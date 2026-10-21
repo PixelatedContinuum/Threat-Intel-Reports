@@ -5,18 +5,14 @@
 # Publishing a campaign = add one entry here (no more editing four files).
 
 entries:
-  # ===== PENDING GO-LIVE — Help Desks to Host Shells Across Brazil's Public Sector (38.180.16.98, INV-2026-067) =====
-  # HELD: preview only. Public go-live waits for the end-round disclosure wave 1 send date plus 10 working days,
-  # no later than 2026-11-13 unless a recipient asks for a hold (Joseph's publication commitment, 2026-10-15).
-  # Uncomment this block at launch, then drop `unlisted: true` from the report + detection front matter.
-  #  - title: "Help Desks to Host Shells Across Brazil's Public Sector"
-  #    date: 2026-10-15
-  #    severity: critical
-  #    tags: [Open Dir, Toolkit, Exploitation, Brazil]
-  #    report_url: /reports/opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015/
-  #    detection_url: /hunting-detections/inv-2026-067-detections
-  #    ioc_url: /ioc-feeds/opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015-iocs.json
-  # ============================================================================================
+  - title: "Help Desks to Host Shells Across Brazil's Public Sector"
+    date: 2026-10-15
+    severity: critical
+    tags: [Open Dir, Toolkit, Exploitation, Brazil]
+    report_url: /reports/opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015/
+    stix_url: /stix/opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015.json
+    detection_url: /hunting-detections/opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015-detections
+    ioc_url: /ioc-feeds/opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015-iocs.json
   - title: "FACEIT ClickFix Pages Point CS2 Players to a Script URL That VirusTotal Ties to a Steam-Focused Executable"
     date: 2026-09-28
     severity: high

@@ -5,11 +5,10 @@ layout: post
 permalink: /reports/opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015/
 thumbnail: /assets/images/cards/opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015.png
 hide: true
-unlisted: true
 category: "Intrusion Toolkit"
 description: "An unnamed operator's open directory shows command execution inside two Brazilian federal bodies, a stolen EDR console token, monitoring servers turned into a command plane and a plaintext relay on TCP 53, across 92 public-sector organisation rows."
-detection_page: /hunting-detections/inv-2026-067-detections/
-ioc_feed: /ioc-feeds/opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015-iocs.json
+detection_page: /hunting-detections/opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015-detections/
+ioc_feed: /ioc-feeds/opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015/
 detection_sections:
   - label: "Detection Coverage Summary"
     anchor: "#detection-coverage-summary"
@@ -45,6 +44,7 @@ figure_nav:
         anchor: "#11-the-monitoring-server-as-a-command-plane"
       - label: "The port 53 relay"
         anchor: "#12-the-port-53-relay-and-the-weblogic-scripts-that-would-deliver-it"
+stix_bundle: /stix/opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015.json
 ---
 
 **Campaign Identifier:** OpenDirectory-38.180.16.98-BrazilPublicSectorToolkit-20261015<br>
@@ -325,7 +325,7 @@ Whether the hook was ever installed, and whether it is there now, is NOT SHOWN. 
 
 The operator also pointed its foothold at a lot of the agency's interior, with output held for some of it. A family of "pod" scripts shares the `svc.py` helper and the operator's own comments, and covers resolution of about 570 host names at the agency, its IT provider and a second federal IT company, connection scans of 315 to 331 mostly internal addresses, a labelled reachability sweep across the monitoring stack, benefit and finance systems, an intranet portal, an automation server and a Kubernetes production API, and a reuse test of 17 credential pairs against three internal database servers. The resolution output is held (579 distinct names), and two encoded scan outputs list host-and-port pairs across 19 internal addresses. Whether those pairs are results or targets cannot be decided from the files. The outputs of the credential-reuse test and of the labelled sweep are not held, so what they found is NOT CHECKED.
 
-One more piece of tooling, a shell and PHP survey of the agency's internal directory, databases and configuration with three hard-coded credential pairs, has no output at all. It sits at LISTED. I mention it because it shows the operator built tooling for the agency's internal directory as well as its help desk.
+One more piece of tooling, a shell and PHP survey naming the agency's internal directory, plus database and configuration targets whose owner the files do not establish, with three hard-coded credential pairs, has no output at all. It sits at LISTED. I mention it because it shows the operator built tooling for the agency's internal directory as well as its help desk.
 
 </details>
 
@@ -675,7 +675,7 @@ The Zabbix object names (`z-` and `wv3_` prefixes, `poc` items, `diag-04` to `di
 ## 16. Detection and Hunting Guidance
 {: .hl-tier-2}
 
-The full rule set is published separately at [Detection Rules, Brazil Public-Sector Toolkit](/hunting-detections/inv-2026-067-detections/): 13 rules, 5 Sigma (3 detection, 2 hunting) and 8 Suricata (3 detection, 5 hunting), with no YARA. All 13 pass syntax validation. None has been measured for prevalence against real traffic, and the coverage-gaps section of that page is worth reading before deploying any of them.
+The full rule set is published separately at [Detection Rules, Brazil Public-Sector Toolkit](/hunting-detections/opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015-detections/): 13 rules, 5 Sigma (3 detection, 2 hunting) and 8 Suricata (3 detection, 5 hunting), with no YARA. All 13 pass syntax validation. None has been measured for prevalence against real traffic, and the coverage-gaps section of that page is worth reading before deploying any of them.
 
 The relay rules are the only ones I could fire against a real capture of the threat behaving, and the numbers belong to two different rules, so I keep them apart. The published announce rule fired on 22 of 22 relay sessions in the filtered capture (the relay sessions plus the one onward connection, on which it stayed silent), and on none of 2,411 TCP flows from seven unrelated captures. None of that traffic contains real DNS over TCP, so how the three port 53 rules behave against it is NOT CHECKED.
 
@@ -706,7 +706,9 @@ For WebLogic, a shell spawned by the WebLogic Java process that writes a JSP int
 ## 17. Notification
 {: .hl-tier-2}
 
-The bank and the agency were notified through CTIR Gov, Brazil's federal government incident response centre, starting in early October. The bank received an early notice on 2026-10-04 and a full encrypted evidence package on 2026-10-09. The agency received an early notice on 2026-10-05, with CERT.br copied, and follow-ups after it. The other organisations for which I hold specific, actionable information are notified in a separate round before this report is published, and the indicator feed and rules go public together with the report.
+The bank and the agency were notified through CTIR Gov, Brazil's federal government incident response centre, starting in early October. The bank received an early notice on 2026-10-04 and a full encrypted evidence package on 2026-10-09. The agency received an early notice on 2026-10-05, with CERT.br copied, and follow-ups after it.
+
+On 2026-10-16 I sent a second round, through CERT.br, CTIR Gov or the organisation's own response team, to the state traffic department, two state finance secretariats (one message also covering that state's government), the federal health IT department and the agency's federal IT provider, and a closing message to the agency. No recipient had asked me to hold publication when this report went live. I do not notify the remaining suppliers and third parties myself, among them the cloud services supplier and the managed security provider. They are the affected organisations' to alert, and the evidence I sent them lists the suppliers they should notify. The indicator feed and rules go public together with the report.
 
 I do not contact the institutions whose API credentials were exposed at the bank. Those subscribers are the bank's to notify, and I gave the bank what it needs to do it. Organisations that appear here only at REACHED or LISTED, with nothing I can give them beyond the fact that they were probed, learn of it from this report.
 

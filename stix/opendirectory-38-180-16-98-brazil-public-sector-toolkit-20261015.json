@@ -1,0 +1,1849 @@
+{
+    "type": "bundle",
+    "id": "bundle--5598eede-a413-4622-bb2d-255ec138ee92",
+    "objects": [
+        {
+            "type": "identity",
+            "spec_version": "2.1",
+            "id": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-10-16T02:07:12.790563Z",
+            "modified": "2026-10-16T02:07:12.790563Z",
+            "name": "The Hunters Ledger",
+            "identity_class": "organization"
+        },
+        {
+            "type": "marking-definition",
+            "spec_version": "2.1",
+            "id": "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9",
+            "created": "2017-01-20T00:00:00.000Z",
+            "definition_type": "tlp",
+            "name": "TLP:WHITE",
+            "definition": {
+                "tlp": "white"
+            }
+        },
+        {
+            "type": "ipv4-addr",
+            "spec_version": "2.1",
+            "id": "ipv4-addr--bed920f8-5477-5c1a-854d-6bd86430a555",
+            "value": "209.99.185.148"
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--6ae7cb4f-4b92-5a33-8b17-e65cadba6880",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-10-16T02:07:12.791616Z",
+            "modified": "2026-10-17T16:28:22.438676Z",
+            "name": "ipv4: 209.99.185.148",
+            "description": "Host control HIGH from the operator's own label 'nosso canary' in five or more files. The victim-side tunnel client /tmp/upd, running as an application service account inside a WSO2 container, points at https://209.99.185.148; a process-table line is shown, an established tunnel is not. Base rate of the 'Update Service' organisation string and of the cloudedge-edge/1.4 banner is NOT CHECKED. | Named as the callback target in S1.class and S1.java, asp_fuzz.py, ssrf_canary.py (comment 'nosso canary'), batch2.sh and batch57.sh; 16 SSRF-related hashes name the collector. Answered 'ok' on 2026-10-03 04:06Z, 2026-10-05 and 2026-10-07; connect timeout on 2026-10-14. | Both builds launch a headless Chrome at the /e/ path and request /p/ in VirusTotal sandbox output. :8146 is absent from all 15 Hunt.io port-history rows and all 14 protocol rows, so its presence, closure or continued service is NOT CHECKED; the 2026-10-14 rescan probed the root path rather than the historical /e/ path. | The response body is the two bytes 'ok' as application/xml from Python BaseHTTP. That pair alone is generic, so match the destination address-and-port against a callback shape, not the body. | This address is a dedicated single-tenant network with no shared hosting, so the host-level block is safe in the operator window. Two limits travel with it: the address held unrelated services before the 2026-04-01 announcement of the prefix (do not match pre-April history on it), and the bpupdate.exe and exp.html surface here is tied to the address by IP only, authorship NOT CHECKED. | The service sits on a host that is HIGH-confidence operator infrastructure, but the two builds that request it are tied to it by IP only and their authorship is NOT CHECKED (a developer or vendor pipeline is not excluded). Prefer the two paths as the indicator; the cloudedge-edge/1.4 banner has no measured base rate.",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "[ipv4-addr:value = '209.99.185.148']",
+            "pattern_type": "stix",
+            "pattern_version": "2.1",
+            "valid_from": "2026-10-15T00:00:00Z",
+            "confidence": 80,
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ],
+            "x_opencti_detection": true,
+            "x_opencti_main_observable_type": "IPv4-Addr",
+            "x_opencti_score": 80
+        },
+        {
+            "type": "ipv4-addr",
+            "spec_version": "2.1",
+            "id": "ipv4-addr--be513732-0dab-5503-ad8e-5e4104b7dc60",
+            "value": "38.180.16.98"
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--cd93f1c3-58d8-5886-a023-b5cb8bd0afa2",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-10-16T02:07:12.79535Z",
+            "modified": "2026-10-17T16:28:22.442568Z",
+            "name": "ipv4: 38.180.16.98",
+            "description": "Hard-coded literal IP in Relay.java.new with no DNS lookup and a 15 s connect timeout. The relay opens the connection and writes READY2 first (7 bytes), sends PING every 15 s while idle, accepts one controller line of the form DIAL <host> <port>, replies OK or FAIL, then splices the two sockets byte for byte with no encryption or framing. Confirmed on the wire in a contained lab run on 2026-10-09 (22 of 22 sessions opened with READY2 alone) and in the operator's own listener log (1,051 relay check-ins: 648 labelled READY(pod) and 403 READY2(wls)). Relay times are undated. The listener was never observed by any scanner, which is a coverage gap, not evidence that it did not exist. Confidence: the endpoint role is HIGH, a historical role covering both relay lanes (pod and wls); DEFINITE applies only to the READY2 protocol bytes of the wls-variant file in the contained 2026-10-09 run, and which file was deployed is not established. | Reported as an open directory to Hunt.io (two automated warnings, 2026-09-27 and 2026-09-30); VirusTotal shows 0 malicious engines. The last positive directory listing is 2026-10-08 19:45Z (9,917 files). Silence onset is undated and the 2026-10-09 zero-response window came from one egress only: whether the host is down or that egress is blocked is NOT CHECKED. The directory was serving 1,649 root files by 2026-10-01 against the 362 captured on 2026-09-30, so the served tree is far larger than the capture. | Part of the same Zabbix join as the :9090 callback; the byte-level script-to-listing relationship was not independently proved and the reader left the listener's role unidentified. | The listener log reads 'listening on 0.0.0.0 port 9090'; the decoded operator script creates a global script z-revtest that connects here and sends id;hostname. The join of script to log is rated MODERATE by the lane (no run log, timestamp or Zabbix audit row) and the callback has no timestamp; the owner of the calling host is unattributed (victim-estate association only). | A legitimate DNS server on TCP/53 speaks DNS framing; this service speaks plain ASCII and answers nothing until the relay announces itself. Match the TCP/53 flow whose first payload is the line READY2 (hex 52 45 41 44 59 32 0a). A TCP/53 flow with no DNS message parsed is the generic hunt. | Do not block this address outside the operator window or on the ports not listed here. The address carried a mail/web tenant in 2024 and a Windows tenant from 2024-12 to 2025-07; its :443 certificate, its JARM and every SSH host key row belong to those earlier tenants. The operator surface is :53, :80, :111, :445, :4000, :8899, :9090 and :9443 from 2026-09-26. | A held 26-byte startup line only; no arrival of any path map is shown. Do not treat a hit on this port as proof of collection. | Port 9090 is common. The discriminating artifact is the callback itself: a Zabbix global script on a proxy or agent connecting outward to this address and returning root identity and hostname. Alert on the outbound conjunction from a monitored host, not on the port alone.",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "[ipv4-addr:value = '38.180.16.98']",
+            "pattern_type": "stix",
+            "pattern_version": "2.1",
+            "valid_from": "2026-10-15T00:00:00Z",
+            "confidence": 80,
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ],
+            "x_opencti_detection": true,
+            "x_opencti_main_observable_type": "IPv4-Addr",
+            "x_opencti_score": 80
+        },
+        {
+            "type": "ipv4-addr",
+            "spec_version": "2.1",
+            "id": "ipv4-addr--bdb41881-4f01-50d3-a4d8-6c5269e78add",
+            "value": "38.180.196.193"
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--e2228066-aff8-541a-85b1-b4c31f6a74c4",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-10-16T02:07:12.796119Z",
+            "modified": "2026-10-17T16:28:22.44325Z",
+            "name": "ipv4: 38.180.196.193",
+            "description": "Operator use HIGH, operator control MODERATE: the operator's own batch84.sh calls it 'our IP (vpsbr)' and a payload is staged there. A later grade superseded a 2026-10-03 LOW on control. JARM, SSH host key and certificate fingerprints for this host were excluded from this feed rather than carried at an upgraded confidence. | Referenced by wls_rce.sh and wls_rce2.sh as the payload server; a session on 2026-09-30 stages pwn.xml there. 'cadsus' appears in 0 of the 973 files of the :8899 archive, so the realm label does not describe the panel's content. | Block this host-and-port pair rather than the address: the address is co-tenanted. The discriminating response is HTTP 401 with WWW-Authenticate: Basic realm=\"cadsus-panel\". | Co-tenanted host. Ten third-party parked domains (gaspowered, gastromono, gastronomiaboliviana, gastronomiaperuana, gateandfences, gatelights, gavickmagazine, garagedoorrepairtulsa, gayathens, gaybrussels) still resolved to this address through 2026-10-03, and that parked-DNS traffic is not this operator's. Prefer blocking the service ports in the operator window (2026-08-20 to 2026-09-14) over the address alone. A blanket block of the address would take unrelated tenants with it.",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "[ipv4-addr:value = '38.180.196.193']",
+            "pattern_type": "stix",
+            "pattern_version": "2.1",
+            "valid_from": "2026-10-15T00:00:00Z",
+            "confidence": 60,
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ],
+            "x_opencti_detection": true,
+            "x_opencti_main_observable_type": "IPv4-Addr",
+            "x_opencti_score": 60
+        },
+        {
+            "type": "url",
+            "spec_version": "2.1",
+            "id": "url--e37b450a-4fa3-5de5-aeb5-35b5e45f0021",
+            "value": "http://209.99.185.148:8146/e/a38243f90dc30f99/"
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--03f4e7a5-2055-5f82-ab98-90cf7331d0cd",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-10-16T02:07:12.796623Z",
+            "modified": "2026-10-17T16:28:22.443777Z",
+            "name": "url: http://209.99.185.148:8146/e/a38243f90dc30f99/",
+            "description": "Confirmed in VirusTotal sandbox behaviour for both builds; the requesting builds' authorship is NOT CHECKED. | A random-looking path token on the operator-controlled host. The operator link of the builds is same-IP only; treat the path as the indicator and the address as operator infrastructure, and see the :8146 entry caveat.",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "[url:value = 'http://209.99.185.148:8146/e/a38243f90dc30f99/']",
+            "pattern_type": "stix",
+            "pattern_version": "2.1",
+            "valid_from": "2026-10-15T00:00:00Z",
+            "confidence": 60,
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ],
+            "x_opencti_detection": true,
+            "x_opencti_main_observable_type": "Url",
+            "x_opencti_score": 60
+        },
+        {
+            "type": "url",
+            "spec_version": "2.1",
+            "id": "url--95a93f7a-6ad2-5339-b1c7-224a74ad0da9",
+            "value": "http://209.99.185.148:8146/p/a38243f90dc30f99"
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--ce873b20-8375-5fb8-842d-57d3a25fe98e",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-10-16T02:07:12.797474Z",
+            "modified": "2026-10-17T16:28:22.444622Z",
+            "name": "url: http://209.99.185.148:8146/p/a38243f90dc30f99",
+            "description": "What the operator or the service does with the /p/ response is NOT CHECKED. | Same caveat as the /e/ path: the path is the indicator, and the operator link of the builds is same-IP only.",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "[url:value = 'http://209.99.185.148:8146/p/a38243f90dc30f99']",
+            "pattern_type": "stix",
+            "pattern_version": "2.1",
+            "valid_from": "2026-10-15T00:00:00Z",
+            "confidence": 60,
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ],
+            "x_opencti_detection": true,
+            "x_opencti_main_observable_type": "Url",
+            "x_opencti_score": 60
+        },
+        {
+            "type": "url",
+            "spec_version": "2.1",
+            "id": "url--00d9fc90-3c36-5334-9856-101fd9c87c37",
+            "value": "http://38.180.16.98/"
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--ce6c00f9-843e-50e8-8167-9b6d6eb9f89f",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-10-16T02:07:12.797937Z",
+            "modified": "2026-10-17T16:28:22.44507Z",
+            "name": "url: http://38.180.16.98/",
+            "description": "Served the operator's /tmp: directories massa1, massa2, massa3, grandes, manuais, dbg, django-loot, netrecon, share, glpwnme, dpgh and js, and the tarballs massa1.tar.gz (3,371 entries) and massa2.tar.gz (1,311 entries, 390.8 MiB). Some of those directory names are clones of public upstream repositories (glpwnme and the dpgh set) and are carried as host context only. The victim-document directories stopped being exposed under those names between 2026-10-01 and 2026-10-03. | The bare address plus a directory listing is the operator's own served tree; the served content is the discriminator, not the banner. Do not widen this to the address on other ports.",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "[url:value = 'http://38.180.16.98/']",
+            "pattern_type": "stix",
+            "pattern_version": "2.1",
+            "valid_from": "2026-10-15T00:00:00Z",
+            "confidence": 80,
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ],
+            "x_opencti_detection": true,
+            "x_opencti_main_observable_type": "Url",
+            "x_opencti_score": 80
+        },
+        {
+            "type": "url",
+            "spec_version": "2.1",
+            "id": "url--71980967-3a33-5e5c-8a82-c35e8e2a0b37",
+            "value": "http://38.180.16.98:80/Relay.java.new"
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--5a8fef61-dd07-5ead-8eb8-589c4c781db2",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-10-16T02:07:12.798365Z",
+            "modified": "2026-10-17T16:28:22.445516Z",
+            "name": "url: http://38.180.16.98:80/Relay.java.new",
+            "description": "Appeared in the listing between 2026-10-01 and 2026-10-03. | Match the whole path or the file hash; the filename alone is generic. That this exact lab sample was the file deployed on a victim host is NOT ESTABLISHED, so do not read a hit as proof of deployment.",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "[url:value = 'http://38.180.16.98:80/Relay.java.new']",
+            "pattern_type": "stix",
+            "pattern_version": "2.1",
+            "valid_from": "2026-10-15T00:00:00Z",
+            "confidence": 80,
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ],
+            "x_opencti_detection": true,
+            "x_opencti_main_observable_type": "Url",
+            "x_opencti_score": 80
+        },
+        {
+            "type": "file",
+            "spec_version": "2.1",
+            "id": "file--8b0e7aab-370b-5bbf-9c06-183645a9f8a8",
+            "hashes": {
+                "SHA-256": "86c0fa7d4fe1740e02a845fe18f85de91b234321b21d7804944f3248395968bc"
+            }
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--1c93c40f-d4c5-56e8-85a8-448f3b33f136",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-10-16T02:07:12.799301Z",
+            "modified": "2026-10-17T16:28:22.446552Z",
+            "name": "sha256: 86c0fa7d4fe1740e02a845fe18f85de91b234321b21d7804944f3248395968bc",
+            "description": "A small shell script name that other users also choose. Match the hash, not the filename, and treat a hit as an operator-hosting artifact only.",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "[file:hashes.'SHA-256' = '86c0fa7d4fe1740e02a845fe18f85de91b234321b21d7804944f3248395968bc']",
+            "pattern_type": "stix",
+            "pattern_version": "2.1",
+            "valid_from": "2026-10-15T00:00:00Z",
+            "confidence": 95,
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ],
+            "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "StixFile",
+            "x_opencti_score": 95
+        },
+        {
+            "type": "file",
+            "spec_version": "2.1",
+            "id": "file--fa137256-4669-5fa4-b46b-57dcfaf31d22",
+            "hashes": {
+                "SHA-256": "986f697d2ef67a38e25c6a17cdecd7bb50148f2c2993864c748e3504d3d747f0"
+            }
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--31d02f68-8401-5aa9-8022-3e432c1f9996",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-10-16T02:07:12.800809Z",
+            "modified": "2026-10-17T16:28:22.448324Z",
+            "name": "sha256: 986f697d2ef67a38e25c6a17cdecd7bb50148f2c2993864c748e3504d3d747f0",
+            "description": "No legitimate use of this relay, found in the operator's directory (authorship not established), is known. The filename is generic, so match the hash or the wire behaviour, never the name.",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "[file:hashes.'SHA-256' = '986f697d2ef67a38e25c6a17cdecd7bb50148f2c2993864c748e3504d3d747f0']",
+            "pattern_type": "stix",
+            "pattern_version": "2.1",
+            "valid_from": "2026-10-15T00:00:00Z",
+            "confidence": 95,
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ],
+            "x_opencti_detection": false,
+            "x_opencti_main_observable_type": "StixFile",
+            "x_opencti_score": 95
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--5ffcea65-b355-572b-a063-52dc1388d5e9",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-10-16T02:07:12.807848Z",
+            "modified": "2026-10-21T19:22:11.419036Z",
+            "name": "WebLogic Java Process Spawns Shell Writing a JSP Into a WebLogic Internal Directory",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "title: WebLogic Java Process Spawns Shell Writing a JSP Into a WebLogic Internal Directory\nid: 67f6efc3-d491-446b-99c9-26dec7274776\nstatus: experimental\ndescription: >-\n    Detects a shell spawned by a Java process whose command line names a WebLogic _WL_internal directory and a .jsp file.\n    This is the process-level footprint of a remote command-execution request (the XMLDecoder-in-WorkContext shape sent to the WS-AT endpoint)\n    that plants a command-execution JSP into WebLogic staging directories.\n    The behaviour was read from an operator's request body that finds every _WL_internal and stage directory under the domain home and writes one JSP into each subdirectory.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015-detections/\nauthor: The Hunters Ledger\ndate: 2026-10-09\ntags:\n    - attack.persistence\n    - attack.t1505.003\n    - attack.execution\n    - attack.t1059.004\n    - stp.3\nlogsource:\n    category: process_creation\n    product: linux\n    definition: 'Requires Linux process creation telemetry that records the parent image and the full command line of the child, for example auditd EXECVE records joined to the parent process, Sysmon for Linux EID 1, or an EDR sensor with equivalent fields.'\ndetection:\n    selection:\n        ParentImage|endswith: '/java'\n        Image|endswith:\n            - '/sh'\n            - '/bash'\n            - '/dash'\n        CommandLine|contains|all:\n            - '_WL_internal'\n            - '.jsp'\n    condition: selection\nfalsepositives:\n    - WebLogic deployment or patching scripts started from a Java based tool that copy JSP files into exploded application directories\nlevel: high",
+            "pattern_type": "sigma",
+            "valid_from": "2026-10-15T00:00:00Z",
+            "labels": [
+                "detection-rule"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--325e81f2-33cb-5fa2-8d96-6078e60a9708",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-10-16T02:07:12.808078Z",
+            "modified": "2026-10-21T19:22:11.419251Z",
+            "name": "Shell Process Creates a JSP File Under a WebLogic _WL_internal Directory",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "title: Shell Process Creates a JSP File Under a WebLogic _WL_internal Directory\nid: f3c8d853-4507-4818-9883-a79f977a41a9\nstatus: experimental\ndescription: >-\n    Detects a shell creating a .jsp file below a _WL_internal directory.\n    WebLogic's own Java process extracts web application contents there, so a shell as the writing process marks a file placed from outside the deployment path.\n    Read from an operator's request body that writes a command-execution JSP into every subdirectory of every _WL_internal and stage directory under a domain home.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015-detections/\nauthor: The Hunters Ledger\ndate: 2026-10-09\ntags:\n    - attack.persistence\n    - attack.t1505.003\n    - stp.3\nlogsource:\n    category: file_event\n    product: linux\n    definition: 'Requires Linux file creation telemetry that records the creating process image and the target path, for example Sysmon for Linux EID 11 or an EDR sensor with file creation events. auditd path rules on the WebLogic domain home would also work but are not default.'\ndetection:\n    selection:\n        TargetFilename|contains: '/_WL_internal/'\n        TargetFilename|endswith: '.jsp'\n        Image|endswith:\n            - '/sh'\n            - '/bash'\n            - '/dash'\n    condition: selection\nfalsepositives:\n    - Administrators extracting or copying JSP files into WebLogic temporary directories by hand during troubleshooting\nlevel: high",
+            "pattern_type": "sigma",
+            "valid_from": "2026-10-15T00:00:00Z",
+            "labels": [
+                "detection-rule"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--2aa7796f-60b4-5b3a-9f5c-bdbc39aebe88",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-10-16T02:07:12.808195Z",
+            "modified": "2026-10-21T19:22:11.419375Z",
+            "name": "GLPI htmLawed Test Page POST Request (CVE-2022-35914, Renamed Copy Included)",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "title: GLPI htmLawed Test Page POST Request (CVE-2022-35914, Renamed Copy Included)\nid: 20c855ee-9086-444b-885c-59a6abba56c1\nstatus: experimental\ndescription: >-\n    Detects a POST request to a PHP file inside GLPI's bundled htmlawed vendor directory.\n    The unauthenticated command execution in CVE-2022-35914 is reached through the htmLawedTest page, and an operator tool read in this case posts to a copy that had been renamed with a suffix, so the match uses the directory and not the default file name.\n    A GLPI web root should never serve its vendor directory.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015-detections/\n    - https://nvd.nist.gov/vuln/detail/CVE-2022-35914\nauthor: The Hunters Ledger\ndate: 2026-10-09\ntags:\n    - attack.initial-access\n    - attack.t1190\n    - cve.2022-35914\n    - detection.emerging-threats\n    - stp.3\nlogsource:\n    category: webserver\n    definition: 'Requires web server access logs that record the request method and URI, for example Apache or nginx access logs on the GLPI host or the reverse proxy in front of it, with the full request URI mapped to cs-uri-query as the other SigmaHQ webserver rules do. The request body is not in these logs, so the match is on method and path only.'\ndetection:\n    selection:\n        cs-method: 'POST'\n        cs-uri-query|contains|all:\n            - '/vendor/htmlawed/htmlawed/'\n            - '.php'\n    condition: selection\nfalsepositives:\n    - Unlikely\nlevel: high",
+            "pattern_type": "sigma",
+            "valid_from": "2026-10-15T00:00:00Z",
+            "labels": [
+                "detection-rule"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--e70edc13-6f82-5453-864f-c6d007828ceb",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-10-16T02:07:12.808301Z",
+            "modified": "2026-10-21T19:22:11.419535Z",
+            "name": "Java Process Spawns Shell to Rewrite Log Files",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "title: Java Process Spawns Shell to Rewrite Log Files\nid: 410da2b6-3023-4f5f-a9a2-1e7abf0c3783\nstatus: experimental\ndescription: >-\n    Detects a shell spawned by a Java process whose command line combines grep -v with a .log file pattern.\n    Read from an operator's request body that rewrites every log file under a WebLogic domain home without the lines naming a planted JSP, through a temporary file and a copy back.\n    Hunting rule, because legitimate Java launched maintenance scripts also filter logs.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015-detections/\nauthor: The Hunters Ledger\ndate: 2026-10-09\ntags:\n    - attack.stealth\n    - attack.t1070\n    - stp.3\nlogsource:\n    category: process_creation\n    product: linux\n    definition: 'Requires Linux process creation telemetry that records the parent image and the full command line of the child, for example auditd EXECVE records joined to the parent process, Sysmon for Linux EID 1, or an EDR sensor with equivalent fields.'\ndetection:\n    selection:\n        ParentImage|endswith: '/java'\n        Image|endswith:\n            - '/sh'\n            - '/bash'\n            - '/dash'\n        CommandLine|contains|all:\n            - 'grep -v'\n            - '.log'\n    condition: selection\nfalsepositives:\n    - Log housekeeping scripts started from a Java based scheduler or management agent\nlevel: medium",
+            "pattern_type": "sigma",
+            "valid_from": "2026-10-15T00:00:00Z",
+            "labels": [
+                "detection-rule"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--cf97447c-7aaa-5341-bf62-61d9c5dcf2b7",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-10-16T02:07:12.8084Z",
+            "modified": "2026-10-21T19:22:11.419678Z",
+            "name": "Zabbix Daemon Child Process Touching Credential Files or Instance Metadata",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "title: Zabbix Daemon Child Process Touching Credential Files or Instance Metadata\nid: 7fc3ea3a-98a7-4a97-877a-a8a4dbfefc48\nstatus: experimental\ndescription: >-\n    Detects a child process of a Zabbix server, proxy or agent daemon whose command line names the password digest file, shell history, authorized keys, the cloud instance metadata address or nmap.\n    Read from an operator's Zabbix API scripts that create global scripts and system.run items to run exactly these requests on a proxy and on monitored hosts; no output of them was held.\n    Hunting rule, because monitoring administrators legitimately run commands through the same daemons.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015-detections/\nauthor: The Hunters Ledger\ndate: 2026-10-09\ntags:\n    - attack.execution\n    - attack.t1072\n    - attack.lateral-movement\n    - attack.credential-access\n    - attack.t1552\n    - stp.3\nlogsource:\n    category: process_creation\n    product: linux\n    definition: 'Requires Linux process creation telemetry that records the parent image and the full command line of the child, for example auditd EXECVE records joined to the parent process, Sysmon for Linux EID 1, or an EDR sensor with equivalent fields.'\ndetection:\n    selection_parent:\n        ParentImage|endswith:\n            - '/zabbix_server'\n            - '/zabbix_proxy'\n            - '/zabbix_agentd'\n            - '/zabbix_agent2'\n    selection_cmd:\n        CommandLine|contains:\n            - '/etc/shadow'\n            - '.bash_history'\n            - 'authorized_keys'\n            - '169.254.169.254'\n            - 'nmap '\n    condition: all of selection_*\nfalsepositives:\n    - Monitoring items or global scripts that deliberately check authorized_keys or shell history for compliance\n    - Authorized network scanning started from a Zabbix global script\nlevel: medium",
+            "pattern_type": "sigma",
+            "valid_from": "2026-10-15T00:00:00Z",
+            "labels": [
+                "detection-rule"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--26647791-827e-5057-a7d2-cb4b302df46b",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-10-16T02:07:12.808499Z",
+            "modified": "2026-10-21T19:22:11.419796Z",
+            "name": "THL DETECT INV-2026-067 Reverse Relay READY2 Announce on TCP 53 (Non-DNS Plaintext Handshake)",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "alert tcp $HOME_NET any -> $EXTERNAL_NET 53 (msg:\"THL DETECT INV-2026-067 Reverse Relay READY2 Announce on TCP 53 (Non-DNS Plaintext Handshake)\"; flow:established,to_server; dsize:7; content:\"READY2|0a|\"; startswith; flowbits:set,thl.inv067.relay; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015-detections/; classtype:trojan-activity; sid:1000001; rev:1; metadata:author The_Hunters_Ledger, date 2026-10-09;)",
+            "pattern_type": "suricata",
+            "valid_from": "2026-10-15T00:00:00Z",
+            "labels": [
+                "detection-rule"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--57316f7b-00d1-50f3-af5a-6282d4543166",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-10-16T02:07:12.808598Z",
+            "modified": "2026-10-21T19:22:11.419906Z",
+            "name": "THL DETECT INV-2026-067 Reverse Relay Controller DIAL Tasking Line from TCP 53 (Internal Destination Instruction)",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "alert tcp $EXTERNAL_NET 53 -> $HOME_NET any (msg:\"THL DETECT INV-2026-067 Reverse Relay Controller DIAL Tasking Line from TCP 53 (Internal Destination Instruction)\"; flow:established,to_client; dsize:9<>200; content:\"DIAL \"; startswith; content:\"|0a|\"; endswith; pcre:\"/^DIAL [^ \\r\\n]{1,128} [0-9]{1,5}\\n$/\"; flowbits:set,thl.inv067.dial; reference:url,the-hunters-ledger.com/hunting-detections/opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015-detections/; classtype:trojan-activity; sid:1000005; rev:1; metadata:author The_Hunters_Ledger, date 2026-10-09;)",
+            "pattern_type": "suricata",
+            "valid_from": "2026-10-15T00:00:00Z",
+            "labels": [
+                "detection-rule"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--3933abc3-6cbc-5ce1-8f66-de278d86455f",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-10-16T02:07:12.808697Z",
+            "modified": "2026-10-21T19:22:11.420023Z",
+            "name": "THL DETECT INV-2026-067 GLPI htmLawed Test Page POST with hhook Parameter (CVE-2022-35914, Renamed Copy Included)",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "alert http $EXTERNAL_NET any -> $HTTP_SERVERS any (msg:\"THL DETECT INV-2026-067 GLPI htmLawed Test Page POST with hhook Parameter (CVE-2022-35914, Renamed Copy Included)\"; flow:established,to_server; http.method; content:\"POST\"; http.uri; content:\"/vendor/htmlawed/htmlawed/\"; nocase; content:\".php\"; nocase; http.request_body; content:\"hhook=\"; content:\"text=\"; reference:url,the-hunters-ledger.com/hunting-detections/opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015-detections/; classtype:web-application-attack; sid:1000008; rev:1; metadata:author The_Hunters_Ledger, date 2026-10-09;)",
+            "pattern_type": "suricata",
+            "valid_from": "2026-10-15T00:00:00Z",
+            "labels": [
+                "detection-rule"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--88fa4fdc-22d4-5ff2-a671-ff9fd749e4e0",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-10-16T02:07:12.808794Z",
+            "modified": "2026-10-21T19:22:11.420132Z",
+            "name": "THL HUNT INV-2026-067 Reverse Relay READY2 Announce on a Non-DNS Port (Port Variant)",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "alert tcp $HOME_NET any -> $EXTERNAL_NET !53 (msg:\"THL HUNT INV-2026-067 Reverse Relay READY2 Announce on a Non-DNS Port (Port Variant)\"; flow:established,to_server; dsize:7; content:\"READY2|0a|\"; startswith; flowbits:set,thl.inv067.relay; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015-detections/; classtype:trojan-activity; sid:1000002; rev:1; metadata:author The_Hunters_Ledger, date 2026-10-09;)",
+            "pattern_type": "suricata",
+            "valid_from": "2026-10-15T00:00:00Z",
+            "labels": [
+                "detection-rule"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--d8e72105-630c-5661-802f-d3a1f54454bb",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-10-16T02:07:12.808902Z",
+            "modified": "2026-10-21T19:22:11.420235Z",
+            "name": "THL HUNT INV-2026-067 Short Printable ASCII Line as Client Payload on TCP 53 (Not DNS Framing)",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "alert tcp $HOME_NET any -> $EXTERNAL_NET 53 (msg:\"THL HUNT INV-2026-067 Short Printable ASCII Line as Client Payload on TCP 53 (Not DNS Framing)\"; flow:established,to_server; flowbits:isnotset,thl.inv067.first53; dsize:3<>40; byte_test:1,>=,0x20,0; byte_test:1,<=,0x7e,0; content:\"|0a|\"; endswith; flowbits:set,thl.inv067.first53; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015-detections/; classtype:protocol-command-decode; sid:1000003; rev:1; metadata:author The_Hunters_Ledger, date 2026-10-09;)",
+            "pattern_type": "suricata",
+            "valid_from": "2026-10-15T00:00:00Z",
+            "labels": [
+                "detection-rule"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--b8cbe838-6818-5140-b7f3-7caeeffd5f1b",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-10-16T02:07:12.809002Z",
+            "modified": "2026-10-21T19:22:11.420336Z",
+            "name": "THL HUNT INV-2026-067 Reverse Relay PING Keepalive After READY2 Announce (Idle Session Persists)",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "alert tcp $HOME_NET any -> $EXTERNAL_NET any (msg:\"THL HUNT INV-2026-067 Reverse Relay PING Keepalive After READY2 Announce (Idle Session Persists)\"; flow:established,to_server; flowbits:isset,thl.inv067.relay; dsize:5; content:\"PING|0a|\"; startswith; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015-detections/; classtype:trojan-activity; sid:1000004; rev:1; metadata:author The_Hunters_Ledger, date 2026-10-09;)",
+            "pattern_type": "suricata",
+            "valid_from": "2026-10-15T00:00:00Z",
+            "labels": [
+                "detection-rule"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--2e9e02cc-2576-56f8-ae16-9930457a4bb0",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-10-16T02:07:12.809098Z",
+            "modified": "2026-10-21T19:22:11.420434Z",
+            "name": "THL HUNT INV-2026-067 Reverse Relay OK Reply After DIAL (Onward Connection Succeeded)",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "alert tcp $HOME_NET any -> $EXTERNAL_NET any (msg:\"THL HUNT INV-2026-067 Reverse Relay OK Reply After DIAL (Onward Connection Succeeded)\"; flow:established,to_server; flowbits:isset,thl.inv067.dial; dsize:3; content:\"OK|0a|\"; startswith; reference:url,the-hunters-ledger.com/hunting-detections/opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015-detections/; classtype:trojan-activity; sid:1000006; rev:1; metadata:author The_Hunters_Ledger, date 2026-10-09;)",
+            "pattern_type": "suricata",
+            "valid_from": "2026-10-15T00:00:00Z",
+            "labels": [
+                "detection-rule"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--378f0963-c747-521d-86be-c00e00750502",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-10-16T02:07:12.809195Z",
+            "modified": "2026-10-21T19:22:11.420531Z",
+            "name": "THL HUNT INV-2026-067 Reverse Relay FAIL Reply After DIAL (Onward Connection Failed)",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "alert tcp $HOME_NET any -> $EXTERNAL_NET any (msg:\"THL HUNT INV-2026-067 Reverse Relay FAIL Reply After DIAL (Onward Connection Failed)\"; flow:established,to_server; flowbits:isset,thl.inv067.dial; dsize:5; content:\"FAIL|0a|\"; startswith; reference:url,the-hunters-ledger.com/hunting-detections/opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015-detections/; classtype:trojan-activity; sid:1000007; rev:1; metadata:author The_Hunters_Ledger, date 2026-10-09;)",
+            "pattern_type": "suricata",
+            "valid_from": "2026-10-15T00:00:00Z",
+            "labels": [
+                "detection-rule"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "malware",
+            "spec_version": "2.1",
+            "id": "malware--a09ce122-2303-5d53-807c-8e9dc67f77a5",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-10-16T02:07:12.809371Z",
+            "modified": "2026-10-16T02:07:12.809371Z",
+            "name": "dump2.sh",
+            "description": "",
+            "malware_types": [
+                "backdoor"
+            ],
+            "is_family": false,
+            "confidence": 95,
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "malware",
+            "spec_version": "2.1",
+            "id": "malware--d34f608b-115b-54de-a411-e7b2e14ee495",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-10-16T02:07:12.809499Z",
+            "modified": "2026-10-16T02:07:12.809499Z",
+            "name": "Relay.java.new",
+            "description": "",
+            "malware_types": [
+                "backdoor"
+            ],
+            "is_family": false,
+            "confidence": 95,
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "attack-pattern",
+            "spec_version": "2.1",
+            "id": "attack-pattern--6214841b-936d-5da2-b5c8-4bed4cf9aee0",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-10-16T02:07:12.8096Z",
+            "modified": "2026-10-16T02:07:12.8096Z",
+            "name": "Exploit Public-Facing Application",
+            "external_references": [
+                {
+                    "source_name": "mitre-attack",
+                    "url": "https://attack.mitre.org/techniques/T1190",
+                    "external_id": "T1190"
+                }
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "attack-pattern",
+            "spec_version": "2.1",
+            "id": "attack-pattern--856a360d-8aca-55ff-949d-fee64905d0a8",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-10-16T02:07:12.809741Z",
+            "modified": "2026-10-16T02:07:12.809741Z",
+            "name": "Valid Accounts",
+            "external_references": [
+                {
+                    "source_name": "mitre-attack",
+                    "url": "https://attack.mitre.org/techniques/T1078",
+                    "external_id": "T1078"
+                }
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "attack-pattern",
+            "spec_version": "2.1",
+            "id": "attack-pattern--73364e03-8914-541e-a33c-877b656c37e4",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-10-16T02:07:12.809853Z",
+            "modified": "2026-10-16T02:07:12.809853Z",
+            "name": "Unix Shell",
+            "external_references": [
+                {
+                    "source_name": "mitre-attack",
+                    "url": "https://attack.mitre.org/techniques/T1059/004",
+                    "external_id": "T1059.004"
+                }
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "attack-pattern",
+            "spec_version": "2.1",
+            "id": "attack-pattern--fd8dd968-9ef8-5d44-9278-54e070789645",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-10-16T02:07:12.809984Z",
+            "modified": "2026-10-16T02:07:12.809984Z",
+            "name": "Web Shell",
+            "external_references": [
+                {
+                    "source_name": "mitre-attack",
+                    "url": "https://attack.mitre.org/techniques/T1505/003",
+                    "external_id": "T1505.003"
+                }
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "attack-pattern",
+            "spec_version": "2.1",
+            "id": "attack-pattern--1076c468-8982-548b-9292-726a22f83ecb",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-10-16T02:07:12.810089Z",
+            "modified": "2026-10-16T02:07:12.810089Z",
+            "name": "Credentials In Files",
+            "external_references": [
+                {
+                    "source_name": "mitre-attack",
+                    "url": "https://attack.mitre.org/techniques/T1552/001",
+                    "external_id": "T1552.001"
+                }
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "attack-pattern",
+            "spec_version": "2.1",
+            "id": "attack-pattern--f04532fb-150d-5d27-99b3-5392af504899",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-10-16T02:07:12.81019Z",
+            "modified": "2026-10-16T02:07:12.81019Z",
+            "name": "Steal Application Access Token",
+            "external_references": [
+                {
+                    "source_name": "mitre-attack",
+                    "url": "https://attack.mitre.org/techniques/T1528",
+                    "external_id": "T1528"
+                }
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "attack-pattern",
+            "spec_version": "2.1",
+            "id": "attack-pattern--b404a9fb-d467-5620-989b-b831b2ff9144",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-10-16T02:07:12.810293Z",
+            "modified": "2026-10-16T02:07:12.810293Z",
+            "name": "Application Access Token",
+            "external_references": [
+                {
+                    "source_name": "mitre-attack",
+                    "url": "https://attack.mitre.org/techniques/T1550/001",
+                    "external_id": "T1550.001"
+                }
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "attack-pattern",
+            "spec_version": "2.1",
+            "id": "attack-pattern--e42939d6-6332-5a6c-8dac-6195c79081bc",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-10-16T02:07:12.810396Z",
+            "modified": "2026-10-16T02:07:12.810396Z",
+            "name": "Data from Information Repositories",
+            "external_references": [
+                {
+                    "source_name": "mitre-attack",
+                    "url": "https://attack.mitre.org/techniques/T1213",
+                    "external_id": "T1213"
+                }
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "attack-pattern",
+            "spec_version": "2.1",
+            "id": "attack-pattern--8bd25a7b-1b65-5b61-9080-4b05d2ce7541",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-10-16T02:07:12.810494Z",
+            "modified": "2026-10-16T02:07:12.810494Z",
+            "name": "Internal Proxy",
+            "external_references": [
+                {
+                    "source_name": "mitre-attack",
+                    "url": "https://attack.mitre.org/techniques/T1090/001",
+                    "external_id": "T1090.001"
+                }
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "attack-pattern",
+            "spec_version": "2.1",
+            "id": "attack-pattern--030bfe25-492a-5e3f-aad5-1c799345aa06",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-10-16T02:07:12.810595Z",
+            "modified": "2026-10-16T02:07:12.810595Z",
+            "name": "Non-Application Layer Protocol",
+            "external_references": [
+                {
+                    "source_name": "mitre-attack",
+                    "url": "https://attack.mitre.org/techniques/T1095",
+                    "external_id": "T1095"
+                }
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "attack-pattern",
+            "spec_version": "2.1",
+            "id": "attack-pattern--06cbe52b-abcb-5b54-a3ec-c553a82c7374",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-10-16T02:07:12.810694Z",
+            "modified": "2026-10-16T02:07:12.810694Z",
+            "name": "Exfiltration Over C2 Channel",
+            "external_references": [
+                {
+                    "source_name": "mitre-attack",
+                    "url": "https://attack.mitre.org/techniques/T1041",
+                    "external_id": "T1041"
+                }
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "attack-pattern",
+            "spec_version": "2.1",
+            "id": "attack-pattern--bc4aee16-aeaf-5d06-9023-dbf06eead1e1",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-10-16T02:07:12.810794Z",
+            "modified": "2026-10-16T02:07:12.810794Z",
+            "name": "Disable or Modify Tools",
+            "external_references": [
+                {
+                    "source_name": "mitre-attack",
+                    "url": "https://attack.mitre.org/techniques/T1685",
+                    "external_id": "T1685"
+                }
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "attack-pattern",
+            "spec_version": "2.1",
+            "id": "attack-pattern--80055098-952b-5cf0-8827-46d1bfec32dc",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-10-16T02:07:12.810917Z",
+            "modified": "2026-10-16T02:07:12.810917Z",
+            "name": "Stored Data Manipulation",
+            "external_references": [
+                {
+                    "source_name": "mitre-attack",
+                    "url": "https://attack.mitre.org/techniques/T1565/001",
+                    "external_id": "T1565.001"
+                }
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "attack-pattern",
+            "spec_version": "2.1",
+            "id": "attack-pattern--511c7a6e-4f3a-5762-9a8d-988f8e457f48",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-10-16T02:07:12.811031Z",
+            "modified": "2026-10-16T02:07:12.811031Z",
+            "name": "Software Deployment Tools",
+            "external_references": [
+                {
+                    "source_name": "mitre-attack",
+                    "url": "https://attack.mitre.org/techniques/T1072",
+                    "external_id": "T1072"
+                }
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "attack-pattern",
+            "spec_version": "2.1",
+            "id": "attack-pattern--b0461f21-7402-55c8-89a8-87f0a8c2dacf",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-10-16T02:07:12.811131Z",
+            "modified": "2026-10-16T02:07:12.811131Z",
+            "name": "Non-Standard Port",
+            "external_references": [
+                {
+                    "source_name": "mitre-attack",
+                    "url": "https://attack.mitre.org/techniques/T1571",
+                    "external_id": "T1571"
+                }
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "infrastructure",
+            "spec_version": "2.1",
+            "id": "infrastructure--8b31849a-8fe5-53a5-9aa9-f4ea85cdfc7e",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-10-16T02:07:12.811239Z",
+            "modified": "2026-10-16T02:07:12.811239Z",
+            "name": "opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015 infrastructure",
+            "infrastructure_types": [
+                "command-and-control",
+                "hosting"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "vulnerability",
+            "spec_version": "2.1",
+            "id": "vulnerability--8c8dec78-9c95-5af6-92a2-626e21d64bea",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-10-16T02:07:12.811785Z",
+            "modified": "2026-10-16T02:07:12.811785Z",
+            "name": "CVE-2022-35914",
+            "external_references": [
+                {
+                    "source_name": "cve",
+                    "url": "https://nvd.nist.gov/vuln/detail/CVE-2022-35914",
+                    "external_id": "CVE-2022-35914"
+                }
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "relationship",
+            "spec_version": "2.1",
+            "id": "relationship--9fe60996-c478-549d-a1df-77697665fb2f",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-10-16T02:07:12.812059Z",
+            "modified": "2026-10-16T02:07:12.812059Z",
+            "relationship_type": "indicates",
+            "source_ref": "indicator--6ae7cb4f-4b92-5a33-8b17-e65cadba6880",
+            "target_ref": "malware--d34f608b-115b-54de-a411-e7b2e14ee495",
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "relationship",
+            "spec_version": "2.1",
+            "id": "relationship--ebdab2b9-2837-550f-8493-84c48a94b968",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-10-16T02:07:12.812158Z",
+            "modified": "2026-10-16T02:07:12.812158Z",
+            "relationship_type": "indicates",
+            "source_ref": "indicator--cd93f1c3-58d8-5886-a023-b5cb8bd0afa2",
+            "target_ref": "malware--d34f608b-115b-54de-a411-e7b2e14ee495",
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "relationship",
+            "spec_version": "2.1",
+            "id": "relationship--bf70e169-08ec-546e-8add-bcf5e52382f3",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-10-16T02:07:12.812242Z",
+            "modified": "2026-10-16T02:07:12.812242Z",
+            "relationship_type": "indicates",
+            "source_ref": "indicator--e2228066-aff8-541a-85b1-b4c31f6a74c4",
+            "target_ref": "malware--d34f608b-115b-54de-a411-e7b2e14ee495",
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "relationship",
+            "spec_version": "2.1",
+            "id": "relationship--0dc3eb35-116e-50f7-8054-43ca76f414a4",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-10-16T02:07:12.81232Z",
+            "modified": "2026-10-16T02:07:12.81232Z",
+            "relationship_type": "indicates",
+            "source_ref": "indicator--03f4e7a5-2055-5f82-ab98-90cf7331d0cd",
+            "target_ref": "malware--d34f608b-115b-54de-a411-e7b2e14ee495",
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "relationship",
+            "spec_version": "2.1",
+            "id": "relationship--96212987-2622-5fe4-bb30-27c7d16345e4",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-10-16T02:07:12.812401Z",
+            "modified": "2026-10-16T02:07:12.812401Z",
+            "relationship_type": "indicates",
+            "source_ref": "indicator--ce873b20-8375-5fb8-842d-57d3a25fe98e",
+            "target_ref": "malware--d34f608b-115b-54de-a411-e7b2e14ee495",
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "relationship",
+            "spec_version": "2.1",
+            "id": "relationship--86ba4636-bd09-5d45-97d2-387c2be14ac3",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-10-16T02:07:12.812481Z",
+            "modified": "2026-10-16T02:07:12.812481Z",
+            "relationship_type": "indicates",
+            "source_ref": "indicator--ce6c00f9-843e-50e8-8167-9b6d6eb9f89f",
+            "target_ref": "malware--d34f608b-115b-54de-a411-e7b2e14ee495",
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "relationship",
+            "spec_version": "2.1",
+            "id": "relationship--45430265-a192-5b18-8703-fbbded8d8a2c",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-10-16T02:07:12.812557Z",
+            "modified": "2026-10-16T02:07:12.812557Z",
+            "relationship_type": "indicates",
+            "source_ref": "indicator--5a8fef61-dd07-5ead-8eb8-589c4c781db2",
+            "target_ref": "malware--d34f608b-115b-54de-a411-e7b2e14ee495",
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "relationship",
+            "spec_version": "2.1",
+            "id": "relationship--b01c735b-bf01-5cf2-8c97-682b1933f8bc",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-10-16T02:07:12.812634Z",
+            "modified": "2026-10-16T02:07:12.812634Z",
+            "relationship_type": "indicates",
+            "source_ref": "indicator--1c93c40f-d4c5-56e8-85a8-448f3b33f136",
+            "target_ref": "malware--d34f608b-115b-54de-a411-e7b2e14ee495",
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "relationship",
+            "spec_version": "2.1",
+            "id": "relationship--df16911e-b37b-5e3a-936d-01f7f0241eb9",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-10-16T02:07:12.81271Z",
+            "modified": "2026-10-16T02:07:12.81271Z",
+            "relationship_type": "indicates",
+            "source_ref": "indicator--31d02f68-8401-5aa9-8022-3e432c1f9996",
+            "target_ref": "malware--d34f608b-115b-54de-a411-e7b2e14ee495",
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "relationship",
+            "spec_version": "2.1",
+            "id": "relationship--368f17ec-8638-5de1-9837-e621e4b48fff",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-10-16T02:07:12.812787Z",
+            "modified": "2026-10-16T02:07:12.812787Z",
+            "relationship_type": "indicates",
+            "source_ref": "indicator--5ffcea65-b355-572b-a063-52dc1388d5e9",
+            "target_ref": "malware--d34f608b-115b-54de-a411-e7b2e14ee495",
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "relationship",
+            "spec_version": "2.1",
+            "id": "relationship--4f1cabff-412a-54d0-a694-231b00cede75",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-10-16T02:07:12.812869Z",
+            "modified": "2026-10-16T02:07:12.812869Z",
+            "relationship_type": "indicates",
+            "source_ref": "indicator--325e81f2-33cb-5fa2-8d96-6078e60a9708",
+            "target_ref": "malware--d34f608b-115b-54de-a411-e7b2e14ee495",
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "relationship",
+            "spec_version": "2.1",
+            "id": "relationship--e0b26fd3-b895-5f7a-9bce-934d36bc167f",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-10-16T02:07:12.812981Z",
+            "modified": "2026-10-16T02:07:12.812981Z",
+            "relationship_type": "indicates",
+            "source_ref": "indicator--2aa7796f-60b4-5b3a-9f5c-bdbc39aebe88",
+            "target_ref": "malware--d34f608b-115b-54de-a411-e7b2e14ee495",
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "relationship",
+            "spec_version": "2.1",
+            "id": "relationship--ee2d3bb1-9fb7-513c-95ba-f6902e3c7866",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-10-16T02:07:12.813061Z",
+            "modified": "2026-10-16T02:07:12.813061Z",
+            "relationship_type": "indicates",
+            "source_ref": "indicator--e70edc13-6f82-5453-864f-c6d007828ceb",
+            "target_ref": "malware--d34f608b-115b-54de-a411-e7b2e14ee495",
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "relationship",
+            "spec_version": "2.1",
+            "id": "relationship--34256425-3788-58aa-87aa-0fcf1ea9b969",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-10-16T02:07:12.81314Z",
+            "modified": "2026-10-16T02:07:12.81314Z",
+            "relationship_type": "indicates",
+            "source_ref": "indicator--cf97447c-7aaa-5341-bf62-61d9c5dcf2b7",
+            "target_ref": "malware--d34f608b-115b-54de-a411-e7b2e14ee495",
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "relationship",
+            "spec_version": "2.1",
+            "id": "relationship--89075e68-e26f-55f1-9951-7d98c1e29d18",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-10-16T02:07:12.813221Z",
+            "modified": "2026-10-16T02:07:12.813221Z",
+            "relationship_type": "indicates",
+            "source_ref": "indicator--26647791-827e-5057-a7d2-cb4b302df46b",
+            "target_ref": "malware--d34f608b-115b-54de-a411-e7b2e14ee495",
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "relationship",
+            "spec_version": "2.1",
+            "id": "relationship--a34a137e-3e1a-5161-81ab-0b1c5a780df8",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-10-16T02:07:12.813299Z",
+            "modified": "2026-10-16T02:07:12.813299Z",
+            "relationship_type": "indicates",
+            "source_ref": "indicator--57316f7b-00d1-50f3-af5a-6282d4543166",
+            "target_ref": "malware--d34f608b-115b-54de-a411-e7b2e14ee495",
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "relationship",
+            "spec_version": "2.1",
+            "id": "relationship--72687c07-8fa9-5633-974f-ac141b0f757a",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-10-16T02:07:12.813379Z",
+            "modified": "2026-10-16T02:07:12.813379Z",
+            "relationship_type": "indicates",
+            "source_ref": "indicator--3933abc3-6cbc-5ce1-8f66-de278d86455f",
+            "target_ref": "malware--d34f608b-115b-54de-a411-e7b2e14ee495",
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "relationship",
+            "spec_version": "2.1",
+            "id": "relationship--afbb2f37-1510-5cba-831e-df589de49827",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-10-16T02:07:12.813459Z",
+            "modified": "2026-10-16T02:07:12.813459Z",
+            "relationship_type": "indicates",
+            "source_ref": "indicator--88fa4fdc-22d4-5ff2-a671-ff9fd749e4e0",
+            "target_ref": "malware--d34f608b-115b-54de-a411-e7b2e14ee495",
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "relationship",
+            "spec_version": "2.1",
+            "id": "relationship--0b5eb635-d833-5bbb-989b-a6657ddaa282",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-10-16T02:07:12.813538Z",
+            "modified": "2026-10-16T02:07:12.813538Z",
+            "relationship_type": "indicates",
+            "source_ref": "indicator--d8e72105-630c-5661-802f-d3a1f54454bb",
+            "target_ref": "malware--d34f608b-115b-54de-a411-e7b2e14ee495",
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "relationship",
+            "spec_version": "2.1",
+            "id": "relationship--63bf1571-f22b-523e-b876-75cd5ee6649e",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-10-16T02:07:12.813625Z",
+            "modified": "2026-10-16T02:07:12.813625Z",
+            "relationship_type": "indicates",
+            "source_ref": "indicator--b8cbe838-6818-5140-b7f3-7caeeffd5f1b",
+            "target_ref": "malware--d34f608b-115b-54de-a411-e7b2e14ee495",
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "relationship",
+            "spec_version": "2.1",
+            "id": "relationship--44258a86-b6a2-59cb-8c12-aeb0f13a32b5",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-10-16T02:07:12.813706Z",
+            "modified": "2026-10-16T02:07:12.813706Z",
+            "relationship_type": "indicates",
+            "source_ref": "indicator--2e9e02cc-2576-56f8-ae16-9930457a4bb0",
+            "target_ref": "malware--d34f608b-115b-54de-a411-e7b2e14ee495",
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "relationship",
+            "spec_version": "2.1",
+            "id": "relationship--7382bfea-a9fc-5ebd-add2-bbe6c5d09583",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-10-16T02:07:12.813801Z",
+            "modified": "2026-10-16T02:07:12.813801Z",
+            "relationship_type": "indicates",
+            "source_ref": "indicator--378f0963-c747-521d-86be-c00e00750502",
+            "target_ref": "malware--d34f608b-115b-54de-a411-e7b2e14ee495",
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "relationship",
+            "spec_version": "2.1",
+            "id": "relationship--2ee9adc0-c981-5b89-9e6b-889eea83408a",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-10-16T02:07:12.813917Z",
+            "modified": "2026-10-16T02:07:12.813917Z",
+            "relationship_type": "uses",
+            "source_ref": "malware--a09ce122-2303-5d53-807c-8e9dc67f77a5",
+            "target_ref": "attack-pattern--6214841b-936d-5da2-b5c8-4bed4cf9aee0",
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "relationship",
+            "spec_version": "2.1",
+            "id": "relationship--fda8729e-d944-5df5-888a-0a4ca9ae7e88",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-10-16T02:07:12.814034Z",
+            "modified": "2026-10-16T02:07:12.814034Z",
+            "relationship_type": "uses",
+            "source_ref": "malware--a09ce122-2303-5d53-807c-8e9dc67f77a5",
+            "target_ref": "attack-pattern--856a360d-8aca-55ff-949d-fee64905d0a8",
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "relationship",
+            "spec_version": "2.1",
+            "id": "relationship--5ea36dd9-ee60-54d7-9885-e044f8d530c3",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-10-16T02:07:12.814151Z",
+            "modified": "2026-10-16T02:07:12.814151Z",
+            "relationship_type": "uses",
+            "source_ref": "malware--a09ce122-2303-5d53-807c-8e9dc67f77a5",
+            "target_ref": "attack-pattern--73364e03-8914-541e-a33c-877b656c37e4",
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "relationship",
+            "spec_version": "2.1",
+            "id": "relationship--8624d200-8c74-5b56-8b75-c0ce07e87a7c",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-10-16T02:07:12.814236Z",
+            "modified": "2026-10-16T02:07:12.814236Z",
+            "relationship_type": "uses",
+            "source_ref": "malware--a09ce122-2303-5d53-807c-8e9dc67f77a5",
+            "target_ref": "attack-pattern--fd8dd968-9ef8-5d44-9278-54e070789645",
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "relationship",
+            "spec_version": "2.1",
+            "id": "relationship--a4b8a33a-25e2-5aa6-ab85-d5e1018ab022",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-10-16T02:07:12.814318Z",
+            "modified": "2026-10-16T02:07:12.814318Z",
+            "relationship_type": "uses",
+            "source_ref": "malware--a09ce122-2303-5d53-807c-8e9dc67f77a5",
+            "target_ref": "attack-pattern--1076c468-8982-548b-9292-726a22f83ecb",
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "relationship",
+            "spec_version": "2.1",
+            "id": "relationship--e5683618-de9b-5e9f-b79d-4933baa6d549",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-10-16T02:07:12.814399Z",
+            "modified": "2026-10-16T02:07:12.814399Z",
+            "relationship_type": "uses",
+            "source_ref": "malware--a09ce122-2303-5d53-807c-8e9dc67f77a5",
+            "target_ref": "attack-pattern--f04532fb-150d-5d27-99b3-5392af504899",
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "relationship",
+            "spec_version": "2.1",
+            "id": "relationship--1b26c41d-814c-5b5a-9b7e-483b2f25ad73",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-10-16T02:07:12.81448Z",
+            "modified": "2026-10-16T02:07:12.81448Z",
+            "relationship_type": "uses",
+            "source_ref": "malware--a09ce122-2303-5d53-807c-8e9dc67f77a5",
+            "target_ref": "attack-pattern--b404a9fb-d467-5620-989b-b831b2ff9144",
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "relationship",
+            "spec_version": "2.1",
+            "id": "relationship--01066dcf-fe50-50ab-8f56-90428ecb74c4",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-10-16T02:07:12.81456Z",
+            "modified": "2026-10-16T02:07:12.81456Z",
+            "relationship_type": "uses",
+            "source_ref": "malware--a09ce122-2303-5d53-807c-8e9dc67f77a5",
+            "target_ref": "attack-pattern--e42939d6-6332-5a6c-8dac-6195c79081bc",
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "relationship",
+            "spec_version": "2.1",
+            "id": "relationship--7f85ef9a-f1e7-53d2-ada6-96616d4a77fe",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-10-16T02:07:12.814643Z",
+            "modified": "2026-10-16T02:07:12.814643Z",
+            "relationship_type": "uses",
+            "source_ref": "malware--a09ce122-2303-5d53-807c-8e9dc67f77a5",
+            "target_ref": "attack-pattern--8bd25a7b-1b65-5b61-9080-4b05d2ce7541",
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "relationship",
+            "spec_version": "2.1",
+            "id": "relationship--15c30652-8e1d-58f3-bd76-6924f56c936b",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-10-16T02:07:12.814727Z",
+            "modified": "2026-10-16T02:07:12.814727Z",
+            "relationship_type": "uses",
+            "source_ref": "malware--a09ce122-2303-5d53-807c-8e9dc67f77a5",
+            "target_ref": "attack-pattern--030bfe25-492a-5e3f-aad5-1c799345aa06",
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "relationship",
+            "spec_version": "2.1",
+            "id": "relationship--8c69e892-5fff-5cca-ae76-c29cd0e77083",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-10-16T02:07:12.814809Z",
+            "modified": "2026-10-16T02:07:12.814809Z",
+            "relationship_type": "uses",
+            "source_ref": "malware--a09ce122-2303-5d53-807c-8e9dc67f77a5",
+            "target_ref": "attack-pattern--06cbe52b-abcb-5b54-a3ec-c553a82c7374",
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "relationship",
+            "spec_version": "2.1",
+            "id": "relationship--a6c55b35-fe1a-52e6-85db-b1a3e7d0267a",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-10-16T02:07:12.814902Z",
+            "modified": "2026-10-16T02:07:12.814902Z",
+            "relationship_type": "uses",
+            "source_ref": "malware--a09ce122-2303-5d53-807c-8e9dc67f77a5",
+            "target_ref": "attack-pattern--bc4aee16-aeaf-5d06-9023-dbf06eead1e1",
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "relationship",
+            "spec_version": "2.1",
+            "id": "relationship--f04172d0-b007-5eec-862b-a64dedea0ca0",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-10-16T02:07:12.814987Z",
+            "modified": "2026-10-16T02:07:12.814987Z",
+            "relationship_type": "uses",
+            "source_ref": "malware--a09ce122-2303-5d53-807c-8e9dc67f77a5",
+            "target_ref": "attack-pattern--80055098-952b-5cf0-8827-46d1bfec32dc",
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "relationship",
+            "spec_version": "2.1",
+            "id": "relationship--fbe5ca90-85f7-50a3-900e-e582249e3908",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-10-16T02:07:12.815071Z",
+            "modified": "2026-10-16T02:07:12.815071Z",
+            "relationship_type": "uses",
+            "source_ref": "malware--a09ce122-2303-5d53-807c-8e9dc67f77a5",
+            "target_ref": "attack-pattern--511c7a6e-4f3a-5762-9a8d-988f8e457f48",
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "relationship",
+            "spec_version": "2.1",
+            "id": "relationship--d293e7ce-03c8-5fb2-a2a2-c1a6835395a3",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-10-16T02:07:12.815157Z",
+            "modified": "2026-10-16T02:07:12.815157Z",
+            "relationship_type": "uses",
+            "source_ref": "malware--a09ce122-2303-5d53-807c-8e9dc67f77a5",
+            "target_ref": "attack-pattern--b0461f21-7402-55c8-89a8-87f0a8c2dacf",
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "relationship",
+            "spec_version": "2.1",
+            "id": "relationship--110184c8-8cc1-5b93-81a7-2846b2087844",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-10-16T02:07:12.815238Z",
+            "modified": "2026-10-16T02:07:12.815238Z",
+            "relationship_type": "uses",
+            "source_ref": "malware--a09ce122-2303-5d53-807c-8e9dc67f77a5",
+            "target_ref": "infrastructure--8b31849a-8fe5-53a5-9aa9-f4ea85cdfc7e",
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "relationship",
+            "spec_version": "2.1",
+            "id": "relationship--924a4de7-ebb2-50e7-8f08-4b6d1c7ccd9d",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-10-16T02:07:12.815321Z",
+            "modified": "2026-10-16T02:07:12.815321Z",
+            "relationship_type": "exploits",
+            "source_ref": "malware--a09ce122-2303-5d53-807c-8e9dc67f77a5",
+            "target_ref": "vulnerability--8c8dec78-9c95-5af6-92a2-626e21d64bea",
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "relationship",
+            "spec_version": "2.1",
+            "id": "relationship--84c43882-6100-5546-bc29-f074779eb8f8",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-10-16T02:07:12.815403Z",
+            "modified": "2026-10-16T02:07:12.815403Z",
+            "relationship_type": "uses",
+            "source_ref": "malware--d34f608b-115b-54de-a411-e7b2e14ee495",
+            "target_ref": "attack-pattern--6214841b-936d-5da2-b5c8-4bed4cf9aee0",
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "relationship",
+            "spec_version": "2.1",
+            "id": "relationship--6a0d8348-fdbe-50fd-b213-ab8b398d0a62",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-10-16T02:07:12.815483Z",
+            "modified": "2026-10-16T02:07:12.815483Z",
+            "relationship_type": "uses",
+            "source_ref": "malware--d34f608b-115b-54de-a411-e7b2e14ee495",
+            "target_ref": "attack-pattern--856a360d-8aca-55ff-949d-fee64905d0a8",
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "relationship",
+            "spec_version": "2.1",
+            "id": "relationship--0f97a054-58cf-54b7-86c0-0f7cbda1de3d",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-10-16T02:07:12.815564Z",
+            "modified": "2026-10-16T02:07:12.815564Z",
+            "relationship_type": "uses",
+            "source_ref": "malware--d34f608b-115b-54de-a411-e7b2e14ee495",
+            "target_ref": "attack-pattern--73364e03-8914-541e-a33c-877b656c37e4",
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "relationship",
+            "spec_version": "2.1",
+            "id": "relationship--3905d200-c89a-52fa-ad74-b7b0faf8a706",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-10-16T02:07:12.815642Z",
+            "modified": "2026-10-16T02:07:12.815642Z",
+            "relationship_type": "uses",
+            "source_ref": "malware--d34f608b-115b-54de-a411-e7b2e14ee495",
+            "target_ref": "attack-pattern--fd8dd968-9ef8-5d44-9278-54e070789645",
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "relationship",
+            "spec_version": "2.1",
+            "id": "relationship--4fdc2057-c705-5490-9a91-840507d8ffb0",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-10-16T02:07:12.815722Z",
+            "modified": "2026-10-16T02:07:12.815722Z",
+            "relationship_type": "uses",
+            "source_ref": "malware--d34f608b-115b-54de-a411-e7b2e14ee495",
+            "target_ref": "attack-pattern--1076c468-8982-548b-9292-726a22f83ecb",
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "relationship",
+            "spec_version": "2.1",
+            "id": "relationship--43ab8c67-ba77-5c69-9a28-9f26f5be52b1",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-10-16T02:07:12.815801Z",
+            "modified": "2026-10-16T02:07:12.815801Z",
+            "relationship_type": "uses",
+            "source_ref": "malware--d34f608b-115b-54de-a411-e7b2e14ee495",
+            "target_ref": "attack-pattern--f04532fb-150d-5d27-99b3-5392af504899",
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "relationship",
+            "spec_version": "2.1",
+            "id": "relationship--966181aa-472b-5f3e-b5ea-3cf4793cd636",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-10-16T02:07:12.815885Z",
+            "modified": "2026-10-16T02:07:12.815885Z",
+            "relationship_type": "uses",
+            "source_ref": "malware--d34f608b-115b-54de-a411-e7b2e14ee495",
+            "target_ref": "attack-pattern--b404a9fb-d467-5620-989b-b831b2ff9144",
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "relationship",
+            "spec_version": "2.1",
+            "id": "relationship--8c14698e-f085-579f-9e92-a2a156f38609",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-10-16T02:07:12.815978Z",
+            "modified": "2026-10-16T02:07:12.815978Z",
+            "relationship_type": "uses",
+            "source_ref": "malware--d34f608b-115b-54de-a411-e7b2e14ee495",
+            "target_ref": "attack-pattern--e42939d6-6332-5a6c-8dac-6195c79081bc",
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "relationship",
+            "spec_version": "2.1",
+            "id": "relationship--c15545ee-1560-5253-8a88-d2bfad4da128",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-10-16T02:07:12.816055Z",
+            "modified": "2026-10-16T02:07:12.816055Z",
+            "relationship_type": "uses",
+            "source_ref": "malware--d34f608b-115b-54de-a411-e7b2e14ee495",
+            "target_ref": "attack-pattern--8bd25a7b-1b65-5b61-9080-4b05d2ce7541",
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "relationship",
+            "spec_version": "2.1",
+            "id": "relationship--335d47fa-7d58-55dc-82fc-16e886e10c4e",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-10-16T02:07:12.816132Z",
+            "modified": "2026-10-16T02:07:12.816132Z",
+            "relationship_type": "uses",
+            "source_ref": "malware--d34f608b-115b-54de-a411-e7b2e14ee495",
+            "target_ref": "attack-pattern--030bfe25-492a-5e3f-aad5-1c799345aa06",
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "relationship",
+            "spec_version": "2.1",
+            "id": "relationship--b607ceaf-8e50-5daa-b701-a644c21f4d55",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-10-16T02:07:12.81621Z",
+            "modified": "2026-10-16T02:07:12.81621Z",
+            "relationship_type": "uses",
+            "source_ref": "malware--d34f608b-115b-54de-a411-e7b2e14ee495",
+            "target_ref": "attack-pattern--06cbe52b-abcb-5b54-a3ec-c553a82c7374",
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "relationship",
+            "spec_version": "2.1",
+            "id": "relationship--a09157cc-52d5-5b2a-bb4d-9b2898e74e1b",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-10-16T02:07:12.816287Z",
+            "modified": "2026-10-16T02:07:12.816287Z",
+            "relationship_type": "uses",
+            "source_ref": "malware--d34f608b-115b-54de-a411-e7b2e14ee495",
+            "target_ref": "attack-pattern--bc4aee16-aeaf-5d06-9023-dbf06eead1e1",
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "relationship",
+            "spec_version": "2.1",
+            "id": "relationship--87e79d7c-2357-58ea-b0ef-0c453cca4d62",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-10-16T02:07:12.816364Z",
+            "modified": "2026-10-16T02:07:12.816364Z",
+            "relationship_type": "uses",
+            "source_ref": "malware--d34f608b-115b-54de-a411-e7b2e14ee495",
+            "target_ref": "attack-pattern--80055098-952b-5cf0-8827-46d1bfec32dc",
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "relationship",
+            "spec_version": "2.1",
+            "id": "relationship--d148a7e1-2d97-55a4-a7ca-07bccda57dd1",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-10-16T02:07:12.816442Z",
+            "modified": "2026-10-16T02:07:12.816442Z",
+            "relationship_type": "uses",
+            "source_ref": "malware--d34f608b-115b-54de-a411-e7b2e14ee495",
+            "target_ref": "attack-pattern--511c7a6e-4f3a-5762-9a8d-988f8e457f48",
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "relationship",
+            "spec_version": "2.1",
+            "id": "relationship--22daee58-371c-5394-812a-d63d197a5b05",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-10-16T02:07:12.816522Z",
+            "modified": "2026-10-16T02:07:12.816522Z",
+            "relationship_type": "uses",
+            "source_ref": "malware--d34f608b-115b-54de-a411-e7b2e14ee495",
+            "target_ref": "attack-pattern--b0461f21-7402-55c8-89a8-87f0a8c2dacf",
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "relationship",
+            "spec_version": "2.1",
+            "id": "relationship--d190c292-1d90-5aef-bf8d-20104cb8492d",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-10-16T02:07:12.8166Z",
+            "modified": "2026-10-16T02:07:12.8166Z",
+            "relationship_type": "uses",
+            "source_ref": "malware--d34f608b-115b-54de-a411-e7b2e14ee495",
+            "target_ref": "infrastructure--8b31849a-8fe5-53a5-9aa9-f4ea85cdfc7e",
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "relationship",
+            "spec_version": "2.1",
+            "id": "relationship--5a9520a9-b2fc-5acc-9fe1-f360de327499",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-10-16T02:07:12.816679Z",
+            "modified": "2026-10-16T02:07:12.816679Z",
+            "relationship_type": "exploits",
+            "source_ref": "malware--d34f608b-115b-54de-a411-e7b2e14ee495",
+            "target_ref": "vulnerability--8c8dec78-9c95-5af6-92a2-626e21d64bea",
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "report",
+            "spec_version": "2.1",
+            "id": "report--6c2dd704-04ad-57c8-b183-13561e5815cc",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-10-16T02:07:12.816797Z",
+            "modified": "2026-10-21T19:20:58.875335Z",
+            "name": "Help Desks to Host Shells Across Brazil's Public Sector",
+            "report_types": [
+                "threat-report"
+            ],
+            "published": "2026-10-15T00:00:00Z",
+            "object_refs": [
+                "ipv4-addr--bed920f8-5477-5c1a-854d-6bd86430a555",
+                "indicator--6ae7cb4f-4b92-5a33-8b17-e65cadba6880",
+                "ipv4-addr--be513732-0dab-5503-ad8e-5e4104b7dc60",
+                "indicator--cd93f1c3-58d8-5886-a023-b5cb8bd0afa2",
+                "ipv4-addr--bdb41881-4f01-50d3-a4d8-6c5269e78add",
+                "indicator--e2228066-aff8-541a-85b1-b4c31f6a74c4",
+                "url--e37b450a-4fa3-5de5-aeb5-35b5e45f0021",
+                "indicator--03f4e7a5-2055-5f82-ab98-90cf7331d0cd",
+                "url--95a93f7a-6ad2-5339-b1c7-224a74ad0da9",
+                "indicator--ce873b20-8375-5fb8-842d-57d3a25fe98e",
+                "url--00d9fc90-3c36-5334-9856-101fd9c87c37",
+                "indicator--ce6c00f9-843e-50e8-8167-9b6d6eb9f89f",
+                "url--71980967-3a33-5e5c-8a82-c35e8e2a0b37",
+                "indicator--5a8fef61-dd07-5ead-8eb8-589c4c781db2",
+                "file--8b0e7aab-370b-5bbf-9c06-183645a9f8a8",
+                "indicator--1c93c40f-d4c5-56e8-85a8-448f3b33f136",
+                "file--fa137256-4669-5fa4-b46b-57dcfaf31d22",
+                "indicator--31d02f68-8401-5aa9-8022-3e432c1f9996",
+                "indicator--5ffcea65-b355-572b-a063-52dc1388d5e9",
+                "indicator--325e81f2-33cb-5fa2-8d96-6078e60a9708",
+                "indicator--2aa7796f-60b4-5b3a-9f5c-bdbc39aebe88",
+                "indicator--e70edc13-6f82-5453-864f-c6d007828ceb",
+                "indicator--cf97447c-7aaa-5341-bf62-61d9c5dcf2b7",
+                "indicator--26647791-827e-5057-a7d2-cb4b302df46b",
+                "indicator--57316f7b-00d1-50f3-af5a-6282d4543166",
+                "indicator--3933abc3-6cbc-5ce1-8f66-de278d86455f",
+                "indicator--88fa4fdc-22d4-5ff2-a671-ff9fd749e4e0",
+                "indicator--d8e72105-630c-5661-802f-d3a1f54454bb",
+                "indicator--b8cbe838-6818-5140-b7f3-7caeeffd5f1b",
+                "indicator--2e9e02cc-2576-56f8-ae16-9930457a4bb0",
+                "indicator--378f0963-c747-521d-86be-c00e00750502",
+                "malware--a09ce122-2303-5d53-807c-8e9dc67f77a5",
+                "malware--d34f608b-115b-54de-a411-e7b2e14ee495",
+                "attack-pattern--6214841b-936d-5da2-b5c8-4bed4cf9aee0",
+                "attack-pattern--856a360d-8aca-55ff-949d-fee64905d0a8",
+                "attack-pattern--73364e03-8914-541e-a33c-877b656c37e4",
+                "attack-pattern--fd8dd968-9ef8-5d44-9278-54e070789645",
+                "attack-pattern--1076c468-8982-548b-9292-726a22f83ecb",
+                "attack-pattern--f04532fb-150d-5d27-99b3-5392af504899",
+                "attack-pattern--b404a9fb-d467-5620-989b-b831b2ff9144",
+                "attack-pattern--e42939d6-6332-5a6c-8dac-6195c79081bc",
+                "attack-pattern--8bd25a7b-1b65-5b61-9080-4b05d2ce7541",
+                "attack-pattern--030bfe25-492a-5e3f-aad5-1c799345aa06",
+                "attack-pattern--06cbe52b-abcb-5b54-a3ec-c553a82c7374",
+                "attack-pattern--bc4aee16-aeaf-5d06-9023-dbf06eead1e1",
+                "attack-pattern--80055098-952b-5cf0-8827-46d1bfec32dc",
+                "attack-pattern--511c7a6e-4f3a-5762-9a8d-988f8e457f48",
+                "attack-pattern--b0461f21-7402-55c8-89a8-87f0a8c2dacf",
+                "infrastructure--8b31849a-8fe5-53a5-9aa9-f4ea85cdfc7e",
+                "vulnerability--8c8dec78-9c95-5af6-92a2-626e21d64bea",
+                "relationship--9fe60996-c478-549d-a1df-77697665fb2f",
+                "relationship--ebdab2b9-2837-550f-8493-84c48a94b968",
+                "relationship--bf70e169-08ec-546e-8add-bcf5e52382f3",
+                "relationship--0dc3eb35-116e-50f7-8054-43ca76f414a4",
+                "relationship--96212987-2622-5fe4-bb30-27c7d16345e4",
+                "relationship--86ba4636-bd09-5d45-97d2-387c2be14ac3",
+                "relationship--45430265-a192-5b18-8703-fbbded8d8a2c",
+                "relationship--b01c735b-bf01-5cf2-8c97-682b1933f8bc",
+                "relationship--df16911e-b37b-5e3a-936d-01f7f0241eb9",
+                "relationship--368f17ec-8638-5de1-9837-e621e4b48fff",
+                "relationship--4f1cabff-412a-54d0-a694-231b00cede75",
+                "relationship--e0b26fd3-b895-5f7a-9bce-934d36bc167f",
+                "relationship--ee2d3bb1-9fb7-513c-95ba-f6902e3c7866",
+                "relationship--34256425-3788-58aa-87aa-0fcf1ea9b969",
+                "relationship--89075e68-e26f-55f1-9951-7d98c1e29d18",
+                "relationship--a34a137e-3e1a-5161-81ab-0b1c5a780df8",
+                "relationship--72687c07-8fa9-5633-974f-ac141b0f757a",
+                "relationship--afbb2f37-1510-5cba-831e-df589de49827",
+                "relationship--0b5eb635-d833-5bbb-989b-a6657ddaa282",
+                "relationship--63bf1571-f22b-523e-b876-75cd5ee6649e",
+                "relationship--44258a86-b6a2-59cb-8c12-aeb0f13a32b5",
+                "relationship--7382bfea-a9fc-5ebd-add2-bbe6c5d09583",
+                "relationship--2ee9adc0-c981-5b89-9e6b-889eea83408a",
+                "relationship--fda8729e-d944-5df5-888a-0a4ca9ae7e88",
+                "relationship--5ea36dd9-ee60-54d7-9885-e044f8d530c3",
+                "relationship--8624d200-8c74-5b56-8b75-c0ce07e87a7c",
+                "relationship--a4b8a33a-25e2-5aa6-ab85-d5e1018ab022",
+                "relationship--e5683618-de9b-5e9f-b79d-4933baa6d549",
+                "relationship--1b26c41d-814c-5b5a-9b7e-483b2f25ad73",
+                "relationship--01066dcf-fe50-50ab-8f56-90428ecb74c4",
+                "relationship--7f85ef9a-f1e7-53d2-ada6-96616d4a77fe",
+                "relationship--15c30652-8e1d-58f3-bd76-6924f56c936b",
+                "relationship--8c69e892-5fff-5cca-ae76-c29cd0e77083",
+                "relationship--a6c55b35-fe1a-52e6-85db-b1a3e7d0267a",
+                "relationship--f04172d0-b007-5eec-862b-a64dedea0ca0",
+                "relationship--fbe5ca90-85f7-50a3-900e-e582249e3908",
+                "relationship--d293e7ce-03c8-5fb2-a2a2-c1a6835395a3",
+                "relationship--110184c8-8cc1-5b93-81a7-2846b2087844",
+                "relationship--924a4de7-ebb2-50e7-8f08-4b6d1c7ccd9d",
+                "relationship--84c43882-6100-5546-bc29-f074779eb8f8",
+                "relationship--6a0d8348-fdbe-50fd-b213-ab8b398d0a62",
+                "relationship--0f97a054-58cf-54b7-86c0-0f7cbda1de3d",
+                "relationship--3905d200-c89a-52fa-ad74-b7b0faf8a706",
+                "relationship--4fdc2057-c705-5490-9a91-840507d8ffb0",
+                "relationship--43ab8c67-ba77-5c69-9a28-9f26f5be52b1",
+                "relationship--966181aa-472b-5f3e-b5ea-3cf4793cd636",
+                "relationship--8c14698e-f085-579f-9e92-a2a156f38609",
+                "relationship--c15545ee-1560-5253-8a88-d2bfad4da128",
+                "relationship--335d47fa-7d58-55dc-82fc-16e886e10c4e",
+                "relationship--b607ceaf-8e50-5daa-b701-a644c21f4d55",
+                "relationship--a09157cc-52d5-5b2a-bb4d-9b2898e74e1b",
+                "relationship--87e79d7c-2357-58ea-b0ef-0c453cca4d62",
+                "relationship--d148a7e1-2d97-55a4-a7ca-07bccda57dd1",
+                "relationship--22daee58-371c-5394-812a-d63d197a5b05",
+                "relationship--d190c292-1d90-5aef-bf8d-20104cb8492d",
+                "relationship--5a9520a9-b2fc-5acc-9fe1-f360de327499"
+            ],
+            "labels": [
+                "Open Dir",
+                "Toolkit",
+                "Exploitation",
+                "Brazil"
+            ],
+            "external_references": [
+                {
+                    "source_name": "The Hunters Ledger",
+                    "url": "https://the-hunters-ledger.com/reports/opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015/"
+                }
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        }
+    ]
+}

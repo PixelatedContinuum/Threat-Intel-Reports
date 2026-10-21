@@ -1892,6 +1892,9 @@ unmapped:
   - label: Operator toolkit (no malware family)
     where:
       - feed multivector-ecommerce-rce-toolkit-192-3-1-116-iocs.json
+  - label: Operator toolkit (no malware family; server-side shell, Python, PHP and Java tooling)
+    where:
+      - feed opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015-iocs.json
   - label: Public tool - CVE-2023-21839 Go exploit (not this operator's own code)
     where:
       - >-

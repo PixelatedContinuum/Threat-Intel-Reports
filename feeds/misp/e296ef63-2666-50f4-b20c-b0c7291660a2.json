@@ -1,0 +1,430 @@
+{
+  "Event": {
+    "uuid": "e296ef63-2666-50f4-b20c-b0c7291660a2",
+    "info": "Help Desks to Host Shells Across Brazil's Public Sector",
+    "date": "2026-10-15",
+    "threat_level_id": 1,
+    "analysis": 2,
+    "timestamp": 1792610549,
+    "publish_timestamp": 1792610549,
+    "published": true,
+    "Orgc": {
+      "name": "The Hunters Ledger",
+      "uuid": "8bc8284b-deb5-546c-a233-57ea34b2ea0d"
+    },
+    "Tag": [
+      {
+        "name": "tlp:clear",
+        "colour": "#ffffff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"Open Dir\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"Toolkit\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"Exploitation\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"Brazil\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Exfiltration Over C2 Channel - T1041\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Unix Shell - T1059.004\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Indicator Removal - T1070\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Software Deployment Tools - T1072\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Valid Accounts - T1078\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Internal Proxy - T1090.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Non-Application Layer Protocol - T1095\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Exploit Public-Facing Application - T1190\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Data from Information Repositories - T1213\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Web Shell - T1505.003\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Steal Application Access Token - T1528\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Application Access Token - T1550.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Unsecured Credentials - T1552\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Credentials In Files - T1552.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Stored Data Manipulation - T1565.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Non-Standard Port - T1571\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Disable or Modify Tools - T1685\"",
+        "colour": "#0088cc"
+      }
+    ],
+    "Attribute": [
+      {
+        "uuid": "afc2a109-24fd-598e-b47f-2f0993dca8ae",
+        "type": "link",
+        "category": "External analysis",
+        "value": "https://the-hunters-ledger.com/hunting-detections/opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015-detections/",
+        "to_ids": false,
+        "comment": "Detection rules, The Hunters Ledger",
+        "timestamp": 1792610549
+      },
+      {
+        "uuid": "1d84cf96-56ff-5335-a4b0-9a50d5c6f050",
+        "type": "link",
+        "category": "External analysis",
+        "value": "https://the-hunters-ledger.com/ioc-feeds/opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015-iocs.json",
+        "to_ids": false,
+        "comment": "IOC feed (JSON), The Hunters Ledger",
+        "timestamp": 1792610549
+      },
+      {
+        "uuid": "0dae91e7-ff96-5bf5-a047-fb2316ab1dd8",
+        "type": "link",
+        "category": "External analysis",
+        "value": "https://the-hunters-ledger.com/reports/opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015/",
+        "to_ids": false,
+        "comment": "Report, The Hunters Ledger",
+        "timestamp": 1792610549
+      },
+      {
+        "uuid": "25fa232b-7a46-5756-8d1a-e1b2350b1eda",
+        "type": "link",
+        "category": "External analysis",
+        "value": "https://the-hunters-ledger.com/stix/opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015.json",
+        "to_ids": false,
+        "comment": "STIX 2.1 bundle, The Hunters Ledger",
+        "timestamp": 1792610549
+      },
+      {
+        "uuid": "33354586-625c-5ed7-b48c-9b558d8a0afd",
+        "type": "vulnerability",
+        "category": "External analysis",
+        "value": "CVE-2022-35914",
+        "to_ids": false,
+        "comment": "Named in the report",
+        "timestamp": 1792610549
+      },
+      {
+        "uuid": "5bac6ba3-0b2d-5763-b17b-24fced377b0d",
+        "type": "sha256",
+        "category": "Payload delivery",
+        "value": "86c0fa7d4fe1740e02a845fe18f85de91b234321b21d7804944f3248395968bc",
+        "to_ids": true,
+        "comment": "sha256: 86c0fa7d4fe1740e02a845fe18f85de91b234321b21d7804944f3248395968bc. A small shell script name that other users also choose. Match the hash, not the filename, and treat a hit as an operator-hosting artifact only. [confidence 95/100]",
+        "timestamp": 1792610549
+      },
+      {
+        "uuid": "5a3f9363-5c08-5bf2-b9af-87acb61b9791",
+        "type": "sha256",
+        "category": "Payload delivery",
+        "value": "986f697d2ef67a38e25c6a17cdecd7bb50148f2c2993864c748e3504d3d747f0",
+        "to_ids": true,
+        "comment": "sha256: 986f697d2ef67a38e25c6a17cdecd7bb50148f2c2993864c748e3504d3d747f0. No legitimate use of this relay, found in the operator's directory (authorship not established), is known. The filename is generic, so match the hash or the wire behaviour, never the name. [confidence 95/100]",
+        "timestamp": 1792610549
+      },
+      {
+        "uuid": "a6ea0fe7-8609-5daa-87b2-0f48d6925900",
+        "type": "url",
+        "category": "Network activity",
+        "value": "http://209.99.185.148:8146/e/a38243f90dc30f99/",
+        "to_ids": true,
+        "comment": "url: http://209.99.185.148:8146/e/a38243f90dc30f99/. Confirmed in VirusTotal sandbox behaviour for both builds; the requesting builds' authorship is NOT CHECKED. | A random-looking path token on the operator-controlled host. The operator link of the builds is same-IP only; treat the path as the indicator and the address as operator infrastructure, and see the :8146 entry caveat. [confidence 60/100]",
+        "timestamp": 1792610549
+      },
+      {
+        "uuid": "833423a7-d1ca-5860-823c-d28304d93d21",
+        "type": "url",
+        "category": "Network activity",
+        "value": "http://209.99.185.148:8146/p/a38243f90dc30f99",
+        "to_ids": true,
+        "comment": "url: http://209.99.185.148:8146/p/a38243f90dc30f99. What the operator or the service does with the /p/ response is NOT CHECKED. | Same caveat as the /e/ path: the path is the indicator, and the operator link of the builds is same-IP only. [confidence 60/100]",
+        "timestamp": 1792610549
+      },
+      {
+        "uuid": "819f1c8d-40a5-5e39-acad-1ae893424aef",
+        "type": "url",
+        "category": "Network activity",
+        "value": "http://38.180.16.98/",
+        "to_ids": true,
+        "comment": "url: http://38.180.16.98/. Served the operator's /tmp: directories massa1, massa2, massa3, grandes, manuais, dbg, django-loot, netrecon, share, glpwnme, dpgh and js, and the tarballs massa1.tar.gz (3,371 entries) and massa2.tar.gz (1,311 entries, 390.8 MiB). Some of those directory names are clones of public upstream repositories (glpwnme and the dpgh set) and are carried as host context only. The victim-document directories stopped being exposed under those names between 2026-10-01 and 2026-10-03. | The bare address plus a directory listing is the operator's own served tree; the served content is the discriminator, not the banner. Do not widen this to the address on other ports. [confidence 80/100]",
+        "timestamp": 1792610549
+      },
+      {
+        "uuid": "90c69eaf-050a-5898-8b58-bbeb605454be",
+        "type": "url",
+        "category": "Network activity",
+        "value": "http://38.180.16.98:80/Relay.java.new",
+        "to_ids": true,
+        "comment": "url: http://38.180.16.98:80/Relay.java.new. Appeared in the listing between 2026-10-01 and 2026-10-03. | Match the whole path or the file hash; the filename alone is generic. That this exact lab sample was the file deployed on a victim host is NOT ESTABLISHED, so do not read a hit as proof of deployment. [confidence 80/100]",
+        "timestamp": 1792610549
+      },
+      {
+        "uuid": "55e6d14f-4d10-5925-8a41-ade9b84b33a1",
+        "type": "ip-dst",
+        "category": "Network activity",
+        "value": "209.99.185.148",
+        "to_ids": true,
+        "comment": "ipv4: 209.99.185.148. Host control HIGH from the operator's own label 'nosso canary' in five or more files. The victim-side tunnel client /tmp/upd, running as an application service account inside a WSO2 container, points at https://209.99.185.148; a process-table line is shown, an established tunnel is not. Base rate of the 'Update Service' organisation string and of the cloudedge-edge/1.4 banner is NOT CHECKED. | Named as the callback target in S1.class and S1.java, asp_fuzz.py, ssrf_canary.py (comment 'nosso canary'), batch2.sh and batch57.sh; 16 SSRF-related hashes name the collector. Answered 'ok' on 2026-10-03 04:06Z, 2026-10-05 and 2026-10-07; connect timeout on 2026-10-14. | Both builds launch a headless Chrome at the /e/ path and request /p/ in VirusTotal sandbox output. :8146 is absent from all 15 Hunt.io port-history rows and all 14 protocol rows, so its presence, closure or continued service is NOT CHECKED; the 2026-10-14 rescan probed the root path rather than the historical /e/ path. | The response body is the two bytes 'ok' as application/xml from Python BaseHTTP. That pair alone is generic, so match the destination address-and-port against a callback shape, not the body. | This address is a dedicated single-tenant network with no shared hosting, so the host-level block is safe in the operator window. Two limits travel with it: the address held unrelated services before the 2026-04-01 announcement of the prefix (do not match pre-April history on it), and the bpupdate.exe and exp.html surface here is tied to the address by IP only, authorship NOT CHECKED. | The service sits on a host that is HIGH-confidence operator infrastructure, but the two builds that request it are tied to it by IP only and their authorship is NOT CHECKED (a developer or vendor pipeline is not excluded). Prefer the two paths as the indicator; the cloudedge-edge/1.4 banner has no measured base rate. [confidence 80/100]",
+        "timestamp": 1792610549
+      },
+      {
+        "uuid": "bba69cce-3ab6-5f93-bc4a-a193b1db6079",
+        "type": "ip-dst",
+        "category": "Network activity",
+        "value": "38.180.16.98",
+        "to_ids": true,
+        "comment": "ipv4: 38.180.16.98. Hard-coded literal IP in Relay.java.new with no DNS lookup and a 15 s connect timeout. The relay opens the connection and writes READY2 first (7 bytes), sends PING every 15 s while idle, accepts one controller line of the form DIAL <host> <port>, replies OK or FAIL, then splices the two sockets byte for byte with no encryption or framing. Confirmed on the wire in a contained lab run on 2026-10-09 (22 of 22 sessions opened with READY2 alone) and in the operator's own listener log (1,051 relay check-ins: 648 labelled READY(pod) and 403 READY2(wls)). Relay times are undated. The listener was never observed by any scanner, which is a coverage gap, not evidence that it did not exist. Confidence: the endpoint role is HIGH, a historical role covering both relay lanes (pod and wls); DEFINITE applies only to the READY2 protocol bytes of the wls-variant file in the contained 2026-10-09 run, and which file was deployed is not established. | Reported as an open directory to Hunt.io (two automated warnings, 2026-09-27 and 2026-09-30); VirusTotal shows 0 malicious engines. The last positive directory listing is 2026-10-08 19:45Z (9,917 files). Silence onset is undated and the 2026-10-09 zero-response window came from one egress only: whether the host is down or that egress is blocked is NOT CHECKED. The directory was serving 1,649 root files by 2026-10-01 against the 362 captured on 2026-09-30, so the served tree is far larger than the capture. | Part of the same Zabbix join as the :9090 callback; the byte-level script-to-listing relationship was not independently proved and the reader left the listener's role unidentified. | The listener log reads 'listening on 0.0.0.0 port 9090'; the decoded operator script creates a global script z-revtest that connects here and sends id;hostname. The join of script to log is rated MODERATE by the lane (no run log, timestamp or Zabbix audit row) and the callback has no timestamp; the owner of the calling host is unattributed (victim-estate association only). | A legitimate DNS server on TCP/53 speaks DNS framing; this service speaks plain ASCII and answers nothing until the relay announces itself. Match the TCP/53 flow whose first payload is the line READY2 (hex 52 45 41 44 59 32 0a). A TCP/53 flow with no DNS message parsed is the generic hunt. | Do not block this address outside the operator window or on the ports not listed here. The address carried a mail/web tenant in 2024 and a Windows tenant from 2024-12 to 2025-07; its :443 certificate, its JARM and every SSH host key row belong to those earlier tenants. The operator surface is :53, :80, :111, :445, :4000, :8899, :9090 and :9443 from 2026-09-26. | A held 26-byte startup line only; no arrival of any path map is shown. Do not treat a hit on this port as proof of collection. | Port 9090 is common. The discriminating artifact is the callback itself: a Zabbix global script on a proxy or agent connecting outward to this address and returning root identity and hostname. Alert on the outbound conjunction from a monitored host, not on the port alone. [confidence 80/100]",
+        "timestamp": 1792610549
+      },
+      {
+        "uuid": "8d701423-23c9-5c44-99ec-aa6651c060a3",
+        "type": "ip-dst",
+        "category": "Network activity",
+        "value": "38.180.196.193",
+        "to_ids": true,
+        "comment": "ipv4: 38.180.196.193. Operator use HIGH, operator control MODERATE: the operator's own batch84.sh calls it 'our IP (vpsbr)' and a payload is staged there. A later grade superseded a 2026-10-03 LOW on control. JARM, SSH host key and certificate fingerprints for this host were excluded from this feed rather than carried at an upgraded confidence. | Referenced by wls_rce.sh and wls_rce2.sh as the payload server; a session on 2026-09-30 stages pwn.xml there. 'cadsus' appears in 0 of the 973 files of the :8899 archive, so the realm label does not describe the panel's content. | Block this host-and-port pair rather than the address: the address is co-tenanted. The discriminating response is HTTP 401 with WWW-Authenticate: Basic realm=\"cadsus-panel\". | Co-tenanted host. Ten third-party parked domains (gaspowered, gastromono, gastronomiaboliviana, gastronomiaperuana, gateandfences, gatelights, gavickmagazine, garagedoorrepairtulsa, gayathens, gaybrussels) still resolved to this address through 2026-10-03, and that parked-DNS traffic is not this operator's. Prefer blocking the service ports in the operator window (2026-08-20 to 2026-09-14) over the address alone. A blanket block of the address would take unrelated tenants with it. [confidence 60/100]",
+        "timestamp": 1792610549
+      },
+      {
+        "uuid": "17b47532-0acd-5285-859a-c0680dd55e04",
+        "type": "snort",
+        "category": "Network activity",
+        "value": "alert http $EXTERNAL_NET any -> $HTTP_SERVERS any (msg:\"THL DETECT INV-2026-067 GLPI htmLawed Test Page POST with hhook Parameter (CVE-2022-35914, Renamed Copy Included)\"; flow:established,to_server; http.method; content:\"POST\"; http.uri; content:\"/vendor/htmlawed/htmlawed/\"; nocase; content:\".php\"; nocase; http.request_body; content:\"hhook=\"; content:\"text=\"; reference:url,the-hunters-ledger.com/hunting-detections/opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015-detections/; classtype:web-application-attack; sid:1000008; rev:1; metadata:author The_Hunters_Ledger, date 2026-10-09;)",
+        "to_ids": true,
+        "comment": "GLPI htmLawed Test Page POST with hhook Parameter | TIER: Detection | robustness 2 | confidence MODERATE | ATT&CK T1190 | rule hash c700667a | https://the-hunters-ledger.com/hunting-detections/opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015-detections/",
+        "timestamp": 1792610549,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Detection\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "de47445d-95cd-5ad2-a3f3-b879415bbc3e",
+        "type": "snort",
+        "category": "Network activity",
+        "value": "alert tcp $EXTERNAL_NET 53 -> $HOME_NET any (msg:\"THL DETECT INV-2026-067 Reverse Relay Controller DIAL Tasking Line from TCP 53 (Internal Destination Instruction)\"; flow:established,to_client; dsize:9<>200; content:\"DIAL \"; startswith; content:\"|0a|\"; endswith; pcre:\"/^DIAL [^ \\r\\n]{1,128} [0-9]{1,5}\\n$/\"; flowbits:set,thl.inv067.dial; reference:url,the-hunters-ledger.com/hunting-detections/opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015-detections/; classtype:trojan-activity; sid:1000005; rev:1; metadata:author The_Hunters_Ledger, date 2026-10-09;)",
+        "to_ids": true,
+        "comment": "Reverse Relay Controller DIAL Tasking Line from TCP 53 | TIER: Detection | robustness 2 | confidence MODERATE, because the line format comes from the relay's parsing code and my stand-in controller exercised it; no real controller line was seen. The operator's relay log records tunnel-up events, which fits the format without proving the bytes. | ATT&CK T1090.001, T1095 | rule hash 97759915 | https://the-hunters-ledger.com/hunting-detections/opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015-detections/",
+        "timestamp": 1792610549,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Detection\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "d8e099d9-326c-5ce7-a3f8-989e7eabc0a3",
+        "type": "snort",
+        "category": "Network activity",
+        "value": "alert tcp $HOME_NET any -> $EXTERNAL_NET !53 (msg:\"THL HUNT INV-2026-067 Reverse Relay READY2 Announce on a Non-DNS Port (Port Variant)\"; flow:established,to_server; dsize:7; content:\"READY2|0a|\"; startswith; flowbits:set,thl.inv067.relay; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015-detections/; classtype:trojan-activity; sid:1000002; rev:1; metadata:author The_Hunters_Ledger, date 2026-10-09;)",
+        "to_ids": false,
+        "comment": "Reverse Relay READY2 Announce on a Non-DNS Port | TIER: Hunting | robustness 1 | confidence LOW | ATT&CK T1090.001, T1095 | rule hash ba410010 | https://the-hunters-ledger.com/hunting-detections/opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015-detections/",
+        "timestamp": 1792610549,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Hunting\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "63549ca2-2278-5a50-917b-949a7e4664f6",
+        "type": "snort",
+        "category": "Network activity",
+        "value": "alert tcp $HOME_NET any -> $EXTERNAL_NET 53 (msg:\"THL DETECT INV-2026-067 Reverse Relay READY2 Announce on TCP 53 (Non-DNS Plaintext Handshake)\"; flow:established,to_server; dsize:7; content:\"READY2|0a|\"; startswith; flowbits:set,thl.inv067.relay; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015-detections/; classtype:trojan-activity; sid:1000001; rev:1; metadata:author The_Hunters_Ledger, date 2026-10-09;)",
+        "to_ids": true,
+        "comment": "Reverse Relay READY2 Announce on TCP 53 | TIER: Detection | robustness 2 | confidence HIGH | ATT&CK T1090.001, T1095 | rule hash a1bbb34f | https://the-hunters-ledger.com/hunting-detections/opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015-detections/",
+        "timestamp": 1792610549,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Detection\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "56649da2-bc37-56f3-9192-d90b7fa28fe5",
+        "type": "snort",
+        "category": "Network activity",
+        "value": "alert tcp $HOME_NET any -> $EXTERNAL_NET 53 (msg:\"THL HUNT INV-2026-067 Short Printable ASCII Line as Client Payload on TCP 53 (Not DNS Framing)\"; flow:established,to_server; flowbits:isnotset,thl.inv067.first53; dsize:3<>40; byte_test:1,>=,0x20,0; byte_test:1,<=,0x7e,0; content:\"|0a|\"; endswith; flowbits:set,thl.inv067.first53; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015-detections/; classtype:protocol-command-decode; sid:1000003; rev:1; metadata:author The_Hunters_Ledger, date 2026-10-09;)",
+        "to_ids": false,
+        "comment": "Short Printable ASCII Line as Client Payload on TCP 53 | TIER: Hunting | robustness 2 | confidence MODERATE | ATT&CK T1095 | rule hash fbf9ac08 | https://the-hunters-ledger.com/hunting-detections/opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015-detections/",
+        "timestamp": 1792610549,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Hunting\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "89a3db2e-a8f0-50f0-8b05-ccc51428c630",
+        "type": "snort",
+        "category": "Network activity",
+        "value": "alert tcp $HOME_NET any -> $EXTERNAL_NET any (msg:\"THL HUNT INV-2026-067 Reverse Relay FAIL Reply After DIAL (Onward Connection Failed)\"; flow:established,to_server; flowbits:isset,thl.inv067.dial; dsize:5; content:\"FAIL|0a|\"; startswith; reference:url,the-hunters-ledger.com/hunting-detections/opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015-detections/; classtype:trojan-activity; sid:1000007; rev:1; metadata:author The_Hunters_Ledger, date 2026-10-09;)",
+        "to_ids": false,
+        "comment": "Reverse Relay FAIL Reply After DIAL | TIER: Hunting | robustness 1 | confidence MODERATE | ATT&CK T1090.001 | rule hash 2ebe206c | https://the-hunters-ledger.com/hunting-detections/opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015-detections/",
+        "timestamp": 1792610549,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Hunting\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "3c4b6df0-f3ed-5e35-8d23-c857f86f7056",
+        "type": "snort",
+        "category": "Network activity",
+        "value": "alert tcp $HOME_NET any -> $EXTERNAL_NET any (msg:\"THL HUNT INV-2026-067 Reverse Relay OK Reply After DIAL (Onward Connection Succeeded)\"; flow:established,to_server; flowbits:isset,thl.inv067.dial; dsize:3; content:\"OK|0a|\"; startswith; reference:url,the-hunters-ledger.com/hunting-detections/opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015-detections/; classtype:trojan-activity; sid:1000006; rev:1; metadata:author The_Hunters_Ledger, date 2026-10-09;)",
+        "to_ids": false,
+        "comment": "Reverse Relay OK Reply After DIAL | TIER: Hunting | robustness 1 | confidence MODERATE | ATT&CK T1090.001 | rule hash bda51c93 | https://the-hunters-ledger.com/hunting-detections/opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015-detections/",
+        "timestamp": 1792610549,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Hunting\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "9eb6610d-03ac-5b15-a221-54919e27a5f2",
+        "type": "snort",
+        "category": "Network activity",
+        "value": "alert tcp $HOME_NET any -> $EXTERNAL_NET any (msg:\"THL HUNT INV-2026-067 Reverse Relay PING Keepalive After READY2 Announce (Idle Session Persists)\"; flow:established,to_server; flowbits:isset,thl.inv067.relay; dsize:5; content:\"PING|0a|\"; startswith; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015-detections/; classtype:trojan-activity; sid:1000004; rev:1; metadata:author The_Hunters_Ledger, date 2026-10-09;)",
+        "to_ids": false,
+        "comment": "Reverse Relay PING Keepalive After READY2 Announce | TIER: Hunting | robustness 1 | confidence MODERATE | ATT&CK T1090.001 | rule hash 7df3d739 | https://the-hunters-ledger.com/hunting-detections/opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015-detections/",
+        "timestamp": 1792610549,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Hunting\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "6150464a-d62f-5dad-9702-5ce2256eda30",
+        "type": "sigma",
+        "category": "Payload installation",
+        "value": "title: GLPI htmLawed Test Page POST Request (CVE-2022-35914, Renamed Copy Included)\nid: 20c855ee-9086-444b-885c-59a6abba56c1\nstatus: experimental\ndescription: >-\n    Detects a POST request to a PHP file inside GLPI's bundled htmlawed vendor directory.\n    The unauthenticated command execution in CVE-2022-35914 is reached through the htmLawedTest page, and an operator tool read in this case posts to a copy that had been renamed with a suffix, so the match uses the directory and not the default file name.\n    A GLPI web root should never serve its vendor directory.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015-detections/\n    - https://nvd.nist.gov/vuln/detail/CVE-2022-35914\nauthor: The Hunters Ledger\ndate: 2026-10-09\ntags:\n    - attack.initial-access\n    - attack.t1190\n    - cve.2022-35914\n    - detection.emerging-threats\n    - stp.3\nlogsource:\n    category: webserver\n    definition: 'Requires web server access logs that record the request method and URI, for example Apache or nginx access logs on the GLPI host or the reverse proxy in front of it, with the full request URI mapped to cs-uri-query as the other SigmaHQ webserver rules do. The request body is not in these logs, so the match is on method and path only.'\ndetection:\n    selection:\n        cs-method: 'POST'\n        cs-uri-query|contains|all:\n            - '/vendor/htmlawed/htmlawed/'\n            - '.php'\n    condition: selection\nfalsepositives:\n    - Unlikely\nlevel: high",
+        "to_ids": true,
+        "comment": "GLPI htmLawed Test Page POST Request (CVE-2022-35914, Renamed Copy Included) | TIER: Detection | robustness 2 | confidence HIGH | ATT&CK T1190 | rule hash 18cfb033 | https://the-hunters-ledger.com/hunting-detections/opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015-detections/",
+        "timestamp": 1792610549,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Detection\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "a44e46f1-2b39-5281-aedf-e6cd05058073",
+        "type": "sigma",
+        "category": "Payload installation",
+        "value": "title: Java Process Spawns Shell to Rewrite Log Files\nid: 410da2b6-3023-4f5f-a9a2-1e7abf0c3783\nstatus: experimental\ndescription: >-\n    Detects a shell spawned by a Java process whose command line combines grep -v with a .log file pattern.\n    Read from an operator's request body that rewrites every log file under a WebLogic domain home without the lines naming a planted JSP, through a temporary file and a copy back.\n    Hunting rule, because legitimate Java launched maintenance scripts also filter logs.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015-detections/\nauthor: The Hunters Ledger\ndate: 2026-10-09\ntags:\n    - attack.stealth\n    - attack.t1070\n    - stp.3\nlogsource:\n    category: process_creation\n    product: linux\n    definition: 'Requires Linux process creation telemetry that records the parent image and the full command line of the child, for example auditd EXECVE records joined to the parent process, Sysmon for Linux EID 1, or an EDR sensor with equivalent fields.'\ndetection:\n    selection:\n        ParentImage|endswith: '/java'\n        Image|endswith:\n            - '/sh'\n            - '/bash'\n            - '/dash'\n        CommandLine|contains|all:\n            - 'grep -v'\n            - '.log'\n    condition: selection\nfalsepositives:\n    - Log housekeeping scripts started from a Java based scheduler or management agent\nlevel: medium",
+        "to_ids": false,
+        "comment": "Java Process Spawns Shell to Rewrite Log Files | TIER: Hunting | robustness 2 | confidence LOW | ATT&CK T1070 | rule hash be5feb93 | https://the-hunters-ledger.com/hunting-detections/opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015-detections/",
+        "timestamp": 1792610549,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Hunting\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "06edfa73-b654-53d5-afaa-f5ba39dbcf5d",
+        "type": "sigma",
+        "category": "Payload installation",
+        "value": "title: Shell Process Creates a JSP File Under a WebLogic _WL_internal Directory\nid: f3c8d853-4507-4818-9883-a79f977a41a9\nstatus: experimental\ndescription: >-\n    Detects a shell creating a .jsp file below a _WL_internal directory.\n    WebLogic's own Java process extracts web application contents there, so a shell as the writing process marks a file placed from outside the deployment path.\n    Read from an operator's request body that writes a command-execution JSP into every subdirectory of every _WL_internal and stage directory under a domain home.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015-detections/\nauthor: The Hunters Ledger\ndate: 2026-10-09\ntags:\n    - attack.persistence\n    - attack.t1505.003\n    - stp.3\nlogsource:\n    category: file_event\n    product: linux\n    definition: 'Requires Linux file creation telemetry that records the creating process image and the target path, for example Sysmon for Linux EID 11 or an EDR sensor with file creation events. auditd path rules on the WebLogic domain home would also work but are not default.'\ndetection:\n    selection:\n        TargetFilename|contains: '/_WL_internal/'\n        TargetFilename|endswith: '.jsp'\n        Image|endswith:\n            - '/sh'\n            - '/bash'\n            - '/dash'\n    condition: selection\nfalsepositives:\n    - Administrators extracting or copying JSP files into WebLogic temporary directories by hand during troubleshooting\nlevel: high",
+        "to_ids": true,
+        "comment": "Shell Process Creates a JSP File Under a WebLogic _WL_internal Directory | TIER: Detection | robustness 2 | confidence MODERATE | ATT&CK T1505.003 | rule hash 36e0f998 | https://the-hunters-ledger.com/hunting-detections/opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015-detections/",
+        "timestamp": 1792610549,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Detection\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "158ac529-c3a6-5ca1-b0cb-4d139df17d9f",
+        "type": "sigma",
+        "category": "Payload installation",
+        "value": "title: WebLogic Java Process Spawns Shell Writing a JSP Into a WebLogic Internal Directory\nid: 67f6efc3-d491-446b-99c9-26dec7274776\nstatus: experimental\ndescription: >-\n    Detects a shell spawned by a Java process whose command line names a WebLogic _WL_internal directory and a .jsp file.\n    This is the process-level footprint of a remote command-execution request (the XMLDecoder-in-WorkContext shape sent to the WS-AT endpoint)\n    that plants a command-execution JSP into WebLogic staging directories.\n    The behaviour was read from an operator's request body that finds every _WL_internal and stage directory under the domain home and writes one JSP into each subdirectory.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015-detections/\nauthor: The Hunters Ledger\ndate: 2026-10-09\ntags:\n    - attack.persistence\n    - attack.t1505.003\n    - attack.execution\n    - attack.t1059.004\n    - stp.3\nlogsource:\n    category: process_creation\n    product: linux\n    definition: 'Requires Linux process creation telemetry that records the parent image and the full command line of the child, for example auditd EXECVE records joined to the parent process, Sysmon for Linux EID 1, or an EDR sensor with equivalent fields.'\ndetection:\n    selection:\n        ParentImage|endswith: '/java'\n        Image|endswith:\n            - '/sh'\n            - '/bash'\n            - '/dash'\n        CommandLine|contains|all:\n            - '_WL_internal'\n            - '.jsp'\n    condition: selection\nfalsepositives:\n    - WebLogic deployment or patching scripts started from a Java based tool that copy JSP files into exploded application directories\nlevel: high",
+        "to_ids": true,
+        "comment": "WebLogic Java Process Spawns Shell Writing a JSP Into a WebLogic Internal Directory | TIER: Detection | robustness 2 | confidence MODERATE | ATT&CK T1505.003, T1059.004 | rule hash b78bc604 | https://the-hunters-ledger.com/hunting-detections/opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015-detections/",
+        "timestamp": 1792610549,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Detection\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "a9fa848c-ce4e-55dc-bf2a-3500dac743b6",
+        "type": "sigma",
+        "category": "Payload installation",
+        "value": "title: Zabbix Daemon Child Process Touching Credential Files or Instance Metadata\nid: 7fc3ea3a-98a7-4a97-877a-a8a4dbfefc48\nstatus: experimental\ndescription: >-\n    Detects a child process of a Zabbix server, proxy or agent daemon whose command line names the password digest file, shell history, authorized keys, the cloud instance metadata address or nmap.\n    Read from an operator's Zabbix API scripts that create global scripts and system.run items to run exactly these requests on a proxy and on monitored hosts; no output of them was held.\n    Hunting rule, because monitoring administrators legitimately run commands through the same daemons.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015-detections/\nauthor: The Hunters Ledger\ndate: 2026-10-09\ntags:\n    - attack.execution\n    - attack.t1072\n    - attack.lateral-movement\n    - attack.credential-access\n    - attack.t1552\n    - stp.3\nlogsource:\n    category: process_creation\n    product: linux\n    definition: 'Requires Linux process creation telemetry that records the parent image and the full command line of the child, for example auditd EXECVE records joined to the parent process, Sysmon for Linux EID 1, or an EDR sensor with equivalent fields.'\ndetection:\n    selection_parent:\n        ParentImage|endswith:\n            - '/zabbix_server'\n            - '/zabbix_proxy'\n            - '/zabbix_agentd'\n            - '/zabbix_agent2'\n    selection_cmd:\n        CommandLine|contains:\n            - '/etc/shadow'\n            - '.bash_history'\n            - 'authorized_keys'\n            - '169.254.169.254'\n            - 'nmap '\n    condition: all of selection_*\nfalsepositives:\n    - Monitoring items or global scripts that deliberately check authorized_keys or shell history for compliance\n    - Authorized network scanning started from a Zabbix global script\nlevel: medium",
+        "to_ids": false,
+        "comment": "Zabbix Daemon Child Process Touching Credential Files or Instance Metadata | TIER: Hunting | robustness 2 | confidence LOW | ATT&CK T1072, T1552 | rule hash 5668593f | https://the-hunters-ledger.com/hunting-detections/opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015-detections/",
+        "timestamp": 1792610549,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Hunting\"",
+            "colour": "#4ade80"
+          }
+        ]
+      }
+    ],
+    "Object": []
+  }
+}

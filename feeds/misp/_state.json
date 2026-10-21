@@ -5,6 +5,12 @@
     "uuid": "8bc8284b-deb5-546c-a233-57ea34b2ea0d"
   },
   "events": {
+    "e296ef63-2666-50f4-b20c-b0c7291660a2": {
+      "slug": "opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015",
+      "hash": "6143756807f3ba8561579ca2ff07c5fffd8c5cddce3cd40eb536e86773a7f3d5",
+      "timestamp": 1792610549,
+      "first_published": "2026-10-21"
+    },
     "1f43fcef-df62-50b8-8069-16415d068ed7": {
       "slug": "newdouble-clickfix",
       "hash": "efacb2693678455a15f20f13ad84ef18107b6c0e42a32d157b5e64e82590c999",

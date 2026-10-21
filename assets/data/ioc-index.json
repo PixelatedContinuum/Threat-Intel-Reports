@@ -1,8 +1,8 @@
 {
- "generated_at": "2026-10-16T19:47:40Z",
+ "generated_at": "2026-10-21T19:22:25Z",
  "counts": {
-  "indicators": 2040,
-  "reports": 59,
+  "indicators": 2056,
+  "reports": 60,
   "multi_report": 146,
   "suppressed_benign": 113,
   "never_block": 134
@@ -51,6 +51,7 @@
    "opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817-iocs.json",
    "opendirectory-193-56-255-154-20260403-iocs.json",
    "opendirectory-216-126-227-49-cve-2026-41940-cpanel-harvester-20260517-iocs.json",
+   "opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015-iocs.json",
    "opendirectory-45-130-148-125-20260430-iocs.json",
    "opendirectory-62-60-237-100-20260506-iocs.json",
    "opendirectory-74-0-42-25-20260316-iocs.json",
@@ -69,9 +70,7 @@
    "webserver-compromise-kit-91-236-230-250-iocs.json",
    "webshells-to-the-cloud.json"
   ],
-  "embargoed": [
-   "opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015-iocs.json"
-  ],
+  "embargoed": [],
   "unknown": [],
   "empty": []
  },
@@ -412,6 +411,14 @@
    "report_url": "/reports/opendirectory-216-126-227-49-cve-2026-41940-cpanel-harvester-20260517/",
    "detection_url": "/hunting-detections/opendirectory-216-126-227-49-cve-2026-41940-cpanel-harvester-20260517-detections",
    "ioc_url": "/ioc-feeds/opendirectory-216-126-227-49-cve-2026-41940-cpanel-harvester-20260517-iocs.json"
+  },
+  "opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015": {
+   "title": "Help Desks to Host Shells Across Brazil's Public Sector",
+   "date": "2026-10-15",
+   "severity": "critical",
+   "report_url": "/reports/opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015/",
+   "detection_url": "/hunting-detections/opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015-detections",
+   "ioc_url": "/ioc-feeds/opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015-iocs.json"
   },
   "opendirectory-45-130-148-125-20260430": {
    "title": "AdaptixC2 Open Directory Exposure (45.130.148.125)",
@@ -7538,6 +7545,99 @@
    {
     "report": "opendirectory-216-126-227-49-cve-2026-41940-cpanel-harvester-20260517",
     "role": "Linux /etc/machine-id"
+   }
+  ],
+  "sha256:986f697d2ef67a38e25c6a17cdecd7bb50148f2c2993864c748e3504d3d747f0": [
+   {
+    "report": "opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015",
+    "role": "Java source, 3,219 bytes, 83 lines"
+   }
+  ],
+  "domain:relay.java.new": [
+   {
+    "report": "opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015",
+    "role": "Java source, 3,219 bytes, 83 lines"
+   }
+  ],
+  "sha256:86c0fa7d4fe1740e02a845fe18f85de91b234321b21d7804944f3248395968bc": [
+   {
+    "report": "opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015",
+    "role": "Shell script, 440 bytes"
+   }
+  ],
+  "domain:dump2.sh": [
+   {
+    "report": "opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015",
+    "role": "Shell script, 440 bytes"
+   }
+  ],
+  "ipv4:38.180.16.98": [
+   {
+    "report": "opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015",
+    "role": "Operator host: open directory and relay/listener infrastructure | Reported as an open directory to Hunt.io (two automated warnings, 2026-09-27 and 2026-09-30); VirusTotal shows 0 malicious engines. The last positive directory listing is 2026-10-08 19:45Z (9,917 files). Silence onset is undated and the 2026-10-09 zero-response window came from one egress only: whether the host is down or that egress is blocked is NOT CHECKED. The directory was serving 1,649 root files by 2026-10-01 against the 362 captured on 2026-09-30, so the served tree is far larger than the capture. | Operator reverse-relay controller endpoint (the control indicator for this feed) | Hard-coded literal IP in Relay.java.new with no DNS lookup and a 15 s connect timeout. The relay opens the connection and writes READY2 first (7 bytes), sends PING every 15 s while idle, accepts one controller line of the form DIAL <host> <port>, replies OK or FAIL, then splices the two sockets byte for byte with no encryption or framing. Confirmed on the wire in a contained lab run on 2026-10-09 (22 of 22 sessions opened with READY2 alone) and in the operator's own listener log (1,051 relay check-ins: 648 labelled READY(pod) and 403 READY2(wls)). Relay times are undated. The listener was never observed by any scanner, which is a coverage gap, not evidence that it did not exist. Confidence: the endpoint role is HIGH, a historical role covering both relay lanes (pod and wls); DEFINITE applies only to the READY2 protocol bytes of the wls-variant file in the contained 2026-10-09 run, and which file was deployed is not established. | Listener that received Zabbix global-script command output (id;hostname) | The listener log reads 'listening on 0.0.0.0 port 9090'; the decoded operator script creates a global script z-revtest that connects here and sends id;hostname. The join of script to log is rated MODERATE by the lane (no run log, timestamp or Zabbix audit row) and the callback has no timestamp; the owner of the calling host is unattributed (victim-estate association only). | Listener to which a path map of a victim Zabbix proxy host was pushed | Part of the same Zabbix join as the :9090 callback; the byte-level script-to-listing relationship was not independently proved and the reader left the listener's role unidentified."
+   }
+  ],
+  "ipv4:38.180.196.193": [
+   {
+    "report": "opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015",
+    "role": "Operator payload-staging HTTP service, later a Werkzeug basic-auth panel | Referenced by wls_rce.sh and wls_rce2.sh as the payload server; a session on 2026-09-30 stages pwn.xml there. 'cadsus' appears in 0 of the 973 files of the :8899 archive, so the realm label does not describe the panel's content."
+   }
+  ],
+  "ipv4:209.99.185.148": [
+   {
+    "report": "opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015",
+    "role": "Host control HIGH from the operator's own label 'nosso canary' in five or more files. The victim-side tunnel client /tmp/upd, running as an application service account inside a WSO2 container, points at https://209.99.185.148; a process-table line is shown, an established tunnel is not. Base rate of the 'Update Service' organisation string and of the cloudedge-edge/1.4 banner is NOT CHECKED. | Operator canary and callback catcher for SSRF, XXE and database-callback tests | Named as the callback target in S1.class and S1.java, asp_fuzz.py, ssrf_canary.py (comment 'nosso canary'), batch2.sh and batch57.sh; 16 SSRF-related hashes name the collector. Answered 'ok' on 2026-10-03 04:06Z, 2026-10-05 and 2026-10-07; connect timeout on 2026-10-14. | Both builds launch a headless Chrome at the /e/ path and request /p/ in VirusTotal sandbox output. :8146 is absent from all 15 Hunt.io port-history rows and all 14 protocol rows, so its presence, closure or continued service is NOT CHECKED; the 2026-10-14 rescan probed the root path rather than the historical /e/ path."
+   }
+  ],
+  "url:http://38.180.16.98/": [
+   {
+    "report": "opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015",
+    "role": "Operator open directory (Python SimpleHTTP, names only, no sizes or dates) | Served the operator's /tmp: directories massa1, massa2, massa3, grandes, manuais, dbg, django-loot, netrecon, share, glpwnme, dpgh and js, and the tarballs massa1.tar.gz (3,371 entries) and massa2.tar.gz (1,311 entries, 390.8 MiB). Some of those directory names are clones of public upstream repositories (glpwnme and the dpgh set) and are carried as host context only. The victim-document directories stopped being exposed under those names between 2026-10-01 and 2026-10-03."
+   }
+  ],
+  "url:http://38.180.16.98:80/Relay.java.new": [
+   {
+    "report": "opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015",
+    "role": "Operator relay source, served from the open directory | Appeared in the listing between 2026-10-01 and 2026-10-03."
+   }
+  ],
+  "url:http://209.99.185.148:8146/e/a38243f90dc30f99/": [
+   {
+    "report": "opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015",
+    "role": "Page fetched by both bpupdate.exe builds (headless Chrome launcher surface) | Confirmed in VirusTotal sandbox behaviour for both builds; the requesting builds' authorship is NOT CHECKED."
+   }
+  ],
+  "url:http://209.99.185.148:8146/p/a38243f90dc30f99": [
+   {
+    "report": "opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015",
+    "role": "Second path requested by both bpupdate.exe builds | What the operator or the service does with the /p/ response is NOT CHECKED."
+   }
+  ],
+  "domain:relay.java": [
+   {
+    "report": "opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015",
+    "role": "Relay source written and compiled on a victim host by the delivery script"
+   }
+  ],
+  "sha256:0ce2e8a961c564e9d76c2f59662c1107b33e2c32922e39a4c0d900e79722e7bc": [
+   {
+    "report": "opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015"
+   }
+  ],
+  "sha1:3b6e9d04e14fcb1d5ad1642fc990b6afdccdf5bc": [
+   {
+    "report": "opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015"
+   }
+  ],
+  "sha1:4693349e740f3ef6a03444a735d5c73745ec8836": [
+   {
+    "report": "opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015"
+   }
+  ],
+  "domain:v487918523.local": [
+   {
+    "report": "opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015",
+    "role": "host-local VPS name"
    }
   ],
   "ipv4:45.130.148.125": [

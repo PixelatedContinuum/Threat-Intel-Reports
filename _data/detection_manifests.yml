@@ -4212,7 +4212,7 @@ opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015-detections:
     engine: sigma
     tier: Detection
     fence: 0
-    hash: "0c078a76"
+    hash: "b78bc604"
     head: "title: WebLogic Java Process Spawns Shell Writin"
     robustness: 2
     confidence: "MODERATE"
@@ -4221,7 +4221,7 @@ opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015-detections:
     engine: sigma
     tier: Detection
     fence: 1
-    hash: "cd8d91d2"
+    hash: "36e0f998"
     head: "title: Shell Process Creates a JSP File Under a "
     robustness: 2
     confidence: "MODERATE"
@@ -4230,7 +4230,7 @@ opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015-detections:
     engine: sigma
     tier: Detection
     fence: 2
-    hash: "c02e3191"
+    hash: "18cfb033"
     head: "title: GLPI htmLawed Test Page POST Request (CVE"
     robustness: 2
     confidence: "HIGH"
@@ -4239,7 +4239,7 @@ opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015-detections:
     engine: sigma
     tier: Hunting
     fence: 3
-    hash: "2fb8711d"
+    hash: "be5feb93"
     head: "title: Java Process Spawns Shell to Rewrite Log "
     robustness: 2
     confidence: "LOW"
@@ -4248,7 +4248,7 @@ opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015-detections:
     engine: sigma
     tier: Hunting
     fence: 4
-    hash: "d15d1a71"
+    hash: "5668593f"
     head: "title: Zabbix Daemon Child Process Touching Cred"
     robustness: 2
     confidence: "LOW"
@@ -4257,7 +4257,7 @@ opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015-detections:
     engine: suricata
     tier: Detection
     fence: 5
-    hash: "7a843bb5"
+    hash: "a1bbb34f"
     head: "alert tcp $HOME_NET any -> $EXTERNAL_NET 53 (msg"
     robustness: 2
     confidence: "HIGH"
@@ -4266,7 +4266,7 @@ opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015-detections:
     engine: suricata
     tier: Detection
     fence: 6
-    hash: "b2244ed3"
+    hash: "97759915"
     head: "alert tcp $EXTERNAL_NET 53 -> $HOME_NET any (msg"
     robustness: 2
     confidence: "MODERATE, because the line format comes from the relay's parsing code and my stand-in controller exercised it; no real controller line was seen. The operator's relay log records tunnel-up events, which fits the format without proving the bytes."
@@ -4275,7 +4275,7 @@ opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015-detections:
     engine: suricata
     tier: Detection
     fence: 7
-    hash: "2b529428"
+    hash: "c700667a"
     head: "alert http $EXTERNAL_NET any -> $HTTP_SERVERS an"
     robustness: 2
     confidence: "MODERATE"
@@ -4284,7 +4284,7 @@ opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015-detections:
     engine: suricata
     tier: Hunting
     fence: 8
-    hash: "5643da42"
+    hash: "ba410010"
     head: "alert tcp $HOME_NET any -> $EXTERNAL_NET !53 (ms"
     robustness: 1
     confidence: "LOW"
@@ -4293,7 +4293,7 @@ opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015-detections:
     engine: suricata
     tier: Hunting
     fence: 9
-    hash: "0a70f93a"
+    hash: "fbf9ac08"
     head: "alert tcp $HOME_NET any -> $EXTERNAL_NET 53 (msg"
     robustness: 2
     confidence: "MODERATE"
@@ -4302,7 +4302,7 @@ opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015-detections:
     engine: suricata
     tier: Hunting
     fence: 10
-    hash: "ea094b23"
+    hash: "7df3d739"
     head: "alert tcp $HOME_NET any -> $EXTERNAL_NET any (ms"
     robustness: 1
     confidence: "MODERATE"
@@ -4311,7 +4311,7 @@ opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015-detections:
     engine: suricata
     tier: Hunting
     fence: 11
-    hash: "23c84b49"
+    hash: "bda51c93"
     head: "alert tcp $HOME_NET any -> $EXTERNAL_NET any (ms"
     robustness: 1
     confidence: "MODERATE"
@@ -4320,7 +4320,7 @@ opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015-detections:
     engine: suricata
     tier: Hunting
     fence: 12
-    hash: "8aabb502"
+    hash: "2ebe206c"
     head: "alert tcp $HOME_NET any -> $EXTERNAL_NET any (ms"
     robustness: 1
     confidence: "MODERATE"

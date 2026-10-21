@@ -2,9 +2,8 @@
 title: "Detection Rules — Brazil Public-Sector Toolkit (38.180.16.98)"
 date: '2026-10-09'
 layout: post
-permalink: /hunting-detections/inv-2026-067-detections/
+permalink: /hunting-detections/opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015-detections/
 hide: true
-unlisted: true
 ---
 
 **Campaign:** INV-2026-067<br>
@@ -75,7 +74,7 @@ description: >-
     that plants a command-execution JSP into WebLogic staging directories.
     The behaviour was read from an operator's request body that finds every _WL_internal and stage directory under the domain home and writes one JSP into each subdirectory.
 references:
-    - https://the-hunters-ledger.com/hunting-detections/inv-2026-067-detections/
+    - https://the-hunters-ledger.com/hunting-detections/opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015-detections/
 author: The Hunters Ledger
 date: 2026-10-09
 tags:
@@ -126,7 +125,7 @@ description: >-
     WebLogic's own Java process extracts web application contents there, so a shell as the writing process marks a file placed from outside the deployment path.
     Read from an operator's request body that writes a command-execution JSP into every subdirectory of every _WL_internal and stage directory under a domain home.
 references:
-    - https://the-hunters-ledger.com/hunting-detections/inv-2026-067-detections/
+    - https://the-hunters-ledger.com/hunting-detections/opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015-detections/
 author: The Hunters Ledger
 date: 2026-10-09
 tags:
@@ -174,7 +173,7 @@ description: >-
     The unauthenticated command execution in CVE-2022-35914 is reached through the htmLawedTest page, and an operator tool read in this case posts to a copy that had been renamed with a suffix, so the match uses the directory and not the default file name.
     A GLPI web root should never serve its vendor directory.
 references:
-    - https://the-hunters-ledger.com/hunting-detections/inv-2026-067-detections/
+    - https://the-hunters-ledger.com/hunting-detections/opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015-detections/
     - https://nvd.nist.gov/vuln/detail/CVE-2022-35914
 author: The Hunters Ledger
 date: 2026-10-09
@@ -223,7 +222,7 @@ description: >-
     Read from an operator's request body that rewrites every log file under a WebLogic domain home without the lines naming a planted JSP, through a temporary file and a copy back.
     Hunting rule, because legitimate Java launched maintenance scripts also filter logs.
 references:
-    - https://the-hunters-ledger.com/hunting-detections/inv-2026-067-detections/
+    - https://the-hunters-ledger.com/hunting-detections/opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015-detections/
 author: The Hunters Ledger
 date: 2026-10-09
 tags:
@@ -272,7 +271,7 @@ description: >-
     Read from an operator's Zabbix API scripts that create global scripts and system.run items to run exactly these requests on a proxy and on monitored hosts; no output of them was held.
     Hunting rule, because monitoring administrators legitimately run commands through the same daemons.
 references:
-    - https://the-hunters-ledger.com/hunting-detections/inv-2026-067-detections/
+    - https://the-hunters-ledger.com/hunting-detections/opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015-detections/
 author: The Hunters Ledger
 date: 2026-10-09
 tags:
@@ -342,7 +341,7 @@ Hit counts are alerts; for every rule above each alert fell in a different flow 
 **Evidence:** All 22 relay sessions in the contained run opened with exactly these seven bytes as the first and only relay segment. The operator's own relay log records 1,051 check-ins across its two lanes, so the announce is the one thing every session produces whether or not the controller ever tasks it. Relay source sha256 prefix 986f697d2ef6.
 
 ```
-alert tcp $HOME_NET any -> $EXTERNAL_NET 53 (msg:"THL DETECT INV-2026-067 Reverse Relay READY2 Announce on TCP 53 (Non-DNS Plaintext Handshake)"; flow:established,to_server; dsize:7; content:"READY2|0a|"; startswith; flowbits:set,thl.inv067.relay; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/inv-2026-067-detections/; classtype:trojan-activity; sid:1000001; rev:1; metadata:author The_Hunters_Ledger, date 2026-10-09;)
+alert tcp $HOME_NET any -> $EXTERNAL_NET 53 (msg:"THL DETECT INV-2026-067 Reverse Relay READY2 Announce on TCP 53 (Non-DNS Plaintext Handshake)"; flow:established,to_server; dsize:7; content:"READY2|0a|"; startswith; flowbits:set,thl.inv067.relay; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015-detections/; classtype:trojan-activity; sid:1000001; rev:1; metadata:author The_Hunters_Ledger, date 2026-10-09;)
 ```
 
 #### Reverse Relay Controller DIAL Tasking Line from TCP 53
@@ -359,7 +358,7 @@ alert tcp $HOME_NET any -> $EXTERNAL_NET 53 (msg:"THL DETECT INV-2026-067 Revers
 **Evidence:** The relay's parsing block accepts one line, trimmed and split on spaces, and acts only when the first token is `DIAL` with at least two more tokens; anything else closes the socket and reconnects. A `DIAL` to a closed port produced the `FAIL` reply and a `DIAL` to a reachable address produced `OK` and a spliced connection.
 
 ```
-alert tcp $EXTERNAL_NET 53 -> $HOME_NET any (msg:"THL DETECT INV-2026-067 Reverse Relay Controller DIAL Tasking Line from TCP 53 (Internal Destination Instruction)"; flow:established,to_client; dsize:9<>200; content:"DIAL "; startswith; content:"|0a|"; endswith; pcre:"/^DIAL [^ \r\n]{1,128} [0-9]{1,5}\n$/"; flowbits:set,thl.inv067.dial; reference:url,the-hunters-ledger.com/hunting-detections/inv-2026-067-detections/; classtype:trojan-activity; sid:1000005; rev:1; metadata:author The_Hunters_Ledger, date 2026-10-09;)
+alert tcp $EXTERNAL_NET 53 -> $HOME_NET any (msg:"THL DETECT INV-2026-067 Reverse Relay Controller DIAL Tasking Line from TCP 53 (Internal Destination Instruction)"; flow:established,to_client; dsize:9<>200; content:"DIAL "; startswith; content:"|0a|"; endswith; pcre:"/^DIAL [^ \r\n]{1,128} [0-9]{1,5}\n$/"; flowbits:set,thl.inv067.dial; reference:url,the-hunters-ledger.com/hunting-detections/opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015-detections/; classtype:trojan-activity; sid:1000005; rev:1; metadata:author The_Hunters_Ledger, date 2026-10-09;)
 ```
 
 #### GLPI htmLawed Test Page POST with hhook Parameter
@@ -377,7 +376,7 @@ alert tcp $EXTERNAL_NET 53 -> $HOME_NET any (msg:"THL DETECT INV-2026-067 Revers
 **Evidence:** The operator's helper (sha256 prefix c195c55f4e8f) posts the form fields `sid`, `hhook` and `text` to its single hard-coded URL under the `vendor/htmlawed/htmlawed/` directory and sends `sid` again as a cookie, with a placeholder value and no credential.
 
 ```
-alert http $EXTERNAL_NET any -> $HTTP_SERVERS any (msg:"THL DETECT INV-2026-067 GLPI htmLawed Test Page POST with hhook Parameter (CVE-2022-35914, Renamed Copy Included)"; flow:established,to_server; http.method; content:"POST"; http.uri; content:"/vendor/htmlawed/htmlawed/"; nocase; content:".php"; nocase; http.request_body; content:"hhook="; content:"text="; reference:url,the-hunters-ledger.com/hunting-detections/inv-2026-067-detections/; classtype:web-application-attack; sid:1000008; rev:1; metadata:author The_Hunters_Ledger, date 2026-10-09;)
+alert http $EXTERNAL_NET any -> $HTTP_SERVERS any (msg:"THL DETECT INV-2026-067 GLPI htmLawed Test Page POST with hhook Parameter (CVE-2022-35914, Renamed Copy Included)"; flow:established,to_server; http.method; content:"POST"; http.uri; content:"/vendor/htmlawed/htmlawed/"; nocase; content:".php"; nocase; http.request_body; content:"hhook="; content:"text="; reference:url,the-hunters-ledger.com/hunting-detections/opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015-detections/; classtype:web-application-attack; sid:1000008; rev:1; metadata:author The_Hunters_Ledger, date 2026-10-09;)
 ```
 
 ### Hunting Rules
@@ -395,7 +394,7 @@ alert http $EXTERNAL_NET any -> $HTTP_SERVERS any (msg:"THL DETECT INV-2026-067 
 **Evidence:** The source makes its destination port a compile-time value (my read of the source); only port 53 was ever observed.
 
 ```
-alert tcp $HOME_NET any -> $EXTERNAL_NET !53 (msg:"THL HUNT INV-2026-067 Reverse Relay READY2 Announce on a Non-DNS Port (Port Variant)"; flow:established,to_server; dsize:7; content:"READY2|0a|"; startswith; flowbits:set,thl.inv067.relay; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/inv-2026-067-detections/; classtype:trojan-activity; sid:1000002; rev:1; metadata:author The_Hunters_Ledger, date 2026-10-09;)
+alert tcp $HOME_NET any -> $EXTERNAL_NET !53 (msg:"THL HUNT INV-2026-067 Reverse Relay READY2 Announce on a Non-DNS Port (Port Variant)"; flow:established,to_server; dsize:7; content:"READY2|0a|"; startswith; flowbits:set,thl.inv067.relay; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015-detections/; classtype:trojan-activity; sid:1000002; rev:1; metadata:author The_Hunters_Ledger, date 2026-10-09;)
 ```
 
 #### Short Printable ASCII Line as Client Payload on TCP 53
@@ -411,7 +410,7 @@ alert tcp $HOME_NET any -> $EXTERNAL_NET !53 (msg:"THL HUNT INV-2026-067 Reverse
 **Evidence:** All 22 relay sessions open with a printable ASCII line of 7 bytes ending in a newline on port 53. Zeek raised a DNS weird on all 22 and Suricata produced no DNS record for any of them, which is the same anomaly seen from the engine side.
 
 ```
-alert tcp $HOME_NET any -> $EXTERNAL_NET 53 (msg:"THL HUNT INV-2026-067 Short Printable ASCII Line as Client Payload on TCP 53 (Not DNS Framing)"; flow:established,to_server; flowbits:isnotset,thl.inv067.first53; dsize:3<>40; byte_test:1,>=,0x20,0; byte_test:1,<=,0x7e,0; content:"|0a|"; endswith; flowbits:set,thl.inv067.first53; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/inv-2026-067-detections/; classtype:protocol-command-decode; sid:1000003; rev:1; metadata:author The_Hunters_Ledger, date 2026-10-09;)
+alert tcp $HOME_NET any -> $EXTERNAL_NET 53 (msg:"THL HUNT INV-2026-067 Short Printable ASCII Line as Client Payload on TCP 53 (Not DNS Framing)"; flow:established,to_server; flowbits:isnotset,thl.inv067.first53; dsize:3<>40; byte_test:1,>=,0x20,0; byte_test:1,<=,0x7e,0; content:"|0a|"; endswith; flowbits:set,thl.inv067.first53; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015-detections/; classtype:protocol-command-decode; sid:1000003; rev:1; metadata:author The_Hunters_Ledger, date 2026-10-09;)
 ```
 
 #### Reverse Relay PING Keepalive After READY2 Announce
@@ -427,7 +426,7 @@ alert tcp $HOME_NET any -> $EXTERNAL_NET 53 (msg:"THL HUNT INV-2026-067 Short Pr
 **Evidence:** `PING` plus a newline (5 bytes) every 15 seconds while the session is idle.
 
 ```
-alert tcp $HOME_NET any -> $EXTERNAL_NET any (msg:"THL HUNT INV-2026-067 Reverse Relay PING Keepalive After READY2 Announce (Idle Session Persists)"; flow:established,to_server; flowbits:isset,thl.inv067.relay; dsize:5; content:"PING|0a|"; startswith; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/inv-2026-067-detections/; classtype:trojan-activity; sid:1000004; rev:1; metadata:author The_Hunters_Ledger, date 2026-10-09;)
+alert tcp $HOME_NET any -> $EXTERNAL_NET any (msg:"THL HUNT INV-2026-067 Reverse Relay PING Keepalive After READY2 Announce (Idle Session Persists)"; flow:established,to_server; flowbits:isset,thl.inv067.relay; dsize:5; content:"PING|0a|"; startswith; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015-detections/; classtype:trojan-activity; sid:1000004; rev:1; metadata:author The_Hunters_Ledger, date 2026-10-09;)
 ```
 
 #### Reverse Relay OK Reply After DIAL
@@ -443,7 +442,7 @@ alert tcp $HOME_NET any -> $EXTERNAL_NET any (msg:"THL HUNT INV-2026-067 Reverse
 **Evidence:** `OK` plus a newline (3 bytes) sent 1 ms after the onward handshake completed.
 
 ```
-alert tcp $HOME_NET any -> $EXTERNAL_NET any (msg:"THL HUNT INV-2026-067 Reverse Relay OK Reply After DIAL (Onward Connection Succeeded)"; flow:established,to_server; flowbits:isset,thl.inv067.dial; dsize:3; content:"OK|0a|"; startswith; reference:url,the-hunters-ledger.com/hunting-detections/inv-2026-067-detections/; classtype:trojan-activity; sid:1000006; rev:1; metadata:author The_Hunters_Ledger, date 2026-10-09;)
+alert tcp $HOME_NET any -> $EXTERNAL_NET any (msg:"THL HUNT INV-2026-067 Reverse Relay OK Reply After DIAL (Onward Connection Succeeded)"; flow:established,to_server; flowbits:isset,thl.inv067.dial; dsize:3; content:"OK|0a|"; startswith; reference:url,the-hunters-ledger.com/hunting-detections/opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015-detections/; classtype:trojan-activity; sid:1000006; rev:1; metadata:author The_Hunters_Ledger, date 2026-10-09;)
 ```
 
 #### Reverse Relay FAIL Reply After DIAL
@@ -459,7 +458,7 @@ alert tcp $HOME_NET any -> $EXTERNAL_NET any (msg:"THL HUNT INV-2026-067 Reverse
 **Evidence:** `FAIL` plus a newline (5 bytes) sent after a `DIAL` to a closed port, with the relay reconnecting within 1 ms.
 
 ```
-alert tcp $HOME_NET any -> $EXTERNAL_NET any (msg:"THL HUNT INV-2026-067 Reverse Relay FAIL Reply After DIAL (Onward Connection Failed)"; flow:established,to_server; flowbits:isset,thl.inv067.dial; dsize:5; content:"FAIL|0a|"; startswith; reference:url,the-hunters-ledger.com/hunting-detections/inv-2026-067-detections/; classtype:trojan-activity; sid:1000007; rev:1; metadata:author The_Hunters_Ledger, date 2026-10-09;)
+alert tcp $HOME_NET any -> $EXTERNAL_NET any (msg:"THL HUNT INV-2026-067 Reverse Relay FAIL Reply After DIAL (Onward Connection Failed)"; flow:established,to_server; flowbits:isset,thl.inv067.dial; dsize:5; content:"FAIL|0a|"; startswith; reference:url,the-hunters-ledger.com/hunting-detections/opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015-detections/; classtype:trojan-activity; sid:1000007; rev:1; metadata:author The_Hunters_Ledger, date 2026-10-09;)
 ```
 
 ---

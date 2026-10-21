@@ -1,6 +1,6 @@
 # Hunters Ledger - consolidated Suricata detection feed
 # https://the-hunters-ledger.com/  |  License: CC BY 4.0
-# 122 rules from 37 campaigns. SIDs are STABLE across rebuilds (persistent
+# 130 rules from 38 campaigns. SIDs are STABLE across rebuilds (persistent
 # sid-map.json; allocated block 3500000-3509999 via sidallocation.org).
 # Above each rule: '# <campaign> (orig sid:N)', then annotation lines:
 #   TIER: Detection|Hunting  |  robustness N  |  confidence X
@@ -411,6 +411,42 @@ alert http any any -> any any (msg:"THL DETECT CVE-2026-41940 Candidate cPanel W
 #   TIER: Hunting  |  robustness 2  |  confidence HIGH FOR THE BANNER MATCH TODAY; DURABILITY IS LIMITED (SEE RATIONALE)  |  BROAD - triage before alerting
 #   FP: The combination of this exact Werkzeug version, Python version suffix, and /login-2fa redirect path is unlikely in unrelated legitimate deployments,...
 alert http any any -> any any (msg:"THL HUNT CVE-2026-41940 Operator Flask C2 Dashboard - Werkzeug/3.1.8 Banner with /login-2fa Redirect"; flow:established,to_client; http.server; content:"Werkzeug/3.1.8 Python/3.13.12"; endswith; nocase; http.header; content:"Location|3a 20|/login-2fa"; nocase; reference:url,the-hunters-ledger.com/reports/opendirectory-216-126-227-49-cve-2026-41940-cpanel-harvester-20260517/; reference:url,the-hunters-ledger.com/hunting-detections/opendirectory-216-126-227-49-cve-2026-41940-cpanel-harvester-20260517-detections/; classtype:trojan-activity; sid:3500059; rev:3; metadata:author The_Hunters_Ledger, date 2026-05-17;)
+# opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015 (orig sid:1000001)
+#   TIER: Detection  |  robustness 2  |  confidence HIGH
+#   rate-limited
+#   FP: None known. A resolver's TCP exchange starts with a two-byte length and a twelve-byte header, so a whole first payload of READY2 plus a newline is...
+alert tcp $HOME_NET any -> $EXTERNAL_NET 53 (msg:"THL DETECT INV-2026-067 Reverse Relay READY2 Announce on TCP 53 (Non-DNS Plaintext Handshake)"; flow:established,to_server; dsize:7; content:"READY2|0a|"; startswith; flowbits:set,thl.inv067.relay; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015-detections/; classtype:trojan-activity; sid:3500212; rev:1; metadata:author The_Hunters_Ledger, date 2026-10-09;)
+# opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015 (orig sid:1000005)
+#   TIER: Detection  |  robustness 2  |  confidence MODERATE, BECAUSE THE LINE FORMAT COMES FROM THE RELAY'S PARSING CODE AND MY STAND-IN CONTROLLER EXERCISED IT; NO REAL CONTROLLER LINE WAS SEEN. THE OPERATOR'S RELAY LOG RECORDS TUNNEL-UP EVENTS, WHICH FITS THE FORMAT WITHOUT PROVING THE BYTES.
+#   FP: None known. The rule needs DIAL, a host token and a decimal port in one short line sent from port 53 to an internal host. No real DNS-over-TCP...
+alert tcp $EXTERNAL_NET 53 -> $HOME_NET any (msg:"THL DETECT INV-2026-067 Reverse Relay Controller DIAL Tasking Line from TCP 53 (Internal Destination Instruction)"; flow:established,to_client; dsize:9<>200; content:"DIAL "; startswith; content:"|0a|"; endswith; pcre:"/^DIAL [^ \r\n]{1,128} [0-9]{1,5}\n$/"; flowbits:set,thl.inv067.dial; reference:url,the-hunters-ledger.com/hunting-detections/opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015-detections/; classtype:trojan-activity; sid:3500213; rev:1; metadata:author The_Hunters_Ledger, date 2026-10-09;)
+# opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015 (orig sid:1000008)
+#   TIER: Detection  |  robustness 2  |  confidence MODERATE
+#   FP: Unlikely. It needs a POST into GLPI's bundled htmlawed directory carrying both hhook= and text= in the body, which no ordinary GLPI page sends.
+alert http $EXTERNAL_NET any -> $HTTP_SERVERS any (msg:"THL DETECT INV-2026-067 GLPI htmLawed Test Page POST with hhook Parameter (CVE-2022-35914, Renamed Copy Included)"; flow:established,to_server; http.method; content:"POST"; http.uri; content:"/vendor/htmlawed/htmlawed/"; nocase; content:".php"; nocase; http.request_body; content:"hhook="; content:"text="; reference:url,the-hunters-ledger.com/hunting-detections/opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015-detections/; classtype:web-application-attack; sid:3500214; rev:1; metadata:author The_Hunters_Ledger, date 2026-10-09;)
+# opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015 (orig sid:1000002)
+#   TIER: Hunting  |  robustness 1  |  confidence LOW  |  BROAD - triage before alerting
+#   rate-limited
+#   FP: Unlikely, but I have no evidence for any port other than 53. The source takes its port as a compile-time value, so a different port is plausible and...
+alert tcp $HOME_NET any -> $EXTERNAL_NET !53 (msg:"THL HUNT INV-2026-067 Reverse Relay READY2 Announce on a Non-DNS Port (Port Variant)"; flow:established,to_server; dsize:7; content:"READY2|0a|"; startswith; flowbits:set,thl.inv067.relay; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015-detections/; classtype:trojan-activity; sid:3500215; rev:1; metadata:author The_Hunters_Ledger, date 2026-10-09;)
+# opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015 (orig sid:1000003)
+#   TIER: Hunting  |  robustness 2  |  confidence MODERATE  |  BROAD - triage before alerting
+#   rate-limited
+#   FP: Anything that speaks a plaintext line protocol on port 53, including SSH or HTTP deliberately run on that port to get through a filter. That is also...
+alert tcp $HOME_NET any -> $EXTERNAL_NET 53 (msg:"THL HUNT INV-2026-067 Short Printable ASCII Line as Client Payload on TCP 53 (Not DNS Framing)"; flow:established,to_server; flowbits:isnotset,thl.inv067.first53; dsize:3<>40; byte_test:1,>=,0x20,0; byte_test:1,<=,0x7e,0; content:"|0a|"; endswith; flowbits:set,thl.inv067.first53; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015-detections/; classtype:protocol-command-decode; sid:3500216; rev:1; metadata:author The_Hunters_Ledger, date 2026-10-09;)
+# opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015 (orig sid:1000004)
+#   TIER: Hunting  |  robustness 1  |  confidence MODERATE  |  BROAD - triage before alerting
+#   rate-limited
+#   FP: None known when the announce was seen first, because the flowbit gates it. Without the announce rule loaded the flowbit is never set and the rule...
+alert tcp $HOME_NET any -> $EXTERNAL_NET any (msg:"THL HUNT INV-2026-067 Reverse Relay PING Keepalive After READY2 Announce (Idle Session Persists)"; flow:established,to_server; flowbits:isset,thl.inv067.relay; dsize:5; content:"PING|0a|"; startswith; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015-detections/; classtype:trojan-activity; sid:3500217; rev:1; metadata:author The_Hunters_Ledger, date 2026-10-09;)
+# opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015 (orig sid:1000006)
+#   TIER: Hunting  |  robustness 1  |  confidence MODERATE  |  BROAD - triage before alerting
+#   FP: None known, because it needs the DIAL rule to have set its flowbit in the same flow. It cannot stand alone.
+alert tcp $HOME_NET any -> $EXTERNAL_NET any (msg:"THL HUNT INV-2026-067 Reverse Relay OK Reply After DIAL (Onward Connection Succeeded)"; flow:established,to_server; flowbits:isset,thl.inv067.dial; dsize:3; content:"OK|0a|"; startswith; reference:url,the-hunters-ledger.com/hunting-detections/opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015-detections/; classtype:trojan-activity; sid:3500218; rev:1; metadata:author The_Hunters_Ledger, date 2026-10-09;)
+# opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015 (orig sid:1000007)
+#   TIER: Hunting  |  robustness 1  |  confidence MODERATE  |  BROAD - triage before alerting
+#   FP: None known, gated the same way as the OK rule.
+alert tcp $HOME_NET any -> $EXTERNAL_NET any (msg:"THL HUNT INV-2026-067 Reverse Relay FAIL Reply After DIAL (Onward Connection Failed)"; flow:established,to_server; flowbits:isset,thl.inv067.dial; dsize:5; content:"FAIL|0a|"; startswith; reference:url,the-hunters-ledger.com/hunting-detections/opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015-detections/; classtype:trojan-activity; sid:3500219; rev:1; metadata:author The_Hunters_Ledger, date 2026-10-09;)
 # opendirectory-45-130-148-125-20260430 (orig sid:5001002)
 #   TIER: Detection  |  robustness 3  |  confidence HIGH
 #   FP: None known — X-Beacon-Id is not a standard HTTP header and is not used by any known legitimate application.

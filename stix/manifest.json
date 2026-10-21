@@ -1,14 +1,29 @@
 {
   "spec": "The Hunters Ledger STIX 2.1 bundle manifest: poll this file, compare sha256 per bundle, fetch what changed.",
   "license": "CC BY 4.0",
-  "count": 43,
+  "count": 44,
   "zip": {
     "file": "hunters-ledger-stix-bundles.zip",
     "url": "https://the-hunters-ledger.com/stix/hunters-ledger-stix-bundles.zip",
-    "sha256": "9d152c88f599841901b86e9bacdebd827100e4481e2a4ff14f9d44b20557a6d7",
-    "bytes": 1983863
+    "sha256": "8dc235d99b5214bab178790670fe2277aec6f95f39dd71a78bda908191ba8e75",
+    "bytes": 1999314
   },
   "bundles": [
+    {
+      "slug": "opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015",
+      "title": "Help Desks to Host Shells Across Brazil's Public Sector",
+      "date": "2026-10-15",
+      "file": "opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015.json",
+      "url": "https://the-hunters-ledger.com/stix/opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015.json",
+      "report_url": "https://the-hunters-ledger.com/reports/opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015/",
+      "bundle_id": "bundle--5598eede-a413-4622-bb2d-255ec138ee92",
+      "report_id": "report--6c2dd704-04ad-57c8-b183-13561e5815cc",
+      "sha256": "2c3b3f9d4cd54220ce349d7cf0b04019a654bbaf4862c156adeaf19189a77f77",
+      "bytes": 104802,
+      "objects": 109,
+      "indicators": 22,
+      "modified": "2026-10-21T19:22:11.420531Z"
+    },
     {
       "slug": "newdouble-clickfix",
       "title": "FACEIT ClickFix Pages Point CS2 Players to a Script URL That VirusTotal Ties to a Steam-Focused Executable",

@@ -2,7 +2,7 @@
 # ATT&CK tables, _data/detection_attack.yml, _data/actors_index.yml and the
 # catalog. Do NOT edit by hand; re-run the generator. Published sources only.
 attack_version: '19.2'
-max_score: 109
+max_score: 110
 tactics:
   - name: Reconnaissance
     slug: reconnaissance
@@ -12,14 +12,16 @@ tactics:
       - T1590.005
       - T1592.004
       - T1593.002
+      - T1593.003
       - T1594
+      - T1595
       - T1595.001
       - T1595.002
       - T1595.003
       - T1596.003
       - T1596.005
-    technique_count: 11
-    report_count: 19
+    technique_count: 13
+    report_count: 23
     rule_count: 5
   - name: Resource Development
     slug: resource-development
@@ -69,8 +71,8 @@ tactics:
       - T1566.003
       - T1566.004
     technique_count: 16
-    report_count: 43
-    rule_count: 59
+    report_count: 46
+    rule_count: 61
   - name: Execution
     slug: execution
     techniques:
@@ -84,6 +86,7 @@ tactics:
       - T1059.005
       - T1059.006
       - T1059.007
+      - T1072
       - T1106
       - T1127.001
       - T1129
@@ -95,9 +98,9 @@ tactics:
       - T1569.002
       - T1574.001
       - T1574.006
-    technique_count: 21
-    report_count: 100
-    rule_count: 138
+    technique_count: 22
+    report_count: 102
+    rule_count: 140
   - name: Persistence
     slug: persistence
     techniques:
@@ -132,8 +135,8 @@ tactics:
       - T1554
       - T1653
     technique_count: 30
-    report_count: 82
-    rule_count: 139
+    report_count: 86
+    rule_count: 141
   - name: Privilege Escalation
     slug: privilege-escalation
     techniques:
@@ -173,7 +176,7 @@ tactics:
       - T1548.002
       - T1611
     technique_count: 35
-    report_count: 116
+    report_count: 118
     rule_count: 123
   - name: Stealth
     slug: stealth
@@ -238,8 +241,8 @@ tactics:
       - T1622
       - T1684.001
     technique_count: 59
-    report_count: 217
-    rule_count: 215
+    report_count: 221
+    rule_count: 216
   - name: Defense Impairment
     slug: defense-impairment
     techniques:
@@ -252,7 +255,7 @@ tactics:
       - T1686
       - T1686.003
     technique_count: 8
-    report_count: 25
+    report_count: 26
     rule_count: 41
   - name: Credential Access
     slug: credential-access
@@ -263,18 +266,22 @@ tactics:
       - T1003.003
       - T1003.004
       - T1003.006
+      - T1003.008
       - T1056
       - T1056.001
       - T1056.002
       - T1056.003
       - T1110
       - T1110.001
+      - T1110.002
       - T1110.003
       - T1110.004
       - T1212
       - T1528
       - T1539
+      - T1552
       - T1552.001
+      - T1552.003
       - T1552.004
       - T1552.005
       - T1555
@@ -288,9 +295,9 @@ tactics:
       - T1606
       - T1606.001
       - T1649
-    technique_count: 31
-    report_count: 76
-    rule_count: 54
+    technique_count: 35
+    report_count: 88
+    rule_count: 55
   - name: Discovery
     slug: discovery
     techniques:
@@ -308,7 +315,9 @@ tactics:
       - T1082
       - T1083
       - T1087
+      - T1087.001
       - T1087.002
+      - T1087.004
       - T1135
       - T1482
       - T1497
@@ -317,10 +326,11 @@ tactics:
       - T1518
       - T1518.001
       - T1538
+      - T1613
       - T1614
       - T1622
-    technique_count: 25
-    report_count: 119
+    technique_count: 28
+    report_count: 133
     rule_count: 23
   - name: Lateral Movement
     slug: lateral-movement
@@ -331,15 +341,17 @@ tactics:
       - T1021.004
       - T1021.005
       - T1021.006
+      - T1072
       - T1091
       - T1210
       - T1534
+      - T1550.001
       - T1550.003
       - T1563.002
       - T1570
-    technique_count: 12
-    report_count: 24
-    rule_count: 19
+    technique_count: 14
+    report_count: 27
+    rule_count: 20
   - name: Collection
     slug: collection
     techniques:
@@ -360,9 +372,10 @@ tactics:
       - T1530
       - T1557
       - T1560
+      - T1602.001
       - T1602.002
-    technique_count: 18
-    report_count: 68
+    technique_count: 19
+    report_count: 73
     rule_count: 36
   - name: Command and Control
     slug: command-and-control
@@ -398,8 +411,8 @@ tactics:
       - T1573.002
       - T1665
     technique_count: 30
-    report_count: 144
-    rule_count: 216
+    report_count: 151
+    rule_count: 226
   - name: Exfiltration
     slug: exfiltration
     techniques:
@@ -409,7 +422,7 @@ tactics:
       - T1567
       - T1567.002
     technique_count: 5
-    report_count: 24
+    report_count: 26
     rule_count: 20
   - name: Impact
     slug: impact
@@ -430,7 +443,7 @@ tactics:
       - T1565.001
       - T1657
     technique_count: 15
-    report_count: 28
+    report_count: 29
     rule_count: 39
 techniques:
   - id: T1001
@@ -638,12 +651,36 @@ techniques:
     rule_count: 0
     actor_count: 1
     score: 1
+  - id: T1003.008
+    name: /etc/passwd and /etc/shadow
+    tactic: Credential Access
+    tactics:
+      - Credential Access
+    reports:
+      - url: /reports/opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015/
+        title: Help Desks to Host Shells Across Brazil's Public Sector
+        date: '2026-10-15'
+        tactic: Credential Access
+        confidence: HIGH
+    detections: []
+    actors: []
+    url: /techniques/T1003.008/
+    mitre_url: https://attack.mitre.org/techniques/T1003/008/
+    report_count: 1
+    rule_count: 0
+    actor_count: 0
+    score: 1
   - id: T1005
     name: Data from Local System
     tactic: Collection
     tactics:
       - Collection
     reports:
+      - url: /reports/opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015/
+        title: Help Desks to Host Shells Across Brazil's Public Sector
+        date: '2026-10-15'
+        tactic: Collection
+        confidence: HIGH
       - url: /reports/sliver-c2-windows-postex-staging-193-233-202-17/
         title: Sliver C2 Windows Post-Exploitation Staging, 193.233.202.17
         date: '2026-09-07'
@@ -734,10 +771,10 @@ techniques:
       - n-3-xl
     url: /techniques/T1005/
     mitre_url: https://attack.mitre.org/techniques/T1005/
-    report_count: 11
+    report_count: 12
     rule_count: 3
     actor_count: 11
-    score: 14
+    score: 15
   - id: T1007
     name: System Service Discovery
     tactic: Discovery
@@ -900,6 +937,11 @@ techniques:
     tactics:
       - Discovery
     reports:
+      - url: /reports/opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015/
+        title: Help Desks to Host Shells Across Brazil's Public Sector
+        date: '2026-10-15'
+        tactic: Discovery
+        confidence: HIGH
       - url: /reports/sliver-c2-windows-postex-staging-193-233-202-17/
         title: Sliver C2 Windows Post-Exploitation Staging, 193.233.202.17
         date: '2026-09-07'
@@ -933,16 +975,21 @@ techniques:
       - UTA-2026-024
     url: /techniques/T1016/
     mitre_url: https://attack.mitre.org/techniques/T1016/
-    report_count: 5
+    report_count: 6
     rule_count: 0
     actor_count: 4
-    score: 5
+    score: 6
   - id: T1016.001
     name: Internet Connection Discovery
     tactic: Discovery
     tactics:
       - Discovery
     reports:
+      - url: /reports/opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015/
+        title: Help Desks to Host Shells Across Brazil's Public Sector
+        date: '2026-10-15'
+        tactic: Discovery
+        confidence: HIGH
       - url: /reports/shadow-xworm-opendirectory/
         title: Shadow RAT & XWorm Open Directory Campaign
         date: '2026-04-05'
@@ -953,16 +1000,21 @@ techniques:
       - UTA-2026-003
     url: /techniques/T1016.001/
     mitre_url: https://attack.mitre.org/techniques/T1016/001/
-    report_count: 1
+    report_count: 2
     rule_count: 0
     actor_count: 1
-    score: 1
+    score: 2
   - id: T1018
     name: Remote System Discovery
     tactic: Discovery
     tactics:
       - Discovery
     reports:
+      - url: /reports/opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015/
+        title: Help Desks to Host Shells Across Brazil's Public Sector
+        date: '2026-10-15'
+        tactic: Discovery
+        confidence: HIGH
       - url: /reports/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817/
         title: Carrier Credential Harvesting Through a Customer's Router
         date: '2026-08-18'
@@ -1001,16 +1053,21 @@ techniques:
       - vova75rus
     url: /techniques/T1018/
     mitre_url: https://attack.mitre.org/techniques/T1018/
-    report_count: 3
+    report_count: 4
     rule_count: 2
     actor_count: 6
-    score: 5
+    score: 6
   - id: T1020
     name: Automated Exfiltration
     tactic: Exfiltration
     tactics:
       - Exfiltration
     reports:
+      - url: /reports/opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015/
+        title: Help Desks to Host Shells Across Brazil's Public Sector
+        date: '2026-10-15'
+        tactic: Exfiltration
+        confidence: HIGH
       - url: /reports/arsenal-237-new-files/
         title: 'Arsenal-237 New Files: Advanced Toolkit Analysis'
         date: '2026-01-20'
@@ -1029,10 +1086,10 @@ techniques:
       - UTA-2026-013
     url: /techniques/T1020/
     mitre_url: https://attack.mitre.org/techniques/T1020/
-    report_count: 1
+    report_count: 2
     rule_count: 2
     actor_count: 1
-    score: 3
+    score: 4
   - id: T1021
     name: Remote Services
     tactic: Lateral Movement
@@ -1666,6 +1723,11 @@ techniques:
     tactics:
       - Stealth
     reports:
+      - url: /reports/opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015/
+        title: Help Desks to Host Shells Across Brazil's Public Sector
+        date: '2026-10-15'
+        tactic: Stealth
+        confidence: HIGH
       - url: /reports/gocloud-multiservice-cryptojacking-149-28-112-221/
         title: GOCLOUD Multi-Service Cryptojacking
         date: '2026-07-26'
@@ -1689,10 +1751,10 @@ techniques:
       - UTA-2026-020
     url: /techniques/T1027.010/
     mitre_url: https://attack.mitre.org/techniques/T1027/010/
-    report_count: 2
+    report_count: 3
     rule_count: 2
     actor_count: 1
-    score: 4
+    score: 5
   - id: T1027.011
     name: Fileless Storage
     tactic: Stealth
@@ -1805,6 +1867,11 @@ techniques:
     tactics:
       - Discovery
     reports:
+      - url: /reports/opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015/
+        title: Help Desks to Host Shells Across Brazil's Public Sector
+        date: '2026-10-15'
+        tactic: Discovery
+        confidence: HIGH
       - url: /reports/sliver-c2-windows-postex-staging-193-233-202-17/
         title: Sliver C2 Windows Post-Exploitation Staging, 193.233.202.17
         date: '2026-09-07'
@@ -1843,10 +1910,10 @@ techniques:
       - UTA-2026-024
     url: /techniques/T1033/
     mitre_url: https://attack.mitre.org/techniques/T1033/
-    report_count: 6
+    report_count: 7
     rule_count: 0
     actor_count: 4
-    score: 6
+    score: 7
   - id: T1036
     name: Masquerading
     tactic: Stealth
@@ -2304,6 +2371,11 @@ techniques:
     tactics:
       - Exfiltration
     reports:
+      - url: /reports/opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015/
+        title: Help Desks to Host Shells Across Brazil's Public Sector
+        date: '2026-10-15'
+        tactic: Exfiltration
+        confidence: MODERATE
       - url: /reports/sliver-c2-windows-postex-staging-193-233-202-17/
         title: Sliver C2 Windows Post-Exploitation Staging, 193.233.202.17
         date: '2026-09-07'
@@ -2477,16 +2549,21 @@ techniques:
       - n-3-xl
     url: /techniques/T1041/
     mitre_url: https://attack.mitre.org/techniques/T1041/
-    report_count: 17
+    report_count: 18
     rule_count: 13
     actor_count: 14
-    score: 30
+    score: 31
   - id: T1046
     name: Network Service Discovery
     tactic: Discovery
     tactics:
       - Discovery
     reports:
+      - url: /reports/opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015/
+        title: Help Desks to Host Shells Across Brazil's Public Sector
+        date: '2026-10-15'
+        tactic: Discovery
+        confidence: HIGH
       - url: /reports/sliver-c2-windows-postex-staging-193-233-202-17/
         title: Sliver C2 Windows Post-Exploitation Staging, 193.233.202.17
         date: '2026-09-07'
@@ -2562,10 +2639,10 @@ techniques:
       - UTA-2026-024
     url: /techniques/T1046/
     mitre_url: https://attack.mitre.org/techniques/T1046/
-    report_count: 8
+    report_count: 9
     rule_count: 4
     actor_count: 8
-    score: 12
+    score: 13
   - id: T1047
     name: Windows Management Instrumentation
     tactic: Execution
@@ -2639,6 +2716,11 @@ techniques:
     tactics:
       - Discovery
     reports:
+      - url: /reports/opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015/
+        title: Help Desks to Host Shells Across Brazil's Public Sector
+        date: '2026-10-15'
+        tactic: Discovery
+        confidence: HIGH
       - url: /reports/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817/
         title: Carrier Credential Harvesting Through a Customer's Router
         date: '2026-08-18'
@@ -2655,10 +2737,10 @@ techniques:
       - UTA-2026-023
     url: /techniques/T1049/
     mitre_url: https://attack.mitre.org/techniques/T1049/
-    report_count: 2
+    report_count: 3
     rule_count: 0
     actor_count: 2
-    score: 2
+    score: 3
   - id: T1053.003
     name: Cron
     tactic: Execution
@@ -3336,6 +3418,11 @@ techniques:
       - Collection
       - Credential Access
     reports:
+      - url: /reports/opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015/
+        title: Help Desks to Host Shells Across Brazil's Public Sector
+        date: '2026-10-15'
+        tactic: Credential Access
+        confidence: HIGH
       - url: /reports/opendirectory-216-126-227-49-cve-2026-41940-cpanel-harvester-20260517/
         title: CVE-2026-41940 cPanel Harvester Toolkit (216.126.227.49)
         date: '2026-05-17'
@@ -3346,16 +3433,21 @@ techniques:
       - UTA-2026-011
     url: /techniques/T1056.003/
     mitre_url: https://attack.mitre.org/techniques/T1056/003/
-    report_count: 1
+    report_count: 2
     rule_count: 0
     actor_count: 1
-    score: 1
+    score: 2
   - id: T1057
     name: Process Discovery
     tactic: Discovery
     tactics:
       - Discovery
     reports:
+      - url: /reports/opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015/
+        title: Help Desks to Host Shells Across Brazil's Public Sector
+        date: '2026-10-15'
+        tactic: Discovery
+        confidence: HIGH
       - url: /reports/gotenberg-rce-cryptomining-107-175-69-137/
         title: Gotenberg CVE-2026-42589 Mass Exploitation and Cryptomining
         date: '2026-09-16'
@@ -3440,10 +3532,10 @@ techniques:
       - UTA-2026-021
     url: /techniques/T1057/
     mitre_url: https://attack.mitre.org/techniques/T1057/
-    report_count: 14
+    report_count: 15
     rule_count: 0
     actor_count: 10
-    score: 14
+    score: 15
   - id: T1059
     name: Command and Scripting Interpreter
     tactic: Execution
@@ -3841,6 +3933,11 @@ techniques:
     tactics:
       - Execution
     reports:
+      - url: /reports/opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015/
+        title: Help Desks to Host Shells Across Brazil's Public Sector
+        date: '2026-10-15'
+        tactic: Execution
+        confidence: HIGH
       - url: /reports/gotenberg-rce-cryptomining-107-175-69-137/
         title: Gotenberg CVE-2026-42589 Mass Exploitation and Cryptomining
         date: '2026-09-16'
@@ -3877,6 +3974,15 @@ techniques:
         tactic: Execution
         confidence: HIGH
     detections:
+      - url: >-
+          /hunting-detections/opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015-detections
+        title: Help Desks to Host Shells Across Brazil's Public Sector
+        date: '2026-10-15'
+        report_url: /reports/opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015/
+        rules: >-
+          WebLogic Java Process Spawns Shell Writing a JSP Into a WebLogic Internal Directory
+          (SIGMA, Detection)
+        count: 1
       - url: /hunting-detections/gotenberg-rce-cryptomining-107-175-69-137-detections
         title: Gotenberg CVE-2026-42589 Mass Exploitation and Cryptomining
         date: '2026-09-16'
@@ -3947,10 +4053,10 @@ techniques:
       - vova75rus
     url: /techniques/T1059.004/
     mitre_url: https://attack.mitre.org/techniques/T1059/004/
-    report_count: 7
-    rule_count: 21
+    report_count: 8
+    rule_count: 22
     actor_count: 11
-    score: 28
+    score: 30
   - id: T1059.005
     name: Visual Basic
     tactic: Execution
@@ -4325,6 +4431,11 @@ techniques:
     tactics:
       - Stealth
     reports:
+      - url: /reports/opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015/
+        title: Help Desks to Host Shells Across Brazil's Public Sector
+        date: '2026-10-15'
+        tactic: Stealth
+        confidence: MODERATE
       - url: /reports/cloudsync-assembler-toolkit-91-197-98-188/
         title: 'CloudSync: An Assembler''s Intrusion Toolkit'
         date: '2026-08-03'
@@ -4341,6 +4452,13 @@ techniques:
         tactic: Stealth
         confidence: MODERATE
     detections:
+      - url: >-
+          /hunting-detections/opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015-detections
+        title: Help Desks to Host Shells Across Brazil's Public Sector
+        date: '2026-10-15'
+        report_url: /reports/opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015/
+        rules: Java Process Spawns Shell to Rewrite Log Files (SIGMA, Hunting)
+        count: 1
       - url: /hunting-detections/bellamain-turkish-phaas-79-137-192-3-20260516-detections
         title: BellaMain Turkish PhaaS Panel (79.137.192.3)
         date: '2026-05-16'
@@ -4355,10 +4473,10 @@ techniques:
       - UTA-2026-021
     url: /techniques/T1070/
     mitre_url: https://attack.mitre.org/techniques/T1070/
-    report_count: 3
-    rule_count: 2
+    report_count: 4
+    rule_count: 3
     actor_count: 3
-    score: 5
+    score: 7
   - id: T1070.004
     name: File Deletion
     tactic: Stealth
@@ -4526,6 +4644,11 @@ techniques:
     tactics:
       - Command and Control
     reports:
+      - url: /reports/opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015/
+        title: Help Desks to Host Shells Across Brazil's Public Sector
+        date: '2026-10-15'
+        tactic: Command and Control
+        confidence: HIGH
       - url: /reports/gotenberg-rce-cryptomining-107-175-69-137/
         title: Gotenberg CVE-2026-42589 Mass Exploitation and Cryptomining
         date: '2026-09-16'
@@ -4918,10 +5041,10 @@ techniques:
       - n-3-xl
     url: /techniques/T1071.001/
     mitre_url: https://attack.mitre.org/techniques/T1071/001/
-    report_count: 28
+    report_count: 29
     rule_count: 81
     actor_count: 19
-    score: 109
+    score: 110
   - id: T1071.002
     name: File Transfer Protocols
     tactic: Command and Control
@@ -4974,6 +5097,35 @@ techniques:
     rule_count: 0
     actor_count: 1
     score: 2
+  - id: T1072
+    name: Software Deployment Tools
+    tactic: Execution
+    tactics:
+      - Execution
+      - Lateral Movement
+    reports:
+      - url: /reports/opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015/
+        title: Help Desks to Host Shells Across Brazil's Public Sector
+        date: '2026-10-15'
+        tactic: Execution
+        confidence: MODERATE
+    detections:
+      - url: >-
+          /hunting-detections/opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015-detections
+        title: Help Desks to Host Shells Across Brazil's Public Sector
+        date: '2026-10-15'
+        report_url: /reports/opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015/
+        rules: >-
+          Zabbix Daemon Child Process Touching Credential Files or Instance Metadata (SIGMA,
+          Hunting)
+        count: 1
+    actors: []
+    url: /techniques/T1072/
+    mitre_url: https://attack.mitre.org/techniques/T1072/
+    report_count: 1
+    rule_count: 1
+    actor_count: 0
+    score: 2
   - id: T1074.001
     name: Local Data Staging
     tactic: Collection
@@ -5009,6 +5161,11 @@ techniques:
       - Privilege Escalation
       - Initial Access
     reports:
+      - url: /reports/opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015/
+        title: Help Desks to Host Shells Across Brazil's Public Sector
+        date: '2026-10-15'
+        tactic: Initial Access
+        confidence: MODERATE
       - url: /reports/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817/
         title: Carrier Credential Harvesting Through a Customer's Router
         date: '2026-08-18'
@@ -5070,10 +5227,10 @@ techniques:
       - UTA-2026-023
     url: /techniques/T1078/
     mitre_url: https://attack.mitre.org/techniques/T1078/
-    report_count: 5
+    report_count: 6
     rule_count: 6
     actor_count: 6
-    score: 11
+    score: 12
   - id: T1078.001
     name: Default Accounts
     tactic: Stealth
@@ -5182,6 +5339,11 @@ techniques:
     tactics:
       - Discovery
     reports:
+      - url: /reports/opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015/
+        title: Help Desks to Host Shells Across Brazil's Public Sector
+        date: '2026-10-15'
+        tactic: Discovery
+        confidence: HIGH
       - url: /reports/gotenberg-rce-cryptomining-107-175-69-137/
         title: Gotenberg CVE-2026-42589 Mass Exploitation and Cryptomining
         date: '2026-09-16'
@@ -5312,16 +5474,21 @@ techniques:
       - n-3-xl
     url: /techniques/T1082/
     mitre_url: https://attack.mitre.org/techniques/T1082/
-    report_count: 21
+    report_count: 22
     rule_count: 1
     actor_count: 15
-    score: 22
+    score: 23
   - id: T1083
     name: File and Directory Discovery
     tactic: Discovery
     tactics:
       - Discovery
     reports:
+      - url: /reports/opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015/
+        title: Help Desks to Host Shells Across Brazil's Public Sector
+        date: '2026-10-15'
+        tactic: Discovery
+        confidence: MODERATE
       - url: /reports/evilsoul-engine-stealer-maas-144-172-103-98/
         title: 'EvilSoul-Engine: A Brazilian Stealer-Builder Malware-as-a-Service'
         date: '2026-07-03'
@@ -5376,10 +5543,10 @@ techniques:
       - n-3-xl
     url: /techniques/T1083/
     mitre_url: https://attack.mitre.org/techniques/T1083/
-    report_count: 9
+    report_count: 10
     rule_count: 0
     actor_count: 5
-    score: 9
+    score: 10
   - id: T1087
     name: Account Discovery
     tactic: Discovery
@@ -5407,12 +5574,36 @@ techniques:
     rule_count: 1
     actor_count: 2
     score: 2
+  - id: T1087.001
+    name: Local Account
+    tactic: Discovery
+    tactics:
+      - Discovery
+    reports:
+      - url: /reports/opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015/
+        title: Help Desks to Host Shells Across Brazil's Public Sector
+        date: '2026-10-15'
+        tactic: Discovery
+        confidence: HIGH
+    detections: []
+    actors: []
+    url: /techniques/T1087.001/
+    mitre_url: https://attack.mitre.org/techniques/T1087/001/
+    report_count: 1
+    rule_count: 0
+    actor_count: 0
+    score: 1
   - id: T1087.002
     name: Domain Account
     tactic: Discovery
     tactics:
       - Discovery
     reports:
+      - url: /reports/opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015/
+        title: Help Desks to Host Shells Across Brazil's Public Sector
+        date: '2026-10-15'
+        tactic: Discovery
+        confidence: MODERATE
       - url: /reports/sliver-c2-windows-postex-staging-193-233-202-17/
         title: Sliver C2 Windows Post-Exploitation Staging, 193.233.202.17
         date: '2026-09-07'
@@ -5435,10 +5626,29 @@ techniques:
       - UTA-2026-024
     url: /techniques/T1087.002/
     mitre_url: https://attack.mitre.org/techniques/T1087/002/
-    report_count: 2
+    report_count: 3
     rule_count: 1
     actor_count: 2
-    score: 3
+    score: 4
+  - id: T1087.004
+    name: Cloud Account
+    tactic: Discovery
+    tactics:
+      - Discovery
+    reports:
+      - url: /reports/opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015/
+        title: Help Desks to Host Shells Across Brazil's Public Sector
+        date: '2026-10-15'
+        tactic: Discovery
+        confidence: HIGH
+    detections: []
+    actors: []
+    url: /techniques/T1087.004/
+    mitre_url: https://attack.mitre.org/techniques/T1087/004/
+    report_count: 1
+    rule_count: 0
+    actor_count: 0
+    score: 1
   - id: T1090
     name: Proxy
     tactic: Command and Control
@@ -5494,6 +5704,11 @@ techniques:
     tactics:
       - Command and Control
     reports:
+      - url: /reports/opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015/
+        title: Help Desks to Host Shells Across Brazil's Public Sector
+        date: '2026-10-15'
+        tactic: Command and Control
+        confidence: HIGH
       - url: /reports/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817/
         title: Carrier Credential Harvesting Through a Customer's Router
         date: '2026-08-18'
@@ -5525,6 +5740,18 @@ techniques:
         tactic: Command and Control
         confidence: HIGH
     detections:
+      - url: >-
+          /hunting-detections/opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015-detections
+        title: Help Desks to Host Shells Across Brazil's Public Sector
+        date: '2026-10-15'
+        report_url: /reports/opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015/
+        rules: >-
+          Reverse Relay READY2 Announce on TCP 53 (SURICATA, Detection); Reverse Relay Controller
+          DIAL Tasking Line from TCP 53 (SURICATA, Detection); Reverse Relay READY2 Announce on a
+          Non-DNS Port (SURICATA, Hunting); Reverse Relay PING Keepalive After READY2 Announce
+          (SURICATA, Hunting); Reverse Relay OK Reply After DIAL (SURICATA, Hunting); Reverse Relay
+          FAIL Reply After DIAL (SURICATA, Hunting)
+        count: 6
       - url: /hunting-detections/korean-claude-openclaw-221.150.15.104-detections
         title: Korean Claude Code + OpenClaw Operator (221.150.15.104)
         date: '2026-05-27'
@@ -5564,10 +5791,10 @@ techniques:
       - UTA-2026-023
     url: /techniques/T1090.001/
     mitre_url: https://attack.mitre.org/techniques/T1090/001/
-    report_count: 6
-    rule_count: 7
+    report_count: 7
+    rule_count: 13
     actor_count: 5
-    score: 13
+    score: 20
   - id: T1090.002
     name: External Proxy
     tactic: Command and Control
@@ -5770,6 +5997,11 @@ techniques:
     tactics:
       - Command and Control
     reports:
+      - url: /reports/opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015/
+        title: Help Desks to Host Shells Across Brazil's Public Sector
+        date: '2026-10-15'
+        tactic: Command and Control
+        confidence: HIGH
       - url: /reports/kaido-quasar-rat-144-172-109-203/
         title: 'KAIDO: A Brazilian Quasar-Fork RAT with Hidden-Desktop Session Hijacking'
         date: '2026-07-03'
@@ -5791,6 +6023,17 @@ techniques:
         tactic: Command and Control
         confidence: HIGH
     detections:
+      - url: >-
+          /hunting-detections/opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015-detections
+        title: Help Desks to Host Shells Across Brazil's Public Sector
+        date: '2026-10-15'
+        report_url: /reports/opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015/
+        rules: >-
+          Reverse Relay READY2 Announce on TCP 53 (SURICATA, Detection); Reverse Relay Controller
+          DIAL Tasking Line from TCP 53 (SURICATA, Detection); Reverse Relay READY2 Announce on a
+          Non-DNS Port (SURICATA, Hunting); Short Printable ASCII Line as Client Payload on TCP 53
+          (SURICATA, Hunting)
+        count: 4
       - url: /hunting-detections/kaido-quasar-rat-detections
         title: 'KAIDO: A Brazilian Quasar-Fork RAT with Hidden-Desktop Session Hijacking'
         date: '2026-07-03'
@@ -5843,10 +6086,10 @@ techniques:
       - n-3-xl
     url: /techniques/T1095/
     mitre_url: https://attack.mitre.org/techniques/T1095/
-    report_count: 4
-    rule_count: 11
+    report_count: 5
+    rule_count: 15
     actor_count: 3
-    score: 15
+    score: 20
   - id: T1098
     name: Account Manipulation
     tactic: Persistence
@@ -5854,6 +6097,11 @@ techniques:
       - Persistence
       - Privilege Escalation
     reports:
+      - url: /reports/opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015/
+        title: Help Desks to Host Shells Across Brazil's Public Sector
+        date: '2026-10-15'
+        tactic: Persistence
+        confidence: MODERATE
       - url: /reports/sliver-c2-windows-postex-staging-193-233-202-17/
         title: Sliver C2 Windows Post-Exploitation Staging, 193.233.202.17
         date: '2026-09-07'
@@ -5906,10 +6154,10 @@ techniques:
       - UTA-2026-024
     url: /techniques/T1098/
     mitre_url: https://attack.mitre.org/techniques/T1098/
-    report_count: 3
+    report_count: 4
     rule_count: 6
     actor_count: 3
-    score: 9
+    score: 10
   - id: T1098.004
     name: SSH Authorized Keys
     tactic: Persistence
@@ -6201,6 +6449,11 @@ techniques:
     tactics:
       - Command and Control
     reports:
+      - url: /reports/opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015/
+        title: Help Desks to Host Shells Across Brazil's Public Sector
+        date: '2026-10-15'
+        tactic: Command and Control
+        confidence: HIGH
       - url: /reports/gotenberg-rce-cryptomining-107-175-69-137/
         title: Gotenberg CVE-2026-42589 Mass Exploitation and Cryptomining
         date: '2026-09-16'
@@ -6429,10 +6682,10 @@ techniques:
       - vova75rus
     url: /techniques/T1105/
     mitre_url: https://attack.mitre.org/techniques/T1105/
-    report_count: 17
+    report_count: 18
     rule_count: 26
     actor_count: 17
-    score: 43
+    score: 44
   - id: T1106
     name: Native API
     tactic: Execution
@@ -6543,6 +6796,11 @@ techniques:
     tactics:
       - Credential Access
     reports:
+      - url: /reports/opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015/
+        title: Help Desks to Host Shells Across Brazil's Public Sector
+        date: '2026-10-15'
+        tactic: Credential Access
+        confidence: MODERATE
       - url: /reports/seasia-gov-exploitation-toolkit-144-172-106-236/
         title: 'The Middle Tier: A Non-APT Operator''s Reach Into Four Southeast Asian Governments'
         date: '2026-08-13'
@@ -6585,16 +6843,40 @@ techniques:
       - UTA-2026-019
     url: /techniques/T1110.001/
     mitre_url: https://attack.mitre.org/techniques/T1110/001/
-    report_count: 2
+    report_count: 3
     rule_count: 6
     actor_count: 2
-    score: 8
+    score: 9
+  - id: T1110.002
+    name: Password Cracking
+    tactic: Credential Access
+    tactics:
+      - Credential Access
+    reports:
+      - url: /reports/opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015/
+        title: Help Desks to Host Shells Across Brazil's Public Sector
+        date: '2026-10-15'
+        tactic: Credential Access
+        confidence: HIGH
+    detections: []
+    actors: []
+    url: /techniques/T1110.002/
+    mitre_url: https://attack.mitre.org/techniques/T1110/002/
+    report_count: 1
+    rule_count: 0
+    actor_count: 0
+    score: 1
   - id: T1110.003
     name: Password Spraying
     tactic: Credential Access
     tactics:
       - Credential Access
     reports:
+      - url: /reports/opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015/
+        title: Help Desks to Host Shells Across Brazil's Public Sector
+        date: '2026-10-15'
+        tactic: Credential Access
+        confidence: HIGH
       - url: /reports/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817/
         title: Carrier Credential Harvesting Through a Customer's Router
         date: '2026-08-18'
@@ -6638,16 +6920,21 @@ techniques:
       - UTA-2026-023
     url: /techniques/T1110.003/
     mitre_url: https://attack.mitre.org/techniques/T1110/003/
-    report_count: 4
+    report_count: 5
     rule_count: 3
     actor_count: 5
-    score: 7
+    score: 8
   - id: T1110.004
     name: Credential Stuffing
     tactic: Credential Access
     tactics:
       - Credential Access
     reports:
+      - url: /reports/opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015/
+        title: Help Desks to Host Shells Across Brazil's Public Sector
+        date: '2026-10-15'
+        tactic: Credential Access
+        confidence: MODERATE
       - url: /reports/zerotrace-74-0-42-25-20260316/
         title: ZeroTrace Multi-Family MaaS Operation (74.0.42.25)
         date: '2026-03-16'
@@ -6657,10 +6944,10 @@ techniques:
     actors: []
     url: /techniques/T1110.004/
     mitre_url: https://attack.mitre.org/techniques/T1110/004/
-    report_count: 1
+    report_count: 2
     rule_count: 0
     actor_count: 0
-    score: 1
+    score: 2
   - id: T1112
     name: Modify Registry
     tactic: Defense Impairment
@@ -6922,6 +7209,11 @@ techniques:
     tactics:
       - Collection
     reports:
+      - url: /reports/opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015/
+        title: Help Desks to Host Shells Across Brazil's Public Sector
+        date: '2026-10-15'
+        tactic: Collection
+        confidence: HIGH
       - url: /reports/seasia-gov-exploitation-toolkit-144-172-106-236/
         title: 'The Middle Tier: A Non-APT Operator''s Reach Into Four Southeast Asian Governments'
         date: '2026-08-13'
@@ -6971,10 +7263,10 @@ techniques:
       - UTA-2026-019
     url: /techniques/T1119/
     mitre_url: https://attack.mitre.org/techniques/T1119/
-    report_count: 3
+    report_count: 4
     rule_count: 7
     actor_count: 4
-    score: 10
+    score: 11
   - id: T1123
     name: Audio Capture
     tactic: Collection
@@ -7166,6 +7458,11 @@ techniques:
     tactics:
       - Command and Control
     reports:
+      - url: /reports/opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015/
+        title: Help Desks to Host Shells Across Brazil's Public Sector
+        date: '2026-10-15'
+        tactic: Command and Control
+        confidence: HIGH
       - url: /reports/sliver-c2-windows-postex-staging-193-233-202-17/
         title: Sliver C2 Windows Post-Exploitation Staging, 193.233.202.17
         date: '2026-09-07'
@@ -7239,10 +7536,10 @@ techniques:
       - UTA-2026-024
     url: /techniques/T1132.001/
     mitre_url: https://attack.mitre.org/techniques/T1132/001/
-    report_count: 6
+    report_count: 7
     rule_count: 8
     actor_count: 6
-    score: 14
+    score: 15
   - id: T1132.002
     name: Non-Standard Encoding
     tactic: Command and Control
@@ -7270,6 +7567,11 @@ techniques:
       - Persistence
       - Initial Access
     reports:
+      - url: /reports/opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015/
+        title: Help Desks to Host Shells Across Brazil's Public Sector
+        date: '2026-10-15'
+        tactic: Initial Access
+        confidence: HIGH
       - url: /reports/seasia-gov-exploitation-toolkit-144-172-106-236/
         title: 'The Middle Tier: A Non-APT Operator''s Reach Into Four Southeast Asian Governments'
         date: '2026-08-13'
@@ -7294,10 +7596,10 @@ techniques:
       - UTA-2026-021
     url: /techniques/T1133/
     mitre_url: https://attack.mitre.org/techniques/T1133/
-    report_count: 2
+    report_count: 3
     rule_count: 2
     actor_count: 2
-    score: 4
+    score: 5
   - id: T1134
     name: Access Token Manipulation
     tactic: Stealth
@@ -7611,6 +7913,11 @@ techniques:
     tactics:
       - Stealth
     reports:
+      - url: /reports/opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015/
+        title: Help Desks to Host Shells Across Brazil's Public Sector
+        date: '2026-10-15'
+        tactic: Stealth
+        confidence: HIGH
       - url: /reports/sliver-c2-windows-postex-staging-193-233-202-17/
         title: Sliver C2 Windows Post-Exploitation Staging, 193.233.202.17
         date: '2026-09-07'
@@ -7749,10 +8056,10 @@ techniques:
       - UTA-2026-024
     url: /techniques/T1140/
     mitre_url: https://attack.mitre.org/techniques/T1140/
-    report_count: 14
+    report_count: 15
     rule_count: 12
     actor_count: 13
-    score: 26
+    score: 27
   - id: T1185
     name: Browser Session Hijacking
     tactic: Collection
@@ -7816,6 +8123,11 @@ techniques:
     tactics:
       - Initial Access
     reports:
+      - url: /reports/opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015/
+        title: Help Desks to Host Shells Across Brazil's Public Sector
+        date: '2026-10-15'
+        tactic: Initial Access
+        confidence: HIGH
       - url: /reports/gotenberg-rce-cryptomining-107-175-69-137/
         title: Gotenberg CVE-2026-42589 Mass Exploitation and Cryptomining
         date: '2026-09-16'
@@ -7872,6 +8184,15 @@ techniques:
         tactic: Initial Access
         confidence: HIGH
     detections:
+      - url: >-
+          /hunting-detections/opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015-detections
+        title: Help Desks to Host Shells Across Brazil's Public Sector
+        date: '2026-10-15'
+        report_url: /reports/opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015/
+        rules: >-
+          GLPI htmLawed Test Page POST Request (CVE-2022-35914, Renamed Copy Included) (SIGMA,
+          Detection); GLPI htmLawed Test Page POST with hhook Parameter (SURICATA, Detection)
+        count: 2
       - url: /hunting-detections/gotenberg-rce-cryptomining-107-175-69-137-detections
         title: Gotenberg CVE-2026-42589 Mass Exploitation and Cryptomining
         date: '2026-09-16'
@@ -7985,10 +8306,10 @@ techniques:
       - UTA-2026-023
     url: /techniques/T1190/
     mitre_url: https://attack.mitre.org/techniques/T1190/
-    report_count: 11
-    rule_count: 46
+    report_count: 12
+    rule_count: 48
     actor_count: 7
-    score: 57
+    score: 60
   - id: T1195.002
     name: Compromise Software Supply Chain
     tactic: Initial Access
@@ -8169,6 +8490,11 @@ techniques:
     tactics:
       - Lateral Movement
     reports:
+      - url: /reports/opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015/
+        title: Help Desks to Host Shells Across Brazil's Public Sector
+        date: '2026-10-15'
+        tactic: Lateral Movement
+        confidence: HIGH
       - url: /reports/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817/
         title: Carrier Credential Harvesting Through a Customer's Router
         date: '2026-08-18'
@@ -8179,10 +8505,10 @@ techniques:
       - UTA-2026-023
     url: /techniques/T1210/
     mitre_url: https://attack.mitre.org/techniques/T1210/
-    report_count: 1
+    report_count: 2
     rule_count: 0
     actor_count: 1
-    score: 1
+    score: 2
   - id: T1212
     name: Exploitation for Credential Access
     tactic: Credential Access
@@ -8227,6 +8553,11 @@ techniques:
     tactics:
       - Collection
     reports:
+      - url: /reports/opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015/
+        title: Help Desks to Host Shells Across Brazil's Public Sector
+        date: '2026-10-15'
+        tactic: Collection
+        confidence: HIGH
       - url: /reports/seasia-gov-exploitation-toolkit-144-172-106-236/
         title: 'The Middle Tier: A Non-APT Operator''s Reach Into Four Southeast Asian Governments'
         date: '2026-08-13'
@@ -8276,10 +8607,10 @@ techniques:
       - UTA-2026-019
     url: /techniques/T1213/
     mitre_url: https://attack.mitre.org/techniques/T1213/
-    report_count: 3
+    report_count: 4
     rule_count: 6
     actor_count: 4
-    score: 9
+    score: 10
   - id: T1213.002
     name: Sharepoint
     tactic: Collection
@@ -9308,6 +9639,11 @@ techniques:
     tactics:
       - Persistence
     reports:
+      - url: /reports/opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015/
+        title: Help Desks to Host Shells Across Brazil's Public Sector
+        date: '2026-10-15'
+        tactic: Persistence
+        confidence: MODERATE
       - url: /reports/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817/
         title: Carrier Credential Harvesting Through a Customer's Router
         date: '2026-08-18'
@@ -9344,6 +9680,16 @@ techniques:
         tactic: Persistence
         confidence: HIGH
     detections:
+      - url: >-
+          /hunting-detections/opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015-detections
+        title: Help Desks to Host Shells Across Brazil's Public Sector
+        date: '2026-10-15'
+        report_url: /reports/opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015/
+        rules: >-
+          WebLogic Java Process Spawns Shell Writing a JSP Into a WebLogic Internal Directory
+          (SIGMA, Detection); Shell Process Creates a JSP File Under a WebLogic _WL_internal
+          Directory (SIGMA, Detection)
+        count: 2
       - url: >-
           /hunting-detections/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817-detections
         title: Carrier Credential Harvesting Through a Customer's Router
@@ -9428,10 +9774,10 @@ techniques:
       - UTA-2026-023
     url: /techniques/T1505.003/
     mitre_url: https://attack.mitre.org/techniques/T1505/003/
-    report_count: 7
-    rule_count: 22
+    report_count: 8
+    rule_count: 24
     actor_count: 6
-    score: 29
+    score: 32
   - id: T1518
     name: Software Discovery
     tactic: Discovery
@@ -9458,6 +9804,11 @@ techniques:
     tactics:
       - Discovery
     reports:
+      - url: /reports/opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015/
+        title: Help Desks to Host Shells Across Brazil's Public Sector
+        date: '2026-10-15'
+        tactic: Discovery
+        confidence: HIGH
       - url: /reports/sliver-c2-windows-postex-staging-193-233-202-17/
         title: Sliver C2 Windows Post-Exploitation Staging, 193.233.202.17
         date: '2026-09-07'
@@ -9498,16 +9849,21 @@ techniques:
       - UTA-2026-024
     url: /techniques/T1518.001/
     mitre_url: https://attack.mitre.org/techniques/T1518/001/
-    report_count: 5
+    report_count: 6
     rule_count: 2
     actor_count: 3
-    score: 7
+    score: 8
   - id: T1528
     name: Steal Application Access Token
     tactic: Credential Access
     tactics:
       - Credential Access
     reports:
+      - url: /reports/opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015/
+        title: Help Desks to Host Shells Across Brazil's Public Sector
+        date: '2026-10-15'
+        tactic: Credential Access
+        confidence: HIGH
       - url: /reports/evilsoul-engine-stealer-maas-144-172-103-98/
         title: 'EvilSoul-Engine: A Brazilian Stealer-Builder Malware-as-a-Service'
         date: '2026-07-03'
@@ -9531,10 +9887,10 @@ techniques:
       - n-3-xl
     url: /techniques/T1528/
     mitre_url: https://attack.mitre.org/techniques/T1528/
-    report_count: 2
+    report_count: 3
     rule_count: 2
     actor_count: 1
-    score: 4
+    score: 5
   - id: T1529
     name: System Shutdown/Reboot
     tactic: Impact
@@ -10334,6 +10690,25 @@ techniques:
     rule_count: 7
     actor_count: 2
     score: 13
+  - id: T1550.001
+    name: Application Access Token
+    tactic: Lateral Movement
+    tactics:
+      - Lateral Movement
+    reports:
+      - url: /reports/opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015/
+        title: Help Desks to Host Shells Across Brazil's Public Sector
+        date: '2026-10-15'
+        tactic: Lateral Movement
+        confidence: HIGH
+    detections: []
+    actors: []
+    url: /techniques/T1550.001/
+    mitre_url: https://attack.mitre.org/techniques/T1550/001/
+    report_count: 1
+    rule_count: 0
+    actor_count: 0
+    score: 1
   - id: T1550.003
     name: Pass the Ticket
     tactic: Lateral Movement
@@ -10353,12 +10728,40 @@ techniques:
     rule_count: 0
     actor_count: 0
     score: 1
+  - id: T1552
+    name: Unsecured Credentials
+    tactic: Credential Access
+    tactics:
+      - Credential Access
+    reports: []
+    detections:
+      - url: >-
+          /hunting-detections/opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015-detections
+        title: Help Desks to Host Shells Across Brazil's Public Sector
+        date: '2026-10-15'
+        report_url: /reports/opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015/
+        rules: >-
+          Zabbix Daemon Child Process Touching Credential Files or Instance Metadata (SIGMA,
+          Hunting)
+        count: 1
+    actors: []
+    url: /techniques/T1552/
+    mitre_url: https://attack.mitre.org/techniques/T1552/
+    report_count: 0
+    rule_count: 1
+    actor_count: 0
+    score: 1
   - id: T1552.001
     name: Credentials In Files
     tactic: Credential Access
     tactics:
       - Credential Access
     reports:
+      - url: /reports/opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015/
+        title: Help Desks to Host Shells Across Brazil's Public Sector
+        date: '2026-10-15'
+        tactic: Credential Access
+        confidence: HIGH
       - url: /reports/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817/
         title: Carrier Credential Harvesting Through a Customer's Router
         date: '2026-08-18'
@@ -10419,16 +10822,40 @@ techniques:
       - n-3-xl
     url: /techniques/T1552.001/
     mitre_url: https://attack.mitre.org/techniques/T1552/001/
-    report_count: 4
+    report_count: 5
     rule_count: 7
     actor_count: 5
-    score: 11
+    score: 12
+  - id: T1552.003
+    name: Shell History
+    tactic: Credential Access
+    tactics:
+      - Credential Access
+    reports:
+      - url: /reports/opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015/
+        title: Help Desks to Host Shells Across Brazil's Public Sector
+        date: '2026-10-15'
+        tactic: Credential Access
+        confidence: HIGH
+    detections: []
+    actors: []
+    url: /techniques/T1552.003/
+    mitre_url: https://attack.mitre.org/techniques/T1552/003/
+    report_count: 1
+    rule_count: 0
+    actor_count: 0
+    score: 1
   - id: T1552.004
     name: Private Keys
     tactic: Credential Access
     tactics:
       - Credential Access
     reports:
+      - url: /reports/opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015/
+        title: Help Desks to Host Shells Across Brazil's Public Sector
+        date: '2026-10-15'
+        tactic: Credential Access
+        confidence: HIGH
       - url: /reports/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817/
         title: Carrier Credential Harvesting Through a Customer's Router
         date: '2026-08-18'
@@ -10451,16 +10878,21 @@ techniques:
       - UTA-2026-023
     url: /techniques/T1552.004/
     mitre_url: https://attack.mitre.org/techniques/T1552/004/
-    report_count: 3
+    report_count: 4
     rule_count: 0
     actor_count: 3
-    score: 3
+    score: 4
   - id: T1552.005
     name: Cloud Instance Metadata API
     tactic: Credential Access
     tactics:
       - Credential Access
     reports:
+      - url: /reports/opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015/
+        title: Help Desks to Host Shells Across Brazil's Public Sector
+        date: '2026-10-15'
+        tactic: Credential Access
+        confidence: HIGH
       - url: /reports/seasia-gov-exploitation-toolkit-144-172-106-236/
         title: 'The Middle Tier: A Non-APT Operator''s Reach Into Four Southeast Asian Governments'
         date: '2026-08-13'
@@ -10494,10 +10926,10 @@ techniques:
       - UTA-2026-019
     url: /techniques/T1552.005/
     mitre_url: https://attack.mitre.org/techniques/T1552/005/
-    report_count: 2
+    report_count: 3
     rule_count: 5
     actor_count: 2
-    score: 7
+    score: 8
   - id: T1553.002
     name: Code Signing
     tactic: Defense Impairment
@@ -10643,6 +11075,11 @@ techniques:
     tactics:
       - Credential Access
     reports:
+      - url: /reports/opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015/
+        title: Help Desks to Host Shells Across Brazil's Public Sector
+        date: '2026-10-15'
+        tactic: Credential Access
+        confidence: HIGH
       - url: /reports/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817/
         title: Carrier Credential Harvesting Through a Customer's Router
         date: '2026-08-18'
@@ -10666,10 +11103,10 @@ techniques:
       - UTA-2026-023
     url: /techniques/T1555/
     mitre_url: https://attack.mitre.org/techniques/T1555/
-    report_count: 2
+    report_count: 3
     rule_count: 1
     actor_count: 2
-    score: 3
+    score: 4
   - id: T1555.003
     name: Credentials from Web Browsers
     tactic: Credential Access
@@ -11125,6 +11562,11 @@ techniques:
     tactics:
       - Impact
     reports:
+      - url: /reports/opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015/
+        title: Help Desks to Host Shells Across Brazil's Public Sector
+        date: '2026-10-15'
+        tactic: Impact
+        confidence: MODERATE
       - url: /reports/PULSAR-RAT/
         title: PULSAR RAT (server.exe) — Technical Analysis & Business Risk Assessment
         date: '2025-12-15'
@@ -11134,10 +11576,10 @@ techniques:
     actors: []
     url: /techniques/T1565.001/
     mitre_url: https://attack.mitre.org/techniques/T1565/001/
-    report_count: 1
+    report_count: 2
     rule_count: 0
     actor_count: 0
-    score: 1
+    score: 2
   - id: T1566
     name: Phishing
     tactic: Initial Access
@@ -11482,6 +11924,11 @@ techniques:
     tactics:
       - Command and Control
     reports:
+      - url: /reports/opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015/
+        title: Help Desks to Host Shells Across Brazil's Public Sector
+        date: '2026-10-15'
+        tactic: Command and Control
+        confidence: HIGH
       - url: /reports/sliver-c2-windows-postex-staging-193-233-202-17/
         title: Sliver C2 Windows Post-Exploitation Staging, 193.233.202.17
         date: '2026-09-07'
@@ -11574,16 +12021,21 @@ techniques:
       - vova75rus
     url: /techniques/T1571/
     mitre_url: https://attack.mitre.org/techniques/T1571/
-    report_count: 10
+    report_count: 11
     rule_count: 7
     actor_count: 13
-    score: 17
+    score: 18
   - id: T1572
     name: Protocol Tunneling
     tactic: Command and Control
     tactics:
       - Command and Control
     reports:
+      - url: /reports/opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015/
+        title: Help Desks to Host Shells Across Brazil's Public Sector
+        date: '2026-10-15'
+        tactic: Command and Control
+        confidence: MODERATE
       - url: /reports/sliver-c2-windows-postex-staging-193-233-202-17/
         title: Sliver C2 Windows Post-Exploitation Staging, 193.233.202.17
         date: '2026-09-07'
@@ -11719,10 +12171,10 @@ techniques:
       - vova75rus
     url: /techniques/T1572/
     mitre_url: https://attack.mitre.org/techniques/T1572/
-    report_count: 10
+    report_count: 11
     rule_count: 21
     actor_count: 15
-    score: 31
+    score: 32
   - id: T1573
     name: Encrypted Channel
     tactic: Command and Control
@@ -12852,6 +13304,25 @@ techniques:
     rule_count: 0
     actor_count: 1
     score: 1
+  - id: T1593.003
+    name: Code Repositories
+    tactic: Reconnaissance
+    tactics:
+      - Reconnaissance
+    reports:
+      - url: /reports/opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015/
+        title: Help Desks to Host Shells Across Brazil's Public Sector
+        date: '2026-10-15'
+        tactic: Reconnaissance
+        confidence: MODERATE
+    detections: []
+    actors: []
+    url: /techniques/T1593.003/
+    mitre_url: https://attack.mitre.org/techniques/T1593/003/
+    report_count: 1
+    rule_count: 0
+    actor_count: 0
+    score: 1
   - id: T1594
     name: Search Victim-Owned Websites
     tactic: Reconnaissance
@@ -12872,12 +13343,36 @@ techniques:
     rule_count: 0
     actor_count: 1
     score: 1
+  - id: T1595
+    name: Active Scanning
+    tactic: Reconnaissance
+    tactics:
+      - Reconnaissance
+    reports:
+      - url: /reports/opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015/
+        title: Help Desks to Host Shells Across Brazil's Public Sector
+        date: '2026-10-15'
+        tactic: Reconnaissance
+        confidence: HIGH
+    detections: []
+    actors: []
+    url: /techniques/T1595/
+    mitre_url: https://attack.mitre.org/techniques/T1595/
+    report_count: 1
+    rule_count: 0
+    actor_count: 0
+    score: 1
   - id: T1595.001
     name: Scanning IP Blocks
     tactic: Reconnaissance
     tactics:
       - Reconnaissance
     reports:
+      - url: /reports/opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015/
+        title: Help Desks to Host Shells Across Brazil's Public Sector
+        date: '2026-10-15'
+        tactic: Reconnaissance
+        confidence: HIGH
       - url: /reports/opendirectory-216-126-227-49-cve-2026-41940-cpanel-harvester-20260517/
         title: CVE-2026-41940 cPanel Harvester Toolkit (216.126.227.49)
         date: '2026-05-17'
@@ -12888,16 +13383,21 @@ techniques:
       - UTA-2026-011
     url: /techniques/T1595.001/
     mitre_url: https://attack.mitre.org/techniques/T1595/001/
-    report_count: 1
+    report_count: 2
     rule_count: 0
     actor_count: 1
-    score: 1
+    score: 2
   - id: T1595.002
     name: Vulnerability Scanning
     tactic: Reconnaissance
     tactics:
       - Reconnaissance
     reports:
+      - url: /reports/opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015/
+        title: Help Desks to Host Shells Across Brazil's Public Sector
+        date: '2026-10-15'
+        tactic: Reconnaissance
+        confidence: MODERATE
       - url: /reports/gotenberg-rce-cryptomining-107-175-69-137/
         title: Gotenberg CVE-2026-42589 Mass Exploitation and Cryptomining
         date: '2026-09-16'
@@ -12949,10 +13449,10 @@ techniques:
       - vova75rus
     url: /techniques/T1595.002/
     mitre_url: https://attack.mitre.org/techniques/T1595/002/
-    report_count: 6
+    report_count: 7
     rule_count: 3
     actor_count: 8
-    score: 9
+    score: 10
   - id: T1595.003
     name: Wordlist Scanning
     tactic: Reconnaissance
@@ -13033,6 +13533,25 @@ techniques:
     rule_count: 2
     actor_count: 3
     score: 5
+  - id: T1602.001
+    name: SNMP (MIB Dump)
+    tactic: Collection
+    tactics:
+      - Collection
+    reports:
+      - url: /reports/opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015/
+        title: Help Desks to Host Shells Across Brazil's Public Sector
+        date: '2026-10-15'
+        tactic: Collection
+        confidence: HIGH
+    detections: []
+    actors: []
+    url: /techniques/T1602.001/
+    mitre_url: https://attack.mitre.org/techniques/T1602/001/
+    report_count: 1
+    rule_count: 0
+    actor_count: 0
+    score: 1
   - id: T1602.002
     name: Network Device Configuration Dump
     tactic: Collection
@@ -13225,6 +13744,25 @@ techniques:
     rule_count: 2
     actor_count: 3
     score: 2
+  - id: T1613
+    name: Container and Resource Discovery
+    tactic: Discovery
+    tactics:
+      - Discovery
+    reports:
+      - url: /reports/opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015/
+        title: Help Desks to Host Shells Across Brazil's Public Sector
+        date: '2026-10-15'
+        tactic: Discovery
+        confidence: HIGH
+    detections: []
+    actors: []
+    url: /techniques/T1613/
+    mitre_url: https://attack.mitre.org/techniques/T1613/
+    report_count: 1
+    rule_count: 0
+    actor_count: 0
+    score: 1
   - id: T1614
     name: System Location Discovery
     tactic: Discovery
@@ -13640,6 +14178,11 @@ techniques:
     tactics:
       - Defense Impairment
     reports:
+      - url: /reports/opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015/
+        title: Help Desks to Host Shells Across Brazil's Public Sector
+        date: '2026-10-15'
+        tactic: Defense Impairment
+        confidence: HIGH
       - url: /reports/newdouble-clickfix/
         title: >-
           FACEIT ClickFix Pages Point CS2 Players to a Script URL That VirusTotal Ties to a
@@ -13827,10 +14370,10 @@ techniques:
       - n-3-xl
     url: /techniques/T1685/
     mitre_url: https://attack.mitre.org/techniques/T1685/
-    report_count: 13
+    report_count: 14
     rule_count: 24
     actor_count: 10
-    score: 37
+    score: 38
   - id: T1686
     name: Disable or Modify System Firewall
     tactic: Defense Impairment

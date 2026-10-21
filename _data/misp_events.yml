@@ -198,6 +198,12 @@ events:
     report_url: /reports/opendirectory-216-126-227-49-cve-2026-41940-cpanel-harvester-20260517/
     detection_url: >-
       /hunting-detections/opendirectory-216-126-227-49-cve-2026-41940-cpanel-harvester-20260517-detections/
+  - slug: opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015
+    uuid: e296ef63-2666-50f4-b20c-b0c7291660a2
+    event_url: /feeds/misp/e296ef63-2666-50f4-b20c-b0c7291660a2.json
+    report_url: /reports/opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015/
+    detection_url: >-
+      /hunting-detections/opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015-detections/
   - slug: opendirectory-45-130-148-125-20260430
     uuid: 5b9f3c7a-ce4f-5fde-afc7-221cd3f69ada
     event_url: /feeds/misp/5b9f3c7a-ce4f-5fde-afc7-221cd3f69ada.json
