@@ -3824,6 +3824,19 @@ a.hl-card:hover { border-color: var(--hl-accent-blue) !important; transform: tra
 .hl-wire__item--src-securityweek        { --wire-src: #a371f7; }
 .hl-wire__item--src-recorded-future     { --wire-src: #f472b6; }
 .hl-wire__item--src-krebs-on-security   { --wire-src: #2dd4bf; }
+/* Added 2026-10-21 (T-0380): every source added after the first eleven fell
+   through to the grey fallback, which barely shows on the dark card. Colours
+   come from the topic palette and the :root accents; a company's two feeds
+   share one (Trend Micro and its ZDI arm, Google and Project Zero). */
+.hl-wire__item--src-rapid7                     { --wire-src: #818cf8; }
+.hl-wire__item--src-domaintools-investigations { --wire-src: #e879f9; }
+.hl-wire__item--src-sans-internet-storm-center { --wire-src: #facc15; }
+.hl-wire__item--src-cisa                       { --wire-src: #ef4444; }
+.hl-wire__item--src-trend-micro                { --wire-src: #b8902f; }
+.hl-wire__item--src-zero-day-initiative        { --wire-src: #b8902f; }
+.hl-wire__item--src-google                     { --wire-src: #f4e9c8; }
+.hl-wire__item--src-google-project-zero        { --wire-src: #f4e9c8; }
+.hl-wire__item--src-the-dfir-report            { --wire-src: #a3e635; }
 
 /* --- header line --------------------------------------------- */
 .hl-wire__freshness {
@@ -3876,8 +3889,9 @@ a.hl-card:hover { border-color: var(--hl-accent-blue) !important; transform: tra
      a fallback declared on the item ties on specificity and wins purely by
      coming later in the file, which silently flattened every border to grey.
      Declared on the container it is inherited instead, and any value the item
-     sets directly beats it regardless of order. */
-  --wire-src: #4b5563;
+     sets directly beats it regardless of order. The site accent blue, not
+     grey: the old #4b5563 was unreadable on the dark card (T-0380). */
+  --wire-src: var(--hl-accent-blue);
 }
 
 .hl-wire__day {
