@@ -818,6 +818,8 @@ the coverage above is narrower than the rule set.</em></p>
 .hl-teardown > summary:hover { text-decoration: underline; }
 .hl-teardown[open] > summary { border-bottom: 1px solid rgba(128,128,128,0.35); margin-bottom: 0.4em; }
 .hl-teardown > *:not(summary) { margin-left: 1em; margin-right: 1em; }
+/* Tables carry width:100% (main.css, custom.scss); with the 1em side margins above they overflowed the box by 1em. */
+.hl-teardown > *:not(summary) { max-width: calc(100% - 2em); box-sizing: border-box; }
 </style>
 <script>
 /* Phase B: open a collapsed <details> when navigating to an anchor inside it (TOC links, heading permalinks, deep-links, back/forward). Guarded: no-op on pages without matching anchors/details. */
