@@ -44,6 +44,12 @@ sources:
   CISA: research
   # Vulnerability research posts only, so every item is on topic.
   Google Project Zero: research
+  # Added 2026-10-21 (T-0380). Research on purpose: only the site's research
+  # collection feed (/research/rss.xml) is ingested. Its SecuritySnacks feed
+  # mixes weekly reading lists with short briefs, and its newsletters are
+  # roundups, so neither is ingested. Every title arrives as "DomainTools
+  # Investigations | <headline>"; wire_export.py strips that prefix.
+  DomainTools Investigations: research
   BleepingComputer: news
   SecurityWeek: news
   Recorded Future: news
