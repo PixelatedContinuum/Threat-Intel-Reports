@@ -203,6 +203,13 @@ drop:
   - preview build
   - insider build
   - subscription
+  # Security-feature launches that name a threat (T-0353, rubric v2 item 9,
+  # Joseph 2026-10-22). Measured on 1071 kept news items: drops 2, both feature
+  # news ("Signal adds new security feature...", "WhatsApp Unveils New Scam Alert
+  # Feature"), no threat story. "to block" was rejected: it drops a malware story.
+  - security feature*
+  - alert feature*
+  - scam detection
 
 # Research sources bypass keep and drop, so a vendor's own product, alliance or
 # analyst-ranking post reaches the page and earns tags from "AI" or "cloud".
@@ -248,6 +255,8 @@ tag_suppress:
 # agentic, prc, sentence and charged to phrases; result and re-measurement in
 # tasks/runs/T-0349/results.md there. T-0353 (2026-10-22) restored bare copilot,
 # added breach record nouns and the tag_suppress list above; tasks/runs/T-0353/.
+# Then narrowed ransom* and north korea* to Joseph's 2026-10-22 rubric decisions
+# (tasks/runs/T-0353/RUBRIC.md v2 there).
 tag_rules:
   zero-day:
     - zero-day*
@@ -266,7 +275,10 @@ tag_rules:
     - zero-day exploitation
     - 0-day exploitation
   ransomware:
-    - ransom*
+    # Not bare "ransom*" (T-0353, rubric v2 item 4, Joseph 2026-10-22): a ransom
+    # or extortion demand with no encryption or gang named is not ransomware.
+    - ransomware*
+    - ransom cartel
     - lockbit
     - akira
     - qilin
@@ -315,7 +327,12 @@ tag_rules:
     - russia-linked
     - russia-nexus
     - iran-linked
-    - north korea*
+    # Not bare "north korea*" (T-0353, rubric v2 item 2, Joseph 2026-10-22): a
+    # country named as a lure theme is not a state actor.
+    - north korean*
+    - north korea-linked
+    - north korea-nexus
+    - north korea's
     - chinese hackers
     - russian hackers
     - iranian hackers
