@@ -31,6 +31,27 @@ var VULNS_STALE_HOURS = 24;
 var VULN_STATUSES = { ok: 1, stale: 1, unavailable: 1 };
 var CVE_SHAPE = /^CVE-\d{4}-\d{4,}$/;
 var DAY_SHAPE = /^\d{4}-\d{2}-\d{2}$/;
+// T-0399: each row's CVSS base score, all four fields empty or all set. A row
+// written before T-0399 carries none of them and checks clean.
+var SCORE_KEYS = ['cvss', 'cvss_version', 'severity', 'scored_by'];
+var SEVERITIES = { critical: 1, high: 1, medium: 1, low: 1 };
+var CVSS_VERSIONS = { '4.0': 1, '3.1': 1, '3.0': 1, '2.0': 1 };
+var SCORED_BY = { NVD: 1, CNA: 1, ADP: 1 };
+
+function scoreProblem(r) {
+  var present = SCORE_KEYS.filter(function (k) { return hasKey(r, k); });
+  if (present.length === 0) return '';
+  if (present.length !== SCORE_KEYS.length) return 'carries only some score fields (' + present.join(', ') + ')';
+  var empty = SCORE_KEYS.filter(function (k) { return r[k] === '' || r[k] === null; });
+  if (empty.length === SCORE_KEYS.length) return '';
+  if (empty.length) return 'has a partial score (' + empty.join(', ') + ' empty)';
+  var n = Number(r.cvss);
+  if (!(n > 0 && n <= 10)) return 'has cvss ' + JSON.stringify(r.cvss) + ', not a score in (0, 10]';
+  if (!CVSS_VERSIONS[String(r.cvss_version)]) return 'has cvss_version ' + JSON.stringify(r.cvss_version);
+  if (!SEVERITIES[String(r.severity)]) return 'has severity ' + JSON.stringify(r.severity);
+  if (!SCORED_BY[String(r.scored_by)]) return 'has scored_by ' + JSON.stringify(r.scored_by);
+  return '';
+}
 
 function hasKey(o, k) { return !!o && Object.prototype.hasOwnProperty.call(o, k); }
 
@@ -77,7 +98,8 @@ function checkVulns(doc, now) {
   }
 
   var seen = Object.create(null);
-  var nCisa = 0, nOlder = 0;
+  var nCisa = 0, nOlder = 0, nUnscored = 0;
+  var nSev = { critical: 0, high: 0, medium: 0, low: 0 };
   rows.forEach(function (r, n) {
     r = r || {};
     var where = 'vulns row ' + (n + 1) + ' (' + String(r.cve || '?') + ')';
@@ -95,6 +117,10 @@ function checkVulns(doc, now) {
       }
     });
     if (typeof r.older !== 'boolean') warnings.push(where + ' has a non-boolean older');
+    var sp = scoreProblem(r);
+    if (sp) warnings.push(where + ' ' + sp);
+    else if (SEVERITIES[String(r.severity)]) nSev[r.severity]++;
+    else nUnscored++;
     if (r.cve && seen[r.cve]) warnings.push(where + ' repeats a CVE');
     if (r.cve) seen[r.cve] = 1;
     if (r.cisa_added) nCisa++;
@@ -107,6 +133,17 @@ function checkVulns(doc, now) {
     warnings.push('vulns_counts disagree with the rows: declared total=' + vc.total +
       ' cisa=' + vc.cisa + ' older=' + vc.older + ', actual ' + rows.length + '/' +
       nCisa + '/' + nOlder);
+  }
+  // The per-band counts arrive with T-0399; a file written before carries
+  // none, and is not held to them.
+  if (rows.length && hasKey(vc, 'unscored')) {
+    var bad = Object.keys(nSev).filter(function (k) { return Number(vc[k]) !== nSev[k]; });
+    if (Number(vc.unscored) !== nUnscored) bad.push('unscored');
+    if (bad.length) {
+      warnings.push('vulns_counts severity disagrees with the rows on ' + bad.join(', ') +
+        ': declared ' + bad.map(function (k) { return k + '=' + vc[k]; }).join(' ') +
+        ', actual ' + bad.map(function (k) { return k + '=' + (k === 'unscored' ? nUnscored : nSev[k]); }).join(' '));
+    }
   }
   return { problems: problems, warnings: warnings, total: rows.length };
 }

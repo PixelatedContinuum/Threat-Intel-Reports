@@ -15,6 +15,7 @@ sitemap: false
   Built in T-0396.
 {%- endcomment -%}
 {%- assign wire = site.data.wire %}
+{%- assign sev_bands = "critical,high,medium,low" | split: "," %}
 <feed xmlns="http://www.w3.org/2005/Atom">
   <title>{{ site.title | xml_escape }}: The Wire, exploited vulnerabilities</title>
   <subtitle>This feed shows VulnCheck's Known Exploited Vulnerabilities (KEV) catalog as VulnCheck publishes it. I do not curate or track this data myself; every entry comes from VulnCheck, and their catalog is at vulncheck.com/kev.</subtitle>
@@ -48,7 +49,13 @@ sitemap: false
     {%- if cisa_len == 10 %}
     <category term="cisa-kev" label="CISA KEV"/>
     {%- endif %}
-    <summary type="text">Added to VulnCheck KEV {{ vday }}{% if cisa_len == 10 %}; in CISA KEV since {{ r.cisa_added }}{% endif %}.</summary>
+    {%- assign cvss_len = r.cvss | size %}
+    {%- assign sev = "" %}
+    {%- if cvss_len > 0 %}{% if sev_bands contains r.severity %}{% assign sev = r.severity %}{% endif %}{% endif %}
+    {%- if sev != "" %}
+    <category term="severity-{{ r.severity | xml_escape }}" label="CVSS {{ r.severity | upcase | xml_escape }} {{ r.cvss | xml_escape }}"/>
+    {%- endif %}
+    <summary type="text">Added to VulnCheck KEV {{ vday }}{% if cisa_len == 10 %}; in CISA KEV since {{ r.cisa_added }}{% endif %}{% if sev != "" %}; CVSS v{{ r.cvss_version | xml_escape }} {{ r.cvss | xml_escape }} {{ r.severity | upcase | xml_escape }}, scored by {% if r.scored_by == "NVD" %}NVD{% elsif r.scored_by == "ADP" %}CISA's ADP{% else %}the CNA{% endif %} (VulnCheck NVD++){% endif %}.</summary>
   </entry>
   {%- endif %}
   {%- endfor %}

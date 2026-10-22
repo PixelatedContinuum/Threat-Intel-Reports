@@ -3966,6 +3966,23 @@ a.hl-card:hover { border-color: var(--hl-accent-blue) !important; transform: tra
 .hl-vuln__b--vc   { --b: #bc8cff; }
 .hl-vuln__b--cisa { --b: #f87171; }
 .hl-vuln__b--old  { --b: #d29922; }
+/* Severity (T-0399): the row's CVSS base score, square-cornered so it does not
+   read as one more list badge beside VulnCheck KEV and CISA KEV. */
+.hl-vuln__sev {
+  font-size: 0.8em;
+  font-weight: 700;
+  padding: 0.1em 0.45em;
+  border-radius: 3px;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+  color: var(--s);
+  border: 1px solid color-mix(in srgb, var(--s) 55%, var(--hl-border-card));
+  background: color-mix(in srgb, var(--s) 22%, transparent);
+}
+.hl-vuln__sev--critical { --s: #ff6b6b; }
+.hl-vuln__sev--high     { --s: #f0883e; }
+.hl-vuln__sev--medium   { --s: #e3b341; }
+.hl-vuln__sev--low      { --s: #7ee787; }
 .hl-vuln__ev { font-size: 0.8em; color: var(--hl-text-muted); white-space: nowrap; align-self: center; }
 
 /* --- the list ------------------------------------------------- */

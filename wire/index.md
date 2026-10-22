@@ -96,6 +96,7 @@ position: 2.5
 
 <section id="vulns" class="hl-wtabs__sec" data-filter-scope>
 {%- assign vstatus = wire.vulns_status | default: "unavailable" -%}
+{%- assign sev_bands = "critical,high,medium,low" | split: "," -%}
 
 <p class="hl-wire__freshness">CVEs added to VulnCheck's Known Exploited Vulnerabilities catalog in the last {{ wire.window_days }} days &middot; <a href="{{ '/wire/vulns.xml' | relative_url }}">Atom feed (vulnerabilities)</a></p>
 
@@ -105,7 +106,7 @@ position: 2.5
 {%- if wire.vulns and wire.vulns != empty -%}{%- if vstatus == "ok" or vstatus == "stale" -%}{%- assign vshow = true -%}{%- endif -%}{%- endif -%}
 {%- if vshow -%}
 
-<p class="hl-wire__freshness">A CISA KEV badge means the CVE is also in CISA's catalog. Each CVE links to its NVD record.{% if vstatus == "stale" %} <span class="hl-wire__notice">Vulnerability data last updated {{ wire.vulns_generated_at | date: "%-d %B %Y, %H:%M" }} UTC.</span>{% endif %}</p>
+<p class="hl-wire__freshness">A CISA KEV badge means the CVE is also in CISA's catalog. Each CVE links to its NVD record. Severity is the CVSS base score in that record, read through VulnCheck NVD++; most are scored by the CVE's CNA, not by NVD, and a CVE with no score shows none.{% if vstatus == "stale" %} <span class="hl-wire__notice">Vulnerability data last updated {{ wire.vulns_generated_at | date: "%-d %B %Y, %H:%M" }} UTC.</span>{% endif %}</p>
 
 {%- comment -%}
   The second bar. Its chips name the axes listing-filter.js reads: data-list
@@ -121,6 +122,13 @@ position: 2.5
     <button type="button" class="hl-chip-btn is-on" data-list="">All <span class="hl-chip-btn__n">{{ wire.vulns_counts.total }}</span></button>
     <button type="button" class="hl-chip-btn" data-list="cisa">Also CISA KEV <span class="hl-chip-btn__n">{{ wire.vulns_counts.cisa }}</span></button>
     <button type="button" class="hl-chip-btn" data-list="vconly">VulnCheck only <span class="hl-chip-btn__n">{{ wire.vulns_counts.total | minus: wire.vulns_counts.cisa }}</span></button>
+  </div>
+  {%- comment -%} Severity (T-0399): the band of the row's CVSS base score; "none" is a CVE with no score, never a low one. {%- endcomment -%}
+  <div class="hl-filter__chips hl-filter__chips--kind">
+    <span class="hl-filter__dim">Severity</span>
+    <button type="button" class="hl-chip-btn is-on" data-sev="">All</button>
+    {%- for sv in sev_bands -%}{%- assign svn = wire.vulns_counts[sv] | default: 0 -%}{%- if svn > 0 -%}<button type="button" class="hl-chip-btn" data-sev="{{ sv }}">{{ sv | capitalize }} <span class="hl-chip-btn__n">{{ svn }}</span></button>{%- endif -%}{%- endfor -%}
+    {%- assign svn = wire.vulns_counts.unscored | default: 0 -%}{%- if svn > 0 -%}<button type="button" class="hl-chip-btn" data-sev="none">No score <span class="hl-chip-btn__n">{{ svn }}</span></button>{%- endif -%}
   </div>
   <div class="hl-filter__chips hl-filter__chips--kind">
     <span class="hl-filter__dim">Vendor</span>
@@ -151,7 +159,7 @@ position: 2.5
 {%- assign vok = false -%}
 {%- if r.cve and r.added -%}{%- assign cve_head = r.cve | slice: 0, 4 -%}{%- assign added_len = r.added | size -%}{%- if cve_head == "CVE-" and added_len == 10 -%}{%- assign vok = true -%}{%- endif -%}{%- endif -%}
 {%- if vok -%}
-{%- assign cisa_len = r.cisa_added | size -%}{%- assign ev_len = r.evidence | size -%}
+{%- assign cisa_len = r.cisa_added | size -%}{%- assign ev_len = r.evidence | size -%}{%- comment -%} A score is drawn only with a known band and a score beside it; Liquid has no operator precedence, so the band test is a contains on the list. {%- endcomment -%}{%- assign sev = "none" -%}{%- assign cvss_len = r.cvss | size -%}{%- if cvss_len > 0 -%}{%- if sev_bands contains r.severity -%}{%- assign sev = r.severity -%}{%- endif -%}{%- endif -%}
 {%- assign vday = r.added | slice: 0, 10 -%}
 {%- if vday != current_vday -%}
 {%- assign current_vday = vday -%}
@@ -159,7 +167,7 @@ position: 2.5
 <div class="hl-wire__day" id="vulns-{{ vday }}" data-filter-group>{{ vday | date: "%A %-d %B %Y" }} &middot; {{ day_rows.size }} added</div>
 {%- endif -%}
 {%- assign cve_parts = r.cve | split: "-" -%}{%- assign cve_year = cve_parts[1] -%}
-<div class="hl-vuln" id="cve-{{ r.cve | downcase }}" data-title="{{ r.cve | downcase }} {{ r.vendor | downcase | escape }} {{ r.product | downcase | escape }}" data-list="{% if cisa_len == 10 %}cisa{% else %}vconly{% endif %}" data-vendor="{{ r.vendor | escape }}" data-age="{% if r.older == true %}older{% else %}recent{% endif %}" data-day="{{ vday }}"><a class="hl-vuln__cve" href="https://nvd.nist.gov/vuln/detail/{{ r.cve }}" target="_blank" rel="noopener noreferrer">{{ r.cve }}</a><span class="hl-vuln__vp">{% if r.vendor and r.vendor != "" %}<b>{{ r.vendor }}</b> {{ r.product }}{% else %}<span class="hl-vuln__none">vendor not given</span>{% endif %}</span><span class="hl-vuln__badges"><span class="hl-vuln__b hl-vuln__b--vc">VulnCheck KEV</span>{% if cisa_len == 10 %}<span class="hl-vuln__b hl-vuln__b--cisa" title="Added to CISA KEV {{ r.cisa_added }}">CISA KEV</span>{% endif %}{% if r.older == true %}<span class="hl-vuln__b hl-vuln__b--old" title="A CVE from {{ cve_year }}, added in {{ vday | slice: 0, 4 }}">CVE-{{ cve_year }}</span>{% endif %}{% comment %} evidence is the earliest citation date; drawn only when it says something the day heading does not. {% endcomment %}{% if ev_len == 10 and r.evidence < vday %}<span class="hl-vuln__ev">evidence {{ r.evidence }}</span>{% endif %}</span></div>
+<div class="hl-vuln" id="cve-{{ r.cve | downcase }}" data-title="{{ r.cve | downcase }} {{ r.vendor | downcase | escape }} {{ r.product | downcase | escape }}" data-list="{% if cisa_len == 10 %}cisa{% else %}vconly{% endif %}" data-vendor="{{ r.vendor | escape }}" data-age="{% if r.older == true %}older{% else %}recent{% endif %}" data-sev="{{ sev }}" data-day="{{ vday }}"><a class="hl-vuln__cve" href="https://nvd.nist.gov/vuln/detail/{{ r.cve }}" target="_blank" rel="noopener noreferrer">{{ r.cve }}</a><span class="hl-vuln__vp">{% if r.vendor and r.vendor != "" %}<b>{{ r.vendor }}</b> {{ r.product }}{% else %}<span class="hl-vuln__none">vendor not given</span>{% endif %}</span><span class="hl-vuln__badges">{% if sev != "none" %}<span class="hl-vuln__sev hl-vuln__sev--{{ sev }}" title="CVSS v{{ r.cvss_version }} base score {{ r.cvss }}, scored by {% if r.scored_by == "NVD" %}NVD{% elsif r.scored_by == "ADP" %}CISA's ADP{% else %}the CNA{% endif %}, from the CVE's NVD record via VulnCheck NVD++">{{ sev | upcase }} {{ r.cvss }}</span>{% endif %}<span class="hl-vuln__b hl-vuln__b--vc">VulnCheck KEV</span>{% if cisa_len == 10 %}<span class="hl-vuln__b hl-vuln__b--cisa" title="Added to CISA KEV {{ r.cisa_added }}">CISA KEV</span>{% endif %}{% if r.older == true %}<span class="hl-vuln__b hl-vuln__b--old" title="A CVE from {{ cve_year }}, added in {{ vday | slice: 0, 4 }}">CVE-{{ cve_year }}</span>{% endif %}{% comment %} evidence is the earliest citation date; drawn only when it says something the day heading does not. {% endcomment %}{% if ev_len == 10 and r.evidence < vday %}<span class="hl-vuln__ev">evidence {{ r.evidence }}</span>{% endif %}</span></div>
 {%- endif -%}
 {%- endfor -%}
 </div>

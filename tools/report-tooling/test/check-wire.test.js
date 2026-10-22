@@ -398,3 +398,56 @@ test('vulns_counts disagreeing with the rows warns', function () {
   assert.equal(r.status, 'PASS');
   assert.match(r.vulnWarnings.join(' '), /vulns_counts disagree/);
 });
+
+/* ---- Severity per CVE (T-0399) ---- */
+
+function scored(over) {
+  return vrow(Object.assign({ cvss: '9.8', cvss_version: '3.1', severity: 'critical', scored_by: 'CNA' }, over || {}));
+}
+
+function sdoc(rows) {
+  var d = vdoc(rows);
+  ['critical', 'high', 'medium', 'low'].forEach(function (k) {
+    d.vulns_counts[k] = rows.filter(function (r) { return r.severity === k; }).length;
+  });
+  d.vulns_counts.unscored = rows.filter(function (r) { return !r.severity; }).length;
+  return d;
+}
+
+var UNSCORED = { cvss: '', cvss_version: '', severity: '', scored_by: '' };
+
+test('scored and unscored rows pass with no vuln warnings (control)', function () {
+  var r = CW.check(sdoc([scored(), scored({ cve: 'CVE-2026-3333', cvss: '5.0', severity: 'medium',
+    scored_by: 'NVD', cvss_version: '4.0' }), vrow(Object.assign({ cve: 'CVE-2026-4444' }, UNSCORED))]), SOURCES, NOW);
+  assert.equal(r.status, 'PASS');
+  assert.deepEqual(r.vulnWarnings, []);
+});
+
+test('a bad score warns per field, and the headlines still PASS', function () {
+  var r = CW.check(sdoc([
+    scored({ cvss: '11' }),
+    scored({ cve: 'CVE-2026-0002', severity: 'none' }),
+    scored({ cve: 'CVE-2026-0003', cvss_version: '5.0' }),
+    scored({ cve: 'CVE-2026-0004', scored_by: 'me' }),
+    scored({ cve: 'CVE-2026-0005', severity: '' }),
+    vrow({ cve: 'CVE-2026-0006', cvss: '7.0' })
+  ]), SOURCES, NOW);
+  assert.equal(r.status, 'PASS');
+  var w = r.vulnWarnings.join(' | ');
+  assert.match(w, /cvss "11"/);
+  assert.match(w, /severity "none"/);
+  assert.match(w, /cvss_version "5.0"/);
+  assert.match(w, /scored_by "me"/);
+  assert.match(w, /partial score/);
+  assert.match(w, /only some score fields/);
+});
+
+test('severity counts disagreeing with the rows warn; a pre-T-0399 file is not held to them', function () {
+  var d = sdoc([scored(), vrow(Object.assign({ cve: 'CVE-2026-4444' }, UNSCORED))]);
+  d.vulns_counts.critical = 5;
+  var r = CW.check(d, SOURCES, NOW);
+  assert.equal(r.status, 'PASS');
+  assert.match(r.vulnWarnings.join(' '), /severity disagrees with the rows on critical/);
+  // control: the T-0396 fixture has no score fields and no per-band counts
+  assert.deepEqual(CW.check(vdoc(), SOURCES, NOW).vulnWarnings, []);
+});
