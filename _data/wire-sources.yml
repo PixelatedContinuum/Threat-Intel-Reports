@@ -204,6 +204,35 @@ drop:
   - insider build
   - subscription
 
+# Research sources bypass keep and drop, so a vendor's own product, alliance or
+# analyst-ranking post reaches the page and earns tags from "AI" or "cloud".
+# A research item whose title matches a term here gets no rule tags; the item
+# stays (wire_export.rule_tags, T-0353). News items are drop's job.
+# Measured on the 2026-10-19 90-day pool: suppresses 14 of 16 product posts, 2 of 7
+# mixed pitches and 0 of 375 content items among the 398 tagged research items
+# (tasks/runs/T-0353/ in the workflows repo).
+tag_suppress:
+  - new in falcon
+  - falcon cloud security
+  - falcon data security
+  - falcon guardian
+  - falcon aidr
+  - crowdstrike extends
+  - crowdstrike accelerates
+  - crowdstrike announces
+  - crowdstrike delivers
+  - crowdstrike and nvidia
+  - secure ai alliance
+  - named strongest
+  - named a leader
+  - frost radar
+  - magic quadrant
+  - forrester wave
+  - agentic soc
+  - elastic agent
+  - new with google cloud
+  - ai-native security platform
+
 # Rule-derived tags (T-0105). Matched against the headline only, with the same
 # term syntax as keep and drop (word-bounded, "*" for a prefix). A matching tag
 # goes in front of the feed's own labels, and the page draws the first two, so
@@ -216,7 +245,8 @@ drop:
 # terms older than T-0339), 58/60 lenient; tasks/runs/T-0339/results.md there.
 # T-0349 (2026-10-19) narrowed breach*, leaked, exploitation, ios, copilot,
 # agentic, prc, sentence and charged to phrases; result and re-measurement in
-# tasks/runs/T-0349/results.md there.
+# tasks/runs/T-0349/results.md there. T-0353 (2026-10-22) restored bare copilot,
+# added breach record nouns and the tag_suppress list above; tasks/runs/T-0353/.
 tag_rules:
   zero-day:
     - zero-day*
@@ -383,6 +413,13 @@ tag_rules:
     - personal data
     - personal information
     - personnel records
+    # Record nouns (T-0353): the verb "breach" stays out, so a headline like
+    # "gang breaches hospital, steals patient records" needs the noun to fire.
+    - customer data
+    - customer records
+    - patient data
+    - patient records
+    - social security numbers
     - data stolen
     - stole data
     - stole personal
@@ -477,13 +514,10 @@ tag_rules:
     - llms
     - chatgpt
     - openai
-    - copilot flaw*
-    - copilot vulnerab*
-    - copilot bug*
-    - copilot zero-click
-    - copilot exploit*
-    - copilot attack*
-    - copilot jailbreak*
+    # Bare "copilot" again (T-0353): the T-0349 phrases missed 3 of 6
+    # right-sense headlines, and its one product-post fire in the measured
+    # pool comes from a research source, which tag_suppress now covers.
+    - copilot
     - machine learning
     - generative ai
     - deepfake*
