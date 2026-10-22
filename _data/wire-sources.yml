@@ -206,11 +206,12 @@ drop:
 
 # Research sources bypass keep and drop, so a vendor's own product, alliance or
 # analyst-ranking post reaches the page and earns tags from "AI" or "cloud".
-# A research item whose title matches a term here gets no rule tags; the item
-# stays (wire_export.rule_tags, T-0353). News items are drop's job.
-# Measured on the 2026-10-19 90-day pool: suppresses 14 of 16 product posts, 2 of 7
-# mixed pitches and 0 of 375 content items among the 398 tagged research items
-# (tasks/runs/T-0353/ in the workflows repo).
+# A research item whose title matches a term here, and carries no keep term,
+# gets no rule tags; the item stays (wire_export.rule_tags, T-0353). The keep
+# guard means "Elastic Agent flaw exploited" keeps its tags. News items are
+# drop's job. Measured on the 2026-10-19 90-day pool: suppresses 14 of 16
+# product posts, 1 of 7 mixed pitches and 0 of 375 content items among the 398
+# tagged research items (tasks/runs/T-0353/ in the workflows repo).
 tag_suppress:
   - new in falcon
   - falcon cloud security
