@@ -3845,40 +3845,123 @@ a.hl-card:hover { border-color: var(--hl-accent-blue) !important; transform: tra
   margin: 0 0 1.2em;
   line-height: 1.6;
 }
-/* Provenance, as a one-line disclosure rather than a callout box. The claim has
-   to be on the page, but a bordered block above the feed interrupted the read.
-   Collapsed it is one muted line carrying the whole point; the detail is a click
-   away for anyone who wants it. Same disclosure convention as the report
-   teardowns, so the marker is already familiar. */
-.hl-wire__prov {
-  margin: -0.5em 0 1.2em;
-  font-size: 0.76em;
-  color: var(--hl-text-muted);
+/* Status notices (stale or unavailable vulnerability data). */
+.hl-wire__notice { color: #d29922; }
+
+/* --- The Wire: one callout per tab (T-0396) ------------------
+   The Headlines tab used to carry four separate notes (the header line, the
+   freshness line, a provenance disclosure and an italic footer); Joseph asked
+   for one clean callout matching the Vulnerabilities one (T-0394 Log,
+   2026-10-22). Blue for the headlines, purple for VulnCheck's data. */
+.hl-wire__callout {
+  font-size: 0.78em;
+  line-height: 1.6;
+  color: var(--hl-text-secondary);
+  background: color-mix(in srgb, var(--hl-accent-blue) 7%, var(--hl-bg-card));
+  border: 1px solid color-mix(in srgb, var(--hl-accent-blue) 30%, var(--hl-border-card));
+  border-left: 4px solid var(--hl-accent-blue);
+  border-radius: 6px;
+  padding: 0.7em 1em;
+  margin: 0 0 0.9em;
 }
-.hl-wire__prov > summary {
-  cursor: pointer;
-  list-style: none;
-  display: inline-block;
-  color: var(--hl-text-muted);
-  border-bottom: 1px dotted var(--hl-border-card);
-  transition: color 0.12s;
-}
-.hl-wire__prov > summary::-webkit-details-marker { display: none; }
-.hl-wire__prov > summary::before {
-  content: '▸';
-  display: inline-block;
-  margin-right: 0.45em;
-  transition: transform 0.15s;
-}
-.hl-wire__prov[open] > summary::before { transform: rotate(90deg); }
-.hl-wire__prov > summary:hover { color: var(--hl-text-primary); }
-.hl-wire__prov > p {
-  margin: 0.6em 0 0;
-  padding-left: 1.2em;
-  line-height: 1.62;
-  max-width: 62ch;
+.hl-wire__callout--v {
+  background: color-mix(in srgb, #bc8cff 7%, var(--hl-bg-card));
+  border-color: color-mix(in srgb, #bc8cff 32%, var(--hl-border-card));
+  border-left-color: #bc8cff;
 }
 
+/* --- The Wire: tabs, switched by the URL hash with CSS only ----
+   No JavaScript: each tab is a link to #headlines or #vulns, and :target shows
+   the section. Any anchor INSIDE #vulns (a day, a CVE) opens it too, through
+   :has(:target). Each selector gets its OWN rule: a browser without :has()
+   drops a whole rule whose selector list holds one it cannot parse, and the
+   plain #vulns:target rule must survive there, so the tab still opens
+   (stacked under the headlines, which it cannot hide). */
+.hl-wtabs__nav {
+  display: flex;
+  gap: 4px;
+  border-bottom: 1px solid var(--hl-border-card);
+  margin: 0.4em 0 1em;
+}
+.hl-post-content .hl-wtabs__tab,
+.hl-wtabs__tab {
+  font-size: 0.8em;
+  padding: 0.45em 1em;
+  color: var(--hl-text-muted) !important;
+  text-decoration: none !important;
+  border: 1px solid transparent;
+  border-bottom: none;
+  border-radius: 6px 6px 0 0;
+  margin-bottom: -1px;
+}
+.hl-wtabs__tab:hover { color: var(--hl-text-primary) !important; }
+.hl-wtabs__n { font-size: 0.8em; opacity: 0.7; margin-left: 0.45em; }
+.hl-wtabs__sec { display: none; }
+#headlines { display: block; }
+#vulns:target { display: block; }
+#vulns:has(:target) { display: block; }
+.hl-wtabs:has(#vulns:target) #headlines { display: none; }
+.hl-wtabs:has(#vulns :target) #headlines { display: none; }
+/* Selected-tab styling: Headlines unless the vulns section is targeted. */
+.hl-post-content .hl-wtabs__tab--h,
+.hl-wtabs__tab--h,
+.hl-wtabs:has(#vulns:target) .hl-wtabs__tab--v,
+.hl-wtabs:has(#vulns :target) .hl-wtabs__tab--v {
+  color: var(--hl-text-primary) !important;
+  background: var(--hl-bg-card);
+  border-color: var(--hl-border-card);
+}
+.hl-wtabs:has(#vulns:target) .hl-wtabs__tab--h,
+.hl-wtabs:has(#vulns :target) .hl-wtabs__tab--h {
+  color: var(--hl-text-muted) !important;
+  background: none;
+  border-color: transparent;
+}
+/* Anchors must not land under the 70px sticky site header. A tab link lands on
+   its section, so the margin also keeps the tab bar (39px) above it in view;
+   a day or CVE anchor needs only the header. Pixels, because the header is. */
+.hl-wtabs__sec { scroll-margin-top: 135px; }
+.hl-vulns .hl-wire__day, .hl-vuln { scroll-margin-top: 80px; }
+
+/* --- The Wire: the digest row and the CVE rows ---------------- */
+.hl-wire__item--vuln { --wire-src: #bc8cff; }
+.hl-chip-btn--vuln::before { background: #bc8cff; }
+.hl-filter__dim--gap { margin-left: 1.2em; }
+
+.hl-vuln {
+  display: grid;
+  grid-template-columns: 9.5em minmax(0, 1fr) auto;
+  gap: 0.7em;
+  align-items: baseline;
+  padding: 0.35em 0.7em;
+  border-bottom: 1px solid color-mix(in srgb, var(--hl-border-card) 60%, transparent);
+  font-size: 0.82em;
+}
+.hl-vuln:target { background: color-mix(in srgb, var(--hl-accent-blue) 12%, var(--hl-bg-card)); }
+.hl-post-content .hl-vuln__cve,
+.hl-vuln__cve {
+  font-family: ui-monospace, Menlo, Consolas, monospace;
+  font-size: 0.92em;
+  color: var(--hl-accent-blue) !important;
+  white-space: nowrap;
+}
+.hl-vuln__vp { min-width: 0; overflow-wrap: break-word; color: var(--hl-text-secondary); }
+.hl-vuln__vp b { color: var(--hl-text-primary); font-weight: 600; }
+.hl-vuln__none { color: var(--hl-text-muted); font-style: italic; }
+.hl-vuln__badges { display: flex; gap: 0.3em; flex-wrap: wrap; justify-content: flex-end; }
+.hl-vuln__b {
+  font-size: 0.8em;
+  padding: 0.1em 0.55em;
+  border-radius: 999px;
+  white-space: nowrap;
+  color: var(--b, var(--hl-text-muted));
+  border: 1px solid color-mix(in srgb, var(--b, var(--hl-text-muted)) 42%, var(--hl-border-card));
+  background: color-mix(in srgb, var(--b, var(--hl-text-muted)) 13%, transparent);
+}
+.hl-vuln__b--vc   { --b: #bc8cff; }
+.hl-vuln__b--cisa { --b: #f87171; }
+.hl-vuln__b--old  { --b: #d29922; }
+.hl-vuln__ev { font-size: 0.8em; color: var(--hl-text-muted); white-space: nowrap; align-self: center; }
 
 /* --- the list ------------------------------------------------- */
 .hl-wire {
@@ -4077,6 +4160,9 @@ a.hl-card:hover { border-color: var(--hl-accent-blue) !important; transform: tra
   }
   .hl-wire__labels { justify-content: flex-start; margin-top: 0.15em; }
   .hl-wire__title { font-size: 0.9em; }
+  .hl-vuln { grid-template-columns: minmax(0, 1fr); gap: 0.2em; padding: 0.55em 0.7em; }
+  .hl-vuln__badges { justify-content: flex-start; }
+  .hl-filter__dim--gap { margin-left: 0; }
 }
 
 /* ---------- Indicator search on /ioc-feeds/ (Track A4) ----------

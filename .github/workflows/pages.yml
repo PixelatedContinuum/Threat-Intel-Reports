@@ -145,8 +145,9 @@ jobs:
           test -f _site/index.html
           test -f _site/wire/index.html
           test -f _site/wire/feed.xml
+          test -f _site/wire/vulns.xml
           test -f _site/hunting-detections/feed.xml
-          python3 -c "import xml.dom.minidom; [xml.dom.minidom.parse(f) for f in ('_site/feed.xml', '_site/wire/feed.xml', '_site/hunting-detections/feed.xml')]" && echo "the three Atom feeds are well-formed XML"
+          python3 -c "import xml.dom.minidom; [xml.dom.minidom.parse(f) for f in ('_site/feed.xml', '_site/wire/feed.xml', '_site/wire/vulns.xml', '_site/hunting-detections/feed.xml')]" && echo "the four Atom feeds are well-formed XML"
           python3 -c "import json; [json.load(open(f))['items'] for f in ('_site/feed.json', '_site/hunting-detections/feed.json')]" && echo "the two JSON Feeds parse"
           # The Dataset structured data on the IOC viewer pages, the two catalog pages, the MISP feed page and the detection library must be valid JSON-LD.
           python3 - <<'PY'

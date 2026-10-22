@@ -1,7 +1,12 @@
 (function () {
-  var bar = document.querySelector('[data-listing-filter]');
-  var grid = document.querySelector('[data-filter-grid]');
-  if (!bar || !grid) return;
+/* One bar and one grid per instance. /wire/ renders two (Headlines and
+   Vulnerabilities), each inside its own [data-filter-scope] section; every
+   other page renders one bar and one grid with no scope, which finds the grid
+   in the document exactly as before. */
+function init(bar) {
+  var scope = bar.closest('[data-filter-scope]');
+  var grid = (scope || document).querySelector('[data-filter-grid]');
+  if (!grid) return;
   // The filterable unit is a catalog card on every listing page and a row on
   // /wire/. A grid names its own selector; the default keeps the four existing
   // pages behaving exactly as they did.
@@ -19,6 +24,8 @@
   var dateInput = bar.querySelector('[data-filter-date]');
   var dateClear = bar.querySelector('[data-filter-date-clear]');
   var emptyMsg = bar.querySelector('[data-filter-empty-msg]');
+  // The page's own wording for "nothing matched" (headlines or CVEs).
+  var emptyDefault = (emptyMsg && emptyMsg.textContent.trim()) || 'No headlines match that filter.';
 
   /* The day a row belongs to is CARRIED on the row as data-day, never derived
      here from its timestamp.
@@ -77,7 +84,7 @@
         return 'No headlines on ' + human(v) + '. The Wire is quiet some days.';
       }
     }
-    return 'No headlines match that filter.';
+    return emptyDefault;
   }
 
   // Chip filter dimension (tags). A chip is selected by its data-* attr
@@ -85,31 +92,58 @@
   // card data-tags, so Dim takes an explicit cardAttr. Chips OR-combine within
   // a dimension; the Dim helper stays generic so a second axis can be re-added
   // later. A dimension with no rendered chips is inert (matches everything).
-  function Dim(attr, cardAttr) {
+  function Dim(attr, cardAttr, match) {
+    var chips = [].slice.call(bar.querySelectorAll('.hl-chip-btn[' + attr + ']'));
     return {
       attr: attr,
       cardAttr: cardAttr || attr,
       // The key this axis uses in the URL hash: data-tag is `tag=`, data-kind
       // is `kind=`. Derived, so a third axis would name itself.
       param: attr.replace(/^data-/, ''),
-      chips: [].slice.call(bar.querySelectorAll('.hl-chip-btn[' + attr + ']')),
+      chips: chips,
       allChip: bar.querySelector('.hl-chip-btn[' + attr + '=""]'),
+      // Chips marked data-default are on when the page opens and after "Clear
+      // filters" (the Vulnerabilities tab's "Recent" CVE-age chip). An axis with
+      // none starts on All, as every axis did before.
+      defaults: chips.filter(function (x) { return x.hasAttribute('data-default'); })
+        .map(function (x) { return x.getAttribute(attr).toLowerCase(); }),
+      // A range axis matches differently from a tag; see addedWithin().
+      match: match || null,
       active: {},
       keys: function () { return Object.keys(this.active); }
     };
+  }
+
+  /* "Added" on the Vulnerabilities tab: a chip value is a number of days, and
+     a row is inside it when its data-day is fewer than that many days before
+     the bar's reference day (data-filter-ref, the day the data was generated).
+     Days are compared as UTC calendar dates built from the strings, the same
+     no-timezone rule as the date input above. */
+  function utcDay(d) {
+    var p = String(d || '').split('-');
+    return p.length === 3 ? Date.UTC(Number(p[0]), Number(p[1]) - 1, Number(p[2])) : NaN;
+  }
+  var refDay = utcDay(bar.getAttribute('data-filter-ref') || lastDay);
+  function addedWithin(card, keys) {
+    var age = (refDay - utcDay(card.getAttribute('data-day'))) / 86400000;
+    return keys.some(function (k) { return age < Number(k); });
   }
   /* Axes, in the order a chip row appears. The tag axis is always present. A
      second axis is picked up only when a page actually renders chips for it,
      so the four listing pages that render one row are unaffected. Axes AND
      together: picking a topic and a kind narrows to items matching both. */
   var dims = [Dim('data-tag', 'data-tags')];
-  if (bar.querySelector('.hl-chip-btn[data-kind]')) {
-    dims.push(Dim('data-kind', 'data-kind'));
+  ['data-kind', 'data-list', 'data-vendor', 'data-age'].forEach(function (a) {
+    if (bar.querySelector('.hl-chip-btn[' + a + ']')) dims.push(Dim(a, a));
+  });
+  if (bar.querySelector('.hl-chip-btn[data-added]')) {
+    dims.push(Dim('data-added', 'data-day', addedWithin));
   }
 
   function matchDim(card, dim) {
     var keys = dim.keys();
     if (keys.length === 0) return true;
+    if (dim.match) return dim.match(card, keys);
     var cv = (card.getAttribute(dim.cardAttr) || '').split('|');
     return keys.some(function (k) { return cv.indexOf(k) > -1; });
   }
@@ -233,23 +267,42 @@
   var hasHistory = !!(window.history && window.history.replaceState);
   var DATE_SHAPE = /^\d{4}-\d{2}-\d{2}$/;
 
+  /* Where the state lives. The default is the hash, as above, and every page
+     but /wire/ keeps it. /wire/ switches its tabs with the hash (#headlines,
+     #vulns, a day or a CVE anchor, all CSS :target), so there the bars keep
+     their state in the QUERY string instead (data-filter-state="query"), each
+     under its own key prefix (data-filter-prefix: none for Headlines, `v` for
+     Vulnerabilities), and the hash is left to the tabs. A Headlines link shared
+     before the move (#tag=ransomware) is still read once, then rewritten into
+     the query. */
+  var inQuery = bar.getAttribute('data-filter-state') === 'query';
+  var prefix = inQuery ? (bar.getAttribute('data-filter-prefix') || '') : '';
+  var legacyHash = false;
+
+  function ownedKeys() {
+    return ['q', 'date'].concat(dims.map(function (d) { return d.param; }))
+      .map(function (k) { return prefix + k; });
+  }
+
   function decode(s) {
     // A hand-edited `%` the browser could not decode is not worth a thrown
     // error in the middle of init; it reads as nothing.
     try { return decodeURIComponent(s); } catch (e) { return ''; }
   }
 
-  function readHash() {
-    var raw = String(window.location.hash || '').replace(/^#/, '');
-    var out = { ours: raw === '', q: '', date: '', tag: [], kind: [] };
+  function parseState(raw, pre) {
+    var out = { ours: raw === '', q: '', date: '' };
+    dims.forEach(function (d) { out[d.param] = null; });   // null: not in the URL
     if (!raw) return out;
     raw.split('&').forEach(function (part) {
       var eq = part.indexOf('=');
       if (eq < 0) return;
       var k = part.slice(0, eq), v = part.slice(eq + 1);
+      if (k.indexOf(pre) !== 0) return;
+      k = k.slice(pre.length);
       if (k === 'q') { out.q = decode(v); out.ours = true; }
       else if (k === 'date') { out.date = decode(v); out.ours = true; }
-      else if (k === 'tag' || k === 'kind') {
+      else if (Object.prototype.hasOwnProperty.call(out, k) && k !== 'ours') {
         out.ours = true;
         out[k] = v.split(',').map(decode)
           .map(function (t) { return t.trim().toLowerCase(); })
@@ -260,15 +313,35 @@
     return out;
   }
 
+  function readHash() {
+    var hash = String(window.location.hash || '').replace(/^#/, '');
+    if (!inQuery) return parseState(hash, '');
+    // An old shared Headlines link carries its state in the hash. A hash with
+    // none of our keys (#vulns, a CVE anchor, #main) is the tabs', not ours.
+    if (prefix === '' && hash.indexOf('=') > -1) {
+      var old = parseState(hash, '');
+      if (old.ours) { legacyHash = true; return old; }
+    }
+    var q = parseState(String(window.location.search || '').replace(/^\?/, ''), prefix);
+    // In the query an absent key means the page's default, never "clear".
+    q.ours = true;
+    return q;
+  }
+
   function stateToHash() {
     var parts = [];
     var term = (search && search.value || '').trim();
-    if (term) parts.push('q=' + encodeURIComponent(term));
+    if (term) parts.push(prefix + 'q=' + encodeURIComponent(term));
     dims.forEach(function (d) {
       var keys = d.keys().map(function (k) { return encodeURIComponent(k.toLowerCase()); });
-      if (keys.length) parts.push(d.param + '=' + keys.join(','));
+      var same = keys.length === d.defaults.length &&
+        d.defaults.every(function (k) { return keys.indexOf(encodeURIComponent(k)) > -1; });
+      if (same) return;   // the default needs no key
+      // An axis whose default is not All writes `all` for All, so a link to
+      // "include older" survives the trip.
+      parts.push(prefix + d.param + '=' + (keys.length ? keys.join(',') : 'all'));
     });
-    if (dateInput && dateInput.value) parts.push('date=' + encodeURIComponent(dateInput.value));
+    if (dateInput && dateInput.value) parts.push(prefix + 'date=' + encodeURIComponent(dateInput.value));
     return parts.join('&');
   }
 
@@ -276,7 +349,20 @@
     if (!hasHistory) return;
     var loc = window.location;
     var h = stateToHash();
-    var want = loc.pathname + loc.search + (h ? '#' + h : '');
+    var want;
+    if (inQuery) {
+      // Keep every query key another bar owns; replace only ours.
+      var mine = ownedKeys();
+      var kept = String(loc.search || '').replace(/^\?/, '').split('&').filter(function (p) {
+        return p && mine.indexOf(p.split('=')[0]) === -1;
+      });
+      if (h) kept.push(h);
+      var hash = legacyHash ? '' : loc.hash;
+      legacyHash = false;
+      want = loc.pathname + (kept.length ? '?' + kept.join('&') : '') + hash;
+    } else {
+      want = loc.pathname + loc.search + (h ? '#' + h : '');
+    }
     if (want === loc.pathname + loc.search + loc.hash) return;
     // A URL the history API refuses (file://, a sandboxed frame) must not stop
     // the filter itself working; the link is a convenience on top of it.
@@ -287,7 +373,12 @@
     var s = readHash();
     if (!s.ours) return false;
     if (search) search.value = s.q;
-    dims.forEach(function (d) { setDim(d, s[d.param] || []); });
+    dims.forEach(function (d) {
+      var v = s[d.param];
+      if (v === null || v === undefined) v = inQuery ? d.defaults : [];
+      else if (v.length === 1 && v[0] === 'all') v = [];
+      setDim(d, v);
+    });
     // A date the input cannot hold would be coerced to '' by the browser
     // anyway; checking the shape here makes that explicit and testable.
     if (dateInput) dateInput.value = DATE_SHAPE.test(s.date) ? s.date : '';
@@ -295,7 +386,30 @@
     return true;
   }
 
-  window.addEventListener('hashchange', applyHash);
+  /* A tab, day or CVE anchor landing on a row this bar has hidden (an older
+     CVE under the default "Recent", or a filter the reader set) would land on
+     nothing. Clear this bar's filters so the target shows, then bring it into
+     view. Inert when the hash names nothing inside this grid. */
+  function revealTarget() {
+    var id = decode(String(window.location.hash || '').replace(/^#/, ''));
+    if (!id || id.indexOf('=') > -1) return;
+    var el = document.getElementById(id);
+    if (!el || !grid.contains(el) || el.style.display !== 'none') return;
+    dims.forEach(function (d) { setDim(d, []); });
+    if (search) search.value = '';
+    if (dateInput) dateInput.value = '';
+    apply();
+    if (el.scrollIntoView) el.scrollIntoView();
+  }
+
+  window.addEventListener('hashchange', function () {
+    if (!inQuery) { applyHash(); return; }
+    // In query mode the hash belongs to the tabs. Only an old-style filter
+    // hash pasted into the address bar is ours to read.
+    var h = String(window.location.hash || '');
+    if (prefix === '' && h.indexOf('=') > -1) applyHash();
+    revealTarget();
+  });
 
   /* --- Tag badges as controls ------------------------------------------------
 
@@ -348,11 +462,7 @@
   });
   var reset = bar.querySelector('[data-filter-reset]');
   if (reset) reset.addEventListener('click', function () {
-    dims.forEach(function (d) {
-      d.active = {};
-      d.chips.forEach(function (x) { x.classList.remove('is-on'); });
-      if (d.allChip) d.allChip.classList.add('is-on');
-    });
+    dims.forEach(function (d) { setDim(d, d.defaults); });
     if (search) search.value = '';
     // "Clear filters" that left the date set would look like it had failed.
     if (dateInput) dateInput.value = '';
@@ -360,5 +470,10 @@
   });
   // The first render is the hash's when the page was opened from a shared
   // link; a fragment that is not ours (#main) gets the plain first render.
+  dims.forEach(function (d) { setDim(d, d.defaults); });
   if (!applyHash()) apply();
+  revealTarget();
+}
+
+[].slice.call(document.querySelectorAll('[data-listing-filter]')).forEach(init);
 })();

@@ -23,15 +23,103 @@ var PALETTE_SIZE = 12;
 // How many tags the page draws per item; the rest are never rendered.
 // Two, not three: three left 60% of rows wrapping their tags to a second line.
 var DISPLAYED_LABELS = 2;
-var KINDS = { research: 1, news: 1 };
+// `vuln` is the daily VulnCheck KEV digest row the exporter adds (T-0396).
+var KINDS = { research: 1, news: 1, vuln: 1 };
+// The Vulnerabilities tab is fed by a separate read (VulnCheck's API) that can
+// fail on its own. Its freshness is warned about past a day, never failed.
+var VULNS_STALE_HOURS = 24;
+var VULN_STATUSES = { ok: 1, stale: 1, unavailable: 1 };
+var CVE_SHAPE = /^CVE-\d{4}-\d{4,}$/;
+var DAY_SHAPE = /^\d{4}-\d{2}-\d{2}$/;
 
-function verdict(status, reason, problems, warnings, counts) {
+function hasKey(o, k) { return !!o && Object.prototype.hasOwnProperty.call(o, k); }
+
+/* The `vulns:` section, against the canonical row schema (cve, added, vendor,
+   product, cisa_added, evidence, older; T-0394 design section 4).
+
+   Every problem here is a WARNING, never a FAIL. The Pages gate in pages.yml
+   keeps wire.yml only when every FAIL is a stale: one, so a vulnerability
+   FAIL would drop the HEADLINES too, for a fault in a separate API read. The
+   page already falls back on its own: it draws the unavailable notice when
+   vulns_status is not ok or stale, and skips a row with no cve or added.
+
+   The one exception is a description key, returned in `problems` (a FAIL):
+   only a code defect could produce one, the publisher refuses it too, and the
+   Wire never ships body text. `now` is epoch ms. */
+function checkVulns(doc, now) {
+  var problems = [];
+  var warnings = [];
+  var rows = doc.vulns;
+  if (!hasKey(doc, 'vulns_status') && !hasKey(doc, 'vulns')) {
+    warnings.push('no vulns section, so the Vulnerabilities tab shows its ' +
+      'unavailable notice (a wire.yml from before T-0396?)');
+    return { problems: problems, warnings: warnings, total: 0 };
+  }
+  var status = doc.vulns_status;
+  if (!VULN_STATUSES[status]) {
+    warnings.push('vulns_status is ' + JSON.stringify(status) +
+      ', not ok, stale or unavailable; the tab will show its unavailable notice');
+  } else if (status !== 'ok') {
+    warnings.push('vulns_status is ' + status + ': the VulnCheck read failed on ' +
+      'the last run' + (status === 'stale' ? ', so the tab shows the cached rows' : ''));
+  }
+  if (!Array.isArray(rows)) rows = [];
+  if ((status === 'ok' || status === 'stale') && !rows.length) {
+    warnings.push('vulns_status is ' + status + ' but there are no rows');
+  }
+
+  var vgen = Date.parse(doc.vulns_generated_at || '');
+  if (rows.length && !vgen) {
+    warnings.push('vulns_generated_at is missing or unparseable: ' + doc.vulns_generated_at);
+  } else if (vgen && (now - vgen) / 3600000 > VULNS_STALE_HOURS) {
+    warnings.push('vulns_generated_at is ' + ((now - vgen) / 3600000).toFixed(1) +
+      ' hours old, over ' + VULNS_STALE_HOURS);
+  }
+
+  var seen = Object.create(null);
+  var nCisa = 0, nOlder = 0;
+  rows.forEach(function (r, n) {
+    r = r || {};
+    var where = 'vulns row ' + (n + 1) + ' (' + String(r.cve || '?') + ')';
+    if (hasKey(r, 'description')) {
+      problems.push(where + ' carries a description field. The Wire publishes ' +
+        'no body text, VulnCheck\'s included.');
+    }
+    if (!CVE_SHAPE.test(String(r.cve || ''))) warnings.push(where + ' has no CVE id in CVE shape');
+    if (!DAY_SHAPE.test(String(r.added || ''))) warnings.push(where + ' has no added day (YYYY-MM-DD)');
+    if (typeof r.vendor !== 'string') warnings.push(where + ' has no vendor field');
+    ['cisa_added', 'evidence'].forEach(function (k) {
+      var v = r[k];
+      if (v !== undefined && v !== null && v !== '' && !DAY_SHAPE.test(String(v))) {
+        warnings.push(where + ' has ' + k + ' ' + JSON.stringify(v) + ', not empty or a day');
+      }
+    });
+    if (typeof r.older !== 'boolean') warnings.push(where + ' has a non-boolean older');
+    if (r.cve && seen[r.cve]) warnings.push(where + ' repeats a CVE');
+    if (r.cve) seen[r.cve] = 1;
+    if (r.cisa_added) nCisa++;
+    if (r.older === true) nOlder++;
+  });
+
+  var vc = doc.vulns_counts || {};
+  if (rows.length && (Number(vc.total) !== rows.length || Number(vc.cisa) !== nCisa ||
+      Number(vc.older) !== nOlder)) {
+    warnings.push('vulns_counts disagree with the rows: declared total=' + vc.total +
+      ' cisa=' + vc.cisa + ' older=' + vc.older + ', actual ' + rows.length + '/' +
+      nCisa + '/' + nOlder);
+  }
+  return { problems: problems, warnings: warnings, total: rows.length };
+}
+
+function verdict(status, reason, problems, warnings, counts, vulnWarnings) {
   return {
     status: status,
     reason: reason || null,
     problems: problems || [],
     warnings: warnings || [],
-    counts: counts || null
+    counts: counts || null,
+    // Vulnerabilities-tab problems, reported as WARN (see checkVulns).
+    vulnWarnings: vulnWarnings || []
   };
 }
 
@@ -114,6 +202,7 @@ function check(doc, sources, now, remote) {
   var seen = Object.create(null);
   var labelsPresent = Object.create(null);
   var nResearch = 0;
+  var nVuln = 0;
 
   for (var i = 0; i < items.length; i++) {
     var it = items[i] || {};
@@ -136,6 +225,7 @@ function check(doc, sources, now, remote) {
       problems.push(where + ' has an unknown kind: ' + it.kind);
     }
     if (it.kind === 'research') nResearch++;
+    if (it.kind === 'vuln') nVuln++;
 
     var d = Date.parse(it.date || '');
     if (it.date && !d) {
@@ -151,7 +241,8 @@ function check(doc, sources, now, remote) {
 
     (it.labels || []).forEach(function (l) { labelsPresent[String(l)] = 1; });
 
-    if (sources && it.source &&
+    // A digest row's source is VulnCheck, never a feed in wire-sources.yml.
+    if (sources && it.source && it.kind !== 'vuln' &&
         !Object.prototype.hasOwnProperty.call(sources, it.source) &&
         warnings.indexOf(it.source) === -1) {
       warnings.push(it.source);
@@ -211,19 +302,26 @@ function check(doc, sources, now, remote) {
       (uncoloured.length > 6 ? ', …' : ''));
   }
 
+  /* `vuln` is absent from a wire.yml written before T-0396 and counts as 0,
+     so an older file still checks clean. */
   var c = doc.counts || {};
+  var nNews = items.length - nResearch - nVuln;
   if (Number(c.total) !== items.length ||
       Number(c.research) !== nResearch ||
-      Number(c.news) !== items.length - nResearch) {
+      Number(c.news) !== nNews ||
+      Number(c.vuln || 0) !== nVuln) {
     problems.push('counts disagree with the item list: declared total=' +
-      c.total + ' research=' + c.research + ' news=' + c.news +
+      c.total + ' research=' + c.research + ' news=' + c.news + ' vuln=' + c.vuln +
       ', actual total=' + items.length + ' research=' + nResearch +
-      ' news=' + (items.length - nResearch));
+      ' news=' + nNews + ' vuln=' + nVuln);
   }
 
+  var v = checkVulns(doc, now);
+  problems = problems.concat(v.problems);
+
   return verdict(problems.length ? 'FAIL' : 'PASS', null, problems, warnings.sort(), {
-    total: items.length, research: nResearch, news: items.length - nResearch
-  });
+    total: items.length, research: nResearch, news: nNews, vuln: nVuln, vulns: v.total
+  }, v.warnings);
 }
 
 /* Verifies wire/index.md still derives each row's day EXACTLY ONCE.
@@ -288,4 +386,5 @@ function checkPage(src) {
   return verdict(problems.length ? 'FAIL' : 'PASS', null, problems, [], null);
 }
 
-module.exports = { check: check, checkPage: checkPage, STALE_HOURS: STALE_HOURS };
+module.exports = { check: check, checkPage: checkPage, STALE_HOURS: STALE_HOURS,
+  VULNS_STALE_HOURS: VULNS_STALE_HOURS };

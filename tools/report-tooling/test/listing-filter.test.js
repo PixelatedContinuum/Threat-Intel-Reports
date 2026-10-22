@@ -598,3 +598,134 @@ test('data-veto cards stay hidden whatever the hash says, and the hash never men
     assert.doesNotMatch(win.location.hash, /veto/);
   });
 });
+
+/* ---- /wire/ with two tabs (T-0396) ----
+
+   Two bars on one page, each scoped to its own [data-filter-scope] section,
+   keeping state in the QUERY string because the hash switches the tabs. The
+   Vulnerabilities bar adds list, vendor, age (default "recent") and a range
+   axis, "added within N days" of data-filter-ref. */
+
+function tabsPage() {
+  return '<div class="hl-wtabs">' +
+    '<section id="headlines" data-filter-scope>' +
+      '<div class="hl-filter" data-listing-filter data-filter-state="query">' +
+        '<input class="hl-filter__search">' +
+        '<div><button class="hl-chip-btn is-on" data-tag="">All</button>' +
+        '<button class="hl-chip-btn" data-tag="alpha">alpha</button></div>' +
+        '<div><button class="hl-chip-btn is-on" data-kind="">All</button>' +
+        '<button class="hl-chip-btn" data-kind="vuln">Vuln digest</button></div>' +
+        '<div data-filter-count></div><div data-filter-empty hidden><span data-filter-empty-msg>No headlines match that filter.</span><button data-filter-reset></button></div>' +
+      '</div>' +
+      '<div class="hl-wire" data-filter-grid data-filter-item=".hl-wire__item">' +
+        '<a class="hl-wire__item" data-title="h one" data-tags="alpha" data-kind="news" data-day="2026-10-22"></a>' +
+        '<a class="hl-wire__item" data-title="3 cves added" data-tags="kev" data-kind="vuln" data-day="2026-10-22"></a>' +
+      '</div>' +
+    '</section>' +
+    '<section id="vulns" data-filter-scope>' +
+      '<div class="hl-filter" data-listing-filter data-filter-state="query" data-filter-prefix="v" data-filter-ref="2026-10-22">' +
+        '<input class="hl-filter__search">' +
+        '<div><button class="hl-chip-btn is-on" data-list="">All</button>' +
+        '<button class="hl-chip-btn" data-list="cisa">CISA</button>' +
+        '<button class="hl-chip-btn" data-list="vconly">VC only</button></div>' +
+        '<div><button class="hl-chip-btn is-on" data-vendor="">All</button>' +
+        '<button class="hl-chip-btn" data-vendor="Acme">Acme</button></div>' +
+        '<div><button class="hl-chip-btn" data-added="1">Today</button>' +
+        '<button class="hl-chip-btn" data-added="7">7 days</button>' +
+        '<button class="hl-chip-btn is-on" data-added="">30 days</button>' +
+        '<button class="hl-chip-btn" data-age="recent" data-default>Recent</button>' +
+        '<button class="hl-chip-btn" data-age="">Include older</button></div>' +
+        '<div data-filter-count></div><div data-filter-empty hidden><span data-filter-empty-msg>No CVEs match that filter.</span><button data-filter-reset></button></div>' +
+      '</div>' +
+      '<div class="hl-wire" data-filter-grid data-filter-item=".hl-vuln">' +
+        '<div class="hl-wire__day" id="vulns-2026-10-22" data-filter-group>22</div>' +
+        '<div class="hl-vuln" id="cve-cve-2026-0001" data-title="cve-2026-0001 acme widget" data-list="cisa" data-vendor="Acme" data-age="recent" data-day="2026-10-22"></div>' +
+        '<div class="hl-wire__day" id="vulns-2026-10-18" data-filter-group>18</div>' +
+        '<div class="hl-vuln" id="cve-cve-2026-0002" data-title="cve-2026-0002 other thing" data-list="vconly" data-vendor="Other" data-age="recent" data-day="2026-10-18"></div>' +
+        '<div class="hl-wire__day" id="vulns-2026-10-01" data-filter-group>1</div>' +
+        '<div class="hl-vuln" id="cve-cve-2016-0003" data-title="cve-2016-0003 acme old" data-list="vconly" data-vendor="Acme" data-age="older" data-day="2026-10-01"></div>' +
+      '</div>' +
+    '</section></div>';
+}
+
+function countOf(win, n) {
+  return win.document.querySelectorAll('[data-filter-count]')[n].textContent;
+}
+
+function chip(win, sel) { return win.document.querySelector(sel); }
+
+test('two bars on one page each drive only their own grid', function () {
+  var win = build(tabsPage(), 'https://example.test/wire/');
+  // Recent is the vulns default: the older CVE starts hidden, headlines untouched.
+  assert.equal(countOf(win, 0), 'Showing 2 of 2');
+  assert.equal(countOf(win, 1), 'Showing 2 of 3');
+  click(win, chip(win, '[data-tag="alpha"]'));
+  assert.equal(countOf(win, 0), 'Showing 1 of 2');
+  assert.equal(countOf(win, 1), 'Showing 2 of 3');
+});
+
+test('the vulns axes: list, vendor, added range and age', function () {
+  var win = build(tabsPage(), 'https://example.test/wire/');
+  click(win, chip(win, '[data-list="cisa"]'));
+  assert.equal(visible(win, '.hl-vuln'), 1);
+  click(win, chip(win, '[data-list=""]'));
+  click(win, chip(win, '[data-age=""]'));          // include older
+  assert.equal(visible(win, '.hl-vuln'), 3);
+  click(win, chip(win, '[data-vendor="Acme"]'));
+  assert.equal(visible(win, '.hl-vuln'), 2);
+  click(win, chip(win, '[data-vendor=""]'));
+  click(win, chip(win, '[data-added="7"]'));       // 22 and 18 Oct are within 7 days of 22 Oct
+  assert.equal(visible(win, '.hl-vuln'), 2);
+  click(win, chip(win, '[data-added="7"]'));
+  click(win, chip(win, '[data-added="1"]'));       // today only
+  assert.equal(visible(win, '.hl-vuln'), 1);
+  // the day heading over an emptied day hides with it
+  assert.equal(win.document.getElementById('vulns-2026-10-01').style.display, 'none');
+});
+
+test('state goes to the query with a prefix, and the tab hash is kept', function () {
+  var win = build(tabsPage(), 'https://example.test/wire/#vulns');
+  click(win, chip(win, '[data-list="cisa"]'));
+  click(win, chip(win, '[data-kind="vuln"]'));
+  assert.equal(win.location.hash, '#vulns');
+  var q = win.location.search;
+  assert.match(q, /vlist=cisa/);
+  assert.match(q, /(^|[?&])kind=vuln/);
+  // the default age needs no key; including older does
+  assert.doesNotMatch(q, /vage=/);
+  click(win, chip(win, '[data-age=""]'));
+  assert.match(win.location.search, /vage=all/);
+});
+
+test('a query-string link restores both bars, defaults where absent', function () {
+  var win = build(tabsPage(), 'https://example.test/wire/?tag=alpha&vage=all&vq=acme#vulns');
+  assert.equal(countOf(win, 0), 'Showing 1 of 2');
+  assert.equal(visible(win, '.hl-vuln'), 2);        // both Acme rows, older included
+  var win2 = build(tabsPage(), 'https://example.test/wire/?vlist=vconly');
+  assert.equal(visible(win2, '.hl-vuln'), 1);       // recent default still applies
+});
+
+test('an old #tag= Headlines link is read, then moved into the query', function () {
+  var win = build(tabsPage(), 'https://example.test/wire/#tag=alpha');
+  assert.equal(countOf(win, 0), 'Showing 1 of 2');
+  assert.equal(win.location.hash, '');
+  assert.match(win.location.search, /tag=alpha/);
+});
+
+test('a CVE anchor on a row the default hides clears that bar so the row shows', function () {
+  var win = build(tabsPage(), 'https://example.test/wire/#cve-cve-2016-0003');
+  assert.notEqual(win.document.getElementById('cve-cve-2016-0003').style.display, 'none');
+  assert.equal(win.location.hash, '#cve-cve-2016-0003');
+  // control: an anchor on a visible row changes nothing
+  var win2 = build(tabsPage(), 'https://example.test/wire/#cve-cve-2026-0001');
+  assert.equal(win2.document.getElementById('cve-cve-2016-0003').style.display, 'none');
+});
+
+test('clear filters on the vulns bar returns to its defaults, not to All', function () {
+  var win = build(tabsPage(), 'https://example.test/wire/');
+  click(win, chip(win, '[data-age=""]'));
+  assert.equal(visible(win, '.hl-vuln'), 3);
+  click(win, win.document.querySelectorAll('[data-filter-reset]')[1]);
+  assert.equal(visible(win, '.hl-vuln'), 2);
+  assert.ok(chip(win, '[data-age="recent"]').classList.contains('is-on'));
+});

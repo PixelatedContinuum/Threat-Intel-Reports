@@ -41,7 +41,11 @@ sitemap: false
     {%- for l in i.labels %}
     <category term="{{ l | xml_escape }}"/>
     {%- endfor %}
+    {%- if i.kind == "vuln" %}
+    <summary type="text">The CVEs VulnCheck added to its Known Exploited Vulnerabilities catalog that day, listed on the Vulnerabilities tab. VulnCheck's data, not curated here.</summary>
+    {%- else %}
     <summary type="text">{{ i.source | xml_escape }} ({{ i.kind }}). Headline and link only; read it at the publisher.</summary>
+    {%- endif %}
   </entry>
   {%- endfor %}
 {%- endif %}

@@ -303,3 +303,98 @@ test('a missing cache-bust on the filter script is caught', function () {
   assert.equal(r.status, 'FAIL');
   assert.match(r.problems.join(' '), /cache-bust/i);
 });
+
+/* ---- The Vulnerabilities tab (T-0396) ----
+
+   Everything about `vulns:` is a WARNING, never a FAIL, because pages.yml drops
+   the whole wire.yml on any non-stale FAIL and the headlines must never depend
+   on the VulnCheck read. A description key is the one exception. */
+
+function vrow(over) {
+  return Object.assign({ cve: 'CVE-2026-1111', added: '2026-08-18', vendor: 'Acme',
+    product: 'Widget', cisa_added: '', evidence: '', older: false }, over || {});
+}
+
+function vdoc(rows, over) {
+  rows = rows || [vrow(), vrow({ cve: 'CVE-2016-2222', cisa_added: '2026-08-18', older: true })];
+  var d = doc({
+    vulns_status: 'ok',
+    vulns_generated_at: '2026-08-19T10:00:00Z',
+    vulns_counts: {
+      total: rows.length,
+      cisa: rows.filter(function (r) { return r.cisa_added; }).length,
+      older: rows.filter(function (r) { return r.older === true; }).length
+    },
+    vulns: rows
+  });
+  return Object.assign(d, over || {});
+}
+
+test('a well-formed vulns section passes with no vuln warnings (control)', function () {
+  var r = CW.check(vdoc(), SOURCES, NOW);
+  assert.equal(r.status, 'PASS');
+  assert.deepEqual(r.vulnWarnings, []);
+  assert.equal(r.counts.vulns, 2);
+});
+
+test('a malformed vulns row is a warning, and the headlines still PASS', function () {
+  var r = CW.check(vdoc([vrow({ cve: 'not-a-cve', added: '18 Aug', older: 'yes',
+    cisa_added: 'soon' })]), SOURCES, NOW);
+  assert.equal(r.status, 'PASS');
+  var w = r.vulnWarnings.join(' | ');
+  assert.match(w, /CVE shape/);
+  assert.match(w, /added day/);
+  assert.match(w, /non-boolean older/);
+  assert.match(w, /cisa_added/);
+});
+
+test('a vulns description key is the one vulns FAIL', function () {
+  var r = CW.check(vdoc([vrow({ description: 'VulnCheck prose.' })]), SOURCES, NOW);
+  assert.equal(r.status, 'FAIL');
+  assert.match(r.problems.join(' '), /description/);
+  // and it is not a stale: problem, so pages.yml drops the file
+  assert.doesNotMatch(r.problems.join(' '), /^stale:/);
+});
+
+test('stale and unavailable statuses warn and still PASS', function () {
+  ['stale', 'unavailable', 'bogus'].forEach(function (st) {
+    var rows = st === 'stale' ? undefined : [];
+    var r = CW.check(vdoc(rows, { vulns_status: st }), SOURCES, NOW);
+    assert.equal(r.status, 'PASS', st);
+    assert.match(r.vulnWarnings.join(' '), new RegExp(st === 'bogus' ? 'not ok' : st), st);
+  });
+});
+
+test('vulns data over a day old warns, and under a day does not', function () {
+  var old = CW.check(vdoc(undefined, { vulns_generated_at: '2026-08-18T10:00:00Z' }), SOURCES, NOW);
+  assert.equal(old.status, 'PASS');
+  assert.match(old.vulnWarnings.join(' '), /hours old/);
+  var fresh = CW.check(vdoc(undefined, { vulns_generated_at: '2026-08-18T13:00:00Z' }), SOURCES, NOW);
+  assert.doesNotMatch(fresh.vulnWarnings.join(' '), /hours old/);
+});
+
+test('a file from before the tab warns once and passes', function () {
+  var r = CW.check(doc(), SOURCES, NOW);
+  assert.equal(r.status, 'PASS');
+  assert.match(r.vulnWarnings.join(' '), /no vulns section/);
+});
+
+test('vuln digest items count as their own kind and are not unclassified sources', function () {
+  var d = vdoc();
+  d.items.push({ title: '2 CVEs added to VulnCheck KEV on 18 August: Acme',
+    url: 'https://the-hunters-ledger.com/wire/#vulns-2026-08-18', source: 'VulnCheck KEV',
+    date: '2026-08-18T12:00:00Z', kind: 'vuln', labels: [] });
+  d.counts = { total: 3, research: 1, news: 1, vuln: 1 };
+  var r = CW.check(d, SOURCES, NOW);
+  assert.equal(r.status, 'PASS');
+  assert.deepEqual(r.warnings, []);
+  // control: the same counts without the vuln key disagree
+  d.counts = { total: 3, research: 1, news: 2 };
+  assert.equal(CW.check(d, SOURCES, NOW).status, 'FAIL');
+});
+
+test('vulns_counts disagreeing with the rows warns', function () {
+  var r = CW.check(vdoc(undefined, { vulns_counts: { total: 9, cisa: 0, older: 0 } }), SOURCES, NOW);
+  assert.equal(r.status, 'PASS');
+  assert.match(r.vulnWarnings.join(' '), /vulns_counts disagree/);
+});

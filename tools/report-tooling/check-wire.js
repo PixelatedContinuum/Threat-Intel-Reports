@@ -97,7 +97,8 @@ if (r.status === 'NOT CHECKED') {
 var head = r.status + '  ' + WIRE;
 if (r.counts) {
   head += '  (' + r.counts.total + ' items: ' + r.counts.research +
-    ' research, ' + r.counts.news + ' news)';
+    ' research, ' + r.counts.news + ' news, ' + r.counts.vuln + ' vuln digest; ' +
+    r.counts.vulns + ' CVE rows)';
 }
 console.log(head);
 
@@ -106,6 +107,9 @@ if (r.warnings.length) {
   console.log('   WARN  unclassified source(s), add to _data/wire-sources.yml: ' +
     r.warnings.join(', '));
 }
+// Never FAIL lines: pages.yml drops wire.yml on any non-stale FAIL, and a
+// Vulnerabilities-tab fault must not take the headlines down with it.
+(r.vulnWarnings || []).forEach(function (w) { console.log('   WARN  vulns: ' + w); });
 
 /* The data is only half of it. The page decides how each row's day is derived,
    and the day filter is only correct while that derivation happens once. */
