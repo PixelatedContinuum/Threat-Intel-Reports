@@ -3873,10 +3873,14 @@ a.hl-card:hover { border-color: var(--hl-accent-blue) !important; transform: tra
 /* --- The Wire: tabs, switched by the URL hash with CSS only ----
    No JavaScript: each tab is a link to #headlines or #vulns, and :target shows
    the section. Any anchor INSIDE #vulns (a day, a CVE) opens it too, through
-   :has(:target). Each selector gets its OWN rule: a browser without :has()
-   drops a whole rule whose selector list holds one it cannot parse, and the
-   plain #vulns:target rule must survive there, so the tab still opens
-   (stacked under the headlines, which it cannot hide). */
+   :has(:target).
+
+   Every hiding rule is itself a :has() selector, so a browser without :has()
+   drops all of them: there BOTH sections stay visible, stacked, and every
+   anchor still scrolls to its row (T-0396 review F2). Not @supports
+   selector(): the Pages Sass compiler (jekyll-sass-converter 1.5) rejects it.
+   Each selector keeps its own rule, and the specificity is set so a show rule
+   beats the blanket hide and the targeted-vulns hide beats the show. */
 .hl-wtabs__nav {
   display: flex;
   gap: 4px;
@@ -3896,12 +3900,13 @@ a.hl-card:hover { border-color: var(--hl-accent-blue) !important; transform: tra
 }
 .hl-wtabs__tab:hover { color: var(--hl-text-primary) !important; }
 .hl-wtabs__n { font-size: 0.8em; opacity: 0.7; margin-left: 0.45em; }
-.hl-wtabs__sec { display: none; }
-#headlines { display: block; }
-#vulns:target { display: block; }
-#vulns:has(:target) { display: block; }
-.hl-wtabs:has(#vulns:target) #headlines { display: none; }
-.hl-wtabs:has(#vulns :target) #headlines { display: none; }
+.hl-wtabs__sec { display: block; }
+.hl-wtabs:has(#headlines) .hl-wtabs__sec { display: none; }                /* (1,2,0) */
+.hl-wtabs:has(#headlines) #headlines { display: block; }                    /* (2,1,0) */
+.hl-wtabs:has(#headlines) #vulns:target { display: block; }                 /* (2,2,0) */
+.hl-wtabs:has(#vulns :target) #vulns { display: block; }                    /* (2,2,0) */
+.hl-wtabs:has(#vulns:target) #headlines { display: none; }                  /* (2,2,0) */
+.hl-wtabs:has(#vulns :target) #headlines { display: none; }                 /* (2,2,0) */
 /* Selected-tab styling: Headlines unless the vulns section is targeted. */
 .hl-post-content .hl-wtabs__tab--h,
 .hl-wtabs__tab--h,

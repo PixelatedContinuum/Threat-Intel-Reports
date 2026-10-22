@@ -143,8 +143,15 @@ position: 2.5
 <div class="hl-wire hl-vulns" data-filter-grid data-filter-item=".hl-vuln" data-pagefind-ignore>
 {%- assign current_vday = "" -%}
 {%- for r in wire.vulns -%}
-{%- comment -%} A row missing its id or its day is skipped rather than drawn broken; check-wire.js warns about it. {%- endcomment -%}
-{%- if r.cve and r.added -%}
+{%- comment -%}
+  A row that is not canonical is skipped rather than drawn broken; check-wire.js
+  warns about it. Liquid treats an empty string as true, so the guard checks the
+  shapes: an id starting CVE- and a ten-character day (T-0396 review F3).
+{%- endcomment -%}
+{%- assign vok = false -%}
+{%- if r.cve and r.added -%}{%- assign cve_head = r.cve | slice: 0, 4 -%}{%- assign added_len = r.added | size -%}{%- if cve_head == "CVE-" and added_len == 10 -%}{%- assign vok = true -%}{%- endif -%}{%- endif -%}
+{%- if vok -%}
+{%- assign cisa_len = r.cisa_added | size -%}{%- assign ev_len = r.evidence | size -%}
 {%- assign vday = r.added | slice: 0, 10 -%}
 {%- if vday != current_vday -%}
 {%- assign current_vday = vday -%}
@@ -152,7 +159,7 @@ position: 2.5
 <div class="hl-wire__day" id="vulns-{{ vday }}" data-filter-group>{{ vday | date: "%A %-d %B %Y" }} &middot; {{ day_rows.size }} added</div>
 {%- endif -%}
 {%- assign cve_parts = r.cve | split: "-" -%}{%- assign cve_year = cve_parts[1] -%}
-<div class="hl-vuln" id="cve-{{ r.cve | downcase }}" data-title="{{ r.cve | downcase }} {{ r.vendor | downcase | escape }} {{ r.product | downcase | escape }}" data-list="{% if r.cisa_added and r.cisa_added != '' %}cisa{% else %}vconly{% endif %}" data-vendor="{{ r.vendor | escape }}" data-age="{% if r.older %}older{% else %}recent{% endif %}" data-day="{{ vday }}"><a class="hl-vuln__cve" href="https://nvd.nist.gov/vuln/detail/{{ r.cve }}" target="_blank" rel="noopener noreferrer">{{ r.cve }}</a><span class="hl-vuln__vp">{% if r.vendor and r.vendor != "" %}<b>{{ r.vendor }}</b> {{ r.product }}{% else %}<span class="hl-vuln__none">vendor not given</span>{% endif %}</span><span class="hl-vuln__badges"><span class="hl-vuln__b hl-vuln__b--vc">VulnCheck KEV</span>{% if r.cisa_added and r.cisa_added != "" %}<span class="hl-vuln__b hl-vuln__b--cisa" title="Added to CISA KEV {{ r.cisa_added }}">CISA KEV</span>{% endif %}{% if r.older %}<span class="hl-vuln__b hl-vuln__b--old" title="A CVE from {{ cve_year }}, added in {{ vday | slice: 0, 4 }}">CVE-{{ cve_year }}</span>{% endif %}{% if r.evidence and r.evidence != "" %}<span class="hl-vuln__ev">evidence {{ r.evidence }}</span>{% endif %}</span></div>
+<div class="hl-vuln" id="cve-{{ r.cve | downcase }}" data-title="{{ r.cve | downcase }} {{ r.vendor | downcase | escape }} {{ r.product | downcase | escape }}" data-list="{% if cisa_len == 10 %}cisa{% else %}vconly{% endif %}" data-vendor="{{ r.vendor | escape }}" data-age="{% if r.older == true %}older{% else %}recent{% endif %}" data-day="{{ vday }}"><a class="hl-vuln__cve" href="https://nvd.nist.gov/vuln/detail/{{ r.cve }}" target="_blank" rel="noopener noreferrer">{{ r.cve }}</a><span class="hl-vuln__vp">{% if r.vendor and r.vendor != "" %}<b>{{ r.vendor }}</b> {{ r.product }}{% else %}<span class="hl-vuln__none">vendor not given</span>{% endif %}</span><span class="hl-vuln__badges"><span class="hl-vuln__b hl-vuln__b--vc">VulnCheck KEV</span>{% if cisa_len == 10 %}<span class="hl-vuln__b hl-vuln__b--cisa" title="Added to CISA KEV {{ r.cisa_added }}">CISA KEV</span>{% endif %}{% if r.older == true %}<span class="hl-vuln__b hl-vuln__b--old" title="A CVE from {{ cve_year }}, added in {{ vday | slice: 0, 4 }}">CVE-{{ cve_year }}</span>{% endif %}{% comment %} evidence is the earliest citation date; drawn only when it says something the day heading does not. {% endcomment %}{% if ev_len == 10 and r.evidence < vday %}<span class="hl-vuln__ev">evidence {{ r.evidence }}</span>{% endif %}</span></div>
 {%- endif -%}
 {%- endfor -%}
 </div>

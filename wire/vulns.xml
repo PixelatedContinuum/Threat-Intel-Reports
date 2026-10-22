@@ -31,8 +31,12 @@ sitemap: false
 {%- if wire and wire.vulns and wire.vulns != empty %}
   {%- if wire.vulns_status == "ok" or wire.vulns_status == "stale" %}
   {%- for r in wire.vulns limit: 500 %}
-  {%- if r.cve and r.added %}
-  {%- assign vday = r.added | slice: 0, 10 %}
+  {%- comment %} The page's row guard: an empty string is true in Liquid, so check shapes. {% endcomment %}
+  {%- assign vok = false %}
+  {%- if r.cve and r.added %}{% assign cve_head = r.cve | slice: 0, 4 %}{% assign added_len = r.added | size %}{% if cve_head == "CVE-" and added_len == 10 %}{% assign vok = true %}{% endif %}{% endif %}
+  {%- if vok %}
+  {%- assign vday = r.added %}
+  {%- assign cisa_len = r.cisa_added | size %}
   <entry>
     <title>{{ r.cve | xml_escape }}{% if r.vendor and r.vendor != "" %}: {{ r.vendor | xml_escape }} {{ r.product | xml_escape }}{% endif %}</title>
     <link href="{{ site.url }}/wire/#cve-{{ r.cve | downcase }}" rel="alternate" type="text/html"/>
@@ -41,10 +45,10 @@ sitemap: false
     <published>{{ vday }}T00:00:00Z</published>
     <updated>{{ vday }}T00:00:00Z</updated>
     <category term="vulncheck-kev" label="VulnCheck KEV"/>
-    {%- if r.cisa_added and r.cisa_added != "" %}
+    {%- if cisa_len == 10 %}
     <category term="cisa-kev" label="CISA KEV"/>
     {%- endif %}
-    <summary type="text">Added to VulnCheck KEV {{ vday }}{% if r.cisa_added and r.cisa_added != "" %}; in CISA KEV since {{ r.cisa_added }}{% endif %}.</summary>
+    <summary type="text">Added to VulnCheck KEV {{ vday }}{% if cisa_len == 10 %}; in CISA KEV since {{ r.cisa_added }}{% endif %}.</summary>
   </entry>
   {%- endif %}
   {%- endfor %}
