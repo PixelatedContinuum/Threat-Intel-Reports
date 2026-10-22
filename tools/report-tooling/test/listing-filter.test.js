@@ -628,6 +628,10 @@ function tabsPage() {
         '<div><button class="hl-chip-btn is-on" data-list="">All</button>' +
         '<button class="hl-chip-btn" data-list="cisa">CISA</button>' +
         '<button class="hl-chip-btn" data-list="vconly">VC only</button></div>' +
+        '<div><button class="hl-chip-btn is-on" data-sev="">All</button>' +
+        '<button class="hl-chip-btn" data-sev="critical">Critical</button>' +
+        '<button class="hl-chip-btn" data-sev="high">High</button>' +
+        '<button class="hl-chip-btn" data-sev="none">No score</button></div>' +
         '<div><button class="hl-chip-btn is-on" data-vendor="">All</button>' +
         '<button class="hl-chip-btn" data-vendor="Acme">Acme</button></div>' +
         '<div><button class="hl-chip-btn" data-added="1">Today</button>' +
@@ -639,11 +643,11 @@ function tabsPage() {
       '</div>' +
       '<div class="hl-wire" data-filter-grid data-filter-item=".hl-vuln">' +
         '<div class="hl-wire__day" id="vulns-2026-10-22" data-filter-group>22</div>' +
-        '<div class="hl-vuln" id="cve-cve-2026-0001" data-title="cve-2026-0001 acme widget" data-list="cisa" data-vendor="Acme" data-age="recent" data-day="2026-10-22"></div>' +
+        '<div class="hl-vuln" id="cve-cve-2026-0001" data-title="cve-2026-0001 acme widget" data-list="cisa" data-vendor="Acme" data-age="recent" data-sev="critical" data-day="2026-10-22"></div>' +
         '<div class="hl-wire__day" id="vulns-2026-10-18" data-filter-group>18</div>' +
-        '<div class="hl-vuln" id="cve-cve-2026-0002" data-title="cve-2026-0002 other thing" data-list="vconly" data-vendor="Other" data-age="recent" data-day="2026-10-18"></div>' +
+        '<div class="hl-vuln" id="cve-cve-2026-0002" data-title="cve-2026-0002 other thing" data-list="vconly" data-vendor="Other" data-age="recent" data-sev="high" data-day="2026-10-18"></div>' +
         '<div class="hl-wire__day" id="vulns-2026-10-01" data-filter-group>1</div>' +
-        '<div class="hl-vuln" id="cve-cve-2016-0003" data-title="cve-2016-0003 acme old" data-list="vconly" data-vendor="Acme" data-age="older" data-day="2026-10-01"></div>' +
+        '<div class="hl-vuln" id="cve-cve-2016-0003" data-title="cve-2016-0003 acme old" data-list="vconly" data-vendor="Acme" data-age="older" data-sev="none" data-day="2026-10-01"></div>' +
       '</div>' +
     '</section></div>';
 }
@@ -681,6 +685,23 @@ test('the vulns axes: list, vendor, added range and age', function () {
   assert.equal(visible(win, '.hl-vuln'), 1);
   // the day heading over an emptied day hides with it
   assert.equal(win.document.getElementById('vulns-2026-10-01').style.display, 'none');
+});
+
+test('the severity axis (T-0399): bands OR together, "none" is its own chip, state in vsev', function () {
+  var win = build(tabsPage(), 'https://example.test/wire/#vulns');
+  click(win, chip(win, '[data-age=""]'));          // include older, so all three rows count
+  click(win, chip(win, '[data-sev="critical"]'));
+  assert.equal(visible(win, '.hl-vuln'), 1);
+  assert.match(win.location.search, /vsev=critical/);
+  click(win, chip(win, '[data-sev="none"]'));
+  assert.equal(visible(win, '.hl-vuln'), 2);
+  click(win, chip(win, '[data-sev=""]'));
+  assert.equal(visible(win, '.hl-vuln'), 3);
+  assert.doesNotMatch(win.location.search, /vsev/);
+  // read back from the URL
+  var win2 = build(tabsPage(), 'https://example.test/wire/?vsev=high&vage=all#vulns');
+  assert.equal(visible(win2, '.hl-vuln'), 1);
+  assert.equal(win2.document.querySelector('[data-sev="high"]').classList.contains('is-on'), true);
 });
 
 test('state goes to the query with a prefix, and the tab hash is kept', function () {

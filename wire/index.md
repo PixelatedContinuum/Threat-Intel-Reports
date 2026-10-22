@@ -180,7 +180,7 @@ position: 2.5
 </section>
 </div>
 
-<script defer src="{{ '/assets/js/listing-filter.js' | relative_url }}?v=12"></script>
+<script defer src="{{ '/assets/js/listing-filter.js' | relative_url }}?v=13"></script>
 
 {%- else -%}
 
