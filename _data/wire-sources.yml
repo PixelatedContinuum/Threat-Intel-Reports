@@ -63,6 +63,11 @@ sources:
   Krawczyk Industries Limited: exclude
   # Our own reports. Already published on this site.
   The Hunters Ledger: exclude
+  # Added 2026-10-22 (T-0393). The VulnCheck connector runs with scope
+  # `vulnerability` only, so it creates no Reports and nothing of it should reach
+  # the Wire. This guards against `report` ever being added to its scope, which
+  # would wrap botnet, threat-actor and ransomware entries as Reports.
+  VulnCheck: exclude
 
 default: news
 
