@@ -207,9 +207,13 @@ drop:
   # Joseph 2026-10-22). Measured on 1071 kept news items: drops 2, both feature
   # news ("Signal adds new security feature...", "WhatsApp Unveils New Scam Alert
   # Feature"), no threat story. "to block" was rejected: it drops a malware story.
-  - security feature*
-  - alert feature*
-  - scam detection
+  # Verb-anchored, not bare "security feature*" (review): Microsoft's CVE class
+  # "Security Feature Bypass" must never be dropped.
+  - adds new security feature*
+  - adds security feature*
+  - new scam alert feature*
+  - powered scam detection
+  - adds scam detection
 
 # Research sources bypass keep and drop, so a vendor's own product, alliance or
 # analyst-ranking post reaches the page and earns tags from "AI" or "cloud".
