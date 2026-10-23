@@ -133,7 +133,7 @@ function init(bar) {
      so the four listing pages that render one row are unaffected. Axes AND
      together: picking a topic and a kind narrows to items matching both. */
   var dims = [Dim('data-tag', 'data-tags')];
-  ['data-kind', 'data-list', 'data-sev', 'data-vendor', 'data-age'].forEach(function (a) {
+  ['data-kind', 'data-list', 'data-sev', 'data-det', 'data-vendor', 'data-age'].forEach(function (a) {
     if (bar.querySelector('.hl-chip-btn[' + a + ']')) dims.push(Dim(a, a));
   });
   if (bar.querySelector('.hl-chip-btn[data-added]')) {
@@ -148,6 +148,19 @@ function init(bar) {
     return keys.some(function (k) { return cv.indexOf(k) > -1; });
   }
 
+  /* A whole CVE id searches as a whole id (T-0407): "cve-2026-8877" must not
+     also find cve-2026-88771. The "N headlines" link on a vulnerability row
+     lands on the Headlines tab with exactly such a term, and its count is of
+     exact ids. Any other term is a substring, as before. */
+  var CVE_TERM = /^cve-\d{4}-\d{4,}$/;
+  function termIn(hay, term) {
+    if (!CVE_TERM.test(term)) return hay.indexOf(term) > -1;
+    for (var at = hay.indexOf(term); at > -1; at = hay.indexOf(term, at + 1)) {
+      if (!/\d/.test(hay.charAt(at + term.length))) return true;
+    }
+    return false;
+  }
+
   function apply() {
     var term = (search && search.value || '').trim().toLowerCase();
     var shown = 0;
@@ -156,7 +169,7 @@ function init(bar) {
       // Search matches BOTH the title and the tags, so e.g. "ransomware"
       // surfaces items tagged Ransomware even if it's not in the title.
       var hay = (c.getAttribute('data-title') || '') + '|' + (c.getAttribute('data-tags') || '');
-      var mq = !term || hay.indexOf(term) > -1;
+      var mq = !term || termIn(hay, term);
       // An external control (the IOC search on /ioc-feeds/) can veto a card
       // without knowing anything about this module's dimensions. Absent the
       // attribute, which is every other page, this is inert.

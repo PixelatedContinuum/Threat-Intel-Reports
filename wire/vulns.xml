@@ -12,7 +12,7 @@ sitemap: false
   There is no description: the rows carry none, by the Wire's rule. The
   subtitle carries the VulnCheck attribution the tab's callout carries.
   Without vulnerability data this is a valid, empty feed rather than a 404.
-  Built in T-0396.
+  Built in T-0396; reports, ET Open and Nuclei pointers added in T-0407.
 {%- endcomment -%}
 {%- assign wire = site.data.wire %}
 {%- assign sev_bands = "critical,high,medium,low" | split: "," %}
@@ -42,12 +42,27 @@ sitemap: false
     <title>{{ r.cve | xml_escape }}{% if r.vendor and r.vendor != "" %}: {{ r.vendor | xml_escape }} {{ r.product | xml_escape }}{% endif %}</title>
     <link href="{{ site.url }}/wire/#cve-{{ r.cve | downcase }}" rel="alternate" type="text/html"/>
     <link href="https://nvd.nist.gov/vuln/detail/{{ r.cve }}" rel="related" type="text/html" title="NVD"/>
+    {%- comment %} T-0407: the reports VulnCheck cites as evidence of exploitation, and a public Nuclei template. {% endcomment %}
+    {%- for rp in r.reports limit: 3 %}{% assign rp_head = rp.url | slice: 0, 8 %}{% if rp_head == "https://" %}
+    <link href="{{ rp.url | xml_escape }}" rel="related" type="text/html" title="Reported by {{ rp.host | xml_escape }}"/>{% endif %}
+    {%- endfor %}
+    {%- assign nu_len = r.nuclei | size %}
+    {%- if nu_len > 0 %}
+    <link href="https://github.com/projectdiscovery/nuclei-templates/blob/main/{{ r.nuclei | xml_escape }}" rel="related" type="text/html" title="Nuclei template"/>
+    {%- endif %}
     <id>{{ site.url }}/wire/#cve-{{ r.cve | downcase }}</id>
     <published>{{ vday }}T00:00:00Z</published>
     <updated>{{ vday }}T00:00:00Z</updated>
     <category term="vulncheck-kev" label="VulnCheck KEV"/>
     {%- if cisa_len == 10 %}
     <category term="cisa-kev" label="CISA KEV"/>
+    {%- endif %}
+    {%- assign n_sids = r.et_sids | size %}
+    {%- if n_sids > 0 %}
+    <category term="et-open-rule" label="ET Open rule"/>
+    {%- endif %}
+    {%- if nu_len > 0 %}
+    <category term="nuclei-template" label="Nuclei template"/>
     {%- endif %}
     {%- assign cvss_len = r.cvss | size %}
     {%- assign sev = "" %}

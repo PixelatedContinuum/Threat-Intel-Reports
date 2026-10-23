@@ -451,3 +451,61 @@ test('severity counts disagreeing with the rows warn; a pre-T-0399 file is not h
   // control: the T-0396 fixture has no score fields and no per-band counts
   assert.deepEqual(CW.check(vdoc(), SOURCES, NOW).vulnWarnings, []);
 });
+
+/* ---- The row's pointers (T-0407) ---- */
+
+function pointed(over) {
+  return vrow(Object.assign({
+    reports: [{ url: 'https://patchstack.com/database/wordpress/plugin/x', host: 'patchstack.com' }],
+    reports_more: 2, stories: 1, et_sids: [2060001], nuclei: 'http/cves/2026/CVE-2026-1111.yaml'
+  }, over || {}));
+}
+
+function pdoc(rows) {
+  var d = vdoc(rows);
+  var c = d.vulns_counts;
+  c.reported = rows.filter(function (r) { return (r.reports || []).length; }).length;
+  c.stories = rows.filter(function (r) { return r.stories > 0; }).length;
+  c.et = rows.filter(function (r) { return (r.et_sids || []).length; }).length;
+  c.nuclei = rows.filter(function (r) { return r.nuclei; }).length;
+  c.detect = rows.filter(function (r) { return (r.et_sids || []).length || r.nuclei; }).length;
+  return d;
+}
+
+test('rows with and without pointers pass with no vuln warnings (control)', function () {
+  var r = CW.check(pdoc([pointed(), vrow({ cve: 'CVE-2026-4444', reports: [], reports_more: 0,
+    stories: 0, et_sids: [], nuclei: '' })]), SOURCES, NOW);
+  assert.equal(r.status, 'PASS');
+  assert.deepEqual(r.vulnWarnings, []);
+});
+
+test('a bad pointer warns per field, and the headlines still PASS', function () {
+  var r = CW.check(pdoc([
+    pointed({ cve: 'CVE-2026-0001', reports: [{ url: 'javascript:alert(1)', host: 'x' }] }),
+    pointed({ cve: 'CVE-2026-0002', reports: [{ url: 'https://x.test/a"b', host: 'x.test' }] }),
+    pointed({ cve: 'CVE-2026-0003', reports: [1, 2, 3, 4].map(function (n) {
+      return { url: 'https://x.test/' + n, host: 'x.test' }; }) }),
+    pointed({ cve: 'CVE-2026-0004', stories: -1 }),
+    pointed({ cve: 'CVE-2026-0005', et_sids: ['2060001'] }),
+    pointed({ cve: 'CVE-2026-0006', nuclei: '../../etc/passwd.yaml' }),
+    pointed({ cve: 'CVE-2026-0007', reports: 'https://x.test/' }),
+    pointed({ cve: 'CVE-2026-0008', reports: [{ url: 'https://x.test/', host: '' }] })
+  ]), SOURCES, NOW);
+  assert.equal(r.status, 'PASS');
+  var w = r.vulnWarnings.join('\n');
+  [/0001\).*not a plain https link/, /0002\).*not a plain https link/, /0003\).*over 3/,
+   /0004\).*stories -1, not a count/, /0005\).*not a list of SIDs/, /0006\).*not a template path/,
+   /0007\).*reports that are not a list/, /0008\).*has no host/].forEach(function (re) {
+    assert.match(w, re);
+  });
+});
+
+test('pointer counts disagreeing with the rows warn; a pre-T-0407 file is not held to them', function () {
+  var d = pdoc([pointed(), vrow({ cve: 'CVE-2026-4444' })]);
+  d.vulns_counts.nuclei = 7;
+  var r = CW.check(d, SOURCES, NOW);
+  assert.equal(r.status, 'PASS');
+  assert.match(r.vulnWarnings.join(' '), /pointers disagree with the rows on nuclei/);
+  // control: the T-0396 fixture carries no pointers and no pointer counts
+  assert.deepEqual(CW.check(vdoc(), SOURCES, NOW).vulnWarnings, []);
+});

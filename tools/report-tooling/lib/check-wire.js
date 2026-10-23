@@ -55,8 +55,45 @@ function scoreProblem(r) {
 
 function hasKey(o, k) { return !!o && Object.prototype.hasOwnProperty.call(o, k); }
 
+/* T-0407: the row's pointers. A row written before T-0407 carries none of
+   them and checks clean; one that carries them is held to the exporter's
+   shapes, since the page draws each as a link or a filter key. */
+var REPORT_URL = /^https:\/\/[A-Za-z0-9.-]+(?::\d+)?(?:[\/?#][^\s"'<>\\`]*)?$/;
+var NUCLEI_PATH = /^[A-Za-z0-9_.\/-]+\.ya?ml$/;
+function isCount(v) { return typeof v === 'number' && Number.isInteger(v) && v >= 0; }
+function reportsOf(r) { return Array.isArray(r.reports) ? r.reports : []; }
+function pointerProblems(r) {
+  var out = [];
+  if (hasKey(r, 'reports')) {
+    if (!Array.isArray(r.reports)) out.push('has reports that are not a list');
+    else {
+      if (r.reports.length > 3) out.push('carries ' + r.reports.length + ' report links, over 3');
+      r.reports.forEach(function (rp, i) {
+        if (!rp || !REPORT_URL.test(String(rp.url || '')) || String(rp.url).length > 500) {
+          out.push('report ' + (i + 1) + ' has url ' + JSON.stringify(rp && rp.url) + ', not a plain https link');
+        } else if (typeof rp.host !== 'string' || !rp.host) {
+          out.push('report ' + (i + 1) + ' has no host');
+        }
+      });
+    }
+  }
+  ['reports_more', 'stories'].forEach(function (k) {
+    if (hasKey(r, k) && !isCount(r[k])) out.push('has ' + k + ' ' + JSON.stringify(r[k]) + ', not a count');
+  });
+  if (hasKey(r, 'et_sids') && !(Array.isArray(r.et_sids) && r.et_sids.every(function (s) {
+    return isCount(s) && s > 0; }))) {
+    out.push('has et_sids ' + JSON.stringify(r.et_sids) + ', not a list of SIDs');
+  }
+  if (hasKey(r, 'nuclei') && r.nuclei !== '' &&
+      !(typeof r.nuclei === 'string' && NUCLEI_PATH.test(r.nuclei) && r.nuclei.indexOf('..') === -1)) {
+    out.push('has nuclei ' + JSON.stringify(r.nuclei) + ', not a template path');
+  }
+  return out;
+}
+
 /* The `vulns:` section, against the canonical row schema (cve, added, vendor,
-   product, cisa_added, evidence, older; T-0394 design section 4).
+   product, cisa_added, evidence, older; T-0394 design section 4), the score
+   (T-0399) and the pointers (T-0407).
 
    Every problem here is a WARNING, never a FAIL. The Pages gate in pages.yml
    keeps wire.yml only when every FAIL is a stale: one, so a vulnerability
@@ -100,6 +137,7 @@ function checkVulns(doc, now) {
   var seen = Object.create(null);
   var nCisa = 0, nOlder = 0, nUnscored = 0;
   var nSev = { critical: 0, high: 0, medium: 0, low: 0 };
+  var nPtr = { reported: 0, stories: 0, et: 0, nuclei: 0, detect: 0 };
   rows.forEach(function (r, n) {
     r = r || {};
     var where = 'vulns row ' + (n + 1) + ' (' + String(r.cve || '?') + ')';
@@ -121,6 +159,14 @@ function checkVulns(doc, now) {
     if (sp) warnings.push(where + ' ' + sp);
     else if (SEVERITIES[String(r.severity)]) nSev[r.severity]++;
     else nUnscored++;
+    pointerProblems(r).forEach(function (p) { warnings.push(where + ' ' + p); });
+    if (reportsOf(r).length) nPtr.reported++;
+    if (Number(r.stories) > 0) nPtr.stories++;
+    var hasEt = Array.isArray(r.et_sids) && r.et_sids.length > 0;
+    var hasNu = typeof r.nuclei === 'string' && r.nuclei !== '';
+    if (hasEt) nPtr.et++;
+    if (hasNu) nPtr.nuclei++;
+    if (hasEt || hasNu) nPtr.detect++;
     if (r.cve && seen[r.cve]) warnings.push(where + ' repeats a CVE');
     if (r.cve) seen[r.cve] = 1;
     if (r.cisa_added) nCisa++;
@@ -143,6 +189,15 @@ function checkVulns(doc, now) {
       warnings.push('vulns_counts severity disagrees with the rows on ' + bad.join(', ') +
         ': declared ' + bad.map(function (k) { return k + '=' + vc[k]; }).join(' ') +
         ', actual ' + bad.map(function (k) { return k + '=' + (k === 'unscored' ? nUnscored : nSev[k]); }).join(' '));
+    }
+  }
+  // The pointer counts arrive with T-0407 and feed the page's chips.
+  if (rows.length && hasKey(vc, 'reported')) {
+    var badp = Object.keys(nPtr).filter(function (k) { return Number(vc[k]) !== nPtr[k]; });
+    if (badp.length) {
+      warnings.push('vulns_counts pointers disagree with the rows on ' + badp.join(', ') +
+        ': declared ' + badp.map(function (k) { return k + '=' + vc[k]; }).join(' ') +
+        ', actual ' + badp.map(function (k) { return k + '=' + nPtr[k]; }).join(' '));
     }
   }
   return { problems: problems, warnings: warnings, total: rows.length };

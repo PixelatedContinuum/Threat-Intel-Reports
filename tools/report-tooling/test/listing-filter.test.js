@@ -632,6 +632,9 @@ function tabsPage() {
         '<button class="hl-chip-btn" data-sev="critical">Critical</button>' +
         '<button class="hl-chip-btn" data-sev="high">High</button>' +
         '<button class="hl-chip-btn" data-sev="none">No score</button></div>' +
+        '<div><button class="hl-chip-btn is-on" data-det="">All</button>' +
+        '<button class="hl-chip-btn" data-det="et">ET Open</button>' +
+        '<button class="hl-chip-btn" data-det="nuclei">Nuclei</button></div>' +
         '<div><button class="hl-chip-btn is-on" data-vendor="">All</button>' +
         '<button class="hl-chip-btn" data-vendor="Acme">Acme</button></div>' +
         '<div><button class="hl-chip-btn" data-added="1">Today</button>' +
@@ -643,11 +646,11 @@ function tabsPage() {
       '</div>' +
       '<div class="hl-wire" data-filter-grid data-filter-item=".hl-vuln">' +
         '<div class="hl-wire__day" id="vulns-2026-10-22" data-filter-group>22</div>' +
-        '<div class="hl-vuln" id="cve-cve-2026-0001" data-title="cve-2026-0001 acme widget" data-list="cisa" data-vendor="Acme" data-age="recent" data-sev="critical" data-day="2026-10-22"></div>' +
+        '<div class="hl-vuln" id="cve-cve-2026-0001" data-title="cve-2026-0001 acme widget" data-list="cisa" data-vendor="Acme" data-age="recent" data-sev="critical" data-det="et|nuclei" data-day="2026-10-22"></div>' +
         '<div class="hl-wire__day" id="vulns-2026-10-18" data-filter-group>18</div>' +
-        '<div class="hl-vuln" id="cve-cve-2026-0002" data-title="cve-2026-0002 other thing" data-list="vconly" data-vendor="Other" data-age="recent" data-sev="high" data-day="2026-10-18"></div>' +
+        '<div class="hl-vuln" id="cve-cve-2026-0002" data-title="cve-2026-0002 other thing" data-list="vconly" data-vendor="Other" data-age="recent" data-sev="high" data-det="" data-day="2026-10-18"></div>' +
         '<div class="hl-wire__day" id="vulns-2026-10-01" data-filter-group>1</div>' +
-        '<div class="hl-vuln" id="cve-cve-2016-0003" data-title="cve-2016-0003 acme old" data-list="vconly" data-vendor="Acme" data-age="older" data-sev="none" data-day="2026-10-01"></div>' +
+        '<div class="hl-vuln" id="cve-cve-2016-0003" data-title="cve-2016-0003 acme old" data-list="vconly" data-vendor="Acme" data-age="older" data-sev="none" data-det="nuclei" data-day="2026-10-01"></div>' +
       '</div>' +
     '</section></div>';
 }
@@ -749,4 +752,47 @@ test('clear filters on the vulns bar returns to its defaults, not to All', funct
   click(win, win.document.querySelectorAll('[data-filter-reset]')[1]);
   assert.equal(visible(win, '.hl-vuln'), 2);
   assert.ok(chip(win, '[data-age="recent"]').classList.contains('is-on'));
+});
+
+test('the public-rule axis (T-0407): ET Open and Nuclei OR together, state in vdet', function () {
+  var win = build(tabsPage(), 'https://example.test/wire/#vulns');
+  click(win, chip(win, '[data-age=""]'));          // include older, so all three rows count
+  click(win, chip(win, '[data-det="et"]'));
+  assert.equal(visible(win, '.hl-vuln'), 1);
+  assert.match(win.location.search, /vdet=et/);
+  click(win, chip(win, '[data-det="nuclei"]'));
+  assert.equal(visible(win, '.hl-vuln'), 2);         // the row with neither stays hidden
+  click(win, chip(win, '[data-det=""]'));
+  assert.equal(visible(win, '.hl-vuln'), 3);
+  var win2 = build(tabsPage(), 'https://example.test/wire/?vdet=nuclei&vage=all#vulns');
+  assert.equal(visible(win2, '.hl-vuln'), 2);
+});
+
+/* The "N headlines" link on a vulnerability row opens /wire/?q=<cve>#headlines,
+   and its count is of exact ids, so the search must not find a longer id that
+   merely starts with the same digits (T-0407). */
+function cveHeadlines() {
+  return '<section id="headlines" data-filter-scope>' +
+    '<div class="hl-filter" data-listing-filter data-filter-state="query">' +
+      '<input class="hl-filter__search">' +
+      '<div><button class="hl-chip-btn is-on" data-tag="">All</button></div>' +
+      '<div data-filter-count></div><div data-filter-empty hidden></div>' +
+    '</div>' +
+    '<div class="hl-wire" data-filter-grid data-filter-item=".hl-wire__item">' +
+      '<a class="hl-wire__item" data-title="netscaler zero days cve-2026-88771 and cve-2026-88772" data-tags="" data-day="2026-10-22"></a>' +
+      '<a class="hl-wire__item" data-title="cve-2026-8877: a different bug" data-tags="" data-day="2026-10-22"></a>' +
+      '<a class="hl-wire__item" data-title="citrix netscaler flaw exploited" data-tags="" data-day="2026-10-22"></a>' +
+    '</div></section>';
+}
+
+test('a whole CVE id searches as a whole id, not as a prefix of a longer one', function () {
+  var win = build(cveHeadlines(), 'https://example.test/wire/?q=cve-2026-8877#headlines');
+  assert.equal(visible(win, '.hl-wire__item'), 1);
+  var win2 = build(cveHeadlines(), 'https://example.test/wire/?q=cve-2026-88771#headlines');
+  assert.equal(visible(win2, '.hl-wire__item'), 1);
+  // control: any other term is still a substring, so a partial id finds both
+  var win3 = build(cveHeadlines(), 'https://example.test/wire/?q=cve-2026-887#headlines');
+  assert.equal(visible(win3, '.hl-wire__item'), 2);
+  var win4 = build(cveHeadlines(), 'https://example.test/wire/?q=netscaler#headlines');
+  assert.equal(visible(win4, '.hl-wire__item'), 2);
 });

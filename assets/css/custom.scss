@@ -3984,6 +3984,36 @@ a.hl-card:hover { border-color: var(--hl-accent-blue) !important; transform: tra
 .hl-vuln__sev--medium   { --s: #e3b341; }
 .hl-vuln__sev--low      { --s: #7ee787; }
 .hl-vuln__ev { font-size: 0.8em; color: var(--hl-text-muted); white-space: nowrap; align-self: center; }
+/* T-0407: the row's pointers, on a line of their own under vendor and product:
+   the reports VulnCheck cites, the Wire headlines that name the CVE, and a
+   public ET Open rule or Nuclei template. */
+.hl-vuln__more {
+  grid-column: 2 / -1;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.25em 0.8em;
+  font-size: 0.85em;
+  color: var(--hl-text-muted);
+  min-width: 0;
+}
+.hl-vuln__rep { min-width: 0; overflow-wrap: anywhere; }
+.hl-post-content .hl-vuln__rep a,
+.hl-vuln__rep a { color: var(--hl-text-secondary) !important; text-decoration: underline; text-decoration-color: color-mix(in srgb, var(--hl-text-muted) 50%, transparent); }
+.hl-vuln__dim { color: var(--hl-text-muted); white-space: nowrap; }
+.hl-post-content .hl-vuln__ptr,
+.hl-vuln__ptr { color: var(--hl-accent-blue) !important; white-space: nowrap; }
+.hl-post-content .hl-vuln__det,
+.hl-vuln__det {
+  font-size: 0.92em;
+  padding: 0 0.5em;
+  border-radius: 3px;
+  white-space: nowrap;
+  color: #7ee787 !important;
+  border: 1px solid color-mix(in srgb, #7ee787 40%, var(--hl-border-card));
+  background: color-mix(in srgb, #7ee787 10%, transparent);
+  text-decoration: none;
+}
 
 /* --- the list ------------------------------------------------- */
 .hl-wire {
@@ -4184,6 +4214,7 @@ a.hl-card:hover { border-color: var(--hl-accent-blue) !important; transform: tra
   .hl-wire__title { font-size: 0.9em; }
   .hl-vuln { grid-template-columns: minmax(0, 1fr); gap: 0.2em; padding: 0.55em 0.7em; }
   .hl-vuln__badges { justify-content: flex-start; }
+  .hl-vuln__more { grid-column: 1 / -1; }
   .hl-filter__dim--gap { margin-left: 0; }
 }
 
