@@ -58,7 +58,9 @@ function hasKey(o, k) { return !!o && Object.prototype.hasOwnProperty.call(o, k)
 /* T-0407: the row's pointers. A row written before T-0407 carries none of
    them and checks clean; one that carries them is held to the exporter's
    shapes, since the page draws each as a link or a filter key. */
-var REPORT_URL = /^https:\/\/[A-Za-z0-9.-]+(?::\d+)?(?:[\/?#][^\s"'<>\\`]*)?$/;
+// Printable ASCII only after the host, the exporter's rule: a raw control
+// character passes a "not whitespace" class (T-0407 review F1).
+var REPORT_URL = /^https:\/\/[A-Za-z0-9.-]+(?::\d+)?(?:[\/?#][!#-&(-;=?-\[\]-_a-~]*)?$/;
 var NUCLEI_PATH = /^[A-Za-z0-9_.\/-]+\.ya?ml$/;
 function isCount(v) { return typeof v === 'number' && Number.isInteger(v) && v >= 0; }
 function reportsOf(r) { return Array.isArray(r.reports) ? r.reports : []; }

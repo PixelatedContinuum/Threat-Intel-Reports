@@ -489,13 +489,16 @@ test('a bad pointer warns per field, and the headlines still PASS', function () 
     pointed({ cve: 'CVE-2026-0005', et_sids: ['2060001'] }),
     pointed({ cve: 'CVE-2026-0006', nuclei: '../../etc/passwd.yaml' }),
     pointed({ cve: 'CVE-2026-0007', reports: 'https://x.test/' }),
-    pointed({ cve: 'CVE-2026-0008', reports: [{ url: 'https://x.test/', host: '' }] })
+    pointed({ cve: 'CVE-2026-0008', reports: [{ url: 'https://x.test/', host: '' }] }),
+    pointed({ cve: 'CVE-2026-0009', reports: [{ url: 'https://x.test/a\u0000b', host: 'x.test' }] }),
+    pointed({ cve: 'CVE-2026-0010', reports: [{ url: 'https://x.test/a\u007fb', host: 'x.test' }] })
   ]), SOURCES, NOW);
   assert.equal(r.status, 'PASS');
   var w = r.vulnWarnings.join('\n');
   [/0001\).*not a plain https link/, /0002\).*not a plain https link/, /0003\).*over 3/,
    /0004\).*stories -1, not a count/, /0005\).*not a list of SIDs/, /0006\).*not a template path/,
-   /0007\).*reports that are not a list/, /0008\).*has no host/].forEach(function (re) {
+   /0007\).*reports that are not a list/, /0008\).*has no host/,
+   /0009\).*not a plain https link/, /0010\).*not a plain https link/].forEach(function (re) {
     assert.match(w, re);
   });
 });
