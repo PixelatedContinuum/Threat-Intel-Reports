@@ -635,6 +635,8 @@ function tabsPage() {
         '<div><button class="hl-chip-btn is-on" data-det="">All</button>' +
         '<button class="hl-chip-btn" data-det="et">ET Open</button>' +
         '<button class="hl-chip-btn" data-det="nuclei">Nuclei</button></div>' +
+        '<div><button class="hl-chip-btn is-on" data-nvd="">All</button>' +
+        '<button class="hl-chip-btn" data-nvd="pre">pre-NVD</button></div>' +
         '<div><button class="hl-chip-btn is-on" data-vendor="">All</button>' +
         '<button class="hl-chip-btn" data-vendor="Acme">Acme</button></div>' +
         '<div><button class="hl-chip-btn" data-added="1">Today</button>' +
@@ -646,11 +648,11 @@ function tabsPage() {
       '</div>' +
       '<div class="hl-wire" data-filter-grid data-filter-item=".hl-vuln">' +
         '<div class="hl-wire__day" id="vulns-2026-10-22" data-filter-group>22</div>' +
-        '<div class="hl-vuln" id="cve-cve-2026-0001" data-title="cve-2026-0001 acme widget" data-list="cisa" data-vendor="Acme" data-age="recent" data-sev="critical" data-det="et|nuclei" data-day="2026-10-22"></div>' +
+        '<div class="hl-vuln" id="cve-cve-2026-0001" data-title="cve-2026-0001 acme widget" data-list="cisa" data-vendor="Acme" data-age="recent" data-sev="critical" data-det="et|nuclei" data-nvd="" data-day="2026-10-22"></div>' +
         '<div class="hl-wire__day" id="vulns-2026-10-18" data-filter-group>18</div>' +
-        '<div class="hl-vuln" id="cve-cve-2026-0002" data-title="cve-2026-0002 other thing" data-list="vconly" data-vendor="Other" data-age="recent" data-sev="high" data-det="" data-day="2026-10-18"></div>' +
+        '<div class="hl-vuln" id="cve-cve-2026-0002" data-title="cve-2026-0002 other thing" data-list="vconly" data-vendor="Other" data-age="recent" data-sev="high" data-det="" data-nvd="pre" data-day="2026-10-18"></div>' +
         '<div class="hl-wire__day" id="vulns-2026-10-01" data-filter-group>1</div>' +
-        '<div class="hl-vuln" id="cve-cve-2016-0003" data-title="cve-2016-0003 acme old" data-list="vconly" data-vendor="Acme" data-age="older" data-sev="none" data-det="nuclei" data-day="2026-10-01"></div>' +
+        '<div class="hl-vuln" id="cve-cve-2016-0003" data-title="cve-2016-0003 acme old" data-list="vconly" data-vendor="Acme" data-age="older" data-sev="none" data-det="nuclei" data-nvd="" data-day="2026-10-01"></div>' +
       '</div>' +
     '</section></div>';
 }
@@ -766,6 +768,29 @@ test('the public-rule axis (T-0407): ET Open and Nuclei OR together, state in vd
   assert.equal(visible(win, '.hl-vuln'), 3);
   var win2 = build(tabsPage(), 'https://example.test/wire/?vdet=nuclei&vage=all#vulns');
   assert.equal(visible(win2, '.hl-vuln'), 2);
+});
+
+test('the pre-NVD axis (T-0468): one chip narrows to the rows VulnCheck added before NVD, state in vnvd', function () {
+  var win = build(tabsPage(), 'https://example.test/wire/#vulns');
+  click(win, chip(win, '[data-age=""]'));          // include older, so all three rows count
+  assert.equal(visible(win, '.hl-vuln'), 3);
+  click(win, chip(win, '[data-nvd="pre"]'));
+  assert.equal(visible(win, '.hl-vuln'), 1);
+  assert.equal(win.document.getElementById('cve-cve-2026-0002').style.display, '');
+  assert.match(win.location.search, /vnvd=pre/);
+  // it ANDs with another axis: pre-NVD and CISA-listed leaves nothing
+  click(win, chip(win, '[data-list="cisa"]'));
+  assert.equal(visible(win, '.hl-vuln'), 0);
+  click(win, chip(win, '[data-list=""]'));
+  click(win, chip(win, '[data-nvd=""]'));
+  assert.equal(visible(win, '.hl-vuln'), 3);
+  // opened from a link
+  var win2 = build(tabsPage(), 'https://example.test/wire/?vnvd=pre#vulns');
+  assert.equal(visible(win2, '.hl-vuln'), 1);
+  // control: a page whose bar renders no pre-NVD chip ignores the attribute on its rows
+  var bare = tabsPage().replace(/<div><button class="hl-chip-btn is-on" data-nvd="">[\s\S]*?pre-NVD<\/button><\/div>/, '');
+  assert.equal(bare.indexOf('data-nvd="">'), -1);
+  assert.equal(visible(build(bare, 'https://example.test/wire/?vnvd=pre#vulns'), '.hl-vuln'), 2);
 });
 
 /* The "N headlines" link on a vulnerability row opens /wire/?q=<cve>#headlines,

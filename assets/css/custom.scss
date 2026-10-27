@@ -3959,6 +3959,7 @@ a.hl-card:hover { border-color: var(--hl-accent-blue) !important; transform: tra
 .hl-vc-vulncheck { --wire-topic: #bc8cff; }
 .hl-vc-old       { --wire-topic: #d29922; }
 .hl-vc-none      { --wire-topic: #8b949e; }
+.hl-vc-prenvd    { --wire-topic: #f778ba; }
 .hl-chip-btn--topic[class*="hl-vuln__sev--"] { --wire-topic: var(--s); }
 .hl-filter__dim--gap { margin-left: 1.2em; }
 
@@ -3981,6 +3982,10 @@ a.hl-card:hover { border-color: var(--hl-accent-blue) !important; transform: tra
 }
 .hl-vuln__vp { min-width: 0; overflow-wrap: break-word; color: var(--hl-text-secondary); }
 .hl-vuln__vp b { color: var(--hl-text-primary); font-weight: 600; }
+/* T-0468: the gap and EPSS chips take width, so a long vendor and product name is
+   cut with an ellipsis (the full text is the cell's title) instead of wrapping the row
+   onto a second line. */
+.hl-vuln__vp { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .hl-vuln__none { color: var(--hl-text-muted); font-style: italic; }
 .hl-vuln__badges { display: flex; gap: 0.3em; flex-wrap: wrap; justify-content: flex-end; }
 .hl-vuln__b {
@@ -3995,6 +4000,10 @@ a.hl-card:hover { border-color: var(--hl-accent-blue) !important; transform: tra
 .hl-vuln__b--vc   { --b: #bc8cff; }
 .hl-vuln__b--cisa { --b: #f87171; }
 .hl-vuln__b--old  { --b: #d29922; }
+/* T-0468: days from NVD publication to the VulnCheck KEV add, and the badge for a
+   CVE VulnCheck added before NVD published it. */
+.hl-vuln__b--gap    { --b: #79c0ff; font-variant-numeric: tabular-nums; cursor: help; }
+.hl-vuln__b--prenvd { --b: #f778ba; cursor: help; }
 /* Severity (T-0399): the row's CVSS base score, square-cornered so it does not
    read as one more list badge beside VulnCheck KEV and CISA KEV. */
 .hl-vuln__sev {
@@ -4065,6 +4074,12 @@ span.hl-vuln__p--det { cursor: help; }
 .hl-post-content .hl-vuln__popbody a,
 .hl-vuln__popbody a { color: var(--hl-accent-blue) !important; }
 .hl-vuln__dim { color: var(--hl-text-muted); }
+/* T-0468: the EPSS chip opens a popover with the 30-day sparkline. The chip is
+   the same details pattern as "src"; the body is a little wider for the line. */
+.hl-vuln__p--epss { font-variant-numeric: tabular-nums; }
+.hl-vuln__xm { color: #e3b341; }
+.hl-vuln__popbody--epss { min-width: 16em; max-width: min(26em, 85vw); }
+.hl-vuln__spark { display: block; overflow: visible; color: #79c0ff; width: 124px; height: 28px; max-width: 100%; }
 
 /* --- the list ------------------------------------------------- */
 .hl-wire {
@@ -4266,7 +4281,11 @@ span.hl-vuln__p--det { cursor: help; }
   .hl-vuln { grid-template-columns: minmax(0, 1fr); gap: 0.2em; padding: 0.55em 0.7em; }
   .hl-vuln__badges { justify-content: flex-start; }
   .hl-vuln__popbody { left: 0.7em; right: auto; }
-  .hl-vuln__badges { flex-wrap: wrap; }
+  /* T-0468: one line of chips on a phone too. The few rows with more chips than
+     fit (12 of 298 on 2026-10-27) scroll sideways inside the line rather than
+     wrapping to a second one; the popover is positioned against the row, so the
+     scroll does not clip it. */
+  .hl-vuln__badges { flex-wrap: nowrap; overflow-x: auto; scrollbar-width: thin; padding-bottom: 2px; }
   .hl-filter__dim--gap { margin-left: 0; }
 }
 

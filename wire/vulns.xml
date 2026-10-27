@@ -5,19 +5,21 @@ sitemap: false
 ---
 <?xml version="1.0" encoding="UTF-8"?>
 {%- comment -%}
-  The Wire's Vulnerabilities tab as an Atom feed: one entry per CVE VulnCheck
+  The Wire's nKEVs tab (was Vulnerabilities, renamed in T-0468) as an Atom feed: one entry per CVE VulnCheck
   added to its Known Exploited Vulnerabilities catalog in the window, newest
   first, from the same `vulns:` rows /wire/ renders (_data/wire.yml, written by
   wire_export.py from VulnCheck's API). Each entry links to its row on /wire/.
   There is no description: the rows carry none, by the Wire's rule. The
   subtitle carries the VulnCheck attribution the tab's callout carries.
   Without vulnerability data this is a valid, empty feed rather than a 404.
-  Built in T-0396; reports, ET Open and Nuclei pointers added in T-0407.
+  Built in T-0396; reports, ET Open and Nuclei pointers added in T-0407;
+  T-0468 puts the disclosure day, the gap and EPSS in each summary: data
+  fields only, still no description.
 {%- endcomment -%}
 {%- assign wire = site.data.wire %}
 {%- assign sev_bands = "critical,high,medium,low" | split: "," %}
 <feed xmlns="http://www.w3.org/2005/Atom">
-  <title>{{ site.title | xml_escape }}: The Wire, exploited vulnerabilities</title>
+  <title>{{ site.title | xml_escape }}: The Wire, nKEVs (new known exploited vulnerabilities)</title>
   <subtitle>This feed shows VulnCheck's Known Exploited Vulnerabilities (KEV) catalog as VulnCheck publishes it. I do not curate or track this data myself; every entry comes from VulnCheck, and their catalog is at vulncheck.com/kev.</subtitle>
   <link href="{{ site.url }}/wire/vulns.xml" rel="self" type="application/atom+xml"/>
   <link href="{{ site.url }}/wire/#vulns" rel="alternate" type="text/html"/>
@@ -70,7 +72,9 @@ sitemap: false
     {%- if sev != "" %}
     <category term="severity-{{ r.severity | xml_escape }}" label="CVSS {{ r.severity | upcase | xml_escape }} {{ r.cvss | xml_escape }}"/>
     {%- endif %}
-    <summary type="text">Added to VulnCheck KEV {{ vday }}{% if cisa_len == 10 %}; in CISA KEV since {{ r.cisa_added }}{% endif %}{% if sev != "" %}; CVSS v{{ r.cvss_version | xml_escape }} {{ r.cvss | xml_escape }} {{ r.severity | upcase | xml_escape }}, scored by {% if r.scored_by == "NVD" %}NVD{% elsif r.scored_by == "ADP" %}CISA's ADP{% else %}the CNA{% endif %} (VulnCheck NVD++){% endif %}.</summary>
+    {%- assign gap_str = r.gap | append: "" %}{% assign gap_len = gap_str | size %}{% assign gap_n = 0 %}{% if gap_len > 0 %}{% assign gap_n = r.gap | plus: 0 %}{% endif %}
+    {%- assign dis_len = r.disclosed | append: "" | size %}{% assign epss_len = r.epss | append: "" | size %}
+    <summary type="text">{% if dis_len == 10 %}Disclosed {{ r.disclosed | xml_escape }}; added{% else %}Added{% endif %} to VulnCheck KEV {{ vday }}{% if dis_len == 10 and gap_len > 0 %} ({% if gap_n > 0 %}+{% endif %}{{ gap_n }} day{% if gap_n != 1 and gap_n != -1 %}s{% endif %}){% endif %}{% if epss_len > 0 %}; EPSS {{ r.epss | times: 1.0 | round: 3 }}{% endif %}{% if cisa_len == 10 %}; in CISA KEV since {{ r.cisa_added }}{% endif %}{% if sev != "" %}; CVSS v{{ r.cvss_version | xml_escape }} {{ r.cvss | xml_escape }} {{ r.severity | upcase | xml_escape }}, scored by {% if r.scored_by == "NVD" %}NVD{% elsif r.scored_by == "ADP" %}CISA's ADP{% else %}the CNA{% endif %} (VulnCheck NVD++){% endif %}.</summary>
   </entry>
   {%- endif %}
   {%- endfor %}

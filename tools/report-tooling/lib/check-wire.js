@@ -25,7 +25,7 @@ var PALETTE_SIZE = 12;
 var DISPLAYED_LABELS = 2;
 // `vuln` is the daily VulnCheck KEV digest row the exporter adds (T-0396).
 var KINDS = { research: 1, news: 1, vuln: 1 };
-// The Vulnerabilities tab is fed by a separate read (VulnCheck's API) that can
+// The nKEVs tab (was Vulnerabilities) is fed by a separate read (VulnCheck's API) that can
 // fail on its own. Its freshness is warned about past a day, never failed.
 var VULNS_STALE_HOURS = 24;
 var VULN_STATUSES = { ok: 1, stale: 1, unavailable: 1 };
@@ -93,6 +93,98 @@ function pointerProblems(r) {
   return out;
 }
 
+/* T-0468: the nKEV fields. `disclosed` is NVD's published day, `gap` the whole
+   days from it to the VulnCheck KEV add (negative: VulnCheck listed it first),
+   and the EPSS fields come from FIRST. A row written before T-0468 carries none
+   of them and checks clean; one that carries them is held to the exporter's
+   shapes, because the page prints each one, `epss_spark` straight into an SVG
+   attribute, and the ratios are claims that can be recomputed from the row. */
+// Anything below a space, DEL and the C1 range: a raw control character passes
+// most "not whitespace" tests and breaks the YAML or the markup (T-0407 review F1).
+var CONTROL_CHAR = /[\u0000-\u001f\u007f-\u009f]/;
+// The exporter's points string: numbers, one decimal at most, commas and single spaces.
+var SPARK_POINTS = /^\d+(?:\.\d)?,\d+(?:\.\d)?(?: \d+(?:\.\d)?,\d+(?:\.\d)?)*$/;
+var SPARK_MAX_POINTS = 30;
+var RATIO_SHAPE = /^\d+(?:\.\d)?$/;
+// A score or percentile as the exporter writes it: a decimal string from 0 to 1.
+var UNIT_SHAPE = /^(?:0(?:\.\d{1,9})?|1(?:\.0{1,9})?)$/;
+function realDay(v) {
+  if (typeof v !== 'string' || !DAY_SHAPE.test(v)) return NaN;
+  var t = Date.parse(v + 'T00:00:00Z');
+  return !isNaN(t) && new Date(t).toISOString().slice(0, 10) === v ? t : NaN;
+}
+function isEmpty(v) { return v === '' || v === null || v === undefined; }
+function controlProblems(o, prefix, out) {
+  if (typeof o === 'string') {
+    if (CONTROL_CHAR.test(o)) out.push('has a control character in ' + prefix);
+  } else if (Array.isArray(o)) {
+    o.forEach(function (v, i) { controlProblems(v, prefix + '[' + i + ']', out); });
+  } else if (o && typeof o === 'object') {
+    Object.keys(o).forEach(function (k) { controlProblems(o[k], prefix ? prefix + '.' + k : k, out); });
+  }
+  return out;
+}
+function nkevProblems(r) {
+  var out = controlProblems(r, '', []);
+  var has = hasKey(r, 'disclosed') || hasKey(r, 'gap');
+  if (hasKey(r, 'disclosed') !== hasKey(r, 'gap')) out.push('carries only one of disclosed and gap');
+  if (hasKey(r, 'disclosed') && !isEmpty(r.disclosed) && isNaN(realDay(r.disclosed))) {
+    out.push('has disclosed ' + JSON.stringify(r.disclosed) + ', not empty or a real day');
+  }
+  if (hasKey(r, 'gap') && !isEmpty(r.gap) && !(typeof r.gap === 'number' && Number.isInteger(r.gap))) {
+    out.push('has gap ' + JSON.stringify(r.gap) + ', not empty or an integer');
+  }
+  if (has && !isEmpty(r.gap) && isEmpty(r.disclosed)) out.push('has a gap but no disclosed day');
+  if (has && isEmpty(r.gap) && !isEmpty(r.disclosed)) out.push('has a disclosed day but no gap');
+  if (typeof r.gap === 'number' && !isNaN(realDay(r.disclosed)) && !isNaN(realDay(r.added))) {
+    var days = Math.round((realDay(r.added) - realDay(r.disclosed)) / 86400000);
+    if (days !== r.gap) out.push('has gap ' + r.gap + ' but added minus disclosed is ' + days + ' days');
+  }
+  ['epss', 'epss_pct', 'epss_pre', 'epss_max'].forEach(function (k) {
+    if (hasKey(r, k) && !isEmpty(r[k]) && !(typeof r[k] === 'string' && UNIT_SHAPE.test(r[k]))) {
+      out.push('has ' + k + ' ' + JSON.stringify(r[k]) + ', not empty or a number from 0 to 1');
+    }
+  });
+  if (hasKey(r, 'epss_date') && !isEmpty(r.epss_date) && isNaN(realDay(r.epss_date))) {
+    out.push('has epss_date ' + JSON.stringify(r.epss_date) + ', not empty or a real day');
+  }
+  // Which comparisons cross an EPSS model change; only an EPSS row can carry a mark.
+  if (hasKey(r, 'epss_xmodel') && !isEmpty(r.epss_xmodel)) {
+    if (typeof r.epss_xmodel !== 'string' || !/^(?:pre|spark|pre,spark)$/.test(r.epss_xmodel)) {
+      out.push('has epss_xmodel ' + JSON.stringify(r.epss_xmodel) + ', not empty, pre, spark or pre,spark');
+    } else if (isEmpty(r.epss)) {
+      out.push('has epss_xmodel ' + r.epss_xmodel + ' but no epss');
+    } else if (r.epss_xmodel.indexOf('pre') === 0 && isEmpty(r.epss_pre)) {
+      out.push('has epss_xmodel pre but no epss_pre');
+    }
+  }
+  if (hasKey(r, 'epss_spark') && !isEmpty(r.epss_spark)) {
+    var sp = r.epss_spark;
+    if (typeof sp !== 'string' || sp.length > 800 || !SPARK_POINTS.test(sp)) {
+      out.push('has epss_spark that is not a points list of numbers');
+    } else if (sp.split(' ').length > SPARK_MAX_POINTS) {
+      out.push('has epss_spark with over ' + SPARK_MAX_POINTS + ' points');
+    }
+  }
+  ['ratio_now', 'ratio_pre'].forEach(function (k) {
+    if (hasKey(r, k) && !isEmpty(r[k]) && !(typeof r[k] === 'string' && RATIO_SHAPE.test(r[k]))) {
+      out.push('has ' + k + ' ' + JSON.stringify(r[k]) + ', not empty or a number');
+    }
+  });
+  // The ratio is (CVSS / 10) / EPSS to one decimal: recompute it from the row.
+  [['ratio_now', 'epss'], ['ratio_pre', 'epss_pre']].forEach(function (pair) {
+    var ratio = r[pair[0]], e = r[pair[1]];
+    if (isEmpty(ratio) || !RATIO_SHAPE.test(String(ratio))) return;
+    var cv = Number(r.cvss), ev = Number(e);
+    if (isEmpty(e) || !(ev > 0) || !(cv > 0 && cv <= 10)) {
+      out.push('has ' + pair[0] + ' ' + ratio + ' but no CVSS or ' + pair[1] + ' to compute it from');
+    } else if (Math.abs((cv / 10) / ev - Number(ratio)) > 0.11) {
+      out.push('has ' + pair[0] + ' ' + ratio + ' but (CVSS / 10) / ' + pair[1] + ' is ' + ((cv / 10) / ev).toFixed(1));
+    }
+  });
+  return out;
+}
+
 /* The `vulns:` section, against the canonical row schema (cve, added, vendor,
    product, cisa_added, evidence, older; T-0394 design section 4), the score
    (T-0399) and the pointers (T-0407).
@@ -140,6 +232,7 @@ function checkVulns(doc, now) {
   var nCisa = 0, nOlder = 0, nUnscored = 0;
   var nSev = { critical: 0, high: 0, medium: 0, low: 0 };
   var nPtr = { reported: 0, stories: 0, et: 0, nuclei: 0, detect: 0 };
+  var nNkev = { disclosed: 0, prenvd: 0, epss: 0, epss_pre: 0 };
   rows.forEach(function (r, n) {
     r = r || {};
     var where = 'vulns row ' + (n + 1) + ' (' + String(r.cve || '?') + ')';
@@ -162,6 +255,11 @@ function checkVulns(doc, now) {
     else if (SEVERITIES[String(r.severity)]) nSev[r.severity]++;
     else nUnscored++;
     pointerProblems(r).forEach(function (p) { warnings.push(where + ' ' + p); });
+    nkevProblems(r).forEach(function (p) { warnings.push(where + ' ' + p); });
+    if (!isEmpty(r.disclosed)) nNkev.disclosed++;
+    if (typeof r.gap === 'number' && r.gap < 0) nNkev.prenvd++;
+    if (!isEmpty(r.epss)) nNkev.epss++;
+    if (!isEmpty(r.epss_pre)) nNkev.epss_pre++;
     if (reportsOf(r).length) nPtr.reported++;
     if (Number(r.stories) > 0) nPtr.stories++;
     var hasEt = Array.isArray(r.et_sids) && r.et_sids.length > 0;
@@ -200,6 +298,15 @@ function checkVulns(doc, now) {
       warnings.push('vulns_counts pointers disagree with the rows on ' + badp.join(', ') +
         ': declared ' + badp.map(function (k) { return k + '=' + vc[k]; }).join(' ') +
         ', actual ' + badp.map(function (k) { return k + '=' + nPtr[k]; }).join(' '));
+    }
+  }
+  // The nKEV counts arrive with T-0468 and feed the page's pre-NVD chip.
+  if (rows.length && hasKey(vc, 'prenvd')) {
+    var badn = Object.keys(nNkev).filter(function (k) { return Number(vc[k]) !== nNkev[k]; });
+    if (badn.length) {
+      warnings.push('vulns_counts nKEV fields disagree with the rows on ' + badn.join(', ') +
+        ': declared ' + badn.map(function (k) { return k + '=' + vc[k]; }).join(' ') +
+        ', actual ' + badn.map(function (k) { return k + '=' + nNkev[k]; }).join(' '));
     }
   }
   return { problems: problems, warnings: warnings, total: rows.length };

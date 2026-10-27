@@ -512,3 +512,100 @@ test('pointer counts disagreeing with the rows warn; a pre-T-0407 file is not he
   // control: the T-0396 fixture carries no pointers and no pointer counts
   assert.deepEqual(CW.check(vdoc(), SOURCES, NOW).vulnWarnings, []);
 });
+
+/* ---- The nKEV fields: disclosure day, gap and EPSS (T-0468) ---- */
+
+function nk(over) {
+  return vrow(Object.assign({
+    cvss: '9.8', cvss_version: '3.1', severity: 'critical', scored_by: 'NVD',
+    added: '2026-10-13', disclosed: '2026-10-01', gap: 12,
+    epss: '0.45200', epss_pct: '0.97100', epss_date: '2026-10-27', epss_pre: '0.01200', epss_max: '0.45200',
+    epss_spark: '0.0,20.0 62.1,12.0 120.0,0.0', ratio_now: '2.2', ratio_pre: '81.7'
+  }, over || {}));
+}
+
+function ndoc(rows) {
+  var d = vdoc(rows);
+  var c = d.vulns_counts;
+  c.disclosed = rows.filter(function (r) { return r.disclosed; }).length;
+  c.prenvd = rows.filter(function (r) { return typeof r.gap === 'number' && r.gap < 0; }).length;
+  c.epss = rows.filter(function (r) { return r.epss; }).length;
+  c.epss_pre = rows.filter(function (r) { return r.epss_pre; }).length;
+  return d;
+}
+
+test('rows with and without the nKEV fields pass with no vuln warnings (control)', function () {
+  var r = CW.check(ndoc([nk(), nk({ cve: 'CVE-2026-2222', added: '2026-10-03', disclosed: '2026-10-09', gap: -6 }),
+    nk({ cve: 'CVE-2026-5555', epss_xmodel: 'pre,spark' }), nk({ cve: 'CVE-2026-6666', epss_xmodel: 'spark' }),
+    nk({ cve: 'CVE-2026-3333', disclosed: '', gap: '', epss: '', epss_pct: '', epss_date: '', epss_pre: '',
+      epss_max: '', epss_spark: '', ratio_now: '', ratio_pre: '' }),
+    vrow({ cve: 'CVE-2026-4444' })]), SOURCES, NOW);
+  assert.equal(r.status, 'PASS');
+  assert.deepEqual(r.vulnWarnings, []);
+});
+
+test('a bad nKEV field warns per field, and the headlines still PASS', function () {
+  var r = CW.check(ndoc([
+    nk({ cve: 'CVE-2026-0001', disclosed: '2026-13-40' }),
+    nk({ cve: 'CVE-2026-0002', gap: '12' }),
+    nk({ cve: 'CVE-2026-0003', gap: 11 }),
+    nk({ cve: 'CVE-2026-0004', disclosed: '', gap: 12 }),
+    nk({ cve: 'CVE-2026-0005', epss: '1.5' }),
+    nk({ cve: 'CVE-2026-0006', epss_pct: '-0.1' }),
+    nk({ cve: 'CVE-2026-0007', epss_spark: '1,1" onload="x' }),
+    nk({ cve: 'CVE-2026-0008', epss_spark: '1,1 2,2 <script>' }),
+    nk({ cve: 'CVE-2026-0009', ratio_now: 'high' }),
+    nk({ cve: 'CVE-2026-0010', ratio_now: '9.9' }),
+    nk({ cve: 'CVE-2026-0011', epss: '', ratio_now: '2.2' }),
+    nk({ cve: 'CVE-2026-0012', epss_date: 'yesterday' }),
+    nk({ cve: 'CVE-2026-0013', epss_spark: new Array(32).join('1,1 ').trim() }),
+    nk({ cve: 'CVE-2026-0014', epss_xmodel: 'all' }),
+    nk({ cve: 'CVE-2026-0015', epss: '', epss_pct: '', epss_xmodel: 'spark', ratio_now: '' }),
+    nk({ cve: 'CVE-2026-0016', epss_pre: '', ratio_pre: '', epss_xmodel: 'pre' })
+  ]), SOURCES, NOW);
+  assert.equal(r.status, 'PASS');
+  var w = r.vulnWarnings.join('\n');
+  [/0001\).*disclosed "2026-13-40"/, /0002\).*gap "12", not empty or an integer/,
+   /0003\).*gap 11 but added minus disclosed is 12 days/, /0004\).*gap but no disclosed|0004\).*carries/,
+   /0005\).*epss "1.5"/, /0006\).*epss_pct "-0.1"/, /0007\).*epss_spark that is not a points list/,
+   /0008\).*epss_spark that is not a points list/, /0009\).*ratio_now "high"/,
+   /0010\).*ratio_now 9.9 but \(CVSS \/ 10\) \/ epss is 2.2/, /0011\).*ratio_now 2.2 but no CVSS or epss/,
+   /0012\).*epss_date "yesterday"/, /0013\).*epss_spark with over 30 points/,
+   /0014\).*epss_xmodel "all"/, /0015\).*epss_xmodel spark but no epss/, /0016\).*epss_xmodel pre but no epss_pre/].forEach(function (re) { assert.match(w, re); });
+});
+
+test('a control character in any field of a row is refused (T-0407 F1, applied to the new fields)', function () {
+  var r = CW.check(ndoc([
+    nk({ cve: 'CVE-2026-0001', epss_spark: '1,1\u0000 2,2' }),
+    nk({ cve: 'CVE-2026-0002', disclosed: '2026-10-01\u000a' }),
+    nk({ cve: 'CVE-2026-0003', vendor: 'Acme\u007f' }),
+    nk({ cve: 'CVE-2026-0004', ratio_pre: '8\u00851.7' })
+  ]), SOURCES, NOW);
+  assert.equal(r.status, 'PASS');
+  var w = r.vulnWarnings.join('\n');
+  [/0001\).*control character in epss_spark/, /0002\).*control character in disclosed/,
+   /0003\).*control character in vendor/, /0004\).*control character in ratio_pre/].forEach(function (re) {
+    assert.match(w, re);
+  });
+  // control: the same rows without the control characters raise none
+  assert.deepEqual(CW.check(ndoc([nk()]), SOURCES, NOW).vulnWarnings, []);
+});
+
+test('nKEV counts disagreeing with the rows warn; a pre-T-0468 file is not held to them', function () {
+  var d = ndoc([nk(), nk({ cve: 'CVE-2026-2222', added: '2026-10-03', disclosed: '2026-10-09', gap: -6 })]);
+  d.vulns_counts.prenvd = 5;
+  var r = CW.check(d, SOURCES, NOW);
+  assert.equal(r.status, 'PASS');
+  assert.match(r.vulnWarnings.join(' '), /nKEV fields disagree with the rows on prenvd/);
+  // control: a file without the counts, and rows without the fields, pass clean
+  assert.deepEqual(CW.check(vdoc(), SOURCES, NOW).vulnWarnings, []);
+  var e = ndoc([nk()]);
+  assert.deepEqual(CW.check(e, SOURCES, NOW).vulnWarnings, []);
+});
+
+test('the one-of-two rule: disclosed without gap warns', function () {
+  var row = nk({ cve: 'CVE-2026-0001' });
+  delete row.gap;
+  var r = CW.check(ndoc([row]), SOURCES, NOW);
+  assert.match(r.vulnWarnings.join(' '), /carries only one of disclosed and gap/);
+});
