@@ -574,7 +574,7 @@ test('a bad nKEV field warns per field, and the headlines still PASS', function 
    /0014\).*epss_xmodel "all"/, /0015\).*epss_xmodel spark but no epss/, /0016\).*epss_xmodel pre but no epss_pre/].forEach(function (re) { assert.match(w, re); });
 });
 
-test('a control character in any field of a row is refused (T-0407 F1, applied to the new fields)', function () {
+test('a control character in any field of a row is warned on, never passed silently (T-0407 F1, applied to the new fields; the exporter strips them at source in _q)', function () {
   var r = CW.check(ndoc([
     nk({ cve: 'CVE-2026-0001', epss_spark: '1,1\u0000 2,2' }),
     nk({ cve: 'CVE-2026-0002', disclosed: '2026-10-01\u000a' }),
