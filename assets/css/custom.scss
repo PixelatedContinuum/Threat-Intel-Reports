@@ -3887,19 +3887,39 @@ a.hl-card:hover { border-color: var(--hl-accent-blue) !important; transform: tra
   border-bottom: 1px solid var(--hl-border-card);
   margin: 0.4em 0 1em;
 }
+/* Each tab carries its section's colour (T-0441): blue for Headlines, purple
+   for Vulnerabilities, the same pair as the callouts. Muted grey at 0.8em was
+   hard to see; the unselected tab now keeps its colour at lower strength. */
+.hl-wtabs__tab--h { --tab: var(--hl-accent-blue); }
+.hl-wtabs__tab--v { --tab: #bc8cff; }
 .hl-post-content .hl-wtabs__tab,
 .hl-wtabs__tab {
-  font-size: 0.8em;
-  padding: 0.45em 1em;
-  color: var(--hl-text-muted) !important;
+  font-size: 0.95em;
+  font-weight: 600;
+  padding: 0.55em 1.3em;
+  color: color-mix(in srgb, var(--tab) 70%, var(--hl-text-muted)) !important;
+  background: color-mix(in srgb, var(--tab) 5%, transparent);
   text-decoration: none !important;
-  border: 1px solid transparent;
+  border: 1px solid color-mix(in srgb, var(--tab) 22%, transparent);
+  border-top-width: 3px;
   border-bottom: none;
-  border-radius: 6px 6px 0 0;
+  border-radius: 8px 8px 0 0;
   margin-bottom: -1px;
+  transition: background 0.12s, color 0.12s;
 }
-.hl-wtabs__tab:hover { color: var(--hl-text-primary) !important; }
-.hl-wtabs__n { font-size: 0.8em; opacity: 0.7; margin-left: 0.45em; }
+.hl-wtabs__tab:hover {
+  color: var(--tab) !important;
+  background: color-mix(in srgb, var(--tab) 11%, transparent);
+}
+.hl-wtabs__n {
+  font-size: 0.75em;
+  font-weight: 600;
+  margin-left: 0.55em;
+  padding: 0.1em 0.55em;
+  border-radius: 999px;
+  vertical-align: 0.1em;
+  background: color-mix(in srgb, var(--tab) 18%, transparent);
+}
 .hl-wtabs__sec { display: block; }
 .hl-wtabs:has(#headlines) .hl-wtabs__sec { display: none; }                /* (1,2,0) */
 .hl-wtabs:has(#headlines) #headlines { display: block; }                    /* (2,1,0) */
@@ -3912,15 +3932,16 @@ a.hl-card:hover { border-color: var(--hl-accent-blue) !important; transform: tra
 .hl-wtabs__tab--h,
 .hl-wtabs:has(#vulns:target) .hl-wtabs__tab--v,
 .hl-wtabs:has(#vulns :target) .hl-wtabs__tab--v {
-  color: var(--hl-text-primary) !important;
-  background: var(--hl-bg-card);
-  border-color: var(--hl-border-card);
+  color: var(--tab) !important;
+  background: color-mix(in srgb, var(--tab) 14%, var(--hl-bg-card));
+  border-color: color-mix(in srgb, var(--tab) 45%, var(--hl-border-card));
+  border-top-color: var(--tab);
 }
 .hl-wtabs:has(#vulns:target) .hl-wtabs__tab--h,
 .hl-wtabs:has(#vulns :target) .hl-wtabs__tab--h {
-  color: var(--hl-text-muted) !important;
-  background: none;
-  border-color: transparent;
+  color: color-mix(in srgb, var(--tab) 70%, var(--hl-text-muted)) !important;
+  background: color-mix(in srgb, var(--tab) 5%, transparent);
+  border-color: color-mix(in srgb, var(--tab) 22%, transparent);
 }
 /* Anchors must not land under the 70px sticky site header. A tab link lands on
    its section, so the margin also keeps the tab bar (39px) above it in view;
@@ -3931,6 +3952,14 @@ a.hl-card:hover { border-color: var(--hl-accent-blue) !important; transform: tra
 /* --- The Wire: the digest row and the CVE rows ---------------- */
 .hl-wire__item--vuln { --wire-src: #bc8cff; }
 .hl-chip-btn--vuln::before { background: #bc8cff; }
+/* Vulnerabilities filter chips (T-0441): coloured like the Headlines topic
+   chips through .hl-chip-btn--topic. List and age chips take their row
+   badge's colour, severity chips their band's (the --s the badge sets). */
+.hl-vc-cisa      { --wire-topic: #f87171; }
+.hl-vc-vulncheck { --wire-topic: #bc8cff; }
+.hl-vc-old       { --wire-topic: #d29922; }
+.hl-vc-none      { --wire-topic: #8b949e; }
+.hl-chip-btn--topic[class*="hl-vuln__sev--"] { --wire-topic: var(--s); }
 .hl-filter__dim--gap { margin-left: 1.2em; }
 
 .hl-vuln {

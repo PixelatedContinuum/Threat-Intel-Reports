@@ -120,15 +120,15 @@ position: 2.5
   <div class="hl-filter__chips hl-filter__chips--kind">
     <span class="hl-filter__dim">List</span>
     <button type="button" class="hl-chip-btn is-on" data-list="">All <span class="hl-chip-btn__n">{{ wire.vulns_counts.total }}</span></button>
-    <button type="button" class="hl-chip-btn" data-list="cisa">Also CISA KEV <span class="hl-chip-btn__n">{{ wire.vulns_counts.cisa }}</span></button>
-    <button type="button" class="hl-chip-btn" data-list="vconly">VulnCheck only <span class="hl-chip-btn__n">{{ wire.vulns_counts.total | minus: wire.vulns_counts.cisa }}</span></button>
+    <button type="button" class="hl-chip-btn hl-chip-btn--topic hl-vc-cisa" data-list="cisa">Also CISA KEV <span class="hl-chip-btn__n">{{ wire.vulns_counts.cisa }}</span></button>
+    <button type="button" class="hl-chip-btn hl-chip-btn--topic hl-vc-vulncheck" data-list="vconly">VulnCheck only <span class="hl-chip-btn__n">{{ wire.vulns_counts.total | minus: wire.vulns_counts.cisa }}</span></button>
   </div>
-  {%- comment -%} Severity (T-0399): the band of the row's CVSS base score; "none" is a CVE with no score, never a low one. {%- endcomment -%}
+  {%- comment -%} Severity (T-0399): the band of the row's CVSS base score; "none" is a CVE with no score, never a low one. Every chip on this bar carries a colour (T-0441): severity chips reuse the row badge's band colour, list and age chips their badge's, the rest the topic palette. {%- endcomment -%}
   <div class="hl-filter__chips hl-filter__chips--kind">
     <span class="hl-filter__dim">Severity</span>
     <button type="button" class="hl-chip-btn is-on" data-sev="">All</button>
-    {%- for sv in sev_bands -%}{%- assign svn = wire.vulns_counts[sv] | default: 0 -%}{%- if svn > 0 -%}<button type="button" class="hl-chip-btn" data-sev="{{ sv }}">{{ sv | capitalize }} <span class="hl-chip-btn__n">{{ svn }}</span></button>{%- endif -%}{%- endfor -%}
-    {%- assign svn = wire.vulns_counts.unscored | default: 0 -%}{%- if svn > 0 -%}<button type="button" class="hl-chip-btn" data-sev="none">No score <span class="hl-chip-btn__n">{{ svn }}</span></button>{%- endif -%}
+    {%- for sv in sev_bands -%}{%- assign svn = wire.vulns_counts[sv] | default: 0 -%}{%- if svn > 0 -%}<button type="button" class="hl-chip-btn hl-chip-btn--topic hl-vuln__sev--{{ sv }}" data-sev="{{ sv }}">{{ sv | capitalize }} <span class="hl-chip-btn__n">{{ svn }}</span></button>{%- endif -%}{%- endfor -%}
+    {%- assign svn = wire.vulns_counts.unscored | default: 0 -%}{%- if svn > 0 -%}<button type="button" class="hl-chip-btn hl-chip-btn--topic hl-vc-none" data-sev="none">No score <span class="hl-chip-btn__n">{{ svn }}</span></button>{%- endif -%}
   </div>
   {%- comment -%} Public detection (T-0407): an ET Open Suricata rule or a Nuclei template names the CVE. Chips OR together, like the severity bands. {%- endcomment -%}
   {%- assign n_et = wire.vulns_counts.et | default: 0 -%}{%- assign n_nu = wire.vulns_counts.nuclei | default: 0 -%}
@@ -136,23 +136,23 @@ position: 2.5
   <div class="hl-filter__chips hl-filter__chips--kind">
     <span class="hl-filter__dim">Public rule</span>
     <button type="button" class="hl-chip-btn is-on" data-det="">All</button>
-    {%- if n_et > 0 -%}<button type="button" class="hl-chip-btn" data-det="et">ET Open <span class="hl-chip-btn__n">{{ n_et }}</span></button>{%- endif -%}
-    {%- if n_nu > 0 -%}<button type="button" class="hl-chip-btn" data-det="nuclei">Nuclei <span class="hl-chip-btn__n">{{ n_nu }}</span></button>{%- endif -%}
+    {%- if n_et > 0 -%}<button type="button" class="hl-chip-btn hl-chip-btn--topic hl-topic-c2" data-det="et">ET Open <span class="hl-chip-btn__n">{{ n_et }}</span></button>{%- endif -%}
+    {%- if n_nu > 0 -%}<button type="button" class="hl-chip-btn hl-chip-btn--topic hl-topic-c6" data-det="nuclei">Nuclei <span class="hl-chip-btn__n">{{ n_nu }}</span></button>{%- endif -%}
   </div>
   {%- endif -%}
   <div class="hl-filter__chips hl-filter__chips--kind">
     <span class="hl-filter__dim">Vendor</span>
     <button type="button" class="hl-chip-btn is-on" data-vendor="">All</button>
-    {%- for v in wire.vuln_vendors -%}<button type="button" class="hl-chip-btn" data-vendor="{{ v.label | escape }}">{{ v.label | escape }} <span class="hl-chip-btn__n">{{ v.count }}</span></button>{%- endfor -%}
+    {%- for v in wire.vuln_vendors -%}{%- assign vc = forloop.index0 | modulo: 12 | plus: 1 -%}<button type="button" class="hl-chip-btn hl-chip-btn--topic hl-topic-c{{ vc }}" data-vendor="{{ v.label | escape }}">{{ v.label | escape }} <span class="hl-chip-btn__n">{{ v.count }}</span></button>{%- endfor -%}
   </div>
   <div class="hl-filter__chips hl-filter__chips--kind">
     <span class="hl-filter__dim">Added</span>
-    <button type="button" class="hl-chip-btn" data-added="1">Today</button>
-    <button type="button" class="hl-chip-btn" data-added="7">7 days</button>
+    <button type="button" class="hl-chip-btn hl-chip-btn--topic hl-topic-c5" data-added="1">Today</button>
+    <button type="button" class="hl-chip-btn hl-chip-btn--topic hl-topic-c7" data-added="7">7 days</button>
     <button type="button" class="hl-chip-btn is-on" data-added="">{{ wire.window_days }} days</button>
     <span class="hl-filter__dim hl-filter__dim--gap">CVE age</span>
-    <button type="button" class="hl-chip-btn" data-age="recent" data-default>Recent</button>
-    <button type="button" class="hl-chip-btn" data-age="">Include older <span class="hl-chip-btn__n">{{ wire.vulns_counts.older }}</span></button>
+    <button type="button" class="hl-chip-btn hl-chip-btn--topic hl-topic-c11" data-age="recent" data-default>Recent</button>
+    <button type="button" class="hl-chip-btn hl-chip-btn--topic hl-vc-old" data-age="">Include older <span class="hl-chip-btn__n">{{ wire.vulns_counts.older }}</span></button>
   </div>
   <div class="hl-filter__count" data-filter-count></div>
   <div class="hl-filter__empty" data-filter-empty hidden><span data-filter-empty-msg>No CVEs match that filter.</span> <button type="button" class="hl-filter__reset" data-filter-reset>Clear filters</button></div>
