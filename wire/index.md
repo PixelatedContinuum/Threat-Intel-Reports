@@ -276,9 +276,12 @@ position: 2.5
 {%- endfor -%}
 </div>
 
+{%- comment -%} T-0468.2: the heading is a details summary, so a reader can fold the legend out of the way and open it again. Open on load. {%- endcomment -%}
 <aside class="hl-post-toc hl-legend" aria-label="Legend" data-pagefind-ignore>
-<div class="hl-post-toc__heading">Legend</div>
+<details class="hl-legend__fold" open>
+<summary class="hl-post-toc__heading" title="Show or hide the legend">Legend</summary>
 <div class="hl-legend__body">{{ legend_html }}</div>
+</details>
 </aside>
 
 {%- else -%}
