@@ -9,19 +9,28 @@ position: 1
 {% assign n_reports = site.data.catalog.entries | where_exp: "e", "e.report_url" | size %}
 {% assign n_det = site.data.metrics.detection_rules %}
 {% assign n_ioc = site.data.metrics.iocs %}
+{% assign n_stix = site.static_files | where_exp: "f", "f.path contains '/stix/'" | where: "extname", ".json" | size %}
+{% assign n_families = site.data.family_index.families | size %}
+{% assign n_actors = site.data.actors.actors | size %}
+{%- capture det_techniques -%}{%- for d in site.data.detection_attack -%}{%- for r in d[1].rows -%}{{ r.id | split: "." | first }} {% endfor -%}{%- endfor -%}{%- endcapture -%}
+{% assign n_techniques = det_techniques | split: " " | uniq | size %}
 <div class="hl-home-hero">
   <h1 class="hl-home-hero__title">Original Threat Intelligence Research</h1>
   <p class="hl-home-hero__lede">Hands-on malware analysis turned into structured, evidence-based intelligence, technically deep enough to trust and clear enough to act on. Free and open: published by a solo analyst for the defender community, with no paywall or signup.</p>
   <div class="hl-creds-strip">
     <span class="hl-cred-pill"><span class="hl-cred-pill__dot" style="background:#58a6ff;"></span><strong>{{ n_reports }}</strong>&nbsp;Reports</span>
     <span class="hl-cred-pill"><span class="hl-cred-pill__dot" style="background:#4ade80;"></span><strong>{{ n_det }}</strong>&nbsp;Detection Rules</span>
+    <span class="hl-cred-pill"><span class="hl-cred-pill__dot" style="background:#2dd4bf;"></span><strong>{{ n_techniques }}</strong>&nbsp;ATT&amp;CK Techniques Covered</span>
     <span class="hl-cred-pill"><span class="hl-cred-pill__dot" style="background:#f87171;"></span><strong>{{ n_ioc }}</strong>&nbsp;IOCs</span>
+    <span class="hl-cred-pill"><span class="hl-cred-pill__dot" style="background:#a78bfa;"></span><strong>{{ n_stix }}</strong>&nbsp;STIX Bundles</span>
+    <span class="hl-cred-pill"><span class="hl-cred-pill__dot" style="background:#f472b6;"></span><strong>{{ n_families }}</strong>&nbsp;Malware &amp; Tools Profiled</span>
+    <span class="hl-cred-pill"><span class="hl-cred-pill__dot" style="background:#fb923c;"></span><strong>{{ n_actors }}</strong>&nbsp;Threat Actors Tracked</span>
     {%- if site.data.impact.actions_reported %}
     <span class="hl-cred-pill"><span class="hl-cred-pill__dot" style="background:#fbbf24;"></span><strong>{{ site.data.impact.actions_reported }}</strong>&nbsp;Takedowns &amp; Victim Actions</span>
     {%- endif %}
   </div>
   {%- if site.data.impact.actions_reported %}
-  <p class="hl-creds-note">Takedowns &amp; Victim Actions counts the actions recorded in my disclosure log as reported back to me by a host, registrar, platform, CERT or victim after one of my reports. Most of my reports get no reply, so this is only what made it back to me. Replies recorded through {{ site.data.impact.as_of | date: "%-d %b %Y" }}.</p>
+  <p class="hl-creds-note">Takedowns &amp; Victim Actions counts only what was reported back to me; most of my reports get no reply.</p>
   {%- endif %}
 </div>
 
