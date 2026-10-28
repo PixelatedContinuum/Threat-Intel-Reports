@@ -6869,3 +6869,23 @@ a.hl-attack__chip:hover { border-color: var(--hl-accent-blue); color: var(--hl-t
   .hl-heatmap { grid-auto-columns: minmax(104px, 1fr); }
   .hl-heatmap__tactic { font-size: 0.54em; letter-spacing: 0.04em; }
 }
+
+/* --- Impact page cards: one accent per card (--ia), headline and a soft gradient in it --- */
+.hl-impact-card { border-color: var(--hl-border-card); }
+.hl-impact-card .hl-impact-card__meta { color: var(--ia); }
+.hl-impact-card .hl-impact-card__title { color: var(--ia) !important; }
+.hl-impact-card__desc { margin: 6px 0 8px; font-size: 0.9em; line-height: 1.5; color: var(--hl-text-secondary); }
+@supports (color: color-mix(in srgb, white, black)) {
+  .hl-impact-card {
+    background: linear-gradient(135deg, color-mix(in srgb, var(--ia) 16%, var(--hl-bg-card)) 0%, var(--hl-bg-card) 62%) !important;
+    border-color: color-mix(in srgb, var(--ia) 30%, var(--hl-border-card)) !important;
+  }
+  .hl-impact-card .hl-impact-card__title {
+    background: linear-gradient(100deg, var(--ia) 0%, color-mix(in srgb, var(--ia) 55%, #ffffff) 100%);
+    -webkit-background-clip: text; background-clip: text;
+    -webkit-text-fill-color: transparent; color: transparent !important;
+  }
+}
+a.hl-impact-card:hover { border-color: var(--ia) !important; }
+a.hl-cred-pill--link { text-decoration: none !important; }
+a.hl-cred-pill--link:hover { border-color: #fbbf24; color: var(--hl-text-primary); }

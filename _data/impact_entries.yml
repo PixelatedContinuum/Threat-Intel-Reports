@@ -1,0 +1,135 @@
+# Cards for /impact/ (Takedowns & Victim Actions). Hand-written, one per action a recipient reported
+# back, or one per group of identical actions from one round (`count`). Add a card when a reply that
+# states action is recorded in the disclosure tracker; tools/report-tooling/test/impact-entries.test.js
+# fails when the counts here do not sum to _data/impact.yml actions_reported.
+# Victim and CERT cards stay general: no organisation, sector, country or platform name.
+# `verified: checked` only where I confirmed the action myself; `record` where the action is in my own case
+# records but no reply from the recipient is on file; `reported` is the recipient's word.
+entries:
+  - ids: [1, 2, 3]
+    count: 3
+    date: "2026-07"
+    category: cert-action
+    recipient: national CERT
+    title: National CERT reported measures on three reports
+    description: >-
+      I sent a national CERT a referral on an operation stealing data from several organisations, plus a notice for each of two organisations it had targeted.
+      The CERT answered all three, saying it had taken appropriate measures on the incidents.
+      It did not say what the measures were.
+    verified: reported
+
+  - ids: [4]
+    count: 1
+    date: "2026-07"
+    category: victim-action
+    recipient: national CERT
+    title: National CERT relayed that a victim remediated
+    description: >-
+      An attacker's own exposed toolkit showed that it had compromised an organisation, and I sent the evidence to the national CERT responsible for it.
+      The CERT later told me the organisation had remediated the incident and completed its investigation.
+    verified: reported
+
+  - ids: [5]
+    count: 1
+    date: "2026-06"
+    category: victim-action
+    recipient: the victim's hosting provider
+    title: Provider's customer took a reported server offline
+    description: >-
+      I told a hosting provider that three of its customers' servers were exposed to the internet and appeared in a cryptojacking operator's own list of services it had fingerprinted.
+      The provider passed on one customer's reply, which said the affected system had been isolated and taken offline and would be completely wiped to make sure the cryptojacker was removed.
+    verified: reported
+
+  - ids: [8]
+    count: 1
+    date: "2026-09"
+    category: victim-action
+    recipient: the victim's hosting provider
+    title: Customer removed material from a reported host
+    description: >-
+      I reported five hosts at one provider that an attacker had exploited through a code-injection flaw as part of a cryptomining campaign.
+      The provider split the report into one ticket per host, and for one host it said its customer had confirmed the removal of the infringing material.
+      My records show no confirmation for the other four.
+    verified: reported
+
+  - ids: [9]
+    count: 1
+    date: "2026-10"
+    category: victim-action
+    recipient: the victim's security team
+    title: Victim's security team used my evidence in its investigations
+    description: >-
+      An attacker had collected files belonging to an organisation, and the organisation's security team asked me for the evidence after my first notice.
+      I sent it an encrypted package with my report, the attacker's copies of its files and an inventory of the credentials exposed in them.
+      The team replied that it was using the material in its ongoing investigations.
+    verified: reported
+
+  - ids: [6]
+    count: 1
+    date: "2026-05"
+    category: attacker-infrastructure
+    recipient: code platform
+    title: Code platform suspended a cryptojacker author's account
+    description: >-
+      I reported the account of a cryptojacker kit's author, which hosted repackaged cryptominer binaries and the staging code operators used.
+      I filed four reports, three on repositories and one on the account, and the platform told me it had acted on all four.
+      The addresses I then checked myself all returned HTTP 404.
+    verified: checked
+    report_url: /reports/ghost-cryptojacker-vova75rus-77.110.96.200/
+
+  - ids: [7]
+    count: 1
+    date: "2026-05"
+    category: attacker-infrastructure
+    recipient: code platform
+    title: Code platform account for an operator's tooling suspended
+    description: >-
+      I reported a second account whose public repository held the code of an operator's attack tooling.
+      My records show the account was suspended and its repository returned HTTP 404 afterwards.
+    verified: record
+
+  - ids: [10]
+    count: 1
+    date: "2026-10"
+    category: attacker-infrastructure
+    recipient: hosting provider
+    title: Hosting provider suspended an intrusion-tooling server
+    description: >-
+      I reported a server publishing an open directory of 356 intrusion-tooling files, including scripts that sprayed passwords against network devices and virtualisation servers and sent their results back to the same server.
+      The provider replied within ten minutes that the service had been suspended.
+    verified: reported
+
+  - ids: [11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21]
+    count: 11
+    date: "2026-10"
+    category: attacker-infrastructure
+    recipient: website host or hosting provider
+    title: 11 phishing and scam sites reported taken down
+    description: >-
+      I sent 11 single-domain abuse reports, each on a phishing or scam site that asked visitors for logins, card details or personal details.
+      Each report named one domain, what the page imitated or asked for, and when I saw it online.
+      Eight replies said the site had been taken down and three said the service had been suspended.
+    verified: reported
+
+  - ids: [22]
+    count: 1
+    date: "2026-10"
+    category: attacker-infrastructure
+    recipient: domain registrar
+    title: Registrar suspended a phishing domain
+    description: >-
+      I reported one phishing domain that imitated a hosting company's login page.
+      The registrar's abuse team replied that it had reviewed my complaint and suspended the domain name.
+    verified: reported
+
+  - ids: [23]
+    count: 1
+    date: "2026-10"
+    category: attacker-infrastructure
+    recipient: remote-access vendor
+    title: Remote-access vendor actioned reported servers
+    description: >-
+      I reported 15 self-hosted remote-access servers, one of them reached through a fake software-update page that installs a remote-access tool.
+      The vendor replied that it had actioned the reported accounts after an internal investigation with its security team, and later that it had actioned the reported instances and needed nothing further.
+      It did not share its findings.
+    verified: reported

@@ -26,7 +26,7 @@ position: 1
     <span class="hl-cred-pill"><span class="hl-cred-pill__dot" style="background:#f472b6;"></span><strong>{{ n_families }}</strong>&nbsp;Malware &amp; Tools Profiled</span>
     <span class="hl-cred-pill"><span class="hl-cred-pill__dot" style="background:#fb923c;"></span><strong>{{ n_actors }}</strong>&nbsp;Threat Actors Tracked</span>
     {%- if site.data.impact.actions_reported %}
-    <span class="hl-cred-pill"><span class="hl-cred-pill__dot" style="background:#fbbf24;"></span><strong>{{ site.data.impact.actions_reported }}</strong>&nbsp;Takedowns &amp; Victim Actions</span>
+    <a class="hl-cred-pill hl-cred-pill--link" href="{{ '/impact/' | relative_url }}"><span class="hl-cred-pill__dot" style="background:#fbbf24;"></span><strong>{{ site.data.impact.actions_reported }}</strong>&nbsp;Takedowns &amp; Victim Actions</a>
     {%- endif %}
   </div>
   {%- if site.data.impact.actions_reported %}
@@ -97,10 +97,11 @@ position: 1
 
 {% include section-header.html label="Browse the Corpus" accent="#a371f7" %}
 
-<div class="hl-tile-row3">
+<div class="hl-tile-row4">
   <a href="{{ '/actors/' | relative_url }}" class="hl-nav-tile" style="--acc: #e879f9;"><div class="hl-nav-tile__title">Threat Actors</div><div class="hl-nav-tile__desc">Tracked actors and the evidence behind each</div></a>
   <a href="{{ '/families/' | relative_url }}" class="hl-nav-tile" style="--acc: #facc15;"><div class="hl-nav-tile__title">Malware Families</div><div class="hl-nav-tile__desc">Each family with its reports, rules and feeds</div></a>
   <a href="{{ '/techniques/' | relative_url }}" class="hl-nav-tile" style="--acc: #fb923c;"><div class="hl-nav-tile__title">ATT&amp;CK Techniques</div><div class="hl-nav-tile__desc">Coverage heatmap and a Navigator layer</div></a>
+  <a href="{{ '/impact/' | relative_url }}" class="hl-nav-tile" style="--acc: #fbbf24;"><div class="hl-nav-tile__title">Takedowns &amp; Victim Actions</div><div class="hl-nav-tile__desc">What hosts, CERTs and victims did after my reports</div></a>
 </div>
 
 {% include section-header.html label="Stay Current" accent="#22d3ee" %}
