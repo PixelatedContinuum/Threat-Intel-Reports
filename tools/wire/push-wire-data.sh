@@ -6,9 +6,9 @@
 #
 # Why an orphan commit and a force-push. The branch is a mailbox, not a history:
 # only its newest content is ever read (by .github/workflows/pages.yml, which
-# copies wire.yml into _data/ before building). Rewriting it each hour keeps the
+# copies wire.yml into _data/ before building). Rewriting it each run keeps the
 # branch at exactly one commit forever, so the repository never grows by a
-# 200 KB YAML file every hour and main's history is no longer 70% "wire: refresh".
+# 200 KB YAML file every 15 minutes and main's history is no longer 70% "wire: refresh".
 #
 # Why plumbing commands rather than checkout/add/commit. Nothing here touches the
 # working tree, the index or the current branch of the clone it runs in, so it
@@ -58,7 +58,7 @@ BLOB=$(git hash-object -w "$SRC") || exit 2
 # 2026-10-09). The workflow checks out main whatever woke it, so this copy only
 # has to exist; taking it from $REMOTE/main each run keeps it current (run.sh
 # fast-forwards main first). Only pages.yml: any other workflow copied here would
-# fire on every hourly push too.
+# fire on every 15-minute push too.
 WF=.github/workflows/pages.yml
 WF_BLOB=$(git rev-parse --verify --quiet "refs/remotes/$REMOTE/main:$WF") || {
   echo "refusing: $REMOTE/main has no $WF, so a push to $BRANCH would trigger no build" >&2

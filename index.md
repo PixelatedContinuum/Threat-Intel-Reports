@@ -91,7 +91,7 @@ position: 1
 {% include section-header.html label="Stay Current" accent="#22d3ee" %}
 
 <div class="hl-nav-grid">
-  <a href="{{ '/wire/' | relative_url }}" class="hl-nav-tile" style="--acc: #38bdf8;"><div class="hl-nav-tile__title">The Wire</div><div class="hl-nav-tile__desc">Hourly headlines from public threat research</div></a>
+  <a href="{{ '/wire/' | relative_url }}" class="hl-nav-tile" style="--acc: #38bdf8;"><div class="hl-nav-tile__title">The Wire</div><div class="hl-nav-tile__desc">Headlines from public threat research, every 15 minutes</div></a>
   <a href="{{ '/changes/' | relative_url }}" class="hl-nav-tile" style="--acc: #34d399;"><div class="hl-nav-tile__title">Changes</div><div class="hl-nav-tile__desc">Revisions to published reports, newest first</div></a>
 </div>
 

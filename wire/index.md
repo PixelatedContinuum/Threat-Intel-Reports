@@ -1,6 +1,6 @@
 ---
 title: The Wire
-description: "Threat intelligence headlines from public research and news sources, refreshed hourly from a self-hosted OpenCTI instance, beside VulnCheck's Known Exploited Vulnerabilities additions. Links only, every item goes to the original publisher."
+description: "Threat intelligence headlines from public research and news sources, refreshed every 15 minutes from a self-hosted OpenCTI instance, beside VulnCheck's Known Exploited Vulnerabilities additions. Links only, every item goes to the original publisher."
 layout: page
 permalink: /wire/
 thumbnail: /assets/images/cards/wire.png
@@ -10,7 +10,7 @@ position: 2.5
 <div class="hl-page-header" style="--ph-accent: #58a6ff;">
   <div class="hl-page-header__label">The Wire</div>
   <div class="hl-page-header__title">Threat Intelligence Headlines</div>
-  <div class="hl-page-header__desc">Threat reporting and newly exploited vulnerabilities, refreshed every hour.</div>
+  <div class="hl-page-header__desc">Threat reporting and newly exploited vulnerabilities, refreshed every 15 minutes.</div>
 </div>
 
 {%- assign wire = site.data.wire -%}
@@ -31,7 +31,7 @@ position: 2.5
 
 <section id="headlines" class="hl-wtabs__sec" data-filter-scope>
 
-<div class="hl-wire__callout hl-wire__callout--h">These headlines come from public research and news sources, pulled every hour from the OpenCTI instance I run myself. The reporting belongs to its publishers and every item links to the original; my own research is in the <a href="/reports/">reports section</a>.</div>
+<div class="hl-wire__callout hl-wire__callout--h">These headlines come from public research and news sources, pulled every 15 minutes from the OpenCTI instance I run myself, which itself polls the publishers' feeds every 5 to 15 minutes. The reporting belongs to its publishers and every item links to the original; my own research is in the <a href="/reports/">reports section</a>.</div>
 
 <p class="hl-wire__freshness">Updated {{ wire.generated_at | date: "%-d %B %Y, %H:%M" }} UTC &middot; {{ n_headlines }} headlines from the last {{ wire.window_days }} days &middot; <a href="{{ '/wire/feed.xml' | relative_url }}">Atom feed</a></p>
 
@@ -286,7 +286,7 @@ position: 2.5
 
 {%- else -%}
 
-<p class="hl-wire__freshness"><span class="hl-wire__notice">Vulnerability data is temporarily unavailable.</span> The headlines are unaffected; this tab fills again on the next successful hourly read.</p>
+<p class="hl-wire__freshness"><span class="hl-wire__notice">Vulnerability data is temporarily unavailable.</span> The headlines are unaffected; this tab fills again on the next successful read, which runs every 15 minutes.</p>
 
 {%- endif %}
 </section>
@@ -296,7 +296,7 @@ position: 2.5
 
 {%- else -%}
 
-<p class="hl-wire__freshness">The Wire is not currently available. The feed is regenerated every hour; if this persists, the generator needs attention. The <a href="{{ '/wire/feed.xml' | relative_url }}">Atom feed</a> carries the same headlines and is empty while this is the case.</p>
+<p class="hl-wire__freshness">The Wire is not currently available. The feed is regenerated every 15 minutes; if this persists, the generator needs attention. The <a href="{{ '/wire/feed.xml' | relative_url }}">Atom feed</a> carries the same headlines and is empty while this is the case.</p>
 
 {%- endif %}
 

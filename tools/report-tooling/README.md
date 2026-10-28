@@ -43,7 +43,7 @@ Activate it once per clone:
 The hook lives at `tools/git-hooks/pre-commit` and is tracked in the repo, so the rules
 are reviewable in a diff. It is **not** installed into `.git/hooks/` and is inert until
 the config above is set, which keeps the unattended Wire generator free of a gate that
-could block its hourly push (it publishes to the `wire-data` branch via
+could block its 15-minute push (it publishes to the `wire-data` branch via
 `tools/wire/push-wire-data.sh`, never to main; see `.github/workflows/pages.yml`).
 
 **What it is for.** The publish skill gates every surface for a campaign that ships

@@ -12,11 +12,17 @@
    so rather than reporting a clean sweep of zero. See
    homelab-soc/docs/gate-honesty-contract.md. */
 
-// Calibrated against the hourly timer (was two-hourly with an 8 hour limit, until
-// 2026-10-02). Four hours is four consecutive misses, which is a dead timer
-// rather than a blip, and tight enough that one OpenCTI hiccup or one push
-// collision does not fail the next publish.
-var STALE_HOURS = 4;
+// Calibrated against the 15-minute timer (T-0458, 2026-10-28; hourly with a 4 hour
+// limit from 2026-10-02, and two-hourly with an 8 hour limit before that). One hour
+// is four consecutive misses of the 15-minute timer, which is a dead timer rather
+// than a blip, as the old four hours was four misses of the hourly one. Measured
+// before the change: 479 hourly runs from 2026-10-09 to 2026-10-28 with no gap over
+// 1.05 hours, and one failed run (2026-10-14) that the next slot recovered. A healthy
+// file is at most one slot plus the timer's 3 minute jitter old when written (18
+// minutes), and the build adds a median 2.2 minutes (maximum 9.3 over 100 runs), so
+// one hour sits more than twice above a healthy age yet still lets one OpenCTI
+// hiccup or one push collision (one to two missed runs) pass.
+var STALE_HOURS = 1;
 var REQUIRED = ['title', 'url', 'source', 'date', 'kind'];
 // Hues defined in assets/css/custom.scss as .hl-topic-c1 .. .hl-topic-c12.
 var PALETTE_SIZE = 12;
@@ -26,7 +32,11 @@ var DISPLAYED_LABELS = 2;
 // `vuln` is the daily VulnCheck KEV digest row the exporter adds (T-0396).
 var KINDS = { research: 1, news: 1, vuln: 1 };
 // The nKEVs tab (was Vulnerabilities) is fed by a separate read (VulnCheck's API) that can
-// fail on its own. Its freshness is warned about past a day, never failed.
+// fail on its own. Its freshness is warned about past a day, never failed. Left at a day
+// when the timer went to 15 minutes (T-0458): the exporter reads VulnCheck once a run, so
+// a failed read already warns at once through vulns_status 'stale', and this limit only
+// backstops a stale cache that keeps being republished. Not tied to the 15-minute
+// cadence: a transient VulnCheck outage must not warn on every build for hours.
 var VULNS_STALE_HOURS = 24;
 var VULN_STATUSES = { ok: 1, stale: 1, unavailable: 1 };
 var CVE_SHAPE = /^CVE-\d{4}-\d{4,}$/;
@@ -336,9 +346,9 @@ function normTitle(t) {
    `now`, and it is what separates the two ways this file goes old.
 
    Those two ways look identical from inside the working tree and are not the
-   same event. The generator pushes wire.yml straight to origin every hour (to
+   same event. The generator pushes wire.yml straight to origin every 15 minutes (to
    the wire-data branch; see tools/wire/push-wire-data.sh), so a clone nobody
-   has fetched falls behind by exactly as many hours as
+   has fetched falls behind by exactly as many runs as
    it has sat there, while the live page stays current. Reading local age alone,
    this gate called a three-day-old clone a dead timer and named LXC-102 as the
    cause; measured over the ten days after the two-hourly cadence landed, the
@@ -349,7 +359,7 @@ function check(doc, sources, now, remote) {
   if (!doc) {
     return verdict('NOT CHECKED', 'wire.yml is absent or unparseable. It is not ' +
       'committed on main: run `npm run wire:pull` to fetch the newest copy from ' +
-      'origin/wire-data (the generator on LXC-102 writes it there every hour).');
+      'origin/wire-data (the generator on LXC-102 writes it there every 15 minutes).');
   }
 
   var items = doc.items;

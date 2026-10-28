@@ -7,7 +7,7 @@ sitemap: false
 {%- comment -%}
   The Wire as an Atom feed: the same headlines /wire/ renders, from the same
   _data/wire.yml the deploy workflow copies in from the wire-data branch,
-  newest first, capped so a reader fetching hourly is never handed the whole
+  newest first, capped so a reader polling it is never handed the whole
   30-day window. Headlines and links only, exactly as the page: every entry's
   link is the publisher's, the author is the publisher, and there is no body
   to copy. The ids are the publisher URLs, which is what a reader dedupes on.
@@ -17,7 +17,7 @@ sitemap: false
 {%- assign wire = site.data.wire %}
 <feed xmlns="http://www.w3.org/2005/Atom">
   <title>{{ site.title | xml_escape }}: The Wire</title>
-  <subtitle>Threat intelligence headlines from public research and news sources, refreshed hourly. Links only; every entry goes to the original publisher. Original research is in the main feed.</subtitle>
+  <subtitle>Threat intelligence headlines from public research and news sources, refreshed every 15 minutes. Links only; every entry goes to the original publisher. Original research is in the main feed.</subtitle>
   <link href="{{ site.url }}/wire/feed.xml" rel="self" type="application/atom+xml"/>
   <link href="{{ site.url }}/wire/" rel="alternate" type="text/html"/>
   <link href="{{ site.url }}/feed.xml" rel="related" type="application/atom+xml" title="{{ site.title | xml_escape }}: reports"/>

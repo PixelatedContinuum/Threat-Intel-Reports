@@ -38,7 +38,7 @@ position: 5
     <span class="hl-feed-url__val">https://the-hunters-ledger.com/wire/feed.xml</span>
     <button class="hl-feed-url__copy" type="button" data-copy="https://the-hunters-ledger.com/wire/feed.xml">COPY</button>
   </div>
-  <p class="hl-panel__desc" style="margin-top:10px;">Three feeds, so a reader can take any without the others: the reports, the <a href="/hunting-detections/">detection library</a> on its own (a new page of Sigma, YARA and Suricata rules per campaign), and <a href="/wire/">The Wire</a> on its own (the hourly headlines from other publishers, links only). The reports and detections feeds are also <a href="https://www.jsonfeed.org/">JSON Feed</a>: <a href="/feed.json">/feed.json</a> and <a href="/hunting-detections/feed.json">/hunting-detections/feed.json</a>.</p>
+  <p class="hl-panel__desc" style="margin-top:10px;">Three feeds, so a reader can take any without the others: the reports, the <a href="/hunting-detections/">detection library</a> on its own (a new page of Sigma, YARA and Suricata rules per campaign), and <a href="/wire/">The Wire</a> on its own (the headlines from other publishers, refreshed every 15 minutes, links only). The reports and detections feeds are also <a href="https://www.jsonfeed.org/">JSON Feed</a>: <a href="/feed.json">/feed.json</a> and <a href="/hunting-detections/feed.json">/hunting-detections/feed.json</a>.</p>
 </div>
 
 <div class="hl-panel" style="--acc: #58a6ff;">

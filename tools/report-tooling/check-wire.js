@@ -36,7 +36,7 @@ function load(p) {
    wire.yml means a stopped generator or just a checkout nobody pulled.
 
    The authoritative copy is `wire.yml` at the tip of origin/wire-data: the
-   generator force-pushes one orphan commit there every hour, and the Pages
+   generator force-pushes one orphan commit there every 15 minutes, and the Pages
    workflow (.github/workflows/pages.yml) copies it into _data/ at build time.
    origin/main:_data/wire.yml is the pre-cutover location and is read as a
    fallback so this gate keeps working during the transition and on a clone

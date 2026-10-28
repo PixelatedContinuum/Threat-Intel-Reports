@@ -1,17 +1,22 @@
 # Build and deploy the-hunters-ledger.com with GitHub Actions.
 #
-# Why this exists. The Wire (/wire/) refreshes hourly, and until now each refresh
+# Why this exists. The Wire (/wire/) refreshes every 15 minutes (hourly until
+# 2026-10-28, T-0458), and until now each refresh
 # was a commit to main: 37 of the last 50 commits were "wire: refresh", which
 # buried the real history. This workflow builds the site from main but takes the
 # Wire data from a separate `wire-data` branch that the generator force-pushes as
-# a single orphan commit each hour (wire.yml plus a copy of this file, because
+# a single orphan commit each run (wire.yml plus a copy of this file, because
 # GitHub runs a push event from the workflows in the pushed commit's own tree). main stays a history of the site; the Wire
-# still updates hourly with nobody touching anything.
+# still updates every 15 minutes with nobody touching anything.
 #
-# Triggers. A push to main (content, layouts, data) or to wire-data (an hourly
+# Triggers. A push to main (content, layouts, data) or to wire-data (a 15-minute
 # refresh) both build the SAME thing: main's tree plus the newest Wire file. The
 # `concurrency` group cancels an in-flight build when a newer push arrives, so
-# an hour's worth of pushes costs one deploy, never a queue.
+# a burst of pushes costs one deploy, never a queue. Measured 2026-10-28 over 100
+# runs: median build 131 s, mean 140 s, maximum 557 s, 5 cancelled by this rule; a
+# 15-minute spacing leaves room for all but a rare slow build, and GitHub's
+# 10-builds-an-hour Pages soft limit does not apply to a custom Actions workflow
+# (docs.github.com/en/pages/getting-started-with-github-pages/github-pages-limits).
 #
 # Two-phase cutover, on purpose. The `build` job always runs, so from the moment
 # this file lands the site is being test-built on every push and any Liquid or

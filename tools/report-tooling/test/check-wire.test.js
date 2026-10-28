@@ -8,7 +8,7 @@ var NOW = Date.parse('2026-08-19T12:00:00Z');
 
 function doc(over) {
   var d = {
-    generated_at: '2026-08-19T10:00:00Z',
+    generated_at: '2026-08-19T11:50:00Z',
     window_days: 30,
     counts: { total: 2, research: 1, news: 1 },
     // Must name a label an item actually carries, or the topic check fires.
@@ -41,10 +41,10 @@ test('an absent file is NOT CHECKED, never PASS', function () {
 /* An old local file is the trigger for the staleness question, not the answer.
    These four pin the answer to what origin holds, because reading local age
    alone accused a healthy generator on every session that opened a clone more
-   than four hours old. */
+   than an hour old. */
 
 test('a stale local file fails only when origin is stale too', function () {
-  // 10 hours old against the hourly timer, and origin is no fresher: the
+  // 10 hours old against the 15-minute timer, and origin is no fresher: the
   // timer really has stopped, which is the case this gate exists for.
   var r = CW.check(doc({ generated_at: '2026-08-19T02:00:00Z' }), SOURCES, NOW,
     { generated_at: '2026-08-19T02:00:00Z' });
@@ -54,10 +54,10 @@ test('a stale local file fails only when origin is stale too', function () {
 });
 
 test('a stale local file against a fresh origin is NOT CHECKED, never FAIL', function () {
-  // The everyday case: the generator pushed twelve times while this clone sat
+  // The everyday case: the generator pushed forty times while this clone sat
   // untouched. Accusing LXC-102 here is the false alarm that spent the alarm.
   var r = CW.check(doc({ generated_at: '2026-08-19T02:00:00Z' }), SOURCES, NOW,
-    { generated_at: '2026-08-19T11:00:00Z' });
+    { generated_at: '2026-08-19T11:45:00Z' });
   assert.equal(r.status, 'NOT CHECKED');
   assert.match(r.reason, /behind/i);
   assert.match(r.reason, /git pull/);
@@ -81,16 +81,28 @@ test('a fresh local file never consults origin', function () {
 });
 
 test('a transient run of misses still passes', function () {
-  // 3 hours old: three missed hourly runs, still inside the four-hour threshold,
-  // so a blip on the generator does not fail somebody else's publish.
-  var r = CW.check(doc({ generated_at: '2026-08-19T09:00:00Z' }), SOURCES, NOW);
+  // 45 minutes old: three missed 15-minute runs, still inside the one-hour
+  // threshold, so a blip on the generator does not fail somebody else's publish.
+  var r = CW.check(doc({ generated_at: '2026-08-19T11:15:00Z' }), SOURCES, NOW);
   assert.equal(r.status, 'PASS');
 });
 
-test('a file past the four-hour limit with origin equally stale fails', function () {
-  // 5 hours old: five missed hourly runs, and origin holds the same file.
-  var r = CW.check(doc({ generated_at: '2026-08-19T07:00:00Z' }), SOURCES, NOW,
-    { generated_at: '2026-08-19T07:00:00Z' });
+test('the limit is one hour: exactly an hour passes, a minute past it with origin equally stale fails', function () {
+  // Pins STALE_HOURS (four missed 15-minute runs) so a later edit to the constant
+  // has to change this test too.
+  assert.equal(CW.STALE_HOURS, 1);
+  var edge = CW.check(doc({ generated_at: '2026-08-19T11:00:00Z' }), SOURCES, NOW);
+  assert.equal(edge.status, 'PASS');
+  var over = CW.check(doc({ generated_at: '2026-08-19T10:59:00Z' }), SOURCES, NOW,
+    { generated_at: '2026-08-19T10:59:00Z' });
+  assert.equal(over.status, 'FAIL');
+  assert.match(over.problems.join(' '), /1-hour limit/);
+});
+
+test('a file past the one-hour limit with origin equally stale fails', function () {
+  // 75 minutes old: five missed 15-minute runs, and origin holds the same file.
+  var r = CW.check(doc({ generated_at: '2026-08-19T10:45:00Z' }), SOURCES, NOW,
+    { generated_at: '2026-08-19T10:45:00Z' });
   assert.equal(r.status, 'FAIL');
 });
 
