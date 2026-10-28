@@ -4081,6 +4081,105 @@ span.hl-vuln__p--det { cursor: help; }
 .hl-vuln__popbody--epss { min-width: 16em; max-width: min(26em, 85vw); }
 .hl-vuln__spark { display: block; overflow: visible; color: #79c0ff; width: 124px; height: 28px; max-width: 100%; }
 
+/* --- The nKEVs legend (T-0468.1) ---------------------------------------
+   Explains each chip, badge and filter of the tab. On a wide screen it is the report
+   table of contents' own panel: the aside carries .hl-post-toc, so its fixed place in the
+   right margin, its width, border, colours, scrolling and the 1280px cut-off all come
+   from that one rule and cannot drift from it. Only the content is new. On a narrow
+   screen the details below replaces it, above the filter bar, in the flow. The legend
+   lives inside #vulns, so the Headlines tab (which hides that section) never shows it. */
+.hl-legend .hl-post-toc__heading { padding-left: 8px; padding-right: 8px; }
+.hl-legend__body { text-align: left; }
+.hl-legend .hl-legend__body { padding: 0 8px; }
+.hl-legend__h {
+  margin: 12px 0 2px;
+  font-size: 0.86em;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--hl-text-muted);
+}
+.hl-legend__h:first-child { margin-top: 0; }
+.hl-legend__list { margin: 0; padding: 0; }
+.hl-legend__list dt {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3em;
+  align-items: baseline;
+  margin: 9px 0 2px;
+  padding: 0;
+  float: none;
+  /* The sample chips are sized close to a row's: the row is .82em of the page, a chip .8em of that. */
+  font-size: 1em;
+  font-weight: 400;
+}
+.hl-legend__list dt.hl-legend__k {
+  display: block;
+  font-size: 0.94em;
+  font-weight: 600;
+  color: var(--hl-text-primary);
+}
+.hl-legend__list dd {
+  margin: 0;
+  padding: 0;
+  font-size: 0.86em;
+  line-height: 1.45;
+  color: var(--hl-text-secondary);
+  overflow-wrap: break-word;
+}
+/* A sample is a picture of the chip, not the chip: nothing to click, hover or tab to. */
+.hl-legend__list dt > span { pointer-events: none; cursor: default; }
+.hl-legend__list dt .hl-vuln__vp { overflow: visible; white-space: normal; font-size: 0.86em; }
+.hl-legend__p { margin: 6px 0 0; font-size: 0.86em; line-height: 1.45; color: var(--hl-text-secondary); overflow-wrap: break-word; }
+.hl-post-content .hl-legend__p a, .hl-legend__p a { color: var(--hl-accent-blue); }
+
+/* Narrow screens: the legend is a closed details above the filter bar, drawn like the
+   report's mobile Contents bar (same colours, label type and caret) but in the flow, not
+   fixed under the site header. It is hidden at the width where the aside shows. */
+.hl-legend-mobile { display: none; }
+@media (max-width: 1280px) {
+  .hl-legend-mobile {
+    display: block;
+    margin: 0 0 0.9em;
+    background: var(--hl-bg-row);
+    border: 1px solid var(--hl-border-row);
+    border-top: 2px solid var(--hl-accent-blue);
+    border-radius: 6px;
+  }
+  .hl-legend-mobile summary {
+    cursor: pointer;
+    padding: 11px 14px;
+    font-size: 0.78em;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--hl-accent-blue);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    list-style: none;
+    user-select: none;
+  }
+  .hl-legend-mobile summary::-webkit-details-marker { display: none; }
+  .hl-legend-mobile summary::before {
+    content: '\25B8';
+    font-size: 0.9em;
+    transition: transform 0.2s ease;
+    display: inline-block;
+    line-height: 1;
+  }
+  .hl-legend-mobile[open] summary::before { transform: rotate(90deg); }
+  .hl-legend-mobile[open] summary { border-bottom: 1px solid var(--hl-border-row); }
+  .hl-legend-mobile summary:hover { background: rgba(88,166,255,0.04); }
+  .hl-legend-mobile summary:focus-visible { outline: 2px solid var(--hl-accent-blue); outline-offset: -2px; }
+  .hl-legend-mobile .hl-legend__body {
+    padding: 10px 12px 12px;
+    font-size: 0.78em;
+    max-height: 70vh;
+    overflow-y: auto;
+  }
+}
+
 /* --- the list ------------------------------------------------- */
 .hl-wire {
   display: flex;
