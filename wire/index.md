@@ -146,7 +146,7 @@ position: 2.5
 <dt><span class="hl-vuln__p hl-vuln__p--epss">EPSS 3%</span></dt>
 <dd>FIRST's predicted probability that the CVE is exploited in the next 30 days. Click the chip in a row to open the popover described below.</dd>
 <dt><span class="hl-vuln__p">3 src</span></dt>
-<dd>The reports VulnCheck cites as its evidence of exploitation. Click to list them.</dd>
+<dd>The reports VulnCheck cites as its evidence of exploitation. Click the chip in a row to list them.</dd>
 <dt><span class="hl-vuln__p">2 news</span></dt>
 <dd>Wire headlines that name the CVE. It opens the Headlines tab searched for it.</dd>
 <dt><span class="hl-vuln__p hl-vuln__p--det">ET</span> <span class="hl-vuln__p hl-vuln__p--det">N</span></dt>
