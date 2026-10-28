@@ -16,7 +16,13 @@ position: 1
     <span class="hl-cred-pill"><span class="hl-cred-pill__dot" style="background:#58a6ff;"></span><strong>{{ n_reports }}</strong>&nbsp;Reports</span>
     <span class="hl-cred-pill"><span class="hl-cred-pill__dot" style="background:#4ade80;"></span><strong>{{ n_det }}</strong>&nbsp;Detection Rules</span>
     <span class="hl-cred-pill"><span class="hl-cred-pill__dot" style="background:#f87171;"></span><strong>{{ n_ioc }}</strong>&nbsp;IOCs</span>
+    {%- if site.data.impact.actions_reported %}
+    <span class="hl-cred-pill"><span class="hl-cred-pill__dot" style="background:#fbbf24;"></span><strong>{{ site.data.impact.actions_reported }}</strong>&nbsp;Takedowns &amp; Victim Actions</span>
+    {%- endif %}
   </div>
+  {%- if site.data.impact.actions_reported %}
+  <p class="hl-creds-note">Takedowns &amp; Victim Actions counts the actions recorded in my disclosure log as reported back to me by a host, registrar, platform, CERT or victim after one of my reports. Most of my reports get no reply, so this is only what made it back to me. Replies recorded through {{ site.data.impact.as_of | date: "%-d %b %Y" }}.</p>
+  {%- endif %}
 </div>
 
 {% include section-header.html label="Latest Reports" accent="#ff4444" %}
