@@ -144,7 +144,7 @@ position: 2.5
 <dt><span class="hl-vuln__b hl-vuln__b--prenvd">pre-NVD</span></dt>
 <dd>VulnCheck added the CVE before NVD published it. It takes the place of the +Nd chip.</dd>
 <dt><span class="hl-vuln__p hl-vuln__p--epss">EPSS 3%</span></dt>
-<dd>FIRST's predicted probability that the CVE is exploited in the next 30 days. Click it to open the popover described below.</dd>
+<dd>FIRST's predicted probability that the CVE is exploited in the next 30 days. Click the chip in a row to open the popover described below.</dd>
 <dt><span class="hl-vuln__p">3 src</span></dt>
 <dd>The reports VulnCheck cites as its evidence of exploitation. Click to list them.</dd>
 <dt><span class="hl-vuln__p">2 news</span></dt>
@@ -162,7 +162,7 @@ position: 2.5
 <dt class="hl-legend__k">Search</dt>
 <dd>Matches the CVE id, vendor and product.</dd>
 <dt class="hl-legend__k">List</dt>
-<dd>All, only CVEs that are also in CISA KEV, or only those VulnCheck lists alone.</dd>
+<dd>All, only CVEs that are also in CISA KEV, or "VulnCheck only": those in VulnCheck KEV but not in CISA KEV.</dd>
 <dt class="hl-legend__k">Severity</dt>
 <dd>The band of the row's CVSS score. "No score" is a CVE with no score, never a low one.</dd>
 <dt class="hl-legend__k">Public rule</dt>
