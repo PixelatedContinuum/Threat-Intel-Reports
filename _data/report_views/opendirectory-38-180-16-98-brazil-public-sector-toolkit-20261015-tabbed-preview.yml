@@ -1,0 +1,142 @@
+# Editorial view selections for this report only. Source tables remain authoritative.
+{
+  "headline_rows": [
+    0,
+    6,
+    12,
+    14
+  ],
+  "stage_joins": {
+    "1. Study": [
+      {
+        "technique": "T1595",
+        "scope_prefix": "IT provider public hostnames"
+      },
+      {
+        "technique": "T1593.003",
+        "scope_prefix": "IT provider public code clones"
+      }
+    ],
+    "2. Entry": [
+      {
+        "technique": "T1190",
+        "scope_prefix": "Agency GLPI"
+      },
+      {
+        "technique": "T1078",
+        "scope_prefix": "Finance secretariat; traffic department"
+      },
+      {
+        "technique": "T1190",
+        "scope_prefix": "Supplier-built cloud portal"
+      }
+    ],
+    "3. Foothold": [
+      {
+        "technique": "T1090.001",
+        "scope_prefix": "Pod and wls relay lanes"
+      },
+      {
+        "technique": "T1095",
+        "scope_prefix": "Same relay lanes"
+      },
+      {
+        "technique": "T1572",
+        "scope_prefix": "Bank client invoked"
+      },
+      {
+        "technique": "T1571",
+        "scope_prefix": "Relay lanes on TCP 53"
+      }
+    ],
+    "4. Mine the help desk": [
+      {
+        "technique": "T1552.001",
+        "scope_prefix": "Agency support-app settings"
+      },
+      {
+        "technique": "T1528",
+        "scope_prefix": "Agency SentinelOne integration token"
+      },
+      {
+        "technique": "T1213",
+        "scope_prefix": "Agency GLPI document search"
+      },
+      {
+        "technique": "T1552.001",
+        "scope_prefix": "Agency integration settings"
+      }
+    ],
+    "5. Spread": [
+      {
+        "technique": "T1550.001",
+        "scope_prefix": "SentinelOne console"
+      },
+      {
+        "technique": "T1518.001",
+        "scope_prefix": "Agency SentinelOne inventory"
+      },
+      {
+        "technique": "T1685",
+        "scope_prefix": "No endpoint impairment established"
+      },
+      {
+        "technique": "T1078",
+        "scope_prefix": "Zabbix staff account"
+      },
+      {
+        "technique": "T1072",
+        "scope_prefix": "Monitoring proxy"
+      },
+      {
+        "technique": "T1072",
+        "scope_prefix": "Zabbix server and agent"
+      }
+    ],
+    "6. Collect": [
+      {
+        "technique": "T1005",
+        "scope_prefix": "Agency GLPI and package store"
+      },
+      {
+        "technique": "T1213",
+        "scope_prefix": "Finance secretariat accounts"
+      },
+      {
+        "technique": "T1119",
+        "scope_prefix": "Agency GLPI file store"
+      },
+      {
+        "technique": "T1020",
+        "scope_prefix": "Agency GLPI; counts overlap"
+      }
+    ],
+    "7. Move it out": [
+      {
+        "technique": "T1071.001",
+        "scope_prefix": "Agency GLPI command channel"
+      },
+      {
+        "technique": "T1132.001",
+        "scope_prefix": "Base64 command output"
+      },
+      {
+        "technique": "T1041",
+        "scope_prefix": "Agency package product"
+      }
+    ]
+  },
+  "timeline_lanes": {
+    "rules": [
+      {
+        "label": "Collection and observation",
+        "pattern": "\\b(?:my |I |collection|directory listing|accepts connections|canary response|first observed)"
+      },
+      {
+        "label": "Victim side",
+        "pattern": "\\b(?:bank|agency|container|console|tunnel client)"
+      }
+    ],
+    "default": "Operator infrastructure"
+  }
+}
