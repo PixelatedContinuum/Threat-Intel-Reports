@@ -4411,11 +4411,11 @@ span.hl-vuln__rule { color: var(--hl-text-secondary); }
   .hl-vuln { grid-template-columns: minmax(0, 1fr); gap: 0.2em; padding: 0.55em 0.7em; }
   .hl-vuln__badges { justify-content: flex-start; }
   .hl-vuln__popbody { left: 0.7em; right: auto; }
-  /* T-0468: one line of chips on a phone too. The few rows with more chips than
-     fit (12 of 298 on 2026-10-27) scroll sideways inside the line rather than
-     wrapping to a second one; the popover is positioned against the row, so the
-     scroll does not clip it. */
-  .hl-vuln__badges { flex-wrap: nowrap; overflow-x: auto; scrollbar-width: thin; padding-bottom: 2px; }
+  /* T-0496: on a phone the chips wrap to a second line. T-0468 had them scroll
+     sideways, which left chips (Rules among them) out of view on the rows with
+     more chips than fit; a wrapped line shows every chip. Rows with few chips
+     stay on one line. */
+  .hl-vuln__badges { flex-wrap: wrap; row-gap: 0.25em; }
   .hl-filter__dim--gap { margin-left: 0; }
 }
 
