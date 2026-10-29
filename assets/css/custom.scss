@@ -4595,6 +4595,15 @@ span.hl-vuln__p--det { cursor: help; }
 .hl-ioctable [data-type="path"]     { --ioct-type: #fbbf24; }  /* amber   */
 .hl-ioctable [data-type="registry"] { --ioct-type: #fb923c; }  /* orange  */
 .hl-ioctable [data-type="filename"] { --ioct-type: #a3e635; }  /* lime    */
+/* `pattern` (2026-10-29): the feed entries a value shape cannot type and the
+   feed's own container declares -- service fingerprints, relay network
+   signatures, behavioural patterns, mutex names, host-name fingerprints. Red is
+   the twelfth and last free hue of the Wire's 12-hue topic palette (the other
+   eleven are spoken for above), and the palette rule wins: an invented hue would
+   be the first exception to "a coloured thing on this site means the same kind of
+   thing everywhere". These rows are what to READ rather than what to match, so
+   the badge carries the verb and the row carries the prose. */
+.hl-ioctable [data-type="pattern"]  { --ioct-type: #f87171; }  /* red     */
 
 .hl-ioctable__chip {
   font: inherit;

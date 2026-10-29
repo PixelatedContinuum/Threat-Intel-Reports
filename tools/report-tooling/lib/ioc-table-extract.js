@@ -54,8 +54,143 @@ var B = require('./benign.js');
 var PROSE_KEYS = ('context confidence notes evidence description rationale summary ' +
   'tactic technique_name technique_id log_source analyst license severity ' +
   'confidence_level campaign title purpose recommendation action priority ' +
-  'direction protocol role tlp pattern query false_positive_risk').split(' ')
+  'direction protocol role tlp pattern query false_positive_risk ' +
+  'false_positive_note').split(' ')
   .reduce(function (a, k) { a[k] = 1; return a; }, {});
+
+/* Keys that DESCRIBE an entry or its host rather than identify an indicator:
+   the ASN and RIR block a host sits in, when it was first and last seen, the
+   subject and validity window of a certificate, the feed's own identifiers and
+   the free label a feed puts on an entry (`type: "Java source, 3,219 bytes"`).
+   They are still walked, so a value that classifies is still a row (a feed that
+   puts a domain under `key`, `registry` or the like keeps it). They are only kept
+   OUT of the not-typed count, because that count is a warning about
+   indicator-shaped values the page cannot type, not a census of every short token
+   in a feed. In the pilot these 20 values were most of the 28 reported "not
+   typed": five metadata fields, three ASN/registry blocks, four certificate
+   fields, two `type: "behavioral"` labels and two registry-looking strings. */
+var NON_INDICATOR_KEYS = ('asn registry first_seen last_seen subject issuer organization ' +
+  'valid_from valid_to observed_by type platform campaign_id campaign_slug ' +
+  'investigation report_date version').split(' ')
+  .reduce(function (a, k) { a[k] = 1; return a; }, {});
+
+/* ---- DECLARED KINDS (2026-10-29; design v4 E7, design v3 D8) -------------------
+
+   The walk below was value-shape only. That is right for a value whose shape IS
+   the fact: `1.2.3.4` is an address wherever it sits, which is why this module
+   never types by bucket name (see the header: `location`, `file_path`,
+   `value_data`, `value` and `key` all carry the same kinds of value across the
+   corpus). It is wrong in the two situations the pilot measured, and in both the
+   FIELD, not the shape, is the only evidence of what the value is.
+
+   1. A FALSE POSITIVE OF SHAPE. `file_hashes.sha256[].filename` holds
+      `Relay.java.new` and `dump2.sh`; `host_indicators.file_paths[].path` holds
+      `Relay.java`. Each is a bare `label.label` token and ioc-classify.js reads
+      that shape as a domain, so the pilot's table offered three operator FILE
+      NAMES as blockable domains. `file_paths[].path` also holds
+      `/bea_wls_internal/health.jsp` (not under a known system root) and
+      `decrypt*.jsp` (no separator at all), which fell through to "not typed"
+      although the field says path.
+
+   2. PROSE ENTRIES. A service fingerprint, a relay network signature, a
+      behavioural pattern, a mutex name and a host-local VPS name have no shape at
+      all: `Server: SimpleHTTP/0.6 Python/3.10.12 serving a directory listing` is a
+      sentence. The pilot's 12 such entries were dropped from the table entirely.
+      They were counted in the not-typed number, which is honest, but a reader of
+      "25 indicators" could not see that the feed carries 41 entries.
+
+   So a declared kind is consulted FIRST, and only where the shape cannot decide:
+   a field that names a file, a path field inside a path container, and the
+   identifying field of five prose containers. It is not a general return to
+   bucket-name typing; every rule below is a field that names its own content.
+
+   WHAT THIS CANNOT COVER, stated because a list-shaped rule must say so: a
+   container not on this list keeps the old behaviour, so its prose entries stay
+   untyped and counted. A feed that describes a fingerprint under `notes` instead
+   of `fingerprint` gains no row, exactly as before. */
+/* Shapes a generic field name may not overturn (see take()). */
+var SHAPE_OUTRANKS_FIELD = { registry: true, url: true, ipv4: true, ipv6: true,
+                             email: true, sha256: true, sha1: true, md5: true,
+                             endpoint: true };
+
+function pathHas(ctx, k) { return ctx.indexOf(k) !== -1; }
+
+function declaredKind(ctx) {
+  var k = ctx.length ? ctx[ctx.length - 1] : null;
+  if (!k) return null;
+
+  /* A certificate entry IS its hash. Its serials, subject and validity window
+     describe that one entry; rendering a 40-hex serial as a sha1 (which the
+     shape rule did, for both serials in the pilot) is a mistype a defender would
+     paste into a blocklist. */
+  if (pathHas(ctx, 'tls_certificates')) {
+    if (k === 'sha256' || k === 'sha1' || k === 'md5') return { type: 'sha256' };
+    if (k === 'serial' || k === 'earlier_serial' || k === 'subject' || k === 'issuer' ||
+        k === 'organization' || k === 'key' || k === 'valid_from' || k === 'valid_to') {
+      return { skip: true };
+    }
+  }
+
+  /* The field that names a file. `Relay.java.new` and `dump2.sh` are file names
+     whose extension looks like a TLD; the field is the evidence, not the shape. */
+  if (k === 'filename' || k === 'file_name') return { type: 'filename' };
+
+  /* A path field inside a path container. */
+  if ((k === 'path' || k === 'file_path') &&
+      (pathHas(ctx, 'file_paths') || pathHas(ctx, 'host_indicators'))) return { type: 'path' };
+
+  /* Prose containers: the container is the feed's only statement of what the
+     entry is, and the value has no shape to read.
+
+     All five kinds get ONE type, `pattern`, and the reason is the site's own
+     palette rule rather than convenience: every type the extractor emits must
+     have a hue in custom.scss, hues come from the Wire's existing 12-hue palette
+     "rather than invented so a coloured thing on this site means the same kind of
+     thing everywhere" (custom.scss, indicator-type palette), and five new hues
+     would be invented for kinds a reader distinguishes by their label anyway. The
+     feed's own kind is in the entry's role text, which is the row's context. If
+     per-kind types are wanted later they need per-kind hues first. */
+  if (k === 'fingerprint' && pathHas(ctx, 'service_fingerprints')) return { type: 'pattern' };
+  /* The fingerprint entry's own host is support, not a second row: the entry is
+     the banner, and the address is carried by the feed's network container (the
+     pilot's :80 host would otherwise appear twice, once as an address and once
+     inside the fingerprint). */
+  if (k === 'host' && pathHas(ctx, 'service_fingerprints')) return { skip: true };
+  if (k === 'pattern' && pathHas(ctx, 'network_signatures')) return { type: 'pattern' };
+  if (k === 'pattern' && pathHas(ctx, 'behavioral_indicators')) return { type: 'pattern' };
+  if (k === 'value' && pathHas(ctx, 'mutex_names')) return { type: 'pattern' };
+  if (k === 'value' && pathHas(ctx, 'operator_fingerprints')) return { type: 'pattern' };
+  return null;
+}
+
+/* A hash-shaped leaf names the entry it belongs to. When an entry carries one, a
+   `filename` beside it is that entry's LABEL and not a second indicator: the
+   feeds' own false_positive_notes say "match the hash, not the filename", and the
+   348 distinct filenames in this corpus were otherwise rendered as their own
+   blockable rows. The label becomes the hash row's fallback context when the
+   entry has no better role text. */
+var HASH_SHAPE_RX = /^(?:[0-9a-f]{32}|[0-9a-f]{40}|[0-9a-f]{64})$/i;
+
+function entryHashOf(node) {
+  var keys = ['sha256', 'sha1', 'md5', 'value'];
+  for (var i = 0; i < keys.length; i++) {
+    var v = node[keys[i]];
+    if (typeof v === 'string' && HASH_SHAPE_RX.test(v.trim())) return v.trim();
+  }
+  return null;
+}
+
+/* A port on the entry object makes the address entry distinct: the pilot's 9
+   address-and-port entries collapsed to 3 rows because three objects carried
+   `38.180.16.98` at :53, :9090 and :9443 and the dedupe key was type:value.
+   Composing the port into the value keeps every entry the feed declares, and it
+   is what the report's own table lists (`38.180.16[.]98:53`). */
+function portOf(node) {
+  var p = node.port;
+  if (typeof p === 'number' && isFinite(p) && p >= 0 && p <= 65535) return String(p);
+  if (typeof p === 'string' && /^\d{1,5}$/.test(p.trim())) return p.trim();
+  return null;
+}
 
 /* Fields that carry a human label for the value beside them. `context`, `description`,
    `role` and `note` are unchanged from before this fix and keep first priority: an
@@ -178,8 +313,18 @@ function isRatingShaped(s) {
 /* The never-block bucket is read a second time, separately, with its own role
    preference (2026-09-13 fix: see the run's surface-fix-plan.md). It is exempt
    from the ordinary walk below, mirroring lib/feed-hygiene.js's own
-   `EXEMPT_TOP`, so a value inside it is never also counted as an ordinary row. */
-var EXEMPT_TOP = { hunt_only_never_block: true };
+   `EXEMPT_TOP`, so a value inside it is never also counted as an ordinary row.
+
+   `metadata` and `non_indicators` join it for the same reason feed-hygiene.js
+   already exempts `metadata`: they are the feed talking about itself, not
+   indicators. `non_indicators` is the sharp case -- the pilot's own feed says
+   "CONTEXT ONLY - DO NOT INGEST AS INDICATORS" over two stock GLPI paths, and the
+   walk was counting both of them as values it could not type, i.e. advertising
+   the one thing the feed forbids ingesting as an omission from the table.
+   `explicitly_excluded` is the same shape: the container lists what the feed
+   deliberately withholds. */
+var EXEMPT_TOP = { hunt_only_never_block: true, metadata: true,
+                   non_indicators: true, explicitly_excluded: true };
 
 /* Preference order for the never-block section's visible reason column.
    `false_positive_risk` first, because where present it is the most direct
@@ -230,7 +375,7 @@ function hostType(s) {
 }
 
 var TYPE_ORDER = ['ipv4', 'domain', 'endpoint', 'url', 'sha256', 'sha1', 'md5',
-                  'email', 'path', 'registry', 'filename'];
+                  'email', 'path', 'registry', 'filename', 'pattern'];
 
 /* Per-row analyst fields, added 2026-10-09: `confidence`, `action` and
    `false_positive_risk` (carried as `fp_risk`), read from the SAME object the
@@ -264,10 +409,26 @@ function metaField(v) {
    carrying a path separator, a percent sign, a dot or more than 40 characters is
    therefore not an action for this column and is null; the raw JSON keeps it. */
 var ACTION_NOT_A_VERB = /[\\\/%.]/;
+
+/* The 40-character cap was a proxy for "a badge, not a sentence", and it dropped
+   26 real actions in the corpus with it: "BLOCK at network perimeter immediately
+   - CRITICAL" (38), "Block at perimeter for non-Korea-Telecom destinations;
+   monitor any inbound or outbound to this IP from non-developer-class hosts"
+   (138). Those are instructions a defender is meant to follow, and the badge
+   already clips at 18em and carries the full text in its `title` (custom.scss,
+   .hl_ioctable__act), so the cap was costing information the layout can show.
+   A longer value is carried when it OPENS with a defender verb; anything else
+   over the cap is still null, because a command or a note does not become an
+   action by being long. */
+var ACTION_VERB_RX = /^(block|hunt|monitor|alert|detect|deny|allow|isolate|contain|quarantine|remove|scan|sweep|inventory|audit|investigate|review|correlate|add|deploy|log|record|notify|escalate|verify|check|search|flag|collect|treat|watch|surface|restrict|patch|rotate)\b/i;
+var ACTION_MAXLEN = 200;
+
 function actionOf(v) {
   var t = metaField(v);
-  if (!t || t.length > 40 || ACTION_NOT_A_VERB.test(t)) return null;
-  return t.toUpperCase();
+  if (!t || ACTION_NOT_A_VERB.test(t)) return null;
+  if (t.length <= 40) return t.toUpperCase();
+  if (t.length <= ACTION_MAXLEN && ACTION_VERB_RX.test(t)) return t.toUpperCase();
+  return null;
 }
 
 /* `false_positive_risk` is usually a one-word rating (low, medium, high), which is
@@ -312,17 +473,65 @@ function typeRank(t) {
    meant to explain it. `summarise()` below calls this twice, with the flag
    set only for the ordinary pass. */
 function runWalk(root, roleKeys, roleMaxLen, exempt, suppressBenign) {
+  /* The ordinary walk is the enhanced one; the never-block walk (roleMaxLen ===
+     Infinity) is the original code path, untouched by the declared-kind, port or
+     label rules, so its behaviour is provably unchanged. */
+  var enhanced = roleMaxLen !== Infinity;
   var byKey = {}, order = [], untyped = 0;
+  /* Walk order, so a filename that is a hash entry's label can hand its analyst
+     fields to the same filename if it also appears somewhere else (see labelMeta). */
+  var seq = 0, labelMeta = {}, labelPos = {};
 
-  function take(raw, role, roleIsCaveat, meta) {
+  function take(raw, role, roleIsCaveat, meta, ctx, port, label) {
+    seq++;
     if (typeof raw !== 'string') return;
     var s = raw.trim();
     if (!s || s.length > 300) return;
 
+    if (enhanced) {
+      var kind = declaredKind(ctx);
+      if (kind && kind.skip) return;
+      /* A filename that labels the hash in the same entry is that entry's label,
+         not a second indicator (see entryHashOf). */
+      if (kind && kind.type === 'filename' && label && s === label) {
+        /* Remember the fields of the entry this label belongs to. If the same
+           filename also appears outside a hash entry, the row it produces must
+           keep the EARLIEST entry's confidence and action, which is what
+           first-wins dedupe gave it before the label rule existed. */
+        var lk = s.toLowerCase();
+        if (!(lk in labelMeta)) { labelMeta[lk] = meta; labelPos[lk] = seq; }
+        return;
+      }
+      if (kind && kind.type) {
+        var kv = s;
+        /* A generic field name (`path`, `filename`) may only overturn the two
+           weak verdicts a shape can give: a `label.label` token read as a domain,
+           or nothing at all. A registry key, a URL, an address, an email or a
+           fixed-length hash keeps the shape's verdict, because the shape is the
+           more specific evidence -- `HKLM\...\CurrentVersion\Run` sits under a
+           `path` field in arsenal-237-enc_c2-exe.json's file_paths and is a
+           registry key, not a path. */
+        var probe = null;
+        if (kind.type === 'path' || kind.type === 'filename') {
+          probe = C.classify(kv) || (hostType(kv) ? { type: hostType(kv) } : null);
+        }
+        if (!(probe && SHAPE_OUTRANKS_FIELD[probe.type])) {
+          if (kind.type === 'ipv4' && port && kv.indexOf(':') === -1) kv = kv + ':' + port;
+          return push(kind.type, kv, role, roleIsCaveat, meta);
+        }
+      }
+    }
+
     var atomic = C.classify(s);
     if (atomic) {
       if (suppressBenign && B.isBenign(atomic.type, atomic.value)) return;   // 8.8.8.8 and friends
-      return push(atomic.type, atomic.value, role, roleIsCaveat, meta);
+      var av = atomic.value;
+      /* An address entry that carries a port is its own entry (see portOf). */
+      if (enhanced && port && atomic.type === 'ipv4' && av.indexOf(':') === -1) av = av + ':' + port;
+      /* No role text on a hash entry: its filename is the most useful label. */
+      var useRole = role;
+      if (enhanced && !useRole && label && HASH_SHAPE_RX.test(av)) useRole = label;
+      return push(atomic.type, av, useRole, roleIsCaveat, meta);
     }
 
     var h = hostType(s);
@@ -331,7 +540,9 @@ function runWalk(root, roleKeys, roleMaxLen, exempt, suppressBenign) {
     /* Not typed. Only count values that plausibly wanted to be an indicator:
        a short, space-free token, or something path- or hash-shaped. Prose, which
        is most of a feed by volume, is not an omission and must not inflate the
-       number the page prints. */
+       number the page prints. Fields that describe an entry or its host
+       (NON_INDICATOR_KEYS) are not omissions either. */
+    if (enhanced && ctx.length && NON_INDICATOR_KEYS[ctx[ctx.length - 1]]) return;
     if (s.length <= 120 && (s.indexOf(' ') === -1 || /[\\/]/.test(s))) untyped++;
   }
 
@@ -351,7 +562,8 @@ function runWalk(root, roleKeys, roleMaxLen, exempt, suppressBenign) {
       byKey[k] = {
         type: type, value: value, context: role || null,
         caveats: (roleIsCaveat && role) ? [role] : [],
-        meta: meta || NO_META
+        meta: meta || NO_META,
+        pos: seq
       };
       order.push(k);
       return;
@@ -361,14 +573,16 @@ function runWalk(root, roleKeys, roleMaxLen, exempt, suppressBenign) {
     }
   }
 
-  function walk(node, key, role, roleIsCaveat, meta) {
+  function walk(node, key, role, roleIsCaveat, meta, ctx, port, label) {
     if (node == null) return;
     if (typeof node === 'string') {
-      if (PROSE_KEYS[key]) return;
-      return take(node, role, roleIsCaveat, meta);
+      /* A declared kind outranks PROSE_KEYS: `pattern` is both a prose key and
+         the identifying field of a network signature or a behavioural entry. */
+      if (PROSE_KEYS[key] && !(enhanced && declaredKind(ctx))) return;
+      return take(node, role, roleIsCaveat, meta, ctx, port, label);
     }
     if (Array.isArray(node)) {
-      node.forEach(function (x) { walk(x, key, role, roleIsCaveat, meta); });
+      node.forEach(function (x) { walk(x, key, role, roleIsCaveat, meta, ctx, port, label); });
       return;
     }
     if (typeof node !== 'object') return;
@@ -376,6 +590,19 @@ function runWalk(root, roleKeys, roleMaxLen, exempt, suppressBenign) {
     /* The analyst fields are re-read at EVERY object boundary (see metaOf above),
        unlike the role label, which a nested value inherits from its ancestors. */
     var myMeta = metaOf(node);
+
+    /* Same rule for the entry's port and its filename label: re-read at an object
+       boundary, inherited through arrays, so a value never takes a sibling entry's
+       port or label. */
+    var myPort = port;
+    var myLabel = label;
+    if (enhanced) {
+      var p = portOf(node);
+      if (p) myPort = p;
+      if (entryHashOf(node) && typeof node.filename === 'string' && node.filename.trim()) {
+        myLabel = node.filename.trim();
+      }
+    }
 
     /* An object may label the value beside it. Take the first role-bearing field
        that is prose rather than an indicator, so `context: "C2 server"` becomes the
@@ -442,11 +669,12 @@ function runWalk(root, roleKeys, roleMaxLen, exempt, suppressBenign) {
     }
     Object.keys(node).forEach(function (k) {
       if (exempt && exempt[k]) return;
-      walk(node[k], k, myRole, myRoleIsCaveat, myMeta);
+      walk(node[k], k, myRole, myRoleIsCaveat, myMeta,
+           ctx.concat([k]), myPort, myLabel);
     });
   }
 
-  walk(root, null, null, false, NO_META);
+  walk(root, null, null, false, NO_META, [], null, null);
 
   var rows = order.map(function (k) {
     var r = byKey[k];
@@ -455,8 +683,17 @@ function runWalk(root, roleKeys, roleMaxLen, exempt, suppressBenign) {
        within one object, extended across every occurrence of this value. Joined with
        " | " so multiple distinct reasons read as separate sentences, not one run-on. */
     var context = r.caveats.length ? r.caveats.join(' | ') : r.context;
+    var m = r.meta;
+    /* A value that was a hash entry's filename label and also appears as an
+       indicator of another type keeps the EARLIEST entry's fields, which is what
+       first-wins dedupe gave it before the label rule existed. Matched on value
+       alone, not on the row's type: `soul.md` is a filename in one container and
+       a domain-shaped string in another, and the earlier entry's MODERATE is the
+       one the feed's own order asserts. */
+    var lk = String(r.value).toLowerCase();
+    if (labelMeta[lk] && labelPos[lk] < r.pos) m = labelMeta[lk] || NO_META;
     return { type: r.type, value: r.value, context: context,
-             confidence: r.meta.confidence, action: r.meta.action, fp_risk: r.meta.fp_risk };
+             confidence: m.confidence, action: m.action, fp_risk: m.fp_risk };
   });
   // Stable order, so a regenerated page diffs cleanly rather than reshuffling.
   rows.sort(function (a, b) {
