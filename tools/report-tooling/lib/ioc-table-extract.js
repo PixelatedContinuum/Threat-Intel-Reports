@@ -107,7 +107,12 @@ var NON_INDICATOR_KEYS = ('asn registry first_seen last_seen subject issuer orga
    WHAT THIS CANNOT COVER, stated because a list-shaped rule must say so: a
    container not on this list keeps the old behaviour, so its prose entries stay
    untyped and counted. A feed that describes a fingerprint under `notes` instead
-   of `fingerprint` gains no row, exactly as before. */
+   of `fingerprint` gains no row, exactly as before.
+
+   A kind may also carry a `label`: the field's own name as a reader-facing
+   context, used where the value is opaque and the entry has no context of its own
+   (a certificate's serial and fingerprint). It is prefixed to any entry context,
+   never substituted for it. */
 /* Shapes a generic field name may not overturn (see take()). */
 var SHAPE_OUTRANKS_FIELD = { registry: true, url: true, ipv4: true, ipv6: true,
                              email: true, sha256: true, sha1: true, md5: true,
@@ -132,15 +137,39 @@ function declaredKind(ctx, value) {
   var k = ctx.length ? ctx[ctx.length - 1] : null;
   if (!k) return null;
 
-  /* A certificate entry IS its hash. Its serials, subject and validity window
-     describe that one entry; rendering a 40-hex serial as a sha1 (which the
-     shape rule did, for both serials in the pilot) is a mistype a defender would
-     paste into a blocklist. The hash fields keep a row, typed by length. */
+  /* A certificate entry IS its hash, and its serials are hunt pivots in their own
+     right: a certificate reader pastes a serial or a fingerprint into a hunting
+     query, and the previous collision search for a reissued listener runs on one
+     or the other.
+
+     Serial rows are typed `pattern`, NOT `sha1`. A 40-hex serial has a sha1's
+     SHAPE and nothing else: cert serials are commonly 8, 16, 20 or 32 hex bytes,
+     so the type would be a value-length accident, and a defender pasting one into
+     a file-hash hunt gets a guaranteed miss. `pattern` is the type this table
+     already gives an opaque hunt term, and it needs no new hue (see the palette
+     note below). Both serial fields carry a field label, because the value is
+     opaque: nothing else on the row says what it is. The label describes the
+     FIELD, not an analytic claim, so it is not the generated commentary the
+     context rules keep out.
+
+     The subject, issuer, organization, key and validity window still describe the
+     certificate rather than identify anything a defender hunts by, and stay out.
+     (An entry's `value` field is left to the shape rule: the three feeds that use
+     it beside a real `context` already carry a better label than any field name.) */
   if (pathHas(ctx, 'tls_certificates')) {
     if (k === 'sha256' || k === 'sha1' || k === 'md5') {
-      return { type: hashTypeOf(value) || 'sha256' };
+      return { type: hashTypeOf(value) || 'sha256', label: 'TLS certificate fingerprint' };
     }
-    if (k === 'serial' || k === 'earlier_serial' || k === 'subject' || k === 'issuer' ||
+    /* The SPKI hash is a SECOND fingerprint of the same certificate: it survives a
+       reissue around the same key pair, which the certificate's own hash does not.
+       It had no row label before (a bare 64-hex string); it is a hunt term of its
+       own, so it says which one it is. */
+    if (k === 'spki_sha256') {
+      return { type: hashTypeOf(value) || 'sha256', label: 'TLS certificate SPKI fingerprint' };
+    }
+    if (k === 'serial') return { type: 'pattern', label: 'TLS certificate serial' };
+    if (k === 'earlier_serial') return { type: 'pattern', label: 'earlier serial' };
+    if (k === 'subject' || k === 'issuer' ||
         k === 'organization' || k === 'key' || k === 'valid_from' || k === 'valid_to') {
       return { skip: true };
     }
@@ -595,11 +624,18 @@ function runWalk(root, roleKeys, roleMaxLen, exempt, suppressBenign) {
           if (probe && probe.type === kind.type && typeof probe.value === 'string') {
             kv = probe.value;
           }
+          /* A declared FIELD LABEL (`TLS certificate serial`) prefixes whatever
+             context the entry itself carries, and never replaces it: the label says
+             what the opaque value is, the entry's own text says why it matters. It
+             rides with a caveat too, so a BLOCK entry's reason is kept in full. */
+          var kindRole = kind.label
+            ? (role ? (kind.label + ' | ' + role) : kind.label)
+            : role;
           /* An address entry with a port keeps BOTH rows: the bare address (what a
              defender blocks) and the host:port entry (what the feed declared). */
-          push(kind.type, kv, role, roleIsCaveat, meta);
+          push(kind.type, kv, kindRole, roleIsCaveat, meta);
           if (kind.type === 'ipv4' && port && kv.indexOf(':') === -1) {
-            return push(kind.type, kv + ':' + port, role, roleIsCaveat, meta);
+            return push(kind.type, kv + ':' + port, kindRole, roleIsCaveat, meta);
           }
           return;
         }

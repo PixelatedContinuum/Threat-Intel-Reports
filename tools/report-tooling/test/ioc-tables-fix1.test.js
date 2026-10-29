@@ -14,8 +14,8 @@
      assertion 13  4 verb-led instructions over 40 characters dropped
      assertion 12  2 long actions carrying a commentary tail
 
-   tls_certificates[].serial and .earlier_serial are deliberately NOT rows (a serial
-   is not a file hash); the pilot test pins that. */
+   tls_certificates[].serial and .earlier_serial became rows in fix round 2 (a serial is
+   a hunt pivot, typed `pattern` with a field label); the pilot test pins the rows. */
 
 var test = require('node:test');
 var assert = require('node:assert');
@@ -160,6 +160,48 @@ test('the certificate SHA-1 the review named is typed sha1', function () {
   assert.equal(v.length, 40);
   var r = rowOf(rows, 'sha1', v);
   assert.ok(r, 'the certificate SHA-1 is not a sha1 row: ' + JSON.stringify(rowOf(rows, 'sha256', v)));
+  assert.equal(r.context, 'TLS certificate fingerprint');
+});
+
+test('every certificate serial in the corpus is a pattern row, never a hash row', function () {
+  /* Denominator: every tls_certificates entry in every feed under ioc-feeds/, and
+     both serial fields on each. A serial is opaque hex of a length the feed chooses,
+     so it must not be typed by its shape. */
+  var files = fs.readdirSync(FEED_DIR).filter(function (f) { return /-iocs\.json$/.test(f); });
+  var checked = 0, bad = [];
+  files.forEach(function (f) {
+    var doc = JSON.parse(fs.readFileSync(path.join(FEED_DIR, f), 'utf8'));
+    function walk(o) {
+      if (!o || typeof o !== 'object') return;
+      Object.keys(o).forEach(function (k) {
+        if (k === 'tls_certificates' && Array.isArray(o[k])) {
+          var rows = X.summarise(doc).rows;
+          o[k].forEach(function (cert) {
+            ['serial', 'earlier_serial'].forEach(function (field) {
+              if (typeof cert[field] !== 'string') return;
+              checked++;
+              var hits = rows.filter(function (r) { return r.value === cert[field].trim(); });
+              var want = field === 'serial' ? 'TLS certificate serial' : 'earlier serial';
+              if (hits.length !== 1 || hits[0].type !== 'pattern' || hits[0].context !== want) {
+                bad.push(f + ': ' + field + ' ' + cert[field] + ' -> ' + JSON.stringify(hits));
+              }
+            });
+          });
+        }
+        walk(o[k]);
+      });
+    }
+    walk(doc);
+  });
+  assert.ok(checked >= 3, 'denominator collapsed: ' + checked + ' certificate serials');
+  assert.deepEqual(bad, []);
+});
+
+test('a certificate SPKI fingerprint says which fingerprint it is', function () {
+  var rows = summarise('opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817').rows;
+  var r = rowOf(rows, 'sha256', 'e788774dfe961c999953ef72a208f198c58c47f14d4b7777d50abee835d75fff');
+  assert.ok(r, 'the SPKI hash row is missing');
+  assert.equal(r.context, 'TLS certificate SPKI fingerprint');
 });
 
 test('the three korean-claude-openclaw instructions are carried, verb-led, dots and slashes and all', function () {

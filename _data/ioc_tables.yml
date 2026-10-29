@@ -9049,14 +9049,14 @@
   feed_url: "/ioc-feeds/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817-iocs.json"
   report_url: "/reports/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817/"
   detection_url: "/hunting-detections/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817-detections"
-  total: 186
+  total: 187
   untyped: 13
   counts:
     domain: 2
     filename: 68
     ipv4: 2
     path: 13
-    pattern: 27
+    pattern: 28
     sha1: 1
     sha256: 70
     url: 3
@@ -9174,7 +9174,7 @@
       fp_risk: null
     - type: "sha256"
       value: "3797dddabdef5e9607c9c0bde108922467adf15d5e29cd6c6319df91b334a0c9"
-      context: null
+      context: "TLS certificate fingerprint"
       confidence: "DEFINITE"
       action: null
       fp_risk: null
@@ -9474,7 +9474,7 @@
       fp_risk: null
     - type: "sha256"
       value: "e788774dfe961c999953ef72a208f198c58c47f14d4b7777d50abee835d75fff"
-      context: null
+      context: "TLS certificate SPKI fingerprint"
       confidence: "DEFINITE"
       action: null
       fp_risk: null
@@ -9528,7 +9528,7 @@
       fp_risk: null
     - type: "sha1"
       value: "aab136e06c94e5616832afa34af096bd6b77151c"
-      context: null
+      context: "TLS certificate fingerprint"
       confidence: "DEFINITE"
       action: null
       fp_risk: null
@@ -10022,6 +10022,12 @@
       value: "/etc/passwd line 1 mutated to a uid-0 entry, or any uid-0 account not named root"
       context: null
       confidence: "HIGH"
+      action: null
+      fp_risk: null
+    - type: "pattern"
+      value: "373b099212237996e4394bdf8dd5a27715dccf13"
+      context: "TLS certificate serial"
+      confidence: "DEFINITE"
       action: null
       fp_risk: null
     - type: "pattern"
@@ -11318,13 +11324,13 @@
   feed_url: "/ioc-feeds/opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015-iocs.json"
   report_url: "/reports/opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015/"
   detection_url: "/hunting-detections/opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015-detections"
-  total: 43
+  total: 45
   untyped: 0
   counts:
     filename: 2
     ipv4: 9
     path: 12
-    pattern: 13
+    pattern: 15
     sha256: 3
     url: 4
   has_confidence: true
@@ -11411,7 +11417,7 @@
       fp_risk: null
     - type: "sha256"
       value: "0ce2e8a961c564e9d76c2f59662c1107b33e2c32922e39a4c0d900e79722e7bc"
-      context: null
+      context: "TLS certificate fingerprint"
       confidence: "HIGH"
       action: "HUNT"
       fp_risk: null
@@ -11510,6 +11516,18 @@
       context: null
       confidence: "DEFINITE"
       action: null
+      fp_risk: null
+    - type: "pattern"
+      value: "3b6e9d04e14fcb1d5ad1642fc990b6afdccdf5bc"
+      context: "TLS certificate serial"
+      confidence: "HIGH"
+      action: "HUNT"
+      fp_risk: null
+    - type: "pattern"
+      value: "4693349e740f3ef6a03444a735d5c73745ec8836"
+      context: "earlier serial"
+      confidence: "HIGH"
+      action: "HUNT"
       fp_risk: null
     - type: "pattern"
       value: "A TCP/53 flow to 38.180.16.98 carrying the 5-byte line PING (hex 50 49 4e 47 0a) at roughly a 15-second cadence"

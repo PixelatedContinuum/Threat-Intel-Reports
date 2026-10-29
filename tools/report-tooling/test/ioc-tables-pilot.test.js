@@ -54,16 +54,19 @@ function countEntries(doc) {
 var doc = JSON.parse(fs.readFileSync(FEED, 'utf8'));
 var summary = X.summarise(doc);
 
-test('THE PILOT ENTRY CARRIES ONE ROW PER INDICATOR ENTRY THE FEED DECLARES, PLUS ITS TWO FILE NAMES', function () {
+test('THE PILOT ENTRY CARRIES ONE ROW PER INDICATOR ENTRY THE FEED DECLARES, PLUS ITS TWO FILE NAMES AND TWO CERTIFICATE SERIALS', function () {
   assert.equal(countEntries(doc), 41,
     'the feed no longer declares 41 indicator entries; the count this test pins moved');
   /* 41 + the two `file_hashes.sha256[].filename` rows. A filename beside a hash is
      the common pivot (Rubeus, SweetPotato) where the hash is the exact-build pivot;
      the first review measured 179 such names absent from the whole table when the
      label rule suppressed them, and the lead restored the row. The denominator
-     stays the feed's 41 entries; the two names are additional rows over it. */
-  assert.equal(summary.rows.length, 43,
-    'rows: ' + summary.rows.length + ' against ' + countEntries(doc) + ' feed entries + 2 filenames');
+     stays the feed's 41 entries; the two names are additional rows over it.
+     + the certificate's `serial` and `earlier_serial` (fix round 2): serials are
+     hunt pivots, so they are rows of their own typed `pattern`. */
+  assert.equal(summary.rows.length, 45,
+    'rows: ' + summary.rows.length + ' against ' + countEntries(doc) +
+    ' feed entries + 2 filenames + 2 certificate serials');
 });
 
 test('no pilot row is untyped: every value the feed declares has a type', function () {
@@ -79,8 +82,8 @@ test('the type histogram is the report\'s own breakdown, measured', function () 
     sha256: 3,     // 2 file hashes + the TLS certificate's fingerprint
     path: 12,
     filename: 2,   // dump2.sh and Relay.java.new, the two hash entries' names
-    pattern: 13    // 3 service fingerprints, 6 network signatures, 2 behaviours,
-                   // 1 mutex, 1 host-name fingerprint
+    pattern: 15    // 3 service fingerprints, 6 network signatures, 2 behaviours,
+                   // 1 mutex, 1 host-name fingerprint, + the 2 certificate serials
   });
 });
 
@@ -116,12 +119,30 @@ test('\'Relay.java\' is a path from the file_paths container, not a domain', fun
   assert.equal(row.type, 'path');
 });
 
-test('a certificate serial is not a sha1 row', function () {
-  var serials = [doc.tls_certificates[0].serial, doc.tls_certificates[0].earlier_serial];
-  serials.forEach(function (s) {
-    var hit = summary.rows.filter(function (r) { return r.value === s; });
-    assert.deepEqual(hit, [], 'the certificate serial ' + s + ' is rendered as a row');
+test('a certificate serial is a pattern row carrying its field label, never a sha1', function () {
+  /* Fix round 2 (lead, 2026-10-29): a serial is a hunt pivot, so it keeps a row.
+     It is NOT typed sha1: 40 hex is a shape, not the fact, and a serial pasted into
+     a file-hash hunt can never match. `pattern` needs no new hue. The context names
+     the field because the value itself is opaque. */
+  var want = [
+    { v: doc.tls_certificates[0].serial, ctx: 'TLS certificate serial' },
+    { v: doc.tls_certificates[0].earlier_serial, ctx: 'earlier serial' }
+  ];
+  want.forEach(function (w) {
+    var hit = summary.rows.filter(function (r) { return r.value === w.v; });
+    assert.equal(hit.length, 1, 'the certificate serial ' + w.v + ' is not exactly one row');
+    assert.equal(hit[0].type, 'pattern', 'a serial is not a sha1: ' + JSON.stringify(hit[0]));
+    assert.equal(hit[0].context, w.ctx, 'the serial row lost its field label');
+    assert.equal(hit[0].action, 'HUNT', 'the serial row lost the certificate entry\'s action');
   });
+});
+
+test('the certificate fingerprint row says it is one', function () {
+  var v = doc.tls_certificates[0].sha256;
+  var r = summary.rows.filter(function (row) { return row.value === v; })[0];
+  assert.ok(r, 'the certificate fingerprint has no row');
+  assert.equal(r.type, 'sha256');
+  assert.equal(r.context, 'TLS certificate fingerprint');
 });
 
 test('the nine address entries survive as nine rows, port included', function () {
@@ -134,10 +155,11 @@ test('the nine address entries survive as nine rows, port included', function ()
 
 test('all thirteen prose-shape entries are rows, with the feed\'s own action and confidence', function () {
   var pat = summary.rows.filter(function (r) { return r.type === 'pattern'; });
-  assert.equal(pat.length, 13);
-  assert.equal(pat.filter(function (r) { return r.confidence; }).length, 13,
+  /* 13 prose entries plus the 2 certificate serials, which share the type. */
+  assert.equal(pat.length, 15);
+  assert.equal(pat.filter(function (r) { return r.confidence; }).length, 15,
     'a pattern row lost its confidence');
-  assert.equal(pat.filter(function (r) { return r.action; }).length, 13,
+  assert.equal(pat.filter(function (r) { return r.action; }).length, 15,
     'a pattern row lost its action');
 });
 

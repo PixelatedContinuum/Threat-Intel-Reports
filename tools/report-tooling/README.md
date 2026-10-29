@@ -73,7 +73,7 @@ It routes on staged paths, so a commit touching only prose runs nothing and says
 |---|---|---|
 | `hunting-detections/*.md`, `_data/detection_manifests.yml` | `check-detection-manifest.js` | manifest stale against source |
 | `ioc-feeds/*.json`, `_data/catalog.yml`, `assets/data/ioc-index.json` | `check-ioc-index.js` | index stale, embargoed feed leaking |
-| `ioc-feeds/*.json`, `_data/catalog.yml`, `reports/*/index.md`, the stubs | `check-ioc-tables.js` | viewer tables stale, a stub surviving after re-embargo |
+| `ioc-feeds/*.json`, `_data/catalog.yml`, `_data/ioc_tables.yml`, `reports/*/index.md`, the stubs | `check-ioc-tables.js` | viewer tables stale, a stub surviving after re-embargo, a regenerated table that silently drops a previously published row |
 | `_data/wire.yml` | `check-wire.js` | malformed or description-bearing wire data |
 
 `_data/wire.yml` is no longer committed (it lives on the `wire-data` branch and the Pages
@@ -115,6 +115,17 @@ feed under `ioc-feeds/<slug>/`, and REMOVES a stub whose feed is no longer publi
 `node check-ioc-tables.js` gates both by regenerate-and-diff. Only published feeds get a
 page: the three embargoed campaigns keep their raw JSON, which is live-but-unlisted by
 design, and gain no rendered surface.
+
+It also enforces design v4 check 5, "IOC tables lose nothing": the regenerated table is
+compared row by row with the previously published one (`--against <file>`, or `git show
+HEAD:_data/ioc_tables.yml` by default) and a row that disappears FAILS unless it is the
+same value under another type or case, or the feed itself lists it in `non_indicators`,
+`explicitly_excluded` or `metadata.reference`. Regenerate-and-diff alone cannot see this:
+a generation that is correct and narrower matches the feeds perfectly while a hunt pivot
+goes missing, which is the direction the E7 work failed in twice. Every removed row is
+printed with its reason class and a count per class. `--after <file>` replaces the new
+side for reproducing a comparison and for the control that must fail; the staleness half
+still reads the real table, so a copy cannot make a stale table look current.
 
 `node generate-actors.js` writes `_data/actors_index.yml`, one stub page per designation
 under `actors/<id>/` and, beside each stub, that actor's ATT&CK Navigator layer

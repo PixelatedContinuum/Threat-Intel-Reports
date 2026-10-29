@@ -12,22 +12,188 @@
    after its campaign went back under embargo serves a rendered page for content
    that is supposed to be off every listing. The second is the one that matters.
 
+   THE NO-LOSS HALF (design v4 check 5, 2026-10-29). Regenerate-and-diff catches a
+   STALE table; it cannot catch a CORRECT AND NARROWER regeneration, which is the
+   direction this table has actually failed in twice. So the new table is also
+   compared row by row with the previously published one: a (feed, value) row that
+   was there before and is gone now is a FAIL, unless the value is the same value
+   under another type or case, or the feed itself lists it in non_indicators,
+   explicitly_excluded or metadata.reference. Every removed row is printed with its
+   reason class, with a count per class (`lib/ioc-table-noloss.js` explains the
+   boundaries and the classes).
+
+   Previous table:
+     --against <path>       compare against this file (a `git show` redirect, a
+                            review's copy, or the pre-task table)
+     (default)              `git show HEAD:_data/ioc_tables.yml`, when the working
+                            file differs from it. Identical means nothing changed,
+                            which is printed with its row count rather than passed
+                            silently. A repository with no HEAD table (the first
+                            commit that adds one) is likewise a stated skip, and a
+                            git failure is NOT CHECKED, never a pass.
+
+   --after <path> exists for reproducing a comparison and for the control that must
+   fail: it replaces the new side only. The staleness half still reads the real
+   working file, so an --after copy can never make a stale table look current.
+
    Exit codes: 0 PASS, 1 FAIL, 2 NOT CHECKED. */
 
 var fs = require('node:fs');
 var path = require('node:path');
+var cp = require('node:child_process');
 
 var ROOT = path.join(__dirname, '..', '..');
 var OUT = path.join(ROOT, '_data', 'ioc_tables.yml');
 var FEED_DIR = path.join(ROOT, 'ioc-feeds');
 
-var GEN, CDM;
+var GEN, CDM, NL;
 try {
   GEN = require('./generate-ioc-tables.js');
   CDM = require('./lib/check-detection-manifest.js');   // shared normalise + diff
+  NL = require('./lib/ioc-table-noloss.js');            // design v4 check 5
 } catch (e) {
   console.log('NOT CHECKED  ' + e.message + '. Run `npm ci` in tools/report-tooling.');
   process.exit(2);
+}
+
+function arg(name) {
+  var a = process.argv.slice(2);
+  for (var i = 0; i < a.length; i++) {
+    if (a[i] === name) return i + 1 < a.length ? a[i + 1] : '';
+    if (a[i].indexOf(name + '=') === 0) return a[i].slice(name.length + 1);
+  }
+  return null;
+}
+
+function gitShow(rev) {
+  return cp.execFileSync('git', ['show', rev], {
+    cwd: ROOT, encoding: 'utf8', maxBuffer: 64 * 1024 * 1024,
+    stdio: ['ignore', 'pipe', 'pipe']
+  });
+}
+
+/* { status: 'OK', text, source } | { status: 'SAME', text } |
+   { status: 'SKIP', reason } | { status: 'NOT CHECKED', reason } */
+function previousTable() {
+  var explicit = arg('--against');
+  if (explicit !== null) {
+    if (!explicit) return { status: 'NOT CHECKED', reason: '--against needs a file path' };
+    try {
+      return { status: 'OK', text: fs.readFileSync(explicit, 'utf8'),
+               source: explicit };
+    } catch (e) {
+      return { status: 'NOT CHECKED',
+               reason: 'could not read --against ' + explicit + ': ' + e.message };
+    }
+  }
+
+  var disk;
+  try { disk = fs.readFileSync(OUT, 'utf8'); }
+  catch (e) { return { status: 'SKIP', reason: 'the working table is not readable: ' + e.message }; }
+
+  try {
+    var head = gitShow('HEAD:_data/ioc_tables.yml');
+    if (head === disk) return { status: 'SAME', text: disk };
+    return { status: 'OK', text: head, source: 'git show HEAD:_data/ioc_tables.yml' };
+  } catch (e) {
+    try { cp.execFileSync('git', ['rev-parse', '--git-dir'], { cwd: ROOT, stdio: 'ignore' }); }
+    catch (e2) {
+      return { status: 'NOT CHECKED',
+               reason: 'no git repository at ' + ROOT +
+                 ', so the previously published table cannot be read' };
+    }
+    try { cp.execFileSync('git', ['cat-file', '-e', 'HEAD:_data/ioc_tables.yml'],
+                          { cwd: ROOT, stdio: 'ignore' }); }
+    catch (e3) {
+      return { status: 'SKIP',
+               reason: 'HEAD has no _data/ioc_tables.yml, so there is no previously ' +
+                 'published table to compare (the first commit that adds one)' };
+    }
+    return { status: 'NOT CHECKED',
+             reason: 'git could not read HEAD:_data/ioc_tables.yml: ' +
+               String((e && e.message) || e).split('\n')[0] };
+  }
+}
+
+/* Runs the check-5 comparison and returns the lines to print plus any problems.
+   The new side is the freshly generated table (what a publish would write), so a
+   stale working file cannot make the comparison look complete. */
+function noLoss(freshText) {
+  var out = { lines: [], problems: [] };
+  var prev = previousTable();
+
+  if (prev.status === 'NOT CHECKED') {
+    out.notChecked = prev.reason;
+    return out;
+  }
+  if (prev.status === 'SKIP') {
+    out.lines.push('   no-loss  skipped: ' + prev.reason);
+    return out;
+  }
+
+  var afterText = freshText;
+  var afterLabel = 'the regenerated table';
+  var afterPath = arg('--after');
+  if (afterPath !== null) {
+    if (!afterPath) { out.notChecked = '--after needs a file path'; return out; }
+    try { afterText = fs.readFileSync(afterPath, 'utf8'); afterLabel = afterPath; }
+    catch (e) {
+      out.notChecked = 'could not read --after ' + afterPath + ': ' + e.message;
+      return out;
+    }
+  }
+
+  var cmp;
+  try {
+    cmp = NL.compare(prev.text, afterText, {
+      readFeed: function (file) {
+        return JSON.parse(fs.readFileSync(path.join(FEED_DIR, file), 'utf8'));
+      }
+    });
+  } catch (e) {
+    out.notChecked = 'the comparison could not be made: ' + e.message;
+    return out;
+  }
+
+  var removedRows = cmp.removed.reduce(function (n, r) { return n + (r.rows || 1); }, 0);
+
+  if (prev.status === 'SAME') {
+    out.lines.push('   no-loss  working _data/ioc_tables.yml is identical to HEAD, so ' +
+      'nothing was removed: ' + cmp.before_rows + ' rows before, ' + cmp.after_rows +
+      ' after, 0 removed');
+    return out;
+  }
+
+  out.lines.push('   no-loss  previous: ' + prev.source + ' (' + cmp.before_feeds +
+    ' feeds, ' + cmp.before_rows + ' rows)');
+  out.lines.push('   no-loss  now:      ' + afterLabel + ' (' + cmp.after_feeds +
+    ' feeds, ' + cmp.after_rows + ' rows)');
+
+  if (!cmp.removed.length) {
+    out.lines.push('   no-loss  removed 0 rows of ' + cmp.before_rows + ' compared');
+    return out;
+  }
+
+  var classes = Object.keys(cmp.counts).sort().map(function (k) {
+    return (NL.REASONS[k] || k) + ' ' + cmp.counts[k];
+  });
+  out.lines.push('   no-loss  removed ' + removedRows + ' rows of ' + cmp.before_rows +
+    ' compared: ' + classes.join(', '));
+  out.lines.push('   no-loss  every removed row, with its reason class:');
+  cmp.removed.forEach(function (r) {
+    out.lines.push('   no-loss    ' + r.feed + '  ' + r.type + '  ' + r.value +
+      '  ->  ' + (NL.REASONS[r.reason] || r.reason) + ' (' + r.detail + ')');
+  });
+
+  if (cmp.unexplained) {
+    out.problems.push('the regeneration REMOVES ' + cmp.unexplained + ' row' +
+      (cmp.unexplained === 1 ? '' : 's') + ' of ' + cmp.before_rows +
+      ' previously published, with no reason the feed gives (listed above). ' +
+      'Design v4 check 5: IOC tables lose nothing. Restore the rows, or have the ' +
+      'feed list the values in non_indicators / explicitly_excluded / ' +
+      'metadata.reference, or pass a reviewed --against.');
+  }
+  return out;
 }
 
 var gen;
@@ -40,6 +206,7 @@ catch (e) {
 if (gen.status === 'NOT CHECKED') { console.log('NOT CHECKED  ' + gen.reason); process.exit(2); }
 
 var problems = gen.problems.slice();
+var lossLines = [];
 
 if (gen.status !== 'FAIL') {
   if (!gen.tables) {
@@ -75,11 +242,21 @@ if (gen.status !== 'FAIL') {
     problems.push('DISCLOSURE: a stub page for "' + s + '" is still on disk but the feed ' +
       'is no longer published. Run `node generate-ioc-tables.js` to remove it.');
   });
+
+  /* Design v4 check 5. Runs on the regenerated table, not the working copy. */
+  var loss = noLoss(gen.yaml);
+  lossLines = loss.lines;
+  if (loss.notChecked) {
+    console.log('NOT CHECKED  the no-loss comparison could not run: ' + loss.notChecked);
+    process.exit(2);
+  }
+  problems = problems.concat(loss.problems);
 }
 
 if (problems.length) {
   console.log('FAIL  ' + OUT);
   problems.forEach(function (p) { console.log('   FAIL  ' + p); });
+  lossLines.forEach(function (l) { console.log(l); });
   process.exit(1);
 }
 
@@ -89,4 +266,5 @@ if (gen.skipped) {
   console.log('   note  skipped ' + gen.skipped.embargoed + ' embargoed, ' +
     gen.skipped.unknown + ' unknown, ' + gen.skipped.empty + ' with nothing typed');
 }
+lossLines.forEach(function (l) { console.log(l); });
 process.exit(0);
