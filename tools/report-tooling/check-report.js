@@ -130,6 +130,27 @@ function tiersNotChecked(reason) {
            byTier: { 1: 0, 2: 0, 3: 0 } };
 }
 
+/* The tab marking (design-v4 5.1) gets its own guard as well. It is reported
+   here rather than only in check-tabs.js so the corpus sweep can print one
+   column per live report from the SAME fetched page the other verdicts read; a
+   second fetch would be a second subject and could disagree with them. */
+var CTABS = null;
+var TABS_REASON = null;
+try {
+  CTABS = require('./check-tabs.js');
+  if (!CTABS || typeof CTABS.checkDom !== 'function' || typeof CTABS.checkMarkdown !== 'function') {
+    throw new Error('check-tabs.js loaded but exports no checkDom/checkMarkdown');
+  }
+} catch (e) {
+  TABS_REASON = 'tab checker did not load: ' +
+    String((e && e.message) || e).split('\n')[0].trim();
+}
+
+function tabsNotChecked(reason) {
+  return { status: 'NOT CHECKED', reason: reason, tagged: 0, unmarked: 0, byTab: {},
+           problems: [], advisories: [] };
+}
+
 /* The revision record (last_updated and the revisions list) gets its own too.
    It needs js-yaml, which the actor and cross-reference tooling already carry. */
 var CREV = null;
@@ -148,6 +169,7 @@ function depsNotChecked(p) {
            glossary: glossaryNotChecked('gate dependencies did not load, so nothing was verified'),
            figureNav: figureNavNotChecked('gate dependencies did not load, so nothing was verified'),
            tiers: tiersNotChecked('gate dependencies did not load, so nothing was verified'),
+           tabs: tabsNotChecked('gate dependencies did not load, so nothing was verified'),
            revisions: revisionsNotChecked('gate dependencies did not load, so nothing was verified') };
 }
 
@@ -345,6 +367,12 @@ function checkMarkdown(md, label) {
     r.problems = (r.problems || []).concat(r.tiers.problems);
   }
 
+  r.tabs = TABS_REASON ? tabsNotChecked(TABS_REASON) : CTABS.checkMarkdown(md, label);
+  if (r.tabs.status === 'FAIL') {
+    r.status = 'FAIL';
+    r.problems = (r.problems || []).concat(r.tabs.problems);
+  }
+
   /* The revision record is front matter too, so it is complete on this path. */
   r.revisions = REV_REASON ? revisionsNotChecked(REV_REASON) : CREV.checkMarkdown(md);
   if (r.revisions.status === 'FAIL') {
@@ -362,6 +390,7 @@ function checkFile(file) {
                        glossary: glossaryNotChecked('report could not be read'),
                        figureNav: figureNavNotChecked('report could not be read'),
                        tiers: tiersNotChecked('report could not be read'),
+                       tabs: tabsNotChecked('report could not be read'),
                        revisions: revisionsNotChecked('report could not be read') }; }
   return checkMarkdown(md, file);
 }
@@ -374,20 +403,23 @@ async function checkUrl(url) {
     if (!res.ok) return { status: 'NOT CHECKED', path: url, reason: 'HTTP ' + res.status, problems: [], missing: [],
                           glossary: glossaryNotChecked('report body was not retrieved'),
                           figureNav: figureNavNotChecked('report body was not retrieved'),
-                          tiers: tiersNotChecked('report body was not retrieved') };
+                          tiers: tiersNotChecked('report body was not retrieved'),
+                          tabs: tabsNotChecked('report body was not retrieved') };
     html = await res.text();
   } catch (e) {
     return { status: 'NOT CHECKED', path: url, reason: e.message, problems: [], missing: [],
              glossary: glossaryNotChecked('report body was not retrieved'),
              figureNav: figureNavNotChecked('report body was not retrieved'),
-             tiers: tiersNotChecked('report body was not retrieved') };
+             tiers: tiersNotChecked('report body was not retrieved'),
+             tabs: tabsNotChecked('report body was not retrieved') };
   }
   var doc = new JSDOM(html).window.document;
   var body = doc.querySelector('.hl-post-content') || doc.querySelector('.hl-post-body');
   if (!body) return { status: 'NOT CHECKED', path: url, reason: 'no report body container', problems: [], missing: [],
                       glossary: glossaryNotChecked('report body was not retrieved'),
                       figureNav: figureNavNotChecked('report body was not retrieved'),
-                      tiers: tiersNotChecked('report body was not retrieved') };
+                      tiers: tiersNotChecked('report body was not retrieved'),
+                      tabs: tabsNotChecked('report body was not retrieved') };
   var wrapper = new JSDOM('<body></body>').window.document;
   wrapper.body.innerHTML = body.innerHTML;
   var r = checkDom(wrapper, url);
@@ -431,6 +463,20 @@ async function checkUrl(url) {
     if (r.tiers.status === 'FAIL') {
       r.status = 'FAIL';
       r.problems = r.problems.concat(r.tiers.problems);
+    }
+  }
+
+  /* The tab marking, from the same fetched document. checkDom cannot re-check
+     placement (the served page carries the merged class), so the tab column
+     reports all-or-none, the vocabulary and the reserved-id rule; placement is
+     check-tabs.js's job on the markdown. */
+  if (TABS_REASON) {
+    r.tabs = tabsNotChecked(TABS_REASON);
+  } else {
+    r.tabs = CTABS.checkDom(doc, url);
+    if (r.tabs.status === 'FAIL') {
+      r.status = 'FAIL';
+      r.problems = r.problems.concat(r.tabs.problems);
     }
   }
   // The front matter is not in the rendered page; the markdown path checks it.

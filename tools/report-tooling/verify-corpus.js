@@ -95,6 +95,13 @@ function pad(s, n) { return String(s).padEnd(n); }
   var figEntries = 0, figChips = 0, figSilent = 0;
   var tierCounts = { PASS: 0, FAIL: 0, 'NOT CHECKED': 0 };
   var tierMarked = 0, tierSilent = 0;
+  /* The tab marking is a column of its own (build-contract.md "Checks"). It is
+     read from the same fetched page as every other verdict here, so it says
+     what the LIVE corpus carries rather than what the markdown on disk asks
+     for: a report whose source is tagged but whose deploy is stale shows as
+     untagged, which is the truth about the page a reader gets. */
+  var tabCounts = { PASS: 0, FAIL: 0, 'NOT CHECKED': 0 };
+  var tabbedReports = 0, tabSections = 0;
   var techniques = 0, unmapped = 0, marks = 0, tables = 0;
   var attention = [];
 
@@ -116,14 +123,26 @@ function pad(s, n) { return String(s).padEnd(n); }
     tierMarked += tv.marked || 0;
     if (tv.status === 'PASS' && !tv.marked) tierSilent++;
 
+    var tb = r.tabs || { status: 'NOT CHECKED', reason: 'no tab verdict recorded',
+                         tagged: 0, unmarked: 0, byTab: {} };
+    tabCounts[tb.status] = (tabCounts[tb.status] || 0) + 1;
+    var tabsUsed = Object.keys(tb.byTab || {}).filter(function (t) { return tb.byTab[t] > 0; }).length;
+    if (tb.tagged) { tabbedReports++; tabSections += tb.tagged; }
+
     techniques += r.techniques || 0;
     unmapped += r.unmapped || 0;
     tables += r.tables || 0;
     marks += g.marks || 0;
 
     var slug = urls[i].replace(BASE, '');
+    /* `untagged` is a fact with the same standing as a count: it says the page
+       carries no tab markup, not that the column could not be read. A read that
+       failed says so in words instead. */
+    var tabCell = tb.status === 'NOT CHECKED' ? 'tabs NOT CHECKED'
+      : tb.status === 'FAIL' ? 'tabs FAIL ' + (tb.problems || []).length + ' problem(s)'
+      : tb.tagged ? 'tabs ' + tb.tagged + 's/' + tabsUsed + 't' : 'untagged';
     var tail = r.status === 'NOT CHECKED' ? r.reason
-      : (r.tables || 0) + 't ' + (r.techniques || 0) + 'tech ' + (g.marks || 0) + 'gloss' +
+      : (r.tables || 0) + 't ' + (r.techniques || 0) + 'tech ' + (g.marks || 0) + 'gloss ' + tabCell +
         (g.status === 'PASS' ? '' : '  glossary ' + g.status);
     console.log(pad(r.status, 12) + pad(slug, 62) + tail);
 
@@ -133,6 +152,8 @@ function pad(s, n) { return String(s).padEnd(n); }
     if (fnv.status === 'FAIL') attention.push(slug + ': figure-nav FAIL, ' + (fnv.problems || []).join('; '));
     if (tv.status === 'NOT CHECKED') attention.push(slug + ': tiers NOT CHECKED, ' + tv.reason);
     if (tv.status === 'FAIL') attention.push(slug + ': tiers FAIL, ' + (tv.problems || []).join('; '));
+    if (tb.status === 'NOT CHECKED') attention.push(slug + ': tabs NOT CHECKED, ' + tb.reason);
+    if (tb.status === 'FAIL') attention.push(slug + ': tabs FAIL, ' + (tb.problems || []).join('; '));
   }
 
   // Source side: is the manifest consistent with the markdown it came from?
@@ -176,6 +197,10 @@ function pad(s, n) { return String(s).padEnd(n); }
   console.log('sections marked      ' + tierMarked);
   // A count, never a silence, for the same reason as the figure-nav line above.
   console.log('reports unmarked     ' + tierSilent);
+  console.log('tabs P/F/NC          ' + tabCounts.PASS + ' / ' + tabCounts.FAIL +
+    ' / ' + tabCounts['NOT CHECKED']);
+  console.log('tabbed reports       ' + tabbedReports + ' of ' + urls.length +
+    ', ' + tabSections + ' tagged sections');
 
   if (attention.length) {
     console.log('\n== needs attention ==');
@@ -184,10 +209,10 @@ function pad(s, n) { return String(s).padEnd(n); }
 
   // FAIL outranks NOT CHECKED, because a real defect is more urgent than an
   // unverified report, but neither can ever exit 0.
-  if (counts.FAIL || figCounts.FAIL || tierCounts.FAIL ||
+  if (counts.FAIL || figCounts.FAIL || tierCounts.FAIL || tabCounts.FAIL ||
       det.status === 'FAIL' || live.status === 'FAIL') process.exit(1);
   if (counts['NOT CHECKED'] || glossCounts['NOT CHECKED'] || figCounts['NOT CHECKED'] ||
-      tierCounts['NOT CHECKED'] ||
+      tierCounts['NOT CHECKED'] || tabCounts['NOT CHECKED'] ||
       det.status === 'NOT CHECKED' || live.status === 'NOT CHECKED') process.exit(2);
   process.exit(0);
 })();

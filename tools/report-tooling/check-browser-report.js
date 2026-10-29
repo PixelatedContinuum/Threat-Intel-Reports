@@ -108,6 +108,737 @@ function check(name, pass, detail) {
   if (detail) console.log('         ' + detail);
 }
 
+/* ---------- tabbed reports (design-v4 check 5.4, section 4a) ----------
+
+   A tabbed page retires the register switch (E3), so the five register
+   assertions above are replaced here rather than added to: on a tabbed page the
+   switch does not exist, and the checks that would find it absent would fail a
+   page that is working exactly as designed. The layout emits the tab class from
+   kramdown onto each h2, so the FETCHED html says which kind of page this is
+   before any browser sees it. An untabbed page takes the old branch untouched:
+   that is the control, and its verdict lines are diffed before/after a change
+   to this file.
+
+   Every assertion below reads the built DOM through lib/cdp.js. The tab bar,
+   panels and views are built by hl-report-tabs.js at runtime, so a check that
+   read the fetched HTML would be reading the inputs and calling them output. */
+
+var TAB_TOKENS = ['overview', 'victims', 'chain', 'timeline', 'attribution', 'indicators', 'confidence'];
+/* 4a's four mobile sizes plus the desktop one 5.4 names. Order matters only for
+   the log; 812x375 is a landscape phone and gets the tablet layout. */
+var TAB_VIEWPORTS = [
+  [1280, 900, 'desktop'],
+  [768, 1024, 'tablet'],
+  [812, 375, 'landscape phone'],
+  [390, 844, 'phone'],
+  [360, 800, 'small phone']
+];
+
+function isTabbedHtml(html) {
+  var tags = String(html).match(/<h2[^>]*>/g) || [];
+  return tags.some(function (t) { return /class="[^"]*\bhl-tab-[a-z]/.test(t); });
+}
+
+async function setViewport(page, width, height) {
+  /* The same emulation Playwright's `newContext({viewport, hasTouch})` uses for
+     a resized desktop viewport: metrics override, touch on, mobile layout off.
+     `mobile: true` would change how the viewport meta is applied and would not
+     be the thing part 1 was verified against. */
+  await page.send('Emulation.setDeviceMetricsOverride', {
+    width: width, height: height, deviceScaleFactor: 1, mobile: false
+  });
+  await page.send('Emulation.setTouchEmulationEnabled', {
+    enabled: width < 1024, maxTouchPoints: 5
+  });
+  await CDP.sleep(150);
+}
+
+async function gotoAndWait(page, url) {
+  await page.send('Page.navigate', { url: url });
+  var ready = await page.waitFor('.hl-rv-ready', 8000);
+  await CDP.sleep(150);
+  return ready;
+}
+
+/* One expression for the page-level horizontal-scroll gate.
+
+   `documentElement.scrollWidth` alone is not enough here: the theme sets
+   `html { overflow-x: clip }`, which keeps scrollWidth equal to the viewport
+   while a too-wide element is silently cut off. A clipped 900 px box is a worse
+   defect than a scrollbar, so two facts are read:
+
+   - canScroll: after scrolling right, did the document actually move?
+   - escaped: how many painted elements extend past the viewport WITHOUT a
+     horizontal scroll/clip ancestor between them and <body>. Elements inside a
+     declared scroll box (`.hl-rv-source-table`, `.hl-rv-table-wrap`) are
+     contained by design and are not counted; html's own clip is deliberately
+     not treated as containment, or it would hide every overflow it causes.
+
+   Both must be clean. */
+var OVERFLOW_EXPR = '(function(){' +
+  'var de=document.documentElement,client=de.clientWidth;' +
+  'window.scrollTo(9999,window.scrollY);var sx=Math.round(window.scrollX);window.scrollTo(0,window.scrollY);' +
+  'var escaped=[],all=document.body.querySelectorAll("*");' +
+  'for(var i=0;i<all.length;i++){var e=all[i],r=e.getBoundingClientRect();' +
+  'if(r.width<=0&&r.height<=0)continue;' +
+  'if(r.right<=client+1&&r.left>=-1)continue;' +
+  'var a=e.parentElement,clipped=false;' +
+  'while(a&&a!==document.body){var c=getComputedStyle(a);' +
+  'if(/auto|scroll|hidden|clip/.test(c.overflowX)){clipped=true;break}a=a.parentElement}' +
+  'if(!clipped)escaped.push({tag:e.tagName,cls:String(e.className||"").slice(0,40),' +
+  'left:Math.round(r.left),right:Math.round(r.right)});}' +
+  'return {client:client,scrollW:de.scrollWidth,scrollX:sx,escaped:escaped.length,' +
+  'first:escaped.slice(0,4)};})()';
+
+/* 44 px targets in chrome, measured the same way part 1 measured 1,562 of them:
+   every rendered control inside a [data-rv-chrome] region plus the tab bar,
+   with every dashboard fold opened first so a control cannot hide inside a
+   closed <details>. getClientRects() is the visibility test, not computed
+   display: a control in a hidden panel reports its own display as inline and
+   would otherwise count as visible. */
+function targetsExpr(token) {
+  return '(function(){var t=' + JSON.stringify(token) + ';' +
+    'var panel=document.getElementById("tab-"+t);' +
+    'if(!panel)return null;' +
+    'panel.querySelectorAll(".hl-rv-view details").forEach(function(d){d.open=true;});' +
+    'var controls=[].slice.call(panel.querySelectorAll("[data-rv-chrome] :is(a,button,input,select,summary),[data-rv-chrome]:is(a,button,input,select,summary)"))' +
+    '.concat([].slice.call(document.querySelectorAll(".hl-rv-bar :is(a,button)")));' +
+    'var seen=new Set(),visible=[];' +
+    'controls.forEach(function(e){if(seen.has(e))return;seen.add(e);' +
+    'if(!e.getClientRects().length)return;' +
+    'if(getComputedStyle(e).visibility==="hidden")return;visible.push(e);});' +
+    'var small=visible.map(function(e){var r=e.getBoundingClientRect();' +
+    'return {tag:e.tagName,cls:String(e.className||"").slice(0,40),' +
+    'text:(e.textContent||"").trim().slice(0,40),w:Math.round(r.width),h:Math.round(r.height)};})' +
+    '.filter(function(e){return e.w<43.99||e.h<43.99;});' +
+    'return {count:visible.length,small:small.slice(0,8),smallCount:small.length};})()';
+}
+
+/* Keyboard, measured with real key events. A synthetic KeyboardEvent dispatched
+   from evaluate() proves the listener, not focusability: a tab that is 0x0 or
+   outside the layout would still "pass". Input.dispatchKeyEvent goes through
+   the browser's own focus handling, and the focused element is read back. */
+async function pressKey(page, key, code, vk) {
+  for (var type of ['keyDown', 'keyUp']) {
+    await page.send('Input.dispatchKeyEvent', {
+      type: type, key: key, code: code,
+      windowsVirtualKeyCode: vk, nativeVirtualKeyCode: vk
+    });
+  }
+  await CDP.sleep(120);
+}
+
+/* A real pointer click on an item that is already on screen, without asking the
+   page to scroll first.
+
+   `page.click` runs scrollIntoView({block:'center'}) before measuring. For a
+   link inside the sticky tab bar's menu, that scrolls the PAGE, which moves the
+   sticky bar and its menu, and the hit test then lands on whatever slid under
+   the old coordinates. The menu is brought on screen by the caller, so measure
+   and dispatch are done on one settled layout instead. */
+async function clickMenuLink(page, href) {
+  var sel = '.hl-rv-menu a[href="' + href + '"]';
+  var pt = await page.json('(function(){' +
+    'var a=document.querySelector(' + JSON.stringify(sel) + ');' +
+    'if(!a)return null;var r=a.getBoundingClientRect();' +
+    'var x=r.x+r.width/2,y=r.y+r.height/2;var hit=document.elementFromPoint(x,y);' +
+    'return {x:x,y:y,ok:!!hit&&(hit===a||a.contains(hit)),' +
+    'hit:hit?hit.tagName:null,top:Math.round(r.top)};})()');
+  if (!pt || !pt.ok) {
+    // Name the geometry rather than clicking blind; the caller reports it.
+    return pt;
+  }
+  await page.send('Input.dispatchMouseEvent', {
+    type: 'mousePressed', x: pt.x, y: pt.y, button: 'left', clickCount: 1
+  });
+  await page.send('Input.dispatchMouseEvent', {
+    type: 'mouseReleased', x: pt.x, y: pt.y, button: 'left', clickCount: 1
+  });
+  await CDP.sleep(200);
+  return pt;
+}
+
+function selectedTabExpr() {
+  return '(function(){var a=document.querySelector("[role=tab][aria-selected=true]");' +
+    'return {id:a?a.id:null,focus:document.activeElement&&document.activeElement.id};})()';
+}
+
+/* The tab whose view holds the primary list its summary line counts. The first
+   integer in the summary is the builder's headline figure (tiles, victim rows,
+   stages, dated events, hypotheses, indicator chips, judgments), so counting
+   the same elements is a real reconciliation rather than a text match. */
+var TAB_PRIMARY = {
+  overview: '.hl-rv-tile',
+  victims: '#victims tbody tr',
+  chain: '.hl-rv-stage',
+  timeline: '.hl-rv-marker',
+  attribution: '#hypotheses tbody tr',
+  indicators: '.hl-rv-chips li',
+  confidence: '#judgments tbody tr'
+};
+
+/* A 25-date chronology spanning two years, from design-v4 5.4. It is derived
+   from the page under test rather than authored: every table whose first header
+   reads Date/Time/When has its rows replaced, so the label-thinning path runs
+   over 25 real candidates instead of the handful a short chronology has. */
+function timelineFixtureHtml(html) {
+  var rows = [];
+  for (var i = 0; i < 25; i++) {
+    var d = new Date(Date.UTC(2024, 10, 15) + i * 30 * 86400000).toISOString().slice(0, 10);
+    rows.push('<tr><td>' + d + '</td><td>Fixture observation ' + (i + 1) + '</td></tr>');
+  }
+  var done = false;
+  var out = String(html).replace(/<table[\s\S]*?<\/table>/g, function (block) {
+    if (done || !/<th[^>]*>\s*(?:Date|Time|When)[^<]*<\/th>/i.test(block)) return block;
+    if (!/<tbody>/i.test(block)) return block;
+    done = true;
+    return block.replace(/(<tbody>)[\s\S]*?(<\/tbody>)/i, '$1' + rows.join('') + '$2');
+  });
+  return done ? out : null;
+}
+
+async function tabbedChecks(page, opts) {
+  var url = opts.url;
+
+  if (!(await page.waitFor('.hl-rv-ready', 8000))) {
+    check('the tab controller built its tabs at all', false,
+      'no .hl-rv-ready after 8s: the fetched page carries hl-tab- classes but ' +
+      'hl-report-tabs.js did not finish, so nothing below could be measured');
+    return;
+  }
+
+  /* ---- ARIA, once: viewport-independent by design ------------------------ */
+  var aria = await page.json('(function(){' +
+    'var tabs=[].slice.call(document.querySelectorAll("[role=tab]"));' +
+    'var panels=[].slice.call(document.querySelectorAll("[role=tabpanel]"));' +
+    'var sel=tabs.filter(function(t){return t.getAttribute("aria-selected")==="true";});' +
+    'var unlinked=tabs.filter(function(t){var p=document.getElementById(t.getAttribute("aria-controls")||"");' +
+    'return !p||p.getAttribute("role")!=="tabpanel"||p.getAttribute("aria-labelledby")!==t.id;});' +
+    // An orphan panel matters as much as an orphan tab: the panel exists, holds
+    // the report's sections, and no control can reach it.
+    'var orphan=panels.filter(function(p){var t=document.getElementById(p.getAttribute("aria-labelledby")||"");' +
+    'return !t||t.getAttribute("role")!=="tab"||t.getAttribute("aria-controls")!==p.id;});' +
+    'var roving=tabs.filter(function(t){return (t.getAttribute("aria-selected")==="true")!==(t.getAttribute("tabindex")==="0");});' +
+    'var shown=panels.filter(function(p){return !p.hidden;});' +
+    'return {tablist:!!document.querySelector("[role=tablist]"),' +
+    'tabs:tabs.map(function(t){return t.id;}),panels:panels.map(function(p){return p.id;}),' +
+    'selected:sel.map(function(t){return t.id;}),unlinked:unlinked.map(function(t){return t.id;}),' +
+    'roving:roving.length,orphan:orphan.map(function(p){return p.id;}),' +
+    'shown:shown.map(function(p){return p.id;})};})()');
+  var expectTabs = TAB_TOKENS.map(function (t) { return 'tabbtn-' + t; });
+  var expectPanels = TAB_TOKENS.map(function (t) { return 'tab-' + t; });
+  check('the tablist is built with one tab and one panel per token',
+    aria.tablist && aria.tabs.length === 7 && aria.panels.length === 7 &&
+    expectTabs.every(function (id, i) { return aria.tabs[i] === id; }) &&
+    expectPanels.every(function (id, i) { return aria.panels[i] === id; }),
+    aria.tabs.length + ' tabs, ' + aria.panels.length + ' panels: ' +
+      (aria.tabs.join(' ') || 'none'));
+  check('every tab controls its own panel and every panel is labelled by its tab',
+    aria.unlinked.length === 0 && aria.orphan.length === 0 && aria.roving === 0,
+    (aria.unlinked.length ? 'unreachable tab(s): ' + aria.unlinked.join(', ') + '. ' : '') +
+    (aria.orphan.length ? 'orphan panel(s) no tab reaches: ' + aria.orphan.join(', ') + '. ' : '') +
+    (!aria.unlinked.length && !aria.orphan.length
+      ? '7 of 7 aria-controls/aria-labelledby pairs resolve; roving tabindex matches selection'
+      : 'roving tabindex mismatches: ' + aria.roving));
+  check('exactly one tab is selected and exactly its panel is shown',
+    aria.selected.length === 1 && aria.shown.length === 1 &&
+    aria.shown[0] === aria.selected[0].replace('tabbtn-', 'tab-'),
+    'selected ' + (aria.selected[0] || 'none') + ', shown ' + (aria.shown[0] || 'none'));
+
+  /* ---- keyboard, with real key events ----------------------------------- */
+  var keys = [
+    ['ArrowRight', 'ArrowRight', 39, 'victims'],
+    ['End', 'End', 35, 'confidence'],
+    ['Home', 'Home', 36, 'overview'],
+    ['ArrowLeft', 'ArrowLeft', 37, 'confidence']
+  ];
+  await page.evaluate('document.getElementById("tabbtn-overview").focus()');
+  await CDP.sleep(100);
+  var keyRows = [];
+  var keyOk = true;
+  for (var k = 0; k < keys.length; k++) {
+    await pressKey(page, keys[k][0], keys[k][1], keys[k][2]);
+    var now = await page.json(selectedTabExpr());
+    var ok = now.id === 'tabbtn-' + keys[k][3] && now.focus === now.id;
+    keyOk = keyOk && ok;
+    keyRows.push(keys[k][0] + ' -> ' + (now.id || 'none') +
+      (now.focus === now.id ? ', focused' : ', FOCUS ' + (now.focus || 'none')));
+  }
+  check('keyboard arrows, Home and End select and focus the right tab',
+    keyOk, keyRows.join(' | '));
+
+  /* ---- old links keep working (design-v4 section 4 and check 5.3) --------
+
+     Every heading id is unchanged, so a URL with any heading id must open that
+     section's tab, open any teardown around it and scroll to it. Cold load and
+     an in-session hashchange are both real entry points (a social post opens
+     cold; an in-report cross-link fires hashchange). A sample of three ids was
+     the design's floor; this walks the FIRST heading of every tab, plus one id
+     inside a collapsed teardown, and prints the denominator. */
+  await setViewport(page, 1280, 900);
+  await gotoAndWait(page, url);
+  var deep = await page.json('(function(){var out=[];' +
+    TAB_TOKENS.map(function (t) {
+      return 'var h=document.querySelector("#tab-' + t + ' .hl-rv-source h2[id]");' +
+        'if(h)out.push({token:' + JSON.stringify(t) + ',id:h.id});';
+    }).join('') +
+    'return out;})()');
+  var deepBad = [];
+  var deepRows = [];
+  for (var d = 0; d < deep.length; d++) {
+    await gotoAndWait(page, url + '#' + deep[d].id);
+    var hit = await waitForReveal(page, deep[d].id);
+    deepRows.push('#' + deep[d].id + ' -> ' + (hit.panel || 'none'));
+    if (!(hit.found && hit.panel && hit.hidden === false && hit.top !== null &&
+          hit.top >= -2 && hit.top < 900)) {
+      deepBad.push('#' + deep[d].id + ': panel ' + (hit.panel || 'none') +
+        ', hidden ' + hit.hidden + ', top ' + hit.top);
+    }
+  }
+  check('a cold link to a heading id opens that section\'s tab and scrolls to it',
+    deep.length === 7 && deepBad.length === 0,
+    deep.length + ' of 7 tab-first heading ids; ' +
+    (deepBad.length ? deepBad.join(' | ') : deepRows.join(', ')));
+
+  /* One id inside a collapsed teardown. A report may carry no id inside its own
+     teardowns (the pilot has 14 closed teardowns and none with an id), in which
+     case the first closed <details> that does hold one is used and named, and a
+     synthetic id inside a source teardown is exercised as a hashchange, the same
+     route part 1 used for this case. */
+  var teardown = await page.evaluate('(function(){' +
+    'var lists=[".hl-rv-source details:not([open])",".hl-post-content details:not([open])"];' +
+    'for(var l=0;l<lists.length;l++){var ds=document.querySelectorAll(lists[l]);' +
+    'for(var i=0;i<ds.length;i++){var e=ds[i].querySelector("[id]");if(!e)continue;' +
+    'var p=e.closest(".hl-rv-panel");' +
+    'return {id:e.id,token:p?p.id.replace(/^tab-/,""):null,cls:String(ds[i].className||""),' +
+    'source:l===0};}}' +
+    'return null;})()');
+  if (!teardown) {
+    check('NOT CHECKED: an id inside a collapsed teardown', false,
+      'this report has no id inside a closed <details>, so the reveal path was not exercised');
+  } else {
+    await gotoAndWait(page, url + '#' + teardown.id);
+    var td = await waitForReveal(page, teardown.id);
+    check('a cold link to an id inside a collapsed teardown opens the tab and the teardown',
+      td.panel === 'tab-' + teardown.token && td.hidden === false && td.open === true &&
+      td.top !== null && td.top < 1280,
+      '#' + teardown.id + ' (' + (teardown.cls || 'details') + ') -> ' + td.panel +
+        ', details ' + (td.open ? 'open' : 'STILL CLOSED') + ', top ' + td.top);
+    if (!teardown.source) {
+      /* Name the synthetic round trip, rather than letting a dashboard fold
+         stand in silently for a report teardown. */
+      var synth = await page.evaluate('(function(){' +
+        'var d=document.querySelector(".hl-rv-source details:not([open])");if(!d)return null;' +
+        'var e=d.querySelector("p,li,tr,td")||d;e.id="p3-fixture-teardown-id";' +
+        'var p=d.closest(".hl-rv-panel");return {id:e.id,token:p?p.id.replace(/^tab-/,""):null};})()');
+      if (!synth) {
+        check('NOT CHECKED: a synthetic id inside a report teardown', false,
+          'no closed source teardown to place one in');
+      } else {
+        await page.evaluate('location.hash=' + JSON.stringify('#' + synth.id));
+        var sd = await waitForReveal(page, synth.id);
+        check('a synthetic id inside a report teardown reveals tab, teardown and position on hashchange',
+          sd.panel === 'tab-' + synth.token && sd.hidden === false && sd.open === true &&
+          sd.top !== null && sd.top >= 0 && sd.top < 1280,
+          'synthetic #' + synth.id + ' -> ' + sd.panel + ', details ' +
+            (sd.open ? 'open' : 'STILL CLOSED') + ', top ' + sd.top +
+            ' (the report has no id of its own inside a teardown)');
+      }
+    }
+  }
+
+  /* ---- per viewport: selection, overflow, targets ----------------------- */
+  var states = [];
+  var overflowBad = [];
+  var selectBad = [];
+  var targetTotal = 0, targetSmall = 0, targetStates = 0;
+
+  for (var v = 0; v < TAB_VIEWPORTS.length; v++) {
+    var width = TAB_VIEWPORTS[v][0], height = TAB_VIEWPORTS[v][1], vlabel = TAB_VIEWPORTS[v][2];
+    await setViewport(page, width, height);
+    if (!(await gotoAndWait(page, url))) {
+      check('the tab controller builds at ' + width + 'x' + height, false,
+        'no .hl-rv-ready at ' + vlabel);
+      continue;
+    }
+    for (var t = 0; t < TAB_TOKENS.length; t++) {
+      var token = TAB_TOKENS[t];
+      await page.evaluate('location.hash=' + JSON.stringify('#tab-' + token));
+      await CDP.sleep(90);
+      var sel = await page.json(selectedTabExpr());
+      var of = await page.json(OVERFLOW_EXPR);
+      states.push({
+        width: width, height: height, token: token,
+        selected: sel.id, scrollW: of.scrollW, client: of.client, scrollX: of.scrollX,
+        escaped: of.escaped, first: of.first
+      });
+      if (sel.id !== 'tabbtn-' + token) {
+        selectBad.push(width + 'x' + height + ' #tab-' + token + ' -> ' +
+          (sel.id || 'nothing selected'));
+      }
+      if (of.scrollX !== 0 || of.escaped !== 0 || of.scrollW > of.client + 1) {
+        overflowBad.push(width + 'x' + height + ' ' + token + ': ' + of.escaped +
+          ' escaped element(s), scrollX ' + of.scrollX + ', scrollWidth ' +
+          of.scrollW + ' of ' + of.client +
+          (of.first.length ? ' [' + of.first.map(function (e) {
+            return e.tag + '.' + (e.cls || '-') + ' ' + e.left + '..' + e.right;
+          }).join('; ') + ']' : ''));
+      }
+      /* On a phone the view body starts collapsed, so its controls would not be
+         measured at all. Open the card with its own control, measure, close it
+         again: 4a asks for the dashboard views' targets, and a control that only
+         appears after one tap is still a tap target. */
+      if (width < 700) {
+        await page.click('#hl-rv-toggle-' + token);
+        await CDP.sleep(80);
+      }
+      var tg = await page.json(targetsExpr(token));
+      if (tg) {
+        targetStates++;
+        targetTotal += tg.count;
+        targetSmall += tg.smallCount;
+        if (tg.smallCount) {
+          check(width + ' ' + token + ': every chrome target is at least 44 by 44',
+            false, tg.smallCount + ' of ' + tg.count + ' under 44: ' +
+            tg.small.map(function (e) {
+              return e.tag + '.' + (e.cls || '-') + ' "' + e.text + '" ' + e.w + 'x' + e.h;
+            }).join('; '));
+        }
+      }
+      if (width < 700) {
+        await page.click('#hl-rv-toggle-' + token);
+        await CDP.sleep(60);
+      }
+    }
+
+    /* One-page mode: every section, report order, no sideways scroll. */
+    await page.evaluate('location.hash="#one-page"');
+    await CDP.sleep(120);
+    var one = await page.json('(function(){' +
+      'var ids=[].slice.call(document.querySelectorAll(".hl-rv-source h2")).map(function(h){return h.id;});' +
+      'var shown=[].slice.call(document.querySelectorAll(".hl-rv-source h2")).filter(function(h){' +
+      'var r=h.getBoundingClientRect();return r.width>0||r.height>0;}).length;' +
+      'return {onepage:document.documentElement.classList.contains("hl-onepage"),' +
+      'ids:ids,shown:shown};})()');
+    var oneOf = await page.json(OVERFLOW_EXPR);
+    states.push({ width: width, height: height, token: 'one-page', selected: 'one-page',
+      scrollW: oneOf.scrollW, client: oneOf.client, scrollX: oneOf.scrollX,
+      escaped: oneOf.escaped, first: oneOf.first });
+    check(width + ' one-page shows every section in report order',
+      one.onepage && one.ids.length === opts.sectionCount &&
+      one.ids.join('|') === opts.reportOrder.join('|') && one.shown === opts.sectionCount,
+      one.shown + ' of ' + opts.sectionCount + ' sections painted, ' + one.ids.length +
+        ' in the DOM' + (one.onepage ? '' : ', NOT in one-page mode'));
+    if (oneOf.scrollX !== 0 || oneOf.escaped !== 0 || oneOf.scrollW > oneOf.client + 1) {
+      overflowBad.push(width + 'x' + height + ' one-page: ' + oneOf.escaped +
+        ' escaped element(s), scrollWidth ' + oneOf.scrollW + ' of ' + oneOf.client);
+    }
+    await page.evaluate('location.hash="#tab-overview"');
+    await CDP.sleep(80);
+
+    /* ---- phone-only gates (4a) ----------------------------------------- */
+    if (width >= 700) continue;
+
+    /* Views open as a compact card: collapsed body, a figure line, and a
+       control that expands the same view in place. The first integer in the
+       line is reconciled against the count of the elements it summarises. */
+    var cards = [];
+    var cardProblems = [];
+    for (var c = 0; c < TAB_TOKENS.length; c++) {
+      var ct = TAB_TOKENS[c];
+      await page.evaluate('location.hash=' + JSON.stringify('#tab-' + ct));
+      await CDP.sleep(80);
+      var before = await page.json('(function(t){var panel=document.getElementById("tab-"+t);' +
+        'var sum=panel.querySelector(".hl-rv-view-summary p");' +
+        'var body=panel.querySelector(".hl-rv-view-body");' +
+        'var toggle=document.getElementById("hl-rv-toggle-"+t);' +
+        'var tables=[].slice.call(panel.querySelectorAll(".hl-rv-table"));' +
+        'return {line:sum?sum.textContent.trim():"",hidden:body?body.hidden:null,' +
+        'expanded:toggle?toggle.getAttribute("aria-expanded"):null,' +
+        'controls:toggle?toggle.getAttribute("aria-controls"):null,' +
+        'bodyId:body?body.id:null,' +
+        'wideTables:tables.filter(function(x){return x.getBoundingClientRect().width>panel.clientWidth+1;}).length,' +
+        'tables:tables.length};})(' + JSON.stringify(ct) + ')');
+      var panelWidth = await page.json('(function(){var panel=document.getElementById("tab-' +
+        ct + '");return panel.clientWidth;})()');
+      await page.click('#hl-rv-toggle-' + ct);
+      await CDP.sleep(120);
+      var after = await page.json('(function(t){var panel=document.getElementById("tab-"+t);' +
+        'var sum=panel.querySelector(".hl-rv-view-summary p");' +
+        'var body=panel.querySelector(".hl-rv-view-body");' +
+        'var toggle=document.getElementById("hl-rv-toggle-"+t);' +
+        'return {line:sum?sum.textContent.trim():"",hidden:body?body.hidden:null,' +
+        'h:body?Math.round(body.getBoundingClientRect().height):0,' +
+        'expanded:toggle?toggle.getAttribute("aria-expanded"):null};})(' +
+        JSON.stringify(ct) + ')');
+      var primary = await page.json('(function(sel){var n=0;' +
+        'try{n=document.querySelectorAll("#tab-' + ct + ' " + sel).length;}catch(e){n=-1;}' +
+        'return n;})(' + JSON.stringify(TAB_PRIMARY[ct]) + ')');
+      var m = before.line.match(/\d+/);
+      var primaryCount = primary;
+      cards.push({ token: ct, line: before.line, count: primaryCount,
+        wide: before.wideTables, tables: before.tables, panelW: panelWidth });
+      if (before.hidden !== true || before.expanded !== 'false' ||
+          before.controls !== before.bodyId || !before.line) {
+        cardProblems.push(ct + ': hidden=' + before.hidden + ' aria-expanded=' +
+          before.expanded + ' line="' + before.line.slice(0, 40) + '"');
+      }
+      if (!/\d/.test(before.line) || !primaryCount || !m) {
+        check('NOT CHECKED: the ' + width + ' px ' + ct + ' card states a headline figure',
+          false, 'summary "' + before.line.slice(0, 80) + '" has no integer to reconcile, ' +
+            'or the view holds none of the elements it counts (' + primaryCount + ')');
+      } else {
+        var first = Number(m[0]);
+        check(width + ' px ' + ct + ': the expanded card shows the figure it counts',
+          after.hidden === false && after.h > 0 && after.expanded === 'true' &&
+          after.line === before.line && primaryCount === first,
+          'summary "' + first + '" vs ' + primaryCount + ' ' + TAB_PRIMARY[ct] +
+            '; collapsed h=' + (before.hidden ? 0 : 'shown') + ', expanded h=' + after.h +
+            ', line unchanged=' + (after.line === before.line));
+      }
+      if (before.wideTables) {
+        cardProblems.push(ct + ': ' + before.wideTables + ' of ' + before.tables +
+          ' dashboard tables wider than the ' + panelWidth + ' px panel');
+      }
+      await page.click('#hl-rv-toggle-' + ct);
+      await CDP.sleep(60);
+    }
+    check(width + ' px: every view opens as a compact card',
+      cardProblems.length === 0, cardProblems.join('; ') ||
+      '7 of 7 views collapsed with a figure line and an aria-controls toggle');
+    check(width + ' px: no dashboard table is wider than the screen',
+      cards.every(function (x) { return x.wide === 0; }),
+      cards.map(function (x) { return x.token + ' ' + (x.tables - x.wide) + '/' + x.tables; }).join(', ') +
+      ' dashboard tables fit');
+
+    /* Sections menu: every tab one tap away, nothing off-screen. Scroll to the
+       top first so the sticky bar and its menu are in their resting position;
+       after a tall view has been expanded and collapsed the page can sit tens
+       of thousands of px down, and the menu then opens over a moving layout.
+       Start on a tab that is NOT the one the menu click must select, so a
+       selection that never moved cannot pass. */
+    await page.evaluate('location.hash="#tab-chain"');
+    await CDP.sleep(100);
+    await page.evaluate('window.scrollTo(0,0)');
+    await CDP.sleep(150);
+    await page.click('.hl-rv-mobile-line button');
+    await CDP.sleep(150);
+    /* The bar is in normal flow until the page scrolls past it, and the menu is
+       anchored under the bar. At the very top the menu can start halfway down
+       the first screen and run past the fold, which is not the state a reader
+       taps in (the bar is sticky and the reader is always scrolled). Bring the
+       bar to its stuck position first, then the whole menu is on screen. */
+    await page.evaluate('(function(){var b=document.querySelector(".hl-rv-bar");' +
+      'window.scrollTo(0, Math.round(b.getBoundingClientRect().top + window.scrollY) + 1);})()');
+    await CDP.sleep(200);
+    var menu = await page.json('(function(){var m=document.querySelector(".hl-rv-menu");' +
+      'if(!m)return null;var items=[].slice.call(m.querySelectorAll("a"));' +
+      'var r=m.getBoundingClientRect();' +
+      'return {hidden:m.hidden,items:items.map(function(a){return a.getAttribute("href");}),' +
+      'h:Math.round(r.height),top:Math.round(r.top),bottom:Math.round(r.bottom),' +
+      'viewport:innerHeight};})()');
+    var wantMenu = TAB_TOKENS.map(function (t) { return '#tab-' + t; }).concat(['#one-page']);
+    check(width + ' px: the Sections menu lists every tab and one-page, all on screen',
+      !!menu && menu.hidden === false && menu.h > 0 && menu.bottom <= menu.viewport + 1 &&
+      wantMenu.every(function (h) { return menu.items.indexOf(h) !== -1; }),
+      menu ? menu.items.length + ' entries, ' + menu.top + '..' + menu.bottom + ' of ' +
+        menu.viewport + ' px: ' + menu.items.join(' ') : 'no menu built');
+    /* The first menu entry, which is at the top of the list and therefore on
+       screen in every state, and a different tab from the one selected above. */
+    var beforeMenu = await page.json(selectedTabExpr());
+    var picked = await clickMenuLink(page, '#tab-overview');
+    if (!picked || !picked.ok) {
+      // One named fallback, so a geometry quirk in the sticky bar cannot make
+      // the gate silent about whether the menu works.
+      try { await page.click('.hl-rv-menu a[href="#tab-overview"]'); } catch (e) { /* reported below */ }
+      await CDP.sleep(150);
+    }
+    var viaMenu = await page.json(selectedTabExpr());
+    check(width + ' px: a tab chosen from the Sections menu becomes the selected tab',
+      viaMenu.id === 'tabbtn-overview' && beforeMenu.id === 'tabbtn-chain',
+      'selected ' + (beforeMenu.id || 'nothing') + ' before, ' +
+      (viaMenu.id || 'nothing') + ' after; pointer ' +
+      (picked && picked.ok ? 'at ' + Math.round(picked.x) + ',' + Math.round(picked.y)
+        : 'geometry fallback (' + JSON.stringify(picked) + ')'));
+    await page.evaluate('location.hash="#tab-overview"');
+    await CDP.sleep(80);
+  }
+
+  check('every tab is selected by its own URL fragment at all five viewports',
+    selectBad.length === 0,
+    (TAB_TOKENS.length * TAB_VIEWPORTS.length) + ' fragment selections across ' +
+    TAB_VIEWPORTS.map(function (x) { return x[0] + 'x' + x[1]; }).join(', ') +
+    (selectBad.length ? ': ' + selectBad.slice(0, 4).join(' | ') : ''));
+  check('no page-level horizontal scroll on any tab or in one-page mode',
+    overflowBad.length === 0,
+    states.length + ' tab/viewport states at ' + TAB_VIEWPORTS.map(function (x) {
+      return x[0] + 'x' + x[1];
+    }).join(', ') + (overflowBad.length ? ': ' + overflowBad.slice(0, 4).join(' | ') : ''));
+  check('every chrome target is at least 44 by 44 px',
+    targetSmall === 0,
+    targetTotal + ' control measurements across ' + targetStates +
+    ' tab/viewport states with dashboard folds open, ' + targetSmall + ' under 44');
+
+  /* ---- JavaScript off and print ---------------------------------------- */
+  await setViewport(page, 1280, 900);
+  await page.send('Emulation.setScriptExecutionDisabled', { value: true });
+  await page.send('Page.navigate', { url: url });
+  await CDP.sleep(1200);
+  var noJs = await page.json('(function(){' +
+    'var hs=[].slice.call(document.querySelectorAll(".hl-post-content h2"));' +
+    'return {ids:hs.map(function(h){return h.id;}),' +
+    'shown:hs.filter(function(h){var r=h.getBoundingClientRect();return r.width>0||r.height>0;}).length,' +
+    'panels:document.querySelectorAll(".hl-rv-panel").length};})()');
+  var noJsOf = await page.json(OVERFLOW_EXPR);
+  check('with JavaScript off every section is present and in report order',
+    noJs.panels === 0 && noJs.ids.length === opts.sectionCount &&
+    noJs.ids.join('|') === opts.reportOrder.join('|') && noJs.shown === opts.sectionCount,
+    noJs.shown + ' of ' + opts.sectionCount + ' sections painted, ' + noJs.panels +
+      ' tab panels built' + (noJsOf.escaped ? ', ' + noJsOf.escaped + ' escaped element(s)' : ''));
+  await page.send('Emulation.setScriptExecutionDisabled', { value: false });
+
+  await setViewport(page, 1280, 900);
+  await gotoAndWait(page, url);
+  await page.evaluate('location.hash="#tab-chain"');
+  await CDP.sleep(120);
+  await page.send('Emulation.setEmulatedMedia', { media: 'print' });
+  await page.evaluate('window.dispatchEvent(new Event("beforeprint"))');
+  await CDP.sleep(250);
+  var printed = await page.json('(function(){' +
+    'var hs=[].slice.call(document.querySelectorAll(".hl-rv-source h2"));' +
+    'return {shown:hs.filter(function(h){var r=h.getBoundingClientRect();return r.width>0||r.height>0;}).length,' +
+    'closed:[].slice.call(document.querySelectorAll(".hl-rv-source details")).filter(function(d){return !d.open;}).length};})()');
+  await page.send('Emulation.setEmulatedMedia', { media: 'screen' });
+  await page.evaluate('window.dispatchEvent(new Event("afterprint"))');
+  await CDP.sleep(250);
+  var restored = await page.json(selectedTabExpr());
+  check('print shows every section with every teardown open, then restores the tab',
+    printed.shown === opts.sectionCount && printed.closed === 0 &&
+    restored.id === 'tabbtn-chain',
+    printed.shown + ' of ' + opts.sectionCount + ' sections painted, ' +
+      printed.closed + ' teardowns left closed; after print selected ' +
+      (restored.id || 'nothing'));
+
+  /* ---- the 25-date timeline fixture (5.4) ------------------------------- */
+  var fixture = timelineFixtureHtml(opts.html);
+  if (!fixture) {
+    check('NOT CHECKED: the 25-date timeline fixture', false,
+      'the fetched page has no Date/Time/When table to build the fixture from');
+    await restoreReportPage(page, url);
+    return;
+  }
+  var fixturePath = new URL(url).pathname + '__timeline-fixture/';
+  var fsrv = await SERVER.start({ [fixturePath]: fixture }, { root: ROOT, base: BASE });
+  try {
+    var thin = [];
+    var vertical = null;
+    for (var f = 0; f < 3; f++) {
+      var fw = [1280, 768, 390][f];
+      await setViewport(page, fw, 900);
+      var ok = await gotoAndWait(page, fsrv.origin + fixturePath + '#tab-timeline');
+      if (!ok) {
+        thin.push({ width: fw, error: 'tab controller did not build on the fixture' });
+        continue;
+      }
+      if (fw < 480) {
+        await page.click('#hl-rv-toggle-timeline');
+        await CDP.sleep(200);
+        vertical = await page.json('(function(){' +
+          'var ls=[].slice.call(document.querySelectorAll("#tab-timeline .hl-rv-vertical-timeline li"));' +
+          'return {count:ls.length,shown:ls.filter(function(x){' +
+          'var r=x.getBoundingClientRect();return r.width>0||r.height>0;}).length};})()');
+      } else {
+        await CDP.sleep(250);
+        thin.push(await page.json('(function(){' +
+          'var e=document.querySelector("#tab-timeline .hl-rv-axis");if(!e)return {width:' + fw + ',missing:true};' +
+          'var boxes=[].slice.call(e.children).filter(function(n){return !n.hidden;})' +
+          '.map(function(n){return n.getBoundingClientRect();});' +
+          'return {width:' + fw + ',candidates:Number(e.dataset.candidates),drawn:Number(e.dataset.drawn),' +
+          'overlaps:boxes.filter(function(x,i){return boxes.some(function(y,j){' +
+          'return j>i&&x.left<y.right&&x.right>y.left;});}).length};})()'));
+      }
+    }
+    var horiz = thin.filter(function (x) { return !x.missing && !x.error; });
+    if (!horiz.length) {
+      check('NOT CHECKED: the 25-date timeline fixture', false,
+        'no .hl-rv-axis on the fixture (the page builds no dated chronology view): ' +
+        JSON.stringify(thin));
+    } else {
+      check('the 25-date fixture thins its labels and none of the kept labels overlap',
+        horiz.every(function (x) { return x.candidates === 25 && x.drawn > 0 &&
+          x.drawn < 25 && x.overlaps === 0; }),
+        horiz.map(function (x) {
+          return x.width + 'px: ' + x.drawn + ' of ' + x.candidates +
+            ' drawn, ' + x.overlaps + ' overlapping';
+        }).join('; '));
+      check('below 480 px the 25-date fixture turns vertical with every event',
+        !!vertical && vertical.shown === 25,
+        vertical ? vertical.shown + ' of 25 events painted vertically' : 'no vertical list built');
+    }
+  } finally {
+    fsrv.close();
+  }
+  await restoreReportPage(page, url);
+}
+
+/* The figure-nav and glossary checks below run on the live page after this
+   branch, and this branch navigates to fixtures at five viewports. Hand it back
+   at the size the gate opened it, on the report itself, on its first tab. */
+async function restoreReportPage(page, url) {
+  await setViewport(page, 1280, 900);
+  await gotoAndWait(page, url);
+  await page.evaluate('location.hash="#tab-overview"');
+  await CDP.sleep(120);
+  /* The figure-nav chips are report content and live in whichever tab their
+     section belongs to, so the shared chip checks below would measure a 0 px
+     element inside a hidden panel. A reader reaches them by opening that tab;
+     the gate does the same. On the pilot this is the chain tab. */
+  await revealPanelContaining(page, '.hl-fignav');
+}
+
+/* Where an id ended up: which panel, whether that panel is shown, whether an
+   enclosing teardown is open, and how far from the viewport top. */
+function revealStateExpr(id) {
+  return '(function(id){var e=document.getElementById(id);' +
+    'var p=e?e.closest(".hl-rv-panel"):null;var d=e?e.closest("details"):null;' +
+    'var r=e?e.getBoundingClientRect():null;' +
+    'return {panel:p?p.id:null,hidden:p?p.hidden:null,open:d?d.open:null,' +
+    'top:r?Math.round(r.top):null,found:!!e};})(' + JSON.stringify(id) + ')';
+}
+
+/* The tab switch, the panel move and the scroll run on a hashchange handler and
+   a requestAnimationFrame, and the chain panel is tens of thousands of px tall,
+   so a fixed sleep can read the DOM before the scroll has happened. Poll for the
+   settled state instead, bounded, and return the last read honestly if it never
+   settles. */
+async function waitForReveal(page, id, timeoutMs) {
+  var deadline = Date.now() + (timeoutMs || 5000);
+  var last = null;
+  for (;;) {
+    last = await page.json(revealStateExpr(id));
+    if (last && last.found && last.hidden === false && last.open !== false &&
+        last.top !== null && last.top >= -2 && last.top < 600) return last;
+    if (Date.now() > deadline) return last;
+    await CDP.sleep(120);
+  }
+}
+
+/* Open the tab that holds the first match, so a later check measures a painted
+   element rather than a hidden one. Returns the token, or null when the match is
+   already in the shown panel or does not exist. */
+async function revealPanelContaining(page, selector) {
+  var token = await page.evaluate('(function(){var e=document.querySelector(' +
+    JSON.stringify(selector) + ');if(!e)return null;' +
+    'var p=e.closest(".hl-rv-panel");' +
+    'if(!p||!p.hidden)return null;return p.id.replace(/^tab-/,"");})()');
+  if (!token) return null;
+  await page.evaluate('location.hash=' + JSON.stringify('#tab-' + token));
+  await CDP.sleep(150);
+  return token;
+}
+
+
+
 /* Everything this file measures on first read of the page -- the register
    switch, the figure-nav chips, the TOC -- is BUILT BY JAVASCRIPT after load,
    and `CDP.open()` only waits a FIXED settle (opts.settle, default 2500ms)
@@ -301,56 +1032,78 @@ async function main() {
         : 'clean: 0 first-party, 0 unexplained, ' + triaged.excluded.length +
           ' third-party error(s) excluded by name');
 
-    // ---------- the register switch ----------
-    var vs = await page.computed('.hl-viewswitch', ['display']);
-    check('the register switch is BUILT and painted, not just declared',
-      vs && vs._present && vs.display !== 'none' && vs._w > 50,
-      vs && vs._present ? 'rendered ' + vs._w + 'x' + vs._h + ' from ' + inputs.tiers +
-        ' tier markers' : 'ABSENT: the control never got built from ' + inputs.tiers + ' markers');
-
-    var btns = await page.json('[].slice.call(document.querySelectorAll(".hl-viewswitch__btn"))' +
-      '.map(function(b){return b.textContent.trim();})');
-    check('it offers all three registers', btns.length === 3, btns.join(' | ') || 'none');
-
-    var openH2 = await page.visibleCount('.hl-post-content h2');
-    // Click the FIRST (most restrictive) register with a real pointer.
-    await page.click('.hl-viewswitch__btn');
-    await CDP.sleep(350);
-    var briefH2 = await page.visibleCount('.hl-post-content h2');
-    check('picking the briefest register actually hides sections',
-      briefH2 < openH2 && briefH2 > 0,
-      openH2 + ' H2 sections visible on load, ' + briefH2 + ' after picking "' +
-        (btns[0] || '?') + '"');
-
-    if (inputs.tocLinks) {
-      /* Measured by the `hidden` ATTRIBUTE that register-switch.js actually sets
-         on each `<li>`, not by rendered area.
-
-         Two wrong measures were tried first and both gave confident wrong
-         answers. Counting visible `<a>` reported 53 of 53 visible however many
-         items were hidden, because computed `display` is the element's own value
-         and does not inherit `none` from an ancestor. Counting rendered `<li>`
-         then reported 0 of 53, because the TOC panel is collapsed by default, so
-         every item has zero area whatever the register. The attribute is the
-         mechanism and it is unambiguous in both states. */
-      var toc = await page.json('(function(){var li=document.querySelectorAll("#hl-toc-list li");' +
-        'var h=0;[].forEach.call(li,function(e){if(e.hasAttribute("hidden"))h++;});' +
-        'return {total:li.length,hidden:h};})()');
-      check('the TOC narrows with the page rather than pointing at hidden sections',
-        toc.hidden > 0 && toc.hidden < toc.total,
-        toc.hidden + ' of ' + toc.total + ' TOC items hidden in the brief register');
+    // ---------- the register switch, or the tabs that replace it ----------
+    var tabbed = isTabbedHtml(html);
+    if (tabbed) {
+      /* Report order is the page's own, read before any tab state changes: each
+         source block carries its position in --rv-order, so one-page mode and
+         the no-JS render can both be compared to the article as authored. */
+      var reportOrder = await page.evaluate('(function(){' +
+        'var blocks=[].slice.call(document.querySelectorAll(".hl-rv-source"));' +
+        'blocks.sort(function(a,b){return parseFloat(a.style.getPropertyValue("--rv-order"))-' +
+        'parseFloat(b.style.getPropertyValue("--rv-order"));});' +
+        'return blocks.map(function(b){var h=b.querySelector("h2");return h&&h.id;})' +
+        '.filter(Boolean);})()');
+      console.log('page:    tabbed; the register switch is not built here, so its ' +
+        'assertions are replaced by the tab assertions (design-v4 5.4)');
+      await tabbedChecks(page, {
+        url: srv.origin + '/reports/' + s + '/',
+        html: html,
+        sectionCount: reportOrder.length,
+        reportOrder: reportOrder
+      });
     } else {
-      check('NOT CHECKED: this report renders no TOC to narrow', false,
-        'the TOC needs 3+ H2s; this report has ' + inputs.headings);
-    }
+      // ---------- the register switch ----------
+      var vs = await page.computed('.hl-viewswitch', ['display']);
+      check('the register switch is BUILT and painted, not just declared',
+        vs && vs._present && vs.display !== 'none' && vs._w > 50,
+        vs && vs._present ? 'rendered ' + vs._w + 'x' + vs._h + ' from ' + inputs.tiers +
+          ' tier markers' : 'ABSENT: the control never got built from ' + inputs.tiers + ' markers');
 
-    // Restore the fullest register for the checks below.
-    await page.evaluate('(function(){var b=document.querySelectorAll(".hl-viewswitch__btn");' +
-      'if(b.length)b[b.length-1].click();})()');
-    await CDP.sleep(350);
-    var restored = await page.visibleCount('.hl-post-content h2');
-    check('returning to the full register restores every section',
-      restored === openH2, restored + ' of ' + openH2 + ' sections back');
+      var btns = await page.json('[].slice.call(document.querySelectorAll(".hl-viewswitch__btn"))' +
+        '.map(function(b){return b.textContent.trim();})');
+      check('it offers all three registers', btns.length === 3, btns.join(' | ') || 'none');
+
+      var openH2 = await page.visibleCount('.hl-post-content h2');
+      // Click the FIRST (most restrictive) register with a real pointer.
+      await page.click('.hl-viewswitch__btn');
+      await CDP.sleep(350);
+      var briefH2 = await page.visibleCount('.hl-post-content h2');
+      check('picking the briefest register actually hides sections',
+        briefH2 < openH2 && briefH2 > 0,
+        openH2 + ' H2 sections visible on load, ' + briefH2 + ' after picking "' +
+          (btns[0] || '?') + '"');
+
+      if (inputs.tocLinks) {
+        /* Measured by the `hidden` ATTRIBUTE that register-switch.js actually sets
+           on each `<li>`, not by rendered area.
+
+           Two wrong measures were tried first and both gave confident wrong
+           answers. Counting visible `<a>` reported 53 of 53 visible however many
+           items were hidden, because computed `display` is the element's own value
+           and does not inherit `none` from an ancestor. Counting rendered `<li>`
+           then reported 0 of 53, because the TOC panel is collapsed by default, so
+           every item has zero area whatever the register. The attribute is the
+           mechanism and it is unambiguous in both states. */
+        var toc = await page.json('(function(){var li=document.querySelectorAll("#hl-toc-list li");' +
+          'var h=0;[].forEach.call(li,function(e){if(e.hasAttribute("hidden"))h++;});' +
+          'return {total:li.length,hidden:h};})()');
+        check('the TOC narrows with the page rather than pointing at hidden sections',
+          toc.hidden > 0 && toc.hidden < toc.total,
+          toc.hidden + ' of ' + toc.total + ' TOC items hidden in the brief register');
+      } else {
+        check('NOT CHECKED: this report renders no TOC to narrow', false,
+          'the TOC needs 3+ H2s; this report has ' + inputs.headings);
+      }
+
+      // Restore the fullest register for the checks below.
+      await page.evaluate('(function(){var b=document.querySelectorAll(".hl-viewswitch__btn");' +
+        'if(b.length)b[b.length-1].click();})()');
+      await CDP.sleep(350);
+      var restored = await page.visibleCount('.hl-post-content h2');
+      check('returning to the full register restores every section',
+        restored === openH2, restored + ' of ' + openH2 + ' sections back');
+    }
 
     // ---------- figure-nav chips ----------
     var fignav = await page.json('(function(){var r=document.querySelector(".hl-fignav");' +
@@ -406,6 +1159,8 @@ async function main() {
     }
 
     // ---------- the glossary ----------
+    /* Same reason as the chips above: measure a mark in a shown tab. */
+    if (tabbed) await revealPanelContaining(page, '.hl-gloss');
     var gloss = await page.json('(function(){var m=document.querySelectorAll(".hl-gloss");' +
       'if(!m.length)return {marks:0};var e=m[0];var r=e.getBoundingClientRect();' +
       'return {marks:m.length,term:e.textContent.trim(),' +
