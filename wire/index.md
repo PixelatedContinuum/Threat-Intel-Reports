@@ -179,7 +179,7 @@ position: 2.5
 <dt class="hl-legend__k">Added</dt>
 <dd>When VulnCheck added the CVE: today, the last 7 days, or the whole {{ wire.window_days }}-day window, counted from the last data update.</dd>
 <dt class="hl-legend__k">CVE age</dt>
-<dd>"Recent" is on when the page opens and hides the older CVEs described above. "Include older" brings them back.</dd>
+<dd>"Include older" is on when the page opens, so every CVE shows. "Recent" hides the older CVEs described above.</dd>
 </dl>
 <p class="hl-legend__p">Picking several chips in one row shows any of them; picking chips in different rows narrows to rows that match all. The filters are kept in the page address, so a filtered view can be shared by copying the link.</p>
 <div class="hl-legend__h">About this data</div>
@@ -193,9 +193,9 @@ position: 2.5
 {%- comment -%}
   The second bar. Its chips name the axes listing-filter.js reads: data-list
   (CISA or VulnCheck only), data-vendor, data-added (days, against
-  data-filter-ref) and data-age. "Recent" is on by default (data-default):
-  older CVEs, more than a year before the year VulnCheck added them, are
-  hidden until the reader includes them, and the chip carries their count.
+  data-filter-ref) and data-age. "Include older" (All) is on by default (T-0503,
+  Joseph 2026-10-29); "Recent" hides older CVEs, more than a year before the
+  year VulnCheck added them, and the Include older chip carries their count.
 {%- endcomment -%}
 <div class="hl-filter hl-filter--wire hl-filter--vulns" data-listing-filter data-filter-state="query" data-filter-prefix="v" data-filter-ref="{{ wire.vulns_generated_at | slice: 0, 10 }}" data-pagefind-ignore>
   <input class="hl-filter__search" type="text" placeholder="Search CVE, vendor, product…" aria-label="Search CVE, vendor and product" autocomplete="off">
@@ -244,8 +244,8 @@ position: 2.5
     <button type="button" class="hl-chip-btn hl-chip-btn--topic hl-topic-c7" data-added="7">7 days</button>
     <button type="button" class="hl-chip-btn is-on" data-added="">{{ wire.window_days }} days</button>
     <span class="hl-filter__dim hl-filter__dim--gap">CVE age</span>
-    <button type="button" class="hl-chip-btn hl-chip-btn--topic hl-topic-c11" data-age="recent" data-default>Recent</button>
-    <button type="button" class="hl-chip-btn hl-chip-btn--topic hl-vc-old" data-age="">Include older <span class="hl-chip-btn__n">{{ wire.vulns_counts.older }}</span></button>
+    <button type="button" class="hl-chip-btn hl-chip-btn--topic hl-topic-c11" data-age="recent">Recent</button>
+    <button type="button" class="hl-chip-btn hl-chip-btn--topic hl-vc-old is-on" data-age="">Include older <span class="hl-chip-btn__n">{{ wire.vulns_counts.older }}</span></button>
   </div>
   <div class="hl-filter__count" data-filter-count></div>
   <div class="hl-filter__empty" data-filter-empty hidden><span data-filter-empty-msg>No CVEs match that filter.</span> <button type="button" class="hl-filter__reset" data-filter-reset>Clear filters</button></div>
