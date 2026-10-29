@@ -115,16 +115,31 @@ var SHAPE_OUTRANKS_FIELD = { registry: true, url: true, ipv4: true, ipv6: true,
 
 function pathHas(ctx, k) { return ctx.indexOf(k) !== -1; }
 
-function declaredKind(ctx) {
+/* A hash's type is its LENGTH, never the field name it sits under. The pilot's
+   certificate carries `sha1: aab136e0...` (40 hex); typing every hash field of a
+   certificate as sha256 (which this function did until the first review) puts a
+   value a defender pastes into a sha256 hunt where it can never match. Returns
+   null for a value that is not fixed-length hex, so the caller keeps its default. */
+var HASH_LEN_TYPE = { 32: 'md5', 40: 'sha1', 64: 'sha256' };
+
+function hashTypeOf(v) {
+  if (typeof v !== 'string') return null;
+  var t = v.trim();
+  return /^[0-9a-f]+$/i.test(t) ? (HASH_LEN_TYPE[t.length] || null) : null;
+}
+
+function declaredKind(ctx, value) {
   var k = ctx.length ? ctx[ctx.length - 1] : null;
   if (!k) return null;
 
   /* A certificate entry IS its hash. Its serials, subject and validity window
      describe that one entry; rendering a 40-hex serial as a sha1 (which the
      shape rule did, for both serials in the pilot) is a mistype a defender would
-     paste into a blocklist. */
+     paste into a blocklist. The hash fields keep a row, typed by length. */
   if (pathHas(ctx, 'tls_certificates')) {
-    if (k === 'sha256' || k === 'sha1' || k === 'md5') return { type: 'sha256' };
+    if (k === 'sha256' || k === 'sha1' || k === 'md5') {
+      return { type: hashTypeOf(value) || 'sha256' };
+    }
     if (k === 'serial' || k === 'earlier_serial' || k === 'subject' || k === 'issuer' ||
         k === 'organization' || k === 'key' || k === 'valid_from' || k === 'valid_to') {
       return { skip: true };
@@ -135,9 +150,14 @@ function declaredKind(ctx) {
      whose extension looks like a TLD; the field is the evidence, not the shape. */
   if (k === 'filename' || k === 'file_name') return { type: 'filename' };
 
-  /* A path field inside a path container. */
+  /* A path field inside a path container. The corpus spells it two ways:
+     `file_paths[].path` (with host_indicators as the container) and
+     `filesystem_paths[].value`, whose values (`~/.claude/settings.local.json`,
+     `<project-root>/.claude/settings.local.json`) have no shape to classify and
+     were producing no row at all, so the actions on them had nowhere to land. */
   if ((k === 'path' || k === 'file_path') &&
       (pathHas(ctx, 'file_paths') || pathHas(ctx, 'host_indicators'))) return { type: 'path' };
+  if (k === 'value' && pathHas(ctx, 'filesystem_paths')) return { type: 'path' };
 
   /* Prose containers: the container is the feed's only statement of what the
      entry is, and the value has no shape to read.
@@ -163,12 +183,13 @@ function declaredKind(ctx) {
   return null;
 }
 
-/* A hash-shaped leaf names the entry it belongs to. When an entry carries one, a
-   `filename` beside it is that entry's LABEL and not a second indicator: the
-   feeds' own false_positive_notes say "match the hash, not the filename", and the
-   348 distinct filenames in this corpus were otherwise rendered as their own
-   blockable rows. The label becomes the hash row's fallback context when the
-   entry has no better role text. */
+/* A hash-shaped leaf names the entry it belongs to, which is why a hash row with no
+   `context`/`description` falls back to the entry's `filename` as its label (see
+   `useRole` in take()). It does NOT suppress the filename's own row: the hash and
+   the name are two pivots a defender uses, the exact build and the well-known tool,
+   and 179 of 283 names existed nowhere in the table when this function also gated
+   the label rule. The first review found that as a defender-facing loss and the
+   lead reverted it. */
 var HASH_SHAPE_RX = /^(?:[0-9a-f]{32}|[0-9a-f]{40}|[0-9a-f]{64})$/i;
 
 function entryHashOf(node) {
@@ -184,7 +205,15 @@ function entryHashOf(node) {
    address-and-port entries collapsed to 3 rows because three objects carried
    `38.180.16.98` at :53, :9090 and :9443 and the dedupe key was type:value.
    Composing the port into the value keeps every entry the feed declares, and it
-   is what the report's own table lists (`38.180.16[.]98:53`). */
+   is what the report's own table lists (`38.180.16[.]98:53`).
+
+   The BARE address keeps its own row beside every host:port row, with the same
+   entry's action. Composing the port and dropping the bare address narrowed what
+   a defender blocks from an address to an address-and-port without saying so, and
+   the first review found 9 BLOCK-marked addresses left with no bare row anywhere
+   in the table. `push()` dedupes the bare row, so three entries on one address
+   still produce one bare row and three ported rows. Ports named only in an
+   entry's `notes` are NOT parsed: the feed is the authority on its own fields. */
 function portOf(node) {
   var p = node.port;
   if (typeof p === 'number' && isFinite(p) && p >= 0 && p <= 65535) return String(p);
@@ -322,7 +351,16 @@ function isRatingShaped(s) {
    walk was counting both of them as values it could not type, i.e. advertising
    the one thing the feed forbids ingesting as an omission from the table.
    `explicitly_excluded` is the same shape: the container lists what the feed
-   deliberately withholds. */
+   deliberately withholds.
+
+   `metadata` is exempt as a CONTAINER but not root and branch: `metadata.infrastructure`
+   records the hosts the feed treats as operator infrastructure, and in
+   opendirectory-45-130-148-125-20260430 the source host `45.130.148.125` is
+   recorded there and nowhere else as a bare address, so the blanket exemption
+   removed the only row a defender could block (first review, assertion 7). The walk
+   therefore descends into `metadata.infrastructure` only (see walk() below);
+   `metadata.reference` and every other metadata field stay out, because their
+   values are the site's own report URLs and the feed's prose about itself. */
 var EXEMPT_TOP = { hunt_only_never_block: true, metadata: true,
                    non_indicators: true, explicitly_excluded: true };
 
@@ -405,9 +443,13 @@ function metaField(v) {
 /* `action` is a defender verb (BLOCK, MONITOR, HUNT, ALERT ...) and renders as a
    badge. Some feeds reuse the key for a persistence COMMAND or PATH beside a
    registry value (dual-rat-analysis: `action: %APPDATA%\SUBDIR\CLIENT.EXE`), which
-   is not a verb and would render as a clipped badge saying nothing. A value
-   carrying a path separator, a percent sign, a dot or more than 40 characters is
-   therefore not an action for this column and is null; the raw JSON keeps it. */
+   is not a verb and would render as a clipped badge saying nothing. A value that is
+   not verb-led and carries a path separator, a percent sign or a dot is therefore
+   not an action for this column and is null; the raw JSON keeps it. A value that IS
+   verb-led keeps its dots and slashes: `Sweep developer endpoints for
+   .claude/settings.local.json under repository working directories` is an
+   instruction, and the separator test dropped three verb-led instructions in
+   korean-claude-openclaw-221.150.15.104 (first review, assertion 13). */
 var ACTION_NOT_A_VERB = /[\\\/%.]/;
 
 /* The 40-character cap was a proxy for "a badge, not a sentence", and it dropped
@@ -419,15 +461,56 @@ var ACTION_NOT_A_VERB = /[\\\/%.]/;
    .hl_ioctable__act), so the cap was costing information the layout can show.
    A longer value is carried when it OPENS with a defender verb; anything else
    over the cap is still null, because a command or a note does not become an
-   action by being long. */
-var ACTION_VERB_RX = /^(block|hunt|monitor|alert|detect|deny|allow|isolate|contain|quarantine|remove|scan|sweep|inventory|audit|investigate|review|correlate|add|deploy|log|record|notify|escalate|verify|check|search|flag|collect|treat|watch|surface|restrict|patch|rotate)\b/i;
+   action by being long.
+
+   SUSPEND is on the list because russian-gemini-credential-mill-213.165.51.115
+   writes one: `SUSPEND + cross-reference with oravepo546-stack`. It was dropped
+   by the missing word, not by its shape. */
+var ACTION_VERB_RX = /^(block|hunt|monitor|alert|detect|deny|allow|isolate|contain|quarantine|remove|scan|sweep|inventory|audit|investigate|review|correlate|add|deploy|log|record|notify|escalate|verify|check|search|flag|collect|treat|watch|surface|restrict|patch|rotate|suspend)\b/i;
 var ACTION_MAXLEN = 200;
+
+/* A badge carries the INSTRUCTION. A clause after it that is not itself verb-led is
+   commentary about the value, and the badge has no room to be a sentence: the first
+   review named two rows whose second clause is commentary rather than a directive,
+   `BLOCK EGRESS FROM YOUR ESTATE; THIS IS THE DISCOVERY VECTOR, NOT AN ATTACK
+   SURFACE AGAINST YOUR ENVIRONMENT` (a URL row) and `MONITOR (LEGITIMATE FILE;
+   ABUSE DETECTED VIA OUTBOUND NETWORK CONNECTIONS)` (a path row).
+
+   So a long action is cut at the first clause boundary that does not open with a
+   defender verb, and a parenthetical left unclosed by that cut is dropped whole
+   (the second example reduces to `MONITOR`, which is the instruction it carries).
+   Applied only over the cap, so no short action changes shape, and only after the
+   verb test, so a command still never becomes an action. A genuine two-part
+   instruction keeps both parts, because each opens with a verb: the
+   korean-claude-openclaw row keeps its `; MONITOR ANY INBOUND OR OUTBOUND ...`.
+
+   WHAT THIS CANNOT COVER: a commentary tail that itself opens with a verb word
+   (`MONITOR X; ALERT ANALYSTS HAVE SEEN THIS BEFORE`) survives, because the rule
+   tests the clause's first word, not its meaning; and a tail the feed separated
+   with a comma or a dash rather than a semicolon is not cut at all. */
+function cutCommentaryTail(t) {
+  if (t.length <= 40) return t;
+  var parts = t.split(';');
+  var kept = [parts[0]];
+  for (var i = 1; i < parts.length; i++) {
+    if (ACTION_VERB_RX.test(parts[i].trim())) kept.push(parts[i]);
+    else break;
+  }
+  var out = kept.join(';').trim();
+  if (out.split('(').length > out.split(')').length) {
+    out = out.slice(0, out.lastIndexOf('(')).trim();
+  }
+  return out || t;
+}
 
 function actionOf(v) {
   var t = metaField(v);
-  if (!t || ACTION_NOT_A_VERB.test(t)) return null;
+  if (!t) return null;
+  if (ACTION_VERB_RX.test(t)) {
+    return t.length <= ACTION_MAXLEN ? cutCommentaryTail(t).toUpperCase() : null;
+  }
+  if (ACTION_NOT_A_VERB.test(t)) return null;
   if (t.length <= 40) return t.toUpperCase();
-  if (t.length <= ACTION_MAXLEN && ACTION_VERB_RX.test(t)) return t.toUpperCase();
   return null;
 }
 
@@ -478,9 +561,8 @@ function runWalk(root, roleKeys, roleMaxLen, exempt, suppressBenign) {
      label rules, so its behaviour is provably unchanged. */
   var enhanced = roleMaxLen !== Infinity;
   var byKey = {}, order = [], untyped = 0;
-  /* Walk order, so a filename that is a hash entry's label can hand its analyst
-     fields to the same filename if it also appears somewhere else (see labelMeta). */
-  var seq = 0, labelMeta = {}, labelPos = {};
+  /* Walk order, kept for the row assembly below. */
+  var seq = 0;
 
   function take(raw, role, roleIsCaveat, meta, ctx, port, label) {
     seq++;
@@ -489,19 +571,8 @@ function runWalk(root, roleKeys, roleMaxLen, exempt, suppressBenign) {
     if (!s || s.length > 300) return;
 
     if (enhanced) {
-      var kind = declaredKind(ctx);
+      var kind = declaredKind(ctx, s);
       if (kind && kind.skip) return;
-      /* A filename that labels the hash in the same entry is that entry's label,
-         not a second indicator (see entryHashOf). */
-      if (kind && kind.type === 'filename' && label && s === label) {
-        /* Remember the fields of the entry this label belongs to. If the same
-           filename also appears outside a hash entry, the row it produces must
-           keep the EARLIEST entry's confidence and action, which is what
-           first-wins dedupe gave it before the label rule existed. */
-        var lk = s.toLowerCase();
-        if (!(lk in labelMeta)) { labelMeta[lk] = meta; labelPos[lk] = seq; }
-        return;
-      }
       if (kind && kind.type) {
         var kv = s;
         /* A generic field name (`path`, `filename`) may only overturn the two
@@ -516,8 +587,21 @@ function runWalk(root, roleKeys, roleMaxLen, exempt, suppressBenign) {
           probe = C.classify(kv) || (hostType(kv) ? { type: hostType(kv) } : null);
         }
         if (!(probe && SHAPE_OUTRANKS_FIELD[probe.type])) {
-          if (kind.type === 'ipv4' && port && kv.indexOf(':') === -1) kv = kv + ':' + port;
-          return push(kind.type, kv, role, roleIsCaveat, meta);
+          /* When the classifier agrees on the TYPE, its normalised value is the one
+             to use: filename and domain are lower-cased there, and a filename row
+             typed here in original case beside the classifier's lower-cased row for
+             the same name is two rows for one file (measured: `CVE-2026-20817_PoC.exe`
+             BLOCK and `cve-2026-20817_poc.exe` HUNT, from two containers). */
+          if (probe && probe.type === kind.type && typeof probe.value === 'string') {
+            kv = probe.value;
+          }
+          /* An address entry with a port keeps BOTH rows: the bare address (what a
+             defender blocks) and the host:port entry (what the feed declared). */
+          push(kind.type, kv, role, roleIsCaveat, meta);
+          if (kind.type === 'ipv4' && port && kv.indexOf(':') === -1) {
+            return push(kind.type, kv + ':' + port, role, roleIsCaveat, meta);
+          }
+          return;
         }
       }
     }
@@ -526,12 +610,16 @@ function runWalk(root, roleKeys, roleMaxLen, exempt, suppressBenign) {
     if (atomic) {
       if (suppressBenign && B.isBenign(atomic.type, atomic.value)) return;   // 8.8.8.8 and friends
       var av = atomic.value;
-      /* An address entry that carries a port is its own entry (see portOf). */
-      if (enhanced && port && atomic.type === 'ipv4' && av.indexOf(':') === -1) av = av + ':' + port;
       /* No role text on a hash entry: its filename is the most useful label. */
       var useRole = role;
       if (enhanced && !useRole && label && HASH_SHAPE_RX.test(av)) useRole = label;
-      return push(atomic.type, av, useRole, roleIsCaveat, meta);
+      push(atomic.type, av, useRole, roleIsCaveat, meta);
+      /* An address entry that carries a port is its own entry (see portOf), and
+         the bare address keeps its row beside it. */
+      if (enhanced && port && atomic.type === 'ipv4' && av.indexOf(':') === -1) {
+        return push(atomic.type, av + ':' + port, useRole, roleIsCaveat, meta);
+      }
+      return;
     }
 
     var h = hostType(s);
@@ -541,8 +629,12 @@ function runWalk(root, roleKeys, roleMaxLen, exempt, suppressBenign) {
        a short, space-free token, or something path- or hash-shaped. Prose, which
        is most of a feed by volume, is not an omission and must not inflate the
        number the page prints. Fields that describe an entry or its host
-       (NON_INDICATOR_KEYS) are not omissions either. */
+       (NON_INDICATOR_KEYS) are not omissions either. A value inside `metadata`
+       is never one: that branch is walked only to surface an infrastructure
+       address (see EXEMPT_TOP), so `country: "Uzbekistan"` beside it is not an
+       indicator the page failed to type. */
     if (enhanced && ctx.length && NON_INDICATOR_KEYS[ctx[ctx.length - 1]]) return;
+    if (enhanced && ctx.indexOf('metadata') !== -1) return;
     if (s.length <= 120 && (s.indexOf(' ') === -1 || /[\\/]/.test(s))) untyped++;
   }
 
@@ -668,7 +760,20 @@ function runWalk(root, roleKeys, roleMaxLen, exempt, suppressBenign) {
       }
     }
     Object.keys(node).forEach(function (k) {
-      if (exempt && exempt[k]) return;
+      if (exempt && exempt[k]) {
+        /* `metadata` is exempt as a container but its infrastructure branch is
+           walked (see EXEMPT_TOP): `metadata.infrastructure.source_ip` is where
+           opendirectory-45-130-148-125-20260430 records its only bare address.
+           The synthetic one-key object keeps every other metadata field out,
+           including `reference` (the site's own report URLs), and gives the
+           branch NO_META so `metadata.confidence` is not stamped on the row. */
+        if (enhanced && k === 'metadata' && node[k] && typeof node[k] === 'object' &&
+            node[k].infrastructure) {
+          walk({ infrastructure: node[k].infrastructure }, k, myRole, myRoleIsCaveat,
+               NO_META, ctx.concat([k]), null, null);
+        }
+        return;
+      }
       walk(node[k], k, myRole, myRoleIsCaveat, myMeta,
            ctx.concat([k]), myPort, myLabel);
     });
@@ -684,14 +789,6 @@ function runWalk(root, roleKeys, roleMaxLen, exempt, suppressBenign) {
        " | " so multiple distinct reasons read as separate sentences, not one run-on. */
     var context = r.caveats.length ? r.caveats.join(' | ') : r.context;
     var m = r.meta;
-    /* A value that was a hash entry's filename label and also appears as an
-       indicator of another type keeps the EARLIEST entry's fields, which is what
-       first-wins dedupe gave it before the label rule existed. Matched on value
-       alone, not on the row's type: `soul.md` is a filename in one container and
-       a domain-shaped string in another, and the earlier entry's MODERATE is the
-       one the feed's own order asserts. */
-    var lk = String(r.value).toLowerCase();
-    if (labelMeta[lk] && labelPos[lk] < r.pos) m = labelMeta[lk] || NO_META;
     return { type: r.type, value: r.value, context: context,
              confidence: m.confidence, action: m.action, fp_risk: m.fp_risk };
   });

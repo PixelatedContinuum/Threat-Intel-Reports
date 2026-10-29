@@ -54,11 +54,16 @@ function countEntries(doc) {
 var doc = JSON.parse(fs.readFileSync(FEED, 'utf8'));
 var summary = X.summarise(doc);
 
-test('THE PILOT ENTRY CARRIES ONE ROW PER INDICATOR ENTRY THE FEED DECLARES', function () {
+test('THE PILOT ENTRY CARRIES ONE ROW PER INDICATOR ENTRY THE FEED DECLARES, PLUS ITS TWO FILE NAMES', function () {
   assert.equal(countEntries(doc), 41,
     'the feed no longer declares 41 indicator entries; the count this test pins moved');
-  assert.equal(summary.rows.length, 41,
-    'rows: ' + summary.rows.length + ' against ' + countEntries(doc) + ' feed entries');
+  /* 41 + the two `file_hashes.sha256[].filename` rows. A filename beside a hash is
+     the common pivot (Rubeus, SweetPotato) where the hash is the exact-build pivot;
+     the first review measured 179 such names absent from the whole table when the
+     label rule suppressed them, and the lead restored the row. The denominator
+     stays the feed's 41 entries; the two names are additional rows over it. */
+  assert.equal(summary.rows.length, 43,
+    'rows: ' + summary.rows.length + ' against ' + countEntries(doc) + ' feed entries + 2 filenames');
 });
 
 test('no pilot row is untyped: every value the feed declares has a type', function () {
@@ -73,8 +78,27 @@ test('the type histogram is the report\'s own breakdown, measured', function () 
     url: 4,
     sha256: 3,     // 2 file hashes + the TLS certificate's fingerprint
     path: 12,
+    filename: 2,   // dump2.sh and Relay.java.new, the two hash entries' names
     pattern: 13    // 3 service fingerprints, 6 network signatures, 2 behaviours,
                    // 1 mutex, 1 host-name fingerprint
+  });
+});
+
+test('a filename beside a hash keeps its own row, with the hash entry\'s confidence and action', function () {
+  var names = summary.rows.filter(function (r) { return r.type === 'filename'; })
+    .map(function (r) { return r.value; }).sort();
+  /* Original case: neither name classifies as a filename in ioc-classify.js
+     (`.new` is not in its extension list and `.sh` is deliberately left a domain
+     there), so both keep the case the feed wrote. A name that DOES classify as a
+     filename is lower-cased by the classifier and typed here with that value, so
+     one file is never two rows (test/ioc-tables-fix1.test.js). */
+  assert.deepEqual(names, ['Relay.java.new', 'dump2.sh']);
+  /* ioc-classify lower-cases a filename, and this row takes that normalised value so
+     one name is one row wherever it was typed (see the corpus test for the duplicate
+     case this prevents). */
+  names.forEach(function (n) {
+    var row = summary.rows.filter(function (r) { return r.type === 'filename' && r.value === n; })[0];
+    assert.equal(row.confidence, 'DEFINITE', n + ' lost the hash entry\'s confidence');
   });
 });
 
