@@ -294,3 +294,18 @@ html:has(.hl-report-page) .hl-back-top { display: none !important; }
 @media (max-width: 699px) { html.hl-rv-reading .hl-nav { transform: translateY(-100%) !important; transition: none !important; } }
 
 .hl-report-page .hl-post-content code { color: var(--rv-code) !important; background: var(--rv-row) !important; border-color: var(--rv-line) !important; }
+
+/* The site's phone tables force nowrap and the theme fixes column widths.
+   Preserve readable source cells inside their own horizontal scroll region. */
+.hl-report-page .hl-rv-source table { table-layout: auto; }
+.hl-report-page .hl-rv-source :is(th,td) { white-space: normal; overflow-wrap: anywhere; }
+/* Existing table/quote colours are literal and important in custom.css, so
+   local tokens alone cannot mirror them. Keep these overrides report-scoped. */
+.hl-report-page .hl-post-content td { color: var(--rv-text) !important; background: var(--rv-row) !important; border-color: var(--rv-line) !important; }
+.hl-report-page .hl-post-content tr:nth-child(even) td { background: var(--rv-card) !important; }
+.hl-report-page .hl-post-content th { color: var(--rv-blue) !important; background: var(--rv-card) !important; border-color: var(--rv-line) !important; }
+.hl-report-page .hl-post-content blockquote { color: var(--rv-text) !important; background: var(--rv-row) !important; }
+@media print {
+  .hl-report-page .hl-rv-source table { font-size: 9pt; }
+  .hl-report-page .hl-rv-source :is(th,td) { font-size: inherit; color: #000000 !important; background: #ffffff !important; }
+}
