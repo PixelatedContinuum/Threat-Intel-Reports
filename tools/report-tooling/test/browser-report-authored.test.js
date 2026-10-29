@@ -170,7 +170,13 @@ test('the tagged preview markdown carries a tab line for every section', functio
   assert.equal(a.tabs['17-notification'], 'victims');
 });
 
-test('a slug with a vault copy resolves to the vault copy, compared with the site copy', function () {
+/* The vault lives in the workflow repo beside this checkout, not in CI's clone
+   of the site repo, so the case is a stated skip there rather than a failure. */
+var VAULT_PRESENT = require('node:fs').existsSync(G.reportPaths(PILOT).vault);
+
+test('a slug with a vault copy resolves to the vault copy, compared with the site copy', {
+  skip: VAULT_PRESENT ? false : 'no vault copy beside this checkout (CI clones the site repo only)'
+}, function () {
   var a = G.readAuthored(PILOT);
   assert.equal(a.error, undefined);
   assert.equal(a.source, 'vault');
