@@ -607,6 +607,298 @@ function timelineFixtureHtml(html) {
   return done ? out : null;
 }
 
+/* ---------- 4a: the tab bar, and the targets 4a names (p7) ----------------
+
+   WHY THESE ROWS EXIST. design-v4 4a's "Gates added for mobile" asks for two
+   things this file did not assert, both found by the deepseek review of the
+   pilot (review_e74f3dcbe2074ad1, V3 task task_b933cd7c01a04024):
+
+   1. every tab reachable from the TAB BAR at 768x1024 and 812x375. The
+      per-viewport loop below cannot cover it: it stops at
+      `if (width >= 700) continue;`, which is correct for the phone-only
+      dashboard-card rules and wrong for the bar, and the tab rows that do run
+      everywhere ask about URL fragments, keyboard and the phone Sections menu,
+      never whether a tab has a box on screen at those two sizes.
+
+   2. the 44 by 44 count covered `[data-rv-chrome]` controls and the bar only,
+      so the teardown summaries 4a names and the in-tab section navigation were
+      never measured at any width.
+
+   The lead measured both by hand on the live preview (p5-report.md, "After the
+   deepseek review") because the gate asserted neither. Measured by hand is not
+   a gate: the next layout change is then verified by nobody.
+
+   THREE THINGS KEEP THESE ROWS HONEST.
+
+   - The page is scrolled only so the sticky bar is on screen. A tab that needs
+     an INNER box scrolled (a tab list with `overflow:hidden` and a fixed width)
+     is exactly what 4a forbids -- "nothing hidden off-screen", one tap to
+     anywhere -- so clipping ancestors are measured, not scrolled away.
+   - A click has to MOVE the selection. Each tab is measured after a different
+     tab has been selected by fragment, so a click that never reached the bar
+     cannot pass by leaving the already-selected tab in place.
+   - A row that measured nothing is NOT CHECKED, never a pass. The bar is built
+     by hl-report-tabs.js, so a controller that never ran leaves a page where
+     "every tab is fine" is true only because there are no tabs. */
+
+var MIN_TARGET_PX = 43.99;
+
+/* 4a's two sizes for the bar, and the two it names for the 44 px count (390 is
+   its phone width; 768 its tablet). */
+var TAB_BAR_VIEWPORTS = [[768, 1024, 'tablet'], [812, 375, 'landscape phone']];
+var TAB_TARGET_VIEWPORTS = [[390, 844, 'phone'], [768, 1024, 'tablet']];
+
+/* One tab's geometry, read the way a finger meets it: scroll the PAGE so the
+   sticky bar is on screen (never an inner scroller), then require a real box,
+   inside the viewport width, and inside every clipping ancestor between the
+   tab and the document. Rounding is whole pixels because a rect comparison
+   against a fractional client width is noise at 767.5. */
+function tabGeomExpr(id) {
+  return '(function(id){' +
+    'var t=document.getElementById(id);if(!t)return {found:false};' +
+    'var bar=t.closest(".hl-rv-bar")||t.parentElement;' +
+    'var br=bar.getBoundingClientRect();' +
+    'if(br.top<2||br.bottom>innerHeight-2){' +
+    'if(bar.scrollIntoView)bar.scrollIntoView({block:"center",behavior:"instant"});}' +
+    'var r=t.getBoundingClientRect();' +
+    'var client=document.documentElement.clientWidth;' +
+    'var clips=[];' +
+    'for(var a=t.parentElement;a&&a!==document.documentElement;a=a.parentElement){' +
+    'var c=getComputedStyle(a);' +
+    'if(!/auto|scroll|hidden|clip/.test(c.overflowX))continue;' +
+    'var ar=a.getBoundingClientRect();' +
+    'if(r.left>=ar.left-1&&r.right<=ar.right+1)continue;' +
+    'clips.push({cls:"."+String(a.className||a.tagName).split(" ")[0],' +
+    'left:Math.round(ar.left),right:Math.round(ar.right)});}' +
+    'return {found:true,id:id,text:(t.textContent||"").trim().slice(0,40),' +
+    'w:Math.round(r.width),h:Math.round(r.height),' +
+    'left:Math.round(r.left),right:Math.round(r.right),client:client,' +
+    'rects:t.getClientRects().length,clips:clips,' +
+    'barTop:Math.round(br.top),barH:Math.round(br.height),innerH:innerHeight};})(' +
+    JSON.stringify(id) + ')';
+}
+
+/* Where a click at the middle of that tab would land. A clipped or covered tab
+   fails here with the element that would take the tap, rather than dispatching
+   a click into whatever slid over it. */
+function tabHitExpr(id) {
+  return '(function(id){var t=document.getElementById(id);if(!t)return null;' +
+    'var r=t.getBoundingClientRect();' +
+    'var x=Math.round(r.left+r.width/2),y=Math.round(r.top+r.height/2);' +
+    'var hit=document.elementFromPoint(x,y);' +
+    'return {x:x,y:y,ok:!!hit&&(hit===t||t.contains(hit)),' +
+    'hit:hit?(hit.tagName+"."+String(hit.className||"").split(" ")[0]):null};})(' +
+    JSON.stringify(id) + ')';
+}
+
+var TAB_CLICK_STATE_EXPR = '(function(){' +
+  'var sel=document.querySelector("[role=tab][aria-selected=true]");' +
+  'var shown=[].slice.call(document.querySelectorAll("[role=tabpanel]"))' +
+  '.filter(function(p){return !p.hidden;});' +
+  'return {selected:sel?sel.id:null,shown:shown.map(function(p){return p.id;})};})()';
+
+/* The verdict for one tab in row A. PURE, so a test can feed it the four
+   measurements a layout mutant changes without launching a browser. */
+function tabReachVerdict(token, geom, hit, after) {
+  var id = 'tabbtn-' + token;
+  if (!geom || !geom.found) return { ok: false, why: id + ': no tab element on the page' };
+  var why = [];
+  if (!geom.rects || geom.w <= 0 || geom.h <= 0) {
+    why.push('rendered with no box (' + geom.w + 'x' + geom.h + ')');
+  }
+  if (geom.h < MIN_TARGET_PX) why.push('only ' + geom.h + ' px high, under 44');
+  (geom.clips || []).forEach(function (c) {
+    why.push('clipped by ' + c.cls + ' (' + c.left + '..' + c.right +
+      '), so the reader cannot see all of it');
+  });
+  if (geom.left < -1 || geom.right > geom.client + 1) {
+    why.push('outside the viewport width (' + geom.left + '..' + geom.right +
+      ' of 0..' + geom.client + ')');
+  }
+  if (!hit || !hit.ok) {
+    why.push('a tap at the middle of the tab would land on ' +
+      ((hit && hit.hit) || 'nothing') + ', not on the tab');
+  } else if (!after) {
+    why.push('the tap was dispatched but the resulting state could not be read');
+  } else {
+    if (after.selected !== id) {
+      why.push('the tap selected ' + (after.selected || 'nothing') + ', not ' + id);
+    }
+    if (after.shown.length !== 1 || after.shown[0] !== 'tab-' + token) {
+      why.push('after the tap the shown panel(s) were ' +
+        (after.shown.join(', ') || 'none') + ', not tab-' + token);
+    }
+  }
+  return { ok: why.length === 0, why: why.length ? id + ': ' + why.join('; ') : '' };
+}
+
+/* Row B's measurements for one tab: every teardown summary in the panel, and
+   every section link in the panel's section navigation. The in-tab contents
+   list starts collapsed on a phone, and a link the reader has not opened yet is
+   still the size it will be when they do, so it is opened for the measurement
+   and put back. */
+function tabTargetExpr(token) {
+  return '(function(t){' +
+    'var p=document.getElementById("tab-"+t);if(!p)return null;' +
+    'function dims(e){var r=e.getBoundingClientRect();' +
+    'return {text:(e.textContent||"").trim().replace(/\\s+/g," ").slice(0,44),' +
+    'w:Math.round(r.width),h:Math.round(r.height),rects:e.getClientRects().length};}' +
+    'var toc=[].slice.call(p.querySelectorAll(".hl-rv-contents"));' +
+    'var reopened=[];toc.forEach(function(d){if(!d.open){d.open=true;reopened.push(d);}});' +
+    'var sums=[].slice.call(p.querySelectorAll("details.hl-teardown > summary")).map(dims);' +
+    'var nav=[].slice.call(p.querySelectorAll(".hl-rv-contents nav a")).map(dims);' +
+    'toc.forEach(function(d){if(reopened.indexOf(d)>-1)d.open=false;});' +
+    'return {sums:sums,nav:nav};})(' + JSON.stringify(token) + ')';
+}
+
+/* The verdict for one row-B group at one width. PURE for the same reason as
+   tabReachVerdict, and it carries the denominator: how many were measured, how
+   many the page holds, and whether the two agree. A group measured 0 times is
+   NOT CHECKED, never a pass, and elements the page holds but no tab panel
+   contains are named rather than dropped. */
+function targetRowVerdict(rows, docTotal, tabs) {
+  var small = [], unrendered = [];
+  (rows || []).forEach(function (r) {
+    if (!r.rects) unrendered.push(r);
+    else if (r.w < MIN_TARGET_PX || r.h < MIN_TARGET_PX) small.push(r);
+  });
+  var failed = small.concat(unrendered);
+  var uncovered = Math.max(0, (docTotal || 0) - (rows || []).length);
+  var measured = (rows || []).length;
+  var detail;
+  if (!measured) {
+    detail = '0 were measured: no such element was found in any of the ' + tabs +
+      ' tabs, so this row measured nothing' +
+      (docTotal ? ' (the page holds ' + docTotal + ', all outside the tab panels)' : '');
+  } else {
+    detail = measured + ' of ' + docTotal + ' measured across ' + tabs + ' tabs, ' +
+      small.length + ' under 44, ' + unrendered.length + ' not rendered' +
+      (failed.length ? ': ' + failed.map(function (r) {
+        return '"' + r.text + '" ' + r.w + 'x' + r.h + (r.rects ? '' : ' (not rendered)');
+      }).join(' | ') : '') +
+      (uncovered ? '; ' + uncovered + ' the page holds were not inside any tab panel, ' +
+        'so they were not measured' : '');
+  }
+  return { notChecked: measured === 0, ok: measured > 0 && failed.length === 0 && uncovered === 0, detail: detail };
+}
+
+/* Row A, at the two sizes 4a names for the bar. */
+async function tabBarRows(page, url) {
+  for (var v = 0; v < TAB_BAR_VIEWPORTS.length; v++) {
+    var width = TAB_BAR_VIEWPORTS[v][0], height = TAB_BAR_VIEWPORTS[v][1];
+    var vlabel = TAB_BAR_VIEWPORTS[v][2];
+    var rowName = 'every tab is rendered in the bar, at least 44 px high, and a tap selects it';
+    await setViewport(page, width, height);
+    /* setViewport already turns touch on below 1024; state it here so this row
+       cannot silently change meaning if that threshold ever moves. */
+    await page.send('Emulation.setTouchEmulationEnabled', { enabled: true, maxTouchPoints: 5 });
+    if (!(await gotoAndWait(page, url))) {
+      check('NOT CHECKED: ' + width + 'x' + height + ': ' + rowName, false,
+        'the tab controller never built at this viewport (no .hl-rv-ready), so no tab ' +
+        'could be measured');
+      continue;
+    }
+    var measuredA = 0, badA = [];
+    for (var t = 0; t < TAB_TOKENS.length; t++) {
+      var token = TAB_TOKENS[t], id = 'tabbtn-' + token;
+      /* A DIFFERENT tab first, so the tap below has to move the selection. */
+      var other = TAB_TOKENS[(t + 3) % TAB_TOKENS.length];
+      await page.evaluate('location.hash=' + JSON.stringify('#tab-' + other));
+      await CDP.sleep(120);
+      var geom = await page.json(tabGeomExpr(id));
+      if (geom && geom.found) measuredA++;
+      var hit = null, after = null;
+      if (geom && geom.found && geom.rects && geom.w > 0 && geom.h > 0 &&
+          !(geom.clips || []).length) {
+        hit = await page.json(tabHitExpr(id));
+        if (hit && hit.ok) {
+          await page.send('Input.dispatchMouseEvent', {
+            type: 'mousePressed', x: hit.x, y: hit.y, button: 'left', clickCount: 1
+          });
+          await page.send('Input.dispatchMouseEvent', {
+            type: 'mouseReleased', x: hit.x, y: hit.y, button: 'left', clickCount: 1
+          });
+          await CDP.sleep(220);
+          after = await page.json(TAB_CLICK_STATE_EXPR);
+        }
+      }
+      var verdict = tabReachVerdict(token, geom, hit, after);
+      if (!verdict.ok) badA.push(width + 'x' + height + ' ' + verdict.why);
+    }
+    var detailA = measuredA + ' of ' + TAB_TOKENS.length + ' tabs measured at ' +
+      width + 'x' + height + ' (' + vlabel + ') with touch emulation, each inside the ' +
+      'viewport width and at least 44 px high, a real tap selecting it and showing its ' +
+      'own panel' + (badA.length ? '; ' + badA.length + ' failing: ' + badA.join(' | ') : '');
+    if (!measuredA) {
+      check('NOT CHECKED: ' + width + 'x' + height + ': ' + rowName, false,
+        'no element with a tab id was on the page, so this row measured nothing; the ' +
+        'bar is built by hl-report-tabs.js and it did not build one here');
+    } else {
+      check(width + 'x' + height + ': ' + rowName, badA.length === 0, detailA);
+    }
+  }
+}
+
+/* Row B, at 390 and 768, selecting each tab in turn so a hidden panel's
+   summaries and links are measured rather than skipped. On a phone the
+   dashboard view opens as a collapsed card, so it is opened with its own
+   control first, the same route the chrome-target loop uses. */
+async function tabTargetRows(page, url) {
+  for (var v = 0; v < TAB_TARGET_VIEWPORTS.length; v++) {
+    var width = TAB_TARGET_VIEWPORTS[v][0], height = TAB_TARGET_VIEWPORTS[v][1];
+    await setViewport(page, width, height);
+    if (!(await gotoAndWait(page, url))) {
+      check('NOT CHECKED: ' + width + ' px: the teardown summaries and section links ' +
+        'are at least 44 by 44 px', false,
+        'the tab controller never built at ' + width + 'x' + height +
+        ' (no .hl-rv-ready), so nothing was measured');
+      continue;
+    }
+    var sums = [], links = [];
+    for (var t = 0; t < TAB_TOKENS.length; t++) {
+      var token = TAB_TOKENS[t];
+      await page.evaluate('location.hash=' + JSON.stringify('#tab-' + token));
+      await CDP.sleep(100);
+      var card = false;
+      if (width < 700) {
+        card = await page.json('(function(t){var b=document.getElementById("hl-rv-view-"+t);' +
+          'return b?b.hidden:false;})(' + JSON.stringify(token) + ')');
+        if (card) {
+          await page.click('#hl-rv-toggle-' + token);
+          await CDP.sleep(140);
+        }
+      }
+      var m = await page.json(tabTargetExpr(token));
+      if (m) {
+        sums = sums.concat(m.sums);
+        links = links.concat(m.nav);
+      }
+      if (card) {
+        await page.click('#hl-rv-toggle-' + token);
+        await CDP.sleep(80);
+      }
+    }
+    var doc = await page.json('(function(){return {' +
+      'sums:document.querySelectorAll("details.hl-teardown > summary").length,' +
+      'nav:document.querySelectorAll(".hl-rv-contents nav a").length};})()');
+    var sumV = targetRowVerdict(sums, doc.sums, TAB_TOKENS.length);
+    var linkV = targetRowVerdict(links, doc.nav, TAB_TOKENS.length);
+    var sumName = 'every teardown summary in every tab is at least 44 by 44 px';
+    var linkName = 'every section link in every tab\'s section navigation is at least ' +
+      '44 by 44 px';
+    if (sumV.notChecked) {
+      check('NOT CHECKED: ' + width + ' px: ' + sumName, false, sumV.detail);
+    } else {
+      check(width + ' px: ' + sumName, sumV.ok, sumV.detail);
+    }
+    if (linkV.notChecked) {
+      check('NOT CHECKED: ' + width + ' px: ' + linkName, false, linkV.detail);
+    } else {
+      check(width + ' px: ' + linkName, linkV.ok, linkV.detail);
+    }
+  }
+}
+
 async function tabbedChecks(page, opts) {
   var url = opts.url;
 
@@ -1233,6 +1525,10 @@ async function tabbedChecks(page, opts) {
     targetSmall === 0,
     targetTotal + ' control measurements across ' + targetStates +
     ' tab/viewport states with dashboard folds open, ' + targetSmall + ' under 44');
+
+  /* ---- 4a: the bar at 768/812x375, and the targets 4a names (p7) -------- */
+  await tabBarRows(page, url);
+  await tabTargetRows(page, url);
 
   /* ---- JavaScript off and print ---------------------------------------- */
   await setViewport(page, 1280, 900);
@@ -1877,6 +2173,16 @@ if (require.main === module) {
     normaliseHeadingText: normaliseHeadingText,
     isTabbedHtml: isTabbedHtml,
     TAB_TOKENS: TAB_TOKENS,
-    TAB_VIEWPORTS: TAB_VIEWPORTS
+    TAB_VIEWPORTS: TAB_VIEWPORTS,
+    /* p7: the 4a rows the deepseek review found missing, and the pure
+       verdicts behind them, so a test can prove each row can fail. */
+    MIN_TARGET_PX: MIN_TARGET_PX,
+    TAB_BAR_VIEWPORTS: TAB_BAR_VIEWPORTS,
+    TAB_TARGET_VIEWPORTS: TAB_TARGET_VIEWPORTS,
+    tabGeomExpr: tabGeomExpr,
+    tabHitExpr: tabHitExpr,
+    tabTargetExpr: tabTargetExpr,
+    tabReachVerdict: tabReachVerdict,
+    targetRowVerdict: targetRowVerdict
   };
 }
