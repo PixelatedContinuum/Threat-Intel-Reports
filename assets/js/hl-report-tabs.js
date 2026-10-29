@@ -42,7 +42,16 @@
     var a = make('a', '', label, parent); a.href = href; return a;
   }
   function sourceLink(model, parent) { if (model && model.heading) link('Read in the report', '#' + model.heading.id, parent); }
+  // figure-nav runs before this deferred script. Mark its generated labels
+  // before detaching anything, so rollback retains only report words too.
+  content.querySelectorAll('.hl-fignav').forEach(function (n) { n.setAttribute('data-rv-chrome', ''); n.setAttribute('data-pagefind-ignore', ''); });
+  // A failed enhancement must put the exact original nodes back, in report order.
+  var originalChrome = new Set(document.querySelectorAll('[data-rv-chrome]'));
+  var curation = {};
+  var viewData = document.getElementById('hl-report-view-data');
+  if (viewData) { try { curation = JSON.parse(viewData.textContent); } catch (e) { console.warn('Report view data unavailable', e); } }
   var sections = [], currentBlock;
+  try {
   sourceNodes.forEach(function (n) {
     if (!currentBlock || n.nodeType === 1 && n.tagName === 'H2') {
       // These two structural wrappers deliberately are not chrome: excluding a
@@ -120,19 +129,22 @@
   TOKENS.forEach(function (t, i) {
     var group = sections.filter(function (s) { return s.token === t; });
     var mins = Math.max(1, Math.round(group.reduce(function (n, s) { return n + text(s.node).split(/\s+/).length; }, 0) / 200));
-    var tab = button(NAMES[i], tablist, function () { navigateTab(i, true); });
+    var tab = button('', tablist, function () { navigateTab(i, true); });
+    tab.setAttribute('aria-label', NAMES[i]);
+    make('span', 'hl-rv-tab-full', NAMES[i], tab);
+    make('span', 'hl-rv-tab-short', ['Overview', 'Victims', 'Chain', 'Timeline', 'Actor', 'IOCs', 'Confidence'][i], tab);
     tab.id = 'tabbtn-' + t; tab.setAttribute('role', 'tab'); tab.setAttribute('aria-controls', 'tab-' + t);
     tab.title = QUESTIONS[i] + ' ' + mins + ' min read';
     tab.addEventListener('keydown', function (e) {
       var j = e.key === 'ArrowRight' ? (i + 1) % 7 : e.key === 'ArrowLeft' ? (i + 6) % 7 : e.key === 'Home' ? 0 : e.key === 'End' ? 6 : -1;
-      if (j < 0) return; e.preventDefault(); navigateTab(j, false); tabs[j].focus({ preventScroll: true });
+      if (j < 0) return; e.preventDefault(); navigateTab(j, false, true); tabs[j].focus({ preventScroll: true });
     });
     tab.addEventListener('focus', function () { if (!onepage && active !== i) select(i); });
     tabs.push(tab);
     var a = link('', '#tab-' + t, menu); a.className = 'hl-rv-menu-item';
     make('strong', '', NAMES[i], a); make('span', '', QUESTIONS[i], a); make('small', '', mins + ' min read', a); menuLinks.push(a);
     var panel = document.createElement('section'); panel.className = 'hl-rv-panel'; panel.id = 'tab-' + t;
-    panel.setAttribute('role', 'tabpanel'); panel.setAttribute('aria-labelledby', tab.id); panel.tabIndex = 0;
+    panel.setAttribute('role', 'tabpanel'); panel.setAttribute('aria-labelledby', tab.id); panel.tabIndex = -1;
     content.appendChild(panel); panels.push(panel);
     var title = make('header', 'hl-rv-panel-head', null, panel);
     make('h2', '', NAMES[i], title); make('p', '', QUESTIONS[i] + ' · ' + mins + ' min read', title);
@@ -151,7 +163,9 @@
   function mode(one) {
     onepage = one; root.classList.toggle('hl-onepage', one); root.classList.toggle('hl-tabbed', !one);
     if (one) {
-      sections.forEach(function (s) { content.appendChild(s.node); });
+      // Lead with the written report in its original order; park the hidden
+      // dashboard shells after it, rather than before the article's first word.
+      sections.forEach(function (s) { content.insertBefore(s.node, panels[0]); });
       panels.forEach(function (p) { p.hidden = true; });
       tabs.forEach(function (t) { t.setAttribute('aria-selected', 'false'); t.tabIndex = -1; });
       tablist.hidden = true; currentLabel.textContent = 'Read as one page';
@@ -172,8 +186,8 @@
     if (window.HLGlossary) window.HLGlossary.applyEdgeClasses(content);
   }
   function scrollTopTab() { bar.scrollIntoView({ block: 'start', behavior: 'instant' }); }
-  function navigateTab(i, scroll) {
-    mode(false); select(i); history.pushState(null, '', '#tab-' + TOKENS[i]);
+  function navigateTab(i, scroll, replace) {
+    mode(false); select(i); history[replace ? 'replaceState' : 'pushState'](null, '', '#tab-' + TOKENS[i]);
     if (scroll) scrollTopTab();
   }
   function target(hash) { try { return decodeURIComponent(hash.replace(/^#/, '')); } catch (e) { return hash.slice(1); } }
@@ -181,7 +195,12 @@
     var id = target(hash);
     if (id === 'one-page') { mode(true); if (scroll) scrollTopTab(); return true; }
     var idx = TOKENS.indexOf(id.replace(/^tab-/, ''));
-    if (id.indexOf('tab-') === 0 && idx >= 0) { mode(false); select(idx); if (scroll) scrollTopTab(); return true; }
+    if (id.indexOf('tab-') === 0 && idx >= 0) {
+      mode(false); select(idx);
+      if (scroll) scrollTopTab();
+      panels[idx].focus({ preventScroll: true });
+      return true;
+    }
     var el = document.getElementById(id); if (!el) return false;
     var panel = el.closest('.hl-rv-panel');
     if (!onepage && panel) { mode(false); select(panels.indexOf(panel)); }
@@ -225,18 +244,19 @@
   function dashTable(parent, m, caption, id) {
     var wrap = make('div', 'hl-rv-table-wrap', null, parent); wrap.tabIndex = 0;
     wrap.setAttribute('role', 'region'); wrap.setAttribute('aria-label', caption);
-    var table = make('table', 'hl-rv-table', null, wrap); if (id) table.id = id;
+    var table = make('table', 'hl-rv-table', null, wrap); table.setAttribute('role', 'table'); if (id) table.id = id;
     make('caption', '', caption, table);
-    var tr = make('tr', '', null, make('thead', '', null, table));
-    m.headers.concat(['Source']).forEach(function (h) { make('th', '', h, tr).scope = 'col'; });
-    var body = make('tbody', '', null, table);
+    var thead = make('thead', '', null, table); thead.setAttribute('role', 'rowgroup');
+    var tr = make('tr', '', null, thead); tr.setAttribute('role', 'row');
+    m.headers.concat(['Source']).forEach(function (h) { var th = make('th', '', h, tr); th.scope = 'col'; th.setAttribute('role', 'columnheader'); });
+    var body = make('tbody', '', null, table); body.setAttribute('role', 'rowgroup');
     m.rows.forEach(function (r, ri) {
-      var row = make('tr', '', null, body); row.id = 'hl-rv-' + (id || m.token + '-' + m.index) + '-' + (ri + 1);
+      var row = make('tr', '', null, body); row.setAttribute('role', 'row'); row.id = 'hl-rv-' + (id || m.token + '-' + m.index) + '-' + (ri + 1);
       r.forEach(function (v, ci) {
-        var td = make('td', '', null, row); td.dataset.label = m.headers[ci];
+        var td = make('td', '', null, row); td.setAttribute('role', 'cell'); td.dataset.label = m.headers[ci];
         if (/Conf|Status|Grade/i.test(m.headers[ci])) badge(td, v); else make('span', '', v, td);
       });
-      var source = make('td', '', null, row); source.dataset.label = 'Source'; sourceLink(m, source);
+      var source = make('td', '', null, row); source.setAttribute('role', 'cell'); source.dataset.label = 'Source'; sourceLink(m, source);
     });
     return table;
   }
@@ -286,7 +306,10 @@
       if (chronology) { var dc = col(chronology, /^Date|^Time|^When/i);
         tile(tiles, chronology.rows[0][dc] + ' to ' + chronology.rows[chronology.rows.length - 1][dc], 'observation window', 'First and last rows in the chronology; not an activity duration.', 'timeline'); count++; }
       if (!count) missing(body, 'victim, procedure, indicator or dated chronology tables');
-      if (judgments) { var headline = Object.assign({}, judgments, { rows: judgments.rows.filter(function (_, i) { return [0, 6, 12, 14].includes(i); }) }); dashTable(tableFold(body, 'Headline judgments'), headline, 'Headline judgments'); }
+      if (judgments && Array.isArray(curation.headline_rows)) {
+        var headline = Object.assign({}, judgments, { rows: judgments.rows.filter(function (_, i) { return curation.headline_rows.includes(i); }) });
+        dashTable(tableFold(body, 'Headline judgments (curated for this report)'), headline, 'Headline judgments (curated for this report)');
+      }
       return count + ' summary figures, from the report tables';
     },
     victims: function (body) {
@@ -302,6 +325,7 @@
     },
     chain: function (body) {
       if (stages) {
+        if (curation.stage_joins) make('p', 'hl-rv-note', 'Stage-to-procedure links: curated for this report.', body);
         var wrap = make('div', 'hl-rv-chain-scroll', null, body); wrap.tabIndex = 0; wrap.setAttribute('role', 'region'); wrap.setAttribute('aria-label', 'Attack stages');
         var columns = make('div', 'hl-rv-stages', null, wrap);
         stages.rows.forEach(function (r) {
@@ -309,23 +333,12 @@
           if (r[2]) { make('h4', '', stages.headers[2], card); make('p', '', r[2], card); } sourceLink(stages, card);
           // Only explicit shared procedure names join. Never infer a stage from tactic alone.
           if (attack) {
-            // The prototype's conservative pilot joins, keyed by stage name,
-            // technique AND explicit estate/scope (never by tactic alone). Rows
-            // that do not satisfy a join remain in the complete procedure table.
-            var pilotJoins = {
-              '1. Study': [['T1595', /^IT provider public hostnames/], ['T1593.003', /^IT provider public code clones/]],
-              '2. Entry': [['T1190', /^Agency GLPI/], ['T1078', /^Finance secretariat; traffic department/], ['T1190', /^Supplier-built cloud portal/]],
-              '3. Foothold': [['T1090.001', /^Pod and wls relay lanes/], ['T1095', /^Same relay lanes/], ['T1572', /^Bank client invoked/], ['T1571', /^Relay lanes on TCP 53/]],
-              '4. Mine the help desk': [['T1552.001', /^Agency support-app settings/], ['T1528', /^Agency SentinelOne integration token/], ['T1213', /^Agency GLPI document search/], ['T1552.001', /^Agency integration settings/]],
-              '5. Spread': [['T1550.001', /^SentinelOne console/], ['T1518.001', /^Agency SentinelOne inventory/], ['T1685', /^No endpoint impairment established/], ['T1078', /^Zabbix staff account/], ['T1072', /^Monitoring proxy/], ['T1072', /^Zabbix server and agent/]],
-              '6. Collect': [['T1005', /^Agency GLPI and package store/], ['T1213', /^Finance secretariat accounts/], ['T1119', /^Agency GLPI file store/], ['T1020', /^Agency GLPI; counts overlap/]],
-              '7. Move it out': [['T1071.001', /^Agency GLPI command channel/], ['T1132.001', /^Base64 command output/], ['T1041', /^Agency package product/]]
-            };
-            var joins = pilotJoins[r[0]] || [];
+            // Optional editorial joins are supplied only by the current report.
+            var joins = curation.stage_joins && curation.stage_joins[r[0]] || [];
             var matches = attack.rows.map(function (a, i) { return { row: a, index: i }; }).filter(function (a) {
               var id = (a.row[0].match(/T\d{4}(?:\.\d{3})?/) || [])[0];
               var scope = a.row[col(attack, /Scope/i)] || '';
-              if (joins.some(function (j) { return id === j[0] && j[1].test(scope); })) return true;
+              if (joins.some(function (j) { return id === j.technique && scope.indexOf(j.scope_prefix) === 0; })) return true;
               var name = a.row[1].toLowerCase(); return name.length >= 12 && (r[1] + ' ' + (r[2] || '')).toLowerCase().includes(name);
             });
             var procedureList = matches.length ? tableFold(card, matches.length + ' linked procedure rows') : card;
@@ -387,6 +400,7 @@
     var body = make('div', 'hl-rv-view-body', null, view); body.id = 'hl-rv-view-' + t;
     toggle.setAttribute('aria-controls', body.id);
     line.textContent = builders[t](body);
+    if (t === 'overview' && curation.headline_rows || t === 'chain' && curation.stage_joins || t === 'timeline' && curation.timeline_lanes) make('p', 'hl-rv-curated', 'View selections curated for this report.', view);
     body.hidden = phone.matches; toggle.textContent = body.hidden ? 'Show the view' : 'Hide the view'; toggle.setAttribute('aria-expanded', String(!body.hidden));
     function sync(open) { body.hidden = !open; toggle.textContent = open ? 'Hide the view' : 'Show the view'; toggle.setAttribute('aria-expanded', String(open)); }
     toggle.addEventListener('click', function () { sync(body.hidden); });
@@ -471,6 +485,43 @@
     mode(true); content.querySelectorAll('details').forEach(function (d) { d.open = true; });
   });
   window.addEventListener('afterprint', function () { if (!beforePrint) return; beforePrint.details.forEach(function (p) { p[0].open = p[1]; }); mode(beforePrint.one); beforePrint = null; });
+  // Reader utilities survive the retirement of the old register/TOC script.
+  var progressTrack = make('div', 'hl-progress-track', null, document.body);
+  var progressBar = make('div', 'hl-progress-bar', null, document.body);
+  progressTrack.setAttribute('aria-hidden', 'true'); progressBar.setAttribute('aria-hidden', 'true');
+  function updateProgress() {
+    var navHeight = phone.matches ? 0 : (document.querySelector('.hl-nav') || {}).offsetHeight || 0;
+    var trackHeight = Math.max(0, innerHeight - navHeight);
+    progressTrack.style.top = progressBar.style.top = navHeight + 'px';
+    progressTrack.style.height = trackHeight + 'px';
+    var total = Math.max(document.body.scrollHeight, root.scrollHeight) - innerHeight;
+    progressBar.style.height = (total > 0 ? Math.min(1, scrollY / total) * trackHeight : 0) + 'px';
+  }
+  window.addEventListener('scroll', updateProgress, { passive: true });
+  window.addEventListener('resize', updateProgress, { passive: true });
+  new ResizeObserver(updateProgress).observe(content);
+  if (eyebrow) {
+    var shareStatus = make('span', 'hl-rv-share-status', '', eyebrow); shareStatus.setAttribute('role', 'status');
+    var shareButton = button('Share', eyebrow, function () {
+      if (navigator.share) { navigator.share({ title: document.title, url: location.href }).catch(function () {}); return; }
+      var address = make('span', 'hl-rv-share-url', location.href, eyebrow);
+      if (navigator.clipboard) navigator.clipboard.writeText(location.href).then(function () { shareStatus.textContent = 'Link copied.'; address.remove(); }, function () { copy(address, shareStatus, 'Link copied.'); });
+      else copy(address, shareStatus, 'Link copied.');
+    });
+    shareButton.className = 'hl-share-btn'; shareButton.setAttribute('aria-label', 'Share this report');
+  }
+  // Storage may be disabled; a tip must never prevent the article from loading.
+  var showTip = true;
+  try { showTip = !sessionStorage.getItem('hl-section-tip'); sessionStorage.setItem('hl-section-tip', '1'); } catch (e) {}
+  if (showTip) {
+    var toast = make('div', 'hl-toast', null, document.body);
+    make('span', 'hl-toast__label', 'Tip', toast);
+    make('span', '', 'Use § beside a section heading to open its shareable link, then Share to save your place.', toast);
+    var toastTimer;
+    function dismissToast() { clearTimeout(toastTimer); toast.classList.remove('hl-toast--visible'); setTimeout(function () { toast.remove(); }, 400); }
+    var dismiss = button('×', toast, dismissToast); dismiss.className = 'hl-toast__close'; dismiss.setAttribute('aria-label', 'Dismiss');
+    setTimeout(function () { toast.classList.add('hl-toast--visible'); }, 1500); toastTimer = setTimeout(dismissToast, 16500);
+  }
   root.classList.add('hl-rv-ready'); mode(false); select(0);
   if (location.hash) go(location.hash, true);
   if (document.fonts) document.fonts.ready.then(function () { measureBar(); if (location.hash) go(location.hash, false); });
@@ -485,12 +536,16 @@
       var years = new Set(m.rows.flatMap(function (x) { return x[dc].match(/\b20\d{2}\b/g) || []; }));
       var start = dates[0];
       if (!start && years.size === 1) { var stamp = Date.parse(display.replace(/\s*\(.*?\)/g, '') + ' ' + Array.from(years)[0]); if (!isNaN(stamp)) start = new Date(stamp).toISOString().slice(0, 10); }
-      var lane = /my |I |collection|directory listing|accepts connections|canary response|first observed/i.test(event) ? 'Collection and observation' : /bank|agency|container|console|tunnel client/i.test(event) ? 'Victim side' : 'Operator infrastructure';
+      var lane = 'Chronology';
+      if (curation.timeline_lanes) {
+        var rule = curation.timeline_lanes.rules.find(function (r) { return new RegExp(r.pattern, 'i').test(event); });
+        lane = rule ? rule.label : curation.timeline_lanes.default;
+      }
       return { display: display, event: event, quality: quality, when: Date.parse(start), end: dates[1] && quality === 'range' ? Date.parse(dates[1]) : Date.parse(start), lane: lane };
     });
-    make('p', 'hl-rv-note', 'Dates are printed as written. Marker shapes: ● given date, ◆ inferred year, ▰ range, ◌ disputed. Lanes group the wording of the chronology, not an additional attribution claim.', parent);
+    make('p', 'hl-rv-note', 'Dates are printed as written. Marker shapes: ● given date, ◆ inferred year, ▰ range, ◌ disputed. ' + (curation.timeline_lanes ? 'Timeline lanes: curated for this report; they group the chronology wording.' : 'Events share a single chronology lane.'), parent);
     var chart = make('div', 'hl-rv-timeline', null, parent), detail = make('p', 'hl-rv-event', 'Select an event to read its date and observation.', parent); detail.setAttribute('role', 'status');
-    var lanes = ['Operator infrastructure', 'Victim side', 'Collection and observation'];
+    var lanes = curation.timeline_lanes ? [curation.timeline_lanes.default].concat(curation.timeline_lanes.rules.map(function (r) { return r.label; })).filter(function (v, i, a) { return a.indexOf(v) === i; }) : ['Chronology'];
     function show(r) { detail.textContent = r.display + ' · ' + r.lane + ' · ' + r.quality.replace('-', ' ') + ': ' + r.event; }
     var valid = rows.filter(function (r) { return !isNaN(r.when); });
     if (valid.length !== rows.length) { chart.remove(); detail.remove(); missing(parent, 'a chronology with parseable dates; original date wording is retained below'); dashTable(parent, m, 'Chronology as printed', 'chronology'); return false; }
@@ -539,4 +594,13 @@
     var tableDetails = make('details', 'hl-rv-chronology-table', null, parent); make('summary', '', 'Chronology as a table', tableDetails); dashTable(tableDetails, m, 'Every dated event as printed', 'chronology');
     return true;
   }
+  } catch (error) {
+    // Remove only nodes this enhancement created, including controls within the
+    // original source. Existing layout assets and pre-existing chrome survive.
+    document.querySelectorAll('[data-rv-chrome]').forEach(function (n) { if (!originalChrome.has(n)) n.remove(); });
+    content.replaceChildren.apply(content, sourceNodes);
+    root.classList.remove('hl-rv-ready', 'hl-tabbed', 'hl-onepage', 'hl-rv-reading');
+    console.warn('Report enhancement unavailable; restored the complete article.', error);
+  }
+
 })();
