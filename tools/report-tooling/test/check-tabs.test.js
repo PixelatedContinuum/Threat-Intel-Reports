@@ -38,18 +38,27 @@ test('an unknown token FAILS and names it', function () {
   assert.match(r.problems.join(' '), /overview, victims, chain/);
 });
 
+test('an unknown token FAILS even when it is the report\'s only tab line', function () {
+  /* Round-1 probe P6 in the failing direction: an invalid token does not count
+     as tagged, so a guard that keys on `tagged` alone would call the report
+     untagged and PASS it. */
+  var r = CT.checkMarkdown(doc('## One Section\n{: .hl-tier-2}\n{: .hl-tab-Overview}\n\nText.\n'));
+  assert.strictEqual(r.status, 'FAIL');
+  assert.match(r.problems.join(' '), /hl-tab-Overview/);
+});
+
 test('a tag that is not directly after the tier line FAILS', function () {
   var r = CT.checkMarkdown(doc(BODY.replace('{: .hl-tier-2}\n{: .hl-tab-indicators}',
     '{: .hl-tier-2}\n{: .hl-figure-nav}\n{: .hl-tab-indicators}')));
   assert.strictEqual(r.status, 'FAIL');
-  assert.match(r.problems.join(' '), /not directly after the tier line/);
+  assert.match(r.problems.join(' '), /not directly after the heading or its tier line/);
 });
 
 test('a tag merged onto the tier line FAILS, naming the check-tiers rule', function () {
   var r = CT.checkMarkdown(doc(BODY.replace('{: .hl-tier-2}\n{: .hl-tab-indicators}',
     '{: .hl-tier-2 .hl-tab-indicators}')));
   assert.strictEqual(r.status, 'FAIL');
-  assert.match(r.problems.join(' '), /merged onto another IAL line/);
+  assert.match(r.problems.join(' '), /merged onto the tier line/);
 });
 
 test('a same-line tag on the heading FAILS, because it corrupts the anchor', function () {
@@ -63,7 +72,8 @@ test('two tab lines under one heading FAIL', function () {
   var r = CT.checkMarkdown(doc(BODY.replace('{: .hl-tab-indicators}',
     '{: .hl-tab-indicators}\n{: .hl-tab-chain}')));
   assert.strictEqual(r.status, 'FAIL');
-  assert.match(r.problems.join(' '), /2 tab lines/);
+  assert.match(r.problems.join(' '), /second tab line/);
+  assert.match(r.problems.join(' '), /exactly one tab/);
 });
 
 test('a heading id of one-page FAILS', function () {
@@ -83,20 +93,24 @@ test('a bare token as a heading id is NOT a failure; that is why panels carry ta
   assert.strictEqual(r.status, 'PASS', JSON.stringify(r.problems));
 });
 
-test('a blank line between the heading and the tier line is still accepted', function () {
+test('a blank line between the heading and the tier line FAILS, because kramdown moves both classes', function () {
   var r = CT.checkMarkdown(doc('## A\n\n{: .hl-tier-1}\n{: .hl-tab-overview}\n\nx\n\n' +
     '## B\n{: .hl-tier-2}\n{: .hl-tab-chain}\n\nx\n'));
-  assert.strictEqual(r.status, 'PASS', JSON.stringify(r.problems));
+  assert.strictEqual(r.status, 'FAIL');
+  assert.match(r.problems.join(' '), /blank line sits between the heading and that tier line/);
 });
 
 test('headings inside fenced code are not counted', function () {
   var r = CT.checkMarkdown(doc(BODY + '\n```\n## Not A Heading\n{: .hl-tab-foo}\n```\n'));
   assert.strictEqual(r.status, 'PASS', JSON.stringify(r.problems));
+  assert.strictEqual(r.tagged, 2);
+  assert.match(r.advisories.join(' '), /fenced block/);
 });
 
-test('h3 tab lines are ignored; tabs work on chapters', function () {
+test('a tab line under an h3 FAILS: tabs work on chapters, so no panel is drawn', function () {
   var r = CT.checkMarkdown(doc(BODY + '\n### Sub\n{: .hl-tab-chain}\n\nx\n'));
-  assert.strictEqual(r.status, 'PASS', JSON.stringify(r.problems));
+  assert.strictEqual(r.status, 'FAIL');
+  assert.match(r.problems.join(' '), /under an h3/);
   assert.strictEqual(r.tagged, 2);
 });
 
@@ -129,4 +143,58 @@ test('the DOM path FAILS a rendered heading id of one-page', function () {
   var r = CT.checkDom(d);
   assert.strictEqual(r.status, 'FAIL');
   assert.match(r.problems.join(' '), /one-page/);
+});
+
+/* Round-1 review, check-tabs rubric. P1 and P2 PASSed while kramdown 2.5.2 put
+   the tab class on a paragraph and the layout's substring trigger was true. The
+   two probe files are reproduced verbatim from
+   tasks/runs/T-0500.1.2/review/scratch/checktabs/. */
+test('P1: a blank line between the tier line and the tab line FAILS with the line number', function () {
+  var md = '## First Section\n{: .hl-tier-2}\n\n{: .hl-tab-overview}\n\nBody one.\n\n' +
+    '## Second Section\n{: .hl-tier-2}\n\n{: .hl-tab-chain}\n\nBody two.\n';
+  var r = CT.checkMarkdown(doc(md));
+  assert.strictEqual(r.status, 'FAIL');
+  assert.match(r.problems.join(' '), /line 8/);
+  assert.match(r.problems.join(' '), /blank line/);
+  // The blank line means neither heading is tagged, so all-or-none fires too.
+  assert.match(r.problems.join(' '), /carry no tab tag/);
+});
+
+test('P2: a stray tab line in a section body FAILS with its line, and the report is tabbed', function () {
+  var md = '## Only Section\n\nBody text before the stray tag.\n\n{: .hl-tab-chain}\n\nMore body.\n';
+  var r = CT.checkMarkdown(doc(md));
+  assert.strictEqual(r.status, 'FAIL');
+  assert.match(r.problems.join(' '), /line 9/);
+  assert.match(r.problems.join(' '), /attaches the class to the next paragraph/);
+});
+
+test('P3: the bare string in prose FAILS, because the layout trigger is a substring test', function () {
+  var md = '## Only Section\n{: .hl-tier-2}\n\nThe layout keys on the string hl-tab- and this ' +
+    'sentence contains it.\n';
+  var r = CT.checkMarkdown(doc(md));
+  assert.strictEqual(r.status, 'FAIL');
+  assert.match(r.problems.join(' '), /carries the string "hl-tab-"/);
+});
+
+test('P8: a blank line between the heading and the tier line FAILS on the tagged section', function () {
+  var md = '## First Section\n\n{: .hl-tier-2}\n{: .hl-tab-overview}\n\nBody.\n';
+  var r = CT.checkMarkdown(doc(md));
+  assert.strictEqual(r.status, 'FAIL');
+  assert.match(r.problems.join(' '), /blank line sits between the heading and that tier line/);
+});
+
+test('a misplaced tab line is reported with its 1-based line number', function () {
+  var md = '## A\n{: .hl-tier-1}\n{: .hl-tab-overview}\n\nx\n\n{: .hl-tab-chain}\n';
+  var r = CT.checkMarkdown(doc(md));
+  assert.strictEqual(r.status, 'FAIL');
+  assert.match(r.problems.join(' '), /line 11/);
+  assert.strictEqual(r.misplaced.length, 1);
+});
+
+test('the DOM path FAILS a tab class kramdown put on a paragraph', function () {
+  var d = new JSDOM('<div class="hl-post-content">' +
+    '<h2 id="a" class="hl-tier-1 hl-tab-overview">A</h2><p class="hl-tab-chain">x</p></div>').window.document;
+  var r = CT.checkDom(d);
+  assert.strictEqual(r.status, 'FAIL');
+  assert.match(r.problems.join(' '), /carries the tab class/);
 });

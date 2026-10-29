@@ -26,11 +26,15 @@
    silent zero would make an interrupted pass look finished. `check-tabs.js`
    fails a report with any untagged section, so the count is also the work left.
 
-   --write inserts the lines. It is idempotent (an existing tab line is left
-   alone, so a writer's override survives a re-run) and it refuses to write a
-   list it cannot place in full, naming the sections that need a decision: a
-   partial write leaves a report the tab gate fails, which is the designed
-   workflow but must never look like a finished backfill. */
+   --write inserts the lines, and it is PARTIAL BY DESIGN: a section it could not
+   place gets no line, the run prints a WARNING with the count, and
+   check-tabs.js then fails that report until a writer tags the rest. It is
+   idempotent (an existing tab line is left alone, so a writer's override
+   survives a re-run). It refuses to write in exactly two cases: the file's
+   section count no longer matches the proposals (the file changed under it), and
+   the file mixes CRLF and LF line endings. Otherwise line endings are
+   PRESERVED: a CRLF file comes back CRLF, so a Windows-saved report does not turn
+   into a whole-file diff. */
 
 var fs = require('node:fs');
 var path = require('node:path');
@@ -173,10 +177,30 @@ function proposeFor(md) {
   return proposals;
 }
 
+/* The dominant line ending, or null when the file mixes them. A rewrite with the
+   wrong ending turns one inserted line into a whole-file diff, which is how the
+   round-1 review measured a CRLF copy being converted to LF line by line. */
+function detectEol(md) {
+  var crlf = (md.match(/\r\n/g) || []).length;
+  var lf = (md.match(/\n/g) || []).length;
+  var loneCr = (md.match(/\r(?!\n)/g) || []).length;
+  if (loneCr) return null;
+  if (crlf === 0) return '\n';
+  if (crlf === lf) return '\r\n';
+  return null;
+}
+
 /* --write inserts the markers, from the bottom up so earlier line numbers stay
    valid. A heading that already carries a tab line keeps it. */
 function writeTabs(file, proposals) {
   var md = fs.readFileSync(file, 'utf8');
+  var eol = detectEol(md);
+  if (!eol) {
+    console.error('refusing to write: ' + file + ' mixes CRLF and LF line endings. ' +
+      'Normalise it to one ending first (the site enforces LF through .gitattributes), ' +
+      'or the rewrite would change every line.');
+    return { error: true };
+  }
   var lines = md.split(/\r?\n/);
   var fenced = false;
   var heads = [];
@@ -212,8 +236,8 @@ function writeTabs(file, proposals) {
     lines.splice(insertAt, 0, '{: .hl-tab-' + p.tab + '}');
     added++;
   }
-  fs.writeFileSync(file, lines.join('\n'), 'utf8');
-  return { added: added, kept: kept, unplaced: unplaced };
+  fs.writeFileSync(file, lines.join(eol), 'utf8');
+  return { added: added, kept: kept, unplaced: unplaced, eol: eol === '\r\n' ? 'CRLF' : 'LF' };
 }
 
 function main() {
@@ -251,7 +275,7 @@ function main() {
       var w = writeTabs(file, proposals);
       if (w.error) process.exit(1);
       console.log(slug + ': ' + w.added + ' tab lines written, ' + w.kept +
-        ' already present, ' + w.unplaced + ' left unplaced');
+        ' already present, ' + w.unplaced + ' left unplaced (line endings kept: ' + w.eol + ')');
       if (w.unplaced) {
         console.log('  WARNING: ' + w.unplaced + ' section(s) got no line, so check-tabs.js will ' +
           'FAIL this report until a writer tags them.');
@@ -314,6 +338,7 @@ module.exports = {
   byName: byName,
   bySpan: bySpan,
   proposeFor: proposeFor,
+  detectEol: detectEol,
   writeTabs: writeTabs
 };
 

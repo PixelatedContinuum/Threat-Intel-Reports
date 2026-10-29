@@ -23,14 +23,35 @@
    - a tab line anywhere but directly under the tier line attaches to whatever
      block precedes it, not to the heading, so the section silently keeps no tab.
 
+   ANY `hl-tab-` IN THE BODY MAKES THE REPORT TABBED (fix round 1). The layout's
+   trigger is a substring test on the rendered content
+   (`{% if content contains 'hl-tab-' %}`, build-contract.md line 12), so the
+   checker cannot afford to read only the IAL form: a tab line after a blank
+   line, a tab line in a section body, a tab line under a blank-separated heading
+   and even the bare string in a sentence all trip the layout. The old scanner
+   stopped at the first blank line and started its body scan only after it had
+   found a tag, so the review's P1 (blank line between the tier line and the tab
+   line) and P2 (a stray tab line in a section body) both PASSed while kramdown
+   put the class on a paragraph and the layout went tabbed. Every line outside a
+   fenced block is now read, every occurrence is classified, and a misplaced one
+   FAILs with its line number and what kramdown would do with it.
+
+   Consequence, and it is deliberate: a report that merely writes the string
+   `hl-tab-` in prose FAILs this gate, because the layout would treat it as
+   tabbed. Write the marker some other way (`hl-tab` + `-`, or in a fenced
+   block); a report that trips the layout's own trigger cannot be shipped as
+   untagged. A fenced block is exempt from the class rule (no class is applied
+   there) but raises an ADVISORY, because the layout's substring trigger does not
+   know the difference.
+
    The vocabulary is fixed (TOKENS below). An unknown token is a FAIL, not a new
    tab: the layout only knows these seven.
 
    PASS, FAIL and NOT CHECKED, the third never folded into the first. A report
-   with no tab lines at all is PASS with a reason, exactly as check-tiers treats
-   an unmarked report: it is simply not a tabbed report, and there is nothing to
-   verify. A report with SOME sections tagged is FAIL, because the layout would
-   put the untagged ones nowhere.
+   with no tab marking anywhere is PASS with a reason, exactly as check-tiers
+   treats an unmarked report: it is simply not a tabbed report, and there is
+   nothing to verify. A report with SOME sections tagged is FAIL, because the
+   layout would put the untagged ones nowhere.
 
    The heading-id rule is here rather than in the browser check because it is a
    property of the markdown: no heading id may be `one-page` or `tab-<token>`,
@@ -48,9 +69,11 @@ var TOKENS = ['overview', 'victims', 'chain', 'timeline', 'attribution', 'indica
 
 var TAB_RE = /^\{:\s*\.hl-tab-([0-9A-Za-z_-]+)\s*\}\s*$/;
 // Same-line forms, all of which kramdown declines to parse as an IAL on a heading.
-var SAME_LINE_RE = /^#{2}\s+.*\{:?\s*\.hl-tab-[0-9A-Za-z_-]+\s*\}\s*$/;
+var SAME_LINE_RE = /^#{1,6}\s+.*\{:?\s*\.hl-tab-[0-9A-Za-z_-]+\s*\}\s*$/;
 // A tab class merged onto another IAL line (usually the tier line).
-var MERGED_RE = /\{:[^}]*\.hl-tab-[0-9A-Za-z_-]+/;
+var MERGED_RE = /\{:[^}]*\.hl-tab-/;
+// Any occurrence at all: the layout's trigger, and the reason every line is read.
+var ANY_RE = /hl-tab-/;
 
 var SAME_LINE_FIX = 'the tab marker must sit on its OWN line, directly after the tier line. ' +
   'kramdown does not parse a same-line brace on a heading as an IAL: it applies no class and ' +
@@ -68,6 +91,7 @@ function verdict(status, reason, extra) {
     unmarked: 0,
     byTab: {},
     sequence: [],
+    misplaced: [],
     advisories: []
   };
   TOKENS.forEach(function (t) { v.byTab[t] = 0; });
@@ -75,126 +99,173 @@ function verdict(status, reason, extra) {
   return v;
 }
 
-/* Every h2 in source order with the tab its following lines declare, the
-   placement problem if it has one, and any heading-id collision in the file.
+/* Every h2 in source order with the tab declared on the line the contract puts
+   it, every `hl-tab-` occurrence that is somewhere else (with its line), and any
+   heading-id collision in the file.
 
    Fenced blocks are skipped for the same reason check-tiers and
    kramdown-slug.js skip them: a quoted shell prompt is not a heading. */
 function scanMarkdown(md) {
-  var src = String(md).replace(/^---\r?\n[\s\S]*?\r?\n---/, '');
+  var src = String(md);
+  var offset = 0;
+  var fm = src.match(/^---\r?\n[\s\S]*?\r?\n---/);
+  if (fm) {
+    // Replaced by its own newlines so a reported line number is the file's.
+    offset = (fm[0].match(/\n/g) || []).length;
+    src = src.slice(fm[0].length);
+  }
   var lines = src.split(/\r?\n/);
-  var out = [];
-  var fenced = false;
+  function at(i) { return i + offset + 1; }
+
+  var fenced = new Array(lines.length);
+  var inFence = false;
+  for (var f = 0; f < lines.length; f++) {
+    if (/^\s*(```|~~~)/.test(lines[f])) { fenced[f] = true; inFence = !inFence; continue; }
+    fenced[f] = inFence;
+  }
+
+  function isHeading(i) { return /^##\s+\S/.test(lines[i] || ''); }
+  function headingText(i) {
+    var m = (lines[i] || '').match(/^##\s+(.*\S)\s*$/);
+    return m ? m[1] : (lines[i] || '').trim();
+  }
+
+  var placed = {};          // line index -> { heading: line index, token }
+  var misplaced = [];       // { line, why }
+  var advisories = [];
+  var fencedMentions = [];
 
   for (var i = 0; i < lines.length; i++) {
     var line = lines[i];
-    if (/^\s*(```|~~~)/.test(line)) { fenced = !fenced; continue; }
-    if (fenced) continue;
+    if (!ANY_RE.test(line)) continue;
+    if (fenced[i]) { fencedMentions.push(at(i)); continue; }
 
-    var sameLine = SAME_LINE_RE.test(line);
-    var h = line.match(/^##\s+(.*\S)\s*$/);
-    if (!h) continue;
-
-    if (sameLine) {
-      out.push({
-        text: h[1], tier: null, tab: null, placed: false,
-        problems: ['"' + h[1] + '": ' + SAME_LINE_FIX]
+    // A heading line carrying the brace: kramdown keeps it as heading text.
+    if (SAME_LINE_RE.test(line)) {
+      misplaced.push({
+        line: at(i),
+        why: '"' + headingText(i) + '": ' + SAME_LINE_FIX
+      });
+      continue;
+    }
+    if (/^#{1,6}\s+/.test(line)) {
+      misplaced.push({
+        line: at(i),
+        why: 'the string "hl-tab-" appears on a heading line at line ' + (at(i)) + ', so kramdown ' +
+          'slugs it into the section id and the layout treats the report as tabbed. A tab marker ' +
+          'belongs on its own line, directly after the tier line.'
       });
       continue;
     }
 
-    /* The block under the heading: the next non-blank line and everything after
-       it up to the next blank line. kramdown accepts a blank line between a
-       block and its IAL, so the tier line is the next NON-BLANK line (same rule
-       as check-tiers); the tab line must then be the very next line. */
-    var run = [];
-    var k = i + 1;
-    while (k < lines.length && !lines[k].trim()) k++;
-    while (k < lines.length && lines[k].trim()) { run.push({ index: k, line: lines[k] }); k++; }
-
-    var tier = null, tierAt = -1;
-    for (var r = 0; r < run.length; r++) {
-      var tm = run[r].line.match(CT.TIER_RE);
-      if (tm) { tier = tm[1]; tierAt = r; break; }
-      // A merged IAL line carries both classes and matches no TIER_RE.
-      if (MERGED_RE.test(run[r].line) && /\.hl-tier-/.test(run[r].line)) {
-        tierAt = r;
-        tier = (run[r].line.match(/\.hl-tier-([0-9A-Za-z_-]+)/) || [])[1] || null;
-        break;
-      }
-    }
-
-    var tabAt = -1, tab = null, tabCount = 0;
-    var problems = [];
-    for (var t = 0; t < run.length; t++) {
-      if (MERGED_RE.test(run[t].line) && !TAB_RE.test(run[t].line)) {
-        problems.push('"' + h[1] + '": the tab class is merged onto another IAL line ' +
-          '("' + run[t].line.trim() + '"). kramdown accepts that, but check-tiers requires the ' +
-          'tier class alone on its line, and the build contract puts the tab on the line ' +
-          'DIRECTLY AFTER it. Write two lines.');
-        tabCount++;
+    if (TAB_RE.test(line)) {
+      var token = line.match(TAB_RE)[1];
+      // A second tab line directly under the first: both apply to the heading,
+      // and a section belongs to exactly one tab.
+      if (placed[i - 1]) {
+        misplaced.push({
+          line: at(i),
+          why: 'the tab line at line ' + (at(i)) + ' is a second tab line under the same heading; ' +
+            'a section belongs to exactly one tab'
+        });
         continue;
       }
-      var m = run[t].line.match(TAB_RE);
-      if (m) {
-        tabCount++;
-        if (tabAt === -1) { tabAt = t; tab = m[1]; }
+      if (i >= 1 && isHeading(i - 1)) {
+        placed[i] = { heading: i - 1, token: token };
+        continue;
       }
+      if (i >= 2 && CT.TIER_RE.test(lines[i - 1]) && isHeading(i - 2)) {
+        placed[i] = { heading: i - 2, token: token };
+        continue;
+      }
+      // Everything else is misplaced, and the message names what the render does.
+      var above = -1;
+      if (i >= 2 && CT.TIER_RE.test(lines[i - 1])) above = i - 2;
+      else if (i >= 1) above = i - 1;
+      var aboveLine = above === -1 ? '' : (lines[above] || '');
+      var why;
+      if (/^(###|####|#####|######)\s/.test(aboveLine)) {
+        why = 'the tab line at line ' + (at(i)) + ' sits under an h3 ("' + aboveLine.trim() + '"); ' +
+          'tabs work on `##` chapters, so no panel is drawn for this section';
+      } else if (i >= 2 && CT.TIER_RE.test(lines[i - 1]) && !lines[i - 2].trim()) {
+        why = 'the tab line at line ' + (at(i)) + ' follows the tier line, but a blank line sits ' +
+          'between the heading and that tier line (line ' + (at(i - 1)) + '), so kramdown attaches both ' +
+          'classes to the paragraph below the heading and the heading keeps none';
+      } else if (i >= 1 && !lines[i - 1].trim()) {
+        why = 'the tab line at line ' + (at(i)) + ' is separated from the block above it by a blank ' +
+          'line, so kramdown attaches the class to the next paragraph and the heading keeps no tab';
+      } else {
+        why = 'the tab line at line ' + (at(i)) + ' is not directly after the heading or its tier ' +
+          'line, so kramdown attaches the class to the block above it and no heading gets a tab';
+      }
+      misplaced.push({ line: at(i), why: why });
+      continue;
     }
 
-    if (tabCount > 1) {
-      problems.push('"' + h[1] + '": ' + tabCount + ' tab lines sit under this heading; a section ' +
-        'belongs to exactly one tab. Keep one.');
+    // Not a tab IAL line, but the layout's trigger is the bare string.
+    if (MERGED_RE.test(line) && /\.hl-tier-/.test(line)) {
+      misplaced.push({
+        line: at(i),
+        why: 'the tab class is merged onto the tier line at line ' + (at(i)) + ' ("' + line.trim() +
+          '"). kramdown accepts that, but check-tiers requires the tier class alone on its line, ' +
+          'and the build contract puts the tab on the line DIRECTLY AFTER it. Write two lines.'
+      });
+    } else {
+      misplaced.push({
+        line: at(i),
+        why: 'line ' + (at(i)) + ' carries the string "hl-tab-" but is not a tab IAL line ' +
+          '("' + line.trim().slice(0, 80) + '"). The layout treats any report containing that ' +
+          'string as tabbed, so this must be fixed before the report is published.'
+      });
     }
+  }
 
-    if (tabAt !== -1) {
-      var expected = tierAt === -1 ? 0 : tierAt + 1;
-      if (tabAt !== expected) {
-        problems.push('"' + h[1] + '": the tab line is not directly after the tier line. ' +
-          (tierAt === -1
-            ? 'It must be the first line under the heading.'
-            : 'It must be the line immediately after "' + run[tierAt].line.trim() + '"; ' +
-              'kramdown attaches a line further down to the block above it, not to the heading.'));
-      }
-      // A tab line after the block's IAL group: attached to the body, not the heading.
-      var later = -1;
-      for (var s = k; s < lines.length; s++) {
-        if (/^#{1,6}\s+/.test(lines[s])) break;
-        if (/^\s*(```|~~~)/.test(lines[s])) break;
-        if (TAB_RE.test(lines[s])) { later = s; break; }
-      }
-      if (later !== -1) {
-        problems.push('"' + h[1] + '": a second tab line sits at line ' + (later + 1) +
-          ' of the section body, where kramdown attaches it to the paragraph above it. ' +
-          'Only the line directly after the tier line counts.');
-      }
-    }
+  if (fencedMentions.length) {
+    advisories.push('the string "hl-tab-" appears in a fenced block at line(s) ' +
+      fencedMentions.slice(0, 6).join(', ') + (fencedMentions.length > 6
+        ? ' and ' + (fencedMentions.length - 6) + ' more' : '') +
+      '. No class is applied there, so this is not a tab tag; the layout\'s substring trigger ' +
+      'still sees it in the rendered HTML.');
+  }
+
+  var out = [];
+  for (var h = 0; h < lines.length; h++) {
+    if (fenced[h] || !isHeading(h)) continue;
+
+    var tier = (CT.TIER_RE.test(lines[h + 1] || '')) ? (lines[h + 1].match(CT.TIER_RE)[1]) : null;
+    var tabLine = -1;
+    if (tier !== null && placed[h + 2]) tabLine = h + 2;
+    else if (tier === null && placed[h + 1]) tabLine = h + 1;
 
     out.push({
-      text: h[1],
+      text: headingText(h),
+      line: at(h),
       tier: tier,
-      tab: tab,
-      placed: tabAt !== -1 && problems.length === 0,
-      problems: problems
+      tab: tabLine === -1 ? null : placed[tabLine].token,
+      placed: tabLine !== -1
     });
   }
 
-  return { headings: out, ids: KS.headings(src) };
+  return { headings: out, ids: KS.headings(src), misplaced: misplaced, advisories: advisories };
 }
 
 /* The rule set, shared by the markdown and DOM paths so they cannot drift. */
 function validate(headings, ids, opts) {
   opts = opts || {};
   var problems = [];
-  var advisories = [];
+  var advisories = (opts.advisories || []).slice();
   var byTab = {};
   TOKENS.forEach(function (t) { byTab[t] = 0; });
   var tagged = 0;
   var unmarked = [];
   var sequence = [];
 
+  /* Placement problems come first and always FAIL: they are the difference
+     between "the class is on the h2" and "kramdown put it on a paragraph while
+     the layout went tabbed". */
+  (opts.misplaced || []).forEach(function (m) { problems.push(m.why); });
+
   headings.forEach(function (h) {
-    (h.problems || []).forEach(function (p) { problems.push(p); });
     if (h.tab === null || h.tab === undefined) { unmarked.push(h.text); return; }
     if (TOKENS.indexOf(h.tab) === -1) {
       problems.push('"' + h.text + '" declares hl-tab-' + h.tab + ', and the only tokens are ' +
@@ -224,13 +295,14 @@ function validate(headings, ids, opts) {
   });
 
   var total = headings.length;
-  var anyTab = tagged > 0 || problems.length > 0;
+  var misplaced = (opts.misplaced || []).length;
+  var anyTab = tagged > 0 || misplaced > 0 || problems.length > 0;
 
   // Nothing tagged at all is not a defect: it is a report without tabs.
   if (!anyTab) {
     return verdict('PASS', 'no tab tags declared', {
       problems: [], tagged: 0, unmarked: unmarked.length, byTab: byTab,
-      sequence: [], advisories: []
+      sequence: [], advisories: advisories
     });
   }
 
@@ -250,6 +322,7 @@ function validate(headings, ids, opts) {
     unmarked: unmarked.length,
     byTab: byTab,
     sequence: sequence,
+    misplaced: opts.misplaced || [],
     advisories: advisories
   });
 }
@@ -261,12 +334,14 @@ function checkMarkdown(src, label) {
     return verdict('NOT CHECKED', 'report could not be scanned: ' +
       String(e.message).split('\n')[0]);
   }
-  return validate(scan.headings, scan.ids, { label: label });
+  return validate(scan.headings, scan.ids, {
+    label: label, misplaced: scan.misplaced, advisories: scan.advisories
+  });
 }
 
 /* The rendered page carries the merged class, so placement cannot be re-checked
-   here; all-or-none, the vocabulary and the id rule can, and those are what a
-   stale build gets wrong. */
+   line by line here; all-or-none, the vocabulary, the id rule and a tab class on
+   a non-heading element can, and those are what a stale build gets wrong. */
 function checkDom(doc, label) {
   var body = doc.querySelector('.hl-post-content') || doc.body;
   if (!body) return verdict('NOT CHECKED', 'no report body container');
@@ -285,15 +360,31 @@ function checkDom(doc, label) {
     if (all[j].id) ids.push({ text: (all[j].textContent || '').trim(), slug: all[j].id });
   }
 
-  var r = validate(headings, ids, { label: label });
-  r.advisories.push('placement was not checked: the rendered page carries the merged class, so ' +
-    'run this gate on the markdown for the line-directly-after-the-tier-line rule');
+  /* The rendered counterpart of the markdown rule: a tab class the merge put on
+     anything but an h2 is the shape the round-1 probes produced. */
+  var misplaced = [];
+  var carrying = body.querySelectorAll('[class*="hl-tab-"]');
+  for (var k = 0; k < carrying.length; k++) {
+    if (String(carrying[k].tagName).toLowerCase() !== 'h2') {
+      misplaced.push({
+        line: null,
+        why: 'a rendered <' + String(carrying[k].tagName).toLowerCase() + '> carries the tab class "' +
+          String(carrying[k].className) + '"; kramdown applied the marker to a block that is not ' +
+          'the section heading, so the section itself has no tab'
+      });
+    }
+  }
+
+  var r = validate(headings, ids, { label: label, misplaced: misplaced });
+  r.advisories.push('placement was not checked line by line: the rendered page carries the merged ' +
+    'class, so run this gate on the markdown for the line-directly-after-the-tier-line rule');
   return r;
 }
 
 module.exports = {
   TOKENS: TOKENS,
   TAB_RE: TAB_RE,
+  MERGED_RE: MERGED_RE,
   scanMarkdown: scanMarkdown,
   validate: validate,
   checkMarkdown: checkMarkdown,

@@ -92,13 +92,13 @@ test('writeTabs inserts the line directly after the tier line, and is idempotent
   fs.writeFileSync(file, pilotMd(), 'utf8');
 
   var w = P.writeTabs(file, P.proposeFor(fs.readFileSync(file, 'utf8')));
-  assert.deepStrictEqual(w, { added: 20, kept: 0, unplaced: 0 });
+  assert.deepStrictEqual(w, { added: 20, kept: 0, unplaced: 0, eol: 'LF' });
   var after = fs.readFileSync(file, 'utf8');
   assert.match(after, /## 1\. Executive Summary\n\{: \.hl-tier-1\}\n\{: \.hl-tab-overview\}/);
   assert.match(after, /## 13\. MITRE ATT&CK Mapping\n\{: \.hl-tier-2\}\n\{: \.hl-tab-chain\}/);
 
   var again = P.writeTabs(file, P.proposeFor(after));
-  assert.deepStrictEqual(again, { added: 0, kept: 20, unplaced: 0 });
+  assert.deepStrictEqual(again, { added: 0, kept: 20, unplaced: 0, eol: 'LF' });
   assert.strictEqual(fs.readFileSync(file, 'utf8'), after);
 
   fs.rmSync(dir, { recursive: true, force: true });
@@ -109,7 +109,7 @@ test('writeTabs leaves an unplaceable section alone and counts it', function () 
   var file = path.join(dir, 'index.md');
   fs.writeFileSync(file, '---\ntitle: "x"\n---\n\n## Zorblax Quux\n{: .hl-tier-2}\n\nx\n', 'utf8');
   var w = P.writeTabs(file, P.proposeFor(fs.readFileSync(file, 'utf8')));
-  assert.deepStrictEqual(w, { added: 0, kept: 0, unplaced: 1 });
+  assert.deepStrictEqual(w, { added: 0, kept: 0, unplaced: 1, eol: 'LF' });
   assert.strictEqual(fs.readFileSync(file, 'utf8'), '---\ntitle: "x"\n---\n\n## Zorblax Quux\n{: .hl-tier-2}\n\nx\n');
   fs.rmSync(dir, { recursive: true, force: true });
 });
@@ -133,5 +133,51 @@ test('a written pilot copy passes check-tabs', function () {
   var r = CT.checkMarkdown(fs.readFileSync(file, 'utf8'), file);
   assert.strictEqual(r.status, 'PASS', JSON.stringify(r.problems));
   assert.strictEqual(r.tagged, 20);
+  fs.rmSync(dir, { recursive: true, force: true });
+});
+
+/* Round-1 review, propose-tabs rubric: a CRLF report was rewritten line by line
+   (770 of 770 lines changed, every CR gone) because the reader split on /\r?\n/
+   and the writer joined with '\n'. A Windows-saved report must not come back as a
+   whole-file diff. */
+test('detectEol reads LF, CRLF and refuses a mixed file', function () {
+  assert.strictEqual(P.detectEol('a\nb\n'), '\n');
+  assert.strictEqual(P.detectEol('a\r\nb\r\n'), '\r\n');
+  assert.strictEqual(P.detectEol('a\r\nb\n'), null);
+  assert.strictEqual(P.detectEol('a\rb\r\n'), null);
+});
+
+test('writeTabs preserves CRLF and changes only the inserted lines', function () {
+  var dir = fs.mkdtempSync(path.join(os.tmpdir(), 'hl-tabs-'));
+  var file = path.join(dir, 'index.md');
+  var crlf = pilotMd().replace(/\n/g, '\r\n');
+  fs.writeFileSync(file, crlf, 'utf8');
+
+  var w = P.writeTabs(file, P.proposeFor(fs.readFileSync(file, 'utf8')));
+  assert.strictEqual(w.added, 20);
+  assert.strictEqual(w.eol, 'CRLF');
+
+  var after = fs.readFileSync(file, 'utf8');
+  var crlfCount = (after.match(/\r\n/g) || []).length;
+  var lfCount = (after.match(/\n/g) || []).length;
+  assert.strictEqual(crlfCount, lfCount, 'every newline must still be CRLF');
+  // Removing the inserted lines gives the pristine file back, byte for byte.
+  var stripped = after.split('\r\n').filter(function (l) { return !/^\{: \.hl-tab-/.test(l); })
+    .join('\r\n');
+  assert.strictEqual(stripped, crlf);
+  assert.match(after, /## 1\. Executive Summary\r\n\{: \.hl-tier-1\}\r\n\{: \.hl-tab-overview\}\r\n/);
+
+  fs.rmSync(dir, { recursive: true, force: true });
+});
+
+test('writeTabs refuses a file that mixes CRLF and LF', function () {
+  var dir = fs.mkdtempSync(path.join(os.tmpdir(), 'hl-tabs-'));
+  var file = path.join(dir, 'index.md');
+  var mixed = '---\ntitle: "x"\n---\n\n## Executive Summary\r\n{: .hl-tier-1}\r\n\r\nx\n';
+  fs.writeFileSync(file, mixed, 'utf8');
+  var before = fs.readFileSync(file, 'utf8');
+  var w = P.writeTabs(file, P.proposeFor(before));
+  assert.strictEqual(w.error, true);
+  assert.strictEqual(fs.readFileSync(file, 'utf8'), before, 'a refused write leaves the file untouched');
   fs.rmSync(dir, { recursive: true, force: true });
 });
