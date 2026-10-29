@@ -61,6 +61,19 @@
    carried by a generated `data-rv-chrome` element (that would steal the anchor),
    and the `h2`/`h3` id sequence must equal the baseline's, in order.
 
+   NOTHING HIDDEN (fix round 2). `textContent` counts text the reader cannot see, so
+   a section, table or paragraph marked `hidden` (or `display:none`,
+   `visibility:hidden`, or with no rendered box) still balanced the word counts:
+   the round-2 review's H1 (one table hidden) and H2 (one whole section hidden)
+   both PASSed at 7b422d4. In one-page mode every non-chrome text node of the
+   article must therefore be RENDERED: it is measured per text node, and the words
+   under `display:none`, `visibility:hidden` or `visibility:collapse` FAIL the run
+   with the hiding element and a sample of the words named. Text inside a CLOSED
+   `<details>` BODY is exempt by design (the contract counts it and the reader
+   opens the teardown), but the teardown's own `<summary>` is not exempt. A text
+   node with no non-zero client rect is reported the same way, because a clipped
+   or zero-sized box hides text as effectively as `display:none`.
+
    THE 90% FLOOR. If the words left on the page after stripping `data-rv-chrome`
    fall under 90% of the baseline's, the page FAILs even when the strips happen to
    make both sides agree: a chrome mark on an element that holds report text
@@ -128,10 +141,38 @@ var EXTRACT_JS = '(function(){' +
   // The h2/h3 sequence is the report's section order, which one-page mode restores.
   'var idSeq=[].slice.call(root.querySelectorAll("h2[id],h3[id]")).map(function(h){return h.id;});' +
   'var text=(root.textContent||"").replace(/\\s+/g," ").trim();' +
+  // Per text node: is the text rendered? Closed details BODIES are exempt by
+  // design, their summaries are not. The whole walk runs after chrome and
+  // scripts are gone, so nothing generated is measured.
+  'var hiddenW=0,hiddenN=0,hiddenS=[],boxW=0,boxN=0,boxS=[],collapsedW=0;' +
+  'var tw=document.createTreeWalker(root,NodeFilter.SHOW_TEXT,null),tn;' +
+  'while((tn=tw.nextNode())){' +
+  'var p=tn.parentElement;if(!p)continue;' +
+  'var tv=(tn.nodeValue||"").replace(/\\s+/g," ").trim();if(!tv)continue;' +
+  'var w=tv.split(" ").length;' +
+  'var el=p,why=null,collapsed=false;' +
+  'while(el&&el!==document.documentElement){' +
+  'var cs=getComputedStyle(el);' +
+  'if(cs.display==="none"||cs.visibility==="hidden"||cs.visibility==="collapse"){' +
+  'why=el.tagName.toLowerCase()+(el.id?"#"+el.id:"")+(el.hidden?" [hidden]":"")+' +
+  '" display="+cs.display+" visibility="+cs.visibility;break;}' +
+  'if(el.tagName==="DETAILS"&&!el.open){var sm=el.querySelector(":scope > summary");' +
+  'if(!(sm&&sm.contains(p)))collapsed=true;}' +
+  'if(el===root)break;el=el.parentElement;}' +
+  'if(why){hiddenW+=w;hiddenN++;if(hiddenS.length<6)hiddenS.push(why+" :: "+tv.slice(0,60));}' +
+  'else if(collapsed){collapsedW+=w;}' +
+  'else{var rg=document.createRange();rg.selectNodeContents(tn);' +
+  'var rs=rg.getClientRects(),boxed=false;' +
+  'for(var ri=0;ri<rs.length;ri++){if(rs[ri].width>0&&rs[ri].height>0){boxed=true;break;}}' +
+  'if(!boxed){boxW+=w;boxN++;if(boxS.length<6)boxS.push(p.tagName.toLowerCase()+' +
+  '(p.id?"#"+p.id:"")+" :: "+tv.slice(0,60));}}' +
+  '}' +
   'var where=root.tagName.toLowerCase()+(root.id?"#"+root.id:"")+' +
   '(root.className?"."+String(root.className).split(" ")[0]:"");' +
   'return JSON.stringify({text:text,counts:counts,ids:ids,idSeq:idSeq,chromeIds:chromeUnique,' +
   'root:where,chrome:chrome,href:location.href,' +
+  'hidden:{words:hiddenW,nodes:hiddenN,samples:hiddenS,noBoxWords:boxW,noBoxNodes:boxN,' +
+  'noBoxSamples:boxS,collapsedWords:collapsedW},' +
   'words:text?text.split(" ").length:0,chars:text.length});' +
 '})()';
 
@@ -314,6 +355,24 @@ function checkSequence(baselineSeq, pageSeq) {
     ' baseline vs ' + pageSeq.length + ' page)'];
 }
 
+function hiddenProblems(hidden) {
+  if (!hidden) {
+    return ['visibility was not measured on the page, so text hidden from the reader is NOT CHECKED'];
+  }
+  var problems = [];
+  if (hidden.words) {
+    problems.push(hidden.words + ' words are hidden from the reader (' + hidden.nodes +
+      ' non-chrome text node(s) under display:none, visibility:hidden or visibility:collapse): ' +
+      (hidden.samples || []).join(' | '));
+  }
+  if (hidden.noBoxWords) {
+    problems.push(hidden.noBoxWords + ' words have no rendered box (' + hidden.noBoxNodes +
+      ' non-chrome text node(s) with no non-zero client rect): ' +
+      (hidden.noBoxSamples || []).join(' | '));
+  }
+  return problems;
+}
+
 function compare(base, page) {
   var aw = base.text ? base.text.split(' ') : [];
   var bw = page.text ? page.text.split(' ') : [];
@@ -354,6 +413,7 @@ function compare(base, page) {
   });
 
   var seqProblems = checkSequence(base.idSeq, page.idSeq);
+  var visProblems = hiddenProblems(page.hidden);
 
   var problems = [];
   if (seq.missing || seq.added) {
@@ -364,6 +424,7 @@ function compare(base, page) {
       'a paragraph or section sits where the report does not put it');
   }
   if (floorProblem) problems.push(floorProblem);
+  visProblems.forEach(function (p) { problems.push(p); });
   countProblems.forEach(function (p) { problems.push('count: ' + p); });
   idProblems.forEach(function (p) { problems.push('id: ' + p); });
   seqProblems.forEach(function (p) { problems.push(p); });
@@ -388,6 +449,8 @@ function compare(base, page) {
     chars: { baseline: base.chars, page: page.chars },
     counts: { baseline: base.counts, page: page.counts },
     countProblems: countProblems,
+    hidden: page.hidden || null,
+    visProblems: visProblems,
     ids: { baseline: base.ids.length, page: page.ids.length, problems: idProblems },
     idSeq: { baseline: (base.idSeq || []).length, page: (page.idSeq || []).length, problems: seqProblems }
   };
@@ -407,6 +470,12 @@ function line(r, label) {
   console.log('  floor     ' + r.words.page + ' of ' + r.words.baseline + ' words (' +
     (r.words.baseline ? (Math.round((r.words.page / r.words.baseline) * 1000) / 10) : 0) +
     '%), 90% floor is ' + r.floor + ' words');
+  console.log('  visible   ' + (r.hidden
+    ? (r.hidden.words ? r.hidden.words + ' hidden words in ' + r.hidden.nodes + ' text node(s)' :
+        'every article word is rendered') +
+      ', ' + (r.hidden.noBoxWords || 0) + ' with no box, ' +
+      (r.hidden.collapsedWords || 0) + ' inside closed teardowns (exempt by design)'
+    : 'NOT MEASURED, so hidden text is not checked'));
   var pairs = COUNTS.map(function (p) {
     var k = p[0];
     return k + ' ' + r.counts.page[k] + '/' + r.counts.baseline[k];
@@ -418,6 +487,7 @@ function line(r, label) {
     ' in the baseline' +
     (r.idSeq.problems.length ? ', order differs' : ', same ids in the same order'));
   r.countProblems.forEach(function (p) { console.log('  COUNT     ' + p); });
+  r.visProblems.forEach(function (p) { console.log('  VISIBLE   ' + p); });
   r.ids.problems.forEach(function (p) { console.log('  ID        ' + p); });
   r.idSeq.problems.forEach(function (p) { console.log('  ORDER     ' + p); });
   if (r.floorProblem) console.log('  FLOOR     ' + r.floorProblem);
@@ -628,12 +698,14 @@ async function main() {
     (failed.length
       ? failed.map(function (a) { return a.width + 'px: ' + a.r.missing + ' missing, ' +
           a.r.added + ' added' +
+          (a.r.hidden && a.r.hidden.words ? ', ' + a.r.hidden.words + ' hidden from the reader' : '') +
+          (a.r.hidden && a.r.hidden.noBoxWords ? ', ' + a.r.hidden.noBoxWords + ' with no box' : '') +
           (a.r.reordered ? ', ' + a.r.reordered + ' out of order' : '') +
           (a.r.controls ? ' (control: ' + a.r.controls.map(function (c) {
             return c.kind + ' ' + c.deleted + ' words';
           }).join(', ') + ')' : ''); }).join('; ')
-      : 'every word, in order, every count, every id and the h2/h3 sequence matches at ' +
-        all.map(function (a) { return a.width + 'px'; }).join(' and ')));
+      : 'every word, in order and rendered, every count, every id and the h2/h3 sequence ' +
+        'matches at ' + all.map(function (a) { return a.width + 'px'; }).join(' and ')));
   process.exit(failed.length ? 1 : 0);
 }
 
@@ -644,6 +716,7 @@ module.exports = {
   DELETE_TEARDOWN_JS: DELETE_TEARDOWN_JS,
   diffWords: diffWords,
   multisetDiff: multisetDiff,
+  hiddenProblems: hiddenProblems,
   checkIds: checkIds,
   checkSequence: checkSequence,
   compare: compare,

@@ -23,26 +23,24 @@
    - a tab line anywhere but directly under the tier line attaches to whatever
      block precedes it, not to the heading, so the section silently keeps no tab.
 
-   ANY `hl-tab-` IN THE BODY MAKES THE REPORT TABBED (fix round 1). The layout's
-   trigger is a substring test on the rendered content
-   (`{% if content contains 'hl-tab-' %}`, build-contract.md line 12), so the
-   checker cannot afford to read only the IAL form: a tab line after a blank
-   line, a tab line in a section body, a tab line under a blank-separated heading
-   and even the bare string in a sentence all trip the layout. The old scanner
-   stopped at the first blank line and started its body scan only after it had
-   found a tag, so the review's P1 (blank line between the tier line and the tab
-   line) and P2 (a stray tab line in a section body) both PASSed while kramdown
-   put the class on a paragraph and the layout went tabbed. Every line outside a
-   fenced block is now read, every occurrence is classified, and a misplaced one
-   FAILs with its line number and what kramdown would do with it.
+   THE TRIGGER IS A CLASS ON AN h2, NOT THE BARE STRING (fix round 2). The
+   layout's trigger is a complete `hl-tab-<token>` class on an `<h2>` opening tag
+   in the rendered content (build-contract.md line 12, `_layouts/post.html`), so
+   the checker cannot afford to read only the IAL form for PLACEMENT: a tab line
+   after a blank line, a tab line in a section body, a tab line under a
+   blank-separated heading, a tab class merged onto the tier line and a tab brace
+   on the heading line all FAIL, because kramdown puts the class on a paragraph,
+   on the wrong element or into the anchor, and the heading keeps no tab. Every
+   line outside a fenced block is read and every occurrence of the marker is
+   classified, with its line number and what kramdown does with it.
 
-   Consequence, and it is deliberate: a report that merely writes the string
-   `hl-tab-` in prose FAILs this gate, because the layout would treat it as
-   tabbed. Write the marker some other way (`hl-tab` + `-`, or in a fenced
-   block); a report that trips the layout's own trigger cannot be shipped as
-   untagged. A fenced block is exempt from the class rule (no class is applied
-   there) but raises an ADVISORY, because the layout's substring trigger does not
-   know the difference.
+   A report that merely WRITES the string `hl-tab-` in prose or in a fenced block
+   is an ADVISORY, not a FAIL. The layout keys on the class kramdown emits, not on
+   the substring, so a sentence quoting `hl-tab-chain` in a paragraph or a shell
+   prompt renders as ordinary text and the page stays on the old layout. The
+   round-1 checker FAILed it on the strength of a substring trigger the layout no
+   longer has (round-2 review F2, P3). The advisory names the line so a writer can
+   see that no class is applied there.
 
    The vocabulary is fixed (TOKENS below). An unknown token is a FAIL, not a new
    tab: the layout only knows these seven.
@@ -149,12 +147,12 @@ function scanMarkdown(md) {
       continue;
     }
     if (/^#{1,6}\s+/.test(line)) {
-      misplaced.push({
-        line: at(i),
-        why: 'the string "hl-tab-" appears on a heading line at line ' + (at(i)) + ', so kramdown ' +
-          'slugs it into the section id and the layout treats the report as tabbed. A tab marker ' +
-          'belongs on its own line, directly after the tier line.'
-      });
+      // Not an IAL brace (that case is above): the marker is plain text in a
+      // heading. kramdown applies no class from heading text, so the page stays
+      // untabbed; the string is visible in the heading and its anchor.
+      advisories.push('the string "hl-tab-" is written in the heading at line ' + (at(i)) +
+        '. kramdown applies no class from heading text, so this does not tab the page; ' +
+        'the string is part of the heading text and its anchor.');
       continue;
     }
 
@@ -202,7 +200,11 @@ function scanMarkdown(md) {
       continue;
     }
 
-    // Not a tab IAL line, but the layout's trigger is the bare string.
+    // Not a tab IAL line, but the marker string is present. A tab class merged
+    // onto another IAL line still FAILs (check-tiers requires the tier class
+    // alone, and the contract puts the tab on its own line). Any other
+    // occurrence is prose: kramdown applies no class there, so it does not tab
+    // the page and is an ADVISORY, not a FAIL.
     if (MERGED_RE.test(line) && /\.hl-tier-/.test(line)) {
       misplaced.push({
         line: at(i),
@@ -211,12 +213,9 @@ function scanMarkdown(md) {
           'and the build contract puts the tab on the line DIRECTLY AFTER it. Write two lines.'
       });
     } else {
-      misplaced.push({
-        line: at(i),
-        why: 'line ' + (at(i)) + ' carries the string "hl-tab-" but is not a tab IAL line ' +
-          '("' + line.trim().slice(0, 80) + '"). The layout treats any report containing that ' +
-          'string as tabbed, so this must be fixed before the report is published.'
-      });
+      advisories.push('the string "hl-tab-" appears at line ' + (at(i)) + ' in text that is not a ' +
+        'tab IAL line ("' + line.trim().slice(0, 80) + '"). kramdown applies no class there, so ' +
+        'the layout does not treat the report as tabbed: this is prose or code, not a tab tag.');
     }
   }
 
@@ -224,8 +223,7 @@ function scanMarkdown(md) {
     advisories.push('the string "hl-tab-" appears in a fenced block at line(s) ' +
       fencedMentions.slice(0, 6).join(', ') + (fencedMentions.length > 6
         ? ' and ' + (fencedMentions.length - 6) + ' more' : '') +
-      '. No class is applied there, so this is not a tab tag; the layout\'s substring trigger ' +
-      'still sees it in the rendered HTML.');
+      '. No class is applied there, so this is code, not a tab tag, and the page stays untabbed.');
   }
 
   var out = [];
@@ -233,6 +231,11 @@ function scanMarkdown(md) {
     if (fenced[h] || !isHeading(h)) continue;
 
     var tier = (CT.TIER_RE.test(lines[h + 1] || '')) ? (lines[h + 1].match(CT.TIER_RE)[1]) : null;
+    // A tier line that exists but is separated from its heading by a blank line:
+    // kramdown attaches both classes to the paragraph below, so the heading keeps
+    // neither. propose-tabs must not write a tab line there and report success.
+    var tierDetached = tier === null && /^\s*$/.test(lines[h + 1] || '') &&
+      CT.TIER_RE.test(lines[h + 2] || '');
     var tabLine = -1;
     if (tier !== null && placed[h + 2]) tabLine = h + 2;
     else if (tier === null && placed[h + 1]) tabLine = h + 1;
@@ -241,6 +244,7 @@ function scanMarkdown(md) {
       text: headingText(h),
       line: at(h),
       tier: tier,
+      tierDetached: tierDetached,
       tab: tabLine === -1 ? null : placed[tabLine].token,
       placed: tabLine !== -1
     });

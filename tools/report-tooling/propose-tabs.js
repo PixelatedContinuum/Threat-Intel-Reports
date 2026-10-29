@@ -30,11 +30,20 @@
    place gets no line, the run prints a WARNING with the count, and
    check-tabs.js then fails that report until a writer tags the rest. It is
    idempotent (an existing tab line is left alone, so a writer's override
-   survives a re-run). It refuses to write in exactly two cases: the file's
-   section count no longer matches the proposals (the file changed under it), and
-   the file mixes CRLF and LF line endings. Otherwise line endings are
+   survives a re-run). It refuses to write in exactly three cases: the file's
+   section count no longer matches the proposals (the file changed under it), the
+   file mixes CRLF and LF line endings, and the file contains a lone carriage
+   return (a `\r` that is not followed by `\n`). Otherwise line endings are
    PRESERVED: a CRLF file comes back CRLF, so a Windows-saved report does not turn
-   into a whole-file diff. */
+   into a whole-file diff.
+
+   A HEADING AND ITS TIER LINE SEPARATED BY A BLANK LINE GET NO TAB LINE (fix
+   round 2). kramdown attaches both block IALs to the paragraph below such a
+   heading, so the heading keeps neither class; writing a tab line under the tier
+   line would report success and leave a section the gate then FAILs (round-2
+   review F3). The run says so per section and counts it, rather than writing a
+   line that cannot work. Move the tier line directly under the heading and
+   re-run. */
 
 var fs = require('node:fs');
 var path = require('node:path');
@@ -151,6 +160,7 @@ function proposeFor(md) {
       text: h.text,
       tier: h.tier,
       existing: h.tab,
+      detachedTier: !!h.tierDetached,
       sameLine: /^#{2}\s+.*\{:?\s*\.hl-tab-/.test('## ' + h.text),
       tab: null,
       how: null
@@ -177,9 +187,9 @@ function proposeFor(md) {
   return proposals;
 }
 
-/* The dominant line ending, or null when the file mixes them. A rewrite with the
-   wrong ending turns one inserted line into a whole-file diff, which is how the
-   round-1 review measured a CRLF copy being converted to LF line by line. */
+/* The dominant line ending, or null when the file cannot be rewritten safely.
+   `eolRefusal` names which of the two reasons applies, so the message does not
+   claim a mixed file when a lone carriage return is the problem (F4). */
 function detectEol(md) {
   var crlf = (md.match(/\r\n/g) || []).length;
   var lf = (md.match(/\n/g) || []).length;
@@ -190,14 +200,26 @@ function detectEol(md) {
   return null;
 }
 
+function eolRefusal(md) {
+  var loneCr = (md.match(/\r(?!\n)/g) || []).length;
+  if (loneCr) {
+    return 'contains ' + loneCr + ' lone carriage return(s), a "\\r" that is not followed by "\\n"';
+  }
+  var crlf = (md.match(/\r\n/g) || []).length;
+  var lf = (md.match(/\n/g) || []).length;
+  if (crlf && crlf !== lf) return 'mixes CRLF and LF line endings';
+  return null;
+}
+
 /* --write inserts the markers, from the bottom up so earlier line numbers stay
    valid. A heading that already carries a tab line keeps it. */
 function writeTabs(file, proposals) {
   var md = fs.readFileSync(file, 'utf8');
-  var eol = detectEol(md);
+  var refusal = eolRefusal(md);
+  var eol = refusal ? null : detectEol(md);
   if (!eol) {
-    console.error('refusing to write: ' + file + ' mixes CRLF and LF line endings. ' +
-      'Normalise it to one ending first (the site enforces LF through .gitattributes), ' +
+    console.error('refusing to write: ' + file + ' ' + (refusal || 'has no usable line ending') +
+      '. Normalise it to one ending first (the site enforces LF through .gitattributes), ' +
       'or the rewrite would change every line.');
     return { error: true };
   }
@@ -218,26 +240,28 @@ function writeTabs(file, proposals) {
     return { error: true };
   }
 
-  var added = 0, kept = 0, unplaced = 0;
+  var added = 0, kept = 0, unplaced = 0, detached = 0;
   for (var h = heads.length - 1; h >= 0; h--) {
     var p = proposals[h];
     var at = heads[h];
     if (p.existing) { kept++; continue; }
+    // A tier line below a blank line does not attach to the heading, so a tab
+    // line written after it lands on a paragraph. Say so; do not write.
+    if (p.detachedTier) { detached++; continue; }
     if (!p.tab) { unplaced++; continue; }
 
-    // After the tier line when there is one, directly after the heading when
-    // there is not (check-tabs.js reports the missing tier as an advisory).
+    // After the tier line when it is DIRECTLY below the heading, directly after
+    // the heading when there is no tier line (check-tabs.js reports the missing
+    // tier as an advisory).
     var insertAt = at + 1;
-    var j = at + 1;
-    while (j < lines.length && !lines[j].trim()) j++;
-    if (j < lines.length && CT.TIER_RE.test(lines[j])) insertAt = j + 1;
-    else insertAt = at + 1; // no tier line: directly under the heading
+    if (CT.TIER_RE.test(lines[at + 1] || '')) insertAt = at + 2;
 
     lines.splice(insertAt, 0, '{: .hl-tab-' + p.tab + '}');
     added++;
   }
   fs.writeFileSync(file, lines.join(eol), 'utf8');
-  return { added: added, kept: kept, unplaced: unplaced, eol: eol === '\r\n' ? 'CRLF' : 'LF' };
+  return { added: added, kept: kept, unplaced: unplaced, detached: detached,
+    eol: eol === '\r\n' ? 'CRLF' : 'LF' };
 }
 
 function main() {
@@ -275,10 +299,17 @@ function main() {
       var w = writeTabs(file, proposals);
       if (w.error) process.exit(1);
       console.log(slug + ': ' + w.added + ' tab lines written, ' + w.kept +
-        ' already present, ' + w.unplaced + ' left unplaced (line endings kept: ' + w.eol + ')');
+        ' already present, ' + w.unplaced + ' left unplaced, ' + w.detached +
+        ' skipped for a detached tier line (line endings kept: ' + w.eol + ')');
       if (w.unplaced) {
         console.log('  WARNING: ' + w.unplaced + ' section(s) got no line, so check-tabs.js will ' +
           'FAIL this report until a writer tags them.');
+      }
+      if (w.detached) {
+        console.log('  WARNING: ' + w.detached + ' section(s) got no line because a blank line ' +
+          'sits between the heading and its tier line. kramdown attaches both classes to the ' +
+          'paragraph below such a heading, so a tab line there cannot stick: move the tier line ' +
+          'directly under the heading and re-run.');
       }
       return;
     }
@@ -306,6 +337,11 @@ function main() {
       if (p.sameLine) {
         console.log('       !! same-line marker: move it to its OWN line below the tier line, or the');
         console.log('          class is dropped and the anchor is corrupted');
+      }
+      if (p.detachedTier) {
+        console.log('       !! a blank line separates this heading from its tier line: kramdown');
+        console.log('          attaches both classes to the paragraph below, so no tab line is');
+        console.log('          written; move the tier line directly under the heading');
       }
       if (!p.existing && p.tab) console.log('       {: .hl-tab-' + p.tab + '}');
     });
@@ -339,6 +375,7 @@ module.exports = {
   bySpan: bySpan,
   proposeFor: proposeFor,
   detectEol: detectEol,
+  eolRefusal: eolRefusal,
   writeTabs: writeTabs
 };
 

@@ -21,7 +21,9 @@ var ZERO_COUNTS = { headings: 1, tables: 0, rows: 0, figures: 0, images: 0,
 function page(over) {
   var p = {
     text: 'a b c', chars: 5, counts: JSON.parse(JSON.stringify(ZERO_COUNTS)),
-    ids: ['x'], idSeq: ['x'], chromeIds: []
+    ids: ['x'], idSeq: ['x'], chromeIds: [],
+    hidden: { words: 0, nodes: 0, samples: [], noBoxWords: 0, noBoxNodes: 0,
+              noBoxSamples: [], collapsedWords: 0 }
   };
   Object.keys(over || {}).forEach(function (k) { p[k] = over[k]; });
   return p;
@@ -190,4 +192,66 @@ test('the teardown control targets a closed details.hl-teardown and says when no
   assert.match(js, /details\.hl-teardown/);
   assert.match(js, /\.open/);
   assert.match(js, /wasOpen/);
+});
+
+/* Round-2 review F1: `textContent` counted text the reader cannot see, so the
+   H1 (one table hidden) and H2 (one whole h2 section hidden) mutants PASSed the
+   full verdict at 7b422d4 while hiding 307 and 730 article words. Both must FAIL
+   now, and the message must name the words and the hiding element. */
+
+test('H1: a hidden table FAILS even though every word is still in textContent', function () {
+  var base = page({ text: 'a b c' });
+  var mut = page({ hidden: { words: 307, nodes: 28,
+    samples: ['table [hidden] display=none visibility=visible :: Risk Dimension'],
+    noBoxWords: 0, noBoxNodes: 0, noBoxSamples: [], collapsedWords: 6192 } });
+  var r = C.compare(base, mut);
+  assert.strictEqual(r.status, 'FAIL');
+  assert.strictEqual(r.missing, 0, 'no word is missing: the words are hidden, not gone');
+  assert.strictEqual(r.added, 0);
+  assert.match(r.problems.join(' '), /307 words are hidden from the reader/);
+  assert.match(r.problems.join(' '), /\[hidden\]/);
+});
+
+test('H2: a hidden h2 section FAILS, and the closed-teardown words stay exempt', function () {
+  var base = page({ text: 'a b c' });
+  var mut = page({ hidden: { words: 730, nodes: 49,
+    samples: ['p [hidden] display=none visibility=visible :: Three hosted servers carry the operation'],
+    noBoxWords: 0, noBoxNodes: 0, noBoxSamples: [], collapsedWords: 6192 } });
+  var r = C.compare(base, mut);
+  assert.strictEqual(r.status, 'FAIL');
+  assert.match(r.problems.join(' '), /730 words are hidden/);
+});
+
+test('text with no rendered box FAILS as well: a clipped or zero-size box hides as surely', function () {
+  var r = C.compare(page({ text: 'a b c' }), page({ hidden: {
+    words: 0, nodes: 0, samples: [], noBoxWords: 12, noBoxNodes: 1,
+    noBoxSamples: ['span :: a clipped sentence'], collapsedWords: 0 } }));
+  assert.strictEqual(r.status, 'FAIL');
+  assert.match(r.problems.join(' '), /12 words have no rendered box/);
+});
+
+test('words inside a CLOSED details body are exempt by design and do not FAIL', function () {
+  var r = C.compare(page({ text: 'a b c' }), page({ hidden: {
+    words: 0, nodes: 0, samples: [], noBoxWords: 0, noBoxNodes: 0, noBoxSamples: [],
+    collapsedWords: 6192 } }));
+  assert.strictEqual(r.status, 'PASS', JSON.stringify(r.problems));
+});
+
+test('a page whose visibility was never measured FAILs rather than passing silently', function () {
+  var p = page({});
+  delete p.hidden;
+  var r = C.compare(page({}), p);
+  assert.strictEqual(r.status, 'FAIL');
+  assert.match(r.problems.join(' '), /visibility was not measured/);
+});
+
+test('the extraction script measures visibility per text node and exempts closed teardowns', function () {
+  var js = C.EXTRACT_JS;
+  assert.match(js, /NodeFilter\.SHOW_TEXT/, 'each text node is measured, not the element tree');
+  assert.match(js, /getComputedStyle/);
+  assert.match(js, /visibility==="hidden"/);
+  assert.match(js, /display==="none"/);
+  assert.match(js, /DETAILS/);
+  assert.match(js, /getClientRects/, 'a text node with no non-zero box is reported too');
+  assert.match(js, /hidden:\{words:/, 'the verdict reads the measurement');
 });

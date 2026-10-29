@@ -92,13 +92,13 @@ test('writeTabs inserts the line directly after the tier line, and is idempotent
   fs.writeFileSync(file, pilotMd(), 'utf8');
 
   var w = P.writeTabs(file, P.proposeFor(fs.readFileSync(file, 'utf8')));
-  assert.deepStrictEqual(w, { added: 20, kept: 0, unplaced: 0, eol: 'LF' });
+  assert.deepStrictEqual(w, { added: 20, kept: 0, unplaced: 0, detached: 0, eol: 'LF' });
   var after = fs.readFileSync(file, 'utf8');
   assert.match(after, /## 1\. Executive Summary\n\{: \.hl-tier-1\}\n\{: \.hl-tab-overview\}/);
   assert.match(after, /## 13\. MITRE ATT&CK Mapping\n\{: \.hl-tier-2\}\n\{: \.hl-tab-chain\}/);
 
   var again = P.writeTabs(file, P.proposeFor(after));
-  assert.deepStrictEqual(again, { added: 0, kept: 20, unplaced: 0, eol: 'LF' });
+  assert.deepStrictEqual(again, { added: 0, kept: 20, unplaced: 0, detached: 0, eol: 'LF' });
   assert.strictEqual(fs.readFileSync(file, 'utf8'), after);
 
   fs.rmSync(dir, { recursive: true, force: true });
@@ -109,7 +109,7 @@ test('writeTabs leaves an unplaceable section alone and counts it', function () 
   var file = path.join(dir, 'index.md');
   fs.writeFileSync(file, '---\ntitle: "x"\n---\n\n## Zorblax Quux\n{: .hl-tier-2}\n\nx\n', 'utf8');
   var w = P.writeTabs(file, P.proposeFor(fs.readFileSync(file, 'utf8')));
-  assert.deepStrictEqual(w, { added: 0, kept: 0, unplaced: 1, eol: 'LF' });
+  assert.deepStrictEqual(w, { added: 0, kept: 0, unplaced: 1, detached: 0, eol: 'LF' });
   assert.strictEqual(fs.readFileSync(file, 'utf8'), '---\ntitle: "x"\n---\n\n## Zorblax Quux\n{: .hl-tier-2}\n\nx\n');
   fs.rmSync(dir, { recursive: true, force: true });
 });
@@ -179,5 +179,47 @@ test('writeTabs refuses a file that mixes CRLF and LF', function () {
   var w = P.writeTabs(file, P.proposeFor(before));
   assert.strictEqual(w.error, true);
   assert.strictEqual(fs.readFileSync(file, 'utf8'), before, 'a refused write leaves the file untouched');
+  fs.rmSync(dir, { recursive: true, force: true });
+});
+
+/* Round-2 review F3: a blank line between the heading and its tier line means
+   kramdown attaches both classes to the paragraph below, so a tab line written
+   after the tier line cannot stick. The old write reported success and check-tabs
+   then FAILed the file. It must refuse that section, say why, and count it. */
+test('writeTabs writes no tab line when a blank line separates the heading from its tier line', function () {
+  var dir = fs.mkdtempSync(path.join(os.tmpdir(), 'hl-tabs-'));
+  var file = path.join(dir, 'index.md');
+  var md = '---\ntitle: "x"\n---\n\n## Executive Summary\n\n{: .hl-tier-1}\n\nx\n\n' +
+    '## 2. Risk Assessment\n{: .hl-tier-2}\n\nx\n';
+  fs.writeFileSync(file, md, 'utf8');
+  var props = P.proposeFor(md);
+  assert.strictEqual(props[0].detachedTier, true, 'the detached tier line is detected');
+  assert.strictEqual(props[1].detachedTier, false);
+
+  var w = P.writeTabs(file, props);
+  assert.strictEqual(w.error, undefined);
+  assert.strictEqual(w.detached, 1);
+  assert.strictEqual(w.added, 1);
+  var after = fs.readFileSync(file, 'utf8');
+  assert.ok(after.indexOf('## Executive Summary\n\n{: .hl-tier-1}\n') !== -1,
+    'the detached section is left exactly as it was');
+  assert.match(after, /## 2\. Risk Assessment\n\{: \.hl-tier-2\}\n\{: \.hl-tab-overview\}/);
+  fs.rmSync(dir, { recursive: true, force: true });
+});
+
+/* Round-2 review F4: the header promised two refusals and the code had three,
+   and a lone carriage return was refused with a "mixes CRLF and LF" message. */
+test('a lone carriage return is refused with its own reason, not as a mixed file', function () {
+  assert.match(P.eolRefusal('a\rb\r\n'), /lone carriage return/);
+  assert.match(P.eolRefusal('a\r\nb\n'), /mixes CRLF and LF/);
+  assert.strictEqual(P.eolRefusal('a\nb\n'), null);
+
+  var dir = fs.mkdtempSync(path.join(os.tmpdir(), 'hl-tabs-'));
+  var file = path.join(dir, 'index.md');
+  var lone = '---\ntitle: "x"\n---\n\n## Executive Summary\n{: .hl-tier-1}\r\n\nx\n';
+  fs.writeFileSync(file, lone, 'utf8');
+  var before = fs.readFileSync(file, 'utf8');
+  assert.strictEqual(P.writeTabs(file, P.proposeFor(before)).error, true);
+  assert.strictEqual(fs.readFileSync(file, 'utf8'), before);
   fs.rmSync(dir, { recursive: true, force: true });
 });

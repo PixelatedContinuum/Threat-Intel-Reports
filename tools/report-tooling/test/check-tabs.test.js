@@ -168,12 +168,34 @@ test('P2: a stray tab line in a section body FAILS with its line, and the report
   assert.match(r.problems.join(' '), /attaches the class to the next paragraph/);
 });
 
-test('P3: the bare string in prose FAILS, because the layout trigger is a substring test', function () {
+/* Round-2 review F2: the layout keys on a complete `hl-tab-<token>` class on an
+   h2, not on the bare string, so P3 is ordinary prose and must not FAIL. A
+   misplaced tab IAL line still FAILs (P1, P2, P8 above). */
+test('P3: the bare string in prose is an ADVISORY, because the layout keys on the heading class', function () {
   var md = '## Only Section\n{: .hl-tier-2}\n\nThe layout keys on the string hl-tab- and this ' +
     'sentence contains it.\n';
   var r = CT.checkMarkdown(doc(md));
+  assert.strictEqual(r.status, 'PASS', JSON.stringify(r.problems));
+  assert.strictEqual(r.problems.length, 0);
+  assert.strictEqual(r.misplaced.length, 0);
+  assert.match(r.advisories.join(' '), /applies no class there/);
+  assert.match(r.advisories.join(' '), /line 8/);
+  // Untagged is untagged: the section is still reported as carrying no tag.
+  assert.strictEqual(r.tagged, 0);
+});
+
+test('a heading whose text quotes the string is an advisory too, not a tab', function () {
+  var r = CT.checkMarkdown(doc('## Only Section\n{: .hl-tier-2}\n\nx\n\n### The hl-tab- marker\n\ny\n'));
+  assert.strictEqual(r.status, 'PASS', JSON.stringify(r.problems));
+  assert.match(r.advisories.join(' '), /written in the heading/);
+});
+
+test('a tab IAL line in the body still FAILS, so misplaced lines are not downgraded with the prose case', function () {
+  var md = '## Only Section\n{: .hl-tier-2}\n{: .hl-tab-overview}\n\nbody\n\n' +
+    '## Second\n{: .hl-tier-2}\n{: .hl-tab-chain}\n\ntext\n\n{: .hl-tab-chain}\n';
+  var r = CT.checkMarkdown(doc(md));
   assert.strictEqual(r.status, 'FAIL');
-  assert.match(r.problems.join(' '), /carries the string "hl-tab-"/);
+  assert.ok(r.problems.some(function (p) { return /blank line/.test(p); }), r.problems.join(' '));
 });
 
 test('P8: a blank line between the heading and the tier line FAILS on the tagged section', function () {
