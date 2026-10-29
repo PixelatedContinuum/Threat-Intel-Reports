@@ -1,0 +1,28 @@
+<style data-rv-chrome data-pagefind-ignore>
+html.hl-rv-subscribe-held [data-form]:is(.modal-container,.slide-in-container,.bar-container),
+html.hl-rv-menu-open [data-form]:is(.modal-container,.slide-in-container,.bar-container) { display: none !important; }
+</style>
+<script data-rv-chrome data-pagefind-ignore>
+/* Tagged pages only. Keep the vendor form out of navigation and the first
+   twenty seconds, including its focusable fields, without changing its text. */
+(function () {
+  var root = document.documentElement, elapsed = false, lastMenuFocus;
+  var selector = '[data-form]:is(.modal-container,.slide-in-container,.bar-container)';
+  root.classList.add('hl-rv-subscribe-held');
+  function sync() {
+    var menuOpen = root.classList.contains('hl-rv-menu-open');
+    var held = !elapsed || menuOpen;
+    if (root.classList.contains('hl-rv-subscribe-held') !== held) root.classList.toggle('hl-rv-subscribe-held', held);
+    document.querySelectorAll(selector).forEach(function (form) {
+      if (form.inert !== held) form.inert = held;
+    });
+    if (menuOpen && lastMenuFocus && document.activeElement === document.body && lastMenuFocus.isConnected) lastMenuFocus.focus({ preventScroll: true });
+  }
+  document.addEventListener('focusin', function (e) { if (e.target.closest('.hl-rv-bar')) lastMenuFocus = e.target; });
+  new MutationObserver(function (records) {
+    if (records.some(function (r) { return r.type === 'childList' || r.target.matches && r.target.matches(selector); })) sync();
+  }).observe(document.body, { childList: true, subtree: true, attributes: true, attributeFilter: ['class', 'style'] });
+  new MutationObserver(sync).observe(root, { attributes: true, attributeFilter: ['class'] });
+  setTimeout(function () { elapsed = true; sync(); }, 20000);
+})();
+</script>

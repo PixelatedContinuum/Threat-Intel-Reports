@@ -34,7 +34,7 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 </script>
 {% endif %}
-{% comment %}Match complete class tokens only inside kramdown h2 opening tags. Keep this Liquid whitespace-free so the untagged render stays byte-identical.{% endcomment %}{% assign hl_tabbed = false %}{% assign hl_tab_tokens = 'overview,victims,chain,timeline,attribution,indicators,confidence' | split: ',' %}{% assign hl_h2_tags = content | split: '<h2 ' %}{% for hl_h2 in hl_h2_tags offset:1 %}{% assign hl_open_tag = hl_h2 | split: '>' | first %}{% if hl_open_tag contains 'class="' %}{% assign hl_classes = hl_open_tag | split: 'class="' | last | split: '"' | first | prepend: ' ' | append: ' ' %}{% for hl_token in hl_tab_tokens %}{% assign hl_class = hl_token | prepend: ' hl-tab-' | append: ' ' %}{% if hl_classes contains hl_class %}{% assign hl_tabbed = true %}{% endif %}{% endfor %}{% endif %}{% endfor %}{% if hl_tabbed %}<link rel="stylesheet" href="{{ '/assets/css/hl-report-tabs.css' | relative_url }}" data-rv-chrome data-pagefind-ignore>
+{% comment %}Match complete class tokens only inside kramdown h2 opening tags. Keep this Liquid whitespace-free so the untagged render stays byte-identical.{% endcomment %}{% assign hl_tabbed = false %}{% assign hl_tab_tokens = 'overview,victims,chain,timeline,attribution,indicators,confidence' | split: ',' %}{% assign hl_h2_tags = content | split: '<h2 ' %}{% for hl_h2 in hl_h2_tags offset:1 %}{% assign hl_open_tag = hl_h2 | split: '>' | first %}{% if hl_open_tag contains 'class="' %}{% assign hl_classes = hl_open_tag | split: 'class="' | last | split: '"' | first | prepend: ' ' | append: ' ' %}{% for hl_token in hl_tab_tokens %}{% assign hl_class = hl_token | prepend: ' hl-tab-' | append: ' ' %}{% if hl_classes contains hl_class %}{% assign hl_tabbed = true %}{% endif %}{% endfor %}{% endif %}{% endfor %}{% if hl_tabbed %}{% include report-subscribe-guard.html %}<link rel="stylesheet" href="{{ '/assets/css/hl-report-tabs.css' | relative_url }}?v=20261029.2" data-rv-chrome data-pagefind-ignore>
 {% endif %}<div class="hl-page{% if hl_tabbed %} hl-report-page{% endif %}" style="--ph-accent: {% if page.path contains 'hunting-detections' %}#4ade80{% else %}#f87171{% endif %};">
 <div class="hl-post-header{% if page.path contains 'hunting-detections' %} hl-post-header--detect{% endif %}">
   <div class="hl-post-header__eyebrow">
@@ -892,7 +892,7 @@ the coverage above is narrower than the rule set.</em></p>
 {% if hl_tabbed %}{%- assign hl_view_slug = page.path | split: '/' | pop | last -%}
 {%- assign hl_view_data = site.data.report_views[hl_view_slug] -%}
 {%- if hl_view_data %}<script type="application/json" id="hl-report-view-data" data-rv-chrome data-pagefind-ignore>{{ hl_view_data | jsonify | replace: '<', '\u003c' | replace: '>', '\u003e' | replace: '&', '\u0026' }}</script>{% endif %}
-<script src="{{ '/assets/js/hl-report-tabs.js' | relative_url }}" defer data-rv-chrome data-pagefind-ignore></script>{% else %}<script src="{{ '/assets/js/register-switch.js' | relative_url }}" defer></script>{% endif %}
+<script src="{{ '/assets/js/hl-report-tabs.js' | relative_url }}?v=20261029.2" defer data-rv-chrome data-pagefind-ignore></script>{% else %}<script src="{{ '/assets/js/register-switch.js' | relative_url }}" defer></script>{% endif %}
 {% if page.path contains "hunting-detections" %}
 {% assign hl_slug = page.path | split: "/" | last | remove: ".md" %}
 {% assign hl_manifest = site.data.detection_manifests[hl_slug] %}
