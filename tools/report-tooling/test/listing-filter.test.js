@@ -770,6 +770,36 @@ test('the public-rule axis (T-0407): ET Open and Nuclei OR together, state in vd
   assert.equal(visible(win2, '.hl-vuln'), 2);
 });
 
+test('the public-rule axis (T-0496): CISA Sigma and Snort join ET Open and Nuclei, pipe-separated values OR together', function () {
+  // two more buttons on the bar, and two more rows: one with all four sources, one with Snort only
+  var page = tabsPage()
+    .replace('<button class="hl-chip-btn" data-det="nuclei">Nuclei</button>',
+      '<button class="hl-chip-btn" data-det="nuclei">Nuclei</button>' +
+      '<button class="hl-chip-btn" data-det="cisa">CISA Sigma</button>' +
+      '<button class="hl-chip-btn" data-det="snort3">Snort</button>')
+    .replace('</div>' + '</section></div>',
+      '<div class="hl-vuln" id="cve-cve-2026-0004" data-title="cve-2026-0004 four" data-list="cisa" data-vendor="Acme" data-age="recent" data-sev="high" data-det="et|nuclei|cisa|snort3" data-nvd="" data-day="2026-10-22"></div>' +
+      '<div class="hl-vuln" id="cve-cve-2026-0005" data-title="cve-2026-0005 snort" data-list="vconly" data-vendor="Acme" data-age="recent" data-sev="high" data-det="snort3" data-nvd="" data-day="2026-10-22"></div>' +
+      '</div></section></div>');
+  assert.ok(page.indexOf('data-det="cisa"') > -1 && page.indexOf('cve-cve-2026-0005') > -1);   // the edits landed
+  var win = build(page, 'https://example.test/wire/#vulns');
+  click(win, chip(win, '[data-age=""]'));            // include older: 5 rows
+  assert.equal(visible(win, '.hl-vuln'), 5);
+  click(win, chip(win, '[data-det="cisa"]'));
+  assert.equal(visible(win, '.hl-vuln'), 1);          // only the four-source row
+  assert.equal(win.document.getElementById('cve-cve-2026-0004').style.display, '');
+  assert.match(win.location.search, /vdet=cisa/);
+  click(win, chip(win, '[data-det="snort3"]'));
+  assert.equal(visible(win, '.hl-vuln'), 2);          // plus the Snort-only row
+  click(win, chip(win, '[data-det="cisa"]'));          // off again: Snort alone
+  assert.equal(visible(win, '.hl-vuln'), 2);
+  click(win, chip(win, '[data-det="snort3"]'));
+  click(win, chip(win, '[data-det="et"]'));            // control: the older ET filter still counts only its own rows
+  assert.equal(visible(win, '.hl-vuln'), 2);           // row 1 and the four-source row
+  var win2 = build(page, 'https://example.test/wire/?vdet=snort3&vage=all#vulns');
+  assert.equal(visible(win2, '.hl-vuln'), 2);
+});
+
 test('the pre-NVD axis (T-0468): one chip narrows to the rows VulnCheck added before NVD, state in vnvd', function () {
   var win = build(tabsPage(), 'https://example.test/wire/#vulns');
   click(win, chip(win, '[data-age=""]'));          // include older, so all three rows count

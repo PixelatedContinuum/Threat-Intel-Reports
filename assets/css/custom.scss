@@ -4080,6 +4080,14 @@ span.hl-vuln__p--det { cursor: help; }
 .hl-vuln__p--epss { font-variant-numeric: tabular-nums; }
 .hl-vuln__xm { color: #e3b341; }
 .hl-vuln__popbody--epss { min-width: 16em; max-width: min(26em, 85vw); }
+/* T-0496: the Rules chip opens a popover with one group per rule source (ET Open, Nuclei,
+   CISA Sigma, Snort 3 community). The chip is the same details pattern as "src" and EPSS.
+   A CVE with many Snort SIDs scrolls inside the popover rather than running off the page. */
+.hl-vuln__popbody--rules { min-width: 14em; max-width: min(26em, 85vw); max-height: min(22em, 60vh); overflow-y: auto; }
+.hl-vuln__rg { display: flex; flex-wrap: wrap; gap: 0.15em 0.6em; align-items: baseline; }
+.hl-vuln__rh { flex: 0 0 100%; font-size: 0.85em; text-transform: uppercase; letter-spacing: 0.04em; color: var(--hl-text-muted); }
+.hl-vuln__rule { font-variant-numeric: tabular-nums; }
+span.hl-vuln__rule { color: var(--hl-text-secondary); }
 .hl-vuln__spark { display: block; overflow: visible; color: #79c0ff; width: 124px; height: 28px; max-width: 100%; }
 
 /* --- The nKEVs legend (T-0468.1) ---------------------------------------
@@ -4403,11 +4411,11 @@ span.hl-vuln__p--det { cursor: help; }
   .hl-vuln { grid-template-columns: minmax(0, 1fr); gap: 0.2em; padding: 0.55em 0.7em; }
   .hl-vuln__badges { justify-content: flex-start; }
   .hl-vuln__popbody { left: 0.7em; right: auto; }
-  /* T-0468: one line of chips on a phone too. The few rows with more chips than
-     fit (12 of 298 on 2026-10-27) scroll sideways inside the line rather than
-     wrapping to a second one; the popover is positioned against the row, so the
-     scroll does not clip it. */
-  .hl-vuln__badges { flex-wrap: nowrap; overflow-x: auto; scrollbar-width: thin; padding-bottom: 2px; }
+  /* T-0496: on a phone the chips wrap to a second line. T-0468 had them scroll
+     sideways, which left chips (Rules among them) out of view on the rows with
+     more chips than fit; a wrapped line shows every chip. Rows with few chips
+     stay on one line. */
+  .hl-vuln__badges { flex-wrap: wrap; row-gap: 0.25em; }
   .hl-filter__dim--gap { margin-left: 0; }
 }
 

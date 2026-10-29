@@ -631,6 +631,101 @@ test('pointer counts disagreeing with the rows warn; a pre-T-0407 file is not he
   assert.deepEqual(CW.check(vdoc(), SOURCES, NOW).vulnWarnings, []);
 });
 
+/* ---- CISA Sigma and Snort 3 community rules (T-0496) ---- */
+
+function ruled(over) {
+  return pointed(Object.assign({ cisa_sigma: ['CISA_SIGMA_261429_CVE_2026_109618-109619_PHP2Shell_TLP_CLEAR.yaml'],
+    snort3_sids: [58800, 58801] }, over || {}));
+}
+
+// Counts as the exporter declares them: every row carries both fields, detect is any of the four.
+function rdoc(rows) {
+  var d = pdoc(rows);
+  var c = d.vulns_counts;
+  c.cisa_sigma = rows.filter(function (r) { return (r.cisa_sigma || []).length; }).length;
+  c.snort3 = rows.filter(function (r) { return (r.snort3_sids || []).length; }).length;
+  c.detect = rows.filter(function (r) {
+    return (r.et_sids || []).length || r.nuclei || (r.cisa_sigma || []).length || (r.snort3_sids || []).length;
+  }).length;
+  return d;
+}
+
+function bare(over) {
+  return vrow(Object.assign({ cve: 'CVE-2026-4444', reports: [], reports_more: 0, stories: 0,
+    et_sids: [], nuclei: '', cisa_sigma: [], snort3_sids: [] }, over || {}));
+}
+
+test('rows with all four rule sources, one source and none pass with no vuln warnings (control)', function () {
+  var r = CW.check(rdoc([ruled(), ruled({ cve: 'CVE-2026-2222', et_sids: [], nuclei: '', cisa_sigma: [] }),
+    bare()]), SOURCES, NOW);
+  assert.equal(r.status, 'PASS');
+  assert.deepEqual(r.vulnWarnings, []);
+});
+
+test('a bad cisa_sigma or snort3_sids warns per field, and the headlines still PASS', function () {
+  var r = CW.check(rdoc([
+    ruled({ cve: 'CVE-2026-0001', cisa_sigma: 'a.yaml' }),
+    ruled({ cve: 'CVE-2026-0002', cisa_sigma: ['../x.yaml'] }),
+    ruled({ cve: 'CVE-2026-0003', cisa_sigma: ['/abs.yaml'] }),
+    ruled({ cve: 'CVE-2026-0004', cisa_sigma: ['has space.yaml'] }),
+    ruled({ cve: 'CVE-2026-0005', cisa_sigma: ['rule.txt'] }),
+    ruled({ cve: 'CVE-2026-0006', cisa_sigma: [7] }),
+    ruled({ cve: 'CVE-2026-0007', snort3_sids: ['58800'] }),
+    ruled({ cve: 'CVE-2026-0008', snort3_sids: [0] }),
+    ruled({ cve: 'CVE-2026-0009', snort3_sids: [58801, 58800] }),
+    ruled({ cve: 'CVE-2026-0010', snort3_sids: [58800, 58800] }),
+    ruled({ cve: 'CVE-2026-0011', snort3_sids: 58800 }),
+    ruled({ cve: 'CVE-2026-0012', snort3_sids: [1.5] }),
+    ruled({ cve: 'CVE-2026-0013', cisa_sigma: ['a"b.yaml'] }),
+    ruled({ cve: 'CVE-2026-0014', cisa_sigma: [new Array(202).join('a') + '.yaml'] }),
+    ruled({ cve: 'CVE-2026-0015', cisa_sigma: [['a.yaml']] })   // a nested list stringifies to a valid path
+  ]), SOURCES, NOW);
+  assert.equal(r.status, 'PASS');
+  var w = r.vulnWarnings.join('\n');
+  [/0001\).*cisa_sigma.*not a list of rule file paths/, /0002\).*cisa_sigma/, /0003\).*cisa_sigma/,
+   /0004\).*cisa_sigma/, /0005\).*cisa_sigma/, /0006\).*cisa_sigma/,
+   /0007\).*snort3_sids.*not a sorted list of distinct SIDs/, /0008\).*snort3_sids/, /0009\).*snort3_sids/,
+   /0010\).*snort3_sids/, /0011\).*snort3_sids/, /0012\).*snort3_sids/, /0013\).*cisa_sigma/, /0014\).*cisa_sigma/, /0015\).*cisa_sigma/].forEach(function (re) {
+    assert.match(w, re);
+  });
+});
+
+test('the CISA Sigma and Snort 3 counts are held to the rows; detect counts any of the four', function () {
+  var rows = [ruled(), bare({ cve: 'CVE-2026-2222', snort3_sids: [60000] }), bare()];
+  var d = rdoc(rows);
+  assert.deepEqual(CW.check(d, SOURCES, NOW).vulnWarnings, []);   // control: declared as the rows are
+  d = rdoc(rows); d.vulns_counts.cisa_sigma = 5;
+  assert.match(CW.check(d, SOURCES, NOW).vulnWarnings.join(' '), /cisa_sigma disagrees with the rows: declared 5, actual 1/);
+  d = rdoc(rows); d.vulns_counts.snort3 = 0;
+  assert.match(CW.check(d, SOURCES, NOW).vulnWarnings.join(' '), /snort3 disagrees with the rows: declared 0, actual 2/);
+  // detect left at the pre-T-0496 meaning (ET or Nuclei only) while a row has only a Snort rule
+  d = rdoc(rows); d.vulns_counts.detect = 1;
+  assert.match(CW.check(d, SOURCES, NOW).vulnWarnings.join(' '), /pointers disagree with the rows on detect/);
+});
+
+test('rows that carry the new rules while the count is missing, or a row without the fields, warn', function () {
+  var rows = [ruled(), bare({ snort3_sids: [60000] })];
+  var d = rdoc(rows); delete d.vulns_counts.snort3;
+  assert.match(CW.check(d, SOURCES, NOW).vulnWarnings.join(' '), /2 snort3 rule rows but vulns_counts has no snort3/);
+  d = rdoc(rows); delete d.vulns_counts.cisa_sigma;
+  assert.match(CW.check(d, SOURCES, NOW).vulnWarnings.join(' '), /1 cisa_sigma rule rows but vulns_counts has no cisa_sigma/);
+  // declaring only the snort3 count is declaring: the rows must carry both fields
+  var lacking = ruled({ cve: 'CVE-2026-3334' }); delete lacking.cisa_sigma;
+  d = rdoc([ruled(), lacking]); delete d.vulns_counts.cisa_sigma;
+  assert.match(CW.check(d, SOURCES, NOW).vulnWarnings.join(' '), /1 of 2 rows lack cisa_sigma or snort3_sids/);
+  // a file that declares the counts holds every row to carrying both fields
+  var missing = ruled({ cve: 'CVE-2026-3333' }); delete missing.snort3_sids;
+  d = rdoc([ruled(), missing]);
+  assert.match(CW.check(d, SOURCES, NOW).vulnWarnings.join(' '), /1 of 2 rows lack cisa_sigma or snort3_sids/);
+});
+
+test('a file written before T-0496 is not held to the new fields or counts (control)', function () {
+  var r = CW.check(pdoc([pointed(), vrow({ cve: 'CVE-2026-4444' })]), SOURCES, NOW);
+  assert.equal(r.status, 'PASS');
+  assert.deepEqual(r.vulnWarnings, []);
+  assert.equal(r.vulnWarnings.length, 0);
+});
+
 /* ---- The nKEV fields: disclosure day, gap and EPSS (T-0468) ---- */
 
 function nk(over) {

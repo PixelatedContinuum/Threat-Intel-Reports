@@ -72,6 +72,10 @@ function hasKey(o, k) { return !!o && Object.prototype.hasOwnProperty.call(o, k)
 // character passes a "not whitespace" class (T-0407 review F1).
 var REPORT_URL = /^https:\/\/[A-Za-z0-9.-]+(?::\d+)?(?:[\/?#][!#-&(-;=?-\[\]-_a-~]*)?$/;
 var NUCLEI_PATH = /^[A-Za-z0-9_.\/-]+\.ya?ml$/;
+// T-0496: a rule file in cisagov/SIGMA_Rules, repo-relative. The same plain charset as a
+// Nuclei path, so the link the page builds from it needs no escaping, plus no leading
+// slash (that would make the blob URL carry an empty segment).
+var CISA_PATH = /^[A-Za-z0-9_.\/-]+\.ya?ml$/;
 function isCount(v) { return typeof v === 'number' && Number.isInteger(v) && v >= 0; }
 function reportsOf(r) { return Array.isArray(r.reports) ? r.reports : []; }
 function pointerProblems(r) {
@@ -99,6 +103,18 @@ function pointerProblems(r) {
   if (hasKey(r, 'nuclei') && r.nuclei !== '' &&
       !(typeof r.nuclei === 'string' && NUCLEI_PATH.test(r.nuclei) && r.nuclei.indexOf('..') === -1)) {
     out.push('has nuclei ' + JSON.stringify(r.nuclei) + ', not a template path');
+  }
+  // T-0496: CISA Sigma rule files and Snort 3 community SIDs. A row written before them
+  // carries neither and checks clean; checkVulns holds a file that declares their counts
+  // to carry both on every row.
+  if (hasKey(r, 'cisa_sigma') && !(Array.isArray(r.cisa_sigma) && r.cisa_sigma.every(function (p) {
+    return typeof p === 'string' && CISA_PATH.test(p) && p.indexOf('..') === -1 &&
+      p.charAt(0) !== '/' && p.length <= 200; }))) {
+    out.push('has cisa_sigma ' + JSON.stringify(r.cisa_sigma) + ', not a list of rule file paths');
+  }
+  if (hasKey(r, 'snort3_sids') && !(Array.isArray(r.snort3_sids) && r.snort3_sids.every(function (s, i, a) {
+    return isCount(s) && s > 0 && (i === 0 || s > a[i - 1]); }))) {
+    out.push('has snort3_sids ' + JSON.stringify(r.snort3_sids) + ', not a sorted list of distinct SIDs');
   }
   return out;
 }
@@ -242,6 +258,9 @@ function checkVulns(doc, now) {
   var nCisa = 0, nOlder = 0, nUnscored = 0;
   var nSev = { critical: 0, high: 0, medium: 0, low: 0 };
   var nPtr = { reported: 0, stories: 0, et: 0, nuclei: 0, detect: 0 };
+  // T-0496: counted apart, since a file written before them declares neither.
+  var nRule = { cisa_sigma: 0, snort3: 0 };
+  var nNoRuleFields = 0;
   var nNkev = { disclosed: 0, prenvd: 0, epss: 0, epss_pre: 0 };
   rows.forEach(function (r, n) {
     r = r || {};
@@ -274,9 +293,14 @@ function checkVulns(doc, now) {
     if (Number(r.stories) > 0) nPtr.stories++;
     var hasEt = Array.isArray(r.et_sids) && r.et_sids.length > 0;
     var hasNu = typeof r.nuclei === 'string' && r.nuclei !== '';
+    var hasCs = Array.isArray(r.cisa_sigma) && r.cisa_sigma.length > 0;
+    var hasSn = Array.isArray(r.snort3_sids) && r.snort3_sids.length > 0;
     if (hasEt) nPtr.et++;
     if (hasNu) nPtr.nuclei++;
-    if (hasEt || hasNu) nPtr.detect++;
+    if (hasCs) nRule.cisa_sigma++;
+    if (hasSn) nRule.snort3++;
+    if (hasEt || hasNu || hasCs || hasSn) nPtr.detect++;
+    if (!hasKey(r, 'cisa_sigma') || !hasKey(r, 'snort3_sids')) nNoRuleFields++;
     if (r.cve && seen[r.cve]) warnings.push(where + ' repeats a CVE');
     if (r.cve) seen[r.cve] = 1;
     if (r.cisa_added) nCisa++;
@@ -309,6 +333,28 @@ function checkVulns(doc, now) {
         ': declared ' + badp.map(function (k) { return k + '=' + vc[k]; }).join(' ') +
         ', actual ' + badp.map(function (k) { return k + '=' + nPtr[k]; }).join(' '));
     }
+  }
+  // T-0496: the CISA Sigma and Snort 3 counts feed the two filter buttons. A file that
+  // declares either must carry both fields on every row, and the declared count must
+  // match the rows; rows that carry rules while the count is missing would draw the Rules
+  // chip but no filter button, so that warns too. A file with neither is an older one.
+  if (rows.length) {
+    var declares = hasKey(vc, 'cisa_sigma') || hasKey(vc, 'snort3');
+    if (declares && nNoRuleFields) {
+      warnings.push('vulns_counts declares CISA Sigma or Snort 3 counts but ' + nNoRuleFields +
+        ' of ' + rows.length + ' rows lack cisa_sigma or snort3_sids');
+    }
+    Object.keys(nRule).forEach(function (k) {
+      if (hasKey(vc, k)) {
+        if (Number(vc[k]) !== nRule[k]) {
+          warnings.push('vulns_counts ' + k + ' disagrees with the rows: declared ' + vc[k] +
+            ', actual ' + nRule[k]);
+        }
+      } else if (nRule[k] > 0) {
+        warnings.push('rows carry ' + nRule[k] + ' ' + k + ' rule rows but vulns_counts has no ' +
+          k + ', so the filter button is not drawn');
+      }
+    });
   }
   // The nKEV counts arrive with T-0468 and feed the page's pre-NVD chip.
   if (rows.length && hasKey(vc, 'prenvd')) {

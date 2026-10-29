@@ -52,6 +52,13 @@ sitemap: false
     {%- if nu_len > 0 %}
     <link href="https://github.com/projectdiscovery/nuclei-templates/blob/main/{{ r.nuclei | xml_escape }}" rel="related" type="text/html" title="Nuclei template"/>
     {%- endif %}
+    {%- comment %} T-0496: CISA Sigma rule files and Snort 3 community SIDs, linked the way the Rules popover on /wire/ links them. {% endcomment %}
+    {%- for cp in r.cisa_sigma %}
+    <link href="https://github.com/cisagov/SIGMA_Rules/blob/develop/{{ cp | uri_escape | xml_escape }}" rel="related" type="text/html" title="CISA Sigma rule"/>
+    {%- endfor %}
+    {%- for sid in r.snort3_sids %}
+    <link href="https://www.snort.org/rule_docs/1-{{ sid | xml_escape }}" rel="related" type="text/html" title="Snort 3 community rule"/>
+    {%- endfor %}
     <id>{{ site.url }}/wire/#cve-{{ r.cve | downcase }}</id>
     <published>{{ vday }}T00:00:00Z</published>
     <updated>{{ vday }}T00:00:00Z</updated>
@@ -65,6 +72,14 @@ sitemap: false
     {%- endif %}
     {%- if nu_len > 0 %}
     <category term="nuclei-template" label="Nuclei template"/>
+    {%- endif %}
+    {%- assign n_cs = r.cisa_sigma | size %}
+    {%- if n_cs > 0 %}
+    <category term="cisa-sigma-rule" label="CISA Sigma rule"/>
+    {%- endif %}
+    {%- assign n_sn = r.snort3_sids | size %}
+    {%- if n_sn > 0 %}
+    <category term="snort3-community-rule" label="Snort 3 community rule"/>
     {%- endif %}
     {%- assign cvss_len = r.cvss | size %}
     {%- assign sev = "" %}
