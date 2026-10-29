@@ -341,7 +341,7 @@
       value: "109.230.231.37"
       context: "Confirmed malware distribution point - open directory serving multiple RAT variants"
       confidence: "CONFIRMED"
-      action: "BLOCK AT NETWORK PERIMETER IMMEDIATELY"
+      action: "BLOCK at network perimeter immediately"
       fp_risk: null
     - type: "sha256"
       value: "4e856041018242c62b3848d63b94c3763beda01648d3139060700c11e9334ad1"
@@ -436,7 +436,7 @@
       value: "109.230.231.37"
       context: "Hardcoded C2 server IP - confirmed malware distribution point (open directory)"
       confidence: "CONFIRMED"
-      action: "BLOCK AT NETWORK PERIMETER IMMEDIATELY - CRITICAL"
+      action: "BLOCK at network perimeter immediately - CRITICAL"
       fp_risk: null
     - type: "sha256"
       value: "0ec3fca58ef8f0d9f098cd749dd209fccda7cbf68c1eecf836668e5dabd6f3bc"
@@ -489,7 +489,7 @@
       value: "109.230.231.37"
       context: "Hardcoded WebSocket C2 server IP - confirmed malware distribution point (open directory)"
       confidence: "CONFIRMED"
-      action: "BLOCK AT NETWORK PERIMETER IMMEDIATELY - CRITICAL"
+      action: "BLOCK at network perimeter immediately - CRITICAL"
       fp_risk: null
     - type: "sha256"
       value: "f8e7e73bf2b26635800a042e7890a35f7376508f288a1ced3d3e12b173c5cb7e"
@@ -1305,7 +1305,7 @@
       value: "109.230.231.37"
       context: "Arsenal-237 malware distribution point - open directory serving complete attack toolkit"
       confidence: "CONFIRMED"
-      action: "BLOCK AT NETWORK PERIMETER IMMEDIATELY"
+      action: "BLOCK at network perimeter immediately"
       fp_risk: null
     - type: "sha256"
       value: "47ec51b5f0ede1e70bd66f3f0152f9eb536d534565dbb7fcc3a05f542dbe4428"
@@ -1933,13 +1933,13 @@
       value: "109.230.231.37"
       context: "Arsenal-237 malware distribution point - open directory serving malware toolkit"
       confidence: "CONFIRMED"
-      action: "BLOCK AT NETWORK PERIMETER IMMEDIATELY"
+      action: "BLOCK at network perimeter immediately"
       fp_risk: null
     - type: "url"
       value: "http://109.230.231.37:8888/lpe.exe"
       context: "Hardcoded C2 URL for downloading lpe.exe privilege escalation module (same as killer.dll)"
       confidence: "CONFIRMED (FOUND IN CONFIGURATION TABLE AT OFFSET 0X180067428)"
-      action: "BLOCK AT NETWORK PERIMETER AND WEB PROXY"
+      action: "BLOCK at network perimeter and web proxy"
       fp_risk: null
     - type: "sha256"
       value: "e26e9221f4e9a437716a28c08c5f74c6a2ecae2c47b77091db7d21f36ed2f7d3"
@@ -2030,13 +2030,13 @@
       value: "109.230.231.37"
       context: "Arsenal-237 malware distribution point - open directory serving malware toolkit"
       confidence: "CONFIRMED"
-      action: "BLOCK AT NETWORK PERIMETER IMMEDIATELY"
+      action: "BLOCK at network perimeter immediately"
       fp_risk: null
     - type: "url"
       value: "http://109.230.231.37:8888/lpe.exe"
       context: "Hardcoded C2 URL for downloading lpe.exe privilege escalation module"
       confidence: "CONFIRMED (FOUND IN CONFIGURATION TABLE AT OFFSET 0X180078D98)"
-      action: "BLOCK AT NETWORK PERIMETER AND WEB PROXY"
+      action: "BLOCK at network perimeter and web proxy"
       fp_risk: null
     - type: "sha256"
       value: "10eb1fbb2be3a09eefb3d97112e42bb06cf029e6cac2a9fb891b8b89a25c788d"
@@ -2121,7 +2121,7 @@
       value: "109.230.231.37"
       context: "Arsenal-237 malware distribution point - open directory serving malware toolkit"
       confidence: "CONFIRMED"
-      action: "BLOCK AT NETWORK PERIMETER IMMEDIATELY"
+      action: "BLOCK at network perimeter immediately"
       fp_risk: null
     - type: "sha256"
       value: "c4dda7b5c5f6eab49efc86091377ab08275aa951d956a5485665954830d1267e"
@@ -3318,7 +3318,7 @@
       value: "109.230.231.37"
       context: null
       confidence: "CONFIRMED"
-      action: "BLOCK AT NETWORK PERIMETER IMMEDIATELY (ALL PORTS, ALL PROTOCOLS, INBOUND AND OUTBOUND)"
+      action: "BLOCK at network perimeter immediately (all ports, all protocols, inbound AND outbound)"
       fp_risk: null
     - type: "sha256"
       value: "1252b4a85ea6d33651bbcee4708f0ec14d5915f7ebe9c8de0ffb5bfc6ad8f412"
@@ -4390,7 +4390,7 @@
       value: "109.230.231.37"
       context: null
       confidence: "CONFIRMED"
-      action: "BLOCK AT NETWORK PERIMETER IMMEDIATELY"
+      action: "BLOCK at network perimeter immediately"
       fp_risk: null
     - type: "sha256"
       value: "172258e53b9506a7671deab25d2ad360cd833a4942609f1a4836d305ffe4578b"
@@ -4503,7 +4503,7 @@
       value: "109.230.231.37"
       context: null
       confidence: "CONFIRMED"
-      action: "BLOCK AT NETWORK PERIMETER IMMEDIATELY"
+      action: "BLOCK at network perimeter immediately"
       fp_risk: null
     - type: "sha256"
       value: "072ce701ec0252eeddd6a0501555296bce512a7b90422addbb6d3619ae10f4ff"
@@ -6766,61 +6766,61 @@
       value: "221.150.15.104"
       context: null
       confidence: "DEFINITE"
-      action: "BLOCK AT PERIMETER FOR NON-KOREA-TELECOM DESTINATIONS; MONITOR ANY INBOUND OR OUTBOUND TO THIS IP FROM NON-DEVELOPER-CLASS HOSTS"
+      action: "Block at perimeter for non-Korea-Telecom destinations; monitor any inbound or outbound to this IP from non-developer-class hosts"
       fp_risk: null
     - type: "domain"
       value: "docs.openclaw.ai"
       context: null
       confidence: "DEFINITE"
-      action: "MONITOR FOR `WEBFETCH(DOMAIN:DOCS.OPENCLAW.AI)` PATTERN IN CLAUDE CODE PERMISSION ALLOWLISTS"
+      action: "Monitor for `WebFetch(domain:docs.openclaw.ai)` pattern in Claude Code permission allowlists"
       fp_risk: null
     - type: "domain"
       value: "lightmake.site"
       context: null
       confidence: "MODERATE"
-      action: "MONITOR DNS RESOLUTION + HTTPS CONNECTIONS FROM NON-DEVELOPER HOSTS"
+      action: "Monitor DNS resolution + HTTPS connections from non-developer hosts"
       fp_risk: null
     - type: "domain"
       value: "openclaw.ai"
       context: null
       confidence: "DEFINITE"
-      action: "MONITOR DNS RESOLUTION FROM SERVER-CLASS AND NON-DEVELOPER HOSTS; ALERT ON HTTPS CONNECTION FROM PRODUCTION ENDPOINTS"
+      action: "Monitor DNS resolution from server-class and non-developer hosts; alert on HTTPS connection from production endpoints"
       fp_risk: null
     - type: "url"
       value: "http://221.150.15.104:8080/"
       context: null
       confidence: "DEFINITE"
-      action: "BLOCK EGRESS FROM YOUR ESTATE"
+      action: "Block egress from your estate"
       fp_risk: null
     - type: "url"
       value: "https://openclaw.ai/install.sh"
       context: null
       confidence: "DEFINITE"
-      action: "BLOCK AT PROXY / EGRESS FILTER UNLESS OPENCLAW USE IS EXPLICITLY SANCTIONED IN YOUR ENVIRONMENT"
+      action: "Block at proxy / egress filter unless OpenClaw use is explicitly sanctioned in your environment"
       fp_risk: null
     - type: "path"
       value: "<project-root>/.claude/settings.local.json"
       context: null
       confidence: "DEFINITE"
-      action: "SWEEP DEVELOPER ENDPOINTS FOR `.CLAUDE/SETTINGS.LOCAL.JSON` UNDER REPOSITORY WORKING DIRECTORIES"
+      action: "Sweep developer endpoints for `.claude/settings.local.json` under repository working directories"
       fp_risk: null
     - type: "path"
       value: "~/.claude/settings.local.json"
       context: null
       confidence: "DEFINITE"
-      action: "ADD TO FILESYSTEM HUNT QUEUES ACROSS DEVELOPER-CLASS AND ADMIN-CLASS ENDPOINTS"
+      action: "Add to filesystem hunt queues across developer-class and admin-class endpoints"
       fp_risk: null
     - type: "path"
       value: "~/.openclaw/"
       context: null
       confidence: "DEFINITE"
-      action: "INVENTORY; SURFACE COMBINED CLAUDE CODE + OPENCLAW INSTALLATIONS FOR REVIEW"
+      action: "Inventory; surface combined Claude Code + OpenClaw installations for review"
       fp_risk: null
     - type: "path"
       value: "~/.openclaw/completions/openclaw.ps1"
       context: null
       confidence: "DEFINITE"
-      action: "INVENTORY + CORRELATE WITH POWERSHELL SESSION LOGS"
+      action: "Inventory + correlate with PowerShell session logs"
       fp_risk: null
   never_block_total: 0
   never_block_rows:
@@ -13243,9 +13243,6 @@
     - type: "sha1"
       value: "bc99a77a68f18005cac0c784a176d3199f735ecf"
       context: "GENUINE Wondershare cert; signs legitimate Wondershare DVD Creator and other products; adding to revocation feeds would block legit customers worldwide"
-    - type: "md5"
-      value: "059917fd7718808bc34be224e415216f"
-      context: "GENUINE Wondershare cert; signs legitimate Wondershare DVD Creator and other products; adding to revocation feeds would block legit customers worldwide"
     - type: "filename"
       value: "bugsplat.dll"
       context: "These hashes are GENUINE legitimate vendor binaries co-located in the operator bundle as camouflage. They have valid Authenticode signatures and exist in legitimate vendor distributions worldwide. DO NOT add to generic blocklists, flag only when found in operator drop paths (C:\\ProgramData\\adv_ctrl\\, %TEMP%\\is-*.tmp\\). Generic hash blocking would cause massive false positives across legitimate user populations."
@@ -13276,6 +13273,9 @@
     - type: "filename"
       value: "wsutilities.dll"
       context: "These hashes are GENUINE legitimate vendor binaries co-located in the operator bundle as camouflage. They have valid Authenticode signatures and exist in legitimate vendor distributions worldwide. DO NOT add to generic blocklists, flag only when found in operator drop paths (C:\\ProgramData\\adv_ctrl\\, %TEMP%\\is-*.tmp\\). Generic hash blocking would cause massive false positives across legitimate user populations."
+    - type: "pattern"
+      value: "059917FD7718808BC34BE224E415216F"
+      context: "certificate serial | GENUINE Wondershare cert; signs legitimate Wondershare DVD Creator and other products; adding to revocation feeds would block legit customers worldwide"
 "opendirectory-74-0-42-25-20260316":
   slug: "opendirectory-74-0-42-25-20260316"
   page_url: "/ioc-feeds/opendirectory-74-0-42-25-20260316/"
@@ -15557,7 +15557,7 @@
       value: "tralalarkefe.com"
       context: "Operator-controlled root domain; all subdomains operator-bound"
       confidence: "DEFINITE"
-      action: "BLOCK AT REGISTRAR LEVEL"
+      action: "BLOCK at registrar level"
       fp_risk: "low"
     - type: "url"
       value: "https://antipublic.one/api/v2/search"
@@ -15605,7 +15605,7 @@
       value: "geminicli@elated-gizmo-491112-k0.iam.gserviceaccount.com"
       context: "Operator's GCP service account for project elated-gizmo-491112-k0"
       confidence: "DEFINITE"
-      action: "REVOKE + AUDIT PROJECT"
+      action: "REVOKE + audit project"
       fp_risk: null
     - type: "path"
       value: "%LOCALAPPDATA%\\Microsoft\\WindowsUpdateManager.ps1"
@@ -19044,8 +19044,8 @@
     ipv4: 1
     md5: 3
     path: 3
-    pattern: 8
-    sha1: 3
+    pattern: 9
+    sha1: 2
     sha256: 2
     url: 2
   has_confidence: true
@@ -19091,12 +19091,6 @@
     - type: "sha256"
       value: "e2ad6f8202994058cc987cc971698238c2dc63a951dd1e43063cc9b8b138713b"
       context: "OneDriveSync.exe"
-      confidence: "DEFINITE"
-      action: null
-      fp_risk: "none"
-    - type: "sha1"
-      value: "659eeb5aa4a489fb238993af259d23f057f6d6d6"
-      context: "Fraudulent VMware code-signing certificate used to sign all campaign binaries"
       confidence: "DEFINITE"
       action: null
       fp_risk: "none"
@@ -19157,6 +19151,12 @@
     - type: "filename"
       value: "onedrivesync.exe"
       context: null
+      confidence: "DEFINITE"
+      action: null
+      fp_risk: "none"
+    - type: "pattern"
+      value: "659EEB5AA4A489FB238993AF259D23F057F6D6D6"
+      context: "certificate serial | Fraudulent VMware code-signing certificate used to sign all campaign binaries"
       confidence: "DEFINITE"
       action: null
       fp_risk: "none"
@@ -19597,7 +19597,7 @@
       value: "109.230.231.37"
       context: null
       confidence: "CONFIRMED"
-      action: "BLOCK AT NETWORK PERIMETER IMMEDIATELY"
+      action: "BLOCK at network perimeter immediately"
       fp_risk: null
     - type: "sha256"
       value: "18da271868c434494a68937fa12cb302d37b14849c4c0fc1db4007ac13c5b760"

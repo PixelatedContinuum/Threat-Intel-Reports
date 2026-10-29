@@ -363,7 +363,7 @@ test('confidence, action and fp_risk are carried from the indicator object, norm
   }] } });
   assert.equal(rows.length, 1);
   assert.equal(rows[0].confidence, 'HIGH', 'confidence is trimmed and upper-cased');
-  assert.equal(rows[0].action, 'BLOCK', 'action is trimmed and upper-cased');
+  assert.equal(rows[0].action, 'BLOCK', 'a single-word action is trimmed and upper-cased');
   assert.equal(rows[0].fp_risk, 'low', 'fp_risk is trimmed and lower-cased');
 });
 
@@ -463,7 +463,27 @@ test('an action that is a path or command is null, not a badge', function () {
   var byVal = {};
   r.rows.forEach(function (row) { byVal[row.value] = row; });
   assert.equal(byVal['HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Schedule\\TaskCache\\Tree\\RuntimeBroker'].action, null);
-  assert.equal(byVal['HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\Run'].action, 'BLOCK (AFTER VALIDATION)');
+  /* Multi-word: the feed's own case is kept (D8), so this reads as authored. */
+  assert.equal(byVal['HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\Run'].action, 'block (after validation)');
+});
+
+test('D8: a multi-word action keeps the feed\'s own case, a single word is upper-cased', function () {
+  var rows = X.extract({ network_indicators: { ipv4: [
+    { value: '203.0.113.30', action: 'Sweep endpoints for .claude/settings.local.json' },
+    { value: '203.0.113.31', action: 'Monitor for `WebFetch(domain:docs.openclaw.ai)` in allowlists' },
+    { value: '203.0.113.32', action: 'monitor' },
+    { value: '203.0.113.33', action: 'Block at perimeter; monitor inbound from non-developer hosts' }
+  ] } });
+  var byVal = {};
+  rows.forEach(function (r) { byVal[r.value] = r; });
+  /* Case is part of the text a defender reads: a hunt string inside an action
+     changed meaning when it was upper-cased (round-2 review, action case). */
+  assert.equal(byVal['203.0.113.30'].action, 'Sweep endpoints for .claude/settings.local.json');
+  assert.equal(byVal['203.0.113.31'].action,
+    'Monitor for `WebFetch(domain:docs.openclaw.ai)` in allowlists');
+  assert.equal(byVal['203.0.113.32'].action, 'MONITOR');
+  assert.equal(byVal['203.0.113.33'].action,
+    'Block at perimeter; monitor inbound from non-developer hosts');
 });
 
 test('a one-word FP risk is lower-cased, a sentence is kept as authored', function () {

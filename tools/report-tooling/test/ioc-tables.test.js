@@ -276,7 +276,8 @@ test('an action or fp_risk carrying a quote, a colon or a backslash survives YAM
     action: 'BLOCK: the "main" one', false_positive_risk: 'LOW, see ' + win }] } },
     { 'x-iocs.json': 'published' }, {});
   var doc = yaml.load(T.toYaml(r.tables));
-  assert.equal(doc.x.rows[0].action, 'BLOCK: THE "MAIN" ONE');
+  // A multi-word action keeps the feed's case (D8); single words are upper-cased.
+  assert.equal(doc.x.rows[0].action, 'BLOCK: the "main" one');
   // A multi-word fp_risk is kept as authored (only a one-word rating is lower-cased).
   assert.equal(doc.x.rows[0].fp_risk, 'LOW, see ' + win);
 });

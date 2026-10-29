@@ -41,7 +41,8 @@ function table(feeds) {
       lines.push('      value: ' + JSON.stringify(r[1]));
       lines.push('      context: null');
       lines.push('      confidence: null');
-      lines.push('      action: null');
+      /* r[2] is the action, when the case is about one (D2). */
+      lines.push('      action: ' + (r[2] ? JSON.stringify(r[2]) : 'null'));
       lines.push('      fp_risk: null');
     });
     lines.push('  never_block_rows:');
@@ -54,11 +55,13 @@ function table(feeds) {
   return lines.join('\n') + '\n';
 }
 
-function compare(before, after, feeds) {
+function compare(before, after, feeds, feedState) {
   var map = feeds || {};
-  return NL.compare(table(before), table(after), {
+  var opts = {
     readFeed: function (file) { return map[file] || null; }
-  });
+  };
+  if (feedState) opts.feedState = feedState;
+  return NL.compare(table(before), table(after), opts);
 }
 
 function keys(rows) {
@@ -174,6 +177,144 @@ test('a missing feed file makes the exemption unknown, never automatically safe'
   var r = compare(BASE, after, {});        // readFeed returns null for every file
   assert.equal(r.unexplained, 3, JSON.stringify(r.removed));
   assert.match(r.removed[0].detail, /no readable feed file/);
+});
+
+/* --- fix round 3 (2026-10-29): the lead's D2-D6 ---------------------------- */
+
+test('D2: a retype that keeps the action is still a retype', function () {
+  var before = {}; before[FEED] = { rows: [['ipv4', '198.51.100.7', 'BLOCK'],
+                                          ['filename', 'dump2.sh']] };
+  var after = {}; after[FEED] = { rows: [['pattern', '198.51.100.7', 'BLOCK'],
+                                         ['filename', 'dump2.sh']] };
+  var r = compare(before, after);
+  assert.equal(r.unexplained, 0, JSON.stringify(r.removed));
+  assert.equal(r.removed[0].reason, 'same-value-other-type');
+});
+
+test('D2: a retype that drops the action is UNEXPLAINED, and says "action lost"', function () {
+  var before = {}; before[FEED] = { rows: [['ipv4', '198.51.100.7', 'BLOCK']] };
+  var after = {}; after[FEED] = { rows: [['pattern', '198.51.100.7', null]] };
+  var r = compare(before, after);
+  assert.equal(r.unexplained, 1, JSON.stringify(r.removed));
+  assert.equal(r.removed[0].reason, 'unexplained');
+  assert.match(r.removed[0].detail, /^action lost/);
+});
+
+test('D2: the action comparison ignores case, because D8 stopped upper-casing multi-word actions', function () {
+  var before = {}; before[FEED] = { rows: [['ipv4', '198.51.100.7', 'BLOCK AT PERIMETER']] };
+  var after = {}; after[FEED] = { rows: [['pattern', '198.51.100.7', 'Block at perimeter']] };
+  var r = compare(before, after);
+  assert.equal(r.unexplained, 0, JSON.stringify(r.removed));
+});
+
+test('D2: a case change that drops the action is UNEXPLAINED too', function () {
+  var before = {}; before[FEED] = { rows: [['domain', 'C2.Example.Test', 'BLOCK']] };
+  var after = {}; after[FEED] = { rows: [['domain', 'c2.example.test', null]] };
+  var r = compare(before, after);
+  assert.equal(r.unexplained, 1, JSON.stringify(r.removed));
+  assert.match(r.removed[0].detail, /action lost/);
+});
+
+test('D6: a URL path case change is a different value, not a normalisation', function () {
+  var before = {}; before[FEED] = { rows: [['url', 'https://79.137.192.3/BellaMain/']] };
+  var after = {}; after[FEED] = { rows: [['url', 'https://79.137.192.3/bellamain/']] };
+  var r = compare(before, after);
+  assert.equal(r.unexplained, 1, JSON.stringify(r.removed));
+});
+
+test('D6: a filename, a path and a pattern compare case-sensitively', function () {
+  [['filename', 'BellaMain.zip', 'bellamain.zip'],
+   ['path', '/opt/App/run.sh', '/opt/app/run.sh'],
+   ['pattern', 'Server: ACME', 'server: acme']].forEach(function (c) {
+    var before = {}; before[FEED] = { rows: [[c[0], c[1]]] };
+    var after = {}; after[FEED] = { rows: [[c[0], c[2]]] };
+    var r = compare(before, after);
+    assert.equal(r.unexplained, 1, c[0] + ': ' + JSON.stringify(r.removed));
+  });
+});
+
+test('D6: a hash or a domain in another case is the same value', function () {
+  var before = {}, after = {};
+  before[FEED] = { rows: [['sha256', 'a'.repeat(64)], ['domain', 'C2.Example.Test']] };
+  after[FEED] = { rows: [['sha256', 'A'.repeat(64)], ['domain', 'c2.example.test']] };
+  var r = compare(before, after);
+  assert.equal(r.unexplained, 0, JSON.stringify(r.removed));
+  assert.equal(r.removed.filter(function (x) {
+    return x.reason === 'same-value-other-case';
+  }).length, 2);
+});
+
+test('D3: a feed block that disappears while its JSON is published is UNEXPLAINED', function () {
+  var after = { 'y-iocs.json': { rows: [['ipv4', '203.0.113.9']] } };
+  var r = compare(BASE, after, {}, function () {
+    return { exists: true, status: 'published' };
+  });
+  assert.equal(r.unexplained, 3, JSON.stringify(r.removed));
+  assert.equal(r.removed[0].reason, 'feed-dropped-while-published');
+  assert.equal(r.removed[0].rows, 3);
+  assert.match(r.removed[0].detail, /published/);
+});
+
+test('D3: an unknown status is not an excuse either', function () {
+  var after = { 'y-iocs.json': { rows: [['ipv4', '203.0.113.9']] } };
+  var r = compare(BASE, after, {}, function () {
+    return { exists: true, status: 'unknown' };
+  });
+  assert.equal(r.unexplained, 3, JSON.stringify(r.removed));
+});
+
+test('D3: an embargoed feed may lose its block, and is reported as withdrawn', function () {
+  var after = { 'y-iocs.json': { rows: [['ipv4', '203.0.113.9']] } };
+  var r = compare(BASE, after, {}, function () {
+    return { exists: true, status: 'embargoed' };
+  });
+  assert.equal(r.unexplained, 0, JSON.stringify(r.removed));
+  assert.equal(r.removed[0].reason, 'feed-withdrawn');
+  assert.match(r.removed[0].detail, /embargoed/);
+});
+
+test('D4: a previous side with no rows is NOT CHECKED, never a clean zero', function () {
+  assert.throws(function () {
+    NL.compare('{}\n', table(BASE));
+  }, /previous table has no rows/);
+  assert.throws(function () {
+    NL.compare('x: 1\n', table(BASE));
+  }, /previous table has no rows/);
+});
+
+test('D4: a new side with no rows FAILS even when every feed would be excused', function () {
+  var r = NL.compare(table(BASE), '{}\n', {});
+  assert.equal(r.after_rows, 0);
+  assert.equal(r.fatal.length, 1, JSON.stringify(r.fatal));
+  assert.match(r.fatal[0], /0 rows/);
+});
+
+test('D5: a free-text reason is not an exempt indicator value', function () {
+  /* The round-2 hole: `reason: "masscan"` exempted a row whose whole value was
+     "masscan". A reason describes a value; it is not one. */
+  var before = {}; before[FEED] = { rows: [['filename', 'masscan']] };
+  var after = {}; after[FEED] = { rows: [['ipv4', '203.0.113.9']] };
+  var feeds = {}; feeds[FEED] = { non_indicators: [{ value: '1.2.3.4', reason: 'masscan',
+                                                     note: 'masscan' }] };
+  var r = compare(before, after, feeds);
+  assert.equal(r.unexplained, 1, JSON.stringify(r.removed));
+  assert.equal(r.removed[0].value, 'masscan');
+});
+
+test('D5: the VALUES a group item carries are still exemptions', function () {
+  var before = {}; before[FEED] = {
+    rows: [['ipv4', '198.51.100.7'], ['url', 'https://the-hunters-ledger.com/reports/x/']]
+  };
+  var after = {}; after[FEED] = { rows: [['ipv4', '203.0.113.9']] };
+  var feeds = {}; feeds[FEED] = {
+    non_indicators: [{ values: ['198.51.100.7'], reason: 'scanner traffic' }],
+    metadata: { reference: [{ url: 'https://the-hunters-ledger.com/reports/x/',
+                              note: 'our own report' }] }
+  };
+  var r = compare(before, after, feeds);
+  assert.equal(r.unexplained, 0, JSON.stringify(r.removed));
+  assert.deepEqual(r.removed.map(function (x) { return x.reason; }).sort(),
+    ['metadata-reference', 'non-indicators']);
 });
 
 /* --- the corpus controls ------------------------------------------------- */

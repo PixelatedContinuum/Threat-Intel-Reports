@@ -118,14 +118,50 @@ design, and gain no rendered surface.
 
 It also enforces design v4 check 5, "IOC tables lose nothing": the regenerated table is
 compared row by row with the previously published one (`--against <file>`, or `git show
-HEAD:_data/ioc_tables.yml` by default) and a row that disappears FAILS unless it is the
-same value under another type or case, or the feed itself lists it in `non_indicators`,
-`explicitly_excluded` or `metadata.reference`. Regenerate-and-diff alone cannot see this:
-a generation that is correct and narrower matches the feeds perfectly while a hunt pivot
-goes missing, which is the direction the E7 work failed in twice. Every removed row is
-printed with its reason class and a count per class. `--after <file>` replaces the new
-side for reproducing a comparison and for the control that must fail; the staleness half
-still reads the real table, so a copy cannot make a stale table look current.
+HEAD:_data/ioc_tables.yml` by default) and a row that disappears FAILS unless one of the
+bounded excuses applies:
+
+- **the same value under another type or case, and the action survives.** The surviving
+  row must be in the same feed's block, and when the removed row carried an action the
+  surviving row must carry the same action (case-insensitive). A retype that drops
+  `BLOCK` is `UNEXPLAINED`, detail "action lost". Case-insensitive value matching is
+  allowed only for the hash types and `domain`/`hostname`: a URL, path, filename or
+  pattern is compared exactly, because a URL path's case is part of the URL.
+- **the feed itself says the value is not an indicator**, in `non_indicators`,
+  `explicitly_excluded` or `metadata.reference`. Only the indicator VALUE fields count:
+  string items, and the `value`/`values`/`indicator`/`url`/hash-shaped keys of object
+  items. `reason`, `note`, `description` and `warning` text never exempts a row.
+- **the whole feed is gone and that is legitimate**: its JSON is absent from `ioc-feeds/`,
+  or the feed is embargoed by `lib/catalog-status.js` (the generator's own rule). A feed
+  whose JSON is present and published (or whose status is `unknown`) that produces no
+  block is `UNEXPLAINED`, class "feed dropped while published". That is the shape an
+  extraction regression leaves, and regenerate-and-diff cannot see it.
+
+Regenerate-and-diff alone cannot see any of this: a generation that is correct and
+narrower matches the feeds perfectly while a hunt pivot goes missing, which is the
+direction the E7 work failed in twice. Every removed row is printed with its reason class
+and a count per class. The comparison runs whether or not the working table differs from
+HEAD, so a regeneration that removes a row is named on the "identical to HEAD" path too
+rather than left to the staleness half. `--after <file>` replaces the new side for
+reproducing a comparison and for the control that must fail; the staleness half still
+reads the real table, so a copy cannot make a stale table look current.
+
+**Zero is not a pass.** A previous side with no rows (an empty mapping, a scalar file, an
+entry with no rows) is NOT CHECKED, exit 2: there is no denominator, so "0 removed" would
+be a category error. A new side with 0 rows while the previous has rows FAILS even where
+each feed's disappearance would otherwise be excused.
+
+**Baseline boundary, stated.** The previous table is the last PUBLISHED one. A lossy table
+that is committed becomes the next run's baseline and this checker cannot see that
+(design-v4 check 5 decision D9, rejected as out of scope): enforcement is the pre-commit
+hook (`lib/staged-gate.js`) and publish step 1g, both of which run this checker before a
+table is committed or deployed. A HEAD with no `_data/ioc_tables.yml` yet (the first
+commit that adds one) is a stated SKIP, and a git failure is NOT CHECKED, never a pass.
+
+**Exemptions are read from the working-tree feed**, deliberately: a feed edit that adds an
+exclusion is a reviewed change to the feed in the same commit, and reading HEAD instead
+would let a working-tree exclusion excuse a row while the committed feed still calls it an
+indicator. The reviewer reads the feed diff alongside this gate's output.
 
 `node generate-actors.js` writes `_data/actors_index.yml`, one stub page per designation
 under `actors/<id>/` and, beside each stub, that actor's ATT&CK Navigator layer

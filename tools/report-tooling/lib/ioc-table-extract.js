@@ -133,26 +133,46 @@ function hashTypeOf(v) {
   return /^[0-9a-f]+$/i.test(t) ? (HASH_LEN_TYPE[t.length] || null) : null;
 }
 
+/* ---- CERTIFICATE SERIALS, ANYWHERE IN A FEED (fix round 3, D7) ----------------
+
+   A certificate entry IS its hash, and its serials are hunt pivots in their own
+   right: a certificate reader pastes a serial or a fingerprint into a hunting
+   query, and the previous collision search for a reissued listener runs on one or
+   the other.
+
+   Serial rows are typed `pattern`, NOT `sha1`. A 40-hex serial has a sha1's SHAPE
+   and nothing else: cert serials are commonly 8, 16, 20 or 32 hex bytes, so the
+   type would be a value-length accident, and a defender pasting one into a
+   file-hash hunt gets a guaranteed miss. `pattern` is the type this table already
+   gives an opaque hunt term, and it needs no new hue (see the palette note below).
+   Each serial row carries a field label, because the value is opaque: nothing else
+   on the row says what it is. The label describes the FIELD, not an analytic claim,
+   so it is not the generated commentary the context rules keep out.
+
+   THE KEY NAME DECIDES, NOT THE CONTAINER. Round 2 only reached serials inside
+   `tls_certificates`, so two real serials were typed by their length instead:
+   opendirectory-62-60's `hunt_only_never_block[].serial` (32 hex, an md5 row) and
+   sliver-open-directory's `certificate_serial` (40 hex, a sha1 row). A serial is a
+   serial wherever the feed writes it, so the rule lives at the top of take() and
+   applies to BOTH walks, including the never-block walk that is otherwise kept as
+   the original code path. Inside `tls_certificates` the labels stay specific
+   ("TLS certificate serial", "earlier serial"); anywhere else the label is the
+   generic "certificate serial". */
+var SERIAL_KEYS = { serial: true, earlier_serial: true, certificate_serial: true };
+
+function serialLabel(ctx) {
+  if (pathHas(ctx, 'tls_certificates')) {
+    return ctx[ctx.length - 1] === 'earlier_serial'
+      ? 'earlier serial' : 'TLS certificate serial';
+  }
+  return 'certificate serial';
+}
+
 function declaredKind(ctx, value) {
   var k = ctx.length ? ctx[ctx.length - 1] : null;
   if (!k) return null;
 
-  /* A certificate entry IS its hash, and its serials are hunt pivots in their own
-     right: a certificate reader pastes a serial or a fingerprint into a hunting
-     query, and the previous collision search for a reissued listener runs on one
-     or the other.
-
-     Serial rows are typed `pattern`, NOT `sha1`. A 40-hex serial has a sha1's
-     SHAPE and nothing else: cert serials are commonly 8, 16, 20 or 32 hex bytes,
-     so the type would be a value-length accident, and a defender pasting one into
-     a file-hash hunt gets a guaranteed miss. `pattern` is the type this table
-     already gives an opaque hunt term, and it needs no new hue (see the palette
-     note below). Both serial fields carry a field label, because the value is
-     opaque: nothing else on the row says what it is. The label describes the
-     FIELD, not an analytic claim, so it is not the generated commentary the
-     context rules keep out.
-
-     The subject, issuer, organization, key and validity window still describe the
+  /* The subject, issuer, organization, key and validity window describe the
      certificate rather than identify anything a defender hunts by, and stay out.
      (An entry's `value` field is left to the shape rule: the three feeds that use
      it beside a real `context` already carry a better label than any field name.) */
@@ -167,8 +187,6 @@ function declaredKind(ctx, value) {
     if (k === 'spki_sha256') {
       return { type: hashTypeOf(value) || 'sha256', label: 'TLS certificate SPKI fingerprint' };
     }
-    if (k === 'serial') return { type: 'pattern', label: 'TLS certificate serial' };
-    if (k === 'earlier_serial') return { type: 'pattern', label: 'earlier serial' };
     if (k === 'subject' || k === 'issuer' ||
         k === 'organization' || k === 'key' || k === 'valid_from' || k === 'valid_to') {
       return { skip: true };
@@ -453,8 +471,9 @@ var TYPE_ORDER = ['ipv4', 'domain', 'endpoint', 'url', 'sha256', 'sha1', 'md5',
    Scope is the nearest enclosing object, crossed through arrays but never
    through a nested object: a feed-level `metadata.confidence` must not become
    every row's confidence, and a value inside a sub-object of an indicator
-   object does not inherit the parent's rating either. Confidence and action
-   are upper-cased, a one-word fp_risk lower-cased, all trimmed; a missing,
+   object does not inherit the parent's rating either. Confidence is upper-cased;
+   a one-word action is upper-cased and a multi-word action keeps the feed's own
+   case (see actionOf, D8); a one-word fp_risk is lower-cased; all are trimmed; a missing,
    non-string or blank field is null (see actionOf and fpRiskOf below for the
    two values that are deliberately NOT carried). The corpus carries `false_positive_risk: true` on nine
    objects and that is null here rather than "true", because a boolean rating
@@ -532,15 +551,26 @@ function cutCommentaryTail(t) {
   return out || t;
 }
 
+/* CASE IS PART OF THE INSTRUCTION (fix round 3, D8). A one-word action is a
+   vocabulary term and is upper-cased so badges read alike: `block` is `BLOCK`. A
+   multi-word action is a sentence a defender reads, and the feed's own casing
+   carries meaning in it -- a hunt string inside it (`WebFetch(domain:...)`), a
+   product name, a path. Upper-casing it changed the text ("WEBFETCH(DOMAIN:...)"
+   for "WebFetch(domain:...)"), so the only normalisation a multi-word action gets
+   is the trim metaField() already applies. */
 function actionOf(v) {
   var t = metaField(v);
   if (!t) return null;
+  var text;
   if (ACTION_VERB_RX.test(t)) {
-    return t.length <= ACTION_MAXLEN ? cutCommentaryTail(t).toUpperCase() : null;
+    if (t.length > ACTION_MAXLEN) return null;
+    text = cutCommentaryTail(t);
+  } else {
+    if (ACTION_NOT_A_VERB.test(t)) return null;
+    if (t.length > 40) return null;
+    text = t;
   }
-  if (ACTION_NOT_A_VERB.test(t)) return null;
-  if (t.length <= 40) return t.toUpperCase();
-  return null;
+  return /\s/.test(text) ? text : text.toUpperCase();
 }
 
 /* `false_positive_risk` is usually a one-word rating (low, medium, high), which is
@@ -598,6 +628,17 @@ function runWalk(root, roleKeys, roleMaxLen, exempt, suppressBenign) {
     if (typeof raw !== 'string') return;
     var s = raw.trim();
     if (!s || s.length > 300) return;
+
+    /* A certificate serial is a row wherever the feed writes it, and in both
+       walks (D7; see SERIAL_KEYS). It is declared first because the resolved type
+       never depends on the value's shape: a 32-hex serial would otherwise be an
+       md5 and a 40-hex one a sha1, which is a length accident, not the fact. The
+       field label prefixes whatever context the entry carries, as it does for the
+       other declared kinds. */
+    if (ctx.length && SERIAL_KEYS[ctx[ctx.length - 1]]) {
+      var sl = serialLabel(ctx);
+      return push('pattern', s, role ? (sl + ' | ' + role) : sl, roleIsCaveat, meta);
+    }
 
     if (enhanced) {
       var kind = declaredKind(ctx, s);

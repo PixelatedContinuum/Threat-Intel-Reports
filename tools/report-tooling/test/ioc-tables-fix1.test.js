@@ -163,38 +163,59 @@ test('the certificate SHA-1 the review named is typed sha1', function () {
   assert.equal(r.context, 'TLS certificate fingerprint');
 });
 
-test('every certificate serial in the corpus is a pattern row, never a hash row', function () {
-  /* Denominator: every tls_certificates entry in every feed under ioc-feeds/, and
-     both serial fields on each. A serial is opaque hex of a length the feed chooses,
-     so it must not be typed by its shape. */
+test('every certificate serial in the corpus, under ANY key, is a pattern row with its label', function () {
+  /* Denominator: every `serial`, `earlier_serial` or `certificate_serial` string in
+     every feed under ioc-feeds/, wherever it sits. A serial is opaque hex of a
+     length the feed chooses, so it must not be typed by its shape: round 2 only
+     reached the `tls_certificates` container, which left one serial an md5 row
+     (opendirectory-62-60's never-block entry) and one a sha1 row
+     (sliver-open-directory's `certificate_serial`). Fix round 3, D7. */
+  var SERIAL_KEYS = { serial: true, earlier_serial: true, certificate_serial: true };
   var files = fs.readdirSync(FEED_DIR).filter(function (f) { return /-iocs\.json$/.test(f); });
   var checked = 0, bad = [];
   files.forEach(function (f) {
     var doc = JSON.parse(fs.readFileSync(path.join(FEED_DIR, f), 'utf8'));
-    function walk(o) {
+    var s = X.summarise(doc);
+    var all = s.rows.concat(s.neverBlockRows);
+    function walk(o, ctx) {
       if (!o || typeof o !== 'object') return;
+      if (Array.isArray(o)) { o.forEach(function (x) { walk(x, ctx); }); return; }
       Object.keys(o).forEach(function (k) {
-        if (k === 'tls_certificates' && Array.isArray(o[k])) {
-          var rows = X.summarise(doc).rows;
-          o[k].forEach(function (cert) {
-            ['serial', 'earlier_serial'].forEach(function (field) {
-              if (typeof cert[field] !== 'string') return;
-              checked++;
-              var hits = rows.filter(function (r) { return r.value === cert[field].trim(); });
-              var want = field === 'serial' ? 'TLS certificate serial' : 'earlier serial';
-              if (hits.length !== 1 || hits[0].type !== 'pattern' || hits[0].context !== want) {
-                bad.push(f + ': ' + field + ' ' + cert[field] + ' -> ' + JSON.stringify(hits));
-              }
-            });
-          });
+        var v = o[k];
+        if (SERIAL_KEYS[k] && typeof v === 'string' && v.trim()) {
+          checked++;
+          var hits = all.filter(function (r) { return r.value === v.trim(); });
+          var inCerts = ctx.indexOf('tls_certificates') !== -1;
+          var want = !inCerts ? 'certificate serial'
+            : (k === 'earlier_serial' ? 'earlier serial' : 'TLS certificate serial');
+          if (hits.length !== 1 || hits[0].type !== 'pattern' ||
+              String(hits[0].context || '').indexOf(want) !== 0) {
+            bad.push(f + ': ' + k + ' ' + v + ' -> ' + JSON.stringify(hits));
+          }
         }
-        walk(o[k]);
+        walk(v, ctx.concat([k]));
       });
     }
-    walk(doc);
+    walk(doc, []);
   });
-  assert.ok(checked >= 3, 'denominator collapsed: ' + checked + ' certificate serials');
+  assert.ok(checked >= 5, 'denominator collapsed: ' + checked + ' certificate serials');
   assert.deepEqual(bad, []);
+});
+
+test('the two serials outside tls_certificates are pattern rows, and keep their entry context', function () {
+  /* opendirectory-62-60 hunt_only_never_block[20].serial: 32 hex, previously typed
+     md5, in the never-block block (which the other declared kinds do not walk). */
+  var nb = summarise('opendirectory-62-60-237-100-20260506').neverBlockRows
+    .filter(function (r) { return r.value === '059917FD7718808BC34BE224E415216F'; })[0];
+  assert.ok(nb, 'the never-block certificate serial is not a row');
+  assert.equal(nb.type, 'pattern');
+  assert.match(nb.context, /^certificate serial \| GENUINE Wondershare cert/);
+  /* sliver-open-directory host_indicators.certificates[0].certificate_serial: 40 hex,
+     previously typed sha1. */
+  var sl = rowOf(summarise('sliver-open-directory').rows,
+    'pattern', '659EEB5AA4A489FB238993AF259D23F057F6D6D6');
+  assert.ok(sl, 'the certificate_serial is not a pattern row');
+  assert.match(sl.context, /^certificate serial \| /);
 });
 
 test('a certificate SPKI fingerprint says which fingerprint it is', function () {
@@ -216,12 +237,13 @@ test('the three korean-claude-openclaw instructions are carried, verb-led, dots 
     assert.ok(r, t + ' ' + want[t] + ' is not a row');
     assert.ok(r.action, t + ' ' + want[t] + ' has no action');
   });
-  assert.match(rowOf(rows, 'path', '<project-root>/.claude/settings.local.json').action, /^SWEEP /);
+  assert.match(rowOf(rows, 'path', '<project-root>/.claude/settings.local.json').action, /^Sweep /);
 });
 
 test('a verdict badge is the instruction, not a sentence: the two commentary tails are cut', function () {
   var korean = summarise('korean-claude-openclaw-221.150.15.104').rows;
-  assert.equal(rowOf(korean, 'url', 'http://221.150.15.104:8080/').action, 'BLOCK EGRESS FROM YOUR ESTATE');
+  /* Fed case is kept on a multi-word action (D8, fix round 3). */
+  assert.equal(rowOf(korean, 'url', 'http://221.150.15.104:8080/').action, 'Block egress from your estate');
   var opendir = summarise('opendirectory-79-137-192-3-20260515').rows;
   var p = opendir.filter(function (r) {
     return r.type === 'path' && /InstallUtil\.exe$/.test(r.value);
@@ -245,9 +267,13 @@ test('actionOf: verb-led text keeps separators, SUSPEND is a verb, a command sta
     }
   };
   var rows = X.summarise(doc).rows;
-  assert.equal(rowOf(rows, 'ipv4', '203.0.113.9').action, 'SUSPEND + CROSS-REFERENCE WITH EXAMPLE-STACK');
+  /* Fixed round 3 (D8): a multi-word action keeps the feed's own case, so a hunt
+     string inside it ("WebFetch(domain:...)") is not shouted into a different
+     value; a single-word action is upper-cased as a vocabulary term. */
+  assert.equal(rowOf(rows, 'ipv4', '203.0.113.9').action,
+    'Suspend + cross-reference with example-stack');
   assert.equal(rowOf(rows, 'ipv4', '203.0.113.10').action,
-    'SWEEP ENDPOINTS FOR .CLAUDE/SETTINGS.LOCAL.JSON UNDER WORKING DIRECTORIES');
+    'Sweep endpoints for .claude/settings.local.json under working directories');
   assert.equal(rowOf(rows, 'ipv4', '203.0.113.11').action, 'BLOCK EGRESS FROM YOUR ESTATE');
   assert.equal(rowOf(rows, 'ipv4', '203.0.113.12').action, null);
   assert.equal(rowOf(rows, 'ipv4', '203.0.113.13').action, 'HUNT');
