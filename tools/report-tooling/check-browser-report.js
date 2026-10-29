@@ -19,6 +19,8 @@
    named, never a pass.
 
    Run: node check-browser-report.js [slug] [--shots <dir>] [--md <report.md>]
+        `--md` must be followed by a path: with none it is a usage error (exit 2),
+        never a silent fallback to the site or vault copy (fix round 2, D4).
    Env: HL_CHROME, HL_SITE_BASE */
 
 var path = require('node:path');
@@ -34,7 +36,20 @@ var si = args.indexOf('--shots');
 if (si > -1) { shotsDir = args[si + 1]; args.splice(si, 2); }
 var mdArg = null;
 var mi = args.indexOf('--md');
-if (mi > -1) { mdArg = args[mi + 1]; args.splice(mi, 2); }
+if (mi > -1) {
+  mdArg = args[mi + 1];
+  /* `--md` as the last argument used to leave mdArg undefined, the truthiness
+     test at readAuthored fell through, and the gate compared against whichever
+     copy happened to resolve instead of the file the caller named (review 2,
+     A11). A named file that is not named is a usage error. */
+  if (!mdArg || /^--/.test(mdArg)) {
+    console.log('usage: node check-browser-report.js [slug] [--shots <dir>] [--md <report.md>]');
+    console.log('NOT CHECKED  --md was given with no path after it, so the file the caller ' +
+      'meant to compare against is unknown; nothing was compared.');
+    process.exit(2);
+  }
+  args.splice(mi, 2);
+}
 var slug = args[0] || null;
 
 function notChecked(reason) {
@@ -106,41 +121,154 @@ function pickSlug() {
   return best;
 }
 
-/* ---------- the authored report (fix round 1) ----------
+/* ---------- the authored report (fix rounds 1 and 2) ----------
 
    The tabbed page cannot be its own expectation. At 8a44adf the gate took the
    expected section list and order from the page's own `--rv-order` blocks, so a
    section deleted from the source (round-1 mutant 1) and two sections swapped in
    the source (mutant 2) both PASSed 51/51: the page agreed with itself. The
    authored markdown is the record of what the report says, so the expected
-   sections, their order and every h2/h3 id are read from it.
+   sections, their order, every h2/h3 id, every heading's text and every h3's
+   parent section are read from it.
 
-   Resolution order: `--md <path>` (an explicit file always wins and is an error
-   when absent), then `reports/<slug>/index.md` in this checkout, then the vault
-   copy `threat-intel-vault/reports/<slug>/index.md` one level above the site
-   repository. Each row says which path was read, because a gate that silently
-   compared against the wrong file is the failure this whole branch exists to
-   avoid. When no markdown resolves, the authored-order rows are NOT CHECKED with
-   that reason; they are never satisfied from the page itself. */
-function authoredPath(s) {
-  if (mdArg) return { path: mdArg, explicit: true };
-  var site = path.join(ROOT, 'reports', s, 'index.md');
-  if (fs.existsSync(site)) return { path: site, explicit: false };
-  var vault = path.join(ROOT, '..', '..', 'threat-intel-vault', 'reports', s, 'index.md');
-  if (fs.existsSync(vault)) return { path: vault, explicit: false };
+   RESOLUTION ORDER (fix round 2, D3): `--md <path>` when given, then THE VAULT
+   COPY `threat-intel-vault/reports/<slug>/index.md`, then this checkout's site
+   copy `reports/<slug>/index.md`. The vault copy is the authored record the site
+   copy is built from, so it wins: the round-2 review (A8) showed that a markdown
+   copy which had already lost a section compared clean against the page built
+   from it. The site copy is used only when no vault copy exists (the
+   `-tabbed-preview` slug), and the authored line says `expectation from the site
+   copy; no vault copy` so that is visible rather than assumed.
+
+   When BOTH copies exist their bodies must agree line for line, front matter and
+   the `{: .hl-tab-…}` lines stripped from each (the vault copy carries tags the
+   site copy may not yet): a copy-stage loss is invisible to a page built from the
+   same copy, so the gate FAILs naming the first differing line.
+
+   Every row that depends on the authored report is NOT CHECKED when no markdown
+   resolves, never satisfied from the page's own sections (fix round 2, D2). */
+
+var TAB_IAL_LINE = /^\s*\{:\s*\.hl-tab-[a-z]+\s*\}\s*$/;
+
+function reportPaths(s) {
+  return {
+    site: path.join(ROOT, 'reports', s, 'index.md'),
+    vault: path.join(ROOT, '..', '..', 'threat-intel-vault', 'reports', s, 'index.md')
+  };
+}
+
+function splitFrontMatter(md) {
+  var text = String(md);
+  var m = text.match(/^---\r?\n[\s\S]*?\r?\n---[ \t]*(?:\r?\n|$)/);
+  if (!m) return { body: text, offset: 0 };
+  return { body: text.slice(m[0].length), offset: (m[0].match(/\n/g) || []).length };
+}
+
+/* The body as numbered lines, with the two things that legitimately differ
+   between the site copy and the vault copy removed: the front matter and the
+   `{: .hl-tab-…}` line under each heading. Trailing whitespace is not content;
+   everything else is compared byte for byte. */
+function bodyLines(md) {
+  var fm = splitFrontMatter(md);
+  var out = [];
+  String(fm.body).split(/\r?\n/).forEach(function (line, i) {
+    if (TAB_IAL_LINE.test(line)) return;
+    out.push({ line: fm.offset + i + 1, text: line.replace(/\s+$/, '') });
+  });
+  return out;
+}
+
+function firstBodyDifference(siteLines, vaultLines) {
+  var n = Math.max(siteLines.length, vaultLines.length);
+  for (var i = 0; i < n; i++) {
+    var s = siteLines[i] ? siteLines[i].text : undefined;
+    var v = vaultLines[i] ? vaultLines[i].text : undefined;
+    if (s === v) continue;
+    return {
+      bodyLine: i + 1,
+      siteLine: siteLines[i] ? siteLines[i].line : null,
+      vaultLine: vaultLines[i] ? vaultLines[i].line : null,
+      site: s,
+      vault: v
+    };
+  }
   return null;
 }
 
+/* Both sides of a heading-text comparison go through the same normaliser:
+   kramdown renders inline constructs to text and converts straight quotes to
+   typographic ones, so "the Bank's Own Proxy" in the markdown and "the Bank’s
+   Own Proxy" on the page are the same heading. Formatting is what this drops;
+   the words, digits and punctuation have to survive it unchanged. */
+var TYPOGRAPHIC = {
+  '\u2018': "'", '\u2019': "'", '\u201a': "'", '\u201b': "'",
+  '\u201c': '"', '\u201d': '"', '\u201e': '"', '\u201f': '"',
+  '\u2013': '-', '\u2014': '-', '\u2026': '...', '\u00a0': ' '
+};
+
+function normaliseHeadingText(s) {
+  var t = String(s == null ? '' : s);
+  t = t.replace(/!\[([^\]]*)\]\([^)]*\)/g, '$1');   // image -> its alt text
+  t = t.replace(/\[([^\]]*)\]\([^)]*\)/g, '$1');     // link -> its label
+  t = t.replace(/\[([^\]]*)\]\[[^\]]*\]/g, '$1');    // reference link -> label
+  t = t.replace(/\[\^[^\]]*\]/g, '');                // footnote marker
+  t = t.replace(/`([^`]*)`/g, '$1');                 // inline code -> its text
+  t = t.replace(/<[^>]+>/g, '');                     // inline html
+  t = t.replace(/\*\*([^*]+)\*\*/g, '$1')
+    .replace(/__([^_]+)__/g, '$1')
+    .replace(/\*([^*]+)\*/g, '$1');
+  t = t.replace(/(^|[\s(])_([^_]+)_(?=[\s).,;:!?]|$)/g, '$1$2');
+  t = t.replace(/&nbsp;/g, ' ').replace(/&amp;/g, '&').replace(/&lt;/g, '<')
+    .replace(/&gt;/g, '>').replace(/&quot;/g, '"').replace(/&#39;/g, "'");
+  t = t.replace(/[\u2018\u2019\u201a\u201b\u201c\u201d\u201e\u201f\u2013\u2014\u2026\u00a0]/g,
+    function (c) { return TYPOGRAPHIC[c]; });
+  return t.replace(/\s+/g, ' ').trim();
+}
+
 function readAuthored(s) {
-  var where = authoredPath(s);
-  if (!where) return { path: null, error: 'no report markdown found (--md, reports/' + s +
-    '/index.md, or the vault copy)' };
-  if (!fs.existsSync(where.path)) {
-    return { path: where.path, error: 'the --md file does not exist' };
+  var where = reportPaths(s);
+  var chosen = null, source = null, note = '';
+  if (mdArg) {
+    if (!fs.existsSync(mdArg)) return { path: mdArg, source: 'md', error: 'the --md file does not exist' };
+    chosen = mdArg; source = 'md';
+    note = 'expectation from --md ' + mdArg;
+  } else if (fs.existsSync(where.vault)) {
+    chosen = where.vault; source = 'vault';
+    note = 'expectation from the vault copy ' + where.vault;
+  } else if (fs.existsSync(where.site)) {
+    chosen = where.site; source = 'site';
+    note = 'expectation from the site copy; no vault copy';
+  } else {
+    return {
+      path: null, source: null,
+      error: 'no report markdown found (--md, the vault copy or reports/' + s + '/index.md)'
+    };
   }
+
   var md;
-  try { md = fs.readFileSync(where.path, 'utf8'); }
-  catch (e) { return { path: where.path, error: 'could not be read: ' + e.message }; }
+  try { md = fs.readFileSync(chosen, 'utf8'); }
+  catch (e) { return { path: chosen, source: source, error: 'could not be read: ' + e.message }; }
+
+  /* The site copy against the vault copy, when both are present. An explicit
+     --md is a deliberate choice of a different file (the probes point it at a
+     doctored copy on purpose), so it never enters this comparison. */
+  var compare = null;
+  if (source === 'vault' && fs.existsSync(where.site)) {
+    var siteMd = null, siteError = null;
+    try { siteMd = fs.readFileSync(where.site, 'utf8'); }
+    catch (e) { siteError = e.message; }
+    compare = siteError
+      ? { readable: false, error: siteError, sitePath: where.site, vaultPath: where.vault, diff: null }
+      : {
+        readable: true, sitePath: where.site, vaultPath: where.vault,
+        diff: firstBodyDifference(bodyLines(siteMd), bodyLines(md))
+      };
+    if (compare.diff) {
+      note += '; the site copy DIFFERS at body line ' + compare.diff.bodyLine;
+    } else if (compare.readable) {
+      note += '; the site copy matches it';
+    }
+  }
 
   var all = KS.headings(md);
   var h2 = all.filter(function (h) { return h.level === 2; });
@@ -152,11 +280,27 @@ function readAuthored(s) {
     tabs = {};
     scan.headings.forEach(function (h, i) { if (h.tab) tabs[h2[i].slug] = h.tab; });
   }
+  /* Which section each h3 sits in, taken in document order: the authored h3
+     belongs to the nearest preceding h2 (D8). */
+  var parents = {};
+  var currentH2 = null;
+  all.forEach(function (h) {
+    if (h.level === 2) { currentH2 = h.slug; return; }
+    if (h.level === 3 && currentH2) parents[h.slug] = currentH2;
+  });
+  var text = {};
+  ids.forEach(function (h) { text[h.slug] = h.text; });
   return {
-    path: where.path,
-    explicit: where.explicit,
+    path: chosen,
+    source: source,
+    note: note,
+    sitePath: where.site,
+    vaultPath: where.vault,
+    compare: compare,
     h2: h2.map(function (h) { return h.slug; }),
     ids: ids.map(function (h) { return h.slug; }),
+    text: text,
+    parents: parents,
     tabs: tabs,
     sections: scan.headings.map(function (h, i) {
       return { text: h.text, tab: h.tab || null, id: h2[i] ? h2[i].slug : null };
@@ -212,15 +356,29 @@ function check(name, pass, detail) {
    panels and views are built by hl-report-tabs.js at runtime, so a check that
    read the fetched HTML would be reading the inputs and calling them output.
 
-   THE REPORT IS THE EXPECTATION, NOT THE PAGE (fix round 1). The expected
-   section list, its order, and every h2/h3 id come from the authored markdown
-   (`--md`, else `reports/<slug>/index.md`, else the vault copy), never from the
-   page's own `--rv-order` or its DOM: at 8a44adf a section deleted from the
-   source and two sections swapped in the source both PASSed, because the gate
-   compared the page with itself. When no markdown resolves, the authored-order
-   rows are NOT CHECKED with that reason. The deep-link sampler reads each panel's
-   first `h2` without an `[id]` filter and FAILs when that heading has no id,
-   rather than skipping to the next heading that has one. */
+   THE REPORT IS THE EXPECTATION, NOT THE PAGE (fix rounds 1 and 2). The expected
+   section list, its order, every h2/h3 id, every heading's text, every h3's
+   parent section and every section's tab come from the authored markdown
+   (`--md`, else the vault copy, else the site copy), never from the page's own
+   `--rv-order` or its DOM: at 8a44adf a section deleted from the source and two
+   sections swapped in the source both PASSed, because the gate compared the page
+   with itself. When no markdown resolves, every row that depends on it (sections,
+   ids, order, print, deep links, tab assignment, heading text, h3 parents) is
+   NOT CHECKED with that reason; none of them is satisfied from the page. The
+   deep-link sampler reads each panel's first `h2` without an `[id]` filter and
+   FAILs when that heading has no id, rather than skipping to the next heading
+   that has one.
+
+   NOTHING LOST, NOTHING HIDDEN, NOTHING MOVED (fix round 2, D5 to D8). The page
+   may not lose a section from view (one-page mode must paint every authored h2
+   and every block up to the next h2: no display:none, no visibility
+   hidden/collapse, no zero opacity on it or an ancestor, no zero-sized box, not
+   moved outside the document), may not move a section into another tab (the
+   `hl-tab-` line under each h2 says which panel its heading must be in), may not
+   rename a heading while keeping its id (authored text against page text), and
+   may not move an h3 into another section (authored parent against page parent).
+   Closed `<details>` bodies are exempt from the render check, as in
+   check-report-text.js: the reader opens the teardown. */
 
 var TAB_TOKENS = ['overview', 'victims', 'chain', 'timeline', 'attribution', 'indicators', 'confidence'];
 /* 4a's four mobile sizes plus the desktop one 5.4 names. Order matters only for
@@ -288,6 +446,59 @@ var OVERFLOW_EXPR = '(function(){' +
   'left:Math.round(r.left),right:Math.round(r.right)});}' +
   'return {client:client,scrollW:de.scrollWidth,scrollX:sx,escaped:escaped.length,' +
   'first:escaped.slice(0,4)};})()';
+
+/* Every authored section, rendered, in one-page mode (fix round 2, D5).
+
+   The round-2 probes hid one section four ways and all four PASSed 53/53: the
+   body under a `display:none` heading (x1), the block under `visibility:hidden`
+   (x2), the block at `opacity:0` (x3), and the block moved to `left:-10000px`
+   (x4). Each read only asked whether the heading had a box, so a section whose
+   text the reader cannot see was counted as shown.
+
+   So each `.hl-rv-source` block is measured as a whole -- its h2 and every
+   sibling up to the next h2, which is exactly what the tab script put in one
+   wrapper -- and every one of those elements must be painted:
+
+   - display is not `none` on it or any ancestor (display does not inherit, so
+     the walk is what catches a hidden wrapper);
+   - its own computed `visibility` is neither `hidden` nor `collapse`
+     (visibility DOES inherit, so the computed value already reflects the
+     ancestors, and an explicit `visibility:visible` below a hidden ancestor is
+     correctly not a defect);
+   - the product of `opacity` up the chain is above 0 (opacity does not inherit);
+   - it has a non-zero box, and it is not entirely outside the document's
+     horizontal extent (a block parked at left:-10000px has right <= 0).
+
+   Closed `<details>` bodies are exempt by construction: only the top-level
+   blocks of a section are measured, and a closed teardown's own `<summary>` and
+   box are rendered while its body is the reader's to open (check-report-text.js
+   exempts the same nodes). Blocks are listed rather than sampled, because a
+   gate that prints four of thirty-two failures is how the round-2 review found
+   the overflow row hiding rows. */
+var SECTION_RENDER_EXPR = '(function(){' +
+  'var client=document.documentElement.clientWidth;' +
+  'function why(el){' +
+  'var out=[];' +
+  'for(var a=el;a;a=a.parentElement){var cs=getComputedStyle(a);' +
+  'var who=(a===el?"itself":a.tagName.toLowerCase()+(a.id?"#"+a.id:""));' +
+  'if(cs.display==="none")out.push("display:none on "+who);}' +
+  'var own=getComputedStyle(el);' +
+  'if(own.visibility==="hidden"||own.visibility==="collapse")out.push("visibility:"+own.visibility);' +
+  'var op=1;for(var b=el;b;b=b.parentElement){var c2=getComputedStyle(b);' +
+  'op*=parseFloat(c2.opacity);if(!(op>0)){out.push("opacity "+c2.opacity+" on "+(b===el?"itself":b.tagName.toLowerCase()+(b.id?"#"+b.id:"")));break;}}' +
+  'var r=el.getBoundingClientRect();' +
+  'if(r.width<=0&&r.height<=0)out.push("no box (0x0)");' +
+  'else if(r.right<=0||r.left>=client)out.push("outside the document horizontally ("+Math.round(r.left)+".."+Math.round(r.right)+" of 0.."+client+")");' +
+  'return out;}' +
+  'var out={client:client,sections:{},count:0};' +
+  '[].slice.call(document.querySelectorAll(".hl-rv-source")).forEach(function(block){' +
+  'var h=block.querySelector("h2");if(!h||!h.id)return;' +
+  'var kids=[].slice.call(block.children),bad=[];' +
+  'kids.forEach(function(el){var rs=why(el);if(!rs.length)return;' +
+  'bad.push((el===h?"heading":el.tagName.toLowerCase()+(el.className?"."+String(el.className).split(" ")[0]:""))+" ("+rs.join(", ")+")");});' +
+  'out.count++;out.sections[h.id]={blocks:kids.length,bad:bad};});' +
+  'return out;})()';
+
 
 /* 44 px targets in chrome, measured the same way part 1 measured 1,562 of them:
    every rendered control inside a [data-rv-chrome] region plus the tab bar,
@@ -406,19 +617,54 @@ async function tabbedChecks(page, opts) {
     return;
   }
 
-  /* ---- the authored report is the expectation (fix round 1) --------------
+  /* ---- the authored report is the expectation (fix rounds 1 and 2) -------
      Read once, before any tab state changes: which sections exist, in what
-     order, and every heading id. A section deleted from the source or two
+     order, every heading id and text, which panel each heading was put in, and
+     which section each h3 sits in. A section deleted from the source or two
      sections swapped in the source leave the page perfectly self-consistent,
      which is exactly why the page's own order cannot be the expectation. */
   var pageHeads = await page.json('(function(){' +
+    'function headText(h){var t="";' +
+    '[].slice.call(h.childNodes).forEach(function(n){' +
+    'if(n.nodeType===3){t+=n.nodeValue;return;}' +
+    'if(n.nodeType!==1)return;' +
+    'if(n.matches(".hl-rv-permalink,[data-rv-chrome]"))return;' +
+    't+=n.textContent;});return t.replace(/\\s+/g," ").trim();}' +
     'var hs=[].slice.call(document.querySelectorAll(".hl-rv-source h2"));' +
     'var ids=[].slice.call(document.querySelectorAll(".hl-rv-source [id]"));' +
+    'var text={},section={},panel={},heads=[];' +
+    '[].slice.call(document.querySelectorAll(".hl-rv-source h2[id],.hl-rv-source h3[id]"))' +
+    '.forEach(function(h){heads.push(h.id);' +
+    'text[h.id]=headText(h);' +
+    'var b=h.closest(".hl-rv-source");var bh=b?b.querySelector("h2"):null;' +
+    'section[h.id]=bh?bh.id:null;' +
+    'var p=h.closest(".hl-rv-panel");panel[h.id]=p?p.id.replace(/^tab-/,""):null;});' +
     'return {h2:hs.map(function(h){return h.id||null;}),' +
     'h2text:hs.map(function(h){return (h.textContent||"").trim().slice(0,70);}),' +
-    'allIds:ids.map(function(e){return e.id;}),' +
-    'sources:document.querySelectorAll(".hl-rv-source").length};})()');
+    'allIds:ids.map(function(e){return e.id;}),heads:heads,text:text,section:section,' +
+    'panel:panel,sources:document.querySelectorAll(".hl-rv-source").length};})()');
   var authored = opts.authored;
+  var noAuthoredReason = (authored && authored.error) || 'no markdown path resolved for this slug';
+
+  /* D3: when the vault copy is the expectation, the site copy must match it. A
+     page built from a copy that already lost a section agrees with itself. */
+  if (authored && authored.compare && authored.compare.readable === false) {
+    check('NOT CHECKED: the site copy of the report matches the vault copy line for line', false,
+      'the site copy ' + authored.compare.sitePath + ' exists but could not be read: ' +
+      authored.compare.error + ', so the two copies were not compared');
+  } else if (authored && authored.compare) {
+    var cmp = authored.compare;
+    check('the site copy of the report matches the vault copy line for line', !cmp.diff,
+      cmp.diff
+        ? 'the site copy ' + cmp.sitePath + ' differs from the vault copy ' + cmp.vaultPath +
+          ' at body line ' + cmp.diff.bodyLine + ' (site line ' + cmp.diff.siteLine +
+          ', vault line ' + cmp.diff.vaultLine + '): site says ' +
+          JSON.stringify(cmp.diff.site === undefined ? '(nothing)' : cmp.diff.site) +
+          ', the vault says ' + JSON.stringify(cmp.diff.vault === undefined ? '(nothing)' : cmp.diff.vault)
+        : 'both copies agree line for line: ' + cmp.sitePath + ' and ' + cmp.vaultPath +
+          ', front matter and hl-tab lines stripped');
+  }
+
   if (authored && authored.h2 && authored.h2.length) {
     var missH2 = authored.h2.filter(function (id) { return pageHeads.h2.indexOf(id) === -1; });
     var dupH2 = authored.h2.filter(function (id) { return countOf(pageHeads.h2, id) > 1; });
@@ -446,10 +692,87 @@ async function tabbedChecks(page, opts) {
           ' (an old link to it is dead). ' : '') +
       (dupHeads.length ? 'repeated id(s): ' + dupHeads.join(', ') + '. ' : '') +
       authored.ids.length + ' authored h2/h3 ids, ' + pageHeads.allIds.length + ' ids in the article');
+
+    /* D7: the heading with an id must still SAY what the report says. A renamed
+       heading keeps its anchor and reads as a de-identified or re-scoped section
+       (round-2 probe x6 changed "17. Notification" to "17. Alerts"). */
+    var textChecked = 0, textBad = [];
+    authored.ids.forEach(function (id) {
+      if (pageHeads.text[id] === undefined) return; // the id row above already names the absence
+      textChecked++;
+      var want = normaliseHeadingText(authored.text[id]);
+      var got = normaliseHeadingText(pageHeads.text[id]);
+      if (want !== got) {
+        textBad.push('#' + id + ': the report says ' + JSON.stringify(authored.text[id]) +
+          ', the page says ' + JSON.stringify(pageHeads.text[id]));
+      }
+    });
+    check('every authored heading reads the same as the page heading with that id',
+      textBad.length === 0,
+      textChecked + ' of ' + authored.ids.length + ' authored h2/h3 headings read' +
+      (textBad.length ? ': ' + textBad.length + ' renamed: ' + textBad.join(' | ') : ''));
+
+    /* D8: an h3 belongs to the h2 above it. Round-2 probe x8 moved "Where to
+       look first" into section 17 and the page still passed, because presence
+       was all that was asked. */
+    var parentChecked = 0, parentBad = [];
+    Object.keys(authored.parents).forEach(function (id) {
+      if (pageHeads.section[id] === undefined) {
+        parentBad.push('#' + id + ': not on the page at all');
+        return;
+      }
+      parentChecked++;
+      if (pageHeads.section[id] !== authored.parents[id]) {
+        parentBad.push('#' + id + ': the report puts it under "' + authored.parents[id] +
+          '", the page puts it under "' + (pageHeads.section[id] || '(no section)') + '"');
+      }
+    });
+    check('every authored h3 sits under its own section on the page',
+      parentBad.length === 0,
+      parentChecked + ' of ' + Object.keys(authored.parents).length + ' authored h3 parents read' +
+      (parentBad.length ? ': ' + parentBad.join(' | ') : ''));
+
+    /* D6: the `{: .hl-tab-<token>}` line under each h2 names the panel its
+       heading must be in. Round-2 probe x5 swapped one section's tab class and
+       the page PASSed: presence and order were asked, membership was not. */
+    if (authored.tabs) {
+      var tagged = authored.h2.filter(function (id) { return !!authored.tabs[id]; });
+      var untagged = authored.h2.filter(function (id) { return !authored.tabs[id]; });
+      var tabBad = [];
+      tagged.forEach(function (id) {
+        if (pageHeads.panel[id] === undefined) {
+          tabBad.push('#' + id + ': not on the page at all');
+          return;
+        }
+        if (pageHeads.panel[id] !== authored.tabs[id]) {
+          tabBad.push('#' + id + ': the report puts it in the ' + authored.tabs[id] +
+            ' tab, the page puts it in ' +
+            (pageHeads.panel[id] ? 'the ' + pageHeads.panel[id] + ' tab' : 'no panel'));
+        }
+      });
+      check('every section sits in the tab its report line names', tabBad.length === 0,
+        tagged.length + ' of ' + authored.h2.length + ' authored tab assignments read' +
+        (untagged.length ? '; ' + untagged.length + ' section(s) carry no tab line: ' +
+          untagged.join(', ') : '') +
+        (tabBad.length ? ': ' + tabBad.length + ' in the wrong tab: ' + tabBad.join(' | ') : ''));
+    } else {
+      check('NOT CHECKED: every section sits in the tab its report line names', false,
+        'this markdown carries no hl-tab line under its h2s (or the tab scan and the ' +
+        'heading list do not line up), so no section\'s tab could be compared with the page');
+    }
   } else {
-    check('NOT CHECKED: the authored report could not be read, so sections, order and heading ids ' +
-      'were not compared with the report', false,
-      (authored && authored.error) || 'no markdown path resolved for this slug');
+    check('NOT CHECKED: the page shows every section of the authored report', false,
+      noAuthoredReason + ', so the section list was not compared with the report; ' +
+      pageHeads.h2.length + ' h2 headings in the article');
+    check('NOT CHECKED: every authored h2 and h3 heading id is on the page exactly once', false,
+      noAuthoredReason + ', so the heading ids were not compared with the report; ' +
+      pageHeads.allIds.length + ' ids in the article');
+    check('NOT CHECKED: every authored heading reads the same as the page heading with that id', false,
+      noAuthoredReason + ', so the heading text was not compared with the report');
+    check('NOT CHECKED: every authored h3 sits under its own section on the page', false,
+      noAuthoredReason + ', so the section each h3 belongs to is not known');
+    check('NOT CHECKED: every section sits in the tab its report line names', false,
+      noAuthoredReason + ', so which tab each section belongs to is not known');
   }
 
   /* ---- ARIA, once: viewport-independent by design ------------------------ */
@@ -539,37 +862,55 @@ async function tabbedChecks(page, opts) {
     'return out;})()');
   var deep = [];
   var deepBad = [];
-  deepPage.forEach(function (row) {
-    var expected = firstAuthoredIdForTab(opts.authored, row.token);
-    if (!row.id) {
-      deepBad.push('#' + (expected || 'tab-' + row.token) + ': the first heading of the ' +
-        row.token + ' tab has no id (' + (row.text || 'no heading') +
-        '), so an old link to that section cannot be followed; the sampler will not ' +
-        'skip to a later heading');
-      return;
+  if (!opts.authoredKnown || !opts.authored.tabs) {
+    /* D2: with no authored expectation this row cannot be satisfied, and it used
+       to PASS by sampling 7 of 7 headings the page had chosen itself (round-2
+       review, A7). The page's own first headings are printed as a diagnostic and
+       are not accepted as the expectation. */
+    check('NOT CHECKED: a cold link to a heading id opens that section\'s tab and scrolls to it', false,
+      (!opts.authoredKnown
+        ? 'the authored report could not be read, so which heading each tab must start with ' +
+          'is not known'
+        : 'the markdown carries no hl-tab line under its h2s, so which heading opens each ' +
+          'tab is not authored') +
+      '; the page\'s own tab-first headings (printed, not compared) are ' +
+      deepPage.map(function (r) {
+        return r.token + ': ' + (r.id ? '#' + r.id : '(no id)');
+      }).join(', '));
+  } else {
+    deepPage.forEach(function (row) {
+      var expected = firstAuthoredIdForTab(opts.authored, row.token);
+      if (!row.id) {
+        deepBad.push('#' + (expected || 'tab-' + row.token) + ': the first heading of the ' +
+          row.token + ' tab has no id (' + (row.text || 'no heading') +
+          '), so an old link to that section cannot be followed; the sampler will not ' +
+          'skip to a later heading');
+        return;
+      }
+      if (expected && row.id !== expected) {
+        deepBad.push('#' + expected + ': the report\'s first ' + row.token +
+          ' heading is missing from the page; the tab starts at #' + row.id + ' instead');
+        return;
+      }
+      deep.push({ token: row.token, id: expected || row.id });
+    });
+    var deepRows = [];
+    for (var d = 0; d < deep.length; d++) {
+      await gotoAndWait(page, url + '#' + deep[d].id);
+      var hit = await waitForReveal(page, deep[d].id);
+      deepRows.push('#' + deep[d].id + ' -> ' + (hit.panel || 'none'));
+      if (!(hit.found && hit.panel && hit.hidden === false && hit.top !== null &&
+            hit.top >= -2 && hit.top < 900)) {
+        deepBad.push('#' + deep[d].id + ': panel ' + (hit.panel || 'none') +
+          ', hidden ' + hit.hidden + ', top ' + hit.top);
+      }
     }
-    if (expected && row.id !== expected) {
-      deepBad.push('#' + expected + ': the report\'s first ' + row.token +
-        ' heading is missing from the page; the tab starts at #' + row.id + ' instead');
-      return;
-    }
-    deep.push({ token: row.token, id: expected || row.id });
-  });
-  var deepRows = [];
-  for (var d = 0; d < deep.length; d++) {
-    await gotoAndWait(page, url + '#' + deep[d].id);
-    var hit = await waitForReveal(page, deep[d].id);
-    deepRows.push('#' + deep[d].id + ' -> ' + (hit.panel || 'none'));
-    if (!(hit.found && hit.panel && hit.hidden === false && hit.top !== null &&
-          hit.top >= -2 && hit.top < 900)) {
-      deepBad.push('#' + deep[d].id + ': panel ' + (hit.panel || 'none') +
-        ', hidden ' + hit.hidden + ', top ' + hit.top);
-    }
+    check('a cold link to a heading id opens that section\'s tab and scrolls to it',
+      deep.length === TAB_TOKENS.length && deepBad.length === 0,
+      deep.length + ' of ' + TAB_TOKENS.length + ' tab-first heading ids sampled' +
+      (deepBad.length ? '; ' + deepBad.length + ' failing: ' + deepBad.join(' | ') :
+        ': ' + deepRows.join(', ')));
   }
-  check('a cold link to a heading id opens that section\'s tab and scrolls to it',
-    deep.length === TAB_TOKENS.length && deepBad.length === 0,
-    deep.length + ' of ' + TAB_TOKENS.length + ' tab-first heading ids sampled' +
-    (deepBad.length ? '; ' + deepBad.join(' | ') : ': ' + deepRows.join(', ')));
 
   /* One id inside a collapsed teardown. A report may carry no id inside its own
      teardowns (the pilot has 14 closed teardowns and none with an id), in which
@@ -715,6 +1056,32 @@ async function tabbedChecks(page, opts) {
       overflowBad.push(width + 'x' + height + ' one-page: ' + oneOf.escaped +
         ' escaped element(s), scrollWidth ' + oneOf.scrollW + ' of ' + oneOf.client);
     }
+
+    /* D5: one-page mode is where the written report lives, so every section and
+       every block up to the next h2 must be PAINTED there -- not merely present
+       in the DOM. The four round-2 hiding probes all passed a rect count over
+       headings alone; this measures the blocks themselves. */
+    var render = await page.json(SECTION_RENDER_EXPR);
+    if (!opts.authoredKnown) {
+      check('NOT CHECKED: ' + width + ' one-page renders every authored section and block', false,
+        'the authored report could not be read, so the section list is not known; ' +
+        render.count + ' section blocks were examined');
+    } else {
+      var noBlock = opts.authored.h2.filter(function (id) { return !render.sections[id]; });
+      var notShown = [];
+      opts.authored.h2.forEach(function (id) {
+        var sec = render.sections[id];
+        if (sec && sec.bad.length) notShown.push('"' + id + '": ' + sec.bad.join('; '));
+      });
+      check(width + ' one-page renders every authored section and every block in it',
+        noBlock.length === 0 && notShown.length === 0,
+        (noBlock.length ? noBlock.length + ' authored section(s) have no section element on the ' +
+            'page: ' + noBlock.map(function (id) { return '"' + id + '"'; }).join(', ') + '. ' : '') +
+        (notShown.length ? notShown.length + ' of ' + opts.authored.h2.length +
+            ' section(s) not rendered: ' + notShown.join(' | ')
+          : opts.authored.h2.length + ' of ' + opts.authored.h2.length +
+            ' sections rendered, heading and every block, at this width'));
+    }
     await page.evaluate('location.hash="#tab-overview"');
     await CDP.sleep(80);
 
@@ -850,12 +1217,18 @@ async function tabbedChecks(page, opts) {
     selectBad.length === 0,
     (TAB_TOKENS.length * TAB_VIEWPORTS.length) + ' fragment selections across ' +
     TAB_VIEWPORTS.map(function (x) { return x[0] + 'x' + x[1]; }).join(', ') +
-    (selectBad.length ? ': ' + selectBad.slice(0, 4).join(' | ') : ''));
+    (selectBad.length
+      ? ': ' + selectBad.length + ' of ' + (TAB_TOKENS.length * TAB_VIEWPORTS.length) +
+        ' failing: ' + selectBad.join(' | ')
+      : ''));
   check('no page-level horizontal scroll on any tab or in one-page mode',
     overflowBad.length === 0,
     states.length + ' tab/viewport states at ' + TAB_VIEWPORTS.map(function (x) {
       return x[0] + 'x' + x[1];
-    }).join(', ') + (overflowBad.length ? ': ' + overflowBad.slice(0, 4).join(' | ') : ''));
+    }).join(', ') + (overflowBad.length
+      ? ': ' + overflowBad.length + ' of ' + states.length + ' states escape: ' +
+        overflowBad.join(' | ')
+      : ''));
   check('every chrome target is at least 44 by 44 px',
     targetSmall === 0,
     targetTotal + ' control measurements across ' + targetStates +
@@ -902,12 +1275,21 @@ async function tabbedChecks(page, opts) {
   await page.evaluate('window.dispatchEvent(new Event("afterprint"))');
   await CDP.sleep(250);
   var restored = await page.json(selectedTabExpr());
-  check('print shows every section with every teardown open, then restores the tab',
-    printed.shown === opts.sectionCount && printed.closed === 0 &&
-    restored.id === 'tabbtn-chain',
-    printed.shown + ' of ' + opts.sectionCount + ' sections painted, ' +
-      printed.closed + ' teardowns left closed; after print selected ' +
-      (restored.id || 'nothing'));
+  if (!opts.authoredKnown) {
+    /* D2: "every section" is only defined by the report. The page's own count
+       (19 of 19) used to satisfy this row with no authored expectation at all. */
+    check('NOT CHECKED: print shows every section with every teardown open, then restores the tab', false,
+      'the authored report could not be read, so "every section" was not defined; the page ' +
+      'printed ' + printed.shown + ' painted h2 heading(s) with ' + printed.closed +
+      ' teardown(s) closed, and after print selected ' + (restored.id || 'nothing'));
+  } else {
+    check('print shows every section with every teardown open, then restores the tab',
+      printed.shown === opts.sectionCount && printed.closed === 0 &&
+      restored.id === 'tabbtn-chain',
+      printed.shown + ' of ' + opts.sectionCount + ' sections painted, ' +
+        printed.closed + ' teardowns left closed; after print selected ' +
+        (restored.id || 'nothing'));
+  }
 
   /* ---- the 25-date timeline fixture (5.4) ------------------------------- */
   var fixture = timelineFixtureHtml(opts.html);
@@ -1217,7 +1599,8 @@ async function main() {
        rather than a thing to assume is someone else's problem. */
     var failing = triaged.firstParty.concat(triaged.unexplained);
     check('no script error blocked the report modules', failing.length === 0,
-      failing.length ? TRIAGE.renderFailing(failing).slice(0, 3).join(' | ') +
+      failing.length ? failing.length + ' failing error(s), first 3: ' +
+        TRIAGE.renderFailing(failing).slice(0, 3).join(' | ') +
         (srv.misses.length ? '  [assets not served: ' + srv.misses.join(', ') + ']' : '')
         : 'clean: 0 first-party, 0 unexplained, ' + triaged.excluded.length +
           ' third-party error(s) excluded by name');
@@ -1240,18 +1623,24 @@ async function main() {
         console.log('authored: ' + authored.path + '  (' + authored.h2.length + ' h2, ' +
           authored.ids.length + ' h2/h3 heading ids' +
           (authored.tabs ? ', tab tags read' : ', no tab tags in the markdown') + ')');
+        console.log('expectation: ' + authored.note);
       }
       var authoredKnown = !!(authored && !authored.error && authored.h2.length);
       console.log('page:    tabbed; the register switch is not built here, so its ' +
         'assertions are replaced by the tab assertions (design-v4 5.4)');
+      console.log('page:    ' + pageOrder.length + ' section blocks in the page\'s own order ' +
+        '(diagnostic only; the expected sections and their order come from the authored report)');
       await tabbedChecks(page, {
         url: srv.origin + '/reports/' + s + '/',
         html: html,
         authored: authoredKnown ? authored : null,
         authoredKnown: authoredKnown,
         pageOrder: pageOrder,
-        sectionCount: authoredKnown ? authored.h2.length : pageOrder.length,
-        reportOrder: authoredKnown ? authored.h2 : pageOrder
+        /* D2: no fallback. With no authored report the count and order are NOT
+           KNOWN, and every row that needs them records NOT CHECKED rather than
+           comparing the page with itself. */
+        sectionCount: authoredKnown ? authored.h2.length : 0,
+        reportOrder: authoredKnown ? authored.h2 : []
       });
     } else {
       // ---------- the register switch ----------
@@ -1461,16 +1850,33 @@ async function main() {
    (which never reaches this handler at all; it is caught and handled inside
    main() itself) and the "crashed before any check ran" path are both
    unchanged. */
-main().catch(function (e) {
-  var recordedFailures = results.filter(function (r) {
-    return !r.pass && !/^NOT CHECKED/.test(r.name);
+/* Everything above is reachable from `node --test` as pure functions: the CLI
+   entry point runs only when this file is the program, so a test can require it
+   and exercise the authored-report resolution, the body comparison and the
+   heading-text normaliser without opening a browser. */
+if (require.main === module) {
+  main().catch(function (e) {
+    var recordedFailures = results.filter(function (r) {
+      return !r.pass && !/^NOT CHECKED/.test(r.name);
+    });
+    if (recordedFailures.length) {
+      console.log('\nFAIL  the run aborted early: ' + recordedFailures.length +
+        ' check(s) had already failed before the crash below.');
+      recordedFailures.forEach(function (r) { console.log('   FAIL  ' + r.name); });
+      console.log('\ncrash: ' + e.message);
+      process.exit(1);
+    }
+    notChecked('the browser check errored before finishing: ' + e.message);
   });
-  if (recordedFailures.length) {
-    console.log('\nFAIL  the run aborted early: ' + recordedFailures.length +
-      ' check(s) had already failed before the crash below.');
-    recordedFailures.forEach(function (r) { console.log('   FAIL  ' + r.name); });
-    console.log('\ncrash: ' + e.message);
-    process.exit(1);
-  }
-  notChecked('the browser check errored before finishing: ' + e.message);
-});
+} else {
+  module.exports = {
+    readAuthored: readAuthored,
+    reportPaths: reportPaths,
+    bodyLines: bodyLines,
+    firstBodyDifference: firstBodyDifference,
+    normaliseHeadingText: normaliseHeadingText,
+    isTabbedHtml: isTabbedHtml,
+    TAB_TOKENS: TAB_TOKENS,
+    TAB_VIEWPORTS: TAB_VIEWPORTS
+  };
+}
