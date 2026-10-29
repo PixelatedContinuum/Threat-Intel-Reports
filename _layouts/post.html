@@ -34,7 +34,8 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 </script>
 {% endif %}
-<div class="hl-page" style="--ph-accent: {% if page.path contains 'hunting-detections' %}#4ade80{% else %}#f87171{% endif %};">
+{% if content contains 'hl-tab-' %}{% assign hl_tabbed = true %}<link rel="stylesheet" href="{{ '/assets/css/hl-report-tabs.css' | relative_url }}" data-rv-chrome data-pagefind-ignore>
+{% endif %}<div class="hl-page{% if hl_tabbed %} hl-report-page{% endif %}" style="--ph-accent: {% if page.path contains 'hunting-detections' %}#4ade80{% else %}#f87171{% endif %};">
 <div class="hl-post-header{% if page.path contains 'hunting-detections' %} hl-post-header--detect{% endif %}">
   <div class="hl-post-header__eyebrow">
     {% if page.path contains "hunting-detections" %}
@@ -49,11 +50,11 @@ document.addEventListener('DOMContentLoaded', function () {
 </div>
 {% include sponsor-banner.html %}
 <div class="hl-post-body">
-  <details class="hl-post-toc-mobile" id="hl-toc-mobile" data-pagefind-ignore>
+  {% unless hl_tabbed %}<details class="hl-post-toc-mobile" id="hl-toc-mobile" data-pagefind-ignore>
     <summary>Contents</summary>
     <nav><ul id="hl-toc-list-mobile"></ul></nav>
   </details>
-  <div id="hl-toc-spacer" aria-hidden="true"></div>
+  <div id="hl-toc-spacer" aria-hidden="true"></div>{% endunless %}
   <div class="hl-post-content">
 {%- comment -%}
   Revision history, on a report that has been revised since publication. The
@@ -159,10 +160,10 @@ the coverage above is narrower than the rule set.</em></p>
   </details>
 </div>
   </div>
-  <aside class="hl-post-toc" id="hl-toc" aria-label="Table of contents" data-pagefind-ignore>
+  {% unless hl_tabbed %}<aside class="hl-post-toc" id="hl-toc" aria-label="Table of contents" data-pagefind-ignore>
     <div class="hl-post-toc__heading">Contents</div>
     <nav><ul class="hl-toc__list" id="hl-toc-list"></ul></nav>
-  </aside>
+  </aside>{% endunless %}
 </div>
 
 {% include sponsor-independence.html %}
@@ -354,7 +355,7 @@ the coverage above is narrower than the rule set.</em></p>
 </div>
 
 
-<script>
+{% unless hl_tabbed %}<script>
 (function () {
   var content = document.querySelector('.hl-post-content');
   if (!content) return;
@@ -848,7 +849,7 @@ the coverage above is narrower than the rule set.</em></p>
   window.addEventListener('load', function () { if (location.hash) setTimeout(handleHash, 60); });
 })();
 </script>
-<script src="{{ '/assets/js/attack-coverage.js' | relative_url }}?v=2" defer></script>
+{% endunless %}{% unless hl_tabbed %}<script src="{{ '/assets/js/attack-coverage.js' | relative_url }}?v=2" defer></script>
 {%- comment -%}
   After attack-coverage on purpose, and both deferred, so they run in order: this
   reads HLAttackCoverage for the parser and hooks the strip that one has already
@@ -862,7 +863,7 @@ the coverage above is narrower than the rule set.</em></p>
   same way the ATT&CK module does. Versioned as a pair with the markup it adds.
 {%- endcomment -%}
 <script src="{{ '/assets/js/hl-facts.js' | relative_url }}?v=1" defer></script>
-{% unless page.glossary == false %}
+{% endunless %}{% unless page.glossary == false %}
 <script type="application/json" id="hl-glossary-data">{{ site.data.glossary | jsonify }}</script>
 <script src="{{ '/assets/js/glossary.js' | relative_url }}" defer></script>
 {% endunless %}
@@ -888,7 +889,7 @@ the coverage above is narrower than the rule set.</em></p>
   exist before that handler starts intercepting their clicks. The module renders
   nothing unless the page marks at least two distinct tiers.
 {%- endcomment -%}
-<script src="{{ '/assets/js/register-switch.js' | relative_url }}" defer></script>
+{% if hl_tabbed %}<script src="{{ '/assets/js/hl-report-tabs.js' | relative_url }}" defer data-rv-chrome data-pagefind-ignore></script>{% else %}<script src="{{ '/assets/js/register-switch.js' | relative_url }}" defer></script>{% endif %}
 {% if page.path contains "hunting-detections" %}
 {% assign hl_slug = page.path | split: "/" | last | remove: ".md" %}
 {% assign hl_manifest = site.data.detection_manifests[hl_slug] %}
