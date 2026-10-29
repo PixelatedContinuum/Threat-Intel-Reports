@@ -18,7 +18,7 @@
    a report that carries none of the machinery is NOT CHECKED with the reason
    named, never a pass.
 
-   Run: node check-browser-report.js [slug] [--shots <dir>]
+   Run: node check-browser-report.js [slug] [--shots <dir>] [--md <report.md>]
    Env: HL_CHROME, HL_SITE_BASE */
 
 var path = require('node:path');
@@ -32,6 +32,9 @@ var args = process.argv.slice(2);
 var shotsDir = null;
 var si = args.indexOf('--shots');
 if (si > -1) { shotsDir = args[si + 1]; args.splice(si, 2); }
+var mdArg = null;
+var mi = args.indexOf('--md');
+if (mi > -1) { mdArg = args[mi + 1]; args.splice(mi, 2); }
 var slug = args[0] || null;
 
 function notChecked(reason) {
@@ -39,12 +42,14 @@ function notChecked(reason) {
   process.exit(2);
 }
 
-var CDP, SERVER, TRIAGE, yaml;
+var CDP, SERVER, TRIAGE, yaml, KS, CTABS;
 try {
   CDP = require('./lib/cdp.js');
   SERVER = require('./lib/page-server.js');
   TRIAGE = require('./lib/console-triage.js');
   yaml = require('js-yaml');
+  KS = require('./lib/kramdown-slug.js');
+  CTABS = require('./check-tabs.js');
 } catch (e) {
   notChecked(e.message + '. Run `npm ci` in tools/report-tooling, then re-run.');
 }
@@ -101,6 +106,90 @@ function pickSlug() {
   return best;
 }
 
+/* ---------- the authored report (fix round 1) ----------
+
+   The tabbed page cannot be its own expectation. At 8a44adf the gate took the
+   expected section list and order from the page's own `--rv-order` blocks, so a
+   section deleted from the source (round-1 mutant 1) and two sections swapped in
+   the source (mutant 2) both PASSed 51/51: the page agreed with itself. The
+   authored markdown is the record of what the report says, so the expected
+   sections, their order and every h2/h3 id are read from it.
+
+   Resolution order: `--md <path>` (an explicit file always wins and is an error
+   when absent), then `reports/<slug>/index.md` in this checkout, then the vault
+   copy `threat-intel-vault/reports/<slug>/index.md` one level above the site
+   repository. Each row says which path was read, because a gate that silently
+   compared against the wrong file is the failure this whole branch exists to
+   avoid. When no markdown resolves, the authored-order rows are NOT CHECKED with
+   that reason; they are never satisfied from the page itself. */
+function authoredPath(s) {
+  if (mdArg) return { path: mdArg, explicit: true };
+  var site = path.join(ROOT, 'reports', s, 'index.md');
+  if (fs.existsSync(site)) return { path: site, explicit: false };
+  var vault = path.join(ROOT, '..', '..', 'threat-intel-vault', 'reports', s, 'index.md');
+  if (fs.existsSync(vault)) return { path: vault, explicit: false };
+  return null;
+}
+
+function readAuthored(s) {
+  var where = authoredPath(s);
+  if (!where) return { path: null, error: 'no report markdown found (--md, reports/' + s +
+    '/index.md, or the vault copy)' };
+  if (!fs.existsSync(where.path)) {
+    return { path: where.path, error: 'the --md file does not exist' };
+  }
+  var md;
+  try { md = fs.readFileSync(where.path, 'utf8'); }
+  catch (e) { return { path: where.path, error: 'could not be read: ' + e.message }; }
+
+  var all = KS.headings(md);
+  var h2 = all.filter(function (h) { return h.level === 2; });
+  var ids = all.filter(function (h) { return h.level === 2 || h.level === 3; });
+  var scan = CTABS.scanMarkdown(md);
+  var tabs = null;
+  var anyTab = scan.headings.some(function (h) { return !!h.tab; });
+  if (anyTab && scan.headings.length === h2.length) {
+    tabs = {};
+    scan.headings.forEach(function (h, i) { if (h.tab) tabs[h2[i].slug] = h.tab; });
+  }
+  return {
+    path: where.path,
+    explicit: where.explicit,
+    h2: h2.map(function (h) { return h.slug; }),
+    ids: ids.map(function (h) { return h.slug; }),
+    tabs: tabs,
+    sections: scan.headings.map(function (h, i) {
+      return { text: h.text, tab: h.tab || null, id: h2[i] ? h2[i].slug : null };
+    })
+  };
+}
+
+function firstAuthoredIdForTab(authored, token) {
+  if (!authored || !authored.tabs) return null;
+  for (var i = 0; i < authored.h2.length; i++) {
+    if (authored.tabs[authored.h2[i]] === token) return authored.h2[i];
+  }
+  return null;
+}
+
+function countOf(list, value) {
+  return list.filter(function (x) { return x === value; }).length;
+}
+
+/* The first place two ordered lists disagree, named, so a swapped or moved
+   section reports the two ids rather than a bare count. */
+function firstOrderDifference(expected, actual) {
+  var n = Math.max(expected.length, actual.length);
+  for (var i = 0; i < n; i++) {
+    if (expected[i] !== actual[i]) {
+      return 'first difference at position ' + (i + 1) + ': the report has "' +
+        (expected[i] === undefined ? '(nothing)' : expected[i]) + '", the page has "' +
+        (actual[i] === undefined ? '(nothing)' : actual[i]) + '"';
+    }
+  }
+  return null;
+}
+
 var results = [];
 function check(name, pass, detail) {
   results.push({ name: name, pass: pass });
@@ -121,7 +210,17 @@ function check(name, pass, detail) {
 
    Every assertion below reads the built DOM through lib/cdp.js. The tab bar,
    panels and views are built by hl-report-tabs.js at runtime, so a check that
-   read the fetched HTML would be reading the inputs and calling them output. */
+   read the fetched HTML would be reading the inputs and calling them output.
+
+   THE REPORT IS THE EXPECTATION, NOT THE PAGE (fix round 1). The expected
+   section list, its order, and every h2/h3 id come from the authored markdown
+   (`--md`, else `reports/<slug>/index.md`, else the vault copy), never from the
+   page's own `--rv-order` or its DOM: at 8a44adf a section deleted from the
+   source and two sections swapped in the source both PASSed, because the gate
+   compared the page with itself. When no markdown resolves, the authored-order
+   rows are NOT CHECKED with that reason. The deep-link sampler reads each panel's
+   first `h2` without an `[id]` filter and FAILs when that heading has no id,
+   rather than skipping to the next heading that has one. */
 
 var TAB_TOKENS = ['overview', 'victims', 'chain', 'timeline', 'attribution', 'indicators', 'confidence'];
 /* 4a's four mobile sizes plus the desktop one 5.4 names. Order matters only for
@@ -307,6 +406,52 @@ async function tabbedChecks(page, opts) {
     return;
   }
 
+  /* ---- the authored report is the expectation (fix round 1) --------------
+     Read once, before any tab state changes: which sections exist, in what
+     order, and every heading id. A section deleted from the source or two
+     sections swapped in the source leave the page perfectly self-consistent,
+     which is exactly why the page's own order cannot be the expectation. */
+  var pageHeads = await page.json('(function(){' +
+    'var hs=[].slice.call(document.querySelectorAll(".hl-rv-source h2"));' +
+    'var ids=[].slice.call(document.querySelectorAll(".hl-rv-source [id]"));' +
+    'return {h2:hs.map(function(h){return h.id||null;}),' +
+    'h2text:hs.map(function(h){return (h.textContent||"").trim().slice(0,70);}),' +
+    'allIds:ids.map(function(e){return e.id;}),' +
+    'sources:document.querySelectorAll(".hl-rv-source").length};})()');
+  var authored = opts.authored;
+  if (authored && authored.h2 && authored.h2.length) {
+    var missH2 = authored.h2.filter(function (id) { return pageHeads.h2.indexOf(id) === -1; });
+    var dupH2 = authored.h2.filter(function (id) { return countOf(pageHeads.h2, id) > 1; });
+    var extraH2 = pageHeads.h2.map(function (id, i) {
+      return { id: id, text: pageHeads.h2text[i] };
+    }).filter(function (x) { return !x.id || authored.h2.indexOf(x.id) === -1; });
+    check('the page shows every section of the authored report',
+      missH2.length === 0 && dupH2.length === 0 && pageHeads.h2.length === authored.h2.length,
+      (missH2.length ? missH2.length + ' authored section(s) missing from the page: ' +
+          missH2.map(function (id) { return '"' + id + '"'; }).join(', ') + '. ' : '') +
+      (dupH2.length ? 'repeated section(s): ' + dupH2.join(', ') + '. ' : '') +
+      (extraH2.length ? 'headings the report does not have: ' +
+          extraH2.map(function (x) {
+            return x.id ? '"' + x.id + '"' : '(no id) "' + x.text + '"';
+          }).join(', ') +
+          '. ' : '') +
+      pageHeads.h2.length + ' of ' + authored.h2.length + ' authored sections in the DOM');
+
+    var missHeads = authored.ids.filter(function (id) { return pageHeads.allIds.indexOf(id) === -1; });
+    var dupHeads = authored.ids.filter(function (id) { return countOf(pageHeads.allIds, id) > 1; });
+    check('every authored h2 and h3 heading id is on the page exactly once',
+      missHeads.length === 0 && dupHeads.length === 0,
+      (missHeads.length ? missHeads.length + ' authored heading id(s) absent from the page: ' +
+          missHeads.map(function (id) { return '#' + id; }).join(', ') +
+          ' (an old link to it is dead). ' : '') +
+      (dupHeads.length ? 'repeated id(s): ' + dupHeads.join(', ') + '. ' : '') +
+      authored.ids.length + ' authored h2/h3 ids, ' + pageHeads.allIds.length + ' ids in the article');
+  } else {
+    check('NOT CHECKED: the authored report could not be read, so sections, order and heading ids ' +
+      'were not compared with the report', false,
+      (authored && authored.error) || 'no markdown path resolved for this slug');
+  }
+
   /* ---- ARIA, once: viewport-independent by design ------------------------ */
   var aria = await page.json('(function(){' +
     'var tabs=[].slice.call(document.querySelectorAll("[role=tab]"));' +
@@ -377,13 +522,39 @@ async function tabbedChecks(page, opts) {
      inside a collapsed teardown, and prints the denominator. */
   await setViewport(page, 1280, 900);
   await gotoAndWait(page, url);
-  var deep = await page.json('(function(){var out=[];' +
+  /* The first heading of each tab. The panel's own first h2 is read WITHOUT an
+     `[id]` filter, because filtering on `[id]` silently skipped past a heading
+     whose id was removed and sampled the next one (round-1 mutant 5a: the
+     deep-link check PASSed 7 of 7 while the first heading of the chain tab had no
+     id at all). When the authored markdown carries tab tags, the expected id is
+     the report's own first heading for that tab and a page that starts elsewhere
+     is a failure, not a different sample. */
+  var deepPage = await page.json('(function(){var out=[];' +
     TAB_TOKENS.map(function (t) {
-      return 'var h=document.querySelector("#tab-' + t + ' .hl-rv-source h2[id]");' +
-        'if(h)out.push({token:' + JSON.stringify(t) + ',id:h.id});';
+      return 'var p=document.getElementById("tab-' + t + '");' +
+        'var h=p?p.querySelector(".hl-rv-source h2"):null;' +
+        'out.push({token:' + JSON.stringify(t) + ',id:h?(h.id||null):null,' +
+        'text:h?(h.textContent||"").trim().slice(0,60):null});';
     }).join('') +
     'return out;})()');
+  var deep = [];
   var deepBad = [];
+  deepPage.forEach(function (row) {
+    var expected = firstAuthoredIdForTab(opts.authored, row.token);
+    if (!row.id) {
+      deepBad.push('#' + (expected || 'tab-' + row.token) + ': the first heading of the ' +
+        row.token + ' tab has no id (' + (row.text || 'no heading') +
+        '), so an old link to that section cannot be followed; the sampler will not ' +
+        'skip to a later heading');
+      return;
+    }
+    if (expected && row.id !== expected) {
+      deepBad.push('#' + expected + ': the report\'s first ' + row.token +
+        ' heading is missing from the page; the tab starts at #' + row.id + ' instead');
+      return;
+    }
+    deep.push({ token: row.token, id: expected || row.id });
+  });
   var deepRows = [];
   for (var d = 0; d < deep.length; d++) {
     await gotoAndWait(page, url + '#' + deep[d].id);
@@ -396,9 +567,9 @@ async function tabbedChecks(page, opts) {
     }
   }
   check('a cold link to a heading id opens that section\'s tab and scrolls to it',
-    deep.length === 7 && deepBad.length === 0,
-    deep.length + ' of 7 tab-first heading ids; ' +
-    (deepBad.length ? deepBad.join(' | ') : deepRows.join(', ')));
+    deep.length === TAB_TOKENS.length && deepBad.length === 0,
+    deep.length + ' of ' + TAB_TOKENS.length + ' tab-first heading ids sampled' +
+    (deepBad.length ? '; ' + deepBad.join(' | ') : ': ' + deepRows.join(', ')));
 
   /* One id inside a collapsed teardown. A report may carry no id inside its own
      teardowns (the pilot has 14 closed teardowns and none with an id), in which
@@ -511,7 +682,10 @@ async function tabbedChecks(page, opts) {
       }
     }
 
-    /* One-page mode: every section, report order, no sideways scroll. */
+    /* One-page mode: every section, in the AUTHORED report's order, no sideways
+       scroll. Comparing the page's one-page order with the page's own --rv-order
+       (the shape before fix round 1) passed a source where two sections had been
+       swapped, because the controller assigns --rv-order from that same DOM. */
     await page.evaluate('location.hash="#one-page"');
     await CDP.sleep(120);
     var one = await page.json('(function(){' +
@@ -524,11 +698,19 @@ async function tabbedChecks(page, opts) {
     states.push({ width: width, height: height, token: 'one-page', selected: 'one-page',
       scrollW: oneOf.scrollW, client: oneOf.client, scrollX: oneOf.scrollX,
       escaped: oneOf.escaped, first: oneOf.first });
-    check(width + ' one-page shows every section in report order',
-      one.onepage && one.ids.length === opts.sectionCount &&
-      one.ids.join('|') === opts.reportOrder.join('|') && one.shown === opts.sectionCount,
-      one.shown + ' of ' + opts.sectionCount + ' sections painted, ' + one.ids.length +
-        ' in the DOM' + (one.onepage ? '' : ', NOT in one-page mode'));
+    if (!opts.authoredKnown) {
+      check('NOT CHECKED: ' + width + ' one-page section order', false,
+        'the authored report could not be read, so the page\'s order was not compared with ' +
+        'the report\'s; ' + one.shown + ' of ' + one.ids.length + ' sections painted');
+    } else {
+      var orderDiff = firstOrderDifference(opts.reportOrder, one.ids);
+      check(width + ' one-page shows every section in the report\'s order',
+        one.onepage && one.ids.length === opts.sectionCount &&
+        orderDiff === null && one.shown === opts.sectionCount,
+        one.shown + ' of ' + opts.sectionCount + ' sections painted, ' + one.ids.length +
+          ' in the DOM' + (one.onepage ? '' : ', NOT in one-page mode') +
+          (orderDiff ? '; OUT OF REPORT ORDER: ' + orderDiff : ''));
+    }
     if (oneOf.scrollX !== 0 || oneOf.escaped !== 0 || oneOf.scrollW > oneOf.client + 1) {
       overflowBad.push(width + 'x' + height + ' one-page: ' + oneOf.escaped +
         ' escaped element(s), scrollWidth ' + oneOf.scrollW + ' of ' + oneOf.client);
@@ -690,11 +872,19 @@ async function tabbedChecks(page, opts) {
     'shown:hs.filter(function(h){var r=h.getBoundingClientRect();return r.width>0||r.height>0;}).length,' +
     'panels:document.querySelectorAll(".hl-rv-panel").length};})()');
   var noJsOf = await page.json(OVERFLOW_EXPR);
-  check('with JavaScript off every section is present and in report order',
-    noJs.panels === 0 && noJs.ids.length === opts.sectionCount &&
-    noJs.ids.join('|') === opts.reportOrder.join('|') && noJs.shown === opts.sectionCount,
-    noJs.shown + ' of ' + opts.sectionCount + ' sections painted, ' + noJs.panels +
-      ' tab panels built' + (noJsOf.escaped ? ', ' + noJsOf.escaped + ' escaped element(s)' : ''));
+  if (!opts.authoredKnown) {
+    check('NOT CHECKED: with JavaScript off, every section in the report\'s order', false,
+      'the authored report could not be read, so the no-JS page was not compared with it; ' +
+      noJs.shown + ' of ' + noJs.ids.length + ' sections painted');
+  } else {
+    var noJsDiff = firstOrderDifference(opts.reportOrder, noJs.ids);
+    check('with JavaScript off every section is present and in the report\'s order',
+      noJs.panels === 0 && noJs.ids.length === opts.sectionCount &&
+      noJsDiff === null && noJs.shown === opts.sectionCount,
+      noJs.shown + ' of ' + opts.sectionCount + ' sections painted, ' + noJs.panels +
+        ' tab panels built' + (noJsDiff ? '; OUT OF REPORT ORDER: ' + noJsDiff : '') +
+        (noJsOf.escaped ? ', ' + noJsOf.escaped + ' escaped element(s)' : ''));
+  }
   await page.send('Emulation.setScriptExecutionDisabled', { value: false });
 
   await setViewport(page, 1280, 900);
@@ -1035,22 +1225,33 @@ async function main() {
     // ---------- the register switch, or the tabs that replace it ----------
     var tabbed = isTabbedHtml(html);
     if (tabbed) {
-      /* Report order is the page's own, read before any tab state changes: each
-         source block carries its position in --rv-order, so one-page mode and
-         the no-JS render can both be compared to the article as authored. */
-      var reportOrder = await page.evaluate('(function(){' +
+      /* Report order read from the page is a DIAGNOSTIC only now: the expected
+         sections and order come from the authored markdown (see readAuthored). */
+      var pageOrder = await page.evaluate('(function(){' +
         'var blocks=[].slice.call(document.querySelectorAll(".hl-rv-source"));' +
         'blocks.sort(function(a,b){return parseFloat(a.style.getPropertyValue("--rv-order"))-' +
         'parseFloat(b.style.getPropertyValue("--rv-order"));});' +
         'return blocks.map(function(b){var h=b.querySelector("h2");return h&&h.id;})' +
         '.filter(Boolean);})()');
+      var authored = readAuthored(s);
+      if (authored.error) {
+        console.log('authored: NOT READ  ' + authored.error);
+      } else {
+        console.log('authored: ' + authored.path + '  (' + authored.h2.length + ' h2, ' +
+          authored.ids.length + ' h2/h3 heading ids' +
+          (authored.tabs ? ', tab tags read' : ', no tab tags in the markdown') + ')');
+      }
+      var authoredKnown = !!(authored && !authored.error && authored.h2.length);
       console.log('page:    tabbed; the register switch is not built here, so its ' +
         'assertions are replaced by the tab assertions (design-v4 5.4)');
       await tabbedChecks(page, {
         url: srv.origin + '/reports/' + s + '/',
         html: html,
-        sectionCount: reportOrder.length,
-        reportOrder: reportOrder
+        authored: authoredKnown ? authored : null,
+        authoredKnown: authoredKnown,
+        pageOrder: pageOrder,
+        sectionCount: authoredKnown ? authored.h2.length : pageOrder.length,
+        reportOrder: authoredKnown ? authored.h2 : pageOrder
       });
     } else {
       // ---------- the register switch ----------
