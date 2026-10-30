@@ -1022,3 +1022,12 @@ html:has(.hl-report-page) main.content { padding-top: 10px !important; }
   .hl-rvsp__zone--many .hl-rvsp__items { gap: 12px; }
   .hl-rvsp__zone--many .hl-rvsp__logo { height: 24px; max-width: 92px; }
 }
+/* The theme sizes p, li, td and spans in em of the content size, so the view's own text states its size (measured below 14px before this: 333 table spans at 390, dates and rule counts at 390 and 768) */
+.hl-report-page .hl-rv-view .hl-rv-table td { font-size: 16px; }
+@media (min-width: 700px) { .hl-report-page .hl-rv-view .hl-rv-table td { font-size: 17px; } }
+.hl-report-page .hl-rv-view .hl-rv-table td :is(span, a, code) { font-size: inherit; }
+.hl-report-page .hl-rv-date { font-size: 14px; }
+.hl-report-page .hl-rv-feed-count, .hl-report-page .hl-rv-rulecounts li, .hl-report-page .hl-rv-rulecounts li :is(a, span) { font-size: 15px; }
+@media (min-width: 1100px) { .hl-report-page .hl-rv-feed-count, .hl-report-page .hl-rv-rulecounts li, .hl-report-page .hl-rv-rulecounts li :is(a, span) { font-size: 16px; } }
+.hl-report-page .hl-rv-table-tools button, .hl-report-page .hl-rv-teardown-controls button, .hl-report-page .hl-rv-indicator-actions :is(button, a) { font-size: 15px; }
+@media (min-width: 1100px) { .hl-report-page .hl-rv-table-tools button, .hl-report-page .hl-rv-teardown-controls button, .hl-report-page .hl-rv-indicator-actions :is(button, a) { font-size: 16px; } }

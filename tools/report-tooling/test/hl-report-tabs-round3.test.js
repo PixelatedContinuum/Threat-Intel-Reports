@@ -103,6 +103,11 @@ test('CSS: desktop type follows the site scale and phones keep the 16px floor',(
   assert.match(css,/\.hl-report-page \.hl-post-content \.hl-rv-source :is\(p, li, blockquote\) \{ font-size: 16px; \}/);
   assert.match(css,/\.hl-report-page \.hl-rv-source :is\(th, td\) \{ font-size: 19\.8px; \}/);
 });
+test('CSS: the view states its own text sizes, because the theme sizes p, td and spans in em of the content size',()=>{
+  assert.match(css,/\.hl-report-page \.hl-rv-view \.hl-rv-table td \{ font-size: 16px; \}/);
+  assert.match(css,/@media \(min-width: 700px\) \{ \.hl-report-page \.hl-rv-view \.hl-rv-table td \{ font-size: 17px; \} \}/);
+  assert.match(css,/\.hl-report-page \.hl-post-content \.hl-rv-source th \{ font-size: 14px !important; \}/);
+});
 test('Liquid: the tabbed layout swaps the banner for the masthead bar, reads the same data, and leaves untagged pages on the old include',()=>{
   const post=fs.readFileSync(path.join(root,'_layouts/post.html'),'utf8');
   assert.ok(post.includes('{% if hl_tabbed %}{% include report-sponsor-bar.html %}{% else %}{% include sponsor-banner.html %}{% endif %}\n<div class="hl-post-body">'));
