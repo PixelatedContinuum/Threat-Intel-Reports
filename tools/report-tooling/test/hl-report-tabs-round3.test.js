@@ -102,9 +102,13 @@ test('CSS: round-3 tokens, the old strip, the pill and the gradient and shadow l
   assert.equal(/td\.hl-rv-cell-pill::after/.test(css),false,'no pill drawn behind a cell');
   // v6.1 (Joseph, 2026-10-30): the site's own gradient highlight is reused for the main titles only (header panel, its title text, the
   // tab title, the section header bars, the data-view bar); bodies, tab cells, the toolbar and the bands stay flat.
-  const GRAD_OK=['.hl-report-page .hl-post-header','.hl-report-page .hl-post-header__title','.hl-report-page .hl-rv-panel-head','.hl-report-page .hl-post-content .hl-rv-source > h2','.hl-rv-view-summary'];
+  // T-0500.1.8 (Joseph, 2026-10-30, "Yes, both places"): the gold featured site-sponsor panel (the band and the tab-foot card) reuses the site's
+  // .hl-panel--featured recipe, which Joseph asked to borrow for highlights: its dark gradient and its gold glow. Nothing else gains a gradient.
+  const GRAD_OK=['.hl-report-page .hl-post-header','.hl-report-page .hl-post-header__title','.hl-report-page .hl-rv-panel-head','.hl-report-page .hl-post-content .hl-rv-source > h2','.hl-rv-view-summary',
+    '.hl-rv-siteband__in','.hl-rv-siteband__in::before'];
   const gradSel=[...css.matchAll(/(?:linear|radial|conic)-gradient\(/g)].map(m=>{const open=css.lastIndexOf('{',m.index),from=Math.max(css.lastIndexOf('}',open),css.lastIndexOf('*/',open)+1);return css.slice(from+1,open).trim().split(',')[0].trim();});
   assert.ok(gradSel.length>=5,'the five site-recipe header gradients are present');
+  assert.ok(gradSel.includes('.hl-rv-siteband__in')&&gradSel.includes('.hl-rv-siteband__in::before'),'the featured site-sponsor panel carries its gradient and its glow');
   for(const sel of gradSel)assert.ok(GRAD_OK.includes(sel),'a gradient on a non-header selector: '+sel);
   assert.deepEqual([...css.matchAll(/box-shadow:\s*([^;}]+)/g)].map(m=>m[1].trim()).filter(v=>!/^none( !important)?$/.test(v)),[],'no shadows or glows');
   assert.equal(/max\(14px,\s*1em\)/.test(css),false,'no em-relative chrome size');

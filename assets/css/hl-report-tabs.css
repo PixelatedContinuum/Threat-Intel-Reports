@@ -4,7 +4,7 @@
    What it draws: every report section and the generated data view is a dashboard panel on one of two
    fills (page, card), with a header bar and a 3px edge in the selected tab's site accent. The accent
    is used for lines, marks, labels and links, never as a fill; status words keep green, amber and red.
-   No gradients, glows or shadows. Site tokens carry the neutrals; the muted text token is scoped here.
+   No gradients, glows or shadows, except the site-recipe header bars and the gold featured site-sponsor panel. Site tokens carry the neutrals; the muted text token is scoped here.
 
    Rules this file keeps (each is gated, see tools/report-tooling):
    - nothing in chrome below 13px; prose and table text are set by this file, not left to the theme;
@@ -35,6 +35,8 @@ html:has(.hl-report-page) {
   --rv-ok: var(--hl-accent-green, #4ade80);
   --rv-warn: var(--hl-sev-med-lbl, #facc15);
   --rv-bad: var(--hl-accent-red, #f87171);
+  --rv-gold: #d4a73a;     /* the site sponsor's featured panel: label, Visit button, sticky mark label */
+  --rv-gold-bar: #b8902f; /* its 4px left bar and glow, the site's gold */
   --rv-radius: 8px;
   --rv-pad: 24px;
   --rv-display: var(--hl-font-display, 'Space Grotesk', system-ui, sans-serif);
@@ -60,10 +62,7 @@ html:has(.hl-report-page) {
 /* ---------- Frame ---------- */
 html:has(.hl-report-page) main.content { max-width: 1240px !important; padding-inline: 20px !important; }
 .hl-report-page { padding-top: 24px; min-width: 0; }
-/* the site band is the first thing on the page: it sits flush under the site nav, the header follows 24px below */
-.hl-report-page > .hl-rv-siteband:first-child { margin-top: -24px; }
-/* the band is wider than the column: clip it so a scrollbar never makes a horizontal one */
-html:has(.hl-report-page) { overflow-x: clip; }
+/* the featured site-sponsor band is the first thing in the column: the page's 24px top padding clears the site nav, the header follows 24px below */
 .hl-report-page::before { display: none !important; }
 .hl-report-page *, .hl-rv-back, .hl-rv-figure-dialog { box-sizing: border-box; }
 .hl-report-page [hidden], .hl-rv-back[hidden] { display: none !important; }
@@ -154,25 +153,36 @@ body:has(.hl-report-page) .hl-sponsor-rail { display: none !important; }
 .hl-rv-resource :is(a, button) { display: inline-flex; align-items: center; min-height: 44px; min-width: 44px; }
 
 /* ---------- Sponsors (v6.1): two different things, drawn as two different things ----------
-   SITE sponsor (a Monthly tier sponsor, whole site): a recessed full-width band at the very top, above the header, labelled
-   "The Hunter's Ledger is supported by". It is site chrome, outside every report panel, and never says it sponsors this report.
+   SITE sponsor (a Monthly tier sponsor, whole site): a gold featured panel at the very top of the column, above the header, labelled
+   "Featured sponsor of The Hunter's Ledger" (T-0500.1.8; the site's .hl-panel--featured recipe). It is outside every report panel and never says it sponsors this report.
    REPORT sponsor (the page's sponsored_by): attached to the report header panel as its foot, "This report is sponsored by".
-   It alone is the sponsor in the reading-line mark and in the tab-foot card; with no report sponsor those show the site sponsors, labelled "Site sponsor". */
-.hl-rv-siteband {
-  position: relative; box-sizing: border-box; width: 100vw; margin: 0 0 24px calc(50% - 50vw); padding: 0 20px;
-  background: var(--rv-well); border-top: 1px solid var(--rv-row-line); border-bottom: 1px solid var(--rv-line);
+   It alone is the sponsor in the reading-line mark and in the tab-foot card; with no report sponsor the card is the same gold panel
+   as the band and the mark reads "Site sponsor" in gold. Gold means the site's sponsor; the tab accent means this report's sponsor. */
+.hl-rv-siteband { position: relative; box-sizing: border-box; margin: 0 0 24px; padding: 0; }
+/* the featured panel: band and tab-foot card share it (site .hl-panel--featured: 135deg dark gradient, gold glow, 1px border, 4px gold bar, 6px radius) */
+.hl-rv-siteband__in, .hl-rv-sponsor-card.is-site {
+  position: relative; overflow: hidden; display: flex; flex-wrap: wrap; align-items: center; gap: 10px 28px; padding: 18px 24px 18px 20px;
+  background: linear-gradient(135deg, #1c1c1c, #0d1117); border: 1px solid var(--rv-line); border-left: 4px solid var(--rv-gold-bar); border-radius: 6px;
 }
-.hl-rv-siteband__in { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 24px; max-width: 1200px; margin: 0 auto; min-height: 56px; padding: 6px 0; }
+.hl-rv-siteband__in::before, .hl-rv-sponsor-card.is-site::before { content: ''; position: absolute; inset: 0; pointer-events: none; background: radial-gradient(120% 150% at 0% 0%, var(--rv-gold-bar), transparent 56%); opacity: 0.16; }
+.hl-rv-siteband__in > *, .hl-rv-sponsor-card.is-site > * { position: relative; }
+.hl-rv-siteband .hl-rv-siteband__label, .hl-rv-sponsor-card.is-site .hl-rv-sponsor-card__label { color: var(--rv-gold) !important; font-weight: 700; }
+/* the real Visit call to action: a gold outline button at the right of the panel */
+.hl-rvsp__cta, .hl-rv-sponsor-card__cta { margin-left: auto; flex: none; font-size: var(--rv-fs); font-weight: 600; line-height: 1.4; color: var(--rv-gold); border: 1px solid var(--rv-gold-bar); border-radius: 6px; padding: 7px 13px; white-space: nowrap; }
+a.hl-rvsp__item:hover .hl-rvsp__cta, a.hl-rv-sponsor-card__item:hover .hl-rv-sponsor-card__cta { background: color-mix(in srgb, var(--rv-gold-bar) 18%, transparent); }
 .hl-rvsp__label, .hl-rv-sponsor-card__label, .hl-rv-sponsor-mark__label { flex: none; white-space: nowrap; color: var(--rv-muted) !important; }
 .hl-rvsp__items { flex: 1 1 auto; display: flex; flex-wrap: wrap; align-items: center; gap: 8px 24px; min-width: 0; }
 .hl-rvsp__item { display: flex; align-items: center; gap: 16px; min-width: 0; color: inherit; text-decoration: none !important; border-radius: var(--rv-radius); }
 .hl-rvsp__logo { display: block; flex: none; width: auto; object-fit: contain; }
-.hl-rv-siteband .hl-rvsp__logo { height: 26px; max-width: 160px; }
+.hl-rv-siteband .hl-rvsp__logo { height: 38px; max-width: 220px; }
 .hl-rvsp__text { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
 .hl-rvsp__name { font-size: var(--rv-fs); font-weight: 600; color: var(--rv-text); white-space: nowrap; }
 .hl-rvsp__item:has(.hl-rvsp__logo) .hl-rvsp__name { display: none; }
 .hl-rvsp__tagline { font-size: var(--rv-fs); color: var(--rv-muted); display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; line-clamp: 2; overflow: hidden; max-width: 60ch; }
-.hl-rvsp__zone--many .hl-rvsp__item:has(.hl-rvsp__logo) .hl-rvsp__text { display: none; }
+.hl-rvsp__zone--many .hl-rvsp__item:has(.hl-rvsp__logo) .hl-rvsp__text, .hl-rvsp__zone--many .hl-rvsp__cta { display: none; }
+.hl-rv-siteband .hl-rvsp__item { flex: 1 1 auto; gap: 20px; }
+.hl-rv-siteband .hl-rvsp__tagline { color: var(--rv-text); }
+.hl-rv-siteband .hl-rvsp__zone--many .hl-rvsp__item { flex: none; }
 .hl-rvsp a.hl-rvsp__item:hover .hl-rvsp__tagline { color: var(--rv-text); }
 .hl-rv-siteband a.hl-rvsp__item { min-height: 44px; }
 /* the report sponsor: the foot of the header panel, the most prominent sponsor element on the page */
@@ -186,13 +196,14 @@ body:has(.hl-report-page) .hl-sponsor-rail { display: none !important; }
 .hl-rvsp--report .hl-rvsp__tagline { color: var(--rv-text); max-width: 56ch; }
 /* theme gives every img padding and a border: logos get neither */
 .hl-report-page img.hl-rvsp__logo, .hl-rv-siteband img.hl-rvsp__logo, .hl-rv-sponsor-mark img, .hl-rv-sponsor-card__item img { padding: 0 !important; border: 0 !important; background: none !important; border-radius: 0 !important; box-shadow: none !important; margin: 0 !important; max-width: none; }
-.hl-rv-siteband img.hl-rvsp__logo { max-width: 160px !important; }
+.hl-rv-siteband img.hl-rvsp__logo { max-width: 220px !important; }
 .hl-rvsp--report img.hl-rvsp__logo { max-width: 280px !important; }
 /* the mark on the reading line (built by the script) */
 .hl-rv-sponsor-mark { order: 7; display: inline-flex; align-items: center; gap: 10px; min-height: 44px; padding-left: 12px; margin-left: 4px; border-left: 1px solid var(--rv-line); color: var(--rv-muted); text-decoration: none; white-space: nowrap; }
 .hl-rv-sponsor-mark img { height: 24px; width: auto; display: block; }
 .hl-rv-sponsor-mark.is-report img { height: 28px; }
 .hl-rv-sponsor-mark__name { font-size: var(--rv-fs); font-weight: 600; color: var(--rv-text); }
+.hl-rv-sponsor-mark.is-site .hl-rv-sponsor-mark__label { color: var(--rv-gold) !important; }
 /* the panel at each tab foot */
 .hl-rv-sponsor-card { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 32px; margin: 0 0 24px; padding: 18px var(--rv-pad); background: var(--rv-card); border: 1px solid var(--rv-line); border-radius: var(--rv-radius); }
 .hl-rv-sponsor-card.is-report { background: var(--rv-row); border-left: 4px solid var(--acc); padding-left: calc(var(--rv-pad) - 3px); }
@@ -200,6 +211,12 @@ body:has(.hl-report-page) .hl-sponsor-rail { display: none !important; }
 .hl-rv-sponsor-card__items { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 32px; }
 .hl-rv-sponsor-card__item { display: flex; align-items: center; gap: 16px; text-decoration: none !important; color: var(--rv-text) !important; min-height: 44px; }
 .hl-rv-sponsor-card__item img { display: block; height: 30px; width: auto; max-width: 200px; object-fit: contain; }
+.hl-rv-sponsor-card.is-site .hl-rv-sponsor-card__items, .hl-rv-sponsor-card.is-site .hl-rv-sponsor-card__item { flex: 1 1 auto; }
+.hl-rv-sponsor-card.is-site .hl-rv-sponsor-card__item { gap: 20px; }
+.hl-rv-sponsor-card.is-site .hl-rv-sponsor-card__item img { height: 38px; max-width: 220px; }
+.hl-rv-sponsor-card.is-site .hl-rv-sponsor-card__tagline { color: var(--rv-text); }
+.hl-rv-sponsor-card.is-site.is-many .hl-rv-sponsor-card__item { flex: none; }
+.hl-rv-sponsor-card.is-site.is-many :is(.hl-rv-sponsor-card__tagline, .hl-rv-sponsor-card__cta) { display: none; }
 .hl-rv-sponsor-card.is-report .hl-rv-sponsor-card__item img { height: 40px; max-width: 260px; }
 .hl-rv-sponsor-card__text { display: flex; flex-direction: column; gap: 2px; }
 .hl-rv-sponsor-card__name { font-size: var(--rv-fs); font-weight: 600; color: var(--rv-text); }
@@ -633,9 +650,6 @@ html:has(.hl-report-page) .hl-toast__label { font-size: var(--rv-fs); }
   .hl-report-page .hl-post-content .hl-rv-source > h2 { font-size: 18px !important; }
   .hl-report-page .hl-post-content .hl-rv-source h3 { margin-top: 28px !important; padding-top: 20px !important; }
   .hl-rv-view-summary p { flex: 1 1 100%; order: 3; }
-  .hl-rv-siteband { padding: 0 16px; margin-bottom: 24px; }
-  .hl-report-page > .hl-rv-siteband:first-child { margin-top: -24px; }
-  .hl-rv-siteband .hl-rvsp__tagline { display: none; }
   .hl-report-page .hl-rvsp--report { padding: 14px 16px 14px 13px; margin-bottom: 24px; }
   .hl-rvsp--report .hl-rvsp__logo { height: 36px; max-width: 220px; }
   .hl-rv-sponsor-mark__label { display: none; }
@@ -655,6 +669,14 @@ html:has(.hl-report-page) .hl-toast__label { font-size: var(--rv-fs); }
   .hl-rv-menu-item { padding: 8px 10px; gap: 1px; }
   /* on a phone the report bar takes the safe-area top while reading; the site nav returns above the report */
   html.hl-rv-reading .hl-nav { transform: translateY(-100%) !important; transition: none !important; }
+}
+/* the featured site-sponsor panel on a phone: the label takes its own row, the tagline stays, and Visit is a full-width button under the content */
+@media (max-width: 640px) {
+  .hl-rv-siteband__in, .hl-rv-sponsor-card.is-site { padding: 14px 16px 14px 14px; gap: 10px 16px; }
+  .hl-rv-siteband .hl-rv-siteband__label, .hl-rv-sponsor-card.is-site .hl-rv-sponsor-card__label { white-space: normal; flex: 1 1 100%; min-width: 0; }
+  .hl-rv-siteband .hl-rvsp__item, .hl-rv-sponsor-card.is-site .hl-rv-sponsor-card__item { flex-wrap: wrap; gap: 10px 16px; }
+  .hl-rv-siteband .hl-rvsp__logo, .hl-rv-sponsor-card.is-site .hl-rv-sponsor-card__item img { height: 30px; }
+  .hl-rvsp__cta, .hl-rv-sponsor-card__cta { margin-left: 0; width: 100%; text-align: center; box-sizing: border-box; }
 }
 @media (max-width: 479px) {
   .hl-rv-swimlanes { display: none; }

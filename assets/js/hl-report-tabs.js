@@ -210,7 +210,7 @@
     if (!sponsorPool.length) return;
     var s = sponsorPool[i % sponsorPool.length];
     if (sponsorMark) sponsorMark.remove();
-    sponsorMark = sponsorLink(s, 'hl-rv-sponsor-mark' + (reportSponsors.length ? ' is-report' : ''), mobileLine);
+    sponsorMark = sponsorLink(s, 'hl-rv-sponsor-mark' + (reportSponsors.length ? ' is-report' : ' is-site'), mobileLine);
     sponsorMark.setAttribute('aria-label', sponsorLabel + ' ' + s.name + (s.tagline ? ': ' + s.tagline : ''));
     if (s.tagline) sponsorMark.title = s.tagline;
     make('span', 'hl-rv-sponsor-mark__label', sponsorLabel, sponsorMark);
@@ -218,9 +218,12 @@
   }
   function sponsorCard(panel) {
     if (!sponsorPool.length) return;
-    var card = make('aside', 'hl-rv-sponsor-card' + (reportSponsors.length ? ' is-report' : ''), null, panel);
+    // With no report sponsor the card is the site sponsor's gold featured panel (same as the band at the top of the page);
+    // with several site sponsors it shows logos only, like the band. A report sponsor's card keeps the tab accent.
+    var featured = !reportSponsors.length, many = featured && sponsorPool.length > 1;
+    var card = make('aside', 'hl-rv-sponsor-card' + (reportSponsors.length ? ' is-report' : ' is-site' + (many ? ' is-many' : '')), null, panel);
     card.setAttribute('aria-label', reportSponsors.length ? 'Report sponsor' : 'Site sponsor');
-    make('p', 'hl-rv-sponsor-card__label', sponsorLabel, card);
+    make('p', 'hl-rv-sponsor-card__label', featured ? "Featured sponsor of The Hunter's Ledger" : sponsorLabel, card);
     var items = make('div', 'hl-rv-sponsor-card__items', null, card);
     sponsorPool.forEach(function (s) {
       var a = sponsorLink(s, 'hl-rv-sponsor-card__item', items);
@@ -228,6 +231,7 @@
       var t = make('span', 'hl-rv-sponsor-card__text', null, a);
       make('span', 'hl-rv-sponsor-card__name', s.name, t);
       if (s.tagline) make('span', 'hl-rv-sponsor-card__tagline', s.tagline, t);
+      if (featured && a.tagName === 'A') { var cta = make('span', 'hl-rv-sponsor-card__cta', 'Visit \u2192', a); cta.setAttribute('aria-hidden', 'true'); }
     });
   }
 
