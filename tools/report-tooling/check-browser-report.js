@@ -855,6 +855,120 @@ async function tabLookRows(page, url) {
   else check(name, v.ok, v.detail);
 }
 
+/* Design v6.1 (T-0500.1.7), Joseph's review of the v6 preview: "no clear separation between anything" and "the text is too small".
+   Two rows. (1) The top of the page is a stack of separate containers: each adjacent pair is at least 24 px apart (23.5 allows for
+   sub-pixel layout), each is a bordered panel on a surface that is not the page's own, and the tab row and the reading toolbar are on
+   different surfaces. (2) The type scale: the report's prose stays 18 px, and at desktop widths tab names are 17 px, secondary text and
+   table cells 16 px, mono micro-labels 14 px; on a phone secondary text and table cells keep a 15 px floor. Both are measured in the
+   browser, not read from the stylesheet. The verdicts are pure so a test can drive each to FAIL. */
+var PANEL_GAP_MIN_PX = 23.5;
+var PANEL_COMPONENTS = [
+  ['site band', '.hl-rv-siteband', true],
+  ['header', '.hl-post-header', true],
+  ['report sponsor', '.hl-rvsp--report', true],
+  ['tab row', '.hl-rv-tabs', true],
+  ['toolbar', '.hl-rv-mobile-line', true],
+  ['tab title', '.hl-rv-panel:not([hidden]) .hl-rv-panel-head', false],
+  ['data view', '.hl-rv-panel:not([hidden]) .hl-rv-view', true],
+  ['first section panel', '.hl-rv-panel:not([hidden]) .hl-rv-source', true]
+];
+var PANEL_EXPR = '(function(){var COMPS=' + JSON.stringify(PANEL_COMPONENTS) + ';' +
+  'var page=getComputedStyle(document.body).backgroundColor;' +
+  'function vis(e){return !!e&&e.getClientRects().length>0&&getComputedStyle(e).visibility!=="hidden";}' +
+  'var out=[];COMPS.forEach(function(c){var e=[].slice.call(document.querySelectorAll(c[1])).filter(vis)[0];if(!e)return;' +
+  'var r=e.getBoundingClientRect(),cs=getComputedStyle(e);out.push({name:c[0],boxed:c[2],top:r.top+scrollY,bottom:r.bottom+scrollY,' +
+  'border:parseFloat(cs.borderTopWidth)+parseFloat(cs.borderLeftWidth),bg:cs.backgroundColor,image:cs.backgroundImage!=="none"});});' +
+  'return {page:page,items:out};})()';
+function panelStackVerdict(m) {
+  if (!m || !m.items || m.items.length < 4) return { notChecked: true, ok: false, detail: 'fewer than four top components were found, so no gap was measured' };
+  var items = m.items.slice().sort(function (a, b) { return a.top - b.top; });
+  var clear = function (c) { return !c || c === 'transparent' || /^rgba\(\s*0,\s*0,\s*0,\s*0\s*\)$/.test(c); };
+  var why = [], gaps = [];
+  for (var i = 0; i < items.length; i++) {
+    var it = items[i];
+    if (it.boxed) {
+      if (!(it.border >= 1)) why.push(it.name + ' has no border');
+      if (it.bg === m.page && !it.image) why.push(it.name + ' is on the page surface ' + it.bg);
+      if (clear(it.bg) && !it.image) why.push(it.name + ' has no surface of its own');
+    }
+    if (i > 0) {
+      /* a report sponsor is the attached foot of the header panel (one box), so it is not a gap to measure */
+      var prev = items[i - 1], gap = it.top - prev.bottom;
+      if (it.name === 'report sponsor' && prev.name === 'header') { if (Math.abs(gap) > 1.5) why.push('the report sponsor is not attached to the header (' + gap.toFixed(1) + ' px)'); continue; }
+      gaps.push(prev.name + '->' + it.name + ' ' + gap.toFixed(1));
+      if (gap < PANEL_GAP_MIN_PX) why.push(prev.name + ' to ' + it.name + ' is ' + gap.toFixed(1) + ' px apart');
+    }
+  }
+  var tabs = items.filter(function (x) { return x.name === 'tab row'; })[0], bar = items.filter(function (x) { return x.name === 'toolbar'; })[0];
+  if (tabs && bar && tabs.bg === bar.bg) why.push('the tab row and the toolbar are on one surface ' + bar.bg);
+  return { notChecked: false, ok: why.length === 0, why: why, gaps: gaps, detail: items.length + ' components, gaps ' + gaps.join(', ') + (why.length ? '; ' + why.join('; ') : '') };
+}
+var TYPE_SPEC = [
+  /* [name, selector, desktop min px, phone min px, kind] */
+  ['Executive Summary prose', 'LONGP:.hl-rv-panel:not([hidden]) .hl-rv-source > p', 18, 17],
+  ['tab name', '.hl-rv-tabs button .hl-rv-tab-full', 17, null],
+  ['tab minutes', '.hl-rv-tabs button .hl-rv-tab-time', 14, null],
+  ['section panel heading', '.hl-rv-panel:not([hidden]) .hl-rv-source > h2', 20, 18],
+  ['data-view summary line', '.hl-rv-panel:not([hidden]) .hl-rv-view-summary p', 16, 15],
+  ['stat tile label', '.hl-rv-panel:not([hidden]) .hl-rv-tile > span:not(.hl-rv-tile-destination):not(.hl-rv-value)', 16, 15],
+  ['stat tile link', '.hl-rv-panel:not([hidden]) .hl-rv-tile-destination', 14, 14],
+  ['how-counted note', '.hl-rv-panel:not([hidden]) .hl-rv-tile-note', 16, 15],
+  ['table cell', '.hl-rv-panel:not([hidden]) .hl-rv-source td', 16, 15],
+  ['table header', '.hl-rv-panel:not([hidden]) .hl-rv-source th', 14, 14],
+  ['toolbar text', '.hl-rv-current-section', 16, 15],
+  ['toolbar mono label', '.hl-rv-current', 14, null],
+  ['header mono label', '.hl-post-header__badge', 14, 14],
+  ['sponsor mono label', '.hl-rvsp__label', 14, 14]
+];
+var TYPE_EXPR = '(function(){var SPEC=' + JSON.stringify(TYPE_SPEC) + ';' +
+  'function vis(e){return e.getClientRects().length>0&&getComputedStyle(e).visibility!=="hidden";}' +
+  'return SPEC.map(function(c){var sel=c[1],els;if(sel.indexOf("LONGP:")===0){var e=[].slice.call(document.querySelectorAll(sel.slice(6))).filter(function(x){return vis(x)&&x.textContent.length>200;})[0];els=e?[e]:[];}' +
+  'else els=[].slice.call(document.querySelectorAll(sel)).filter(vis);' +
+  'return {name:c[0],n:els.length,px:els.length?Math.min.apply(null,els.map(function(e){return parseFloat(getComputedStyle(e).fontSize);})):null};});})()';
+function typeScaleVerdict(rows, phone) {
+  if (!rows || !rows.length) return { notChecked: true, ok: false, detail: 'nothing was measured' };
+  var why = [], measured = 0, listed = [];
+  rows.forEach(function (r, i) {
+    var min = phone ? TYPE_SPEC[i][3] : TYPE_SPEC[i][2];
+    if (min == null) return;
+    if (!r.n || r.px == null) return; /* an element absent from this tab is not a failure; the count below says how many were measured */
+    measured++;
+    listed.push(r.name + ' ' + r.px);
+    if (r.px < min - 0.01) why.push(r.name + ' is ' + r.px + ' px, floor ' + min);
+  });
+  if (measured < 8) return { notChecked: true, ok: false, detail: 'only ' + measured + ' of the type-scale elements were found, so the scale was not measured' };
+  return { notChecked: false, ok: why.length === 0, why: why, detail: measured + ' elements measured (' + listed.join(', ') + ')' + (why.length ? '; ' + why.join('; ') : '') };
+}
+async function panelRows(page, url) {
+  var states = [[1280, 900, 'desktop 1280', false], [390, 844, 'phone 390', true]];
+  for (var i = 0; i < states.length; i++) {
+    var w = states[i][0], h = states[i][1], label = states[i][2], phone = states[i][3];
+    await setViewport(page, w, h);
+    var nameA = 'the top of the page is separate panels, each at least 24 px apart, on their own surfaces';
+    var nameB = 'text is on the v6.1 scale: tab names 17, secondary and table text 16, mono labels 14, phone floor 15';
+    if (!(await gotoAndWait(page, url))) {
+      check('NOT CHECKED: ' + label + ': ' + nameA, false, 'the tab controller never built, so nothing was measured');
+      check('NOT CHECKED: ' + label + ': ' + nameB, false, 'the tab controller never built, so nothing was measured');
+      continue;
+    }
+    var tabsMeasured = [];
+    for (var t = 0; t < 2; t++) {
+      var token = TAB_TOKENS[t === 0 ? 0 : 2]; /* overview (tiles, lead) and chain (tables, filters) */
+      await page.evaluate('location.hash="#tab-' + token + '"');
+      await CDP.sleep(250);
+      await page.evaluate('window.scrollTo(0,0)');
+      await CDP.sleep(150);
+      var pv = panelStackVerdict(await page.json(PANEL_EXPR));
+      if (pv.notChecked) check('NOT CHECKED: ' + label + ' ' + token + ': ' + nameA, false, pv.detail);
+      else check(label + ' ' + token + ': ' + nameA, pv.ok, pv.detail);
+      await page.evaluate('document.querySelectorAll(".hl-rv-view details").forEach(function(d){d.open=true;})');
+      var tv = typeScaleVerdict(await page.json(TYPE_EXPR), phone);
+      if (tv.notChecked) check('NOT CHECKED: ' + label + ' ' + token + ': ' + nameB, false, tv.detail);
+      else check(label + ' ' + token + ': ' + nameB, tv.ok, tv.detail);
+    }
+  }
+}
+
 /* Row A, at the two sizes 4a names for the bar. */
 async function tabBarRows(page, url) {
   for (var v = 0; v < TAB_BAR_VIEWPORTS.length; v++) {
@@ -1620,6 +1734,7 @@ async function tabbedChecks(page, opts) {
       (textSmallList.length ? ': ' + textSmallList.slice(0, 8).join(' | ') : ''));
   }
   await tabLookRows(page, url);
+  await panelRows(page, url);
 
   /* ---- 4a: the bar at 768/812x375, and the targets 4a names (p7) -------- */
   await tabBarRows(page, url);
@@ -2274,6 +2389,11 @@ if (require.main === module) {
     MIN_TARGET_PX: MIN_TARGET_PX,
     TAB_BAR_VIEWPORTS: TAB_BAR_VIEWPORTS,
     tabLookVerdict: tabLookVerdict,
+    panelStackVerdict: panelStackVerdict,
+    typeScaleVerdict: typeScaleVerdict,
+    TYPE_SPEC: TYPE_SPEC,
+    PANEL_EXPR: PANEL_EXPR,
+    TYPE_EXPR: TYPE_EXPR,
     chromeTextExpr: chromeTextExpr,
     CHROME_FLOOR_PX: CHROME_FLOOR_PX,
     TAB_TARGET_VIEWPORTS: TAB_TARGET_VIEWPORTS,
