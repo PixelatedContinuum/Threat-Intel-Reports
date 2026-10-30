@@ -1262,6 +1262,85 @@ async function mispRows(page, url) {
   }
 }
 
+/* T-0500.1.9 (Joseph 2026-10-30, audit H07 and F2): the ATT&CK coverage strip and the Navigator layer download are back on tabbed pages. On a
+   tabbed report whose Attack chain tab holds an ATT&CK mapping table (a table whose header names a Tactic and whose rows carry technique IDs,
+   found here WITHOUT the strip's own parser so a page that never loaded attack-coverage.js cannot excuse itself), the Attack chain panel draws
+   one coverage strip per such table: every tactic bar of the strip (15), a count of more than 0 techniques, the strip marked as generated
+   chrome so the completeness gate does not count its words, and a "Navigator layer" button that, clicked, offers a .json file whose layer lists
+   techniques. A report with no such table is NOT CHECKED, never a pass. The control serves the same page with the attack-coverage.js script tag
+   removed and requires this row to FAIL on it. */
+var ATTACK_STRIP_EXPR = '(async function(){' +
+  'function vis(e){var r=e.getBoundingClientRect();return r.width>0&&r.height>0&&getComputedStyle(e).visibility!=="hidden";}' +
+  'var panel=document.getElementById("tab-chain");' +
+  'var tables=[].slice.call(document.querySelectorAll(".hl-post-content table")).filter(function(t){var h=t.rows[0]?t.rows[0].textContent:"";return /tactic/i.test(h)&&/\\bT\\d{4}/.test(t.textContent);});' +
+  'var strips=[].slice.call(document.querySelectorAll(".hl-attack"));' +
+  'var mine=strips.filter(function(x){return panel&&panel.contains(x);});var st=mine[0]||null;' +
+  'var exp=st?[].slice.call(st.querySelectorAll(".hl-attack__export")):[];var btn=exp[0]||null;' +
+  'var dl=null;if(btn){var cap=null,old=HTMLAnchorElement.prototype.click;HTMLAnchorElement.prototype.click=function(){cap={href:this.href,download:this.download};};' +
+  'try{btn.click();}finally{HTMLAnchorElement.prototype.click=old;}' +
+  'if(cap){try{var j=JSON.parse(await (await fetch(cap.href)).text());dl={file:cap.download,techniques:(j.techniques||[]).length,domain:j.domain||null};}catch(e){dl={file:cap.download,error:String(e)};}}else dl={error:"clicking the button offered no file"};}' +
+  'var cnt=st?(st.querySelector(".hl-attack__count")||{}).textContent||"":"";var n=cnt.match(/(\\d+) techniques/);' +
+  'return JSON.stringify({mappingTables:tables.length,tablesInChain:tables.filter(function(t){return panel&&panel.contains(t);}).length,panelFound:!!panel,' +
+  'strips:strips.length,inChain:mine.length,chrome:mine.filter(function(x){return x.hasAttribute("data-rv-chrome");}).length,' +
+  'segs:st?st.querySelectorAll(".hl-attack__seg").length:0,techniques:n?Number(n[1]):0,count:cnt,' +
+  'visible:st?vis(st):false,exportCount:exp.length,exportVisible:btn?vis(btn):false,exportText:btn?btn.textContent.trim():null,download:dl});})()';
+function attackStripVerdict(m) {
+  if (!m) return { notChecked: true, ok: false, detail: 'nothing was measured' };
+  if (!m.panelFound) return { notChecked: true, ok: false, detail: 'the page has no Attack chain panel (#tab-chain), so there is nothing to look in' };
+  if (!m.mappingTables) return { notChecked: true, ok: false, detail: 'no ATT&CK mapping table (a Tactic column with technique IDs) on this report, so no strip is expected' };
+  var why = [];
+  if (!m.tablesInChain) why.push('the ATT&CK mapping table is not in the Attack chain tab, so the strip cannot be there');
+  if (m.inChain < 1) why.push('no coverage strip is drawn in the Attack chain tab although the report has ' + m.mappingTables + ' ATT&CK mapping table(s) (' + m.strips + ' strip(s) on the whole page)');
+  else {
+    if (m.chrome !== m.inChain) why.push(m.inChain - m.chrome + ' strip(s) are not marked data-rv-chrome, so the completeness gate would count their words as report text');
+    if (m.segs !== 15) why.push('the strip has ' + m.segs + ' tactic bars (15 expected)');
+    if (!(m.techniques > 0)) why.push('the strip counts ' + m.techniques + ' techniques (' + JSON.stringify(m.count) + ')');
+    if (!m.visible) why.push('the strip is not painted');
+    if (m.exportCount !== 1) why.push(m.exportCount + ' Navigator layer buttons in the strip (1 expected)');
+    else {
+      if (!/Navigator layer/.test(m.exportText || '')) why.push('the download button reads ' + JSON.stringify(m.exportText));
+      if (!m.exportVisible) why.push('the Navigator layer button is not painted');
+      if (!m.download || m.download.error) why.push('the Navigator layer button offered no usable file (' + (m.download ? m.download.error : 'no result') + ')');
+      else if (!/\.json$/.test(m.download.file || '') || !(m.download.techniques > 0)) why.push('the download is ' + JSON.stringify(m.download.file) + ' with ' + m.download.techniques + ' technique(s) in its layer');
+    }
+  }
+  return { notChecked: false, ok: why.length === 0, why: why, detail: m.inChain + ' strip(s) in the Attack chain tab of ' + m.mappingTables + ' mapping table(s), ' + m.segs + ' bars, ' + m.techniques + ' techniques' + (m.download && m.download.file ? ', download ' + m.download.file + ' with ' + m.download.techniques + ' technique(s)' : '') + (why.length ? '; ' + why.join('; ') : '') };
+}
+function attackStripControlHtml(html) {
+  var out = String(html).replace(/<script\b[^>]*attack-coverage\.js[^>]*><\/script>/, '');
+  return out === html ? null : out;
+}
+async function attackStripRows(page, url, html) {
+  var name = 'the Attack chain tab draws the ATT&CK coverage strip with a working Navigator layer download';
+  var states = [[1280, 900], [390, 844]];
+  for (var i = 0; i < states.length; i++) {
+    await setViewport(page, states[i][0], states[i][1]);
+    var label = states[i][0] + 'x' + states[i][1] + ': ' + name;
+    if (!(await gotoAndWait(page, url + '#tab-chain'))) { check('NOT CHECKED: ' + label, false, 'the tab controller never built, so nothing was measured'); continue; }
+    await CDP.sleep(250);
+    var v = attackStripVerdict(JSON.parse(await page.evaluate(ATTACK_STRIP_EXPR)));
+    if (v.notChecked) check('NOT CHECKED: ' + label, false, v.detail);
+    else check(label, v.ok, v.detail);
+  }
+  /* The control: the same page with attack-coverage.js removed. The row above must FAIL on it, or the row cannot see a missing strip. */
+  var cname = 'control: the strip row FAILS on a copy of the page without attack-coverage.js';
+  var ctl = attackStripControlHtml(html);
+  if (!ctl) { check('NOT CHECKED: ' + cname, false, 'the fetched page has no attack-coverage.js script tag to remove, so there is no strip to take away'); return; }
+  var cpath = new URL(url).pathname + '__no-attack-strip/';
+  var csrv = await SERVER.start({ [cpath]: ctl }, { root: ROOT, base: BASE });
+  try {
+    await setViewport(page, 1280, 900);
+    if (!(await gotoAndWait(page, csrv.origin + cpath + '#tab-chain'))) { check('NOT CHECKED: ' + cname, false, 'the tab controller never built on the control copy'); return; }
+    await CDP.sleep(250);
+    var cv = attackStripVerdict(JSON.parse(await page.evaluate(ATTACK_STRIP_EXPR)));
+    if (cv.notChecked) check('NOT CHECKED: ' + cname, false, cv.detail);
+    else check(cname, !cv.ok && /no coverage strip is drawn/.test(cv.why.join(' ')), 'the row said: ' + (cv.ok ? 'PASS (it cannot see a missing strip)' : cv.why.join('; ')));
+  } finally {
+    csrv.close();
+  }
+  await restoreReportPage(page, url);
+}
+
 /* T-0500.1.7.1: the timeline marks (Joseph, 2026-10-30: "a pretty good amount larger") and their legend. At 1280 and 768 the swim-lane dots are at
    least 32 px (30 on a phone width) and their numbers at least 18 px; at 390 the vertical list's dots are at least 24 px and its numbers 18 px.
    No two marks overlap, no mark overlaps an axis date, and every event is present as a mark, as a dated list item and as a row of the table. The
@@ -2136,6 +2215,7 @@ async function tabbedChecks(page, opts) {
   await shareRows(page, url);
   await mispRows(page, url);
   await timelineRows(page, url);
+  await attackStripRows(page, url, opts.html);
 
   /* ---- 4a: the bar at 768/812x375, and the targets 4a names (p7) -------- */
   await tabBarRows(page, url);
@@ -2816,6 +2896,9 @@ if (require.main === module) {
     tabHitExpr: tabHitExpr,
     tabTargetExpr: tabTargetExpr,
     tabReachVerdict: tabReachVerdict,
-    targetRowVerdict: targetRowVerdict
+    targetRowVerdict: targetRowVerdict,
+    attackStripVerdict: attackStripVerdict,
+    attackStripControlHtml: attackStripControlHtml,
+    ATTACK_STRIP_EXPR: ATTACK_STRIP_EXPR
   };
 }

@@ -633,6 +633,23 @@ html:has(.hl-report-page) .hl-toast__label { font-size: var(--rv-fs); }
 }
 .hl-onepage .hl-rv-panel, .hl-onepage .hl-rv-view, .hl-onepage .hl-rv-contents, .hl-onepage .hl-rv-nextprev { display: none !important; }
 
+/* ---------- The ATT&CK coverage strip in the Attack chain tab (T-0500.1.9) ----------
+   assets/js/attack-coverage.js draws it beside the mapping table on every layout; its base rules
+   (custom.scss .hl-attack*) set one row of 15 bars with 8 px labels, which on this layout is under
+   the chrome floor and, because every button here is at least 44 px wide, 739 px across at a
+   390 px viewport. Here the bars wrap into as many columns as fit, each cell a 62 px bar over its
+   tactic name at 14 px (the file's floor). The bar heights are the script's own inline percentages, now of the cell's
+   62 px row. */
+.hl-report-page .hl-attack { max-width: 100%; min-width: 0; box-sizing: border-box; }
+.hl-report-page .hl-attack__bars { display: grid; grid-template-columns: repeat(auto-fill, minmax(104px, 1fr)); gap: 10px 4px; height: auto; align-items: start; }
+.hl-report-page .hl-attack__seg { display: grid; grid-template-columns: minmax(0, 1fr); grid-template-rows: 62px auto; align-content: start; width: 100%; height: auto; min-width: 0; padding: 0 2px; box-sizing: border-box; border: 0; border-radius: 4px; }
+.hl-report-page .hl-attack__seg:hover { background: rgba(128, 128, 128, 0.1); }
+.hl-report-page .hl-attack__fill { align-self: end; }
+.hl-report-page .hl-attack__seglabel { font-size: 14px; line-height: 1.25; opacity: 0.85; margin-top: 4px; white-space: normal; overflow: visible; text-overflow: clip; overflow-wrap: break-word; text-align: center; }
+.hl-report-page .hl-attack__count, .hl-report-page .hl-attack__export, .hl-report-page .hl-attack__prompt, .hl-report-page .hl-attack__detailhead, .hl-report-page .hl-attack__chip { font-size: 14px; }
+.hl-report-page .hl-attack__chip { padding: 6px 10px; }
+.hl-report-page .hl-attack__export { padding: 0 14px; }
+
 /* ---------- Responsive ---------- */
 @media (min-width: 1100px) {
   .hl-report-page .hl-post-header { grid-template-columns: minmax(0, 1fr) auto; }

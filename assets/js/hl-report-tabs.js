@@ -88,9 +88,10 @@
     return tools;
   }
 
-  // figure-nav runs before this deferred script. Mark its generated labels
+  // figure-nav and attack-coverage run before this deferred script. Mark their generated
+  // labels (the figure chips; the ATT&CK coverage strip and its Navigator download, T-0500.1.9)
   // before detaching anything, so rollback retains only report words too.
-  content.querySelectorAll('.hl-fignav').forEach(function (n) { n.setAttribute('data-rv-chrome', ''); n.setAttribute('data-pagefind-ignore', ''); });
+  content.querySelectorAll('.hl-fignav, .hl-attack').forEach(function (n) { n.setAttribute('data-rv-chrome', ''); n.setAttribute('data-pagefind-ignore', ''); });
   // A failed enhancement must put the exact original nodes back, in report order.
   var originalChrome = new Set(document.querySelectorAll('[data-rv-chrome]'));
   var curation = {};
