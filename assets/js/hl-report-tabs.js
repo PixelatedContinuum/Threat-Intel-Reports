@@ -196,9 +196,10 @@
   });
   var reportSponsors = sponsorList.filter(function (x) { return x.kind === 'report'; });
   var siteSponsors = sponsorList.filter(function (x) { return x.kind !== 'report'; });
-  // The report sponsor when there is one, else the Monthly sponsors: never both in one place.
+  // The report sponsor alone when there is one (Report tier: no competing logos in the report), else the site
+  // (Monthly) sponsors, labelled as the site's: a site sponsor is never presented as this report's sponsor.
   var sponsorPool = reportSponsors.length ? reportSponsors : siteSponsors;
-  var sponsorLabel = reportSponsors.length ? 'Sponsored by' : 'Supported by';
+  var sponsorLabel = reportSponsors.length ? 'Sponsored by' : 'Site sponsor';
   function sponsorLink(s, cls, parent) {
     var a = safeHref(s.href) ? make('a', cls, null, parent) : make('span', cls, null, parent);
     if (a.tagName === 'A') { a.href = s.href; a.target = '_blank'; a.rel = 'noopener noreferrer'; }
@@ -218,7 +219,7 @@
   function sponsorCard(panel) {
     if (!sponsorPool.length) return;
     var card = make('aside', 'hl-rv-sponsor-card' + (reportSponsors.length ? ' is-report' : ''), null, panel);
-    card.setAttribute('aria-label', reportSponsors.length ? 'Report sponsor' : 'Site sponsors');
+    card.setAttribute('aria-label', reportSponsors.length ? 'Report sponsor' : 'Site sponsor');
     make('p', 'hl-rv-sponsor-card__label', sponsorLabel, card);
     var items = make('div', 'hl-rv-sponsor-card__items', null, card);
     sponsorPool.forEach(function (s) {

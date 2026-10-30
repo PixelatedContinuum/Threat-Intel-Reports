@@ -48,9 +48,9 @@ test('the report sponsor owns the reading-line mark and the tab-foot cards; the 
     }
   }finally{f.w.close();}
 });
-test('with no report sponsor the Monthly sponsors fill the card and one of them, never two, sits on the reading line',()=>{
+test('with no report sponsor the Monthly sponsors fill the card and one of them, never two, sits on the reading line, both labelled Site sponsor',()=>{
   const f=page(bar([],SITE3));try{
-    assert.equal(marks(f.d).length,1);assert.equal(marks(f.d)[0].querySelector('.hl-rv-sponsor-mark__label').textContent,'Supported by');
+    assert.equal(marks(f.d).length,1);assert.equal(marks(f.d)[0].querySelector('.hl-rv-sponsor-mark__label').textContent,'Site sponsor');assert.equal(f.d.getElementById('tab-overview').querySelector('.hl-rv-sponsor-card').getAttribute('aria-label'),'Site sponsor');
     assert.deepEqual(names(f.d.getElementById('tab-overview')),['Monthly One','Monthly Two','Monthly Three']);
     const first=marks(f.d)[0].getAttribute('aria-label');
     f.d.getElementById('tabbtn-victims').click();assert.equal(marks(f.d).length,1);assert.notEqual(marks(f.d)[0].getAttribute('aria-label'),first,'Monthly sponsors take turns by tab');
@@ -100,25 +100,34 @@ test('CSS: round-3 tokens, the old strip, the pill and the gradient and shadow l
   for(const token of ['--rv-nav','--rv-tab:','--rv-boundary','--rv-accent','--rv-selected-ink','--rv-blue','--rv-series','--rv-meaning'])assert.equal(css.includes(token),false,token+' removed');
   assert.match(css,/body:has\(\.hl-report-page\) \.hl-sponsor-rail \{ display: none !important; \}/);
   assert.equal(/td\.hl-rv-cell-pill::after/.test(css),false,'no pill drawn behind a cell');
-  assert.equal(/(linear|radial|conic)-gradient\(/.test(css),false,'no gradients');
+  // v6.1 (Joseph, 2026-10-30): the site's own gradient highlight is reused for the main titles only (header panel, its title text, the
+  // tab title, the section header bars, the data-view bar); bodies, tab cells, the toolbar and the bands stay flat.
+  const GRAD_OK=['.hl-report-page .hl-post-header','.hl-report-page .hl-post-header__title','.hl-report-page .hl-rv-panel-head','.hl-report-page .hl-post-content .hl-rv-source > h2','.hl-rv-view-summary'];
+  const gradSel=[...css.matchAll(/(?:linear|radial|conic)-gradient\(/g)].map(m=>{const open=css.lastIndexOf('{',m.index),from=Math.max(css.lastIndexOf('}',open),css.lastIndexOf('*/',open)+1);return css.slice(from+1,open).trim().split(',')[0].trim();});
+  assert.ok(gradSel.length>=5,'the five site-recipe header gradients are present');
+  for(const sel of gradSel)assert.ok(GRAD_OK.includes(sel),'a gradient on a non-header selector: '+sel);
   assert.deepEqual([...css.matchAll(/box-shadow:\s*([^;}]+)/g)].map(m=>m[1].trim()).filter(v=>!/^none( !important)?$/.test(v)),[],'no shadows or glows');
   assert.equal(/max\(14px,\s*1em\)/.test(css),false,'no em-relative chrome size');
-  const below=[...css.matchAll(/font-size:\s*(\d+(?:\.\d+)?)px/g)].map(m=>+m[1]).filter(n=>n<13);
-  assert.deepEqual(below,[],'every font-size in the file is 13px or more (chrome micro-labels floor)');
+  const below=[...css.matchAll(/font-size:\s*(\d+(?:\.\d+)?)px/g)].map(m=>+m[1]).filter(n=>n<14);
+  assert.deepEqual(below,[],'every font-size in the file is 14px or more (v6.1 micro-label floor; secondary text rides --rv-fs)');
+  assert.match(css,/--rv-fs: 16px;/);assert.match(css,/--rv-fs-mono: 14px;/);
+  assert.match(css,/html:has\(\.hl-report-page\) \{ --rv-pad: 16px; --rv-fs: 15px; --rv-fs-mono: 14px; \}/,'phones keep a 15px secondary floor');
+  const tok=Number((css.match(/--rv-fs: (\d+)px/)||[])[1]);assert.ok(tok>=16);
   // the same floor for a min-height on a control: the 44px rule names every control kind
   assert.match(css,/:is\(button, input, select, summary, \[role="tab"\], \[data-rv-chrome\] a, \[data-rv-chrome\]:is\(a, button, input, select, summary\)\) \{ min-height: 44px; min-width: 44px; \}/);
   assert.equal(/min-height:\s*(3\d|[0-3]?\d)px/.test(css.replace(/min-height: 0\b/g,'')),false,'no control min-height below 44px (a 0 reset is allowed)');
 });
-test('CSS: v6 type is stated, not inherited: prose 18px (17px on phones), table text 14px, mono headers 13px',()=>{
+test('CSS: v6.1 type is stated, not inherited: prose 18px (17px on phones), table text 16px (15px phones), mono headers 14px, tab names 17px',()=>{
   assert.match(css,/\.hl-report-page \.hl-post-content \{ width: 100%; max-width: none; min-width: 0; font-size: 18px; line-height: 1\.65;/);
   assert.match(css,/@media \(max-width: 699px\) \{[\s\S]*?\.hl-report-page \.hl-post-content \{ font-size: 17px; \}/);
-  assert.match(css,/\.hl-report-page \.hl-post-content :is\(th, td\) \{\s*padding: 10px 14px !important;[^}]*font-size: 14px !important;/);
-  assert.match(css,/\.hl-report-page \.hl-post-content th \{\s*font-family: var\(--rv-mono\); font-size: 13px !important;/);
+  assert.match(css,/\.hl-report-page \.hl-post-content :is\(th, td\) \{\s*padding: 10px 14px !important;[^}]*font-size: var\(--rv-fs\) !important;/);
+  assert.match(css,/\.hl-report-page \.hl-post-content th \{\s*font-family: var\(--rv-mono\); font-size: var\(--rv-fs-mono\) !important;/);
+  assert.match(css,/\.hl-report-page \.hl-rv-tabs button \{[^}]*font-size: 17px;/);
   assert.equal(/\.hl-report-page \.hl-post-content \.hl-rv-source :is\(p, li, blockquote\) \{ font-size/.test(css),false,'prose fills its column at one stated size, with no per-element override');
 });
 test('CSS: the view states its own text sizes and keeps its tile notes a row under the tiles',()=>{
-  assert.match(css,/\.hl-rv-tile > span:not\(\.hl-rv-tile-destination\) \{ font-size: 14px;/);
-  assert.match(css,/\.hl-rv-tile-destination \{[^}]*font-size: 13px !important;/);
+  assert.match(css,/\.hl-rv-tile > span:not\(\.hl-rv-tile-destination\) \{ font-size: var\(--rv-fs\);/);
+  assert.match(css,/\.hl-rv-tile-destination \{[^}]*font-size: var\(--rv-fs-mono\) !important;/);
   assert.match(css,/\.hl-rv-tile-notes \{ order: -2; display: grid;/);
   assert.match(css,/@media \(max-width: 1139px\) \{\s*\.hl-rv-tile-notes \{ grid-template-columns: minmax\(0, 1fr\);[\s\S]*?\.hl-rv-tile-note__key \{ display: inline;/);
   assert.match(css,/\.hl-rv-view-summary::before \{ content: 'DATA VIEW';/);
@@ -126,7 +135,8 @@ test('CSS: the view states its own text sizes and keeps its tile notes a row und
 });
 test('Liquid: the tabbed layout swaps the banner for the masthead bar, reads the same data, and leaves untagged pages on the old include',()=>{
   const post=fs.readFileSync(path.join(root,'_layouts/post.html'),'utf8');
-  assert.ok(post.includes('{% if hl_tabbed %}{% include report-sponsor-bar.html %}{% else %}{% include sponsor-banner.html %}{% endif %}\n<div class="hl-post-body">'));
+  assert.ok(post.includes('{% if hl_tabbed %}{% include report-sponsor-bar.html part="report" %}{% else %}{% include sponsor-banner.html %}{% endif %}\n<div class="hl-post-body">'));
+  assert.ok(post.includes('{% if hl_tabbed %}{% include report-sponsor-bar.html part="band" %}{% endif %}\n<div class="hl-post-header'),'the site band is the first thing in the page, before the header');
   const inc=fs.readFileSync(path.join(root,'_includes/report-sponsor-bar.html'),'utf8');
   assert.ok(inc.includes('page.sponsored_by | join: "|;sep;|" | split: "|;sep;|"'),'same normalisation as sponsor-banner.html');
   assert.ok(inc.includes('where: "tier", "monthly" | where: "active", true'),'same Monthly filter as the rail and the footer');
