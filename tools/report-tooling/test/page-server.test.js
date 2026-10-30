@@ -132,3 +132,18 @@ test('a proxy failure is recorded as a named miss, not a silent success', async 
     assert.match(srv.misses[0], /proxy failed/);
   } finally { srv.close(); }
 });
+
+test('opts.files serves a path from the given text in place of the working-tree file (a gate control serves one mutated script)', async () => {
+  const S = require('../lib/page-server.js');
+  const http = require('node:http');
+  const srv = await S.start({ '/p/': '<html>page</html>' }, { root: require('node:path').join(__dirname, '..', '..', '..'), files: { '/assets/js/hl-report-tabs.js': '// mutated' } });
+  const get = (u) => new Promise((resolve) => http.get(srv.origin + u, (r) => { let b = ''; r.on('data', (d) => { b += d; }); r.on('end', () => resolve({ status: r.statusCode, body: b, type: r.headers['content-type'] })); }));
+  try {
+    const mutated = await get('/assets/js/hl-report-tabs.js');
+    assert.equal(mutated.body, '// mutated');
+    assert.match(mutated.type, /javascript/);
+    const real = await get('/assets/js/attack-coverage.js');
+    assert.notEqual(real.body, '// mutated');
+    assert.equal(real.status, 200);
+  } finally { srv.close(); }
+});

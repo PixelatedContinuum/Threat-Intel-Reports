@@ -1483,6 +1483,84 @@ async function attackStripRows(page, url, html) {
   await restoreReportPage(page, url);
 }
 
+/* T-0500.1.9: two controls for the rows that decide what the page builds and what each view shows. Each serves the page with ONE change
+   to hl-report-tabs.js (page-server `files`) and requires the row under test to FAIL on it. The mutations are exact text; if the script
+   no longer contains that text the control is NOT CHECKED, never a pass, because a control that mutated nothing proves nothing.
+     1. every tab is built whether or not it holds a section (the old behaviour), on a page whose timeline sections are moved to the Attack
+        chain tab, so the Timeline tab is empty: the "no tab without a section" row must FAIL, and PASS on the same page with the real script.
+     2. every view's notice is dropped and its summary line replaced: the card verdict must FAIL for every tab, whether the report has the
+        view's table (a figure that does not reconcile) or lacks it (no "View unavailable" notice). */
+var TABS_SCRIPT_PATH = '/assets/js/hl-report-tabs.js';
+var MUT_FORCE_TABS = ['var present = ALL_TOKENS.map(function (t) { return sections.some(function (s) { return s.token === t; }); });',
+  'var present = ALL_TOKENS.map(function () { return true; });'];
+var MUT_NO_NOTICE = ["function missing(parent, need) { make('p', 'hl-rv-unavailable', 'View unavailable: needs ' + need + '. The full report follows.', parent); }",
+  'function missing(parent, need) { }'];
+var MUT_BAD_LINE = ['line.textContent = builders[t](body);', "builders[t](body); line.textContent = 'x';"];
+function mutatedTabsScript(mutations) {
+  var src;
+  try { src = fs.readFileSync(path.join(ROOT, 'assets', 'js', 'hl-report-tabs.js'), 'utf8'); } catch (e) { return null; }
+  var out = src;
+  for (var i = 0; i < mutations.length; i++) {
+    if (out.indexOf(mutations[i][0]) === -1) return null;
+    out = out.split(mutations[i][0]).join(mutations[i][1]);
+  }
+  return out;
+}
+function viewFactsExpr(tokens) {
+  return '(function(tokens){return tokens.map(function(t){var b=document.getElementById("hl-rv-view-"+t);var n=b?b.querySelector(".hl-rv-unavailable"):null;' +
+    'var s=document.querySelector("#tab-"+t+" .hl-rv-view-summary p");var sel=' + JSON.stringify(TAB_PRIMARY) + '[t];var c=0;try{c=document.querySelectorAll("#tab-"+t+" "+sel).length;}catch(e){}' +
+    'var ft=t==="overview"?document.querySelector("#tab-overview .hl-rv-tile strong"):null;var fm=ft?ft.textContent.match(/\\d+/):null;' +
+    'return {token:t,line:s?s.textContent.trim():"",count:c,notice:n?n.textContent.trim():null,firstTile:fm?Number(fm[0]):null};});})(' + JSON.stringify(tokens) + ')';
+}
+async function tabControlRows(page, url, html) {
+  var nameA = 'control: the "no tab without a section" row FAILS on a copy of the page whose script builds every tab, and PASSES on the same page with the real script';
+  var nameB = 'control: the card row FAILS for every view on a copy of the page whose views lose their notice and their figure';
+  await setViewport(page, 1280, 900);
+  var forced = mutatedTabsScript([MUT_FORCE_TABS]);
+  if (!forced) check('NOT CHECKED: ' + nameA, false, 'hl-report-tabs.js no longer contains the text the control changes (' + MUT_FORCE_TABS[0].slice(0, 60) + '...), so no copy could be built');
+  else {
+    var moved = String(html).replace(/hl-tab-timeline/g, 'hl-tab-chain');
+    var cpath = new URL(url).pathname + '__empty-tab-control/';
+    var forcedSrv = await SERVER.start({ [cpath]: moved }, { root: ROOT, base: BASE, files: { [TABS_SCRIPT_PATH]: forced } });
+    var realSrv = await SERVER.start({ [cpath]: moved }, { root: ROOT, base: BASE });
+    try {
+      var tabsOf = async function (origin) {
+        if (!(await gotoAndWait(page, origin + cpath))) return null;
+        return await page.json(TAB_SECTIONS_EXPR);
+      };
+      var onForced = await tabsOf(forcedSrv.origin), onReal = await tabsOf(realSrv.origin);
+      if (!onForced || !onReal) check('NOT CHECKED: ' + nameA, false, 'the tab controller never built on a control copy');
+      else {
+        var fv = emptyTabsVerdict(onForced), rv = emptyTabsVerdict(onReal);
+        var fired = !fv.ok && /empty: .*timeline/.test(fv.detail);
+        check(nameA, fired && rv.ok, 'forced copy: ' + (fv.ok ? 'PASS (the row cannot see an empty tab)' : fv.detail) + ' | real script, timeline sections moved to chain: ' + rv.detail);
+      }
+    } finally { forcedSrv.close(); realSrv.close(); }
+  }
+  var broken = mutatedTabsScript([MUT_NO_NOTICE, MUT_BAD_LINE]);
+  if (!broken) check('NOT CHECKED: ' + nameB, false, 'hl-report-tabs.js no longer contains the text the control changes, so no broken copy could be built');
+  else if (!SHAPES) check('NOT CHECKED: ' + nameB, false, 'the report\'s table shapes were not read, so what each view should show is not known');
+  else {
+    var bpath = new URL(url).pathname + '__broken-views-control/';
+    var bsrv = await SERVER.start({ [bpath]: html }, { root: ROOT, base: BASE, files: { [TABS_SCRIPT_PATH]: broken } });
+    try {
+      if (!(await gotoAndWait(page, bsrv.origin + bpath))) check('NOT CHECKED: ' + nameB, false, 'the tab controller never built on the broken copy');
+      else {
+        var facts = await page.json(viewFactsExpr(liveTokens()));
+        var held = [], missed = [];
+        facts.forEach(function (f) {
+          var info = SHAPES[f.token];
+          var v = viewShapeVerdict(f.token, info ? info.shape : true, f.line, f.count, f.notice, f.firstTile);
+          (v.ok ? missed : held).push(f.token + (info && info.shape ? ' (table present)' : ' (table absent)'));
+        });
+        check(nameB, missed.length === 0 && held.length === facts.length,
+          held.length + ' of ' + facts.length + ' views failed the card verdict on the broken copy: ' + held.join(', ') + (missed.length ? '; PASSED although broken: ' + missed.join(', ') : ''));
+      }
+    } finally { bsrv.close(); }
+  }
+  await restoreReportPage(page, url);
+}
+
 /* T-0500.1.7.1: the timeline marks (Joseph, 2026-10-30: "a pretty good amount larger") and their legend. At 1280 and 768 the swim-lane dots are at
    least 32 px (30 on a phone width) and their numbers at least 18 px; at 390 the vertical list's dots are at least 24 px and its numbers 18 px.
    No two marks overlap, no mark overlaps an axis date, and every event is present as a mark, as a dated list item and as a row of the table. The
@@ -2395,6 +2473,7 @@ async function tabbedChecks(page, opts) {
   await mispRows(page, url);
   await timelineRows(page, url);
   await attackStripRows(page, url, opts.html);
+  await tabControlRows(page, url, opts.html);
 
   /* ---- 4a: the bar at 768/812x375, and the targets 4a names (p7) -------- */
   await tabBarRows(page, url);

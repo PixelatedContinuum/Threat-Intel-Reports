@@ -39,9 +39,14 @@ function contentType(file) {
 /* `pages` maps a URL path to the HTML to serve there, e.g.
    { '/wire/': '<html>…' }. `opts.root` is the repo root, `opts.base` the live
    origin to proxy misses to. Resolves to a handle with `origin`, `misses` and
-   `close()`. */
+   `close()`.
+
+   `opts.files` maps a URL path to a file served in place of the working tree's (or the live
+   site's) copy, e.g. { '/assets/js/hl-report-tabs.js': '<mutated source>' }. A gate control
+   uses it to serve the page with ONE script changed and asks the row under test to fail. */
 function start(pages, opts) {
   opts = opts || {};
+  var files = opts.files || {};
   var root = opts.root;
   var base = (opts.base || '').replace(/\/+$/, '');
   var misses = [];
@@ -53,6 +58,11 @@ function start(pages, opts) {
       if (Object.prototype.hasOwnProperty.call(pages, url)) {
         res.writeHead(200, { 'content-type': TYPES['.html'] });
         return res.end(pages[url]);
+      }
+
+      if (Object.prototype.hasOwnProperty.call(files, url)) {
+        res.writeHead(200, { 'content-type': contentType(url) });
+        return res.end(files[url]);
       }
 
       var rel = decodeURIComponent(url).replace(/^\/+/, '');
