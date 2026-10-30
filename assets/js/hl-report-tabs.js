@@ -165,7 +165,7 @@
   menuButton.setAttribute('aria-expanded', 'false'); menuButton.setAttribute('aria-controls', 'hl-rv-sections');
   var menu = make('div', 'hl-rv-menu', null, bar); menu.id = 'hl-rv-sections'; menu.hidden = true;
   var tablist = make('div', 'hl-rv-tabs', null, bar); tablist.setAttribute('role', 'tablist'); tablist.setAttribute('aria-label', 'Report tabs');
-  var oneLink = link('Read as one page', '#one-page', bar); oneLink.className = 'hl-rv-onepage';
+  var oneLink = link('Read as one page', '#one-page', mobileLine); oneLink.className = 'hl-rv-onepage';
   var panels = [], tabs = [], menuLinks = [], times = [], active = 0, onepage = false;
   var sectionLabel = make('span', 'hl-rv-current-section', '', mobileLine);
   var remaining = make('span', 'hl-rv-remaining', '', mobileLine);
@@ -181,6 +181,48 @@
   content.before(pageContents);
   var currentSection = null, navigatingUntil = 0;
 
+  // Sponsors come from the server-rendered masthead bar (_includes/report-sponsor-bar.html), so the
+  // bar, the mark on the reading line and the card at the foot of each tab always show the same set.
+  var sponsorList = Array.from(document.querySelectorAll('.hl-rvsp .hl-rvsp__item')).map(function (el) {
+    var img = el.querySelector('img');
+    return { kind: el.getAttribute('data-rv-sponsor') === 'report' ? 'report' : 'site', name: el.getAttribute('data-name') || '', tagline: el.getAttribute('data-tagline') || '', href: el.getAttribute('href') || '', logo: img ? img.getAttribute('src') || '' : '' };
+  });
+  var reportSponsors = sponsorList.filter(function (x) { return x.kind === 'report'; });
+  var siteSponsors = sponsorList.filter(function (x) { return x.kind !== 'report'; });
+  // The report sponsor when there is one, else the Monthly sponsors: never both in one place.
+  var sponsorPool = reportSponsors.length ? reportSponsors : siteSponsors;
+  var sponsorLabel = reportSponsors.length ? 'Sponsored by' : 'Supported by';
+  function sponsorLink(s, cls, parent) {
+    var a = safeHref(s.href) ? make('a', cls, null, parent) : make('span', cls, null, parent);
+    if (a.tagName === 'A') { a.href = s.href; a.target = '_blank'; a.rel = 'noopener noreferrer'; }
+    return a;
+  }
+  var sponsorMark = null;
+  function updateSponsorMark(i) {
+    if (!sponsorPool.length) return;
+    var s = sponsorPool[i % sponsorPool.length];
+    if (sponsorMark) sponsorMark.remove();
+    sponsorMark = sponsorLink(s, 'hl-rv-sponsor-mark' + (reportSponsors.length ? ' is-report' : ''), mobileLine);
+    sponsorMark.setAttribute('aria-label', sponsorLabel + ' ' + s.name + (s.tagline ? ': ' + s.tagline : ''));
+    if (s.tagline) sponsorMark.title = s.tagline;
+    make('span', 'hl-rv-sponsor-mark__label', sponsorLabel, sponsorMark);
+    if (s.logo) { var logo = make('img', '', null, sponsorMark); logo.src = s.logo; logo.alt = ''; } else make('span', 'hl-rv-sponsor-mark__name', s.name, sponsorMark);
+  }
+  function sponsorCard(panel) {
+    if (!sponsorPool.length) return;
+    var card = make('aside', 'hl-rv-sponsor-card' + (reportSponsors.length ? ' is-report' : ''), null, panel);
+    card.setAttribute('aria-label', reportSponsors.length ? 'Report sponsor' : 'Site sponsors');
+    make('p', 'hl-rv-sponsor-card__label', sponsorLabel, card);
+    var items = make('div', 'hl-rv-sponsor-card__items', null, card);
+    sponsorPool.forEach(function (s) {
+      var a = sponsorLink(s, 'hl-rv-sponsor-card__item', items);
+      if (s.logo) { var logo = make('img', '', null, a); logo.src = s.logo; logo.alt = s.name; }
+      var t = make('span', 'hl-rv-sponsor-card__text', null, a);
+      make('span', 'hl-rv-sponsor-card__name', s.name, t);
+      if (s.tagline) make('span', 'hl-rv-sponsor-card__tagline', s.tagline, t);
+    });
+  }
+
   var words = sections.reduce(function (n, s) { return n + text(s.node).split(/\s+/).length; }, 0);
   var time = make('span', 'hl-read-time hl-rv-time', Math.max(1, Math.round(words / 200)) + ' min in full');
   var eyebrow = document.querySelector('.hl-post-header__eyebrow'); if (eyebrow) eyebrow.appendChild(time);
@@ -194,7 +236,7 @@
     make('span', 'hl-rv-tab-full', NAMES[i], tab);
     make('span', 'hl-rv-tab-short', ['Overview', 'Victims', 'Chain', 'Timeline', 'Actor', 'IOCs', 'Confidence'][i], tab);
     make('small', 'hl-rv-tab-time', mins + ' min', tab);
-    tab.id = 'tabbtn-' + t; tab.setAttribute('role', 'tab'); tab.setAttribute('aria-controls', 'tab-' + t);
+    tab.dataset.rvHue = t; tab.id = 'tabbtn-' + t; tab.setAttribute('role', 'tab'); tab.setAttribute('aria-controls', 'tab-' + t);
     tab.title = QUESTIONS[i] + ' ' + mins + ' min read';
     tab.addEventListener('keydown', function (e) {
       var j = e.key === 'ArrowRight' ? (i + 1) % 7 : e.key === 'ArrowLeft' ? (i + 6) % 7 : e.key === 'Home' ? 0 : e.key === 'End' ? 6 : -1;
@@ -205,7 +247,7 @@
     var a = link('', '#tab-' + t, menu); a.className = 'hl-rv-menu-item';
     make('strong', '', NAMES[i], a); make('span', '', QUESTIONS[i], a); make('small', '', mins + ' min read', a); menuLinks.push(a);
     var panel = document.createElement('section'); panel.className = 'hl-rv-panel'; panel.id = 'tab-' + t;
-    panel.setAttribute('role', 'tabpanel'); panel.setAttribute('aria-labelledby', tab.id); panel.tabIndex = -1;
+    panel.dataset.rvHue = t; panel.setAttribute('role', 'tabpanel'); panel.setAttribute('aria-labelledby', tab.id); panel.tabIndex = -1;
     content.appendChild(panel); panels.push(panel);
     var title = make('header', 'hl-rv-panel-head', null, panel);
     make('h2', '', NAMES[i], title); make('p', '', QUESTIONS[i] + ' · ' + mins + ' min read', title);
@@ -221,7 +263,7 @@
   bar.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeMenu(true); });
   document.addEventListener('click', function (e) { if (!bar.contains(e.target)) closeMenu(false); });
   function select(i) {
-    active = i; currentSection = null;
+    active = i; currentSection = null; bar.dataset.rvHue = TOKENS[i]; updateSponsorMark(i);
     tabs.forEach(function (tab, j) { tab.setAttribute('aria-selected', String(i === j)); tab.tabIndex = i === j ? 0 : -1; panels[j].hidden = i !== j; });
     currentLabel.textContent = NAMES[i]; menuLinks.forEach(function (a, j) { if (j === i) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current'); }); closeMenu(false); fillMenuSections(); measureBar(); updateProgress();
   }
@@ -236,7 +278,7 @@
       tablist.hidden = true; currentLabel.textContent = 'Read as one page';
       oneLink.textContent = 'Back to tabs'; oneLink.href = '#tab-' + TOKENS[active];
     } else {
-      sections.forEach(function (s) { var p = panels[TOKENS.indexOf(s.token)]; p.insertBefore(s.node, p.querySelector('.hl-rv-nextprev')); });
+      sections.forEach(function (s) { var p = panels[TOKENS.indexOf(s.token)]; p.insertBefore(s.node, p.querySelector('.hl-rv-sponsor-card, .hl-rv-nextprev')); });
       tablist.hidden = false; oneLink.textContent = 'Read as one page'; oneLink.href = '#one-page'; select(active);
     }
     closeMenu(false); measureBar(); updateProgress();
@@ -362,7 +404,7 @@
     rows.forEach(function (r) { r.addEventListener('hl-rv-reveal', function () { controls.forEach(function (c) { c.value = ''; }); apply(); }); });
   }
   function tile(parent, value, label, how, tok) {
-    var a = link('', '#tab-' + tok, parent); a.className = 'hl-rv-tile';
+    var a = link('', '#tab-' + tok, parent); a.className = 'hl-rv-tile'; a.dataset.rvHue = tok;
     make('strong', 'hl-rv-value', value, a); make('span', '', label, a);
     var m = { victims: victims, chain: attack, timeline: chronology }[tok];
     var note = make('small', '', 'How counted: ' + how + (m ? ' From ' + text(m.heading) + ', table ' + m.index + ', ' + m.rows.length + ' rows.' : ' From the detection guidance.'), a);
@@ -407,7 +449,7 @@
     },
     chain: function (body) {
       var stageCards = [], stageRows = [], stageDetails = [];
-      var ribbon = make('div', 'hl-rv-stage-ribbon', null, body); ribbon.setAttribute('aria-label', 'Filter procedures by stage');
+      var ribbon = make('div', 'hl-rv-stage-ribbon', null, body); ribbon.setAttribute('role', 'group'); ribbon.setAttribute('aria-label', 'Filter procedures by stage');
       if (stages) {
         if (curation.stage_joins) make('p', 'hl-rv-note', 'Stage-to-procedure links: curated for this report.', body);
         var wrap = make('div', 'hl-rv-chain-scroll', null, body); wrap.tabIndex = 0; wrap.setAttribute('role', 'region'); wrap.setAttribute('aria-label', 'Attack stages');
@@ -436,7 +478,7 @@
             var procedureList = matches.length ? tableFold(card, matches.length + ' linked procedure rows') : card;
             make('small', 'hl-rv-stage-count', matches.length + ' linked procedures', heading);
             var counts = ['OBSERVED', 'INFERRED', 'NOT SHOWN'].map(function (status) { return matches.filter(function (a) { return a.row[col(attack, /^Status$/i)] === status; }).length; });
-            function mini(parent) { var bar = make('span', 'hl-rv-mini', null, parent); bar.setAttribute('aria-label', counts.map(function (n, i) { return n + ' ' + ['observed', 'inferred', 'not shown'][i]; }).join(', ')); counts.forEach(function (n, i) { if (n) { var segment = make('span', 'hl-rv-' + ['observed','inferred','not-shown'][i], '', bar); segment.style.flexGrow = n; } }); }
+            function mini(parent) { var bar = make('span', 'hl-rv-mini', null, parent); bar.setAttribute('role', 'img'); bar.setAttribute('aria-label', counts.map(function (n, i) { return n + ' ' + ['observed', 'inferred', 'not shown'][i]; }).join(', ')); counts.forEach(function (n, i) { if (n) { var segment = make('span', 'hl-rv-' + ['observed','inferred','not-shown'][i], '', bar); segment.style.flexGrow = n; } }); }
             mini(heading);
             var step = button('', ribbon, function () {
               var select = body.querySelector('.hl-rv-filters label:nth-of-type(4) select');
@@ -518,14 +560,14 @@
       var feed = Array.from(document.querySelectorAll('a[href]')).find(function (a) { return /\/ioc-feeds\//.test(a.getAttribute('href')); });
       if (feed) link('Open the IOC feed' + (feedMatch ? ' (' + feedMatch[1] + ' entries)' : ''), feed.getAttribute('href'), actions);
       var allCopy = button('Copy these ' + indicators.rows.length + ' (as printed)', actions, function () { copyValue(indicators.rows.map(function (r) { return r[0]; }).join('\n'), allCopy, live); });
-      var types = make('div', 'hl-rv-type-filters', null, body); types.setAttribute('aria-label', 'Filter printed indicator types');
+      var types = make('div', 'hl-rv-type-filters', null, body); types.setAttribute('role', 'group'); types.setAttribute('aria-label', 'Filter printed indicator types');
       function type(v) { return /^[a-f0-9]{32,128}$/i.test(v) ? 'Hash' : /^(?:\d{1,3}(?:\[?\.\]?)){3}\d{1,3}(?::\d+)?$/.test(v) ? 'IP' : /[\\/]/.test(v) ? 'Path' : 'Other'; }
       var selectedType = '';
       ['', 'IP', 'Hash', 'Path', 'Other'].filter(function (t) { return !t || indicators.rows.some(function (r) { return type(r[0]) === t; }); }).forEach(function (t) {
         var b = button(t || 'All types', types, function () { selectedType = t; chips.querySelectorAll('li').forEach(function (li, i) { li.hidden = !!t && type(indicators.rows[i][0]) !== t; }); body.querySelectorAll('#indicators tbody tr').forEach(function (row, i) { row.hidden = !!t && type(indicators.rows[i][0]) !== t; }); Array.from(types.children).forEach(function (c) { c.setAttribute('aria-pressed', String(c === b)); }); }); b.setAttribute('aria-pressed', String(!t));
       });
       var chips = make('ul', 'hl-rv-chips', null, body), status = make('p', 'hl-rv-copy-status', '', body); status.setAttribute('role', 'status');
-      indicators.rows.forEach(function (r) { var li = make('li', '', null, chips); var code = make('code', '', r[0], li); var b = button('Copy', li, function () { copyValue(code.textContent, b, live); }); });
+      indicators.rows.forEach(function (r) { var li = make('li', 'hl-rv-chip-item', null, chips); var code = make('code', '', r[0], li); var b = button('Copy', li, function () { copyValue(code.textContent, b, live); }); });
       dashTable(tableFold(body, 'Indicator context, confidence and action'), indicators, 'Highlighted indicators, confidence and action', 'indicators');
       // The report's own detection paragraphs carry count, tier and caveat together.
       var detection = sections.find(function (s) { return s.token === 'indicators' && s.heading && /Detection|Hunting/i.test(text(s.heading)); });
@@ -538,7 +580,7 @@
       if (!judgments) { missing(body, 'a Claim / Confidence / What would change it table'); return 'Confidence and gaps remain in the full report'; }
       var all = tableFold(body, 'Filter all ' + judgments.rows.length + ' judgments');
       var table = dashTable(all, judgments, 'Judgments and what would change them', 'judgments');
-      var distribution = make('div', 'hl-rv-distribution', null, body); all.before(distribution); distribution.setAttribute('aria-label', 'Judgments by confidence as printed');
+      var distribution = make('div', 'hl-rv-distribution', null, body); all.before(distribution); distribution.setAttribute('role', 'group'); distribution.setAttribute('aria-label', 'Judgments by confidence as printed');
       var counts = {}; judgments.rows.forEach(function (r) { var v = r[col(judgments, /Confidence/i)]; counts[v] = (counts[v] || 0) + 1; });
       Object.keys(counts).forEach(function (v) { var b = button(v + ' · ' + counts[v], distribution, function () { var input = all.querySelector('select'); input.value = v; input.dispatchEvent(new Event('input')); Array.from(distribution.children).forEach(function (c) { c.setAttribute('aria-pressed', String(c === b)); }); }); b.style.flexGrow = counts[v]; b.style.setProperty('--rv-share', (100 * counts[v] / judgments.rows.length) + '%'); b.setAttribute('aria-pressed', 'false'); b.title = v + ': ' + counts[v] + ' of ' + judgments.rows.length + ' judgments'; });
       filters(all, table, [{ label: 'Confidence', col: col(judgments, /Confidence/i), values: Object.keys(counts), match: function (row, value) { return text(row.cells[col(judgments, /Confidence/i)]) === value; } }], 'judgments');
@@ -577,8 +619,9 @@
       phone.addEventListener('change', function () { toc.open = !phone.matches; });
       toc.addEventListener('toggle', measureBar);
     }
+    sponsorCard(panel);
     var footer = make('nav', 'hl-rv-nextprev', null, panel); footer.setAttribute('aria-label', 'Read report in order');
-    function card(j, direction) { var a = link('', '#tab-' + TOKENS[j], footer); make('small', '', direction, a); make('strong', '', NAMES[j], a); make('span', '', QUESTIONS[j], a); make('small', '', times[j] + ' min read', a); }
+    function card(j, direction) { var a = link('', '#tab-' + TOKENS[j], footer); a.dataset.rvHue = TOKENS[j]; make('small', '', direction, a); make('strong', '', NAMES[j], a); make('span', '', QUESTIONS[j], a); make('small', '', times[j] + ' min read', a); }
     card((i + 6) % 7, 'Previous');
     card(i < 6 ? i + 1 : 0, i < 6 ? 'Next' : 'Back to');
     var teardownControls = make('div', 'hl-rv-teardown-controls', null, panel); footer.before(teardownControls);
@@ -642,12 +685,16 @@
   var printUrl = canonical ? canonical.href : location.origin + location.pathname;
   var printDate = text(document.querySelector('.hl-post-header__date'));
   printStyle.textContent = '@page hl-report { @top-left { content: ' + JSON.stringify(printTitle) + '; width: 60%; font: 7pt sans-serif; } @top-right { content: ' + JSON.stringify(printUrl) + '; width: 38%; font: 6pt sans-serif; overflow-wrap: anywhere; } @bottom-left { content: ' + JSON.stringify(printDate) + '; } }';
-  // Sponsor names/logos stay in flow; the complete tagline remains on hover/focus.
-  document.querySelectorAll('.hl-sponsor-rail__item').forEach(function (a) { var tagline = a.querySelector('.hl-sponsor-rail__tagline'); if (tagline) a.title = text(tagline); });
   // Keep resources in the header: the old fixed dock overlaps the wider report.
   var resources = document.querySelector('.hl-report-page .hl-quicklinks');
   var reportHeader = document.querySelector('.hl-report-page .hl-post-header');
   if (resources && reportHeader) reportHeader.appendChild(resources);
+  // The site's own button recipe (custom.scss .hl-cta), one colour per kind: Detections green, IOC feed red, STIX cyan.
+  var kindColours = [[/detect/i, '#4ade80'], [/ioc/i, '#f87171'], [/stix/i, '#22d3ee']];
+  if (resources) resources.querySelectorAll('.hl-quicklink').forEach(function (a) {
+    var label = text(a.querySelector('.hl-quicklink__label')) + ' ' + (a.id || ''), kind = kindColours.find(function (k) { return k[0].test(label); });
+    a.classList.add('hl-cta'); a.style.setProperty('--acc', kind ? kind[1] : '#58a6ff');
+  });
   // Keep the site's resource popovers functional without constructing a TOC.
   var resourcePairs = [['hl-detect-tab', 'hl-detect-panel'], ['hl-ioc-tab', 'hl-ioc-panel'], ['hl-stix-tab', 'hl-stix-panel']];
   function closeResources(except) { resourcePairs.forEach(function (pair) { var b = document.getElementById(pair[0]), p = document.getElementById(pair[1]); if (p && p !== except) { p.classList.remove(pair[1] + '--open'); if (b) b.setAttribute('aria-expanded', 'false'); } }); }
@@ -702,7 +749,8 @@
     var total = onepage ? Math.max(1, Math.round(words / 200)) : times[active];
     var left = Math.max(0, Math.ceil(total * (1 - fraction)));
     var description = 'about ' + left + ' min left in this ' + (onepage ? 'report' : 'tab');
-    remaining.textContent = phone.matches ? '~' + left + 'm left' : description; remaining.setAttribute('aria-label', description); remaining.title = description;
+    // A span cannot carry aria-label: the visible short form is hidden from assistive technology and the full phrase is hidden text.
+    remaining.replaceChildren(); make('span', '', phone.matches ? '~' + left + 'm left' : description, remaining).setAttribute('aria-hidden', 'true'); make('span', 'hl-rv-live', description, remaining); remaining.title = description;
   }
   var progressPending = false;
   function scheduleProgress() { if (!progressPending) { progressPending = true; requestAnimationFrame(function () { progressPending = false; updateProgress(); }); } }
@@ -722,7 +770,7 @@
       else copy(address, shareStatus, 'Link copied.');
     });
     if (resources) resources.appendChild(shareButton);
-    shareButton.className = 'hl-share-btn'; shareButton.setAttribute('aria-label', 'Share this report');
+    shareButton.className = 'hl-share-btn hl-cta hl-cta--ghost'; shareButton.style.setProperty('--acc', '#58a6ff'); shareButton.setAttribute('aria-label', 'Share this report');
   }
   root.classList.add('hl-rv-ready'); mode(false); select(0);
   if (location.hash) go(location.hash, true);

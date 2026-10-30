@@ -70,13 +70,12 @@ html:has(.hl-report-page) main.content { max-width: 1440px !important; padding-i
 .hl-rv-bar {
   position: sticky; top: calc(var(--hl-rv-nav-h, 0px) + env(safe-area-inset-top, 0px)); z-index: 60;
   scroll-margin-top: var(--hl-rv-nav-h, 0px);
-  background: var(--rv-nav); color: var(--rv-text); border: 1px solid var(--rv-line); border-radius: 10px; box-shadow: 0 4px 16px #0003;
+  color: var(--rv-text);
   padding: 8px; display: flex; flex-wrap: wrap; align-items: center; gap: 4px 12px;
 }
 .hl-rv-tabs { display: flex; flex: 1 1 900px; flex-wrap: wrap; gap: 4px; }
 .hl-rv-tab-short { display: none; }
-.hl-report-page .hl-rv-tabs button { flex: 1 0 auto; padding: 10px 12px; font-size: 16px; font-weight: 600; color: var(--rv-text); background: var(--rv-tab); border-color: var(--rv-boundary); }
-.hl-report-page .hl-rv-tabs [aria-selected="true"] { color: var(--rv-selected-ink); border-color: var(--rv-boundary); background: var(--rv-accent); }
+.hl-report-page .hl-rv-tabs button { flex: 1 0 auto; padding: 10px 12px; font-size: 16px; font-weight: 600; }
 .hl-rv-onepage { display: inline-flex; align-items: center; padding: 8px 12px; font-size: 14px; }
 .hl-rv-mobile-line { display: none; }
 .hl-rv-menu { position: absolute; top: 100%; inset-inline: 0; max-height: calc(100dvh - 64px); overflow-y: auto; overscroll-behavior: contain; background: var(--rv-bg); border: 1px solid var(--rv-line); box-shadow: 0 12px 30px #0006; padding: 8px; }
@@ -84,7 +83,6 @@ html:has(.hl-report-page) main.content { max-width: 1440px !important; padding-i
 .hl-rv-menu-item span, .hl-rv-menu-item small { color: var(--rv-muted); font-size: 14px; }
 .hl-rv-menu-item[aria-current="page"] { background: var(--rv-row); }
 .hl-rv-panel { min-width: 0; padding-top: 20px; }
-.hl-report-page .hl-rv-panel-head h2 { border: 0; padding: 0; margin: 0 0 6px; font-size: 24px; background: none; }
 .hl-rv-panel-head p { margin: 0 0 18px; color: var(--rv-muted); }
 .hl-rv-view { border: 1px solid var(--rv-line); background: var(--rv-row); border-radius: 8px; padding: 16px; margin-block: 12px 24px; }
 .hl-rv-view-summary { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
@@ -283,7 +281,6 @@ html:has(.hl-report-page) .hl-back-top { display: none !important; }
 .hl-report-page .hl-quicklink, .hl-report-page .hl-quicklink:hover { width: auto; height: auto; min-height: 44px; min-width: 44px; padding: 4px 10px; gap: 6px; }
 .hl-report-page .hl-quicklink__label { opacity: 1; font-size: 14px; padding-right: 0; }
 .hl-report-page .hl-quicklink__icon { width: 20px; height: 32px; }
-.hl-report-page .hl-rv-panel-head h2 { margin: 0 0 8px !important; padding: 8px 12px !important; }
 .hl-report-page .hl-rv-view :is(h3,h4) { margin: 0 0 8px !important; padding: 0 !important; border: 0 !important; background: none !important; }
 .hl-report-page .hl-rv-view blockquote { margin: 0 0 8px !important; padding: 8px 12px; }
 .hl-report-page .hl-rv-source table { font-size: 14px; }
@@ -334,16 +331,12 @@ html:has(.hl-report-page) .hl-toast__close:focus-visible { outline: 3px solid va
   --rv-series-4: #c98500; --rv-series-5: #d55181; --rv-series-6: #008300; --rv-series-7: #9085e9;
   --rv-observed: #0ca30c; --rv-inferred: #fab219; --rv-not-shown: #9ca3af;
   --rv-insufficient: #184f95; --rv-low: #2a78d6; --rv-moderate: #6da7ec; --rv-high: #9ec5f4; --rv-definite: #cde2fb;
-  --rv-nav: #222630; --rv-tab: #2b303a; --rv-boundary: #929ba9;
-  --rv-accent: #b91c1c; --rv-selected-ink: #ffffff;
 }
 :root[data-theme="light"] .hl-report-page {
   --rv-series-1: #2a78d6; --rv-series-2: #eb6834; --rv-series-3: #1baf7a;
   --rv-series-4: #eda100; --rv-series-5: #e87ba4; --rv-series-6: #008300; --rv-series-7: #6250d6;
   --rv-observed: #0ca30c; --rv-inferred: #fab219; --rv-not-shown: #6b7280;
   --rv-insufficient: #6da7ec; --rv-low: #3987e5; --rv-moderate: #256abf; --rv-high: #184f95; --rv-definite: #0d366b;
-  --rv-nav: #e8ebf0; --rv-tab: #ffffff; --rv-boundary: #687487;
-  --rv-accent: #b91c1c; --rv-selected-ink: #ffffff;
 }
 @media (prefers-color-scheme: light) {
   :root:not([data-theme="dark"]) .hl-report-page {
@@ -351,8 +344,6 @@ html:has(.hl-report-page) .hl-toast__close:focus-visible { outline: 3px solid va
     --rv-series-4: #eda100; --rv-series-5: #e87ba4; --rv-series-6: #008300; --rv-series-7: #6250d6;
     --rv-observed: #0ca30c; --rv-inferred: #fab219; --rv-not-shown: #6b7280;
     --rv-insufficient: #6da7ec; --rv-low: #3987e5; --rv-moderate: #256abf; --rv-high: #184f95; --rv-definite: #0d366b;
-    --rv-nav: #e8ebf0; --rv-tab: #ffffff; --rv-boundary: #687487;
-    --rv-accent: #b91c1c; --rv-selected-ink: #ffffff;
   }
 }
 /* Inline slot references stay stable when filtering, and mirror with the theme. */
@@ -363,15 +354,12 @@ html:has(.hl-report-page) .hl-toast__close:focus-visible { outline: 3px solid va
 .hl-report-page [data-rv-series="5"] { --rv-series: var(--rv-series-5); }
 .hl-report-page [data-rv-series="6"] { --rv-series: var(--rv-series-6); }
 .hl-report-page [data-rv-series="7"] { --rv-series: var(--rv-series-7); }
-.hl-report-page .hl-rv-tabs button:hover,
-.hl-report-page .hl-rv-mobile-line button:hover { border-color: var(--rv-text); box-shadow: inset 0 -3px var(--rv-accent); }
 .hl-report-page .hl-rv-tabs button:focus-visible,
 .hl-report-page .hl-rv-mobile-line button:focus-visible { outline: 3px solid var(--rv-focus); outline-offset: 2px; }
-.hl-report-page .hl-rv-mobile-line button { background: var(--rv-tab); border-color: var(--rv-boundary); font-size: 16px; font-weight: 600; }
+.hl-report-page .hl-rv-mobile-line button { font-size: 16px; font-weight: 600; }
 .hl-rv-current { color: var(--rv-text); }
-.hl-report-page .hl-rv-onepage { color: var(--rv-text); font-weight: 600; text-decoration: underline; text-underline-offset: 4px; }
 .hl-report-page .hl-rv-stage { border-top: 4px solid var(--rv-series, var(--rv-blue)); }
-.hl-report-page .hl-rv-stage.hl-rv-stage-muted { border-top-color: var(--rv-boundary); background: var(--rv-row); box-shadow: inset 0 0 0 1px var(--rv-line); }
+.hl-report-page .hl-rv-stage.hl-rv-stage-muted { border-top-color: var(--rv-line); background: var(--rv-row); box-shadow: inset 0 0 0 1px var(--rv-line); }
 .hl-report-page .hl-rv-stage.hl-rv-stage-match { box-shadow: inset 0 0 0 2px var(--rv-series, var(--rv-blue)); }
 .hl-report-page .hl-rv-stage-muted > :is(h3,p,h4,a,details) { opacity: .8; }
 .hl-report-page .hl-rv-stage-state { font-weight: 600; font-size: 14px; color: var(--rv-text); }
@@ -408,17 +396,9 @@ html:has(.hl-report-page) .hl-toast__close:focus-visible { outline: 3px solid va
 .hl-report-page .hl-post-content .hl-rv-source figure { margin-inline: 0; width: 100%; }
 .hl-report-page .hl-rv-source th { font-size: 14px; }
 .hl-report-page .hl-post-header__title { font-size: clamp(26px,3vw,40px) !important; line-height: 1.2; }
-.hl-report-page .hl-rv-panel-head h2 { font-size: 24px !important; }
-.hl-report-page .hl-rv-view :is(p,li,small,code,caption,th,td,label,a) { font-size: max(14px, 1em); }
 .hl-report-page .hl-rv-view small { font-size: 14px; }
-/* The wider report consumes the old rail's gutter even on large screens.
-   Keep every paid placement in a separate in-flow band at every tagged width. */
-body:has(.hl-report-page) .hl-sponsor-rail { position: static; inset: auto; transform: none; width: 100%; max-width: 1440px; margin: 0 auto; padding: 16px 28px; flex-direction: row; flex-wrap: wrap; align-items: center; gap: 12px; border-bottom: 1px solid var(--hl-border-card); }
-body:has(.hl-report-page) .hl-sponsor-rail__label { width: auto; font-size: 14px; }
-body:has(.hl-report-page) .hl-sponsor-rail__item { flex: 0 1 auto; display: inline-flex; align-items: center; gap: 16px; padding: 10px 14px; max-width: 100%; }
-body:has(.hl-report-page) .hl-sponsor-rail__logo { max-height: 28px; max-width: 128px; margin: 0; padding: 0; flex: none; }
-body:has(.hl-report-page) .hl-sponsor-rail__name { font-size: 14px; }
-body:has(.hl-report-page) .hl-sponsor-rail__tagline { font-size: 14px; display: block; overflow: visible; max-width: 340px; }
+/* The old top strip and left rail are replaced on tabbed pages by the masthead sponsor bar (.hl-rvsp). */
+body:has(.hl-report-page) .hl-sponsor-rail { display: none !important; }
 @media (min-width: 700px) and (max-width: 1280px) {
   .hl-rv-tab-full { display: none; } .hl-rv-tab-short { display: inline; }
   .hl-report-page .hl-rv-tabs button { font-size: 16px; font-weight: 600; }
@@ -431,10 +411,6 @@ body:has(.hl-report-page) .hl-sponsor-rail__tagline { font-size: 14px; display: 
 }
 @media (max-width: 699px) {
   .hl-rv-bar { padding: 4px 8px; }
-  body:has(.hl-report-page) .hl-sponsor-rail { padding: 12px 16px; gap: 8px; }
-  body:has(.hl-report-page) .hl-sponsor-rail__label { width: 100%; }
-  body:has(.hl-report-page) .hl-sponsor-rail__item { width: 100%; gap: 12px; padding: 10px; }
-  body:has(.hl-report-page) .hl-sponsor-rail__logo { max-width: 100px; }
   .hl-report-page .hl-rv-grade-row { grid-template-columns: 112px minmax(0,1fr) 24px; }
   .hl-rv-status-tiles { grid-template-columns: minmax(0,1fr); }
 }
@@ -462,7 +438,6 @@ html:has(.hl-report-page) .hl-toast__label { font-size: 14px; }
 .hl-report-page .hl-rv-bar { display: flex; flex-direction: column; align-items: stretch; flex-wrap: nowrap; gap: 0; padding: 4px; top: calc(var(--hl-rv-nav-h, 0px) - var(--hl-rv-tabs-h, 0px)); }
 .hl-report-page .hl-rv-tabs { flex: none; display: flex; gap: 4px; padding-bottom: 4px; }
 .hl-report-page .hl-rv-tab-time { display: block; font-size: 14px; font-weight: 400; line-height: 1.2; }
-.hl-report-page .hl-rv-onepage { align-self: flex-end; padding: 0 8px; min-height: 44px; }
 .hl-report-page .hl-rv-mobile-line { display: flex; align-items: center; gap: 8px; min-height: 48px; width: 100%; }
 .hl-report-page .hl-rv-current { flex: 0 1 auto; font-size: 14px; font-weight: 650; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .hl-report-page .hl-rv-current-section { flex: 1 1 180px; min-width: 0; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; font-size: 14px; color: var(--rv-text); }
@@ -475,12 +450,11 @@ html:has(.hl-report-page) .hl-toast__label { font-size: 14px; }
 .hl-report-page .hl-rv-progress-track { height: 3px; background: var(--rv-line); }
 .hl-report-page .hl-rv-progress-bar { height: 3px; width: 0; background: var(--rv-blue); }
 .hl-report-page .hl-rv-contents { position: static; z-index: auto; }
-.hl-report-page .hl-rv-contents a[aria-current], .hl-report-page .hl-rv-page-contents a[aria-current], .hl-report-page .hl-rv-menu-sections a[aria-current] { background: var(--rv-nav); box-shadow: inset 3px 0 var(--rv-blue); color: var(--rv-text); }
+.hl-report-page .hl-rv-contents a[aria-current], .hl-report-page .hl-rv-page-contents a[aria-current], .hl-report-page .hl-rv-menu-sections a[aria-current] { background: color-mix(in srgb, var(--acc) 10%, var(--rv-card)); box-shadow: inset 3px 0 var(--rv-blue); color: var(--rv-text); }
 .hl-report-page .hl-rv-page-contents { margin-block: 16px; padding: 12px; border: 1px solid var(--rv-line); border-radius: 6px; }
 .hl-report-page .hl-rv-page-contents nav { display: flex; flex-wrap: wrap; gap: 6px; }
 .hl-report-page .hl-rv-page-contents a { padding: 8px 12px; font-size: 14px; }
 .hl-report-page .hl-rv-panel-head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 14px; }
-.hl-report-page .hl-rv-panel-head h2 { padding: 0 !important; margin: 0 !important; font-size: 22px !important; }
 .hl-report-page .hl-rv-panel-head p { margin: 0; font-size: 14px; }
 .hl-report-page .hl-rv-skip-view { font-size: 14px; padding-block: 2px; }
 .hl-report-page .hl-rv-view { margin-top: 2px; }
@@ -501,8 +475,8 @@ html:has(.hl-report-page) .hl-toast__label { font-size: 14px; }
 .hl-report-page .hl-rv-compromised { --rv-meaning: var(--rv-series-2); }
 .hl-report-page .hl-rv-reached { --rv-meaning: var(--rv-series-3); }
 .hl-report-page .hl-rv-listed { --rv-meaning: var(--rv-not-shown); }
-.hl-report-page :is(.hl-rv-tabs button, .hl-rv-tile, .hl-rv-nextprev a):is(:hover,:focus-within) { box-shadow: inset 0 -3px var(--rv-blue); border-color: var(--rv-blue); }
-.hl-report-page .hl-post-content tr:is(:hover,:focus-within) td { background: var(--rv-nav) !important; }
+.hl-report-page :is(.hl-rv-tile, .hl-rv-nextprev a):is(:hover,:focus-within) { box-shadow: inset 0 -3px var(--rv-blue); border-color: var(--rv-blue); }
+.hl-report-page .hl-post-content tr:is(:hover,:focus-within) td { background: color-mix(in srgb, var(--acc) 10%, var(--rv-card)) !important; }
 .hl-report-page .hl-rv-source-footer { color: var(--rv-muted); font-size: 14px; border-top: 1px solid var(--rv-line); margin: 18px 0 0; padding-top: 10px; }
 .hl-report-page .hl-rv-source-footer a { color: var(--rv-muted); min-height: 44px; }
 .hl-report-page .hl-rv-victim-cards { display: grid; grid-template-columns: repeat(auto-fit,minmax(min(100%,260px),1fr)); gap: 12px; }
@@ -511,7 +485,7 @@ html:has(.hl-report-page) .hl-toast__label { font-size: 14px; }
 .hl-report-page .hl-rv-victim-card p { font-size: 14px; margin: 8px 0; }
 .hl-report-page .hl-rv-stage-ribbon { display: grid; grid-template-columns: repeat(7,minmax(0,1fr)); gap: 3px; margin-block: 8px 16px; }
 .hl-report-page .hl-rv-stage-ribbon button { min-width: 0; padding: 12px 14px 12px 10px; clip-path: polygon(0 0,calc(100% - 9px) 0,100% 50%,calc(100% - 9px) 100%,0 100%,7px 50%); border: 0; border-top: 3px solid var(--rv-series); border-radius: 0; background: var(--rv-card); text-align: left; }
-.hl-report-page .hl-rv-stage-ribbon button:is(:hover,[aria-pressed=true]) { background: var(--rv-nav); box-shadow: inset 0 -4px var(--rv-series); }
+.hl-report-page .hl-rv-stage-ribbon button:is(:hover,[aria-pressed=true]) { background: color-mix(in srgb, var(--acc) 10%, var(--rv-card)); box-shadow: inset 0 -4px var(--rv-series); }
 .hl-report-page .hl-rv-stage-ribbon button:focus-visible { clip-path: none; outline-offset: 0; }
 .hl-report-page .hl-rv-stage-ribbon :is(strong,small) { display: block; font-size: 14px; overflow-wrap: anywhere; }
 .hl-report-page .hl-rv-mini { display: flex; width: 100%; gap: 2px; height: 6px; margin-top: 8px; background: var(--rv-line); border-radius: 3px; overflow: hidden; }
@@ -527,11 +501,11 @@ html:has(.hl-report-page) .hl-toast__label { font-size: 14px; }
 .hl-report-page .hl-rv-vertical-timeline { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); list-style: none; margin: 16px 0; padding: 0; gap: 12px; }
 .hl-report-page .hl-rv-vertical-timeline li { display: grid; grid-template-columns: 110px minmax(0,1fr); gap: 10px; padding: 10px; border: 1px solid var(--rv-line); border-left: 3px solid var(--rv-series); border-radius: 6px; }
 .hl-report-page .hl-rv-vertical-marker { display: grid; text-align: left; gap: 6px; padding: 0; }
-.hl-report-page .hl-rv-event-active { background: var(--rv-nav); outline: 2px solid var(--rv-blue); outline-offset: 2px; }
+.hl-report-page .hl-rv-event-active { background: color-mix(in srgb, var(--acc) 10%, var(--rv-card)); outline: 2px solid var(--rv-blue); outline-offset: 2px; }
 .hl-report-page .hl-rv-distribution { display: flex; gap: 3px; flex-wrap: wrap; margin-block: 12px; }
 .hl-report-page .hl-rv-distribution button { flex-basis: 110px; border-bottom: 4px solid var(--rv-blue); }
-.hl-report-page [aria-pressed=true] { border-color: var(--rv-blue); background: var(--rv-nav); }
-.hl-report-page .hl-teardown > summary { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; border: 1px solid var(--rv-boundary); border-radius: 6px; margin: 8px 0; background: var(--rv-card); }
+.hl-report-page [aria-pressed=true] { border-color: var(--rv-blue); background: color-mix(in srgb, var(--acc) 10%, var(--rv-card)); }
+.hl-report-page .hl-teardown > summary { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; border: 1px solid var(--rv-line); border-radius: 6px; margin: 8px 0; background: var(--rv-card); }
 .hl-report-page .hl-teardown > summary::before { content: '▸'; color: var(--rv-blue); }
 .hl-report-page .hl-teardown[open] > summary::before { content: '▾'; }
 .hl-report-page .hl-rv-teardown-count { margin-left: auto; font-size: 14px; color: var(--rv-muted); }
@@ -541,12 +515,6 @@ html:has(.hl-report-page) .hl-toast__label { font-size: 14px; }
 .hl-report-page .hl-rv-metadata { display: inline-block; margin: 4px 16px 8px 0; padding: 8px 10px; border: 1px solid var(--rv-line); border-radius: 4px; font-size: 14px !important; }
 .hl-report-page .hl-rv-threat { display: inline-flex; padding: 4px 10px; border: 1px solid var(--rv-red); border-radius: 999px; background: color-mix(in srgb, var(--rv-red) 16%, var(--rv-bg)); color: var(--rv-text); font-size: 14px; font-weight: 650; }
 /* Compact masthead: the entire title remains visible, at every width. */
-body:has(.hl-report-page) .hl-sponsor-rail { padding: 2px 28px; gap: 10px; flex-wrap: nowrap; min-height: 40px; }
-body:has(.hl-report-page) .hl-sponsor-rail__item { width: auto; padding: 4px 8px; min-height: 36px; gap: 8px; position: relative; }
-body:has(.hl-report-page) .hl-sponsor-rail__label { width: auto; font-size: 14px; }
-body:has(.hl-report-page) .hl-sponsor-rail__logo { max-height: 22px; max-width: 90px; }
-body:has(.hl-report-page) .hl-sponsor-rail__tagline { display: none; }
-body:has(.hl-report-page) .hl-sponsor-rail__item:is(:hover,:focus-within) .hl-sponsor-rail__tagline { display: block; position: absolute; top: 100%; left: 0; padding: 12px; background: var(--hl-bg-card,#1a1a1a); border: 1px solid var(--hl-border-card,#444); width: 260px; z-index: 80; }
 html:has(.hl-report-page) main.content { padding-top: 10px !important; }
 .hl-report-page .hl-post-header { padding: 8px 12px; margin: 0 0 8px; }
 .hl-report-page .hl-post-header__eyebrow { display: flex; align-items: center; flex-wrap: wrap; gap: 4px 8px; margin-bottom: 6px; line-height: 1.25; }
@@ -579,7 +547,6 @@ html:has(.hl-report-page) main.content { padding-top: 10px !important; }
   .hl-report-page .hl-rv-view-summary { align-items: flex-start; flex-wrap: wrap; gap: 8px; }
   .hl-report-page .hl-rv-view-summary p { flex-basis: 100%; }
   .hl-report-page .hl-rv-vertical-timeline li { grid-template-columns: 78px minmax(0,1fr); }
-  body:has(.hl-report-page) .hl-sponsor-rail { padding-inline: 16px; }
   .hl-report-page .hl-post-header { padding: 6px 0; }
   .hl-report-page .hl-post-header__eyebrow { gap: 4px 6px; }
   .hl-report-page .hl-post-header__title { font-size: 22px !important; }
@@ -612,7 +579,6 @@ html:has(.hl-report-page) main.content { padding-top: 10px !important; }
 .hl-report-page .hl-quicklinks .hl-share-btn { padding: 0 8px; font-size: 14px; margin: 0; }
 .hl-report-page .hl-rv-bar { display: grid; grid-template-columns: minmax(0,1fr) auto; }
 .hl-report-page .hl-rv-tabs { grid-column: 1; }
-.hl-report-page .hl-rv-onepage { grid-column: 2; grid-row: 1; align-self: stretch; justify-content: center; }
 .hl-report-page .hl-rv-mobile-line, .hl-report-page .hl-rv-progress-track { grid-column: 1 / -1; }
 @media (max-width: 699px) {
   html:has(.hl-report-page) main.content { padding-top: 0 !important; }
@@ -676,4 +642,383 @@ html:has(.hl-report-page) main.content { padding-top: 10px !important; }
   body:has(.hl-report-page) .hl-rv-resource { display: none !important; }
   .hl-report-page .hl-rv-source pre, .hl-report-page .hl-rv-source pre code { white-space: pre-wrap; overflow-wrap: anywhere; overflow: visible; }
   .hl-report-page .hl-rv-source td.hl-rv-indicator-cell code { white-space: normal; overflow-wrap: anywhere; }
+}
+
+/* ==========================================================================
+   Round 3 (T-0500.1.7). The tabbed report is built from the site's own parts
+   so it reads as an extension of the site, not a second product:
+   - one hue per tab, the Wire tab recipe (custom.scss:3894-3945)
+   - view panels in the .hl-panel language (custom.scss:3091-3125): one
+     surface, one accent edge, nothing bordered inside a bordered box
+   - section heads from the report h2 rule (custom.scss:408-420)
+   - resource buttons .hl-cta (custom.scss:3179-3216), colour per kind
+   - cards from .hl-link-card / .hl-nav-tile (custom.scss:3245, 890-936)
+   - type from the site's em scale: prose 22px, tables 19.8px, h2 25.3px
+   ========================================================================== */
+
+/* ---- one hue per tab (the site's section accents, from each page's --ph-accent) ---- */
+.hl-report-page {
+  --rv-hue-overview: #a371f7;     /* Reports */
+  --rv-hue-victims: #fbbf24;      /* Impact */
+  --rv-hue-chain: #f87171;        /* IOC Feeds red */
+  --rv-hue-timeline: #58a6ff;     /* The Wire */
+  --rv-hue-attribution: #e879f9;  /* Actors */
+  --rv-hue-indicators: #4ade80;   /* Detections */
+  --rv-hue-confidence: #2dd4bf;   /* Families */
+  --acc: var(--rv-hue-overview);
+  --rv-display: var(--hl-font-display, 'Space Grotesk', system-ui, sans-serif);
+  --rv-mono: ui-monospace, 'Cascadia Mono', Menlo, monospace;
+  --rv-fs: 17px; --rv-fs-sm: 15px;
+}
+.hl-report-page [data-rv-hue="overview"] { --acc: var(--rv-hue-overview); }
+.hl-report-page [data-rv-hue="victims"] { --acc: var(--rv-hue-victims); }
+.hl-report-page [data-rv-hue="chain"] { --acc: var(--rv-hue-chain); }
+.hl-report-page [data-rv-hue="timeline"] { --acc: var(--rv-hue-timeline); }
+.hl-report-page [data-rv-hue="attribution"] { --acc: var(--rv-hue-attribution); }
+.hl-report-page [data-rv-hue="indicators"] { --acc: var(--rv-hue-indicators); }
+.hl-report-page [data-rv-hue="confidence"] { --acc: var(--rv-hue-confidence); }
+
+/* ---- the site's em scale: content is 22px on desktop, so the site's own h2 (1.15em),
+   table (0.9em) and th rules produce 25.3 / 19.8 / 14.85px. Phones keep the 16px floor. ---- */
+.hl-report-page .hl-post-content { font-size: 16px; }
+@media (min-width: 700px) { .hl-report-page .hl-post-content { font-size: 19px; } }
+@media (min-width: 1100px) { .hl-report-page .hl-post-content { font-size: 22px; } }
+.hl-report-page .hl-post-content .hl-rv-source :is(p, li, blockquote) { font-size: 16px; }
+@media (min-width: 700px) { .hl-report-page .hl-post-content .hl-rv-source :is(p, li, blockquote) { font-size: 19px; } }
+@media (min-width: 1100px) { .hl-report-page .hl-post-content .hl-rv-source :is(p, li, blockquote) { font-size: 22px; } }
+.hl-report-page .hl-post-content .hl-rv-source figcaption { font-size: 16px; }
+@media (min-width: 1100px) { .hl-report-page .hl-post-content .hl-rv-source figcaption { font-size: 18px; } }
+/* Chrome keeps its own px sizes whatever the content size is. */
+.hl-report-page :is(.hl-rv-panel-head p, .hl-rv-view, .hl-rv-contents, .hl-rv-nextprev, .hl-rv-teardown-controls, .hl-rv-page-contents, .hl-rv-sponsor-card, .hl-rv-skip-view, .hl-rv-table-tools, .hl-rv-source-footer, .hl-rv-menu) { font-size: 16px; }
+@media (min-width: 1100px) { .hl-report-page :is(.hl-rv-panel-head p, .hl-rv-view, .hl-rv-contents, .hl-rv-nextprev, .hl-rv-teardown-controls, .hl-rv-page-contents, .hl-rv-sponsor-card, .hl-rv-skip-view, .hl-rv-table-tools, .hl-rv-source-footer, .hl-rv-menu) { font-size: var(--rv-fs); } }
+@media (min-width: 1100px) {
+  .hl-report-page .hl-rv-source :is(th, td) { font-size: 19.8px; }
+  .hl-report-page .hl-post-content .hl-rv-source th { font-size: 14.85px !important; }
+  .hl-report-page .hl-rv-source table { font-size: 19.8px; }
+  /* generated view tables carry a Source column and badges: 17px keeps four columns legible in the overview's half width */
+  .hl-report-page .hl-rv-view .hl-rv-table td { font-size: 17px; }
+  .hl-report-page .hl-rv-view .hl-rv-table th { font-size: 14px !important; }
+  #tab-overview .hl-rv-view-body { grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); }
+}
+@media (min-width: 700px) and (max-width: 1099px) {
+  .hl-report-page .hl-rv-source td { font-size: 17px; }
+  .hl-report-page .hl-rv-view .hl-rv-table td { font-size: 17px; }
+}
+
+/* ---- section heads: the site rule (custom.scss:408) applies, the bar takes the tab's hue ---- */
+.hl-report-page .hl-rv-panel-head { display: block; padding-top: 4px; }
+.hl-report-page .hl-rv-panel-head h2 {
+  margin: 0 0 6px !important;
+  font-family: var(--rv-display);
+  border-left-color: var(--acc) !important;
+  background: linear-gradient(to right, color-mix(in srgb, var(--acc) 12%, transparent), transparent) !important;
+}
+.hl-report-page .hl-rv-panel-head p { margin: 0 0 4px; padding-left: 17px; color: var(--rv-muted); font-size: 16px; }
+@media (min-width: 1100px) { .hl-report-page .hl-rv-panel-head p { font-size: 17px; } }
+/* one-page mode: the site's own h2/h3 rules keep their red/blue bars, with the same breathing room */
+
+/* ---- tab bar: the Wire recipe, one hue per tab, on a baseline instead of a grey box ---- */
+.hl-report-page .hl-rv-bar { padding: 4px 0 0; background: none; border: 0; border-radius: 0; box-shadow: none; }
+.hl-report-page .hl-rv-tabs { gap: 4px; padding: 0; border-bottom: 1px solid var(--rv-line); }
+.hl-report-page .hl-rv-bar .hl-rv-tabs button[role="tab"] {
+  --tab: var(--acc);
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px;
+  padding: 10px 16px 9px; min-width: 44px;
+  font-family: var(--rv-display); font-size: 17px; font-weight: 600; line-height: 1.25;
+  color: color-mix(in srgb, var(--tab) 74%, #b8bdc7);
+  background: color-mix(in srgb, var(--tab) 6%, transparent);
+  border: 1px solid color-mix(in srgb, var(--tab) 24%, transparent);
+  border-top-width: 3px; border-bottom: 0; border-radius: 8px 8px 0 0; margin-bottom: -1px;
+  box-shadow: none; transition: background 0.12s, color 0.12s;
+}
+.hl-report-page .hl-rv-bar .hl-rv-tabs button[role="tab"]:hover { color: var(--tab); background: color-mix(in srgb, var(--tab) 12%, transparent); border-color: color-mix(in srgb, var(--tab) 40%, transparent); box-shadow: none; }
+.hl-report-page .hl-rv-bar .hl-rv-tabs button[role="tab"][aria-selected="true"] {
+  color: color-mix(in srgb, var(--tab) 72%, #fff); /* the Wire recipe uses the bare hue; 72% toward white lifts the purple tab to 6.2:1 (bare hue measured 4.19:1) */
+  background: color-mix(in srgb, var(--tab) 14%, var(--hl-bg-card, #1a1a1a));
+  border-color: color-mix(in srgb, var(--tab) 50%, var(--hl-border-card, #2a2a2a));
+  border-top-color: var(--tab);
+  box-shadow: 0 -6px 22px color-mix(in srgb, var(--tab) 16%, transparent);
+}
+.hl-report-page .hl-rv-bar .hl-rv-tabs button[role="tab"]:focus-visible { outline: 3px solid var(--tab); outline-offset: 2px; }
+.hl-report-page .hl-rv-tab-time {
+  display: inline-block; font-family: var(--rv-mono); font-size: 14px; font-weight: 600; letter-spacing: 0.02em;
+  padding: 1px 9px; border-radius: 999px; background: color-mix(in srgb, var(--tab, var(--acc)) 14%, transparent); color: inherit;
+}
+.hl-report-page .hl-rv-onepage {
+  flex: none; order: 4; align-self: center; margin-left: 2px; padding: 0 12px; min-height: 44px; display: inline-flex; align-items: center;
+  font-size: 15px; font-weight: 600; text-decoration: none; white-space: nowrap; color: var(--rv-muted);
+  border: 1px solid var(--rv-line); border-radius: 8px; background: transparent;
+}
+.hl-report-page .hl-rv-onepage:hover { color: var(--rv-text); border-color: var(--acc); }
+.hl-report-page .hl-rv-bar { grid-template-columns: minmax(0, 1fr); }
+.hl-report-page .hl-rv-tabs { grid-row: 1; grid-column: 1; }
+.hl-report-page .hl-rv-mobile-line { grid-row: 2; grid-column: 1; }
+.hl-report-page .hl-rv-progress-track { grid-row: 3; grid-column: 1; }
+/* the seven full names need about 1300px; below 1440px the short names the page already uses at 1280 and under apply */
+@media (min-width: 1281px) and (max-width: 1439px) { .hl-rv-tab-full { display: none; } .hl-rv-tab-short { display: inline; } }
+@media (min-width: 1440px) { .hl-report-page .hl-rv-bar .hl-rv-tabs button[role="tab"] { font-size: 16px; padding-inline: 10px; } }
+@media (max-width: 767px) { .hl-report-page .hl-rv-onepage { font-size: 14px; padding: 0 8px; } }
+
+/* ---- the reading line: the site's CONTENTS bar treatment, edge in the tab's hue ---- */
+.hl-report-page .hl-rv-mobile-line {
+  position: relative; margin-top: 6px; padding: 0 8px 0 14px;
+  background: linear-gradient(135deg, var(--hl-bg-card, #1a1a1a), #0d1117);
+  border: 1px solid var(--hl-border-card, #2a2a2a); border-top: 2px solid var(--acc); border-radius: 0 0 8px 8px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.45);
+}
+.hl-report-page .hl-rv-current { font-family: var(--rv-display); font-weight: 700; font-size: 15px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--acc); }
+.hl-report-page .hl-rv-current-section, .hl-report-page .hl-rv-remaining { font-size: 15px; }
+.hl-report-page .hl-rv-progress-track { height: 3px; background: transparent; margin-top: -3px; border-radius: 0 0 8px 8px; overflow: hidden; position: relative; z-index: 1; }
+.hl-report-page .hl-rv-progress-bar { background: var(--acc); box-shadow: 0 0 10px var(--acc); }
+.hl-report-page .hl-rv-mobile-line button { border-radius: 8px; }
+.hl-report-page .hl-rv-menu { background: var(--hl-bg-card, #1a1a1a); border-color: var(--hl-border-card, #2a2a2a); border-radius: 0 0 8px 8px; }
+
+/* ---- buttons, inputs: tinted tool buttons in the tab's hue (the .hl-cta--ghost recipe), pills for toggles ---- */
+.hl-report-page :is(button, input, select) { font-family: inherit; font-size: 16px; color: var(--rv-text); background: color-mix(in srgb, var(--acc) 8%, transparent); border: 1px solid color-mix(in srgb, var(--acc) 30%, transparent); border-radius: 8px; transition: background 0.12s, border-color 0.12s; }
+.hl-report-page :is(button, select):hover { background: color-mix(in srgb, var(--acc) 16%, transparent); border-color: color-mix(in srgb, var(--acc) 55%, transparent); }
+.hl-report-page :is(input, select) { background: #0d1117; border-color: var(--hl-border-card, #2a2a2a); cursor: text; }
+.hl-report-page select { cursor: pointer; }
+.hl-report-page input:hover, .hl-report-page select:hover { background: #0d1117; border-color: color-mix(in srgb, var(--acc) 55%, transparent); }
+.hl-report-page .hl-rv-view :is(button, summary)[aria-pressed="true"] { background: color-mix(in srgb, var(--acc) 22%, transparent); border-color: var(--acc); color: var(--rv-text); }
+.hl-report-page :is(.hl-rv-type-filters, .hl-rv-distribution) button { border-radius: 999px; }
+.hl-report-page .hl-rv-back { border-color: var(--acc); border-radius: 999px; background: color-mix(in srgb, var(--acc) 14%, var(--hl-bg-card, #1a1a1a)); }
+
+/* ---- view panels: one surface in the .hl-panel language, one accent edge ---- */
+.hl-report-page .hl-rv-view {
+  position: relative; margin-block: 10px 28px; padding: 20px 22px;
+  background:
+    radial-gradient(120% 150% at 0 0, color-mix(in srgb, var(--acc) 10%, transparent), transparent 56%),
+    linear-gradient(135deg, var(--hl-bg-card, #1a1a1a), #0d1117);
+  border: 1px solid var(--hl-border-card, #2a2a2a); border-left: 3px solid var(--acc); border-radius: 9px;
+}
+.hl-report-page .hl-rv-view-summary { align-items: center; gap: 14px; padding-bottom: 14px; margin-bottom: 14px; border-bottom: 1px solid color-mix(in srgb, var(--acc) 22%, var(--hl-border-card, #2a2a2a)); }
+.hl-report-page .hl-rv-view-summary p { font-family: var(--rv-mono); font-size: 15px; color: var(--rv-text); display: flex; align-items: baseline; gap: 12px; }
+.hl-report-page .hl-rv-view-summary p::before { content: ''; flex: none; width: 9px; height: 9px; border-radius: 50%; background: var(--acc); box-shadow: 0 0 10px var(--acc); align-self: center; }
+@media (min-width: 1100px) { .hl-report-page .hl-rv-view-summary p { font-size: 16px; } }
+/* inner cards sit on the same surface: tint, a 3px edge, one radius. No second grey, no second border. */
+.hl-report-page .hl-rv-view :is(.hl-rv-tile, .hl-rv-victim-card, .hl-rv-diamond-card, .hl-rv-status-tile, .hl-rv-event, .hl-rv-stage, .hl-rv-chip-item) {
+  --edge: var(--acc);
+  background: color-mix(in srgb, var(--edge) 6%, transparent);
+  border: 1px solid var(--hl-border-row, #222); border-left: 3px solid var(--edge); border-radius: 8px;
+}
+.hl-report-page .hl-rv-view .hl-rv-stage { --edge: var(--rv-series, var(--acc)); border-top: 1px solid var(--hl-border-row, #222); }
+.hl-report-page .hl-rv-view .hl-rv-status-tile { --edge: var(--rv-meaning, var(--acc)); border-top: 1px solid var(--hl-border-row, #222); }
+.hl-report-page .hl-rv-view .hl-rv-stage.hl-rv-stage-muted { background: transparent; box-shadow: none; --edge: var(--rv-line); }
+.hl-report-page .hl-rv-view .hl-rv-stage.hl-rv-stage-match { box-shadow: 0 0 18px color-mix(in srgb, var(--edge) 22%, transparent); }
+.hl-report-page .hl-rv-view .hl-rv-chain-scroll { border: 0; }
+.hl-report-page .hl-rv-view .hl-rv-table-wrap { border: 0; border-radius: 0; }
+.hl-report-page .hl-rv-view .hl-rv-lead blockquote { background: transparent !important; border-left: 3px solid var(--acc); border-radius: 0 6px 6px 0; }
+.hl-report-page .hl-rv-view .hl-rv-chip-item { padding: 8px 12px; }
+.hl-report-page .hl-rv-view .hl-rv-table th { background: color-mix(in srgb, var(--acc) 8%, #0d1117) !important; }
+.hl-report-page .hl-rv-view .hl-rv-diamond-label { border-color: var(--acc); }
+
+/* tiles: the .hl-nav-tile look (3px edge, wash), the value in the display face with the glowing dot of .hl-feat */
+.hl-report-page .hl-rv-tiles { gap: 14px; }
+.hl-report-page .hl-rv-view .hl-rv-tile { --edge: var(--acc); position: relative; padding: 18px 18px 16px; transition: transform 0.15s ease, box-shadow 0.15s ease; }
+.hl-report-page .hl-rv-view .hl-rv-tile::before { content: ''; width: 9px; height: 9px; border-radius: 50%; background: var(--edge); box-shadow: 0 0 10px var(--edge); }
+.hl-report-page .hl-rv-view .hl-rv-tile:hover { transform: translateY(-2px); box-shadow: 0 8px 22px rgba(0, 0, 0, 0.4), 0 0 20px color-mix(in srgb, var(--edge) 16%, transparent); border-color: var(--hl-border-row, #222); }
+.hl-report-page .hl-rv-tile .hl-rv-value { font-family: var(--rv-display); font-weight: 700; font-size: 38px; line-height: 1.1; color: var(--edge); }
+.hl-report-page .hl-rv-tile:last-child .hl-rv-value { font-size: 22px; }
+.hl-report-page .hl-rv-tile > span:not(.hl-rv-tile-destination) { font-size: 17px; font-weight: 600; color: var(--rv-text); }
+.hl-report-page .hl-rv-tile small { font-size: 15px; }
+.hl-report-page .hl-rv-tile .hl-rv-tile-destination { font-family: var(--rv-mono); font-size: 14px; color: var(--edge); }
+
+/* ---- next / previous: the .hl-link-card look with the destination tab's hue ---- */
+.hl-report-page .hl-rv-nextprev { border-top: 0; padding-top: 4px; margin-block: 28px 12px; }
+.hl-report-page .hl-rv-nextprev a { background: var(--hl-bg-row, #161616); border: 1px solid var(--hl-border-row, #222); border-left: 3px solid var(--acc); border-radius: 8px; padding: 14px 18px; transition: transform 0.15s ease, box-shadow 0.15s ease; }
+.hl-report-page .hl-rv-nextprev a:hover { transform: translateY(-2px); box-shadow: 0 8px 22px rgba(0, 0, 0, 0.4); border-color: var(--hl-border-row, #222); border-left-color: var(--acc); }
+.hl-report-page .hl-rv-nextprev strong { font-family: var(--rv-display); font-weight: 700; font-size: 20px; color: var(--acc); }
+.hl-report-page .hl-rv-nextprev :is(span, small) { font-size: 15px; }
+
+/* ---- chips and small marks ---- */
+.hl-report-page .hl-rv-view .hl-rv-badge { font-size: 14px; border-radius: 3px; }
+.hl-report-page .hl-rv-skip-view { color: var(--rv-muted); }
+.hl-report-page .hl-rv-note, .hl-report-page .hl-rv-curated, .hl-report-page .hl-rv-count, .hl-report-page .hl-rv-filters label, .hl-report-page .hl-rv-teardown-count { font-size: 15px; }
+.hl-report-page .hl-rv-view .hl-rv-table caption { font-size: 15px; }
+.hl-report-page .hl-rv-source-footer { font-size: 15px; }
+
+/* ---- header: resource actions are the site's .hl-cta, one colour per kind ---- */
+.hl-report-page .hl-post-header { padding: 12px 20px; }
+.hl-report-page .hl-post-header__title { font-size: clamp(24px, 2.3vw, 34px) !important; }
+.hl-report-page .hl-post-header__eyebrow, .hl-report-page .hl-post-header__eyebrow :is(span, a, time, button), .hl-report-page .hl-read-time { font-size: 15px; }
+.hl-report-page .hl-quicklinks { gap: 10px; }
+@media (min-width: 1100px) {
+  .hl-report-page .hl-post-header__eyebrow { grid-column: 1; grid-row: 1; }
+  .hl-report-page .hl-post-header .hl-quicklinks { grid-column: 2; grid-row: 1; align-self: center; justify-self: end; }
+  .hl-report-page .hl-post-header__title { grid-column: 1 / -1; grid-row: 2; }
+}
+@media (min-width: 700px) and (max-width: 1099px) {
+  .hl-report-page .hl-post-header { grid-template-columns: minmax(0, 1fr); }
+  .hl-report-page .hl-post-header .hl-quicklinks { grid-column: 1; grid-row: 3; margin-top: 4px; }
+}
+.hl-report-page .hl-quicklinks .hl-quicklink.hl-cta, .hl-report-page .hl-quicklinks .hl-quicklink.hl-cta:hover,
+.hl-report-page .hl-quicklinks .hl-share-btn.hl-cta, .hl-report-page .hl-quicklinks .hl-share-btn.hl-cta:hover {
+  width: auto; height: auto; min-height: 44px; padding: 6px 16px; gap: 8px; overflow: visible;
+  font-size: 16px; border-radius: 8px;
+}
+.hl-report-page .hl-quicklinks .hl-quicklink.hl-cta:not(.hl-cta--ghost), .hl-report-page .hl-quicklinks .hl-quicklink.hl-cta:not(.hl-cta--ghost):hover {
+  background: linear-gradient(135deg, color-mix(in srgb, var(--acc) 82%, #fff), var(--acc)); border-color: color-mix(in srgb, var(--acc) 55%, #fff);
+}
+.hl-report-page .hl-quicklinks .hl-cta--ghost, .hl-report-page .hl-quicklinks .hl-cta--ghost:hover { background: color-mix(in srgb, var(--acc) 10%, transparent); border-color: color-mix(in srgb, var(--acc) 34%, transparent); }
+.hl-report-page .hl-quicklinks .hl-cta--ghost:hover { background: color-mix(in srgb, var(--acc) 18%, transparent); }
+.hl-report-page .hl-quicklinks .hl-quicklink.hl-cta .hl-quicklink__label { opacity: 1; padding: 0; font-size: 16px; font-weight: 700; text-transform: none; letter-spacing: 0; }
+.hl-report-page .hl-quicklinks .hl-quicklink.hl-cta .hl-quicklink__icon { width: 18px; height: 18px; }
+.hl-report-page .hl-quicklinks .hl-quicklink.hl-cta .hl-quicklink__icon svg { width: 18px; height: 18px; }
+.hl-report-page .hl-quicklinks .hl-quicklink.hl-cta:focus-visible { outline: 3px solid var(--acc); outline-offset: 3px; }
+
+/* ---- masthead sponsor bar (_includes/report-sponsor-bar.html): the report sponsor first and largest,
+   the site's gold, the .hl-panel gradient and corner wash; the Monthly sponsors in a quieter zone. One row from 1100px. ---- */
+.hl-rvsp {
+  --sp: var(--hl-accent-gold, #b8902f);
+  --sp-text: color-mix(in srgb, var(--hl-accent-gold, #b8902f) 70%, #fff);
+  display: flex; flex-wrap: wrap; align-items: center; column-gap: 28px; row-gap: 8px;
+  margin: 0 0 14px; padding: 10px 20px;
+  background:
+    radial-gradient(90% 260% at 0 50%, color-mix(in srgb, var(--sp) 9%, transparent), transparent 58%),
+    linear-gradient(135deg, var(--hl-bg-card, #1a1a1a), #0d1117);
+  border: 1px solid var(--hl-border-card, #2a2a2a); border-left: 3px solid var(--sp); border-radius: 9px;
+  font-size: 16px; line-height: 1.3;
+}
+.hl-rvsp--has-report { background: radial-gradient(90% 260% at 0 50%, color-mix(in srgb, var(--sp) 18%, transparent), transparent 58%), linear-gradient(135deg, var(--hl-bg-card, #1a1a1a), #0d1117); box-shadow: 0 0 26px color-mix(in srgb, var(--sp) 14%, transparent); }
+.hl-rvsp__zone { display: flex; align-items: center; gap: 16px; min-width: 0; }
+.hl-rvsp__zone--report { flex: 1 1 auto; }
+@media (min-width: 1100px) { .hl-rvsp { flex-wrap: nowrap; } .hl-rvsp__zone--report { flex: 1 1 0; } .hl-rvsp__items { flex-wrap: nowrap; } }
+.hl-rvsp__zone--site { flex: 0 1 auto; margin-left: auto; padding-left: 28px; border-left: 1px solid var(--hl-border-card, #2a2a2a); }
+.hl-rvsp:not(.hl-rvsp--has-report) .hl-rvsp__zone--site { margin-left: 0; padding-left: 0; border-left: 0; flex: 1 1 auto; }
+.hl-rvsp__label { flex: none; font-size: 14px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; white-space: nowrap; color: var(--hl-text-muted, #888); }
+.hl-rvsp__zone--report .hl-rvsp__label { color: var(--sp-text); }
+.hl-rvsp__items { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 24px; min-width: 0; }
+.hl-rvsp__item { display: flex; align-items: center; gap: 14px; min-width: 0; color: inherit; text-decoration: none !important; border-radius: 6px; }
+.hl-rvsp a.hl-rvsp__item:hover .hl-rvsp__name { color: var(--sp-text); }
+.hl-rvsp a.hl-rvsp__item:focus-visible { outline: 3px solid var(--sp); outline-offset: 4px; }
+.hl-rvsp__logo { display: block; flex: none; width: auto; object-fit: contain; }
+.hl-rvsp__zone--report .hl-rvsp__logo { height: 40px; max-width: 220px; }
+.hl-rvsp__zone--site .hl-rvsp__logo { height: 30px; max-width: 150px; }
+.hl-rvsp__text { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.hl-rvsp__name { font-family: var(--hl-font-display, 'Space Grotesk', system-ui, sans-serif); font-weight: 700; color: var(--hl-text-primary, #eee); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.hl-rvsp__zone--report .hl-rvsp__name { font-size: 20px; }
+.hl-rvsp__zone--site .hl-rvsp__name { font-size: 16px; }
+.hl-rvsp__tagline { font-size: 15px; color: var(--rv-muted, #b8bdc7); display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; line-clamp: 2; overflow: hidden; }
+.hl-rvsp__zone--report .hl-rvsp__tagline { max-width: 46ch; }
+.hl-rvsp__zone--site .hl-rvsp__tagline { max-width: 28ch; }
+.hl-rvsp__zone--site .hl-rvsp__item:has(.hl-rvsp__logo) .hl-rvsp__name { display: none; }
+/* Several Monthly sponsors: logos only, so up to three lay out in one row */
+.hl-rvsp__zone--many .hl-rvsp__item:has(.hl-rvsp__logo) .hl-rvsp__text { display: none; }
+@media (max-width: 1279px) { .hl-rvsp__zone--site .hl-rvsp__tagline { display: none; } }
+@media (max-width: 1099px) {
+  .hl-rvsp { flex-direction: column; align-items: stretch; gap: 8px; padding: 10px 16px; }
+  .hl-rvsp__zone--site, .hl-rvsp:not(.hl-rvsp--has-report) .hl-rvsp__zone--site { margin-left: 0; padding-left: 0; border-left: 0; flex: none; }
+  .hl-rvsp--has-report .hl-rvsp__zone--site { padding-top: 8px; border-top: 1px solid var(--hl-border-card, #2a2a2a); }
+  .hl-rvsp__zone--site .hl-rvsp__tagline { display: -webkit-box; }
+}
+@media (max-width: 699px) {
+  .hl-rvsp { padding: 6px 12px; margin-bottom: 10px; gap: 4px; }
+  .hl-rvsp__zone { flex-wrap: wrap; row-gap: 0; column-gap: 12px; }
+  .hl-rvsp__zone--report .hl-rvsp__items, .hl-rvsp__zone--site .hl-rvsp__items { display: contents; }
+  .hl-rvsp__zone--report .hl-rvsp__logo { height: 28px; max-width: 150px; }
+  .hl-rvsp__zone--site .hl-rvsp__logo { height: 24px; max-width: 110px; }
+  .hl-rvsp__item { display: contents; }
+  .hl-rvsp__zone--report .hl-rvsp__text { flex: 1 1 100%; display: block; min-width: 0; }
+  .hl-rvsp__zone--report .hl-rvsp__name { display: block; font-size: 16px; }
+  .hl-rvsp__tagline { display: none; }
+  .hl-rvsp__zone--site .hl-rvsp__text { display: none; }
+  .hl-rvsp--has-report .hl-rvsp__zone--site { padding-top: 4px; }
+  .hl-rvsp__zone--site .hl-rvsp__items { gap: 4px 14px; }
+}
+
+/* a small sponsor mark at the end of the sticky reading line, and a card at the foot of each tab */
+.hl-report-page .hl-rv-sponsor-mark { flex: none; display: inline-flex; align-items: center; gap: 10px; margin-left: 4px; padding: 0 6px; min-height: 44px; border-radius: 6px; color: var(--hl-text-muted, #888); text-decoration: none; border-left: 1px solid var(--hl-border-card, #2a2a2a); }
+.hl-report-page .hl-rv-sponsor-mark:hover { background: color-mix(in srgb, var(--hl-accent-gold, #b8902f) 12%, transparent); }
+.hl-report-page .hl-rv-sponsor-mark__label { font-size: 14px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; white-space: nowrap; }
+.hl-report-page .hl-rv-sponsor-mark.is-report .hl-rv-sponsor-mark__label { color: color-mix(in srgb, var(--hl-accent-gold, #b8902f) 70%, #fff); }
+.hl-report-page .hl-rv-sponsor-mark img { display: block; height: 24px; width: auto; max-width: 110px; object-fit: contain; }
+.hl-report-page .hl-rv-sponsor-mark__name { font-size: 15px; font-weight: 600; color: var(--rv-text); }
+@media (max-width: 767px) { .hl-report-page .hl-rv-sponsor-mark__label { display: none; } }
+.hl-report-page .hl-rv-sponsor-card {
+  --sp: var(--hl-accent-gold, #b8902f);
+  margin-block: 28px 8px; padding: 16px 20px;
+  background: radial-gradient(90% 200% at 0 50%, color-mix(in srgb, var(--sp) 8%, transparent), transparent 60%), var(--hl-bg-row, #161616);
+  border: 1px solid var(--hl-border-row, #222); border-left: 3px solid var(--sp); border-radius: 8px;
+}
+.hl-report-page .hl-rv-sponsor-card__label { margin: 0 0 10px; font-size: 14px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--hl-text-muted, #888); }
+.hl-report-page .hl-rv-sponsor-card.is-report .hl-rv-sponsor-card__label { color: color-mix(in srgb, var(--sp) 70%, #fff); }
+.hl-report-page .hl-rv-sponsor-card__items { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr)); gap: 14px 28px; }
+.hl-report-page .hl-rv-sponsor-card__item { display: flex; align-items: center; gap: 16px; color: inherit; text-decoration: none; min-width: 0; border-radius: 6px; }
+.hl-report-page .hl-rv-sponsor-card__item:hover .hl-rv-sponsor-card__name { color: color-mix(in srgb, var(--sp) 70%, #fff); }
+.hl-report-page .hl-rv-sponsor-card__item img { display: block; flex: none; height: 40px; width: auto; max-width: 180px; object-fit: contain; }
+.hl-report-page .hl-rv-sponsor-card__text { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.hl-report-page .hl-rv-sponsor-card__name { font-family: var(--rv-display); font-weight: 700; font-size: 18px; color: var(--hl-text-primary, #eee); }
+.hl-report-page .hl-rv-sponsor-card__tagline { font-size: 15px; color: var(--rv-muted, #b8bdc7); }
+
+/* ---- F3: a pill drawn from a cell's own ::after needs the cell as its containing block, including the sticky first column ---- */
+.hl-report-page .hl-rv-source td.hl-rv-cell-pill { position: relative; }
+.hl-report-page .hl-rv-source-table td.hl-rv-cell-pill:first-child { position: sticky; }
+
+/* ---- responsive tuning for the new parts ---- */
+@media (max-width: 1099px) {
+  .hl-report-page .hl-rv-view { padding: 16px 16px; }
+  .hl-report-page .hl-rv-tile .hl-rv-value { font-size: 30px; }
+}
+@media (max-width: 699px) {
+  .hl-report-page .hl-rv-view { padding: 14px 12px; border-left-width: 3px; }
+  .hl-report-page .hl-rv-view-summary { padding-bottom: 10px; margin-bottom: 10px; }
+  .hl-report-page .hl-rv-mobile-line { margin-top: 0; padding: 0 4px 0 10px; border-radius: 0 0 8px 8px; }
+  .hl-report-page .hl-rv-panel-head p { padding-left: 13px; }
+  .hl-report-page .hl-quicklinks { flex-wrap: wrap; gap: 6px; }
+  .hl-report-page .hl-quicklinks .hl-quicklink.hl-cta, .hl-report-page .hl-quicklinks .hl-share-btn.hl-cta { padding: 4px 8px; font-size: 14px; }
+  .hl-report-page .hl-quicklinks .hl-quicklink.hl-cta .hl-quicklink__label { font-size: 14px; }
+  .hl-report-page .hl-quicklinks .hl-quicklink.hl-cta .hl-quicklink__icon { display: none; }
+}
+@media (min-width: 700px) and (max-width: 1099px) {
+  .hl-report-page .hl-rv-bar .hl-rv-tabs button[role="tab"] { font-size: 16px; padding: 8px 4px 7px; }
+  .hl-report-page .hl-rv-tab-time { padding: 1px 6px; white-space: nowrap; }
+  .hl-report-page .hl-rv-onepage { padding: 0 10px; font-size: 14px; }
+}
+@media print {
+  .hl-rvsp, .hl-rv-sponsor-mark, .hl-rv-sponsor-card { display: none !important; }
+}
+.hl-report-page .hl-rv-mobile-line > .hl-rv-sponsor-mark { order: 5; }
+/* The theme pads and fits every img; sponsor logos are drawn at their own height, unpadded. */
+.hl-report-page .hl-rvsp img.hl-rvsp__logo, .hl-report-page .hl-rv-sponsor-mark img, .hl-report-page .hl-rv-sponsor-card__item img { padding: 0; margin: 0; border: 0; border-radius: 0; }
+
+/* view tables break a word only when nothing else fits; badges never split */
+.hl-report-page .hl-rv-view .hl-rv-table :is(th, td) { overflow-wrap: break-word; word-break: normal; min-width: 100px; }
+.hl-report-page .hl-rv-badge:not(.hl-rv-unscaled) { white-space: nowrap; }
+.hl-report-page .hl-rv-view .hl-rv-tile { align-items: flex-start; text-align: left; }
+.hl-report-page .hl-rv-view .hl-rv-chips { margin: 8px 0 14px; padding: 0; }
+.hl-report-page .hl-rv-table-fold > summary { font-size: 16px; }
+/* Phones: the mark may shrink and the minutes-left text gives way, so the line never exceeds the viewport (gate: 360px) */
+.hl-report-page .hl-rv-sponsor-mark { min-width: 0; }
+@media (max-width: 479px) {
+  .hl-report-page .hl-rv-remaining { display: none; }
+  .hl-report-page .hl-rv-sponsor-mark { flex: 0 1 auto; max-width: 104px; overflow: hidden; padding: 0 4px; margin-left: 2px; }
+  .hl-report-page .hl-rv-sponsor-mark img { height: 22px; max-width: 92px; }
+}
+.hl-report-page .hl-rv-sponsor-mark img { flex: 0 1 auto; min-width: 0; }
+@media (max-width: 479px) { .hl-report-page .hl-rv-sponsor-mark img { max-width: 100%; } }
+@media (max-width: 479px) {
+  /* the section name (numbered, from the report) is the useful context on a phone line this narrow; the tab name is in the panel head below */
+  .hl-report-page .hl-rv-current { display: none; }
+  .hl-report-page .hl-rv-current-section { flex: 1 1 60px; }
+}
+@media (min-width: 700px) and (max-width: 999px) { .hl-report-page .hl-rv-current { display: none; } .hl-report-page .hl-rv-current-section { flex: 1 1 120px; } }
+/* Print keeps the round-2 sizes: the screen scale above is for reading on a display, and a printed page is not 1100px wide. */
+@media print {
+  .hl-report-page .hl-post-content { font-size: 16px; }
+  .hl-report-page .hl-post-content .hl-rv-source :is(p, li, blockquote, figcaption) { font-size: 16px; }
+  .hl-report-page .hl-rv-source table, .hl-report-page .hl-rv-source :is(th, td) { font-size: 9pt; }
+  .hl-report-page .hl-post-content h2 { font-size: 20px !important; }
+}
+@media (max-width: 479px) {
+  .hl-report-page .hl-rv-sponsor-card__item { flex-direction: column; align-items: flex-start; gap: 8px; }
+}
+/* The theme's important em rule shrinks source table headings to 8.9px at 390 and 9.5px at 768 (measured); the heading row stays readable at every width. */
+.hl-report-page .hl-post-content .hl-rv-source th { font-size: 14px !important; }
+@media (min-width: 1100px) { .hl-report-page .hl-post-content .hl-rv-source th { font-size: 14.85px !important; } }
+@media print { .hl-report-page .hl-post-content .hl-rv-source th { font-size: 9pt !important; } }
+/* Report sponsor plus three Monthly sponsors at 1100 to 1279px: the logos shrink so the report sponsor keeps its name */
+@media (min-width: 1100px) and (max-width: 1279px) {
+  .hl-rvsp__zone--many { padding-left: 20px; gap: 12px; }
+  .hl-rvsp__zone--many .hl-rvsp__items { gap: 12px; }
+  .hl-rvsp__zone--many .hl-rvsp__logo { height: 24px; max-width: 92px; }
 }
