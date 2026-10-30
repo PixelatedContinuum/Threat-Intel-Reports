@@ -863,7 +863,7 @@ async function tabLookRows(page, url) {
    browser, not read from the stylesheet. The verdicts are pure so a test can drive each to FAIL. */
 var PANEL_GAP_MIN_PX = 23.5;
 var PANEL_COMPONENTS = [
-  ['site band', '.hl-rv-siteband', true],
+  ['site band', '.hl-rv-siteband__in', true],
   ['header', '.hl-post-header', true],
   ['report sponsor', '.hl-rvsp--report', true],
   ['tab row', '.hl-rv-tabs', true],
@@ -965,6 +965,113 @@ async function panelRows(page, url) {
       var tv = typeScaleVerdict(await page.json(TYPE_EXPR), phone);
       if (tv.notChecked) check('NOT CHECKED: ' + label + ' ' + token + ': ' + nameB, false, tv.detail);
       else check(label + ' ' + token + ': ' + nameB, tv.ok, tv.detail);
+    }
+  }
+}
+
+/* T-0500.1.8: the featured site sponsor. Joseph, 2026-10-30 ("Yes, both places"): on a tabbed report the left-margin Sponsors rail cannot be
+   used, so the Monthly (whole-site) sponsor is a gold featured panel in two places, the band above the header and the card at each tab foot,
+   and its label on the reading line turns gold. The report sponsor stays the tab accent and the only "Sponsored by". One row, measured in the
+   browser at 1280 and 390 on two tabs. With no report sponsor: the band and the card each carry the gold 4px left bar and the dark gradient,
+   the label "Featured sponsor of The Hunter's Ledger" in gold, a visible tagline and a visible, real "Visit" element (aria-hidden, inside the
+   sponsor's link, inside the panel); with several Monthly sponsors (logos only) the tagline and Visit are hidden. With a report sponsor: its card has
+   no gold, no gradient, no "Featured" label and no Visit element, and the reading-line label is not gold. A page with no sponsor at all must draw
+   none of it. The verdict is pure so a test can drive each failure. */
+var GOLD_BAR = 'rgb(184, 144, 47)';
+var GOLD_LABEL = 'rgb(212, 167, 58)';
+var FEATURED_LABEL = "Featured sponsor of The Hunter's Ledger";
+var FEATURED_EXPR = '(function(){' +
+  'function vis(e){if(!e)return false;var cs=getComputedStyle(e);return e.getClientRects().length>0&&cs.visibility!=="hidden"&&cs.display!=="none"&&e.getBoundingClientRect().height>0;}' +
+  'function one(sel,root){return [].slice.call((root||document).querySelectorAll(sel)).filter(vis)[0]||null;}' +
+  'function measure(root,k){if(!root)return null;var r=root.getBoundingClientRect(),cs=getComputedStyle(root);' +
+  'var lab=root.querySelector(k.label),items=[].slice.call(root.querySelectorAll(k.item));' +
+  'return {w:r.width,h:r.height,barW:parseFloat(cs.borderLeftWidth),bar:cs.borderLeftColor,image:cs.backgroundImage!=="none",' +
+  'cls:root.className,text:root.textContent.replace(/\\s+/g," ").trim(),' +
+  'label:lab?lab.textContent.trim():null,labelVisible:vis(lab),labelColor:lab?getComputedStyle(lab).color:null,' +
+  'many:root.classList.contains("hl-rvsp__zone--many")||!!root.querySelector(".hl-rvsp__zone--many")||root.classList.contains("is-many"),' +
+  'items:items.length,withTagline:items.filter(function(i){return i.hasAttribute("data-tagline")||!!i.querySelector(k.tag);}).length,' +
+  'taglines:[].slice.call(root.querySelectorAll(k.tag)).map(function(e){return {vis:vis(e),len:e.textContent.trim().length};}),' +
+  'ctas:[].slice.call(root.querySelectorAll(k.cta)).map(function(e){var b=e.getBoundingClientRect();return {vis:vis(e),text:e.textContent.trim(),ariaHidden:e.getAttribute("aria-hidden"),inLink:!!e.closest("a[href]"),' +
+  'inside:b.left>=r.left-1&&b.right<=r.right+1&&b.top>=r.top-1&&b.bottom<=r.bottom+1,tag:e.tagName};})};}' +
+  'var band=one(".hl-rv-siteband__in"),card=one(".hl-rv-panel:not([hidden]) .hl-rv-sponsor-card"),mark=one(".hl-rv-sponsor-mark"),lab=mark?mark.querySelector(".hl-rv-sponsor-mark__label"):null;' +
+  'var b=measure(band,{label:".hl-rv-siteband__label",item:".hl-rvsp__item",tag:".hl-rvsp__tagline",cta:".hl-rvsp__cta"});' +
+  'if(b)b.many=!!document.querySelector(".hl-rv-siteband__in.hl-rvsp__zone--many");' +
+  'var c=measure(card,{label:".hl-rv-sponsor-card__label",item:".hl-rv-sponsor-card__item",tag:".hl-rv-sponsor-card__tagline",cta:".hl-rv-sponsor-card__cta"});' +
+  'if(c)c.isReport=card.classList.contains("is-report");' +
+  'return {reportSponsors:document.querySelectorAll(".hl-rvsp--report .hl-rvsp__item").length,siteItems:document.querySelectorAll(".hl-rvsp--site .hl-rvsp__item").length,band:b,card:c,' +
+  'markLabel:vis(lab)?{text:lab.textContent.trim(),color:getComputedStyle(lab).color}:null,markPresent:!!mark};})()';
+function featuredPanelWhy(name, p, expectGold) {
+  var why = [];
+  if (!p) { why.push(name + ' was not found'); return why; }
+  var gold = p.barW >= 4 && p.bar === GOLD_BAR;
+  if (expectGold) {
+    if (!gold) why.push(name + ' has no 4px gold left bar (' + p.barW + 'px ' + p.bar + ')');
+    if (!p.image) why.push(name + ' has no gradient panel fill');
+    if (p.label !== FEATURED_LABEL) why.push(name + ' label is ' + JSON.stringify(p.label) + ', not "' + FEATURED_LABEL + '"');
+    else if (!p.labelVisible) why.push(name + ' label is not visible');
+    else if (p.labelColor !== GOLD_LABEL) why.push(name + ' label is ' + p.labelColor + ', not gold ' + GOLD_LABEL);
+    var shownTaglines = p.taglines.filter(function (t) { return t.vis && t.len > 0; }).length;
+    var shownCtas = p.ctas.filter(function (c) { return c.vis; }).length;
+    if (p.many) {
+      if (shownTaglines) why.push(name + ' shows ' + shownTaglines + ' tagline(s) with several sponsors (logos only expected)');
+      if (shownCtas) why.push(name + ' shows ' + shownCtas + ' Visit element(s) with several sponsors (logos only expected)');
+    } else {
+      if (!p.withTagline) why.push(name + ' has no sponsor tagline in the markup, so no tagline could be measured');
+      else if (shownTaglines < p.withTagline) why.push(name + ' shows ' + shownTaglines + ' of ' + p.withTagline + ' tagline(s)');
+      if (!p.ctas.length) why.push(name + ' has no Visit element');
+      p.ctas.forEach(function (c) {
+        if (!c.vis) why.push(name + ' Visit element is not visible');
+        if (!/^Visit\b/.test(c.text)) why.push(name + ' Visit element reads ' + JSON.stringify(c.text));
+        if (c.ariaHidden !== 'true') why.push(name + ' Visit element is not aria-hidden (it would double the link name)');
+        if (!c.inLink) why.push(name + ' Visit element is not inside the sponsor link');
+        if (!c.inside) why.push(name + ' Visit element sits outside the panel');
+        if (c.tag !== 'SPAN') why.push(name + ' Visit element is a ' + c.tag + ', not the span the markup carries');
+      });
+    }
+  } else {
+    if (gold) why.push(name + ' has the gold bar on a report sponsor');
+    if (p.image) why.push(name + ' has a gradient fill on a report sponsor');
+    if (/Featured/i.test(p.text)) why.push(name + ' says "Featured" on a report sponsor');
+    if (p.ctas.length) why.push(name + ' carries a Visit element on a report sponsor');
+  }
+  return why;
+}
+function featuredSponsorVerdict(m) {
+  if (!m) return { notChecked: true, ok: false, detail: 'nothing was measured' };
+  var why = [], measured = [];
+  var siteMode = m.reportSponsors === 0 && (m.siteItems > 0 || (m.card && !m.card.isReport));
+  if (m.reportSponsors === 0 && !siteMode) {
+    /* no sponsor of any kind: nothing is expected, and nothing may be drawn */
+    var drawn = (m.band ? 1 : 0) + (m.card ? 1 : 0) + (m.markPresent ? 1 : 0);
+    return { notChecked: false, ok: drawn === 0, none: true, why: drawn ? ['a sponsor panel was drawn on a page with no sponsor'] : [], detail: 'no sponsor on this page: 0 featured panels expected, ' + drawn + ' drawn' };
+  }
+  if (siteMode) {
+    if (!m.band) why.push('the site band was not found with ' + m.siteItems + ' site sponsor(s) on the page'); else { measured.push('band'); why = why.concat(featuredPanelWhy('the site band', m.band, true)); }
+    if (!m.card) why.push('the tab-foot card was not found'); else if (m.card.isReport) why.push('the tab-foot card is the report-sponsor card with no report sponsor'); else { measured.push('tab-foot card'); why = why.concat(featuredPanelWhy('the tab-foot card', m.card, true)); }
+    if (m.markLabel) { measured.push('reading-line mark'); if (m.markLabel.color !== GOLD_LABEL) why.push('the reading-line "' + m.markLabel.text + '" label is ' + m.markLabel.color + ', not gold'); if (!/^Site sponsor$/i.test(m.markLabel.text)) why.push('the reading-line label reads ' + JSON.stringify(m.markLabel.text) + ', not "Site sponsor"'); }
+  } else {
+    if (m.band) { measured.push('band'); why = why.concat(featuredPanelWhy('the site band', m.band, true)); }
+    if (!m.card) why.push('the tab-foot card was not found'); else if (!m.card.isReport) why.push('the tab-foot card is the featured site card although the page has a report sponsor'); else { measured.push('tab-foot card (report)'); why = why.concat(featuredPanelWhy('the report-sponsor card', m.card, false)); }
+    if (m.markLabel) { measured.push('reading-line mark (report)'); if (m.markLabel.color === GOLD_LABEL) why.push('the reading-line label is gold on a report sponsor'); }
+  }
+  if (!measured.length) return { notChecked: true, ok: false, detail: 'a sponsor is on the page but no featured-sponsor element could be measured' };
+  return { notChecked: false, ok: why.length === 0, why: why, detail: (siteMode ? 'site sponsor' : 'report sponsor') + ': ' + measured.join(', ') + ' measured' + (why.length ? '; ' + why.join('; ') : '') };
+}
+async function featuredSponsorRows(page, url) {
+  var states = [[1280, 900, 'desktop 1280'], [390, 844, 'phone 390']];
+  var name = 'the Monthly sponsor is the gold featured panel (band and tab-foot card, gold bar, label, tagline, Visit) and a report sponsor stays the tab accent';
+  for (var i = 0; i < states.length; i++) {
+    await setViewport(page, states[i][0], states[i][1]);
+    if (!(await gotoAndWait(page, url))) { check('NOT CHECKED: ' + states[i][2] + ': ' + name, false, 'the tab controller never built, so nothing was measured'); continue; }
+    for (var t = 0; t < 2; t++) {
+      var token = TAB_TOKENS[t === 0 ? 0 : 2];
+      await page.evaluate('location.hash="#tab-' + token + '"');
+      await CDP.sleep(250);
+      await page.evaluate('window.scrollTo(0,0)');
+      await CDP.sleep(150);
+      var fv = featuredSponsorVerdict(await page.json(FEATURED_EXPR));
+      if (fv.notChecked) check('NOT CHECKED: ' + states[i][2] + ' ' + token + ': ' + name, false, fv.detail);
+      else check(states[i][2] + ' ' + token + ': ' + name, fv.ok, fv.detail);
     }
   }
 }
@@ -1735,6 +1842,7 @@ async function tabbedChecks(page, opts) {
   }
   await tabLookRows(page, url);
   await panelRows(page, url);
+  await featuredSponsorRows(page, url);
 
   /* ---- 4a: the bar at 768/812x375, and the targets 4a names (p7) -------- */
   await tabBarRows(page, url);
@@ -2390,6 +2498,8 @@ if (require.main === module) {
     TAB_BAR_VIEWPORTS: TAB_BAR_VIEWPORTS,
     tabLookVerdict: tabLookVerdict,
     panelStackVerdict: panelStackVerdict,
+    featuredSponsorVerdict: featuredSponsorVerdict,
+    FEATURED_EXPR: FEATURED_EXPR,
     typeScaleVerdict: typeScaleVerdict,
     TYPE_SPEC: TYPE_SPEC,
     PANEL_EXPR: PANEL_EXPR,
