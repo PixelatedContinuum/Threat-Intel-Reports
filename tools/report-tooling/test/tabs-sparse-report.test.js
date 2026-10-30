@@ -95,14 +95,14 @@ test('viewShapeVerdict: a shape the report lacks PASSES with the notice and FAIL
   assert.equal(G.viewShapeVerdict('chain',false,'7 stages',7,NOTICE).ok,false,'stages drawn from nothing');
   assert.equal(G.viewShapeVerdict('chain',false,'',0,NOTICE).ok,false,'no summary line');
 });
-test('viewShapeVerdict: a shape the report has FAILS when the view is wrong and PASSES when its figure reconciles',()=>{
-  assert.equal(G.viewShapeVerdict('victims',true,'5 organisation rows',5,null).ok,true);
-  assert.equal(G.viewShapeVerdict('victims',true,'4 organisation rows',5,null).ok,false,'figure differs from the rows');
-  assert.equal(G.viewShapeVerdict('victims',true,'Victim grades remain in the full report',0,'View unavailable: needs an Organisation / Grade table.').ok,false,'view says missing though the table is there');
-  assert.equal(G.viewShapeVerdict('victims',true,'no figure here',5,null).ok,false,'no integer');
-  assert.equal(G.viewShapeVerdict('overview',true,'2 techniques · 2 procedure rows',2,null,2).ok,true,'overview reconciles the first tile, not the tile count');
-  assert.equal(G.viewShapeVerdict('overview',true,'2 techniques · 9 procedure rows',3,null,9).ok,false);
-  assert.equal(G.viewShapeVerdict('timeline',true,'Chronology as printed; date positions unavailable',0,'View unavailable: needs a chronology with parseable dates; original date wording is retained below.').ok,true,'the documented degrade for unparseable dates');
+test('viewShapeVerdict: a shape the report has FAILS when the view is wrong and PASSES when its figure reconciles with the SOURCE rows',()=>{
+  assert.equal(G.viewShapeVerdict('victims',true,'5 organisation rows',5,null,{rows:5}).ok,true);
+  assert.equal(G.viewShapeVerdict('victims',true,'4 organisation rows',5,null,{rows:5}).ok,false,'figure differs from the rows');
+  assert.equal(G.viewShapeVerdict('victims',true,'Victim grades remain in the full report',0,'View unavailable: needs an Organisation / Grade table.',{rows:5}).ok,false,'view says missing though the table is there');
+  assert.equal(G.viewShapeVerdict('victims',true,'no figure here',5,null,{rows:5}).ok,false,'no integer');
+  assert.equal(G.viewShapeVerdict('overview',true,'2 techniques · 2 procedure rows',2,null,{rows:2,tiles:['2','2']}).ok,true,'overview reconciles its tiles with the source, and the first tile with the summary');
+  assert.equal(G.viewShapeVerdict('overview',true,'2 techniques · 9 procedure rows',3,null,{rows:3,tiles:['9','9','9']}).ok,false);
+  assert.equal(G.viewShapeVerdict('timeline',true,'Chronology as printed; date positions unavailable',0,'View unavailable: needs a chronology with parseable dates; original date wording is retained below.',{rows:4}).ok,true,'the documented degrade for unparseable dates');
 });
 test('emptyTabsVerdict: a built tab with no section FAILS; all tabs holding a section PASS; no tab is NOT CHECKED',()=>{
   const ok=[{token:'overview',panel:true,sections:2,headed:1},{token:'chain',panel:true,sections:1,headed:1}];

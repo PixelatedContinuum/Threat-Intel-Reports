@@ -696,35 +696,112 @@ function serialiseSpecs() {
   Object.keys(SHAPE_SPECS).forEach(function (k) { o[k] = SHAPE_SPECS[k].map(function (r) { return [r.source, r.flags]; }); });
   return JSON.stringify(o);
 }
-var SHAPES_EXPR = '(function(){var SPECS=' + serialiseSpecs() + ';' +
-  'function txt(n){return (n.textContent||"").replace(/\\s+/g," ").trim();}' +
-  'function model(table){var trs=[].slice.call(table.rows),m=[];' +
-  'trs.forEach(function(tr,ri){if(!m[ri])m[ri]=[];var col=0;[].slice.call(tr.cells).forEach(function(c){while(m[ri][col]!==undefined)col++;' +
-  'for(var y=0;y<c.rowSpan;y++){if(!m[ri+y])m[ri+y]=[];for(var x=0;x<c.colSpan;x++)m[ri+y][col+x]=txt(c);}col+=c.colSpan;});});' +
-  'if(!m.length||!table.querySelector("th"))return null;var hr=table.tHead?table.tHead.rows.length:1;var headers=m[hr-1];var rows=m.slice(hr);' +
-  'if(!rows.length||rows.some(function(r){return r.length!==headers.length;}))return null;return {headers:headers,rows:rows.length};}' +
-  'var tabs={};[].slice.call(document.querySelectorAll(".hl-rv-panel")).forEach(function(p){tabs[p.id.replace(/^tab-/,"")]=' +
-  '[].slice.call(p.querySelectorAll(".hl-rv-source table")).map(model).filter(Boolean);});' +
-  'function has(tok,res){return (tabs[tok]||[]).some(function(m){return res.every(function(r){return m.headers.some(function(h){return new RegExp(r[0],r[1]).test(h);});});});}' +
-  'var out={};Object.keys(SPECS).forEach(function(k){out[k]={tab:!!document.getElementById("tab-"+k),shape:has(k,SPECS[k])};});' +
-  'var attack=(tabs.chain||[]).some(function(m){return m.headers.some(function(h){return /Tactic.*Technique/i.test(h);})&&m.headers.some(function(h){return /^Status$/i.test(h);});});' +
-  'var rule=false,seen=false;[].slice.call(document.querySelectorAll("#tab-indicators .hl-rv-source")).forEach(function(b){var h=b.querySelector("h2");if(seen||!h||!/Detection|Hunting/i.test(txt(h)))return;seen=true;' +
-  'var p=b.querySelector("p"),t=p?txt(p):"",mt=t.match(/(\\d+) rules\\b/),eng=[];' +
-  't.replace(/(\\d+) (Sigma|Suricata|YARA) \\((\\d+) detection, (\\d+) hunting\\)/g,function(_,a,e,d,hh){eng.push([+a,+d,+hh]);});if(/no YARA/.test(t))eng.push([0,0,0]);' +
-  'if(mt&&eng.length&&eng.every(function(e){return e[0]===e[1]+e[2];})&&eng.reduce(function(n,e){return n+e[0];},0)===+mt[1])rule=true;});' +
-  'out.overview={tab:!!document.getElementById("tab-overview"),shape:out.victims.shape||attack||out.timeline.shape||rule};' +
-  'return out;})()';
+/* T-0500.1.9 sitefix3 (Sol review F1, F2): what the SOURCE says, read independently of the views.
+   For every table in a panel's `.hl-rv-source` blocks it records, separately: whether the headers match a view's shape, and whether the
+   table is usable (a header row, at least one data row, and every row as wide as the header; the same test hl-report-tabs.js applies).
+   The first version kept only the usable tables, so a table whose headers matched but whose rows were short vanished from the data and the
+   view's "missing" notice then passed. Now:
+     shape      a usable table with the matching headers exists (the view should draw)
+     irregular  tables whose headers match but which are not usable, each with the reason (the view cannot draw them: a FAIL, never a notice)
+     rows, ids  the data-row count and the first-column texts of the first usable matching table, the expectation the view is checked against
+   Overview reads four shapes, so it carries the expected tile values in the builder's order and the irregular tables of the three it reads.
+   The mirror of hl-report-tabs.js is on purpose: a layout that mis-reads a table cannot excuse itself. */
+function shapesInPage(SPECS) {
+  function txt(n) { return (n.textContent || '').replace(/\s+/g, ' ').trim(); }
+  function model(table, index) {
+    var trs = [].slice.call(table.rows), m = [];
+    trs.forEach(function (tr, ri) {
+      if (!m[ri]) m[ri] = [];
+      var col = 0;
+      [].slice.call(tr.cells).forEach(function (c) {
+        while (m[ri][col] !== undefined) col++;
+        for (var y = 0; y < c.rowSpan; y++) { if (!m[ri + y]) m[ri + y] = []; for (var x = 0; x < c.colSpan; x++) m[ri + y][col + x] = txt(c); }
+        col += c.colSpan;
+      });
+    });
+    var out = { index: index, headers: null, rows: [], valid: false, why: '' };
+    if (!m.length || !table.querySelector('th')) { out.why = 'no header cells (th)'; return out; }
+    var hr = table.tHead ? table.tHead.rows.length : 1;
+    out.headers = m[hr - 1] || null; out.rows = m.slice(hr);
+    if (!out.headers) { out.why = 'no header row'; return out; }
+    if (!out.rows.length) { out.why = 'no data rows'; return out; }
+    for (var i = 0; i < out.rows.length; i++) {
+      if (out.rows[i].length !== out.headers.length) { out.why = 'row ' + (i + 1) + ' has ' + out.rows[i].length + ' cell(s), the header has ' + out.headers.length; return out; }
+    }
+    out.valid = true; return out;
+  }
+  var tabs = {};
+  [].slice.call(document.querySelectorAll('.hl-rv-panel')).forEach(function (p) {
+    tabs[p.id.replace(/^tab-/, '')] = [].slice.call(p.querySelectorAll('.hl-rv-source table')).map(function (t, i) { return model(t, i + 1); });
+  });
+  function matches(m, res) { return !!m.headers && res.every(function (r) { return m.headers.some(function (h) { return new RegExp(r[0], r[1]).test(h); }); }); }
+  function hasHeader(m, re) { return !!m.headers && m.headers.some(function (h) { return re.test(h); }); }
+  function col(m, re) { return m.headers.findIndex(function (h) { return re.test(h); }); }
+  function irregularOf(list) { return list.filter(function (m) { return !m.valid; }).map(function (m) { return { table: m.index, headers: m.headers, rows: m.rows.length, why: m.why }; }); }
+  var out = {};
+  Object.keys(SPECS).forEach(function (k) {
+    var cand = (tabs[k] || []).filter(function (m) { return matches(m, SPECS[k]); });
+    var good = cand.filter(function (m) { return m.valid; })[0] || null;
+    out[k] = { tab: !!document.getElementById('tab-' + k), shape: !!good, irregular: irregularOf(cand), rows: good ? good.rows.length : null,
+      ids: good ? good.rows.map(function (r) { return r[0]; }) : null };
+  });
+  /* Overview: the procedure table, then the detection sentence, then the tiles in the order the builder draws them. */
+  var chainAll = tabs.chain || [];
+  var attackKey = [/Tactic.*Technique/i, /^Status$/i, /Conf/i, /Scope/i];
+  var attackCand = chainAll.filter(function (m) { return hasHeader(m, /Tactic.*Technique/i) && hasHeader(m, /^Status$/i); });
+  var attack = chainAll.filter(function (m) { return m.valid && attackKey.every(function (r) { return hasHeader(m, r); }); })[0] ||
+    attackCand.filter(function (m) { return m.valid; }).sort(function (a, b) { return b.rows.length - a.rows.length; })[0] || null;
+  var rule = null, seen = false;
+  [].slice.call(document.querySelectorAll('#tab-indicators .hl-rv-source')).forEach(function (b) {
+    var h = b.querySelector('h2'); if (seen || !h || !/Detection|Hunting/i.test(txt(h))) return; seen = true;
+    var p = b.querySelector('p'), t = p ? txt(p) : '', mt = t.match(/(\d+) rules\b/), eng = [];
+    t.replace(/(\d+) (Sigma|Suricata|YARA) \((\d+) detection, (\d+) hunting\)/g, function (_, a, e, d, hh) { eng.push([+a, +d, +hh]); });
+    if (/no YARA/.test(t)) eng.push([0, 0, 0]);
+    if (mt && eng.length && eng.every(function (e) { return e[0] === e[1] + e[2]; }) && eng.reduce(function (n, e) { return n + e[0]; }, 0) === +mt[1]) rule = +mt[1];
+  });
+  var tiles = [], vic = (tabs.victims || []).filter(function (m) { return matches(m, SPECS.victims) && m.valid; })[0];
+  if (vic) { var g = col(vic, /Grade/i); tiles.push(String(vic.rows.filter(function (r) { return /^(ACCESS SHOWN|COMPROMISED)\b/.test(r[g]); }).length)); }
+  if (attack) {
+    var ids = {}; attack.rows.forEach(function (r) { (r[0].match(/T\d{4}(?:\.\d{3})?/g) || []).forEach(function (id) { ids[id] = 1; }); });
+    tiles.push(String(Object.keys(ids).length)); tiles.push(String(attack.rows.length));
+  }
+  if (rule !== null) tiles.push(String(rule));
+  var chron = (tabs.timeline || []).filter(function (m) { return matches(m, SPECS.timeline) && m.valid; })[0];
+  if (chron) { var dc = col(chron, /^Date|^Time|^When/i); tiles.push(chron.rows[0][dc] + ' to ' + chron.rows[chron.rows.length - 1][dc]); }
+  var ovIrregular = out.victims.irregular.map(function (x) { return Object.assign({ view: 'victims' }, x); })
+    .concat(irregularOf(attackCand).map(function (x) { return Object.assign({ view: 'chain (procedure table)' }, x); }))
+    .concat(out.timeline.irregular.map(function (x) { return Object.assign({ view: 'timeline' }, x); }));
+  out.overview = { tab: !!document.getElementById('tab-overview'), shape: !!(vic || attack || rule !== null || chron), irregular: ovIrregular,
+    rows: tiles.length, tiles: tiles, ids: null, attackRows: attack ? attack.rows.length : 0 };
+  return out;
+}
+var SHAPES_EXPR = '(' + shapesInPage.toString() + ')(' + serialiseSpecs() + ')';
 
 /* The documented "missing" notice of one view (hl-report-tabs.js missing(): "View unavailable: needs ... The full report follows."). */
 function viewNoticeExpr(token) {
   return '(function(t){var b=document.getElementById("hl-rv-view-"+t);var n=b?b.querySelector(".hl-rv-unavailable"):null;' +
     'return {notice:n?n.textContent.trim():null};})(' + JSON.stringify(token) + ')';
 }
-/* The verdict for one view's card, PURE. `shape` is whether the report has the table or sentence the view reads. With the shape absent
-   the view must say so in the documented notice and draw none of the elements it would count; with it present the summary's first
-   integer must equal the count of those elements. A present shape whose view is wrong FAILS; an absent shape with the notice PASSES. */
-function viewShapeVerdict(token, shape, line, primaryCount, notice, expected) {
+/* The verdict for one view's card, PURE.
+   `shape` is whether the report has a usable table or sentence the view reads. `src` is what the SOURCE says (SHAPES[token] from
+   shapesInPage, plus `drawnIds` and `drawnTiles` read off the view): `rows` the data-row count the view must draw and its summary must
+   state, `ids` the first-column texts, `tiles` the tile values Overview must show, `irregular` the tables whose headers match but whose
+   rows do not. T-0500.1.9 sitefix3:
+     - a table the report HAS whose rows are irregular FAILS, whether the view says "missing" or draws nothing (the view cannot read it);
+       it is never an absent shape, and a usable table elsewhere in the tab does not excuse the broken one;
+     - with the shape absent the view must say so in the documented notice and draw none of the elements it would count (J5, PASSES);
+     - with the shape present the summary's first integer AND the drawn elements must equal the SOURCE's count. The view is never its own
+       expectation: a view that dropped a source row and a summary that agrees with it is a FAIL. Without a source expectation the
+       verdict is NOT CHECKED, not a comparison of the view with itself. */
+function viewShapeVerdict(token, shape, line, primaryCount, notice, src) {
   var need = SHAPE_NEED[token] || 'its table';
+  src = src || {};
+  var irregular = src.irregular || [];
+  if (irregular.length) {
+    var what = irregular.map(function (t) { return (t.view ? t.view + ' ' : '') + 'table ' + t.table + ' (' + (t.headers || []).join(' / ') + '): ' + t.why; }).join('; ');
+    return { absent: false, irregular: true, ok: false,
+      detail: 'the report has ' + need + ' whose rows are irregular, so the view cannot read it (' + what + '); the view says ' + JSON.stringify(notice || '(no notice)') + ', summary ' + JSON.stringify(line) + ', ' + primaryCount + ' ' + TAB_PRIMARY[token] + ' drawn' };
+  }
   if (shape === false) {
     var why = [];
     if (!notice || notice.indexOf('View unavailable: needs') !== 0) why.push('the report lacks ' + need + ' but the view shows no "View unavailable: needs ..." notice');
@@ -734,10 +811,23 @@ function viewShapeVerdict(token, shape, line, primaryCount, notice, expected) {
   }
   var m = String(line || '').match(/\d+/);
   if (notice && /parseable dates/.test(notice)) return { absent: true, ok: true, detail: 'the report has its ' + need + ' but the dates do not parse; the view says so (' + JSON.stringify(notice) + ') and keeps the table as printed' };
-  if (!primaryCount) return { absent: false, ok: false, detail: 'the report has ' + need + ' but the view drew no ' + TAB_PRIMARY[token] + ' element' + (notice ? ' and says ' + JSON.stringify(notice) : '') + '; summary ' + JSON.stringify(line) };
+  if (typeof src.rows !== 'number') return { notChecked: true, ok: false, detail: 'the report has ' + need + ' but its source rows were not read, so what the view should draw is not known (a view is never checked against itself)' };
+  if (!primaryCount) return { absent: false, ok: false, detail: 'the report has ' + need + ' (' + src.rows + ' ' + (token === 'overview' ? 'tiles' : 'rows') + ') but the view drew no ' + TAB_PRIMARY[token] + ' element' + (notice ? ' and says ' + JSON.stringify(notice) : '') + '; summary ' + JSON.stringify(line) };
   if (!m) return { absent: false, ok: false, detail: 'the report has ' + need + ' but the summary ' + JSON.stringify(line) + ' states no figure' };
-  var want = expected === undefined || expected === null ? primaryCount : expected;
-  return { absent: false, figure: Number(m[0]), count: primaryCount, ok: Number(m[0]) === want, detail: 'summary "' + m[0] + '" vs ' + want + (want === primaryCount ? ' ' + TAB_PRIMARY[token] : ' (the first of ' + primaryCount + ' ' + TAB_PRIMARY[token] + ')') };
+  var why2 = [];
+  var wantFigure = token === 'overview' ? Number(String((src.tiles || [])[0] || '').match(/\d+/) || NaN) : src.rows;
+  if (Number(m[0]) !== wantFigure) why2.push('summary states ' + m[0] + ', the source has ' + wantFigure + (token === 'overview' ? ' for the first tile' : ' rows'));
+  if (primaryCount !== src.rows) why2.push('the view draws ' + primaryCount + ' ' + TAB_PRIMARY[token] + ', the source has ' + src.rows + (token === 'overview' ? ' tiles' : ' rows'));
+  var idNote = '';
+  if (token === 'overview' && src.tiles && src.drawnTiles) {
+    if (JSON.stringify(src.tiles) !== JSON.stringify(src.drawnTiles)) why2.push('tile values ' + JSON.stringify(src.drawnTiles) + ' differ from the source\'s ' + JSON.stringify(src.tiles));
+  } else if (src.ids && src.drawnIds) {
+    var missing = src.ids.filter(function (id, i) { return src.drawnIds[i] !== id; });
+    if (src.drawnIds.length === src.ids.length && missing.length) why2.push(missing.length + ' of ' + src.ids.length + ' row identities differ from the source (first: ' + JSON.stringify(missing[0]) + ')');
+    idNote = '; ' + (src.ids.length - missing.length) + ' of ' + src.ids.length + ' row identities match the source';
+  }
+  return { absent: false, figure: Number(m[0]), count: primaryCount, expected: src.rows, ok: why2.length === 0,
+    detail: 'summary "' + m[0] + '" and ' + primaryCount + ' ' + TAB_PRIMARY[token] + ' vs the source\'s ' + (token === 'overview' ? JSON.stringify(src.tiles) : src.rows + ' rows') + idNote + (why2.length ? '; ' + why2.join('; ') : '') };
 }
 
 /* A 25-date chronology spanning two years, from design-v4 5.4. It is derived
@@ -749,6 +839,16 @@ function viewShapeVerdict(token, shape, line, primaryCount, notice, expected) {
    that only has a Time column (a stage table) is not a chronology and is not
    used: the fixture it made was rejected by the view and built no timeline
    (T-0500.1.9). No such table gives null: the report has no chronology. */
+function fixtureChronologyRows(heads, dc, ec) {
+  var rows = [];
+  for (var i = 0; i < 25; i++) {
+    var d = new Date(Date.UTC(2024, 10, 15) + i * 30 * 86400000).toISOString().slice(0, 10);
+    var cells = heads.map(function () { return 'Fixture'; });
+    cells[dc] = d; cells[ec] = 'Fixture observation ' + (i + 1);
+    rows.push('<tr>' + cells.map(function (c) { return '<td>' + c + '</td>'; }).join('') + '</tr>');
+  }
+  return rows.join('');
+}
 function timelineFixtureHtml(html) {
   var done = false;
   var out = String(html).replace(/<table[\s\S]*?<\/table>/g, function (block) {
@@ -757,17 +857,35 @@ function timelineFixtureHtml(html) {
     var dc = heads.findIndex(function (h) { return /^(?:Date|Time|When)/i.test(h); });
     var ec = heads.findIndex(function (h) { return /Observation|Event/i.test(h); });
     if (dc < 0 || ec < 0 || dc === ec) return block;
-    var rows = [];
-    for (var i = 0; i < 25; i++) {
-      var d = new Date(Date.UTC(2024, 10, 15) + i * 30 * 86400000).toISOString().slice(0, 10);
-      var cells = heads.map(function () { return 'Fixture'; });
-      cells[dc] = d; cells[ec] = 'Fixture observation ' + (i + 1);
-      rows.push('<tr>' + cells.map(function (c) { return '<td>' + c + '</td>'; }).join('') + '</tr>');
-    }
     done = true;
-    return block.replace(/(<tbody>)[\s\S]*?(<\/tbody>)/i, '$1' + rows.join('') + '$2');
+    return block.replace(/(<tbody>)[\s\S]*?(<\/tbody>)/i, '$1' + fixtureChronologyRows(heads, dc, ec) + '$2');
   });
   return done ? out : null;
+}
+/* Sol review F4 (sitefix3): a report with no chronology used to record a PASS for "the 25-date timeline fixture" while saying in its own
+   detail that nothing was exercised. The label-thinning algorithm is the layout's, not the report's, so it is exercised on a chronology
+   the gate supplies: a Date / Observation section tagged for the Timeline tab is injected into the fetched page ahead of its first tab
+   section, 25 rows at 30-day steps, and the real layout builds a timeline from it. That row says the chronology was injected. What the
+   report itself shows in place of its absent chronology (no tab, or the documented notice, and no mark drawn) is its own two timeline rows.
+   No tab section to inject before gives null, and the fixture rows are NOT CHECKED. */
+function timelineInjectedFixtureHtml(html) {
+  var str = String(html);
+  var m = /<h2\b[^>]*class="[^"]*\bhl-tab-[a-z]+[^"]*"[^>]*>/.exec(str);
+  if (!m) return null;
+  var block = '<h2 id="hl-gate-fixture-chronology" class="hl-tab-timeline">Fixture chronology (injected by the gate)</h2>' +
+    '<table><thead><tr><th>Date</th><th>Observation</th></tr></thead><tbody>' + fixtureChronologyRows(['Date', 'Observation'], 0, 1) + '</tbody></table>';
+  return str.slice(0, m.index) + block + str.slice(m.index);
+}
+/* Which fixture the thinning rows run on: the report's own chronology scaled to 25 rows, or (the report has none) the injected one. */
+function timelineFixturePlan(html, shapes) {
+  var derived = timelineFixtureHtml(html);
+  if (derived) return { kind: 'derived', html: derived };
+  if (shapes && shapes.timeline && shapes.timeline.shape === false) {
+    var injected = timelineInjectedFixtureHtml(html);
+    if (injected) return { kind: 'injected', html: injected };
+    return { kind: 'none', html: null, reason: 'the report has no chronology table and the fetched page has no tab section to inject one before' };
+  }
+  return { kind: 'none', html: null, reason: 'the fetched page has no Date/Time/When table to build the fixture from' };
 }
 
 /* T-0500.1.9: the tabs the page builds, each with the sections it holds. A section is a `.hl-rv-source` block directly in the panel; the
@@ -1404,49 +1522,125 @@ async function mispRows(page, url) {
   }
 }
 
-/* T-0500.1.9 (Joseph 2026-10-30, audit H07 and F2): the ATT&CK coverage strip and the Navigator layer download are back on tabbed pages. On a
-   tabbed report whose Attack chain tab holds an ATT&CK mapping table (a table whose header names a Tactic and whose rows carry technique IDs,
-   found here WITHOUT the strip's own parser so a page that never loaded attack-coverage.js cannot excuse itself), the Attack chain panel draws
-   one coverage strip per such table: every tactic bar of the strip (15), a count of more than 0 techniques, the strip marked as generated
-   chrome so the completeness gate does not count its words, and a "Navigator layer" button that, clicked, offers a .json file whose layer lists
-   techniques. A report with no such table is NOT CHECKED, never a pass. The control serves the same page with the attack-coverage.js script tag
-   removed and requires this row to FAIL on it. */
-var ATTACK_STRIP_EXPR = '(async function(){' +
-  'function vis(e){var r=e.getBoundingClientRect();return r.width>0&&r.height>0&&getComputedStyle(e).visibility!=="hidden";}' +
-  'var panel=document.getElementById("tab-chain");' +
-  'var tables=[].slice.call(document.querySelectorAll(".hl-post-content table")).filter(function(t){var h=t.rows[0]?t.rows[0].textContent:"";return /tactic/i.test(h)&&/\\bT\\d{4}/.test(t.textContent);});' +
-  'var strips=[].slice.call(document.querySelectorAll(".hl-attack"));' +
-  'var mine=strips.filter(function(x){return panel&&panel.contains(x);});var st=mine[0]||null;' +
-  'var exp=st?[].slice.call(st.querySelectorAll(".hl-attack__export")):[];var btn=exp[0]||null;' +
-  'var dl=null;if(btn){var cap=null,old=HTMLAnchorElement.prototype.click;HTMLAnchorElement.prototype.click=function(){cap={href:this.href,download:this.download};};' +
+/* T-0500.1.9 (Joseph 2026-10-30, audit H07 and F2; Sol review F3 in sitefix3): the ATT&CK coverage strip and the Navigator layer download are
+   back on tabbed pages, ONE STRIP FOR EVERY MAPPING TABLE the report has.
+   A mapping table is decided by a RULE, found here without the strip's own parser so a page that never loaded attack-coverage.js cannot
+   excuse itself: a table in the report's own words (`.hl-rv-source`, never the generated views, which carry a copy of the procedure table
+   and were counted as a third mapping table on the pilot) in which at least one row pairs a technique ID with a tactic that resolves to one
+   of the 15 ATT&CK tactics (or the three aliases attack-coverage.js accepts). A table that carries technique IDs but resolves no tactic gets
+   no strip by attack-coverage.js's own definition (a strip of unmapped techniques is noise), and the row says so for that table, by rule.
+   Each mapping table is paired with the strip that stands before it in the same section; a table without one FAILS, however many other
+   tables have theirs. Every strip is measured: its 15 tactic bars, a count of more than 0 techniques, marked as generated chrome so the
+   completeness gate does not count its words, painted, and a "Navigator layer" button that, clicked, offers a .json file whose layer lists as
+   many techniques as the strip counts. A report with no mapping table is NOT CHECKED, never a pass.
+   Two controls serve the page with attack-coverage.js changed and require this row to FAIL: the script removed, and the strip of the LAST
+   mapping table not drawn (a partial loss when the report has two or more tables). */
+var ATTACK_TACTICS = ['Reconnaissance', 'Resource Development', 'Initial Access', 'Execution', 'Persistence', 'Privilege Escalation', 'Stealth',
+  'Defense Impairment', 'Credential Access', 'Discovery', 'Lateral Movement', 'Collection', 'Command and Control', 'Exfiltration', 'Impact',
+  'Priv. Escalation', 'C&C', 'Defense Evasion'];
+function attackTablesInPage(TACTICS) {
+  function txt(n) { return (n.textContent || '').replace(/\s+/g, ' ').trim(); }
+  function vis(e) { var r = e.getBoundingClientRect(); return r.width > 0 && r.height > 0 && getComputedStyle(e).visibility !== 'hidden'; }
+  var names = TACTICS.map(function (t) { return t.toLowerCase(); });
+  function tactic(raw) {
+    var t = String(raw || '').replace(/[\s\/|:]+$/, '').trim();
+    if (!t) return false;
+    if (names.indexOf(t.toLowerCase()) !== -1) return true;
+    var parts = t.split('/');
+    return parts.length > 1 && parts.some(function (p) { return names.indexOf(p.trim().toLowerCase()) !== -1; });
+  }
+  var ID = /\bT\d{4}(?:\.\d{3})?\b/;
+  function grid(table) {
+    var trs = [].slice.call(table.rows), m = [];
+    trs.forEach(function (tr, ri) {
+      if (!m[ri]) m[ri] = [];
+      var col = 0;
+      [].slice.call(tr.cells).forEach(function (c) {
+        while (m[ri][col] !== undefined) col++;
+        for (var y = 0; y < c.rowSpan; y++) { if (!m[ri + y]) m[ri + y] = []; for (var x = 0; x < c.colSpan; x++) m[ri + y][col + x] = txt(c); }
+        col += c.colSpan;
+      });
+    });
+    return m.slice(table.tHead ? table.tHead.rows.length : 0);
+  }
+  function judge(table) {
+    var rows = grid(table), withId = 0, mapped = 0;
+    rows.forEach(function (cells) {
+      var idx = -1;
+      for (var i = 0; i < cells.length; i++) { if (ID.test(cells[i] || '')) { idx = i; break; } }
+      if (idx === -1) return;
+      withId++;
+      var own = cells[idx], before = own.slice(0, own.search(ID)), ok = tactic(before);
+      for (var j = idx - 1; j >= 0 && !ok; j--) ok = tactic(cells[j]);
+      if (ok) mapped++;
+    });
+    return { withId: withId, mapped: mapped };
+  }
+  function label(table) {
+    for (var n = table; n && n !== document.body; n = n.parentElement) {
+      for (var p = n.previousElementSibling; p; p = p.previousElementSibling) { if (/^H[1-6]$/.test(p.tagName)) return txt(p).slice(0, 60); }
+    }
+    return '';
+  }
+  var blocks = [].slice.call(document.querySelectorAll('.hl-rv-source'));
+  var tables = [].slice.call(document.querySelectorAll('.hl-rv-source table'));
+  var strips = [].slice.call(document.querySelectorAll('.hl-attack')), used = [];
+  var list = tables.map(function (t, i) {
+    var j = judge(t), panel = t.closest('[role=tabpanel]');
+    return { table: t, index: i + 1, label: label(t), panel: panel ? panel.id : null, rows: grid(t).length, withId: j.withId, mapped: j.mapped > 0, strip: null };
+  });
+  list.filter(function (x) { return x.mapped; }).forEach(function (x) {
+    var block = x.table.closest('.hl-rv-source'), best = null;
+    strips.forEach(function (s) {
+      if (used.indexOf(s) !== -1 || !block || !block.contains(s)) return;
+      if (s.compareDocumentPosition(x.table) & Node.DOCUMENT_POSITION_FOLLOWING) best = s;
+    });
+    if (best) { used.push(best); x.strip = best; }
+  });
+  return { blocks: blocks.length, list: list, strips: strips, unpaired: strips.length - used.length, tablesRead: tables.length, vis: vis };
+}
+var ATTACK_STRIP_EXPR = '(async function(){var T=(' + attackTablesInPage.toString() + ')(' + JSON.stringify(ATTACK_TACTICS) + ');' +
+  'async function measure(st){var exp=[].slice.call(st.querySelectorAll(".hl-attack__export")),btn=exp[0]||null,dl=null;' +
+  'if(btn){var cap=null,old=HTMLAnchorElement.prototype.click;HTMLAnchorElement.prototype.click=function(){cap={href:this.href,download:this.download};};' +
   'try{btn.click();}finally{HTMLAnchorElement.prototype.click=old;}' +
   'if(cap){try{var j=JSON.parse(await (await fetch(cap.href)).text());dl={file:cap.download,techniques:(j.techniques||[]).length,domain:j.domain||null};}catch(e){dl={file:cap.download,error:String(e)};}}else dl={error:"clicking the button offered no file"};}' +
-  'var cnt=st?(st.querySelector(".hl-attack__count")||{}).textContent||"":"";var n=cnt.match(/(\\d+) techniques/);' +
-  'return JSON.stringify({mappingTables:tables.length,tablesInChain:tables.filter(function(t){return panel&&panel.contains(t);}).length,panelFound:!!panel,' +
-  'strips:strips.length,inChain:mine.length,chrome:mine.filter(function(x){return x.hasAttribute("data-rv-chrome");}).length,' +
-  'segs:st?st.querySelectorAll(".hl-attack__seg").length:0,techniques:n?Number(n[1]):0,count:cnt,' +
-  'visible:st?vis(st):false,exportCount:exp.length,exportVisible:btn?vis(btn):false,exportText:btn?btn.textContent.trim():null,download:dl});})()';
+  'var cnt=(st.querySelector(".hl-attack__count")||{}).textContent||"",n=cnt.match(/(\\d+) techniques/);' +
+  'return {chrome:st.hasAttribute("data-rv-chrome"),segs:st.querySelectorAll(".hl-attack__seg").length,techniques:n?Number(n[1]):0,count:cnt,visible:T.vis(st),' +
+  'exportCount:exp.length,exportVisible:btn?T.vis(btn):false,exportText:btn?btn.textContent.trim():null,download:dl};}' +
+  'var tables=[];for(var i=0;i<T.list.length;i++){var x=T.list[i];tables.push({index:x.index,label:x.label,panel:x.panel,rows:x.rows,withId:x.withId,mapped:x.mapped,strip:x.strip?await measure(x.strip):null});}' +
+  'return JSON.stringify({sourceBlocks:T.blocks,tablesRead:T.tablesRead,stripsOnPage:T.strips.length,unpaired:T.unpaired,tables:tables});})()';
 function attackStripVerdict(m) {
   if (!m) return { notChecked: true, ok: false, detail: 'nothing was measured' };
-  if (!m.panelFound) return { notChecked: true, ok: false, detail: 'the page has no Attack chain panel (#tab-chain), so there is nothing to look in' };
-  if (!m.mappingTables) return { notChecked: true, ok: false, detail: 'no ATT&CK mapping table (a Tactic column with technique IDs) on this report, so no strip is expected' };
-  var why = [];
-  if (!m.tablesInChain) why.push('the ATT&CK mapping table is not in the Attack chain tab, so the strip cannot be there');
-  if (m.inChain < 1) why.push('no coverage strip is drawn in the Attack chain tab although the report has ' + m.mappingTables + ' ATT&CK mapping table(s) (' + m.strips + ' strip(s) on the whole page)');
-  else {
-    if (m.chrome !== m.inChain) why.push(m.inChain - m.chrome + ' strip(s) are not marked data-rv-chrome, so the completeness gate would count their words as report text');
-    if (m.segs !== 15) why.push('the strip has ' + m.segs + ' tactic bars (15 expected)');
-    if (!(m.techniques > 0)) why.push('the strip counts ' + m.techniques + ' techniques (' + JSON.stringify(m.count) + ')');
-    if (!m.visible) why.push('the strip is not painted');
-    if (m.exportCount !== 1) why.push(m.exportCount + ' Navigator layer buttons in the strip (1 expected)');
+  if (!m.sourceBlocks) return { notChecked: true, ok: false, detail: 'the page has no .hl-rv-source section, so there is no report text to read mapping tables from' };
+  var want = (m.tables || []).filter(function (t) { return t.mapped; });
+  var skipped = (m.tables || []).filter(function (t) { return !t.mapped && t.withId > 0; });
+  var skipNote = skipped.length ? '; no strip expected for ' + skipped.map(function (t) { return 'table ' + t.index + (t.label ? ' (' + t.label + ')' : ''); }).join(', ') +
+    ': it carries technique IDs but no row pairs one with an ATT&CK tactic, so attack-coverage.js maps nothing from it' : '';
+  if (!want.length) return { notChecked: true, ok: false, detail: 'no ATT&CK mapping table on this report (no row of the ' + m.tablesRead + ' source table(s) pairs a technique ID with an ATT&CK tactic), so no strip is expected' + skipNote };
+  var why = [], parts = [];
+  want.forEach(function (t) {
+    var name = 'mapping table ' + t.index + (t.label ? ' (' + t.label + ')' : '') + (t.panel ? ' in ' + t.panel : '');
+    var s = t.strip;
+    if (!s) { why.push(name + ' has no coverage strip (' + m.stripsOnPage + ' strip(s) on the page for ' + want.length + ' mapping table(s))'); return; }
+    var w = [];
+    if (!s.chrome) w.push('the strip is not marked data-rv-chrome, so the completeness gate would count its words as report text');
+    if (s.segs !== 15) w.push('the strip has ' + s.segs + ' tactic bars (15 expected)');
+    if (!(s.techniques > 0)) w.push('the strip counts ' + s.techniques + ' techniques (' + JSON.stringify(s.count) + ')');
+    if (!s.visible) w.push('the strip is not painted');
+    if (s.exportCount !== 1) w.push(s.exportCount + ' Navigator layer buttons in the strip (1 expected)');
     else {
-      if (!/Navigator layer/.test(m.exportText || '')) why.push('the download button reads ' + JSON.stringify(m.exportText));
-      if (!m.exportVisible) why.push('the Navigator layer button is not painted');
-      if (!m.download || m.download.error) why.push('the Navigator layer button offered no usable file (' + (m.download ? m.download.error : 'no result') + ')');
-      else if (!/\.json$/.test(m.download.file || '') || !(m.download.techniques > 0)) why.push('the download is ' + JSON.stringify(m.download.file) + ' with ' + m.download.techniques + ' technique(s) in its layer');
+      if (!/Navigator layer/.test(s.exportText || '')) w.push('the download button reads ' + JSON.stringify(s.exportText));
+      if (!s.exportVisible) w.push('the Navigator layer button is not painted');
+      if (!s.download || s.download.error) w.push('the Navigator layer button offered no usable file (' + (s.download ? s.download.error : 'no result') + ')');
+      else if (!/\.json$/.test(s.download.file || '') || !(s.download.techniques > 0)) w.push('the download is ' + JSON.stringify(s.download.file) + ' with ' + s.download.techniques + ' technique(s) in its layer');
+      else if (s.download.techniques !== s.techniques) w.push('the strip counts ' + s.techniques + ' techniques but its download lists ' + s.download.techniques);
     }
-  }
-  return { notChecked: false, ok: why.length === 0, why: why, detail: m.inChain + ' strip(s) in the Attack chain tab of ' + m.mappingTables + ' mapping table(s), ' + m.segs + ' bars, ' + m.techniques + ' techniques' + (m.download && m.download.file ? ', download ' + m.download.file + ' with ' + m.download.techniques + ' technique(s)' : '') + (why.length ? '; ' + why.join('; ') : '') };
+    w.forEach(function (x) { why.push(name + ': ' + x); });
+    parts.push('table ' + t.index + ': ' + s.segs + ' bars, ' + s.techniques + ' techniques' + (s.download && s.download.file ? ', download ' + s.download.file + ' with ' + s.download.techniques : ''));
+  });
+  var have = want.filter(function (t) { return t.strip; }).length;
+  return { notChecked: false, ok: why.length === 0, why: why,
+    detail: have + ' strip(s) for ' + want.length + ' mapping table(s) (' + m.tablesRead + ' source table(s) read; ' + m.stripsOnPage + ' strip(s) on the page, ' + m.unpaired + ' with no mapping table of their own): ' + parts.join('; ') + skipNote + (why.length ? '; ' + why.join('; ') : '') };
 }
 function attackStripControlHtml(html) {
   var out = String(html).replace(/<script\b[^>]*attack-coverage\.js[^>]*><\/script>/, '');
@@ -1476,9 +1670,33 @@ async function attackStripRows(page, url, html) {
     await CDP.sleep(250);
     var cv = attackStripVerdict(JSON.parse(await page.evaluate(ATTACK_STRIP_EXPR)));
     if (cv.notChecked) check('NOT CHECKED: ' + cname, false, cv.detail);
-    else check(cname, !cv.ok && /no coverage strip is drawn/.test(cv.why.join(' ')), 'the row said: ' + (cv.ok ? 'PASS (it cannot see a missing strip)' : cv.why.join('; ')));
+    else check(cname, !cv.ok && /has no coverage strip/.test(cv.why.join(' ')), 'the row said: ' + (cv.ok ? 'PASS (it cannot see a missing strip)' : cv.why.join('; ')));
   } finally {
     csrv.close();
+  }
+  /* The partial-loss control (Sol review F3): the strip of the LAST mapping table is not drawn and every other strip is. With two or more
+     mapping tables this is a partial loss, the case a row that measured only the first strip could not see; with one it is the same
+     total loss as above. The row must name the table that lost its strip. */
+  var pname = 'control: the strip row FAILS on a copy of the page that does not draw the strip of the last mapping table';
+  var partial = mutatedTabsScript([MUT_DROP_LAST_STRIP], 'attack-coverage.js');
+  if (!partial) { check('NOT CHECKED: ' + pname, false, 'attack-coverage.js no longer contains the text the control changes (' + MUT_DROP_LAST_STRIP[0] + '), so no copy could be built'); }
+  else {
+    var ppath = new URL(url).pathname + '__last-strip-lost/';
+    var psrv = await SERVER.start({ [ppath]: html }, { root: ROOT, base: BASE, files: { '/assets/js/attack-coverage.js': partial } });
+    try {
+      await setViewport(page, 1280, 900);
+      if (!(await gotoAndWait(page, psrv.origin + ppath + '#tab-chain'))) check('NOT CHECKED: ' + pname, false, 'the tab controller never built on the control copy');
+      else {
+        await CDP.sleep(250);
+        var pm = JSON.parse(await page.evaluate(ATTACK_STRIP_EXPR));
+        var pv = attackStripVerdict(pm);
+        var expectedN = (pm.tables || []).filter(function (t) { return t.mapped; }).length;
+        if (pv.notChecked) check('NOT CHECKED: ' + pname, false, pv.detail);
+        else check(pname, !pv.ok && pv.why.length === 1 && /has no coverage strip/.test(pv.why[0]), 'the report has ' + expectedN + ' mapping table(s); the row said: ' + (pv.ok ? 'PASS (it cannot see a lost strip)' : pv.why.join('; ')));
+      }
+    } finally {
+      psrv.close();
+    }
   }
   await restoreReportPage(page, url);
 }
@@ -1495,10 +1713,68 @@ var MUT_FORCE_TABS = ['var present = ALL_TOKENS.map(function (t) { return sectio
   'var present = ALL_TOKENS.map(function () { return true; });'];
 var MUT_NO_NOTICE = ["function missing(parent, need) { make('p', 'hl-rv-unavailable', 'View unavailable: needs ' + need + '. The full report follows.', parent); }",
   'function missing(parent, need) { }'];
+/* the strip of the last mapping table is never drawn (attack-coverage.js init loops over every mapping table) */
+var MUT_DROP_LAST_STRIP = ['findMappingTables(body).forEach(function (table) {', 'findMappingTables(body).slice(0, -1).forEach(function (table) {'];
+/* label thinning off: every axis label is kept, so 25 dates cannot be 25 non-overlapping labels */
+var MUT_NO_THIN = ['if (box.left < last + 6) n.hidden = true; else { last = box.right; drawn++; }', '{ last = box.right; drawn++; }'];
+function thinExpr(fw) {
+  return '(function(){var e=document.querySelector("#tab-timeline .hl-rv-axis");if(!e)return {width:' + fw + ',missing:true};' +
+    'var boxes=[].slice.call(e.children).filter(function(n){return !n.hidden;}).map(function(n){return n.getBoundingClientRect();});' +
+    'return {width:' + fw + ',candidates:Number(e.dataset.candidates),drawn:Number(e.dataset.drawn),' +
+    'overlaps:boxes.filter(function(x,i){return boxes.some(function(y,j){return j>i&&x.left<y.right&&x.right>y.left;});}).length};})()';
+}
+function thinOk(x) { return x.candidates === 25 && x.drawn > 0 && x.drawn < 25 && x.overlaps === 0; }
+/* every table the layout reads loses its last data row before any view is built, so each view, its summary and Overview's tiles shrink TOGETHER
+   and agree with each other; the source tables in the article are untouched. A check that compares a view with itself passes this. */
+var MUT_DROP_SOURCE_ROW = ['function find(tok, required) {', 'models.forEach(function (m) { if (m.rows.length > 1) m.rows = m.rows.slice(0, -1); }); function find(tok, required) {'];
+/* The fetched page with one data cell removed from the last row of the first source table that a view reads (a table whose headers match
+   a shape the report HAS), so the table is irregular and the layout cannot read it. Returns the page and the candidate's place, or null. */
+/* A victim table and a procedure table, injected ahead of the first tab section, for the two source-table controls when the report has no
+   table of its own that a view reads (the controls need a source row to drop and a row to shorten; a report without them cannot show
+   either control, and a control that cannot run must not turn a clean report into a NOT CHECKED). Returns null with no tab section to
+   inject before. */
+function controlFixtureHtml(html) {
+  var str = String(html);
+  var m = /<h2\b[^>]*class="[^"]*\bhl-tab-[a-z]+[^"]*"[^>]*>/.exec(str);
+  if (!m) return null;
+  var tr = function (cells) { return '<tr>' + cells.map(function (c) { return '<td>' + c + '</td>'; }).join('') + '</tr>'; };
+  var block = '<h2 id="hl-gate-fixture-victims" class="hl-tab-victims">Fixture victims (injected by the gate)</h2>' +
+    '<table><thead><tr><th>Organisation</th><th>Grade</th></tr></thead><tbody>' + tr(['Fixture A', 'ACCESS SHOWN']) + tr(['Fixture B', 'REACHED']) + tr(['Fixture C', 'LISTED']) + '</tbody></table>' +
+    '<h2 id="hl-gate-fixture-chain" class="hl-tab-chain">Fixture procedures (injected by the gate)</h2>' +
+    '<table><thead><tr><th>Tactic / Technique</th><th>Name</th><th>Status</th><th>Conf.</th><th>Scope</th></tr></thead><tbody>' +
+    tr(['Execution / T1059.001', 'Fixture one', 'OBSERVED', 'HIGH', 'fixture']) + tr(['Discovery / T1082', 'Fixture two', 'INFERRED', 'LOW', 'fixture']) + tr(['Discovery / T1083', 'Fixture three', 'OBSERVED', 'HIGH', 'fixture']) + '</tbody></table>';
+  return str.slice(0, m.index) + block + str.slice(m.index);
+}
+function irregularTableCandidates(html, shapes) {
+  var out = [], blocks = String(html).match(/<table[\s\S]*?<\/table>/g) || [];
+  blocks.forEach(function (block, i) {
+    var tb = /<tbody>[\s\S]*<\/tbody>/i.exec(block);
+    if (!tb || !/<tr[\s\S]*?<td/i.test(tb[0])) return;
+    var heads = (block.match(/<th[^>]*>[\s\S]*?<\/th>/g) || []).map(function (h) { return h.replace(/<[^>]+>/g, '').replace(/\s+/g, ' ').trim(); });
+    var tokens = Object.keys(SHAPE_SPECS).filter(function (t) {
+      return (!shapes || (shapes[t] && shapes[t].shape)) && SHAPE_SPECS[t].every(function (re) { return heads.some(function (h) { return re.test(h); }); });
+    });
+    if (tokens.length) out.push({ blockIndex: i, tokens: tokens, heads: heads });
+  });
+  return out;
+}
+function irregularTableHtml(html, candidate) {
+  var n = -1;
+  return String(html).replace(/<table[\s\S]*?<\/table>/g, function (block) {
+    n++;
+    if (n !== candidate.blockIndex) return block;
+    return block.replace(/<tbody>[\s\S]*<\/tbody>/i, function (tb) {
+      var rows = tb.match(/<tr[\s\S]*?<\/tr>/g) || [];
+      var last = rows[rows.length - 1];
+      var cut = last.replace(/<td[^>]*>(?:(?!<td)[\s\S])*?<\/td>(?![\s\S]*<td)/, '');
+      return tb.replace(last, cut);
+    });
+  });
+}
 var MUT_BAD_LINE = ['line.textContent = builders[t](body);', "builders[t](body); line.textContent = 'x';"];
-function mutatedTabsScript(mutations) {
+function mutatedTabsScript(mutations, file) {
   var src;
-  try { src = fs.readFileSync(path.join(ROOT, 'assets', 'js', 'hl-report-tabs.js'), 'utf8'); } catch (e) { return null; }
+  try { src = fs.readFileSync(path.join(ROOT, 'assets', 'js', file || 'hl-report-tabs.js'), 'utf8'); } catch (e) { return null; }
   var out = src;
   for (var i = 0; i < mutations.length; i++) {
     if (out.indexOf(mutations[i][0]) === -1) return null;
@@ -1506,11 +1782,26 @@ function mutatedTabsScript(mutations) {
   }
   return out;
 }
+/* What a view drew, for the card verdict: its summary line, the count of its primary elements, its notice, the first-column text of
+   each row it drew (for the views that draw their source table) and, for Overview, every tile's value. */
+var IDENT_SEL = {
+  victims: '#victims tbody tr td:first-child',
+  attribution: '#hypotheses tbody tr td:first-child',
+  indicators: '.hl-rv-chips li code',
+  confidence: '#judgments tbody tr td:first-child'
+};
 function viewFactsExpr(tokens) {
-  return '(function(tokens){return tokens.map(function(t){var b=document.getElementById("hl-rv-view-"+t);var n=b?b.querySelector(".hl-rv-unavailable"):null;' +
-    'var s=document.querySelector("#tab-"+t+" .hl-rv-view-summary p");var sel=' + JSON.stringify(TAB_PRIMARY) + '[t];var c=0;try{c=document.querySelectorAll("#tab-"+t+" "+sel).length;}catch(e){}' +
-    'var ft=t==="overview"?document.querySelector("#tab-overview .hl-rv-tile strong"):null;var fm=ft?ft.textContent.match(/\\d+/):null;' +
-    'return {token:t,line:s?s.textContent.trim():"",count:c,notice:n?n.textContent.trim():null,firstTile:fm?Number(fm[0]):null};});})(' + JSON.stringify(tokens) + ')';
+  return '(function(tokens){var P=' + JSON.stringify(TAB_PRIMARY) + ',I=' + JSON.stringify(IDENT_SEL) + ';function tx(e){return (e.textContent||"").replace(/\\s+/g," ").trim();}' +
+    'return tokens.map(function(t){var b=document.getElementById("hl-rv-view-"+t);var n=b?b.querySelector(".hl-rv-unavailable"):null;' +
+    'var s=document.querySelector("#tab-"+t+" .hl-rv-view-summary p");var sel=P[t];var c=0;try{c=document.querySelectorAll("#tab-"+t+" "+sel).length;}catch(e){}' +
+    'var ids=null;if(I[t]){ids=[].slice.call(document.querySelectorAll("#tab-"+t+" "+I[t])).map(tx);}' +
+    'var tiles=t==="overview"?[].slice.call(document.querySelectorAll("#tab-overview .hl-rv-tile strong")).map(tx):null;' +
+    'return {token:t,line:s?s.textContent.trim():"",count:c,notice:n?n.textContent.trim():null,ids:ids,tiles:tiles};});})(' + JSON.stringify(tokens) + ')';
+}
+/* The card verdict for one view from one page measurement: the SOURCE expectation (SHAPES[token]) plus what the view drew. */
+function cardVerdict(info, fact) {
+  var src = Object.assign({}, info || {}, { drawnIds: fact.ids, drawnTiles: fact.tiles });
+  return viewShapeVerdict(fact.token, info ? info.shape : true, fact.line, fact.count, fact.notice, src);
 }
 async function tabControlRows(page, url, html) {
   var nameA = 'control: the "no tab without a section" row FAILS on a copy of the page whose script builds every tab, and PASSES on the same page with the real script';
@@ -1550,14 +1841,89 @@ async function tabControlRows(page, url, html) {
         var held = [], missed = [];
         facts.forEach(function (f) {
           var info = SHAPES[f.token];
-          var v = viewShapeVerdict(f.token, info ? info.shape : true, f.line, f.count, f.notice, f.firstTile);
-          (v.ok ? missed : held).push(f.token + (info && info.shape ? ' (table present)' : ' (table absent)'));
+          var v = cardVerdict(info, f);
+          (v.ok || v.notChecked ? missed : held).push(f.token + (info && info.shape ? ' (table present)' : ' (table absent)'));
         });
         check(nameB, missed.length === 0 && held.length === facts.length,
           held.length + ' of ' + facts.length + ' views failed the card verdict on the broken copy: ' + held.join(', ') + (missed.length ? '; PASSED although broken: ' + missed.join(', ') : ''));
       }
     } finally { bsrv.close(); }
   }
+
+  /* The two source-table controls below need a table to drop a row from and a table to shorten. A report that has such tables is tested on
+     its own; a report that has none (a plain draft with no victim, procedure or other view table) is tested on a victim and a procedure
+     table the gate injects, and the row names are marked, so a clean report is neither NOT CHECKED nor a pass without a measurement. */
+  var ownLoss = !!SHAPES && TAB_TOKENS.some(function (t) { return SHAPES[t] && SHAPES[t].shape && (t === 'overview' ? SHAPES.overview.attackRows > 1 : SHAPES[t].rows > 1); });
+  var ownCands = SHAPES ? irregularTableCandidates(html, SHAPES) : [];
+  var injectedHtml = (ownLoss && ownCands.length) ? null : controlFixtureHtml(html);
+  var lossHtml = ownLoss ? html : injectedHtml, lossNote = ownLoss ? '' : ' (on a victim and a procedure table the gate injected: the report has no table of its own whose view has two or more rows)';
+  var irrHtml = ownCands.length ? html : injectedHtml, irrCands = ownCands.length ? ownCands : (injectedHtml ? irregularTableCandidates(injectedHtml, null) : []);
+  var irrNote = ownCands.length ? '' : ' (on a table the gate injected: the report has no table of its own that a view reads)';
+
+  /* Sol review F2 (sitefix3): the views are checked against the SOURCE table, not against themselves. This copy drops the last data row of
+     every table the layout reads before a view is built, so each view, its summary line and Overview's tiles agree with each other and are
+     one row short of the article. The card verdict must FAIL for every view whose source table has two or more rows (and for Overview
+     when the procedure table has two or more); the unmutated page passes the same rows. */
+  var nameC = 'control: the card row FAILS for every view that has two or more source rows on a copy of the page that drops the last source row from each view and its summary' + lossNote;
+  var lossy = mutatedTabsScript([MUT_DROP_SOURCE_ROW]);
+  if (!lossy) check('NOT CHECKED: ' + nameC, false, 'hl-report-tabs.js no longer contains the text the control changes (' + MUT_DROP_SOURCE_ROW[0] + '), so no copy could be built');
+  else if (!lossHtml) check('NOT CHECKED: ' + nameC, false, 'the report has no table a view reads with two or more rows and the fetched page has no tab section to inject one before');
+  else {
+    var lpath = new URL(url).pathname + '__source-row-loss-control/';
+    var lsrv = await SERVER.start({ [lpath]: lossHtml }, { root: ROOT, base: BASE, files: { [TABS_SCRIPT_PATH]: lossy } });
+    try {
+      if (!(await gotoAndWait(page, lsrv.origin + lpath))) check('NOT CHECKED: ' + nameC, false, 'the tab controller never built on the control copy');
+      else {
+        /* the source tables are the article's own and the mutation leaves them alone, so the expectation is read from this very page */
+        var lshapes = await page.json(SHAPES_EXPR);
+        var lbuilt = await page.json(TAB_SECTIONS_EXPR);
+        var lfacts = await page.json(viewFactsExpr(lbuilt.map(function (t) { return t.token; })));
+        var applies = [], caught = [], uncaught = [];
+        lfacts.forEach(function (f) {
+          var info = lshapes[f.token];
+          if (!info || !info.shape) return;
+          var qualifies = f.token === 'overview' ? info.attackRows > 1 : info.rows > 1;
+          if (!qualifies) return;
+          applies.push(f.token);
+          var v = cardVerdict(info, f);
+          (!v.ok && !v.notChecked ? caught : uncaught).push(f.token);
+        });
+        if (!applies.length) check('NOT CHECKED: ' + nameC, false, 'no view of the control page reads a table with two or more rows, so there is no source row to drop');
+        else check(nameC, uncaught.length === 0, caught.length + ' of ' + applies.length + ' views failed on the copy that lost a source row: ' + caught.join(', ') + (uncaught.length ? '; PASSED although a source row was lost: ' + uncaught.join(', ') : ''));
+      }
+    } finally { lsrv.close(); }
+  }
+
+  /* Sol review F1 (sitefix3): a table the report HAS whose rows are irregular is a FAIL, not a "missing" view. This copy removes one data
+     cell from the last row of a source table a view reads, so the layout cannot read the table and shows its "view unavailable" notice. The
+     card verdict must FAIL for that view and name the table; the same report with its table intact does not. */
+  var nameD = 'control: the card row FAILS on a copy of the page whose source table has a short row, though the view shows the "unavailable" notice' + irrNote;
+  if (!irrHtml || !irrCands.length) check('NOT CHECKED: ' + nameD, false, 'the report has no table with data rows that a view reads and the fetched page has no tab section to inject one before');
+  else {
+    var result = null, tried = 0;
+    for (var ci = 0; ci < Math.min(irrCands.length, 3) && !(result && result.hit); ci++) {
+      tried++;
+      var ipath = new URL(url).pathname + '__irregular-table-control' + ci + '/';
+      var isrv = await SERVER.start({ [ipath]: irregularTableHtml(irrHtml, irrCands[ci]) }, { root: ROOT, base: BASE });
+      try {
+        if (!(await gotoAndWait(page, isrv.origin + ipath))) { result = { hit: false, why: 'the tab controller never built on the control copy' }; continue; }
+        var ishapes = await page.json(SHAPES_EXPR);
+        var ibuilt = await page.json(TAB_SECTIONS_EXPR);
+        var ifacts = await page.json(viewFactsExpr(ibuilt.map(function (t) { return t.token; })));
+        var hits = [], passed = [];
+        ifacts.forEach(function (f) {
+          var info = ishapes[f.token];
+          if (!info || !info.irregular || !info.irregular.length) return;
+          var v = cardVerdict(info, f);
+          (!v.ok && !v.notChecked && v.irregular ? hits : passed).push(f.token + ': ' + v.detail.slice(0, 200));
+        });
+        result = { hit: hits.length + passed.length > 0, hits: hits, passed: passed };
+      } finally { isrv.close(); }
+    }
+    if (!result || !result.hit) check('NOT CHECKED: ' + nameD, false, 'removing a cell from ' + tried + ' candidate table(s) did not make any view\'s table irregular on the page' + (result && result.why ? ' (' + result.why + ')' : ''));
+    else check(nameD, result.passed.length === 0 && result.hits.length > 0, result.hits.length + ' view(s) failed as irregular' + (result.hits.length ? ': ' + result.hits[0] : '') + (result.passed.length ? '; PASSED although the table is irregular: ' + result.passed.join(' | ') : ''));
+  }
+
   await restoreReportPage(page, url);
 }
 
@@ -2356,16 +2722,16 @@ async function tabbedChecks(page, opts) {
         check('NOT CHECKED: the ' + width + ' px ' + ct + ' card states a headline figure', false,
           'the report\'s table shapes could not be read from the page, so what this view should show is not known');
       } else {
-        var firstTile = ct === 'overview' ? await page.json('(function(){var e=document.querySelector("#tab-overview .hl-rv-tile strong");' +
-          'var m=e?e.textContent.match(/\\d+/):null;return m?Number(m[0]):null;})()') : null;
-        var noticeRead = await page.json(viewNoticeExpr(ct));
-        var sv = viewShapeVerdict(ct, shapeInfo.shape, before.line, primaryCount, noticeRead && noticeRead.notice, firstTile);
+        var fact = (await page.json(viewFactsExpr([ct])))[0];
+        fact.line = before.line; fact.count = primaryCount;
+        var sv = cardVerdict(shapeInfo, fact);
         var opened = after.hidden === false && after.h > 0 && after.expanded === 'true' && after.line === before.line;
-        check(width + ' px ' + ct + (sv.absent ? ': the report lacks this view\'s table, and the expanded card says so'
-            : ': the expanded card shows the figure it counts'),
-          sv.ok && opened,
-          sv.detail + '; collapsed h=' + (before.hidden ? 0 : 'shown') + ', expanded h=' + after.h +
-            ', line unchanged=' + (after.line === before.line));
+        var cardName = width + ' px ' + ct + (sv.irregular ? ': the report has this view\'s table with irregular rows' : sv.absent ? ': the report lacks this view\'s table, and the expanded card says so'
+            : ': the expanded card shows the figure the source table has');
+        var cardDetail = sv.detail + '; collapsed h=' + (before.hidden ? 0 : 'shown') + ', expanded h=' + after.h +
+            ', line unchanged=' + (after.line === before.line);
+        if (sv.notChecked) check('NOT CHECKED: ' + cardName, false, sv.detail);
+        else check(cardName, sv.ok && opened, cardDetail);
       }
       if (before.wideTables) {
         cardProblems.push(ct + ': ' + before.wideTables + ' of ' + before.tables +
@@ -2537,16 +2903,11 @@ async function tabbedChecks(page, opts) {
   }
 
   /* ---- the 25-date timeline fixture (5.4) ------------------------------- */
-  var fixture = timelineFixtureHtml(opts.html);
+  var plan = timelineFixturePlan(opts.html, SHAPES);
+  var fixture = plan.html;
+  var fx = plan.kind === 'injected' ? ' (a chronology the gate injected: the report has none)' : '';
   if (!fixture) {
-    if (SHAPES && SHAPES.timeline && SHAPES.timeline.shape === false) {
-      /* J5: no chronology table is the report lacking a view, not a failure; the fixture scales that table, so there is nothing to scale. */
-      check('the 25-date timeline fixture: not applicable, the report has no Date / Observation chronology table', true,
-        'the page has no Date/Time/When table, so no chronology view exists whose label thinning could be exercised; the timeline rows above state what the page shows instead');
-    } else {
-      check('NOT CHECKED: the 25-date timeline fixture', false,
-        'the fetched page has no Date/Time/When table to build the fixture from');
-    }
+    check('NOT CHECKED: the 25-date timeline fixture', false, plan.reason);
     await restoreReportPage(page, url);
     return;
   }
@@ -2572,31 +2933,41 @@ async function tabbedChecks(page, opts) {
           'var r=x.getBoundingClientRect();return r.width>0||r.height>0;}).length};})()');
       } else {
         await CDP.sleep(250);
-        thin.push(await page.json('(function(){' +
-          'var e=document.querySelector("#tab-timeline .hl-rv-axis");if(!e)return {width:' + fw + ',missing:true};' +
-          'var boxes=[].slice.call(e.children).filter(function(n){return !n.hidden;})' +
-          '.map(function(n){return n.getBoundingClientRect();});' +
-          'return {width:' + fw + ',candidates:Number(e.dataset.candidates),drawn:Number(e.dataset.drawn),' +
-          'overlaps:boxes.filter(function(x,i){return boxes.some(function(y,j){' +
-          'return j>i&&x.left<y.right&&x.right>y.left;});}).length};})()'));
+        thin.push(await page.json(thinExpr(fw)));
       }
     }
     var horiz = thin.filter(function (x) { return !x.missing && !x.error; });
     if (!horiz.length) {
-      check('NOT CHECKED: the 25-date timeline fixture', false,
+      check('NOT CHECKED: the 25-date timeline fixture' + fx, false,
         'no .hl-rv-axis on the fixture (the page builds no dated chronology view): ' +
         JSON.stringify(thin));
     } else {
-      check('the 25-date fixture thins its labels and none of the kept labels overlap',
-        horiz.every(function (x) { return x.candidates === 25 && x.drawn > 0 &&
-          x.drawn < 25 && x.overlaps === 0; }),
+      check('the 25-date fixture thins its labels and none of the kept labels overlap' + fx,
+        horiz.every(thinOk),
         horiz.map(function (x) {
           return x.width + 'px: ' + x.drawn + ' of ' + x.candidates +
             ' drawn, ' + x.overlaps + ' overlapping';
         }).join('; '));
-      check('below 480 px the 25-date fixture turns vertical with every event',
+      check('below 480 px the 25-date fixture turns vertical with every event' + fx,
         !!vertical && vertical.shown === 25,
         vertical ? vertical.shown + ' of 25 events painted vertically' : 'no vertical list built');
+      /* The control (Sol review F4): the same fixture on a layout that does not thin. The thinning row must FAIL on it, so a PASS above is
+         a measured one and not a row that cannot see an unthinned axis. */
+      var cname = 'control: the thinning row FAILS on a copy of the fixture whose layout never thins its labels';
+      var nothin = mutatedTabsScript([MUT_NO_THIN]);
+      if (!nothin) check('NOT CHECKED: ' + cname, false, 'hl-report-tabs.js no longer contains the text the control changes (' + MUT_NO_THIN[0].slice(0, 50) + '...), so no copy could be built');
+      else {
+        var nsrv = await SERVER.start({ [fixturePath]: fixture }, { root: ROOT, base: BASE, files: { [TABS_SCRIPT_PATH]: nothin } });
+        try {
+          await setViewport(page, 1280, 900);
+          if (!(await gotoAndWait(page, nsrv.origin + fixturePath + '#tab-timeline'))) check('NOT CHECKED: ' + cname, false, 'the tab controller never built on the control copy');
+          else {
+            await CDP.sleep(250);
+            var nt = await page.json(thinExpr(1280));
+            check(cname, !nt.missing && !thinOk(nt), nt.missing ? 'no axis on the control copy' : 'the row said: ' + (thinOk(nt) ? 'PASS (it cannot see an unthinned axis)' : nt.drawn + ' of ' + nt.candidates + ' drawn, ' + nt.overlaps + ' overlapping'));
+          }
+        } finally { nsrv.close(); }
+      }
     }
   } finally {
     fsrv.close();
@@ -3144,6 +3515,20 @@ if (require.main === module) {
     TAB_TOKENS: TAB_TOKENS,
     summarise: summarise,
     timelineFixtureHtml: timelineFixtureHtml,
+    timelineInjectedFixtureHtml: timelineInjectedFixtureHtml,
+    timelineFixturePlan: timelineFixturePlan,
+    cardVerdict: cardVerdict,
+    controlFixtureHtml: controlFixtureHtml,
+    mutatedTabsScript: mutatedTabsScript,
+    MUT_DROP_SOURCE_ROW: MUT_DROP_SOURCE_ROW,
+    MUT_DROP_LAST_STRIP: MUT_DROP_LAST_STRIP,
+    MUT_NO_THIN: MUT_NO_THIN,
+    irregularTableCandidates: irregularTableCandidates,
+    irregularTableHtml: irregularTableHtml,
+    viewFactsExpr: viewFactsExpr,
+    shapesInPage: shapesInPage,
+    ATTACK_TACTICS: ATTACK_TACTICS,
+    attackTablesInPage: attackTablesInPage,
     viewNoticeExpr: viewNoticeExpr,
     viewShapeVerdict: viewShapeVerdict,
     emptyTabsVerdict: emptyTabsVerdict,

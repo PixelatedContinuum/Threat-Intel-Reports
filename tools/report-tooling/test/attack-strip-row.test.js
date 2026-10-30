@@ -11,49 +11,77 @@ var fs = require('node:fs');
 var path = require('node:path');
 var G = require('../check-browser-report.js');
 
-function good() {
-  return {
-    panelFound: true, mappingTables: 1, tablesInChain: 1, strips: 1, inChain: 1, chrome: 1, segs: 15,
-    techniques: 31, count: '31 techniques · 9 of 15 tactics', visible: true, exportCount: 1,
+function strip(patch) {
+  return Object.assign({
+    chrome: true, segs: 15, techniques: 31, count: '31 techniques · 9 of 15 tactics', visible: true, exportCount: 1,
     exportVisible: true, exportText: '↓ Navigator layer',
     download: { file: 'x-mitre-att-ck-mapping-layer.json', techniques: 31, domain: 'enterprise-attack' }
-  };
+  }, patch || {});
 }
-function bad(patch, re) {
-  var m = Object.assign(good(), patch);
+/* a page measurement: the source tables read in document order, each with the strip standing before it (or null) */
+function good(n) {
+  var tables = [];
+  for (var i = 1; i <= (n || 1); i++) tables.push({ index: i, label: '13. MITRE ATT&CK Mapping', panel: 'tab-chain', rows: 17, withId: 16, mapped: true, strip: strip() });
+  return { sourceBlocks: 9, tablesRead: 3 + (n || 1), stripsOnPage: n || 1, unpaired: 0, tables: tables };
+}
+function bad(m, re) {
   var v = G.attackStripVerdict(m);
   assert.equal(v.notChecked, false);
-  assert.equal(v.ok, false, JSON.stringify(patch));
+  assert.equal(v.ok, false, JSON.stringify(v));
   assert.match(v.why.join(' | '), re);
 }
+function patchStrip(n, i, patch) { var m = good(n); m.tables[i].strip = strip(patch); return m; }
 
-test('a strip with 15 bars, a count, chrome and a working layer download passes', function () {
-  var v = G.attackStripVerdict(good());
+test('a strip with 15 bars, a count, chrome and a working layer download passes, for one mapping table and for two', function () {
+  var v = G.attackStripVerdict(good(1));
   assert.equal(v.ok, true, v.detail);
-  assert.match(v.detail, /31 technique\(s\)/);
+  assert.match(v.detail, /1 strip\(s\) for 1 mapping table\(s\)/);
+  assert.match(v.detail, /download x-mitre-att-ck-mapping-layer\.json with 31/);
+  var w = G.attackStripVerdict(good(2));
+  assert.equal(w.ok, true, w.detail);
+  assert.match(w.detail, /2 strip\(s\) for 2 mapping table\(s\)/);
 });
 
-test('every way the row can fail does fail', function () {
-  bad({ strips: 0, inChain: 0, chrome: 0, segs: 0, techniques: 0, visible: false, exportCount: 0 }, /no coverage strip is drawn in the Attack chain tab/);
-  bad({ strips: 1, inChain: 0 }, /no coverage strip is drawn in the Attack chain tab.*1 strip\(s\) on the whole page/);
-  bad({ tablesInChain: 0 }, /mapping table is not in the Attack chain tab/);
-  bad({ chrome: 0 }, /not marked data-rv-chrome/);
-  bad({ segs: 14 }, /14 tactic bars/);
-  bad({ techniques: 0, count: '0 techniques' }, /counts 0 techniques/);
-  bad({ visible: false }, /not painted/);
-  bad({ exportCount: 0 }, /0 Navigator layer buttons/);
-  bad({ exportText: 'Download' }, /download button reads/);
-  bad({ exportVisible: false }, /Navigator layer button is not painted/);
-  bad({ download: { error: 'clicking the button offered no file' } }, /offered no usable file/);
-  bad({ download: { file: 'x.json', techniques: 0 } }, /0 technique\(s\) in its layer/);
-  bad({ download: { file: 'x.txt', techniques: 3 } }, /"x.txt"/);
+test('every way the row can fail does fail, and names the mapping table it failed on', function () {
+  bad(patchStrip(1, 0, { chrome: false }), /not marked data-rv-chrome/);
+  bad(patchStrip(1, 0, { segs: 14 }), /14 tactic bars/);
+  bad(patchStrip(1, 0, { techniques: 0, count: '0 techniques' }), /counts 0 techniques/);
+  bad(patchStrip(1, 0, { visible: false }), /not painted/);
+  bad(patchStrip(1, 0, { exportCount: 0 }), /0 Navigator layer buttons/);
+  bad(patchStrip(1, 0, { exportText: 'Download' }), /download button reads/);
+  bad(patchStrip(1, 0, { exportVisible: false }), /Navigator layer button is not painted/);
+  bad(patchStrip(1, 0, { download: { error: 'clicking the button offered no file' } }), /offered no usable file/);
+  bad(patchStrip(1, 0, { download: { file: 'x.json', techniques: 0 } }), /0 technique\(s\) in its layer/);
+  bad(patchStrip(1, 0, { download: { file: 'x.txt', techniques: 3 } }), /"x.txt"/);
+  bad(patchStrip(1, 0, { download: { file: 'x.json', techniques: 30 } }), /counts 31 techniques but its download lists 30/);
+  var none = good(1); none.tables[0].strip = null; none.stripsOnPage = 0;
+  bad(none, /mapping table 1 \(13\. MITRE ATT&CK Mapping\) in tab-chain has no coverage strip \(0 strip\(s\) on the page for 1 mapping table\(s\)\)/);
 });
 
-test('a report with no ATT&CK mapping table, or a page with no Attack chain panel, is NOT CHECKED, never a pass', function () {
-  var none = G.attackStripVerdict(Object.assign(good(), { mappingTables: 0, strips: 0, inChain: 0 }));
-  assert.equal(none.notChecked, true);
-  assert.equal(none.ok, false);
-  assert.equal(G.attackStripVerdict(Object.assign(good(), { panelFound: false })).notChecked, true);
+test('sitefix3 F3: a page with two mapping tables and one strip FAILS, naming the table that has none; the same for each table, and for a defect in the second strip only', function () {
+  var second = good(2); second.tables[1].strip = null; second.stripsOnPage = 1;
+  bad(second, /mapping table 2 .* has no coverage strip \(1 strip\(s\) on the page for 2 mapping table\(s\)\)/);
+  var first = good(2); first.tables[0].strip = null; first.stripsOnPage = 1;
+  bad(first, /mapping table 1 .* has no coverage strip/);
+  // the first strip is perfect; only the second one's download is broken or its bars are short
+  bad(patchStrip(2, 1, { download: { error: 'clicking the button offered no file' } }), /mapping table 2 .*offered no usable file/);
+  bad(patchStrip(2, 1, { segs: 3 }), /mapping table 2 .*3 tactic bars/);
+  bad(patchStrip(2, 1, { chrome: false }), /mapping table 2 .*data-rv-chrome/);
+  // the pre-fix row measured only the first strip and passed this
+  assert.equal(G.attackStripVerdict(second).ok, false);
+});
+
+test('a table that carries technique IDs but no tactic gets no strip by rule, and the row says so; a report with no mapping table at all is NOT CHECKED', function () {
+  var m = good(1);
+  m.tables.push({ index: 4, label: 'Detection coverage', panel: 'tab-indicators', rows: 5, withId: 5, mapped: false, strip: null });
+  var v = G.attackStripVerdict(m);
+  assert.equal(v.ok, true, v.detail);
+  assert.match(v.detail, /no strip expected for table 4 \(Detection coverage\): it carries technique IDs but no row pairs one with an ATT&CK tactic/);
+  var none = { sourceBlocks: 9, tablesRead: 4, stripsOnPage: 0, unpaired: 0, tables: [{ index: 1, label: 'x', panel: 'tab-chain', rows: 3, withId: 0, mapped: false, strip: null }] };
+  var nc = G.attackStripVerdict(none);
+  assert.equal(nc.notChecked, true);
+  assert.equal(nc.ok, false);
+  assert.equal(G.attackStripVerdict({ sourceBlocks: 0, tables: [] }).notChecked, true);
   assert.equal(G.attackStripVerdict(null).notChecked, true);
 });
 

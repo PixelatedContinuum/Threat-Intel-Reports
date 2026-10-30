@@ -59,6 +59,19 @@ needs ..." notice, and the browser gate PASSES a view that shows it; a view whos
 which shows the wrong figure FAILS. The gate reads the report's own source tables to know which. A row that
 could not measure is printed NOT CHECKED, counted apart from FAIL, and with no FAIL ends the run at exit 2.
 
+**What the card, strip and fixture rows check against (sitefix3).** A view is checked against the report's SOURCE
+table, never against itself: its summary figure and its drawn rows must equal the source table's data-row count
+(Overview: each tile must equal the figure derived from the source tables), and for the views that draw their table the
+first-column identities must match. A table whose headers match a view's shape but whose rows are irregular (a short row,
+no data rows) is a FAIL that names the table, not a "missing" view; only a table that is absent gets the notice. The
+ATT&CK row wants one strip, with a working Navigator download, for every mapping table in the report's own sections (a
+table that pairs a technique ID with an ATT&CK tactic; the generated copy of the procedure table is not one); a table with
+technique IDs and no tactic gets no strip by that rule and the row says so. The 25-date label-thinning row runs on the
+report's own chronology, or on a chronology the gate injects when it has none (the row says so); it is never a PASS for a
+fixture that was not drawn. Each of these has a control that serves a changed layout and must FAIL: a view that lost a
+source row with its summary, a short row, a lost strip, a layout that never thins. A control with no table to work on in
+the report runs on a table the gate injects, and says so.
+
 The completeness check reads the baseline with scripting disabled, because the published
 article carries inline scripts that add a "Copy" button to every `<pre>` at runtime and
 those words are not report text; the tabbed page is read with its own script running,
