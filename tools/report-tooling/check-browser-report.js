@@ -524,6 +524,64 @@ function targetsExpr(token) {
     'return {count:visible.length,small:small.slice(0,8),smallCount:small.length};})()';
 }
 
+/* Design v6 (T-0500.1.7): nothing in chrome is set below 13 px. Joseph has complained about small
+   text, and a mono micro-label is the easiest thing to let shrink, so the floor is measured on every
+   tab, not assumed from the stylesheet. Every text node under the generated regions is read at its
+   computed size: the tab bar, the header, the sponsor strip, the panel heads and every [data-rv-chrome]
+   node in the tab (permalinks, table tools, the whole data view). Text drawn by CSS content (the
+   SECTION nn label, DATA VIEW, the tab dots) is not a text node, so every element in those regions is
+   also asked for its ::before and ::after. The report's own prose is not measured here: it is the
+   author's text and is set larger. getClientRects() decides visibility, as in the 44 px count. */
+var CHROME_FLOOR_PX = 12.99;
+function chromeTextExpr(token) {
+  return '(function(t){var panel=document.getElementById("tab-"+t);if(!panel)return null;' +
+    'panel.querySelectorAll(".hl-rv-view details").forEach(function(d){d.open=true;});' +
+    'var roots=[].slice.call(document.querySelectorAll(".hl-rv-bar,.hl-post-header,.hl-rvsp"))' +
+    '.concat([].slice.call(panel.querySelectorAll("[data-rv-chrome],.hl-rv-panel-head")));' +
+    'var heads=[].slice.call(panel.querySelectorAll(".hl-rv-source > h2,.hl-rv-source.hl-rv-nohead"));' +
+    'var seen=new Set(),count=0,small=[],pseudo=0;' +
+    'function vis(el){return !!el&&el.getClientRects().length>0&&getComputedStyle(el).visibility!=="hidden";}' +
+    'roots.forEach(function(root){var w=document.createTreeWalker(root,NodeFilter.SHOW_TEXT),n;' +
+    'while((n=w.nextNode())){if(!/\\S/.test(n.nodeValue)||seen.has(n))continue;seen.add(n);' +
+    'var el=n.parentElement;if(!vis(el))continue;count++;var px=parseFloat(getComputedStyle(el).fontSize);' +
+    'if(px<' + CHROME_FLOOR_PX + ')small.push({px:px,what:(n.nodeValue.trim()).slice(0,30),cls:String(el.className||el.tagName).slice(0,30)});}});' +
+    'var els=[];roots.concat(heads).forEach(function(r){els.push(r);[].slice.call(r.querySelectorAll("*")).forEach(function(e){els.push(e);});});' +
+    'var done=new Set();els.forEach(function(el){if(done.has(el))return;done.add(el);if(!vis(el))return;' +
+    '["::before","::after"].forEach(function(ps){var c=getComputedStyle(el,ps);' +
+    'if(!c.content||c.content==="none"||c.content==="normal"||c.content==="\\"\\"")return;' +
+    'if(c.display==="none")return;pseudo++;var px=parseFloat(c.fontSize);' +
+    'if(px<' + CHROME_FLOOR_PX + ')small.push({px:px,what:ps+" "+c.content.slice(0,24),cls:String(el.className||el.tagName).slice(0,30)});});});' +
+    'return {count:count,pseudo:pseudo,small:small.slice(0,8),smallCount:small.length};})(' + JSON.stringify(token) + ')';
+}
+
+/* The selected tab is told apart from the others by more than its aria state: its label and underline
+   take the tab's accent while an idle tab is muted with no underline, and every tab carries its own
+   accent dot (CSS content on ::before). Seven tabs, five clean site hues: at least six distinct dots. */
+var TAB_LOOK_EXPR = '(function(){var tabs=[].slice.call(document.querySelectorAll("[role=tab]"));' +
+  'return tabs.map(function(b){var c=getComputedStyle(b),d=getComputedStyle(b,"::before");' +
+  'return {id:b.id,selected:b.getAttribute("aria-selected")==="true",color:c.color,' +
+  'line:c.borderBottomColor,lineW:parseFloat(c.borderBottomWidth),dot:d.backgroundColor,dotW:parseFloat(d.width)};});})()';
+function tabLookVerdict(tabs) {
+  if (!tabs || tabs.length < 2) return { notChecked: true, ok: false, detail: 'fewer than two tabs were rendered, so nothing could be compared' };
+  var clear = function (c) { return !c || c === 'transparent' || /^rgba\(\s*0,\s*0,\s*0,\s*0\s*\)$/.test(c); };
+  var sel = tabs.filter(function (t) { return t.selected; });
+  var idle = tabs.filter(function (t) { return !t.selected; });
+  var why = [];
+  if (sel.length !== 1) why.push(sel.length + ' tabs selected');
+  else {
+    if (sel[0].lineW < 2 || clear(sel[0].line)) why.push('selected tab has no underline (' + sel[0].lineW + 'px ' + sel[0].line + ')');
+    if (idle.some(function (t) { return t.color === sel[0].color; })) why.push('an idle tab has the selected tab\'s label colour ' + sel[0].color);
+    if (idle.some(function (t) { return !clear(t.line); })) why.push('an idle tab is underlined');
+  }
+  var dots = tabs.map(function (t) { return t.dot; });
+  if (tabs.some(function (t) { return !(t.dotW > 0) || clear(t.dot); })) why.push('a tab has no accent dot');
+  var distinct = dots.filter(function (d, i) { return dots.indexOf(d) === i; }).length;
+  if (distinct < 6) why.push('only ' + distinct + ' distinct dot colours across ' + tabs.length + ' tabs');
+  return { notChecked: false, ok: why.length === 0, why: why, distinct: distinct,
+    detail: tabs.length + ' tabs: selected ' + (sel[0] ? sel[0].id + ' ' + sel[0].color + ' with a ' + sel[0].lineW + 'px ' + sel[0].line + ' line' : 'none') +
+      '; ' + distinct + ' distinct dot colours' + (why.length ? '; ' + why.join('; ') : '') };
+}
+
 /* Keyboard, measured with real key events. A synthetic KeyboardEvent dispatched
    from evaluate() proves the listener, not focusability: a tab that is 0x0 or
    outside the layout would still "pass". Input.dispatchKeyEvent goes through
@@ -780,6 +838,21 @@ function targetRowVerdict(rows, docTotal, tabs) {
         'so they were not measured' : '');
   }
   return { notChecked: measured === 0, ok: measured > 0 && failed.length === 0 && uncovered === 0, detail: detail };
+}
+
+/* v6: the selected tab is distinguishable and every tab has its own accent dot, at desktop width where the tab strip shows. */
+async function tabLookRows(page, url) {
+  var name = 'the selected tab is distinguished by label colour and underline, and every tab carries its own accent dot';
+  await setViewport(page, 1280, 900);
+  if (!(await gotoAndWait(page, url))) {
+    check('NOT CHECKED: ' + name, false, 'the tab controller never built at 1280x900 (no .hl-rv-ready), so nothing was measured');
+    return;
+  }
+  await page.evaluate('location.hash="#tab-chain"');
+  await CDP.sleep(150);
+  var v = tabLookVerdict(await page.json(TAB_LOOK_EXPR));
+  if (v.notChecked) check('NOT CHECKED: ' + name, false, v.detail);
+  else check(name, v.ok, v.detail);
 }
 
 /* Row A, at the two sizes 4a names for the bar. */
@@ -1256,6 +1329,7 @@ async function tabbedChecks(page, opts) {
   var overflowBad = [];
   var selectBad = [];
   var targetTotal = 0, targetSmall = 0, targetStates = 0;
+  var textTotal = 0, textPseudo = 0, textSmallList = [], textStates = 0;
 
   for (var v = 0; v < TAB_VIEWPORTS.length; v++) {
     var width = TAB_VIEWPORTS[v][0], height = TAB_VIEWPORTS[v][1], vlabel = TAB_VIEWPORTS[v][2];
@@ -1308,6 +1382,16 @@ async function tabbedChecks(page, opts) {
               return e.tag + '.' + (e.cls || '-') + ' "' + e.text + '" ' + e.w + 'x' + e.h;
             }).join('; '));
         }
+      }
+      var tx = await page.json(chromeTextExpr(token));
+      if (tx) {
+        textStates++;
+        textTotal += tx.count;
+        textPseudo += tx.pseudo;
+        tx.small.forEach(function (e) {
+          textSmallList.push(width + ' ' + token + ': ' + e.px + 'px "' + e.what + '" (' + e.cls + ')');
+        });
+        if (tx.smallCount > tx.small.length) textSmallList.push(width + ' ' + token + ': ' + (tx.smallCount - tx.small.length) + ' more');
       }
       if (width < 700) {
         await page.click('#hl-rv-toggle-' + token);
@@ -1525,6 +1609,17 @@ async function tabbedChecks(page, opts) {
     targetSmall === 0,
     targetTotal + ' control measurements across ' + targetStates +
     ' tab/viewport states with dashboard folds open, ' + targetSmall + ' under 44');
+  if (!textStates || textTotal + textPseudo === 0) {
+    check('NOT CHECKED: no chrome text is under 13 px on any tab at any viewport', false,
+      '0 text nodes or generated labels were measured, so this row measured nothing');
+  } else {
+    check('no chrome text is under 13 px on any tab at any viewport',
+      textSmallList.length === 0,
+      textTotal + ' chrome text nodes and ' + textPseudo + ' generated labels measured across ' + textStates +
+      ' tab/viewport states with dashboard folds open, ' + textSmallList.length + ' under 13 px' +
+      (textSmallList.length ? ': ' + textSmallList.slice(0, 8).join(' | ') : ''));
+  }
+  await tabLookRows(page, url);
 
   /* ---- 4a: the bar at 768/812x375, and the targets 4a names (p7) -------- */
   await tabBarRows(page, url);
@@ -2178,6 +2273,9 @@ if (require.main === module) {
        verdicts behind them, so a test can prove each row can fail. */
     MIN_TARGET_PX: MIN_TARGET_PX,
     TAB_BAR_VIEWPORTS: TAB_BAR_VIEWPORTS,
+    tabLookVerdict: tabLookVerdict,
+    chromeTextExpr: chromeTextExpr,
+    CHROME_FLOOR_PX: CHROME_FLOOR_PX,
     TAB_TARGET_VIEWPORTS: TAB_TARGET_VIEWPORTS,
     tabGeomExpr: tabGeomExpr,
     tabHitExpr: tabHitExpr,
