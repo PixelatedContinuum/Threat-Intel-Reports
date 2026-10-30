@@ -1280,10 +1280,13 @@ var TIMELINE_EXPR = '(function(){function vis(e){var r=e.getBoundingClientRect()
   'var marks=[].slice.call(document.querySelectorAll(horizontal?".hl-rv-marker":".hl-rv-vertical-marker")).filter(vis).map(R);' +
   'var axis=[].slice.call(document.querySelectorAll(".hl-rv-axis span")).filter(vis).map(R);' +
   'var kinds={};Q.forEach(function(q){var d=dots.filter(function(e){return e.parentNode.classList.contains("hl-rv-"+q);})[0];kinds[q]=d?paint(d):null;});' +
+  'var dotList=dots.map(function(e){var k=null;Q.forEach(function(q){if(e.parentNode.classList.contains("hl-rv-"+q))k=q;});return {q:k,paint:paint(e)};});' +
+  'var markEls=[].slice.call(document.querySelectorAll(horizontal?".hl-rv-marker":".hl-rv-vertical-marker")).filter(vis);' +
+  'var numberList=markEls.map(function(mk){var e=horizontal?mk.querySelector(":scope > span:last-child"):(mk.querySelector(".hl-rv-vnum")||(mk.parentNode&&mk.parentNode.querySelector(".hl-rv-vnum")));if(!e)return {present:false};var cs=getComputedStyle(e),r=e.getBoundingClientRect();var clipped=/inset\\(\\s*(50|100)%/.test(cs.clipPath||"")||(cs.clip&&/rect\\(0(px)?, 0(px)?, 0(px)?, 0(px)?\\)/.test(cs.clip));return {present:true,w:r.width,h:r.height,visibility:cs.visibility,display:cs.display,opacity:parseFloat(cs.opacity),clipped:!!clipped,text:e.textContent.trim(),fs:parseFloat(cs.fontSize)};});' +
   'var refs={};[["given","--rv-ok"],["year-inferred","--rv-warn"],["range","--rv-warn"],["disputed","--rv-bad"]].forEach(function(p){var s=document.createElement("span");s.style.color="var("+p[1]+")";document.body.appendChild(s);refs[p[0]]=getComputedStyle(s).color;s.remove();});' +
   'var legend=Q.map(function(q){var it=document.querySelector(".hl-rv-timeline-legend .hl-rv-legend-item.hl-rv-"+q),s=it?it.querySelector(".hl-rv-symbol"):null;return {q:q,found:!!s,visible:s?vis(s):false,paint:s?paint(s):null,w:s?s.getBoundingClientRect().width:0,h:s?s.getBoundingClientRect().height:0};});' +
   'return {vw:innerWidth,horizontal:horizontal,dotCount:dots.length,dotMin:dots.length?Math.min.apply(null,dots.map(function(e){var r=e.getBoundingClientRect();return Math.min(r.width,r.height);})):null,' +
-  'numMin:nums.length?Math.min.apply(null,nums):null,numCount:nums.length,marks:marks,axis:axis,kinds:kinds,refs:refs,legend:legend,' +
+  'numMin:nums.length?Math.min.apply(null,nums):null,numCount:nums.length,marks:marks,axis:axis,kinds:kinds,dots:dotList,numbers:numberList,refs:refs,legend:legend,' +
   'events:document.querySelectorAll(".hl-rv-vertical-timeline li").length,markerTotal:document.querySelectorAll(".hl-rv-marker").length,' +
   'dated:[].slice.call(document.querySelectorAll(".hl-rv-vertical-timeline .hl-rv-date")).filter(function(e){return e.textContent.trim().length>0;}).length,' +
   'tableRows:document.querySelectorAll(".hl-rv-chronology-table tbody tr").length};})()';
@@ -1300,6 +1303,23 @@ function timelineVerdict(m) {
   var why = [];
   var minDot = m.horizontal ? (m.vw >= 700 ? 32 : 28) : 24;
   if (m.dotMin < minDot - 0.01) why.push('the smallest mark is ' + m.dotMin.toFixed(1) + ' px (at least ' + minDot + ' expected)');
+  if (!Array.isArray(m.numbers) || !m.numbers.length || m.numbers.length !== m.marks.length) return { notChecked: true, ok: false, detail: 'the event numbers could not be measured for every mark (' + (Array.isArray(m.numbers) ? m.numbers.length : 'none') + ' number(s) against ' + m.marks.length + ' mark(s))' };
+  var badNums = [];
+  m.numbers.forEach(function (n, i) {
+    var f = [];
+    if (!n || !n.present) f.push('missing');
+    else {
+      if (!(n.w > 0 && n.h > 0)) f.push('zero-size box');
+      if (n.visibility === 'hidden' || n.visibility === 'collapse') f.push('visibility hidden');
+      if (n.display === 'none') f.push('display none');
+      if (n.clipped) f.push('clipped to nothing');
+      if (n.opacity === 0) f.push('transparent');
+      if (!n.text) f.push('empty text');
+      if (!(n.fs >= 18 - 0.01)) f.push('font ' + n.fs + ' px, at least 18 expected');
+    }
+    if (f.length) badNums.push('event number ' + (i + 1) + ' is ' + f.join(', '));
+  });
+  if (badNums.length) why.push(badNums.length + ' of ' + m.numbers.length + ' event number(s) not present and legible: ' + badNums.slice(0, 4).join('; '));
   if (m.numMin == null) why.push('no event number was measured'); else if (m.numMin < 18 - 0.01) why.push('the smallest event number is ' + m.numMin + ' px (at least 18 expected)');
   var hits = overlapPairs(m.marks);
   if (hits) why.push(hits + ' pair(s) of marks overlap');
@@ -1313,13 +1333,14 @@ function timelineVerdict(m) {
 }
 function legendVerdict(m) {
   if (!m || !m.legend) return { notChecked: true, ok: false, detail: 'nothing was measured' };
+  if (!Array.isArray(m.dots) || m.dots.length !== m.dotCount || m.dots.some(function (d) { return !d || !d.q || !d.paint; })) return { notChecked: true, ok: false, detail: 'not every timeline dot could be measured (' + (Array.isArray(m.dots) ? m.dots.length : 'none') + ' of ' + m.dotCount + ', or a dot of no known kind)' };
   var why = [], compared = 0, vsToken = 0, refSet = {};
   Object.keys(m.refs).forEach(function (k) { refSet[m.refs[k]] = true; });
   m.legend.forEach(function (it) {
     if (!it.found || !it.visible) { why.push('the ' + it.q + ' swatch is missing or hidden'); return; }
     if (it.w < 14 || it.h < 14) why.push('the ' + it.q + ' swatch is ' + it.w.toFixed(0) + 'x' + it.h.toFixed(0) + ' px');
-    var dot = m.kinds[it.q];
-    if (dot) { compared++; if (it.paint !== dot) why.push('the ' + it.q + ' swatch is ' + it.paint + ' but its dots are ' + dot); }
+    var same = m.dots.filter(function (d) { return d.q === it.q; });
+    if (same.length) { compared += same.length; var off = same.filter(function (d) { return d.paint !== it.paint; }); if (off.length) why.push('the ' + it.q + ' swatch is ' + it.paint + ' but a ' + it.q + ' dot is ' + off[0].paint + ' (' + off.length + ' of ' + same.length + ' differ)'); }
     else { vsToken++; if (it.paint !== m.refs[it.q]) why.push('the ' + it.q + ' swatch is ' + it.paint + ', not the status colour ' + m.refs[it.q] + ' (no ' + it.q + ' dot on this report to compare)'); }
     if (!refSet[it.paint]) why.push('the ' + it.q + ' swatch (' + it.paint + ') is not a status colour (grey or black)');
   });

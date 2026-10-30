@@ -154,8 +154,11 @@ test('the MISP verdict: the button when the data has an event, nothing when it h
   assert.equal(G.mispEventFor('/reports/opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015-tabbed-preview/'), null, 'the preview URL has none');
 });
 const GREEN = 'rgb(74, 222, 128)', AMBER = 'rgb(250, 204, 21)', RED = 'rgb(248, 113, 113)';
-const TL = (over) => Object.assign({ vw: 1280, horizontal: true, dotCount: 10, dotMin: 34, numMin: 18, numCount: 10, marks: [{ l: 0, t: 0, r: 44, b: 64 }, { l: 60, t: 0, r: 104, b: 64 }], axis: [{ l: 0, t: 100, r: 80, b: 120 }], kinds: { given: GREEN, 'year-inferred': AMBER, range: AMBER, disputed: RED }, refs: { given: GREEN, 'year-inferred': AMBER, range: AMBER, disputed: RED },
-  legend: [['given', GREEN], ['year-inferred', AMBER], ['range', AMBER], ['disputed', RED]].map(p => ({ q: p[0], found: true, visible: true, paint: p[1], w: 18, h: 18 })), events: 10, markerTotal: 10, dated: 10, tableRows: 10 }, over || {});
+const TL = (over) => Object.assign({ vw: 1280, horizontal: true, dotCount: 5, dotMin: 34, numMin: 18, numCount: 10, marks: [{ l: 0, t: 0, r: 44, b: 64 }, { l: 60, t: 0, r: 104, b: 64 }, { l: 120, t: 0, r: 164, b: 64 }, { l: 180, t: 0, r: 224, b: 64 }], axis: [{ l: 0, t: 100, r: 80, b: 120 }], kinds: { given: GREEN, 'year-inferred': AMBER, range: AMBER, disputed: RED }, refs: { given: GREEN, 'year-inferred': AMBER, range: AMBER, disputed: RED },
+  legend: [['given', GREEN], ['year-inferred', AMBER], ['range', AMBER], ['disputed', RED]].map(p => ({ q: p[0], found: true, visible: true, paint: p[1], w: 18, h: 18 })), events: 10, markerTotal: 10, dated: 10, tableRows: 10,
+  numbers: [0, 1, 2, 3].map(() => ({ present: true, w: 20, h: 22, visibility: 'visible', display: 'block', opacity: 1, clipped: false, text: '1', fs: 18 })),
+  dots: [['given', GREEN], ['given', GREEN], ['year-inferred', AMBER], ['range', AMBER], ['disputed', RED]].map(p => ({ q: p[0], paint: p[1] })) }, over || {});
+const numsWith = (i, patch) => [0, 1, 2, 3].map(k => Object.assign({ present: true, w: 20, h: 22, visibility: 'visible', display: 'block', opacity: 1, clipped: false, text: '1', fs: 18 }, k === i ? patch : {}));
 test('the timeline verdict passes large marks and FAILS small dots, small numbers, overlaps and missing events', () => {
   assert.equal(G.timelineVerdict(TL()).ok, true, G.timelineVerdict(TL()).detail);
   assert.equal(G.timelineVerdict(TL({ vw: 390, horizontal: false, dotMin: 26, markerTotal: 0 })).ok === false, true, 'a phone list still counts the swim-lane marks: 0 of 10 is a missing mark');
@@ -166,23 +169,40 @@ test('the timeline verdict passes large marks and FAILS small dots, small number
   bad({ vw: 390, horizontal: false, dotMin: 16 }, /at least 24/);
   bad({ numMin: 16 }, /smallest event number is 16 px/);
   bad({ numMin: null }, /no event number was measured/);
-  bad({ marks: [{ l: 0, t: 0, r: 44, b: 64 }, { l: 30, t: 10, r: 80, b: 70 }] }, /1 pair\(s\) of marks overlap/);
+  bad({ marks: [{ l: 0, t: 0, r: 44, b: 64 }, { l: 30, t: 10, r: 80, b: 70 }, { l: 120, t: 0, r: 164, b: 64 }, { l: 180, t: 0, r: 224, b: 64 }] }, /1 pair\(s\) of marks overlap/);
   bad({ axis: [{ l: 10, t: 40, r: 80, b: 70 }] }, /overlap a date label/);
   bad({ markerTotal: 9 }, /9 swim-lane mark/);
   bad({ events: 9 }, /9 dated list item/);
   bad({ dated: 8 }, /8 of 10 list items carry their date/);
   assert.equal(G.timelineVerdict(TL({ dotCount: 0 })).notChecked, true);
+  /* T-0500.1.8: one hidden number among several fails the row, whichever way it is hidden; an unmeasured one is NOT CHECKED */
+  const hidden = (patch, re) => { const v = G.timelineVerdict(TL({ numbers: numsWith(3, patch) })); assert.equal(v.ok, false, JSON.stringify(patch)); assert.equal(v.notChecked, false); assert.match(v.detail, re); };
+  hidden({ visibility: 'hidden' }, /event number 4 is visibility hidden/);
+  hidden({ display: 'none', w: 0, h: 0 }, /event number 4 is zero-size box, display none/);
+  hidden({ w: 0, h: 0 }, /zero-size box/);
+  hidden({ clipped: true }, /clipped to nothing/);
+  hidden({ text: '' }, /empty text/);
+  hidden({ fs: 12 }, /font 12 px/);
+  hidden({ present: false }, /event number 4 is missing/);
+  assert.equal(G.timelineVerdict(TL({ numbers: numsWith(0, {}) })).ok, true);
+  assert.equal(G.timelineVerdict(TL({ numbers: numsWith(0, {}).slice(0, 3) })).notChecked, true, 'a number not measured for a mark is NOT CHECKED, not PASS');
+  assert.equal(G.timelineVerdict(TL({ numbers: undefined })).notChecked, true);
 });
 test('the legend verdict passes matching colours and FAILS grey, black, a drifted colour, a missing swatch and a tiny one', () => {
   assert.equal(G.legendVerdict(TL()).ok, true, G.legendVerdict(TL()).detail);
   const withLegend = (fn) => { const m = TL(); m.legend = m.legend.map(fn); return G.legendVerdict(m); };
-  assert.match(withLegend(i => i.q === 'given' ? Object.assign({}, i, { paint: 'rgb(168, 168, 168)' }) : i).detail, /given swatch is rgb\(168, 168, 168\) but its dots are/);
+  assert.match(withLegend(i => i.q === 'given' ? Object.assign({}, i, { paint: 'rgb(168, 168, 168)' }) : i).detail, /given swatch is rgb\(168, 168, 168\) but a [a-z-]+ dot is/);
   assert.match(withLegend(i => i.q === 'disputed' ? Object.assign({}, i, { paint: 'rgb(0, 0, 0)' }) : i).detail, /disputed swatch/);
-  assert.match(withLegend(i => i.q === 'range' ? Object.assign({}, i, { paint: GREEN }) : i).detail, /range swatch is rgb\(74, 222, 128\) but its dots are/);
+  assert.match(withLegend(i => i.q === 'range' ? Object.assign({}, i, { paint: GREEN }) : i).detail, /range swatch is rgb\(74, 222, 128\) but a [a-z-]+ dot is/);
   assert.match(withLegend(i => i.q === 'range' ? Object.assign({}, i, { found: false }) : i).detail, /range swatch is missing/);
   assert.match(withLegend(i => Object.assign({}, i, { w: 6, h: 6 })).detail, /swatch is 6x6 px/);
   /* no dot of a kind on this report: the swatch is compared with the status colour the dots would take */
-  const noRange = TL(); noRange.kinds.range = null; assert.equal(G.legendVerdict(noRange).ok, true);
+  /* T-0500.1.8: a later dot of the same kind with the wrong colour fails, not only the first of each kind */
+  const lastGiven = TL(); lastGiven.dots[1].paint = RED; const lg = G.legendVerdict(lastGiven); assert.equal(lg.ok, false); assert.match(lg.detail, /given swatch is rgb\(74, 222, 128\) but a given dot is rgb\(248, 113, 113\) \(1 of 2 differ\)/);
+  const unk = TL(); unk.dots[1].q = null; assert.equal(G.legendVerdict(unk).notChecked, true, 'a dot of unknown kind is NOT CHECKED');
+  const short = TL(); short.dots.pop(); assert.equal(G.legendVerdict(short).notChecked, true, 'fewer dots measured than drawn is NOT CHECKED');
+  assert.equal(G.legendVerdict(Object.assign(TL(), { dots: undefined })).notChecked, true);
+  const noRange = TL(); noRange.dots = noRange.dots.filter(d => d.q !== 'range'); noRange.dotCount = 4; assert.equal(G.legendVerdict(noRange).ok, true);
   noRange.legend.find(i => i.q === 'range').paint = RED; assert.match(G.legendVerdict(noRange).detail, /range swatch is rgb\(248, 113, 113\), not the status colour/);
   assert.equal(G.legendVerdict(null).notChecked, true);
 });
