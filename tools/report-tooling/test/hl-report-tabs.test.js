@@ -31,14 +31,15 @@ test('visible chain filters constrain generated rows and highlight readable reta
     f.area.querySelector('button').click();assert.ok(f.rows().every(r=>!r.hidden));assert.ok(f.cards().every(c=>!c.classList.contains('hl-rv-stage-muted')));
   }finally{f.dom.window.close();}
 });
-test('stage and tactic filters intersect without inferring joins or recolouring survivors',()=>{
+test('stage and tactic filters intersect without inferring joins or recolouring survivors (v6: nothing carries a series colour)',()=>{
   const f=fixture();try{
-    const colours=f.rows().map(r=>r.dataset.rvSeries);
+    // v6 draws chart marks in the tab accent: no row or card carries a per-stage series colour any more
+    assert.ok(f.rows().every(r=>r.dataset.rvSeries===undefined)&&f.cards().every(c=>c.dataset.rvSeries===undefined));
     f.set('Stage','Alpha');assert.deepEqual(f.rows().map(r=>r.hidden),[false,true,true]);
     f.set('Tactic','Execution');assert.ok(f.rows().every(r=>r.hidden));assert.equal(f.area.querySelector('[role=status]').textContent,'Showing 0 of 3 procedure rows');
     assert.ok(f.cards().every(c=>c.classList.contains('hl-rv-stage-muted')));
     f.area.querySelector('button').click();f.set('Tactic','Discovery');assert.deepEqual(f.rows().map(r=>r.hidden),[false,true,false]);
-    assert.deepEqual(f.rows().map(r=>r.dataset.rvSeries),colours);assert.equal(colours[2],undefined);
+    assert.ok(f.rows().every(r=>r.dataset.rvSeries===undefined),'surviving rows are not recoloured');
     f.set('Search procedure rows','no such procedure');assert.ok(f.rows().every(r=>r.hidden));f.area.querySelector('button').click();assert.ok(f.rows().every(r=>!r.hidden));
   }finally{f.dom.window.close();}
 });

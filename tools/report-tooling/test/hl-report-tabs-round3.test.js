@@ -68,16 +68,23 @@ test('sponsor chrome is excluded from the report text, survives a one-page round
   }finally{f.w.close();}
   const none=page('');try{assert.equal(none.d.querySelectorAll('.hl-rv-sponsor-card,.hl-rv-sponsor-mark').length,0);}finally{none.w.close();}
 });
-test('every tab, panel, card and the bar carry one hue token, and the header actions use the site button recipe with one colour per kind',()=>{
+test('v6: every tab, menu entry and next/previous card carries its hue token, the page carries the selected tab\'s, and the header actions keep one colour per kind',()=>{
   const f=page(bar([],SITE));try{
-    TOKENS.forEach(t=>{assert.equal(f.d.getElementById('tabbtn-'+t).dataset.rvHue,t);assert.equal(f.d.getElementById('tab-'+t).dataset.rvHue,t);});
+    TOKENS.forEach(t=>{assert.equal(f.d.getElementById('tabbtn-'+t).dataset.rvHue,t);});
     assert.equal(new Set(TOKENS.map(t=>f.d.getElementById('tabbtn-'+t).dataset.rvHue)).size,7);
-    assert.equal(f.d.querySelector('.hl-rv-bar').dataset.rvHue,'overview');f.d.getElementById('tabbtn-chain').click();assert.equal(f.d.querySelector('.hl-rv-bar').dataset.rvHue,'chain');
+    const page_=f.d.querySelector('.hl-report-page');assert.equal(page_.dataset.rvHue,'overview');
+    f.d.getElementById('tabbtn-chain').click();assert.equal(page_.dataset.rvHue,'chain','the page accent follows the selected tab');
     assert.ok([...f.d.querySelectorAll('.hl-rv-nextprev a')].every(a=>TOKENS.includes(a.dataset.rvHue)));
+    assert.ok([...f.d.querySelectorAll('.hl-rv-menu-item[href^="#tab-"]')].every(a=>a.dataset.rvHue===a.getAttribute('href').slice(5)));
+    assert.equal(f.d.querySelectorAll('.hl-rv-tile[data-rv-hue], .hl-rv-panel[data-rv-hue], .hl-rv-bar[data-rv-hue]').length,0,'the accent lives on the page, the tab, the menu entry and the card only');
     const q=[...f.d.querySelectorAll('.hl-quicklink')];assert.ok(q.every(a=>a.classList.contains('hl-cta')));
     assert.deepEqual(q.map(a=>a.style.getPropertyValue('--acc')),['#4ade80','#f87171','#22d3ee']);
     assert.ok(f.d.querySelector('.hl-share-btn').classList.contains('hl-cta--ghost'));
-    TOKENS.forEach(t=>assert.match(css,new RegExp('\\[data-rv-hue="'+t+'"\\] \\{ --acc: var\\(--rv-hue-'+t+'\\); \\}')));
+    for(const t of TOKENS){
+      assert.match(css,new RegExp('--rv-hue-'+t+': #[0-9a-f]{6};'),'token for '+t);
+      assert.match(css,new RegExp('\\[data-rv-hue="'+t+'"\\][^{]*\\{ --acc: var\\(--rv-hue-'+t+'\\); \\}'),'rule for '+t);
+    }
+    assert.equal(new Set(TOKENS.map(t=>css.match(new RegExp('--rv-hue-'+t+': (#[0-9a-f]{6});'))[1])).size>=6,true,'at most one repeated hue: the site has five clean section hues for seven tabs');
   }finally{f.w.close();}
 });
 test('F2: aria-label sits only on elements that can carry one',()=>{
@@ -89,24 +96,33 @@ test('F2: aria-label sits only on elements that can carry one',()=>{
   }finally{f.w.close();}
 });
 
-test('CSS: removed tokens are gone from every theme block, the old strip is hidden, and the pill anchor rule keeps the sticky first column',()=>{
-  for(const token of ['--rv-nav','--rv-tab:','--rv-boundary','--rv-accent','--rv-selected-ink'])assert.equal(css.includes(token),false,token+' removed');
+test('CSS: round-3 tokens, the old strip, the pill and the gradient and shadow looks are gone; no chrome size below 13px',()=>{
+  for(const token of ['--rv-nav','--rv-tab:','--rv-boundary','--rv-accent','--rv-selected-ink','--rv-blue','--rv-series','--rv-meaning'])assert.equal(css.includes(token),false,token+' removed');
   assert.match(css,/body:has\(\.hl-report-page\) \.hl-sponsor-rail \{ display: none !important; \}/);
-  assert.match(css,/\.hl-report-page \.hl-rv-source td\.hl-rv-cell-pill \{ position: relative; \}/);
-  assert.match(css,/\.hl-report-page \.hl-rv-source-table td\.hl-rv-cell-pill:first-child \{ position: sticky; \}/);
-  // the round-1 zeroing of the panel-head h2 padding (it removed the gap to the bar) must not come back
-  assert.equal(/\.hl-rv-panel-head h2 \{[^}]*padding:\s*0\s*!important/.test(css),false);
-  assert.equal(/max\(14px,\s*1em\)/.test(css),false,'no em-relative chrome size on a 22px content base');
+  assert.equal(/td\.hl-rv-cell-pill::after/.test(css),false,'no pill drawn behind a cell');
+  assert.equal(/(linear|radial|conic)-gradient\(/.test(css),false,'no gradients');
+  assert.deepEqual([...css.matchAll(/box-shadow:\s*([^;}]+)/g)].map(m=>m[1].trim()).filter(v=>!/^none( !important)?$/.test(v)),[],'no shadows or glows');
+  assert.equal(/max\(14px,\s*1em\)/.test(css),false,'no em-relative chrome size');
+  const below=[...css.matchAll(/font-size:\s*(\d+(?:\.\d+)?)px/g)].map(m=>+m[1]).filter(n=>n<13);
+  assert.deepEqual(below,[],'every font-size in the file is 13px or more (chrome micro-labels floor)');
+  // the same floor for a min-height on a control: the 44px rule names every control kind
+  assert.match(css,/:is\(button, input, select, summary, \[role="tab"\], \[data-rv-chrome\] a, \[data-rv-chrome\]:is\(a, button, input, select, summary\)\) \{ min-height: 44px; min-width: 44px; \}/);
+  assert.equal(/min-height:\s*(3\d|[0-3]?\d)px/.test(css.replace(/min-height: 0\b/g,'')),false,'no control min-height below 44px (a 0 reset is allowed)');
 });
-test('CSS: desktop type follows the site scale and phones keep the 16px floor',()=>{
-  assert.match(css,/@media \(min-width: 1100px\) \{ \.hl-report-page \.hl-post-content \{ font-size: 22px; \} \}/);
-  assert.match(css,/\.hl-report-page \.hl-post-content \.hl-rv-source :is\(p, li, blockquote\) \{ font-size: 16px; \}/);
-  assert.match(css,/\.hl-report-page \.hl-rv-source :is\(th, td\) \{ font-size: 19\.8px; \}/);
+test('CSS: v6 type is stated, not inherited: prose 18px (17px on phones), table text 14px, mono headers 13px',()=>{
+  assert.match(css,/\.hl-report-page \.hl-post-content \{ width: 100%; max-width: none; min-width: 0; font-size: 18px; line-height: 1\.65;/);
+  assert.match(css,/@media \(max-width: 699px\) \{[\s\S]*?\.hl-report-page \.hl-post-content \{ font-size: 17px; \}/);
+  assert.match(css,/\.hl-report-page \.hl-post-content :is\(th, td\) \{\s*padding: 10px 14px !important;[^}]*font-size: 14px !important;/);
+  assert.match(css,/\.hl-report-page \.hl-post-content th \{\s*font-family: var\(--rv-mono\); font-size: 13px !important;/);
+  assert.equal(/\.hl-report-page \.hl-post-content \.hl-rv-source :is\(p, li, blockquote\) \{ font-size/.test(css),false,'prose fills its column at one stated size, with no per-element override');
 });
-test('CSS: the view states its own text sizes, because the theme sizes p, td and spans in em of the content size',()=>{
-  assert.match(css,/\.hl-report-page \.hl-rv-view \.hl-rv-table td \{ font-size: 16px; \}/);
-  assert.match(css,/@media \(min-width: 700px\) \{ \.hl-report-page \.hl-rv-view \.hl-rv-table td \{ font-size: 17px; \} \}/);
-  assert.match(css,/\.hl-report-page \.hl-post-content \.hl-rv-source th \{ font-size: 14px !important; \}/);
+test('CSS: the view states its own text sizes and keeps its tile notes a row under the tiles',()=>{
+  assert.match(css,/\.hl-rv-tile > span:not\(\.hl-rv-tile-destination\) \{ font-size: 14px;/);
+  assert.match(css,/\.hl-rv-tile-destination \{[^}]*font-size: 13px !important;/);
+  assert.match(css,/\.hl-rv-tile-notes \{ order: -2; display: grid;/);
+  assert.match(css,/@media \(max-width: 1139px\) \{\s*\.hl-rv-tile-notes \{ grid-template-columns: minmax\(0, 1fr\);[\s\S]*?\.hl-rv-tile-note__key \{ display: inline;/);
+  assert.match(css,/\.hl-rv-view-summary::before \{ content: 'DATA VIEW';/);
+  assert.match(css,/\.hl-rv-panel > \.hl-rv-half \{ grid-column: auto; \}/);
 });
 test('Liquid: the tabbed layout swaps the banner for the masthead bar, reads the same data, and leaves untagged pages on the old include',()=>{
   const post=fs.readFileSync(path.join(root,'_layouts/post.html'),'utf8');
