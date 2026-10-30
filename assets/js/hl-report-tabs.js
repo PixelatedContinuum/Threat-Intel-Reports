@@ -7,16 +7,21 @@
   if (!content) return;
   var root = document.documentElement;
   var page = content.closest('.hl-report-page');
-  var TOKENS = ['overview', 'victims', 'chain', 'timeline', 'attribution', 'indicators', 'confidence'];
+  // ALL_TOKENS is the fixed tab order a report may tag; TOKENS (and the arrays indexed with it) is narrowed below to the
+  // tabs that hold a section, so a report with nothing tagged for Victims or Timeline gets no empty tab (T-0500.1.9).
+  var ALL_TOKENS = ['overview', 'victims', 'chain', 'timeline', 'attribution', 'indicators', 'confidence'];
+  var TOKENS = ALL_TOKENS.slice();
   var NAMES = ['Overview', 'Victims and impact', 'Attack chain', 'Infrastructure and timeline', 'Attribution', 'Indicators and detections', 'Confidence and gaps'];
   var QUESTIONS = ['What happened and how bad is it?', 'Who was hit, and how far did the operator get?', 'How did the operator get in and spread?', 'Which servers, and when did each thing happen?', 'Who is behind it, and what would change my mind?', 'What can a defender deploy today?', "How strong is each finding, and what remains unknown?"];
+  var ARIA_LABELS = ['Overview', 'Victims and impact', 'Chain: attack chain', 'Timeline: infrastructure and timeline', 'Actor: attribution', 'IOCs: indicators and detections', 'Confidence and gaps'];
+  var SHORT_NAMES = ['Overview', 'Victims', 'Chain', 'Timeline', 'Actor', 'IOCs', 'Confidence'];
   var phone = window.matchMedia('(max-width: 699px)');
   var sourceNodes = Array.from(content.childNodes);
   var headings = Array.from(content.children).filter(function (n) { return n.tagName === 'H2'; });
-  function token(h) { return TOKENS.find(function (t) { return h.classList.contains('hl-tab-' + t); }); }
+  function token(h) { return ALL_TOKENS.find(function (t) { return h.classList.contains('hl-tab-' + t); }); }
   // Invalid/partial annotations degrade to the complete server-rendered article.
   if (!headings.length || headings.some(function (h) { return !token(h); })) return;
-  if (TOKENS.some(function (t) { return document.getElementById('tab-' + t) || document.getElementById('tabbtn-' + t); }) || document.getElementById('one-page')) return;
+  if (ALL_TOKENS.some(function (t) { return document.getElementById('tab-' + t) || document.getElementById('tabbtn-' + t); }) || document.getElementById('one-page')) return;
   function text(n) { return (n ? n.textContent : '').replace(/\s+/g, ' ').trim(); }
   function make(tag, cls, value, parent) {
     var n = document.createElement(tag);
@@ -116,6 +121,11 @@
     }
     currentBlock.appendChild(n);
   });
+  // Build only the tabs that hold a section, in the fixed order. The campaign-record block (before the first h2) belongs to
+  // Overview, so Overview is present whenever the article has anything in it.
+  var present = ALL_TOKENS.map(function (t) { return sections.some(function (s) { return s.token === t; }); });
+  function narrow(list) { return list.filter(function (_, i) { return present[i]; }); }
+  TOKENS = narrow(ALL_TOKENS); NAMES = narrow(NAMES); QUESTIONS = narrow(QUESTIONS); ARIA_LABELS = narrow(ARIA_LABELS); SHORT_NAMES = narrow(SHORT_NAMES);
   var models = [];
   sections.forEach(function (s) {
     s.node.querySelectorAll('table').forEach(function (table, index) {
@@ -238,14 +248,14 @@
     var mins = Math.max(1, Math.round(group.reduce(function (n, s) { return n + text(s.node).split(/\s+/).length; }, 0) / 200));
     times.push(mins);
     var tab = button('', tablist, function () { navigateTab(i, true); });
-    tab.setAttribute('aria-label', ['Overview', 'Victims and impact', 'Chain: attack chain', 'Timeline: infrastructure and timeline', 'Actor: attribution', 'IOCs: indicators and detections', 'Confidence and gaps'][i]);
+    tab.setAttribute('aria-label', ARIA_LABELS[i]);
     make('span', 'hl-rv-tab-full', NAMES[i], tab);
-    make('span', 'hl-rv-tab-short', ['Overview', 'Victims', 'Chain', 'Timeline', 'Actor', 'IOCs', 'Confidence'][i], tab);
+    make('span', 'hl-rv-tab-short', SHORT_NAMES[i], tab);
     make('small', 'hl-rv-tab-time', mins + ' min', tab);
     tab.dataset.rvHue = t; tab.id = 'tabbtn-' + t; tab.setAttribute('role', 'tab'); tab.setAttribute('aria-controls', 'tab-' + t);
     tab.title = QUESTIONS[i] + ' ' + mins + ' min read';
     tab.addEventListener('keydown', function (e) {
-      var j = e.key === 'ArrowRight' ? (i + 1) % 7 : e.key === 'ArrowLeft' ? (i + 6) % 7 : e.key === 'Home' ? 0 : e.key === 'End' ? 6 : -1;
+      var n = TOKENS.length, j = e.key === 'ArrowRight' ? (i + 1) % n : e.key === 'ArrowLeft' ? (i + n - 1) % n : e.key === 'Home' ? 0 : e.key === 'End' ? n - 1 : -1;
       if (j < 0) return; e.preventDefault(); navigateTab(j, false, true); tabs[j].focus({ preventScroll: true });
     });
     tab.addEventListener('focus', function () { if (!onepage && active !== i) select(i); });
@@ -321,6 +331,8 @@
       panels[idx].focus({ preventScroll: true });
       return true;
     }
+    // An old link to a tab this report does not have (nothing was tagged for it) opens the first tab instead of doing nothing.
+    if (id.indexOf('tab-') === 0 && ALL_TOKENS.indexOf(id.slice(4)) >= 0) { mode(false); select(0); if (scroll) scrollTopTab(); panels[0].focus({ preventScroll: true }); return true; }
     var el = document.getElementById(id); if (!el) return false;
     var panel = el.closest('.hl-rv-panel');
     if (!onepage && panel) { mode(false); select(panels.indexOf(panel)); }
@@ -415,8 +427,8 @@
   // A stat tile is the number, its label and where it leads. Its "How counted" note is a cell of the note row
   // that sits directly under the tile grid (one note under its tile), so the tiles stay short. On a phone the row
   // is one column and each note is keyed by its tile's value and label.
-  function tile(parent, value, label, how, tok) {
-    var a = link('', '#tab-' + tok, parent); a.className = 'hl-rv-tile';
+  function tile(parent, value, label, how, tok, short) {
+    var a = link('', '#tab-' + tok, parent); a.className = 'hl-rv-tile'; a.dataset.rvShort = short;
     var big = make('strong', 'hl-rv-value', value, a); make('span', '', label, a);
     if (String(value).length > 8) big.classList.add('hl-rv-value--long');
     var m = { victims: victims, chain: attack, timeline: chronology }[tok];
@@ -432,15 +444,15 @@
     overview: function (body) {
       var tiles = make('div', 'hl-rv-tiles', null, body), count = 0;
       if (victims) { var g = col(victims, /Grade/i); var inside = victims.rows.filter(function (r) { return /^(ACCESS SHOWN|COMPROMISED)\b/.test(r[g]); }).length;
-        tile(tiles, inside, 'organisations with inside or authenticated access', 'Organisation rows graded ACCESS SHOWN or COMPROMISED in the victim table; qualifiers stay in that tab.', 'victims'); count++; }
+        tile(tiles, inside, 'organisations with inside or authenticated access', 'Organisation rows graded ACCESS SHOWN or COMPROMISED in the victim table; qualifiers stay in that tab.', 'victims', 'organisations'); count++; }
       if (attack) {
         var ids = new Set(); attack.rows.forEach(function (r) { (r[0].match(/T\d{4}(?:\.\d{3})?/g) || []).forEach(function (id) { ids.add(id); }); });
-        tile(tiles, ids.size, 'distinct technique IDs', 'Distinct IDs in the full procedure table.', 'chain');
-        tile(tiles, attack.rows.length, 'procedure rows', 'Every procedure row, including repeated technique IDs.', 'chain'); count += 2;
+        tile(tiles, ids.size, 'distinct technique IDs', 'Distinct IDs in the full procedure table.', 'chain', 'techniques');
+        tile(tiles, attack.rows.length, 'procedure rows', 'Every procedure row, including repeated technique IDs.', 'chain', 'procedure rows'); count += 2;
       }
-      if (ruleTotal !== null) { tile(tiles, ruleTotal, 'detection and hunting rules', 'Counts in the report detection guidance, reconciled to the engine and tier counts.', 'indicators'); count++; }
+      if (ruleTotal !== null) { tile(tiles, ruleTotal, 'detection and hunting rules', 'Counts in the report detection guidance, reconciled to the engine and tier counts.', 'indicators', 'rules'); count++; }
       if (chronology) { var dc = col(chronology, /^Date|^Time|^When/i);
-        tile(tiles, chronology.rows[0][dc] + ' to ' + chronology.rows[chronology.rows.length - 1][dc], 'observation window', 'First and last rows in the chronology; not an activity duration.', 'timeline'); count++; }
+        tile(tiles, chronology.rows[0][dc] + ' to ' + chronology.rows[chronology.rows.length - 1][dc], 'observation window', 'First and last rows in the chronology; not an activity duration.', 'timeline', 'observation window'); count++; }
       if (!count) missing(body, 'victim, procedure, indicator or dated chronology tables');
       var executive = sections.find(function (s) { return s.token === 'overview' && s.heading; });
       var lead = executive && executive.node.querySelector('p');
@@ -449,7 +461,8 @@
         var headline = Object.assign({}, judgments, { rows: judgments.rows.filter(function (_, i) { return curation.headline_rows.includes(i); }) });
         var headlineTable = dashTable(tableFold(body, 'Headline judgments (curated for this report)'), headline, 'Headline judgments (curated for this report)'); tiles.before(headlineTable.closest('details'));
       }
-      return Array.from(tiles.querySelectorAll('.hl-rv-tile')).map(function (t, i) { return text(t.querySelector('strong')) + ' ' + ['organisations', 'techniques', 'procedure rows', 'rules', 'observation window'][i]; }).join(' · ');
+      var line = Array.from(tiles.querySelectorAll('.hl-rv-tile')).map(function (t) { return text(t.querySelector('strong')) + ' ' + t.dataset.rvShort; }).join(' · ');
+      return line || 'Headline figures remain in the full report';
     },
     victims: function (body) {
       if (!victims) { missing(body, 'an Organisation / Grade table'); return 'Victim grades remain in the full report'; }
@@ -636,8 +649,10 @@
     sponsorCard(panel);
     var footer = make('nav', 'hl-rv-nextprev', null, panel); footer.setAttribute('aria-label', 'Read report in order');
     function card(j, direction) { var a = link('', '#tab-' + TOKENS[j], footer); a.dataset.rvHue = TOKENS[j]; make('small', '', direction, a); make('strong', '', NAMES[j], a); make('span', '', QUESTIONS[j], a); make('small', '', times[j] + ' min read', a); }
-    card((i + 6) % 7, 'Previous');
-    card(i < 6 ? i + 1 : 0, i < 6 ? 'Next' : 'Back to');
+    if (TOKENS.length > 1) {
+      card((i + TOKENS.length - 1) % TOKENS.length, 'Previous');
+      card(i < TOKENS.length - 1 ? i + 1 : 0, i < TOKENS.length - 1 ? 'Next' : 'Back to');
+    }
     var teardownControls = make('div', 'hl-rv-teardown-controls', null, panel); footer.before(teardownControls);
     function teardowns() { return sections.filter(function (s) { return s.token === t; }).flatMap(function (s) { return Array.from(s.node.querySelectorAll('details.hl-teardown')); }); }
     if (teardowns().length) {

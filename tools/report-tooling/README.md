@@ -38,17 +38,26 @@ renders the tabs from it.
 **The new-report gate (T-0500.1.9).** One command before the preview push of a NEW report, from
 a folder that may sit outside this checkout (`threat-intel-vault/reports/<slug>/`):
 
-    bash tools/report-tooling/new-report-gates.sh <report folder holding index.md> [--out DIR] [--baseline-md FILE]
+    bash tools/report-tooling/new-report-gates.sh <report folder holding index.md> [--out DIR] [--baseline-md FILE] [--views FILE]
 
 It renders the folder twice with `render-report.rb` (tagged, and untagged with the tab lines
 stripped), serves both from `lib/gate-server.js`, then prints one PASS, FAIL or NOT CHECKED line
 each for `check-tabs --require`, `check-report-text` at 1280 and 390 against the untagged
 render, its two deletion controls (each must exit 1) and `check-browser-report` on the tagged
 render. `--baseline-md FILE` renders that baseline from another copy of the report (the vault's,
-while the site copy is checked), so a paragraph lost in between shows as missing. Exit 0 only when every line is PASS; 1 on any FAIL; 2 when only NOT CHECKED remain. It
+while the site copy is checked), so a paragraph lost in between shows as missing. `--views FILE` is the report's `report_views` curation file
+(what would be `_data/report_views/<report folder>.yml`) when it sits outside this checkout, for example beside
+the vault report; it goes to the render, so the gates measure the curated views the live page will carry. Exit 0 only when every line is PASS; 1 on any FAIL; 2 when only NOT CHECKED remain. It
 needs ruby with the jekyll, jekyll-seo-tag, kramdown-parser-gfm and sass gems, openssl, a
 Chrome, and network to the live site for the theme's `main.css` and `main.min.js`; when one is
 missing the gates that need it are NOT CHECKED and the script says which (`--help`).
+
+**A report is not the pilot (T-0500.1.9).** The page builds only the tabs that hold a section, so a report
+with nothing tagged for Victims or Timeline has no empty tab. A table or sentence shape the report lacks
+(Joseph, 2026-10-30: the dashboard shapes are a SHOULD) gives its view the documented "View unavailable:
+needs ..." notice, and the browser gate PASSES a view that shows it; a view whose shape the report has and
+which shows the wrong figure FAILS. The gate reads the report's own source tables to know which. A row that
+could not measure is printed NOT CHECKED, counted apart from FAIL, and with no FAIL ends the run at exit 2.
 
 The completeness check reads the baseline with scripting disabled, because the published
 article carries inline scripts that add a "Copy" button to every `<pre>` at runtime and

@@ -335,10 +335,21 @@ function firstOrderDifference(expected, actual) {
 }
 
 var results = [];
+/* A row whose name starts "NOT CHECKED" could not measure what it names. It is printed as NOT CHECKED (never "FAIL NOT
+   CHECKED"), counted apart from FAIL, and on its own it ends the run at exit 2 (T-0500.1.9, dry-run finding F6). */
 function check(name, pass, detail) {
-  results.push({ name: name, pass: pass });
-  console.log('   ' + (pass ? 'PASS  ' : 'FAIL  ') + name);
+  var nc = !pass && /^NOT CHECKED/.test(name);
+  results.push({ name: name, pass: pass, notChecked: nc });
+  console.log('   ' + (pass ? 'PASS  ' : nc ? 'NOT CHECKED  ' : 'FAIL  ') + (nc ? name.replace(/^NOT CHECKED:?\s*/, '') : name));
   if (detail) console.log('         ' + detail);
+}
+/* The end of the run, pure so a test can drive each exit: a FAIL beats a NOT CHECKED, a NOT CHECKED beats a PASS. */
+function summarise(rows) {
+  var failed = rows.filter(function (r) { return !r.pass; });
+  var nc = failed.filter(function (r) { return /^NOT CHECKED/.test(r.name); }).length;
+  var fail = failed.length - nc;
+  return { total: rows.length, pass: rows.length - failed.length, fail: fail, notChecked: nc,
+    label: fail ? 'FAIL' : (nc ? 'NOT CHECKED' : 'PASS'), exit: fail ? 1 : (nc ? 2 : 0) };
 }
 
 /* ---------- tabbed reports (design-v4 check 5.4, section 4a) ----------
@@ -381,6 +392,36 @@ function check(name, pass, detail) {
    check-report-text.js: the reader opens the teardown. */
 
 var TAB_TOKENS = ['overview', 'victims', 'chain', 'timeline', 'attribution', 'indicators', 'confidence'];
+/* T-0500.1.9: a report builds only the tabs that hold a section, so the rows below loop over the tabs THE PAGE BUILT
+   (read once in tabbedChecks), not over the seven the pilot has. Whether those are the right tabs is its own two rows:
+   "every tab the page builds holds a section" and "the page builds the tabs the report tags". */
+var LIVE_TOKENS = null;
+function liveTokens() { return LIVE_TOKENS || TAB_TOKENS; }
+function firstTab() { return liveTokens()[0]; }
+/* a second tab for the rows that must start from a different tab than the one they select: Attack chain when the report has it */
+function otherTab() { var l = liveTokens(); return l.indexOf('chain') >= 0 && l[0] !== 'chain' ? 'chain' : (l[1] || l[0]); }
+function rowTabs() { var a = firstTab(), b = otherTab(); return a === b ? [a] : [a, b]; }
+/* What each dashboard view reads, mirrored from hl-report-tabs.js on purpose and read from the report's own SOURCE tables
+   (never from the view), so a page whose view dropped a table it should have read cannot excuse itself. J5 (Joseph, 2026-10-30):
+   a table or sentence shape is a SHOULD; a report without it gets the "view unavailable" notice, and that is not a failure. */
+var SHAPE_SPECS = {
+  victims: [/Organisation|Organization|Victim/i, /Grade/i],
+  chain: [/^Stage$/i, /What.*did/i],
+  timeline: [/^Date|^Time|^When/i, /Observation|Event/i],
+  attribution: [/Hypothesis/i, /stands|Assessment/i],
+  indicators: [/^Indicator/i, /Action/i],
+  confidence: [/Claim|Judgment/i, /Confidence/i, /change/i]
+};
+var SHAPE_NEED = {
+  overview: 'victim, procedure, indicator or dated chronology tables',
+  victims: 'an Organisation / Grade table',
+  chain: 'a Stage / What the operator did table',
+  timeline: 'a Date / Observation chronology table',
+  attribution: 'a Hypothesis / Where it stands table',
+  indicators: 'an Indicator / Action table',
+  confidence: 'a Claim / Confidence / What would change it table'
+};
+var SHAPES = null;
 /* 4a's four mobile sizes plus the desktop one 5.4 names. Order matters only for
    the log; 812x375 is a landscape phone and gets the tablet layout. */
 var TAB_VIEWPORTS = [
@@ -556,7 +597,8 @@ function chromeTextExpr(token) {
 
 /* The selected tab is told apart from the others by more than its aria state: its label and underline
    take the tab's accent while an idle tab is muted with no underline, and every tab carries its own
-   accent dot (CSS content on ::before). Seven tabs, five clean site hues: at least six distinct dots. */
+   accent dot (CSS content on ::before). Seven tabs, five clean site hues: at least six distinct dots (one fewer than the tabs
+   when a report builds fewer than seven). */
 var TAB_LOOK_EXPR = '(function(){var tabs=[].slice.call(document.querySelectorAll("[role=tab]"));' +
   'return tabs.map(function(b){var c=getComputedStyle(b),d=getComputedStyle(b,"::before");' +
   'return {id:b.id,selected:b.getAttribute("aria-selected")==="true",color:c.color,' +
@@ -576,7 +618,7 @@ function tabLookVerdict(tabs) {
   var dots = tabs.map(function (t) { return t.dot; });
   if (tabs.some(function (t) { return !(t.dotW > 0) || clear(t.dot); })) why.push('a tab has no accent dot');
   var distinct = dots.filter(function (d, i) { return dots.indexOf(d) === i; }).length;
-  if (distinct < 6) why.push('only ' + distinct + ' distinct dot colours across ' + tabs.length + ' tabs');
+  if (distinct < Math.min(6, tabs.length - 1)) why.push('only ' + distinct + ' distinct dot colours across ' + tabs.length + ' tabs');
   return { notChecked: false, ok: why.length === 0, why: why, distinct: distinct,
     detail: tabs.length + ' tabs: selected ' + (sel[0] ? sel[0].id + ' ' + sel[0].color + ' with a ' + sel[0].lineW + 'px ' + sel[0].line + ' line' : 'none') +
       '; ' + distinct + ' distinct dot colours' + (why.length ? '; ' + why.join('; ') : '') };
@@ -645,24 +687,124 @@ var TAB_PRIMARY = {
   confidence: '#judgments tbody tr'
 };
 
-/* A 25-date chronology spanning two years, from design-v4 5.4. It is derived
-   from the page under test rather than authored: every table whose first header
-   reads Date/Time/When has its rows replaced, so the label-thinning path runs
-   over 25 real candidates instead of the handful a short chronology has. */
-function timelineFixtureHtml(html) {
-  var rows = [];
-  for (var i = 0; i < 25; i++) {
-    var d = new Date(Date.UTC(2024, 10, 15) + i * 30 * 86400000).toISOString().slice(0, 10);
-    rows.push('<tr><td>' + d + '</td><td>Fixture observation ' + (i + 1) + '</td></tr>');
+/* Which of the report's own table and sentence shapes are present, read from its SOURCE tables in the built page (the
+   `.hl-rv-source` blocks, which hold the report's words, never the dashboard views). Per tab: whether the tab was built and
+   whether its shape is present. Overview reads four shapes (a victims, a procedure or a chronology table, or the detection
+   sentence that reconciles to its engine counts) and counts as present when any one is. */
+function serialiseSpecs() {
+  var o = {};
+  Object.keys(SHAPE_SPECS).forEach(function (k) { o[k] = SHAPE_SPECS[k].map(function (r) { return [r.source, r.flags]; }); });
+  return JSON.stringify(o);
+}
+var SHAPES_EXPR = '(function(){var SPECS=' + serialiseSpecs() + ';' +
+  'function txt(n){return (n.textContent||"").replace(/\\s+/g," ").trim();}' +
+  'function model(table){var trs=[].slice.call(table.rows),m=[];' +
+  'trs.forEach(function(tr,ri){if(!m[ri])m[ri]=[];var col=0;[].slice.call(tr.cells).forEach(function(c){while(m[ri][col]!==undefined)col++;' +
+  'for(var y=0;y<c.rowSpan;y++){if(!m[ri+y])m[ri+y]=[];for(var x=0;x<c.colSpan;x++)m[ri+y][col+x]=txt(c);}col+=c.colSpan;});});' +
+  'if(!m.length||!table.querySelector("th"))return null;var hr=table.tHead?table.tHead.rows.length:1;var headers=m[hr-1];var rows=m.slice(hr);' +
+  'if(!rows.length||rows.some(function(r){return r.length!==headers.length;}))return null;return {headers:headers,rows:rows.length};}' +
+  'var tabs={};[].slice.call(document.querySelectorAll(".hl-rv-panel")).forEach(function(p){tabs[p.id.replace(/^tab-/,"")]=' +
+  '[].slice.call(p.querySelectorAll(".hl-rv-source table")).map(model).filter(Boolean);});' +
+  'function has(tok,res){return (tabs[tok]||[]).some(function(m){return res.every(function(r){return m.headers.some(function(h){return new RegExp(r[0],r[1]).test(h);});});});}' +
+  'var out={};Object.keys(SPECS).forEach(function(k){out[k]={tab:!!document.getElementById("tab-"+k),shape:has(k,SPECS[k])};});' +
+  'var attack=(tabs.chain||[]).some(function(m){return m.headers.some(function(h){return /Tactic.*Technique/i.test(h);})&&m.headers.some(function(h){return /^Status$/i.test(h);});});' +
+  'var rule=false,seen=false;[].slice.call(document.querySelectorAll("#tab-indicators .hl-rv-source")).forEach(function(b){var h=b.querySelector("h2");if(seen||!h||!/Detection|Hunting/i.test(txt(h)))return;seen=true;' +
+  'var p=b.querySelector("p"),t=p?txt(p):"",mt=t.match(/(\\d+) rules\\b/),eng=[];' +
+  't.replace(/(\\d+) (Sigma|Suricata|YARA) \\((\\d+) detection, (\\d+) hunting\\)/g,function(_,a,e,d,hh){eng.push([+a,+d,+hh]);});if(/no YARA/.test(t))eng.push([0,0,0]);' +
+  'if(mt&&eng.length&&eng.every(function(e){return e[0]===e[1]+e[2];})&&eng.reduce(function(n,e){return n+e[0];},0)===+mt[1])rule=true;});' +
+  'out.overview={tab:!!document.getElementById("tab-overview"),shape:out.victims.shape||attack||out.timeline.shape||rule};' +
+  'return out;})()';
+
+/* The documented "missing" notice of one view (hl-report-tabs.js missing(): "View unavailable: needs ... The full report follows."). */
+function viewNoticeExpr(token) {
+  return '(function(t){var b=document.getElementById("hl-rv-view-"+t);var n=b?b.querySelector(".hl-rv-unavailable"):null;' +
+    'return {notice:n?n.textContent.trim():null};})(' + JSON.stringify(token) + ')';
+}
+/* The verdict for one view's card, PURE. `shape` is whether the report has the table or sentence the view reads. With the shape absent
+   the view must say so in the documented notice and draw none of the elements it would count; with it present the summary's first
+   integer must equal the count of those elements. A present shape whose view is wrong FAILS; an absent shape with the notice PASSES. */
+function viewShapeVerdict(token, shape, line, primaryCount, notice, expected) {
+  var need = SHAPE_NEED[token] || 'its table';
+  if (shape === false) {
+    var why = [];
+    if (!notice || notice.indexOf('View unavailable: needs') !== 0) why.push('the report lacks ' + need + ' but the view shows no "View unavailable: needs ..." notice');
+    if (primaryCount > 0) why.push('the view drew ' + primaryCount + ' ' + TAB_PRIMARY[token] + ' element(s) from nothing');
+    if (!line) why.push('the card has no summary line');
+    return { absent: true, ok: why.length === 0, detail: 'the report lacks ' + need + ': the view says ' + JSON.stringify(notice || '(nothing)') + ', summary ' + JSON.stringify(line) + ', ' + primaryCount + ' ' + TAB_PRIMARY[token] + ' drawn' + (why.length ? '; ' + why.join('; ') : '') };
   }
+  var m = String(line || '').match(/\d+/);
+  if (notice && /parseable dates/.test(notice)) return { absent: true, ok: true, detail: 'the report has its ' + need + ' but the dates do not parse; the view says so (' + JSON.stringify(notice) + ') and keeps the table as printed' };
+  if (!primaryCount) return { absent: false, ok: false, detail: 'the report has ' + need + ' but the view drew no ' + TAB_PRIMARY[token] + ' element' + (notice ? ' and says ' + JSON.stringify(notice) : '') + '; summary ' + JSON.stringify(line) };
+  if (!m) return { absent: false, ok: false, detail: 'the report has ' + need + ' but the summary ' + JSON.stringify(line) + ' states no figure' };
+  var want = expected === undefined || expected === null ? primaryCount : expected;
+  return { absent: false, figure: Number(m[0]), count: primaryCount, ok: Number(m[0]) === want, detail: 'summary "' + m[0] + '" vs ' + want + (want === primaryCount ? ' ' + TAB_PRIMARY[token] : ' (the first of ' + primaryCount + ' ' + TAB_PRIMARY[token] + ')') };
+}
+
+/* A 25-date chronology spanning two years, from design-v4 5.4. It is derived
+   from the page under test rather than authored: a table that is a chronology
+   (a header reading Date/Time/When AND a header reading Observation/Event, the
+   two the timeline view reads) has its rows replaced, so the label-thinning
+   path runs over 25 real candidates instead of the handful a short chronology
+   has. Its columns keep their places and extra columns are filled. A table
+   that only has a Time column (a stage table) is not a chronology and is not
+   used: the fixture it made was rejected by the view and built no timeline
+   (T-0500.1.9). No such table gives null: the report has no chronology. */
+function timelineFixtureHtml(html) {
   var done = false;
   var out = String(html).replace(/<table[\s\S]*?<\/table>/g, function (block) {
-    if (done || !/<th[^>]*>\s*(?:Date|Time|When)[^<]*<\/th>/i.test(block)) return block;
-    if (!/<tbody>/i.test(block)) return block;
+    if (done || !/<tbody>/i.test(block)) return block;
+    var heads = (block.match(/<th[^>]*>[\s\S]*?<\/th>/g) || []).map(function (h) { return h.replace(/<[^>]+>/g, '').replace(/\s+/g, ' ').trim(); });
+    var dc = heads.findIndex(function (h) { return /^(?:Date|Time|When)/i.test(h); });
+    var ec = heads.findIndex(function (h) { return /Observation|Event/i.test(h); });
+    if (dc < 0 || ec < 0 || dc === ec) return block;
+    var rows = [];
+    for (var i = 0; i < 25; i++) {
+      var d = new Date(Date.UTC(2024, 10, 15) + i * 30 * 86400000).toISOString().slice(0, 10);
+      var cells = heads.map(function () { return 'Fixture'; });
+      cells[dc] = d; cells[ec] = 'Fixture observation ' + (i + 1);
+      rows.push('<tr>' + cells.map(function (c) { return '<td>' + c + '</td>'; }).join('') + '</tr>');
+    }
     done = true;
     return block.replace(/(<tbody>)[\s\S]*?(<\/tbody>)/i, '$1' + rows.join('') + '$2');
   });
   return done ? out : null;
+}
+
+/* T-0500.1.9: the tabs the page builds, each with the sections it holds. A section is a `.hl-rv-source` block directly in the panel; the
+   first block (before the report's first h2, the campaign record) has no heading and belongs to Overview. */
+var TAB_SECTIONS_EXPR = '(function(){return [].slice.call(document.querySelectorAll("[role=tab]")).map(function(t){' +
+  'var tok=t.id.replace(/^tabbtn-/,""),p=document.getElementById("tab-"+tok),' +
+  'blocks=p?[].slice.call(p.querySelectorAll(":scope > .hl-rv-source")):[];' +
+  'return {token:tok,panel:!!p,sections:blocks.length,headed:blocks.filter(function(b){return !!b.querySelector("h2");}).length};});})()';
+/* Row 1, PURE: no tab without a section. A tab the page builds that holds no section is an empty tab, the defect the dry run found
+   (a report with nothing tagged for Victims or Timeline still got both). */
+function emptyTabsVerdict(pageTabs) {
+  if (!pageTabs || !pageTabs.length) return { notChecked: true, ok: false, detail: 'no tab was built, so there was nothing to count' };
+  var empty = pageTabs.filter(function (t) { return !t.panel || t.sections === 0; });
+  return { notChecked: false, ok: empty.length === 0,
+    detail: pageTabs.length + ' tab(s) built, ' + empty.length + ' with no section: ' +
+      pageTabs.map(function (t) { return t.token + ' ' + t.sections; }).join(', ') +
+      (empty.length ? '; empty: ' + empty.map(function (t) { return t.token; }).join(', ') : '') };
+}
+/* Row 2, PURE: the page builds exactly the tabs the report tags, in the fixed order. Overview may exist beyond the tags only for the
+   campaign record (a block with no heading). `authoredTokens` null means the report's tab tags are not known: NOT CHECKED. */
+function tabSetVsReportVerdict(pageTabs, authoredTokens) {
+  if (!authoredTokens) return { notChecked: true, ok: false, detail: 'the report\'s tab tags are not known (no markdown path, or no hl-tab line), so which tabs it should have is not known; the page built ' + (pageTabs || []).map(function (t) { return t.token; }).join(', ') };
+  var built = (pageTabs || []).map(function (t) { return t.token; });
+  var missing = authoredTokens.filter(function (t) { return built.indexOf(t) === -1; });
+  var extra = built.filter(function (t) {
+    if (authoredTokens.indexOf(t) !== -1) return false;
+    var info = pageTabs.filter(function (x) { return x.token === t; })[0];
+    return !(t === 'overview' && info && info.headed === 0 && info.sections > 0);
+  });
+  var order = TAB_TOKENS.filter(function (t) { return built.indexOf(t) !== -1; });
+  var inOrder = order.join(' ') === built.join(' ');
+  var why = [];
+  if (missing.length) why.push('tagged in the report but not built: ' + missing.join(', '));
+  if (extra.length) why.push('built although no section is tagged for it: ' + extra.join(', '));
+  if (!inOrder) why.push('built out of the fixed order: ' + built.join(', '));
+  return { notChecked: false, ok: why.length === 0,
+    detail: 'the report tags ' + authoredTokens.length + ' tab(s) (' + authoredTokens.join(', ') + '), the page built ' + built.length + ' (' + built.join(', ') + ')' + (why.length ? '; ' + why.join('; ') : '') };
 }
 
 /* ---------- 4a: the tab bar, and the targets 4a names (p7) ----------------
@@ -848,7 +990,7 @@ async function tabLookRows(page, url) {
     check('NOT CHECKED: ' + name, false, 'the tab controller never built at 1280x900 (no .hl-rv-ready), so nothing was measured');
     return;
   }
-  await page.evaluate('location.hash="#tab-chain"');
+  await page.evaluate('location.hash="#tab-' + otherTab() + '"');
   await CDP.sleep(150);
   var v = tabLookVerdict(await page.json(TAB_LOOK_EXPR));
   if (v.notChecked) check('NOT CHECKED: ' + name, false, v.detail);
@@ -953,8 +1095,8 @@ async function panelRows(page, url) {
       continue;
     }
     var tabsMeasured = [];
-    for (var t = 0; t < 2; t++) {
-      var token = TAB_TOKENS[t === 0 ? 0 : 2]; /* overview (tiles, lead) and chain (tables, filters) */
+    for (var t = 0; t < rowTabs().length; t++) {
+      var token = rowTabs()[t]; /* the first tab (overview: tiles, lead) and Attack chain (tables, filters) when the report has it */
       await page.evaluate('location.hash="#tab-' + token + '"');
       await CDP.sleep(250);
       await page.evaluate('window.scrollTo(0,0)');
@@ -1073,8 +1215,8 @@ async function featuredSponsorRows(page, url) {
   for (var i = 0; i < states.length; i++) {
     await setViewport(page, states[i][0], states[i][1]);
     if (!(await gotoAndWait(page, url))) { check('NOT CHECKED: ' + states[i][2] + ': ' + name, false, 'the tab controller never built, so nothing was measured'); continue; }
-    for (var t = 0; t < 2; t++) {
-      var token = TAB_TOKENS[t === 0 ? 0 : 2];
+    for (var t = 0; t < rowTabs().length; t++) {
+      var token = rowTabs()[t];
       await page.evaluate('location.hash="#tab-' + token + '"');
       await CDP.sleep(250);
       await page.evaluate('window.scrollTo(0,0)');
@@ -1437,6 +1579,20 @@ async function timelineRows(page, url) {
     /* on a phone the data view starts folded: open it, as a reader would, before measuring */
     await page.evaluate('(function(){var b=document.querySelector("#tab-timeline .hl-rv-view-summary button");if(b&&b.getAttribute("aria-expanded")==="false")b.click();})()');
     await CDP.sleep(450);
+    /* T-0500.1.9 (J5): a report without a Date / Observation chronology table (or without a timeline tab at all) is not a failure. The
+       row then checks what the page shows INSTEAD: no timeline tab, or the documented "View unavailable" notice, and no mark drawn. */
+    var tlTab = liveTokens().indexOf('timeline') >= 0;
+    if (!tlTab || (SHAPES && SHAPES.timeline && SHAPES.timeline.shape === false)) {
+      var drawn = await page.json('document.querySelectorAll(".hl-rv-marker, .hl-rv-vertical-marker, .hl-rv-timeline-legend").length');
+      var tlNotice = tlTab ? (await page.json(viewNoticeExpr('timeline'))).notice : null;
+      var noneOk = drawn === 0 && (!tlTab || (tlNotice && tlNotice.indexOf('View unavailable: needs') === 0));
+      var noneDetail = tlTab
+        ? 'the report has no Date / Observation chronology table: the timeline view says ' + JSON.stringify(tlNotice) + ' and draws ' + drawn + ' mark(s) or legend(s)'
+        : 'the report tags no section for the timeline tab, so the page builds none: ' + drawn + ' mark(s) or legend(s) drawn';
+      check(w + 'x' + h + ': ' + nameA, noneOk, noneDetail);
+      check(w + 'x' + h + ': ' + nameB, noneOk, noneDetail);
+      continue;
+    }
     var m = await page.json(TIMELINE_EXPR);
     var tv = timelineVerdict(m), lv = legendVerdict(m);
     if (tv.notChecked) check('NOT CHECKED: ' + w + 'x' + h + ': ' + nameA, false, tv.detail); else check(w + 'x' + h + ': ' + nameA, tv.ok, tv.detail);
@@ -1461,10 +1617,10 @@ async function tabBarRows(page, url) {
       continue;
     }
     var measuredA = 0, badA = [];
-    for (var t = 0; t < TAB_TOKENS.length; t++) {
-      var token = TAB_TOKENS[t], id = 'tabbtn-' + token;
+    for (var t = 0; t < liveTokens().length; t++) {
+      var token = liveTokens()[t], id = 'tabbtn-' + token;
       /* A DIFFERENT tab first, so the tap below has to move the selection. */
-      var other = TAB_TOKENS[(t + 3) % TAB_TOKENS.length];
+      var other = liveTokens()[(t + Math.max(1, Math.floor(liveTokens().length / 2))) % liveTokens().length];
       await page.evaluate('location.hash=' + JSON.stringify('#tab-' + other));
       await CDP.sleep(120);
       var geom = await page.json(tabGeomExpr(id));
@@ -1487,7 +1643,7 @@ async function tabBarRows(page, url) {
       var verdict = tabReachVerdict(token, geom, hit, after);
       if (!verdict.ok) badA.push(width + 'x' + height + ' ' + verdict.why);
     }
-    var detailA = measuredA + ' of ' + TAB_TOKENS.length + ' tabs measured at ' +
+    var detailA = measuredA + ' of ' + liveTokens().length + ' tabs measured at ' +
       width + 'x' + height + ' (' + vlabel + ') with touch emulation, each inside the ' +
       'viewport width and at least 44 px high, a real tap selecting it and showing its ' +
       'own panel' + (badA.length ? '; ' + badA.length + ' failing: ' + badA.join(' | ') : '');
@@ -1517,8 +1673,8 @@ async function tabTargetRows(page, url) {
       continue;
     }
     var sums = [], links = [];
-    for (var t = 0; t < TAB_TOKENS.length; t++) {
-      var token = TAB_TOKENS[t];
+    for (var t = 0; t < liveTokens().length; t++) {
+      var token = liveTokens()[t];
       await page.evaluate('location.hash=' + JSON.stringify('#tab-' + token));
       await CDP.sleep(100);
       var card = false;
@@ -1543,8 +1699,8 @@ async function tabTargetRows(page, url) {
     var doc = await page.json('(function(){return {' +
       'sums:document.querySelectorAll("details.hl-teardown > summary").length,' +
       'nav:document.querySelectorAll(".hl-rv-contents nav a").length};})()');
-    var sumV = targetRowVerdict(sums, doc.sums, TAB_TOKENS.length);
-    var linkV = targetRowVerdict(links, doc.nav, TAB_TOKENS.length);
+    var sumV = targetRowVerdict(sums, doc.sums, liveTokens().length);
+    var linkV = targetRowVerdict(links, doc.nav, liveTokens().length);
     var sumName = 'every teardown summary in every tab is at least 44 by 44 px';
     var linkName = 'every section link in every tab\'s section navigation is at least ' +
       '44 by 44 px';
@@ -1570,6 +1726,11 @@ async function tabbedChecks(page, opts) {
       'hl-report-tabs.js did not finish, so nothing below could be measured');
     return;
   }
+  /* The tabs THIS page built (T-0500.1.9): every row below loops over these, not over a fixed seven. */
+  var pageTabs = await page.json(TAB_SECTIONS_EXPR);
+  var built = TAB_TOKENS.filter(function (t) { return pageTabs.some(function (x) { return x.token === t; }); });
+  LIVE_TOKENS = built.length ? built : null;
+  SHAPES = await page.json(SHAPES_EXPR);
 
   /* ---- the authored report is the expectation (fix rounds 1 and 2) -------
      Read once, before any tab state changes: which sections exist, in what
@@ -1729,6 +1890,17 @@ async function tabbedChecks(page, opts) {
       noAuthoredReason + ', so which tab each section belongs to is not known');
   }
 
+  /* ---- the tab set: no tab without a section, and the tabs the report tags (T-0500.1.9) ---- */
+  var emptyV = emptyTabsVerdict(pageTabs);
+  if (emptyV.notChecked) check('NOT CHECKED: no tab is built without a section', false, emptyV.detail);
+  else check('no tab is built without a section', emptyV.ok, emptyV.detail);
+  var authoredTokens = opts.authoredKnown && opts.authored.tabs
+    ? TAB_TOKENS.filter(function (t) { return Object.keys(opts.authored.tabs).some(function (id) { return opts.authored.tabs[id] === t; }); })
+    : null;
+  var setV = tabSetVsReportVerdict(pageTabs, authoredTokens);
+  if (setV.notChecked) check('NOT CHECKED: the page builds the tabs the report tags', false, setV.detail);
+  else check('the page builds the tabs the report tags', setV.ok, setV.detail);
+
   /* ---- ARIA, once: viewport-independent by design ------------------------ */
   var aria = await page.json('(function(){' +
     'var tabs=[].slice.call(document.querySelectorAll("[role=tab]"));' +
@@ -1747,10 +1919,10 @@ async function tabbedChecks(page, opts) {
     'selected:sel.map(function(t){return t.id;}),unlinked:unlinked.map(function(t){return t.id;}),' +
     'roving:roving.length,orphan:orphan.map(function(p){return p.id;}),' +
     'shown:shown.map(function(p){return p.id;})};})()');
-  var expectTabs = TAB_TOKENS.map(function (t) { return 'tabbtn-' + t; });
-  var expectPanels = TAB_TOKENS.map(function (t) { return 'tab-' + t; });
+  var expectTabs = liveTokens().map(function (t) { return 'tabbtn-' + t; });
+  var expectPanels = liveTokens().map(function (t) { return 'tab-' + t; });
   check('the tablist is built with one tab and one panel per token',
-    aria.tablist && aria.tabs.length === 7 && aria.panels.length === 7 &&
+    aria.tablist && aria.tabs.length === expectTabs.length && aria.panels.length === expectPanels.length &&
     expectTabs.every(function (id, i) { return aria.tabs[i] === id; }) &&
     expectPanels.every(function (id, i) { return aria.panels[i] === id; }),
     aria.tabs.length + ' tabs, ' + aria.panels.length + ' panels: ' +
@@ -1760,7 +1932,7 @@ async function tabbedChecks(page, opts) {
     (aria.unlinked.length ? 'unreachable tab(s): ' + aria.unlinked.join(', ') + '. ' : '') +
     (aria.orphan.length ? 'orphan panel(s) no tab reaches: ' + aria.orphan.join(', ') + '. ' : '') +
     (!aria.unlinked.length && !aria.orphan.length
-      ? '7 of 7 aria-controls/aria-labelledby pairs resolve; roving tabindex matches selection'
+      ? expectTabs.length + ' of ' + expectTabs.length + ' aria-controls/aria-labelledby pairs resolve; roving tabindex matches selection'
       : 'roving tabindex mismatches: ' + aria.roving));
   check('exactly one tab is selected and exactly its panel is shown',
     aria.selected.length === 1 && aria.shown.length === 1 &&
@@ -1768,13 +1940,14 @@ async function tabbedChecks(page, opts) {
     'selected ' + (aria.selected[0] || 'none') + ', shown ' + (aria.shown[0] || 'none'));
 
   /* ---- keyboard, with real key events ----------------------------------- */
+  var keyTabs = liveTokens(), keyN = keyTabs.length;
   var keys = [
-    ['ArrowRight', 'ArrowRight', 39, 'victims'],
-    ['End', 'End', 35, 'confidence'],
-    ['Home', 'Home', 36, 'overview'],
-    ['ArrowLeft', 'ArrowLeft', 37, 'confidence']
+    ['ArrowRight', 'ArrowRight', 39, keyTabs[1 % keyN]],
+    ['End', 'End', 35, keyTabs[keyN - 1]],
+    ['Home', 'Home', 36, keyTabs[0]],
+    ['ArrowLeft', 'ArrowLeft', 37, keyTabs[keyN - 1]]
   ];
-  await page.evaluate('document.getElementById("tabbtn-overview").focus()');
+  await page.evaluate('document.getElementById("tabbtn-' + keyTabs[0] + '").focus()');
   await CDP.sleep(100);
   var keyRows = [];
   var keyOk = true;
@@ -1807,7 +1980,7 @@ async function tabbedChecks(page, opts) {
      the report's own first heading for that tab and a page that starts elsewhere
      is a failure, not a different sample. */
   var deepPage = await page.json('(function(){var out=[];' +
-    TAB_TOKENS.map(function (t) {
+    liveTokens().map(function (t) {
       return 'var p=document.getElementById("tab-' + t + '");' +
         'var h=p?p.querySelector(".hl-rv-source h2"):null;' +
         'out.push({token:' + JSON.stringify(t) + ',id:h?(h.id||null):null,' +
@@ -1860,8 +2033,8 @@ async function tabbedChecks(page, opts) {
       }
     }
     check('a cold link to a heading id opens that section\'s tab and scrolls to it',
-      deep.length === TAB_TOKENS.length && deepBad.length === 0,
-      deep.length + ' of ' + TAB_TOKENS.length + ' tab-first heading ids sampled' +
+      deep.length === liveTokens().length && deepBad.length === 0,
+      deep.length + ' of ' + liveTokens().length + ' tab-first heading ids sampled' +
       (deepBad.length ? '; ' + deepBad.length + ' failing: ' + deepBad.join(' | ') :
         ': ' + deepRows.join(', ')));
   }
@@ -1928,8 +2101,8 @@ async function tabbedChecks(page, opts) {
         'no .hl-rv-ready at ' + vlabel);
       continue;
     }
-    for (var t = 0; t < TAB_TOKENS.length; t++) {
-      var token = TAB_TOKENS[t];
+    for (var t = 0; t < liveTokens().length; t++) {
+      var token = liveTokens()[t];
       await page.evaluate('location.hash=' + JSON.stringify('#tab-' + token));
       await CDP.sleep(90);
       var sel = await page.json(selectedTabExpr());
@@ -2047,7 +2220,7 @@ async function tabbedChecks(page, opts) {
           : opts.authored.h2.length + ' of ' + opts.authored.h2.length +
             ' sections rendered, heading and every block, at this width'));
     }
-    await page.evaluate('location.hash="#tab-overview"');
+    await page.evaluate('location.hash="#tab-' + firstTab() + '"');
     await CDP.sleep(80);
 
     /* ---- phone-only gates (4a) ----------------------------------------- */
@@ -2058,8 +2231,8 @@ async function tabbedChecks(page, opts) {
        line is reconciled against the count of the elements it summarises. */
     var cards = [];
     var cardProblems = [];
-    for (var c = 0; c < TAB_TOKENS.length; c++) {
-      var ct = TAB_TOKENS[c];
+    for (var c = 0; c < liveTokens().length; c++) {
+      var ct = liveTokens()[c];
       await page.evaluate('location.hash=' + JSON.stringify('#tab-' + ct));
       await CDP.sleep(80);
       var before = await page.json('(function(t){var panel=document.getElementById("tab-"+t);' +
@@ -2097,17 +2270,23 @@ async function tabbedChecks(page, opts) {
         cardProblems.push(ct + ': hidden=' + before.hidden + ' aria-expanded=' +
           before.expanded + ' line="' + before.line.slice(0, 40) + '"');
       }
-      if (!/\d/.test(before.line) || !primaryCount || !m) {
-        check('NOT CHECKED: the ' + width + ' px ' + ct + ' card states a headline figure',
-          false, 'summary "' + before.line.slice(0, 80) + '" has no integer to reconcile, ' +
-            'or the view holds none of the elements it counts (' + primaryCount + ')');
+      /* T-0500.1.9 (J5): what the card must show depends on what the REPORT has. A table or sentence shape the report lacks
+         gives the documented "View unavailable" notice, and that PASSES; a shape the report has whose view is wrong FAILS. The shape
+         is read from the report's own source tables, not from the view. */
+      var shapeInfo = SHAPES && SHAPES[ct];
+      if (!shapeInfo) {
+        check('NOT CHECKED: the ' + width + ' px ' + ct + ' card states a headline figure', false,
+          'the report\'s table shapes could not be read from the page, so what this view should show is not known');
       } else {
-        var first = Number(m[0]);
-        check(width + ' px ' + ct + ': the expanded card shows the figure it counts',
-          after.hidden === false && after.h > 0 && after.expanded === 'true' &&
-          after.line === before.line && primaryCount === first,
-          'summary "' + first + '" vs ' + primaryCount + ' ' + TAB_PRIMARY[ct] +
-            '; collapsed h=' + (before.hidden ? 0 : 'shown') + ', expanded h=' + after.h +
+        var firstTile = ct === 'overview' ? await page.json('(function(){var e=document.querySelector("#tab-overview .hl-rv-tile strong");' +
+          'var m=e?e.textContent.match(/\\d+/):null;return m?Number(m[0]):null;})()') : null;
+        var noticeRead = await page.json(viewNoticeExpr(ct));
+        var sv = viewShapeVerdict(ct, shapeInfo.shape, before.line, primaryCount, noticeRead && noticeRead.notice, firstTile);
+        var opened = after.hidden === false && after.h > 0 && after.expanded === 'true' && after.line === before.line;
+        check(width + ' px ' + ct + (sv.absent ? ': the report lacks this view\'s table, and the expanded card says so'
+            : ': the expanded card shows the figure it counts'),
+          sv.ok && opened,
+          sv.detail + '; collapsed h=' + (before.hidden ? 0 : 'shown') + ', expanded h=' + after.h +
             ', line unchanged=' + (after.line === before.line));
       }
       if (before.wideTables) {
@@ -2119,7 +2298,7 @@ async function tabbedChecks(page, opts) {
     }
     check(width + ' px: every view opens as a compact card',
       cardProblems.length === 0, cardProblems.join('; ') ||
-      '7 of 7 views collapsed with a figure line and an aria-controls toggle');
+      liveTokens().length + ' of ' + liveTokens().length + ' views collapsed with a figure line and an aria-controls toggle');
     check(width + ' px: no dashboard table is wider than the screen',
       cards.every(function (x) { return x.wide === 0; }),
       cards.map(function (x) { return x.token + ' ' + (x.tables - x.wide) + '/' + x.tables; }).join(', ') +
@@ -2131,7 +2310,7 @@ async function tabbedChecks(page, opts) {
        of thousands of px down, and the menu then opens over a moving layout.
        Start on a tab that is NOT the one the menu click must select, so a
        selection that never moved cannot pass. */
-    await page.evaluate('location.hash="#tab-chain"');
+    await page.evaluate('location.hash="#tab-' + otherTab() + '"');
     await CDP.sleep(100);
     await page.evaluate('window.scrollTo(0,0)');
     await CDP.sleep(150);
@@ -2151,7 +2330,7 @@ async function tabbedChecks(page, opts) {
       'return {hidden:m.hidden,items:items.map(function(a){return a.getAttribute("href");}),' +
       'h:Math.round(r.height),top:Math.round(r.top),bottom:Math.round(r.bottom),' +
       'viewport:innerHeight};})()');
-    var wantMenu = TAB_TOKENS.map(function (t) { return '#tab-' + t; }).concat(['#one-page']);
+    var wantMenu = liveTokens().map(function (t) { return '#tab-' + t; }).concat(['#one-page']);
     check(width + ' px: the Sections menu lists every tab and one-page, all on screen',
       !!menu && menu.hidden === false && menu.h > 0 && menu.bottom <= menu.viewport + 1 &&
       wantMenu.every(function (h) { return menu.items.indexOf(h) !== -1; }),
@@ -2160,30 +2339,30 @@ async function tabbedChecks(page, opts) {
     /* The first menu entry, which is at the top of the list and therefore on
        screen in every state, and a different tab from the one selected above. */
     var beforeMenu = await page.json(selectedTabExpr());
-    var picked = await clickMenuLink(page, '#tab-overview');
+    var picked = await clickMenuLink(page, '#tab-' + firstTab());
     if (!picked || !picked.ok) {
       // One named fallback, so a geometry quirk in the sticky bar cannot make
       // the gate silent about whether the menu works.
-      try { await page.click('.hl-rv-menu a[href="#tab-overview"]'); } catch (e) { /* reported below */ }
+      try { await page.click('.hl-rv-menu a[href="#tab-' + firstTab() + '"]'); } catch (e) { /* reported below */ }
       await CDP.sleep(150);
     }
     var viaMenu = await page.json(selectedTabExpr());
     check(width + ' px: a tab chosen from the Sections menu becomes the selected tab',
-      viaMenu.id === 'tabbtn-overview' && beforeMenu.id === 'tabbtn-chain',
+      viaMenu.id === 'tabbtn-' + firstTab() && beforeMenu.id === 'tabbtn-' + otherTab() && firstTab() !== otherTab(),
       'selected ' + (beforeMenu.id || 'nothing') + ' before, ' +
       (viaMenu.id || 'nothing') + ' after; pointer ' +
       (picked && picked.ok ? 'at ' + Math.round(picked.x) + ',' + Math.round(picked.y)
         : 'geometry fallback (' + JSON.stringify(picked) + ')'));
-    await page.evaluate('location.hash="#tab-overview"');
+    await page.evaluate('location.hash="#tab-' + firstTab() + '"');
     await CDP.sleep(80);
   }
 
   check('every tab is selected by its own URL fragment at all five viewports',
     selectBad.length === 0,
-    (TAB_TOKENS.length * TAB_VIEWPORTS.length) + ' fragment selections across ' +
+    (liveTokens().length * TAB_VIEWPORTS.length) + ' fragment selections across ' +
     TAB_VIEWPORTS.map(function (x) { return x[0] + 'x' + x[1]; }).join(', ') +
     (selectBad.length
-      ? ': ' + selectBad.length + ' of ' + (TAB_TOKENS.length * TAB_VIEWPORTS.length) +
+      ? ': ' + selectBad.length + ' of ' + (liveTokens().length * TAB_VIEWPORTS.length) +
         ' failing: ' + selectBad.join(' | ')
       : ''));
   check('no page-level horizontal scroll on any tab or in one-page mode',
@@ -2249,7 +2428,7 @@ async function tabbedChecks(page, opts) {
 
   await setViewport(page, 1280, 900);
   await gotoAndWait(page, url);
-  await page.evaluate('location.hash="#tab-chain"');
+  await page.evaluate('location.hash="#tab-' + otherTab() + '"');
   await CDP.sleep(120);
   await page.send('Emulation.setEmulatedMedia', { media: 'print' });
   await page.evaluate('window.dispatchEvent(new Event("beforeprint"))');
@@ -2272,7 +2451,7 @@ async function tabbedChecks(page, opts) {
   } else {
     check('print shows every section with every teardown open, then restores the tab',
       printed.shown === opts.sectionCount && printed.closed === 0 &&
-      restored.id === 'tabbtn-chain',
+      restored.id === 'tabbtn-' + otherTab(),
       printed.shown + ' of ' + opts.sectionCount + ' sections painted, ' +
         printed.closed + ' teardowns left closed; after print selected ' +
         (restored.id || 'nothing'));
@@ -2281,8 +2460,14 @@ async function tabbedChecks(page, opts) {
   /* ---- the 25-date timeline fixture (5.4) ------------------------------- */
   var fixture = timelineFixtureHtml(opts.html);
   if (!fixture) {
-    check('NOT CHECKED: the 25-date timeline fixture', false,
-      'the fetched page has no Date/Time/When table to build the fixture from');
+    if (SHAPES && SHAPES.timeline && SHAPES.timeline.shape === false) {
+      /* J5: no chronology table is the report lacking a view, not a failure; the fixture scales that table, so there is nothing to scale. */
+      check('the 25-date timeline fixture: not applicable, the report has no Date / Observation chronology table', true,
+        'the page has no Date/Time/When table, so no chronology view exists whose label thinning could be exercised; the timeline rows above state what the page shows instead');
+    } else {
+      check('NOT CHECKED: the 25-date timeline fixture', false,
+        'the fetched page has no Date/Time/When table to build the fixture from');
+    }
     await restoreReportPage(page, url);
     return;
   }
@@ -2353,6 +2538,17 @@ async function restoreReportPage(page, url) {
      element inside a hidden panel. A reader reaches them by opening that tab;
      the gate does the same. On the pilot this is the chain tab. */
   await revealPanelContaining(page, '.hl-fignav');
+}
+
+/* Open every closed <details> around the first figure-nav chip row and scroll it into view, naming what was opened. The click that follows
+   needs a painted chip; the teardown is the reader's to open and a closed one is not a defect of the report. */
+async function openFirstChipRow(page) {
+  var r = await page.json('(function(){var r=document.querySelector(".hl-fignav");if(!r)return null;var opened=[];' +
+    'for(var d=r.closest("details");d;d=d.parentElement&&d.parentElement.closest("details")){if(!d.open){d.open=true;' +
+    'opened.push((d.querySelector("summary")||d).textContent.trim().replace(/\\s+/g," ").slice(0,50));}}' +
+    'r.scrollIntoView({block:"center",behavior:"instant"});return {opened:opened,painted:r.getClientRects().length>0};})()');
+  await CDP.sleep(300);
+  return r || { opened: [], painted: false };
 }
 
 /* Where an id ended up: which panel, whether that panel is shown, whether an
@@ -2683,6 +2879,12 @@ async function main() {
     }
 
     // ---------- figure-nav chips ----------
+    /* T-0500.1.9 (dry-run F3): a figure inside a closed teardown carries its chip row inside that teardown, and a click on a chip nobody
+       can see cannot land (lib/cdp.js:684 threw and ended the run). A reader opens the teardown first; so does the gate, and says so. */
+    var chipOpened = tabbed ? await openFirstChipRow(page) : null;
+    var chipNote = chipOpened && chipOpened.opened.length
+      ? '; the first chip row sat inside a closed teardown (' + chipOpened.opened.map(function (t) { return JSON.stringify(t); }).join(', ') + '), which the gate opened first, as a reader does'
+      : '';
     var fignav = await page.json('(function(){var r=document.querySelector(".hl-fignav");' +
       'if(!r)return null;var c=getComputedStyle(r);var b=r.getBoundingClientRect();' +
       'var chips=[].slice.call(r.querySelectorAll("a"));' +
@@ -2696,7 +2898,7 @@ async function main() {
     } else {
       check('the figure-nav chips are built and painted',
         fignav.display !== 'none' && fignav.w > 50 && fignav.chips > 0,
-        fignav.chips + ' chips, ' + fignav.w + 'px wide');
+        fignav.chips + ' chips, ' + fignav.w + 'px wide' + chipNote);
 
       /* The chips once shipped in the theme's link colour because
          `.hl-post-content a` is marked important and no test read CSS. */
@@ -2804,13 +3006,10 @@ async function main() {
     srv.close();
   }
 
-  var failed = results.filter(function (r) { return !r.pass; });
-  var notCheckedRows = failed.filter(function (r) { return /^NOT CHECKED/.test(r.name); });
-  console.log('\n' + (failed.length ? (failed.length === notCheckedRows.length ? 'NOT CHECKED' : 'FAIL') : 'PASS') +
-    '  /reports/' + s + '/ in a real browser  (' +
-    (results.length - failed.length) + '/' + results.length + ' checks)');
-  if (!failed.length) process.exit(0);
-  process.exit(failed.length === notCheckedRows.length ? 2 : 1);
+  var end = summarise(results);
+  console.log('\n' + end.label + '  /reports/' + s + '/ in a real browser  (' + end.pass + '/' + end.total + ' checks' +
+    (end.fail ? '; ' + end.fail + ' failed' : '') + (end.notChecked ? '; ' + end.notChecked + ' not checked' : '') + ')');
+  process.exit(end.exit);
 }
 
 /* Defect: a crash here used to erase a FAIL that `results` already recorded.
@@ -2864,6 +3063,15 @@ if (require.main === module) {
     normaliseHeadingText: normaliseHeadingText,
     isTabbedHtml: isTabbedHtml,
     TAB_TOKENS: TAB_TOKENS,
+    summarise: summarise,
+    timelineFixtureHtml: timelineFixtureHtml,
+    viewNoticeExpr: viewNoticeExpr,
+    viewShapeVerdict: viewShapeVerdict,
+    emptyTabsVerdict: emptyTabsVerdict,
+    tabSetVsReportVerdict: tabSetVsReportVerdict,
+    SHAPES_EXPR: SHAPES_EXPR,
+    TAB_SECTIONS_EXPR: TAB_SECTIONS_EXPR,
+    SHAPE_SPECS: SHAPE_SPECS,
     TAB_VIEWPORTS: TAB_VIEWPORTS,
     /* p7: the 4a rows the deepseek review found missing, and the pure
        verdicts behind them, so a test can prove each row can fail. */
