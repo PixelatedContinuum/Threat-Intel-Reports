@@ -999,7 +999,9 @@ var FEATURED_EXPR = '(function(){' +
   'var b=measure(band,{label:".hl-rv-reportband__label",item:".hl-rvsp__item",tag:".hl-rvsp__tagline",cta:".hl-rvsp__cta"});' +
   'if(b)b.many=!!document.querySelector(".hl-rv-reportband__in.hl-rvsp__zone--many");' +
   'var c=measure(card,{label:".hl-rv-sponsor-card__label",item:".hl-rv-sponsor-card__item",tag:".hl-rv-sponsor-card__tagline",cta:".hl-rv-sponsor-card__cta"});' +
-  'if(c)c.isReport=card.classList.contains("is-report");' +
+  'if(c){c.isReport=card.classList.contains("is-report");' +
+  'var pr=document.createElement("span");pr.style.cssText="color:var(--acc);position:absolute;visibility:hidden";card.appendChild(pr);' +
+  'c.acc=getComputedStyle(card).getPropertyValue("--acc").trim()?getComputedStyle(pr).color:null;card.removeChild(pr);}' +
   'return {reportSponsors:document.querySelectorAll(".hl-rvsp--report .hl-rvsp__item").length,siteItems:document.querySelectorAll(".hl-sponsor-rail .hl-sponsor-rail__item").length,band:b,bandInDom:!!document.querySelector(".hl-rv-reportband"),card:c,' +
   'markPresent:!!document.querySelector(".hl-rv-sponsor-mark,.hl-rv-sponsor-mark__label")};})()';
 function featuredPanelWhy(name, p, expectGold, label) {
@@ -1035,12 +1037,16 @@ function featuredPanelWhy(name, p, expectGold, label) {
     if (p.image) why.push(name + ' has a gradient fill on a report sponsor');
     if (/Featured/i.test(p.text)) why.push(name + ' says "Featured" on a report sponsor');
     if (p.ctas.length) why.push(name + ' carries a Visit element on a report sponsor');
+    /* the report card keeps the active tab's accent: a 4px left bar whose colour is the panel's --acc. An accent that could not be read is NOT CHECKED, never a pass. */
+    if (!p.acc) return { notChecked: true, why: why.concat(name + ': the active tab accent (--acc) could not be read, so the bar colour was not compared') };
+    if (!(p.barW >= 4)) why.push(name + ' has no 4px left bar in the tab accent (' + p.barW + 'px ' + p.bar + ')');
+    else if (p.bar !== p.acc) why.push(name + ' left bar is ' + p.bar + ', not the active tab accent ' + p.acc);
   }
   return why;
 }
 function featuredSponsorVerdict(m) {
   if (!m) return { notChecked: true, ok: false, detail: 'nothing was measured' };
-  var why = [], measured = [];
+  var why = [], measured = [], accUnread = false;
   if (m.markPresent) why.push('a sponsor mark is on the reading line (Joseph removed it for both sponsor kinds)');
   if (m.reportSponsors === 0) {
     /* no report sponsor: no band at all, and the gold card is the site sponsor's */
@@ -1055,8 +1061,9 @@ function featuredSponsorVerdict(m) {
     else { measured.push('tab-foot card'); why = why.concat(featuredPanelWhy('the tab-foot card', m.card, true, FEATURED_LABEL)); }
   } else {
     if (!m.band) why.push('the report band was not found with ' + m.reportSponsors + ' report sponsor(s) on the page'); else { measured.push('report band'); why = why.concat(featuredPanelWhy('the report band', m.band, true, BAND_LABEL)); }
-    if (!m.card) why.push('the tab-foot card was not found'); else if (!m.card.isReport) why.push('the tab-foot card is the featured site card although the page has a report sponsor'); else { measured.push('tab-foot card (report)'); why = why.concat(featuredPanelWhy('the report-sponsor card', m.card, false)); }
+    if (!m.card) why.push('the tab-foot card was not found'); else if (!m.card.isReport) why.push('the tab-foot card is the featured site card although the page has a report sponsor'); else { var rw = featuredPanelWhy('the report-sponsor card', m.card, false); if (rw.notChecked) { accUnread = true; why = why.concat(rw.why); } else { measured.push('tab-foot card (report)'); why = why.concat(rw); } }
   }
+  if (accUnread && !why.some(function (w) { return !/could not be read/.test(w); })) return { notChecked: true, ok: false, detail: why.join('; ') };
   if (!measured.length) return { notChecked: true, ok: false, detail: 'a sponsor is on the page but no featured-sponsor element could be measured' };
   return { notChecked: false, ok: why.length === 0, why: why, detail: (m.reportSponsors === 0 ? 'site sponsor, no report sponsor' : 'report sponsor') + ': ' + measured.join(', ') + ' measured' + (why.length ? '; ' + why.join('; ') : '') };
 }

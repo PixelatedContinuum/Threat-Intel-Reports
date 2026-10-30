@@ -129,6 +129,7 @@ test('JS: with a report sponsor the card is unchanged (tab accent, "Sponsored by
 });
 
 /* the gate row's verdict, each failure driven by the measurement a broken layout would give */
+const GOLD_FOR_TEST = 'rgb(184, 144, 47)';
 const BAR = 'rgb(184, 144, 47)', LAB = 'rgb(212, 167, 58)';
 function panel(over) {
   return Object.assign({ w: 1200, h: 80, barW: 4, bar: BAR, image: true, cls: '', text: BANDLABEL + ' Hunt.io tagline Visit', label: BANDLABEL, labelVisible: true, labelColor: LAB, many: false, items: 1, withTagline: 1,
@@ -138,7 +139,7 @@ function siteCard(over) { return panel(Object.assign({ isReport: false, label: L
 /* a page with no report sponsor and a Monthly sponsor: no band, the gold site card, the rail has one card */
 function noReport(over) { return Object.assign({ reportSponsors: 0, siteItems: 1, band: null, bandInDom: false, card: siteCard(), markPresent: false }, over || {}); }
 function reportState(over) {
-  return Object.assign({ reportSponsors: 1, siteItems: 1, band: panel(), bandInDom: true, card: panel({ isReport: true, barW: 4, bar: 'rgb(163, 113, 247)', image: false, label: 'Sponsored by', labelColor: 'rgb(168, 168, 168)', text: 'Sponsored by Report Co tagline', ctas: [] }),
+  return Object.assign({ reportSponsors: 1, siteItems: 1, band: panel(), bandInDom: true, card: panel({ isReport: true, barW: 4, bar: 'rgb(163, 113, 247)', acc: 'rgb(163, 113, 247)', image: false, label: 'Sponsored by', labelColor: 'rgb(168, 168, 168)', text: 'Sponsored by Report Co tagline', ctas: [] }),
     markPresent: false }, over || {});
 }
 test('the gate row PASSES: no band on a page with no report sponsor; the gold band and the unchanged report card when there is one; no mark', () => {
@@ -204,4 +205,20 @@ test('the gate row: a page with no sponsor must draw nothing, and a sponsor with
 });
 test('the gate measures through one browser expression that names the elements the verdict reads', () => {
   for (const sel of ['.hl-rv-reportband__in', '.hl-rv-sponsor-card', '.hl-rvsp__cta', '.hl-rv-sponsor-card__cta', '.hl-rvsp__tagline', '.hl-rv-sponsor-mark', '.hl-rvsp--report .hl-rvsp__item', '.hl-sponsor-rail .hl-sponsor-rail__item', '.hl-rv-reportband']) assert.ok(G.FEATURED_EXPR.includes(sel), sel);
+});
+
+test('the report-sponsor card must keep the active tab accent: no bar, a different colour or an unreadable accent cannot pass (T-0500.1.8 review fix)', () => {
+  const card = (over) => reportState({ card: Object.assign({}, reportState().card, over) });
+  let v = G.featuredSponsorVerdict(card({}));
+  assert.equal(v.ok, true, v.detail);
+  v = G.featuredSponsorVerdict(card({ barW: 0, bar: 'rgba(0, 0, 0, 0)' }));
+  assert.equal(v.ok, false); assert.match(v.detail, /no 4px left bar in the tab accent/);
+  v = G.featuredSponsorVerdict(card({ barW: 1 }));
+  assert.equal(v.ok, false, 'a thin bar is not the 4px accent bar');
+  v = G.featuredSponsorVerdict(card({ bar: 'rgb(255, 255, 255)' }));
+  assert.equal(v.ok, false); assert.match(v.detail, /not the active tab accent rgb\(163, 113, 247\)/);
+  v = G.featuredSponsorVerdict(card({ acc: null }));
+  assert.equal(v.notChecked, true, 'an accent that cannot be measured is NOT CHECKED'); assert.equal(v.ok, false); assert.match(v.detail, /could not be read/);
+  v = G.featuredSponsorVerdict(card({ acc: null, bar: GOLD_FOR_TEST }));
+  assert.equal(v.ok, false, 'a real fault is still a FAIL when the accent is also unreadable'); assert.equal(!!v.notChecked, false);
 });

@@ -95,6 +95,23 @@ test('F2: aria-label sits only on elements that can carry one',()=>{
   }finally{f.w.close();}
 });
 
+// every selector of a grouped rule is returned, not just the first (T-0500.1.8 review fix)
+function gradientSelectors(text){
+  return [...text.matchAll(/(?:linear|radial|conic)-gradient\(/g)].flatMap(m=>{const open=text.lastIndexOf('{',m.index),c=text.lastIndexOf('*/',open),from=Math.max(text.lastIndexOf('}',open)+1,c<0?0:c+2);return text.slice(from,open).split(',').map(x=>x.trim()).filter(Boolean);});
+}
+const GRAD_OK=['.hl-report-page .hl-post-header','.hl-report-page .hl-post-header__title','.hl-report-page .hl-rv-panel-head','.hl-report-page .hl-post-content .hl-rv-source > h2','.hl-rv-view-summary',
+    '.hl-rv-reportband__in','.hl-rv-reportband__in::before',
+    // the gold panel rules are grouped with the tab-foot site card (hl-report-tabs.css lines 185 and 189: `.hl-rv-reportband__in, .hl-rv-sponsor-card.is-site` and the ::before pair)
+    '.hl-rv-sponsor-card.is-site','.hl-rv-sponsor-card.is-site::before',
+    // hl-report-tabs.css lines 320-321: the section header bar is grouped `.hl-report-page .hl-post-content .hl-rv-source > h2, .hl-rv-source.hl-rv-nohead::before` (the first block has no h2, so its label is the bar)
+    '.hl-rv-source.hl-rv-nohead::before'];
+function assertGradientsAllowed(sels){for(const sel of sels)assert.ok(GRAD_OK.includes(sel),'a gradient on a non-header selector: '+sel);}
+test('CSS control: a grouped rule hides no selector behind its first (allowed, .hl-rv-tabs { background: gradient })',()=>{
+  const sels=gradientSelectors('.hl-rv-reportband__in, .hl-rv-tabs { background: linear-gradient(red, blue); }');
+  assert.deepEqual(sels,['.hl-rv-reportband__in','.hl-rv-tabs']);
+  assert.ok(sels.some(x=>x==='.hl-rv-tabs'),'the second selector is seen');
+  assert.throws(()=>assertGradientsAllowed(sels),/non-header selector: \.hl-rv-tabs/,'the shared check rejects the second selector');
+});
 test('CSS: round-3 tokens, the old strip, the pill and the gradient and shadow looks are gone; no chrome size below 13px',()=>{
   for(const token of ['--rv-nav','--rv-tab:','--rv-boundary','--rv-accent','--rv-selected-ink','--rv-blue','--rv-series','--rv-meaning'])assert.equal(css.includes(token),false,token+' removed');
   assert.equal(/\.hl-sponsor-rail \{ display: none/.test(css),false,'the site Sponsors rail is no longer hidden on tabbed pages (the strip or the fixed card shows)');
@@ -105,12 +122,10 @@ test('CSS: round-3 tokens, the old strip, the pill and the gradient and shadow l
   // tab title, the section header bars, the data-view bar); bodies, tab cells, the toolbar and the bands stay flat.
   // T-0500.1.8 (Joseph, 2026-10-30, "Yes, both places"): the gold featured site-sponsor panel (the band and the tab-foot card) reuses the site's
   // .hl-panel--featured recipe, which Joseph asked to borrow for highlights: its dark gradient and its gold glow. Nothing else gains a gradient.
-  const GRAD_OK=['.hl-report-page .hl-post-header','.hl-report-page .hl-post-header__title','.hl-report-page .hl-rv-panel-head','.hl-report-page .hl-post-content .hl-rv-source > h2','.hl-rv-view-summary',
-    '.hl-rv-reportband__in','.hl-rv-reportband__in::before'];
-  const gradSel=[...css.matchAll(/(?:linear|radial|conic)-gradient\(/g)].map(m=>{const open=css.lastIndexOf('{',m.index),from=Math.max(css.lastIndexOf('}',open),css.lastIndexOf('*/',open)+1);return css.slice(from+1,open).trim().split(',')[0].trim();});
+  const gradSel=gradientSelectors(css);
   assert.ok(gradSel.length>=5,'the five site-recipe header gradients are present');
   assert.ok(gradSel.includes('.hl-rv-reportband__in')&&gradSel.includes('.hl-rv-reportband__in::before'),'the featured site-sponsor panel carries its gradient and its glow');
-  for(const sel of gradSel)assert.ok(GRAD_OK.includes(sel),'a gradient on a non-header selector: '+sel);
+  assertGradientsAllowed(gradSel);
   assert.deepEqual([...css.matchAll(/box-shadow:\s*([^;}]+)/g)].map(m=>m[1].trim()).filter(v=>!/^none( !important)?$/.test(v)),[],'no shadows or glows');
   assert.equal(/max\(14px,\s*1em\)/.test(css),false,'no em-relative chrome size');
   const below=[...css.matchAll(/font-size:\s*(\d+(?:\.\d+)?)px/g)].map(m=>+m[1]).filter(n=>n<14);
