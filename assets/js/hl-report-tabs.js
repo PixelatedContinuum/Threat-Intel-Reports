@@ -188,38 +188,31 @@
   content.before(pageContents);
   var currentSection = null, navigatingUntil = 0;
 
-  // Sponsors come from the server-rendered masthead bar (_includes/report-sponsor-bar.html), so the
-  // bar, the mark on the reading line and the card at the foot of each tab always show the same set.
-  var sponsorList = Array.from(document.querySelectorAll('.hl-rvsp .hl-rvsp__item')).map(function (el) {
+  // Sponsors come from server-rendered markup, so the tab-foot card always shows what the page shows. The report
+  // sponsor(s) are the "This report is sponsored by" panel (_includes/report-sponsor-bar.html); the site (Monthly)
+  // sponsors are the site's own Sponsors rail (_includes/sidebar-sponsors.html, the same Monthly filter), which the
+  // tabbed CSS keeps in the left gutter or as the site strip. Joseph, 2026-10-30: there is no sponsor mark on the reading line.
+  var reportSponsors = Array.from(document.querySelectorAll('.hl-rvsp--report .hl-rvsp__item')).map(function (el) {
     var img = el.querySelector('img');
-    return { kind: el.getAttribute('data-rv-sponsor') === 'report' ? 'report' : 'site', name: el.getAttribute('data-name') || '', tagline: el.getAttribute('data-tagline') || '', href: el.getAttribute('href') || '', logo: img ? img.getAttribute('src') || '' : '' };
+    return { name: el.getAttribute('data-name') || '', tagline: el.getAttribute('data-tagline') || '', href: el.getAttribute('href') || '', logo: img ? img.getAttribute('src') || '' : '' };
   });
-  var reportSponsors = sponsorList.filter(function (x) { return x.kind === 'report'; });
-  var siteSponsors = sponsorList.filter(function (x) { return x.kind !== 'report'; });
+  var siteSponsors = Array.from(document.querySelectorAll('.hl-sponsor-rail .hl-sponsor-rail__item')).map(function (el) {
+    var img = el.querySelector('img'), name = el.querySelector('.hl-sponsor-rail__name'), tagline = el.querySelector('.hl-sponsor-rail__tagline');
+    return { name: name ? name.textContent.trim() : '', tagline: tagline ? tagline.textContent.trim() : '', href: el.getAttribute('href') || '', logo: img ? img.getAttribute('src') || '' : '' };
+  });
   // The report sponsor alone when there is one (Report tier: no competing logos in the report), else the site
-  // (Monthly) sponsors, labelled as the site's: a site sponsor is never presented as this report's sponsor.
+  // (Monthly) sponsors, as the site's: a site sponsor is never presented as this report's sponsor.
   var sponsorPool = reportSponsors.length ? reportSponsors : siteSponsors;
-  var sponsorLabel = reportSponsors.length ? 'Sponsored by' : 'Site sponsor';
+  var sponsorLabel = 'Sponsored by';
   function sponsorLink(s, cls, parent) {
     var a = safeHref(s.href) ? make('a', cls, null, parent) : make('span', cls, null, parent);
     if (a.tagName === 'A') { a.href = s.href; a.target = '_blank'; a.rel = 'noopener noreferrer'; }
     return a;
   }
-  var sponsorMark = null;
-  function updateSponsorMark(i) {
-    if (!sponsorPool.length) return;
-    var s = sponsorPool[i % sponsorPool.length];
-    if (sponsorMark) sponsorMark.remove();
-    sponsorMark = sponsorLink(s, 'hl-rv-sponsor-mark' + (reportSponsors.length ? ' is-report' : ' is-site'), mobileLine);
-    sponsorMark.setAttribute('aria-label', sponsorLabel + ' ' + s.name + (s.tagline ? ': ' + s.tagline : ''));
-    if (s.tagline) sponsorMark.title = s.tagline;
-    make('span', 'hl-rv-sponsor-mark__label', sponsorLabel, sponsorMark);
-    if (s.logo) { var logo = make('img', '', null, sponsorMark); logo.src = s.logo; logo.alt = ''; } else make('span', 'hl-rv-sponsor-mark__name', s.name, sponsorMark);
-  }
   function sponsorCard(panel) {
     if (!sponsorPool.length) return;
-    // With no report sponsor the card is the site sponsor's gold featured panel (same as the band at the top of the page);
-    // with several site sponsors it shows logos only, like the band. A report sponsor's card keeps the tab accent.
+    // With no report sponsor the card is the site sponsor's gold featured panel; with several site sponsors it shows logos
+    // only. A report sponsor's card keeps the tab accent.
     var featured = !reportSponsors.length, many = featured && sponsorPool.length > 1;
     var card = make('aside', 'hl-rv-sponsor-card' + (reportSponsors.length ? ' is-report' : ' is-site' + (many ? ' is-many' : '')), null, panel);
     card.setAttribute('aria-label', reportSponsors.length ? 'Report sponsor' : 'Site sponsor');
@@ -281,7 +274,7 @@
   bar.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeMenu(true); });
   document.addEventListener('click', function (e) { if (!bar.contains(e.target)) closeMenu(false); });
   function select(i) {
-    active = i; currentSection = null; page.dataset.rvHue = TOKENS[i]; updateSponsorMark(i);
+    active = i; currentSection = null; page.dataset.rvHue = TOKENS[i];
     tabs.forEach(function (tab, j) { tab.setAttribute('aria-selected', String(i === j)); tab.tabIndex = i === j ? 0 : -1; panels[j].hidden = i !== j; });
     currentLabel.textContent = NAMES[i]; menuLinks.forEach(function (a, j) { if (j === i) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current'); }); closeMenu(false); fillMenuSections(); measureBar(); updateProgress();
   }

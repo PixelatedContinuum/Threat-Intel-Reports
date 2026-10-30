@@ -863,7 +863,7 @@ async function tabLookRows(page, url) {
    browser, not read from the stylesheet. The verdicts are pure so a test can drive each to FAIL. */
 var PANEL_GAP_MIN_PX = 23.5;
 var PANEL_COMPONENTS = [
-  ['site band', '.hl-rv-siteband__in', true],
+  ['report band', '.hl-rv-reportband__in', true],
   ['header', '.hl-post-header', true],
   ['report sponsor', '.hl-rvsp--report', true],
   ['tab row', '.hl-rv-tabs', true],
@@ -918,7 +918,8 @@ var TYPE_SPEC = [
   ['toolbar text', '.hl-rv-current-section', 16, 15],
   ['toolbar mono label', '.hl-rv-current', 14, null],
   ['header mono label', '.hl-post-header__badge', 14, 14],
-  ['sponsor mono label', '.hl-rvsp__label', 14, 14]
+  ['sponsor mono label', '.hl-rvsp__label', 14, 14],
+  ['header resource button', '.hl-quicklinks .hl-quicklink__label', 16, 15]
 ];
 var TYPE_EXPR = '(function(){var SPEC=' + JSON.stringify(TYPE_SPEC) + ';' +
   'function vis(e){return e.getClientRects().length>0&&getComputedStyle(e).visibility!=="hidden";}' +
@@ -969,17 +970,18 @@ async function panelRows(page, url) {
   }
 }
 
-/* T-0500.1.8: the featured site sponsor. Joseph, 2026-10-30 ("Yes, both places"): on a tabbed report the left-margin Sponsors rail cannot be
-   used, so the Monthly (whole-site) sponsor is a gold featured panel in two places, the band above the header and the card at each tab foot,
-   and its label on the reading line turns gold. The report sponsor stays the tab accent and the only "Sponsored by". One row, measured in the
-   browser at 1280 and 390 on two tabs. With no report sponsor: the band and the card each carry the gold 4px left bar and the dark gradient,
-   the label "Featured sponsor of The Hunter's Ledger" in gold, a visible tagline and a visible, real "Visit" element (aria-hidden, inside the
-   sponsor's link, inside the panel); with several Monthly sponsors (logos only) the tagline and Visit are hidden. With a report sponsor: its card has
-   no gold, no gradient, no "Featured" label and no Visit element, and the reading-line label is not gold. A page with no sponsor at all must draw
-   none of it. The verdict is pure so a test can drive each failure. */
+/* T-0500.1.8, reworked 2026-10-30 (Joseph's decision, amendment 1): the gold featured band at the top of the page is the REPORT sponsor
+   (the page's sponsored_by), labelled "This report is sponsored by"; a report with no sponsor has no band at all. The Monthly (site) sponsor is
+   the site's own Sponsors rail (rows below) and, when no report sponsor exists, the gold card at each tab foot. There is no sponsor mark on the
+   reading line in either case. One row, measured in the browser at 1280 and 390 on two tabs. With a report sponsor: the band has the gold 4px
+   left bar and the dark gradient, the label in gold, a visible tagline and a visible, real "Visit" element (aria-hidden, inside the sponsor's
+   link, inside the panel; with several sponsors, logos only), and the tab-foot card is the report card (tab accent, no gold, no Visit). With no
+   report sponsor: no band is in the DOM, and the tab-foot card is the gold featured card. A page with no sponsor at all draws none of it.
+   The verdict is pure so a test can drive each failure. */
 var GOLD_BAR = 'rgb(184, 144, 47)';
 var GOLD_LABEL = 'rgb(212, 167, 58)';
 var FEATURED_LABEL = "Featured sponsor of The Hunter's Ledger";
+var BAND_LABEL = 'This report is sponsored by';
 var FEATURED_EXPR = '(function(){' +
   'function vis(e){if(!e)return false;var cs=getComputedStyle(e);return e.getClientRects().length>0&&cs.visibility!=="hidden"&&cs.display!=="none"&&e.getBoundingClientRect().height>0;}' +
   'function one(sel,root){return [].slice.call((root||document).querySelectorAll(sel)).filter(vis)[0]||null;}' +
@@ -993,21 +995,21 @@ var FEATURED_EXPR = '(function(){' +
   'taglines:[].slice.call(root.querySelectorAll(k.tag)).map(function(e){return {vis:vis(e),len:e.textContent.trim().length};}),' +
   'ctas:[].slice.call(root.querySelectorAll(k.cta)).map(function(e){var b=e.getBoundingClientRect();return {vis:vis(e),text:e.textContent.trim(),ariaHidden:e.getAttribute("aria-hidden"),inLink:!!e.closest("a[href]"),' +
   'inside:b.left>=r.left-1&&b.right<=r.right+1&&b.top>=r.top-1&&b.bottom<=r.bottom+1,tag:e.tagName};})};}' +
-  'var band=one(".hl-rv-siteband__in"),card=one(".hl-rv-panel:not([hidden]) .hl-rv-sponsor-card"),mark=one(".hl-rv-sponsor-mark"),lab=mark?mark.querySelector(".hl-rv-sponsor-mark__label"):null;' +
-  'var b=measure(band,{label:".hl-rv-siteband__label",item:".hl-rvsp__item",tag:".hl-rvsp__tagline",cta:".hl-rvsp__cta"});' +
-  'if(b)b.many=!!document.querySelector(".hl-rv-siteband__in.hl-rvsp__zone--many");' +
+  'var band=one(".hl-rv-reportband__in"),card=one(".hl-rv-panel:not([hidden]) .hl-rv-sponsor-card");' +
+  'var b=measure(band,{label:".hl-rv-reportband__label",item:".hl-rvsp__item",tag:".hl-rvsp__tagline",cta:".hl-rvsp__cta"});' +
+  'if(b)b.many=!!document.querySelector(".hl-rv-reportband__in.hl-rvsp__zone--many");' +
   'var c=measure(card,{label:".hl-rv-sponsor-card__label",item:".hl-rv-sponsor-card__item",tag:".hl-rv-sponsor-card__tagline",cta:".hl-rv-sponsor-card__cta"});' +
   'if(c)c.isReport=card.classList.contains("is-report");' +
-  'return {reportSponsors:document.querySelectorAll(".hl-rvsp--report .hl-rvsp__item").length,siteItems:document.querySelectorAll(".hl-rvsp--site .hl-rvsp__item").length,band:b,card:c,' +
-  'markLabel:vis(lab)?{text:lab.textContent.trim(),color:getComputedStyle(lab).color}:null,markPresent:!!mark};})()';
-function featuredPanelWhy(name, p, expectGold) {
+  'return {reportSponsors:document.querySelectorAll(".hl-rvsp--report .hl-rvsp__item").length,siteItems:document.querySelectorAll(".hl-sponsor-rail .hl-sponsor-rail__item").length,band:b,bandInDom:!!document.querySelector(".hl-rv-reportband"),card:c,' +
+  'markPresent:!!document.querySelector(".hl-rv-sponsor-mark,.hl-rv-sponsor-mark__label")};})()';
+function featuredPanelWhy(name, p, expectGold, label) {
   var why = [];
   if (!p) { why.push(name + ' was not found'); return why; }
   var gold = p.barW >= 4 && p.bar === GOLD_BAR;
   if (expectGold) {
     if (!gold) why.push(name + ' has no 4px gold left bar (' + p.barW + 'px ' + p.bar + ')');
     if (!p.image) why.push(name + ' has no gradient panel fill');
-    if (p.label !== FEATURED_LABEL) why.push(name + ' label is ' + JSON.stringify(p.label) + ', not "' + FEATURED_LABEL + '"');
+    if (p.label !== label) why.push(name + ' label is ' + JSON.stringify(p.label) + ', not "' + label + '"');
     else if (!p.labelVisible) why.push(name + ' label is not visible');
     else if (p.labelColor !== GOLD_LABEL) why.push(name + ' label is ' + p.labelColor + ', not gold ' + GOLD_LABEL);
     var shownTaglines = p.taglines.filter(function (t) { return t.vis && t.len > 0; }).length;
@@ -1039,27 +1041,28 @@ function featuredPanelWhy(name, p, expectGold) {
 function featuredSponsorVerdict(m) {
   if (!m) return { notChecked: true, ok: false, detail: 'nothing was measured' };
   var why = [], measured = [];
-  var siteMode = m.reportSponsors === 0 && (m.siteItems > 0 || (m.card && !m.card.isReport));
-  if (m.reportSponsors === 0 && !siteMode) {
-    /* no sponsor of any kind: nothing is expected, and nothing may be drawn */
-    var drawn = (m.band ? 1 : 0) + (m.card ? 1 : 0) + (m.markPresent ? 1 : 0);
-    return { notChecked: false, ok: drawn === 0, none: true, why: drawn ? ['a sponsor panel was drawn on a page with no sponsor'] : [], detail: 'no sponsor on this page: 0 featured panels expected, ' + drawn + ' drawn' };
-  }
-  if (siteMode) {
-    if (!m.band) why.push('the site band was not found with ' + m.siteItems + ' site sponsor(s) on the page'); else { measured.push('band'); why = why.concat(featuredPanelWhy('the site band', m.band, true)); }
-    if (!m.card) why.push('the tab-foot card was not found'); else if (m.card.isReport) why.push('the tab-foot card is the report-sponsor card with no report sponsor'); else { measured.push('tab-foot card'); why = why.concat(featuredPanelWhy('the tab-foot card', m.card, true)); }
-    if (m.markLabel) { measured.push('reading-line mark'); if (m.markLabel.color !== GOLD_LABEL) why.push('the reading-line "' + m.markLabel.text + '" label is ' + m.markLabel.color + ', not gold'); if (!/^Site sponsor$/i.test(m.markLabel.text)) why.push('the reading-line label reads ' + JSON.stringify(m.markLabel.text) + ', not "Site sponsor"'); }
+  if (m.markPresent) why.push('a sponsor mark is on the reading line (Joseph removed it for both sponsor kinds)');
+  if (m.reportSponsors === 0) {
+    /* no report sponsor: no band at all, and the gold card is the site sponsor's */
+    if (m.bandInDom || m.band) why.push('a band is drawn on a page with no report sponsor');
+    if (m.siteItems === 0 && m.card) why.push('a tab-foot card is drawn with no sponsor on the page');
+    if (m.siteItems === 0) {
+      return { notChecked: false, ok: why.length === 0, none: true, why: why, detail: 'no sponsor on this page: 0 panels expected, ' + ((m.bandInDom || m.band ? 1 : 0) + (m.markPresent ? 1 : 0) + (m.card ? 1 : 0)) + ' drawn' + (why.length ? '; ' + why.join('; ') : '') };
+    }
+    measured.push('no band');
+    if (!m.card) why.push('the tab-foot card was not found with ' + m.siteItems + ' site sponsor(s) on the page');
+    else if (m.card.isReport) why.push('the tab-foot card is the report-sponsor card with no report sponsor');
+    else { measured.push('tab-foot card'); why = why.concat(featuredPanelWhy('the tab-foot card', m.card, true, FEATURED_LABEL)); }
   } else {
-    if (m.band) { measured.push('band'); why = why.concat(featuredPanelWhy('the site band', m.band, true)); }
+    if (!m.band) why.push('the report band was not found with ' + m.reportSponsors + ' report sponsor(s) on the page'); else { measured.push('report band'); why = why.concat(featuredPanelWhy('the report band', m.band, true, BAND_LABEL)); }
     if (!m.card) why.push('the tab-foot card was not found'); else if (!m.card.isReport) why.push('the tab-foot card is the featured site card although the page has a report sponsor'); else { measured.push('tab-foot card (report)'); why = why.concat(featuredPanelWhy('the report-sponsor card', m.card, false)); }
-    if (m.markLabel) { measured.push('reading-line mark (report)'); if (m.markLabel.color === GOLD_LABEL) why.push('the reading-line label is gold on a report sponsor'); }
   }
   if (!measured.length) return { notChecked: true, ok: false, detail: 'a sponsor is on the page but no featured-sponsor element could be measured' };
-  return { notChecked: false, ok: why.length === 0, why: why, detail: (siteMode ? 'site sponsor' : 'report sponsor') + ': ' + measured.join(', ') + ' measured' + (why.length ? '; ' + why.join('; ') : '') };
+  return { notChecked: false, ok: why.length === 0, why: why, detail: (m.reportSponsors === 0 ? 'site sponsor, no report sponsor' : 'report sponsor') + ': ' + measured.join(', ') + ' measured' + (why.length ? '; ' + why.join('; ') : '') };
 }
 async function featuredSponsorRows(page, url) {
   var states = [[1280, 900, 'desktop 1280'], [390, 844, 'phone 390']];
-  var name = 'the Monthly sponsor is the gold featured panel (band and tab-foot card, gold bar, label, tagline, Visit) and a report sponsor stays the tab accent';
+  var name = 'the report sponsor is the gold band (none without one), the Monthly sponsor the gold tab-foot card, and no sponsor mark sits on the reading line';
   for (var i = 0; i < states.length; i++) {
     await setViewport(page, states[i][0], states[i][1]);
     if (!(await gotoAndWait(page, url))) { check('NOT CHECKED: ' + states[i][2] + ': ' + name, false, 'the tab controller never built, so nothing was measured'); continue; }
@@ -1073,6 +1076,51 @@ async function featuredSponsorRows(page, url) {
       if (fv.notChecked) check('NOT CHECKED: ' + states[i][2] + ' ' + token + ': ' + name, false, fv.detail);
       else check(states[i][2] + ' ' + token + ': ' + name, fv.ok, fv.detail);
     }
+  }
+}
+
+/* T-0500.1.8: the site's Sponsors rail on a tabbed page. Where the left gutter fits it (viewport 1600 and up) it is the site's fixed card,
+   at least 16 px clear of the 1200 px column and inside the viewport; below that it is the site's in-flow strip under the navbar, above the
+   report, not hidden. The expected mode is stated per viewport, so a rail that is hidden, or fixed where the gutter is too narrow, FAILS. */
+var RAIL_STATES = [[1280, 900, 'strip'], [1440, 900, 'strip'], [1600, 900, 'fixed'], [1920, 1080, 'fixed'], [2560, 1300, 'fixed'], [390, 844, 'strip']];
+var RAIL_CLEAR_MIN_PX = 16;
+var RAIL_EXPR = '(function(){var r=document.querySelector(".hl-sponsor-rail"),col=document.querySelector(".hl-report-page");' +
+  'if(!r||!col)return {present:false};var cs=getComputedStyle(r),b=r.getBoundingClientRect(),c=col.getBoundingClientRect();' +
+  'var items=[].slice.call(r.querySelectorAll(".hl-sponsor-rail__item")).filter(function(i){var x=i.getBoundingClientRect();return x.width>0&&x.height>0;}).length;' +
+  'return {present:true,display:cs.display,visibility:cs.visibility,position:cs.position,left:b.left,right:b.right,top:b.top,bottom:b.bottom,width:b.width,height:b.height,' +
+  'colLeft:c.left,colRight:c.right,colTop:c.top,vw:document.documentElement.clientWidth,iw:innerWidth,visibleItems:items,allItems:r.querySelectorAll(".hl-sponsor-rail__item").length};})()';
+function railVerdict(m, expect) {
+  if (!m || !m.present) return { notChecked: true, ok: false, detail: 'no Sponsors rail is in the page, so there was nothing to place' };
+  var why = [];
+  if (m.display === 'none' || m.visibility === 'hidden' || !m.width || !m.height) why.push('the rail is hidden (display ' + m.display + ', ' + m.width + 'x' + m.height + ')');
+  else {
+    if (m.visibleItems < m.allItems || !m.visibleItems) why.push(m.visibleItems + ' of ' + m.allItems + ' sponsor card(s) are visible');
+    if (expect === 'fixed') {
+      if (m.position !== 'fixed') why.push('the rail is ' + m.position + ', not fixed in the gutter');
+      var clear = m.colLeft - m.right;
+      if (clear < RAIL_CLEAR_MIN_PX) why.push('the rail is ' + clear.toFixed(1) + ' px from the column (at least ' + RAIL_CLEAR_MIN_PX + ' needed)');
+      if (m.left < 0) why.push('the rail starts at ' + m.left.toFixed(1) + ' px, outside the viewport');
+      if (m.width < 120 || m.width > 200.5) why.push('the rail is ' + m.width.toFixed(1) + ' px wide (120 to 200 expected)');
+    } else {
+      if (m.position === 'fixed') why.push('the rail is fixed at a width where the gutter does not fit it; the site strip is expected');
+      if (m.bottom > m.colTop + 1) why.push('the strip ends at ' + m.bottom.toFixed(1) + ' px, below the top of the report (' + m.colTop.toFixed(1) + ')');
+      if (m.height > 160) why.push('the strip is ' + m.height.toFixed(1) + ' px tall, not a strip');
+    }
+  }
+  var clearTxt = m.colLeft - m.right;
+  return { notChecked: false, ok: why.length === 0, why: why, detail: expect + ' mode: position ' + m.position + ', ' + m.width.toFixed(1) + 'x' + m.height.toFixed(1) + ' px at x ' + m.left.toFixed(1) + ' to ' + m.right.toFixed(1) + ', column starts at ' + m.colLeft.toFixed(1) + (expect === 'fixed' ? ' (clear ' + clearTxt.toFixed(1) + ' px)' : '') + ', ' + m.visibleItems + ' of ' + m.allItems + ' card(s) visible' + (why.length ? '; ' + why.join('; ') : '') };
+}
+async function sponsorRailRows(page, url) {
+  var name = 'the site Sponsors rail is the fixed gutter card where the gutter fits it and the site strip where it does not, never hidden';
+  for (var i = 0; i < RAIL_STATES.length; i++) {
+    var s = RAIL_STATES[i];
+    await setViewport(page, s[0], s[1]);
+    if (!(await gotoAndWait(page, url))) { check('NOT CHECKED: ' + s[0] + 'x' + s[1] + ': ' + name, false, 'the tab controller never built, so nothing was measured'); continue; }
+    await page.evaluate('window.scrollTo(0,0)');
+    await CDP.sleep(200);
+    var rv = railVerdict(await page.json(RAIL_EXPR), s[2]);
+    if (rv.notChecked) check('NOT CHECKED: ' + s[0] + 'x' + s[1] + ': ' + name, false, rv.detail);
+    else check(s[0] + 'x' + s[1] + ' (' + s[2] + '): ' + name, rv.ok, rv.detail);
   }
 }
 
@@ -2056,6 +2104,7 @@ async function tabbedChecks(page, opts) {
   await tabLookRows(page, url);
   await panelRows(page, url);
   await featuredSponsorRows(page, url);
+  await sponsorRailRows(page, url);
   await shareRows(page, url);
   await mispRows(page, url);
   await timelineRows(page, url);
@@ -2716,6 +2765,9 @@ if (require.main === module) {
     panelStackVerdict: panelStackVerdict,
     featuredSponsorVerdict: featuredSponsorVerdict,
     FEATURED_EXPR: FEATURED_EXPR,
+    railVerdict: railVerdict,
+    RAIL_EXPR: RAIL_EXPR,
+    RAIL_STATES: RAIL_STATES,
     shareGeometryVerdict: shareGeometryVerdict,
     shareBehaviourVerdict: shareBehaviourVerdict,
     SHARE_EXPR: SHARE_EXPR,

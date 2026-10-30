@@ -10,13 +10,14 @@ const css=fs.readFileSync(path.join(root,'assets/css/hl-report-tabs.css'),'utf8'
 const TOKENS=['overview','victims','chain','timeline','attribution','indicators','confidence'];
 
 function item(kind,name,tagline,logo,href){
-  return `<a class="hl-rvsp__item" href="${href||'https://example.test/'+name.toLowerCase().replace(/\W+/g,'-')}" data-rv-sponsor="${kind}" data-name="${name}" data-tagline="${tagline}">${logo?`<img class="hl-rvsp__logo" src="${logo}" alt="${name}">`:''}<span class="hl-rvsp__text"><span class="hl-rvsp__name">${name}</span></span></a>`;
+  const h=href||'https://example.test/'+name.toLowerCase().replace(/\W+/g,'-');
+  // a report sponsor is an item of the attached "This report is sponsored by" panel; a site sponsor is a card of the site's own Sponsors rail
+  if(kind==='site')return `<a class="hl-sponsor-rail__item" href="${h}">${logo?`<img class="hl-sponsor-rail__logo" src="${logo}" alt="${name}">`:''}<div class="hl-sponsor-rail__text"><div class="hl-sponsor-rail__name">${name}</div><div class="hl-sponsor-rail__tagline">${tagline}</div></div></a>`;
+  return `<a class="hl-rvsp__item" href="${h}" data-rv-sponsor="${kind}" data-name="${name}" data-tagline="${tagline}">${logo?`<img class="hl-rvsp__logo" src="${logo}" alt="${name}">`:''}<span class="hl-rvsp__text"><span class="hl-rvsp__name">${name}</span></span></a>`;
 }
 function bar(report,site){
-  return '<aside class="hl-rvsp" data-rv-chrome>'
-    +(report.length?'<div class="hl-rvsp__zone hl-rvsp__zone--report"><span class="hl-rvsp__label">Sponsored by</span><div class="hl-rvsp__items">'+report.join('')+'</div></div>':'')
-    +(site.length?'<div class="hl-rvsp__zone hl-rvsp__zone--site"><span class="hl-rvsp__label">Supported by</span><div class="hl-rvsp__items">'+site.join('')+'</div></div>':'')
-    +'</aside>';
+  return (report.length?'<aside class="hl-rvsp hl-rvsp--report" data-rv-chrome><span class="hl-rvsp__label">This report is sponsored by</span><div class="hl-rvsp__items">'+report.join('')+'</div></aside>':'')
+    +(site.length?'<aside class="hl-sponsor-rail" aria-label="Sponsors"><div class="hl-sponsor-rail__label">Sponsors</div>'+site.join('')+'</aside>':'');
 }
 function page(sponsors,phone=false){
   const table='<table><thead><tr><th>Stage</th><th>What the operator did</th></tr></thead><tbody><tr><td>Alpha</td><td>Alpha procedure detail</td></tr></tbody></table>'
@@ -34,12 +35,10 @@ const SITE3=[item('site','Monthly One','t1','/m1.png'),item('site','Monthly Two'
 function marks(d){return [...d.querySelectorAll('.hl-rv-sponsor-mark')];}
 function names(el){return [...el.querySelectorAll('.hl-rv-sponsor-card__name')].map(n=>n.textContent);}
 
-test('the report sponsor owns the reading-line mark and the tab-foot cards; the Monthly sponsor never appears beside it',()=>{
+test('the report sponsor owns the tab-foot cards, the Monthly sponsor never appears beside it, and there is no reading-line mark',()=>{
   const f=page(bar(REPORT,SITE));try{
-    assert.equal(marks(f.d).length,1);
-    const m=marks(f.d)[0];assert.ok(m.classList.contains('is-report'));assert.equal(m.querySelector('.hl-rv-sponsor-mark__label').textContent,'Sponsored by');
-    assert.match(m.getAttribute('aria-label'),/Report Sponsor Co/);assert.doesNotMatch(m.getAttribute('aria-label'),/Hunt/);
-    assert.equal(m.closest('.hl-rv-mobile-line')!==null,true);assert.equal(m.getAttribute('rel'),'noopener noreferrer');assert.equal(m.target,'_blank');
+    assert.equal(marks(f.d).length,0,'Joseph removed the reading-line mark for the report sponsor');
+    assert.equal(f.d.querySelector('.hl-rv-mobile-line').querySelector('img'),null);
     for(const t of TOKENS){
       const panel=f.d.getElementById('tab-'+t),card=panel.querySelector('.hl-rv-sponsor-card');
       assert.ok(card,'card on '+t);assert.deepEqual(names(card),['Report Sponsor Co']);
@@ -48,12 +47,11 @@ test('the report sponsor owns the reading-line mark and the tab-foot cards; the 
     }
   }finally{f.w.close();}
 });
-test('with no report sponsor the Monthly sponsors fill the card and one of them, never two, sits on the reading line, both labelled Site sponsor',()=>{
+test('with no report sponsor the Monthly sponsors (read from the site rail) fill the card, and no mark sits on the reading line',()=>{
   const f=page(bar([],SITE3));try{
-    assert.equal(marks(f.d).length,1);assert.equal(marks(f.d)[0].querySelector('.hl-rv-sponsor-mark__label').textContent,'Site sponsor');assert.equal(f.d.getElementById('tab-overview').querySelector('.hl-rv-sponsor-card').getAttribute('aria-label'),'Site sponsor');
+    assert.equal(marks(f.d).length,0,'no mark for the site sponsors either');assert.equal(f.d.getElementById('tab-overview').querySelector('.hl-rv-sponsor-card').getAttribute('aria-label'),'Site sponsor');
     assert.deepEqual(names(f.d.getElementById('tab-overview')),['Monthly One','Monthly Two','Monthly Three']);
-    const first=marks(f.d)[0].getAttribute('aria-label');
-    f.d.getElementById('tabbtn-victims').click();assert.equal(marks(f.d).length,1);assert.notEqual(marks(f.d)[0].getAttribute('aria-label'),first,'Monthly sponsors take turns by tab');
+    f.d.getElementById('tabbtn-victims').click();assert.equal(marks(f.d).length,0);
   }finally{f.w.close();}
 });
 test('sponsor chrome is excluded from the report text, survives a one-page round trip before the cards, and a page with no sponsors gets none',async()=>{
@@ -99,17 +97,19 @@ test('F2: aria-label sits only on elements that can carry one',()=>{
 
 test('CSS: round-3 tokens, the old strip, the pill and the gradient and shadow looks are gone; no chrome size below 13px',()=>{
   for(const token of ['--rv-nav','--rv-tab:','--rv-boundary','--rv-accent','--rv-selected-ink','--rv-blue','--rv-series','--rv-meaning'])assert.equal(css.includes(token),false,token+' removed');
-  assert.match(css,/body:has\(\.hl-report-page\) \.hl-sponsor-rail \{ display: none !important; \}/);
+  assert.equal(/\.hl-sponsor-rail \{ display: none/.test(css),false,'the site Sponsors rail is no longer hidden on tabbed pages (the strip or the fixed card shows)');
+  assert.match(css,/@media \(min-width: 1600px\) \{\s*body:has\(\.hl-report-page\) \.hl-sponsor-rail \{[^}]*--rail-gutter: calc\(50vw - 600px\);[^}]*--rail-w: min\(200px, calc\(var\(--rail-gutter\) - 48px\)\);[^}]*left: calc\(\(var\(--rail-gutter\) - var\(--rail-w\)\) \/ 2\);/);
+  assert.match(css,/@media \(min-width: 1281px\) and \(max-width: 1599px\) \{\s*body:has\(\.hl-report-page\) \.hl-sponsor-rail \{\s*position: static;/,'the site strip carries on from 1281 to 1599px');
   assert.equal(/td\.hl-rv-cell-pill::after/.test(css),false,'no pill drawn behind a cell');
   // v6.1 (Joseph, 2026-10-30): the site's own gradient highlight is reused for the main titles only (header panel, its title text, the
   // tab title, the section header bars, the data-view bar); bodies, tab cells, the toolbar and the bands stay flat.
   // T-0500.1.8 (Joseph, 2026-10-30, "Yes, both places"): the gold featured site-sponsor panel (the band and the tab-foot card) reuses the site's
   // .hl-panel--featured recipe, which Joseph asked to borrow for highlights: its dark gradient and its gold glow. Nothing else gains a gradient.
   const GRAD_OK=['.hl-report-page .hl-post-header','.hl-report-page .hl-post-header__title','.hl-report-page .hl-rv-panel-head','.hl-report-page .hl-post-content .hl-rv-source > h2','.hl-rv-view-summary',
-    '.hl-rv-siteband__in','.hl-rv-siteband__in::before'];
+    '.hl-rv-reportband__in','.hl-rv-reportband__in::before'];
   const gradSel=[...css.matchAll(/(?:linear|radial|conic)-gradient\(/g)].map(m=>{const open=css.lastIndexOf('{',m.index),from=Math.max(css.lastIndexOf('}',open),css.lastIndexOf('*/',open)+1);return css.slice(from+1,open).trim().split(',')[0].trim();});
   assert.ok(gradSel.length>=5,'the five site-recipe header gradients are present');
-  assert.ok(gradSel.includes('.hl-rv-siteband__in')&&gradSel.includes('.hl-rv-siteband__in::before'),'the featured site-sponsor panel carries its gradient and its glow');
+  assert.ok(gradSel.includes('.hl-rv-reportband__in')&&gradSel.includes('.hl-rv-reportband__in::before'),'the featured site-sponsor panel carries its gradient and its glow');
   for(const sel of gradSel)assert.ok(GRAD_OK.includes(sel),'a gradient on a non-header selector: '+sel);
   assert.deepEqual([...css.matchAll(/box-shadow:\s*([^;}]+)/g)].map(m=>m[1].trim()).filter(v=>!/^none( !important)?$/.test(v)),[],'no shadows or glows');
   assert.equal(/max\(14px,\s*1em\)/.test(css),false,'no em-relative chrome size');
@@ -138,12 +138,13 @@ test('CSS: the view states its own text sizes and keeps its tile notes a row und
   assert.match(css,/\.hl-rv-view-summary::before \{ content: 'DATA VIEW';/);
   assert.match(css,/\.hl-rv-panel > \.hl-rv-half \{ grid-column: auto; \}/);
 });
-test('Liquid: the tabbed layout swaps the banner for the masthead bar, reads the same data, and leaves untagged pages on the old include',()=>{
+test('Liquid: the tabbed layout swaps the banner for the report-sponsor bar, reads the same data, and leaves untagged pages on the old include',()=>{
   const post=fs.readFileSync(path.join(root,'_layouts/post.html'),'utf8');
   assert.ok(post.includes('{% if hl_tabbed %}{% include report-sponsor-bar.html part="report" %}{% else %}{% include sponsor-banner.html %}{% endif %}\n<div class="hl-post-body">'));
-  assert.ok(post.includes('{% if hl_tabbed %}{% include report-sponsor-bar.html part="band" %}{% endif %}\n<div class="hl-post-header'),'the site band is the first thing in the page, before the header');
+  assert.ok(post.includes('{% if hl_tabbed %}{% include report-sponsor-bar.html part="band" %}{% endif %}\n<div class="hl-post-header'),'the report band is the first thing in the page, before the header');
   const inc=fs.readFileSync(path.join(root,'_includes/report-sponsor-bar.html'),'utf8');
   assert.ok(inc.includes('page.sponsored_by | join: "|;sep;|" | split: "|;sep;|"'),'same normalisation as sponsor-banner.html');
-  assert.ok(inc.includes('where: "tier", "monthly" | where: "active", true'),'same Monthly filter as the rail and the footer');
+  assert.equal(inc.replace(/\{%-? comment -%\}[\s\S]*?\{%-? endcomment -%\}/g,'').includes('monthly'),false,'the Monthly sponsors are the site rail now, with its own filter (sidebar-sponsors.html)');
+  assert.ok(fs.readFileSync(path.join(root,'_includes/sidebar-sponsors.html'),'utf8').includes('where: "tier", "monthly" | where: "active", true'));
   assert.ok(inc.includes('data-rv-chrome data-pagefind-ignore'));assert.equal(/<script|onclick=|tracking|utm_/.test(inc.replace(/\{%-? comment -%\}[\s\S]*?\{%-? endcomment -%\}/g,'')),false);
 });

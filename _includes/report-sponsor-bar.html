@@ -3,54 +3,44 @@
   sponsor-banner.html when hl_tabbed; untagged reports keep the old banner byte for byte).
   Called twice, with `part`:
 
-    part="band"    SITE sponsor band, the first thing on the page, above the report header: "Featured
-                   sponsor of The Hunter's Ledger <logo, tagline, Visit>". The Monthly sponsors, same
-                   filter as sidebar-sponsors.html and site-sponsors.html (tier monthly and active;
-                   on unlisted preview pages every monthly sponsor). It is the gold featured panel
+    part="band"    REPORT sponsor band, the first thing on the page, above the report header: "This report
+                   is sponsored by <logo, tagline, Visit>". The sponsor(s) named by the page's
+                   sponsored_by front matter (one report or a bundle). It is the gold featured panel
                    (the site's .hl-panel--featured recipe) in the report column, outside every report
-                   panel, and never says it sponsors this report. A sponsor already shown as the
-                   report sponsor is not repeated, so one logo never appears twice (a Monthly sponsor
-                   that also sponsors this report shows only as the report sponsor). The "Visit"
-                   call to action is a real span inside the sponsor's link (aria-hidden, so the
-                   link's name is the sponsor's, not "Visit"); with several Monthly sponsors
-                   (hl-rvsp__zone--many) it and the tagline are dropped, logos only.
+                   panel. A report with no sponsored_by has no band at all. The "Visit" call to action
+                   is a real span inside the sponsor's link (aria-hidden, so the link's name is the
+                   sponsor's, not "Visit"); with several report sponsors (hl-rvsp__zone--many) it and
+                   the tagline are dropped, logos only. Joseph, 2026-10-30: the gold band is the report
+                   sponsor; the Monthly (site) sponsors appear in the site's own Sponsors rail, which
+                   the tabbed CSS keeps in the left gutter where it fits and as the site's strip where
+                   it does not.
     part="report"  REPORT sponsor, attached to the report header panel: "This report is sponsored by
-                   <logo, name, tagline>". The sponsor(s) named by the page's sponsored_by front
-                   matter. Same normalize-to-array trick and the same lookup against
-                   site.data.sponsors.sponsors as sponsor-banner.html, so an id that resolves
-                   to nothing renders nothing here either.
+                   <logo, name, tagline>". The same sponsor(s). Same normalize-to-array trick and the
+                   same lookup against site.data.sponsors.sponsors as sponsor-banner.html, so an id
+                   that resolves to nothing renders nothing here either.
 
   Each part renders nothing when it has no sponsor. Reads no new data fields and sends no tracking.
-  hl-report-tabs.js reads the .hl-rvsp__item elements of both parts (data-rv-sponsor, data-name,
-  data-tagline) to build the small mark on the sticky reader line and the card at the foot of each
-  tab: the report sponsor alone when there is one, else the site sponsors (the mark labelled "Site
-  sponsor", the card as the same gold featured panel as the band).
+  hl-report-tabs.js reads the .hl-rvsp--report .hl-rvsp__item elements (data-name, data-tagline) for the
+  card at the foot of each tab: the report sponsor alone when there is one, else the site sponsors read
+  from the site rail (the same Monthly filter), as the same gold featured card.
 {%- endcomment -%}
 {%- assign rv_report_sponsors = "" | split: "" -%}
-{%- assign rv_report_ids = "" | split: "" -%}
 {%- if page.sponsored_by -%}
   {%- assign rv_ids = page.sponsored_by | join: "|;sep;|" | split: "|;sep;|" -%}
   {%- for rv_sid in rv_ids -%}
     {%- assign rv_s = site.data.sponsors.sponsors | where: "id", rv_sid | first -%}
     {%- if rv_s -%}
       {%- assign rv_report_sponsors = rv_report_sponsors | push: rv_s -%}
-      {%- assign rv_report_ids = rv_report_ids | push: rv_s.id -%}
     {%- endif -%}
   {%- endfor -%}
 {%- endif -%}
-{%- assign rv_monthly = site.data.sponsors.sponsors | where: "tier", "monthly" | where: "active", true -%}
-{%- if page.unlisted -%}{%- assign rv_monthly = site.data.sponsors.sponsors | where: "tier", "monthly" -%}{%- endif -%}
-{%- assign rv_site_sponsors = "" | split: "" -%}
-{%- for rv_m in rv_monthly -%}
-  {%- unless rv_report_ids contains rv_m.id -%}{%- assign rv_site_sponsors = rv_site_sponsors | push: rv_m -%}{%- endunless -%}
-{%- endfor -%}
-{%- if include.part == "band" and rv_site_sponsors.size > 0 -%}
-<aside class="hl-rvsp hl-rvsp--site hl-rv-siteband" aria-label="Site sponsors" data-rv-chrome data-pagefind-ignore>
-  <div class="hl-rv-siteband__in{% if rv_site_sponsors.size > 1 %} hl-rvsp__zone--many{% endif %}" role="group" aria-label="Site sponsors">
-    <span class="hl-rvsp__label hl-rv-siteband__label">Featured sponsor of The Hunter's Ledger</span>
+{%- if include.part == "band" and rv_report_sponsors.size > 0 -%}
+<aside class="hl-rvsp hl-rvsp--band hl-rv-reportband" aria-label="Report sponsor" data-rv-chrome data-pagefind-ignore>
+  <div class="hl-rv-reportband__in{% if rv_report_sponsors.size > 1 %} hl-rvsp__zone--many{% endif %}" role="group" aria-label="Report sponsor">
+    <span class="hl-rvsp__label hl-rv-reportband__label">This report is sponsored by</span>
     <div class="hl-rvsp__items">
-    {%- for sponsor in rv_site_sponsors %}
-      {% if sponsor.url %}<a class="hl-rvsp__item" href="{{ sponsor.url }}" target="_blank" rel="noopener noreferrer"{% else %}<span class="hl-rvsp__item"{% endif %} data-rv-sponsor="site" data-name="{{ sponsor.name | escape }}"{% if sponsor.tagline %} data-tagline="{{ sponsor.tagline | escape }}"{% endif %}>
+    {%- for sponsor in rv_report_sponsors %}
+      {% if sponsor.url %}<a class="hl-rvsp__item" href="{{ sponsor.url }}" target="_blank" rel="noopener noreferrer"{% else %}<span class="hl-rvsp__item"{% endif %} data-rv-sponsor="band" data-name="{{ sponsor.name | escape }}"{% if sponsor.tagline %} data-tagline="{{ sponsor.tagline | escape }}"{% endif %}>
         {%- if sponsor.logo %}<img class="hl-rvsp__logo" src="{{ sponsor.logo | relative_url }}" alt="{{ sponsor.name | escape }}">{% endif %}
         <span class="hl-rvsp__text"><span class="hl-rvsp__name"{% if sponsor.logo %} aria-hidden="true"{% endif %}>{{ sponsor.name | escape }}</span>{% if sponsor.tagline %}<span class="hl-rvsp__tagline">{{ sponsor.tagline | escape }}</span>{% endif %}</span>
       {%- if sponsor.url %}<span class="hl-rvsp__cta" aria-hidden="true">Visit &rarr;</span>{% endif %}

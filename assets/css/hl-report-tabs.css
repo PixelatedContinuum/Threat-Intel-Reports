@@ -69,8 +69,28 @@ html:has(.hl-report-page) main.content { max-width: 1240px !important; padding-i
 .hl-report-page .hl-post-body { display: block; min-width: 0; }
 .hl-report-page [id] { scroll-margin-top: calc(var(--hl-rv-nav-h, 0px) + var(--hl-rv-bar-h, 52px) + 16px); }
 html:has(.hl-report-page) .hl-back-top { display: none !important; }
-/* the site's old left rail and top strip are replaced on tabbed pages by the masthead sponsor bar */
-body:has(.hl-report-page) .hl-sponsor-rail { display: none !important; }
+/* The site's Sponsors rail (T-0500.1.8, Joseph 2026-10-30): the Monthly sponsors appear on a tabbed page the way they do on every other page.
+   Where the left gutter fits it, from 1600px up, the rail is the site's fixed card, centred in the gutter between the viewport edge and the 1200px
+   column with at least 24px clear on each side (the site's own formula assumes a 900px column and would touch this one). Below 1600px it is the
+   site's usual in-flow strip under the navbar; custom.scss draws that up to 1280px, so 1281 to 1599px repeats those rules here. */
+@media (min-width: 1281px) and (max-width: 1599px) {
+  body:has(.hl-report-page) .hl-sponsor-rail {
+    position: static; transform: none; width: auto; max-width: 900px; margin: 0 auto; padding: 9px 28px 3px;
+    flex-direction: row; flex-wrap: wrap; align-items: center; gap: 8px;
+  }
+  body:has(.hl-report-page) .hl-sponsor-rail__label { width: 100%; margin-bottom: 0; }
+  body:has(.hl-report-page) .hl-sponsor-rail__item { flex: 0 1 auto; display: inline-flex; align-items: center; gap: 9px; padding: 6px 10px; }
+  body:has(.hl-report-page) .hl-sponsor-rail__logo { margin-bottom: 0; max-height: 24px; flex-shrink: 0; }
+  body:has(.hl-report-page) .hl-sponsor-rail__name { font-size: 0.78rem; }
+  body:has(.hl-report-page) .hl-sponsor-rail__tagline { font-size: 0.68rem; line-height: 1.35; margin-top: 1px; }
+}
+@media (min-width: 1600px) {
+  body:has(.hl-report-page) .hl-sponsor-rail {
+    --rail-gutter: calc(50vw - 600px);
+    --rail-w: min(200px, calc(var(--rail-gutter) - 48px));
+    width: var(--rail-w); left: calc((var(--rail-gutter) - var(--rail-w)) / 2);
+  }
+}
 
 /* ---------- Controls: one recipe, 44px floor ---------- */
 .hl-report-page :is(button, input, select, summary, [role="tab"], [data-rv-chrome] a, [data-rv-chrome]:is(a, button, input, select, summary)) { min-height: 44px; min-width: 44px; }
@@ -112,7 +132,7 @@ body:has(.hl-report-page) .hl-sponsor-rail { display: none !important; }
 .hl-report-page .hl-read-time::before { content: none !important; }
 /* mono micro-labels: one recipe, 14px floor */
 .hl-report-page :is(.hl-post-header__badge, .hl-post-header__date, .hl-read-time, .hl-rv-threat),
-:is(.hl-rvsp__label, .hl-rv-sponsor-card__label, .hl-rv-sponsor-mark__label) {
+:is(.hl-rvsp__label, .hl-rv-sponsor-card__label) {
   font-family: var(--rv-mono); font-size: var(--rv-fs-mono) !important; font-weight: 400; letter-spacing: 0.08em !important; text-transform: uppercase !important; line-height: 1.4;
 }
 .hl-report-page .hl-post-header__badge { padding: 2px 10px; border: 1px solid color-mix(in srgb, var(--acc) 30%, transparent); background: color-mix(in srgb, var(--acc) 9%, transparent); border-radius: 3px; color: var(--acc); }
@@ -151,42 +171,42 @@ body:has(.hl-report-page) .hl-sponsor-rail { display: none !important; }
 @media (max-width: 900px) {
   html:has(.hl-report-page) :is(.hl-detect-panel.hl-detect-panel--open, .hl-ioc-panel.hl-ioc-panel--open, .hl-stix-panel.hl-stix-panel--open) { display: block !important; }
 }
-.hl-rv-resource { position: fixed; left: 16px !important; top: 100px !important; max-width: calc(100vw - 32px); transform: none !important; background: var(--rv-card); border: 1px solid var(--rv-line); border-radius: var(--rv-radius); box-shadow: none; }
+.hl-rv-resource { position: fixed; z-index: 500; left: 16px !important; top: 100px !important; max-width: calc(100vw - 32px); transform: none !important; background: var(--rv-card); border: 1px solid var(--rv-line); border-radius: var(--rv-radius); box-shadow: none; }
 .hl-rv-resource :is(a, button) { display: inline-flex; align-items: center; min-height: 44px; min-width: 44px; }
 
-/* ---------- Sponsors (v6.1): two different things, drawn as two different things ----------
-   SITE sponsor (a Monthly tier sponsor, whole site): a gold featured panel at the very top of the column, above the header, labelled
-   "Featured sponsor of The Hunter's Ledger" (T-0500.1.8; the site's .hl-panel--featured recipe). It is outside every report panel and never says it sponsors this report.
-   REPORT sponsor (the page's sponsored_by): attached to the report header panel as its foot, "This report is sponsored by".
-   It alone is the sponsor in the reading-line mark and in the tab-foot card; with no report sponsor the card is the same gold panel
-   as the band and the mark reads "Site sponsor" in gold. Gold means the site's sponsor; the tab accent means this report's sponsor. */
-.hl-rv-siteband { position: relative; box-sizing: border-box; margin: 0 0 24px; padding: 0; }
+/* ---------- Sponsors (v6.1, reworked by Joseph's decision of 2026-10-30) ----------
+   REPORT sponsor (the page's sponsored_by, one report or a bundle): the gold featured panel at the very top of the column, above the header, labelled
+   "This report is sponsored by" (T-0500.1.8; the site's .hl-panel--featured recipe), and again as the attached foot of the header panel. A report with no
+   sponsor has no panel. SITE sponsors (Monthly tier) are the site's Sponsors rail (fixed in the left gutter from 1600px, the site strip below that) and
+   the card at each tab foot, which is the same gold panel when there is no report sponsor. There is no sponsor mark on the reading line.
+   Gold is the featured-panel recipe; the tab accent marks the report sponsor's attached panel and card. */
+.hl-rv-reportband { position: relative; box-sizing: border-box; margin: 0 0 24px; padding: 0; }
 /* the featured panel: band and tab-foot card share it (site .hl-panel--featured: 135deg dark gradient, gold glow, 1px border, 4px gold bar, 6px radius) */
-.hl-rv-siteband__in, .hl-rv-sponsor-card.is-site {
+.hl-rv-reportband__in, .hl-rv-sponsor-card.is-site {
   position: relative; overflow: hidden; display: flex; flex-wrap: wrap; align-items: center; gap: 10px 28px; padding: 18px 24px 18px 20px;
   background: linear-gradient(135deg, #1c1c1c, #0d1117); border: 1px solid var(--rv-line); border-left: 4px solid var(--rv-gold-bar); border-radius: 6px;
 }
-.hl-rv-siteband__in::before, .hl-rv-sponsor-card.is-site::before { content: ''; position: absolute; inset: 0; pointer-events: none; background: radial-gradient(120% 150% at 0% 0%, var(--rv-gold-bar), transparent 56%); opacity: 0.16; }
-.hl-rv-siteband__in > *, .hl-rv-sponsor-card.is-site > * { position: relative; }
-.hl-rv-siteband .hl-rv-siteband__label, .hl-rv-sponsor-card.is-site .hl-rv-sponsor-card__label { color: var(--rv-gold) !important; font-weight: 700; }
+.hl-rv-reportband__in::before, .hl-rv-sponsor-card.is-site::before { content: ''; position: absolute; inset: 0; pointer-events: none; background: radial-gradient(120% 150% at 0% 0%, var(--rv-gold-bar), transparent 56%); opacity: 0.16; }
+.hl-rv-reportband__in > *, .hl-rv-sponsor-card.is-site > * { position: relative; }
+.hl-rv-reportband .hl-rv-reportband__label, .hl-rv-sponsor-card.is-site .hl-rv-sponsor-card__label { color: var(--rv-gold) !important; font-weight: 700; }
 /* the real Visit call to action: a gold outline button at the right of the panel */
 .hl-rvsp__cta, .hl-rv-sponsor-card__cta { margin-left: auto; flex: none; font-size: var(--rv-fs); font-weight: 600; line-height: 1.4; color: var(--rv-gold); border: 1px solid var(--rv-gold-bar); border-radius: 6px; padding: 7px 13px; white-space: nowrap; }
 a.hl-rvsp__item:hover .hl-rvsp__cta, a.hl-rv-sponsor-card__item:hover .hl-rv-sponsor-card__cta { background: color-mix(in srgb, var(--rv-gold-bar) 18%, transparent); }
-.hl-rvsp__label, .hl-rv-sponsor-card__label, .hl-rv-sponsor-mark__label { flex: none; white-space: nowrap; color: var(--rv-muted) !important; }
+.hl-rvsp__label, .hl-rv-sponsor-card__label { flex: none; white-space: nowrap; color: var(--rv-muted) !important; }
 .hl-rvsp__items { flex: 1 1 auto; display: flex; flex-wrap: wrap; align-items: center; gap: 8px 24px; min-width: 0; }
 .hl-rvsp__item { display: flex; align-items: center; gap: 16px; min-width: 0; color: inherit; text-decoration: none !important; border-radius: var(--rv-radius); }
 .hl-rvsp__logo { display: block; flex: none; width: auto; object-fit: contain; }
-.hl-rv-siteband .hl-rvsp__logo { height: 38px; max-width: 220px; }
+.hl-rv-reportband .hl-rvsp__logo { height: 38px; max-width: 220px; }
 .hl-rvsp__text { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
 .hl-rvsp__name { font-size: var(--rv-fs); font-weight: 600; color: var(--rv-text); white-space: nowrap; }
 .hl-rvsp__item:has(.hl-rvsp__logo) .hl-rvsp__name { display: none; }
 .hl-rvsp__tagline { font-size: var(--rv-fs); color: var(--rv-muted); display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; line-clamp: 2; overflow: hidden; max-width: 60ch; }
 .hl-rvsp__zone--many .hl-rvsp__item:has(.hl-rvsp__logo) .hl-rvsp__text, .hl-rvsp__zone--many .hl-rvsp__cta { display: none; }
-.hl-rv-siteband .hl-rvsp__item { flex: 1 1 auto; gap: 20px; }
-.hl-rv-siteband .hl-rvsp__tagline { color: var(--rv-text); }
-.hl-rv-siteband .hl-rvsp__zone--many .hl-rvsp__item { flex: none; }
+.hl-rv-reportband .hl-rvsp__item { flex: 1 1 auto; gap: 20px; }
+.hl-rv-reportband .hl-rvsp__tagline { color: var(--rv-text); }
+.hl-rv-reportband .hl-rvsp__zone--many .hl-rvsp__item { flex: none; }
 .hl-rvsp a.hl-rvsp__item:hover .hl-rvsp__tagline { color: var(--rv-text); }
-.hl-rv-siteband a.hl-rvsp__item { min-height: 44px; }
+.hl-rv-reportband a.hl-rvsp__item { min-height: 44px; }
 /* the report sponsor: the foot of the header panel, the most prominent sponsor element on the page */
 .hl-report-page .hl-rvsp--report {
   display: flex; flex-wrap: wrap; align-items: center; gap: 12px 28px; padding: 18px 24px 18px 20px; margin: 0 0 24px;
@@ -197,15 +217,9 @@ a.hl-rvsp__item:hover .hl-rvsp__cta, a.hl-rv-sponsor-card__item:hover .hl-rv-spo
 .hl-rvsp--report .hl-rvsp__name { font-size: 22px; }
 .hl-rvsp--report .hl-rvsp__tagline { color: var(--rv-text); max-width: 56ch; }
 /* theme gives every img padding and a border: logos get neither */
-.hl-report-page img.hl-rvsp__logo, .hl-rv-siteband img.hl-rvsp__logo, .hl-rv-sponsor-mark img, .hl-rv-sponsor-card__item img { padding: 0 !important; border: 0 !important; background: none !important; border-radius: 0 !important; box-shadow: none !important; margin: 0 !important; max-width: none; }
-.hl-rv-siteband img.hl-rvsp__logo { max-width: 220px !important; }
+.hl-report-page img.hl-rvsp__logo, .hl-rv-reportband img.hl-rvsp__logo, .hl-rv-sponsor-card__item img { padding: 0 !important; border: 0 !important; background: none !important; border-radius: 0 !important; box-shadow: none !important; margin: 0 !important; max-width: none; }
+.hl-rv-reportband img.hl-rvsp__logo { max-width: 220px !important; }
 .hl-rvsp--report img.hl-rvsp__logo { max-width: 280px !important; }
-/* the mark on the reading line (built by the script) */
-.hl-rv-sponsor-mark { order: 7; display: inline-flex; align-items: center; gap: 10px; min-height: 44px; padding-left: 12px; margin-left: 4px; border-left: 1px solid var(--rv-line); color: var(--rv-muted); text-decoration: none; white-space: nowrap; }
-.hl-rv-sponsor-mark img { height: 24px; width: auto; display: block; }
-.hl-rv-sponsor-mark.is-report img { height: 28px; }
-.hl-rv-sponsor-mark__name { font-size: var(--rv-fs); font-weight: 600; color: var(--rv-text); }
-.hl-rv-sponsor-mark.is-site .hl-rv-sponsor-mark__label { color: var(--rv-gold) !important; }
 /* the panel at each tab foot */
 .hl-rv-sponsor-card { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 32px; margin: 0 0 24px; padding: 18px var(--rv-pad); background: var(--rv-card); border: 1px solid var(--rv-line); border-radius: var(--rv-radius); }
 .hl-rv-sponsor-card.is-report { background: var(--rv-row); border-left: 4px solid var(--acc); padding-left: calc(var(--rv-pad) - 3px); }
@@ -643,7 +657,6 @@ html:has(.hl-report-page) .hl-toast__label { font-size: var(--rv-fs); }
   .hl-rv-tile-note__key { display: inline; font-weight: 600; color: var(--rv-text); }
   .hl-rv-tile-note__key::after { content: ': '; }
 }
-@media (max-width: 767px) { .hl-rv-sponsor-mark__label { display: none; } }
 @media (max-width: 699px) {
   html:has(.hl-report-page) { --rv-pad: 16px; --rv-fs: 15px; --rv-fs-mono: 14px; }
   html:has(.hl-report-page) main.content { padding-inline: 16px !important; }
@@ -658,16 +671,12 @@ html:has(.hl-report-page) .hl-toast__label { font-size: var(--rv-fs); }
   .hl-report-page .hl-quicklinks { gap: 6px; }
   .hl-report-page .hl-quicklinks .hl-quicklink, .hl-report-page .hl-quicklinks .hl-cta { padding: 0 8px; gap: 6px; }
   .hl-report-page .hl-quicklinks .hl-quicklink__label { font-size: var(--rv-fs); }
-  .hl-rv-sponsor-mark { padding-left: 8px; margin-left: 0; gap: 0; }
-  .hl-rv-sponsor-mark__label { display: none; }
-  .hl-rv-sponsor-mark img, .hl-rv-sponsor-mark.is-report img { height: 20px; }
   .hl-report-page .hl-post-content .hl-rv-source > h2, .hl-rv-source.hl-rv-nohead::before { padding-left: calc(var(--rv-pad) - 3px) !important; }
   .hl-report-page .hl-post-content .hl-rv-source > h2 { font-size: 18px !important; }
   .hl-report-page .hl-post-content .hl-rv-source h3 { margin-top: 28px !important; padding-top: 20px !important; }
   .hl-rv-view-summary p { flex: 1 1 100%; order: 3; }
   .hl-report-page .hl-rvsp--report { padding: 14px 16px 14px 13px; margin-bottom: 24px; }
   .hl-rvsp--report .hl-rvsp__logo { height: 36px; max-width: 220px; }
-  .hl-rv-sponsor-mark__label { display: none; }
   .hl-rv-tiles { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
   .hl-report-page .hl-rv-tile { padding: 12px; }
   .hl-report-page .hl-rv-value, .hl-rv-status-tile > strong { font-size: 28px; }
@@ -687,10 +696,10 @@ html:has(.hl-report-page) .hl-toast__label { font-size: var(--rv-fs); }
 }
 /* the featured site-sponsor panel on a phone: the label takes its own row, the tagline stays, and Visit is a full-width button under the content */
 @media (max-width: 640px) {
-  .hl-rv-siteband__in, .hl-rv-sponsor-card.is-site { padding: 14px 16px 14px 14px; gap: 10px 16px; }
-  .hl-rv-siteband .hl-rv-siteband__label, .hl-rv-sponsor-card.is-site .hl-rv-sponsor-card__label { white-space: normal; flex: 1 1 100%; min-width: 0; }
-  .hl-rv-siteband .hl-rvsp__item, .hl-rv-sponsor-card.is-site .hl-rv-sponsor-card__item { flex-wrap: wrap; gap: 10px 16px; }
-  .hl-rv-siteband .hl-rvsp__logo, .hl-rv-sponsor-card.is-site .hl-rv-sponsor-card__item img { height: 30px; }
+  .hl-rv-reportband__in, .hl-rv-sponsor-card.is-site { padding: 14px 16px 14px 14px; gap: 10px 16px; }
+  .hl-rv-reportband .hl-rv-reportband__label, .hl-rv-sponsor-card.is-site .hl-rv-sponsor-card__label { white-space: normal; flex: 1 1 100%; min-width: 0; }
+  .hl-rv-reportband .hl-rvsp__item, .hl-rv-sponsor-card.is-site .hl-rv-sponsor-card__item { flex-wrap: wrap; gap: 10px 16px; }
+  .hl-rv-reportband .hl-rvsp__logo, .hl-rv-sponsor-card.is-site .hl-rv-sponsor-card__item img { height: 30px; }
   .hl-rvsp__cta, .hl-rv-sponsor-card__cta { margin-left: 0; width: 100%; text-align: center; box-sizing: border-box; }
 }
 @media (max-width: 699px) {
