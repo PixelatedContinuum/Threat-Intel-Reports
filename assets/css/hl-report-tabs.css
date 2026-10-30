@@ -249,7 +249,7 @@ a.hl-rvsp__item:hover .hl-rvsp__cta, a.hl-rv-sponsor-card__item:hover .hl-rv-spo
   scroll-margin-top: var(--hl-rv-nav-h, 0px);
 }
 .hl-rv-tabs {
-  display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 1px; margin: 0 0 24px; background: var(--rv-line); border: 1px solid var(--rv-line); border-radius: var(--rv-radius);
+  display: grid; grid-auto-flow: column; grid-auto-columns: minmax(0, 1fr); gap: 1px; margin: 0 0 24px; background: var(--rv-line); border: 1px solid var(--rv-line); border-radius: var(--rv-radius);
   overflow-x: auto; overflow-y: hidden; scrollbar-width: none;
 }
 .hl-rv-tabs::-webkit-scrollbar { display: none; }

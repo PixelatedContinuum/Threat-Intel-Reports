@@ -70,7 +70,7 @@ test('CSS: the band is no longer glued to the nav by a negative margin', () => {
 });
 test('the cache-busters moved with the stylesheet and the script, on the tabbed branch only', () => {
   const v = [...layout.matchAll(/hl-report-tabs\.(css|js)' \| relative_url \}\}\?v=([0-9.]+)/g)].map(x => x[2]);
-  assert.equal(v.length, 2); assert.deepEqual(v, ['20261030.5', '20261030.6']); // the script moved again with the sparse-report tabs (T-0500.1.9 sitefix2); the stylesheet did not
+  assert.equal(v.length, 2); assert.deepEqual(v, ['20261030.6', '20261030.6']); // both moved in T-0500.1.9 sitefix2: the script builds only the tabs that hold a section, the tab row sizes itself to them
 });
 
 function item(kind, name, tagline, logo, href) {
