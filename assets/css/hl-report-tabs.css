@@ -102,11 +102,11 @@ body:has(.hl-report-page) .hl-sponsor-rail { display: none !important; }
   display: grid; grid-template-columns: minmax(0, 1fr); gap: 0 24px; align-items: end;
   background: linear-gradient(135deg, color-mix(in srgb, var(--acc) 11%, #0d1117) 0%, #0d1117 60%, #111111 100%);
   border: 1px solid var(--rv-line); border-left: 4px solid var(--acc); border-radius: 6px;
-  padding: 22px 24px 24px 20px; margin: 0 0 24px;
+  padding: 22px 24px 24px 20px; margin: 0 0 24px; position: relative;
 }
 /* a report sponsor is attached to this panel: one box, the sponsor as its foot */
 .hl-report-page .hl-post-header:has(+ .hl-rvsp--report) { margin-bottom: 0; border-bottom: 0; border-bottom-left-radius: 0; border-bottom-right-radius: 0; }
-.hl-report-page .hl-post-header__eyebrow { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 18px; margin: 0 0 12px; grid-column: 1 / -1; }
+.hl-report-page .hl-post-header__eyebrow { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 18px; margin: 0 0 12px; padding-right: 52px; grid-column: 1 / -1; }
 .hl-report-page .hl-post-header__eyebrow > span { display: inline-flex; align-items: center; gap: 8px; }
 .hl-report-page .hl-post-header__eyebrow > .hl-post-header__sep, .hl-report-page .hl-post-header__sep { display: none !important; }
 .hl-report-page .hl-read-time::before { content: none !important; }
@@ -119,7 +119,14 @@ body:has(.hl-report-page) .hl-sponsor-rail { display: none !important; }
 .hl-report-page .hl-post-header__date, .hl-report-page .hl-read-time { color: var(--rv-muted); }
 .hl-report-page .hl-rv-threat { color: var(--rv-bad); border: 0; background: none; padding: 0; border-radius: 0; }
 .hl-report-page .hl-rv-threat::before { content: ''; width: 7px; height: 7px; border-radius: 50%; background: currentColor; }
-.hl-report-page .hl-rv-share-status { font-family: var(--rv-mono); font-size: var(--rv-fs-mono); color: var(--rv-muted); }
+/* the share icon: top-right corner of the header box, 44px, built by the script (absent with scripts off). The eyebrow keeps 52px clear of it. */
+.hl-report-page .hl-rv-share { position: absolute; top: 8px; right: 8px; z-index: 2; }
+.hl-report-page .hl-rv-share-btn { display: inline-flex; align-items: center; justify-content: center; width: 44px; height: 44px; padding: 0; color: var(--rv-muted); background: color-mix(in srgb, var(--acc) 7%, transparent); border-color: color-mix(in srgb, var(--acc) 42%, var(--rv-line)); }
+.hl-report-page .hl-rv-share-btn:hover { color: var(--acc); border-color: var(--acc); }
+.hl-report-page .hl-rv-share-btn svg { width: 20px; height: 20px; flex: none; }
+/* "Link copied": always in the page (so the live region announces), drawn only while it has text */
+.hl-report-page .hl-rv-share-status { position: absolute; top: 50%; right: 52px; transform: translateY(-50%); margin: 0; font-family: var(--rv-mono); font-size: var(--rv-fs-mono); letter-spacing: 0.04em; color: var(--rv-text); white-space: nowrap; }
+.hl-report-page .hl-rv-share-status:not(:empty) { padding: 6px 12px; background: var(--rv-row); border: 1px solid var(--acc); border-radius: var(--rv-radius); }
 .hl-report-page .hl-rv-share-url { font-size: var(--rv-fs); color: var(--rv-muted); overflow-wrap: anywhere; }
 .hl-report-page .hl-post-header__title {
   font-family: var(--rv-display); font-size: 32px !important; font-weight: 700; line-height: 1.25; letter-spacing: -0.01em; margin: 0 !important; color: var(--rv-text) !important;
@@ -140,11 +147,6 @@ body:has(.hl-report-page) .hl-sponsor-rail { display: none !important; }
 .hl-report-page .hl-quicklink__icon { width: 18px; height: 18px; display: inline-flex; align-items: center; justify-content: center; color: currentColor; }
 .hl-report-page .hl-quicklink__icon svg { width: 18px; height: 18px; stroke: currentColor; }
 .hl-report-page .hl-quicklinks .hl-quicklink__label { opacity: 1; padding: 0; font-family: var(--rv-display); font-size: var(--rv-fs); font-weight: 600; letter-spacing: 0.01em; text-transform: none; }
-/* Share is neutral: it is an action, not a resource */
-.hl-report-page .hl-quicklinks .hl-share-btn, .hl-report-page .hl-quicklinks .hl-share-btn:hover { color: var(--rv-text) !important; border-color: var(--rv-line); }
-.hl-report-page .hl-quicklinks .hl-share-btn:hover { border-color: var(--rv-muted); background: transparent !important; }
-.hl-report-page .hl-quicklinks .hl-share-btn .hl-quicklink__icon { color: var(--rv-muted); }
-.hl-report-page .hl-quicklinks .hl-share-btn { margin: 0; }
 /* the resource popovers the site script opens (Detections, IOC feed, STIX) sit at the page edge on every width */
 @media (max-width: 900px) {
   html:has(.hl-report-page) :is(.hl-detect-panel.hl-detect-panel--open, .hl-ioc-panel.hl-ioc-panel--open, .hl-stix-panel.hl-stix-panel--open) { display: block !important; }
@@ -535,21 +537,34 @@ a.hl-rvsp__item:hover .hl-rvsp__cta, a.hl-rv-sponsor-card__item:hover .hl-rv-spo
 .hl-rv-procedures .hl-rv-table-tools { margin: 0; }
 
 /* timeline: swim lanes, status dots */
-.hl-rv-timeline { min-width: 0; }
-.hl-rv-timeline-legend { display: flex; flex-wrap: wrap; gap: 4px 20px; margin: 0 0 12px; font-size: var(--rv-fs); color: var(--rv-muted); }
-.hl-rv-timeline-legend .hl-rv-symbol { color: var(--rv-muted); }
+/* The marks (Joseph, 2026-10-30: "a pretty good amount larger"): drawn shapes, 34px on a desktop and 30px on a phone, with the event number at 18px beneath.
+   --mark is the one place a status colour is chosen: the dots, the vertical list and the legend swatches all read it, so they cannot drift apart. */
+.hl-rv-timeline { min-width: 0; --rv-dot: 34px; --rv-num: 18px; --rv-mark-h: 64px; --rv-swatch: 18px; }
+.hl-rv-given { --mark: var(--rv-ok); }
+.hl-rv-year-inferred, .hl-rv-range { --mark: var(--rv-warn); }
+.hl-rv-disputed { --mark: var(--rv-bad); }
+.hl-rv-timeline-legend { display: flex; flex-wrap: wrap; gap: 6px 20px; margin: 0 0 12px; font-size: var(--rv-fs); color: var(--rv-muted); }
 .hl-rv-timeline-legend > span { display: inline-flex; align-items: center; gap: 8px; }
+.hl-rv-lane-swatch { width: 18px; height: 3px; border-radius: 2px; background: var(--rv-muted); }
+.hl-rv-timeline-legend .hl-rv-symbol { width: var(--rv-swatch); height: var(--rv-swatch); }
+.hl-rv-timeline-legend .hl-rv-range .hl-rv-symbol, .hl-rv-timeline-legend .hl-rv-symbol { flex: none; }
+.hl-rv-timeline-legend .hl-rv-range .hl-rv-symbol { width: calc(var(--rv-swatch) * 1.8); }
 .hl-rv-swimlanes { padding: 0; }
 .hl-rv-lane { padding: 12px 0; border-top: 1px solid var(--rv-line); }
 .hl-report-page .hl-rv-lane h3 { margin: 0 0 8px !important; font-size: var(--rv-fs) !important; font-weight: 600 !important; color: var(--rv-muted) !important; }
-.hl-rv-rail { position: relative; height: 52px; margin-inline: 22px; border-top: 1px solid var(--rv-line); }
-.hl-report-page .hl-rv-marker { position: absolute; top: 0; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 2px; width: 44px; height: 44px; min-width: 44px; min-height: 44px; font-size: var(--rv-fs); border: 0; background: transparent; line-height: 1.1; }
+.hl-rv-rail { position: relative; height: var(--rv-mark-h); margin-inline: 22px; border-top: 1px solid var(--rv-line); }
+.hl-report-page .hl-rv-marker { position: absolute; top: 0; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; justify-content: flex-start; gap: 4px; padding: 2px; width: 44px; height: var(--rv-mark-h); min-width: 44px; min-height: 44px; font-size: var(--rv-num); border: 0; background: transparent; line-height: 1.2; }
 .hl-report-page .hl-rv-marker:hover { border: 0; }
-.hl-rv-symbol { font-size: 16px; color: var(--rv-ok); }
-.hl-rv-marker > span:last-child { font-size: var(--rv-fs); color: var(--rv-muted); font-variant-numeric: tabular-nums; }
-.hl-rv-year-inferred .hl-rv-symbol, .hl-rv-range .hl-rv-symbol { color: var(--rv-warn); }
-.hl-rv-disputed .hl-rv-symbol { color: var(--rv-bad); }
+/* the shape of a mark says what kind of date it is; its colour says the same thing as the legend: given = circle, inferred year = diamond, range = bar, disputed = dotted ring */
+.hl-rv-symbol { display: block; flex: none; box-sizing: border-box; width: var(--rv-dot); height: var(--rv-dot); border-radius: 50%; background: var(--mark, var(--rv-ok)); font-size: 0; line-height: 0; }
+.hl-rv-year-inferred > .hl-rv-symbol, .hl-rv-year-inferred .hl-rv-symbol { border-radius: 0; clip-path: polygon(50% 0, 100% 50%, 50% 100%, 0 50%); }
+.hl-rv-marker.hl-rv-range > .hl-rv-symbol { width: 100%; min-width: var(--rv-dot); border-radius: calc(var(--rv-dot) / 2); }
+.hl-rv-range .hl-rv-symbol { border-radius: 999px; }
+.hl-rv-vertical-marker.hl-rv-range > .hl-rv-symbol { border-radius: 6px; }
+.hl-rv-disputed .hl-rv-symbol { background: transparent; border: 5px dotted var(--mark); }
+.hl-rv-marker > span:last-child { font-size: var(--rv-num); font-weight: 600; color: var(--rv-muted); font-variant-numeric: tabular-nums; }
 .hl-rv-event-active > span:last-child { color: var(--rv-text); }
+.hl-rv-event-active > .hl-rv-symbol { outline: 2px solid var(--rv-text); outline-offset: 3px; }
 .hl-rv-axis { height: 40px; position: relative; margin-inline: 22px; border-top: 1px solid var(--rv-line); }
 .hl-rv-axis span { position: absolute; top: 8px; transform: translateX(-50%); width: max-content; max-width: 160px; font-size: var(--rv-fs); color: var(--rv-muted); text-align: center; white-space: nowrap; }
 .hl-rv-event { margin: 12px 0 0; padding: 12px 16px; background: var(--rv-bg); border: 1px solid var(--rv-line); border-radius: var(--rv-radius); font-size: var(--rv-fs); line-height: 1.5; color: var(--rv-text) !important; }
@@ -678,12 +693,19 @@ html:has(.hl-report-page) .hl-toast__label { font-size: var(--rv-fs); }
   .hl-rv-siteband .hl-rvsp__logo, .hl-rv-sponsor-card.is-site .hl-rv-sponsor-card__item img { height: 30px; }
   .hl-rvsp__cta, .hl-rv-sponsor-card__cta { margin-left: 0; width: 100%; text-align: center; box-sizing: border-box; }
 }
+@media (max-width: 699px) {
+  .hl-rv-timeline { --rv-dot: 30px; --rv-mark-h: 60px; --rv-swatch: 16px; }
+  .hl-report-page .hl-rv-share-status { top: 52px; right: 0; transform: none; }
+}
 @media (max-width: 479px) {
   .hl-rv-swimlanes { display: none; }
   .hl-report-page .hl-rv-vertical-timeline { display: grid; list-style: none; margin: 0; padding: 0; gap: 0; }
   .hl-rv-vertical-timeline li { display: grid; grid-template-columns: 6.5rem minmax(0, 1fr); gap: 12px; padding: 10px 0; border-top: 1px solid var(--rv-line); }
   .hl-rv-date { font-size: var(--rv-fs); color: var(--rv-muted); overflow-wrap: anywhere; }
-  .hl-report-page .hl-rv-vertical-marker { display: grid; gap: 4px; width: 100%; padding: 0; text-align: left; border: 0; background: none; font-size: var(--rv-fs); }
+  .hl-report-page .hl-rv-vertical-marker { display: grid; grid-template-columns: var(--rv-dot) minmax(0, 1fr); column-gap: 12px; align-items: start; gap: 4px 12px; width: 100%; padding: 0; text-align: left; border: 0; background: none; font-size: var(--rv-fs); }
+  .hl-rv-vertical-marker > .hl-rv-symbol { grid-row: 1 / span 2; }
+  .hl-rv-vertical-marker > small { grid-column: 2; }
+  .hl-rv-vnum { font-size: var(--rv-num); font-weight: 600; color: var(--rv-text); font-variant-numeric: tabular-nums; }
   .hl-rv-vertical-marker small { font-size: var(--rv-fs); color: var(--rv-muted); }
 }
 @media (prefers-reduced-motion: reduce) {

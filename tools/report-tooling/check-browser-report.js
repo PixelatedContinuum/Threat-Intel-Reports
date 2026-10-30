@@ -1076,6 +1076,219 @@ async function featuredSponsorRows(page, url) {
   }
 }
 
+/* T-0500.1.7.1: the share icon in the header box's top-right corner (Joseph, 2026-10-30). Geometry at three widths: present, labelled, a 44 px
+   target inside the header box and in its corner, overlapping neither the eyebrow line, the title nor the resource buttons, keyboard-focusable with
+   a visible focus ring, with an aria-live region beside it. Behaviour at one width: with no share sheet a click writes the page address to the
+   clipboard and says "Link copied" in view; with a share sheet it calls it with the page address and does not touch the clipboard. */
+var SHARE_VIEWPORTS = [[1280, 900], [768, 1024], [390, 844]];
+var SHARE_EXPR = '(function(){var h=document.querySelector(".hl-report-page .hl-post-header"),b=document.querySelector(".hl-rv-share-btn");' +
+  'function R(e){var r=e.getBoundingClientRect();return {l:r.left,t:r.top,r:r.right,b:r.bottom,w:r.width,h:r.height};}' +
+  'function vis(e){var r=e.getBoundingClientRect();return r.width>0&&r.height>0&&getComputedStyle(e).visibility!=="hidden";}' +
+  'if(!h)return {header:false};var out={header:true,hdr:R(h),present:!!b,shareStillThere:!!document.querySelector(".hl-share-btn")};if(!b)return out;' +
+  'out.btn=R(b);out.label=b.getAttribute("aria-label");out.tag=b.tagName;out.type=b.type;out.disabled=b.disabled;out.tabIndex=b.tabIndex;out.inHeader=h.contains(b);' +
+  'var others=[].slice.call(h.querySelectorAll(".hl-post-header__eyebrow > *,.hl-post-header__title,.hl-quicklinks .hl-quicklink,.hl-quicklinks .hl-cta")).filter(vis);' +
+  'out.checked=others.length;out.overlaps=others.filter(function(e){var o=R(e);return o.l<out.btn.r-0.5&&o.r>out.btn.l+0.5&&o.t<out.btn.b-0.5&&o.b>out.btn.t+0.5;}).map(function(e){return (e.className||e.tagName).toString().split(" ")[0];});' +
+  'var live=document.querySelector(".hl-rv-share [role=status][aria-live]");out.live=!!live;out.liveText=live?live.textContent:null;' +
+  'b.focus();var cs=getComputedStyle(b);out.focused=document.activeElement===b;out.outlineStyle=cs.outlineStyle;out.outlineWidth=parseFloat(cs.outlineWidth);out.focusVisible=b.matches(":focus-visible");b.blur();' +
+  'return out;})()';
+function shareGeometryVerdict(m) {
+  if (!m || !m.header) return { notChecked: true, ok: false, detail: 'no report header was found, so nothing was measured' };
+  var why = [];
+  if (m.shareStillThere) why.push('the old Share button is still in the resource row');
+  if (!m.present) { why.push('there is no share icon button in the header'); return { notChecked: false, ok: false, why: why, detail: why.join('; ') }; }
+  if (m.label !== 'Share this report') why.push('aria-label is ' + JSON.stringify(m.label) + ', not "Share this report"');
+  if (m.tag !== 'BUTTON' || m.type !== 'button') why.push('it is a ' + m.tag + ' (type ' + m.type + '), not a type=button button');
+  if (m.btn.w < 44 - 0.5 || m.btn.h < 44 - 0.5) why.push('the target is ' + m.btn.w.toFixed(1) + 'x' + m.btn.h.toFixed(1) + ' px, under 44');
+  if (!m.inHeader || m.btn.l < m.hdr.l || m.btn.r > m.hdr.r + 0.5 || m.btn.t < m.hdr.t || m.btn.b > m.hdr.b) why.push('it is not inside the header box');
+  var fromRight = m.hdr.r - m.btn.r, fromTop = m.btn.t - m.hdr.t;
+  if (fromRight > 16 || fromTop > 16) why.push('it is not in the top-right corner (' + fromRight.toFixed(1) + ' px from the right edge, ' + fromTop.toFixed(1) + ' px from the top)');
+  if (m.overlaps.length) why.push('it overlaps ' + m.overlaps.join(', '));
+  if (m.disabled || m.tabIndex < 0 || !m.focused) why.push('it cannot take keyboard focus (tabIndex ' + m.tabIndex + ', focused ' + m.focused + ')');
+  else if (m.outlineStyle === 'none' || !(m.outlineWidth >= 2) || !m.focusVisible) why.push('no visible focus ring (outline ' + m.outlineStyle + ' ' + m.outlineWidth + 'px, :focus-visible ' + m.focusVisible + ')');
+  if (!m.live) why.push('no aria-live status region beside it');
+  return { notChecked: false, ok: why.length === 0, why: why, detail: 'icon ' + m.btn.w.toFixed(0) + 'x' + m.btn.h.toFixed(0) + ' px, ' + fromRight.toFixed(1) + ' px from the right and ' + fromTop.toFixed(1) + ' px from the top of the header box, ' + m.checked + ' neighbouring element(s) checked for overlap, focus ring ' + m.outlineWidth + 'px' + (why.length ? '; ' + why.join('; ') : '') };
+}
+function shareBehaviourVerdict(m) {
+  if (!m) return { notChecked: true, ok: false, detail: 'nothing was measured' };
+  var why = [];
+  if (!m.href) why.push('the page address was not read');
+  if (m.writes.length !== 1 || m.writes[0] !== m.href) why.push('the clipboard got ' + JSON.stringify(m.writes) + ', not the page address');
+  if (m.status !== 'Link copied') why.push('the live region says ' + JSON.stringify(m.status) + ', not "Link copied"');
+  if (!m.statusVisible) why.push('"Link copied" is not drawn in view');
+  if (m.shares.length !== 1 || !m.shares[0] || m.shares[0].url !== m.href) why.push('with a share sheet present it was called with ' + JSON.stringify(m.shares) + ', not the page address');
+  if (m.writesAfterShare !== m.writes.length) why.push('with a share sheet present the clipboard was written as well');
+  return { notChecked: false, ok: why.length === 0, why: why, detail: 'no share sheet: clipboard written ' + m.writes.length + ' time(s), status ' + JSON.stringify(m.status) + (m.statusVisible ? ' in view' : ' NOT in view') + '; share sheet present: called ' + m.shares.length + ' time(s), clipboard written ' + (m.writesAfterShare - m.writes.length) + ' more time(s)' + (why.length ? '; ' + why.join('; ') : '') };
+}
+async function shareRows(page, url) {
+  var nameA = 'the share icon is a labelled 44 px button in the header box corner, clear of the eyebrow, title and buttons, with a focus ring';
+  var nameB = 'clicking the share icon copies the page address and says "Link copied", or hands it to the share sheet when there is one';
+  for (var i = 0; i < SHARE_VIEWPORTS.length; i++) {
+    var w = SHARE_VIEWPORTS[i][0], h = SHARE_VIEWPORTS[i][1];
+    await setViewport(page, w, h);
+    if (!(await gotoAndWait(page, url))) { check('NOT CHECKED: ' + w + 'x' + h + ': ' + nameA, false, 'the tab controller never built, so nothing was measured'); continue; }
+    await page.evaluate('window.scrollTo(0,0)');
+    await CDP.sleep(200);
+    var gv = shareGeometryVerdict(await page.json(SHARE_EXPR));
+    if (gv.notChecked) check('NOT CHECKED: ' + w + 'x' + h + ': ' + nameA, false, gv.detail);
+    else check(w + 'x' + h + ': ' + nameA, gv.ok, gv.detail);
+  }
+  await setViewport(page, 1280, 900);
+  if (!(await gotoAndWait(page, url))) { check('NOT CHECKED: ' + nameB, false, 'the tab controller never built, so nothing was measured'); return; }
+  await page.evaluate('window.scrollTo(0,0)');
+  var m = await page.json('(function(){var st={writes:[],shares:[]};window.__rvShare=st;' +
+    'Object.defineProperty(navigator,"share",{value:undefined,configurable:true});' +
+    'Object.defineProperty(navigator,"clipboard",{value:{writeText:function(t){st.writes.push(t);return Promise.resolve();}},configurable:true});' +
+    'var b=document.querySelector(".hl-rv-share-btn");if(!b)return null;b.click();return {started:true};})()');
+  if (!m) { check(nameB, false, 'there is no share icon button to click'); return; }
+  await CDP.sleep(400);
+  var afterCopy = await page.json('(function(){var s=document.querySelector(".hl-rv-share-status"),r=s?s.getBoundingClientRect():null;' +
+    'return {href:location.href,writes:window.__rvShare.writes.slice(),status:s?s.textContent:null,statusVisible:!!r&&r.width>0&&r.height>0&&r.top>=0&&r.bottom<=innerHeight&&r.left>=0&&r.right<=innerWidth};})()');
+  var afterShare = await page.json('(function(){var st=window.__rvShare;Object.defineProperty(navigator,"share",{value:function(d){st.shares.push({url:d.url,title:d.title});return Promise.resolve();},configurable:true});' +
+    'document.querySelector(".hl-rv-share-btn").click();return {shares:st.shares.slice(),writes:st.writes.length};})()');
+  var bv = shareBehaviourVerdict({ href: afterCopy.href, writes: afterCopy.writes, status: afterCopy.status, statusVisible: afterCopy.statusVisible, shares: afterShare.shares, writesAfterShare: afterShare.writes });
+  check(nameB, bv.ok, bv.detail);
+}
+
+/* T-0500.1.7.1: the MISP button. A tabbed report renders the same MISP quick link a normal report does (one lookup in _layouts/post.html against
+   _data/misp_events.yml, matched on the page's URL): when the lookup finds an event there is a MISP button in the header's button row, linking to
+   that event; when it finds none there is no button and nothing else in its place. The expectation is read from the data file for the page's own
+   URL, so a page whose URL has no event is checked for the absence, and the Share button is gone in both. */
+function mispEventFor(pathname) {
+  try {
+    var doc = (yaml || require('js-yaml')).load(fs.readFileSync(path.join(ROOT, '_data', 'misp_events.yml'), 'utf8'));
+    var ev = (doc && doc.events || []).filter(function (e) { return e.report_url === pathname; })[0];
+    return ev ? ev.event_url : null;
+  } catch (e) { return undefined; }
+}
+var MISP_EXPR = '(function(){function vis(e){var r=e.getBoundingClientRect();return r.width>0&&r.height>0&&getComputedStyle(e).visibility!=="hidden";}' +
+  'var h=document.querySelector(".hl-report-page .hl-post-header"),links=[].slice.call(document.querySelectorAll(".hl-quicklinks a.hl-quicklink")).filter(function(a){return /^MISP\\b/.test((a.querySelector(".hl-quicklink__label")||{}).textContent||"");});' +
+  'var a=links[0]||null,r=a?a.getBoundingClientRect():null;' +
+  'return {count:links.length,shareStillThere:!!document.querySelector(".hl-share-btn"),found:!!a,href:a?a.getAttribute("href"):null,target:a?a.target:null,rel:a?a.rel:null,' +
+  'label:a?a.getAttribute("aria-label"):null,cls:a?a.className:null,visible:a?vis(a):false,w:r?r.width:0,h:r?r.height:0,inHeader:!!(a&&h&&h.contains(a)),' +
+  'inRow:!!(a&&a.closest(".hl-quicklinks")),icon:!!(a&&a.querySelector(".hl-quicklink__icon svg"))};})()';
+function mispVerdict(m, expectedHref, pathname) {
+  if (!m) return { notChecked: true, ok: false, detail: 'nothing was measured' };
+  if (expectedHref === undefined) return { notChecked: true, ok: false, detail: '_data/misp_events.yml could not be read, so it is not known whether this page has an event' };
+  var why = [];
+  if (m.shareStillThere) why.push('the old Share button is still in the resource row');
+  if (expectedHref === null) {
+    if (m.found) why.push('a MISP button is drawn although _data/misp_events.yml has no event for ' + pathname);
+    return { notChecked: false, ok: why.length === 0, none: true, why: why, detail: 'no MISP event for ' + pathname + ' in _data/misp_events.yml: 0 buttons expected, ' + m.count + ' drawn' + (why.length ? '; ' + why.join('; ') : '') };
+  }
+  if (!m.found) why.push('the data has a MISP event for ' + pathname + ' but no MISP button is drawn');
+  else {
+    if (m.count !== 1) why.push(m.count + ' MISP buttons (1 expected)');
+    if (m.href !== expectedHref) why.push('it links to ' + m.href + ', not the event ' + expectedHref);
+    if (m.target !== '_blank' || !/noopener/.test(m.rel || '')) why.push('it does not open in a new tab with noopener (' + m.target + ', ' + m.rel + ')');
+    if (!/MISP event for this report/.test(m.label || '')) why.push('its aria-label is ' + JSON.stringify(m.label));
+    if (!/\bhl-quicklink\b/.test(m.cls || '') || !m.inRow || !m.icon) why.push('it is not the normal report markup (class ' + m.cls + ', in the quicklinks row ' + m.inRow + ', icon ' + m.icon + ')');
+    if (!m.visible) why.push('it is not visible');
+    if (!m.inHeader) why.push('it is not in the header box');
+    if (m.w < 43.5 || m.h < 43.5) why.push('it is ' + m.w.toFixed(1) + 'x' + m.h.toFixed(1) + ' px, under 44');
+  }
+  return { notChecked: false, ok: why.length === 0, why: why, detail: 'MISP event ' + expectedHref + ': ' + m.count + ' button(s), ' + m.w.toFixed(0) + 'x' + m.h.toFixed(0) + ' px' + (why.length ? '; ' + why.join('; ') : '') };
+}
+async function mispRows(page, url) {
+  var name = 'the header button row has the MISP button when the page has a MISP event, and no Share button';
+  /* the page's own URL is its canonical link (Jekyll's page.url, the thing the layout's lookup matches); a local render served at another path
+     still names the URL it stands for. With no canonical link the request path is the best available answer. */
+  var states = [[1280, 900], [390, 844]];
+  for (var i = 0; i < states.length; i++) {
+    await setViewport(page, states[i][0], states[i][1]);
+    if (!(await gotoAndWait(page, url))) { check('NOT CHECKED: ' + states[i][0] + 'x' + states[i][1] + ': ' + name, false, 'the tab controller never built, so nothing was measured'); continue; }
+    await page.evaluate('window.scrollTo(0,0)');
+    await CDP.sleep(150);
+    var canonical = await page.json('(function(){var l=document.querySelector("link[rel=canonical]");return l?l.href:null;})()');
+    var pathname = new URL(canonical || url).pathname;
+    var expected = mispEventFor(pathname);
+    var v = mispVerdict(await page.json(MISP_EXPR), expected, pathname);
+    if (v.notChecked) check('NOT CHECKED: ' + states[i][0] + 'x' + states[i][1] + ': ' + name, false, v.detail);
+    else check(states[i][0] + 'x' + states[i][1] + ': ' + name, v.ok, v.detail);
+  }
+}
+
+/* T-0500.1.7.1: the timeline marks (Joseph, 2026-10-30: "a pretty good amount larger") and their legend. At 1280 and 768 the swim-lane dots are at
+   least 32 px (30 on a phone width) and their numbers at least 18 px; at 390 the vertical list's dots are at least 24 px and its numbers 18 px.
+   No two marks overlap, no mark overlaps an axis date, and every event is present as a mark, as a dated list item and as a row of the table. The
+   legend's four swatches carry the same paint as the dots of the same kind (or, with no dot of that kind on this report, the status colour the
+   dots would take), and none is grey. */
+var TIMELINE_VIEWPORTS = [[1280, 900], [768, 1024], [390, 844]];
+var STATUS_QUALITIES = ['given', 'year-inferred', 'range', 'disputed'];
+var TIMELINE_EXPR = '(function(){function vis(e){var r=e.getBoundingClientRect();return r.width>0&&r.height>0&&getComputedStyle(e).visibility!=="hidden";}' +
+  'function R(e){var r=e.getBoundingClientRect();return {l:r.left,t:r.top,r:r.right,b:r.bottom,w:r.width,h:r.height};}' +
+  'function paint(e){var cs=getComputedStyle(e),bg=cs.backgroundColor;return /^rgba\\(0, 0, 0, 0\\)$|^transparent$/.test(bg)?cs.borderTopColor:bg;}' +
+  'var Q=' + JSON.stringify(STATUS_QUALITIES) + ';' +
+  'var sw=[].slice.call(document.querySelectorAll(".hl-rv-marker > .hl-rv-symbol")).filter(vis);' +
+  'var vsw=[].slice.call(document.querySelectorAll(".hl-rv-vertical-marker > .hl-rv-symbol")).filter(vis);' +
+  'var dots=sw.length?sw:vsw;var horizontal=sw.length>0;' +
+  'var nums=[].slice.call(document.querySelectorAll(horizontal?".hl-rv-marker > span:last-child":".hl-rv-vnum")).filter(vis).map(function(e){return parseFloat(getComputedStyle(e).fontSize);});' +
+  'var marks=[].slice.call(document.querySelectorAll(horizontal?".hl-rv-marker":".hl-rv-vertical-marker")).filter(vis).map(R);' +
+  'var axis=[].slice.call(document.querySelectorAll(".hl-rv-axis span")).filter(vis).map(R);' +
+  'var kinds={};Q.forEach(function(q){var d=dots.filter(function(e){return e.parentNode.classList.contains("hl-rv-"+q);})[0];kinds[q]=d?paint(d):null;});' +
+  'var refs={};[["given","--rv-ok"],["year-inferred","--rv-warn"],["range","--rv-warn"],["disputed","--rv-bad"]].forEach(function(p){var s=document.createElement("span");s.style.color="var("+p[1]+")";document.body.appendChild(s);refs[p[0]]=getComputedStyle(s).color;s.remove();});' +
+  'var legend=Q.map(function(q){var it=document.querySelector(".hl-rv-timeline-legend .hl-rv-legend-item.hl-rv-"+q),s=it?it.querySelector(".hl-rv-symbol"):null;return {q:q,found:!!s,visible:s?vis(s):false,paint:s?paint(s):null,w:s?s.getBoundingClientRect().width:0,h:s?s.getBoundingClientRect().height:0};});' +
+  'return {vw:innerWidth,horizontal:horizontal,dotCount:dots.length,dotMin:dots.length?Math.min.apply(null,dots.map(function(e){var r=e.getBoundingClientRect();return Math.min(r.width,r.height);})):null,' +
+  'numMin:nums.length?Math.min.apply(null,nums):null,numCount:nums.length,marks:marks,axis:axis,kinds:kinds,refs:refs,legend:legend,' +
+  'events:document.querySelectorAll(".hl-rv-vertical-timeline li").length,markerTotal:document.querySelectorAll(".hl-rv-marker").length,' +
+  'dated:[].slice.call(document.querySelectorAll(".hl-rv-vertical-timeline .hl-rv-date")).filter(function(e){return e.textContent.trim().length>0;}).length,' +
+  'tableRows:document.querySelectorAll(".hl-rv-chronology-table tbody tr").length};})()';
+function overlapPairs(rects) {
+  var hits = 0;
+  for (var i = 0; i < rects.length; i++) for (var j = i + 1; j < rects.length; j++) {
+    var a = rects[i], b = rects[j];
+    if (a.l < b.r - 1 && a.r > b.l + 1 && a.t < b.b - 1 && a.b > b.t + 1) hits++;
+  }
+  return hits;
+}
+function timelineVerdict(m) {
+  if (!m || !m.dotCount) return { notChecked: true, ok: false, detail: 'no timeline mark was visible, so no size was measured' };
+  var why = [];
+  var minDot = m.horizontal ? (m.vw >= 700 ? 32 : 28) : 24;
+  if (m.dotMin < minDot - 0.01) why.push('the smallest mark is ' + m.dotMin.toFixed(1) + ' px (at least ' + minDot + ' expected)');
+  if (m.numMin == null) why.push('no event number was measured'); else if (m.numMin < 18 - 0.01) why.push('the smallest event number is ' + m.numMin + ' px (at least 18 expected)');
+  var hits = overlapPairs(m.marks);
+  if (hits) why.push(hits + ' pair(s) of marks overlap');
+  var axisHits = 0;
+  m.marks.forEach(function (mk) { m.axis.forEach(function (ax) { if (mk.l < ax.r - 1 && mk.r > ax.l + 1 && mk.t < ax.b - 1 && mk.b > ax.t + 1) axisHits++; }); });
+  if (axisHits) why.push(axisHits + ' mark(s) overlap a date label');
+  if (!m.events || m.events !== m.tableRows) why.push(m.events + ' dated list item(s) against ' + m.tableRows + ' table row(s)');
+  if (m.markerTotal !== m.tableRows) why.push(m.markerTotal + ' swim-lane mark(s) against ' + m.tableRows + ' table row(s)');
+  if (m.dated !== m.events) why.push(m.dated + ' of ' + m.events + ' list items carry their date');
+  return { notChecked: false, ok: why.length === 0, why: why, detail: (m.horizontal ? 'swim lanes' : 'vertical list') + ': ' + m.dotCount + ' mark(s), smallest ' + m.dotMin.toFixed(1) + ' px, numbers from ' + m.numMin + ' px, ' + m.marks.length + ' box(es) and ' + m.axis.length + ' date label(s) checked for overlap, ' + m.events + ' events against ' + m.tableRows + ' table rows' + (why.length ? '; ' + why.join('; ') : '') };
+}
+function legendVerdict(m) {
+  if (!m || !m.legend) return { notChecked: true, ok: false, detail: 'nothing was measured' };
+  var why = [], compared = 0, vsToken = 0, refSet = {};
+  Object.keys(m.refs).forEach(function (k) { refSet[m.refs[k]] = true; });
+  m.legend.forEach(function (it) {
+    if (!it.found || !it.visible) { why.push('the ' + it.q + ' swatch is missing or hidden'); return; }
+    if (it.w < 14 || it.h < 14) why.push('the ' + it.q + ' swatch is ' + it.w.toFixed(0) + 'x' + it.h.toFixed(0) + ' px');
+    var dot = m.kinds[it.q];
+    if (dot) { compared++; if (it.paint !== dot) why.push('the ' + it.q + ' swatch is ' + it.paint + ' but its dots are ' + dot); }
+    else { vsToken++; if (it.paint !== m.refs[it.q]) why.push('the ' + it.q + ' swatch is ' + it.paint + ', not the status colour ' + m.refs[it.q] + ' (no ' + it.q + ' dot on this report to compare)'); }
+    if (!refSet[it.paint]) why.push('the ' + it.q + ' swatch (' + it.paint + ') is not a status colour (grey or black)');
+  });
+  return { notChecked: false, ok: why.length === 0, why: why, detail: m.legend.length + ' swatch(es): ' + compared + ' compared with a dot of the same kind, ' + vsToken + ' with the status colour (no such dot on this report)' + (why.length ? '; ' + why.join('; ') : '') };
+}
+async function timelineRows(page, url) {
+  var nameA = 'the timeline marks are large (dots 32 px, numbers 18 px; smaller on a phone), never overlap, and every event is present';
+  var nameB = 'the timeline legend swatches carry the same colours as the dots';
+  for (var i = 0; i < TIMELINE_VIEWPORTS.length; i++) {
+    var w = TIMELINE_VIEWPORTS[i][0], h = TIMELINE_VIEWPORTS[i][1];
+    await setViewport(page, w, h);
+    if (!(await gotoAndWait(page, url))) { check('NOT CHECKED: ' + w + 'x' + h + ': ' + nameA, false, 'the tab controller never built, so nothing was measured'); check('NOT CHECKED: ' + w + 'x' + h + ': ' + nameB, false, 'the tab controller never built, so nothing was measured'); continue; }
+    await page.evaluate('location.hash="#tab-timeline"');
+    await CDP.sleep(450);
+    /* on a phone the data view starts folded: open it, as a reader would, before measuring */
+    await page.evaluate('(function(){var b=document.querySelector("#tab-timeline .hl-rv-view-summary button");if(b&&b.getAttribute("aria-expanded")==="false")b.click();})()');
+    await CDP.sleep(450);
+    var m = await page.json(TIMELINE_EXPR);
+    var tv = timelineVerdict(m), lv = legendVerdict(m);
+    if (tv.notChecked) check('NOT CHECKED: ' + w + 'x' + h + ': ' + nameA, false, tv.detail); else check(w + 'x' + h + ': ' + nameA, tv.ok, tv.detail);
+    if (lv.notChecked) check('NOT CHECKED: ' + w + 'x' + h + ': ' + nameB, false, lv.detail); else check(w + 'x' + h + ': ' + nameB, lv.ok, lv.detail);
+  }
+}
+
 /* Row A, at the two sizes 4a names for the bar. */
 async function tabBarRows(page, url) {
   for (var v = 0; v < TAB_BAR_VIEWPORTS.length; v++) {
@@ -1843,6 +2056,9 @@ async function tabbedChecks(page, opts) {
   await tabLookRows(page, url);
   await panelRows(page, url);
   await featuredSponsorRows(page, url);
+  await shareRows(page, url);
+  await mispRows(page, url);
+  await timelineRows(page, url);
 
   /* ---- 4a: the bar at 768/812x375, and the targets 4a names (p7) -------- */
   await tabBarRows(page, url);
@@ -2500,6 +2716,15 @@ if (require.main === module) {
     panelStackVerdict: panelStackVerdict,
     featuredSponsorVerdict: featuredSponsorVerdict,
     FEATURED_EXPR: FEATURED_EXPR,
+    shareGeometryVerdict: shareGeometryVerdict,
+    shareBehaviourVerdict: shareBehaviourVerdict,
+    SHARE_EXPR: SHARE_EXPR,
+    mispVerdict: mispVerdict,
+    mispEventFor: mispEventFor,
+    MISP_EXPR: MISP_EXPR,
+    timelineVerdict: timelineVerdict,
+    legendVerdict: legendVerdict,
+    TIMELINE_EXPR: TIMELINE_EXPR,
     typeScaleVerdict: typeScaleVerdict,
     TYPE_SPEC: TYPE_SPEC,
     PANEL_EXPR: PANEL_EXPR,

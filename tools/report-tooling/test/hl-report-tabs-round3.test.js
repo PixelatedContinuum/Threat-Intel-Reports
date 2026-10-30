@@ -79,7 +79,8 @@ test('v6: every tab, menu entry and next/previous card carries its hue token, th
     assert.equal(f.d.querySelectorAll('.hl-rv-tile[data-rv-hue], .hl-rv-panel[data-rv-hue], .hl-rv-bar[data-rv-hue]').length,0,'the accent lives on the page, the tab, the menu entry and the card only');
     const q=[...f.d.querySelectorAll('.hl-quicklink')];assert.ok(q.every(a=>a.classList.contains('hl-cta')));
     assert.deepEqual(q.map(a=>a.style.getPropertyValue('--acc')),['#4ade80','#f87171','#22d3ee']);
-    assert.ok(f.d.querySelector('.hl-share-btn').classList.contains('hl-cta--ghost'));
+    assert.equal(f.d.querySelector('.hl-share-btn'),null,'the Share button is gone from the resource row');
+    const sb=f.d.querySelector('.hl-post-header > .hl-rv-share .hl-rv-share-btn');assert.ok(sb,'the share icon is in the header box');assert.equal(sb.getAttribute('aria-label'),'Share this report');
     for(const t of TOKENS){
       assert.match(css,new RegExp('--rv-hue-'+t+': #[0-9a-f]{6};'),'token for '+t);
       assert.match(css,new RegExp('\\[data-rv-hue="'+t+'"\\][^{]*\\{ --acc: var\\(--rv-hue-'+t+'\\); \\}'),'rule for '+t);

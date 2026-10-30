@@ -65,7 +65,7 @@ test('CSS: the band is no longer glued to the nav by a negative margin', () => {
 });
 test('the cache-busters moved with the stylesheet and the script, on the tabbed branch only', () => {
   const v = [...layout.matchAll(/hl-report-tabs\.(css|js)' \| relative_url \}\}\?v=([0-9.]+)/g)].map(x => x[2]);
-  assert.equal(v.length, 2); assert.deepEqual(v, ['20261030.3', '20261030.3']);
+  assert.equal(v.length, 2); assert.deepEqual(v, ['20261030.4', '20261030.4']);
 });
 
 function item(kind, name, tagline, logo, href) {

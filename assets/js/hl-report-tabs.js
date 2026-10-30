@@ -781,16 +781,25 @@
     var spy = new IntersectionObserver(scheduleProgress, { rootMargin: '-100px 0px -60% 0px' });
     sections.forEach(function (s) { if (s.heading) spy.observe(s.heading); });
   }
-  if (eyebrow) {
-    var shareStatus = make('span', 'hl-rv-share-status', '', eyebrow); shareStatus.setAttribute('role', 'status');
-    var shareButton = button('Share', eyebrow, function () {
+  // Share: a 44px icon button in the top-right corner of the header box (Joseph, 2026-10-30). It calls the browser's own share
+  // sheet where there is one and otherwise copies the page address, saying "Link copied" in an aria-live region. No request is
+  // made and nothing is tracked. It is built here, so with scripts off it is simply absent.
+  if (reportHeader) {
+    var share = make('div', 'hl-rv-share', null, reportHeader); share.setAttribute('data-rv-chrome', '');
+    var shareStatus = make('span', 'hl-rv-share-status', '', share); shareStatus.setAttribute('role', 'status'); shareStatus.setAttribute('aria-live', 'polite');
+    var shareButton = button('', share, function () {
       if (navigator.share) { navigator.share({ title: document.title, url: location.href }).catch(function () {}); return; }
-      var address = make('span', 'hl-rv-share-url', location.href, eyebrow);
-      if (navigator.clipboard) navigator.clipboard.writeText(location.href).then(function () { shareStatus.textContent = 'Link copied.'; address.remove(); }, function () { copy(address, shareStatus, 'Link copied.'); });
+      var address = make('span', 'hl-rv-share-url', location.href, reportHeader);
+      if (navigator.clipboard) navigator.clipboard.writeText(location.href).then(function () { address.remove(); announceShare('Link copied'); }, function () { copy(address, shareStatus, 'Link copied.'); });
       else copy(address, shareStatus, 'Link copied.');
     });
-    if (resources) resources.appendChild(shareButton);
-    shareButton.className = 'hl-share-btn hl-cta hl-cta--ghost'; shareButton.style.setProperty('--acc', '#58a6ff'); shareButton.setAttribute('aria-label', 'Share this report');
+    shareButton.className = 'hl-rv-share-btn'; shareButton.setAttribute('aria-label', 'Share this report'); shareButton.title = 'Share this report';
+    shareButton.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>';
+    var shareTimer = 0;
+    function announceShare(message) {
+      shareStatus.textContent = message;
+      clearTimeout(shareTimer); shareTimer = setTimeout(function () { shareStatus.textContent = ''; }, 2600);
+    }
   }
   root.classList.add('hl-rv-ready'); mode(false); select(0);
   if (location.hash) go(location.hash, true);
@@ -821,8 +830,9 @@
     if (valid.length !== rows.length) { chart.remove(); detail.remove(); missing(parent, 'a chronology with parseable dates; original date wording is retained below'); dashTable(parent, m, 'Chronology as printed', 'chronology'); return false; }
     var min = Math.min.apply(null, valid.map(function (r) { return r.when; })), max = Math.max.apply(null, valid.map(function (r) { return r.end; }));
     var legend = make('div', 'hl-rv-timeline-legend', null, chart);
-    lanes.forEach(function (lane, i) { var item = make('span', 'hl-rv-lane-' + i, null, legend); make('span', 'hl-rv-symbol', '━', item); make('span', '', lane, item); });
-    ['● Given date', '◆ Inferred year', '▰ Range', '◌ Disputed'].forEach(function (v) { make('span', '', v, legend); });
+    lanes.forEach(function (lane, i) { var item = make('span', 'hl-rv-lane-' + i, null, legend); make('span', 'hl-rv-lane-swatch', '', item); make('span', '', lane, item); });
+    // The four status swatches are the same shapes as the dots and take their colour from the same quality class (--mark in the stylesheet), so a legend cannot drift from the dots.
+    [['given', 'Given date'], ['year-inferred', 'Inferred year'], ['range', 'Range'], ['disputed', 'Disputed']].forEach(function (v) { var item = make('span', 'hl-rv-legend-item hl-rv-' + v[0], null, legend); make('span', 'hl-rv-symbol', '', item); make('span', '', v[1], item); });
     var horizontal = make('div', 'hl-rv-swimlanes', null, chart);
     lanes.forEach(function (lane, li) {
       var band = make('div', 'hl-rv-lane hl-rv-lane-' + li, null, horizontal); make('h3', '', lane, band);
@@ -831,12 +841,12 @@
         var b = button('', rail, function () { show(r); }); b.className = 'hl-rv-marker hl-rv-' + r.quality;
         b.dataset.rvEvent = i; b.title = r.display + ': ' + r.event;
         b.setAttribute('aria-label', r.display + ': ' + r.event); b.dataset.start = r.when; b.dataset.end = r.end; b.style.left = (isNaN(r.when) || max === min ? 0 : 100 * ((r.when + r.end) / 2 - min) / (max - min)) + '%';
-        make('span', 'hl-rv-symbol', r.quality === 'year-inferred' ? '◆' : r.quality === 'range' ? '▰' : r.quality === 'disputed' ? '◌' : '●', b); make('span', '', i + 1, b);
+        make('span', 'hl-rv-symbol', '', b); make('span', '', i + 1, b);
         b.addEventListener('focus', function () { show(r); }); b.addEventListener('mouseenter', function () { show(r); });
       });
       function placeMarkers() {
         var width = rail.clientWidth; if (!width) return;
-        var slots = [];
+        var slots = [], step = (parseFloat(getComputedStyle(rail).getPropertyValue('--rv-mark-h')) || 64) + 8;
         Array.from(rail.children).forEach(function (b) {
           var a = +b.dataset.start, z = +b.dataset.end;
           var x = ((a + z) / 2 - min) / (max - min || 1) * width;
@@ -844,9 +854,9 @@
           var interval = { left: x - w / 2 - 4, right: x + w / 2 + 4 }, slot = 0;
           while (slots[slot] && slots[slot].some(function (s) { return interval.left < s.right && interval.right > s.left; })) slot++;
           if (!slots[slot]) slots[slot] = []; slots[slot].push(interval);
-          b.style.top = slot * 52 + 'px'; b.style.width = w + 'px';
+          b.style.top = slot * step + 'px'; b.style.width = w + 'px';
         });
-        rail.style.height = Math.max(1, slots.length) * 52 - 8 + 'px';
+        rail.style.height = Math.max(1, slots.length) * step - 8 + 'px';
       }
       new ResizeObserver(placeMarkers).observe(rail);
     });
@@ -862,9 +872,9 @@
     var vertical = make('ol', 'hl-rv-vertical-timeline', null, chart);
     rows.forEach(function (r, i) {
       var li = make('li', 'hl-rv-lane-' + lanes.indexOf(r.lane), null, vertical); make('span', 'hl-rv-date', r.display, li); li.dataset.rvEvent = i;
-      var b = button('', li, function () { show(r); }); b.className = 'hl-rv-vertical-marker';
+      var b = button('', li, function () { show(r); }); b.className = 'hl-rv-vertical-marker hl-rv-' + r.quality;
       b.addEventListener('focus', function () { show(r); }); b.addEventListener('mouseenter', function () { show(r); });
-      make('span', 'hl-rv-symbol', r.quality === 'year-inferred' ? '◆' : r.quality === 'range' ? '▰' : r.quality === 'disputed' ? '◌' : '●', b); make('span', '', (i + 1) + '. ' + r.event, b); make('small', '', r.lane + ' · ' + r.quality.replace('-', ' '), b);
+      make('span', 'hl-rv-symbol', '', b); var vtext = make('span', '', null, b); make('span', 'hl-rv-vnum', (i + 1) + '.', vtext); vtext.appendChild(document.createTextNode(' ' + r.event)); make('small', '', r.lane + ' · ' + r.quality.replace('-', ' '), b);
     });
     var tableDetails = make('details', 'hl-rv-chronology-table', null, parent); tableDetails.open = true; make('summary', '', 'Chronology as a table', tableDetails); dashTable(tableDetails, m, 'Every dated event as printed', 'chronology');
     return true;
