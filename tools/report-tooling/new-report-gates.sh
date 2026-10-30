@@ -1,11 +1,17 @@
 #!/usr/bin/env bash
 # new-report-gates.sh: the one command a doer runs on a NEW report before the preview push.
 #
-#   bash tools/report-tooling/new-report-gates.sh <report folder holding index.md> [--out DIR]
+#   bash tools/report-tooling/new-report-gates.sh <report folder holding index.md> [--out DIR] [--baseline-md FILE]
 #
 # The folder may be OUTSIDE this checkout (threat-intel-vault/reports/<slug>/); nothing is
 # written to the checkout. It prints one line per gate, PASS, FAIL or NOT CHECKED, then a count.
 # Exit 0 only when every gate is PASS; 1 when any gate FAILs; 2 when none FAIL but one is NOT CHECKED.
+#
+# --baseline-md FILE  render the completeness baseline from FILE (tab lines stripped) instead of from the
+#                     folder's own markdown. Use it when the report was copied or edited after the baseline text
+#                     existed: pass the vault copy while checking the site copy, and a paragraph lost in between
+#                     shows as missing. Without it the baseline is the folder's own markdown, which can only
+#                     catch what the tab layout itself drops.
 #
 # Gates, in order:
 #   render              render-report.rb renders the folder twice with the site's own layouts:
@@ -42,20 +48,28 @@ REPO="$(cd "$HERE/../.." && pwd)"
 
 usage() { sed -n '2,/^$/p' "${BASH_SOURCE[0]}" | sed 's/^# \{0,1\}//'; }
 OUT=""
+BASELINE_MD=""
 FOLDER=""
 while [ $# -gt 0 ]; do
   case "$1" in
     -h|--help) usage; exit 0 ;;
     --out) OUT="${2:-}"; shift 2 ;;
+    --baseline-md) BASELINE_MD="${2:-}"; shift 2 ;;
     -*) echo "unknown option $1" >&2; usage >&2; exit 2 ;;
     *) FOLDER="$1"; shift ;;
   esac
 done
-if [ -z "$FOLDER" ]; then echo "usage: bash new-report-gates.sh <report folder holding index.md> [--out DIR]" >&2; exit 2; fi
+if [ -z "$FOLDER" ]; then echo "usage: bash new-report-gates.sh <report folder holding index.md> [--out DIR] [--baseline-md FILE]" >&2; exit 2; fi
 if [ -f "$FOLDER" ]; then FOLDER="$(dirname "$FOLDER")"; fi
 if [ ! -f "$FOLDER/index.md" ]; then echo "no index.md in $FOLDER" >&2; exit 2; fi
 FOLDER="$(cd "$FOLDER" && pwd)"
 MD="$FOLDER/index.md"
+BASELINE_ARGS=()
+if [ -n "$BASELINE_MD" ]; then
+  if [ -d "$BASELINE_MD" ]; then BASELINE_MD="$BASELINE_MD/index.md"; fi
+  if [ ! -f "$BASELINE_MD" ]; then echo "no baseline markdown at $BASELINE_MD" >&2; exit 2; fi
+  BASELINE_ARGS=("$(cd "$(dirname "$BASELINE_MD")" && pwd)/$(basename "$BASELINE_MD")")
+fi
 
 if [ -z "$OUT" ]; then OUT="$(mktemp -d /tmp/hl-new-report-gates.XXXXXX)"; KEEP=0; else mkdir -p "$OUT"; OUT="$(cd "$OUT" && pwd)"; KEEP=1; fi
 
@@ -101,7 +115,7 @@ RENDER_OK=0
 if ! command -v ruby >/dev/null 2>&1; then
   line "NOT CHECKED" render "ruby is not on PATH"
 else
-  ruby render-report.rb "$FOLDER" "$OUT/render" > "$OUT/render.txt" 2>&1; rc=$?
+  ruby render-report.rb "$FOLDER" "$OUT/render" ${BASELINE_ARGS[@]+"${BASELINE_ARGS[@]}"} > "$OUT/render.txt" 2>&1; rc=$?
   case $rc in
     0) RENDER_OK=1; line PASS render "$(last "$OUT/render.txt")" ;;
     1) line FAIL render "$(last "$OUT/render.txt")" ;;

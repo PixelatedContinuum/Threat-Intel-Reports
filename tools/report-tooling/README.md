@@ -38,13 +38,14 @@ renders the tabs from it.
 **The new-report gate (T-0500.1.9).** One command before the preview push of a NEW report, from
 a folder that may sit outside this checkout (`threat-intel-vault/reports/<slug>/`):
 
-    bash tools/report-tooling/new-report-gates.sh <report folder holding index.md> [--out DIR]
+    bash tools/report-tooling/new-report-gates.sh <report folder holding index.md> [--out DIR] [--baseline-md FILE]
 
 It renders the folder twice with `render-report.rb` (tagged, and untagged with the tab lines
 stripped), serves both from `lib/gate-server.js`, then prints one PASS, FAIL or NOT CHECKED line
 each for `check-tabs --require`, `check-report-text` at 1280 and 390 against the untagged
 render, its two deletion controls (each must exit 1) and `check-browser-report` on the tagged
-render. Exit 0 only when every line is PASS; 1 on any FAIL; 2 when only NOT CHECKED remain. It
+render. `--baseline-md FILE` renders that baseline from another copy of the report (the vault's,
+while the site copy is checked), so a paragraph lost in between shows as missing. Exit 0 only when every line is PASS; 1 on any FAIL; 2 when only NOT CHECKED remain. It
 needs ruby with the jekyll, jekyll-seo-tag, kramdown-parser-gfm and sass gems, openssl, a
 Chrome, and network to the live site for the theme's `main.css` and `main.min.js`; when one is
 missing the gates that need it are NOT CHECKED and the script says which (`--help`).
