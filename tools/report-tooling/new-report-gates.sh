@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # new-report-gates.sh: the one command a doer runs on a NEW report before the preview push.
 #
-#   bash tools/report-tooling/new-report-gates.sh <report folder holding index.md> [--out DIR] [--baseline-md FILE]
+#   bash tools/report-tooling/new-report-gates.sh <report folder holding index.md> [--out DIR] [--baseline-md FILE] [--views FILE]
 #
 # The folder may be OUTSIDE this checkout (threat-intel-vault/reports/<slug>/); nothing is
 # written to the checkout. It prints one line per gate, PASS, FAIL or NOT CHECKED, then a count.
@@ -12,6 +12,11 @@
 #                     existed: pass the vault copy while checking the site copy, and a paragraph lost in between
 #                     shows as missing. Without it the baseline is the folder's own markdown, which can only
 #                     catch what the tab layout itself drops.
+#
+# --views FILE        the report's report_views curation file (what would be _data/report_views/<report folder>.yml),
+#                     for a file that sits OUTSIDE this checkout, for example beside the vault report. It is passed to
+#                     the render, so the page the gates measure carries the curated views the live page will carry, not
+#                     the generic ones. Without it the render sees only the curation files already in this checkout.
 #
 # Gates, in order:
 #   render              render-report.rb renders the folder twice with the site's own layouts:
@@ -49,17 +54,19 @@ REPO="$(cd "$HERE/../.." && pwd)"
 usage() { sed -n '2,/^$/p' "${BASH_SOURCE[0]}" | sed 's/^# \{0,1\}//'; }
 OUT=""
 BASELINE_MD=""
+VIEWS=""
 FOLDER=""
 while [ $# -gt 0 ]; do
   case "$1" in
     -h|--help) usage; exit 0 ;;
     --out) OUT="${2:-}"; shift 2 ;;
     --baseline-md) BASELINE_MD="${2:-}"; shift 2 ;;
+    --views) VIEWS="${2:-}"; shift 2 ;;
     -*) echo "unknown option $1" >&2; usage >&2; exit 2 ;;
     *) FOLDER="$1"; shift ;;
   esac
 done
-if [ -z "$FOLDER" ]; then echo "usage: bash new-report-gates.sh <report folder holding index.md> [--out DIR] [--baseline-md FILE]" >&2; exit 2; fi
+if [ -z "$FOLDER" ]; then echo "usage: bash new-report-gates.sh <report folder holding index.md> [--out DIR] [--baseline-md FILE] [--views FILE]" >&2; exit 2; fi
 if [ -f "$FOLDER" ]; then FOLDER="$(dirname "$FOLDER")"; fi
 if [ ! -f "$FOLDER/index.md" ]; then echo "no index.md in $FOLDER" >&2; exit 2; fi
 FOLDER="$(cd "$FOLDER" && pwd)"
@@ -69,6 +76,12 @@ if [ -n "$BASELINE_MD" ]; then
   if [ -d "$BASELINE_MD" ]; then BASELINE_MD="$BASELINE_MD/index.md"; fi
   if [ ! -f "$BASELINE_MD" ]; then echo "no baseline markdown at $BASELINE_MD" >&2; exit 2; fi
   BASELINE_ARGS=("$(cd "$(dirname "$BASELINE_MD")" && pwd)/$(basename "$BASELINE_MD")")
+fi
+
+VIEWS_ARGS=()
+if [ -n "$VIEWS" ]; then
+  if [ ! -f "$VIEWS" ]; then echo "no report_views file at $VIEWS" >&2; exit 2; fi
+  VIEWS_ARGS=(--views "$(cd "$(dirname "$VIEWS")" && pwd)/$(basename "$VIEWS")")
 fi
 
 if [ -z "$OUT" ]; then OUT="$(mktemp -d /tmp/hl-new-report-gates.XXXXXX)"; KEEP=0; else mkdir -p "$OUT"; OUT="$(cd "$OUT" && pwd)"; KEEP=1; fi
@@ -93,6 +106,7 @@ trap cleanup EXIT
 trap 'exit 130' INT TERM
 
 echo "new-report-gates: $MD"
+[ -n "$VIEWS" ] && echo "report_views:     ${VIEWS_ARGS[1]}"
 echo "evidence folder:  $OUT$( [ "$KEEP" = 0 ] && echo ' (removed on exit; pass --out DIR to keep it)')"
 
 HAVE_NODE=1; command -v node >/dev/null 2>&1 || HAVE_NODE=0
@@ -115,7 +129,7 @@ RENDER_OK=0
 if ! command -v ruby >/dev/null 2>&1; then
   line "NOT CHECKED" render "ruby is not on PATH"
 else
-  ruby render-report.rb "$FOLDER" "$OUT/render" ${BASELINE_ARGS[@]+"${BASELINE_ARGS[@]}"} > "$OUT/render.txt" 2>&1; rc=$?
+  ruby render-report.rb "$FOLDER" "$OUT/render" ${BASELINE_ARGS[@]+"${BASELINE_ARGS[@]}"} ${VIEWS_ARGS[@]+"${VIEWS_ARGS[@]}"} > "$OUT/render.txt" 2>&1; rc=$?
   case $rc in
     0) RENDER_OK=1; line PASS render "$(last "$OUT/render.txt")" ;;
     1) line FAIL render "$(last "$OUT/render.txt")" ;;
