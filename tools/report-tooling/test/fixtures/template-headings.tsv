@@ -1,0 +1,19 @@
+BLUF (Bottom Line Up Front)	overview
+1. Executive Summary	overview
+2. Business Risk Assessment	overview
+3. What Is [Malware Name]?	chain
+4. Technical Capabilities Deep-Dive	chain
+5. Static Analysis Findings	chain
+6. Dynamic Analysis Findings	chain
+7. MITRE ATT&CK Framework Mapping	chain
+8. Indicators of Compromise	indicators
+9. Detection and Response Guidance	indicators
+10. Recommendations	indicators
+Delivery Method Analysis & Initial Access Vectors	chain
+Future Evolution & Threat Trends	confidence
+Frequently Asked Questions	confidence
+[N]. Component Inventory	chain
+[N]. Confidence Summary and Evidence Gaps	confidence
+11. References	confidence
+12. Appendices	confidence
+License	confidence

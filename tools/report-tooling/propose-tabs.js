@@ -8,7 +8,7 @@
    It proposes; it never decides. The writer keeps or overrides every line, the
    same contract propose-tiers.js runs under.
 
-   Three proposal sources, always labelled so the writer can see what they are
+   Four proposal sources, always labelled so the writer can see what they are
    trusting:
 
      name   the default mapping in design-v4 section 3: heading text against the
@@ -21,6 +21,16 @@
      span   the corpus shape, as in propose-tiers: an unnamed heading sitting
             between two placed neighbours on the SAME tab inherits it. Nothing
             else is guessed.
+     template  the report template's own headings that none of the above reaches
+            ("What Is [Malware Name]?", Recommendations, Delivery Method ...,
+            Future Evolution ..., FAQ, Component Inventory). A last pass that never
+            moves a proposal the other three made; see TEMPLATE_RULES.
+
+   WHICH REPORT. `propose-tabs.js <path to an index.md>` (or the folder that holds
+   one) works on any report markdown, the vault copy threat-intel-vault/reports/
+   <slug>/index.md included; the old form, a bare folder name under this checkout's
+   reports/, still works. With no argument it prints proposals for the whole corpus,
+   and `--write` with no argument REFUSES (exit 2): a write needs a named report.
 
    Anything still unresolved prints "?" and is COUNTED in the summary, because a
    silent zero would make an interrupted pass look finished. `check-tabs.js`
@@ -49,6 +59,7 @@ var fs = require('node:fs');
 var path = require('node:path');
 var CT = require('./lib/check-tiers.js');
 var TT = require('./check-tabs.js');
+var RT = require('./lib/report-target.js');
 
 var ROOT = path.join(__dirname, '..', '..');
 var REPORTS = path.join(ROOT, 'reports');
@@ -136,6 +147,35 @@ var RULES = [
   ['overview', /^summary$/]
 ];
 
+/* The report template's own headings that no rule above reaches (T-0500.1.9, audit
+   T06: 5 of the 19 headings in report-structure-template were unplaced, and the
+   gate fails a report until every section has a tab). A SEPARATE, LAST pass, run
+   only on a heading that name, tier3 and span all left unplaced, so adding these
+   cannot move any proposal that already exists (measured on the corpus: the
+   proposals that changed were all "?" before). design-v4 section 3 lists none of
+   them, so each is a default the writer keeps or overrides, labelled "template":
+     "What Is [Malware Name]?"   is the template's Technical Classification section
+     "Delivery Method ... & Initial Access Vectors" is tradecraft, with the chain
+     "[N]. Component Inventory"  inventories the toolkit's parts, so the chain
+     "Recommendations"           is response orientation, with detections
+     "Future Evolution & Threat Trends", "Frequently Asked Questions" are reference
+      apparatus with no tab of their own: Confidence and gaps. */
+var TEMPLATE_RULES = [
+  ['chain', /^(\[?\d+\]?\.\s*)?what is\b[^?]*\?\s*$/],
+  ['chain', /initial access/],
+  ['chain', /\bdelivery (method|mechanism|vector|chain)s?\b/],
+  ['chain', /component inventory/],
+  ['indicators', /recommendations?/],
+  ['confidence', /future (evolution|outlook)|threat trends/],
+  ['confidence', /frequently asked|\bfaq\b/]
+];
+
+function byTemplate(text) {
+  var s = String(text).toLowerCase();
+  for (var i = 0; i < TEMPLATE_RULES.length; i++) if (TEMPLATE_RULES[i][1].test(s)) return TEMPLATE_RULES[i][0];
+  return null;
+}
+
 function byName(text) {
   var s = String(text).toLowerCase();
   for (var i = 0; i < RULES.length; i++) if (RULES[i][1].test(s)) return RULES[i][0];
@@ -182,6 +222,12 @@ function proposeFor(md) {
     if (p.tab) return;
     var s = bySpan(proposals, i);
     if (s) { p.tab = s; p.how = 'span'; }
+  });
+
+  proposals.forEach(function (p) {
+    if (p.tab) return;
+    var t = byTemplate(p.text);
+    if (t) { p.tab = t; p.how = 'template'; }
   });
 
   return proposals;
@@ -269,22 +315,40 @@ function main() {
   var write = args.indexOf('--write') !== -1;
   var only = args.filter(function (a) { return a.indexOf('--') !== 0; })[0];
 
-  var slugs = fs.readdirSync(REPORTS, { withFileTypes: true })
-    .filter(function (e) { return e.isDirectory(); })
-    .map(function (e) { return e.name; })
-    .filter(function (n) { return !only || n === only; })
-    .sort();
-
-  if (only && !slugs.length) {
-    console.error('no report directory named ' + only);
+  /* A bare --write used to tag every untagged report in the corpus. It now
+     refuses: writing needs a named target (T-0500.1.9, audit W04). */
+  if (write && !only) {
+    console.error('refusing --write with no target: it would tag the whole corpus. ' +
+      'Name one report: node propose-tabs.js <path to index.md or report folder name> --write');
     process.exit(2);
   }
 
-  var totals = { set: 0, name: 0, tier3: 0, span: 0, none: 0, reports: 0, done: 0, headings: 0 };
+  var targets;
+  if (only) {
+    var t = RT.resolveTarget(only, REPORTS);
+    if (t.error) {
+      console.error(t.error);
+      process.exit(2);
+    }
+    if (!fs.existsSync(t.file)) {
+      console.error('no index.md at ' + t.file);
+      process.exit(2);
+    }
+    targets = [t];
+  } else {
+    targets = fs.readdirSync(REPORTS, { withFileTypes: true })
+      .filter(function (e) { return e.isDirectory(); })
+      .map(function (e) { return e.name; })
+      .sort()
+      .map(function (n) { return { mode: 'name', slug: n, file: path.join(REPORTS, n, 'index.md') }; });
+  }
+
+  var totals = { set: 0, name: 0, tier3: 0, span: 0, template: 0, none: 0, reports: 0, done: 0, headings: 0 };
   var unplacedAll = [];
 
-  slugs.forEach(function (slug) {
-    var file = path.join(REPORTS, slug, 'index.md');
+  targets.forEach(function (target) {
+    var slug = target.mode === 'path' ? target.file : target.slug;
+    var file = target.file;
     if (!fs.existsSync(file)) return;
     var md = fs.readFileSync(file, 'utf8');
     var proposals = proposeFor(md);
@@ -325,6 +389,7 @@ function main() {
       else if (p.how === 'name') totals.name++;
       else if (p.how === 'tier3') totals.tier3++;
       else if (p.how === 'span') totals.span++;
+      else if (p.how === 'template') totals.template++;
       else {
         totals.none++;
         unplacedAll.push({ slug: slug, text: p.text });
@@ -360,6 +425,7 @@ function main() {
   console.log('proposed by name     ' + totals.name);
   console.log('proposed as tier 3   ' + totals.tier3);
   console.log('proposed by span     ' + totals.span);
+  console.log('proposed by template ' + totals.template);
   console.log('NEED A DECISION      ' + totals.none);
   if (unplacedAll.length) {
     console.log('');
@@ -371,6 +437,8 @@ function main() {
 module.exports = {
   TOKENS: TT.TOKENS,
   RULES: RULES,
+  TEMPLATE_RULES: TEMPLATE_RULES,
+  byTemplate: byTemplate,
   byName: byName,
   bySpan: bySpan,
   proposeFor: proposeFor,

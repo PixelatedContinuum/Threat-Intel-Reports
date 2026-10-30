@@ -220,3 +220,34 @@ test('the DOM path FAILS a tab class kramdown put on a paragraph', function () {
   assert.strictEqual(r.status, 'FAIL');
   assert.match(r.problems.join(' '), /carries the tab class/);
 });
+
+/* T-0500.1.9, J1: --require makes "no tab tags" a FAIL. Without it nothing changes. */
+test('--require: a report with no tab tags FAILS, with it absent the same report is PASS', function () {
+  var md = doc('## One\n{: .hl-tier-1}\n\ntext\n\n## Two\n{: .hl-tier-2}\n\ntext\n');
+  var plain = CT.checkMarkdown(md);
+  assert.strictEqual(plain.status, 'PASS');
+  var req = CT.checkMarkdown(md, 'x', { require: true });
+  assert.strictEqual(req.status, 'FAIL');
+  assert.match(req.problems.join(' '), /no tab tags declared: 0 of 2 sections/);
+});
+
+test('--require does not change a fully tagged report, and a report with no sections FAILS', function () {
+  assert.strictEqual(CT.checkMarkdown(doc(BODY), 'x', { require: true }).status, 'PASS');
+  var empty = CT.checkMarkdown(doc('Just prose, no headings.\n'), 'x', { require: true });
+  assert.strictEqual(empty.status, 'FAIL');
+  assert.match(empty.problems.join(' '), /no ## sections/);
+});
+
+test('--require on the command line: exit 1 untagged, exit 0 tagged, exit 0 untagged without the flag', function () {
+  var cp = require('node:child_process'), fs = require('node:fs'), os = require('node:os'), path = require('node:path');
+  var dir = fs.mkdtempSync(path.join(os.tmpdir(), 'hl-tabs-'));
+  var u = path.join(dir, 'u.md'), g = path.join(dir, 'g.md');
+  fs.writeFileSync(u, doc('## One\n{: .hl-tier-1}\n\ntext\n'));
+  fs.writeFileSync(g, doc(BODY));
+  var cli = path.join(__dirname, '..', 'check-tabs.js');
+  var run = function (args) { return cp.spawnSync(process.execPath, [cli].concat(args), { encoding: 'utf8' }).status; };
+  assert.strictEqual(run(['--require', u]), 1);
+  assert.strictEqual(run([u]), 0);
+  assert.strictEqual(run(['--require', g]), 0);
+  assert.strictEqual(run(['--require', dir + '/missing.md']), 2);
+});

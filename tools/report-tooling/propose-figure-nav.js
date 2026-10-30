@@ -17,6 +17,7 @@ var fs = require('node:fs');
 var path = require('node:path');
 var KS = require('./lib/kramdown-slug.js');
 var CFN = require('./lib/check-figure-nav.js');
+var RT = require('./lib/report-target.js');
 
 var ROOT = path.join(__dirname, '..', '..');
 var REPORTS = path.join(ROOT, 'reports');
@@ -38,22 +39,35 @@ var args = process.argv.slice(2);
 var showAlt = args.indexOf('--alt') !== -1;
 var only = args.filter(function (a) { return a.indexOf('--') !== 0; })[0];
 
-var slugs = fs.readdirSync(REPORTS, { withFileTypes: true })
-  .filter(function (e) { return e.isDirectory(); })
-  .map(function (e) { return e.name; })
-  .filter(function (n) { return !only || n === only; })
-  .sort();
-
-if (only && !slugs.length) {
-  console.error('no report directory named ' + only);
+/* This tool only prints. A --write (or --apply) would otherwise be ignored while
+   looking like it ran, so it is refused outright, with or without a target
+   (T-0500.1.9, audit I03). */
+if (args.indexOf('--write') !== -1 || args.indexOf('--apply') !== -1) {
+  console.error('refusing --write: propose-figure-nav.js only prints a starter block to paste ' +
+    'into front matter; it never writes a report.');
   process.exit(2);
+}
+
+var targets;
+if (only) {
+  var t = RT.resolveTarget(only, REPORTS);
+  if (t.error) { console.error(t.error); process.exit(2); }
+  if (!fs.existsSync(t.file)) { console.error('no index.md at ' + t.file); process.exit(2); }
+  targets = [t];
+} else {
+  targets = fs.readdirSync(REPORTS, { withFileTypes: true })
+    .filter(function (e) { return e.isDirectory(); })
+    .map(function (e) { return e.name; })
+    .sort()
+    .map(function (n) { return { mode: 'name', slug: n, file: path.join(REPORTS, n, 'index.md') }; });
 }
 
 var totalFigures = 0;
 var totalReports = 0;
 
-slugs.forEach(function (slug) {
-  var file = path.join(REPORTS, slug, 'index.md');
+targets.forEach(function (target) {
+  var slug = target.mode === 'path' ? target.file : target.slug;
+  var file = target.file;
   if (!fs.existsSync(file)) return;
   var md = fs.readFileSync(file, 'utf8');
   var images = CFN.figureImages(md);

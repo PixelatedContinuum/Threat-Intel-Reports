@@ -31,9 +31,23 @@ renders the tabs from it.
 
 | Script | Input | What it proves |
 |---|---|---|
-| `node propose-tabs.js <slug> [--write]` | a report, or every report with no argument | proposes the design-v4 section 3 tab for each `##` from its heading text (name, tier-3 teardown, then span), prints the line to paste and counts the headings it cannot place; `--write` inserts the lines, leaves an existing one alone, warns when some headings got no line (a partial write is by design and check-tabs then fails the report), and preserves the file's line endings (CRLF stays CRLF; a mixed file is refused) |
-| `node check-tabs.js <report.md \| https://url> [--against <report.md>]` | a report | all-or-none, the seven known tokens, the line directly after the tier line, one tab per section, and no heading id equal to `one-page` or `tab-<token>`. Any `hl-tab-` outside a fenced block makes the report tabbed (the layout's trigger is that substring), and a misplaced one FAILS with its line number and what kramdown does with it. An untagged report is PASS with a reason; a partly tagged one FAILS |
+| `node propose-tabs.js <path to index.md \| folder \| slug> [--write]` | a report (a path may be the vault copy), or every report with no argument; a bare `--write` refuses with exit 2 | proposes the design-v4 section 3 tab for each `##` from its heading text (name, tier-3 teardown, span, then the report template's own headings), prints the line to paste and counts the headings it cannot place; `--write` inserts the lines, leaves an existing one alone, warns when some headings got no line (a partial write is by design and check-tabs then fails the report), and preserves the file's line endings (CRLF stays CRLF; a mixed file is refused) |
+| `node check-tabs.js [--require] <report.md \| https://url> [--against <report.md>]` | a report | `--require` makes a report with no tab tags a FAIL (exit 1): use it on every new report, which ships tabbed. Without it: all-or-none, the seven known tokens, the line directly after the tier line, one tab per section, and no heading id equal to `one-page` or `tab-<token>`. Any `hl-tab-` outside a fenced block makes the report tabbed (the layout's trigger is that substring), and a misplaced one FAILS with its line number and what kramdown does with it. Without `--require` an untagged report is PASS with a reason; a partly tagged one FAILS |
 | `node check-report-text.js --baseline <url-or-file> --page <url-or-file> [--width 1280,390] [--control] [--control-teardown]` | the pre-tagging article and the tabbed page | design-v4 check 5.2 in Chrome over `lib/cdp.js`: one-page mode, `[data-rv-chrome]`, `script`, `style` and `title` stripped, an ORDERED word diff (a moved paragraph or section FAILS), the `h2`/`h3` id sequence equal to the baseline's, every baseline article id present exactly once (not only headings), matching counts for headings, tables, rows, figures, teardowns, details, code blocks, links and lists, and a FAIL when the words left fall under 90% of the baseline's. `--control` deletes one body paragraph and `--control-teardown` one paragraph inside a closed `details.hl-teardown`; both must be caught |
+
+**The new-report gate (T-0500.1.9).** One command before the preview push of a NEW report, from
+a folder that may sit outside this checkout (`threat-intel-vault/reports/<slug>/`):
+
+    bash tools/report-tooling/new-report-gates.sh <report folder holding index.md> [--out DIR]
+
+It renders the folder twice with `render-report.rb` (tagged, and untagged with the tab lines
+stripped), serves both from `lib/gate-server.js`, then prints one PASS, FAIL or NOT CHECKED line
+each for `check-tabs --require`, `check-report-text` at 1280 and 390 against the untagged
+render, its two deletion controls (each must exit 1) and `check-browser-report` on the tagged
+render. Exit 0 only when every line is PASS; 1 on any FAIL; 2 when only NOT CHECKED remain. It
+needs ruby with the jekyll, jekyll-seo-tag, kramdown-parser-gfm and sass gems, openssl, a
+Chrome, and network to the live site for the theme's `main.css` and `main.min.js`; when one is
+missing the gates that need it are NOT CHECKED and the script says which (`--help`).
 
 The completeness check reads the baseline with scripting disabled, because the published
 article carries inline scripts that add a "Copy" button to every `<pre>` at runtime and

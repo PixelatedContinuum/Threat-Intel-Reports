@@ -302,6 +302,20 @@ function validate(headings, ids, opts) {
   var misplaced = (opts.misplaced || []).length;
   var anyTab = tagged > 0 || misplaced > 0 || problems.length > 0;
 
+  /* --require (T-0500.1.9, J1): the tabbed layout is the default for a new
+     report, so a report with no tab tag at all is a FAIL, not "a report without
+     tabs". A report with no sections is the same failure: nothing was scanned. */
+  if (opts.require && !anyTab) {
+    return verdict('FAIL', null, {
+      problems: [total
+        ? 'no tab tags declared: 0 of ' + total + ' sections carry a {: .hl-tab-...} line, and ' +
+          '--require says a new report is tabbed. Run propose-tabs.js <index.md> --write, then ' +
+          'check every proposal.'
+        : '--require was given and the report has no ## sections to tag'],
+      tagged: 0, unmarked: unmarked.length, byTab: byTab, sequence: [], advisories: advisories
+    });
+  }
+
   // Nothing tagged at all is not a defect: it is a report without tabs.
   if (!anyTab) {
     return verdict('PASS', 'no tab tags declared', {
@@ -331,7 +345,7 @@ function validate(headings, ids, opts) {
   });
 }
 
-function checkMarkdown(src, label) {
+function checkMarkdown(src, label, opts) {
   var scan;
   try { scan = scanMarkdown(src); }
   catch (e) {
@@ -339,14 +353,15 @@ function checkMarkdown(src, label) {
       String(e.message).split('\n')[0]);
   }
   return validate(scan.headings, scan.ids, {
-    label: label, misplaced: scan.misplaced, advisories: scan.advisories
+    label: label, misplaced: scan.misplaced, advisories: scan.advisories,
+    require: !!(opts && opts.require)
   });
 }
 
 /* The rendered page carries the merged class, so placement cannot be re-checked
    line by line here; all-or-none, the vocabulary, the id rule and a tab class on
    a non-heading element can, and those are what a stale build gets wrong. */
-function checkDom(doc, label) {
+function checkDom(doc, label, opts) {
   var body = doc.querySelector('.hl-post-content') || doc.body;
   if (!body) return verdict('NOT CHECKED', 'no report body container');
 
@@ -379,7 +394,7 @@ function checkDom(doc, label) {
     }
   }
 
-  var r = validate(headings, ids, { label: label, misplaced: misplaced });
+  var r = validate(headings, ids, { label: label, misplaced: misplaced, require: !!(opts && opts.require) });
   r.advisories.push('placement was not checked line by line: the rendered page carries the merged ' +
     'class, so run this gate on the markdown for the line-directly-after-the-tier-line rule');
   return r;
@@ -403,11 +418,14 @@ if (require.main === module) {
   var argv = process.argv.slice(2);
   var againstAt = argv.indexOf('--against');
   var against = againstAt !== -1 ? argv[againstAt + 1] : null;
+  var requireTabs = argv.indexOf('--require') !== -1;
   var target = argv.filter(function (a) {
     return a.indexOf('--') !== 0 && a !== against;
   })[0];
   if (!target) {
-    console.error('usage: node check-tabs.js <report.md|https://...> [--against <report.md>]');
+    console.error('usage: node check-tabs.js [--require] <report.md|report folder|https://...> [--against <report.md>]');
+    console.error('  --require  a report that declares no tab tags is a FAIL (exit 1), not a PASS:');
+    console.error('             use it on every NEW report, which ships tabbed.');
     process.exit(2);
   }
 
@@ -445,7 +463,7 @@ if (require.main === module) {
         console.log('NOT CHECKED  ' + target + '  ' + e.message);
         process.exit(2);
       }
-      r = checkDom(new JSDOM(html).window.document, target);
+      r = checkDom(new JSDOM(html).window.document, target, { require: requireTabs });
       if (against && r.status === 'PASS') {
         var expected;
         try { expected = checkMarkdown(fs.readFileSync(against, 'utf8'), against); }
@@ -463,9 +481,12 @@ if (require.main === module) {
       }
     } else {
       var src;
-      try { src = fs.readFileSync(target, 'utf8'); }
+      var file = target;
+      try { if (fs.statSync(file).isDirectory()) file = path.join(file, 'index.md'); }
+      catch (e) { /* the read below names the problem */ }
+      try { src = fs.readFileSync(file, 'utf8'); }
       catch (e) { console.log('NOT CHECKED  ' + target + '  ' + e.message); process.exit(2); }
-      r = checkMarkdown(src, target);
+      r = checkMarkdown(src, target, { require: requireTabs });
     }
     report(r, target);
     process.exit(r.status === 'PASS' ? 0 : r.status === 'FAIL' ? 1 : 2);

@@ -28,6 +28,7 @@ var fs = require('node:fs');
 var path = require('node:path');
 var CT = require('./lib/check-tiers.js');
 var KS = require('./lib/kramdown-slug.js');
+var RT = require('./lib/report-target.js');
 
 var ROOT = path.join(__dirname, '..', '..');
 var REPORTS = path.join(ROOT, 'reports');
@@ -99,8 +100,7 @@ var only = args.filter(function (a) {
    refuses a list whose length does not match, because a short list would mark
    the wrong sections and a silent partial pass is the defect the gate exists to
    catch. Idempotent: a heading that already carries a marker is left alone. */
-function applyTiers(slug, list) {
-  var file = path.join(REPORTS, slug, 'index.md');
+function applyTiers(slug, list, file) {
   var md = fs.readFileSync(file, 'utf8');
   var tiers = String(list).split(',').map(function (t) { return t.trim(); });
 
@@ -142,27 +142,47 @@ function applyTiers(slug, list) {
   console.log(slug + ': ' + added + ' markers written, ' + skipped + ' already present');
 }
 
-if (applyList) {
-  if (!only) { console.error('--apply needs a slug'); process.exit(2); }
-  applyTiers(only, applyList);
-  process.exit(0);
+/* A bare --write, or --apply with no target, refuses (T-0500.1.9, audit R01):
+   neither may run across the corpus. --write is not a mode of this tool; the
+   writing mode is --apply <tiers>. */
+if (args.indexOf('--write') !== -1) {
+  console.error('refusing --write: propose-tiers.js writes with --apply <comma list of tiers> ' +
+    'and a named target, never across the corpus.');
+  process.exit(2);
+}
+if (applyAt !== -1 && !applyList) {
+  console.error('refusing --apply with no tier list: --apply <comma list of 1, 2 or 3, one per section>.');
+  process.exit(2);
+}
+if ((applyAt !== -1) && !only) {
+  console.error('refusing --apply with no target: name one report (path to index.md or folder name).');
+  process.exit(2);
 }
 
-var slugs = fs.readdirSync(REPORTS, { withFileTypes: true })
-  .filter(function (e) { return e.isDirectory(); })
-  .map(function (e) { return e.name; })
-  .filter(function (n) { return !only || n === only; })
-  .sort();
+var targets;
+if (only) {
+  var t = RT.resolveTarget(only, REPORTS);
+  if (t.error) { console.error(t.error); process.exit(2); }
+  if (!fs.existsSync(t.file)) { console.error('no index.md at ' + t.file); process.exit(2); }
+  targets = [t];
+} else {
+  targets = fs.readdirSync(REPORTS, { withFileTypes: true })
+    .filter(function (e) { return e.isDirectory(); })
+    .map(function (e) { return e.name; })
+    .sort()
+    .map(function (n) { return { mode: 'name', slug: n, file: path.join(REPORTS, n, 'index.md') }; });
+}
 
-if (only && !slugs.length) {
-  console.error('no report directory named ' + only);
-  process.exit(2);
+if (applyList) {
+  applyTiers(targets[0].mode === 'path' ? targets[0].file : targets[0].slug, applyList, targets[0].file);
+  process.exit(0);
 }
 
 var totals = { set: 0, name: 0, span: 0, none: 0, reports: 0, done: 0 };
 
-slugs.forEach(function (slug) {
-  var file = path.join(REPORTS, slug, 'index.md');
+targets.forEach(function (target) {
+  var slug = target.mode === 'path' ? target.file : target.slug;
+  var file = target.file;
   if (!fs.existsSync(file)) return;
   var md = fs.readFileSync(file, 'utf8');
   var proposals = proposeFor(md);
