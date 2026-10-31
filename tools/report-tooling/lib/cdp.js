@@ -17,6 +17,7 @@
    silent pass. See homelab-soc/docs/gate-honesty-contract.md. */
 
 var http = require('node:http');
+var net = require('node:net');
 var fs = require('node:fs');
 var os = require('node:os');
 var path = require('node:path');
@@ -177,16 +178,221 @@ function removeProfileDirWhenSafe(profileDir, opts) {
   }
 }
 
-function getJSON(url) {
+function getJSON(url, timeoutMs) {
   return new Promise(function (resolve, reject) {
-    http.get(url, function (res) {
+    var req = http.get(url, function (res) {
       var b = '';
       res.on('data', function (d) { b += d; });
       res.on('end', function () {
         try { resolve(JSON.parse(b)); } catch (e) { reject(e); }
       });
-    }).on('error', reject);
+      res.on('error', reject);
+    });
+    req.on('error', reject);
+    // A listener that accepts and never answers must not hold the run: before
+    // this there was no bound, so a wedged browser on the probed port hung the
+    // gate for as long as the socket stayed open.
+    req.setTimeout(timeoutMs || 5000, function () {
+      req.destroy(new Error('no answer from ' + url + ' within ' + (timeoutMs || 5000) + 'ms'));
+    });
   });
+}
+
+/* ---- isolation: one browser per open(), owned by this process --------------
+
+   T-0505 / T-0500.1.11. Before this, every launch asked for the debugging port
+   9377 (check-report-text.js counted up from 9401) and then probed
+   `/json/version` on it. A browser left over from an earlier run, or one a
+   parallel run started, answered that probe, and the gate drove it: it never
+   started it, it could not close it, and whatever tab that browser had open
+   was the "page" being measured. Measured 2026-10-29: three runs on one page
+   gave NOT CHECKED, FAIL 60/61 and PASS 67/67 while two orphaned
+   hl-cdp-profile browsers held ports 9377 and 9401; 2026-10-31: a preview run
+   hung 73 minutes, and a check-report-text control compared a document with
+   itself through another run's browser.
+
+   What changed, one line per way a run used to reach or outlive a browser:
+   - the browser picks its own port (`--remote-debugging-port=0`) and says so in
+     `<profile>/DevToolsActivePort`, inside the fresh profile this run created.
+     No fixed port, so nothing to collide on and nothing foreign to attach to;
+     the `/json/version` answer must also carry the same browser id as that
+     file, so a different browser on the reported port is refused.
+   - a caller-chosen `opts.port` is allowed but refused when anything already
+     listens on it.
+   - every launched browser is registered. The process `exit` event (normal end,
+     process.exit(), an uncaught error) and SIGINT/SIGTERM/SIGHUP kill the
+     registered browsers' whole process group and remove the profile.
+   - SIGKILL of the run cannot be caught, so each browser has a detached node
+     watchdog that waits for this process to disappear and then does the same.
+   - a command the browser never answers rejects after HL_CDP_SEND_TIMEOUT_MS
+     (default 120s); a launch that never opens its port, HL_CDP_LAUNCH_WAIT_MS (30s); the whole run has HL_CDP_RUN_TIMEOUT_MS (default 15
+     minutes), after which it prints NOT CHECKED, kills the browsers and exits 2.
+     A hang is NOT CHECKED with the reason, never an open-ended wait. */
+var DEFAULT_RUN_TIMEOUT_MS = 15 * 60 * 1000;
+var DEFAULT_SEND_TIMEOUT_MS = 120 * 1000;
+var DEFAULT_LAUNCH_WAIT_MS = 30 * 1000;
+
+function envMs(name, dflt) {
+  var v = Number(process.env[name]);
+  return v > 0 ? v : dflt;
+}
+
+function launchWaitMs() { return envMs('HL_CDP_LAUNCH_WAIT_MS', DEFAULT_LAUNCH_WAIT_MS); }
+
+function notCheckedError(msg) {
+  var e = new Error(msg);
+  e.notChecked = true;
+  return e;
+}
+
+/* The file Chrome writes into its user-data-dir once the debugging port is
+   open: line 1 the port, line 2 the browser's websocket path. */
+function parseDevToolsActivePort(text) {
+  var lines = String(text || '').split(/\r?\n/);
+  var first = (lines[0] || '').trim();
+  var port = Number(first);
+  if (!/^\d+$/.test(first) || !(port > 0 && port < 65536)) return null;
+  return { port: port, wsPath: (lines[1] || '').trim() || null };
+}
+
+/* true when something accepts a TCP connection on host:port. */
+function probeListener(port, host, timeoutMs) {
+  return new Promise(function (resolve) {
+    var sock = net.connect({ port: port, host: host || '127.0.0.1' });
+    var done = false;
+    function end(v) { if (done) return; done = true; try { sock.destroy(); } catch (e) { /* gone */ } resolve(v); }
+    sock.setTimeout(timeoutMs || 1000, function () { end(false); });
+    sock.on('connect', function () { end(true); });
+    sock.on('error', function () { end(false); });
+  });
+}
+
+function pathOf(wsUrl) {
+  try { return new URL(wsUrl).pathname; } catch (e) { return null; }
+}
+
+function processAlive(pid) {
+  try { process.kill(pid, 0); } catch (e) { return e.code === 'EPERM'; }
+  try { // a zombie is dead for this purpose
+    var st = fs.readFileSync('/proc/' + pid + '/stat', 'utf8');
+    return st.slice(st.lastIndexOf(')') + 2, st.lastIndexOf(')') + 3) !== 'Z';
+  } catch (e) { return true; }
+}
+
+/* Registry of browsers this process started and has not yet closed. */
+var LIVE = [];
+
+function groupAlive(pid) {
+  try { process.kill(-pid, 0); return true; } catch (e) { return e.code === 'EPERM'; }
+}
+
+function killGroup(pid) {
+  try { process.kill(-pid, 'SIGKILL'); } catch (e) { /* group already gone */ }
+  try { process.kill(pid, 'SIGKILL'); } catch (e) { /* already gone */ }
+}
+
+/* Synchronous and idempotent: it runs from the `exit` event, where nothing
+   asynchronous can complete. */
+function killEntry(entry) {
+  if (entry.dead) return;
+  entry.dead = true;
+  var at = LIVE.indexOf(entry);
+  if (at >= 0) LIVE.splice(at, 1);
+  // The watchdog first: its argv must not match the profile while we wait on it.
+  if (entry.watchdog) { try { process.kill(entry.watchdog, 'SIGKILL'); } catch (e) { /* gone */ } }
+  killGroup(entry.pid);
+  // Backstop for a browser process that left its group.
+  try {
+    childProcess.execFileSync('pkill', ['-KILL', '-f', 'user-data-dir=' + entry.profileDir],
+      { stdio: ['ignore', 'ignore', 'ignore'] });
+  } catch (e) { /* exit 1: nothing matched, which is the normal case */ }
+  removeProfileDirWhenSafe(entry.profileDir);
+  pauseRunBudget();
+}
+
+function killAll() { LIVE.slice().forEach(killEntry); }
+
+/* Whole-run budget. The clock runs while at least one browser is open and is
+   paused between browsers, so a script that opens eight browsers in turn
+   shares one budget and one that finishes its browsers and then computes for
+   a long time is not killed for the computing. */
+var budget = { used: 0, since: 0, timer: null, left: null };
+
+function remainingBudgetMs() {
+  var total = envMs('HL_CDP_RUN_TIMEOUT_MS', DEFAULT_RUN_TIMEOUT_MS);
+  return total - budget.used - (budget.since ? Date.now() - budget.since : 0);
+}
+
+function startRunBudget() {
+  if (budget.timer) return;
+  var left = remainingBudgetMs();
+  budget.since = Date.now();
+  budget.timer = setTimeout(function () {
+    console.log('NOT CHECKED  the browser run did not finish within ' +
+      Math.round(envMs('HL_CDP_RUN_TIMEOUT_MS', DEFAULT_RUN_TIMEOUT_MS) / 1000) +
+      's (HL_CDP_RUN_TIMEOUT_MS); the browser was killed, so no row it had measured is a verdict');
+    killAll();
+    process.exit(2);
+  }, Math.max(left, 1));
+  budget.timer.unref();
+}
+
+function pauseRunBudget() {
+  if (LIVE.length || !budget.timer) return;
+  clearTimeout(budget.timer);
+  budget.timer = null;
+  budget.used += Date.now() - budget.since;
+  budget.since = 0;
+}
+
+var hooksInstalled = false;
+function installHooks() {
+  if (hooksInstalled) return;
+  hooksInstalled = true;
+  process.on('exit', killAll);
+  ['SIGINT', 'SIGTERM', 'SIGHUP'].forEach(function (sig) {
+    process.on(sig, function () {
+      killAll();
+      process.exit(128 + (os.constants.signals[sig] || 0));
+    });
+  });
+}
+
+/* Survives SIGKILL of the run: waits for the owner to disappear, then removes
+   the browser's group and its profile. The profile reaches it through the
+   environment, not argv, so no command line outside the browser carries the
+   user-data-dir text that the gates' own pgrep checks look for. */
+var WATCHDOG_SRC = [
+  "var cp=require('child_process'),fs=require('fs');",
+  "var owner=+process.argv[1],b=+process.argv[2],dir=process.env.HL_CDP_WD_DIR;",
+  "function alive(p){try{process.kill(p,0)}catch(e){return e.code==='EPERM'}",
+  " try{var s=fs.readFileSync('/proc/'+p+'/stat','utf8');return s.slice(s.lastIndexOf(')')+2,s.lastIndexOf(')')+3)!=='Z'}catch(e){return true}}",
+  "function groupAlive(){try{process.kill(-b,0);return true}catch(e){return e.code==='EPERM'}}",
+  "setInterval(function(){",
+  " if(alive(owner)){if(!groupAlive())process.exit(0);return}",
+  " try{process.kill(-b,'SIGKILL')}catch(e){}try{process.kill(b,'SIGKILL')}catch(e){}",
+  " var pat='user-data-'+'dir='+dir;",
+  " try{cp.spawnSync('pkill',['-KILL','-f',pat])}catch(e){}",
+  " for(var i=0;i<40;i++){var r=cp.spawnSync('pgrep',['-f',pat]);if(r.status===1)break;",
+  "  Atomics.wait(new Int32Array(new SharedArrayBuffer(4)),0,0,100)}",
+  " try{fs.rmSync(dir,{recursive:true,force:true})}catch(e){}",
+  " process.exit(0)",
+  "},500);"
+].join('\n');
+
+function spawnWatchdog(browserPid, profileDir) {
+  try {
+    var env = {};
+    Object.keys(process.env).forEach(function (k) { env[k] = process.env[k]; });
+    env.HL_CDP_WD_DIR = profileDir;
+    var w = childProcess.spawn(process.execPath,
+      ['-e', WATCHDOG_SRC, String(process.pid), String(browserPid)],
+      { detached: true, stdio: 'ignore', env: env });
+    w.unref();
+    return w.pid;
+  } catch (e) {
+    return null; // the exit and signal hooks still cover every catchable end
+  }
 }
 
 /* ---- brand identification -------------------------------------------------
@@ -348,7 +554,15 @@ async function open(url, opts) {
     throw e2;
   }
 
-  var port = opts.port || 9377;
+  /* The port. Left to the browser (`--remote-debugging-port=0`) unless the
+     caller names one, and a named one is refused when anything already listens
+     on it: that listener is, by definition, a browser this run did not start. */
+  var requestedPort = Number(opts.port) || 0;
+  if (requestedPort && await probeListener(requestedPort)) {
+    throw notCheckedError('port ' + requestedPort + ' already has a listener; refusing to ' +
+      'attach to a browser this run did not start. Leave opts.port unset so the browser ' +
+      'chooses a free port.');
+  }
 
   /* A fresh, isolated --user-data-dir on every launch. Before this, the
      browser was spawned with NO profile flag at all, which means headless
@@ -376,7 +590,15 @@ async function open(url, opts) {
      it sounds). `--no-first-run` and `--no-default-browser-check` suppress
      the first-launch prompts a brand new profile would otherwise show,
      which this gate never has a UI able to dismiss. */
-  var profileDir = fs.mkdtempSync(path.join(os.tmpdir(), 'hl-cdp-profile-'));
+  /* HL_CDP_RUN_TAG (set by new-report-gates.sh) puts the caller's tag in the profile
+     name, so a wrapper can find the browsers its own run started and no others. */
+  var runTag = String(process.env.HL_CDP_RUN_TAG || '').replace(/[^A-Za-z0-9]/g, '');
+  // HL_CDP_PROFILE_PREFIX is for the unit tests only: their stand-in browsers must not look like gate
+  // browsers to the pgrep checks other runs make ('hl-cdp-profile').
+  var profileDir = fs.mkdtempSync(path.join(os.tmpdir(),
+    (process.env.HL_CDP_PROFILE_PREFIX || 'hl-cdp-profile-') + (runTag ? runTag + '-' : '')));
+  installHooks();
+  startRunBudget();
   var proc = childProcess.spawn(bin, [
     '--headless',
     '--disable-gpu',
@@ -384,28 +606,83 @@ async function open(url, opts) {
     '--hide-scrollbars',
     '--force-device-scale-factor=1',
     '--window-size=' + (opts.width || 1280) + ',' + (opts.height || 1400),
-    '--remote-debugging-port=' + port,
+    '--remote-debugging-port=' + requestedPort,
     '--remote-allow-origins=*',
     '--user-data-dir=' + profileDir,
     '--no-first-run',
     '--no-default-browser-check',
     'about:blank'
-  ], { stdio: 'ignore' });
+  ], { stdio: 'ignore', detached: true });
+  var entry = { proc: proc, pid: proc.pid, profileDir: profileDir, dead: false, watchdog: null };
+  LIVE.push(entry);
+  var exitInfo = null;
+  proc.on('exit', function (code, sig) { exitInfo = 'exit code ' + code + (sig ? ', signal ' + sig : ''); });
+  var spawnError = null;
+  proc.on('error', function (err) { spawnError = err; });
+  if (proc.pid) entry.watchdog = spawnWatchdog(proc.pid, profileDir);
 
+  try {
+    /* "exited" counts only when nothing of the browser's process group is left: a launcher that
+       forks the real browser and exits is still a running browser. */
+    return await drive(entry, bin, url, opts, WebSocket, requestedPort,
+      function () { return exitInfo && !groupAlive(entry.pid) ? exitInfo : null; },
+      function () { return spawnError; });
+  } catch (err) {
+    killEntry(entry);
+    throw err;
+  }
+}
+
+/* Everything after the spawn. open() owns the browser and kills it if this
+   throws, so no step here needs its own cleanup. */
+async function drive(entry, bin, url, opts, WebSocket, requestedPort, getExit, getSpawnError) {
+  var proc = entry.proc;
+  var profileDir = entry.profileDir;
+  var sendTimeoutMs = opts.sendTimeoutMs || envMs('HL_CDP_SEND_TIMEOUT_MS', DEFAULT_SEND_TIMEOUT_MS);
+
+  // 1. The browser announces its own port in its own profile.
+  var active = null;
+  var activeFile = path.join(profileDir, 'DevToolsActivePort');
+  var launchDeadline = Date.now() + launchWaitMs();
+  while (!active) {
+    if (getSpawnError()) throw notCheckedError('could not start the browser: ' + getSpawnError().message);
+    if (getExit()) throw notCheckedError('the browser exited (' + getExit() + ') before opening its debugging port.');
+    try { active = parseDevToolsActivePort(fs.readFileSync(activeFile, 'utf8')); } catch (err) { active = null; }
+    if (active) break;
+    if (Date.now() > launchDeadline) {
+      throw notCheckedError('the browser started but never opened its debugging port.');
+    }
+    await sleep(100);
+  }
+  var port = active.port;
+  if (requestedPort && port !== requestedPort) {
+    throw notCheckedError('asked for debugging port ' + requestedPort + ' but the browser reports ' + port + '.');
+  }
+  entry.port = port;
+
+  // 2. The thing answering on that port must be that browser.
   var up = null;
-  for (var i = 0; i < 80 && !up; i++) {
-    try { up = await getJSON('http://127.0.0.1:' + port + '/json/version'); }
-    catch (err) { await sleep(250); }
+  while (!up) {
+    try { up = await getJSON('http://127.0.0.1:' + port + '/json/version', 2000); }
+    catch (err) {
+      if (getExit()) throw notCheckedError('the browser exited (' + getExit() + ') before answering on its debugging port.');
+      if (Date.now() > launchDeadline) throw notCheckedError('the browser started but never opened its debugging port.');
+      await sleep(250);
+    }
   }
-  if (!up) {
-    proc.kill();
-    var e3 = new Error('the browser started but never opened its debugging port.');
-    e3.notChecked = true;
-    throw e3;
+  if (active.wsPath && pathOf(up.webSocketDebuggerUrl) !== active.wsPath) {
+    throw notCheckedError('port ' + port + ' is answered by a different browser than the one this run ' +
+      'started (browser id ' + pathOf(up.webSocketDebuggerUrl) + ', expected ' + active.wsPath + '); refusing to attach.');
   }
 
-  var list = await getJSON('http://127.0.0.1:' + port + '/json/list');
-  var target = list.filter(function (t) { return t.type === 'page'; })[0];
+  var target = null;
+  while (!target) {
+    var list = await getJSON('http://127.0.0.1:' + port + '/json/list', 5000);
+    target = list.filter(function (t) { return t.type === 'page'; })[0];
+    if (target) break;
+    if (Date.now() > launchDeadline) throw notCheckedError('the browser opened no page target.');
+    await sleep(100);
+  }
   var ws = new WebSocket(target.webSocketDebuggerUrl, { perMessageDeflate: false });
 
   var id = 0;
@@ -429,7 +706,13 @@ async function open(url, opts) {
 
   ws.on('message', function (raw) {
     var m = JSON.parse(raw.toString());
-    if (m.id && pending[m.id]) { pending[m.id](m); delete pending[m.id]; return; }
+    if (m.id && pending[m.id]) {
+      var waiting = pending[m.id];
+      delete pending[m.id];
+      clearTimeout(waiting.timer);
+      waiting.resolve(m);
+      return;
+    }
     if (m.method === 'Network.requestWillBeSent') {
       networkUrls.push(m.params.request.url);
       // Kept so a later loadingFailed for this requestId can be joined back
@@ -485,13 +768,47 @@ async function open(url, opts) {
       rec.receivedBytes = m.params.receivedBytes;
     }
   });
-  await new Promise(function (r) { ws.on('open', r); });
+  /* A browser that dies or drops the connection rejects every command still
+     waiting on it, so a caller is told NOT CHECKED instead of waiting on an
+     answer that cannot come. */
+  var wsGone = null;
+  function failPending(why) {
+    wsGone = wsGone || why;
+    Object.keys(pending).forEach(function (k) {
+      var w = pending[k];
+      delete pending[k];
+      clearTimeout(w.timer);
+      w.reject(notCheckedError(why));
+    });
+  }
+  ws.on('close', function () { failPending('the browser closed its debugging connection.'); });
+  ws.on('error', function (err) { failPending('the debugging connection failed: ' + err.message); });
+
+  await new Promise(function (resolve, reject) {
+    var t = setTimeout(function () {
+      reject(notCheckedError('the browser did not accept the debugging connection within ' +
+        Math.round(launchWaitMs() / 1000) + 's.'));
+    }, launchWaitMs());
+    ws.on('open', function () { clearTimeout(t); resolve(); });
+    ws.on('error', function (err) { clearTimeout(t); reject(notCheckedError('the debugging connection failed: ' + err.message)); });
+  });
 
   function send(method, params) {
-    return new Promise(function (resolve) {
+    return new Promise(function (resolve, reject) {
+      if (wsGone) { reject(notCheckedError(wsGone)); return; }
       var myId = ++id;
-      pending[myId] = resolve;
-      ws.send(JSON.stringify({ id: myId, method: method, params: params || {} }));
+      var timer = setTimeout(function () {
+        delete pending[myId];
+        reject(notCheckedError('the browser did not answer ' + method + ' within ' +
+          Math.round(sendTimeoutMs / 1000) + 's (HL_CDP_SEND_TIMEOUT_MS).'));
+      }, sendTimeoutMs);
+      pending[myId] = { resolve: resolve, reject: reject, timer: timer };
+      try { ws.send(JSON.stringify({ id: myId, method: method, params: params || {} })); }
+      catch (err) {
+        delete pending[myId];
+        clearTimeout(timer);
+        reject(notCheckedError('could not send ' + method + ': ' + err.message));
+      }
     });
   }
 
@@ -526,6 +843,7 @@ async function open(url, opts) {
       'navigator.userAgentData.brands : null'
     );
   } catch (evalErr) {
+    if (evalErr && evalErr.notChecked) throw evalErr; // a dead browser is not "no Client Hints"
     // No Client Hints support (or the page threw evaluating it) is a fact
     // about the engine, not a reason to fail brand identification outright;
     // brandOf() falls back to the binary path alone.
@@ -541,6 +859,12 @@ async function open(url, opts) {
     // ENGINE version, not the brand: see brand / label below for the name.
     version: up.Browser,
     binary: bin,
+    // The browser this run started: its pid, its port and its profile. Added
+    // so a test (or a caller) can prove which browser it is talking to.
+    pid: proc.pid,
+    watchdog: entry.watchdog,
+    port: port,
+    profileDir: profileDir,
     // The decisive brand name ('Brave', 'Chrome', 'Chromium', 'unknown', ...).
     brand: brandInfo.brand,
     // Both raw readings, so a disagreement is visible rather than resolved
@@ -829,13 +1153,10 @@ async function open(url, opts) {
     consoleErrorDetails: function () { return consoleErrorDetails.slice(); },
     close: function () {
       try { ws.close(); } catch (e) { /* already gone */ }
-      try { proc.kill(); } catch (e) { /* already gone */ }
-      // See removeProfileDirWhenSafe() above: this is still synchronous and
-      // still best-effort in EFFECT (it never throws past the caller), but
-      // it no longer races proc.kill() against the browser's own shutdown,
-      // and a removal that genuinely cannot happen is now logged rather
-      // than swallowed.
-      removeProfileDirWhenSafe(profileDir);
+      // killEntry: the whole process group, the watchdog, and the profile once
+      // no process still names it (see removeProfileDirWhenSafe above). It is
+      // synchronous and best-effort in EFFECT, as close() always was.
+      killEntry(entry);
     }
   };
 }
@@ -849,5 +1170,10 @@ module.exports = {
   // removeProfileDirWhenSafe's own comment above): exported so the wait/remove
   // and wait/give-up paths can be exercised directly against a real short-lived
   // marker process, without spawning an actual browser.
-  removeProfileDirWhenSafe: removeProfileDirWhenSafe
+  removeProfileDirWhenSafe: removeProfileDirWhenSafe,
+  // Test-only surface for the isolation logic (T-0505).
+  parseDevToolsActivePort: parseDevToolsActivePort,
+  probeListener: probeListener,
+  processAlive: processAlive,
+  liveBrowsers: function () { return LIVE.length; }
 };

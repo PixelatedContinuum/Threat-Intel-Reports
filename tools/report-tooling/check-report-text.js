@@ -550,16 +550,20 @@ async function main() {
 
   var all = [];
 
-  /* One browser at a time, each on its own debugging port.
+  /* One browser at a time, each started by this run on a port the browser
+     chooses itself (lib/cdp.js; no port is passed here).
 
      MEASURED 2026-10-29: opening the baseline and the page in two browsers that
      both defaulted to port 9377 made the second launch attach to the FIRST
      browser's target list, because the first had not finished exiting and the
      port was still held. Both extractions then ran against the same document and
      the check reported a perfect match between a page and itself, which is the
-     worst possible false pass. A single monotonic port counter, one port per
-     launch, removes the race; the location check below is the tripwire that
-     would catch it again.
+     worst possible false pass. A counter of fixed ports (9401, 9402, ...) only
+     moved the collision: a browser left over from another run still answered on
+     one of them (2026-10-31, T-0505). lib/cdp.js now asks the browser for a free
+     port and reads it from the browser's own profile, refuses a different
+     browser answering there, and kills its browser on every exit path; the
+     location check below stays as the tripwire for the same fault.
 
      SCRIPTS OFF FOR THE BASELINE, ON FOR THE PAGE, and both halves are measured.
      The live page carries inline scripts inside the article that add a "Copy"
@@ -572,9 +576,6 @@ async function main() {
      published), and the page is read with its own script running, because the
      tabbed page builds its panels and views at runtime and that is what is being
      checked. */
-  var portSeq = 9400;
-  function nextPort() { portSeq += 1; return portSeq; }
-
   for (var wi = 0; wi < widths.length; wi++) {
     var width = widths[wi];
     console.log('');
@@ -584,7 +585,7 @@ async function main() {
       var pg;
       try {
         pg = await CDP.open(scripts ? withOnePage(target) : 'about:blank',
-          { width: width, height: 1400, port: nextPort(), settle: scripts ? 3000 : 500 });
+          { width: width, height: 1400, settle: scripts ? 3000 : 500 });
         if (!scripts) {
           await pg.send('Emulation.setScriptExecutionDisabled', { value: true });
           await pg.send('Page.navigate', { url: withOnePage(target) });
