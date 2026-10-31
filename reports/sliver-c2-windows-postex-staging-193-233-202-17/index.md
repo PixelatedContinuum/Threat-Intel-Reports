@@ -36,6 +36,7 @@ stix_bundle: /stix/sliver-c2-windows-postex-staging-193-233-202-17.json
 
 ## BLUF (Bottom Line Up Front)
 {: .hl-tier-1}
+{: .hl-tab-overview}
 
 An open directory on `193.233.202.17` held a complete Windows post-exploitation kit built around a Sliver command-and-control beacon, together with a second and entirely separate implant that reads its C2 address out of an Ethereum smart contract. The operator reached a Windows Active Directory estate at one US organisation, created a Domain Admin account by script, disabled endpoint protection by product-specific service name, and subverted the victim's own DNS content filter through its administrative API so their C2 domain would resolve and pass the filter.
 
@@ -49,6 +50,7 @@ The most useful thing I can say about this actor is where they spent their effor
 
 ## 1. Executive Summary
 {: .hl-tier-1}
+{: .hl-tab-overview}
 
 The operator got into a Windows domain, took Domain Admin, and then spent their time making sure they could stay and could reach the rest of the estate. That is the short answer to what they did inside the network, and every part of it is scripted rather than improvised.
 
@@ -88,6 +90,7 @@ For the campaign rather than the intrusion, poll the resolver contract.
 
 ## 2. What Is Already Public, and What This Report Adds
 {: .hl-tier-1}
+{: .hl-tab-overview}
 
 This infrastructure was not found first here, and saying so plainly is the honest frame for everything that follows.
 
@@ -115,6 +118,7 @@ If any of those is yours to answer, please take it. My congratulations to the pe
 
 ## 3. Business Risk Assessment
 {: .hl-tier-1}
+{: .hl-tab-overview}
 
 I rate this **8.1 out of 10, HIGH**. The staged capability set is a complete pre-ransomware kill chain against a Windows domain, with credential access, privilege escalation, lateral movement and two independent command-and-control channels all present and all built for a real environment.
 
@@ -157,6 +161,7 @@ One detail from the deployment scripts is worth reading as targeting rather than
 
 ## 4. Technical Classification
 {: .hl-tier-2}
+{: .hl-tab-chain}
 
 | Field | Assessment |
 |---|---|
@@ -180,6 +185,7 @@ The kit was authored and staged on a Linux host, which I rate HIGH on three conv
 
 ## 5. What the Operator Did Inside the Network
 {: .hl-tier-2}
+{: .hl-tab-chain}
 
 Everything in this section is **staged capability**. The scripts prove the operator prepared these commands and knew this environment in detail. They do not prove that every command ran, reached every listed host, or succeeded. I hold that distinction throughout because it is the one most easily lost between an evidence record and a report.
 
@@ -276,6 +282,7 @@ Remote task deployment rides on a base64-encoded batch script, 387 bytes once de
 
 ## 6. The Two C2 Strands, and What Ties Them Together
 {: .hl-tier-2}
+{: .hl-tab-chain}
 
 The kit runs two command-and-control channels that share almost nothing technically. One is a Sliver beacon talking to a raw IP address. The other is a Node.js implant that asks a public blockchain where to report. They look like two separate operations that happened to be staged in the same directory, and for a while I treated them that way.
 
@@ -371,6 +378,7 @@ There is an irony in that hop worth recording without over-reading. Adding an in
 
 ## 7. Infrastructure and Registration
 {: .hl-tier-2}
+{: .hl-tab-timeline}
 
 The hosting is a mixed stack rather than one bulletproof provider, and the registration pattern behind the domain-rotation layer turned out to carry more signal than any single address did.
 
@@ -427,6 +435,7 @@ Across the whole portfolio, bulletproof hosting is **SUSPECTED rather than CONFI
 
 ## 8. Static Analysis Findings
 {: .hl-tier-3}
+{: .hl-tab-chain}
 
 The binaries turned out to be simpler than they looked, and the correction is worth leading with because the first reading of this corpus got it wrong in an instructive way.
 
@@ -471,6 +480,7 @@ None of this stock tooling should be turned into campaign detection content, and
 
 ## 9. Dynamic Analysis Findings
 {: .hl-tier-3}
+{: .hl-tab-chain}
 
 Everything in this section is the implant's own behaviour rather than an inference from its bytes.
 
@@ -578,6 +588,7 @@ What the fingerprint is still good for is hunting inside an environment already 
 
 ## 10. MITRE ATT&CK Mapping
 {: .hl-tier-2}
+{: .hl-tab-chain}
 
 Fifty-nine techniques map to this campaign across eleven tactics, 54 of them at HIGH or DEFINITE and 5 at MODERATE. The concentration tells you what kind of operation this is. Command and Control carries eleven techniques and Defense Evasion nine, which is where an operator building for a long stay spends their effort, while Execution and Discovery carry the breadth you would expect from someone who already had access and was working out what they had reached.
 
@@ -664,6 +675,7 @@ The mapping uses ATT&CK v19.2. The T1562 Impair Defenses tree was revoked in tha
 
 ## 11. Threat Actor Assessment
 {: .hl-tier-2}
+{: .hl-tab-attribution}
 
 > **Note on UTA identifiers:** "UTA" stands for Unattributed Threat Actor. <a href="/actors/UTA-2026-024/">UTA-2026-024</a> is a tracking label The Hunters Ledger assigns to an actor I have observed but cannot yet link to a publicly named threat group. Other vendors and feeds will not use this label; it is specific to this publication. If later evidence ties the activity to a named actor, I will retire the label and update the report.
 
@@ -723,6 +735,7 @@ What keeps all three alive is that the setter is permissionless, so the contract
 
 ## 12. Indicators of Compromise
 {: .hl-tier-2}
+{: .hl-tab-indicators}
 
 The full machine-readable feed is published separately at [`sliver-c2-windows-postex-staging-193-233-202-17-iocs.json`](/ioc-feeds/sliver-c2-windows-postex-staging-193-233-202-17-iocs.json), carrying 321 indicators. That includes 234 file hashes across 80 unique samples, three IP addresses, six domains, nine URLs, seven registry keys, 22 file paths, five scheduled-task names and the blockchain constants.
 
@@ -738,6 +751,7 @@ The feed carries an explicit exclusions list and it is not padding. Twelve value
 
 ## 13. Detection and Response Guidance
 {: .hl-tier-2}
+{: .hl-tab-indicators}
 
 The complete rule set is published separately at [`/hunting-detections/sliver-c2-windows-postex-staging-193-233-202-17-detections/`](/hunting-detections/sliver-c2-windows-postex-staging-193-233-202-17-detections/), and it carries 18 rules: 4 YARA, 12 Sigma and 2 Suricata. Ten are alerting-grade Detection rules and eight are broader Hunting rules for scoping. Every one of them keys on a behaviour or a build artifact rather than an address, because this operator has already demonstrated five domain rotations, three addresses and twenty per-build ports.
 
@@ -787,6 +801,7 @@ For ongoing tracking, monitor the resolver contract rather than chasing domains.
 
 ## 14. Confidence Summary and Evidence Gaps
 {: .hl-tier-2}
+{: .hl-tab-confidence}
 
 What follows separates what this investigation settled from what it deliberately left open, and says what would close each remaining gap rather than leaving it as an unexplained absence.
 
@@ -828,6 +843,7 @@ Each of those was one cheap check away, and each is recorded here rather than qu
 
 ## 15. References
 {: .hl-tier-2}
+{: .hl-tab-confidence}
 
 Prior publication on this infrastructure, in date order:
 
