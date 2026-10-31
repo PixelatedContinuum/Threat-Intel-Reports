@@ -431,7 +431,8 @@ a.hl-rvsp__item:hover .hl-rvsp__cta, a.hl-rv-sponsor-card__item:hover .hl-rv-spo
   border-left: 3px solid var(--acc); border-bottom: 1px solid var(--rv-line); border-radius: 7px 7px 0 0;
 }
 .hl-rv-view-summary::before { content: 'DATA VIEW'; flex: none; font-family: var(--rv-mono); font-size: var(--rv-fs-mono); letter-spacing: 0.1em; color: var(--acc); }
-.hl-rv-view-summary:has(button[aria-expanded="false"]) { border-bottom: 0; border-radius: 7px; }
+/* a collapsed bar is a whole card only when nothing sits under it; with the curated note under it the bar keeps its square bottom corners and its divider, and the note is the card's second row (T-0500.1.10.1) */
+.hl-rv-view:not(:has(> .hl-rv-curated)) > .hl-rv-view-summary:has(button[aria-expanded="false"]) { border-bottom: 0; border-radius: 7px; }
 .hl-rv-view-summary p { flex: 1 1 18rem; margin: 0 !important; font-size: 17px; font-weight: 400; line-height: 1.4; color: var(--rv-text) !important; font-variant-numeric: tabular-nums; }
 .hl-report-page .hl-rv-view-summary button { flex: none; margin-left: auto; }
 .hl-rv-view-body { min-width: 0; display: flex; flex-direction: column; gap: 20px; padding: var(--rv-pad); }
@@ -439,6 +440,7 @@ a.hl-rvsp__item:hover .hl-rvsp__cta, a.hl-rv-sponsor-card__item:hover .hl-rv-spo
 .hl-report-page .hl-rv-view p { margin: 0; }
 .hl-rv-note, .hl-rv-unavailable, .hl-rv-curated { font-size: var(--rv-fs); line-height: 1.5; color: var(--rv-muted) !important; margin: 0; }
 .hl-rv-view > .hl-rv-curated { padding: 0 var(--rv-pad) var(--rv-pad); margin: -8px 0 0 !important; }
+.hl-rv-view:has(> .hl-rv-view-summary button[aria-expanded="false"]) > .hl-rv-curated { padding-top: 12px; margin-top: 0 !important; }
 .hl-report-page .hl-rv-view :is(h3, h4) { margin: 0 0 8px !important; padding: 0 !important; border: 0 !important; background: none !important; font-family: var(--rv-display); font-size: 16px !important; font-weight: 600 !important; color: var(--rv-text) !important; }
 .hl-report-page .hl-rv-view strong { font-weight: 600; color: var(--rv-text); }
 .hl-report-page .hl-rv-view a { color: var(--acc); font-size: var(--rv-fs); text-decoration: none; }

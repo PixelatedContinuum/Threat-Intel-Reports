@@ -70,7 +70,7 @@ test('CSS: the band is no longer glued to the nav by a negative margin', () => {
 });
 test('the cache-busters moved with the stylesheet and the script, on the tabbed branch only', () => {
   const v = [...layout.matchAll(/hl-report-tabs\.(css|js)' \| relative_url \}\}\?v=([0-9.]+)/g)].map(x => x[2]);
-  assert.equal(v.length, 2); assert.deepEqual(v, ['20261031.2', '20261031.2']); // the stylesheet moved in T-0500.1.9.1 (box fit: next/previous cards in a column, h3 permalink, timeline end labels, 900px tab labels); the script moved in T-0500.1.10 (one-tab footer, d842b96)
+  assert.equal(v.length, 2); assert.deepEqual(v, ['20261031.3', '20261031.2']); // the stylesheet moved in T-0500.1.10.1 (collapsed data-view card: the bar keeps square corners over its curated note); it moved before that in T-0500.1.9.1 (box fit: next/previous cards in a column, h3 permalink, timeline end labels, 900px tab labels); the script moved in T-0500.1.10 (one-tab footer, d842b96)
 });
 
 function item(kind, name, tagline, logo, href) {

@@ -2306,6 +2306,94 @@ async function boxFitRows(page, url, html) {
   await restoreReportPage(page, url);
 }
 
+/* T-0500.1.10.1: the collapsed data view. Two rows and three controls (lib/box-fit.js, "the collapsed data view", says what is measured).
+   Joseph, on a phone, saw the collapsed Data view bar drawn as a whole rounded card with the curated note hanging under it, touching its
+   bottom edge. The box-fit rows above open every view before they measure and judge each box against its own content, so neither could.
+     1. with each data view collapsed, no visible element of the view overlaps a painted sibling
+     2. with each data view collapsed, a bar with rounded bottom corners has no visible sibling under it
+   Both over every tab at 1280 and 390 px. Controls, each a copy of the page served with ONE appended rule, all on a view that has the
+   curated note (the report's own, or one the gate injects the way the layout builds it):
+     overlap   the note given its old margin -8px: row 1 must FAIL, row 2 must PASS                  (1280)
+     rounded   the bar given its old full radius with the note under it: row 2 must FAIL, row 1 PASS (390)
+     shipped   both old rules restored: BOTH rows must FAIL                                         (390)
+   A control whose view or note is not on the page, or whose mutation was not measured, is NOT CHECKED, never a pass. */
+var VIEW_VIEWPORTS = [[1280, 900, 'desktop'], [390, 844, 'phone']];
+/* the class lists are doubled so the old rule outweighs the fixed one (:has() counts as its most specific argument): a copy whose mutation lost the cascade would move nothing and prove nothing */
+var VIEW_OLD_NOTE = '.hl-report-page.hl-report-page .hl-rv-view.hl-rv-view > .hl-rv-curated.hl-rv-curated { margin-top: -8px !important; padding-top: 0 !important; }\n';
+var VIEW_OLD_BAR = '.hl-report-page.hl-report-page .hl-rv-view.hl-rv-view > .hl-rv-view-summary.hl-rv-view-summary:has(button[aria-expanded="false"]) { border-bottom: 0 !important; border-radius: 7px !important; }\n';
+var VIEW_CONTROLS = [
+  { key: 'overlap', vp: [1280, 900, 'desktop'], overlap: false, rounded: true, css: '\n' + VIEW_OLD_NOTE },
+  { key: 'rounded', vp: [390, 844, 'phone'], overlap: true, rounded: false, css: '\n' + VIEW_OLD_BAR },
+  { key: 'shipped', vp: [390, 844, 'phone'], overlap: false, rounded: false, css: '\n' + VIEW_OLD_NOTE + VIEW_OLD_BAR }
+];
+var VIEW_INJECT_NOTE_EXPR = '(function(tab){var v=document.querySelector("#tab-"+tab+" .hl-rv-view");if(!v)return false;' +
+  'var p=document.createElement("p");p.className="hl-rv-curated";p.setAttribute("data-rv-chrome","");p.setAttribute("data-pagefind-ignore","");' +
+  'p.textContent="View selections curated for this report (injected control).";v.appendChild(p);return true;})(__TAB__)';
+async function viewCollapsedState(page, label, hash) {
+  await page.evaluate('location.hash=' + JSON.stringify(hash));
+  await CDP.sleep(90);
+  /* every data view collapsed: on a phone they start so, on a desktop the reader's Hide button does it */
+  await page.evaluate('document.querySelectorAll("button[aria-expanded=true][id^=hl-rv-toggle-]").forEach(function(b){b.click();})');
+  await CDP.sleep(120);
+  var m = await page.json(BOXFIT.VIEW_EXPR);
+  if (m.notChecked) return { label: label, notChecked: m.notChecked };
+  m.label = label;
+  return m;
+}
+async function viewFitRows(page, url, html) {
+  var nameOverlap = 'with each data view collapsed, no visible element of the view overlaps a painted sibling, on every tab at 1280 and 390 px';
+  var nameRounded = 'with each data view collapsed, a summary bar with rounded bottom corners has no visible sibling under it, on every tab at 1280 and 390 px';
+  var states = [];
+  for (var v = 0; v < VIEW_VIEWPORTS.length; v++) {
+    var w = VIEW_VIEWPORTS[v][0], h = VIEW_VIEWPORTS[v][1];
+    await setViewport(page, w, h);
+    if (!(await gotoAndWait(page, url))) { states.push({ label: w + 'x' + h, notChecked: 'the tab controller never built at ' + w + 'x' + h }); continue; }
+    var toks = liveTokens();
+    for (var i = 0; i < toks.length; i++) states.push(await viewCollapsedState(page, w + 'x' + h + ' ' + toks[i], '#tab-' + toks[i]));
+  }
+  [['overlap', nameOverlap], ['rounded', nameRounded]].forEach(function (x) {
+    var vd = BOXFIT.viewVerdict(states, x[0]);
+    if (vd.notChecked) check('NOT CHECKED: ' + x[1], false, vd.detail);
+    else check(x[1], vd.ok, vd.detail);
+  });
+  var base;
+  try { base = fs.readFileSync(path.join(ROOT, 'assets', 'css', 'hl-report-tabs.css'), 'utf8'); } catch (e) { base = null; }
+  for (var c = 0; c < VIEW_CONTROLS.length; c++) {
+    var ctl = VIEW_CONTROLS[c];
+    var cname = 'control: on a copy of the page with ' + ({
+      overlap: 'the curated note given its old margin of -8px over the collapsed bar, the overlap row FAILS and the rounded row PASSES',
+      rounded: 'the collapsed bar given its old full radius with the curated note under it, the rounded row FAILS and the overlap row PASSES',
+      shipped: 'both old rules restored (the card Joseph saw on a phone), both rows FAIL'
+    })[ctl.key];
+    if (!base) { check('NOT CHECKED: ' + cname, false, 'assets/css/hl-report-tabs.css could not be read, so no copy could be built'); continue; }
+    var cpath = new URL(url).pathname + '__view-fit-' + ctl.key + '/';
+    var srv = await SERVER.start({ [cpath]: html }, { root: ROOT, base: BASE, files: { [BOX_CSS_PATH]: base + ctl.css } });
+    try {
+      await setViewport(page, ctl.vp[0], ctl.vp[1]);
+      if (!(await gotoAndWait(page, srv.origin + cpath))) { check('NOT CHECKED: ' + cname, false, 'the tab controller never built on the control copy'); continue; }
+      var tab = await page.evaluate('(function(){var n=document.querySelector(".hl-rv-view > .hl-rv-curated");var p=n&&n.closest("[id^=tab-]");return p?p.id.replace("tab-",""):null;})()');
+      var injected = false;
+      if (!tab) {
+        /* a report whose curation names none of the views builds no note; the control still has to show the rows can see the defect, so the
+           gate puts a note of the layout's shape into a view of the copy, the way it injects a card or a table elsewhere */
+        tab = otherTab();
+        injected = await page.evaluate(VIEW_INJECT_NOTE_EXPR.replace('__TAB__', JSON.stringify(tab)));
+        if (!injected) { check('NOT CHECKED: ' + cname, false, 'the page has no data view on the ' + tab + ' tab to put a curated note in'); continue; }
+      }
+      var st = await viewCollapsedState(page, ctl.vp[0] + 'x' + ctl.vp[1] + ' ' + tab, '#tab-' + tab);
+      var ov = BOXFIT.viewVerdict([st], 'overlap'), rv = BOXFIT.viewVerdict([st], 'rounded');
+      if (ov.notChecked || rv.notChecked) { check('NOT CHECKED: ' + cname, false, 'the control copy measured no collapsed data view: ' + ov.detail); continue; }
+      var inView = function (vd) { return vd.findings.some(function (f) { return /hl-rv-view/.test(f.view); }); };
+      var ovOk = ctl.overlap ? ov.ok : (!ov.ok && inView(ov)), rvOk = ctl.rounded ? rv.ok : (!rv.ok && inView(rv));
+      check(cname, ovOk && rvOk,
+        (injected ? '(on a note the gate injected: no view of this report carries one) ' : '') +
+        'overlap row: ' + (ov.ok ? 'PASS' : 'FAIL ' + ov.count + ' fault(s), first: ' + ov.detail.split('; ')[0]) +
+        ' | rounded row: ' + (rv.ok ? 'PASS' : 'FAIL ' + rv.count + ' fault(s), first: ' + rv.detail.split('; ')[0]));
+    } finally { srv.close(); }
+  }
+  await restoreReportPage(page, url);
+}
+
 async function tabbedChecks(page, opts) {
   var url = opts.url;
 
@@ -2991,6 +3079,7 @@ async function tabbedChecks(page, opts) {
   await attackStripRows(page, url, opts.html);
   await tabControlRows(page, url, opts.html);
   await boxFitRows(page, url, opts.html);
+  await viewFitRows(page, url, opts.html);
 
   /* ---- 4a: the bar at 768/812x375, and the targets 4a names (p7) -------- */
   await tabBarRows(page, url);
@@ -3729,6 +3818,8 @@ if (require.main === module) {
     attackStripControlHtml: attackStripControlHtml,
     ATTACK_STRIP_EXPR: ATTACK_STRIP_EXPR,
     BOX_CONTROLS: BOX_CONTROLS,
-    boxFitRows: boxFitRows
+    boxFitRows: boxFitRows,
+    viewFitRows: viewFitRows,
+    VIEW_CONTROLS: VIEW_CONTROLS
   };
 }

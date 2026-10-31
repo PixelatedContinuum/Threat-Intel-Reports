@@ -270,4 +270,110 @@ function verdict(states, which) {
   return { ok: true, count: 0, findings: [], detail: '0 faults; ' + detail };
 }
 
-module.exports = { EXPR: EXPR, boxFit: boxFit, verdict: verdict, describe: describe };
+/* ---- T-0500.1.10.1: the collapsed data view ------------------------------------------------------------------------------------
+   Joseph, on a phone (live pilot, Attack chain tab): the collapsed "Data view" bar drawn as a fully rounded card with the line
+   "View selections curated for this report." hanging under it, touching its bottom edge. Two CSS rules disagreed (the collapsed bar
+   was given a full radius and no divider as if nothing followed it; the note was given margin -8px as if the body above it were
+   open), and the box-fit rows above missed it twice over: boxFitState opens every view before it measures, and each box fits its own
+   content even when two boxes overlap each other.
+
+   WHAT IT MEASURES, with every data view collapsed, in the page, over the views on screen (a view in a hidden tab has no box):
+     overlap   two in-flow, non-inline siblings anywhere inside a view whose boxes intersect by more than 1px on both axes, where
+               either one paints (a background, image, border, shadow, or a text run of its own): the unpainted note laid over the
+               painted bar is the case Joseph saw
+     rounded   a summary bar with a rounded bottom corner that has a visible in-flow sibling after it in the view: a card whose first
+               row is a closed shape with a row hanging under it
+   A view whose button says aria-expanded other than false is counted as not collapsed and not measured; a view with no bar or no
+   button is counted and not measured. A bar with nothing under it that keeps its full radius is the design; it is counted
+   (roundedAlone), not faulted. An unmeasured state is NOT CHECKED. ES5, like the other in-page expressions. */
+function viewFit() {
+  var root = document.querySelector('.hl-report-page');
+  var o = { views: 0, collapsed: 0, notCollapsed: 0, noBar: 0, withNote: 0, siblingPairs: 0, rounded: 0, roundedAlone: 0, overlap: [], roundedOver: [] };
+  if (!root) return { notChecked: 'no .hl-report-page on the page', views: 0 };
+  function px(v) { var n = parseFloat(v); return isNaN(n) ? 0 : n; }
+  function r1(n) { return Math.round(n * 10) / 10; }
+  function sig(e) { var c = String(e.getAttribute('class') || '').split(/\s+/).filter(Boolean).slice(0, 2).join('.'); return e.tagName.toLowerCase() + (c ? '.' + c : ''); }
+  var SKIP = { SCRIPT: 1, STYLE: 1, NOSCRIPT: 1, TEMPLATE: 1, LINK: 1, META: 1, BR: 1, WBR: 1 };
+  function shown(e) {
+    if (SKIP[e.tagName]) return null;
+    var c = getComputedStyle(e);
+    if (c.display === 'none' || c.display === 'contents' || c.visibility === 'hidden' || c.visibility === 'collapse') return null;
+    var r = e.getBoundingClientRect();
+    return r.width >= 1 && r.height >= 1 ? { c: c, r: r } : null;
+  }
+  function paints(e, c) {
+    if (/^(IMG|SVG|CANVAS|VIDEO|INPUT|SELECT|TEXTAREA|PICTURE|IFRAME)$/i.test(e.tagName)) return true;
+    if (c.backgroundImage && c.backgroundImage !== 'none') return true;
+    if (c.backgroundColor && c.backgroundColor !== 'transparent' && !/rgba\(.*,\s*0\)$/.test(c.backgroundColor)) return true;
+    var S = ['Left', 'Right', 'Top', 'Bottom'];
+    for (var k = 0; k < S.length; k++) if (px(c['border' + S[k] + 'Width']) > 0 && c['border' + S[k] + 'Style'] !== 'none' && !/rgba\(.*,\s*0\)$/.test(c['border' + S[k] + 'Color'] || '')) return true;
+    if (c.boxShadow && c.boxShadow !== 'none') return true;
+    for (var n = e.firstChild; n; n = n.nextSibling) if (n.nodeType === 3 && /\S/.test(n.nodeValue)) return true;
+    return false;
+  }
+  function flow(c) { return c.position !== 'absolute' && c.position !== 'fixed'; }
+  var views = root.querySelectorAll('.hl-rv-view');
+  for (var i = 0; i < views.length; i++) {
+    var v = views[i];
+    if (!shown(v)) continue;
+    o.views++;
+    var bar = null, ch = v.children;
+    for (var j = 0; j < ch.length; j++) if (/\bhl-rv-view-summary\b/.test(ch[j].className)) { bar = ch[j]; break; }
+    var btn = bar && bar.querySelector('button[aria-expanded]');
+    if (!bar || !btn) { o.noBar++; continue; }
+    if (btn.getAttribute('aria-expanded') !== 'false') { o.notCollapsed++; continue; }
+    o.collapsed++;
+    if (v.querySelector(':scope > .hl-rv-curated')) o.withNote++;
+    /* overlap: every shown, in-flow, non-inline element in the view against its later siblings */
+    var all = [v].concat([].slice.call(v.querySelectorAll('*')));
+    for (var a = 0; a < all.length; a++) {
+      var A = shown(all[a]);
+      if (!A || !flow(A.c) || A.c.display === 'inline') continue;
+      for (var f = all[a].nextElementSibling; f; f = f.nextElementSibling) {
+        var B = shown(f);
+        if (!B || !flow(B.c) || B.c.display === 'inline') continue;
+        o.siblingPairs++;
+        var ox = Math.min(A.r.right, B.r.right) - Math.max(A.r.left, B.r.left), oy = Math.min(A.r.bottom, B.r.bottom) - Math.max(A.r.top, B.r.top);
+        if (ox > 1 && oy > 1 && (paints(all[a], A.c) || paints(f, B.c)))
+          o.overlap.push({ kind: 'overlap', sig: sig(all[a]), other: sig(f), by: r1(oy), wide: r1(ox), view: sig(v) });
+      }
+    }
+    /* rounded: the bar's bottom corners against what follows it */
+    var bs = getComputedStyle(bar), rad = Math.max(px(bs.borderBottomLeftRadius), px(bs.borderBottomRightRadius));
+    var after = null;
+    for (var g = bar.nextElementSibling; g; g = g.nextElementSibling) { var G = shown(g); if (G && flow(G.c)) { after = g; break; } }
+    if (rad > 0) {
+      o.rounded++;
+      if (after) o.roundedOver.push({ kind: 'rounded-over-sibling', sig: sig(bar), other: sig(after), radius: rad, view: sig(v) });
+      else o.roundedAlone++;
+    }
+  }
+  return o;
+}
+var VIEW_EXPR = '(' + viewFit.toString() + ')()';
+
+/* states: [{ label, views, collapsed, ... overlap, roundedOver } | { label, notChecked }]; which: 'overlap' | 'rounded' */
+function viewVerdict(states, which) {
+  var good = (states || []).filter(function (s) { return s && !s.notChecked && s.collapsed > 0; });
+  var bad = (states || []).filter(function (s) { return !s || s.notChecked || !(s.collapsed > 0); });
+  if (!good.length) return { notChecked: true, ok: false, detail: 'no collapsed data view was measured' + (bad.length ? ' (' + bad.map(function (s) { return s && s.notChecked || 'no collapsed view'; }).join('; ') + ')' : '') };
+  var key = which === 'rounded' ? 'roundedOver' : 'overlap', findings = [];
+  good.forEach(function (s) { (s[key] || []).forEach(function (f) { findings.push(Object.assign({ where: s.label + ': ' }, f)); }); });
+  var sum = function (k) { return good.reduce(function (a, s) { return a + (s[k] || 0); }, 0); };
+  var unit = sum('collapsed') + ' collapsed data views in ' + good.length + ' tab/viewport states (' + sum('withNote') + ' with the curated note under the bar)';
+  var detail = which === 'rounded'
+    ? sum('rounded') + ' bars with a rounded bottom corner, ' + sum('roundedAlone') + ' of them with nothing under them; ' + unit
+    : sum('siblingPairs') + ' sibling pairs compared; ' + unit;
+  var notC = sum('notCollapsed'); if (notC) detail += '; NOT MEASURED: ' + notC + ' view(s) that were not collapsed';
+  if (bad.length) detail += '; NOT MEASURED: ' + bad.length + ' state(s)';
+  if (findings.length) {
+    var d = findings.slice(0, 4).map(function (f) {
+      return f.where + (f.kind === 'overlap' ? f.sig + ' overlaps its sibling ' + f.other + ' by ' + f.by + 'px (' + f.wide + 'px wide) inside ' + f.view
+        : f.sig + ' has a bottom radius of ' + f.radius + 'px and ' + f.other + ' under it inside ' + f.view);
+    }).join(' | ');
+    return { ok: false, count: findings.length, findings: findings, detail: findings.length + ' fault(s): ' + d + (findings.length > 4 ? ' | +' + (findings.length - 4) + ' more' : '') + '; ' + detail };
+  }
+  return { ok: true, count: 0, findings: [], detail: '0 faults; ' + detail };
+}
+
+module.exports = { EXPR: EXPR, boxFit: boxFit, verdict: verdict, describe: describe, VIEW_EXPR: VIEW_EXPR, viewFit: viewFit, viewVerdict: viewVerdict };
