@@ -21,8 +21,8 @@ detection_sections:
   - label: "Suricata Signatures"
     anchor: "#suricata-signatures"
 ioc_highlights:
-  - "77.110.96.200"
-  - "77.110.125.145"
+  - "77[.]110[.]96[.]200"
+  - "77[.]110[.]125[.]145"
   - "eaaa10c840de23335abae1a9ead0a6a7fb7be5187cd19ad05137feab12bb7301"
   - "e943b58112f58517b95424dba9334bf97c5dc2dd2f069dca04b9e75b9fec56ba"
   - "008bc5ab6e62c9e55e3dd2da5ef31e1e0f05f35c5898a8ef5c7aeaf6e2a2c46f6"
@@ -42,7 +42,7 @@ figure_nav:
         anchor: "#91-the-4-tier-supply-chain-model-central-attribution-finding"
 ---
 
-**Campaign Identifier:** GHOST-Cryptojacker-Vova75Rus-77.110.96.200<br>
+**Campaign Identifier:** GHOST-Cryptojacker-Vova75Rus-77[.]110[.]96[.]200<br>
 **Last Updated:** June 19, 2026<br>
 **Threat Level:** HIGH
 
@@ -74,7 +74,7 @@ Each finding is named here and dissected in its home section:
 
 Censys documented the kit on one host with hash-IOC-only coverage and an implied per-victim compilation model. This investigation adds **seven net-new contributions**:
 
-1. **Sibling deployment at 77.110.125.145**: confirms multi-tenant commodity, not a single-host bespoke campaign.
+1. **Sibling deployment at 77[.]110[.]125[.]145**: confirms multi-tenant commodity, not a single-host bespoke campaign.
 2. **Byte-identical `libpam_cache.so` across customers** (DEFINITE): refutes per-victim compilation; proves a pre-compiled kit-author artifact with 17-byte per-customer config substitution.
 3. **Kit-author OWNER Telegram bot signature** (8415540095): the campaign's highest-value detection string.
 4. **Full 27-string + 9-port hide-list inventory**: Censys reported the rootkit's existence, not its filter list.
@@ -114,15 +114,15 @@ One disclosure outcome landed on 2026-06-19. Of the three Hetzner-customer Comfy
 Three identity tiers, detailed with full evidence in §9. Vova75Rus is **not** any customer operator. The wallet-match test refuted the initial conflation (§13.2): his personal XTM/Tari setup (Kryptex worker `1238rkM7gGg3sl`) is distinct from Operator-A's XMR + CFX wallets.
 
 - **Vova75Rus** (kit author, GitHub UID 73169104): **HIGH (88%), NAMED** (§9.2). Russian-origin; account suspended by GitHub T&S 2026-05-25.
-- **<a href="/actors/UTA-2026-016/">UTA-2026-016</a>** *(an internal tracking label used by The Hunters Ledger, see Section 9)* = Operator-A (77.110.96.200), **LOW (65%, top of the LOW band)**, unattributed (§9.3). DEFINITE Russian-speaking; higher-OPSEC (self-hosted XMR/CFX pool proxies); active.
-- **<a href="/actors/UTA-2026-017/">UTA-2026-017</a>** = Operator-B (77.110.125.145): **LOW (60%)**, unattributed (§9.4). DEFINITE Russian-speaking; lower-OPSEC (public pools); host abandoned ~5 days post-Censys.
+- **<a href="/actors/UTA-2026-016/">UTA-2026-016</a>** *(an internal tracking label used by The Hunters Ledger, see Section 9)* = Operator-A (77[.]110[.]96[.]200), **LOW (65%, top of the LOW band)**, unattributed (§9.3). DEFINITE Russian-speaking; higher-OPSEC (self-hosted XMR/CFX pool proxies); active.
+- **<a href="/actors/UTA-2026-017/">UTA-2026-017</a>** = Operator-B (77[.]110[.]125[.]145): **LOW (60%)**, unattributed (§9.4). DEFINITE Russian-speaking; lower-OPSEC (public pools); host abandoned ~5 days post-Censys.
 - **UnamSanctam** (upstream OSS): **HIGH (90%) on the passive-OSS-author role, NOT a Case 9 threat actor** (§9.5). Supplies UnamWebPanel / SilentCryptoMiner tooling the kit author bundles.
 
 ### For Technical Teams
 
 Five immediate priorities for SOC analysts, threat hunters, and Linux endpoint defenders (rules in §10):
 
-1. **Hunt the OWNER Telegram bot signature.** Search Linux-host egress HTTPS for `api.telegram.org/bot8415540095:*`: one string match catches every GHOST customer worldwide. Broaden with the bash-history token regex `\d{8,10}:[A-Za-z0-9_-]{30,40}` for any plaintext bot token.
+1. **Hunt the OWNER Telegram bot signature.** Search Linux-host egress HTTPS for `api[.]telegram[.]org/bot8415540095:*`: one string match catches every GHOST customer worldwide. Broaden with the bash-history token regex `\d{8,10}:[A-Za-z0-9_-]{30,40}` for any plaintext bot token.
 2. **Audit `/etc/ld.so.preload`.** Any non-empty value on a production server is suspicious; cross-check its mtime and `libpam_cache.so` under `/lib/security/` (or `/lib/x86_64-linux-gnu/security/`, `/usr/lib/security/`). The filename has no PAM functionality.
 3. **Audit ComfyUI `custom_nodes/`** for any Python file with both `class PerformanceMonitor` and `NODE_CLASS_MAPPINGS` (the fake-custom-node persistence). ComfyUI exposes port 8188 unauthenticated by default: restrict to localhost or an authenticated reverse proxy.
 4. **Block AEZA Group (AS210644) at egress** absent a business reason for it. OFAC designation (2025-07-01) plus 47 days of unresponsive abuse posture hosting cryptojacker C2 makes this both a security and a compliance position.
@@ -216,7 +216,7 @@ The full structured IOC inventory is in the separate IOC feed file (link in Sect
 | ComfyUI target verifier | `check_comfyui.sh` | `dc232b55...862213a1d` | 974 B | Not in VT |
 | Cloud IP-range scraper | `get_all_ranges.sh` | `9023734a...d04bd93e` | 3,007 B | Not in VT |
 
-**The libpam_cache.so MD5 296a800564111b0bad9fe63faf4e63ba is byte-identical across both operator hosts (77.110.96.200 and 77.110.125.145).** This is the central evidence anchor for the kit-sales business model.
+**The libpam_cache.so MD5 296a800564111b0bad9fe63faf4e63ba is byte-identical across both operator hosts (77[.]110[.]96[.]200 and 77[.]110[.]125[.]145).** This is the central evidence anchor for the kit-sales business model.
 
 ### Why This Is a Commodity-Kit Family, Not a Single-Operator Campaign
 
@@ -295,7 +295,7 @@ The `libpam_cache` filename is deceptive by design. The naming convention `libpa
 
 This is significant because most defenders' mental model for a rootkit is a kernel-mode rootkit that requires kernel exploitation, kernel module loading privileges, or a kernel-vulnerability chain. The LD_PRELOAD libc-hook rootkit pattern requires none of these, only the ability to write `/etc/ld.so.preload`, a root-equivalent file write. The detection profile is fundamentally different, with no `lsmod` entry, no kernel symbol table entries, and no kernel taint flag. Standard rootkit-detection tools that focus on kernel-mode artifacts will miss this entire family.
 
-**Byte-identical across customers is the central evidence anchor.** Both 77.110.96.200 and 77.110.125.145 ship the **same** MD5 296a800564111b0bad9fe63faf4e63ba binary. The per-customer wallet-prefix hide strings (`4BBj3gj4` for Operator-A vs the absence of Operator-A's prefix for Operator-B, and Operator-B's `46a5osgf` substituted in) are present **as static strings inside the binary**, the kit author pre-compiles per-customer binaries with these strings baked in, **not** per-victim. Operator-B's binary on disk is the operator's customer copy as shipped by the kit author. This proves the kit-author tier exists structurally, regardless of how many operators are observed downstream.
+**Byte-identical across customers is the central evidence anchor.** Both 77[.]110[.]96[.]200 and 77[.]110[.]125[.]145 ship the **same** MD5 296a800564111b0bad9fe63faf4e63ba binary. The per-customer wallet-prefix hide strings (`4BBj3gj4` for Operator-A vs the absence of Operator-A's prefix for Operator-B, and Operator-B's `46a5osgf` substituted in) are present **as static strings inside the binary**, the kit author pre-compiles per-customer binaries with these strings baked in, **not** per-victim. Operator-B's binary on disk is the operator's customer copy as shipped by the kit author. This proves the kit-author tier exists structurally, regardless of how many operators are observed downstream.
 
 To detect it, the YARA rules in Section 10 work on three axes, (1) the combination of `readdir` and `fopen` exports in an ELF64 shared object, (2) the GHOST-specific hide-list strings (`khugepaged_`, `nv_uvm_`, `inotify_guard`, `libpam_cache`), and (3) the hide-port format string `:%04X`. A Sigma rule covers `/etc/ld.so.preload` write events from auditd, and a separate Sigma rule covers `libpam_cache.so` creation under any `/lib/*/security/` directory. There are also behavioral rules for the watchdog process name `inotify_guard`, a process name that should not appear on any legitimate Linux system.
 
@@ -305,7 +305,7 @@ To detect it, the YARA rules in Section 10 work on three axes, (1) the combinati
 
 I hold this DEFINITE, with the full scripts captured.
 
-**`ghost.sh` (45,289 bytes / 1,338 lines / 43 functions).** The kit's central installer. Captured on both 77.110.96.200 (full SHA-256 `e943b581...9fec56ba`) and 77.110.125.145 (SHA-256 prefix `025d683b...`). The two copies differ in exactly 17 bytes (the wallet addresses, mining pool URLs, and `PIP_PAYLOAD_REPO` GitHub URL) confirming the per-customer config-substitution distribution model.
+**`ghost.sh` (45,289 bytes / 1,338 lines / 43 functions).** The kit's central installer. Captured on both 77[.]110[.]96[.]200 (full SHA-256 `e943b581...9fec56ba`) and 77[.]110[.]125[.]145 (SHA-256 prefix `025d683b...`). The two copies differ in exactly 17 bytes (the wallet addresses, mining pool URLs, and `PIP_PAYLOAD_REPO` GitHub URL) confirming the per-customer config-substitution distribution model.
 
 Key functions (43 total):
 
@@ -322,7 +322,7 @@ Key functions (43 total):
 
 The first line of `ghost.sh` is the kit-author self-identification comment: `# GHOST v5.1 (Anti-Hisana + Resurrection + Spread + Escape)`. Censys references a v6.0 "Domination Edition" but no v6.0 sample was captured in this investigation; v6.0 capability differences relative to v5.1 are unknown.
 
-`hyst.sh` (8,670 bytes) is the Hysteria v2 backdoor installation wrapper, carrying Russian-language operator commentary (10 Cyrillic words including ИТОГО, Запуск, Перезапуск). It installs the Hysteria v2 server binary and generates random credentials at `/tmp/.hy2_password`, `/tmp/.hy2_port` and `/tmp/.hy2_uri`. The admin panel calls back to `http://77.110.96.200:3301`, Operator-A's host, with a bing.com SNI masquerade configured.
+`hyst.sh` (8,670 bytes) is the Hysteria v2 backdoor installation wrapper, carrying Russian-language operator commentary (10 Cyrillic words including ИТОГО, Запуск, Перезапуск). It installs the Hysteria v2 server binary and generates random credentials at `/tmp/.hy2_password`, `/tmp/.hy2_port` and `/tmp/.hy2_uri`. The admin panel calls back to `hxxp://77[.]110[.]96[.]200:3301`, Operator-A's host, with a bing.com SNI masquerade configured.
 
 `min1.sh` (4,280 bytes) is the miner-only installer carrying the dual-Telegram architecture, with Russian-language commentary. It is **Operator-A's most-modified file**, last modified 2026-05-24T17:10:29Z, the same day as analysis and 47 days post-Censys. The presence of both the OWNER bot 8415540095 (kit-author-baked) and the MIRROR bot 8315596543 (operator-set) in the same file is the structural signature of the dual-monitoring architecture. VT detection stood at 0/53, undetected by every AV vendor 6 weeks after the Censys disclosure.
 
@@ -432,7 +432,7 @@ Analytically this matters because a single-actor scenario would not maintain two
 
 Operationally it matters too. The OWNER bot is the kit-author-owned channel, so disrupting it disrupts the kit author's supply-chain monitoring across **all** customers globally. The MIRROR bot is operator-specific, so disrupting it disrupts one customer only.
 
-The single highest-value detection signature in this campaign is an HTTPS request to `api.telegram.org/bot8415540095:*` from any host, covered by Suricata rule MAL_GHOST_OWNER_Telegram_Bot_Indicator in Section 10. A YARA byte-string match for `8415540095` in any binary or script catches deployments at rest, and a Sigma rule for bash history matching the bot token regex catches operator-OPSEC failures across many cryptojacker families, not just GHOST.
+The single highest-value detection signature in this campaign is an HTTPS request to `api[.]telegram[.]org/bot8415540095:*` from any host, covered by Suricata rule MAL_GHOST_OWNER_Telegram_Bot_Indicator in Section 10. A YARA byte-string match for `8415540095` in any binary or script catches deployments at rest, and a Sigma rule for bash history matching the bot token regex catches operator-OPSEC failures across many cryptojacker families, not just GHOST.
 
 
 </details>
@@ -460,9 +460,9 @@ The single highest-value detection signature in this campaign is an HTTPS reques
 - First seen on VT (host of derivative `libpam_cache.so` SHA `eaaa10c8...`): 2026-04-08T17:42:05Z
 - VT detection: 0/0 (this specific hash never submitted to VirusTotal as of analysis date)
 
-The binary is byte-identical across customer hosts. The same MD5 (296a800564111b0bad9fe63faf4e63ba) was pulled from open directories on both 77.110.96.200 and 77.110.125.145, and the two are bit-for-bit identical. This is the central evidence anchor for the kit-sales business model (Sections 3 and 9).
+The binary is byte-identical across customer hosts. The same MD5 (296a800564111b0bad9fe63faf4e63ba) was pulled from open directories on both 77[.]110[.]96[.]200 and 77[.]110[.]125[.]145, and the two are bit-for-bit identical. This is the central evidence anchor for the kit-sales business model (Sections 3 and 9).
 
-The source code ships alongside the binary. At `http://77.110.96.200/libpam_cache.c` and the sibling host equivalent, the kit author provides the 98-line C source. Direct inspection of that source refutes any PAM authentication functionality, with zero PAM symbols, zero `pam_authenticate` / `pam_handle_t` / `pam_acct_mgmt` references, and zero authentication-flow code. The "pam" in the filename is masquerade only.
+The source code ships alongside the binary. At `hxxp://77[.]110[.]96[.]200/libpam_cache.c` and the sibling host equivalent, the kit author provides the 98-line C source. Direct inspection of that source refutes any PAM authentication functionality, with zero PAM symbols, zero `pam_authenticate` / `pam_handle_t` / `pam_acct_mgmt` references, and zero authentication-flow code. The "pam" in the filename is masquerade only.
 
 **Function exports of forensic interest:**
 
@@ -540,7 +540,7 @@ The first line self-identifies. Line 1 reads `# GHOST v5.1 (Anti-Hisana + Resurr
 
 **Memfd_create fileless execution: `_memfd_launch`**. Uses the `memfd_create` syscall (T1620, Reflective Code Loading) to load and execute the miner binary from an anonymous in-memory file descriptor without writing to disk. SysV shm fallback for older systems where `memfd_create` is unavailable.
 
-The upstream OSS attribution survives intact. Files written by the kit's UnamWebPanel component carry the comment `/* Made by Unam Sanctam https://github.com/UnamSanctam */`, which comes from the UnamWebPanel codebase (UnamSanctam is the GitHub identity of the upstream OSS author, and the comment is in the original source). Its presence in deployed PHP files anchors the UnamSanctam to Vova75Rus supply-chain relationship, because Vova75Rus bundles UnamWebPanel without modifying the upstream attribution.
+The upstream OSS attribution survives intact. Files written by the kit's UnamWebPanel component carry the comment `/* Made by Unam Sanctam hxxps://github[.]com/UnamSanctam */`, which comes from the UnamWebPanel codebase (UnamSanctam is the GitHub identity of the upstream OSS author, and the comment is in the original source). Its presence in deployed PHP files anchors the UnamSanctam to Vova75Rus supply-chain relationship, because Vova75Rus bundles UnamWebPanel without modifying the upstream attribution.
 
 
 </details>
@@ -550,12 +550,12 @@ The upstream OSS attribution survives intact. Files written by the kit's UnamWeb
 {: .hl-tier-3}
 {: .hl-tab-chain}
 
-> **Analyst note:** This section documents the operator's actual hands-on-keyboard activity on Operator-A's host (77.110.96.200), reconstructed from a 1,472-line bash history file recovered from the open directory. The bash history is the most direct evidence of operator tradecraft, OPSEC posture, and operational iteration tempo available in this investigation. No malware was detonated by The Hunters Ledger to produce this section; the dynamic analysis is reconstructed from operator-side artifacts left in the open directory.
+> **Analyst note:** This section documents the operator's actual hands-on-keyboard activity on Operator-A's host (77[.]110[.]96[.]200), reconstructed from a 1,472-line bash history file recovered from the open directory. The bash history is the most direct evidence of operator tradecraft, OPSEC posture, and operational iteration tempo available in this investigation. No malware was detonated by The Hunters Ledger to produce this section; the dynamic analysis is reconstructed from operator-side artifacts left in the open directory.
 
 <details markdown="1" class="hl-teardown">
 <summary>Full operator forensics: bash history, operational reconstruction, live iteration, network behavior (6.1-6.4)</summary>
 
-### 6.1 Operator Bash History Forensics (Operator-A, 77.110.96.200)
+### 6.1 Operator Bash History Forensics (Operator-A, 77[.]110[.]96[.]200)
 
 The file runs to 1,472 lines and roughly 39 KB. The bash history was readable in the open directory, an OPSEC failure by an operator who had not cleared or scrubbed it. The history covers hands-on operator activity on the kit's deployment server.
 
@@ -591,27 +591,27 @@ Sixth they iterate. Operator-A actively modifies `min1.sh` and other operator-fa
 
 The `min1.sh` modification at 2026-05-24T17:10:29Z is the investigation's most operationally significant timestamp: Operator-A **actively iterated** on the kit 47 days after the Censys disclosure (2026-04-07) and despite the OFAC sanctions on AEZA (in effect since 2025-07-01).
 
-This raises Operator-A's risk profile above Operator-B, who abandoned 77.110.125.145 five days post-disclosure. Operator-A's continued operation suggests either (a) unawareness of the disclosure, (b) confidence in AEZA's non-cooperative abuse posture, or (c) tempo over OPSEC. The evidence cannot distinguish these.
+This raises Operator-A's risk profile above Operator-B, who abandoned 77[.]110[.]125[.]145 five days post-disclosure. Operator-A's continued operation suggests either (a) unawareness of the disclosure, (b) confidence in AEZA's non-cooperative abuse posture, or (c) tempo over OPSEC. The evidence cannot distinguish these.
 
 ### 6.4 Network Behavior (Reconstructed from Kit Configuration)
 
 The patterns below reconstruct GHOST's network behavior from the kit's static configuration, mining-pool egress, dual-Telegram C2, Hysteria v2 backdoor traffic, and scanner activity. This investigation did not capture live PCAP (open-directory artifact pull only; honeypot deployment is project-planned but blocked on Protectli/VLAN segmentation), so treat these as configuration-derived rather than observed:
 
 **Outbound mining pool traffic.**
-- Operator-A: TCP 77.110.96.200:3333 (self-hosted XMR proxy) → upstream to `xmr.kryptex.network`
-- Operator-A: TCP 77.110.96.200:4444 (self-hosted CFX proxy) → upstream to `cfx.kryptex.network`
-- Operator-B: TCP `auto.c3pool.org:443` (public XMR pool) and `cfx-asia1.nanopool.org:10543` (public CFX pool)
+- Operator-A: TCP 77[.]110[.]96[.]200:3333 (self-hosted XMR proxy) → upstream to `xmr.kryptex.network`
+- Operator-A: TCP 77[.]110[.]96[.]200:4444 (self-hosted CFX proxy) → upstream to `cfx.kryptex.network`
+- Operator-B: TCP `auto[.]c3pool[.]org:443` (public XMR pool) and `cfx-asia1[.]nanopool[.]org:10543` (public CFX pool)
 
 **Outbound C2 traffic.**
-- HTTPS to `api.telegram.org/bot8415540095:*` (kit-author OWNER bot)
-- HTTPS to `api.telegram.org/bot8315596543:*` (Operator-A MIRROR bot)
-- HTTPS to `github.com/Vova75Rus/*` (kit-author payload fetches)
-- HTTPS to `github.com/UnamSanctam/*` (upstream OSS fetches)
-- HTTPS to `github.com/jamestechdev-oss/*` (Operator-B PIP_PAYLOAD_REPO, deleted post-Censys)
+- HTTPS to `api[.]telegram[.]org/bot8415540095:*` (kit-author OWNER bot)
+- HTTPS to `api[.]telegram[.]org/bot8315596543:*` (Operator-A MIRROR bot)
+- HTTPS to `github[.]com/Vova75Rus/*` (kit-author payload fetches)
+- HTTPS to `github[.]com/UnamSanctam/*` (upstream OSS fetches)
+- HTTPS to `github[.]com/jamestechdev-oss/*` (Operator-B PIP_PAYLOAD_REPO, deleted post-Censys)
 
 **Hysteria v2 backdoor traffic.**
-- UDP 77.110.96.200:14433 / :14444 with bing.com SNI in QUIC TLS handshake
-- HTTP 77.110.96.200:3301/api/* (Hysteria admin panel)
+- UDP 77[.]110[.]96[.]200:14433 / :14444 with bing.com SNI in QUIC TLS handshake
+- HTTP 77[.]110[.]96[.]200:3301/api/* (Hysteria admin panel)
 
 **Scanner traffic.**
 - HTTP GETs to `<victim>:8188/system_stats` and `<victim>:8188/queue` from Operator-A's host
@@ -640,7 +640,7 @@ The full ATT&CK technique mapping for this case is maintained alongside the dete
 
 > **Analyst note:** The complete IOC set for this case is published as a machine-readable JSON feed for direct SIEM/EDR ingestion. It is not duplicated inline here. The highest-priority indicators are also surfaced in the IOC panel (fingerprint icon) on this page.
 
-The full IOC feed is at [`/ioc-feeds/ghost-cryptojacker-vova75rus-77.110.96.200-iocs.json`](https://the-hunters-ledger.com/ioc-feeds/ghost-cryptojacker-vova75rus-77.110.96.200-iocs.json), carrying every indicator for this case with type, confidence and recommended action.
+The full IOC feed is at [`/ioc-feeds/ghost-cryptojacker-vova75rus-77[.]110[.]96[.]200-iocs.json`](https://the-hunters-ledger.com/ioc-feeds/ghost-cryptojacker-vova75rus-77.110.96.200-iocs.json), carrying every indicator for this case with type, confidence and recommended action.
 
 ---
 
@@ -661,13 +661,13 @@ Tier 1: UnamSanctam        — upstream OSS malware tooling (UnamWebPanel, Silen
    ↓ (passive OSS consumption — Vova75Rus bundles UnamSanctam components)
 Tier 2: Vova75Rus          — GHOST cryptojacker kit author (HIGH 88%, NAMED actor, GitHub suspended 2026-05-25)
    ↓ (kit-sales distribution with OWNER Telegram bot supply-chain monitoring)
-Tier 3: Customer operators — UTA-2026-016 (Operator-A, 77.110.96.200) + UTA-2026-017 (Operator-B, 77.110.125.145)
+Tier 3: Customer operators — UTA-2026-016 (Operator-A, 77[.]110[.]96[.]200) + UTA-2026-017 (Operator-B, 77[.]110[.]125[.]145)
    ↓ (ComfyUI port-8188 exploitation against cloud GPU victims)
 Tier 4: Victims            — Exposed ComfyUI / Stable-Diffusion / ML-inference hosts (4,573-IP target candidate corpus; 78 confirmed-vulnerable)
 ```
 
 <figure style="text-align: center; margin: 2em 0;">
-  <img src="{{ "/assets/images/ghost-cryptojacker-vova75rus-77.110.96.200/ghost-kit-4tier-supply-chain.svg" | relative_url }}" alt="Process-tree infographic showing the GHOST cryptojacker kit 4-tier supply chain. Tier 1 at top (grey side-rail): UnamSanctam, OSS malware author on GitHub since 2014, 860 followers, supplies UnamWebPanel and SilentCryptoMiner as free OSS, flagged as passive upstream and NOT a Case 9 threat actor. Connector down to Tier 2 (red side-rail, deep-red border for emphasis): Vova75Rus, kit author, GitHub UID 73169104, Russian native, region code 75 (Zabaykalsky Krai indicator), 5+ year GitHub history; assembles ghost.sh + libpam_cache.so + Python ComfyUI exploitation framework into the GHOST kit; OWNER Telegram bot 8415540095 baked into every customer deployment as supply-chain monitoring signature; byte-identical libpam_cache.so (SHA-256 prefix eaaa10c8) shipped to all customers; account suspended by GitHub T&amp;S 2026-05-25 with 9 URLs returning HTTP 404. Tier 2 connector branches three ways to Tier 3, three customer-operator cards (each with deep-red side-rail). Customer A (77.110.96.200, UTA-2026-016, ACTIVE) on the left: higher-OPSEC, self-hosted XMR pool on port 3333 and CFX pool on port 4444, XMR wallet prefix 4BBj3gj4, CFX wallet cfx:aaj5x with drain chain through operator consolidator to mainstream exchange (~2,426 CFX over 6 months), MIRROR Telegram bot 8315596543, last activity 2026-05-24. Customer B (77.110.125.145, UTA-2026-017, ABANDONED) in the middle: lower-OPSEC, uses public pools auto.c3pool.org and cfx-asia1.nanopool.org, XMR wallet 46a5osgf, CFX wallet cfx:aat5y never drained (nonce=0, balance 19.82 CFX), abandoned since 2026-04-12. Customer C (historical, INACTIVE) on the right: active only Nov-Dec 2025, CFX wallet cfx:aasktcha drained to the SAME consolidator as Customer A (suggests wallet rotation by Operator-A or shared kit operator), no XMR wallet or infrastructure observed (predates Hunt.io coverage window). Footer detection anchors: OWNER bot prefix 8415540095 catches all customer kits, plus the byte-identical libpam_cache.so SHA-256 as the cross-customer rootkit signature.">
+  <img src="{{ "/assets/images/ghost-cryptojacker-vova75rus-77.110.96.200/ghost-kit-4tier-supply-chain.svg" | relative_url }}" alt="Process-tree infographic showing the GHOST cryptojacker kit 4-tier supply chain. Tier 1 at top (grey side-rail): UnamSanctam, OSS malware author on GitHub since 2014, 860 followers, supplies UnamWebPanel and SilentCryptoMiner as free OSS, flagged as passive upstream and NOT a Case 9 threat actor. Connector down to Tier 2 (red side-rail, deep-red border for emphasis): Vova75Rus, kit author, GitHub UID 73169104, Russian native, region code 75 (Zabaykalsky Krai indicator), 5+ year GitHub history; assembles ghost.sh + libpam_cache.so + Python ComfyUI exploitation framework into the GHOST kit; OWNER Telegram bot 8415540095 baked into every customer deployment as supply-chain monitoring signature; byte-identical libpam_cache.so (SHA-256 prefix eaaa10c8) shipped to all customers; account suspended by GitHub T&amp;S 2026-05-25 with 9 URLs returning HTTP 404. Tier 2 connector branches three ways to Tier 3, three customer-operator cards (each with deep-red side-rail). Customer A (77[.]110[.]96[.]200, UTA-2026-016, ACTIVE) on the left: higher-OPSEC, self-hosted XMR pool on port 3333 and CFX pool on port 4444, XMR wallet prefix 4BBj3gj4, CFX wallet cfx:aaj5x with drain chain through operator consolidator to mainstream exchange (~2,426 CFX over 6 months), MIRROR Telegram bot 8315596543, last activity 2026-05-24. Customer B (77[.]110[.]125[.]145, UTA-2026-017, ABANDONED) in the middle: lower-OPSEC, uses public pools auto[.]c3pool[.]org and cfx-asia1[.]nanopool[.]org, XMR wallet 46a5osgf, CFX wallet cfx:aat5y never drained (nonce=0, balance 19.82 CFX), abandoned since 2026-04-12. Customer C (historical, INACTIVE) on the right: active only Nov-Dec 2025, CFX wallet cfx:aasktcha drained to the SAME consolidator as Customer A (suggests wallet rotation by Operator-A or shared kit operator), no XMR wallet or infrastructure observed (predates Hunt.io coverage window). Footer detection anchors: OWNER bot prefix 8415540095 catches all customer kits, plus the byte-identical libpam_cache.so SHA-256 as the cross-customer rootkit signature.">
   <figcaption><em>Figure 1: GHOST kit 4-tier supply chain. The central attribution finding for Case 9 visualized, UnamSanctam upstream OSS, Vova75Rus kit author (the intervention point), and three downstream customer operators with distinct OPSEC tiers and wallet trails. The GitHub T&amp;S action on the Vova75Rus tier 2026-05-25 disrupted all three downstream operators via a single intervention point, demonstrating the supply-chain takedown leverage that motivates the Tier-0 disposition framing.</em></figcaption>
 </figure>
 
@@ -690,18 +690,18 @@ The identity anchors on GitHub UID 73169104, handle `Vova75Rus`. The account was
 
 **Eight evidence anchors:**
 
-1. **5+ year coherent GitHub account history** (UID 73169104, created 2020-10-20, 9 repositories under the handle including ComfyUI-Shell-Executor, miner, legendary-carnival, Dim, Notes.github.io).
+1. **5+ year coherent GitHub account history** (UID 73169104, created 2020-10-20, 9 repositories under the handle including ComfyUI-Shell-Executor, miner, legendary-carnival, Dim, Notes[.]github[.]io).
 2. **Region code 75 = Zabaykalsky Krai** per the Russian regional plate-code convention (eastern Siberia, bordering Mongolia and China). LOW geographic precision but a coherent identity indicator.
-3. **Personal-dedication page** using a Russian-language March 8th / Women's Day greeting on `Vova75Rus/Notes.github.io`. Wayback Machine preserved before GitHub T&S suspension. Personal-attribution artifact consistent with single-individual ownership.
-4. **Commit-author noreply email** `73169104+Vova75Rus@users.noreply.github.com` unambiguous to GitHub UID 73169104 across all 9 repositories. Same identity authored all repos.
-5. **Censys ARC primary research independent corroboration** (Mark Ellzey, 2026-04-07). Censys identified the GHOST kit on 77.110.96.200 without naming the kit author; this investigation's pivot from `PIP_PAYLOAD_REPO` to `Vova75Rus/ComfyUI-Shell-Executor` closed the attribution gap.
+3. **Personal-dedication page** using a Russian-language March 8th / Women's Day greeting on `Vova75Rus/Notes[.]github[.]io`. Wayback Machine preserved before GitHub T&S suspension. Personal-attribution artifact consistent with single-individual ownership.
+4. **Commit-author noreply email** `73169104+Vova75Rus[@]users[.]noreply[.]github[.]com` unambiguous to GitHub UID 73169104 across all 9 repositories. Same identity authored all repos.
+5. **Censys ARC primary research independent corroboration** (Mark Ellzey, 2026-04-07). Censys identified the GHOST kit on 77[.]110[.]96[.]200 without naming the kit author; this investigation's pivot from `PIP_PAYLOAD_REPO` to `Vova75Rus/ComfyUI-Shell-Executor` closed the attribution gap.
 6. **GitHub T&S Tier-0 account-level suspension 2026-05-25** within ~24 hours of disclosure submission. T&S action at the account level (rather than repo level) is consistent with substantive ToS violations across the account's repository inventory: not a single-repo dispute.
 7. **OWNER Telegram bot 8415540095 baked into every customer GHOST kit deployment.** Structural fingerprint of kit-sales business model with kit-author supply-chain monitoring. The bot ownership chains back to Vova75Rus via the per-customer config-substitution pattern (operators do not control the OWNER bot; the kit author does).
 8. **Byte-identical libpam_cache.so MD5 296a800564111b0bad9fe63faf4e63ba across both customer hosts.** DEFINITE supply-chain root proof. A single actor at the kit-author tier ships the same binary to multiple downstream operators.
 
 **Language precision per attribution confidence scale.** HIGH 88% maps to language like "highly likely", "strong indicators suggest", "probable attribution to". The report avoids "attributed to" (DEFINITE language) for Vova75Rus because the real-world identity remains unverified beyond the GitHub handle.
 
-### 9.3 UTA-2026-016 (Operator-A, 77.110.96.200): LOW Confidence (65%, top of the LOW band 50-70%)
+### 9.3 UTA-2026-016 (Operator-A, 77[.]110[.]96[.]200): LOW Confidence (65%, top of the LOW band 50-70%)
 
 **Confidence statement.**
 - **Confidence:** LOW (65%, top of the LOW band 50-70%), upgraded from LOW (60%) in the parent campaign via four net-new evidence elements added in this sub-report.
@@ -732,7 +732,7 @@ cfx:aasktcha7r... → same consolidator → same off-ramp
 
 The historical wallet cfx:aasktcha7r... drains to the same consolidator as the current wallet, proving 6-month continuous single-operator campaign and providing a wallet-rotation forensic anchor.
 
-### 9.4 UTA-2026-017 (Operator-B, 77.110.125.145): LOW Confidence (60%, within the LOW band 50-70%)
+### 9.4 UTA-2026-017 (Operator-B, 77[.]110[.]125[.]145): LOW Confidence (60%, within the LOW band 50-70%)
 
 **Confidence statement.**
 - **Confidence:** LOW (60%, within the LOW band 50-70%), upgraded from LOW (55%) via the DEFINITE 183-Cyrillic-word finding in `New_scanner.py`.
@@ -744,15 +744,15 @@ The historical wallet cfx:aasktcha7r... drains to the same consolidator as the c
 1. **183 unique Cyrillic words in `New_scanner.py` operator wrapper**: DEFINITE Russian-speaking; supplants parent's earlier "INFERRED" attribution.
 2. **CFX wallet cfx:aat5y... holds 19.82 CFX, never drained (nonce 0)**: distinct from Operator-A; 2 incoming pool payouts only.
 3. **Host abandoned ~5 days post-Censys** (last activity 2026-04-12). Reason for abandonment: 4 alternatives (operator-quit / detection / kit-author intervention / pool-side payout failure), unresolved.
-4. **Operator-B "Asia-based" hypothesis EXPLICITLY RETRACTED.** The earlier inference that Operator-B was Asia-based (based on `cfx-asia1.nanopool.org` pool config) was wrong: pool routing region is operational convenience, not geographic indicator.
+4. **Operator-B "Asia-based" hypothesis EXPLICITLY RETRACTED.** The earlier inference that Operator-B was Asia-based (based on `cfx-asia1[.]nanopool[.]org` pool config) was wrong: pool routing region is operational convenience, not geographic indicator.
 
 ### 9.5 UnamSanctam: HIGH Confidence (90%) on Passive OSS Role, NOT a Case 9 Threat Actor
 
 UnamSanctam is included in this section for **supply-chain context only**. UnamSanctam is **not** a Case 9 threat actor.
 
-UnamSanctam is an active GitHub developer, with 860 followers and public repositories carrying 2,584 cumulative stars (UnamWebPanel 198, SilentCryptoMiner 1020, SilentXMRMiner 643, SilentETHMiner 254, UnamBinder 279, UnamDownloader 190) as recorded during the investigation in May 2026; these are live counts that will have drifted by the time this is read [Source: github.com/UnamSanctam](https://github.com/UnamSanctam). They supply upstream OSS tooling that downstream malware kits, including GHOST, bundle. SilentCryptoMiner was disabled by GitHub for ToS violations, and the remaining repositories are active.
+UnamSanctam is an active GitHub developer, with 860 followers and public repositories carrying 2,584 cumulative stars (UnamWebPanel 198, SilentCryptoMiner 1020, SilentXMRMiner 643, SilentETHMiner 254, UnamBinder 279, UnamDownloader 190) as recorded during the investigation in May 2026; these are live counts that will have drifted by the time this is read [Source: github[.]com/UnamSanctam](https://github.com/UnamSanctam). They supply upstream OSS tooling that downstream malware kits, including GHOST, bundle. SilentCryptoMiner was disabled by GitHub for ToS violations, and the remaining repositories are active.
 
-UnamSanctam's involvement in GHOST is passive. The upstream attribution comment `/* Made by Unam Sanctam https://github.com/UnamSanctam */` appears in the GHOST kit's deployed PHP files because Vova75Rus bundles UnamWebPanel without modifying the attribution. There is no evidence of direct UnamSanctam involvement in the GHOST kit's authorship, distribution, or operation.
+UnamSanctam's involvement in GHOST is passive. The upstream attribution comment `/* Made by Unam Sanctam hxxps://github[.]com/UnamSanctam */` appears in the GHOST kit's deployed PHP files because Vova75Rus bundles UnamWebPanel without modifying the attribution. There is no evidence of direct UnamSanctam involvement in the GHOST kit's authorship, distribution, or operation.
 
 **Disambiguation from Kaspersky SilentCryptoMiner coverage.** Kaspersky Securelist has documented 2,000+ Russian victims of SilentCryptoMiner campaigns (YouTube delivery and SIEM agent delivery). Those campaigns are attributable to **OPERATORS** using SilentCryptoMiner, not to UnamSanctam as an operator. UnamSanctam is the upstream OSS author; the operators are separate identities. The same architectural distinction applies to GHOST: Vova75Rus is the kit author; Operator-A and Operator-B are separate operator identities.
 
@@ -778,7 +778,7 @@ This negative finding matters for cross-case analysis at the parent campaign lev
 
 **Full detection rule set** is available in the separate detection file:
 
-[**`/hunting-detections/ghost-cryptojacker-vova75rus-77.110.96.200-detections/`**](/hunting-detections/ghost-cryptojacker-vova75rus-77.110.96.200-detections/)
+[**`/hunting-detections/ghost-cryptojacker-vova75rus-77[.]110[.]96[.]200-detections/`**](/hunting-detections/ghost-cryptojacker-vova75rus-77.110.96.200-detections/)
 
 The detection file contains 25 production-ready detection rules covering YARA file-based detection, Sigma log-based detection, and Suricata network-based detection. All rules are authored by The Hunters Ledger under the CC BY 4.0 license and are deployable directly into compatible scanning/SIEM/IDS infrastructure.
 
@@ -800,7 +800,7 @@ The single most valuable detection rule across the entire GHOST family is `MAL_G
 
 - **Catches every GHOST customer worldwide.** The bot is baked into every customer deployment by the kit author. No operator-side variation can evade this signature.
 - **Trivial to deploy.** Single string match: works at YARA byte-level, Sigma log-pattern level, and Suricata network-payload level.
-- **LOW false-positive risk.** The 10-digit Telegram bot ID prefix has no legitimate use case outside Telegram-bot integrations; combined with the surrounding context (`api.telegram.org/bot` URL prefix; bash-history typing; binary string in script files), the FP risk is negligible.
+- **LOW false-positive risk.** The 10-digit Telegram bot ID prefix has no legitimate use case outside Telegram-bot integrations; combined with the surrounding context (`api[.]telegram[.]org/bot` URL prefix; bash-history typing; binary string in script files), the FP risk is negligible.
 
 ### Detection Layering Approach
 
@@ -913,7 +913,7 @@ None of the six evidence-data gaps below invalidates a central conclusion of thi
 - **Kryptex wallet-block outcome not confirmed.** Operator-A's XMR + CFX mining wallets connect to Kryptex pool subdomains, but Kryptex's wallet-block policy is unclear from public documentation, so whether those wallets can be blocked at the pool level is unresolved.
 - **PPLN.co Japan-focused article content inaccessible.** A PPLN.co article referenced as relevant to Japan-specific victim IP documentation was truncated and was not fully retrievable during this investigation. Whether Japan-specific victim IPs are documented in that source (which would inform JPCERT/CC coordination routing) is unresolved.
 - **Historical Customer C wallet (cfx:aasktcha...): earliest GHOST deployment timing unknown.** The historical wallet cfx:aasktcha7r... drains to the same consolidator as Operator-A's current wallet, providing wallet-rotation forensic evidence. However, the earliest GHOST kit deployment date associated with this historical wallet is not established, the wallet's first transaction predates the current investigation's evidence window and source data to establish kit-author distribution timing further back is not available.
-- **JARM / JA4X TLS fingerprints for both customer hosts not retrieved.** The Hunt MCP namespace required for JARM and JA4X fingerprint retrieval against 77.110.96.200 and 77.110.125.145 was unavailable during this investigation session. JARM/JA4X fingerprints would enable cross-corpus pivoting against the broader Hunt platform IP corpus to surface additional GHOST kit customer operators beyond the two observed here. This is a deferred infrastructure-pivot opportunity rather than a refutation risk.
+- **JARM / JA4X TLS fingerprints for both customer hosts not retrieved.** The Hunt MCP namespace required for JARM and JA4X fingerprint retrieval against 77[.]110[.]96[.]200 and 77[.]110[.]125[.]145 was unavailable during this investigation session. JARM/JA4X fingerprints would enable cross-corpus pivoting against the broader Hunt platform IP corpus to surface additional GHOST kit customer operators beyond the two observed here. This is a deferred infrastructure-pivot opportunity rather than a refutation risk.
 
 The central conclusions each gap leaves standing: the 4-tier supply chain model, the Vova75Rus kit-author attribution (HIGH 88%), and the byte-identical `libpam_cache.so` supply-chain proof (DEFINITE).
 
@@ -972,7 +972,7 @@ A direct VT lookup refuted that. They are `/var/log/auth.log.1.gz` and `/var/log
 
 ### 13.5 Operator-B "Asia-based" hypothesis EXPLICITLY RETRACTED
 
-I tentatively framed Operator-B as Asia-based on the basis of the `cfx-asia1.nanopool.org` pool config in their deployment.
+I tentatively framed Operator-B as Asia-based on the basis of the `cfx-asia1[.]nanopool[.]org` pool config in their deployment.
 
 That was wrong. Pool routing region is an **operational convenience** choice about latency, not a geographic indicator. The 183 unique Cyrillic words in Operator-B's `New_scanner.py` upgrade their attribution to DEFINITE Russian-speaking, and I withdraw the Asia-based hypothesis.
 
