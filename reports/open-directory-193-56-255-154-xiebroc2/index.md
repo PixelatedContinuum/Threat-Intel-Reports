@@ -36,6 +36,7 @@ stix_bundle: /stix/open-directory-193-56-255-154-xiebroc2.json
 
 ## 1. Executive Summary
 {: .hl-tier-1}
+{: .hl-tab-overview}
 
 An open directory at `193.56.255.154` (AS9009 / M247, Singapore) exposed a complete multi-framework C2 toolkit, three distinct attack payloads publicly accessible on a Windows Server 2025 VPS. XiebroC2 v3.1 (Go implant, 36 post-exploitation commands, TCP port 4444) and two Covenant GruntStager builds (HTTP on port 443) both call back to the same server, giving the operator redundant access that survives single-vector blocking. Infrastructure pivoting identified a probable second server at `92.60.75.103` (MODERATE confidence, see Section 7) hosting a novel undocumented DLL beacon. The operator is tracked as <a href="/actors/UTA-2026-002/">UTA-2026-002</a> *(an internal tracking label used by The Hunters Ledger, see Section 6)* at MODERATE confidence (72%); seven simultaneous OPSEC failures rule out sophisticated nation-state involvement.
 
@@ -109,9 +110,11 @@ The hardcoded AES-128-ECB key `QWERt_CSDMAHUATW` lets defenders decrypt any capt
 
 ## 2. Business Risk Assessment
 {: .hl-tier-1}
+{: .hl-tab-overview}
 
 ## Understanding the Real-World Impact
 {: .hl-tier-1}
+{: .hl-tab-overview}
 
 The payloads on this open directory represent a complete post-exploitation toolkit, tools an attacker uses after gaining initial access to a victim machine. If any of these files executed on a workstation or server, the operator at `193.56.255.154` gains the ability to read files, watch the screen, run commands, steal credentials, and pivot to internal systems through an encrypted channel that resembles ordinary internet traffic.
 
@@ -170,9 +173,11 @@ Confirmed exposure to this infrastructure warrants consulting an incident respon
 
 ## 3. What Was Found on This Infrastructure
 {: .hl-tier-2}
+{: .hl-tab-chain}
 
 ## 3.1 Classification and Sample Inventory
 {: .hl-tier-2}
+{: .hl-tab-chain}
 
 The open directory at `193.56.255.154:80` (port 80, served by Python SimpleHTTP 0.6) exposed three files to any visitor. A fourth artifact, `s.d`, was recovered during infrastructure pivoting from a second open directory at `92.60.75.103` (assessed MODERATE confidence same operator, see Section 7):
 
@@ -227,6 +232,7 @@ I hold the family DEFINITE. Embedded source paths (`C:/Users/admin/Desktop/code/
 
 ## 3.2 File Identifiers
 {: .hl-tier-2}
+{: .hl-tab-chain}
 
 **main.exe (XiebroC2 v3.1):**
 
@@ -275,11 +281,13 @@ Structured IOCs in machine-readable format: [ioc-feeds/opendirectory-193-56-255-
 
 ## 4. Technical Capabilities: XiebroC2 v3.1 Deep-Dive
 {: .hl-tier-3}
+{: .hl-tab-chain}
 
 > **Analyst note:** This section explains how the main attack tool on this server works, from the moment it runs on a victim's computer to the full set of actions the attacker can remotely direct it to perform. XiebroC2 is a Chinese-developed, open-source remote access toolkit that gives an attacker complete control over a compromised Windows machine through an encrypted internet connection.
 
 ## 4.1 Family Identity: XiebroC2 v3.1
 {: .hl-tier-3}
+{: .hl-tab-chain}
 
 XiebroC2 (repository: `INotGreen/XiebroC2`) is a lightweight, cross-platform C2 framework developed by GitHub user INotGreen, positioned as a lower-resource-footprint alternative to commercial C2 platforms. The framework is Chinese in origin and written in Go, producing native Windows binaries as implants. Version 3.1, released in early 2024, introduced WebSocket transport, SOCKS5 reverse proxy, macOS client support, and screen capture capability.
 
@@ -305,6 +313,7 @@ A source code typo doubles as a detection artifact. The function name `main/Help
 
 ## 4.2 Hardcoded C2 Configuration
 {: .hl-tier-3}
+{: .hl-tab-chain}
 
 > **Analyst note:** The implant's connection settings (including the server address and encryption key) are baked directly into the binary file. Analysts can read them out without running the malware.
 
@@ -325,6 +334,7 @@ The space-padding technique serves a dual purpose: it acts as a binary patch tar
 
 ## 4.3 AES-128-ECB Encryption Key (CRITICAL)
 {: .hl-tier-3}
+{: .hl-tab-chain}
 
 > **Analyst note:** All traffic between this implant and the attacker's server is encrypted, but the encryption key is hardcoded inside the file. This means any saved network traffic from this implant can be decrypted. An unusual capability for defenders to have.
 
@@ -354,6 +364,7 @@ This key matters for defenders. AES-ECB, Electronic Codebook mode, is cryptograp
 
 ## 4.4 Wire Protocol and Beaconing
 {: .hl-tier-3}
+{: .hl-tab-chain}
 
 > **Analyst note:** The implant communicates with the attacker's server using a custom binary format over a raw internet connection. It randomizes the timing of its check-ins to avoid triggering alerts that look for regular-interval patterns.
 
@@ -376,6 +387,7 @@ The beacon jitters. Its connection watchdog (`Run_main()`) sleeps a randomly jit
 
 ## 4.5 Victim Registration Beacon
 {: .hl-tier-3}
+{: .hl-tab-chain}
 
 On every new connection, the implant sends a 15-field MessagePack registration packet to the C2 operator:
 
@@ -402,6 +414,7 @@ The GBK encoding is an artifact worth noting. All shell output handlers call `Co
 
 ## 4.6 Command Set: 36 Post-Exploitation Capabilities
 {: .hl-tier-3}
+{: .hl-tab-chain}
 
 The `HandlePacket/tcp.Read` function dispatches 36 confirmed commands. Commands are organized into functional categories:
 
@@ -481,6 +494,7 @@ The `HandlePacket/tcp.Read` function dispatches 36 confirmed commands. Commands 
 
 ## 4.7 Fileless .NET Execution via In-Process CLR Hosting
 {: .hl-tier-3}
+{: .hl-tab-chain}
 
 > **Analyst note:** This capability lets the attacker run any .NET hacking tool (for example, a password harvester or Active Directory scanner) entirely inside the main.exe process, with nothing written to the hard drive and no visible new program window. Standard antivirus cannot detect this because it only scans files.
 
@@ -509,6 +523,7 @@ The full import path `github.com/Ne0nd0g/go-clr` is embedded in any Go binary us
 
 ## 4.8 Process Hollowing: Entry Point Patching
 {: .hl-tier-3}
+{: .hl-tab-chain}
 
 > **Analyst note:** This technique lets the implant hide inside a legitimate Windows program. The attacker's code starts a normal Windows application (such as notepad.exe), pauses it before it runs, secretly replaces its program code with malicious code, then lets it start. From the outside, it looks like a legitimate program is running.
 
@@ -567,6 +582,7 @@ These strings are unique to the XiebroC2 PE parser implementation and provide hi
 
 ## 4.9 CreateRemoteThread Shellcode Injection
 {: .hl-tier-3}
+{: .hl-tab-chain}
 
 > **Analyst note:** This is an alternative method for hiding inside another process. Instead of replacing a process's code entirely, the attacker's code is injected as a separate thread running inside a chosen target process, making it appear to belong to that process.
 
@@ -598,6 +614,7 @@ The detection signature is the four-API sequence `VirtualAllocEx`, `WriteProcess
 
 ## 4.10 SOCKS5 Reverse Proxy (Lateral Movement Enabler)
 {: .hl-tier-3}
+{: .hl-tab-chain}
 
 > **Analyst note:** This command turns the victim computer into a network relay. Once active, the attacker can reach other computers and services on the victim's internal network through the existing encrypted connection, effectively letting the operator browse internal systems as if physically on-site.
 
@@ -607,11 +624,13 @@ The `ReverseProxy` command invokes `Helper/proxy.ReverseSocksAgent`, which estab
 
 ## 5. Technical Capabilities: Covenant C2 Stagers
 {: .hl-tier-3}
+{: .hl-tab-chain}
 
 > **Analyst note:** The two Covenant files on this staging server are lightweight connection tools. When executed, they reach out to the attacker's server, complete a security handshake, and then download and run a full-featured implant entirely in memory, nothing is saved to the hard drive. Two delivery methods were prepared (an executable file and a PowerShell command) so the attacker had options for how to deliver it to victims.
 
 ## 5.1 Covenant Framework Overview
 {: .hl-tier-3}
+{: .hl-tab-chain}
 
 Covenant (`github.com/cobbr/Covenant`) is an open-source .NET C2 framework created by Ryan Cobb, designed to demonstrate the .NET attack surface for red team operations. The official repository was archived in late 2021/early 2022, ending active development by the original author. The framework remains functional and continues to appear in both legitimate red team operations and malicious campaigns.
 
@@ -623,6 +642,7 @@ Covenant (`github.com/cobbr/Covenant`) is an open-source .NET C2 framework creat
 
 ## 5.2 Three-Phase Cryptographic Key Exchange
 {: .hl-tier-3}
+{: .hl-tab-chain}
 
 > **Analyst note:** Before the attacker's server sends the actual implant code to the victim, the two computers go through a three-step security handshake to verify they're talking to the right server. This makes the payload delivery hard to intercept and means even if someone captures the network traffic, they can't read the implant code without the right keys.
 
@@ -655,6 +675,7 @@ The three-round handshake provides mutual authentication: the server proves it d
 
 ## 5.3 Dual Build Compartmentalization
 {: .hl-tier-3}
+{: .hl-tab-chain}
 
 Two separate Covenant stager builds were present on the staging server, a deliberate operational design:
 
@@ -707,6 +728,7 @@ That has a detection consequence. The shared `session=` token `75db-99b1-25fe4e9
 
 ## 5.4 Default HTTP Profile: High-Value Fingerprinting
 {: .hl-tier-3}
+{: .hl-tab-chain}
 
 > **Analyst note:** The Covenant traffic from this investigation uses all the default settings that come with the Covenant framework out of the box. These default values have been publicly documented and are highly detectable on a network that inspects HTTP traffic content.
 
@@ -728,6 +750,7 @@ Port 443 is anomalous too. The Covenant listener runs cleartext HTTP on port 443
 
 ## 5.5 GruntHTTP.ps1: PowerShell Fileless Delivery
 {: .hl-tier-3}
+{: .hl-tab-chain}
 
 > **Analyst note:** The PowerShell file is a one-line script that contains the entire second stager hidden inside it as compressed, encoded data. When run, it unpacks and executes the stager entirely in computer memory, nothing is saved to disk. This bypasses file-scanning antivirus because there is no file to scan.
 
@@ -754,11 +777,13 @@ $bytes = New-Object IO.Compression.DeflateStream(
 
 ## 6. Threat Actor Assessment
 {: .hl-tier-2}
+{: .hl-tab-attribution}
 
 > **Note on UTA identifiers:** "UTA" stands for Unattributed Threat Actor. <a href="/actors/UTA-2026-002/">UTA-2026-002</a> is a tracking label The Hunters Ledger assigns to an actor I have observed but cannot yet link to a publicly named threat group. Other vendors and feeds will not use this label; it is specific to this publication. If later evidence ties the activity to a named actor, I will retire the label and update the report.
 
 ## 6.1 Attribution Summary
 {: .hl-tier-2}
+{: .hl-tab-attribution}
 
 ```
 Threat Actor:       Unknown (UTA-2026-002)
@@ -776,6 +801,7 @@ UTA Tracking:       MODERATE confidence (72%)
 
 ## 6.2 UTA-2026-002 Distinguishing Characteristics
 {: .hl-tier-2}
+{: .hl-tab-attribution}
 
 Despite insufficient evidence for named actor attribution, the available evidence supports characterizing a distinct, trackable operator. Three distinctive characteristics were identified (minimum 2 technical required):
 
@@ -787,6 +813,7 @@ The third characteristic is infrastructural, a shared OPSEC failure pattern acro
 
 ## 6.3 Why Named Actor Attribution is Rejected
 {: .hl-tier-2}
+{: .hl-tab-attribution}
 
 **APT28 (Fancy Bear / Sednit / UAC-0001), EXPLICITLY REJECTED:**
 APT28's documented Covenant variant uses heavy customization including cloud-based C2 routing through file-sharing services (pCloud, Koofr, Filen), developed and refined across three years of operations [Source: The Hacker News citing ESET, https://thehackernews.com/2026/03/apt28-uses-beardshell-and-covenant.html; BleepingComputer, https://www.bleepingcomputer.com/news/security/apt28-hackers-deploy-customized-variant-of-covenant-open-source-tool/]. The stock default-profile Covenant in this campaign (Chrome 41 User-Agent from 2015, static session token, unmodified URL paths, no cloud routing) is inconsistent with APT28's documented operational sophistication. No infrastructure overlap with APT28's documented Covenant infrastructure exists in available reporting.
@@ -796,6 +823,7 @@ GBK encoding and XiebroC2's Chinese-language origin are consistent with a Chines
 
 ## 6.4 Most Probable Hypothesis
 {: .hl-tier-2}
+{: .hl-tab-attribution}
 
 **H2 (Generic crimeware operator with Chinese-language operator environment)** is the most consistent hypothesis:
 - Default tooling configurations throughout suggest compilation from public source without customization
@@ -808,6 +836,7 @@ GBK encoding and XiebroC2's Chinese-language origin are consistent with a Chines
 
 ## 6.5 What Would Increase Attribution Confidence
 {: .hl-tier-2}
+{: .hl-tab-attribution}
 
 - Passive DNS data linking infrastructure to a prior attributed campaign
 - Identification of victims enabling targeting pattern analysis consistent with a specific actor
@@ -819,9 +848,11 @@ GBK encoding and XiebroC2's Chinese-language origin are consistent with a Chines
 
 ## 7. Infrastructure Analysis
 {: .hl-tier-2}
+{: .hl-tab-timeline}
 
 ## 7.0 How the Infrastructure Was Mapped
 {: .hl-tier-2}
+{: .hl-tab-timeline}
 
 > **Analyst note:** Starting from a single IP address, the investigation used the malware's own C2 framework fingerprint to search for related servers. This section explains the pivot chain, how four candidate IPs were identified, and why only one was elevated to likely same-operator status.
 
@@ -842,6 +873,7 @@ A secondary pivot from the historical phishing activity on `193.56.255.154` iden
 
 ## 7.1 Primary C2 Server: 193.56.255.154
 {: .hl-tier-2}
+{: .hl-tab-timeline}
 
 <table class="professional-table">
   <thead>
@@ -910,6 +942,7 @@ There is historical context on this IP. It hosted Canadian financial sector phis
 
 ## 7.2 Secondary Server: 92.60.75.103 (MODERATE confidence: same operator)
 {: .hl-tier-2}
+{: .hl-tab-timeline}
 
 A second server (AS49791 / Newserverlife LLC, Kazakhstan) shows an identical operational pattern within the same two-week window:
 
@@ -925,6 +958,7 @@ The Hermes DLL is a novel, undocumented WinInet-based HTTP beacon in pre-alpha s
 
 ## 7.3 M247/AS9009 Hosting Context
 {: .hl-tier-2}
+{: .hl-tab-timeline}
 
 M247 Europe SRL is a legitimate commercial hosting and connectivity provider, not a purpose-built bulletproof hosting service. Its scale, budget VPS pricing, and documented enforcement inconsistency make it attractive to threat actors. Published research documents prior malicious use of M247 infrastructure:
 
@@ -936,6 +970,7 @@ No prior open-source campaign attributions were found for `193.56.255.154` speci
 
 ## 7.4 Ecosystem Exposure: XiebroC2 and Covenant Threat Actor Adoption
 {: .hl-tier-2}
+{: .hl-tab-timeline}
 
 **Confidence: INSUFFICIENT for named APT-level actor attribution; MODERATE for crimeware ecosystem characterization**
 
@@ -953,6 +988,7 @@ On infrastructure overlap, there are zero confirmed overlaps between `193.56.255
 
 ## 8. MITRE ATT&CK Mapping
 {: .hl-tier-2}
+{: .hl-tab-chain}
 
 The following table shows HIGH confidence technique mappings drawn directly from binary analysis and behavioral observation. All techniques are HIGH confidence.
 
@@ -1144,9 +1180,11 @@ The following table shows HIGH confidence technique mappings drawn directly from
 
 ## 9. Detection & Hunting
 {: .hl-tier-2}
+{: .hl-tab-indicators}
 
 ## 9.1 Detection Rule Files
 {: .hl-tier-2}
+{: .hl-tab-indicators}
 
 Complete detection rules are available in the dedicated detection file:
 
@@ -1161,6 +1199,7 @@ MITRE ATT&CK techniques covered: T1055.012, T1055, T1620, T1059.001, T1059.003, 
 
 ## 9.2 IOC Feed
 {: .hl-tier-2}
+{: .hl-tab-indicators}
 
 Structured IOCs in machine-readable JSON format:
 
@@ -1179,6 +1218,7 @@ IOC summary:
 
 ## 9.3 Priority Hunt Targets
 {: .hl-tier-2}
+{: .hl-tab-indicators}
 
 For analysts hunting proactively or investigating a potential exposure:
 
@@ -1205,6 +1245,7 @@ For analysts hunting proactively or investigating a potential exposure:
 
 ## 10. Response Orientation
 {: .hl-tier-2}
+{: .hl-tab-indicators}
 
 This section is a brief orientation for readers who need to understand what to address, not a step-by-step incident response guide. Confirmed infections warrant engaging a dedicated incident response playbook.
 
@@ -1229,6 +1270,7 @@ This section is a brief orientation for readers who need to understand what to a
 
 ## 11. Confidence Levels Summary
 {: .hl-tier-2}
+{: .hl-tab-confidence}
 
 ### DEFINITE (Direct Evidence: No Ambiguity)
 - XiebroC2 v3.1 family identification (compile path in pclntab)
@@ -1271,14 +1313,17 @@ This section is a brief orientation for readers who need to understand what to a
 
 ## 12. Appendices
 {: .hl-tier-2}
+{: .hl-tab-confidence}
 
 ## Appendix A: Evidence Data Gap Note
 {: .hl-tier-2}
+{: .hl-tab-confidence}
 
 The `main.exe` SHA256 is a gap. The triage preprocessing log was confirmed to have been run against `s.d` only, with the SHA256 match confirmed in `hashes.txt`, and the SHA256 for `main.exe`, the XiebroC2 implant, was not captured in the triage artifacts available here. I document that hash as absent from the IOC feed with a data gap note, and organizations retrieving the file should compute its SHA256 independently. The space-padded C2 config strings and the pclntab typo `WindosVersion` are together sufficient for YARA-based identification without it.
 
 ## Appendix B: XiebroC2 v3.1 AES Key: Framework Default Confirmation
 {: .hl-tier-2}
+{: .hl-tab-confidence}
 
 The AES-128-ECB key `QWERt_CSDMAHUATW` was independently documented by AhnLab ASEC in their September 2025 analysis of a XiebroC2 attack on an exposed MS-SQL server [AhnLab ASEC, Tier 2: https://asec.ahnlab.com/en/90369/]. The ASEC sample connected to a different IP (`1.94.185.235:8433`) using WebSocket transport, while this investigation's sample uses `193.56.255.154:4444` with TCP transport, confirming these are different deployments using the same framework default key.
 
@@ -1286,6 +1331,7 @@ For threat hunting, the key `QWERt_CSDMAHUATW` can serve as a detection string f
 
 ## Appendix C: Covenant Framework Historical Adoption Context
 {: .hl-tier-2}
+{: .hl-tab-confidence}
 
 Covenant's archived status (original repository archived 2021/2022) did not reduce its threat actor adoption. Key documented actor usage:
 
@@ -1295,6 +1341,7 @@ Covenant's archived status (original repository archived 2021/2022) did not redu
 
 ## Appendix D: Research References
 {: .hl-tier-2}
+{: .hl-tab-confidence}
 
 **XiebroC2:**
 - **AhnLab ASEC (2025):** "XiebroC2 Identified in MS-SQL Server Attack Cases", https://asec.ahnlab.com/en/90369/
@@ -1325,5 +1372,6 @@ Covenant's archived status (original repository archived 2021/2022) did not redu
 
 ## License
 {: .hl-tier-2}
+{: .hl-tab-confidence}
 
 © 2026 Joseph, The Hunters Ledger. Licensed under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/), free to republish and adapt, including commercially, with attribution to The Hunters Ledger and a link to the original.
