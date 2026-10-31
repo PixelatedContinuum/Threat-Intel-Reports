@@ -255,3 +255,72 @@ test('the extraction script measures visibility per text node and exempts closed
   assert.match(js, /getClientRects/, 'a text node with no non-zero box is reported too');
   assert.match(js, /hidden:\{words:/, 'the verdict reads the measurement');
 });
+
+/* T-0500.1.11 fix5a: widget chrome. The extraction script is run over real markup (jsdom evaluates the scripts of the include widgets' own classes, a stylesheet
+   hides the toggle label the way the site's does, and a Range reports one box so a rendered node is not read as boxless). */
+var JSDOM = require('jsdom').JSDOM;
+function extract(bodyHtml, css) {
+  var dom = new JSDOM('<!doctype html><style>' + (css || '') + '</style><body><div class="hl-post-content">' + bodyHtml + '</div></body>', { runScripts: 'outside-only' });
+  dom.window.Range.prototype.getClientRects = function () { return [{ width: 10, height: 10 }]; };
+  var out = JSON.parse(dom.window.eval(C.EXTRACT_JS));
+  return { out: out, win: dom.window, dom: dom };
+}
+var IM = '<details class="im-card"><summary><span class="im-toggle" aria-hidden="true"><span class="im-toggle-text im-toggle-text--closed">Open for details</span>' +
+  '<span class="im-toggle-text im-toggle-text--open">Close details</span></span></summary><div class="im-detail"><p class="im-why">The service runs as a system task and survives every reboot of the host.</p></div></details>';
+var CX = '<details><summary><span class="cx-toggle" aria-hidden="true"><span class="cx-toggle-text cx-toggle-text--closed">Open for evidence and limit</span><span class="cx-toggle-text cx-toggle-text--open">Close</span></span></summary></details>';
+var HIDE_OPEN = '.im-toggle-text--open, .cx-toggle-text--open { display: none; }';
+test('the hidden state label of an install-modes or capability-axes toggle is widget chrome, not hidden text; both are counted', function () {
+  var e = extract(IM + CX, HIDE_OPEN).out;
+  assert.strictEqual(e.hidden.words, 0);
+  assert.strictEqual(e.widget.labelWords, 3, '"Close details" is 2 words, "Close" is 1');
+  assert.strictEqual(e.widget.labelNodes, 2);
+  assert.match(e.text, /Close details/, 'the words stay in the text: the baseline holds them too, so the word diff balances');
+  assert.strictEqual(C.compare(page({ text: e.text }), page({ text: e.text, hidden: e.hidden, widget: e.widget })).status, 'PASS');
+});
+test('control: a real sentence hidden inside the same widget still FAILs, whatever the toggle labels do', function () {
+  var e = extract(IM.replace('<p class="im-why">', '<p class="im-why" style="display:none">'), HIDE_OPEN).out;
+  assert.strictEqual(e.hidden.words, 14);
+  assert.strictEqual(e.widget.labelWords, 2);
+  var r = C.compare(page({ text: e.text }), page({ text: e.text, hidden: e.hidden }));
+  assert.strictEqual(r.status, 'FAIL'); assert.match(r.problems.join(' '), /14 words are hidden/);
+});
+test('the label exemption is the widget\'s markup, not the word: "Close details" hidden outside an aria-hidden toggle, or in a span of the same class outside .im-toggle, FAILs', function () {
+  var e1 = extract('<p style="display:none">Close details</p>', '').out;
+  assert.strictEqual(e1.hidden.words, 2);
+  var e2 = extract('<span class="im-toggle-text im-toggle-text--open">Close details</span>', HIDE_OPEN).out;
+  assert.strictEqual(e2.hidden.words, 2, 'a label class on its own, outside .im-toggle[aria-hidden=true], is not the widget');
+  var e3 = extract('<span class="im-toggle"><span class="im-toggle-text im-toggle-text--open">Close details</span></span>', HIDE_OPEN).out;
+  assert.strictEqual(e3.hidden.words, 2, 'a toggle that is not declared decorative (aria-hidden) is not exempt');
+});
+var PT = function (extra) { return '<li class="hl-ptree-item"><details class="hl-ptree-node"><summary>proc</summary>\n<div class="pt-detail">\n<p class="pt-why">The loader unpacks the second stage into a temp directory and runs it at once.</p>\n' +
+  '<div class="pt-fact"><span class="pt-fact-key">SHA-256</span><code class="pt-fact-val">1afbe5d9</code>' + (extra === undefined ? '<button type="button" class="pt-copy js-only">copy</button>' : extra) + '</div></div></details></li>'; };
+test('the process tree\'s runtime copy button is removed before the text is read: the value reads as the baseline reads it', function () {
+  var base = extract(PT('')).out, live = extract(PT()).out;
+  assert.strictEqual(base.text.endsWith('SHA-2561afbe5d9'), true);
+  assert.strictEqual(live.text, base.text);
+  assert.strictEqual(live.widget.copyControls, 1);
+  assert.strictEqual(C.compare(page({ text: base.text }), page({ text: live.text, widget: live.widget })).status, 'PASS');
+});
+test('control: a real word missing inside a process-tree node still FAILs, and a "copy" button outside the widget\'s markup is still added text', function () {
+  var base = extract(PT('')).out;
+  var lost = extract(PT().replace('runs it at once.', 'runs it at')).out;
+  var r = C.compare(page({ text: base.text }), page({ text: lost.text, widget: lost.widget }));
+  assert.strictEqual(r.status, 'FAIL'); assert.strictEqual(r.missing, 1, 'the word "once." is the one lost');
+  var stray = extract(PT('') + '<p>Value <button class="pt-copy">copy</button></p>').out;
+  assert.strictEqual(stray.widget.copyControls, 0, 'a pt-copy button outside .hl-ptree-node .pt-fact is not the widget\'s');
+  assert.match(stray.text, /Value copy$/);
+});
+test('the widget controls delete one real word / hide one real sentence INSIDE a widget, and say so when the page has no such sentence', function () {
+  var w = extract(PT());
+  var del = JSON.parse(w.win.eval(C.DELETE_WIDGET_WORD_JS));
+  assert.strictEqual(del.words, 1);
+  assert.match(del.text, /^once\./);
+  assert.match(JSON.parse(w.win.eval(C.EXTRACT_JS)).text, /runs it at SHA-256/, 'the last word is gone from the page');
+  var h = extract(PT());
+  var hid = JSON.parse(h.win.eval(C.HIDE_WIDGET_SENTENCE_JS));
+  assert.strictEqual(hid.words, 15); assert.strictEqual(hid.hide, true);
+  assert.strictEqual(JSON.parse(h.win.eval(C.EXTRACT_JS)).hidden.words, 15);
+  var none = extract('<p>A plain paragraph with no widget in it at all, however long it is made.</p>');
+  assert.strictEqual(JSON.parse(none.win.eval(C.DELETE_WIDGET_WORD_JS)).words, 0);
+  assert.strictEqual(JSON.parse(none.win.eval(C.HIDE_WIDGET_SENTENCE_JS)).words, 0);
+});

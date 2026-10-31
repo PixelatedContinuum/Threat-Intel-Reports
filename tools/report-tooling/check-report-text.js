@@ -74,6 +74,18 @@
    node with no non-zero client rect is reported the same way, because a clipped
    or zero-sized box hides text as effectively as `display:none`.
 
+   WIDGET CHROME (T-0500.1.11 fix5a). Two include widgets carry controls of their own, neither a report word:
+     - the install-modes and capability-axes cards (`_includes/install-modes.html`, `capability-axes.html`) print a toggle label for each state,
+       "Open for details" / "Close details" and "Open for evidence and limit" / "Close", and the stylesheet shows only the one that fits the card's state, so
+       the other is `display:none`. They sit in `.im-toggle[aria-hidden="true"] > .im-toggle-text` and `.cx-toggle[aria-hidden="true"] > .cx-toggle-text`.
+       The labels are in the baseline as well (the server HTML carries both), so the word diff balances; only the hidden-text check read them as a section
+       hidden from the reader (gotenberg: 6 words in 4 nodes, on the live page too). A text node whose parent is such a label is counted as widget chrome, not hidden text.
+     - the process tree (`assets/js/hl-process-tree.js`) appends a `button.pt-copy` ("copy") to every `.pt-fact` of a `.hl-ptree-node` at runtime. The baseline is
+       read with scripting off, so each button reads as one added word glued to the value before it (opendirectory-62: 30 missing and 30 added words, live page too).
+       Those buttons are removed before the text is read, like `data-rv-chrome`.
+   Both are keyed on the widget's own markup, never on the word, and both are counted in the `widget` line. A real word lost inside a process-tree node, and a real
+   sentence hidden anywhere (inside a widget included), still FAIL; `--control-widget` and `--control-hidden` prove that on the real page.
+
    THE 90% FLOOR. If the words left on the page after stripping `data-rv-chrome`
    fall under 90% of the baseline's, the page FAILs even when the strips happen to
    make both sides agree: a chrome mark on an element that holds report text
@@ -133,6 +145,9 @@ var EXTRACT_JS = '(function(){' +
   'if(e.parentNode){e.parentNode.removeChild(e);chrome++;}});' +
   '[].slice.call(root.querySelectorAll("script,style,title")).forEach(function(e){' +
   'if(e.parentNode)e.parentNode.removeChild(e);});' +
+  // the process tree's runtime copy buttons: the widget's own control, keyed on its markup (see WIDGET CHROME above)
+  'var copyN=0;[].slice.call(root.querySelectorAll(".hl-ptree-node .pt-fact > button.pt-copy")).forEach(function(b){' +
+  'if(b.parentNode){b.parentNode.removeChild(b);copyN++;}});' +
   'var seen={},chromeUnique=chromeIds.filter(function(id){if(seen[id])return false;seen[id]=1;return true;});' +
   'var counts={};' +
   COUNTS_JSON + '.forEach(function(p){counts[p[0]]=root.querySelectorAll(p[1]).length;});' +
@@ -144,12 +159,14 @@ var EXTRACT_JS = '(function(){' +
   // Per text node: is the text rendered? Closed details BODIES are exempt by
   // design, their summaries are not. The whole walk runs after chrome and
   // scripts are gone, so nothing generated is measured.
-  'var hiddenW=0,hiddenN=0,hiddenS=[],boxW=0,boxN=0,boxS=[],collapsedW=0;' +
+  'var hiddenW=0,hiddenN=0,hiddenS=[],boxW=0,boxN=0,boxS=[],collapsedW=0,lblW=0,lblN=0;' +
   'var tw=document.createTreeWalker(root,NodeFilter.SHOW_TEXT,null),tn;' +
   'while((tn=tw.nextNode())){' +
   'var p=tn.parentElement;if(!p)continue;' +
   'var tv=(tn.nodeValue||"").replace(/\\s+/g," ").trim();if(!tv)continue;' +
   'var w=tv.split(" ").length;' +
+  // a toggle label of an include widget (see WIDGET CHROME above): the widget shows one per state and hides the other
+  'var isLbl=!!p.closest(".im-toggle[aria-hidden=true] > .im-toggle-text,.cx-toggle[aria-hidden=true] > .cx-toggle-text");' +
   'var el=p,why=null,collapsed=false;' +
   'while(el&&el!==document.documentElement){' +
   'var cs=getComputedStyle(el);' +
@@ -159,12 +176,14 @@ var EXTRACT_JS = '(function(){' +
   'if(el.tagName==="DETAILS"&&!el.open){var sm=el.querySelector(":scope > summary");' +
   'if(!(sm&&sm.contains(p)))collapsed=true;}' +
   'if(el===root)break;el=el.parentElement;}' +
-  'if(why){hiddenW+=w;hiddenN++;if(hiddenS.length<6)hiddenS.push(why+" :: "+tv.slice(0,60));}' +
+  'if(why&&isLbl){lblW+=w;lblN++;}' +
+  'else if(why){hiddenW+=w;hiddenN++;if(hiddenS.length<6)hiddenS.push(why+" :: "+tv.slice(0,60));}' +
   'else if(collapsed){collapsedW+=w;}' +
   'else{var rg=document.createRange();rg.selectNodeContents(tn);' +
   'var rs=rg.getClientRects(),boxed=false;' +
   'for(var ri=0;ri<rs.length;ri++){if(rs[ri].width>0&&rs[ri].height>0){boxed=true;break;}}' +
-  'if(!boxed){boxW+=w;boxN++;if(boxS.length<6)boxS.push(p.tagName.toLowerCase()+' +
+  'if(!boxed&&isLbl){lblW+=w;lblN++;}' +
+  'else if(!boxed){boxW+=w;boxN++;if(boxS.length<6)boxS.push(p.tagName.toLowerCase()+' +
   '(p.id?"#"+p.id:"")+" :: "+tv.slice(0,60));}}' +
   '}' +
   'var where=root.tagName.toLowerCase()+(root.id?"#"+root.id:"")+' +
@@ -173,6 +192,7 @@ var EXTRACT_JS = '(function(){' +
   'root:where,chrome:chrome,href:location.href,' +
   'hidden:{words:hiddenW,nodes:hiddenN,samples:hiddenS,noBoxWords:boxW,noBoxNodes:boxN,' +
   'noBoxSamples:boxS,collapsedWords:collapsedW},' +
+  'widget:{copyControls:copyN,labelWords:lblW,labelNodes:lblN},' +
   'words:text?text.split(" ").length:0,chars:text.length});' +
 '})()';
 
@@ -213,6 +233,26 @@ var DELETE_TEARDOWN_JS = '(function(){' +
   'return JSON.stringify({words:0,text:null,wasOpen:wasOpen,' +
   'why:"the teardown holds no paragraph of 20 words or more"});' +
 '})()';
+
+/* The controls for the widget exemption (fix5a). Each varies what the exemption varies: text INSIDE a widget.
+     widget  removes the last word of one real report sentence inside a process-tree node (or, on a page with none, inside an install-modes or capability-axes
+             card). The comparison must lose exactly that word.
+     hidden  hides one real report sentence inside such a widget (display:none), leaving every word in place. The hidden-text check must FAIL with that many words.
+   A page with no widget holding a sentence of 8 words or more is NOT CHECKED, never a pass. */
+var WIDGET_SENTENCE_JS = 'var root=document.querySelector(".hl-post-content")||document.querySelector("main")||document.body;' +
+  'var ws=[].slice.call(root.querySelectorAll(".hl-ptree-node .pt-why,.hl-ptree-node .pt-caveat,.hl-ptree-node .pt-what,.im-why,.cx-block-val,.cx-headline"));' +
+  'ws=ws.filter(function(e){return !e.closest("[data-rv-chrome]")&&(e.textContent||"").replace(/\\s+/g," ").trim().split(" ").length>=8;});';
+var DELETE_WIDGET_WORD_JS = '(function(){' + WIDGET_SENTENCE_JS +
+  'if(!ws.length)return JSON.stringify({words:0,text:null,why:"the page has no sentence of 8 words or more inside a process-tree node or an install-modes or capability-axes card"});' +
+  'var e=ws[0],tw=document.createTreeWalker(e,NodeFilter.SHOW_TEXT,null),n,last=null;' +
+  'while((n=tw.nextNode())){if(/\\S/.test(n.nodeValue))last=n;}' +
+  'var v=last.nodeValue,m=v.match(/^([\\s\\S]*?)(\\S+)(\\s*)$/);' +
+  'var gone=m[2];last.nodeValue=m[1].replace(/\\s+$/,"")+m[3];' +
+  'return JSON.stringify({words:1,text:gone+" (last word of: "+(e.textContent||"").replace(/\\s+/g," ").trim().slice(0,70)+")"});})()';
+var HIDE_WIDGET_SENTENCE_JS = '(function(){' + WIDGET_SENTENCE_JS +
+  'if(!ws.length)return JSON.stringify({words:0,text:null,why:"the page has no sentence of 8 words or more inside a process-tree node or an install-modes or capability-axes card"});' +
+  'var e=ws[0],t=(e.textContent||"").replace(/\\s+/g," ").trim();e.style.display="none";' +
+  'return JSON.stringify({words:t.split(" ").length,text:t,hide:true});})()';
 
 function withOnePage(target) {
   if (/^https?:\/\//.test(target)) return target.replace(/#.*$/, '') + '#one-page';
@@ -450,6 +490,7 @@ function compare(base, page) {
     counts: { baseline: base.counts, page: page.counts },
     countProblems: countProblems,
     hidden: page.hidden || null,
+    widget: page.widget || null,
     visProblems: visProblems,
     ids: { baseline: base.ids.length, page: page.ids.length, problems: idProblems },
     idSeq: { baseline: (base.idSeq || []).length, page: (page.idSeq || []).length, problems: seqProblems }
@@ -476,6 +517,10 @@ function line(r, label) {
       ', ' + (r.hidden.noBoxWords || 0) + ' with no box, ' +
       (r.hidden.collapsedWords || 0) + ' inside closed teardowns (exempt by design)'
     : 'NOT MEASURED, so hidden text is not checked'));
+  console.log('  widget    ' + (r.widget
+    ? r.widget.copyControls + ' process-tree copy button(s) and ' + r.widget.labelWords + ' toggle-label word(s) in ' + r.widget.labelNodes +
+      ' node(s) are the include widgets\' own chrome (exempt, keyed on their markup)'
+    : 'NOT MEASURED'));
   var pairs = COUNTS.map(function (p) {
     var k = p[0];
     return k + ' ' + r.counts.page[k] + '/' + r.counts.baseline[k];
@@ -515,10 +560,12 @@ async function main() {
   var widthArg = arg('--width') || '1280';
   var control = argv.indexOf('--control') !== -1;
   var controlTeardown = argv.indexOf('--control-teardown') !== -1;
+  var controlWidget = argv.indexOf('--control-widget') !== -1;
+  var controlHidden = argv.indexOf('--control-hidden') !== -1;
 
   if (!baselineArg || !pageArg) {
     console.error('usage: node check-report-text.js --baseline <url-or-file> --page <url-or-file> ' +
-      '[--width 1280,390] [--control] [--control-teardown]');
+      '[--width 1280,390] [--control] [--control-teardown] [--control-widget] [--control-hidden]');
     process.exit(2);
   }
   if (!fs.existsSync(baselineArg) && !/^https?:\/\//.test(baselineArg)) {
@@ -547,6 +594,8 @@ async function main() {
   var controls = [];
   if (control) controls.push('paragraph');
   if (controlTeardown) controls.push('teardown');
+  if (controlWidget) controls.push('widget');
+  if (controlHidden) controls.push('hidden');
 
   var all = [];
 
@@ -638,8 +687,8 @@ async function main() {
         try {
           var cp = await openDoc(pageArg, true);
           try {
-            del = JSON.parse(await cp.evaluate(kind === 'teardown'
-              ? DELETE_TEARDOWN_JS : DELETE_PARA_JS));
+            del = JSON.parse(await cp.evaluate(kind === 'teardown' ? DELETE_TEARDOWN_JS
+              : kind === 'widget' ? DELETE_WIDGET_WORD_JS : kind === 'hidden' ? HIDE_WIDGET_SENTENCE_JS : DELETE_PARA_JS));
             if (!del.words) {
               console.log('CONTROL NOT CHECKED  ' + del.why);
               process.exit(2);
@@ -670,10 +719,15 @@ async function main() {
         var beforeAdded = byMultiset ? r.multiset.added : r.added;
         var afterMissing = byMultiset ? rc.multiset.missing : rc.missing;
         var afterAdded = byMultiset ? rc.multiset.added : rc.added;
-        var fired = rc.status === 'FAIL' &&
-          afterMissing === beforeMissing + del.words && afterAdded === beforeAdded;
-        console.log('  CONTROL   [' + kind + '] deleted a ' + del.words + '-word paragraph ' +
-          (kind === 'teardown' ? 'inside a CLOSED details.hl-teardown' : 'from the body') +
+        var fired = kind === 'hidden'
+          ? (rc.status === 'FAIL' && afterMissing === beforeMissing && afterAdded === beforeAdded &&
+             (rc.hidden ? rc.hidden.words : 0) >= (r.hidden ? r.hidden.words : 0) + del.words)
+          : (rc.status === 'FAIL' && afterMissing === beforeMissing + del.words && afterAdded === beforeAdded);
+        console.log('  CONTROL   [' + kind + '] ' + (kind === 'hidden'
+          ? 'hid a ' + del.words + '-word sentence inside a widget (display:none), ' + (rc.hidden ? rc.hidden.words : 0) + ' hidden words (' + (r.hidden ? r.hidden.words : 0) + ' before)'
+          : kind === 'widget' ? 'removed one word inside a widget'
+          : 'deleted a ' + del.words + '-word paragraph ' +
+            (kind === 'teardown' ? 'inside a CLOSED details.hl-teardown' : 'from the body')) +
           ' ("' + String(del.text).slice(0, 60) + '..."): verdict ' + rc.status + ', ' +
           afterMissing + ' missing (' + beforeMissing + ' before the delete), ' + afterAdded +
           ' added  ->  ' + (fired ? 'FIRED' : 'DID NOT FIRE') +
@@ -715,6 +769,8 @@ module.exports = {
   EXTRACT_JS: EXTRACT_JS,
   DELETE_PARA_JS: DELETE_PARA_JS,
   DELETE_TEARDOWN_JS: DELETE_TEARDOWN_JS,
+  DELETE_WIDGET_WORD_JS: DELETE_WIDGET_WORD_JS,
+  HIDE_WIDGET_SENTENCE_JS: HIDE_WIDGET_SENTENCE_JS,
   diffWords: diffWords,
   multisetDiff: multisetDiff,
   hiddenProblems: hiddenProblems,
