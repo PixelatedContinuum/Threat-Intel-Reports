@@ -71,7 +71,7 @@ AdvancedRouterScanner is a custom, semi-private exploitation framework targeting
 </table>
 
 ### Recommended Actions
-1. **BLOCK** known malicious infrastructure (185.38.150.7:9999, 176.65.137.13:80)
+1. **BLOCK** known malicious infrastructure (185[.]38[.]150[.]7:9999, 176[.]65[.]137[.]13:80)
 2. **AUDIT** all exposed network devices, particularly Huawei/Four-Faith OEM equipment
 3. **MONITOR** for exploitation patterns and credential brute-forcing attempts
 4. **ISOLATE** potentially compromised devices from critical networks
@@ -561,7 +561,7 @@ The exploit file was not found in VirusTotal, and when uploaded it came back cle
 
 ### Priority 2: Investigation & Analysis
 1. **FORENSIC ANALYSIS** of network device logs for exploitation attempts
-2. **LOG ANALYSIS** for connections to known malicious IPs (185.38.150.7, 176.65.137.13)
+2. **LOG ANALYSIS** for connections to known malicious IPs (185[.]38[.]150[.]7, 176[.]65[.]137[.]13)
 3. **VULNERABILITY ASSESSMENT** of all embedded network devices
 4. **TRAFFIC ANALYSIS** for unusual scanning patterns and command injection attempts
 5. **THREAT HUNTING** for AdvancedRouterScanner artifacts in network traffic
