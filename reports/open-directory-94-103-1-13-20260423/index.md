@@ -20,7 +20,7 @@ ioc_highlights:
   - value: "94[.]103[.]1[.]13"
     note: "Operator staging host (AS209207, multi-tenant)"
   - value: "forumrutor24[.]com"
-    note: "Co-tenant on 94.103.1.13 (34d active)"
+    note: "Co-tenant on 94[.]103[.]1[.]13 (34d active)"
   - value: "da302511ee77a4bb9371387ac9932e6431003c9c597ecbe0fd50364f4d7831a8"
     note: "Stage-5b UACME #41 UAC bypass (cross-build, 8/77 VT)"
   - value: "f7a4fe18d838e9d87db2db6378ffb21b90c3881d28d70871b8c2a661c6a78a6a"
@@ -30,7 +30,7 @@ ioc_highlights:
 stix_bundle: /stix/open-directory-94-103-1-13-20260423.json
 ---
 
-**Campaign Identifier:** Chaos-TorBrowserTor-MultiStageLoader-94.103.1.13<br>
+**Campaign Identifier:** Chaos-TorBrowserTor-MultiStageLoader-94[.]103[.]1[.]13<br>
 **Last Updated:** May 2, 2026 (addendum, see §12)<br>
 **Threat Level:** HIGH
 
@@ -40,7 +40,7 @@ stix_bundle: /stix/open-directory-94-103-1-13-20260423.json
 {: .hl-tier-1}
 {: .hl-tab-overview}
 
-An open directory discovered on the Russian-registered bulletproof-adjacent VPS **94.103.1.13** (AS209207 Digital Hosting Provider LLC, upstream AS48014 AlbaHost) is hosting a pre-production cybercrime staging kit whose terminal payload is a **Chaos ransomware builder variant** configured as `.torbrowsertor`. The kit is operated by a financially-motivated actor tracked internally as **<a href="/actors/UTA-2026-005/">UTA-2026-005</a>** *(an internal tracking label used by The Hunters Ledger, see Section 7)*. Attribution to any publicly named threat actor is **INSUFFICIENT (0%)**; family-level identification of the Chaos builder lineage is **DEFINITE (97%)**.
+An open directory discovered on the Russian-registered bulletproof-adjacent VPS **94[.]103[.]1[.]13** (AS209207 Digital Hosting Provider LLC, upstream AS48014 AlbaHost) is hosting a pre-production cybercrime staging kit whose terminal payload is a **Chaos ransomware builder variant** configured as `.torbrowsertor`. The kit is operated by a financially-motivated actor tracked internally as **<a href="/actors/UTA-2026-005/">UTA-2026-005</a>** *(an internal tracking label used by The Hunters Ledger, see Section 7)*. Attribution to any publicly named threat actor is **INSUFFICIENT (0%)**; family-level identification of the Chaos builder lineage is **DEFINITE (97%)**.
 
 The primary finding in this report is **not** the ransomware itself. The commodity Chaos builder is well documented. The primary finding is a **private five-stage batch-to-PowerShell-to-.NET crypter** (`mymain.bat` + `myfile.bat`) that the operator uses to deliver Chaos while evading static detection (VT 0/76 on both batch droppers at submission time) and sandbox analysis. That crypter exhibits four characteristics with **no located prior public reporting**:
 
@@ -77,7 +77,7 @@ I walk the loader chain in defender-actionable detail and hand off a set of cros
 
 ### What Was Found
 
-Open-directory monitoring flagged `94.103.1.13` on 2026-04-17. The server was exposing directory listings for a mixed staging tree containing ~47 distinct samples: Stage-1 batch droppers, obfuscated PowerShell loaders, .NET Stage-4 and Stage-5 modules, an Orcus RAT v7 build, a custom PrintSpoofer-class privilege-escalation binary, a full Mimikatz suite, multiple GodPotato variants, PrintNightmare tooling (including the signed `mimispool.dll`), Chisel and Plink tunneling binaries, a Python tunnel-stub collection, and a second (parallel) pre-production campaign tree containing SnipeIT/SIP-PBX/Exim/CGMiner/OTP exploit scripts targeting six IP addresses (three of them Ukrainian).
+Open-directory monitoring flagged `94[.]103[.]1[.]13` on 2026-04-17. The server was exposing directory listings for a mixed staging tree containing ~47 distinct samples: Stage-1 batch droppers, obfuscated PowerShell loaders, .NET Stage-4 and Stage-5 modules, an Orcus RAT v7 build, a custom PrintSpoofer-class privilege-escalation binary, a full Mimikatz suite, multiple GodPotato variants, PrintNightmare tooling (including the signed `mimispool.dll`), Chisel and Plink tunneling binaries, a Python tunnel-stub collection, and a second (parallel) pre-production campaign tree containing SnipeIT/SIP-PBX/Exim/CGMiner/OTP exploit scripts targeting six IP addresses (three of them Ukrainian).
 
 Of the 47 samples, two were the loader chain that matters: the sibling batch droppers `mymain.bat` (2.6 MB, SHA256 `3b5d30e3…`, VT 0/76 at submission) and `myfile.bat` (2.65 MB, SHA256 `fb39fa0d…`). Both are heavily DOSfuscated and both carry two large Base64-alphabet-substituted blobs that decode into a five-stage loader chain terminating in Chaos/TorBrowserTor ransomware plus a pre-compiled UACME #41 UAC-bypass module. The two builds share the same builder pipeline and identical invariants (mutex GUID, Stage-5b PE) but rotate cryptographic keys and resource names, evidence that the crypter is a re-runnable builder rather than a one-off weaponization.
 
@@ -168,34 +168,34 @@ Fody/Costura repository (B1), Microsoft .NET single-file-deployment documentatio
 
 > **Analyst note:** This subsection explains what is unusual about the VPS hosting the open directory. The ASN is only three months old, its upstream is a single Albanian transit provider that has a history of announcing bogon networks, and the operator chose it specifically for abuse tolerance. AbuseIPDB shows 0 reports. The operator is under the community-reporting radar despite being flagged by a handful of security vendors. Passive DNS shows the host is **multi-tenant**: the same IP that hosts the Chaos distribution also hosts at least three concurrent parasitic campaigns with deliberate tradecraft (Cloudflare fronting, mixed registrars, aged-domain purchases). None of this proves "bulletproof hosting" in the formal sense, but it is consistent with operator intent to resist takedown and run parallel infrastructure.
 
-- **94.103.1.13**: the staging server, sits on **AS209207 (Digital Hosting Provider LLC)**, a Russian-registered ASN allocated **2026-01-19** (approximately 3 months old at the time of this writing). The ASN's own self-domain is `dhost.su`, a `.su` (Soviet-era) TLD still in operator-friendly use, reinforcing the RU-operator / NL-route jurisdictional split.
+- **94[.]103[.]1[.]13**: the staging server, sits on **AS209207 (Digital Hosting Provider LLC)**, a Russian-registered ASN allocated **2026-01-19** (approximately 3 months old at the time of this writing). The ASN's own self-domain is `dhost[.]su`, a `.su` (Soviet-era) TLD still in operator-friendly use, reinforcing the RU-operator / NL-route jurisdictional split.
 - AS209207's single upstream is **AS48014 AlbaHost**: an Albanian transit provider with a history of announcing bogon prefixes.
 - Three separate data sources (BGP.he.net, IPinfo.io, BGPView) agree on the ASN/upstream relationship (HIGH confidence on the infrastructure facts).
 - **AbuseIPDB: 0 reports, 0% confidence** (manual browser fetch, 2026-04-23). The previous limitation of automated 403 bot-blocks is resolved. This IP genuinely has no public abuse reports despite being flagged by 5 of 94 VirusTotal vendors (Criminal IP, BitDefender phishing, CRDF, CyRadar phishing, ESET suspicious, per session-8 lookup). An operator running under the community-reporting radar while accumulating limited-vendor detection coverage.
 - **Bulletproof classification: SUSPECTED, not CONFIRMED.** The ASN is too new for a meaningful Spamhaus DROP/SBL listing history. No named-BPH-database entry was located. Threat intelligence feeds flag the upstream pattern as presumptively abuse-tolerant; no named institution is cited without a live source.
-- **Explicit retraction:** An earlier working hypothesis linked this server to Proton66 / "TheGentlemen" toolkit. This hypothesis is **retracted**, 94.103.1.13 is on AS209207, not AS198953; the Hunt.io "TheGentlemen" toolkit was observed on 176.120.22.127, a completely different IP and ASN.
+- **Explicit retraction:** An earlier working hypothesis linked this server to Proton66 / "TheGentlemen" toolkit. This hypothesis is **retracted**, 94[.]103[.]1[.]13 is on AS209207, not AS198953; the Hunt.io "TheGentlemen" toolkit was observed on 176[.]120[.]22[.]127, a completely different IP and ASN.
 
 #### Multi-Tenant Operator Host: Co-Tenancy Pattern
 
-Passive DNS (DomainTools Iris, 2026-04-23) confirms 94.103.1.13 is not a single-purpose Chaos staging server. The IP concurrently hosts at least three parallel operator campaigns alongside the Chaos distribution:
+Passive DNS (DomainTools Iris, 2026-04-23) confirms 94[.]103[.]1[.]13 is not a single-purpose Chaos staging server. The IP concurrently hosts at least three parallel operator campaigns alongside the Chaos distribution:
 
 | Domain | Subdomains | First Resolution → Last | Resolutions | Theme / Role |
 |---|---|---|---|---|
-| `forumrutor24.com` | `www.` | 2026-03-20 → 2026-04-23 (34 days) | 183 pDNS hits | Russian-forum / tracker theme |
-| `gtanuncios.com` | `mail.` | 2026-04-10 → 2026-04-23 (13 days) | 114 pDNS hits | Aged Portuguese/Spanish classifieds (created 2015); pivoted to 94.103.1.13 on 2026-04-11 15:09:21Z from prior Cloudflare origin `104.21.56.197` |
-| `bulgainme.pro` | `mail.` | 2026-04-10 → 2026-04-23 (13 days) | 32 pDNS hits | Short-lived `.pro` registration (2026-02-23); mail server activated 2026-04-11 |
+| `forumrutor24[.]com` | `www.` | 2026-03-20 → 2026-04-23 (34 days) | 183 pDNS hits | Russian-forum / tracker theme |
+| `gtanuncios[.]com` | `mail.` | 2026-04-10 → 2026-04-23 (13 days) | 114 pDNS hits | Aged Portuguese/Spanish classifieds (created 2015); pivoted to 94[.]103[.]1[.]13 on 2026-04-11 15:09:21Z from prior Cloudflare origin `104[.]21[.]56[.]197` |
+| `bulgainme[.]pro` | `mail.` | 2026-04-10 → 2026-04-23 (13 days) | 32 pDNS hits | Short-lived `.pro` registration (2026-02-23); mail server activated 2026-04-11 |
 
-Historical resolution of `slayer.ktx.ro` (Romanian TLD) to 94.103.1.13 on 2025-12-18-19 (8 resolutions, 36-minute burst) indicates the IP was in operator rotation roughly four months before the current Chaos campaign. The operator's rotation cadence is therefore measured in months, not weeks.
+Historical resolution of `slayer.ktx.ro` (Romanian TLD) to 94[.]103[.]1[.]13 on 2025-12-18-19 (8 resolutions, 36-minute burst) indicates the IP was in operator rotation roughly four months before the current Chaos campaign. The operator's rotation cadence is therefore measured in months, not weeks.
 
 **Consistent tradecraft across all three active co-tenants:**
-- **Cloudflare-fronted DNS + CDN.** Every domain uses Cloudflare name servers (pair rotations observed: `fay/quinton` → `rob/nova`, `art/noor`, `dana/ethan` → `amber`). Operator-controlled Cloudflare accounts hide the `94.103.1.13` origin from passive scanners.
-- **Mixed-registrar strategy.** `forumrutor24.com` is registered via **Mat Bao Corporation** (Vietnamese registrar, IANA 1586, an unusual choice that deliberately sidesteps RU and US registrar scrutiny); `gtanuncios.com` transferred to **Network Solutions** via an intermediate CN reseller identity; `bulgainme.pro` uses a minimal `.pro` gTLD registration. No single registrar chokepoint.
-- **Aged-domain purchase for reputation laundering** (gtanuncios.com). The domain was created 2015-05-16 (10+ years old), originally held by `Vikas` via PDR India, transferred to `xiang xiang fan` (CN reseller identity, Linfen Shanxi, phone +86 130 3255 6442, email `lc1393353@gmail.com`) on 2025-06-28, held dormant for ten months, then pivoted to 94.103.1.13 on 2026-04-11. Privacy-masking was applied to the WHOIS on 2026-04-24 00:39:01Z. This pattern (acquiring an aged domain with existing reputation and holding it dormant before pivoting to operator infrastructure) is documented attacker tradecraft against age-based reputation filters.
-- **Concurrent setup bursts.** SSL cert churn on `bulgainme.pro` on 2026-04-10 (3 certs issued in a 2-minute window, 17:57-17:59 UTC), paired with the 2026-04-11 cutover of `gtanuncios.com` to the operator IP and mail-server activation on both domains, indicates a single operator standing up multi-domain infrastructure in a tight window.
+- **Cloudflare-fronted DNS + CDN.** Every domain uses Cloudflare name servers (pair rotations observed: `fay/quinton` → `rob/nova`, `art/noor`, `dana/ethan` → `amber`). Operator-controlled Cloudflare accounts hide the `94[.]103[.]1[.]13` origin from passive scanners.
+- **Mixed-registrar strategy.** `forumrutor24[.]com` is registered via **Mat Bao Corporation** (Vietnamese registrar, IANA 1586, an unusual choice that deliberately sidesteps RU and US registrar scrutiny); `gtanuncios[.]com` transferred to **Network Solutions** via an intermediate CN reseller identity; `bulgainme[.]pro` uses a minimal `.pro` gTLD registration. No single registrar chokepoint.
+- **Aged-domain purchase for reputation laundering** (gtanuncios[.]com). The domain was created 2015-05-16 (10+ years old), originally held by `Vikas` via PDR India, transferred to `xiang xiang fan` (CN reseller identity, Linfen Shanxi, phone +86 130 3255 6442, email `lc1393353[@]gmail[.]com`) on 2025-06-28, held dormant for ten months, then pivoted to 94[.]103[.]1[.]13 on 2026-04-11. Privacy-masking was applied to the WHOIS on 2026-04-24 00:39:01Z. This pattern (acquiring an aged domain with existing reputation and holding it dormant before pivoting to operator infrastructure) is documented attacker tradecraft against age-based reputation filters.
+- **Concurrent setup bursts.** SSL cert churn on `bulgainme[.]pro` on 2026-04-10 (3 certs issued in a 2-minute window, 17:57-17:59 UTC), paired with the 2026-04-11 cutover of `gtanuncios[.]com` to the operator IP and mail-server activation on both domains, indicates a single operator standing up multi-domain infrastructure in a tight window.
 
 My assessment is that the operator's posture is mature, running parallel parasitic infrastructure rather than a single-campaign tool deployment. That reframes them from a Chaos ransomware distributor into a multi-campaign operator using Chaos as one of several concurrent monetization paths on the same host, and I hold it at HIGH.
 
-Defensively that means blocking only the Chaos-specific IOCs in this report will miss the operator's other campaigns on the same IP. Hunting teams should enumerate `forumrutor24.com`, `www.forumrutor24.com`, `gtanuncios.com`, `mail.gtanuncios.com`, `bulgainme.pro`, `mail.bulgainme.pro`, `94.103.1.13` and historical `slayer.ktx.ro` under the broader <a href="/actors/UTA-2026-005/">UTA-2026-005</a> cluster. The full set is published in the IOC feed.
+Defensively that means blocking only the Chaos-specific IOCs in this report will miss the operator's other campaigns on the same IP. Hunting teams should enumerate `forumrutor24[.]com`, `www[.]forumrutor24[.]com`, `gtanuncios[.]com`, `mail[.]gtanuncios[.]com`, `bulgainme[.]pro`, `mail[.]bulgainme[.]pro`, `94[.]103[.]1[.]13` and historical `slayer.ktx.ro` under the broader <a href="/actors/UTA-2026-005/">UTA-2026-005</a> cluster. The full set is published in the IOC feed.
 
 **VirusTotal refresh (2026-04-23): Cloudflare fronting validated:**
 
@@ -203,17 +203,17 @@ The detection picture across this cluster is a clean demonstration of how Cloudf
 
 | IOC | VT Detection | Context |
 |---|---|---|
-| `94.103.1.13` (backing IP) | **5/94 + 1 suspicious** | Flagged by Criminal IP, BitDefender (phishing), CRDF, CyRadar (phishing), ESET (suspicious) |
+| `94[.]103[.]1[.]13` (backing IP) | **5/94 + 1 suspicious** | Flagged by Criminal IP, BitDefender (phishing), CRDF, CyRadar (phishing), ESET (suspicious) |
 | All 5 active co-tenant domains | **0/94** | Cloudflare edge hides the origin from automated scanners |
-| Mail subdomains (`mail.gtanuncios.com`, `mail.bulgainme.pro`) | NOT FOUND | Never indexed, operator-internal webmail |
-| `gtanuncios.com` traffic rank | **Alexa #267,012** | Aged domain retains legitimate historical traffic reputation, directly corroborates the reputation-laundering interpretation of the aged-domain purchase |
-| `dhost.su` (ASN self-domain) | 0/94 via **BEGET-SU** | Well-known low-cost Russian registrar commonly chosen by operators for the cheap + weak-KYC combination |
+| Mail subdomains (`mail[.]gtanuncios[.]com`, `mail[.]bulgainme[.]pro`) | NOT FOUND | Never indexed, operator-internal webmail |
+| `gtanuncios[.]com` traffic rank | **Alexa #267,012** | Aged domain retains legitimate historical traffic reputation, directly corroborates the reputation-laundering interpretation of the aged-domain purchase |
+| `dhost[.]su` (ASN self-domain) | 0/94 via **BEGET-SU** | Well-known low-cost Russian registrar commonly chosen by operators for the cheap + weak-KYC combination |
 
 The analytical takeaway is that this is not coincidence. Blocking the domains downstream of the CDN is ineffective, because 0/94 means they look clean to most security tooling, so blocking the IP, or hunting the cross-build structural IOCs, the mutex GUID, the Stage-5b hash and the cross-layer key-reuse anchors, is the effective posture. The operator's infrastructure choices are deliberate, since Cloudflare fronting plus mixed registrars plus aged-domain purchases combine into a cluster that evades all three common defensive triggers, domain reputation, CDN reputation and registrar reputation. The only layer where detection has broken through is the backing IP itself at 5/94, and the AS209207 ASN profile.
 
 ### Victim vs Operator Infrastructure: Critical Distinction
 
-The parallel pre-production campaign staged on 94.103.1.13 contains exploit scripts targeting six IP addresses. **These are victim / target IPs, not operator C2.** Do not block them as malicious infrastructure, hunt them for signs of compromise.
+The parallel pre-production campaign staged on 94[.]103[.]1[.]13 contains exploit scripts targeting six IP addresses. **These are victim / target IPs, not operator C2.** Do not block them as malicious infrastructure, hunt them for signs of compromise.
 
 The target IPs, ports, and what each one is, are in [open-directory-94-103-1-13-20260423-iocs.json](/ioc-feeds/open-directory-94-103-1-13-20260423-iocs.json), each one marked `victim_infrastructure_do_not_block` with the same hunt-not-block guidance.
 
@@ -222,7 +222,7 @@ Three of six target IPs are on Ukrainian ASNs, consistent with opportunistic tar
 ### Research Gaps Carried Into This Report
 
 - **Real Orcus C2 upstream is UNKNOWN.** The RAT connects to `127.0.0.1:20268` on the infected host; that loopback address is one end of a chisel or plink tunnel whose external egress cannot be recovered from static analysis alone. Dynamic detonation with egress capture is needed.
-- **Operator identity is still INSUFFICIENT for named-actor attribution.** The `xiang xiang fan` / `lc1393353@gmail.com` / `+86 130 3255 6442` identity recorded as the pre-masking registrant of `gtanuncios.com` is most plausibly a **CN domain-reseller inventory identity**, not the operator. The aged-domain-purchase pattern (10-year-old legitimate classifieds domain acquired from this reseller in 2025-06-28, dormant for 10 months, then pivoted to operator IP in 2026-04-11) is documented attacker tradecraft for reputation laundering. This evidence does NOT upgrade named-actor attribution above INSUFFICIENT, but it is recorded in <a href="/actors/UTA-2026-005/">UTA-2026-005</a> as a tracked signal: if the same reseller-inventory identity appears on another operator-pivoted domain in the future, that would be a clustering signal.
+- **Operator identity is still INSUFFICIENT for named-actor attribution.** The `xiang xiang fan` / `lc1393353[@]gmail[.]com` / `+86 130 3255 6442` identity recorded as the pre-masking registrant of `gtanuncios[.]com` is most plausibly a **CN domain-reseller inventory identity**, not the operator. The aged-domain-purchase pattern (10-year-old legitimate classifieds domain acquired from this reseller in 2025-06-28, dormant for 10 months, then pivoted to operator IP in 2026-04-11) is documented attacker tradecraft for reputation laundering. This evidence does NOT upgrade named-actor attribution above INSUFFICIENT, but it is recorded in <a href="/actors/UTA-2026-005/">UTA-2026-005</a> as a tracked signal: if the same reseller-inventory identity appears on another operator-pivoted domain in the future, that would be a clustering signal.
 - **Wardow-Orcus crack has no Tier-1/Tier-2 vendor writeup**: used as a community-known identifier, not a cited vendor claim.
 - **Console.Title launch gate and the specific tri-artifact conjunction have no located prior public reporting.** The corpus surveyed is not exhaustive; "no located prior public reporting" is used throughout rather than "first of its kind" to reflect that honest scope.
 - **TorBrowserTor variant is only ~2 weeks into its public-reporting lifecycle.** This publication is among the earliest comprehensive writeups.
@@ -240,7 +240,7 @@ the general category term only.
 
 ### 5.1 Sample Inventory (Static Analysis)
 
-Both Stage-1 batch files were pulled from the `94.103.1.13` open directory on 2026-04-17 and submitted to VirusTotal on 2026-04-21 as part of a 47-sample batch upload. Decrypted intermediate payloads (Stage-4, Stage-5a, Stage-5b) were extracted through static reverse engineering; the cross-build-invariant Stage-5b was submitted to VT, while the per-build Stage-4 and Stage-5a artifacts were retained internally and not submitted (they are RE products, not files observed on the open directory).
+Both Stage-1 batch files were pulled from the `94[.]103[.]1[.]13` open directory on 2026-04-17 and submitted to VirusTotal on 2026-04-21 as part of a 47-sample batch upload. Decrypted intermediate payloads (Stage-4, Stage-5a, Stage-5b) were extracted through static reverse engineering; the cross-build-invariant Stage-5b was submitted to VT, while the per-build Stage-4 and Stage-5a artifacts were retained internally and not submitted (they are RE products, not files observed on the open directory).
 
 | Filename | SHA256 (truncated) | Size | VT detection | Compilation |
 |---|---|---|---|---|
@@ -669,7 +669,7 @@ At operator level I track this as <a href="/actors/UTA-2026-005/">UTA-2026-005</
 This distinction is load-bearing for several reasons:
 
 - **Different codebase.** Talos's Chaos RaaS group uses a distinct codebase that does not share the `ConsoleApplication7` namespace, the `driveNotification` class, or the Rijndael-256 CFB + RSA-2048 OAEP encryption pipeline that the analyzed sample implements.
-- **Different TTPs.** Talos's group is reported in an affiliate RaaS model with specific entry patterns (compromised RMM, phishing-to-Cobalt-Strike pipelines) that do not appear in evidence recovered from 94.103.1.13.
+- **Different TTPs.** Talos's group is reported in an affiliate RaaS model with specific entry patterns (compromised RMM, phishing-to-Cobalt-Strike pipelines) that do not appear in evidence recovered from 94[.]103[.]1[.]13.
 - **Different operator profile.** <a href="/actors/UTA-2026-005/">UTA-2026-005</a> runs a private crypter and a pre-production multi-campaign open directory; Talos's group operates an affiliate program with a different infrastructure pattern.
 - **Same family name, different actors.** Just as "Mimikatz" identifies a tool used by many actors (not a single actor), "Chaos" identifies a ransomware family used by many actors. Confusing family with actor is a common attribution error this blockquote exists to prevent.
 
@@ -707,21 +707,21 @@ These are the evidence points the <a href="/actors/UTA-2026-005/">UTA-2026-005</
 
 ### 7.5 Operator Infrastructure
 
-- **Staging server: 94.103.1.13** (AS209207, Russia-registered, Albania-routed via AS48014). HIGH confidence operator-controlled based on open-directory contents aligning with the loader chain. AbuseIPDB: 0 reports, 0% confidence (manual browser fetch, 2026-04-23), operator is under community-reporting radar. VT 5/94 (session 8).
+- **Staging server: 94[.]103[.]1[.]13** (AS209207, Russia-registered, Albania-routed via AS48014). HIGH confidence operator-controlled based on open-directory contents aligning with the loader chain. AbuseIPDB: 0 reports, 0% confidence (manual browser fetch, 2026-04-23), operator is under community-reporting radar. VT 5/94 (session 8).
 - **Real Orcus C2: UNKNOWN.** Hidden behind `127.0.0.1:20268` loopback + chisel/plink tunnel. Dynamic egress analysis required.
-- **Multi-tenant operator host.** 94.103.1.13 concurrently serves at least three parallel parasitic campaigns alongside the Chaos distribution: `forumrutor24.com` (Russian forum theme, 34 days active), `gtanuncios.com` (aged 10-year classifieds domain acquired from a CN reseller, pivoted 2026-04-11), and `bulgainme.pro` (short-lived `.pro` with webmail). All three use Cloudflare fronting + mixed registrars + aged-domain-purchase tradecraft, see Section 4 Infrastructure Context subsection for full breakdown. This reframes the operator from a single-campaign Chaos distributor to a **multi-campaign operator** running parallel monetization paths on the same infrastructure.
-- **Historical operator rotation evidence.** `slayer.ktx.ro` resolved to 94.103.1.13 on 2025-12-18-19 (brief 36-minute burst, 8 resolutions): the IP has been in operator rotation approximately four months before the Chaos campaign, establishing a months-long cadence for operator activity on this host.
-- **Possible secondary: 172.86.76.198.** LOW confidence operator-controlled; observed in tunnel-script artifacts but role is ambiguous. Could be a relay, a staging host, or an unrelated pivot point, evidence is not strong enough to mark HIGH.
-- **Reseller-inventory identity (NOT operator attribution).** Pre-masking WHOIS for `gtanuncios.com` recorded registrant `xiang xiang fan`, email `lc1393353@gmail.com`, phone `+86 130 3255 6442`, city `lin fen` (Linfen, Shanxi, China). The ten-month dormant hold between domain transfer (2025-06-28) and operator pivot (2026-04-11) is consistent with CN domain-broker inventory rather than direct operator identity. This identity is **tracked in <a href="/actors/UTA-2026-005/">UTA-2026-005</a>** for future cross-campaign correlation but does NOT elevate attribution above INSUFFICIENT.
-- **Bulletproof classification: SUSPECTED.** AS209207 is 3 months old (allocated 2026-01-19), Russia-registered, Albania-routed through a single upstream (AS48014 AlbaHost) with historical bogon announcements. The ASN's self-domain `dhost.su` uses a `.su` TLD typical of operator-friendly Russian-speaking hosting providers. Profile is consistent with bulletproof-adjacent hosting, but no named-BPH-database entry was located at the time of this writing.
+- **Multi-tenant operator host.** 94[.]103[.]1[.]13 concurrently serves at least three parallel parasitic campaigns alongside the Chaos distribution: `forumrutor24[.]com` (Russian forum theme, 34 days active), `gtanuncios[.]com` (aged 10-year classifieds domain acquired from a CN reseller, pivoted 2026-04-11), and `bulgainme[.]pro` (short-lived `.pro` with webmail). All three use Cloudflare fronting + mixed registrars + aged-domain-purchase tradecraft, see Section 4 Infrastructure Context subsection for full breakdown. This reframes the operator from a single-campaign Chaos distributor to a **multi-campaign operator** running parallel monetization paths on the same infrastructure.
+- **Historical operator rotation evidence.** `slayer.ktx.ro` resolved to 94[.]103[.]1[.]13 on 2025-12-18-19 (brief 36-minute burst, 8 resolutions): the IP has been in operator rotation approximately four months before the Chaos campaign, establishing a months-long cadence for operator activity on this host.
+- **Possible secondary: 172[.]86[.]76[.]198.** LOW confidence operator-controlled; observed in tunnel-script artifacts but role is ambiguous. Could be a relay, a staging host, or an unrelated pivot point, evidence is not strong enough to mark HIGH.
+- **Reseller-inventory identity (NOT operator attribution).** Pre-masking WHOIS for `gtanuncios[.]com` recorded registrant `xiang xiang fan`, email `lc1393353[@]gmail[.]com`, phone `+86 130 3255 6442`, city `lin fen` (Linfen, Shanxi, China). The ten-month dormant hold between domain transfer (2025-06-28) and operator pivot (2026-04-11) is consistent with CN domain-broker inventory rather than direct operator identity. This identity is **tracked in <a href="/actors/UTA-2026-005/">UTA-2026-005</a>** for future cross-campaign correlation but does NOT elevate attribution above INSUFFICIENT.
+- **Bulletproof classification: SUSPECTED.** AS209207 is 3 months old (allocated 2026-01-19), Russia-registered, Albania-routed through a single upstream (AS48014 AlbaHost) with historical bogon announcements. The ASN's self-domain `dhost[.]su` uses a `.su` TLD typical of operator-friendly Russian-speaking hosting providers. Profile is consistent with bulletproof-adjacent hosting, but no named-BPH-database entry was located at the time of this writing.
 
 ### 7.6 Gaps That Would Strengthen or Resolve Attribution
 
 - A second sample containing the Stage-5b SHA256 `da302511…` or the mutex GUID `9f67b5ed-…` would permit high-confidence cross-campaign clustering.
 - A new build exhibiting the same cross-layer AES + XOR key-reuse pattern (any new passphrase/key pair reused at three crypter layers) would confirm the private crypter is a persistent builder (raising <a href="/actors/UTA-2026-005/">UTA-2026-005</a> confidence from MODERATE to HIGH).
 - Dynamic detonation capturing the real Orcus C2 endpoint behind `127.0.0.1:20268` would provide the first infrastructure pivot beyond the staging server.
-- Reappearance of the co-tenant triad (`forumrutor24.com`, `gtanuncios.com`, `bulgainme.pro`) on a different operator IP alongside Chaos-lineage samples would establish <a href="/actors/UTA-2026-005/">UTA-2026-005</a> continuity across infrastructure rotation.
-- Reappearance of the `xiang xiang fan` / `lc1393353@gmail.com` reseller-inventory identity on another aged-domain acquisition that subsequently pivots to operator infrastructure would elevate the "CN-broker-preference" signal from LOW to MODERATE.
+- Reappearance of the co-tenant triad (`forumrutor24[.]com`, `gtanuncios[.]com`, `bulgainme[.]pro`) on a different operator IP alongside Chaos-lineage samples would establish <a href="/actors/UTA-2026-005/">UTA-2026-005</a> continuity across infrastructure rotation.
+- Reappearance of the `xiang xiang fan` / `lc1393353[@]gmail[.]com` reseller-inventory identity on another aged-domain acquisition that subsequently pivots to operator infrastructure would elevate the "CN-broker-preference" signal from LOW to MODERATE.
 - Any language, locale, or developer-environment artifact in future decompiled builds would reduce geographic-attribution gaps.
 - A second open directory with overlapping scripts or overlapping tri-artifact gate coverage would strengthen the cluster.
 
@@ -735,11 +735,11 @@ Consolidated view of every major analytical claim in this report with its confid
 | <a href="/actors/UTA-2026-005/">UTA-2026-005</a> is a single operator cluster | **MODERATE (72%)** | Six distinctive characteristics (five technical, one infrastructure) reach B2 Admiralty threshold; cannot rule out tightly-cooperating operator duo sharing tooling |
 | Named-actor attribution | **INSUFFICIENT (0%)** | Zero infrastructure overlaps with named actor clusters, zero Tier-1/Tier-2 vendor attributions, zero named-actor TTP matches |
 | 2025 Talos "Chaos RaaS group", this activity | **RULED OUT** | Talos explicitly distinguishes the 2025 RaaS actor from the 2021-origin Chaos builder lineage; the sample is builder-variant, wrong codebase |
-| 94.103.1.13 is operator-controlled staging server | **HIGH** | Open directory contents directly align with loader chain artifacts (`t.ps1`/`t2.ps1`/`potato.ps1` hardcode this IP); multi-tenant co-tenancy pattern consistent with operator rotation |
-| 94.103.1.13 is bulletproof-hosting-adjacent | **SUSPECTED (not CONFIRMED)** | AS209207 is 3 months old, Russia-registered, single-upstream via AS48014 AlbaHost (historical bogon announcements), `.su` TLD self-domain; but no named-BPH-database entry located |
+| 94[.]103[.]1[.]13 is operator-controlled staging server | **HIGH** | Open directory contents directly align with loader chain artifacts (`t.ps1`/`t2.ps1`/`potato.ps1` hardcode this IP); multi-tenant co-tenancy pattern consistent with operator rotation |
+| 94[.]103[.]1[.]13 is bulletproof-hosting-adjacent | **SUSPECTED (not CONFIRMED)** | AS209207 is 3 months old, Russia-registered, single-upstream via AS48014 AlbaHost (historical bogon announcements), `.su` TLD self-domain; but no named-BPH-database entry located |
 | AbuseIPDB clean (0/0 reports) | **DEFINITE** | Manual browser fetch 2026-04-23 |
 | Multi-tenant operator host with concurrent campaigns | **HIGH** | DomainTools Iris pDNS 2026-04-23: three concurrent active co-tenants + one historical (slayer.ktx.ro Dec 2025), consistent Cloudflare fronting + mixed registrars + aged-domain-purchase tradecraft across all three active domains |
-| `xiang xiang fan` / `lc1393353@gmail.com` / Linfen CN is operator identity | **LOW** | Most plausibly a CN domain-reseller inventory identity (10-month dormant hold between acquisition and operator pivot is documented aged-domain-purchase tradecraft); tracked as signal, NOT elevated to attribution |
+| `xiang xiang fan` / `lc1393353[@]gmail[.]com` / Linfen CN is operator identity | **LOW** | Most plausibly a CN domain-reseller inventory identity (10-month dormant hold between acquisition and operator pivot is documented aged-domain-purchase tradecraft); tracked as signal, NOT elevated to attribution |
 | Cross-layer AES+XOR key reuse is a private-crypter builder fingerprint | **HIGH** | Two builds show the same intra-build key-reuse pattern with per-build rotation; no located public reporting of this combined transformation stack |
 | Stage-4 mutex GUID `9f67b5ed-…` and Stage-5b SHA256 `da302511…` are high-value hunting anchors | **DEFINITE** | Both cross-build invariants directly observed; zero prior public hits on each |
 | Tri-artifact gate is operator-convenience check | **MODERATE (70%)** | More parsimonious than decoy hypothesis given operator must maintain tools; cannot rule out decoy |
@@ -786,16 +786,16 @@ On remediation, the persistence mechanisms here are all user-space, registry plu
 Third-party perspective: these are action categories with rationale, not step-by-step procedures. See your internal IR playbook or dedicated IR vendor for execution.
 
 - **Isolate affected hosts.** Network-quarantine while preserving volatile state for forensic capture.
-- **Block 94.103.1.13 at perimeter.** Egress block on the staging server IP. Do NOT block the victim/target IPs listed in Section 4: those are attack targets, not operator infrastructure.
+- **Block 94[.]103[.]1[.]13 at perimeter.** Egress block on the staging server IP. Do NOT block the victim/target IPs listed in Section 4: those are attack targets, not operator infrastructure.
 - **Kill active tunnels.** Identify and terminate any `chisel.exe`, `plink.exe`, or Python tunnel-runner processes: these are the conduit for the real C2 beyond the loopback front.
 - **Rotate exposed credentials.** Mimikatz was staged; assume credential exposure on any infected host. Prioritize accounts with elevated privileges or domain access.
 - **Preserve forensic evidence before remediation.** Volatile memory capture (to recover the plaintext AES passphrase and XOR key from decrypted Stage-4 memory), scheduled-task XML export, registry hive export, USB-drive imaging for propagation evidence.
 
 ### 8.4 Network-Side Detection
 
-- HTTP GET to `94.103.1.13:80`: any request to this IP is operator-controlled infrastructure.
+- HTTP GET to `94[.]103[.]1[.]13:80`: any request to this IP is operator-controlled infrastructure.
 - `chisel.exe` or `plink.exe` process making outbound HTTP/HTTPS to unusual external hosts, tunnel-establishment signature.
-- DNS queries for `forumrutor24.com` or `gtanuncios.com` from environments with no expected Russian/Spanish-language consumer web traffic.
+- DNS queries for `forumrutor24[.]com` or `gtanuncios[.]com` from environments with no expected Russian/Spanish-language consumer web traffic.
 
 ---
 
@@ -823,13 +823,13 @@ MODERATE confidence: operator-convenience check against their own development ho
 
 Static signature-based AV scans for patterns in the file bytes. `mymain.bat` and `myfile.bat` are 2.6 MB of DOSfuscated text, no conventional PE structure, no embedded MZ/PE headers on the unprocessed file, no recognizable import names, no string patterns matching published YARA rules. The actual malicious content is two large Base64-alphabet-substituted blobs that only become recognizable after reversing the substitution, stripping the 32-character magic marker, AES-decrypting with a SHA256-derived key, and GZip-decompressing. Every one of those transformations must happen *in memory* before a scanner sees something it could match.
 
-**Q6: Is 94.103.1.13 a confirmed bulletproof hosting provider?**
+**Q6: Is 94[.]103[.]1[.]13 a confirmed bulletproof hosting provider?**
 
 SUSPECTED, not CONFIRMED. AS209207 is three months old (allocated 2026-01-19), Russia-registered, Albania-routed through a single upstream (AS48014 AlbaHost) with a history of announcing bogon networks. The profile is consistent with bulletproof-adjacent hosting (abuse-tolerant, short-lived infrastructure, non-cooperative registration) but no named-BPH-database entry was located, and the ASN is too new for a meaningful Spamhaus DROP/SBL listing history. No named-institution attribution is cited without a live source.
 
 **Q7: What would change my attribution assessment from <a href="/actors/UTA-2026-005/">UTA-2026-005</a> to a named actor?**
 
-(a) A Tier-1/Tier-2 vendor advisory linking this specific kit (private crypter, mutex GUID, Stage-5b PE hash, tri-artifact gate) to a named group; (b) passive DNS history for 94.103.1.13 showing prior named-actor use; (c) recovery of the real Orcus C2 upstream via dynamic detonation and correlation to a named-actor C2 pattern; or (d) a second campaign with the same cross-build invariants attributed by another vendor. None of these are currently available.
+(a) A Tier-1/Tier-2 vendor advisory linking this specific kit (private crypter, mutex GUID, Stage-5b PE hash, tri-artifact gate) to a named group; (b) passive DNS history for 94[.]103[.]1[.]13 showing prior named-actor use; (c) recovery of the real Orcus C2 upstream via dynamic detonation and correlation to a named-actor C2 pattern; or (d) a second campaign with the same cross-build invariants attributed by another vendor. None of these are currently available.
 
 **Q8: The sample's BTC wallets appear in older campaigns. Does that mean <a href="/actors/UTA-2026-005/">UTA-2026-005</a> is responsible for those older campaigns?**
 
@@ -850,13 +850,13 @@ The two most consequential gaps in this investigation are the unknown Orcus C2 u
 ### 10.1 Confirmed Gaps
 
 - **Real Orcus C2 upstream: UNKNOWN.** The RAT connects to `127.0.0.1:20268`; the external endpoint behind the chisel/plink tunnel cannot be recovered from static analysis. Dynamic detonation with egress capture is required.
-- **Operator identity: INSUFFICIENT for named-actor attribution.** The `xiang xiang fan` / `lc1393353@gmail.com` / `+86 130 3255 6442` identity recorded as pre-masking registrant of `gtanuncios.com` is most plausibly a CN domain-reseller inventory identity, not direct operator, ten-month dormant hold between acquisition (2025-06-28) and operator pivot (2026-04-11) is documented aged-domain-purchase tradecraft. Tracked in <a href="/actors/UTA-2026-005/">UTA-2026-005</a> for future correlation, not elevated to attribution.
+- **Operator identity: INSUFFICIENT for named-actor attribution.** The `xiang xiang fan` / `lc1393353[@]gmail[.]com` / `+86 130 3255 6442` identity recorded as pre-masking registrant of `gtanuncios[.]com` is most plausibly a CN domain-reseller inventory identity, not direct operator, ten-month dormant hold between acquisition (2025-06-28) and operator pivot (2026-04-11) is documented aged-domain-purchase tradecraft. Tracked in <a href="/actors/UTA-2026-005/">UTA-2026-005</a> for future correlation, not elevated to attribution.
 - **Wardow-Orcus crack authoritative attribution.** No Tier-1/Tier-2 vendor writeup exists for this specific crack. Wardow-crack identifiers are used as community-known identifiers, not vendor-sourced claims.
 - **Console.Title launch gate prior art.** No public reporting has been located describing the Console.Title + File.ReadLines batch-line self-extraction combination. The corpus surveyed is not exhaustive; absence of reporting is not proof of novelty.
 - **Tri-artifact gate prior art.** Similarly, no prior public reporting has been located for the specific `admin` + `%TEMP%\VBE\` + `%TEMP%\mapping.csv` conjunction. Combined multi-artifact gating in general is well-documented; this specific triple in the inverted direction is not.
 - **Second-victim telemetry.** The open directory was discovered in a pre-production state. No confirmed victim telemetry has been observed: targeting scope is inferred from the staged exploit scripts, not from attack outcomes.
 - **Language/locale artifacts in decompiled code.** No language, locale, or developer-environment strings were recovered from the decompiled code. Geographic attribution of the operator is therefore unconstrained beyond the hosting choice and the CN-reseller-registrar preference signal (which is LOW confidence per above).
-- **`otp2.py` / `otp_brute.py` direction.** Full source not reviewed; direction for 172.86.76.198 (operator-controlled vs target) remains ambiguous: flagged LOW confidence in infrastructure assessment.
+- **`otp2.py` / `otp_brute.py` direction.** Full source not reviewed; direction for 172[.]86[.]76[.]198 (operator-controlled vs target) remains ambiguous: flagged LOW confidence in infrastructure assessment.
 
 ### 10.2 Assumptions Made
 
@@ -873,11 +873,11 @@ The two most consequential gaps in this investigation are the unknown Orcus C2 u
 | A second sample with Stage-5b SHA256 `da302511…` | <a href="/actors/UTA-2026-005/">UTA-2026-005</a> confidence from MODERATE to HIGH |
 | A second sample with mutex GUID `9f67b5ed-…` | Same, cross-campaign cluster confirmed |
 | A Tier-1/Tier-2 vendor writeup linking this kit to a named group | Named-actor attribution from INSUFFICIENT to MODERATE/HIGH |
-| Passive DNS history tying 94.103.1.13 to named-actor infrastructure | Same, enables named-actor attribution |
+| Passive DNS history tying 94[.]103[.]1[.]13 to named-actor infrastructure | Same, enables named-actor attribution |
 | Real Orcus C2 endpoint via dynamic detonation | Opens infrastructure pivot; may enable attribution if the endpoint matches known clusters |
 | A language/locale artifact in future decompiled builds | Enables geographic attribution |
-| Reappearance of the co-tenant triad (`forumrutor24.com` + `gtanuncios.com` + `bulgainme.pro`) on a different operator IP with Chaos-lineage samples | Establishes <a href="/actors/UTA-2026-005/">UTA-2026-005</a> continuity across infrastructure rotation |
-| Reappearance of `xiang xiang fan` / `lc1393353@gmail.com` reseller-inventory identity on another operator-pivoted aged-domain acquisition | Elevates the CN-broker-preference signal from LOW to MODERATE |
+| Reappearance of the co-tenant triad (`forumrutor24[.]com` + `gtanuncios[.]com` + `bulgainme[.]pro`) on a different operator IP with Chaos-lineage samples | Establishes <a href="/actors/UTA-2026-005/">UTA-2026-005</a> continuity across infrastructure rotation |
+| Reappearance of `xiang xiang fan` / `lc1393353[@]gmail[.]com` reseller-inventory identity on another operator-pivoted aged-domain acquisition | Elevates the CN-broker-preference signal from LOW to MODERATE |
 | Confirmed victim telemetry | Shifts threat level from HIGH (capability-based) toward CRITICAL (impact-based) |
 | Spamhaus DROP/SBL listing for AS209207 | Upgrades bulletproof classification from SUSPECTED to CONFIRMED |
 
@@ -922,16 +922,16 @@ The two most consequential gaps in this investigation are the unknown Orcus C2 u
 {: .hl-tier-2}
 {: .hl-tab-chain}
 
-> **Analyst note:** This section was appended on 2026-05-02 to capture two developments since the original 2026-04-23 publication: (1) the staging server `94.103.1.13:7777` went globally offline, consistent with operator takedown after sustained external probing; (2) deeper analysis of `interact.py` (referenced but not fully decomposed in the original) yielded one new sample-level IOC (its SHA256), one new host-side persistence IOC (a hardcoded backdoor account credential pair), and one detection-relevant detail (the XOR key used to obfuscate the staged GodPotato payload). All three are now reflected in the IOC feed and detection content.
+> **Analyst note:** This section was appended on 2026-05-02 to capture two developments since the original 2026-04-23 publication: (1) the staging server `94[.]103[.]1[.]13:7777` went globally offline, consistent with operator takedown after sustained external probing; (2) deeper analysis of `interact.py` (referenced but not fully decomposed in the original) yielded one new sample-level IOC (its SHA256), one new host-side persistence IOC (a hardcoded backdoor account credential pair), and one detection-relevant detail (the XOR key used to obfuscate the staged GodPotato payload). All three are now reflected in the IOC feed and detection content.
 
 ### 12.1 Staging Infrastructure Status: Server Globally Offline
 
-The open directory at `http://94.103.1.13:7777/` was last successfully reached by The Hunters Ledger recrawl service at **2026-05-02 16:44 UTC**. From that point onward, all access attempts return TCP connection refused. To rule out a routing or proxy issue local to The Hunters Ledger, the host was probed externally from **eight independent network locations** (Spain, France, India ×2, Singapore, UK, US, Vietnam, all on different ASNs) via `check-host.net`. Every probe returned `Connection refused`. The IP itself remains advertised (the host is not null-routed) but no service is listening on port 7777.
+The open directory at `hxxp://94[.]103[.]1[.]13:7777/` was last successfully reached by The Hunters Ledger recrawl service at **2026-05-02 16:44 UTC**. From that point onward, all access attempts return TCP connection refused. To rule out a routing or proxy issue local to The Hunters Ledger, the host was probed externally from **eight independent network locations** (Spain, France, India ×2, Singapore, UK, US, Vietnam, all on different ASNs) via `check-host.net`. Every probe returned `Connection refused`. The IP itself remains advertised (the host is not null-routed) but no service is listening on port 7777.
 
 This pattern is consistent with one of three operator actions:
-- **Voluntary takedown** following increased external attention (`94.103.1.13` had received sustained recrawls plus at least one third-party mass-download attempt on 2026-05-02 prior to the outage).
+- **Voluntary takedown** following increased external attention (`94[.]103[.]1[.]13` had received sustained recrawls plus at least one third-party mass-download attempt on 2026-05-02 prior to the outage).
 - **Hosting-provider abuse response** by AS209207 (Digital Hosting Provider LLC) following abuse complaints. AS209207 has historically been operator-tolerant, so this is the less likely of the three.
-- **Migration to fresh infrastructure** with the operator deliberately closing the previously-exposed staging port. The two co-tenant patterns documented in §4 (`forumrutor24.com`, `gtanuncios.com`, `bulgainme.pro` and their respective mail subdomains) suggest the operator runs multi-tenant infrastructure across this host; closing port 7777 does not necessarily imply abandoning the IP. Defenders should continue monitoring the IP for re-emergence on alternate ports (the operator's broader port profile included 22, 80, and 7777).
+- **Migration to fresh infrastructure** with the operator deliberately closing the previously-exposed staging port. The two co-tenant patterns documented in §4 (`forumrutor24[.]com`, `gtanuncios[.]com`, `bulgainme[.]pro` and their respective mail subdomains) suggest the operator runs multi-tenant infrastructure across this host; closing port 7777 does not necessarily imply abandoning the IP. Defenders should continue monitoring the IP for re-emergence on alternate ports (the operator's broader port profile included 22, 80, and 7777).
 
 Some material was lost. The sample expansion observed between 2026-04-13 and 2026-04-20, 41 net-new files including `ros.apk` at 19 MB, `loveorg.tar` at 240 KB, and a financial-platform JavaScript-bundle cluster (`adm_bundle.js`, `pay_bundle.js`, `trade_bundle.js`, `vendor.js`), was indexed by metadata only. The crawler captured filenames and sizes but did not retrieve full file content before the takedown, and the hasher service did not complete sha256 computation for those artifacts. They are not currently recoverable from VirusTotal or other public corpora and constitute a hard intelligence gap. A 19 MB Android package alongside payment-flow and trading-flow JavaScript bundles is consistent with a parallel mobile-banking trojan staging effort, but absent the file bytes that stays an inference rather than an observed sample-level finding.
 
@@ -957,7 +957,7 @@ What was preserved is all 50 unique sample hashes captured during the active obs
 
 **2. AMSI bypass** via the canonical `[Ref].Assembly.GetType("System.Management.Automation.AmsiUtils").GetField("amsiInitFailed","NonPublic,Static").SetValue(...)` pattern. This is publicly documented from approximately 2017 and remains effective on Windows hosts running PowerShell versions where the field is still present and writable. The version of `interact.py` retrieved from VirusTotal has all PowerShell `$variable` markers stripped. The call appears as `SetValue(,)` in the captured bytes, likely an artifact of the operator's template-generator tooling rather than a working deployed script. Functionally equivalent to `SetValue($null,$true)`. Maps to **T1685, Disable or Modify Tools**.
 
-**3. Staged GodPotato XOR-loader → SYSTEM → backdoor account.** The script downloads `http://94.103.1.13/gp.xor`, performs an in-memory single-byte XOR decode with key `0x42`, and reflectively loads the decoded bytes as a .NET assembly via `[Reflection.Assembly]::Load()`. The assembly's entry point is invoked with the argument string `-cmd "net user pentest Qwerty12345 /add"`. This is the GodPotato pattern, coerce a privileged service account, invoke `CreateProcessWithToken` as `NT AUTHORITY\SYSTEM`, and execute the command-line string as that token. The result is a local Administrator account `pentest` with password `Qwerty12345` created on the victim host. Maps to **T1620, Reflective Code Loading**, **T1136.001, Local Account**, and **T1078.003, Local Accounts**.
+**3. Staged GodPotato XOR-loader → SYSTEM → backdoor account.** The script downloads `hxxp://94[.]103[.]1[.]13/gp.xor`, performs an in-memory single-byte XOR decode with key `0x42`, and reflectively loads the decoded bytes as a .NET assembly via `[Reflection.Assembly]::Load()`. The assembly's entry point is invoked with the argument string `-cmd "net user pentest Qwerty12345 /add"`. This is the GodPotato pattern, coerce a privileged service account, invoke `CreateProcessWithToken` as `NT AUTHORITY\SYSTEM`, and execute the command-line string as that token. The result is a local Administrator account `pentest` with password `Qwerty12345` created on the victim host. Maps to **T1620, Reflective Code Loading**, **T1136.001, Local Account**, and **T1078.003, Local Accounts**.
 
 #### 12.2.1 New IOCs Added
 
@@ -973,7 +973,7 @@ The original 2026-04-23 publication referenced `interact.py` in the IOC feed con
 
 ### 12.3 Detection Content Updates
 
-A new Sigma rule has been added to the [companion detection page](/hunting-detections/open-directory-94-103-1-13-20260423-detections/) covering the `pentest:Qwerty12345` backdoor-account creation pattern at the command-line level. This rule fires on `net user pentest * /add` regardless of the staging mechanism (XOR-loader, plain PowerShell, manual operator session, etc.) and is therefore robust against any future variation in the operator's loader chain so long as the credential string remains stable. The IOC feed has been updated to include the `interact.py` SHA256 and an expanded context entry on the existing `http://94.103.1.13/gp.xor` URL noting the XOR key.
+A new Sigma rule has been added to the [companion detection page](/hunting-detections/open-directory-94-103-1-13-20260423-detections/) covering the `pentest:Qwerty12345` backdoor-account creation pattern at the command-line level. This rule fires on `net user pentest * /add` regardless of the staging mechanism (XOR-loader, plain PowerShell, manual operator session, etc.) and is therefore robust against any future variation in the operator's loader chain so long as the credential string remains stable. The IOC feed has been updated to include the `interact.py` SHA256 and an expanded context entry on the existing `hxxp://94[.]103[.]1[.]13/gp.xor` URL noting the XOR key.
 
 ---
 
