@@ -144,6 +144,12 @@ var RULES = [
   ['overview', /risk assessment/],
   ['overview', /business impact/],
   ['overview', /^overview$/],
+  // How the investigation unfolded: a narrative section, Overview by default
+  // (Joseph, 2026-10-31). Deliberately narrow: "investigation timeline" is NOT
+  // here, the timeline rule above owns it.
+  ['overview', /how (this|the|our) investigation (unfolded|developed|began|started|progressed|went)/],
+  ['overview', /investigation (narrative|story)\b/],
+  ['overview', /how we (found|identified|traced|got to) /],
   ['overview', /^summary$/]
 ];
 

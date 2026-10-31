@@ -223,3 +223,24 @@ test('a lone carriage return is refused with its own reason, not as a mixed file
   assert.strictEqual(fs.readFileSync(file, 'utf8'), before);
   fs.rmSync(dir, { recursive: true, force: true });
 });
+
+/* Joseph, 2026-10-31: a section telling how the investigation unfolded defaults
+   to Overview. Control: before the rule these printed no tab. */
+test('an investigation-narrative section is placed to overview by name', function () {
+  var md = '---\ntitle: "x"\n---\n\n## 1. Executive Summary\n{: .hl-tier-1}\n\nb\n\n' +
+    '## 2. How This Investigation Unfolded\n{: .hl-tier-1}\n\nb\n\n' +
+    '## 3. The Investigation Narrative\n{: .hl-tier-1}\n\nb\n\n' +
+    '## 4. How We Found the Second Host\n{: .hl-tier-2}\n\nb\n';
+  var props = P.proposeFor(md);
+  assert.deepStrictEqual(props.map(function (p) { return p.tab; }), ['overview', 'overview', 'overview', 'overview']);
+  assert.strictEqual(props[1].how, 'name');
+  assert.strictEqual(P.byName('2. How This Investigation Unfolded'), 'overview');
+});
+
+test('the narrative rule does not catch non-narrative headings that share a word', function () {
+  ['6. Discovery Method: hunt.io Open Directory Capture', '13. Ongoing Investigation: Expanded Toolkit Discovery',
+   '3. What Was Found on This Infrastructure', '4. What Was Found: Malware Classification',
+   'Investigation Timeline', 'How We Hunted the Operator Across Providers'].forEach(function (h) {
+    assert.notStrictEqual(P.byName(h), 'overview', h);
+  });
+});
