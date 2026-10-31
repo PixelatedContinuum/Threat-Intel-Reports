@@ -38,10 +38,15 @@
      position:fixed              placed against the viewport (the back-to-top button, the toast), not a parent
      painted at 2px or less / no size / visibility:hidden   nothing painted, so nothing hangs out
      svg internals               the svg root is measured, its shapes are the drawing
+     centred mark                an empty, absolutely placed mark whose centre lies inside its decorative (aria-hidden) container and which lies inside that
+                                 container's parent: the process tree's timing bead, a 7px circle on a 3px line, is placed at left:N% and pulled back by half its
+                                 own width, so at 0% it hangs 3.5px past the left of the line and on every row 2px above and below it (opendirectory-62, 88 faults in
+                                 18 places). A bead whose centre lies off the line (left:160%), or one so large that it leaves the container's parent, still faults.
    An unmeasured state is NOT CHECKED, never a pass: a row whose measurement count is zero says so. */
 
 /* In the page. Returns one measurement object per call. Kept in ES5 because the other in-page expressions are. */
-function boxFit() {
+function boxFit(opt) {
+  var useMark = !(opt && opt.centredMark === false);
   var root = document.querySelector('.hl-report-page');
   var excluded = {}, hang = [], bars = [], measured = 0, barsMeasured = 0, stripsMeasured = 0, scrollers = 0;
   function ex(k) { excluded[k] = (excluded[k] || 0) + 1; }
@@ -88,6 +93,19 @@ function boxFit() {
       if (px(c['border' + sides[k] + 'Width']) > 0 && c['border' + sides[k] + 'Style'] !== 'none' && !/rgba\(.*,\s*0\)$/.test(c['border' + sides[k] + 'Color'] || '')) return true;
     }
     return !!c.boxShadow && c.boxShadow !== 'none';
+  }
+  /* T-0500.1.11 fix5a: a mark centred on a point of its track (see "centred mark" above). It is a mark, not content: it has no children and no text,
+     its container is declared decorative (aria-hidden="true"), and the point it marks (its centre) lies on the container. It must also lie inside the
+     container's parent (the summary row the track sits in), so a mark that is large enough to leave the row is still a fault. */
+  function centredMark(el, rc, host, hr) {
+    if (!useMark || !host || host.getAttribute('aria-hidden') !== 'true') return false;
+    if (el.children.length || /\S/.test(el.textContent || '')) return false;
+    var cx = (rc.left + rc.right) / 2, cy = (rc.top + rc.bottom) / 2;
+    if (cx < hr.left - 0.5 || cx > hr.right + 0.5 || cy < hr.top - 0.5 || cy > hr.bottom + 0.5) return false;
+    var wrap = host.parentElement;
+    if (!wrap) return false;
+    var wr = wrap.getBoundingClientRect();
+    return rc.left >= wr.left - 1 && rc.right <= wr.right + 1 && rc.top >= wr.top - 1 && rc.bottom <= wr.bottom + 1;
   }
   /* the rects of what is painted inside e: its text runs and every descendant that paints a box (in flow; placed elements are checked on their own).
      A descendant that clips or scrolls its content (overflow other than visible) contributes its own box only: what lies beyond it is cut off or
@@ -194,6 +212,7 @@ function boxFit() {
           var horiz = out.side === 'left' || out.side === 'right';
           if (/auto|scroll/.test(horiz ? ocs.overflowX : ocs.overflowY)) ex('child inside a scroll container');
           else if (horiz && /hidden|clip/.test(ocs.overflowX) && ocs.textOverflow === 'ellipsis' && ocs.whiteSpace === 'nowrap') ex('child inside an ellipsis box');
+          else if (cs.position === 'absolute' && centredMark(e, r, boxEl, orc)) ex('centred mark on a decorative track');
           else hang.push({ kind: cs.position === 'absolute' ? 'abs-out-of-container' : 'out-of-parent', sig: sig(e), path: path(e), side: out.side, by: r1(out.by), parent: sig(boxEl),
             child: [r1(r.left), r1(r.top), r1(r.right), r1(r.bottom)] });
         }
@@ -253,6 +272,8 @@ function boxFit() {
 }
 
 var EXPR = '(' + boxFit.toString() + ')()';
+/* the same expression with the centred-mark exclusion off: what the hang row did before fix5a. Used only by the gate's control and the unit tests. */
+var EXPR_NO_MARK = '(' + boxFit.toString() + ')({ centredMark: false })';
 
 function sumExcluded(states) {
   var t = {};
@@ -404,4 +425,4 @@ function viewVerdict(states, which) {
   return { ok: true, count: 0, findings: [], detail: '0 faults; ' + detail };
 }
 
-module.exports = { EXPR: EXPR, boxFit: boxFit, verdict: verdict, describe: describe, VIEW_EXPR: VIEW_EXPR, viewFit: viewFit, viewVerdict: viewVerdict };
+module.exports = { EXPR: EXPR, EXPR_NO_MARK: EXPR_NO_MARK, boxFit: boxFit, verdict: verdict, describe: describe, VIEW_EXPR: VIEW_EXPR, viewFit: viewFit, viewVerdict: viewVerdict };

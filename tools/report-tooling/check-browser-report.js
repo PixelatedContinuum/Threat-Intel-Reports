@@ -2402,6 +2402,16 @@ var BOX_OLD_WRAP_CSS = '\n.hl-report-page.hl-report-page .hl-rv-stage.hl-rv-stag
 var BOX_INJECT_CODE_EXPR = '(function(tab){var p=document.getElementById("tab-"+tab);if(!p)return false;var d=document.createElement("div");d.className="hl-rv-source hl-gate-code-ctl";d.setAttribute("data-rv-chrome","");d.setAttribute("data-pagefind-ignore","");' +
   'var h="";for(var k=14;k<=58;k++){var t=new Array(k+1).join("x");h+="<p>Raw <code>| "+t+" | </code> and more</p>";}d.innerHTML=h;p.appendChild(d);return true;})(__TAB__)';
 var BOX_OLD_CODE_CSS = '\n.hl-report-page.hl-report-page .hl-post-content.hl-post-content :is(p, li, dd):has(code) { padding-right: 0 !important; }\n';
+/* T-0500.1.11 fix5a: the process tree's timing bead. A 7px circle on a 3px line, placed at left:N% and pulled back by half its width, hangs 3.5px past
+   the line at 0% and 2px above and below it everywhere: the hang row called that a fault (opendirectory-62, 88 faults in 18 places) and the 'short'
+   control, which needs the hang row to PASS, failed with it. The row now excuses an empty mark whose centre lies on its aria-hidden track and which lies
+   inside the track's parent. The control injects, with the widget's own class names (so the widget's own stylesheet rules place the bead), three tracks:
+     fit   beads at 0% and 100%                      shipped expression: 0 faults;   expression with the exclusion off (the old row): faults
+     off   a bead at 160% (its centre is off the line) shipped expression: a fault
+     big   a 90px bead on the line                   shipped expression: a fault (it leaves the track's row) */
+var BOX_INJECT_MARK_EXPR = '(function(tab){var p=document.getElementById("tab-"+tab);if(!p)return false;var d=document.createElement("div");d.className="hl-ptree hl-gate-mark-ctl";d.setAttribute("data-rv-chrome","");d.setAttribute("data-pagefind-ignore","");' +
+  'function tr(cls,beads){var h="<div style=\\"padding:10px 12px\\"><span class=\\"pt-track "+cls+"\\" aria-hidden=\\"true\\" style=\\"display:block;width:300px\\">";beads.forEach(function(b){h+="<i style=\\"background:#999;"+b+"\\"></i>";});return h+"</span></div>";}' +
+  'd.innerHTML=tr("hl-gate-mark-fit",["left:0%","left:100%"])+tr("hl-gate-mark-off",["left:160%"])+tr("hl-gate-mark-big",["left:50%;width:90px;height:90px"]);p.appendChild(d);return true;})(__TAB__)';
 async function boxFitState(page, label, hash) {
   await page.evaluate('location.hash=' + JSON.stringify(hash));
   await CDP.sleep(90);
@@ -2517,6 +2527,21 @@ async function boxFitRows(page, url, html) {
     }
     if (!cdRes[0] || !cdRes[1]) check('NOT CHECKED: ' + cdName, false, 'a control page did not build, had no ' + tab + ' tab panel to put the paragraphs in, or measured no elements');
     else check(cdName, cdRes[0].length === 0 && cdRes[1].length > 0, 'shipped stylesheet: ' + cdRes[0].length + ' fault(s) on the 45 paragraphs (0 expected); old padding: ' + cdRes[1].length + ' fault(s)' + (cdRes[1].length ? ', first: ' + BOXFIT.describe(cdRes[1][0]) : ' (at least 1 expected)'));
+  }
+  var mkName = 'control: the hang row ignores a timing bead centred on the end of its track and FAILS a bead whose centre is off the track or that leaves the track\'s row, and the old row (exclusion off) FAILS the first (three tracks the gate injects)';
+  await setViewport(page, 1280, 900);
+  if (!(await gotoAndWait(page, url))) check('NOT CHECKED: ' + mkName, false, 'the tab controller never built, so nothing was injected');
+  else if (!(await page.evaluate(BOX_INJECT_MARK_EXPR.replace('__TAB__', JSON.stringify(tab))))) check('NOT CHECKED: ' + mkName, false, 'the page has no ' + tab + ' tab panel to put the tracks in');
+  else {
+    await page.evaluate('location.hash=' + JSON.stringify('#tab-' + tab));
+    await CDP.sleep(90);
+    var mkNew = await page.json(BOXFIT.EXPR), mkOld = await page.json(BOXFIT.EXPR_NO_MARK);
+    if (mkNew.notChecked || !mkNew.measured) check('NOT CHECKED: ' + mkName, false, 'the control page measured no elements');
+    else {
+      var onTrack = function (m, cls) { return (m.hang || []).filter(function (f) { return f.path.indexOf(cls) >= 0; }); };
+      var nFit = onTrack(mkNew, 'hl-gate-mark-fit').length, nOff = onTrack(mkNew, 'hl-gate-mark-off').length, nBig = onTrack(mkNew, 'hl-gate-mark-big').length, oFit = onTrack(mkOld, 'hl-gate-mark-fit').length;
+      check(mkName, nFit === 0 && nOff > 0 && nBig > 0 && oFit > 0, 'beads at 0% and 100% of a track: ' + nFit + ' fault(s) (0 expected), ' + oFit + ' with the exclusion off (at least 1 expected); bead at 160%: ' + nOff + ' fault(s) (at least 1 expected); 90px bead on the track: ' + nBig + ' fault(s) (at least 1 expected); ' + (mkNew.excluded && mkNew.excluded['centred mark on a decorative track'] || 0) + ' bead(s) excused on this page');
+    }
   }
   await restoreReportPage(page, url);
 }

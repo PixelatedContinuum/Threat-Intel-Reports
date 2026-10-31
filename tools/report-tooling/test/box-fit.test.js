@@ -190,3 +190,49 @@ test('the stylesheet gives a stage card a break for one unbroken token (opendire
   assert.match(src, /control: a stage card holding one unbroken 90-character token stays inside its box/);
   assert.match(src, /control: the strip row FAILS on a copy of the page whose strips are hidden/);
 });
+
+/* T-0500.1.11 fix5a: the centred mark. jsdom has no offsetParent, so the fixture says a mark's offset parent is its parent element. */
+function markPage(inner) {
+  const f = layout(inner);
+  Object.defineProperty(f.w.HTMLElement.prototype, 'offsetParent', { configurable: true, get() { return this.parentElement; } });
+  return f;
+}
+const ABS = '&quot;position&quot;:&quot;absolute&quot;,&quot;backgroundColor&quot;:&quot;rgb(153, 153, 153)&quot;';
+function track(bead, host) {
+  return '<div class="row" data-box="0,0,400,40"><span class="trk" ' + (host || 'aria-hidden="true"') + ' data-cs="{&quot;position&quot;:&quot;relative&quot;}" data-box="50,20,350,23">' +
+    '<i class="bead" data-cs="{' + ABS + '}" data-box="' + bead + '"></i></span></div>';
+}
+test('a bead centred on the left end of its aria-hidden track (3.5px past it, 2px above and below) is excused and counted; with the exclusion off it is a fault', () => {
+  const f = markPage(track('46.5,18,53.5,25'));
+  try {
+    const m = f.run();
+    assert.deepEqual(m.hang, []); assert.equal(m.excluded['centred mark on a decorative track'], 1);
+    const old = JSON.parse(JSON.stringify(f.w.eval(B.EXPR_NO_MARK)));
+    assert.deepEqual(kinds(old, 'hang').length, 1); assert.equal(old.hang[0].kind, 'abs-out-of-container'); assert.equal(old.hang[0].side, 'left'); assert.equal(old.hang[0].by, 3.5);
+  } finally { f.close(); }
+});
+test('a bead whose centre is off the track (a real overflow of the same element) is a fault', () => {
+  const f = markPage(track('380,18,387,25'));
+  try { const m = f.run(); assert.deepEqual(kinds(m, 'hang'), ['abs-out-of-container:i.bead']); assert.equal(m.hang[0].side, 'right'); assert.equal(m.excluded['centred mark on a decorative track'], undefined); } finally { f.close(); }
+});
+test('a bead centred on the track but so large that it leaves the track\'s row is a fault', () => {
+  const f = markPage(track('105,-30,195,60'));
+  try { assert.deepEqual(kinds(f.run(), 'hang').length, 1); } finally { f.close(); }
+});
+test('the exclusion needs a decorative container: the same bead on a track that is not aria-hidden is a fault, and so is a mark that carries text', () => {
+  const f = markPage(track('46.5,18,53.5,25', 'data-x="1"'));
+  try { assert.deepEqual(kinds(f.run(), 'hang').length, 1); } finally { f.close(); }
+  const g = markPage('<div class="row" data-box="0,0,400,40"><span class="trk" aria-hidden="true" data-cs="{&quot;position&quot;:&quot;relative&quot;}" data-box="50,20,350,23"><i class="bead" data-cs="{' + ABS + '}" data-box="46.5,18,53.5,25">x</i></span></div>');
+  try { assert.deepEqual(kinds(g.run(), 'hang').length, 1); } finally { g.close(); }
+});
+test('the gate injects the three tracks of the bead control with the widget\'s own class names, and the shipped stylesheet places the bead from them', () => {
+  const src = fs.readFileSync(path.join(SITE, 'tools/report-tooling/check-browser-report.js'), 'utf8');
+  assert.match(src, /hl-gate-mark-fit/); assert.match(src, /hl-gate-mark-off/); assert.match(src, /hl-gate-mark-big/);
+  const scss = fs.readFileSync(path.join(SITE, 'assets/css/custom.scss'), 'utf8');
+  assert.match(scss, /\.hl-ptree \.pt-track > i \{[^}]*position: absolute;[^}]*translateX\(-50%\)/);
+});
+test('a paragraph, list item or definition that holds an inline code chip reserves the chip\'s 6px closing edge (padding 5px + border 1px)', () => {
+  assert.match(CSS, /\.hl-report-page \.hl-post-content :is\(p, li, dd\):has\(code\) \{ padding-right: 6px; \}/);
+  const scss = fs.readFileSync(path.join(SITE, 'assets/css/custom.scss'), 'utf8');
+  assert.match(scss, /\.hl-post-content code \{[^}]*border: 1px solid[^}]*padding: 2px 5px/);
+});
