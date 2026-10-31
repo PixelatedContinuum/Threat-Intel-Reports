@@ -236,3 +236,11 @@ test('a paragraph, list item or definition that holds an inline code chip reserv
   const scss = fs.readFileSync(path.join(SITE, 'assets/css/custom.scss'), 'utf8');
   assert.match(scss, /\.hl-post-content code \{[^}]*border: 1px solid[^}]*padding: 2px 5px/);
 });
+
+test('the process tree\'s kind chip wraps in its column on a phone (the widget\'s sheet says nowrap), and the gate carries the control with the old nowrap', () => {
+  assert.match(CSS, /@media \(max-width: 720px\) \{ \.hl-report-page \.hl-ptree \.pt-kind \{ white-space: normal; max-width: 100%; overflow-wrap: anywhere; \} \}/);
+  const scss = fs.readFileSync(path.join(SITE, 'assets/css/custom.scss'), 'utf8');
+  assert.match(scss, /\.hl-ptree \.pt-kind \{[^}]*white-space: nowrap/);
+  const src = fs.readFileSync(path.join(SITE, 'tools/report-tooling/check-browser-report.js'), 'utf8');
+  assert.match(src, /hl-gate-kind-ctl/); assert.match(src, /BOX_OLD_KIND_CSS/);
+});

@@ -2420,6 +2420,14 @@ var BOX_OLD_WRAP_CSS = '\n.hl-report-page.hl-report-page .hl-rv-stage.hl-rv-stag
 var BOX_INJECT_CODE_EXPR = '(function(tab){var p=document.getElementById("tab-"+tab);if(!p)return false;var d=document.createElement("div");d.className="hl-rv-source hl-gate-code-ctl";d.setAttribute("data-rv-chrome","");d.setAttribute("data-pagefind-ignore","");' +
   'var h="";for(var k=14;k<=58;k++){var t=new Array(k+1).join("x");h+="<p>Raw <code>| "+t+" | </code> and more</p>";}d.innerHTML=h;p.appendChild(d);return true;})(__TAB__)';
 var BOX_OLD_CODE_CSS = '\n.hl-report-page.hl-report-page .hl-post-content.hl-post-content :is(p, li, dd):has(code) { padding-right: 0 !important; }\n';
+/* T-0500.1.11 fix5a: the process tree's kind chip. Its sheet says white-space: nowrap; in a node whose summary text column is narrower than the chip (three or more deep on a phone) the chip hung out
+   of the summary and was clipped by the node (opendirectory-62 at 390 and 360px). The control injects one node with a chip no phone column can hold, with the widget's own class names, and measures it at
+   360px on the shipped stylesheet (0 faults expected) and on a copy with the chip put back to nowrap (at least 1). */
+var BOX_INJECT_KIND_EXPR = '(function(tab){var p=document.getElementById("tab-"+tab);if(!p)return false;var d=document.createElement("div");d.className="hl-ptree";d.setAttribute("data-rv-chrome","");d.setAttribute("data-pagefind-ignore","");' +
+  'd.innerHTML="<ul class=\\"hl-ptree-root\\"><li class=\\"hl-ptree-item hl-gate-kind-ctl\\" data-kind=\\"dropper\\"><details class=\\"hl-ptree-node\\" open><summary><span class=\\"pt-rail\\" aria-hidden=\\"true\\"></span>"+' +
+  '"<svg class=\\"pt-chevron\\" viewBox=\\"0 0 24 24\\" aria-hidden=\\"true\\"><path d=\\"M9 5l7 7-7 7\\"/></svg><span class=\\"pt-headline\\"><span class=\\"pt-line1\\"><span class=\\"pt-name\\">launcher.exe</span></span></span>"+' +
+  '"<span class=\\"pt-kind\\">Side-loaded vendor component, dropper stage two of three</span></summary><div class=\\"pt-detail\\"><p class=\\"pt-why\\">Injected control node.</p></div></details></li></ul>";p.appendChild(d);return true;})(__TAB__)';
+var BOX_OLD_KIND_CSS = '\n@media (max-width: 720px) { .hl-report-page.hl-report-page .hl-ptree .pt-kind.pt-kind { white-space: nowrap !important; max-width: none !important; } }\n';
 /* T-0500.1.11 fix5a: the process tree's timing bead. A 7px circle on a 3px line, placed at left:N% and pulled back by half its width, hangs 3.5px past
    the line at 0% and 2px above and below it everywhere: the hang row called that a fault (opendirectory-62, 88 faults in 18 places) and the 'short'
    control, which needs the hang row to PASS, failed with it. The row now excuses an empty mark whose centre lies on its aria-hidden track and which lies
@@ -2560,6 +2568,24 @@ async function boxFitRows(page, url, html) {
       var nFit = onTrack(mkNew, 'hl-gate-mark-fit').length, nOff = onTrack(mkNew, 'hl-gate-mark-off').length, nBig = onTrack(mkNew, 'hl-gate-mark-big').length, oFit = onTrack(mkOld, 'hl-gate-mark-fit').length;
       check(mkName, nFit === 0 && nOff > 0 && nBig > 0 && oFit > 0, 'beads at 0% and 100% of a track: ' + nFit + ' fault(s) (0 expected), ' + oFit + ' with the exclusion off (at least 1 expected); bead at 160%: ' + nOff + ' fault(s) (at least 1 expected); 90px bead on the track: ' + nBig + ' fault(s) (at least 1 expected); ' + (mkNew.excluded && mkNew.excluded['centred mark on a decorative track'] || 0) + ' bead(s) excused on this page');
     }
+  }
+  var kdName = 'control: a process-tree node whose kind chip is wider than a phone column keeps the chip inside its summary at 360px, and the hang row FAILS it on a copy with the old nowrap (a node the gate injects)';
+  if (!base) check('NOT CHECKED: ' + kdName, false, 'assets/css/hl-report-tabs.css could not be read, so no copy could be built');
+  else {
+    var kdRes = [];
+    for (var kv = 0; kv < 2; kv++) {
+      var kdpath = new URL(url).pathname + '__box-fit-kind' + kv + '/';
+      var kdsrv = await SERVER.start({ [kdpath]: html }, { root: ROOT, base: BASE, files: kv ? { [BOX_CSS_PATH]: base + BOX_OLD_KIND_CSS } : {} });
+      try {
+        await setViewport(page, 360, 800);
+        if (!(await gotoAndWait(page, kdsrv.origin + kdpath)) || !(await page.evaluate(BOX_INJECT_KIND_EXPR.replace('__TAB__', JSON.stringify(tab))))) { kdRes.push(null); continue; }
+        var kdst = await boxFitState(page, '360x800 ' + tab, '#tab-' + tab);
+        var kdv = BOXFIT.verdict([kdst], 'hang');
+        kdRes.push(kdv.notChecked ? null : kdv.findings.filter(function (f) { return /hl-gate-kind-ctl/.test(f.path + ' ' + f.sig); }));
+      } finally { kdsrv.close(); }
+    }
+    if (!kdRes[0] || !kdRes[1]) check('NOT CHECKED: ' + kdName, false, 'a control page did not build, had no ' + tab + ' tab panel to put the node in, or measured no elements');
+    else check(kdName, kdRes[0].length === 0 && kdRes[1].length > 0, 'shipped stylesheet: ' + kdRes[0].length + ' fault(s) on the node (0 expected); old nowrap: ' + kdRes[1].length + ' fault(s)' + (kdRes[1].length ? ', first: ' + BOXFIT.describe(kdRes[1][0]) : ' (at least 1 expected)'));
   }
   await restoreReportPage(page, url);
 }
