@@ -1297,7 +1297,10 @@ function panelStackVerdict(m) {
 }
 var TYPE_SPEC = [
   /* [name, selector, desktop min px, phone min px, kind] */
-  ['Executive Summary prose', 'LONGP:.hl-rv-panel:not([hidden]) .hl-rv-source > p', 18, 17],
+  /* T-0500.1.11: the campaign-record block that opens a report (no h2: Campaign Identifier, Last Updated, Threat Level, and on some reports a
+     sentence about the investigation's status) is metadata at the 16px secondary size, not Executive Summary prose; with the status sentence
+     it passes the 200-character test and the row measured it against 18 (open-directory-172-105-0-126). It carries .hl-rv-nohead. */
+  ['Executive Summary prose', 'LONGP:.hl-rv-panel:not([hidden]) .hl-rv-source:not(.hl-rv-nohead) > p', 18, 17],
   ['tab name', '.hl-rv-tabs button .hl-rv-tab-full', 17, null],
   ['tab minutes', '.hl-rv-tabs button .hl-rv-tab-time', 14, null],
   ['section panel heading', '.hl-rv-panel:not([hidden]) .hl-rv-source > h2', 20, 18],

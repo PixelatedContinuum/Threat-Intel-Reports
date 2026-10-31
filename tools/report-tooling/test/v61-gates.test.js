@@ -81,3 +81,26 @@ test('the type scale row is NOT CHECKED when fewer than eight elements were meas
   var rows = scale(); rows.forEach(function (r, i) { if (i > 5) { r.n = 0; r.px = null; } });
   var v = G.typeScaleVerdict(rows, false); assert.strictEqual(v.notChecked, true); assert.strictEqual(v.ok, false);
 });
+
+/* T-0500.1.11 (open-directory-172-105-0-126): the campaign-record block that opens a report is metadata at 16px, not Executive Summary prose.
+   The in-page expression is run over a page whose first long paragraph is that block (16px, 213 characters, class hl-rv-nohead) and whose next is
+   real prose (18px): the old selector measured the block and FAILED an 18px floor; the shipped one measures the prose. jsdom has no layout, so
+   getClientRects is stubbed to "painted" and the font sizes are declared inline. */
+test('Executive Summary prose is not the campaign-record block that opens the report (the old selector measured it at 16 px against 18)', function () {
+  var { JSDOM } = require('jsdom');
+  var long = (n, c) => new Array(n).join(c);
+  var html = '<div class="hl-rv-panel"><div class="hl-rv-source hl-rv-nohead"><p style="font-size:16px">' + long(214, 'a') + '</p></div>' +
+    '<div class="hl-rv-source"><h2 style="font-size:22px">1. Executive Summary</h2><p style="font-size:18px">' + long(300, 'b') + '</p></div></div>';
+  function run(expr) {
+    var dom = new JSDOM(html, { runScripts: 'outside-only' });
+    dom.window.Element.prototype.getClientRects = function () { return [{ width: 1, height: 1 }]; };
+    var rows = JSON.parse(JSON.stringify(dom.window.eval(expr)));
+    return rows.filter(function (r) { return r.name === 'Executive Summary prose'; })[0];
+  }
+  var row = G.TYPE_SPEC.filter(function (r) { return r[0] === 'Executive Summary prose'; })[0];
+  assert.match(row[1], /\.hl-rv-source:not\(\.hl-rv-nohead\) > p/);
+  assert.strictEqual(run(G.TYPE_EXPR).px, 18, 'the shipped selector measures the prose');
+  var oldExpr = G.TYPE_EXPR.split('.hl-rv-source:not(.hl-rv-nohead) > p').join('.hl-rv-source > p');
+  assert.notStrictEqual(oldExpr, G.TYPE_EXPR, 'the control copy changed the selector');
+  assert.strictEqual(run(oldExpr).px, 16, 'the old selector measures the campaign-record block');
+});
