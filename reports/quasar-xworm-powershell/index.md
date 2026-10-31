@@ -120,12 +120,12 @@ Both provide persistence, remote control, and data theft capabilities; both comm
   <tbody>
     <tr>
       <td><strong>Dynamic DNS Domain</strong></td>
-      <td>dns4up.duckdns[.]org</td>
+      <td>dns4up[.]duckdns[.]org</td>
       <td>Primary C2 domain for RAT communication</td>
     </tr>
     <tr>
       <td><strong>Hosting IP</strong></td>
-      <td>193.233.164.21</td>
+      <td>193[.]233[.]164[.]21</td>
       <td>Infrastructure hosting malicious payloads</td>
     </tr>
     <tr>
@@ -179,7 +179,7 @@ Both provide persistence, remote control, and data theft capabilities; both comm
 Analysts can pivot on:
 - **File names**: `update.png`, `update.ps1`
 - **Strings**: `Add-MpPreference`, `ExclusionPath`, `HttpClient.GetAsync`
-- **Domains/IPs**: DuckDNS subdomains, `193.233.164.21`
+- **Domains/IPs**: DuckDNS subdomains, `193[.]233[.]164[.]21`
 - **Malware traits**: QuasarRAT embedded configs, XWorm obfuscation patterns
 
 ---
@@ -219,7 +219,7 @@ Analysts can pivot on:
     <tr>
       <td><strong>Command and Control / T1071.001</strong></td>
       <td>Web Protocols</td>
-      <td>HTTP/HTTPS communication to <code>193.233.164.21</code> via <code>dns4up.duckdns.org</code></td>
+      <td>HTTP/HTTPS communication to <code>193[.]233[.]164[.]21</code> via <code>dns4up[.]duckdns[.]org</code></td>
     </tr>
     <tr>
       <td><strong>Execution / T1059.005</strong></td>
@@ -251,7 +251,7 @@ Analysts can pivot on:
     </tr>
     <tr>
       <td><strong>Network Indicators</strong></td>
-      <td>dns4up.duckdns.org, 193.233.164.21</td>
+      <td>dns4up[.]duckdns[.]org, 193[.]233[.]164[.]21</td>
       <td>DNS monitoring, network traffic analysis</td>
     </tr>
     <tr>
@@ -274,7 +274,7 @@ Analysts can pivot on:
 2. **Restore** Microsoft Defender functionality and remove all added exclusions
 3. **Scan** for QuasarRAT and XWorm binaries on affected hosts
 4. **Audit** PowerShell execution logs for suspicious script block activity
-5. **Block** outbound access to `dns4up.duckdns.org` and `193.233.164.21`
+5. **Block** outbound access to `dns4up[.]duckdns[.]org` and `193[.]233[.]164[.]21`
 
 ### Longer-Term Detection Posture
 
