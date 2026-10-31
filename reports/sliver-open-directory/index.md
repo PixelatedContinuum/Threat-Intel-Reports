@@ -36,6 +36,7 @@ stix_bundle: /stix/sliver-open-directory.json
 
 ## BLUF (Bottom Line Up Front)
 {: .hl-tier-1}
+{: .hl-tab-overview}
 
 An exposed open directory at `45.94.31.220`, hosted on bulletproof infrastructure operated by 1337 Services GmbH (AS210558), yielded a complete attacker build workspace containing 270 files, 69 subdirectories, and 144 MB of offensive tooling. The workspace includes a fully operational Sliver C2 implant wrapped in a ScareCrow loader with 15 layered EDR evasion techniques, custom source code for five evasion modules, a fraudulent VMware code-signing certificate with its unencrypted private key, and a Sliver beacon generation command revealing complete C2 configuration. The toolkit was built on 2026-02-14 at 15:01 UTC and discovered approximately 6.75 hours later, likely before successful victim deployment.
 
@@ -56,6 +57,7 @@ The intelligence here is descriptive, covering what was built, and explanatory, 
 
 ## 1. Executive Summary
 {: .hl-tier-1}
+{: .hl-tab-overview}
 
 ### The Threat in Clear Terms
 
@@ -98,6 +100,7 @@ Defenders can act now on the certificate serial `659EEB5AA4A489FB238993AF259D23F
 
 ## 2. Sample and Artifact Inventory
 {: .hl-tier-2}
+{: .hl-tab-chain}
 
 ### Primary Analyzed Samples
 
@@ -181,6 +184,7 @@ There is a third-party signing risk here. Anyone who downloaded `key.pem` from t
 
 ## 3. Kill Chain Analysis
 {: .hl-tier-3}
+{: .hl-tab-chain}
 
 The kill chain runs through four stages from delivery to C2 establishment. Because the C2 infrastructure was offline during dynamic analysis, Stages 5-6 are reconstructed from build artifacts and behavioral analysis rather than live observation. Each stage is presented chronologically with available defender telemetry.
 
@@ -436,6 +440,7 @@ There is no persistence, confirmed by behavioral sandbox analysis (zero registry
 
 ## 4. Evasion Techniques
 {: .hl-tier-3}
+{: .hl-tab-chain}
 
 This section documents all 15 evasion techniques in the toolkit. Each technique includes implementation details, defender impact, and detection approach. Techniques are organized by implementation source.
 
@@ -698,6 +703,7 @@ On realism, the 15-technique stack is layered but not impenetrable. Enterprise E
 
 ## 5. Infrastructure and Build Pipeline
 {: .hl-tier-2}
+{: .hl-tab-timeline}
 
 ### 5.1 Hosting Provider: 1337 Services GmbH (AS210558)
 
@@ -782,6 +788,7 @@ What was exposed is 270 files across 69 subdirectories, totaling 144 MB. That in
 
 ## 6. Threat Actor Assessment
 {: .hl-tier-2}
+{: .hl-tab-attribution}
 
 ### UTA-2026-001 Designation
 
@@ -854,6 +861,7 @@ The toolchain characteristics, infrastructure choices, and operational behaviors
 
 ## 7. MITRE ATT&CK Mapping
 {: .hl-tier-2}
+{: .hl-tab-chain}
 
 
 | Tactic               | Technique ID | Technique Name                               | Confidence     | Key Evidence                                                                                                                        |
@@ -892,6 +900,7 @@ On persistence, T1547.001 (Registry Run Keys) was assessed and NOT observed. Beh
 
 ## 8. Detection Opportunities
 {: .hl-tier-2}
+{: .hl-tab-indicators}
 
 Detection is organized by kill chain stage. Because the build pipeline can regenerate polymorphically distinct beacons in approximately 8 minutes, behavioral and structural detection anchors are prioritized over file-hash-based blocking.
 
@@ -972,6 +981,7 @@ update.exe → NtCreateThread()           (execution)
 
 ## 9. Analytical Caveats and Gaps
 {: .hl-tier-2}
+{: .hl-tab-confidence}
 
 ### Critical Assumptions
 
@@ -1010,6 +1020,7 @@ A7 assumes the threat actor is a cybercrime operator. If a state actor is delibe
 
 ## 10. Response Guidance
 {: .hl-tier-2}
+{: .hl-tab-indicators}
 
 ### If This Infrastructure or Toolkit is Observed
 
@@ -1055,6 +1066,7 @@ Remediation strategy should reflect the injection architecture:
 
 ## 11. Confidence Summary
 {: .hl-tier-2}
+{: .hl-tab-confidence}
 
 This report already carries confidence labels through Sections 3, 6, 7, and 9. I collect them here by level rather than leave a reader to gather them section by section.
 
@@ -1072,6 +1084,7 @@ This report already carries confidence labels through Sections 3, 6, 7, and 9. I
 
 ## Appendix A: IOC and Detection File References {#appendix-a}
 {: .hl-tier-2}
+{: .hl-tab-indicators}
 
 ### IOC Feed (Machine-Readable)
 
@@ -1101,6 +1114,7 @@ The rules target architectural constants that survive polymorphic regeneration, 
 
 ## Appendix B: Research References {#appendix-b}
 {: .hl-tier-2}
+{: .hl-tab-confidence}
 
 ### Tier 1 Sources (Authoritative)
 
@@ -1140,5 +1154,6 @@ The rules target architectural constants that survive polymorphic regeneration, 
 
 ## License
 {: .hl-tier-2}
+{: .hl-tab-confidence}
 
 © 2026 Joseph, The Hunters Ledger. Licensed under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/), free to republish and adapt, including commercially, with attribution to The Hunters Ledger and a link to the original.
