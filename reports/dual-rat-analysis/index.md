@@ -37,6 +37,7 @@ stix_bundle: /stix/dual-rat-analysis.json
 
 ## BLUF (Bottom Line Up Front)
 {: .hl-tier-1}
+{: .hl-tab-overview}
 
 ### Executive Summary
 
@@ -98,6 +99,7 @@ Two .NET Remote Access Trojans (Quasar RAT and NjRAT/XWorm) were discovered on t
 
 ## Sample 1: Quasar RAT Analysis
 {: .hl-tier-3}
+{: .hl-tab-chain}
 
 ### File Identification
 - **Original Filename**: client.exe
@@ -309,6 +311,7 @@ That four-minute delay before C2 contact is a deliberate evasion technique aimed
 
 ## Sample 2: NjRAT/XWorm Analysis
 {: .hl-tier-3}
+{: .hl-tab-chain}
 
 ### File Identification
 - **Original Filename**: server (1).exe
@@ -519,6 +522,7 @@ Aggressive persistence and critical-process protection together make this malwar
 
 ## Delivery Method Analysis & Initial Access Vectors
 {: .hl-tier-2}
+{: .hl-tab-chain}
 
 ### Common Infection Vectors
 
@@ -560,6 +564,7 @@ The typical victim profile here is broad opportunistic targeting across industri
 
 ## Future Evolution & Threat Trends
 {: .hl-tier-2}
+{: .hl-tab-chain}
 
 ### Emerging Capabilities to Watch
 
@@ -603,6 +608,7 @@ Commodity RAT development is trending toward enhanced evasion, expanded surveill
 
 ## Comparative Technical Analysis
 {: .hl-tier-3}
+{: .hl-tab-chain}
 
 **Investigation Context**: The co-presence of Quasar RAT and NjRAT/XWorm on the same infrastructure as [PULSAR RAT]({{ "/reports/PULSAR-RAT/" | relative_url }}) indicates an operator assembling a multi-tool capability set, one family for targeted stealth operations, one for resilient mass deployment.
 
@@ -642,6 +648,7 @@ Commodity RAT development is trending toward enhanced evasion, expanded surveill
 
 ## MITRE ATT&CK Mapping
 {: .hl-tier-2}
+{: .hl-tab-chain}
 
 ### Quasar RAT - ATT&CK Mapping
 
@@ -840,6 +847,7 @@ Commodity RAT development is trending toward enhanced evasion, expanded surveill
 
 ## Frequently Asked Questions
 {: .hl-tier-2}
+{: .hl-tab-confidence}
 
 ### Technical Questions
 
@@ -881,6 +889,7 @@ A: Both RATs enable comprehensive data theft and surveillance, keylogging, scree
 
 ## Confidence Summary
 {: .hl-tier-2}
+{: .hl-tab-confidence}
 
 Both MITRE ATT&CK mapping tables in this report, one for the Quasar RAT sample and one for the NjRAT/XWorm sample, carry a Confidence column, and every one of their 23 combined rows reads CONFIRMED. That is the only confidence grading stated anywhere in this report.
 
@@ -890,5 +899,6 @@ Nothing in the report attaches a confidence level to the APT10 association claim
 
 ## License
 {: .hl-tier-2}
+{: .hl-tab-confidence}
 
 © 2026 Joseph, The Hunters Ledger. Licensed under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/), free to republish and adapt, including commercially, with attribution to The Hunters Ledger and a link to the original.
