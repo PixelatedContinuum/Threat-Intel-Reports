@@ -2394,6 +2394,13 @@ var BOX_INJECT_STAGE_EXPR = '(function(tab){var p=document.getElementById("tab-"
   'd.innerHTML="<article class=\\"hl-rv-stage\\"><details class=\\"hl-rv-stage-detail\\" open><summary>Stage 2</summary><p>"+tok+"</p></details></article>";' +
   'p.appendChild(d);return true;})(__TAB__)';
 var BOX_OLD_WRAP_CSS = '\n.hl-report-page.hl-report-page .hl-rv-stage.hl-rv-stage { overflow-wrap: normal !important; }\n';
+/* T-0500.1.11 fix5a: the inline code chip. A paragraph holding a chip whose text ends in a space, on a full last line, let the chip's closing
+   edge (5px padding + 1px border) hang 5.2px past the paragraph (rovodev-mirai-matrix-c2, a teardown paragraph at 360px). The stylesheet now gives such a
+   paragraph 6px of right padding. The control injects 45 paragraphs whose chip text runs from 14 to 58 characters (every residue of a line, so one lands
+   in the zone) and measures them at 360px on the shipped stylesheet (0 faults expected) and on a copy with the padding put back to 0 (at least 1). */
+var BOX_INJECT_CODE_EXPR = '(function(tab){var p=document.getElementById("tab-"+tab);if(!p)return false;var d=document.createElement("div");d.className="hl-rv-source hl-gate-code-ctl";d.setAttribute("data-rv-chrome","");d.setAttribute("data-pagefind-ignore","");' +
+  'var h="";for(var k=14;k<=58;k++){var t=new Array(k+1).join("x");h+="<p>Raw <code>| "+t+" | </code> and more</p>";}d.innerHTML=h;p.appendChild(d);return true;})(__TAB__)';
+var BOX_OLD_CODE_CSS = '\n.hl-report-page.hl-report-page .hl-post-content.hl-post-content :is(p, li, dd):has(code) { padding-right: 0 !important; }\n';
 async function boxFitState(page, label, hash) {
   await page.evaluate('location.hash=' + JSON.stringify(hash));
   await CDP.sleep(90);
@@ -2491,6 +2498,24 @@ async function boxFitRows(page, url, html) {
     }
     if (!stRes[0] || !stRes[1]) check('NOT CHECKED: ' + stName, false, 'a control page did not build, had no ' + tab + ' tab panel to put the card in, or measured no elements');
     else check(stName, stRes[0].length === 0 && stRes[1].length > 0, 'shipped stylesheet: ' + stRes[0].length + ' fault(s) on the card (0 expected); old overflow-wrap: ' + stRes[1].length + ' fault(s)' + (stRes[1].length ? ', first: ' + BOXFIT.describe(stRes[1][0]) : ' (at least 1 expected)'));
+  }
+  var cdName = 'control: a paragraph holding an inline code chip that ends in a space keeps the chip inside its box at 360px, and the hang row FAILS it on a copy with the old padding (45 paragraphs the gate injects)';
+  if (!base) check('NOT CHECKED: ' + cdName, false, 'assets/css/hl-report-tabs.css could not be read, so no copy could be built');
+  else {
+    var cdRes = [];
+    for (var cv = 0; cv < 2; cv++) {
+      var cdpath = new URL(url).pathname + '__box-fit-code' + cv + '/';
+      var cdsrv = await SERVER.start({ [cdpath]: html }, { root: ROOT, base: BASE, files: cv ? { [BOX_CSS_PATH]: base + BOX_OLD_CODE_CSS } : {} });
+      try {
+        await setViewport(page, 360, 800);
+        if (!(await gotoAndWait(page, cdsrv.origin + cdpath)) || !(await page.evaluate(BOX_INJECT_CODE_EXPR.replace('__TAB__', JSON.stringify(tab))))) { cdRes.push(null); continue; }
+        var cdst = await boxFitState(page, '360x800 ' + tab, '#tab-' + tab);
+        var cdv = BOXFIT.verdict([cdst], 'hang');
+        cdRes.push(cdv.notChecked ? null : cdv.findings.filter(function (f) { return /hl-gate-code-ctl/.test(f.path + ' ' + f.sig); }));
+      } finally { cdsrv.close(); }
+    }
+    if (!cdRes[0] || !cdRes[1]) check('NOT CHECKED: ' + cdName, false, 'a control page did not build, had no ' + tab + ' tab panel to put the paragraphs in, or measured no elements');
+    else check(cdName, cdRes[0].length === 0 && cdRes[1].length > 0, 'shipped stylesheet: ' + cdRes[0].length + ' fault(s) on the 45 paragraphs (0 expected); old padding: ' + cdRes[1].length + ' fault(s)' + (cdRes[1].length ? ', first: ' + BOXFIT.describe(cdRes[1][0]) : ' (at least 1 expected)'));
   }
   await restoreReportPage(page, url);
 }

@@ -407,6 +407,9 @@ a.hl-rvsp__item:hover .hl-rvsp__cta, a.hl-rv-sponsor-card__item:hover .hl-rv-spo
 .hl-report-page .hl-post-content tr:hover td:first-child { border-left: 0 !important; }
 .hl-report-page .hl-post-content tbody tr:last-child td { border-bottom: 0 !important; }
 .hl-report-page .hl-post-content :is(td, th) code { overflow-wrap: anywhere; font-size: var(--rv-fs); }
+/* T-0500.1.11 fix5a: an inline code chip is 6px wider than its text at the end of its last line (5px padding + 1px border). When that line is full and the chip's text ends in a space, the browser lets the space hang
+   and puts the closing edge past the paragraph's content box: rovodev-mirai-matrix-c2 teardown at 360px, a chip 5.2px past its paragraph. A paragraph, list item or definition that holds a chip reserves those 6px, so the closing edge lands inside the block's own box. */
+.hl-report-page .hl-post-content :is(p, li, dd):has(code) { padding-right: 6px; }
 .hl-report-page .hl-post-content caption { caption-side: top; text-align: left; padding: 12px 14px; font-size: var(--rv-fs); color: var(--rv-muted); }
 .hl-report-page .hl-rv-source :is(td, th).hl-rv-indicator-cell, .hl-report-page .hl-rv-source td.hl-rv-indicator-cell code { font-family: var(--rv-mono); white-space: nowrap; overflow-wrap: normal; word-break: normal; }
 .hl-report-page .hl-rv-source .hl-rv-confidence-cell { min-width: 130px; word-break: normal; overflow-wrap: normal; }
