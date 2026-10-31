@@ -122,6 +122,7 @@ stix_bundle: /stix/gotenberg-rce-cryptomining-107-175-69-137.json
 
 ## 1. Executive Summary
 {: .hl-tier-1}
+{: .hl-tab-overview}
 
 One disclosed CVE turned into a 198-host compromise in under an hour, and the obvious network
 signature for this exact injection never fires on real traffic. That is the whole report in two
@@ -214,6 +215,7 @@ DEFINITE conclusion rather than a risk to model.
 
 ## 2. What This Campaign Is
 {: .hl-tier-2}
+{: .hl-tab-chain}
 
 ### Classification and Identification
 
@@ -261,6 +263,7 @@ citation is correct.
 
 ## 3. Campaign Scale, Timing, and Escalation Discipline
 {: .hl-tier-2}
+{: .hl-tab-victims}
 
 ### The numbers, and why I trust them
 
@@ -416,6 +419,7 @@ it as **NOT CHECKED** rather than guessing in either direction.
 
 ## 4. The Payload: Cryptomining, Install Modes, and Rival Displacement
 {: .hl-tier-1}
+{: .hl-tab-chain}
 
 ### The miner itself is not the interesting part, and that is itself a finding
 
@@ -494,6 +498,7 @@ vulnerable long enough; a responder on such a host should expect more than one a
 
 ## 5. The Wider Enterprise: Data Theft, Account Farms, and AI Touchpoints
 {: .hl-tier-2}
+{: .hl-tab-chain}
 
 ### This campaign is the smallest thing this operator does
 
@@ -629,6 +634,7 @@ them individually.
 
 ## 6. Infrastructure
 {: .hl-tier-3}
+{: .hl-tab-timeline}
 
 ### The operator's host, and the ColoCrossing/RackNerd distinction
 
@@ -828,6 +834,7 @@ than on a third party's report.
 
 ## 7. The Exploitation Mechanism, and the Detection Signature That Never Fires
 {: .hl-tier-3}
+{: .hl-tab-chain}
 
 This is the report's most important technical finding, and it is a negative result: the obvious
 detection rule for this exact injection does not work, and reading the operator's own source
@@ -960,6 +967,7 @@ operator's own scripts alone.
 
 ## 8. MITRE ATT&CK Mapping
 {: .hl-tier-2}
+{: .hl-tab-chain}
 
 > All rows below are HIGH confidence or better unless explicitly marked `(MODERATE)`. The
 > Confidence Summary near the end of this report organizes findings by confidence level for the
@@ -982,6 +990,7 @@ operator's own scripts alone.
 
 ## 9. Threat Actor Assessment
 {: .hl-tier-3}
+{: .hl-tab-attribution}
 
 ### No named actor, and that is the honest answer
 
@@ -1128,6 +1137,7 @@ infrastructure be recognized as the same operator.
 
 ## 10. Indicators of Compromise
 {: .hl-tier-2}
+{: .hl-tab-indicators}
 
 Full detail lives in the machine-readable feed referenced below; this section highlights what
 actually distinguishes this operator from the surrounding commodity noise.
@@ -1178,6 +1188,7 @@ canonical, and it excludes every victim address by design.
 
 ## 11. Detection and Response Guidance
 {: .hl-tier-2}
+{: .hl-tab-indicators}
 
 ### Network-based detection
 
@@ -1260,6 +1271,7 @@ than merely at risk, since the operator had unauthenticated code execution as th
 
 ## 12. Recommendations
 {: .hl-tier-1}
+{: .hl-tab-indicators}
 
 ### Immediate actions
 
@@ -1310,6 +1322,7 @@ historical logs for the latency pattern in Section 11's second hunt.
 
 ## 13. Confidence Summary and Evidence Gaps
 {: .hl-tier-2}
+{: .hl-tab-confidence}
 
 <table>
 <colgroup>
@@ -1389,6 +1402,7 @@ through rather than around it.
 
 ## Glossary
 {: .hl-tier-3}
+{: .hl-tab-confidence}
 
 | Term | Definition |
 |---|---|
