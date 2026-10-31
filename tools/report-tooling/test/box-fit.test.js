@@ -160,3 +160,33 @@ test('CSS fix 4: from 900px to 1179px the seven-column tab row uses 16px labels 
   assert.match(CSS, /@media \(min-width: 900px\) and \(max-width: 1179px\) \{\n  \.hl-report-page \.hl-rv-tabs button \{ font-size: 16px; padding-left: 28px; \}\n\}/);
   assert.match(CSS, /@media \(min-width: 700px\) and \(max-width: 899px\) \{\n  \.hl-rv-tabs \{ display: flex; \}\n  \.hl-report-page \.hl-rv-tabs button \{ flex: 1 1 auto; white-space: nowrap; padding: 14px 6px 10px 24px; \}/);
 });
+
+/* T-0500.1.11 (PULSAR-RAT): a table cell with rowspan > 1 lies over the rows it spans, so neither its row's scroll height nor its own rect is a
+   hang-out of the row it starts in. The cell is still measured against the rows it spans. */
+const SPAN_TABLE = (rowspan, cellBottom, trScroll) => '<table data-box="0,0,400,135"><tbody data-box="0,0,400,135">' +
+  '<tr data-box="0,0,400,45" data-ch="45" data-sh="' + trScroll + '"><td rowspan="' + rowspan + '" data-box="0,0,100,' + cellBottom + '">Initial Access</td><td data-box="100,0,400,45">a</td></tr>' +
+  '<tr data-box="0,45,400,90"><td data-box="100,45,400,90">b</td></tr>' +
+  '<tr data-box="0,90,400,135"><td data-box="100,90,400,135">c</td></tr></tbody></table>';
+test('a rowspan cell that lies inside the rows it spans is not a hang-out of its row (the PULSAR-RAT shape: 135px of content in a 45px row)', () => {
+  const f = layout(SPAN_TABLE(3, 135, 135));
+  try { const m = f.run(); assert.deepEqual(m.hang, []); assert.ok(m.excluded['row holding a rowspan cell that lies inside the rows it spans'] >= 1); assert.ok(m.excluded['rowspan cell measured against the rows it spans'] >= 1); } finally { f.close(); }
+});
+test('a rowspan cell that hangs out of the rows it spans is still a fault, on the row and on the cell', () => {
+  const f = layout(SPAN_TABLE(3, 220, 220));
+  try { const m = f.run(); const k = kinds(m, 'hang'); assert.ok(k.some(x => x.startsWith('spill-y:tr')), JSON.stringify(k)); assert.ok(k.some(x => x.startsWith('out-of-parent:td')), JSON.stringify(k)); } finally { f.close(); }
+});
+test('without a rowspan the same 135px cell in a 45px row is a fault (the exemption is the span, not the size)', () => {
+  const f = layout(SPAN_TABLE(1, 135, 135));
+  try { const k = kinds(f.run(), 'hang'); assert.ok(k.some(x => x.startsWith('spill-y:tr')), JSON.stringify(k)); assert.ok(k.some(x => x.startsWith('out-of-parent:td')), JSON.stringify(k)); } finally { f.close(); }
+});
+test('a rowspan cell that fits its span does not excuse another cell of the row that lies past the row', () => {
+  const f = layout(SPAN_TABLE(3, 135, 135).replace('<td data-box="100,0,400,45">a</td>', '<td data-box="100,0,400,120">a</td>'));
+  try { const k = kinds(f.run(), 'hang'); assert.ok(k.some(x => x.startsWith('spill-y:tr')), JSON.stringify(k)); } finally { f.close(); }
+});
+test('the stylesheet gives a stage card a break for one unbroken token (opendirectory-45: 421px of content in a 242px card), and the gate carries the two controls', () => {
+  assert.match(CSS, /\.hl-rv-stage \{[^}]*overflow-wrap: anywhere;/);
+  const src = fs.readFileSync(path.join(__dirname, '../check-browser-report.js'), 'utf8');
+  assert.match(src, /control: the hang row ignores a row-spanning table cell that lies inside the rows it spans/);
+  assert.match(src, /control: a stage card holding one unbroken 90-character token stays inside its box/);
+  assert.match(src, /control: the strip row FAILS on a copy of the page whose strips are hidden/);
+});

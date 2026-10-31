@@ -866,7 +866,16 @@ function viewShapeVerdictBase(token, shape, line, primaryCount, notice, src) {
     return { absent: true, ok: why.length === 0, detail: 'the report lacks ' + need + ': the view says ' + JSON.stringify(notice || '(nothing)') + ', summary ' + JSON.stringify(line) + ', ' + primaryCount + ' ' + TAB_PRIMARY[token] + ' drawn' + (why.length ? '; ' + why.join('; ') : '') };
   }
   var m = String(line || '').match(/\d+/);
-  if (notice && /parseable dates/.test(notice)) return { absent: true, ok: true, detail: 'the report has its ' + need + ' but the dates do not parse; the view says so (' + JSON.stringify(notice) + ') and keeps the table as printed' };
+  if (notice && /parseable dates/.test(notice)) {
+    /* T-0500.1.11: a chronology whose dates do not parse (a row such as "Hours static since discovery | 80+" holds no date) is drawn as no marks
+       and printed as written. That is an honest view, but only if the printed table holds EVERY source row and no mark is drawn: the
+       view is checked against the SOURCE's row count, so a view that dropped a row and still said "dates do not parse" FAILS. */
+    if (typeof src.rows !== 'number' || typeof src.drawnPrinted !== 'number') return { notChecked: true, ok: false, absent: true, detail: 'the report has its ' + need + ' but the dates do not parse (' + JSON.stringify(notice) + '), and the rows the view printed as written were not counted against the source' };
+    var whyP = [];
+    if (src.drawnPrinted !== src.rows) whyP.push('the view prints ' + src.drawnPrinted + ' row(s) as written, the source has ' + src.rows);
+    if (primaryCount > 0) whyP.push('the view draws ' + primaryCount + ' ' + TAB_PRIMARY[token] + ' although it says the dates do not parse');
+    return { absent: true, unparsed: true, ok: whyP.length === 0, detail: 'the report has its ' + need + ' but the dates do not parse; the view says so (' + JSON.stringify(notice) + '), draws ' + primaryCount + ' ' + TAB_PRIMARY[token] + ' and prints ' + src.drawnPrinted + ' of the source\'s ' + src.rows + ' rows as written' + (whyP.length ? '; ' + whyP.join('; ') : '') };
+  }
   if (typeof src.rows !== 'number') return { notChecked: true, ok: false, detail: 'the report has ' + need + ' but its source rows were not read, so what the view should draw is not known (a view is never checked against itself)' };
   if (!primaryCount) return { absent: false, ok: false, detail: 'the report has ' + need + ' (' + src.rows + ' ' + (token === 'overview' ? 'tiles' : 'rows') + ') but the view drew no ' + TAB_PRIMARY[token] + ' element' + (notice ? ' and says ' + JSON.stringify(notice) : '') + '; summary ' + JSON.stringify(line) };
   if (!m) return { absent: false, ok: false, detail: 'the report has ' + need + ' but the summary ' + JSON.stringify(line) + ' states no figure' };
@@ -1730,7 +1739,11 @@ var ATTACK_STRIP_EXPR = '(async function(){var T=(' + attackTablesInPage.toStrin
   'var cnt=(st.querySelector(".hl-attack__count")||{}).textContent||"",n=cnt.match(/(\\d+) techniques/);' +
   'return {chrome:st.hasAttribute("data-rv-chrome"),segs:st.querySelectorAll(".hl-attack__seg").length,techniques:n?Number(n[1]):0,count:cnt,visible:T.vis(st),' +
   'exportCount:exp.length,exportVisible:btn?T.vis(btn):false,exportText:btn?btn.textContent.trim():null,download:dl};}' +
-  'var tables=[];for(var i=0;i<T.list.length;i++){var x=T.list[i];tables.push({index:x.index,label:x.label,panel:x.panel,rows:x.rows,withId:x.withId,mapped:x.mapped,strip:x.strip?await measure(x.strip):null});}' +
+  'var tables=[];for(var i=0;i<T.list.length;i++){var x=T.list[i];' +
+  /* T-0500.1.11: a strip is drawn beside its mapping table, in whichever tab holds that table. A strip in a tab that is not selected is not painted,
+     so the tab that holds the table is selected before its strip is measured (the old row measured every strip with the Attack chain tab open). */
+  'if(x.strip&&x.panel&&location.hash!=="#"+x.panel){location.hash="#"+x.panel;await new Promise(function(r){setTimeout(r,300);});}' +
+  'tables.push({index:x.index,label:x.label,panel:x.panel,rows:x.rows,withId:x.withId,mapped:x.mapped,strip:x.strip?await measure(x.strip):null});}' +
   'return JSON.stringify({sourceBlocks:T.blocks,tablesRead:T.tablesRead,stripsOnPage:T.strips.length,unpaired:T.unpaired,tables:tables});})()';
 function attackStripVerdict(m) {
   if (!m) return { notChecked: true, ok: false, detail: 'nothing was measured' };
@@ -1770,7 +1783,7 @@ function attackStripControlHtml(html) {
   return out === html ? null : out;
 }
 async function attackStripRows(page, url, html) {
-  var name = 'the Attack chain tab draws the ATT&CK coverage strip with a working Navigator layer download';
+  var name = 'every ATT&CK mapping table has its coverage strip beside it, in whichever tab holds the table, with a working Navigator layer download';
   /* T-0500.1.11: the strip is drawn next to the report's ATT&CK mapping table, in the Attack chain tab when the page builds one and in
      whichever tab holds that table otherwise (a one-tab report: the Overview, as the gate has always measured it). The page is opened
      on a tab it built; asking for #tab-chain on a page without one selected nothing. */
@@ -1823,6 +1836,31 @@ async function attackStripRows(page, url, html) {
       }
     } finally {
       psrv.close();
+    }
+  }
+  /* T-0500.1.11: the row selects the tab that holds each mapping table, so a strip hidden in its own tab must still FAIL it. This copy hides
+     every strip with one rule; the row must name each mapping table's strip as not painted. A row that measured only the strips of the open
+     tab, or that never opened the holding tab, would pass here for a table in a tab it did not open. */
+  var hname = 'control: the strip row FAILS on a copy of the page whose strips are hidden, in the tab that holds each mapping table';
+  var hidden = String(html).replace('</head>', '<style>.hl-attack{display:none !important}</style></head>');
+  if (hidden === String(html)) check('NOT CHECKED: ' + hname, false, 'the fetched page has no </head> to put the hiding rule in front of, so no copy could be built');
+  else {
+    var hpath = new URL(url).pathname + '__strips-hidden/';
+    var hsrv = await SERVER.start({ [hpath]: hidden }, { root: ROOT, base: BASE });
+    try {
+      await setViewport(page, 1280, 900);
+      if (!(await gotoAndWait(page, hsrv.origin + hpath + '#tab-' + stripTab))) check('NOT CHECKED: ' + hname, false, 'the tab controller never built on the control copy');
+      else {
+        await CDP.sleep(250);
+        var hm = JSON.parse(await page.evaluate(ATTACK_STRIP_EXPR));
+        var hv = attackStripVerdict(hm);
+        var wantN = (hm.tables || []).filter(function (t) { return t.mapped; }).length;
+        var named = hv.notChecked ? 0 : (hv.why || []).filter(function (x) { return /the strip is not painted/.test(x); }).length;
+        if (hv.notChecked) check('NOT CHECKED: ' + hname, false, hv.detail);
+        else check(hname, !hv.ok && named === wantN, 'the report has ' + wantN + ' mapping table(s); the row named ' + named + ' strip(s) as not painted: ' + (hv.ok ? 'PASS (it cannot see a hidden strip)' : hv.why.slice(0, 2).join('; ')));
+      }
+    } finally {
+      hsrv.close();
     }
   }
   await restoreReportPage(page, url);
@@ -1924,11 +1962,12 @@ function viewFactsExpr(tokens) {
     'var ids=null;if(I[t]){ids=[].slice.call(document.querySelectorAll("#tab-"+t+" "+I[t])).map(tx);}' +
     'var tiles=t==="overview"?[].slice.call(document.querySelectorAll("#tab-overview .hl-rv-tile strong")).map(tx):null;' +
     'var attack=null;if(t==="chain"){var rows=[].slice.call(document.querySelectorAll("#tab-chain #procedures tbody tr td:first-child"));var u=document.querySelector("#hl-rv-view-chain .hl-rv-unstated");attack={count:rows.length,ids:rows.map(tx),unstated:u?tx(u):null};}' +
-    'return {token:t,line:s?s.textContent.trim():"",count:c,notice:n?n.textContent.trim():null,ids:ids,tiles:tiles,attack:attack};});})(' + JSON.stringify(tokens) + ')';
+    'var printed=t==="timeline"?document.querySelectorAll("#hl-rv-view-timeline #chronology tbody tr").length:null;' +
+    'return {token:t,line:s?s.textContent.trim():"",count:c,notice:n?n.textContent.trim():null,ids:ids,tiles:tiles,attack:attack,printed:printed};});})(' + JSON.stringify(tokens) + ')';
 }
 /* The card verdict for one view from one page measurement: the SOURCE expectation (SHAPES[token]) plus what the view drew. */
 function cardVerdict(info, fact) {
-  var src = Object.assign({}, info || {}, { drawnIds: fact.ids, drawnTiles: fact.tiles, drawnAttack: fact.attack });
+  var src = Object.assign({}, info || {}, { drawnIds: fact.ids, drawnTiles: fact.tiles, drawnAttack: fact.attack, drawnPrinted: fact.printed });
   return viewShapeVerdict(fact.token, info ? info.shape : true, fact.line, fact.count, fact.notice, src);
 }
 async function tabControlRows(page, url, html) {
@@ -2166,6 +2205,20 @@ async function timelineRows(page, url) {
       check(w + 'x' + h + ': ' + nameB, noneOk, noneDetail);
       continue;
     }
+    /* T-0500.1.11: a chronology table whose dates do not parse is a table the report HAS, so SHAPES says shape true, yet the view draws no mark
+       and says so ("View unavailable: needs a chronology with parseable dates"). What the page shows INSTEAD is checked the way a report
+       with no chronology is: no mark or legend drawn, the notice present, and every source row printed as written (counted against the
+       SOURCE table). A mark that is not there is never measured and never called PASS without that. */
+    var unp = await page.json('(function(){var b=document.getElementById("hl-rv-view-timeline"),n=b?b.querySelector(".hl-rv-unavailable"):null;return {notice:n?n.textContent.trim():null,printed:document.querySelectorAll("#hl-rv-view-timeline #chronology tbody tr").length,drawn:document.querySelectorAll(".hl-rv-marker, .hl-rv-vertical-marker, .hl-rv-timeline-legend").length};})()');
+    if (unp && unp.notice && /parseable dates/.test(unp.notice)) {
+      var want = SHAPES && SHAPES.timeline && typeof SHAPES.timeline.rows === 'number' ? SHAPES.timeline.rows : null;
+      if (want === null) { check('NOT CHECKED: ' + w + 'x' + h + ': ' + nameA, false, 'the chronology\'s dates do not parse, and its source rows were not read, so the printed table was not counted'); check('NOT CHECKED: ' + w + 'x' + h + ': ' + nameB, false, 'the chronology\'s dates do not parse, and its source rows were not read, so the printed table was not counted'); continue; }
+      var unpOk = unp.drawn === 0 && unp.printed === want;
+      var unpDetail = 'the chronology has rows with no parseable date, so the layout draws no timeline mark and says ' + JSON.stringify(unp.notice) + ': ' + unp.drawn + ' mark(s) or legend(s) drawn, ' + unp.printed + ' of the source\'s ' + want + ' row(s) printed as written';
+      check(w + 'x' + h + ': ' + nameA, unpOk, unpDetail);
+      check(w + 'x' + h + ': ' + nameB, unpOk, unpDetail);
+      continue;
+    }
     var m = await page.json(TIMELINE_EXPR);
     var tv = timelineVerdict(m), lv = legendVerdict(m);
     if (tv.notChecked) check('NOT CHECKED: ' + w + 'x' + h + ': ' + nameA, false, tv.detail); else check(w + 'x' + h + ': ' + nameA, tv.ok, tv.detail);
@@ -2320,6 +2373,24 @@ var BOX_INJECT_CARD_EXPR = '(function(tab){var p=document.getElementById("tab-"+
   '["Previous","Next"].forEach(function(dir){var a=mk("a");a.href="#tab-"+tab;a.setAttribute("data-rv-hue",tab);' +
   '[["small",dir],["strong","Overview"],["span","What happened and how bad is it?"],["small","12 min read"]].forEach(function(x){' +
   'var e=mk(x[0]);e.textContent=x[1];a.appendChild(e);});n.appendChild(a);});p.appendChild(n);return true;})(__TAB__)';
+/* T-0500.1.11: two more controls for the hang row, each on content the gate injects into a tab panel (as the next/previous card is when a
+   report builds none), because the page under test may have neither a row-spanning table nor a stage card.
+     span   two tables in a report-text block: one whose row-spanning cell lies inside the three rows it spans (the PULSAR-RAT shape: a "Tactic"
+            cell over three technique rows; the old row called its tr 135px of content in a 45px box) and one whose row-spanning cell holds a
+            block taller than the rows it spans (a negative bottom margin lets it hang out). The hang row must report nothing for the first
+            and a fault for the second.
+     stage  a stage card holding one unbroken 90-character token, as opendirectory-45's stage 2 holds a call chain: on the shipped stylesheet the
+            card breaks the token and the hang row reports nothing for it; on a copy with the old overflow-wrap (normal) it reports the card. */
+var BOX_INJECT_SPAN_EXPR = '(function(tab){var p=document.getElementById("tab-"+tab);if(!p)return false;var d=document.createElement("div");d.className="hl-rv-source";d.setAttribute("data-rv-chrome","");d.setAttribute("data-pagefind-ignore","");' +
+  'function tr(cells){return "<tr>"+cells.join("")+"</tr>";}' +
+  'd.innerHTML="<table class=\\"hl-gate-span-fit\\"><thead><tr><th>Tactic</th><th>Technique</th></tr></thead><tbody>"+tr(["<td rowspan=\\"3\\">Initial Access</td>","<td>T1566.001 Spearphishing Attachment</td>"])+tr(["<td>T1566.002 Spearphishing Link</td>"])+tr(["<td>T1190 Exploit Public-Facing Application</td>"])+"</tbody></table>"+' +
+  '"<table class=\\"hl-gate-span-spill\\"><thead><tr><th>Tactic</th><th>Technique</th></tr></thead><tbody>"+tr(["<td rowspan=\\"2\\"><div style=\\"height:240px;margin-bottom:-210px\\">Execution</div></td>","<td>T1059.001 PowerShell</td>"])+tr(["<td>T1204.002 Malicious File</td>"])+"</tbody></table>";' +
+  'p.appendChild(d);return true;})(__TAB__)';
+var BOX_INJECT_STAGE_EXPR = '(function(tab){var p=document.getElementById("tab-"+tab);if(!p)return false;var d=document.createElement("div");d.className="hl-rv-stages";d.setAttribute("data-rv-chrome","");d.setAttribute("data-pagefind-ignore","");' +
+  'var tok="";for(var i=0;i<9;i++)tok+="Assembly.Load";' +
+  'd.innerHTML="<article class=\\"hl-rv-stage\\"><details class=\\"hl-rv-stage-detail\\" open><summary>Stage 2</summary><p>"+tok+"</p></details></article>";' +
+  'p.appendChild(d);return true;})(__TAB__)';
+var BOX_OLD_WRAP_CSS = '\n.hl-report-page.hl-report-page .hl-rv-stage.hl-rv-stage { overflow-wrap: normal !important; }\n';
 async function boxFitState(page, label, hash) {
   await page.evaluate('location.hash=' + JSON.stringify(hash));
   await CDP.sleep(90);
@@ -2386,6 +2457,37 @@ async function boxFitRows(page, url, html) {
         'hang row: ' + (hv.ok ? 'PASS' : 'FAIL ' + hv.count + ' fault(s), first: ' + BOXFIT.describe(hv.findings[0])) +
         ' | bar row: ' + (bv.ok ? 'PASS' : 'FAIL ' + bv.count + ' fault(s), first: ' + BOXFIT.describe(bv.findings[0])));
     } finally { srv.close(); }
+  }
+  var spanName = 'control: the hang row ignores a row-spanning table cell that lies inside the rows it spans and FAILS one that hangs out of them (two tables the gate injects)';
+  await setViewport(page, 1280, 900);
+  if (!(await gotoAndWait(page, url))) check('NOT CHECKED: ' + spanName, false, 'the tab controller never built, so nothing was injected');
+  else if (!(await page.evaluate(BOX_INJECT_SPAN_EXPR.replace('__TAB__', JSON.stringify(tab))))) check('NOT CHECKED: ' + spanName, false, 'the page has no ' + tab + ' tab panel to put the two tables in');
+  else {
+    var sst = await boxFitState(page, '1280x900 ' + tab, '#tab-' + tab);
+    var shv = BOXFIT.verdict([sst], 'hang');
+    if (shv.notChecked) check('NOT CHECKED: ' + spanName, false, 'the control page measured no elements: ' + shv.detail);
+    else {
+      var onFit = shv.findings.filter(function (f) { return /hl-gate-span-fit/.test(f.path); }), onSpill = shv.findings.filter(function (f) { return /hl-gate-span-spill/.test(f.path); });
+      check(spanName, onFit.length === 0 && onSpill.length > 0, 'row-spanning cell inside its three rows: ' + onFit.length + ' fault(s) (0 expected); row-spanning cell hanging out of its two rows: ' + onSpill.length + ' fault(s)' + (onSpill.length ? ', first: ' + BOXFIT.describe(onSpill[0]) : ' (at least 1 expected)'));
+    }
+  }
+  var stName = 'control: a stage card holding one unbroken 90-character token stays inside its box, and the hang row FAILS it on a copy with the old overflow-wrap (a card the gate injects)';
+  if (!base) check('NOT CHECKED: ' + stName, false, 'assets/css/hl-report-tabs.css could not be read, so no copy could be built');
+  else {
+    var stRes = [];
+    for (var sv = 0; sv < 2; sv++) {
+      var spath = new URL(url).pathname + '__box-fit-stage' + sv + '/';
+      var ssrv = await SERVER.start({ [spath]: html }, { root: ROOT, base: BASE, files: sv ? { [BOX_CSS_PATH]: base + BOX_OLD_WRAP_CSS } : {} });
+      try {
+        await setViewport(page, 1280, 900);
+        if (!(await gotoAndWait(page, ssrv.origin + spath)) || !(await page.evaluate(BOX_INJECT_STAGE_EXPR.replace('__TAB__', JSON.stringify(tab))))) { stRes.push(null); continue; }
+        var sst2 = await boxFitState(page, '1280x900 ' + tab, '#tab-' + tab);
+        var shv2 = BOXFIT.verdict([sst2], 'hang');
+        stRes.push(shv2.notChecked ? null : shv2.findings.filter(function (f) { return /hl-rv-stage/.test(f.path + ' ' + f.sig); }));
+      } finally { ssrv.close(); }
+    }
+    if (!stRes[0] || !stRes[1]) check('NOT CHECKED: ' + stName, false, 'a control page did not build, had no ' + tab + ' tab panel to put the card in, or measured no elements');
+    else check(stName, stRes[0].length === 0 && stRes[1].length > 0, 'shipped stylesheet: ' + stRes[0].length + ' fault(s) on the card (0 expected); old overflow-wrap: ' + stRes[1].length + ' fault(s)' + (stRes[1].length ? ', first: ' + BOXFIT.describe(stRes[1][0]) : ' (at least 1 expected)'));
   }
   await restoreReportPage(page, url);
 }

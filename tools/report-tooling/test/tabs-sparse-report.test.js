@@ -102,7 +102,10 @@ test('viewShapeVerdict: a shape the report has FAILS when the view is wrong and 
   assert.equal(G.viewShapeVerdict('victims',true,'no figure here',5,null,{rows:5}).ok,false,'no integer');
   assert.equal(G.viewShapeVerdict('overview',true,'2 techniques · 2 procedure rows',2,null,{rows:2,tiles:['2','2']}).ok,true,'overview reconciles its tiles with the source, and the first tile with the summary');
   assert.equal(G.viewShapeVerdict('overview',true,'2 techniques · 9 procedure rows',3,null,{rows:3,tiles:['9','9','9']}).ok,false);
-  assert.equal(G.viewShapeVerdict('timeline',true,'Chronology as printed; date positions unavailable',0,'View unavailable: needs a chronology with parseable dates; original date wording is retained below.',{rows:4}).ok,true,'the documented degrade for unparseable dates');
+  assert.equal(G.viewShapeVerdict('timeline',true,'Chronology as printed; date positions unavailable',0,'View unavailable: needs a chronology with parseable dates; original date wording is retained below.',{rows:4,drawnPrinted:4}).ok,true,'the documented degrade for unparseable dates, with every source row printed as written');
+  assert.equal(G.viewShapeVerdict('timeline',true,'Chronology as printed; date positions unavailable',0,'View unavailable: needs a chronology with parseable dates; original date wording is retained below.',{rows:4,drawnPrinted:3}).ok,false,'a row lost from the printed table is a FAIL, whatever the notice says');
+  assert.equal(G.viewShapeVerdict('timeline',true,'Chronology as printed; date positions unavailable',2,'View unavailable: needs a chronology with parseable dates; original date wording is retained below.',{rows:4,drawnPrinted:4}).ok,false,'marks drawn beside a notice that says the dates do not parse are a FAIL');
+  assert.equal(G.viewShapeVerdict('timeline',true,'Chronology as printed; date positions unavailable',0,'View unavailable: needs a chronology with parseable dates; original date wording is retained below.',{rows:4}).notChecked,true,'printed rows not counted: NOT CHECKED, never a pass');
 });
 test('emptyTabsVerdict: a built tab with no section FAILS; all tabs holding a section PASS; no tab is NOT CHECKED',()=>{
   const ok=[{token:'overview',panel:true,sections:2,headed:1},{token:'chain',panel:true,sections:1,headed:1}];

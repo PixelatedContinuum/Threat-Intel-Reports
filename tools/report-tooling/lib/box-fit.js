@@ -57,6 +57,25 @@ function boxFit() {
     for (var i = 0; n && n !== root && i < 4; i++, n = n.parentElement) parts.unshift(sig(n));
     return parts.join(' > ');
   }
+  /* A table cell with rowspan > 1 is laid out in its first row and lies over the rows it spans (T-0500.1.11). Its box legitimately reaches
+     past its own tr: the row's scrollHeight and the cell's rect then lie "outside" a one-row box that was never its box. spanBottom() is the
+     bottom edge of the LAST row the cell spans (or of its own row), spanOver() the bottom the cell may reach. A cell that lies past the rows
+     it spans is still a fault; only the span itself is excused, and the exclusion is counted. */
+  function spanBottom(cell) {
+    var tr = cell.parentElement, sec = tr && tr.parentElement, rows = sec && sec.rows;
+    if (!rows || !(cell.rowSpan > 1)) return null;
+    var j = Math.min(tr.sectionRowIndex + cell.rowSpan - 1, rows.length - 1);
+    return rows[j].getBoundingClientRect().bottom;
+  }
+  function rowSpanExplains(tr) {
+    var spanning = false, own = tr.getBoundingClientRect().bottom;
+    for (var k = 0; k < tr.cells.length; k++) {
+      var c = tr.cells[k], sb = spanBottom(c), cb = c.getBoundingClientRect().bottom;
+      if (sb !== null) { spanning = true; if (cb > sb + 1) return false; }
+      else if (cb > own + 1) return false;
+    }
+    return spanning;
+  }
   /* What a box PAINTS decides whether content hanging out of it can be seen. An element with no background, image or border of its own
      (a link's 44px hit area, a wrapper) has no edge to hang out of: it is judged by its own text runs and by the painted boxes inside it. */
   function ownPaint(c, tag) {
@@ -135,6 +154,7 @@ function boxFit() {
         if (/auto|scroll/.test(cs.overflowY)) isScroller = true;
         else if (/hidden|clip/.test(cs.overflowY) && ((cs.webkitLineClamp && cs.webkitLineClamp !== 'none') || (cs.lineClamp && cs.lineClamp !== 'none'))) ex('line clamp');
         else if (cs.overflowY === 'visible' && paintedOk('y')) ex('unpainted overhang');
+        else if (e.tagName === 'TR' && rowSpanExplains(e)) ex('row holding a rowspan cell that lies inside the rows it spans');
         else hang.push({ kind: cs.overflowY === 'visible' ? 'spill-y' : 'clipped-y', sig: sig(e), path: path(e), client: e.clientHeight, scroll: e.scrollHeight, over: dy });
       }
       if (isScroller) { scrollers++; ex('scroll container'); }
@@ -160,6 +180,7 @@ function boxFit() {
         orc = boxEl.getBoundingClientRect();
         var L = orc.left + px(ocs.borderLeftWidth) - gl, R = orc.right - px(ocs.borderRightWidth) + gr;
         var T = orc.top + px(ocs.borderTopWidth) - gt, Bm = orc.bottom - px(ocs.borderBottomWidth) + gb;
+        if (/^(TD|TH)$/.test(e.tagName) && boxEl === p && p.tagName === 'TR') { var sbm = spanBottom(e); if (sbm !== null && sbm > orc.bottom) { Bm = sbm - px(ocs.borderBottomWidth) + gb; ex('rowspan cell measured against the rows it spans'); } }
         var list = inline ? [].slice.call(rects) : [r];
         if (!ownPaint(cs, e.tagName)) { list = paintRects(e); if (!list.length) { ex('unpainted box with nothing painted inside'); list = []; } }
         list.forEach(function (q) {

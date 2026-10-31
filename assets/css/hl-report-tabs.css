@@ -524,7 +524,7 @@ a.hl-rvsp__item:hover .hl-rvsp__cta, a.hl-rv-sponsor-card__item:hover .hl-rv-spo
 .hl-rv-stage-ribbon button small { font-size: var(--rv-fs); color: var(--rv-muted); }
 .hl-rv-chain-scroll { max-width: 100%; }
 .hl-rv-stages { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 17rem), 1fr)); gap: 16px; align-items: start; }
-.hl-rv-stage { background: var(--rv-bg); border: 1px solid var(--rv-line); border-radius: var(--rv-radius); padding: 16px; min-width: 0; }
+.hl-rv-stage { background: var(--rv-bg); border: 1px solid var(--rv-line); border-radius: var(--rv-radius); padding: 16px; min-width: 0; overflow-wrap: anywhere; } /* .hl-rv-view sets overflow-wrap: normal; a stage cell holding one unbroken token (a call chain, a path, a hash) was 421px wide in a 242px card (opendirectory-45, 9 stages) */
 .hl-rv-stage-detail { margin: 0; }
 .hl-report-page .hl-rv-stage-detail > summary { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 10px; padding: 0 0 12px; font-family: var(--rv-display); font-size: 16px; font-weight: 600; cursor: pointer; }
 .hl-rv-stage-count { font-family: var(--rv-mono); font-size: var(--rv-fs-mono) !important; font-weight: 400; letter-spacing: 0.04em; color: var(--rv-muted); }
