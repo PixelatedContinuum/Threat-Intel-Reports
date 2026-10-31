@@ -17,9 +17,9 @@ detection_sections:
   - label: "Suricata Signatures"
     anchor: "#suricata-signatures"
 ioc_highlights:
-  - "67.215.232[.]25"
-  - "hxxp://67.215.232[.]25:8080/health"
-  - "hxxp://67.215.232[.]25:1337/"
+  - "67[.]215[.]232[.]25"
+  - "hxxp://67[.]215[.]232[.]25:8080/health"
+  - "hxxp://67[.]215[.]232[.]25:1337/"
   - "a7029ef2b6a541ef2b7508e1316d3c2efd3493108975ee457bcdb73043a25262"
 stix_bundle: /stix/flaskc2-postex-toolkit-67-215-232-25.json
 figure_nav:
@@ -37,7 +37,7 @@ figure_nav:
         anchor: "#5-the-bespoke-flask-c2-beacon-api"
 ---
 
-**Campaign Identifier:** FlaskC2-PostEx-Toolkit-67.215.232.25<br>
+**Campaign Identifier:** FlaskC2-PostEx-Toolkit-67[.]215[.]232[.]25<br>
 **Last Updated:** June 12, 2026<br>
 **Threat Level:** MEDIUM
 
@@ -49,7 +49,7 @@ figure_nav:
 {: .hl-tier-1}
 {: .hl-tab-overview}
 
-A live single-host Windows post-exploitation operation at `67.215.232[.]25` pairs a **bespoke Flask C2 beacon API** with a **custom MSSQL SQL-CLR reverse-shell backdoor** and a complete public privilege-escalation toolkit. This report delivers the first public documentation of that C2's beacon route surface and its shared-host link to the reverse-engineered tooling. Three co-located services run on one budget US VPS: an open directory on port 1337 caching a 17-file toolkit, the Flask C2 panel on port 8080, and an opaque second Flask listener on port 5000. The operator's objective is unambiguous from the toolkit's composition: gain a foothold as a service account that holds SeImpersonatePrivilege (through either an IIS webshell or the MSSQL backdoor) escalate to SYSTEM with the "Potato" suite, then pivot through Active Directory with Kerberos and dMSA abuse, all orchestrated through the Flask panel.
+A live single-host Windows post-exploitation operation at `67[.]215[.]232[.]25` pairs a **bespoke Flask C2 beacon API** with a **custom MSSQL SQL-CLR reverse-shell backdoor** and a complete public privilege-escalation toolkit. This report delivers the first public documentation of that C2's beacon route surface and its shared-host link to the reverse-engineered tooling. Three co-located services run on one budget US VPS: an open directory on port 1337 caching a 17-file toolkit, the Flask C2 panel on port 8080, and an opaque second Flask listener on port 5000. The operator's objective is unambiguous from the toolkit's composition: gain a foothold as a service account that holds SeImpersonatePrivilege (through either an IIS webshell or the MSSQL backdoor) escalate to SYSTEM with the "Potato" suite, then pivot through Active Directory with Kerberos and dMSA abuse, all orchestrated through the Flask panel.
 
 This report exists to fill a specific gap. The C2 panel itself was first documented publicly by Breakglass Intelligence on 2026-04-09 [Source: intel.breakglass.tech post #158873]; that disclosure covered the panel and its unauthenticated `/health` route but did not reverse-engineer the staged toolkit, did not establish the toolkit-to-C2 link, did not map the complete beacon route surface, and did not profile the single-host infrastructure. Those four are the original contributions here, and two of them form the report's analytical spine: **(1)** the bespoke Flask C2 beacon API, a minimal three-route, in-handler-authenticated headless control plane with a distinctive "servers" vocabulary that matches no known public C2 framework, and **(2)** the toolkit-to-C2 shared-host linkage that ties the reverse-engineered kit to the live panel. The remainder of the report characterizes the one genuinely bespoke compiled component, `cmd_exec.dll`, and documents the public toolkit precisely enough to detect it.
 
@@ -61,7 +61,7 @@ The defensive bottom line is that the custom MSSQL CLR backdoor is the highest-v
 
 ### Key Takeaways
 
-- **A single host runs the entire operation.** `67.215.232[.]25` (AS36352, HostPapa/ColoCrossing, US) co-locates the open-directory toolkit cache (`:1337`), the Flask C2 panel (`:8080`), and an opaque second Flask listener (`:5000`). It is IP-only (no domain has ever resolved to it) so IP-level blocking fully covers the known infrastructure. Five convergent negative pivots confirm no sibling C2 exists (HIGH confidence).
+- **A single host runs the entire operation.** `67[.]215[.]232[.]25` (AS36352, HostPapa/ColoCrossing, US) co-locates the open-directory toolkit cache (`:1337`), the Flask C2 panel (`:8080`), and an opaque second Flask listener (`:5000`). It is IP-only (no domain has ever resolved to it) so IP-level blocking fully covers the known infrastructure. Five convergent negative pivots confirm no sibling C2 exists (HIGH confidence).
 - **The Flask C2 is bespoke and minimal.** Only three routes exist: an unauthenticated `GET /health` status endpoint and two POST-only beacon endpoints (`/api/heartbeat`, `/api/report`). Authentication is enforced inside the handler, not at the route. The vocabulary (beacons are called "servers") matches no public C2 framework (MODERATE-HIGH confidence).
 - **The one bespoke binary evades sandboxes by architecture.** `cmd_exec.dll` is a custom build of a known MSSQL SQL-CLR reverse-shell technique that exposes a `[SqlProcedure] reverse_shell(ip, port)` stored procedure. It cannot fire outside a SQL Server host, so generic sandboxes rate it harmless and most AV scores it clean (DEFINITE classification).
 - **Two parallel footholds, one escalation chain.** IIS webshells (`w3wp.exe`) and the MSSQL backdoor (`sqlservr.exe`) both land as SeImpersonate-holding service accounts, the exact context the co-located public Potato suite (six tools) escalates from, feeding Rubeus and SharpSuccessor for Active Directory lateral movement.
@@ -90,7 +90,7 @@ The toolkit composition leaves no ambiguity about operational intent. The operat
 The diagram below renders this chain. Each stage carries its own analyst note in the deep-dive sections that follow.
 
 <figure style="text-align: center; margin: 2em 0;">
-  <img loading="lazy" src="{{ "/assets/images/flaskc2-postex-toolkit-67-215-232-25/flaskc2-postex-kill-chain.svg" | relative_url }}" alt="Vertical four-step kill-chain infographic for the FlaskC2-PostEx-Toolkit on 67.215.232.25. Step 1 (orange, Initial Access dual foothold): two entry vectors converge on one privilege - an IIS webshell running in w3wp.exe, or the cmd_exec.dll MSSQL CLR backdoor running in sqlservr.exe; both run as a service account holding SeImpersonatePrivilege by default; detection hint is w3wp.exe or sqlservr.exe spawning a cmd.exe child. Step 2 (red, Local Privilege Escalation to SYSTEM): the public Potato suite (EfsPotato, GodPotato, JuicyPotato, PrintSpoofer, RoguePotato, SweetPotato) abuses SeImpersonate to steal a SYSTEM token, with the operator picking the variant matching the target Windows build; detection hint is service-account to SYSTEM token theft and native-tool imphashes. Step 3 (red, AD Lateral Movement / Domain Escalation): Rubeus for Kerberos abuse and SharpSuccessor for the BadSuccessor dMSA technique move from SYSTEM-on-host toward domain compromise. Step 4 (deep red, Command and Control): a bespoke Flask C2 on port 8080 with POST /api/heartbeat, POST /api/report, and GET /health endpoints, idle at the time of analysis. The footer lists detection anchors including sqlservr.exe and w3wp.exe spawning cmd.exe, the SQL Server CLR backdoor banner string, the AES key-equals-IV value ca63457538b9b1e0, and the Flask /health field-combo.">
+  <img loading="lazy" src="{{ "/assets/images/flaskc2-postex-toolkit-67-215-232-25/flaskc2-postex-kill-chain.svg" | relative_url }}" alt="Vertical four-step kill-chain infographic for the FlaskC2-PostEx-Toolkit on 67[.]215[.]232[.]25. Step 1 (orange, Initial Access dual foothold): two entry vectors converge on one privilege - an IIS webshell running in w3wp.exe, or the cmd_exec.dll MSSQL CLR backdoor running in sqlservr.exe; both run as a service account holding SeImpersonatePrivilege by default; detection hint is w3wp.exe or sqlservr.exe spawning a cmd.exe child. Step 2 (red, Local Privilege Escalation to SYSTEM): the public Potato suite (EfsPotato, GodPotato, JuicyPotato, PrintSpoofer, RoguePotato, SweetPotato) abuses SeImpersonate to steal a SYSTEM token, with the operator picking the variant matching the target Windows build; detection hint is service-account to SYSTEM token theft and native-tool imphashes. Step 3 (red, AD Lateral Movement / Domain Escalation): Rubeus for Kerberos abuse and SharpSuccessor for the BadSuccessor dMSA technique move from SYSTEM-on-host toward domain compromise. Step 4 (deep red, Command and Control): a bespoke Flask C2 on port 8080 with POST /api/heartbeat, POST /api/report, and GET /health endpoints, idle at the time of analysis. The footer lists detection anchors including sqlservr.exe and w3wp.exe spawning cmd.exe, the SQL Server CLR backdoor banner string, the AES key-equals-IV value ca63457538b9b1e0, and the Flask /health field-combo.">
   <figcaption><em>Figure 1: The end-to-end post-exploitation chain. Two interchangeable footholds (IIS webshell or MSSQL CLR backdoor) both yield a SeImpersonate-holding service account, from which the public Potato suite reaches SYSTEM, Rubeus and SharpSuccessor drive Active Directory escalation, and the bespoke Flask C2 provides control. The SeImpersonate convergence at Step 1 is the reason a privilege-escalation-heavy toolkit is the right kit for this access model.</em></figcaption>
 </figure>
 
@@ -136,7 +136,7 @@ The craft signal in this campaign is narrow and worth stating plainly: the opera
 | **Sophistication** | **Intermediate / mid-tier.** No novel capability. Craft signal = operator recompiles .NET tooling from source but downloads prebuilt native tools and reuses commodity webshells. |
 | **Threat level** | Capability **HIGH** · Campaign **MEDIUM** (idle C2, no confirmed victims, single host, ~3-month stable exposure) |
 | **First seen** | Open directory first observed 2026-03-11 (Hunt.io `malicious_open_dir`); Flask listeners first observed 2026-03-09; operator .NET build cluster 2026-03-20 to 2026-03-23 |
-| **Attribution** | **Unknown / INSUFFICIENT.** No named-actor link in any corpus. Campaign described by infrastructure: `FlaskC2-PostEx-Toolkit-67.215.232.25` |
+| **Attribution** | **Unknown / INSUFFICIENT.** No named-actor link in any corpus. Campaign described by infrastructure: `FlaskC2-PostEx-Toolkit-67[.]215[.]232[.]25` |
 
 The campaign is not a single malware family and should not be described as one. It is a staging collection (a curated set of post-exploitation tools cached on an open directory, plus one bespoke backdoor and a bespoke C2) assembled to execute a single operational workflow. The classification depth in this report is therefore distributed: the bespoke `cmd_exec.dll` and the Flask C2 receive full reverse-engineering treatment (Sections 4 and 5), the webshells and CVE PoC receive component-level analysis (Section 6), and the public Potato/Rubeus/SharpSuccessor tooling is documented at the depth needed to detect and contextualize it (Section 7) without re-deriving well-published research.
 
@@ -358,7 +358,7 @@ Microsoft assessed BadSuccessor as Moderate severity; an August 2025 patch to `k
 
 > **Analyst note:** This subsection describes the operator's server hosting, where the staging host lives, who provides it, and what the surrounding history tells us. The key defensive point is simple: the entire operation runs on one rented server with no backup and no domain name, so a single block at the network perimeter covers everything currently known.
 
-The operation runs on a **single host**, `67.215.232[.]25`, with no sibling infrastructure (HIGH confidence). The host is an Ubuntu VPS on **AS36352 (HostPapa / ColoCrossing)**, a budget US commodity datacenter provider registered in Buffalo, NY (geolocated to Los Angeles). VirusTotal scores the IP 15/91 malicious; Hunt.io flags it as a malicious open directory with `threat_actor: null`. This is a commodity provider with a moderate abuse history reflecting its low-cost, low-verification model, **not** bulletproof hosting (it is US-based, ARIN-registered, and subject to US legal process). The host is fully attacker-controlled: the operator installed custom Python services (the Flask C2, the open-directory server) on custom ports, which requires root-level control of the VPS.
+The operation runs on a **single host**, `67[.]215[.]232[.]25`, with no sibling infrastructure (HIGH confidence). The host is an Ubuntu VPS on **AS36352 (HostPapa / ColoCrossing)**, a budget US commodity datacenter provider registered in Buffalo, NY (geolocated to Los Angeles). VirusTotal scores the IP 15/91 malicious; Hunt.io flags it as a malicious open directory with `threat_actor: null`. This is a commodity provider with a moderate abuse history reflecting its low-cost, low-verification model, **not** bulletproof hosting (it is US-based, ARIN-registered, and subject to US legal process). The host is fully attacker-controlled: the operator installed custom Python services (the Flask C2, the open-directory server) on custom ports, which requires root-level control of the VPS.
 
 **Single-host operation is confirmed by five convergent negative pivots:**
 
@@ -442,7 +442,7 @@ Three artifacts in the toolkit could be mistaken for identity leads. None is, an
 
 ### 9.4 No tracking designation assigned
 
-The Hunters Ledger assigns **no internal tracking designation (no UTA)** to this operation. It is a single-host, idle, sibling-less footprint with no cross-investigation links, which does not meet the threshold for a trackable-actor label, minting one would manufacture trackability the evidence does not support. The campaign is described by its infrastructure: `FlaskC2-PostEx-Toolkit-67.215.232.25`. Two markers are retained as future monitoring anchors that could reopen the question if they recur on infrastructure tied to additional activity: the Flask C2 vocabulary/route fingerprint, and the SSH host-key triplet. Until then, they are anchors, not the basis for a designation.
+The Hunters Ledger assigns **no internal tracking designation (no UTA)** to this operation. It is a single-host, idle, sibling-less footprint with no cross-investigation links, which does not meet the threshold for a trackable-actor label, minting one would manufacture trackability the evidence does not support. The campaign is described by its infrastructure: `FlaskC2-PostEx-Toolkit-67[.]215[.]232[.]25`. Two markers are retained as future monitoring anchors that could reopen the question if they recur on infrastructure tied to additional activity: the Flask C2 vocabulary/route fingerprint, and the SSH host-key triplet. Until then, they are anchors, not the basis for a designation.
 
 Prior art is credited to Breakglass Intelligence, who first documented the C2 panel on 2026-04-09 and likewise reported attribution as unknown [Source: intel.breakglass.tech post #158873].
 
@@ -454,7 +454,7 @@ Prior art is credited to Breakglass Intelligence, who first documented the C2 pa
 
 The complete, validated, machine-readable IOC feed is published separately at the **[IOC feed]({{ page.ioc_feed }})** (JSON, no defanging, SIEM/EDR-ingestible), so I do not repeat it here. It runs to 15 SHA256 file hashes (1 DEFINITE bespoke backdoor, 14 HIGH), 6 native-tool imphashes that resist renaming, 1 IPv4, 5 URLs, 1 host file path, and 6 string indicators, grouped by family so each maps to the correct detection rule. The strongest anchors are the bespoke `cmd_exec.dll` MSSQL CLR backdoor hash, its `[*] Connected to SQL Server CLR backdoor` banner string, and the AES key/IV `ca63457538b9b1e0` in the `NPCInfoList1.aspx` loader.
 
-**Deliberately excluded from the feed** (documented so the exclusion is auditable): the proxy-era ports 5222-5455 on this IP (Nov-Dec 2025 tenancy, different-tenant/reallocation risk); two benign VirusTotal downloaded files (`autodiscover.xml` and the `:1337` directory-index page); `inostage.ru` / `panel.inostage.ru` (public-tool co-host noise); and the generic .NET runtime imphashes (`f34d5f2d…`, `dae02f32…`, non-discriminating managed-PE stubs). The `Aatrox` and `Ghost小组` strings are included as detection anchors but carry an explicit note that they are commodity-reuse signals, not operator identity.
+**Deliberately excluded from the feed** (documented so the exclusion is auditable): the proxy-era ports 5222-5455 on this IP (Nov-Dec 2025 tenancy, different-tenant/reallocation risk); two benign VirusTotal downloaded files (`autodiscover.xml` and the `:1337` directory-index page); `inostage[.]ru` / `panel[.]inostage[.]ru` (public-tool co-host noise); and the generic .NET runtime imphashes (`f34d5f2d…`, `dae02f32…`, non-discriminating managed-PE stubs). The `Aatrox` and `Ghost小组` strings are included as detection anchors but carry an explicit note that they are commodity-reuse signals, not operator identity.
 
 ---
 
@@ -520,7 +520,7 @@ The brief orientation below is intended only to point defenders at *what to addr
 
 **Containment categories (action labels):**
 - Isolate affected MSSQL and IIS hosts.
-- Block `67.215.232[.]25` at the perimeter (all known ports).
+- Block `67[.]215[.]232[.]25` at the perimeter (all known ports).
 - Apply the January-2026 Windows Error Reporting patch on unpatched Windows 10/11 and Server 2019/2022.
 - Review Active Directory for Kerberos ticket abuse and dMSA/BadSuccessor exposure (the latter on any domain with a Windows Server 2025 domain controller).
 
@@ -547,7 +547,7 @@ These are documented limits of passive, OSINT-and-static analysis of an idle hos
 {: .hl-tab-confidence}
 
 **Prior public reference (credited):**
-- Breakglass Intelligence (2026-04-09): "Flask C2 — 67.215.232.25 unauth /health", first public documentation of the C2 panel; reports attribution unknown. `https://intel.breakglass.tech/post/flask-c2-67-215-232-25-unauth-health-hostpapa` (post #158873). Tier 3.
+- Breakglass Intelligence (2026-04-09): "Flask C2 — 67[.]215[.]232[.]25 unauth /health", first public documentation of the C2 panel; reports attribution unknown. `https://intel.breakglass.tech/post/flask-c2-67-215-232-25-unauth-health-hostpapa` (post #158873). Tier 3.
 
 **MSSQL CLR technique lineage (public, pre-dating this build):**
 - Rapid7 Metasploit: `mssql_clr_payload` module. Tier 2.
