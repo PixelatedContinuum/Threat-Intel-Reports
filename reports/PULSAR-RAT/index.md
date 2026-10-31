@@ -32,6 +32,7 @@ stix_bundle: /stix/PULSAR-RAT.json
 
 ## BLUF (Bottom Line Up Front)
 {: .hl-tier-1}
+{: .hl-tab-overview}
 
 **server.exe** is Pulsar RAT (9.2/10 CRITICAL), a .NET remote access trojan distributed from an open directory at `hxxp://185[.]208[.]159[.]182/d/server[.]exe`. Static code analysis confirms complete remote control, automated credential harvesting across all major browsers, keylogging, HVNC covert desktop access, and BCrypt-encrypted C2 with a Pastebin dead-drop resolver. Multi-layered anti-analysis targets VMware, VirtualBox, QEMU, Hyper-V, and common debuggers. Registry RunOnce persistence is confirmed; recovery partition abuse capability is present in code and requires per-system verification. The infrastructure also hosts Quasar RAT and NjRAT/XWorm families, see the follow-up report [Dual-RAT Analysis]({{ "/reports/dual-rat-analysis/" | relative_url }}) for full campaign scope. Capabilities are detailed in Section 6; detection rules and IOCs are in the sidebar.
 
@@ -122,6 +123,7 @@ Capability detail sits in Section 6, detection coverage and the IOC feed are in 
 
 ## 1. EXECUTIVE SUMMARY
 {: .hl-tier-1}
+{: .hl-tab-overview}
 
 **server.exe** is Pulsar RAT, a .NET remote access trojan derived from the open-source Quasar RAT family. Static code analysis establishes the threat at **9.2/10 CRITICAL**. An attacker who executes this payload gains the equivalent of unrestricted physical access: complete filesystem control, automated credential harvesting from all major browsers, live keylogging, covert Hidden Virtual Network Computing (HVNC) desktop access invisible to the user, screen and webcam capture, microphone recording, clipboard hijacking targeting cryptocurrency addresses, and a SOCKS proxy module for lateral movement into network segments not directly reachable from the internet.
 
@@ -182,6 +184,7 @@ For cross-references, the full technical detail is in Section 6 for capabilities
 
 ## 2. BUSINESS RISK ASSESSMENT
 {: .hl-tier-1}
+{: .hl-tab-overview}
 
 ### Understanding the Real-World Impact
 
@@ -350,6 +353,7 @@ Based on analysis of embedded strings and YARA rule matches, **server.exe** is c
 
 ## 4. INFECTION VECTORS
 {: .hl-tier-2}
+{: .hl-tab-chain}
 
 ### How Pulsar RAT Reaches Target Systems
 
@@ -478,6 +482,7 @@ Phishing delivery requires user execution. Training focused on executable attach
 
 ## 5. MITRE ATT&CK MAPPING
 {: .hl-tier-2}
+{: .hl-tab-chain}
 
 ### Comprehensive Threat Intelligence Mapping
 
@@ -976,6 +981,7 @@ Then plan against the critical-priority gaps first, which here means Defense Eva
 
 ## 6. TECHNICAL CAPABILITIES DEEP-DIVE
 {: .hl-tier-3}
+{: .hl-tab-chain}
 
 > **Analyst note:** This section documents Pulsar RAT's functional modules as confirmed through static code analysis of `server.exe`. Each subsection leads with a confidence level and the specific code evidence that supports it. Defenders can use this detail to build targeted detection rules and evaluate which controls are directly tested by each capability.
 
@@ -2308,6 +2314,7 @@ Indirect costs cover productivity loss, regulatory notification obligations wher
 
 ## 12. CONFIDENCE SUMMARY
 {: .hl-tier-2}
+{: .hl-tab-confidence}
 
 This report labels confidence at three levels throughout: the classification table in Section 3, a per-module CONFIDENCE LEVEL line at the start of most capability subsections in Section 6, and a Confidence column on every row of the Section 5 technique-mapping table. I organize all three here rather than leaving a reader to collect them section by section.
 
@@ -2323,5 +2330,6 @@ This report labels confidence at three levels throughout: the classification tab
 
 ## License
 {: .hl-tier-2}
+{: .hl-tab-confidence}
 
 © 2026 Joseph, The Hunters Ledger. Licensed under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/), free to republish and adapt, including commercially, with attribution to The Hunters Ledger and a link to the original.
