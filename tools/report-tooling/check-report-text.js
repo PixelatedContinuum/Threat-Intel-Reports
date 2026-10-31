@@ -109,8 +109,21 @@
    is printed and the exit code follows that verdict (1), as the gate would for a
    real loss; the CONTROL line says whether the control fired as designed.
 
+   DEFANG-AWARE MODE (T-0500.1.12, `--defang`; new-report-gates.sh passes it whenever it is given a baseline). The rules
+   (tasks/runs/T-0500.1.12/defang-rules.md, rule 5): "The completeness check compares page and baseline after normalising the
+   defang forms in rules 1 and 2 (and only those); any other difference is a FAIL." Both sides are normalised, in the
+   whitespace-collapsed text, by `defangNormalise` and by nothing else:
+     rule 1   hxxp:// -> http://   hxxps:// -> https://   fxp:// -> ftp://   [.] -> .   [@] -> @
+     rule 2   a command name whose first character is bracketed: [p]owershell -> powershell. Only a bracketed single letter or
+              digit that STARTS a token (after whitespace or one of ( " ' ` $ | ; & = ,) and is followed directly by a letter,
+              digit, dot, underscore or hyphen. [1] (a citation), [x] and [p] on their own are left alone.
+   Everything else is untouched, so a removed word, a reworded word, `[dot]`, `(.)` or a bracket anywhere else still FAILs.
+   The number of tokens normalised on each side is printed (`defang` line) and kept in the result. The mode is symmetric by
+   design (a baseline that is already defanged normalises the same way), so it cannot tell a REFANG from a defang: the
+   direction is the lint's job (check-defang.js), not this gate's. Without the flag the comparison is exact, as before.
+
    Run: node check-report-text.js --baseline <url-or-file> --page <url-or-file>
-          [--width 1280,390] [--control] [--control-teardown]
+          [--width 1280,390] [--control] [--control-teardown] [--defang]
    Env: HL_CHROME (see lib/cdp.js) */
 
 var path = require('node:path');
@@ -413,7 +426,30 @@ function hiddenProblems(hidden) {
   return problems;
 }
 
-function compare(base, page) {
+/* The ONLY normalisation --defang applies (rules 1 and 2 of defang-rules.md). Returns the text and the number of tokens changed. */
+var DEFANG_FORMS = [
+  [/\bhxxps:\/\//g, 'https://'],
+  [/\bhxxp:\/\//g, 'http://'],
+  [/\bfxp:\/\//g, 'ftp://'],
+  [/\[\.\]/g, '.'],
+  [/\[@\]/g, '@']
+];
+var DEFANG_CMD = /(^|[\s("'`$|;&=,])\[([A-Za-z0-9])\](?=[A-Za-z0-9._-])/g;
+function defangNormalise(text) {
+  var n = 0, t = String(text || '');
+  DEFANG_FORMS.forEach(function (f) { t = t.replace(f[0], function () { n++; return f[1]; }); });
+  t = t.replace(DEFANG_CMD, function (m, pre, ch) { n++; return pre + ch; });
+  return { text: t, tokens: n };
+}
+
+function compare(base, page, opts) {
+  var defang = null;
+  if (opts && opts.defang) {
+    var nb = defangNormalise(base.text), np = defangNormalise(page.text);
+    defang = { baseline: nb.tokens, page: np.tokens };
+    base = Object.assign({}, base, { text: nb.text });
+    page = Object.assign({}, page, { text: np.text });
+  }
   var aw = base.text ? base.text.split(' ') : [];
   var bw = page.text ? page.text.split(' ') : [];
   var ms = multisetDiff(aw, bw);
@@ -489,6 +525,7 @@ function compare(base, page) {
     chars: { baseline: base.chars, page: page.chars },
     counts: { baseline: base.counts, page: page.counts },
     countProblems: countProblems,
+    defang: defang,
     hidden: page.hidden || null,
     widget: page.widget || null,
     visProblems: visProblems,
@@ -500,6 +537,8 @@ function compare(base, page) {
 function line(r, label) {
   console.log('  ' + label.padEnd(9) + r.words.baseline + ' words, ' + r.chars.baseline +
     ' chars  ->  ' + r.words.page + ' words, ' + r.chars.page + ' chars');
+  if (r.defang) console.log('  defang    ' + r.defang.page + ' defang token(s) normalised on the page, ' + r.defang.baseline +
+    ' on the baseline (rules 1 and 2 only; every other difference still counts)');
   console.log('  words     missing ' + r.missing + ', added ' + r.added +
     ' (ordered, in report order: a moved paragraph counts as both)' +
     (r.approximate ? '  [APPROXIMATE: the pair differs in more than ' + MAX_D + ' places]' : ''));
@@ -562,10 +601,11 @@ async function main() {
   var controlTeardown = argv.indexOf('--control-teardown') !== -1;
   var controlWidget = argv.indexOf('--control-widget') !== -1;
   var controlHidden = argv.indexOf('--control-hidden') !== -1;
+  var cmpOpts = { defang: argv.indexOf('--defang') !== -1 };
 
   if (!baselineArg || !pageArg) {
     console.error('usage: node check-report-text.js --baseline <url-or-file> --page <url-or-file> ' +
-      '[--width 1280,390] [--control] [--control-teardown] [--control-widget] [--control-hidden]');
+      '[--width 1280,390] [--control] [--control-teardown] [--control-widget] [--control-hidden] [--defang]');
     process.exit(2);
   }
   if (!fs.existsSync(baselineArg) && !/^https?:\/\//.test(baselineArg)) {
@@ -673,7 +713,7 @@ async function main() {
       process.exit(2);
     }
 
-    var r = compare(base, pg);
+    var r = compare(base, pg, cmpOpts);
     line(r, 'text');
     console.log('  ' + r.status);
 
@@ -698,7 +738,7 @@ async function main() {
                 'this control cannot show that text inside a CLOSED details is counted');
               process.exit(2);
             }
-            rc = compare(base, JSON.parse(await cp.evaluate(EXTRACT_JS)));
+            rc = compare(base, JSON.parse(await cp.evaluate(EXTRACT_JS)), cmpOpts);
           } finally { cp.close(); }
         } catch (e) {
           console.log('NOT CHECKED  ' + String(e.message || e).split('\n')[0]);
@@ -777,6 +817,7 @@ module.exports = {
   checkIds: checkIds,
   checkSequence: checkSequence,
   compare: compare,
+  defangNormalise: defangNormalise,
   withOnePage: withOnePage,
   MAX_D: MAX_D
 };

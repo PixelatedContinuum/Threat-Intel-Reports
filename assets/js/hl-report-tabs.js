@@ -745,7 +745,10 @@
   // Citation and code copy controls used to live in the old TOC script.
   var copyStatus = make('p', 'hl-rv-copy-status', '', content); copyStatus.setAttribute('role', 'status');
   content.querySelectorAll('[data-cite-copy]').forEach(function (b) { b.addEventListener('click', function () { var src = document.getElementById(b.dataset.citeCopy); if (src) copy(src, copyStatus, 'Citation copied.', b); }); });
-  content.querySelectorAll('.hl-rv-source pre').forEach(function (pre) { var b = button('Copy code', pre, function () { copy(pre.querySelector('code') || pre, copyStatus, 'Code copied.', b); }); });
+  // Opt-in (T-0500.1.12): only a block the author marked {: .hl-copy} (defender content) gets a button. kramdown puts the class on the
+  // outer div.highlighter-rouge, so it is read on the pre, its code, or the two wrappers above it. Attacker blocks are defanged and get none.
+  function hlCopyMarked(pre) { var p = pre.parentElement, g = p && p.parentElement; return pre.classList.contains('hl-copy') || !!pre.querySelector(':scope > code.hl-copy') || !!(p && p.classList.contains('hl-copy')) || !!(g && g.classList.contains('hl-copy')); }
+  content.querySelectorAll('.hl-rv-source pre').forEach(function (pre) { if (!hlCopyMarked(pre)) return; var b = button('Copy code', pre, function () { copy(pre.querySelector('code') || pre, copyStatus, 'Code copied.', b); }); });
   // Older figure-nav adds its own chips before this deferred script. They are
   // navigation chrome, not words of the report.
   content.querySelectorAll('.hl-fignav').forEach(function (n) { n.setAttribute('data-rv-chrome', ''); n.setAttribute('data-pagefind-ignore', ''); });

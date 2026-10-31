@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # new-report-gates.sh: the one command a doer runs on a NEW report before the preview push.
 #
-#   bash tools/report-tooling/new-report-gates.sh <report folder holding index.md> [--out DIR] [--baseline-md FILE] [--views FILE]
+#   bash tools/report-tooling/new-report-gates.sh <report folder holding index.md> [--out DIR] [--baseline-md FILE] [--views FILE] [--defang-allow FILE]
 #
 # The folder may be OUTSIDE this checkout (threat-intel-vault/reports/<slug>/); nothing is
 # written to the checkout. It prints one line per gate, PASS, FAIL or NOT CHECKED, then a count.
@@ -18,11 +18,18 @@
 #                     the render, so the page the gates measure carries the curated views the live page will carry, not
 #                     the generic ones. Without it the render sees only the curation files already in this checkout.
 #
+# --defang-allow FILE the names the defang gate may leave raw (one per line, # comments): a vendor or product named as such, not
+#                     infrastructure of the actor (defang-rules.md rule 1). Every suppressed hit is counted in the gate's output.
+#
 # Gates, in order:
+#   defang              check-defang.js on the folder's source: every un-defanged non-private network indicator outside a block
+#                       marked {: .hl-copy}, and every attacker code block with no bracketed command token (T-0500.1.12). Node only
 #   render              render-report.rb renders the folder twice with the site's own layouts:
 #                       tagged (as written) and untagged (every tab line removed)
 #   check-tabs          check-tabs.js --require: a report that declares no tab tags FAILs
-#   completeness        check-report-text.js at 1280 and 390, the untagged render as baseline
+#   completeness        check-report-text.js at 1280 and 390, the untagged render as baseline. With --baseline-md it runs with
+#                       --defang: only the defang forms of rules 1 and 2 are normalised on both sides, any other difference FAILs,
+#                       and the count of tokens normalised is printed in the evidence file (completeness.txt)
 #   control-body        the same with --control (deletes one body paragraph): must exit 1
 #   control-teardown    the same with --control-teardown: must exit 1
 #   browser             check-browser-report.js on the tagged render, in a real browser
@@ -59,17 +66,19 @@ OUT=""
 BASELINE_MD=""
 VIEWS=""
 FOLDER=""
+DEFANG_ALLOW=""
 while [ $# -gt 0 ]; do
   case "$1" in
     -h|--help) usage; exit 0 ;;
     --out) OUT="${2:-}"; shift 2 ;;
     --baseline-md) BASELINE_MD="${2:-}"; shift 2 ;;
     --views) VIEWS="${2:-}"; shift 2 ;;
+    --defang-allow) DEFANG_ALLOW="${2:-}"; shift 2 ;;
     -*) echo "unknown option $1" >&2; usage >&2; exit 2 ;;
     *) FOLDER="$1"; shift ;;
   esac
 done
-if [ -z "$FOLDER" ]; then echo "usage: bash new-report-gates.sh <report folder holding index.md> [--out DIR] [--baseline-md FILE] [--views FILE]" >&2; exit 2; fi
+if [ -z "$FOLDER" ]; then echo "usage: bash new-report-gates.sh <report folder holding index.md> [--out DIR] [--baseline-md FILE] [--views FILE] [--defang-allow FILE]" >&2; exit 2; fi
 if [ -f "$FOLDER" ]; then FOLDER="$(dirname "$FOLDER")"; fi
 if [ ! -f "$FOLDER/index.md" ]; then echo "no index.md in $FOLDER" >&2; exit 2; fi
 FOLDER="$(cd "$FOLDER" && pwd)"
@@ -80,6 +89,15 @@ if [ -n "$BASELINE_MD" ]; then
   if [ ! -f "$BASELINE_MD" ]; then echo "no baseline markdown at $BASELINE_MD" >&2; exit 2; fi
   BASELINE_ARGS=("$(cd "$(dirname "$BASELINE_MD")" && pwd)/$(basename "$BASELINE_MD")")
 fi
+
+DEFANG_ARGS=()
+if [ -n "$DEFANG_ALLOW" ]; then
+  if [ ! -f "$DEFANG_ALLOW" ]; then echo "no defang allow file at $DEFANG_ALLOW" >&2; exit 2; fi
+  DEFANG_ARGS=(--allow "$(cd "$(dirname "$DEFANG_ALLOW")" && pwd)/$(basename "$DEFANG_ALLOW")")
+fi
+# the completeness gates compare after normalising rules 1 and 2 only when a baseline from another copy was given
+TEXT_FLAGS=()
+if [ -n "$BASELINE_MD" ]; then TEXT_FLAGS=(--defang); fi
 
 VIEWS_ARGS=()
 if [ -n "$VIEWS" ]; then
@@ -143,10 +161,18 @@ echo "evidence folder:  $OUT$( [ "$KEEP" = 0 ] && echo ' (removed on exit; pass 
 
 HAVE_NODE=1; command -v node >/dev/null 2>&1 || HAVE_NODE=0
 if [ "$HAVE_NODE" = 0 ]; then
-  for g in check-tabs render completeness control-body control-teardown browser; do line "NOT CHECKED" "$g" "node is not on PATH"; done
+  for g in defang check-tabs render completeness control-body control-teardown browser; do line "NOT CHECKED" "$g" "node is not on PATH"; done
   echo "gates: $PASS PASS, $FAIL FAIL, $NC NOT CHECKED"; exit 2
 fi
 cd "$HERE" || exit 2
+
+# --- defang lint (needs only node): the source of the folder, not a render
+node check-defang.js "$FOLDER" ${DEFANG_ARGS[@]+"${DEFANG_ARGS[@]}"} > "$OUT/defang.txt" 2>&1; rc=$?
+case $rc in
+  0) line PASS defang "$(last "$OUT/defang.txt")" ;;
+  1) line FAIL defang "$(last "$OUT/defang.txt") (findings: $OUT/defang.txt, rerun with --all for every one)" ;;
+  *) line "NOT CHECKED" defang "$(last "$OUT/defang.txt")" ;;
+esac
 
 # --- check-tabs --require (needs only node)
 node check-tabs.js --require "$MD" > "$OUT/check-tabs.txt" 2>&1; rc=$?
@@ -200,7 +226,7 @@ BASE_URL="http://127.0.0.1:${HTTP_PORT:-0}"
 text_gate() { # gate-name expected-exit extra-flag
   local name="$1" want="$2" flag="${3:-}"
   if [ "$SERVER_OK" = 0 ]; then line "NOT CHECKED" "$name" "$SERVER_WHY"; return; fi
-  run_step "$OUT/$name.txt" node check-report-text.js --baseline "$BASE_URL/__baseline/untagged/" --page "$BASE_URL/reports/$SLUG/" --width 1280,390 $flag
+  run_step "$OUT/$name.txt" node check-report-text.js --baseline "$BASE_URL/__baseline/untagged/" --page "$BASE_URL/reports/$SLUG/" --width 1280,390 ${TEXT_FLAGS[@]+"${TEXT_FLAGS[@]}"} $flag
   if [ "$want" = 0 ]; then
     case $rc in 0) line PASS "$name" "$(last "$OUT/$name.txt")" ;; 1) line FAIL "$name" "$(last "$OUT/$name.txt")" ;; *) line "NOT CHECKED" "$name" "$(last "$OUT/$name.txt")" ;; esac
   else

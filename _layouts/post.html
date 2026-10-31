@@ -463,8 +463,14 @@ the coverage above is narrower than the rule set.</em></p>
     });
   });
 
-  // --- Copy buttons on code blocks ---
+  // --- Copy buttons on code blocks: opt-in. Only a block the author marked {: .hl-copy} (defender content) gets
+  //     one. kramdown puts that class on the outer div.highlighter-rouge, not on the pre, so the marker is read on
+  //     the pre, its code, or the two wrappers above it. Attacker blocks are defanged and offer no copy button. ---
   content.querySelectorAll('pre').forEach(function (pre) {
+    var marked = pre.classList.contains('hl-copy') || !!pre.querySelector(':scope > code.hl-copy') ||
+      (pre.parentElement && pre.parentElement.classList.contains('hl-copy')) ||
+      (pre.parentElement && pre.parentElement.parentElement && pre.parentElement.parentElement.classList.contains('hl-copy'));
+    if (!marked) return;
     var btn = document.createElement('button');
     btn.className = 'hl-copy-btn';
     btn.textContent = 'Copy';
@@ -903,7 +909,7 @@ the coverage above is narrower than the rule set.</em></p>
 {% if hl_tabbed %}{%- assign hl_view_slug = page.path | split: '/' | pop | last -%}
 {%- assign hl_view_data = site.data.report_views[hl_view_slug] -%}
 {%- if hl_view_data %}<script type="application/json" id="hl-report-view-data" data-rv-chrome data-pagefind-ignore>{{ hl_view_data | jsonify | replace: '<', '\u003c' | replace: '>', '\u003e' | replace: '&', '\u0026' }}</script>{% endif %}
-<script src="{{ '/assets/js/hl-report-tabs.js' | relative_url }}?v=20261031.4" defer data-rv-chrome data-pagefind-ignore></script>{% else %}<script src="{{ '/assets/js/register-switch.js' | relative_url }}" defer></script>{% endif %}
+<script src="{{ '/assets/js/hl-report-tabs.js' | relative_url }}?v=20261031.5" defer data-rv-chrome data-pagefind-ignore></script>{% else %}<script src="{{ '/assets/js/register-switch.js' | relative_url }}" defer></script>{% endif %}
 {% if page.path contains "hunting-detections" %}
 {% assign hl_slug = page.path | split: "/" | last | remove: ".md" %}
 {% assign hl_manifest = site.data.detection_manifests[hl_slug] %}
