@@ -37,6 +37,7 @@ stix_bundle: /stix/remcos-opendirectory.json
 
 ## BLUF (Bottom Line Up Front)
 {: .hl-tier-1}
+{: .hl-tab-overview}
 
 An open directory at **203[.]159[.]90[.]147** hosts a two-stage Remcos RAT campaign: a Visual Basic 6 obfuscated dropper (Payload.exe, MD5 `3d7b442573acf64c3aad17b23d224dc9`) extracts and executes the Remcos payload (Backdoor.exe, MD5 `04693af3b0a7c9788daba8e35f429ba6`), which establishes five redundant persistence mechanisms, disables UAC system-wide, injects into explorer.exe and msedge.exe, and exfiltrates screenshots, audio recordings, keystrokes, clipboard contents, and browser credentials to the same IP. The threat actor consolidated distribution and Command and Control (C2) on a single IP, a poor-OPSEC pattern consistent with cybercriminal or initial access broker operations (MODERATE confidence). Overall risk: **9.5/10 CRITICAL**. Block 203[.]159[.]90[.]147 at the network perimeter immediately; see Section 9 for detection guidance and the [IOC feed](/ioc-feeds/remcos-opendirectory-campaign.json) for machine-readable indicators.
 
@@ -44,6 +45,7 @@ An open directory at **203[.]159[.]90[.]147** hosts a two-stage Remcos RAT campa
 
 ## 1. Executive Summary
 {: .hl-tier-1}
+{: .hl-tab-overview}
 
 ### Key Risk Factors
 
@@ -150,6 +152,7 @@ Remcos RAT remains a critical and actively exploited threat in 2025-2026. Securi
 
 ## 2. ATTACK CHAIN ARCHITECTURE
 {: .hl-tier-2}
+{: .hl-tab-chain}
 
 ### Multi-Stage Execution Flow
 
@@ -273,6 +276,7 @@ Remcos RAT remains a critical and actively exploited threat in 2025-2026. Securi
 
 ## 3. PERSISTENCE MECHANISMS
 {: .hl-tier-3}
+{: .hl-tab-chain}
 
 > **Analyst note:** Persistence mechanisms are the techniques malware uses to survive a reboot and remain installed even after the user closes the application. This Remcos sample deploys five overlapping methods, removing only one leaves the infection active.
 
@@ -418,6 +422,7 @@ This maps to T1547.001, Boot or Logon Autostart: Registry Run Keys.
 
 ## 4. SURVEILLANCE AND DATA COLLECTION
 {: .hl-tier-3}
+{: .hl-tab-chain}
 
 ### Screenshot Capture
 
@@ -522,6 +527,7 @@ Indicators:
 
 ## 5. EVASION AND ANTI-ANALYSIS TECHNIQUES
 {: .hl-tier-3}
+{: .hl-tab-chain}
 
 ### Process Injection
 
@@ -639,6 +645,7 @@ This maps to T1497.001, Virtualization/Sandbox Evasion.
 
 ## 6. COMMAND & CONTROL INFRASTRUCTURE
 {: .hl-tier-2}
+{: .hl-tab-timeline}
 
 > **Analyst note:** Command and Control (C2) is the communication channel between the malware and the attacker. It is how the attacker issues new commands and receives stolen data. This section covers the C2 protocol observed in Remcos and the mechanisms it uses to exfiltrate captured material.
 
@@ -706,6 +713,7 @@ Live C2 traffic was not captured during analysis: the malware was analyzed in an
 
 ## 7. MITRE ATT&CK FRAMEWORK MAPPING
 {: .hl-tier-2}
+{: .hl-tab-chain}
 
 > **Confidence note:** all rows below are HIGH confidence unless explicitly marked `(MODERATE)`. Every technique is evidenced by the static or dynamic findings in Sections 2 to 6.
 
@@ -745,6 +753,7 @@ In total that is 27 distinct MITRE ATT&CK techniques across 10 tactics.
 
 ## 8. THREAT INTELLIGENCE CONTEXT
 {: .hl-tier-2}
+{: .hl-tab-attribution}
 
 ### Remcos RAT Global Threat Landscape
 
@@ -784,6 +793,7 @@ My assessment is that Remcos serves as a multi-purpose tool across the threat ac
 
 ## 9. ATTRIBUTION ANALYSIS
 {: .hl-tier-2}
+{: .hl-tab-attribution}
 
 ### Campaign Sophistication Assessment
 
@@ -823,6 +833,7 @@ I hold that assessment at MODERATE.
 
 ## 10. REMEDIATION GUIDANCE
 {: .hl-tier-2}
+{: .hl-tab-indicators}
 
 ### Immediate Actions
 
@@ -877,6 +888,7 @@ Manual remediation requires removing the Remcos executable from `C:\Users\[USERN
 
 ## 11. Confidence Summary
 {: .hl-tier-2}
+{: .hl-tab-confidence}
 
 The MITRE ATT&CK mapping in Section 7 carries a blanket HIGH confidence note, and none of its 27 rows is marked with the `(MODERATE)` exception the note reserves, so I hold all 27 techniques at HIGH.
 
@@ -888,5 +900,6 @@ Section 6's analysis of the C2 channel notes a limit I did not resolve: live C2 
 
 ## License
 {: .hl-tier-2}
+{: .hl-tab-confidence}
 
 © 2026 Joseph, The Hunters Ledger. Licensed under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/), free to republish and adapt, including commercially, with attribution to The Hunters Ledger and a link to the original.
