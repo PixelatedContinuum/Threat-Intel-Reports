@@ -57,7 +57,7 @@ function notChecked(reason) {
   process.exit(2);
 }
 
-var CDP, SERVER, TRIAGE, yaml, KS, CTABS, BOXFIT;
+var CDP, SERVER, TRIAGE, yaml, KS, CTABS, BOXFIT, GLOSS;
 try {
   CDP = require('./lib/cdp.js');
   SERVER = require('./lib/page-server.js');
@@ -66,6 +66,7 @@ try {
   KS = require('./lib/kramdown-slug.js');
   CTABS = require('./check-tabs.js');
   BOXFIT = require('./lib/box-fit.js');
+  GLOSS = require('./lib/gloss-target.js');
 } catch (e) {
   notChecked(e.message + '. Run `npm ci` in tools/report-tooling, then re-run.');
 }
@@ -3843,20 +3844,23 @@ async function main() {
     }
 
     // ---------- the glossary ----------
-    /* Same reason as the chips above: measure a mark in a shown tab. */
-    if (tabbed) await revealPanelContaining(page, '.hl-gloss');
-    var gloss = await page.json('(function(){var m=document.querySelectorAll(".hl-gloss");' +
-      'if(!m.length)return {marks:0};var e=m[0];var r=e.getBoundingClientRect();' +
-      'return {marks:m.length,term:e.textContent.trim(),' +
+    /* Same reason as the chips above: measure a mark in a shown tab. And a mark a reader can reach: the first
+       .hl-gloss in the DOM can sit in a closed <details> (the revisions note), which paints nothing, so a forced
+       :hover turns `visibility` on and the opacity transition never runs (lib/gloss-target.js). */
+    var pick = await page.json(GLOSS.PICK_EXPR);
+    if (tabbed && pick.marks) await revealPanelContaining(page, GLOSS.SELECTOR);
+    var gloss = pick.marks ? await page.json('(function(){var e=document.querySelector(' + JSON.stringify(GLOSS.SELECTOR) + ');' +
+      'var r=e.getBoundingClientRect();' +
+      'return {marks:document.querySelectorAll(".hl-gloss").length,term:e.textContent.trim(),' +
       'title:e.getAttribute("data-hl-gloss")||e.getAttribute("title")||"",' +
-      'w:Math.round(r.width),borderBottom:getComputedStyle(e).borderBottomStyle};})()');
+      'w:Math.round(r.width),borderBottom:getComputedStyle(e).borderBottomStyle};})()') : { marks: 0 };
     if (!gloss.marks) {
       check('NOT CHECKED: this report carries no glossary marks', false,
         'no .hl-gloss elements were created, so the tooltip could not be exercised');
     } else {
       check('glossary terms are marked in the rendered page',
         gloss.marks > 0 && gloss.w > 0,
-        gloss.marks + ' marks, first is "' + gloss.term + '"');
+        gloss.marks + ' marks, measured: ' + GLOSS.describe(pick));
       check('a mark is visually distinguished, not silently inert',
         gloss.borderBottom !== 'none' || !!gloss.title,
         'border-bottom: ' + gloss.borderBottom + ', tooltip text: ' +
@@ -3869,7 +3873,7 @@ async function main() {
          where the tooltip never opened. A gate that cannot fail is not a gate. */
       var tipState = function () {
         return page.json('(function(){var a=getComputedStyle(' +
-          'document.querySelector(".hl-gloss"),"::after");' +
+          'document.querySelector(' + JSON.stringify(GLOSS.SELECTOR) + '),"::after");' +
           'return {opacity:a.opacity,visibility:a.visibility,' +
           'hasText:(a.content||"none").length>8};})()');
       };
@@ -3878,24 +3882,46 @@ async function main() {
         parseFloat(closed.opacity) === 0 || closed.visibility === 'hidden',
         'at rest: opacity ' + closed.opacity + ', visibility ' + closed.visibility);
 
-      await page.forcePseudo('.hl-gloss', ['hover']);
+      await page.forcePseudo(GLOSS.SELECTOR, ['hover']);
       await CDP.sleep(250);
       var open = await tipState();
       check('hovering a term reveals its definition',
-        parseFloat(open.opacity) > 0 && open.visibility === 'visible' && open.hasText,
+        GLOSS.revealed(open),
         'hovered: opacity ' + open.opacity + ', visibility ' + open.visibility +
-          ', definition text ' + (open.hasText ? 'present' : 'MISSING'));
+          ', definition text ' + (open.hasText ? 'present' : 'MISSING') + '; ' + GLOSS.describe(pick));
 
       // The CSS binds :focus as well, which is what a keyboard reader gets.
-      await page.forcePseudo('.hl-gloss', []);
+      await page.forcePseudo(GLOSS.SELECTOR, []);
       await CDP.sleep(150);
-      await page.forcePseudo('.hl-gloss', ['focus']);
+      await page.forcePseudo(GLOSS.SELECTOR, ['focus']);
       await CDP.sleep(250);
       var focused = await tipState();
       check('and focusing it does the same, so it is reachable without a mouse',
         parseFloat(focused.opacity) > 0 && focused.visibility === 'visible',
         'focused: opacity ' + focused.opacity + ', visibility ' + focused.visibility);
-      await page.forcePseudo('.hl-gloss', []);
+      await page.forcePseudo(GLOSS.SELECTOR, []);
+
+      /* Control, on a copy of this page (a style element the gate adds and removes) whose hover and focus rules show nothing:
+         the definition is genuinely never shown. The same two measurements, judged by the same predicate the rows use, must
+         read "not revealed", or the rows above could not tell a hidden definition from a shown one. It runs on the mark the
+         rows chose. */
+      var ctlName = 'control: on a copy whose hover and focus rules show nothing, the definition is not revealed, so the hover and focus rows would FAIL';
+      await page.evaluate('(function(){var s=document.createElement("style");s.id="hl-gate-gloss-ctl";' +
+        's.textContent=".hl-gloss:hover::after,.hl-gloss:focus::after{opacity:0 !important}";document.head.appendChild(s);})()');
+      await page.forcePseudo(GLOSS.SELECTOR, ['hover']);
+      await CDP.sleep(250);
+      var ctlHover = await tipState();
+      await page.forcePseudo(GLOSS.SELECTOR, []);
+      await CDP.sleep(150);
+      await page.forcePseudo(GLOSS.SELECTOR, ['focus']);
+      await CDP.sleep(250);
+      var ctlFocus = await tipState();
+      await page.forcePseudo(GLOSS.SELECTOR, []);
+      await page.evaluate('(function(){var s=document.getElementById("hl-gate-gloss-ctl");if(s)s.remove();})()');
+      check(ctlName,
+        GLOSS.revealed(open) && !GLOSS.revealed(ctlHover) && !(parseFloat(ctlFocus.opacity) > 0 && ctlFocus.visibility === 'visible'),
+        'shipped CSS, hovered: opacity ' + open.opacity + '; copy with no reveal, hovered: opacity ' + ctlHover.opacity +
+          ', visibility ' + ctlHover.visibility + '; focused: opacity ' + ctlFocus.opacity + ', visibility ' + ctlFocus.visibility);
     }
 
     if (shotsDir) {
