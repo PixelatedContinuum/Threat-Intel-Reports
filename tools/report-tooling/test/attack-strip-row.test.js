@@ -100,14 +100,15 @@ test('the in-page expression compiles', function () {
   assert.doesNotThrow(function () { new AsyncFunction('return ' + G.ATTACK_STRIP_EXPR); });
 });
 
-test('the layout loads attack-coverage.js on tabbed pages and keeps hl-attack-table and hl-facts untabbed only', function () {
+test('the layout loads attack-coverage.js on tabbed pages and keeps hl-attack-table untabbed only and loads hl-facts on both layouts', function () {
   var layout = fs.readFileSync(path.join(__dirname, '..', '..', '..', '_layouts', 'post.html'), 'utf8');
   var ac = layout.indexOf("attack-coverage.js' | relative_url }}?v=2");
   var openUnless = layout.indexOf('{% unless hl_tabbed %}', ac);
-  var table = layout.indexOf('hl-attack-table.js', ac);
-  var facts = layout.indexOf('hl-facts.js', ac);
-  var endUnless = layout.indexOf('{% endunless %}', facts);
-  assert.ok(ac > 0 && openUnless > ac && table > openUnless && facts > table && endUnless > facts);
+  var table = layout.indexOf("hl-attack-table.js' | relative_url", ac);
+  var facts = layout.indexOf("hl-facts.js' | relative_url", ac);
+  var endUnless = layout.indexOf('{% endunless %}', table);
+  // hl-attack-table.js is inside the unless-tabbed block; hl-facts.js comes after the block closes (Joseph, 2026-10-31).
+  assert.ok(ac > 0 && openUnless > ac && table > openUnless && endUnless > table && facts > endUnless);
   // attack-coverage.js sits outside any unless-tabbed block: the nearest tag before it closes one.
   var before = layout.slice(0, ac);
   assert.ok(before.lastIndexOf('{% endunless %}') > before.lastIndexOf('{% unless'), 'attack-coverage.js is inside an unless block');

@@ -142,6 +142,7 @@
     link.href = '#' + r.row.id;
     link.setAttribute('aria-label', 'Link to ' + key);
     link.textContent = '#';
+    link.setAttribute('data-rv-chrome', '');   // generated, not report text: the completeness gate strips it (T-0500.1.10)
     r.key.appendChild(link);
 
     /* the value the button copies is the code span when there is exactly one,
@@ -155,6 +156,7 @@
     btn.type = 'button';
     btn.className = 'hl-copy-btn hl-facts-copy';
     btn.textContent = 'Copy';
+    btn.setAttribute('data-rv-chrome', '');    // generated, not report text (T-0500.1.10)
     btn.setAttribute('aria-label', 'Copy the value of ' + key);
     btn.addEventListener('click', function () {
       copyText(copyValue, function (worked) {

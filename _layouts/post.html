@@ -34,7 +34,7 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 </script>
 {% endif %}
-{% comment %}Match complete class tokens only inside kramdown h2 opening tags. Keep this Liquid whitespace-free so the untagged render stays byte-identical.{% endcomment %}{% assign hl_tabbed = false %}{% assign hl_tab_tokens = 'overview,victims,chain,timeline,attribution,indicators,confidence' | split: ',' %}{% assign hl_h2_tags = content | split: '<h2 ' %}{% for hl_h2 in hl_h2_tags offset:1 %}{% assign hl_open_tag = hl_h2 | split: '>' | first %}{% if hl_open_tag contains 'class="' %}{% assign hl_classes = hl_open_tag | split: 'class="' | last | split: '"' | first | prepend: ' ' | append: ' ' %}{% for hl_token in hl_tab_tokens %}{% assign hl_class = hl_token | prepend: ' hl-tab-' | append: ' ' %}{% if hl_classes contains hl_class %}{% assign hl_tabbed = true %}{% endif %}{% endfor %}{% endif %}{% endfor %}{% if hl_tabbed %}{% include report-subscribe-guard.html %}<link rel="stylesheet" href="{{ '/assets/css/hl-report-tabs.css' | relative_url }}?v=20261031.1" data-rv-chrome data-pagefind-ignore>
+{% comment %}Match complete class tokens only inside kramdown h2 opening tags. Keep this Liquid whitespace-free so the untagged render stays byte-identical.{% endcomment %}{% assign hl_tabbed = false %}{% assign hl_tab_tokens = 'overview,victims,chain,timeline,attribution,indicators,confidence' | split: ',' %}{% assign hl_h2_tags = content | split: '<h2 ' %}{% for hl_h2 in hl_h2_tags offset:1 %}{% assign hl_open_tag = hl_h2 | split: '>' | first %}{% if hl_open_tag contains 'class="' %}{% assign hl_classes = hl_open_tag | split: 'class="' | last | split: '"' | first | prepend: ' ' | append: ' ' %}{% for hl_token in hl_tab_tokens %}{% assign hl_class = hl_token | prepend: ' hl-tab-' | append: ' ' %}{% if hl_classes contains hl_class %}{% assign hl_tabbed = true %}{% endif %}{% endfor %}{% endif %}{% endfor %}{% if hl_tabbed %}{% include report-subscribe-guard.html %}<link rel="stylesheet" href="{{ '/assets/css/hl-report-tabs.css' | relative_url }}?v=20261031.2" data-rv-chrome data-pagefind-ignore>
 {% endif %}<div class="hl-page{% if hl_tabbed %} hl-report-page{% endif %}" style="--ph-accent: {% if page.path contains 'hunting-detections' %}#4ade80{% else %}#f87171{% endif %};">{% if hl_tabbed %}{% include report-sponsor-bar.html part="band" %}{% endif %}
 <div class="hl-post-header{% if page.path contains 'hunting-detections' %} hl-post-header--detect{% endif %}">
   <div class="hl-post-header__eyebrow">
@@ -855,12 +855,11 @@ the coverage above is narrower than the rule set.</em></p>
   (T-0500.1.9, Joseph 2026-10-30: they come back on tabbed pages). On a tabbed page this
   script runs before hl-report-tabs.js, builds the strip beside the mapping table, and the
   tab controller then moves the whole section, strip included, into the Attack chain panel
-  and marks the strip as chrome. The two scripts below stay untabbed-only. hl-attack-table
-  caps the table at 8 rows with `hidden` and adds a search toolbar: measured on the tabbed
-  preview it makes check-report-text FAIL (940 words hidden, 14 added). hl-facts adds a copy
-  button and an id to every literal value of a Field / Value table; it passed completeness
-  there, but it is no part of the 2026-10-30 decision (strip and Navigator download) and the
-  tab controller already has its own table copy controls, so it stays off until decided.
+  and marks the strip as chrome. hl-attack-table.js below stays untabbed-only: it caps the table at 8 rows with `hidden` and adds a
+  search toolbar, and measured on the tabbed preview it makes check-report-text FAIL (940 words
+  hidden, 14 added). hl-facts.js, after it, loads on BOTH layouts (Joseph, 2026-10-31, T-0500.1.10):
+  it adds a copy button and an id to every literal value of a Field / Value table; it passed
+  completeness on the tabbed preview and is no longer left off.
 {%- endcomment -%}
 {% unless hl_tabbed %}
 {%- comment -%}
@@ -869,14 +868,13 @@ the coverage above is narrower than the rule set.</em></p>
   built. It no-ops on a page with no mapping table, which is why it needs no
   front-matter guard. Versioned as a pair with the toolbar markup it inserts.
 {%- endcomment -%}
-<script src="{{ '/assets/js/hl-attack-table.js' | relative_url }}?v=1" defer></script>
-{%- comment -%}
+<script src="{{ '/assets/js/hl-attack-table.js' | relative_url }}?v=1" defer></script>{% endunless %}{%- comment -%}
   Enhances literal-heavy Field / Value tables in place. No front-matter guard:
   it applies its own rubric and no-ops on a page with no qualifying table, the
   same way the ATT&CK module does. Versioned as a pair with the markup it adds.
 {%- endcomment -%}
 <script src="{{ '/assets/js/hl-facts.js' | relative_url }}?v=1" defer></script>
-{% endunless %}{% unless page.glossary == false %}
+{% unless page.glossary == false %}
 <script type="application/json" id="hl-glossary-data">{{ site.data.glossary | jsonify }}</script>
 <script src="{{ '/assets/js/glossary.js' | relative_url }}" defer></script>
 {% endunless %}
@@ -905,7 +903,7 @@ the coverage above is narrower than the rule set.</em></p>
 {% if hl_tabbed %}{%- assign hl_view_slug = page.path | split: '/' | pop | last -%}
 {%- assign hl_view_data = site.data.report_views[hl_view_slug] -%}
 {%- if hl_view_data %}<script type="application/json" id="hl-report-view-data" data-rv-chrome data-pagefind-ignore>{{ hl_view_data | jsonify | replace: '<', '\u003c' | replace: '>', '\u003e' | replace: '&', '\u0026' }}</script>{% endif %}
-<script src="{{ '/assets/js/hl-report-tabs.js' | relative_url }}?v=20261030.6" defer data-rv-chrome data-pagefind-ignore></script>{% else %}<script src="{{ '/assets/js/register-switch.js' | relative_url }}" defer></script>{% endif %}
+<script src="{{ '/assets/js/hl-report-tabs.js' | relative_url }}?v=20261031.2" defer data-rv-chrome data-pagefind-ignore></script>{% else %}<script src="{{ '/assets/js/register-switch.js' | relative_url }}" defer></script>{% endif %}
 {% if page.path contains "hunting-detections" %}
 {% assign hl_slug = page.path | split: "/" | last | remove: ".md" %}
 {% assign hl_manifest = site.data.detection_manifests[hl_slug] %}

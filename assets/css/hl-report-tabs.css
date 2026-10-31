@@ -785,3 +785,17 @@ html:has(.hl-report-page) .hl-toast__label { font-size: var(--rv-fs); }
   .hl-report-page .hl-rv-source details::details-content { content-visibility: visible !important; display: block !important; height: auto !important; }
   .hl-report-page .hl-rv-source pre, .hl-report-page .hl-rv-source pre code { white-space: pre-wrap; overflow-wrap: anywhere; overflow: visible; }
 }
+
+/* Field / Value tables on a tabbed page (hl-facts.js, T-0500.1.10): the permalink "#" and the Copy button the script adds.
+   The permalink is 12.75px at 390px in custom.scss (0.85em of the cell), under the 13px chrome-text floor, so it takes 14px here.
+   On a phone-width touch screen the permalink and the Copy button are 44px targets and the row grows to hold them (a negative margin that
+   kept the row height put the button 1.6px past its cell in the box-fit row). */
+.hl-report-page .hl-facts .hl-facts-anchor { font-size: 14px; }
+@media (hover: none) and (max-width: 700px) {
+  .hl-report-page .hl-facts .hl-facts-anchor,
+  .hl-report-page .hl-facts .hl-facts-copy {
+    display: inline-flex; align-items: center; justify-content: center;
+    min-width: 44px; min-height: 44px; box-sizing: border-box;
+    vertical-align: middle;
+  }
+}
