@@ -38,6 +38,7 @@ stix_bundle: /stix/open-directory-94-103-1-13-20260423.json
 
 ## 1. BLUF / Bottom Line Up Front
 {: .hl-tier-1}
+{: .hl-tab-overview}
 
 An open directory discovered on the Russian-registered bulletproof-adjacent VPS **94.103.1.13** (AS209207 Digital Hosting Provider LLC, upstream AS48014 AlbaHost) is hosting a pre-production cybercrime staging kit whose terminal payload is a **Chaos ransomware builder variant** configured as `.torbrowsertor`. The kit is operated by a financially-motivated actor tracked internally as **<a href="/actors/UTA-2026-005/">UTA-2026-005</a>** *(an internal tracking label used by The Hunters Ledger, see Section 7)*. Attribution to any publicly named threat actor is **INSUFFICIENT (0%)**; family-level identification of the Chaos builder lineage is **DEFINITE (97%)**.
 
@@ -58,6 +59,7 @@ I walk the loader chain in defender-actionable detail and hand off a set of cros
 
 ## 2. Key Takeaways
 {: .hl-tier-1}
+{: .hl-tab-overview}
 
 - **The loader, not the ransomware, is the novel story.** Chaos/TorBrowserTor is well-documented commodity ransomware; its clipboard wallets and Telegram handle (`@TorBrowserTor`) are **Chaos builder defaults** with zero operator-specific attribution value. The defender-actionable novelty lives in the **private five-stage batch loader** (`mymain.bat`, `myfile.bat`) that delivers it.
 - **Four crypter-chain behaviors have no located prior public reporting:** the Console.Title launch-gate trick, the inverted tri-artifact anti-sandbox gate (`admin` + `%TEMP%\VBE\` + `%TEMP%\mapping.csv`), cross-layer AES+XOR key reuse as a builder fingerprint, and the specific Stage-5b UACME #41 AppInfo RPC bypass PE (byte-identical across both builds, 8/77 VT).
@@ -71,6 +73,7 @@ I walk the loader chain in defender-actionable detail and hand off a set of cros
 
 ## 3. Executive Summary
 {: .hl-tier-1}
+{: .hl-tab-overview}
 
 ### What Was Found
 
@@ -113,6 +116,7 @@ Family-level identification is DEFINITE at 97 percent. This is the Chaos ransomw
 
 ## 4. Threat Intelligence Summary
 {: .hl-tier-2}
+{: .hl-tab-attribution}
 
 This section synthesizes threat-intelligence research (research-analyst output, stage2-research.md) with infrastructure findings (infrastructure-analyst output, stage2-infrastructure.md). Content is strictly tied to findings from the malware analysis and is not a generic threat landscape overview.
 
@@ -227,6 +231,7 @@ Three of six target IPs are on Ukrainian ASNs, consistent with opportunistic tar
 
 ## 5. Technical Analysis
 {: .hl-tier-3}
+{: .hl-tab-chain}
 
 The technical core of this report is the **five-stage private crypter chain** carried inside `mymain.bat` and `myfile.bat`. This section walks the chain in chronological order from the moment a user double-clicks the batch file through to Chaos/TorBrowserTor ransomware detonation. Each kill chain stage heading opens with an analyst-note blockquote for readers who want the high-level summary before the technical detail.
 
@@ -597,6 +602,7 @@ Documenting only the commodity layer (Chaos ransomware, UACME #41, Perun's Fart,
 
 ## 6. MITRE ATT&CK Mapping
 {: .hl-tier-2}
+{: .hl-tab-chain}
 
 > **Analyst note:** The table below maps observed behaviors to MITRE ATT&CK techniques. Only techniques with HIGH or DEFINITE confidence are included. The private-crypter chain heavily exercises Defense Evasion (TA0005), Persistence (TA0003), and Privilege Escalation (TA0004) tactics; the ransomware payload adds Impact (TA0040).
 
@@ -644,6 +650,7 @@ Documenting only the commodity layer (Chaos ransomware, UACME #41, Perun's Fart,
 
 ## 7. Threat Actor Assessment
 {: .hl-tier-2}
+{: .hl-tab-attribution}
 
 > **Note on UTA identifiers:** "UTA" stands for Unattributed Threat Actor. <a href="/actors/UTA-2026-005/">UTA-2026-005</a> is a tracking label The Hunters Ledger assigns to an actor I have observed but cannot yet link to a publicly named threat group. Other vendors and feeds will not use this label; it is specific to this publication. If later evidence ties the activity to a named actor, I will retire the label and update the report.
 
@@ -744,6 +751,7 @@ Consolidated view of every major analytical claim in this report with its confid
 
 ## 8. Detection & Response
 {: .hl-tier-2}
+{: .hl-tab-indicators}
 
 This section covers the minimum defender orientation for the <a href="/actors/UTA-2026-005/">UTA-2026-005</a> kit. Detection content (YARA, Sigma, Suricata, EDR queries) is delivered separately in [/hunting-detections/open-directory-94-103-1-13-20260423-detections/](/hunting-detections/open-directory-94-103-1-13-20260423-detections/). This report does not duplicate those rules. What follows is the prioritized hunting and response orientation.
 
@@ -793,6 +801,7 @@ Third-party perspective: these are action categories with rationale, not step-by
 
 ## 9. FAQ / Key Intelligence Questions
 {: .hl-tier-2}
+{: .hl-tab-confidence}
 
 **Q1: Is this the Cisco Talos "Chaos RaaS group" from 2025?**
 
@@ -834,6 +843,7 @@ Short version: Stage 4 of this loader needs to know the path of the batch file t
 
 ## 10. Gaps & Assumptions
 {: .hl-tier-2}
+{: .hl-tab-confidence}
 
 The two most consequential gaps in this investigation are the unknown Orcus C2 upstream and the absence of confirmed victim telemetry. Both limit the operational scope assessment and are the priority targets for follow-on analysis. All confirmed gaps, analytical assumptions, and the evidence that would change each assessment are catalogued below.
 
@@ -875,6 +885,7 @@ The two most consequential gaps in this investigation are the unknown Orcus C2 u
 
 ## 11. References and Further Reading
 {: .hl-tier-2}
+{: .hl-tab-confidence}
 
 **Chaos ransomware family (B1 sources):**
 - WatchGuard: Chaos ransomware family tracker (2021-2026).
@@ -909,6 +920,7 @@ The two most consequential gaps in this investigation are the unknown Orcus C2 u
 
 ## 12. Addendum: 2026-05-02 Follow-up
 {: .hl-tier-2}
+{: .hl-tab-chain}
 
 > **Analyst note:** This section was appended on 2026-05-02 to capture two developments since the original 2026-04-23 publication: (1) the staging server `94.103.1.13:7777` went globally offline, consistent with operator takedown after sustained external probing; (2) deeper analysis of `interact.py` (referenced but not fully decomposed in the original) yielded one new sample-level IOC (its SHA256), one new host-side persistence IOC (a hardcoded backdoor account credential pair), and one detection-relevant detail (the XOR key used to obfuscate the staged GodPotato payload). All three are now reflected in the IOC feed and detection content.
 
