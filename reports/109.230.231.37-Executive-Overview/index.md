@@ -13,7 +13,7 @@ description: "Initial discovery of 16 malware samples across a threat actor R&D 
 stix_bundle: /stix/109.230.231.37-Executive-Overview.json
 ---
 
-**Campaign Identifier:** Arsenal-237-109.230.231.37-Malware-Repository<br>
+**Campaign Identifier:** Arsenal-237-109[.]230[.]231[.]37-Malware-Repository<br>
 **Last Updated:** January 12, 2026<br>
 **Threat Level:** CRITICAL
 
@@ -30,7 +30,7 @@ stix_bundle: /stix/109.230.231.37-Executive-Overview.json
 
 ### The Bottom Line
 
-This analysis identified **16 malware samples across 7 reports** distributed from an open web directory at **109.230.231.37**. The collection combines remote access trojans (RATs), **custom ransomware capabilities**, multi-layer persistence mechanisms, and credential theft in a coordinated ecosystem pointing to organized cybercrime operations.
+This analysis identified **16 malware samples across 7 reports** distributed from an open web directory at **109[.]230[.]231[.]37**. The collection combines remote access trojans (RATs), **custom ransomware capabilities**, multi-layer persistence mechanisms, and credential theft in a coordinated ecosystem pointing to organized cybercrime operations.
 
 > **Analyst note:** The files' naming conventions, capability set, versioned builds, and testing utilities collectively indicate an active R&D environment rather than an operational deployment. The analysis treats this as a testing ground, new tools or combinations under active development. Full technical depth on the ransomware component is in [enc/dec Ransomware Family (10 variants)]({{ "/reports/enc-dec-ransomware-family/" | relative_url }}).
 
@@ -47,7 +47,7 @@ The repository contains a **10-variant ransomware toolkit** (five encryptors and
 Strategically, this toolkit enables a dual-threat model, silent data exfiltration followed by ransomware deployment that eliminates recovery through Volume Shadow Copy deletion.
 
 **WHAT WAS FOUND:**
-The Hunters Ledger analysis examined **16 malware samples across 7 reports** selected from an open directory containing 38 malicious executables. Samples include a Golang-compiled RAT, Xworm RAT versions 1 and 2.4.0, a **10-variant custom ransomware family (enc/dec toolkit)**, persistence droppers (FleetAgentAdvanced, FleetAgentFUD), and a UAC bypass proof-of-concept. All Xworm variants share C2 infrastructure at **109.230.231.37**, indicating centralized operations. FleetAgentAdvanced.exe implements **quadruple-redundant persistence** across Registry Run keys, Scheduled Tasks, and dual Startup folder shortcuts, designed to survive multiple cleanup attempts.
+The Hunters Ledger analysis examined **16 malware samples across 7 reports** selected from an open directory containing 38 malicious executables. Samples include a Golang-compiled RAT, Xworm RAT versions 1 and 2.4.0, a **10-variant custom ransomware family (enc/dec toolkit)**, persistence droppers (FleetAgentAdvanced, FleetAgentFUD), and a UAC bypass proof-of-concept. All Xworm variants share C2 infrastructure at **109[.]230[.]231[.]37**, indicating centralized operations. FleetAgentAdvanced.exe implements **quadruple-redundant persistence** across Registry Run keys, Scheduled Tasks, and dual Startup folder shortcuts, designed to survive multiple cleanup attempts.
 
 **BUSINESS IMPACT IF INFECTED:**
 Successful infection enables threat actors to establish persistent remote access, harvest credentials (browser passwords, saved authentication tokens, session cookies), exfiltrate sensitive data, **deploy custom ransomware for total data loss**, and use compromised machines as pivot points. Organizations facing compromise should anticipate multi-day to multi-week response efforts. Beyond the immediate technical compromise:
@@ -60,11 +60,11 @@ Successful infection enables threat actors to establish persistent remote access
 
 **IMMEDIATE ACTIONS REQUIRED:**
 
-1. **BLOCK CRITICAL INFRASTRUCTURE:** Add **109.230.231.37** to firewall deny lists, web proxy blocklists, and DNS sinkhole configurations. This indicator appears across all Xworm RAT variants and represents the highest-confidence single blocking opportunity.
+1. **BLOCK CRITICAL INFRASTRUCTURE:** Add **109[.]230[.]231[.]37** to firewall deny lists, web proxy blocklists, and DNS sinkhole configurations. This indicator appears across all Xworm RAT variants and represents the highest-confidence single blocking opportunity.
 
 2. **DEPLOY DETECTION SIGNATURES:** Import YARA rules to endpoint detection platforms and Sigma rules to SIEM platforms. Detection packages are organized by malware sample. **Priority: deploy enc/dec ransomware family detection rules immediately** (see [enc/dec Ransomware Detection Package]({{ "/hunting-detections/enc-dec-ransomware-family/" | relative_url }})) and the Quick Reference links below.
 
-3. **HUNT FOR EXISTING INFECTIONS:** Hunt for persistence artifacts (Registry Run keys named "WindowsDefenderUpdate" or "Microsoft .NET Runtime Optimization"), suspicious scheduled tasks (Microsoft-themed task names executing from `%AppData%`), **ransomware executables (enc\*.exe, dec\*.exe, updated_enc.exe, test_gui_enc\*.exe patterns)**, and network connections to 109.230.231.37. Detailed hunting queries are in the Quick Start Detection Guide below.
+3. **HUNT FOR EXISTING INFECTIONS:** Hunt for persistence artifacts (Registry Run keys named "WindowsDefenderUpdate" or "Microsoft .NET Runtime Optimization"), suspicious scheduled tasks (Microsoft-themed task names executing from `%AppData%`), **ransomware executables (enc\*.exe, dec\*.exe, updated_enc.exe, test_gui_enc\*.exe patterns)**, and network connections to 109[.]230[.]231[.]37. Detailed hunting queries are in the Quick Start Detection Guide below.
 
 4. **VERIFY OFFLINE BACKUP INTEGRITY (CRITICAL FOR RANSOMWARE DEFENSE):** The enc/dec ransomware family deletes Volume Shadow Copies, eliminating Windows built-in recovery. Without verified offline backups, encryption produces permanent data loss. Verify that offline backup systems are functional, network-isolated (air-gapped or tape), and tested for restoration.
 
@@ -110,7 +110,7 @@ Each malware sample analyzed in this investigation has three companion resources
   <tbody>
     <tr>
       <td><strong>Threat Infrastructure</strong></td>
-      <td>IP: <code>109.230.231.37</code> (C2 server + malware hosting)</td>
+      <td>IP: <code>109[.]230[.]231[.]37</code> (C2 server + malware hosting)</td>
     </tr>
     <tr>
       <td><strong>Samples Analyzed</strong></td>
@@ -168,11 +168,11 @@ The key finding is a Golang-compiled RAT with a dormant C2, masquerading as a Wi
 ### HIGH Risk - Active C2 & Persistence Capabilities
 
 **[agent_xworm.exe - Xworm RAT v1](/reports/agent-xworm-exe/)** | 21 KB Report
-**Risk:** HIGH | **C2 Server:** 109.230.231.37 | **Capabilities:** PowerShell execution, system reconnaissance
+**Risk:** HIGH | **C2 Server:** 109[.]230[.]231[.]37 | **Capabilities:** PowerShell execution, system reconnaissance
 The key finding is a hardcoded C2 authentication token that reveals centralized threat infrastructure.
 
 **[agent_xworm_v2.exe - Xworm RAT v2.4.0](/reports/agent-xworm-v2-exe/)** | 27 KB Report
-**Risk:** HIGH | **C2 Server:** 109.230.231.37 | **Protocol:** WebSocket-based C2
+**Risk:** HIGH | **C2 Server:** 109[.]230[.]231[.]37 | **Protocol:** WebSocket-based C2
 The key finding is an enhanced version carrying a WebSocket protocol upgrade from its TCP-based predecessor.
 
 **[FleetAgentAdvanced.exe - Multi-Persistence Dropper](/reports/fleetagentadvanced-exe/)** | 68 KB Report
@@ -197,7 +197,7 @@ The key finding is CMSTPLUA COM and Fodhelper UAC bypass techniques, where the s
 {: .hl-tier-1}
 {: .hl-tab-chain}
 
-Analysis of the open directory at **109.230.231.37** (38 malicious executables total, 16 examined in depth) reveals a multi-tier threat ecosystem combining remote access trojans, **custom ransomware capabilities**, multi-layer persistence droppers, and proof-of-concept exploitation tools. Shared C2 infrastructure, diverse malware families coordinated through centralized infrastructure, and deceptive Microsoft-themed naming ("WinDefenderSvc.exe", "Microsoft .NET Runtime Optimization") designed to blend with legitimate system processes all indicate organized operations.
+Analysis of the open directory at **109[.]230[.]231[.]37** (38 malicious executables total, 16 examined in depth) reveals a multi-tier threat ecosystem combining remote access trojans, **custom ransomware capabilities**, multi-layer persistence droppers, and proof-of-concept exploitation tools. Shared C2 infrastructure, diverse malware families coordinated through centralized infrastructure, and deceptive Microsoft-themed naming ("WinDefenderSvc.exe", "Microsoft .NET Runtime Optimization") designed to blend with legitimate system processes all indicate organized operations.
 
 **The most significant discovery is the enc/dec ransomware family**, a 10-variant toolkit (5 encryptors, 5 decryptors) featuring custom ChaCha20+RSA-2048 hybrid cryptography, hardware-optimized encryption (AVX-512/AVX2/SSE runtime CPU dispatcher), per-victim key generation, and development indicators including versioned builds (enc_v2.exe, test_gui_enc_v2.exe) and testing utilities.
 
@@ -218,7 +218,7 @@ The malware deleted the scheduled task XML configuration file immediately after 
 
 ### Network Infrastructure Patterns
 
-All Xworm variants share a single C2 server (**109.230.231.37**), providing defenders with a high-value blocking opportunity: one network indicator neutralizes multiple malware families simultaneously. Dynamic analysis identified active persistence establishment in agent.exe and FleetAgentAdvanced.exe; other samples exhibited dormant behavior, likely awaiting environmental conditions, time triggers, or successful C2 handshakes before activating.
+All Xworm variants share a single C2 server (**109[.]230[.]231[.]37**), providing defenders with a high-value blocking opportunity: one network indicator neutralizes multiple malware families simultaneously. Dynamic analysis identified active persistence establishment in agent.exe and FleetAgentAdvanced.exe; other samples exhibited dormant behavior, likely awaiting environmental conditions, time triggers, or successful C2 handshakes before activating.
 
 > **Analyst Assessment:** Multiple technical indicators suggest this infrastructure is a testing environment rather than an operational deployment. Unlike campaigns with C2 obfuscation (dynamic assignments, encryption), this repository uses static and sometimes hardcoded C2 addresses, consistent with development and QA operations rather than operationally security-conscious deployment.
 
@@ -362,6 +362,7 @@ Priority: CRITICAL (P0)
 Action: DENY/DROP all inbound and outbound connections
 Scope: Firewall rules, web proxy blocklists, DNS sinkhole, IPS/IDS signatures
 ```
+{: .hl-copy}
 
 **Implementation Commands:**
 
@@ -370,17 +371,20 @@ Scope: Firewall rules, web proxy blocklists, DNS sinkhole, IPS/IDS signatures
 New-NetFirewallRule -DisplayName "Block Xworm C2 - 109.230.231.37" `
   -Direction Outbound -Action Block -RemoteAddress 109.230.231.37
 ```
+{: .hl-copy}
 
 *Cisco ASA Firewall:*
 ```
 access-list BLOCK_MALWARE_C2 extended deny ip any host 109.230.231.37
 ```
+{: .hl-copy}
 
 *Palo Alto Networks Firewall:*
 ```
 set address "Xworm-C2-109.230.231.37" ip-netmask 109.230.231.37/32
 set rulebase security rules "Block-Xworm-C2" source any destination "Xworm-C2-109.230.231.37" action deny
 ```
+{: .hl-copy}
 
 **2. DEPLOY ENDPOINT DETECTION SIGNATURES**
 
@@ -398,6 +402,7 @@ Get-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Run" |
     $_.PSObject.Properties.Name -match "WindowsDefender|\.NET Runtime|WinDefender"
   } | Select-Object PSPath, PSChildName, *
 ```
+{: .hl-copy}
 
 *Splunk SPL - Network Connection Hunt:*
 ```spl
@@ -406,6 +411,7 @@ index=firewall OR index=proxy
   | stats count by src_ip, dest_port, action
   | where action="allowed"
 ```
+{: .hl-copy}
 
 ---
 
@@ -439,7 +445,7 @@ Configure SIEM correlation rules for these behavioral patterns:
 
 **Critical C2 Infrastructure:**
 ```
-IP Address: 109.230.231.37
+IP Address: 109[.]230[.]231[.]37
 Context: Command & Control server for Xworm RAT variants + malware hosting
 Confidence: CONFIRMED (hardcoded in agent_xworm.exe and agent_xworm_v2.exe)
 ```
@@ -570,7 +576,7 @@ FleetAgentFUD.exe → powershell.exe -NoP -NonI -W Hidden -Exec Bypass
 **PowerShell Execution Patterns:**
 ```powershell
 # Reconnaissance Commands
-Get-Process | Select-Object Name, Id, Path
+[G]et-Process | Select-Object Name, Id, Path
 Get-Service | Select-Object Name, Status, StartType
 (Get-WmiObject Win32_ComputerSystem).Domain
 ```
@@ -650,7 +656,7 @@ This campaign reflects several trends in the current threat landscape:
 
 Second, advanced capabilities are being commoditized. Remote access trojan functionality, WebSocket-based C2 protocols and multi-layer persistence mechanisms are now accessible via open directories, which lowers barriers to entry for less experienced threat actors.
 
-Third, the infrastructure patterns are shared. Multiple distinct malware families sharing C2 infrastructure at 109.230.231.37 suggests centralized threat operations or a malware-as-a-service business model. Infrastructure-based blocking therefore provides outsized defensive value, because a single network indicator neutralizes multiple threat families at once.
+Third, the infrastructure patterns are shared. Multiple distinct malware families sharing C2 infrastructure at 109[.]230[.]231[.]37 suggests centralized threat operations or a malware-as-a-service business model. Infrastructure-based blocking therefore provides outsized defensive value, because a single network indicator neutralizes multiple threat families at once.
 
 Fourth, the design is evasion-first. Deceptive Microsoft-themed naming conventions, anti-forensic behaviors such as immediate `task.xml` deletion, and environment-aware dormancy mechanisms all indicate operators prioritizing stealth and long-term persistence over immediate impact.
 
@@ -680,7 +686,7 @@ From the 38 executables in the open directory, **16 samples were selected for an
 
 **Important Notes:**
 - The presence of malware samples in an open directory does not imply the hosting provider's awareness or complicity
-- IP address 109.230.231.37 should be blocked via firewall rules, but network operators should verify legitimate use cases before implementing blocks
+- IP address 109[.]230[.]231[.]37 should be blocked via firewall rules, but network operators should verify legitimate use cases before implementing blocks
 - Detection signatures may require tuning for specific environments to minimize false positives
 - Organizations discovering infections should consult with qualified incident response professionals before remediation
 - This analysis represents findings as of January 2026; threat actors may modify infrastructure, update malware capabilities, or change tactics over time

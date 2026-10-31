@@ -22,9 +22,9 @@ permalink: /reports/fleetagentadvanced-exe/
 hide: true
 ---
 
-> **Open Directory Investigation**: This sample was discovered on an open directory hosted at IP address **109.230.231.37**, representing an active malware distribution point. The presence of multiple RAT variants and trojans on this infrastructure suggests organized malware distribution operations targeting opportunistic victims. To see all other reports from this investigation see [Executive Overview](/reports/109.230.231.37-Executive-Overview/)
+> **Open Directory Investigation**: This sample was discovered on an open directory hosted at IP address **109[.]230[.]231[.]37**, representing an active malware distribution point. The presence of multiple RAT variants and trojans on this infrastructure suggests organized malware distribution operations targeting opportunistic victims. To see all other reports from this investigation see [Executive Overview](/reports/109.230.231.37-Executive-Overview/)
 
-**Campaign Identifier:** Arsenal-237-109.230.231.37-Malware-Repository
+**Campaign Identifier:** Arsenal-237-109[.]230[.]231[.]37-Malware-Repository
 
 ---
 
@@ -87,7 +87,7 @@ The malware employs **quadruple persistence mechanisms** masquerading as legitim
 
 ### Recommended Actions
 1. **ISOLATE** systems showing suspicious RuntimeOptimization.exe or Microsoft .NET Runtime Optimization entries
-2. **BLOCK** distribution infrastructure: IP 109.230.231.37 at network perimeter
+2. **BLOCK** distribution infrastructure: IP 109[.]230[.]231[.]37 at network perimeter
 3. **DEPLOY** behavioral detection rules for .NET malware with multi-layer persistence indicators
 4. **HUNT** enterprise-wide for file hashes, persistence artifacts (4 mechanisms), and task.xml deletion patterns
 5. **REBUILD** confirmed infected systems (recommended) OR execute comprehensive 4-mechanism removal with verification
@@ -113,7 +113,7 @@ The malware employs **quadruple persistence mechanisms** masquerading as legitim
 - **File Size**: 172,544 bytes (approx 168 KB)
 - **Type**: PE32 executable (GUI) Intel 80386, .NET compiled
 - **Malware Type**: Persistence-Focused Trojan/Dropper
-- **Distribution Source**: IP 109.230.231.37 (CONFIRMED)
+- **Distribution Source**: IP 109[.]230[.]231[.]37 (CONFIRMED)
 
 **Dropped Payload (Persistence Component):**
 - **Filename**: RuntimeOptimization.exe
@@ -122,7 +122,7 @@ The malware employs **quadruple persistence mechanisms** masquerading as legitim
 - **Location**: %APPDATA%\Microsoft\CLR\RuntimeOptimization.exe
 - **Purpose**: Secondary persistent payload with dormant C2 capabilities
 
-This sample was found on an open directory at 109.230.231.37 alongside other RAT variants, among them agent.exe (PoetRAT) and the agent-xworm builds. The directory is an active distribution point serving several threat families to opportunistic victims.
+This sample was found on an open directory at 109[.]230[.]231[.]37 alongside other RAT variants, among them agent.exe (PoetRAT) and the agent-xworm builds. The directory is an active distribution point serving several threat families to opportunistic victims.
 
 ---
 
@@ -1088,6 +1088,7 @@ Get-ItemProperty "HKCU:\Software\Microsoft\Windows\CurrentVersion\Run" |
 Get-FileHash -Algorithm SHA256 "$env:APPDATA\Microsoft\CLR\RuntimeOptimization.exe" -ErrorAction SilentlyContinue
 # Compare to: 9fc6b69623133f5d6f1f4cda0ec4319300080c9bbaa0f88c93f01eeba84e80e7
 ```
+{: .hl-copy}
 
 If **ANY** of these checks return results, the system is infected.
 
@@ -1291,7 +1292,7 @@ FleetAgentAdvanced.exe (PID 8832)
 
 **Distribution Infrastructure:**
 ```
-IP Address:     109.230.231.37
+IP Address:     109[.]230[.]231[.]37
 Service:        Open directory serving multiple malware families
 Status:         ACTIVE (as of analysis date)
 Confidence:     CONFIRMED

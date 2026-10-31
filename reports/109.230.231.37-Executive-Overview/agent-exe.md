@@ -24,9 +24,9 @@ permalink: /reports/agent-exe/
 hide: true
 ---
 
-> **Open Directory Investigation**: This sample was discovered on an open directory hosted at IP address **109.230.231.37**, representing an active malware distribution point. The presence of multiple RAT variants on this infrastructure suggests organized malware distribution operations targeting opportunistic victims. To see all other reports from this investigation see [Executive Overview](/reports/109.230.231.37-Executive-Overview/)
+> **Open Directory Investigation**: This sample was discovered on an open directory hosted at IP address **109[.]230[.]231[.]37**, representing an active malware distribution point. The presence of multiple RAT variants on this infrastructure suggests organized malware distribution operations targeting opportunistic victims. To see all other reports from this investigation see [Executive Overview](/reports/109.230.231.37-Executive-Overview/)
 
-**Campaign Identifier:** Arsenal-237-109.230.231.37-Malware-Repository
+**Campaign Identifier:** Arsenal-237-109[.]230[.]231[.]37-Malware-Repository
 
 
 ---
@@ -90,7 +90,7 @@ The malware employs **dual persistence mechanisms** masquerading as Windows Defe
 
 ### Recommended Actions
 1. **ISOLATE** systems showing suspicious WinDefenderSvc.exe or WindowsDefenderUpdate entries
-2. **BLOCK** distribution infrastructure: IP 109.230.231.37 at network perimeter
+2. **BLOCK** distribution infrastructure: IP 109[.]230[.]231[.]37 at network perimeter
 3. **DEPLOY** behavioral detection rules for Golang RAT indicators and dual persistence
 4. **HUNT** enterprise-wide for file hashes, persistence artifacts, and .wd_installed markers
 5. **ROTATE** credentials for all users on confirmed or suspected infected systems
@@ -115,14 +115,14 @@ The malware employs **dual persistence mechanisms** masquerading as Windows Defe
 - **File Size**: 1,571,840 bytes (approx 1.5 MB)
 - **Type**: PE32+ executable (console) x86-64, Golang-compiled
 - **Family**: Matches PoetRAT malware signatures
-- **Distribution Source**: IP 109.230.231.37 (CONFIRMED)
+- **Distribution Source**: IP 109[.]230[.]231[.]37 (CONFIRMED)
 
 **Dropped File (Persistence Component):**
 - **Filename**: WinDefenderSvc.exe
 - **SHA256**: 4e856041018242c62b3848d63b94c3763beda01648d3139060700c11e9334ad1
 - **Location**: %APPDATA%\Microsoft\Windows\Start Menu\Programs\Startup\
 
-This sample was found on an open directory at 109.230.231.37, an active malware distribution point serving several RAT variants to opportunistic victims.
+This sample was found on an open directory at 109[.]230[.]231[.]37, an active malware distribution point serving several RAT variants to opportunistic victims.
 
 ---
 
@@ -230,7 +230,7 @@ During dynamic analysis, agent.exe demonstrated **environment-aware C2 behavior*
 - **Status**: NOT OBSERVED in controlled sandbox environment
 - **Likely Behavior**: Environment detection followed by delayed or conditional C2 activation
 - **Confirmed Capabilities**: TCP/UDP networking code, encrypted channel implementation (AES, ChaCha20)
-- **Distribution Point**: IP 109.230.231.37 (confirmed malware download source)
+- **Distribution Point**: IP 109[.]230[.]231[.]37 (confirmed malware download source)
 
 **Environment-Aware Activation Patterns**:
 1. **Sandbox Detection**: Malware may detect analysis environments through VM detection, debugger checks, or behavioral fingerprinting

@@ -20,9 +20,9 @@ permalink: /reports/enc-dec-ransomware-family/
 hide: true
 ---
 
-> **Open Directory Investigation**: This ransomware family was discovered on an open directory hosted at IP address **109.230.231.37**, representing the "Arsenal-237" malware development toolkit. The presence of 10 ransomware variants (5 encryptors, 5 decryptors) alongside espionage tools indicates a sophisticated threat actor's development environment. To see all other reports from this investigation see [Arsenal-237 Executive Overview](/reports/109.230.231.37-Executive-Overview/)
+> **Open Directory Investigation**: This ransomware family was discovered on an open directory hosted at IP address **109[.]230[.]231[.]37**, representing the "Arsenal-237" malware development toolkit. The presence of 10 ransomware variants (5 encryptors, 5 decryptors) alongside espionage tools indicates a sophisticated threat actor's development environment. To see all other reports from this investigation see [Arsenal-237 Executive Overview](/reports/109.230.231.37-Executive-Overview/)
 
-**Campaign Identifier:** Arsenal-237-109.230.231.37-Malware-Repository
+**Campaign Identifier:** Arsenal-237-109[.]230[.]231[.]37-Malware-Repository
 
 
 ---
@@ -85,7 +85,7 @@ The malware systematically **deletes Volume Shadow Copies** to prevent system re
 </table>
 
 ### Recommended Actions
-1. **BLOCK** infrastructure 109.230.231.37 at network perimeter immediately
+1. **BLOCK** infrastructure 109[.]230[.]231[.]37 at network perimeter immediately
 2. **DEPLOY** enc/dec ransomware YARA signatures for detection across all endpoints
 3. **HUNT** enterprise-wide for related malware tools (agent.exe, steal_browser.exe)
 4. **SECURE** offline backups with immutable storage and air-gap isolation
@@ -102,7 +102,7 @@ The malware systematically **deletes Volume Shadow Copies** to prevent system re
 - [enc/dec Ransomware IOCs]({{ "/ioc-feeds/enc-dec-ransomware-family.json" | relative_url }})
 
 **Critical Infrastructure:**
-- **Distribution/C2:** 109.230.231.37 (BLOCK ALL TRAFFIC)
+- **Distribution/C2:** 109[.]230[.]231[.]37 (BLOCK ALL TRAFFIC)
 
 **Development Characteristics:**
 - **Sophistication:** Professional malware development environment
@@ -193,7 +193,7 @@ The malware systematically **deletes Volume Shadow Copies** to prevent system re
 - **Key Features**: Testing/QA decryption utility, development build
 
 ### Discovery Context
-This ransomware family was discovered as part of a broader malware toolkit on an exposed open directory at IP address 109.230.231.37 in December 2025. The directory contained 38 malicious executables representing a sophisticated development and testing environment, including various espionage tools, commodity RATs, persistence mechanisms, and this custom ransomware family.
+This ransomware family was discovered as part of a broader malware toolkit on an exposed open directory at IP address 109[.]230[.]231[.]37 in December 2025. The directory contained 38 malicious executables representing a sophisticated development and testing environment, including various espionage tools, commodity RATs, persistence mechanisms, and this custom ransomware family.
 
 ---
 
@@ -523,8 +523,8 @@ All encryption variants systematically delete Windows Volume Shadow Copies to pr
 
 This concatenated string reveals the command execution:
 ```
-vssadmin.exe delete shadows /all /quiet
-wmic.exe shadowcopy delete
+[v]ssadmin.exe delete shadows /all /quiet
+[w]mic.exe shadowcopy delete
 ```
 
 Deleting the Volume Shadow Copies removes the Windows Previous Versions restore capability and pushes the victim onto offline backups. It is a standard ransomware move for maximizing pressure.
@@ -715,7 +715,7 @@ preceded by data access, so an incident is not confined to availability.
 A: Detection requires multi-layered approach:
 - **Static Signatures**: Deploy YARA rules for ChaCha20 constant ("expand 32-byte k"), VSS deletion signature
 - **Behavioral EDR**: Real-time monitoring for mass file modification patterns (not time-limited sandbox analysis)
-- **Network Controls**: Block infrastructure 109.230.231.37 at perimeter
+- **Network Controls**: Block infrastructure 109[.]230[.]231[.]37 at perimeter
 - **Threat Hunting**: Proactive search for Rust ransomware artifacts, PoetRAT espionage tools (agent.exe, steal_browser.exe)
 - **VSS Monitoring**: Alert on vssadmin.exe and wmic.exe with deletion parameters (high-fidelity indicator)
 

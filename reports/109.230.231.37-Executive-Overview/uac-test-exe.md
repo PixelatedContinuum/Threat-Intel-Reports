@@ -22,9 +22,9 @@ permalink: /reports/uac-test-exe/
 hide: true
 ---
 
-> **Open Directory Investigation**: This sample was discovered on an open directory hosted at IP address **109.230.231.37**, representing an active malware distribution point. Unlike the weaponized RAT variants found alongside it, uac_test.exe is a security research tool designed for UAC bypass testing, not active malware operations. To see all other reports from this investigation see [Executive Overview](/reports/109.230.231.37-Executive-Overview/)
+> **Open Directory Investigation**: This sample was discovered on an open directory hosted at IP address **109[.]230[.]231[.]37**, representing an active malware distribution point. Unlike the weaponized RAT variants found alongside it, uac_test.exe is a security research tool designed for UAC bypass testing, not active malware operations. To see all other reports from this investigation see [Executive Overview](/reports/109.230.231.37-Executive-Overview/)
 
-**Campaign Identifier:** Arsenal-237-109.230.231.37-Malware-Repository
+**Campaign Identifier:** Arsenal-237-109[.]230[.]231[.]37-Malware-Repository
 
 ---
 
@@ -107,9 +107,9 @@ The tool implements two well-documented UAC bypass methods: **CMSTPLUA COM inter
 - **File Size**: 285,184 bytes (approx 278 KB)
 - **Type**: PE32+ executable (console) x86-64, Rust-compiled
 - **Classification**: Security Research Tool / UAC Bypass PoC
-- **Distribution Source**: IP 109.230.231.37 (CONFIRMED)
+- **Distribution Source**: IP 109[.]230[.]231[.]37 (CONFIRMED)
 
-This sample was found on an open directory at 109.230.231.37, an active malware distribution point serving several RAT variants to opportunistic victims, among them agent.exe (PoetRAT), FleetAgent and XWorm. A UAC bypass tool sitting alongside weaponized malware points either to a compromised penetration testing setup or to the operator's own testing and development.
+This sample was found on an open directory at 109[.]230[.]231[.]37, an active malware distribution point serving several RAT variants to opportunistic victims, among them agent.exe (PoetRAT), FleetAgent and XWorm. A UAC bypass tool sitting alongside weaponized malware points either to a compromised penetration testing setup or to the operator's own testing and development.
 
 ---
 
@@ -252,6 +252,7 @@ Alert on fodhelper.exe spawning unexpected child processes
 Normal behavior: fodhelper.exe launches settings apps or exits cleanly
 Suspicious: fodhelper.exe → cmd.exe, powershell.exe, or arbitrary executables
 ```
+{: .hl-copy}
 
 **Behavioral Indicators:**
 - Registry key creation under `HKCU\Software\Classes\ms-settings\`
@@ -647,7 +648,7 @@ This tool likely wasn't distributed via typical malware infection chains; it was
     <tr>
       <td><strong>Downloaded from Open Directory</strong></td>
       <td class="medium">MEDIUM</td>
-      <td>User downloaded from IP 109.230.231.37 alongside other samples (testing/curiosity)</td>
+      <td>User downloaded from IP 109[.]230[.]231[.]37 alongside other samples (testing/curiosity)</td>
     </tr>
     <tr>
       <td><strong>Part of Malware Toolkit</strong></td>
@@ -666,7 +667,7 @@ This tool likely wasn't distributed via typical malware infection chains; it was
 
 - **Application Whitelisting**: Would have blocked execution (prevents unsigned/unapproved binaries)
 - **USB Device Control**: Prevents unauthorized file transfers via removable media
-- **Download Restrictions**: Block or monitor downloads from known malware hosting (109.230.231.37)
+- **Download Restrictions**: Block or monitor downloads from known malware hosting (109[.]230[.]231[.]37)
 - **User Training**: Educate on unauthorized security tool usage policies
 
 ---
@@ -822,7 +823,7 @@ Investigate first, and attribute malicious intent only after reviewing the evide
 ### Network Indicators
 
 **Distribution Infrastructure:**
-- **IP Address**: `109.230.231.37`
+- **IP Address**: `109[.]230[.]231[.]37`
 - **Description**: Confirmed malware distribution point - open directory serving multiple RAT variants
 - **Confidence**: CONFIRMED
 - **Action**: BLOCK at network perimeter immediately
@@ -874,7 +875,7 @@ C:\Windows\Prefetch\uac_test.exe-*.pf
 - File hash match: `18da271868c434494a68937fa12cb302d37b14849c4c0fc1db4007ac13c5b760`
 - Registry creation: `HKCU\Software\Classes\ms-settings\shell\open\command`
 - COM object instantiation: CLSID `{6EDD6D74-C007-4E75-B76A-E5740995E24C}`
-- Network connection to: `109.230.231.37`
+- Network connection to: `109[.]230[.]231[.]37`
 
 **Behavioral Patterns:**
 - Rust executable making privilege elevation checks

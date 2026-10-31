@@ -24,11 +24,11 @@ permalink: /reports/agent-xworm-exe/
 hide: true
 ---
 
-> **Open Directory Investigation**: This sample was discovered on an open directory hosted at IP address **109.230.231.37**, representing an active malware distribution point. The presence of multiple RAT variants on this infrastructure suggests organized malware distribution operations targeting opportunistic victims. To see all other reports from this investigation see [Executive Overview](/reports/109.230.231.37-Executive-Overview/)
+> **Open Directory Investigation**: This sample was discovered on an open directory hosted at IP address **109[.]230[.]231[.]37**, representing an active malware distribution point. The presence of multiple RAT variants on this infrastructure suggests organized malware distribution operations targeting opportunistic victims. To see all other reports from this investigation see [Executive Overview](/reports/109.230.231.37-Executive-Overview/)
 
 > **Analyst Note**: This is been a trend in my findings and reports lately, there has been many different findings of XWorm being involved in many different places, levels of sophistication, and operations. This is one of the main reasons I picked this out of all these 30+ samples found in this directory to drill into further.
 
-**Campaign Identifier:** Arsenal-237-109.230.231.37-Malware-Repository
+**Campaign Identifier:** Arsenal-237-109[.]230[.]231[.]37-Malware-Repository
 
 
 ---
@@ -38,7 +38,7 @@ hide: true
 ## Executive Summary
 
 ### Business Impact Summary
-**agent_xworm.exe** is a **CRITICAL-severity Remote Access Trojan (RAT)** confirmed as belonging to the **XWorm** malware family. This 16KB .NET-compiled malware represents the latest evolution of XWorm RAT, which achieved massive scale in 2024-2025 with over 18,459 devices compromised worldwide in a single builder campaign. The sample demonstrates professional-grade development with hardcoded command-and-control infrastructure (109.230.231.37), Base64-encoded communications, and comprehensive offensive capabilities including PowerShell execution, system reconnaissance, and file download functionality.
+**agent_xworm.exe** is a **CRITICAL-severity Remote Access Trojan (RAT)** confirmed as belonging to the **XWorm** malware family. This 16KB .NET-compiled malware represents the latest evolution of XWorm RAT, which achieved massive scale in 2024-2025 with over 18,459 devices compromised worldwide in a single builder campaign. The sample demonstrates professional-grade development with hardcoded command-and-control infrastructure (109[.]230[.]231[.]37), Base64-encoded communications, and comprehensive offensive capabilities including PowerShell execution, system reconnaissance, and file download functionality.
 
 XWorm's architecture revolves around a heartbeat-based TCP client that maintains persistent connection to attacker infrastructure using authentication secrets (`AgentSec_8hJ3kL6mN9pQ2rS5tU8vW1xY4zA7bC0d`). Static analysis reveals modular command handlers for process enumeration, service discovery, domain checking, and arbitrary command execution. The malware's small footprint (16KB) combined with hidden console operation indicates a lightweight first-stage payload designed for rapid deployment and minimal detection surface.
 
@@ -98,7 +98,7 @@ The threat landscape for XWorm has evolved significantly in 2025, with Version 6
 </table>
 
 ### Recommended Actions
-1. **ISOLATE** systems showing connections to 109.230.231.37 immediately
+1. **ISOLATE** systems showing connections to 109[.]230[.]231[.]37 immediately
 2. **BLOCK** distribution infrastructure at network perimeter and internal firewalls
 3. **DEPLOY** behavioral detection rules for .NET RAT indicators and Base64-encoded C2
 4. **HUNT** enterprise-wide for file hashes, authentication secret "AgentSec_", and PowerShell anomalies
@@ -126,9 +126,9 @@ The threat landscape for XWorm has evolved significantly in 2025, with Version 6
 - **Framework**: .NET Framework v4.0.30319 (Microsoft Visual Studio .NET)
 - **Family**: XWorm RAT (CONFIRMED - HIGH confidence 95%)
 - **Version**: Likely v5.x or early v6.x
-- **Distribution Source**: IP 109.230.231.37 (CONFIRMED - Open Directory)
+- **Distribution Source**: IP 109[.]230[.]231[.]37 (CONFIRMED - Open Directory)
 
-This sample was found on an open directory at 109.230.231.37, an active malware distribution point serving several RAT variants. Having "agent_xworm.exe" sit alongside "agent.exe" (PoetRAT) points to infrastructure reuse by an organized actor.
+This sample was found on an open directory at 109[.]230[.]231[.]37, an active malware distribution point serving several RAT variants. Having "agent_xworm.exe" sit alongside "agent.exe" (PoetRAT) points to infrastructure reuse by an organized actor.
 
 ---
 
@@ -175,7 +175,7 @@ agent_xworm.exe is a 32-bit .NET console application with modular architecture:
 VERSION - XWorm version identifier
 HEARTBEAT_MS - Keepalive interval
 RECONNECT_MS - Reconnection delay
-SERVER_HOST - C2 IP (109.230.231.37)
+SERVER_HOST - C2 IP (109[.]230[.]231[.]37)
 SERVER_PORT - C2 TCP port
 AGENT_SECRET - Authentication (AgentSec_8hJ3kL6mN9pQ2rS5tU8vW1xY4zA7bC0d)
 ```
@@ -188,7 +188,7 @@ AGENT_SECRET - Authentication (AgentSec_8hJ3kL6mN9pQ2rS5tU8vW1xY4zA7bC0d)
 ### Command & Control Infrastructure
 
 **C2 Characteristics**:
-- **Server**: 109.230.231.37 (hardcoded, offline during analysis)
+- **Server**: 109[.]230[.]231[.]37 (hardcoded, offline during analysis)
 - **Protocol**: TCP with heartbeat keepalive
 - **Authentication**: Shared secret "AgentSec_8hJ3kL6mN9pQ2rS5tU8vW1xY4zA7bC0d"
 - **Encoding**: Base64 for command/data transmission
@@ -197,14 +197,14 @@ AGENT_SECRET - Authentication (AgentSec_8hJ3kL6mN9pQ2rS5tU8vW1xY4zA7bC0d)
 **Operational Flow**:
 1. Execute → hide console (ShowWindow API)
 2. Generate machine ID (MD5 hash)
-3. Connect to 109.230.231.37
+3. Connect to 109[.]230[.]231[.]37
 4. Authenticate with AGENT_SECRET
 5. Spawn heartbeat thread
 6. Receive/process commands via `HandleCmd()`
 7. Execute via `Exec()` → transmit results
 8. Auto-reconnect on failure
 
-The hardcoded IP 109.230.231.37 is the blocking opportunity here. Traffic to it means an active XWorm infection and calls for immediate response.
+The hardcoded IP 109[.]230[.]231[.]37 is the blocking opportunity here. Traffic to it means an active XWorm infection and calls for immediate response.
 
 ### Capabilities Analysis
 
@@ -305,7 +305,7 @@ A single builder campaign compromised 18,459 devices.
 - Drive-by downloads (compromised websites, exploit kits)
 - **ClickFix social engineering** (fake error messages → PowerShell execution)
 - Software supply chain (pirated software bundles)
-- Open directories (109.230.231.37 infrastructure)
+- Open directories (109[.]230[.]231[.]37 infrastructure)
 
 ### Multi-Malware Ecosystem
 
@@ -456,7 +456,7 @@ XWorm → AsyncRAT → LockBit Black ransomware
 ## Frequently Asked Questions
 
 ### Q: Why is the C2 server offline?
-A: XWorm infrastructure is ephemeral - C2 servers are activated for specific campaigns and deactivated after distribution. Open directory (109.230.231.37) was distribution point; actual C2 may be different infrastructure or operator-specific.
+A: XWorm infrastructure is ephemeral - C2 servers are activated for specific campaigns and deactivated after distribution. Open directory (109[.]230[.]231[.]37) was distribution point; actual C2 may be different infrastructure or operator-specific.
 
 ### Q: How does the XWorm plugin system work?
 A: **In-memory DLL loading** via .NET reflection. C2 sends plugin URL → malware downloads DLL bytes → Assembly.Load into memory (no disk writes). Plugins include keyloggers, screenshot capture, webcam access.
