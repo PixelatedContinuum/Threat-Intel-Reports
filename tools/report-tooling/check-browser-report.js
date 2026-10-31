@@ -2183,6 +2183,28 @@ function legendVerdict(m) {
   });
   return { notChecked: false, ok: why.length === 0, why: why, detail: m.legend.length + ' swatch(es): ' + compared + ' compared with a dot of the same kind, ' + vsToken + ' with the status colour (no such dot on this report)' + (why.length ? '; ' + why.join('; ') : '') };
 }
+/* The rows for a Timeline tab whose chronology has rows with no parseable date (T-0500.1.11, fix5a). Pure, so a test can drive each branch.
+     unp   what the page shows: { notice, printed, drawn }  (the notice text, the rows printed in the tab, the marks and legends drawn)
+     want  the SOURCE table's row count, or null when the source rows were not read
+   Returns the rows to report, in order:
+     1. the printed-rows row, PASS or FAIL under a name of its own (no mark drawn and every source row printed as written); with want null it is NOT CHECKED
+     2. the marks row and 3. the legend row, always NOT CHECKED, under the names the rows carry on every other report, because nothing was drawn to measure */
+function unparsedTimelineRows(unp, want, vp, nameA, nameB) {
+  var nameP = vp + ': the timeline tab of a chronology whose dates do not parse draws no mark and prints every source row as written';
+  var rows = [];
+  var base = 'the chronology has rows with no parseable date, so the layout draws no timeline mark and says ' + JSON.stringify(unp.notice);
+  if (want === null) {
+    rows.push({ name: 'NOT CHECKED: ' + nameP, pass: false, detail: base + '; its source rows were not read, so the printed table was not counted' });
+  } else {
+    rows.push({ name: nameP, pass: unp.drawn === 0 && unp.printed === want,
+      detail: base + ': ' + unp.drawn + ' mark(s) or legend(s) drawn, ' + unp.printed + ' of the source\'s ' + want + ' row(s) printed as written' });
+  }
+  var why = 'the chronology\'s dates do not parse, so the layout draws no mark and the gate has nothing to measure here (' +
+    (want === null ? 'its source rows were not counted' : unp.printed + ' of ' + want + ' source row(s) printed as written, matched in the row above') + ')';
+  rows.push({ name: 'NOT CHECKED: ' + vp + ': ' + nameA, pass: false, detail: why });
+  rows.push({ name: 'NOT CHECKED: ' + vp + ': ' + nameB, pass: false, detail: why });
+  return rows;
+}
 async function timelineRows(page, url) {
   var nameA = 'the timeline marks are large (dots 32 px, numbers 18 px; smaller on a phone), never overlap, and every event is present';
   var nameB = 'the timeline legend swatches carry the same colours as the dots';
@@ -2210,17 +2232,13 @@ async function timelineRows(page, url) {
       continue;
     }
     /* T-0500.1.11: a chronology table whose dates do not parse is a table the report HAS, so SHAPES says shape true, yet the view draws no mark
-       and says so ("View unavailable: needs a chronology with parseable dates"). What the page shows INSTEAD is checked the way a report
-       with no chronology is: no mark or legend drawn, the notice present, and every source row printed as written (counted against the
-       SOURCE table). A mark that is not there is never measured and never called PASS without that. */
+       and says so ("View unavailable: needs a chronology with parseable dates"). The marks and the legend are then NOT CHECKED: the gate cannot
+       test a mark that is not there, and a PASS under the mark rows' names (b23fix) said it had. What the page shows INSTEAD is a row of its own,
+       counted against the SOURCE table: no mark or legend drawn, the notice present, every source row printed as written (fix5a). */
     var unp = await page.json('(function(){var b=document.getElementById("hl-rv-view-timeline"),n=b?b.querySelector(".hl-rv-unavailable"):null;return {notice:n?n.textContent.trim():null,printed:document.querySelectorAll("#hl-rv-view-timeline #chronology tbody tr").length,drawn:document.querySelectorAll(".hl-rv-marker, .hl-rv-vertical-marker, .hl-rv-timeline-legend").length};})()');
     if (unp && unp.notice && /parseable dates/.test(unp.notice)) {
       var want = SHAPES && SHAPES.timeline && typeof SHAPES.timeline.rows === 'number' ? SHAPES.timeline.rows : null;
-      if (want === null) { check('NOT CHECKED: ' + w + 'x' + h + ': ' + nameA, false, 'the chronology\'s dates do not parse, and its source rows were not read, so the printed table was not counted'); check('NOT CHECKED: ' + w + 'x' + h + ': ' + nameB, false, 'the chronology\'s dates do not parse, and its source rows were not read, so the printed table was not counted'); continue; }
-      var unpOk = unp.drawn === 0 && unp.printed === want;
-      var unpDetail = 'the chronology has rows with no parseable date, so the layout draws no timeline mark and says ' + JSON.stringify(unp.notice) + ': ' + unp.drawn + ' mark(s) or legend(s) drawn, ' + unp.printed + ' of the source\'s ' + want + ' row(s) printed as written';
-      check(w + 'x' + h + ': ' + nameA, unpOk, unpDetail);
-      check(w + 'x' + h + ': ' + nameB, unpOk, unpDetail);
+      unparsedTimelineRows(unp, want, w + 'x' + h, nameA, nameB).forEach(function (row) { check(row.name, row.pass, row.detail); });
       continue;
     }
     var m = await page.json(TIMELINE_EXPR);
@@ -4024,6 +4042,7 @@ if (require.main === module) {
     timelineInjectedFixtureHtml: timelineInjectedFixtureHtml,
     timelineFixturePlan: timelineFixturePlan,
     cardVerdict: cardVerdict,
+    unparsedTimelineRows: unparsedTimelineRows,
     controlFixtureHtml: controlFixtureHtml,
     mutatedTabsScript: mutatedTabsScript,
     MUT_DROP_SOURCE_ROW: MUT_DROP_SOURCE_ROW,

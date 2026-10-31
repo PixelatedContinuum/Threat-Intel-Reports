@@ -137,3 +137,29 @@ test('timelineFixtureHtml builds from a Date / Observation table only; a Stage /
   assert.match(out,/<td>Fixture<\/td><\/tr>/,'the third column is filled so every row has as many cells as headers');
   assert.equal(G.timelineFixtureHtml('<html>'+table(['Stage','Time','Action'],[['1','t','a']])+'</html>'),null);
 });
+
+/* T-0500.1.11 fix5a: a chronology whose dates do not parse draws no mark, so the marks and the legend are NOT CHECKED (b23fix reported PASS under their names). */
+test('unparsedTimelineRows: marks and legend are NOT CHECKED, never PASS; the printed-rows row passes only when every source row is printed and nothing is drawn',()=>{
+  const A='marks name',B='legend name',N='View unavailable: needs a chronology with parseable dates; original date wording is retained below.';
+  const rows=G.unparsedTimelineRows({notice:N,printed:6,drawn:0},6,'1280x900',A,B);
+  assert.equal(rows.length,3);
+  assert.deepEqual(rows.map(r=>r.pass),[true,false,false]);
+  assert.match(rows[0].name,/draws no mark and prints every source row as written/); assert.doesNotMatch(rows[0].name,/^NOT CHECKED/);
+  assert.equal(rows[1].name,'NOT CHECKED: 1280x900: marks name'); assert.equal(rows[2].name,'NOT CHECKED: 1280x900: legend name');
+  assert.match(rows[1].detail,/dates do not parse/); assert.match(rows[1].detail,/6 of 6 source row\(s\) printed/);
+  // none of the three rows is a PASS under the mark or legend name
+  assert.equal(rows.filter(r=>r.pass&&(r.name===A||r.name===B||r.name.endsWith(A)||r.name.endsWith(B))).length,0);
+  // the summary counts them as NOT CHECKED, so a report that ends here exits 2
+  const s=G.summarise(rows.map(r=>({name:r.name,pass:r.pass})));
+  assert.deepEqual([s.pass,s.fail,s.notChecked,s.exit],[1,0,2,2]);
+});
+test('unparsedTimelineRows: a printed table that lost a row FAILS, marks drawn beside the notice FAIL, an uncounted source is NOT CHECKED',()=>{
+  const A='a',B='b',N='View unavailable: needs a chronology with parseable dates; original date wording is retained below.';
+  const lost=G.unparsedTimelineRows({notice:N,printed:5,drawn:0},6,'390x844',A,B);
+  assert.equal(lost[0].pass,false); assert.doesNotMatch(lost[0].name,/^NOT CHECKED/);
+  assert.equal(G.summarise(lost.map(r=>({name:r.name,pass:r.pass}))).exit,1);
+  const drawn=G.unparsedTimelineRows({notice:N,printed:6,drawn:3},6,'390x844',A,B);
+  assert.equal(drawn[0].pass,false);
+  const unread=G.unparsedTimelineRows({notice:N,printed:6,drawn:0},null,'390x844',A,B);
+  assert.match(unread[0].name,/^NOT CHECKED/); assert.equal(unread.every(r=>r.pass===false),true);
+});
