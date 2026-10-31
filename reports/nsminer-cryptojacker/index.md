@@ -37,9 +37,11 @@ stix_bundle: /stix/nsminer-cryptojacker.json
 
 ## Malware Analysis Report: NsMiner Cryptojacker
 {: .hl-tier-1}
+{: .hl-tab-overview}
 
 ## 1. Executive Summary
 {: .hl-tier-1}
+{: .hl-tab-overview}
 
 I identified a multi-stage cryptojacking campaign distributing the **NsMiner** payload from an open directory at 125.19.150.122. The initial infection vector is a trojanized NSIS (Nullsoft Scriptable Install System) installer, `IMG001.exe`.
 
@@ -71,6 +73,7 @@ Risk level is HIGH.
 
 ## 2. Malware and Campaign Analysis
 {: .hl-tier-2}
+{: .hl-tab-chain}
 
 **NsMiner** is a Trojan Coin Miner named for the persistence directory it creates (`NsMiner`) and its final binaries (`NsCpuCNMiner*.exe`). The family is designed exclusively for cryptojacking.
 
@@ -80,6 +83,7 @@ The NSIS installer dropper bundles malicious scripts and payloads inside a struc
 
 ## 3. Technical Deep-Dive
 {: .hl-tier-3}
+{: .hl-tab-chain}
 
 > **Analyst note:** This section walks the three-stage infection chain, dropper, downloader, and miner. Each stage hands off to the next and adds a layer of resilience or evasion. Understanding all three is necessary to scope containment, because removing only the miner leaves `tftp.exe` active and able to re-fetch it.
 
@@ -149,6 +153,7 @@ One analysis note belongs here. Full unpacking of the VMProtect layer was not co
 
 ## 4. MITRE ATT&CK Mapping
 {: .hl-tier-2}
+{: .hl-tab-chain}
 
 | Tactic | Technique ID | Technique Name | Evidence | 
 | --- | --- | --- | --- |
@@ -163,6 +168,7 @@ One analysis note belongs here. Full unpacking of the VMProtect layer was not co
 
 ## 5. Detection and Hunting
 {: .hl-tier-2}
+{: .hl-tab-indicators}
 
 ### YARA Rule
 This rule targets unique strings and properties of the dropper and downloader components.
@@ -209,6 +215,7 @@ url="*hrtests.ru/S.php*"
 
 ## 6. Indicators of Compromise (IOCs)
 {: .hl-tier-2}
+{: .hl-tab-indicators}
 
 ### File Hashes
 | Filename | SHA256 | 
@@ -242,5 +249,6 @@ url="*hrtests.ru/S.php*"
 
 ## License
 {: .hl-tier-2}
+{: .hl-tab-confidence}
 
 © 2026 Joseph, The Hunters Ledger. Licensed under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/), free to republish and adapt, including commercially, with attribution to The Hunters Ledger and a link to the original.
