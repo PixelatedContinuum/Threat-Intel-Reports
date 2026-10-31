@@ -56,6 +56,7 @@ figure_nav:
 
 ## 0. BLUF / Bottom Line Up Front
 {: .hl-tier-1}
+{: .hl-tab-overview}
 
 A 3:00 AM read for the on-call SOC analyst, threat hunter, or detection engineer. Fuller narrative begins at Section 1.
 
@@ -85,6 +86,7 @@ The detection package carries YARA, Sigma, Suricata and EDR query content for bo
 
 ## 1. Executive Summary
 {: .hl-tier-1}
+{: .hl-tab-overview}
 
 The operator behind `45.130.148.125` is an unattributed mid-tier hands-on intrusion operator, tracked here as **<a href="/actors/UTA-2026-006/">UTA-2026-006</a>** *(an internal tracking label used by The Hunters Ledger, see Section 8)*, who has staged a complete, operationally-ready AdaptixC2 deployment together with a full commodity post-exploitation kit (Ligolo-ng, chisel, Ghostpack/SpecterOps suite, mimikatz, lazagne) on a single Uzbekistani VPS. Their distinguishing build-environment fingerprints are the Linux PDB path `/tmp/si_build/obj/Release/net472/si_build.pdb`, the matched `beacon.ps1` PowerShell loader paired with an operator-written `[SI]::Inject` .NET injector, the recovered RC4 listener key `f443b9ce7e0658900f6a7ff0991cdee6`, and per-listener type IDs `0xbe4c0149` / `0xcb4e6379`, none of which appear in any reviewed public threat feed. The TTPs defenders should detect to catch this specific operator's tradecraft are documented in detail throughout Sections 4 and 5 of this report and packaged in the linked detection rule set.
 
@@ -162,6 +164,7 @@ This report is anchored to a single observable corpus rather than to general thr
 
 ## 2. Discovery Context and Toolkit Composition
 {: .hl-tier-2}
+{: .hl-tab-chain}
 
 ### 2.1 Discovery via Vantage
 
@@ -231,6 +234,7 @@ This investigation contributes original intelligence on five dimensions not pres
 
 ## 3. Kill Chain Overview
 {: .hl-tier-2}
+{: .hl-tab-chain}
 
 > **Analyst note:** This section walks the anticipated attack flow end-to-end at a high level so the rest of the report has a shared map. Each stage gets a plain-language description of what happens, who triggers it, and what the defender should look for. Sections 4 and 5 then go deep on each technical layer. If you only read one technical section, read this one. It gives you the shape of the campaign at one glance. **Important context:** no live victim traffic was captured. Every stage below is grounded in observable artifacts in the open directory (operator-written PowerShell loader, decompiled .NET injector, RC4-decrypted beacon configuration, and bundled toolkit composition) rather than in observed traffic.
 
@@ -261,6 +265,7 @@ Time-to-impact was NOT MEASURED, because no live victim traffic was captured. St
 
 ## 4. Technical Analysis: Static Findings
 {: .hl-tier-3}
+{: .hl-tab-chain}
 
 > **Analysis tools referenced in this section.** The figures and screenshots throughout this section come from static reverse-engineering: a disassembler/decompiler for the C++ AdaptixC2 beacon, a .NET decompiler for the operator's `injector.dll`, PE-format inspection for compile-timestamp and export-table comparisons, and Go-symbol recovery for the Linux ELF agent. Mentions throughout use the general category term only.
 
@@ -588,6 +593,7 @@ The full IOC list with hashes, sizes, contexts, and confidence levels is documen
 
 ## 5. Technical Analysis: Behavioral / Anticipated Kill Chain
 {: .hl-tier-3}
+{: .hl-tab-chain}
 
 > **Analyst note:** This section walks through the operator's kill chain from initial victim execution through Linux-host pivoting. Steps 2 through 7, covering the loader chain and the beacon's command-and-control behaviour, are confirmed by controlled execution of the recovered samples. Steps 1, 8 and 9, covering delivery, interactive operator activity and persistence, stay inferred from what the toolkit contains, because they depend on operator choices I have not seen exercised. Each step names the telemetry source that catches it.
 
@@ -718,6 +724,7 @@ The combination (reflection-based AMSI bypass and W^X-aware injection alongside 
 
 ## 6. MITRE ATT&CK Mapping
 {: .hl-tier-2}
+{: .hl-tab-chain}
 
 > **Skill validation:** The mappings below were validated via the `mitre-attack-mapping` skill in Stage 1. Sub-technique selection corrections have been applied: process injection maps to T1055 (parent) plus T1055.002 (Portable Executable Injection sub-technique), NOT T1055.003 (Thread Execution Hijacking) or T1055.012 (Process Hollowing), because the injector writes a full PE plus its RDI bootstrap into the target's allocated memory, then resumes a new thread at the bootstrap entry. **T1055.001 (DLL Injection) was considered but rejected** because the injected payload includes its own RDI bootstrap rather than relying on `LoadLibrary`. The RDI bootstrap performs the in-memory PE-mapping work that `LoadLibrary` would otherwise do, which is the discriminating feature between T1055.002 (a PE is written and reflectively mapped) and T1055.001 (a path is passed to `LoadLibrary`). Initial Access is not mapped (delivery vector not observed). Impact is not mapped (no destructive techniques observed in the toolkit).
 
@@ -773,6 +780,7 @@ By tactic the coverage runs 9 of 14. Initial Access (TA0001) is unmapped because
 
 ## 7. Infrastructure Analysis
 {: .hl-tier-2}
+{: .hl-tab-timeline}
 
 > **Analyst note:** Infrastructure analysis maps the operator's hosting decisions, attribution overlap potential, and takedown resilience. Findings here are derived from passive observation (no port scanning was performed against the operator). Where VirusTotal lookups were blocked by quota during the original analysis, those gaps are noted.
 
@@ -843,6 +851,7 @@ The static-since-discovery profile is the most telling temporal signal in this c
 
 ## 8. Threat Actor Assessment
 {: .hl-tier-2}
+{: .hl-tab-attribution}
 
 > **Note on UTA identifiers:** "UTA" stands for Unattributed Threat Actor. <a href="/actors/UTA-2026-006/">UTA-2026-006</a> is a tracking label The Hunters Ledger assigns to an actor I have observed but cannot yet link to a publicly named threat group. Other vendors and feeds will not use this label; it is specific to this publication. If later evidence ties the activity to a named actor, I will retire the label and update the report.
 
@@ -914,6 +923,7 @@ The following actions would materially increase attribution confidence:
 
 ## 9. Cohort Context: AdaptixC2 in the Threat Landscape
 {: .hl-tier-2}
+{: .hl-tab-attribution}
 
 > **Analyst note:** The remainder of this section provides the public-reporting context that frames this operator's deployment within the broader AdaptixC2 ecosystem. It is included to support detection prioritization (defenders need to recognize the framework, not just this campaign) and to scope the cohort alignment that supports <a href="/actors/UTA-2026-006/">UTA-2026-006</a>'s risk framing.
 
@@ -949,6 +959,7 @@ The detection-engineering implication is significant: **defending against Adapti
 
 ## 10. Detection & Response
 {: .hl-tier-2}
+{: .hl-tab-indicators}
 
 ### 10.1 Detection content (linked package)
 
@@ -1023,6 +1034,7 @@ One refinement to how the RC4 key should be treated. The key is not rotated auto
 
 ## 11. Indicators of Compromise
 {: .hl-tier-2}
+{: .hl-tab-indicators}
 
 > **Currency warning, added August 2026.** `45.130.148.125` no longer hosts this infrastructure. Both the staging directory on port 8888 and the C2 listener on port 80 are gone, and the address now answers on port 80 with an nginx redirect to an unrelated commercial website. **Treat the IP as a historical indicator only.** Blocking it today will not stop this actor and will interfere with a legitimate third-party service, so it belongs in retrospective hunting against archived telemetry rather than in an active blocklist. The file hashes, the loader and injector fingerprints, the build-environment strings and the framework-level network signatures are all unaffected by this change and remain current.
 
@@ -1078,6 +1090,7 @@ For defender posture, block the network indicators above as additional AdaptixC2
 
 ## 12. Response Orientation
 {: .hl-tier-2}
+{: .hl-tab-indicators}
 
 This is a brief orientation for defenders who need to know *what to address*, not *how to address it*. Detailed incident response is the responsibility of the responding team's internal IR playbooks and is out of scope for this publication.
 
@@ -1104,6 +1117,7 @@ This is a brief orientation for defenders who need to know *what to address*, no
 
 ## 13. Confidence Summary
 {: .hl-tier-2}
+{: .hl-tab-confidence}
 
 Findings are organized below by the project-standard confidence framework. The list is not exhaustive but captures the assessments that drive the report's conclusions.
 
@@ -1139,6 +1153,7 @@ Findings are organized below by the project-standard confidence framework. The l
 
 ## Gaps & Assumptions
 {: .hl-tier-2}
+{: .hl-tab-confidence}
 
 A consolidated list of the assumptions underlying this analysis, the alternative hypotheses considered but not adopted, and the evidence that would resolve each. Readers should treat this section as the explicit list of "what would change my mind", both for personal due diligence and for downstream stakeholder communication.
 
@@ -1174,6 +1189,7 @@ The AdaptixC2 framework is GPL-3.0 open-source on GitHub (github.com/Adaptix-Fra
 
 ## FAQ / Key Intelligence Questions
 {: .hl-tier-2}
+{: .hl-tab-confidence}
 
 Quick answers to the questions analysts most frequently ask of a report like this one.
 
@@ -1207,6 +1223,7 @@ Both, but for different purposes. Framework-level detection (HTTP fingerprint, R
 
 ## 14. References and Further Reading
 {: .hl-tier-2}
+{: .hl-tab-confidence}
 
 The following Tier-1 and Tier-2 sources informed this report's threat-landscape context. Specific URLs are not embedded in this report; readers can locate the cited reports through the vendor names and publication dates below.
 
