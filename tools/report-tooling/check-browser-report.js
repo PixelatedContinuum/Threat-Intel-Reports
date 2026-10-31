@@ -57,7 +57,7 @@ function notChecked(reason) {
   process.exit(2);
 }
 
-var CDP, SERVER, TRIAGE, yaml, KS, CTABS;
+var CDP, SERVER, TRIAGE, yaml, KS, CTABS, BOXFIT;
 try {
   CDP = require('./lib/cdp.js');
   SERVER = require('./lib/page-server.js');
@@ -65,6 +65,7 @@ try {
   yaml = require('js-yaml');
   KS = require('./lib/kramdown-slug.js');
   CTABS = require('./check-tabs.js');
+  BOXFIT = require('./lib/box-fit.js');
 } catch (e) {
   notChecked(e.message + '. Run `npm ci` in tools/report-tooling, then re-run.');
 }
@@ -2161,6 +2162,92 @@ async function tabTargetRows(page, url) {
   }
 }
 
+/* T-0500.1.9.1: box fit. Two rows and three controls (lib/box-fit.js says what is measured and what is excluded, with its reasons).
+   The page-level scroll row above sees only a page that moves sideways; Joseph found, on a phone, the next/previous cards 44px tall
+   with their text hanging 100px below and their accent edge a third of their text, and no row saw it.
+     1. no element hangs out of its box: on every tab and in one-page mode, at the five tab viewports, with every teardown open
+     2. every accent edge is as long as the block it marks
+   Controls, each a copy of the page served with ONE appended rule (page-server `files`), each naming the next/previous card (every tab
+   of a multi-tab report has one):
+     wide      a card given a fixed 80px width and nowrap text: the hang row must FAIL, the bar row must PASS
+     short     a card whose accent edge is a 3px strip 20px long on a taller card: the bar row must FAIL, the hang row must PASS
+     shipped   the defect itself, restored: at 390px a card in the column list takes flex 1 1 0 and is held at 44px by the control
+               floor: BOTH rows must FAIL
+   A control whose selector is not on the page, or whose mutation moved nothing, is NOT CHECKED, never a pass. */
+var BOX_CSS_PATH = '/assets/css/hl-report-tabs.css';
+var BOX_CONTROLS = [
+  { key: 'wide', vp: [1280, 900, 'desktop'], hang: false, bar: true,
+    css: '\n.hl-report-page .hl-rv-nextprev a { width: 80px !important; flex: none !important; white-space: nowrap !important; }\n' },
+  { key: 'short', vp: [1280, 900, 'desktop'], hang: true, bar: false,
+    css: '\n.hl-report-page .hl-rv-nextprev a { position: relative !important; border-left-width: 1px !important; }\n' +
+      '.hl-report-page .hl-rv-nextprev a::before { content: ""; position: absolute; left: -1px; top: 0; width: 3px; height: 20px; background: var(--acc); }\n' },
+  { key: 'shipped', vp: [390, 844, 'phone'], hang: false, bar: false,
+    css: '\n@media (max-width: 699px) { .hl-report-page .hl-rv-nextprev a { flex: 1 1 0 !important; } }\n' }
+];
+async function boxFitState(page, label, hash) {
+  await page.evaluate('location.hash=' + JSON.stringify(hash));
+  await CDP.sleep(90);
+  /* every teardown open and, on a phone, every data view's body open: a closed one is the reader's to open, a defect inside it is still a defect */
+  await page.evaluate('(function(){document.querySelectorAll("details").forEach(function(d){d.open=true;});' +
+    'document.querySelectorAll("button[aria-expanded=false][id^=hl-rv-toggle-]").forEach(function(b){b.click();});})()');
+  await CDP.sleep(120);
+  var m = await page.json(BOXFIT.EXPR);
+  m.label = label;
+  if (m.notChecked) return { label: label, notChecked: m.notChecked };
+  return m;
+}
+async function boxFitMeasure(page, url) {
+  var states = [];
+  for (var v = 0; v < TAB_VIEWPORTS.length; v++) {
+    var w = TAB_VIEWPORTS[v][0], h = TAB_VIEWPORTS[v][1];
+    await setViewport(page, w, h);
+    if (!(await gotoAndWait(page, url))) { states.push({ label: w + 'x' + h, notChecked: 'the tab controller never built at ' + w + 'x' + h }); continue; }
+    var views = liveTokens().map(function (t) { return ['#tab-' + t, t]; }).concat([['#one-page', 'one-page']]);
+    for (var i = 0; i < views.length; i++) states.push(await boxFitState(page, w + 'x' + h + ' ' + views[i][1], views[i][0]));
+  }
+  return states;
+}
+async function boxFitRows(page, url, html) {
+  var nameHang = 'no element on any tab hangs out of its box, at the five tab viewports with every teardown open';
+  var nameBar = 'every accent edge is as long as the block it marks, at the five tab viewports with every teardown open';
+  var states = await boxFitMeasure(page, url);
+  [['hang', nameHang], ['bar', nameBar]].forEach(function (x) {
+    var v = BOXFIT.verdict(states, x[0]);
+    if (v.notChecked) check('NOT CHECKED: ' + x[1], false, v.detail);
+    else check(x[1], v.ok, v.detail);
+  });
+  var base;
+  try { base = fs.readFileSync(path.join(ROOT, 'assets', 'css', 'hl-report-tabs.css'), 'utf8'); } catch (e) { base = null; }
+  var tab = otherTab();
+  for (var c = 0; c < BOX_CONTROLS.length; c++) {
+    var ctl = BOX_CONTROLS[c];
+    var cname = 'control: on a copy of the page with ' + ({
+      wide: 'a next/previous card given content wider than its box, the hang row FAILS and the bar row PASSES',
+      short: 'a next/previous card whose accent edge is forced shorter than its block, the bar row FAILS and the hang row PASSES',
+      shipped: 'the 390px column-card defect restored (flex 1 1 0 held at 44px), both rows FAIL'
+    })[ctl.key];
+    if (!base) { check('NOT CHECKED: ' + cname, false, 'assets/css/hl-report-tabs.css could not be read, so no copy could be built'); continue; }
+    var cpath = new URL(url).pathname + '__box-fit-' + ctl.key + '/';
+    var srv = await SERVER.start({ [cpath]: html }, { root: ROOT, base: BASE, files: { [BOX_CSS_PATH]: base + ctl.css } });
+    try {
+      await setViewport(page, ctl.vp[0], ctl.vp[1]);
+      if (!(await gotoAndWait(page, srv.origin + cpath))) { check('NOT CHECKED: ' + cname, false, 'the tab controller never built on the control copy'); continue; }
+      if (!(await page.evaluate('!!document.querySelector("#tab-' + tab + ' .hl-rv-nextprev a")'))) {
+        check('NOT CHECKED: ' + cname, false, 'the page has no next/previous card on the ' + tab + ' tab, so the copy has nothing to change'); continue;
+      }
+      var st = await boxFitState(page, ctl.vp[0] + 'x' + ctl.vp[1] + ' ' + tab, '#tab-' + tab);
+      var hv = BOXFIT.verdict([st], 'hang'), bv = BOXFIT.verdict([st], 'bar');
+      if (hv.notChecked || bv.notChecked) { check('NOT CHECKED: ' + cname, false, 'the control copy measured no elements: ' + hv.detail); continue; }
+      var names = function (v) { return v.findings.some(function (f) { return /hl-rv-nextprev/.test(f.path); }); };
+      var hangOk = ctl.hang ? hv.ok : (!hv.ok && names(hv)), barOk = ctl.bar ? bv.ok : (!bv.ok && names(bv));
+      check(cname, hangOk && barOk,
+        'hang row: ' + (hv.ok ? 'PASS' : 'FAIL ' + hv.count + ' fault(s), first: ' + BOXFIT.describe(hv.findings[0])) +
+        ' | bar row: ' + (bv.ok ? 'PASS' : 'FAIL ' + bv.count + ' fault(s), first: ' + BOXFIT.describe(bv.findings[0])));
+    } finally { srv.close(); }
+  }
+  await restoreReportPage(page, url);
+}
+
 async function tabbedChecks(page, opts) {
   var url = opts.url;
 
@@ -2840,6 +2927,7 @@ async function tabbedChecks(page, opts) {
   await timelineRows(page, url);
   await attackStripRows(page, url, opts.html);
   await tabControlRows(page, url, opts.html);
+  await boxFitRows(page, url, opts.html);
 
   /* ---- 4a: the bar at 768/812x375, and the targets 4a names (p7) -------- */
   await tabBarRows(page, url);
@@ -3571,6 +3659,8 @@ if (require.main === module) {
     targetRowVerdict: targetRowVerdict,
     attackStripVerdict: attackStripVerdict,
     attackStripControlHtml: attackStripControlHtml,
-    ATTACK_STRIP_EXPR: ATTACK_STRIP_EXPR
+    ATTACK_STRIP_EXPR: ATTACK_STRIP_EXPR,
+    BOX_CONTROLS: BOX_CONTROLS,
+    boxFitRows: boxFitRows
   };
 }
