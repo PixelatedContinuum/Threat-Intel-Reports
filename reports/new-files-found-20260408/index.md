@@ -32,7 +32,7 @@ revisions:
     note: "Corrected the gen-4 beacon ID description: the ID mixes in the process ID, so it changes on every restart and is not a stable per-host identifier."
 ---
 
-**Campaign Identifier:** OpenStrike-CSBeacon-Toolkit-172.105.0.126<br>
+**Campaign Identifier:** OpenStrike-CSBeacon-Toolkit-172[.]105[.]0[.]126<br>
 **Last Updated:** April 8, 2026<br>
 **Threat Level:** HIGH
 
@@ -50,7 +50,7 @@ A previously identified threat actor, <a href="/actors/UTA-2026-004/">UTA-2026-0
 
 **What Was Found**
 
-Continued monitoring of the open directory at `172.105.0.126:8888` surfaced 106 additional files not present in the original investigation. Triage and deep-dive analysis across 18 selected samples revealed the full scope of the operator's toolkit:
+Continued monitoring of the open directory at `172[.]105[.]0[.]126:8888` surfaced 106 additional files not present in the original investigation. Triage and deep-dive analysis across 18 selected samples revealed the full scope of the operator's toolkit:
 
 - A 4-generation custom implant family (OpenStrike), with the newest generation still in development
 - The complete CS 4.9.1 "Pwn3rs" cracked installation with all post-exploitation capability modules
@@ -130,15 +130,15 @@ No immediate incident response is required. This toolkit is assessed as pre-oper
 {: .hl-tier-2}
 {: .hl-tab-overview}
 
-> **Analyst note:** This is a continuation of the original OpenStrike analysis I published April 6, 2026. Readers unfamiliar with that report are strongly encouraged to read it first, it establishes the OpenStrike family name, the Trinity Protocol cryptographic architecture, and the initial infrastructure profile for 172.105.0.126. Here I cover only what was new in the expanded file set.
+> **Analyst note:** This is a continuation of the original OpenStrike analysis I published April 6, 2026. Readers unfamiliar with that report are strongly encouraged to read it first, it establishes the OpenStrike family name, the Trinity Protocol cryptographic architecture, and the initial infrastructure profile for 172[.]105[.]0[.]126. Here I cover only what was new in the expanded file set.
 
-In the April 6 report ([/reports/open-directory-172-105-0-126-20260406/](/reports/open-directory-172-105-0-126-20260406/)) I documented 7 custom samples recovered from an open directory at `172.105.0.126:8888`, using an infrastructure-first discovery method that identified the toolkit before any victim could be confirmed. There I covered:
+In the April 6 report ([/reports/open-directory-172-105-0-126-20260406/](/reports/open-directory-172-105-0-126-20260406/)) I documented 7 custom samples recovered from an open directory at `172[.]105[.]0[.]126:8888`, using an infrastructure-first discovery method that identified the toolkit before any victim could be confirmed. There I covered:
 
 - OpenStrike gen-3 beacon (`beacon.exe`, 299KB, 11 commands, RSA-2048 Trinity Protocol)
 - 5 shellcode loader variants from a shared GCC 15 codebase
 - A cracked CS 3.x DLL with tripwired ReflectiveLoader
 - The "Trinity Protocol" cryptographic architecture (AES-128-CBC + HMAC-SHA256 + RSA-2048)
-- C2 infrastructure on ports 80, 8443 at `172.105.0.126`
+- C2 infrastructure on ports 80, 8443 at `172[.]105[.]0[.]126`
 
 **What this report adds:**
 
@@ -762,9 +762,9 @@ Six JavaScript templates recovered: `analytics.js` (credential harvester), `keyl
 {: .hl-tier-2}
 {: .hl-tab-timeline}
 
-### 5.1 Server Architecture: 172.105.0.126
+### 5.1 Server Architecture: 172[.]105[.]0[.]126
 
-The single VPS at `172.105.0.126` serves five distinct operational roles:
+The single VPS at `172[.]105[.]0[.]126` serves five distinct operational roles:
 
 | Port | Role | Evidence |
 |---|---|---|
@@ -825,7 +825,7 @@ The infrastructure pivot closed empty. The specific SSL cert SHA256 `6e8efd85...
 Watermark 987654321 is a high-prevalence pirated CS watermark found in multiple independent hunting datasets. Key documented associations:
 
 - svch0st's beacon hunting study (2021): among the most common non-zero watermarks in threat hunting datasets alongside 666666666 (Tier 3 source)
-- Intel Dalal / Medium: identified on infrastructure pointing to Tencent API Gateway (`service-owedaeao-1304783326.gz.tencentapigw.com.cn/api/x`), suggestive of Chinese-nexus origin (Tier 3 source)
+- Intel Dalal / Medium: identified on infrastructure pointing to Tencent API Gateway (`service-owedaeao-1304783326[.]gz[.]tencentapigw[.]com[.]cn/api/x`), suggestive of Chinese-nexus origin (Tier 3 source)
 - CybersecurityNews (DFIR Report attribution, 2024): found alongside `红队版.zip` containing TaoWu, Landon (CS extension frameworks), and Viper C2, characteristic of Chinese-language red team toolkit packaging
 
 **Critical finding, You Dun attribution rejected:** The You Dun group has been documented using watermark 987654321. The infrastructure analyst explicitly assessed this attribution as INSUFFICIENT: Canadian Linode hosting (atypical for documented You Dun infrastructure), zero Chinese-language strings in 106 samples, no Chinese domestic C2 patterns, and no key overlaps with documented You Dun infrastructure. The shared watermark is explained by shared distribution availability, not operational linkage.
@@ -986,7 +986,7 @@ IOCs are provided in structured machine-readable format. This feed contains only
 | SHA256 hashes | 22 |
 | MD5 hashes | 6 |
 | SHA1 hashes | 4 |
-| IPv4 + port combinations | 3 (ports 80, 809, 50050 on 172.105.0.126) |
+| IPv4 + port combinations | 3 (ports 80, 809, 50050 on 172[.]105[.]0[.]126) |
 | URLs | 6 |
 | Windows services | 2 (DceRpcSs, npf) |
 | User-Agent strings | 1 (IE9 BOIE9;ENUSSEM) |
@@ -998,7 +998,7 @@ IOCs are provided in structured machine-readable format. This feed contains only
 
 | Indicator | Type | Action |
 |---|---|---|
-| `172.105.0.126`, extend block to ports 809/50050 | IPv4 | Block (already in April 6 feed) |
+| `172[.]105[.]0[.]126`, extend block to ports 809/50050 | IPv4 | Block (already in April 6 feed) |
 | Service name `DceRpcSs` | Service | Hunt/alert, not a legitimate Windows service |
 | `\\.\pipe\MSSE-*-server` | Named pipe | Alert on creation (Sysmon Event 17) |
 | `C:\Windows\Temp\beacon.dll` | File path | Alert on creation (Sysmon Event 11) |
@@ -1068,8 +1068,8 @@ Deploy both detection files for full campaign coverage. Review for deduplication
 | Gap | Priority | Recommended Action |
 |---|---|---|
 | SSL cert `6e8efd85...`, no results in paid tools | CLOSED | Searched Shodan and Censys paid platforms, zero results. Cert is unique to this deployment or was never indexed. |
-| 172.105.0.126 infrastructure overview | CLOSED | Covered in the [April 6 report](/reports/open-directory-172-105-0-126-20260406/) infrastructure analysis. See original report Section 5 for full IP reputation and hosting details. |
-| Open directory current status | MEDIUM | Active probe or Shodan `ip:172.105.0.126 port:8888` |
+| 172[.]105[.]0[.]126 infrastructure overview | CLOSED | Covered in the [April 6 report](/reports/open-directory-172-105-0-126-20260406/) infrastructure analysis. See original report Section 5 for full IP reputation and hosting details. |
+| Open directory current status | MEDIUM | Active probe or Shodan `ip:172[.]105[.]0[.]126 port:8888` |
 | Trinity RSA-2048 key origin distribution | MEDIUM | Compare modulus `9f12c9cb...` against known CS 3.x cracks |
 | Watermark 987654321 auth file hash | LOW | Would confirm single vs. multiple distribution source |
 
@@ -1120,11 +1120,11 @@ Deploy both detection files for full campaign coverage. Review for deduplication
 
 **Containment categories:**
 
-- Block `172.105.0.126` at perimeter for all ports: extend existing April 6 block to ports 809 and 50050
+- Block `172[.]105[.]0[.]126` at perimeter for all ports: extend existing April 6 block to ports 809 and 50050
 - Alert or block SSL certificate SHA256 `6e8efd85110de376426cde809f25d50ffcbb1d0e39d11c82913757cb277e15dd` at TLS inspection points
 - Hunt for ICMP tunneling indicators on network egress monitoring
 - Deploy detection rules from [/hunting-detections/new-files-found-20260408-detections/](/hunting-detections/new-files-found-20260408-detections/)
-- Rotate credentials on any host confirmed to have communicated with 172.105.0.126
+- Rotate credentials on any host confirmed to have communicated with 172[.]105[.]0[.]126
 
 ---
 
@@ -1169,7 +1169,7 @@ Deploy both detection files for full campaign coverage. Review for deduplication
 
 The original April 6 report is at [/reports/open-directory-172-105-0-126-20260406/](/reports/open-directory-172-105-0-126-20260406/)
 
-The original investigation established the OpenStrike family name, the Trinity Protocol cryptographic architecture, <a href="/actors/UTA-2026-004/">UTA-2026-004</a> designation, and the initial infrastructure profile for 172.105.0.126. Both reports together constitute the complete public technical record of the OpenStrike campaign through April 8, 2026. Deploy IOC feeds and detection rules from both investigations for full coverage.
+The original investigation established the OpenStrike family name, the Trinity Protocol cryptographic architecture, <a href="/actors/UTA-2026-004/">UTA-2026-004</a> designation, and the initial infrastructure profile for 172[.]105[.]0[.]126. Both reports together constitute the complete public technical record of the OpenStrike campaign through April 8, 2026. Deploy IOC feeds and detection rules from both investigations for full coverage.
 
 ---
 
