@@ -403,6 +403,15 @@ function firstTab() { return liveTokens()[0]; }
 function otherTab() { var l = liveTokens(); return l.indexOf('chain') >= 0 && l[0] !== 'chain' ? 'chain' : (l[1] || l[0]); }
 /* Where the Sections-menu row starts, and what it must see before and after. With two or more tabs it starts on another tab.
    With one tab there is none, so it starts in one-page mode, where no tab is selected: the click must then select the tab. */
+/* T-0500.1.11 (b1fix): a step may only use a tab the page BUILT. hasTab asks the built set (liveTokens); clickToggle clicks a view's
+   toggle only if it is in the page and returns whether it did, so a missing control is a reported row and never a thrown error that
+   ends the whole gate (inkognito tags no timeline section and the fixture step clicked #hl-rv-toggle-timeline: "click target not present"). */
+function hasTab(token) { return liveTokens().indexOf(token) >= 0; }
+async function clickToggle(page, token) {
+  if (!(await page.evaluate('!!document.getElementById("hl-rv-toggle-' + token + '")'))) return false;
+  await page.click('#hl-rv-toggle-' + token);
+  return true;
+}
 function menuStartHash(first, other) { return first === other ? '#one-page' : '#tab-' + other; }
 function menuSelectVerdict(beforeId, afterId, first, other) {
   var expectedBefore = first === other ? null : 'tabbtn-' + other;
@@ -961,13 +970,18 @@ function timelineInjectedFixtureHtml(html) {
   return str.slice(0, m.index) + block + str.slice(m.index);
 }
 /* Which fixture the thinning rows run on: the report's own chronology scaled to 25 rows, or (the report has none) the injected one. */
-function timelineFixturePlan(html, shapes) {
-  var derived = timelineFixtureHtml(html);
+function timelineFixturePlan(html, shapes, timelineTabBuilt) {
+  /* T-0500.1.11: a fixture derived from the report's own dated table builds a timeline view only if the page builds a Timeline tab
+     (the table sits in whatever section the report put it in: inkognito's two Date / Event tables are in Attack chain sections). With no
+     Timeline tab the derived fixture would have nothing to draw, so the layout's thinning is exercised on the injected chronology
+     instead, and the row says so. timelineTabBuilt undefined means the caller did not ask (the older calls). */
+  var noTab = timelineTabBuilt === false;
+  var derived = noTab ? null : timelineFixtureHtml(html);
   if (derived) return { kind: 'derived', html: derived };
-  if (shapes && shapes.timeline && shapes.timeline.shape === false) {
+  if (noTab || (shapes && shapes.timeline && shapes.timeline.shape === false)) {
     var injected = timelineInjectedFixtureHtml(html);
     if (injected) return { kind: 'injected', html: injected };
-    return { kind: 'none', html: null, reason: 'the report has no chronology table and the fetched page has no tab section to inject one before' };
+    return { kind: 'none', html: null, reason: (noTab ? 'the page builds no Timeline tab' : 'the report has no chronology table') + ' and the fetched page has no tab section to inject one before' };
   }
   return { kind: 'none', html: null, reason: 'the fetched page has no Date/Time/When table to build the fixture from' };
 }
@@ -1757,11 +1771,15 @@ function attackStripControlHtml(html) {
 }
 async function attackStripRows(page, url, html) {
   var name = 'the Attack chain tab draws the ATT&CK coverage strip with a working Navigator layer download';
+  /* T-0500.1.11: the strip is drawn next to the report's ATT&CK mapping table, in the Attack chain tab when the page builds one and in
+     whichever tab holds that table otherwise (a one-tab report: the Overview, as the gate has always measured it). The page is opened
+     on a tab it built; asking for #tab-chain on a page without one selected nothing. */
+  var stripTab = hasTab('chain') ? 'chain' : firstTab();
   var states = [[1280, 900], [390, 844]];
   for (var i = 0; i < states.length; i++) {
     await setViewport(page, states[i][0], states[i][1]);
     var label = states[i][0] + 'x' + states[i][1] + ': ' + name;
-    if (!(await gotoAndWait(page, url + '#tab-chain'))) { check('NOT CHECKED: ' + label, false, 'the tab controller never built, so nothing was measured'); continue; }
+    if (!(await gotoAndWait(page, url + '#tab-' + stripTab))) { check('NOT CHECKED: ' + label, false, 'the tab controller never built, so nothing was measured'); continue; }
     await CDP.sleep(250);
     var v = attackStripVerdict(JSON.parse(await page.evaluate(ATTACK_STRIP_EXPR)));
     if (v.notChecked) check('NOT CHECKED: ' + label, false, v.detail);
@@ -1775,7 +1793,7 @@ async function attackStripRows(page, url, html) {
   var csrv = await SERVER.start({ [cpath]: ctl }, { root: ROOT, base: BASE });
   try {
     await setViewport(page, 1280, 900);
-    if (!(await gotoAndWait(page, csrv.origin + cpath + '#tab-chain'))) { check('NOT CHECKED: ' + cname, false, 'the tab controller never built on the control copy'); return; }
+    if (!(await gotoAndWait(page, csrv.origin + cpath + '#tab-' + stripTab))) { check('NOT CHECKED: ' + cname, false, 'the tab controller never built on the control copy'); return; }
     await CDP.sleep(250);
     var cv = attackStripVerdict(JSON.parse(await page.evaluate(ATTACK_STRIP_EXPR)));
     if (cv.notChecked) check('NOT CHECKED: ' + cname, false, cv.detail);
@@ -1794,7 +1812,7 @@ async function attackStripRows(page, url, html) {
     var psrv = await SERVER.start({ [ppath]: html }, { root: ROOT, base: BASE, files: { '/assets/js/attack-coverage.js': partial } });
     try {
       await setViewport(page, 1280, 900);
-      if (!(await gotoAndWait(page, psrv.origin + ppath + '#tab-chain'))) check('NOT CHECKED: ' + pname, false, 'the tab controller never built on the control copy');
+      if (!(await gotoAndWait(page, psrv.origin + ppath + '#tab-' + stripTab))) check('NOT CHECKED: ' + pname, false, 'the tab controller never built on the control copy');
       else {
         await CDP.sleep(250);
         var pm = JSON.parse(await page.evaluate(ATTACK_STRIP_EXPR));
@@ -2129,7 +2147,7 @@ async function timelineRows(page, url) {
     var w = TIMELINE_VIEWPORTS[i][0], h = TIMELINE_VIEWPORTS[i][1];
     await setViewport(page, w, h);
     if (!(await gotoAndWait(page, url))) { check('NOT CHECKED: ' + w + 'x' + h + ': ' + nameA, false, 'the tab controller never built, so nothing was measured'); check('NOT CHECKED: ' + w + 'x' + h + ': ' + nameB, false, 'the tab controller never built, so nothing was measured'); continue; }
-    await page.evaluate('location.hash="#tab-timeline"');
+    if (hasTab('timeline')) await page.evaluate('location.hash="#tab-timeline"');
     await CDP.sleep(450);
     /* on a phone the data view starts folded: open it, as a reader would, before measuring */
     await page.evaluate('(function(){var b=document.querySelector("#tab-timeline .hl-rv-view-summary button");if(b&&b.getAttribute("aria-expanded")==="false")b.click();})()');
@@ -2237,7 +2255,7 @@ async function tabTargetRows(page, url) {
         card = await page.json('(function(t){var b=document.getElementById("hl-rv-view-"+t);' +
           'return b?b.hidden:false;})(' + JSON.stringify(token) + ')');
         if (card) {
-          await page.click('#hl-rv-toggle-' + token);
+          card = await clickToggle(page, token);
           await CDP.sleep(140);
         }
       }
@@ -2247,7 +2265,7 @@ async function tabTargetRows(page, url) {
         links = links.concat(m.nav);
       }
       if (card) {
-        await page.click('#hl-rv-toggle-' + token);
+        await clickToggle(page, token);
         await CDP.sleep(80);
       }
     }
@@ -2871,8 +2889,9 @@ async function tabbedChecks(page, opts) {
          measured at all. Open the card with its own control, measure, close it
          again: 4a asks for the dashboard views' targets, and a control that only
          appears after one tap is still a tap target. */
+      var tgOpened = false;
       if (width < 700) {
-        await page.click('#hl-rv-toggle-' + token);
+        tgOpened = await clickToggle(page, token);
         await CDP.sleep(80);
       }
       var tg = await page.json(targetsExpr(token));
@@ -2898,8 +2917,8 @@ async function tabbedChecks(page, opts) {
         });
         if (tx.smallCount > tx.small.length) textSmallList.push(width + ' ' + token + ': ' + (tx.smallCount - tx.small.length) + ' more');
       }
-      if (width < 700) {
-        await page.click('#hl-rv-toggle-' + token);
+      if (tgOpened) {
+        await clickToggle(page, token);
         await CDP.sleep(60);
       }
     }
@@ -2991,7 +3010,7 @@ async function tabbedChecks(page, opts) {
         'tables:tables.length};})(' + JSON.stringify(ct) + ')');
       var panelWidth = await page.json('(function(){var panel=document.getElementById("tab-' +
         ct + '");return panel.clientWidth;})()');
-      await page.click('#hl-rv-toggle-' + ct);
+      var hadToggle = await clickToggle(page, ct);
       await CDP.sleep(120);
       var after = await page.json('(function(t){var panel=document.getElementById("tab-"+t);' +
         'var sum=panel.querySelector(".hl-rv-view-summary p");' +
@@ -3036,7 +3055,7 @@ async function tabbedChecks(page, opts) {
         cardProblems.push(ct + ': ' + before.wideTables + ' of ' + before.tables +
           ' dashboard tables wider than the ' + panelWidth + ' px panel');
       }
-      await page.click('#hl-rv-toggle-' + ct);
+      if (hadToggle) await clickToggle(page, ct);
       await CDP.sleep(60);
     }
     check(width + ' px: every view opens as a compact card',
@@ -3209,9 +3228,9 @@ async function tabbedChecks(page, opts) {
   }
 
   /* ---- the 25-date timeline fixture (5.4) ------------------------------- */
-  var plan = timelineFixturePlan(opts.html, SHAPES);
+  var plan = timelineFixturePlan(opts.html, SHAPES, hasTab('timeline'));
   var fixture = plan.html;
-  var fx = plan.kind === 'injected' ? ' (a chronology the gate injected: the report has none)' : '';
+  var fx = plan.kind === 'injected' ? ' (a chronology the gate injected: ' + (hasTab('timeline') ? 'the report has none' : 'the page builds no Timeline tab') + ')' : '';
   if (!fixture) {
     check('NOT CHECKED: the 25-date timeline fixture', false, plan.reason);
     await restoreReportPage(page, url);
@@ -3231,7 +3250,7 @@ async function tabbedChecks(page, opts) {
         continue;
       }
       if (fw < 480) {
-        await page.click('#hl-rv-toggle-timeline');
+        if (!(await clickToggle(page, 'timeline'))) { vertical = { count: 0, shown: 0, noToggle: true }; continue; }
         await CDP.sleep(200);
         vertical = await page.json('(function(){' +
           'var ls=[].slice.call(document.querySelectorAll("#tab-timeline .hl-rv-vertical-timeline li"));' +
@@ -3256,7 +3275,7 @@ async function tabbedChecks(page, opts) {
         }).join('; '));
       check('below 480 px the 25-date fixture turns vertical with every event' + fx,
         !!vertical && vertical.shown === 25,
-        vertical ? vertical.shown + ' of 25 events painted vertically' : 'no vertical list built');
+        vertical ? vertical.shown + ' of 25 events painted vertically' + (vertical.noToggle ? ' (the fixture has no #hl-rv-toggle-timeline to open)' : '') : 'no vertical list built');
       /* The control (Sol review F4): the same fixture on a layout that does not thin. The thinning row must FAIL on it, so a PASS above is
          a measured one and not a row that cannot see an unthinned axis. */
       var cname = 'control: the thinning row FAILS on a copy of the fixture whose layout never thins its labels';
@@ -3287,7 +3306,7 @@ async function tabbedChecks(page, opts) {
 async function restoreReportPage(page, url) {
   await setViewport(page, 1280, 900);
   await gotoAndWait(page, url);
-  await page.evaluate('location.hash="#tab-overview"');
+  await page.evaluate('location.hash="#tab-' + firstTab() + '"');
   await CDP.sleep(120);
   /* The figure-nav chips are report content and live in whichever tab their
      section belongs to, so the shared chip checks below would measure a 0 px
@@ -3852,6 +3871,9 @@ if (require.main === module) {
     LANDMARK_EXPR: LANDMARK_EXPR,
     menuSelectVerdict: menuSelectVerdict,
     menuStartHash: menuStartHash,
+    hasTab: hasTab,
+    clickToggle: clickToggle,
+    setLiveTokens: function (t) { LIVE_TOKENS = t; },
     BOX_INJECT_CARD_EXPR: BOX_INJECT_CARD_EXPR,
     panelStackVerdict: panelStackVerdict,
     featuredSponsorVerdict: featuredSponsorVerdict,

@@ -186,9 +186,13 @@ test('a slug with a vault copy resolves to the vault copy, compared with the sit
   assert.equal(a.h2.length, 20);
 });
 
-test('the published markdown has no tab tags yet, so no tab assignment is invented', function () {
-  var a = G.readAuthored(PILOT);
-  assert.equal(a.tabs, null);
+test('the published markdown carries the tab tags the preview carries (T-0500.1.11 batch 1 tagged it), and a tagged-nowhere text still gives no assignment', function () {
+  /* it used to assert a.tabs === null: the pilot original had no tab lines. Batch 1 (516c7c5) tagged it with the preview's 20 lines. */
+  var a = G.readAuthored(PILOT), b = G.readAuthored(PREVIEW);
+  assert.equal(Object.keys(a.tabs).length, 20, '20 tagged sections');
+  assert.deepEqual(a.tabs, b.tabs, 'the published markdown and the preview agree on every section\'s tab');
+  var untagged = G.readAuthored('no-such-report-folder-t0500-1-11');
+  assert.ok(!untagged || !untagged.tabs, 'an unreadable text invents no assignment');
 });
 
 test('every authored h3 is mapped to the h2 above it (D8)', function () {

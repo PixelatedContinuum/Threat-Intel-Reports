@@ -137,6 +137,8 @@ html:has(.hl-report-page) .hl-back-top { display: none !important; }
 }
 .hl-report-page .hl-post-header__badge { padding: 2px 10px; border: 1px solid color-mix(in srgb, var(--acc) 30%, transparent); background: color-mix(in srgb, var(--acc) 9%, transparent); border-radius: 3px; color: var(--acc); }
 .hl-report-page .hl-post-header__date, .hl-report-page .hl-read-time { color: var(--rv-muted); }
+/* the "Updated <date>" link sits inside the date label: custom.scss gives it 0.9em, which on the 14px mono recipe above measured 12.6px, under the 13px chrome floor (T-0500.1.11 b1b); it takes the label's own size */
+.hl-report-page .hl-post-header__date .hl-last-updated { font-size: inherit; }
 .hl-report-page .hl-rv-threat { color: var(--rv-bad); border: 0; background: none; padding: 0; border-radius: 0; }
 .hl-report-page .hl-rv-threat::before { content: ''; width: 7px; height: 7px; border-radius: 50%; background: currentColor; }
 /* the share icon: top-right corner of the header box, 44px, built by the script (absent with scripts off). The eyebrow keeps 52px clear of it. */
