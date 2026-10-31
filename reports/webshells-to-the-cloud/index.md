@@ -112,17 +112,17 @@ Defenders should block known infrastructure (`45[.]118[.]144[.]151:8081`, `152[.
   <tbody>
     <tr>
       <td><strong>Primary C2 Server</strong></td>
-      <td>45.118.144[.]151:8081</td>
+      <td>45[.]118[.]144[.]151:8081</td>
       <td>Initial webshell deployment and backdoor hosting</td>
     </tr>
     <tr>
       <td><strong>Exploitation Server</strong></td>
-      <td>152.32.191[.]156:8081</td>
+      <td>152[.]32[.]191[.]156:8081</td>
       <td>Exploit kits, payload delivery, and automation</td>
     </tr>
     <tr>
       <td><strong>Content Delivery</strong></td>
-      <td>juyu1[.]yifanyi.app</td>
+      <td>juyu1[.]yifanyi[.]app</td>
       <td>Malicious content distribution and SEO poisoning</td>
     </tr>
     <tr>
@@ -135,7 +135,7 @@ Defenders should block known infrastructure (`45[.]118[.]144[.]151:8081`, `152[.
 
 ---
 
-### Phase 1: Initial Discovery (45.118.144[.]151)
+### Phase 1: Initial Discovery (45[.]118[.]144[.]151)
 
 > **Analyst note:** This phase covers the attacker's first-stage implants: a backdoored PHP page that executes only attacker-signed payloads, a general-purpose command shell, and a traffic redirector. Understanding the RSA-keyed execution gate is key, it blocks any third party from reusing these backdoors against the same victims.
 
@@ -168,13 +168,13 @@ Defenders should block known infrastructure (`45[.]118[.]144[.]151:8081`, `152[.
 - Cloaks behavior for Googlebot (`?googlebot`).  
 - **Implication:** SEO poisoning, phishing, or malware delivery.  
 - **Hunting Highlights:**  
-  - PHP files with `file_get_contents("http://shellcp.info/...")`  
+  - PHP files with `file_get_contents("hxxp://shellcp[.]info/...")`  
   - Outbound HTTP requests to `shellcp[.]info`  
   - Cloaking logic tied to "oogle" in User‑Agent  
 
 ---
 
-### Phase 2: Pivot & Exploitation (152.32.191[.]156)
+### Phase 2: Pivot & Exploitation (152[.]32[.]191[.]156)
 
 > **Analyst note:** This phase covers the exploit kits targeting CloudPanel, a web hosting control panel. The exploit chain forges an authentication cookie to bypass access controls, then creates and uploads a command shell. Attackers also create a persistent OS-level account as a fallback.
 
@@ -208,7 +208,7 @@ Defenders should block known infrastructure (`45[.]118[.]144[.]151:8081`, `152[.
 - **AWS:** Ami.php, Instance.php, Regions.php → S3 exfiltration, destructive actions possible.  
 
 **Hunting Highlights**  
-- Outbound traffic to `api.dropboxapi.com`.  
+- Outbound traffic to `api[.]dropboxapi[.]com`.  
 - Rclone process execution (`rclone`, `rclone.exe`).  
 - Unexpected S3 PutObject/DeleteObject events in CloudTrail.  
 - Large outbound transfers to cloud storage from servers without backup roles.  
@@ -251,7 +251,7 @@ Defenders should block known infrastructure (`45[.]118[.]144[.]151:8081`, `152[.
     <tr>
       <td><strong>Initial Access</strong></td>
       <td>CloudPanel 0-day exploit kits, PHP backdoors</td>
-      <td>45.118.144[.]151:8081</td>
+      <td>45[.]118[.]144[.]151:8081</td>
       <td class="high">CRITICAL - Server compromise</td>
     </tr>
     <tr>
