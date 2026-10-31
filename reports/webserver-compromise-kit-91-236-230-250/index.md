@@ -28,7 +28,7 @@ stix_bundle: /stix/webserver-compromise-kit-91-236-230-250.json
 ---
 
 
-**Campaign Identifier:** WebServer-Compromise-Kit-91.236.230.250<br>
+**Campaign Identifier:** WebServer-Compromise-Kit-91[.]236[.]230[.]250<br>
 **Last Updated:** February 10, 2026<br>
 **Threat Level:** HIGH
 
@@ -39,19 +39,19 @@ stix_bundle: /stix/webserver-compromise-kit-91-236-230-250.json
 {: .hl-tier-1}
 {: .hl-tab-overview}
 
-A three-component post-exploitation kit hosted on an open directory at `91.236.230.250` provides everything an attacker needs to compromise an IIS/.NET web server: an ASP.NET reverse shell (`a.png`) for command execution, PrintSpoofer for escalation to NT AUTHORITY\SYSTEM, and revsocks (`rev.exe`) for persistent network pivoting. All three tools are publicly available red team utilities (none are modified) meaning technique-based detection takes priority over hash-based blocking. Block `91.236.230.250` immediately; deploy detection rules targeting IIS spawning command shells, PrintSpoofer named pipe creation, and anomalous outbound proxy traffic.
+A three-component post-exploitation kit hosted on an open directory at `91[.]236[.]230[.]250` provides everything an attacker needs to compromise an IIS/.NET web server: an ASP.NET reverse shell (`a.png`) for command execution, PrintSpoofer for escalation to NT AUTHORITY\SYSTEM, and revsocks (`rev.exe`) for persistent network pivoting. All three tools are publicly available red team utilities (none are modified) meaning technique-based detection takes priority over hash-based blocking. Block `91[.]236[.]230[.]250` immediately; deploy detection rules targeting IIS spawning command shells, PrintSpoofer named pipe creation, and anomalous outbound proxy traffic.
 
 ## Executive Summary
 {: .hl-tier-1}
 {: .hl-tab-overview}
 
-An open directory at `91.236.230.250` exposes a complete post-exploitation toolkit for IIS/.NET web servers: an ASP.NET reverse shell for initial access, a privilege escalation binary for SYSTEM-level control, and a reverse SOCKS proxy for persistent network tunneling and lateral movement.
+An open directory at `91[.]236[.]230[.]250` exposes a complete post-exploitation toolkit for IIS/.NET web servers: an ASP.NET reverse shell for initial access, a privilege escalation binary for SYSTEM-level control, and a reverse SOCKS proxy for persistent network tunneling and lateral movement.
 
 **Key Findings:**
 
 - **Multi-Stage Intrusion Kit:** Three coordinated tools (ASP.NET reverse shell, privilege escalation, network pivoting)
-- **Critical Infrastructure:** Open directory at `http://91.236.230.250/` providing public access to complete toolkit
-- **Malicious Infrastructure:** Single IP address (91.236.230.250) hosted on BlueVPS AS62005 (United States)
+- **Critical Infrastructure:** Open directory at `hxxp://91[.]236[.]230[.]250/` providing public access to complete toolkit
+- **Malicious Infrastructure:** Single IP address (91[.]236[.]230[.]250) hosted on BlueVPS AS62005 (United States)
 
 **Threat Assessment:**
 
@@ -62,7 +62,7 @@ This toolkit enables a complete compromise workflow:
 
 The presence of an open directory suggests either operational security failure or intentional "public toolkit" distribution for multiple actors. All three tools are legitimate red team utilities repurposed for malicious use, complicating attribution and demonstrating the actor's reliance on proven, publicly available capabilities.
 
-Defensive priority is CRITICAL. Block the infrastructure at 91.236.230.250 immediately and deploy detection rules targeting the distinctive behavioral patterns, IIS spawning command shells, PrintSpoofer named pipe creation, and reverse SOCKS proxy execution.
+Defensive priority is CRITICAL. Block the infrastructure at 91[.]236[.]230[.]250 immediately and deploy detection rules targeting the distinctive behavioral patterns, IIS spawning command shells, PrintSpoofer named pipe creation, and reverse SOCKS proxy execution.
 
 ---
 
@@ -74,7 +74,7 @@ This campaign targets any internet-exposed IIS/.NET application, with no sector 
 
 ### Campaign Overview
 
-**Campaign Identifier:** WebServer-Compromise-Kit-91.236.230.250<br>
+**Campaign Identifier:** WebServer-Compromise-Kit-91[.]236[.]230[.]250<br>
 I discovered this on 6 February 2026.
 The infrastructure was active as of 8 February 2026.
 Targeting is opportunistic, reaching any organization running vulnerable IIS or .NET applications.
@@ -138,7 +138,7 @@ The reverse proxy capabilities (DNS tunneling, WebSocket encapsulation) indicate
 - **SHA-256:** 238a9850787c9336ec56114f346e39088ad63de1c6a1d7d798292a7fb4577738
 
 **Hardcoded Configuration:**
-- **C2 IP:** 91.236.230.250
+- **C2 IP:** 91[.]236[.]230[.]250
 - **C2 Port:** 443/TCP (HTTPS port for firewall evasion)
 - **Banner:** "Spawn Shell...\n" (unique network signature)
 
@@ -158,7 +158,7 @@ Unlike standard ASP.NET applications that use managed .NET classes like `System.
 **Execution Flow:**
 
 1. **Trigger:** When `a.png` is requested via HTTP/HTTPS, the `Page_Load` event fires
-2. **Configuration:** Sets `host = "91.236.230.250"` and `port = 443`
+2. **Configuration:** Sets `host = "91[.]236[.]230[.]250"` and `port = 443`
 3. **Connection:** Calls `CallbackShell(host, port)` to establish outbound connection
 
 <figure style="text-align: center; margin: 2em 0;">
@@ -198,7 +198,7 @@ The attacker receives an interactive `cmd.exe` shell, and the `WaitForSingleObje
 #### Detection Opportunities
 
 **High-Confidence Network Indicators:**
-1. Outbound TCP to 91.236.230.250:443 from `w3wp.exe`
+1. Outbound TCP to 91[.]236[.]230[.]250:443 from `w3wp.exe`
 2. TCP payload contains "Spawn Shell..." banner
 3. Non-TLS traffic on port 443 (DPI opportunity)
 
@@ -347,12 +347,12 @@ Uses `RpcRemoteFindFirstPrinterChangeNotificationEx` to instruct Print Spooler t
 {: .hl-tier-2}
 {: .hl-tab-timeline}
 
-The entire kit (C2 listener and malware distribution) runs on a single commodity VPS at `91.236.230.250`, indicating a minimal, single-operator setup rather than resilient criminal infrastructure.
+The entire kit (C2 listener and malware distribution) runs on a single commodity VPS at `91[.]236[.]230[.]250`, indicating a minimal, single-operator setup rather than resilient criminal infrastructure.
 
 ### Malicious Infrastructure Profile
 
 **Primary C2 Server:**
-- **IP:** 91.236.230.250
+- **IP:** 91[.]236[.]230[.]250
 - **ASN:** AS62005 (BlueVPS OU)
 - **Location:** United States (Organization: Estonia)
 - **Tier:** Low-cost VPS hosting (commodity infrastructure)
@@ -403,7 +403,7 @@ Abuse tolerance is moderate to low.
 
 **Stage 2: Initial Access**
 - HTTP request to `a.png`
-- Reverse shell to 91.236.230.250:443
+- Reverse shell to 91[.]236[.]230[.]250:443
 
 **Stage 3: Toolkit Download**
 - Download PrintSpoofer.exe, rev.exe from open directory
@@ -464,7 +464,7 @@ It includes YARA, Sigma, Suricata and EDR queries.
 |-----------|----------|---------|-------|
 | IIS → cmd.exe | CRITICAL | Very Low | 2 |
 | Named Pipe `.*\pipe\spoolss` | CRITICAL | Very Low | 4 |
-| Connection to 91.236.230.250 | CRITICAL | None | All |
+| Connection to 91[.]236[.]230[.]250 | CRITICAL | None | All |
 | "Spawn Shell..." banner | CRITICAL | None | 2 |
 
 ### Hunting Queries
@@ -474,6 +474,7 @@ It includes YARA, Sigma, Suricata and EDR queries.
 Get-ChildItem C:\inetpub\wwwroot -Recurse -Include *.png,*.jpg,*.gif |
     Select-String -Pattern "\[DllImport\(", "Page_Load"
 ```
+{: .hl-copy}
 
 **Hunt 2: IIS Network Anomalies**
 ```kql
@@ -482,12 +483,14 @@ DeviceNetworkEvents
 | where RemoteIPType == "Public"
 | summarize by RemoteIP
 ```
+{: .hl-copy}
 
 **Hunt 3: PrintSpoofer Pipes**
 ```powershell
 Get-WinEvent -FilterHashtable @{LogName='Microsoft-Windows-Sysmon/Operational'; ID=17} |
     Where-Object {$_.Properties[2].Value -like "*spoolss"}
 ```
+{: .hl-copy}
 
 ---
 
@@ -505,10 +508,10 @@ Get-WinEvent -FilterHashtable @{LogName='Microsoft-Windows-Sysmon/Operational'; 
 ### Network Indicators
 
 **IP Addresses:**
-- `91.236.230.250` (C2 + Distribution) - **BLOCK**
+- `91[.]236[.]230[.]250` (C2 + Distribution) - **BLOCK**
 
 **URLs:**
-- `http://91.236.230.250/` (open directory)
+- `hxxp://91[.]236[.]230[.]250/` (open directory)
 
 **User-Agents:**
 - `Mozilla/5.0 (Windows NT 6.1; Trident/7.0; rv:11.0) like Gecko`
@@ -553,6 +556,7 @@ Get-WinEvent -FilterHashtable @{LogName='Microsoft-Windows-Sysmon/Operational'; 
 Block 91.236.230.250 (all ports)
 Add to threat feeds
 ```
+{: .hl-copy}
 
 **2. Abuse Reporting:**
 ```
@@ -574,6 +578,7 @@ Include: Malware hashes, screenshots
 Stop-Service Spooler
 Set-Service Spooler -StartupType Disabled
 ```
+{: .hl-copy}
 
 **2. IIS Hardening:**
 - Restrict file extensions
