@@ -55,6 +55,7 @@ stix_bundle: /stix/opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261
 
 ## 1. Executive Summary
 {: .hl-tier-1}
+{: .hl-tab-overview}
 
 The operator's own files show it running commands inside two Brazilian federal bodies, a federal social-security agency and a federal development bank, and working authenticated staff sessions at a state finance secretariat in the North region. Saved administrator pages from a state traffic department in the Northeast region and from a cloud services supplier sit in the same directory, though I cannot show the operator captured those itself. Beyond those five, the files name 87 more organisation rows across federal, state and municipal government, and every one of those stops at a probe reply, a refusal or a name on a list. Whether any of the access still works today is unknown. The latest dated host-side evidence at the bank is 2026-09-15, and the latest dated console replies at the agency are from 2026-10-02.
 
@@ -85,6 +86,7 @@ If you defend a Brazilian public body or a supplier to one, three checks are wor
 
 ## 2. Risk Assessment
 {: .hl-tier-1}
+{: .hl-tab-overview}
 
 I score the toolkit **7.8 out of 10, HIGH**, on what it can do, and I rate the campaign one level higher, at CRITICAL, on what it has already done. The gap between those two numbers is the point of this section. As software, almost nothing here is advanced. As an operation, it has shown command execution inside two federal institutions and holds key material that could still open doors if nobody has rotated it.
 
@@ -120,6 +122,7 @@ The finance secretariat's account table carries a similar tail. Its passwords ar
 
 ## 3. Who Was Hit, and How Far the Operator Got
 {: .hl-tier-2}
+{: .hl-tab-victims}
 
 Five organisations show inside or authenticated access, and the long list behind them is mostly probes. I grade every organisation on what the operator's own files prove, using four levels, and the levels matter because a name in a script is not a compromise.
 
@@ -155,6 +158,7 @@ Seven further assessment blocks cover systems whose owner I could not establish.
 
 ## 4. Technical Classification
 {: .hl-tier-2}
+{: .hl-tab-chain}
 
 This is an intrusion toolkit, not a malware family. There is no implant, no loader and no packed binary in the operator's own work. It is Python, PHP, shell and a little Java, wrapped around public exploits and legitimate management interfaces, and run from a hosted Linux server the operator used. I put family identification at INSUFFICIENT, because nothing in it matches a named family and nothing in it is distinctive enough to found one.
 
@@ -178,6 +182,7 @@ Two Windows executables on the operator's second host, 209.99.185[.]148, sit apa
 
 ## 5. The Attack Chain at a Glance
 {: .hl-tier-2}
+{: .hl-tab-chain}
 
 The operation runs in a recognisable order: study the target's public code and products, get in through a public-facing application, mine the inside for access material, then use the victim's own management tools to spread. Collection runs alongside most stages rather than waiting for the end, and nothing in what I hold goes past collection into fraud, extortion, sale or destruction.
 
@@ -197,6 +202,7 @@ Three things in this chain are worth more to a defender than the rest. The help 
 
 ## 6. Infrastructure
 {: .hl-tier-2}
+{: .hl-tab-timeline}
 
 Three hosted servers carry the operation, and they are joined by the operator's own documents rather than by any shared technical fingerprint. Its scripts call one of them "our IP", label another "nosso canary" ("our canary"), and point the bank's tunnel client at the third. No operator-owned domain exists anywhere in the evidence. Whether the operator rented these servers, compromised them or bought them second-hand is not established; only a provider's customer record would settle it.
 
@@ -238,6 +244,7 @@ When the directory went silent, and why, is undated. A server that still answers
 
 ## 7. What the Public Record Holds
 {: .hl-tier-2}
+{: .hl-tab-timeline}
 
 Nothing public that I found names this operator or describes its combined activity, and I hold that at MODERATE. That is bounded by what was searched. Searches for the bare addresses and file hashes did not return a known positive control, so those negatives are not reliable, and the relay's protocol strings were never searched at all. I make no claim to be first to publish any of it.
 
@@ -257,6 +264,7 @@ I can see two readings. It could be the same actor, never fully removed after th
 
 ## 8. The Social-Security Agency: From a Help-Desk Test Page to the Internal Package Store
 {: .hl-tier-3}
+{: .hl-tab-chain}
 
 The agency is the centre of this operation, and the finding that moved it from "targeted" to "inside" is a single shell script. The operator sent commands through a vulnerable test page that ships with GLPI, had each command fetch one 64 KiB slice of a file from an internal file server and print it as base64, and saved the fourteen answers. Those fourteen answers decode, slice by slice, into 905,374 bytes that are byte-identical to an agency deployment package and match the MD5 in the agency's own package manifest. Nobody can hold those slices without running commands on a host that can reach that file server, and that is what makes this an intrusion rather than a target list.
 
@@ -333,6 +341,7 @@ One more piece of tooling, a shell and PHP survey naming the agency's internal d
 
 ## 9. The Development Bank: An API Gateway and a Tunnel Out Through the Bank's Own Proxy
 {: .hl-tier-3}
+{: .hl-tab-chain}
 
 At the bank the operator got command execution inside the bank's WSO2 API Manager and left a tunnel client running there, aimed at its own server through the bank's own forward proxy. A process table captured inside the container shows the client as PID 7519, running as the WSO2 service account, started on "Sep 14" (the table carries no year or zone), with a proxy credential of the bank's on its command line. I hold at HIGH that the process exists and at MODERATE that the operator started it, because the operator's own capture commands sit beside it and the destination is the operator's 209.99.185[.]148.
 
@@ -373,6 +382,7 @@ The directory also holds the console listing of an archive named `lula2026.zip` 
 
 ## 10. The Finance Secretariat, the Saved-Page Victims and the Suppliers
 {: .hl-tier-3}
+{: .hl-tab-chain}
 
 The finance secretariat is the clearest case of the operator working as an ordinary user and leaving with the user table. Its saved staff pages print the operator's own address, 38.180.16[.]98, as the client in the application banner, so these are sessions the operator ran. Through a database query page reachable from outside, it exported the state's main user account table, and the export sits in its directory with exactly the row count its own log reports. What I cannot show is any command execution on a host of the secretariat's, which is why the grade stops at COMPROMISED.
 
@@ -421,6 +431,7 @@ The IT provider builds and runs the agency's systems, and the operator cloned it
 
 ## 11. The Monitoring Server as a Command Plane
 {: .hl-tier-3}
+{: .hl-tab-chain}
 
 With one stolen staff account, the operator logged into an internal Zabbix monitoring server and used its own script feature to run commands on the machines it monitors. Its scripts create temporary global scripts and command items, run them on a monitoring proxy, receive the result on the operator's own listener, and delete the objects afterwards. One of those callbacks returned root identity and a hostname from the proxy to 38.180.16[.]98 on port 9090. I hold the join between that script and that callback at MODERATE, and I cannot name the network that owns the proxy, so it is graded COMPROMISED rather than added to the agency.
 
@@ -450,6 +461,7 @@ The operator also held Zabbix inventory exports: 8,017 host records, and 13,445 
 
 ## 12. The Port 53 Relay, and the WebLogic Scripts That Would Deliver It
 {: .hl-tier-3}
+{: .hl-tab-chain}
 
 The operator's reverse relay is a 3,219-byte, 83-line Java source file, `Relay.java.new`, that calls home to 38.180.16[.]98 on TCP port 53 and does exactly what it is told. It announces itself, waits, opens a connection to whatever host and port the controller names, and then copies bytes in both directions until either side closes. There is no encryption, no authentication and no framing. Port 53 is the DNS port, which many networks let out when they block most other ports, but nothing about the traffic is DNS.
 
@@ -495,6 +507,7 @@ The relay and the bank's tunnel client do the same job in different languages to
 
 ## 13. MITRE ATT&CK Mapping
 {: .hl-tier-2}
+{: .hl-tab-chain}
 
 The mapping covers 70 procedure rows across 57 distinct technique IDs (Enterprise ATT&CK v19.2): 51 OBSERVED, 17 INFERRED and 2 NOT SHOWN. OBSERVED includes a retained attempt that failed, where the attempt is the procedure. INFERRED means the operator's tooling is built to do it but no execution result is held. NOT SHOWN rows mark a boundary and claim no impact. Confidence grades the mapping and its evidence. On an INFERRED row, HIGH means I am confident the tooling does this; whether it ran is a separate question.
 
@@ -603,6 +616,7 @@ Port 53 here does not mean DNS tunnelling, and root identity returned from a mon
 
 ## 14. Threat Actor Assessment
 {: .hl-tier-2}
+{: .hl-tab-attribution}
 
 I cannot attribute this activity to any publicly named actor or persona, and I put named-actor attribution at INSUFFICIENT. What I can describe with confidence is the operation: a sustained campaign of collection and access expansion across Brazilian public bodies and their suppliers, whose ultimate purpose is undetermined. The evidence for what the operator did is far stronger than the evidence for who it is. This is the first coverage The Hunters Ledger has published on this operator: no earlier case of mine touches its three addresses or the `bpupdate.exe` builds.
 
@@ -650,6 +664,7 @@ I do not assign a tracking designation of my own. My threshold for one is three 
 
 ## 15. Indicators of Compromise
 {: .hl-tier-2}
+{: .hl-tab-indicators}
 
 The machine-readable indicator set is published separately as a [JSON IOC feed](/ioc-feeds/opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015/), undefanged and ready for ingestion. It carries 41 operator-side indicator entries: 2 full SHA-256 file hashes, 9 address and port entries over the three operator servers, 4 URLs, 12 file paths, 1 mutex, 1 TLS certificate, 3 service fingerprints, 6 relay network signatures, 2 behavioural patterns and 1 operator host-name fingerprint. Every entry carries its own confidence and action, and those govern over the feed-level label. The feed's validator parsed 30 entries in 4 of its 10 containers; the other containers were not machine-checked.
 
@@ -674,6 +689,7 @@ The Zabbix object names (`z-` and `wv3_` prefixes, `poc` items, `diag-04` to `di
 
 ## 16. Detection and Hunting Guidance
 {: .hl-tier-2}
+{: .hl-tab-indicators}
 
 The full rule set is published separately at [Detection Rules, Brazil Public-Sector Toolkit](/hunting-detections/opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015-detections/): 13 rules, 5 Sigma (3 detection, 2 hunting) and 8 Suricata (3 detection, 5 hunting), with no YARA. All 13 pass syntax validation. None has been measured for prevalence against real traffic, and the coverage-gaps section of that page is worth reading before deploying any of them.
 
@@ -705,6 +721,7 @@ For WebLogic, a shell spawned by the WebLogic Java process that writes a JSP int
 
 ## 17. Notification
 {: .hl-tier-2}
+{: .hl-tab-victims}
 
 The bank and the agency were notified through CTIR Gov, Brazil's federal government incident response centre, starting in early October. The bank received an early notice on 2026-10-04 and a full encrypted evidence package on 2026-10-09. The agency received an early notice on 2026-10-05, with CERT.br copied, and follow-ups after it.
 
@@ -716,6 +733,7 @@ I do not contact the institutions whose API credentials were exposed at the bank
 
 ## 18. Confidence Summary, Gaps, and What Would Change This
 {: .hl-tier-2}
+{: .hl-tab-confidence}
 
 My findings sort cleanly by strength, and the table keeps each claim beside the observation that would move it.
 
@@ -747,6 +765,7 @@ Of the hypotheses I could not kill, three matter most for a reader. The saved-pa
 
 ## 19. References
 {: .hl-tier-2}
+{: .hl-tab-confidence}
 
 - Cybernews (2026-09-09, updated 2026-09-10), [report on an intrusion at a Brazilian federal agency and its IT provider](https://cybernews.com/security/brazil-data-breach-government-employee-logins/); context only, no shared hard indicator.
 - CyberCyber Labs (2026-07-28), ["Inside an Exposed C2 Server"](https://cybercyberlabs.com/reports/Inside-Exposed-C2.pdf) (CCL-2026-07-EXC2), sections 1 to 4; a different operator's GLPI compromise of a Brazilian public body.
@@ -761,6 +780,7 @@ Of the hypotheses I could not kill, three matter most for a reader. The saved-pa
 
 ## Acknowledgements
 {: .hl-tier-2}
+{: .hl-tab-confidence}
 
 I thank [Adverserial AI](https://adverserial.ai) for access to its CyberKimi and CyberGLM models during this investigation. A good part of the operator's tooling and the stolen data in this case is material that general-purpose AI models declined to read. Those two models read it for me, and some of the findings in this report rest in part on those reads.
 
