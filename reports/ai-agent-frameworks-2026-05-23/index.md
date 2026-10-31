@@ -54,6 +54,7 @@ figure_nav:
 
 ## 1. Executive Summary
 {: .hl-tier-1}
+{: .hl-tab-overview}
 
 Eight unrelated threat operators have independently wired AI-agent CLIs into live offensive operations, and the evidence is operator-side, meaning their own handoff documents, attacker prompts, weaponized configs, AI-co-authored code, and stolen victim data, rather than the AI-output measurements that dominate public reporting. Two victims are confirmed compromised at capture time, a HIPAA-regulated US healthcare provider (Case 1) and a state-affiliated Turkish financial-sector organization (Case 2). The campaign yields **five novel TTPs**, **six UTA designations**, **one named-actor HIGH attribution** (Vova75Rus, 88%), and **one Tier-0 disposition outcome**, GitHub Trust & Safety suspended Vova75Rus on 2026-05-25, severing the GHOST kit's upstream distribution channel.
 
@@ -135,6 +136,7 @@ The Vova75Rus disposition (GitHub T&S 2026-05-25) is the headline disruption, an
 
 ## The Defender's Mirror: Running This Investigation with AI
 {: .hl-tier-2}
+{: .hl-tab-overview}
 
 The eight operators below weaponize AI-agent CLIs for offense; this investigation ran on the mirror image of that pattern. An analyst directing an AI agent (Claude), paired with the Hunt.io platform, surfaced and triaged every case across multiple exposed hosts and produced this six-report series, a scope not normally tractable for a solo analyst, made tractable by the same AI-augmentation I document here. The takeaway for defenders is the symmetry itself: the tooling that lowers the barrier for attackers lowers it just as far for the people hunting them. The full per-endpoint methodology, sponsorship disclosure, and candid account of what worked and failed are in **[§13](#methodology)** (and openly: **[how the reports are made](/behind-the-reports/ai-workflow/)**, **[how the threats are found](/behind-the-reports/collection-platform/)**).
 
@@ -142,6 +144,7 @@ The eight operators below weaponize AI-agent CLIs for offense; this investigatio
 
 ## 2. Business Risk Assessment
 {: .hl-tier-1}
+{: .hl-tab-overview}
 
 ### Understanding the Real-World Impact
 
@@ -188,6 +191,7 @@ The following is a generic phase model, refer to Section 12 (Response Orientatio
 
 ## 3. Technical Classification
 {: .hl-tier-2}
+{: .hl-tab-chain}
 
 > **Analyst note:** This section establishes the campaign's identity, scope, and overall composition. Because this is a multi-actor campaign rather than a single malware family, classification spans 8 unrelated operators rather than a single sample lineage. Readers familiar with single-family analyses should expect a wider taxonomy.
 
@@ -264,6 +268,7 @@ Four of eight cases (2, 3, 9-A, 10) were active during the investigation window.
 
 ## 4. Technical Capabilities Deep-Dive: Per Case
 {: .hl-tier-3}
+{: .hl-tab-chain}
 
 > **Analyst note:** This section is the technical heart of the report, but it is a *synthesis* volume: cases with their own sub-report (1, 2, 3, 4, 9) appear here as one-paragraph capsules, what the case is, why it matters, primary indicator, with the full forensic depth in the linked sub-report (§14.2). Cases 7, 8, 10 have no sub-report and are documented at capsule depth here. The parent's core value follows the capsules: §4.9 five novel TTPs, §4.10 the three-class taxonomy, §4.11 false-positive discrimination. All cross-case synthesis. Each capsule is self-contained.
 
@@ -479,6 +484,7 @@ The combined lesson for defenders is about false-positive rate. My hunting heuri
 
 ## 5. Static Analysis Findings
 {: .hl-tier-3}
+{: .hl-tab-chain}
 
 > **Analyst note:** This is a multi-actor campaign, so static findings span many binaries and scripts. Two are publication-defining and synthesized here: the byte-identical `libpam_cache.so` across Case 9 customer hosts (DEFINITE supply-chain root) and the 13-criteria AI-Generated Code structural signature across Cases 1, 2, 3. Per-sample static analysis lives in the sub-reports (§14.2).
 
@@ -502,6 +508,7 @@ Cross-operator validation across three different AI tools (Gemini CLI, OpenClaw,
 
 ## 6. Dynamic Analysis Findings
 {: .hl-tier-3}
+{: .hl-tab-chain}
 
 > **Analyst note:** This campaign's methodology is open-directory hunt + multi-source filesystem pull, not sandbox detonation, so dynamic analysis documents operator workflows chronologically rather than runtime malware behavior. The per-case operator timelines (Cases 1, 2, 3, 9) live in the sub-reports; the two publication-defining dynamic findings are flagged below.
 
@@ -516,6 +523,7 @@ Each case's chronological operator-side workflow is documented step-by-step in i
 
 ## 7. MITRE ATT&CK Mapping
 {: .hl-tier-2}
+{: .hl-tab-chain}
 
 > **Analyst note:** This campaign maps to 49+ ATT&CK techniques across 11 tactics. To keep this parent report focused, the technique-by-technique mapping lives with the detection logic on the companion detection page rather than being duplicated here.
 
@@ -525,6 +533,7 @@ The campaign's heaviest tactic representation is **Resource Development** (opera
 
 ## 8. Indicators of Compromise
 {: .hl-tier-2}
+{: .hl-tab-indicators}
 
 > **Analyst note:** The complete IOC set for all cases is published as a machine-readable JSON feed for direct SIEM/EDR ingestion. It is not duplicated inline here. The highest-priority indicators are also surfaced in the IOC panel (fingerprint icon) on this page.
 
@@ -534,6 +543,7 @@ The full IOC feed is at [`/ioc-feeds/ai-agent-frameworks-2026-05-23-iocs.json`](
 
 ## 9. Threat Actor Assessment
 {: .hl-tier-2}
+{: .hl-tab-attribution}
 
 > **Note on UTA identifiers:** "UTA" stands for Unattributed Threat Actor. <a href="/actors/UTA-2026-012/">UTA-2026-012</a> through <a href="/actors/UTA-2026-017/">UTA-2026-017</a> are tracking labels The Hunters Ledger assigns to actors I have observed but cannot yet link to a publicly named threat group. Other vendors and feeds will not use these labels; they are specific to this publication. If later evidence ties any of them to a named actor, I will retire that label and update the report.
 
@@ -715,6 +725,7 @@ The investigation's attribution findings have two Tier-2 vendor corroborations:
 
 ## 10. Risk & Detection Posture
 {: .hl-tier-2}
+{: .hl-tab-indicators}
 
 > **Analyst note:** This section describes the campaign-wide risk posture and the detection-engineering posture across the linked detection file (25 rules: 8 YARA, 12 Sigma, 5 Suricata). For per-case operator-specific detection content, see the companion sub-reports' detection deliverables (linked in Section 14.2).
 
@@ -774,6 +785,7 @@ The investigation identifies these detection gaps not currently covered by the l
 
 ## 11. Confidence Levels Summary
 {: .hl-tier-2}
+{: .hl-tab-confidence}
 
 > **Analyst note:** This section organizes the campaign's findings by confidence level using the project standard scale (DEFINITE / HIGH / MODERATE / LOW / INSUFFICIENT, see CLAUDE.md CONFIDENCE LEVELS). Readers triaging the report for defender action should focus on DEFINITE and HIGH findings; MODERATE findings require additional corroboration before defender action; LOW findings are publication-honest acknowledgments of remaining uncertainty.
 
@@ -830,6 +842,7 @@ The investigation identifies these detection gaps not currently covered by the l
 
 ## 12. Response Orientation
 {: .hl-tier-2}
+{: .hl-tab-indicators}
 
 > **Analyst note:** This is not an incident response guide. It is a brief orientation for readers who need to know *what to address*, not *how to address it*. Readers with incident response needs should engage their internal IR team or a dedicated playbook, that is out of scope for this third-party publication.
 
@@ -865,6 +878,7 @@ The investigation identifies these detection gaps not currently covered by the l
 
 ## 13. Investigation Methodology: Hunt.io Platform (MCP + V3 API) in the Defender Workflow {#methodology}
 {: .hl-tier-2}
+{: .hl-tab-overview}
 
 > **Analyst note:** I document here how attackers integrate AI-agent CLIs into offensive workflows. For this investigation I integrated an AI-agent CLI (Claude Code) with the **Hunt.io Model Context Protocol (MCP) server** to surface, triage, and analyze every one of the 9 cases above. Below I cover that defender-side AI integration in detail, what worked, what did not, the specific findings the MCP enabled, and the workarounds I used when MCP endpoints failed. The symmetry is intentional: AI-augmented tradecraft is now mainstream on both sides of the security line, and defenders evaluating MCP-augmented investigation workflows benefit from a concrete artifact to compare against.
 
@@ -997,6 +1011,7 @@ That foundation, Hunt.io MCP metadata plus VirusTotal MCP content plus out-of-ba
 
 ## 14. References & Appendices
 {: .hl-tier-2}
+{: .hl-tab-confidence}
 
 ### 14.1 Linked Project Files
 
