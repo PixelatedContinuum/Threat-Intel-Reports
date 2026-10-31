@@ -156,12 +156,33 @@
   }
   function col(m, re) { return m.headers.findIndex(function (h) { return re.test(h); }); }
   var attack = find('chain', [/Tactic.*Technique/i, /^Status$/i, /Conf/i, /Scope/i]) || models.filter(function (m) { return m.token === 'chain' && m.headers.some(function (h) { return /Tactic.*Technique/i.test(h); }) && m.headers.some(function (h) { return /^Status$/i.test(h); }); }).sort(function (a, b) { return b.rows.length - a.rows.length; })[0];
-  var stages = find('chain', [/^Stage$/i, /What.*did/i]);
+  // Legacy ATT&CK tables (T-0500.1.11): a report written before the tabbed layout names a tactic and a technique but states no Status. Two shapes
+  // carry it: one cell "Tactic / T1059" (Tactic / Technique | Name | Evidence), or a Tactic column beside a Technique (ID) column. The view lists
+  // those rows by tactic and says which columns the table does not state; it never infers a Status. A table with a Status column is read as before.
+  function legacyAttack(m) {
+    if (m.token !== 'chain' || m.headers.some(function (h) { return /^Status$/i.test(h); })) return false;
+    return m.headers.some(function (h) { return /Tactic.*Technique/i.test(h); }) ||
+      m.headers.some(function (h) { return /^Tactic$/i.test(h); }) && m.headers.some(function (h) { return /^Technique( ID)?$/i.test(h); });
+  }
+  if (!attack) { attack = models.filter(legacyAttack).sort(function (a, b) { return b.rows.length - a.rows.length; })[0]; if (attack) attack.legacy = true; }
+  // Where an ATT&CK table keeps what the view reads. The Status-bearing table keeps the original places (the tactic cell carries the technique ID, the name is column 2);
+  // a legacy table is read by its headers, and a column it lacks is -1 (the view then says it is not stated).
+  function attackCols(m) {
+    if (!m) return null;
+    var combined = col(m, /Tactic.*Technique/i);
+    if (!m.legacy) return { tactic: combined, id: combined, name: 1, status: col(m, /^Status$/i), conf: col(m, /Conf/i), scope: col(m, /Scope/i) };
+    var name = combined >= 0 ? col(m, /^Name$/i) : col(m, /Technique Name/i);
+    return { tactic: combined >= 0 ? combined : col(m, /^Tactic$/i), id: combined >= 0 ? combined : col(m, /^Technique( ID)?$/i), name: name, status: -1, conf: col(m, /Conf/i), scope: col(m, /Scope/i) };
+  }
+  function cell(row, i) { return i >= 0 && row[i] !== undefined ? row[i] : ''; }
+  var attackC = attackCols(attack);
+  var stages = find('chain', [/^Stage$/i, /What.*did/i]) || find('chain', [/^Stage$|^Phase$/i, /What.*(does|happens)/i]);
   var victims = find('victims', [/Organisation|Organization|Victim/i, /Grade/i]);
   var chronology = find('timeline', [/^Date|^Time|^When/i, /Observation|Event/i]);
-  var judgments = find('confidence', [/Claim|Judgment/i, /Confidence/i, /change/i]);
+  // A legacy confidence table is Finding | Confidence, with or without a column for what would change it; the view says when that column is absent.
+  var judgments = find('confidence', [/Claim|Judgment/i, /Confidence/i, /change/i]) || find('confidence', [/Claim|Judgment|Finding/i, /Confidence/i]);
   var indicators = find('indicators', [/^Indicator/i, /Action/i]);
-  var hypotheses = find('attribution', [/Hypothesis/i, /stands|Assessment/i]);
+  var hypotheses = find('attribution', [/Hypothesis/i, /stands|Assessment/i]) || find('attribution', [/Hypothesis/i, /Verdict|Consistency|Likelihood|Ruling|Why/i]);
   var calls = find('attribution', [/^Call|Judgment/i, /change/i]);
   var detectionSection = sections.find(function (s) { return s.token === 'indicators' && s.heading && /Detection|Hunting/i.test(text(s.heading)); });
   var detectionParagraph = detectionSection && detectionSection.node.querySelector('p');
@@ -446,9 +467,15 @@
       if (victims) { var g = col(victims, /Grade/i); var inside = victims.rows.filter(function (r) { return /^(ACCESS SHOWN|COMPROMISED)\b/.test(r[g]); }).length;
         tile(tiles, inside, 'organisations with inside or authenticated access', 'Organisation rows graded ACCESS SHOWN or COMPROMISED in the victim table; qualifiers stay in that tab.', 'victims', 'organisations'); count++; }
       if (attack) {
-        var ids = new Set(); attack.rows.forEach(function (r) { (r[0].match(/T\d{4}(?:\.\d{3})?/g) || []).forEach(function (id) { ids.add(id); }); });
-        tile(tiles, ids.size, 'distinct technique IDs', 'Distinct IDs in the full procedure table.', 'chain', 'techniques');
-        tile(tiles, attack.rows.length, 'procedure rows', 'Every procedure row, including repeated technique IDs.', 'chain', 'procedure rows'); count += 2;
+        var ids = new Set(); attack.rows.forEach(function (r) { (cell(r, attackC.id).match(/T\d{4}(?:\.\d{3})?/g) || []).forEach(function (id) { ids.add(id); }); });
+        if (attack.legacy) {
+          tile(tiles, ids.size, 'distinct technique IDs', 'Distinct IDs in the ATT&CK mapping table; the report states no Status for them.', 'chain', 'techniques');
+          tile(tiles, attack.rows.length, 'mapping rows', 'Every row of the ATT&CK mapping table, including repeated technique IDs.', 'chain', 'mapping rows');
+        } else {
+          tile(tiles, ids.size, 'distinct technique IDs', 'Distinct IDs in the full procedure table.', 'chain', 'techniques');
+          tile(tiles, attack.rows.length, 'procedure rows', 'Every procedure row, including repeated technique IDs.', 'chain', 'procedure rows');
+        }
+        count += 2;
       }
       if (ruleTotal !== null) { tile(tiles, ruleTotal, 'detection and hunting rules', 'Counts in the report detection guidance, reconciled to the engine and tier counts.', 'indicators', 'rules'); count++; }
       if (chronology) { var dc = col(chronology, /^Date|^Time|^When/i);
@@ -498,25 +525,30 @@
             // Optional editorial joins are supplied only by the current report.
             var joins = curation.stage_joins && curation.stage_joins[r[0]] || [];
             var matches = attack.rows.map(function (a, i) { return { row: a, index: i }; }).filter(function (a) {
-              var id = (a.row[0].match(/T\d{4}(?:\.\d{3})?/) || [])[0];
-              var scope = a.row[col(attack, /Scope/i)] || '';
+              var id = (cell(a.row, attackC.id).match(/T\d{4}(?:\.\d{3})?/) || [])[0];
+              var scope = cell(a.row, attackC.scope);
               if (joins.some(function (j) { return id === j.technique && scope.indexOf(j.scope_prefix) === 0; })) return true;
-              var name = a.row[1].toLowerCase(); return name.length >= 12 && (r[1] + ' ' + (r[2] || '')).toLowerCase().includes(name);
+              var name = cell(a.row, attackC.name).toLowerCase(); return name.length >= 12 && (r[1] + ' ' + (r[2] || '')).toLowerCase().includes(name);
             });
             stageRows[si] = matches.map(function (a) { return a.index; });
             var procedureList = matches.length ? tableFold(card, matches.length + ' linked procedure rows') : card;
             make('small', 'hl-rv-stage-count', matches.length + ' linked procedures', heading);
-            var counts = ['OBSERVED', 'INFERRED', 'NOT SHOWN'].map(function (status) { return matches.filter(function (a) { return a.row[col(attack, /^Status$/i)] === status; }).length; });
+            var counts = ['OBSERVED', 'INFERRED', 'NOT SHOWN'].map(function (status) { return matches.filter(function (a) { return attackC.status >= 0 && a.row[attackC.status] === status; }).length; });
             function mini(parent) { var bar = make('span', 'hl-rv-mini', null, parent); bar.setAttribute('role', 'img'); bar.setAttribute('aria-label', counts.map(function (n, i) { return n + ' ' + ['observed', 'inferred', 'not shown'][i]; }).join(', ')); counts.forEach(function (n, i) { if (n) { var segment = make('span', 'hl-rv-' + ['observed','inferred','not-shown'][i], '', bar); segment.style.flexGrow = n; } }); }
-            mini(heading);
+            if (!attack.legacy) mini(heading);
             var step = button('', ribbon, function () {
-              var select = body.querySelector('.hl-rv-filters label:nth-of-type(4) select');
+              var select = Array.from(body.querySelectorAll('.hl-rv-filters label')).filter(function (l) { return l.firstChild && l.firstChild.textContent === 'Stage'; }).map(function (l) { return l.querySelector('select'); })[0];
               if (select) { select.value = select.value === r[0] ? '' : r[0]; select.dispatchEvent(new Event('input')); }
               detail.open = true;
             }); step.setAttribute('aria-pressed', 'false');
-            make('strong', '', r[0], step); make('small', '', matches.length + ' linked', step); mini(step);
+            make('strong', '', r[0], step); make('small', '', matches.length + ' linked', step); if (!attack.legacy) mini(step);
             if (!matches.length) make('p', 'hl-rv-count', 'No explicit procedure join supplied; all rows remain in the table below.', card);
-            matches.forEach(function (a) { var chip = link(a.row[0] + ' · ' + a.row[1], '#hl-rv-procedures-' + (a.index + 1), procedureList); chip.className = 'hl-rv-procedure'; badge(chip, a.row[col(attack, /^Status$/i)]); badge(chip, a.row[col(attack, /Conf/i)]); make('small', '', a.row[col(attack, /Scope/i)], chip); });
+            matches.forEach(function (a) {
+              var chip = link(cell(a.row, attackC.id) + ' · ' + cell(a.row, attackC.name >= 0 ? attackC.name : attackC.tactic), '#hl-rv-procedures-' + (a.index + 1), procedureList); chip.className = 'hl-rv-procedure';
+              if (attackC.status >= 0) badge(chip, a.row[attackC.status]);
+              if (attackC.conf >= 0) badge(chip, a.row[attackC.conf]);
+              if (attackC.scope >= 0) make('small', '', a.row[attackC.scope], chip);
+            });
           }
         });
       } else missing(body, 'a Stage / What the operator did table');
@@ -524,19 +556,21 @@
         // Filters and the live count are visible above both stage cards and the
         // procedure table. Only this generated copy is ever filtered.
         var full = make('section', 'hl-rv-procedures', null, body);
-        var table = dashTable(full, attack, 'All ATT&CK procedure rows', 'procedures');
-        var tacticCol = col(attack, /Tactic.*Technique/i);
+        var table = dashTable(full, attack, attack.legacy ? 'All ATT&CK mapping rows' : 'All ATT&CK procedure rows', 'procedures');
+        var tacticCol = attackC.tactic;
         function tactic(value) { return value.replace(/\s*\(?T\d{4}.*$/, '').replace(/\s*[·:|/-]\s*$/, '').trim(); }
         var tactics = attack.rows.map(function (r) { return tactic(r[tacticCol]); }).filter(function (v, i, a) { return v && a.indexOf(v) === i; });
         var generatedRows = Array.from(table.tBodies[0].rows);
         var specs = [
-          { label: 'Status', col: col(attack, /^Status$/i), values: ['OBSERVED', 'INFERRED', 'NOT SHOWN'] },
-          { label: 'Confidence', col: col(attack, /Conf/i), values: ['DEFINITE', 'HIGH', 'MODERATE', 'LOW', 'INSUFFICIENT', 'Range', 'Unscaled'] },
+          { label: 'Status', col: attackC.status, values: ['OBSERVED', 'INFERRED', 'NOT SHOWN'] },
+          { label: 'Confidence', col: attackC.conf, values: ['DEFINITE', 'HIGH', 'MODERATE', 'LOW', 'INSUFFICIENT', 'Range', 'Unscaled'] },
           { label: 'Stage', values: stages ? stages.rows.map(function (r) { return r[0]; }) : [], match: function (row, value) { return stageRows[stages.rows.findIndex(function (r) { return r[0] === value; })].includes(generatedRows.indexOf(row)); } },
           { label: 'Tactic', col: tacticCol, values: tactics, match: function (row, value) { return tactic(text(row.cells[tacticCol])) === value; } }
         ];
+        // A legacy table has no Status, may have no Confidence, and may have no Stage table to filter by: a filter with nothing behind it is not drawn.
+        if (attack.legacy) specs = specs.filter(function (sp) { return sp.label === 'Tactic' || sp.label === 'Stage' && stages || sp.label === 'Confidence' && attackC.conf >= 0; });
         var stageStates = stageCards.map(function (card) { var state = make('p', 'hl-rv-stage-state', '', card); state.setAttribute('role', 'status'); return state; });
-        filters(full, table, specs, 'procedure rows', function (visible, filtering) {
+        filters(full, table, specs, attack.legacy ? 'mapping rows' : 'procedure rows', function (visible, filtering) {
           var indices = visible.map(function (r) { return generatedRows.indexOf(r); });
           stageCards.forEach(function (card, si) {
             var hits = stageRows[si].filter(function (ri) { return indices.includes(ri); }).length;
@@ -550,15 +584,24 @@
         ribbon.after(filterArea);
         make('p', 'hl-rv-note', 'Stage filters use explicit procedure links only. Unjoined rows stay in the full table. Muted stages remain readable; the written report below is never filtered.', filterArea);
         var statusTiles = make('div', 'hl-rv-status-tiles', null);
-        ['OBSERVED', 'INFERRED', 'NOT SHOWN'].forEach(function (value) {
-          var n = attack.rows.filter(function (r) { return r[col(attack, /^Status$/i)] === value; }).length;
+        ['OBSERVED', 'INFERRED', 'NOT SHOWN'].filter(function () { return !attack.legacy; }).forEach(function (value) {
+          var n = attack.rows.filter(function (r) { return r[attackC.status] === value; }).length;
           var tile = make('div', 'hl-rv-status-tile hl-rv-' + value.toLowerCase().replace(/ /g, '-'), null, statusTiles);
           make('strong', '', n, tile); badge(tile, value);
           make('small', '', 'How counted: procedure rows with this status. ' + attack.rows.length + ' rows in table ' + attack.index + '.', tile); sourceLink(attack, tile, value + ' procedure rows');
         });
-        filterArea.after(statusTiles);
+        if (attack.legacy) {
+          // Say what the report's table does not hold; never fill a Status in.
+          var absent = [attackC.status < 0 && 'Status (OBSERVED, INFERRED, NOT SHOWN)', attackC.conf < 0 && 'Confidence', attackC.scope < 0 && 'Scope'].filter(Boolean);
+          // The view reads one table, the largest. Say how many ATT&CK mapping tables of this tab it leaves out, with their rows.
+          var others = models.filter(function (m) { return m !== attack && legacyAttack(m); }), otherRows = others.reduce(function (n, m) { return n + m.rows.length; }, 0);
+          var unstated = make('p', 'hl-rv-note hl-rv-unstated', 'Not stated in this report\'s ATT&CK table: ' + absent.join(', ') + '. The view lists the report\'s own rows by tactic as printed and does not grade them.' +
+            (others.length ? ' This tab has ' + others.length + ' other ATT&CK mapping table' + (others.length > 1 ? 's' : '') + ' (' + otherRows + ' rows) that this view does not list; they are in the report.' : ''), null);
+          filterArea.after(unstated);
+        } else filterArea.after(statusTiles);
       } else missing(body, 'a Tactic / Technique, Status and Confidence procedure table');
-      var status = attack ? attack.rows.reduce(function (out, r) { var s = r[col(attack, /^Status$/i)]; out[s] = (out[s] || 0) + 1; return out; }, {}) : {};
+      if (attack && attack.legacy) return (stages ? stages.rows.length + ' stages, ' : '') + attack.rows.length + ' ATT&CK mapping rows, status not stated';
+      var status = attack ? attack.rows.reduce(function (out, r) { var s = r[attackC.status]; out[s] = (out[s] || 0) + 1; return out; }, {}) : {};
       return (stages ? stages.rows.length : 0) + ' stages, ' + (attack ? attack.rows.length : 0) + ' procedures' + (attack ? ': ' + Object.keys(status).map(function (s) { return status[s] + ' ' + s.toLowerCase(); }).join(', ') : '');
     },
     timeline: function (body) {
@@ -611,6 +654,7 @@
       all.before(distbar, distribution); distribution.setAttribute('role', 'group'); distribution.setAttribute('aria-label', 'Judgments by confidence as printed');
       var counts = {}; judgments.rows.forEach(function (r) { var v = r[col(judgments, /Confidence/i)]; counts[v] = (counts[v] || 0) + 1; });
       Object.keys(counts).forEach(function (v) { var b = button(v + ' · ' + counts[v], distribution, function () { var input = all.querySelector('select'); input.value = v; input.dispatchEvent(new Event('input')); Array.from(distribution.children).forEach(function (c) { c.setAttribute('aria-pressed', String(c === b)); }); }); var seg = make('span', '', null, distbar); seg.style.flexGrow = counts[v]; seg.style.flexBasis = '0'; seg.title = v + ': ' + counts[v]; b.setAttribute('aria-pressed', 'false'); b.title = v + ': ' + counts[v] + ' of ' + judgments.rows.length + ' judgments'; });
+      if (!judgments.headers.some(function (h) { return /change/i.test(h); })) make('p', 'hl-rv-note hl-rv-unstated', 'Not stated in this report\'s table: what would change each judgment. The view lists the rows as printed.', all);
       filters(all, table, [{ label: 'Confidence', col: col(judgments, /Confidence/i), values: Object.keys(counts), match: function (row, value) { return text(row.cells[col(judgments, /Confidence/i)]) === value; } }], 'judgments');
       return judgments.rows.length + ' judgments, including ranges and unscaled wording';
     }

@@ -420,6 +420,13 @@ var SHAPE_SPECS = {
   indicators: [/^Indicator/i, /Action/i],
   confidence: [/Claim|Judgment/i, /Confidence/i, /change/i]
 };
+/* T-0500.1.11 (legacy table shapes): the shapes a report written before the tabbed layout uses for the same four views. A view reads its
+   SHAPE_SPECS table first and, when the report has none, the first table of its SHAPE_ALT; mirrored from hl-report-tabs.js on purpose. */
+var SHAPE_ALT = {
+  chain: [/^Stage$|^Phase$/i, /What.*(does|happens)/i],
+  attribution: [/Hypothesis/i, /Verdict|Consistency|Likelihood|Ruling|Why/i],
+  confidence: [/Claim|Judgment|Finding/i, /Confidence/i]
+};
 var SHAPE_NEED = {
   overview: 'victim, procedure, indicator or dated chronology tables',
   victims: 'an Organisation / Grade table',
@@ -716,6 +723,11 @@ function serialiseSpecs() {
   Object.keys(SHAPE_SPECS).forEach(function (k) { o[k] = SHAPE_SPECS[k].map(function (r) { return [r.source, r.flags]; }); });
   return JSON.stringify(o);
 }
+function serialiseAlt() {
+  var o = {};
+  Object.keys(SHAPE_ALT).forEach(function (k) { o[k] = SHAPE_ALT[k].map(function (r) { return [r.source, r.flags]; }); });
+  return JSON.stringify(o);
+}
 /* T-0500.1.9 sitefix3 (Sol review F1, F2): what the SOURCE says, read independently of the views.
    For every table in a panel's `.hl-rv-source` blocks it records, separately: whether the headers match a view's shape, and whether the
    table is usable (a header row, at least one data row, and every row as wide as the header; the same test hl-report-tabs.js applies).
@@ -726,7 +738,7 @@ function serialiseSpecs() {
      rows, ids  the data-row count and the first-column texts of the first usable matching table, the expectation the view is checked against
    Overview reads four shapes, so it carries the expected tile values in the builder's order and the irregular tables of the three it reads.
    The mirror of hl-report-tabs.js is on purpose: a layout that mis-reads a table cannot excuse itself. */
-function shapesInPage(SPECS) {
+function shapesInPage(SPECS, ALT) {
   function txt(n) { return (n.textContent || '').replace(/\s+/g, ' ').trim(); }
   function model(table, index) {
     var trs = [].slice.call(table.rows), m = [];
@@ -761,6 +773,7 @@ function shapesInPage(SPECS) {
   var out = {};
   Object.keys(SPECS).forEach(function (k) {
     var cand = (tabs[k] || []).filter(function (m) { return matches(m, SPECS[k]); });
+    if (!cand.length && ALT && ALT[k]) cand = (tabs[k] || []).filter(function (m) { return matches(m, ALT[k]); });
     var good = cand.filter(function (m) { return m.valid; })[0] || null;
     out[k] = { tab: !!document.getElementById('tab-' + k), shape: !!good, irregular: irregularOf(cand), rows: good ? good.rows.length : null,
       ids: good ? good.rows.map(function (r) { return r[0]; }) : null };
@@ -771,6 +784,19 @@ function shapesInPage(SPECS) {
   var attackCand = chainAll.filter(function (m) { return hasHeader(m, /Tactic.*Technique/i) && hasHeader(m, /^Status$/i); });
   var attack = chainAll.filter(function (m) { return m.valid && attackKey.every(function (r) { return hasHeader(m, r); }); })[0] ||
     attackCand.filter(function (m) { return m.valid; }).sort(function (a, b) { return b.rows.length - a.rows.length; })[0] || null;
+  /* T-0500.1.11: a legacy ATT&CK table (no Status column) names a tactic and a technique either in one cell ("Execution / T1059") or in a
+     Tactic column beside a Technique (ID) column. It is read only when no Status-bearing table exists, as the layout does, and its columns are
+     found by header: the technique ID is the combined cell or the Technique (ID) column, the tactic the combined cell or the Tactic column. */
+  function legacyAttackOf(m) {
+    return !hasHeader(m, /^Status$/i) && (hasHeader(m, /Tactic.*Technique/i) || hasHeader(m, /^Tactic$/i) && hasHeader(m, /^Technique( ID)?$/i));
+  }
+  var legacyCand = attack ? [] : chainAll.filter(legacyAttackOf);
+  var legacy = null;
+  if (!attack) { legacy = legacyCand.filter(function (m) { return m.valid; }).sort(function (a, b) { return b.rows.length - a.rows.length; })[0] || null; attack = legacy; }
+  var idCol = !attack ? -1 : col(attack, /Tactic.*Technique/i) >= 0 ? col(attack, /Tactic.*Technique/i) : col(attack, /^Technique( ID)?$/i);
+  var attackInfo = { shape: !!attack, legacy: !!legacy, rows: attack ? attack.rows.length : null, ids: attack ? attack.rows.map(function (r) { return r[0]; }) : null,
+    others: legacy ? legacyCand.filter(function (m) { return m.valid && m !== legacy; }).map(function (m) { return m.rows.length; }) : [],
+    absent: !attack ? [] : [!hasHeader(attack, /^Status$/i) && 'Status', !hasHeader(attack, /Conf/i) && 'Confidence', !hasHeader(attack, /Scope/i) && 'Scope'].filter(Boolean) };
   var rule = null, seen = false;
   [].slice.call(document.querySelectorAll('#tab-indicators .hl-rv-source')).forEach(function (b) {
     var h = b.querySelector('h2'); if (seen || !h || !/Detection|Hunting/i.test(txt(h))) return; seen = true;
@@ -782,20 +808,21 @@ function shapesInPage(SPECS) {
   var tiles = [], vic = (tabs.victims || []).filter(function (m) { return matches(m, SPECS.victims) && m.valid; })[0];
   if (vic) { var g = col(vic, /Grade/i); tiles.push(String(vic.rows.filter(function (r) { return /^(ACCESS SHOWN|COMPROMISED)\b/.test(r[g]); }).length)); }
   if (attack) {
-    var ids = {}; attack.rows.forEach(function (r) { (r[0].match(/T\d{4}(?:\.\d{3})?/g) || []).forEach(function (id) { ids[id] = 1; }); });
+    var ids = {}; attack.rows.forEach(function (r) { (r[idCol].match(/T\d{4}(?:\.\d{3})?/g) || []).forEach(function (id) { ids[id] = 1; }); });
     tiles.push(String(Object.keys(ids).length)); tiles.push(String(attack.rows.length));
   }
   if (rule !== null) tiles.push(String(rule));
   var chron = (tabs.timeline || []).filter(function (m) { return matches(m, SPECS.timeline) && m.valid; })[0];
   if (chron) { var dc = col(chron, /^Date|^Time|^When/i); tiles.push(chron.rows[0][dc] + ' to ' + chron.rows[chron.rows.length - 1][dc]); }
   var ovIrregular = out.victims.irregular.map(function (x) { return Object.assign({ view: 'victims' }, x); })
-    .concat(irregularOf(attackCand).map(function (x) { return Object.assign({ view: 'chain (procedure table)' }, x); }))
+    .concat(irregularOf(attackCand.concat(legacyCand)).map(function (x) { return Object.assign({ view: 'chain (procedure table)' }, x); }))
     .concat(out.timeline.irregular.map(function (x) { return Object.assign({ view: 'timeline' }, x); }));
   out.overview = { tab: !!document.getElementById('tab-overview'), shape: !!(vic || attack || rule !== null || chron), irregular: ovIrregular,
     rows: tiles.length, tiles: tiles, ids: null, attackRows: attack ? attack.rows.length : 0 };
+  out.chain.attack = attackInfo;
   return out;
 }
-var SHAPES_EXPR = '(' + shapesInPage.toString() + ')(' + serialiseSpecs() + ')';
+var SHAPES_EXPR = '(' + shapesInPage.toString() + ')(' + serialiseSpecs() + ',' + serialiseAlt() + ')';
 
 /* The documented "missing" notice of one view (hl-report-tabs.js missing(): "View unavailable: needs ... The full report follows."). */
 function viewNoticeExpr(token) {
@@ -813,7 +840,7 @@ function viewNoticeExpr(token) {
      - with the shape present the summary's first integer AND the drawn elements must equal the SOURCE's count. The view is never its own
        expectation: a view that dropped a source row and a summary that agrees with it is a FAIL. Without a source expectation the
        verdict is NOT CHECKED, not a comparison of the view with itself. */
-function viewShapeVerdict(token, shape, line, primaryCount, notice, src) {
+function viewShapeVerdictBase(token, shape, line, primaryCount, notice, src) {
   var need = SHAPE_NEED[token] || 'its table';
   src = src || {};
   var irregular = src.irregular || [];
@@ -848,6 +875,43 @@ function viewShapeVerdict(token, shape, line, primaryCount, notice, src) {
   }
   return { absent: false, figure: Number(m[0]), count: primaryCount, expected: src.rows, ok: why2.length === 0,
     detail: 'summary "' + m[0] + '" and ' + primaryCount + ' ' + TAB_PRIMARY[token] + ' vs the source\'s ' + (token === 'overview' ? JSON.stringify(src.tiles) : src.rows + ' rows') + idNote + (why2.length ? '; ' + why2.join('; ') : '') };
+}
+
+/* T-0500.1.11: the ATT&CK procedure table of the Attack chain view, checked against the SOURCE table like every other card. `att` is
+   SHAPES.chain.attack (shape, legacy, rows, ids, absent: the columns the table does not hold); `drawn` is what the view drew
+   (count of `#procedures` rows, their first-column texts, and the text of its `.hl-rv-unstated` note, null when it has none).
+     - a table the report has: the view draws every row (count AND first-column identities equal the source), never from a view's own count;
+     - a legacy table (no Status column): the view says in `.hl-rv-unstated` which columns the table does not state, naming each one, and a
+       table that has a Status column carries no such note (a note on a table that states Status is as wrong as a missing one);
+     - no table: the view draws none of its rows. */
+function attackVerdict(att, drawn) {
+  drawn = drawn || {};
+  if (!att.shape) {
+    var n0 = typeof drawn.count === 'number' ? drawn.count : 0;
+    return { ok: n0 === 0, detail: 'no ATT&CK table in the report; the view draws ' + n0 + ' procedure row(s)' + (n0 ? ' from nothing' : '') };
+  }
+  if (typeof drawn.count !== 'number') return { notChecked: true, ok: false, detail: 'the report has an ATT&CK table (' + att.rows + ' rows) but the view\'s procedure rows were not read' };
+  var why = [];
+  if (drawn.count !== att.rows) why.push('the view draws ' + drawn.count + ' procedure rows, the source table has ' + att.rows);
+  var diff = (att.ids || []).filter(function (id, i) { return (drawn.ids || [])[i] !== id; });
+  if (drawn.count === att.rows && diff.length) why.push(diff.length + ' of ' + att.rows + ' ATT&CK row identities differ from the source (first: ' + JSON.stringify(diff[0]) + ')');
+  if (att.legacy) {
+    var note = drawn.unstated || '';
+    var lacking = (att.absent || []).filter(function (c) { return note.indexOf(c) === -1; });
+    if (!note) why.push('the table states no ' + att.absent.join(', ') + ' and the view does not say so');
+    else if (lacking.length) why.push('the view\'s note does not name ' + lacking.join(', ') + ', which the table does not state');
+    var others = att.others || [], otherRows = others.reduce(function (n, r) { return n + r; }, 0);
+    if (note && others.length && note.indexOf('(' + otherRows + ' rows)') === -1) why.push('the report has ' + others.length + ' other ATT&CK mapping table(s) (' + otherRows + ' rows) in the tab and the view\'s note does not say how many it leaves out');
+    if (note && !others.length && /other ATT&CK mapping table/.test(note)) why.push('the view\'s note says it leaves out other ATT&CK tables, and the source has none');
+  } else if (drawn.unstated) why.push('the table states Status but the view says it does not');
+  return { ok: why.length === 0, detail: att.rows + ' ATT&CK rows in the source' + (att.legacy ? ' (no Status column; the view names what is not stated: ' + JSON.stringify(drawn.unstated || null) + ')' : '') + '; the view draws ' + drawn.count + '; ' + (att.rows - diff.length) + ' of ' + att.rows + ' identities match' + (why.length ? '; ' + why.join('; ') : '') };
+}
+function viewShapeVerdict(token, shape, line, primaryCount, notice, src) {
+  var base = viewShapeVerdictBase(token, shape, line, primaryCount, notice, src);
+  if (token !== 'chain' || !src || !src.attack || base.notChecked) return base;
+  var av = attackVerdict(src.attack, src.drawnAttack);
+  if (av.notChecked) return { notChecked: true, ok: false, absent: base.absent, irregular: base.irregular, detail: base.detail + '; ' + av.detail };
+  return Object.assign({}, base, { ok: base.ok && av.ok, attackChecked: src.attack.shape, detail: base.detail + '; ATT&CK table: ' + av.detail });
 }
 
 /* A 25-date chronology spanning two years, from design-v4 5.4. It is derived
@@ -1841,11 +1905,12 @@ function viewFactsExpr(tokens) {
     'var s=document.querySelector("#tab-"+t+" .hl-rv-view-summary p");var sel=P[t];var c=0;try{c=document.querySelectorAll("#tab-"+t+" "+sel).length;}catch(e){}' +
     'var ids=null;if(I[t]){ids=[].slice.call(document.querySelectorAll("#tab-"+t+" "+I[t])).map(tx);}' +
     'var tiles=t==="overview"?[].slice.call(document.querySelectorAll("#tab-overview .hl-rv-tile strong")).map(tx):null;' +
-    'return {token:t,line:s?s.textContent.trim():"",count:c,notice:n?n.textContent.trim():null,ids:ids,tiles:tiles};});})(' + JSON.stringify(tokens) + ')';
+    'var attack=null;if(t==="chain"){var rows=[].slice.call(document.querySelectorAll("#tab-chain #procedures tbody tr td:first-child"));var u=document.querySelector("#hl-rv-view-chain .hl-rv-unstated");attack={count:rows.length,ids:rows.map(tx),unstated:u?tx(u):null};}' +
+    'return {token:t,line:s?s.textContent.trim():"",count:c,notice:n?n.textContent.trim():null,ids:ids,tiles:tiles,attack:attack};});})(' + JSON.stringify(tokens) + ')';
 }
 /* The card verdict for one view from one page measurement: the SOURCE expectation (SHAPES[token]) plus what the view drew. */
 function cardVerdict(info, fact) {
-  var src = Object.assign({}, info || {}, { drawnIds: fact.ids, drawnTiles: fact.tiles });
+  var src = Object.assign({}, info || {}, { drawnIds: fact.ids, drawnTiles: fact.tiles, drawnAttack: fact.attack });
   return viewShapeVerdict(fact.token, info ? info.shape : true, fact.line, fact.count, fact.notice, src);
 }
 async function tabControlRows(page, url, html) {
@@ -1898,7 +1963,7 @@ async function tabControlRows(page, url, html) {
   /* The two source-table controls below need a table to drop a row from and a table to shorten. A report that has such tables is tested on
      its own; a report that has none (a plain draft with no victim, procedure or other view table) is tested on a victim and a procedure
      table the gate injects, and the row names are marked, so a clean report is neither NOT CHECKED nor a pass without a measurement. */
-  var ownLoss = !!SHAPES && TAB_TOKENS.some(function (t) { return SHAPES[t] && SHAPES[t].shape && (t === 'overview' ? SHAPES.overview.attackRows > 1 : SHAPES[t].rows > 1); });
+  var ownLoss = !!SHAPES && TAB_TOKENS.some(function (t) { return SHAPES[t] && (SHAPES[t].shape || t === 'chain' && SHAPES.chain.attack && SHAPES.chain.attack.shape) && (t === 'overview' ? SHAPES.overview.attackRows > 1 : t === 'chain' ? SHAPES.chain.rows > 1 || SHAPES.chain.attack && SHAPES.chain.attack.rows > 1 : SHAPES[t].rows > 1); });
   var ownCands = SHAPES ? irregularTableCandidates(html, SHAPES) : [];
   var injectedHtml = (ownLoss && ownCands.length) ? null : controlFixtureHtml(html);
   var lossHtml = ownLoss ? html : injectedHtml, lossNote = ownLoss ? '' : ' (on a victim and a procedure table the gate injected: the report has no table of its own whose view has two or more rows)';
@@ -1926,8 +1991,9 @@ async function tabControlRows(page, url, html) {
         var applies = [], caught = [], uncaught = [];
         lfacts.forEach(function (f) {
           var info = lshapes[f.token];
-          if (!info || !info.shape) return;
-          var qualifies = f.token === 'overview' ? info.attackRows > 1 : info.rows > 1;
+          var attackRows = f.token === 'chain' && info && info.attack && info.attack.shape ? info.attack.rows : 0;
+          if (!info || !info.shape && !attackRows) return;
+          var qualifies = f.token === 'overview' ? info.attackRows > 1 : f.token === 'chain' ? info.rows > 1 || attackRows > 1 : info.rows > 1;
           if (!qualifies) return;
           applies.push(f.token);
           var v = cardVerdict(info, f);
@@ -2959,7 +3025,7 @@ async function tabbedChecks(page, opts) {
         fact.line = before.line; fact.count = primaryCount;
         var sv = cardVerdict(shapeInfo, fact);
         var opened = after.hidden === false && after.h > 0 && after.expanded === 'true' && after.line === before.line;
-        var cardName = width + ' px ' + ct + (sv.irregular ? ': the report has this view\'s table with irregular rows' : sv.absent ? ': the report lacks this view\'s table, and the expanded card says so'
+        var cardName = width + ' px ' + ct + (sv.irregular ? ': the report has this view\'s table with irregular rows' : sv.absent ? (sv.attackChecked ? ': the report lacks this view\'s Stage table, the expanded card says so, and it draws the ATT&CK table\'s rows' : ': the report lacks this view\'s table, and the expanded card says so')
             : ': the expanded card shows the figure the source table has');
         var cardDetail = sv.detail + '; collapsed h=' + (before.hidden ? 0 : 'shown') + ', expanded h=' + after.h +
             ', line unchanged=' + (after.line === before.line);
