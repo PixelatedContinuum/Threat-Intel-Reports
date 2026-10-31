@@ -22,7 +22,7 @@ function layout(html) {
   w.Range.prototype.getClientRects = function () { return []; };
   const real = w.getComputedStyle.bind(w);
   /* jsdom's cascade is partial (no text-overflow, a bare overflow shorthand), so a box may also declare data-cs='{"overflowX":"hidden",...}', laid over what jsdom computes */
-  const PROPS = ['display', 'position', 'visibility', 'overflowX', 'overflowY', 'textOverflow', 'whiteSpace', 'marginLeft', 'marginRight', 'marginTop', 'marginBottom',
+  const PROPS = ['display', 'position', 'visibility', 'overflowX', 'overflowY', 'textOverflow', 'whiteSpace', 'webkitLineClamp', 'lineClamp', 'marginLeft', 'marginRight', 'marginTop', 'marginBottom',
     'borderLeftWidth', 'borderRightWidth', 'borderTopWidth', 'borderBottomWidth', 'borderLeftStyle', 'borderRightStyle', 'borderTopStyle', 'borderBottomStyle',
     'borderLeftColor', 'borderRightColor', 'borderTopColor', 'borderBottomColor'];
   w.getComputedStyle = (el, pe) => {
@@ -73,6 +73,11 @@ test('ellipsis truncation is excluded and counted, and a hidden clip without an 
   const f = layout('<span class="e" data-cs="{&quot;display&quot;:&quot;block&quot;,&quot;overflowX&quot;:&quot;hidden&quot;,&quot;textOverflow&quot;:&quot;ellipsis&quot;,&quot;whiteSpace&quot;:&quot;nowrap&quot;}" data-box="0,0,100,20" data-sw="300"></span>' +
     '<div class="c" data-cs="{&quot;overflowX&quot;:&quot;hidden&quot;}" data-box="0,30,100,50" data-sw="300"></div>');
   try { const m = f.run(); assert.deepEqual(kinds(m, 'hang'), ['clipped-x:div.c']); assert.equal(m.excluded.ellipsis, 1); } finally { f.close(); }
+});
+test('a line-clamped box (overflow hidden, line-clamp 2) is excluded and counted; the same box without a clamp is a clipped-y fault', () => {
+  const f = layout('<span class="t" data-cs="{&quot;display&quot;:&quot;block&quot;,&quot;overflowY&quot;:&quot;hidden&quot;,&quot;webkitLineClamp&quot;:&quot;2&quot;}" data-box="0,0,100,38" data-sh="57"></span>' +
+    '<span class="u" data-cs="{&quot;display&quot;:&quot;block&quot;,&quot;overflowY&quot;:&quot;hidden&quot;,&quot;webkitLineClamp&quot;:&quot;none&quot;}" data-box="0,50,100,88" data-sh="57"></span>');
+  try { const m = f.run(); assert.deepEqual(kinds(m, 'hang'), ['clipped-y:span.u']); assert.equal(m.excluded['line clamp'], 1); } finally { f.close(); }
 });
 test('an accent edge shorter than its content is a short bar, with how far the content lies past it; a longer edge is not a fault', () => {
   const f = layout('<div class="card" data-box="10,10,390,54" style="border-left:3px solid #f00"><p data-box="20,10,380,60">t</p><p data-box="20,60,380,150">u</p></div>' +

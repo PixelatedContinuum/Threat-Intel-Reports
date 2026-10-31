@@ -29,6 +29,8 @@
      form control                an input or select scrolls its own value
      ellipsis                    overflow hidden + text-overflow ellipsis + nowrap: the reader sees the truncation (the sticky bar's
                                  current-section label); the full heading is on the page being read
+     line clamp                  overflow hidden + line-clamp: the reader sees the ellipsis on the last line (a sponsor's tagline is
+                                 clamped to two lines, .hl-rvsp__tagline; found on the hunt-io sponsor variant of the page at 390px)
      gutter                      a positioned container overhanging by no more than its own margin on that side (the timeline rail)
      position:fixed              placed against the viewport (the back-to-top button, the toast), not a parent
      painted at 2px or less / no size / visibility:hidden   nothing painted, so nothing hangs out
@@ -81,6 +83,7 @@ function boxFit() {
       }
       if (dy > 2) {
         if (/auto|scroll/.test(cs.overflowY)) isScroller = true;
+        else if (/hidden|clip/.test(cs.overflowY) && ((cs.webkitLineClamp && cs.webkitLineClamp !== 'none') || (cs.lineClamp && cs.lineClamp !== 'none'))) ex('line clamp');
         else hang.push({ kind: cs.overflowY === 'visible' ? 'spill-y' : 'clipped-y', sig: sig(e), path: path(e), client: e.clientHeight, scroll: e.scrollHeight, over: dy });
       }
       if (isScroller) { scrollers++; ex('scroll container'); }
