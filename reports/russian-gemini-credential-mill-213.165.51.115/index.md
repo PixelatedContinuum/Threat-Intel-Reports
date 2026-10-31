@@ -43,6 +43,7 @@ stix_bundle: /stix/russian-gemini-credential-mill-213.165.51.115.json
 
 ## 1. Executive Summary
 {: .hl-tier-1}
+{: .hl-tab-overview}
 
 A single Russian-native operator runs an AI-augmented credential mill with persistent RDP and SSH tunnels into an active HIPAA-regulated US healthcare victim, both tunnels configured and operational at the moment The Hunters Ledger captured the operator's own filesystem. This is the first public, complete **operator-side** view of an AI-orchestrated credential mill: the arsenal, the victim, and the operator's own session-handoff notes to Gemini CLI are all visible at once.
 
@@ -118,6 +119,7 @@ Sections 4-7 carry the technical depth (capabilities, static, dynamic, MITRE ATT
 
 ## 2. Business Risk Assessment
 {: .hl-tier-1}
+{: .hl-tab-overview}
 
 This is not a one-off attack but an active credential mill with a named US healthcare victim, persistent operator-controlled remote access into that victim, and a concurrent political disinformation operation. The risk is twofold: an **immediate-victim risk** (the healthcare victim's HIPAA breach timeline runs until tunnel teardown and direct notification) and a **broader-class risk** for any US small-practice healthcare organization with a similar attack surface.
 
@@ -158,6 +160,7 @@ The phases below describe **categories of work** required to investigate and rem
 
 ## 3. Technical Classification
 {: .hl-tier-2}
+{: .hl-tab-chain}
 
 The arsenal is an operator-built composite: a custom Python-stdlib C2, an LLM-personalized credential mutator, a stolen-key validation pipeline, a mass WordPress validation rig, and a Telegram disinformation bot, a mid-tier AI-augmented cybercrime stack, not a commodity off-the-shelf kit. The tables and comparison below establish how it is structured and how it sits against peer threats.
 
@@ -218,6 +221,7 @@ The combination of these three features defines the operator's class: **AI-augme
 
 ## 4. Capabilities Deep-Dive
 {: .hl-tier-3}
+{: .hl-tab-chain}
 
 Every link in the operator's chain (credential acquisition, LLM personalization, victim-side persistent access, and co-located political IO) is captured at source-code level, and three of those links (the LLM mutator, the AI handoff documents, and the unauthenticated C2) are net-new public findings. The arsenal spans nine functional layers; the subsections below walk each one with the evidence behind it.
 
@@ -507,6 +511,7 @@ The hybrid resource model matters because it yields measurably higher throughput
 
 ## 5. Static Analysis
 {: .hl-tier-3}
+{: .hl-tab-chain}
 
 > **Analyst note:** This section walks the operator's Python source and Markdown handoff documents at the structural level. The captured arsenal is operator-built Python. There is no compiled binary stage for the credential mill components themselves (the only binary stage, the PowerShell beacon `agent_final.ps1`, was referenced in handoff documents but not extracted; lineage caveat in §5.4). The high-signal findings: (1) the verbatim Gemini role-priming prompt in `ai_sniper_brute.py`; (2) the three AI Operator Handoff Document structural patterns; (3) the `c2_server.py` endpoint family and the `/api/v1/get_results` mismatch; (4) the operator's Russian-language source comments.
 
@@ -669,6 +674,7 @@ These strings do not Google-Translate cleanly. The idiom register is consistent 
 
 ## 6. Dynamic / Behavioral Analysis
 {: .hl-tier-3}
+{: .hl-tab-chain}
 
 > **Analyst note:** This section covers the operator's runtime behavior captured across 122 Gemini CLI session JSONs (Phase 11 analysis), open-directory observation of `213.165.51.115` (Hunt.io platform first-seen 2026-03-30; cleaned by 2026-05-23), and network behavior inferred from the captured operator tooling and victim-side artifacts. The operator's behavioral patterns are: (1) Gemini CLI session-driven workflows with handoff documents between sessions, (2) multi-hour mass-WP-validation runs against ~30,000 sites, (3) live posting to `@americanpatriotus` Telegram channel via Gemini-drafted content, (4) cloudflared tunnel registration and victim-side persistent access establishment, and (5) detection-aware open-directory cleanup within days of exposure.
 
@@ -758,6 +764,7 @@ The operator detected the public exposure and wiped the open directory within da
 
 ## 7. MITRE ATT&CK Mapping
 {: .hl-tier-2}
+{: .hl-tab-chain}
 
 > **Analyst note:** This case's behaviors map to MITRE ATT&CK in the companion detection file, where each technique is tied to its detection logic. To keep this report focused, the full technique table is not duplicated inline.
 
@@ -767,6 +774,7 @@ The full ATT&CK technique mapping for this case is maintained alongside the dete
 
 ## 8. Indicators of Compromise
 {: .hl-tier-2}
+{: .hl-tab-indicators}
 
 > **Analyst note:** The complete IOC set for this case is published as a machine-readable JSON feed for direct SIEM/EDR ingestion. It is not duplicated inline here. The highest-priority indicators are also surfaced in the IOC panel (fingerprint icon) on this page.
 
@@ -776,6 +784,7 @@ The full IOC feed is at [`/ioc-feeds/russian-gemini-credential-mill-213.165.51.1
 
 ## 9. Threat Actor Assessment: UTA-2026-012
 {: .hl-tier-2}
+{: .hl-tab-attribution}
 
 > **Note on UTA identifiers:** "UTA" stands for Unattributed Threat Actor. <a href="/actors/UTA-2026-012/">UTA-2026-012</a> is a tracking label The Hunters Ledger assigns to an actor I have observed but cannot yet link to a publicly named threat group. Other vendors and feeds will not use this label; it is specific to this publication. If later evidence ties the activity to a named actor, I will retire the label and update the report. <a href="/actors/UTA-2026-012/">UTA-2026-012</a> has DEFINITE cross-identification with the Trend Micro vendor catalog handle **"bandcampro"** (Trend Micro "Patriot Bait" publication 2026-05-22); both refer to the same operator.
 
@@ -862,6 +871,7 @@ H2, which I reject at effectively zero probability, is coincidental adjacent-ope
 
 ## 10. Risk & Detection
 {: .hl-tier-2}
+{: .hl-tab-indicators}
 
 The single highest-signal action for every environment is to block `*.tralalarkefe.com` (the operator-owned custom domain has no legitimate use case) backed by the operator-bespoke `X-Agent-ID: HOSTNAME_user` C2 header, which catches this operator's traffic even after infrastructure migration. The complete detection ruleset (26 rules across YARA, Sigma, and Suricata) is in the separate detection file:
 
@@ -915,6 +925,7 @@ This is not an incident response guide. It is a brief orientation for readers wh
 
 ## 11. Confidence Summary
 {: .hl-tier-2}
+{: .hl-tab-confidence}
 
 This section organizes the report's findings by confidence level per CLAUDE.md CONFIDENCE LEVELS framework. Granular confidence levels are present inline throughout the report; this summary provides the higher-level view.
 
@@ -968,6 +979,7 @@ This section organizes the report's findings by confidence level per CLAUDE.md C
 
 ## 12. Coverage Gaps
 {: .hl-tier-2}
+{: .hl-tab-confidence}
 
 The following gaps represent uncertainty in the current analysis and require additional evidence to resolve. They are documented here for transparency and as targets for future investigation.
 
@@ -991,6 +1003,7 @@ The following gaps represent uncertainty in the current analysis and require add
 
 ## 13. Calibration Notes / Retractions
 {: .hl-tier-2}
+{: .hl-tab-confidence}
 
 This section documents analytical corrections, prior-art reframings, and scope adjustments made during the investigation. Transparency about investigative iteration is a credibility-preservation requirement of this report's project standards.
 
@@ -1038,6 +1051,7 @@ I normalized that to "MODERATE 83%" with the explanatory annotation "top of the 
 
 ## 14. Defender Follow-Ups
 {: .hl-tier-2}
+{: .hl-tab-indicators}
 
 This section provides the prioritized hunt activities for defenders preparing to engage this operator's TTPs.
 
