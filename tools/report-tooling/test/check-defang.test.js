@@ -166,3 +166,11 @@ test('CLI: FAIL exit 1 with a denominator, PASS exit 0 on the defanged twin, NOT
     assert.strictEqual(cp.spawnSync(process.execPath, [cli, path.join(tmp, 'nope')], { encoding: 'utf8' }).status, 2);
   } finally { fs.rmSync(tmp, { recursive: true, force: true }); }
 });
+
+test('Liquid src path: an address inside src="{{ "/assets/.. 198.51.100.17 .." | relative_url }}" is an asset path, not a finding; the alt text still is', function () {
+  var img = '  <img src="{{ "/assets/images/OpenDirectory-198.51.100.17/a.png" | relative_url }}" alt="shot of 198.51.100.17">\n';
+  var r = scan('# t\n\n' + img);
+  assert.deepStrictEqual(kinds(r), ['IPV4'], 'one finding: the alt text only');
+  var r2 = scan('# t\n\n' + img.replace('alt="shot of 198.51.100.17"', 'alt="shot of 198[.]51[.]100[.]17"'));
+  assert.deepStrictEqual(kinds(r2), []);
+});

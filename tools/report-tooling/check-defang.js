@@ -123,6 +123,7 @@ function allowedBy(allow, host) {
 function stripTargets(line) {
   if (/^\s*\[[^\]]+\]:\s*\S+/.test(line) && !/^\s*\[[^\]]+\]:\s*$/.test(line)) return '';
   return line
+    .replace(/\{\{[^}]*\}\}|\{%[^%]*%\}/g, ' ') /* Liquid output/tags (a src="{{ "/assets/.." | relative_url }}" path holds quotes) */
     .replace(/\]\((?:<[^>]*>|[^)\s]*)(?:\s+"[^"]*")?\)/g, ']')
     .replace(/\b(?:href|src|poster|srcset|action|data-href|data-src)\s*=\s*(?:"[^"]*"|'[^']*')/gi, ' ');
 }
