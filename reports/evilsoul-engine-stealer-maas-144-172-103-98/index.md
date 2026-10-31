@@ -20,7 +20,7 @@ detection_sections:
 ioc_highlights:
   - "evilsoul[.]cc"
   - "evilsoul[.]xyz"
-  - "198.1.195[.]210"
+  - "198[.]1[.]195[.]210"
   - "299a2e7fa8a69c495ec19fecf55d93bb766addaa78e89a4e1ad78a9cea59b31c"
 figure_nav:
   - image: infra-cluster.svg
@@ -45,11 +45,11 @@ figure_nav:
         anchor: "#101-the-two-actors"
 ---
 
-**Campaign Identifier:** EvilSoul-Engine-Stealer-MaaS-144.172.103.98<br>
+**Campaign Identifier:** EvilSoul-Engine-Stealer-MaaS-144[.]172[.]103[.]98<br>
 **Last Updated:** July 3, 2026<br>
 **Threat Level:** HIGH
 
-> **Report scope.** This is one of two reports on a single Brazilian information-stealer operation whose complete server-side toolkit The Hunters Ledger recovered from a torn-down open directory. This report (Report B) covers the EvilSoul-Engine stealer-builder ecosystem, the payload factory, its packer, its web control panel, and the built stealer payloads (`stealer.js`, the `299a2e7f` Socket.IO variant, and the Maploot/Tinarox Electron twins), plus the commodity Chrome credential-decryption tool the operation adopted. The companion report (Report A) covers the operator's other, concurrently-live product line, the KAIDO Quasar-fork remote access trojan at `144.172.109[.]203`. Both are run by the same actor; this report cross-references Report A where the two lines connect.
+> **Report scope.** This is one of two reports on a single Brazilian information-stealer operation whose complete server-side toolkit The Hunters Ledger recovered from a torn-down open directory. This report (Report B) covers the EvilSoul-Engine stealer-builder ecosystem, the payload factory, its packer, its web control panel, and the built stealer payloads (`stealer.js`, the `299a2e7f` Socket.IO variant, and the Maploot/Tinarox Electron twins), plus the commodity Chrome credential-decryption tool the operation adopted. The companion report (Report A) covers the operator's other, concurrently-live product line, the KAIDO Quasar-fork remote access trojan at `144[.]172[.]109[.]203`. Both are run by the same actor; this report cross-references Report A where the two lines connect.
 
 ---
 
@@ -57,7 +57,7 @@ figure_nav:
 {: .hl-tier-1}
 {: .hl-tab-overview}
 
-EvilSoul-Engine is a Brazilian stealer-builder Malware-as-a-Service (MaaS), a productized criminal factory that compiles and auto-distributes uniquely-packed Discord, browser, and cryptocurrency-theft payloads for paying customers. It is operated by the named, self-identified Brazilian actor `n_3_xl` / `@govbrasil`, branded KAIDO (`0xK41`), at HIGH confidence, the same actor whose KAIDO remote access trojan is documented in the companion report. The Hunters Ledger recovered and reverse-engineered the operation's complete server side, the stealer template, an automated builder, a JavaScript packer, a MongoDB-backed web control panel, and an exfiltration/delivery service, after an open-directory sweep surfaced the staging server at `144.172.103[.]98:8888`; with the origin already offline, its files were preserved and recovered via [Hunt.io's AttackCapture](https://hunt.io/). This report answers the intelligence question that motivated the investigation: there was no public technical documentation of the EvilSoul-Engine stealer-builder, its Chrome App-Bound-Encryption (ABE-v20) bypass, its process-token-impersonation credential decryptor, or its Microsoft Defender timing-window evasion, and none of the operation's built payloads carried a working detection signature. This report closes that gap and hands defenders behavior-based detection for a threat that hash-blocking cannot durably catch.
+EvilSoul-Engine is a Brazilian stealer-builder Malware-as-a-Service (MaaS), a productized criminal factory that compiles and auto-distributes uniquely-packed Discord, browser, and cryptocurrency-theft payloads for paying customers. It is operated by the named, self-identified Brazilian actor `n_3_xl` / `@govbrasil`, branded KAIDO (`0xK41`), at HIGH confidence, the same actor whose KAIDO remote access trojan is documented in the companion report. The Hunters Ledger recovered and reverse-engineered the operation's complete server side, the stealer template, an automated builder, a JavaScript packer, a MongoDB-backed web control panel, and an exfiltration/delivery service, after an open-directory sweep surfaced the staging server at `144[.]172[.]103[.]98:8888`; with the origin already offline, its files were preserved and recovered via [Hunt.io's AttackCapture](https://hunt.io/). This report answers the intelligence question that motivated the investigation: there was no public technical documentation of the EvilSoul-Engine stealer-builder, its Chrome App-Bound-Encryption (ABE-v20) bypass, its process-token-impersonation credential decryptor, or its Microsoft Defender timing-window evasion, and none of the operation's built payloads carried a working detection signature. This report closes that gap and hands defenders behavior-based detection for a threat that hash-blocking cannot durably catch.
 
 This matters because EvilSoul-Engine weaponizes current-generation credential theft. Its built payloads defeat Chrome's newest cookie protection, App-Bound Encryption, in two different ways, disable Microsoft Defender wholesale through whole-drive exclusion, real-time monitoring off, firewall off and antivirus process termination, and sit quietly past Defender's post-launch behavioral-monitoring window before doing anything noisy. Because the operation is a MaaS vendor, that capability does not stay with one operator, since every customer who buys a build gets a uniquely repacked payload and the factory's own packer guarantees no two builds share a file hash. Across the 21 recovered files, no existing YARA signature produced a single hit. The correct defensive posture is to hunt behaviors, not hashes.
 
@@ -118,7 +118,7 @@ The endpoint's own defenses are a target. Several tiers actively disable Microso
 {: .hl-tier-2}
 {: .hl-tab-victims}
 
-Hold two truths at once: the recovered infrastructure is a dead staging box, and the operator behind it is concurrently active. The open directory at `144.172.103[.]98:8888` was a genuine, torn-down staging instance of the operation's newer EvilSoul-Engine stealer-builder line (HIGH confidence, its exact purpose as a pre-production staging box versus a proof-of-concept build environment cannot be distinguished from the recovered artifacts, but both readings agree it was non-production and operator-controlled), captured over a single roughly one-week window (2026-06-06 to 2026-06-13) and confirmed dead by 2026-06-27. All of its channels are verified offline: the Telegram bot returns `401 Unauthorized`, the Discord webhooks return `10015 Unknown Webhook`, and the origin server is down. But the same operator's KAIDO Quasar remote access trojan command-and-control at `144.172.109[.]203` was live with fresh samples first seen in May 2026, samples that predate the June open-directory capture. This is a live, multi-product operator caught through one dead staging artifact, not a defunct one-off campaign.
+Hold two truths at once: the recovered infrastructure is a dead staging box, and the operator behind it is concurrently active. The open directory at `144[.]172[.]103[.]98:8888` was a genuine, torn-down staging instance of the operation's newer EvilSoul-Engine stealer-builder line (HIGH confidence, its exact purpose as a pre-production staging box versus a proof-of-concept build environment cannot be distinguished from the recovered artifacts, but both readings agree it was non-production and operator-controlled), captured over a single roughly one-week window (2026-06-06 to 2026-06-13) and confirmed dead by 2026-06-27. All of its channels are verified offline: the Telegram bot returns `401 Unauthorized`, the Discord webhooks return `10015 Unknown Webhook`, and the origin server is down. But the same operator's KAIDO Quasar remote access trojan command-and-control at `144[.]172[.]109[.]203` was live with fresh samples first seen in May 2026, samples that predate the June open-directory capture. This is a live, multi-product operator caught through one dead staging artifact, not a defunct one-off campaign.
 
 The practical consequence: killing the recovered infrastructure does not remove the threat. This is a vendor node in a supply chain, not the end of a campaign. Each customer build is uniquely repacked, and those builds persist in customers' hands independent of the origin server's status. The takeaway for defenders is the one this report returns to repeatedly, detect behaviors, not hashes.
 
@@ -151,8 +151,8 @@ EvilSoul-Engine is best understood as two things at once: a stealer-builder MaaS
 | Type | Information-stealer builder/packer + stealer payloads + web control panel |
 | Family confidence | EvilSoul-Engine lineage: DEFINITE |
 | Builds observed | Node source (`stealer.js`); pkg-Node single-executable (`299a2e7f` Socket.IO variant); Electron (Maploot, Tinarox); four unrecovered `static/*.exe` factory outputs |
-| Delivery hosts | gofile.io, catbox.moe, litterbox.catbox.moe, pixeldrain.com, an ngrok tunnel, the Telegram Bot API |
-| Exfiltration sinks | Discord webhooks, `evilsoul[.]xyz` / `evilsoul[.]cc` backends, gofile.io, web-panel `/send-*` endpoints |
+| Delivery hosts | gofile[.]io, catbox.moe, litterbox.catbox.moe, pixeldrain[.]com, an ngrok tunnel, the Telegram Bot API |
+| Exfiltration sinks | Discord webhooks, `evilsoul[.]xyz` / `evilsoul[.]cc` backends, gofile[.]io, web-panel `/send-*` endpoints |
 | Sophistication | Selective, advanced credential-theft (ABE-v20 bypass, CDP cookie theft, Defender timing evasion) on an otherwise commodity structure |
 | Status | Recovered open directory dead; sibling Electron and pkg-Node builds live in customers' hands |
 
@@ -205,7 +205,7 @@ The EvilSoul-Engine stealer harvests a consumer's full credential footprint (Dis
 
 #### Deep technical analysis
 
-The stealer steals authentication tokens from the local storage of every Discord client variant, Discord, Canary, PTB, Development, and Lightcord, by reading their LevelDB stores. It then validates each token against the Discord API (`discord.com/api/v9/users/@me`) and enriches every valid one with the account's full context: billing and saved payment sources, friends and relationships, guild (server) memberships, badges, Nitro subscription status, two-factor-authentication state, email, phone number, and, critically, **account recovery codes**.
+The stealer steals authentication tokens from the local storage of every Discord client variant, Discord, Canary, PTB, Development, and Lightcord, by reading their LevelDB stores. It then validates each token against the Discord API (`discord[.]com/api/v9/users/@me`) and enriches every valid one with the account's full context: billing and saved payment sources, friends and relationships, guild (server) memberships, badges, Nitro subscription status, two-factor-authentication state, email, phone number, and, critically, **account recovery codes**.
 
 Lifting the recovery codes is what turns token theft into durable account takeover. A victim who notices the compromise and resets their password can be locked back out by an attacker holding the recovery codes.
 
@@ -217,7 +217,7 @@ Stealing a Discord token is like stealing a signed, pre-authenticated door badge
 
 For consumers the security impact is loss of a primary social and, increasingly, financial identity, since Discord accounts carry billing data and act as gateways to communities and marketplaces. For organizations, a compromised employee Discord account is a social-engineering launchpad and, where Discord is used for coordination, a foothold into internal discussion.
 
-To detect it, the enrichment traffic is the tell, a burst of requests to `discord.com/api/v9/` endpoints (`/users/@me`, billing, relationships) from a non-browser process shortly after execution, and it survives repacking. Exfiltration of the harvest lands on Discord webhooks (Section 5.6).
+To detect it, the enrichment traffic is the tell, a burst of requests to `discord[.]com/api/v9/` endpoints (`/users/@me`, billing, relationships) from a non-browser process shortly after execution, and it survives repacking. Exfiltration of the harvest lands on Discord webhooks (Section 5.6).
 
 ### 5.2 Browser credential and cookie theft: three mechanisms
 
@@ -322,7 +322,7 @@ The stealer packages its harvest and ships it out through several redundant chan
 
 - Discord webhooks: the primary exfiltration sink; harvested archives and status embeds are POSTed to hardcoded webhook IDs (Maploot/Tinarox share `1391195207508295750` and `1401355074235793458`).
 - Web-panel endpoints: a zip of cookies, autofills, credit cards, and passwords to `/send-data`; status embeds to `/send-embed`; plus `/send-logs` and `/send-recovery-codes`.
-- Cloud file hosts: loot archives uploaded to gofile.io.
+- Cloud file hosts: loot archives uploaded to gofile[.]io.
 - Operator backend: the `evilsoul[.]xyz` backend receives injected data and serves tool downloads (`/dcinjection-send`, `/upload-txts`, `/download/panel`).
 
 To detect it, the network signatures are strong precisely because they are hardcoded. Discord webhook POSTs to the two known IDs, uploads to gofile, and traffic to the `evilsoul[.]xyz` and `evilsoul[.]cc` backends are all directly hunted in the companion Suricata and IOC content. Because gofile and Discord are legitimate shared services, the *specific* webhook IDs and backend domains are the discriminating indicators, not the services themselves.
@@ -342,7 +342,7 @@ To detect it, the network signatures are strong precisely because they are hardc
 
 > **Analyst note:** This is a distinct EvilSoul-Engine product tier, not just a fire-and-forget stealer, but a stealer with a full real-time remote access trojan bolted on, driven over a persistent Socket.IO channel. Its payload was V8 bytecode, so static analysis was unable to read it; its decrypted source was recovered from process memory during observed execution. This section describes what the tier can do to an infected host and how each capability is detected. The remote-control internals are summarized at capability altitude.
 
-The `299a2e7f` build (a single 81.9 MB pkg-Node executable) carries all the stealer capabilities of Section 5 and adds a full interactive remote access trojan over a persistent real-time channel to `http://evilsoul[.]cc:80` (Socket.IO version 4, opening with a `?EIO=4&transport=polling` handshake before upgrading to a WebSocket). Once connected, the operator issues named events and the infected client executes them and returns results.
+The `299a2e7f` build (a single 81.9 MB pkg-Node executable) carries all the stealer capabilities of Section 5 and adds a full interactive remote access trojan over a persistent real-time channel to `hxxp://evilsoul[.]cc:80` (Socket.IO version 4, opening with a `?EIO=4&transport=polling` handshake before upgrading to a WebSocket). Once connected, the operator issues named events and the infected client executes them and returns results.
 
 <details markdown="1" class="hl-teardown">
 <summary>Full remote-control, webhook-resolution, ABE-bypass, and build-identity detail for the Socket.IO variant (6.1-6.4)</summary>
@@ -360,9 +360,9 @@ This tier crosses the line from data theft to hands-on host control. The operato
 
 ### 6.2 Runtime webhook resolution: a detection-relevant design choice
 
-Unlike the Maploot and Tinarox builds (which hardcode their Discord webhooks), the `299a2e7f` build hardcodes no exfiltration webhook at all. Instead, at runtime it POSTs its license key to a relay endpoint, `http://198.1.195[.]210:3000/tralalero`, and receives the current Discord webhook URL in the response. A fallback key (`6D479A7E665F`) is sent in every call.
+Unlike the Maploot and Tinarox builds (which hardcode their Discord webhooks), the `299a2e7f` build hardcodes no exfiltration webhook at all. Instead, at runtime it POSTs its license key to a relay endpoint, `hxxp://198[.]1[.]195[.]210:3000/tralalero`, and receives the current Discord webhook URL in the response. A fallback key (`6D479A7E665F`) is sent in every call.
 
-This design lets the operator rotate exfiltration destinations without rebuilding payloads, which weakens webhook-based blocking. But it introduces a *stronger* fixed indicator: the relay endpoint itself. Every build of this tier phones `198.1.195[.]210:3000/tralalero` on startup, so a network rule on that endpoint catches the tier regardless of which webhook it is currently using. The relay is a single point the operator cannot rotate without rebuilding.
+This design lets the operator rotate exfiltration destinations without rebuilding payloads, which weakens webhook-based blocking. But it introduces a *stronger* fixed indicator: the relay endpoint itself. Every build of this tier phones `198[.]1[.]195[.]210:3000/tralalero` on startup, so a network rule on that endpoint catches the tier regardless of which webhook it is currently using. The relay is a single point the operator cannot rotate without rebuilding.
 
 ### 6.3 App-Bound-Encryption bypass via GitHub-hosted tools
 
@@ -372,7 +372,7 @@ To detect it, the drop of `chromelevator.exe` or `chrome_decrypt.dll` into `%TEM
 
 ### 6.4 A distinct build in the same family
 
-The `299a2e7f` tier is assessed as a distinct build of the same EvilSoul family (HIGH confidence), not a different malware. It lacks several `stealer.js` features (no Steam key, no `evilsoul.xyz` backend, no hardware-ID blocklist, no Defender timing phase observed in the recovered memory). It is a different product tier of the same MaaS.
+The `299a2e7f` tier is assessed as a distinct build of the same EvilSoul family (HIGH confidence), not a different malware. It lacks several `stealer.js` features (no Steam key, no `evilsoul[.]xyz` backend, no hardware-ID blocklist, no Defender timing phase observed in the recovered memory). It is a different product tier of the same MaaS.
 
 A supporting identity detail: the build references a custom Discord emoji (`evilsoulguild` emoji ID `1389088908117278781`), which differs from the emoji ID referenced by the Maploot and Tinarox builds (`1362105228719034679`). These are custom-emoji identifiers, not Discord server identifiers. Two distinct `evilsoulguild` emoji imply the operation runs at least two separate panel servers or builds, but the operator's real Discord server ID was never recovered, so this is a floor on the number of panel servers, not a server identifier itself. It is retained as a family-linkage anchor, correctly scoped.
 
@@ -397,11 +397,11 @@ Both Maploot and Tinarox present as free games. The `package.json` author reads 
 
 After cracking Tinarox's added keyed obfuscation layer with a JavaScript deobfuscator (webcrack), every exfiltration value recovered independently from Tinarox's own code is byte-for-byte identical to Maploot's:
 
-- The primary Discord webhook (`discord.com/api/webhooks/1391195207508295750/…`).
-- The secondary Discord webhook (`discord.com/api/webhooks/1401355074235793458/…`, resolved from Maploot's memory).
-- The ngrok tunnel (`acf02ac96211.ngrok-free[.]app`): shared and not rotated between builds.
+- The primary Discord webhook (`discord[.]com/api/webhooks/1391195207508295750/…`).
+- The secondary Discord webhook (`discord[.]com/api/webhooks/1401355074235793458/…`, resolved from Maploot's memory).
+- The ngrok tunnel (`acf02ac96211[.]ngrok-free[.]app`): shared and not rotated between builds.
 - The `evilsoul[.]xyz` backend (`/dcinjection-send`, `/upload-txts`, `/download/panel`, `/download/decrypter/<ver>`).
-- The gofile upload endpoint (`store8.gofile[.]io/uploadFile`).
+- The gofile upload endpoint (`store8[.]gofile[.]io/uploadFile`).
 - The Steam Web API key (`440D7F4D810EF9298D25EDDF37C1F902`).
 - The EvilSoul-family custom emoji (`evilsoulguild` emoji `1362105228719034679`, a custom emoji, not a server identifier).
 
@@ -415,7 +415,7 @@ The twins are a snapshot of the builder mid-evolution. The operator is actively 
 
 ### 7.3 The shared App-Bound-Encryption injector
 
-Maploot's backend serves its own copy of the Chrome App-Bound-Encryption injector at `evilsoul[.]xyz/download/decrypter/chrome_inject.exe`. This is the `evilsoul.xyz` analog of the `299a2e7f` tier's GitHub-hosted `chromelevator.exe`, the same App-Bound-Encryption bypass mechanism, delivered from the operator's own backend rather than from GitHub. It ties the twins' credential-decryption capability to the same commodity tool the Socket.IO tier fetches, analyzed next.
+Maploot's backend serves its own copy of the Chrome App-Bound-Encryption injector at `evilsoul[.]xyz/download/decrypter/chrome_inject.exe`. This is the `evilsoul[.]xyz` analog of the `299a2e7f` tier's GitHub-hosted `chromelevator.exe`, the same App-Bound-Encryption bypass mechanism, delivered from the operator's own backend rather than from GitHub. It ties the twins' credential-decryption capability to the same commodity tool the Socket.IO tier fetches, analyzed next.
 
 </details>
 
@@ -427,7 +427,7 @@ Maploot's backend serves its own copy of the Chrome App-Bound-Encryption injecto
 
 > **Analyst note:** The Chrome credential-decryption tool that multiple EvilSoul-Engine tiers fetch at runtime is not the operator's own invention. It is a public, well-documented red-team tool that the operation adopted. This distinction matters for accurate reporting: it is a supply-chain-adoption story, not a novel-tradecraft story. This section covers what the tool does (at capability altitude), how it is family-named by antivirus vendors, and why its provenance is intel-relevant.
 
-The `chromelevator.exe` and `chrome_decrypt.dll` pair fetched by the `299a2e7f` tier (and mirrored on `evilsoul.xyz`) is the public red-team tool xaitax "Chrome-App-Bound-Encryption-Decryption" (also called "ChromElevator"), authored by security researcher Alexander Hagenah. This is well-documented public prior art, not novel tradecraft invented by this operator. The upstream repository (`github.com/xaitax/Chrome-App-Bound-Encryption-Decryption`) was confirmed accessible and current during the investigation. Antivirus vendors already family-name it on related samples, Kaspersky as `HEUR:HackTool.Win64.ChromElevator.gen`, Microsoft as `HackTool:Win64/PSWDump.MY!MTB`.
+The `chromelevator.exe` and `chrome_decrypt.dll` pair fetched by the `299a2e7f` tier (and mirrored on `evilsoul[.]xyz`) is the public red-team tool xaitax "Chrome-App-Bound-Encryption-Decryption" (also called "ChromElevator"), authored by security researcher Alexander Hagenah. This is well-documented public prior art, not novel tradecraft invented by this operator. The upstream repository (`github.com/xaitax/Chrome-App-Bound-Encryption-Decryption`) was confirmed accessible and current during the investigation. Antivirus vendors already family-name it on related samples, Kaspersky as `HEUR:HackTool.Win64.ChromElevator.gen`, Microsoft as `HackTool:Win64/PSWDump.MY!MTB`.
 
 <details markdown="1" class="hl-teardown">
 <summary>Full capability breakdown, operator fork evidence, and provenance reasoning for the ABE bypass tool (8.1-8.3)</summary>
@@ -479,7 +479,7 @@ All times are relative to process launch (T+00:00).
 | T+00:05-00:10 | The process queries the Windows registry for the machine's cryptographic GUID (`REG QUERY … MachineGuid`) via a spawned `cmd.exe` child, the host-fingerprinting step behind the sample's machine-ID generation. |
 | T+00:10+ | The sample opens a Socket.IO connection to `evilsoul[.]cc:80`. |
 | T+00:10+ (on connect) | The sample attempts its Defender/firewall/antivirus-suppression routine, writes a Startup-folder persistence script, and creates the hidden VBS/LNK watchdog chain described in Section 5.5. |
-| T+ (undetermined) | The sample attempts to resolve its exfiltration webhook by POSTing its license key to the relay endpoint (`198.1.195[.]210:3000/tralalero`, Section 6.2). |
+| T+ (undetermined) | The sample attempts to resolve its exfiltration webhook by POSTing its license key to the relay endpoint (`198[.]1[.]195[.]210:3000/tralalero`, Section 6.2). |
 | T+ full session | The sample settles into a connected, idle state with its full decrypted source resident in process memory. |
 
 ### 9.2 What execution confirmed, and what remains code-only
@@ -574,10 +574,10 @@ Two caveats bound the attribution honestly. First, the primary public source for
 | Collection / T1113 | Screen Capture | 30fps desktop capture streamed as Socket.IO `screenData` (`299a2e7f`) |
 | Collection / T1005 | Data from Local System | Direct read of `Login Data`/`Web Data`/`History`/LevelDB |
 | Command and Control / T1071.001 | Web Protocols | Socket.IO to `evilsoul[.]cc`; Discord webhook POST; `evilsoul[.]xyz` backend |
-| Command and Control / T1571 | Non-Standard Port | `198.1.195[.]210:3000` relay; builder `:1331` |
+| Command and Control / T1571 | Non-Standard Port | `198[.]1[.]195[.]210:3000` relay; builder `:1331` |
 | Command and Control / T1105 | Ingress Tool Transfer | Runtime fetch of ABE tools + Python decryptor from C2/GitHub |
 | Exfiltration / T1041 | Exfiltration Over C2 Channel | Discord webhook / `/send-*` panel endpoints |
-| Exfiltration / T1567.002 | Exfiltration to Cloud Storage | gofile.io `uploadFile` loot archives (DEFINITE) |
+| Exfiltration / T1567.002 | Exfiltration to Cloud Storage | gofile[.]io `uploadFile` loot archives (DEFINITE) |
 | Impact / T1529 | System Shutdown/Reboot | `NtRaiseHardError` BSOD + shutdown/restart commands (`299a2e7f`) (MODERATE) |
 | Impact / T1489 | Service Stop | `net stop WinDefend`; AV `taskkill` (`299a2e7f`) |
 | Resource Development / T1588.002 | Obtain Capabilities: Tool | xaitax ChromElevator adopted as supply-chain ABE bypass (DEFINITE) |
@@ -595,18 +595,18 @@ On coverage, the mapping is credential-access- and defense-evasion-heavy, exactl
 The infrastructure examined for this report is the EvilSoul-Engine / 0xK41 origin cluster, the recovered kit's own hosting footprint. Every IP examined across the wider investigation is attacker-controlled, not compromised, which means infrastructure characteristics (hosting choices, domain-registration timing, exfiltration-endpoint reuse) are legitimate identity indicators for this operator rather than incidental traits of a hijacked host.
 
 <figure style="text-align: center; margin: 2em 0;">
-  <img loading="lazy" src="{{ "/assets/images/evilsoul-engine-stealer-maas-144-172-103-98/infra-cluster.svg" | relative_url }}" alt="Two-cluster infrastructure diagram. The left cluster is the dead EvilSoul-Engine origin (developer @breakingupslow) on MagnoHost Brazil and the RouterHosting factory origin at 144.172.103.98:8888. The right cluster is the live KAIDO kit (operator n_3_xl / @govbrasil) with kaidoo.com.br C2. A labelled link marks the DEFINITE tooling lineage between them, and a separate marker shows the same-operator equation retracted to LOW confidence.">
-  <figcaption><em>Figure 7: The two-cluster, two-operator infrastructure model. The dead EvilSoul-Engine origin cluster (left, developer <code>@breakingupslow</code>, the recovered "factory" at <code>144.172.103[.]98:8888</code> plus the MagnoHost/Brazil exfiltration backends) is joined to the concurrently-live KAIDO kit cluster (right, operator <code>n_3_xl</code> / <code>@govbrasil</code>, <code>kaidoo[.]com[.]br</code> C2) by a tooling-lineage link, not a shared-operator link. The lineage (KAIDO's toolkit is built on the EvilSoul-Engine MaaS) is DEFINITE; the earlier "same person" equation is shown RETRACTED / LOW. These are two separate Brazilian operators (Section 10). The diagram makes visible why killing the dead origin does not remove the threat: the operator cluster on the right is live and independent.</em></figcaption>
+  <img loading="lazy" src="{{ "/assets/images/evilsoul-engine-stealer-maas-144-172-103-98/infra-cluster.svg" | relative_url }}" alt="Two-cluster infrastructure diagram. The left cluster is the dead EvilSoul-Engine origin (developer @breakingupslow) on MagnoHost Brazil and the RouterHosting factory origin at 144[.]172[.]103[.]98:8888. The right cluster is the live KAIDO kit (operator n_3_xl / @govbrasil) with kaidoo[.]com[.]br C2. A labelled link marks the DEFINITE tooling lineage between them, and a separate marker shows the same-operator equation retracted to LOW confidence.">
+  <figcaption><em>Figure 7: The two-cluster, two-operator infrastructure model. The dead EvilSoul-Engine origin cluster (left, developer <code>@breakingupslow</code>, the recovered "factory" at <code>144[.]172[.]103[.]98:8888</code> plus the MagnoHost/Brazil exfiltration backends) is joined to the concurrently-live KAIDO kit cluster (right, operator <code>n_3_xl</code> / <code>@govbrasil</code>, <code>kaidoo[.]com[.]br</code> C2) by a tooling-lineage link, not a shared-operator link. The lineage (KAIDO's toolkit is built on the EvilSoul-Engine MaaS) is DEFINITE; the earlier "same person" equation is shown RETRACTED / LOW. These are two separate Brazilian operators (Section 10). The diagram makes visible why killing the dead origin does not remove the threat: the operator cluster on the right is live and independent.</em></figcaption>
 </figure>
 
 ### 12.1 The EvilSoul-Engine cluster (dead origin)
 
 | Indicator | Role | Provider / jurisdiction | Confidence |
 |---|---|---|---|
-| `144.172.103[.]98` | Open-directory origin (`:8888`), `x4m1k[.]com` A-record target | RouterHosting (US), **DEAD** | HIGH |
-| `198.1.195[.]207` | EvilSoul builder default panel target | MagnoHost (Brazil) | HIGH |
-| `198.1.195[.]210` | EvilSoul relay (`:3000/tralalero` webhook resolution) | MagnoHost (Brazil), same /24 | HIGH |
-| `198.89.99[.]163` | Historical `evilsoul1337[.]xyz` host | MagnoHost (Brazil) | MODERATE |
+| `144[.]172[.]103[.]98` | Open-directory origin (`:8888`), `x4m1k[.]com` A-record target | RouterHosting (US), **DEAD** | HIGH |
+| `198[.]1[.]195[.]207` | EvilSoul builder default panel target | MagnoHost (Brazil) | HIGH |
+| `198[.]1[.]195[.]210` | EvilSoul relay (`:3000/tralalero` webhook resolution) | MagnoHost (Brazil), same /24 | HIGH |
+| `198[.]89[.]99[.]163` | Historical `evilsoul1337[.]xyz` host | MagnoHost (Brazil) | MODERATE |
 | `x4m1k[.]com` (+ subdomains) | "0xK41 Panel" control plane | Cloudflare NS, origin exposed | HIGH |
 | `evilsoul[.]cc` | Socket.IO C2 for `299a2e7f` | shared `indie`+`rex` Cloudflare account | DEFINITE (role) |
 | `evilsoul[.]xyz` | Maploot/Tinarox primary backend | operator backend | DEFINITE (role) |
@@ -614,7 +614,7 @@ The infrastructure examined for this report is the EvilSoul-Engine / 0xK41 origi
 
 Cluster cohesion is **STRONG**. Three independent shared elements bind this cluster: the Brazilian MagnoHost `/24` co-location (`.207`/`.210`/`.163`), a shared Cloudflare account tying `evilsoul[.]cc` and `evilsoul1337[.]xyz` (the same `indie`+`rex` nameserver pair), and (the strongest single technical fact) the shared exfiltration infrastructure across the independently-analyzed Maploot and Tinarox builds (identical Discord webhook IDs, Steam API key, and ngrok subdomain, Section 7). That last element is about as strong a same-operator signal as passive evidence provides.
 
-The Brazilian hosting block's specific autonomous-system number is reported inconsistently across sources (one enrichment source records AS210554, another AS270764). Both agree the block is Brazilian and both resolve, via reverse DNS, to the provider MagnoHost (`*.magnohost.com.br`). This report cites the corroborated fact (MagnoHost, Brazil) and flags the specific ASN number as sourced-with-variance rather than asserting one.
+The Brazilian hosting block's specific autonomous-system number is reported inconsistently across sources (one enrichment source records AS210554, another AS270764). Both agree the block is Brazilian and both resolve, via reverse DNS, to the provider MagnoHost (`*.magnohost[.]com[.]br`). This report cites the corroborated fact (MagnoHost, Brazil) and flags the specific ASN number as sourced-with-variance rather than asserting one.
 
 ### 12.2 Durable versus shared-service indicators
 
@@ -622,25 +622,25 @@ Not every indicator is equally safe to block. The distinction matters operationa
 
 **Durable, operator-provisioned (safe to block/monitor):**
 - The `evilsoul[.]cc`, `evilsoul[.]xyz`, `evilsoul1337[.]xyz`, and `x4m1k[.]com` domains.
-- The relay endpoint `198.1.195[.]210:3000/tralalero`: a fixed point the operator cannot rotate without rebuilding the `299a2e7f` tier.
+- The relay endpoint `198[.]1[.]195[.]210:3000/tralalero`: a fixed point the operator cannot rotate without rebuilding the `299a2e7f` tier.
 - The specific Discord webhook IDs (`1391195207508295750`, `1401355074235793458`).
-- The specific ngrok subdomain (`acf02ac96211.ngrok-free[.]app`): operator-provisioned and, notably, unrotated across the Maploot/Tinarox builds.
+- The specific ngrok subdomain (`acf02ac96211[.]ngrok-free[.]app`): operator-provisioned and, notably, unrotated across the Maploot/Tinarox builds.
 
 **Shared services (block the specific value, not the provider):**
-- gofile.io: a legitimate file host; the operation uses `store8.gofile[.]io/uploadFile`. Do not block gofile broadly; alert on the specific upload pattern in context.
+- gofile[.]io: a legitimate file host; the operation uses `store8[.]gofile[.]io/uploadFile`. Do not block gofile broadly; alert on the specific upload pattern in context.
 - ngrok: the service is legitimate; only the specific subdomain token is operator-unique.
 - Discord: the platform is legitimate; only the specific webhook IDs are indicators.
 - GitHub: the `sqlban` account that hosted the ABE tools is now taken down (404).
 
 ### 12.3 Origin exposed despite Cloudflare
 
-The operator's `x4m1k[.]com` panel domain uses Cloudflare nameservers but does not proxy its traffic through Cloudflare's CDN. The A-record resolves directly to the origin IP (`144.172.103[.]98`). This is an operational-security gap: the appearance of CDN fronting without the protection. It is consistent with the operator profile throughout, effort concentrated on payload evasion, inconsistent discipline at the infrastructure layer.
+The operator's `x4m1k[.]com` panel domain uses Cloudflare nameservers but does not proxy its traffic through Cloudflare's CDN. The A-record resolves directly to the origin IP (`144[.]172[.]103[.]98`). This is an operational-security gap: the appearance of CDN fronting without the protection. It is consistent with the operator profile throughout, effort concentrated on payload evasion, inconsistent discipline at the infrastructure layer.
 
 Full infrastructure detail, including the two-cluster model, the certificate/JARM continuity establishing the origin as attacker-controlled, and the bulletproof-hosting assessment, is in the investigation record. The KAIDO Quasar RAT C2 cluster (the operator's separate, live infrastructure) is covered in the companion report.
 
 ### 12.4 A residual, unresolved lead
 
-An unrelated co-tenant was observed on the historical `evilsoul1337[.]xyz` host (`198.89.99[.]163`): a Brazilian CPF/name-lookup ("doxing") API and a game-server panel. This is assessed at **MODERATE-LOW** confidence as likely-unrelated co-tenancy (a different customer sharing the same Brazilian VPS) rather than operator-controlled, and it is documented here as a residual lead, not attributed to the operator. Separately, a French-language domain pair (`choix-relay[.]com` / `choixrdv[.]com`) co-resident on other operator-adjacent infrastructure is held at MODERATE confidence as a possible but unconfirmed parallel operation. Neither changes the primary attribution.
+An unrelated co-tenant was observed on the historical `evilsoul1337[.]xyz` host (`198[.]89[.]99[.]163`): a Brazilian CPF/name-lookup ("doxing") API and a game-server panel. This is assessed at **MODERATE-LOW** confidence as likely-unrelated co-tenancy (a different customer sharing the same Brazilian VPS) rather than operator-controlled, and it is documented here as a residual lead, not attributed to the operator. Separately, a French-language domain pair (`choix-relay[.]com` / `choixrdv[.]com`) co-resident on other operator-adjacent infrastructure is held at MODERATE confidence as a possible but unconfirmed parallel operation. Neither changes the primary attribution.
 
 ---
 
@@ -666,7 +666,7 @@ The feed is formatted for direct ingestion into SIEM and EDR tooling (no defangi
 | Host / behavioral IOCs | 12+ | Drop paths, registry keys, scheduled task, license keys, operator-signature constants |
 
 <figure style="text-align: center; margin: 2em 0;">
-  <img loading="lazy" src="{{ "/assets/images/evilsoul-engine-stealer-maas-144-172-103-98/vt-corpus-map.svg" | relative_url }}" alt="Sample corpus map. The dead factory at 144.172.103.98:8888 sits at the top; below it two product families branch out: EvilSoul stealer builds (Maploot, Tinarox, and the 299a2e7f pkg-Node variant) sharing one exfiltration backend, and KAIDO Quasar RAT builds (c7542e82, 385d20ca, 022944768) pointing at the live c2.kaidoo.com.br C2, each sample annotated with its recovery method and key detection anchors.">
+  <img loading="lazy" src="{{ "/assets/images/evilsoul-engine-stealer-maas-144-172-103-98/vt-corpus-map.svg" | relative_url }}" alt="Sample corpus map. The dead factory at 144[.]172[.]103[.]98:8888 sits at the top; below it two product families branch out: EvilSoul stealer builds (Maploot, Tinarox, and the 299a2e7f pkg-Node variant) sharing one exfiltration backend, and KAIDO Quasar RAT builds (c7542e82, 385d20ca, 022944768) pointing at the live c2[.]kaidoo[.]com[.]br C2, each sample annotated with its recovery method and key detection anchors.">
   <figcaption><em>Figure 8: The VirusTotal sample corpus mapped to the torn-down factory. Because the four native factory-output <code>static/*.exe</code> files were never recovered as binaries, VirusTotal samples fill the gap and show what the factory produced: the EvilSoul-Engine stealer builds (Maploot and Tinarox Electron twins plus the <code>299a2e7f</code> pkg-Node Socket.IO variant), which share one byte-for-byte exfiltration stack, and (for cross-campaign context) the operator's separate, live KAIDO Quasar-fork RAT builds. The map orients the reader to how the tiers relate and which are recovered versus inferred; per-indicator confidence and recommended <code>BLOCK</code>/<code>HUNT</code> actions live in the IOC feed. The RAT builds are the subject of the companion report, not this one.</em></figcaption>
 </figure>
 
@@ -676,7 +676,7 @@ For a defender triaging quickly, these are the discriminating indicators, chosen
 
 - **Operator-signature packer constant**: `see-you-in-the-hellwizard-1082@239$328927bA` (survives js-confuser; near-zero false-positive across all tiers).
 - **`299a2e7f` args-file suffix**: `evilsoulblockkstarjkjaksghjhsjkahjskjak81929ijsahsjkj` (near-zero false-positive; unique to the Socket.IO tier).
-- **Relay endpoint**: `198.1.195[.]210:3000/tralalero` (fixed webhook-resolution point).
+- **Relay endpoint**: `198[.]1[.]195[.]210:3000/tralalero` (fixed webhook-resolution point).
 - **Backend domains**: `evilsoul[.]cc` (Socket.IO C2), `evilsoul[.]xyz` (Maploot/Tinarox backend).
 - **ABE-tool drop path**: `%TEMP%\executor\chromelevator.exe` and `chrome_decrypt.dll`.
 - **Shared Steam API key**: `440D7F4D810EF9298D25EDDF37C1F902` (byte-identical across Maploot/Tinarox).
@@ -722,7 +722,7 @@ The two anchor behaviors, both build-independent:
 - **CDP browser-relaunch cookie theft**: a browser binary spawned with `--remote-debugging-port`, `--headless`, and `--user-data-dir` (pointing at the real profile) by a non-browser, non-developer parent. This maps to Sysmon process-creation (Event ID 1) and network (Event ID 3) telemetry. It is the highest-value credential-access hunt because the parent-child and command-line combination is distinctive and does not vary between builds.
 - **Process-token-impersonation decryptor**: a Python process reading a script from standard input (`python -u -`), enabling the debug privilege, and opening a handle to `lsass.exe`. This maps to Sysmon process-creation (Event ID 1) plus process-access (Event ID 10). Because the script never touches disk, only the process-behavior chain catches it.
 
-Discord account theft produces a burst of `discord.com/api/v9/` enrichment requests from a non-browser process; browser theft produces direct reads of `Login Data`, `Cookies`, `Web Data`, and LevelDB stores (Sysmon Event ID 11 / file-access telemetry).
+Discord account theft produces a burst of `discord[.]com/api/v9/` enrichment requests from a non-browser process; browser theft produces direct reads of `Login Data`, `Cookies`, `Web Data`, and LevelDB stores (Sysmon Event ID 11 / file-access telemetry).
 
 #### Stage 4: Persistence
 
@@ -734,7 +734,7 @@ Persistence is redundant (Section 5.5). The standout detection is the hidden sch
 
 > **Analyst note:** The harvested data leaves the host, over hardcoded Discord webhooks, cloud file-host uploads, or a persistent real-time channel in the interactive tier. Because the destinations are hardcoded, this stage produces the strongest network signatures, and the interactive tier's persistent channel is itself a distinctive protocol pattern.
 
-The network signatures are strong because they are fixed: a **Socket.IO handshake** (`/socket.io/?EIO=4&transport=polling`) to `evilsoul[.]cc`; an HTTP POST to the relay `198.1.195[.]210:3000/tralalero`; **Discord webhook POSTs** to the two known IDs; gofile uploads (`api.gofile.io/servers` → `*.gofile.io/uploadFile`); the ngrok tunnel (`acf02ac96211.ngrok-free[.]app`); and the `evilsoul[.]xyz` backend `/send-*` and `/download` endpoints. The relay endpoint is the most valuable of these for the `299a2e7f` tier because the operator cannot rotate it without rebuilding.
+The network signatures are strong because they are fixed: a **Socket.IO handshake** (`/socket.io/?EIO=4&transport=polling`) to `evilsoul[.]cc`; an HTTP POST to the relay `198[.]1[.]195[.]210:3000/tralalero`; **Discord webhook POSTs** to the two known IDs; gofile uploads (`api[.]gofile[.]io/servers` → `*.gofile[.]io/uploadFile`); the ngrok tunnel (`acf02ac96211[.]ngrok-free[.]app`); and the `evilsoul[.]xyz` backend `/send-*` and `/download` endpoints. The relay endpoint is the most valuable of these for the `299a2e7f` tier because the operator cannot rotate it without rebuilding.
 
 ### 14.2 Detection priority ranking
 
@@ -744,7 +744,7 @@ For teams deciding where to invest first, the report's five highest-value, most-
 2. **Defender/AV suppression burst**: `Add-MpPreference -ExclusionPath 'C:\'` and `Set-MpPreference -DisableRealtimeMonitoring $true` (Windows EID 4104). Highest signal, lowest false-positive.
 3. **Process-token-impersonation decryptor**: `python -u -` from stdin + debug privilege + `lsass.exe` handle (Sysmon EID 1 + 10).
 4. **Microsoft-masquerade hidden scheduled task**: task authored as `Microsoft Corporation`, hidden, created by a non-system process (Windows EID 4698).
-5. **Operator-signature and relay network anchors**: the packer XOR constant in staged files (YARA); the `198.1.195[.]210:3000/tralalero` relay and `evilsoul[.]cc` Socket.IO handshake (network).
+5. **Operator-signature and relay network anchors**: the packer XOR constant in staged files (YARA); the `198[.]1[.]195[.]210:3000/tralalero` relay and `evilsoul[.]cc` Socket.IO handshake (network).
 
 The detection file's 6 Sigma rules and 1 Suricata signature back these five priorities directly: Sigma covers hunts 2-4 (Defender/AV suppression, the LSASS-impersonation decryptor, and the Microsoft-masquerade scheduled task), and Suricata covers hunt 5's network anchors (the relay endpoint and the Socket.IO handshake).
 
@@ -754,7 +754,7 @@ The detection file's 6 Sigma rules and 1 Suricata signature back these five prio
 |---|---|
 | **DEFINITE** | EvilSoul-Engine tooling lineage; CDP cookie theft / ABE-v20 bypass; Discord/browser/crypto credential theft; Defender-suppression chain; gofile cloud exfiltration; xaitax ABE-tool adoption; Maploot/Tinarox shared exfiltration stack (same operator) |
 | **HIGH** | Kit operator = `n_3_xl` / KAIDO (85%); process-token-impersonation decryptor as an advanced ABE-v20 bypass; Defender behavioral-window timing evasion; Microsoft-masquerade scheduled task; `299a2e7f` as a distinct build of the same family; four redundant persistence methods |
-| **MODERATE** | `n_3_xl`'s exact relationship to the EvilSoul operation (customer/reseller/affiliate); `299a2e7f` BSOD/shutdown impact commands; residual `choix-relay` parallel-line hypothesis; historical `evilsoul1337.xyz` host attribution |
+| **MODERATE** | `n_3_xl`'s exact relationship to the EvilSoul operation (customer/reseller/affiliate); `299a2e7f` BSOD/shutdown impact commands; residual `choix-relay` parallel-line hypothesis; historical `evilsoul1337[.]xyz` host attribution |
 | **LOW / RETRACTED** | `n_3_xl` == `@breakingupslow` (RETRACTED, UNSUPPORTED); `hwids.txt` as a 2,229-victim count (rejected reading) |
 
 ---
@@ -768,7 +768,7 @@ This is a brief orientation on *what to address*, not a step-by-step incident-re
 **Detection priorities (hunt these first):**
 - The CDP browser-relaunch cookie-theft pattern (`--remote-debugging-port` + `--headless` + `--user-data-dir` from a non-browser parent). The single most durable signal, catches every tier.
 - The Defender-suppression burst (`Add-MpPreference -ExclusionPath 'C:\'`, `Set-MpPreference -DisableRealtimeMonitoring $true`) in script-block logs.
-- The `evilsoul[.]cc` Socket.IO handshake and the `198.1.195[.]210:3000/tralalero` relay in network egress.
+- The `evilsoul[.]cc` Socket.IO handshake and the `198[.]1[.]195[.]210:3000/tralalero` relay in network egress.
 
 **Persistence targets (look for and remove):**
 - Hidden scheduled task authored as `Microsoft Corporation`.
@@ -776,7 +776,7 @@ This is a brief orientation on *what to address*, not a step-by-step incident-re
 - `%APPDATA%\...\Startup\update.bat` plus a hidden random `.lnk`; `%TEMP%\updatesystem.cmd`, `%TEMP%\watcher.vbs`, and `%TEMP%\executor\chromelevator.exe` + `chrome_decrypt.dll`.
 
 **Containment categories (action labels):**
-- Block or monitor the EvilSoul exfiltration domains and relay (`evilsoul[.]cc`, `evilsoul[.]xyz`, `198.1.195[.]210:3000`).
+- Block or monitor the EvilSoul exfiltration domains and relay (`evilsoul[.]cc`, `evilsoul[.]xyz`, `198[.]1[.]195[.]210:3000`).
 - Alert on the two known Discord webhook IDs and the operator's gofile/ngrok delivery values.
 - Isolate hosts exhibiting CDP cookie-theft or Defender-suppression behavior.
 - Reset exposed Discord, browser, cryptocurrency, and gaming credentials on affected accounts, and treat stolen session cookies as live, invalidating sessions where possible.
@@ -812,6 +812,6 @@ Section 16 details the four open research questions; this section lists the rema
 
 ---
 
-*Report B of a two-report campaign. See the companion report on the KAIDO Quasar-fork RAT (same operator, concurrently-live product line at `144.172.109[.]203`) for the operator's remote access trojan.*
+*Report B of a two-report campaign. See the companion report on the KAIDO Quasar-fork RAT (same operator, concurrently-live product line at `144[.]172[.]109[.]203`) for the operator's remote access trojan.*
 
 © 2026 Joseph, The Hunters Ledger. Licensed under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/), free to republish and adapt, including commercially, with attribution to The Hunters Ledger and a link to the original.
