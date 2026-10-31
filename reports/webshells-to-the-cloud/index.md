@@ -31,6 +31,7 @@ stix_bundle: /stix/webshells-to-the-cloud.json
 
 ## BLUF (Bottom Line Up Front)
 {: .hl-tier-1}
+{: .hl-tab-overview}
 
 ### Executive Summary
 
@@ -97,6 +98,7 @@ Defenders should block known infrastructure (`45[.]118[.]144[.]151:8081`, `152[.
 
 ## Technical Analysis
 {: .hl-tier-3}
+{: .hl-tab-chain}
 
 ### Infrastructure Overview
 <table class="professional-table">
@@ -233,6 +235,7 @@ Defenders should block known infrastructure (`45[.]118[.]144[.]151:8081`, `152[.
 
 ## Attack Chain Analysis
 {: .hl-tier-3}
+{: .hl-tab-chain}
 
 ### Campaign Structure Summary
 <table class="professional-table">
@@ -384,6 +387,7 @@ A: Cloud access monitoring, API security controls, regular access reviews, and l
 
 ## Confidence Summary
 {: .hl-tier-2}
+{: .hl-tab-confidence}
 
 The Attribution Fingerprints table is the only place this report grades a finding by confidence. The reused RSA public key, the consistent `clp-fm` cookie name, and the shared file path pattern are all CONFIRMED across the infrastructure. The reused account credentials are MODERATE, since a shared credential pattern is weaker evidence of common operator behavior than a reused cryptographic key or a hardcoded file path.
 
@@ -391,5 +395,6 @@ The Attribution Fingerprints table is the only place this report grades a findin
 
 ## License
 {: .hl-tier-2}
+{: .hl-tab-confidence}
 
 © 2026 Joseph, The Hunters Ledger. Licensed under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/), free to republish and adapt, including commercially, with attribution to The Hunters Ledger and a link to the original.
