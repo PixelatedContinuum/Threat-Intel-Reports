@@ -26,6 +26,7 @@ stix_bundle: /stix/arsenal-237-new-files.json
 
 ## Report Context: New Files from Arsenal-237 Directory
 {: .hl-tier-1}
+{: .hl-tab-overview}
 
 This report analyzes **11 new malware samples** added to the same open directory (109.230.231.37) documented in early January 2026. These samples represent a significant capability jump from the original 16: the new additions introduce BYOVD kernel driver abuse, a kernel-mode rootkit, a CrowdStrike-specific EDR terminator, and enterprise-grade Rust ransomware, capabilities absent from the first wave.
 
@@ -33,6 +34,7 @@ This report analyzes **11 new malware samples** added to the same open directory
 
 ## BLUF: The Arsenal-237 Threat
 {: .hl-tier-1}
+{: .hl-tab-overview}
 
 Arsenal-237 is a modular ransomware toolkit built for enterprise compromise across three sequential phases: privilege escalation and defense disablement, persistence and credential access, then ransomware deployment.
 
@@ -78,6 +80,7 @@ When Arsenal-237 reaches a target environment, attackers gain the ability to:
 
 ## Analysis Components: New Files
 {: .hl-tier-2}
+{: .hl-tab-chain}
 
 ### Arsenal-237 New Files: Recently Added Malware
 
@@ -99,6 +102,7 @@ Each sample has three companion resources: a technical report with behavioral an
 
 ## Toolkit Component Overview
 {: .hl-tier-2}
+{: .hl-tab-chain}
 
 This landing page indexes 11 detailed analysis reports covering the complete Arsenal-237 attack chain. Each component report includes file hashes (MD5, SHA1, SHA256), IOC feeds, YARA/Sigma detection rules, behavioral analysis, and MITRE ATT&CK mappings.
 
@@ -115,6 +119,7 @@ Four components perform file encryption and provide victim-specific decryption c
 
 ## Toolkit Architecture Overview
 {: .hl-tier-2}
+{: .hl-tab-chain}
 
 ### Design Philosophy: Professional Ransomware-as-a-Service
 
@@ -175,6 +180,7 @@ PHASE 3: Impact - Ransomware Deployment
 
 ## Component Analysis Index
 {: .hl-tier-3}
+{: .hl-tab-chain}
 
 All 11 components have individual detailed reports with full technical analysis, IOCs, and detection rules.
 
@@ -362,6 +368,7 @@ The full report is at [/reports/arsenal-237-new-files/full_test_enc-exe/](/repor
 
 ## Attack Chain Integration
 {: .hl-tier-2}
+{: .hl-tab-chain}
 
 ### How Components Work Together: A Complete Attack Scenario
 
@@ -409,6 +416,7 @@ Seven observed characteristics mark Arsenal-237 as a mature, professionally deve
 
 ## MITRE ATT&CK Mapping
 {: .hl-tier-2}
+{: .hl-tab-chain}
 
 This landing page indexes eleven components, so its mapping is the union of theirs. Each row
 names the component that implements the technique, and the per-component reports carry the
@@ -465,6 +473,7 @@ visibility before the ransomware runs.
 
 ## Threat Intelligence Summary
 {: .hl-tier-2}
+{: .hl-tab-attribution}
 
 ### Arsenal-237 Attribution Context
 
@@ -486,6 +495,7 @@ On the hosting model I sit at MODERATE. Infrastructure resilience indicators sug
 
 ## Strategic Defensive Recommendations
 {: .hl-tier-2}
+{: .hl-tab-indicators}
 
 ### For Executive Leadership
 
@@ -568,6 +578,7 @@ Individual component reports contain specific YARA signatures, Sigma rules, and 
 
 ## FAQ - Addressing Common Questions
 {: .hl-tier-2}
+{: .hl-tab-confidence}
 
 ### Technical Questions
 
@@ -670,6 +681,7 @@ The offline backup strategy is the largest single variable in business impact: o
 
 ## Key Takeaways
 {: .hl-tier-1}
+{: .hl-tab-overview}
 
 **1. Arsenal-237 is an operational attack platform, not a standalone encryptor.**
 It coordinates privilege escalation, kernel-mode defense disablement, persistence, credential theft, and ransomware across 11 components. Standard single-layer remediation and signature-based detection are insufficient against a toolkit built to disable those defenses before impact begins.
@@ -698,6 +710,7 @@ BYOVD techniques abuse legitimately signed drivers that bypass signature-based d
 
 ## Confidence Levels Summary
 {: .hl-tier-2}
+{: .hl-tab-confidence}
 
 ### Findings Organized by Confidence Level
 
@@ -736,6 +749,7 @@ BYOVD techniques abuse legitimately signed drivers that bypass signature-based d
 
 ## Incident Response Procedures
 {: .hl-tier-2}
+{: .hl-tab-indicators}
 
 ### If Arsenal-237 Has Been Detected (CONFIRMED Infection)
 
@@ -772,6 +786,7 @@ BYOVD techniques abuse legitimately signed drivers that bypass signature-based d
 
 ## Related Resources & Further Reading
 {: .hl-tier-2}
+{: .hl-tab-confidence}
 
 ### Individual Component Reports
 
@@ -813,5 +828,6 @@ Access detailed technical analysis for each toolkit component:
 
 ## License
 {: .hl-tier-2}
+{: .hl-tab-confidence}
 
 © 2026 Joseph, The Hunters Ledger. Licensed under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/), free to republish and adapt, including commercially, with attribution to The Hunters Ledger and a link to the original.
