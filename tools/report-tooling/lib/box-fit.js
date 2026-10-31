@@ -32,6 +32,9 @@
      line clamp                  overflow hidden + line-clamp: the reader sees the ellipsis on the last line (a sponsor's tagline is
                                  clamped to two lines, .hl-rvsp__tagline; found on the hunt-io sponsor variant of the page at 390px)
      gutter                      a positioned container overhanging by no more than its own margin on that side (the timeline rail)
+     unpainted overhang          a box with no background, image or border of its own is judged by the text and painted boxes inside it:
+                                 the 44px permalink target of an h3 overlaps the 10px under its line by design (its glyph lies inside
+                                 the heading); content that IS painted outside its parent (a card's title below the card) still faults
      position:fixed              placed against the viewport (the back-to-top button, the toast), not a parent
      painted at 2px or less / no size / visibility:hidden   nothing painted, so nothing hangs out
      svg internals               the svg root is measured, its shapes are the drawing
@@ -54,6 +57,36 @@ function boxFit() {
     for (var i = 0; n && n !== root && i < 4; i++, n = n.parentElement) parts.unshift(sig(n));
     return parts.join(' > ');
   }
+  /* What a box PAINTS decides whether content hanging out of it can be seen. An element with no background, image or border of its own
+     (a link's 44px hit area, a wrapper) has no edge to hang out of: it is judged by its own text runs and by the painted boxes inside it. */
+  function ownPaint(c, tag) {
+    if (/^(IMG|SVG|CANVAS|VIDEO|INPUT|SELECT|TEXTAREA|PICTURE|IFRAME)$/i.test(tag)) return true;
+    var bg = c.backgroundColor;
+    if (c.backgroundImage && c.backgroundImage !== 'none') return true;
+    if (bg && bg !== 'transparent' && !/rgba\(.*,\s*0\)$/.test(bg)) return true;
+    var sides = ['Left', 'Right', 'Top', 'Bottom'];
+    for (var k = 0; k < sides.length; k++) {
+      if (px(c['border' + sides[k] + 'Width']) > 0 && c['border' + sides[k] + 'Style'] !== 'none' && !/rgba\(.*,\s*0\)$/.test(c['border' + sides[k] + 'Color'] || '')) return true;
+    }
+    return !!c.boxShadow && c.boxShadow !== 'none';
+  }
+  /* the rects of what is painted inside e: its text runs and every descendant that paints a box (in flow; placed elements are checked on their own) */
+  function paintRects(e) {
+    var out = [], tw = document.createTreeWalker(e, NodeFilter.SHOW_ELEMENT | NodeFilter.SHOW_TEXT, null), nd, guard = 0;
+    while ((nd = tw.nextNode()) && guard++ < 1500) {
+      if (nd.nodeType === 3) {
+        if (!/\S/.test(nd.nodeValue)) continue;
+        var rg = document.createRange(); rg.selectNodeContents(nd);
+        [].slice.call(rg.getClientRects()).forEach(function (q) { if (q.width || q.height) out.push(q); });
+      } else {
+        var ncs = getComputedStyle(nd);
+        if (ncs.display === 'none' || ncs.visibility === 'hidden' || ncs.position === 'absolute' || ncs.position === 'fixed') continue;
+        if (nd.namespaceURI === 'http://www.w3.org/2000/svg' && nd.tagName.toLowerCase() !== 'svg') continue;
+        if (ownPaint(ncs, nd.tagName)) { var nr = nd.getBoundingClientRect(); if (nr.width || nr.height) out.push(nr); }
+      }
+    }
+    return out;
+  }
   var all = root.querySelectorAll('*');
   var SKIP = { SCRIPT: 1, STYLE: 1, NOSCRIPT: 1, TEMPLATE: 1, LINK: 1, META: 1, BR: 1, WBR: 1 };
   for (var i = 0; i < all.length; i++) {
@@ -75,15 +108,24 @@ function boxFit() {
     if (/^(INPUT|TEXTAREA|SELECT)$/.test(e.tagName)) ex('form control');
     else if (!inline && e.clientWidth > 0) {
       var dx = e.scrollWidth - e.clientWidth, dy = e.scrollHeight - e.clientHeight, isScroller = false;
+      /* scrollWidth and scrollHeight count unpainted boxes (a hit area that overlaps its heading's padding): the verdict is made on what is painted */
+      var painted = null, paintedOk = function (axis) {
+        if (!painted) painted = paintRects(e);
+        if (!painted.length) return true;
+        var r0 = e.getBoundingClientRect();
+        return painted.every(function (q) { return axis === 'x' ? q.right <= r0.right - px(cs.borderRightWidth) + 1 : q.bottom <= r0.bottom - px(cs.borderBottomWidth) + 1; });
+      };
       if (dx > 2) {
         if (/auto|scroll/.test(cs.overflowX)) isScroller = true;
         else if (/hidden|clip/.test(cs.overflowX) && cs.textOverflow === 'ellipsis' && cs.whiteSpace === 'nowrap') ex('ellipsis');
         else if ((cs.position || 'static') !== 'static' && dx <= px(cs.marginRight) + 1) ex('gutter');
+        else if (cs.overflowX === 'visible' && paintedOk('x')) ex('unpainted overhang');
         else hang.push({ kind: cs.overflowX === 'visible' ? 'spill-x' : 'clipped-x', sig: sig(e), path: path(e), client: e.clientWidth, scroll: e.scrollWidth, over: dx });
       }
       if (dy > 2) {
         if (/auto|scroll/.test(cs.overflowY)) isScroller = true;
         else if (/hidden|clip/.test(cs.overflowY) && ((cs.webkitLineClamp && cs.webkitLineClamp !== 'none') || (cs.lineClamp && cs.lineClamp !== 'none'))) ex('line clamp');
+        else if (cs.overflowY === 'visible' && paintedOk('y')) ex('unpainted overhang');
         else hang.push({ kind: cs.overflowY === 'visible' ? 'spill-y' : 'clipped-y', sig: sig(e), path: path(e), client: e.clientHeight, scroll: e.scrollHeight, over: dy });
       }
       if (isScroller) { scrollers++; ex('scroll container'); }
@@ -110,6 +152,7 @@ function boxFit() {
         var L = orc.left + px(ocs.borderLeftWidth) - gl, R = orc.right - px(ocs.borderRightWidth) + gr;
         var T = orc.top + px(ocs.borderTopWidth) - gt, Bm = orc.bottom - px(ocs.borderBottomWidth) + gb;
         var list = inline ? [].slice.call(rects) : [r];
+        if (!ownPaint(cs, e.tagName)) { list = paintRects(e); if (!list.length) { ex('unpainted box with nothing painted inside'); list = []; } }
         list.forEach(function (q) {
           if (q.width === 0 && q.height === 0) return;
           if (q.left < L - 1) out = out || { side: 'left', by: L - q.left };

@@ -19,10 +19,11 @@ function layout(html) {
   const def = (name, key, f) => Object.defineProperty(E, name, { configurable: true, get() { const b = box(this); return b ? num(this, key, f(b)) : 0; } });
   def('clientWidth', 'data-cw', b => b[2] - b[0]); def('clientHeight', 'data-ch', b => b[3] - b[1]);
   def('scrollWidth', 'data-sw', b => b[2] - b[0]); def('scrollHeight', 'data-sh', b => b[3] - b[1]);
-  w.Range.prototype.getClientRects = function () { return []; };
+  /* a text run lies where its parent element's declared box is */
+  w.Range.prototype.getClientRects = function () { const n = this.startContainer, el = n.nodeType === 3 ? n.parentElement : n; return box(el) ? [el.getBoundingClientRect()] : []; };
   const real = w.getComputedStyle.bind(w);
   /* jsdom's cascade is partial (no text-overflow, a bare overflow shorthand), so a box may also declare data-cs='{"overflowX":"hidden",...}', laid over what jsdom computes */
-  const PROPS = ['display', 'position', 'visibility', 'overflowX', 'overflowY', 'textOverflow', 'whiteSpace', 'webkitLineClamp', 'lineClamp', 'marginLeft', 'marginRight', 'marginTop', 'marginBottom',
+  const PROPS = ['backgroundColor', 'backgroundImage', 'boxShadow', 'display', 'position', 'visibility', 'overflowX', 'overflowY', 'textOverflow', 'whiteSpace', 'webkitLineClamp', 'lineClamp', 'marginLeft', 'marginRight', 'marginTop', 'marginBottom',
     'borderLeftWidth', 'borderRightWidth', 'borderTopWidth', 'borderBottomWidth', 'borderLeftStyle', 'borderRightStyle', 'borderTopStyle', 'borderBottomStyle',
     'borderLeftColor', 'borderRightColor', 'borderTopColor', 'borderBottomColor'];
   w.getComputedStyle = (el, pe) => {
@@ -59,13 +60,13 @@ test('a child outside its parent is a hang-out on the side it leaves by; 1px is 
   try { assert.deepEqual(kinds(g.run(), 'hang'), ['out-of-parent:p.t']); } finally { g.close(); }
 });
 test('a box whose content is wider or taller than it is a spill; 2px of line-box leading is not; a scroller is excluded and counted', () => {
-  const f = layout('<div class="a" data-box="0,0,100,50" data-sw="250"></div>' +
-    '<div class="b" data-box="0,60,100,110" data-sh="130"></div>' +
-    '<div class="lead" data-box="0,120,100,170" data-sh="52"></div>' +
+  const f = layout('<div class="a" data-box="0,0,100,50" data-sw="250"><span data-box="0,0,250,20">a long line</span></div>' +
+    '<div class="b" data-box="0,60,100,110" data-sh="130"><span data-box="0,60,100,190">a tall block</span></div>' +
+    '<div class="lead" data-box="0,120,100,170" data-sh="52"><span data-box="0,120,100,171">text</span></div>' +
     '<div class="scroll" data-box="0,180,100,230" data-sw="900" data-cs="{&quot;overflowX&quot;:&quot;auto&quot;}"></div>');
   try {
     const m = f.run();
-    assert.deepEqual(kinds(m, 'hang').sort(), ['spill-x:div.a', 'spill-y:div.b']);
+    assert.deepEqual(kinds(m, 'hang').filter(k => /^spill/.test(k)).sort(), ['spill-x:div.a', 'spill-y:div.b']);
     assert.equal(m.excluded['scroll container'], 1); assert.equal(m.scrollers, 1);
   } finally { f.close(); }
 });
@@ -78,6 +79,16 @@ test('a line-clamped box (overflow hidden, line-clamp 2) is excluded and counted
   const f = layout('<span class="t" data-cs="{&quot;display&quot;:&quot;block&quot;,&quot;overflowY&quot;:&quot;hidden&quot;,&quot;webkitLineClamp&quot;:&quot;2&quot;}" data-box="0,0,100,38" data-sh="57"></span>' +
     '<span class="u" data-cs="{&quot;display&quot;:&quot;block&quot;,&quot;overflowY&quot;:&quot;hidden&quot;,&quot;webkitLineClamp&quot;:&quot;none&quot;}" data-box="0,50,100,88" data-sh="57"></span>');
   try { const m = f.run(); assert.deepEqual(kinds(m, 'hang'), ['clipped-y:span.u']); assert.equal(m.excluded['line clamp'], 1); } finally { f.close(); }
+});
+test('an unpainted hit area that overhangs its heading is excluded and counted; the same box with a background is a fault', () => {
+  const f = layout('<h3 class="h" data-box="0,0,300,40" data-sh="50" style="border-top:1px solid #333"><span data-box="0,10,100,30">Title</span><a class="perma" data-box="100,5,144,49"><span data-box="112,14,128,32">§</span></a></h3>');
+  try { const m = f.run(); assert.deepEqual(m.hang, []); assert.equal(m.excluded['unpainted overhang'], 1); } finally { f.close(); }
+  const g = layout('<h3 class="h" data-box="0,0,300,40" data-sh="50"><span data-box="0,10,100,30">Title</span><a class="perma" data-cs="{&quot;backgroundColor&quot;:&quot;rgb(40, 40, 40)&quot;}" data-box="100,5,144,49"><span data-box="112,14,128,32">§</span></a></h3>');
+  try { const m = g.run(); assert.deepEqual(kinds(m, 'hang').sort(), ['out-of-parent:a.perma', 'spill-y:h3.h']); } finally { g.close(); }
+});
+test('text that lies outside a painted card is a fault on the text and on the card, whatever box its own element has', () => {
+  const f = layout('<a class="card" data-cs="{&quot;borderLeftWidth&quot;:&quot;3px&quot;,&quot;borderLeftStyle&quot;:&quot;solid&quot;,&quot;borderLeftColor&quot;:&quot;rgb(1, 2, 3)&quot;}" data-box="0,0,300,44" data-sh="150"><strong data-box="10,10,200,150">title</strong></a>');
+  try { const m = f.run(); assert.deepEqual(kinds(m, 'hang').sort(), ['out-of-parent:strong', 'spill-y:a.card']); assert.equal(m.bars.length, 1); } finally { f.close(); }
 });
 test('an accent edge shorter than its content is a short bar, with how far the content lies past it; a longer edge is not a fault', () => {
   const f = layout('<div class="card" data-box="10,10,390,54" style="border-left:3px solid #f00"><p data-box="20,10,380,60">t</p><p data-box="20,60,380,150">u</p></div>' +
@@ -131,9 +142,9 @@ test('CSS fix 1: in the column list (699px and below) a next/previous card takes
   assert.match(m, /\.hl-report-page \.hl-rv-nextprev a \{ flex: 0 0 auto; \}/);
   assert.match(CSS, /\.hl-report-page \.hl-rv-nextprev a \{ flex: 1 1 0;/, 'the row layout keeps its equal columns');
 });
-test('CSS fix 2: an h3\'s 44px permalink target lies inside the h3 (10px of bottom padding, and top padding after an h2), the gap under it unchanged at 12px', () => {
-  assert.match(CSS, /\.hl-rv-source h3 \{[^}]*margin: 36px 0 2px !important; padding-top: 24px !important; padding-bottom: 10px !important;/);
-  assert.match(CSS, /\.hl-rv-source > h2 \+ h3 \{ margin-top: -10px !important; border-top: 0 !important; padding-top: 10px !important; \}/);
+test('CSS: the h3 spacing is untouched (the permalink overhang is judged by the gate as an unpainted hit area, not padded away)', () => {
+  assert.match(CSS, /\.hl-rv-source h3 \{[^}]*margin: 36px 0 12px !important; padding-top: 24px !important; border-top: 1px solid/);
+  assert.match(CSS, /\.hl-rv-source > h2 \+ h3 \{ margin-top: 0 !important; border-top: 0 !important; padding-top: 0 !important; \}/);
 });
 test('CSS fix 3: the first and last timeline date labels start and end at the rail ends, and a label has no 160px cap it overflows', () => {
   assert.match(CSS, /\.hl-rv-axis span:first-child \{ transform: none; text-align: left; \}/);
