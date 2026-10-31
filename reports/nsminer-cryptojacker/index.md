@@ -28,7 +28,7 @@ description: "A multi-stage cryptojacking campaign distributed from an open dire
 stix_bundle: /stix/nsminer-cryptojacker.json
 ---
 
-**Campaign Identifier:** NsMiner-125.19.150.122-Cryptojacking<br>
+**Campaign Identifier:** NsMiner-125[.]19[.]150[.]122-Cryptojacking<br>
 **Last Updated:** February 2, 2026<br>
 **Threat Level:** HIGH
 
@@ -43,14 +43,14 @@ stix_bundle: /stix/nsminer-cryptojacker.json
 {: .hl-tier-1}
 {: .hl-tab-overview}
 
-I identified a multi-stage cryptojacking campaign distributing the **NsMiner** payload from an open directory at 125.19.150.122. The initial infection vector is a trojanized NSIS (Nullsoft Scriptable Install System) installer, `IMG001.exe`.
+I identified a multi-stage cryptojacking campaign distributing the **NsMiner** payload from an open directory at 125[.]19[.]150[.]122. The initial infection vector is a trojanized NSIS (Nullsoft Scriptable Install System) installer, `IMG001.exe`.
 
 The dropper hijacks CPU and electrical resources for the attacker's cryptocurrency mining, causing system slowdowns and hardware strain. The downloader component `tftp.exe` compounds that risk, because it can fetch secondary payloads, ransomware or data stealers among them, at any time after initial infection.
 
 **Key Findings:**
 *   **Attack Chain:** `IMG001.exe` establishes persistence under `%APPDATA%\NsMiner`, then extracts and runs `tftp.exe`, which fetches the final miner payload by credential-stuffing over a dozen FTP servers.
 *   **Final Payload:** `NsCpuCNMiner32.exe` and `NsCpuCNMiner64.exe` mine a CryptoNight-based currency, almost certainly Monero (XMR), using the victim's CPU.
-*   **C2 Infrastructure:** `tftp.exe` beacons to `hrtests.ru` over HTTP and cycles hardcoded FTP credentials against 18 target IPs. Servers that accept the credentials become secondary payload distribution points.
+*   **C2 Infrastructure:** `tftp.exe` beacons to `hrtests[.]ru` over HTTP and cycles hardcoded FTP credentials against 18 target IPs. Servers that accept the credentials become secondary payload distribution points.
 *   **Evasion:** The miner binaries are packed with VMProtect (a commercial binary protector), defeating signature-based detection and complicating static analysis.
 
 **Overall Risk Assessment:**
@@ -79,7 +79,7 @@ Risk level is HIGH.
 
 The NSIS installer dropper bundles malicious scripts and payloads inside a structure that resembles legitimate software packaging, lowering user suspicion at execution.
 
-`hrtests.ru` carries historical ties to miner activity dating to at least 2016, suggesting the actors reuse aging infrastructure or run a long-running operation. The hardcoded list of 18 FTP IPs with credential pairs reflects a **credential stuffing** strategy. The malware cycles through targets likely identified by prior scanning. Any server that accepts a credential pair becomes a payload distribution point for the miner binaries.
+`hrtests[.]ru` carries historical ties to miner activity dating to at least 2016, suggesting the actors reuse aging infrastructure or run a long-running operation. The hardcoded list of 18 FTP IPs with credential pairs reflects a **credential stuffing** strategy. The malware cycles through targets likely identified by prior scanning. Any server that accepts a credential pair becomes a payload distribution point for the miner binaries.
 
 ## 3. Technical Deep-Dive
 {: .hl-tier-3}
@@ -117,7 +117,7 @@ The NSIS installer dropper bundles malicious scripts and payloads inside a struc
 *   **Purpose:** To contact the C2 network and download the final miner payload.
 
 **Behavior:**
-1.  **C2 Beacon:** Sends an initial "phone home" beacon to `http://hrtests.ru/S.php`, exfiltrating basic system and user information.
+1.  **C2 Beacon:** Sends an initial "phone home" beacon to `hxxp://hrtests[.]ru/S.php`, exfiltrating basic system and user information.
 
 <figure style="text-align: center; margin: 2em 0;">
   <img loading="lazy" src="{{ "/assets/images/nsminer/nsminer-static-analysis-urls.png" | relative_url }}" alt="Static Analysis - Extracted URLs">
@@ -161,7 +161,7 @@ One analysis note belongs here. Full unpacking of the VMProtect layer was not co
 | **Persistence** | T1547.001 | Boot or Logon Autostart Execution: Registry Run Keys | (Implied by persistence mechanism, common for NSIS) |
 | **Defense Evasion** | T1027 | Obfuscated Files or Information | Final miner payloads are packed with VMProtect. |
 | **Defense Evasion** | T1218.011 | System Binary Proxy Execution: Rundll32 | NSIS installers often use plugins that are DLLs. |
-| **Command and Control**| T1071.001 | Application Layer Protocol: Web Protocols | Beaconing to `hrtests.ru` over HTTP. |
+| **Command and Control**| T1071.001 | Application Layer Protocol: Web Protocols | Beaconing to `hrtests[.]ru` over HTTP. |
 | **Command and Control**| T1071.002 | Application Layer Protocol: File Transfer Protocols| Use of multiple FTP servers for payload download. |
 | **Impact** | T1496 | Resource Hijacking | The final payload is a cryptominer that hijacks CPU resources. |
 
@@ -202,6 +202,7 @@ rule NsMiner_Dropper_Downloader {
         )
 }
 ```
+{: .hl-copy}
 
 ### SIEM Hunting Query
 This query hunts for the HTTP beaconing activity from `tftp.exe`. The syntax is Splunk SPL; adapt field names to your SIEM platform.
@@ -212,6 +213,7 @@ http_method=GET
 url="*hrtests.ru/S.php*" 
 | stats count by src_ip, user_agent, url
 ```
+{: .hl-copy}
 
 ## 6. Indicators of Compromise (IOCs)
 {: .hl-tier-2}
@@ -236,11 +238,11 @@ url="*hrtests.ru/S.php*"
 ### Network Indicators
 
 **Domains:**
-*   `hrtests.ru` (Primary C2)
-*   `testswork.ru` (Secondary C2)
+*   `hrtests[.]ru` (Primary C2)
+*   `testswork[.]ru` (Secondary C2)
 
 **Full URL:**
-*   `http://hrtests.ru/S.php` (C2 Beacon Endpoint)
+*   `hxxp://hrtests[.]ru/S.php` (C2 Beacon Endpoint)
 
 **FTP Target Server IPs (Credential Stuffing Targets):**
 *   18 addresses, withheld. The operator's configuration lists them as FTP credential-stuffing targets, so they are prospective victims rather than operator infrastructure and are not indicators to block; three of them are not routable addresses at all.
