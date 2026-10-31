@@ -60,7 +60,7 @@ figure_nav:
         anchor: "#sentinelstealers-capability-profile-and-the-locker-question"
 ---
 
-**Campaign Identifier:** CloudSync-Assembler-Toolkit-91.197.98.188<br>
+**Campaign Identifier:** CloudSync-Assembler-Toolkit-91[.]197[.]98[.]188<br>
 **Last Updated:** August 3, 2026<br>
 **Threat Level:** HIGH
 
@@ -307,15 +307,15 @@ One caveat I will keep honest. Radmin VPN is a different product from Famatech's
   <figcaption><em>Figure 2: The stealer names itself. Its assembly attributes carry <code>SentinelStealer</code> in both <code>AssemblyTitle</code> and <code>AssemblyProduct</code>, and that is worth more here than it usually would be. No public reporting on this family was found under any name, so the operator's own build metadata is currently the only basis anyone has for what to call it. The same block also settles the protector question, declaring .NET Framework 4.7.2 rather than the decade-old runtime a scanner's family label implied.</em></figcaption>
 </figure>
 
-Its C2 closes it. The stealer geolocates the victim through `ip-api.com` and then opens TLS to `c3lestial.fun`, a domain on Hostinger parking nameservers, registered in September 2025, six months before any of this campaign's infrastructure existed, carrying 16 detections out of 91 engines and more than twenty unrelated communicating files. The operator's own two dedicated C2s are on a single small hosting allocation, flagged by nothing, with no sample cluster at all. Those are not the same kind of infrastructure and they do not belong to the same person.
+Its C2 closes it. The stealer geolocates the victim through `ip-api.com` and then opens TLS to `c3lestial[.]fun`, a domain on Hostinger parking nameservers, registered in September 2025, six months before any of this campaign's infrastructure existed, carrying 16 detections out of 91 engines and more than twenty unrelated communicating files. The operator's own two dedicated C2s are on a single small hosting allocation, flagged by nothing, with no sample cluster at all. Those are not the same kind of infrastructure and they do not belong to the same person.
 
 So `v.exe` is a tool the operator picked up and staged and never integrated. I originally read it as sourced-but-integrated and the evidence moved me to sourced-and-separate, which is a local correction that leaves the wider thesis stronger rather than weaker. It is the assembler behaviour pattern one step further along, a purchase that never became part of the operation.
 
-That correction also produced a rule I now apply generally. `c3lestial.fun` still belongs in the published indicators, in its own labelled tier. My first instinct was to leave it out because it is not this operator's infrastructure, and that instinct was wrong, because it would equally have stripped the Paralell loader, PsExec, NetExec, Nishang, chisel, the web shell and the panel skin. If the central finding is that this actor assembles other people's kit, then documenting the sourced components **is** documenting the actor. The fix is provenance labels, not omission.
+That correction also produced a rule I now apply generally. `c3lestial[.]fun` still belongs in the published indicators, in its own labelled tier. My first instinct was to leave it out because it is not this operator's infrastructure, and that instinct was wrong, because it would equally have stripped the Paralell loader, PsExec, NetExec, Nishang, chisel, the web shell and the panel skin. If the central finding is that this actor assembles other people's kit, then documenting the sourced components **is** documenting the actor. The fix is provenance labels, not omission.
 
 ### The hosting, and a precision worth keeping
 
-The estate is three attacker-controlled hosts split across two jurisdictions by function. Russia carries staging and delivery, on `91.197.98.188` (AS197695, REG.RU), which simultaneously serves the open directory on port 8000 and two implant C2 listeners on 5555 and 7777. Germany carries both dedicated C2s, `91.92.43.221` for the CloudSync panel and `2.27.248.138` for the second toolchain's beacon, panel and operator remote desktop, both on AS207043 (Dedik Services Limited, a UK-registered company).
+The estate is three attacker-controlled hosts split across two jurisdictions by function. Russia carries staging and delivery, on `91[.]197[.]98[.]188` (AS197695, REG.RU), which simultaneously serves the open directory on port 8000 and two implant C2 listeners on 5555 and 7777. Germany carries both dedicated C2s, `91[.]92[.]43[.]221` for the CloudSync panel and `2[.]27[.]248[.]138` for the second toolchain's beacon, panel and operator remote desktop, both on AS207043 (Dedik Services Limited, a UK-registered company).
 
 Read the split as an operational choice and not as a nationality signal. Nothing here indicates where the operator sits, and inferring a nationality from where somebody rents servers is the same category of error as inferring an identity from whose tools they bought.
 
@@ -486,13 +486,13 @@ Browser credential theft runs through `BrowserCredentialRecovery`, handling Chro
 
 A `#XLOADER` comment appears on the PowerShell stage. That is the operator's or the crypter's label, **not the Formbook/XLoader family**, and reporting it as XLoader would be wrong. It is exactly the kind of string that gets a sample mis-bucketed by a hurried triage.
 
-A sibling build, `cls.exe` (`79b6f2eb6583a83aabe590264de08c0ad1eb7e960ae9a4bdbc6ed84142ce95a9`, flagged by Microsoft as `Trojan:MSIL/Zilla` at 47 of 70 engines), confirms the family is live and extends the capability set with a hidden desktop (`hiddenDesktop`) and microphone capture (`mic_record`). It beacons to `2.27.248.138:4443` and shares the `Svc_<name>` and `<name>_Mutex` builder conventions, which establishes one builder across both. It surfaced through the C2 rather than independently, so it corroborates that infrastructure without being a separate discovery of it.
+A sibling build, `cls.exe` (`79b6f2eb6583a83aabe590264de08c0ad1eb7e960ae9a4bdbc6ed84142ce95a9`, flagged by Microsoft as `Trojan:MSIL/Zilla` at 47 of 70 engines), confirms the family is live and extends the capability set with a hidden desktop (`hiddenDesktop`) and microphone capture (`mic_record`). It beacons to `2[.]27[.]248[.]138:4443` and shares the `Svc_<name>` and `<name>_Mutex` builder conventions, which establishes one builder across both. It surfaced through the C2 rather than independently, so it corroborates that infrastructure without being a separate discovery of it.
 
 ### 8.5 The chain at runtime
 
 `wscript.exe` starts the JScript. It creates the `PhotoStudioJS` scheduled task from the temporary XML and drops the "Photo Studio" masquerade copy. A hidden `powershell.exe` reads an encrypted blob from `%TEMP%\log_<digits>_<digits>`. That stage injects into `MSBuild.exe` **with no project file argument**, and `SvchostPayload` runs inside MSBuild from there.
 
-From inside MSBuild come three observable actions. A Defender tamper, running `Set-MpPreference -DisableRealtimeMonitoring -DisableIOAVProtection -DisableBehaviorMonitoring $true`. A second persistence, `schtasks /create /tn "WindowsUpdateService" /tr "...\svchost.exe" /sc onlogon /delay 0000:30 /rl highest`. And an outbound beacon to `2.27.248.138:4443`. There is no C2 domain anywhere in this toolchain, only the raw address.
+From inside MSBuild come three observable actions. A Defender tamper, running `Set-MpPreference -DisableRealtimeMonitoring -DisableIOAVProtection -DisableBehaviorMonitoring $true`. A second persistence, `schtasks /create /tn "WindowsUpdateService" /tr "...\svchost.exe" /sc onlogon /delay 0000:30 /rl highest`. And an outbound beacon to `2[.]27[.]248[.]138:4443`. There is no C2 domain anywhere in this toolchain, only the raw address.
 
 The loader then cleans up after itself, deleting both the task XML and the staged payload blob once they have been consumed.
 
@@ -545,7 +545,7 @@ There is a trap on this stage worth naming, because it is easy to fall into and 
 This is the one that identified the victim. The command, published here with the user principal name substituted, is:
 
 ```powershell
-$password = ConvertTo-SecureString 'Admin@20...9n@@' -AsPlainText -Force; New-ADUser -Name 'Guest$' -SamAccountName 'Guest$' -UserPrincipalName 'Guest$@<victim-ad-domain>' -AccountPassword $password -Enabled $true -PasswordNeverExpires $true -ChangePasswordAtLogon $false -ErrorAction SilentlyContinue; Write-Host 'User created'
+$password = [C]onvertTo-SecureString 'Admin@20...9n@@' -AsPlainText -Force; New-ADUser -Name 'Guest$' -SamAccountName 'Guest$' -UserPrincipalName 'Guest$@<victim-ad-domain>' -AccountPassword $password -Enabled $true -PasswordNeverExpires $true -ChangePasswordAtLogon $false -ErrorAction SilentlyContinue; Write-Host 'User created'
 ```
 
 In the original, `<victim-ad-domain>` is the hardcoded Active Directory domain of a specific German organization. The password is defanged. Everything else is verbatim.
@@ -572,7 +572,7 @@ Hiding an artifact and hiding infrastructure are separate skills with separate i
 
 Six stages run in order.
 
-1. The script downloads `client.exe` from `http://91.197.98.188:8000/client.exe` with a proxy-aware PowerShell `WebClient` call, inheriting the logged-in user's `DefaultWebProxy` and `DefaultCredentials` and spoofing a browser User-Agent, so delivery works from inside an authenticated enterprise proxy.
+1. The script downloads `client.exe` from `hxxp://91[.]197[.]98[.]188:8000/client.exe` with a proxy-aware PowerShell `WebClient` call, inheriting the logged-in user's `DefaultWebProxy` and `DefaultCredentials` and spoofing a browser User-Agent, so delivery works from inside an authenticated enterprise proxy.
 2. It drops the file into the user's Startup folder under a `~<RANDOM>.exe` name.
 3. It runs an obfuscated AMSI bypass that flips the `amsiInitFailed` field on a string-reversed `AmsiUtils` reference, blinding in-process script scanning.
 4. It launches the dropped file with `start "" /B`.
@@ -610,7 +610,7 @@ Its configuration completes the picture. The `BotToken` and `ChatID` fields are 
   <figcaption><em>Figure 5: The stealer's configuration class, recovered intact because the protector left it unrenamed for JSON serialization. <code>FilePatterns</code> is the load-bearing detail: it hunts wallet seed phrases and Steam authenticator files (<code>*.mafile</code>), which is commodity crimeware targeting and bears no relationship to an intrusion against a healthcare provider. The <code>BotToken</code> and <code>ChatID</code> fields below it are declared and never referenced by any code in the assembly, making them dead builder defaults rather than live exfiltration credentials. Both values are truncated here for publication.</em></figcaption>
 </figure>
 
-On the network side it queries `http://ip-api.com/json/` over plain HTTP with **no User-Agent header**, which is a .NET `WebClient` default, then resolves `c3lestial.fun` and opens TLS to port 443 presenting that hostname in SNI. The endpoint `https://c3lestial.fun/receive.php` was recovered from process memory, but **no HTTP method was ever observed**, so no method-bound rule was written against it and I do not say the stealer "exfiltrates to" that path.
+On the network side it queries `http://ip-api.com/json/` over plain HTTP with **no User-Agent header**, which is a .NET `WebClient` default, then resolves `c3lestial[.]fun` and opens TLS to port 443 presenting that hostname in SNI. The endpoint `hxxps://c3lestial[.]fun/receive.php` was recovered from process memory, but **no HTTP method was ever observed**, so no method-bound rule was written against it and I do not say the stealer "exfiltrates to" that path.
 
 </details>
 
@@ -833,7 +833,7 @@ What is in it, by category:
 
 ### Two tiers, and why the separation is load-bearing
 
-The feed keeps the **operator estate** and the **sourced commodity-stealer service** in separate tiers so nothing reads them as one infrastructure. `c3lestial.fun` belongs to a stealer service that predates this campaign by six months and has more than twenty unrelated communicating files. Publishing it as campaign infrastructure would send defenders after the wrong operator.
+The feed keeps the **operator estate** and the **sourced commodity-stealer service** in separate tiers so nothing reads them as one infrastructure. `c3lestial[.]fun` belongs to a stealer service that predates this campaign by six months and has more than twenty unrelated communicating files. Publishing it as campaign infrastructure would send defenders after the wrong operator.
 
 It is still published, deliberately. My first instinct was to leave it out because it is not this operator's, and that instinct was wrong for the reason Section 6 sets out. Provenance labels, not exclusion. Keep operator-owned and sourced-component indicators in separate tiers and a reader can act on both without confusing them.
 
@@ -847,8 +847,8 @@ The atomic indicators here have a short shelf life and the behavioral ones do no
 
 These are published with their reasons because they save other researchers the same dead ends, and they are explicitly **not** indicators to block or alert on.
 
-- `46.36.217.3`, with `stolotov.org` and `stolotov.net`. Swept in on a shared panel title, then severed on a detailed host view showing a different operating system, no SSH host-key overlap, and a simpler login page that never ran the real RAT panel. Suspicious infrastructure, but not demonstrably this operator's. LOW association.
-- `65.20.90.34`. Reverse DNS shows a proxy and relay footprint unrelated to this operator, and the panel title differs from the tracked one. Probable false positive.
+- `46[.]36[.]217[.]3`, with `stolotov[.]org` and `stolotov[.]net`. Swept in on a shared panel title, then severed on a detailed host view showing a different operating system, no SSH host-key overlap, and a simpler login page that never ran the real RAT panel. Suspicious infrastructure, but not demonstrably this operator's. LOW association.
+- `65[.]20[.]90[.]34`. Reverse DNS shows a proxy and relay footprint unrelated to this operator, and the panel title differs from the tracked one. Probable false positive.
 - The "CloudSync Dashboard" panel title itself is a commodity SaaS-admin template, not an operator fingerprint. A legitimate commercial web-development agency surfaced during this work purely because its portfolio site uses the same template, and it is not named here for exactly that reason. This is why title-based sweeps threw false positives throughout this case, and it is the single most useful negative finding for anyone trying to pivot on the panel.
 - A shared JARM fingerprint carried as a candidate pivot. Closed as non-distinctive, with more than 50 unrelated IPs across unrelated ASNs sharing it inside a 30-day window.
 - `CN=localhost` self-signed certificates appear on both this operator's and Blind Eagle's infrastructure. Different certificates, and the commonest default in existence. Not a link.
