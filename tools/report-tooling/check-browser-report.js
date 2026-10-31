@@ -2384,9 +2384,9 @@ var BOX_INJECT_CARD_EXPR = '(function(tab){var p=document.getElementById("tab-"+
 var BOX_INJECT_SPAN_EXPR = '(function(tab){var p=document.getElementById("tab-"+tab);if(!p)return false;var d=document.createElement("div");d.className="hl-rv-source";d.setAttribute("data-rv-chrome","");d.setAttribute("data-pagefind-ignore","");' +
   'function tr(cells){return "<tr>"+cells.join("")+"</tr>";}' +
   'd.innerHTML="<table class=\\"hl-gate-span-fit\\"><thead><tr><th>Tactic</th><th>Technique</th></tr></thead><tbody>"+tr(["<td rowspan=\\"3\\">Initial Access</td>","<td>T1566.001 Spearphishing Attachment</td>"])+tr(["<td>T1566.002 Spearphishing Link</td>"])+tr(["<td>T1190 Exploit Public-Facing Application</td>"])+"</tbody></table>"+' +
-  '"<table class=\\"hl-gate-span-spill\\"><thead><tr><th>Tactic</th><th>Technique</th></tr></thead><tbody>"+tr(["<td rowspan=\\"2\\"><div style=\\"height:240px;margin-bottom:-210px\\">Execution</div></td>","<td>T1059.001 PowerShell</td>"])+tr(["<td>T1204.002 Malicious File</td>"])+"</tbody></table>";' +
+  '"<table class=\\"hl-gate-span-spill\\"><thead><tr><th>Tactic</th><th>Technique</th></tr></thead><tbody>"+tr(["<td rowspan=\\"2\\"><div style=\\"height:240px;margin-bottom:-210px;background:#c33\\">Execution</div></td>","<td>T1059.001 PowerShell</td>"])+tr(["<td>T1204.002 Malicious File</td>"])+"</tbody></table>";' +
   'p.appendChild(d);return true;})(__TAB__)';
-var BOX_INJECT_STAGE_EXPR = '(function(tab){var p=document.getElementById("tab-"+tab);if(!p)return false;var d=document.createElement("div");d.className="hl-rv-stages";d.setAttribute("data-rv-chrome","");d.setAttribute("data-pagefind-ignore","");' +
+var BOX_INJECT_STAGE_EXPR = '(function(tab){var p=document.getElementById("tab-"+tab);if(!p)return false;var d=document.createElement("div");d.className="hl-rv-stages hl-gate-stage-ctl";d.setAttribute("data-rv-chrome","");d.setAttribute("data-pagefind-ignore","");' +
   'var tok="";for(var i=0;i<9;i++)tok+="Assembly.Load";' +
   'd.innerHTML="<article class=\\"hl-rv-stage\\"><details class=\\"hl-rv-stage-detail\\" open><summary>Stage 2</summary><p>"+tok+"</p></details></article>";' +
   'p.appendChild(d);return true;})(__TAB__)';
@@ -2483,7 +2483,7 @@ async function boxFitRows(page, url, html) {
         if (!(await gotoAndWait(page, ssrv.origin + spath)) || !(await page.evaluate(BOX_INJECT_STAGE_EXPR.replace('__TAB__', JSON.stringify(tab))))) { stRes.push(null); continue; }
         var sst2 = await boxFitState(page, '1280x900 ' + tab, '#tab-' + tab);
         var shv2 = BOXFIT.verdict([sst2], 'hang');
-        stRes.push(shv2.notChecked ? null : shv2.findings.filter(function (f) { return /hl-rv-stage/.test(f.path + ' ' + f.sig); }));
+        stRes.push(shv2.notChecked ? null : shv2.findings.filter(function (f) { return /hl-gate-stage-ctl/.test(f.path + ' ' + f.sig); }));
       } finally { ssrv.close(); }
     }
     if (!stRes[0] || !stRes[1]) check('NOT CHECKED: ' + stName, false, 'a control page did not build, had no ' + tab + ' tab panel to put the card in, or measured no elements');
