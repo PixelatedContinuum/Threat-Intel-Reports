@@ -647,13 +647,14 @@
       phone.addEventListener('change', function () { toc.open = !phone.matches; });
     }
     sponsorCard(panel);
-    var footer = make('nav', 'hl-rv-nextprev', null, panel); footer.setAttribute('aria-label', 'Read report in order');
+    // The Previous/Next footer exists only when the report has another tab to go to; with one tab it would be an empty labelled landmark.
+    var footer = TOKENS.length > 1 ? make('nav', 'hl-rv-nextprev', null, panel) : null; if (footer) footer.setAttribute('aria-label', 'Read report in order');
     function card(j, direction) { var a = link('', '#tab-' + TOKENS[j], footer); a.dataset.rvHue = TOKENS[j]; make('small', '', direction, a); make('strong', '', NAMES[j], a); make('span', '', QUESTIONS[j], a); make('small', '', times[j] + ' min read', a); }
-    if (TOKENS.length > 1) {
+    if (footer) {
       card((i + TOKENS.length - 1) % TOKENS.length, 'Previous');
       card(i < TOKENS.length - 1 ? i + 1 : 0, i < TOKENS.length - 1 ? 'Next' : 'Back to');
     }
-    var teardownControls = make('div', 'hl-rv-teardown-controls', null, panel); footer.before(teardownControls);
+    var teardownControls = make('div', 'hl-rv-teardown-controls', null, panel); if (footer) footer.before(teardownControls);
     function teardowns() { return sections.filter(function (s) { return s.token === t; }).flatMap(function (s) { return Array.from(s.node.querySelectorAll('details.hl-teardown')); }); }
     if (teardowns().length) {
       button('Expand all teardowns', teardownControls, function () { teardowns().forEach(function (d) { d.open = true; }); });

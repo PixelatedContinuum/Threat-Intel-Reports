@@ -401,6 +401,13 @@ function liveTokens() { return LIVE_TOKENS || TAB_TOKENS; }
 function firstTab() { return liveTokens()[0]; }
 /* a second tab for the rows that must start from a different tab than the one they select: Attack chain when the report has it */
 function otherTab() { var l = liveTokens(); return l.indexOf('chain') >= 0 && l[0] !== 'chain' ? 'chain' : (l[1] || l[0]); }
+/* Where the Sections-menu row starts, and what it must see before and after. With two or more tabs it starts on another tab.
+   With one tab there is none, so it starts in one-page mode, where no tab is selected: the click must then select the tab. */
+function menuStartHash(first, other) { return first === other ? '#one-page' : '#tab-' + other; }
+function menuSelectVerdict(beforeId, afterId, first, other) {
+  var expectedBefore = first === other ? null : 'tabbtn-' + other;
+  return afterId === 'tabbtn-' + first && (beforeId || null) === expectedBefore;
+}
 function rowTabs() { var a = firstTab(), b = otherTab(); return a === b ? [a] : [a, b]; }
 /* What each dashboard view reads, mirrored from hl-report-tabs.js on purpose and read from the report's own SOURCE tables
    (never from the view), so a page whose view dropped a table it should have read cannot excuse itself. J5 (Joseph, 2026-10-30):
@@ -605,8 +612,20 @@ var TAB_LOOK_EXPR = '(function(){var tabs=[].slice.call(document.querySelectorAl
   'return {id:b.id,selected:b.getAttribute("aria-selected")==="true",color:c.color,' +
   'line:c.borderBottomColor,lineW:parseFloat(c.borderBottomWidth),dot:d.backgroundColor,dotW:parseFloat(d.width)};});})()';
 function tabLookVerdict(tabs) {
-  if (!tabs || tabs.length < 2) return { notChecked: true, ok: false, detail: 'fewer than two tabs were rendered, so nothing could be compared' };
+  if (!tabs || tabs.length < 1) return { notChecked: true, ok: false, detail: 'no tab was rendered, so nothing could be measured' };
   var clear = function (c) { return !c || c === 'transparent' || /^rgba\(\s*0,\s*0,\s*0,\s*0\s*\)$/.test(c); };
+  /* One tab (T-0500.1.10): there is no idle tab to tell the selected one from and no second dot to tell apart, so the
+     comparisons cannot be made and are not claimed. What one tab can show is measured on its own: it is the selected tab,
+     it has the accent underline, and it carries an accent dot. The row says so in its name (tabLookRowName). */
+  if (tabs.length === 1) {
+    var one = tabs[0], oneWhy = [];
+    if (!one.selected) oneWhy.push('the only tab is not selected');
+    if (one.lineW < 2 || clear(one.line)) oneWhy.push('the only tab has no underline (' + one.lineW + 'px ' + one.line + ')');
+    if (!(one.dotW > 0) || clear(one.dot)) oneWhy.push('the only tab has no accent dot');
+    return { notChecked: false, ok: oneWhy.length === 0, why: oneWhy, single: true, distinct: 1,
+      detail: '1 tab: ' + one.id + ' ' + one.color + ' with a ' + one.lineW + 'px ' + one.line + ' line and a ' + one.dotW + 'px ' + one.dot + ' dot' +
+        '; no idle tab exists, so the label-colour and dot-colour comparisons were not made' + (oneWhy.length ? '; ' + oneWhy.join('; ') : '') };
+  }
   var sel = tabs.filter(function (t) { return t.selected; });
   var idle = tabs.filter(function (t) { return !t.selected; });
   var why = [];
@@ -1102,8 +1121,32 @@ function targetRowVerdict(rows, docTotal, tabs) {
 }
 
 /* v6: the selected tab is distinguishable and every tab has its own accent dot, at desktop width where the tab strip shows. */
+/* T-0500.1.10: a report with one tab built a Previous/Next footer with no card in it, an empty <nav aria-label="Read report in order">
+   landmark that a screen reader announces and nothing in it. The row reads every navigation landmark in the report page, shown or not
+   (a landmark inside a closed or hidden panel is still in the document), and FAILs one with no link or button in it. */
+var LANDMARK_EXPR = '(function(){var root=document.querySelector(".hl-report-page")||document.body;' +
+  'var navs=[].slice.call(root.querySelectorAll("nav,[role=navigation]"));' +
+  'return navs.map(function(n){return {cls:String(n.className||"").slice(0,40),label:n.getAttribute("aria-label")||"",' +
+  'targets:n.querySelectorAll("a[href],button").length,panel:(n.closest(".hl-rv-panel")||{}).id||""};});})()';
+function emptyLandmarkVerdict(navs) {
+  if (!Array.isArray(navs) || navs.length === 0) return { notChecked: true, ok: false, empty: [], detail: 'the page has no navigation landmark, so nothing was measured' };
+  var empty = navs.filter(function (n) { return !(n.targets > 0); });
+  return { notChecked: false, ok: empty.length === 0, empty: empty,
+    detail: navs.length + ' navigation landmark(s) read, ' + empty.length + ' with no link or button in them' +
+      (empty.length ? ': ' + empty.slice(0, 6).map(function (n) { return (n.cls || 'nav') + (n.label ? ' "' + n.label + '"' : '') + (n.panel ? ' in #' + n.panel : ''); }).join(' | ') : '') };
+}
+async function landmarkRows(page, url) {
+  var name = 'no navigation landmark on the page is empty';
+  await setViewport(page, 1280, 900);
+  if (!(await gotoAndWait(page, url))) { check('NOT CHECKED: ' + name, false, 'the tab controller never built at 1280x900 (no .hl-rv-ready), so nothing was measured'); return; }
+  var v = emptyLandmarkVerdict(await page.json(LANDMARK_EXPR));
+  if (v.notChecked) check('NOT CHECKED: ' + name, false, v.detail);
+  else check(name, v.ok, v.detail);
+}
+var TAB_LOOK_NAME = 'the selected tab is distinguished by label colour and underline, and every tab carries its own accent dot';
+var TAB_LOOK_NAME_ONE = 'the only tab is selected, underlined in its accent and carries its accent dot (one tab: no idle tab to tell it from)';
 async function tabLookRows(page, url) {
-  var name = 'the selected tab is distinguished by label colour and underline, and every tab carries its own accent dot';
+  var name = TAB_LOOK_NAME;
   await setViewport(page, 1280, 900);
   if (!(await gotoAndWait(page, url))) {
     check('NOT CHECKED: ' + name, false, 'the tab controller never built at 1280x900 (no .hl-rv-ready), so nothing was measured');
@@ -1112,6 +1155,7 @@ async function tabLookRows(page, url) {
   await page.evaluate('location.hash="#tab-' + otherTab() + '"');
   await CDP.sleep(150);
   var v = tabLookVerdict(await page.json(TAB_LOOK_EXPR));
+  if (v.single) name = TAB_LOOK_NAME_ONE;
   if (v.notChecked) check('NOT CHECKED: ' + name, false, v.detail);
   else check(name, v.ok, v.detail);
 }
@@ -2184,6 +2228,14 @@ var BOX_CONTROLS = [
   { key: 'shipped', vp: [390, 844, 'phone'], hang: false, bar: false,
     css: '\n@media (max-width: 699px) { .hl-report-page .hl-rv-nextprev a { flex: 1 1 0 !important; } }\n' }
 ];
+/* The layout's own footer shape (hl-report-tabs.js card()): a nav of two cards, each a link with a direction line, a name, a question
+   and a reading time, carrying the tab's hue. Appended to the panel and, like the real footer, last in it, and marked as the layout marks everything it builds (data-rv-chrome, which the 44px control floor keys on: without it the 390px defect cannot be restored). */
+var BOX_INJECT_CARD_EXPR = '(function(tab){var p=document.getElementById("tab-"+tab);if(!p)return false;' +
+  'function mk(t){var e=document.createElement(t);e.setAttribute("data-rv-chrome","");e.setAttribute("data-pagefind-ignore","");return e;}' +
+  'var n=mk("nav");n.className="hl-rv-nextprev";n.setAttribute("aria-label","Read report in order (injected control)");' +
+  '["Previous","Next"].forEach(function(dir){var a=mk("a");a.href="#tab-"+tab;a.setAttribute("data-rv-hue",tab);' +
+  '[["small",dir],["strong","Overview"],["span","What happened and how bad is it?"],["small","12 min read"]].forEach(function(x){' +
+  'var e=mk(x[0]);e.textContent=x[1];a.appendChild(e);});n.appendChild(a);});p.appendChild(n);return true;})(__TAB__)';
 async function boxFitState(page, label, hash) {
   await page.evaluate('location.hash=' + JSON.stringify(hash));
   await CDP.sleep(90);
@@ -2232,8 +2284,13 @@ async function boxFitRows(page, url, html) {
     try {
       await setViewport(page, ctl.vp[0], ctl.vp[1]);
       if (!(await gotoAndWait(page, srv.origin + cpath))) { check('NOT CHECKED: ' + cname, false, 'the tab controller never built on the control copy'); continue; }
+      var injected = false;
       if (!(await page.evaluate('!!document.querySelector("#tab-' + tab + ' .hl-rv-nextprev a")'))) {
-        check('NOT CHECKED: ' + cname, false, 'the page has no next/previous card on the ' + tab + ' tab, so the copy has nothing to change'); continue;
+        /* A report with one tab builds no next/previous footer (T-0500.1.10). The control still has to prove the rows can
+           see a card defect, so the gate puts a card of the layout's own shape into the copy, the way it injects a table
+           for a report that has none. Nothing on the tab panel is left to chance: no panel, nothing injected, NOT CHECKED. */
+        injected = await page.evaluate(BOX_INJECT_CARD_EXPR.replace('__TAB__', JSON.stringify(tab)));
+        if (!injected) { check('NOT CHECKED: ' + cname, false, 'the page has no next/previous card on the ' + tab + ' tab and the copy has no panel to put one in'); continue; }
       }
       var st = await boxFitState(page, ctl.vp[0] + 'x' + ctl.vp[1] + ' ' + tab, '#tab-' + tab);
       var hv = BOXFIT.verdict([st], 'hang'), bv = BOXFIT.verdict([st], 'bar');
@@ -2241,6 +2298,7 @@ async function boxFitRows(page, url, html) {
       var names = function (v) { return v.findings.some(function (f) { return /hl-rv-nextprev/.test(f.path); }); };
       var hangOk = ctl.hang ? hv.ok : (!hv.ok && names(hv)), barOk = ctl.bar ? bv.ok : (!bv.ok && names(bv));
       check(cname, hangOk && barOk,
+        (injected ? '(on a card the gate injected: the report has one tab and builds no next/previous footer) ' : '') +
         'hang row: ' + (hv.ok ? 'PASS' : 'FAIL ' + hv.count + ' fault(s), first: ' + BOXFIT.describe(hv.findings[0])) +
         ' | bar row: ' + (bv.ok ? 'PASS' : 'FAIL ' + bv.count + ' fault(s), first: ' + BOXFIT.describe(bv.findings[0])));
     } finally { srv.close(); }
@@ -2840,8 +2898,11 @@ async function tabbedChecks(page, opts) {
        after a tall view has been expanded and collapsed the page can sit tens
        of thousands of px down, and the menu then opens over a moving layout.
        Start on a tab that is NOT the one the menu click must select, so a
-       selection that never moved cannot pass. */
-    await page.evaluate('location.hash="#tab-' + otherTab() + '"');
+       selection that never moved cannot pass. A report with ONE tab has no
+       other tab to start on (T-0500.1.10): it starts in one-page mode, where
+       no tab is selected, so the click still has to move the selection. */
+    var startHash = menuStartHash(firstTab(), otherTab());
+    await page.evaluate('location.hash=' + JSON.stringify(startHash));
     await CDP.sleep(100);
     await page.evaluate('window.scrollTo(0,0)');
     await CDP.sleep(150);
@@ -2879,7 +2940,8 @@ async function tabbedChecks(page, opts) {
     }
     var viaMenu = await page.json(selectedTabExpr());
     check(width + ' px: a tab chosen from the Sections menu becomes the selected tab',
-      viaMenu.id === 'tabbtn-' + firstTab() && beforeMenu.id === 'tabbtn-' + otherTab() && firstTab() !== otherTab(),
+      menuSelectVerdict(beforeMenu.id, viaMenu.id, firstTab(), otherTab()),
+      (startHash === '#one-page' ? '(one tab: started in one-page mode) ' : '') +
       'selected ' + (beforeMenu.id || 'nothing') + ' before, ' +
       (viaMenu.id || 'nothing') + ' after; pointer ' +
       (picked && picked.ok ? 'at ' + Math.round(picked.x) + ',' + Math.round(picked.y)
@@ -2919,6 +2981,7 @@ async function tabbedChecks(page, opts) {
       (textSmallList.length ? ': ' + textSmallList.slice(0, 8).join(' | ') : ''));
   }
   await tabLookRows(page, url);
+  await landmarkRows(page, url);
   await panelRows(page, url);
   await featuredSponsorRows(page, url);
   await sponsorRailRows(page, url);
@@ -3630,6 +3693,11 @@ if (require.main === module) {
     MIN_TARGET_PX: MIN_TARGET_PX,
     TAB_BAR_VIEWPORTS: TAB_BAR_VIEWPORTS,
     tabLookVerdict: tabLookVerdict,
+    emptyLandmarkVerdict: emptyLandmarkVerdict,
+    LANDMARK_EXPR: LANDMARK_EXPR,
+    menuSelectVerdict: menuSelectVerdict,
+    menuStartHash: menuStartHash,
+    BOX_INJECT_CARD_EXPR: BOX_INJECT_CARD_EXPR,
     panelStackVerdict: panelStackVerdict,
     featuredSponsorVerdict: featuredSponsorVerdict,
     FEATURED_EXPR: FEATURED_EXPR,
