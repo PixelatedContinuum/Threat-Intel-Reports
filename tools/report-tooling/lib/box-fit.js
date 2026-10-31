@@ -354,8 +354,11 @@ var VIEW_EXPR = '(' + viewFit.toString() + ')()';
 
 /* states: [{ label, views, collapsed, ... overlap, roundedOver } | { label, notChecked }]; which: 'overlap' | 'rounded' */
 function viewVerdict(states, which) {
+  /* a state with zero shown data views (a tab that has none) is not a defect and not an unmeasured view: it is left out of both lists.
+     A state that failed to build, or showed views of which none was measured collapsed, is bad (unmeasured). */
   var good = (states || []).filter(function (s) { return s && !s.notChecked && s.collapsed > 0; });
-  var bad = (states || []).filter(function (s) { return !s || s.notChecked || !(s.collapsed > 0); });
+  var bad = (states || []).filter(function (s) { return !s || s.notChecked || (s.views > 0 && !(s.collapsed > 0)) || (s.views === undefined && !(s.collapsed > 0)); });
+  var empty = (states || []).filter(function (s) { return s && !s.notChecked && s.views === 0; });
   if (!good.length) return { notChecked: true, ok: false, detail: 'no collapsed data view was measured' + (bad.length ? ' (' + bad.map(function (s) { return s && s.notChecked || 'no collapsed view'; }).join('; ') + ')' : '') };
   var key = which === 'rounded' ? 'roundedOver' : 'overlap', findings = [];
   good.forEach(function (s) { (s[key] || []).forEach(function (f) { findings.push(Object.assign({ where: s.label + ': ' }, f)); }); });
@@ -364,8 +367,11 @@ function viewVerdict(states, which) {
   var detail = which === 'rounded'
     ? sum('rounded') + ' bars with a rounded bottom corner, ' + sum('roundedAlone') + ' of them with nothing under them; ' + unit
     : sum('siblingPairs') + ' sibling pairs compared; ' + unit;
-  var notC = sum('notCollapsed'); if (notC) detail += '; NOT MEASURED: ' + notC + ' view(s) that were not collapsed';
+  var notC = sum('notCollapsed'), noBar = sum('noBar');
+  if (notC) detail += '; NOT MEASURED: ' + notC + ' view(s) that were not collapsed';
+  if (noBar) detail += '; NOT MEASURED: ' + noBar + ' shown view(s) with no summary bar or no aria-expanded button';
   if (bad.length) detail += '; NOT MEASURED: ' + bad.length + ' state(s)';
+  if (empty.length) detail += '; ' + empty.length + ' state(s) showed no data view (not a defect)';
   if (findings.length) {
     var d = findings.slice(0, 4).map(function (f) {
       return f.where + (f.kind === 'overlap' ? f.sig + ' overlaps its sibling ' + f.other + ' by ' + f.by + 'px (' + f.wide + 'px wide) inside ' + f.view
@@ -373,6 +379,7 @@ function viewVerdict(states, which) {
     }).join(' | ');
     return { ok: false, count: findings.length, findings: findings, detail: findings.length + ' fault(s): ' + d + (findings.length > 4 ? ' | +' + (findings.length - 4) + ' more' : '') + '; ' + detail };
   }
+  if (notC || noBar || bad.length) return { notChecked: true, ok: false, count: 0, findings: [], detail: '0 faults in what was measured, but not everything shown was; ' + detail };
   return { ok: true, count: 0, findings: [], detail: '0 faults; ' + detail };
 }
 

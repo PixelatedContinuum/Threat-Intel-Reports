@@ -97,3 +97,27 @@ test('CSS: the old rules are gone from the shipped sheet and the fixed ones are 
   assert.match(CSS, /\.hl-rv-view > \.hl-rv-curated \{ padding: 0 var\(--rv-pad\) var\(--rv-pad\); margin: -8px 0 0 !important; \}/, 'the open view keeps the note 8px under its body');
   assert.match(CSS, /\.hl-rv-view:has\(> \.hl-rv-view-summary button\[aria-expanded="false"\]\) > \.hl-rv-curated \{ padding-top: 12px; margin-top: 0 !important; \}/);
 });
+
+/* fix2: viewVerdict never folds an unmeasured shown view or state into PASS. States are the in-page counts, declared directly. */
+const GOODST = (label) => ({ label, views: 1, collapsed: 1, notCollapsed: 0, noBar: 0, withNote: 0, siblingPairs: 3, rounded: 0, roundedAlone: 0, overlap: [], roundedOver: [] });
+test('fix2: a view with no bar beside a measured one gives NOT CHECKED on both rows, naming the count', () => {
+  const st = [GOODST('a'), Object.assign(GOODST('b'), { views: 2, noBar: 1 })];
+  ['overlap', 'rounded'].forEach(w => { const v = B.viewVerdict(st, w); assert.equal(v.notChecked, true); assert.equal(v.ok, false); assert.match(v.detail, /NOT MEASURED: 1 shown view\(s\) with no summary bar/); });
+});
+test('fix2: a view that was not collapsed beside a measured one gives NOT CHECKED', () => {
+  const st = [GOODST('a'), Object.assign(GOODST('b'), { views: 2, notCollapsed: 2 })];
+  const v = B.viewVerdict(st, 'overlap'); assert.equal(v.notChecked, true); assert.match(v.detail, /NOT MEASURED: 2 view\(s\) that were not collapsed/);
+});
+test('fix2: a bad state (never built, or views shown and none collapsed) gives NOT CHECKED; a state with zero shown views does not', () => {
+  const dead = B.viewVerdict([GOODST('a'), { label: 'b', notChecked: 'controller never built' }], 'rounded');
+  assert.equal(dead.notChecked, true); assert.match(dead.detail, /NOT MEASURED: 1 state/);
+  const none = B.viewVerdict([GOODST('a'), { label: 'b', views: 2, collapsed: 0, notCollapsed: 0, noBar: 0 }], 'rounded');
+  assert.equal(none.notChecked, true);
+  const zero = B.viewVerdict([GOODST('a'), { label: 'c', views: 0, collapsed: 0, notCollapsed: 0, noBar: 0 }], 'rounded');
+  assert.equal(zero.ok, true); assert.match(zero.detail, /1 state\(s\) showed no data view \(not a defect\)/);
+});
+test('fix2: all clean is PASS, and a fault beside a noBar view is still FAIL', () => {
+  const clean = B.viewVerdict([GOODST('a'), GOODST('b')], 'overlap'); assert.equal(clean.ok, true); assert.equal(clean.notChecked, undefined);
+  const faulty = Object.assign(GOODST('b'), { views: 2, noBar: 1, overlap: [{ kind: 'overlap', sig: 'p', other: 'div', by: 8, wide: 300, view: 'section.hl-rv-view' }] });
+  const f = B.viewVerdict([GOODST('a'), faulty], 'overlap'); assert.equal(f.ok, false); assert.equal(f.notChecked, undefined); assert.equal(f.count, 1); assert.match(f.detail, /NOT MEASURED: 1 shown view/);
+});
