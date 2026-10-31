@@ -33,6 +33,7 @@ stix_bundle: /stix/newdouble-clickfix.json
 
 ## BLUF (Bottom Line Up Front)
 {: .hl-tier-1}
+{: .hl-tab-overview}
 
 Two saved FACEIT-themed pages instruct Counter-Strike 2 players to paste and run a PowerShell command. The command names a script URL at `202.71.14.31`; the script VirusTotal held for that URL on September 25, 2026 was designed to install a Steam-focused executable. On September 29, 2026 the same host was still serving that script, byte for byte unchanged. Whether the lure pages and the executable URL are still live is NOT CHECKED. Which script a visitor received on either page's scan date, including the August 26 page, is NOT CHECKED.
 
@@ -42,6 +43,7 @@ Why that matters is set out in Section 1. Valve describes criminals stripping st
 
 ## 1. Executive Summary
 {: .hl-tier-1}
+{: .hl-tab-overview}
 
 I found this on [Webamon](https://intel.webamon.com/), in saved scans of fake FACEIT verification pages. I'm a gamer myself, as plenty of people in security are, so this one hit home. With so many recent attacks aimed at gamers, I wanted players, and the people who look after their machines, to know what to watch for.
 
@@ -61,6 +63,7 @@ What I did not find in public reporting at the time of my bounded search is the 
 
 ## 2. Business Risk Assessment
 {: .hl-tier-1}
+{: .hl-tab-overview}
 
 The lure is aimed at people who play CS2 and may treat a FACEIT verification prompt as part of normal competitive play. Running the supplied command places their Steam account at risk; if an account were lost, its inventory and skins would be exposed as a general consequence of account access, not as a kit capability. Removing Steam Guard would weaken a key account protection if the malware completes that action. The available evidence establishes the kit's intended effects, not that any particular player lost an account or item.
 
@@ -68,6 +71,7 @@ My assessment is that the fake VAC-ban notice is meant to pressure a player to e
 
 ## 3. Delivery Chain and Technical Classification
 {: .hl-tier-2}
+{: .hl-tab-chain}
 
 The saved `newdouble` pages show a checkbox security check using Cloudflare imagery under FACEIT branding. Their page code writes a PowerShell command to the clipboard when the visitor clicks the checkbox, then directs the visitor to open Windows Run and paste it. The page cannot execute the command itself. This is a ClickFix delivery step that depends on a person running the pasted text.
 
@@ -85,6 +89,7 @@ Historical response bodies and second stages for `212.113.98.10/resources/12/y.p
 
 ## 4. Hosting and Campaign Scope
 {: .hl-tier-2}
+{: .hl-tab-timeline}
 
 The four payload hosts are ordinary rented virtual servers, with plain HTTP URLs on raw IP addresses. The two `newdouble` pages point to `202.71.14.31`, in a block routed by Sollutium EU (AS43641) and sold under the `servers.guru` brand. The February `faceitanticheat.com` page points to `93.183.93.9`, and the March `faceitanticheat.support` page points to `185.209.30.61`; both are on VDSINA (AS48282). The February `xplayduels.com` pages point to `212.113.98.10`, on Nekobyte International (AS206134) under the IT-GARAGE VPS brand. Only `202.71.14.31` belongs to the September Steam kit chain; `93.183.93.9`, `212.113.98.10` and `185.209.30.61` are older payload hosts that used the same page template and path layout, with operator link INSUFFICIENT, and `93.183.93.9` served a different payload (a miner).
 
@@ -100,6 +105,7 @@ That continuity strengthens the link between the two `newdouble` pages and their
 
 ## 5. Capabilities and Defender Observables
 {: .hl-tier-2}
+{: .hl-tab-chain}
 
 The Steam-focused executable is designed to capture sign-in material and session access, and remove Steam Guard protections. I assess at **HIGH** that it is built to capture Steam sign-in material on the host and that it contains account-protection removal code. That it forwards the captured material to a remote panel, the step a takeover by someone else needs, I rate **MODERATE**: the code that sends account material to a panel exists, but the path from capture to that sender was not traced. Successful takeover or removal on a victim account is **INSUFFICIENT** without a runtime or incident record. A defender can look for unexpected changes to Steam account protection, session state and the `Accounts` entry in Steam's `config.vdf`, while treating those traces as hunting leads until validated against normal client behavior.
 
@@ -111,6 +117,7 @@ A panel API exists in the executable, which supports an operator-control purpose
 
 ## 6. Static and Behavioral Findings
 {: .hl-tier-3}
+{: .hl-tab-chain}
 
 The hash-matched `y.ps1` source expresses a download from `/x/x.exe`, an attempted launch, a Startup entry and changes meant to weaken Windows defenses. Those instructions support **HIGH** confidence in what the script is designed to do. They do not prove that elevation, defense changes, the download or persistence succeeded on a player's machine. A historical sandbox record supports one request from the script to `/x/x.exe`; a separate three-page sandbox report lists the URL but does not show an HTTP transaction.
 
@@ -118,6 +125,7 @@ The hash-matched `x.exe` contains Steam account and Guard handling, the fake VAC
 
 ## 7. MITRE ATT&CK Mapping
 {: .hl-tier-2}
+{: .hl-tab-chain}
 
 These mappings describe the saved lure and the recovered script, not completed actions on a victim host. The technique names and IDs follow the current [MITRE ATT&CK catalog](https://attack.mitre.org/).
 
@@ -130,6 +138,7 @@ These mappings describe the saved lure and the recovered script, not completed a
 
 ## 8. Indicators of Compromise
 {: .hl-tier-2}
+{: .hl-tab-indicators}
 
 The machine-readable [IOC feed]({{ "/ioc-feeds/newdouble-clickfix-iocs.json" | relative_url }}) is maintained separately. Its two `newdouble` domains, the raw-IP delivery URLs and the script and executable hashes represent historical observations. They should be matched to the dated lure and file records in this report. The exception is `http://202.71.14.31/y/y.ps1`, still served on September 29, 2026 from the open directory `http://202.71.14.31/y/`; no other URL is established as still active. `faceitanticheat.com` and `faceitanticheat.support` no longer resolved on that date and are historical.
 
@@ -137,6 +146,7 @@ The older `93.183.93.9` miner chain is a different payload and belongs in a hist
 
 ## 9. Detection and Hunting Guidance
 {: .hl-tier-2}
+{: .hl-tab-indicators}
 
 The [IOC feed]({{ "/ioc-feeds/newdouble-clickfix-iocs.json" | relative_url }}) contains the historical domains, delivery URLs and file hashes, and the [detection package]({{ "/hunting-detections/newdouble-clickfix-detections/" | relative_url }}) holds the YARA, Sigma and Suricata rules. The following are hunting leads from the recovered script and executable, not claims of observed victim activity or validated alert rules.
 
@@ -150,6 +160,7 @@ Where a match suggests execution, preserve the relevant process, file, certifica
 
 ## 10. Recommendations
 {: .hl-tier-1}
+{: .hl-tab-indicators}
 
 Treat a FACEIT-branded page that asks a player to paste a command into Windows Run as an execution risk. For prevention, make the legitimate account-verification path clear to players and restrict untrusted script execution where practical. The saved pages depend on the player running the command; visiting the page alone does not establish infection.
 
@@ -159,6 +170,7 @@ Prioritize behavior-based hunting around the download-and-run command and the co
 
 ## 11. Threat Actor Assessment
 {: .hl-tier-2}
+{: .hl-tab-attribution}
 
 I cannot attribute this activity to a named actor. Attribution is **INSUFFICIENT**, below 50 percent. The available pages, payload URLs and file evidence identify an operation aimed at CS2 players, but they do not identify who controlled the domains, rented the servers or received account material. There is no authenticated operator account, private configuration or distinctive shared build artifact that would support a named-actor claim. I assign no UTA designation.
 
@@ -168,6 +180,7 @@ The closest public account, relayed on August 25, 2026, describes Steam client d
 
 ## 12. Confidence Summary and Evidence Gaps
 {: .hl-tier-2}
+{: .hl-tab-confidence}
 
 | Finding | Confidence | What would change it |
 |---|---|---|
@@ -198,6 +211,7 @@ The strongest evidence is the saved page code, the hash-matched script and execu
 
 ## 13. References
 {: .hl-tier-2}
+{: .hl-tab-confidence}
 
 - Webamon saved reports: [`newdoubleauthentification.com`, August 26, 2026](https://intel.webamon.com/report/4298d731-f038-458a-8b67-f6d6497e5e84); [`newdouble-authentification.com`, September 26, 2026](https://intel.webamon.com/report/92202cbe-dbfe-4124-8883-2907424b4ed4). These are historical page records, not live-site checks.
 - Webamon older template records: [`faceitanticheat.com`, February 1](https://intel.webamon.com/report/18db694f-a11f-4298-8988-cf7fdec587db); [`xplayduels.com`, February 22](https://intel.webamon.com/report/905d3450-5211-4478-bdb7-3b1e399cc9fd) and [February 23](https://intel.webamon.com/report/237569af-66d4-417e-9df2-600c28ed0752); [`faceitanticheat.support`, March 4](https://intel.webamon.com/report/d106ca91-1912-4344-9157-7eaa6d59bd54). Their shared page form does not establish a shared payload or operator.
