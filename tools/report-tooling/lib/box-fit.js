@@ -70,21 +70,30 @@ function boxFit() {
     }
     return !!c.boxShadow && c.boxShadow !== 'none';
   }
-  /* the rects of what is painted inside e: its text runs and every descendant that paints a box (in flow; placed elements are checked on their own) */
+  /* the rects of what is painted inside e: its text runs and every descendant that paints a box (in flow; placed elements are checked on their own).
+     A descendant that clips or scrolls its content (overflow other than visible) contributes its own box only: what lies beyond it is cut off or
+     scrolled, not painted outside. */
   function paintRects(e) {
-    var out = [], tw = document.createTreeWalker(e, NodeFilter.SHOW_ELEMENT | NodeFilter.SHOW_TEXT, null), nd, guard = 0;
-    while ((nd = tw.nextNode()) && guard++ < 1500) {
-      if (nd.nodeType === 3) {
-        if (!/\S/.test(nd.nodeValue)) continue;
-        var rg = document.createRange(); rg.selectNodeContents(nd);
-        [].slice.call(rg.getClientRects()).forEach(function (q) { if (q.width || q.height) out.push(q); });
-      } else {
-        var ncs = getComputedStyle(nd);
-        if (ncs.display === 'none' || ncs.visibility === 'hidden' || ncs.position === 'absolute' || ncs.position === 'fixed') continue;
-        if (nd.namespaceURI === 'http://www.w3.org/2000/svg' && nd.tagName.toLowerCase() !== 'svg') continue;
-        if (ownPaint(ncs, nd.tagName)) { var nr = nd.getBoundingClientRect(); if (nr.width || nr.height) out.push(nr); }
+    var out = [], count = 0;
+    function walk(el, top) {
+      var ecs = getComputedStyle(el);
+      if (/auto|scroll|hidden|clip/.test(ecs.overflowX + ' ' + ecs.overflowY)) { var br = el.getBoundingClientRect(); if (br.width || br.height) out.push(br); return; }
+      for (var c = el.firstChild; c && count < 1500; c = c.nextSibling) {
+        count++;
+        if (c.nodeType === 3) {
+          if (!/\S/.test(c.nodeValue)) continue;
+          var rg = document.createRange(); rg.selectNodeContents(c);
+          [].slice.call(rg.getClientRects()).forEach(function (q) { if (q.width || q.height) out.push(q); });
+        } else if (c.nodeType === 1) {
+          var ncs = getComputedStyle(c);
+          if (ncs.display === 'none' || ncs.visibility === 'hidden' || ncs.position === 'absolute' || ncs.position === 'fixed') continue;
+          if (c.namespaceURI === 'http://www.w3.org/2000/svg' && c.tagName.toLowerCase() !== 'svg') continue;
+          if (ownPaint(ncs, c.tagName)) { var nr = c.getBoundingClientRect(); if (nr.width || nr.height) out.push(nr); }
+          walk(c, false);
+        }
       }
     }
+    walk(e, true);
     return out;
   }
   var all = root.querySelectorAll('*');
@@ -163,6 +172,7 @@ function boxFit() {
         if (out) {
           var horiz = out.side === 'left' || out.side === 'right';
           if (/auto|scroll/.test(horiz ? ocs.overflowX : ocs.overflowY)) ex('child inside a scroll container');
+          else if (horiz && /hidden|clip/.test(ocs.overflowX) && ocs.textOverflow === 'ellipsis' && ocs.whiteSpace === 'nowrap') ex('child inside an ellipsis box');
           else hang.push({ kind: cs.position === 'absolute' ? 'abs-out-of-container' : 'out-of-parent', sig: sig(e), path: path(e), side: out.side, by: r1(out.by), parent: sig(boxEl),
             child: [r1(r.left), r1(r.top), r1(r.right), r1(r.bottom)] });
         }

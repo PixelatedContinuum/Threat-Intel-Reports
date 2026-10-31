@@ -86,6 +86,11 @@ test('an unpainted hit area that overhangs its heading is excluded and counted; 
   const g = layout('<h3 class="h" data-box="0,0,300,40" data-sh="50"><span data-box="0,10,100,30">Title</span><a class="perma" data-cs="{&quot;backgroundColor&quot;:&quot;rgb(40, 40, 40)&quot;}" data-box="100,5,144,49"><span data-box="112,14,128,32">§</span></a></h3>');
   try { const m = g.run(); assert.deepEqual(kinds(m, 'hang').sort(), ['out-of-parent:a.perma', 'spill-y:h3.h']); } finally { g.close(); }
 });
+test('an unpainted wrapper whose descendant scrolls or clips is judged by that descendant\'s box, not by the text beyond it', () => {
+  const f = layout('<section class="wrap" data-box="0,0,300,100"><div class="scroll" data-cs="{&quot;overflowX&quot;:&quot;auto&quot;}" data-box="0,0,300,100" data-sw="900"><span data-box="0,0,900,20">a very wide table row</span></div>' +
+    '<span class="cut" data-cs="{&quot;display&quot;:&quot;block&quot;,&quot;overflowX&quot;:&quot;hidden&quot;,&quot;textOverflow&quot;:&quot;ellipsis&quot;,&quot;whiteSpace&quot;:&quot;nowrap&quot;}" data-box="0,60,300,80" data-sw="700"><span data-box="0,60,700,80">a long label</span></span></section>');
+  try { const m = f.run(); assert.deepEqual(m.hang, []); assert.equal(m.excluded['child inside an ellipsis box'], 1); assert.equal(m.excluded['scroll container'], 1); assert.equal(m.excluded.ellipsis, 1); } finally { f.close(); }
+});
 test('text that lies outside a painted card is a fault on the text and on the card, whatever box its own element has', () => {
   const f = layout('<a class="card" data-cs="{&quot;borderLeftWidth&quot;:&quot;3px&quot;,&quot;borderLeftStyle&quot;:&quot;solid&quot;,&quot;borderLeftColor&quot;:&quot;rgb(1, 2, 3)&quot;}" data-box="0,0,300,44" data-sh="150"><strong data-box="10,10,200,150">title</strong></a>');
   try { const m = f.run(); assert.deepEqual(kinds(m, 'hang').sort(), ['out-of-parent:strong', 'spill-y:a.card']); assert.equal(m.bars.length, 1); } finally { f.close(); }
