@@ -28,7 +28,7 @@ stix_bundle: /stix/remcos-opendirectory.json
 ---
 
 
-**Campaign Identifier:** OpenDirectory-203.159.90.147-Remcos<br>
+**Campaign Identifier:** OpenDirectory-203[.]159[.]90[.]147-Remcos<br>
 **Last Updated:** February 6, 2026<br>
 **Threat Level:** CRITICAL
 
@@ -371,10 +371,10 @@ This maps to T1547.004, Boot or Logon Autostart Execution: Winlogon Helper DLL.
 **install.bat Technical Analysis:**
 
 ```batch
-PING 127.0.0.1 -n 2
-DEL "[ORIGINAL_PATH]\Backdoor.exe"
-start "" "C:\Users\[USERNAME]\AppData\Roaming\remcos\remcos.exe"
-DEL "%TEMP%\install.bat"
+[P]ING 127.0.0.1 -n 2
+[D]EL "[ORIGINAL_PATH]\Backdoor.exe"
+[s]tart "" "C:\Users\[USERNAME]\AppData\Roaming\remcos\remcos.exe"
+[D]EL "%TEMP%\install.bat"
 ```
 
 **Anti-Forensics Impact:**
