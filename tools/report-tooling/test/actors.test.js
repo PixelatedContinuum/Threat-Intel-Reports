@@ -390,3 +390,33 @@ actors:
   ], cat);
   assert.match(ix.problems.join('\n'), /identifier "ONLYINEMBARGO" is not printed in any published/);
 });
+
+test('an identifier printed defanged in a published report counts as printed (T-0500.1.12)', () => {
+  const src = `
+actors:
+  - id: UTA-2026-001
+    status: active
+    first_observed: 2026-02-28
+    last_updated: 2026-03-01
+    type: t
+    motivation: m
+    targeting: { note: n }
+    confidence: { named_actor: INSUFFICIENT }
+    summary: s
+    primary_host: 203.0.113.1
+    identifiers:
+      - { kind: domain, value: evil.example-attacker.com, context: in the report, defanged }
+      - { kind: ip, value: 198.51.100.17, context: in the report, defanged }
+      - { kind: email, value: ops@evil.example-attacker.com, context: in the report, defanged }
+      - { kind: domain, value: other.example-attacker.com, context: not in the report }
+    reports:
+      primary: [/reports/one/]`;
+  const actors = A.parseActors(src).actors;
+  const cat = A.parseCatalog(CATALOG);
+  const ix = A.build(actors, [report('one', 'names UTA-2026-001 and prints evil[.]example-attacker[.]com, 198[.]51[.]100[.]17 and ops[@]evil[.]example-attacker[.]com')], cat);
+  const text = ix.problems.join('\n');
+  assert.match(text, /identifier "other.example-attacker.com" is not printed/);
+  assert.doesNotMatch(text, /identifier "evil.example-attacker.com"/);
+  assert.doesNotMatch(text, /identifier "198.51.100.17"/);
+  assert.doesNotMatch(text, /identifier "ops@evil/);
+});

@@ -262,6 +262,12 @@ function publication(report, catalogByUrl) {
 
 /* ---- ATT&CK, through the same parser the report strip uses --------------- */
 
+/* T-0500.1.12: report bodies print network indicators defanged (hxxp://, [.], [@]). The identifier check compares the value as the
+   actor page prints it, so it reads the body in both forms: verbatim, and with those three defang forms undone. */
+function refang(t) {
+  return String(t).replace(/\[\.\]/g, '.').replace(/\[@\]/g, '@').replace(/\bhxxp(s?):\/\//gi, 'http$1://').replace(/\bfxp:\/\//gi, 'ftp://');
+}
+
 function attackFor(body, deps) {
   var html = deps.extractTables(body).join('\n');
   var doc = new deps.JSDOM('<body>' + html + '</body>').window.document;
@@ -351,7 +357,7 @@ function build(actors, reports, catalogByUrl, opts) {
       if (!idn || !idn.value) return;
       var seen = list.some(function (row) {
         var r = byUrl[row.url];
-        return r && r.body.indexOf(String(idn.value)) > -1;
+        return r && (r.body.indexOf(String(idn.value)) > -1 || refang(r.body).indexOf(String(idn.value)) > -1);
       });
       if (!seen) {
         problems.push(a.id + ': identifier "' + idn.value + '" is not printed in any published ' +
