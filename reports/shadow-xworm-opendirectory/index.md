@@ -38,6 +38,7 @@ stix_bundle: /stix/shadow-xworm-opendirectory.json
 
 ## Bottom Line Up Front
 {: .hl-tier-1}
+{: .hl-tab-overview}
 
 An exposed open directory at `epgoldsecurity.com` revealed a financially-motivated threat actor (<a href="/actors/UTA-2026-003/">UTA-2026-003</a>, an internal tracking label used by The Hunters Ledger) operating both Shadow RAT v2.6.4.0 and XWorm 3.0-5.0 against US victims during the 2026 tax season, with all four malware builds connecting to a single C2 server at 151.245.112.70. Shadow RAT is the primary risk: it disables Windows' two main malware detection mechanisms (AMSI and ETW) before any malicious activity begins, and carries a persistence capability that survives OS reinstallation, making detection and remediation significantly harder than a standard RAT infection. Both families must be fully removed for a confirmed infection to be cleared; removing one while the other persists leaves the attacker with full access. Block 151.245.112.70 immediately and check all endpoints for the persistence artifacts documented in Section 11.
 
@@ -45,6 +46,7 @@ An exposed open directory at `epgoldsecurity.com` revealed a financially-motivat
 
 ## 1. Executive Summary
 {: .hl-tier-1}
+{: .hl-tab-overview}
 
 A single unattributed financially-motivated operator (<a href="/actors/UTA-2026-003/">UTA-2026-003</a> *(an internal tracking label used by The Hunters Ledger, see Section 8)*) ran Shadow RAT v2.6.4.0 and XWorm 3.0-5.0 against US victims during the 2026 tax season, with all four malware builds routing to one C2 server at 151.245.112.70. An exposed open directory at `epgoldsecurity.com` disclosed the full toolkit; configuration decryption of all four samples, static code examination, and passive DNS pivoting establish the findings throughout this report.
 
@@ -102,6 +104,7 @@ The dual bypass chain (AMSI blinds .NET in-memory scanning; ETW silences EDR tel
 
 ## 2. Key Takeaways
 {: .hl-tier-1}
+{: .hl-tab-overview}
 
 - **Dual-RAT, single operator: both families must be remediated together.** Shadow RAT and XWorm share the same C2 IP and are operated by the same actor. Removing one while the other persists leaves the attacker with full access. Any confirmed infection must treat both families as a single, coordinated threat.
 
@@ -121,6 +124,7 @@ The dual bypass chain (AMSI blinds .NET in-memory scanning; ETW silences EDR tel
 
 ## 3. Business Risk Assessment
 {: .hl-tier-1}
+{: .hl-tab-overview}
 
 ### Understanding the Real-World Impact
 
@@ -184,6 +188,7 @@ The dual bypass chain (AMSI blinds .NET in-memory scanning; ETW silences EDR tel
 
 ## 4. Malware Classification & Identity
 {: .hl-tier-2}
+{: .hl-tab-chain}
 
 ### Sample Inventory
 
@@ -344,6 +349,7 @@ The production build enables 8 boolean feature flags (obfuscated names: `bool_2`
 
 ## 5. Technical Analysis: Shadow RAT v2.6.4.0
 {: .hl-tier-3}
+{: .hl-tab-chain}
 
 ### 5.1 Static Analysis: File Characteristics
 
@@ -613,6 +619,7 @@ A `FunStuff` namespace in `Shadow.Common.Messages` contains non-destructive hara
 
 ## 6. Technical Analysis: XWorm 3.0-5.0
 {: .hl-tier-3}
+{: .hl-tab-chain}
 
 ### 6.1 Static Analysis: File Characteristics
 
@@ -730,6 +737,7 @@ XWorm writes keystrokes to `%TEMP%\Log.tmp`. This fixed output path is a reliabl
 
 ## 7. Infrastructure Analysis
 {: .hl-tier-2}
+{: .hl-tab-timeline}
 
 ### 7.1 C2 Server: 151.245.112.70
 
@@ -805,6 +813,7 @@ These failures are consistent with an inexperienced individual operator rather t
 
 ## 8. Threat Actor Assessment
 {: .hl-tier-2}
+{: .hl-tab-attribution}
 
 > **Analyst note:** This section covers what is known about the person or group operating this campaign. Because the domains use WHOIS privacy, no clear identity has been established. The designation "<a href="/actors/UTA-2026-003/">UTA-2026-003</a>" is a tracking label used internally by this publication to refer to this unidentified operator.
 
@@ -876,6 +885,7 @@ Based on the totality of evidence, <a href="/actors/UTA-2026-003/">UTA-2026-003<
 
 ## 9. Threat Intelligence Context
 {: .hl-tier-2}
+{: .hl-tab-attribution}
 
 ### 9.1 Shadow RAT Lineage: The Quasar Fork Ecosystem
 
@@ -982,6 +992,7 @@ There is a supply chain risk too. The open-source Quasar and Pulsar lineage plus
 
 ## 10. MITRE ATT&CK Mapping
 {: .hl-tier-2}
+{: .hl-tab-chain}
 
 > **Analyst note:** MITRE ATT&CK is a publicly available framework that categorizes the tactics and techniques used by attackers. This table maps observed Shadow RAT and XWorm behaviors to ATT&CK identifiers, enabling security teams to hunt for these techniques using ATT&CK-based detection tools and threat intelligence platforms.
 
@@ -1301,6 +1312,7 @@ There is a supply chain risk too. The open-source Quasar and Pulsar lineage plus
 
 ## 11. Response Orientation
 {: .hl-tier-2}
+{: .hl-tab-indicators}
 
 This section provides a brief orientation for teams who have confirmed or suspect a compromise involving this infrastructure. Detailed procedures are the responsibility of the affected organization's internal incident response team.
 
@@ -1340,6 +1352,7 @@ If an endpoint compromise is confirmed, the following response phases apply:
 
 ## 12. Confidence Levels Summary
 {: .hl-tier-2}
+{: .hl-tab-confidence}
 
 ### DEFINITE (Direct evidence from code inspection / config decryption)
 - Shadow RAT family classification (Quasar-lineage .NET RAT)
@@ -1389,6 +1402,7 @@ If an endpoint compromise is confirmed, the following response phases apply:
 
 ## 13. IOCs & Detections
 {: .hl-tier-2}
+{: .hl-tab-indicators}
 
 ### IOC Summary
 
@@ -1430,6 +1444,7 @@ If an endpoint compromise is confirmed, the following response phases apply:
 
 ## 14. Appendix: Research References
 {: .hl-tier-2}
+{: .hl-tab-confidence}
 
 ### A. Shadow RAT / Quasar RAT Lineage
 
@@ -1483,5 +1498,6 @@ HHS.gov (Tier 1) published a "Remcos RAT Advisory", a US government advisory rel
 
 ## License
 {: .hl-tier-2}
+{: .hl-tab-confidence}
 
 © 2026 Joseph, The Hunters Ledger. Licensed under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/), free to republish and adapt, including commercially, with attribution to The Hunters Ledger and a link to the original.
