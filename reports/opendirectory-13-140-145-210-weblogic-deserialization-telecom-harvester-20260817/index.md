@@ -73,6 +73,7 @@ figure_nav:
 
 ## 1. Executive Summary
 {: .hl-tier-1}
+{: .hl-tab-overview}
 
 An operator reached a national carrier's credential and provisioning material by taking over the internet-facing web management interface of one ordinary business customer's carrier-managed router, then instructing that router to upload its own firmware image, crash dumps and configuration files outbound, and finally mining the stolen configs for the carrier's authentication secrets. The customer was a 96-person printing and office-supplies firm. Nothing of that company's own business data was taken, and there was no lateral movement into its office LAN, even though the operator held an arbitrary-file-read primitive on a device sitting behind the company firewall. What they took was the device's own material, and their post-processing says why. The stolen configs were grepped for `tacacs`, `radius`, `acs`, `cwmp`, `tr069`, SNMP community strings and Cisco `key 7` and `key 5` encrypted passwords in a single pass.
 
@@ -100,6 +101,7 @@ That router has since stopped answering. As of 2026-09-01 it responds on none of
 
 ## 2. Key Takeaways
 {: .hl-tier-1}
+{: .hl-tab-overview}
 
 Stop assuming the interesting victims are the big ones. The unremarkable business customer's carrier-managed router is how somebody gets at the carrier. That single sentence is what I would want a network operator to take away from this case, and everything below is support for it.
 
@@ -116,6 +118,7 @@ Three signals are worth hunting before anything else in this campaign. The route
 
 ## 3. Risk Assessment
 {: .hl-tier-1}
+{: .hl-tab-overview}
 
 I score this campaign **7.9/10, HIGH**. The score is driven by a confirmed large-volume theft of carrier-relevant credential material and a confirmed foothold inside a national telecom, and it is held below CRITICAL by three genuine failures and by the complete absence of any destructive capability.
 
@@ -154,6 +157,7 @@ Nothing in 169 files encrypts, wipes, defaces, denies service or manipulates dat
 
 ## 4. Campaign Scope and the Victims Still Exposed
 {: .hl-tier-2}
+{: .hl-tab-victims}
 
 Every resolved target in this campaign is critical infrastructure or government, with one instrument and one foreign outlier. The operator worked Ecuador's state telecom by name, a second carrier's customer edge, one municipal cadastre, the application estate of a second municipality, a national education portal, and a Mexican bank's password-reset endpoint. One further government body appears in the table without being a target at all, because the carrier monitoring platform the operator built a harvest script against also monitors a metropolitan fire service. That is the scope, and it is what makes this a briefing for a national regulator rather than an incident report for one company.
 
@@ -204,6 +208,7 @@ The router was also contested, which changes how any future forensic work on it 
 
 ## 5. Technical Classification
 {: .hl-tier-2}
+{: .hl-tab-chain}
 
 There is no malware family here, and treating this as one would misread the case. What was recovered is a single operator's complete working directory, left listing on the public internet. That distinction has practical consequences for anyone building coverage, because there is no family name to pivot on, no import-hash cluster, and no command-and-control protocol signature in the conventional sense.
 
@@ -239,6 +244,7 @@ That is a collection lesson worth carrying past this case. Trusting either sourc
 
 ## 6. The Confirmed Compromise: 424 MB Out of a Customer's Router
 {: .hl-tier-2}
+{: .hl-tab-victims}
 
 The victim is a single Cisco 1100-series integrated services router running IOS-XE 16.6.4, a 2018 build that was never patched for the 2023 web-interface vulnerability. Its hostname embeds the customer's own company name and its head-office site, which the crash-dump filename convention reveals without the operator ever writing it down. Its management address and its egress address are adjacent addresses in the same carrier-assigned block, and the internal web backend that its nginx front end proxies to sits at `192.168.1.6:80`.
 
@@ -351,6 +357,7 @@ Read that list as a statement of intent. `key 7` and `key 5` are Cisco's stored-
 
 ## 7. The Rest of the Campaign: What Landed, What Failed, What Was Only Built
 {: .hl-tier-2}
+{: .hl-tab-victims}
 
 The router is the one compromise I can prove from the victim's side. Everything else in this campaign sorts into three buckets, and keeping them apart is the discipline that makes the rest of this report worth reading. A confirmed foothold inside the carrier. A confirmed failure against a municipal government. And a set of capabilities that are fully built, aimed at named targets, with working credentials already in hand, but with no captured outcome at all.
 
@@ -481,6 +488,7 @@ Intent is **MODERATE**, and I am deliberately not resolving it. The scripts disc
 
 ## 8. Operator Infrastructure and Tradecraft
 {: .hl-tier-2}
+{: .hl-tab-timeline}
 
 The operator's external footprint is one virtual server, one domain and one rented VPN exit. That is the entire estate, and the emptiness is a finding rather than a gap, because I went looking hard for more.
 
@@ -540,6 +548,7 @@ I have to be careful about what that means. An open directory caught mid-operati
 
 ## 9. Detection and Response Guidance
 {: .hl-tier-2}
+{: .hl-tab-indicators}
 
 Detection content for this campaign lives in the companion file. Thirty-one rules ship there across three languages, twenty-three of them Detection-tier and eight Hunting-tier, organised by capability cluster rather than by family because there is no family to organise by, plus five atomic indicators routed to the machine-readable feed instead of being forced into rules that would detect nothing without their hard-coded literal.
 
@@ -591,6 +600,7 @@ Containment falls into six categories.
 
 ## 10. Technical Teardown
 {: .hl-tier-3}
+{: .hl-tab-chain}
 
 The operator's own code settles the capability question that their file names only pose. They are a competent adapter rather than a vulnerability researcher. The differentiated technique they implement is public, they implement it once and stamp it into seven parameterised wrappers, and their genuinely original work is simpler than the impressive-looking work. That is a normal and effective way to build an offensive capability, and it is not what a first read of the directory listing suggests.
 
@@ -756,6 +766,7 @@ Port 1389 ran the LDAP and RMI callback. Port 4445 took reverse shells and beaco
 
 ## 11. MITRE ATT&CK Mapping
 {: .hl-tier-2}
+{: .hl-tab-chain}
 
 Thirteen of the fourteen ATT&CK Enterprise tactics are represented. The one that is empty is Impact, and its emptiness is a finding rather than a gap, because nothing in 169 files encrypts, wipes, defaces, denies service or manipulates data. The only modification observed on a victim system makes that victim's daemon more resilient. Any reading of this campaign as destructive would be unsupported.
 
@@ -836,6 +847,7 @@ Two mapping decisions are worth stating rather than leaving for someone to query
 
 ## 12. Threat Actor Assessment
 {: .hl-tier-2}
+{: .hl-tab-attribution}
 
 > **Note on UTA identifiers:** "UTA" stands for Unattributed Threat Actor. <a href="/actors/UTA-2026-023/">UTA-2026-023</a> is a tracking label The Hunters Ledger assigns to an actor I have observed but cannot yet link to a publicly named threat group. Other vendors and feeds will not use this label; it is specific to this publication. If later evidence ties the activity to a named actor, I will retire the label and update the report.
 
@@ -913,6 +925,7 @@ When an actor leaves a third-party API key in their tooling, that is not just an
 
 ## 13. Indicators of Compromise
 {: .hl-tier-2}
+{: .hl-tab-indicators}
 
 The complete, validated, machine-readable indicator set lives in the companion feed, un-defanged and ready for ingestion.
 
@@ -947,6 +960,7 @@ And victim addresses are victims. The router and firewall pair, the two carrier 
 
 ## 14. Confidence, Gaps, and Calibration
 {: .hl-tier-2}
+{: .hl-tab-confidence}
 
 ### 14.1 Confidence Summary, findings organized by confidence level
 
@@ -1017,6 +1031,7 @@ What keeps this below the top of the scale is that the provider has not replied 
 
 ## 15. References
 {: .hl-tier-2}
+{: .hl-tab-confidence}
 
 Each source below carries the tier rating I assigned it while researching this case. Where a rating came out split, the entry sits at the lower of the two and says so. Several primary pages could not be retrieved directly, and those entries say that too rather than implying a clean primary read.
 
