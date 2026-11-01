@@ -30,7 +30,7 @@ description: "An exposed open directory at epgoldsecurity.com revealed a single 
 stix_bundle: /stix/shadow-xworm-opendirectory.json
 ---
 
-**Campaign Identifier:** OpenDirectory-DualRAT-MaaS-151.245.112.70<br>
+**Campaign Identifier:** OpenDirectory-DualRAT-MaaS-151[.]245[.]112[.]70<br>
 **Last Updated:** April 4, 2026<br>
 **Threat Level:** HIGH
 
@@ -40,7 +40,7 @@ stix_bundle: /stix/shadow-xworm-opendirectory.json
 {: .hl-tier-1}
 {: .hl-tab-overview}
 
-An exposed open directory at `epgoldsecurity.com` revealed a financially-motivated threat actor (<a href="/actors/UTA-2026-003/">UTA-2026-003</a>, an internal tracking label used by The Hunters Ledger) operating both Shadow RAT v2.6.4.0 and XWorm 3.0-5.0 against US victims during the 2026 tax season, with all four malware builds connecting to a single C2 server at 151.245.112.70. Shadow RAT is the primary risk: it disables Windows' two main malware detection mechanisms (AMSI and ETW) before any malicious activity begins, and carries a persistence capability that survives OS reinstallation, making detection and remediation significantly harder than a standard RAT infection. Both families must be fully removed for a confirmed infection to be cleared; removing one while the other persists leaves the attacker with full access. Block 151.245.112.70 immediately and check all endpoints for the persistence artifacts documented in Section 11.
+An exposed open directory at `epgoldsecurity[.]com` revealed a financially-motivated threat actor (<a href="/actors/UTA-2026-003/">UTA-2026-003</a>, an internal tracking label used by The Hunters Ledger) operating both Shadow RAT v2[.]6[.]4[.]0 and XWorm 3.0-5.0 against US victims during the 2026 tax season, with all four malware builds connecting to a single C2 server at 151[.]245[.]112[.]70. Shadow RAT is the primary risk: it disables Windows' two main malware detection mechanisms (AMSI and ETW) before any malicious activity begins, and carries a persistence capability that survives OS reinstallation, making detection and remediation significantly harder than a standard RAT infection. Both families must be fully removed for a confirmed infection to be cleared; removing one while the other persists leaves the attacker with full access. Block 151[.]245[.]112[.]70 immediately and check all endpoints for the persistence artifacts documented in Section 11.
 
 ---
 
@@ -48,7 +48,7 @@ An exposed open directory at `epgoldsecurity.com` revealed a financially-motivat
 {: .hl-tier-1}
 {: .hl-tab-overview}
 
-A single unattributed financially-motivated operator (<a href="/actors/UTA-2026-003/">UTA-2026-003</a> *(an internal tracking label used by The Hunters Ledger, see Section 8)*) ran Shadow RAT v2.6.4.0 and XWorm 3.0-5.0 against US victims during the 2026 tax season, with all four malware builds routing to one C2 server at 151.245.112.70. An exposed open directory at `epgoldsecurity.com` disclosed the full toolkit; configuration decryption of all four samples, static code examination, and passive DNS pivoting establish the findings throughout this report.
+A single unattributed financially-motivated operator (<a href="/actors/UTA-2026-003/">UTA-2026-003</a> *(an internal tracking label used by The Hunters Ledger, see Section 8)*) ran Shadow RAT v2[.]6[.]4[.]0 and XWorm 3.0-5.0 against US victims during the 2026 tax season, with all four malware builds routing to one C2 server at 151[.]245[.]112[.]70. An exposed open directory at `epgoldsecurity[.]com` disclosed the full toolkit; configuration decryption of all four samples, static code examination, and passive DNS pivoting establish the findings throughout this report.
 
 Shadow RAT (HIGH confidence: a private fork of Pulsar RAT, itself a Quasar RAT derivative) is the primary risk, a 50+ capability .NET RAT with AMSI/ETW bypass, HVNC, WinRE persistence that survives OS reinstallation, an integrated Kematian stealer, and AES-256-CBC encrypted C2. XWorm 3.0-5.0, a commercially available MaaS RAT, provides redundant access with triple persistence and a six-layer anti-analysis suite. Both families must be fully remediated together; removing one while the other persists leaves the attacker with full access.
 
@@ -193,8 +193,8 @@ The dual bypass chain (AMSI blinds .NET in-memory scanning; ETW silences EDR tel
 ### Sample Inventory
 
 <figure style="text-align: center; margin: 2em 0;">
-  <img loading="lazy" src="{{ "/assets/images/shadow-xworm-opendirectory/open-directory-listing.png" | relative_url }}" alt="Attack Capture File Manager view of the open directory at epgoldsecurity.com, showing four payload files: Shadow.Common.dll, ShadoClient.exe, ShadowClient.exe, and XWormClient2.exe, 4 total files, 4.29 MB, hosted at https://epgoldsecurity.com">
-  <figcaption><em>Figure 1: The exposed open directory at epgoldsecurity.com as captured during investigation, four malware files publicly accessible to any visitor, including both a staging and production Shadow RAT build plus two XWorm builder outputs.</em></figcaption>
+  <img loading="lazy" src="{{ "/assets/images/shadow-xworm-opendirectory/open-directory-listing.png" | relative_url }}" alt="Attack Capture File Manager view of the open directory at epgoldsecurity[.]com, showing four payload files: Shadow.Common.dll, ShadoClient.exe, ShadowClient.exe, and XWormClient2.exe, 4 total files, 4.29 MB, hosted at hxxps://epgoldsecurity[.]com">
+  <figcaption><em>Figure 1: The exposed open directory at epgoldsecurity[.]com as captured during investigation, four malware files publicly accessible to any visitor, including both a staging and production Shadow RAT build plus two XWorm builder outputs.</em></figcaption>
 </figure>
 
 <table class="professional-table">
@@ -210,14 +210,14 @@ The dual bypass chain (AMSI blinds .NET in-memory scanning; ETW silences EDR tel
   <tbody>
     <tr>
       <td><code>ShadoClient.exe</code></td>
-      <td>Shadow RAT v2.6.4.0</td>
+      <td>Shadow RAT v2[.]6[.]4[.]0</td>
       <td><code>3a4b0f50...626ab32</code></td>
       <td>2,182,144 bytes</td>
       <td>Staging/test build (most features disabled)</td>
     </tr>
     <tr>
       <td><code>ShadowClient.exe</code></td>
-      <td>Shadow RAT v2.6.4.0</td>
+      <td>Shadow RAT v2[.]6[.]4[.]0</td>
       <td><code>240e2575...ee972f</code></td>
       <td>2,181,120 bytes</td>
       <td>Production build (8 feature flags enabled)</td>
@@ -254,7 +254,7 @@ Full hashes are available in the [IOC feed](/ioc-feeds/shadow-xworm-opendirector
   <thead>
     <tr>
       <th>Attribute</th>
-      <th>Shadow RAT v2.6.4.0</th>
+      <th>Shadow RAT v2[.]6[.]4[.]0</th>
       <th>XWorm 3.0-5.0</th>
       <th>Confidence</th>
     </tr>
@@ -302,8 +302,8 @@ Full hashes are available in the [IOC feed](/ioc-feeds/shadow-xworm-opendirector
     </tr>
     <tr>
       <td><strong>C2 Server</strong></td>
-      <td>151.245.112.70:8990</td>
-      <td>151.245.112.70:7007</td>
+      <td>151[.]245[.]112[.]70:8990</td>
+      <td>151[.]245[.]112[.]70:7007</td>
       <td class="confirmed">DEFINITE</td>
     </tr>
   </tbody>
@@ -318,13 +318,13 @@ Many of the key findings in this report (C2 addresses, shared infrastructure, op
 Decrypting the Shadow RAT config started from an encrypted configuration extracted from a binary resource embedded in the .NET assembly. I wrote a custom Python decryptor to replicate the malware's PBKDF2 key derivation, 50,000 iterations with a static 32-byte salt extracted from `Shadow.Common.dll`, and its AES-256-CBC decryption. The wire format for each config field, `[HMAC-SHA256 (32 bytes)][IV (16 bytes)][AES-256-CBC ciphertext]`, was reverse-engineered from decompiled code, with the full technical detail in Section 5.3. I applied this independently to both builds, `ShadoClient.exe` and `ShadowClient.exe`, producing a field-by-field comparison that confirmed identical C2 infrastructure and divergent feature flags between the staging and production variants.
 
 <figure style="text-align: center; margin: 2em 0;">
-  <img loading="lazy" src="{{ "/assets/images/shadow-xworm-opendirectory/shadow-rat-decrypted-config.png" | relative_url }}" alt="Terminal output of the Shadow RAT config decryptor showing derived AES key, PBKDF2 parameters, and decrypted config values including C2 host 151.245.112.70 port 8990, mutex GUID, install path, and version 2.6.4.0">
-  <figcaption><em>Figure 2: Shadow RAT config decryptor terminal output. All four builds independently resolved to the same C2 address (151.245.112.70:8990), establishing single-operator control of both RAT families.</em></figcaption>
+  <img loading="lazy" src="{{ "/assets/images/shadow-xworm-opendirectory/shadow-rat-decrypted-config.png" | relative_url }}" alt="Terminal output of the Shadow RAT config decryptor showing derived AES key, PBKDF2 parameters, and decrypted config values including C2 host 151[.]245[.]112[.]70 port 8990, mutex GUID, install path, and version 2[.]6[.]4[.]0">
+  <figcaption><em>Figure 2: Shadow RAT config decryptor terminal output. All four builds independently resolved to the same C2 address (151[.]245[.]112[.]70:8990), establishing single-operator control of both RAT families.</em></figcaption>
 </figure>
 
 XWorm's configuration uses a weaker scheme, Rijndael-256-ECB with a key derived from a non-standard overlapping MD5 construction, covered in Section 6.4. I wrote a separate Python decryptor to replicate that derivation and decrypt the config class fields, then applied it to both XWorm builds, `XWormClient.exe` and `XWormClient2.exe`, each of which used a different builder-generated AES key but resolved to the same C2 address.
 
-This matters because the decrypted configurations from all four samples independently resolved to the same C2 IP address, `151.245.112.70`, with Shadow RAT on port 8990 and XWorm on port 7007. That is the primary evidence establishing DEFINITE confidence that a single operator controls both malware families. Without the decryption work the connection between the two RAT families would have stayed unconfirmed, because no plaintext configuration data is visible in the packed binaries.
+This matters because the decrypted configurations from all four samples independently resolved to the same C2 IP address, `151[.]245[.]112[.]70`, with Shadow RAT on port 8990 and XWorm on port 7007. That is the primary evidence establishing DEFINITE confidence that a single operator controls both malware families. Without the decryption work the connection between the two RAT families would have stayed unconfirmed, because no plaintext configuration data is visible in the packed binaries.
 
 ### Two Shadow RAT Builds: Staging vs. Production
 
@@ -332,22 +332,22 @@ This matters because the decrypted configurations from all four samples independ
 
 A key finding from the open directory exposure is the recovery of both a staging (test) build and a production build of Shadow RAT. This distinction is operationally significant.
 
-`ShadoClient.exe` (staging) and `ShadowClient.exe` (production) share identical core configuration: same AES key (`97DC71A09A26EAF63C56B6FF2BA582AA3A994D6F`), same C2 address (151.245.112.70:8990), same mutex GUID (`4c7e33e6-3f73-4b4c-a411-89fe63cdfa1e`), and same version string (`2.6.4.0`). The shared mutex means only one can run at a time. They are mutually exclusive variants for different deployment contexts.
+`ShadoClient.exe` (staging) and `ShadowClient.exe` (production) share identical core configuration: same AES key (`97DC71A09A26EAF63C56B6FF2BA582AA3A994D6F`), same C2 address (151[.]245[.]112[.]70:8990), same mutex GUID (`4c7e33e6-3f73-4b4c-a411-89fe63cdfa1e`), and same version string (`2[.]6[.]4[.]0`). The shared mutex means only one can run at a time. They are mutually exclusive variants for different deployment contexts.
 
 The production build enables 8 boolean feature flags (obfuscated names: `bool_2`, `I9iF`, `jU8I`, `cmoY`, `kflb`, `Jjq`, `x9Tg`, `Cm5a`) that activate specific capabilities. The staging build runs in a minimal mode likely used by the operator for testing before deployment. The production install path uses `$77Client.exe`, an unusual filename prefix that may serve as a versioning or identification marker for the operator.
 
 ### Two XWorm Builds: Same Campaign, Different Passes
 
-`XWormClient.exe` and `XWormClient2.exe` are both XWorm builder outputs targeting the same C2 (151.245.112.70:7007) but with different builder-generated AES encryption keys (`PdqPY2fw6ffCVLQ8` vs. `ZdoNsjYfT6begqDl`). This indicates the operator ran the XWorm builder twice. A standard operational pattern, likely to have differently-keyed variants for different target batches or to reduce signature correlation between builds.
+`XWormClient.exe` and `XWormClient2.exe` are both XWorm builder outputs targeting the same C2 (151[.]245[.]112[.]70:7007) but with different builder-generated AES encryption keys (`PdqPY2fw6ffCVLQ8` vs. `ZdoNsjYfT6begqDl`). This indicates the operator ran the XWorm builder twice. A standard operational pattern, likely to have differently-keyed variants for different target batches or to reduce signature correlation between builds.
 
 <figure style="text-align: center; margin: 2em 0;">
-  <img loading="lazy" src="{{ "/assets/images/shadow-xworm-opendirectory/xworm-config-comparison.png" | relative_url }}" alt="XWorm config comparison terminal output showing XWormClient.exe vs XWormClient2.exe side-by-side, both share identical C2 host 151.245.112.70, port 7007, group tag Xwormmm, and USB spread filename, with only the AES key and mutex differing between builds">
-  <figcaption><em>Figure 3: XWorm config comparison. Both builder outputs resolve to the same C2 address (151.245.112.70:7007). The only differences are the builder-generated AES key and mutex, confirming they are two deployments of the same campaign.</em></figcaption>
+  <img loading="lazy" src="{{ "/assets/images/shadow-xworm-opendirectory/xworm-config-comparison.png" | relative_url }}" alt="XWorm config comparison terminal output showing XWormClient.exe vs XWormClient2.exe side-by-side, both share identical C2 host 151[.]245[.]112[.]70, port 7007, group tag Xwormmm, and USB spread filename, with only the AES key and mutex differing between builds">
+  <figcaption><em>Figure 3: XWorm config comparison. Both builder outputs resolve to the same C2 address (151[.]245[.]112[.]70:7007). The only differences are the builder-generated AES key and mutex, confirming they are two deployments of the same campaign.</em></figcaption>
 </figure>
 
 ---
 
-## 5. Technical Analysis: Shadow RAT v2.6.4.0
+## 5. Technical Analysis: Shadow RAT v2[.]6[.]4[.]0
 {: .hl-tier-3}
 {: .hl-tab-chain}
 
@@ -475,9 +475,9 @@ Shadow RAT also anti-tampers via an RSA signature, which I hold DEFINITE. After 
 
 | Field | Value |
 |---|---|
-| Host | `151.245.112.70` |
+| Host | `151[.]245[.]112[.]70` |
 | Port | `8990` |
-| Version | `2.6.4.0` |
+| Version | `2[.]6[.]4[.]0` |
 | Mutex | `4c7e33e6-3f73-4b4c-a411-89fe63cdfa1e` |
 | Install Sub-Directory | `SubDir` |
 | Install Name (production) | `$77Client.exe` |
@@ -522,7 +522,7 @@ Additional persistence APIs are present in the codebase for managing HKCU, HKLM,
 
 **Primary C2 channel (DEFINITE):**
 
-Shadow RAT connects to `151.245.112.70:8990` over TLS 1.2 (TCP). The TLS layer provides transport encryption, but Shadow RAT adds an additional application-layer encryption:
+Shadow RAT connects to `151[.]245[.]112[.]70:8990` over TLS 1.2 (TCP). The TLS layer provides transport encryption, but Shadow RAT adds an additional application-layer encryption:
 
 - Wire format: `[HMAC-SHA256 (32 bytes)][IV (16 bytes)][AES-256-CBC ciphertext]`
 - Message serialization: protobuf-net (Google Protocol Buffers for .NET)
@@ -545,16 +545,16 @@ Config fields `NgrokPath` and `NgrokToken` indicate Ngrok tunneling capability, 
 
 **ScreenConnect RMM (HIGH, deployed on C2 server):**
 
-ScreenConnect (ConnectWise) was deployed to the C2 server at 151.245.112.70 on or around March 1, 2026, replacing the Apache-based open directory server (the server now runs IIS/10.0). Port 8040 serves as the ScreenConnect relay port. ScreenConnect is a legitimate remote management tool; its deployment on the C2 server indicates the operator may be using it to manage victim machines through a "legitimate" remote access channel alongside the RAT, reducing the forensic visibility of their access.
+ScreenConnect (ConnectWise) was deployed to the C2 server at 151[.]245[.]112[.]70 on or around March 1, 2026, replacing the Apache-based open directory server (the server now runs IIS/10.0). Port 8040 serves as the ScreenConnect relay port. ScreenConnect is a legitimate remote management tool; its deployment on the C2 server indicates the operator may be using it to manage victim machines through a "legitimate" remote access channel alongside the RAT, reducing the forensic visibility of their access.
 
 <figure style="text-align: center; margin: 2em 0;">
   <img loading="lazy" src="{{ "/assets/images/shadow-xworm-opendirectory/shadow-rat-c2-setup.png" | relative_url }}" alt="Decompiled Shadow RAT C2 initialization method showing SetHandshakeAndExceptionMode, TcpClient instantiation connecting to the C2 host string, mutex check, and the Pastebin dead-drop URL resolver path that fires when the Pastebin config flag is enabled">
-  <figcaption><em>Figure 10: Shadow RAT C2 setup logic, the initialization method establishes the TLS connection to 151.245.112.70:8990, checks the Pastebin dead-drop resolver flag, and enforces the single-instance mutex before the RAT's command loop begins.</em></figcaption>
+  <figcaption><em>Figure 10: Shadow RAT C2 setup logic, the initialization method establishes the TLS connection to 151[.]245[.]112[.]70:8990, checks the Pastebin dead-drop resolver flag, and enforces the single-instance mutex before the RAT's command loop begins.</em></figcaption>
 </figure>
 
 <figure style="text-align: center; margin: 2em 0;">
-  <img loading="lazy" src="{{ "/assets/images/shadow-xworm-opendirectory/screenconnect-page.jpg" | relative_url }}" alt="ScreenConnect welcome page at 151.245.112.70 showing 'No Available Sessions', confirming ScreenConnect is deployed and running on the C2 server as of analysis date, with the login portal publicly accessible on port 80">
-  <figcaption><em>Figure 11: ScreenConnect portal at 151.245.112.70, deployed on or around March 1, 2026, replacing the open directory server. The public-facing portal provides the operator a legitimate RMM channel alongside the Shadow RAT and XWorm C2 infrastructure.</em></figcaption>
+  <img loading="lazy" src="{{ "/assets/images/shadow-xworm-opendirectory/screenconnect-page.jpg" | relative_url }}" alt="ScreenConnect welcome page at 151[.]245[.]112[.]70 showing 'No Available Sessions', confirming ScreenConnect is deployed and running on the C2 server as of analysis date, with the login portal publicly accessible on port 80">
+  <figcaption><em>Figure 11: ScreenConnect portal at 151[.]245[.]112[.]70, deployed on or around March 1, 2026, replacing the open directory server. The public-facing portal provides the operator a legitimate RMM channel alongside the Shadow RAT and XWorm C2 infrastructure.</em></figcaption>
 </figure>
 
 ---
@@ -627,7 +627,7 @@ A `FunStuff` namespace in `Shadow.Common.Messages` contains non-destructive hara
 
 The binary structure consists of three sections: `.text` (high entropy, obfuscated code), `.rsrc` (low entropy, standard resources), and `.reloc` (minimal relocation data). Entry classes follow a `Stub.` prefix naming pattern (`Stub.FiNjJdc7MwurRPek8XtW5lm` for build #1, a longer obfuscated string for build #2). The `<Xwormmm>` campaign group tag is embedded in plaintext as a builder-configured identifier.
 
-**Two builds, same configuration, different keys:** Both XWorm builds share identical C2 configuration (host `151.245.112.70`, port `7007`, group `<Xwormmm>`, USB spread filename `USB.exe`) but use different builder-generated AES encryption keys (`PdqPY2fw6ffCVLQ8` for build #1, `ZdoNsjYfT6begqDl` for build #2). The two mutexes (`PdqPY2fw6ffCVLQ8` and `ZdoNsjYfT6begqDl`; the AES keys double as mutex names in XWorm) confirm they cannot run simultaneously on the same host.
+**Two builds, same configuration, different keys:** Both XWorm builds share identical C2 configuration (host `151[.]245[.]112[.]70`, port `7007`, group `<Xwormmm>`, USB spread filename `USB.exe`) but use different builder-generated AES encryption keys (`PdqPY2fw6ffCVLQ8` for build #1, `ZdoNsjYfT6begqDl` for build #2). The two mutexes (`PdqPY2fw6ffCVLQ8` and `ZdoNsjYfT6begqDl`; the AES keys double as mutex names in XWorm) confirm they cannot run simultaneously on the same host.
 
 ---
 
@@ -669,7 +669,7 @@ XWorm deploys all three persistence mechanisms at install time:
 
 **Mechanism 1. Scheduled Task (DEFINITE):**
 ```
-schtasks /create /f /sc minute /mo 1 /tn "XWormClient" /tr "'%AppData%\XWormClient.exe'" /rl highest
+[s]chtasks /create /f /sc minute /mo 1 /tn "XWormClient" /tr "'%AppData%\XWormClient.exe'" /rl highest
 ```
 This creates a scheduled task named `XWormClient` that executes every 60 seconds with HIGHEST privilege level. The 60-second interval means that even if the XWorm process is manually killed, it will restart within one minute without any user action.
 
@@ -719,7 +719,7 @@ The runtime C2 communication key `Nothing2hide` uses the same derivation scheme.
 
 ### 6.5 Command & Control
 
-XWorm communicates with `151.245.112.70:7007` over TCP. The runtime communication is encrypted with Rijndael-256-ECB using the key derived from `Nothing2hide` (see Section 6.4). Unlike Shadow RAT's protobuf-net serialization, XWorm uses a simpler string-based command protocol.
+XWorm communicates with `151[.]245[.]112[.]70:7007` over TCP. The runtime communication is encrypted with Rijndael-256-ECB using the key derived from `Nothing2hide` (see Section 6.4). Unlike Shadow RAT's protobuf-net serialization, XWorm uses a simpler string-based command protocol.
 
 XWorm runs an anti-analysis pre-flight, which I hold DEFINITE. Before establishing a C2 connection it makes an HTTP GET to `http://ip-api.com/line/?fields=hosting`, and that check precedes every C2 connection attempt rather than running once at install time, which makes it a reliable network-level detection indicator on any execution.
 
@@ -739,13 +739,13 @@ XWorm writes keystrokes to `%TEMP%\Log.tmp`. This fixed output path is a reliabl
 {: .hl-tier-2}
 {: .hl-tab-timeline}
 
-### 7.1 C2 Server: 151.245.112.70
+### 7.1 C2 Server: 151[.]245[.]112[.]70
 
 > **Analyst note:** This section profiles the server that the malware connects to for attacker commands. The server's configuration (which ports are open and how it has been set up) reveals details about the operator's operational habits and security practices that help validate the attribution assessment.
 
 **DEFINITE confidence: confirmed via config decryption from all four malware builds**
 
-The C2 server is a Windows VPS hosted at Strike.bz (a budget VPS provider) in AS203662 (3K33 sp. z o.o., Poland). The reverse DNS record is `9wpZAEak.strike.bz`. The server runs Windows (confirmed via SMB/RDP exposure) and has been stable at this IP for over 80 days as of analysis date.
+The C2 server is a Windows VPS hosted at Strike[.]bz (a budget VPS provider) in AS203662 (3K33 sp. z o.o., Poland). The reverse DNS record is `9wpZAEak[.]strike[.]bz`. The server runs Windows (confirmed via SMB/RDP exposure) and has been stable at this IP for over 80 days as of analysis date.
 
 **Observed open ports:**
 
@@ -767,28 +767,28 @@ The port exposure matters. An attacker-controlled server with RDP (3389), SMB (4
 
 ### 7.2 Domain Rotation Timeline
 
-The operator used a systematic domain rotation strategy, maintaining approximately one active domain at a time and rotating on a ~30-35 day cycle. All domains exclusively resolved to 151.245.112.70 during their active periods. Self-hosted nameservers (ns2.latssko.com, ns2.harrismanlieb.ink) both pointing to the C2 IP confirm operator control of DNS infrastructure.
+The operator used a systematic domain rotation strategy, maintaining approximately one active domain at a time and rotating on a ~30-35 day cycle. All domains exclusively resolved to 151[.]245[.]112[.]70 during their active periods. Self-hosted nameservers (ns2[.]latssko[.]com, ns2.harrismanlieb.ink) both pointing to the C2 IP confirm operator control of DNS infrastructure.
 
 | Domain | Active Period | Status | Role | Notes |
 |---|---|---|---|---|
-| `breakingsecurity.online` | 2026-01-13 to 2026-01-16 | Inactive | Unknown (3 days) | Remcos RAT brand impersonation |
-| `bluewiin.com` | 2026-01-16 (1 day) | Inactive | Staging/brief use | Very brief resolution period |
-| `latssko.com` | 2026-01-16 to 2026-02-20 | Inactive | Operational (~35 days) | Self-hosted NS (ns2.latssko.com) |
+| `breakingsecurity[.]online` | 2026-01-13 to 2026-01-16 | Inactive | Unknown (3 days) | Remcos RAT brand impersonation |
+| `bluewiin[.]com` | 2026-01-16 (1 day) | Inactive | Staging/brief use | Very brief resolution period |
+| `latssko[.]com` | 2026-01-16 to 2026-02-20 | Inactive | Operational (~35 days) | Self-hosted NS (ns2[.]latssko[.]com) |
 | `harrismanlieb.ink` | 2026-02-12 to present | **Active** | Primary C2 + payload hosting | Self-hosted NS (ns2.harrismanlieb.ink) |
-| `epgoldsecurity.com` | 2026-02-20 to present | **Active** | Payload delivery (open directory) | Migrated from BlazingFast to Hostinger 2026-03-26 |
+| `epgoldsecurity[.]com` | 2026-02-20 to present | **Active** | Payload delivery (open directory) | Migrated from BlazingFast to Hostinger 2026-03-26 |
 
-DomainTools scored both `harrismanlieb.ink` and `epgoldsecurity.com` at 100/100 risk. Both were weaponized immediately on registration, a zero-day gap between registration and malicious use, which fits purpose-registered attack infrastructure rather than repurposed legitimate domains.
+DomainTools scored both `harrismanlieb.ink` and `epgoldsecurity[.]com` at 100/100 risk. Both were weaponized immediately on registration, a zero-day gap between registration and malicious use, which fits purpose-registered attack infrastructure rather than repurposed legitimate domains.
 
-**breakingsecurity.online, Remcos brand impersonation:** This domain was active for only three days in January 2026, immediately before the operator's infrastructure stabilized. Its name deliberately mimics BreakingSecurity (breakingsecurity.net), the legitimate developer and seller of Remcos RAT. The operator may have used this domain to attract aspiring cybercriminals seeking Remcos access, delivering Shadow RAT or XWorm instead under the guise of a "free" or "cracked" Remcos tool. The specific purpose remains MODERATE confidence, plausible but not confirmed.
+**breakingsecurity[.]online, Remcos brand impersonation:** This domain was active for only three days in January 2026, immediately before the operator's infrastructure stabilized. Its name deliberately mimics BreakingSecurity (breakingsecurity[.]net), the legitimate developer and seller of Remcos RAT. The operator may have used this domain to attract aspiring cybercriminals seeking Remcos access, delivering Shadow RAT or XWorm instead under the guise of a "free" or "cracked" Remcos tool. The specific purpose remains MODERATE confidence, plausible but not confirmed.
 
 ---
 
 ### 7.3 Payload Delivery Infrastructure
 
-`epgoldsecurity.com` served as the public-facing payload delivery server hosting the open directory that exposed the malware samples. Its infrastructure shows more movement than the C2 server:
+`epgoldsecurity[.]com` served as the public-facing payload delivery server hosting the open directory that exposed the malware samples. Its infrastructure shows more movement than the C2 server:
 
-- **Initial hosting:** BlazingFast (AS47674, Netherlands) at 185.11.145.145 and 185.11.145.254
-- **Current hosting:** Hostinger (AS47583, US) + Cloudflare CDN at 187.124.244.54, migrated on 2026-03-26
+- **Initial hosting:** BlazingFast (AS47674, Netherlands) at 185[.]11[.]145[.]145 and 185[.]11[.]145[.]254
+- **Current hosting:** Hostinger (AS47583, US) + Cloudflare CDN at 187[.]124[.]244[.]54, migrated on 2026-03-26
 - **Migration timing:** The move to Hostinger/Cloudflare coincides with a pattern typical of abuse response. BlazingFast may have issued a takedown notice, prompting the operator to move to a different provider
 
 The use of Cloudflare as a CDN in front of the payload server adds a layer of infrastructure resilience and makes the real hosting IP less visible in DNS queries.
@@ -801,11 +801,11 @@ The use of Cloudflare as a CDN in front of the payload server adds a layer of in
 
 The operator demonstrates multiple OPSEC failures:
 
-1. **Stable, exposed C2 IP:** 151.245.112.70 has been in use for 80+ days with no IP rotation
+1. **Stable, exposed C2 IP:** 151[.]245[.]112[.]70 has been in use for 80+ days with no IP rotation
 2. **Exposed administrative ports:** RDP (3389), SMB (445), WinRM (5985) all accessible from the internet
 3. **Unpatched vulnerabilities:** CVE-2020-0796 (SMBGhost) unpatched on the C2 server, a 2020 critical vulnerability that provides unauthenticated remote code execution against the attacker's own infrastructure
 4. **Open directory:** The operator exposed their payload server without directory listing disabled, allowing researchers to enumerate and download all four malware samples
-5. **Infrastructure fingerprinting:** Self-hosted nameservers (ns2.latssko.com, ns2.harrismanlieb.ink) pointing to the C2 IP create a distinctive infrastructure clustering signal
+5. **Infrastructure fingerprinting:** Self-hosted nameservers (ns2[.]latssko[.]com, ns2.harrismanlieb.ink) pointing to the C2 IP create a distinctive infrastructure clustering signal
 
 These failures are consistent with an inexperienced individual operator rather than a sophisticated criminal organization.
 
@@ -825,7 +825,7 @@ The threat actor is unknown, designated <a href="/actors/UTA-2026-003/">UTA-2026
 
 
 
-That confidence rests on finding zero named-actor infrastructure overlaps across 151.245.112.70, AS203662, and all five operator domains. All the tooling is either open-source, the Shadow RAT/Pulsar fork and Kematian Stealer, or commercially available MaaS in XWorm. The single-operator profile is DEFINITE, on the shared C2 IP across all four builds, and financial motivation is DEFINITE too, on the crypto clipper, credential stealer, Steam token theft and browser password recovery. The low OPSEC is inconsistent with organized group tradecraft.
+That confidence rests on finding zero named-actor infrastructure overlaps across 151[.]245[.]112[.]70, AS203662, and all five operator domains. All the tooling is either open-source, the Shadow RAT/Pulsar fork and Kematian Stealer, or commercially available MaaS in XWorm. The single-operator profile is DEFINITE, on the shared C2 IP across all four builds, and financial motivation is DEFINITE too, on the crypto clipper, credential stealer, Steam token theft and browser password recovery. The low OPSEC is inconsistent with organized group tradecraft.
 
 What is missing is any operator handle, forum presence, or email reuse across domains, plus code similarity analysis against named-group private tooling and any HUMINT context. All five domains use WHOIS privacy protection, which blocks registrant analysis.
 
@@ -833,7 +833,7 @@ What is missing is any operator handle, forum presence, or email reuse across do
 - Operator handle in crimeware forums tied to this infrastructure → MODERATE confidence toward named persona
 - Registrant email reuse across domains → infrastructure expansion and possible persona link
 - Code similarity (70%+) to confirmed named-group private tooling → HIGH confidence
-- Government advisory naming 151.245.112.70 → DEFINITE confidence
+- Government advisory naming 151[.]245[.]112[.]70 → DEFINITE confidence
 - Pastebin account identification → possible operator identity pivot
 
 ### Analysis of Competing Hypotheses (ACH)
@@ -891,7 +891,7 @@ Based on the totality of evidence, <a href="/actors/UTA-2026-003/">UTA-2026-003<
 
 **Confidence: HIGH (research-confirmed)**
 
-Shadow RAT v2.6.4.0 has no prior public threat intelligence reporting under that specific branding. The name appears to be operator-specific private labeling. The underlying codebase, however, has strong forensic parallels to the documented Quasar RAT fork ecosystem.
+Shadow RAT v2[.]6[.]4[.]0 has no prior public threat intelligence reporting under that specific branding. The name appears to be operator-specific private labeling. The underlying codebase, however, has strong forensic parallels to the documented Quasar RAT fork ecosystem.
 
 **Quasar RAT foundation (DEFINITE, MITRE ATT&CK S0262, Malpedia):**
 Quasar RAT is an open-source .NET RAT whose GitHub availability spawned numerous derivative families. Its architectural patterns, AES-encrypted config, RSA anti-tampering, protobuf-net serialization, Costura.Fody assembly embedding, .NET Reactor packing, appear across many named forks including CinaRAT, VenomRAT, and Pulsar RAT.
@@ -944,7 +944,7 @@ Sources: ANY.RUN 2025 Annual Threat Report (Tier 2); Cyble EvilCoder research (T
   <figcaption><em>Figure 15: The harrismanlieb.ink payload directory as captured by DomainTools, the two tax-season lure filenames (Form 1040.msi and 2026_Benefits_Enroll) were hosted from the day the domain was registered, confirming immediate weaponization.</em></figcaption>
 </figure>
 
-The operator's delivery lures, `Form 1040.msi` and `2026_Benefits_Enroll`, are directly consistent with the documented 2026 tax-season malware wave. Microsoft's Security Blog (March 19, 2026) documented a tax-season campaign that targeted 29,000+ users across 10,000 organizations, peaking on February 10, 2026, coinciding with this operator's deployment period (`harrismanlieb.ink` registered February 12, `epgoldsecurity.com` registered February 20). MSI installer delivery is a confirmed 2026 attack delivery mechanism documented by Microsoft.
+The operator's delivery lures, `Form 1040.msi` and `2026_Benefits_Enroll`, are directly consistent with the documented 2026 tax-season malware wave. Microsoft's Security Blog (March 19, 2026) documented a tax-season campaign that targeted 29,000+ users across 10,000 organizations, peaking on February 10, 2026, coinciding with this operator's deployment period (`harrismanlieb.ink` registered February 12, `epgoldsecurity[.]com` registered February 20). MSI installer delivery is a confirmed 2026 attack delivery mechanism documented by Microsoft.
 
 Sources: Microsoft Security Blog, tax season 2026 (March 19, 2026, Tier 2); Check Point Research tax season 2026 (Tier 2); IRS Dirty Dozen 2026 (Tier 1)
 
@@ -999,9 +999,9 @@ There is a supply chain risk too. The open-source Quasar and Pulsar lineage plus
 *Table shows only HIGH/MODERATE confidence mappings. Low-confidence techniques omitted pending deeper analysis.*
 
 <details markdown="1" class="hl-teardown">
-<summary>The full technique mapping for both Shadow RAT v2.6.4.0 and XWorm 3.0-5.0. Click to expand.</summary>
+<summary>The full technique mapping for both Shadow RAT v2[.]6[.]4[.]0 and XWorm 3.0-5.0. Click to expand.</summary>
 
-### Shadow RAT v2.6.4.0
+### Shadow RAT v2[.]6[.]4[.]0
 
 <table class="professional-table">
   <thead>
@@ -1159,7 +1159,7 @@ There is a supply chain risk too. The open-source Quasar and Pulsar lineage plus
       <td>T1071.001</td>
       <td>Web Protocols</td>
       <td class="likely">HIGH</td>
-      <td>TLS 1.2 C2 over TCP to 151.245.112.70:8990</td>
+      <td>TLS 1.2 C2 over TCP to 151[.]245[.]112[.]70:8990</td>
     </tr>
     <tr>
       <td>Command and Control</td>
@@ -1287,7 +1287,7 @@ There is a supply chain risk too. The open-source Quasar and Pulsar lineage plus
       <td>T1071.001</td>
       <td>Web Protocols</td>
       <td class="likely">HIGH</td>
-      <td>C2 communication to 151.245.112.70:7007</td>
+      <td>C2 communication to 151[.]245[.]112[.]70:7007</td>
     </tr>
     <tr>
       <td>Command and Control</td>
@@ -1317,7 +1317,7 @@ There is a supply chain risk too. The open-source Quasar and Pulsar lineage plus
 This section provides a brief orientation for teams who have confirmed or suspect a compromise involving this infrastructure. Detailed procedures are the responsibility of the affected organization's internal incident response team.
 
 **Detection priorities (hunt for these first):**
-- TCP connections to 151.245.112.70 on ports 8990, 7007, or 8040 (outbound from any endpoint)
+- TCP connections to 151[.]245[.]112[.]70 on ports 8990, 7007, or 8040 (outbound from any endpoint)
 - HTTP GET requests to `http://ip-api.com/line/?fields=hosting`: high-fidelity XWorm execution indicator, fires before every C2 connection
 - Process memory access events targeting `amsi.dll` or `ntdll.dll` with write permissions, AMSI/ETW bypass indicator
 - Registry value `Shadow Client Startup` under `HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\Run`
@@ -1330,10 +1330,10 @@ This section provides a brief orientation for teams who have confirmed or suspec
 - Both families: Check for ScreenConnect client installation, may persist independently of malware removal
 
 **Containment categories:**
-- Block 151.245.112.70 and all five associated domains at network egress
+- Block 151[.]245[.]112[.]70 and all five associated domains at network egress
 - Isolate affected endpoints to prevent further C2 communication and lateral movement via Ngrok tunneling
 - Rotate credentials for any accounts accessible from the compromised endpoint (browser-stored passwords, Steam, cryptocurrency wallets)
-- Review and revoke any ScreenConnect sessions originating from or managed by 151.245.112.70
+- Review and revoke any ScreenConnect sessions originating from or managed by 151[.]245[.]112[.]70
 - Deploy detection signatures across endpoint and network monitoring platforms: 23 detection rules across 3 layers (7 YARA, 10 Sigma, 6 Suricata), see Section 13 and [/hunting-detections/shadow-xworm-opendirectory-detections/](/hunting-detections/shadow-xworm-opendirectory-detections/)
 
 ### Operational Impact Timeline
@@ -1343,7 +1343,7 @@ If an endpoint compromise is confirmed, the following response phases apply:
 | Phase | Activities | Complexity |
 |---|---|---|
 | **Initial Response** | Isolate affected hosts, preserve evidence, deploy detection signatures across environment | Moderate effort, standard IR workflow |
-| **Scope Assessment** | Identify all affected endpoints, review network logs for C2 connections to 151.245.112.70, assess credential exposure | Significant effort, scales with endpoint count |
+| **Scope Assessment** | Identify all affected endpoints, review network logs for C2 connections to 151[.]245[.]112[.]70, assess credential exposure | Significant effort, scales with endpoint count |
 | **Persistence Review** | Enumerate all three persistence locations per family (Registry Run, scheduled task, startup shortcut) plus WinRE modification check | Significant effort, WinRE check requires specialized assessment |
 | **Remediation** | Remove persistence artifacts, block infrastructure, rotate exposed credentials, rebuild any system with confirmed WinRE persistence | Varies by scope; systems with WinRE persistence require rebuild |
 | **Post-Remediation Monitoring** | Verify no re-infection, monitor for ScreenConnect sessions, threat hunt for lateral movement | Extended monitoring, sustained threat hunting required |
@@ -1357,7 +1357,7 @@ If an endpoint compromise is confirmed, the following response phases apply:
 ### DEFINITE (Direct evidence from code inspection / config decryption)
 - Shadow RAT family classification (Quasar-lineage .NET RAT)
 - XWorm family classification (commercial MaaS RAT)
-- C2 server 151.245.112.70 (all four builds hardcode this IP)
+- C2 server 151[.]245[.]112[.]70 (all four builds hardcode this IP)
 - Shadow RAT C2 port 8990; XWorm C2 port 7007 (config decryption confirmed)
 - AMSI bypass via AmsiScanBuffer shellcode (code inspection)
 - ETW bypass via EtwEventWrite RET patch (code inspection)
@@ -1380,9 +1380,9 @@ If an endpoint compromise is confirmed, the following response phases apply:
 - WinRE persistence capability (DoAddWinREPersistence code confirmed; activation is operator-initiated)
 - Firewall disable, AV/Defender disruption (code confirmed)
 - Production vs. staging build distinction (8 feature flags confirmed enabled in ShadowClient.exe)
-- C2 server infrastructure: Strike.bz, AS203662, Poland
-- harrismanlieb.ink and epgoldsecurity.com as operator-controlled infrastructure
-- latssko.com and breakingsecurity.online as previous operator domains
+- C2 server infrastructure: Strike[.]bz, AS203662, Poland
+- harrismanlieb.ink and epgoldsecurity[.]com as operator-controlled infrastructure
+- latssko[.]com and breakingsecurity[.]online as previous operator domains
 - Tax-season targeting (Form 1040.msi, 2026_Benefits_Enroll)
 - ScreenConnect deployment on C2 server (March 2026)
 - Poor operator OPSEC (exposed ports, stable IP, CVE-2020-0796)
@@ -1392,7 +1392,7 @@ If an endpoint compromise is confirmed, the following response phases apply:
 - Ngrok tunneling (config fields present; operator-initiated)
 - Process hollowing/RunPE (config fields present; trigger conditions not confirmed)
 - XWorm USB spread (USB.exe config field; propagation code not independently confirmed)
-- breakingsecurity.online purpose (Remcos impersonation consistent; specific use unconfirmed)
+- breakingsecurity[.]online purpose (Remcos impersonation consistent; specific use unconfirmed)
 
 ### LOW (Weak/circumstantial evidence)
 - <a href="/actors/UTA-2026-003/">UTA-2026-003</a> attribution as independent operator vs. known group (ZERO named-actor overlaps, but absence of evidence is not evidence of absence)
@@ -1425,10 +1425,10 @@ If an endpoint compromise is confirmed, the following response phases apply:
 | Cryptographic artifacts | 6 |
 
 **Critical blocking priorities:**
-- **151.245.112.70** (CRITICAL, active C2, all family traffic)
+- **151[.]245[.]112[.]70** (CRITICAL, active C2, all family traffic)
 - **harrismanlieb.ink** (HIGH, active C2 front domain)
-- **epgoldsecurity.com** (HIGH, active payload delivery)
-- **latssko.com**, **breakingsecurity.online**, **bluewiin.com** (MEDIUM, historical; block for completeness)
+- **epgoldsecurity[.]com** (HIGH, active payload delivery)
+- **latssko[.]com**, **breakingsecurity[.]online**, **bluewiin[.]com** (MEDIUM, historical; block for completeness)
 
 ### Detection Coverage
 
@@ -1492,7 +1492,7 @@ Forcepoint X-Labs (Tier 2) published "ScreenConnect Attack Analysis", covering p
 
 ### F. Government & Regulatory Context
 
-HHS.gov (Tier 1) published a "Remcos RAT Advisory", a US government advisory relevant to the breakingsecurity.online impersonation context.
+HHS.gov (Tier 1) published a "Remcos RAT Advisory", a US government advisory relevant to the breakingsecurity[.]online impersonation context.
 
 ---
 
