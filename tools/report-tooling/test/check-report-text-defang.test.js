@@ -7,7 +7,7 @@
    Fixture addresses are documentation ranges (RFC 5737), never real infrastructure. */
 var test = require('node:test');
 var assert = require('node:assert');
-var C = require('../check-report-text.js');
+var C = require(process.env.CRT_CHECKER || '../check-report-text.js');   // CRT_CHECKER: run the tests against another copy (the old checker, to show they fail)
 
 var ZERO_COUNTS = { headings: 1, tables: 0, rows: 0, figures: 0, images: 0,
   teardowns: 0, details: 0, 'code blocks': 0, links: 0, lists: 0 };
@@ -89,4 +89,67 @@ test('defangNormalise changes only what rules 1 and 2 name', function () {
   var n = C.defangNormalise(s);
   assert.strictEqual(n.text, 'a.b (c). https://x ps @ [1] . [a][b] x.y');
   assert.strictEqual(n.tokens, 6);
+});
+
+/* T-0500.1.12 harden2: links converted to text, derived from the markdown; IPv6 [:] */
+function withLinks(p, n) { var q = page(p); q.counts.links = n; return q; }
+var MD_LINK = 'The loader came from [Source: github.com/example-actor](https://github.com/example-actor/loader) and the other note is [vendor](https://vendor.example/post).\n';
+var MD_TEXT = 'The loader came from Source: github[.]com/example-actor and the other note is [vendor](https://vendor.example/post).\n';
+var TXT = 'The loader came from Source: github.com/example-actor and the other note is vendor and then the session ended with no further activity seen';
+var TXTD = TXT.replace('github.com', 'github[.]com');
+
+test('links control 1: one link converted to text in the source PASSes with one link fewer on the page', function () {
+  var lc = C.linksConverted(MD_LINK, MD_TEXT);
+  assert.strictEqual(lc.count, 1);
+  var r = C.compare(withLinks(TXT, 2), withLinks(TXTD, 1), { defang: true, linksConverted: lc.count });
+  assert.strictEqual(r.status, 'PASS', JSON.stringify(r.problems));
+  assert.strictEqual(r.linksConverted, 1);
+});
+
+test('links control 2: one link silently dropped (text kept, the source still links it) FAILs on the link count', function () {
+  var lc = C.linksConverted(MD_LINK, MD_LINK);
+  assert.strictEqual(lc.count, 0, 'the markdown converted nothing, so nothing may drop');
+  var r = C.compare(withLinks(TXT, 2), withLinks(TXT, 1), { defang: true, linksConverted: lc.count });
+  assert.strictEqual(r.status, 'FAIL');
+  assert.deepStrictEqual(r.countProblems, ['links 2 baseline vs 1 page']);
+});
+
+test('links: the allowance is exact, one conversion in the source does not excuse a second link lost on the page', function () {
+  var lc = C.linksConverted(MD_LINK, MD_TEXT);
+  var r = C.compare(withLinks(TXT, 2), withLinks(TXTD, 0), { defang: true, linksConverted: lc.count });
+  assert.strictEqual(r.status, 'FAIL');
+  assert.match(r.countProblems[0], /^links 2 baseline vs 0 page/);
+});
+
+test('links: a conversion that is not in the source gives no allowance (no markdown, no drop; flag off, no drop)', function () {
+  assert.strictEqual(C.compare(withLinks(TXT, 2), withLinks(TXTD, 1), { defang: true }).status, 'FAIL');
+  assert.strictEqual(C.compare(withLinks(TXT, 2), withLinks(TXT, 1), { linksConverted: 1 }).status, 'FAIL', 'the count is only honoured in --defang mode');
+});
+
+test('links: a link REMOVED together with its text is not a conversion (the words are gone, FAIL)', function () {
+  var lc = C.linksConverted(MD_LINK, 'The loader came from and the other note is [vendor](https://vendor.example/post).\n');
+  assert.strictEqual(lc.count, 0);
+});
+
+test('links: markdown reader: inline, reference, autolink, html; code and images are not links', function () {
+  var md = 'a [one](http://a.example/1) b [two][r] c <http://c.example/3> d <a href="http://d.example/4">four</a> e ![img](http://e.example/i.png) f `[code](http://f.example)`\n' +
+    '```\n[fence](http://g.example)\n```\n[r]: http://b.example/2 "title"\n[^1]: footnote text\n';
+  var got = C.markdownLinks(md).map(function (l) { return l.target; }).sort();
+  assert.deepStrictEqual(got, ['http://a.example/1', 'http://b.example/2', 'http://c.example/3', 'http://d.example/4']);
+});
+
+test('links: a target that was only defanged stays a link and is not a conversion', function () {
+  var lc = C.linksConverted('See [x](http://h.example/p) now\n', 'See [x](hxxp://h[.]example/p) now\n');
+  assert.strictEqual(lc.count, 0);
+});
+
+test('IPv6 [:] form: normalises on both sides; a lone [:] and a wrong bracket do not', function () {
+  var base = 'The operator reached hxxp://x and then http://[2001:db8::7]/p before leaving the host for the day and returning later on';
+  var def = base.replace('hxxp://x', 'http://x').replace('[2001:db8::7]', '[2001[:]db8[:][:]7]');
+  var r = C.compare(page(base), page(def), DEF);
+  assert.strictEqual(r.status, 'PASS', JSON.stringify(r.problems));
+  assert.strictEqual(r.defang.page, 3);
+  assert.strictEqual(C.compare(page(base), page(def.replace('db8[:]', 'db8[;]')), DEF).status, 'FAIL');
+  assert.strictEqual(C.defangNormalise('slice x[:] and y[:]z').text, 'slice x[:] and y[:]z', 'a [:] not between hex or colon characters is left');
+  assert.strictEqual(C.defangNormalise('fe80[:][:]1 and ab[:]cd').text, 'fe80::1 and ab:cd');
 });

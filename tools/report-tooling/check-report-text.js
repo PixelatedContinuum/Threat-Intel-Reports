@@ -432,7 +432,10 @@ var DEFANG_FORMS = [
   [/\bhxxp:\/\//g, 'http://'],
   [/\bfxp:\/\//g, 'ftp://'],
   [/\[\.\]/g, '.'],
-  [/\[@\]/g, '@']
+  [/\[@\]/g, '@'],
+  /* rule 1, IPv6: the colon of an address written [:] (2001[:]db8[:][:]7 -> 2001:db8::7). Only between hex digits, colons or the
+     brackets of a neighbouring [:], so a lone [:] after a word is left alone. */
+  [/(?<=[0-9A-Fa-f:\]])\[:\](?=[0-9A-Fa-f:\[])/g, ':']
 ];
 var DEFANG_CMD = /(^|[\s("'`$|;&=,])\[([A-Za-z0-9])\](?=[A-Za-z0-9._-])/g;
 function defangNormalise(text) {
@@ -440,6 +443,70 @@ function defangNormalise(text) {
   DEFANG_FORMS.forEach(function (f) { t = t.replace(f[0], function () { n++; return f[1]; }); });
   t = t.replace(DEFANG_CMD, function (m, pre, ch) { n++; return pre + ch; });
   return { text: t, tokens: n };
+}
+
+/* LINKS CONVERTED TO TEXT, derived from the markdown (T-0500.1.12 harden2). A report edit may turn a link to attacker
+   material into plain defanged text (defang-rules.md rule 1). The rendered page then holds one link fewer, and that is the
+   only difference allowed in the link count. The number is not a flag the caller sets: it is measured from the two markdown
+   sources as the links of the baseline that the edited source no longer links and whose visible text it still carries.
+   A link dropped from the page with no such change in the source (text kept, the source still links it) is not counted, so
+   the link count still FAILs. Inline [text](target), [text][label] with its definition, <scheme://autolinks> and <a href>
+   are read; fenced code and code spans are skipped (they render no link). A bare URL is not read: the report renderer does
+   not link one. */
+function stripCode(md) {
+  var out = [], fence = null;
+  String(md || '').split('\n').forEach(function (ln) {
+    var m = /^\s{0,3}(`{3,}|~{3,})/.exec(ln);
+    if (fence) { if (m && m[1][0] === fence[0] && m[1].length >= fence.length) fence = null; out.push(''); return; }
+    if (m) { fence = m[1]; out.push(''); return; }
+    out.push(ln.replace(/(`+)[^`\n]*?\1/g, function (c) { return ' '.repeat(c.length); }));
+  });
+  return out.join('\n');
+}
+function markdownLinks(md) {
+  var src = stripCode(md), links = [], defs = {}, i;
+  src.replace(/^\s{0,3}\[([^\]\^][^\]]*)\]:\s*<?(\S+?)>?(?:\s+["'(].*)?$/gm, function (m, label, target) {
+    defs[label.toLowerCase().replace(/\s+/g, ' ')] = target; return m;
+  });
+  for (i = 0; i < src.length; i++) {
+    if (src[i] !== '[' || src[i - 1] === '!' || src[i - 1] === '\\') continue;
+    var d = 1, j = i + 1;
+    while (j < src.length && d > 0) { if (src[j] === '\\') j++; else if (src[j] === '[') d++; else if (src[j] === ']') d--; j++; }
+    if (d !== 0) continue;
+    var text = src.slice(i + 1, j - 1), target = null, end = j;
+    if (src[j] === '(') {
+      var pd = 1, k = j + 1;
+      while (k < src.length && pd > 0) { if (src[k] === '\\') k++; else if (src[k] === '(') pd++; else if (src[k] === ')') pd--; k++; }
+      if (pd === 0) { target = src.slice(j + 1, k - 1).trim().replace(/^<|>$/g, '').replace(/\s+["'].*$/, ''); end = k; }
+    } else if (src[j] === '[') {
+      var e = src.indexOf(']', j);
+      if (e !== -1) {
+        var lab = (src.slice(j + 1, e) || text).toLowerCase().replace(/\s+/g, ' ');
+        if (defs[lab] !== undefined) { target = defs[lab]; end = e + 1; }
+      }
+    }
+    if (target === null || /^\^/.test(text)) continue;
+    links.push({ text: text, target: target });
+    i = end - 1;
+  }
+  src.replace(/<((?:https?|ftp|mailto):[^>\s]+)>/gi, function (m, t) { links.push({ text: t, target: t }); return m; });
+  src.replace(/<a\s[^>]*href\s*=\s*["']?([^"'\s>]+)["']?[^>]*>([\s\S]*?)<\/a>/gi, function (m, t, x) {
+    links.push({ text: x.replace(/<[^>]*>/g, ''), target: t }); return m;
+  });
+  return links;
+}
+function plain(t) { return defangNormalise(String(t || '').replace(/[*_`]/g, '').replace(/\s+/g, ' ').trim()).text; }
+function linksConverted(baseMd, pageMd) {
+  var pageLinks = markdownLinks(pageMd), held = {}, pagePlain = plain(stripCode(pageMd).replace(/\[([^\]]*)\]\([^)]*\)/g, '$1'));
+  pageLinks.forEach(function (l) { var k = plain(l.target); held[k] = (held[k] || 0) + 1; });
+  var converted = [];
+  markdownLinks(baseMd).forEach(function (l) {
+    var k = plain(l.target);
+    if (held[k] > 0) { held[k]--; return; }
+    var t = plain(l.text);
+    if (t && pagePlain.indexOf(t) !== -1) converted.push(l);
+  });
+  return { count: converted.length, converted: converted, baseline: markdownLinks(baseMd).length, page: pageLinks.length };
 }
 
 function compare(base, page, opts) {
@@ -473,10 +540,14 @@ function compare(base, page, opts) {
   }
 
   var countProblems = [];
+  /* the only allowed drop in links: the links the source converted to text (opts.linksConverted, measured from the markdown) */
+  var linkDrop = (opts && opts.defang && opts.linksConverted > 0) ? opts.linksConverted : 0;
   COUNTS.forEach(function (p) {
     var k = p[0];
-    if (base.counts[k] !== page.counts[k]) {
-      countProblems.push(k + ' ' + base.counts[k] + ' baseline vs ' + page.counts[k] + ' page');
+    var expect = base.counts[k] - (k === 'links' ? linkDrop : 0);
+    if (expect !== page.counts[k]) {
+      countProblems.push(k + ' ' + base.counts[k] + ' baseline vs ' + page.counts[k] + ' page' +
+        (k === 'links' && linkDrop ? ' (' + linkDrop + ' link(s) converted to text in the source allowed, so ' + expect + ' expected)' : ''));
     }
   });
 
@@ -526,6 +597,7 @@ function compare(base, page, opts) {
     counts: { baseline: base.counts, page: page.counts },
     countProblems: countProblems,
     defang: defang,
+    linksConverted: linkDrop,
     hidden: page.hidden || null,
     widget: page.widget || null,
     visProblems: visProblems,
@@ -539,6 +611,7 @@ function line(r, label) {
     ' chars  ->  ' + r.words.page + ' words, ' + r.chars.page + ' chars');
   if (r.defang) console.log('  defang    ' + r.defang.page + ' defang token(s) normalised on the page, ' + r.defang.baseline +
     ' on the baseline (rules 1 and 2 only; every other difference still counts)');
+  if (r.defang) console.log('  links     ' + r.linksConverted + ' link(s) converted to text in the markdown source (derived from the two sources; any other change in the link count still FAILs)');
   console.log('  words     missing ' + r.missing + ', added ' + r.added +
     ' (ordered, in report order: a moved paragraph counts as both)' +
     (r.approximate ? '  [APPROXIMATE: the pair differs in more than ' + MAX_D + ' places]' : ''));
@@ -601,11 +674,21 @@ async function main() {
   var controlTeardown = argv.indexOf('--control-teardown') !== -1;
   var controlWidget = argv.indexOf('--control-widget') !== -1;
   var controlHidden = argv.indexOf('--control-hidden') !== -1;
-  var cmpOpts = { defang: argv.indexOf('--defang') !== -1 };
+  var cmpOpts = { defang: argv.indexOf('--defang') !== -1, linksConverted: 0 };
+  var baseMdArg = arg('--baseline-md'), pageMdArg = arg('--page-md');
+  if (cmpOpts.defang && baseMdArg && pageMdArg) {
+    if (!fs.existsSync(baseMdArg) || !fs.existsSync(pageMdArg)) {
+      console.log('NOT CHECKED  --baseline-md / --page-md not found');
+      process.exit(2);
+    }
+    var lc = linksConverted(fs.readFileSync(baseMdArg, 'utf8'), fs.readFileSync(pageMdArg, 'utf8'));
+    cmpOpts.linksConverted = lc.count;
+    console.log('links converted to text, from the markdown: ' + lc.count + ' (source links ' + lc.baseline + ' -> ' + lc.page + ')');
+  }
 
   if (!baselineArg || !pageArg) {
     console.error('usage: node check-report-text.js --baseline <url-or-file> --page <url-or-file> ' +
-      '[--width 1280,390] [--control] [--control-teardown] [--control-widget] [--control-hidden] [--defang]');
+      '[--width 1280,390] [--control] [--control-teardown] [--control-widget] [--control-hidden] [--defang [--baseline-md FILE --page-md FILE]]');
     process.exit(2);
   }
   if (!fs.existsSync(baselineArg) && !/^https?:\/\//.test(baselineArg)) {
@@ -818,6 +901,8 @@ module.exports = {
   checkSequence: checkSequence,
   compare: compare,
   defangNormalise: defangNormalise,
+  markdownLinks: markdownLinks,
+  linksConverted: linksConverted,
   withOnePage: withOnePage,
   MAX_D: MAX_D
 };
