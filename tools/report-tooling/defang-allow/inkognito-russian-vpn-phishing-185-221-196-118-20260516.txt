@@ -1,8 +1,12 @@
 hunt.io  # vendor named as the source of a lookup
-github.com  # open-source project repos (Marzban, EspoCRM) and the decoy server-header value 'github.com'; no actor-owned repo
+github.com/espocrm  # open-source project repos (Marzban, EspoCRM) and the decoy server-header value 'github.com'; no actor-owned repo (owner-scoped)
+github.com/Gozargah  # open-source project repos (Marzban, EspoCRM) and the decoy server-header value 'github.com'; no actor-owned repo (owner-scoped)
 registrar-servers.com  # Namecheap registrar default nameservers named as a vendor default
 reg.ru  # registrar REG.RU default nameservers named as the registrar's
 getoutline.org  # legitimate Outline VPN project site named as such
 caddyserver.com  # legitimate Caddy project site named as such
 nginx.org  # legitimate nginx project site named as such
-amazonaws.com  # AWS S3 named as the service the decoy apex moved to
+claude.md  # file name (.md), not a host
+dns2.registrar-servers.com  # registrar nameserver named as the NS of the domain (registrar infrastructure)
+ns1.reg.ru  # registrar nameserver named as the NS of the domain (registrar infrastructure)
+ns2.reg.ru  # registrar nameserver named as the NS of the domain (registrar infrastructure)

@@ -1,2 +1,12 @@
 # benign well-known service named as such (brand the lure impersonates)
 faceit.com  # gaming platform brand the ClickFix lure impersonates, named as the brand (the lure hosts themselves are defanged)
+blog.gdatasoftware.com  # cited reference page linked in the text (vendor, research, news, government or standards), not infrastructure of the actor
+intel.webamon.com  # cited reference page linked in the text (vendor, research, news, government or standards), not infrastructure of the actor
+malwaretips.com  # cited reference page linked in the text (vendor, research, news, government or standards), not infrastructure of the actor
+reliaquest.com  # cited reference page linked in the text (vendor, research, news, government or standards), not infrastructure of the actor
+store.steampowered.com  # cited reference page linked in the text (vendor, research, news, government or standards), not infrastructure of the actor
+www.kaspersky.com  # cited reference page linked in the text (vendor, research, news, government or standards), not infrastructure of the actor
+www.kaspersky.com.au  # cited reference page linked in the text (vendor, research, news, government or standards), not infrastructure of the actor
+www.malwarebytes.com  # cited reference page linked in the text (vendor, research, news, government or standards), not infrastructure of the actor
+www.secuinfra.com  # cited reference page linked in the text (vendor, research, news, government or standards), not infrastructure of the actor
+www.welivesecurity.com  # cited reference page linked in the text (vendor, research, news, government or standards), not infrastructure of the actor

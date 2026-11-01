@@ -1,2 +1,5 @@
-github.com  # public repos named as prior art
+github.com/hashicorp  # public repos named as prior art (owner-scoped)
+github.com/itm4n  # public repos named as prior art (owner-scoped)
 hunt.io  # vendor
+crt.sh  # crt.sh certificate-transparency search, a public service named as such
+intptr.zero  # code or protocol identifier that ends in a TLD word, not a host

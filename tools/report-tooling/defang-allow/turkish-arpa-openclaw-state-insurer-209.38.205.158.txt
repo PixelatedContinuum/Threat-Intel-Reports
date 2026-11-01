@@ -2,3 +2,6 @@
 hunt.io  # data vendor / sponsor named as source
 block index.md | Operator VPS (209[.]38[.]205[.]158)  # ASCII tunnel-architecture diagram (PUTTY_TUNNEL_DETAY.md): box-drawing lines, its one command-like line is the label "SSH keys: ..."; the operator IP in it is defanged
 block index.md | $apiToken = "<REDACTED-JWT>"  # three PowerShell variable assignments (JWT already redacted, victim URL defanged); no executable token to bracket
+claude.md  # file name (.md), not a host
+identity.md  # file name (.md), not a host
+soul.md  # file name (.md), not a host

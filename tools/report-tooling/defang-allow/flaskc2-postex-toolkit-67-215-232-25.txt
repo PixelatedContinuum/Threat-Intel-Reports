@@ -1,5 +1,9 @@
 hunt.io  # vendor
-github.com  # public repos named as prior art / PoCs
+github.com/rapid7  # public repos named as prior art / PoCs (owner-scoped)
 breakglass.tech  # Breakglass Intelligence, the cited prior-art source
 netspi.com  # vendor, cited
 itm4n.github.io  # researcher blog, cited
+decode-vbe.py  # file name (.py), not a host
+hackingarticles.in  # Hacking Articles, a research blog cited as a source
+intel.breakglass.tech  # cited reference URL in the references list (vendor, research, news, government), not infrastructure of the actor
+wscript.shell  # code or protocol identifier that ends in a TLD word, not a host

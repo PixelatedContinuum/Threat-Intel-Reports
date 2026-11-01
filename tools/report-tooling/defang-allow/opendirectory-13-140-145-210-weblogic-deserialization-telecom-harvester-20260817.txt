@@ -1,3 +1,12 @@
 # d4 allow list (opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817/allow.txt): benign well-known vendor, publisher, standards or reference sites named as such (defang-rules.md rule 1). One reason per entry.
-github.com  # public proof-of-concept repo cited as a reference (V4bel/dirtyfrag), not operator infrastructure
+github.com/V4bel  # public proof-of-concept repo cited as a reference (V4bel/dirtyfrag), not operator infrastructure (owner-scoped)
 blog.talosintelligence.com  # Cisco Talos vendor blog, cited reference
+exploit21182.java  # file name (.java), not a host
+genbypass.java  # file name (.java), not a host
+jndibind.java  # file name (.java), not a host
+jndienum.java  # file name (.java), not a host
+t3blind.java  # file name (.java), not a host
+t3exploit.java  # file name (.java), not a host
+wlauth.java  # file name (.java), not a host
+wlexploit.java  # file name (.java), not a host
+xds.java  # file name (.java), not a host

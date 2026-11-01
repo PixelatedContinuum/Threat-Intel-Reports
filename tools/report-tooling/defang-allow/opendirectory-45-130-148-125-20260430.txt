@@ -1,5 +1,14 @@
 # d4 allow list (opendirectory-45-130-148-125-20260430/allow.txt): benign well-known vendor, publisher, standards or reference sites named as such (defang-rules.md rule 1). One reason per entry.
 hunt.io  # data vendor named as source
-github.com  # AdaptixC2 is a public open-source framework; Go import paths and the project repo are references, not operator infrastructure
+github.com/Adaptix-Framework  # AdaptixC2 is a public open-source framework; Go import paths and the project repo are references, not operator infrastructure (owner-scoped)
+github.com/coder  # AdaptixC2 is a public open-source framework; Go import paths and the project repo are references, not operator infrastructure (owner-scoped)
+github.com/hashicorp  # AdaptixC2 is a public open-source framework; Go import paths and the project repo are references, not operator infrastructure (owner-scoped)
+github.com/jpillora  # AdaptixC2 is a public open-source framework; Go import paths and the project repo are references, not operator infrastructure (owner-scoped)
+github.com/nicocha30  # AdaptixC2 is a public open-source framework; Go import paths and the project repo are references, not operator infrastructure (owner-scoped)
+github.com/shamaton  # AdaptixC2 is a public open-source framework; Go import paths and the project repo are references, not operator infrastructure (owner-scoped)
 golang.org  # Go language site
 ipip.net  # public IP geolocation vendor named as the lookup source
+gopkg.in  # Go package redirect service, a library import path
+intptr.zero  # code or protocol identifier that ends in a TLD word, not a host
+linpeas.sh  # file name (.sh), not a host
+main.date  # code or protocol identifier that ends in a TLD word, not a host

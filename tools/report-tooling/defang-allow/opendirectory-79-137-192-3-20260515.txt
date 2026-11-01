@@ -1,1 +1,4 @@
-api.telegram.org  # Telegram Bot API named as the service (the bot token is not in the host)
+api.telegram.org/bot*  # Telegram Bot API named as the service (the bot token is not in the host) (the /bot<token> path only; a real bot id still fails)
+amnesia.sh  # file name (.sh), not a host
+bellamain.zip  # file name (.zip), not a host
+claude.md  # file name (.md), not a host

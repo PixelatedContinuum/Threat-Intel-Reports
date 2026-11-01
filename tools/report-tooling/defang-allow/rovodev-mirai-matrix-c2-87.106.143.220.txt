@@ -1,3 +1,11 @@
 # d4 allow list (rovodev-mirai-matrix-c2-87.106.143.220/allow.txt): benign well-known vendor, publisher, standards or reference sites named as such (defang-rules.md rule 1). One reason per entry.
 hunt.io  # sponsor and data vendor, named as a source (screenshots, 'Hunt.io panel')
 news.drweb.com  # Dr.Web vendor news article cited as a reference
+autoscanner.py  # file name (.py), not a host
+bot.sh  # file name (.sh), not a host
+claude.md  # file name (.md), not a host
+cross-compile.sh  # file name (.sh), not a host
+mirai.aw  # code or protocol identifier that ends in a TLD word, not a host
+mirai.bo  # code or protocol identifier that ends in a TLD word, not a host
+pandora.sh  # file name (.sh), not a host
+readme.md  # file name (.md), not a host

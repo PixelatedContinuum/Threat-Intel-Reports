@@ -1,7 +1,17 @@
 # T-0500.1.12 d3: benign well-known services/vendors/references named as such (rule 1); nothing actor-used
 crates.io  # Rust package registry, named as the ecosystem and inside a cargo registry build-path string in the sample (index.crates.io-...)
-github.com  # SigmaHQ/sigma public detection-rule repository, named as a resource for defenders
+github.com/SigmaHQ  # SigmaHQ/sigma public detection-rule repository, named as a resource for defenders (owner-scoped)
 ic3.gov  # FBI Internet Crime Complaint Center, named as the place to report in the response guidance
 learn.microsoft.com  # Microsoft documentation pages cited as references (HVCI, driver blocklist)
 www.elastic.co  # Elastic product page cited as a reference for log analysis
 www.sysinternals.com  # Sysinternals, the legitimate publisher named in the DLL version-info company-name field
+bdapiutil64-sys.md  # file name (.md), not a host
+chromelevator-exe.md  # file name (.md), not a host
+detections.md  # file name (.md), not a host
+docs.microsoft.com  # cited reference page linked in the text (vendor, research, news, government or standards), not infrastructure of the actor
+killer-crowdstrike-dll.md  # file name (.md), not a host
+killer-dll.md  # file name (.md), not a host
+lib.rs  # file name (.rs), not a host
+lpe-exe.md  # file name (.md), not a host
+nethost-dll.md  # file name (.md), not a host
+rootkit-dll.md  # file name (.md), not a host

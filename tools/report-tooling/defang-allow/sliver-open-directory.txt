@@ -1,6 +1,8 @@
 # T-0500.1.12 d3: benign well-known services/vendors/references named as such (rule 1); nothing actor-used
 abuse.ch  # abuse.ch threat-intelligence platform named as a source
-github.com  # public tool repositories cited in References (optiv/ScareCrow, klezVirus/SysWhispers3, TheWover/donut)
+github.com/klezVirus  # public tool repositories cited in References (optiv/ScareCrow, klezVirus/SysWhispers3, TheWover/donut) (owner-scoped)
+github.com/optiv  # public tool repositories cited in References (optiv/ScareCrow, klezVirus/SysWhispers3, TheWover/donut) (owner-scoped)
+github.com/TheWover  # public tool repositories cited in References (optiv/ScareCrow, klezVirus/SysWhispers3, TheWover/donut) (owner-scoped)
 hunt.io  # Hunt.io, the data source and sponsor, named as such in the Data source note
 intezer.com  # Intezer, the sandbox vendor whose canary domain the Sliver beacon embeds for its anti-analysis check, named as the vendor not an actor host
 ipinfo.io  # IPinfo ASN record cited in References
@@ -17,3 +19,8 @@ www.recordedfuture.com  # Recorded Future research page cited in References
 www.reversinglabs.com  # ReversingLabs research page cited in References
 www.synacktiv.com  # Synacktiv research page cited in References
 www.vmray.com  # VMRay research page cited in References
+any.run  # ANY.RUN sandbox, a vendor service named as such
+exe-xxxxxxxx.pf  # file name (.pf), not a host
+rdp.sh  # file name (.sh), not a host
+sliver-open-directory-detections.md  # file name (.md), not a host
+block index.md | [Ref].Assembly.GetType('System.Management.Automation.AmsiUtils')  # a PowerShell expression statement that starts with the [Ref] type literal and holds no command name; its one operative string ('[a]msiInitFailed') is already broken

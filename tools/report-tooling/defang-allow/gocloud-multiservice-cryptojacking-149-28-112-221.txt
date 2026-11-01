@@ -1,2 +1,35 @@
 # T-0500.1.12 d3: benign well-known services/vendors/references named as such (rule 1); nothing actor-used
 hunt.io  # Hunt.io, the data source and sponsor, named as such in the Data source note
+a.py  # file name (.py), not a host
+arxiv.org  # cited reference page linked in the text (vendor, research, news, government or standards), not infrastructure of the actor
+blog.shodan.io  # cited reference page linked in the text (vendor, research, news, government or standards), not infrastructure of the actor
+blog.talosintelligence.com  # cited reference page linked in the text (vendor, research, news, government or standards), not infrastructure of the actor
+miner.sh  # file name (.sh), not a host
+miningpoolstats.net  # cited reference page linked in the text (vendor, research, news, government or standards), not infrastructure of the actor
+nvd.nist.gov  # cited reference page linked in the text (vendor, research, news, government or standards), not infrastructure of the actor
+omnihunter.py  # file name (.py), not a host
+scanner.py  # file name (.py), not a host
+securelist.com  # cited reference page linked in the text (vendor, research, news, government or standards), not infrastructure of the actor
+setup.sh  # file name (.sh), not a host
+socradar.io  # cited reference page linked in the text (vendor, research, news, government or standards), not infrastructure of the actor
+thedfirreport.com  # cited reference page linked in the text (vendor, research, news, government or standards), not infrastructure of the actor
+thehackernews.com  # cited reference page linked in the text (vendor, research, news, government or standards), not infrastructure of the actor
+unit42.paloaltonetworks.com  # cited reference page linked in the text (vendor, research, news, government or standards), not infrastructure of the actor
+watchdog2.py  # file name (.py), not a host
+www.aquasec.com  # cited reference page linked in the text (vendor, research, news, government or standards), not infrastructure of the actor
+www.bleepingcomputer.com  # cited reference page linked in the text (vendor, research, news, government or standards), not infrastructure of the actor
+www.cisa.gov  # cited reference page linked in the text (vendor, research, news, government or standards), not infrastructure of the actor
+www.coindesk.com  # cited reference page linked in the text (vendor, research, news, government or standards), not infrastructure of the actor
+www.darktrace.com  # cited reference page linked in the text (vendor, research, news, government or standards), not infrastructure of the actor
+www.helpnetsecurity.com  # cited reference page linked in the text (vendor, research, news, government or standards), not infrastructure of the actor
+www.investhk.gov.hk  # cited reference page linked in the text (vendor, research, news, government or standards), not infrastructure of the actor
+www.invicti.com  # cited reference page linked in the text (vendor, research, news, government or standards), not infrastructure of the actor
+www.ndss-symposium.org  # cited reference page linked in the text (vendor, research, news, government or standards), not infrastructure of the actor
+www.netspi.com  # cited reference page linked in the text (vendor, research, news, government or standards), not infrastructure of the actor
+www.rapid7.com  # cited reference page linked in the text (vendor, research, news, government or standards), not infrastructure of the actor
+www.sentinelone.com  # cited reference page linked in the text (vendor, research, news, government or standards), not infrastructure of the actor
+www.sysdig.com  # cited reference page linked in the text (vendor, research, news, government or standards), not infrastructure of the actor
+www.verizon.com  # cited reference page linked in the text (vendor, research, news, government or standards), not infrastructure of the actor
+www.virustotal.com  # cited reference page linked in the text (vendor, research, news, government or standards), not infrastructure of the actor
+www.vulncheck.com  # cited reference page linked in the text (vendor, research, news, government or standards), not infrastructure of the actor
+xmrig.zip  # file name (.zip), not a host

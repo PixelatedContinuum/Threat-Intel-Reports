@@ -1,1 +1,16 @@
 cert.br         # Brazilian national CERT named as the disclosure route
+adverserial.ai  # cited reference page linked in the text (vendor, research, news, government or standards), not infrastructure of the actor
+cybercyberlabs.com  # cited reference page linked in the text (vendor, research, news, government or standards), not infrastructure of the actor
+cybernews.com  # cited reference page linked in the text (vendor, research, news, government or standards), not infrastructure of the actor
+lula2026.zip  # file name (.zip), not a host
+pull.py  # file name (.py), not a host
+relay.java  # file name (.java), not a host
+relay.java.new  # file name (.new), not a host
+svc.py  # file name (.py), not a host
+system.run  # code or protocol identifier that ends in a TLD word, not a host
+www.cisa.gov  # cited reference page linked in the text (vendor, research, news, government or standards), not infrastructure of the actor
+www.deepwatch.com  # cited reference page linked in the text (vendor, research, news, government or standards), not infrastructure of the actor
+www.exploit-db.com  # cited reference page linked in the text (vendor, research, news, government or standards), not infrastructure of the actor
+www.rapid7.com  # cited reference page linked in the text (vendor, research, news, government or standards), not infrastructure of the actor
+www.vulncheck.com  # cited reference page linked in the text (vendor, research, news, government or standards), not infrastructure of the actor
+www.zabbix.com  # cited reference page linked in the text (vendor, research, news, government or standards), not infrastructure of the actor

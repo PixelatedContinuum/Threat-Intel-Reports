@@ -8,3 +8,23 @@ goproxy.github.io # GoProxy library name, appears as the certificate subject CN 
 360.com         # same: legitimate Qihoo vendor URLs
 360seas.com     # same: legitimate Qihoo vendor URLs
 1.0.0.11      # PE FileVersion string of SlideShowEditor.exe, a version number, not an address
+04.zip  # file name (.zip), not a host
+claude.md  # file name (.md), not a host
+detections.md  # file name (.md), not a host
+enterprise.360totalsecurity.com  # Qihoo 360 vendor URL quoted from the genuine signed PromoUtil.exe
+nda.zip  # file name (.zip), not a host
+nda2026.zip  # file name (.zip), not a host
+opendirectory-62-60-237-100-20260506-detections.md  # file name (.md), not a host
+orion.ts.360.com  # Qihoo 360 vendor URL quoted from the genuine signed PromoUtil.exe
+premium.360totalsecurity.com  # Qihoo 360 vendor URL quoted from the genuine signed PromoUtil.exe
+price.zip  # file name (.zip), not a host
+price2026.zip  # file name (.zip), not a host
+rdp.sh  # file name (.sh), not a host
+reslog.360seas.com  # Qihoo 360 vendor URL quoted from the genuine signed PromoUtil.exe
+rootnode.name  # code or protocol identifier that ends in a TLD word, not a host
+s.360safe.com  # Qihoo 360 vendor URL quoted from the genuine signed PromoUtil.exe
+security.zip  # file name (.zip), not a host
+spec.cloud.360safe.com  # Qihoo 360 vendor URL quoted from the genuine signed PromoUtil.exe
+squirrel.windows  # code or protocol identifier that ends in a TLD word, not a host
+store.360totalsecurity.com  # Qihoo 360 vendor URL quoted from the genuine signed PromoUtil.exe
+www.360totalsecurity.com  # Qihoo 360 vendor URL quoted from the genuine signed PromoUtil.exe

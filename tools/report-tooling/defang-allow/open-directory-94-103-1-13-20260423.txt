@@ -1,5 +1,10 @@
 bgp.he.net      # Hurricane Electric BGP toolkit, cited lookup service
 check-host.net  # public availability-check service named as the tool used
-github.com      # hfiref0x/UACME reference (public research repository), cited
+github.com/hfiref0x  # hfiref0x/UACME reference (public research repository), cited (owner-scoped)
 hunt.io         # Hunt.io, source/product name
 ipinfo.io       # IPinfo lookup service, cited
+interact.py  # file name (.py), not a host
+open-directory-94-103-1-13-20260423-detections.md  # file name (.md), not a host
+otp2.py  # file name (.py), not a host
+stage2-infrastructure.md  # file name (.md), not a host
+stage2-research.md  # file name (.md), not a host

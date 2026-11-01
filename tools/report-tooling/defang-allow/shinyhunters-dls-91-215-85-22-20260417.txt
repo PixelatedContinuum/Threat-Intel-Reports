@@ -21,3 +21,19 @@ salesforceben.com # press cited
 sophos.com      # vendor report cited
 techradar.com   # press cited
 threatstop.com  # vendor report cited
+bgp.tools  # bgp.tools routing data source, named as the source
+cert.europa.eu  # cited reference URL in the references list (vendor, research, news, government), not infrastructure of the actor
+europa.zip  # file name (.zip), not a host
+shinyhunters-dls-91-215-85-22-20260417-detections.md  # file name (.md), not a host
+www.bleepingcomputer.com  # cited reference URL in the references list (vendor, research, news, government), not infrastructure of the actor
+www.dataminr.com  # cited reference URL in the references list (vendor, research, news, government), not infrastructure of the actor
+www.helpnetsecurity.com  # cited reference URL in the references list (vendor, research, news, government), not infrastructure of the actor
+www.ic3.gov  # cited reference URL in the references list (vendor, research, news, government), not infrastructure of the actor
+www.intrinsec.com  # cited reference URL in the references list (vendor, research, news, government), not infrastructure of the actor
+www.mitiga.io  # cited reference URL in the references list (vendor, research, news, government), not infrastructure of the actor
+www.ransomware.live  # cited reference URL in the references list (vendor, research, news, government), not infrastructure of the actor
+www.resecurity.com  # cited reference URL in the references list (vendor, research, news, government), not infrastructure of the actor
+www.salesforceben.com  # cited reference URL in the references list (vendor, research, news, government), not infrastructure of the actor
+www.sophos.com  # cited reference URL in the references list (vendor, research, news, government), not infrastructure of the actor
+www.techradar.com  # cited reference URL in the references list (vendor, research, news, government), not infrastructure of the actor
+www.threatstop.com  # cited reference URL in the references list (vendor, research, news, government), not infrastructure of the actor

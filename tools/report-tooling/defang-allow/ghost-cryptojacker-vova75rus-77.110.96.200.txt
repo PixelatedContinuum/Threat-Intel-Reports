@@ -6,3 +6,9 @@ docs.oracle.com # vendor documentation cited
 gate.io         # public exchange named as such
 hunt.io         # Hunt.io, source/product name
 ppln.co         # vendor/news site cited
+ghost.sh  # file name (.sh), not a host
+hyst.sh  # file name (.sh), not a host
+libpam.so  # file name (.so), not a host
+min1.sh  # file name (.sh), not a host
+py.py  # file name (.py), not a host
+scan.py  # file name (.py), not a host

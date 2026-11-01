@@ -2,3 +2,5 @@ hunt.io         # Hunt.io, source/product name
 thedfirreport.com # DFIR Report, cited research
 docs.microsoft.com # Microsoft documentation cited
 bbs.kanxue.com  # Kanxue forum named as the origin of the cracked tooling distribution (a source forum, not operator infrastructure)
+authkey.pub  # file name (.pub), not a host
+sidechannel.blog  # sidechannel.blog research blog cited as a source

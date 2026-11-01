@@ -4,3 +4,4 @@ docs.openclaw.ai  # OpenClaw documentation site named in the operator Claude Cod
 openclaw.ai  # OpenClaw project site named as the installer the operator pre-approved, a product not an actor host
 hunt.io  # Hunt.io, the data source and sponsor, named as such in the Data source note
 npmjs.com  # public npm registry named as the alternative install path for the OpenClaw package
+claude.md  # file name (.md), not a host
