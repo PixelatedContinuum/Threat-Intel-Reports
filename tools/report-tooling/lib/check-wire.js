@@ -231,6 +231,19 @@ var EDB_ID = /^\d{1,8}$/;
 // Starts with a digit, or v and a digit; no wildcard. The exporter's validator for a fixed version
 // (cve.now carries junk such as "log4j-core*").
 var FIXED_VERSION = /^[vV]?\d[0-9A-Za-z.+_-]{0,39}$/;
+// The real exporter output (T-0522 sample) joins one fixed version per product branch with ", "
+// ("10.4.3, 10.2.7"; Windows builds "10.0.14393.9612, 10.0.17763.9376"). Every item must be a version.
+var FIXED_MAX_ITEMS = 12;
+var FIXED_MAX_LEN = 300;
+function fixedProblem(v) {
+  if (typeof v !== 'string' || v.length > FIXED_MAX_LEN) return 'not empty or a version, or a comma-separated list of versions';
+  var items = v.split(',');
+  if (items.length > FIXED_MAX_ITEMS) return 'lists ' + items.length + ' versions, over ' + FIXED_MAX_ITEMS;
+  for (var i = 0; i < items.length; i++) {
+    if (!FIXED_VERSION.test(items[i].replace(/^ /, ''))) return 'not empty or a version, or a comma-separated list of versions';
+  }
+  return '';
+}
 var ALIAS_ID = /^(?:GHSA(?:-[a-z0-9]{4}){3}|EUVD-\d{4}-\d{4,})$/i;
 var MAX_LIST = 25;
 function cvenowProblems(r) {
@@ -254,8 +267,8 @@ function cvenowProblems(r) {
   list('msf', MSF_PATH);
   list('edb', EDB_ID);
   list('aliases', ALIAS_ID);
-  if (hasKey(r, 'fixed') && !isEmpty(r.fixed) && !(typeof r.fixed === 'string' && FIXED_VERSION.test(r.fixed))) {
-    out.push('has fixed ' + JSON.stringify(r.fixed) + ', not empty or a version');
+  if (hasKey(r, 'fixed') && !isEmpty(r.fixed) && fixedProblem(r.fixed)) {
+    out.push('has fixed ' + JSON.stringify(r.fixed) + ', ' + fixedProblem(r.fixed));
   }
   if (hasKey(r, 'kev_due') && !isEmpty(r.kev_due) && isNaN(realDay(r.kev_due))) {
     out.push('has kev_due ' + JSON.stringify(r.kev_due) + ', not empty or a real day');

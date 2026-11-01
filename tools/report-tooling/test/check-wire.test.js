@@ -877,6 +877,17 @@ test('nKEV rows with, without and with a partial set of the cve.now fields pass 
   assert.deepEqual(r.vulnWarnings, []);
 });
 
+test('a fixed version may be a comma-separated list of versions, one per branch (the real exporter output)', function () {
+  var r = CW.check(vdoc([cn({ cve: 'CVE-2026-3001', fixed: '10.4.3, 10.2.7' }),
+    cn({ cve: 'CVE-2026-3002', fixed: '10.0.14393.9612, 10.0.17763.9376, 10.0.20348.5761' }),
+    cn({ cve: 'CVE-2026-3003', fixed: '24.4R2-S5-EVO, 25.2R2-S2-EVO' }), cn({ cve: 'CVE-2026-3004', fixed: '16.114.26101123,16.0.14334.20974' }),
+    cn({ cve: 'CVE-2026-3005', fixed: 'v5.000.0000000.15' })]), SOURCES, NOW);
+  assert.equal(r.status, 'PASS');
+  assert.deepEqual(r.vulnWarnings, []);
+  // the same on the CVEs tab
+  assert.deepEqual(CW.check(cvdoc([cvrow({ fixed: '10.4.3, 10.2.7' })]), SOURCES, NOW).cveWarnings, []);
+});
+
 test('a bad cve.now field warns per field, and the headlines still PASS', function () {
   var r = CW.check(vdoc([
     cn({ cve: 'CVE-2026-0001', ssvc_expl: 'high' }),
@@ -888,6 +899,11 @@ test('a bad cve.now field warns per field, and the headlines still PASS', functi
     cn({ cve: 'CVE-2026-0007', edb: ['48208"><script>'] }),
     cn({ cve: 'CVE-2026-0010', fixed: 'log4j-core*' }),
     cn({ cve: 'CVE-2026-0011', fixed: 'see advisory' }),
+    cn({ cve: 'CVE-2026-0016', fixed: '10.4.3, log4j-core*' }),
+    cn({ cve: 'CVE-2026-0017', fixed: '10.4.3,, 10.2.7' }),
+    cn({ cve: 'CVE-2026-0018', fixed: '10.4.3, 10.2.7,' }),
+    cn({ cve: 'CVE-2026-0019', fixed: '1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 1.8, 1.9, 2.0, 2.1, 2.2, 2.3' }),
+    cn({ cve: 'CVE-2026-0020', fixed: '10.4.3, see advisory' }),
     cn({ cve: 'CVE-2026-0012', aliases: ['PYSEC-2026-1640'] }),
     cn({ cve: 'CVE-2026-0013', aliases: ['GHSA-xxxx-yyyy-zzzz"onmouseover="x'] }),
     cn({ cve: 'CVE-2026-0014', kev_due: 'next week' }),
@@ -899,7 +915,9 @@ test('a bad cve.now field warns per field, and the headlines still PASS', functi
    /0004\).*msf entry "modules\/\.\.\/\.\.\/etc\/passwd\.rb", not the expected shape/,
    /0005\).*msf entry "https:\/\/evil\.test\/x\.rb"/, /0006\).*msf that is not a list/,
    /0007\).*edb entry/,
-   /0010\).*fixed "log4j-core\*", not empty or a version/, /0011\).*fixed "see advisory"/,
+   /0010\).*fixed "log4j-core\*", not empty or a version, or a comma-separated list of versions/, /0011\).*fixed "see advisory"/,
+   /0016\).*fixed "10.4.3, log4j-core\*"/, /0017\).*fixed "10.4.3,, 10.2.7"/, /0018\).*fixed "10.4.3, 10.2.7,"/,
+   /0019\).*lists 13 versions, over 12/, /0020\).*fixed "10.4.3, see advisory"/,
    /0012\).*aliases entry "PYSEC-2026-1640"/, /0013\).*aliases entry/, /0014\).*kev_due "next week"/,
    /0015\).*29 edb, over 25/].forEach(function (re) { assert.match(w, re); });
 });
