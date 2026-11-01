@@ -19,13 +19,13 @@ detection_sections:
   - label: "Sigma Rules"
     anchor: "#sigma-rules"
 ioc_highlights:
-  - "221.150.15.104"
+  - "221[.]150[.]15[.]104"
   - "openclaw.ai"
   - "~/.claude/settings.local.json"
 stix_bundle: /stix/korean-claude-openclaw-221.150.15.104.json
 ---
 
-**Campaign Identifier:** Korean-ClaudeCode-Allowlist-OpenClaw-221.150.15.104<br>
+**Campaign Identifier:** Korean-ClaudeCode-Allowlist-OpenClaw-221[.]150[.]15[.]104<br>
 **Last Updated:** May 27, 2026<br>
 **Threat Level:** MEDIUM
 
@@ -39,7 +39,7 @@ stix_bundle: /stix/korean-claude-openclaw-221.150.15.104.json
 {: .hl-tier-1}
 {: .hl-tab-overview}
 
-A Korean operator pre-approved an `openclaw.ai` installer in Claude Code's permission allowlist (`~/.claude/settings.local.json`), silencing every safety prompt for the full OpenClaw install-and-run chain. Seven pre-authorized entries, recovered from the operator's own open-directory exposure (`221.150.15.104`, Korea Telecom), describe that chain end to end. This is the parent investigation's first DEFINITE artifact-level evidence of an operator deliberately customizing an AI-agent CLI's safety-prompt mechanism to streamline toolkit deployment.
+A Korean operator pre-approved an `openclaw.ai` installer in Claude Code's permission allowlist (`~/.claude/settings.local.json`), silencing every safety prompt for the full OpenClaw install-and-run chain. Seven pre-authorized entries, recovered from the operator's own open-directory exposure (`221[.]150[.]15[.]104`, Korea Telecom), describe that chain end to end. This is the parent investigation's first DEFINITE artifact-level evidence of an operator deliberately customizing an AI-agent CLI's safety-prompt mechanism to streamline toolkit deployment.
 
 No malware binary was extracted and no victims were observed; the captured artifact is the operator's tradecraft footprint. The defender-relevant finding is the **hunt anchor**: any `~/.claude/settings.local.json` whose `permissions.allow` array pre-approves `curl ... | bash`, a global npm install of an unfamiliar package, or a local-listener bring-up is a high-priority finding regardless of the specific tooling named (Section 4.2).
 
@@ -86,14 +86,14 @@ No malware binary was extracted and no victims were observed.
 
 ### Threat Actor
 
-The operator is tracked as **<a href="/actors/UTA-2026-015/">UTA-2026-015</a>** *(an internal tracking label used by The Hunters Ledger, see Section 6)* at **LOW (55%)** confidence. The strongest signals are Hunt.io's Korean-language curator label and the Korea Telecom AS4766 residential exposure; the `settings.local.json` content is English-only and corroborates neither, and no clustering with named threat actors was found. **Disposition:** the residential exposure at `221.150.15.104:8080` remained reachable at investigation close (2026-05-23). No vendor takedown applies. This tradecraft-observation case has no named victim and no removable artifact (Section 6).
+The operator is tracked as **<a href="/actors/UTA-2026-015/">UTA-2026-015</a>** *(an internal tracking label used by The Hunters Ledger, see Section 6)* at **LOW (55%)** confidence. The strongest signals are Hunt.io's Korean-language curator label and the Korea Telecom AS4766 residential exposure; the `settings.local.json` content is English-only and corroborates neither, and no clustering with named threat actors was found. **Disposition:** the residential exposure at `221[.]150[.]15[.]104:8080` remained reachable at investigation close (2026-05-23). No vendor takedown applies. This tradecraft-observation case has no named victim and no removable artifact (Section 6).
 
 ### For Technical Teams
 
 SOC and threat-hunting priorities:
 
 - **Filesystem hunt**: inventory `~/.claude/settings.local.json` and `<project>/.claude/settings.local.json` presence and content across developer- and admin-class endpoints, using the ready-to-deploy YARA and Sigma patterns in the detection file (Sections 4.1, 4.2, 8).
-- **Network egress monitoring**: add `openclaw.ai`, `docs.openclaw.ai`, and `lightmake.site` to DNS watchlists (Section 7).
+- **Network egress monitoring**: add `openclaw.ai`, `docs.openclaw.ai`, and `lightmake[.]site` to DNS watchlists (Section 7).
 - **Listening-port inventory**: surface TCP port `18789` bindings on developer-class endpoints (Section 4.5).
 - **Detection generalization**: the same hunt criteria catch any operator-customized allowlist of this shape, not just OpenClaw (Sections 4.2, 8).
 - **Disclosure**: Anthropic and OpenClaw maintainers were notified via the parent investigation's vendor process; no customer-side disclosure is in scope.
@@ -108,7 +108,7 @@ Case 4 captured a Korean operator's residential open-directory exposure, one of 
 
 ### Discovery Method
 
-Hunt.io's open-directory crawler indexed the operator's exposed home directory at `http://221.150.15.104:8080/` on **2026-03-11**, with the curator labelling the host "Korean operator" on regional-ISP and language-environment indicators. The parent investigation's host-prioritization review selected the case on 2026-05-23, prioritizing hosts with co-located mainstream + side-loaded AI-agent installations.
+Hunt.io's open-directory crawler indexed the operator's exposed home directory at `hxxp://221[.]150[.]15[.]104:8080/` on **2026-03-11**, with the curator labelling the host "Korean operator" on regional-ISP and language-environment indicators. The parent investigation's host-prioritization review selected the case on 2026-05-23, prioritizing hosts with co-located mainstream + side-loaded AI-agent installations.
 
 ### Named-Victim Status
 
@@ -156,7 +156,7 @@ This is an **operator-tradecraft analysis report, not a malware analysis report.
 | Size | 442 bytes |
 | Format | UTF-8 JSON (RFC 8259) |
 | Schema | Anthropic Claude Code per-directory or global permission allowlist schema |
-| Discovery URL | `http://221.150.15.104:8080/.claude/settings.local.json` (via open directory) |
+| Discovery URL | `hxxp://221[.]150[.]15[.]104:8080/.claude/settings.local.json` (via open directory) |
 | Preserved at | Offline investigation evidence archive (The Hunters Ledger) |
 | Hashable? | Yes, but hash-based detection is operationally less useful than content-based detection because operators can trivially produce per-host or per-project variants with different byte sequences |
 
@@ -286,7 +286,7 @@ The allowlist references three distribution channels for OpenClaw, all owned or 
 | npm registry | `npm i -g openclaw` (package name `openclaw`) | Global npm install, alternative path to the shell installer. Published to the public npmjs.com registry. |
 | Documentation host | `docs.openclaw.ai` (referenced via Claude Code `WebFetch`) | Operator-pre-authorized doc fetch. The defender signal here is that Claude Code is being used to consume OpenClaw documentation, not just to install and run the tool, the operator is treating OpenClaw as a capability they will use via Claude Code's natural-language interface, with OpenClaw's docs as a contextual reference. |
 
-The parent investigation additionally documents **`lightmake.site`** as an OpenClaw-adjacent infrastructure component in the ecosystem's hosting-and-egress signature, observed at MODERATE confidence in the umbrella's multi-case analysis, **not** in the Case 4 artifact itself. It does not appear in the captured allowlist, but is included in the IOC feed (Section 7) as a documented OpenClaw-ecosystem domain defenders should monitor alongside the Case-4-direct indicators; its evidentiary basis for this case is thinner than the DEFINITE-confidence Case 4 domains.
+The parent investigation additionally documents **`lightmake[.]site`** as an OpenClaw-adjacent infrastructure component in the ecosystem's hosting-and-egress signature, observed at MODERATE confidence in the umbrella's multi-case analysis, **not** in the Case 4 artifact itself. It does not appear in the captured allowlist, but is included in the IOC feed (Section 7) as a documented OpenClaw-ecosystem domain defenders should monitor alongside the Case-4-direct indicators; its evidentiary basis for this case is thinner than the DEFINITE-confidence Case 4 domains.
 
 **Important framing: OpenClaw's public-distribution status.** OpenClaw is a **publicly-distributed AI-agent framework**; broad availability does not make installing it inherently malicious. The dual-use pattern mirrors tools like Metasploit, Cobalt Strike, and Sliver, which have both legitimate adopters and abusive-use populations.
 
@@ -398,7 +398,7 @@ At LOW confidence the evidence supports "weak indicators suggest" and no more. S
 
 > **Analyst note:** The complete IOC set for this case is published as a machine-readable JSON feed for direct SIEM/EDR ingestion. It is not duplicated inline here. The highest-priority indicators are also surfaced in the IOC panel (fingerprint icon) on this page.
 
-The full IOC feed is at [`/ioc-feeds/korean-claude-openclaw-221.150.15.104-iocs.json`](https://the-hunters-ledger.com/ioc-feeds/korean-claude-openclaw-221.150.15.104-iocs.json), carrying every indicator for this case with type, confidence and recommended action.
+The full IOC feed is at [`/ioc-feeds/korean-claude-openclaw-221[.]150[.]15[.]104-iocs.json`](https://the-hunters-ledger.com/ioc-feeds/korean-claude-openclaw-221.150.15.104-iocs.json), carrying every indicator for this case with type, confidence and recommended action.
 
 ---
 
@@ -408,7 +408,7 @@ The full IOC feed is at [`/ioc-feeds/korean-claude-openclaw-221.150.15.104-iocs.
 
 Detection rules (YARA, Sigma) covering the file-content patterns documented in Section 4.2 are provided in:
 
-**[`/hunting-detections/korean-claude-openclaw-221.150.15.104-detections/`](https://the-hunters-ledger.com/hunting-detections/korean-claude-openclaw-221.150.15.104-detections/)**
+**[`/hunting-detections/korean-claude-openclaw-221[.]150[.]15[.]104-detections/`](https://the-hunters-ledger.com/hunting-detections/korean-claude-openclaw-221.150.15.104-detections/)**
 
 The detection file follows The Hunters Ledger conventions (CC BY 4.0 license, "The Hunters Ledger" author field on all rules, YAML front matter, no body H1 title). Deploy per your internal detection-engineering processes; this report does not prescribe deployment specifics.
 
@@ -458,8 +458,8 @@ Findings organized by confidence level. The body attaches per-claim confidence i
 
 - The `~/.claude/settings.local.json` file exists at the captured location with the seven-entry `permissions.allow` array documented in Section 4.1
 - The file size is 442 bytes (UTF-8 JSON)
-- The host is `221.150.15.104` on AS4766 Korea Telecom
-- The open directory was reachable at `http://221.150.15.104:8080/` as of Hunt.io first-seen 2026-03-11
+- The host is `221[.]150[.]15[.]104` on AS4766 Korea Telecom
+- The open directory was reachable at `hxxp://221[.]150[.]15[.]104:8080/` as of Hunt.io first-seen 2026-03-11
 - The host filesystem contains `~/.openclaw/` co-located with `~/.claude/`
 - The host filesystem contains `~/.openclaw/completions/openclaw.ps1`
 - The artifact is direct evidence of attacker-modified Claude Code permission-allowlist content (T1685 mapping)
@@ -549,8 +549,8 @@ Defenders building hunt and detection logic should anchor on the DEFINITE artifa
 
 ### Sister Deliverables (canonical paths)
 
-- **IOC feed:** [`/ioc-feeds/korean-claude-openclaw-221.150.15.104-iocs.json`](https://the-hunters-ledger.com/ioc-feeds/korean-claude-openclaw-221.150.15.104-iocs.json), Machine-readable IOC package, 18 actionable indicators across 8 categories.
-- **Detection rules:** [`/hunting-detections/korean-claude-openclaw-221.150.15.104-detections/`](https://the-hunters-ledger.com/hunting-detections/korean-claude-openclaw-221.150.15.104-detections/). YARA and Sigma rules covering the file-content patterns documented in Section 4.2.
+- **IOC feed:** [`/ioc-feeds/korean-claude-openclaw-221[.]150[.]15[.]104-iocs.json`](https://the-hunters-ledger.com/ioc-feeds/korean-claude-openclaw-221.150.15.104-iocs.json), Machine-readable IOC package, 18 actionable indicators across 8 categories.
+- **Detection rules:** [`/hunting-detections/korean-claude-openclaw-221[.]150[.]15[.]104-detections/`](https://the-hunters-ledger.com/hunting-detections/korean-claude-openclaw-221.150.15.104-detections/). YARA and Sigma rules covering the file-content patterns documented in Section 4.2.
 
 ### External References
 
