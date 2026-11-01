@@ -151,7 +151,7 @@ EvilSoul-Engine is best understood as two things at once: a stealer-builder MaaS
 | Type | Information-stealer builder/packer + stealer payloads + web control panel |
 | Family confidence | EvilSoul-Engine lineage: DEFINITE |
 | Builds observed | Node source (`stealer.js`); pkg-Node single-executable (`299a2e7f` Socket.IO variant); Electron (Maploot, Tinarox); four unrecovered `static/*.exe` factory outputs |
-| Delivery hosts | gofile[.]io, catbox.moe, litterbox.catbox.moe, pixeldrain[.]com, an ngrok tunnel, the Telegram Bot API |
+| Delivery hosts | gofile[.]io, catbox[.]moe, litterbox[.]catbox[.]moe, pixeldrain[.]com, an ngrok tunnel, the Telegram Bot API |
 | Exfiltration sinks | Discord webhooks, `evilsoul[.]xyz` / `evilsoul[.]cc` backends, gofile[.]io, web-panel `/send-*` endpoints |
 | Sophistication | Selective, advanced credential-theft (ABE-v20 bypass, CDP cookie theft, Defender timing evasion) on an otherwise commodity structure |
 | Status | Recovered open directory dead; sibling Electron and pkg-Node builds live in customers' hands |
@@ -427,7 +427,7 @@ Maploot's backend serves its own copy of the Chrome App-Bound-Encryption injecto
 
 > **Analyst note:** The Chrome credential-decryption tool that multiple EvilSoul-Engine tiers fetch at runtime is not the operator's own invention. It is a public, well-documented red-team tool that the operation adopted. This distinction matters for accurate reporting: it is a supply-chain-adoption story, not a novel-tradecraft story. This section covers what the tool does (at capability altitude), how it is family-named by antivirus vendors, and why its provenance is intel-relevant.
 
-The `chromelevator.exe` and `chrome_decrypt.dll` pair fetched by the `299a2e7f` tier (and mirrored on `evilsoul[.]xyz`) is the public red-team tool xaitax "Chrome-App-Bound-Encryption-Decryption" (also called "ChromElevator"), authored by security researcher Alexander Hagenah. This is well-documented public prior art, not novel tradecraft invented by this operator. The upstream repository (`github.com/xaitax/Chrome-App-Bound-Encryption-Decryption`) was confirmed accessible and current during the investigation. Antivirus vendors already family-name it on related samples, Kaspersky as `HEUR:HackTool.Win64.ChromElevator.gen`, Microsoft as `HackTool:Win64/PSWDump.MY!MTB`.
+The `chromelevator.exe` and `chrome_decrypt.dll` pair fetched by the `299a2e7f` tier (and mirrored on `evilsoul[.]xyz`) is the public red-team tool xaitax "Chrome-App-Bound-Encryption-Decryption" (also called "ChromElevator"), authored by security researcher Alexander Hagenah. This is well-documented public prior art, not novel tradecraft invented by this operator. The upstream repository (`github.com/xaitax/Chrome-App-Bound-Encryption-Decryption`) was confirmed accessible and current during the investigation. Antivirus vendors already family-name it on related samples, Kaspersky as `HEUR:HackTool.Win64.ChromElevator.gen`, Microsoft as `HackTool:Win64/PSWDump[.]MY!MTB`.
 
 <details markdown="1" class="hl-teardown">
 <summary>Full capability breakdown, operator fork evidence, and provenance reasoning for the ABE bypass tool (8.1-8.3)</summary>
@@ -442,7 +442,7 @@ The report deliberately does not reproduce the tool's injection or key-extractio
 
 ### 8.2 Operator modification: a fork, not pristine upstream
 
-The recovered binaries are an operator-modified fork (HIGH confidence), not the pristine upstream tool. The executable's banner reads verbatim `" by @xaitax / @breakingupslow"` (co-crediting the EvilSoul-Engine developer) and the DLL embeds a copyright line referencing `t.me/evilsoulstealer` after the original author's credit. This is independent, code-level confirmation of the tool's tie to the EvilSoul (`@breakingupslow`) cluster, and it is one of the threads that separates the tooling-lineage actor from the kit operator (Section 9).
+The recovered binaries are an operator-modified fork (HIGH confidence), not the pristine upstream tool. The executable's banner reads verbatim `" by @xaitax / @breakingupslow"` (co-crediting the EvilSoul-Engine developer) and the DLL embeds a copyright line referencing `t[.]me/evilsoulstealer` after the original author's credit. This is independent, code-level confirmation of the tool's tie to the EvilSoul (`@breakingupslow`) cluster, and it is one of the threads that separates the tooling-lineage actor from the kit operator (Section 9).
 
 ### 8.3 Why the provenance is intel-relevant
 
@@ -520,7 +520,7 @@ The corrected model is two related-but-distinct Brazilian operators, connected b
 
 The kit operator is `n_3_xl` / `@govbrasil` / KAIDO (the `0xK41` brand), a Brazilian commodity-malware operator, and I hold that at HIGH, 85 percent.
 
-- **Why:** Self-attested operator identity in the kit's own config (`t.me/n_3_xl` titled "[KAIDO]"), reciprocally confirmed by `@govbrasil` ("Maldev @n_3_xl"); pervasive `0xK41`/KAIDO brand ownership; directly-observed KAIDO C2 infrastructure; Brazil corroborated six ways.
+- **Why:** Self-attested operator identity in the kit's own config (`t[.]me/n_3_xl` titled "[KAIDO]"), reciprocally confirmed by `@govbrasil` ("Maldev @n_3_xl"); pervasive `0xK41`/KAIDO brand ownership; directly-observed KAIDO C2 infrastructure; Brazil corroborated six ways.
 - **Missing:** Real-world legal identity (all operator domains privacy-registered from day one).
 - **Would increase confidence:** A non-WHOIS identity link (a leak, a reused operator email, a cross-platform handle-to-name correlation), or government/vendor-catalog attribution (none exists).
 
@@ -610,7 +610,7 @@ The infrastructure examined for this report is the EvilSoul-Engine / 0xK41 origi
 | `x4m1k[.]com` (+ subdomains) | "0xK41 Panel" control plane | Cloudflare NS, origin exposed | HIGH |
 | `evilsoul[.]cc` | Socket.IO C2 for `299a2e7f` | shared `indie`+`rex` Cloudflare account | DEFINITE (role) |
 | `evilsoul[.]xyz` | Maploot/Tinarox primary backend | operator backend | DEFINITE (role) |
-| `evilsoul1337[.]xyz` | "EvilSoul Panel" (historical) | shared Cloudflare account with `evilsoul.cc` | MODERATE |
+| `evilsoul1337[.]xyz` | "EvilSoul Panel" (historical) | shared Cloudflare account with `evilsoul[.]cc` | MODERATE |
 
 Cluster cohesion is **STRONG**. Three independent shared elements bind this cluster: the Brazilian MagnoHost `/24` co-location (`.207`/`.210`/`.163`), a shared Cloudflare account tying `evilsoul[.]cc` and `evilsoul1337[.]xyz` (the same `indie`+`rex` nameserver pair), and (the strongest single technical fact) the shared exfiltration infrastructure across the independently-analyzed Maploot and Tinarox builds (identical Discord webhook IDs, Steam API key, and ngrok subdomain, Section 7). That last element is about as strong a same-operator signal as passive evidence provides.
 

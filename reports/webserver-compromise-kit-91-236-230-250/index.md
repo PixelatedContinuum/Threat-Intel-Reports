@@ -604,7 +604,7 @@ Set-Service Spooler -StartupType Disabled
 ### Tool Repositories
 
 - **PrintSpoofer:** https://github.com/itm4n/PrintSpoofer
-- **revsocks:** https://github.com/kost/revsocks
+- **revsocks:** hxxps://github[.]com/kost/revsocks
 - **InsomniaShell:** Public web shell tutorials
 
 ### MITRE ATT&CK

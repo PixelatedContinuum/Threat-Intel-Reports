@@ -333,17 +333,17 @@ IPT_BAK="${IPT_BAK:-/dev/shm/.ipt.bak}"
 [ -f "$IPT_BAK" ] || [i]ptables-save > "$IPT_BAK"
 
 # 2. exempt the MITM's own upstream connections  (ASCII "MITM")
-iptables -t nat -I OUTPUT 1 -m mark --mark 0x4D49544D -j RETURN
+[i]ptables -t nat -I OUTPUT 1 -m mark --mark 0x4D49544D -j RETURN
 
 # 3. exclusion set, checked BEFORE the redirect
 ipset create mitm_exclude hash:ip maxelem 1000000 -exist
-iptables -t nat -I OUTPUT 2 -p tcp -m set --match-set mitm_exclude dst -j RETURN
+[i]ptables -t nat -I OUTPUT 2 -p tcp -m set --match-set mitm_exclude dst -j RETURN
 
 # 4. the interception itself
-iptables -t nat -A OUTPUT -p tcp --dport 22 ! -d 127.0.0.1 -j REDIRECT --to-port 19923
+[i]ptables -t nat -A OUTPUT -p tcp --dport 22 ! -d 127.0.0.1 -j REDIRECT --to-port 19923
 
 # 5. hide the listener from the outside
-iptables -I INPUT 1 -p tcp --dport 19923 ! -i lo -j DROP
+[i]ptables -I INPUT 1 -p tcp --dport 19923 ! -i lo -j DROP
 ```
 
 The VPN schemes substitute `PREROUTING -i wg0`, `tun0` or `awg0` for `OUTPUT`, and one consumer-VPN scheme carries a Docker branch keyed on `docker0`. The exclusion set is provisioned for a million entries against a population that was 1,507 rows as of 2026-07-17, which is either forward planning or a default nobody tuned.

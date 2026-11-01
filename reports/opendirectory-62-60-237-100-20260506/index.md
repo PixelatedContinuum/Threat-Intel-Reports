@@ -1338,7 +1338,7 @@ This delete-then-rewrite pattern is unusual, possibly anti-forensics (wipe + res
 The reconnect is fast enough that the closing and replacement connections briefly coexist: the prior beacon is still lingering in `CLOSE_WAIT` while the next one is already `ESTABLISHED` on a fresh ephemeral port, so there is no observable gap between beacons.
 - VT confirms `Carriers.exe` as a known communicating file for this IP, direct cross-reference
 - Other communicating files on this IP: `Gdkmos.exe`, `KioskWindows_1.04.zip`, `detectrdps.exe`, `SSA-Statement.exe`, `Rjdfz.exe` (sister samples)
-- Historical resolutions cluster around banking phishing infrastructure: `caisseregionale-agricole[.]com`, `securepay[.]ddns[.]net`, `paiementsecurise[.]ddns[.]net`, `securepay.life`, `netbillerdown[.]com`
+- Historical resolutions cluster around banking phishing infrastructure: `caisseregionale-agricole[.]com`, `securepay[.]ddns[.]net`, `paiementsecurise[.]ddns[.]net`, `securepay[.]life`, `netbillerdown[.]com`
 
 The TLS handshake did not complete past the ClientHello, so the server certificate fingerprint and HTTP/HTTPS payloads are unavailable. The JA3 hash is high-value for detection: fingerprints the malware's TLS client behavior independently of the C2 IP.
 
@@ -1467,7 +1467,7 @@ The sanctions context matters. AS210644 was sanctioned by the US Treasury Office
 | Listing status | **Spamhaus DROP** |
 | Other community signals | DOJ Operation Talent domain seizure (StarkRDP/rdp.sh, January 2025); 1000+ community abuse reports across 200+ sources on the /24 |
 | VT communicating files | `Carriers.exe`, `Gdkmos.exe`, `KioskWindows_1.04.zip`, `detectrdps.exe`, `SSA-Statement.exe`, `Rjdfz.exe` |
-| Historical resolutions | Banking phishing infrastructure (`caisseregionale-agricole[.]com`, `securepay[.]ddns[.]net`, `paiementsecurise[.]ddns[.]net`, `securepay.life`, `netbillerdown[.]com`) |
+| Historical resolutions | Banking phishing infrastructure (`caisseregionale-agricole[.]com`, `securepay[.]ddns[.]net`, `paiementsecurise[.]ddns[.]net`, `securepay[.]life`, `netbillerdown[.]com`) |
 
 AS210558 is **Spamhaus DROP-listed**. Spamhaus DROP is a list of presumed-malicious infrastructure that legitimate networks publish-and-block by policy. The listing means routine network-perimeter rules at most defenders' organizations would already be blocking traffic to/from this IP regardless of campaign-specific detection.
 

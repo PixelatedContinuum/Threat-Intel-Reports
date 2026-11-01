@@ -243,7 +243,7 @@ First it profiles the host, collecting computer name, username, operating system
 
 Then it stands up its own Tor hidden service. The implant launches a roughly 10 MB `taskhostw.exe`, which is a statically compiled Tor binary wearing a Windows system-process name, points it at a generated `torrc`, and lets Tor mint a fresh `.onion` address for this specific victim. No `.onion` is hardcoded in any build, because the address is created on the victim rather than assigned by the operator.
 
-Then it tells the operator it has landed, over `api.telegram.org`, to the hardcoded chat id `8116056430`. This is a first-run notification only, not the control channel.
+Then it tells the operator it has landed, over `api[.]telegram[.]org`, to the hardcoded chat id `8116056430`. This is a first-run notification only, not the control channel.
 
 Then it registers with the C2, sending a 32-character static authentication key as the first line, followed by a keyed profile block that includes the freshly generated onion address, the AnyDesk credentials, and the `Guest$` backdoor account name and password as named protocol fields.
 
@@ -682,7 +682,7 @@ The techniques that carry the most detection value are concentrated in Defense E
 | Command and Control / T1090.003 | Multi-hop Proxy | per-victim Tor hidden service, statically linked Tor |
 | Command and Control / T1571 | Non-Standard Port | `:5555`, `:7777`, `:4443`, `:5000-5003` |
 | Command and Control / T1105 | Ingress Tool Transfer | panel `/api/dl`; `ct.bat` `WebClient`; AnyDesk fetch |
-| Command and Control / T1102 | Web Service | `api.telegram.org` first-run notify |
+| Command and Control / T1102 | Web Service | `api[.]telegram[.]org` first-run notify |
 | Command and Control / T1090 | Proxy | `ct.bat` `DefaultWebProxy` + `DefaultCredentials` |
 | Command and Control / T1572 | Protocol Tunneling | chisel, bore, ssh (sourced) |
 | Exfiltration / T1041 | Exfiltration Over C2 Channel | panel file-manager download; .NET RAT (MODERATE) |

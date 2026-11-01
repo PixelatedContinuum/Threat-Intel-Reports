@@ -577,8 +577,8 @@ FleetAgentFUD.exe → powershell.exe -NoP -NonI -W Hidden -Exec Bypass
 ```powershell
 # Reconnaissance Commands
 [G]et-Process | Select-Object Name, Id, Path
-Get-Service | Select-Object Name, Status, StartType
-(Get-WmiObject Win32_ComputerSystem).Domain
+[G]et-Service | Select-Object Name, Status, StartType
+([G]et-WmiObject Win32_ComputerSystem).Domain
 ```
 
 ---

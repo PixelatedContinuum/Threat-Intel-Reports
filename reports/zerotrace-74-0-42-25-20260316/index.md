@@ -963,7 +963,7 @@ On threat hunting coverage, the MITRE ATT&CK techniques in this campaign (see Ap
 
 - AS834/IPXO as C2 hosting provider: IPinfo + BGP.he.net agreement; AS199654 discrepancy noted and explained
 - Bulletproof hosting characterization for AS834: 3 of 6 indicators present; not definitive
-- wireon.work.gd as PureRAT fallback domain: DNS timeline correlation
+- wireon[.]work[.]gd as PureRAT fallback domain: DNS timeline correlation
 - ziadxyzhosting[.]com and ziadverisontwo[.]com as actor-controlled: naming pattern match; WHOIS unavailable
 - puf.ps1/sync.ps1 payloads as Aspdkzb-family: size correlation; inner PE not extracted
 - Infrastructure attribution to ZeroTrace (72%): digital identity artifacts + 1 Tier 2 source; ZeroTrace components confirmed, broader campaign scope inferred
@@ -1147,7 +1147,7 @@ The complete machine-readable IOC feed is available in the structured JSON forma
 **Raven RAT / ZeroTrace:**
 
 - CYFIRMA (2025): "Raven Stealer Unmasked", ZeroTrace Team identity, `@ZeroTraceDevOfficial`, `monroe31s`, `steffz` handle in Octalyn Stealer builder artifacts
-- GitHub: `monroe31s/Raven-RAT`, [github[.]com/monroe31s/Raven-RAT](https://github.com/monroe31s/Raven-RAT); created 2025-05-01; 7 stars, 5 forks; `@ZeroTraceDevOfficial` Telegram link confirmed
+- GitHub: `monroe31s/Raven-RAT`, github[.]com/monroe31s/Raven-RAT; created 2025-05-01; 7 stars, 5 forks; `@ZeroTraceDevOfficial` Telegram link confirmed
 
 **ConnectWise ScreenConnect Abuse:**
 

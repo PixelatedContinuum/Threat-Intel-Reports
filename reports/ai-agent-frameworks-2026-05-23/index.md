@@ -595,7 +595,7 @@ The language is Russian, with the native idiom register confirmed in Phase 11.
 - Telegram: `@americanpatriotus` (disinformation channel actively posted to via Gemini CLI)
 - Persona string: `братух` (Russian "bro" diminutive in GEMINI.md global memory file)
 - Russian carding forum: `duty-free[.]cc` (forum-active operator; saved MHTML thread in operator archive)
-- AntiPublic combolist subscription: `antipublic.one`
+- AntiPublic combolist subscription: `antipublic[.]one`
 
 Since this report was published, Trend Micro has independently documented the same operator as `bandcampro` in their "Patriot Bait" research, matching on all four operator addresses and on the `@americanpatriotus` channel. That is a second Tier-2 source arriving at the same operator by a different route, and it is what carries this case from 75 to 83 percent. It does not name a person, so the designation stays in place and is written as "<a href="/actors/UTA-2026-012/">UTA-2026-012</a> (Trend Micro: bandcampro)".
 

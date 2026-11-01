@@ -333,7 +333,7 @@ The [Detection Package]({{ "/hunting-detections/fleetagentfud-exe/" | relative_u
 ```
 String Analysis:
 "clipboard"
-"Get-Clipboard"
+"[G]et-Clipboard"
 
 PowerShell Command:
 -NoP -W Hidden -C Get-Clipboard
@@ -941,7 +941,7 @@ PowerShell Execution Policy Bypass:
 -ExecutionPolicy Bypass
 
 Normal State:
-Get-ExecutionPolicy → "Restricted"
+[G]et-ExecutionPolicy → "Restricted"
 .\script.ps1 → ERROR: Script execution blocked
 
 Bypassed State:

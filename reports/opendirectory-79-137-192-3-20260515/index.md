@@ -157,9 +157,9 @@ But Vantage also surfaced two unrelated directories on the same IP: `cryptone/` 
 
 ### 2.2 The branching
 
-Iris Investigate domain history and VirusTotal pivots from the IP returned a substantial co-tenancy footprint. Among the historical co-tenants of `79[.]137[.]192[.]3` were **BriansClub** (`bclub.mp`), **CRD Club** (`crdclub[.]su`), elon-merge[.]com, RedLine Stealer (`Incurious.exe`), SmokeLoader (`kourimaobaku.exe`), and Tofsee spam botnet (`a52d0a1829a0ff_15M.exe`). Static triage of those PE samples (with `PreProcess` and `StaticTriage` analyst tooling, internal automation) confirmed each of those tenants belongs to a distinct, well-documented threat family with no operator overlap to BellaMain.
+Iris Investigate domain history and VirusTotal pivots from the IP returned a substantial co-tenancy footprint. Among the historical co-tenants of `79[.]137[.]192[.]3` were **BriansClub** (`bclub[.]mp`), **CRD Club** (`crdclub[.]su`), elon-merge[.]com, RedLine Stealer (`Incurious.exe`), SmokeLoader (`kourimaobaku.exe`), and Tofsee spam botnet (`a52d0a1829a0ff_15M.exe`). Static triage of those PE samples (with `PreProcess` and `StaticTriage` analyst tooling, internal automation) confirmed each of those tenants belongs to a distinct, well-documented threat family with no operator overlap to BellaMain.
 
-Pulling on the fake-exchange directory `cryptone/` led to the production domain `cryptone.bot` (Cloudflare-fronted, origin hidden), and from there, pivoting on TLS fingerprints, search-console verification IDs, and registration patterns, to a much broader **Inkognito** brand portfolio: INK VPN (`inkconnect[.]ru`), INK Lens phishing platform (`inklens[.]ru` / `inklens[.]co[.]uk`), CryptOne fake exchange, Bikaf VPN. Cluster B emerged from these pivots.
+Pulling on the fake-exchange directory `cryptone/` led to the production domain `cryptone[.]bot` (Cloudflare-fronted, origin hidden), and from there, pivoting on TLS fingerprints, search-console verification IDs, and registration patterns, to a much broader **Inkognito** brand portfolio: INK VPN (`inkconnect[.]ru`), INK Lens phishing platform (`inklens[.]ru` / `inklens[.]co[.]uk`), CryptOne fake exchange, Bikaf VPN. Cluster B emerged from these pivots.
 
 A separate thread followed the loader sample `staticlittlesource.exe` recovered from the same IP. Static analysis identified the canonical `.frontb` PE section and decryption of the `.data`-resident encrypted region produced a Microsoft-classified `Trojan:Win32/Rhadamanthys!ic` Stage-2. Cluster C (the headline finding) emerged from this thread.
 
@@ -358,7 +358,7 @@ Once installed, the Stage-2 contacts the C2 to download additional capability mo
 - **Seven Turkish marketplace phishing kits**: Dolap (clothing resale), Kargo (parcel delivery lure), Letgo (classifieds), PTTAvm (postal-service marketplace), Sahibinden (general marketplace), Shopier (commerce platform), Turkcell (telecom), all collecting login credentials, payment-card details, and bank-statement (`dekont`) uploads
 - **Telegram exfil pipeline**: hardcoded bot token `6797512084:AAGbJVoC0zcKWYPbFG8oc_bACPn6gUEye_E` in all six `girislog.php` files; exfil to chat IDs `-1002104835510` (credential channel) and `-1001817323952` (operator channel); withdrawal-approval workflow gated to admin Telegram UIDs `5606327063` and `6594066326`
 - **TRX (Tron) cryptocurrency payout workflow** in `cekimbot.php` for converting harvested card balances to operator-controlled wallets
-- **Live fake crypto exchange front (`cryptone.bot`, Cloudflare-fronted)**: second-stage social engineering vector for victims who provide credentials to the spoofed marketplace pages
+- **Live fake crypto exchange front (`cryptone[.]bot`, Cloudflare-fronted)**: second-stage social engineering vector for victims who provide credentials to the spoofed marketplace pages
 
 The hardcoded Telegram bot token was REVOKED on 2026-05-07, returning HTTP 401 on `getMe`, but the bot ID retains pivot value for retroactive analysis. The kits remain on the staging IP.
 
@@ -369,7 +369,7 @@ The hardcoded Telegram bot token was REVOKED on 2026-05-07, returning HTTP 401 o
 **Capabilities:**
 - **INK VPN consumer brand** (`inkconnect[.]ru`): Russian-language VPN service marketed to censorship-region populations; provides legitimate VPN service as a customer-acquisition front
 - **INK Lens phishing platform** (`inklens[.]ru` / `inklens[.]co[.]uk`): 467+ brand-impersonation subdomains spoofing Wells Fargo, Accenture, Tencent, AnyDesk, OWA 2013, Jenkins development environments, SolidWorks downloads, and other corporate brands
-- **CryptOne fake crypto exchange** (`cryptone.bot`, also referenced from Cluster A but operationally Inkognito-controlled): Cloudflare-fronted credential-harvesting frontend
+- **CryptOne fake crypto exchange** (`cryptone[.]bot`, also referenced from Cluster A but operationally Inkognito-controlled): Cloudflare-fronted credential-harvesting frontend
 - **Bikaf VPN** (`bikaf[.]ru`, decommissioned): earlier consumer VPN brand with CCTV/Hikvision angle
 - **EspoCRM back-office** on dedicated Aeza IT IP `185[.]221[.]196[.]118`: single-instance customer relationship management for the Inkognito brand portfolio
 - **Russian payment processor integration**: SBP (Sistema Bystrykh Platezhey, Russian Fast Payment System), T-Pay, and direct card processing
@@ -748,7 +748,7 @@ The rotation matters for detection because JARM is not stable across certificate
 
 ### 6.6 Cluster A and B dynamic notes (condensed)
 
-For Cluster A, BellaMain, there is no malware execution surface. The dynamic behavior of interest is HTTP traffic to the kit URIs (`*/girislog.php`, `*/kartlaodeme.php`, `*/tgdekont.php`, `*/cekimbot.php`) and the Telegram bot exfil traffic to `api.telegram.org` carrying bot ID `6797512084`, which is revoked but still pivot-valuable. Web proxy and Suricata detection content covers these patterns, see the separate detection file.
+For Cluster A, BellaMain, there is no malware execution surface. The dynamic behavior of interest is HTTP traffic to the kit URIs (`*/girislog.php`, `*/kartlaodeme.php`, `*/tgdekont.php`, `*/cekimbot.php`) and the Telegram bot exfil traffic to `api[.]telegram[.]org` carrying bot ID `6797512084`, which is revoked but still pivot-valuable. Web proxy and Suricata detection content covers these patterns, see the separate detection file.
 
 For Cluster B, Inkognito, there is likewise no malware execution surface. The dynamic indicators are HTTP requests carrying the `X-Admin-Token` custom auth header on `api[.]inkconnect[.]ru` and DNS queries for the brand-impersonation subdomain patterns under `*.inklens[.]ru` and `*.inklens[.]co[.]uk`. Detection content covers both of these in the separate detection file. A third indicator listed here originally, HTTP responses carrying the `Server: kittenx` decommission tombstone, was withdrawn on 2026-08-21 together with the two detection rules built on it. See Section 9.2.
 
@@ -767,7 +767,7 @@ The mapping below covers all three clusters. Cluster C (Rhadamanthys MaaS-custom
 | Tactic / Technique | Name | Evidence |
 |---|---|---|
 | Resource Development / T1583.003 | Virtual Private Server | Aeza VPS hosting on AS216246 / AS210644 (Russia / Italy); Hostkey NL AS57043 for Cluster C C2 |
-| Resource Development / T1583.006 | Web Services | Cluster B Cloudflare-fronted `cryptone.bot`; Cluster A panel staging on Aeza |
+| Resource Development / T1583.006 | Web Services | Cluster B Cloudflare-fronted `cryptone[.]bot`; Cluster A panel staging on Aeza |
 | Resource Development / T1587.001 | Develop Capabilities, Malware | Cluster C customer-built loader `staticlittlesource.exe`; Cluster A custom BellaMain PhaaS panel |
 | Resource Development / T1588.001 | Obtain Capabilities, Malware | Cluster C purchased Rhadamanthys MaaS Stage-2 from vendor |
 | Resource Development / T1608.005 | Stage Capabilities, Link Target | Cluster A 7 marketplace phishing kits hosted on staging IP `79[.]137[.]192[.]3` |
@@ -802,7 +802,7 @@ The mapping below covers all three clusters. Cluster C (Rhadamanthys MaaS-custom
 | Command and Control / T1573.001 | Symmetric Cryptography | Stage-2 CBC-XOR cipher for FS container; loader RC4 for Stage-2 wrapper |
 | Command and Control / T1573.002 | Asymmetric Cryptography | Stage-2 TLS pinning to operator-issued brand-impersonation certificates (Samsung period) |
 | Command and Control / T1568 | Dynamic Resolution | Stage-2 dynamic API resolution from PEB (cross-tactic with T1027.007, Defense Evasion primary) |
-| Command and Control / T1102 | Web Service | Cluster A Telegram Bot API (`api.telegram.org`) for credential exfil from PhaaS kits |
+| Command and Control / T1102 | Web Service | Cluster A Telegram Bot API (`api[.]telegram[.]org`) for credential exfil from PhaaS kits |
 | Exfiltration / T1041 | Exfiltration Over C2 Channel | Stage-2 encrypted credential exfil over the established C2 HTTPS channel |
 | Exfiltration / T1567.002 | Exfiltration to Cloud Storage | Cluster A Telegram chat-based exfil (`-1002104835510`, `-1001817323952`) functionally equivalent to cloud-storage exfil |
 
@@ -986,7 +986,7 @@ Cross-cluster linkage is LOW, and actively rebutted rather than merely absent. T
 | Operator language | Turkish | Russian | English-language LLM artifacts | NO |
 | Payment infrastructure | TRX cryptocurrency, Telegram-based | SBP, T-Pay, card (Russian) | None observed (commodity MaaS subscription) | NO |
 | Malware family | BellaMain PhaaS panel | None (web-app + VPN) | Rhadamanthys MaaS Stage-2 + custom loader | NO |
-| Production C2 provider | Cloudflare-fronted (`cryptone.bot`) | Cloudflare-fronted production + Aeza back-office | Hostkey NL (`79[.]133[.]180[.]168`) | NO |
+| Production C2 provider | Cloudflare-fronted (`cryptone[.]bot`) | Cloudflare-fronted production + Aeza back-office | Hostkey NL (`79[.]133[.]180[.]168`) | NO |
 
 The ACH winner is three operationally separate actors, co-tenant on a shared multi-tenant Aeza bulletproof staging utility.
 The runner-up, three clusters operating as one entity, is RULED OUT, eliminated by zero overlap on all 7 dimensions.
@@ -994,7 +994,7 @@ The runner-up, three clusters operating as one entity, is RULED OUT, eliminated 
 The 7-dimension test produces zero matches. Co-tenancy on `79[.]137[.]192[.]3` is therefore best explained as three customers of the same hosting service, not as one actor running three operations. The OFAC Aeza Tier-1 anchor confirms this is the typical pattern for bulletproof hosting infrastructure: BPH providers host many unrelated actors simultaneously, and co-residency is not operationally diagnostic.
 
 <figure style="text-align: center; margin: 2em 0;">
-  <img loading="lazy" src="{{ "/assets/images/opendirectory-79-137-192-3-20260515/opendirectory-79-137-192-3-three-cluster-cotenancy.svg" | relative_url }}" alt="Process-tree infographic of the three-cluster co-tenancy on 79[.]137[.]192[.]3. Top center yellow side-rail card: the IP 79[.]137[.]192[.]3 on AS216246 Aeza Group LLC RU, multi-tenant bulletproof staging server with Apache 2.4.58 Win64 PHP 8.2.12, OFAC SDN Aeza Group sanction July 2025 documents 5 unrelated actor ecosystems co-resident on Aeza. Below the IP a 3-way fanout splits into three cluster cards. Left card yellow side-rail: Cluster A, UTA-2026-008, BellaMain Turkish PhaaS, operator @AresRS34, developer Wadanz, PHP/MySQL panel plus 7 Turkish marketplace kits, payout TRX TRON, Turkish language, brand cryptone.bot fake exchange, distinct-actor MODERATE 75% and named-actor INSUFFICIENT. Middle card red side-rail: Cluster B, UTA-2026-009, Inkognito Russian VPN/phishing, parent brand Inkognito with sub-brands INK VPN INK Lens CryptOne, React/Vite SPA plus EspoCRM stack, payment SBP T-Pay card RU, Russian language, operator alias @inkconnectvpn, 2.5+ year continuous operation, distinct-actor MODERATE 78% and named-actor INSUFFICIENT. Right card highlighted with deep-red border and side-rail plus a star: Cluster C, PRIMARY, UTA-2026-010, Rhadamanthys MaaS customer, loader staticlittlesource.exe, canonical Stage-2, operator strings BombAUb23456 and others, InstallUtil.exe LOLBin, C2 79[.]133[.]180[.]168:3394 on Hostkey NL, English language, survived Operation Endgame November 2025, distinct-actor MODERATE 72% and named-actor INSUFFICIENT. Below the three clusters a grey side-rail band lists the 7 dimensions tested for cross-cluster operator overlap with zero overlap on any: Telegram identifiers, operator pseudonyms, registrar/DNS/SOA pattern, language artifacts, payment processors, malware family, production-C2 hosting provider; cross-cluster operational linkage rated LOW (actively rebutted, not absent). Footer cites the Tier-1 anchor that Aeza simultaneously hosted BianLian, RedLine, Lumma, Meduza, and BlackSprut as 5 unrelated actor ecosystems, and notes that the same exclusion logic applied to BriansClub and CRD Club and elon-merge[.]com on this same IP also returned separate-actor verdicts.">
+  <img loading="lazy" src="{{ "/assets/images/opendirectory-79-137-192-3-20260515/opendirectory-79-137-192-3-three-cluster-cotenancy.svg" | relative_url }}" alt="Process-tree infographic of the three-cluster co-tenancy on 79[.]137[.]192[.]3. Top center yellow side-rail card: the IP 79[.]137[.]192[.]3 on AS216246 Aeza Group LLC RU, multi-tenant bulletproof staging server with Apache 2.4.58 Win64 PHP 8.2.12, OFAC SDN Aeza Group sanction July 2025 documents 5 unrelated actor ecosystems co-resident on Aeza. Below the IP a 3-way fanout splits into three cluster cards. Left card yellow side-rail: Cluster A, UTA-2026-008, BellaMain Turkish PhaaS, operator @AresRS34, developer Wadanz, PHP/MySQL panel plus 7 Turkish marketplace kits, payout TRX TRON, Turkish language, brand cryptone[.]bot fake exchange, distinct-actor MODERATE 75% and named-actor INSUFFICIENT. Middle card red side-rail: Cluster B, UTA-2026-009, Inkognito Russian VPN/phishing, parent brand Inkognito with sub-brands INK VPN INK Lens CryptOne, React/Vite SPA plus EspoCRM stack, payment SBP T-Pay card RU, Russian language, operator alias @inkconnectvpn, 2.5+ year continuous operation, distinct-actor MODERATE 78% and named-actor INSUFFICIENT. Right card highlighted with deep-red border and side-rail plus a star: Cluster C, PRIMARY, UTA-2026-010, Rhadamanthys MaaS customer, loader staticlittlesource.exe, canonical Stage-2, operator strings BombAUb23456 and others, InstallUtil.exe LOLBin, C2 79[.]133[.]180[.]168:3394 on Hostkey NL, English language, survived Operation Endgame November 2025, distinct-actor MODERATE 72% and named-actor INSUFFICIENT. Below the three clusters a grey side-rail band lists the 7 dimensions tested for cross-cluster operator overlap with zero overlap on any: Telegram identifiers, operator pseudonyms, registrar/DNS/SOA pattern, language artifacts, payment processors, malware family, production-C2 hosting provider; cross-cluster operational linkage rated LOW (actively rebutted, not absent). Footer cites the Tier-1 anchor that Aeza simultaneously hosted BianLian, RedLine, Lumma, Meduza, and BlackSprut as 5 unrelated actor ecosystems, and notes that the same exclusion logic applied to BriansClub and CRD Club and elon-merge[.]com on this same IP also returned separate-actor verdicts.">
   <figcaption><em>Figure 18: The three-cluster co-tenancy that defines this report's analytical contribution. The visual makes the headline argument scannable: the three operators share one IP (top yellow box) and nothing else (grey overlap-failure band). The OFAC Aeza Tier-1 anchor in the footer is what makes the LOW cross-cluster linkage a defensible position rather than an absence of evidence.</em></figcaption>
 </figure>
 
@@ -1035,7 +1035,7 @@ The detection file contains rules across three clusters and four detection-conte
 **Cluster A (BellaMain), MEDIUM PRIORITY:**
 
 1. **Web-server log hunt:** kit URI patterns `*/girislog.php`, `*/kartlaodeme.php`, `*/tgdekont.php`, `*/cekimbot.php`.
-2. **Network log hunt:** outbound HTTPS to `api.telegram.org` carrying bot ID `6797512084` (token revoked 2026-05-07; retroactive log analysis using the bot ID retains pivot value for identifying prior credential exfil traffic that predates revocation).
+2. **Network log hunt:** outbound HTTPS to `api[.]telegram[.]org` carrying bot ID `6797512084` (token revoked 2026-05-07; retroactive log analysis using the bot ID retains pivot value for identifying prior credential exfil traffic that predates revocation).
 3. **YARA scan:** BellaMain panel signature (Wadanz suffix on `sifreleWadanz`/`sifrecozWadanz` strings).
 
 **Cluster B (Inkognito), MEDIUM PRIORITY:**
