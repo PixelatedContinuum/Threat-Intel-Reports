@@ -4140,12 +4140,10 @@ span.hl-vuln__p--ssvc, span.hl-vuln__p--exp, span.hl-vuln__p--cn { cursor: help;
    375 px); the value cell may shrink below its content so it cannot push the popover off the screen. */
 .hl-vuln__vers { min-width: 0; }
 .hl-vuln__ver { display: inline-block; max-width: 100%; vertical-align: top; word-break: break-all; }
-/* The CVE record's first sentence, one line under the row on a wide screen (the full text is the
-   title attribute), two on a phone. It spans every grid column. */
-/* T-0522 Revision 3: why a CVEs row is listed, in plain words, as small tags on a line of their own
-   under the row. Each arm has its own colour; the two halves of the "critical, no login, product on
-   KEV" arm sit side by side. The legend uses the same classes on spans. */
-.hl-vuln__why { grid-column: 1 / -1; min-width: 0; display: flex; flex-wrap: wrap; gap: 0.3em; }
+/* T-0522 Revision 3, T-0531: why a CVEs row is listed, as small tags among the row's chips right
+   after the severity chip, where an nKEV row puts its CISA KEV badge, so both tabs read the same way.
+   Each arm has its own colour; the two halves of the "critical, no login, product on KEV" arm sit
+   side by side. The legend uses the same classes on spans. */
 .hl-vuln__w {
   font-size: 0.78em;
   padding: 0.05em 0.55em;
@@ -4163,15 +4161,6 @@ span.hl-vuln__p--ssvc, span.hl-vuln__p--exp, span.hl-vuln__p--cn { cursor: help;
 .hl-vuln__w--edb  { --w: #fbbf24; }
 .hl-vuln__w--epss { --w: #22d3ee; }
 .hl-legend__list dt .hl-vuln__w { font-size: 0.9em; }
-.hl-vuln__title {
-  grid-column: 1 / -1;
-  min-width: 0;
-  color: var(--hl-text-muted);
-  font-size: 0.92em;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
 
 /* --- The nKEVs legend (T-0468.1) ---------------------------------------
    Explains each chip, badge and filter of the tab. On a wide screen it is the report
@@ -4494,7 +4483,6 @@ span.hl-vuln__p--ssvc, span.hl-vuln__p--exp, span.hl-vuln__p--cn { cursor: help;
   .hl-vuln { grid-template-columns: minmax(0, 1fr); gap: 0.2em; padding: 0.55em 0.7em; }
   .hl-vuln__badges { justify-content: flex-start; }
   .hl-vuln__popbody { left: 0.7em; right: auto; }
-  .hl-vuln__title { white-space: normal; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
   /* T-0496: on a phone the chips wrap to a second line. T-0468 had them scroll
      sideways, which left chips (Rules among them) out of view on the rows with
      more chips than fit; a wrapped line shows every chip. Rows with few chips

@@ -1015,10 +1015,11 @@ function checkLegend(src) {
       interactive or countable (the nKEVs legend's rules, for its own capture).
    3. The public claims survive: the callout still says being listed is not evidence of
       exploitation, that the list is a selection, what it excludes and when a row moves to the nKEVs tab, that
-      Metasploit and Exploit-DB claims are confirmed against the publishers' indexes, that the SSVC
-      points are CISA's own assessment, and credits
-      cve.now with its licence; the attribution line above the filter bar names cve.now, FIRST and
-      the feed.
+      Metasploit and Exploit-DB claims are confirmed against the publishers' indexes, the cap and the
+      ranking; the attribution line above it (the callout's sources since T-0531, when the callout
+      was cut to the selection rule and its limits) says what cve.now supplies, that the SSVC points
+      are CISA's own assessment, the cve.now licence, where scores, exploits and KEV products come
+      from, and links cve.now, FIRST and the feed.
    4. Every data-driven value the tab draws is escaped (T-0407 found unescaped vendor and product
       text on the nKEV tab). Checked on the tab's own markup and the shared include that draws the
       cve.now chips: each {{ }} output either carries `escape` or is a number or literal the
@@ -1158,30 +1159,25 @@ function checkCvesTab(src, includes) {
   var callout = sec.match(/<div class="hl-wire__callout hl-wire__callout--c">[\s\S]*?<\/div>/);
   if (!callout) problems.push('the CVEs callout (hl-wire__callout--c) is missing');
   else {
-    [[/my selection/, 'that the list is my selection'],
+    [[/My selection/, 'that the list is my selection'],
      [/does not mean anyone has been seen exploiting/, 'that being listed is not evidence of exploitation'],
      [/excludes anything on VulnCheck KEV or CISA KEV/, 'that the list excludes anything on VulnCheck KEV or CISA KEV'],
-     [/is a fact about the product/, 'that "product on CISA KEV" is a fact about the product, not about the CVE'],
-     [/no login and no user action/, 'the plain-words rule for the critical arm'],
+     [/is a fact about the product, not this CVE/, 'that "product on CISA KEV" is a fact about the product, not about the CVE'],
+     [/over the network with no login and no user action/, 'the plain-words rule for the critical arm'],
+     [/in a product CISA has listed before/, 'the KEV-product half of the critical arm'],
      [/top 10%/, 'the EPSS arm in plain words'],
-     [/moves to the nKEVs tab when/, 'that a row moves to the nKEVs tab when its CVE is added'],
+     [/moves to the nKEVs tab when it is added to VulnCheck KEV/, 'that a row moves to the nKEVs tab when its CVE is added'],
      [/confirmed against Rapid7's or Exploit-DB's own index/, 'that Metasploit and Exploit-DB claims are confirmed against the publishers\' indexes'],
-     [/CISA's own assessment/, 'that the SSVC decision points are CISA\'s own assessment'],
      [/at most 50 CVEs/, 'that the list is capped at 50'],
-     [/ranked by how many reasons they meet, then by EPSS, then by CVSS/, 'how the 50 shown are ranked'],
-     [/fixed versions and advisory ids come from/, 'what cve.now supplies (listing, titles, SSVC, fixed versions, advisory ids)'],
-     [/NVD record through VulnCheck, mostly the CNA's score, unless the row says cve\.now/, 'that CVSS comes from the NVD record through VulnCheck unless the row says cve.now'],
-     [/Rapid7's and Exploit-DB's own indexes/, 'that Metasploit and Exploit-DB come from the publishers\' own indexes'],
-     [/from CISA's KEV catalog/, 'that "Product on CISA KEV" comes from CISA\'s KEV catalog'],
-     [/EPSS from FIRST/, 'that EPSS is FIRST\'s'],
-     [/cve\.now/, 'cve.now'], [/CC BY 4\.0/, 'the cve.now licence']].forEach(function (c) {
+     [/ranked by how many reasons they meet, then by EPSS, then by CVSS/, 'how the 50 shown are ranked']].forEach(function (c) {
       if (!c[0].test(callout[0])) problems.push('the CVEs callout no longer states ' + c[1]);
     });
   }
   var line = sec.match(/<p class="hl-wire__freshness hl-wire__freshness--c">[\s\S]*?<\/p>/);
   if (!line) problems.push('the short CVEs line (hl-wire__freshness--c) is missing');
   else {
-    [[/Listing, titles, SSVC, fixed versions and advisory ids from/, 'what cve.now supplies'],
+    [[/Listing, titles, SSVC \(CISA's own assessment\), fixed versions and advisory ids from/, 'what cve.now supplies and that SSVC is CISA\'s own assessment'],
+     [/CC BY 4\.0/, 'the cve.now licence'],
      [/Scores from NVD through VulnCheck, or from cve\.now where a row says so/, 'where the scores come from (NVD through VulnCheck, or cve.now where a row says so)'],
      [/Exploits from Rapid7 and Exploit-DB/, 'where the exploits come from'],
      [/KEV products from CISA/, 'where the KEV products come from']].forEach(function (c) {

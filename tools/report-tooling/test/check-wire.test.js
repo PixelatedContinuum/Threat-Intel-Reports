@@ -254,8 +254,8 @@ test('an undrawn fourth label needs no colour', function () {
 var CVES_TAB_OK = [
   '<a class="hl-wtabs__tab hl-wtabs__tab--c" href="#cves">CVEs</a>',
   '<section id="cves" class="hl-wtabs__sec" data-filter-scope>',
-  '<p class="hl-wire__freshness hl-wire__freshness--c">CVEs: Listing, titles, SSVC, fixed versions and advisory ids from <a href="https://cve.now/">cve.now</a> &middot; Scores from NVD through VulnCheck, or from cve.now where a row says so &middot; Exploits from Rapid7 and Exploit-DB &middot; KEV products from CISA &middot; EPSS from <a href="https://www.first.org/epss/">FIRST</a> &middot; <a href="{{ \'/wire/cves.xml\' | relative_url }}">Atom feed (CVEs)</a></p>',
-  '<div class="hl-wire__callout hl-wire__callout--c"><p>This list is my selection. A CVE is here when it is rated Critical, can be reached over the network with no login and no user action, and is in a product CISA has listed before. Each Metasploit or Exploit-DB claim is confirmed against Rapid7\'s or Exploit-DB\'s own index. Or EPSS puts it in the top 10%.</p><p>"Product on CISA KEV" is a fact about the product. Being here does not mean anyone has been seen exploiting the CVE. The list excludes anything on VulnCheck KEV or CISA KEV, and a row moves to the nKEVs tab when its CVE is added to VulnCheck KEV. The list shows at most 50 CVEs. When more qualify, the 50 shown are ranked by how many reasons they meet, then by EPSS, then by CVSS.</p><p>Listing, titles, SSVC (CISA\'s own assessment), fixed versions and advisory ids come from <a href="https://cve.now/">cve.now</a> (CC BY 4.0). CVSS scores and vectors come from the CVE\'s NVD record through VulnCheck, mostly the CNA\'s score, unless the row says cve.now. Metasploit and Exploit-DB entries come from Rapid7\'s and Exploit-DB\'s own indexes, "Product on CISA KEV" from CISA\'s KEV catalog, and EPSS from FIRST.</p></div>',
+  '<p class="hl-wire__freshness hl-wire__freshness--c">CVEs: Listing, titles, SSVC (CISA\'s own assessment), fixed versions and advisory ids from <a href="https://cve.now/">cve.now</a> (<a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>) &middot; Scores from NVD through VulnCheck, or from cve.now where a row says so &middot; Exploits from Rapid7 and Exploit-DB &middot; KEV products from CISA &middot; EPSS from <a href="https://www.first.org/epss/">FIRST</a> &middot; <a href="{{ \'/wire/cves.xml\' | relative_url }}">Atom feed (CVEs)</a></p>',
+  '<div class="hl-wire__callout hl-wire__callout--c"><p>My selection of CVEs published in the last 30 days that are not on a KEV list yet. Each is here for at least one of three reasons: Critical (CVSS 9.0 or higher), reachable over the network with no login and no user action, in a product CISA has listed before; a Metasploit module or Exploit-DB entry, confirmed against Rapid7\'s or Exploit-DB\'s own index; or EPSS in the top 10%.</p><p>Being listed does not mean anyone has been seen exploiting the CVE. "Product on CISA KEV" is a fact about the product, not this CVE. The list excludes anything on VulnCheck KEV or CISA KEV, and a CVE moves to the nKEVs tab when it is added to VulnCheck KEV. It shows at most 50 CVEs, ranked by how many reasons they meet, then by EPSS, then by CVSS.</p></div>',
   '{%- capture cves_legend_html -%}',
   '<dl class="hl-legend__list"><dt><span class="hl-vuln__cve">CVE-YYYY-NNNN</span></dt><dd>The CVE.</dd></dl>',
   '<p class="hl-legend__p">I choose which CVEs appear here, by the rule above, and show at most 50. When more qualify, the 50 shown are ranked by how many reasons they meet, then by EPSS, then by CVSS.</p>',
@@ -1171,14 +1171,15 @@ test('a page with no CVEs section, no tab link, or a section outside the filter 
 });
 
 test('the callout losing a public claim is caught, claim by claim', function () {
-  [["my selection", /my selection/], ["does not mean anyone has been seen exploiting", /not evidence of exploitation/],
+  [["My selection", /my selection/], ["does not mean anyone has been seen exploiting", /not evidence of exploitation/],
    ["excludes anything on VulnCheck KEV or CISA KEV", /excludes anything on VulnCheck KEV or CISA KEV/],
    ["moves to the nKEVs tab when", /moves to the nKEVs tab/],
    ["is a fact about the product", /fact about the product/],
    ["no login and no user action", /plain-words rule for the critical arm/],
+   ["in a product CISA has listed before", /KEV-product half of the critical arm/],
    ["top 10%", /EPSS arm in plain words/],
    ["confirmed against Rapid7's or Exploit-DB's own index", /confirmed against the publishers/],
-   ["CISA's own assessment", /CISA's own assessment/], ["(CC BY 4.0)", /licence/]].forEach(function (c) {
+   ["(CISA's own assessment)", /CISA's own assessment/], [">CC BY 4.0<", /licence/]].forEach(function (c) {
     assert.ok(PAGE_OK.indexOf(c[0]) > -1, 'stub lacks ' + c[0]);
     var r = CW.checkPage(PAGE_OK.replace(c[0], 'XX'), INCLUDES_OK);
     assert.equal(r.status, 'FAIL', c[0]);
@@ -1192,7 +1193,7 @@ test('any mention of a GitHub proof of concept on the page or in the include is 
   var page = CW.checkPage(PAGE_OK.replace('<dd>The CVE.</dd>', '<dd>Counts GitHub PoC repositories.</dd>'), INCLUDES_OK);
   assert.equal(page.status, 'FAIL');
   assert.match(page.problems.join(' '), /the page mentions a GitHub proof of concept/);
-  var prose = CW.checkPage(PAGE_OK.replace('This list is my selection.', 'This list is my selection. I count every proof of concept.'), INCLUDES_OK);
+  var prose = CW.checkPage(PAGE_OK.replace('not on a KEV list yet.', 'not on a KEV list yet. I count every proof of concept.'), INCLUDES_OK);
   assert.match(prose.problems.join(' '), /the page mentions a GitHub proof of concept/);
   var inc = CW.checkPage(PAGE_OK, { 'wire-vuln-new.html': INC_OK + '\n<span>{{ poc_n }} public repositories</span>' });
   assert.match(inc.problems.join(' '), /wire-vuln-new\.html mentions a GitHub proof of concept/);
@@ -1339,15 +1340,10 @@ test('cvss_vector, kev_product and kev_product_n are held to their shapes', func
 test('each corrected attribution sentence is pinned: callout, short line and legend, claim by claim', function () {
   var pins = [
     // callout
-    ["The list shows at most 50 CVEs.", /capped at 50/],
-    ["ranked by how many reasons they meet, then by EPSS, then by CVSS.</p><p>Listing", /how the 50 shown are ranked/],
-    ["fixed versions and advisory ids come from <a href=\"https://cve.now/\">cve.now</a> (CC BY 4.0). CVSS", /what cve\.now supplies/],
-    ["NVD record through VulnCheck, mostly the CNA's score, unless the row says cve.now. Metasploit and Exploit-DB entries", /CVSS comes from the NVD record through VulnCheck/],
-    ["Metasploit and Exploit-DB entries come from Rapid7's and Exploit-DB's own indexes", /Metasploit and Exploit-DB come from the publishers/],
-    ["from CISA's KEV catalog, and EPSS from FIRST.", /comes from CISA's KEV catalog/],
-    ["and EPSS from FIRST.</p></div>", /EPSS is FIRST's/],
+    ["It shows at most 50 CVEs,", /capped at 50/],
+    ["CVEs, ranked by how many reasons they meet", /how the 50 shown are ranked/],
     // short line
-    ["Listing, titles, SSVC, fixed versions and advisory ids from <a href=\"https://cve.now/\">cve.now</a>", /short CVEs line no longer says what cve\.now supplies/],
+    ["Listing, titles, SSVC (CISA's own assessment), fixed versions and advisory ids from <a href=\"https://cve.now/\">cve.now</a>", /short CVEs line no longer says what cve\.now supplies/],
     ["Scores from NVD through VulnCheck, or from cve.now where a row says so", /short CVEs line no longer says where the scores come from/],
     ["Exploits from Rapid7 and Exploit-DB", /short CVEs line no longer says where the exploits come from/],
     ["KEV products from CISA", /short CVEs line no longer says where the KEV products come from/],
@@ -1370,7 +1366,7 @@ test('each corrected attribution sentence is pinned: callout, short line and leg
 test('a sentence saying cve.now carries Metasploit or Exploit-DB data is caught anywhere on the page', function () {
   var wrong = [
     ['<dd>The CVE.</dd>', '<dd>cve.now (CC BY 4.0), which carries the Metasploit Framework module list and Exploit-DB.</dd>'],
-    ['This list is my selection.', 'This list is my selection. cve.now carries the Exploit-DB list.']
+    ['not on a KEV list yet.', 'not on a KEV list yet. cve.now carries the Exploit-DB list.']
   ];
   wrong.forEach(function (w) {
     var r = CW.checkPage(PAGE_OK.replace(w[0], w[1]), INCLUDES_OK);
@@ -1441,7 +1437,7 @@ test('an include may build only its own link targets, and one that builds none m
 });
 
 test('the CVEs tab says nothing that makes a rule admit a CVE (Revision 3: Rules never admit a row)', function () {
-  var bad = CW.checkPage(PAGE_OK.replace('This list is my selection.', 'This list is my selection. A CVE can be listed when a public rule or a high EPSS percentile admitted it.'), INCLUDES_OK);
+  var bad = CW.checkPage(PAGE_OK.replace('not on a KEV list yet.', 'not on a KEV list yet. A CVE can be listed when a public rule or a high EPSS percentile admitted it.'), INCLUDES_OK);
   assert.equal(bad.status, 'FAIL');
   assert.match(bad.problems.join(' '), /says a rule admits a CVE/);
   var real = readReal('wire/index.md').replace("when one of the other reasons on its row admitted it", "when a public rule or a high EPSS percentile admitted it");
