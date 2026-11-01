@@ -20,6 +20,11 @@ var INCLUDES = path.join(ROOT, '_includes');
 var SCSS = path.join(ROOT, 'assets', 'css', 'custom.scss');
 var FEED = path.join(ROOT, 'wire', 'cves.xml');
 var VULNS_FEED = path.join(ROOT, 'wire', 'vulns.xml');
+// T-0532 part S: the Details file page pair, the row include they share, the renderer.
+var DETAILS_NKEV = path.join(ROOT, 'wire', 'details-nkev.json');
+var DETAILS_CVES = path.join(ROOT, 'wire', 'details-cves.json');
+var DETAILS_ROW_INCLUDE = path.join(ROOT, '_includes', 'wire-details-row.html');
+var DETAILS_JS = path.join(ROOT, 'assets', 'js', 'wire-details.js');
 
 var yaml, CW;
 try {
@@ -153,7 +158,34 @@ console.log(tc.status + '  ' + SCSS + (tc.status === 'PASS' ? '  (every tab-hidi
 if (tc.reason) console.log('   ' + tc.reason);
 tc.problems.forEach(function (x) { console.log('   FAIL  ' + x); });
 
-if (r.status === 'PASS' && p.status === 'PASS' && tc.status === 'PASS' && fd.status === 'PASS' && fvn.status === 'PASS') process.exit(0);
+/* The Details surface (T-0532 part S): the two JSON pages and the row include they
+   share are held to jsonify for every value; the renderer to no markup sink; the
+   page to the toggles, the wrapper and the versioned data-details URLs. */
+function readOr(pathF) {
+  try { return fs.readFileSync(pathF, 'utf8'); } catch (e) { return null; }
+}
+var detailsChecks = [
+  ['wire/details-nkev.json', CW.checkDetailsJsonPage(readOr(DETAILS_NKEV)), '(every value emitted through jsonify)'],
+  ['wire/details-cves.json', CW.checkDetailsJsonPage(readOr(DETAILS_CVES)), '(every value emitted through jsonify)'],
+  ['_includes/wire-details-row.html', CW.checkDetailsJsonPage(readOr(DETAILS_ROW_INCLUDE)), '(every value emitted through jsonify)'],
+  ['assets/js/wire-details.js', CW.checkDetailsScript(readOr(DETAILS_JS)), '(text nodes and validated hrefs only)'],
+  ['page: Details structure', CW.checkDetailsPage(pageSrc), '(three toggles, the wrapper filter item, versioned data-details)']
+];
+var anyNotChecked = false;
+var anyDetailsFail = false;
+detailsChecks.forEach(function (c) {
+  console.log(c[1].status + '  ' + c[0] + (c[1].status === 'PASS' ? '  ' + c[2] : ''));
+  if (c[1].reason) console.log('   ' + c[1].reason);
+  c[1].problems.forEach(function (x) { console.log('   FAIL  ' + x); });
+  if (c[1].status === 'FAIL') anyDetailsFail = true;
+  if (c[1].status === 'NOT CHECKED') anyNotChecked = true;
+});
+
+if (r.status === 'PASS' && p.status === 'PASS' && tc.status === 'PASS' && fd.status === 'PASS' && fvn.status === 'PASS' &&
+    !anyDetailsFail) {
+  if (anyNotChecked) process.exit(2);
+  process.exit(0);
+}
 // A page-side FAIL starts with "FAIL  <path>" in the log, which pages.yml reads as a bug on main.
 if (r.status === 'FAIL' || p.status === 'FAIL' || tc.status === 'FAIL' || fd.status === 'FAIL' || fvn.status === 'FAIL') process.exit(1);
 // NOT CHECKED on the page or the CSS alone is not a pass, and is not a FAIL either.

@@ -1396,18 +1396,28 @@ function readReal(rel) {
 }
 
 test('the gate follows the include chain: every wire-* include the page names is read, the real six pass', function () {
+  /* T-0532 adds wire-details-row.html, which the Details JSON pages include for
+     themselves (its escaping is their check, not this one); the chain the PAGE
+     names stays the six below. */
+  var rowInc = 'wire-details-row.html';
   var inc = realIncludes();
-  assert.deepEqual(Object.keys(inc).sort(), ['wire-cve-why.html', 'wire-vuln-epss.html', 'wire-vuln-new.html', 'wire-vuln-news.html', 'wire-vuln-rules.html', 'wire-vuln-sev.html']);
+  assert.deepEqual(Object.keys(inc).sort(),
+    ['wire-cve-why.html', rowInc, 'wire-vuln-epss.html', 'wire-vuln-new.html',
+     'wire-vuln-news.html', 'wire-vuln-rules.html', 'wire-vuln-sev.html']);
   var page = readReal('wire/index.md');
   var r = CW.checkPage(page, inc);
   assert.equal(r.status, 'PASS', r.problems.join(' | '));
   // an include the page names but the caller did not supply is NOT CHECKED, never a pass
-  Object.keys(inc).forEach(function (name) {
+  ['wire-cve-why.html', 'wire-vuln-epss.html', 'wire-vuln-new.html',
+   'wire-vuln-news.html', 'wire-vuln-rules.html', 'wire-vuln-sev.html'].forEach(function (name) {
     var some = Object.assign({}, inc); delete some[name];
     var x = CW.checkPage(page, some);
     assert.equal(x.status, 'FAIL', name);
     assert.match(x.problems.join(' '), new RegExp('NOT CHECKED: _includes/' + name.replace(/\./g, '\\.') + ' could not be read'));
   });
+  // the Details row include is not in the page's chain, so it may sit outside this map
+  var withoutRow = Object.assign({}, inc); delete withoutRow[rowInc];
+  assert.equal(CW.checkPage(page, withoutRow).status, 'PASS');
 });
 
 test('one escaping mutation per include, and one PoC mutation per include, each fails the page gate', function () {

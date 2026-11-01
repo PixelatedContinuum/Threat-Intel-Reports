@@ -156,6 +156,7 @@ function controlProblems(o, prefix, out) {
 }
 function nkevProblems(r) {
   var out = controlProblems(r, '', []);
+  out = out.concat(detailsFieldProblems(r));
   var has = hasKey(r, 'disclosed') || hasKey(r, 'gap');
   if (hasKey(r, 'disclosed') !== hasKey(r, 'gap')) out.push('carries only one of disclosed and gap');
   if (hasKey(r, 'disclosed') && !isEmpty(r.disclosed) && isNaN(realDay(r.disclosed))) {
@@ -273,6 +274,63 @@ function cvenowProblems(r) {
   if (hasKey(r, 'kev_due') && !isEmpty(r.kev_due) && isNaN(realDay(r.kev_due))) {
     out.push('has kev_due ' + JSON.stringify(r.kev_due) + ', not empty or a real day');
   }
+  return out;
+}
+
+/* T-0532: the fields part E of the task adds, on either tab's rows: the Details fact
+   sheet prints or links them, so each holds the exporter's shape (design section 5).
+   `desc` is the CVE record's English description, capped at 3,000 characters; `cwe` a
+   list of at most five CWE ids; `affected` at most six affected-version lines, each at
+   most 160 characters. Control characters in any of them are caught by
+   controlProblems, which already runs over the whole row. A row that carries none of
+   the new keys checks clean: a wire.yml written before part E is valid input. */
+var DESC_MAX_LEN = 3000;
+var CWE_SHAPE = /^CWE-\d+$/;
+var CWE_MAX = 5;
+var AFFECTED_MAX = 6;
+var AFFECTED_ITEM_MAX = 160;
+function briefly(v) {
+  var t = JSON.stringify(v);
+  return t.length > 80 ? t.slice(0, 77) + '...' : t;
+}
+function detailsFieldProblems(r) {
+  var out = [];
+  if (hasKey(r, 'desc') && !isEmpty(r.desc) &&
+      !(typeof r.desc === 'string' && r.desc.length <= DESC_MAX_LEN && r.desc.trim() !== '')) {
+    out.push('has desc ' + briefly(r.desc) + ', not empty or text up to ' + DESC_MAX_LEN + ' characters');
+  }
+  if (hasKey(r, 'cwe')) {
+    if (!Array.isArray(r.cwe)) out.push('has cwe that is not a list');
+    else {
+      if (r.cwe.length > CWE_MAX) out.push('has ' + r.cwe.length + ' cwe entries, over ' + CWE_MAX);
+      r.cwe.forEach(function (x) {
+        if (typeof x !== 'string' || !CWE_SHAPE.test(x)) {
+          out.push('has a cwe entry ' + briefly(x) + ', not a CWE id');
+        }
+      });
+    }
+  }
+  if (hasKey(r, 'affected')) {
+    if (!Array.isArray(r.affected)) out.push('has affected that is not a list');
+    else {
+      if (r.affected.length > AFFECTED_MAX) {
+        out.push('has ' + r.affected.length + ' affected entries, over ' + AFFECTED_MAX);
+      }
+      r.affected.forEach(function (x) {
+        if (typeof x !== 'string' || !x.trim() || x.length > AFFECTED_ITEM_MAX) {
+          out.push('has an affected entry ' + briefly(x) + ', not text up to ' +
+            AFFECTED_ITEM_MAX + ' characters');
+        }
+      });
+    }
+  }
+  /* The vector the score came from, on nKEV rows as well now (the CVEs tab carried
+     it from T-0522). */
+  if (hasKey(r, 'cvss_vector') && !isEmpty(r.cvss_vector) &&
+      !(typeof r.cvss_vector === 'string' && r.cvss_vector.length <= 120 && CVSS_VECTOR.test(r.cvss_vector))) {
+    out.push('has cvss_vector ' + briefly(r.cvss_vector) + ', not empty or a CVSS vector');
+  }
+  if (!isEmpty(r.cvss_vector) && isEmpty(r.cvss)) out.push('has a cvss_vector but no cvss');
   return out;
 }
 
@@ -550,11 +608,6 @@ function checkCves(doc, now) {
     pointerProblems(r).forEach(function (p) { warnings.push(where + ' ' + p); });
     nkevProblems(r).forEach(function (p) { warnings.push(where + ' ' + p); });
     cvenowProblems(r).forEach(function (p) { warnings.push(where + ' ' + p); });
-    if (hasKey(r, 'cvss_vector') && !isEmpty(r.cvss_vector) &&
-        !(typeof r.cvss_vector === 'string' && r.cvss_vector.length <= 120 && CVSS_VECTOR.test(r.cvss_vector))) {
-      warnings.push(where + ' has cvss_vector ' + JSON.stringify(r.cvss_vector) + ', not empty or a CVSS vector');
-    }
-    if (!isEmpty(r.cvss_vector) && isEmpty(r.cvss)) warnings.push(where + ' has a cvss_vector but no cvss');
     if (hasKey(r, 'kev_product') && !isEmpty(r.kev_product) && !(typeof r.kev_product === 'string' && r.kev_product.length <= 120)) {
       warnings.push(where + ' has a kev_product that is not short text');
     }
@@ -1148,7 +1201,7 @@ function checkCvesTab(src, includes) {
   }
   var secEnd = src.indexOf('</section>', open);
   var sec = src.slice(open, secEnd < 0 ? src.length : secEnd);
-  if (!/<section id="cves" class="hl-wtabs__sec" data-filter-scope>/.test(src)) {
+  if (!/<section id="cves" class="hl-wtabs__sec" data-filter-scope[\s>]/.test(src)) {
     problems.push('the CVEs section lost its hl-wtabs__sec class or data-filter-scope, so the tab CSS or its own filter bar would not find it');
   }
   if (!/<a class="hl-wtabs__tab hl-wtabs__tab--c" href="#cves"/.test(src)) {
@@ -1389,5 +1442,123 @@ function checkTabCss(scss) {
   return verdict(problems.length ? 'FAIL' : 'PASS', null, problems, [], { hides: hides });
 }
 
-module.exports = { check: check, checkPage: checkPage, checkTabCss: checkTabCss, checkCvesFeed: checkCvesFeed, checkVulnsFeed: checkVulnsFeed, checkTabNav: checkTabNav, STALE_HOURS: STALE_HOURS,
+/* T-0532 part S: the Details dropdown, as structure. The guarantees the gates and the
+   tests below cannot see some other way:
+
+   1. The two JSON pages (and the row include they share) emit every value through
+      | jsonify: no raw {{ r.x }} output reaches a file a reader can fetch.
+   2. wire-details.js contains no markup-injection sink at all: panels are built with
+      createElement and set text only through textContent, so a value that sneaks
+      through the JSON pages' validation cannot become markup.
+   3. All three row templates carry the server-rendered toggle, exactly the markup
+      design section 6 fixes (hidden until the script removes it).
+   4. The headlines grid's filter item is the wrapper (data-filter-item=".hl-wire__row"),
+      and no grid still names the old ".hl-wire__item": the wrapper is what the filter
+      shows and hides, so a hidden row takes its panel with it.
+   5. Both tab sections carry a versioned data-details URL, and the renderer loads
+      deferred, after listing-filter.js, with a cache-bust of its own.
+
+   Each of these functions takes the file text, or null when unreadable, which is
+   NOT CHECKED, said in a problem line, never a pass. */
+var DETAILS_TOGGLE = /<button type="button" class="hl-dt" aria-expanded="false" hidden>Details<\/button>/;
+var DETAILS_SINK = /innerHTML|outerHTML|insertAdjacentHTML|document\.write|(?:^|[^A-Za-z$_.])eval\s*\(/;
+function lineWith(src, needle) {
+  var lines = src.split('\n');
+  for (var i = 0; i < lines.length; i++) {
+    if (lines[i].indexOf(needle) !== -1) { return lines[i]; }
+  }
+  return null;
+}
+function checkDetailsScript(src) {
+  if (!src) {
+    return verdict('NOT CHECKED', 'assets/js/wire-details.js is absent or unreadable, so the no-markup rule was not verified.');
+  }
+  var m = src.match(DETAILS_SINK);
+  if (m) {
+    return verdict('FAIL', null, [
+      JSON.stringify(m[0]) + ' in wire-details.js. The Details renderer builds elements only ' +
+      'with createElement, sets text only through textContent, and never hands the browser a ' +
+      'markup string or reads a markup property.'], [], null);
+  }
+  return verdict('PASS', null, [], [], null);
+}
+function checkDetailsJsonPage(src) {
+  if (!src) {
+    return verdict('NOT CHECKED', 'the Details details JSON page is absent or unreadable, so its escaping was not verified.');
+  }
+  var body = src.replace(/^---\n[\s\S]*?\n---\n?/, '')
+    .replace(/\{%-?\s*comment\s*-?%\}[\s\S]*?\{%-?\s*endcomment\s*-?%\}/g, '')
+    .replace(/\{%\s*comment\s*%\}[\s\S]*?\{%\s*endcomment\s*%\}/g, '');
+  var problems = [];
+  (body.match(/\{\{-?[\s\S]*?-?\}\}/g) || []).forEach(function (m) {
+    var inner = m.replace(/^\{\{-?\s*/, '').replace(/\s*-?\}\}$/, '');
+    if (!/\|\s*jsonify\s*$/.test(inner)) {
+      problems.push('a Details JSON page prints ' + m + ' without | jsonify. Every value in ' +
+        'wire/details-nkev.json and wire/details-cves.json (and the row include they share) ' +
+        'must be emitted through jsonify, or a value holding a quote or a backslash changes the JSON shape.');
+    }
+  });
+  return verdict(problems.length ? 'FAIL' : 'PASS', null, problems, [], null);
+}
+function checkDetailsPage(src) {
+  if (!src) {
+    return verdict('NOT CHECKED', 'wire/index.md is absent or unreadable, so the Details dropdown structure was not verified.');
+  }
+  var problems = [];
+  // 3. the three row templates carry the toggle
+  var nToggles = src.split(DETAILS_TOGGLE).length - 1;
+  if (nToggles !== 3) {
+    problems.push('the Details toggle markup appears ' + nToggles + ' time(s), expected 3: one in ' +
+      'the headline wrapper, one in the nKEV row template, one in the CVEs row template');
+  }
+  var nkevSlice = (src.match(/\{%-?\s*for r in wire\.vulns -?%\}[\s\S]*?\{%-?\s*endfor\s*-?%\}\s*<\/div>/) || [''])[0];
+  if (!nkevSlice) {
+    problems.push('could not find the nKEV row template (for r in wire.vulns), so its Details toggle could not be verified');
+  } else if (!DETAILS_TOGGLE.test(nkevSlice)) {
+    problems.push('the nKEV row template carries no Details toggle');
+  }
+  var cvesLine = lineWith(src, 'hl-vuln hl-vuln--cve');
+  if (!cvesLine) {
+    problems.push('could not find the CVEs row template line (the hl-vuln--cve row), so its Details toggle could not be verified');
+  } else if (!DETAILS_TOGGLE.test(cvesLine)) {
+    problems.push('the CVEs row template carries no Details toggle');
+  }
+  var headLine = lineWith(src, 'class="hl-wire__row"');
+  if (!headLine) {
+    problems.push('no headline row wrapper (hl-wire__row) is in the page, so the toggle and the filter item pattern cannot be verified');
+  } else if (!DETAILS_TOGGLE.test(headLine)) {
+    problems.push('the headline row wrapper carries no Details toggle');
+  }
+  // 4. the headlines grid's filter item is the wrapper
+  if (src.indexOf('data-filter-item=".hl-wire__row"') === -1) {
+    problems.push('the headlines grid names no wrapper (data-filter-item=".hl-wire__row"), so the filter would show or hide the anchor and leave its Details panel on the other side of it');
+  }
+  if (src.indexOf('data-filter-item=".hl-wire__item"') !== -1) {
+    problems.push('a grid still names data-filter-item=".hl-wire__item", which the Details restructure replaced with the wrapper');
+  }
+  // 5. versioned data-details on both sections, the renderer deferred after the filter
+  ['vulns', 'cves'].forEach(function (id) {
+    var secOpen = lineWith(src, '<section id="' + id + '"');
+    if (!secOpen) { problems.push('the ' + id + ' section tag is missing'); return; }
+    if (!/data-details="[^"]+\?v=[^"]*"/.test(secOpen)) {
+      problems.push('the ' + id + ' section carries no versioned data-details URL (?v=), so a ' +
+        'browser could pair one build\u2019s page with another build\u2019s details file');
+    }
+  });
+  var filterAt = src.indexOf('listing-filter.js');
+  var detailsAt = src.indexOf('wire-details.js');
+  if (detailsAt === -1) {
+    problems.push('the page loads no wire-details.js, so no Details toggle could remove hidden or build a panel');
+  } else {
+    if (filterAt > -1 && detailsAt < filterAt) {
+      problems.push('wire-details.js loads before listing-filter.js: the filter module must come first');
+    }
+    if (!/<script defer src="\{\{-?\s*'\/assets\/js\/wire-details\.js'\s*\|\s*relative_url\s*-?\}\}\?v=\d+"/.test(src)) {
+      problems.push('the wire-details.js tag is not the deferred, versioned form the Details toggle relies on (script defer, ?v= number)');
+    }
+  }
+  return verdict(problems.length ? 'FAIL' : 'PASS', null, problems, [], null);
+}
+
+module.exports = { check: check, checkPage: checkPage, checkTabCss: checkTabCss, checkCvesFeed: checkCvesFeed, checkVulnsFeed: checkVulnsFeed, checkTabNav: checkTabNav, checkDetailsPage: checkDetailsPage, checkDetailsScript: checkDetailsScript, checkDetailsJsonPage: checkDetailsJsonPage, STALE_HOURS: STALE_HOURS,
   VULNS_STALE_HOURS: VULNS_STALE_HOURS };
