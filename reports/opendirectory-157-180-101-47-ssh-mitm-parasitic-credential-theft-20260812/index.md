@@ -50,7 +50,7 @@ figure_nav:
         anchor: "#the-host-anchors-cheapest-first"
 ---
 
-**Campaign Identifier:** SSHInterception-ParasiticCredentialTheft-157.180.101.47<br>
+**Campaign Identifier:** SSHInterception-ParasiticCredentialTheft-157[.]180[.]101[.]47<br>
 **Last Updated:** August 12, 2026<br>
 **Threat Level:** HIGH
 
@@ -330,7 +330,7 @@ Withdrawal is as engineered as deployment. The stop script kills the three proce
 ```bash
 # 1. snapshot for later restoration
 IPT_BAK="${IPT_BAK:-/dev/shm/.ipt.bak}"
-[ -f "$IPT_BAK" ] || iptables-save > "$IPT_BAK"
+[ -f "$IPT_BAK" ] || [i]ptables-save > "$IPT_BAK"
 
 # 2. exempt the MITM's own upstream connections  (ASCII "MITM")
 iptables -t nat -I OUTPUT 1 -m mark --mark 0x4D49544D -j RETURN
@@ -354,7 +354,7 @@ A live relay's own startup output confirms the sequence end to end, recorded on 
 [+] ipset mitm_exclude готов, RETURN-правило перед REDIRECT
 [+] iptables: OUTPUT all-procs ports=22 (except localhost) → :19923
 [+] MITM PID=969 port=19923
-[+] Exclude puller PID=1160 → https://46.4.68.89:8444/excludes
+[+] Exclude puller PID=1160 → hxxps://46[.]4[.]68[.]89:8444/excludes
 ```
 
 #### The tmpfs artifact map
@@ -373,7 +373,7 @@ A live relay's own startup output confirms the sequence end to end, recorded on 
 The self-wipe is the last line of the run script:
 
 ```bash
-(sleep 3 && find "$SCRIPT_DIR" -mindepth 1 ! -name stop.sh -delete) &
+([s]leep 3 && find "$SCRIPT_DIR" -mindepth 1 ! -name stop.sh -delete) &
 ```
 
 This was observed in the act rather than only inferred from source. A captured directory listing of a live relay on 2026-07-24 shows the full staging set present (`run_local_debug.sh` at 8,042 bytes, `mitm_local.py` at 32,203, `stop.sh` at 5,284, `blocklist.txt` at 338,456, `payload_user.pl` at 598, `exclude_puller.py` at 4,042, `sniffer.py` at 17,039, `payload.pl` at 597) and then, after the stop script runs, the same listing with only `stop.sh` remaining. The password blocklist lives inside the staging directory and is deleted along with everything else, harmlessly, because it is read into a set at construction.
@@ -381,21 +381,21 @@ This was observed in the act rather than only inferred from source. A captured d
 #### The three processes
 
 ```
-python3 -u mitm_local.py                                  # comm set to [kworker/2:0H]
-python3 -u sniffer.py --iface <if> --mitm-port 19923 \
+[p]ython3 -u mitm_local.py                                  # comm set to [kworker/2:0H]
+[p]ython3 -u sniffer.py --iface <if> --mitm-port 19923 \
         --skip-ports 22 --own-ips <ip> --output-only --backend auto
-python3 -u exclude_puller.py                              # 600-second default interval
+[p]ython3 -u exclude_puller.py                              # 600-second default interval
 ```
 
 All three launch via `nohup env …` with `ulimit -n 65535`, double-fork to daemonise, and set their process name to a kernel worker thread. Both `kworker/2:0H` and `kworker/2:1H` appear in the evidence and both should be hunted.
 
-One incidental network artifact fires at process start. The interceptor determines its own address by opening a socket to `8.8.8.8:80` and reading the local end of it. On its own that means nothing. Combined with the process indicators above it is corroborating.
+One incidental network artifact fires at process start. The interceptor determines its own address by opening a socket to `8[.]8[.]8[.]8:80` and reading the local end of it. On its own that means nothing. Combined with the process indicators above it is corroborating.
 
 #### The one non-fileless step
 
 ```bash
-python3 -c "import paramiko" || pip3 install paramiko --break-system-packages -q
-command -v ipset || apt-get install -y ipset || yum install -y ipset
+[p]ython3 -c "import paramiko" || pip3 install paramiko --break-system-packages -q
+[c]ommand -v ipset || apt-get install -y ipset || yum install -y ipset
 ```
 
 </details>
@@ -552,12 +552,12 @@ This is not a bulletproof-hosting operation, and reputation feeds are literally 
 
 | Address | Provider | Role |
 |---|---|---|
-| `157.180.101.47` | Hetzner, AS24940 | Development and staging box. The open directory that exposed the whole operation |
-| `46.4.68.89` | Hetzner, AS24940 | Production receiver. Confirmed by four independent routes |
-| `167.233.127.124` | Hetzner, AS24940 | Test bench and SOCKS5 pivot on port 1080 |
-| `37.221.64.100` | AlexHost, AS200019 | Operator-owned relay, contributing 467 of the 3,166 lines in the 06-24 burst |
-| `45.32.158.85` | Vultr, AS20473 | Disposable test box, appearing as both relay and target in his own tests |
-| `185.93.104.193` | Scalaxy, AS58061 | Command-and-control for the separate key-authorization workstream |
+| `157[.]180[.]101[.]47` | Hetzner, AS24940 | Development and staging box. The open directory that exposed the whole operation |
+| `46[.]4[.]68[.]89` | Hetzner, AS24940 | Production receiver. Confirmed by four independent routes |
+| `167[.]233[.]127[.]124` | Hetzner, AS24940 | Test bench and SOCKS5 pivot on port 1080 |
+| `37[.]221[.]64[.]100` | AlexHost, AS200019 | Operator-owned relay, contributing 467 of the 3,166 lines in the 06-24 burst |
+| `45[.]32[.]158[.]85` | Vultr, AS20473 | Disposable test box, appearing as both relay and target in his own tests |
+| `185[.]93[.]104[.]193` | Scalaxy, AS58061 | Command-and-control for the separate key-authorization workstream |
 | `127.0.0.1` | | Loopback, recorded as a relay value in his own local tests and listed only so it is not mistaken for a victim |
 
 *This table is oriented for reading. The same seven addresses, alongside the hashes and other indicators, are in the [IOC feed](/ioc-feeds/opendirectory-157-180-101-47-ssh-mitm-parasitic-credential-theft-20260812-iocs.json) in machine-readable form (Section 14).*
