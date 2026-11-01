@@ -26,9 +26,9 @@ detection_sections:
   - label: "Coverage Gaps"
     anchor: "#coverage-gaps"
 ioc_highlights:
-  - value: "13.140.145[.]210"
+  - value: "13[.]140[.]145[.]210"
     note: "Operator VPS, Contabo AS51167, France"
-  - value: "95.214.114[.]37"
+  - value: "95[.]214[.]114[.]37"
     note: "Operator VPN egress seen in the victim log"
   - value: "radius-sync[.]com"
     note: "Operator domain impersonating telecom AAA"
@@ -65,7 +65,7 @@ figure_nav:
         anchor: "#83-where-the-data-went-is-unknown-and-that-is-a-real-finding"
 ---
 
-**Campaign Identifier:** WebLogicDeserialization-TelecomHarvester-13.140.145.210<br>
+**Campaign Identifier:** WebLogicDeserialization-TelecomHarvester-13[.]140[.]145[.]210<br>
 **Last Updated:** September 1, 2026<br>
 **Threat Level:** HIGH
 
@@ -81,7 +81,7 @@ That is the whole point of this case. The printing company was the route. The ca
 
 The anchor is a receipt, not an inference. On 2026-07-24 the victim router uploaded **424,946,514 bytes across 100 HTTP PUTs**, and it was the router itself making those requests, with `User-Agent: cisco-IOS` on every one. That total breaks down as the full 355,970,456-byte IOS-XE firmware image, 65 unique nginx core dumps, 3 ad-hoc core pulls and 19 configuration pulls including `cwmp_inventory`, the device's TR-069 provisioning record. All of it landed in the operator's own listener log, which two independent captures of the operator's exposed working directory later recovered. I claim compromise here because the evidence is victim-side, not because a script would have printed success if it worked.
 
-The rest of the campaign is broader than that one router. I recovered **169 unique operator files**, SHA256-verified, from a directory-listing web server the operator left open on the public internet at `13.140.145[.]210:8888`. Inside sit a hand-written Oracle WebLogic T3 and JNDI exploitation suite, a from-scratch four-mode LDAP exploitation server, a Cisco-shaped multi-port capture rig, tunnelling and post-exploitation scripts, three bespoke credential wordlists totalling roughly 2.7 MB, a userland rootkit's originals-backup, and the operator's own run logs. Beyond the router, a host inside Ecuador's state telecom reached out and pulled the operator's tunnelling client from their staging server, which is a confirmed internal foothold in a national carrier. A WebLogic attack against a municipal government application failed outright. A monitoring-server credential harvest, a Windows post-exploitation chain and the rootkit install are all built, targeted and staged, with no captured victim-side outcome.
+The rest of the campaign is broader than that one router. I recovered **169 unique operator files**, SHA256-verified, from a directory-listing web server the operator left open on the public internet at `13[.]140[.]145[.]210:8888`. Inside sit a hand-written Oracle WebLogic T3 and JNDI exploitation suite, a from-scratch four-mode LDAP exploitation server, a Cisco-shaped multi-port capture rig, tunnelling and post-exploitation scripts, three bespoke credential wordlists totalling roughly 2.7 MB, a userland rootkit's originals-backup, and the operator's own run logs. Beyond the router, a host inside Ecuador's state telecom reached out and pulled the operator's tunnelling client from their staging server, which is a confirmed internal foothold in a national carrier. A WebLogic attack against a municipal government application failed outright. A monitoring-server credential harvest, a Windows post-exploitation chain and the rootkit install are all built, targeted and staged, with no captured victim-side outcome.
 
 I rate the campaign **HIGH**, on an overall risk score of **7.9/10** derived in Section 3. It is not CRITICAL because nothing in the 169 files encrypts, wipes, defaces or denies service, because the WebLogic leg against its named target failed with three independent confirmations, and because the credential-cracking step against the stolen crash dumps failed outright with 21 candidate passwords all rejected and zero authentication tokens recovered. Those failures matter to the rating and I state them as findings rather than burying them.
 
@@ -252,7 +252,7 @@ The sequence reconstructs cleanly from three sources that agree, the operator's 
 
 | Time (UTC) | What happened | Where the evidence comes from |
 |---|---|---|
-| 2026-07-24 01:59:05 | First attempt using a single-encoded path fails and crashes the router's Lua authentication parser, source `95.214.114[.]37` | Victim's own nginx error log, carved from a stolen core dump |
+| 2026-07-24 01:59:05 | First attempt using a single-encoded path fails and crashes the router's Lua authentication parser, source `95[.]214[.]114[.]37` | Victim's own nginx error log, carved from a stolen core dump |
 | 2026-07-24 02:02:12 | Double-encoded path succeeds, request proxied upstream to the internal web backend, same source address | Same log, three minutes later |
 | Same session | Two small test files retrieved to prove the file-copy primitive works before running it in anger | Operator's listener log |
 | 2026-07-24, across the day | **100 HTTP PUTs totalling 424,946,514 bytes** arrive from the customer-edge egress address | Operator's listener log, corroborated by an independent raw capture carrying `User-Agent: cisco-IOS` |
@@ -429,7 +429,7 @@ The Windows post-exploitation chain runs against an internal host the operator l
 ```
 operator VPS
   tunnelling server -> local SOCKS listener on 127.0.0.1:1080
-    ssh -i <operator key> root@<carrier host A>   (jump host, confirmed foothold; root operator-side)
+    [s]sh -i <operator key> root@<carrier host A>   (jump host, confirmed foothold; root operator-side)
       recon -> carrier host C, operator label "SYS-GAD"                  (no captured outcome)
       192.168.10.12, operator label "CATASTRO" (WAMP stack, mapping server on :8080)
         code execution: unauthenticated OGC-filter RCE                   (no captured outcome)
@@ -496,9 +496,9 @@ Six expansion techniques across five platforms all came back negative. No siblin
 
 | Asset | Detail |
 |---|---|
-| Virtual server | `13.140.145[.]210`, Contabo GmbH, AS51167, France. Reverse DNS resolves to a standard provider-assigned hostname. No detections on any reputation platform |
+| Virtual server | `13[.]140[.]145[.]210`, Contabo GmbH, AS51167, France. Reverse DNS resolves to a standard provider-assigned hostname. No detections on any reputation platform |
 | Domain | `radius-sync[.]com`, created 2026-07-11 at 07:53:50 UTC (registrar-authoritative; an earlier saved lookup reading 2026-07-10 is a timezone display artifact and is retracted), Cloudflare-fronted, paid out to 2029 |
-| Attack-source egress | `95.214.114[.]37`, PacketHub S.A., AS136787, geolocated Ecuador, a rented commercial VPN exit rather than owned infrastructure |
+| Attack-source egress | `95[.]214[.]114[.]37`, PacketHub S.A., AS136787, geolocated Ecuador, a rented commercial VPN exit rather than owned infrastructure |
 | TLS material | Self-signed certificate, subject and issuer both naming the server's own address, generated 2026-07-24 at 12:50 UTC, the same day as the router theft |
 | Tunnel fingerprints | Four distinct server key fingerprints captured across the tunnelling logs |
 
@@ -787,8 +787,8 @@ Two mapping decisions are worth stating rather than leaving for someone to query
 | Reconnaissance / T1592.004 | Client Configurations | Captured SSL-VPN portal and education-portal landing pages |
 | Reconnaissance / T1589.001 | Credentials | Wordlists seeded on the target's legal name, city and site role |
 | Reconnaissance / T1589 | Gather Victim Identity Information | Bank customer-ID iteration, response bodies discarded (MODERATE) |
-| Resource Development / T1583.003 | Virtual Private Server | `13.140.145.210`, Contabo AS51167 (DEFINITE) |
-| Resource Development / T1583.001 | Domains | `radius-sync.com`, Cloudflare-fronted, paid to 2029 |
+| Resource Development / T1583.003 | Virtual Private Server | `13[.]140[.]145[.]210`, Contabo AS51167 (DEFINITE) |
+| Resource Development / T1583.001 | Domains | `radius-sync[.]com`, Cloudflare-fronted, paid to 2029 |
 | Resource Development / T1587.001 | Malware | Own T3/JNDI suite, 4-mode LDAP server, C2 console, capture rig |
 | Resource Development / T1587.003 | Digital Certificates | Self-signed cert generated the day of the router theft |
 | Resource Development / T1588.002 | Tool | chisel v1.23.1, `plink.exe`, ysoserial, `JNDIExploit.jar` |
@@ -939,7 +939,7 @@ The full set is in the [detection file](/hunting-detections/opendirectory-13-140
 
 - An outbound HTTP `PUT` from a network device carrying `User-Agent: cisco-IOS` to a destination outside the management range. DEFINITE, and the operator cannot suppress it.
 - A request path containing `%2577eb%2575i` or the full `%2577eb%2575i_%2577sma_Http`. DEFINITE, and the highest-specificity indicator in the case.
-- A SOAP body carrying `urn:cisco:wsma-filesystem` with a `dstURL` whose scheme is `http://` and whose host sits outside the management range. HIGH, and it is the exfiltration primitive itself.
+- A SOAP body carrying `urn:cisco:wsma-filesystem` with a `dstURL` whose scheme is `hxxp://` and whose host sits outside the management range. HIGH, and it is the exfiltration primitive itself.
 - An `Authorization` header matching `^[a-f0-9]{18}$` with no auth scheme against an IOS-XE web interface. HIGH, and deliberately generic across the whole public exploitation class rather than specific to this operator.
 
 There is no conventional beacon in this campaign, which is worth knowing before anyone builds a sleep-interval or jitter profile and finds nothing. The reverse shell is interactive, the execution-proof beacon is a single request, and the tunnel is a persistent WebSocket rather than a polling implant. No domain-generation algorithm and no fronting beyond ordinary proxying of the operator's own domain.
@@ -948,9 +948,9 @@ There is no conventional beacon in this campaign, which is worth knowing before 
 
 This matters as much as what is, because three categories of address in this case will look like operator infrastructure to anyone who does not read the context.
 
-Five addresses are explicitly not this operator. Crash traces on the victim router preserve activity from `140.99.223[.]46`, `147.124.203[.]51`, `62.133.46[.]18`, `146.70.52[.]222` and `47.130.108[.]237` between May and July 2026. All five used the generic public exploitation URI rather than this operator's distinctive double-encoded path. They are independent actors on the same victim device, they must not be folded into operator infrastructure, and their real evidentiary value runs the other way, since any future forensics on that router cannot assume a single intruder.
+Five addresses are explicitly not this operator. Crash traces on the victim router preserve activity from `140[.]99[.]223[.]46`, `147[.]124[.]203[.]51`, `62[.]133[.]46[.]18`, `146[.]70[.]52[.]222` and `47[.]130[.]108[.]237` between May and July 2026. All five used the generic public exploitation URI rather than this operator's distinctive double-encoded path. They are independent actors on the same victim device, they must not be folded into operator infrastructure, and their real evidentiary value runs the other way, since any future forensics on that router cannot assume a single intruder.
 
-One address is retracted outright. The operator's domain pointed at `2.57.91[.]91` for roughly fifteen seconds at registration before being repointed. That is shared parking infrastructure at a large consumer registrar holding millions of domains, and its reputation score is mass-hosting noise. It is not an operator address and it should not be carried by anyone.
+One address is retracted outright. The operator's domain pointed at `2[.]57[.]91[.]91` for roughly fifteen seconds at registration before being repointed. That is shared parking infrastructure at a large consumer registrar holding millions of domains, and its reputation score is mass-hosting noise. It is not an operator address and it should not be carried by anyone.
 
 Two addresses must not be blocked. The current proxy addresses for the operator's domain are shared edge infrastructure. They are useful for resolution context and blocking them would take out unrelated traffic.
 
@@ -1069,7 +1069,7 @@ Each source below carries the tier rating I assigned it while researching this c
 
 - SEC Consult, "TR-069: IoT Before It Was Cool!". The provisioning-protocol exposure history behind the carrier-managed customer-premises argument in Section 4.1, corroborated by independent technical summaries of the protocol and by retrospectives on the November 2016 Deutsche Telekom incident.
 - Netcracker Technology press release of 2025-03-26, corroborated by BusinessWire, SDxCentral and Developing Telecoms, on the extension of its full-stack BSS partnership with the carrier in this market. That partnership is what makes the `netcraker` wordlist seed in Section 10.5 genuine carrier knowledge rather than a guess. Developing Telecoms is also the June 2025 source for that carrier's pending divestment of its Ecuadorian mobile unit, which had not closed as of the most recent reporting I found. The sources name the parties; this report does not, since the carrier and its customer are victims here and naming them adds nothing a defender can act on.
-- The Hacker News, June 2026, reporting the CVE-2024-21182 catalog addition and noting that no public reports describe how the vulnerability is being exploited and that no threat actor is named in connection with it. The `dinosn/CVE-2024-21182` repository documentation is the source for the vulhub 12.2.1.3 container being the standard, publicly recommended build workaround rather than operator ingenuity.
+- The Hacker News, June 2026, reporting the CVE-2024-21182 catalog addition and noting that no public reports describe how the vulnerability is being exploited and that no threat actor is named in connection with it. The `dinosn/CVE-2024-21182` repository documentation is the source for the vulhub 12[.]2[.]1[.]3 container being the standard, publicly recommended build workaround rather than operator ingenuity.
 
 ### 15.4 What could not be retrieved
 
