@@ -1066,6 +1066,13 @@ function checkCvesTab(src, includes) {
      [/moves to the nKEVs tab when/, 'that a row moves to the nKEVs tab when its CVE is added'],
      [/confirmed against Rapid7's or Exploit-DB's own index/, 'that Metasploit and Exploit-DB claims are confirmed against the publishers\' indexes'],
      [/CISA's own assessment/, 'that the SSVC decision points are CISA\'s own assessment'],
+     [/at most 50 CVEs/, 'that the list is capped at 50'],
+     [/ranked by how many reasons they meet, then by EPSS, then by CVSS/, 'how the 50 shown are ranked'],
+     [/fixed versions and advisory ids come from/, 'what cve.now supplies (listing, titles, SSVC, fixed versions, advisory ids)'],
+     [/NVD record through VulnCheck, mostly the CNA's score/, 'that CVSS comes from the NVD record through VulnCheck'],
+     [/Rapid7's and Exploit-DB's own indexes/, 'that Metasploit and Exploit-DB come from the publishers\' own indexes'],
+     [/from CISA's KEV catalog/, 'that "Product on CISA KEV" comes from CISA\'s KEV catalog'],
+     [/EPSS from FIRST/, 'that EPSS is FIRST\'s'],
      [/cve\.now/, 'cve.now'], [/CC BY 4\.0/, 'the cve.now licence']].forEach(function (c) {
       if (!c[0].test(callout[0])) problems.push('the CVEs callout no longer states ' + c[1]);
     });
@@ -1073,6 +1080,12 @@ function checkCvesTab(src, includes) {
   var line = sec.match(/<p class="hl-wire__freshness hl-wire__freshness--c">[\s\S]*?<\/p>/);
   if (!line) problems.push('the short CVEs line (hl-wire__freshness--c) is missing');
   else {
+    [[/Listing, titles, SSVC, fixed versions and advisory ids from/, 'what cve.now supplies'],
+     [/Scores from NVD through VulnCheck/, 'where the scores come from'],
+     [/Exploits from Rapid7 and Exploit-DB/, 'where the exploits come from'],
+     [/KEV products from CISA/, 'where the KEV products come from']].forEach(function (c) {
+      if (!c[0].test(line[0])) problems.push('the short CVEs line no longer says ' + c[1]);
+    });
     ['cve.now', 'first.org/epss', 'cves.xml'].forEach(function (needle) {
       if (line[0].indexOf(needle) < 0) problems.push('the short CVEs line no longer links ' + needle);
     });
@@ -1088,13 +1101,20 @@ function checkCvesTab(src, includes) {
     if (/<(button|input|details|summary|select|textarea)\b/i.test(legend)) problems.push('the CVEs legend markup holds a control or details element: samples must not be interactive');
     if (/\sid\s*=/i.test(legend)) problems.push('the CVEs legend markup carries an id, but it is printed twice, so the id would repeat');
     (legend.match(/<a\b[^>]*>/gi) || []).forEach(function (a) {
-      if (!/href="https:\/\/(cve\.now|www\.first\.org|www\.exploit-db\.com|github\.com\/(?:cisagov\/vulnrichment|rapid7\/metasploit-framework))[\/"]/.test(a)) {
+      if (!/href="https:\/\/(cve\.now|www\.first\.org|www\.exploit-db\.com|www\.cisa\.gov|github\.com\/(?:cisagov\/vulnrichment|rapid7\/metasploit-framework))[\/"]/.test(a)) {
         problems.push('a link in the CVEs legend that is not an attribution link: ' + a);
       }
     });
     if (!/CC BY 4\.0/.test(legend) || !/Empirical Security/.test(legend)) {
       problems.push('the CVEs legend lost the cve.now licence or the EPSS attribution');
     }
+    [[/show at most 50\. When more qualify, the 50 shown are ranked by how many reasons they meet, then by EPSS, then by CVSS/, 'the cap and the ranking'],
+     [/titles, SSVC decision points \(CISA's own assessment, from <a [^>]*>Vulnrichment<\/a>\), fixed versions and advisory ids come from <a [^>]*>cve\.now<\/a>/, 'what cve.now supplies and that SSVC is CISA\'s assessment'],
+     [/NVD record through VulnCheck, mostly the CNA's score/, 'that CVSS comes from the NVD record through VulnCheck'],
+     [/Metasploit modules come from Rapid7's <a [^>]*>metasploit-framework<\/a> module index and Exploit-DB entries from <a [^>]*>Exploit-DB<\/a>'s own index/, 'that Metasploit and Exploit-DB come from the publishers\' own indexes'],
+     [/"Product on CISA KEV" comes from CISA's <a [^>]*>KEV catalog<\/a>/, 'that "Product on CISA KEV" comes from CISA\'s KEV catalog']].forEach(function (c) {
+      if (!c[0].test(legend)) problems.push('the CVEs legend no longer says ' + c[1]);
+    });
   }
   var prints = src.match(/\{\{\s*cves_legend_html\s*\}\}/g) || [];
   if (prints.length !== 2) problems.push('the CVEs legend is printed ' + prints.length + ' time(s), expected 2');
@@ -1105,6 +1125,12 @@ function checkCvesTab(src, includes) {
   var gridOnly = grid ? grid[0].replace(/<aside[\s\S]*$/, '') : '';
   if (!grid) problems.push('could not find the CVEs grid');
   else if (/cves_legend_html|hl-legend/.test(gridOnly)) problems.push('the CVEs legend sits inside the CVEs grid, where the filter script would count it as rows');
+
+  /* The accuracy rule behind the attribution lines: cve.now no longer supplies the Metasploit or Exploit-DB
+     data (Revision 2: the publishers' own indexes do), so no sentence anywhere on the page may say cve.now
+     carries them. A false source line is a claim we cannot back. */
+  var carries = src.replace(/\{%-?\s*comment\s*-?%\}[\s\S]*?\{%-?\s*endcomment\s*-?%\}/g, '').match(/carries[^.]{0,160}(?:Metasploit|Exploit-DB)/i);
+  if (carries) problems.push('the page says cve.now carries Metasploit or Exploit-DB data (' + JSON.stringify(carries[0].slice(0, 80)) + '). Those come from Rapid7\'s and Exploit-DB\'s own indexes.');
 
   // Revision 2: a GitHub PoC cannot be validated, so it is not claimed, counted, filtered or mentioned.
   var pocRe = /\bpocs?\b|\bpoc_n\b|proof[- ]of[- ]concept/i;
