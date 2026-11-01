@@ -6,4 +6,3 @@ getoutline.org  # legitimate Outline VPN project site named as such
 caddyserver.com  # legitimate Caddy project site named as such
 nginx.org  # legitimate nginx project site named as such
 amazonaws.com  # AWS S3 named as the service the decoy apex moved to
-co.uk  # the .co.uk ccTLD named as a TLD, not a host

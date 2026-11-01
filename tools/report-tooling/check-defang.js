@@ -41,6 +41,11 @@
                                      output, and FAILs as STALE-BLOCK-EXCEPTION when it matches no block in a file read, or
                                      as BROAD-BLOCK-EXCEPTION when it matches more than one. FIRST LINE holds no `#`.
 
+   Guards on allow files: an entry that is a bare public suffix or TLD (co.uk, gov.br, com.tr, com) FAILs as ALLOW-PUBLIC-SUFFIX
+   and is not applied, because entries match as suffixes and one such line would pass every host under it; a bare public suffix in
+   prose (".co.uk" named as a registry) is counted as such and is not a host. An allowed host never excuses a URL whose path
+   carries a real bot id (`/bot<digits>:...`, as on api.telegram.org): BOT-ID-URL. A `/bot<token>` placeholder is fine.
+
    Schemes: http, https, ftp, sftp need the canonical hxxp / hxxps / fxp scheme. ws and wss (WebSocket) keep their scheme and
    take the host defang only (dots of the host to `[.]`). A bare `ws://` or `wss://` with no host is a mention of the scheme,
    not an indicator, and is not flagged; a ws/wss URL whose host has no dot (`localhost`, `{host}`) is not flagged either.
@@ -72,6 +77,18 @@ var TLDS_STRONG = ('com net org info biz edu gov mil int io co xyz top online si
   'pw tk ml ga cf gq cn ru su ua kz ir kr jp tw vn br mx de fr uk nl eu us ca au pk tr es ch se onion i2p link click live icu cyou ' +
   'buzz rest bond monster sbs cfd lol mobi pro asia ws ai gl ly cx bz xxx space').split(' ');
 var TLD_RE = TLDS_STRONG.join('|');
+
+/* A public suffix (co.uk, gov.br, com.tr) or a bare TLD (com, .ru) names a whole registry, not a host. An allow entry is matched as a
+   suffix, so one such line would let every host under it through; and as a mention in prose it is no host either. Heuristic, not
+   the Public Suffix List: a second-level word from PUBLIC_SLD under a two-letter ccTLD, or a single label that is a known TLD or
+   two letters. */
+var PUBLIC_SLD = 'co com org net gov edu ac or ne go gob mil sch ltd plc nom gv gouv'.split(' '); /* words that are registry levels and not hosts in their own right: not me/id/info/web/nic, which are real hosts under some TLDs */
+function isPublicSuffix(name) {
+  var labels = String(name).toLowerCase().replace(/^\*?\./, '').split('.');
+  if (labels.some(function (l) { return !l; })) return false;
+  if (labels.length === 1) return TLDS_STRONG.indexOf(labels[0]) !== -1 || /^[a-z]{2}$/.test(labels[0]);
+  return labels.length === 2 && PUBLIC_SLD.indexOf(labels[0]) !== -1 && /^[a-z]{2}$/.test(labels[1]);
+}
 
 /* Names that are not infrastructure of the actor: our own site, RFC 2606 names, the XML/schema namespaces reports quote and
    the MITRE/standards references. Deliberately no hosting, code, paste or storage service: an attacker URL on one of those
@@ -123,7 +140,7 @@ function isPrivateIPv4(o) {
    for an ATTACKER-COMMAND-BLOCK finding (see the header); anything else is a host or IP that may stay raw. Throws on a line
    without a reason or a malformed block line: an allowance nobody explained is not accepted. */
 function makeAllow(files) {
-  var entries = BUILTIN_ALLOW.slice(), fromFile = 0, blocks = [], hostReasons = {};
+  var entries = BUILTIN_ALLOW.slice(), fromFile = 0, blocks = [], hostReasons = {}, bad = [];
   (files || []).forEach(function (f) {
     fs.readFileSync(f, 'utf8').split(/\r?\n/).forEach(function (raw, n) {
       var hash = raw.indexOf('#');
@@ -136,10 +153,11 @@ function makeAllow(files) {
       if (/^block\s/.test(body) && !bm) throw new Error('malformed block exception (' + where + '): expected `block FILE | FIRST LINE  # reason`');
       if (bm) { blocks.push({ file: bm[1].trim(), prefix: bm[2].trim(), reason: reason, src: where, used: 0 }); fromFile++; return; }
       var host = body.toLowerCase();
+      if (isPublicSuffix(host)) { bad.push({ entry: host, src: where }); return; } /* not active; run() reports it as a FAIL */
       entries.push(host); hostReasons[host] = reason; fromFile++;
     });
   });
-  return { entries: entries, builtin: BUILTIN_ALLOW.length, fromFile: fromFile, blocks: blocks, hostReasons: hostReasons };
+  return { entries: entries, builtin: BUILTIN_ALLOW.length, fromFile: fromFile, blocks: blocks, hostReasons: hostReasons, bad: bad };
 }
 
 /* The allow file for a target, found by slug. Returns { files: [paths], note: text }. */
@@ -193,7 +211,7 @@ function mask(line, start, end) { return line.slice(0, start) + ' '.repeat(end -
 
 /* Returns { flagged: [{kind, token}], defanged: n, privateN: n, allowed: {entry: n} }. */
 function scanLine(rawLine, allow) {
-  var out = { flagged: [], defanged: 0, privateN: 0, allowedN: 0, allowed: {} };
+  var out = { flagged: [], defanged: 0, privateN: 0, suffixN: 0, allowedN: 0, allowed: {} };
   var line = rawLine, m;
   function noteAllowed(e) { out.allowedN++; out.allowed[e] = (out.allowed[e] || 0) + 1; }
 
@@ -216,7 +234,12 @@ function scanLine(rawLine, allow) {
       if (rawDots.indexOf('.') === -1) { if (host.indexOf('[.]') !== -1) out.defanged++; continue; } /* defanged, or no dot at all */
     }
     var al = allowedBy(allow, host.replace(/\[\.\]/g, '.'));
-    if (al) { noteAllowed(al); continue; }
+    if (al) {
+      /* an allowed host does not excuse a path that carries a real bot id (api.telegram.org/bot<digits>:...); `<token>` stays fine */
+      var bot = tok.match(/\/bot(\d+):/i);
+      if (bot) { out.flagged.push({ kind: 'BOT-ID-URL', token: host + '/bot<' + bot[1].length + ' digits>:...' }); continue; }
+      noteAllowed(al); continue;
+    }
     out.flagged.push({ kind: 'URL', token: tok });
   }
   spans.forEach(function (s) { line = mask(line, s[0], s[1]); });
@@ -262,8 +285,13 @@ function scanLine(rawLine, allow) {
     var hasRaw = /(^|[^\]])\.(?!\])/.test(d.replace(/\[\.\]/g, '\u0000'));
     var plain = d.replace(/\[\.\]/g, '.').toLowerCase();
     if (!hasRaw) { out.defanged++; continue; }
+    if (isPublicSuffix(plain)) { out.suffixN++; continue; } /* a registry named as such (".co.uk"), not a host */
     var al4 = allowedBy(allow, plain);
-    if (al4) { noteAllowed(al4); continue; }
+    if (al4) {
+      var bot4 = line.slice(m.index + m[0].length).match(/^\/bot(\d+):/i);
+      if (bot4) { out.flagged.push({ kind: 'BOT-ID-URL', token: plain + '/bot<' + bot4[1].length + ' digits>:...' }); continue; }
+      noteAllowed(al4); continue;
+    }
     out.flagged.push({ kind: /\[\.\]/.test(d) ? 'DOMAIN-PARTLY-DEFANGED' : 'DOMAIN', token: d });
   }
   var hx = rawLine.match(HXXP_RE);
@@ -305,7 +333,7 @@ var FM_SKIP = ['title', 'description', 'permalink', 'slug', 'layout', 'hide', 'd
 
 function newStats() {
   return { files: 0, fmLines: 0, bodyLines: 0, blocks: 0, blocksCopy: 0, blocksScanned: 0, blockLines: 0,
-    matchedFlagged: 0, matchedDefanged: 0, matchedPrivate: 0, matchedAllowed: 0, allowedBy: {},
+    matchedFlagged: 0, matchedDefanged: 0, matchedPrivate: 0, matchedSuffix: 0, matchedAllowed: 0, allowedBy: {},
     cmdBlocks: 0, cmdBlocksBracketed: 0, cmdBlocksBare: 0, blockExceptions: 0, cmdBlocksExcepted: [], cmdLinesUnbracketedInBracketedBlocks: 0, copyBlockIndicators: 0,
     copyBlocks: [] };
 }
@@ -323,6 +351,7 @@ function scanFile(text, file, allow, stats) {
     stats.matchedFlagged += r.flagged.length;
     stats.matchedDefanged += r.defanged;
     stats.matchedPrivate += r.privateN;
+    stats.matchedSuffix += r.suffixN;
     stats.matchedAllowed += r.allowedN;
     Object.keys(r.allowed).forEach(function (e) { stats.allowedBy[e] = (stats.allowedBy[e] || 0) + r.allowed[e]; });
     r.flagged.forEach(function (f) { findings.push({ file: file, line: ln, ctx: ctx, kind: f.kind, token: f.token }); });
@@ -484,6 +513,9 @@ function run(target, allowFiles, opts) {
     var rel = path.relative(fs.statSync(target).isDirectory() ? target : path.dirname(target), f) || path.basename(f);
     findings = findings.concat(scanFile(fs.readFileSync(f, 'utf8'), rel, allow, stats));
   });
+  allow.bad.forEach(function (b) {
+    findings.push({ file: 'allow file', line: 0, ctx: 'allow', kind: 'ALLOW-PUBLIC-SUFFIX', token: b.src + ' "' + defangForPrint(b.entry) + '" is a bare public suffix or TLD; allow entries match as suffixes, so it would pass every host under it. Allow the host, not the registry' });
+  });
   // an exception must excuse exactly one block of a file that was read
   var readRel = files.map(function (f) { return path.relative(fs.statSync(target).isDirectory() ? target : path.dirname(target), f) || path.basename(f); });
   allow.blocks.forEach(function (b) {
@@ -528,8 +560,8 @@ function main() {
   console.log('  files       ' + s.files + ' page(s) read (index.md and any .md with front matter)' + (R.skipped.length ? '; ' + R.skipped.length + ' .md without front matter not read (not published): ' + R.skipped.map(function (f) { return path.basename(f); }).join(', ') : ''));
   console.log('  lines       (non-blank) ' + s.fmLines + ' front-matter (identity keys skipped), ' + s.bodyLines + ' body outside fences, ' + s.blockLines + ' inside ' + s.blocksScanned + ' scanned fenced blocks');
   console.log('  blocks      ' + s.blocks + ' fenced: ' + s.blocksCopy + ' marked .hl-copy (defender, kept raw, not scanned for indicators), ' + s.blocksScanned + ' scanned');
-  var matched = s.matchedFlagged + s.matchedDefanged + s.matchedPrivate + s.matchedAllowed;
-  console.log('  indicators  ' + matched + ' indicator-shaped tokens matched: ' + s.matchedFlagged + ' un-defanged (flagged), ' + s.matchedDefanged + ' already defanged, ' + s.matchedPrivate + ' private/reserved, ' + s.matchedAllowed + ' allowed');
+  var matched = s.matchedFlagged + s.matchedDefanged + s.matchedPrivate + s.matchedSuffix + s.matchedAllowed;
+  console.log('  indicators  ' + matched + ' indicator-shaped tokens matched: ' + s.matchedFlagged + ' un-defanged (flagged), ' + s.matchedDefanged + ' already defanged, ' + s.matchedPrivate + ' private/reserved, ' + s.matchedSuffix + ' bare public suffix (a registry named as such, not a host), ' + s.matchedAllowed + ' allowed');
   var ab = Object.keys(s.allowedBy);
   if (ab.length) console.log('  allowed     ' + R.allow.builtin + ' built-in + ' + R.allow.fromFile + ' file entries; hits suppressed: ' + ab.sort().map(function (e) { return e + ' x' + s.allowedBy[e]; }).join(', '));
   if (s.blockExceptions) console.log('  excepted    ' + s.blockExceptions + ' command-block finding(s) excused by a one-block exception: ' + s.cmdBlocksExcepted.map(function (b) { return b.file + ':' + b.line + ' (' + b.reason + ')'; }).join('; '));
@@ -557,7 +589,7 @@ function main() {
   process.exit(0);
 }
 
-module.exports = { autoAllow: autoAllow, scanLine: scanLine, scanFile: scanFile, run: run, makeAllow: makeAllow, newStats: newStats, selfTest: selfTest,
+module.exports = { isPublicSuffix: isPublicSuffix, autoAllow: autoAllow, scanLine: scanLine, scanFile: scanFile, run: run, makeAllow: makeAllow, newStats: newStats, selfTest: selfTest,
   lineLooksLikeCommand: lineLooksLikeCommand, defangForPrint: defangForPrint, BRACKET_CMD: BRACKET_CMD, BUILTIN_ALLOW: BUILTIN_ALLOW };
 
 if (require.main === module) main();

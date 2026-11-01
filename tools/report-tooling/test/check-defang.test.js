@@ -338,3 +338,57 @@ test('the in-repo allow dir: every file parses with a reason on every line and n
     assert.ok(l.split('#')[1] && l.split('#')[1].trim(), 'alias has a reason');
   });
 });
+
+/* ---- guards (coordinator items 5 and 6, T-0500.1.12 d5fix) ---- */
+
+test('allow guard: a bare public suffix or TLD entry FAILs and is not applied; the control host under it is still flagged', function () {
+  withTmp(function (tmp) {
+    var dir = path.join(tmp, 'defang-allow'); fs.mkdirSync(dir);
+    var rep = path.join(tmp, 'rep'); fs.mkdirSync(rep);
+    fs.writeFileSync(path.join(rep, 'index.md'), '# t\n\nThe operator host is inklens.co.uk and fi1.inklens.co.uk, a .co.uk name; also evil.example-attacker.com.\n');
+    ['co.uk', 'gov.br', 'com.tr', 'com', '.ru', '*.co.uk'].forEach(function (entry) {
+      fs.writeFileSync(path.join(dir, 'rep.txt'), entry + '  # test: a registry named as a host\n');
+      var r = cli([rep, '--allow-dir', dir]);
+      assert.strictEqual(r.status, 1, entry + '\n' + r.stdout);
+      assert.match(r.stdout, /ALLOW-PUBLIC-SUFFIX/, entry);
+      assert.match(r.stdout, /FINDING .*DOMAIN/, 'the host under the suffix is still flagged for ' + entry);
+    });
+    // control: a specific host entry is fine and the bare mention ".co.uk" is not a finding by itself
+    fs.writeFileSync(path.join(dir, 'rep.txt'), 'inklens.co.uk  # test: allowed on purpose\nexample-attacker.com  # test\n');
+    var ok = cli([rep, '--allow-dir', dir]);
+    assert.strictEqual(ok.status, 0, ok.stdout);
+    assert.match(ok.stdout, /bare public suffix/);
+    // the mention alone, with nothing allowed
+    fs.writeFileSync(path.join(rep, 'index.md'), '# t\n\nA .co.uk name and a gov.br registry and com.tr are registries, not hosts.\n');
+    fs.writeFileSync(path.join(dir, 'rep.txt'), '');
+    assert.strictEqual(cli([rep, '--allow-dir', dir]).status, 0);
+  });
+  assert.strictEqual(L.isPublicSuffix('co.uk'), true);
+  assert.strictEqual(L.isPublicSuffix('inklens.co.uk'), false);
+  assert.strictEqual(L.isPublicSuffix('id.ru'), false, 'id/me/info/web/nic are hosts under some TLDs, not registry levels');
+});
+
+test('bot id guard: an allowed host does not pass a path with a real bot id; the <token> placeholder does; the finding never prints the id', function () {
+  var a = L.makeAllow([]);
+  a.entries.push('api.telegram.org');
+  function f(line) { var st = L.newStats(); return L.scanFile(line + '\n', 't.md', a, st).map(function (x) { return x.kind + ' ' + x.token; }); }
+  assert.deepStrictEqual(f('curl https://api.telegram.org/bot<token>/sendMessage'), []);
+  assert.deepStrictEqual(f('curl https://api.telegram.org/bot{BOT_TOKEN}/sendMessage'), []);
+  assert.deepStrictEqual(f('uri https://api.telegram.org/bot8123456789:AAF-example/sendMessage'), ['BOT-ID-URL api.telegram.org/bot<10 digits>:...']);
+  assert.deepStrictEqual(f('uri api.telegram.org/bot8123456789:AAF-example/sendMessage'), ['BOT-ID-URL api.telegram.org/bot<10 digits>:...']);
+  // the same real-digit path to a host that is not allowed is the ordinary URL finding
+  assert.deepStrictEqual(new Set(L.scanFile('uri https://other.example-attacker.com/bot8123456789:AAF/x\n', 't.md', L.makeAllow([]), L.newStats()).map(function (x) { return x.kind; })), new Set(['URL']));
+  // end to end: FAIL with an allow file that lists the host, id not printed
+  withTmp(function (tmp) {
+    var dir = path.join(tmp, 'defang-allow'); fs.mkdirSync(dir);
+    var rep = path.join(tmp, 'rep'); fs.mkdirSync(rep);
+    fs.writeFileSync(path.join(dir, 'rep.txt'), 'api.telegram.org  # Telegram Bot API named as the service\n');
+    fs.writeFileSync(path.join(rep, 'index.md'), '# t\n\nPlaceholder https://api.telegram.org/bot<token>/getMe is fine.\n');
+    assert.strictEqual(cli([rep, '--allow-dir', dir]).status, 0);
+    fs.writeFileSync(path.join(rep, 'index.md'), '# t\n\nReal https://api.telegram.org/bot8123456789:AAF-example/getMe is not.\n');
+    var r = cli([rep, '--allow-dir', dir]);
+    assert.strictEqual(r.status, 1, r.stdout);
+    assert.match(r.stdout, /BOT-ID-URL/);
+    assert.doesNotMatch(r.stdout, /8123456789/);
+  });
+});
