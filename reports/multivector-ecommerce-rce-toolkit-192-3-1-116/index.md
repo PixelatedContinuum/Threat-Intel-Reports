@@ -25,8 +25,8 @@ detection_sections:
   - label: "Coverage Gaps"
     anchor: "#coverage-gaps"
 ioc_highlights:
-  - "192.3.1[.]116"
-  - "31.22.111[.]190"
+  - "192[.]3[.]1[.]116"
+  - "31[.]22[.]111[.]190"
   - "vpn932081317[.]softether[.]net"
   - "cs-pgcwufmiws[.]cn-hangzhou[.]fcapp[.]run"
 stix_bundle: /stix/multivector-ecommerce-rce-toolkit-192-3-1-116.json
@@ -119,7 +119,7 @@ figure_nav:
         anchor: "#122-sophistication-two-bands-reported-separately"
 ---
 
-**Campaign Identifier:** MultiVector-Ecommerce-RCE-Toolkit-192.3.1.116<br>
+**Campaign Identifier:** MultiVector-Ecommerce-RCE-Toolkit-192[.]3[.]1[.]116<br>
 **Last Updated:** August 21, 2026<br>
 **Threat Level:** HIGH
 
@@ -131,7 +131,7 @@ figure_nav:
 
 I keep running into this same setup, in my own investigations and across public reporting, often enough now that I read it as a pattern and not a one-off. A low-skill operator stages a large pile of attack scripts they almost certainly did not hand-write, then wires an off-the-shelf agentic-AI framework in as the console they run the whole operation from.
 
-`192.3.1[.]116:7777` is one working example, a staging directory left open to anyone who found the port. Inside sit 452 files, with 58 Python and 5 shell attack scripts in the root directory alone and 53 further subdirectories below it, all aimed at five mapped corporate groups and at least seven more targets across mainland China. The harvested results sit alongside them, and so does Hermes, a public open-source agent framework cloned onto the host, running as root and driven from a Telegram group. There is no malware, no implant, and no command-and-control framework of the operator's own making anywhere in the corpus.
+`192[.]3[.]1[.]116:7777` is one working example, a staging directory left open to anyone who found the port. Inside sit 452 files, with 58 Python and 5 shell attack scripts in the root directory alone and 53 further subdirectories below it, all aimed at five mapped corporate groups and at least seven more targets across mainland China. The harvested results sit alongside them, and so does Hermes, a public open-source agent framework cloned onto the host, running as root and driven from a Telegram group. There is no malware, no implant, and no command-and-control framework of the operator's own making anywhere in the corpus.
 
 The person behind it barely matters. What is worth your time is the *how*, a concrete and inspectable picture of the way an ordinary operator now puts LLM tooling to work, and the how is the part most "threat actors are using AI" reporting skips.
 
@@ -235,11 +235,11 @@ The weight of evidence points clearly to unauthorized data theft. The authorized
 
 ### 2.3 What the exposed directory is, and what it is not
 
-`http://192.3.1[.]116:7777/` is a plain Python static file server of the `SimpleHTTP` class. Two consequences follow, and both are frequently misread.
+`hxxp://192[.]3[.]1[.]116:7777/` is a plain Python static file server of the `SimpleHTTP` class. Two consequences follow, and both are frequently misread.
 
 First, every file in the operator's working tree was retrievable by anyone who found the port, including private SSH keys, captured victim data, and control-plane environment dumps. This is the operational-security failure that makes the entire investigation possible.
 
-Second, requesting `hxxp://192.3.1[.]116:7777/cmd[.]jsp` returns the **source** of that file. The server does not execute JSP. The host is distributing a working web shell, not running one at that URL. Deployment of that web shell to any victim host is unconfirmed, because it exists only in the operator's own directory and no captured artifact shows it present anywhere else.
+Second, requesting `hxxp://192[.]3[.]1[.]116:7777/cmd[.]jsp` returns the **source** of that file. The server does not execute JSP. The host is distributing a working web shell, not running one at that URL. Deployment of that web shell to any victim host is unconfirmed, because it exists only in the operator's own directory and no captured artifact shows it present anywhere else.
 
 ---
 
@@ -308,7 +308,7 @@ Twelve to fourteen entities show up across five corporate groups and at least se
 They are sorted below by what actually happened to each, not inventoried asset by asset, because the quickest way to write a misleading threat report is to list a dozen names under a heading and let the reader assume they all fell. Every name that follows belongs to a business that was targeted, not to the attacker, and none of it belongs on a blocklist.
 
 <figure style="text-align: center; margin: 2em 0;">
-  <img loading="lazy" src="{{ "/assets/images/multivector-ecommerce-rce-toolkit-192-3-1-116/multivector-target-landscape.svg" | relative_url }}" alt="Process-tree infographic titled The Target Landscape, with the operator platform at 192.3.1.116 as the root node and six branches, each carrying a coloured side-rail indicating outcome. Branch A, deep red, a rent-to-own commerce platform with confirmed data theft: real names plus order and financial records for at least five named individuals, four independent sourcing channels, and an armed account-takeover weapon staged against a staff account that was never confirmed fired. Branch B, red, a construction-cost consulting platform with confirmed exposure: an unauthenticated database console disclosed a ninety-three-table schema, four hundred and twenty-seven endpoints, eight hundred and thirty SQL statements and the root username at time of capture, later found remediated, and it is the only target with a confirmed registered legal entity. Branch C, yellow, a four-product commerce group linked as sister products by shared frontend build artifacts, showing reconnaissance plus unconfirmed brute force and one confirmed information disclosure. Branch D, yellow, a second commerce platform where account registration, login and administrative-route enumeration occurred through a self-registered account with no successful administrative access and no confirmed data theft. Branch E, grey, insurance asset management and others including a ledger product, a dating platform, a mobile-OEM developer API and several unidentified probes, all attempted and none confirmed compromised. Branch F, grey, a loan-referral API with unresolved ownership where records were definitively returned but ownership and authenticity are insufficient, so no victim is named.">
+  <img loading="lazy" src="{{ "/assets/images/multivector-ecommerce-rce-toolkit-192-3-1-116/multivector-target-landscape.svg" | relative_url }}" alt="Process-tree infographic titled The Target Landscape, with the operator platform at 192[.]3[.]1[.]116 as the root node and six branches, each carrying a coloured side-rail indicating outcome. Branch A, deep red, a rent-to-own commerce platform with confirmed data theft: real names plus order and financial records for at least five named individuals, four independent sourcing channels, and an armed account-takeover weapon staged against a staff account that was never confirmed fired. Branch B, red, a construction-cost consulting platform with confirmed exposure: an unauthenticated database console disclosed a ninety-three-table schema, four hundred and twenty-seven endpoints, eight hundred and thirty SQL statements and the root username at time of capture, later found remediated, and it is the only target with a confirmed registered legal entity. Branch C, yellow, a four-product commerce group linked as sister products by shared frontend build artifacts, showing reconnaissance plus unconfirmed brute force and one confirmed information disclosure. Branch D, yellow, a second commerce platform where account registration, login and administrative-route enumeration occurred through a self-registered account with no successful administrative access and no confirmed data theft. Branch E, grey, insurance asset management and others including a ledger product, a dating platform, a mobile-OEM developer API and several unidentified probes, all attempted and none confirmed compromised. Branch F, grey, a loan-referral API with unresolved ownership where records were definitively returned but ownership and authenticity are insufficient, so no victim is named.">
   <figcaption><em>Figure 1: The full target set, colour-coded by what the evidence actually supports. Most branches are attempted, not compromised, and the distinction between them is the discipline this report is built on.</em></figcaption>
 </figure>
 
@@ -881,14 +881,14 @@ The operator runs one host that does everything, wrapped in three independent an
 
 | Component | Detail | Confidence |
 |---|---|---|
-| Primary host | `192.3.1[.]116`, AS36352 (HostPapa), United States. Open directory on TCP/7777 served by a Python static HTTP server. | DEFINITE |
-| Rogue directory server | `ldap://192.3.1[.]116:1389/cn=exploit`, backed by the operator's own directory-server scripts and setup tooling. | DEFINITE |
+| Primary host | `192[.]3[.]1[.]116`, AS36352 (HostPapa), United States. Open directory on TCP/7777 served by a Python static HTTP server. | DEFINITE |
+| Rogue directory server | `ldap://192[.]3[.]1[.]116:1389/cn=exploit`, backed by the operator's own directory-server scripts and setup tooling. | DEFINITE |
 | Shared callback listener | TCP/9876, reused across otherwise unrelated exploitation classes: Eureka XStream, SnakeYAML and the JNDI chain. The operator runs a small reused listener set, not one per technique. | DEFINITE |
 | Success-beacon path | A dedicated path on TCP/7777, never observed hit. | DEFINITE |
-| Staged payload URL | `hxxp://192.3.1[.]116:7777/cmd[.]jsp`, confirmed present and downloadable. Serves source only. | DEFINITE |
+| Staged payload URL | `hxxp://192[.]3[.]1[.]116:7777/cmd[.]jsp`, confirmed present and downloadable. Serves source only. | DEFINITE |
 | Attack-traffic relay | `cs-pgcwufmiws[.]cn-hangzhou[.]fcapp[.]run`, a legitimate Alibaba Cloud Function Compute serverless endpoint reused as a proxy. Confirmed across two independent attack types against the same target. | DEFINITE |
 | Operator VPN | Self-hosted SoftEther VPN on the same host, DDNS hostname `vpn932081317[.]softether[.]net`, still resolving to the platform address. | HIGH |
-| Control-source address | `31.22.111[.]190`, the address the operator connects from to administer the host. Identical connection-environment values across two independent captures. Most likely shared rented proxy egress, not operator-controlled infrastructure, so it is not an identity anchor and must not be used to cluster future activity. | HIGH that operator traffic originated here, MODERATE that the address is operator-controlled |
+| Control-source address | `31[.]22[.]111[.]190`, the address the operator connects from to administer the host. Identical connection-environment values across two independent captures. Most likely shared rented proxy egress, not operator-controlled infrastructure, so it is not an identity anchor and must not be used to cluster future activity. | HIGH that operator traffic originated here, MODERATE that the address is operator-controlled |
 | Build-host identifier | An unmodified default SSH key comment referencing a budget VPS provider instance, shared across three distinct RSA-2048 key pairs with different fingerprints, and authoring the git clone records for the framework plugins. | HIGH |
 | Control channel | A commercial messaging platform group chat with one identified controlling user, wired into the agent framework running as root on the host. | HIGH |
 
@@ -919,7 +919,7 @@ Thirty-six techniques map across eleven tactics, and the attempted-versus-achiev
 | Reconnaissance / T1596.003 | Digital Certificates | DEFINITE | Certificate-transparency subdomain discovery |
 | Reconnaissance / T1593.002 | Search Engines | DEFINITE | Site-scoped search queries; one hit bot detection |
 | Reconnaissance / T1594 | Search Victim-Owned Websites | DEFINITE | JS bundle mining for base URLs, routes and secrets |
-| Resource Development / T1583.003 | Virtual Private Server | DEFINITE | `192.3.1.116` on AS36352; budget-VPS build host |
+| Resource Development / T1583.003 | Virtual Private Server | DEFINITE | `192[.]3[.]1[.]116` on AS36352; budget-VPS build host |
 | Resource Development / T1583.006 | Web Services | DEFINITE | Serverless function endpoint reused as attack relay |
 | Resource Development / T1585 | Establish Accounts | DEFINITE | Four throwaway accounts self-registered on targets |
 | Resource Development / T1588.002 | Tool | HIGH | Decompiler intact; two exploitation tools arrived broken |
@@ -1090,7 +1090,7 @@ Future matching should anchor on characteristics one and three, which are infras
 
 The machine-readable indicators live in the [IOC feed](/ioc-feeds/multivector-ecommerce-rce-toolkit-192-3-1-116-iocs.json) and the rules live in the [detection file](/hunting-detections/multivector-ecommerce-rce-toolkit-192-3-1-116-detections/). Neither is reproduced here, so take them from the source rather than retyping anything out of this page.
 
-Coverage is behavioural and payload-class based, because there is no malware family to signature. No rule in the published set encodes this operator's address, hostnames or account names, because those are atomic indicators and they live in the feed. A rule pinned to `192.3.1[.]116` dies with the takedown that is already filed, while the techniques outlive the infrastructure.
+Coverage is behavioural and payload-class based, because there is no malware family to signature. No rule in the published set encodes this operator's address, hostnames or account names, because those are atomic indicators and they live in the feed. A rule pinned to `192[.]3[.]1[.]116` dies with the takedown that is already filed, while the techniques outlive the infrastructure.
 
 | Rule type | Detection tier | Hunting tier | Focus |
 |---|---|---|---|
