@@ -42,8 +42,8 @@ sitemap: false
   {%- assign cisa_len = r.cisa_added | size %}
   <entry>
     <title>{{ r.cve | xml_escape }}{% if r.vendor and r.vendor != "" %}: {{ r.vendor | xml_escape }} {{ r.product | xml_escape }}{% endif %}</title>
-    <link href="{{ site.url }}/wire/#cve-{{ r.cve | downcase }}" rel="alternate" type="text/html"/>
-    <link href="https://nvd.nist.gov/vuln/detail/{{ r.cve }}" rel="related" type="text/html" title="NVD"/>
+    <link href="{{ site.url }}/wire/#cve-{{ r.cve | downcase | xml_escape }}" rel="alternate" type="text/html"/>
+    <link href="https://nvd.nist.gov/vuln/detail/{{ r.cve | xml_escape }}" rel="related" type="text/html" title="NVD"/>
     {%- comment %} T-0407: the reports VulnCheck cites as evidence of exploitation, and a public Nuclei template. {% endcomment %}
     {%- for rp in r.reports limit: 3 %}{% assign rp_head = rp.url | slice: 0, 8 %}{% if rp_head == "https://" %}
     <link href="{{ rp.url | xml_escape }}" rel="related" type="text/html" title="Reported by {{ rp.host | xml_escape }}"/>{% endif %}
@@ -59,9 +59,9 @@ sitemap: false
     {%- for sid in r.snort3_sids %}
     <link href="https://www.snort.org/rule_docs/1-{{ sid | xml_escape }}" rel="related" type="text/html" title="Snort 3 community rule"/>
     {%- endfor %}
-    <id>{{ site.url }}/wire/#cve-{{ r.cve | downcase }}</id>
-    <published>{{ vday }}T00:00:00Z</published>
-    <updated>{{ vday }}T00:00:00Z</updated>
+    <id>{{ site.url }}/wire/#cve-{{ r.cve | downcase | xml_escape }}</id>
+    <published>{{ vday | xml_escape }}T00:00:00Z</published>
+    <updated>{{ vday | xml_escape }}T00:00:00Z</updated>
     <category term="vulncheck-kev" label="VulnCheck KEV"/>
     {%- if cisa_len == 10 %}
     <category term="cisa-kev" label="CISA KEV"/>
@@ -89,7 +89,7 @@ sitemap: false
     {%- endif %}
     {%- assign gap_str = r.gap | append: "" %}{% assign gap_len = gap_str | size %}{% assign gap_n = 0 %}{% if gap_len > 0 %}{% assign gap_n = r.gap | plus: 0 %}{% endif %}
     {%- assign dis_len = r.disclosed | append: "" | size %}{% assign epss_len = r.epss | append: "" | size %}
-    <summary type="text">{% if dis_len == 10 %}Disclosed {{ r.disclosed | xml_escape }}; added{% else %}Added{% endif %} to VulnCheck KEV {{ vday }}{% if dis_len == 10 and gap_len > 0 %} ({% if gap_n > 0 %}+{% endif %}{{ gap_n }} day{% if gap_n != 1 and gap_n != -1 %}s{% endif %}){% endif %}{% if epss_len > 0 %}; EPSS {{ r.epss | times: 1.0 | round: 3 }}{% endif %}{% if cisa_len == 10 %}; in CISA KEV since {{ r.cisa_added }}{% endif %}{% if sev != "" %}; CVSS v{{ r.cvss_version | xml_escape }} {{ r.cvss | xml_escape }} {{ r.severity | upcase | xml_escape }}, scored by {% if r.scored_by == "NVD" %}NVD{% elsif r.scored_by == "ADP" %}CISA's ADP{% else %}the CNA{% endif %} (VulnCheck NVD++){% endif %}.</summary>
+    <summary type="text">{% if dis_len == 10 %}Disclosed {{ r.disclosed | xml_escape }}; added{% else %}Added{% endif %} to VulnCheck KEV {{ vday | xml_escape }}{% if dis_len == 10 and gap_len > 0 %} ({% if gap_n > 0 %}+{% endif %}{{ gap_n }} day{% if gap_n != 1 and gap_n != -1 %}s{% endif %}){% endif %}{% if epss_len > 0 %}; EPSS {{ r.epss | times: 1.0 | round: 3 }}{% endif %}{% if cisa_len == 10 %}; in CISA KEV since {{ r.cisa_added | xml_escape }}{% endif %}{% if sev != "" %}; CVSS v{{ r.cvss_version | xml_escape }} {{ r.cvss | xml_escape }} {{ r.severity | upcase | xml_escape }}, scored by {% if r.scored_by == "NVD" %}NVD{% elsif r.scored_by == "ADP" %}CISA's ADP{% else %}the CNA{% endif %} (VulnCheck NVD++){% endif %}.</summary>
   </entry>
   {%- endif %}
   {%- endfor %}
