@@ -17,7 +17,7 @@ sitemap: false
 {%- assign sev_bands = "critical,high,medium,low" | split: "," %}
 <feed xmlns="http://www.w3.org/2005/Atom">
   <title>{{ site.title | xml_escape }}: The Wire, CVEs (significant new CVEs not yet on a KEV list)</title>
-  <subtitle>This feed is my selection of new CVEs with a confirmed public exploit, a public detection rule or a high EPSS percentile that are not on VulnCheck KEV or CISA KEV. Being listed does not mean exploitation has been seen. Facts come from cve.now (CC BY 4.0), CISA SSVC through Vulnrichment, FIRST EPSS, Exploit-DB and Metasploit.</subtitle>
+  <subtitle>This feed is my selection of new CVEs with a critical flaw in a product CISA has listed before, a confirmed public exploit or a high EPSS percentile, that are not on VulnCheck KEV or CISA KEV. Being listed does not mean exploitation has been seen. Facts come from cve.now (CC BY 4.0), CISA SSVC through Vulnrichment, FIRST EPSS, Exploit-DB and Metasploit.</subtitle>
   <link href="{{ site.url }}/wire/cves.xml" rel="self" type="application/atom+xml"/>
   <link href="{{ site.url }}/wire/#cves" rel="alternate" type="text/html"/>
   <link href="https://cve.now/" rel="via" type="text/html" title="cve.now"/>
@@ -35,6 +35,7 @@ sitemap: false
   {%- assign cve_head = r.cve | slice: 0, 4 %}{% assign pub_len = r.published | size %}
   {%- if cve_head == "CVE-" and pub_len == 10 %}
   {%- assign vday = r.published %}
+  {%- include wire-cve-why.html %}
   {%- assign msf_len = r.msf | size %}{% assign edb_len = r.edb | size %}
   <entry>
     <title>{{ r.cve | xml_escape }}{% if r.vendor and r.vendor != "" %}: {{ r.vendor | xml_escape }} {{ r.product | xml_escape }}{% endif %}</title>
@@ -52,6 +53,12 @@ sitemap: false
     <published>{{ vday | xml_escape }}T00:00:00Z</published>
     <updated>{{ vday | xml_escape }}T00:00:00Z</updated>
     <category term="cves-tab" label="CVEs tab"/>
+    {%- if w_ab %}
+    <category term="critical-no-login-kev-product" label="Critical, no login needed, product on CISA KEV"/>
+    {%- endif %}
+    {%- if w_epss %}
+    <category term="epss-top-10" label="EPSS top 10%"/>
+    {%- endif %}
     {%- if msf_len > 0 %}
     <category term="metasploit-module" label="Metasploit module"/>
     {%- endif %}
@@ -73,7 +80,7 @@ sitemap: false
     <category term="severity-{{ r.severity | xml_escape }}" label="CVSS {{ r.severity | upcase | xml_escape }} {{ r.cvss | xml_escape }}"/>
     {%- endif %}
     {%- assign epss_len = r.epss | append: "" | size %}
-    <summary type="text">Published {{ vday | xml_escape }}{% if sev != "" %}; CVSS v{{ r.cvss_version | xml_escape }} {{ r.cvss | xml_escape }} {{ r.severity | upcase | xml_escape }}, scored by {% if r.scored_by == "NVD" %}NVD{% elsif r.scored_by == "ADP" %}CISA's ADP{% else %}the CNA{% endif %} (VulnCheck NVD++){% endif %}{% if epss_len > 0 %}; EPSS {{ r.epss | times: 1.0 | round: 3 }}{% endif %}{% if msf_len > 0 %}; {{ msf_len }} Metasploit module{% if msf_len != 1 %}s{% endif %} (confirmed){% endif %}{% if edb_len > 0 %}; {{ edb_len }} Exploit-DB entr{% if edb_len == 1 %}y{% else %}ies{% endif %} (confirmed){% endif %}. Not in a KEV list when selected; exploitation not implied.</summary>
+    <summary type="text">Published {{ vday | xml_escape }}{% if sev != "" %}; CVSS v{{ r.cvss_version | xml_escape }} {{ r.cvss | xml_escape }} {{ r.severity | upcase | xml_escape }}, scored by {% if r.scored_by == "cve.now" %}cve.now (no score in our NVD data){% else %}{% if r.scored_by == "NVD" %}NVD{% elsif r.scored_by == "ADP" %}CISA's ADP{% else %}the CNA{% endif %} (VulnCheck NVD++){% endif %}{% endif %}{% if epss_len > 0 %}; EPSS {{ r.epss | times: 1.0 | round: 3 }}{% endif %}{% if w_ab %}; Critical and reachable with no login, in a product on CISA KEV ({{ kn }} before; a fact about the product, not this CVE){% endif %}{% if w_epss %}; EPSS top 10%{% endif %}{% if msf_len > 0 %}; {{ msf_len }} Metasploit module{% if msf_len != 1 %}s{% endif %} (confirmed){% endif %}{% if edb_len > 0 %}; {{ edb_len }} Exploit-DB entr{% if edb_len == 1 %}y{% else %}ies{% endif %} (confirmed){% endif %}. Not in a KEV list when selected; exploitation not implied.</summary>
   </entry>
   {%- endif %}
   {%- endfor %}

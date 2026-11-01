@@ -5,9 +5,9 @@
 {%- assign al_len = r.aliases | size -%}
 {%- if ss_len > 0 or fx_len > 0 or al_len > 0 -%}
 <details class="hl-vuln__pop hl-vuln__pop--ssvc"><summary class="hl-vuln__p hl-vuln__p--ssvc" title="{% if ss_len > 0 %}CISA's SSVC decision points (its assessment), via cve.now{% if ss_e != '' %}; exploitation {{ ss_e | escape }}{% endif %}{% if ss_a != '' %}; automatable {{ ss_a | escape }}{% endif %}{% if ss_i != '' %}; technical impact {{ ss_i | escape }}{% endif %}{% else %}Fixed version and advisory ids, via cve.now{% endif %}: click for details">{% if ss_len > 0 %}SSVC{% else %}Details{% endif %}</summary><span class="hl-vuln__popbody hl-vuln__popbody--ssvc">
-{%- if ss_e != '' -%}<span class="hl-vuln__kv"><span class="hl-vuln__rh">Exploitation</span><span>{{ ss_e | escape }}</span></span>{%- endif -%}
-{%- if ss_a != '' -%}<span class="hl-vuln__kv"><span class="hl-vuln__rh">Automatable</span><span>{{ ss_a | escape }}</span></span>{%- endif -%}
-{%- if ss_i != '' -%}<span class="hl-vuln__kv"><span class="hl-vuln__rh">Technical impact</span><span>{{ ss_i | escape }}</span></span>{%- endif -%}
+{%- if ss_e != '' -%}<span class="hl-vuln__kv"><span class="hl-vuln__rh">Exploitation (CISA)</span><span>{{ ss_e | escape }}</span></span>{%- endif -%}
+{%- if ss_a != '' -%}<span class="hl-vuln__kv"><span class="hl-vuln__rh">Automatable (CISA)</span><span>{{ ss_a | escape }}</span></span>{%- endif -%}
+{%- if ss_i != '' -%}<span class="hl-vuln__kv"><span class="hl-vuln__rh">Technical impact (CISA)</span><span>{{ ss_i | escape }}</span></span>{%- endif -%}
 {%- if fx_len > 0 -%}<span class="hl-vuln__kv"><span class="hl-vuln__rh">Fixed in</span><span>{{ fx | escape }}</span></span>{%- endif -%}
 {%- if al_len > 0 -%}<span class="hl-vuln__rg"><span class="hl-vuln__rh">Advisories</span>{%- for al in r.aliases -%}{%- assign al5 = al | slice: 0, 5 -%}{%- if al5 == 'GHSA-' -%}<a class="hl-vuln__rule" href="https://github.com/advisories/{{ al | uri_escape | escape }}" target="_blank" rel="noopener noreferrer">{{ al | escape }}</a>{%- elsif al5 == 'EUVD-' -%}<a class="hl-vuln__rule" href="https://euvd.enisa.europa.eu/vulnerability/{{ al | uri_escape | escape }}" target="_blank" rel="noopener noreferrer">{{ al | escape }}</a>{%- endif -%}{%- endfor -%}</span>{%- endif -%}
 {%- if ss_len > 0 -%}<span class="hl-vuln__dim">CISA's own assessment (CISA Vulnrichment), carried by cve.now.</span>{%- endif -%}

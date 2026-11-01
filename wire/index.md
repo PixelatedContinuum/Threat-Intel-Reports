@@ -324,8 +324,8 @@ position: 2.5
 <p class="hl-wire__freshness hl-wire__freshness--c">Significant new CVEs not yet on a KEV list, published in the last {{ wire.window_days }} days &middot; Facts from <a href="https://cve.now/" target="_blank" rel="noopener noreferrer">cve.now</a> (<a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener noreferrer">CC BY 4.0</a>) &middot; EPSS from <a href="https://www.first.org/epss/" target="_blank" rel="noopener noreferrer">FIRST</a> &middot; <a href="{{ '/wire/cves.xml' | relative_url }}">Atom feed (CVEs)</a></p>
 
 <div class="hl-wire__callout hl-wire__callout--c">
-<p>This list is my selection. A CVE is here when it was published in the last {{ wire.window_days }} days, has a CVSS score of 9.0 or higher from NVD or cve.now, and passes at least one test: a Metasploit module or an Exploit-DB entry, each confirmed against Rapid7's or Exploit-DB's own index, a public Nuclei or ET Open rule that names it, or a FIRST EPSS percentile of 95 or higher.</p>
-<p>Being here means a public exploit or a high predicted likelihood exists. It does not mean anyone has been seen exploiting the CVE. The list excludes anything on VulnCheck KEV or CISA KEV, and a row moves to the nKEVs tab when its CVE is added to VulnCheck KEV.</p>
+<p>This list is my selection of CVEs published in the last {{ wire.window_days }} days that are not on a KEV list yet and that I think you should know about and patch. A CVE is here when at least one of these is true. It is rated Critical (CVSS 9.0 or higher), can be reached over the network with no login and no user action, and is in a product CISA has listed before. Or a Metasploit module or an Exploit-DB entry exists for it, each confirmed against Rapid7's or Exploit-DB's own index. Or FIRST's EPSS puts it in the top 10% for likelihood of exploitation.</p>
+<p>"Product on CISA KEV" is a fact about the product: CISA has listed other CVEs in it before. It says nothing about this CVE. Being here does not mean anyone has been seen exploiting the CVE. The list excludes anything on VulnCheck KEV or CISA KEV, and a row moves to the nKEVs tab when its CVE is added to VulnCheck KEV.</p>
 <p>The facts come from <a href="https://cve.now/" target="_blank" rel="noopener noreferrer">cve.now</a> (CC BY 4.0). The SSVC decision points are CISA's own assessment (Vulnrichment), and EPSS is FIRST's.</p>
 </div>
 
@@ -343,18 +343,13 @@ position: 2.5
   rows they filter must agree, and the exporter's counts can use other names. check-wire.js
   compares the exporter's declared counts with the rows separately.
 {%- endcomment -%}
-{%- assign c_msf = 0 -%}{%- assign c_edb = 0 -%}{%- assign c_rule = 0 -%}{%- assign c_epss = 0 -%}
+{%- assign c_ab = 0 -%}{%- assign c_msf = 0 -%}{%- assign c_edb = 0 -%}{%- assign c_epss = 0 -%}
 {%- assign c_critical = 0 -%}{%- assign c_high = 0 -%}{%- assign c_medium = 0 -%}{%- assign c_low = 0 -%}{%- assign c_none = 0 -%}
 {%- for r in wire.cves -%}
 {%- assign cve_head = r.cve | slice: 0, 4 -%}
 {%- if cve_head == "CVE-" -%}
-{%- assign msf_len = r.msf | size -%}{%- assign edb_len = r.edb | size -%}
-{%- assign n_sids = r.et_sids | size -%}{%- assign nu_len = r.nuclei | size -%}{%- assign rn_cs = r.cisa_sigma | size -%}{%- assign rn_sn = r.snort3_sids | size -%}
-{%- assign pc_n = r.epss_pct | times: 100 | floor -%}
-{%- if msf_len > 0 -%}{%- assign c_msf = c_msf | plus: 1 -%}{%- endif -%}
-{%- if edb_len > 0 -%}{%- assign c_edb = c_edb | plus: 1 -%}{%- endif -%}
-{%- if n_sids > 0 or nu_len > 0 or rn_cs > 0 or rn_sn > 0 -%}{%- assign c_rule = c_rule | plus: 1 -%}{%- endif -%}
-{%- if pc_n >= 95 -%}{%- assign c_epss = c_epss | plus: 1 -%}{%- endif -%}
+{%- include wire-cve-why.html -%}
+{%- if w_ab -%}{%- assign c_ab = c_ab | plus: 1 -%}{%- endif -%}{%- if w_msf -%}{%- assign c_msf = c_msf | plus: 1 -%}{%- endif -%}{%- if w_edb -%}{%- assign c_edb = c_edb | plus: 1 -%}{%- endif -%}{%- if w_epss -%}{%- assign c_epss = c_epss | plus: 1 -%}{%- endif -%}
 {%- assign cvss_len = r.cvss | size -%}{%- assign sev = "none" -%}{%- if cvss_len > 0 -%}{%- if sev_bands contains r.severity -%}{%- assign sev = r.severity -%}{%- endif -%}{%- endif -%}
 {%- case sev -%}{%- when "critical" -%}{%- assign c_critical = c_critical | plus: 1 -%}{%- when "high" -%}{%- assign c_high = c_high | plus: 1 -%}{%- when "medium" -%}{%- assign c_medium = c_medium | plus: 1 -%}{%- when "low" -%}{%- assign c_low = c_low | plus: 1 -%}{%- else -%}{%- assign c_none = c_none | plus: 1 -%}{%- endcase -%}
 {%- endif -%}
@@ -376,9 +371,15 @@ position: 2.5
 <dt><span class="hl-vuln__vp"><b>Vendor</b> Product</span></dt>
 <dd>The vendor and product, as the CVE record names them. A CVE record that names none shows none.</dd>
 <dt><span class="hl-vuln__sev hl-vuln__sev--critical">CRITICAL 9.8</span></dt>
-<dd>The CVSS base score in the CVE's NVD record, read through VulnCheck NVD++, as on the nKEVs tab. A CVE can sit here under a lower band when cve.now's score, which is the CNA's, reached 9.0 and NVD's did not. A CVE with no score shows no chip.</dd>
+<dd>The CVSS base score in the CVE's NVD record, read through VulnCheck NVD++, as on the nKEVs tab. Hover it for the CVSS vector. When our NVD data holds no score, the chip uses cve.now's score and vector and the hover says so. A CVE with no score at all shows no chip.</dd>
+<dt><span class="hl-vuln__w hl-vuln__w--ab">Critical, no login needed</span> <span class="hl-vuln__w hl-vuln__w--kev">Product on CISA KEV (3 before)</span></dt>
+<dd>These two always come together. The CVE is rated Critical (CVSS 9.0 or higher) and its CVSS vector says it can be reached over the network with no privileges and no user action. The product it is in has had other CVEs listed on CISA's KEV catalog before; the number is how many. That is a fact about the product, not about this CVE. Hover the first chip for the vector, the second for the product.</dd>
+<dt><span class="hl-vuln__w hl-vuln__w--msf">Metasploit module</span> <span class="hl-vuln__w hl-vuln__w--edb">Exploit-DB</span></dt>
+<dd>A Metasploit module, or an Exploit-DB entry, exists for the CVE, confirmed against Rapid7's or Exploit-DB's own list.</dd>
+<dt><span class="hl-vuln__w hl-vuln__w--epss">EPSS top 10%</span></dt>
+<dd>FIRST's EPSS puts the CVE in the top 10% for predicted likelihood of being exploited in the next 30 days.</dd>
 <dt><span class="hl-vuln__p hl-vuln__p--epss">EPSS 3%</span></dt>
-<dd>FIRST's predicted probability that the CVE is exploited in the next 30 days. The popover shows the last 30 days as a line and today's value.</dd>
+<dd>The EPSS probability itself. The popover shows the last 30 days as a line and today's value.</dd>
 <dt><span class="hl-vuln__p hl-vuln__p--ssvc">SSVC</span></dt>
 <dd>CISA's own assessment of the CVE, from its Stakeholder-Specific Vulnerability Categorization (SSVC): exploitation, automatable and technical impact. They are CISA's decision points, not mine. cve.now carries them (CISA Vulnrichment), with the fixed version and the GitHub Security Advisory (GHSA) and EU Vulnerability Database (EUVD) ids where it has them. A CVE without them shows no chip.</dd>
 <dt><span class="hl-vuln__p hl-vuln__p--exp">Exploits 2</span></dt>
@@ -396,8 +397,8 @@ position: 2.5
 <dl class="hl-legend__list">
 <dt class="hl-legend__k">Search</dt>
 <dd>Matches the CVE id, vendor, product and the first sentence.</dd>
-<dt class="hl-legend__k">Signal</dt>
-<dd>Why the CVE is public-exploit or high-likelihood: a confirmed Metasploit module, a confirmed Exploit-DB entry, a public rule that names it, or an EPSS percentile of 95 or higher.</dd>
+<dt class="hl-legend__k">Why listed</dt>
+<dd>The same reasons the rows show: Critical with no login needed in a product on CISA KEV, a Metasploit module, an Exploit-DB entry, or EPSS in the top 10%. A public rule is not a reason, so it has no chip here; the Rules chip on a row still lists the rules.</dd>
 <dt class="hl-legend__k">Severity</dt>
 <dd>The band of the row's CVSS score. It appears only when more than one band is present.</dd>
 <dt class="hl-legend__k">Vendor</dt>
@@ -414,14 +415,14 @@ position: 2.5
 
 <div class="hl-filter hl-filter--wire hl-filter--vulns" data-listing-filter data-filter-state="query" data-filter-prefix="c" data-pagefind-ignore>
   <input class="hl-filter__search" type="text" placeholder="Search CVE, vendor, product, title…" aria-label="Search CVE, vendor, product and title" autocomplete="off">
-  {%- comment -%} Signal: why a CVE is listed. Chips OR together and count the rows, not the exporter's declared totals. {%- endcomment -%}
+  {%- comment -%} Reason: why a CVE is listed, in the same words the rows use. The four selection arms (Revision 3); Rules are not an arm. Chips OR together and count the rows, not the exporter's declared totals. {%- endcomment -%}
   <div class="hl-filter__chips hl-filter__chips--kind">
-    <span class="hl-filter__dim">Signal</span>
+    <span class="hl-filter__dim">Why listed</span>
     <button type="button" class="hl-chip-btn is-on" data-sig="">All <span class="hl-chip-btn__n">{{ wire.cves.size }}</span></button>
-    {%- if c_msf > 0 -%}<button type="button" class="hl-chip-btn hl-chip-btn--topic hl-topic-c4" data-sig="msf">Metasploit <span class="hl-chip-btn__n">{{ c_msf }}</span></button>{%- endif -%}
-    {%- if c_edb > 0 -%}<button type="button" class="hl-chip-btn hl-chip-btn--topic hl-topic-c7" data-sig="edb">Exploit-DB <span class="hl-chip-btn__n">{{ c_edb }}</span></button>{%- endif -%}
-    {%- if c_rule > 0 -%}<button type="button" class="hl-chip-btn hl-chip-btn--topic hl-topic-c2" data-sig="rule">Public rule <span class="hl-chip-btn__n">{{ c_rule }}</span></button>{%- endif -%}
-    {%- if c_epss > 0 -%}<button type="button" class="hl-chip-btn hl-chip-btn--topic hl-topic-c6" data-sig="epss">High EPSS <span class="hl-chip-btn__n">{{ c_epss }}</span></button>{%- endif -%}
+    {%- if c_ab > 0 -%}<button type="button" class="hl-chip-btn hl-chip-btn--topic hl-topic-c4" data-sig="crit_noauth_kev_product">Critical, no login needed, product on CISA KEV <span class="hl-chip-btn__n">{{ c_ab }}</span></button>{%- endif -%}
+    {%- if c_msf > 0 -%}<button type="button" class="hl-chip-btn hl-chip-btn--topic hl-topic-c7" data-sig="msf">Metasploit module <span class="hl-chip-btn__n">{{ c_msf }}</span></button>{%- endif -%}
+    {%- if c_edb > 0 -%}<button type="button" class="hl-chip-btn hl-chip-btn--topic hl-topic-c5" data-sig="edb">Exploit-DB <span class="hl-chip-btn__n">{{ c_edb }}</span></button>{%- endif -%}
+    {%- if c_epss > 0 -%}<button type="button" class="hl-chip-btn hl-chip-btn--topic hl-topic-c6" data-sig="epss90">EPSS top 10% <span class="hl-chip-btn__n">{{ c_epss }}</span></button>{%- endif -%}
   </div>
   {%- comment -%} Severity: only when the list spans more than one band (the selection starts at CVSS 9.0, so it often does not). "No score" is a CVE with no score, never a low one. {%- endcomment -%}
   {%- if c_bands > 1 -%}
@@ -468,11 +469,8 @@ position: 2.5
 {%- comment -%} The include's cve_mode draws no KEV-add comparison, so these stay empty on this tab. {%- endcomment -%}
 {%- assign epss_len = r.epss | append: "" | size -%}{%- assign epss_pre_len = 0 -%}{%- assign rn_len = 0 -%}{%- assign rp_len = 0 -%}{%- assign spark_len = r.epss_spark | append: "" | size -%}
 {%- assign n_st = r.stories | default: 0 -%}
-{%- assign msf_len = r.msf | size -%}{%- assign edb_len = r.edb | size -%}
-{%- assign pc_n = r.epss_pct | times: 100 | floor -%}
-{%- assign sg = "" | split: "" -%}
-{%- if msf_len > 0 -%}{%- assign sg = sg | push: "msf" -%}{%- endif -%}{%- if edb_len > 0 -%}{%- assign sg = sg | push: "edb" -%}{%- endif -%}{%- if rn_rules > 0 -%}{%- assign sg = sg | push: "rule" -%}{%- endif -%}{%- if epss_len > 0 and pc_n >= 95 -%}{%- assign sg = sg | push: "epss" -%}{%- endif -%}
-<div class="hl-vuln hl-vuln--cve" id="cves-{{ r.cve | downcase | escape }}" data-title="{{ r.cve | downcase | escape }} {{ r.vendor | downcase | escape }} {{ r.product | downcase | escape }} {{ r.title | downcase | escape }}" data-vendor="{{ r.vendor | escape }}" data-sev="{{ sev }}" data-sig="{{ sg | join: '|' }}" data-day="{{ vday | escape }}"><a class="hl-vuln__cve" href="https://nvd.nist.gov/vuln/detail/{{ r.cve | escape }}" target="_blank" rel="noopener noreferrer">{{ r.cve | escape }}</a><span class="hl-vuln__vp" title="{{ r.vendor | escape }} {{ r.product | escape }}">{% if r.vendor and r.vendor != "" %}<b>{{ r.vendor | escape }}</b> {{ r.product | escape }}{% else %}<span class="hl-vuln__none">vendor not given</span>{% endif %}</span><span class="hl-vuln__badges">{% include wire-vuln-sev.html %}{% include wire-vuln-epss.html cve_mode=true %}{% include wire-vuln-new.html %}{% include wire-vuln-news.html %}{% include wire-vuln-rules.html %}<a class="hl-vuln__p hl-vuln__p--cn" href="https://cve.now/{{ r.cve | escape }}" target="_blank" rel="noopener noreferrer" title="{{ r.cve | escape }} on cve.now">cve.now</a></span>{% assign ttl_len = r.title | append: "" | size %}{% if ttl_len > 0 %}<span class="hl-vuln__title" title="{{ r.title | escape }}">{{ r.title | escape }}</span>{% endif %}</div>
+{%- include wire-cve-why.html -%}
+<div class="hl-vuln hl-vuln--cve" id="cves-{{ r.cve | downcase | escape }}" data-title="{{ r.cve | downcase | escape }} {{ r.vendor | downcase | escape }} {{ r.product | downcase | escape }} {{ r.title | downcase | escape }}" data-vendor="{{ r.vendor | escape }}" data-sev="{{ sev }}" data-sig="{{ sg | join: '|' }}" data-day="{{ vday | escape }}"><a class="hl-vuln__cve" href="https://nvd.nist.gov/vuln/detail/{{ r.cve | escape }}" target="_blank" rel="noopener noreferrer">{{ r.cve | escape }}</a><span class="hl-vuln__vp" title="{{ r.vendor | escape }} {{ r.product | escape }}">{% if r.vendor and r.vendor != "" %}<b>{{ r.vendor | escape }}</b> {{ r.product | escape }}{% else %}<span class="hl-vuln__none">vendor not given</span>{% endif %}</span><span class="hl-vuln__badges">{% include wire-vuln-sev.html %}{% include wire-vuln-epss.html cve_mode=true %}{% include wire-vuln-new.html %}{% include wire-vuln-news.html %}{% include wire-vuln-rules.html %}<a class="hl-vuln__p hl-vuln__p--cn" href="https://cve.now/{{ r.cve | escape }}" target="_blank" rel="noopener noreferrer" title="{{ r.cve | escape }} on cve.now">cve.now</a></span>{% assign ttl_len = r.title | append: "" | size %}<span class="hl-vuln__why">{% if w_ab %}<span class="hl-vuln__w hl-vuln__w--ab" title="Rated Critical (CVSS {{ r.cvss | escape }}) and reachable over the network with no privileges and no user action, read from its CVSS vector{% if w_vec != '' %} ({{ w_vec | escape }}){% endif %}">Critical, no login needed</span><span class="hl-vuln__w hl-vuln__w--kev" title="{{ kp | escape }}: CISA has listed {{ kn }} earlier CVE{% if kn != 1 %}s{% endif %} in this product on its KEV catalog. That is a fact about the product, not about this CVE.">Product on CISA KEV ({{ kn }} before)</span>{% endif %}{% if w_msf %}<span class="hl-vuln__w hl-vuln__w--msf" title="A Metasploit module for this CVE, confirmed against Rapid7's own module list">Metasploit module</span>{% endif %}{% if w_edb %}<span class="hl-vuln__w hl-vuln__w--edb" title="An Exploit-DB entry for this CVE, confirmed against Exploit-DB's own list">Exploit-DB</span>{% endif %}{% if w_epss %}<span class="hl-vuln__w hl-vuln__w--epss" title="FIRST's EPSS puts this CVE in the top 10% for likelihood of exploitation in the next 30 days (percentile {{ w_pc }})">EPSS top 10%</span>{% endif %}</span>{% if ttl_len > 0 %}<span class="hl-vuln__title" title="{{ r.title | escape }}">{{ r.title | escape }}</span>{% endif %}</div>
 {%- endif -%}
 {%- endfor -%}
 {%- endif -%}

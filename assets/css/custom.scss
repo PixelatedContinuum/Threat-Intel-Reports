@@ -4132,9 +4132,30 @@ span.hl-vuln__p--ssvc, span.hl-vuln__p--exp, span.hl-vuln__p--cn { cursor: help;
 .hl-vuln__popbody--ssvc { min-width: 13em; max-width: min(22em, 85vw); }
 .hl-vuln__popbody--exp { min-width: 14em; max-width: min(26em, 85vw); max-height: min(22em, 60vh); overflow-y: auto; }
 .hl-vuln__kv { display: flex; gap: 0.6em; align-items: baseline; }
-.hl-vuln__kv .hl-vuln__rh { flex: 0 0 8.5em; }
+.hl-vuln__kv .hl-vuln__rh { flex: 0 0 11.5em; }
 /* The CVE record's first sentence, one line under the row on a wide screen (the full text is the
    title attribute), two on a phone. It spans every grid column. */
+/* T-0522 Revision 3: why a CVEs row is listed, in plain words, as small tags on a line of their own
+   under the row. Each arm has its own colour; the two halves of the "critical, no login, product on
+   KEV" arm sit side by side. The legend uses the same classes on spans. */
+.hl-vuln__why { grid-column: 1 / -1; min-width: 0; display: flex; flex-wrap: wrap; gap: 0.3em; }
+.hl-vuln__w {
+  font-size: 0.78em;
+  padding: 0.05em 0.55em;
+  border-radius: 999px;
+  white-space: nowrap;
+  line-height: 1.5;
+  cursor: help;
+  color: var(--w);
+  border: 1px solid color-mix(in srgb, var(--w) 45%, var(--hl-border-card));
+  background: color-mix(in srgb, var(--w) 12%, transparent);
+}
+.hl-vuln__w--ab   { --w: #ff6b6b; }
+.hl-vuln__w--kev  { --w: #f0883e; }
+.hl-vuln__w--msf  { --w: #fb923c; }
+.hl-vuln__w--edb  { --w: #fbbf24; }
+.hl-vuln__w--epss { --w: #22d3ee; }
+.hl-legend__list dt .hl-vuln__w { font-size: 0.9em; }
 .hl-vuln__title {
   grid-column: 1 / -1;
   min-width: 0;
