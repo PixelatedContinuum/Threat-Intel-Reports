@@ -267,6 +267,8 @@ function allowedBy(allow, host, urlPath) {
     var e = allow.entries[i];
     if (host !== e.host) continue;
     if (!e.path) return e.raw;
+    /* a dot segment or an encoded dot/slash walks out of the scope a browser or server would resolve (`github.com/itm4n/../Iamem/x`) */
+    if (/(?:^|\/)(?:\.|\.\.|%2e|%2e%2e)(?:\/|$)|%2f|%5c|\\/i.test(p)) continue;
     if (e.prefix ? p.indexOf(e.path) === 0 : (p === e.path || p.indexOf(e.path + '/') === 0)) return e.raw;
   }
   return null;

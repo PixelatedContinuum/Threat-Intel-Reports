@@ -203,3 +203,14 @@ test('the in-repo allow files hold no bare multi-tenant host, no bare suffix and
   });
   assert.ok(checked >= 40, 'checked ' + checked + ' allow files');
 });
+
+test('a path scope cannot be walked out of: dot segments, encoded dots and slashes, and a look-alike owner do not match', function () {
+  var scoped = 'github.com/ne0nd0g  # the Merlin author, cited as a reference\n';
+  passes(H + 'github.com/ne0nd0g/merlin/blob/master/a.go\n', scoped);
+  fails(H + 'https://github.com/ne0nd0g/../Iamem/payload\n', scoped);
+  fails(H + 'https://github.com/ne0nd0g/%2e%2e/Iamem/payload\n', scoped);
+  fails(H + 'https://github.com/ne0nd0g%2f..%2fIamem/payload\n', scoped);
+  fails(H + 'https://github.com@evil.example-attacker.com/ne0nd0g/x\n', scoped);
+  fails(H + 'https://github.com./ne0nd0g/x\n', scoped);
+  fails(H + 'https://github.com/ne0nd0gx/x\n', scoped);
+});
