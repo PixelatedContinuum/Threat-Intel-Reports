@@ -66,6 +66,10 @@ var FAILED = 'Details could not be loaded.';
 var NO_ENTRY = 'No details in our data for this CVE.';
 var DESC_EMPTY = 'The CVE record in our data has no description.';
 var DESC_SRC = 'From the CVE record, via NVD.';
+// The exporter caps desc at 3,000 characters and ends a capped text with "..." (wire_export.py
+// desc_text), so a text that long ending that way was shortened: say so (design section 5).
+var DESC_CAP_MIN = 2990;
+var DESC_CAPPED = 'Shortened here; the full text is on NVD (link below).';
 var TITLE_SRC = "The CVE record's first sentence, via cve.now. The full description is on NVD.";
 var FIXED_EMPTY = "No fixed version in the data I hold; check the vendor's advisory.";
 var FIXED_IN = 'Fixed in: ';
@@ -182,6 +186,9 @@ function secRecord(panel, d, isCves) {
   if (desc) {
     panel.appendChild(el('blockquote', 'hl-dt__quote', desc));
     panel.appendChild(el('p', 'hl-dt__src', DESC_SRC));
+    if (desc.length >= DESC_CAP_MIN && desc.slice(-3) === '...') {
+      panel.appendChild(el('p', 'hl-dt__src', DESC_CAPPED));
+    }
   } else if (isCves && str(d.title).trim()) {
     panel.appendChild(el('blockquote', 'hl-dt__quote', str(d.title).trim()));
     panel.appendChild(el('p', 'hl-dt__src', TITLE_SRC));

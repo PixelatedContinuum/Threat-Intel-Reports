@@ -254,3 +254,19 @@ test('an entry the details file does not carry says so in one line', async funct
   await settle();
   assert.match(rowEl.querySelector('.hl-dt__panel').textContent, /No details in our data for this CVE\./);
 });
+
+test('a capped description says the full text is on NVD; a short one does not (Sol round 2 P2)', async function () {
+  var capped = Object.assign({}, NKEV_ROWS['cve-2026-1001'], { desc: 'x'.repeat(2997) + '...' });
+  var env = openDom({ 'cve-2026-1001': capped });
+  var doc = env.dom.window.document;
+  var rowEl = doc.getElementById('cve-cve-2026-1001');
+  clicks(doc, rowEl.querySelector('.hl-dt'));
+  await settle();
+  assert.match(rowEl.querySelector('.hl-dt__panel').textContent, /the full text is on NVD/);
+  var env2 = openDom(NKEV_ROWS);
+  var doc2 = env2.dom.window.document;
+  var row2 = doc2.getElementById('cve-cve-2026-1001');
+  clicks(doc2, row2.querySelector('.hl-dt'));
+  await settle();
+  assert.doesNotMatch(row2.querySelector('.hl-dt__panel').textContent, /the full text is on NVD/);
+});

@@ -501,7 +501,7 @@ data-tags stays the lowercased list the filter matches on. {%- endcomment -%}
 </div>
 
 <script defer src="{{ '/assets/js/listing-filter.js' | relative_url }}?v=16"></script>
-<script defer src="{{ '/assets/js/wire-details.js' | relative_url }}?v=3"></script>
+<script defer src="{{ '/assets/js/wire-details.js' | relative_url }}?v=4"></script>
 
 {%- else -%}
 
