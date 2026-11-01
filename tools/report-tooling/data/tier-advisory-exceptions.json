@@ -63,10 +63,6 @@
     "section": "4. Technical Capabilities: XiebroC2 v3.1 Deep-Dive",
     "reason": "Reviewed 2026-10-17 (T-0213), not reordered. Canonical report order (report-structure-template: executive framing and scope, then the technical descent, then the reference apparatus): the Tier 2 sections after the teardown carry the findings and reference sections, so the teardown sits in the first third by design (tier sequence 111222333333333333333332222222222222222222222222)."
   },
-  "opendirectory-157-180-101-47-ssh-mitm-parasitic-credential-theft-20260812": {
-    "section": "5. The Interception Mechanism",
-    "reason": "Reviewed 2026-10-17 (T-0213), not reordered. Canonical report order (report-structure-template: executive framing and scope, then the technical descent, then the reference apparatus): the Tier 2 sections after the teardown carry the findings and reference sections, so the teardown sits in the first third by design (tier sequence 1122333222222222)."
-  },
   "opendirectory-216-126-227-49-cve-2026-41940-cpanel-harvester-20260517": {
     "section": "4. Technical Capabilities Deep-Dive",
     "reason": "Reviewed 2026-10-17 (T-0213), not reordered. Canonical report order (report-structure-template: executive framing and scope, then the technical descent, then the reference apparatus): the Tier 2 sections after the teardown carry the findings and reference sections, so the teardown sits in the first third by design (tier sequence 1223232222222)."

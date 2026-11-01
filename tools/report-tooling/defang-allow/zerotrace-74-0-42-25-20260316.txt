@@ -7,3 +7,13 @@ ip-api.com    # public IP geolocation service the XWorm sample queries for sandb
 ipinfo.io     # IPinfo lookup service, cited
 smtp.office365.com # Microsoft mail service named as the SMTP relay the sample's config uses
 ysoserial.net # public deserialization tool project, named as the tool
+a.k.a.data  # code or protocol identifier that ends in a TLD word, not a host
+exploit.py  # file name (.py), not a host
+messages.rs  # file name (.rs), not a host
+ohttp.open  # code or protocol identifier that ends in a TLD word, not a host
+readme.md  # file name (.md), not a host
+screen.py  # file name (.py), not a host
+sctt.py  # file name (.py), not a host
+server.py  # file name (.py), not a host
+www.cisa.gov  # cited reference page linked in the text (vendor, research, news, government or standards), not infrastructure of the actor
+interaction.shell  # VBA call Interaction.Shell(cmd, Hide) named in prose, a code identifier followed by a parenthesis, not a host

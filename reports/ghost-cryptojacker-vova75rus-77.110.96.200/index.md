@@ -598,8 +598,8 @@ This raises Operator-A's risk profile above Operator-B, who abandoned 77[.]110[.
 The patterns below reconstruct GHOST's network behavior from the kit's static configuration, mining-pool egress, dual-Telegram C2, Hysteria v2 backdoor traffic, and scanner activity. This investigation did not capture live PCAP (open-directory artifact pull only; honeypot deployment is project-planned but blocked on Protectli/VLAN segmentation), so treat these as configuration-derived rather than observed:
 
 **Outbound mining pool traffic.**
-- Operator-A: TCP 77[.]110[.]96[.]200:3333 (self-hosted XMR proxy) → upstream to `xmr.kryptex.network`
-- Operator-A: TCP 77[.]110[.]96[.]200:4444 (self-hosted CFX proxy) → upstream to `cfx.kryptex.network`
+- Operator-A: TCP 77[.]110[.]96[.]200:3333 (self-hosted XMR proxy) → upstream to `xmr[.]kryptex[.]network`
+- Operator-A: TCP 77[.]110[.]96[.]200:4444 (self-hosted CFX proxy) → upstream to `cfx[.]kryptex[.]network`
 - Operator-B: TCP `auto[.]c3pool[.]org:443` (public XMR pool) and `cfx-asia1[.]nanopool[.]org:10543` (public CFX pool)
 
 **Outbound C2 traffic.**
@@ -750,7 +750,7 @@ The historical wallet cfx:aasktcha7r... drains to the same consolidator as the c
 
 UnamSanctam is included in this section for **supply-chain context only**. UnamSanctam is **not** a Case 9 threat actor.
 
-UnamSanctam is an active GitHub developer, with 860 followers and public repositories carrying 2,584 cumulative stars (UnamWebPanel 198, SilentCryptoMiner 1020, SilentXMRMiner 643, SilentETHMiner 254, UnamBinder 279, UnamDownloader 190) as recorded during the investigation in May 2026; these are live counts that will have drifted by the time this is read [Source: github[.]com/UnamSanctam](https://github.com/UnamSanctam). They supply upstream OSS tooling that downstream malware kits, including GHOST, bundle. SilentCryptoMiner was disabled by GitHub for ToS violations, and the remaining repositories are active.
+UnamSanctam is an active GitHub developer, with 860 followers and public repositories carrying 2,584 cumulative stars (UnamWebPanel 198, SilentCryptoMiner 1020, SilentXMRMiner 643, SilentETHMiner 254, UnamBinder 279, UnamDownloader 190) as recorded during the investigation in May 2026; these are live counts that will have drifted by the time this is read Source: github[.]com/UnamSanctam. They supply upstream OSS tooling that downstream malware kits, including GHOST, bundle. SilentCryptoMiner was disabled by GitHub for ToS violations, and the remaining repositories are active.
 
 UnamSanctam's involvement in GHOST is passive. The upstream attribution comment `/* Made by Unam Sanctam hxxps://github[.]com/UnamSanctam */` appears in the GHOST kit's deployed PHP files because Vova75Rus bundles UnamWebPanel without modifying the attribution. There is no evidence of direct UnamSanctam involvement in the GHOST kit's authorship, distribution, or operation.
 
@@ -950,7 +950,7 @@ This retraction is reflected in Section 7 ATT&CK mapping and in the detection-fi
 I initially advanced the hypothesis that Vova75Rus and Operator-A were the same identity, a single actor wearing both the kit-author and the operator hats.
 
 **Refutation (Phase 15 wallet-match test):**
-- Vova75Rus's own mining setup: XTM/Tari via Kryptex worker `1238rkM7gGg3sl` on `xtm-rx-eu.kryptex.network:8038`.
+- Vova75Rus's own mining setup: XTM/Tari via Kryptex worker `1238rkM7gGg3sl` on `xtm-rx-eu[.]kryptex[.]network:8038`.
 - Operator-A's mining setup: XMR (4BBj3gj4...) + CFX (cfx:aaj5xb...) via distinct wallets.
 - Different cryptocurrencies (XTM/Tari vs. XMR + CFX), different pools, different destination wallets, distinct worker IDs.
 

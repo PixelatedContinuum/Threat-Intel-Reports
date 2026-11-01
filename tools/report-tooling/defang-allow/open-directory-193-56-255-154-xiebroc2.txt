@@ -5,8 +5,16 @@ asec.ahnlab.com  # AhnLab ASEC vendor blog, cited reference
 ipinfo.io  # IPinfo AS data page, cited reference
 blocklist.de  # public blocklist project, cited reference
 thehackernews.com  # security press, cited reference
-web.archive.org  # Wayback Machine, cited reference
+web.archive.org/web/20240525125244/*  # Wayback Machine, cited reference (the one archived HYAS report snapshot)
 golang.org  # Go language site, x/sys package name
 bleepingcomputer.com  # security press, cited reference
 threatfox.abuse.ch  # abuse.ch ThreatFox, cited reference
-github.com  # public offensive-tool repos cited as references (go-clr, Covenant, XiebroC2); the operator account github.com/Iamem is defanged by hand (post-replacement in spec.json)
+github.com/cobbr  # public offensive-tool repos cited as references (go-clr, Covenant, XiebroC2); the operator account github.com/Iamem is defanged by hand (post-replacement in spec.json) (owner-scoped)
+github.com/Ne0nd0g  # public offensive-tool repos cited as references (go-clr, Covenant, XiebroC2); the operator account github.com/Iamem is defanged by hand (post-replacement in spec.json) (owner-scoped)
+github.com/ropnop  # public offensive-tool repos cited as references (go-clr, Covenant, XiebroC2); the operator account github.com/Iamem is defanged by hand (post-replacement in spec.json) (owner-scoped)
+handle.network  # code or protocol identifier that ends in a TLD word, not a host
+handle.zip  # file name (.zip), not a host
+opendirectory-193-56-255-154-20260403-detections.md  # file name (.md), not a host
+tcp.read  # code or protocol identifier that ends in a TLD word, not a host
+www.bleepingcomputer.com  # cited reference URL in the references list (vendor, research, news, government), not infrastructure of the actor
+www.blocklist.de  # cited reference URL in the references list (vendor, research, news, government), not infrastructure of the actor

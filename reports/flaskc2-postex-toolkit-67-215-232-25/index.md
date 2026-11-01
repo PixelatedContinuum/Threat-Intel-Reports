@@ -201,7 +201,7 @@ The MSSQL SQL-CLR command-execution and reverse-shell technique is public and we
 
 - **Metasploit `mssql_clr_payload` module** (Rapid7), the canonical automated implementation: it builds a CLR assembly from hex-encoded DLL bytes, registers a stored procedure, and calls it to execute a payload [Source: github.com/rapid7/metasploit-framework, module `mssql_clr_payload`].
 - **NetSPI, "Attacking SQL Server CLR Assemblies"**: a comprehensive walkthrough of CLR assembly import, a `cmd_exec` stored-procedure deployment, `ALTER ASSEMBLY` persistence, and detection via `sys.assemblies` queries; the described `cmd_exec` implementation matches the operator's build's functionality exactly [Source: netspi.com/blog].
-- **`evi1ox/MSSQL_BackDoor`**: an open-source .NET CLR backdoor for MSSQL using hex-encoding for fileless deployment and the `UNSAFE` permission set [Source: github.com/evi1ox/MSSQL_BackDoor].
+- **`evi1ox/MSSQL_BackDoor`**: an open-source .NET CLR backdoor for MSSQL using hex-encoding for fileless deployment and the `UNSAFE` permission set [Source: github[.]com/evi1ox/MSSQL_BackDoor].
 - **HackingArticles, "MSSQL for Pentester: CLR Assembly"**: an operator-oriented walkthrough of CLR assembly deployment for RCE and persistence [Source: hackingarticles.in].
 
 The report's position, stated plainly: this component is **detection-valuable, not novel**. Its operator-specific banner string is a strong YARA anchor, and its architectural evasion is a genuine defender gap, but the underlying technique has been documented and tooled for years.
@@ -307,7 +307,7 @@ The observed `main` flow is a scaffold, not an exploit:
 
 **Why it cannot elevate (import-surface absence, DEFINITE).** The binary imports process-enumeration, `OpenProcess`, `OpenProcessToken`, `GetTokenInformation`, `AdjustTokenPrivileges`, privilege-lookup, and file-mapping/console APIs. **Decisively absent** are any ALPC (`NtAlpc*`), RPC, or WER (`WerReport*`) API; `DuplicateTokenEx`; `ImpersonateLoggedOnUser` / `SetThreadToken`; `CreateProcessWithTokenW` / `CreateProcessAsUserW`; and any `CreateProcess*` at all. The single `OpenProcessToken` uses read-only `TOKEN_QUERY`, it inspects a token, it never duplicates one. Token theft, impersonation, the SYSTEM-process spawn, and the actual ALPC trigger are all missing. The program demonstrates the reconnaissance around the vulnerability; it does not perform the exploitation.
 
-**Public CVE context (corroborates the reverse engineering).** CVE-2026-20817 is a real, publicly documented WER service ALPC EoP. Its root cause is the `SvcElevatedLaunch` function launching `WerFault.exe` with an attacker-supplied command line drawn from a shared memory section, without validating the caller, a low-privileged attacker who controls that section content can cause `WerFault.exe` to run arbitrary commands as SYSTEM. The public description matches this build's reverse-engineered behavior exactly (the ALPC port name, the 520-byte shared section, the `WerFault.exe` enumeration), which validates the static analysis against the public record. Microsoft **patched it in the January 2026 Security Update** (affecting Windows 10/11 before that update and Windows Server 2019/2022). A public PoC by the researcher @oxfemale [Source: github.com/oxfemale/CVE-2026-20817] and a technical writeup by the researcher itm4n [Source: itm4n.github.io/cve-2026-20817-wersvc-eop/] both exist; the itm4n writeup credits Denis Faiustov and Ruslan Sayfiev (GMO Cybersecurity) for the original discovery.
+**Public CVE context (corroborates the reverse engineering).** CVE-2026-20817 is a real, publicly documented WER service ALPC EoP. Its root cause is the `SvcElevatedLaunch` function launching `WerFault.exe` with an attacker-supplied command line drawn from a shared memory section, without validating the caller, a low-privileged attacker who controls that section content can cause `WerFault.exe` to run arbitrary commands as SYSTEM. The public description matches this build's reverse-engineered behavior exactly (the ALPC port name, the 520-byte shared section, the `WerFault.exe` enumeration), which validates the static analysis against the public record. Microsoft **patched it in the January 2026 Security Update** (affecting Windows 10/11 before that update and Windows Server 2019/2022). A public PoC by the researcher @oxfemale [Source: github[.]com/oxfemale/CVE-2026-20817] and a technical writeup by the researcher itm4n [Source: itm4n.github.io/cve-2026-20817-wersvc-eop/] both exist; the itm4n writeup credits Denis Faiustov and Ruslan Sayfiev (GMO Cybersecurity) for the original discovery.
 
 To frame this honestly, and I maintain the framing, I do **not** claim the operator holds a working CVE-2026-20817 exploit, and I do **not** call this build the public PoC. Whether it derives from the oxfemale release is unconfirmed, since no hash comparison was performed, and ours is non-weaponized while the public PoC is described as working, so they may differ. The accurate statement is that the operator carries a *non-weaponized demonstration PoC* for a recently-patched LPE, which makes this a **patch-action callout** rather than a live exploit threat. The operational read is that the operator relies on the proven commodity Potato escalators and experiments with newer LPE research on the side.
 
@@ -552,11 +552,11 @@ These are documented limits of passive, OSINT-and-static analysis of an idle hos
 **MSSQL CLR technique lineage (public, pre-dating this build):**
 - Rapid7 Metasploit: `mssql_clr_payload` module. Tier 2.
 - NetSPI: "Attacking SQL Server CLR Assemblies." Tier 2.
-- `github.com/evi1ox/MSSQL_BackDoor`: open-source MSSQL CLR backdoor. Tier 3.
+- `github[.]com/evi1ox/MSSQL_BackDoor`: open-source MSSQL CLR backdoor. Tier 3.
 - HackingArticles: "MSSQL for Pentester: CLR Assembly." Tier 3.
 
 **CVE-2026-20817 (patched January 2026; public PoC):**
-- @oxfemale: `github.com/oxfemale/CVE-2026-20817` (public PoC). Tier 3.
+- @oxfemale: `github[.]com/oxfemale/CVE-2026-20817` (public PoC). Tier 3.
 - itm4n: "CVE-2026-20817 WerSvc EoP" (2026-03-22), technical writeup; credits Denis Faiustov and Ruslan Sayfiev (GMO Cybersecurity) for discovery. Tier 3.
 
 **Active Directory / dMSA:**

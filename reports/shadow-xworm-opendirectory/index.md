@@ -767,17 +767,17 @@ The port exposure matters. An attacker-controlled server with RDP (3389), SMB (4
 
 ### 7.2 Domain Rotation Timeline
 
-The operator used a systematic domain rotation strategy, maintaining approximately one active domain at a time and rotating on a ~30-35 day cycle. All domains exclusively resolved to 151[.]245[.]112[.]70 during their active periods. Self-hosted nameservers (ns2[.]latssko[.]com, ns2.harrismanlieb.ink) both pointing to the C2 IP confirm operator control of DNS infrastructure.
+The operator used a systematic domain rotation strategy, maintaining approximately one active domain at a time and rotating on a ~30-35 day cycle. All domains exclusively resolved to 151[.]245[.]112[.]70 during their active periods. Self-hosted nameservers (ns2[.]latssko[.]com, ns2[.]harrismanlieb[.]ink) both pointing to the C2 IP confirm operator control of DNS infrastructure.
 
 | Domain | Active Period | Status | Role | Notes |
 |---|---|---|---|---|
 | `breakingsecurity[.]online` | 2026-01-13 to 2026-01-16 | Inactive | Unknown (3 days) | Remcos RAT brand impersonation |
 | `bluewiin[.]com` | 2026-01-16 (1 day) | Inactive | Staging/brief use | Very brief resolution period |
 | `latssko[.]com` | 2026-01-16 to 2026-02-20 | Inactive | Operational (~35 days) | Self-hosted NS (ns2[.]latssko[.]com) |
-| `harrismanlieb.ink` | 2026-02-12 to present | **Active** | Primary C2 + payload hosting | Self-hosted NS (ns2.harrismanlieb.ink) |
+| `harrismanlieb[.]ink` | 2026-02-12 to present | **Active** | Primary C2 + payload hosting | Self-hosted NS (ns2[.]harrismanlieb[.]ink) |
 | `epgoldsecurity[.]com` | 2026-02-20 to present | **Active** | Payload delivery (open directory) | Migrated from BlazingFast to Hostinger 2026-03-26 |
 
-DomainTools scored both `harrismanlieb.ink` and `epgoldsecurity[.]com` at 100/100 risk. Both were weaponized immediately on registration, a zero-day gap between registration and malicious use, which fits purpose-registered attack infrastructure rather than repurposed legitimate domains.
+DomainTools scored both `harrismanlieb[.]ink` and `epgoldsecurity[.]com` at 100/100 risk. Both were weaponized immediately on registration, a zero-day gap between registration and malicious use, which fits purpose-registered attack infrastructure rather than repurposed legitimate domains.
 
 **breakingsecurity[.]online, Remcos brand impersonation:** This domain was active for only three days in January 2026, immediately before the operator's infrastructure stabilized. Its name deliberately mimics BreakingSecurity (breakingsecurity[.]net), the legitimate developer and seller of Remcos RAT. The operator may have used this domain to attract aspiring cybercriminals seeking Remcos access, delivering Shadow RAT or XWorm instead under the guise of a "free" or "cracked" Remcos tool. The specific purpose remains MODERATE confidence, plausible but not confirmed.
 
@@ -805,7 +805,7 @@ The operator demonstrates multiple OPSEC failures:
 2. **Exposed administrative ports:** RDP (3389), SMB (445), WinRM (5985) all accessible from the internet
 3. **Unpatched vulnerabilities:** CVE-2020-0796 (SMBGhost) unpatched on the C2 server, a 2020 critical vulnerability that provides unauthenticated remote code execution against the attacker's own infrastructure
 4. **Open directory:** The operator exposed their payload server without directory listing disabled, allowing researchers to enumerate and download all four malware samples
-5. **Infrastructure fingerprinting:** Self-hosted nameservers (ns2[.]latssko[.]com, ns2.harrismanlieb.ink) pointing to the C2 IP create a distinctive infrastructure clustering signal
+5. **Infrastructure fingerprinting:** Self-hosted nameservers (ns2[.]latssko[.]com, ns2[.]harrismanlieb[.]ink) pointing to the C2 IP create a distinctive infrastructure clustering signal
 
 These failures are consistent with an inexperienced individual operator rather than a sophisticated criminal organization.
 
@@ -940,11 +940,11 @@ Sources: ANY.RUN 2025 Annual Threat Report (Tier 2); Cyble EvilCoder research (T
 **Confidence: HIGH (Microsoft Security Blog, Check Point Research, IRS Dirty Dozen 2026)**
 
 <figure style="text-align: center; margin: 2em 0;">
-  <img loading="lazy" src="{{ "/assets/images/shadow-xworm-opendirectory/tax-lure-directory.jpg" | relative_url }}" alt="DomainTools-captured index of the harrismanlieb.ink payload directory showing two files: 2026_Benefits_Enroll (9.6 MB, dated 2026-02-12) and Form 1040.msi (9.6 MB, dated 2026-02-12), the tax-season lure filenames used to deliver the malware">
-  <figcaption><em>Figure 15: The harrismanlieb.ink payload directory as captured by DomainTools, the two tax-season lure filenames (Form 1040.msi and 2026_Benefits_Enroll) were hosted from the day the domain was registered, confirming immediate weaponization.</em></figcaption>
+  <img loading="lazy" src="{{ "/assets/images/shadow-xworm-opendirectory/tax-lure-directory.jpg" | relative_url }}" alt="DomainTools-captured index of the harrismanlieb[.]ink payload directory showing two files: 2026_Benefits_Enroll (9.6 MB, dated 2026-02-12) and Form 1040.msi (9.6 MB, dated 2026-02-12), the tax-season lure filenames used to deliver the malware">
+  <figcaption><em>Figure 15: The harrismanlieb[.]ink payload directory as captured by DomainTools, the two tax-season lure filenames (Form 1040.msi and 2026_Benefits_Enroll) were hosted from the day the domain was registered, confirming immediate weaponization.</em></figcaption>
 </figure>
 
-The operator's delivery lures, `Form 1040.msi` and `2026_Benefits_Enroll`, are directly consistent with the documented 2026 tax-season malware wave. Microsoft's Security Blog (March 19, 2026) documented a tax-season campaign that targeted 29,000+ users across 10,000 organizations, peaking on February 10, 2026, coinciding with this operator's deployment period (`harrismanlieb.ink` registered February 12, `epgoldsecurity[.]com` registered February 20). MSI installer delivery is a confirmed 2026 attack delivery mechanism documented by Microsoft.
+The operator's delivery lures, `Form 1040.msi` and `2026_Benefits_Enroll`, are directly consistent with the documented 2026 tax-season malware wave. Microsoft's Security Blog (March 19, 2026) documented a tax-season campaign that targeted 29,000+ users across 10,000 organizations, peaking on February 10, 2026, coinciding with this operator's deployment period (`harrismanlieb[.]ink` registered February 12, `epgoldsecurity[.]com` registered February 20). MSI installer delivery is a confirmed 2026 attack delivery mechanism documented by Microsoft.
 
 Sources: Microsoft Security Blog, tax season 2026 (March 19, 2026, Tier 2); Check Point Research tax season 2026 (Tier 2); IRS Dirty Dozen 2026 (Tier 1)
 
@@ -1381,7 +1381,7 @@ If an endpoint compromise is confirmed, the following response phases apply:
 - Firewall disable, AV/Defender disruption (code confirmed)
 - Production vs. staging build distinction (8 feature flags confirmed enabled in ShadowClient.exe)
 - C2 server infrastructure: Strike[.]bz, AS203662, Poland
-- harrismanlieb.ink and epgoldsecurity[.]com as operator-controlled infrastructure
+- harrismanlieb[.]ink and epgoldsecurity[.]com as operator-controlled infrastructure
 - latssko[.]com and breakingsecurity[.]online as previous operator domains
 - Tax-season targeting (Form 1040.msi, 2026_Benefits_Enroll)
 - ScreenConnect deployment on C2 server (March 2026)
@@ -1426,7 +1426,7 @@ If an endpoint compromise is confirmed, the following response phases apply:
 
 **Critical blocking priorities:**
 - **151[.]245[.]112[.]70** (CRITICAL, active C2, all family traffic)
-- **harrismanlieb.ink** (HIGH, active C2 front domain)
+- **harrismanlieb[.]ink** (HIGH, active C2 front domain)
 - **epgoldsecurity[.]com** (HIGH, active payload delivery)
 - **latssko[.]com**, **breakingsecurity[.]online**, **bluewiin[.]com** (MEDIUM, historical; block for completeness)
 

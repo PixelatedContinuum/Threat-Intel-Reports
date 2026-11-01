@@ -138,8 +138,8 @@ function pickSlug() {
    copy `reports/<slug>/index.md`. The vault copy is the authored record the site
    copy is built from, so it wins: the round-2 review (A8) showed that a markdown
    copy which had already lost a section compared clean against the page built
-   from it. The site copy is used only when no vault copy exists (the
-   `-tabbed-preview` slug), and the authored line says `expectation from the site
+   from it. The site copy is used only when no vault copy exists (a slug
+   with no vault copy, such as `zerotrace-74-0-42-25-20260316`), and the authored line says `expectation from the site
    copy; no vault copy` so that is visible rather than assumed.
 
    When BOTH copies exist their bodies must agree line for line, front matter and

@@ -66,19 +66,16 @@ test('an uppercase paste of an indexed hash still matches', function () {
     'an uppercase paste must still match');
 });
 
-test('no embargoed campaign appears anywhere in the committed index', function () {
-  // The campaigns held for disclosure as of 2026-08-20. This is a safety
-  // assertion against the real artefact, not a unit test of the generator.
-  // 192-3-1-116 (MultiVector) was released 2026-08-20: CNCERT/CC confirmed action
-  // on all three of its reports, and its 30-day hold elapsed.
-  var held = /157-180-101-47/;
-  var badReports = Object.keys(idx.reports).filter(function (s) { return held.test(s); });
-  assert.deepEqual(badReports, [], 'embargoed campaign in the reports table');
-  var badHits = [];
-  Object.keys(idx.indicators).forEach(function (k) {
-    idx.indicators[k].forEach(function (h) {
-      if (held.test(h.report)) badHits.push(k + ' -> ' + h.report);
-    });
-  });
-  assert.deepEqual(badHits.slice(0, 5), [], 'indicator pointing at an embargoed campaign');
+// The "no embargoed campaign in the committed index" assertion that stood here named
+// the last campaign under disclosure hold by its address range, and that campaign left
+// the site on T-0528 (its report, detections, feed and figure now live only in the
+// vault). No campaign is under embargo as of 2026-11-01, so a hardcoded name has no
+// subject left. The rule itself stays enforced where it is computed: the generator
+// records every withheld feed under coverage.embargoed and check-ioc-index.js FAILS an
+// index whose coverage disagrees with the catalog (`test/check-ioc-index.test.js`,
+// "an indicator pointing at an embargoed report FAILS"), and check-embargo-artifacts.js
+// refuses to let a held campaign's IOC feed sit in this public repo.
+test('the index records no withheld feed', function () {
+  assert.deepEqual(idx.coverage.embargoed, [],
+    'the generator withheld a feed; confirm the site still holds it before indexing');
 });

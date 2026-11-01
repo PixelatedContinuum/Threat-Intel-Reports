@@ -103,7 +103,7 @@ if [ -n "$DEFANG_ALLOW" ]; then
 fi
 # the completeness gates compare after normalising rules 1 and 2 only when a baseline from another copy was given
 TEXT_FLAGS=()
-if [ -n "$BASELINE_MD" ]; then TEXT_FLAGS=(--defang); fi
+if [ -n "$BASELINE_MD" ]; then TEXT_FLAGS=(--defang --baseline-md "${BASELINE_ARGS[0]}" --page-md "$MD"); fi   # the link count may drop only by the links the two sources show converted to text
 
 VIEWS_ARGS=()
 if [ -n "$VIEWS" ]; then

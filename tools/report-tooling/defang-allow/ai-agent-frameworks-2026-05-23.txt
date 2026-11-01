@@ -4,4 +4,16 @@ docs.openclaw.ai  # OpenClaw project documentation site named in the Case 4 oper
 openclaw.ai  # OpenClaw project site named as the installer source the Case 4 operator pre-approved, a product not an actor host
 generativelanguage.googleapis.com  # Google Gemini API endpoint the Case 1 pipeline calls (detection guidance), a legitimate vendor service named as such
 hunt.io  # Hunt.io, the data source and sponsor, named as such in the Data source note
-web.archive.org  # Internet Archive Wayback Machine named as the archive used to confirm the repositories were removed, a reference service
+web.archive.org/web/20260525020*  # Internet Archive Wayback Machine named as the archive used to confirm the repositories were removed, a reference service (the one snapshot-search URL quoted)
+ai-agent-frameworks-2026-05-23-detections.md  # file name (.md), not a host
+any.run  # ANY.RUN sandbox, a vendor service named as such
+claude.md  # file name (.md), not a host
+evidence-package.md  # file name (.md), not a host
+gemini.md  # file name (.md), not a host
+min1.sh  # file name (.sh), not a host
+plan.md  # file name (.md), not a host
+skill.md  # file name (.md), not a host
+soul.md  # file name (.md), not a host
+tool.py  # file name (.py), not a host
+tria.ge  # Triage sandbox, a vendor service named as such
+wrapper.sh  # file name (.sh), not a host

@@ -3,3 +3,9 @@ ipinfo.io  # vendor named as an enrichment source
 bgp.he.net  # Hurricane Electric BGP tool named as a source
 gcc.gnu.org  # compiler project cited
 edgegap.net  # benign prior tenant pool named in the passive-DNS table (Edgegap game routing)
+1768.py  # file name (.py), not a host
+loader.py  # file name (.py), not a host
+loader2.py  # file name (.py), not a host
+open-directory-172-105-0-126-20260406-detections.md  # file name (.md), not a host
+pr.edgegap.net  # Edgegap game-server pool, described in the report as benign prior tenant
+usualsuspect.re  # usualsuspect.re research blog cited as a source

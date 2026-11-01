@@ -96,16 +96,12 @@ defaults:
       thumbnail: /assets/images/cards/behind-the-reports.png
   # jekyll-sitemap has no awareness of this theme's `unlisted:` front matter (that key
   # only adds a noindex meta tag at render time, see _layouts/default.html). Left alone,
-  # the plugin would still list these two embargoed pages' URLs in the public sitemap.xml,
-  # which defeats unlisted-by-URL: a sitemap is a directory, unlike a robots.txt Disallow
-  # that at least maps 1:1 to a path you chose to name. Excluding by config path here
+  # the plugin would still list an unlisted page's URL in the public sitemap.xml, which
+  # defeats unlisted-by-URL: a sitemap is a directory, unlike a robots.txt Disallow that at
+  # least maps 1:1 to a path you chose to name. Exclude one by config path here
   # (jekyll-sitemap's documented `sitemap: false` mechanism, set via defaults scope so no
-  # page front matter has to change) keeps this fix inside the _config.yml lane.
-  - scope:
-      path: "reports/opendirectory-157-180-101-47-ssh-mitm-parasitic-credential-theft-20260812"
-    values:
-      sitemap: false
-  - scope:
-      path: "hunting-detections/opendirectory-157-180-101-47-ssh-mitm-parasitic-credential-theft-20260812-detections.md"
-    values:
-      sitemap: false
+  # page front matter has to change), which keeps this fix inside the _config.yml lane:
+  #   - scope:
+  #       path: "reports/<slug>"
+  #     values:
+  #       sitemap: false

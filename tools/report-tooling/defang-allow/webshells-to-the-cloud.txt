@@ -1,1 +1,3 @@
 # nothing allowed: shellcp.info, api.dropboxapi.com (exfil API the actor used) and the .app host are all defanged
+exploit.py  # file name (.py), not a host
+exploit2.py  # file name (.py), not a host

@@ -1,3 +1,4 @@
 # T-0500.1.12 d3: benign well-known services/vendors/references named as such (rule 1); nothing actor-used
 api.ipify.org  # public IP-lookup service the Quasar sample queries before beaconing (detection guidance), a benign service named as such
 ipify.org  # public IP-lookup service the Quasar sample queries before beaconing, a benign service named as such
+ipwho.is  # public IP-lookup service named as the service the sample queries

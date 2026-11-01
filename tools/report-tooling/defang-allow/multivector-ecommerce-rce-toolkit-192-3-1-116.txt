@@ -6,7 +6,11 @@ book.hacktricks.xyz  # HackTricks page cited in the references list
 cloud.google.com  # Google Cloud documentation cited in the references list
 community.imperva.com  # Imperva community post cited in the references list
 developers.cloudflare.com  # Cloudflare developer documentation cited in the references list
-github.com      # the three github.com URLs are public advisory/wiki/tool pages (GHSA, alibaba/druid wiki, laluka/jolokia-exploitation-toolkit)
+github.com/advisories  # the three github.com URLs are public advisory/wiki/tool pages (GHSA, alibaba/druid wiki, laluka/jolokia-exploitation-toolkit) (owner-scoped)
+github.com/alibaba  # the three github.com URLs are public advisory/wiki/tool pages (GHSA, alibaba/druid wiki, laluka/jolokia-exploitation-toolkit) (owner-scoped)
+github.com/laluka  # the three github.com URLs are public advisory/wiki/tool pages (GHSA, alibaba/druid wiki, laluka/jolokia-exploitation-toolkit) (owner-scoped)
+github.com/projectdiscovery  # the three github.com URLs are public advisory/wiki/tool pages (GHSA, alibaba/druid wiki, laluka/jolokia-exploitation-toolkit) (owner-scoped)
+github.com/tarunkant  # the three github.com URLs are public advisory/wiki/tool pages (GHSA, alibaba/druid wiki, laluka/jolokia-exploitation-toolkit) (owner-scoped)
 hermes-agent.nousresearch.com  # Nous Research Hermes Agent project site, reference 25
 maxchadwick.xyz  # researcher blog post cited in the references list
 nvd.nist.gov  # NVD CVE record cited in the references list
@@ -21,3 +25,12 @@ group-ib.com  # Group-IB research page cited in the references list
 ptsconsulting.com.hk  # PTS Consulting article cited in the references list
 recordedfuture.com  # Recorded Future research page cited in the references list
 x-stream.github.io  # XStream project security-advisory page, reference 4
+com.hzsx.rent  # code or protocol identifier that ends in a TLD word, not a host
+www.acunetix.com  # cited reference URL in the references list (vendor, research, news, government), not infrastructure of the actor
+www.anthropic.com  # cited reference URL in the references list (vendor, research, news, government), not infrastructure of the actor
+www.baeldung.com  # cited reference URL in the references list (vendor, research, news, government), not infrastructure of the actor
+www.broadcom.com  # cited reference URL in the references list (vendor, research, news, government), not infrastructure of the actor
+www.dts-solution.com  # cited reference URL in the references list (vendor, research, news, government), not infrastructure of the actor
+www.group-ib.com  # cited reference URL in the references list (vendor, research, news, government), not infrastructure of the actor
+www.ptsconsulting.com.hk  # cited reference URL in the references list (vendor, research, news, government), not infrastructure of the actor
+www.recordedfuture.com  # cited reference URL in the references list (vendor, research, news, government), not infrastructure of the actor

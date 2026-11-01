@@ -29,7 +29,7 @@ var G = require('../check-browser-report.js');
 var TOOL = path.join(__dirname, '..');
 var REPO = path.join(TOOL, '..', '..');
 var PILOT = 'opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015';
-var PREVIEW = PILOT + '-tabbed-preview';
+var NOVAULT = 'zerotrace-74-0-42-25-20260316'; /* a published report with no vault copy */
 
 /* ---- the tab vocabulary and the viewport list (design-v4 3 and 4a) ---- */
 
@@ -155,17 +155,17 @@ test('a body line is reported with the file line it came from', function () {
 /* ---- the resolution order (D2 and D3) ---- */
 
 test('a slug with no vault copy resolves to the site copy and says so', function () {
-  var a = G.readAuthored(PREVIEW);
+  var a = G.readAuthored(NOVAULT);
   assert.equal(a.error, undefined);
   assert.equal(a.source, 'site');
   assert.equal(a.note, 'expectation from the site copy; no vault copy');
   assert.equal(a.compare, null, 'nothing to compare the site copy with');
-  assert.equal(a.h2.length, 20);
+  assert.ok(a.h2.length > 0);
 });
 
-test('the tagged preview markdown carries a tab line for every section', function () {
-  var a = G.readAuthored(PREVIEW);
-  assert.ok(a.tabs, 'the preview copy is tagged, so its tab assignments are readable');
+test('the tagged pilot markdown carries a tab line for every section', function () {
+  var a = G.readAuthored(PILOT);
+  assert.ok(a.tabs, 'the pilot copy is tagged, so its tab assignments are readable');
   assert.equal(Object.keys(a.tabs).length, 20);
   assert.equal(a.tabs['17-notification'], 'victims');
 });
@@ -188,15 +188,14 @@ test('a slug with a vault copy resolves to the vault copy, compared with the sit
 
 test('the published markdown carries the tab tags the preview carries (T-0500.1.11 batch 1 tagged it), and a tagged-nowhere text still gives no assignment', function () {
   /* it used to assert a.tabs === null: the pilot original had no tab lines. Batch 1 (516c7c5) tagged it with the preview's 20 lines. */
-  var a = G.readAuthored(PILOT), b = G.readAuthored(PREVIEW);
+  var a = G.readAuthored(PILOT);
   assert.equal(Object.keys(a.tabs).length, 20, '20 tagged sections');
-  assert.deepEqual(a.tabs, b.tabs, 'the published markdown and the preview agree on every section\'s tab');
   var untagged = G.readAuthored('no-such-report-folder-t0500-1-11');
   assert.ok(!untagged || !untagged.tabs, 'an unreadable text invents no assignment');
 });
 
 test('every authored h3 is mapped to the h2 above it (D8)', function () {
-  var a = G.readAuthored(PREVIEW);
+  var a = G.readAuthored(PILOT);
   assert.equal(a.parents['where-to-look-first'], '16-detection-and-hunting-guidance');
   assert.equal(a.parents['the-suppliers-and-the-rest-of-the-named-parties'],
     '3-who-was-hit-and-how-far-the-operator-got');

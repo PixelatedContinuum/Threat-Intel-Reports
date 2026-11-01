@@ -912,7 +912,7 @@ A secondary pivot from the historical phishing activity on `193[.]56[.]255[.]154
     <tr>
       <td>Hosting type</td>
       <td>Legitimate commercial VPS (permissive enforcement)</td>
-      <td>M247 abuse contact: ro-legal@m247.ro; 48hr response commitment</td>
+      <td>M247 abuse contact: ro-legal[@]m247[.]ro; 48hr response commitment</td>
     </tr>
     <tr>
       <td>First seen malicious</td>

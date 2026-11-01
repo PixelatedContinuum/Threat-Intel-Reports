@@ -2,3 +2,7 @@
 hhs.gov  # US HHS site named as a victim-sector reference, not actor infrastructure
 ip-api.com  # public IP-geolocation service XWorm queries before each C2 connection (detection guidance), a benign service named as such
 malpedia.caad.fkie.fraunhofer.de  # Malpedia (Fraunhofer FKIE) entry cited as a reference
+aforge.video  # code or protocol identifier that ends in a TLD word, not a host
+any.run  # ANY.RUN sandbox, a vendor service named as such
+shadow-xworm-opendirectory-detections.md  # file name (.md), not a host
+wscript.shell  # code or protocol identifier that ends in a TLD word, not a host

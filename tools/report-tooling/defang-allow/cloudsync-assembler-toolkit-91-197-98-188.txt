@@ -1,10 +1,17 @@
-github.com  # public offensive-tool repos named as prior art (NetExec, PrintSpoofer, ...), not actor repos
+github.com/ekzhang  # public offensive-tool repos named as prior art (NetExec, PrintSpoofer, ...), not actor repos (owner-scoped)
+github.com/itm4n  # public offensive-tool repos named as prior art (NetExec, PrintSpoofer, ...), not actor repos (owner-scoped)
+github.com/jpillora  # public offensive-tool repos named as prior art (NetExec, PrintSpoofer, ...), not actor repos (owner-scoped)
+github.com/Pennyw0rth  # public offensive-tool repos named as prior art (NetExec, PrintSpoofer, ...), not actor repos (owner-scoped)
+github.com/PowerShell  # public offensive-tool repos named as prior art (NetExec, PrintSpoofer, ...), not actor repos (owner-scoped)
+github.com/samratashok  # public offensive-tool repos named as prior art (NetExec, PrintSpoofer, ...), not actor repos (owner-scoped)
 hunt.io  # vendor
 ip-api.com  # public geolocation service the stealer queries; named as the service
 asec.ahnlab.com  # vendor, cited
-api.telegram.org  # Telegram Bot API named as the service
+api.telegram.org/bot*  # Telegram Bot API named as the service (the /bot<token> path only; a real bot id still fails)
 reg.ru  # registrar named
 ransomware.live  # public tracker, cited
 halcyon.ai  # vendor, cited
 anydesk.com  # legitimate vendor CDN the actor fetched the installer from; vendor site named as such
 1.0.0.0  # .NET AssemblyFileVersion in an image alt text, a version string not an address
+cloudsync-assembler-toolkit-91-197-98-188-detections.md  # file name (.md), not a host
+download.anydesk.com  # AnyDesk vendor CDN, named as the legitimate download host the operator used (report line quotes it as vendor infrastructure)

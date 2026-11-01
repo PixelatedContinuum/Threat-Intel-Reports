@@ -1,4 +1,4 @@
-api.telegram.org  # Telegram Bot API named as the service
+api.telegram.org/bot*  # Telegram Bot API named as the service (the /bot<token> path only; a real bot id still fails)
 api.binance.com  # Binance public ticker API named as the service
 usom.gov.tr  # Turkey national CERT, cited and polled by the panel; government service
 ptt.gov.tr  # government fraud-warning page cited
@@ -18,3 +18,11 @@ globalinitiative.net  # research org, cited
 cofense.com  # vendor, cited
 breakglass.io  # vendor, cited
 bleepingcomputer.com  # press, cited
+bellamain.zip  # file name (.zip), not a host
+blog.sekoia.io  # Sekoia research blog cited as a source
+claude.md  # file name (.md), not a host
+dolap.com  # legitimate brand site the phishing kit impersonates, linked as the brand's own page
+sahibinden.com  # legitimate brand site the phishing kit impersonates, linked as the brand's own page
+www.pttavm.com  # legitimate brand site the phishing kit impersonates, linked as the brand's own page
+www.shopier.com  # legitimate brand site the phishing kit impersonates, linked as the brand's own page
+www.usom.gov.tr  # cited reference URL in the references list (vendor, research, news, government), not infrastructure of the actor

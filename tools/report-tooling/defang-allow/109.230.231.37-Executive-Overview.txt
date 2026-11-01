@@ -1,2 +1,11 @@
 # d4 allow list (109.230.231.37-Executive-Overview/allow.txt): benign well-known vendor, publisher, standards or reference sites named as such (defang-rules.md rule 1). One reason per entry.
 # (none: nothing allowed; attacker.com in a quoted JSON example is defanged too)
+agent-xworm-exe.md  # file name (.md), not a host
+agent-xworm-v2-exe.md  # file name (.md), not a host
+disks.rs  # file name (.rs), not a host
+logpoint.com  # cited reference page linked in the text (vendor, research, news, government or standards), not infrastructure of the actor
+malpedia.caad.fkie.fraunhofer.de  # cited reference page linked in the text (vendor, research, news, government or standards), not infrastructure of the actor
+uac-test-exe.md  # file name (.md), not a host
+www.huntress.com  # cited reference page linked in the text (vendor, research, news, government or standards), not infrastructure of the actor
+www.msspalert.com  # cited reference page linked in the text (vendor, research, news, government or standards), not infrastructure of the actor
+www.picussecurity.com  # cited reference page linked in the text (vendor, research, news, government or standards), not infrastructure of the actor

