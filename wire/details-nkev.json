@@ -1,0 +1,26 @@
+---
+layout: none
+permalink: /wire/details-nkev.json
+sitemap: false
+---
+{%- comment -%}
+  T-0532 part S, design section 5: the nKEVs tab's Details fact sheet, written at build
+  from the same wire.yml the page rendered, so a page and its file always come from one
+  build (the section's data-details version query carries the same generated_at). Rows
+  are guarded exactly as the page guards them: a CVE id in CVE shape and a ten-character
+  added day, which makes the row count equal the tab's. Every data value is emitted
+  through | jsonify; the per-row object and its per-field guards are
+  _includes/wire-details-row.html. Not in site search: no layout (pagefind indexes HTML
+  only) and sitemap off.
+{%- endcomment -%}
+{%- assign wire = site.data.wire -%}
+{"generated_at": {{ wire.vulns_generated_at | jsonify }}, "rows": {
+{%- assign first = true -%}
+{%- for r in wire.vulns -%}
+{%- assign cve_head = r.cve | slice: 0, 4 -%}{%- assign added_len = r.added | size -%}
+{%- if cve_head == "CVE-" and added_len == 10 -%}
+{%- unless first -%},{%- endunless -%}{%- assign first = false -%}
+{%- include wire-details-row.html r=r -%}
+{%- endif -%}
+{%- endfor -%}
+}}

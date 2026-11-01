@@ -1,0 +1,24 @@
+{%- comment -%}
+  T-0532 part S: one Wire row as one Details fact-sheet entry.
+
+  Called from wire/details-nkev.json (the lead "added") and wire/details-cves.json
+  (the lead "published") with r = one row that the calling page has already passed
+  through its own shape guard. Every field the fact sheet reads is emitted, so one
+  include is the schema for both tabs; a field the row does not carry or carries
+  empty emits as an empty value (null or ""), exactly what the brief asks, and the
+  renderer shows that section's line about absence. Every data value is emitted
+  through | jsonify (the JSON pages' escaping rule, hard rule 1): a value holding a
+  quote, a backslash or a control character cannot change the JSON shape. The key is
+  the row's CVE lowercased, exactly the id the page puts on the row element, so the
+  renderer finds its row by string id.
+
+  One object per row, single line; the calling page owns "generated_at", the "rows"
+  wrapper and the commas between rows. Every key after the first carries its comma
+  at its FRONT, so no absence anywhere can leave a trailing comma. The one field
+  shaped as a number that must NOT be coerced when empty is `gap`: a gap of ""
+  coerced to 0 would claim "NVD published it the same day VulnCheck added it", so it
+  is skipped when empty, and the renderer then says nothing about the NVD date
+  rather than a false same-day.
+{%- endcomment -%}
+{%- assign dr = include.r -%}
+{{ dr.cve | downcase | jsonify }}: {"added": {{ dr.added | jsonify }}, "published": {{ dr.published | jsonify }}, "title": {{ dr.title | jsonify }}, "desc": {{ dr.desc | jsonify }}, "cwe": {{ dr.cwe | jsonify }}, "affected": {{ dr.affected | jsonify }}, "fixed": {{ dr.fixed | jsonify }}, "kev_due": {{ dr.kev_due | jsonify }}, "evidence": {{ dr.evidence | jsonify }}, "cisa_added": {{ dr.cisa_added | jsonify }}, "disclosed": {{ dr.disclosed | jsonify }}{%- if dr.gap != nil and dr.gap != "" -%}, "gap": {{ dr.gap | plus: 0 | jsonify }}{%- endif -%}, "msf": {{ dr.msf | jsonify }}, "edb": {{ dr.edb | jsonify }}, "reports": {{ dr.reports | jsonify }}, "reports_more": {{ dr.reports_more | default: 0 | plus: 0 | jsonify }}, "stories": {{ dr.stories | default: 0 | plus: 0 | jsonify }}, "aliases": {{ dr.aliases | jsonify }}, "et_sids": {{ dr.et_sids | jsonify }}, "nuclei": {{ dr.nuclei | jsonify }}, "cisa_sigma": {{ dr.cisa_sigma | jsonify }}, "snort3_sids": {{ dr.snort3_sids | jsonify }}, "ssvc_expl": {{ dr.ssvc_expl | jsonify }}, "ssvc_auto": {{ dr.ssvc_auto | jsonify }}, "ssvc_impact": {{ dr.ssvc_impact | jsonify }}, "cvss": {{ dr.cvss | jsonify }}, "cvss_version": {{ dr.cvss_version | jsonify }}, "severity": {{ dr.severity | jsonify }}, "scored_by": {{ dr.scored_by | jsonify }}, "cvss_vector": {{ dr.cvss_vector | jsonify }}, "epss": {{ dr.epss | jsonify }}, "epss_pct": {{ dr.epss_pct | jsonify }}, "epss_date": {{ dr.epss_date | jsonify }}, "epss_pre": {{ dr.epss_pre | jsonify }}, "epss_max": {{ dr.epss_max | jsonify }}, "epss_xmodel": {{ dr.epss_xmodel | jsonify }}, "signals": {{ dr.signals | jsonify }}, "kev_product": {{ dr.kev_product | jsonify }}, "kev_product_n": {{ dr.kev_product_n | default: 0 | plus: 0 | jsonify }}}

@@ -1,0 +1,23 @@
+---
+layout: none
+permalink: /wire/details-cves.json
+sitemap: false
+---
+{%- comment -%}
+  T-0532 part S, design section 5: the CVEs tab's Details fact sheet, built the same way
+  as the nKEVs one (see that page's comment) over wire.cves, with the CVEs tab's own
+  shape guard (a CVE id in CVE shape) matching the page's loop, so the row count equals
+  the tab's. cve.now's model-written summaries are never read here: no summary or context
+  key is emitted, and none exists in wire.yml to emit.
+{%- endcomment -%}
+{%- assign wire = site.data.wire -%}
+{"generated_at": {{ wire.cves_generated_at | jsonify }}, "rows": {
+{%- assign first = true -%}
+{%- for r in wire.cves -%}
+{%- assign cve_head = r.cve | slice: 0, 4 -%}
+{%- if cve_head == "CVE-" -%}
+{%- unless first -%},{%- endunless -%}{%- assign first = false -%}
+{%- include wire-details-row.html r=r -%}
+{%- endif -%}
+{%- endfor -%}
+}}
