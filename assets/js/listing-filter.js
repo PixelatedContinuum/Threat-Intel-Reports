@@ -1,6 +1,6 @@
 (function () {
-/* One bar and one grid per instance. /wire/ renders two (Headlines and
-   Vulnerabilities), each inside its own [data-filter-scope] section; every
+/* One bar and one grid per instance. /wire/ renders three (Headlines,
+   nKEVs and CVEs), each inside its own [data-filter-scope] section; every
    other page renders one bar and one grid with no scope, which finds the grid
    in the document exactly as before. */
 function init(bar) {
@@ -133,7 +133,7 @@ function init(bar) {
      so the four listing pages that render one row are unaffected. Axes AND
      together: picking a topic and a kind narrows to items matching both. */
   var dims = [Dim('data-tag', 'data-tags')];
-  ['data-kind', 'data-list', 'data-sev', 'data-det', 'data-nvd', 'data-vendor', 'data-age'].forEach(function (a) {
+  ['data-kind', 'data-list', 'data-sev', 'data-det', 'data-nvd', 'data-sig', 'data-vendor', 'data-age'].forEach(function (a) {
     if (bar.querySelector('.hl-chip-btn[' + a + ']')) dims.push(Dim(a, a));
   });
   if (bar.querySelector('.hl-chip-btn[data-added]')) {

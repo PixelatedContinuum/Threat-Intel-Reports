@@ -1,0 +1,86 @@
+---
+layout: none
+permalink: /wire/cves.xml
+sitemap: false
+---
+<?xml version="1.0" encoding="UTF-8"?>
+{%- comment -%}
+  The Wire's CVEs tab (T-0522) as an Atom feed: one entry per CVE the exporter's selection
+  rule lists (significant, recent, not yet on a KEV list, with a public exploit, a public
+  rule or a high EPSS percentile), from the same `cves:` rows /wire/ renders (_data/wire.yml,
+  written by wire_export.py). Each entry links to its row on /wire/. Modelled on vulns.xml:
+  data fields only, no description, and nothing from cve.now's model-written summaries.
+  GitHub proof-of-concept repositories are counted in the summary and never linked.
+  Without CVE data this is a valid, empty feed rather than a 404.
+{%- endcomment -%}
+{%- assign wire = site.data.wire %}
+{%- assign sev_bands = "critical,high,medium,low" | split: "," %}
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>{{ site.title | xml_escape }}: The Wire, CVEs (significant new CVEs not yet on a KEV list)</title>
+  <subtitle>This feed is my selection of new CVEs with a public exploit, a public detection rule or a high EPSS percentile that are not yet in CISA's KEV catalog or on the nKEVs tab. Being listed does not mean exploitation has been seen. Facts come from cve.now (CC BY 4.0), CISA SSVC through Vulnrichment, FIRST EPSS, Exploit-DB and Metasploit.</subtitle>
+  <link href="{{ site.url }}/wire/cves.xml" rel="self" type="application/atom+xml"/>
+  <link href="{{ site.url }}/wire/#cves" rel="alternate" type="text/html"/>
+  <link href="https://cve.now/" rel="via" type="text/html" title="cve.now"/>
+  <updated>{% if wire and wire.cves_generated_at and wire.cves_generated_at != "" %}{{ wire.cves_generated_at | date_to_xmlschema }}{% elsif wire and wire.generated_at %}{{ wire.generated_at | date_to_xmlschema }}{% else %}{{ site.time | date_to_xmlschema }}{% endif %}</updated>
+  <id>{{ site.url }}/wire/cves.xml</id>
+  <author>
+    <name>{{ site.title | xml_escape }}</name>
+    <uri>{{ site.url }}/wire/#cves</uri>
+  </author>
+  <rights>Data from cve.now (CC BY 4.0), CISA Vulnrichment, FIRST EPSS, Exploit-DB and the Metasploit Framework. Selection by {{ site.title | xml_escape }}.</rights>
+{%- if wire and wire.cves and wire.cves != empty %}
+  {%- if wire.cves_status == "ok" or wire.cves_status == "stale" %}
+  {%- for r in wire.cves limit: 500 %}
+  {%- comment %} The page's row guard: an empty string is true in Liquid, so check shapes. {% endcomment %}
+  {%- assign cve_head = r.cve | slice: 0, 4 %}{% assign pub_len = r.published | size %}
+  {%- if cve_head == "CVE-" and pub_len == 10 %}
+  {%- assign vday = r.published %}
+  {%- assign msf_len = r.msf | size %}{% assign edb_len = r.edb | size %}
+  {%- assign poc_s = r.poc_n | append: "" %}{% assign poc_n = 0 %}{% if poc_s != "" %}{% assign poc_n = r.poc_n | plus: 0 %}{% endif %}
+  <entry>
+    <title>{{ r.cve | xml_escape }}{% if r.vendor and r.vendor != "" %}: {{ r.vendor | xml_escape }} {{ r.product | xml_escape }}{% endif %}</title>
+    <link href="{{ site.url }}/wire/#cves-{{ r.cve | downcase | xml_escape }}" rel="alternate" type="text/html"/>
+    <link href="https://nvd.nist.gov/vuln/detail/{{ r.cve | xml_escape }}" rel="related" type="text/html" title="NVD"/>
+    <link href="https://cve.now/{{ r.cve | xml_escape }}" rel="related" type="text/html" title="cve.now"/>
+    {%- comment %} Metasploit modules and Exploit-DB entries are linked as the Exploits popover links them; PoC repositories never. {% endcomment %}
+    {%- for m in r.msf %}
+    <link href="https://github.com/rapid7/metasploit-framework/blob/master/{{ m | uri_escape | xml_escape }}" rel="related" type="text/html" title="Metasploit module"/>
+    {%- endfor %}
+    {%- for e in r.edb %}
+    <link href="https://www.exploit-db.com/exploits/{{ e | uri_escape | xml_escape }}" rel="related" type="text/html" title="Exploit-DB entry"/>
+    {%- endfor %}
+    <id>{{ site.url }}/wire/#cves-{{ r.cve | downcase | xml_escape }}</id>
+    <published>{{ vday | xml_escape }}T00:00:00Z</published>
+    <updated>{{ vday | xml_escape }}T00:00:00Z</updated>
+    <category term="cves-tab" label="CVEs tab"/>
+    {%- if msf_len > 0 %}
+    <category term="metasploit-module" label="Metasploit module"/>
+    {%- endif %}
+    {%- if edb_len > 0 %}
+    <category term="exploit-db" label="Exploit-DB entry"/>
+    {%- endif %}
+    {%- if poc_n > 0 %}
+    <category term="github-poc" label="GitHub PoC"/>
+    {%- endif %}
+    {%- assign n_sids = r.et_sids | size %}
+    {%- if n_sids > 0 %}
+    <category term="et-open-rule" label="ET Open rule"/>
+    {%- endif %}
+    {%- assign nu_len = r.nuclei | size %}
+    {%- if nu_len > 0 %}
+    <category term="nuclei-template" label="Nuclei template"/>
+    {%- endif %}
+    {%- assign cvss_len = r.cvss | size %}
+    {%- assign sev = "" %}
+    {%- if cvss_len > 0 %}{% if sev_bands contains r.severity %}{% assign sev = r.severity %}{% endif %}{% endif %}
+    {%- if sev != "" %}
+    <category term="severity-{{ r.severity | xml_escape }}" label="CVSS {{ r.severity | upcase | xml_escape }} {{ r.cvss | xml_escape }}"/>
+    {%- endif %}
+    {%- assign epss_len = r.epss | append: "" | size %}
+    <summary type="text">Published {{ vday | xml_escape }}{% if sev != "" %}; CVSS v{{ r.cvss_version | xml_escape }} {{ r.cvss | xml_escape }} {{ r.severity | upcase | xml_escape }}, scored by {% if r.scored_by == "NVD" %}NVD{% elsif r.scored_by == "ADP" %}CISA's ADP{% else %}the CNA{% endif %} (VulnCheck NVD++){% endif %}{% if epss_len > 0 %}; EPSS {{ r.epss | times: 1.0 | round: 3 }}{% endif %}{% if msf_len > 0 %}; {{ msf_len }} Metasploit module{% if msf_len != 1 %}s{% endif %}{% endif %}{% if edb_len > 0 %}; {{ edb_len }} Exploit-DB entr{% if edb_len == 1 %}y{% else %}ies{% endif %}{% endif %}{% if poc_n > 0 %}; {{ poc_n }} GitHub PoC repositor{% if poc_n == 1 %}y{% else %}ies{% endif %} (not linked){% endif %}. Not in a KEV list when selected; exploitation not implied.</summary>
+  </entry>
+  {%- endif %}
+  {%- endfor %}
+  {%- endif %}
+{%- endif %}
+</feed>

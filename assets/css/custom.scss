@@ -3870,11 +3870,20 @@ a.hl-card:hover { border-color: var(--hl-accent-blue) !important; transform: tra
   border-color: color-mix(in srgb, #bc8cff 32%, var(--hl-border-card));
   border-left-color: #bc8cff;
 }
+/* T-0522: the CVEs tab's callout (teal, the tab's colour) holds three short paragraphs. */
+.hl-wire__callout--c {
+  background: color-mix(in srgb, #2dd4bf 7%, var(--hl-bg-card));
+  border-color: color-mix(in srgb, #2dd4bf 32%, var(--hl-border-card));
+  border-left-color: #2dd4bf;
+}
+.hl-wire__callout p { margin: 0 0 0.6em; }
+.hl-wire__callout p:last-child { margin-bottom: 0; }
 
 /* --- The Wire: tabs, switched by the URL hash with CSS only ----
-   No JavaScript: each tab is a link to #headlines or #vulns, and :target shows
-   the section. Any anchor INSIDE #vulns (a day, a CVE) opens it too, through
-   :has(:target).
+   No JavaScript: each tab is a link to #headlines, #vulns or #cves, and :target
+   shows the section. Any anchor INSIDE #vulns or #cves (a day, a CVE) opens it
+   too, through :has(:target). Headlines is the default; each other tab's rules
+   below are the vulns pair repeated (T-0522 added #cves).
 
    Every hiding rule is itself a :has() selector, so a browser without :has()
    drops all of them: there BOTH sections stay visible, stacked, and every
@@ -3893,6 +3902,7 @@ a.hl-card:hover { border-color: var(--hl-accent-blue) !important; transform: tra
    hard to see; the unselected tab now keeps its colour at lower strength. */
 .hl-wtabs__tab--h { --tab: var(--hl-accent-blue); }
 .hl-wtabs__tab--v { --tab: #bc8cff; }
+.hl-wtabs__tab--c { --tab: #2dd4bf; }
 .hl-post-content .hl-wtabs__tab,
 .hl-wtabs__tab {
   font-size: 0.95em;
@@ -3928,21 +3938,37 @@ a.hl-card:hover { border-color: var(--hl-accent-blue) !important; transform: tra
 .hl-wtabs:has(#vulns :target) #vulns { display: block; }                    /* (2,2,0) */
 .hl-wtabs:has(#vulns:target) #headlines { display: none; }                  /* (2,2,0) */
 .hl-wtabs:has(#vulns :target) #headlines { display: none; }                 /* (2,2,0) */
-/* Selected-tab styling: Headlines unless the vulns section is targeted. */
+.hl-wtabs:has(#headlines) #cves:target { display: block; }                  /* (2,2,0) */
+.hl-wtabs:has(#cves :target) #cves { display: block; }                      /* (2,2,0) */
+.hl-wtabs:has(#cves:target) #headlines { display: none; }                   /* (2,2,0) */
+.hl-wtabs:has(#cves :target) #headlines { display: none; }                  /* (2,2,0) */
+/* Selected-tab styling: Headlines unless the vulns or cves section is targeted. */
 .hl-post-content .hl-wtabs__tab--h,
 .hl-wtabs__tab--h,
 .hl-wtabs:has(#vulns:target) .hl-wtabs__tab--v,
-.hl-wtabs:has(#vulns :target) .hl-wtabs__tab--v {
+.hl-wtabs:has(#vulns :target) .hl-wtabs__tab--v,
+.hl-wtabs:has(#cves:target) .hl-wtabs__tab--c,
+.hl-wtabs:has(#cves :target) .hl-wtabs__tab--c {
   color: var(--tab) !important;
   background: color-mix(in srgb, var(--tab) 14%, var(--hl-bg-card));
   border-color: color-mix(in srgb, var(--tab) 45%, var(--hl-border-card));
   border-top-color: var(--tab);
 }
 .hl-wtabs:has(#vulns:target) .hl-wtabs__tab--h,
-.hl-wtabs:has(#vulns :target) .hl-wtabs__tab--h {
+.hl-wtabs:has(#vulns :target) .hl-wtabs__tab--h,
+.hl-wtabs:has(#cves:target) .hl-wtabs__tab--h,
+.hl-wtabs:has(#cves :target) .hl-wtabs__tab--h {
   color: color-mix(in srgb, var(--tab) 70%, var(--hl-text-muted)) !important;
   background: color-mix(in srgb, var(--tab) 5%, transparent);
   border-color: color-mix(in srgb, var(--tab) 22%, transparent);
+}
+/* Three tabs no longer fit at phone width with the desktop padding (the CVEs tab ran 50px past a
+   375px screen, measured in a browser, T-0522). Tighter padding and gaps below 480px. */
+@media (max-width: 480px) {
+  .hl-wtabs__nav { gap: 2px; }
+  .hl-post-content .hl-wtabs__tab,
+  .hl-wtabs__tab { padding: 0.55em 0.7em; font-size: 0.88em; }
+  .hl-wtabs__n { margin-left: 0.35em; padding: 0.1em 0.4em; }
 }
 /* Anchors must not land under the 70px sticky site header. A tab link lands on
    its section, so the margin also keeps the tab bar (39px) above it in view;
@@ -4029,7 +4055,11 @@ a.hl-card:hover { border-color: var(--hl-accent-blue) !important; transform: tra
    template. Outlined and muted so the severity chip stays the loudest thing. */
 .hl-vuln { position: relative; }
 /* One line on a wide screen: the vendor text wraps before the chips do. */
-.hl-vuln__badges { flex-wrap: nowrap; align-items: baseline; }
+.hl-vuln__badges { flex-wrap: wrap; row-gap: 0.25em; align-items: baseline; }
+/* T-0522: wrap instead of nowrap. The cve.now chips (SSVC, Exploits) lengthen a row, and in a browser
+   one of 317 nKEV rows ran 6px past its box at 1280. A grid `auto` column takes its content's full
+   width while there is room, so a row that fits still sits on one line, unchanged; only a row that
+   would overflow now wraps its chips to a second line inside the column. */
 .hl-post-content .hl-vuln__p,
 .hl-vuln__p {
   font-size: 0.78em;
@@ -4089,6 +4119,31 @@ span.hl-vuln__p--det { cursor: help; }
 .hl-vuln__rule { font-variant-numeric: tabular-nums; }
 span.hl-vuln__rule { color: var(--hl-text-secondary); }
 .hl-vuln__spark { display: block; overflow: visible; color: #79c0ff; width: 124px; height: 28px; max-width: 100%; }
+/* T-0522: the cve.now fields. SSVC and Exploits are the same details-popover pattern as src, EPSS
+   and Rules; cve.now is a plain link chip. Each takes its own text colour so the three read as
+   different things in a row of outlined chips. */
+.hl-post-content .hl-vuln__p--ssvc,
+.hl-vuln__p--ssvc { color: #79c0ff !important; border-color: color-mix(in srgb, #79c0ff 40%, var(--hl-border-card)); }
+.hl-post-content .hl-vuln__p--exp,
+.hl-vuln__p--exp { color: #fb923c !important; border-color: color-mix(in srgb, #fb923c 40%, var(--hl-border-card)); }
+.hl-post-content .hl-vuln__p--cn,
+.hl-vuln__p--cn { color: #2dd4bf !important; border-color: color-mix(in srgb, #2dd4bf 40%, var(--hl-border-card)); }
+span.hl-vuln__p--ssvc, span.hl-vuln__p--exp, span.hl-vuln__p--cn { cursor: help; }
+.hl-vuln__popbody--ssvc { min-width: 13em; max-width: min(22em, 85vw); }
+.hl-vuln__popbody--exp { min-width: 14em; max-width: min(26em, 85vw); max-height: min(22em, 60vh); overflow-y: auto; }
+.hl-vuln__kv { display: flex; gap: 0.6em; align-items: baseline; }
+.hl-vuln__kv .hl-vuln__rh { flex: 0 0 8.5em; }
+/* The CVE record's first sentence, one line under the row on a wide screen (the full text is the
+   title attribute), two on a phone. It spans every grid column. */
+.hl-vuln__title {
+  grid-column: 1 / -1;
+  min-width: 0;
+  color: var(--hl-text-muted);
+  font-size: 0.92em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
 
 /* --- The nKEVs legend (T-0468.1) ---------------------------------------
    Explains each chip, badge and filter of the tab. On a wide screen it is the report
@@ -4411,6 +4466,7 @@ span.hl-vuln__rule { color: var(--hl-text-secondary); }
   .hl-vuln { grid-template-columns: minmax(0, 1fr); gap: 0.2em; padding: 0.55em 0.7em; }
   .hl-vuln__badges { justify-content: flex-start; }
   .hl-vuln__popbody { left: 0.7em; right: auto; }
+  .hl-vuln__title { white-space: normal; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
   /* T-0496: on a phone the chips wrap to a second line. T-0468 had them scroll
      sideways, which left chips (Rules among them) out of view on the rows with
      more chips than fit; a wrapped line shows every chip. Rows with few chips
