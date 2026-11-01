@@ -451,7 +451,7 @@ function defangNormalise(text) {
    sources as the links of the baseline that the edited source no longer links and whose visible text it still carries.
    A link dropped from the page with no such change in the source (text kept, the source still links it) is not counted, so
    the link count still FAILs. Inline [text](target), [text][label] with its definition, <scheme://autolinks> and <a href>
-   are read; fenced code and code spans are skipped (they render no link). A bare URL is not read: the report renderer does
+   are read; fenced code, code spans and HTML comments are skipped (they render no link). A bare URL is not read: the report renderer does
    not link one. */
 function stripCode(md) {
   var out = [], fence = null;
@@ -461,7 +461,8 @@ function stripCode(md) {
     if (m) { fence = m[1]; out.push(''); return; }
     out.push(ln.replace(/(`+)[^`\n]*?\1/g, function (c) { return ' '.repeat(c.length); }));
   });
-  return out.join('\n');
+  /* an HTML comment renders nothing: its links and its text are not on the page (T-0500.1.12 r2fix, F4); newlines kept */
+  return out.join('\n').replace(/<!--[\s\S]*?(?:-->|$)/g, function (c) { return c.replace(/[^\n]/g, ' '); });
 }
 function markdownLinks(md) {
   var src = stripCode(md), links = [], defs = {}, i;

@@ -153,3 +153,22 @@ test('IPv6 [:] form: normalises on both sides; a lone [:] and a wrong bracket do
   assert.strictEqual(C.defangNormalise('slice x[:] and y[:]z').text, 'slice x[:] and y[:]z', 'a [:] not between hex or colon characters is left');
   assert.strictEqual(C.defangNormalise('fe80[:][:]1 and ab[:]cd').text, 'fe80::1 and ab:cd');
 });
+
+/* T-0500.1.12 r2fix F4: a link inside an HTML comment renders nothing, so it is neither counted nor an allowance */
+test('links F4: a phantom link in an HTML comment is not a link; the allowance cannot mask a silently dropped real link', function () {
+  var base = '<!-- [phantom](https://actor.invalid/a) -->\nSee [vendor](https://vendor.invalid/b).';
+  var page_ = '<!-- phantom -->\nSee [vendor](https://vendor.invalid/b).';
+  assert.deepStrictEqual(C.markdownLinks(base).map(function (l) { return l.target; }), ['https://vendor.invalid/b']);
+  var lc = C.linksConverted(base, page_);
+  assert.strictEqual(lc.count, 0, 'nothing rendered was converted');
+  // the page lost the vendor link in rendering while the source still links it: baseline 1 link vs page 0 must FAIL
+  var r = C.compare(withLinks(TXT, 1), withLinks(TXT, 0), { defang: true, linksConverted: lc.count });
+  assert.strictEqual(r.status, 'FAIL');
+  // multi-line comment too
+  assert.strictEqual(C.markdownLinks('<!--\n[a](http://x.example/1)\n-->\n[b](http://y.example/2)\n').length, 1);
+  // controls: a genuine one-link conversion still PASSes, a silent drop still FAILs
+  var lc2 = C.linksConverted(MD_LINK, MD_TEXT);
+  assert.strictEqual(lc2.count, 1);
+  assert.strictEqual(C.compare(withLinks(TXT, 2), withLinks(TXTD, 1), { defang: true, linksConverted: lc2.count }).status, 'PASS');
+  assert.strictEqual(C.compare(withLinks(TXT, 2), withLinks(TXT, 1), { defang: true, linksConverted: C.linksConverted(MD_LINK, MD_LINK).count }).status, 'FAIL');
+});

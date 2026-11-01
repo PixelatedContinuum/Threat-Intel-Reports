@@ -214,3 +214,16 @@ test('a path scope cannot be walked out of: dot segments, encoded dots and slash
   fails(H + 'https://github.com./ne0nd0g/x\n', scoped);
   fails(H + 'https://github.com/ne0nd0gx/x\n', scoped);
 });
+
+/* T-0500.1.12 r2fix (Sol round 2): F5 a raw domain before "(" and F6 a partly defanged IPv6 host are findings */
+test('r2fix F5: a raw domain directly followed by "(" is flagged; the defanged form and an allowed name pass', function () {
+  fails(H + 'evil-attacker.sh(foo)\n');
+  passes(H + 'evil-attacker[.]sh(foo)\n');
+  passes(H + 'call install.sh(foo)\n', 'install.sh  # a script file name in prose\n');
+});
+test('r2fix F6: a partly defanged IPv6 host (raw colons beside [:]) is a finding; the fully defanged form passes', function () {
+  assert.ok(fails(H + 'ws://[2001[:]db8::7]/p\n').kinds.indexOf('IPV6-URL') !== -1);
+  assert.ok(fails(H + 'hxxp://[2001[:]db8::7]/p\n').kinds.indexOf('IPV6-URL') !== -1);
+  passes(H + 'ws://[2001[:]db8[:][:]7]/p\n');
+  passes(H + 'hxxp://[2001[:]db8[:][:]7]/p\n');
+});

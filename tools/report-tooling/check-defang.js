@@ -71,7 +71,7 @@
    domain, e-mail, partly defanged host, link target, unmarked attacker block, bare executable line, bare multi-tenant allow entry) and
    its defanged twin must come back clean, or the run is NOT CHECKED. A missing or implausible TLD snapshot is NOT CHECKED too.
 
-   WHAT IT CANNOT SEE (the PASS line says so): IPv6 outside a URL; a domain whose last label is not in the IANA snapshot (the snapshot
+   WHAT IT CANNOT SEE (the PASS line says so): deliberate obfuscation by the author (comment and continuation tricks, srcset or entity-encoded schemes, mixed-encoding dot segments, numeric or hex IPv4 hosts); IPv6 outside a URL; a domain whose last label is not in the IANA snapshot (the snapshot
    dates from its first line; refresh it by hand); a command whose first token is not in COMMANDS or a cmdlet; indented (4-space)
    code, which is read as prose; anything rendered by an include or Liquid tag from data outside the file; the rendered page (this is
    a source lint); and whether an allowed name is really benign, since the allow file is a reviewer's claim. A file name or code
@@ -306,10 +306,10 @@ var URL_RE = /\b(?:https?|ftps?|sftp|wss?):\/\/[^\s"'<>]+/gi;
 /* The domain and e-mail shapes take ANY final label; scanLine keeps it only when it is a TLD in the IANA snapshot (isTld). */
 var EMAIL_RE = /[A-Za-z0-9._%+-]+@(?:[A-Za-z0-9-]+(?:\[\.\]|\.))+[A-Za-z][A-Za-z0-9-]*[A-Za-z0-9]\b/gi;
 var IP_RE = /(?<![\d]|\d\.|\d\[\.\])(\d{1,3})(\[\.\]|\.)(\d{1,3})(\[\.\]|\.)(\d{1,3})(\[\.\]|\.)(\d{1,3})(?!\d|\.\d|\[\.\]\d)/g;
-var DOMAIN_RE = /(?<![A-Za-z0-9_\\-])((?:[A-Za-z0-9](?:[A-Za-z0-9-]*[A-Za-z0-9])?(?:\[\.\]|\.))+([A-Za-z][A-Za-z0-9-]*[A-Za-z0-9]|[A-Za-z]{2}))(?![A-Za-z0-9_(-]|\.[A-Za-z0-9]|\[\.\][A-Za-z0-9])/gi;
+var DOMAIN_RE = /(?<![A-Za-z0-9_\\-])((?:[A-Za-z0-9](?:[A-Za-z0-9-]*[A-Za-z0-9])?(?:\[\.\]|\.))+([A-Za-z][A-Za-z0-9-]*[A-Za-z0-9]|[A-Za-z]{2}))(?![A-Za-z0-9_-]|\.[A-Za-z0-9]|\[\.\][A-Za-z0-9])/gi;
 var HXXP_RE = /\b(?:hxxps?|fxp):\/\//gi;
 /* A scheme (real or defanged) followed by a bracketed IPv6 literal whose colons are still raw. */
-var V6_URL_RE = /\b(?:https?|hxxps?|ftps?|fxp|sftp|wss?):\/\/\[([0-9A-Fa-f.]*:[0-9A-Fa-f:.]*)\](?::\d+)?/gi;
+var V6_URL_RE = /\b(?:https?|hxxps?|ftps?|fxp|sftp|wss?):\/\/\[((?:[0-9A-Fa-f.:]|\[:\])*)\](?::\d+)?/gi;
 
 function mask(line, start, end) { return line.slice(0, start) + ' '.repeat(end - start) + line.slice(end); }
 
@@ -346,7 +346,11 @@ function scanLine(rawLine, allow) {
     if (oct && isPrivateIPv4(oct.slice(1).map(Number))) { out.privateN++; continue; }
     if (/^\[.*\]$/.test(host)) { /* IPv6 literal */
       var v6 = host.slice(1, -1);
-      if (/\[:\]/.test(v6) && isWs) { out.defanged++; continue; } /* ws(s) with the colons defanged */
+      if (/\[:\]/.test(v6) && isWs) { /* ws(s) with the colons defanged: every colon must be, a raw one beside a [:] is a partly defanged host */
+        if (v6.replace(/\[:\]/g, '').indexOf(':') !== -1) out.flagged.push({ kind: 'IPV6-URL', token: tok });
+        else out.defanged++;
+        continue;
+      }
       if (isPrivateIPv6(v6)) { out.privateN++; continue; }
       out.flagged.push({ kind: 'IPV6-URL', token: tok });
       continue;
@@ -371,8 +375,10 @@ function scanLine(rawLine, allow) {
   V6_URL_RE.lastIndex = 0;
   spans = [];
   while ((m = V6_URL_RE.exec(line))) {
+    if (m[1].replace(/\[:\]/g, '').indexOf(':') === -1 && m[1].indexOf('[:]') === -1) continue; /* not an IPv6 literal */
     spans.push([m.index, m.index + m[0].length]);
-    if (isPrivateIPv6(m[1])) { out.privateN++; continue; }
+    if (m[1].indexOf('[:]') !== -1 && m[1].replace(/\[:\]/g, '').indexOf(':') === -1) { out.defanged++; continue; } /* every colon defanged */
+    if (isPrivateIPv6(m[1].replace(/\[:\]/g, ':'))) { out.privateN++; continue; }
     out.flagged.push({ kind: 'IPV6-URL', token: m[0] });
   }
   spans.forEach(function (s) { line = mask(line, s[0], s[1]); });
@@ -823,7 +829,7 @@ function main() {
     process.exit(1);
   }
   console.log('PASS  no un-defanged indicator outside .hl-copy blocks, link targets included, and no attacker command line without a bracketed command token; ' + summary +
-    '; CANNOT SEE: bare IPv6 text outside a URL; a domain whose last label is not in the IANA snapshot (' + getTlds().count + ' names); a command whose first token is not in COMMANDS; indented (4-space) code; Liquid/include output; the rendered page; whether an allowed name is really benign (the allow file is the reviewer\'s claim)');
+    '; CANNOT SEE: deliberate obfuscation by the author (comment and line-continuation tricks, srcset or entity-encoded schemes, mixed-encoding dot segments, numeric or hex IPv4 hosts: the lint guards honest mistakes, not evasion); bare IPv6 text outside a URL; a domain whose last label is not in the IANA snapshot (' + getTlds().count + ' names); a command whose first token is not in COMMANDS; indented (4-space) code; Liquid/include output; the rendered page; whether an allowed name is really benign (the allow file is the reviewer\'s claim)');
   process.exit(0);
 }
 
