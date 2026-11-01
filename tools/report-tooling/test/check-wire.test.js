@@ -300,7 +300,7 @@ var PAGE_OK = [
   '<details class="hl-legend-mobile" data-pagefind-ignore><summary>Legend</summary>{{ legend_html }}</details>',
   '<div class="hl-wire hl-vulns" data-filter-grid data-filter-item=".hl-vuln">',
   '{%- for r in wire.vulns -%}',
-  '<div class="hl-vuln">{% for rp in r.reports %}<a href="{{ rp.url }}">x</a>{% endfor %}</div>',
+  '<div class="hl-vuln">{% for rp in r.reports %}<a href="{{ rp.url | escape }}">x</a>{% endfor %}</div>',
   '{%- endfor -%}',
   '</div>',
   '<aside class="hl-post-toc hl-legend" aria-label="Legend" data-pagefind-ignore>{{ legend_html }}</aside>',
@@ -1382,6 +1382,71 @@ test('the feed: the real wire/cves.xml passes; an unescaped output, a PoC word, 
     assert.match(r.problems.join(' | '), c[1], 'case ' + i);
   });
   assert.equal(CW.checkCvesFeed(null).status, 'NOT CHECKED');
+});
+
+/* ---- ESC lane (T-0522): the nKEV row template and wire/vulns.xml are now held to the same
+   escaping guarantee as the CVEs tab and its feed. One mutation per newly escaped value (each
+   anchor asserted present first), plus the number-forcing pins. ---- */
+
+test('one escaping mutation per newly escaped nKEV value fails the page gate (control: the real page passes)', function () {
+  var page = readReal('wire/index.md');
+  var inc = realIncludes();
+  assert.equal(CW.checkPage(page, inc).status, 'PASS');
+  var mutants = [
+    ['id="cve-{{ r.cve | downcase | escape }}"', 'id="cve-{{ r.cve | downcase }}"'],
+    ['data-title="{{ r.cve | downcase | escape }} {{ r.vendor', 'data-title="{{ r.cve | downcase }} {{ r.vendor'],
+    ['data-sev="{{ sev | escape }}"', 'data-sev="{{ sev }}"'],
+    ['data-det="{{ det | join: \'|\' | escape }}"', 'data-det="{{ det | join: \'|\' }}"'],
+    ['data-nvd="{{ nvd_key | escape }}"', 'data-nvd="{{ nvd_key }}"'],
+    ['data-day="{{ vday | escape }}"', 'data-day="{{ vday }}"'],
+    ['vuln/detail/{{ r.cve | escape }}', 'vuln/detail/{{ r.cve }}'],
+    ['noreferrer">{{ r.cve | escape }}</a>', 'noreferrer">{{ r.cve }}</a>'],
+    ['CISA KEV {{ r.cisa_added | escape }}', 'CISA KEV {{ r.cisa_added }}'],
+    ['A CVE from {{ cve_year | escape }}', 'A CVE from {{ cve_year }}'],
+    ['added in {{ vday | slice: 0, 4 | escape }}', 'added in {{ vday | slice: 0, 4 }}'],
+    ['>CVE-{{ cve_year | escape }}</span>', '>CVE-{{ cve_year }}</span>'],
+    ['evidence {{ r.evidence | escape }}', 'evidence {{ r.evidence }}'],
+    ['KEV {{ vday | escape }}, {% if gap_n', 'KEV {{ vday }}, {% if gap_n'],
+    ['id="vulns-{{ vday | escape }}"', 'id="vulns-{{ vday }}"'],
+    ['{{ vday | date: "%A %-d %B %Y" | escape }}', '{{ vday | date: "%A %-d %B %Y" }}']
+  ];
+  mutants.forEach(function (m, i) {
+    assert.ok(page.indexOf(m[0]) > -1, 'escape mutation ' + i + ' anchor missing: ' + m[0]);
+    var r = CW.checkPage(page.replace(m[0], m[1]), inc);
+    assert.equal(r.status, 'FAIL', 'escape mutation ' + i + ': ' + m[0]);
+    assert.match(r.problems.join(' | '), /nKEV row template prints .* without escape/, 'mutation ' + i);
+  });
+  // Reverting the reports_more number forcing is caught by the pin, not by a filter:
+  // the value prints bare and must stay, in the assign, forced to a number.
+  var force = '{%- assign n_more = r.reports_more | default: 0 | plus: 0 -%}';
+  assert.ok(page.indexOf(force) > -1, 'the n_more forcing assign is missing');
+  var unforced = CW.checkPage(page.replace(force, '{%- assign n_more = r.reports_more | default: 0 -%}'), inc);
+  assert.equal(unforced.status, 'FAIL');
+  assert.match(unforced.problems.join(' | '), /does not force n_more/);
+});
+
+test('one xml-escape mutation per newly escaped vulns.xml value fails the nKEV feed gate (control: the real feed passes)', function () {
+  var xml = readReal('wire/vulns.xml');
+  assert.equal(CW.checkVulnsFeed(xml).status, 'PASS');
+  var cases = [
+    ['vuln/detail/{{ r.cve | xml_escape }}', 'vuln/detail/{{ r.cve }}'],
+    ['#cve-{{ r.cve | downcase | xml_escape }}" rel="alternate', '#cve-{{ r.cve | downcase }}" rel="alternate'],
+    ['#cve-{{ r.cve | downcase | xml_escape }}</id>', '#cve-{{ r.cve | downcase }}</id>'],
+    ['<published>{{ vday | xml_escape }}T00:00:00Z', '<published>{{ vday }}T00:00:00Z'],
+    ['<updated>{{ vday | xml_escape }}T00:00:00Z', '<updated>{{ vday }}T00:00:00Z'],
+    ['KEV {{ vday | xml_escape }}{% if dis_len', 'KEV {{ vday }}{% if dis_len'],
+    ['since {{ r.cisa_added | xml_escape }}', 'since {{ r.cisa_added }}']
+  ];
+  cases.forEach(function (c, i) {
+    assert.ok(xml.indexOf(c[0]) > -1, 'feed case ' + i + ' anchor missing: ' + c[0]);
+    var r = CW.checkVulnsFeed(xml.replace(c[0], c[1]));
+    assert.equal(r.status, 'FAIL', 'feed case ' + i);
+    assert.match(r.problems.join(' | '), /wire\/vulns\.xml prints .* without xml_escape/, 'feed case ' + i);
+  });
+  // Control: a bare number-forced value (gap_n), the site constants and the Atom dates pass.
+  assert.ok(xml.indexOf('{{ gap_n }}') > -1, 'the gap_n pin anchor is missing from the feed');
+  assert.equal(CW.checkVulnsFeed(null).status, 'NOT CHECKED');
+  assert.match(CW.checkVulnsFeed(null).reason, /vulns\.xml is absent or unreadable/);
 });
 
 test('an include named only by another include is followed too', function () {

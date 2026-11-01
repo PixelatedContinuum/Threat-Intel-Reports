@@ -19,6 +19,7 @@ var PAGE = path.join(ROOT, 'wire', 'index.md');
 var INCLUDES = path.join(ROOT, '_includes');
 var SCSS = path.join(ROOT, 'assets', 'css', 'custom.scss');
 var FEED = path.join(ROOT, 'wire', 'cves.xml');
+var VULNS_FEED = path.join(ROOT, 'wire', 'vulns.xml');
 
 var yaml, CW;
 try {
@@ -141,13 +142,19 @@ var fd = CW.checkCvesFeed(feedSrc);
 console.log(fd.status + '  ' + FEED + (fd.status === 'PASS' ? '  (every output escaped, sources and the cve.now score note present)' : ''));
 if (fd.reason) console.log('   ' + fd.reason);
 fd.problems.forEach(function (x) { console.log('   FAIL  ' + x); });
+var vf = null;
+try { vf = fs.readFileSync(VULNS_FEED, 'utf8'); } catch (e) { vf = null; }
+var fvn = CW.checkVulnsFeed(vf);
+console.log(fvn.status + '  ' + VULNS_FEED + (fvn.status === 'PASS' ? '  (every output escaped for XML)' : ''));
+if (fvn.reason) console.log('   ' + fvn.reason);
+fvn.problems.forEach(function (x) { console.log('   FAIL  ' + x); });
 var tc = CW.checkTabCss(scssSrc);
 console.log(tc.status + '  ' + SCSS + (tc.status === 'PASS' ? '  (every tab-hiding rule is a :has() rule)' : ''));
 if (tc.reason) console.log('   ' + tc.reason);
 tc.problems.forEach(function (x) { console.log('   FAIL  ' + x); });
 
-if (r.status === 'PASS' && p.status === 'PASS' && tc.status === 'PASS' && fd.status === 'PASS') process.exit(0);
+if (r.status === 'PASS' && p.status === 'PASS' && tc.status === 'PASS' && fd.status === 'PASS' && fvn.status === 'PASS') process.exit(0);
 // A page-side FAIL starts with "FAIL  <path>" in the log, which pages.yml reads as a bug on main.
-if (r.status === 'FAIL' || p.status === 'FAIL' || tc.status === 'FAIL' || fd.status === 'FAIL') process.exit(1);
+if (r.status === 'FAIL' || p.status === 'FAIL' || tc.status === 'FAIL' || fd.status === 'FAIL' || fvn.status === 'FAIL') process.exit(1);
 // NOT CHECKED on the page or the CSS alone is not a pass, and is not a FAIL either.
 process.exit(2);

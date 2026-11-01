@@ -910,6 +910,7 @@ function checkPage(src, includes) {
 
   problems = problems.concat(checkLegend(src));
   problems = problems.concat(checkCvesTab(src, includes));
+  problems = problems.concat(checkNkevRow(src));
 
   return verdict(problems.length ? 'FAIL' : 'PASS', null, problems, [], null);
 }
@@ -1039,6 +1040,47 @@ function unescapedOutputs(text) {
     bad.push(m);
   });
   return bad;
+}
+
+/* The nKEV row template (ESC lane, T-0522). The same rule the CVEs tab is held to holds for the
+   row's own markup: every {{ }} output either carries `escape` or is a number the template forced.
+   The four bare prints below are number-forced in their assigns, and are allowed bare only while
+   that forcing is still there, so a refactor that prints the value unforced is caught outright. */
+var NKEV_FORCED = [
+  ['n_more', /\{%-?\s*assign\s+n_more\s*=\s*r\.reports_more\s*\|\s*default:\s*0\s*\|\s*plus:\s*0\s*-?%\}/,
+    'reports_more'],
+  ['gap_n', /\{%-?\s*assign\s+gap_n\s*=\s*r\.gap\s*\|\s*plus:\s*0\s*-?%\}/, 'gap'],
+  ['gap_abs', /\{%-?\s*assign\s+gap_abs\s*=\s*gap_n\s*\|\s*times:\s*-1\s*-?%\}/, 'the gap'],
+  ['n_src', /\{%-?\s*assign\s+n_src\s*=\s*n_reps\s*\|\s*plus:\s*n_more\s*-?%\}/, 'the report count']
+];
+function checkNkevRow(src) {
+  if (src === null || src === undefined) {
+    return ['NOT CHECKED: wire/index.md is absent, so the nKEV row template could not be verified'];
+  }
+  var m = /\{%-?\s*for r in wire\.vulns -?%\}[\s\S]*?\{%-?\s*endfor\s*-?%\}\s*<\/div>/.exec(src);
+  if (!m) {
+    return ['could not find the nKEV row template (for r in wire.vulns), so its outputs were not verified'];
+  }
+  var slice = m[0].replace(/\{%-?\s*comment\s*-?%\}[\s\S]*?\{%-?\s*endcomment\s*-?%\}/g, '')
+    .replace(/\{%\s*comment\s*%\}[\s\S]*?\{%\s*endcomment\s*%\}/g, '');
+  var problems = [];
+  (slice.match(/\{\{-?[\s\S]*?-?\}\}/g) || []).forEach(function (out) {
+    var inner = out.replace(/^\{\{-?\s*/, '').replace(/\s*-?\}\}$/, '');
+    if (/\|\s*escape\b/.test(inner)) return;
+    if (NUMERIC_END.test(inner)) return;
+    if (/\.size\s*$/.test(inner)) return;   // Liquid's MethodLiteral: array/string size is a number
+    for (var i = 0; i < NKEV_FORCED.length; i++) {
+      if (new RegExp('^(?:' + NKEV_FORCED[i][0] + ')$').test(inner)) {
+        if (!NKEV_FORCED[i][1].test(slice)) {
+          problems.push('the nKEV row template does not force ' + inner + ' (' + NKEV_FORCED[i][2] +
+            ') to a number: the pin for it changed or is missing, and a hostile value there breaks a filter attribute or the build');
+        }
+        return;
+      }
+    }
+    problems.push('the nKEV row template prints ' + out + ' without escape, and it is not a number the template forced');
+  });
+  return problems;
 }
 function checkCvesTab(src, includes) {
   var problems = [];
@@ -1231,6 +1273,27 @@ function checkCvesFeed(xml) {
   return verdict(problems.length ? 'FAIL' : 'PASS', null, problems, [], null);
 }
 
+/* The nKEV Atom feed (ESC lane, T-0522): wire/vulns.xml. The same escaping guarantee the CVEs feed is
+   held to: every output is escaped for XML or is a number the template forced, a site constant or an
+   Atom date filter's output. `gap_n` is `r.gap | plus: 0` in the template, so a number. `xml` is
+   wire/vulns.xml, or null. */
+var SAFE_VULNS_FEED_OUT = /^(?:site\.url|site\.time\s*\|\s*date_to_xmlschema|wire\.vulns_generated_at\s*\|\s*date_to_xmlschema|wire\.generated_at\s*\|\s*date_to_xmlschema|gap_n)$/;
+function checkVulnsFeed(xml) {
+  if (typeof xml !== 'string') {
+    return verdict('NOT CHECKED', 'wire/vulns.xml is absent or unreadable, so the nKEV feed was not verified.');
+  }
+  var problems = [];
+  var body = xml.replace(/\{%-?\s*comment\s*-?%\}[\s\S]*?\{%-?\s*endcomment\s*-?%\}/g, '').replace(/\{%\s*comment\s*%\}[\s\S]*?\{%\s*endcomment\s*%\}/g, '');
+  (body.match(/\{\{-?[\s\S]*?-?\}\}/g) || []).forEach(function (m) {
+    var inner = m.replace(/^\{\{-?\s*/, '').replace(/\s*-?\}\}$/, '');
+    if (/\|\s*xml_escape\b/.test(inner)) return;
+    if (/\|\s*(?:round:\s*\d+|times:\s*[\d.]+|plus:\s*\d+|size|floor)\s*$/.test(inner)) return;
+    if (SAFE_VULNS_FEED_OUT.test(inner)) return;
+    problems.push('wire/vulns.xml prints ' + m + ' without xml_escape, and it is not a number, a site constant or an Atom date');
+  });
+  return verdict(problems.length ? 'FAIL' : 'PASS', null, problems, [], null);
+}
+
 /* The tab CSS (T-0522 made it three tabs). The no-:has fallback is a property of the whole block:
    every rule that hides a section or a tab's selected state is itself a :has() selector, so a
    browser without :has() drops them all and shows every section stacked, with every anchor still
@@ -1273,5 +1336,5 @@ function checkTabCss(scss) {
   return verdict(problems.length ? 'FAIL' : 'PASS', null, problems, [], { hides: hides });
 }
 
-module.exports = { check: check, checkPage: checkPage, checkTabCss: checkTabCss, checkCvesFeed: checkCvesFeed, STALE_HOURS: STALE_HOURS,
+module.exports = { check: check, checkPage: checkPage, checkTabCss: checkTabCss, checkCvesFeed: checkCvesFeed, checkVulnsFeed: checkVulnsFeed, STALE_HOURS: STALE_HOURS,
   VULNS_STALE_HOURS: VULNS_STALE_HOURS };
