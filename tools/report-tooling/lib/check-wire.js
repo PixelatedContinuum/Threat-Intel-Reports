@@ -49,7 +49,8 @@ var DAY_SHAPE = /^\d{4}-\d{2}-\d{2}$/;
 var SCORE_KEYS = ['cvss', 'cvss_version', 'severity', 'scored_by'];
 var SEVERITIES = { critical: 1, high: 1, medium: 1, low: 1 };
 var CVSS_VERSIONS = { '4.0': 1, '3.1': 1, '3.0': 1, '2.0': 1 };
-var SCORED_BY = { NVD: 1, CNA: 1, ADP: 1 };
+// 'cve.now': Revision 3's arm A takes cve.now's score and vector when our NVD data holds none, and the row says so.
+var SCORED_BY = { NVD: 1, CNA: 1, ADP: 1, 'cve.now': 1 };
 
 function scoreProblem(r) {
   var present = SCORE_KEYS.filter(function (k) { return hasKey(r, k); });
@@ -435,18 +436,30 @@ function checkVulns(doc, now) {
 var CVES_KEYS = ['cve', 'published', 'vendor', 'product', 'title', 'cvss', 'cvss_version', 'severity',
   'scored_by', 'epss', 'epss_pct', 'epss_date', 'epss_max', 'epss_spark', 'signals', 'msf', 'edb',
   'et_sids', 'nuclei', 'cisa_sigma', 'snort3_sids', 'ssvc_expl', 'ssvc_auto', 'ssvc_impact',
-  'fixed', 'aliases', 'stories'];
-var CVES_SIGNALS = { msf: 1, edb: 1, nuclei: 1, et: 1, epss: 1 };
+  'fixed', 'aliases', 'stories', 'cvss_vector', 'kev_product', 'kev_product_n'];
+/* Revision 3 (Joseph, 2026-11-01): the four selection arms are crit_noauth_kev_product (CVSS 9.0 or
+   higher, AV:N/PR:N/UI:N in the row's own vector, AND a product CISA has listed before), msf, edb and
+   epss90 (FIRST percentile 0.90 or higher). nuclei and et are shown as the Rules chip and are NOT arms:
+   a row with only those admits nothing. */
+var CVES_SIGNALS = { crit_noauth_kev_product: 1, msf: 1, edb: 1, epss90: 1, nuclei: 1, et: 1 };
+var CVES_ARMS = ['crit_noauth_kev_product', 'msf', 'edb', 'epss90'];
+var CVSS_VECTOR = /^(?:CVSS:\d\.\d\/)?[A-Za-z]{1,3}:[A-Za-z0-9]{1,3}(?:\/[A-Za-z]{1,3}:[A-Za-z0-9]{1,3})*$/;
 var CVES_BODY_KEYS = ['description', 'summary', 'context'];
-var EPSS_HIGH_PCT = 0.95;
+var EPSS_HIGH_PCT = 0.90;
 function signalFacts(r) {
   var epct = Number(r.epss_pct);
+  var cv = Number(r.cvss);
+  var vec = typeof r.cvss_vector === 'string' ? r.cvss_vector : '';
+  var tokens = vec.split('/');
   return {
+    crit_noauth_kev_product: !isEmpty(r.cvss) && cv >= 9 && tokens.indexOf('AV:N') !== -1 &&
+      tokens.indexOf('PR:N') !== -1 && tokens.indexOf('UI:N') !== -1 &&
+      typeof r.kev_product === 'string' && r.kev_product !== '' && isCount(r.kev_product_n) && r.kev_product_n > 0,
     msf: Array.isArray(r.msf) && r.msf.length > 0,
     edb: Array.isArray(r.edb) && r.edb.length > 0,
     nuclei: typeof r.nuclei === 'string' && r.nuclei !== '',
     et: Array.isArray(r.et_sids) && r.et_sids.length > 0,
-    epss: !isEmpty(r.epss_pct) && epct >= EPSS_HIGH_PCT
+    epss90: !isEmpty(r.epss_pct) && epct >= EPSS_HIGH_PCT
   };
 }
 function checkCves(doc, now) {
@@ -487,7 +500,7 @@ function checkCves(doc, now) {
   var seen = Object.create(null);
   var nSev = { critical: 0, high: 0, medium: 0, low: 0 };
   var nUnscored = 0;
-  var nSig = { msf: 0, edb: 0, nuclei: 0, et: 0, epss: 0 };
+  var nSig = { crit_noauth_kev_product: 0, msf: 0, edb: 0, epss90: 0, nuclei: 0, et: 0 };
   var byVendor = Object.create(null);
   rows.forEach(function (r, n) {
     r = r || {};
@@ -524,6 +537,20 @@ function checkCves(doc, now) {
     pointerProblems(r).forEach(function (p) { warnings.push(where + ' ' + p); });
     nkevProblems(r).forEach(function (p) { warnings.push(where + ' ' + p); });
     cvenowProblems(r).forEach(function (p) { warnings.push(where + ' ' + p); });
+    if (hasKey(r, 'cvss_vector') && !isEmpty(r.cvss_vector) &&
+        !(typeof r.cvss_vector === 'string' && r.cvss_vector.length <= 120 && CVSS_VECTOR.test(r.cvss_vector))) {
+      warnings.push(where + ' has cvss_vector ' + JSON.stringify(r.cvss_vector) + ', not empty or a CVSS vector');
+    }
+    if (!isEmpty(r.cvss_vector) && isEmpty(r.cvss)) warnings.push(where + ' has a cvss_vector but no cvss');
+    if (hasKey(r, 'kev_product') && !isEmpty(r.kev_product) && !(typeof r.kev_product === 'string' && r.kev_product.length <= 120)) {
+      warnings.push(where + ' has a kev_product that is not short text');
+    }
+    if (hasKey(r, 'kev_product_n') && !isEmpty(r.kev_product_n) && !(isCount(r.kev_product_n))) {
+      warnings.push(where + ' has kev_product_n ' + JSON.stringify(r.kev_product_n) + ', not empty or a count');
+    }
+    if (isEmpty(r.kev_product) !== (isEmpty(r.kev_product_n) || r.kev_product_n === 0)) {
+      warnings.push(where + ' carries kev_product and kev_product_n only in part (a product needs its count of earlier CISA KEV entries, and a count needs its product)');
+    }
     // The signals the row lists against the facts the row shows.
     var listed = Array.isArray(r.signals) ? r.signals : null;
     if (!listed) warnings.push(where + ' has signals that are not a list');
@@ -538,7 +565,9 @@ function checkCves(doc, now) {
         if (!has && facts[s]) warnings.push(where + ' shows ' + s + ' but does not list it as a signal');
         if (facts[s]) nSig[s]++;
       });
-      if (!listed.length) warnings.push(where + ' lists no signal, so nothing admits it under the rule');
+      if (!CVES_ARMS.some(function (s) { return listed.indexOf(s) !== -1; })) {
+        warnings.push(where + ' lists no selection arm (' + CVES_ARMS.join(', ') + '), so nothing admits it under the rule');
+      }
     }
     if (r.cve && seen[r.cve]) warnings.push(where + ' repeats a CVE');
     if (r.cve) seen[r.cve] = 1;
@@ -984,7 +1013,7 @@ function checkLegend(src) {
 
    `includes` is { name: text } for the _includes this tab uses, or absent when they could not be
    read (then 5 and the include half of 4 are NOT CHECKED, said in a problem line, never a pass). */
-var SAFE_OUT = /^(?:c_[a-z]+|ex_n|msf_len|edb_len|sev|vc|cves_legend_html|wire\.window_days|wire\.cves\.size|g\.items\.size|n_cves|forloop\.index|sg\s*\|\s*join:\s*'\|'|'[^']*'\s*\|\s*relative_url)$/;
+var SAFE_OUT = /^(?:c_[a-z]+|ex_n|msf_len|edb_len|kn|w_pc|sev|vc|cves_legend_html|wire\.window_days|wire\.cves\.size|g\.items\.size|n_cves|forloop\.index|sg\s*\|\s*join:\s*'\|'|'[^']*'\s*\|\s*relative_url)$/;
 function unescapedOutputs(text) {
   var bad = [];
   (text.match(/\{\{-?[\s\S]*?-?\}\}/g) || []).forEach(function (m) {
@@ -1018,6 +1047,9 @@ function checkCvesTab(src, includes) {
     [[/my selection/, 'that the list is my selection'],
      [/does not mean anyone has been seen exploiting/, 'that being listed is not evidence of exploitation'],
      [/excludes anything on VulnCheck KEV or CISA KEV/, 'that the list excludes anything on VulnCheck KEV or CISA KEV'],
+     [/is a fact about the product/, 'that "product on CISA KEV" is a fact about the product, not about the CVE'],
+     [/no login and no user action/, 'the plain-words rule for the critical arm'],
+     [/top 10%/, 'the EPSS arm in plain words'],
      [/moves to the nKEVs tab when/, 'that a row moves to the nKEVs tab when its CVE is added'],
      [/confirmed against Rapid7's or Exploit-DB's own index/, 'that Metasploit and Exploit-DB claims are confirmed against the publishers\' indexes'],
      [/CISA's own assessment/, 'that the SSVC decision points are CISA\'s own assessment'],
