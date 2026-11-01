@@ -347,7 +347,7 @@ The split between `dekontbot` for card data and `vergibot` for identity data is 
 
 For comparative context, Cofense (2023) documented single-bot, single-channel credential exfiltration, the dominant commodity pattern. Sekoia.io EvilTokens (2024) documented bot separation at the *PhaaS marketplace* level, covering sales, template deployment and anti-bot protections, but not at the per-deployment victim-data-routing level. Netcraft Haozi (2025) documented operator-community channel separation for FAQs and after-sales support, but again not per-deployment data-stream separation. Breakglass TMoscow Bot (2025) documented four-tier role-based access control in a web panel, but expressed those roles within a single panel UI rather than as distinct Telegram bot tokens. BellaMain's per-deployment four-bot architecture with identity-versus-card separation is more granular than any of these published patterns. I hold that MODERATE, because BellaMain's design is the only documented instance and the absence of prior reporting limits corroboration.
 
-The high-fidelity behavior is the hardcoded canary bot URI pattern in HTTP egress logs from any PHP host, `api.telegram.org/bot6797512084:AAGbJVoC*`. The token is revoked, but any attempted call indicates an active BellaMain deployment. The operator-configured bot tokens for `adminbot`, `dekontbot`, `cekimbot` and `vergibot` live in the panel's MySQL database and are not recoverable from source, so they would surface only via a panel-database compromise or honeypot acquisition. The Sigma rule for Telegram-bot-URI hunting is in the [separate detection file](/hunting-detections/bellamain-turkish-phaas-79-137-192-3-20260516-detections/).
+The high-fidelity behavior is the hardcoded canary bot URI pattern in HTTP egress logs from any PHP host, `api[.]telegram[.]org/bot6797512084:AAGbJVoC*`. The token is revoked, but any attempted call indicates an active BellaMain deployment. The operator-configured bot tokens for `adminbot`, `dekontbot`, `cekimbot` and `vergibot` live in the panel's MySQL database and are not recoverable from source, so they would surface only via a panel-database compromise or honeypot acquisition. The Sigma rule for Telegram-bot-URI hunting is in the [separate detection file](/hunting-detections/bellamain-turkish-phaas-79-137-192-3-20260516-detections/).
 
 ### 5.4 TRUNCATE Evidence Destruction On Demand: Anti-Forensics
 
@@ -932,7 +932,7 @@ These are the first three signatures to deploy if attention is limited:
 
 1. **`V5VgjLU0jsDe/` URI path component** (Sigma): Any HTTP request URI containing this 12-character random string is high-fidelity. Single-string match; vanishingly low FP probability.
 2. **`sifreleWadanz` + `sifrecozWadanz` function-name pair in PHP source** (YARA): Author-pseudonym signature; deploy on web-root file-integrity-monitoring or PHP corpus audits.
-3. **`api.telegram.org/bot6797512084:AAGbJVoC*` egress URI** (Suricata / Zeek HTTP), Specific revoked-token URI; observation of attempted calls indicates an active BellaMain deployment.
+3. **`api[.]telegram[.]org/bot6797512084:AAGbJVoC*` egress URI** (Suricata / Zeek HTTP), Specific revoked-token URI; observation of attempted calls indicates an active BellaMain deployment.
 
 See the [separate detection file](/hunting-detections/bellamain-turkish-phaas-79-137-192-3-20260516-detections/) for the full rule bodies and additional behavioral signatures.
 

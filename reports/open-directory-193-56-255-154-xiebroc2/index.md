@@ -1347,7 +1347,7 @@ Covenant's archived status (original repository archived 2021/2022) did not redu
 - **AhnLab ASEC (2025):** "XiebroC2 Identified in MS-SQL Server Attack Cases", https://asec.ahnlab.com/en/90369/
 - **AhnLab ASEC (2025):** "Statistics Report on Malware Targeting Windows Database Servers in Q3 2025", https://asec.ahnlab.com/en/90572/
 - **AhnLab ASEC Q4 2025:** MS-SQL malware statistics (Trigona; no XiebroC2 activity reported), https://asec.ahnlab.com/en/92003/
-- **INotGreen/XiebroC2 GitHub repository:** https://github.com/INotGreen/XiebroC2
+- **INotGreen/XiebroC2 GitHub repository:** hxxps://github[.]com/INotGreen/XiebroC2
 
 **Covenant C2:**
 - **BleepingComputer:** "APT28 hackers deploy customized variant of Covenant open-source tool", https://www.bleepingcomputer.com/news/security/apt28-hackers-deploy-customized-variant-of-covenant-open-source-tool/

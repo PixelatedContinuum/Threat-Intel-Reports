@@ -189,7 +189,7 @@ The full content of the operator's `~/.claude/settings.local.json` (442 bytes, U
 {
   "permissions": {
     "allow": [
-      "Bash(curl -fsSL https://openclaw.ai/install.sh | bash)",
+      "Bash([c]url -fsSL https://openclaw.ai/install.sh | bash)",
       "Bash(which node && node --version && which npm && npm --version 2>/dev/null; which brew 2>/dev/null; which pnpm 2>/dev/null)",
       "Bash(npm i -g openclaw)",
       "Bash(openclaw onboard)",
@@ -207,7 +207,7 @@ The schema is Anthropic Claude Code's documented per-directory and global permis
 
 | # | Command | Purpose | Risk Category |
 |---|---|---|---|
-| 1 | `Bash(curl -fsSL https://openclaw.ai/install.sh \| bash)` | Fetch and pipe-execute the OpenClaw installer | Remote-code execution via the `curl \| bash` distribution pattern |
+| 1 | `Bash([c]url -fsSL https://openclaw.ai/install.sh \| bash)` | Fetch and pipe-execute the OpenClaw installer | Remote-code execution via the `curl \| bash` distribution pattern |
 | 2 | `Bash(which node && node --version && which npm && npm --version 2>/dev/null; which brew 2>/dev/null; which pnpm 2>/dev/null)` | Environment probe, enumerate Node.js, npm, Homebrew, pnpm presence | System information discovery |
 | 3 | `Bash(npm i -g openclaw)` | Globally install OpenClaw via npm (alternative install path) | Package-manager-mediated tool acquisition |
 | 4 | `Bash(openclaw onboard)` | Run OpenClaw's first-run onboarding workflow | Toolkit bring-up |
