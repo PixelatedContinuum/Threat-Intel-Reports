@@ -45,8 +45,8 @@ const BOGUS_TACTIC = [
   '| Fabrication | T1059.004 | Unix Shell | interactive bash |'
 ].join('\n');
 
-// opendirectory-157-180-101-47, line 741. The retired ID is an aside in the
-// evidence cell, not a second declared technique.
+// A withdrawn report, line 741 of the copy kept in the vault. The retired ID is an
+// aside in the evidence cell, not a second declared technique.
 const RETIRED_MENTION = [
   '| Tactic / Technique | Name | Evidence |',
   '|---|---|---|',

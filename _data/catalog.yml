@@ -48,17 +48,6 @@ entries:
     stix_url: /stix/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817.json
     detection_url: /hunting-detections/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817-detections
     ioc_url: /ioc-feeds/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817-iocs.json
-  # ===== PENDING GO-LIVE — SSH Interception and Parasitic Credential Theft (157.180.101.47) =====
-  # HELD: public go-live blocked pending the CERT-GOV-MD reply. 130 victims sit behind that channel.
-  # Uncomment this block at launch, then drop `unlisted: true` from the report + detection front matter.
-  #  - title: "SSH Interception and Parasitic Credential Theft"
-  #    date: 2026-08-12
-  #    severity: high
-  #    tags: [Cred Theft, SSH, Tor, AI Abuse]
-  #    report_url: /reports/opendirectory-157-180-101-47-ssh-mitm-parasitic-credential-theft-20260812/
-  #    detection_url: /hunting-detections/opendirectory-157-180-101-47-ssh-mitm-parasitic-credential-theft-20260812-detections
-  #    ioc_url: /ioc-feeds/opendirectory-157-180-101-47-ssh-mitm-parasitic-credential-theft-20260812-iocs.json
-  # ============================================================================================
   - title: "CloudSync: An Assembler's Intrusion Toolkit"
     date: 2026-08-03
     severity: high

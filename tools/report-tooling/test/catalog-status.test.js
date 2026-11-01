@@ -122,15 +122,17 @@ test('the real catalog and the real front matter AGREE on every campaign', funct
     'a conflict here is a half-completed go-live and must be resolved by hand');
 });
 
-test('the real corpus has 50+ published and at least one embargoed', function () {
+test('the real corpus has 40+ published', function () {
   var real = fs.readFileSync(
     path.join(__dirname, '..', '..', '..', '_data', 'catalog.yml'), 'utf8');
   var r = CS.resolve(real, realUnlisted());
   var counts = { published: 0, embargoed: 0 };
   Object.keys(r.status).forEach(function (k) { counts[r.status[k]]++; });
   assert.ok(counts.published > 40, 'expected 40+ published, got ' + counts.published);
-  // 2 as of 2026-08-21: 13.140.145.210 and 157.180.101.47. MultiVector was the third and
-  // was released that day, its 30-day hold having elapsed with CNCERT/CC confirming action.
-  // Still a real guard against an accidental mass-release of the two that remain held.
-  assert.ok(counts.embargoed >= 1, 'expected the 1 known embargoed campaign, got ' + counts.embargoed);
+  // This test used to floor counts.embargoed at 1, naming the campaigns held on
+  // 2026-08-21. The last of them was withdrawn from the site on T-0528 and no campaign
+  // is held as of 2026-11-01, so the floor was dropped with the campaign that satisfied
+  // it rather than kept as a check with no subject. A half-completed go-live is still
+  // caught: the test above this one fails on any catalog/front-matter conflict, and
+  // check-embargo-artifacts.js FAILS on a held campaign's IOC feed sitting in the repo.
 });
