@@ -281,6 +281,14 @@ var INC_OK = [
 var INCLUDES_OK = { 'wire-vuln-new.html': INC_OK };
 
 var PAGE_OK = [
+  // The tab nav (G3, r2): outside every section, three tab counts, each printed only while
+  // its assign forces the value to a number. checkTabNav holds this region to the same rule
+  // as the row templates, so the stub carries the pins.
+  '{%- assign n_headlines = wire.counts.research | plus: wire.counts.news -%}',
+  '{%- assign n_vulns = wire.vulns_counts.total | default: 0 | plus: 0 -%}',
+  '{%- assign n_cves = wire.cves_counts.total | default: 0 | plus: 0 -%}',
+  '<nav class="hl-wtabs__nav" aria-label="Sections of The Wire"><a class="hl-wtabs__tab hl-wtabs__tab--h" href="#headlines">Headlines<span class="hl-wtabs__n">{{ n_headlines }}</span></a><a class="hl-wtabs__tab hl-wtabs__tab--v" href="#vulns">nKEVs<span class="hl-wtabs__n">{{ n_vulns }}</span></a><a class="hl-wtabs__tab hl-wtabs__tab--c" href="#cves">CVEs<span class="hl-wtabs__n">{{ n_cves }}</span></a></nav>',
+  '<section id="headlines" class="hl-wtabs__sec" data-filter-scope>',
   '{%- assign current_day = "" -%}',
   '{%- for i in wire.items -%}',
   '{%- assign day = i.date | date: "%Y-%m-%d" -%}',
@@ -290,6 +298,8 @@ var PAGE_OK = [
   '{%- endif -%}',
   '<a class="hl-wire__item" data-kind="{{ i.kind }}" data-day="{{ day }}"></a>',
   '{%- endfor -%}',
+  '</section>',
+  '<section id="vulns" class="hl-wtabs__sec" data-filter-scope>',
   // The nKEVs tab's shape (T-0468.1): the short attribution line, the legend captured once, printed
   // twice (the narrow details, then the aside after the grid), the grid itself with no legend in it.
   '<p class="hl-wire__freshness hl-wire__freshness--v">nKEVs: CVEs newly added &middot; Data: <a href="https://www.vulncheck.com/kev">VulnCheck KEV</a> &middot; EPSS from <a href="https://www.first.org/epss/">FIRST</a> &middot; <a href="{{ \'/wire/vulns.xml\' | relative_url }}">Atom feed (nKEVs)</a></p>',
@@ -304,6 +314,7 @@ var PAGE_OK = [
   '{%- endfor -%}',
   '</div>',
   '<aside class="hl-post-toc hl-legend" aria-label="Legend" data-pagefind-ignore>{{ legend_html }}</aside>',
+  '</section>',
   CVES_TAB_OK,
   '<script defer src="{{ \'/assets/js/listing-filter.js\' | relative_url }}?v=10"></script>'
 ].join('\n');
@@ -463,6 +474,81 @@ test('the real wire/index.md passes the page gate (the legend and the day deriva
   var inc = realIncludes();
   var r = CW.checkPage(real, inc);
   assert.equal(r.status, 'PASS', r.problems.join(' | '));
+});
+
+/* ---- The tab nav, G3 (r2): the three tab counts print outside every section ----
+
+   The counts sit in hl-wtabs__nav before the first <section>, so the section-scoped
+   checkers never read them and r2 passed a hostile count straight to the page. The
+   rule is the row templates': every output outside the sections is escaped, numeric,
+   or one of the three tab counts - printed only while its assign still forces the
+   value to a number. */
+test('the tab nav region (the page outside its sections) follows the escaping rule; a raw count print there is caught', function () {
+  assert.equal(CW.checkPage(PAGE_OK, INCLUDES_OK).status, 'PASS');
+  // Same raw print, but sourced straight from the data instead of the forced numbers.
+  var raw = PAGE_OK.replace(
+    '<span class="hl-wtabs__n">{{ n_cves }}</span></a></nav>',
+    '<span class="hl-wtabs__n">{{ wire.cves_counts.total }}</span></a></nav>');
+  var r = CW.checkPage(raw, INCLUDES_OK);
+  assert.equal(r.status, 'FAIL');
+  assert.match(r.problems.join(' | '), /tab nav region .* prints \{\{ wire\.cves_counts\.total \}\} without escape/);
+});
+
+test('a hostile print in the tab nav region is seen; the same print inside a section is that section checker\'s, not this one\'s', function () {
+  // The un-stripped scan is region-scoped: a raw data print inside a section is not this
+  // checker's finding (the section checkers own it), so checkTabNav alone must stay silent.
+  assert.equal(CW.checkTabNav(PAGE_OK).join(' '), '');
+  // strip only complete section spans: a <section> with no close leaves its whole body in
+  // the checked region instead of silently widening to EOF
+  var dangling = PAGE_OK.replace('<section id="headlines" class="hl-wtabs__sec" data-filter-scope>', '');
+  assert.match(CW.checkTabNav(dangling).join(' '), /tab nav region .* without escape/);
+});
+
+test('reverting the number forcing on any tab count fails the gate (W: 3 pins)', function () {
+  var force = {
+    n_headlines: '{%- assign n_headlines = wire.counts.research | plus: wire.counts.news -%}',
+    n_vulns: '{%- assign n_vulns = wire.vulns_counts.total | default: 0 | plus: 0 -%}',
+    n_cves: '{%- assign n_cves = wire.cves_counts.total | default: 0 | plus: 0 -%}'
+  };
+  assert.equal(CW.checkPage(PAGE_OK, INCLUDES_OK).status, 'PASS');
+  var unforced = {
+    n_headlines: '{%- assign n_headlines = wire.counts.research -%}',
+    n_vulns: '{%- assign n_vulns = wire.vulns_counts.total | default: 0 -%}',
+    n_cves: '{%- assign n_cves = wire.cves_counts.total | default: 0 -%}'
+  };
+  Object.keys(force).forEach(function (k) {
+    assert.ok(PAGE_OK.indexOf(force[k]) > -1, k + ' pin anchor missing');
+    var r = CW.checkPage(PAGE_OK.replace(force[k], unforced[k]), INCLUDES_OK);
+    assert.equal(r.status, 'FAIL', k + ' un-forced');
+    assert.match(r.problems.join(' | '), /is no longer forced to a number in its assign/);
+    assert.match(r.problems.join(' | '), new RegExp('tab count ' + k));
+  });
+});
+
+test('the real tab nav: one un-forcing mutation per count, and a raw re-derivation, each fails the page gate (control: the real page passes)', function () {
+  var page = readReal('wire/index.md');
+  var inc = realIncludes();
+  assert.equal(CW.checkPage(page, inc).status, 'PASS');
+  var mutants = [
+    ['{%- assign n_vulns = wire.vulns_counts.total | default: 0 | plus: 0 -%}',
+     '{%- assign n_vulns = wire.vulns_counts.total | default: 0 -%}',
+     /n_vulns .* is no longer forced to a number in its assign/],
+    ['{%- assign n_cves = wire.cves_counts.total | default: 0 | plus: 0 -%}',
+     '{%- assign n_cves = wire.cves_counts.total | default: 0 -%}',
+     /n_cves .* is no longer forced to a number in its assign/],
+    ['{%- assign n_headlines = wire.counts.research | plus: wire.counts.news -%}',
+     '{%- assign n_headlines = wire.counts.research -%}',
+     /n_headlines .* is no longer forced to a number in its assign/],
+    ['<span class="hl-wtabs__n">{{ n_vulns }}</span>',
+     '<span class="hl-wtabs__n">{{ wire.vulns_counts.total }}</span>',
+     /tab nav region .* prints \{\{ wire\.vulns_counts\.total \}\} without escape/]
+  ];
+  mutants.forEach(function (m, i) {
+    assert.ok(page.indexOf(m[0]) > -1, 'tab nav mutation ' + i + ' anchor missing: ' + m[0]);
+    var r = CW.checkPage(page.replace(m[0], m[1]), inc);
+    assert.equal(r.status, 'FAIL', 'tab nav mutation ' + i + ': ' + m[0]);
+    assert.match(r.problems.join(' | '), m[2], 'mutation ' + i + ' wrong problem');
+  });
 });
 
 /* ---- The Vulnerabilities tab (T-0396) ----
@@ -1080,7 +1166,7 @@ test('a page with no CVEs section, no tab link, or a section outside the filter 
   assert.match(gone.problems.join(' '), /CVEs tab is missing/);
   var scope = CW.checkPage(PAGE_OK.replace('<section id="cves" class="hl-wtabs__sec" data-filter-scope>', '<section id="cves">'), INCLUDES_OK);
   assert.match(scope.problems.join(' '), /lost its hl-wtabs__sec class or data-filter-scope/);
-  var nav = CW.checkPage(PAGE_OK.replace('href="#cves"', 'href="#cve"'), INCLUDES_OK);
+  var nav = CW.checkPage(PAGE_OK.replace(/href="#cves"/g, 'href="#cve"'), INCLUDES_OK);
   assert.match(nav.problems.join(' '), /no link to #cves/);
 });
 

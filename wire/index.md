@@ -16,8 +16,8 @@ position: 2.5
 {%- assign wire = site.data.wire -%}
 {%- if wire and wire.items and wire.items != empty -%}
 {%- assign n_headlines = wire.counts.research | plus: wire.counts.news -%}
-{%- assign n_vulns = wire.vulns_counts.total | default: 0 -%}
-{%- assign n_cves = wire.cves_counts.total | default: 0 -%}
+{%- assign n_vulns = wire.vulns_counts.total | default: 0 | plus: 0 -%}
+{%- assign n_cves = wire.cves_counts.total | default: 0 | plus: 0 -%}
 
 {%- comment -%}
   Three tabs, switched by the URL hash with CSS alone (:target and :has, in

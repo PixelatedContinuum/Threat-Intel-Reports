@@ -909,6 +909,7 @@ function checkPage(src, includes) {
   }
 
   problems = problems.concat(checkLegend(src));
+  problems = problems.concat(checkTabNav(src));
   problems = problems.concat(checkCvesTab(src, includes));
   problems = problems.concat(checkNkevRow(src));
 
@@ -1027,7 +1028,7 @@ function checkLegend(src) {
 
    `includes` is { name: text } for the _includes this tab uses, or absent when they could not be
    read (then 5 and the include half of 4 are NOT CHECKED, said in a problem line, never a pass). */
-var SAFE_OUT = /^(?:c_[a-z]+|ex_n|msf_len|edb_len|kn|w_pc|ep_pct|pc_n|pc_sfx|st_n|rn_rules|sev|sev\s*\|\s*upcase|vc|cves_legend_html|wire\.window_days|wire\.cves\.size|g\.items\.size|n_cves|forloop\.index|sg\s*\|\s*join:\s*'\|'|'[^']*'\s*\|\s*relative_url)$/;
+var SAFE_OUT = /^(?:c_[a-z]+|ex_n|msf_len|edb_len|kn|w_pc|ep_pct|pc_n|pc_sfx|st_n|rn_rules|sev|sev\s*\|\s*upcase|vc|cves_legend_html|wire\.window_days|wire\.cves\.size|g\.items\.size|forloop\.index|sg\s*\|\s*join:\s*'\|'|'[^']*'\s*\|\s*relative_url)$/;
 // An expression ending in a numeric filter yields a number whatever the data held.
 var NUMERIC_END = /\|\s*(?:round(?::\s*\d+)?|times:\s*[\d.]+|plus:\s*\d+|minus:\s*\d+|size|floor|modulo:\s*\d+)\s*$/;
 function unescapedOutputs(text) {
@@ -1079,6 +1080,61 @@ function checkNkevRow(src) {
       }
     }
     problems.push('the nKEV row template prints ' + out + ' without escape, and it is not a number the template forced');
+  });
+  return problems;
+}
+
+/* The tab nav (G3, r2). The three tab counts (n_headlines, n_vulns, n_cves) print in
+   hl-wtabs__nav, outside every <section>, so the section-scoped checkers never read them and
+   the gate passed a hostile count straight through. Coverage here is the whole page outside
+   the sections - the page header, the tab nav, the no-data else branches, the script tag and
+   the footer include - held to the same rule the row templates are: every {{ }} output must
+   carry `escape`, end in a numeric filter, or be one of the three tab counts, allowed only
+   while its assign still forces the value to a number (the pin; reverting the forcing is
+   caught even if the print moves). n_headlines' forcing is Liquid's own `plus`: it coerces a
+   hostile string to a number (0), so nothing but a number prints from that assign. */
+var TAB_FORCED = [
+  ['n_headlines', /\{%-?\s*assign\s+n_headlines\s*=\s*wire\.counts\.research\s*\|\s*plus:\s*wire\.counts\.news\s*-?%\}/,
+    'the headline count (plus, which coerces)'],
+  ['n_vulns', /\{%-?\s*assign\s+n_vulns\s*=\s*wire\.vulns_counts\.total\s*\|\s*default:\s*0\s*\|\s*plus:\s*0\s*-?%\}/,
+    'vulns_counts.total'],
+  ['n_cves', /\{%-?\s*assign\s+n_cves\s*=\s*wire\.cves_counts\.total\s*\|\s*default:\s*0\s*\|\s*plus:\s*0\s*-?%\}/,
+    'cves_counts.total']
+];
+function checkTabNav(src) {
+  if (src === null || src === undefined) {
+    return ['NOT CHECKED: wire/index.md is absent, so the tab nav was not verified'];
+  }
+  var problems = [];
+  for (var i = 0; i < TAB_FORCED.length; i++) {
+    if (!TAB_FORCED[i][1].test(src)) {
+      problems.push('the tab count ' + TAB_FORCED[i][0] + ' (' + TAB_FORCED[i][2] +
+        ') is no longer forced to a number in its assign: a hostile value in that count ' +
+        'prints as raw markup in the tab nav, which sits outside the sections every ' +
+        'other page check covers');
+    }
+  }
+  if (!/<nav class="hl-wtabs__nav"/.test(src)) {
+    problems.push('the tab nav (hl-wtabs__nav) is missing, so the page has no visible tab list');
+    return problems;
+  }
+  // Everything outside a section: strip each marked <section> ... </section> span, leaving the
+  // header, the nav, the else branches, the script tag and the includes. A section opened but
+  // never closed cannot silently widen the checked region: the strip only removes a complete
+  // span, so anything outside it - or a dangling <section> with no close - stays in scope.
+  var outside = src.replace(/<section\b[\s\S]*?<\/section>/g, '\n')
+    .replace(/\{%-?\s*comment\s*-?%\}[\s\S]*?\{%-?\s*endcomment\s*-?%\}/g, '')
+    .replace(/\{%\s*comment\s*%\}[\s\S]*?\{%\s*endcomment\s*%\}/g, '');
+  (outside.match(/\{\{-?[\s\S]*?-?\}\}/g) || []).forEach(function (out) {
+    var inner = out.replace(/^\{\{-?\s*/, '').replace(/\s*-?\}\}$/, '');
+    if (/\|\s*escape\b/.test(inner)) return;
+    if (NUMERIC_END.test(inner)) return;
+    if (/^'[^']*'\s*\|\s*relative_url$/.test(inner)) return;   // a quoted site path, not data
+    for (var i = 0; i < TAB_FORCED.length; i++) {
+      if (new RegExp('^(?:' + TAB_FORCED[i][0] + ')$').test(inner)) return; // pin checked unconditionally above
+    }
+    problems.push('the tab nav region (the page outside its sections) prints ' + out +
+      ' without escape, and it is not a number the template forced');
   });
   return problems;
 }
@@ -1336,5 +1392,5 @@ function checkTabCss(scss) {
   return verdict(problems.length ? 'FAIL' : 'PASS', null, problems, [], { hides: hides });
 }
 
-module.exports = { check: check, checkPage: checkPage, checkTabCss: checkTabCss, checkCvesFeed: checkCvesFeed, checkVulnsFeed: checkVulnsFeed, STALE_HOURS: STALE_HOURS,
+module.exports = { check: check, checkPage: checkPage, checkTabCss: checkTabCss, checkCvesFeed: checkCvesFeed, checkVulnsFeed: checkVulnsFeed, checkTabNav: checkTabNav, STALE_HOURS: STALE_HOURS,
   VULNS_STALE_HOURS: VULNS_STALE_HOURS };
