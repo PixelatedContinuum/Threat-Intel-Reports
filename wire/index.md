@@ -154,9 +154,9 @@ position: 2.5
 <dt><span class="hl-vuln__p hl-vuln__p--det">Rules 4</span></dt>
 <dd>Public detection rules that name the CVE, counted across four sources: ET Open (Suricata), Nuclei templates, CISA's SIGMA_Rules and the Snort 3 community ruleset. A row with none shows no chip. Click the chip in a row to open the popover described below. Checked daily.</dd>
 <dt><span class="hl-vuln__p hl-vuln__p--ssvc">SSVC</span></dt>
-<dd>The decision points CISA publishes for the CVE in its Stakeholder-Specific Vulnerability Categorization (SSVC): exploitation, automatable and technical impact. cve.now carries them, with the fixed version and the GitHub Security Advisory (GHSA) and EU Vulnerability Database (EUVD) ids where it has them. Click the chip in a row to read them. A CVE cve.now has none for shows no chip.</dd>
+<dd>CISA's own assessment of the CVE, from its Stakeholder-Specific Vulnerability Categorization (SSVC): exploitation, automatable and technical impact. They are CISA's decision points, not mine. cve.now carries them (CISA Vulnrichment), with the fixed version and the GitHub Security Advisory (GHSA) and EU Vulnerability Database (EUVD) ids where it has them. Click the chip in a row to read them. A CVE cve.now has none for shows no chip.</dd>
 <dt><span class="hl-vuln__p hl-vuln__p--exp">Exploits 2</span></dt>
-<dd>Public exploits that cve.now lists for the CVE: Metasploit modules and Exploit-DB entries open their pages. GitHub proof-of-concept repositories are counted and never linked. A missing chip does not mean no exploit exists: cve.now has not checked every CVE for them, and I have not tested any exploit.</dd>
+<dd>Public exploits for the CVE that I confirmed against the publisher's own index: a Metasploit module appears only when Rapid7's module list names the CVE, and an Exploit-DB entry only when Exploit-DB's own list does. Both open their pages. A missing chip does not mean no exploit exists, only that I could not confirm one, and I have not tested any exploit.</dd>
 </dl>
 <div class="hl-legend__h">Rules popover</div>
 <dl class="hl-legend__list">
@@ -324,9 +324,9 @@ position: 2.5
 <p class="hl-wire__freshness hl-wire__freshness--c">Significant new CVEs not yet on a KEV list, published in the last {{ wire.window_days }} days &middot; Facts from <a href="https://cve.now/" target="_blank" rel="noopener noreferrer">cve.now</a> (<a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener noreferrer">CC BY 4.0</a>) &middot; EPSS from <a href="https://www.first.org/epss/" target="_blank" rel="noopener noreferrer">FIRST</a> &middot; <a href="{{ '/wire/cves.xml' | relative_url }}">Atom feed (CVEs)</a></p>
 
 <div class="hl-wire__callout hl-wire__callout--c">
-<p>This list is my selection. A CVE is here when it was published in the last {{ wire.window_days }} days, has a CVSS score of 9.0 or higher from NVD or cve.now, is not in CISA's KEV catalog or on the nKEVs tab, and passes at least one test: a Metasploit module, an Exploit-DB entry, a GitHub proof of concept, a public Nuclei or ET Open rule that names it, or a FIRST EPSS percentile of 95 or higher.</p>
-<p>Being here means a public exploit or a high predicted likelihood exists. It does not mean anyone has been seen exploiting the CVE. A row leaves this tab when its CVE reaches a KEV list.</p>
-<p>I count GitHub proof-of-concept repositories and do not link them. The facts come from <a href="https://cve.now/" target="_blank" rel="noopener noreferrer">cve.now</a> (CC BY 4.0), which carries the SSVC (Stakeholder-Specific Vulnerability Categorization) decision points CISA publishes through Vulnrichment, with EPSS from FIRST, Exploit-DB and Metasploit.</p>
+<p>This list is my selection. A CVE is here when it was published in the last {{ wire.window_days }} days, has a CVSS score of 9.0 or higher from NVD or cve.now, and passes at least one test: a Metasploit module or an Exploit-DB entry, each confirmed against Rapid7's or Exploit-DB's own index, a public Nuclei or ET Open rule that names it, or a FIRST EPSS percentile of 95 or higher.</p>
+<p>Being here means a public exploit or a high predicted likelihood exists. It does not mean anyone has been seen exploiting the CVE. The list excludes anything on VulnCheck KEV or CISA KEV, and a row moves to the nKEVs tab when its CVE is added to VulnCheck KEV.</p>
+<p>The facts come from <a href="https://cve.now/" target="_blank" rel="noopener noreferrer">cve.now</a> (CC BY 4.0). The SSVC decision points are CISA's own assessment (Vulnrichment), and EPSS is FIRST's.</p>
 </div>
 
 {%- assign cshow = false -%}
@@ -343,17 +343,16 @@ position: 2.5
   rows they filter must agree, and the exporter's counts can use other names. check-wire.js
   compares the exporter's declared counts with the rows separately.
 {%- endcomment -%}
-{%- assign c_msf = 0 -%}{%- assign c_edb = 0 -%}{%- assign c_poc = 0 -%}{%- assign c_rule = 0 -%}{%- assign c_epss = 0 -%}
+{%- assign c_msf = 0 -%}{%- assign c_edb = 0 -%}{%- assign c_rule = 0 -%}{%- assign c_epss = 0 -%}
 {%- assign c_critical = 0 -%}{%- assign c_high = 0 -%}{%- assign c_medium = 0 -%}{%- assign c_low = 0 -%}{%- assign c_none = 0 -%}
 {%- for r in wire.cves -%}
 {%- assign cve_head = r.cve | slice: 0, 4 -%}
 {%- if cve_head == "CVE-" -%}
-{%- assign msf_len = r.msf | size -%}{%- assign edb_len = r.edb | size -%}{%- assign poc_s = r.poc_n | append: "" -%}{%- assign poc_n = 0 -%}{%- if poc_s != "" -%}{%- assign poc_n = r.poc_n | plus: 0 -%}{%- endif -%}
+{%- assign msf_len = r.msf | size -%}{%- assign edb_len = r.edb | size -%}
 {%- assign n_sids = r.et_sids | size -%}{%- assign nu_len = r.nuclei | size -%}{%- assign rn_cs = r.cisa_sigma | size -%}{%- assign rn_sn = r.snort3_sids | size -%}
 {%- assign pc_n = r.epss_pct | times: 100 | floor -%}
 {%- if msf_len > 0 -%}{%- assign c_msf = c_msf | plus: 1 -%}{%- endif -%}
 {%- if edb_len > 0 -%}{%- assign c_edb = c_edb | plus: 1 -%}{%- endif -%}
-{%- if poc_n > 0 -%}{%- assign c_poc = c_poc | plus: 1 -%}{%- endif -%}
 {%- if n_sids > 0 or nu_len > 0 or rn_cs > 0 or rn_sn > 0 -%}{%- assign c_rule = c_rule | plus: 1 -%}{%- endif -%}
 {%- if pc_n >= 95 -%}{%- assign c_epss = c_epss | plus: 1 -%}{%- endif -%}
 {%- assign cvss_len = r.cvss | size -%}{%- assign sev = "none" -%}{%- if cvss_len > 0 -%}{%- if sev_bands contains r.severity -%}{%- assign sev = r.severity -%}{%- endif -%}{%- endif -%}
@@ -381,9 +380,9 @@ position: 2.5
 <dt><span class="hl-vuln__p hl-vuln__p--epss">EPSS 3%</span></dt>
 <dd>FIRST's predicted probability that the CVE is exploited in the next 30 days. The popover shows the last 30 days as a line and today's value.</dd>
 <dt><span class="hl-vuln__p hl-vuln__p--ssvc">SSVC</span></dt>
-<dd>The decision points CISA publishes for the CVE in its Stakeholder-Specific Vulnerability Categorization (SSVC): exploitation, automatable and technical impact. cve.now carries them, with the fixed version and the GitHub Security Advisory (GHSA) and EU Vulnerability Database (EUVD) ids where it has them. A CVE without them shows no chip.</dd>
+<dd>CISA's own assessment of the CVE, from its Stakeholder-Specific Vulnerability Categorization (SSVC): exploitation, automatable and technical impact. They are CISA's decision points, not mine. cve.now carries them (CISA Vulnrichment), with the fixed version and the GitHub Security Advisory (GHSA) and EU Vulnerability Database (EUVD) ids where it has them. A CVE without them shows no chip.</dd>
 <dt><span class="hl-vuln__p hl-vuln__p--exp">Exploits 2</span></dt>
-<dd>Public exploits that cve.now lists: Metasploit modules and Exploit-DB entries open their pages. GitHub proof-of-concept repositories are counted and never linked. The flags are cve.now's and I have not tested any exploit. A CVE can be listed with none of these when a public rule or a high EPSS percentile admitted it; a missing chip does not mean no exploit exists, because cve.now has not checked every CVE for them.</dd>
+<dd>Public exploits for the CVE that I confirmed against the publisher's own index: a Metasploit module appears only when Rapid7's module list names the CVE, and an Exploit-DB entry only when Exploit-DB's own list does. Both open their pages. I have not tested any exploit. A CVE can be listed with none of these when a public rule or a high EPSS percentile admitted it; a missing chip does not mean no exploit exists, only that I could not confirm one.</dd>
 <dt><span class="hl-vuln__p hl-vuln__p--det">Rules 2</span></dt>
 <dd>Public detection rules that name the CVE, counted across ET Open (Suricata), Nuclei templates, CISA's SIGMA_Rules and the Snort 3 community ruleset. Click the chip in a row to list them.</dd>
 <dt><span class="hl-vuln__p">2 news</span></dt>
@@ -398,7 +397,7 @@ position: 2.5
 <dt class="hl-legend__k">Search</dt>
 <dd>Matches the CVE id, vendor, product and the first sentence.</dd>
 <dt class="hl-legend__k">Signal</dt>
-<dd>Why the CVE is public-exploit or high-likelihood: a Metasploit module, an Exploit-DB entry, a GitHub proof of concept, a public rule that names it, or an EPSS percentile of 95 or higher.</dd>
+<dd>Why the CVE is public-exploit or high-likelihood: a confirmed Metasploit module, a confirmed Exploit-DB entry, a public rule that names it, or an EPSS percentile of 95 or higher.</dd>
 <dt class="hl-legend__k">Severity</dt>
 <dd>The band of the row's CVSS score. It appears only when more than one band is present.</dd>
 <dt class="hl-legend__k">Vendor</dt>
@@ -421,7 +420,6 @@ position: 2.5
     <button type="button" class="hl-chip-btn is-on" data-sig="">All <span class="hl-chip-btn__n">{{ wire.cves.size }}</span></button>
     {%- if c_msf > 0 -%}<button type="button" class="hl-chip-btn hl-chip-btn--topic hl-topic-c4" data-sig="msf">Metasploit <span class="hl-chip-btn__n">{{ c_msf }}</span></button>{%- endif -%}
     {%- if c_edb > 0 -%}<button type="button" class="hl-chip-btn hl-chip-btn--topic hl-topic-c7" data-sig="edb">Exploit-DB <span class="hl-chip-btn__n">{{ c_edb }}</span></button>{%- endif -%}
-    {%- if c_poc > 0 -%}<button type="button" class="hl-chip-btn hl-chip-btn--topic hl-topic-c5" data-sig="poc">GitHub PoC <span class="hl-chip-btn__n">{{ c_poc }}</span></button>{%- endif -%}
     {%- if c_rule > 0 -%}<button type="button" class="hl-chip-btn hl-chip-btn--topic hl-topic-c2" data-sig="rule">Public rule <span class="hl-chip-btn__n">{{ c_rule }}</span></button>{%- endif -%}
     {%- if c_epss > 0 -%}<button type="button" class="hl-chip-btn hl-chip-btn--topic hl-topic-c6" data-sig="epss">High EPSS <span class="hl-chip-btn__n">{{ c_epss }}</span></button>{%- endif -%}
   </div>
@@ -470,10 +468,10 @@ position: 2.5
 {%- comment -%} The include's cve_mode draws no KEV-add comparison, so these stay empty on this tab. {%- endcomment -%}
 {%- assign epss_len = r.epss | append: "" | size -%}{%- assign epss_pre_len = 0 -%}{%- assign rn_len = 0 -%}{%- assign rp_len = 0 -%}{%- assign spark_len = r.epss_spark | append: "" | size -%}
 {%- assign n_st = r.stories | default: 0 -%}
-{%- assign msf_len = r.msf | size -%}{%- assign edb_len = r.edb | size -%}{%- assign poc_s = r.poc_n | append: "" -%}{%- assign poc_n = 0 -%}{%- if poc_s != "" -%}{%- assign poc_n = r.poc_n | plus: 0 -%}{%- endif -%}
+{%- assign msf_len = r.msf | size -%}{%- assign edb_len = r.edb | size -%}
 {%- assign pc_n = r.epss_pct | times: 100 | floor -%}
 {%- assign sg = "" | split: "" -%}
-{%- if msf_len > 0 -%}{%- assign sg = sg | push: "msf" -%}{%- endif -%}{%- if edb_len > 0 -%}{%- assign sg = sg | push: "edb" -%}{%- endif -%}{%- if poc_n > 0 -%}{%- assign sg = sg | push: "poc" -%}{%- endif -%}{%- if rn_rules > 0 -%}{%- assign sg = sg | push: "rule" -%}{%- endif -%}{%- if epss_len > 0 and pc_n >= 95 -%}{%- assign sg = sg | push: "epss" -%}{%- endif -%}
+{%- if msf_len > 0 -%}{%- assign sg = sg | push: "msf" -%}{%- endif -%}{%- if edb_len > 0 -%}{%- assign sg = sg | push: "edb" -%}{%- endif -%}{%- if rn_rules > 0 -%}{%- assign sg = sg | push: "rule" -%}{%- endif -%}{%- if epss_len > 0 and pc_n >= 95 -%}{%- assign sg = sg | push: "epss" -%}{%- endif -%}
 <div class="hl-vuln hl-vuln--cve" id="cves-{{ r.cve | downcase | escape }}" data-title="{{ r.cve | downcase | escape }} {{ r.vendor | downcase | escape }} {{ r.product | downcase | escape }} {{ r.title | downcase | escape }}" data-vendor="{{ r.vendor | escape }}" data-sev="{{ sev }}" data-sig="{{ sg | join: '|' }}" data-day="{{ vday | escape }}"><a class="hl-vuln__cve" href="https://nvd.nist.gov/vuln/detail/{{ r.cve | escape }}" target="_blank" rel="noopener noreferrer">{{ r.cve | escape }}</a><span class="hl-vuln__vp" title="{{ r.vendor | escape }} {{ r.product | escape }}">{% if r.vendor and r.vendor != "" %}<b>{{ r.vendor | escape }}</b> {{ r.product | escape }}{% else %}<span class="hl-vuln__none">vendor not given</span>{% endif %}</span><span class="hl-vuln__badges">{% include wire-vuln-sev.html %}{% include wire-vuln-epss.html cve_mode=true %}{% include wire-vuln-new.html %}{% include wire-vuln-news.html %}{% include wire-vuln-rules.html %}<a class="hl-vuln__p hl-vuln__p--cn" href="https://cve.now/{{ r.cve | escape }}" target="_blank" rel="noopener noreferrer" title="{{ r.cve | escape }} on cve.now">cve.now</a></span>{% assign ttl_len = r.title | append: "" | size %}{% if ttl_len > 0 %}<span class="hl-vuln__title" title="{{ r.title | escape }}">{{ r.title | escape }}</span>{% endif %}</div>
 {%- endif -%}
 {%- endfor -%}
