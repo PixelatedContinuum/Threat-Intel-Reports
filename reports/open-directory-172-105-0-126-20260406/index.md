@@ -21,7 +21,7 @@ detection_sections:
   - label: "Suricata Signatures"
     anchor: "#suricata-signatures"
 ioc_highlights:
-  - value: "172.105.0[.]126"
+  - value: "172[.]105[.]0[.]126"
     note: "C2 server: all beacon variants, port 8443"
   - value: "7d6a17754f086b53ee294f5ccd60b0127f921520ce7b64fea0aebb47114fb5d2"
     note: "beacon.exe: custom C beacon (SHA256)"
@@ -32,7 +32,7 @@ ioc_highlights:
 stix_bundle: /stix/open-directory-172-105-0-126-20260406.json
 ---
 
-**Campaign Identifier:** OpenStrike-CSBeacon-Toolkit-172.105.0.126<br>
+**Campaign Identifier:** OpenStrike-CSBeacon-Toolkit-172[.]105[.]0[.]126<br>
 **Last Updated:** April 7, 2026<br>
 **Threat Level:** HIGH<br>
 The investigation is ONGOING, with an expanded toolkit discovery still under analysis (see [Section 13](#13-ongoing-investigation-expanded-toolkit-discovery)).
@@ -47,7 +47,7 @@ The investigation is ONGOING, with an expanded toolkit discovery still under ana
 - **Risk level:** HIGH (7.5/10 overall), no persistence, but evasion mechanisms create blind spots in GET-based exfil detection and standard CS injection defenses
 - **Deployment status:** No victims identified; toolkit recovered pre-compromise via infrastructure-first discovery
 - **Top hunt indicator:** `GET /qz99` on port 8443, short, non-standard, minimal false-positive risk in enterprise proxy logs
-- **Immediate action:** Block `172.105.0.126` at perimeter (all ports, bidirectional); deploy YARA/Sigma rules from the detection file
+- **Immediate action:** Block `172[.]105[.]0[.]126` at perimeter (all ports, bidirectional); deploy YARA/Sigma rules from the detection file
 - **Investigation status:** ONGOING, 116 additional files (full CS deployment including Mimikatz, artifact kit, DNS/SMB beacons) discovered on April 7 and under analysis ([Section 13](#13-ongoing-investigation-expanded-toolkit-discovery))
 
 ---
@@ -56,7 +56,7 @@ The investigation is ONGOING, with an expanded toolkit discovery still under ana
 {: .hl-tier-1}
 {: .hl-tab-overview}
 
-This investigation documents a novel, previously undocumented multi-implant C2 toolkit called **"OpenStrike"**, a name chosen by the toolkit's author, not by this publication. The name appears in the Python beacon's source code docstring: `"OpenStrike Universal Beacon — Single-File Cross-Platform Implant"` and in the BOF executor module: `"OpenStrike BOF Executor"`. The toolkit was recovered from an open directory on a Linode VPS at `172.105.0.126`, had zero VirusTotal coverage at time of discovery, and its C2 protocol internals, an AES-128-CBC + HMAC-SHA256 cryptographic envelope shared across three distinct beacon variants via a single RSA-2048 key, here termed the "Trinity Protocol", were not previously documented in public threat research. This report closes that gap, providing defenders with the first full technical analysis of OpenStrike's architecture, detection surface, and protocol internals.
+This investigation documents a novel, previously undocumented multi-implant C2 toolkit called **"OpenStrike"**, a name chosen by the toolkit's author, not by this publication. The name appears in the Python beacon's source code docstring: `"OpenStrike Universal Beacon — Single-File Cross-Platform Implant"` and in the BOF executor module: `"OpenStrike BOF Executor"`. The toolkit was recovered from an open directory on a Linode VPS at `172[.]105[.]0[.]126`, had zero VirusTotal coverage at time of discovery, and its C2 protocol internals, an AES-128-CBC + HMAC-SHA256 cryptographic envelope shared across three distinct beacon variants via a single RSA-2048 key, here termed the "Trinity Protocol", were not previously documented in public threat research. This report closes that gap, providing defenders with the first full technical analysis of OpenStrike's architecture, detection surface, and protocol internals.
 
 **What Was Found**
 
@@ -134,7 +134,7 @@ Attribution is INSUFFICIENT (<50% confidence). The operator is tracked internall
 
 > **Analyst note:** This section catalogs the seven binary samples and nine Python scripts recovered from the open directory. Each entry includes the original filename, cryptographic hash, compiler, and analysis status. The binary samples are Windows PE executables; Python scripts require the Python interpreter to run and are cross-platform.
 
-All samples were recovered from an open directory on `172.105.0.126` via [hunt.io](https://hunt.io/)'s AttackCapture system (a continuous internet scanning service that indexes misconfigured servers and automatically downloads exposed files). No dynamic sandbox analysis was performed; all behavioral inferences are derived from static reverse engineering.
+All samples were recovered from an open directory on `172[.]105[.]0[.]126` via [hunt.io](https://hunt.io/)'s AttackCapture system (a continuous internet scanning service that indexes misconfigured servers and automatically downloads exposed files). No dynamic sandbox analysis was performed; all behavioral inferences are derived from static reverse engineering.
 
 <table class="professional-table">
   <thead>
@@ -231,7 +231,7 @@ Extracted configuration via the config extraction tool:
 | Config Field | Value | Significance |
 |---|---|---|
 | XOR config key | `0x2E` | CS 3.x encoding scheme |
-| C2 server | `172.105.0.126:8443` | Non-standard HTTPS port |
+| C2 server | `172[.]105[.]0[.]126:8443` | Non-standard HTTPS port |
 | Staging URI | `/updates` (GET) | Task poll endpoint |
 | Submission URI | `/submit` (POST) | Bulk-data exfil endpoint |
 | Sleep interval | 5,000 ms | 5-second beacon interval |
@@ -246,7 +246,7 @@ The watermark is 0. The CS license watermark uniquely identifies each licensed i
 The config is trimmed. With only 10 config fields against the standard 25 to 40-plus, the DLL lacks many of the encoding patterns CS-specific detection tools scan for, which reduces the beacon's detectable surface area against config-pattern-matching detection strategies, and I hold that at MODERATE.
 
 <figure style="text-align: center; margin: 2em 0;">
-  <img loading="lazy" src="{{ "/assets/images/open-directory-172-105-0-126-20260406/cs-dll-config-extraction.png" | relative_url }}" alt="Terminal output from the 1768.py config extraction tool showing the decoded Cobalt Strike 3.x configuration including watermark value zero, C2 server address 172.105.0.126 on port 8443, staging URI /updates, submission URI /submit, GET and POST verb assignments, Mozilla user-agent string, and license-id zero confirming a cracked build.">
+  <img loading="lazy" src="{{ "/assets/images/open-directory-172-105-0-126-20260406/cs-dll-config-extraction.png" | relative_url }}" alt="Terminal output from the 1768.py config extraction tool showing the decoded Cobalt Strike 3.x configuration including watermark value zero, C2 server address 172[.]105[.]0[.]126 on port 8443, staging URI /updates, submission URI /submit, GET and POST verb assignments, Mozilla user-agent string, and license-id zero confirming a cracked build.">
   <figcaption><em>Figure 1: Cobalt Strike configuration extracted via 1768.py showing watermark=0 (cracked), the /qz99 staging URI on port 8443, and the CS version 3 identifier. Only 10 of the standard 25-40+ config fields are populated, a deliberately trimmed configuration that reduces the beacon's detectable surface area.</em></figcaption>
 </figure>
 
@@ -437,7 +437,7 @@ All three beacon variants embed the identical RSA-2048 public key modulus, begin
 
 **Operational implications:**
 
-1. A single operator controls all three implant types from one C2 server; the matching private key resides at `172.105.0.126`
+1. A single operator controls all three implant types from one C2 server; the matching private key resides at `172[.]105[.]0[.]126`
 2. The RSA modulus serves as a cross-implant attribution indicator: any beacon carrying this modulus is part of the OpenStrike toolkit
 3. Private key recovery (via server seizure or memory dump) enables retroactive decryption of all historic registration traffic
 4. Single-key architecture rules out MaaS operation; separate customers would require separate key pairs
@@ -505,7 +505,7 @@ This automation combines VEH crash handling, INT3 breakpoint injection, and regi
 > **Analyst note:** stager.exe is the "production" loader, the one that would be deployed to a real target. Instead of reading a shellcode file from disk, it downloads the beacon payload over an encrypted HTTPS connection from the C2 server. The /qz99 URI it requests is the single most distinctive network indicator in the entire toolkit.
 
 ```
-1. HTTPS connect to 172.105.0.126:8443 (SSL verification disabled)
+1. HTTPS connect to 172[.]105[.]0[.]126:8443 (SSL verification disabled)
 2. GET /qz99 → receive shellcode payload (variable size)
 3. Allocate RWX memory buffer (grows dynamically with download)
 4. Write received shellcode to RWX buffer
@@ -513,8 +513,8 @@ This automation combines VEH crash handling, INT3 breakpoint injection, and regi
 ```
 
 <figure style="text-align: center; margin: 2em 0;">
- <img loading="lazy" src="{{ "/assets/images/open-directory-172-105-0-126-20260406/stager-winhttp-c2-chain.png" | relative_url }}" alt="Decompilation of stager.exe showing the complete WinHTTP C2 connection chain: WinHttpOpen with Mozilla/5.0 user-agent string, WinHttpConnect to the hardcoded IP address 172.105.0.126 on port 0x20FB (8443 decimal), WinHttpOpenRequest to the /qz99 staging URI, followed by WinHttpSendRequest, WinHttpReceiveResponse, and VirtualAlloc for payload memory allocation.">
- <figcaption><em>Figure 10: The stager.exe production delivery chain, decompilation showing the complete WinHTTP sequence with the hardcoded C2 address 172.105.0.126:8443 and the /qz99 staging URI. This is the network stager that would be deployed to real targets, downloading the beacon payload over HTTPS with SSL verification disabled.</em></figcaption>
+ <img loading="lazy" src="{{ "/assets/images/open-directory-172-105-0-126-20260406/stager-winhttp-c2-chain.png" | relative_url }}" alt="Decompilation of stager.exe showing the complete WinHTTP C2 connection chain: WinHttpOpen with Mozilla/5.0 user-agent string, WinHttpConnect to the hardcoded IP address 172[.]105[.]0[.]126 on port 0x20FB (8443 decimal), WinHttpOpenRequest to the /qz99 staging URI, followed by WinHttpSendRequest, WinHttpReceiveResponse, and VirtualAlloc for payload memory allocation.">
+ <figcaption><em>Figure 10: The stager.exe production delivery chain, decompilation showing the complete WinHTTP sequence with the hardcoded C2 address 172[.]105[.]0[.]126:8443 and the /qz99 staging URI. This is the network stager that would be deployed to real targets, downloading the beacon payload over HTTPS with SSL verification disabled.</em></figcaption>
 </figure>
 
 The `/qz99` URI is the highest-priority network IOC in the toolkit, short, non-standard, and with negligible false-positive risk in enterprise proxy logs.
@@ -857,7 +857,7 @@ The CS 3.x versus 4.x split is significant. CS 3.x reached end of life in 2019, 
 
 ---
 
-### 5.3 Infrastructure: 172.105.0.126 Profile
+### 5.3 Infrastructure: 172[.]105[.]0[.]126 Profile
 
 **Network context: HIGH confidence (4-source validated)**
 
@@ -869,7 +869,7 @@ The CS 3.x versus 4.x split is significant. CS 3.x reached end of life in 2019, 
 | C2 port status | Offline at analysis date | Shodan |
 | Bulletproof hosting | NOT DETECTED (0/6 indicators) | Infrastructure analysis |
 
-On the specific IP I have INSUFFICIENT evidence to say anything. No threat intelligence exists for `172.105.0.126` in open-source feeds. Consistent with a recently provisioned VPS aligned with GCC 15 build timing (late 2025-early 2026). Infrastructure pivoting not viable from open-source data: single IP, no domain layer, no SSL certificate data accessible (port offline).
+On the specific IP I have INSUFFICIENT evidence to say anything. No threat intelligence exists for `172[.]105[.]0[.]126` in open-source feeds. Consistent with a recently provisioned VPS aligned with GCC 15 build timing (late 2025-early 2026). Infrastructure pivoting not viable from open-source data: single IP, no domain layer, no SSL certificate data accessible (port offline).
 
 For hosting context, Linode is a legitimate commercial provider with a documented history of C2 abuse, driven by accessible pricing and easy provisioning. Recorded Future's 2022 data places Linode 8th globally among C2 hosting providers. The choice reflects a common pattern among commodity operators seeking low-cost, low-commitment infrastructure.
 
@@ -881,16 +881,16 @@ DomainTools Iris passive DNS export reveals this IP has been continuously alloca
 
 | Domain | Period | Duration | Assessment |
 |---|---|---|---|
-| li1953-126.members.linode.com | Feb 2019-Feb 2022 | ~3 years | Linode default PTR, IP in pool since at least 2019 |
-| ceres.woodengatecider.ca | Oct 2023-Sep 2024 | ~337 days | Canadian artisan cider brand, legitimate prior tenant |
-| cap03.ddns.net | May 2024-Sep 2024 | ~85 days | Dynamic DNS (No-IP); purpose ambiguous from PDNS alone; prior tenant |
-| jessicahelpdesk.work | Apr 14, 2025 | 1 day | SUSPICIOUS, helpdesk social engineering lure pattern; prior tenant |
+| li1953-126[.]members[.]linode[.]com | Feb 2019-Feb 2022 | ~3 years | Linode default PTR, IP in pool since at least 2019 |
+| ceres[.]woodengatecider[.]ca | Oct 2023-Sep 2024 | ~337 days | Canadian artisan cider brand, legitimate prior tenant |
+| cap03[.]ddns[.]net | May 2024-Sep 2024 | ~85 days | Dynamic DNS (No-IP); purpose ambiguous from PDNS alone; prior tenant |
+| jessicahelpdesk[.]work | Apr 14, 2025 | 1 day | SUSPICIOUS, helpdesk social engineering lure pattern; prior tenant |
 | *.pr.edgegap.net (~30 entries) | May 12-20, 2025 | ~9 days | Edgegap game server routing pool, definitively benign prior tenant |
-| coolify.jbforge.ca | Dec 2025-Apr 2, 2026 | ~99 days | SIGNIFICANT, see below |
+| coolify[.]jbforge[.]ca | Dec 2025-Apr 2, 2026 | ~99 days | SIGNIFICANT, see below |
 
-`coolify.jbforge.ca` held this IP from December 2025 to 2 April 2026, pointing at a self-hosted Coolify installation, Coolify being an open-source self-hosted PaaS developers use to manage application deployments, comparable to Heroku. The subdomain structure fits a Canadian developer using the handle "jbforge" exposing a Coolify admin panel on a personal subdomain. The domain was last seen 2026-04-02, four days before analysis. The most parsimonious reading is sequential tenancy, where the jbforge tenant's lease ended or they migrated and the threat actor subsequently rented the same IP. The alternative, that jbforge IS the threat actor using Coolify as a backend management interface, I assess as LOW likelihood given the open directory and debug-loader OPSEC failures seen throughout the kit. There is no direct attribution impact, and this is a separable OSINT lead, where WHOIS on `jbforge.ca` would confirm tenant distinctness.
+`coolify[.]jbforge[.]ca` held this IP from December 2025 to 2 April 2026, pointing at a self-hosted Coolify installation, Coolify being an open-source self-hosted PaaS developers use to manage application deployments, comparable to Heroku. The subdomain structure fits a Canadian developer using the handle "jbforge" exposing a Coolify admin panel on a personal subdomain. The domain was last seen 2026-04-02, four days before analysis. The most parsimonious reading is sequential tenancy, where the jbforge tenant's lease ended or they migrated and the threat actor subsequently rented the same IP. The alternative, that jbforge IS the threat actor using Coolify as a backend management interface, I assess as LOW likelihood given the open directory and debug-loader OPSEC failures seen throughout the kit. There is no direct attribution impact, and this is a separable OSINT lead, where WHOIS on `jbforge[.]ca` would confirm tenant distinctness.
 
-`jessicahelpdesk.work` resolved to this IP for a single day in April 2025, roughly eleven months before the C2 window. The personal-name plus "helpdesk" plus generic TLD pattern is documented in tech-support scam and vishing infrastructure impersonating corporate helpdesks. That event belongs to a separate prior tenant rather than the OpenStrike operator. Its significance is confirming the IP carries prior malicious use history from a different actor, which explains why it does not appear in open-source reputation databases despite that earlier incident, and I hold that at MODERATE.
+`jessicahelpdesk[.]work` resolved to this IP for a single day in April 2025, roughly eleven months before the C2 window. The personal-name plus "helpdesk" plus generic TLD pattern is documented in tech-support scam and vishing infrastructure impersonating corporate helpdesks. That event belongs to a separate prior tenant rather than the OpenStrike operator. Its significance is confirming the IP carries prior malicious use history from a different actor, which explains why it does not appear in open-source reputation databases despite that earlier incident, and I hold that at MODERATE.
 
 In summary on timing, the C2 operator's tenancy on this IP began at an undated point before discovery and ended before or at analysis date, with port 8443 offline by 2026-04-06. The IP has been in continuous Linode allocation since at least 2019 with multiple sequential tenants, which is normal for commercial datacenter IP blocks. The threat actor registered no domains pointing to it, and the C2 operated exclusively over the raw IP address.
 
@@ -910,7 +910,7 @@ I hold the passive-DNS reading at MODERATE. The tenancy picture across the years
 
 **Provider risk:**
 
-- **Linode / Akamai Connected Cloud (AS63949)**: the C2 hosting provider; a legitimate mainstream commercial provider, not bulletproof. Formal abuse reporting is available at `linode.com/legal-abuse/`. The provider is subject to US and Canadian jurisdiction, both cooperative Five Eyes members, enabling law enforcement takedown requests.
+- **Linode / Akamai Connected Cloud (AS63949)**: the C2 hosting provider; a legitimate mainstream commercial provider, not bulletproof. Formal abuse reporting is available at `linode[.]com/legal-abuse/`. The provider is subject to US and Canadian jurisdiction, both cooperative Five Eyes members, enabling law enforcement takedown requests.
 - **Port 8443**: non-standard HTTPS port that may bypass legacy proxy inspection rules or policies that only inspect traffic on port 443
 
 There are no supply chain implications. No trojanized legitimate software was identified and no supply chain delivery vector is in evidence. The discovery method, an open directory found infrastructure-first, gives no visibility into intended delivery mechanisms.
@@ -986,7 +986,7 @@ In report language, the threat actor behind this toolkit cannot be attributed to
 - AES-128-CBC with hardcoded IV `abcdefghijklmnop` present in all three beacon variants (static analysis)
 - Encrypt-then-MAC construction (AES-128-CBC + 16-byte truncated HMAC-SHA256) across all implants (static analysis)
 - `ReflectiveLoader` export redirected to `66 90 CC` (NOP+INT3), tripwire confirmed (static analysis of PE export directory)
-- CS 3.x DLL: watermark=0, XOR config key `0x2E`, C2 `172.105.0.126:8443` (config extraction via the config extraction tool)
+- CS 3.x DLL: watermark=0, XOR config key `0x2E`, C2 `172[.]105[.]0[.]126:8443` (config extraction via the config extraction tool)
 - beacon.exe CMD_SHELL uses `cmd.exe /c` via CreatePipe + CreateProcessA (static analysis)
 - stager.exe downloads payload from GET `/qz99` on port 8443 (static analysis)
 - All six EXEs compiled with MinGW-w64 GCC 15-win32 (compiler strings in PE)
@@ -1058,7 +1058,7 @@ The feed contains 13 file hashes (SHA256 / SHA1 / MD5 for 7 binaries including o
 | `GET /qz99` on port 8443 | Network URI | P1, most distinctive | Proxy / firewall logs |
 | `abcdefghijklmnop` in process memory | AES IV string | P1, in-memory beacon hunt | Memory scanning, YARA |
 | `0x0000BEEF` in network traffic | Protocol magic | P1, wire-level | IDS / Suricata |
-| `172.105.0.126` on port 8443 | C2 IP | P1, block immediately | Firewall, proxy |
+| `172[.]105[.]0[.]126` on port 8443 | C2 IP | P1, block immediately | Firewall, proxy |
 | GET `/updates?id=[0-9a-f]{8}` | URI pattern | P2, beacon poll | Proxy / firewall logs |
 | `66 90 CC` at ReflectiveLoader export | Static DLL signature | P2, file scan | YARA on disk |
 | `[*] OpenStrike Beacon starting...` | Debug string | P1, family ID | YARA on disk / memory |
@@ -1134,7 +1134,7 @@ The detection file is at [`/hunting-detections/open-directory-172-105-0-126-2026
 
 **Containment categories:**
 
-- Block `172.105.0.126` at perimeter (all ports, bidirectional)
+- Block `172[.]105[.]0[.]126` at perimeter (all ports, bidirectional)
 - Isolate any host exhibiting 5-second polling pattern to port 8443
 - Preserve memory of suspected hosts before remediation
 - Deploy YARA and Sigma rules from detection file across endpoint and log infrastructure
@@ -1149,7 +1149,7 @@ This strand is UNDER INVESTIGATION, discovered on 7 April 2026, with 116 additio
 
 
 
-On April 7, 2026 (one day after the initial discovery) a follow-up review of the open directory on `172.105.0.126` revealed a significant expansion of the exposed toolkit. The directory on port 8888 now contains **116 additional files** that were not present during the original analysis. Initial triage indicates this is a **complete Cobalt Strike operator deployment** including the full post-exploitation module suite, artifact kit, and multiple additional custom beacon builds.
+On April 7, 2026 (one day after the initial discovery) a follow-up review of the open directory on `172[.]105[.]0[.]126` revealed a significant expansion of the exposed toolkit. The directory on port 8888 now contains **116 additional files** that were not present during the original analysis. Initial triage indicates this is a **complete Cobalt Strike operator deployment** including the full post-exploitation module suite, artifact kit, and multiple additional custom beacon builds.
 
 This section documents what has been identified at a triage level. Full analysis of these files is ongoing, and this report will be updated with detailed findings as they become available.
 
@@ -1301,7 +1301,7 @@ Development path (dbg_loader.exe — entry-point discovery):
 - Elastic Security Labs: "Inside the Axios Supply Chain Compromise"
 - JPCERT: "CrossC2: Expanding Cobalt Strike Beacon to Cross-Platform Attacks" (August 2025)
 - Core Security: "Writing Beacon Object Files"
-- DomainTools: Iris passive DNS export for 172.105.0.126 (2026-04-06)
+- DomainTools: Iris passive DNS export for 172[.]105[.]0[.]126 (2026-04-06)
 
 **Tier 3 (Community):**
 - usualsuspect.re: "Cobalt Strike's Malleable C2 Under the Hood" (7-8 opcodes documented; cross-referenced with official CS docs)
