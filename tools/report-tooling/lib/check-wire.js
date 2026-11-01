@@ -1471,8 +1471,9 @@ function checkTabCss(scss) {
    2. wire-details.js contains no markup-injection sink at all: panels are built with
       createElement and set text only through textContent, so a value that sneaks
       through the JSON pages' validation cannot become markup.
-   3. All three row templates carry the server-rendered toggle, exactly the markup
-      design section 6 fixes (hidden until the script removes it).
+   3. The nKEV and CVEs row templates carry the server-rendered toggle, exactly this
+      markup (hidden until the script removes it), first in the row, before the CVE
+      id link; the Headlines row carries none (Joseph, 2026-11-01).
    4. The headlines grid's filter item is the wrapper (data-filter-item=".hl-wire__row"),
       and no grid still names the old ".hl-wire__item": the wrapper is what the filter
       shows and hides, so a hidden row takes its panel with it.
@@ -1481,7 +1482,8 @@ function checkTabCss(scss) {
 
    Each of these functions takes the file text, or null when unreadable, which is
    NOT CHECKED, said in a problem line, never a pass. */
-var DETAILS_TOGGLE = /<button type="button" class="hl-dt" aria-expanded="false" hidden>Details<\/button>/;
+var DETAILS_TOGGLE = /<button type="button" class="hl-dt" aria-expanded="false" hidden title="Show details"><span class="hl-dt__sr">Details<\/span><\/button>/;
+var TOGGLE_FIRST = /<button type="button" class="hl-dt"[^>]*>[\s\S]*?<\/button><a class="hl-vuln__cve"/;
 var DETAILS_SINK = /innerHTML|outerHTML|insertAdjacentHTML|document\.write|(?:^|[^A-Za-z$_.])eval\s*\(/;
 function lineWith(src, needle) {
   var lines = src.split('\n');
@@ -1526,29 +1528,33 @@ function checkDetailsPage(src) {
     return verdict('NOT CHECKED', 'wire/index.md is absent or unreadable, so the Details dropdown structure was not verified.');
   }
   var problems = [];
-  // 3. the three row templates carry the toggle
+  // 3. the two vulnerability row templates carry the toggle, first in the row
   var nToggles = src.split(DETAILS_TOGGLE).length - 1;
-  if (nToggles !== 3) {
-    problems.push('the Details toggle markup appears ' + nToggles + ' time(s), expected 3: one in ' +
-      'the headline wrapper, one in the nKEV row template, one in the CVEs row template');
+  if (nToggles !== 2) {
+    problems.push('the Details toggle markup appears ' + nToggles + ' time(s), expected 2: one in ' +
+      'the nKEV row template, one in the CVEs row template');
   }
   var nkevSlice = (src.match(/\{%-?\s*for r in wire\.vulns -?%\}[\s\S]*?\{%-?\s*endfor\s*-?%\}\s*<\/div>/) || [''])[0];
   if (!nkevSlice) {
     problems.push('could not find the nKEV row template (for r in wire.vulns), so its Details toggle could not be verified');
   } else if (!DETAILS_TOGGLE.test(nkevSlice)) {
     problems.push('the nKEV row template carries no Details toggle');
+  } else if (!TOGGLE_FIRST.test(nkevSlice)) {
+    problems.push('the nKEV row template\'s Details toggle is not directly before the CVE id link');
   }
   var cvesLine = lineWith(src, 'hl-vuln hl-vuln--cve');
   if (!cvesLine) {
     problems.push('could not find the CVEs row template line (the hl-vuln--cve row), so its Details toggle could not be verified');
   } else if (!DETAILS_TOGGLE.test(cvesLine)) {
     problems.push('the CVEs row template carries no Details toggle');
+  } else if (!TOGGLE_FIRST.test(cvesLine)) {
+    problems.push('the CVEs row template\'s Details toggle is not directly before the CVE id link');
   }
   var headLine = lineWith(src, 'class="hl-wire__row"');
   if (!headLine) {
-    problems.push('no headline row wrapper (hl-wire__row) is in the page, so the toggle and the filter item pattern cannot be verified');
-  } else if (!DETAILS_TOGGLE.test(headLine)) {
-    problems.push('the headline row wrapper carries no Details toggle');
+    problems.push('no headline row wrapper (hl-wire__row) is in the page, so the filter item pattern cannot be verified');
+  } else if (headLine.indexOf('class="hl-dt"') !== -1) {
+    problems.push('the headline row carries a Details toggle; the Headlines tab has none (Joseph, 2026-11-01)');
   }
   // 4. the headlines grid's filter item is the wrapper
   if (src.indexOf('data-filter-item=".hl-wire__row"') === -1) {

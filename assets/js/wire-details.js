@@ -15,10 +15,8 @@
    shape tools/report-tooling/lib/check-wire.js holds for the same field, so a value
    the gate admitted is still re-checked here before it may become a link target.
 
-   Headlines panels carry no JSON file: they are derived from what the page itself
-   holds (exact CVE ids in the title and labels, tab membership read from row ids,
-   other headlines naming the same CVE, labels, kind and source). No summary of any
-   headline is written here, and nothing reads a model-written summary key.
+   The Headlines tab has no Details toggle (Joseph, 2026-11-01: it added little and
+   cluttered the rows).
 
    The reader-facing lines are the design's wording, quoted from
    tasks/runs/T-0532/design.md. */
@@ -33,7 +31,6 @@ var MSF_SHAPE = /^modules\/[A-Za-z0-9_.\/-]+\.rb$/;
 var EDB_SHAPE = /^\d{1,8}$/;
 var SID_SHAPE = /^\d+$/;
 var REPORT_SHAPE = /^https:\/\/[A-Za-z0-9.-]+(?::\d+)?(?:[\/?#][!#-&(-;=?-\[\]-_a-~]*)?$/;
-var PUBLISHER_SHAPE = /^https:\/\//i;
 var DAY_SHAPE = /^\d{4}-\d{2}-\d{2}$/;
 var VERSION_SHAPE = /^[vV]?\d[0-9A-Za-z.+_-]{0,39}$/;
 var CVSS_VECTOR_SHAPE = /^(?:CVSS:\d\.\d\/)?[A-Za-z]{1,3}:[A-Za-z0-9]{1,3}(?:\/[A-Za-z]{1,3}:[A-Za-z0-9]{1,3})*$/;
@@ -46,7 +43,6 @@ var SSVC_SETS = {
   ssvc_impact: { partial: 1, total: 1 }
 };
 var URL_LIMIT = 500;
-var OTHER_LIMIT = 20;
 
 /* --- link prefixes: the fixed part of every external href ------------------- */
 var NVD_PREFIX = 'https://nvd.nist.gov/vuln/detail/';
@@ -99,17 +95,6 @@ var SSVCTAIL = " (CISA's assessment, via cve.now)";
 var EPSS_PRE = '7 days before the KEV add: ';
 var EPSS_MAX = 'Highest in the last 30 days: ';
 var EPSS_CROSSED = " The values for this CVE cross a change of FIRST's EPSS model, so they are not directly comparable.";
-var IN_NKEV = 'on the nKEVs tab';
-var IN_CVES = 'on the CVEs tab';
-var ON_EITHER = 'not on either tab';
-var NONE_NAMED = 'Names no CVE.';
-var DIGEST_LEAD = 'Added to VulnCheck KEV that day: ';
-var NO_DIGEST = 'No nKEV rows for this day in the current window.';
-var NO_OTHER_HEADLINES = 'No other headline on the page names one of these CVEs.';
-var OTHER_HEADLINE_LEAD = 'Other headlines: ';
-var MORE_TAIL = ' more name one of these CVEs.';
-var LABELS_LEAD = 'Labels: ';
-
 /* --- small helpers ----------------------------------------------------------- */
 function isStr(v) { return typeof v === 'string'; }
 function str(v) { return typeof v === 'string' ? v : ''; }
@@ -130,7 +115,6 @@ function el(tag, cls, text) {
 }
 function headInto(panel, text) { panel.appendChild(el('div', 'hl-dt__h', text)); }
 function lineInto(panel, text) { panel.appendChild(el('p', 'hl-dt__line', text)); }
-function dimInto(panel, text) { panel.appendChild(el('p', 'hl-dt__line hl-dt__dim', text)); }
 
 /* An external link. `target` is always already the fixed prefix plus an encoded,
    shape-checked value (or a report URL that survived its own check above). */
@@ -157,27 +141,6 @@ function ordinal(n) {
   return 'th';
 }
 
-var MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July',
-  'August', 'September', 'October', 'November', 'December'];
-function humanDay(d) {  // split, never a Date parse (listing-filter.js's rule)
-  var p = String(d).split('-');
-  return Number(p[2]) + ' ' + MONTHS[Number(p[1]) - 1] + ' ' + p[0];
-}
-
-/* Exact CVE ids in text, the exporter's own match (a maximal digit run, so a longer
-   id is never cut short by one it contains), uppercased and de-duplicated. */
-var IN_TEXT_RE = /CVE-\d{4}-\d{4,}/gi;
-function cveIdsIn(text) {
-  var found = [];
-  var m = IN_TEXT_RE.exec(text || '');
-  while (m) {
-    var id = m[0].toUpperCase();
-    if (found.indexOf(id) === -1 && CVE_SHAPE.test(id)) { found.push(id); }
-    m = IN_TEXT_RE.exec(text || '');
-  }
-  IN_TEXT_RE.lastIndex = 0;
-  return found;
-}
 
 /* --- Section 1: the CVE record ----------------------------------------------- */
 function secRecord(panel, d, isCves) {
@@ -616,135 +579,9 @@ function buildCvesPanel(panel, d, cveId, asOfDay) {
   secLinks(panel, d, cveId);
 }
 
-/* --- headlines and digest rows: derived from the page itself ---------------------------------- */
-function buildDigest(panel, row) {
-  var wanted = row.getAttribute('data-day') || '';
-  if (DAY_SHAPE.test(wanted)) {
-    var rows = document.querySelectorAll('#vulns .hl-vuln[data-day="' + wanted + '"]');
-    if (!rows.length) {
-      lineInto(panel, NO_DIGEST);
-    } else {
-      var list = el('p', 'hl-dt__line');
-      list.textContent = DIGEST_LEAD;
-      var seen = 0;
-      [].forEach.call(rows, function (vrow) {
-        // the row's id begins with the 'cve-' page prefix; what follows is the plain
-        // lowercased CVE id (design section 4: read from the rows on the page)
-        var plain = (vrow.id || '').slice(4);
-        var id = plain.toUpperCase();
-        if (!CVE_SHAPE.test(id)) { return; }
-        if (seen) { list.appendChild(document.createTextNode('; ')); }
-        var a = el('a', 'hl-dt__link', id);
-        a.href = '#' + vrow.id;
-        list.appendChild(a);
-        var vp = vrow.querySelector('.hl-vuln__vp');
-        if (vp && vp.textContent) {
-          list.appendChild(document.createTextNode(' ' + vp.textContent.replace(/\s+/g, ' ').trim()));
-        }
-        seen++;
-      });
-      if (seen) {
-        list.appendChild(document.createTextNode('.'));
-        panel.appendChild(list);
-      } else {
-        lineInto(panel, NO_DIGEST);
-      }
-    }
-  } else {
-    lineInto(panel, NO_DIGEST);
-  }
-}
-
-function buildHeadlines(panel, row) {
-  var labelsAttr = row.getAttribute('data-labels') || '';
-  var kind = row.getAttribute('data-kind') || '';
-  if (kind === 'vuln') {
-    buildDigest(panel, row);
-    return;
-  }
-  var ownTitle = row.getAttribute('data-title') || '';
-  var day = dayOf(row.getAttribute('data-day'));
-  var ids = cveIdsIn(ownTitle + ' ' + labelsAttr);
-  if (ids.length === 0) {
-    lineInto(panel, NONE_NAMED);
-    var own = labelsAttr.split('|').map(function (s) { return s.trim(); }).filter(Boolean);
-    if (own.length) { lineInto(panel, LABELS_LEAD + own.join(', ')); }
-    return;
-  }
-  headInto(panel, 'CVEs named');
-  ids.forEach(function (id) {
-    var lower = id.toLowerCase();
-    var rowLine = el('p', 'hl-dt__line');
-    rowLine.textContent = id + ': ';
-    if (document.getElementById('cve-' + lower)) {
-      // the row's id is the doubled one the page writes ('cve-' + the downcased id)
-      var a = el('a', 'hl-dt__link', IN_NKEV);
-      a.href = '#cve-' + lower;
-      rowLine.appendChild(a);
-      rowLine.appendChild(document.createTextNode('.'));
-    } else if (document.getElementById('cves-' + lower)) {
-      var a2 = el('a', 'hl-dt__link', IN_CVES);
-      a2.href = '#cves-' + lower;
-      rowLine.appendChild(a2);
-      rowLine.appendChild(document.createTextNode('.'));
-    } else {
-      linkInto(rowLine, encUrl(NVD_PREFIX, id), ON_EITHER, false);
-      rowLine.appendChild(document.createTextNode('.'));
-    }
-    panel.appendChild(rowLine);
-  });
-  headInto(panel, 'Other headlines');
-  var grid = row.closest('.hl-wire');
-  var all = grid ? grid.querySelectorAll('.hl-wire__row') : [];
-  var shown = 0;
-  var matched = 0;
-  [].forEach.call(all, function (other) {
-    if (other === row || other.getAttribute('data-kind') === 'vuln') { return; }
-    var hit = false;
-    var hay = (other.getAttribute('data-title') || '') + ' ' + (other.getAttribute('data-labels') || '');
-    ids.forEach(function (id) {
-      if (cveIdsIn(hay).indexOf(id) !== -1) { hit = true; }
-    });
-    if (!hit) { return; }
-    matched++;
-    if (shown >= OTHER_LIMIT) { return; }
-    var oAnchor = other.querySelector('a.hl-wire__item');
-    var oHref = oAnchor ? (oAnchor.getAttribute('href') || '') : '';
-    if (!PUBLISHER_SHAPE.test(oHref)) { return; }
-    var oTitle = other.querySelector('.hl-wire__title');
-    var oSrc = other.querySelector('.hl-wire__src');
-    var oDay = dayOf(other.getAttribute('data-day'));
-    var line = el('p', 'hl-dt__line');
-    var a = el('a', 'hl-dt__link', oTitle ? oTitle.textContent : '(headline)');
-    a.href = oHref;
-    a.target = '_blank';
-    a.rel = 'noopener noreferrer';
-    line.appendChild(a);
-    var meta = ' \u00b7 ' + (oSrc ? oSrc.textContent.trim() + ', ' : '') + (oDay ? humanDay(oDay) : '');
-    line.appendChild(document.createTextNode(meta));
-    panel.appendChild(line);
-    shown++;
-  });
-  if (matched === 0) {
-    dimInto(panel, NO_OTHER_HEADLINES);
-  } else if (matched > shown) {
-    dimInto(panel, OTHER_HEADLINE_LEAD + shown + ' shown, and ' + (matched - shown) + MORE_TAIL);
-  }
-  var labels = labelsAttr.split('|').map(function (s) { return s.trim(); }).filter(Boolean);
-  if (labels.length) {
-    lineInto(panel, LABELS_LEAD + labels.join(', '));
-  }
-  var src = row.querySelector('.hl-wire__src');
-  var srcName = src ? src.textContent.trim() : '';
-  var kindName = kind === 'research' ? 'Research' : kind === 'news' ? 'News' : '';
-  if (kindName && srcName) {
-    lineInto(panel, kindName + ' from ' + srcName + (day ? ', ' + humanDay(day) : '') + '.');
-  }
-}
-
 /* --- open, close, load ------------------------------------------------------------------------- */
 function rowOf(btn) {
-  return btn.closest('.hl-vuln') || btn.closest('.hl-wire__row');
+  return btn.closest('.hl-vuln');
 }
 
 var panelSeq = 0;
@@ -821,7 +658,7 @@ function fillVulnPanel(panel, row, state) {
 
 function bindToggle(btn, state) {
   var row = rowOf(btn);
-  if (!row) { return; }
+  if (!row || !state) { return; }
   // Hidden until the script says the row can open a panel (design section 6):
   // without JavaScript no dead button shows and the rows work as they did.
   btn.removeAttribute('hidden');
@@ -836,21 +673,17 @@ function bindToggle(btn, state) {
     function deliver() {
       if (panel.parentNode !== row) { return; }   // closed while the file loaded
       panel.textContent = '';
-      if (state && state.data) {
+      if (state.data) {
         fillVulnPanel(panel, row, state);
       } else {
         lineInto(panel, FAILED);
       }
     }
-    if (state) {
-      if (state.data) {
-        fillVulnPanel(panel, row, state);
-      } else {
-        lineInto(panel, LOADING);
-        state.load().then(deliver);
-      }
+    if (state.data) {
+      fillVulnPanel(panel, row, state);
     } else {
-      buildHeadlines(panel, row);
+      lineInto(panel, LOADING);
+      state.load().then(deliver);
     }
     panel.addEventListener('keydown', function (ev) {
       if (ev.key === 'Escape') { closePanel(row, btn); }
@@ -859,14 +692,13 @@ function bindToggle(btn, state) {
   btn.addEventListener('keydown', function (ev) {
     if (ev.key === 'Escape') { closePanel(row, btn); }
   });
-  function prime() { if (state) { state.load(); } }
+  function prime() { state.load(); }
   btn.addEventListener('focus', prime);
   btn.addEventListener('pointerenter', prime, { passive: true });
   btn.addEventListener('touchstart', prime, { passive: true });
 }
 
-/* A vuln row finds its file through the section its data-details names; a headline
-   row's panel is derived straight from the page, with no fetch. Panels are
+/* A vuln row finds its file through the section its data-details names. Panels are
    independent: opening one row's does not close another's. */
 function init() {
   var bySectionId = new Map();

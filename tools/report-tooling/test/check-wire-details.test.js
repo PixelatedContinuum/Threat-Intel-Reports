@@ -103,20 +103,36 @@ test('an unreadable renderer is NOT CHECKED, never a pass', function () {
   assert.equal(CW.checkDetailsScript(null).status, 'NOT CHECKED');
 });
 
-/* --- 3. the three row templates carry the toggle ------------------------------ */
+/* --- 3. the two vulnerability row templates carry the toggle, first ----------- */
 
-test('wire/index.md carries the Details toggle in all three row templates', function () {
+var TOGGLE_RE = /<button type="button" class="hl-dt" aria-expanded="false" hidden title="Show details"><span class="hl-dt__sr">Details<\/span><\/button>/;
+
+test('wire/index.md carries the Details toggle in the nKEV and CVEs row templates', function () {
   var r = CW.checkDetailsPage(INDEX);
   assert.equal(r.status, 'PASS', JSON.stringify(r.problems));
 });
 
 test('a page missing one template\u2019s toggle fails', function () {
-  var missingHead = INDEX.replace(/<button type="button" class="hl-dt" aria-expanded="false" hidden>Details<\/button>/,
-    '<button type="button" class="hl-dt-x" aria-expanded="false" hidden>Details<\/button>');
-  assert.equal(CW.checkDetailsPage(missingHead).status, 'FAIL');
-  var wrongDoc = INDEX.replace(/<button type="button" class="hl-dt" aria-expanded="false" hidden>Details<\/button>/,
-    '<button type="button" class="hl-dt" aria-expanded="true" hidden>Details<\/button>');
+  var missing = INDEX.replace(TOGGLE_RE, '');
+  assert.equal(CW.checkDetailsPage(missing).status, 'FAIL');
+  var wrongDoc = INDEX.replace(TOGGLE_RE, function (m) { return m.replace('aria-expanded="false"', 'aria-expanded="true"'); });
   assert.equal(CW.checkDetailsPage(wrongDoc).status, 'FAIL');
+});
+
+test('a toggle moved off the front of the row fails', function () {
+  var moved = INDEX.replace(/(<button type="button" class="hl-dt"[^>]*>[\s\S]*?<\/button>)(<a class="hl-vuln__cve"[^>]*>[^<]*<\/a>)/, '$2$1');
+  assert.notEqual(moved, INDEX, 'the mutation must apply');
+  var r = CW.checkDetailsPage(moved);
+  assert.equal(r.status, 'FAIL');
+  assert.match(JSON.stringify(r.problems), /not directly before the CVE id link/);
+});
+
+test('a Details toggle on the headline row fails', function () {
+  var bad = INDEX.replace(/(<div class="hl-wire__row"[^\n]*?)<\/div>/, '$1<button type="button" class="hl-dt" aria-expanded="false" hidden>Details</button></div>');
+  assert.notEqual(bad, INDEX, 'the mutation must apply');
+  var r = CW.checkDetailsPage(bad);
+  assert.equal(r.status, 'FAIL');
+  assert.match(JSON.stringify(r.problems), /headline row carries a Details toggle/);
 });
 
 test('a page whose headlines wrapper is gone fails', function () {

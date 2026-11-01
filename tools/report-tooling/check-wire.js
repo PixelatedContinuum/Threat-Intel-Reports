@@ -169,7 +169,7 @@ var detailsChecks = [
   ['wire/details-cves.json', CW.checkDetailsJsonPage(readOr(DETAILS_CVES)), '(every value emitted through jsonify)'],
   ['_includes/wire-details-row.html', CW.checkDetailsJsonPage(readOr(DETAILS_ROW_INCLUDE)), '(every value emitted through jsonify)'],
   ['assets/js/wire-details.js', CW.checkDetailsScript(readOr(DETAILS_JS)), '(text nodes and validated hrefs only)'],
-  ['page: Details structure', CW.checkDetailsPage(pageSrc), '(three toggles, the wrapper filter item, versioned data-details)']
+  ['page: Details structure', CW.checkDetailsPage(pageSrc), '(nKEV and CVEs toggles first in the row, none on headlines, the wrapper filter item, versioned data-details)']
 ];
 var anyNotChecked = false;
 var anyDetailsFail = false;

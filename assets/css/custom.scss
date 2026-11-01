@@ -4177,29 +4177,52 @@ span.hl-vuln__p--ssvc, span.hl-vuln__p--exp, span.hl-vuln__p--cn { cursor: help;
    inside the .hl-vuln grid it spans the whole row. Sizes in em, like the row
    rules above. */
 .hl-dt {
-  font-family: inherit;
-  font-size: 0.72em;
-  line-height: 1.5;
-  padding: 0.05em 0.55em;
-  border-radius: 999px;
-  white-space: nowrap;
-  color: var(--hl-text-secondary) !important;
-  border: 1px solid color-mix(in srgb, var(--hl-text-muted) 45%, var(--hl-border-card));
-  background: transparent;
-  text-decoration: none !important;
+  /* First column of the row, left of the CVE id: a chevron button that turns down
+     when its panel is open, so the row reads as one that expands (Joseph,
+     2026-11-01: as a chip among chips nobody would know it opens). */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  align-self: center;
+  width: 1.75em;
+  height: 1.75em;
+  padding: 0;
+  border-radius: 0.35em;
+  border: 1px solid color-mix(in srgb, var(--hl-accent-blue) 55%, transparent);
+  background: color-mix(in srgb, var(--hl-accent-blue) 14%, transparent);
+  color: var(--hl-accent-blue) !important;
   cursor: pointer;
+  font: inherit;
 }
+.hl-dt[hidden] { display: none; }
+.hl-dt::before {
+  content: '';
+  width: 0.42em;
+  height: 0.42em;
+  border-right: 2px solid currentColor;
+  border-bottom: 2px solid currentColor;
+  transform: translateX(-0.08em) rotate(-45deg);
+  transition: transform 0.15s ease;
+}
+.hl-dt[aria-expanded='true']::before { transform: translateY(-0.1em) rotate(45deg); }
 .hl-dt:hover,
 .hl-dt[aria-expanded='true'] {
+  background: color-mix(in srgb, var(--hl-accent-blue) 28%, transparent);
   border-color: var(--hl-accent-blue);
-  color: var(--hl-accent-blue) !important;
 }
 .hl-dt:focus-visible { outline: 2px solid var(--hl-accent-blue); outline-offset: 2px; }
-.hl-wire__row { display: flex; flex-direction: column; }
-.hl-wire__row > .hl-dt {
-  align-self: flex-end;
-  margin: 0.25em 0.4em 0.1em 0;
+/* The button's name, for screen readers only; the chevron is what shows. */
+.hl-dt__sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
 }
+.hl-vuln { grid-template-columns: auto 9.5em minmax(0, 1fr) auto; }
+.hl-vuln--cve { grid-template-columns: auto 9.5em minmax(12em, 1fr) auto; }
+.hl-wire__row { display: flex; flex-direction: column; }
 .hl-dt__panel {
   font-size: 0.82em;
   line-height: 1.55;
@@ -4586,8 +4609,10 @@ span.hl-vuln__p--ssvc, span.hl-vuln__p--exp, span.hl-vuln__p--cn { cursor: help;
      (descriptions, affected version lines, links) cap at a readable height and
      scroll rather than pushing the whole tab down. */
   .hl-dt__panel { max-height: 65vh; overflow-y: auto; }
-  .hl-dt { font-size: 0.66em; }
-  .hl-wire__row > .hl-dt { margin: 0.3em 0.2em 0.05em 0; }
+  /* the chevron keeps its own column; the row's other parts stack beside it */
+  .hl-vuln, .hl-vuln--cve { grid-template-columns: auto minmax(0, 1fr); column-gap: 0.6em; }
+  .hl-vuln > :not(.hl-dt):not(.hl-dt__panel) { grid-column: 2; }
+  .hl-vuln > .hl-dt { grid-row: 1; align-self: start; }
 }
 
 /* ---------- Indicator search on /ioc-feeds/ (Track A4) ----------

@@ -48,21 +48,21 @@ function pageHtml() {
     '<div class="hl-wire__day" data-filter-group>2026 October 31</div>' +
     '<div class="hl-wire__row" data-title="acme widget tipper overheats cve-2026-1001 cve-2026-9999 cve-2026-7777" data-tags="acme|cve-2026-1001|cve-2026-9999|cve-2026-7777" data-labels="Acme|CVE-2026-1001|CVE-2026-9999|CVE-2026-7777" data-kind="research" data-day="2026-10-31">' +
     '<a class="hl-wire__item hl-wire__item--research" href="https://blog.example.acme/setup"><span class="hl-wire__src">Acme</span><span class="hl-wire__title">Acme widget tipper overheats</span></a>' +
-    '<button type="button" class="hl-dt" aria-expanded="false" hidden="">Details</button></div>' +
+    '</div>' +
     '<div class="hl-wire__row" data-title="vulncheck widget wiki ky" data-kind="vuln" data-day="2026-10-31">' +
     '<a class="hl-wire__item hl-wire__item--vuln" href="#vulns-2026-10-31">digest</a>' +
-    '<button type="button" class="hl-dt" aria-expanded="false" hidden="">Details</button></div>' +
+    '</div>' +
     '</div></section>' +
     '<section id="vulns" class="hl-wtabs__sec" data-filter-scope data-details="/wire/details-nkev.json?v=2026-11-01T19:32:18Z">' +
     '<div class="hl-vuln" id="cve-cve-2026-1001" data-title="cve-2026-1001 acme widget" data-day="2026-10-31">' +
-    '<a class="hl-vuln__cve" href="https://nvd.nist.gov/vuln/detail/CVE-2026-1001">CVE-2026-1001</a>' +
+    '<button type="button" class="hl-dt" aria-expanded="false" hidden="" title="Show details"><span class="hl-dt__sr">Details</span></button><a class="hl-vuln__cve" href="https://nvd.nist.gov/vuln/detail/CVE-2026-1001">CVE-2026-1001</a>' +
     '<span class="hl-vuln__vp"><b>Acme</b> Widget</span>' +
-    '<button type="button" class="hl-dt" aria-expanded="false" hidden="">Details</button></div>' +
+    '</div>' +
     '</section>' +
     '<section id="cves" class="hl-wtabs__sec" data-filter-scope data-details="/wire/details-cves.json?v=2026-11-01T19:32:18Z">' +
     '<div class="hl-vuln hl-vuln--cve" id="cves-cve-2026-9999" data-day="2026-10-31">' +
-    '<a class="hl-vuln__cve" href="https://nvd.nist.gov/vuln/detail/CVE-2026-9999">CVE-2026-9999</a>' +
-    '<button type="button" class="hl-dt" aria-expanded="false" hidden="">Details</button></div>' +
+    '<button type="button" class="hl-dt" aria-expanded="false" hidden="" title="Show details"><span class="hl-dt__sr">Details</span></button><a class="hl-vuln__cve" href="https://nvd.nist.gov/vuln/detail/CVE-2026-9999">CVE-2026-9999</a>' +
+    '</div>' +
     '</section></body>';
 }
 
@@ -175,41 +175,6 @@ test('a scored-by ADP row says so in the design\u2019s words', async function ()
   var p = doc.getElementById('cve-cve-2026-1001').querySelector('.hl-dt__panel');
   await settle();
   assert.match(p.textContent, /scored by CISA's ADP\./);
-});
-
-test('a headline row derives its panel from the page: named CVEs, labels, kind and source', async function () {
-  var env = openDom({});
-  var doc = env.dom.window.document;
-  var row = doc.querySelectorAll('.hl-wire__row')[0];
-  var btn = row.querySelector('.hl-dt');
-  clicks(doc, btn);
-  var p = row.querySelector('.hl-dt__panel');
-  var t = p.textContent;
-  assert.match(t, /CVEs named/);
-  assert.match(t, /CVE-2026-1001: on the nKEVs tab\./);
-  var onTab = [].filter.call(p.querySelectorAll('a'), function (a) { return a.textContent === 'on the nKEVs tab'; })[0];
-  assert.equal(onTab.getAttribute('href'), '#cve-cve-2026-1001');
-  assert.match(t, /CVE-2026-9999: on the CVEs tab\./);
-  var onCves = [].filter.call(p.querySelectorAll('a'), function (a) { return a.textContent === 'on the CVEs tab'; })[0];
-  assert.equal(onCves.getAttribute('href'), '#cves-cve-2026-9999');
-  assert.match(t, /CVE-2026-7777: /);
-  var notTab = [].filter.call(p.querySelectorAll('a'), function (a) { return a.textContent === 'not on either tab'; })[0];
-  assert.equal(notTab.getAttribute('href'), 'https://nvd.nist.gov/vuln/detail/CVE-2026-7777');
-  assert.match(t, /Labels: Acme, CVE-2026-1001, CVE-2026-9999, CVE-2026-7777/);
-  assert.match(t, /Research from Acme, 31 October 2026\./);
-});
-
-test('a digest row lists that day\u2019s nKEV rows from the page', async function () {
-  var env = openDom({});
-  var doc = env.dom.window.document;
-  var row = doc.querySelectorAll('.hl-wire__row')[1];
-  var btn = row.querySelector('.hl-dt');
-  clicks(doc, btn);
-  var p = row.querySelector('.hl-dt__panel');
-  var t = p.textContent;
-  assert.match(t, /Added to VulnCheck KEV that day: CVE-2026-1001 Acme Widget\./);
-  var a = [].filter.call(p.querySelectorAll('a'), function (a) { return a.textContent === 'CVE-2026-1001'; })[0];
-  assert.equal(a.getAttribute('href'), '#cve-cve-2026-1001');
 });
 
 test('a failed details fetch shows the failure line, and the next open retries', async function () {
