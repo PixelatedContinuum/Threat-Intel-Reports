@@ -35,7 +35,7 @@ test('resolveTarget: a bare name is the old folder form, a path is the file or i
   assert.strictEqual(RT.resolveTarget(s.file, REPORTS).mode, 'path');
   assert.strictEqual(RT.resolveTarget(s.file, REPORTS).file, s.file);
   assert.strictEqual(RT.resolveTarget(s.dir, REPORTS).file, s.file);
-  var name = RT.resolveTarget('opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015-tabbed-preview', REPORTS);
+  var name = RT.resolveTarget('opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015', REPORTS);
   assert.strictEqual(name.mode, 'name');
   assert.ok(RT.resolveTarget('nope-not-a-report', REPORTS).error);
   assert.match(RT.resolveTarget('/no/such/place/index.md', REPORTS).error, /no such file or folder/);

@@ -151,7 +151,7 @@ test('the MISP verdict: the button when the data has an event, nothing when it h
   bad(M({ count: 2 }), href, /2 MISP buttons/);
   assert.equal(G.mispVerdict(none, undefined, '/reports/x/').notChecked, true);
   assert.equal(typeof G.mispEventFor('/reports/opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015/'), 'string', 'the pilot report has an event in _data/misp_events.yml');
-  assert.equal(G.mispEventFor('/reports/opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015-tabbed-preview/'), null, 'the preview URL has none');
+  assert.equal(G.mispEventFor('/reports/no-such-report-t0500-1-11/'), null, 'a URL with no event gives null');
 });
 const GREEN = 'rgb(74, 222, 128)', AMBER = 'rgb(250, 204, 21)', RED = 'rgb(248, 113, 113)';
 const TL = (over) => Object.assign({ vw: 1280, horizontal: true, dotCount: 5, dotMin: 34, numMin: 18, numCount: 10, marks: [{ l: 0, t: 0, r: 44, b: 64 }, { l: 60, t: 0, r: 104, b: 64 }, { l: 120, t: 0, r: 164, b: 64 }, { l: 180, t: 0, r: 224, b: 64 }], axis: [{ l: 0, t: 100, r: 80, b: 120 }], kinds: { given: GREEN, 'year-inferred': AMBER, range: AMBER, disputed: RED }, refs: { given: GREEN, 'year-inferred': AMBER, range: AMBER, disputed: RED },
