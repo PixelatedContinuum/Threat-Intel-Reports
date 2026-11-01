@@ -55,7 +55,7 @@ The installer masquerading as cracked Sogou Input Method is the delivery mechani
     <tr>
       <td><strong>Data Theft Scale</strong></td>
       <td class="numeric high">8/10</td>
-      <td>JD.com cookie theft, credential harvesting, and financial fraud targeting e-commerce</td>
+      <td>JD[.]com cookie theft, credential harvesting, and financial fraud targeting e-commerce</td>
     </tr>
     <tr>
       <td><strong>Persistence Mechanisms</strong></td>
@@ -73,7 +73,7 @@ The installer masquerading as cracked Sogou Input Method is the delivery mechani
 ### Recommended Actions
 1. **ISOLATE** systems with Sogou Input Method installations
 2. **BLOCK** network access to identified infrastructure (27[.]184[.]28[.]134:8081, related domains)
-3. **INVESTIGATE** potential JD.com credential compromise
+3. **INVESTIGATE** potential JD[.]com credential compromise
 4. **COLLECT** forensic evidence including memory dumps and network logs
 
 ---
@@ -429,11 +429,11 @@ The PE analysis tool (peframe) provided additional context on the malware’s st
 
 > **Analyst note:** XOR is a simple reversible encoding operation where each byte of data is combined with a key value to produce an encoded output, the same operation with the same key decodes it. Malware uses XOR encoding to hide C2 addresses and tokens from casual static inspection; analysts recover the plaintext by applying the same key in reverse.
 
-- **Decoded Domains:** 5bNG.ar, 6.ar, B.tk, J.im, K.ct, Q.ar, rlh.cq, s0.ndf, vpl.gu, X.pg.  
+- **Decoded Domains:** 5bNG[.]ar, 6[.]ar, B[.]tk, J[.]im, K[.]ct, Q[.]ar, rlh[.]cq, s0[.]ndf, vpl[.]gu, X[.]pg.  
 - **Endpoint Token:** CGI1 (suggests `/cgi1` path).  
 - **Resolution Results:**  
-  - 6.ar → 149.50.136.243 (Argentina registry).  
-  - J.im → 52.20.84.62 (Amazon AWS).  
+  - 6[.]ar → 149[.]50[.]136[.]243 (Argentina registry).  
+  - J[.]im → 52[.]20[.]84[.]62 (Amazon AWS).  
   - Others expired or placeholders. 
 
 ## Infrastructure Analysis
@@ -442,43 +442,43 @@ The PE analysis tool (peframe) provided additional context on the malware’s st
 
 ### WHOIS & IP Enrichment
 
-### 149.50.136.243
-- **Hostname:** vps-3906667-x.dattaweb.com  
+### 149[.]50[.]136[.]243
+- **Hostname:** vps-3906667-x[.]dattaweb[.]com  
 - **City/Region:** Rosario, Santa Fe, Argentina  
 - **Country:** Argentina (AR), network registered via Cogent Communications (US)  
 - **OrgName:** Cogent Communications, LLC / DATTATEC.COM S.R.L. (Donweb hosting)  
 - **ASN:** AS27823, Dattatec.com (donweb.com)  
-- **Route:** 149.50.136.0/24  
+- **Route:** 149[.]50[.]136[.]0/24  
 - **Type:** Hosting  
 - **Timezone:** America/Argentina/Cordoba  
 - **Abuse Contact:** abuse@cogentco.com, +1-877-875-4311  
-- **Domains Hosted:** ~207 total (examples: 1000.ar, 2.tur.ar, pumas.ar, transporte.ar, permutas.ar)  
+- **Domains Hosted:** ~207 total (examples: 1000[.]ar, 2[.]tur[.]ar, pumas[.]ar, transporte[.]ar, permutas[.]ar)  
 - **Impact:** Disposable VPS infrastructure in Argentina, hosted by Donweb/Cogent. Likely used for short-lived C2 servers.  
 
-### 52.20.84.62
-- **Hostname:** ec2-52-20-84-62.compute-1.amazonaws.com  
+### 52[.]20[.]84[.]62
+- **Hostname:** ec2-52-20-84-62[.]compute-1[.]amazonaws[.]com  
 - **City/Region:** Ashburn, Virginia, US  
 - **Country:** United States (US)  
 - **OrgName:** Amazon Technologies Inc.  
 - **ASN:** AS14618, Amazon.com, Inc.  
-- **Route:** 52.20.0.0/14  
+- **Route:** 52[.]20[.]0[.]0/14  
 - **Type:** Hosting (Amazon EC2)  
 - **Timezone:** America/New_York  
 - **Abuse Contact:** trustandsafety@support.aws.com, +1-206-555-0000  
-- **Domains Hosted:** ~765,002 total (examples: infopetworld.com, hoho.ai, recipesandcooker.com, stackpathcdn.com, playersb.com)  
+- **Domains Hosted:** ~765,002 total (examples: infopetworld[.]com, hoho[.]ai, recipesandcooker[.]com, stackpathcdn[.]com, playersb[.]com)  
 - **Impact:** Amazon EC2 instance in Ashburn, VA. Reflects attacker reliance on cloud infrastructure for disposable C2 nodes.  
 
 ---
 
 ### Infrastructure Enrichment: IPs and Hosted Domains
 
-### 149.50.136.243
-- **Hostname:** vps-3906667-x.dattaweb[.]com  
-- **Domains Hosted:** ~794 (examples: promo.tur[.]ar, ciudades.tur[.]ar, 80[.]ar, 90[.]ar, ciudad[.]ar, solar[.]ar, comidas[.]ar, bicis[.]ar, hipodromo[.]ar, comercios[.]ar, permutas[.]ar, verde[.]ar, commerce[.]ar, vacaciones.tur[.]ar)  
-- **WHOIS Registrants:** Multiple domains registered through Hostmar.com infrastructure  
+### 149[.]50[.]136[.]243
+- **Hostname:** vps-3906667-x[.]dattaweb[.]com  
+- **Domains Hosted:** ~794 (examples: promo[.]tur[.]ar, ciudades[.]tur[.]ar, 80[.]ar, 90[.]ar, ciudad[.]ar, solar[.]ar, comidas[.]ar, bicis[.]ar, hipodromo[.]ar, comercios[.]ar, permutas[.]ar, verde[.]ar, commerce[.]ar, vacaciones[.]tur[.]ar)  
+- **WHOIS Registrants:** Multiple domains registered through Hostmar[.]com infrastructure  
 - **ASN/ISP:** AS27823, Dattatec.com / Donweb (Argentina), upstream Cogent Communications (US)  
 
-#### Open Ports & Services (149.50.136.243)
+#### Open Ports & Services (149[.]50[.]136[.]243)
 - Port 21: FTP (ProFTPD), Active, last seen 11/16/2025  
 - Port 80: HTTP (Apache HTTPD), Active, last seen 11/13/2025  
 - Port 110: POP3 (Dovecot), Active, last seen 11/11/2025  
@@ -489,33 +489,33 @@ The PE analysis tool (peframe) provided additional context on the malware’s st
 - Ports 2082-2095: HTTP/TLS (Apache HTTPD / misc, cPanel-style ports), Active, last seen 11/09-11/16/2025  
 - Port 5465: SSH (OpenBSD OpenSSH 7.4), Active, last seen 11/14/2025  
 
-**Impact (149.50.136.243):**  
+**Impact (149[.]50[.]136[.]243):**  
 - Hosting dozens of .ar domains with malware/phishing reputations.  
 - Services (FTP, mail, Apache on multiple ports) suggest shared hosting/reseller environment exploited for disposable C2 and phishing.  
 - Domain reuse across .ar sites indicates centralized ownership or small operator group.  
 
 ---
 
-### 52.20.84.62
-- **Hostname:** ec2-52-20-84-62.compute-1.amazonaws.com  
+### 52[.]20[.]84[.]62
+- **Hostname:** ec2-52-20-84-62[.]compute-1[.]amazonaws[.]com  
 - **Domains Hosted:** ~1.5M (examples: 1-3[.]shop, 1-4[.]shop, 11-11wish[.]cloud, 3000bc[.]xyz, aslo[.]xyz)  
 - **ASN/ISP:** AS14618, Amazon.com, Inc. (Amazon EC2, Ashburn VA)  
 
-#### Open Ports & Services (52.20.84.62)
+#### Open Ports & Services (52[.]20[.]84[.]62)
 - Port 80: HTTP (TCPWRAPPED), Active, last seen 11/16/2025  
 - Port 443: HTTPS (TLS/HTTP), Active, last seen 11/11/2025  
 
-**Impact (52.20.84.62):**  
-- Massive domain hosting footprint with numeric naming conventions (number-number.shop).  
+**Impact (52[.]20[.]84[.]62):**  
+- Massive domain hosting footprint with numeric naming conventions (number-number[.]shop).  
 - Clear evidence of Amazon EC2 abuse for disposable phishing/malware campaigns.  
 - Scale (~1.5M domains) complicates attribution but naming patterns provide detection pivot points.  
 
 ---
 
 ### Analyst Notes
->**149.50.136.243:** Hosted in Argentina via Donweb/Dattatec, registered under Cogent Communications (US). Dual attribution highlights attacker’s use of regional hosting with international upstreams.  
->**52.20.84.62:** Amazon EC2 node in Ashburn, VA. Massive domain count shows shared cloud environment abuse. Attackers exploit churnable infrastructure for stealth and scalability.  
->Follow-up investigation identified a domain in a LNK file pointing to **423down[.]com**, which resolved to **45.151.132[.]50** as of 11/23/2025. The site presented a download page with links to additional sites and downloads consistent with the other activities observed on this directory. These artifacts were added to the IOC feed on 11/23/2025.
+>**149[.]50[.]136[.]243:** Hosted in Argentina via Donweb/Dattatec, registered under Cogent Communications (US). Dual attribution highlights attacker’s use of regional hosting with international upstreams.  
+>**52[.]20[.]84[.]62:** Amazon EC2 node in Ashburn, VA. Massive domain count shows shared cloud environment abuse. Attackers exploit churnable infrastructure for stealth and scalability.  
+>Follow-up investigation identified a domain in a LNK file pointing to **423down[.]com**, which resolved to **45[.]151[.]132[.]50** as of 11/23/2025. The site presented a download page with links to additional sites and downloads consistent with the other activities observed on this directory. These artifacts were added to the IOC feed on 11/23/2025.
 
 Operationally, both IPs confirm reliance on cheap ccTLDs plus disposable hosting and cloud services to maintain short-lived, churnable C2 servers.  
 
@@ -552,7 +552,7 @@ Operationally, both IPs confirm reliance on cheap ccTLDs plus disposable hosting
 - **Impact:** The malware can disrupt system availability, either as a sabotage tactic or to force reboots that activate persistence mechanisms. This can cause data loss, downtime, and user frustration.  
 
 ### Command & Control (C2)
-- **Evidence:** XOR decoding revealed disposable domains (6.ar, J.im) and endpoint tokens (CGI1). Resolution confirmed active IPs (149.50.136.243, 52.20.84.62). Traffic patterns mimic certificate validation (ocsp.digicert.com, crl3.digicert.com) and legitimate Sogou updates (get.sogou.com, ping.pinyin.sogou.com).  
+- **Evidence:** XOR decoding revealed disposable domains (6[.]ar, J[.]im) and endpoint tokens (CGI1). Resolution confirmed active IPs (149[.]50[.]136[.]243, 52[.]20[.]84[.]62). Traffic patterns mimic certificate validation (ocsp.digicert.com, crl3.digicert.com) and legitimate Sogou updates (get[.]sogou[.]com, ping[.]pinyin[.]sogou[.]com).  
 - **Impact:** By blending malicious traffic with legitimate certificate checks and software updates, the malware evades detection by network monitoring tools. Disposable domains and churnable cloud IPs ensure C2 infrastructure can be quickly replaced, complicating takedown and attribution.  
 
 ---
@@ -626,7 +626,7 @@ During the broader investigation, a benign Microsoft Word document (**如意素�
 
 ### WeChat ID (rysc2019)
 - **Evidence:** Extracted directly from the document’s text. No obfuscation or encoding was present.  
-- **Reasoning:** WeChat is widely used in China for communication and payments. Underground operators often use WeChat IDs as direct contact points for customers purchasing pirated IPTV streams, stolen JD.com accounts, or cracked software.  
+- **Reasoning:** WeChat is widely used in China for communication and payments. Underground operators often use WeChat IDs as direct contact points for customers purchasing pirated IPTV streams, stolen JD[.]com accounts, or cracked software.  
 - **Impact:** This identifier provides a pivot for OSINT investigations. It links the operator’s technical ecosystem to a mainstream communication/payment platform, showing how monetization is facilitated.  
 
 ### Taobao Shop (“如意素材库 / Ruyi Material Library”)
