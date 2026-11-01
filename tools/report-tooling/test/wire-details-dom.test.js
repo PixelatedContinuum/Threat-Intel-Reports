@@ -116,7 +116,8 @@ test('a nKEV row opens the full fact sheet in the design\u2019s fixed order', as
   assert.match(t, /On CISA KEV since 2026-10-30\./);
   assert.match(t, /Earliest citation date: 2026-10-20\./);
   assert.match(t, /NVD published 2026-10-25, 3 days before the KEV add\./);
-  assert.match(t, /Exploit-DB/);
+  // edb is empty in this fixture, so no Exploit-DB group (an empty heading was a defect).
+  assert.doesNotMatch(t, /Exploit-DB/);
   assert.match(t, /ET Open: SID 1234567\./);
   assert.match(t, /Nuclei: /);
   assert.match(t, /CVSS v3\.1 base score 9\.8, Critical, scored by the CNA\./);

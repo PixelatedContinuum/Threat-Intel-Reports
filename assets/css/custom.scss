@@ -4245,6 +4245,14 @@ span.hl-vuln__p--ssvc, span.hl-vuln__p--exp, span.hl-vuln__p--cn { cursor: help;
 .hl-dt__dim { color: var(--hl-text-muted); }
 .hl-dt__panel a { color: var(--hl-accent-blue) !important; }
 .hl-dt__panel a:hover { text-decoration: underline; }
+/* On a wide screen the fact sheet flows into two columns, so a full sheet is about
+   half as tall (one column measured 922 px at 1280 px wide); a heading stays with the
+   line under it and the quoted description stays whole. */
+@media (min-width: 900px) {
+  .hl-dt__panel { columns: 2 22em; column-gap: 2.2em; }
+  .hl-dt__h { break-after: avoid; }
+  .hl-dt__quote, .hl-dt__group { break-inside: avoid; }
+}
 
 
 /* --- The nKEVs legend (T-0468.1) ---------------------------------------

@@ -96,7 +96,7 @@ classes and href, and the filter data attributes and the toggle live on it. The
 wrapper is what listing-filter.js shows and hides, so a filter that hides a row
 hides its Details panel with it. data-labels carries every label as filed, while
 data-tags stays the lowercased list the filter matches on. {%- endcomment -%}
-<div class="hl-wire__row" data-title="{{ i.title | downcase | escape }}" data-tags="{{ i.labels | join: '|' | downcase | escape }}" data-labels="{{ i.labels | join: '|' | escape }}" data-kind="{{ i.kind }}" data-day="{{ day }}"><a class="hl-wire__item hl-wire__item--{{ i.kind }} hl-wire__item--src-{{ i.source | slugify }}" href="{{ href }}"{{ tgt }}><span class="hl-wire__src">{{ i.source | escape }}</span><span class="hl-wire__title">{{ i.title | escape }}</span><span class="hl-wire__labels">{%- for l in i.labels limit: 2 -%}{%- assign tc = wire.label_colors[l] -%}<span class="hl-wire__label{% if tc %} hl-topic-c{{ tc }}{% endif %}">{{ l | escape }}</span>{%- endfor -%}</span></a><button type="button" class="hl-dt" aria-expanded="false" hidden>Details</button></div>
+<div class="hl-wire__row" data-title="{{ i.title | downcase | escape }}" data-tags="{{ i.labels | join: '|' | downcase | escape }}" data-labels="{{ i.labels | join: '|' | escape }}" data-kind="{{ i.kind }}" data-day="{{ day }}"><a class="hl-wire__item hl-wire__item--{{ i.kind }} hl-wire__item--src-{{ i.source | slugify }}" href="{{ href }}"{{ tgt }}><span class="hl-wire__src">{{ i.source }}</span><span class="hl-wire__title">{{ i.title }}</span><span class="hl-wire__labels">{%- for l in i.labels limit: 2 -%}{%- assign tc = wire.label_colors[l] -%}<span class="hl-wire__label{% if tc %} hl-topic-c{{ tc }}{% endif %}">{{ l }}</span>{%- endfor -%}</span></a><button type="button" class="hl-dt" aria-expanded="false" hidden>Details</button></div>
 {%- endfor -%}
 </div>
 
@@ -501,7 +501,7 @@ data-tags stays the lowercased list the filter matches on. {%- endcomment -%}
 </div>
 
 <script defer src="{{ '/assets/js/listing-filter.js' | relative_url }}?v=16"></script>
-<script defer src="{{ '/assets/js/wire-details.js' | relative_url }}?v=1"></script>
+<script defer src="{{ '/assets/js/wire-details.js' | relative_url }}?v=2"></script>
 
 {%- else -%}
 

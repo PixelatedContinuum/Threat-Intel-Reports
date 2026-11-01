@@ -66,6 +66,7 @@ var FAILED = 'Details could not be loaded.';
 var NO_ENTRY = 'No details in our data for this CVE.';
 var DESC_EMPTY = 'The CVE record in our data has no description.';
 var DESC_SRC = 'From the CVE record, via NVD.';
+var TITLE_SRC = "The CVE record's first sentence, via cve.now. The full description is on NVD.";
 var FIXED_EMPTY = "No fixed version in the data I hold; check the vendor's advisory.";
 var FIXED_IN = 'Fixed in: ';
 var FIXED_TAIL = " (from the CVE record's affected data, via cve.now)";
@@ -182,7 +183,8 @@ function secRecord(panel, d, isCves) {
     panel.appendChild(el('blockquote', 'hl-dt__quote', desc));
     panel.appendChild(el('p', 'hl-dt__src', DESC_SRC));
   } else if (isCves && str(d.title).trim()) {
-    lineInto(panel, str(d.title).trim());
+    panel.appendChild(el('blockquote', 'hl-dt__quote', str(d.title).trim()));
+    panel.appendChild(el('p', 'hl-dt__src', TITLE_SRC));
   } else {
     lineInto(panel, DESC_EMPTY);
   }
@@ -359,13 +361,18 @@ function secExploits(panel, d) {
   if (edb) {
     var g2 = el('div', 'hl-dt__group');
     g2.appendChild(el('span', 'hl-dt__gh', 'Exploit-DB'));
+    var edbSeen = false;
     edb.forEach(function (id) {
       var s = String(id);
       if (!EDB_SHAPE.test(s)) { return; }
       linkInto(g2, encUrl(EDB_PREFIX, s), 'EDB-' + s, false);
-      shown = true;
+      edbSeen = true;
     });
-    if (g2.lastChild) { panel.appendChild(g2); }
+    // The heading alone is not a group: an empty or all-invalid list draws nothing.
+    if (edbSeen) {
+      shown = true;
+      panel.appendChild(g2);
+    }
   }
   if (!shown) {
     lineInto(panel, EXPLOITS_NONE);
