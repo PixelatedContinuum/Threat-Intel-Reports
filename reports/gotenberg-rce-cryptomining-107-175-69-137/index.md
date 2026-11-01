@@ -114,7 +114,7 @@ capability_axes:
 stix_bundle: /stix/gotenberg-rce-cryptomining-107-175-69-137.json
 ---
 
-**Campaign Identifier:** Gotenberg-RCE-Cryptomining-107.175.69.137<br>
+**Campaign Identifier:** Gotenberg-RCE-Cryptomining-107[.]175[.]69[.]137<br>
 **Last Updated:** September 16, 2026<br>
 **Threat Level:** HIGH
 
@@ -638,7 +638,7 @@ them individually.
 
 ### The operator's host, and the ColoCrossing/RackNerd distinction
 
-The operator's own infrastructure sits at `107.175.69.137`, in AS36352, registered today as
+The operator's own infrastructure sits at `107[.]175[.]69[.]137`, in AS36352, registered today as
 AS-COLOCROSSING, under HostPapa. I re-verified the ASN and current owner live against VirusTotal at
 publication and it matches exactly what passive registry data showed during the investigation.
 
@@ -848,7 +848,7 @@ ordinary multipart form POST to `/forms/pdfengines/metadata/write`, carrying a P
 where a defender reviewing the endpoint would look first. It sits in the metadata **key**:
 
 ```
-Title\n-if\nsystem('sleep {N}')||1\n-Comment
+[T]itle\n-if\nsystem('sleep {N}')||1\n-Comment
 ```
 
 The embedded newlines are the whole mechanism. When Gotenberg passes this key to ExifTool,
@@ -930,6 +930,7 @@ handles that specific input shape, not a detection false positive.
 ```
 content:"|5c 6e 2d 69 66 5c 6e 73 79 73 74 65 6d 28|"
 ```
+{: .hl-copy}
 
 This is the literal hex-escaped form of `\n-if\nsystem(`, matched against the HTTP request body on
 POSTs to `/forms/pdfengines/metadata/write`. It survives every transport variant that could be
@@ -1152,7 +1153,7 @@ actually distinguishes this operator from the surrounding commodity noise.
 
 | Type | Value | Confidence | Note |
 |---|---|---|---|
-| IPv4 | `107.175.69.137` | DEFINITE | The operator's own host. Served the exposed directory, the campaign toolkit, the OOB listener, and an unauthenticated reverse-shell collector. |
+| IPv4 | `107[.]175[.]69[.]137` | DEFINITE | The operator's own host. Served the exposed directory, the campaign toolkit, the OOB listener, and an unauthenticated reverse-shell collector. |
 | Port | `18888` | DEFINITE | Out-of-band callback listener; victim callbacks tagged with hostname and UID |
 | Port | `19999` | DEFINITE | Campaign toolkit and miner payload staging |
 | Port | `13337` | DEFINITE | Unauthenticated reverse-shell collector, internet-reachable throughout |
@@ -1174,7 +1175,7 @@ actually distinguishes this operator from the surrounding commodity noise.
 | Type | Value | Note |
 |---|---|---|
 | SHA256 | `b20f39fc00d242e706b6c30367ad811c676e0575050a4ec2f30104b696944b49` | Stock, unmodified XMRig 6.26.0. 133 VirusTotal submissions from 107 unrelated sources, re-verified at publication. Do not use this hash to tie a host or campaign to this operator. |
-| Mining pools | `gulf.moneroocean.stream:10032`, `ca.moneroocean.stream:10032` | Public, shared infrastructure used by unrelated operators. Hunt for it; never blocklist it as this operator's own infrastructure. |
+| Mining pools | `gulf[.]moneroocean[.]stream:10032`, `ca[.]moneroocean[.]stream:10032` | Public, shared infrastructure used by unrelated operators. Hunt for it; never blocklist it as this operator's own infrastructure. |
 
 ### Full Feed Location
 
