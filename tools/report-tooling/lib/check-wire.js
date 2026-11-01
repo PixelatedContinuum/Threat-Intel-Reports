@@ -965,8 +965,29 @@ function checkPage(src, includes) {
   problems = problems.concat(checkTabNav(src));
   problems = problems.concat(checkCvesTab(src, includes));
   problems = problems.concat(checkNkevRow(src));
+  problems = problems.concat(checkHeadlineRow(src));
 
   return verdict(problems.length ? 'FAIL' : 'PASS', null, problems, [], null);
+}
+
+/* The Headlines row (T-0532, Sol review_8c50e5967cc944d4 P1). Its text comes from
+   publishers' feeds, so every output is escaped like the vuln rows'. The exporter
+   decodes feed entities first (flatten), so escaping here prints them correctly.
+   Bare prints allowed: `tgt` (a fixed attribute string the template assigns),
+   `day` (pinned bare above: a date-filter output), and `i.source | slugify`
+   (letters, digits and hyphens only). */
+var HEADLINE_BARE = /^(?:tgt|day|i\.source\s*\|\s*slugify)$/;
+function checkHeadlineRow(src) {
+  var line = (src.split('\n').filter(function (l) { return l.indexOf('<div class="hl-wire__row"') === 0; }))[0];
+  // No row line: nothing to escape here. The Details structure check requires the
+  // wrapper on the real page, and the partial pages the other tests feed have none.
+  if (!line) { return []; }
+  return unescapedOutputs(line).filter(function (m) {
+    var inner = m.replace(/^\{\{-?\s*/, '').replace(/\s*-?\}\}$/, '');
+    return !HEADLINE_BARE.test(inner);
+  }).map(function (m) {
+    return 'the Headlines row prints ' + m + ' unescaped; feed text must reach the page through | escape';
+  });
 }
 
 /* The nKEVs legend (T-0468.1). The explanatory text left the top of the tab and
@@ -1560,5 +1581,5 @@ function checkDetailsPage(src) {
   return verdict(problems.length ? 'FAIL' : 'PASS', null, problems, [], null);
 }
 
-module.exports = { check: check, checkPage: checkPage, checkTabCss: checkTabCss, checkCvesFeed: checkCvesFeed, checkVulnsFeed: checkVulnsFeed, checkTabNav: checkTabNav, checkDetailsPage: checkDetailsPage, checkDetailsScript: checkDetailsScript, checkDetailsJsonPage: checkDetailsJsonPage, STALE_HOURS: STALE_HOURS,
+module.exports = { checkHeadlineRow: checkHeadlineRow, check: check, checkPage: checkPage, checkTabCss: checkTabCss, checkCvesFeed: checkCvesFeed, checkVulnsFeed: checkVulnsFeed, checkTabNav: checkTabNav, checkDetailsPage: checkDetailsPage, checkDetailsScript: checkDetailsScript, checkDetailsJsonPage: checkDetailsJsonPage, STALE_HOURS: STALE_HOURS,
   VULNS_STALE_HOURS: VULNS_STALE_HOURS };

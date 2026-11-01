@@ -108,6 +108,8 @@ test('a nKEV row opens the full fact sheet in the design\u2019s fixed order', as
   assert.match(t, /The record description\./);
   assert.match(t, /From the CVE record, via NVD\./);
   assert.match(t, /Weakness: CWE-79\./);
+  var cweLink = [].slice.call(p.querySelectorAll('a')).filter(function (a) { return a.textContent === 'CWE-79'; })[0];
+  assert.equal(cweLink.getAttribute('href'), 'https://cwe.mitre.org/data/definitions/79.html');
   assert.match(t, /Acme Widget: 1\.0 up to and including 2\.0/);
   assert.match(t, /Fixed in: 2\.1\.0/);
   assert.match(t, /A fixed version is listed above\./);

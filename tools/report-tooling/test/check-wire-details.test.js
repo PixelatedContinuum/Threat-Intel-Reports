@@ -211,3 +211,14 @@ test('a vector with no cvss warns, exactly as the CVEs tab always held', functio
   var r = CW.check(docWithVuln(vulnRow({ cvss: '', cvss_version: '', severity: '', scored_by: '', cvss_vector: 'CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H' })), null, NOW);
   assert.match(r.vulnWarnings.join(' '), /a cvss_vector but no cvss/);
 });
+
+test('the Headlines row escapes every feed value (T-0532, Sol P1)', function () {
+  var row = INDEX.split('\n').filter(function (l) { return l.indexOf('<div class="hl-wire__row"') === 0; })[0];
+  assert.ok(row, 'the headline row is in wire/index.md');
+  assert.deepEqual(CW.checkHeadlineRow(INDEX), []);
+  ['{{ i.title | escape }}', '{{ i.source | escape }}', '{{ l | escape }}', '{{ href | escape }}'].forEach(function (needle) {
+    var broken = INDEX.replace(needle, needle.replace(' | escape', ''));
+    assert.notEqual(broken, INDEX, 'needle present: ' + needle);
+    assert.equal(CW.checkHeadlineRow(broken).length, 1, 'unescaped ' + needle + ' is caught');
+  });
+});

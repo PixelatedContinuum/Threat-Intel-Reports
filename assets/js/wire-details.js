@@ -199,7 +199,8 @@ function secRecord(panel, d, isCves) {
   row.textContent = okIds.length === 1 ? 'Weakness: ' : 'Weaknesses: ';
   okIds.forEach(function (id, i) {
     if (i > 0) { row.appendChild(document.createTextNode(', ')); }
-    linkInto(row, encUrl(CWE_PREFIX, id) + '.html', id, false);
+    // MITRE's page is /data/definitions/<number>.html; the CWE- form 404s (Sol P2).
+    linkInto(row, encUrl(CWE_PREFIX, id.slice(4)) + '.html', id, false);
   });
   row.appendChild(document.createTextNode('.'));
   panel.appendChild(row);
