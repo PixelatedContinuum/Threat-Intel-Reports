@@ -28,7 +28,7 @@ hide: true
 
 **A Comprehensive, Evidence-Based Guide for Security Decision-Makers**
 
-**Campaign Identifier:** Arsenal-237-New-Files-109.230.231.37
+**Campaign Identifier:** Arsenal-237-New-Files-109[.]230[.]231[.]37
 
 ---
 
@@ -141,7 +141,7 @@ This analysis is based on comprehensive static reverse engineering of the chrome
 **Related Reports:**
 - [lpe.exe Privilege Escalation]({{ "/reports/arsenal-237-lpe-exe/" | relative_url }}) - Stage 1 privilege escalation
 - [killer.dll Defense Evasion]({{ "/reports/arsenal-237-new-files/killer-dll/" | relative_url }}) - Stage 2 defense evasion
-- [Arsenal-237 Executive Overview]({{ "/reports/109.230.231.37-Executive-Overview/" | relative_url }}) - Full toolkit analysis
+- [Arsenal-237 Executive Overview]({{ "/reports/109[.]230[.]231[.]37-Executive-Overview/" | relative_url }}) - Full toolkit analysis
 
 ---
 
@@ -157,7 +157,7 @@ chromelevator.exe serves as a **credential harvesting coordinator** in the Arsen
 
 ### Infrastructure Analysis: What We Know
 
-chromelevator.exe was found as part of the 109.230.231.37 infrastructure cluster, which points to centralized campaign operations. It integrates with the other Arsenal-237 components through standardized named-pipe communication and shared development patterns.
+chromelevator.exe was found as part of the 109[.]230[.]231[.]37 infrastructure cluster, which points to centralized campaign operations. It integrates with the other Arsenal-237 components through standardized named-pipe communication and shared development patterns.
 
 **Integration Evidence:**
 - **Companion Tools:** Works alongside lpe.exe (privilege escalation), killer.dll (EDR bypass), rootkit.dll (persistence), and enc_c2.exe (ransomware)
@@ -790,7 +790,7 @@ chromelevator.exe implements a flexible command-line interface enabling differen
 **Available Command-Line Options:**
 
 ```bash
-chromelevator.exe [options] [parameters]
+[c]hromelevator.exe [options] [parameters]
   --verbose              Enable detailed logging and status output
   --fingerprint         Perform system fingerprinting and profiling
   --output-path <dir>   Specify custom output directory for extracted data
@@ -1192,7 +1192,7 @@ This analysis is based on comprehensive static reverse engineering of the chrome
 
 ---
 
-The 109.230.231.37 infrastructure cluster represents a professional ransomware-as-a-service operation deploying coordinated multi-component attacks. chromelevator.exe serves as the **credential harvesting coordinator** within this broader attack chain:
+The 109[.]230[.]231[.]37 infrastructure cluster represents a professional ransomware-as-a-service operation deploying coordinated multi-component attacks. chromelevator.exe serves as the **credential harvesting coordinator** within this broader attack chain:
 
 <table class="professional-table">
   <thead>

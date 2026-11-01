@@ -22,9 +22,9 @@ permalink: /reports/arsenal-237-new-files/killer-dll/
 hide: true
 ---
 
-> **Open Directory Investigation**: This sample was discovered on an open directory hosted at IP address **109.230.231.37**, representing the Arsenal-237 malware development and testing repository. killer.dll is a defense evasion module designed to systematically terminate security products using the BYOVD (Bring Your Own Vulnerable Driver) technique. This module operates as Stage 2 of a two-stage attack chain, with lpe.exe (privilege escalation) delivering killer.dll as its payload. To see all other reports from this investigation see [Executive Overview](/reports/109.230.231.37-Executive-Overview/)
+> **Open Directory Investigation**: This sample was discovered on an open directory hosted at IP address **109[.]230[.]231[.]37**, representing the Arsenal-237 malware development and testing repository. killer.dll is a defense evasion module designed to systematically terminate security products using the BYOVD (Bring Your Own Vulnerable Driver) technique. This module operates as Stage 2 of a two-stage attack chain, with lpe.exe (privilege escalation) delivering killer.dll as its payload. To see all other reports from this investigation see [Executive Overview](/reports/109.230.231.37-Executive-Overview/)
 
-**Campaign Identifier:** Arsenal-237-New-Files-109.230.231.37
+**Campaign Identifier:** Arsenal-237-New-Files-109[.]230[.]231[.]37
 
 ---
 
@@ -88,7 +88,7 @@ This module targets a comprehensive list of enterprise security products includi
 </table>
 
 ### Recommended Actions
-1. **BLOCK** Arsenal-237 infrastructure: IP 109.230.231.37 and C2 endpoint http://109.230.231.37:8888/lpe.exe at network perimeter
+1. **BLOCK** Arsenal-237 infrastructure: IP 109[.]230[.]231[.]37 and C2 endpoint hxxp://109[.]230[.]231[.]37:8888/lpe.exe at network perimeter
 2. **HUNT** for vulnerable driver loading: BdApiUtil64.sys (Baidu) and ProcExpDriver.sys (Process Explorer) service creation events
 3. **MONITOR** for IOCTL abuse: DeviceIoControl calls with codes 0x800024B4 and 0x8335003C targeting driver device handles
 4. **ALERT** on anomalous service lifecycle: CreateServiceW -> StartServiceW -> DeleteService sequences from non-standard processes
@@ -115,7 +115,7 @@ This module targets a comprehensive list of enterprise security products includi
 - **File Size**: 532,992 bytes (approx 520 KB)
 - **Compiler**: Rust (identified via PDB/debug strings)
 - **Family**: Arsenal-237 BYOVD Defense Evasion Module
-- **Distribution Source**: IP 109.230.231.37 (CONFIRMED)
+- **Distribution Source**: IP 109[.]230[.]231[.]37 (CONFIRMED)
 
 ### Embedded Driver 1: Baidu Antivirus BdApi Driver
 - **Embedded Filename**: BdApiUtil64.sys
@@ -138,11 +138,11 @@ This module targets a comprehensive list of enterprise security products includi
 - **Capabilities**: Process inspection, token manipulation, privilege operations, address space attachment
 
 ### C2 Infrastructure
-- **C2 Download URL**: http://109.230.231.37:8888/lpe.exe (CONFIRMED)
+- **C2 Download URL**: hxxp://109[.]230[.]231[.]37:8888/lpe.exe (CONFIRMED)
 - **Payload Download Location**: %TEMP%\svchost_update.exe
 - **Infrastructure Context**: Arsenal-237 open directory malware repository
 
-This sample was found on the Arsenal-237 open directory at IP address 109.230.231.37, an active malware development and testing repository containing multiple attack tools, RATs, and exploit frameworks.
+This sample was found on the Arsenal-237 open directory at IP address 109[.]230[.]231[.]37, an active malware development and testing repository containing multiple attack tools, RATs, and exploit frameworks.
 
 ---
 
@@ -1049,7 +1049,7 @@ lpe.exe <command_to_execute_as_SYSTEM>
 
 **Example**:
 ```cmd
-lpe.exe "rundll32.exe C:\path\to\killer.dll,get_hostfxr_path"
+[l]pe.exe "rundll32.exe C:\path\to\killer.dll,get_hostfxr_path"
 ```
 
 lpe.exe cycles through privilege escalation techniques until successfully obtaining SYSTEM, then executes specified command with SYSTEM privileges.
@@ -1065,7 +1065,7 @@ It is launched by lpe.exe via rundll32.exe with SYSTEM privileges.
 
 **Execution Method**:
 ```cmd
-rundll32.exe C:\path\to\killer.dll,get_hostfxr_path
+[r]undll32.exe C:\path\to\killer.dll,get_hostfxr_path
 ```
 - **DLL**: killer.dll
 - **Export Function**: `get_hostfxr_path` (entry point for defense evasion logic)
@@ -1081,13 +1081,13 @@ It sits at offset `0x180078d98` in killer.dll's configuration data.
 
 **Content**:
 ```
-http://109.230.231.37:8888/lpe.exe
+hxxp://109[.]230[.]231[.]37:8888/lpe.exe
 TEMP\svchost_update.exe
 ```
 
 That string confirms:
 - killer.dll shares configuration data with downloader/deployment module
-- lpe.exe is downloaded from Arsenal-237 C2 server (109.230.231.37:8888)
+- lpe.exe is downloaded from Arsenal-237 C2 server (109[.]230[.]231[.]37:8888)
 - lpe.exe is saved to `%TEMP%\svchost_update.exe` for execution
 - Both modules are part of same toolkit distributed from same infrastructure
 
@@ -1111,7 +1111,7 @@ This one comes from lpe.exe's help text, analyzed separately.
 
 **Content**:
 ```
-Example: lpe.exe "rundll32.exe C:\path\to\killer.dll,get_hostfxr_path"
+Example: [l]pe.exe "rundll32.exe C:\path\to\killer.dll,get_hostfxr_path"
 ```
 
 lpe.exe explicitly documents killer.dll as an example payload, confirming intentional integration.
@@ -1124,7 +1124,7 @@ lpe.exe explicitly documents killer.dll as an example payload, confirming intent
 +-----------------------------------------------------------------+
 | STAGE 0: Initial Access                                        |
 +-----------------------------------------------------------------+
-| - Attacker downloads lpe.exe and killer.dll from 109.230.231.37|
+| - Attacker downloads lpe.exe and killer.dll from 109[.]230[.]231[.]37|
 | - Files placed on target system via phishing, exploit, etc.    |
 +-----------------------------------------------------------------+
                               |
@@ -1582,7 +1582,7 @@ The anti-analysis features are **deliberately designed to defeat time-limited sa
       <td><strong>Command and Control</strong></td>
       <td>T1105</td>
       <td>Ingress Tool Transfer</td>
-      <td>C2 URL http://109.230.231.37:8888/lpe.exe for tool download</td>
+      <td>C2 URL hxxp://109[.]230[.]231[.]37:8888/lpe.exe for tool download</td>
       <td class="confirmed">CONFIRMED</td>
     </tr>
     <tr>
@@ -1730,6 +1730,7 @@ ConvertFrom-CIPolicy -XmlFilePath "C:\BlockDrivers.xml" -BinaryFilePath "C:\Wind
 # 4. Activate policy (requires reboot)
 Restart-Computer
 ```
+{: .hl-copy}
 
 **Business Considerations**:
 - **False Positive Risk**: Blocking Process Explorer driver may impact IT administrators who use Sysinternals tools legitimately

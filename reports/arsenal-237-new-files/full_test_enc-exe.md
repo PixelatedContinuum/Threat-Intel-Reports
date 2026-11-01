@@ -28,7 +28,7 @@ hide: true
 
 **A Comprehensive, Evidence-Based Guide for Security Decision-Makers and Defense Teams**
 
-**Campaign Identifier:** Arsenal-237-New-Files-109.230.231.37
+**Campaign Identifier:** Arsenal-237-New-Files-109[.]230[.]231[.]37
 
 ---
 
@@ -164,7 +164,7 @@ This assessment is based on comprehensive static analysis including:
 - [enc_c2.exe C2-enabled Ransomware]({{ "/reports/arsenal-237-new-files/enc_c2-exe/" | relative_url }}) - C2-enabled ransomware variant
 - [new_enc.exe Ransomware]({{ "/reports/new-enc-exe/" | relative_url }}) - Simplified ransomware variant
 - [dec_fixed.exe Decryptor]({{ "/reports/arsenal-237-new-files/dec_fixed-exe/" | relative_url }}) - Victim-specific decryptor
-- [Arsenal-237 Executive Overview]({{ "/reports/109.230.231.37-Executive-Overview/" | relative_url }}) - Full toolkit analysis
+- [Arsenal-237 Executive Overview]({{ "/reports/109[.]230[.]231[.]37-Executive-Overview/" | relative_url }}) - Full toolkit analysis
 
 ---
 
@@ -713,6 +713,7 @@ API calls:
   GetLogicalDrives (potential UNC mapping)
   CreateFileW with UNC paths
 ```
+{: .hl-copy}
 
 **Lateral Movement Scenarios:**
 
@@ -1444,6 +1445,7 @@ rule Rust_Ransomware_Parallel_Encryption {
          ($rayon_core and $rsa and $sysinfo))
 }
 ```
+{: .hl-copy}
 
 ### Sigma Detection Rules
 
@@ -1507,6 +1509,7 @@ detection:
 action: alert
 level: critical
 ```
+{: .hl-copy}
 
 ### KQL (Kusto Query Language) for Azure Sentinel / Microsoft Defender
 
@@ -1520,6 +1523,7 @@ DeviceFileEvents
 | where FileCount > 10
 | project TimeGenerated, DeviceName, InitiatingProcessName, FileCount
 ```
+{: .hl-copy}
 
 ```kusto
 // Alert on unsigned binary executing net use
@@ -1530,6 +1534,7 @@ DeviceProcessEvents
 | join kind=inner (DeviceFileEvents | where FileName == "full_test_enc.exe") on DeviceName
 | project TimeGenerated, DeviceName, ProcessCommandLine, ProcessFileName
 ```
+{: .hl-copy}
 
 ```kusto
 // Detect parallel encryption pattern
@@ -1540,6 +1545,7 @@ DeviceFileEvents
 | where FileCount > 100
 | project DeviceName, hour, FileCount
 ```
+{: .hl-copy}
 
 ---
 

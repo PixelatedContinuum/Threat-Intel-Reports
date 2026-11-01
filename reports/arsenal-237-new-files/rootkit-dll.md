@@ -28,7 +28,7 @@ hide: true
 
 **A Technical Deep-Dive into Enterprise-Grade Security Product Neutralization and Anti-Forensics Capabilities**
 
-**Campaign Identifier:** Arsenal-237-New-Files-109.230.231.37
+**Campaign Identifier:** Arsenal-237-New-Files-109[.]230[.]231[.]37
 
 
 ---
@@ -49,7 +49,7 @@ rootkit.dll is a sophisticated defense evasion framework masquerading as a rootk
 - [killer.dll BYOVD Module]({{ "/reports/arsenal-237-new-files/killer-dll/" | relative_url }}) - Basic BYOVD implementation
 - [BdApiUtil64.sys Vulnerable Driver]({{ "/reports/bdapiutil64-sys/" | relative_url }}) - Weaponized driver component
 - [nethost.dll C2 Module]({{ "/reports/arsenal-237/nethost-dll/" | relative_url }}) - C2 communication component
-- [Arsenal-237 Executive Overview]({{ "/reports/109.230.231.37-Executive-Overview/" | relative_url }}) - Full toolkit analysis
+- [Arsenal-237 Executive Overview]({{ "/reports/109[.]230[.]231[.]37-Executive-Overview/" | relative_url }}) - Full toolkit analysis
 
 ---
 
@@ -123,7 +123,7 @@ The framework demonstrates professional-grade development with clear modular arc
 
 ## Overview and Arsenal-237 Context
 
-rootkit.dll is the fifth of eleven deep-dive samples analyzed as part of Arsenal-237 threat actor infrastructure. This component was discovered on an open directory at 109.230.231.37 alongside a comprehensive attack toolkit containing privilege escalation, security product termination, driver exploitation, command and control, and ransomware payloads.
+rootkit.dll is the fifth of eleven deep-dive samples analyzed as part of Arsenal-237 threat actor infrastructure. This component was discovered on an open directory at 109[.]230[.]231[.]37 alongside a comprehensive attack toolkit containing privilege escalation, security product termination, driver exploitation, command and control, and ransomware payloads.
 
 **Arsenal-237 Toolkit Composition:**
 
@@ -990,6 +990,7 @@ rule Arsenal237_rootkit_dll_FileProperties {
         any of them
 }
 ```
+{: .hl-copy}
 
 A confirmed hash match identifies the file with certainty, so this rule is DEFINITE.
 
@@ -999,7 +1000,7 @@ A confirmed hash match identifies the file with certainty, so this rule is DEFIN
 
 1. **rundll32.exe Execution with rootkit.dll:**
    ```
-   rundll32.exe rootkit.dll DllEntryPoint
+   [r]undll32.exe rootkit.dll DllEntryPoint
    ```
    - Presence of rootkit.dll in rundll32 command line triggers alert
    - Detection Confidence: DEFINITE (process execution is observable)
@@ -1047,6 +1048,7 @@ A confirmed hash match identifies the file with certainty, so this rule is DEFIN
    HKLM\SYSTEM\CurrentControlSet\Services\Bprotect
    HKLM\SYSTEM\CurrentControlSet\Services\Bprotect\Parameters
    ```
+   {: .hl-copy}
    - Presence indicates driver loading attempt
    - Service name "Bprotect" specific to Arsenal-227 toolkit
    - Detection Confidence: DEFINITE (registry persistence)
@@ -1368,7 +1370,7 @@ The comprehensive toolkit (privilege escalation, defense evasion, C2, ransomware
 ### Network Indicators
 
 **C2 Infrastructure (Arsenal-237 Discovery Location):**
-- IP Address: 109.230.231.37
+- IP Address: 109[.]230[.]231[.]37
 - Protocol: HTTP/HTTPS
 - Port: [Common C2 ports - 443, 8080, 8443]
 - Purpose: Toolkit distribution, C2 communication

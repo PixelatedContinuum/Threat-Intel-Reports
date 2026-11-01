@@ -24,7 +24,7 @@ hide: true
 
 # lpe.exe: Arsenal-237 Privilege Escalation Module
 
-**Campaign Identifier:** Arsenal-237-New-Files-109.230.231.37
+**Campaign Identifier:** Arsenal-237-New-Files-109[.]230[.]231[.]37
 
 ---
 
@@ -110,7 +110,7 @@ hide: true
 - **Immediate Actions**: Isolate affected systems immediately; begin forensic investigation for lateral movement and data exfiltration
 - **Threat Hunting**: Search for lpe.exe execution, named pipe creation (\\.\pipe\spoolss), and fodhelper.exe registry modifications
 - **Detection**: Deploy network and host-based detection for all five escalation techniques detailed in Section 7
-- **Containment**: Block IPs in Arsenal-237 infrastructure (109.230.231.37) at network perimeter
+- **Containment**: Block IPs in Arsenal-237 infrastructure (109[.]230[.]231[.]37) at network perimeter
 
 ### Primary Threat Vector
 
@@ -118,7 +118,7 @@ lpe.exe is delivered as part of the Arsenal-237 toolkit through compromised webs
 
 As a distribution model it is a second-stage payload delivered by a first-stage dropper, usually an obfuscated PowerShell or batch script.
 
-The Arsenal-237 open directory at 109.230.231.37 provides both toolkit staging and C2 coordination.
+The Arsenal-237 open directory at 109[.]230[.]231[.]37 provides both toolkit staging and C2 coordination.
 
 ---
 
@@ -131,7 +131,7 @@ The Arsenal-237 open directory at 109.230.231.37 provides both toolkit staging a
 **Related Reports:**
 - [killer.dll BYOVD Module]({{ "/reports/arsenal-237-new-files/killer-dll/" | relative_url }}) - Stage 2 defense evasion
 - [rootkit.dll Defense Evasion]({{ "/reports/arsenal-237/rootkit-dll/" | relative_url }}) - Advanced rootkit component
-- [Arsenal-237 Executive Overview]({{ "/reports/109.230.231.37-Executive-Overview/" | relative_url }}) - Full toolkit analysis
+- [Arsenal-237 Executive Overview]({{ "/reports/109[.]230[.]231[.]37-Executive-Overview/" | relative_url }}) - Full toolkit analysis
 
 ---
 
@@ -506,7 +506,7 @@ That is **direct use of Task Scheduler's administrative capability** rather than
 
 **Scheduled Task Creation Command**:
 ```
-schtasks /create
+[s]chtasks /create
   /tn "[TASK_NAME]"                   # Task name (likely randomized - not hardcoded in malware)
   /tr "[PAYLOAD_COMMAND]"             # Command to execute (e.g., killer.dll path)
   /sc once                            # Run once (not recurring)
@@ -522,7 +522,7 @@ The `/tn` parameter is present, but the task name itself is **not hardcoded** in
 
 **Execution Mechanism**:
 ```
-schtasks command
+[s]chtasks command
     |
 Windows Task Scheduler service (running as SYSTEM)
     |
@@ -556,6 +556,7 @@ PowerShell Query:
   Get-ScheduledTask | Where-Object {$_.Principal.UserId -eq "NT AUTHORITY\SYSTEM"} |
     Select-Object TaskName, TaskPath, Date -ExpandProperty Actions
 ```
+{: .hl-copy}
 
 ---
 
@@ -568,12 +569,12 @@ lpe.exe uses Windows Management Instrumentation Command-line (wmic.exe) to creat
 
 **WMIC Command Sequence**:
 ```
-wmic process call create "[PAYLOAD_COMMAND]"
+[w]mic process call create "[PAYLOAD_COMMAND]"
 ```
 
 **Process Execution Chain**:
 ```
-wmic.exe (Windows Management Instrumentation)
+[w]mic.exe (Windows Management Instrumentation)
     |
 Queries WMI Service (running as SYSTEM)
     |
@@ -951,6 +952,7 @@ index=main sourcetype=WinEventLog:Sysmon EventCode=13
 | stats count by user, object_path, object_name, new_value
 | search count > 0
 ```
+{: .hl-copy}
 
 #### Splunk Query: SYSTEM-Privilege Scheduled Task Creation
 ```splunk
@@ -959,6 +961,7 @@ index=main schtasks /create
 | search CommandLine="*/ru*SYSTEM*" OR RunAsUser="NT AUTHORITY\\SYSTEM"
 | table _time, ComputerName, user, CommandLine
 ```
+{: .hl-copy}
 
 #### KQL Query (Microsoft Sentinel): Token Manipulation Detection
 ```kql
@@ -967,6 +970,7 @@ DeviceProcessEvents
   or ProcessName has_any("OpenProcessToken", "DuplicateTokenEx", "ImpersonateLoggedOnUser")
 | project Timestamp, DeviceName, ProcessName, InitiatingProcessName, ProcessCommandLine
 ```
+{: .hl-copy}
 
 #### PowerShell Hunting: Process Token Access
 ```powershell
@@ -978,6 +982,7 @@ Get-WinEvent -LogName Security -FilterXPath `
   Select-Object TimeCreated, MachineName,
     @{Name='SourceProcess';Expression={$_.Properties[0].Value}}
 ```
+{: .hl-copy}
 
 ### IOC Collection Points
 
@@ -992,7 +997,7 @@ Get-WinEvent -LogName Security -FilterXPath `
 - Scheduled task creation: schtasks /create with SYSTEM privileges
 
 **Network IOCs**:
-- Arsenal-237 infrastructure: 109.230.231.37
+- Arsenal-237 infrastructure: 109[.]230[.]231[.]37
 - Toolkit staging/C2 domains (from infrastructure analysis)
 
 ---
@@ -1097,7 +1102,7 @@ Network-based detection (firewalls, IDS/IPS) **cannot detect lpe.exe execution**
 - API monitoring
 - Behavioral analytics
 
-Network detection becomes relevant only for the Arsenal-237 toolkit *staging* (connections to 109.230.231.37) or subsequent stages like ransomware C2.
+Network detection becomes relevant only for the Arsenal-237 toolkit *staging* (connections to 109[.]230[.]231[.]37) or subsequent stages like ransomware C2.
 
 ---
 
@@ -1384,13 +1389,13 @@ While detailed string analysis is not available from compiled binary, typical em
 
 | Infrastructure Component | Value | Type | Status | Notes |
 |---|---|---|---|---|
-| **Toolkit Staging** | 109.230.231.37 | IP Address | Active | Open directory hosting lpe.exe, killer.dll, enc_*.exe |
+| **Toolkit Staging** | 109[.]230[.]231[.]37 | IP Address | Active | Open directory hosting lpe.exe, killer.dll, enc_*.exe |
 | **Repository Location** | /arsenal-237/ | Directory | Active | Standard toolkit distribution path |
 | **File Hosting** | HTTP (port 80) | Protocol | Active | Unencrypted transfer (detection opportunity) |
 
 ### OSINT Findings
 
-**IP Address: 109.230.231.37**
+**IP Address: 109[.]230[.]231[.]37**
 
 The hosting provider is not established in this analysis.
 
@@ -1406,7 +1411,7 @@ The hosting provider is not established in this analysis.
 - Reverse DNS: [Pending identification]
 
 **Blocking Recommendations**:
-- Block at firewall level (deny all traffic to 109.230.231.37)
+- Block at firewall level (deny all traffic to 109[.]230[.]231[.]37)
 - Block at DNS level (sinkhole resolution)
 - Add to threat feed for detection systems
 - Monitor for connections as indicator of compromise

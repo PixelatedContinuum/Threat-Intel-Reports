@@ -26,7 +26,7 @@ hide: true
 
 **A Comprehensive Threat Intelligence Guide for Security Decision-Makers**
 
-**Campaign Identifier:** Arsenal-237-New-Files-109.230.231.37
+**Campaign Identifier:** Arsenal-237-New-Files-109[.]230[.]231[.]37
 
 
 ---
@@ -856,6 +856,7 @@ SHA256: d73c4f127c5c0a7f9bf0f398e95dd55c7e8f6f6a5783c8cb314bd99c2d1c9802
 MD5:    7c5493a0a5df52682a5c2ba433634601
 SHA1:   29014d4d6fc42219cd9cdc130b868382cf2c14c2
 ```
+{: .hl-copy}
 
 **String-Based Detection:**
 ```
@@ -865,6 +866,7 @@ Error Messages: "Decryption failed - wrong key or corrupted file"
               : "File corrupted - encrypted size mismatch"
 Command Flag: "--folder-a"
 ```
+{: .hl-copy}
 
 ### Behavioral Detection (Process Level)
 

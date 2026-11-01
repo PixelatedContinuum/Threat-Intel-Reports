@@ -13,14 +13,14 @@ description: "Follow-up analysis of 11 new samples added to the Arsenal-237 open
 stix_bundle: /stix/arsenal-237-new-files.json
 ---
 
-**Campaign Identifier:** Arsenal-237-New-Files-109.230.231.37<br>
+**Campaign Identifier:** Arsenal-237-New-Files-109[.]230[.]231[.]37<br>
 **Last Updated:** January 27, 2026<br>
 **Threat Level:** CRITICAL
 
 
 ---
 
-> **Part of series:** This is report 2 of 2 in the Arsenal-237 investigation. The original report, [Arsenal-237: Threat Actor R&D Repository Exposed](/reports/109.230.231.37-Executive-Overview/), documents the first 16 samples found in the same open directory (109.230.231.37) and is the recommended starting point; this follow-up analyzes the 11 samples added after that discovery.
+> **Part of series:** This is report 2 of 2 in the Arsenal-237 investigation. The original report, [Arsenal-237: Threat Actor R&D Repository Exposed](/reports/109.230.231.37-Executive-Overview/), documents the first 16 samples found in the same open directory (109[.]230[.]231[.]37) and is the recommended starting point; this follow-up analyzes the 11 samples added after that discovery.
 
 ---
 
@@ -28,7 +28,7 @@ stix_bundle: /stix/arsenal-237-new-files.json
 {: .hl-tier-1}
 {: .hl-tab-overview}
 
-This report analyzes **11 new malware samples** added to the same open directory (109.230.231.37) documented in early January 2026. These samples represent a significant capability jump from the original 16: the new additions introduce BYOVD kernel driver abuse, a kernel-mode rootkit, a CrowdStrike-specific EDR terminator, and enterprise-grade Rust ransomware, capabilities absent from the first wave.
+This report analyzes **11 new malware samples** added to the same open directory (109[.]230[.]231[.]37) documented in early January 2026. These samples represent a significant capability jump from the original 16: the new additions introduce BYOVD kernel driver abuse, a kernel-mode rootkit, a CrowdStrike-specific EDR terminator, and enterprise-grade Rust ransomware, capabilities absent from the first wave.
 
 ---
 
@@ -40,7 +40,7 @@ Arsenal-237 is a modular ransomware toolkit built for enterprise compromise acro
 
 In Phase 1 the operator escalates privilege and disables the defenses. lpe.exe reaches NT AUTHORITY\SYSTEM through five techniques, token impersonation from lsass.exe and winlogon.exe, registry UAC bypass via fodhelper.exe hijacking, and SYSTEM-level scheduled tasks. With SYSTEM privileges, killer.dll and its CrowdStrike-specific variant killer_crowdstrike.dll load the signed but vulnerable BdApiUtil64.sys (a Baidu antivirus driver) and issue kernel-mode IOCTL commands such as 0x800024B4 to terminate CSFalconService.exe, csagent.exe, and more than 20 other security products. rootkit.dll extends this by adding Unicode-based file hiding, API hooking for call interception, PowerShell integration, and anti-forensics measures that target process-monitoring and packet-analysis tools.
 
-In Phase 2 they move to persistence and credential access. nethost.dll establishes persistence via DLL hijacking, beacons to hardcoded TCP targets (8.8.8.8:53 and 127.0.0.1:53), and supports PowerShell execution, system enumeration, and Base64-encoded exfiltration. chromelevator.exe uses reflective DLL injection and direct syscalls to extract cookies, passwords, and payment data from Chrome, Brave, and Edge credential stores.
+In Phase 2 they move to persistence and credential access. nethost.dll establishes persistence via DLL hijacking, beacons to hardcoded TCP targets (8[.]8[.]8[.]8:53 and 127.0.0.1:53), and supports PowerShell execution, system enumeration, and Base64-encoded exfiltration. chromelevator.exe uses reflective DLL injection and direct syscalls to extract cookies, passwords, and payment data from Chrome, Brave, and Edge credential stores.
 
 In Phase 3 they deploy the ransomware. new_enc.exe targets Commvault agents (misidentified as Veritas Backup Exec at authoring and corrected 2026-09-13, once the referenced service short-names were confirmed against Commvault's own published documentation) and VSS snapshots using a hardcoded ChaCha20 key (67e6096a...), a test-variant operational security lapse. full_test_enc.exe deploys multi-threaded hybrid encryption (RSA-OAEP plus ChaCha20) across all accessible drives and network shares without C2 dependence, which makes decryption impossible without the operator's RSA private key. dec_fixed.exe, a victim-specific decryptor carrying a distinct hardcoded key (1e0d8597...), confirms per-victim key management and an active RaaS model (CONFIRMED).
 
@@ -272,7 +272,7 @@ The full report is at [/reports/arsenal-237/rootkit-dll/](/reports/arsenal-237/r
 
 This component is a persistence mechanism working through DLL hijacking.
 
-It masquerades as the legitimate .NET runtime component nethost.dll. Loaded by legitimate .NET processes, it establishes DLL-hijacking persistence that survives reboots, beacons to hardcoded TCP targets (8.8.8.8:53 and 127.0.0.1:53), and supports PowerShell execution, system enumeration, and Base64-encoded exfiltration.
+It masquerades as the legitimate .NET runtime component nethost.dll. Loaded by legitimate .NET processes, it establishes DLL-hijacking persistence that survives reboots, beacons to hardcoded TCP targets (8[.]8[.]8[.]8:53 and 127.0.0.1:53), and supports PowerShell execution, system enumeration, and Base64-encoded exfiltration.
 
 **File Identifiers:**
 - MD5: `f91ff1bb5699524524fff0e2587af040`

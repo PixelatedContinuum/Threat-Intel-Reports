@@ -26,7 +26,7 @@ hide: true
 
 **A Comprehensive, Evidence-Based Threat Assessment for Enterprise Security Decision-Makers**
 
-**Campaign Identifier:** Arsenal-237-New-Files-109.230.231.37
+**Campaign Identifier:** Arsenal-237-New-Files-109[.]230[.]231[.]37
 
 
 ---
@@ -163,7 +163,7 @@ new_enc.exe is deployed **manually by threat actors** following successful syste
 - [enc_c2.exe Ransomware]({{ "/reports/arsenal-237-new-files/enc_c2-exe/" | relative_url }}) - C2-enabled ransomware variant
 - [full_test_enc.exe Advanced Ransomware]({{ "/reports/arsenal-237-new-files/full_test_enc-exe/" | relative_url }}) - Most advanced ransomware variant
 - [dec_fixed.exe Decryptor]({{ "/reports/arsenal-237-new-files/dec_fixed-exe/" | relative_url }}) - Victim-specific decryptor
-- [Arsenal-237 Executive Overview]({{ "/reports/109.230.231.37-Executive-Overview/" | relative_url }}) - Full toolkit analysis
+- [Arsenal-237 Executive Overview]({{ "/reports/109[.]230[.]231[.]37-Executive-Overview/" | relative_url }}) - Full toolkit analysis
 
 ---
 
@@ -259,7 +259,7 @@ Anywhere Commvault is the backup, that backup fails completely. Every incrementa
 **Primary Anti-Recovery Strategy: VSS Deletion**
 
 ```batch
-vssadmin delete shadows /all /quiet
+[v]ssadmin delete shadows /all /quiet
 ```
 
 This command permanently removes all Windows Volume Shadow Copy snapshots. The "/quiet" flag suppresses prompts, enabling silent execution.
@@ -689,6 +689,7 @@ new_enc.exe signature indicators:
 - Scheduled task: RustRansomNoteTask
 - VSS command: vssadmin delete shadows /all /quiet
 ```
+{: .hl-copy}
 
 **Behavioral Detection (Event Log Queries)**
 
@@ -740,6 +741,7 @@ DeviceProcessEvents
 | project Timestamp, DeviceId, DeviceName, FileName, ProcessCommandLine, ParentProcessName
 | order by Timestamp desc
 ```
+{: .hl-copy}
 
 **KQL - Commvault Service Termination Hunt:**
 ```kql
@@ -748,6 +750,7 @@ DeviceProcessEvents
 | project Timestamp, DeviceId, DeviceName, ProcessCommandLine
 | order by Timestamp desc
 ```
+{: .hl-copy}
 
 **SPL (Splunk) - Ransomware Service Termination Pattern:**
 ```spl
@@ -755,11 +758,13 @@ index=main sourcetype=WinEventLog:System (GxVss OR GxBlr OR GxFWD OR GxCVD OR Gx
 | stats count by host, user, signature
 | where count > 3
 ```
+{: .hl-copy}
 
 **Elastic Query - ChaCha20 Key Detection (Memory Search):**
 ```
 process.name:("new_enc.exe" OR "enc*.exe") AND memory.strings:"67e6096a85ae67bb"
 ```
+{: .hl-copy}
 
 ## Section 9: Recovery Path Analysis
 
@@ -859,7 +864,7 @@ The related sample is enc_c2.exe, the C2-enabled variant.
 | Feature | enc_c2.exe | new_enc.exe |
 |---------|------------|-------------|
 | **Deployment Model** | C2-enabled (Tor onion) | Manual CLI (--pass, --folder, --file) |
-| **C2 Infrastructure** | rustydl5ak6p6ajqnja6qzkxvp5huhe4olpdsq5oy75ea4o34aalpkqd.onion | None identified |
+| **C2 Infrastructure** | rustydl5ak6p6ajqnja6qzkxvp5huhe4olpdsq5oy75ea4o34aalpkqd[.]onion | None identified |
 | **Builder ID** | TEST_BUILD_001 | ICIIXGD1X8ZJ4T1MTQ6TLQIDJEMDE7U4 |
 | **Version** | [Unknown] | v0.5-beta |
 | **Anti-Analysis Sophistication** | Standard | Enhanced (5-layer system) |

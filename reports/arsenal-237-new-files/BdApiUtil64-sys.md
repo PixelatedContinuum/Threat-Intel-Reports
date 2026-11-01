@@ -26,7 +26,7 @@ hide: true
 
 **A Comprehensive, Evidence-Based Guide for Security Decision-Makers**
 
-**Campaign Identifier:** Arsenal-237-New-Files-109.230.231.37
+**Campaign Identifier:** Arsenal-237-New-Files-109[.]230[.]231[.]37
 
 ---
 
@@ -242,7 +242,7 @@ This combination makes it an ideal choice for BYOVD attacks. Attackers weaponize
 
 ### Discovery & Infrastructure
 
-**HIGH CONFIDENCE (85%)** - BdApiUtil64.sys was discovered on an open directory at **109.230.231.37** as part of the comprehensive Arsenal-237 attack toolkit. This IP address hosts a complete attack orchestration platform with 11 deep-dive analysis samples.
+**HIGH CONFIDENCE (85%)** - BdApiUtil64.sys was discovered on an open directory at **109[.]230[.]231[.]37** as part of the comprehensive Arsenal-237 attack toolkit. This IP address hosts a complete attack orchestration platform with 11 deep-dive analysis samples.
 
 The Arsenal-237 toolkit represents a **professional-grade, organized threat** with sophisticated attack automation and defense evasion. The toolkit contains:
 
@@ -1216,6 +1216,7 @@ MD5:    ced47b89212f3260ebeb41682a4b95ec
 SHA1:   148c0cde4f2ef807aea77d7368f00f4c519f47ef
 SHA256: 47ec51b5f0ede1e70bd66f3f0152f9eb536d534565dbb7fcc3a05f542dbe4428
 ```
+{: .hl-copy}
 
 Any match here is DEFINITE, and puts the Arsenal-237 toolkit on the system.
 
@@ -1225,6 +1226,7 @@ Standard deployment path:
 ```
 C:\Windows\System32\drivers\BdApiUtil64.sys
 ```
+{: .hl-copy}
 
 Alternate paths (less common):
 ```
@@ -1233,6 +1235,7 @@ C:\ProgramData\BdApiUtil64.sys
 C:\Temp\BdApiUtil64.sys
 [User-controlled temp directories]
 ```
+{: .hl-copy}
 
 An exact hash match is DEFINITE. A filename match carrying the Baidu signature is highly likely.
 
@@ -1274,6 +1277,7 @@ Location:
 ```
 HKLM\SYSTEM\CurrentControlSet\Services\Bprotect
 ```
+{: .hl-copy}
 
 Suspicious Indicators:
 ```
@@ -1281,6 +1285,7 @@ ImagePath = C:\Windows\System32\drivers\BdApiUtil64.sys
 Start = 2 (Automatic) or 3 (Demand start) WITHOUT Baidu Antivirus installed
 DisplayName = "Baidu Protect" (or empty/unusual name)
 ```
+{: .hl-copy}
 
 **Detection Method**:
 ```powershell
@@ -1288,6 +1293,7 @@ DisplayName = "Baidu Protect" (or empty/unusual name)
 Get-ItemProperty -Path 'HKLM:\SYSTEM\CurrentControlSet\Services\Bprotect' -ErrorAction SilentlyContinue |
   Select-Object ImagePath, Start, DisplayName
 ```
+{: .hl-copy}
 
 A Bprotect service with no legitimate Baidu Antivirus installation behind it is malicious, which I rate HIGH at around 90 percent.
 
@@ -1322,6 +1328,7 @@ Sysmon Event 6 (Driver Loaded) provides kernel-level visibility into driver load
   <ImageLoaded condition="contains">BdApiUtil64.sys</ImageLoaded>
 </DriverLoad>
 ```
+{: .hl-copy}
 
 Any driver load of BdApiUtil64.sys is malicious unless Baidu Antivirus is legitimately installed, which makes this DEFINITE.
 
@@ -1390,6 +1397,7 @@ On its own an EventLog termination is not enough and needs correlating, so I rat
   </DriverLoad>
 </Rule>
 ```
+{: .hl-copy}
 
 **KQL Query (Microsoft Sentinel / Azure Log Analytics)**
 
@@ -1407,6 +1415,7 @@ union (DeviceImageLoadEvents)
 | where FolderPath !contains "ProgramData\\Baidu"
 | project Timestamp, DeviceName, FileName, FolderPath, Signer
 ```
+{: .hl-copy}
 
 **Splunk SPL (Splunk Query Language)**
 
@@ -1423,6 +1432,7 @@ OR (EventCode=5 AND Image="*MsMpEng.exe" OR Image="*csagent.exe" OR Image="*ekrn
 | where time_diff > 0 AND time_diff < 60000
 | table host, driver_load, process_term, time_diff
 ```
+{: .hl-copy}
 
 **CrowdStrike Falcon Query (IOAs/Indicators of Attack)**
 
@@ -1435,6 +1445,7 @@ AND TimeStampTime:[NOW-1m TO NOW]
 DLL_Loading AND image_filename:BdApiUtil64.sys
 | stats count by ComputerName, image_filename, timestamp
 ```
+{: .hl-copy}
 
 ---
 
@@ -1552,7 +1563,7 @@ The actor is either an organized cybercriminal group or a state-affiliated malwa
 - **Professional Development**: Modular attack components, explicit product-specific optimizations (killer_crowdstrike.dll)
 - **Enterprise Focus**: Toolkit targets enterprise security products (CrowdStrike, ESET, Kaspersky), not consumer antivirus
 - **Historical Precedent**: Similar toolkits documented in BlackByte, Cuba, ALPHV/BlackCat campaigns (known ransomware groups)
-- **Infrastructure Sophistication**: Organized toolkit distribution (109.230.231.37 open directory), coordinated attack flow
+- **Infrastructure Sophistication**: Organized toolkit distribution (109[.]230[.]231[.]37 open directory), coordinated attack flow
 
 **Possible Attribution** (without definitive evidence):
 - Organized ransomware group (potentially Russian or Eastern European based on security product targeting)
@@ -1953,6 +1964,7 @@ Kernel-level compromise requires complete system rebuild. Aggressive cleanup:
   }
 }
 ```
+{: .hl-copy}
 
 ### Registry Indicators
 
@@ -2018,6 +2030,7 @@ rule Arsenal237_Service_Creation_IOCTL {
         all of them
 }
 ```
+{: .hl-copy}
 
 ### Sigma Detection Rule
 
@@ -2052,6 +2065,7 @@ falsepositives:
     - Legitimate Baidu Antivirus installations
 level: critical
 ```
+{: .hl-copy}
 
 ### EDR Query (KQL - Microsoft Sentinel)
 
@@ -2074,6 +2088,7 @@ DeviceProcessEvents
 | where TimeFromLoad > 0min and TimeFromLoad < 1min
 | project Timestamp, DeviceName, ProcessName, ThreatLevel = "CRITICAL"
 ```
+{: .hl-copy}
 
 ---
 

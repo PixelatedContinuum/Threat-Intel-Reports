@@ -28,7 +28,7 @@ hide: true
 
 **A Comprehensive, Evidence-Based Guide for Security Decision-Makers**
 
-**Campaign Identifier:** Arsenal-237-New-Files-109.230.231.37
+**Campaign Identifier:** Arsenal-237-New-Files-109[.]230[.]231[.]37
 
 
 ---
@@ -54,7 +54,7 @@ nethost.dll is a critical command-and-control (C2) communication module deployed
 **Technical Summary**
 
 **What This Malware Enables:**
-- Rapid C2 channel establishment to hardcoded IP addresses (8.8.8.8:53, 127.0.0.1:53)
+- Rapid C2 channel establishment to hardcoded IP addresses (8[.]8[.]8[.]8:53, 127.0.0.1:53)
 - 16+ command capabilities including PowerShell execution, system enumeration, and data exfiltration
 - Real-time command processing with template-based payload injection
 - Environmental awareness enabling adaptive C2 strategies
@@ -76,7 +76,7 @@ nethost.dll is a critical command-and-control (C2) communication module deployed
 - Incident response activation is appropriate if this sample is confirmed on endpoints
 
 *For Technical Teams:*
-1. **Urgent:** Block outbound connections to 8.8.8.8:53 and 127.0.0.1:53 at network perimeter and endpoint level
+1. **Urgent:** Block outbound connections to 8[.]8[.]8[.]8:53 and 127.0.0.1:53 at network perimeter and endpoint level
 2. **Urgent:** Deploy YARA rules and detection signatures across all endpoints (see Detections section)
 3. **High Priority:** Hunt for nethost.dll across all systems using file hashes (see IOCs section)
 4. **High Priority:** Review network logs for attempted connections to C2 addresses even if blocked
@@ -105,7 +105,7 @@ This report derives findings from static reverse engineering analysis of the net
 **Related Reports:**
 - [lpe.exe Privilege Escalation]({{ "/reports/arsenal-237-lpe-exe/" | relative_url }}) - Stage 1 privilege escalation
 - [rootkit.dll Defense Evasion]({{ "/reports/arsenal-237/rootkit-dll/" | relative_url }}) - Defense evasion component
-- [Arsenal-237 Executive Overview]({{ "/reports/109.230.231.37-Executive-Overview/" | relative_url }}) - Full toolkit analysis
+- [Arsenal-237 Executive Overview]({{ "/reports/109[.]230[.]231[.]37-Executive-Overview/" | relative_url }}) - Full toolkit analysis
 
 ---
 
@@ -234,9 +234,9 @@ nethost.dll is **mandatory** for ransomware operation; without established C2 co
 The DLL contains hardcoded C2 infrastructure embedded in static data:
 
 ```
-Target String: "8.8.8.8:53127.0.0.1ntdll.dll"
+Target String: "8[.]8[.]8[.]8:53127.0.0.1ntdll.dll"
 Extracted Targets:
-  - 8.8.8.8:53 (TCP)
+  - 8[.]8[.]8[.]8:53 (TCP)
   - 127.0.0.1:53 (TCP)
 ```
 
@@ -244,14 +244,14 @@ Extracted Targets:
 
 | Address | Purpose | Assessment | Confidence |
 |---|---|---|---|
-| **8.8.8.8:53** | Google Public DNS server | Masking/Proxy (attacker likely operates proxy or local redirect on this address) | MODERATE (70%) |
+| **8[.]8[.]8[.]8:53** | Google Public DNS server | Masking/Proxy (attacker likely operates proxy or local redirect on this address) | MODERATE (70%) |
 | **127.0.0.1:53** | Localhost DNS port | Local SOCKS proxy or DNS proxy on infected system (CONFIRMED in code) | CONFIRMED |
 | **Port 53 (TCP)** | DNS-over-TCP (unusual) | Masking C2 as DNS traffic; port 53 DNS queries typically use UDP but TCP is valid for zone transfers | CONFIRMED |
 
 **Why These Targets Are Suspicious:**
 
-Google Public DNS (8.8.8.8) is not typically targeted for C2 communication. The selection of this address coupled with port 53 suggests:
-1. The attacker operates infrastructure at or through 8.8.8.8 (unlikely; more likely a proxy/tunnel endpoint)
+Google Public DNS (8[.]8[.]8[.]8) is not typically targeted for C2 communication. The selection of this address coupled with port 53 suggests:
+1. The attacker operates infrastructure at or through 8[.]8[.]8[.]8 (unlikely; more likely a proxy/tunnel endpoint)
 2. The address is a placeholder awaiting modification during deployment
 3. The attacker expects local DNS proxy infrastructure on infected networks
 
@@ -270,10 +270,10 @@ Step 2: Environmental Reconnaissance
 
 Step 3: Parse Hardcoded Targets
    +- Extract IP:port pairs from embedded string
-   +- Result: [8.8.8.8:53, 127.0.0.1:53]
+   +- Result: [8[.]8[.]8[.]8:53, 127.0.0.1:53]
 
 Step 4: Sequential Connection Attempts
-   +- For each target (8.8.8.8:53 first):
+   +- For each target (8[.]8[.]8[.]8:53 first):
       +- Create TCP socket (WSASocketW)
       +- Attempt connection (connect() API)
       +- If successful -> Return, socket ready for C2
@@ -359,13 +359,13 @@ The DLL embeds template strings for dynamic PowerShell command construction:
 
 **Service Enumeration Template:**
 ```powershell
-Get-Service|?{$_.Status -eq ''}|Select Name,Status|FT
+[G]et-Service|?{$_.Status -eq ''}|Select Name,Status|FT
 ```
 That lists all services, and the empty string (`''`) after `-eq` is a placeholder the C2 server fills with whatever status filter it wants (e.g., 'Running', 'Stopped'). The template lets the operator enumerate services with dynamic filtering.
 
 **File Download Template:**
 ```powershell
-Invoke-WebRequest -Uri '' -OutFile ''
+[I]nvoke-WebRequest -Uri '' -OutFile ''
 ```
 That downloads a file from a C2-provided URL and saves it to a C2-provided local path, with both parameters populated dynamically by the server.
 
@@ -420,7 +420,7 @@ If COMPUTERNAME/USERNAME discovered successfully:
 
 If environmental discovery fails:
    +- Proceed to hardcoded C2 targets
-   +- Use standard failover logic (8.8.8.8:53 then 127.0.0.1:53)
+   +- Use standard failover logic (8[.]8[.]8[.]8:53 then 127.0.0.1:53)
 ```
 
 **Threat Intelligence Implications:**
@@ -562,11 +562,11 @@ This indicates sophisticated attack execution. Full arsenal assessment recommend
 
 ---
 
-**Q4: "We blocked connections to 8.8.8.8:53 at the firewall. Are we safe?"**
+**Q4: "We blocked connections to 8[.]8[.]8[.]8:53 at the firewall. Are we safe?"**
 
 *Short Answer:* Partially-you've blocked the primary C2 address, but secondary infrastructure may exist.
 
-*Detailed Answer:* Blocking 8.8.8.8:53 and 127.0.0.1:53 prevents C2 communication from nethost.dll as currently configured. However:
+*Detailed Answer:* Blocking 8[.]8[.]8[.]8:53 and 127.0.0.1:53 prevents C2 communication from nethost.dll as currently configured. However:
 - Attacker likely anticipated blocking and has failover infrastructure
 - Secondary C2 addresses may be embedded in conditional code paths (environmental detection logic)
 - Future variants may use different C2 infrastructure
@@ -637,12 +637,12 @@ Treat as ransomware pre-staging unless additional evidence suggests alternative 
 
 ---
 
-**Q9: "Why does the malware target 8.8.8.8 specifically?"**
+**Q9: "Why does the malware target 8[.]8[.]8[.]8 specifically?"**
 
 *Short Answer:* Likely a proxy/tunnel endpoint, deliberately chosen to evade network detection.
 
-*Detailed Answer:* 8.8.8.8 is Google's public DNS server. The attacker doesn't intend to contact Google but rather to:
-1. Use 8.8.8.8 as an externally-reachable address for a proxy service they control
+*Detailed Answer:* 8[.]8[.]8[.]8 is Google's public DNS server. The attacker doesn't intend to contact Google but rather to:
+1. Use 8[.]8[.]8[.]8 as an externally-reachable address for a proxy service they control
 2. Piggyback on legitimate DNS traffic to hide C2 communication
 3. Exploit network rules that permit "DNS" traffic to DNS servers
 
@@ -684,7 +684,7 @@ The urgency is HIGH rather than drop-everything immediate. Remediation within 24
 
 ### Finding 2: Network Blocking Is Partially Effective But Incomplete
 
-Blocking 8.8.8.8:53 and 127.0.0.1:53 stops this variant's C2 communication but does not address the underlying compromise.
+Blocking 8[.]8[.]8[.]8:53 and 127.0.0.1:53 stops this variant's C2 communication but does not address the underlying compromise.
 
 The attacker already controls the system through nethost.dll. Network blocking stops new commands but does not remove the malware or prevent lateral movement to other systems.
 
@@ -731,12 +731,12 @@ Rust malware is not harder to defend against than C-compiled malware. Modern EDR
 
 ### Finding 6: Multi-Target Failover Indicates Resilience Planning But Is Exploitable
 
-The malware tries several C2 targets (8.8.8.8:53, 127.0.0.1:53), so resilience was designed in. With only two of them, though, blocking stays feasible.
+The malware tries several C2 targets (8[.]8[.]8[.]8:53, 127.0.0.1:53), so resilience was designed in. With only two of them, though, blocking stays feasible.
 
 Two hardcoded targets is primitive for malware of this quality, where ransomware C2 usually carries ten or more redundant endpoints. That may indicate:
 - Early-stage development
 - Intentional simplicity (variant for specific targets)
-- Assumption of network accessibility (attacker expects 8.8.8.8 to be reachable)
+- Assumption of network accessibility (attacker expects 8[.]8[.]8[.]8 to be reachable)
 
 Blocking these addresses is worth doing, but it buys temporary disruption only. The operator will rebuild on new infrastructure.
 
@@ -749,7 +749,7 @@ Blocking these addresses is worth doing, but it buys temporary disruption only. 
 - PE64 x64 DLL file format
 - Rust compiler artifacts and runtime
 - Winsock 2.2 initialization (WSASocketW, connect APIs)
-- Hardcoded C2 targets: 8.8.8.8:53 and 127.0.0.1:53
+- Hardcoded C2 targets: 8[.]8[.]8[.]8:53 and 127.0.0.1:53
 - C2 command parsing and dispatch (16+ commands identified)
 - PowerShell integration templates
 - Base64 encoding for file uploads
@@ -767,7 +767,7 @@ Blocking these addresses is worth doing, but it buys temporary disruption only. 
 
 ### LIKELY (60-80% - Reasonable Inference)
 
-- **8.8.8.8 Proxy Endpoint (70%)**: Address unlikely to be targeted directly; probable attacker-controlled proxy masquerading as Google DNS
+- **8[.]8[.]8[.]8 Proxy Endpoint (70%)**: Address unlikely to be targeted directly; probable attacker-controlled proxy masquerading as Google DNS
 - **Additional C2 Infrastructure Hidden (70%)**: Conditional execution paths based on environmental checks likely contain alternative C2 addresses
 - **Local Proxy Installation Expected (65%)**: 127.0.0.1:53 connection suggests attacker pre-installed tunnel/proxy infrastructure
 - **Data Exfiltration Intent (70%)**: File upload capability combined with disk enumeration suggests data theft before encryption
@@ -798,7 +798,7 @@ Blocking these addresses is worth doing, but it buys temporary disruption only. 
    +- If failed -> continue to hardcoded targets
 
 2. Call sub_180044320() to parse hardcoded C2 string
-   +- Input: "8.8.8.8:53127.0.0.1ntdll.dll"
+   +- Input: "8[.]8[.]8[.]8:53127.0.0.1ntdll.dll"
    +- Output: Parsed IP:port pairs
 
 3. For each parsed target:
@@ -881,7 +881,7 @@ The malware includes template strings for dynamic PowerShell command constructio
 
 **Service Enumeration:**
 ```powershell
-Get-Service|?{$_.Status -eq ''}|Select Name,Status|FT
+[G]et-Service|?{$_.Status -eq ''}|Select Name,Status|FT
 ```
 
 **Analysis:**
@@ -896,7 +896,7 @@ To detect it, monitor for PowerShell commands carrying `Get-Service|?{$_.Status 
 
 **File Download:**
 ```powershell
-Invoke-WebRequest -Uri '' -OutFile ''
+[I]nvoke-WebRequest -Uri '' -OutFile ''
 ```
 
 **Analysis:**
@@ -963,19 +963,19 @@ Where nethost.dll turns up, the other components are worth hunting for, using th
 ### Network IOCs
 
 **C2 Infrastructure:**
-- IP: 8.8.8.8, Port: 53 (TCP)
+- IP: 8[.]8[.]8[.]8, Port: 53 (TCP)
 - IP: 127.0.0.1, Port: 53 (TCP)
 
 **Detection Strategy:**
 - Block outbound connections to these addresses at perimeter firewall
 - Alert on any connection attempts from unknown/suspicious processes
-- Monitor for legitimate DNS traffic to 8.8.8.8 as potential bypass indicator
+- Monitor for legitimate DNS traffic to 8[.]8[.]8[.]8 as potential bypass indicator
 
 ### Behavioral IOCs
 
 **Process Behavior:**
 - DLL injection of nethost.dll into running process
-- TCP socket creation followed by connection attempt to 8.8.8.8:53 or 127.0.0.1:53
+- TCP socket creation followed by connection attempt to 8[.]8[.]8[.]8:53 or 127.0.0.1:53
 - PowerShell.exe spawned with suspicious command-line arguments
 - Environment variable enumeration (GetEnvironmentVariable COMPUTERNAME/USERNAME)
 
