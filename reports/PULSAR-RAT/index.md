@@ -23,7 +23,7 @@ stix_bundle: /stix/PULSAR-RAT.json
 ---
 
 
-**Campaign Identifier:** PULSAR-RAT-185.208.159.182<br>
+**Campaign Identifier:** PULSAR-RAT-185[.]208[.]159[.]182<br>
 **Last Updated:** December 1, 2025<br>
 **Threat Level:** CRITICAL
 
@@ -127,7 +127,7 @@ Capability detail sits in Section 6, detection coverage and the IOC feed are in 
 
 **server.exe** is Pulsar RAT, a .NET remote access trojan derived from the open-source Quasar RAT family. Static code analysis establishes the threat at **9.2/10 CRITICAL**. An attacker who executes this payload gains the equivalent of unrestricted physical access: complete filesystem control, automated credential harvesting from all major browsers, live keylogging, covert Hidden Virtual Network Computing (HVNC) desktop access invisible to the user, screen and webcam capture, microphone recording, clipboard hijacking targeting cryptocurrency addresses, and a SOCKS proxy module for lateral movement into network segments not directly reachable from the internet.
 
-**Infrastructure context:** `185[.]208[.]159[.]182` (AS42624, associated with "NOAVARAN SHABAKEH SABZ MEHREGAN Ltd." and "SETEL CONECTA S.L.") has been reported as an active C2 node for RedLine Stealer on port `1912`, a Quasar RAT distribution point, and hosts additional malware families documented in the follow-up investigation, [Dual-RAT Analysis]({{ "/reports/dual-rat-analysis/" | relative_url }}). Threat intelligence feeds flag the broader `185.208.15x.xxx` range for malicious activity across multiple platforms (HIGH confidence, OSINT correlation).
+**Infrastructure context:** `185[.]208[.]159[.]182` (AS42624, associated with "NOAVARAN SHABAKEH SABZ MEHREGAN Ltd." and "SETEL CONECTA S.L.") has been reported as an active C2 node for RedLine Stealer on port `1912`, a Quasar RAT distribution point, and hosts additional malware families documented in the follow-up investigation, [Dual-RAT Analysis]({{ "/reports/dual-rat-analysis/" | relative_url }}). Threat intelligence feeds flag the broader `185[.]208[.]15x[.]xxx` range for malicious activity across multiple platforms (HIGH confidence, OSINT correlation).
 
 For cross-references, the full technical detail is in Section 6 for capabilities, in Section 6's Evasion subsection for anti-analysis, and in Section 7 for incident response. The risk scores below are reproduced from the BLUF for convenience, and the scoring methodology is in Section 3.
 
@@ -942,6 +942,7 @@ FOR EACH technique in table:
   5. Tune to reduce false positives
   6. Document in security runbooks
 ```
+{: .hl-copy}
 
 **SIEM Query Development Example:**
 
@@ -954,6 +955,7 @@ index=proxy OR index=dns OR index=firewall
 | where count > 5
 | table src_ip, dest, url, count
 ```
+{: .hl-copy}
 
 **EDR Hunting Query Example:**
 
@@ -964,6 +966,7 @@ AND file_path:*Login Data*
 AND (file_path:*Chrome* OR file_path:*Firefox* OR file_path:*Edge*)
 AND NOT process_name:(chrome.exe OR firefox.exe OR msedge.exe)
 ```
+{: .hl-copy}
 
 ### Gap Analysis Framework
 
@@ -1113,6 +1116,7 @@ Get-Partition | Where-Object {$_.Type -eq 'Recovery'} |
 Write-Host "`nWARNING: Mounting recovery partition for inspection should only be done by trained personnel" -ForegroundColor Yellow
 Write-Host "Consider imaging the partition first for forensic preservation" -ForegroundColor Yellow
 ```
+{: .hl-copy}
 
 **For thorough verification, forensics specialists can:**
 - Create forensic images before any inspection
@@ -1174,7 +1178,7 @@ Standard registry monitoring will catch this, and any competent EDR or endpoint 
 1. INFECTED SYSTEM STARTUP
    ↓
 2. Retrieves C2 configuration from public paste site
-   (e.g., pastebin.com/raw/[attacker-specified-ID])
+   (e.g., pastebin[.]com/raw/[attacker-specified-ID])
    ↓
 3. Decrypts configuration using embedded keys to get C2 server IP/domain
    ↓
@@ -1692,7 +1696,7 @@ Change passwords from a DIFFERENT, CLEAN system. Do not change them from the com
 
 #### Block C2 Infrastructure (Network Level)
 
-1. **Block paste sites** (see considerations below) - pastebin.com, paste.ee, hastebin.com
+1. **Block paste sites** (see considerations below) - pastebin[.]com, paste[.]ee, hastebin[.]com
 2. **Block geolocation services** - ipwho.is, ip-api.com
 3. **Block identified C2 IPs/domains** - If any identified from network logs
 4. **Monitor for C2 attempts** - Set up alerts for blocked connection attempts
@@ -1814,6 +1818,7 @@ Industry IR guidance consistently recommends rebuild over cleanup for any compro
 Remove-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\RunOnce" -Name [suspicious_entry]
 Remove-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\RunOnce" -Name [suspicious_entry]
 ```
+   {: .hl-copy}
 
 3. **Remove filesystem persistence** (30 minutes):
    - Delete malware executable (verify hash first)
@@ -2033,12 +2038,14 @@ The short answer is that it is difficult to confirm without specialized tools an
    ```
    reagentc /info
    ```
+   {: .hl-copy}
    If disabled, WinRE persistence unlikely (but check why it's disabled)
 
 2. **Check for recovery partition:**
    ```
    Get-Partition | Where-Object {$_.Type -eq 'Recovery'}
    ```
+   {: .hl-copy}
    If no recovery partition exists, WinRE persistence impossible
 
 3. **For definitive verification:**
@@ -2320,7 +2327,7 @@ This report labels confidence at three levels throughout: the classification tab
 
 **CONFIRMED**, code or behavior directly present and observed: the malware type (Remote Access Trojan) and its professional-grade sophistication; the C2 architecture and its multi-layered evasion of domain and IP based detection; keylogging; automated browser password extraction; clipboard hijacking targeting cryptocurrency addresses; screen and video capture; the API calls behind token manipulation and process injection; the SOCKS proxy module; anti-VM, anti-debugger, and sandbox-evasion detection; the cryptographic obfuscation; and Registry RunOnce persistence. The Section 5 technique-mapping table carries the same label on 35 of its 47 rows.
 
-**HIGH**: the Pulsar RAT / Quasar-derivative family identification; the infrastructure context tying `185[.]208[.]159[.]182` to the broader `185.208.15x.xxx` range flagged by threat intelligence feeds; the HVNC (Hidden Virtual Network Computing) capability, which requires driver installation to function; and WinRE persistence, present in code but not confirmed to survive every recovery scenario. One row of the Section 5 table, Windows Recovery Environment persistence under Pre-OS Boot, also carries this label.
+**HIGH**: the Pulsar RAT / Quasar-derivative family identification; the infrastructure context tying `185[.]208[.]159[.]182` to the broader `185[.]208[.]15x[.]xxx` range flagged by threat intelligence feeds; the HVNC (Hidden Virtual Network Computing) capability, which requires driver installation to function; and WinRE persistence, present in code but not confirmed to survive every recovery scenario. One row of the Section 5 table, Windows Recovery Environment persistence under Pre-OS Boot, also carries this label.
 
 **MODERATE**: the UAC bypass technique, present in code with the specific bypass method unconfirmed by dynamic analysis; the threat actor type (professional cybercriminals), the primary motivation (financial gain), and the target profile (broad, opportunistic) from the Section 3 classification table; and, restated from Section 10, financial motivation aligning with the credential-harvesting and clipboard-hijacking capabilities observed. Seven rows of the Section 5 table carry this label, covering spearphishing-attachment delivery, potential service-based persistence and creation, the UAC bypass technique, impairing security tools, session-cookie theft, and lateral movement through compromised systems.
 
