@@ -17,7 +17,7 @@ sitemap: false
 {%- assign sev_bands = "critical,high,medium,low" | split: "," %}
 <feed xmlns="http://www.w3.org/2005/Atom">
   <title>{{ site.title | xml_escape }}: The Wire, CVEs (significant new CVEs not yet on a KEV list)</title>
-  <subtitle>This feed is my selection of new CVEs with a critical flaw in a product CISA has listed before, a confirmed public exploit or a high EPSS percentile, that are not on VulnCheck KEV or CISA KEV. Being listed does not mean exploitation has been seen. The feed shows at most 50 CVEs, ranked by how many reasons they meet, then EPSS, then CVSS. Listing, titles, SSVC (CISA's assessment), fixed versions and advisory ids come from cve.now (CC BY 4.0); scores from NVD through VulnCheck; exploits from Rapid7's and Exploit-DB's own indexes; KEV products from CISA; EPSS from FIRST.</subtitle>
+  <subtitle>This feed is my selection of new CVEs with a critical flaw in a product CISA has listed before, a confirmed public exploit or a high EPSS percentile, that are not on VulnCheck KEV or CISA KEV. Being listed does not mean exploitation has been seen. The feed shows at most 50 CVEs, ranked by how many reasons they meet, then EPSS, then CVSS. Listing, titles, SSVC (CISA's assessment), fixed versions and advisory ids come from cve.now (CC BY 4.0); scores from NVD through VulnCheck, unless a row says cve.now; exploits from Rapid7's and Exploit-DB's own indexes; KEV products from CISA; EPSS from FIRST.</subtitle>
   <link href="{{ site.url }}/wire/cves.xml" rel="self" type="application/atom+xml"/>
   <link href="{{ site.url }}/wire/#cves" rel="alternate" type="text/html"/>
   <link href="https://cve.now/" rel="via" type="text/html" title="cve.now"/>
@@ -27,7 +27,7 @@ sitemap: false
     <name>{{ site.title | xml_escape }}</name>
     <uri>{{ site.url }}/wire/#cves</uri>
   </author>
-  <rights>Listing, titles, SSVC, fixed versions and advisory ids from cve.now (CC BY 4.0); scores from NVD through VulnCheck; exploits from Rapid7 and Exploit-DB; KEV products from CISA; EPSS from FIRST. Selection by {{ site.title | xml_escape }}.</rights>
+  <rights>Listing, titles, SSVC, fixed versions and advisory ids from cve.now (CC BY 4.0); scores from NVD through VulnCheck, unless a row says cve.now; exploits from Rapid7 and Exploit-DB; KEV products from CISA; EPSS from FIRST. Selection by {{ site.title | xml_escape }}.</rights>
 {%- if wire and wire.cves and wire.cves != empty %}
   {%- if wire.cves_status == "ok" or wire.cves_status == "stale" %}
   {%- for r in wire.cves limit: 500 %}
