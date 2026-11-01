@@ -24,14 +24,14 @@ description: "Comparative technical analysis of Quasar RAT and NjRAT/XWorm disco
 stix_bundle: /stix/dual-rat-analysis.json
 ---
 
-**Campaign Identifier:** Dual-RAT-185.208.159.182-Quasar-NjRAT<br>
+**Campaign Identifier:** Dual-RAT-185[.]208[.]159[.]182-Quasar-NjRAT<br>
 **Last Updated:** December 6, 2025<br>
 **Threat Level:** HIGH
 
 
 ---
 
-> **Investigation Continuation Note**: This analysis continues the original [PULSAR RAT (server.exe)]({{ "/reports/PULSAR-RAT/" | relative_url }}) investigation. Two additional files, client.exe and server (1).exe, appeared in the open directory at IP `185.208.159.182` during that investigation, indicating the operator was concurrently testing or deploying additional RAT families alongside PULSAR RAT.
+> **Investigation Continuation Note**: This analysis continues the original [PULSAR RAT (server.exe)]({{ "/reports/PULSAR-RAT/" | relative_url }}) investigation. Two additional files, client.exe and server (1).exe, appeared in the open directory at IP `185[.]208[.]159[.]182` during that investigation, indicating the operator was concurrently testing or deploying additional RAT families alongside PULSAR RAT.
 
 ---
 
@@ -109,7 +109,7 @@ Two .NET Remote Access Trojans (Quasar RAT and NjRAT/XWorm) were discovered on t
 - **Family**: Quasar RAT (open-source, formerly xRAT)
 - **YARA Detection**: HKTL_NET_GUID_Quasar
 
-**Discovery Context**: This sample appeared in the investigation directory at IP 185.208.159.182 during analysis of the original [PULSAR RAT server.exe]({{ "/reports/PULSAR-RAT/" | relative_url }}), suggesting the threat actors were actively deploying multiple RAT variants.
+**Discovery Context**: This sample appeared in the investigation directory at IP 185[.]208[.]159[.]182 during analysis of the original [PULSAR RAT server.exe]({{ "/reports/PULSAR-RAT/" | relative_url }}), suggesting the threat actors were actively deploying multiple RAT variants.
 
 ### Executive Technical Summary
 
@@ -175,14 +175,14 @@ Remediation complexity is **MEDIUM**. The single persistence mechanism makes cle
 
 > **Analyst note:** C2 (Command and Control) is the communication channel between the malware and the attacker. This section covers how Quasar RAT locates the attacker's server, what traffic it generates, and how it encrypts communications to evade inspection.
 
-Quasar RAT connects directly to fixed C2 infrastructure at 185.208.159.182 on port 4782 using custom encryption. Before establishing the C2 channel, the malware performs pre-beacon reconnaissance, making HTTP requests to external IP discovery services (ipwho.is, api.ipify.org) to determine the victim's external IP address.
+Quasar RAT connects directly to fixed C2 infrastructure at 185[.]208[.]159[.]182 on port 4782 using custom encryption. Before establishing the C2 channel, the malware performs pre-beacon reconnaissance, making HTTP requests to external IP discovery services (ipwho.is, api.ipify.org) to determine the victim's external IP address.
 
 #### Executive Technical Context
-A direct IP connection gives the C2 infrastructure a single point of failure. If defenders block 185.208.159.182, the malware loses all communication.
+A direct IP connection gives the C2 infrastructure a single point of failure. If defenders block 185[.]208[.]159[.]182, the malware loses all communication.
 
 Fixed C2 infrastructure makes network-based blocking effective, though the custom encryption stops Deep Packet Inspection from identifying malicious payloads.
 
-To detect it, monitor for outbound TCP connections to 185.208.159.182:4782, for processes making HTTP requests to IP geolocation services such as ipwho.is or api.ipify.org before opening unusual TCP connections, and for encrypted traffic patterns consistent with C2 beacons, meaning regular intervals and small payloads.
+To detect it, monitor for outbound TCP connections to 185[.]208[.]159[.]182:4782, for processes making HTTP requests to IP geolocation services such as ipwho.is or api.ipify.org before opening unusual TCP connections, and for encrypted traffic patterns consistent with C2 beacons, meaning regular intervals and small payloads.
 
 Infrastructure resilience is **LOW**. The hosting is bulletproof, but the fixed IP address makes blocking through network security controls effective.
 
@@ -281,9 +281,9 @@ Purpose: Backup IP discovery method
 
 **Step 7: Primary C2 Connection**
 ```
-[TCP Connect] Client.exe:4120 > 185.208.159.182:4782
+[TCP Connect] Client.exe:4120 > 185[.]208[.]159[.]182:4782
 [TCP Send] Client.exe:4120 > [Encrypted beacon payload - 247 bytes]
-[TCP Receive] 185.208.159.182:4782 > [Encrypted response - 89 bytes]
+[TCP Receive] 185[.]208[.]159[.]182:4782 > [Encrypted response - 89 bytes]
 Purpose: Establish command and control channel
 ```
 
@@ -305,7 +305,7 @@ That four-minute delay before C2 contact is a deliberate evasion technique aimed
 - **Initial execution**: File creation and Zone.Identifier removal
 - **Persistence**: Scheduled task creation events
 - **Reconnaissance**: HTTP requests to IP geolocation services
-- **C2 establishment**: TCP connection to 185.208.159.182:4782
+- **C2 establishment**: TCP connection to 185[.]208[.]159[.]182:4782
 
 ---
 
@@ -322,7 +322,7 @@ That four-minute delay before C2 contact is a deliberate evasion technique aimed
 - **Version**: XWorm 3.0-5.0 (DiE confirmed)
 - **YARA Detection**: Njrat, BlackWorm
 
-**Discovery Context**: This sample also appeared in the investigation directory at IP 185.208.159.182 alongside the Quasar sample, indicating the threat actors were simultaneously deploying multiple RAT families during the [PULSAR RAT investigation]({{ "/reports/PULSAR-RAT/" | relative_url }}).
+**Discovery Context**: This sample also appeared in the investigation directory at IP 185[.]208[.]159[.]182 alongside the Quasar sample, indicating the threat actors were simultaneously deploying multiple RAT families during the [PULSAR RAT investigation]({{ "/reports/PULSAR-RAT/" | relative_url }}).
 
 ### Executive Technical Summary
 
@@ -388,14 +388,14 @@ Remediation complexity is **HIGH**, requiring systematic removal of all three me
 
 > **Analyst note:** A "dead-drop resolver" is a technique where the malware does not hardcode its C2 server address, instead it reads the address from a public web service that the attacker controls. This section covers how NjRAT/XWorm uses Pastebin as that resolver, and why it makes traditional IP-blocking ineffective.
 
-NjRAT/XWorm resolves its C2 endpoint via Pastebin dead-drop. The malware sends an HTTP GET request to `https://pastebin.com/raw/bzg5zj8n` using a spoofed mobile user-agent string, then parses the response to extract the actual C2 IP and port for TCP connection establishment.
+NjRAT/XWorm resolves its C2 endpoint via Pastebin dead-drop. The malware sends an HTTP GET request to `hxxps://pastebin[.]com/raw/bzg5zj8n` using a spoofed mobile user-agent string, then parses the response to extract the actual C2 IP and port for TCP connection establishment.
 
 #### Executive Technical Context
 Dead-drop C2 architecture lets the attacker change servers in seconds by editing a Pastebin post, with no need to update or redeploy the malware. The current C2 address is never burned into the binary.
 
 Traditional IOC-based blocking on IP and domain blacklists is ineffective against that architecture, because blocking the current C2 IP does not stop reinfected or persistent systems resolving a new one. Behavior-based detection is the reliable response path.
 
-To detect it, monitor for HTTP GET requests to `https://pastebin.com/raw/bzg5zj8n`, for non-browser processes making HTTPS requests to pastebin.com followed by TCP connections to arbitrary IPs and ports, and for the mobile user-agent string `Mozilla/5.0 (iPhone; CPU iPhone OS 11_4_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/11.0 Mobile/15E148 Safari/604.1` originating from desktop processes.
+To detect it, monitor for HTTP GET requests to `hxxps://pastebin[.]com/raw/bzg5zj8n`, for non-browser processes making HTTPS requests to pastebin[.]com followed by TCP connections to arbitrary IPs and ports, and for the mobile user-agent string `Mozilla/5.0 (iPhone; CPU iPhone OS 11_4_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/11.0 Mobile/15E148 Safari/604.1` originating from desktop processes.
 
 Infrastructure resilience is **HIGH**, because the attacker can change C2 endpoints in seconds, which makes takedown operations ineffective against already-deployed implants.
 
@@ -468,10 +468,10 @@ Purpose: Startup folder persistence
 
 **Step 6: Pastebin Dead-Drop Query**
 ```
-[DNS Query] server (1).exe:10092 > pastebin.com (A record)
-[TCP Connect] server (1).exe:10092 > pastebin.com:443
+[DNS Query] server (1).exe:10092 > pastebin[.]com (A record)
+[TCP Connect] server (1).exe:10092 > pastebin[.]com:443
 [HTTP GET] server (1).exe:10092 > GET /raw/bzg5zj8n HTTP/1.1
-Host: pastebin.com
+Host: pastebin[.]com
 User-Agent: Mozilla/5.0 (iPhone; CPU iPhone OS 11_4_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/11.0 Mobile/15E148 Safari/604.1
 Purpose: Retrieve current C2 endpoint
 ```
