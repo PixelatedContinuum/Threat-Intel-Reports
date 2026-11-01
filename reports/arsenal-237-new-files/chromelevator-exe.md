@@ -141,7 +141,7 @@ This analysis is based on comprehensive static reverse engineering of the chrome
 **Related Reports:**
 - [lpe.exe Privilege Escalation]({{ "/reports/arsenal-237-lpe-exe/" | relative_url }}) - Stage 1 privilege escalation
 - [killer.dll Defense Evasion]({{ "/reports/arsenal-237-new-files/killer-dll/" | relative_url }}) - Stage 2 defense evasion
-- [Arsenal-237 Executive Overview]({{ "/reports/109[.]230[.]231[.]37-Executive-Overview/" | relative_url }}) - Full toolkit analysis
+- [Arsenal-237 Executive Overview]({{ "/reports/109.230.231.37-Executive-Overview/" | relative_url }}) - Full toolkit analysis
 
 ---
 

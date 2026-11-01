@@ -49,7 +49,7 @@ rootkit.dll is a sophisticated defense evasion framework masquerading as a rootk
 - [killer.dll BYOVD Module]({{ "/reports/arsenal-237-new-files/killer-dll/" | relative_url }}) - Basic BYOVD implementation
 - [BdApiUtil64.sys Vulnerable Driver]({{ "/reports/bdapiutil64-sys/" | relative_url }}) - Weaponized driver component
 - [nethost.dll C2 Module]({{ "/reports/arsenal-237/nethost-dll/" | relative_url }}) - C2 communication component
-- [Arsenal-237 Executive Overview]({{ "/reports/109[.]230[.]231[.]37-Executive-Overview/" | relative_url }}) - Full toolkit analysis
+- [Arsenal-237 Executive Overview]({{ "/reports/109.230.231.37-Executive-Overview/" | relative_url }}) - Full toolkit analysis
 
 ---
 

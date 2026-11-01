@@ -164,7 +164,7 @@ This assessment is based on comprehensive static analysis including:
 - [enc_c2.exe C2-enabled Ransomware]({{ "/reports/arsenal-237-new-files/enc_c2-exe/" | relative_url }}) - C2-enabled ransomware variant
 - [new_enc.exe Ransomware]({{ "/reports/new-enc-exe/" | relative_url }}) - Simplified ransomware variant
 - [dec_fixed.exe Decryptor]({{ "/reports/arsenal-237-new-files/dec_fixed-exe/" | relative_url }}) - Victim-specific decryptor
-- [Arsenal-237 Executive Overview]({{ "/reports/109[.]230[.]231[.]37-Executive-Overview/" | relative_url }}) - Full toolkit analysis
+- [Arsenal-237 Executive Overview]({{ "/reports/109.230.231.37-Executive-Overview/" | relative_url }}) - Full toolkit analysis
 
 ---
 

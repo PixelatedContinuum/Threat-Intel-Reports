@@ -131,7 +131,7 @@ The Arsenal-237 open directory at 109[.]230[.]231[.]37 provides both toolkit sta
 **Related Reports:**
 - [killer.dll BYOVD Module]({{ "/reports/arsenal-237-new-files/killer-dll/" | relative_url }}) - Stage 2 defense evasion
 - [rootkit.dll Defense Evasion]({{ "/reports/arsenal-237/rootkit-dll/" | relative_url }}) - Advanced rootkit component
-- [Arsenal-237 Executive Overview]({{ "/reports/109[.]230[.]231[.]37-Executive-Overview/" | relative_url }}) - Full toolkit analysis
+- [Arsenal-237 Executive Overview]({{ "/reports/109.230.231.37-Executive-Overview/" | relative_url }}) - Full toolkit analysis
 
 ---
 

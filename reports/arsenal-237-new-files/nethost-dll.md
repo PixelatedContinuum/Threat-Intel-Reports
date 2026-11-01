@@ -105,7 +105,7 @@ This report derives findings from static reverse engineering analysis of the net
 **Related Reports:**
 - [lpe.exe Privilege Escalation]({{ "/reports/arsenal-237-lpe-exe/" | relative_url }}) - Stage 1 privilege escalation
 - [rootkit.dll Defense Evasion]({{ "/reports/arsenal-237/rootkit-dll/" | relative_url }}) - Defense evasion component
-- [Arsenal-237 Executive Overview]({{ "/reports/109[.]230[.]231[.]37-Executive-Overview/" | relative_url }}) - Full toolkit analysis
+- [Arsenal-237 Executive Overview]({{ "/reports/109.230.231.37-Executive-Overview/" | relative_url }}) - Full toolkit analysis
 
 ---
 
