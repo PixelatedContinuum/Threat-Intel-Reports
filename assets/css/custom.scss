@@ -4167,6 +4167,86 @@ span.hl-vuln__p--ssvc, span.hl-vuln__p--exp, span.hl-vuln__p--cn { cursor: help;
    right-aligned. A row that fits stays on one line. */
 .hl-vuln--cve { grid-template-columns: 9.5em minmax(12em, 1fr) auto; }
 
+/* --- The Wire: details (T-0532) --------------------------------------------
+   Every row on all three tabs carries a Details toggle at the end of the row.
+   The button is server-rendered hidden, so a row without JavaScript draws and
+   behaves exactly as T-0531 left it; wire-details.js removes the hidden attr,
+   fetches one details JSON per tab and builds the panel from text nodes only.
+   The panel is appended inside the row element (the .hl-vuln grid row or the
+   .hl-wire__row wrapper), so a filter that hides the row hides its panel:
+   inside the .hl-vuln grid it spans the whole row. Sizes in em, like the row
+   rules above. */
+.hl-dt {
+  font-family: inherit;
+  font-size: 0.72em;
+  line-height: 1.5;
+  padding: 0.05em 0.55em;
+  border-radius: 999px;
+  white-space: nowrap;
+  color: var(--hl-text-secondary) !important;
+  border: 1px solid color-mix(in srgb, var(--hl-text-muted) 45%, var(--hl-border-card));
+  background: transparent;
+  text-decoration: none !important;
+  cursor: pointer;
+}
+.hl-dt:hover,
+.hl-dt[aria-expanded='true'] {
+  border-color: var(--hl-accent-blue);
+  color: var(--hl-accent-blue) !important;
+}
+.hl-dt:focus-visible { outline: 2px solid var(--hl-accent-blue); outline-offset: 2px; }
+.hl-wire__row { display: flex; flex-direction: column; }
+.hl-wire__row > .hl-dt {
+  align-self: flex-end;
+  margin: 0.25em 0.4em 0.1em 0;
+}
+.hl-dt__panel {
+  font-size: 0.82em;
+  line-height: 1.55;
+  text-align: left;
+  color: var(--hl-text-secondary);
+  background: var(--hl-bg-row);
+  border: 1px solid var(--hl-border-row);
+  border-left: 3px solid var(--hl-accent-blue);
+  border-radius: 6px;
+  padding: 0.6em 0.8em 0.7em;
+  margin: 0.35em 0 0.45em;
+  overflow-wrap: anywhere;
+}
+/* Appended inside the .hl-vuln grid: one full-width row of the grid, under the
+   CVE, vendor/product and chips line. */
+.hl-vuln > .hl-dt__panel { grid-column: 1 / -1; }
+.hl-dt__h {
+  margin: 0.8em 0 0.2em;
+  font-size: 0.84em;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--hl-text-muted);
+}
+.hl-dt__h:first-child { margin-top: 0; }
+.hl-dt__line { margin: 0.2em 0; overflow-wrap: anywhere; }
+.hl-dt__line:first-child { margin-top: 0; }
+.hl-dt__quote {
+  margin: 0.25em 0;
+  padding: 0.35em 0.7em;
+  border-left: 3px solid var(--hl-border-card);
+  color: var(--hl-text-primary);
+}
+.hl-dt__src { margin: 0.15em 0 0.4em; font-size: 0.88em; color: var(--hl-text-muted); }
+.hl-dt__group { display: flex; flex-wrap: wrap; gap: 0.15em 0.7em; align-items: baseline; }
+.hl-dt__gh {
+  flex: 0 0 100%;
+  font-size: 0.84em;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--hl-text-muted);
+}
+.hl-dt__dim { color: var(--hl-text-muted); }
+.hl-dt__panel a { color: var(--hl-accent-blue) !important; }
+.hl-dt__panel a:hover { text-decoration: underline; }
+
+
 /* --- The nKEVs legend (T-0468.1) ---------------------------------------
    Explains each chip, badge and filter of the tab. On a wide screen it is the report
    table of contents' own panel: the aside carries .hl-post-toc, so its fixed place in the
@@ -4494,6 +4574,12 @@ span.hl-vuln__p--ssvc, span.hl-vuln__p--exp, span.hl-vuln__p--cn { cursor: help;
      stay on one line. */
   .hl-vuln__badges { flex-wrap: wrap; row-gap: 0.25em; }
   .hl-filter__dim--gap { margin-left: 0; }
+  /* T-0532: the details panel, narrow. On a phone the details paragraphs
+     (descriptions, affected version lines, links) cap at a readable height and
+     scroll rather than pushing the whole tab down. */
+  .hl-dt__panel { max-height: 65vh; overflow-y: auto; }
+  .hl-dt { font-size: 0.66em; }
+  .hl-wire__row > .hl-dt { margin: 0.3em 0.2em 0.05em 0; }
 }
 
 /* ---------- Indicator search on /ioc-feeds/ (Track A4) ----------
