@@ -860,7 +860,7 @@ function cvesPage() {
       '<input class="hl-filter__search">' +
       '<div><button class="hl-chip-btn is-on" data-sig="">All</button>' +
       '<button class="hl-chip-btn" data-sig="msf">Metasploit</button>' +
-      '<button class="hl-chip-btn" data-sig="poc">GitHub PoC</button>' +
+      '<button class="hl-chip-btn" data-sig="edb">Exploit-DB</button>' +
       '<button class="hl-chip-btn" data-sig="epss">High EPSS</button></div>' +
       '<div><button class="hl-chip-btn is-on" data-sev="">All</button>' +
       '<button class="hl-chip-btn" data-sev="critical">Critical</button>' +
@@ -871,10 +871,10 @@ function cvesPage() {
     '</div>' +
     '<div class="hl-wire" data-filter-grid data-filter-item=".hl-vuln">' +
       '<div class="hl-wire__day" id="cves-2026-10-30" data-filter-group>30</div>' +
-      '<div class="hl-vuln" id="cves-cve-2026-0001" data-title="cve-2026-0001 acme widget an issue in widget" data-vendor="Acme" data-sev="critical" data-sig="msf|poc" data-day="2026-10-30"></div>' +
+      '<div class="hl-vuln" id="cves-cve-2026-0001" data-title="cve-2026-0001 acme widget an issue in widget" data-vendor="Acme" data-sev="critical" data-sig="msf|edb" data-day="2026-10-30"></div>' +
       '<div class="hl-vuln" id="cves-cve-2026-0002" data-title="cve-2026-0002 other thing" data-vendor="Other" data-sev="high" data-sig="epss" data-day="2026-10-30"></div>' +
       '<div class="hl-wire__day" id="cves-2026-10-28" data-filter-group>28</div>' +
-      '<div class="hl-vuln" id="cves-cve-2026-0003" data-title="cve-2026-0003 acme gadget" data-vendor="Acme" data-sev="critical" data-sig="poc" data-day="2026-10-28"></div>' +
+      '<div class="hl-vuln" id="cves-cve-2026-0003" data-title="cve-2026-0003 acme gadget" data-vendor="Acme" data-sev="critical" data-sig="edb" data-day="2026-10-28"></div>' +
     '</div></section></div>';
 }
 
@@ -913,7 +913,7 @@ test('a day heading over an emptied day hides, and a CVE id searches as a whole 
 });
 
 test('a shared link opens the CVEs filter, and the other tabs\' keys are left alone', function () {
-  var win = build(cvesPage(), 'https://example.test/wire/?csig=poc&vq=zzz&tag=ransomware#cves');
+  var win = build(cvesPage(), 'https://example.test/wire/?csig=edb&vq=zzz&tag=ransomware#cves');
   assert.equal(visible(win, '.hl-vuln'), 2);
   click(win, chip(win, '[data-sev="critical"]'));
   assert.match(win.location.search, /vq=zzz/);

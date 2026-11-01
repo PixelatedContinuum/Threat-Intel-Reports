@@ -253,9 +253,6 @@ function cvenowProblems(r) {
   list('msf', MSF_PATH);
   list('edb', EDB_ID);
   list('aliases', ALIAS_ID);
-  if (hasKey(r, 'poc_n') && !isEmpty(r.poc_n) && !isCount(r.poc_n)) {
-    out.push('has poc_n ' + JSON.stringify(r.poc_n) + ', not empty or a count');
-  }
   if (hasKey(r, 'fixed') && !isEmpty(r.fixed) && !(typeof r.fixed === 'string' && FIXED_VERSION.test(r.fixed))) {
     out.push('has fixed ' + JSON.stringify(r.fixed) + ', not empty or a version');
   }
@@ -433,12 +430,13 @@ function checkVulns(doc, now) {
    The guarantee stated at the exporter and re-checked here: every row is a CVE the selection rule
    admits. Each signal the row lists must be visible in the row (a Metasploit signal with no Metasploit
    module is a claim the page cannot show), and each signal the row shows must be listed. `now` is
-   epoch ms; `nkev` is the set of CVE ids on the nKEVs tab, which a CVEs row must not repeat. */
+   epoch ms. A CVE id in both sections is a FAIL, decided in check() (the two tabs are disjoint by
+   construction, and a repeat means the exporter's exclusion broke). */
 var CVES_KEYS = ['cve', 'published', 'vendor', 'product', 'title', 'cvss', 'cvss_version', 'severity',
   'scored_by', 'epss', 'epss_pct', 'epss_date', 'epss_max', 'epss_spark', 'signals', 'msf', 'edb',
-  'poc_n', 'et_sids', 'nuclei', 'cisa_sigma', 'snort3_sids', 'ssvc_expl', 'ssvc_auto', 'ssvc_impact',
+  'et_sids', 'nuclei', 'cisa_sigma', 'snort3_sids', 'ssvc_expl', 'ssvc_auto', 'ssvc_impact',
   'fixed', 'aliases', 'stories'];
-var CVES_SIGNALS = { msf: 1, edb: 1, poc: 1, nuclei: 1, et: 1, epss: 1 };
+var CVES_SIGNALS = { msf: 1, edb: 1, nuclei: 1, et: 1, epss: 1 };
 var CVES_BODY_KEYS = ['description', 'summary', 'context'];
 var EPSS_HIGH_PCT = 0.95;
 function signalFacts(r) {
@@ -446,13 +444,12 @@ function signalFacts(r) {
   return {
     msf: Array.isArray(r.msf) && r.msf.length > 0,
     edb: Array.isArray(r.edb) && r.edb.length > 0,
-    poc: isCount(r.poc_n) && r.poc_n > 0,
     nuclei: typeof r.nuclei === 'string' && r.nuclei !== '',
     et: Array.isArray(r.et_sids) && r.et_sids.length > 0,
     epss: !isEmpty(r.epss_pct) && epct >= EPSS_HIGH_PCT
   };
 }
-function checkCves(doc, now, nkev) {
+function checkCves(doc, now) {
   var problems = [];
   var warnings = [];
   var rows = doc.cves;
@@ -490,7 +487,7 @@ function checkCves(doc, now, nkev) {
   var seen = Object.create(null);
   var nSev = { critical: 0, high: 0, medium: 0, low: 0 };
   var nUnscored = 0;
-  var nSig = { msf: 0, edb: 0, poc: 0, nuclei: 0, et: 0, epss: 0 };
+  var nSig = { msf: 0, edb: 0, nuclei: 0, et: 0, epss: 0 };
   var byVendor = Object.create(null);
   rows.forEach(function (r, n) {
     r = r || {};
@@ -545,7 +542,6 @@ function checkCves(doc, now, nkev) {
     }
     if (r.cve && seen[r.cve]) warnings.push(where + ' repeats a CVE');
     if (r.cve) seen[r.cve] = 1;
-    if (r.cve && nkev && nkev[r.cve]) warnings.push(where + ' is also an nKEVs row; the tab lists CVEs not yet on a KEV list');
     if (!isEmpty(r.cisa_added) || (hasKey(r, 'kev_due') && !isEmpty(r.kev_due))) {
       warnings.push(where + ' carries a CISA KEV date, but the tab lists CVEs not on a KEV list');
     }
@@ -791,10 +787,20 @@ function check(doc, sources, now, remote) {
 
   var v = checkVulns(doc, now);
   problems = problems.concat(v.problems);
+  var cv = checkCves(doc, now);
+  problems = problems.concat(cv.problems);
+  /* Revision 2 (Joseph, 2026-11-01): nKEVs and CVEs are disjoint, so the same information is never
+     printed on both tabs. The exporter asserts it before writing; this is the second check, and a
+     FAIL (the file is dropped, as for any data FAIL) because a repeat is a defect, not noise. */
   var nkevIds = Object.create(null);
   (Array.isArray(doc.vulns) ? doc.vulns : []).forEach(function (r) { if (r && r.cve) nkevIds[r.cve] = 1; });
-  var cv = checkCves(doc, now, nkevIds);
-  problems = problems.concat(cv.problems);
+  var both = Object.create(null);
+  (Array.isArray(doc.cves) ? doc.cves : []).forEach(function (r) {
+    if (r && r.cve && nkevIds[r.cve] && !both[r.cve]) {
+      both[r.cve] = 1;
+      problems.push('CVE id ' + r.cve + ' is in both the vulns and the cves sections. The nKEVs and CVEs tabs must not repeat a CVE.');
+    }
+  });
 
   return verdict(problems.length ? 'FAIL' : 'PASS', null, problems, warnings.sort(), {
     total: items.length, research: nResearch, news: nNews, vuln: nVuln, vulns: v.total, cves: cv.total
@@ -964,19 +970,21 @@ function checkLegend(src) {
    2. The legend is printed twice from one capture, outside the grid, with samples that are not
       interactive or countable (the nKEVs legend's rules, for its own capture).
    3. The public claims survive: the callout still says being listed is not evidence of
-      exploitation, that the list is a selection, that GitHub PoCs are not linked, and credits
+      exploitation, that the list is a selection, what it excludes and when a row moves to the nKEVs tab, that
+      Metasploit and Exploit-DB claims are confirmed against the publishers' indexes, that the SSVC
+      points are CISA's own assessment, and credits
       cve.now with its licence; the attribution line above the filter bar names cve.now, FIRST and
       the feed.
    4. Every data-driven value the tab draws is escaped (T-0407 found unescaped vendor and product
       text on the nKEV tab). Checked on the tab's own markup and the shared include that draws the
       cve.now chips: each {{ }} output either carries `escape` or is a number or literal the
       template itself built.
-   5. GitHub proof-of-concept repositories are never turned into a link: no href in the cve.now
-      include is built from the PoC fields, and the only link targets are the three it names.
+   5. The include's only link targets are the four it names (advisories, EUVD, Metasploit, Exploit-DB),
+      and nothing on the page or in the include mentions a GitHub proof of concept (Revision 2).
 
    `includes` is { name: text } for the _includes this tab uses, or absent when they could not be
    read (then 5 and the include half of 4 are NOT CHECKED, said in a problem line, never a pass). */
-var SAFE_OUT = /^(?:c_[a-z]+|ex_n|msf_len|edb_len|poc_n|sev|vc|cves_legend_html|wire\.window_days|wire\.cves\.size|g\.items\.size|n_cves|forloop\.index|sg\s*\|\s*join:\s*'\|'|'[^']*'\s*\|\s*relative_url)$/;
+var SAFE_OUT = /^(?:c_[a-z]+|ex_n|msf_len|edb_len|sev|vc|cves_legend_html|wire\.window_days|wire\.cves\.size|g\.items\.size|n_cves|forloop\.index|sg\s*\|\s*join:\s*'\|'|'[^']*'\s*\|\s*relative_url)$/;
 function unescapedOutputs(text) {
   var bad = [];
   (text.match(/\{\{-?[\s\S]*?-?\}\}/g) || []).forEach(function (m) {
@@ -1009,7 +1017,10 @@ function checkCvesTab(src, includes) {
   else {
     [[/my selection/, 'that the list is my selection'],
      [/does not mean anyone has been seen exploiting/, 'that being listed is not evidence of exploitation'],
-     [/do not link/, 'that GitHub proof-of-concept repositories are not linked'],
+     [/excludes anything on VulnCheck KEV or CISA KEV/, 'that the list excludes anything on VulnCheck KEV or CISA KEV'],
+     [/moves to the nKEVs tab when/, 'that a row moves to the nKEVs tab when its CVE is added'],
+     [/confirmed against Rapid7's or Exploit-DB's own index/, 'that Metasploit and Exploit-DB claims are confirmed against the publishers\' indexes'],
+     [/CISA's own assessment/, 'that the SSVC decision points are CISA\'s own assessment'],
      [/cve\.now/, 'cve.now'], [/CC BY 4\.0/, 'the cve.now licence']].forEach(function (c) {
       if (!c[0].test(callout[0])) problems.push('the CVEs callout no longer states ' + c[1]);
     });
@@ -1050,26 +1061,32 @@ function checkCvesTab(src, includes) {
   if (!grid) problems.push('could not find the CVEs grid');
   else if (/cves_legend_html|hl-legend/.test(gridOnly)) problems.push('the CVEs legend sits inside the CVEs grid, where the filter script would count it as rows');
 
+  // Revision 2: a GitHub PoC cannot be validated, so it is not claimed, counted, filtered or mentioned.
+  var pocRe = /\bpocs?\b|\bpoc_n\b|proof[- ]of[- ]concept/i;
+  [['the page', src.replace(/\{%-?\s*comment\s*-?%\}[\s\S]*?\{%-?\s*endcomment\s*-?%\}/g, '')],
+   ['_includes/wire-vuln-new.html', typeof (includes && includes['wire-vuln-new.html']) === 'string' ? includes['wire-vuln-new.html'].replace(/\{%-?\s*comment\s*-?%\}[\s\S]*?\{%-?\s*endcomment\s*-?%\}/g, '') : '']].forEach(function (x) {
+    var m = x[1].match(pocRe);
+    if (m) problems.push(x[0] + ' mentions a GitHub proof of concept (' + JSON.stringify(m[0]) + '). PoCs cannot be validated, so the Wire does not claim, count, filter or link them.');
+  });
+
   // 4. escaping, on the tab's markup and the shared include
   unescapedOutputs(sec).forEach(function (m) {
     problems.push('the CVEs tab prints ' + m + ' without escape, and it is not a number or literal the template built');
   });
   var inc = includes && includes['wire-vuln-new.html'];
   if (typeof inc !== 'string') {
-    problems.push('NOT CHECKED: _includes/wire-vuln-new.html could not be read, so the escaping and the PoC no-link rule for the cve.now chips were not verified');
+    problems.push('NOT CHECKED: _includes/wire-vuln-new.html could not be read, so the escaping, the link targets and the no-PoC rule for the cve.now chips were not verified');
   } else {
     unescapedOutputs(inc.replace(/\{%-?\s*comment\s*-?%\}[\s\S]*?\{%-?\s*endcomment\s*-?%\}/g, '')).forEach(function (m) {
       problems.push('_includes/wire-vuln-new.html prints ' + m + ' without escape, and it is not a number or literal the template built');
     });
-    // 5. the only link targets, and none built from the PoC fields
+    // 5. the only link targets
     var hrefs = inc.match(/href="[^"]*"/g) || [];
     hrefs.forEach(function (h) {
       if (!/^href="https:\/\/(?:github\.com\/advisories\/|euvd\.enisa\.europa\.eu\/vulnerability\/|github\.com\/rapid7\/metasploit-framework\/blob\/master\/|www\.exploit-db\.com\/exploits\/)/.test(h)) {
         problems.push('_includes/wire-vuln-new.html links to ' + h + ', which is not one of its four named targets');
       }
-      if (/poc/i.test(h)) problems.push('_includes/wire-vuln-new.html builds a link from a PoC value: ' + h + ' (PoC repositories are counted, never linked)');
     });
-    if (/<a\b[^>]*>[^<]*(?:poc_n|r\.poc)/i.test(inc)) problems.push('_includes/wire-vuln-new.html wraps the PoC count in a link');
   }
   return problems;
 }
