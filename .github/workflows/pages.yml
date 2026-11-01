@@ -105,8 +105,8 @@ jobs:
           fi
           # rc 1: separate a page defect (code on main, fail the build) from a data
           # defect (generator output, drop the file and keep publishing).
-          if grep -qE '^FAIL .*(wire/index\.md|assets/css/custom\.scss)' /tmp/wire-gate.txt; then
-            echo "::error::check-wire: wire/index.md or the tab rules in custom.scss failed their structure check (day derivation, legend, CVEs tab, tab fallback). That is a page bug on main, not a data problem."
+          if grep -qE '^FAIL .*(wire/index\.md|wire/cves\.xml|assets/css/custom\.scss)' /tmp/wire-gate.txt; then
+            echo "::error::check-wire: wire/index.md, wire/cves.xml or the tab rules in custom.scss failed their structure check (day derivation, legend, CVEs tab, escaping, tab fallback). That is a page bug on main, not a data problem."
             exit 1
           fi
           # Data problems that are ONLY staleness keep the data: the page shows its own timestamp.

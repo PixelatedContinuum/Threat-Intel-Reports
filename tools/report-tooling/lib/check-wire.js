@@ -1026,13 +1026,16 @@ function checkLegend(src) {
 
    `includes` is { name: text } for the _includes this tab uses, or absent when they could not be
    read (then 5 and the include half of 4 are NOT CHECKED, said in a problem line, never a pass). */
-var SAFE_OUT = /^(?:c_[a-z]+|ex_n|msf_len|edb_len|kn|w_pc|sev|vc|cves_legend_html|wire\.window_days|wire\.cves\.size|g\.items\.size|n_cves|forloop\.index|sg\s*\|\s*join:\s*'\|'|'[^']*'\s*\|\s*relative_url)$/;
+var SAFE_OUT = /^(?:c_[a-z]+|ex_n|msf_len|edb_len|kn|w_pc|ep_pct|pc_n|pc_sfx|st_n|rn_rules|sev|sev\s*\|\s*upcase|vc|cves_legend_html|wire\.window_days|wire\.cves\.size|g\.items\.size|n_cves|forloop\.index|sg\s*\|\s*join:\s*'\|'|'[^']*'\s*\|\s*relative_url)$/;
+// An expression ending in a numeric filter yields a number whatever the data held.
+var NUMERIC_END = /\|\s*(?:round(?::\s*\d+)?|times:\s*[\d.]+|plus:\s*\d+|minus:\s*\d+|size|floor|modulo:\s*\d+)\s*$/;
 function unescapedOutputs(text) {
   var bad = [];
   (text.match(/\{\{-?[\s\S]*?-?\}\}/g) || []).forEach(function (m) {
     var inner = m.replace(/^\{\{-?\s*/, '').replace(/\s*-?\}\}$/, '');
     if (/\|\s*escape\b/.test(inner)) return;
     if (SAFE_OUT.test(inner)) return;
+    if (NUMERIC_END.test(inner)) return;
     bad.push(m);
   });
   return bad;
@@ -1069,7 +1072,7 @@ function checkCvesTab(src, includes) {
      [/at most 50 CVEs/, 'that the list is capped at 50'],
      [/ranked by how many reasons they meet, then by EPSS, then by CVSS/, 'how the 50 shown are ranked'],
      [/fixed versions and advisory ids come from/, 'what cve.now supplies (listing, titles, SSVC, fixed versions, advisory ids)'],
-     [/NVD record through VulnCheck, mostly the CNA's score/, 'that CVSS comes from the NVD record through VulnCheck'],
+     [/NVD record through VulnCheck, mostly the CNA's score, unless the row says cve\.now/, 'that CVSS comes from the NVD record through VulnCheck unless the row says cve.now'],
      [/Rapid7's and Exploit-DB's own indexes/, 'that Metasploit and Exploit-DB come from the publishers\' own indexes'],
      [/from CISA's KEV catalog/, 'that "Product on CISA KEV" comes from CISA\'s KEV catalog'],
      [/EPSS from FIRST/, 'that EPSS is FIRST\'s'],
@@ -1081,7 +1084,7 @@ function checkCvesTab(src, includes) {
   if (!line) problems.push('the short CVEs line (hl-wire__freshness--c) is missing');
   else {
     [[/Listing, titles, SSVC, fixed versions and advisory ids from/, 'what cve.now supplies'],
-     [/Scores from NVD through VulnCheck/, 'where the scores come from'],
+     [/Scores from NVD through VulnCheck, or from cve\.now where a row says so/, 'where the scores come from (NVD through VulnCheck, or cve.now where a row says so)'],
      [/Exploits from Rapid7 and Exploit-DB/, 'where the exploits come from'],
      [/KEV products from CISA/, 'where the KEV products come from']].forEach(function (c) {
       if (!c[0].test(line[0])) problems.push('the short CVEs line no longer says ' + c[1]);
@@ -1110,7 +1113,7 @@ function checkCvesTab(src, includes) {
     }
     [[/show at most 50\. When more qualify, the 50 shown are ranked by how many reasons they meet, then by EPSS, then by CVSS/, 'the cap and the ranking'],
      [/titles, SSVC decision points \(CISA's own assessment, from <a [^>]*>Vulnrichment<\/a>\), fixed versions and advisory ids come from <a [^>]*>cve\.now<\/a>/, 'what cve.now supplies and that SSVC is CISA\'s assessment'],
-     [/NVD record through VulnCheck, mostly the CNA's score/, 'that CVSS comes from the NVD record through VulnCheck'],
+     [/NVD record through VulnCheck, mostly the CNA's score, unless the row says cve\.now/, 'that CVSS comes from the NVD record through VulnCheck unless the row says cve.now'],
      [/Metasploit modules come from Rapid7's <a [^>]*>metasploit-framework<\/a> module index and Exploit-DB entries from <a [^>]*>Exploit-DB<\/a>'s own index/, 'that Metasploit and Exploit-DB come from the publishers\' own indexes'],
      [/"Product on CISA KEV" comes from CISA's <a [^>]*>KEV catalog<\/a>/, 'that "Product on CISA KEV" comes from CISA\'s KEV catalog']].forEach(function (c) {
       if (!c[0].test(legend)) problems.push('the CVEs legend no longer says ' + c[1]);
@@ -1132,34 +1135,100 @@ function checkCvesTab(src, includes) {
   var carries = src.replace(/\{%-?\s*comment\s*-?%\}[\s\S]*?\{%-?\s*endcomment\s*-?%\}/g, '').match(/carries[^.]{0,160}(?:Metasploit|Exploit-DB)/i);
   if (carries) problems.push('the page says cve.now carries Metasploit or Exploit-DB data (' + JSON.stringify(carries[0].slice(0, 80)) + '). Those come from Rapid7\'s and Exploit-DB\'s own indexes.');
 
+  /* The include chain (review F4). Every wire-* include the page names, and every one those name in turn,
+     is part of the rendered tab, so each is held to the same rules as the page: no PoC claim, every
+     data-derived output escaped, and only the link targets it is allowed. support-cta.html and the other
+     site-wide includes are not tab includes and are not read. A name that cannot be read is NOT CHECKED,
+     said as a problem line, never a pass. */
+  var stripComments = function (s) { return s.replace(/\{%-?\s*comment\s*-?%\}[\s\S]*?\{%-?\s*endcomment\s*-?%\}/g, ''); };
+  var chain = [], seenInc = Object.create(null);
+  (function walk(text) {
+    (stripComments(text).match(/\{%-?\s*include\s+wire-[A-Za-z0-9_.\/-]+/g) || []).forEach(function (m) {
+      var name = m.replace(/^\{%-?\s*include\s+/, '');
+      if (seenInc[name]) return;
+      seenInc[name] = 1; chain.push(name);
+      if (includes && typeof includes[name] === 'string') walk(includes[name]);
+    });
+  })(src);
+
   // Revision 2: a GitHub PoC cannot be validated, so it is not claimed, counted, filtered or mentioned.
   var pocRe = /\bpocs?\b|\bpoc_n\b|proof[- ]of[- ]concept/i;
-  [['the page', src.replace(/\{%-?\s*comment\s*-?%\}[\s\S]*?\{%-?\s*endcomment\s*-?%\}/g, '')],
-   ['_includes/wire-vuln-new.html', typeof (includes && includes['wire-vuln-new.html']) === 'string' ? includes['wire-vuln-new.html'].replace(/\{%-?\s*comment\s*-?%\}[\s\S]*?\{%-?\s*endcomment\s*-?%\}/g, '') : '']].forEach(function (x) {
+  var scanned = [['the page', stripComments(src)]];
+  chain.forEach(function (n) {
+    if (includes && typeof includes[n] === 'string') scanned.push(['_includes/' + n, stripComments(includes[n])]);
+  });
+  scanned.forEach(function (x) {
     var m = x[1].match(pocRe);
     if (m) problems.push(x[0] + ' mentions a GitHub proof of concept (' + JSON.stringify(m[0]) + '). PoCs cannot be validated, so the Wire does not claim, count, filter or link them.');
   });
 
-  // 4. escaping, on the tab's markup and the shared include
+  // Review F3: Rules (Nuclei, ET Open, Sigma, Snort) are shown on a row but never admit one (Revision 3).
+  var admit = sec.replace(/\{%-?\s*comment\s*-?%\}[\s\S]*?\{%-?\s*endcomment\s*-?%\}/g, '').match(/\b(?:public rules?|rules?|Nuclei|ET Open|Snort)\b[^.<]{0,80}\b(?:admit|admits|admitted|qualif\w+)\b/i);
+  if (admit) problems.push('the CVEs tab says a rule admits a CVE (' + JSON.stringify(admit[0].slice(0, 80)) + '). Rules are shown on a row and never admit one.');
+
+  // 4. escaping, on the tab's markup and every include in the chain
   unescapedOutputs(sec).forEach(function (m) {
     problems.push('the CVEs tab prints ' + m + ' without escape, and it is not a number or literal the template built');
   });
-  var inc = includes && includes['wire-vuln-new.html'];
-  if (typeof inc !== 'string') {
-    problems.push('NOT CHECKED: _includes/wire-vuln-new.html could not be read, so the escaping, the link targets and the no-PoC rule for the cve.now chips were not verified');
-  } else {
-    unescapedOutputs(inc.replace(/\{%-?\s*comment\s*-?%\}[\s\S]*?\{%-?\s*endcomment\s*-?%\}/g, '')).forEach(function (m) {
-      problems.push('_includes/wire-vuln-new.html prints ' + m + ' without escape, and it is not a number or literal the template built');
+  chain.forEach(function (name) {
+    var inc = includes && includes[name];
+    if (typeof inc !== 'string') {
+      problems.push('NOT CHECKED: _includes/' + name + ' could not be read, so its escaping, link targets and no-PoC rule were not verified');
+      return;
+    }
+    unescapedOutputs(stripComments(inc)).forEach(function (m) {
+      problems.push('_includes/' + name + ' prints ' + m + ' without escape, and it is not a number or literal the template built');
     });
-    // 5. the only link targets
-    var hrefs = inc.match(/href="[^"]*"/g) || [];
-    hrefs.forEach(function (h) {
-      if (!/^href="https:\/\/(?:github\.com\/advisories\/|euvd\.enisa\.europa\.eu\/vulnerability\/|github\.com\/rapid7\/metasploit-framework\/blob\/master\/|www\.exploit-db\.com\/exploits\/)/.test(h)) {
-        problems.push('_includes/wire-vuln-new.html links to ' + h + ', which is not one of its four named targets');
+    // 5. only the link targets this include is allowed to build
+    var allowed = INCLUDE_LINKS[name] || [];
+    (inc.match(/href="[^"]*"/g) || []).forEach(function (h) {
+      var ok = allowed.some(function (re) { return re.test(h); });
+      if (!ok) {
+        problems.push('_includes/' + name + ' links to ' + h + ', which is not one of its ' +
+          (allowed.length === 4 ? 'four named' : 'allowed link') + ' targets');
       }
     });
-  }
+  });
   return problems;
+}
+
+/* Which links each tab include may build (review F4). An include not listed may build none. */
+var INCLUDE_LINKS = {
+  'wire-vuln-new.html': [
+    /^href="https:\/\/github\.com\/advisories\//, /^href="https:\/\/euvd\.enisa\.europa\.eu\/vulnerability\//,
+    /^href="https:\/\/github\.com\/rapid7\/metasploit-framework\/blob\/master\//, /^href="https:\/\/www\.exploit-db\.com\/exploits\//
+  ],
+  'wire-vuln-rules.html': [
+    /^href="https:\/\/github\.com\/projectdiscovery\/nuclei-templates\/blob\/main\//, /^href="https:\/\/github\.com\/cisagov\/SIGMA_Rules\/blob\/develop\//,
+    /^href="https:\/\/www\.snort\.org\/rule_docs\//
+  ],
+  'wire-vuln-news.html': [/^href="\{\{ '\/wire\/' \| relative_url \}\}\?q=/]
+};
+
+/* The CVEs Atom feed (review F4 and F3). Every output is escaped for XML or is a number, a site constant
+   or a date the Atom date filter formats; nothing mentions a GitHub proof of concept; the feed says scores
+   may come from cve.now and credits the right sources. `xml` is wire/cves.xml, or null. */
+var SAFE_FEED_OUT = /^(?:site\.url|site\.time\s*\|\s*date_to_xmlschema|wire\.(?:cves_)?generated_at\s*\|\s*date_to_xmlschema|msf_len|edb_len|kn)$/;
+function checkCvesFeed(xml) {
+  if (typeof xml !== 'string') return verdict('NOT CHECKED', 'wire/cves.xml is absent or unreadable, so the feed was not verified.');
+  var problems = [];
+  var body = xml.replace(/\{%-?\s*comment\s*-?%\}[\s\S]*?\{%-?\s*endcomment\s*-?%\}/g, '').replace(/\{%\s*comment\s*%\}[\s\S]*?\{%\s*endcomment\s*%\}/g, '');
+  (body.match(/\{\{-?[\s\S]*?-?\}\}/g) || []).forEach(function (m) {
+    var inner = m.replace(/^\{\{-?\s*/, '').replace(/\s*-?\}\}$/, '');
+    if (/\|\s*xml_escape\b/.test(inner)) return;
+    if (/\|\s*(?:round:\s*\d+|times:\s*[\d.]+|plus:\s*\d+|size|floor)\s*$/.test(inner)) return;
+    if (SAFE_FEED_OUT.test(inner)) return;
+    problems.push('wire/cves.xml prints ' + m + ' without xml_escape, and it is not a number or a site constant');
+  });
+  if (/\bpocs?\b|\bpoc_n\b|proof[- ]of[- ]concept/i.test(body)) problems.push('wire/cves.xml mentions a GitHub proof of concept');
+  if (!/scored_by == "cve\.now"/.test(body)) problems.push('wire/cves.xml no longer says when a score came from cve.now');
+  if ((body.match(/unless a row says cve\.now/g) || []).length < 2) {
+    problems.push('wire/cves.xml no longer qualifies "scores from NVD through VulnCheck" with "unless a row says cve.now" in both the subtitle and the rights line');
+  }
+  if (!/Rapid7/.test(body) || !/Exploit-DB/.test(body)) problems.push('wire/cves.xml no longer credits Rapid7 and Exploit-DB for the exploits');
+  if (/carries[^.]{0,160}(?:Metasploit|Exploit-DB)/i.test(body)) problems.push('wire/cves.xml says cve.now carries Metasploit or Exploit-DB data');
+  if (/\b(?:rules?|Nuclei|ET Open|Snort)\b[^.<]{0,80}\badmit/i.test(body)) problems.push('wire/cves.xml says a rule admits a CVE');
+  return verdict(problems.length ? 'FAIL' : 'PASS', null, problems, [], null);
 }
 
 /* The tab CSS (T-0522 made it three tabs). The no-:has fallback is a property of the whole block:
@@ -1204,5 +1273,5 @@ function checkTabCss(scss) {
   return verdict(problems.length ? 'FAIL' : 'PASS', null, problems, [], { hides: hides });
 }
 
-module.exports = { check: check, checkPage: checkPage, checkTabCss: checkTabCss, STALE_HOURS: STALE_HOURS,
+module.exports = { check: check, checkPage: checkPage, checkTabCss: checkTabCss, checkCvesFeed: checkCvesFeed, STALE_HOURS: STALE_HOURS,
   VULNS_STALE_HOURS: VULNS_STALE_HOURS };

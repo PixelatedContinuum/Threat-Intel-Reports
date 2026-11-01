@@ -18,6 +18,7 @@ var SOURCES = path.join(ROOT, '_data', 'wire-sources.yml');
 var PAGE = path.join(ROOT, 'wire', 'index.md');
 var INCLUDES = path.join(ROOT, '_includes');
 var SCSS = path.join(ROOT, 'assets', 'css', 'custom.scss');
+var FEED = path.join(ROOT, 'wire', 'cves.xml');
 
 var yaml, CW;
 try {
@@ -119,7 +120,11 @@ if (r.warnings.length) {
 var pageSrc = null;
 try { pageSrc = fs.readFileSync(PAGE, 'utf8'); } catch (e) { pageSrc = null; }
 var includes = {};
-['wire-vuln-new.html'].forEach(function (n) {
+// Every wire-* include on disk: the page gate follows the chain the page actually names, and a
+// name it needs that is not here is NOT CHECKED there (review F4).
+var incNames = [];
+try { incNames = fs.readdirSync(INCLUDES).filter(function (n) { return /^wire-.*\.html$/.test(n); }); } catch (e) { incNames = []; }
+incNames.forEach(function (n) {
   try { includes[n] = fs.readFileSync(path.join(INCLUDES, n), 'utf8'); } catch (e) { /* left absent: the page gate says NOT CHECKED */ }
 });
 var p = CW.checkPage(pageSrc, includes);
@@ -130,13 +135,19 @@ p.problems.forEach(function (x) { console.log('   FAIL  ' + x); });
 /* The tab CSS: the no-:has fallback is a property of the whole rule block. */
 var scssSrc = null;
 try { scssSrc = fs.readFileSync(SCSS, 'utf8'); } catch (e) { scssSrc = null; }
+var feedSrc = null;
+try { feedSrc = fs.readFileSync(FEED, 'utf8'); } catch (e) { feedSrc = null; }
+var fd = CW.checkCvesFeed(feedSrc);
+console.log(fd.status + '  ' + FEED + (fd.status === 'PASS' ? '  (every output escaped, sources and the cve.now score note present)' : ''));
+if (fd.reason) console.log('   ' + fd.reason);
+fd.problems.forEach(function (x) { console.log('   FAIL  ' + x); });
 var tc = CW.checkTabCss(scssSrc);
 console.log(tc.status + '  ' + SCSS + (tc.status === 'PASS' ? '  (every tab-hiding rule is a :has() rule)' : ''));
 if (tc.reason) console.log('   ' + tc.reason);
 tc.problems.forEach(function (x) { console.log('   FAIL  ' + x); });
 
-if (r.status === 'PASS' && p.status === 'PASS' && tc.status === 'PASS') process.exit(0);
+if (r.status === 'PASS' && p.status === 'PASS' && tc.status === 'PASS' && fd.status === 'PASS') process.exit(0);
 // A page-side FAIL starts with "FAIL  <path>" in the log, which pages.yml reads as a bug on main.
-if (r.status === 'FAIL' || p.status === 'FAIL' || tc.status === 'FAIL') process.exit(1);
+if (r.status === 'FAIL' || p.status === 'FAIL' || tc.status === 'FAIL' || fd.status === 'FAIL') process.exit(1);
 // NOT CHECKED on the page or the CSS alone is not a pass, and is not a FAIL either.
 process.exit(2);
