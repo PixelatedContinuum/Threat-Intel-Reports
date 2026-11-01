@@ -105,8 +105,8 @@ jobs:
           fi
           # rc 1: separate a page defect (code on main, fail the build) from a data
           # defect (generator output, drop the file and keep publishing).
-          if grep -q '^FAIL .*wire/index.md' /tmp/wire-gate.txt; then
-            echo "::error::check-wire: wire/index.md failed its day-derivation check. That is a page bug on main, not a data problem."
+          if grep -qE '^FAIL .*(wire/index\.md|assets/css/custom\.scss)' /tmp/wire-gate.txt; then
+            echo "::error::check-wire: wire/index.md or the tab rules in custom.scss failed their structure check (day derivation, legend, CVEs tab, tab fallback). That is a page bug on main, not a data problem."
             exit 1
           fi
           # Data problems that are ONLY staleness keep the data: the page shows its own timestamp.
@@ -151,8 +151,9 @@ jobs:
           test -f _site/wire/index.html
           test -f _site/wire/feed.xml
           test -f _site/wire/vulns.xml
+          test -f _site/wire/cves.xml
           test -f _site/hunting-detections/feed.xml
-          python3 -c "import xml.dom.minidom; [xml.dom.minidom.parse(f) for f in ('_site/feed.xml', '_site/wire/feed.xml', '_site/wire/vulns.xml', '_site/hunting-detections/feed.xml')]" && echo "the four Atom feeds are well-formed XML"
+          python3 -c "import xml.dom.minidom; [xml.dom.minidom.parse(f) for f in ('_site/feed.xml', '_site/wire/feed.xml', '_site/wire/vulns.xml', '_site/wire/cves.xml', '_site/hunting-detections/feed.xml')]" && echo "the five Atom feeds are well-formed XML"
           python3 -c "import json; [json.load(open(f))['items'] for f in ('_site/feed.json', '_site/hunting-detections/feed.json')]" && echo "the two JSON Feeds parse"
           # The Dataset structured data on the IOC viewer pages, the two catalog pages, the MISP feed page and the detection library must be valid JSON-LD.
           python3 - <<'PY'

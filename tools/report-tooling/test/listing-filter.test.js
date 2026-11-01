@@ -851,3 +851,72 @@ test('a whole CVE id searches as a whole id, not as a prefix of a longer one', f
   var win4 = build(cveHeadlines(), 'https://example.test/wire/?q=netscaler#headlines');
   assert.equal(visible(win4, '.hl-wire__item'), 2);
 });
+
+/* ---- The CVEs tab bar (T-0522): a signal axis, severity and vendor, state under the c prefix ---- */
+
+function cvesPage() {
+  return '<div class="hl-wtabs"><section id="cves" data-filter-scope>' +
+    '<div class="hl-filter" data-listing-filter data-filter-state="query" data-filter-prefix="c">' +
+      '<input class="hl-filter__search">' +
+      '<div><button class="hl-chip-btn is-on" data-sig="">All</button>' +
+      '<button class="hl-chip-btn" data-sig="msf">Metasploit</button>' +
+      '<button class="hl-chip-btn" data-sig="poc">GitHub PoC</button>' +
+      '<button class="hl-chip-btn" data-sig="epss">High EPSS</button></div>' +
+      '<div><button class="hl-chip-btn is-on" data-sev="">All</button>' +
+      '<button class="hl-chip-btn" data-sev="critical">Critical</button>' +
+      '<button class="hl-chip-btn" data-sev="high">High</button></div>' +
+      '<div><button class="hl-chip-btn is-on" data-vendor="">All</button>' +
+      '<button class="hl-chip-btn" data-vendor="Acme">Acme</button></div>' +
+      '<div data-filter-count></div><div data-filter-empty hidden><span data-filter-empty-msg>No CVEs match that filter.</span><button data-filter-reset></button></div>' +
+    '</div>' +
+    '<div class="hl-wire" data-filter-grid data-filter-item=".hl-vuln">' +
+      '<div class="hl-wire__day" id="cves-2026-10-30" data-filter-group>30</div>' +
+      '<div class="hl-vuln" id="cves-cve-2026-0001" data-title="cve-2026-0001 acme widget an issue in widget" data-vendor="Acme" data-sev="critical" data-sig="msf|poc" data-day="2026-10-30"></div>' +
+      '<div class="hl-vuln" id="cves-cve-2026-0002" data-title="cve-2026-0002 other thing" data-vendor="Other" data-sev="high" data-sig="epss" data-day="2026-10-30"></div>' +
+      '<div class="hl-wire__day" id="cves-2026-10-28" data-filter-group>28</div>' +
+      '<div class="hl-vuln" id="cves-cve-2026-0003" data-title="cve-2026-0003 acme gadget" data-vendor="Acme" data-sev="critical" data-sig="poc" data-day="2026-10-28"></div>' +
+    '</div></section></div>';
+}
+
+test('the signal axis ORs within a row and ANDs with severity and vendor; state is under the c prefix', function () {
+  var win = build(cvesPage(), 'https://example.test/wire/#cves');
+  assert.equal(visible(win, '.hl-vuln'), 3);
+  click(win, chip(win, '[data-sig="msf"]'));
+  assert.equal(visible(win, '.hl-vuln'), 1);
+  assert.match(win.location.search, /csig=msf/);
+  click(win, chip(win, '[data-sig="epss"]'));
+  assert.equal(visible(win, '.hl-vuln'), 2);                    // msf OR epss
+  click(win, chip(win, '[data-sev="critical"]'));
+  assert.equal(visible(win, '.hl-vuln'), 1);                    // AND critical
+  click(win, chip(win, '.hl-chip-btn[data-vendor="Acme"]'));
+  assert.equal(visible(win, '.hl-vuln'), 1);
+  assert.equal(win.location.hash, '#cves');
+  assert.match(win.location.search, /csev=critical/);
+  assert.match(win.location.search, /cvendor=acme/);
+});
+
+test('a day heading over an emptied day hides, and a CVE id searches as a whole id on the CVEs tab', function () {
+  var win = build(cvesPage(), 'https://example.test/wire/#cves');
+  click(win, chip(win, '[data-sig="msf"]'));
+  assert.equal(win.document.getElementById('cves-2026-10-28').style.display, 'none');
+  click(win, chip(win, '[data-sig=""]'));
+  var s = win.document.querySelector('.hl-filter__search');
+  s.value = 'cve-2026-000';                                    // a prefix of three ids is a substring search
+  s.dispatchEvent(new win.Event('input'));
+  assert.equal(visible(win, '.hl-vuln'), 3);
+  s.value = 'cve-2026-0001';
+  s.dispatchEvent(new win.Event('input'));
+  assert.equal(visible(win, '.hl-vuln'), 1);
+  s.value = 'widget';                                          // the first sentence is searchable (it is in data-title)
+  s.dispatchEvent(new win.Event('input'));
+  assert.equal(visible(win, '.hl-vuln'), 1);
+});
+
+test('a shared link opens the CVEs filter, and the other tabs\' keys are left alone', function () {
+  var win = build(cvesPage(), 'https://example.test/wire/?csig=poc&vq=zzz&tag=ransomware#cves');
+  assert.equal(visible(win, '.hl-vuln'), 2);
+  click(win, chip(win, '[data-sev="critical"]'));
+  assert.match(win.location.search, /vq=zzz/);
+  assert.match(win.location.search, /tag=ransomware/);
+  assert.match(win.location.search, /csev=critical/);
+});

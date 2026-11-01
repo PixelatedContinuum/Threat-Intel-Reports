@@ -39,6 +39,9 @@ var KINDS = { research: 1, news: 1, vuln: 1 };
 // cadence: a transient VulnCheck outage must not warn on every build for hours.
 var VULNS_STALE_HOURS = 24;
 var VULN_STATUSES = { ok: 1, stale: 1, unavailable: 1 };
+// T-0522: the CVEs tab has its own read (cve.now), warned about the same way: past a day, never failed.
+var CVES_STALE_HOURS = 24;
+var CVES_CAP = 50;
 var CVE_SHAPE = /^CVE-\d{4}-\d{4,}$/;
 var DAY_SHAPE = /^\d{4}-\d{2}-\d{2}$/;
 // T-0399: each row's CVSS base score, all four fields empty or all set. A row
@@ -211,6 +214,57 @@ function nkevProblems(r) {
   return out;
 }
 
+/* T-0522: the cve.now fields. They arrive on nKEV rows (only when the entry carries them) and on
+   every CVEs row. A row written before them carries none and checks clean; one that carries them
+   is held to the exporter's shapes, because the page builds a link from a Metasploit path, an
+   Exploit-DB id and an advisory id, and prints the rest. The shape rule behind absence: a flag that
+   cve.now did not evaluate is simply not written (never "none"), so an empty value here means
+   "nothing to show", not "checked and clear". */
+var SSVC_EXPL = { none: 1, poc: 1, active: 1 };
+var SSVC_AUTO = { yes: 1, no: 1 };
+var SSVC_IMPACT = { partial: 1, total: 1 };
+// cve.now lists a Metasploit module as a repo-relative path; the page appends it to
+// github.com/rapid7/metasploit-framework/blob/master/. No "..", plain charset, so no escaping is needed.
+var MSF_PATH = /^modules\/[A-Za-z0-9_.\/-]+\.rb$/;
+var EDB_ID = /^\d{1,8}$/;
+// Starts with a digit, or v and a digit; no wildcard. The exporter's validator for a fixed version
+// (cve.now carries junk such as "log4j-core*").
+var FIXED_VERSION = /^[vV]?\d[0-9A-Za-z.+_-]{0,39}$/;
+var ALIAS_ID = /^(?:GHSA(?:-[a-z0-9]{4}){3}|EUVD-\d{4}-\d{4,})$/i;
+var MAX_LIST = 25;
+function cvenowProblems(r) {
+  var out = [];
+  [['ssvc_expl', SSVC_EXPL], ['ssvc_auto', SSVC_AUTO], ['ssvc_impact', SSVC_IMPACT]].forEach(function (p) {
+    if (hasKey(r, p[0]) && !isEmpty(r[p[0]]) && !(typeof r[p[0]] === 'string' && p[1][r[p[0]]] === 1)) {
+      out.push('has ' + p[0] + ' ' + JSON.stringify(r[p[0]]) + ', not empty or one of ' + Object.keys(p[1]).join('/'));
+    }
+  });
+  function list(k, re) {
+    if (!hasKey(r, k)) return;
+    var v = r[k];
+    if (!Array.isArray(v)) { out.push('has ' + k + ' that is not a list'); return; }
+    if (v.length > MAX_LIST) out.push('has ' + v.length + ' ' + k + ', over ' + MAX_LIST);
+    v.forEach(function (x) {
+      if (typeof x !== 'string' || !re.test(x) || x.indexOf('..') !== -1 || x.length > 200) {
+        out.push('has ' + k + ' entry ' + JSON.stringify(x) + ', not the expected shape');
+      }
+    });
+  }
+  list('msf', MSF_PATH);
+  list('edb', EDB_ID);
+  list('aliases', ALIAS_ID);
+  if (hasKey(r, 'poc_n') && !isEmpty(r.poc_n) && !isCount(r.poc_n)) {
+    out.push('has poc_n ' + JSON.stringify(r.poc_n) + ', not empty or a count');
+  }
+  if (hasKey(r, 'fixed') && !isEmpty(r.fixed) && !(typeof r.fixed === 'string' && FIXED_VERSION.test(r.fixed))) {
+    out.push('has fixed ' + JSON.stringify(r.fixed) + ', not empty or a version');
+  }
+  if (hasKey(r, 'kev_due') && !isEmpty(r.kev_due) && isNaN(realDay(r.kev_due))) {
+    out.push('has kev_due ' + JSON.stringify(r.kev_due) + ', not empty or a real day');
+  }
+  return out;
+}
+
 /* The `vulns:` section, against the canonical row schema (cve, added, vendor,
    product, cisa_added, evidence, older; T-0394 design section 4), the score
    (T-0399) and the pointers (T-0407).
@@ -285,6 +339,7 @@ function checkVulns(doc, now) {
     else nUnscored++;
     pointerProblems(r).forEach(function (p) { warnings.push(where + ' ' + p); });
     nkevProblems(r).forEach(function (p) { warnings.push(where + ' ' + p); });
+    cvenowProblems(r).forEach(function (p) { warnings.push(where + ' ' + p); });
     if (!isEmpty(r.disclosed)) nNkev.disclosed++;
     if (typeof r.gap === 'number' && r.gap < 0) nNkev.prenvd++;
     if (!isEmpty(r.epss)) nNkev.epss++;
@@ -368,7 +423,166 @@ function checkVulns(doc, now) {
   return { problems: problems, warnings: warnings, total: rows.length };
 }
 
-function verdict(status, reason, problems, warnings, counts, vulnWarnings) {
+/* The `cves:` section (T-0522), the CVEs tab. The same WARN policy as `vulns:`, for the same reason:
+   pages.yml drops the whole wire.yml on a non-stale FAIL, and the headlines must never depend on
+   the cve.now read. Two things are a FAIL, because only a code defect could produce them and the
+   Wire's rules forbid them: a row carrying body text (`description`, `summary` or `context`), since
+   cve.now's model-written summaries are never published (design, Part 4: it omitted a fix status
+   3 of 3 times, affected versions 6 of 6, and invented a claim once).
+
+   The guarantee stated at the exporter and re-checked here: every row is a CVE the selection rule
+   admits. Each signal the row lists must be visible in the row (a Metasploit signal with no Metasploit
+   module is a claim the page cannot show), and each signal the row shows must be listed. `now` is
+   epoch ms; `nkev` is the set of CVE ids on the nKEVs tab, which a CVEs row must not repeat. */
+var CVES_KEYS = ['cve', 'published', 'vendor', 'product', 'title', 'cvss', 'cvss_version', 'severity',
+  'scored_by', 'epss', 'epss_pct', 'epss_date', 'epss_max', 'epss_spark', 'signals', 'msf', 'edb',
+  'poc_n', 'et_sids', 'nuclei', 'cisa_sigma', 'snort3_sids', 'ssvc_expl', 'ssvc_auto', 'ssvc_impact',
+  'fixed', 'aliases', 'stories'];
+var CVES_SIGNALS = { msf: 1, edb: 1, poc: 1, nuclei: 1, et: 1, epss: 1 };
+var CVES_BODY_KEYS = ['description', 'summary', 'context'];
+var EPSS_HIGH_PCT = 0.95;
+function signalFacts(r) {
+  var epct = Number(r.epss_pct);
+  return {
+    msf: Array.isArray(r.msf) && r.msf.length > 0,
+    edb: Array.isArray(r.edb) && r.edb.length > 0,
+    poc: isCount(r.poc_n) && r.poc_n > 0,
+    nuclei: typeof r.nuclei === 'string' && r.nuclei !== '',
+    et: Array.isArray(r.et_sids) && r.et_sids.length > 0,
+    epss: !isEmpty(r.epss_pct) && epct >= EPSS_HIGH_PCT
+  };
+}
+function checkCves(doc, now, nkev) {
+  var problems = [];
+  var warnings = [];
+  var rows = doc.cves;
+  if (!hasKey(doc, 'cves_status') && !hasKey(doc, 'cves')) {
+    warnings.push('no cves section, so the CVEs tab shows its unavailable notice ' +
+      '(a wire.yml from before T-0522?)');
+    return { problems: problems, warnings: warnings, total: 0 };
+  }
+  var status = doc.cves_status;
+  if (!VULN_STATUSES[status]) {
+    warnings.push('cves_status is ' + JSON.stringify(status) +
+      ', not ok, stale or unavailable; the tab will show its unavailable notice');
+  } else if (status !== 'ok') {
+    warnings.push('cves_status is ' + status + ': the cve.now read failed on the last run' +
+      (status === 'stale' ? ', so the tab shows the cached rows' : ''));
+  }
+  if (!Array.isArray(rows)) rows = [];
+  if (status === 'stale' && !rows.length) warnings.push('cves_status is stale but there are no rows');
+  if (status === 'ok' && !rows.length) {
+    warnings.push('cves_status is ok but there are no rows: possible if nothing passes the rule, ' +
+      'but the measurement behind the rule found 25 rows over 30 days');
+  }
+  if (rows.length > CVES_CAP) warnings.push('carries ' + rows.length + ' rows, over the cap of ' + CVES_CAP);
+
+  var cgen = Date.parse(doc.cves_generated_at || '');
+  if (rows.length && !cgen) {
+    warnings.push('cves_generated_at is missing or unparseable: ' + doc.cves_generated_at);
+  } else if (cgen && (now - cgen) / 3600000 > CVES_STALE_HOURS) {
+    warnings.push('cves_generated_at is ' + ((now - cgen) / 3600000).toFixed(1) +
+      ' hours old, over ' + CVES_STALE_HOURS);
+  }
+  var windowDays = Number(doc.window_days);
+  var oldest = cgen && windowDays ? cgen - (windowDays + 1) * 86400000 : null;
+
+  var seen = Object.create(null);
+  var nSev = { critical: 0, high: 0, medium: 0, low: 0 };
+  var nUnscored = 0;
+  var nSig = { msf: 0, edb: 0, poc: 0, nuclei: 0, et: 0, epss: 0 };
+  var byVendor = Object.create(null);
+  rows.forEach(function (r, n) {
+    r = r || {};
+    var where = 'cves row ' + (n + 1) + ' (' + String(r.cve || '?') + ')';
+    CVES_BODY_KEYS.forEach(function (k) {
+      if (hasKey(r, k)) {
+        problems.push(where + ' carries a ' + k + ' field. The Wire publishes no body text, and ' +
+          'cve.now\'s model-written summaries are never published.');
+      }
+    });
+    var missing = CVES_KEYS.filter(function (k) { return !hasKey(r, k); });
+    if (missing.length) warnings.push(where + ' lacks keys the schema promises: ' + missing.join(', '));
+    if (!CVE_SHAPE.test(String(r.cve || ''))) warnings.push(where + ' has no CVE id in CVE shape');
+    if (isNaN(realDay(r.published))) {
+      warnings.push(where + ' has published ' + JSON.stringify(r.published) + ', not a real day');
+    } else if (oldest && realDay(r.published) < oldest) {
+      warnings.push(where + ' was published ' + r.published + ', outside the ' + windowDays + '-day window');
+    } else if (cgen && realDay(r.published) > cgen) {
+      warnings.push(where + ' was published ' + r.published + ', after cves_generated_at');
+    }
+    ['vendor', 'product', 'title'].forEach(function (k) {
+      if (hasKey(r, k) && typeof r[k] !== 'string') warnings.push(where + ' has a ' + k + ' that is not text');
+    });
+    if (typeof r.title === 'string' && r.title.length > 500) {
+      warnings.push(where + ' has a title of ' + r.title.length + ' characters, over 500');
+    }
+    if (typeof r.vendor === 'string' && r.vendor.indexOf('|') !== -1) {
+      warnings.push(where + ' has a vendor containing "|", which the vendor filter cannot match');
+    }
+    var sp = scoreProblem(r);
+    if (sp) warnings.push(where + ' ' + sp);
+    else if (SEVERITIES[String(r.severity)]) nSev[r.severity]++;
+    else nUnscored++;
+    pointerProblems(r).forEach(function (p) { warnings.push(where + ' ' + p); });
+    nkevProblems(r).forEach(function (p) { warnings.push(where + ' ' + p); });
+    cvenowProblems(r).forEach(function (p) { warnings.push(where + ' ' + p); });
+    // The signals the row lists against the facts the row shows.
+    var listed = Array.isArray(r.signals) ? r.signals : null;
+    if (!listed) warnings.push(where + ' has signals that are not a list');
+    else {
+      listed.forEach(function (s) {
+        if (!CVES_SIGNALS[s]) warnings.push(where + ' lists unknown signal ' + JSON.stringify(s));
+      });
+      var facts = signalFacts(r);
+      Object.keys(CVES_SIGNALS).forEach(function (s) {
+        var has = listed.indexOf(s) !== -1;
+        if (has && !facts[s]) warnings.push(where + ' lists signal ' + s + ' but the row shows no ' + s + ' fact');
+        if (!has && facts[s]) warnings.push(where + ' shows ' + s + ' but does not list it as a signal');
+        if (facts[s]) nSig[s]++;
+      });
+      if (!listed.length) warnings.push(where + ' lists no signal, so nothing admits it under the rule');
+    }
+    if (r.cve && seen[r.cve]) warnings.push(where + ' repeats a CVE');
+    if (r.cve) seen[r.cve] = 1;
+    if (r.cve && nkev && nkev[r.cve]) warnings.push(where + ' is also an nKEVs row; the tab lists CVEs not yet on a KEV list');
+    if (!isEmpty(r.cisa_added) || (hasKey(r, 'kev_due') && !isEmpty(r.kev_due))) {
+      warnings.push(where + ' carries a CISA KEV date, but the tab lists CVEs not on a KEV list');
+    }
+    if (typeof r.vendor === 'string' && r.vendor) byVendor[r.vendor] = (byVendor[r.vendor] || 0) + 1;
+  });
+
+  var cc = doc.cves_counts || {};
+  if (rows.length && Number(cc.total) !== rows.length) {
+    warnings.push('cves_counts total disagrees with the rows: declared ' + cc.total + ', actual ' + rows.length);
+  }
+  if (rows.length && hasKey(cc, 'unscored')) {
+    var bad = Object.keys(nSev).filter(function (k) { return Number(cc[k]) !== nSev[k]; });
+    if (Number(cc.unscored) !== nUnscored) bad.push('unscored');
+    if (bad.length) {
+      warnings.push('cves_counts severity disagrees with the rows on ' + bad.join(', '));
+    }
+  }
+  // A signal count the file declares must match the rows; one it does not declare is not held to it.
+  Object.keys(nSig).forEach(function (k) {
+    if (rows.length && hasKey(cc, k) && Number(cc[k]) !== nSig[k]) {
+      warnings.push('cves_counts ' + k + ' disagrees with the rows: declared ' + cc[k] + ', actual ' + nSig[k]);
+    }
+  });
+  // The vendor chips filter on the label exactly; one no row carries selects an empty page.
+  var vs = Array.isArray(doc.cve_vendors) ? doc.cve_vendors : [];
+  vs.forEach(function (v) {
+    var lab = v && v.label;
+    if (typeof lab !== 'string' || !lab) { warnings.push('cve_vendors has an entry with no label'); return; }
+    if (!byVendor[lab]) warnings.push('cve_vendors chip "' + lab + '" matches no row, so it would filter the tab to nothing');
+    else if (Number(v.count) !== byVendor[lab]) {
+      warnings.push('cve_vendors chip "' + lab + '" declares ' + v.count + ' rows, actual ' + byVendor[lab]);
+    }
+  });
+  return { problems: problems, warnings: warnings, total: rows.length };
+}
+
+function verdict(status, reason, problems, warnings, counts, vulnWarnings, cveWarnings) {
   return {
     status: status,
     reason: reason || null,
@@ -376,7 +590,9 @@ function verdict(status, reason, problems, warnings, counts, vulnWarnings) {
     warnings: warnings || [],
     counts: counts || null,
     // Vulnerabilities-tab problems, reported as WARN (see checkVulns).
-    vulnWarnings: vulnWarnings || []
+    vulnWarnings: vulnWarnings || [],
+    // CVEs-tab problems, reported as WARN too (see checkCves).
+    cveWarnings: cveWarnings || []
   };
 }
 
@@ -575,10 +791,14 @@ function check(doc, sources, now, remote) {
 
   var v = checkVulns(doc, now);
   problems = problems.concat(v.problems);
+  var nkevIds = Object.create(null);
+  (Array.isArray(doc.vulns) ? doc.vulns : []).forEach(function (r) { if (r && r.cve) nkevIds[r.cve] = 1; });
+  var cv = checkCves(doc, now, nkevIds);
+  problems = problems.concat(cv.problems);
 
   return verdict(problems.length ? 'FAIL' : 'PASS', null, problems, warnings.sort(), {
-    total: items.length, research: nResearch, news: nNews, vuln: nVuln, vulns: v.total
-  }, v.warnings);
+    total: items.length, research: nResearch, news: nNews, vuln: nVuln, vulns: v.total, cves: cv.total
+  }, v.warnings, cv.warnings);
 }
 
 /* Verifies wire/index.md still derives each row's day EXACTLY ONCE.
@@ -599,7 +819,7 @@ function check(doc, sources, now, remote) {
    `src` is the text of wire/index.md, or null when it could not be read. This
    pins template STRUCTURE, not rendered output; that a reader's browser then
    filters correctly is the browser check. */
-function checkPage(src) {
+function checkPage(src, includes) {
   if (src === null || src === undefined) {
     return verdict('NOT CHECKED', 'wire/index.md is absent or unreadable, so ' +
       'nothing was verified about how the page derives each row\'s day.');
@@ -641,6 +861,7 @@ function checkPage(src) {
   }
 
   problems = problems.concat(checkLegend(src));
+  problems = problems.concat(checkCvesTab(src, includes));
 
   return verdict(problems.length ? 'FAIL' : 'PASS', null, problems, [], null);
 }
@@ -706,7 +927,7 @@ function checkLegend(src) {
   }
   var anchors = legend.match(/<a\b[^>]*>/gi) || [];
   anchors.forEach(function (a) {
-    if (!/href="https:\/\/(www\.vulncheck\.com|www\.first\.org)\//.test(a)) {
+    if (!/href="https:\/\/(www\.vulncheck\.com|www\.first\.org|cve\.now)\//.test(a)) {
       problems.push('a link in the legend that is not an attribution link: ' + a +
         ' (a sample chip must be a span, not a link)');
     }
@@ -734,5 +955,166 @@ function checkLegend(src) {
   return problems;
 }
 
-module.exports = { check: check, checkPage: checkPage, STALE_HOURS: STALE_HOURS,
+
+/* The CVEs tab (T-0522), as structure. Five guarantees live in the template and nothing else would
+   notice one breaking:
+
+   1. The tab exists and is reachable: a nav link to #cves, a section with that id inside the
+      filter scope, and the filter script's cache-bust (the same rule as the day gate).
+   2. The legend is printed twice from one capture, outside the grid, with samples that are not
+      interactive or countable (the nKEVs legend's rules, for its own capture).
+   3. The public claims survive: the callout still says being listed is not evidence of
+      exploitation, that the list is a selection, that GitHub PoCs are not linked, and credits
+      cve.now with its licence; the attribution line above the filter bar names cve.now, FIRST and
+      the feed.
+   4. Every data-driven value the tab draws is escaped (T-0407 found unescaped vendor and product
+      text on the nKEV tab). Checked on the tab's own markup and the shared include that draws the
+      cve.now chips: each {{ }} output either carries `escape` or is a number or literal the
+      template itself built.
+   5. GitHub proof-of-concept repositories are never turned into a link: no href in the cve.now
+      include is built from the PoC fields, and the only link targets are the three it names.
+
+   `includes` is { name: text } for the _includes this tab uses, or absent when they could not be
+   read (then 5 and the include half of 4 are NOT CHECKED, said in a problem line, never a pass). */
+var SAFE_OUT = /^(?:c_[a-z]+|ex_n|msf_len|edb_len|poc_n|sev|vc|cves_legend_html|wire\.window_days|wire\.cves\.size|g\.items\.size|n_cves|forloop\.index|sg\s*\|\s*join:\s*'\|'|'[^']*'\s*\|\s*relative_url)$/;
+function unescapedOutputs(text) {
+  var bad = [];
+  (text.match(/\{\{-?[\s\S]*?-?\}\}/g) || []).forEach(function (m) {
+    var inner = m.replace(/^\{\{-?\s*/, '').replace(/\s*-?\}\}$/, '');
+    if (/\|\s*escape\b/.test(inner)) return;
+    if (SAFE_OUT.test(inner)) return;
+    bad.push(m);
+  });
+  return bad;
+}
+function checkCvesTab(src, includes) {
+  var problems = [];
+  var open = src.search(/<section id="cves"/);
+  if (open < 0) {
+    problems.push('the CVEs tab is missing: no <section id="cves">');
+    return problems;
+  }
+  var secEnd = src.indexOf('</section>', open);
+  var sec = src.slice(open, secEnd < 0 ? src.length : secEnd);
+  if (!/<section id="cves" class="hl-wtabs__sec" data-filter-scope>/.test(src)) {
+    problems.push('the CVEs section lost its hl-wtabs__sec class or data-filter-scope, so the tab CSS or its own filter bar would not find it');
+  }
+  if (!/<a class="hl-wtabs__tab hl-wtabs__tab--c" href="#cves"/.test(src)) {
+    problems.push('the tab bar has no link to #cves');
+  }
+
+  // 3. public claims
+  var callout = sec.match(/<div class="hl-wire__callout hl-wire__callout--c">[\s\S]*?<\/div>/);
+  if (!callout) problems.push('the CVEs callout (hl-wire__callout--c) is missing');
+  else {
+    [[/my selection/, 'that the list is my selection'],
+     [/does not mean anyone has been seen exploiting/, 'that being listed is not evidence of exploitation'],
+     [/do not link/, 'that GitHub proof-of-concept repositories are not linked'],
+     [/cve\.now/, 'cve.now'], [/CC BY 4\.0/, 'the cve.now licence']].forEach(function (c) {
+      if (!c[0].test(callout[0])) problems.push('the CVEs callout no longer states ' + c[1]);
+    });
+  }
+  var line = sec.match(/<p class="hl-wire__freshness hl-wire__freshness--c">[\s\S]*?<\/p>/);
+  if (!line) problems.push('the short CVEs line (hl-wire__freshness--c) is missing');
+  else {
+    ['cve.now', 'first.org/epss', 'cves.xml'].forEach(function (needle) {
+      if (line[0].indexOf(needle) < 0) problems.push('the short CVEs line no longer links ' + needle);
+    });
+  }
+
+  // 2. legend
+  var capOpen = src.search(/\{%-?\s*capture\s+cves_legend_html\s*-?%\}/);
+  var capEnd = capOpen < 0 ? -1 : src.indexOf('endcapture', capOpen);
+  if (capOpen < 0 || capEnd < 0) problems.push('the CVEs legend is missing: no `capture cves_legend_html` block');
+  else {
+    var legend = src.slice(capOpen, capEnd);
+    if (/\sdata-[a-z]/i.test(legend)) problems.push('the CVEs legend markup carries a data-* attribute, which the filter script would read as a filter attribute');
+    if (/<(button|input|details|summary|select|textarea)\b/i.test(legend)) problems.push('the CVEs legend markup holds a control or details element: samples must not be interactive');
+    if (/\sid\s*=/i.test(legend)) problems.push('the CVEs legend markup carries an id, but it is printed twice, so the id would repeat');
+    (legend.match(/<a\b[^>]*>/gi) || []).forEach(function (a) {
+      if (!/href="https:\/\/(cve\.now|www\.first\.org|www\.exploit-db\.com|github\.com\/(?:cisagov\/vulnrichment|rapid7\/metasploit-framework))[\/"]/.test(a)) {
+        problems.push('a link in the CVEs legend that is not an attribution link: ' + a);
+      }
+    });
+    if (!/CC BY 4\.0/.test(legend) || !/Empirical Security/.test(legend)) {
+      problems.push('the CVEs legend lost the cve.now licence or the EPSS attribution');
+    }
+  }
+  var prints = src.match(/\{\{\s*cves_legend_html\s*\}\}/g) || [];
+  if (prints.length !== 2) problems.push('the CVEs legend is printed ' + prints.length + ' time(s), expected 2');
+  if (!/<aside class="hl-post-toc hl-legend" aria-label="CVEs legend"/.test(src)) {
+    problems.push('the CVEs legend aside is missing, or lost its aria-label="CVEs legend" or the hl-post-toc class');
+  }
+  var grid = sec.match(/data-filter-item="\.hl-vuln"[\s\S]*?<\/aside>/);
+  var gridOnly = grid ? grid[0].replace(/<aside[\s\S]*$/, '') : '';
+  if (!grid) problems.push('could not find the CVEs grid');
+  else if (/cves_legend_html|hl-legend/.test(gridOnly)) problems.push('the CVEs legend sits inside the CVEs grid, where the filter script would count it as rows');
+
+  // 4. escaping, on the tab's markup and the shared include
+  unescapedOutputs(sec).forEach(function (m) {
+    problems.push('the CVEs tab prints ' + m + ' without escape, and it is not a number or literal the template built');
+  });
+  var inc = includes && includes['wire-vuln-new.html'];
+  if (typeof inc !== 'string') {
+    problems.push('NOT CHECKED: _includes/wire-vuln-new.html could not be read, so the escaping and the PoC no-link rule for the cve.now chips were not verified');
+  } else {
+    unescapedOutputs(inc.replace(/\{%-?\s*comment\s*-?%\}[\s\S]*?\{%-?\s*endcomment\s*-?%\}/g, '')).forEach(function (m) {
+      problems.push('_includes/wire-vuln-new.html prints ' + m + ' without escape, and it is not a number or literal the template built');
+    });
+    // 5. the only link targets, and none built from the PoC fields
+    var hrefs = inc.match(/href="[^"]*"/g) || [];
+    hrefs.forEach(function (h) {
+      if (!/^href="https:\/\/(?:github\.com\/advisories\/|euvd\.enisa\.europa\.eu\/vulnerability\/|github\.com\/rapid7\/metasploit-framework\/blob\/master\/|www\.exploit-db\.com\/exploits\/)/.test(h)) {
+        problems.push('_includes/wire-vuln-new.html links to ' + h + ', which is not one of its four named targets');
+      }
+      if (/poc/i.test(h)) problems.push('_includes/wire-vuln-new.html builds a link from a PoC value: ' + h + ' (PoC repositories are counted, never linked)');
+    });
+    if (/<a\b[^>]*>[^<]*(?:poc_n|r\.poc)/i.test(inc)) problems.push('_includes/wire-vuln-new.html wraps the PoC count in a link');
+  }
+  return problems;
+}
+
+/* The tab CSS (T-0522 made it three tabs). The no-:has fallback is a property of the whole block:
+   every rule that hides a section or a tab's selected state is itself a :has() selector, so a
+   browser without :has() drops them all and shows every section stacked, with every anchor still
+   landing on its row. A hiding rule written without :has() would hide a section for those
+   browsers with no way back. `scss` is the text of assets/css/custom.scss, or null. */
+function checkTabCss(scss) {
+  if (typeof scss !== 'string') {
+    return verdict('NOT CHECKED', 'assets/css/custom.scss is absent or unreadable, so the tab fallback rule was not verified.');
+  }
+  var problems = [];
+  var i = scss.indexOf('.hl-wtabs__sec { display: block; }');
+  var j = scss.indexOf('Anchors must not land under the 70px sticky site header');
+  if (i < 0 || j < i) {
+    return verdict('NOT CHECKED', 'could not find the tab rules block in custom.scss, so the fallback rule was not verified.');
+  }
+  var block = scss.slice(i, j);
+  var rules = block.match(/[^{}]+\{[^}]*\}/g) || [];
+  var hides = 0;
+  rules.forEach(function (rule) {
+    var sel = rule.slice(0, rule.indexOf('{')).replace(/\/\*[\s\S]*?\*\//g, '').trim();
+    var body = rule.slice(rule.indexOf('{'));
+    if (/display:\s*none/.test(body) && sel.indexOf(':has(') < 0) {
+      problems.push('the tab rule "' + sel.replace(/\s+/g, ' ') + '" hides a section without :has(), so a browser without :has() could not show it');
+    }
+    if (/display:\s*none/.test(body)) hides++;
+  });
+  // Every tab that can be targeted must be able to hide the Headlines section.
+  ['#vulns:target', '#vulns :target', '#cves:target', '#cves :target'].forEach(function (t) {
+    var re = new RegExp('\\.hl-wtabs:has\\(' + t.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '\\)\\s+#headlines\\s*\\{\\s*display:\\s*none');
+    if (!re.test(block)) problems.push('no rule hides #headlines when ' + t + ' is targeted');
+  });
+  ['#vulns', '#cves'].forEach(function (id) {
+    if (!new RegExp('\\.hl-wtabs:has\\(#headlines\\)\\s+' + id + ':target\\s*\\{\\s*display:\\s*block').test(block)) {
+      problems.push('no rule shows ' + id + ' when it is the target');
+    }
+    if (!new RegExp('\\.hl-wtabs:has\\(' + id + ' :target\\)\\s+' + id + '\\s*\\{\\s*display:\\s*block').test(block)) {
+      problems.push('no rule shows ' + id + ' when an anchor inside it is the target');
+    }
+  });
+  return verdict(problems.length ? 'FAIL' : 'PASS', null, problems, [], { hides: hides });
+}
+
+module.exports = { check: check, checkPage: checkPage, checkTabCss: checkTabCss, STALE_HOURS: STALE_HOURS,
   VULNS_STALE_HOURS: VULNS_STALE_HOURS };

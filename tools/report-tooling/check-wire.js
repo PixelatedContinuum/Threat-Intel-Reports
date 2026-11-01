@@ -16,6 +16,8 @@ var ROOT = path.join(__dirname, '..', '..');
 var WIRE = path.join(ROOT, '_data', 'wire.yml');
 var SOURCES = path.join(ROOT, '_data', 'wire-sources.yml');
 var PAGE = path.join(ROOT, 'wire', 'index.md');
+var INCLUDES = path.join(ROOT, '_includes');
+var SCSS = path.join(ROOT, 'assets', 'css', 'custom.scss');
 
 var yaml, CW;
 try {
@@ -98,7 +100,7 @@ var head = r.status + '  ' + WIRE;
 if (r.counts) {
   head += '  (' + r.counts.total + ' items: ' + r.counts.research +
     ' research, ' + r.counts.news + ' news, ' + r.counts.vuln + ' vuln digest; ' +
-    r.counts.vulns + ' CVE rows)';
+    r.counts.vulns + ' nKEV rows, ' + r.counts.cves + ' CVEs rows)';
 }
 console.log(head);
 
@@ -110,17 +112,31 @@ if (r.warnings.length) {
 // Never FAIL lines: pages.yml drops wire.yml on any non-stale FAIL, and a
 // Vulnerabilities-tab fault must not take the headlines down with it.
 (r.vulnWarnings || []).forEach(function (w) { console.log('   WARN  vulns: ' + w); });
+(r.cveWarnings || []).forEach(function (w) { console.log('   WARN  cves: ' + w); });
 
 /* The data is only half of it. The page decides how each row's day is derived,
    and the day filter is only correct while that derivation happens once. */
 var pageSrc = null;
 try { pageSrc = fs.readFileSync(PAGE, 'utf8'); } catch (e) { pageSrc = null; }
-var p = CW.checkPage(pageSrc);
+var includes = {};
+['wire-vuln-new.html'].forEach(function (n) {
+  try { includes[n] = fs.readFileSync(path.join(INCLUDES, n), 'utf8'); } catch (e) { /* left absent: the page gate says NOT CHECKED */ }
+});
+var p = CW.checkPage(pageSrc, includes);
 console.log(p.status + '  ' + PAGE + (p.status === 'PASS' ? '  (day derived once, cache-bust present)' : ''));
 if (p.reason) console.log('   ' + p.reason);
 p.problems.forEach(function (x) { console.log('   FAIL  ' + x); });
 
-if (r.status === 'PASS' && p.status === 'PASS') process.exit(0);
-// NOT CHECKED on the page alone is not a pass, and is not a FAIL either.
-if (r.status === 'PASS' && p.status === 'NOT CHECKED') process.exit(2);
-process.exit(1);
+/* The tab CSS: the no-:has fallback is a property of the whole rule block. */
+var scssSrc = null;
+try { scssSrc = fs.readFileSync(SCSS, 'utf8'); } catch (e) { scssSrc = null; }
+var tc = CW.checkTabCss(scssSrc);
+console.log(tc.status + '  ' + SCSS + (tc.status === 'PASS' ? '  (every tab-hiding rule is a :has() rule)' : ''));
+if (tc.reason) console.log('   ' + tc.reason);
+tc.problems.forEach(function (x) { console.log('   FAIL  ' + x); });
+
+if (r.status === 'PASS' && p.status === 'PASS' && tc.status === 'PASS') process.exit(0);
+// A page-side FAIL starts with "FAIL  <path>" in the log, which pages.yml reads as a bug on main.
+if (r.status === 'FAIL' || p.status === 'FAIL' || tc.status === 'FAIL') process.exit(1);
+// NOT CHECKED on the page or the CSS alone is not a pass, and is not a FAIL either.
+process.exit(2);
