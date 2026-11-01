@@ -18,13 +18,13 @@ detection_sections:
   - label: "Suricata Signatures"
     anchor: "#suricata-signatures"
 ioc_highlights:
-  - "144.172.109[.]203"
+  - "144[.]172[.]109[.]203"
   - "kaidoo[.]com[.]br"
-  - "c2.kaidoo[.]com[.]br"
+  - "c2[.]kaidoo[.]com[.]br"
   - "c7542e8265f70d6c1dbf2e3cf6e81a90198cd157d3d6693c6d2a8a49d99a5b8d"
 ---
 
-**Campaign Identifier:** KAIDO-Quasar-RAT-144.172.109.203<br>
+**Campaign Identifier:** KAIDO-Quasar-RAT-144[.]172[.]109[.]203<br>
 **Last Updated:** July 3, 2026<br>
 **Threat Level:** HIGH
 
@@ -46,9 +46,9 @@ The analysis substrate is unusually strong for a commodity RAT. The operator's s
 
 The single most important operational finding is that KAIDO **withholds its behavior** until it reaches its operator. Left running without ever reaching a live command-and-control server, the RAT does nothing observable, no files dropped, no persistence written, no child processes, no HVNC. All of that behavior is gated behind a successful command-and-control handshake, so the sample looks near-benign to commodity sandboxes that do not simulate the Quasar protocol. Defenders should treat a "clean" automated-sandbox verdict on a suspected KAIDO sample as unreliable and pivot to the static and network indicators in this report.
 
-Two facts hold simultaneously, and both matter. The recovered open directory was a genuine, torn-down staging instance. All of its recovered channels are dead. But the operator's separate, longer-lived KAIDO Quasar RAT command-and-control server at `c2.kaidoo[.]com[.]br` → `144.172.109[.]203` was **last confirmed live** carrying three downloadable samples first seen in May 2026, on infrastructure the operator has held since approximately August 2025 (about ten months of continuity). Killing the dead staging box does not remove this threat. There are **no confirmed victims** in the recovered logs, one operator test box and one unresolved possible-victim host, so what I document here is a live capability and a live operator, not a confirmed victim population.
+Two facts hold simultaneously, and both matter. The recovered open directory was a genuine, torn-down staging instance. All of its recovered channels are dead. But the operator's separate, longer-lived KAIDO Quasar RAT command-and-control server at `c2[.]kaidoo[.]com[.]br` → `144[.]172[.]109[.]203` was **last confirmed live** carrying three downloadable samples first seen in May 2026, on infrastructure the operator has held since approximately August 2025 (about ten months of continuity). Killing the dead staging box does not remove this threat. There are **no confirmed victims** in the recovered logs, one operator test box and one unresolved possible-victim host, so what I document here is a live capability and a live operator, not a confirmed victim population.
 
-KAIDO is one of two product lines run by this operator. The other is the **EvilSoul-Engine stealer-builder**, a separate Node.js/Electron information-stealer factory hosted at `144.172.103[.]98` and built on tooling developed by a distinct Brazilian actor (`@breakingupslow`). That product line is covered in a companion report and is out of scope here; this report is confined to the KAIDO Quasar-fork RAT.
+KAIDO is one of two product lines run by this operator. The other is the **EvilSoul-Engine stealer-builder**, a separate Node.js/Electron information-stealer factory hosted at `144[.]172[.]103[.]98` and built on tooling developed by a distinct Brazilian actor (`@breakingupslow`). That product line is covered in a companion report and is out of scope here; this report is confined to the KAIDO Quasar-fork RAT.
 
 ### Key Takeaways
 
@@ -89,7 +89,7 @@ Overall risk score: **7.2 / 10 (HIGH)**. The score is a weighted average of six 
 
 For a defender, KAIDO is a consumer-focused RAT distributed through Discord lures and cracked-software bait, so the exposed population is individual Windows endpoints rather than enterprise fleets. The capability is still enterprise-relevant wherever those endpoints touch corporate accounts, because a contractor, a remote employee on a personal machine, or a bring-your-own-device host that authenticates to a corporate SaaS platform becomes a live-session pivot the moment KAIDO's HVNC activates. The 2FA and device-trust controls that would normally contain a stolen password do not contain a hijacked live session.
 
-The recovered staging infrastructure is dead. The KAIDO Quasar RAT command-and-control server (`144.172.109[.]203`) was last confirmed live on 2026-06-27 with three downloadable May-2026 samples and has not been re-verified since, so treat it as last confirmed active rather than confirmed active today. The operator rotated its command-and-control host within the same US provider rather than switching providers under pressure, which is consistent with an operator not under takedown stress.
+The recovered staging infrastructure is dead. The KAIDO Quasar RAT command-and-control server (`144[.]172[.]109[.]203`) was last confirmed live on 2026-06-27 with three downloadable May-2026 samples and has not been re-verified since, so treat it as last confirmed active rather than confirmed active today. The operator rotated its command-and-control host within the same US provider rather than switching providers under pressure, which is consistent with an operator not under takedown stress.
 
 ---
 
@@ -118,8 +118,8 @@ Three KAIDO builds were reverse-engineered, all approximately 1 MB 64-bit .NET a
 | SHA256 (abbreviated) | Build tag | Decrypted C2 | VirusTotal detections |
 |---|---|---|---|
 | `c7542e82…a5b8d` | `breach` | `kaidoo[.]com[.]br:4782` | 53 / 72 |
-| `385d20ca…1e254` | `kaido-webdav` | `c2.kaidoo[.]com[.]br:443` | 57 / 72 |
-| `02294476…aa39fa` | `kaido-webdav` | `c2.kaidoo[.]com[.]br:443` | 33 / 72 |
+| `385d20ca…1e254` | `kaido-webdav` | `c2[.]kaidoo[.]com[.]br:443` | 57 / 72 |
+| `02294476…aa39fa` | `kaido-webdav` | `c2[.]kaidoo[.]com[.]br:443` | 33 / 72 |
 
 KAIDO's author invests effort selectively. The HVNC and DXGI screen-capture modules are genuinely advanced, while the surrounding RAT is a stock Quasar fork with commodity anti-analysis. This capability-versus-effort gap, combined with single-language Portuguese artifacts and ego-branding throughout, points to an individual commodity operator rather than a structured team. The full-spectrum surveillance capability, the deliberate rebrand, and the browser-session-hijack primitive are where the operator spent real development time.
 
@@ -206,14 +206,14 @@ KAIDO's three samples are approximately 1 MB 64-bit .NET assemblies with their d
 
 The encrypted configuration block decrypted in full (**DEFINITE**, an offline decrypt of the embedded `Settings` class):
 
-- **Command-and-control endpoints:** `kaidoo[.]com[.]br:4782` (primary, using the Quasar binary protocol) and `c2.kaidoo[.]com[.]br:443` (secondary), both resolving to `144.172.109[.]203`.
+- **Command-and-control endpoints:** `kaidoo[.]com[.]br:4782` (primary, using the Quasar binary protocol) and `c2[.]kaidoo[.]com[.]br:443` (secondary), both resolving to `144[.]172[.]109[.]203`.
 - **Quasar authentication key / pinned-certificate thumbprint:** SHA1 `0acd8c90641e6e8b085aaf5a541c7ac050a65a4a`, identical across all three builds. A strong cross-build static anchor.
 - **Embedded pinned server certificate:** self-signed, subject/issuer `CN=ihat tbcs`, valid 2026-03-14 through 2032-03-17. This embedded certificate is **distinct** from the certificate the live host actually presented (the `TeamKAIDO` / `kaido-c2` certificate), which shows the operator rotates command-and-control certificates across builds.
 - **Cryptography:** AES-256-GCM with PBKDF2-HMAC-SHA256 key derivation at 100,000 iterations; wire framing of `[12-byte nonce][16-byte tag][ciphertext]`, base64-encoded.
 
 <figure style="text-align: center; margin: 2em 0;">
-  <img loading="lazy" src="{{ "/assets/images/kaido-quasar-rat-144-172-109-203/kaido-config-c2-defanged.webp" | relative_url }}" alt="Recovered KAIDO operator configuration (secrets defanged) showing the 0xK41 brand name, the t.me/n_3_xl operator Telegram contact, exfiltration author templates such as '0xK41 ~ BrowserData', and operator panel and webhook fields.">
-  <figcaption><em>Figure 4: Recovered KAIDO operator configuration with credentials and tokens defanged. Beyond the command-and-control and crypto parameters recovered from the client builds, the operator-side configuration exposes the identity artifacts that anchor attribution, the <code>0xK41</code> brand name, the <code>t.me/n_3_xl</code> operator contact, and branded exfiltration author templates (<code>0xK41 ~ BrowserData</code>, Steam/Minecraft/Roblox session labels). These self-attested branding strings tie the tooling to the named operator (Section 10) and survive as recovery evidence.</em></figcaption>
+  <img loading="lazy" src="{{ "/assets/images/kaido-quasar-rat-144-172-109-203/kaido-config-c2-defanged.webp" | relative_url }}" alt="Recovered KAIDO operator configuration (secrets defanged) showing the 0xK41 brand name, the t[.]me/n_3_xl operator Telegram contact, exfiltration author templates such as '0xK41 ~ BrowserData', and operator panel and webhook fields.">
+  <figcaption><em>Figure 4: Recovered KAIDO operator configuration with credentials and tokens defanged. Beyond the command-and-control and crypto parameters recovered from the client builds, the operator-side configuration exposes the identity artifacts that anchor attribution, the <code>0xK41</code> brand name, the <code>t[.]me/n_3_xl</code> operator contact, and branded exfiltration author templates (<code>0xK41 ~ BrowserData</code>, Steam/Minecraft/Roblox session labels). These self-attested branding strings tie the tooling to the named operator (Section 10) and survive as recovery evidence.</em></figcaption>
 </figure>
 
 Recovering the full configuration offline is the single most valuable static outcome. It gives defenders the command-and-control domains and IP without needing the sample to beacon, it provides the cross-build authentication-key thumbprint as a durable anchor, and it exposes the certificate-rotation behavior that tells a hunter not to over-rely on any single certificate hash.
@@ -326,11 +326,11 @@ Host and behavioral anchors. I keep this table rather than folding it into the f
 | Named pipe | `\\.\pipe\kaido_dxgi_<8 hex>` | HIGH | DXGI HVNC frame transport |
 | Behavior | Deletion of the file's own `:Zone.Identifier` stream within 2-3s of launch | DEFINITE | Mark-of-the-Web bypass (Sysmon Event ID 23) |
 | Cert (embedded) | Pinned client cert, SHA1 `0acd8c90641e6e8b085aaf5a541c7ac050a65a4a` | DEFINITE | Quasar authentication key, identical across all three builds |
-| Passive infra | `179.43.150[.]50` | MODERATE | Current `kaidoo[.]com[.]br` A-record; AS51852 Private Layer (CH), passive only |
+| Passive infra | `179[.]43[.]150[.]50` | MODERATE | Current `kaidoo[.]com[.]br` A-record; AS51852 Private Layer (CH), passive only |
 
-> **Note on the passive host.** `179.43.150[.]50` (Switzerland) is the current A-record for the `kaidoo[.]com[.]br` apex, distinct from the live RAT C2 at `144.172.109[.]203`. It is retained as a MODERATE-confidence passive indicator, a single-observation resolution corroborated by an RDP certificate, not by a second technique. The operator's use of a second provider and jurisdiction for the brand apex is itself an infrastructure-diversification signal.
+> **Note on the passive host.** `179[.]43[.]150[.]50` (Switzerland) is the current A-record for the `kaidoo[.]com[.]br` apex, distinct from the live RAT C2 at `144[.]172[.]109[.]203`. It is retained as a MODERATE-confidence passive indicator, a single-observation resolution corroborated by an RDP certificate, not by a second technique. The operator's use of a second provider and jurisdiction for the brand apex is itself an infrastructure-diversification signal.
 
-A dedicated certificate and fingerprint fleet-sweep across three independent internet-scanning sources (a commercial certificate corpus, Shodan, and Censys) found the `TeamKAIDO` certificate and its JA4X fingerprint on **exactly one host**, `144.172.109[.]203`. As currently observable this is a single-command-and-control-host operation with no enumerable secondary fleet. That absence is bounded by scanner coverage of the non-standard `:8443` port and by data currency; it is a negative result, not proof that no sibling infrastructure ever existed.
+A dedicated certificate and fingerprint fleet-sweep across three independent internet-scanning sources (a commercial certificate corpus, Shodan, and Censys) found the `TeamKAIDO` certificate and its JA4X fingerprint on **exactly one host**, `144[.]172[.]109[.]203`. As currently observable this is a single-command-and-control-host operation with no enumerable secondary fleet. That absence is bounded by scanner coverage of the non-standard `:8443` port and by data currency; it is a negative result, not proof that no sibling infrastructure ever existed.
 
 ---
 
@@ -362,7 +362,7 @@ This is not an incident-response playbook, organizations with a live KAIDO detec
 
 - **Detection priorities (hunt these first):** the raw-TCP Quasar beacon on port 4782 and the `TeamKAIDO` / `kaido-c2` TLS certificate; the Mark-of-the-Web self-deletion behavior; the HVNC named pipe `\\.\pipe\kaido_dxgi_*`.
 - **Persistence targets (find and remove, artifact locations, not removal commands):** the `%AppData%\<subdir>\svchost.exe` install path and its `Logs\` subfolder; and, if the RAT reached its persistence stage, a registry Run key, a scheduled task, and a Windows service (exact names unobserved, enumerate by parentage and creation time).
-- **Containment categories (one-line labels):** isolate hosts showing the Quasar beacon or the HVNC named pipe; block and monitor the KAIDO command-and-control infrastructure (`kaidoo[.]com[.]br`, `c2.kaidoo[.]com[.]br`, `144.172.109[.]203` on ports 4782 and 8443) at the perimeter; reset credentials for any account authenticated on an affected host, since HVNC drives the victim's own live session and can reach accounts whose passwords were never typed by an attacker; treat browser sessions on affected hosts as compromised and force re-authentication.
+- **Containment categories (one-line labels):** isolate hosts showing the Quasar beacon or the HVNC named pipe; block and monitor the KAIDO command-and-control infrastructure (`kaidoo[.]com[.]br`, `c2[.]kaidoo[.]com[.]br`, `144[.]172[.]109[.]203` on ports 4782 and 8443) at the perimeter; reset credentials for any account authenticated on an affected host, since HVNC drives the victim's own live session and can reach accounts whose passwords were never typed by an attacker; treat browser sessions on affected hosts as compromised and force re-authentication.
 
 ---
 
@@ -372,14 +372,14 @@ This is not an incident-response playbook, organizations with a live KAIDO detec
 
 > **Analyst note:** This section states who operates KAIDO and how confident that attribution is. It rests primarily on identity artifacts the operator embedded in their own toolkit and self-published on their own sales channels, self-attested evidence, not third-party inference. Because a specific actor is named at HIGH confidence, no unattributed-actor (UTA) designation applies.
 
-The KAIDO Quasar-fork RAT is attributed with **HIGH confidence** (approximately 85%) to a self-identified Brazilian commodity-malware operator using the handle `n_3_xl` (Telegram `@govbrasil`) under the KAIDO / `0xK41` brand, a financially-motivated Malware-as-a-Service vendor, not a targeted-intrusion actor. Attribution rests on identity artifacts recovered directly from the kit's own configuration: the operator-contact field points to `t.me/n_3_xl` (a Telegram channel titled "[KAIDO]"), and that link is reciprocally confirmed by the `@govbrasil` support handle whose bio reads "Kaido" and lists "Maldev @n_3_xl." Pervasive `0xK41` / KAIDO branding appears across configs, exfiltration embeds, and the operator's web panel, and a near-unique operator signature string survives the obfuscation intact. The sample-to-brand-to-infrastructure chain is direct: the analyzed RAT builds decrypt to `kaidoo[.]com[.]br`, which carries the operator-branded `TeamKAIDO` command-and-control certificate.
+The KAIDO Quasar-fork RAT is attributed with **HIGH confidence** (approximately 85%) to a self-identified Brazilian commodity-malware operator using the handle `n_3_xl` (Telegram `@govbrasil`) under the KAIDO / `0xK41` brand, a financially-motivated Malware-as-a-Service vendor, not a targeted-intrusion actor. Attribution rests on identity artifacts recovered directly from the kit's own configuration: the operator-contact field points to `t[.]me/n_3_xl` (a Telegram channel titled "[KAIDO]"), and that link is reciprocally confirmed by the `@govbrasil` support handle whose bio reads "Kaido" and lists "Maldev @n_3_xl." Pervasive `0xK41` / KAIDO branding appears across configs, exfiltration embeds, and the operator's web panel, and a near-unique operator signature string survives the obfuscation intact. The sample-to-brand-to-infrastructure chain is direct: the analyzed RAT builds decrypt to `kaidoo[.]com[.]br`, which carries the operator-branded `TeamKAIDO` command-and-control certificate.
 
 **Confidence statement.**
 
 The threat actor is `n_3_xl` / `@govbrasil` / KAIDO (the `0xK41` brand), a Brazilian commodity-malware operator, and I hold that at HIGH, around 85 percent.
 
 
-- **Why this confidence:** Self-attested operator identity artifacts recovered from the kit's own configuration (`t.me/n_3_xl`, titled "[KAIDO]"), reciprocally confirmed by the `@govbrasil` support handle; pervasive `0xK41`/KAIDO brand ownership; the sample-to-brand-to-infrastructure chain (`c7542e82` → `kaidoo.com.br` → `TeamKAIDO` cert); and Brazilian jurisdiction corroborated across hosting, ccTLD, and language. This is direct, self-attested identity evidence, not inference.
+- **Why this confidence:** Self-attested operator identity artifacts recovered from the kit's own configuration (`t[.]me/n_3_xl`, titled "[KAIDO]"), reciprocally confirmed by the `@govbrasil` support handle; pervasive `0xK41`/KAIDO brand ownership; the sample-to-brand-to-infrastructure chain (`c7542e82` → `kaidoo[.]com[.]br` → `TeamKAIDO` cert); and Brazilian jurisdiction corroborated across hosting, ccTLD, and language. This is direct, self-attested identity evidence, not inference.
 - **What's missing:** A real-world legal identity. All operator domains were privacy-registered from day one, so reverse-WHOIS is a dead end. The ceiling is a durable persona, not a named person.
 - **What would increase confidence:** A non-WHOIS identity link (a leak, a reused operator email, a cross-platform handle correlation), or government/vendor-catalog attribution (none exists).
 
@@ -428,7 +428,7 @@ This report is built on strong direct evidence (full static configuration recove
 - The HVNC browser-session-hijack architecture and the DXGI screen-capture path (static recovery plus the SharpDX dependency stack, Section 4.1, 4.2).
 - Attribution to the `n_3_xl` / `@govbrasil` / KAIDO (`0xK41`) operator (self-attested identity artifacts embedded in the kit's own configuration, Section 10).
 - The `TeamKAIDO` / `kaido-c2` TLS certificate and JA4X fingerprint as a fleet-enumeration pivot (cross-validated across three independent scanning sources, Section 8).
-- The Brazilian nexus for the operator (Portuguese-language artifacts, `.com.br` registration requirements, hosting-provider corroboration, Section 10).
+- The Brazilian nexus for the operator (Portuguese-language artifacts, `.com[.]br` registration requirements, hosting-provider corroboration, Section 10).
 
 **MODERATE**, reasonable evidence, notable gaps:
 
@@ -436,7 +436,7 @@ This report is built on strong direct evidence (full static configuration recove
 - The Brazilian banking / instant-payment (PIX) fraud objective is strongest on the KAIDO brand via external reporting and is MODERATE for the specific builds analyzed. The recovered code confirms the HVNC session-hijack primitive and generic credential access, but no banking-overlay or payment-clipper code was observed in these three samples (Section 4.1, 11).
 - Persistence install routines (registry Run key, scheduled task, Windows service), HVNC activation, injection APIs, and credential collection are all code-present but were withheld by the command-and-control gate, so their exact runtime artifacts are unobserved (Section 6, 9.2).
 - The operator's relationship to the EvilSoul-Engine tooling lineage is a supplier/reseller tie, not a shared identity, `n_3_xl` and `@breakingupslow` are assessed as different individuals (Section 10).
-- The `179.43.150[.]50` passive infrastructure indicator (current `kaidoo[.]com[.]br` A-record), single-observation resolution, not cross-validated by a second technique (Section 8).
+- The `179[.]43[.]150[.]50` passive infrastructure indicator (current `kaidoo[.]com[.]br` A-record), single-observation resolution, not cross-validated by a second technique (Section 8).
 - Bulletproof-hosting status for the operator's US provider is SUSPECTED on behavioral grounds (ten months of unchallenged malicious activity), not confirmed against a named bulletproof-hosting list (Section 11).
 
 **LOW / INSUFFICIENT**, explicit limits on what this report can conclude:
@@ -464,8 +464,8 @@ This report draws on the tiered source hierarchy defined in the project's source
 
 - VirusTotal: file reports, detection counts, sibling-sample clustering, behavioral sandbox correlation.
 - Hunt.io: TLS-certificate and JARM/JA4X fleet enrichment (`certificates.inventory` SQL corpus), ASN/hosting attribution, threat-actor catalog check (zero entries for "KAIDO," "Quasar-fork," or the operator handles as of 2026-06-27).
-- DomainTools Iris: passive DNS and WHOIS-history change logs confirming ASN/provider attribution for `144.172.103[.]98` and cross-brand infrastructure overlap.
-- Direct observation of the operator's own Telegram channel (`t.me/n_3_xl`) and support handle (`@govbrasil`) bios, self-attested identity artifacts, not third-party inference.
+- DomainTools Iris: passive DNS and WHOIS-history change logs confirming ASN/provider attribution for `144[.]172[.]103[.]98` and cross-brand infrastructure overlap.
+- Direct observation of the operator's own Telegram channel (`t[.]me/n_3_xl`) and support handle (`@govbrasil`) bios, self-attested identity artifacts, not third-party inference.
 
 **Tier 3, named-researcher OSINT (contextual, not load-bearing for the KAIDO RAT's technical findings):**
 
