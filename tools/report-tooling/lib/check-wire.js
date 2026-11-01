@@ -41,7 +41,7 @@ var VULNS_STALE_HOURS = 24;
 var VULN_STATUSES = { ok: 1, stale: 1, unavailable: 1 };
 // T-0522: the CVEs tab has its own read (cve.now), warned about the same way: past a day, never failed.
 var CVES_STALE_HOURS = 24;
-var CVES_CAP = 50;
+var CVES_CAP = 150;
 var CVE_SHAPE = /^CVE-\d{4}-\d{4,}$/;
 var DAY_SHAPE = /^\d{4}-\d{2}-\d{2}$/;
 // T-0399: each row's CVSS base score, all four fields empty or all set. A row
@@ -1168,8 +1168,8 @@ function checkCvesTab(src, includes) {
      [/top 10%/, 'the EPSS arm in plain words'],
      [/moves to the nKEVs tab when it is added to VulnCheck KEV/, 'that a row moves to the nKEVs tab when its CVE is added'],
      [/confirmed against Rapid7's or Exploit-DB's own index/, 'that Metasploit and Exploit-DB claims are confirmed against the publishers\' indexes'],
-     [/at most 50 CVEs/, 'that the list is capped at 50'],
-     [/ranked by how many reasons they meet, then by EPSS, then by CVSS/, 'how the 50 shown are ranked']].forEach(function (c) {
+     [/at most 150 CVEs/, 'that the list is capped at 150'],
+     [/ranked by how many reasons they meet, then by EPSS, then by CVSS/, 'how the CVEs shown are ranked']].forEach(function (c) {
       if (!c[0].test(callout[0])) problems.push('the CVEs callout no longer states ' + c[1]);
     });
   }
@@ -1183,7 +1183,8 @@ function checkCvesTab(src, includes) {
      [/KEV products from CISA/, 'where the KEV products come from']].forEach(function (c) {
       if (!c[0].test(line[0])) problems.push('the short CVEs line no longer says ' + c[1]);
     });
-    ['cve.now', 'first.org/epss', 'cves.xml'].forEach(function (needle) {
+    // T-0531: the links themselves, not the words, since the line also names cve.now in its text.
+    ['href="https://cve.now/', 'href="https://www.first.org/epss/', 'cves.xml'].forEach(function (needle) {
       if (line[0].indexOf(needle) < 0) problems.push('the short CVEs line no longer links ' + needle);
     });
   }
@@ -1205,7 +1206,7 @@ function checkCvesTab(src, includes) {
     if (!/CC BY 4\.0/.test(legend) || !/Empirical Security/.test(legend)) {
       problems.push('the CVEs legend lost the cve.now licence or the EPSS attribution');
     }
-    [[/show at most 50\. When more qualify, the 50 shown are ranked by how many reasons they meet, then by EPSS, then by CVSS/, 'the cap and the ranking'],
+    [[/show at most 150\. When more qualify, the 150 shown are ranked by how many reasons they meet, then by EPSS, then by CVSS/, 'the cap and the ranking'],
      [/titles, SSVC decision points \(CISA's own assessment, from <a [^>]*>Vulnrichment<\/a>\), fixed versions and advisory ids come from <a [^>]*>cve\.now<\/a>/, 'what cve.now supplies and that SSVC is CISA\'s assessment'],
      [/NVD record through VulnCheck, mostly the CNA's score, unless the row says cve\.now/, 'that CVSS comes from the NVD record through VulnCheck unless the row says cve.now'],
      [/Metasploit modules come from Rapid7's <a [^>]*>metasploit-framework<\/a> module index and Exploit-DB entries from <a [^>]*>Exploit-DB<\/a>'s own index/, 'that Metasploit and Exploit-DB come from the publishers\' own indexes'],

@@ -4161,6 +4161,11 @@ span.hl-vuln__p--ssvc, span.hl-vuln__p--exp, span.hl-vuln__p--cn { cursor: help;
 .hl-vuln__w--edb  { --w: #fbbf24; }
 .hl-vuln__w--epss { --w: #22d3ee; }
 .hl-legend__list dt .hl-vuln__w { font-size: 0.9em; }
+/* T-0531: a CVEs row carries more chips than an nKEV row (the reason tags), and on a wide screen
+   they took the whole row and cut the vendor and product to one letter. The name now keeps at least
+   12em, so a chip set that does not fit beside it stacks onto a second line inside its column,
+   right-aligned. A row that fits stays on one line. */
+.hl-vuln--cve { grid-template-columns: 9.5em minmax(12em, 1fr) auto; }
 
 /* --- The nKEVs legend (T-0468.1) ---------------------------------------
    Explains each chip, badge and filter of the tab. On a wide screen it is the report
