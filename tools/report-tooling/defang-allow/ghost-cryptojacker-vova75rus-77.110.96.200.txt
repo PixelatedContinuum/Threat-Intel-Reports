@@ -1,0 +1,8 @@
+bgpview.io      # BGPView lookup service, cited
+bing.com        # the SNI value the Hysteria config masquerades as; a benign Microsoft service named as such
+cloud.google.com # vendor blog cited
+confluxscan.io  # public blockchain explorer cited
+docs.oracle.com # vendor documentation cited
+gate.io         # public exchange named as such
+hunt.io         # Hunt.io, source/product name
+ppln.co         # vendor/news site cited

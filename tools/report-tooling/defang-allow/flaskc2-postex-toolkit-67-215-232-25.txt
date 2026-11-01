@@ -1,0 +1,5 @@
+hunt.io  # vendor
+github.com  # public repos named as prior art / PoCs
+breakglass.tech  # Breakglass Intelligence, the cited prior-art source
+netspi.com  # vendor, cited
+itm4n.github.io  # researcher blog, cited

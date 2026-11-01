@@ -1,0 +1,9 @@
+hunt.io  # vendor named as the source of a lookup
+github.com  # open-source project repos (Marzban, EspoCRM) and the decoy server-header value 'github.com'; no actor-owned repo
+registrar-servers.com  # Namecheap registrar default nameservers named as a vendor default
+reg.ru  # registrar REG.RU default nameservers named as the registrar's
+getoutline.org  # legitimate Outline VPN project site named as such
+caddyserver.com  # legitimate Caddy project site named as such
+nginx.org  # legitimate nginx project site named as such
+amazonaws.com  # AWS S3 named as the service the decoy apex moved to
+co.uk  # the .co.uk ccTLD named as a TLD, not a host

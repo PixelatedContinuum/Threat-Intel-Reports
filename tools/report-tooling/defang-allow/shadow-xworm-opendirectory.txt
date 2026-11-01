@@ -1,0 +1,4 @@
+# T-0500.1.12 d3: benign well-known services/vendors/references named as such (rule 1); nothing actor-used
+hhs.gov  # US HHS site named as a victim-sector reference, not actor infrastructure
+ip-api.com  # public IP-geolocation service XWorm queries before each C2 connection (detection guidance), a benign service named as such
+malpedia.caad.fkie.fraunhofer.de  # Malpedia (Fraunhofer FKIE) entry cited as a reference

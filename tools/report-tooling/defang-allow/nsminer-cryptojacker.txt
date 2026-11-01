@@ -1,0 +1,2 @@
+# d4 allow list (nsminer-cryptojacker/allow.txt): benign well-known vendor, publisher, standards or reference sites named as such (defang-rules.md rule 1). One reason per entry.
+# (none)

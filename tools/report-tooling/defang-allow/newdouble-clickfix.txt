@@ -1,0 +1,2 @@
+# benign well-known service named as such (brand the lure impersonates)
+faceit.com  # gaming platform brand the ClickFix lure impersonates, named as the brand (the lure hosts themselves are defanged)

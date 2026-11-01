@@ -1,0 +1,23 @@
+# the URL hosts below are the report's cited reference list; each is a public vendor, press or research page
+hunt.io  # Hunt.io, the data source and sponsor, named as such in the Data source note
+beaglesecurity.com  # Beagle Security article cited in the references list
+blog.fox-it.com  # Fox-IT blog post cited in the references list
+book.hacktricks.xyz  # HackTricks page cited in the references list
+cloud.google.com  # Google Cloud documentation cited in the references list
+community.imperva.com  # Imperva community post cited in the references list
+developers.cloudflare.com  # Cloudflare developer documentation cited in the references list
+github.com      # the three github.com URLs are public advisory/wiki/tool pages (GHSA, alibaba/druid wiki, laluka/jolokia-exploitation-toolkit)
+hermes-agent.nousresearch.com  # Nous Research Hermes Agent project site, reference 25
+maxchadwick.xyz  # researcher blog post cited in the references list
+nvd.nist.gov  # NVD CVE record cited in the references list
+snyk.io  # Snyk advisory cited in the references list
+spycloud.com  # SpyCloud research page cited in the references list
+acunetix.com  # Acunetix article cited in the references list
+anthropic.com  # Anthropic report cited in the references list (reference 23)
+baeldung.com  # Baeldung article cited in the references list
+broadcom.com  # Broadcom advisory or documentation cited in the references list
+dts-solution.com  # DTS Solution article on Spring Actuator heap dumps, reference 9
+group-ib.com  # Group-IB research page cited in the references list
+ptsconsulting.com.hk  # PTS Consulting article cited in the references list
+recordedfuture.com  # Recorded Future research page cited in the references list
+x-stream.github.io  # XStream project security-advisory page, reference 4

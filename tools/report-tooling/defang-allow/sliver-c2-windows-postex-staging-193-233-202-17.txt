@@ -1,0 +1,5 @@
+hunt.io  # vendor
+huntress.com  # vendor, cited report
+nodejs.org  # legitimate Node.js download the actor fetched; product site named as such
+github.com  # Go import path of upstream Sliver / vendor repos, not an actor repo
+z-github.com  # Go symbol-table string 'Z-github.com/bishopfox/sliver/...' (a pclntab artifact), not a host

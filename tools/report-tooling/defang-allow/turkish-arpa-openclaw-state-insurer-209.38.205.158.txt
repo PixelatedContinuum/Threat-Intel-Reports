@@ -1,0 +1,4 @@
+# d4 allow list (turkish-arpa-openclaw-state-insurer-209.38.205.158/allow.txt): benign well-known vendor, publisher, standards or reference sites named as such (defang-rules.md rule 1). One reason per entry.
+hunt.io  # data vendor / sponsor named as source
+block index.md | Operator VPS (209[.]38[.]205[.]158)  # ASCII tunnel-architecture diagram (PUTTY_TUNNEL_DETAY.md): box-drawing lines, its one command-like line is the label "SSH keys: ..."; the operator IP in it is defanged
+block index.md | $apiToken = "<REDACTED-JWT>"  # three PowerShell variable assignments (JWT already redacted, victim URL defanged); no executable token to bracket

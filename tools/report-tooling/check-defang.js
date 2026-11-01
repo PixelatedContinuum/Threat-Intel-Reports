@@ -4,7 +4,7 @@
 /* The defang lint (T-0500.1.12, rules 1, 2, 3 and 5 of tasks/runs/T-0500.1.12/defang-rules.md; Joseph, 2026-10-31:
    "we just do not want it to be easy for people to make a mistake and run something").
 
-   node check-defang.js <report folder | index.md | any .md> [--allow FILE]... [--all] [--quiet-ok]
+   node check-defang.js <report folder | index.md | any .md> [--allow FILE]... [--allow-dir DIR] [--no-auto-allow] [--all]
 
    Reads the report SOURCE (a folder: every .md under it, the index and any sub-report pages; a file: that file) and reports
 
@@ -25,6 +25,25 @@
    (one name per line, `#` comments; a domain entry also covers its subdomains). Allowed hits are COUNTED, per entry, in the
    output: a suppressed indicator is never silent. An attacker URL on a legitimate service (a paste or file-share link) is NOT
    allowed by default: that is why the built-in list holds no hosting, code or storage service.
+
+   ALLOW FILES live in the site repo, at tools/report-tooling/defang-allow/<report folder name>.txt (tools/ is excluded from the
+   Jekyll build, so none is published), and are picked up BY SLUG: the folder name of the target (or of the folder holding the
+   target .md) names the file, with no flag. defang-allow/_aliases.txt maps a copy whose folder name differs (a vault report
+   whose slug differs from the site's) to the site slug: `<other folder name> <site slug>  # reason`. --allow FILE adds more
+   files, --allow-dir DIR changes the directory, --no-auto-allow reads only the built-in list (the control: a report that
+   needs its file fails without it). The output says which file was read and how many hits each entry suppressed. Every line
+   of an allow file needs a reason after `#`; a line without one is NOT CHECKED, never accepted. Two line forms:
+
+     host-or-ip   # reason            a name that may stay raw (a domain entry covers its subdomains)
+     block FILE | FIRST LINE  # reason     one attacker-command-block finding is accepted: the unmarked fenced block in FILE (path
+                                     relative to the report folder) whose first non-blank line starts with FIRST LINE. It
+                                     suppresses that one finding only, never the indicators in the block, is counted in the
+                                     output, and FAILs as STALE-BLOCK-EXCEPTION when it matches no block in a file read, or
+                                     as BROAD-BLOCK-EXCEPTION when it matches more than one. FIRST LINE holds no `#`.
+
+   Schemes: http, https, ftp, sftp need the canonical hxxp / hxxps / fxp scheme. ws and wss (WebSocket) keep their scheme and
+   take the host defang only (dots of the host to `[.]`). A bare `ws://` or `wss://` with no host is a mention of the scheme,
+   not an indicator, and is not flagged; a ws/wss URL whose host has no dot (`localhost`, `{host}`) is not flagged either.
 
    Findings are printed DEFANGED (the lint's own output is not a copy-ready indicator list).
 
@@ -100,15 +119,49 @@ function isPrivateIPv4(o) {
   return false;
 }
 
+/* Parse allow files. Every non-comment line needs a reason after `#`. `block FILE | FIRST LINE # reason` is a one-block exception
+   for an ATTACKER-COMMAND-BLOCK finding (see the header); anything else is a host or IP that may stay raw. Throws on a line
+   without a reason or a malformed block line: an allowance nobody explained is not accepted. */
 function makeAllow(files) {
-  var entries = BUILTIN_ALLOW.slice(), fromFile = 0;
+  var entries = BUILTIN_ALLOW.slice(), fromFile = 0, blocks = [], hostReasons = {};
   (files || []).forEach(function (f) {
-    fs.readFileSync(f, 'utf8').split(/\r?\n/).forEach(function (l) {
-      l = l.replace(/#.*$/, '').trim().toLowerCase();
-      if (l) { entries.push(l); fromFile++; }
+    fs.readFileSync(f, 'utf8').split(/\r?\n/).forEach(function (raw, n) {
+      var hash = raw.indexOf('#');
+      var body = (hash < 0 ? raw : raw.slice(0, hash)).trim();
+      var reason = hash < 0 ? '' : raw.slice(hash + 1).trim();
+      if (!body) return;
+      var where = path.basename(f) + ':' + (n + 1);
+      if (!reason) throw new Error('allow entry without a reason (' + where + '): "' + body.slice(0, 60) + '"; write `entry  # why it may stay raw`');
+      var bm = body.match(/^block\s+(.+?)\s*\|\s*(.+)$/);
+      if (/^block\s/.test(body) && !bm) throw new Error('malformed block exception (' + where + '): expected `block FILE | FIRST LINE  # reason`');
+      if (bm) { blocks.push({ file: bm[1].trim(), prefix: bm[2].trim(), reason: reason, src: where, used: 0 }); fromFile++; return; }
+      var host = body.toLowerCase();
+      entries.push(host); hostReasons[host] = reason; fromFile++;
     });
   });
-  return { entries: entries, builtin: BUILTIN_ALLOW.length, fromFile: fromFile };
+  return { entries: entries, builtin: BUILTIN_ALLOW.length, fromFile: fromFile, blocks: blocks, hostReasons: hostReasons };
+}
+
+/* The allow file for a target, found by slug. Returns { files: [paths], note: text }. */
+function autoAllow(target, dir) {
+  var abs = path.resolve(target);
+  var folder = fs.statSync(abs).isDirectory() ? abs : path.dirname(abs);
+  var slug = path.basename(folder), site = slug, files = [], note = '';
+  var alias = path.join(dir, '_aliases.txt');
+  if (fs.existsSync(alias)) {
+    fs.readFileSync(alias, 'utf8').split(/\r?\n/).forEach(function (raw, n) {
+      var hash = raw.indexOf('#'), body = (hash < 0 ? raw : raw.slice(0, hash)).trim();
+      if (!body) return;
+      if (hash < 0 || !raw.slice(hash + 1).trim()) throw new Error('alias without a reason (_aliases.txt:' + (n + 1) + ')');
+      var parts = body.split(/\s+/);
+      if (parts.length !== 2) throw new Error('malformed alias (_aliases.txt:' + (n + 1) + '): expected `<folder name> <site slug>  # reason`');
+      if (parts[0] === slug) site = parts[1];
+    });
+  }
+  var f = path.join(dir, site + '.txt');
+  if (fs.existsSync(f)) { files.push(f); note = f + (site !== slug ? ' (alias of ' + site + ')' : ''); }
+  else note = 'none at ' + f + ' (built-in list only)';
+  return { files: files, note: note, slug: slug };
 }
 function allowedBy(allow, host) {
   host = String(host).toLowerCase();
@@ -144,7 +197,8 @@ function scanLine(rawLine, allow) {
   var line = rawLine, m;
   function noteAllowed(e) { out.allowedN++; out.allowed[e] = (out.allowed[e] || 0) + 1; }
 
-  // 1. URLs with a real scheme. The scheme itself is the violation (canonical form is hxxp), whatever the host looks like.
+  // 1. URLs with a real scheme. For http, https, ftp and sftp the scheme itself is the violation (canonical form is hxxp), whatever
+  //    the host looks like. ws and wss keep their scheme and take the host defang only; a bare `ws://` is no indicator.
   URL_RE.lastIndex = 0;
   var spans = [];
   while ((m = URL_RE.exec(line))) {
@@ -152,9 +206,15 @@ function scanLine(rawLine, allow) {
     var auth = tok.replace(/^[a-z]+:\/\//i, '').split(/[\/?#]/)[0].replace(/^[^@]*@/, '');
     var host = auth.replace(/:\d+$/, '');
     spans.push([m.index, m.index + m[0].length]);
-    var oct = host.match(/^(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})$/);
+    var isWs = /^wss?:/i.test(tok);
+    if (isWs && host === '') continue; /* the scheme named in prose or a block, with no host */
+    var oct = (isWs ? host.replace(/\[\.\]/g, '.') : host).match(/^(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})$/);
     if (oct && isPrivateIPv4(oct.slice(1).map(Number))) { out.privateN++; continue; }
     if (/^\[.*\]$/.test(host)) { out.privateN++; continue; } /* IPv6 literal: not checked */
+    if (isWs) {
+      var rawDots = host.replace(/\[\.\]/g, '');
+      if (rawDots.indexOf('.') === -1) { if (host.indexOf('[.]') !== -1) out.defanged++; continue; } /* defanged, or no dot at all */
+    }
     var al = allowedBy(allow, host.replace(/\[\.\]/g, '.'));
     if (al) { noteAllowed(al); continue; }
     out.flagged.push({ kind: 'URL', token: tok });
@@ -246,7 +306,7 @@ var FM_SKIP = ['title', 'description', 'permalink', 'slug', 'layout', 'hide', 'd
 function newStats() {
   return { files: 0, fmLines: 0, bodyLines: 0, blocks: 0, blocksCopy: 0, blocksScanned: 0, blockLines: 0,
     matchedFlagged: 0, matchedDefanged: 0, matchedPrivate: 0, matchedAllowed: 0, allowedBy: {},
-    cmdBlocks: 0, cmdBlocksBracketed: 0, cmdBlocksBare: 0, cmdLinesUnbracketedInBracketedBlocks: 0, copyBlockIndicators: 0,
+    cmdBlocks: 0, cmdBlocksBracketed: 0, cmdBlocksBare: 0, blockExceptions: 0, cmdBlocksExcepted: [], cmdLinesUnbracketedInBracketedBlocks: 0, copyBlockIndicators: 0,
     copyBlocks: [] };
 }
 
@@ -324,10 +384,18 @@ function scanFile(text, file, allow, stats) {
         stats.cmdBlocks++;
         if (bracketed) { stats.cmdBlocksBracketed++; stats.cmdLinesUnbracketedInBracketedBlocks += unbr; }
         else {
-          stats.cmdBlocksBare++;
-          findings.push({ file: file, line: open + 1, ctx: 'block', kind: 'ATTACKER-COMMAND-BLOCK',
-            token: '(' + (lang || 'untagged') + ', ' + body.length + ' lines, ' + cmdLines + ' command-like; first: ' +
-              defangForPrint((body.find(function (x) { return x.trim() && !isComment(x); }) || '').trim().slice(0, 60)) + ')' });
+          var firstNb = (body.find(function (x) { return x.trim(); }) || '').trim();
+          var ex = (allow.blocks || []).filter(function (b) { return b.file === file && firstNb.indexOf(b.prefix) === 0; });
+          if (ex.length) {
+            ex.forEach(function (b) { b.used++; });
+            stats.blockExceptions++;
+            stats.cmdBlocksExcepted.push({ file: file, line: open + 1, reason: ex[0].reason });
+          } else {
+            stats.cmdBlocksBare++;
+            findings.push({ file: file, line: open + 1, ctx: 'block', kind: 'ATTACKER-COMMAND-BLOCK',
+              token: '(' + (lang || 'untagged') + ', ' + body.length + ' lines, ' + cmdLines + ' command-like; first: ' +
+                defangForPrint((body.find(function (x) { return x.trim() && !isComment(x); }) || '').trim().slice(0, 60)) + ')' });
+          }
         }
       }
     }
@@ -344,18 +412,21 @@ var FIXTURE_BAD = [
   'domain evil.example-attacker.com seen',
   'mail ops@evil.example-attacker.com sent',
   'mixed 198[.]51.100[.]17 here',
-  'mixed evil[.]example-attacker.com there'
+  'mixed evil[.]example-attacker.com there',
+  'socket ws://192.0.2.5:8080/x here'
 ];
 var FIXTURE_GOOD = [
   'beacon at hxxp://198[.]51[.]100[.]17:8080/a.ps1 now',
   'host 198[.]51[.]100[.]17 listed',
   'domain evil[.]example-attacker[.]com seen',
   'mail ops[@]evil[.]example-attacker[.]com sent',
-  'private 10.1.2.3 and 192.168.0.9 and 127.0.0.1 fine'
+  'private 10.1.2.3 and 192.168.0.9 and 127.0.0.1 fine',
+  'socket ws://192[.]0[.]2[.]5:8080/x here',
+  'WebSocket (ws://) and `wss://` are named as schemes, ws://localhost:8080/x is no indicator'
 ];
 function selfTest() {
   var allow = makeAllow([]), why = [];
-  var kinds = [['URL'], ['IPV4'], ['DOMAIN'], ['EMAIL'], ['IPV4-PARTLY-DEFANGED'], ['DOMAIN-PARTLY-DEFANGED']];
+  var kinds = [['URL'], ['IPV4'], ['DOMAIN'], ['EMAIL'], ['IPV4-PARTLY-DEFANGED'], ['DOMAIN-PARTLY-DEFANGED'], ['URL']];
   FIXTURE_BAD.forEach(function (l, n) {
     var r = scanLine(l, allow);
     if (!r.flagged.some(function (f) { return f.kind === kinds[n][0]; })) why.push('known positive not flagged as ' + kinds[n][0] + ': ' + defangForPrint(l));
@@ -368,6 +439,15 @@ function selfTest() {
   var blk = scanFile('# t\n\n```\npowershell -ep bypass -c "x"\n```\n\n```\n[p]owershell -ep bypass -c "x"\n```\n\n```\npowershell -ep bypass -c "x"\n```\n{: .hl-copy}\n', 'self-test', allow, st);
   if (blk.filter(function (f) { return f.kind === 'ATTACKER-COMMAND-BLOCK'; }).length !== 1 || st.blocksCopy !== 1 || st.cmdBlocksBracketed !== 1) {
     why.push('block fixture: expected 1 bare attacker block, 1 bracketed, 1 .hl-copy skipped; got bare ' + st.cmdBlocksBare + ', bracketed ' + st.cmdBlocksBracketed + ', copy ' + st.blocksCopy);
+  }
+  // a block exception removes its one finding and nothing else
+  var exAllow = makeAllow([]);
+  exAllow.blocks.push({ file: 'self-test', prefix: 'powershell -ep bypass', reason: 'self-test', src: 'self-test', used: 0 });
+  var st2 = newStats();
+  var doc2 = '```\npowershell -ep bypass -c "x"\n```\n\n```\nwget http://198.51.100.17/a\n```\n';
+  var f2 = scanFile(doc2, 'self-test', exAllow, st2);
+  if (exAllow.blocks[0].used !== 1 || f2.some(function (f) { return f.kind === 'ATTACKER-COMMAND-BLOCK' && f.line === 2; }) || !f2.some(function (f) { return f.kind === 'ATTACKER-COMMAND-BLOCK'; }) || !f2.some(function (f) { return f.kind === 'URL'; })) {
+    why.push('block exception fixture: expected the matched block excused (used 1), the other block and its URL still flagged');
   }
   return why;
 }
@@ -404,27 +484,47 @@ function run(target, allowFiles, opts) {
     var rel = path.relative(fs.statSync(target).isDirectory() ? target : path.dirname(target), f) || path.basename(f);
     findings = findings.concat(scanFile(fs.readFileSync(f, 'utf8'), rel, allow, stats));
   });
+  // an exception must excuse exactly one block of a file that was read
+  var readRel = files.map(function (f) { return path.relative(fs.statSync(target).isDirectory() ? target : path.dirname(target), f) || path.basename(f); });
+  allow.blocks.forEach(function (b) {
+    if (readRel.indexOf(b.file) === -1) return;
+    if (b.used === 0) findings.push({ file: b.file, line: 0, ctx: 'allow', kind: 'STALE-BLOCK-EXCEPTION', token: b.src + ' matches no unmarked command block starting "' + defangForPrint(b.prefix) + '"' });
+    if (b.used > 1) findings.push({ file: b.file, line: 0, ctx: 'allow', kind: 'BROAD-BLOCK-EXCEPTION', token: b.src + ' matches ' + b.used + ' blocks starting "' + defangForPrint(b.prefix) + '"; one exception excuses one block' });
+  });
   return { allow: allow, stats: stats, findings: findings, files: files, skipped: skipped };
 }
 
 function main() {
   var argv = process.argv.slice(2), target = null, allowFiles = [], all = false;
+  var allowDir = path.join(__dirname, 'defang-allow'), autoOn = true;
   for (var a = 0; a < argv.length; a++) {
     if (argv[a] === '--allow') allowFiles.push(argv[++a]);
+    else if (argv[a] === '--allow-dir') allowDir = argv[++a];
+    else if (argv[a] === '--no-auto-allow') autoOn = false;
     else if (argv[a] === '--all') all = true;
-    else if (argv[a] === '-h' || argv[a] === '--help') { console.log('usage: node check-defang.js <report folder | index.md> [--allow FILE]... [--all]'); process.exit(0); }
+    else if (argv[a] === '-h' || argv[a] === '--help') { console.log('usage: node check-defang.js <report folder | index.md> [--allow FILE]... [--allow-dir DIR] [--no-auto-allow] [--all]'); process.exit(0); }
     else target = argv[a];
   }
   if (!target) { console.log('NOT CHECKED  usage: node check-defang.js <report folder | index.md> [--allow FILE]... [--all]'); process.exit(2); }
   if (!fs.existsSync(target)) { console.log('NOT CHECKED  not found: ' + target); process.exit(2); }
   for (var af = 0; af < allowFiles.length; af++) if (!allowFiles[af] || !fs.existsSync(allowFiles[af])) { console.log('NOT CHECKED  allow file not found: ' + allowFiles[af]); process.exit(2); }
 
+  var autoNote = 'off (--no-auto-allow); built-in list only', autoFiles = [];
+  if (autoOn) {
+    try { var au = autoAllow(target, allowDir); autoFiles = au.files; autoNote = au.note; }
+    catch (e) { console.log('NOT CHECKED  ' + e.message); process.exit(2); }
+  }
+  allowFiles = autoFiles.concat(allowFiles);
+
   var bad = selfTest();
   if (bad.length) { bad.forEach(function (b) { console.log('SELF-TEST  ' + b); }); console.log('NOT CHECKED  the lint failed its own known-positive self-test; no verdict'); process.exit(2); }
 
-  var R = run(target, allowFiles), s = R.stats;
+  var R;
+  try { R = run(target, allowFiles); } catch (e) { console.log('NOT CHECKED  ' + e.message); process.exit(2); }
+  var s = R.stats;
   console.log('check-defang: ' + target);
   console.log('  self-test   known positives flagged on 6 kinds + 1 bare attacker block, defanged twins and private addresses clean');
+  console.log('  allow file  ' + autoNote + (allowFiles.length > autoFiles.length ? '; plus ' + (allowFiles.length - autoFiles.length) + ' --allow file(s)' : ''));
   console.log('  files       ' + s.files + ' page(s) read (index.md and any .md with front matter)' + (R.skipped.length ? '; ' + R.skipped.length + ' .md without front matter not read (not published): ' + R.skipped.map(function (f) { return path.basename(f); }).join(', ') : ''));
   console.log('  lines       (non-blank) ' + s.fmLines + ' front-matter (identity keys skipped), ' + s.bodyLines + ' body outside fences, ' + s.blockLines + ' inside ' + s.blocksScanned + ' scanned fenced blocks');
   console.log('  blocks      ' + s.blocks + ' fenced: ' + s.blocksCopy + ' marked .hl-copy (defender, kept raw, not scanned for indicators), ' + s.blocksScanned + ' scanned');
@@ -432,6 +532,7 @@ function main() {
   console.log('  indicators  ' + matched + ' indicator-shaped tokens matched: ' + s.matchedFlagged + ' un-defanged (flagged), ' + s.matchedDefanged + ' already defanged, ' + s.matchedPrivate + ' private/reserved, ' + s.matchedAllowed + ' allowed');
   var ab = Object.keys(s.allowedBy);
   if (ab.length) console.log('  allowed     ' + R.allow.builtin + ' built-in + ' + R.allow.fromFile + ' file entries; hits suppressed: ' + ab.sort().map(function (e) { return e + ' x' + s.allowedBy[e]; }).join(', '));
+  if (s.blockExceptions) console.log('  excepted    ' + s.blockExceptions + ' command-block finding(s) excused by a one-block exception: ' + s.cmdBlocksExcepted.map(function (b) { return b.file + ':' + b.line + ' (' + b.reason + ')'; }).join('; '));
   console.log('  commands    ' + s.cmdBlocks + ' command-like blocks outside .hl-copy: ' + s.cmdBlocksBracketed + ' with a bracketed token, ' + s.cmdBlocksBare + ' without');
   if (s.cmdLinesUnbracketedInBracketedBlocks) console.log('  NOTE        ' + s.cmdLinesUnbracketedInBracketedBlocks + ' command-like line(s) in blocks that DO have a bracketed token carry none (rule 2: a command list brackets each line, a script one statement; the lint cannot tell them apart)');
   if (s.copyBlocks.length) {
@@ -446,7 +547,8 @@ function main() {
   if (F.length > limit) console.log('  (' + (F.length - limit) + ' more findings not printed; --all prints them)');
   var kinds = {};
   F.forEach(function (f) { kinds[f.kind] = (kinds[f.kind] || 0) + 1; });
-  var summary = total + ' lines, ' + s.blocks + ' blocks, ' + matched + ' indicator tokens scanned in ' + s.files + ' file(s)';
+  var summary = total + ' lines, ' + s.blocks + ' blocks, ' + matched + ' indicator tokens scanned in ' + s.files + ' file(s); allow file: ' +
+    (autoFiles.length ? path.basename(autoFiles[0]) : 'none') + ', ' + s.matchedAllowed + ' hit(s) suppressed, ' + s.blockExceptions + ' block exception(s)';
   if (F.length) {
     console.log('FAIL  ' + F.length + ' finding(s) (' + Object.keys(kinds).sort().map(function (k) { return k + ' ' + kinds[k]; }).join(', ') + '); ' + summary);
     process.exit(1);
@@ -455,7 +557,7 @@ function main() {
   process.exit(0);
 }
 
-module.exports = { scanLine: scanLine, scanFile: scanFile, run: run, makeAllow: makeAllow, newStats: newStats, selfTest: selfTest,
+module.exports = { autoAllow: autoAllow, scanLine: scanLine, scanFile: scanFile, run: run, makeAllow: makeAllow, newStats: newStats, selfTest: selfTest,
   lineLooksLikeCommand: lineLooksLikeCommand, defangForPrint: defangForPrint, BRACKET_CMD: BRACKET_CMD, BUILTIN_ALLOW: BUILTIN_ALLOW };
 
 if (require.main === module) main();

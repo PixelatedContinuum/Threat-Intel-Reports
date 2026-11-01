@@ -114,7 +114,7 @@ test('the allow list suppresses and COUNTS: nothing is silent, and a domain entr
   var tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'hl-defang-allow-'));
   try {
     var f = path.join(tmp, 'allow.txt');
-    fs.writeFileSync(f, '# vendor names\nvendor.example-attacker.com\n198.51.100.99\n');
+    fs.writeFileSync(f, '# vendor names\nvendor.example-attacker.com  # a vendor named as such\n198.51.100.99  # a documentation-range probe address\n');
     var a = L.makeAllow([f]);
     var st = L.newStats();
     var found = L.scanFile('see docs.vendor.example-attacker.com and 198.51.100.99 and 198.51.100.98 and https://vendor.example-attacker.com/x\n', 't.md', a, st);
@@ -173,4 +173,168 @@ test('Liquid src path: an address inside src="{{ "/assets/.. 198.51.100.17 .." |
   assert.deepStrictEqual(kinds(r), ['IPV4'], 'one finding: the alt text only');
   var r2 = scan('# t\n\n' + img.replace('alt="shot of 198.51.100.17"', 'alt="shot of 198[.]51[.]100[.]17"'));
   assert.deepStrictEqual(kinds(r2), []);
+});
+
+/* ---- ws / wss (lead decision, T-0500.1.12 d5fix): scheme kept, host defanged; a bare scheme mention is no indicator ---- */
+
+test('ws/wss: a URL to a raw documentation-range IP FAILs; the same with [.] dots and a bare ws:// PASS', function () {
+  assert.deepStrictEqual(kinds(scan('The agent opens ws://192.0.2.7:8080/stream and wss://192.0.2.7/x here.\n')), ['URL', 'URL']);
+  var ok = scan('The agent opens ws://192[.]0[.]2[.]7:8080/stream and wss://192[.]0[.]2[.]7/x here.\n');
+  assert.deepStrictEqual(ok.f, []);
+  assert.strictEqual(ok.st.matchedDefanged, 2, 'both defanged ws URLs are counted, not silently dropped');
+  var bare = scan('WebSocket (ws://) connections, `wss://`, "ws://" and ws:// alone are scheme mentions.\n\n```\nURL scheme: ws://\n```\n');
+  assert.deepStrictEqual(bare.f, []);
+  assert.strictEqual(bare.st.matchedFlagged + bare.st.matchedDefanged, 0);
+});
+
+test('ws/wss: a domain host takes the host defang only; a partly defanged host and a raw domain are findings; private and dotless hosts are not', function () {
+  assert.deepStrictEqual(kinds(scan('connects to ws://c2.example-attacker.com/ch\n')), ['URL']);
+  assert.deepStrictEqual(scan('connects to wss://c2[.]example-attacker[.]com/ch\n').f, []);
+  assert.deepStrictEqual(kinds(scan('connects to ws://c2[.]example-attacker.com/ch\n')), ['URL']);
+  assert.deepStrictEqual(scan('dev ws://localhost:8080/x and ws://192.168.1.5/x and ws://{host}/x and ws://10[.]0[.]0[.]1/x\n').f, []);
+  // the other schemes are unchanged: the scheme itself is the violation
+  assert.deepStrictEqual(kinds(scan('see http://192[.]0[.]2[.]7/x and ftp://192[.]0[.]2[.]7/x\n')), ['URL', 'URL']);
+});
+
+test('ws/wss: a ws URL to a path with dots and a defanged host passes; the allow list covers a ws host like any other', function () {
+  assert.deepStrictEqual(scan('ws://192[.]0[.]2[.]7:9/a.b.c/d.e\n').f, []);
+  var tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'hl-defang-ws-'));
+  try {
+    var f = path.join(tmp, 'a.txt'); fs.writeFileSync(f, 'vendor.example-attacker.com  # vendor websocket endpoint named as such\n');
+    var st = L.newStats();
+    assert.deepStrictEqual(L.scanFile('ws://vendor.example-attacker.com/s\n', 't.md', L.makeAllow([f]), st), []);
+    assert.strictEqual(st.matchedAllowed, 1);
+  } finally { fs.rmSync(tmp, { recursive: true, force: true }); }
+});
+
+/* ---- allow files: reasons required, picked up by slug, block exceptions ---- */
+
+function withTmp(fn) {
+  var tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'hl-defang-allow2-'));
+  try { return fn(tmp); } finally { fs.rmSync(tmp, { recursive: true, force: true }); }
+}
+var CLI = path.join(__dirname, '..', 'check-defang.js');
+function cli(args) { return cp.spawnSync(process.execPath, [CLI].concat(args), { encoding: 'utf8' }); }
+
+test('allow file: an entry without a reason is refused (NOT CHECKED), a pure comment line is fine', function () {
+  withTmp(function (tmp) {
+    var f = path.join(tmp, 'a.txt');
+    fs.writeFileSync(f, '# header only\nvendor.example-attacker.com\n');
+    assert.throws(function () { L.makeAllow([f]); }, /without a reason \(a\.txt:2\)/);
+    fs.writeFileSync(f, '# header only\nvendor.example-attacker.com  #   \n');
+    assert.throws(function () { L.makeAllow([f]); }, /without a reason/);
+    fs.writeFileSync(f, 'block index.md first line\n');
+    assert.throws(function () { L.makeAllow([f]); }, /without a reason/);
+    fs.writeFileSync(f, 'block index.md first line  # reason\n');
+    assert.throws(function () { L.makeAllow([f]); }, /malformed block exception/);
+    var d = path.join(tmp, 'r'); fs.mkdirSync(d); fs.writeFileSync(path.join(d, 'index.md'), '# t\n\nhost vendor.example-attacker.com\n');
+    fs.writeFileSync(f, 'vendor.example-attacker.com\n');
+    var r = cli([d, '--allow', f]);
+    assert.strictEqual(r.status, 2, r.stdout);
+    assert.match(r.stdout, /NOT CHECKED .*without a reason/);
+  });
+});
+
+test('allow file by slug: the folder name picks <allow dir>/<slug>.txt with no flag; with the file removed the report FAILs (the control)', function () {
+  withTmp(function (tmp) {
+    var dir = path.join(tmp, 'defang-allow'); fs.mkdirSync(dir);
+    var rep = path.join(tmp, 'reports', 'my-slug'); fs.mkdirSync(rep, { recursive: true });
+    fs.writeFileSync(path.join(rep, 'index.md'), '# t\n\nThe report names vendor.example-attacker.com as a product.\n');
+    fs.writeFileSync(path.join(dir, 'my-slug.txt'), 'vendor.example-attacker.com  # product named as such\n');
+    var withFile = cli([rep, '--allow-dir', dir]);
+    assert.strictEqual(withFile.status, 0, withFile.stdout);
+    assert.match(withFile.stdout, /allow file  .*my-slug\.txt/);
+    assert.match(withFile.stdout, /PASS .*allow file: my-slug\.txt, 1 hit\(s\) suppressed, 0 block exception\(s\)/);
+    // the same folder addressed by its index.md picks the same file
+    assert.strictEqual(cli([path.join(rep, 'index.md'), '--allow-dir', dir]).status, 0);
+    // control: the file removed -> FAIL; the file for another slug does not help
+    fs.renameSync(path.join(dir, 'my-slug.txt'), path.join(dir, 'other-slug.txt'));
+    var without = cli([rep, '--allow-dir', dir]);
+    assert.strictEqual(without.status, 1, without.stdout);
+    assert.match(without.stdout, /allow file  none at .*my-slug\.txt/);
+    assert.match(without.stdout, /FINDING .*DOMAIN/);
+    // --no-auto-allow reads the built-in list only, even when the file exists
+    fs.renameSync(path.join(dir, 'other-slug.txt'), path.join(dir, 'my-slug.txt'));
+    assert.strictEqual(cli([rep, '--allow-dir', dir, '--no-auto-allow']).status, 1);
+  });
+});
+
+test('allow file aliases: a copy whose folder name differs reads the site slug\'s file; an alias without a reason is refused', function () {
+  withTmp(function (tmp) {
+    var dir = path.join(tmp, 'defang-allow'); fs.mkdirSync(dir);
+    var rep = path.join(tmp, 'vault-name'); fs.mkdirSync(rep);
+    fs.writeFileSync(path.join(rep, 'index.md'), '# t\n\nThe report names vendor.example-attacker.com as a product.\n');
+    fs.writeFileSync(path.join(dir, 'site-name.txt'), 'vendor.example-attacker.com  # product named as such\n');
+    assert.strictEqual(cli([rep, '--allow-dir', dir]).status, 1);
+    fs.writeFileSync(path.join(dir, '_aliases.txt'), '# header\nvault-name  site-name  # the vault folder name of the site report\n');
+    var r = cli([rep, '--allow-dir', dir]);
+    assert.strictEqual(r.status, 0, r.stdout);
+    assert.match(r.stdout, /\(alias of site-name\)/);
+    fs.writeFileSync(path.join(dir, '_aliases.txt'), 'vault-name  site-name\n');
+    assert.strictEqual(cli([rep, '--allow-dir', dir]).status, 2);
+  });
+});
+
+var BLOCK_DOC = '# Report\n\nDiagram:\n\n```\nOperator VPS (198[.]51[.]100[.]17) --- port 18080\nSSH keys: a.ppk (PuTTY format)\n```\n\nAnd a real command:\n\n```\nwget hxxp://198[.]51[.]100[.]17/a\n```\n';
+
+test('block exception: excuses exactly the named block (counted), never the other blocks; stale and broad exceptions FAIL', function () {
+  withTmp(function (tmp) {
+    var dir = path.join(tmp, 'defang-allow'); fs.mkdirSync(dir);
+    var rep = path.join(tmp, 'rep'); fs.mkdirSync(rep);
+    fs.writeFileSync(path.join(rep, 'index.md'), BLOCK_DOC);
+    function run(entries) { fs.writeFileSync(path.join(dir, 'rep.txt'), entries); return cli([rep, '--allow-dir', dir]); }
+    // no exception: both blocks flagged
+    var none = cli([rep, '--allow-dir', dir]);
+    assert.strictEqual(none.status, 1);
+    assert.match(none.stdout, /ATTACKER-COMMAND-BLOCK 2/);
+    // one exception for the diagram: it goes, the wget block stays
+    var one = run('block index.md | Operator VPS (198[.]51[.]100[.]17)  # ASCII diagram, no command\n');
+    assert.strictEqual(one.status, 1);
+    assert.match(one.stdout, /ATTACKER-COMMAND-BLOCK 1\)/);
+    assert.match(one.stdout, /excepted    1 command-block finding\(s\).*index\.md:5 \(ASCII diagram, no command\)/);
+    assert.match(one.stdout, /1 block exception\(s\)/);
+    // both excused -> PASS, and both are counted
+    var two = run('block index.md | Operator VPS  # ASCII diagram\nblock index.md | wget hxxp  # accepted for the test\n');
+    assert.strictEqual(two.status, 0, two.stdout);
+    assert.match(two.stdout, /2 block exception\(s\)/);
+    // an exception for another file does not apply; a stale one (matches no block in a file read) FAILs
+    var stale = run('block index.md | Operator VPS  # ASCII diagram\nblock index.md | wget hxxp  # ok\nblock index.md | curl hxxp  # matches nothing\n');
+    assert.strictEqual(stale.status, 1);
+    assert.match(stale.stdout, /STALE-BLOCK-EXCEPTION/);
+    var other = run('block other.md | Operator VPS  # wrong file\n');
+    assert.match(other.stdout, /ATTACKER-COMMAND-BLOCK 2/);
+    assert.doesNotMatch(other.stdout, /STALE-BLOCK-EXCEPTION/, 'an exception for a file that was not read is not stale');
+    // too broad: one exception matching two blocks FAILs
+    fs.writeFileSync(path.join(rep, 'index.md'), BLOCK_DOC + '\n```\nOperator VPS (198[.]51[.]100[.]17) again\nSSH keys: b\n```\n');
+    var broad = run('block index.md | Operator VPS  # too short a prefix\nblock index.md | wget hxxp  # ok\n');
+    assert.strictEqual(broad.status, 1);
+    assert.match(broad.stdout, /BROAD-BLOCK-EXCEPTION/);
+  });
+});
+
+test('block exception: it excuses the command-block finding only; a raw indicator in the same block is still a finding', function () {
+  var a = L.makeAllow([]);
+  a.blocks.push({ file: 't.md', prefix: 'wget', reason: 'test', src: 'x', used: 0 });
+  var st = L.newStats();
+  var f = L.scanFile('```\nwget http://198.51.100.17/a\n```\n', 't.md', a, st);
+  assert.deepStrictEqual(f.map(function (x) { return x.kind; }), ['URL']);
+  assert.strictEqual(st.blockExceptions, 1);
+});
+
+test('the in-repo allow dir: every file parses with a reason on every line and names a report folder (or is the alias file)', function () {
+  var dir = path.join(__dirname, '..', 'defang-allow');
+  var reports = path.join(__dirname, '..', '..', '..', 'reports');
+  var files = fs.readdirSync(dir).filter(function (n) { return /\.txt$/.test(n); });
+  assert.ok(files.length >= 40, 'the allow dir holds the per-report files (' + files.length + ')');
+  files.forEach(function (n) {
+    if (n === '_aliases.txt') return;
+    L.makeAllow([path.join(dir, n)]); /* throws on a line without a reason */
+    assert.ok(fs.existsSync(path.join(reports, n.replace(/\.txt$/, ''))), n + ' names no folder under reports/');
+  });
+  fs.readFileSync(path.join(dir, '_aliases.txt'), 'utf8').split('\n').forEach(function (l) {
+    var b = l.split('#')[0].trim(); if (!b) return;
+    var p = b.split(/\s+/);
+    assert.ok(fs.existsSync(path.join(reports, p[1])), 'alias target ' + p[1] + ' is not a report folder');
+    assert.ok(l.split('#')[1] && l.split('#')[1].trim(), 'alias has a reason');
+  });
 });

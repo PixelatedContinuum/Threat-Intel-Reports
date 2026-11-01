@@ -1,0 +1,5 @@
+bgp.he.net      # Hurricane Electric BGP toolkit, cited lookup service
+check-host.net  # public availability-check service named as the tool used
+github.com      # hfiref0x/UACME reference (public research repository), cited
+hunt.io         # Hunt.io, source/product name
+ipinfo.io       # IPinfo lookup service, cited

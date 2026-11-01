@@ -1,0 +1,4 @@
+# A copy of a report whose folder name differs from the site folder name reads the site slug's allow file.
+# <folder name of the other copy>  <site slug>  # reason
+opendirectory-193-56-255-154-20260403  open-directory-193-56-255-154-xiebroc2  # vault folder name of the xiebroc2 report (the site renamed the folder)
+opendirectory-74-0-42-25-20260316  zerotrace-74-0-42-25-20260316  # vault folder name of the zerotrace report (the site renamed the folder)

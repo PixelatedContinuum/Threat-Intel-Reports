@@ -1,0 +1,23 @@
+cybernews.com   # press outlet cited
+databreaches.net # breach-journalism outlet, named as the party emailed/cited
+europa.eu       # CERT-EU advisory cited (cert.europa.eu)
+keys.openpgp.org # public keyserver named as where the key was looked up
+keyserver.ubuntu.com # public keyserver named as where the key was looked up
+ransomware.live # public ransomware tracker cited as a source
+cloud.google.com # vendor blog cited
+haveibeenpwned.com # breach service cited
+krebsonsecurity.com # press cited
+socradar.io     # vendor report cited
+techcrunch.com  # press cited
+therecord.media # press cited
+bleepingcomputer.com # press cited
+dataminr.com    # vendor report cited
+helpnetsecurity.com # press cited
+ic3.gov         # FBI IC3 advisory cited
+intrinsec.com   # vendor report cited
+mitiga.io       # vendor report cited
+resecurity.com  # vendor report cited
+salesforceben.com # press cited
+sophos.com      # vendor report cited
+techradar.com   # press cited
+threatstop.com  # vendor report cited

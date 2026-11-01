@@ -1,0 +1,2 @@
+# T-0500.1.12 d3: benign well-known services/vendors/references named as such (rule 1); nothing actor-used
+hunt.io  # Hunt.io, the data source and sponsor, named as such in the Data source note

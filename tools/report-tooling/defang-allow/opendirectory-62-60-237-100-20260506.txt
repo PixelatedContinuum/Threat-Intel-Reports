@@ -1,0 +1,10 @@
+abuse.ch        # public threat-intel platform cited (MalwareBazaar/URLhaus), not infrastructure
+doh.xfinity.com # benign DoH/connectivity probe the sample's baseline check contacts, named as a benign service
+test.com        # benign connectivity self-test host named as such
+api2.amplitude.com # benign analytics service named as such in the same baseline list
+goproxy.github.io # GoProxy library name, appears as the certificate subject CN the sample installs (a cert subject, not a visit target)
+360totalsecurity.com # genuine Qihoo 360 vendor URLs inside the legitimately signed PromoUtil.exe
+360safe.com     # same: legitimate Qihoo vendor URLs
+360.com         # same: legitimate Qihoo vendor URLs
+360seas.com     # same: legitimate Qihoo vendor URLs
+1.0.0.11      # PE FileVersion string of SlideShowEditor.exe, a version number, not an address

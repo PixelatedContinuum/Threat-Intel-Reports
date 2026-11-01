@@ -1,0 +1,7 @@
+# T-0500.1.12 d3: benign well-known services/vendors/references named as such (rule 1); nothing actor-used
+crates.io  # Rust package registry, named as the ecosystem and inside a cargo registry build-path string in the sample (index.crates.io-...)
+github.com  # SigmaHQ/sigma public detection-rule repository, named as a resource for defenders
+ic3.gov  # FBI Internet Crime Complaint Center, named as the place to report in the response guidance
+learn.microsoft.com  # Microsoft documentation pages cited as references (HVCI, driver blocklist)
+www.elastic.co  # Elastic product page cited as a reference for log analysis
+www.sysinternals.com  # Sysinternals, the legitimate publisher named in the DLL version-info company-name field

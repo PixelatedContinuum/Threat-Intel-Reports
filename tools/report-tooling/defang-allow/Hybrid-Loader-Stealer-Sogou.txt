@@ -1,0 +1,9 @@
+# d4 allow list (Hybrid-Loader-Stealer-Sogou/allow.txt): benign well-known vendor, publisher, standards or reference sites named as such (defang-rules.md rule 1). One reason per entry.
+ocsp.digicert.com  # DigiCert OCSP/CRL endpoint that the sample's traffic imitates, named as the legitimate service
+crl3.digicert.com  # same
+schemas.openxmlformats.org  # Office schema namespace
+amazon.com  # vendor named as such
+dattatec.com  # ISP name in an ASN line (hosting provider, not the actor)
+donweb.com  # same ISP
+cogentco.com  # transit provider abuse desk address, provider contact not actor
+support.aws.com  # AWS abuse desk address, provider contact not actor

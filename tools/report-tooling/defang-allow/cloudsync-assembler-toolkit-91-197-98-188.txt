@@ -1,0 +1,10 @@
+github.com  # public offensive-tool repos named as prior art (NetExec, PrintSpoofer, ...), not actor repos
+hunt.io  # vendor
+ip-api.com  # public geolocation service the stealer queries; named as the service
+asec.ahnlab.com  # vendor, cited
+api.telegram.org  # Telegram Bot API named as the service
+reg.ru  # registrar named
+ransomware.live  # public tracker, cited
+halcyon.ai  # vendor, cited
+anydesk.com  # legitimate vendor CDN the actor fetched the installer from; vendor site named as such
+1.0.0.0  # .NET AssemblyFileVersion in an image alt text, a version string not an address

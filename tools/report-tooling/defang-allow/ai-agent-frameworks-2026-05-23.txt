@@ -1,0 +1,7 @@
+# T-0500.1.12 d3: benign well-known services/vendors/references named as such (rule 1); nothing actor-used
+bing.com  # search engine named as the SNI masquerade name the Case 9 Hysteria backdoor presents, a benign service not actor infrastructure
+docs.openclaw.ai  # OpenClaw project documentation site named in the Case 4 operator allowlist, a product site not an actor host
+openclaw.ai  # OpenClaw project site named as the installer source the Case 4 operator pre-approved, a product not an actor host
+generativelanguage.googleapis.com  # Google Gemini API endpoint the Case 1 pipeline calls (detection guidance), a legitimate vendor service named as such
+hunt.io  # Hunt.io, the data source and sponsor, named as such in the Data source note
+web.archive.org  # Internet Archive Wayback Machine named as the archive used to confirm the repositories were removed, a reference service

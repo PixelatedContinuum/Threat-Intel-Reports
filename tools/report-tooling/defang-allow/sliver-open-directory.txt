@@ -1,0 +1,19 @@
+# T-0500.1.12 d3: benign well-known services/vendors/references named as such (rule 1); nothing actor-used
+abuse.ch  # abuse.ch threat-intelligence platform named as a source
+github.com  # public tool repositories cited in References (optiv/ScareCrow, klezVirus/SysWhispers3, TheWover/donut)
+hunt.io  # Hunt.io, the data source and sponsor, named as such in the Data source note
+intezer.com  # Intezer, the sandbox vendor whose canary domain the Sliver beacon embeds for its anti-analysis check, named as the vendor not an actor host
+ipinfo.io  # IPinfo ASN record cited in References
+krebsonsecurity.com  # KrebsOnSecurity article cited in References
+redcanary.com  # Red Canary research page cited in References
+www.cybereason.com  # Cybereason research page cited in References
+www.elastic.co  # Elastic research page cited in References
+www.ibm.com  # IBM research page cited in References
+www.microsoft.com  # Microsoft documentation or research page cited in References
+www.optiv.com  # Optiv page cited in References (ScareCrow author)
+www.peeringdb.com  # PeeringDB network record cited in References
+www.proofpoint.com  # Proofpoint research page cited in References
+www.recordedfuture.com  # Recorded Future research page cited in References
+www.reversinglabs.com  # ReversingLabs research page cited in References
+www.synacktiv.com  # Synacktiv research page cited in References
+www.vmray.com  # VMRay research page cited in References

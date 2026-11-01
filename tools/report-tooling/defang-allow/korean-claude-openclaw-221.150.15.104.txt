@@ -1,0 +1,6 @@
+# T-0500.1.12 d3: benign well-known services/vendors/references named as such (rule 1); nothing actor-used
+docs.anthropic.com  # Anthropic Claude Code documentation cited as the reference for the permission-allowlist mechanism
+docs.openclaw.ai  # OpenClaw documentation site named in the operator Claude Code allowlist, a product site not an actor host
+openclaw.ai  # OpenClaw project site named as the installer the operator pre-approved, a product not an actor host
+hunt.io  # Hunt.io, the data source and sponsor, named as such in the Data source note
+npmjs.com  # public npm registry named as the alternative install path for the OpenClaw package

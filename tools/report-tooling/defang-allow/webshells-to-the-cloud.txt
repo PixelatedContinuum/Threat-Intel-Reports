@@ -1,0 +1,1 @@
+# nothing allowed: shellcp.info, api.dropboxapi.com (exfil API the actor used) and the .app host are all defanged

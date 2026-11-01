@@ -1,0 +1,2 @@
+cert.br         # Brazilian national CERT named as the disclosure route
+gov.br          # the .gov.br sector suffix named as a class of targets, not a host

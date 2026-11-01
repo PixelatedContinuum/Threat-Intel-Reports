@@ -1,0 +1,1 @@
+api.telegram.org  # Telegram Bot API named as the service (the bot token is not in the host)

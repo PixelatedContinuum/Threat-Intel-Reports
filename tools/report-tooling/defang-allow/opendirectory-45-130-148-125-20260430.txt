@@ -1,0 +1,5 @@
+# d4 allow list (opendirectory-45-130-148-125-20260430/allow.txt): benign well-known vendor, publisher, standards or reference sites named as such (defang-rules.md rule 1). One reason per entry.
+hunt.io  # data vendor named as source
+github.com  # AdaptixC2 is a public open-source framework; Go import paths and the project repo are references, not operator infrastructure
+golang.org  # Go language site
+ipip.net  # public IP geolocation vendor named as the lookup source

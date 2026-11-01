@@ -1,0 +1,20 @@
+api.telegram.org  # Telegram Bot API named as the service
+api.binance.com  # Binance public ticker API named as the service
+usom.gov.tr  # Turkey national CERT, cited and polled by the panel; government service
+ptt.gov.tr  # government fraud-warning page cited
+cdn.dolap.com  # impersonated brand's real CDN, loaded by the kits; legitimate brand site named as such
+m.turkcell.com.tr  # impersonated brand's real site; legitimate
+js-agent.newrelic.com  # New Relic RUM beacon host copied from scraped sites; vendor
+bam.nr-data.net  # New Relic RUM beacon host; vendor
+sekoia.io  # vendor, cited
+virustotal.com  # vendor
+trmlabs.com  # vendor, cited
+treasury.gov  # government, cited
+silentpush.com  # vendor, cited
+securelist.com  # vendor, cited
+netcraft.com  # vendor, cited
+infosecurity-magazine.com  # press, cited
+globalinitiative.net  # research org, cited
+cofense.com  # vendor, cited
+breakglass.io  # vendor, cited
+bleepingcomputer.com  # press, cited

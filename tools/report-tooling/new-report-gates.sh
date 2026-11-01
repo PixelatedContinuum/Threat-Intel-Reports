@@ -18,12 +18,18 @@
 #                     the render, so the page the gates measure carries the curated views the live page will carry, not
 #                     the generic ones. Without it the render sees only the curation files already in this checkout.
 #
-# --defang-allow FILE the names the defang gate may leave raw (one per line, # comments): a vendor or product named as such, not
-#                     infrastructure of the actor (defang-rules.md rule 1). Every suppressed hit is counted in the gate's output.
+# --defang-allow FILE more names for the defang gate to leave raw, on top of the report's own allow file. A report's own file needs
+#                     no flag: check-defang.js reads tools/report-tooling/defang-allow/<report folder name>.txt by itself (a vault
+#                     folder whose name differs is mapped by defang-allow/_aliases.txt) and the gate row ends with
+#                     `allow file: <name or none>, N hit(s) suppressed, M block exception(s)`. Each line of an allow file is a
+#                     vendor or product named as such, not infrastructure of the actor (defang-rules.md rule 1), or a one-block
+#                     command exception, and carries a reason after `#`; a line without one makes the gate NOT CHECKED. Every
+#                     suppressed hit is counted in the gate's output. A NEW report that needs a name allowed adds its own file there.
 #
 # Gates, in order:
 #   defang              check-defang.js on the folder's source: every un-defanged non-private network indicator outside a block
-#                       marked {: .hl-copy}, and every attacker code block with no bracketed command token (T-0500.1.12). Node only
+#                       marked {: .hl-copy}, and every attacker code block with no bracketed command token (T-0500.1.12). Node only.
+#                       The report's allow file is found by folder name (see --defang-allow); without one, only the built-in names pass
 #   render              render-report.rb renders the folder twice with the site's own layouts:
 #                       tagged (as written) and untagged (every tab line removed)
 #   check-tabs          check-tabs.js --require: a report that declares no tab tags FAILs

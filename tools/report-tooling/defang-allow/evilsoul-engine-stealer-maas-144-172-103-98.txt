@@ -1,0 +1,6 @@
+socket.io  # the Socket.IO library named as a protocol, not a host
+github.com  # public repo named as the tool origin
+hunt.io  # vendor
+ip-api.com  # public geolocation service the stealer queries
+myexternalip.com  # public IP-lookup service the stealer queries
+decodecybercrime.com  # cited public OSINT article

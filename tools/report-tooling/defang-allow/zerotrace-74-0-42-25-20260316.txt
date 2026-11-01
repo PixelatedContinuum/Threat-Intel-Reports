@@ -1,0 +1,9 @@
+bgp.he.net    # Hurricane Electric BGP toolkit, cited lookup service
+cisa.gov      # government advisory cited
+cleantalk.org # CleanTalk spam blacklist, cited as a source
+derp.ca       # Derp.ca research blog, cited as a source (published reports on the same RAT)
+hunt.io       # Hunt.io, the vendor whose open directory feed surfaced the host (source/product name)
+ip-api.com    # public IP geolocation service the XWorm sample queries for sandbox detection, named as a service
+ipinfo.io     # IPinfo lookup service, cited
+smtp.office365.com # Microsoft mail service named as the SMTP relay the sample's config uses
+ysoserial.net # public deserialization tool project, named as the tool
