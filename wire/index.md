@@ -154,7 +154,7 @@ position: 2.5
 <dt><span class="hl-vuln__p hl-vuln__p--det">Rules 4</span></dt>
 <dd>Public detection rules that name the CVE, counted across four sources: ET Open (Suricata), Nuclei templates, CISA's SIGMA_Rules and the Snort 3 community ruleset. A row with none shows no chip. Click the chip in a row to open the popover described below. Checked daily.</dd>
 <dt><span class="hl-vuln__p hl-vuln__p--ssvc">SSVC</span></dt>
-<dd>CISA's SSVC decision points for the CVE (exploitation, automatable, technical impact), carried by cve.now, with the fixed version and the GHSA and EUVD advisory ids where cve.now has them. Click the chip in a row to read them. A CVE cve.now has none for shows no chip.</dd>
+<dd>The decision points CISA publishes for the CVE in its Stakeholder-Specific Vulnerability Categorization (SSVC): exploitation, automatable and technical impact. cve.now carries them, with the fixed version and the GitHub Security Advisory (GHSA) and EU Vulnerability Database (EUVD) ids where it has them. Click the chip in a row to read them. A CVE cve.now has none for shows no chip.</dd>
 <dt><span class="hl-vuln__p hl-vuln__p--exp">Exploits 2</span></dt>
 <dd>Public exploits that cve.now lists for the CVE: Metasploit modules and Exploit-DB entries open their pages. GitHub proof-of-concept repositories are counted and never linked. A missing chip does not mean no exploit exists: cve.now has not checked every CVE for them, and I have not tested any exploit.</dd>
 </dl>
@@ -321,12 +321,12 @@ position: 2.5
   CVE record sits under the row, and the filter axes are signal, severity and vendor. The
   model-written summaries cve.now carries are never read here. Absent fields draw nothing.
 {%- endcomment -%}
-<p class="hl-wire__freshness hl-wire__freshness--c">CVEs: significant new CVEs not yet on a KEV list, published in the last {{ wire.window_days }} days &middot; Data: <a href="https://cve.now/" target="_blank" rel="noopener noreferrer">cve.now</a> (<a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener noreferrer">CC BY 4.0</a>) &middot; EPSS from <a href="https://www.first.org/epss/" target="_blank" rel="noopener noreferrer">FIRST</a> &middot; <a href="{{ '/wire/cves.xml' | relative_url }}">Atom feed (CVEs)</a></p>
+<p class="hl-wire__freshness hl-wire__freshness--c">Significant new CVEs not yet on a KEV list, published in the last {{ wire.window_days }} days &middot; Facts from <a href="https://cve.now/" target="_blank" rel="noopener noreferrer">cve.now</a> (<a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener noreferrer">CC BY 4.0</a>) &middot; EPSS from <a href="https://www.first.org/epss/" target="_blank" rel="noopener noreferrer">FIRST</a> &middot; <a href="{{ '/wire/cves.xml' | relative_url }}">Atom feed (CVEs)</a></p>
 
 <div class="hl-wire__callout hl-wire__callout--c">
-<p>This list is my selection, not a vendor's. A CVE is here when it was published in the last {{ wire.window_days }} days, has a CVSS score of 9.0 or higher from NVD or cve.now, is not in CISA's KEV catalog or on the nKEVs tab, and passes at least one test: a Metasploit module, an Exploit-DB entry, a GitHub proof of concept, a public Nuclei or ET Open rule that names it, or a FIRST EPSS percentile of 95 or higher.</p>
+<p>This list is my selection. A CVE is here when it was published in the last {{ wire.window_days }} days, has a CVSS score of 9.0 or higher from NVD or cve.now, is not in CISA's KEV catalog or on the nKEVs tab, and passes at least one test: a Metasploit module, an Exploit-DB entry, a GitHub proof of concept, a public Nuclei or ET Open rule that names it, or a FIRST EPSS percentile of 95 or higher.</p>
 <p>Being here means a public exploit or a high predicted likelihood exists. It does not mean anyone has been seen exploiting the CVE. A row leaves this tab when its CVE reaches a KEV list.</p>
-<p>I count GitHub proof-of-concept repositories and do not link them. Data from <a href="https://cve.now/" target="_blank" rel="noopener noreferrer">cve.now</a> (CC BY 4.0), CISA's SSVC through Vulnrichment, FIRST EPSS, Exploit-DB and Metasploit.</p>
+<p>I count GitHub proof-of-concept repositories and do not link them. The facts come from <a href="https://cve.now/" target="_blank" rel="noopener noreferrer">cve.now</a> (CC BY 4.0), which carries the SSVC (Stakeholder-Specific Vulnerability Categorization) decision points CISA publishes through Vulnrichment, with EPSS from FIRST, Exploit-DB and Metasploit.</p>
 </div>
 
 {%- assign cshow = false -%}
@@ -381,7 +381,7 @@ position: 2.5
 <dt><span class="hl-vuln__p hl-vuln__p--epss">EPSS 3%</span></dt>
 <dd>FIRST's predicted probability that the CVE is exploited in the next 30 days. The popover shows the last 30 days as a line and today's value.</dd>
 <dt><span class="hl-vuln__p hl-vuln__p--ssvc">SSVC</span></dt>
-<dd>CISA's SSVC decision points for the CVE (exploitation, automatable, technical impact), carried by cve.now, with the fixed version and the GHSA and EUVD advisory ids where cve.now has them. A CVE without them shows no chip.</dd>
+<dd>The decision points CISA publishes for the CVE in its Stakeholder-Specific Vulnerability Categorization (SSVC): exploitation, automatable and technical impact. cve.now carries them, with the fixed version and the GitHub Security Advisory (GHSA) and EU Vulnerability Database (EUVD) ids where it has them. A CVE without them shows no chip.</dd>
 <dt><span class="hl-vuln__p hl-vuln__p--exp">Exploits 2</span></dt>
 <dd>Public exploits that cve.now lists: Metasploit modules and Exploit-DB entries open their pages. GitHub proof-of-concept repositories are counted and never linked. The flags are cve.now's and I have not tested any exploit. A CVE can be listed with none of these when a public rule or a high EPSS percentile admitted it; a missing chip does not mean no exploit exists, because cve.now has not checked every CVE for them.</dd>
 <dt><span class="hl-vuln__p hl-vuln__p--det">Rules 2</span></dt>
