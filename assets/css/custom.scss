@@ -4133,6 +4133,13 @@ span.hl-vuln__p--ssvc, span.hl-vuln__p--exp, span.hl-vuln__p--cn { cursor: help;
 .hl-vuln__popbody--exp { min-width: 14em; max-width: min(26em, 85vw); max-height: min(22em, 60vh); overflow-y: auto; }
 .hl-vuln__kv { display: flex; gap: 0.6em; align-items: baseline; }
 .hl-vuln__kv .hl-vuln__rh { flex: 0 0 11.5em; }
+/* A fixed version is a list on real data, one per product branch ("10.4.3, 10.2.7"; a Windows CVE can carry
+   three or more 4-part build numbers). Each version is its own inline-block, so a line breaks between
+   versions, not inside one (an inline-block takes its content's width up to the cell's width, so a
+   version breaks internally only when it alone is wider than the cell, as a 40-character one could at
+   375 px); the value cell may shrink below its content so it cannot push the popover off the screen. */
+.hl-vuln__vers { min-width: 0; }
+.hl-vuln__ver { display: inline-block; max-width: 100%; vertical-align: top; word-break: break-all; }
 /* The CVE record's first sentence, one line under the row on a wide screen (the full text is the
    title attribute), two on a phone. It spans every grid column. */
 /* T-0522 Revision 3: why a CVEs row is listed, in plain words, as small tags on a line of their own
