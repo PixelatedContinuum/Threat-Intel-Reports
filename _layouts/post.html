@@ -35,7 +35,74 @@ document.addEventListener('DOMContentLoaded', function () {
 </script>
 {% endif %}
 {% comment %}Match complete class tokens only inside kramdown h2 opening tags. Keep this Liquid whitespace-free so the untagged render stays byte-identical.{% endcomment %}{% assign hl_tabbed = false %}{% assign hl_tab_tokens = 'overview,victims,chain,timeline,attribution,indicators,confidence' | split: ',' %}{% assign hl_h2_tags = content | split: '<h2 ' %}{% for hl_h2 in hl_h2_tags offset:1 %}{% assign hl_open_tag = hl_h2 | split: '>' | first %}{% if hl_open_tag contains 'class="' %}{% assign hl_classes = hl_open_tag | split: 'class="' | last | split: '"' | first | prepend: ' ' | append: ' ' %}{% for hl_token in hl_tab_tokens %}{% assign hl_class = hl_token | prepend: ' hl-tab-' | append: ' ' %}{% if hl_classes contains hl_class %}{% assign hl_tabbed = true %}{% endif %}{% endfor %}{% endif %}{% endfor %}{% if hl_tabbed %}{% include report-subscribe-guard.html %}<link rel="stylesheet" href="{{ '/assets/css/hl-report-tabs.css' | relative_url }}?v=20261102.2" data-rv-chrome data-pagefind-ignore>
-{% endif %}<div class="hl-page{% if hl_tabbed %} hl-report-page{% endif %}" style="--ph-accent: {% if page.path contains 'hunting-detections' %}#4ade80{% else %}#f87171{% endif %};">{% if hl_tabbed %}{% include report-featured-sponsor.html %}{% endif %}
+{% endif %}{%- assign _is_det0 = false -%}{%- if page.path contains 'hunting-detections' %}{% assign _is_det0 = true %}{% endif -%}<div class="hl-page{% if hl_tabbed %} hl-report-page{% endif %}{% if _is_det0 %} hl-idx hl-idx--det{% endif %}" style="--ph-accent: {% if page.path contains 'hunting-detections' %}#4ade80{% else %}#f87171{% endif %};">{% if hl_tabbed %}{% include report-featured-sponsor.html %}{% endif %}
+{%- if _is_det0 -%}{%- comment -%}
+  A detection page in design D (T-0500.1.7.4 b3): the plate with its resource buttons, KPI tiles computed from the page's own rule manifest and ATT&CK table, then the page as before
+  (the picker and the coverage strip are built by their scripts into the content), with a sticky icon section bar over the h2 sections. The page stays flat: no tabs.
+  Everything the plate and tiles print is a count or a link taken from _data (catalog, misp_events, detection_manifests, detection_attack); nothing is invented.
+{%- endcomment -%}
+{%- assign _dcat = nil -%}
+{%- for _e in site.data.catalog.entries -%}{%- assign _e1 = _e.detection_url | append: "/" -%}{%- if _e.detection_url and _e1 == page.url -%}{%- assign _dcat = _e -%}{%- break -%}{%- endif -%}{%- endfor -%}
+{%- assign _dmisp = site.data.misp_events.events | where: "detection_url", page.url | first -%}
+{%- assign _dslug = page.path | split: "/" | last | remove: ".md" -%}
+{%- assign _dman = site.data.detection_manifests[_dslug] -%}
+{%- assign _datk = site.data.detection_attack[_dslug] -%}
+<div class="hl-post-header hl-post-header--detect hl-d-plate">
+  <div class="hl-post-header__eyebrow">
+    <span class="hl-post-header__badge hl-post-header__badge--detect hl-d-kicker">Detection Rules</span>
+    <span class="hl-post-header__sep">·</span>
+    <span class="hl-post-header__date">{{ page.date | date: "%B %d, %Y" }}</span>
+  </div>
+  <h1 class="hl-post-header__title">{% include defang-text.html text=page.title %}</h1>
+  {%- if _dcat or _dmisp %}
+  <div class="hl-d-res" role="group" aria-label="Related resources" data-pagefind-ignore>
+    {%- if _dcat.report_url %}<a class="hl-d-res__a hl-d-res__a--pri" href="{{ _dcat.report_url | relative_url }}">{% include d-icon.html name="ext" %}Read the full report</a>{% endif -%}
+    {%- if _dcat.ioc_url %}<a class="hl-d-res__a" href="{{ _dcat.ioc_url | remove: '-iocs.json' | append: '/' | relative_url }}">{% include d-icon.html name="target" %}IOC feed</a>{% endif -%}
+    {%- if _dcat.stix_url %}<a class="hl-d-res__a" href="{{ _dcat.stix_url | relative_url }}">{% include d-icon.html name="share" %}STIX</a>{% endif -%}
+    {%- if _dmisp %}<a class="hl-d-res__a" href="{{ _dmisp.event_url | relative_url }}" target="_blank" rel="noopener noreferrer">{% include d-icon.html name="table" %}MISP</a>{% endif -%}
+  </div>
+  {%- endif %}
+</div>
+{%- if _dman and _dman.size > 0 %}
+{%- assign _n_all = _dman.size -%}
+{%- assign _n_det = _dman | where: "tier", "Detection" | size -%}
+{%- assign _n_hunt = _n_all | minus: _n_det -%}
+<div class="hl-d-kpis" style="--fc: {% if _datk and _datk.total > 0 %}5{% else %}4{% endif %};" data-pagefind-ignore>
+  <div class="hl-d-kpi" style="--kc: #4ade80;"><span class="hl-d-kpi__n">{{ _n_all }}</span><span class="hl-d-kpi__cap">Rules on this page</span><span class="hl-d-kpi__note">{{ _n_det }} Detection, {{ _n_hunt }} Hunting</span></div>
+  {%- assign _engs = "sigma,suricata,yara" | split: "," -%}
+  {%- for _e in _engs -%}
+  {%- assign _eman = _dman | where: "engine", _e -%}
+  {%- assign _en = _eman.size -%}
+  {%- assign _ed = _eman | where: "tier", "Detection" | size -%}
+  {%- assign _eh = _en | minus: _ed -%}
+  {%- assign _ec = "#58a6ff" -%}{%- if _e == "suricata" %}{% assign _ec = "#fb923c" %}{% elsif _e == "yara" %}{% assign _ec = "#c084fc" %}{% endif -%}
+  <div class="hl-d-kpi" style="--kc: {{ _ec }};"><span class="hl-d-kpi__n">{{ _en }}</span><span class="hl-d-kpi__cap">{{ _e | capitalize }} rules</span>{% if _en > 0 %}<span class="hl-d-kpi__mv" aria-hidden="true"><i style="width: {{ _ed | times: 100 | divided_by: _en }}%;"></i><i style="width: {{ _eh | times: 100 | divided_by: _en }}%;"></i></span>{% endif %}<span class="hl-d-kpi__note">{{ _ed }} Detection, {{ _eh }} Hunting</span></div>
+  {%- endfor %}
+  {%- if _datk and _datk.total > 0 %}
+  <div class="hl-d-kpi" style="--kc: #fb923c;"><span class="hl-d-kpi__n">{{ _datk.total }}</span><span class="hl-d-kpi__cap">ATT&amp;CK techniques</span><span class="hl-d-kpi__note">across {{ _datk.tactics }} tactic{% if _datk.tactics != 1 %}s{% endif %}</span></div>
+  {%- endif %}
+</div>
+{%- endif %}
+{%- assign _h2s = content | split: '<h2 ' -%}
+{%- if _h2s.size > 2 -%}
+{%- capture _dbar -%}
+{%- for _h in _h2s offset: 1 -%}
+  {%- assign _hp = _h | split: '"' -%}{%- assign _hid = _hp[1] -%}
+  {%- assign _hlab = _h | split: '</h2>' | first | split: '>' | slice: 1, 9 | join: '>' | strip_html | strip -%}
+  {%- assign _hico = "list" -%}{%- assign _hcol = "#4ade80" -%}
+  {%- if _hid contains "yara" %}{% assign _hico = "code" %}{% assign _hcol = "#c084fc" %}
+  {%- elsif _hid contains "sigma" %}{% assign _hico = "shield" %}{% assign _hcol = "#58a6ff" %}
+  {%- elsif _hid contains "suricata" %}{% assign _hico = "pulse" %}{% assign _hcol = "#fb923c" %}
+  {%- elsif _hid contains "gaps" %}{% assign _hico = "alert" %}{% assign _hcol = "#fbbf24" %}
+  {%- elsif _hid contains "license" %}{% assign _hico = "flag" %}{% assign _hcol = "#9ca3af" %}{% endif -%}
+  {%- assign _hnum = forloop.index | prepend: "0" | slice: -2, 2 -%}
+  {%- include d-sbar-item.html id=_hid text=_hlab icon=_hico color=_hcol count=_hnum -%}
+{%- endfor -%}
+{%- endcapture -%}
+{%- assign _hn = _h2s.size | minus: 1 -%}
+{%- include d-sbar.html label="Detection page sections" items=_dbar n=_hn -%}
+{%- endif -%}
+{%- else %}
 <div class="hl-post-header{% if page.path contains 'hunting-detections' %} hl-post-header--detect{% endif %}">
   <div class="hl-post-header__eyebrow">
     {% if page.path contains "hunting-detections" %}
@@ -49,6 +116,7 @@ document.addEventListener('DOMContentLoaded', function () {
   <h1 class="hl-post-header__title">{% if page.path contains "hunting-detections" %}{% include defang-text.html text=page.title %}{% else %}{{ page.title }}{% endif %}</h1>{% if hl_tabbed %}
 {% include report-sponsor-bar.html part="report" %}{% endif %}
 </div>
+{%- endif %}
 {% unless hl_tabbed %}{% include sponsor-banner.html %}{% endunless %}
 <div class="hl-post-body">
   {% unless hl_tabbed %}<details class="hl-post-toc-mobile" id="hl-toc-mobile" data-pagefind-ignore>
@@ -935,4 +1003,5 @@ the coverage above is narrower than the rule set.</em></p>
 <script src="{{ '/assets/js/hl-hash.js' | relative_url }}" defer></script>
 <script src="{{ '/assets/js/detection-picker.js' | relative_url }}" defer></script>
 {% endif %}
+<script src="{{ '/assets/js/section-bar.js' | relative_url }}?v=1" defer></script>
 {% endif %}
