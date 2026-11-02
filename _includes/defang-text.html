@@ -279,6 +279,20 @@
   {%- unless forloop.last -%}{{ _dt_nl }}{%- endunless -%}
 {%- endfor -%}
 {%- endcapture -%}
+{%- comment -%} Liquid's split drops trailing empty strings, so the newlines that end the text are counted off the input and written back (without them "<b>Campaign:</b> 192.0.2.1\n<b>Date:</b>" would print "192.0.2.1Date:") {%- endcomment -%}
+{%- assign _dt_nlc = 0 -%}
+{%- assign _dt_rem = _dt_in -%}
+{%- for _dt_i in (1..6) -%}
+  {%- assign _dt_lc = _dt_rem | slice: -1 -%}
+  {%- if _dt_lc == _dt_nl -%}
+    {%- assign _dt_nlc = _dt_nlc | plus: 1 -%}
+    {%- assign _dt_rn = _dt_rem.size | minus: 1 -%}
+    {%- assign _dt_rem = _dt_rem | slice: 0, _dt_rn -%}
+  {%- endif -%}
+{%- endfor -%}
 {{- _dt_all -}}
+{%- if _dt_nlc > 0 -%}{{ _dt_nl }}{%- endif -%}
+{%- if _dt_nlc > 1 -%}{{ _dt_nl }}{%- endif -%}
+{%- if _dt_nlc > 2 -%}{{ _dt_nl }}{%- endif -%}
 {%- else -%}{{- _dt_in -}}
 {%- endif -%}

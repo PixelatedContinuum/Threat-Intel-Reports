@@ -90,6 +90,7 @@ const TEXT_CASES = [
   ['tftp://198.51.100.17/x and atftp://x.example.org/y', 'tftp://198[.]51[.]100[.]17/x and atftp://x[.]example[.]org/y'],
   ['http://web.archive.org/web/2026/https://shinyhunte.rs/p', 'hxxp://web[.]archive[.]org/web/2026/hxxps://shinyhunte[.]rs/p'],
   ['  lead and trail  ', '  lead and trail  '],
+  ['ends with newlines 198.51.100.17\n', 'ends with newlines 198[.]51[.]100[.]17\n'],
   ['GHOST Cryptojacker Kit: no indicator here.', 'GHOST Cryptojacker Kit: no indicator here.']
 ];
 
@@ -137,6 +138,7 @@ const HTML_CASES = [
   ['<a href="javascript:void(0)">js 1.2.3.4</a>', '<span class="hl-unlinked" data-unlinked="1">js 1[.]2[.]3[.]4</span>'],
   ['<a href="https://www.linkedin.com/in/josephrharrison">linkedin.com/in/josephrharrison</a> <a href="https://www.linkedin.com/in/josephrharrison">LinkedIn linkedin.com/x</a>', '<a href="https://www.linkedin.com/in/josephrharrison">linkedin.com/in/josephrharrison</a> <a href="https://www.linkedin.com/in/josephrharrison">LinkedIn linkedin[.]com/x</a>'],
   ['<span title="via openvpn.learn-address.sh and 198.51.100.17" data-title="openvpn.learn-address.sh">a</span> <a href="/x/" aria-label="see evil.example.org">go</a>', '<span title="via openvpn[.]learn-address[.]sh and 198[.]51[.]100[.]17" data-title="openvpn.learn-address.sh">a</span> <a href="/x/" aria-label="see evil[.]example[.]org">go</a>'],
+  ['<p><b>Campaign:</b> x-198.51.100.17\n<b>Date:</b> 2026 and 1.2.3.4\n\n<i>z</i> 5.6.7.8 \n</p>', '<p><b>Campaign:</b> x-198[.]51[.]100[.]17\n<b>Date:</b> 2026 and 1[.]2[.]3[.]4\n\n<i>z</i> 5[.]6[.]7[.]8 \n</p>'],
   ['<code data-literal="filename">ghost.sh</code> <code>ghost.sh</code>', '<code data-literal="filename">ghost.sh</code> <code>ghost[.]sh</code>']
 ];
 
