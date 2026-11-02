@@ -291,5 +291,5 @@ test('check-defang --site: the rendered check prints its denominators and what i
   const r = gate(fixtureSite({ 'index.html': '<p>nothing here</p>' }));
   assert.equal(r.status, 0);
   for (const label of ['self-test', 'allow data', 'pages', 'excluded', 'text', 'indicators', 'links', 'pre', 'literal']) assert.match(r.stdout, new RegExp('^  ' + label + '\\s', 'm'), label);
-  assert.match(r.stdout, /CANNOT SEE: text a script writes after load; the data-title search keys/);
+  assert.match(r.stdout, /CANNOT SEE: text a script writes after load \(check-browser-defang\.js reads that in a real browser\); the data-title search keys/);
 });
