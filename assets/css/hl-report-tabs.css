@@ -693,7 +693,7 @@ html:has(.hl-report-page) .hl-toast__label { font-size: var(--rv-fs); }
 /* ---------- Design D, D3 (T-0500.1.7.3): the Overview's scan layer. Tiles and panels are B's panels (radial and linear fill, 10px radius); report prose stays on the page. ---------- */
 .hl-rv-view--scan > .hl-rv-view-body { gap: 24px; }
 .hl-rv-tiles { order: 0; grid-template-columns: repeat(auto-fit, minmax(min(100%, 11.5rem), 1fr)); } /* c6: five or six tiles fit one row at 1440 as in the mockup (13.5rem wrapped them 4 + 1) */
-.hl-rv-tiles:not(:has(> :nth-child(5))) { grid-template-columns: repeat(auto-fill, minmax(min(100%, 11.5rem), 14rem)); } /* c6: three or four tiles keep the tile width instead of stretching across the row */
+@media (min-width: 700px) { .hl-rv-tiles:not(:has(> :nth-child(5))) { grid-template-columns: repeat(auto-fill, minmax(min(100%, 11.5rem), 14rem)); } } /* c6: three or four tiles keep the tile width instead of stretching across the row; c7c: desktop only, so the phone rule (two equal columns, below 700px) is not outvoted */
 .hl-rv-tilecell { --pn: var(--acc); }
 .hl-rv-tilecell:has([data-rv-tile="inside"]), .hl-rv-tilecell:has([data-rv-tile="threat"]), .hl-rv-tilecell:has([data-rv-tile="iocs"]) { --pn: #f87171; }
 .hl-rv-tilecell:has([data-rv-tile="techniques"]), .hl-rv-tilecell:has([data-rv-tile="dtech"]) { --pn: #fb923c; }
