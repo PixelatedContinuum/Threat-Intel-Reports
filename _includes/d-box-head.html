@@ -1,0 +1,2 @@
+{%- comment -%} The mono head of a box on a dashboard page (T-0500.1.7.4 b3): icon, label, optional note at the right. Params: icon, label, note (optional), accent (hex). {%- endcomment -%}
+<div class="hl-d-bh" style="--ea: {{ include.accent }};">{% include d-icon.html name=include.icon class="hl-d-bh__i" %}<h3 class="hl-d-bh__t">{{ include.label }}</h3>{% if include.note %}<span class="hl-d-bh__s">{{ include.note }}</span>{% endif %}</div>

@@ -1,0 +1,2 @@
+{%- comment -%} One entry of the sticky section bar (T-0500.1.7.4 b3). Params: id (the section's id), text, icon (a d-icon name), color (hex), count (optional). {%- endcomment -%}
+<a href="#{{ include.id }}" style="--tc: {{ include.color }};"><span class="hl-sbar__ib">{% include d-icon.html name=include.icon %}</span><span class="hl-sbar__tt"><span class="hl-sbar__tn">{{ include.count | default: "&nbsp;" }}</span><span>{{ include.text }}</span></span></a>

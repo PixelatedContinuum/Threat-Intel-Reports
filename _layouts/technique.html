@@ -14,68 +14,148 @@ layout: page
 
   Only published sources are indexed, so a technique mapped only by an
   unlisted report has no page and never reaches here.
+
+  Design D as a dashboard (T-0500.1.7.4 b3; decision 4: no tabs): plate, four KPI tiles, a fact-chip row, a sticky icon section bar, then the sections
+  in one flat column. The section ids are the old ones (reports detections actors).
 {%- endcomment -%}
 {%- assign t = site.data.attack_index.techniques | where: "id", page.technique_id | first -%}
-
-<div class="hl-page-header" style="--ph-accent: #fb923c;">
-  <div class="hl-page-header__label">ATT&amp;CK Technique{% if t and t.tactics.size > 0 %} &middot; {{ t.tactics | join: " / " }}{% endif %}</div>
-  <div class="hl-page-header__title"><code class="hl-xref__id">{{ page.technique_id }}</code> {% if t %}{{ t.name }}{% endif %}</div>
-  <div class="hl-page-header__desc">{% if t %}Mapped by {{ t.report_count }} report{% if t.report_count != 1 %}s{% endif %}, {{ t.rule_count }} detection rule{% if t.rule_count != 1 %}s{% endif %}{% if t.actor_count > 0 %} and {{ t.actor_count }} tracked actor{% if t.actor_count != 1 %}s{% endif %}{% endif %} on The Hunters Ledger. <a href="{{ t.mitre_url }}" rel="noopener">Technique page on attack.mitre.org</a>.{% else %}This technique is missing from <code>_data/attack_index.yml</code>. Re-run <code>generate-xref.js</code>.{% endif %}</div>
-</div>
+{%- capture _label -%}ATT&amp;CK Technique{% if t and t.tactics.size > 0 %} &middot; {{ t.tactics | join: " / " }}{% endif %}{%- endcapture -%}
+{%- capture _title -%}<code class="hl-xref__id">{{ page.technique_id }}</code> {% if t %}{{ t.name }}{% endif %}{%- endcapture -%}
+{%- capture _desc -%}{% if t %}Mapped by {{ t.report_count }} report{% if t.report_count != 1 %}s{% endif %}, {{ t.rule_count }} detection rule{% if t.rule_count != 1 %}s{% endif %}{% if t.actor_count > 0 %} and {{ t.actor_count }} tracked actor{% if t.actor_count != 1 %}s{% endif %}{% endif %} on The Hunters Ledger. <a href="{{ t.mitre_url }}" rel="noopener">Technique page on attack.mitre.org</a>.{% else %}This technique is missing from <code>_data/attack_index.yml</code>. Re-run <code>generate-xref.js</code>.{% endif %}{%- endcapture -%}
+{% include index-header.html accent="#fb923c" label=_label title=_title desc=_desc %}
 
 {%- if t -%}
-<div class="hl-xref">
+{%- assign n_rep = t.report_count | default: 0 -%}
+{%- assign n_rule = t.rule_count | default: 0 -%}
+{%- assign n_act = t.actor_count | default: 0 -%}
+{%- assign n_det = t.detections.size | default: 0 -%}
+{%- assign n_tac = t.tactics.size | default: 0 -%}
+{%- assign _parent = nil -%}{%- if page.technique_id contains "." -%}{%- assign _parent = page.technique_id | split: "." | first -%}{%- endif -%}
+<div class="hl-xref hl-dash">
 
-  <p class="hl-xref__nav"><a href="{{ '/techniques/' | relative_url }}">&larr; All techniques and the coverage heatmap</a></p>
-
-  <h2 id="reports">Reports</h2>
-  {%- if t.reports.size > 0 -%}
-  <p class="hl-xref__muted">Each report maps this technique in its own ATT&amp;CK table, at the confidence the report states. The link opens that table.</p>
-  <div class="hl-xref__list">
-    {%- for r in t.reports -%}
-    <div class="hl-xref__item hl-xref__item--report">
-      <div class="hl-xref__item-head">
-        <span class="hl-xref__role">Report</span>
-        <span class="hl-xref__item-meta">{{ r.date | date: "%b %Y" }}{% if r.tactic != "" %} &middot; under {{ r.tactic }}{% endif %}{% if r.confidence %} &middot; <span class="hl-xref__conf hl-xref__conf--{{ r.confidence | downcase }}">{{ r.confidence }}</span>{% endif %}</span>
-      </div>
-      <a class="hl-xref__item-title" href="{{ r.url | relative_url }}#mitre-attck-mapping">{{ r.title }}</a>
-    </div>
-    {%- endfor -%}
+  <div class="hl-d-kpis" style="--fc: 4;">
+    {%- capture _cap -%}Report{% if n_rep != 1 %}s{% endif %}{%- endcapture -%}
+    {%- if n_rep > 0 -%}{%- include d-kpi.html num=n_rep cap=_cap color="#a371f7" note="map it in their ATT&amp;CK table" href="#reports" -%}{%- else -%}{%- include d-kpi.html num=n_rep cap=_cap color="#4b5563" note="none: rules only" href="#reports" -%}{%- endif -%}
+    {%- capture _cap -%}Detection rule{% if n_rule != 1 %}s{% endif %}{%- endcapture -%}
+    {%- capture _note -%}across {{ n_det }} detection page{% if n_det != 1 %}s{% endif %}{%- endcapture -%}
+    {%- if n_det > 0 -%}{%- include d-kpi.html num=n_rule cap=_cap color="#4ade80" note=_note href="#detections" -%}{%- else -%}{%- include d-kpi.html num=n_rule cap=_cap color="#4b5563" note="none" href="#detections" -%}{%- endif -%}
+    {%- capture _cap -%}Tracked actor{% if n_act != 1 %}s{% endif %}{%- endcapture -%}
+    {%- if n_act > 0 -%}{%- include d-kpi.html num=n_act cap=_cap color="#e879f9" note="reports map it" href="#actors" -%}{%- else -%}{%- include d-kpi.html num=n_act cap=_cap color="#4b5563" note="none" -%}{%- endif -%}
+    {%- capture _cap -%}Tactic{% if n_tac != 1 %}s{% endif %}{%- endcapture -%}
+    {%- capture _note -%}{{ t.tactics | join: " / " }}{%- endcapture -%}
+    {%- include d-kpi.html num=n_tac cap=_cap color="#fb923c" note=_note -%}
   </div>
-  {%- else -%}
-  <p class="hl-xref__muted">No published report maps this technique in its ATT&amp;CK table; it is carried by detection rules only.</p>
-  {%- endif -%}
 
-  <h2 id="detections">Detection rules</h2>
-  {%- if t.detections.size > 0 -%}
-  <p class="hl-xref__muted">Rules whose ATT&amp;CK coverage line names this technique, by detection page. The link opens the page's coverage table.</p>
-  <div class="hl-xref__list">
-    {%- for d in t.detections -%}
-    <div class="hl-xref__item hl-xref__item--detection">
-      <div class="hl-xref__item-head">
-        <span class="hl-xref__role">Detection rules</span>
-        <span class="hl-xref__item-meta">{% if d.date %}{{ d.date | date: "%b %Y" }} &middot; {% endif %}{{ d.count }} rule{% if d.count != 1 %}s{% endif %}</span>
-      </div>
-      <a class="hl-xref__item-title" href="{{ d.url | relative_url }}">{{ d.title }}</a>
-      {%- if d.rules != "" -%}<div class="hl-xref__rules">{{ d.rules }}</div>{%- endif -%}
-    </div>
-    {%- endfor -%}
+  <div class="hl-chipbar" aria-label="Technique facts">
+    {%- for tac in t.tactics -%}<span class="hl-kc" style="--kc: #fb923c;">{{ tac }}</span>{%- endfor -%}
+    {%- if _parent -%}
+      {%- assign _pp = site.data.attack_index.techniques | where: "id", _parent | first -%}
+      {%- if _pp -%}<a class="hl-kc" style="--kc: #22d3ee;" href="{{ _parent | prepend: '/techniques/' | append: '/' | relative_url }}">Sub-technique of {{ _parent }}</a>{%- else -%}<span class="hl-kc" style="--kc: #22d3ee;">Sub-technique of {{ _parent }}</span>{%- endif -%}
+    {%- else -%}<span class="hl-kc" style="--kc: #22d3ee;">Parent technique</span>{%- endif -%}
+    <span class="hl-kc" style="--kc: #9ca3af;">ATT&amp;CK v{{ site.data.attack_index.attack_version }}</span>
   </div>
-  {%- else -%}
-  <p class="hl-xref__muted">No published detection rule on the site covers this technique yet.</p>
-  {%- endif -%}
+
+  <p class="hl-dash__nav hl-dash__gap"><a href="{{ '/techniques/' | relative_url }}">&larr; All techniques and the coverage heatmap</a></p>
+
+  {%- capture _bar -%}
+    {%- include d-sbar-item.html id="reports" text="Reports" icon="report" color="#a371f7" count=n_rep -%}
+    {%- include d-sbar-item.html id="detections" text="Detection rules" icon="shield" color="#4ade80" count=n_rule -%}
+    {%- if t.actors.size > 0 -%}{%- include d-sbar-item.html id="actors" text="Tracked actors" icon="user" color="#e879f9" count=n_act -%}{%- endif -%}
+  {%- endcapture -%}
+  {%- assign _nbar = 2 -%}{%- if t.actors.size > 0 %}{% assign _nbar = 3 %}{% endif -%}
+  {%- include d-sbar.html label="Technique sections" items=_bar n=_nbar -%}
+
+  <section class="hl-dsec" style="--da: #a371f7;">
+    {%- capture _cnt -%}{{ n_rep }} report{% if n_rep != 1 %}s{% endif %}{%- endcapture -%}
+    {%- include d-dhead.html id="reports" title="Reports" icon="report" count=_cnt -%}
+    {%- if t.reports.size > 0 -%}
+    {%- if t.reports.size > 1 -%}
+    {%- assign _nh = t.reports | where: "confidence", "HIGH" | size -%}
+    {%- assign _nm = t.reports | where: "confidence", "MODERATE" | size -%}
+    {%- assign _nl = t.reports | where: "confidence", "LOW" | size -%}
+    {%- assign _nd = t.reports | where: "confidence", "DEFINITE" | size -%}
+    {%- assign _ni = t.reports | where: "confidence", "INSUFFICIENT" | size -%}
+    {%- assign _nn = n_rep | minus: _nh | minus: _nm | minus: _nl | minus: _nd | minus: _ni -%}
+    <div class="hl-d-box hl-dash__gap" style="--pa: #a371f7;">
+      {%- capture _sn -%}{{ n_rep }} reports, one bar{%- endcapture -%}
+      {%- include d-box-head.html icon="pulse" label="Confidence the reports state" note=_sn accent="#a371f7" -%}
+      <div class="hl-stack" role="img" aria-label="Confidence mix">
+        {%- if _nh > 0 %}<i style="width: {{ _nh | times: 100.0 | divided_by: n_rep }}%; background: #4ade80;" title="HIGH {{ _nh }}"></i>{% endif -%}
+        {%- if _nm > 0 %}<i style="width: {{ _nm | times: 100.0 | divided_by: n_rep }}%; background: #fbbf24;" title="MODERATE {{ _nm }}"></i>{% endif -%}
+        {%- if _nl > 0 %}<i style="width: {{ _nl | times: 100.0 | divided_by: n_rep }}%; background: #fb923c;" title="LOW {{ _nl }}"></i>{% endif -%}
+        {%- if _nd > 0 %}<i style="width: {{ _nd | times: 100.0 | divided_by: n_rep }}%; background: #22d3ee;" title="DEFINITE {{ _nd }}"></i>{% endif -%}
+        {%- if _ni > 0 %}<i style="width: {{ _ni | times: 100.0 | divided_by: n_rep }}%; background: #9ca3af;" title="INSUFFICIENT {{ _ni }}"></i>{% endif -%}
+        {%- if _nn > 0 %}<i style="width: {{ _nn | times: 100.0 | divided_by: n_rep }}%; background: #4b5563;" title="not stated {{ _nn }}"></i>{% endif -%}
+      </div>
+      <div class="hl-cflegend">
+        {%- if _nh > 0 %}<span style="--lc: #4ade80;">HIGH <b>{{ _nh }}</b></span>{% endif -%}
+        {%- if _nm > 0 %}<span style="--lc: #fbbf24;">MODERATE <b>{{ _nm }}</b></span>{% endif -%}
+        {%- if _nl > 0 %}<span style="--lc: #fb923c;">LOW <b>{{ _nl }}</b></span>{% endif -%}
+        {%- if _nd > 0 %}<span style="--lc: #22d3ee;">DEFINITE <b>{{ _nd }}</b></span>{% endif -%}
+        {%- if _ni > 0 %}<span style="--lc: #9ca3af;">INSUFFICIENT <b>{{ _ni }}</b></span>{% endif -%}
+        {%- if _nn > 0 %}<span style="--lc: #4b5563;">not stated <b>{{ _nn }}</b></span>{% endif -%}
+      </div>
+    </div>
+    {%- endif -%}
+    <p class="hl-dash__muted hl-dash__muted--lead">Each report maps this technique in its own ATT&amp;CK table, at the confidence the report states. The link opens that table.</p>
+    <div class="hl-console">
+      <div class="hl-crow hl-crow--hd hl-crow--tech" aria-hidden="true"><span>Date &middot; tactic</span><span>Report (opens its ATT&amp;CK table)</span><span>Confidence</span></div>
+      {%- for r in t.reports -%}
+      {%- assign _cc = "#4b5563" -%}
+      {%- if r.confidence == "HIGH" %}{% assign _cc = "#4ade80" %}{% elsif r.confidence == "MODERATE" %}{% assign _cc = "#fbbf24" %}{% elsif r.confidence == "LOW" %}{% assign _cc = "#fb923c" %}{% elsif r.confidence == "DEFINITE" %}{% assign _cc = "#22d3ee" %}{% elsif r.confidence == "INSUFFICIENT" %}{% assign _cc = "#9ca3af" %}{% endif -%}
+      <div class="hl-crow hl-crow--tech hl-crow--edge" style="--ce: {{ _cc }};">
+        <div class="hl-crow__rh"><span class="hl-badge" style="--bc: #a371f7;">Report</span><span class="hl-meta">{{ r.date | date: "%b %Y" }}{% if r.tactic != "" %} &middot; under {{ r.tactic }}{% endif %}</span></div>
+        <a class="hl-crow__ttl" href="{{ r.url | relative_url }}#mitre-attck-mapping">{{ r.title }}</a>
+        <div>{% if r.confidence %}<span class="hl-badge" style="--bc: {{ _cc }};">{{ r.confidence }}</span>{% endif %}</div>
+      </div>
+      {%- endfor -%}
+    </div>
+    {%- else -%}
+    <p class="hl-dash__empty">No published report maps this technique in its ATT&amp;CK table; it is carried by detection rules only.</p>
+    {%- endif -%}
+  </section>
+
+  <section class="hl-dsec" style="--da: #4ade80;">
+    {%- capture _cnt -%}{{ n_rule }} rule{% if n_rule != 1 %}s{% endif %}{%- endcapture -%}
+    {%- include d-dhead.html id="detections" title="Detection rules" icon="shield" count=_cnt -%}
+    {%- if t.detections.size > 0 -%}
+    {%- assign max_r = 1 -%}{%- for d in t.detections -%}{%- if d.count > max_r -%}{%- assign max_r = d.count -%}{%- endif -%}{%- endfor -%}
+    <p class="hl-dash__muted hl-dash__muted--lead">Rules whose ATT&amp;CK coverage line names this technique, by detection page. The link opens the page's coverage table.</p>
+    <div class="hl-console">
+      {%- for d in t.detections -%}
+      <div class="hl-crow hl-crow--det hl-crow--edge" style="--ce: #4ade80;">
+        <div class="hl-crow__dm">
+          <span class="hl-badge" style="--bc: #4ade80;">Detection rules</span>
+          <a class="hl-crow__ttl" href="{{ d.url | relative_url }}">{{ d.title }}</a>
+          <span class="hl-meta">{% if d.date %}{{ d.date | date: "%b %Y" }} &middot; {% endif %}{{ d.count }} rule{% if d.count != 1 %}s{% endif %}</span>
+          {%- if d.rules != "" -%}<div class="hl-crow__rtxt">{{ d.rules }}</div>{%- endif -%}
+        </div>
+        {%- if t.detections.size > 1 -%}{%- assign _w = d.count | times: 100 | divided_by: max_r -%}{%- if _w < 5 %}{% assign _w = 5 %}{% endif -%}
+        <div class="hl-crow__mb"><span class="hl-mbar" aria-hidden="true" style="--mc: #4ade80;"><i style="width: {{ _w }}%;"></i></span><span class="hl-meta">{{ d.count }} rule{% if d.count != 1 %}s{% endif %} of {{ max_r }} max</span></div>
+        {%- else -%}<div></div>{%- endif -%}
+      </div>
+      {%- endfor -%}
+    </div>
+    {%- else -%}
+    <p class="hl-dash__empty">No published detection rule on the site covers this technique yet.</p>
+    {%- endif -%}
+  </section>
 
   {%- if t.actors.size > 0 -%}
-  <h2 id="actors">Tracked actors</h2>
-  <p class="hl-xref__muted">Designations whose reports map this technique.</p>
-  <ul class="hl-xref__actors">
-    {%- for id in t.actors -%}
-    {%- assign a = site.data.actors.actors | where: "id", id | first -%}
-    <li><a href="{{ id | prepend: '/actors/' | append: '/' | relative_url }}">{% if a and a.name %}{{ a.name }}{% else %}{{ id }}{% endif %}</a>{% if a %}: {{ a.type }}{% endif %}</li>
-    {%- endfor -%}
-  </ul>
+  <section class="hl-dsec" style="--da: #e879f9;">
+    {%- capture _cnt -%}{{ n_act }} actor{% if n_act != 1 %}s{% endif %}{%- endcapture -%}
+    {%- include d-dhead.html id="actors" title="Tracked actors" icon="user" count=_cnt -%}
+    <p class="hl-dash__muted hl-dash__muted--lead">Designations whose reports map this technique.</p>
+    <div class="hl-grid hl-grid--dash">
+      {%- for id in t.actors -%}
+      {%- assign a = site.data.actors.actors | where: "id", id | first -%}
+      <a class="hl-card hl-dash-card" href="{{ id | prepend: '/actors/' | append: '/' | relative_url }}" style="--sv: #e879f9;"><span class="hl-card__meta">Tracked actor</span><span class="hl-card__title">{% if a and a.name %}{{ a.name }}{% else %}{{ id }}{% endif %}</span>{% if a %}<span class="hl-dash-card__d">{{ a.type }}</span>{% endif %}</a>
+      {%- endfor -%}
+    </div>
+  </section>
   {%- endif -%}
 
-  <p class="hl-xref__licence">ATT&amp;CK v{{ site.data.attack_index.attack_version }}. MITRE ATT&amp;CK&reg; is a registered trademark of The MITRE Corporation; technique names are MITRE's and link to MITRE's own pages. The mapping on each linked page is this publication's reading of its own evidence.</p>
+  <p class="hl-dash__lic">ATT&amp;CK v{{ site.data.attack_index.attack_version }}. MITRE ATT&amp;CK&reg; is a registered trademark of The MITRE Corporation; technique names are MITRE's and link to MITRE's own pages. The mapping on each linked page is this publication's reading of its own evidence.</p>
 </div>
 {%- endif -%}
+<script src="{{ '/assets/js/section-bar.js' | relative_url }}?v=1" defer></script>

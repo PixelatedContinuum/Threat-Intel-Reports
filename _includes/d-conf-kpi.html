@@ -1,0 +1,8 @@
+{%- comment -%} A confidence KPI tile (T-0500.1.7.4 b3): the level as a word, its published percentage when there is one, and the site's four-step ladder (INSUFFICIENT empty, LOW 1, MODERATE 2, HIGH 3, DEFINITE 4). Params: level (as stored, upper case), pct (optional), cap. {%- endcomment -%}
+{%- assign _lv = include.level | upcase -%}
+{%- assign _c = "#9ca3af" -%}{%- assign _l = 0 -%}
+{%- if _lv == "LOW" -%}{%- assign _c = "#fb923c" -%}{%- assign _l = 1 -%}
+{%- elsif _lv == "MODERATE" -%}{%- assign _c = "#fbbf24" -%}{%- assign _l = 2 -%}
+{%- elsif _lv == "HIGH" -%}{%- assign _c = "#4ade80" -%}{%- assign _l = 3 -%}
+{%- elsif _lv == "DEFINITE" -%}{%- assign _c = "#22d3ee" -%}{%- assign _l = 4 -%}{%- endif -%}
+{%- if include.pct -%}{%- capture _u -%}{{ include.pct }}%{%- endcapture -%}{%- include d-kpi.html num=_lv cap=include.cap color=_c lad=_l word=true unit=_u -%}{%- else -%}{%- include d-kpi.html num=_lv cap=include.cap color=_c lad=_l word=true -%}{%- endif -%}

@@ -20,5 +20,19 @@
 {%- when "chev" -%}{%- capture _p -%}<path d="M6 9l6 6 6-6"/>{%- endcapture -%}
 {%- when "alert" -%}{%- capture _p -%}<path d="M12 3L2 20h20z"/><path d="M12 10v5M12 17.5v.5"/>{%- endcapture -%}
 {%- when "download" -%}{%- capture _p -%}<path d="M12 3v12M7 11l5 5 5-5M4 20h16"/>{%- endcapture -%}
+{%- when "list" -%}{%- capture _p -%}<path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/>{%- endcapture -%}
+{%- when "code" -%}{%- capture _p -%}<path d="M16 18l6-6-6-6M8 6l-6 6 6 6"/>{%- endcapture -%}
+{%- when "table" -%}{%- capture _p -%}<rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 10h18M9 4v16"/>{%- endcapture -%}
+{%- when "link" -%}{%- capture _p -%}<path d="M10 13a5 5 0 0 0 7 0l3-3a5 5 0 0 0-7-7l-1 1"/><path d="M14 11a5 5 0 0 0-7 0l-3 3a5 5 0 0 0 7 7l1-1"/>{%- endcapture -%}
+{%- when "key" -%}{%- capture _p -%}<circle cx="8" cy="15" r="4"/><path d="M11 12l9-9M16 7l3 3"/>{%- endcapture -%}
+{%- when "cpu" -%}{%- capture _p -%}<rect x="6" y="6" width="12" height="12" rx="2"/><path d="M9 2v4M15 2v4M9 18v4M15 18v4M2 9h4M2 15h4M18 9h4M18 15h4"/>{%- endcapture -%}
+{%- when "globe" -%}{%- capture _p -%}<circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/>{%- endcapture -%}
+{%- when "tag" -%}{%- capture _p -%}<path d="M3 12V3h9l9 9-9 9z"/><circle cx="7.5" cy="7.5" r="1.2"/>{%- endcapture -%}
+{%- when "feed" -%}{%- capture _p -%}<path d="M4 11a9 9 0 0 1 9 9M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1.4" fill="currentColor"/>{%- endcapture -%}
+{%- when "ext" -%}{%- capture _p -%}<path d="M6 3H3v10h10v-3M9 3h4v4M13 3L7 9"/>{%- endcapture -%}
+{%- when "mail" -%}{%- capture _p -%}<rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/>{%- endcapture -%}
+{%- when "bolt" -%}{%- capture _p -%}<path d="M13 2L4 14h7l-1 8 9-12h-7z"/>{%- endcapture -%}
+{%- when "clock" -%}{%- capture _p -%}<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>{%- endcapture -%}
+{%- when "star" -%}{%- capture _p -%}<path d="M12 3l2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1L3.2 9.5l6.1-.9z"/>{%- endcapture -%}
 {%- endcase -%}
 {%- if _p != "" -%}<svg class="hl-d-ico{% if include.class %} {{ include.class }}{% endif %}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">{{ _p }}</svg>{%- endif -%}

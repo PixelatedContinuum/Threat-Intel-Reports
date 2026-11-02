@@ -1,0 +1,3 @@
+{%- comment -%} The head of one flat section of a dashboard page (T-0500.1.7.4 b3): icon tile, the gradient h2 that carries the section's id (so every #fragment link still lands), and an optional count pill.
+  Params: id, title (HTML), icon, count (optional pill text). The section's accent is --da, set on the <section>. {%- endcomment -%}
+<div class="hl-dh"><span class="hl-dh__i">{% include d-icon.html name=include.icon %}</span><h2 id="{{ include.id }}">{{ include.title }}</h2>{% if include.count %}<span class="hl-dh__s">{{ include.count }}</span>{% endif %}</div>

@@ -1,0 +1,3 @@
+{%- comment -%} The sticky icon section bar of the actor, family and technique pages (T-0500.1.7.4 b3; decision 4: no tabs). One flat page, this bar jumps to a section and
+  assets/js/section-bar.js marks the one in view. Params: label (aria-label), items (the entries, from d-sbar-item.html), n (how many). Nothing is hidden: with no script every link is a plain #fragment link. {%- endcomment -%}
+<nav class="hl-sbar" aria-label="{{ include.label }}" data-pagefind-ignore><div class="hl-sbar__list" style="--n: {{ include.n }};">{{ include.items }}</div></nav>
