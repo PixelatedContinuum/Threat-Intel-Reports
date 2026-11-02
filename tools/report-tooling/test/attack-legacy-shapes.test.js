@@ -35,7 +35,7 @@ test('a legacy "Tactic / Technique | Name | Evidence" table builds the chain vie
     assert.deepEqual(labels,['Search procedure rows'.replace('procedure','mapping'),'Tactic'],'no Status, Confidence or Stage filter with nothing behind it');
     assert.equal(d.querySelectorAll('#hl-rv-view-chain .hl-rv-status-tile').length,0,'no Status tiles: Status is never invented');
     assert.equal(d.querySelectorAll('#hl-rv-view-chain .hl-rv-observed, #hl-rv-view-chain .hl-rv-inferred, #hl-rv-view-chain .hl-rv-not-shown').length,0);
-    assert.match(d.querySelector('#tab-overview .hl-rv-view-summary p').textContent,/^3 techniques · 3 mapping rows$/);
+    assert.match(d.querySelector('#tab-overview .hl-rv-view-summary p').textContent,/^3 techniques$/);
     const tactic=[...d.querySelectorAll('#hl-rv-view-chain .hl-rv-filters select')][0];
     assert.deepEqual([...tactic.options].map(o=>o.value),['','Execution','Persistence']);
   }finally{f.w.close();}
@@ -51,7 +51,7 @@ test('a legacy "Tactic | Technique ID | Technique Name" table builds the same vi
   const f=page([['overview'],['chain',A2]]);
   try{
     assert.equal(f.d.querySelectorAll('#tab-chain #procedures tbody tr').length,3);
-    assert.match(f.d.querySelector('#tab-overview .hl-rv-view-summary p').textContent,/^3 techniques · 3 mapping rows$/);
+    assert.match(f.d.querySelector('#tab-overview .hl-rv-view-summary p').textContent,/^3 techniques$/);
     assert.match(f.d.querySelector('#hl-rv-view-chain .hl-rv-unstated').textContent,/Status \(OBSERVED, INFERRED, NOT SHOWN\), Scope\./,'Confidence is in the table, so it is not listed');
     assert.deepEqual([...f.d.querySelectorAll('#hl-rv-view-chain .hl-rv-filters select')][1].options.length>1,true);
   }finally{f.w.close();}
@@ -62,7 +62,7 @@ test('a Status-bearing table is read exactly as before: Status filter and tiles,
     const d=f.d;
     assert.equal(d.querySelectorAll('#hl-rv-view-chain .hl-rv-unstated').length,0);assert.equal(d.querySelectorAll('#hl-rv-view-chain .hl-rv-status-tile').length,3);
     assert.match(d.querySelector('#tab-chain .hl-rv-view-summary p').textContent,/^0 stages, 2 procedures: 1 observed, 1 inferred$/);
-    assert.match(d.querySelector('#tab-overview .hl-rv-view-summary p').textContent,/^2 techniques · 2 procedure rows$/);
+    assert.match(d.querySelector('#tab-overview .hl-rv-view-summary p').textContent,/^2 techniques$/);
     assert.deepEqual([...d.querySelectorAll('#hl-rv-view-chain .hl-rv-filters label')].map(l=>l.firstChild.textContent),['Search procedure rows','Status','Confidence','Stage','Tactic']);
   }finally{f.w.close();}
 });
@@ -111,7 +111,7 @@ test('the gate and the layout agree on Overview tiles for every legacy shape (th
     const f=page([['overview'],['chain',html]]);
     try{
       const want=shapes(f).overview.tiles,got=[...f.d.querySelectorAll('#tab-overview .hl-rv-tile strong')].map(e=>e.textContent.trim());
-      assert.deepEqual(got,want);assert.equal(want.length,2);
+      assert.deepEqual(got,want);assert.equal(want.length,1,'a report with no victim grade table gets the fallback set: one techniques tile');
     }finally{f.w.close();}
   }
 });

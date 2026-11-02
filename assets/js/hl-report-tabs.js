@@ -240,6 +240,56 @@
   var feedMatch = indicatorText.match(/(?:carries|contains) (\d+) operator-side indicator entries/i);
   var victimBlock = sections.find(function (s) { return s.token === 'victims' && s.heading && /Who.*Hit|Victim/i.test(text(s.heading)); });
   var tallyParagraph = victimBlock && Array.from(victimBlock.node.querySelectorAll('p')).find(function (p) { return /\d+ ACCESS SHOWN.*\d+ COMPROMISED.*\d+ REACHED.*\d+ LISTED/.test(text(p)); });
+  // ---- Design D, D3 (T-0500.1.7.3): the data the Overview's scan layer reads. Every part is built from the tables and site data this report has; nothing is invented. ----
+  var siteData = {}, siteNode = document.getElementById('hl-report-site-data');
+  if (siteNode) { try { siteData = JSON.parse(siteNode.textContent) || {}; } catch (e) { console.warn('Report site data unavailable', e); } }
+  var RISK_HEAD = /^(Risk (Dimension|Factor)|Dimension)$/i, RISK_SCORE = /^Score|^Rating/i, RISK_WHY = /Rationale|Justification|Business Impact|Assessment|Evidence|Notes?|Key Driver|Explanation/i;
+  // The risk assessment tables of the Overview (a report may carry more than one). Header matching is tolerant: the first column names the dimension, one column holds the score or rating.
+  var riskTables = models.filter(function (m) { return m.token === 'overview' && col(m, RISK_HEAD) >= 0 && col(m, RISK_SCORE) >= 0; });
+  var RISK_WORDS = { LOW: 1, MEDIUM: 2, MODERATE: 2, HIGH: 3, CRITICAL: 4 };
+  function parseScore(value) {
+    var t = String(value).replace(/\s+/g, ' ').trim(), n = t.match(/^(\d+(?:\.\d+)?)\s*(?:\/\s*(\d+(?:\.\d+)?)|out of\s*(\d+(?:\.\d+)?))?/);
+    if (n) return { text: t, num: +n[1], max: +(n[2] || n[3] || 10), rest: t.slice(n[0].length).replace(/^[\s,;:()\-]+|[\s,;:()\-]+$/g, '') };
+    var w = t.match(/^(CRITICAL|HIGH|MEDIUM|MODERATE|LOW)\b/i);
+    return { text: t, num: NaN, max: 10, word: w ? w[1].toUpperCase() : '', rest: '' };
+  }
+  function riskRows(m) {
+    var nameC = col(m, RISK_HEAD), scoreC = col(m, RISK_SCORE), weightC = col(m, /^Weight/i), sevC = col(m, /^Severity$/i);
+    var whyC = m.headers.findIndex(function (h, i) { return i !== nameC && i !== scoreC && i !== weightC && i !== sevC && RISK_WHY.test(h); });
+    return m.rows.map(function (r) { return { name: r[nameC], score: parseScore(r[scoreC]), weight: weightC >= 0 ? r[weightC] : '', sev: sevC >= 0 ? r[sevC] : '', why: whyC >= 0 ? r[whyC] : '', total: /^overall\b/i.test(r[nameC]) }; });
+  }
+  function scoreValue(s) { return String(s.num) + '/' + String(s.max); }
+  // The overall score: the table's Overall row, else the one "N out of 10" the risk section's first paragraph states.
+  function overallRisk() {
+    for (var i = 0; i < riskTables.length; i++) {
+      var row = riskRows(riskTables[i]).find(function (r) { return r.total && isFinite(r.score.num); });
+      if (row) return { value: scoreValue(row.score), rest: row.score.rest, from: text(riskTables[i].heading) + ', table ' + riskTables[i].index + ', the Overall row', model: riskTables[i], heading: riskTables[i].heading };
+    }
+    var sec = sections.find(function (s) { return s.token === 'overview' && s.heading && /risk/i.test(text(s.heading)); });
+    var para = sec && sec.node.querySelector('p');
+    if (!para) return null;
+    var found = []; text(para).replace(/(\d+(?:\.\d+)?)\s*(?:\/|out of)\s*10\b/g, function (_, n) { if (found.indexOf(n) < 0) found.push(n); });
+    return found.length === 1 ? { value: found[0] + '/10', rest: '', from: text(sec.heading) + ', its first paragraph', model: null, heading: sec.heading } : null;
+  }
+  var threatLevel = (function () {
+    var m = sections.flatMap(function (s) { return Array.from(s.node.children); }).filter(function (n) { return n.tagName === 'P' && /^(Campaign Identifier|Last Updated|Threat Level):/.test(text(n)); })
+      .map(text).join(' ').match(/(?:^|\s)Threat Level:\s*(CRITICAL|HIGH|MEDIUM|MODERATE|LOW)\b/i);
+    return m ? m[1] : null;
+  })();
+  function tacticName(value) { return value.replace(/\s*\(?T\d{4}.*$/, '').replace(/\s*[·:|/-]\s*$/, '').trim(); }
+  var TACTIC_ORDER = ['Reconnaissance', 'Resource Development', 'Initial Access', 'Execution', 'Persistence', 'Privilege Escalation', 'Stealth', 'Defense Evasion', 'Credential Access', 'Discovery', 'Lateral Movement', 'Collection', 'Command and Control', 'Exfiltration', 'Defense Impairment', 'Impact'];
+  // The chronology as dated events: the date text as printed, the observation, and a coordinate where the date parses (the visible date keeps its own qualifier).
+  function chronologyRows(m) {
+    var dc = col(m, /^Date|^Time|^When/i), ec = col(m, /Observation|Event/i);
+    var years = new Set(m.rows.flatMap(function (x) { return x[dc].match(/\b20\d{2}\b/g) || []; }));
+    return m.rows.map(function (r) {
+      var display = r[dc], event = r[ec], dates = display.match(/\d{4}-\d{2}-\d{2}/g) || [];
+      var quality = /disagree|disput/i.test(display + ' ' + event) ? 'disputed' : /inferred/i.test(display) ? 'year-inferred' : /\bto\b/.test(display) ? 'range' : 'given';
+      var start = dates[0];
+      if (!start && years.size === 1) { var stamp = Date.parse(display.replace(/\s*\(.*?\)/g, '') + ' ' + Array.from(years)[0]); if (!isNaN(stamp)) start = new Date(stamp).toISOString().slice(0, 10); }
+      return { display: display, event: event, quality: quality, when: Date.parse(start), end: dates[1] && quality === 'range' ? Date.parse(dates[1]) : Date.parse(start) };
+    });
+  }
   var bar = make('nav', 'hl-rv-bar', null);
   bar.setAttribute('aria-label', 'Report sections');
   content.parentNode.insertBefore(bar, content);
@@ -357,7 +407,7 @@
   function select(i) {
     active = i; currentSection = null; page.dataset.rvHue = TOKENS[i];
     tabs.forEach(function (tab, j) { tab.setAttribute('aria-selected', String(i === j)); tab.tabIndex = i === j ? 0 : -1; panels[j].hidden = i !== j; });
-    currentLabel.textContent = NAMES[i]; menuLinks.forEach(function (a, j) { if (j === i) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current'); }); closeMenu(false); fillMenuSections(); measureBar(); updateProgress();
+    currentLabel.textContent = NAMES[i]; menuLinks.forEach(function (a, j) { if (j === i) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current'); }); closeMenu(false); fillMenuSections(); measureBar(); updateProgress(); clearLink();
   }
   function mode(one) {
     onepage = one; pageContents.hidden = !one; currentSection = null; root.classList.toggle('hl-onepage', one); root.classList.toggle('hl-tabbed', !one);
@@ -496,50 +546,325 @@
     table.parentElement.before(area); apply();
     rows.forEach(function (r) { r.addEventListener('hl-rv-reveal', function () { controls.forEach(function (c) { c.value = ''; }); apply(); }); });
   }
-  // A stat tile is the number, its label and where it leads. Its "How counted" note is a cell of the note row
-  // that sits directly under the tile grid (one note under its tile), so the tiles stay short. On a phone the row
-  // is one column and each note is keyed by its tile's value and label.
-  function tile(parent, value, label, how, tok, short) {
+  // ---- Design D, D3: the scan band, the risk bars and the judgments view of the Overview, and the linked highlighting between them and the summary prose ----
+  var GRADE_HUES = { 'ACCESS SHOWN': '#f87171', COMPROMISED: '#fb923c', REACHED: '#7aa7f0', LISTED: '#6f7681', CURRENT: '#22d3ee', OTHER: '#8a8a8a' };
+  var STATUS_HUES = { OBSERVED: '#22d3ee', INFERRED: '#a371f7', 'NOT SHOWN': '#6f7681' };
+  var GRADE_ORDER = ['ACCESS SHOWN', 'COMPROMISED', 'REACHED', 'LISTED', 'CURRENT', 'OTHER'];
+  var LINK = {};   // key -> { label, terms, cs (case sensitive), els }
+  function linkKey(el, key, label, terms, cs) {
+    el.dataset.rvKey = key;
+    if (!LINK[key]) LINK[key] = { label: label, terms: terms, cs: !!cs, els: [] };
+    LINK[key].els.push(el);
+  }
+  function pnPanel(parent, cls, title, sub, tok, note) {
+    var box = make('section', 'hl-rv-pn ' + cls, null, parent); box.setAttribute('role', 'group'); box.setAttribute('aria-label', title);
+    var head = make('div', 'hl-rv-pn-head', null, box);
+    icon(TAB_ICONS[tok], 17, head, 'hl-rv-eyebrow-icon');
+    make('h3', 'hl-rv-pn-title', title, head); make('p', 'hl-rv-pn-sub', sub, head);
+    if (note) infoButton(head, [make('p', 'hl-rv-pn-note', note)], 'How counted: ' + title);
+    return box;
+  }
+  function gradeOf(v) { var m = String(v).match(/^(ACCESS SHOWN|COMPROMISED|REACHED|LISTED|CURRENT)/); return m ? m[1] : 'OTHER'; }
+  function plainName(v) { return v.replace(/^(?:an?|the)\s+/i, '').replace(/[\s.]+$/, ''); }
+  function fromNote(m) { return text(m.heading) + ', table ' + m.index + ', ' + m.rows.length + ' rows'; }
+  function scanBand(body) {
+    var band = make('div', 'hl-rv-scan', null, body), n = 0;
+    if (victims && col(victims, /Grade/i) >= 0) {
+      var vg = col(victims, /Grade/i), counts = {};
+      victims.rows.forEach(function (r) { var k = gradeOf(r[vg]); counts[k] = (counts[k] || 0) + 1; });
+      var pn = pnPanel(band, 'hl-rv-pn--grades', 'Victims by access grade', victims.rows.length + ' organisation rows', 'victims',
+        'How counted: one square for each row of the victim table, coloured by that row\'s Grade. From ' + fromNote(victims) + '.');
+      var order = GRADE_ORDER.filter(function (k) { return counts[k]; });
+      var squares = make('div', 'hl-rv-squares', null, pn); squares.setAttribute('role', 'img');
+      squares.setAttribute('aria-label', victims.rows.length + ' organisation rows by grade: ' + order.map(function (k) { return counts[k] + ' ' + k; }).join(', '));
+      victims.rows.map(function (r, i) { return { k: gradeOf(r[vg]), i: i }; }).sort(function (a, b) { return GRADE_ORDER.indexOf(a.k) - GRADE_ORDER.indexOf(b.k) || a.i - b.i; })
+        .forEach(function (o) { var sq = make('span', 'hl-rv-sq', null, squares); sq.dataset.rvGrade = o.k; sq.style.setProperty('--seg', GRADE_HUES[o.k]); });
+      var legend = make('div', 'hl-rv-legend', null, pn); legend.setAttribute('role', 'group'); legend.setAttribute('aria-label', 'Grades');
+      order.forEach(function (k) { var b = make('button', 'hl-rv-key', null, legend); b.type = 'button'; b.setAttribute('aria-pressed', 'false'); b.style.setProperty('--seg', GRADE_HUES[k]);
+        make('span', 'hl-rv-key-sw', null, b); make('span', 'hl-rv-key-name', k === 'OTHER' ? 'Other grades' : k, b); make('strong', '', counts[k], b); linkKey(b, 'grade:' + k, k, k === 'OTHER' ? [] : [k], true); });
+      var top = victims.rows.filter(function (r) { return /^(ACCESS SHOWN|COMPROMISED)$/.test(gradeOf(r[vg])); });
+      if (top.length) {
+        var list = make('ul', 'hl-rv-orgs', null, pn);
+        top.slice(0, 8).forEach(function (r) { var li = make('li', '', null, list), b = make('button', 'hl-rv-org', null, li); b.type = 'button'; b.setAttribute('aria-pressed', 'false');
+          make('span', 'hl-rv-org-name', r[0], b); var gk = gradeOf(r[vg]); var pill = make('span', 'hl-rv-org-grade', gk, b); pill.style.setProperty('--seg', GRADE_HUES[gk]);
+          var nm = plainName(r[0]); linkKey(b, 'org:' + r[0], r[0], nm.length >= 8 ? [nm] : [], false); });
+        if (top.length > 8) make('p', 'hl-rv-pn-more', (top.length - 8) + ' more organisation rows at these two grades are in the Victims tab.', pn);
+      }
+      make('p', 'hl-rv-linkread', 'Hover or tap a grade or an organisation to light where the summary names it.', pn).setAttribute('role', 'status');
+      n++;
+    }
+    // The tactic heat strip: one column per tactic, one cell per procedure row (status-coloured when the table has Status), else one cell per technique the detection page covers.
+    var heat = null, heatSource = '';
+    if (attack) heat = attack.rows.map(function (r) { return { tactic: tacticName(cell(r, attackC.tactic)) || 'Unlabelled', status: attackC.status >= 0 ? r[attackC.status] : '', label: cell(r, attackC.id) + ' ' + cell(r, attackC.name) }; });
+    else if (siteData.techniques && siteData.techniques.rows && siteData.techniques.rows.length) { heat = siteData.techniques.rows.map(function (r) { return { tactic: r.tactic, status: '', label: r.id + ' ' + r.name }; }); heatSource = 'detection'; }
+    if (heat && heat.length) {
+      var cols = {}, tacticList = [];
+      heat.forEach(function (h) { if (!cols[h.tactic]) { cols[h.tactic] = []; tacticList.push(h.tactic); } cols[h.tactic].push(h); });
+      var seen = tacticList.slice(); tacticList.sort(function (a, b) { var x = TACTIC_ORDER.indexOf(a), y = TACTIC_ORDER.indexOf(b); return (x < 0 ? 99 : x) - (y < 0 ? 99 : y) || seen.indexOf(a) - seen.indexOf(b); });
+      var hasStatus = !heatSource && attackC.status >= 0;
+      var sub = heatSource ? heat.length + ' technique' + (heat.length === 1 ? '' : 's') + ' in ' + tacticList.length + ' tactic' + (tacticList.length === 1 ? '' : 's') + ', from the detection page' : heat.length + (attack.legacy ? ' mapping rows' : ' procedure rows') + ', ' + tacticList.length + ' tactic' + (tacticList.length === 1 ? '' : 's');
+      var hp = pnPanel(band, 'hl-rv-pn--heat', heatSource ? 'Techniques by tactic (detection coverage)' : 'Techniques by tactic', sub, 'chain',
+        heatSource ? 'How counted: one cell for each technique ID the report\'s detection rules cover, grouped by the tactic the detection page gives it. The report has no ATT&CK mapping table of its own, so every cell is one colour. From the detection page (_data/detection_attack.yml).'
+          : 'How counted: one cell for each row of the ATT&CK table, grouped by its Tactic cell' + (hasStatus ? ' and coloured by its Status' : '; the report states no Status, so every cell is one colour') + '. From ' + fromNote(attack) + '.');
+      if (hasStatus) {
+        var lg = make('div', 'hl-rv-heat-legend', null, hp);
+        ['OBSERVED', 'INFERRED', 'NOT SHOWN'].forEach(function (k) { var it = make('span', '', null, lg); var sw = make('span', 'hl-rv-cell hl-rv-cell--sw', null, it); sw.dataset.rvStatus = k; sw.style.setProperty('--seg', STATUS_HUES[k]); make('span', '', k.charAt(0) + k.slice(1).toLowerCase(), it); });
+      }
+      var scroller = make('div', 'hl-rv-heat', null, hp); scroller.tabIndex = 0; scroller.setAttribute('role', 'region'); scroller.setAttribute('aria-label', 'Tactic heat strip');
+      tacticList.forEach(function (tc) {
+        var colEl = make('div', 'hl-rv-heatcol', null, scroller);
+        var hb = make('button', 'hl-rv-heathead', null, colEl); hb.type = 'button'; hb.setAttribute('aria-pressed', 'false'); hb.setAttribute('aria-label', tc + ', ' + cols[tc].length + ' ' + (heatSource ? 'technique' : 'row') + (cols[tc].length === 1 ? '' : 's'));
+        make('strong', '', cols[tc].length, hb); make('span', '', tc, hb); linkKey(hb, 'tactic:' + tc, tc, tc === 'Unlabelled' ? [] : [tc], false);
+        var cells = make('div', 'hl-rv-heatcells', null, colEl);
+        cols[tc].forEach(function (h) { var c = make('span', 'hl-rv-cell', null, cells); c.title = h.label; if (hasStatus) { c.dataset.rvStatus = h.status; c.style.setProperty('--seg', STATUS_HUES[h.status] || 'var(--acc)'); } });
+      });
+      make('p', 'hl-rv-linkread', 'Hover or tap a tactic to light the words in the summary that name it.', hp).setAttribute('role', 'status');
+      n++;
+    }
+    if (chronology) {
+      var crows = chronologyRows(chronology);
+      if (crows.every(function (r) { return !isNaN(r.when); })) {
+        var tp = pnPanel(band, 'hl-rv-pn--time', 'Observation window', crows.length + ' dated events, from the chronology', 'timeline',
+          'How counted: one marker for each row of the chronology, placed by its printed date (a range sits at its middle). The full chronology, with every date as written, is in the Timeline tab. From ' + fromNote(chronology) + '.');
+        var min = Math.min.apply(null, crows.map(function (r) { return r.when; })), max = Math.max.apply(null, crows.map(function (r) { return r.end; }));
+        var rail = make('div', 'hl-rv-crail', null, tp), detail = make('p', 'hl-rv-cdetail', 'Select an event to read its date and observation.', tp); detail.setAttribute('role', 'status');
+        var marks = crows.map(function (r, i) {
+          var b = make('button', 'hl-rv-cmark hl-rv-' + r.quality, null, rail); b.type = 'button'; b.dataset.rvEvent = i; b.setAttribute('aria-pressed', 'false'); b.setAttribute('aria-label', 'Event ' + (i + 1) + ', ' + r.display + ': ' + r.event);
+          make('span', '', i + 1, b); b.dataset.start = r.when; b.dataset.end = r.end;
+          b.style.left = (max === min ? 50 : 100 * ((r.when + r.end) / 2 - min) / (max - min)) + '%';
+          b.addEventListener('click', function () { marks.forEach(function (x) { x.setAttribute('aria-pressed', String(x === b)); }); detail.textContent = '';
+            make('strong', '', r.display, detail); detail.appendChild(document.createTextNode(' · ' + r.event + ' ')); var more = link('Read it in the Timeline tab', '#' + chronology.heading.id, detail); more.className = 'hl-rv-cmore'; });
+          return b;
+        });
+        var ends = make('div', 'hl-rv-cends', null, tp); make('span', '', crows[0].display, ends); make('span', '', crows[crows.length - 1].display, ends);
+        function place() {
+          var width = rail.clientWidth; if (!width) return; var slots = [];
+          marks.forEach(function (b) { var a = +b.dataset.start, z = +b.dataset.end, x = max === min ? width / 2 : ((a + z) / 2 - min) / (max - min) * width, w = 44, slot = 0;
+            while (slots[slot] && slots[slot].some(function (s) { return x - w / 2 < s.r && x + w / 2 > s.l; })) slot++;
+            if (!slots[slot]) slots[slot] = []; slots[slot].push({ l: x - w / 2, r: x + w / 2 }); b.style.top = slot * 46 + 'px'; });
+          rail.style.height = Math.max(1, slots.length) * 46 + 'px';
+        }
+        new ResizeObserver(place).observe(rail);
+        n++;
+      }
+    }
+    if (!n) band.remove();
+  }
+  // The risk assessment bars: one bar for every row of each risk table in the Overview, the score and the weight when the table has them, the row's own justification beside it.
+  function riskPanel(body) {
+    if (!riskTables.length) return;
+    var rowsTotal = riskTables.reduce(function (s, m) { return s + m.rows.length; }, 0);
+    var pn = pnPanel(body, 'hl-rv-pn--risk', 'Risk assessment', rowsTotal + ' rows' + (riskTables.length > 1 ? ' in ' + riskTables.length + ' tables' : ''), 'confidence',
+      'How counted: one bar for each row of the risk table, as long as its score is of its maximum (a word rating such as HIGH is drawn on a four-step scale and marked as one); the weight and the justification are the table\'s own text. The table stays in the report. From ' + riskTables.map(fromNote).join('; ') + '.');
+    riskTables.forEach(function (m) {
+      var wrap = make('div', 'hl-rv-risk', null, pn); if (riskTables.length > 1) make('h4', 'hl-rv-risk-cap', text(m.heading) + ', table ' + m.index, wrap);
+      var list = make('ol', 'hl-rv-dims', null, wrap);
+      riskRows(m).forEach(function (r) {
+        var li = make('li', 'hl-rv-riskrow' + (r.total ? ' is-total' : ''), null, list), head = make('div', 'hl-rv-riskhead', null, li);
+        make('span', 'hl-rv-riskname', r.name, head);
+        var sc = make('span', 'hl-rv-riskscore', null, head);
+        if (isFinite(r.score.num)) { make('strong', '', String(r.score.num), sc); make('small', '', '/' + r.score.max, sc); } else make('strong', 'hl-rv-riskword', r.score.text, sc);
+        var meta = make('span', 'hl-rv-riskmeta', null, head);
+        if (r.weight) make('span', '', r.weight + ' weight', meta);
+        if (isFinite(r.score.num) && r.score.rest) make('span', 'hl-rv-riskrest', r.score.rest, meta);
+        if (r.sev) make('span', 'hl-rv-riskrest', r.sev, meta);
+        var bar = make('div', 'hl-rv-riskbar', null, li); bar.setAttribute('role', 'img');
+        var fill = make('i', '', null, bar), frac, scale;
+        if (isFinite(r.score.num)) { frac = Math.max(0, Math.min(1, r.score.num / (r.score.max || 10))); scale = 'num'; bar.setAttribute('aria-label', r.score.num + ' out of ' + r.score.max); }
+        else if (RISK_WORDS[r.score.word]) { frac = RISK_WORDS[r.score.word] / 4; scale = 'word'; bar.setAttribute('aria-label', r.score.word + ' rating, drawn on a four-step scale'); }
+        else { frac = 0; scale = 'none'; bar.setAttribute('aria-label', 'No numeric score: ' + r.score.text); }
+        bar.dataset.rvScale = scale; fill.style.width = Math.round(frac * 1000) / 10 + '%';
+        if (r.why) make('p', 'hl-rv-riskwhy', r.why, li);
+      });
+    });
+  }
+  // The judgments view: every row of the judgments table, shown in full, with a chip for each printed confidence and its count; the chips filter this copy only.
+  var PIPS = { DEFINITE: 5, HIGH: 4, MODERATE: 3, LOW: 2, INSUFFICIENT: 1 };
+  function judgmentsPanel(body) {
+    if (!judgments) return;
+    var cc = col(judgments, /Confidence/i), nc = col(judgments, /Claim|Judgment|Finding/i), wc = col(judgments, /change/i);
+    var pn = pnPanel(body, 'hl-rv-pn--judg', 'Judgments', judgments.rows.length + ' judgments, each with how sure the report is' + (wc >= 0 ? ' and what would change it' : ''), 'confidence',
+      'How counted: one row for each row of the judgments table, in the table\'s order, with its confidence as printed. A range or a compound level is a chip of its own and is never rescaled. The Confidence tab keeps the table and its own view. From ' + fromNote(judgments) + '.');
+    var counts = {}; judgments.rows.forEach(function (r) { counts[r[cc]] = (counts[r[cc]] || 0) + 1; });
+    var chips = make('div', 'hl-rv-jchips', null, pn); chips.setAttribute('role', 'group'); chips.setAttribute('aria-label', 'Filter judgments by confidence');
+    var res = make('p', 'hl-rv-count', '', pn); res.setAttribute('role', 'status');
+    var list = make('ol', 'hl-rv-jlist' + (wc < 0 ? ' hl-rv-jlist--two' : ''), null, pn), rows = [];
+    function chip(label, value, n) { var b = make('button', 'hl-rv-jchip', null, chips); b.type = 'button'; b.setAttribute('aria-pressed', String(value === '')); b.dataset.rvConf = value; if (PIPS[value]) b.classList.add('hl-rv-lv-' + value);
+      make('span', '', label, b); b.appendChild(document.createTextNode(' ')); make('strong', '', n, b);
+      b.addEventListener('click', function () { Array.from(chips.children).forEach(function (c) { c.setAttribute('aria-pressed', String(c === b)); });
+        var shown = 0; rows.forEach(function (li) { var hit = !value || li.dataset.rvConf === value; li.hidden = !hit; if (hit) shown++; });
+        res.textContent = value ? 'Showing ' + shown + ' of ' + judgments.rows.length + ' judgments' : ''; }); }
+    chip('All', '', judgments.rows.length); Object.keys(counts).forEach(function (v) { chip(v, v, counts[v]); });
+    judgments.rows.forEach(function (r, i) {
+      var li = make('li', 'hl-rv-jrow', null, list); li.dataset.rvConf = r[cc]; rows.push(li);
+      make('span', 'hl-rv-jn', String(i + 1).padStart(2, '0'), li).setAttribute('aria-hidden', 'true');
+      make('p', 'hl-rv-claim', r[nc], li);
+      var cf = make('div', 'hl-rv-jconf' + (PIPS[r[cc]] ? ' hl-rv-lv-' + r[cc] : ''), null, li);
+      if (PIPS[r[cc]]) { var pips = make('span', 'hl-rv-pips', null, cf); pips.setAttribute('aria-hidden', 'true'); for (var k = 0; k < 5; k++) make('i', k < PIPS[r[cc]] ? 'on' : '', null, pips); }
+      make('span', 'hl-rv-jword', r[cc], cf);
+      if (wc >= 0) { var ch = make('p', 'hl-rv-jchange', null, li); make('small', '', 'What would change it', ch); ch.appendChild(document.createTextNode(' ' + r[wc])); }
+    });
+    if (wc < 0) make('p', 'hl-rv-note hl-rv-unstated', 'Not stated in this report\'s table: what would change each judgment. The view lists the rows as printed.', pn);
+  }
+  // Linked highlighting. The summary prose is the Overview's own source sections. A grade, a tactic or an organisation named in a panel is wrapped, wherever the prose says it, in a plain span
+  // (.hl-rv-hit). The span adds no text, no id and no attribute the report reads: it is not marked as chrome because the completeness check removes chrome whole, and the words inside
+  // must stay. Hovering or focusing a key in a panel lights its spans; a press pins it. On a phone a pinned key shows a bar that scrolls the first place into view.
+  function wrapHits() {
+    var keys = Object.keys(LINK).filter(function (k) { return LINK[k].terms.length; });
+    if (!keys.length) return;
+    var roots = Array.from((panels[0] || document.createElement('div')).querySelectorAll('.hl-rv-source')); if (!roots.length) return;
+    function esc(s) { return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); }
+    [true, false].forEach(function (cs) {
+      var terms = []; keys.forEach(function (k) { if (LINK[k].cs === cs) LINK[k].terms.forEach(function (t) { terms.push({ t: t, k: k }); }); });
+      if (!terms.length) return;
+      terms.sort(function (a, b) { return b.t.length - a.t.length; });
+      var re = new RegExp('(?<![A-Za-z0-9])(' + terms.map(function (x) { return esc(x.t); }).join('|') + ')(?![A-Za-z0-9])', cs ? 'g' : 'gi');
+      var byTerm = {}; terms.forEach(function (x) { byTerm[cs ? x.t : x.t.toLowerCase()] = x.k; });
+      roots.forEach(function (root) {
+        var walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, { acceptNode: function (nd) {
+          if (!nd.nodeValue.trim()) return NodeFilter.FILTER_REJECT;
+          for (var p = nd.parentNode; p && p !== root; p = p.parentNode) {
+            if (p.nodeType !== 1) continue;
+            if (p.hasAttribute('data-rv-chrome') || /^(TABLE|PRE|CODE|A|H1|H2|H3|H4|H5|H6|SUMMARY|BUTTON|SCRIPT|STYLE|TEXTAREA)$/.test(p.tagName) || p.classList.contains('hl-gloss')) return NodeFilter.FILTER_REJECT;
+          }
+          return NodeFilter.FILTER_ACCEPT;
+        } });
+        var nodes = []; while (walker.nextNode()) nodes.push(walker.currentNode);
+        nodes.forEach(function (nd) {
+          var s = nd.nodeValue, last = 0, frag = null, m; re.lastIndex = 0;
+          while ((m = re.exec(s))) {
+            if (!frag) frag = document.createDocumentFragment();
+            if (m.index > last) frag.appendChild(document.createTextNode(s.slice(last, m.index)));
+            var sp = document.createElement('span'); sp.className = 'hl-rv-hit'; sp.dataset.rvHit = byTerm[cs ? m[1] : m[1].toLowerCase()]; sp.textContent = m[1]; frag.appendChild(sp);
+            last = m.index + m[1].length;
+          }
+          if (frag) { if (last < s.length) frag.appendChild(document.createTextNode(s.slice(last))); nd.parentNode.replaceChild(frag, nd); }
+        });
+      });
+    });
+  }
+  var litKey = null, pinnedKey = null, hoverKey = null, showBar = null;
+  function hitsOf(key) { return Array.from(document.querySelectorAll('.hl-rv-hit')).filter(function (s) { return s.dataset.rvHit === key; }); }
+  function paintLink() {
+    var key = hoverKey || pinnedKey; litKey = key;
+    document.querySelectorAll('.hl-rv-hit.is-lit').forEach(function (s) { s.classList.remove('is-lit'); });
+    var hits = key ? hitsOf(key) : []; hits.forEach(function (s) { s.classList.add('is-lit'); });
+    Object.keys(LINK).forEach(function (k) { LINK[k].els.forEach(function (el) { el.classList.toggle('is-active', k === key); el.setAttribute('aria-pressed', String(k === pinnedKey)); }); });
+    document.querySelectorAll('.hl-rv-linkread').forEach(function (p) {
+      p.textContent = key ? (LINK[key].terms.length ? (hits.length ? hits.length + ' place' + (hits.length === 1 ? '' : 's') + ' in the summary name ' + LINK[key].label + '.' : 'The summary does not name ' + LINK[key].label + ' in these words.') : 'Nothing to light for ' + LINK[key].label + '.')
+        : p.dataset.idle;
+    });
+    if (showBar) { showBar.hidden = !(phone.matches && pinnedKey && !onepage); if (!showBar.hidden) { showBar.querySelector('.hl-rv-showbar-count').textContent = hits.length ? hits.length + ' in the summary: ' + LINK[pinnedKey].label : 'Not named in the summary: ' + LINK[pinnedKey].label; showBar.querySelector('.hl-rv-showbar-go').disabled = !hits.length; } }
+  }
+  function clearLink() { hoverKey = null; pinnedKey = null; if (showBar) paintLink(); }
+  function wireLinks() {
+    var keys = Object.keys(LINK); if (!keys.length) return;
+    document.querySelectorAll('.hl-rv-linkread').forEach(function (p) { p.dataset.idle = p.textContent; });
+    keys.forEach(function (k) { LINK[k].els.forEach(function (el) {
+      el.addEventListener('pointerenter', function (e) { if (e.pointerType === 'mouse') { hoverKey = k; paintLink(); } });
+      el.addEventListener('pointerleave', function (e) { if (e.pointerType === 'mouse') { hoverKey = null; paintLink(); } });
+      el.addEventListener('focus', function () { hoverKey = k; paintLink(); });
+      el.addEventListener('blur', function () { hoverKey = null; paintLink(); });
+      el.addEventListener('click', function () { pinnedKey = pinnedKey === k ? null : k; hoverKey = null; paintLink(); });
+    }); });
+    showBar = make('div', 'hl-rv-showbar', null, document.body); showBar.hidden = true; showBar.setAttribute('role', 'region'); showBar.setAttribute('aria-label', 'Linked highlighting');
+    make('span', 'hl-rv-showbar-count', '', showBar);
+    var go = button('Show in the summary', showBar, function () { var first = hitsOf(pinnedKey)[0]; if (first) first.scrollIntoView({ block: 'center', behavior: 'instant' }); }); go.className = 'hl-rv-showbar-go';
+    var off = button('Clear', showBar, function () { pinnedKey = null; paintLink(); }); off.className = 'hl-rv-showbar-off';
+    phone.addEventListener('change', paintLink);
+  }
+  // A stat tile is the number, its label, a small drawing of what it counts and where it leads (design D, B's panel). Its "How counted" note is the body of
+  // the tile's "i" popover, text unchanged, in the DOM; a tile says where its number is read from and is never drawn without a source.
+  // opt: kind (the tile's name for the gate), from (the source sentence), href and dest (where it leads when that is not a tab), viz (a drawing: segments or dots), sub (one line of detail).
+  function tile(parent, value, label, how, tok, short, opt) {
+    opt = opt || {};
     var cellBox = make('div', 'hl-rv-tilecell', null, parent);
-    var a = link('', '#tab-' + tok, cellBox); a.className = 'hl-rv-tile'; a.dataset.rvShort = short;
+    var a = opt.noLink ? make('div', 'hl-rv-tile', null, cellBox) : link('', opt.href || '#tab-' + tok, cellBox); a.className = 'hl-rv-tile'; a.dataset.rvShort = short; if (opt.kind) a.dataset.rvTile = opt.kind;
     var big = make('strong', 'hl-rv-value', value, a); make('span', '', label, a);
     if (String(value).length > 8) big.classList.add('hl-rv-value--long');
+    if (opt.viz) {
+      var viz = make('span', 'hl-rv-tile-viz' + (opt.viz.dots ? ' hl-rv-tile-viz--dots' : '') + (opt.viz.bar !== undefined ? ' hl-rv-tile-viz--bar' : ''), null, a); viz.setAttribute('aria-hidden', 'true');
+      if (opt.viz.bar !== undefined) { var f = make('i', '', null, viz); f.style.width = Math.round(Math.max(0, Math.min(1, opt.viz.bar)) * 100) + '%'; }
+      else (opt.viz.parts || []).forEach(function (p) { var s = make('i', p.cls || '', null, viz); s.style.flexGrow = p.n; if (p.hue) s.style.setProperty('--seg', p.hue); });
+    }
+    if (opt.sub) make('span', 'hl-rv-tile-sub', opt.sub, a);
     var m = { victims: victims, chain: attack, timeline: chronology }[tok];
-    var notes = parent.nextElementSibling;
-    if (!notes || !notes.classList.contains('hl-rv-tile-notes')) { notes = make('div', 'hl-rv-tile-notes', null); parent.after(notes); }
-    var cell = make('p', 'hl-rv-tile-note', null, notes);
+    var cell = make('p', 'hl-rv-tile-note', null);
     make('span', 'hl-rv-tile-note__key', value + ' ' + label, cell);
-    make('small', '', 'How counted: ' + how + (m ? ' From ' + text(m.heading) + ', table ' + m.index + ', ' + m.rows.length + ' rows.' : ' From the detection guidance.'), cell);
-    infoButton(cellBox, [notes.removeChild(cell)], 'How counted: ' + value + ' ' + label);
-    if (!notes.children.length) notes.remove();
-    if (m) a.href = '#' + m.heading.id;
-    make('span', 'hl-rv-tile-destination', '↗ ' + NAMES[TOKENS.indexOf(tok)], a);
+    make('small', '', 'How counted: ' + how + (opt.from ? ' From ' + opt.from + '.' : m ? ' From ' + text(m.heading) + ', table ' + m.index + ', ' + m.rows.length + ' rows.' : ' From the detection guidance.'), cell);
+    infoButton(cellBox, [cell], 'How counted: ' + value + ' ' + label);
+    if (!opt.href && !opt.noLink && m) a.href = '#' + m.heading.id;
+    make('span', 'hl-rv-tile-destination', '↗ ' + (opt.dest || NAMES[TOKENS.indexOf(tok)]), a);
   }
   var builders = {
     overview: function (body) {
       var tiles = make('div', 'hl-rv-tiles', null, body), count = 0;
-      if (victims) { var g = col(victims, /Grade/i); var inside = victims.rows.filter(function (r) { return /^(ACCESS SHOWN|COMPROMISED)\b/.test(r[g]); }).length;
-        tile(tiles, inside, 'organisations with inside or authenticated access', 'Organisation rows graded ACCESS SHOWN or COMPROMISED in the victim table; qualifiers stay in that tab.', 'victims', 'organisations'); count++; }
-      if (attack) {
-        var ids = new Set(); attack.rows.forEach(function (r) { (cell(r, attackC.id).match(/T\d{4}(?:\.\d{3})?/g) || []).forEach(function (id) { ids.add(id); }); });
+      var destTab = TOKENS.indexOf('indicators') >= 0 ? 'indicators' : 'overview';
+      var det = siteData.techniques && siteData.techniques.rows && siteData.techniques.rows.length ? siteData.techniques : null;
+      var detPage = siteData.detection_page && safeHref(siteData.detection_page) ? siteData.detection_page : null;
+      // A report with a victim grade table and an ATT&CK table (the pilot's data) keeps the tiles it always had, each from its own source: organisations with inside access, techniques, procedure rows,
+      // rules and the observation window. Every other report gets the fallback set below, built from the data it has (a victim grade table still gives its organisations tile).
+      var rich = !!(victims && attack);
+      function segments(map, order) { return order.filter(function (k) { return map[k]; }).map(function (k) { return { n: map[k], hue: GRADE_HUES[k] || STATUS_HUES[k] || 'var(--acc)' }; }); }
+      function tacticCounts() { var by = {}; attack.rows.forEach(function (r) { var k = tacticName(cell(r, attackC.tactic)) || 'Unlabelled'; by[k] = (by[k] || 0) + 1; }); return by; }
+      function distinctIds() { var ids = new Set(); attack.rows.forEach(function (r) { (cell(r, attackC.id).match(/T\d{4}(?:\.\d{3})?/g) || []).forEach(function (id) { ids.add(id); }); }); return ids; }
+      if (victims) {
+        var g = col(victims, /Grade/i); var inside = victims.rows.filter(function (r) { return /^(ACCESS SHOWN|COMPROMISED)\b/.test(r[g]); });
+        var ins = {}; inside.forEach(function (r) { var k = r[g].match(/^(ACCESS SHOWN|COMPROMISED)/)[1]; ins[k] = (ins[k] || 0) + 1; });
+        tile(tiles, inside.length, 'organisations with inside or authenticated access', 'Organisation rows graded ACCESS SHOWN or COMPROMISED in the victim table; qualifiers stay in that tab.', 'victims', 'organisations',
+          { kind: 'inside', viz: { dots: true, parts: inside.map(function (r) { return { n: 1, hue: GRADE_HUES[r[g].match(/^(ACCESS SHOWN|COMPROMISED)/)[1]] }; }) }, sub: ['ACCESS SHOWN', 'COMPROMISED'].filter(function (k) { return ins[k]; }).map(function (k) { return ins[k] + ' ' + k.toLowerCase(); }).join(', ') });
+        count++;
+      }
+      if (rich) {
+        var bt = tacticCounts(), nt = Object.keys(bt).length, tacticViz = { parts: Object.keys(bt).map(function (k) { return { n: bt[k] }; }) }, tsub = 'across ' + nt + ' tactic' + (nt === 1 ? '' : 's');
         if (attack.legacy) {
-          tile(tiles, ids.size, 'distinct technique IDs', 'Distinct IDs in the ATT&CK mapping table; the report states no Status for them.', 'chain', 'techniques');
-          tile(tiles, attack.rows.length, 'mapping rows', 'Every row of the ATT&CK mapping table, including repeated technique IDs.', 'chain', 'mapping rows');
+          tile(tiles, distinctIds().size, 'distinct technique IDs', 'Distinct IDs in the ATT&CK mapping table; the report states no Status for them.', 'chain', 'techniques', { kind: 'techniques', viz: tacticViz, sub: tsub });
+          tile(tiles, attack.rows.length, 'mapping rows', 'Every row of the ATT&CK mapping table, including repeated technique IDs.', 'chain', 'mapping rows', { kind: 'procedures', viz: { parts: [{ n: 1 }] }, sub: 'no Status stated' });
         } else {
-          tile(tiles, ids.size, 'distinct technique IDs', 'Distinct IDs in the full procedure table.', 'chain', 'techniques');
-          tile(tiles, attack.rows.length, 'procedure rows', 'Every procedure row, including repeated technique IDs.', 'chain', 'procedure rows');
+          var stat = {}; if (attackC.status >= 0) attack.rows.forEach(function (r) { stat[r[attackC.status]] = (stat[r[attackC.status]] || 0) + 1; });
+          tile(tiles, distinctIds().size, 'distinct technique IDs', 'Distinct IDs in the full procedure table.', 'chain', 'techniques', { kind: 'techniques', viz: tacticViz, sub: tsub });
+          tile(tiles, attack.rows.length, 'procedure rows', 'Every procedure row, including repeated technique IDs.', 'chain', 'procedure rows',
+            { kind: 'procedures', viz: { parts: segments(stat, ['OBSERVED', 'INFERRED', 'NOT SHOWN']) }, sub: ['OBSERVED', 'INFERRED', 'NOT SHOWN'].filter(function (k) { return stat[k]; }).map(function (k) { return stat[k] + ' ' + k.toLowerCase(); }).join(', ') });
         }
         count += 2;
+        if (ruleTotal !== null) { tile(tiles, ruleTotal, 'detection and hunting rules', 'Counts in the report detection guidance, reconciled to the engine and tier counts.', 'indicators', 'rules',
+          { kind: 'rules', viz: { parts: engines.map(function (e) { return { n: e.total }; }).filter(function (p) { return p.n; }) }, sub: engines.filter(function (e) { return e.total; }).map(function (e) { return e.total + ' ' + e.engine; }).join(', ') }); count++; }
+        if (chronology) {
+          var dc = col(chronology, /^Date|^Time|^When/i), crow = chronologyRows(chronology), stamps = crow.map(function (r) { return r.when; }).filter(function (v) { return !isNaN(v); });
+          var span = stamps.length === crow.length && stamps.length ? Math.round((Math.max.apply(null, crow.map(function (r) { return r.end; })) - Math.min.apply(null, stamps)) / 86400000) : null;
+          tile(tiles, chronology.rows[0][dc] + ' to ' + chronology.rows[chronology.rows.length - 1][dc], 'observation window', 'First and last rows in the chronology; not an activity duration.', 'timeline', 'observation window',
+            { kind: 'window', viz: { parts: [{ n: 1 }] }, sub: span !== null ? span + ' days between the first and last dated entry' : '' }); count++;
+        }
+      } else {
+        // Fallback set, from the data this report has: threat level, overall risk score, distinct ATT&CK techniques, detection rules, IOC entries. A tile with no source is not drawn.
+        if (threatLevel) { tile(tiles, threatLevel, 'threat level', 'The Threat Level line at the top of the report.', 'overview', 'threat level',
+          { kind: 'threat', from: 'the report\'s Threat Level line', noLink: true, viz: { parts: [1, 2, 3, 4].map(function (n) { return { n: 1, cls: n <= (RISK_WORDS[threatLevel.toUpperCase()] || 0) ? 'on' : 'off' }; }) } }); count++; }
+        var overall = overallRisk();
+        if (overall) { var hid = overall.heading && overall.heading.id;
+          tile(tiles, overall.value, 'overall risk score', 'The report\'s own overall score for the toolkit or campaign, read as printed; not computed here.', 'overview', 'risk score',
+            { kind: 'risk', from: overall.from, href: hid ? '#' + hid : undefined, dest: 'Risk assessment', viz: { bar: parseFloat(overall.value) / (parseFloat(overall.value.split('/')[1]) || 10) }, sub: overall.rest }); count++; }
+        if (attack) {
+          var ids2 = new Set(); attack.rows.forEach(function (r) { (cell(r, attackC.id).match(/T\d{4}(?:\.\d{3})?/g) || []).forEach(function (id) { ids2.add(id); }); });
+          var bt = {}; attack.rows.forEach(function (r) { var k = tacticName(cell(r, attackC.tactic)) || 'Unlabelled'; bt[k] = (bt[k] || 0) + 1; }); var nt = Object.keys(bt).length;
+          tile(tiles, ids2.size, 'distinct ATT&CK techniques', 'Distinct IDs in the ATT&CK mapping table' + (attack.legacy ? '; the report states no Status for them.' : '.'), 'chain', 'techniques',
+            { kind: 'techniques', viz: { parts: Object.keys(bt).map(function (k) { return { n: bt[k] }; }) }, sub: 'across ' + nt + ' tactic' + (nt === 1 ? '' : 's') }); count++;
+        } else if (det) {
+          var dt = {}; det.rows.forEach(function (r) { dt[r.tactic] = (dt[r.tactic] || 0) + 1; }); var ndt = Object.keys(dt).length;
+          tile(tiles, det.rows.length, 'distinct ATT&CK techniques', 'Techniques the report\'s detection rules cover, one per technique ID; the report has no mapping table of its own.', 'overview', 'techniques',
+            { kind: 'dtech', from: 'the detection page (_data/detection_attack.yml)', href: detPage || undefined, dest: 'Detection page', viz: { parts: Object.keys(dt).map(function (k) { return { n: dt[k] }; }) }, sub: 'across ' + ndt + ' tactic' + (ndt === 1 ? '' : 's') + ', from the detection page' }); count++;
+        }
+        if (ruleTotal !== null) { tile(tiles, ruleTotal, 'detection and hunting rules', 'Counts in the report detection guidance, reconciled to the engine and tier counts.', destTab, 'rules',
+          { kind: 'rules', dest: destTab === 'indicators' ? undefined : 'Overview', viz: { parts: engines.map(function (e) { return { n: e.total }; }).filter(function (p) { return p.n; }) }, sub: engines.filter(function (e) { return e.total; }).map(function (e) { return e.total + ' ' + e.engine; }).join(', ') }); count++; }
+        else if (siteData.rules && siteData.rules.total > 0) { var sr = siteData.rules;
+          tile(tiles, sr.total, 'detection and hunting rules', 'Rules in the report\'s detection page: ' + [['sigma', 'Sigma'], ['yara', 'YARA'], ['suricata', 'Suricata']].filter(function (e) { return sr[e[0]]; }).map(function (e) { return sr[e[0]] + ' ' + e[1]; }).join(', ') + '; ' + sr.detection + ' detection tier, ' + sr.hunting + ' hunting tier.', 'overview', 'rules',
+            { kind: 'drules', from: 'the detection page (_data/detection_manifests.yml)', href: detPage || undefined, dest: 'Detection page', viz: { parts: [{ n: sr.detection, hue: 'var(--acc)' }, { n: sr.hunting }].filter(function (p) { return p.n; }) }, sub: sr.detection + ' detection, ' + sr.hunting + ' hunting' }); count++; }
+        var feed = siteData.iocs && siteData.iocs.total > 0 ? siteData.iocs : null;
+        if (feed || feedMatch) { var n = feed ? feed.total : +feedMatch[1];
+          tile(tiles, n, 'IOC entries', feed ? 'Entries in the report\'s IOC feed as the site lists them.' : 'Entries the report says its IOC feed carries.', destTab, 'IOC entries',
+            { kind: 'iocs', from: feed ? 'the IOC feed table (_data/ioc_tables.yml)' : 'the report\'s indicator section', href: feed && safeHref(feed.feed_url) ? feed.feed_url : undefined, dest: feed ? 'IOC feed' : undefined }); count++; }
       }
-      if (ruleTotal !== null) { tile(tiles, ruleTotal, 'detection and hunting rules', 'Counts in the report detection guidance, reconciled to the engine and tier counts.', 'indicators', 'rules'); count++; }
-      if (chronology) { var dc = col(chronology, /^Date|^Time|^When/i);
-        tile(tiles, chronology.rows[0][dc] + ' to ' + chronology.rows[chronology.rows.length - 1][dc], 'observation window', 'First and last rows in the chronology; not an activity duration.', 'timeline', 'observation window'); count++; }
-      if (!count) missing(body, 'victim, procedure, indicator or dated chronology tables');
-      // The report's lead (its bottom line) is the plate's bottom line now (design D); it is not repeated in this view.
-      if (judgments && Array.isArray(curation.headline_rows)) {
-        var headline = Object.assign({}, judgments, { rows: judgments.rows.filter(function (_, i) { return curation.headline_rows.includes(i); }) });
-        var headlineTable = dashTable(tableFold(body, 'Headline judgments (curated for this report)'), headline, 'Headline judgments (curated for this report)'); tiles.before(headlineTable.closest('details'));
-      }
+      scanBand(body); riskPanel(body); judgmentsPanel(body);
+      if (!count) missing(body, 'a victim grade, procedure, risk, detection, indicator or dated chronology source to count');
       var line = Array.from(tiles.querySelectorAll('.hl-rv-tile')).map(function (t) { return text(t.querySelector('strong')) + ' ' + t.dataset.rvShort; }).join(' · ');
       return line || 'Headline figures remain in the full report';
     },
@@ -610,7 +935,7 @@
         var full = make('section', 'hl-rv-procedures', null, body);
         var table = dashTable(full, attack, attack.legacy ? 'All ATT&CK mapping rows' : 'All ATT&CK procedure rows', 'procedures');
         var tacticCol = attackC.tactic;
-        function tactic(value) { return value.replace(/\s*\(?T\d{4}.*$/, '').replace(/\s*[·:|/-]\s*$/, '').trim(); }
+        function tactic(value) { return tacticName(value); }
         var tactics = attack.rows.map(function (r) { return tactic(r[tacticCol]); }).filter(function (v, i, a) { return v && a.indexOf(v) === i; });
         var generatedRows = Array.from(table.tBodies[0].rows);
         var specs = [
@@ -714,7 +1039,7 @@
   };
   TOKENS.forEach(function (t, i) {
     var panel = panels[i], head = panel.querySelector('.hl-rv-panel-head');
-    var view = make('section', 'hl-rv-view', null); head.after(view);
+    var view = make('section', 'hl-rv-view' + (t === 'overview' ? ' hl-rv-view--scan' : ''), null); head.after(view);
     var firstSource = sections.find(function (s) { return s.token === t && s.heading; });
     if (firstSource) { var skip = link('Skip this view', '#' + firstSource.heading.id, panel); skip.className = 'hl-rv-skip-view'; view.before(skip); }
     var summary = make('div', 'hl-rv-view-summary', null, view), line = make('p', '', '', summary);
@@ -733,7 +1058,7 @@
       function placeLead() { if (overviewLead) { if (phone.matches) view.before(overviewLead); else body.insertBefore(overviewLead, body.firstChild); } }
       placeLead(); phone.addEventListener('change', placeLead);
     }
-    if (t === 'overview' && curation.headline_rows || t === 'chain' && curation.stage_joins || t === 'timeline' && curation.timeline_lanes) make('p', 'hl-rv-curated', 'View selections curated for this report.', view);
+    if (t === 'chain' && curation.stage_joins || t === 'timeline' && curation.timeline_lanes) make('p', 'hl-rv-curated', 'View selections curated for this report.', view);
     body.hidden = phone.matches; toggle.textContent = body.hidden ? 'Show the view' : 'Hide the view'; toggle.setAttribute('aria-expanded', String(!body.hidden));
     function sync(open) { body.hidden = !open; toggle.textContent = open ? 'Hide the view' : 'Show the view'; toggle.setAttribute('aria-expanded', String(open)); }
     toggle.addEventListener('click', function () { sync(body.hidden); });
@@ -794,6 +1119,8 @@
       img.addEventListener('click', function () { b.click(); });
     });
   });
+  // The summary's own words, wrapped where a panel key names them; after every other pass has touched the source text.
+  wrapHits(); wireLinks();
   function copy(src, status, success, control) {
     if (control) { copyValue(src.textContent, control, status); return; }
     function fallback() { var range = document.createRange(); range.selectNodeContents(src); var sel = window.getSelection(); sel.removeAllRanges(); sel.addRange(range); status.textContent = 'Clipboard unavailable. Text selected; use the copy command.'; }
@@ -948,21 +1275,13 @@
   if (document.fonts) document.fonts.ready.then(function () { measureBar(); if (location.hash) go(location.hash, false); });
 
   function drawTimeline(parent, m) {
-    var dc = col(m, /^Date|^Time|^When/i), ec = col(m, /Observation|Event/i);
-    var rows = m.rows.map(function (r) {
-      var display = r[dc], event = r[ec], dates = display.match(/\d{4}-\d{2}-\d{2}/g) || [];
-      var quality = /disagree|disput/i.test(display + ' ' + event) ? 'disputed' : /inferred/i.test(display) ? 'year-inferred' : /\bto\b/.test(display) ? 'range' : 'given';
-      // Infer only the chart coordinate from a single explicitly shared year;
-      // the visible date retains its original "year inferred" qualifier.
-      var years = new Set(m.rows.flatMap(function (x) { return x[dc].match(/\b20\d{2}\b/g) || []; }));
-      var start = dates[0];
-      if (!start && years.size === 1) { var stamp = Date.parse(display.replace(/\s*\(.*?\)/g, '') + ' ' + Array.from(years)[0]); if (!isNaN(stamp)) start = new Date(stamp).toISOString().slice(0, 10); }
+    var rows = chronologyRows(m).map(function (r) {
       var lane = 'Chronology';
       if (curation.timeline_lanes) {
-        var rule = curation.timeline_lanes.rules.find(function (r) { return new RegExp(r.pattern, 'i').test(event); });
+        var rule = curation.timeline_lanes.rules.find(function (x) { return new RegExp(x.pattern, 'i').test(r.event); });
         lane = rule ? rule.label : curation.timeline_lanes.default;
       }
-      return { display: display, event: event, quality: quality, when: Date.parse(start), end: dates[1] && quality === 'range' ? Date.parse(dates[1]) : Date.parse(start), lane: lane };
+      r.lane = lane; return r;
     });
     make('p', 'hl-rv-note', 'Dates are printed as written. Marker shapes: ● given date, ◆ inferred year, ▰ range, ◌ disputed. ' + (curation.timeline_lanes ? 'Timeline lanes: curated for this report; they group the chronology wording.' : 'Events share a single chronology lane.'), parent);
     var chart = make('div', 'hl-rv-timeline', null, parent), detail = make('p', 'hl-rv-event', 'Select an event to read its date and observation.', parent); detail.setAttribute('role', 'status');
@@ -1024,6 +1343,7 @@
   } catch (error) {
     // Remove only nodes this enhancement created, including controls within the
     // original source. Existing layout assets and pre-existing chrome survive.
+    document.querySelectorAll('.hl-rv-hit').forEach(function (n) { n.replaceWith(document.createTextNode(n.textContent)); });
     document.querySelectorAll('[data-rv-chrome]').forEach(function (n) { if (!originalChrome.has(n)) n.remove(); });
     content.replaceChildren.apply(content, sourceNodes);
     root.classList.remove('hl-rv-ready', 'hl-tabbed', 'hl-onepage', 'hl-rv-reading');

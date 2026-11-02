@@ -101,7 +101,9 @@ function gradientSelectors(text){
 }
 // design D (T-0500.1.7.3): the plate (header box and its title text), the tab title text, the boxed generated view, the gold featured panels (band, margin card, site tab-foot card) and the quiet tab-foot card
 const GRAD_OK=['.hl-report-page .hl-post-header','.hl-report-page .hl-post-header__title','.hl-report-page .hl-post-content .hl-rv-panel-head h2','.hl-rv-view',
-    '.hl-rv-feat','.hl-rv-featcard','.hl-rv-sponsor-card.is-site','.hl-rv-sponsor-card'];
+    '.hl-rv-feat','.hl-rv-featcard','.hl-rv-sponsor-card.is-site','.hl-rv-sponsor-card',
+    // D3: the Overview's tiles and scan panels are B's panels; risk bars and the inferred-status hatch are drawn fills
+    '.hl-report-page .hl-rv-tile','.hl-rv-pn','.hl-rv-riskbar > i','.hl-rv-riskbar[data-rv-scale="word"] > i','.hl-rv-cell[data-rv-status="INFERRED"]'];
 function assertGradientsAllowed(sels){for(const sel of sels)assert.ok(GRAD_OK.includes(sel),'a gradient on a non-header selector: '+sel);}
 test('CSS control: a grouped rule hides no selector behind its first (allowed, .hl-rv-tabs { background: gradient })',()=>{
   const sels=gradientSelectors('.hl-rv-feat, .hl-rv-tabs { background: linear-gradient(red, blue); }');

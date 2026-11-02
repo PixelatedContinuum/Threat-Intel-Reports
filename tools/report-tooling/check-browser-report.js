@@ -438,7 +438,7 @@ var SHAPE_ALT = {
   confidence: [/Claim|Judgment|Finding/i, /Confidence/i]
 };
 var SHAPE_NEED = {
-  overview: 'victim, procedure, indicator or dated chronology tables',
+  overview: 'a victim grade, procedure, risk, detection, indicator or dated chronology source to count',
   victims: 'an Organisation / Grade table',
   chain: 'a Stage / What the operator did table',
   timeline: 'a Date / Observation chronology table',
@@ -822,19 +822,45 @@ function shapesInPage(SPECS, ALT) {
     if (/no YARA/.test(t)) eng.push([0, 0, 0]);
     if (mt && eng.length && eng.every(function (e) { return e[0] === e[1] + e[2]; }) && eng.reduce(function (n, e) { return n + e[0]; }, 0) === +mt[1]) rule = +mt[1];
   });
+  /* T-0500.1.7.3 (design D, D3): the tiles in the order the builder draws them. A report with a victim grade table AND an ATT&CK table keeps the five tiles it always had (inside
+     access, distinct technique IDs, procedure or mapping rows, rules, observation window). Every other report gets the fallback set, each tile only when its source exists:
+     threat level, overall risk score, distinct ATT&CK techniques (its own table, else the detection page's), detection rules (the report's sentence, else the detection page's
+     manifest), IOC entries (the feed table, else the report's sentence). The site data is the JSON block the layout writes from _data (hl-report-site-data). */
   var tiles = [], vic = (tabs.victims || []).filter(function (m) { return matches(m, SPECS.victims) && m.valid; })[0];
+  var chron = (tabs.timeline || []).filter(function (m) { return matches(m, SPECS.timeline) && m.valid; })[0];
+  var site = {}; try { site = JSON.parse((document.getElementById('hl-report-site-data') || {}).textContent || '{}') || {}; } catch (e) { site = {}; }
+  var rich = !!(vic && attack);
   if (vic) { var g = col(vic, /Grade/i); tiles.push(String(vic.rows.filter(function (r) { return /^(ACCESS SHOWN|COMPROMISED)\b/.test(r[g]); }).length)); }
-  if (attack) {
+  if (rich) {
     var ids = {}; attack.rows.forEach(function (r) { (r[idCol].match(/T\d{4}(?:\.\d{3})?/g) || []).forEach(function (id) { ids[id] = 1; }); });
     tiles.push(String(Object.keys(ids).length)); tiles.push(String(attack.rows.length));
+    if (rule !== null) tiles.push(String(rule));
+    if (chron) { var dc = col(chron, /^Date|^Time|^When/i); tiles.push(chron.rows[0][dc] + ' to ' + chron.rows[chron.rows.length - 1][dc]); }
+  } else {
+    var meta = [].slice.call(document.querySelectorAll('.hl-rv-source > p')).map(txt).filter(function (t) { return /^(Campaign Identifier|Last Updated|Threat Level):/.test(t); }).join(' ');
+    var th = meta.match(/(?:^|\s)Threat Level:\s*(CRITICAL|HIGH|MEDIUM|MODERATE|LOW)\b/i); if (th) tiles.push(th[1]);
+    var risks = (tabs.overview || []).filter(function (m) { return m.valid && m.headers.some(function (h) { return /^(Risk (Dimension|Factor)|Dimension)$/i.test(h); }) && m.headers.some(function (h) { return /^Score|^Rating/i.test(h); }); });
+    var overall = null;
+    risks.forEach(function (m) { if (overall) return; var nc = col(m, /^(Risk (Dimension|Factor)|Dimension)$/i), sc = col(m, /^Score|^Rating/i);
+      m.rows.forEach(function (r) { if (overall || !/^overall\b/i.test(r[nc])) return; var x = r[sc].match(/^(\d+(?:\.\d+)?)\s*(?:\/\s*(\d+(?:\.\d+)?)|out of\s*(\d+(?:\.\d+)?))?/); if (x) overall = +x[1] + '/' + +(x[2] || x[3] || 10); }); });
+    if (!overall) {
+      var rs = [].slice.call(document.querySelectorAll('#tab-overview .hl-rv-source')).filter(function (b) { var h = b.querySelector(':scope > h2'); return h && /risk/i.test(txt(h)); })[0];
+      var rp = rs && rs.querySelector('p'), found = [];
+      if (rp) txt(rp).replace(/(\d+(?:\.\d+)?)\s*(?:\/|out of)\s*10\b/g, function (_, n) { if (found.indexOf(n) < 0) found.push(n); });
+      if (found.length === 1) overall = found[0] + '/10';
+    }
+    if (overall) tiles.push(overall);
+    var dtech = site.techniques && site.techniques.rows && site.techniques.rows.length ? site.techniques.rows.length : 0;
+    if (attack) { var ids2 = {}; attack.rows.forEach(function (r) { (r[idCol].match(/T\d{4}(?:\.\d{3})?/g) || []).forEach(function (id) { ids2[id] = 1; }); }); tiles.push(String(Object.keys(ids2).length)); }
+    else if (dtech) tiles.push(String(dtech));
+    if (rule !== null) tiles.push(String(rule)); else if (site.rules && site.rules.total > 0) tiles.push(String(site.rules.total));
+    var feedSentence = null, ind = [].slice.call(document.querySelectorAll('#tab-indicators .hl-rv-source')).map(txt).join(' ').match(/(?:carries|contains) (\d+) operator-side indicator entries/i);
+    if (site.iocs && site.iocs.total > 0) tiles.push(String(site.iocs.total)); else if (ind) tiles.push(ind[1]);
   }
-  if (rule !== null) tiles.push(String(rule));
-  var chron = (tabs.timeline || []).filter(function (m) { return matches(m, SPECS.timeline) && m.valid; })[0];
-  if (chron) { var dc = col(chron, /^Date|^Time|^When/i); tiles.push(chron.rows[0][dc] + ' to ' + chron.rows[chron.rows.length - 1][dc]); }
   var ovIrregular = out.victims.irregular.map(function (x) { return Object.assign({ view: 'victims' }, x); })
     .concat(irregularOf(attackCand.concat(legacyCand)).map(function (x) { return Object.assign({ view: 'chain (procedure table)' }, x); }))
     .concat(out.timeline.irregular.map(function (x) { return Object.assign({ view: 'timeline' }, x); }));
-  out.overview = { tab: !!document.getElementById('tab-overview'), shape: !!(vic || attack || rule !== null || chron), irregular: ovIrregular,
+  out.overview = { tab: !!document.getElementById('tab-overview'), shape: tiles.length > 0, irregular: ovIrregular,
     rows: tiles.length, tiles: tiles, ids: null, attackRows: attack ? attack.rows.length : 0 };
   out.chain.attack = attackInfo;
   return out;
@@ -886,10 +912,13 @@ function viewShapeVerdictBase(token, shape, line, primaryCount, notice, src) {
   }
   if (typeof src.rows !== 'number') return { notChecked: true, ok: false, detail: 'the report has ' + need + ' but its source rows were not read, so what the view should draw is not known (a view is never checked against itself)' };
   if (!primaryCount) return { absent: false, ok: false, detail: 'the report has ' + need + ' (' + src.rows + ' ' + (token === 'overview' ? 'tiles' : 'rows') + ') but the view drew no ' + TAB_PRIMARY[token] + ' element' + (notice ? ' and says ' + JSON.stringify(notice) : '') + '; summary ' + JSON.stringify(line) };
-  if (!m) return { absent: false, ok: false, detail: 'the report has ' + need + ' but the summary ' + JSON.stringify(line) + ' states no figure' };
+  /* T-0500.1.7.3: a fallback Overview may hold only the threat-level tile (CRITICAL), whose figure is a word; then the summary states no integer and none is expected */
+  var wordsOnly = token === 'overview' && !/\d/.test(String((src.tiles || []).join(' ')));
+  if (!m && !wordsOnly) return { absent: false, ok: false, detail: 'the report has ' + need + ' but the summary ' + JSON.stringify(line) + ' states no figure' };
   var why2 = [];
-  var wantFigure = token === 'overview' ? Number(String((src.tiles || [])[0] || '').match(/\d+/) || NaN) : src.rows;
-  if (Number(m[0]) !== wantFigure) why2.push('summary states ' + m[0] + ', the source has ' + wantFigure + (token === 'overview' ? ' for the first tile' : ' rows'));
+  var wantFigure = token === 'overview' ? Number(String((src.tiles || []).join(' ')).match(/\d+/) || NaN) : src.rows;
+  if (wordsOnly && String(line || '').indexOf(String((src.tiles || [])[0] || '\u0000')) < 0) why2.push('the summary ' + JSON.stringify(line) + ' does not state the first tile, ' + JSON.stringify((src.tiles || [])[0]));
+  if (m && Number(m[0]) !== wantFigure) why2.push('summary states ' + m[0] + ', the source has ' + wantFigure + (token === 'overview' ? ' for the first figure in the tiles' : ' rows'));
   if (primaryCount !== src.rows) why2.push('the view draws ' + primaryCount + ' ' + TAB_PRIMARY[token] + ', the source has ' + src.rows + (token === 'overview' ? ' tiles' : ' rows'));
   var idNote = '';
   if (token === 'overview' && src.tiles && src.drawnTiles) {
@@ -899,8 +928,8 @@ function viewShapeVerdictBase(token, shape, line, primaryCount, notice, src) {
     if (src.drawnIds.length === src.ids.length && missing.length) why2.push(missing.length + ' of ' + src.ids.length + ' row identities differ from the source (first: ' + JSON.stringify(missing[0]) + ')');
     idNote = '; ' + (src.ids.length - missing.length) + ' of ' + src.ids.length + ' row identities match the source';
   }
-  return { absent: false, figure: Number(m[0]), count: primaryCount, expected: src.rows, ok: why2.length === 0,
-    detail: 'summary "' + m[0] + '" and ' + primaryCount + ' ' + TAB_PRIMARY[token] + ' vs the source\'s ' + (token === 'overview' ? JSON.stringify(src.tiles) : src.rows + ' rows') + idNote + (why2.length ? '; ' + why2.join('; ') : '') };
+  return { absent: false, figure: m ? Number(m[0]) : null, count: primaryCount, expected: src.rows, ok: why2.length === 0,
+    detail: 'summary "' + (m ? m[0] : JSON.stringify(line)) + '" and ' + primaryCount + ' ' + TAB_PRIMARY[token] + ' vs the source\'s ' + (token === 'overview' ? JSON.stringify(src.tiles) : src.rows + ' rows') + idNote + (why2.length ? '; ' + why2.join('; ') : '') };
 }
 
 /* T-0500.1.11: the ATT&CK procedure table of the Attack chain view, checked against the SOURCE table like every other card. `att` is
@@ -1311,7 +1340,8 @@ var TYPE_SPEC = [
   ['tab name', '.hl-rv-tabs button .hl-rv-tab-full', 16, null],
   ['section panel heading', '.hl-rv-panel:not([hidden]) .hl-rv-source > h2', 20, 18],
   ['data-view summary line', '.hl-rv-panel:not([hidden]) .hl-rv-view-summary p', 16, 15],
-  ['stat tile label', '.hl-rv-panel:not([hidden]) .hl-rv-tile > span:not(.hl-rv-tile-destination):not(.hl-rv-value)', 16, 15],
+  ['stat tile label', '.hl-rv-panel:not([hidden]) .hl-rv-tile > span:not(.hl-rv-tile-destination):not(.hl-rv-value):not(.hl-rv-tile-sub):not(.hl-rv-tile-viz)', 16, 15],
+  ['stat tile detail', '.hl-rv-panel:not([hidden]) .hl-rv-tile .hl-rv-tile-sub', 14, 14],
   ['stat tile link', '.hl-rv-panel:not([hidden]) .hl-rv-tile-destination', 14, 14],
   ['how-counted note', '.hl-rv-panel:not([hidden]) .hl-rv-tile-note', 16, 15],
   ['table cell', '.hl-rv-panel:not([hidden]) .hl-rv-source td', 16, 15],
@@ -1773,6 +1803,175 @@ async function textHiddenRows(page, url) {
       await page.evaluate('(function(){var p=document.querySelector(".hl-rv-panel:not([hidden]) .hl-rv-source p");if(p)p.style.display="none";})()');
       var c = textHiddenVerdict(await page.json(TEXT_HIDDEN_EXPR));
       check('control: with one report paragraph hidden the text-hidden row FAILS', c.ok === false && !c.notChecked, c.ok === false ? 'FAILS as designed: ' + c.detail : 'the control did NOT fire: ' + c.detail);
+    }
+  }
+}
+
+/* T-0500.1.7.3 (design D, D3): the Overview's scan layer. Each row compares what the layout drew with an expectation read from the SOURCE (SHAPES, the report's own
+   tables, or the site-data block the layout writes from _data), never from the view's own count, and each has a control that re-creates the defect on the same page and must FAIL. */
+var RISK_EXPR = '(function(){function txt(n){return (n.textContent||"").replace(/\\s+/g," ").trim();}var P=document.getElementById("tab-overview");if(!P)return {panel:false};' +
+  'var out={panel:true,tables:[],rows:[],bars:0,barsWithFill:0,panelDrawn:!!P.querySelector(".hl-rv-pn--risk")};' +
+  '[].slice.call(P.querySelectorAll(".hl-rv-source table")).forEach(function(t){var trs=[].slice.call(t.rows);if(!trs.length||!t.querySelector("th"))return;var hr=t.tHead?t.tHead.rows.length:1;' +
+  'var heads=[].slice.call(trs[hr-1].cells).map(txt);var body=trs.slice(hr).map(function(r){return [].slice.call(r.cells).map(txt);});if(!body.length||body.some(function(r){return r.length!==heads.length;}))return;' +
+  'var nc=heads.findIndex(function(h){return /^(Risk (Dimension|Factor)|Dimension)$/i.test(h);}),sc=heads.findIndex(function(h){return /^Score|^Rating/i.test(h);});if(nc<0||sc<0)return;' +
+  'var wc=heads.findIndex(function(h,i){return i!==nc&&i!==sc&&!/^Weight/i.test(h)&&!/^Severity$/i.test(h)&&/Rationale|Justification|Business Impact|Assessment|Evidence|Notes?|Key Driver|Explanation/i.test(h);});' +
+  'out.tables.push({n:body.length,names:body.map(function(r){return r[nc];}),why:wc<0?null:body.map(function(r){return r[wc];})});});' +
+  'out.rows=[].slice.call(P.querySelectorAll(".hl-rv-riskrow")).map(function(li){var w=li.querySelector(".hl-rv-riskwhy");return {name:txt(li.querySelector(".hl-rv-riskname")),why:w?txt(w):null,bar:!!li.querySelector(".hl-rv-riskbar")};});' +
+  'out.bars=P.querySelectorAll(".hl-rv-riskbar").length;out.barsWithFill=P.querySelectorAll(".hl-rv-riskbar > i").length;return out;})()';
+/* Risk bars: one bar for every row of every risk table the report's Overview holds, in its order, each beside its own justification text when the table has that column. */
+function riskBarVerdict(m) {
+  if (!m || !m.panel) return { notChecked: true, ok: false, detail: 'no Overview panel was found, so nothing was measured' };
+  var src = (m.tables || []).reduce(function (n, t) { return n + t.n; }, 0);
+  if (!src) return { notChecked: true, ok: false, detail: 'this report\'s Overview holds no risk table (0 source rows), so there is nothing to compare the bars with' + (m.bars ? '; ' + m.bars + ' bar(s) are drawn from nothing' : '') };
+  var names = [], why = [], bad = [];
+  m.tables.forEach(function (t) { names = names.concat(t.names); why = why.concat(t.why || t.names.map(function () { return null; })); });
+  if (m.rows.length !== src) bad.push('the view draws ' + m.rows.length + ' risk rows, the source tables have ' + src);
+  if (m.bars !== src) bad.push('the view draws ' + m.bars + ' bars, the source tables have ' + src);
+  if (m.barsWithFill !== m.bars) bad.push((m.bars - m.barsWithFill) + ' bar(s) have no fill element');
+  var nameDiff = names.filter(function (n, i) { return !m.rows[i] || m.rows[i].name !== n; });
+  if (m.rows.length === src && nameDiff.length) bad.push(nameDiff.length + ' of ' + src + ' row names differ from the source (first: ' + JSON.stringify(nameDiff[0]) + ')');
+  var whyDiff = why.filter(function (w, i) { return w !== null && (!m.rows[i] || m.rows[i].why !== w); });
+  if (m.rows.length === src && whyDiff.length) bad.push(whyDiff.length + ' justification text(s) differ from the source cell or are not drawn (first: ' + JSON.stringify(String(whyDiff[0]).slice(0, 50)) + ')');
+  return { notChecked: false, ok: bad.length === 0, why: bad, detail: m.bars + ' bar(s) against ' + src + ' source row(s) in ' + m.tables.length + ' risk table(s); the denominator is the source table rows' + (bad.length ? '; ' + bad.join('; ') : '') };
+}
+var HEAT_EXPR = '(function(){var P=document.getElementById("tab-overview");if(!P)return {panel:false};var h=P.querySelector(".hl-rv-heat");var site={};try{site=JSON.parse((document.getElementById("hl-report-site-data")||{}).textContent||"{}")||{};}catch(e){}' +
+  'var cols=h?[].slice.call(h.querySelectorAll(".hl-rv-heatcol")).map(function(c){var b=c.querySelector(".hl-rv-heathead strong");return {head:b?+b.textContent:NaN,cells:c.querySelectorAll(".hl-rv-cell").length};}):[];' +
+  'return {panel:true,drawn:!!h,cells:h?h.querySelectorAll(".hl-rv-cell").length:0,cols:cols,siteRows:site.techniques&&site.techniques.rows?site.techniques.rows.length:0};})()';
+/* Heat strip: one cell for every procedure row (or mapping row) of the report's ATT&CK table, else one for every technique its detection page covers; each tactic column's printed count is its cells. */
+function heatVerdict(m, attackRows) {
+  if (!m || !m.panel) return { notChecked: true, ok: false, detail: 'no Overview panel was found, so nothing was measured' };
+  var want = typeof attackRows === 'number' && attackRows > 0 ? attackRows : (m.siteRows || 0), from = typeof attackRows === 'number' && attackRows > 0 ? 'the report\'s ATT&CK table rows' : 'the detection page\'s technique rows';
+  if (!want) return { notChecked: true, ok: false, detail: 'the report has no ATT&CK table and its detection page lists no technique (0 source rows)' + (m.cells ? '; ' + m.cells + ' cell(s) are drawn from nothing' : '') };
+  var bad = [];
+  if (!m.drawn) bad.push('no heat strip is drawn');
+  if (m.cells !== want) bad.push('the strip draws ' + m.cells + ' cells, ' + from + ' number ' + want);
+  var sum = m.cols.reduce(function (n, c) { return n + c.cells; }, 0);
+  if (sum !== m.cells) bad.push('the columns hold ' + sum + ' cells, the strip ' + m.cells);
+  m.cols.forEach(function (c, i) { if (c.head !== c.cells) bad.push('column ' + (i + 1) + ' states ' + c.head + ' and holds ' + c.cells); });
+  return { notChecked: false, ok: bad.length === 0, why: bad, detail: m.cells + ' cell(s) in ' + m.cols.length + ' tactic column(s) against ' + want + ' (' + from + ')' + (bad.length ? '; ' + bad.join('; ') : '') };
+}
+var SQUARES_EXPR = '(function(){var P=document.getElementById("tab-overview");if(!P)return {panel:false};var g=P.querySelector(".hl-rv-squares");' +
+  'var legend=[].slice.call(P.querySelectorAll(".hl-rv-pn--grades .hl-rv-key strong")).reduce(function(n,e){return n+(+e.textContent||0);},0);' +
+  'return {panel:true,drawn:!!g,squares:g?g.querySelectorAll(".hl-rv-sq").length:0,legend:legend};})()';
+/* Victim squares: one square for every row of the victim grade table, and the legend's counts add up to the same number. */
+function squaresVerdict(m, victimRows) {
+  if (!m || !m.panel) return { notChecked: true, ok: false, detail: 'no Overview panel was found, so nothing was measured' };
+  if (!victimRows) return { notChecked: true, ok: false, detail: 'this report has no victim grade table (0 source rows)' + (m.squares ? '; ' + m.squares + ' square(s) are drawn from nothing' : '') };
+  var bad = [];
+  if (!m.drawn) bad.push('no grade squares are drawn');
+  if (m.squares !== victimRows) bad.push('the panel draws ' + m.squares + ' squares, the victim table has ' + victimRows + ' rows');
+  if (m.legend !== victimRows) bad.push('the legend counts add up to ' + m.legend + ', the table has ' + victimRows + ' rows');
+  return { notChecked: false, ok: bad.length === 0, why: bad, detail: m.squares + ' square(s), legend total ' + m.legend + ', against ' + victimRows + ' victim table row(s)' + (bad.length ? '; ' + bad.join('; ') : '') };
+}
+var JUDG_EXPR = '(function(){var P=document.getElementById("tab-overview");if(!P)return {panel:false};var p=P.querySelector(".hl-rv-pn--judg");var chips=p?[].slice.call(p.querySelectorAll(".hl-rv-jchip")):[];' +
+  'var all=chips.filter(function(c){return c.dataset.rvConf==="";})[0];var rest=chips.filter(function(c){return c.dataset.rvConf!=="";});' +
+  'var hidden=p?[].slice.call(p.querySelectorAll(".hl-rv-jrow")).filter(function(r){return r.hidden;}).length:0;' +
+  'return {panel:true,drawn:!!p,rows:p?p.querySelectorAll(".hl-rv-jrow").length:0,hidden:hidden,all:all?+all.querySelector("strong").textContent:null,sum:rest.reduce(function(n,c){return n+(+c.querySelector("strong").textContent||0);},0),folded:!!(p&&p.closest("details"))};})()';
+/* Judgments: every row of the judgments table, shown in full (none hidden at rest, no fold), with chip counts that add up to the rows. */
+function judgmentsVerdict(m, judgmentRows) {
+  if (!m || !m.panel) return { notChecked: true, ok: false, detail: 'no Overview panel was found, so nothing was measured' };
+  if (!judgmentRows) return { notChecked: true, ok: false, detail: 'this report has no judgments table (0 source rows)' + (m.rows ? '; ' + m.rows + ' row(s) are drawn from nothing' : '') };
+  var bad = [];
+  if (!m.drawn) bad.push('no judgments view is drawn');
+  if (m.rows !== judgmentRows) bad.push('the view draws ' + m.rows + ' judgments, the source table has ' + judgmentRows);
+  if (m.hidden) bad.push(m.hidden + ' judgment(s) are hidden at rest');
+  if (m.folded) bad.push('the view sits inside a fold');
+  if (m.all !== judgmentRows) bad.push('the All chip says ' + m.all + ', the table has ' + judgmentRows);
+  if (m.sum !== judgmentRows) bad.push('the chip counts add up to ' + m.sum + ', the table has ' + judgmentRows);
+  return { notChecked: false, ok: bad.length === 0, why: bad, detail: m.rows + ' judgment row(s), chips total ' + m.sum + ', against ' + judgmentRows + ' source row(s)' + (bad.length ? '; ' + bad.join('; ') : '') };
+}
+var TILESRC_EXPR = '(function(){return [].slice.call(document.querySelectorAll("#tab-overview .hl-rv-tilecell")).map(function(c){var t=c.querySelector(".hl-rv-tile"),p=c.querySelector(".hl-rv-pop");' +
+  'return {kind:t?t.dataset.rvTile||null:null,value:t?t.querySelector("strong").textContent:null,pop:p?p.textContent.replace(/\\s+/g," ").trim():"",hidden:p?p.hidden:null};});})()';
+/* Every tile says where its number is read from: its popover holds "How counted: ... From <source>." and it is a tile of a named kind. */
+function tileSourceVerdict(rows) {
+  if (!rows || !rows.length) return { notChecked: true, ok: false, detail: 'this report\'s Overview draws no tile, so nothing was measured' };
+  var bad = [];
+  rows.forEach(function (r) { var n = 'tile ' + JSON.stringify(r.value);
+    if (!r.kind) bad.push(n + ' has no kind');
+    if (!/How counted: .+ From .+\./.test(r.pop)) bad.push(n + ' states no source in its note: ' + JSON.stringify(r.pop.slice(0, 60)));
+    if (r.hidden !== true) bad.push(n + ' note is not hidden at rest'); });
+  return { notChecked: false, ok: bad.length === 0, why: bad, detail: rows.length + ' tile(s) measured, ' + bad.length + ' without a stated source' + (bad.length ? ': ' + bad.join('; ') : '') };
+}
+var LINKPROBE_EXPR = '(function(){var hits=[].slice.call(document.querySelectorAll("#tab-overview .hl-rv-hit"));var by={};hits.forEach(function(h){by[h.dataset.rvHit]=(by[h.dataset.rvHit]||0)+1;});' +
+  'var keys=Object.keys(by).filter(function(k){return [].slice.call(document.querySelectorAll("#tab-overview [data-rv-key]")).some(function(e){return e.dataset.rvKey===k;});});' +
+  'var k=keys[0];if(!k)return {hits:hits.length,key:null};var el=[].slice.call(document.querySelectorAll("#tab-overview [data-rv-key]")).filter(function(e){return e.dataset.rvKey===k;})[0];el.setAttribute("data-rv-probe","1");' +
+  'return {hits:hits.length,key:k,want:by[k],text:[].slice.call(document.querySelectorAll("#tab-overview .hl-rv-source")).map(function(e){return e.textContent;}).join(" ").replace(/\\s+/g," ")};})()';
+var LINKSTATE_EXPR = '(function(){var el=document.querySelector("[data-rv-probe]");var k=el?el.dataset.rvKey:null;var lit=[].slice.call(document.querySelectorAll(".hl-rv-hit.is-lit"));' +
+  'var bar=document.querySelector(".hl-rv-showbar");var br=bar&&!bar.hidden?bar.getBoundingClientRect():null;var go=bar?bar.querySelector(".hl-rv-showbar-go"):null;' +
+  'return {lit:lit.length,litOther:lit.filter(function(s){return s.dataset.rvHit!==k;}).length,pressed:el?el.getAttribute("aria-pressed"):null,barShown:!!(br&&br.width>0&&br.height>0),goEnabled:!!(go&&!go.disabled),' +
+  'text:[].slice.call(document.querySelectorAll("#tab-overview .hl-rv-source")).map(function(e){return e.textContent;}).join(" ").replace(/\\s+/g," "),firstTop:(function(){var f=[].slice.call(document.querySelectorAll(".hl-rv-hit")).filter(function(s){return s.dataset.rvHit===k;})[0];if(!f)return null;var r=f.getBoundingClientRect();return {t:r.top,b:r.bottom};})(),ih:innerHeight};})()';
+/* Linked highlighting: pressing a key in a panel lights exactly the spans the prose wraps for it, adds no word (the Overview's text is the same before and after), a second press
+   clears it, and on a phone a pinned key shows the "Show in the summary" bar, whose button brings the first place into view. */
+function linkVerdict(probe, pressed, cleared, phone, shown) {
+  if (!probe || probe.key === null) return { notChecked: true, ok: false, detail: probe ? 'the summary names no grade, tactic or organisation that a panel offers (' + probe.hits + ' wrapped place(s)), so there was nothing to light' : 'the probe did not run' };
+  var bad = [];
+  if (pressed.lit !== probe.want) bad.push('pressing the key lit ' + pressed.lit + ' place(s), the prose wraps ' + probe.want + ' for it');
+  if (pressed.litOther) bad.push(pressed.litOther + ' place(s) of another key lit as well');
+  if (pressed.pressed !== 'true') bad.push('the pressed key does not say aria-pressed="true"');
+  if (pressed.text !== probe.text) bad.push('the Overview text changed when the key was pressed');
+  if (cleared.lit !== 0) bad.push('a second press left ' + cleared.lit + ' place(s) lit');
+  if (phone) {
+    if (!pressed.barShown) bad.push('on a phone the pinned key shows no "Show in the summary" bar');
+    else if (!shown || !shown.top || shown.top.t < -1 || shown.top.b > shown.top.ih + 1) bad.push('"Show in the summary" did not bring the first place into view');
+  }
+  return { notChecked: false, ok: bad.length === 0, why: bad, detail: 'key ' + JSON.stringify(probe.key) + ': ' + probe.want + ' wrapped place(s), ' + pressed.lit + ' lit on a press, ' + cleared.lit + ' after the second' + (phone ? '; phone bar shown: ' + pressed.barShown : '') + (bad.length ? '; ' + bad.join('; ') : '') };
+}
+async function openOverview(page, url, w, h) {
+  await setViewport(page, w, h);
+  if (!(await gotoAndWait(page, url))) return false;
+  await page.evaluate('location.hash="#tab-' + firstTab() + '"'); await CDP.sleep(250); /* the first built tab is Overview whenever the article holds anything */
+  var open = await page.json('(function(){var t=document.querySelector("#tab-overview .hl-rv-view-summary button[aria-expanded=false]:not(.hl-rv-info)");if(t)t.click();return !!t;})()');
+  if (open) await CDP.sleep(250);
+  return true;
+}
+async function overviewScanRows(page, url) {
+  var states = [[1280, 900], [390, 844]];
+  var attackRows = SHAPES && SHAPES.chain && SHAPES.chain.attack && SHAPES.chain.attack.shape ? SHAPES.chain.attack.rows : null;
+  var victimRows = SHAPES && SHAPES.victims && SHAPES.victims.shape ? SHAPES.victims.rows : 0;
+  var judgmentRows = SHAPES && SHAPES.confidence && SHAPES.confidence.shape ? SHAPES.confidence.rows : 0;
+  function row(name, w, h, v) { var n = w + 'x' + h + ': ' + name; if (v.notChecked) check('NOT CHECKED: ' + n, false, v.detail); else check(n, v.ok, v.detail); }
+  function ctl(name, v) { check('control: ' + name, v.ok === false && !v.notChecked, v.ok === false ? 'FAILS as designed: ' + v.detail : 'the control did NOT fire: ' + v.detail); }
+  var N = { risk: 'risk bars: one bar for every row of the report\'s risk table(s), each beside its own justification', heat: 'the tactic heat strip draws one cell for every ATT&CK procedure row (or detection technique) and each column states its own count',
+    sq: 'the victim grade squares: one square for every row of the victim table', jd: 'the judgments view shows every row of the judgments table, none hidden, with chip counts that add up',
+    tile: 'every Overview tile says where its number is read from', link: 'linked highlighting: a pressed grade, tactic or organisation lights the places in the summary that name it, adds no word, clears on a second press' };
+  for (var i = 0; i < states.length; i++) {
+    var w = states[i][0], h = states[i][1];
+    if (!(await openOverview(page, url, w, h))) { check('NOT CHECKED: ' + w + 'x' + h + ': Overview scan rows', false, 'the tab controller never built, so nothing was measured'); continue; }
+    var vRisk = riskBarVerdict(await page.json(RISK_EXPR)), vHeat = heatVerdict(await page.json(HEAT_EXPR), attackRows), vSq = squaresVerdict(await page.json(SQUARES_EXPR), victimRows);
+    var vJd = judgmentsVerdict(await page.json(JUDG_EXPR), judgmentRows), vTile = tileSourceVerdict(await page.json(TILESRC_EXPR));
+    row(N.risk, w, h, vRisk); row(N.heat, w, h, vHeat); row(N.sq, w, h, vSq); row(N.jd, w, h, vJd); row(N.tile, w, h, vTile);
+    var probe = await page.json(LINKPROBE_EXPR), phone = w < 700;
+    if (!probe || probe.key === null) row(N.link, w, h, linkVerdict(probe));
+    else {
+      try { await page.click('[data-rv-probe]'); } catch (e) { /* the state below says so */ }
+      await CDP.sleep(200);
+      var pressed = await page.json(LINKSTATE_EXPR), shown = null;
+      if (phone && pressed.barShown) { try { await page.click('.hl-rv-showbar-go'); } catch (e) { /* reported below */ } await CDP.sleep(250); shown = { top: await page.json(LINKSTATE_EXPR).then(function (s) { return s.firstTop ? { t: s.firstTop.t, b: s.firstTop.b, ih: s.ih } : null; }) }; }
+      if (phone && pressed.barShown) { try { await page.click('.hl-rv-showbar-off'); } catch (e) { /* the second press below clears */ } await CDP.sleep(150); }
+      else { try { await page.click('[data-rv-probe]'); } catch (e) { /* reported below */ } await CDP.sleep(200); }
+      var cleared = await page.json(LINKSTATE_EXPR);
+      row(N.link, w, h, linkVerdict(probe, pressed, cleared, phone, shown));
+    }
+    if (i === 0) {
+      // controls, each on this same page: one risk row removed, one heat cell removed, one square removed, one judgment hidden, a tile note without its source, a key whose handler is gone
+      var ctls = [
+        [vRisk, 'with one risk row removed the risk-bar row FAILS', '(function(){var r=document.querySelector("#tab-overview .hl-rv-riskrow");if(r)r.remove();})()', function () { return page.json(RISK_EXPR).then(riskBarVerdict); }],
+        [vHeat, 'with one heat cell removed the heat-strip row FAILS', '(function(){var c=document.querySelector("#tab-overview .hl-rv-heat .hl-rv-cell");if(c)c.remove();})()', function () { return page.json(HEAT_EXPR).then(function (m) { return heatVerdict(m, attackRows); }); }],
+        [vSq, 'with one grade square removed the squares row FAILS', '(function(){var c=document.querySelector("#tab-overview .hl-rv-sq");if(c)c.remove();})()', function () { return page.json(SQUARES_EXPR).then(function (m) { return squaresVerdict(m, victimRows); }); }],
+        [vJd, 'with one judgment hidden the judgments row FAILS', '(function(){var c=document.querySelector("#tab-overview .hl-rv-jrow");if(c)c.hidden=true;})()', function () { return page.json(JUDG_EXPR).then(function (m) { return judgmentsVerdict(m, judgmentRows); }); }],
+        [vTile, 'a tile note that names no source makes the tile-source row FAIL', '(function(){var p=document.querySelector("#tab-overview .hl-rv-tilecell .hl-rv-pop small");if(p)p.textContent="How counted: a number.";})()', function () { return page.json(TILESRC_EXPR).then(tileSourceVerdict); }]
+      ];
+      for (var ci = 0; ci < ctls.length; ci++) {
+        if (ctls[ci][0].notChecked) { check('NOT CHECKED: control: ' + ctls[ci][1], false, 'the row it controls measured nothing on this report (' + ctls[ci][0].detail + '), so there is nothing to break'); continue; }
+        await page.evaluate(ctls[ci][2]); ctl(ctls[ci][1], await ctls[ci][3]());
+      }
+      if (probe && probe.key !== null) {
+        await page.evaluate('(function(){var e=document.querySelector("[data-rv-probe]");var c=e.cloneNode(true);e.replaceWith(c);var s=document.querySelector(".hl-rv-hit.is-lit");})()');
+        try { await page.click('[data-rv-probe]'); } catch (e) { /* the verdict says so */ }
+        await CDP.sleep(200);
+        var cp = await page.json(LINKSTATE_EXPR);
+        ctl('a key whose handler is gone makes the linked-highlighting row FAIL', linkVerdict(probe, cp, { lit: 0 }, false));
+      }
     }
   }
 }
@@ -3617,6 +3816,7 @@ async function tabbedChecks(page, opts) {
   await plateRows(page, url, opts.mdText);
   await infoRows(page, url);
   await textHiddenRows(page, url);
+  await overviewScanRows(page, url);
   await shareRows(page, url);
   await mispRows(page, url);
   await timelineRows(page, url);
@@ -4372,6 +4572,19 @@ if (require.main === module) {
     frontMatterLinks: frontMatterLinks,
     infoVerdict: infoVerdict,
     textHiddenVerdict: textHiddenVerdict,
+    riskBarVerdict: riskBarVerdict,
+    heatVerdict: heatVerdict,
+    squaresVerdict: squaresVerdict,
+    judgmentsVerdict: judgmentsVerdict,
+    tileSourceVerdict: tileSourceVerdict,
+    linkVerdict: linkVerdict,
+    RISK_EXPR: RISK_EXPR,
+    HEAT_EXPR: HEAT_EXPR,
+    SQUARES_EXPR: SQUARES_EXPR,
+    JUDG_EXPR: JUDG_EXPR,
+    TILESRC_EXPR: TILESRC_EXPR,
+    LINKPROBE_EXPR: LINKPROBE_EXPR,
+    LINKSTATE_EXPR: LINKSTATE_EXPR,
     STICKY_CONTROL_CSS: STICKY_CONTROL_CSS,
     STICKY_STATES: STICKY_STATES,
     RAIL_EXPR: RAIL_EXPR,

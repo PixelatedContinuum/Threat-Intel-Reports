@@ -70,7 +70,7 @@ test('the overview line labels each tile by what it is, not by its position, whe
   const f=page([['overview'],['chain',attack]]);
   try{
     const line=f.d.querySelector('#tab-overview .hl-rv-view-summary p').textContent;
-    assert.match(line,/^2 techniques · 2 procedure rows$/);assert.doesNotMatch(line,/organisations/);
+    assert.match(line,/^2 techniques$/);assert.doesNotMatch(line,/organisations/);
   }finally{f.w.close();}
 });
 
