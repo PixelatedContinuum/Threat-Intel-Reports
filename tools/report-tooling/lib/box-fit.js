@@ -183,10 +183,11 @@ function boxFit(opt) {
     /* B: a child outside its parent's padding box */
     var p = e.parentElement;
     if (cs.position === 'fixed') ex('position:fixed');
-    else if (cs.position === 'sticky' && /^(TH|TD)$/.test(e.tagName)) ex('sticky header cell');
-    else if (e.tagName === 'TR' && e.parentElement && e.parentElement.tagName === 'THEAD' && Array.prototype.some.call(e.cells, function (c) { return getComputedStyle(c).position === 'sticky'; })) ex('row of sticky header cells');
     else if (p) {
-      var out = null, ph, ocs, orc, gl = 0, gr = 0, gt = 0, gb = 0, boxEl = null;
+      /* A sticky header cell (and the header row that holds one) is carried down the page by the scroll: that vertical displacement is by design and is counted. Left and right containment still apply to it. */
+      var stickyV = (cs.position === 'sticky' && /^(TH|TD)$/.test(e.tagName)) ? 'sticky header cell'
+        : (e.tagName === 'TR' && p.tagName === 'THEAD' && Array.prototype.some.call(e.cells, function (c) { return getComputedStyle(c).position === 'sticky'; })) ? 'row of sticky header cells' : null;
+      var out = null, stickyHit = false, ph, ocs, orc, gl = 0, gr = 0, gt = 0, gb = 0, boxEl = null;
       if (cs.position === 'absolute') {
         boxEl = e.offsetParent;
         if (boxEl && boxEl !== document.body && boxEl !== document.documentElement && !/^(TD|TH|TABLE)$/.test(boxEl.tagName)) {
@@ -209,9 +210,10 @@ function boxFit(opt) {
           if (q.width === 0 && q.height === 0) return;
           if (q.left < L - 1) out = out || { side: 'left', by: L - q.left };
           if (q.right > R + 1) out = out || { side: 'right', by: q.right - R };
-          if (q.top < T - 1) out = out || { side: 'top', by: T - q.top };
-          if (q.bottom > Bm + 1) out = out || { side: 'bottom', by: q.bottom - Bm };
+          if (q.top < T - 1) { if (stickyV) stickyHit = true; else out = out || { side: 'top', by: T - q.top }; }
+          if (q.bottom > Bm + 1) { if (stickyV) stickyHit = true; else out = out || { side: 'bottom', by: q.bottom - Bm }; }
         });
+        if (stickyV && stickyHit) ex(stickyV);
         if (out) {
           var horiz = out.side === 'left' || out.side === 'right';
           if (/auto|scroll/.test(horiz ? ocs.overflowX : ocs.overflowY)) ex('child inside a scroll container');
