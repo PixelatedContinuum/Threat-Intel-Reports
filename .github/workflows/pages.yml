@@ -144,8 +144,9 @@ jobs:
           sudo chown -R "$(id -u):$(id -g)" _site
           npx --yes pagefind@1.3.0 --site _site 2>&1 | tee /tmp/pagefind.txt
 
-      # Decision 5 of the site restyle (T-0500.1.7.4, Joseph 2026-11-02): no rendered non-report page shows a raw network indicator or links to
-      # actor infrastructure. The gate reads the built _site (check-defang.js --site); a report's own text is gated at its source above.
+      # Decision 5 of the site restyle (T-0500.1.7.4, Joseph 2026-11-02): no rendered page shows a raw network indicator or links to actor
+      # infrastructure. The gate reads the built _site (check-defang.js --site), report pages included (their title, citation, BibTeX and Continue Reading
+      # cards come from the layout; a report's own text is also gated at its source above).
       # Exit 0 PASS, 1 FAIL (a page the build just produced carries a raw or clickable indicator: fail the job), 2 NOT CHECKED (warn, as the other gates do).
       - name: Gate the rendered pages for raw indicators
         working-directory: tools/report-tooling

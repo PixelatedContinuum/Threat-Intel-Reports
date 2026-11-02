@@ -1,4 +1,5 @@
-# What may print raw, and what may stay a link, on the NON-REPORT pages (T-0500.1.7.4, Joseph 2026-11-02, decision 5: defang everything).
+# What may print raw, and what may stay a link, on every rendered page (T-0500.1.7.4, Joseph 2026-11-02, decision 5: defang everything). A report page is judged against this
+# file PLUS its own tools/report-tooling/defang-allow/<report>.txt, and a reference link on a report page stays a link (only a link to an IP, or to a host the page names defanged, is refused).
 # Read by BOTH sides of one rule: _includes/defang-text.html and _includes/defang-html.html (render time) and tools/report-tooling/check-defang.js --site (the gate over the
 # built pages). An entry here is a reviewer's claim that the name is not actor infrastructure: add one only for this site, a reference, a product name that ends in a TLD word,
 # or a name the site prints on purpose. A bare multi-tenant host (github.com, pastebin.com ...) is refused by the gate and must be path-scoped under `links`.
