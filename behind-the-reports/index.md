@@ -5,13 +5,14 @@ date: '2026-04-12'
 layout: page
 permalink: /behind-the-reports/
 hide: true
+hl_idx: single
 ---
 
-<div class="hl-page-header" style="--ph-accent: #f97316;">
-  <div class="hl-page-header__label">Behind the Reports</div>
-  <div class="hl-page-header__title">How the Intelligence Is Produced</div>
+<header class="hl-page-header hl-d-plate" style="--ph-accent: #f97316;">
+  <div class="hl-page-header__label hl-d-kicker">Behind the Reports</div>
+  <h1 class="hl-page-header__title">How the Intelligence Is Produced</h1>
   <div class="hl-page-header__desc">The whole path an investigation takes, from a scanner finding an open directory to a detection rule running in somebody else's SOC.</div>
-</div>
+</header>
 
 ## Start to Finish
 
@@ -28,7 +29,7 @@ Two things are worth knowing before the walkthrough. I do this alone, so every d
 
 ---
 
-{% include section-header.html label="Step 1 of 3: Find and Choose" accent="#b8902f" %}
+{% include section-header.html label="Step 1 of 3: Find and Choose" accent="#fb923c" %}
 
 It starts with a scan. A self-hosted collection platform called Vantage runs every night against the announced IP space of 65 bulletproof-hosting networks, the corner of the market where malware actually gets staged and served, across 28 ports. Anything that answers gets probed for an open directory, and a confirmed one gets crawled in full.
 
@@ -42,7 +43,7 @@ Then I choose, and this is the first decision that is genuinely mine. It is also
 
 ---
 
-{% include section-header.html label="Step 2 of 3: Analyze and Draft" accent="#b8902f" %}
+{% include section-header.html label="Step 2 of 3: Analyze and Draft" accent="#fb923c" %}
 
 A chosen candidate stops being a platform problem and becomes an investigation. I pull the files into an isolated lab and take them apart by hand: detonation, static examination, reverse engineering, watching what the sample does to a machine and to the network. Nothing here is automated, and this is where the actual findings come from.
 
@@ -56,7 +57,7 @@ I stay in the loop at two points. I read the draft at the first checkpoint and c
 
 ---
 
-{% include section-header.html label="Step 3 of 3: Verify and Ship" accent="#b8902f" %}
+{% include section-header.html label="Step 3 of 3: Verify and Ship" accent="#fb923c" %}
 
 Nothing publishes because an agent said it went well. Every YARA rule is compiled by the real compiler, every Sigma rule runs through SigmaHQ's own validator, and every Suricata signature is parsed by a live Suricata engine. Those checks report one of three outcomes rather than two, and the third, NOT CHECKED, is never quietly folded into a pass.
 

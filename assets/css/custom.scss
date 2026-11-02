@@ -3565,11 +3565,11 @@ a.hl-sponsor-rail__item:focus-visible { outline: 2px solid #ffffff; outline-offs
 .hl-series-cluster {
   grid-column: 1 / -1;
   position: relative;
-  border: 1px solid rgba(184, 144, 47, 0.32);
-  border-left: 3px solid var(--hl-accent-gold);
+  border: 1px solid rgba(159, 180, 201, 0.32);
+  border-left: 3px solid var(--hl-accent-steel);
   border-radius: 8px;
   background:
-    linear-gradient(180deg, rgba(184, 144, 47, 0.07) 0%, rgba(184, 144, 47, 0.02) 55%, rgba(184, 144, 47, 0) 100%);
+    linear-gradient(180deg, rgba(159, 180, 201, 0.07) 0%, rgba(159, 180, 201, 0.02) 55%, rgba(159, 180, 201, 0) 100%);
   padding: 13px 13px 13px 14px;
 }
 
@@ -3587,9 +3587,9 @@ a.hl-sponsor-rail__item:focus-visible { outline: 2px solid #ffffff; outline-offs
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.14em;
-  color: var(--hl-accent-gold);
-  border: 1px solid rgba(184, 144, 47, 0.45);
-  background: rgba(184, 144, 47, 0.12);
+  color: var(--hl-accent-steel);
+  border: 1px solid rgba(159, 180, 201, 0.45);
+  background: rgba(159, 180, 201, 0.12);
   border-radius: 3px;
   padding: 2px 7px;
   white-space: nowrap;
@@ -3628,7 +3628,7 @@ a.hl-sponsor-rail__item:focus-visible { outline: 2px solid #ffffff; outline-offs
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.12em;
-  color: var(--hl-accent-gold);
+  color: var(--hl-accent-steel);
   margin-bottom: 4px;
 }
 
@@ -3640,7 +3640,7 @@ a.hl-sponsor-rail__item:focus-visible { outline: 2px solid #ffffff; outline-offs
 
 /* STIX "Download all" button (/stix/ listing) — matches the .hl-quicklink border treatment */
 .hl-download-all { display: inline-block; padding: .5rem .9rem; border: 1px solid var(--hl-border-card); border-radius: 8px; font-weight: 600; text-decoration: none; color: inherit; }
-.hl-download-all:hover { border-color: var(--hl-accent-gold); }
+.hl-download-all:hover { border-color: var(--hl-accent-steel); }
 
 /* ---- ATT&CK coverage strip (assets/js/attack-coverage.js) ---- */
 .hl-attack { border: 1px solid rgba(128,128,128,0.32); border-radius: 8px;
@@ -3921,10 +3921,10 @@ a.hl-sponsor-rail__item:focus-visible { outline: 2px solid #ffffff; outline-offs
 .hl-wire__item--src-domaintools-investigations { --wire-src: #e879f9; }
 .hl-wire__item--src-sans-internet-storm-center { --wire-src: #facc15; }
 .hl-wire__item--src-cisa                       { --wire-src: #ef4444; }
-.hl-wire__item--src-trend-micro                { --wire-src: #b8902f; }
-.hl-wire__item--src-zero-day-initiative        { --wire-src: #b8902f; }
-.hl-wire__item--src-google                     { --wire-src: #f4e9c8; }
-.hl-wire__item--src-google-project-zero        { --wire-src: #f4e9c8; }
+.hl-wire__item--src-trend-micro                { --wire-src: #fb7185; }
+.hl-wire__item--src-zero-day-initiative        { --wire-src: #fb7185; }
+.hl-wire__item--src-google                     { --wire-src: #7dd3fc; }
+.hl-wire__item--src-google-project-zero        { --wire-src: #7dd3fc; }
 .hl-wire__item--src-the-dfir-report            { --wire-src: #a3e635; }
 
 /* --- header line --------------------------------------------- */
@@ -4774,7 +4774,7 @@ span.hl-vuln__p--ssvc, span.hl-vuln__p--exp, span.hl-vuln__p--cn { cursor: help;
    section, so the two surfaces read as one convention. */
 .hl-iocsearch__result--withheld {
   color: var(--hl-text-primary);
-  border-left: 3px solid #f59e0b;
+  border-left: 3px solid #fbbf24;
   padding-left: 0.8em;
 }
 .hl-iocsearch__result strong {
@@ -4808,7 +4808,7 @@ span.hl-vuln__p--ssvc, span.hl-vuln__p--exp, span.hl-vuln__p--cn { cursor: help;
   word-break: break-all;
 }
 .hl-iocsearch__row--hit code { color: var(--hl-accent-green, #4ade80); }
-.hl-iocsearch__row--withheld code { color: #f59e0b; }
+.hl-iocsearch__row--withheld code { color: #fbbf24; }
 .hl-iocsearch__in-feed { color: var(--hl-text-muted); }
 .hl-iocsearch__row--miss, .hl-iocsearch__more {
   color: var(--hl-text-muted);
@@ -5023,15 +5023,15 @@ span.hl-vuln__p--ssvc, span.hl-vuln__p--exp, span.hl-vuln__p--cn { cursor: help;
 .hl-ioctable__nb {
   margin-top: 1.6em;
   padding: 1em 1.2em;
-  border: 1px solid color-mix(in srgb, #f59e0b 40%, var(--ioct-border));
-  border-left: 3px solid #f59e0b;
+  border: 1px solid color-mix(in srgb, #fbbf24 40%, var(--ioct-border));
+  border-left: 3px solid #fbbf24;
   border-radius: 6px;
-  background: color-mix(in srgb, #f59e0b 7%, transparent);
+  background: color-mix(in srgb, #fbbf24 7%, transparent);
 }
 .hl-ioctable__nbtitle {
   font-size: 0.95em;
   margin: 0 0 0.5em;
-  color: #f59e0b;
+  color: #fbbf24;
 }
 .hl-ioctable__nbdesc {
   font-size: 0.85em;
@@ -6650,7 +6650,7 @@ main.content:focus { outline: none; }
   vertical-align: middle;
 }
 .hl-ioctable__act--block   { color: var(--hl-accent-red, #f87171); }
-.hl-ioctable__act--monitor { color: var(--hl-accent-gold, #b8902f); }
+.hl-ioctable__act--monitor { color: var(--hl-sev-med-lbl); }
 .hl-ioctable__act--hunt    { color: var(--ioct-dim); }
 .hl-ioctable__btn--toggle[aria-pressed="true"] {
   border-color: currentColor;
@@ -6955,8 +6955,8 @@ body.hl-drawer-locked { overflow: hidden; }
 #hl-search .pagefind-ui__result-link:hover { color: var(--hl-text-primary); text-decoration: underline; text-decoration-color: var(--sr-acc); }
 #hl-search .pagefind-ui__result-excerpt { color: var(--hl-text-secondary); opacity: 0.9; font-size: 0.95rem; margin: 0; }
 #hl-search .pagefind-ui__result mark {
-  background: color-mix(in srgb, var(--hl-accent-gold) 32%, transparent);
-  color: var(--hl-accent-gold-light);
+  background: color-mix(in srgb, var(--hl-accent-blue) 30%, transparent);
+  color: #ffffff;
   border-radius: 3px;
   padding: 0 3px;
   font-weight: 600;
@@ -8187,3 +8187,48 @@ a.hl-kc:hover { border-color: var(--kc); color: #ffffff; }
 .hl-cflegend { display: flex; flex-wrap: wrap; gap: 6px 16px; margin: 10px 0 0; font: 500 14px var(--hl-font-mono); color: #d6d6d6; }
 .hl-cflegend span { display: inline-flex; align-items: center; gap: 6px; }
 .hl-cflegend span::before { content: ""; width: 10px; height: 10px; border-radius: 2px; background: var(--lc); }
+
+/* ============================================================
+   DESIGN D: SINGLE PAGES (T-0500.1.7.4 b3)
+   Sponsor, support, consulting, subscribe, about, PGP, Behind the Reports (and its three step pages), changes, search, the MISP feed page and the 404.
+   Scoped to .hl-idx--single (front matter hl_idx: single). The plate is the shared one above; the old panels, feature tiles, tier cards and
+   call-to-action buttons were already D's gradient panels and keep their own rules. What changes: the section head (D's mono eyebrow),
+   the rows of /changes/, the 404 as a plate, and the search field at 390.
+   ============================================================ */
+.hl-idx--single .hl-section-header {
+  display: flex; align-items: center; gap: 10px;
+  margin: 30px 0 12px; padding: 0; border: 0;
+  font: 600 13.5px/1.2 var(--hl-font-mono); letter-spacing: 0.12em; text-transform: uppercase;
+  color: #d6dde6;
+}
+.hl-idx--single .hl-section-header__bar { width: 17px; height: 17px; border-radius: 5px; opacity: 0.85; }
+.hl-idx--single .hl-panel, .hl-idx--single .hl-feat, .hl-idx--single .hl-tier-card, .hl-idx--single .hl-link-card { border-radius: 10px; }
+.hl-idx--single .hl-panel__title, .hl-idx--single .hl-feat__title, .hl-idx--single .hl-tier-card__name { letter-spacing: -0.005em; }
+.hl-idx--single .hl-cta { min-height: 44px; border-radius: 8px; }
+.hl-idx--single .hl-cta-row { gap: 10px 12px; }
+.hl-idx--single .hl-creds-strip { gap: 8px; }
+.hl-idx--single pre { border: 1px solid var(--hl-field-line); border-radius: 8px; background: #0a0e13; }
+.hl-idx--single .hl-feed-url { border-radius: 8px; }
+.hl-idx--single .hl-note { border-radius: 10px; }
+
+/* /changes/ as D rows: a mono date, the report as the title, the note under it */
+.hl-idx--single .hl-changes { max-width: none; margin: 12px 0 0; border: 1px solid var(--hl-border-card); border-radius: 10px; overflow: hidden; background: linear-gradient(135deg, #171717, #0f1319); }
+.hl-idx--single .hl-changes__item { position: relative; display: grid; grid-template-columns: 170px minmax(0, 1fr); gap: 4px 16px; align-items: baseline; margin: 0; padding: 14px 18px 14px 20px; border: 0; border-top: 1px solid #222222; }
+.hl-idx--single .hl-changes__item:first-child { border-top: 0; }
+.hl-idx--single .hl-changes__item::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 4px; background: var(--ph-accent); }
+.hl-idx--single .hl-changes__item time { min-width: 0; font: 600 14.5px var(--hl-font-mono); letter-spacing: 0.02em; color: var(--hl-muted-d); }
+.hl-idx--single .hl-changes__item a { font: 600 18px/1.3 var(--hl-font-display); color: #ffffff; text-decoration: none; overflow-wrap: anywhere; }
+.hl-idx--single .hl-changes__item a:hover { text-decoration: underline; }
+.hl-idx--single .hl-changes__note { grid-column: 2; font-size: 16px; line-height: 1.5; color: #dcdcdc; }
+@media (max-width: 719px) {
+  .hl-idx--single .hl-changes__item { grid-template-columns: minmax(0, 1fr); }
+  .hl-idx--single .hl-changes__note { grid-column: 1; }
+}
+
+/* the 404 as a plate */
+.hl-idx--single .hl-404 { max-width: 760px; margin: 14px auto 0; padding: clamp(30px, 6vw, 60px) clamp(18px, 4vw, 40px) clamp(34px, 6vw, 56px); border: 1px solid var(--hl-border-card); border-left: 3px solid var(--ph-accent); border-radius: 8px; background: radial-gradient(120% 150% at 0 0, color-mix(in srgb, var(--ph-accent) 15%, transparent), transparent 58%), linear-gradient(135deg, #1a1a1a, #0d1117); }
+.hl-idx--single .hl-404__log { border-radius: 8px; background: #0a0e13; border-color: var(--hl-field-line); }
+.hl-idx--single .hl-404__btn { min-height: 48px; border-radius: 8px; font-size: 16px; }
+.hl-idx--single .hl-404__btn--primary { background: color-mix(in srgb, #58a6ff 22%, #14171c); border-color: #58a6ff; }
+.hl-idx--single .hl-404__btn--primary:hover { background: color-mix(in srgb, #58a6ff 34%, #14171c); }
+.hl-idx--single .hl-404__btn--ghost { background: #14171c; }

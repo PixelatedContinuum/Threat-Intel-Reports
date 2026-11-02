@@ -5,13 +5,14 @@ layout: page
 permalink: /subscribe/
 thumbnail: /assets/images/cards/subscribe.png
 position: 5
+hl_idx: single
 ---
 
-<div class="hl-page-header" style="background: linear-gradient(135deg, #0d1520 0%, #0d1117 60%, #111111 100%); --ph-accent: #3b82f6;">
-  <div class="hl-page-header__label">Stay Informed</div>
-  <div class="hl-page-header__title">Subscribe to The Hunter's Ledger</div>
+<header class="hl-page-header hl-d-plate" style="--ph-accent: #3b82f6;">
+  <div class="hl-page-header__label hl-d-kicker">Stay Informed</div>
+  <h1 class="hl-page-header__title">Subscribe to The Hunter's Ledger</h1>
   <div class="hl-page-header__desc">New threat intelligence reports, detection rules, and IOC feeds, delivered the moment they publish. Pick whatever fits how you work. No marketing, no noise.</div>
-</div>
+</header>
 
 {% include section-header.html label="Delivery Options" accent="#58a6ff" %}
 

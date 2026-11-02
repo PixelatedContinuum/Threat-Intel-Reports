@@ -4,13 +4,14 @@ description: "PGP public key for The Hunter's Ledger, for sending sensitive mate
 nav_title: PGP Key
 layout: page
 permalink: /pgp/
+hl_idx: single
 ---
 
-<div class="hl-page-header" style="--ph-accent: #58a6ff;">
-  <div class="hl-page-header__label">Secure Contact</div>
-  <div class="hl-page-header__title">PGP Public Key</div>
+<header class="hl-page-header hl-d-plate" style="--ph-accent: #58a6ff;">
+  <div class="hl-page-header__label hl-d-kicker">Secure Contact</div>
+  <h1 class="hl-page-header__title">PGP Public Key</h1>
   <div class="hl-page-header__desc">For sending sensitive material to The Hunter's Ledger, including victim-identifying detail, credentials, and pre-publication findings.</div>
-</div>
+</header>
 
 ## Fingerprint
 

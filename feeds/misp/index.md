@@ -3,13 +3,14 @@ title: MISP Feed
 layout: page
 permalink: /feeds/misp/
 description: "Subscribe to The Hunters Ledger as a MISP feed: one event per published campaign carrying the indicators and the Suricata, YARA and Sigma rules, pulled natively by MISP and OpenCTI. Licensed CC BY 4.0."
+hl_idx: single
 ---
 
-<div class="hl-page-header" style="--ph-accent: #22d3ee;">
-  <div class="hl-page-header__label">MISP Feed</div>
-  <div class="hl-page-header__title">Subscribe as a MISP feed</div>
+<header class="hl-page-header hl-d-plate" style="--ph-accent: #22d3ee;">
+  <div class="hl-page-header__label hl-d-kicker">MISP Feed</div>
+  <h1 class="hl-page-header__title">Subscribe as a MISP feed</h1>
   <div class="hl-page-header__desc">Every published campaign as one MISP event: the indicators from its STIX bundle, the Suricata, YARA and Sigma rules from its detection page, the CVEs it names, ATT&amp;CK galaxy tags, and links back to the report. Static files in the MISP feed format, so MISP pulls it on its own schedule and OpenCTI reads it through its MISP feed connector, with no MISP instance in between. Free under <strong>CC BY 4.0</strong>.</div>
-</div>
+</header>
 
 {%- assign m = site.static_files | where: "path", "/feeds/misp/manifest.json" | first -%}
 

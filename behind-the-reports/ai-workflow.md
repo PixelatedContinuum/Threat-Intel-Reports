@@ -5,13 +5,14 @@ date: '2026-08-20'
 layout: page
 permalink: /behind-the-reports/ai-workflow/
 hide: true
+hl_idx: single
 ---
 
-<div class="hl-page-header" style="--ph-accent: #f97316;">
-  <div class="hl-page-header__label">Behind the Reports</div>
-  <div class="hl-page-header__title">How a Solo Analyst Uses AI Agents to Produce Timely, Trustworthy Threat Intelligence</div>
+<header class="hl-page-header hl-d-plate" style="--ph-accent: #f97316;">
+  <div class="hl-page-header__label hl-d-kicker">Behind the Reports</div>
+  <h1 class="hl-page-header__title">How a Solo Analyst Uses AI Agents to Produce Timely, Trustworthy Threat Intelligence</h1>
   <div class="hl-page-header__desc">The workflow, the design decisions, and why it was built this way.</div>
-</div>
+</header>
 
 <div class="hl-note" style="margin-bottom: 2rem;">
   <div class="hl-note__label">Step 2 of 3</div>

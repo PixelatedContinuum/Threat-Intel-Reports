@@ -4,13 +4,14 @@ description: "Independent security consulting: malware analysis, incident respon
 layout: page
 permalink: /consulting/
 thumbnail: /assets/images/cards/consulting.png
+hl_idx: single
 ---
 
-<div class="hl-page-header" style="--ph-accent: #9fb4c9;">
-  <div class="hl-page-header__label">Consulting &amp; Advisory</div>
-  <div class="hl-page-header__title">Threat Intelligence That Works for Your Team</div>
+<header class="hl-page-header hl-d-plate" style="--ph-accent: #9fb4c9;">
+  <div class="hl-page-header__label hl-d-kicker">Consulting &amp; Advisory</div>
+  <h1 class="hl-page-header__title">Threat Intelligence That Works for Your Team</h1>
   <div class="hl-page-header__desc">An independent practice run alongside active security operations work. Engagements stay selective, quality and fit over volume. If it's a fit, you get the same depth that goes into the research on this site, applied directly to your environment.</div>
-</div>
+</header>
 
 {% include section-header.html label="Services" accent="#58a6ff" %}
 
@@ -49,7 +50,7 @@ thumbnail: /assets/images/cards/consulting.png
     <div class="hl-panel__title">Threat Intelligence Utilization</div>
     <p class="hl-panel__body">Operationalize the intelligence your team already has, from hunting plans to translating intel into detection logic and briefings on relevant threats and campaigns.</p>
   </div>
-  <div class="hl-panel" style="--acc: #facc15;">
+  <div class="hl-panel" style="--acc: #a3e635;">
     <div class="hl-panel__title">Training &amp; Knowledge Transfer</div>
     <p class="hl-panel__body">Focused sessions for analyst teams on threat hunting, applying malware reports, turning threat intel into detections, or understanding specific threat actors.</p>
   </div>

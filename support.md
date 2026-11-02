@@ -5,13 +5,14 @@ layout: page
 permalink: /support/
 thumbnail: /assets/images/cards/support.png
 position: 6
+hl_idx: single
 ---
 
-<div class="hl-page-header" style="--ph-accent: #f472b6;">
-  <div class="hl-page-header__label">Support the Work</div>
-  <div class="hl-page-header__title">Keep This Research Independent</div>
+<header class="hl-page-header hl-d-plate" style="--ph-accent: #f472b6;">
+  <div class="hl-page-header__label hl-d-kicker">Support the Work</div>
+  <h1 class="hl-page-header__title">Keep This Research Independent</h1>
   <div class="hl-page-header__desc">Run by a single researcher. No corporate backing, no paywalls, no ads. Your support keeps it that way.</div>
-</div>
+</header>
 
 {% include section-header.html label="What Goes Into Each Report" accent="#f97316" %}
 

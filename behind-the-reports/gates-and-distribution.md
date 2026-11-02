@@ -5,13 +5,14 @@ layout: page
 permalink: /behind-the-reports/gates-and-distribution/
 hide: true
 description: "The gates that stop the Hunters Ledger pipeline reporting success it has not earned, and where the finished intelligence goes after it publishes."
+hl_idx: single
 ---
 
-<div class="hl-page-header" style="--ph-accent: #f97316;">
-  <div class="hl-page-header__label">Behind the Reports</div>
-  <div class="hl-page-header__title">Verifying and Shipping It</div>
+<header class="hl-page-header hl-d-plate" style="--ph-accent: #f97316;">
+  <div class="hl-page-header__label hl-d-kicker">Behind the Reports</div>
+  <h1 class="hl-page-header__title">Verifying and Shipping It</h1>
   <div class="hl-page-header__desc">The checks that stop the pipeline lying to me about its own work, and where the finished intelligence actually goes.</div>
-</div>
+</header>
 
 <div class="hl-note" style="margin-bottom: 2rem;">
   <div class="hl-note__label">Step 3 of 3</div>

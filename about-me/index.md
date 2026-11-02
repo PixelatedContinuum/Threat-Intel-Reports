@@ -5,13 +5,14 @@ date: '2025-11-17'
 layout: page
 permalink: /about-me/
 thumbnail: /assets/images/cards/about.png
+hl_idx: single
 ---
 
-<div class="hl-page-header" style="--ph-accent: #60a5fa;">
-  <div class="hl-page-header__label">About</div>
-  <div class="hl-page-header__title">Joseph Harrison</div>
+<header class="hl-page-header hl-d-plate" style="--ph-accent: #60a5fa;">
+  <div class="hl-page-header__label hl-d-kicker">About</div>
+  <h1 class="hl-page-header__title">Joseph Harrison</h1>
   <div class="hl-page-header__desc">SOC Operations Lead &amp; Threat Intelligence Researcher</div>
-</div>
+</header>
 
 <div class="hl-creds-strip">
   <span class="hl-cred-pill"><span class="hl-cred-pill__dot" style="background:#f97316;"></span><strong>GCFA</strong></span>
@@ -27,7 +28,7 @@ thumbnail: /assets/images/cards/about.png
   <span class="hl-cred-pill"><span class="hl-cred-pill__dot" style="background:#f97316;"></span><strong>Reverse Engineering</strong></span>
   <span class="hl-cred-pill"><span class="hl-cred-pill__dot" style="background:#c084fc;"></span><strong>DFIR</strong></span>
   <span class="hl-cred-pill"><span class="hl-cred-pill__dot" style="background:#2dd4bf;"></span><strong>Threat Intelligence</strong></span>
-  <span class="hl-cred-pill"><span class="hl-cred-pill__dot" style="background:#b8902f;"></span><strong>AI Agent Engineering</strong></span>
+  <span class="hl-cred-pill"><span class="hl-cred-pill__dot" style="background:#fb923c;"></span><strong>AI Agent Engineering</strong></span>
 </div>
 
 {% include section-header.html label="Who I Am" accent="#58a6ff" %}

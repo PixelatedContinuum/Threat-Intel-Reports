@@ -3,13 +3,14 @@ title: Search
 layout: page
 permalink: /search/
 description: "Full-text search across every published report, detection page, IOC feed and STIX bundle on The Hunter's Ledger."
+hl_idx: single
 ---
 
-<div class="hl-page-header" style="--ph-accent: #58a6ff;">
-  <div class="hl-page-header__label">Search</div>
-  <div class="hl-page-header__title">Search the Ledger</div>
+<header class="hl-page-header hl-d-plate" style="--ph-accent: #58a6ff;">
+  <div class="hl-page-header__label hl-d-kicker">Search</div>
+  <h1 class="hl-page-header__title">Search the Ledger</h1>
   <div class="hl-page-header__desc">Full-text search across every published report, detection page, IOC feed and STIX bundle. Type an indicator, a technique, a tool name or a phrase, and narrow by section.</div>
-</div>
+</header>
 
 {%- comment -%}
   The index (/pagefind/) is produced by Pagefind in the deploy workflow, after
