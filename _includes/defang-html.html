@@ -11,8 +11,8 @@
     - the inside of <pre>, <script>, <style>, <template> and <textarea> is copied as it is: a <pre> on a detection page is a rule body (decision 5 keeps rule bodies exact),
       and a script is code, not text (the rendered-page gate fails a raw indicator in a <pre> anywhere else);
     - an <a href> that points off this site is kept only when its target (host + path, no scheme, no www) begins with an entry of _data/defang_allow.yml `links` (MITRE, vendor
-      and standards references, our own profiles); any other target (an unlisted host, an IP address, javascript:, data:) becomes a <span class="hl-unlinked"> holding the same
-      text, which is then defanged: an indicator is text, never a link. A relative link, an anchor and a mailto: to one of our `mailboxes` are kept. unlink=false keeps every link (the Wire:
+      and standards references, our own profiles); any other target (an unlisted host, an IP address, javascript:, data:) becomes a <span class="hl-unlinked" data-unlinked="DEFANGED TARGET"> holding the same
+      text, which is then defanged (the gate prints each such span, so a reference link nobody listed shows up as a lost link, never silently): an indicator is text, never a link. A relative link, an anchor and a mailto: to one of our `mailboxes` are kept. unlink=false keeps every link (the Wire:
       its article links are curated feed publishers, not actor infrastructure, and the rendered-page gate checks them for IP targets only);
     - a kept external link whose label is only its own host name or host + path ("patchstack.com", "linkedin.com/in/josephrharrison") is not defanged: the label names where the reference goes.
   An element carrying data-literal="<type>" (the IOC viewer's hash, filename, path and registry cells, _includes/ioc-cell.html) keeps its text as written.
@@ -110,7 +110,8 @@
         {%- endif -%}
         {%- if _dh_keep == false -%}
           {%- assign _dh_lab = "" -%}
-          {%- assign _dh_tag_out = 'span class="hl-unlinked" data-unlinked="1"' -%}
+          {%- capture _dh_hd %}{% include defang-text.html text=_dh_href %}{% endcapture -%}
+          {%- assign _dh_tag_out = 'span class="hl-unlinked" data-unlinked="' | append: _dh_hd | append: '"' -%}
           {%- assign _dh_unl = true -%}
         {%- endif -%}
       {%- elsif _dh_nm == "/a" and _dh_unl -%}

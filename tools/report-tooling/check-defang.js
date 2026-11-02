@@ -864,6 +864,8 @@ function mainSite(site, allowData, only, all) {
   var L = s.links;
   console.log('  links       ' + L.total + ' <a href>: ' + L.relative + ' own-site/relative, ' + L.anchor + ' anchors, ' + L.external + ' external (' + L.externalAllowed + ' kept: listed reference or Wire publisher, ' + L.labelSkips + ' labelled with their own host name), ' + L.mailto + ' mailto, ' + L.other + ' other scheme');
   console.log('  pre         ' + s.pre.blocks + ' blocks, ' + s.pre.lines + ' lines: ' + s.pre.onDetection + ' on detection pages kept exact (' + s.pre.rawIndicators + ' raw indicator token(s) inside, rule bodies), ' + s.pre.offDetection + ' elsewhere scanned as page text');
+  console.log('  unlinked    ' + s.unlinked.n + ' <a> rendered as text by the include (an off-site target not under `links` in the allow data)' + (s.unlinked.n ? ':' : ''));
+  s.unlinked.targets.forEach(function (t) { console.log('              ' + t); });
   console.log('  literal     ' + s.literal.cells + ' IOC viewer cell(s) marked data-literal (hash, filename, path, registry values, as the feed recorded them), each checked for its type');
   if (s.pages === 0 || s.textNodes === 0) { console.log('NOT CHECKED  no page or no text node was scanned (zero denominator)'); process.exit(2); }
   var limit = all ? F.length : 60;

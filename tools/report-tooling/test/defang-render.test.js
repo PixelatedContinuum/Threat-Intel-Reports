@@ -132,10 +132,10 @@ const HTML_CASES = [
   ['<pre class="highlight"><code>rule x { $a = "198.51.100.17" }</code></pre><p>after 198.51.100.99</p>', '<pre class="highlight"><code>rule x { $a = "198.51.100.17" }</code></pre><p>after 198[.]51[.]100[.]99</p>'],
   ['<script>var a = "x.sh"; if (1<2) {}</script><p>1.2.3.4</p>', '<script>var a = "x.sh"; if (1<2) {}</script><p>1[.]2[.]3[.]4</p>'],
   ['<a href="https://attack.mitre.org/techniques/T1001/">attack.mitre.org</a>', '<a href="https://attack.mitre.org/techniques/T1001/">attack.mitre.org</a>'],
-  ['<a href="http://198.51.100.17/x">http://198.51.100.17/x</a> and <a href="https://vendor.example.net/r">vendor.example.net post</a>', '<span class="hl-unlinked" data-unlinked="1">hxxp://198[.]51[.]100[.]17/x</span> and <span class="hl-unlinked" data-unlinked="1">vendor[.]example[.]net post</span>'],
+  ['<a href="http://198.51.100.17/x">http://198.51.100.17/x</a> and <a href="https://vendor.example.net/r">vendor.example.net post</a>', '<span class="hl-unlinked" data-unlinked="hxxp://198[.]51[.]100[.]17/x">hxxp://198[.]51[.]100[.]17/x</span> and <span class="hl-unlinked" data-unlinked="hxxps://vendor[.]example[.]net/r">vendor[.]example[.]net post</span>'],
   ['<a href="/actors/UTA-2026-001/">198.51.100.17</a> <a href="#x">1.2.3.4</a>', '<a href="/actors/UTA-2026-001/">198[.]51[.]100[.]17</a> <a href="#x">1[.]2[.]3[.]4</a>'],
-  ['<a href="mailto:intel@the-hunters-ledger.com">intel@the-hunters-ledger.com</a> <a href="mailto:op@evil.example.xyz">op@evil.example.xyz</a>', '<a href="mailto:intel@the-hunters-ledger.com">intel@the-hunters-ledger.com</a> <span class="hl-unlinked" data-unlinked="1">op[@]evil[.]example[.]xyz</span>'],
-  ['<a href="javascript:void(0)">js 1.2.3.4</a>', '<span class="hl-unlinked" data-unlinked="1">js 1[.]2[.]3[.]4</span>'],
+  ['<a href="mailto:intel@the-hunters-ledger.com">intel@the-hunters-ledger.com</a> <a href="mailto:op@evil.example.xyz">op@evil.example.xyz</a>', '<a href="mailto:intel@the-hunters-ledger.com">intel@the-hunters-ledger.com</a> <span class="hl-unlinked" data-unlinked="mailto:op[@]evil[.]example[.]xyz">op[@]evil[.]example[.]xyz</span>'],
+  ['<a href="javascript:void(0)">js 1.2.3.4</a>', '<span class="hl-unlinked" data-unlinked="javascript:void(0)">js 1[.]2[.]3[.]4</span>'],
   ['<a href="https://www.linkedin.com/in/josephrharrison">linkedin.com/in/josephrharrison</a> <a href="https://www.linkedin.com/in/josephrharrison">LinkedIn linkedin.com/x</a>', '<a href="https://www.linkedin.com/in/josephrharrison">linkedin.com/in/josephrharrison</a> <a href="https://www.linkedin.com/in/josephrharrison">LinkedIn linkedin[.]com/x</a>'],
   ['<span title="via openvpn.learn-address.sh and 198.51.100.17" data-title="openvpn.learn-address.sh">a</span> <a href="/x/" aria-label="see evil.example.org">go</a>', '<span title="via openvpn[.]learn-address[.]sh and 198[.]51[.]100[.]17" data-title="openvpn.learn-address.sh">a</span> <a href="/x/" aria-label="see evil[.]example[.]org">go</a>'],
   ['<p><b>Campaign:</b> x-198.51.100.17\n<b>Date:</b> 2026 and 1.2.3.4\n\n<i>z</i> 5.6.7.8 \n</p>', '<p><b>Campaign:</b> x-198[.]51[.]100[.]17\n<b>Date:</b> 2026 and 1[.]2[.]3[.]4\n\n<i>z</i> 5[.]6[.]7[.]8 \n</p>'],
@@ -204,6 +204,11 @@ test('check-defang --site: a clean fixture PASSes with its denominators, each in
   const ex = gate(fixtureSite({ 'index.html': '<p>x</p>', 'reports/a/index.html': '198.51.100.17', 'report-templates/index.html': '198.51.100.17', 'feeds/misp/changelog/index.html': '198.51.100.17' }));
   assert.equal(ex.status, 0, ex.stdout);
   assert.match(ex.stdout, /excluded\s+1 feed changelog \(decision 7\); 1 report page \(source lint\); 1 working doc \(decision 7\)/);
+  // the include's own output is counted and listed, never silent: an <a> rendered as text shows in the gate output with its defanged target
+  const un = gate(fixtureSite({ 'index.html': '<span class="hl-unlinked" data-unlinked="hxxps://vendor[.]example[.]net/r">vendor[.]example[.]net</span>' }));
+  assert.equal(un.status, 0, un.stdout);
+  assert.match(un.stdout, /unlinked\s+1 <a> rendered as text/);
+  assert.match(un.stdout, /index\.html -> hxxps:\/\/vendor\[\.\]example\[\.\]net\/r/);
   // our own mailbox is allowed, a foreign one is not
   assert.equal(gate(fixtureSite({ 'index.html': '<a href="mailto:intel@the-hunters-ledger.com">intel@the-hunters-ledger.com</a>' })).status, 0);
   // zero denominator and a missing directory are NOT CHECKED (exit 2), never PASS

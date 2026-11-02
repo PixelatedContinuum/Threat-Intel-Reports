@@ -117,7 +117,7 @@ function isIpHost(host) {
 function newStats() {
   return { pages: 0, byType: {}, excluded: {}, textNodes: 0, attrs: 0, matchedFlagged: 0, matchedDefanged: 0, matchedPrivate: 0, matchedAllowed: 0, allowedBy: {},
     links: { total: 0, relative: 0, anchor: 0, external: 0, externalAllowed: 0, mailto: 0, other: 0, labelSkips: 0 },
-    pre: { blocks: 0, lines: 0, rawIndicators: 0, onDetection: 0, offDetection: 0 }, literal: { cells: 0 } };
+    pre: { blocks: 0, lines: 0, rawIndicators: 0, onDetection: 0, offDetection: 0 }, literal: { cells: 0 }, unlinked: { n: 0, targets: [] } };
 }
 
 /* Scan one parsed document. `JSDOM` is passed in so tests can hand a document directly. */
@@ -141,6 +141,12 @@ function scanDocument(doc, rel, data, stats, findings) {
   }
   var body = doc.body;
   if (!body) return;
+
+  // anchors the include turned into text: not a failure (that is the rule working), but never silent: counted and listed so a reference link nobody put under `links` is seen as a lost link
+  Array.prototype.forEach.call(body.querySelectorAll('span.hl-unlinked'), function (sp) {
+    stats.unlinked.n++;
+    if (stats.unlinked.targets.length < 30) stats.unlinked.targets.push(rel + ' -> ' + D.defangForPrint(sp.getAttribute('data-unlinked') || '').slice(0, 90));
+  });
 
   // links first: classify, and collect the text nodes of reference links that are only their own host name
   var skipNodes = new Set();
