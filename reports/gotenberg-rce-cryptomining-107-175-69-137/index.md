@@ -259,6 +259,19 @@ citation is correct.
   denial-of-service or an information leak. Everything downstream, the miner, the recon, the rival
   displacement, follows from that.
 
+### The six stages at a glance
+
+Section 3 gives the order of the stages and the evidence behind each. This table sets the same six stages side by side with where the report shows them.
+
+| Stage | What the operator did | Where it is shown |
+|---|---|---|
+| 1. Liveness and fingerprinting | Liveness and fingerprinting against all 206 candidates, through a local SOCKS5 proxy; 205 probed alive and 1 target was dead at probe time | The operator's own target list, a row count verified byte-for-byte; the artifact for the probe itself is Not stated |
+| 2. Timing-based RCE confirmation | Timed a baseline metadata write against an injected one and called the target confirmed when the delta was at least 70% of the injected sleep duration | Timing side-channel verdict, row count matched against the out-of-band sweep results; Section 7 covers the mechanism |
+| 3. Out-of-band callback | Injected a command that curls back to the operator's listener with a tag built from the victim's own hostname and numeric user ID | The callback log: 167 OBSERVED by direct IP match, 17 INFERRED through a gateway or NAT address |
+| 4. Three-transport retry | wget, then curl, then `nc` for any host that did not call back on the first attempt, each transport tagging its own callback | The callback log, which records which binary existed on that host; 14 hosts never called back under any channel |
+| 5. Pre-deployment recon | Checked for rival miner processes and free space in `/tmp`, and touched `/tmp/.wt` to confirm the directory is writable before spending a payload there | On the one host the operator worked interactively, the same recon logic recorded `touch: cannot touch '/etc/.wtest': Permission denied` |
+| 6. Deployment | Deployed only after every prior gate passed; the deployment script's first action on any target is to kill a named list of competing miner processes before installing its own | Miner install verified on 148 to 151 hosts; two recorded deploy outputs show the kill command terminating a rival's process |
+
 ---
 
 ## 3. Campaign Scale, Timing, and Escalation Discipline
@@ -829,6 +842,19 @@ signal either way. I did not re-check whether the host still answers on the same
 every port and banner above is dated to the observation window rather than to the publication date.
 The two-path, twice-controlled results in this section rest on direct, dated observation rather
 than on a third party's report.
+
+### The dated events in one table
+
+These are the events the report dates, taken from Sections 3 and 6. Timing the report gives only in relation to another event, such as the domain's DNS record appearing two days after the campaign ended, is left in the text above.
+
+| Date (UTC) | Observation |
+|---|---|
+| 2026-08-26 | The miner binaries carry a build timestamp of this date, so the payload was staged five days before the campaign |
+| 2026-08-31 02:50:03 | First genuine line of the operator's own callback log, the start of the campaign window; the report treats the timezone as the writing host's own system clock, since nothing in the corpus independently confirms it |
+| 2026-08-31, eleven minutes into the campaign | Both deployed miner configuration files were regenerated live, before the mass deployment wave ran |
+| 2026-08-31 03:44:22 | Last genuine line of the callback log, the end of the 54-minute window |
+| 2026-08-31, for five days | Port 12577 on `107[.]175[.]69[.]137` carried a certificate whose subject claimed to be a well-known CDN provider but was issued by an unrelated certificate authority; the report dates it to the campaign date, and the port is gone now |
+| 2026-09-16 | Publication date: the co-located domain still resolves to the operator's host; the report did not re-check whether the host still answers on the same live ports, so its port and banner results are dated to the observation window |
 
 ---
 
