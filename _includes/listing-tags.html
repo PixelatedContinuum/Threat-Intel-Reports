@@ -1,0 +1,18 @@
+{%- comment -%} The topic vocabulary of a listing: every tag that appears in at least 3 of the page's entries, with its count (T-0500.1.7.4 b2: split out of listing-filter.html so a
+  page can read the number of chips before the filter is printed). Params: entries, tag_field (optional). Sets, in the caller's scope: hl_tagarr (every tag of every entry, with repeats),
+  hl_uniq (the distinct tags, sorted) and hl_chip_n (how many of them earn a chip). {%- endcomment -%}
+{%- assign tagbag = "" -%}
+{%- for e in include.entries -%}
+  {%- assign etags = e.tags -%}
+  {%- if include.tag_field -%}{%- assign ov = e[include.tag_field] -%}{%- if ov -%}{%- assign etags = ov -%}{%- endif -%}{%- endif -%}
+  {%- assign joined = etags | join: "|" -%}
+  {%- assign tagbag = tagbag | append: "|" | append: joined -%}
+{%- endfor -%}
+{%- assign hl_tagarr = tagbag | remove_first: "|" | split: "|" -%}
+{%- assign hl_uniq = hl_tagarr | uniq | sort -%}
+{%- assign hl_chip_n = 0 -%}
+{%- for u in hl_uniq -%}
+  {%- assign cnt = 0 -%}
+  {%- for t in hl_tagarr -%}{%- if t == u -%}{%- assign cnt = cnt | plus: 1 -%}{%- endif -%}{%- endfor -%}
+  {%- if u != "" and cnt >= 3 -%}{%- assign hl_chip_n = hl_chip_n | plus: 1 -%}{%- endif -%}
+{%- endfor -%}

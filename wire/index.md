@@ -2,22 +2,27 @@
 title: The Wire
 description: "Threat intelligence headlines from public research and news sources, refreshed every 15 minutes from a self-hosted OpenCTI instance, beside VulnCheck's Known Exploited Vulnerabilities additions. Links only, every item goes to the original publisher."
 layout: page
+hl_idx: wire
 permalink: /wire/
 thumbnail: /assets/images/cards/wire.png
 position: 2.5
 ---
 
-<div class="hl-page-header" style="--ph-accent: #58a6ff;">
-  <div class="hl-page-header__label">The Wire</div>
-  <div class="hl-page-header__title">Threat Intelligence Headlines</div>
-  <div class="hl-page-header__desc">Threat reporting, newly exploited vulnerabilities and significant new CVEs, refreshed every 15 minutes.</div>
-</div>
+{% capture _desc %}Threat reporting, newly exploited vulnerabilities and significant new CVEs, refreshed every 15 minutes.{% endcapture %}
+{% include index-header.html accent="#58a6ff" label="The Wire" title="Threat Intelligence Headlines" desc=_desc %}
 
 {%- assign wire = site.data.wire -%}
 {%- if wire and wire.items and wire.items != empty -%}
 {%- assign n_headlines = wire.counts.research | plus: wire.counts.news -%}
 {%- assign n_vulns = wire.vulns_counts.total | default: 0 | plus: 0 -%}
 {%- assign n_cves = wire.cves_counts.total | default: 0 | plus: 0 -%}
+
+<div class="hl-d-kpis hl-d-kpis--wire" style="--fc: 4;">
+  <div class="hl-d-kpi" style="--kc: #58a6ff;"><span class="hl-d-kpi__n">{{ n_headlines }}</span><span class="hl-d-kpi__cap">Headlines</span><span class="hl-d-kpi__note">last {{ wire.window_days }} days</span></div>
+  <div class="hl-d-kpi" style="--kc: #bc8cff;"><span class="hl-d-kpi__n">{{ n_vulns }}</span><span class="hl-d-kpi__cap">nKEVs</span><span class="hl-d-kpi__note">new to VulnCheck KEV</span></div>
+  <div class="hl-d-kpi" style="--kc: #2dd4bf;"><span class="hl-d-kpi__n">{{ n_cves }}</span><span class="hl-d-kpi__cap">Significant new CVEs</span><span class="hl-d-kpi__note">not yet on a KEV list</span></div>
+  <div class="hl-d-kpi" style="--kc: #7ee787;"><span class="hl-d-kpi__n hl-d-kpi__n--sm">{{ wire.generated_at | date: "%H:%M" }} UTC</span><span class="hl-d-kpi__cap">Last data update</span><span class="hl-d-kpi__note">{{ wire.generated_at | date: "%-d %B %Y" }}, at capture</span></div>
+</div>
 
 {%- comment -%}
   Three tabs, switched by the URL hash with CSS alone (:target and :has, in
@@ -29,7 +34,7 @@ position: 2.5
   stays the tabs'. Designed in T-0394, built in T-0396.
 {%- endcomment -%}
 <div class="hl-wtabs">
-<nav class="hl-wtabs__nav" aria-label="Sections of The Wire"><a class="hl-wtabs__tab hl-wtabs__tab--h" href="#headlines">Headlines<span class="hl-wtabs__n">{{ n_headlines }}</span></a><a class="hl-wtabs__tab hl-wtabs__tab--v" href="#vulns" title="New Known Exploited Vulnerabilities: CVEs newly added to VulnCheck&#39;s KEV catalog">nKEVs<span class="hl-wtabs__n">{{ n_vulns }}</span></a><a class="hl-wtabs__tab hl-wtabs__tab--c" href="#cves" title="Significant new CVEs not yet on a KEV list">CVEs<span class="hl-wtabs__n">{{ n_cves }}</span></a></nav>
+<nav class="hl-wtabs__nav" aria-label="Sections of The Wire"><a class="hl-wtabs__tab hl-wtabs__tab--h" href="#headlines">{% include d-icon.html name="pulse" %}<span class="hl-wtabs__t">Headlines</span><span class="hl-wtabs__n">{{ n_headlines }}</span></a><a class="hl-wtabs__tab hl-wtabs__tab--v" href="#vulns" title="New Known Exploited Vulnerabilities: CVEs newly added to VulnCheck&#39;s KEV catalog">{% include d-icon.html name="alert" %}<span class="hl-wtabs__t">nKEVs</span><span class="hl-wtabs__n">{{ n_vulns }}</span></a><a class="hl-wtabs__tab hl-wtabs__tab--c" href="#cves" title="Significant new CVEs not yet on a KEV list">{% include d-icon.html name="shield" %}<span class="hl-wtabs__t">CVEs</span><span class="hl-wtabs__n">{{ n_cves }}</span></a></nav>
 
 <section id="headlines" class="hl-wtabs__sec" data-filter-scope>
 

@@ -3,15 +3,13 @@ title: Impact
 nav_title: Impact
 description: "Takedowns and victim actions that hosts, registrars, platforms, CERTs and victims reported back after a Hunter's Ledger disclosure."
 layout: page
+hl_idx: list
 permalink: /impact/
 position: 2.95
 ---
 
-<div class="hl-page-header" style="--ph-accent: #fbbf24;">
-  <div class="hl-page-header__label">Impact</div>
-  <div class="hl-page-header__title">Takedowns &amp; Victim Actions</div>
-  <div class="hl-page-header__desc">When an investigation turns up live attacker infrastructure or an organisation that has been hit, I report it: to the hosting provider, registrar or platform, to the national CERT, or to the victim's own security team. These are the actions recipients reported back to me, plus any my own case records show. Most of my reports get no reply, so this is only what made it back to me.</div>
-</div>
+{% capture _desc %}When an investigation turns up live attacker infrastructure or an organisation that has been hit, I report it: to the hosting provider, registrar or platform, to the national CERT, or to the victim's own security team. These are the actions recipients reported back to me, plus any my own case records show. Most of my reports get no reply, so this is only what made it back to me.{% endcapture %}
+{% include index-header.html accent="#fbbf24" label="Impact" title="Takedowns &amp; Victim Actions" desc=_desc %}
 
 {%- assign entries = site.data.impact_entries.entries | sort: "date" | reverse -%}
 {%- assign n_infra = 0 -%}{%- assign n_victim = 0 -%}{%- assign n_cert = 0 -%}
@@ -22,20 +20,26 @@ position: 2.95
   {%- if e.category == "cert-action" %}{% assign n_cert = n_cert | plus: c %}{% endif -%}
 {%- endfor -%}
 
-<div class="hl-creds-strip">
-  <span class="hl-cred-pill"><span class="hl-cred-pill__dot" style="background:#fbbf24;"></span><strong>{{ site.data.impact.actions_reported }}</strong>&nbsp;Actions in total</span>
-  <span class="hl-cred-pill"><span class="hl-cred-pill__dot" style="background:#f87171;"></span><strong>{{ n_infra }}</strong>&nbsp;Attacker infrastructure actions</span>
-  <span class="hl-cred-pill"><span class="hl-cred-pill__dot" style="background:#4ade80;"></span><strong>{{ n_victim }}</strong>&nbsp;Victim actions</span>
-  <span class="hl-cred-pill"><span class="hl-cred-pill__dot" style="background:#58a6ff;"></span><strong>{{ n_cert }}</strong>&nbsp;CERT actions</span>
+<div class="hl-d-kpis" style="--fc: 4;">
+  <div class="hl-d-kpi" style="--kc:#fbbf24;"><span class="hl-d-kpi__n">{{ site.data.impact.actions_reported }}</span><span class="hl-d-kpi__cap">Actions in total</span></div>
+  <div class="hl-d-kpi" style="--kc:#f87171;"><span class="hl-d-kpi__n">{{ n_infra }}</span><span class="hl-d-kpi__cap">Attacker infrastructure actions</span></div>
+  <div class="hl-d-kpi" style="--kc:#4ade80;"><span class="hl-d-kpi__n">{{ n_victim }}</span><span class="hl-d-kpi__cap">Victim actions</span></div>
+  <div class="hl-d-kpi" style="--kc:#58a6ff;"><span class="hl-d-kpi__n">{{ n_cert }}</span><span class="hl-d-kpi__cap">CERT actions</span></div>
 </div>
 
-<div class="hl-filter" data-listing-filter data-pagefind-ignore>
-  <input class="hl-filter__search" type="text" placeholder="Search actions…" aria-label="Filter actions" autocomplete="off">
-  <div class="hl-filter__chips">
+<div class="hl-filter hl-d-cons" data-listing-filter data-pagefind-ignore style="--acc: #fbbf24;">
+  <div class="hl-d-srch">
+    <div class="hl-d-search">{% include d-icon.html name="search" %}<input class="hl-filter__search" type="text" placeholder="Search actions…" aria-label="Filter actions" autocomplete="off"></div>
+    <button type="button" class="hl-d-ftog" aria-expanded="false" aria-controls="hl-d-facets">Filters <b data-ftog-n></b>{% include d-icon.html name="chev" %}</button>
+  </div>
+  <div class="hl-d-facets" id="hl-d-facets">
+    <div class="hl-d-frow"><b class="hl-d-frow__k">Filter</b>
+    <div class="hl-filter__chips">
     <button type="button" class="hl-chip-btn is-on" data-tag="">All</button>
     <button type="button" class="hl-chip-btn" data-tag="attacker-infrastructure">Attacker infrastructure</button>
     <button type="button" class="hl-chip-btn" data-tag="victim-action">Victim actions</button>
     <button type="button" class="hl-chip-btn" data-tag="cert-action">CERT actions</button>
+    </div></div>
   </div>
   <div class="hl-filter__count" data-filter-count></div>
   <div class="hl-filter__empty" data-filter-empty hidden>Nothing matches that filter. <button type="button" class="hl-filter__reset" data-filter-reset>Clear filters</button></div>
@@ -66,3 +70,4 @@ position: 2.95
 <p class="hl-actor__muted">Each card is one action, or a group of identical actions from one round of reports, and says where it comes from: the recipient's word, my own check, or my case records alone. Victim actions are described in general terms only, with no organisation, sector or country, because the victims and the national CERTs that relayed my reports shared them in confidence. Most reports get no reply at all, and some of these actions may have had causes beyond my report.</p>
 
 <script defer src="{{ '/assets/js/listing-filter.js' | relative_url }}?v=11"></script>
+<script defer src="{{ '/assets/js/index-console.js' | relative_url }}?v=1"></script>

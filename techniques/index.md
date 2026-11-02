@@ -3,20 +3,24 @@ title: ATT&CK Techniques
 nav_title: ATT&CK Techniques
 description: "Every MITRE ATT&CK technique mapped by a published report or detection rule on The Hunters Ledger, as a site-wide coverage heatmap with a page per technique and a Navigator layer to download."
 layout: page
+hl_idx: list
 permalink: /techniques/
 position: 2.8
 ---
 
 {%- assign ix = site.data.attack_index -%}
 
-<div class="hl-page-header" style="--ph-accent: #fb923c;">
-  <div class="hl-page-header__label">ATT&amp;CK Coverage</div>
-  <div class="hl-page-header__title">Techniques across the corpus</div>
-  <div class="hl-page-header__desc">{{ ix.techniques.size }} techniques mapped by the published reports and detection rules, laid out as the ATT&amp;CK matrix (v{{ ix.attack_version }}). Darker cells are mapped more often; the score is reports plus rules. Every cell opens a page listing exactly which reports, rules and tracked actors map that technique. <a href="{{ '/assets/data/attack-navigator-layer.json' | relative_url }}" download="hunters-ledger-attack-layer.json">Download the Navigator layer</a> to open the same view in <a href="https://mitre-attack.github.io/attack-navigator/" rel="noopener">ATT&amp;CK Navigator</a>.</div>
+{% capture _desc %}{{ ix.techniques.size }} techniques mapped by the published reports and detection rules, laid out as the ATT&amp;CK matrix (v{{ ix.attack_version }}). Darker cells are mapped more often; the score is reports plus rules. Every cell opens a page listing exactly which reports, rules and tracked actors map that technique. <a href="{{ '/assets/data/attack-navigator-layer.json' | relative_url }}" download="hunters-ledger-attack-layer.json">Download the Navigator layer</a> to open the same view in <a href="https://mitre-attack.github.io/attack-navigator/" rel="noopener">ATT&amp;CK Navigator</a>.{% endcapture %}
+{% include index-header.html accent="#fb923c" label="ATT&amp;CK Coverage" title="Techniques across the corpus" desc=_desc %}
+
+<div class="hl-d-kpis" style="--fc: 3;">
+  <div class="hl-d-kpi" style="--kc:#fb923c;"><span class="hl-d-kpi__n">{{ ix.techniques.size }}</span><span class="hl-d-kpi__cap">Techniques mapped</span><span class="hl-d-kpi__note">ATT&amp;CK v{{ ix.attack_version }}</span></div>
+  <div class="hl-d-kpi" style="--kc:#a371f7;"><span class="hl-d-kpi__n">{{ ix.tactics.size }}</span><span class="hl-d-kpi__cap">Tactic columns</span><span class="hl-d-kpi__note">in matrix order</span></div>
+  <div class="hl-d-kpi" style="--kc:#ef4444;"><span class="hl-d-kpi__n">{{ ix.max_score }}</span><span class="hl-d-kpi__cap">Highest score</span><span class="hl-d-kpi__note">reports plus rules</span></div>
 </div>
 
-<div class="hl-filter" data-pagefind-ignore>
-  <input class="hl-filter__search hl-heatmap__search" id="hl-heatmap-q" type="text" placeholder="Filter techniques by ID or name…" aria-label="Filter techniques" autocomplete="off">
+<div class="hl-filter hl-d-cons hl-d-cons--solo" data-pagefind-ignore style="--acc: #fb923c;">
+  <div class="hl-d-srch"><div class="hl-d-search">{% include d-icon.html name="search" %}<input class="hl-filter__search hl-heatmap__search" id="hl-heatmap-q" type="text" placeholder="Filter techniques by ID or name…" aria-label="Filter techniques" autocomplete="off"></div></div>
 </div>
 
 <div class="hl-heatmap" id="hl-heatmap" style="--hl-heat-max: {{ ix.max_score }};" data-pagefind-ignore>

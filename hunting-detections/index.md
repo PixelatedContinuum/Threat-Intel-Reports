@@ -2,16 +2,21 @@
 title: Detection Library
 description: "Sigma, YARA and Suricata detection rules from original research, mapped to MITRE ATT&CK and licensed CC BY 4.0, plus a live Suricata rule feed."
 layout: page
+hl_idx: list
 permalink: /hunting-detections/
 thumbnail: /assets/images/cards/hunting-detections.png
 position: 3
 ---
 
-<div class="hl-page-header" style="--ph-accent: #4ade80;">
-  <div class="hl-page-header__label">Detection Library</div>
-  <div class="hl-page-header__title">Sigma, YARA &amp; Suricata Rules</div>
-  <div class="hl-page-header__desc">Detection logic from original research, mapped to MITRE ATT&amp;CK. Free to use, including commercially, under <strong>CC BY 4.0</strong>.</div>
-</div>
+{% capture _desc %}Detection logic from original research, mapped to MITRE ATT&amp;CK. Free to use, including commercially, under <strong>CC BY 4.0</strong>.{% endcapture %}
+{% include index-header.html accent="#4ade80" label="Detection Library" title="Sigma, YARA &amp; Suricata Rules" desc=_desc %}
+
+
+
+{% assign det_entries = site.data.catalog.entries | where_exp: "e", "e.detection_url" | sort: "date" | reverse %}
+
+{% include listing-tags.html entries=det_entries tag_field="detection_tags" %}
+{% include index-kpis.html entries=det_entries label="Detection pages" noun="detections" accent="#4ade80" topics=hl_chip_n %}
 
 <details class="hl-feed">
   <summary class="hl-feed__toggle">
@@ -37,10 +42,7 @@ position: 3
   </div>
 </details>
 
-
-{% assign det_entries = site.data.catalog.entries | where_exp: "e", "e.detection_url" | sort: "date" | reverse %}
-
-{% include listing-filter.html entries=det_entries tag_field="detection_tags" placeholder="Search detections by name…" %}
+{% include listing-filter.html entries=det_entries tag_field="detection_tags" placeholder="Search detections by name…" accent="#4ade80" %}
 
 <div class="hl-grid" data-filter-grid data-pagefind-ignore>
 {% for e in det_entries %}

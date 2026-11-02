@@ -1,17 +1,20 @@
 ---
 title: STIX Bundles
 layout: page
+hl_idx: list
 permalink: /stix/
 position: 4.5
 description: "Per-campaign STIX 2.1 bundles, ready to import into OpenCTI, MISP, or any STIX-aware platform. Licensed CC BY 4.0."
 thumbnail: /assets/images/cards/stix.png
 ---
 
-<div class="hl-page-header" style="--ph-accent: #22d3ee;">
-  <div class="hl-page-header__label">STIX Bundles</div>
-  <div class="hl-page-header__title">STIX 2.1 Threat Intelligence</div>
-  <div class="hl-page-header__desc">Per-campaign STIX 2.1 bundles, ready to import into OpenCTI, MISP, or any STIX-aware platform. Licensed under <strong>CC BY 4.0</strong>.</div>
-</div>
+{% capture _desc %}Per-campaign STIX 2.1 bundles, ready to import into OpenCTI, MISP, or any STIX-aware platform. Licensed under <strong>CC BY 4.0</strong>.{% endcapture %}
+{% include index-header.html accent="#22d3ee" label="STIX Bundles" title="STIX 2.1 Threat Intelligence" desc=_desc %}
+
+{% assign stix_entries = site.data.catalog.entries | where_exp: "e", "e.stix_url" | sort: "date" | reverse %}
+
+{% include listing-tags.html entries=stix_entries tag_field="stix_tags" %}
+{% include index-kpis.html entries=stix_entries label="STIX bundles" noun="bundles" accent="#22d3ee" topics=hl_chip_n %}
 
 <details class="hl-feed">
   <summary class="hl-feed__toggle">
@@ -35,11 +38,9 @@ thumbnail: /assets/images/cards/stix.png
   </div>
 </details>
 
-<p style="margin:0 0 1.5rem;"><a class="hl-download-all" href="/stix/hunters-ledger-stix-bundles.zip" download>⬇ Download all campaigns (.zip)</a> <span class="hl-xref__muted">Polling instead? <a href="/stix/manifest.json">manifest.json</a> lists every bundle with its SHA-256, size and modified time, so a platform can fetch only what changed.</span></p>
+<p class="hl-d-dlrow"><a class="hl-download-all" href="/stix/hunters-ledger-stix-bundles.zip" download>⬇ Download all campaigns (.zip)</a> <span class="hl-xref__muted">Polling instead? <a href="/stix/manifest.json">manifest.json</a> lists every bundle with its SHA-256, size and modified time, so a platform can fetch only what changed.</span></p>
 
-{% assign stix_entries = site.data.catalog.entries | where_exp: "e", "e.stix_url" | sort: "date" | reverse %}
-
-{% include listing-filter.html entries=stix_entries tag_field="stix_tags" placeholder="Search STIX bundles by name…" %}
+{% include listing-filter.html entries=stix_entries tag_field="stix_tags" placeholder="Search STIX bundles by name…" accent="#22d3ee" %}
 
 <div class="hl-grid" data-filter-grid data-pagefind-ignore>
 {% for e in stix_entries %}

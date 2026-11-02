@@ -1,0 +1,8 @@
+{%- comment -%} The masthead plate of an index page in design D (T-0500.1.7.4 b2): kicker, gradient h1, lede. The old class names stay on the elements
+  (hl-page-header, __label, __title, __desc) so anything that reads them keeps working. Params: accent (hex), label, title, desc (HTML, already escaped by the caller).
+  The text is passed through unchanged; the defang include in page.html runs over the whole page afterwards. {%- endcomment -%}
+<header class="hl-page-header hl-d-plate" style="--ph-accent: {{ include.accent | default: '#58a6ff' }};">
+  <div class="hl-page-header__label hl-d-kicker">{{ include.label }}</div>
+  <h1 class="hl-page-header__title">{{ include.title }}</h1>
+  <div class="hl-page-header__desc">{{ include.desc }}</div>
+</header>

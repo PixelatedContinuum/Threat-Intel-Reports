@@ -1,0 +1,36 @@
+{%- comment -%} KPI tiles of a catalog index (T-0500.1.7.4 b2), computed from the entries the page lists, never typed. Params: entries (the listing's own array), noun (plural, "reports"),
+  accent (hex), topics (the number of topic chips the filter prints, or empty to leave that tile out), as (optional first-tile label, default "Reports").
+  Percentages are whole numbers rounded from the entry counts; a severity with no entry is left out rather than shown as 0. {%- endcomment -%}
+{%- assign _n = include.entries | size -%}
+{%- assign _crit = include.entries | where: "severity", "critical" | size -%}
+{%- assign _high = include.entries | where: "severity", "high" | size -%}
+{%- assign _med = include.entries | where: "severity", "med" | size -%}
+{%- assign _low = include.entries | where: "severity", "low" | size -%}
+{%- assign _acc = include.accent | default: "#a371f7" -%}
+{%- assign _single = include.single | default: include.noun -%}
+{%- if _n > 0 -%}
+{%- assign _tiles = 1 -%}
+{%- if _crit > 0 -%}{%- assign _tiles = _tiles | plus: 1 -%}{%- endif -%}
+{%- if _high > 0 -%}{%- assign _tiles = _tiles | plus: 1 -%}{%- endif -%}
+{%- if _med > 0 -%}{%- assign _tiles = _tiles | plus: 1 -%}{%- endif -%}
+{%- if _low > 0 -%}{%- assign _tiles = _tiles | plus: 1 -%}{%- endif -%}
+{%- if include.topics and include.topics > 0 -%}{%- assign _tiles = _tiles | plus: 1 -%}{%- endif -%}
+<div class="hl-d-kpis" style="--fc: {{ _tiles }};">
+  <div class="hl-d-kpi" style="--kc: {{ _acc }};"><span class="hl-d-kpi__n">{{ _n }}</span><span class="hl-d-kpi__cap">{{ include.label }}</span><span class="hl-d-kpi__note">in the catalog now</span></div>
+  {%- if _crit > 0 %}
+  <div class="hl-d-kpi" style="--kc: #ef4444;"><span class="hl-d-kpi__n">{{ _crit }}</span><span class="hl-d-kpi__cap">Critical {{ include.noun }}</span><span class="hl-d-kpi__note">{{ _crit | times: 100.0 | divided_by: _n | round }}% of {{ _n }}</span></div>
+  {%- endif %}
+  {%- if _high > 0 %}
+  <div class="hl-d-kpi" style="--kc: #fb923c;"><span class="hl-d-kpi__n">{{ _high }}</span><span class="hl-d-kpi__cap">High {{ include.noun }}</span><span class="hl-d-kpi__note">{{ _high | times: 100.0 | divided_by: _n | round }}% of {{ _n }}</span></div>
+  {%- endif %}
+  {%- if _med > 0 %}
+  <div class="hl-d-kpi" style="--kc: #fbbf24;"><span class="hl-d-kpi__n">{{ _med }}</span><span class="hl-d-kpi__cap">Medium {{ include.noun }}</span><span class="hl-d-kpi__note">{{ _med | times: 100.0 | divided_by: _n | round }}% of {{ _n }}</span></div>
+  {%- endif %}
+  {%- if _low > 0 %}
+  <div class="hl-d-kpi" style="--kc: #60a5fa;"><span class="hl-d-kpi__n">{{ _low }}</span><span class="hl-d-kpi__cap">Low {{ include.noun }}</span><span class="hl-d-kpi__note">{{ _low | times: 100.0 | divided_by: _n | round }}% of {{ _n }}</span></div>
+  {%- endif %}
+  {%- if include.topics and include.topics > 0 %}
+  <div class="hl-d-kpi" style="--kc: #58a6ff;"><span class="hl-d-kpi__n">{{ include.topics }}</span><span class="hl-d-kpi__cap">Topic tags</span><span class="hl-d-kpi__note">filter chips below</span></div>
+  {%- endif %}
+</div>
+{%- endif -%}
