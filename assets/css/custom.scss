@@ -1359,6 +1359,11 @@ main.content {
 .hl-post-content h1:hover .hl-heading-anchor,
 .hl-post-content h2:hover .hl-heading-anchor   { opacity: 0.55; }
 .hl-heading-anchor:hover                       { opacity: 1 !important; }
+/* A detection page at 320px was 5px wider than the screen: the permalink anchor's hover tooltip (position: absolute, nowrap, opacity 0) sticks out past the right edge when a
+   heading wraps to the edge, and an invisible box still widens the page. No hover on a phone, so the tooltip is not drawn there (detection pages only; T-0500.1.7.4 b1b). */
+@media (max-width: 400px) {
+  .hl-page:has(.hl-post-header--detect) .hl-heading-anchor::after { display: none; }
+}
 
 /* --- First-visit section tip toast -------------------------- */
 .hl-toast {
@@ -4052,6 +4057,12 @@ a.hl-sponsor-rail__item:focus-visible { outline: 2px solid #ffffff; outline-offs
   .hl-post-content .hl-wtabs__tab,
   .hl-wtabs__tab { padding: 0.55em 0.7em; font-size: 0.88em; }
   .hl-wtabs__n { margin-left: 0.35em; padding: 0.1em 0.4em; }
+}
+/* At 320px the three tabs ran 5px past the screen (measured in a browser, T-0500.1.7.4 b1b: the CVEs tab ended at 325): one more step down below 360px. */
+@media (max-width: 360px) {
+  .hl-post-content .hl-wtabs__tab,
+  .hl-wtabs__tab { padding: 0.55em 0.5em; font-size: 0.82em; }
+  .hl-wtabs__n { margin-left: 0.25em; padding: 0.1em 0.3em; }
 }
 /* Anchors must not land under the 70px sticky site header. A tab link lands on
    its section, so the margin also keeps the tab bar (39px) above it in view;
