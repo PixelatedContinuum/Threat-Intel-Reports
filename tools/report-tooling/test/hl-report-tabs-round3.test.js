@@ -164,7 +164,7 @@ test('Liquid: the tabbed layout puts the report sponsor in the plate and the fea
   const post=fs.readFileSync(path.join(root,'_layouts/post.html'),'utf8');
   assert.ok(post.includes('{% unless hl_tabbed %}{% include sponsor-banner.html %}{% endunless %}\n<div class="hl-post-body">'),'untagged pages keep sponsor-banner.html in the old place');
   assert.ok(post.includes('</h1>{% if hl_tabbed %}\n{% include report-sponsor-bar.html part="report" %}{% endif %}\n</div>'),'the report sponsor is the foot of the plate (inside the header box)');
-  assert.ok(post.includes('{% if hl_tabbed %}{% include report-featured-sponsor.html %}{% endif %}\n<div class="hl-post-header'),'the featured sponsor is the first thing in the page, before the header');
+  assert.ok(post.includes('{% if hl_tabbed %}{% include report-featured-sponsor.html %}{% endif %}\n{%- if _is_det0 -%}')&&post.includes('{%- else %}\n<div class="hl-post-header'),'the featured sponsor is the first thing in the page, before the header (b3: a detection page takes its own plate in the first branch, a report keeps this one)');
   const inc=fs.readFileSync(path.join(root,'_includes/report-sponsor-bar.html'),'utf8');
   assert.ok(inc.includes('page.sponsored_by | join: "|;sep;|" | split: "|;sep;|"'),'same normalisation as sponsor-banner.html');
   assert.equal(inc.replace(/\{%-? comment -%\}[\s\S]*?\{%-? endcomment -%\}/g,'').includes('monthly'),false,'the Monthly sponsors are the featured include and the site rail, with their own filter');
