@@ -1016,10 +1016,10 @@
         var columns = make('div', 'hl-rv-stages', null, wrap);
         stages.rows.forEach(function (r, si) {
           var lab = stageLabel(r[0], si);
-          var card = make('article', 'hl-rv-stage', null, columns);
+          var card = make('article', 'hl-rv-stage', null, columns); card.setAttribute('data-n', lab.n);
           stageCards.push(card); stageRows.push([]); stageTactics.push([]);
           var detail = make('details', 'hl-rv-stage-detail', null, card); detail.open = !phone.matches; stageDetails.push(detail);
-          var heading = make('summary', '', r[0], detail);
+          var heading = make('summary', '', r[0], detail); var nm = String(r[0]).match(/^(\d+\.\s*)(.+)$/); if (nm) { heading.textContent = ''; make('span', 'hl-rv-stage-no', nm[1], heading); heading.appendChild(document.createTextNode(nm[2])); }
           phone.addEventListener('change', function () { detail.open = !phone.matches; });
           card = detail;
           make('p', '', r[1], card);
