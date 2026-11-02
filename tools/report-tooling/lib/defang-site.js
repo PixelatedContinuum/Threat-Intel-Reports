@@ -174,6 +174,14 @@ function scanHead(doc, rel, type, allow, stats, findings) {
   });
 }
 
+/* data-literal cells of the IOC viewer: see _includes/ioc-cell.html. A value is honoured only for these six types and only when it is not shaped like a URL, an e-mail address or an IP address. */
+var LIT_TYPES = { sha256: /^[0-9a-f]{64}$/i, md5: /^[0-9a-f]{32}$/i, sha1: /^[0-9a-f]{40}$/i, filename: null, path: null, registry: null };
+function literalProblem(ty, val) {
+  return !Object.prototype.hasOwnProperty.call(LIT_TYPES, ty) ? 'unknown literal type "' + ty + '"' :
+    (LIT_TYPES[ty] && !LIT_TYPES[ty].test(val)) ? 'does not look like a ' + ty :
+    /^[a-z][a-z0-9+.-]*:\/\//i.test(val) || /^[^\s@]+@[^\s@]+\.[a-z]{2,}$/i.test(val) || /^(?:\d{1,3}\.){3}\d{1,3}$/.test(val) ? 'is shaped like a URL, an e-mail address or an IP address' : '';
+}
+
 function scanDocument(doc, rel, data, stats, findings) {
   var type = pageType(rel), isWire = type === 'wire', isDet = type === 'detection', isRep = type === 'report';
   var allow = data.allow;
@@ -256,13 +264,10 @@ function scanDocument(doc, rel, data, stats, findings) {
 
   // data-literal cells of the IOC viewer: hash, filename, path and registry values print as the feed recorded them (nothing to disarm). Honoured for those six types only, and
   // never for a value shaped like a URL, an e-mail address or an IP address; a hash cell must look like a hash.
-  var LIT_TYPES = { sha256: /^[0-9a-f]{64}$/i, md5: /^[0-9a-f]{32}$/i, sha1: /^[0-9a-f]{40}$/i, filename: null, path: null, registry: null };
   Array.prototype.forEach.call(body.querySelectorAll('[data-literal]'), function (el) {
     var ty = el.getAttribute('data-literal'), val = el.textContent.trim();
     stats.literal.cells++;
-    var bad = !Object.prototype.hasOwnProperty.call(LIT_TYPES, ty) ? 'unknown literal type "' + ty + '"' :
-      (LIT_TYPES[ty] && !LIT_TYPES[ty].test(val)) ? 'does not look like a ' + ty :
-      /^[a-z][a-z0-9+.-]*:\/\//i.test(val) || /^[^\s@]+@[^\s@]+\.[a-z]{2,}$/i.test(val) || /^(?:\d{1,3}\.){3}\d{1,3}$/.test(val) ? 'is shaped like a URL, an e-mail address or an IP address' : '';
+    var bad = literalProblem(ty, val);
     if (bad) findings.push({ page: rel, type: type, ctx: 'literal', kind: 'LITERAL-MISUSE', token: D.defangForPrint(val.slice(0, 60)) + ' (' + bad + ')' });
     else { var w2 = doc.createTreeWalker(el, 4), n2; while ((n2 = w2.nextNode())) skipNodes.add(n2); }
   });
@@ -336,9 +341,13 @@ function makeScanner(dataFile, opts) {
     return findings.slice(before);
   }
   /* A copied or downloaded text (the clipboard, a share sheet, a blob): every line judged against the allow data of the page it came from. */
-  function scanText(rel, ctx, text) {
+  function scanText(rel, ctx, text, literals) {
     var t = pageType(rel), d = t === 'report' ? reportData(rel) : data, out = [];
+    // literals: [{type, value}] read from the page's own data-literal cells. A captured line that holds one of them as the viewer printed it is judged without it, exactly as the page-wide pass skips the cell
+    // (only a value literalProblem accepts; the longest first). Anything else on the line is still judged.
+    var lits = (literals || []).filter(function (l) { return l.value && !literalProblem(l.type, l.value); }).map(function (l) { return l.value; }).sort(function (a, b) { return b.length - a.length; });
     String(text).split(/\r?\n/).forEach(function (line) {
+      lits.forEach(function (v) { if (line.indexOf(v) > -1) line = line.split(v).join(' '); });
       if (!line.trim()) return;
       D.scanLine(line, d.allow).flagged.forEach(function (f) { out.push({ page: rel, type: t, ctx: ctx, kind: f.kind, token: f.token, near: nearOf(line, f.token) }); });
     });

@@ -161,7 +161,7 @@ function sleep(ms) { return CDP.sleep(ms); }
   try { page = await CDP.open('about:blank', { settle: 50 }); } catch (e) { srv.close(); if (e.notChecked) notChecked(e.message); throw e; }
   var ev = page.evaluate;
   var T = { pages: 0, loads: 0, loadFails: [], runs: 0, presses: 0, pressErrors: 0, byKind: {}, captures: { clip: 0, share: 0, blobs: 0, exec: 0 }, judged: 0, exempt: 0, extras: 0, blocked: 0,
-            consoleThrows: [], findings: [], seen: {}, perPage: {} };
+            consoleThrows: [], findings: [], seen: {}, literals: [], literalCells: 0, perPage: {} };
   var idxJson = null;
   try { idxJson = JSON.parse(fs.readFileSync(path.join(siteDir, 'assets/data/ioc-index.json'), 'utf8')); } catch (e) { /* the search scenario then says NOT CHECKED for itself */ }
 
@@ -185,7 +185,7 @@ function sleep(ms) { return CDP.sleep(ms); }
     T.captures[kind === 'blob' ? 'blobs' : kind]++;
     if (exempt) { T.exempt++; return; }
     T.judged++;
-    scanner.scanText(rel, kind + ':' + label, text).forEach(function (f) { T.findings.push(f); });
+    scanner.scanText(rel, kind + ':' + label, text, T.literals).forEach(function (f) { T.findings.push(f); });
   }
   function judgePresses(rel, pageType, log, note) {
     if (!log || !log.presses) return;
@@ -282,6 +282,9 @@ function sleep(ms) { return CDP.sleep(ms); }
       try { loaded = await navigate(rel, w); } catch (e) { loaded = false; }
       if (!loaded) { T.loadFails.push(rel + ' @' + w); T.findings.push({ page: rel, type: type, ctx: 'load', kind: 'LOAD-FAILED', token: 'the page did not reach readyState complete at ' + w }); continue; }
       T.loads++; T.runs++; T.perPage[rel].runs++;
+      // the page's own data-literal cells (hash, filename, path, registry values printed as recorded): a copy or download of them is exact by the same rule the page-wide pass applies
+      T.literals = await ev('Array.prototype.map.call(document.querySelectorAll("[data-literal]"),function(e){return {type:e.getAttribute("data-literal"),value:e.textContent.trim()}})') || [];
+      T.literalCells += T.literals.length;
       var errs = await ev('window.__hlcap ? window.__hlcap.errors : null');
       if (errs && errs.length) T.findings.push({ page: rel, type: type, ctx: 'stub', kind: 'STUB-FAILED', token: errs.join('; ') });
       // the page as loaded, then after the controls are pressed (two passes: expanders first, then the filter chips too)
@@ -312,6 +315,7 @@ function sleep(ms) { return CDP.sleep(ms); }
   console.log('controls pressed   ' + T.presses + ' (errors ' + T.pressErrors + '): ' + Object.keys(T.byKind).sort().map(function (k) { return k + ' ' + T.byKind[k]; }).join(', '));
   console.log('captures           clipboard ' + T.captures.clip + ', share sheet ' + T.captures.share + ', downloads (blob text) ' + T.captures.blobs + ', execCommand copy ' + T.captures.exec +
               ' = ' + (T.captures.clip + T.captures.share + T.captures.blobs + T.captures.exec) + '; judged ' + T.judged + ', exempt ' + T.exempt + ' (taken from a <pre> rule block, or on a detection page: decision 5)');
+  console.log('literal cells      ' + T.literalCells + ' data-literal cells read across the page loads; a captured line is judged without a value that equals one of them (hash, filename, path, registry as recorded)');
   console.log('scenarios          ' + T.extras + ' (IOC search queries and ?q= link, Wire details, site search)');
   var zero = [];
   if (!T.loads) zero.push('no page loaded');

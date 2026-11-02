@@ -189,6 +189,23 @@ test('defang-html rendered by Jekyll: text defanged, pre and script untouched, a
   assert.equal(got('w'), '<a href="https://vendor.example.net/r">vendor.example.net</a> <a href="http://198.51.100.17/x">x</a>', 'unlink=false (the Wire) keeps every link and the label that is its own host');
 });
 
+test('ioc-cell: a filename, path or registry value that names a host or an address is defanged, not literal; every other literal value is kept exactly (fix-r1, browser gate)', (t) => {
+  if (!JEKYLL) return t.skip('NOT CHECKED: no jekyll gem on this machine, so the Liquid include was not executed');
+  const CASES = [
+    ['path', '\\\\evil-host.example.xyz\\share\\a.exe', '\\\\evil-host[.]example[.]xyz\\share\\a.exe'],
+    ['filename', '1468_US_198.51.100.17_28-01-26.cab', '1468_US_198[.]51[.]100[.]17_28-01-26[.]cab'],
+    ['path', 'http://evil-host.example.xyz/a', 'hxxp://evil-host[.]example[.]xyz/a'],
+    ['filename', 'ghost.sh', null], ['path', '/tmp/oraq.py', null], ['path', 'C:\\Users\\x\\a.exe', null], ['registry', 'HKLM\\SOFTWARE\\Microsoft\\x', null], ['sha256', 'a'.repeat(64), null]
+  ];
+  const body = CASES.map((c, i) => '<!--S' + i + '-->{% include ioc-cell.html type="' + c[0] + '" value="' + c[1].replace(/\\/g, '\\') + '" %}<!--E' + i + '-->').join('\n');
+  const { html } = buildSite(body);
+  CASES.forEach((c, i) => {
+    const got = html.split('<!--S' + i + '-->')[1].split('<!--E' + i + '-->')[0];
+    if (c[2] === null) assert.equal(got, '<code data-literal="' + c[0] + '">' + c[1] + '</code>', 'literal kept: ' + c[1]);
+    else assert.equal(got, '<code>' + c[2] + '</code>', 'defanged: ' + c[1]);
+  });
+});
+
 test('the rendered-page gate agrees with the includes: what they print is clean, the same page without them FAILs (control), and the gate\'s own self-test passes', (t) => {
   if (!JEKYLL) return t.skip('NOT CHECKED: no jekyll gem on this machine, so the Liquid include was not executed');
   assert.deepEqual(S.selfTest(), []);

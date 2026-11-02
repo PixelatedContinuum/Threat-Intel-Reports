@@ -4,6 +4,9 @@
     - hash, filename, path and registry values (sha256 md5 sha1 filename path registry) print as the feed recorded them and carry data-literal="<type>": nothing in them
       to disarm, and a bracket inside a path would break the string a hunter pastes (the viewer's own rule since 2026-10-09). The page-wide pass and the gate honour data-literal
       only for those six types and only on a value that is not a URL or an e-mail address;
+    - EXCEPTION (T-0500.1.7.4 fix-r1, browser gate): a filename, path or registry value that names a host or an address is not literal and goes through the text defang like prose: a UNC path
+      (starts with two backslashes: \\host.tld\share), a value with "://" in it, or one with two adjacent all-digit dot-separated parts of 1 to 3 digits (an IPv4 address inside a name, as in
+      "1468_US_23.106.161.1_28-01-26.cab"). The 2219 literal cells of the 61 viewer pages hold 5 such values (all on one page); every other literal value is unchanged.
     - every other type (pattern, a free-text note) goes through the text defang like any other prose.
   The Raw JSON feed behind the page stays exact.
 {%- endcomment -%}
@@ -11,7 +14,27 @@
 {%- if _ic_t == "ipv4" or _ic_t == "ipv6" or _ic_t == "domain" or _ic_t == "endpoint" or _ic_t == "url" or _ic_t == "email" -%}
 <code>{% include defang-text.html text=include.value type=_ic_t %}</code>
 {%- elsif _ic_t == "sha256" or _ic_t == "md5" or _ic_t == "sha1" or _ic_t == "filename" or _ic_t == "path" or _ic_t == "registry" -%}
+{%- assign _ic_v = include.value | append: "" -%}
+{%- assign _ic_net = false -%}
+{%- if _ic_t == "filename" or _ic_t == "path" or _ic_t == "registry" -%}
+{%- assign _ic_two = _ic_v | slice: 0, 2 -%}
+{%- if _ic_two == "\\" or _ic_v contains "://" -%}{%- assign _ic_net = true -%}{%- endif -%}
+{%- assign _ic_parts = _ic_v | split: "." -%}
+{%- assign _ic_prev = false -%}
+{%- for _ic_p in _ic_parts -%}
+{%- assign _ic_isnum = false -%}
+{%- assign _ic_n = _ic_p | plus: 0 -%}
+{%- assign _ic_ns = _ic_n | append: "" -%}
+{%- if _ic_p != "" and _ic_p.size < 4 and _ic_ns == _ic_p and _ic_n < 256 and forloop.first == false and forloop.last == false -%}{%- assign _ic_isnum = true -%}{%- endif -%}
+{%- if _ic_isnum and _ic_prev -%}{%- assign _ic_net = true -%}{%- endif -%}
+{%- assign _ic_prev = _ic_isnum -%}
+{%- endfor -%}
+{%- endif -%}
+{%- if _ic_net -%}
+<code>{% include defang-text.html text=include.value %}</code>
+{%- else -%}
 <code data-literal="{{ _ic_t }}">{{ include.value }}</code>
+{%- endif -%}
 {%- else -%}
 <code>{% include defang-text.html text=include.value %}</code>
 {%- endif -%}

@@ -62,3 +62,14 @@ test('makeScanner.scanText: a copied, shared or downloaded string is judged line
   assert.ok(bad.every((f) => f.ctx === 'clip:copy'));
   assert.deepStrictEqual(sc.scanText('reports/x/index.html', 'clip:copy', 'hxxp://198[.]51[.]100[.]17/payload[.]php\n' + 'a'.repeat(64)), []);
 });
+
+test('makeScanner.scanText with the page\'s data-literal cells: a captured filename that looks like a domain passes, a raw address on the same line or a URL-shaped "literal" still fails (the exemption cannot hide a raw indicator)', () => {
+  const sc = S.makeScanner(ALLOW);
+  const lits = [{ type: 'filename', value: 'gs.sh' }, { type: 'filename', value: 'http://198.51.100.17/a' }, { type: 'sha256', value: '198.51.100.17' }];
+  const P = 'ioc-feeds/x/index.html';
+  assert.ok(sc.scanText(P, 'clip:copy', 'gs.sh').length >= 1, 'without the literal list the filename is judged as a domain (control)');
+  assert.deepStrictEqual(sc.scanText(P, 'clip:copy', 'gs.sh,filename,,HIGH', lits), []);
+  assert.ok(sc.scanText(P, 'clip:copy', 'gs.sh,beacon 198.51.100.17', lits).length >= 1, 'a raw address next to a literal is still flagged');
+  assert.ok(sc.scanText(P, 'clip:copy', 'http://198.51.100.17/a', lits).length >= 1, 'a URL-shaped value is never honoured as literal');
+  assert.ok(sc.scanText(P, 'clip:copy', '198.51.100.17', lits).length >= 1, 'a sha256 cell that is not a hash is never honoured');
+});
