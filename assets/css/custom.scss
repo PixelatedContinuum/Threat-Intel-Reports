@@ -8313,12 +8313,12 @@ a.hl-kc:hover { border-color: var(--kc); color: #ffffff; }
 .hl-idx--det .hl-post-content > hr { margin: 22px 0; border: 0; border-top: 1px solid var(--hl-border-card); }
 .hl-idx--det .hl-post-content h2 {
   margin: 38px 0 14px !important; padding: 0 !important; border: 0 !important; border-radius: 0; background: none !important;
-  font: 700 clamp(26px, 3vw, 38px)/1.1 var(--hl-font-display) !important; letter-spacing: -0.02em; scroll-margin-top: calc(var(--hl-nav-h) + var(--sbh, 86px) + 8px);
+  font: 700 clamp(26px, 3vw, 38px)/1.1 var(--hl-font-display) !important; letter-spacing: -0.02em;
 }
-.hl-idx--det .hl-post-content h3 { margin: 30px 0 10px !important; padding: 0 !important; border: 0 !important; font: 700 24px/1.2 var(--hl-font-display) !important; letter-spacing: -0.01em; scroll-margin-top: calc(var(--hl-nav-h) + var(--sbh, 86px) + 8px); }
+.hl-idx--det .hl-post-content h3 { margin: 30px 0 10px !important; padding: 0 !important; border: 0 !important; font: 700 24px/1.2 var(--hl-font-display) !important; letter-spacing: -0.01em; }
 .hl-idx--det .hl-post-content h3.hl-tier-detection { color: #4ade80 !important; background: none !important; }
 .hl-idx--det .hl-post-content h3.hl-tier-hunting { color: #fbbf24 !important; background: none !important; }
-.hl-idx--det .hl-post-content h4 { margin: 28px 0 10px !important; padding: 16px 0 0 !important; border: 0 !important; border-top: 1px solid var(--hl-border-card) !important; font: 600 20px/1.3 var(--hl-font-display) !important; scroll-margin-top: calc(var(--hl-nav-h) + var(--sbh, 86px) + 8px); }
+.hl-idx--det .hl-post-content h4 { margin: 28px 0 10px !important; padding: 16px 0 0 !important; border: 0 !important; border-top: 1px solid var(--hl-border-card) !important; font: 600 20px/1.3 var(--hl-font-display) !important; }
 .hl-idx--det .hl-post-content p { margin-bottom: 1em; }
 .hl-idx--det .hl-post-content strong { color: #ffffff; }
 .hl-idx--det .hl-post-content a { color: #79c0ff !important; }
