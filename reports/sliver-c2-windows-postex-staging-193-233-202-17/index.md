@@ -196,6 +196,15 @@ Two things in this campaign are observed rather than staged, and they carry more
   <figcaption><em>Figure 1: The four stages the operator's own scripts prove were prepared inside the victim network, from studying and defeating a commercial DNS filter through to a scripted, self-healing deployment across eighteen hosts. Every stage reuses the same domain backdoor account created in Stage 3.</em></figcaption>
 </figure>
 
+The same four stages in order, with where each is shown.
+
+| Stage | What the operator did | Where it is shown |
+|---|---|---|
+| 1. Study the environment, bypass the DNS filter | Three scripts perform reconnaissance and then drive the victim's DNS filtering appliance through its own administrative API (the `jaction=getWhitelist` and `addwhitelist` calls); four further scripts plant an A record in the victim's AD-integrated DNS zone so the operator's own name resolves inward | Operator scripts, staged capability; see The DNS filter bypass |
+| 2. Six persistence mechanisms, one fileless re-pull | Six scheduled-task definitions forge their Author field to a domain administrator, run as SYSTEM and set Hidden=true; the capstone is a weekly task whose action is a `DownloadString` one-liner that pulls `task_39.ps1` from the operator's C2 on port 42718 and runs it with `iex`, re-pulling the full attack chain on every run | Operator scripts, staged capability; see Persistence, and the one that matters most |
+| 3. Domain Admin, then three routes to credentials | A new account is created by script and added directly to Domain Admins; credentials are harvested through an LSASS minidump, a copy of mimikatz, and the SAM, SYSTEM and SECURITY hives uploaded over HTTP; EnableLUA and Network Level Authentication are both disabled | Operator scripts, staged capability; see The rest of the script layer |
+| 4. Mass deployment across an eighteen-host fleet | Seven scripts reuse the same domain backdoor account over `net use` against an eighteen-host internal fleet, falling back across certutil, xcopy and WMI process creation so one blocked transfer path does not stop the deployment | Operator scripts, staged capability; see The rest of the script layer |
+
 ### The DNS filter bypass
 
 This is the piece I keep coming back to, because it is the clearest evidence that the operator had studied this specific environment rather than run a playbook at it.
@@ -731,6 +740,32 @@ Three readings fit. One operator running two toolsets, a resolution surface shar
 
 What keeps all three alive is that the setter is permissionless, so the contract's design cannot rule out a second party writing to a different key, and nothing observed discriminates between the three. That stays **NOT CHECKED** rather than being resolved by preference.
 
+### The competing readings and the calls, in two tables
+
+The readings this section weighs, with what the report says of each. A cell reads Not stated where the report says nothing.
+
+| Hypothesis | Inconsistencies | Where it stands |
+|---|---|---|
+| An unknown intrusion set ran the access and the tunnelling, and a Gentlemen affiliate deployed the encryptor, whether by handoff, brokerage or partnership | 0 | Survives with zero inconsistencies across ten graded evidence rows, and survives the sensitivity check that removes the Huntress telemetry |
+| The operator captured here is a Gentlemen affiliate running both halves themselves | 2 | Both inconsistencies are weak on inspection; if discounted it ties with the leading reading, which is why the identity question sits at INSUFFICIENT rather than LOW |
+| This operator shares a builder with the DPRK-suspected cluster | Not stated | Ruled out at HIGH; also eliminated by the sensitivity check that removes the Huntress telemetry |
+| The coincidence hypothesis | Not stated | Eliminated by the sensitivity check that removes the Huntress telemetry |
+| Shared resolver entry: a resolution surface shared between operators | Not stated | The report's lean, mostly on duration; nothing observed discriminates between the three readings, which stays NOT CHECKED |
+| Shared resolver entry: one operator, or more likely a team, running two toolsets | Not stated | A close second; nothing observed discriminates between the three readings, which stays NOT CHECKED |
+| Shared resolver entry: a handoff from one operator to the other | Not stated | Fits; nothing observed discriminates between the three readings, which stays NOT CHECKED |
+
+The calls, with what the report says would change each.
+
+| Call | What would change it |
+|---|---|
+| Who ran this intrusion (INSUFFICIENT) | Not stated |
+| The address served as command and control in a confirmed The Gentlemen ransomware deployment (HIGH) | Removing the Huntress first-party incident telemetry collapses the association outright (Section 2) |
+| The operator captured here is a The Gentlemen affiliate who deployed the encryptor (LOW) | Not stated |
+| A shared builder with the DPRK-suspected cluster is ruled out (HIGH) | Not stated |
+| The intrusion set is a distinct actor (MODERATE) | Not stated |
+| The tracking designation | It retires when a curated group designation can be attached at HIGH confidence or better. The report names two things that would close the gap with Hunt.io's framing and let the designation retire into it: asking Huntress whether their post-incident telemetry can separate the two roles, and a build-level hash match between the binary Huntress observed and the Chisel builds recovered here, which would not prove encryptor deployment on its own |
+| Which reading of the shared resolver entry holds (NOT CHECKED) | Not stated |
+
 ---
 
 ## 12. Indicators of Compromise
@@ -746,6 +781,17 @@ The contract address is the durable indicator and the hashes mostly are not. Dom
 Two addresses carry handling constraints that a bare blocklist would destroy. `77[.]110[.]126[.]46` is marked hunt only and must never be blocked, because operator use is certain while ownership of the box is not established. `146[.]103[.]127[.]44` is historical, April 2026 only, and has since been reassigned to an unrelated occupant, so it is monitor rather than block. A feed consumer that flattens these into one blocklist will harm a third party and gain nothing, since the operator has already moved.
 
 The feed carries an explicit exclusions list and it is not padding. Twelve values were considered as indicators and rejected on a stated test, each with the test recorded. The JA3 fingerprint is there at its measured 3,645 hosts, the shared JARM at its measured 1,307,847 address and port pairs, the same-autonomous-system address that a vendor grouped with ours, and a set of Go string-pool artifacts that look like indicators but are compiler and runtime residue. Publishing what was rejected and why is the part that lets somebody else check the work rather than take it on faith.
+
+The indicators this report's own text singles out, with what it says to do with each. The other entries are in the feed. A cell reads Not stated where the report says nothing.
+
+| Indicator | What it is | Confidence | Action |
+|---|---|---|---|
+| `193[.]233[.]202[.]17` | Primary Sliver C2 and staging host | Not stated | Not stated |
+| `itemrange[.]com` | Current blockchain-resolved C2 domain | Not stated | Not stated |
+| `0xb3f2897f2bc797e5b9033faef8c81e92b01cb831` | Ethereum resolver contract, the campaign's most durable indicator | Not stated | Monitor the resolver contract rather than chase domains |
+| `bd61c2880920bbfb86c12df439dd1ca0258a10e532433698fd029aef2a5b33f2` | `svchost_update.exe`, the Sliver beacon payload (SHA-256) | Not stated | Not stated |
+| `77[.]110[.]126[.]46` | Hardcoded as a third-tier fallback inside four binaries (`ws35.exe`, `ws36.exe`, `ws37.exe` and `ws_3srv.exe`) | Operator use is certain; ownership of the box is NOT ESTABLISHED | Hunt only; never block |
+| `146[.]103[.]127[.]44` | Historical: operator-used in April 2026, since reassigned to an unrelated occupant | Not stated | Monitor; do not block |
 
 ---
 
@@ -804,6 +850,23 @@ For ongoing tracking, monitor the resolver contract rather than chasing domains.
 {: .hl-tab-confidence}
 
 What follows separates what this investigation settled from what it deliberately left open, and says what would close each remaining gap rather than leaving it as an unexplained absence.
+
+The same judgments, one per row, with what the report says would change each. A cell reads Not stated where the report says nothing.
+
+| Claim | Confidence | What would change it |
+|---|---|---|
+| The Sliver identification | DEFINITE | Not stated |
+| The Node.js bot's construction | DEFINITE | Not stated |
+| The rotation history is complete | DEFINITE | Not stated |
+| The link between the two C2 strands | DEFINITE | Not stated |
+| The repeated `Avenel, CA, US` registrant string as evidence that three domains came from one registration process | STRONG | Not stated |
+| The same string as a pivot to infrastructure outside this set | NOT CHECKED | A reverse search on that registrant string, which is blocked for want of a credential |
+| Whether that string is this operator's fingerprint or a commodity tool's hardcoded default | NOT ESTABLISHED | A reverse search on that registrant string, which is blocked for want of a credential |
+| Whether the resolver contract is still actively maintained | Undecided by design | Not stated |
+| The MSI UpgradeCode's prevalence across unrelated samples | NOT CHECKED | Not stated |
+| Whether the four-constant contract fingerprint is unique beyond the four publicly known contracts in that family | NOT CHECKED | Not stated |
+| The tie to the published ransomware incident from the reverse-SOCKS invocation, service masquerade and task-naming family | No measured denominator; corroborates rather than proves | Not stated |
+| Whether the victim in a second published incident is the same organisation as the one here | Unresolved | Not stated |
 
 ### What is settled
 

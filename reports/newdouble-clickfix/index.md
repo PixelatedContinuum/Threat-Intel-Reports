@@ -79,6 +79,15 @@ The command fetches `/y/y.ps1` from `202[.]71[.]14[.]31` and runs the saved scri
 
 On September 29, 2026 the host exposed `hxxp://202[.]71[.]14[.]31/y/` as an open directory listing one file, `y.ps1`, with that same SHA-256. So the script VirusTotal first saw on September 25 was still being served unchanged four days later. That brackets the September 26 scan but does not prove what its visitor received, and whether `/x/x.exe` is still served is NOT CHECKED.
 
+The chain below restates the first four stages above, the ones whose order the report states: the saved pages, then the pasted command, then the script, then the executable. The capabilities in the executable are not given a run order and stay in Section 5.
+
+| Stage | What happens | Where it is shown |
+|---|---|---|
+| Checkbox security check on a saved page | A saved FACEIT-branded page shows a checkbox security check with Cloudflare imagery. Clicking the checkbox writes a PowerShell command to the clipboard and directs the visitor to open Windows Run and paste it. The page cannot execute the command itself | Saved Webamon page code, August 26 and September 26, 2026 scans (saved page observations, not evidence that a player executed the command) |
+| Open Windows Run and paste it | The visitor must still paste and run the command; this step depends on a person running the pasted text. No player execution is confirmed | Section 3 on the page code; Section 12 on what is missing |
+| Fetches `/y/y.ps1` and runs the saved script | The command fetches `/y/y.ps1` from `202[.]71[.]14[.]31` and runs the saved script, a downloader and launcher | Hash-matched `y.ps1` (SHA-256 `dd29536b27649fa897d39198f3ec32d05215b9c6d2864acc32f51de648a25e25`); the host still served the same file on September 29, 2026 (HIGH, observed that day). The exact script bytes a visitor would have received at either Webamon scan time are NOT CHECKED, and the unchanged fetch on September 29 does not prove what the September 26 visitor received |
+| Requests `/x/x.exe` and attempts to launch it | The script requests `/x/x.exe`, names the local copy `steamwebhelper.exe` and attempts to launch it; it attempts to keep it available through a Startup entry and carries changes meant to weaken Windows defenses | `y.ps1` source (HIGH for intended behavior); a historical sandbox record of one request to `/x/x.exe`. Success of the download, elevation, defense changes or persistence is not proven; whether `/x/x.exe` is still served is NOT CHECKED |
+
 Six saved Webamon reports across five domains share one link, which is only a favicon and proves little on its own. The page scripts are the stronger comparison: all six match after replacing their single payload URL. That supports reuse of a lure template, not a common operator. The four earlier reports cover [`faceitanticheat[.]com`](https://intel.webamon.com/report/18db694f-a11f-4298-8988-cf7fdec587db) on February 1, [`xplayduels[.]com`](https://intel.webamon.com/report/905d3450-5211-4478-bdb7-3b1e399cc9fd) on February 22 and [February 23](https://intel.webamon.com/report/237569af-66d4-417e-9df2-600c28ed0752), and [`faceitanticheat[.]support`](https://intel.webamon.com/report/d106ca91-1912-4344-9157-7eaa6d59bd54) on March 4, 2026.
 
 One older URL has enough historical payload evidence to classify its chain. The script body recorded for `hxxp://93[.]183[.]93[.]9/y/y.ps1` contacted `/x/qwe.exe` and an XMRig miner download, with miner configuration and a Monero pool lookup. It is a **different payload** from the Steam-focused `x.exe`; the page template and `/y/y.ps1` to `/x/*.exe` path convention are shared, and the two first-stage scripts also share host-side paths and persistence. The VirusTotal sandbox record for the February script shows it writing `%APPDATA%\MyApp\y.ps1`, staging under `Microsoft\Windows\Libraries\Cache\` and adding a Startup shortcut, and the September `y.ps1` source does the same (a sandbox observation on one side, script source on the other). That points to a shared script template, which is stronger kit evidence but still not operator evidence.
@@ -102,6 +111,24 @@ The certificates change nothing either. For the campaign period, public certific
 No evidence here establishes bulletproof hosting. The one thing that has moved is time. On September 29, 2026, `202[.]71[.]14[.]31` was still up and serving the same `y.ps1` from an open directory at `/y/`, at least 34 days after the first `newdouble` lure scan on August 26. On the same day `faceitanticheat[.]com` and `faceitanticheat[.]support` no longer resolved, while `xplayduels[.]com` and both `newdouble` domains still resolved through Cloudflare; what those pages serve now is NOT CHECKED. No open directory was found on the campaign paths of the other three payload hosts, which does not mean they are down, so their liveness stays **NOT CHECKED**.
 
 That continuity strengthens the link between the two `newdouble` pages and their one payload host over time. It does not touch the February to September question. No new host came out of these checks, so there was nothing new to grade, and a shared template or hoster is still not an operator link. Operator linkage across the older chains stays **INSUFFICIENT**. Historical port, TLS-fingerprint and co-hosting records for the four payload hosts, the kind of pivot most likely to surface a new host, are NOT CHECKED.
+
+The dated events in this report, in date order. The February and March dates take the year 2026 that the report gives for the four earlier Webamon reports and the February miner records.
+
+| Date | Observation |
+|---|---|
+| 2026-02-01 | Webamon saved scan of `faceitanticheat[.]com`; the page points to `93[.]183[.]93[.]9` |
+| 2026-02-21 | `hxxp://93[.]183[.]93[.]9/y/y.ps1` first seen; the URL also lists a second record named `y.ps1` from this date (SHA-256 `bf7d24c60ae4c71426036103d7138d89bcc86811e6ea69d737473513b63a8649`), an untyped stub whose type and content are NOT CHECKED |
+| 2026-02-22 / 2026-02-23 | Webamon saved scans of `xplayduels[.]com`; the pages point to `212[.]113[.]98[.]10` |
+| 2026-02-23 | `hxxp://93[.]183[.]93[.]9/y/y.ps1` last analyzed; at this analysis it served a Monero miner chain |
+| 2026-02-24 | The miner script itself first seen, three weeks after the February 1 Webamon scan; its exact bytes at that scan are NOT CHECKED |
+| 2026-03-04 | Webamon saved scan of `faceitanticheat[.]support`; the page points to `185[.]209[.]30[.]61` |
+| 2026-03-22 | `wt[.]seudad[.]ru` appeared on `212[.]113[.]98[.]10`, inside the window; an unchecked in-window hostname (NOT CHECKED) |
+| 2026-08-17 to 2026-08-22 | First-seen dates of the four published script hashes in the closest public account |
+| 2026-08-25 | That public account relayed in a forum thread |
+| 2026-08-26 | Webamon saved scan of `newdoubleauthentification[.]com`, the earliest `newdouble` page |
+| 2026-09-25 | VirusTotal first saw the `y.ps1` with SHA-256 `dd29536b27649fa897d39198f3ec32d05215b9c6d2864acc32f51de648a25e25`; the script VirusTotal held for that URL was designed to install a Steam-focused executable |
+| 2026-09-26 | Webamon saved scan of `newdouble-authentification[.]com` |
+| 2026-09-29 | `202[.]71[.]14[.]31` still serving the same `y.ps1` from the open directory `hxxp://202[.]71[.]14[.]31/y/`. `faceitanticheat[.]com` and `faceitanticheat[.]support` no longer resolved; `xplayduels[.]com` and both `newdouble` domains still resolved through Cloudflare, and what those pages serve is NOT CHECKED |
 
 ## 5. Capabilities and Defender Observables
 {: .hl-tier-2}
@@ -144,6 +171,25 @@ The machine-readable [IOC feed]({{ "/ioc-feeds/newdouble-clickfix-iocs.json" | r
 
 The older `93[.]183[.]93[.]9` miner chain is a different payload and belongs in a historical template comparison, not in the Steam kit's blocklist. The other two older script URLs have no recovered response bodies. Cloudflare edge IPs, the shared favicon, ordinary Steam web destinations and the executable's loopback address are also unsuitable as standalone malicious indicators.
 
+The indicators this report names in its text, with the confidence and handling the report itself gives for each. Where the report gives none for an indicator, the cell says so.
+
+| Indicator | What it is | Confidence | Action |
+|---|---|---|---|
+| `202[.]71[.]14[.]31` | Payload host named by both `newdouble` pages, in a block routed by Sollutium EU (AS43641); the only one of the four payload IPs that belongs to the September Steam kit chain | HIGH, observed that day (still served the same `y.ps1` on September 29, 2026) | Historical observation; match to the dated lure and file records. A block covers the observed delivery path but cannot cover a copied page or a changed server |
+| `newdoubleauthentification[.]com` | Fake FACEIT verification page, Webamon saved scan of August 26, 2026 | DEFINITE for the saved pages (that they supplied the command) | Historical observation; match to the dated lure records. A block covers the observed delivery path only |
+| `newdouble-authentification[.]com` | Fake FACEIT verification page, Webamon saved scan of September 26, 2026 | DEFINITE for the saved pages (that they supplied the command) | Historical observation; match to the dated lure records. A block covers the observed delivery path only |
+| `hxxp://202[.]71[.]14[.]31/y/y.ps1` | Script URL named in the clipboard command; still served on September 29, 2026 from the open directory `hxxp://202[.]71[.]14[.]31/y/` | HIGH, observed that day | The one URL established as still active; no other URL is. A block covers the observed delivery path only |
+| `hxxp://202[.]71[.]14[.]31/x/x.exe` | Executable URL the recovered script requests; whether it is still served is NOT CHECKED | Not stated | Historical observation; match to the dated file records |
+| `dd29536b27649fa897d39198f3ec32d05215b9c6d2864acc32f51de648a25e25` | SHA-256 of the `y.ps1` script; VirusTotal first saw it on September 25, 2026 | Not stated | Historical observation; match to the dated file records |
+| `1366b8ca7f315142ba9989241402758cf2a86e5568a28da0942e1810fe12c324` | SHA-256 of the Steam-focused executable `x.exe`, saved by the script as `steamwebhelper.exe` | Not stated | Historical observation; match to the dated file records |
+| `hxxp://93[.]183[.]93[.]9/y/y.ps1` | Older script URL; its recovered body contacted `/x/qwe.exe` and an XMRig miner download, a different payload from `x.exe` | Not stated | Belongs in a historical template comparison, not in the Steam kit's blocklist |
+| `hxxp://212[.]113[.]98[.]10/resources/12/y.ps1` | Older script URL on a host that used the same page template and path layout; no recovered response body | Not stated | Not stated |
+| `hxxp://185[.]209[.]30[.]61/y/y.ps1` | Older script URL on a host that used the same page template and path layout; no recovered response body | Not stated | Not stated |
+| `faceitanticheat[.]com` | Older lure domain, Webamon saved scan of February 1; it no longer resolved on September 29, 2026 | Not stated | Historical |
+| `faceitanticheat[.]support` | Older lure domain, Webamon saved scan of March 4, 2026; it no longer resolved on September 29, 2026 | Not stated | Historical |
+| `xplayduels[.]com` | Older lure domain, Webamon saved scans of February 22 and 23; it still resolved through Cloudflare on September 29, 2026, and what its pages serve is NOT CHECKED | Not stated | Not stated |
+| `bf7d24c60ae4c71426036103d7138d89bcc86811e6ea69d737473513b63a8649` | SHA-256 of a second record named `y.ps1` from February 21 on the `93[.]183[.]93[.]9` URL, an untyped stub whose type and content are NOT CHECKED | Not stated | Not stated |
+
 ## 9. Detection and Hunting Guidance
 {: .hl-tier-2}
 {: .hl-tab-indicators}
@@ -177,6 +223,12 @@ I cannot attribute this activity to a named actor. Attribution is **INSUFFICIENT
 The six saved pages reuse a lure template after their payload URLs are changed. That supports template reuse, not a single operator. The `93[.]183[.]93[.]9` script URL served a Monero miner chain at its February 23 analysis (the URL also lists a second record named `y.ps1`, dated February 21, an untyped stub `bf7d24c6` whose type and content are NOT CHECKED), while the `202[.]71[.]14[.]31` chain points to an executable built for Steam account theft. A copied or shared kit and one operator using both remain unresolved alternatives. Shared ordinary hosting and path conventions do not settle them.
 
 The closest public account, relayed on August 25, 2026, describes Steam client debugging abuse, a mitmproxy root certificate, local proxy redirection and a fake suspension notice, and its four published scripts were first seen August 17 to 22, days before the earliest `newdouble` page; VirusTotal associates two of them with FACEIT-named domains in the wild. That account rests on a forum relay of a social media post I did not read. None of its six published IOCs matches this kit. Two overlapping dropped-file hashes are generic sandbox residue and do not link the operations. A comparison of operator-only configuration, authenticated panel control or distinctive payload bytes across the chains would change this assessment. Until then, the operator identity and the relationship to the older template chains remain **INSUFFICIENT**, and the relationship to the public neighbor is NOT CHECKED.
+
+| Call | What would change it |
+|---|---|
+| Attribution to a named actor is INSUFFICIENT, below 50 percent, with no UTA designation | A comparison of operator-only configuration, authenticated panel control or distinctive payload bytes across the chains would change this assessment |
+| The same operator ran the older miner chain and the recent Steam chain (INSUFFICIENT); a copied or shared kit and one operator using both remain unresolved alternatives | Operator-only configuration or authenticated control spanning both would raise it |
+| The relationship to the closest public account (NOT CHECKED); none of its six published IOCs matches this kit | A distinctive cross-chain artifact or a matching dated publication would revise those judgments |
 
 ## 12. Confidence Summary and Evidence Gaps
 {: .hl-tier-2}

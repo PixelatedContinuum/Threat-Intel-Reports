@@ -12,7 +12,7 @@ const css = fs.readFileSync(path.join(root, 'assets/css/hl-report-tabs.css'), 'u
 
 test('CSS (design D): the site rail is not drawn on tabbed pages; the featured card is fixed in the left margin from 1440px, at least 140px wide there, and the band carries on below', () => {
   assert.match(css, /body:has\(\.hl-report-page\) \.hl-sponsor-rail \{ display: none !important; \}/);
-  assert.match(css, /--rv-card-w: min\(200px, calc\(\(100vw - var\(--rv-col\)\) \/ 2 - 20px\)\); --rv-card-left: max\(16px, calc\(\(100vw - var\(--rv-col\)\) \/ 2 - 4px - var\(--rv-card-w\)\)\);/);
+  assert.match(css, /--rv-rail-gap: clamp\(20px, calc\(\(100vw - var\(--rv-col\)\) \/ 2 \* 0\.15\), 56px\); --rv-card-w: max\(140px, min\(200px, calc\(\(100vw - var\(--rv-col\)\) \/ 2 - 8px - var\(--rv-rail-gap\)\)\)\); --rv-card-left: max\(8px, calc\(\(100vw - var\(--rv-col\)\) \/ 2 - var\(--rv-rail-gap\) - var\(--rv-card-w\)\)\);/);
   assert.match(css, /\.hl-rv-featcard \{ display: none; \}/, 'the card is not drawn below 1440px');
   assert.match(css, /@media \(min-width: 1440px\) \{[^@]*\.hl-rv-feat \{ display: none; \}/, 'the band is not drawn from 1440px');
   const printBlock = css.slice(css.indexOf('@media print'));

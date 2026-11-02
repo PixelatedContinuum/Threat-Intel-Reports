@@ -133,7 +133,7 @@ test('CSS: round-3 tokens, the old strip, the pill and the gradient and shadow l
   const shadowSel=[...css.replace(/\/\*[\s\S]*?\*\//g,'').matchAll(/([^{}@]+)\{([^{}]*)\}/g)].filter(m=>/box-shadow:(?!\s*none)/.test(m[2])).flatMap(m=>m[1].split(',').map(x=>x.trim()));
   assert.deepEqual(shadowSel.filter(s=>!['.hl-rv-feat','.hl-rv-featcard','.hl-rv-sponsor-card.is-site','.hl-report-page .hl-rv-tabs button[aria-selected="true"]','.hl-rv-pop',
     // D4 (T-0500.1.7.3 c3), as in the approved mockup: the lit or chosen stage node and the lit story card (a ring and a soft glow), the spine dot's ring, and the slim bar's drop shadow
-    '.hl-report-page .hl-rv-flow button.hl-rv-fnode[aria-pressed="true"]','.hl-report-page .hl-rv-flow button.hl-rv-fnode.is-linked','.hl-rv-minibar','.hl-rv-stage::before','.hl-rv-stage.hl-rv-stage-lit',
+    '.hl-report-page .hl-rv-flow button.hl-rv-fnode[aria-pressed="true"]','.hl-report-page .hl-rv-flow button.hl-rv-fnode.is-linked','.hl-rv-minibar','.hl-rv-stage::before','.hl-rv-stage.hl-rv-stage-lit::before','.hl-rv-stage.hl-rv-stage-lit',
     '.hl-rv-procedures tr.hl-rv-keyrow td:first-child'].includes(s)),[],'no shadows or glows except the featured panels, the selected tab chip and the popover');
   assert.equal(/max\(14px,\s*1em\)/.test(css),false,'no em-relative chrome size');
   const below=[...css.matchAll(/font-size:\s*(\d+(?:\.\d+)?)px/g)].map(m=>+m[1]).filter(n=>n<14);

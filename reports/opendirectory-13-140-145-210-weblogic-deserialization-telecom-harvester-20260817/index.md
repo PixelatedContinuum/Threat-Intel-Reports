@@ -921,6 +921,17 @@ So the key is published only in truncated form, it must not be used by anyone re
 
 When an actor leaves a third-party API key in their tooling, that is not just an indicator. It is a lever, and the vendor is the one who can pull it.
 
+### 12.6 What would change these calls
+
+The report names a change condition for four of its calls. Each row restates it from the section cited.
+
+| Call | What would change it |
+|---|---|
+| Named-actor attribution (INSUFFICIENT, around 15 percent) | Any of the four things that would open a route: an infrastructure or handler link to a tracked cluster, an operator-authored language artifact pointing anywhere other than Spanish, a code lineage to compare against, or independent vendor reporting to weigh (Section 12) |
+| State sponsorship or direction (INSUFFICIENT, around 20 percent) | Infrastructure and tasking links, rather than more reverse engineering of these samples (Section 12.3) |
+| Motive: espionage-flavoured collection over access-brokering (LOW, roughly 60/40) | A captured protocol-level interaction on the signalling plane rather than port scanning, such as a subscriber-information or interrogation request, would tip intent-to-use over intent-to-prove-sellable. A marketplace listing referencing this victim set would tip it the other way (Section 12.4) |
+| Rootkit install on a victim (MODERATE, capped) | The finding cannot be raised without the trojanised replacements, which were never exposed in the open directory and cannot be obtained from either capture (Section 7.4) |
+
 ---
 
 ## 13. Indicators of Compromise
@@ -932,6 +943,20 @@ The complete, validated, machine-readable indicator set lives in the companion f
 **[Download the IOC feed](/ioc-feeds/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817-iocs.json)**
 
 It carries operator infrastructure, the full SHA256 set for the corpus, host-based artifacts across Linux and Windows, credential material observed in use, and network signatures, with per-indicator confidence and context, so I do not repeat that inventory here. It covers the operator server IP and its attack-source VPN exit, the operator-registered domain, the nine-port set on the operator server, the custom loopback console, the self-signed TLS certificate, four distinct tunnel key fingerprints, and the live third-party scanning-service key found hardcoded in the tooling, which I flag there as a credential to report rather than use.
+
+The table below gathers the indicators this report prints in its front-matter highlights and in Section 13.2, with the confidence the report gives each and the action it names. The feed above stays the complete set.
+
+| Indicator | What it is | Confidence | Action |
+|---|---|---|---|
+| `13[.]140[.]145[.]210` | Operator VPS, Contabo AS51167, France | DEFINITE | Block and monitor (operator infrastructure, Section 9.3) |
+| `95[.]214[.]114[.]37` | Operator VPN egress seen in the victim log; a rented commercial VPN exit | HIGH | Block and monitor (operator infrastructure, Section 9.3) |
+| `radius-sync[.]com` | Operator domain impersonating telecom AAA | HIGH | Block and monitor (operator infrastructure, Section 9.3) |
+| `72c6383477bbcb93811fd837a9e4721cfddea0cd238eebe3012acc0e6a31c40e` | `exfil_nvram.sh`, the WSMA fileCopy exfil script | Not stated | Not stated |
+| `5f2efa79f548b648a318e6c6f3512581574002b79fab97cfec10b77feba177b8` | `serve_http.log`, receipt of the 100 uploads | Not stated | Not stated |
+| `User-Agent: cisco-IOS` | An outbound HTTP `PUT` from a network device to a destination outside the management range; the operator cannot suppress it | DEFINITE | Detect first (listed first in Section 9.3) |
+| `%2577eb%2575i_%2577sma_Http` | A request path containing `%2577eb%2575i` or the full path; the highest-specificity indicator in the case | DEFINITE | Detect first (listed second in Section 9.3) |
+| `urn:cisco:wsma-filesystem` | A SOAP body with a `dstURL` whose scheme is `hxxp://` and whose host sits outside the management range; the exfiltration primitive itself | HIGH | Not stated |
+| `^[a-f0-9]{18}$` | An `Authorization` header with no auth scheme against an IOS-XE web interface; deliberately generic across the whole public exploitation class | HIGH | Detect first (listed second in Section 9.3) |
 
 ### 13.2 The highest-value network signatures
 
@@ -970,6 +995,36 @@ And victim addresses are victims. The router and firewall pair, the two carrier 
 | **HIGH** | The VPN exit as the operator's attack source. The domain as operator-owned. The internal carrier foothold. Rootkit intent and staging. Genuine telecom domain knowledge, on the signalling-plane port selection, the correct carrier terminology in the internal scan, and the back-office platform seeded in the wordlists. Deliberate pre-selection of the router victim. The monitoring-plane, mapping-server, hive-theft and credential-spray tooling as capability with named targets |
 | **MODERATE** | Root access on the carrier AAA server, and root on the carrier jump host, since in both the reach is victim-side while the root session itself is operator-side inference. Rootkit install on a victim, capped because the replacements are unrecoverable. The specific host the rootkit targeted. Bank-probe intent. The collection-maintenance reading of the watchdog rewrite. The absence of prior public documentation for the file-copy exfiltration technique, held at MODERATE-HIGH as a negative-search result |
 | **LOW to INSUFFICIENT** | Any named-actor attribution. Any state-sponsorship claim. Whether the credential-store attack succeeded. Whether the monitoring harvest ran. What happened to the collected data after it reached the operator's server |
+
+The same findings, one per row, each with the observation that would move it where the report names one.
+
+| Claim | Confidence | What would change it |
+|---|---|---|
+| The router compromise and the 424,946,514-byte exfiltration on 2026-07-24 with the victim device as HTTP client | DEFINITE | Not stated |
+| The double-encoded path and the forged 18-hex token as operator constants | DEFINITE | Not stated |
+| The failure of the WebLogic leg, on three independent victim-side confirmations | DEFINITE | Not stated |
+| The failure of the core-dump credential cracking, 21 candidates all rejected | DEFINITE | Not stated |
+| The two Go binaries being the same unmodified public tool built twice | DEFINITE | Not stated |
+| The rootkit originals-archive contents | DEFINITE | Not stated |
+| The operator's TLS material and the four tunnel fingerprints | DEFINITE | Not stated |
+| The VPN exit as the operator's attack source | HIGH | Not stated |
+| The domain as operator-owned | HIGH | Not stated |
+| The internal carrier foothold | HIGH | Not stated |
+| Rootkit intent and staging | HIGH | Not stated |
+| Genuine telecom domain knowledge, on the signalling-plane port selection, the correct carrier terminology in the internal scan, and the back-office platform seeded in the wordlists | HIGH | Not stated |
+| Deliberate pre-selection of the router victim | HIGH | Not stated |
+| The monitoring-plane, mapping-server, hive-theft and credential-spray tooling as capability with named targets | HIGH | Not stated |
+| Root access on the carrier AAA server, and root on the carrier jump host (the reach is victim-side while the root session itself is operator-side inference) | MODERATE | Not stated |
+| Rootkit install on a victim, capped because the replacements are unrecoverable | MODERATE | The finding cannot be raised without the trojanised replacements, which were never exposed in the open directory and cannot be obtained from either capture |
+| The specific host the rootkit targeted | MODERATE | Not stated |
+| Bank-probe intent | MODERATE | Not stated |
+| The collection-maintenance reading of the watchdog rewrite | MODERATE | Not stated |
+| The absence of prior public documentation for the file-copy exfiltration technique | MODERATE, held at MODERATE-HIGH as a negative-search result | Not stated |
+| Any named-actor attribution | LOW to INSUFFICIENT | Any of the four things that would open a route: an infrastructure or handler link to a tracked cluster, an operator-authored language artifact pointing anywhere other than Spanish, a code lineage to compare against, or independent vendor reporting to weigh |
+| Any state-sponsorship claim | LOW to INSUFFICIENT | Infrastructure and tasking links, rather than more reverse engineering of these samples |
+| Whether the credential-store attack succeeded | LOW to INSUFFICIENT | Not stated |
+| Whether the monitoring harvest ran | LOW to INSUFFICIENT | Not stated |
+| What happened to the collected data after it reached the operator's server | LOW to INSUFFICIENT | Not stated |
 
 ### 14.2 Where I was wrong, and what changed
 

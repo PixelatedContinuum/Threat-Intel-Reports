@@ -196,7 +196,7 @@ a.hl-rv-feat__item:hover .hl-rv-feat__cta, a.hl-rv-featcard__item:hover .hl-rv-f
 .hl-rv-feat--many .hl-rv-feat__tagline, .hl-rv-feat--many .hl-rv-feat__cta { display: none; }
 .hl-rv-featcard { display: none; }
 @media (min-width: 1440px) {
-  html:has(.hl-report-page) { --rv-card-w: min(200px, calc((100vw - var(--rv-col)) / 2 - 20px)); --rv-card-left: max(16px, calc((100vw - var(--rv-col)) / 2 - 4px - var(--rv-card-w))); }
+  html:has(.hl-report-page) { --rv-rail-gap: clamp(20px, calc((100vw - var(--rv-col)) / 2 * 0.15), 56px); --rv-card-w: max(140px, min(200px, calc((100vw - var(--rv-col)) / 2 - 8px - var(--rv-rail-gap)))); --rv-card-left: max(8px, calc((100vw - var(--rv-col)) / 2 - var(--rv-rail-gap) - var(--rv-card-w))); } /* a deliberate gap between the card and the report column: the card keeps its 140px floor and sits 8px from the screen edge at 1440 and 1600, and from 1800px it moves out to leave 48-56px (it hugged the plate, 4px, at every width) */
   .hl-rv-feat { display: none; }
   .hl-rv-featcard {
     display: flex; flex-direction: column; gap: 10px; position: fixed; z-index: 75; left: var(--rv-card-left); top: calc(var(--hl-rv-nav-h, 64px) + 22px); width: var(--rv-card-w);
@@ -692,7 +692,8 @@ html:has(.hl-report-page) .hl-toast__label { font-size: var(--rv-fs); }
 
 /* ---------- Design D, D3 (T-0500.1.7.3): the Overview's scan layer. Tiles and panels are B's panels (radial and linear fill, 10px radius); report prose stays on the page. ---------- */
 .hl-rv-view--scan > .hl-rv-view-body { gap: 24px; }
-.hl-rv-tiles { order: 0; grid-template-columns: repeat(auto-fit, minmax(min(100%, 13.5rem), 1fr)); }
+.hl-rv-tiles { order: 0; grid-template-columns: repeat(auto-fit, minmax(min(100%, 11.5rem), 1fr)); } /* c6: five or six tiles fit one row at 1440 as in the mockup (13.5rem wrapped them 4 + 1) */
+@media (min-width: 700px) { .hl-rv-tiles:not(:has(> :nth-child(5))) { grid-template-columns: repeat(auto-fill, minmax(min(100%, 11.5rem), 14rem)); } } /* c6: three or four tiles keep the tile width instead of stretching across the row; c7c: desktop only, so the phone rule (two equal columns, below 700px) is not outvoted */
 .hl-rv-tilecell { --pn: var(--acc); }
 .hl-rv-tilecell:has([data-rv-tile="inside"]), .hl-rv-tilecell:has([data-rv-tile="threat"]), .hl-rv-tilecell:has([data-rv-tile="iocs"]) { --pn: #f87171; }
 .hl-rv-tilecell:has([data-rv-tile="techniques"]), .hl-rv-tilecell:has([data-rv-tile="dtech"]) { --pn: #fb923c; }
@@ -755,7 +756,7 @@ html:has(.hl-report-page) .hl-toast__label { font-size: var(--rv-fs); }
 
 /* tactic heat strip: a column for each tactic, a cell for each row */
 .hl-rv-heat { display: flex; gap: 6px; overflow-x: auto; padding-bottom: 6px; min-width: 0; }
-.hl-rv-heatcol { flex: 1 0 44px; min-width: 44px; display: flex; flex-direction: column; border: 1px solid var(--rv-line); border-radius: 8px; background: rgba(0, 0, 0, 0.22); }
+.hl-rv-heatcol { flex: 1 0 44px; min-width: 44px; max-width: 88px; display: flex; flex-direction: column; border: 1px solid var(--rv-line); border-radius: 8px; background: rgba(0, 0, 0, 0.22); }
 .hl-report-page button.hl-rv-heathead { flex-direction: column; justify-content: flex-start; gap: 6px; width: 100%; min-height: 150px; padding: 8px 2px; border-radius: 7px 7px 0 0; align-items: center; }
 .hl-rv-heathead strong { font-family: var(--rv-display); font-size: var(--rv-fs); font-weight: 700; color: var(--rv-text); font-variant-numeric: tabular-nums; }
 .hl-rv-heathead span { writing-mode: vertical-rl; transform: rotate(180deg); font-size: var(--rv-fs-mono); font-family: var(--rv-mono); letter-spacing: 0.02em; color: var(--rv-text); white-space: nowrap; }
@@ -1066,18 +1067,21 @@ html:has(.hl-report-page) .hl-toast__label { font-size: var(--rv-fs); }
 .hl-rv-story-head { display: flex; flex-wrap: wrap; align-items: center; gap: 2px 10px; min-height: 44px; margin: 0 0 12px; }
 .hl-rv-story-head .hl-rv-eyebrow-icon { color: var(--acc); }
 .hl-rv-flowwrap + .hl-rv-console, .hl-rv-story-head { --pn: var(--acc); }
-.hl-report-page .hl-rv-stages { display: grid; grid-template-columns: minmax(0, 1fr); gap: 18px; align-items: start; padding-left: 34px; }
+.hl-report-page .hl-rv-stages { display: grid; grid-template-columns: minmax(0, 1fr); gap: 18px; align-items: start; padding-left: 78px; }
 .hl-report-page .hl-rv-stage {
   position: relative; margin: 0; padding: 16px 18px 18px; border: 1px solid var(--rv-line); border-radius: 10px;
   background: radial-gradient(120% 140% at 0 0, color-mix(in srgb, var(--acc) 7%, transparent), transparent 60%), linear-gradient(135deg, var(--rv-card), #0d1117);
   transition: opacity 0.15s, border-color 0.15s;
 }
-.hl-rv-stage::before { content: ''; position: absolute; left: -34px; top: 22px; z-index: 1; width: 14px; height: 14px; border-radius: 50%; background: var(--acc); box-shadow: 0 0 0 4px var(--rv-bg); }
+.hl-rv-stage::before { content: attr(data-n); position: absolute; left: -78px; top: 10px; z-index: 1; box-sizing: border-box; width: 56px; height: 56px; display: grid; place-items: center; border-radius: 50%; border: 2px solid var(--acc); background: #141414; color: #ffffff; font-family: var(--rv-display); font-size: 24px; font-weight: 600; font-variant-numeric: tabular-nums; line-height: 1; box-shadow: 0 0 0 6px var(--rv-bg), 0 0 26px color-mix(in srgb, var(--acc) 26%, transparent); } /* the stage number on the spine, as in the approved mockup (d-combined .node): the number beside the story, not a bare dot */
 .hl-report-page .hl-rv-stages { position: relative; }
-.hl-rv-stages::before { content: ''; position: absolute; left: 6px; top: 0; bottom: 0; width: 2px; background: linear-gradient(transparent, var(--acc) 40px, color-mix(in srgb, var(--acc) 30%, #2a2a2a) calc(100% - 40px), transparent); } /* one spine on its host, dots on the cards sit on it */
+.hl-rv-stages::before { content: ''; position: absolute; left: 27px; top: 0; bottom: 0; width: 2px; background: linear-gradient(transparent, var(--acc) 40px, color-mix(in srgb, var(--acc) 30%, #2a2a2a) calc(100% - 40px), transparent); } /* one spine on its host, dots on the cards sit on it */
 .hl-rv-stage.hl-rv-stage-lit { border-color: var(--acc); box-shadow: 0 0 0 1px var(--acc); }
+.hl-rv-stage.hl-rv-stage-lit::before { background: color-mix(in srgb, var(--acc) 30%, #141414); box-shadow: 0 0 0 6px var(--rv-bg), 0 0 0 8px var(--acc), 0 0 30px color-mix(in srgb, var(--acc) 50%, transparent); }
+@media (max-width: 719px) { .hl-report-page .hl-rv-stages { padding-left: 54px; } .hl-rv-stage::before { left: -54px; top: 12px; width: 42px; height: 42px; font-size: 19px; box-shadow: 0 0 0 5px var(--rv-bg); } .hl-rv-stages::before { left: 20px; } }
 .hl-rv-stage.hl-rv-stage-dim { opacity: 0.45; }
-.hl-report-page .hl-rv-stage-detail > summary { font-size: 20px; padding-bottom: 10px; }
+.hl-report-page .hl-rv-stage-detail > summary { font-size: clamp(24px, 2.4vw, 30px); line-height: 1.35; letter-spacing: -0.01em; color: #ffffff; padding-bottom: 12px; }
+.hl-rv-stage-no { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; } /* the number is drawn on the spine (data-n); the text stays in the page for the completeness gate and screen readers */
 .hl-rv-stage .hl-rv-mini { flex: 0 0 120px; }
 .hl-report-page .hl-rv-stage a.hl-rv-procedure {
   display: flex; flex-direction: row; flex-wrap: wrap; align-items: center; gap: 4px 16px; padding: 10px 14px; margin: 0 0 8px; background: color-mix(in srgb, var(--rv-bg) 70%, transparent);
