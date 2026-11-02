@@ -7944,6 +7944,9 @@ a.hl-cred-pill--link:hover { border-color: #fbbf24; color: var(--hl-text-primary
   .hl-idx--wire .hl-vuln__popbody { left: 12px; right: auto; }
 }
 .hl-idx--wire .hl-vuln__spark { max-width: 100%; }
+/* a closed popover draws nothing, and Chrome still reports the box of its hidden body past the right edge on a phone (the edge probe's only hit on the Wire at 320 and 390, in the b1 sweep too);
+   not drawing the closed body removes the phantom box and changes nothing a reader sees. An open one is measured with every popover forced open (gate: popover-edge.cjs). */
+.hl-idx--wire details.hl-vuln__pop:not([open]) > .hl-vuln__popbody { display: none; }
 
 /* the legend panel of the nKEV tab */
 .hl-idx--wire .hl-legend-mobile { border: 1px solid var(--hl-border-card); border-top: 1px solid var(--hl-border-card); border-radius: 10px; background: linear-gradient(135deg, #171717, #0f1319); }

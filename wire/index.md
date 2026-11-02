@@ -8,8 +8,7 @@ thumbnail: /assets/images/cards/wire.png
 position: 2.5
 ---
 
-{% capture _desc %}Threat reporting, newly exploited vulnerabilities and significant new CVEs, refreshed every 15 minutes.{% endcapture %}
-{% include index-header.html accent="#58a6ff" label="The Wire" title="Threat Intelligence Headlines" desc=_desc %}
+{% include index-header.html accent="#58a6ff" label="The Wire" title="Threat Intelligence Headlines" desc="Threat reporting, newly exploited vulnerabilities and significant new CVEs, refreshed every 15 minutes." %}
 
 {%- assign wire = site.data.wire -%}
 {%- if wire and wire.items and wire.items != empty -%}
@@ -18,10 +17,10 @@ position: 2.5
 {%- assign n_cves = wire.cves_counts.total | default: 0 | plus: 0 -%}
 
 <div class="hl-d-kpis hl-d-kpis--wire" style="--fc: 4;">
-  <div class="hl-d-kpi" style="--kc: #58a6ff;"><span class="hl-d-kpi__n">{{ n_headlines }}</span><span class="hl-d-kpi__cap">Headlines</span><span class="hl-d-kpi__note">last {{ wire.window_days }} days</span></div>
+  <div class="hl-d-kpi" style="--kc: #58a6ff;"><span class="hl-d-kpi__n">{{ n_headlines }}</span><span class="hl-d-kpi__cap">Headlines</span><span class="hl-d-kpi__note">last {{ wire.window_days | plus: 0 }} days</span></div>
   <div class="hl-d-kpi" style="--kc: #bc8cff;"><span class="hl-d-kpi__n">{{ n_vulns }}</span><span class="hl-d-kpi__cap">nKEVs</span><span class="hl-d-kpi__note">new to VulnCheck KEV</span></div>
   <div class="hl-d-kpi" style="--kc: #2dd4bf;"><span class="hl-d-kpi__n">{{ n_cves }}</span><span class="hl-d-kpi__cap">Significant new CVEs</span><span class="hl-d-kpi__note">not yet on a KEV list</span></div>
-  <div class="hl-d-kpi" style="--kc: #7ee787;"><span class="hl-d-kpi__n hl-d-kpi__n--sm">{{ wire.generated_at | date: "%H:%M" }} UTC</span><span class="hl-d-kpi__cap">Last data update</span><span class="hl-d-kpi__note">{{ wire.generated_at | date: "%-d %B %Y" }}, at capture</span></div>
+  <div class="hl-d-kpi" style="--kc: #7ee787;"><span class="hl-d-kpi__n hl-d-kpi__n--sm">{{ wire.generated_at | date: "%H:%M" | escape }} UTC</span><span class="hl-d-kpi__cap">Last data update</span><span class="hl-d-kpi__note">{{ wire.generated_at | date: "%-d %B %Y" | escape }}, at capture</span></div>
 </div>
 
 {%- comment -%}
