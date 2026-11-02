@@ -18,5 +18,6 @@ layout: default
 {%- elsif page.url contains 'about' -%}{%- assign _glow_accent = '#60a5fa' -%}
 {%- endif -%}
 <div class="hl-page" style="--ph-accent: {{ _glow_accent }};">
-{{ content }}
+{%- comment -%} Decision 5 (T-0500.1.7.4): everything a non-report page prints passes through the defang include once, here, so a layout or component built on this one needs to call nothing (usage: _includes/defang-html.html). The Wire keeps its article links: they are curated feed publishers. The working docs (/report-templates/ and the feed changelogs) are left as they are (decision 7). {%- endcomment %}
+{% if page.url == '/wire/' %}{% include defang-html.html html=content unlink=false %}{% elsif page.url contains '/report-templates/' or page.url contains '/changelog/' %}{{ content }}{% else %}{% include defang-html.html html=content %}{% endif %}
 </div>

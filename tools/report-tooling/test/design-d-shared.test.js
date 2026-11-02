@@ -101,7 +101,7 @@ test('defang-text: dotted-quad words are defanged at every dot, everything else 
     'Sliver C2 Windows Post-Exploitation Staging, 193.233.202.17',
     'Russian Gemini CLI Credential Mill (213.165.51.115)',
     'Beacon to 8.8.8.8:53 then 10.0.0.5.',
-    'Version v4.3.4.1, 300.1.1.1, 1.2.3 and 01.2.3.4 stay as written',
+    'Version v4.3.4.1, 300.1.1.1, 1.2.3 and 01.2.3.4 (only the first is an address)',
     'GHOST Cryptojacker Kit: Vova75Rus Supply Chain',
     ''
   ]);
@@ -110,7 +110,7 @@ test('defang-text: dotted-quad words are defanged at every dot, everything else 
     'Sliver C2 Windows Post-Exploitation Staging, 193[.]233[.]202[.]17',
     'Russian Gemini CLI Credential Mill (213[.]165[.]51[.]115)',
     'Beacon to 8[.]8[.]8[.]8:53 then 10[.]0[.]0[.]5.',
-    'Version v4.3.4.1, 300.1.1.1, 1.2.3 and 01.2.3.4 stay as written',
+    'Version v4[.]3[.]4[.]1, 300.1.1.1, 1.2.3 and 01.2.3.4 (only the first is an address)',
     'GHOST Cryptojacker Kit: Vova75Rus Supply Chain',
     ''
   ]);

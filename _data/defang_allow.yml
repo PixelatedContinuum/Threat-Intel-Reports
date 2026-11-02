@@ -1,0 +1,40 @@
+# What may print raw, and what may stay a link, on the NON-REPORT pages (T-0500.1.7.4, Joseph 2026-11-02, decision 5: defang everything).
+# Read by BOTH sides of one rule: _includes/defang-text.html and _includes/defang-html.html (render time) and tools/report-tooling/check-defang.js --site (the gate over the
+# built pages). An entry here is a reviewer's claim that the name is not actor infrastructure: add one only for this site, a reference, a product name that ends in a TLD word,
+# or a name the site prints on purpose. A bare multi-tenant host (github.com, pastebin.com ...) is refused by the gate and must be path-scoped under `links`.
+
+# Names that print undefanged in text. Exact host match, lower case, no subdomain inheritance. Each needs a reason.
+raw:
+  the-hunters-ledger.com: this site
+  hunt.io: the site sponsor's name, printed by the sponsor card and the footer
+  attack.mitre.org: MITRE ATT&CK reference, printed on every technique page
+  creativecommons.org: the licence every profile and feed page links
+  cve.now: the CVE reference service the Wire links as a label and a tooltip
+  example.com: RFC 2606 documentation name
+  example.org: RFC 2606 documentation name
+  example.net: RFC 2606 documentation name
+  asp.net: a Microsoft product name, not a host
+  vb.net: a Microsoft product name, not a host
+  system.net: a .NET namespace, not a host
+  system.io: a .NET namespace, not a host
+
+# Our own mailboxes (full address, lower case): the only addresses that print raw and may be mailto: links.
+mailboxes:
+  intel@the-hunters-ledger.com: the publication's contact address
+  the.hunters.ledger@gmail.com: the PGP key's user id, printed on /pgp/
+
+# Where an <a> may point off this site (and stay clickable) on a non-report page other than the Wire. Host + path prefix, no scheme, no www. A target that begins with none of these
+# renders as plain defanged text. The Wire is exempt: its article links are curated feed publishers, checked by the gate for IP targets only.
+links:
+  - the-hunters-ledger.com
+  - hunt.io
+  - linkedin.com/in/josephrharrison
+  - attack.mitre.org
+  - mitre-attack.github.io/attack-navigator
+  - creativecommons.org/licenses
+  - github.com/sponsors/PixelatedContinuum
+  - paypal.me/thehuntersledger
+  - x.com/Hunters_Ledger
+  - jsonfeed.org
+  - conf.splunk.com
+  - linkedin.com/in/anthony-vigil        # a researcher credited by two detection pages

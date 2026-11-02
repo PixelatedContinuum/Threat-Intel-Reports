@@ -1,0 +1,154 @@
+{%- comment -%}
+  Render-time defang of a rendered HTML FRAGMENT (T-0500.1.7.4, decision 5): the text a reader sees is defanged and a link to actor infrastructure is no link.
+  Every non-report page passes through it once, in _layouts/page.html (the layout of the index pages, the actor, family and technique profiles, the IOC viewer, the Wire
+  and the single pages), and a detection page's body passes through it in _layouts/post.html. A page or a component built on those layouts needs to call nothing:
+  its text is defanged on the way out. Call it directly only for a fragment that is printed OUTSIDE those two layouts:
+
+    {%- capture _html %}...markup...{% endcapture -%}{% include defang-html.html html=_html %}      (add  unlink=false  to keep every link, as the Wire does)
+
+  WHAT IT DOES, one pass over the markup cut at "<":
+    - text between tags goes through defang-text.html (URLs, IPv4, IPv6, domains, e-mails -> hxxp / [.] / [@] / [:]; a name in _data/defang_allow.yml `raw` is left alone);
+    - the inside of <pre>, <script>, <style>, <template> and <textarea> is copied as it is: a <pre> on a detection page is a rule body (decision 5 keeps rule bodies exact),
+      and a script is code, not text (the rendered-page gate fails a raw indicator in a <pre> anywhere else);
+    - an <a href> that points off this site is kept only when its target (host + path, no scheme, no www) begins with an entry of _data/defang_allow.yml `links` (MITRE, vendor
+      and standards references, our own profiles); any other target (an unlisted host, an IP address, javascript:, data:) becomes a <span class="hl-unlinked"> holding the same
+      text, which is then defanged: an indicator is text, never a link. A relative link, an anchor and a mailto: to one of our `mailboxes` are kept. unlink=false keeps every link (the Wire:
+      its article links are curated feed publishers, not actor infrastructure, and the rendered-page gate checks them for IP targets only);
+    - a kept external link whose label is only its own host name or host + path ("patchstack.com", "linkedin.com/in/josephrharrison") is not defanged: the label names where the reference goes.
+  An element carrying data-literal="<type>" (the IOC viewer's hash, filename, path and registry cells, _includes/ioc-cell.html) keeps its text as written.
+  Tag attributes are never rewritten: an href, a data-title search key, a data-live value stay exactly as the layout wrote them (the rendered-page gate reads the tooltip
+  attributes title, alt, aria-label and data-copy, so a layout must defang those where it writes them).
+  The markup is cut at "<" and ">", which kramdown and Liquid always escape in text (&lt; &gt;); a raw ">" inside an attribute value would be read as the end of the tag.
+{%- endcomment -%}
+{%- assign _dh_unlink = true -%}
+{%- if include.unlink == false -%}{%- assign _dh_unlink = false -%}{%- endif -%}
+{%- assign _dh_links = site.data.defang_allow.links -%}
+{%- assign _dh_raw = site.data.defang_allow.raw -%}
+{%- assign _dh_mbx = site.data.defang_allow.mailboxes -%}
+{%- assign _dh_attrs = "title,alt,aria-label" | split: "," -%}
+{%- assign _dh_pieces = include.html | append: "" | split: "<" -%}
+{%- assign _dh_skip = "" -%}
+{%- assign _dh_unl = false -%}
+{%- capture _dh_out -%}
+{%- for _dh_p in _dh_pieces -%}
+  {%- if forloop.first -%}
+    {%- assign _dh_t = _dh_p -%}
+    {%- if _dh_t contains "." or _dh_t contains "@" or _dh_t contains ":" -%}{%- include defang-text.html text=_dh_t -%}{%- else -%}{{- _dh_t -}}{%- endif -%}
+  {%- else -%}
+    {%- comment -%} fast path (the build runs this on every page): a piece with no ".", "@" or ":" in it, outside a raw element and not opening or closing one of the tags that matter, is copied as it is {%- endcomment -%}
+    {%- assign _dh_fast = false -%}
+    {%- if _dh_skip == "" -%}
+      {%- unless _dh_p contains "." or _dh_p contains "@" or _dh_p contains ":" -%}
+        {%- assign _dh_f2 = _dh_p | slice: 0, 2 -%}
+        {%- unless _dh_f2 == "a " or _dh_f2 == "a>" or _dh_f2 == "pr" or _dh_f2 == "sc" or _dh_f2 == "st" or _dh_f2 == "te" or _dh_f2 == "/a" -%}{%- assign _dh_fast = true -%}{%- endunless -%}
+      {%- endunless -%}
+    {%- endif -%}
+    {%- if _dh_fast -%}{{- "<" -}}{{- _dh_p -}}{%- else -%}
+    {%- assign _dh_raw_piece = false -%}
+    {%- if _dh_skip != "" -%}
+      {%- assign _dh_close = "/" | append: _dh_skip -%}
+      {%- assign _dh_head = _dh_p | slice: 0, _dh_close.size | downcase -%}
+      {%- if _dh_head == _dh_close -%}{%- assign _dh_skip = "" -%}{%- else -%}{%- assign _dh_raw_piece = true -%}{%- endif -%}
+    {%- endif -%}
+    {%- assign _dh_hasgt = false -%}
+    {%- if _dh_p contains ">" -%}{%- assign _dh_hasgt = true -%}{%- endif -%}
+    {%- if _dh_raw_piece or _dh_hasgt == false -%}
+      {{- "<" -}}{{- _dh_p -}}
+    {%- else -%}
+      {%- assign _dh_tag = _dh_p | split: ">" | first | append: "" -%}
+      {%- assign _dh_n = _dh_tag.size | plus: 1 -%}
+      {%- assign _dh_txt = _dh_p | slice: _dh_n, 10000000 -%}
+      {%- assign _dh_tl = _dh_tag | downcase -%}
+      {%- assign _dh_nm = _dh_tl | split: " " | first | append: "" -%}
+      {%- assign _dh_tag_out = _dh_tag -%}
+      {%- assign _dh_txt_raw = false -%}
+      {%- assign _dh_lab = "" -%}
+      {%- assign _dh_lab2 = "" -%}
+      {%- if _dh_nm == "script" or _dh_nm == "style" or _dh_nm == "pre" or _dh_nm == "template" or _dh_nm == "textarea" -%}
+        {%- assign _dh_skip = _dh_nm -%}
+        {%- assign _dh_txt_raw = true -%}
+      {%- elsif _dh_tl contains 'data-literal="' -%}
+        {%- comment -%} an IOC viewer value whose type has nothing to disarm (hash, filename, path, registry): _includes/ioc-cell.html sets the marker, the gate checks it {%- endcomment -%}
+        {%- assign _dh_txt_raw = true -%}
+      {%- elsif _dh_nm == "a" and _dh_tl contains 'href="' -%}
+        {%- assign _dh_href = _dh_tag | split: 'href="' | last | append: "" | split: '"' | first | append: "" -%}
+        {%- assign _dh_hl = _dh_href | downcase -%}
+        {%- assign _dh_c1 = _dh_hl | slice: 0 -%}
+        {%- assign _dh_c2 = _dh_hl | slice: 0, 2 -%}
+        {%- assign _dh_c7 = _dh_hl | slice: 0, 7 -%}
+        {%- assign _dh_kind = "rel" -%}
+        {%- if _dh_c1 == "/" and _dh_c2 != "//" -%}{%- assign _dh_kind = "rel" -%}
+        {%- elsif _dh_c2 == "//" or _dh_hl contains "://" -%}{%- assign _dh_kind = "ext" -%}
+        {%- elsif _dh_c1 == "#" or _dh_c1 == "?" or _dh_hl == "" -%}{%- assign _dh_kind = "rel" -%}
+        {%- elsif _dh_c7 == "mailto:" -%}{%- assign _dh_kind = "mail" -%}
+        {%- elsif _dh_hl contains ":" -%}
+          {%- assign _dh_sch = _dh_hl | split: ":" | first | append: "" -%}
+          {%- unless _dh_sch contains "/" or _dh_sch contains "." -%}{%- assign _dh_kind = "other" -%}{%- endunless -%}
+        {%- endif -%}
+        {%- assign _dh_keep = true -%}
+        {%- if _dh_kind == "other" -%}{%- assign _dh_keep = false -%}
+        {%- elsif _dh_kind == "mail" -%}
+          {%- assign _dh_maddr = _dh_hl | remove_first: "mailto:" | split: "?" | first | append: "" -%}
+          {%- unless _dh_mbx[_dh_maddr] -%}{%- assign _dh_keep = false -%}{%- endunless -%}
+        {%- elsif _dh_kind == "ext" -%}
+          {%- assign _dh_key = _dh_hl | remove_first: "https:" | remove_first: "http:" | remove_first: "//" | remove_first: "www." | split: "?" | first | append: "" | split: "#" | first | append: "" -%}
+          {%- assign _dh_hostk = _dh_key | split: "/" | first | append: "" -%}
+          {%- assign _dh_lab = _dh_hostk -%}
+          {%- assign _dh_kn = _dh_key.size | minus: 1 -%}
+          {%- assign _dh_kl = _dh_key | slice: _dh_kn -%}
+          {%- assign _dh_lab2 = _dh_key -%}
+          {%- if _dh_kl == "/" -%}{%- assign _dh_lab2 = _dh_key | slice: 0, _dh_kn -%}{%- endif -%}
+          {%- if _dh_unlink -%}
+            {%- assign _dh_keep = false -%}
+            {%- assign _dh_ks = _dh_key | append: "/" -%}
+            {%- for _dh_e in _dh_links -%}
+              {%- assign _dh_ee = _dh_e | downcase | append: "/" -%}
+              {%- assign _dh_pf = _dh_ks | slice: 0, _dh_ee.size -%}
+              {%- if _dh_pf == _dh_ee -%}{%- assign _dh_keep = true -%}{%- endif -%}
+            {%- endfor -%}
+          {%- endif -%}
+        {%- endif -%}
+        {%- if _dh_keep == false -%}
+          {%- assign _dh_lab = "" -%}
+          {%- assign _dh_tag_out = 'span class="hl-unlinked" data-unlinked="1"' -%}
+          {%- assign _dh_unl = true -%}
+        {%- endif -%}
+      {%- elsif _dh_nm == "/a" and _dh_unl -%}
+        {%- assign _dh_tag_out = "/span" -%}
+        {%- assign _dh_unl = false -%}
+      {%- endif -%}
+      {%- comment -%} the tooltip attributes a reader can hover: title, alt and aria-label go through the text defang; href, data-* and every other attribute stay exactly as written {%- endcomment -%}
+      {%- if _dh_tag_out contains '="' and _dh_tag_out contains "." or _dh_tag_out contains '="' and _dh_tag_out contains "@" -%}
+        {%- for _dh_at in _dh_attrs -%}
+          {%- assign _dh_ak = " " | append: _dh_at | append: '="' -%}
+          {%- if _dh_tag_out contains _dh_ak -%}
+            {%- assign _dh_av = _dh_tag_out | split: _dh_ak | last | append: "" | split: '"' | first | append: "" -%}
+            {%- if _dh_av contains "." or _dh_av contains "@" or _dh_av contains ":" -%}
+              {%- capture _dh_avd %}{% include defang-text.html text=_dh_av %}{% endcapture -%}
+              {%- if _dh_avd != _dh_av -%}
+                {%- assign _dh_ao = _dh_ak | append: _dh_av | append: '"' -%}
+                {%- assign _dh_an = _dh_ak | append: _dh_avd | append: '"' -%}
+                {%- assign _dh_tag_out = _dh_tag_out | replace_first: _dh_ao, _dh_an -%}
+              {%- endif -%}
+            {%- endif -%}
+          {%- endif -%}
+        {%- endfor -%}
+      {%- endif -%}
+      {{- "<" -}}{{- _dh_tag_out -}}{{- ">" -}}
+      {%- if _dh_txt_raw -%}{{- _dh_txt -}}
+      {%- elsif _dh_txt contains "." or _dh_txt contains "@" or _dh_txt contains ":" -%}
+        {%- assign _dh_tt = _dh_txt | strip | downcase | remove_first: "https://" | remove_first: "http://" | remove_first: "www." -%}
+        {%- assign _dh_tn = _dh_tt.size | minus: 1 -%}
+        {%- assign _dh_tl9 = _dh_tt | slice: _dh_tn -%}
+        {%- if _dh_tl9 == "/" -%}{%- assign _dh_tt = _dh_tt | slice: 0, _dh_tn -%}{%- endif -%}
+        {%- assign _dh_same = false -%}
+        {%- if _dh_lab != "" -%}{%- if _dh_tt == _dh_lab or _dh_tt == _dh_lab2 -%}{%- assign _dh_same = true -%}{%- endif -%}{%- endif -%}
+        {%- if _dh_same -%}{{- _dh_txt -}}{%- else -%}{%- include defang-text.html text=_dh_txt -%}{%- endif -%}
+      {%- else -%}{{- _dh_txt -}}
+      {%- endif -%}
+    {%- endif -%}
+    {%- endif -%}
+  {%- endif -%}
+{%- endfor -%}
+{%- endcapture -%}
+{{- _dh_out -}}

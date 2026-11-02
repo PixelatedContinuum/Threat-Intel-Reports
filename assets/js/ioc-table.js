@@ -10,7 +10,9 @@
    defender a block list they did not ask for and would not notice was wrong.
    The defang toggle (2026-10-09) rides on the same rule: it rewrites the
    DISPLAYED value, and copy, .txt and .csv read the display, so a defanged
-   table exports defanged values and a live one exports live values. The live
+   table exports defanged values and a live one exports live values. Since
+   2026-11-02 the table STARTS defanged (the layout prints it that way, the
+   button starts pressed): the reader turns the live values on deliberately. The live
    value is kept on the <code> element's data-live attribute so switching the
    toggle off restores it byte for byte rather than re-deriving it.
 
@@ -36,7 +38,7 @@
 
   function defang(value, type) {
     var s = value;
-    if (type === 'url') s = s.replace(/^http(s?)/i, 'hxxp$1');
+    if (type === 'url') s = s.replace(/https?:\/\//gi, function (m) { return m.replace(/tt/i, 'xx'); }); /* every scheme, a URL inside a path included */
     if (type === 'email') s = s.replace(/@/g, '[@]');
     return s.replace(/\./g, '[.]');
   }
@@ -63,7 +65,8 @@
     var hasFp = flag('data-has-fp-risk');
 
     var active = {};
-    var defanged = false;
+    /* Defanged is the DEFAULT (decision 5 of T-0500.1.7.4): the layout prints every network row defanged and the button starts pressed. */
+    var defanged = !defangEl || defangEl.getAttribute('aria-pressed') !== 'false';
 
     function activeCount() { return Object.keys(active).length; }
 
@@ -120,7 +123,10 @@
        element the selector above never finds, so the toggle cannot reach it. */
     rows.forEach(function (tr) {
       var c = tr.querySelector('code');
-      if (c && !c.hasAttribute('data-live')) c.setAttribute('data-live', c.textContent);
+      if (!c) return;
+      /* what the layout printed (defanged for a network row, the feed's own text for a hash or a filename): the state the button starts in */
+      c.__hlShown = c.textContent;
+      if (!c.hasAttribute('data-live')) c.setAttribute('data-live', c.textContent);
     });
 
     function applyDefang() {
@@ -130,7 +136,7 @@
         var live = c.getAttribute('data-live');
         if (live == null) return;
         var type = tr.getAttribute('data-type');
-        c.textContent = (defanged && DEFANG_TYPES[type]) ? defang(live, type) : live;
+        c.textContent = !defanged ? live : (DEFANG_TYPES[type] ? defang(live, type) : c.__hlShown);
       });
       if (defangEl) {
         defangEl.setAttribute('aria-pressed', defanged ? 'true' : 'false');
@@ -218,6 +224,7 @@
     });
 
     apply();
+    applyDefang();
   }
 
   ready(init);

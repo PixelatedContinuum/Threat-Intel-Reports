@@ -1,33 +1,284 @@
 {%- comment -%}
-  Render-time defang of the VISIBLE text of a title (T-0500.1.7.4, Joseph 2026-11-02, decision 5): every word that is a dotted-quad IPv4 address has each dot written
-  as [.], the one form the site's report prose and tools/report-tooling/check-defang.js use ("193.233.202.17" prints as "193[.]233[.]202[.]17").
+  Render-time defang of VISIBLE TEXT (T-0500.1.7.4, Joseph 2026-11-02, decision 5: "We should defang everything ... I do not want to risk people clicking on something or
+  accidentally pasting it in the wrong way"). The one shared include; _includes/defang-html.html calls it for every text node of a page and cards call it for their titles.
+
   Call:  {%- capture shown %}{% include defang-text.html text=some.title %}{% endcapture -%}  then print {{ shown }}.
-  Applies to what a reader sees only. Never use it on a data file, an href, a data- attribute or a search key: the raw address stays there, so the listing filter
-  and the search still find "193.233.202.17" when someone types it. Liquid has no regular expressions, so a word counts as an address when, after the surrounding
-  ( ) , ; " ' and a trailing full stop are taken off (and anything after a ":", a port), it splits on "." into exactly four parts that are each a whole number from 0 to 255 (a word like "v4.3.4.1" or "1.2.3" does not).
-  Private and loopback addresses are defanged too: a title never needs one raw. Output is the text with single spaces between words; HTML collapses runs of space anyway.
+  Params: text (required); type (optional, an IOC table type: ipv4 ipv6 domain endpoint url email defang the whole value the way assets/js/ioc-table.js does, every other
+  type is returned as it is).
+
+  FORMS (the one set tools/report-tooling/check-defang.js and the report prose use):  http -> hxxp, https -> hxxps, ftp -> fxp, sftp -> sfxp (ws and wss keep their scheme),
+  every dot of a host, IP or domain -> [.], the @ of an e-mail or of a URL's user:password@ -> [@], the colons of an IPv6 address -> [:]. A port, a path and a query keep their characters
+  ("hxxp://193[.]233[.]202[.]17:8888/lpe.exe", "op[@]evil[.]example", "2001[:]db8[:][:]7").
+
+  WHAT COUNTS AS AN INDICATOR. Liquid has no regular expressions, so the text is cut into words on spaces and each word is judged on its own, after the surrounding
+  ( ) < > " ' ` , ; : ! ? and a trailing full stop are taken off (a word that already holds [.] is un-defanged first and defanged again from scratch, so a partly defanged "38[.]180.16.98" comes out whole):
+    - starts with http:// https:// ftp:// sftp:// ws:// wss://  -> a URL: scheme and host are defanged, the path is not
+    - one @ with a dotted host after it whose last label is a TLD -> an e-mail
+    - three or more colons between groups of hex digits -> an IPv6 address
+    - anything else is cut at / _ = , ; | ( ) { } < > " ' ` \ + * & % # $ ! ? : [ ] “ ” ‘ ’ — – … and each piece is judged: four whole numbers 0-255 -> an IPv4 address; dots, no empty
+      label and a last label that is a key of _data/defang_tlds.yml (the IANA root zone, the same snapshot check-defang.js reads) -> a domain; a hyphen stays inside a
+      piece, and a piece that is neither but holds an IPv4 address after a hyphen ("Toolkit-193.233.202.17-Repository") is judged again on its hyphens
+  A word that already holds [.] [@] or [:] is left as it is.
+  A name that is a key of _data/defang_allow.yml `raw` (this site, MITRE, a product that ends in a TLD word) and an address that is a key of `mailboxes` (our own) are left alone. A file name that ends in a TLD word
+  (install.sh, run.py) is read as a domain, exactly as the report lint reads it.
+
+  WHERE NOT TO USE IT: a data file, an href, a data- attribute, a search key, a rule body. The raw value stays there on purpose (the listing filter and the search match
+  on it; the IOC feed JSON and the detection rules are exact). Whitespace: newlines and the spaces at the ends of the text are kept, a run of spaces inside a line becomes one.
 {%- endcomment -%}
-{%- assign _df_words = include.text | split: " " -%}
-{%- assign _df_sp = " " -%}
-{%- capture _df_out -%}
-{%- for _df_w in _df_words -%}
-  {%- assign _df_tail = "" -%}
-  {%- assign _df_x = _df_w -%}
-  {%- assign _df_last = _df_w | slice: -1 -%}
-  {%- if _df_last == "." -%}{%- assign _df_tail = "." -%}{%- assign _df_len = _df_w | size | minus: 1 -%}{%- assign _df_x = _df_w | slice: 0, _df_len -%}{%- endif -%}
-  {%- assign _df_core = _df_x | remove: "(" | remove: ")" | remove: "," | remove: ";" | remove: '"' | remove: "'" | split: ":" | first -%}
-  {%- assign _df_parts = _df_core | split: "." -%}
-  {%- assign _df_ip = false -%}
-  {%- if _df_parts.size == 4 -%}
-    {%- assign _df_ip = true -%}
-    {%- for _df_p in _df_parts -%}
-      {%- assign _df_n = _df_p | plus: 0 -%}
-      {%- assign _df_back = _df_n | append: "" -%}
-      {%- if _df_back != _df_p or _df_n > 255 -%}{%- assign _df_ip = false -%}{%- endif -%}
-    {%- endfor -%}
-  {%- endif -%}
-  {%- if _df_ip -%}{{ _df_x | replace: ".", "[.]" }}{%- else -%}{{ _df_x }}{%- endif -%}{{ _df_tail }}
-  {%- unless forloop.last -%}{{ _df_sp }}{%- endunless -%}
+{%- assign _dt_in = include.text | append: "" -%}
+{%- if include.type -%}
+  {%- assign _dt_ty = include.type | downcase -%}
+  {%- if _dt_ty == "ipv4" or _dt_ty == "ipv6" or _dt_ty == "domain" or _dt_ty == "endpoint" or _dt_ty == "url" or _dt_ty == "email" -%}
+    {%- assign _dt_v = _dt_in -%}
+    {%- if _dt_ty == "url" -%}
+      {%- comment -%} every scheme in the value, the first and one inside the path (a web.archive.org URL carries another): the viewer's script does the same {%- endcomment -%}
+      {%- assign _dt_v = _dt_v | replace: "https://", "hxxps://" | replace: "http://", "hxxp://" | replace: "HTTPS://", "hxxps://" | replace: "HTTP://", "hxxp://" -%}
+    {%- endif -%}
+    {%- if _dt_ty == "email" -%}{%- assign _dt_v = _dt_v | replace: "@", "[@]" -%}{%- endif -%}
+    {{- _dt_v | replace: ".", "[.]" -}}
+  {%- else -%}{{- _dt_in -}}{%- endif -%}
+{%- elsif _dt_in contains "." or _dt_in contains "@" or _dt_in contains ":" -%}
+{%- capture _dt_nl %}
+{% endcapture -%}
+{%- assign _dt_tlds = site.data.defang_tlds -%}
+{%- assign _dt_raw = site.data.defang_allow.raw -%}
+{%- assign _dt_mbx = site.data.defang_allow.mailboxes -%}
+{%- assign _dt_schemes = "sftp://,https://,http://,ftp://,wss://,ws://" | split: "," -%}
+{%- assign _dt_lines = _dt_in | split: _dt_nl -%}
+{%- capture _dt_all -%}
+{%- for _dt_line in _dt_lines -%}
+  {%- assign _dt_words = _dt_line | split: " " -%}
+  {%- assign _dt_c0 = _dt_line | slice: 0 -%}
+  {%- assign _dt_c9 = _dt_line | slice: -1 -%}
+  {%- if _dt_c0 == " " -%}{{ " " }}{%- endif -%}
+  {%- for _dt_w in _dt_words -%}
+    {%- assign _dt_out = _dt_w -%}
+    {%- if _dt_w contains "." or _dt_w contains "@" or _dt_w contains ":" -%}
+    {%- assign _dt_wu = _dt_w -%}
+    {%- if _dt_w contains "[.]" -%}{%- assign _dt_wu = _dt_w | replace: "[.]", "." -%}{%- endif -%}
+    {%- unless _dt_wu contains "[@]" or _dt_wu contains "[:]" or _dt_wu contains "§§" -%}
+      {%- comment -%} 1. take off what surrounds the word: ( " ' < ` and a leading full stop, then , ; ) " ' > ` ! ? : and a trailing full stop {%- endcomment -%}
+      {%- assign _dt_lead = "" -%}
+      {%- assign _dt_x = _dt_wu -%}
+      {%- for _dt_i in (1..3) -%}
+        {%- assign _dt_c = _dt_x | slice: 0 -%}
+        {%- if _dt_c == "(" or _dt_c == '"' or _dt_c == "'" or _dt_c == "<" or _dt_c == "`" or _dt_c == "." or _dt_c == "[" -%}
+          {%- assign _dt_lead = _dt_lead | append: _dt_c -%}
+          {%- assign _dt_x = _dt_x | slice: 1, 100000 -%}
+        {%- endif -%}
+      {%- endfor -%}
+      {%- assign _dt_tail = "" -%}
+      {%- for _dt_i in (1..4) -%}
+        {%- assign _dt_c = _dt_x | slice: -1 -%}
+        {%- if _dt_c == "." or _dt_c == "," or _dt_c == ";" or _dt_c == ")" or _dt_c == '"' or _dt_c == "'" or _dt_c == ">" or _dt_c == "`" or _dt_c == "!" or _dt_c == "?" or _dt_c == ":" or _dt_c == "]" -%}
+          {%- assign _dt_tail = _dt_c | append: _dt_tail -%}
+          {%- assign _dt_n = _dt_x.size | minus: 1 -%}
+          {%- assign _dt_x = _dt_x | slice: 0, _dt_n -%}
+        {%- endif -%}
+      {%- endfor -%}
+      {%- assign _dt_res = _dt_x -%}
+      {%- assign _dt_head = "" -%}
+      {%- assign _dt_psrc = "" -%}
+      {%- assign _dt_xl = _dt_x | downcase -%}
+      {%- comment -%} a scheme anywhere in the word, the earliest one: what comes before it ("reference:url,", "DownloadFile(") is kept, the URL from its scheme on is judged {%- endcomment -%}
+      {%- assign _dt_pfx = "" -%}
+      {%- assign _dt_sch = "" -%}
+      {%- assign _dt_sn = 0 -%}
+      {%- if _dt_xl contains "://" -%}
+        {%- assign _dt_best = 100000 -%}
+        {%- assign _dt_bsc = "" -%}
+        {%- for _dt_sc in _dt_schemes -%}
+          {%- if _dt_xl contains _dt_sc -%}
+            {%- assign _dt_at = _dt_xl | split: _dt_sc | first | append: "" | size -%}
+            {%- assign _dt_okpre = true -%}
+            {%- if _dt_at > 0 -%}
+              {%- comment -%} a scheme word glued to a letter or digit is another word ("tftp://" is not "ftp://") {%- endcomment -%}
+              {%- assign _dt_pi = _dt_at | minus: 1 -%}
+              {%- assign _dt_pch = _dt_xl | slice: _dt_pi, 1 -%}
+              {%- assign _dt_pup = _dt_pch | upcase -%}
+              {%- if _dt_pup != _dt_pch or "0123456789" contains _dt_pch -%}{%- assign _dt_okpre = false -%}{%- endif -%}
+            {%- endif -%}
+            {%- if _dt_at < _dt_best and _dt_okpre -%}{%- assign _dt_best = _dt_at -%}{%- assign _dt_bsc = _dt_sc -%}{%- endif -%}
+          {%- endif -%}
+        {%- endfor -%}
+        {%- if _dt_bsc != "" -%}
+          {%- if _dt_best > 0 -%}
+            {%- assign _dt_pfx = _dt_x | slice: 0, _dt_best -%}
+            {%- assign _dt_x = _dt_x | slice: _dt_best, 100000 -%}
+            {%- assign _dt_xl = _dt_x | downcase -%}
+          {%- endif -%}
+          {%- if _dt_bsc == "https://" -%}{%- assign _dt_sch = "hxxps://" -%}{%- assign _dt_sn = 8 -%}
+          {%- elsif _dt_bsc == "http://" -%}{%- assign _dt_sch = "hxxp://" -%}{%- assign _dt_sn = 7 -%}
+          {%- elsif _dt_bsc == "sftp://" -%}{%- assign _dt_sch = "sfxp://" -%}{%- assign _dt_sn = 7 -%}
+          {%- elsif _dt_bsc == "ftp://" -%}{%- assign _dt_sch = "fxp://" -%}{%- assign _dt_sn = 6 -%}
+          {%- elsif _dt_bsc == "wss://" -%}{%- assign _dt_sch = "wss://" -%}{%- assign _dt_sn = 6 -%}
+          {%- elsif _dt_bsc == "ws://" -%}{%- assign _dt_sch = "ws://" -%}{%- assign _dt_sn = 5 -%}
+          {%- endif -%}
+        {%- endif -%}
+      {%- endif -%}
+      {%- assign _dt_em = _dt_x | split: "@" -%}
+      {%- assign _dt_cn = _dt_x | split: ":" -%}
+      {%- assign _dt_hasdot = false -%}
+      {%- if _dt_x contains "." -%}{%- assign _dt_hasdot = true -%}{%- endif -%}
+      {%- if _dt_sn > 0 -%}
+        {%- comment -%} 2. a URL: scheme and host are defanged; userinfo, port, path and query are kept. {%- endcomment -%}
+        {%- assign _dt_rest = _dt_x | slice: _dt_sn, 100000 -%}
+        {%- assign _dt_auth = _dt_rest | split: "/" | first | append: "" | split: "?" | first | append: "" | split: "#" | first | append: "" -%}
+        {%- assign _dt_after = _dt_rest | slice: _dt_auth.size, 100000 -%}
+        {%- assign _dt_ui = "" -%}
+        {%- assign _dt_hp = _dt_auth -%}
+        {%- if _dt_auth contains "@" -%}
+          {%- assign _dt_hp = _dt_auth | split: "@" | last | append: "" -%}
+          {%- assign _dt_un = _dt_auth.size | minus: _dt_hp.size -%}
+          {%- assign _dt_ui = _dt_auth | slice: 0, _dt_un | replace: "@", "[@]" -%}
+        {%- endif -%}
+        {%- assign _dt_hp1 = _dt_hp | slice: 0 -%}
+        {%- if _dt_hp1 == "[" -%}
+          {%- assign _dt_lit = _dt_hp | split: "]" | first | append: "" -%}
+          {%- assign _dt_hrest = _dt_hp | slice: _dt_lit.size, 100000 -%}
+          {%- assign _dt_hdef = _dt_lit | replace: ":", "[:]" -%}
+          {%- assign _dt_head = _dt_sch | append: _dt_ui | append: _dt_hdef | append: _dt_hrest -%}
+          {%- assign _dt_psrc = _dt_after -%}
+        {%- else -%}
+          {%- assign _dt_host = _dt_hp | split: ":" | first | append: "" -%}
+          {%- assign _dt_port = _dt_hp | slice: _dt_host.size, 100000 -%}
+          {%- assign _dt_hl = _dt_host | downcase -%}
+          {%- if _dt_raw[_dt_hl] -%}
+            {%- assign _dt_res = _dt_x -%}
+          {%- elsif _dt_host contains "." or _dt_sch != "ws://" and _dt_sch != "wss://" -%}
+            {%- assign _dt_hdef = _dt_host | replace: ".", "[.]" -%}
+            {%- assign _dt_head = _dt_sch | append: _dt_ui | append: _dt_hdef | append: _dt_port -%}
+            {%- assign _dt_psrc = _dt_after -%}
+          {%- endif -%}
+        {%- endif -%}
+      {%- elsif _dt_em.size == 2 and _dt_em[0] != "" and _dt_em[1] contains "." -%}
+        {%- comment -%} 3. an e-mail: one @, a dotted host after it whose last label is a TLD; our own mailboxes stay. {%- endcomment -%}
+        {%- assign _dt_edom = _dt_em[1] | downcase -%}
+        {%- assign _dt_etld = _dt_edom | split: "." | last | append: "" -%}
+        {%- assign _dt_addr = _dt_xl -%}
+        {%- if _dt_tlds[_dt_etld] and _dt_raw[_dt_edom] == nil and _dt_mbx[_dt_addr] == nil -%}
+          {%- assign _dt_hdef = _dt_em[1] | replace: ".", "[.]" -%}
+          {%- assign _dt_res = _dt_em[0] | append: "[@]" | append: _dt_hdef -%}
+        {%- endif -%}
+      {%- elsif _dt_cn.size > 3 and _dt_hasdot == false -%}
+        {%- comment -%} 4. an IPv6 address: three or more colons, every group at most four hex digits. {%- endcomment -%}
+        {%- assign _dt_ok = true -%}
+        {%- for _dt_g in _dt_cn -%}
+          {%- if _dt_g.size > 4 -%}{%- assign _dt_ok = false -%}
+          {%- else -%}
+            {%- assign _dt_gr = _dt_g | downcase | remove: "0" | remove: "1" | remove: "2" | remove: "3" | remove: "4" | remove: "5" | remove: "6" | remove: "7" | remove: "8" | remove: "9" | remove: "a" | remove: "b" | remove: "c" | remove: "d" | remove: "e" | remove: "f" -%}
+            {%- if _dt_gr != "" -%}{%- assign _dt_ok = false -%}{%- endif -%}
+          {%- endif -%}
+        {%- endfor -%}
+        {%- if _dt_ok -%}{%- assign _dt_res = _dt_x | replace: ":", "[:]" -%}{%- endif -%}
+      {%- else -%}
+        {%- assign _dt_psrc = _dt_x -%}
+      {%- endif -%}
+      {%- if _dt_psrc != "" and _dt_psrc contains "." -%}
+        {%- comment -%} 5. anything else: cut at the characters that end a host (a path, a port, a quote, an =, a comma ...) and judge each piece: an IPv4 address, or a dotted name whose last label is a TLD.
+           A hyphen stays inside a piece (it is part of a host name); a piece that is not a host but holds an IPv4 address after a hyphen ("Toolkit-193.233.202.17-Repository") is judged again on the hyphens. {%- endcomment -%}
+        {%- assign _dt_mk = _dt_psrc | replace: "/", "§§/§§" | replace: "_", "§§_§§" | replace: "=", "§§=§§" | replace: ",", "§§,§§" | replace: ";", "§§;§§" | replace: "|", "§§|§§" | replace: "(", "§§(§§" | replace: ")", "§§)§§" | replace: "{", "§§{§§" | replace: "}", "§§}§§" | replace: "<", "§§<§§" | replace: ">", "§§>§§" | replace: '"', '§§"§§' | replace: "'", "§§'§§" | replace: "`", "§§`§§" | replace: "\", "§§\§§" | replace: "+", "§§+§§" | replace: "*", "§§*§§" | replace: "&", "§§&§§" | replace: "%", "§§%§§" | replace: "#", "§§#§§" | replace: "$", "§§$§§" | replace: "!", "§§!§§" | replace: "?", "§§?§§" | replace: ":", "§§:§§" | replace: "[", "§§[§§" | replace: "]", "§§]§§" | replace: "“", "§§“§§" | replace: "”", "§§”§§" | replace: "‘", "§§‘§§" | replace: "’", "§§’§§" | replace: "—", "§§—§§" | replace: "–", "§§–§§" | replace: "…", "§§…§§" -%}
+        {%- assign _dt_pcs = _dt_mk | split: "§§" -%}
+        {%- capture _dt_pres -%}
+        {%- for _dt_pc in _dt_pcs -%}
+          {%- assign _dt_pq = _dt_pc -%}
+          {%- assign _dt_plead = "" -%}
+          {%- assign _dt_ptail = "" -%}
+          {%- if _dt_pc contains "." -%}
+            {%- for _dt_i in (1..3) -%}
+              {%- assign _dt_c = _dt_pq | slice: 0 -%}
+              {%- if _dt_c == "." or _dt_c == "-" -%}{%- assign _dt_plead = _dt_plead | append: _dt_c -%}{%- assign _dt_pq = _dt_pq | slice: 1, 100000 -%}{%- endif -%}
+              {%- assign _dt_c = _dt_pq | slice: -1 -%}
+              {%- if _dt_c == "." or _dt_c == "-" -%}{%- assign _dt_ptail = _dt_c | append: _dt_ptail -%}{%- assign _dt_n = _dt_pq.size | minus: 1 -%}{%- assign _dt_pq = _dt_pq | slice: 0, _dt_n -%}{%- endif -%}
+            {%- endfor -%}
+          {%- endif -%}
+          {%- assign _dt_pr = _dt_pq -%}
+          {%- if _dt_pq contains "." -%}
+            {%- assign _dt_pl = _dt_pq | downcase -%}
+            {%- assign _dt_parts = _dt_pq | split: "." -%}
+            {%- assign _dt_isip = false -%}
+            {%- if _dt_parts.size == 4 -%}
+              {%- assign _dt_isip = true -%}
+              {%- for _dt_p in _dt_parts -%}
+                {%- assign _dt_pn = _dt_p | plus: 0 -%}
+                {%- assign _dt_pb = _dt_pn | append: "" -%}
+                {%- if _dt_pb != _dt_p or _dt_pn > 255 -%}{%- assign _dt_isip = false -%}{%- endif -%}
+              {%- endfor -%}
+            {%- endif -%}
+            {%- if _dt_isip -%}
+              {%- assign _dt_pr = _dt_pq | replace: ".", "[.]" -%}
+            {%- else -%}
+              {%- assign _dt_tld = _dt_parts | last | append: "" | downcase -%}
+              {%- assign _dt_ok = true -%}
+              {%- assign _dt_hasdash = false -%}
+              {%- if _dt_pq contains "-" -%}{%- assign _dt_hasdash = true -%}{%- endif -%}
+              {%- if _dt_pq contains ".." -%}{%- assign _dt_ok = false -%}{%- endif -%}
+              {%- for _dt_p in _dt_parts -%}{%- if _dt_p == "" -%}{%- assign _dt_ok = false -%}{%- endif -%}{%- endfor -%}
+              {%- if _dt_ok and _dt_tlds[_dt_tld] and _dt_raw[_dt_pl] == nil -%}
+                {%- assign _dt_pr = _dt_pq | replace: ".", "[.]" -%}
+              {%- elsif _dt_parts.size == 4 and _dt_ok and _dt_hasdash == false -%}
+                {%- comment -%} letters then an address ("v2.6.4.0"): the report lint reads the four numbers after the letters as an address, so the page does too {%- endcomment -%}
+                {%- assign _dt_p0 = _dt_parts[0] -%}
+                {%- assign _dt_vp = "" -%}
+                {%- for _dt_i in (1..6) -%}
+                  {%- assign _dt_c = _dt_p0 | slice: 0 -%}
+                  {%- assign _dt_cn2 = _dt_c | plus: 0 -%}
+                  {%- if _dt_c != "" and _dt_cn2 == 0 and _dt_c != "0" -%}
+                    {%- assign _dt_vp = _dt_vp | append: _dt_c -%}
+                    {%- assign _dt_p0 = _dt_p0 | slice: 1, 100 -%}
+                  {%- endif -%}
+                {%- endfor -%}
+                {%- if _dt_vp != "" -%}
+                  {%- assign _dt_isip = true -%}
+                  {%- assign _dt_vq = _dt_parts | join: "." | slice: _dt_vp.size, 100 -%}
+                  {%- assign _dt_vparts = _dt_vq | split: "." -%}
+                  {%- for _dt_p in _dt_vparts -%}
+                    {%- assign _dt_pn = _dt_p | plus: 0 -%}
+                    {%- assign _dt_pb = _dt_pn | append: "" -%}
+                    {%- if _dt_pb != _dt_p or _dt_pn > 255 -%}{%- assign _dt_isip = false -%}{%- endif -%}
+                  {%- endfor -%}
+                  {%- if _dt_isip and _dt_vparts.size == 4 -%}{%- assign _dt_vr = _dt_vq | replace: ".", "[.]" -%}{%- assign _dt_pr = _dt_vp | append: _dt_vr -%}{%- endif -%}
+                {%- endif -%}
+              {%- elsif _dt_pq contains "-" -%}
+                {%- assign _dt_hy = _dt_pq | split: "-" -%}
+                {%- capture _dt_pr -%}
+                {%- for _dt_hp2 in _dt_hy -%}
+                  {%- assign _dt_hq = _dt_hp2 -%}
+                  {%- assign _dt_parts = _dt_hp2 | split: "." -%}
+                  {%- if _dt_parts.size == 4 -%}
+                    {%- assign _dt_isip = true -%}
+                    {%- for _dt_p in _dt_parts -%}
+                      {%- assign _dt_pn = _dt_p | plus: 0 -%}
+                      {%- assign _dt_pb = _dt_pn | append: "" -%}
+                      {%- if _dt_pb != _dt_p or _dt_pn > 255 -%}{%- assign _dt_isip = false -%}{%- endif -%}
+                    {%- endfor -%}
+                    {%- if _dt_isip -%}{%- assign _dt_hq = _dt_hp2 | replace: ".", "[.]" -%}{%- endif -%}
+                  {%- endif -%}
+                  {{- _dt_hq -}}{%- unless forloop.last -%}-{%- endunless -%}
+                {%- endfor -%}
+                {%- endcapture -%}
+              {%- endif -%}
+            {%- endif -%}
+          {%- endif -%}
+          {{- _dt_plead -}}{{- _dt_pr -}}{{- _dt_ptail -}}
+        {%- endfor -%}
+        {%- endcapture -%}
+        {%- comment -%} a scheme inside the text (a URL that carries another URL in its path) is written the same way {%- endcomment -%}
+        {%- assign _dt_res = _dt_head | append: _dt_pres | replace: "https://", "hxxps://" | replace: "http://", "hxxp://" -%}
+      {%- elsif _dt_head != "" -%}
+        {%- assign _dt_res = _dt_head | append: _dt_psrc -%}
+      {%- endif -%}
+      {%- assign _dt_out = _dt_lead | append: _dt_pfx | append: _dt_res | append: _dt_tail -%}
+      {%- if _dt_wu != _dt_w and _dt_out == _dt_wu -%}{%- assign _dt_out = _dt_w -%}{%- endif -%}
+    {%- endunless -%}
+    {%- endif -%}
+    {{- _dt_out -}}
+    {%- unless forloop.last -%}{{ " " }}{%- endunless -%}
+  {%- endfor -%}
+  {%- if _dt_c9 == " " and _dt_line.size > 1 -%}{{ " " }}{%- endif -%}
+  {%- unless forloop.last -%}{{ _dt_nl }}{%- endunless -%}
 {%- endfor -%}
 {%- endcapture -%}
-{{- _df_out -}}
+{{- _dt_all -}}
+{%- else -%}{{- _dt_in -}}
+{%- endif -%}

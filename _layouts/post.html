@@ -46,7 +46,7 @@ document.addEventListener('DOMContentLoaded', function () {
     <span class="hl-post-header__sep">·</span>
     <span class="hl-post-header__date">{{ page.date | date: "%B %d, %Y" }}{% if page.last_updated %} · <a class="hl-last-updated" href="#revisions" title="Revision history">Updated {{ page.last_updated | date: "%b %d, %Y" }}</a>{% endif %}</span>
   </div>
-  <h1 class="hl-post-header__title">{{ page.title }}</h1>{% if hl_tabbed %}
+  <h1 class="hl-post-header__title">{% if page.path contains "hunting-detections" %}{% include defang-text.html text=page.title %}{% else %}{{ page.title }}{% endif %}</h1>{% if hl_tabbed %}
 {% include report-sponsor-bar.html part="report" %}{% endif %}
 </div>
 {% unless hl_tabbed %}{% include sponsor-banner.html %}{% endunless %}
@@ -114,7 +114,7 @@ document.addEventListener('DOMContentLoaded', function () {
 <thead><tr><th>Tactic / Technique</th><th>Name</th><th>Rules</th></tr></thead>
 <tbody>
 {%- for row in _atk.rows %}
-<tr><td>{{ row.tactic }} / <a href="{{ row.id | prepend: '/techniques/' | append: '/' | relative_url }}">{{ row.id }}</a></td><td>{{ row.name }}</td><td>{{ row.rules }}</td></tr>
+<tr><td>{{ row.tactic }} / <a href="{{ row.id | prepend: '/techniques/' | append: '/' | relative_url }}">{{ row.id }}</a></td><td>{{ row.name }}</td><td>{% include defang-text.html text=row.rules %}</td></tr>
 {%- endfor %}
 </tbody>
 </table>
@@ -126,7 +126,8 @@ the coverage above is narrower than the rule set.</em></p>
 </details>
   {%- endif -%}
 {%- endif %}
-    {{ content }}
+    {%- comment -%} A detection page is not a report: its prose and tables are defanged at render time (decision 5, T-0500.1.7.4), its <pre> rule bodies stay exact. A report's own text is defanged in its source and gated there. {%- endcomment %}
+    {% if page.path contains 'hunting-detections' %}{% include defang-html.html html=content %}{% else %}{{ content }}{% endif %}
 {%- comment -%}
   Cite this report. A ready citation line and a BibTeX record, both built
   from the front matter the page already carries (title, date, last_updated,
@@ -139,10 +140,12 @@ the coverage above is narrower than the rule set.</em></p>
 {%- assign _is_det = false -%}{%- if page.path contains 'hunting-detections' %}{% assign _is_det = true %}{% endif -%}
 {%- assign _cite_url = page.url | absolute_url -%}
 {%- assign _cite_key = page.url | split: '/' | last | slugify -%}
-{%- assign _cite_title = page.title | replace: '&', '\&' | replace: '%', '\%' | replace: '#', '\#' -%}
+{%- comment -%} A detection page's title is defanged here too (decision 5, T-0500.1.7.4): the citation line and the BibTeX are copied by a reader. A report keeps its title as written. {%- endcomment -%}
+{%- if _is_det -%}{%- capture _cite_src %}{% include defang-text.html text=page.title %}{% endcapture -%}{%- else -%}{%- assign _cite_src = page.title -%}{%- endif -%}
+{%- assign _cite_title = _cite_src | replace: '&', '\&' | replace: '%', '\%' | replace: '#', '\#' -%}
 <div class="hl-cite" id="cite" data-pagefind-ignore>
   <div class="hl-cite__head">Cite this {% if _is_det %}detection page{% else %}report{% endif %}</div>
-  <p class="hl-cite__text" id="hl-cite-text">Harrison, J. ({{ page.date | date: "%Y" }}). <em>{{ page.title }}</em>. The Hunter's Ledger. {{ _cite_url }}. Published {{ page.date | date: "%-d %B %Y" }}{% if page.last_updated %}, revised {{ page.last_updated | date: "%-d %B %Y" }}{% endif %}.</p>
+  <p class="hl-cite__text" id="hl-cite-text">Harrison, J. ({{ page.date | date: "%Y" }}). <em>{{ _cite_src }}</em>. The Hunter's Ledger. {{ _cite_url }}. Published {{ page.date | date: "%-d %B %Y" }}{% if page.last_updated %}, revised {{ page.last_updated | date: "%-d %B %Y" }}{% endif %}.</p>
   <div class="hl-cite__actions">
     <button type="button" class="hl-cite__btn" data-cite-copy="hl-cite-text">Copy citation</button>
     <span class="hl-cite__licence">CC BY 4.0: free to reuse, including commercially, with attribution and a link to this page.{% if page.last_updated %} Cite the revision date; the <a href="#revisions">revision history</a> says what changed.{% endif %}</span>
@@ -239,7 +242,7 @@ the coverage above is narrower than the rule set.</em></p>
         <div class="hl-card__bar hl-sev--{{ _sev }}"></div>
         <div>
           <div class="hl-card__meta">{% if rp.series and rp_self and rp.series == rp_self.series %}Same series · {% endif %}{{ _sev | upcase }} · {{ rp.date | date: "%b %Y" }}</div>
-          <div class="hl-card__title">{{ rp.title }}</div>
+          <div class="hl-card__title">{% if _is_det %}{% include defang-text.html text=rp.title %}{% else %}{{ rp.title }}{% endif %}</div>
         </div>
       </div>
     </a>
