@@ -71,7 +71,7 @@ function loadAllowData(file) {
 
 function pageType(rel) {
   var r = '/' + rel.replace(/index\.html$/, '');
-  var table = [[/^\/reports\/[^\/]+\/$/, 'report'], [/^\/reports\/$/, 'reports-index'], [/^\/hunting-detections\/[^\/]+\/$/, 'detection'], [/^\/hunting-detections\/$/, 'detections-index'],
+  var table = [[/^\/reports\/[^\/]+\/(?:.+\/)?$/, 'report'], [/^\/reports\/$/, 'reports-index'], [/^\/hunting-detections\/[^\/]+\/$/, 'detection'], [/^\/hunting-detections\/$/, 'detections-index'],
     [/^\/ioc-feeds\/[^\/]+\/$/, 'ioc-feed'], [/^\/ioc-feeds\/$/, 'ioc-feeds-index'], [/^\/actors\/[^\/]+\/$/, 'actor'], [/^\/actors\/$/, 'actors-index'],
     [/^\/techniques\/[^\/]+\/$/, 'technique'], [/^\/techniques\/$/, 'techniques-index'], [/^\/families\/[^\/]+\/$/, 'family'], [/^\/families\/$/, 'families-index'],
     [/^\/behind-the-reports\/[^\/]+\/$/, 'behind-step'], [/^\/$/, 'home'], [/^\/wire\/$/, 'wire']];
@@ -258,8 +258,24 @@ function scanSite(dir, dataFile, opts) {
   var allowDir = opts.allowDir || path.join(repoRoot, 'tools', 'report-tooling', 'defang-allow');
   var reportsDir = opts.reportsDir || path.join(repoRoot, 'reports');
   var repCache = {};
+  // a sub-report page keeps its own permalink (/reports/lpe-exe/) but belongs to the folder it is written in (reports/arsenal-237-new-files/), whose allow file the source lint reads
+  var owner = null;
+  function ownerOf(rel) {
+    if (!owner) {
+      owner = {};
+      if (fs.existsSync(reportsDir)) fs.readdirSync(reportsDir, { withFileTypes: true }).forEach(function (e) {
+        if (!e.isDirectory()) return;
+        fs.readdirSync(path.join(reportsDir, e.name)).forEach(function (f) {
+          if (!/\.md$/i.test(f)) return;
+          var m = fs.readFileSync(path.join(reportsDir, e.name, f), 'utf8').slice(0, 4000).match(/^permalink:\s*['"]?(\S+?)['"]?\s*$/m);
+          if (m) owner[m[1].replace(/\/?$/, '/')] = e.name;
+        });
+      });
+    }
+    return owner['/' + rel.replace(/index\.html$/, '')] || rel.split('/')[1];
+  }
   function reportData(rel) {
-    var slug = rel.split('/')[1];
+    var slug = ownerOf(rel);
     if (repCache[slug]) return repCache[slug];
     var files = [];
     var folder = path.join(reportsDir, slug);
