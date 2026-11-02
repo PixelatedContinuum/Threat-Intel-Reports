@@ -36,6 +36,8 @@
                                  the 44px permalink target of an h3 overlaps the 10px under its line by design (its glyph lies inside
                                  the heading); content that IS painted outside its parent (a card's title below the card) still faults
      position:fixed              placed against the viewport (the back-to-top button, the toast), not a parent
+     sticky header cell          a th with position:sticky (the procedure table's header, T-0500.1.7.3 c3) is displaced from its row by design while the page scrolls, and the
+                                 row holding it is judged by its other cells; a th that is NOT sticky and hangs out of its row still faults (test/box-fit.test.js)
      painted at 2px or less / no size / visibility:hidden   nothing painted, so nothing hangs out
      svg internals               the svg root is measured, its shapes are the drawing
      centred mark                an empty, absolutely placed mark whose centre lies inside its decorative (aria-hidden) container and which lies inside that
@@ -181,6 +183,8 @@ function boxFit(opt) {
     /* B: a child outside its parent's padding box */
     var p = e.parentElement;
     if (cs.position === 'fixed') ex('position:fixed');
+    else if (cs.position === 'sticky' && /^(TH|TD)$/.test(e.tagName)) ex('sticky header cell');
+    else if (e.tagName === 'TR' && e.parentElement && e.parentElement.tagName === 'THEAD' && Array.prototype.some.call(e.cells, function (c) { return getComputedStyle(c).position === 'sticky'; })) ex('row of sticky header cells');
     else if (p) {
       var out = null, ph, ocs, orc, gl = 0, gr = 0, gt = 0, gb = 0, boxEl = null;
       if (cs.position === 'absolute') {

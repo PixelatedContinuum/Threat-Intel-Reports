@@ -407,6 +407,7 @@
   function select(i) {
     active = i; currentSection = null; page.dataset.rvHue = TOKENS[i];
     tabs.forEach(function (tab, j) { tab.setAttribute('aria-selected', String(i === j)); tab.tabIndex = i === j ? 0 : -1; panels[j].hidden = i !== j; });
+    if (phone.matches && tabs[i] && tablist.scrollWidth > tablist.clientWidth + 1) { var tl = tabs[i].offsetLeft - tablist.offsetLeft - (tablist.clientWidth - tabs[i].offsetWidth) / 2; tablist.scrollLeft = Math.max(0, tl); }
     currentLabel.textContent = NAMES[i]; menuLinks.forEach(function (a, j) { if (j === i) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current'); }); closeMenu(false); fillMenuSections(); measureBar(); updateProgress(); clearLink();
   }
   function mode(one) {
@@ -545,6 +546,99 @@
     button('Reset filters', area, function () { controls.forEach(function (c) { c.value = ''; }); apply(); });
     table.parentElement.before(area); apply();
     rows.forEach(function (r) { r.addEventListener('hl-rv-reveal', function () { controls.forEach(function (c) { c.value = ''; }); apply(); }); });
+  }
+  // Design D, D4: the filter console. One search box and one row of chips for each facet that has a column behind it (Stage, Tactic, Status, Confidence, and the report's own shortlist when it has one),
+  // each chip with its count over every row of the table. Single choice inside a facet, all facets and the search combine. The count line shows only while something is filtered. Once the console has
+  // scrolled up under the reading line, a slim sticky bar (search, a Filters button with the facets in a panel, the count and Clear) takes over; both draw from one state.
+  function pipsBefore(el, value) {
+    if (!PIPS[value] || !el.parentNode) return null;
+    var p = make('span', 'hl-rv-pips hl-rv-lv-' + value); p.setAttribute('aria-hidden', 'true'); for (var k = 0; k < 5; k++) make('i', k < PIPS[value] ? 'on' : '', null, p);
+    el.parentNode.insertBefore(p, el); return p;
+  }
+  var consoleSeq = 0;
+  function chainConsole(parent, table, specs, noun, onApply) {
+    var rows = Array.from(table.tBodies[0].rows), state = { q: '', facet: {} }, seq = ++consoleSeq;
+    function pred(row, s, v) {
+      if (s.match) return s.match(row, v);
+      var c = text(row.cells[s.col]);
+      if (v === 'Range') return /\b(LOW|MODERATE|HIGH)-(LOW|MODERATE|HIGH)\b/.test(c);
+      if (v === 'Unscaled') return !/^(DEFINITE|HIGH|MODERATE|LOW|INSUFFICIENT)$/.test(c) && !/^(LOW|MODERATE|HIGH)-(LOW|MODERATE|HIGH)$/.test(c);
+      return c === v;
+    }
+    // A facet value with no row behind it is not drawn: a chip that can only give an empty table is not a filter.
+    var facets = specs.map(function (s) { return { spec: s, values: s.values.map(function (v) { return { v: v, n: rows.filter(function (r) { return pred(r, s, v); }).length }; }).filter(function (x) { return x.n > 0; }) }; }).filter(function (f) { return f.values.length; });
+    var area = make('section', 'hl-rv-pn hl-rv-console hl-rv-filters', null, parent); area.setAttribute('role', 'search'); area.setAttribute('aria-label', 'Search and filter the attack chain');
+    var head = make('div', 'hl-rv-pn-head', null, area);
+    icon('<path d="M3 5h18l-7 8v6l-4-2v-4z"/>', 17, head, 'hl-rv-eyebrow-icon'); make('h3', 'hl-rv-pn-title', 'Filter the procedures', head);
+    make('p', 'hl-rv-pn-sub', 'search, then ' + facets.map(function (f) { return f.spec.label.toLowerCase(); }).join(', '), head);
+    var search = make('label', 'hl-rv-csearch', null, area); make('span', '', 'Search ' + noun, search);
+    var input = make('input', '', null, search); input.type = 'search'; input.autocomplete = 'off'; input.placeholder = 'Search, for example a technique ID or a host';
+    var tog = make('button', 'hl-rv-ftoggle', 'Filters', area); tog.type = 'button'; tog.setAttribute('aria-expanded', 'false'); tog.setAttribute('aria-controls', 'hl-rv-facets-' + seq);
+    var facetHost = make('div', 'hl-rv-facets', null, area); facetHost.id = 'hl-rv-facets-' + seq;
+    var chips = [];
+    function drawFacets(host, extra) {
+      facets.forEach(function (f) {
+        var fr = make('div', 'hl-rv-fr', null, host), lab = make('b', '', f.spec.label, fr);
+        var group = make('div', 'hl-rv-fchips', null, fr); group.setAttribute('role', 'group'); group.setAttribute('aria-label', 'Filter by ' + f.spec.label.toLowerCase());
+        f.values.forEach(function (x) {
+          var b = make('button', 'hl-rv-fchip', null, group); b.type = 'button'; b.setAttribute('aria-pressed', 'false'); b.dataset.rvFacet = f.spec.label; b.dataset.rvValue = x.v;
+          if (f.spec.label === 'Status') b.classList.add('hl-rv-st-' + x.v.toLowerCase().replace(/ /g, '-'));
+          make('span', '', x.v, b); b.appendChild(document.createTextNode(' ')); make('strong', '', x.n, b);
+          b.addEventListener('click', function () { toggle(f.spec.label, x.v); });
+          chips.push(b);
+        });
+      });
+    }
+    drawFacets(facetHost);
+    var count = make('p', 'hl-rv-count', '', area); count.setAttribute('role', 'status');
+    var reset = button('Reset filters', area, function () { state.q = ''; state.facet = {}; apply(); }); reset.hidden = true;
+    // the slim bar
+    var anchor = make('div', 'hl-rv-minibar-anchor'); anchor.setAttribute('role', 'presentation');
+    var mini = make('div', 'hl-rv-minibar', null, anchor); mini.hidden = true; mini.setAttribute('role', 'search'); mini.setAttribute('aria-label', 'Search and filter the attack chain, slim bar');
+    var mrow = make('div', 'hl-rv-mrow', null, mini);
+    var minput = make('input', '', null, make('label', 'hl-rv-msearch', null, mrow)); minput.type = 'search'; minput.autocomplete = 'off'; minput.placeholder = 'Search ' + noun; minput.setAttribute('aria-label', 'Search ' + noun);
+    var mtog = make('button', 'hl-rv-ftoggle hl-rv-mtoggle', 'Filters', mrow); mtog.type = 'button'; mtog.setAttribute('aria-expanded', 'false'); mtog.setAttribute('aria-controls', 'hl-rv-mpanel-' + seq);
+    var mbadge = make('strong', '', '', mtog);
+    var mcount = make('span', 'hl-rv-mcount', '', mrow); mcount.setAttribute('role', 'status');
+    var mclear = button('Clear', mrow, function () { state.q = ''; state.facet = {}; apply(); }); mclear.hidden = true;
+    var mpanel = make('div', 'hl-rv-mpanel', null, mini); mpanel.id = 'hl-rv-mpanel-' + seq; mpanel.hidden = true; drawFacets(mpanel);
+    tog.addEventListener('click', function () { var o = area.classList.toggle('is-open'); tog.setAttribute('aria-expanded', String(o)); });
+    mtog.addEventListener('click', function () { mpanel.hidden = !mpanel.hidden; mtog.setAttribute('aria-expanded', String(!mpanel.hidden)); });
+    function toggle(label, value) { var on = state.facet[label] !== value; if (on) state.facet[label] = value; else delete state.facet[label]; apply(); return on; }
+    function apply() {
+      var n = 0, q = state.q.toLowerCase(), labels = Object.keys(state.facet);
+      rows.forEach(function (row) {
+        var hit = (!q || text(row).toLowerCase().includes(q)) && facets.every(function (f) { var v = state.facet[f.spec.label]; return !v || pred(row, f.spec, v); });
+        row.hidden = !hit; if (hit) n++;
+      });
+      var filtering = !!q || labels.length > 0;
+      chips.forEach(function (b) { b.setAttribute('aria-pressed', String(state.facet[b.dataset.rvFacet] === b.dataset.rvValue)); });
+      if (input.value !== state.q) input.value = state.q; if (minput.value !== state.q) minput.value = state.q;
+      var line = filtering ? 'Showing ' + n + ' of ' + rows.length + ' ' + noun : '';
+      count.textContent = line; mcount.textContent = line; reset.hidden = !filtering; mclear.hidden = !filtering;
+      var active = labels.length + (q ? 1 : 0); mbadge.textContent = active ? String(active) : '';
+      mtog.setAttribute('aria-label', active ? 'Filters, ' + active + ' active' : 'Filters');
+      if (onApply) onApply(rows.filter(function (r) { return !r.hidden; }), filtering, state);
+    }
+    input.addEventListener('input', function () { state.q = input.value; apply(); }); minput.addEventListener('input', function () { state.q = minput.value; apply(); });
+    rows.forEach(function (r) { r.addEventListener('hl-rv-reveal', function () { state.q = ''; state.facet = {}; apply(); }); });
+    // The slim bar shows while the console is above the reading line and the table's end is not.
+    var watched = null, ticking = false;
+    function place() {
+      ticking = false;
+      var visible = !!area.offsetParent && !!watched && !!watched.offsetParent;
+      if (!visible) { if (!mini.hidden) { mini.hidden = true; mpanel.hidden = true; mtog.setAttribute('aria-expanded', 'false'); } return; }
+      var cs = getComputedStyle(root), top = (parseFloat(cs.getPropertyValue('--hl-rv-nav-h')) || 0) + (parseFloat(cs.getPropertyValue('--hl-rv-bar-h')) || 56) + 8;
+      var a = area.getBoundingClientRect(), w = watched.getBoundingClientRect();
+      // while something is filtered or typed the bar stays (a short result must not take the search box away mid-word); it still stops where the view ends, as a sticky box does
+      var active = !!state.q || Object.keys(state.facet).length > 0;
+      var show = a.bottom < top && (w.bottom > top + 96 || active);
+      if (show === mini.hidden) { mini.hidden = !show; if (!show) { mpanel.hidden = true; mtog.setAttribute('aria-expanded', 'false'); } }
+    }
+    function queue() { if (!ticking) { ticking = true; (window.requestAnimationFrame || function (f) { return setTimeout(f, 16); })(place); } }
+    window.addEventListener('scroll', queue, { passive: true }); window.addEventListener('resize', queue);
+    apply();
+    return { area: area, head: head, anchor: anchor, toggle: toggle, watch: function (el) { watched = el; queue(); } };
   }
   // ---- Design D, D3: the scan band, the risk bars and the judgments view of the Overview, and the linked highlighting between them and the summary prose ----
   var GRADE_HUES = { 'ACCESS SHOWN': '#f87171', COMPROMISED: '#fb923c', REACHED: '#7aa7f0', LISTED: '#6f7681', CURRENT: '#22d3ee', OTHER: '#8a8a8a' };
@@ -685,18 +779,21 @@
     var cc = col(judgments, /Confidence/i), nc = col(judgments, /Claim|Judgment|Finding/i), wc = col(judgments, /change/i);
     var pn = pnPanel(body, 'hl-rv-pn--judg', 'Judgments', judgments.rows.length + ' judgments, each with how sure the report is' + (wc >= 0 ? ' and what would change it' : ''), 'confidence',
       'How counted: one row for each row of the judgments table, in the table\'s order, with its confidence as printed. A range or a compound level is a chip of its own and is never rescaled. The Confidence tab keeps the table and its own view. From ' + fromNote(judgments) + '.');
-    var counts = {}; judgments.rows.forEach(function (r) { counts[r[cc]] = (counts[r[cc]] || 0) + 1; });
+    // Chips group the printed ratings by the five canonical levels plus one "Other / ranges" chip (a range, a compound level or a word off the scale). The row keeps the rating exactly as printed.
+    var LEVELS = ['DEFINITE', 'HIGH', 'MODERATE', 'LOW', 'INSUFFICIENT'];
+    function levelOf(v) { var u = String(v).trim().toUpperCase(); return LEVELS.indexOf(u) >= 0 ? u : 'OTHER'; }
+    var counts = {}; judgments.rows.forEach(function (r) { var k = levelOf(r[cc]); counts[k] = (counts[k] || 0) + 1; });
     var chips = make('div', 'hl-rv-jchips', null, pn); chips.setAttribute('role', 'group'); chips.setAttribute('aria-label', 'Filter judgments by confidence');
     var res = make('p', 'hl-rv-count', '', pn); res.setAttribute('role', 'status');
     var list = make('ol', 'hl-rv-jlist' + (wc < 0 ? ' hl-rv-jlist--two' : ''), null, pn), rows = [];
     function chip(label, value, n) { var b = make('button', 'hl-rv-jchip', null, chips); b.type = 'button'; b.setAttribute('aria-pressed', String(value === '')); b.dataset.rvConf = value; if (PIPS[value]) b.classList.add('hl-rv-lv-' + value);
       make('span', '', label, b); b.appendChild(document.createTextNode(' ')); make('strong', '', n, b);
       b.addEventListener('click', function () { Array.from(chips.children).forEach(function (c) { c.setAttribute('aria-pressed', String(c === b)); });
-        var shown = 0; rows.forEach(function (li) { var hit = !value || li.dataset.rvConf === value; li.hidden = !hit; if (hit) shown++; });
+        var shown = 0; rows.forEach(function (li) { var hit = !value || li.dataset.rvLevel === value; li.hidden = !hit; if (hit) shown++; });
         res.textContent = value ? 'Showing ' + shown + ' of ' + judgments.rows.length + ' judgments' : ''; }); }
-    chip('All', '', judgments.rows.length); Object.keys(counts).forEach(function (v) { chip(v, v, counts[v]); });
+    chip('All', '', judgments.rows.length); LEVELS.concat(['OTHER']).forEach(function (v) { if (counts[v]) chip(v === 'OTHER' ? 'Other / ranges' : v, v, counts[v]); });
     judgments.rows.forEach(function (r, i) {
-      var li = make('li', 'hl-rv-jrow', null, list); li.dataset.rvConf = r[cc]; rows.push(li);
+      var li = make('li', 'hl-rv-jrow', null, list); li.dataset.rvConf = r[cc]; li.dataset.rvLevel = levelOf(r[cc]); rows.push(li);
       make('span', 'hl-rv-jn', String(i + 1).padStart(2, '0'), li).setAttribute('aria-hidden', 'true');
       make('p', 'hl-rv-claim', r[nc], li);
       var cf = make('div', 'hl-rv-jconf' + (PIPS[r[cc]] ? ' hl-rv-lv-' + r[cc] : ''), null, li);
@@ -882,15 +979,33 @@
       dashTable(tableFold(body, 'Read all ' + victims.rows.length + ' victim rows and qualifiers'), victims, 'Victim access and qualifiers', 'victims'); return victims.rows.length + ' organisation rows · ' + (tallyParagraph ? 'target tally ' + denominator + ': ' : '') + Object.keys(counts).map(function (g) { return counts[g] + ' ' + g; }).join(' · ');
     },
     chain: function (body) {
-      var stageCards = [], stageRows = [], stageDetails = [];
-      var ribbon = make('div', 'hl-rv-stage-ribbon', null, body); ribbon.setAttribute('role', 'group'); ribbon.setAttribute('aria-label', 'Filter procedures by stage');
+      // Design D, D4 (T-0500.1.7.3 c3): stage flow cards, the filter console (chip facets with counts) with a slim sticky bar under the tabs, the chain story with
+      // inline procedure rows, and the B-style procedure table. Stage-to-procedure joins are exactly as before: curation, or a technique name found in the stage text. Never inferred from tactic.
+      var stageCards = [], stageRows = [], stageDetails = [], flowButtons = [], stageTactics = [];
+      var flowWrap = null, ribbon = null, linkRead = null;
+      function stageLabel(cellValue, si) {
+        var m = String(cellValue).match(/^(\d+)\.\s*(.+)$/);
+        if (m) return { n: m[1], name: m[2] };
+        if (/^\d+$/.test(String(cellValue).trim())) return { n: String(cellValue).trim(), name: 'Stage ' + String(cellValue).trim() };
+        return { n: String(si + 1), name: String(cellValue) };
+      }
+      if (stages) {
+        flowWrap = make('div', 'hl-rv-flowwrap', null, body);
+        ribbon = make('ol', 'hl-rv-stage-ribbon hl-rv-flow', null, flowWrap); ribbon.setAttribute('role', 'group'); ribbon.setAttribute('aria-label', 'Filter procedures by stage');
+      }
+      var cons = null;
+      var key = null;   // the report's own list of the techniques that carry the case, when it has one
       if (stages) {
         if (curation.stage_joins) make('p', 'hl-rv-note', 'Stage-to-procedure links: curated for this report.', body);
+        var storyHead = make('div', 'hl-rv-story-head', null, body);
+        icon(TAB_ICONS.chain, 17, storyHead, 'hl-rv-eyebrow-icon'); make('h3', 'hl-rv-pn-title', 'The chain story', storyHead);
+        make('p', 'hl-rv-pn-sub', stages.rows.length + ' stages in the order the report gives them, each with the procedure rows the report links to it', storyHead);
         var wrap = make('div', 'hl-rv-chain-scroll', null, body); wrap.tabIndex = 0; wrap.setAttribute('role', 'region'); wrap.setAttribute('aria-label', 'Attack stages');
         var columns = make('div', 'hl-rv-stages', null, wrap);
         stages.rows.forEach(function (r, si) {
+          var lab = stageLabel(r[0], si);
           var card = make('article', 'hl-rv-stage', null, columns);
-          stageCards.push(card); stageRows.push([]);
+          stageCards.push(card); stageRows.push([]); stageTactics.push([]);
           var detail = make('details', 'hl-rv-stage-detail', null, card); detail.open = !phone.matches; stageDetails.push(detail);
           var heading = make('summary', '', r[0], detail);
           phone.addEventListener('change', function () { detail.open = !phone.matches; });
@@ -908,58 +1023,126 @@
               var name = cell(a.row, attackC.name).toLowerCase(); return name.length >= 12 && (r[1] + ' ' + (r[2] || '')).toLowerCase().includes(name);
             });
             stageRows[si] = matches.map(function (a) { return a.index; });
+            stageTactics[si] = matches.map(function (a) { return tacticName(cell(a.row, attackC.tactic)); }).filter(function (v, i, arr) { return v && arr.indexOf(v) === i; });
             var procedureList = matches.length ? tableFold(card, matches.length + ' linked procedure rows') : card;
             make('small', 'hl-rv-stage-count', matches.length + ' linked procedures', heading);
             var counts = ['OBSERVED', 'INFERRED', 'NOT SHOWN'].map(function (status) { return matches.filter(function (a) { return attackC.status >= 0 && a.row[attackC.status] === status; }).length; });
-            function mini(parent) { var bar = make('span', 'hl-rv-mini', null, parent); bar.setAttribute('role', 'img'); bar.setAttribute('aria-label', counts.map(function (n, i) { return n + ' ' + ['observed', 'inferred', 'not shown'][i]; }).join(', ')); counts.forEach(function (n, i) { if (n) { var segment = make('span', 'hl-rv-' + ['observed','inferred','not-shown'][i], '', bar); segment.style.flexGrow = n; } }); }
+            function mini(parent) { var bar = make('span', 'hl-rv-mini', null, parent); bar.setAttribute('role', 'img'); bar.setAttribute('aria-label', counts.map(function (n, i) { return n + ' ' + ['observed', 'inferred', 'not shown'][i]; }).join(', ')); counts.forEach(function (n, i) { if (n) { var segment = make('span', 'hl-rv-' + ['observed','inferred','not-shown'][i], '', bar); segment.style.flexGrow = String(n); } }); }
             if (!attack.legacy) mini(heading);
-            var step = button('', ribbon, function () {
-              var select = Array.from(body.querySelectorAll('.hl-rv-filters label')).filter(function (l) { return l.firstChild && l.firstChild.textContent === 'Stage'; }).map(function (l) { return l.querySelector('select'); })[0];
-              if (select) { select.value = select.value === r[0] ? '' : r[0]; select.dispatchEvent(new Event('input')); }
-              detail.open = true;
-            }); step.setAttribute('aria-pressed', 'false');
-            make('strong', '', r[0], step); make('small', '', matches.length + ' linked', step); if (!attack.legacy) mini(step);
+            var li = make('li', 'hl-rv-fli', null, ribbon);
+            var step = button('', li, function () {
+              if (matches.length && cons) cons.toggle('Stage', r[0]);
+              detail.open = true; stageCards[si].scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+            }); step.className = 'hl-rv-fnode'; step.setAttribute('aria-pressed', 'false');
+            step.setAttribute('aria-label', 'Stage ' + lab.n + ', ' + lab.name + ': ' + matches.length + ' linked procedures. ' + (matches.length ? 'Go to the stage and filter to it.' : 'Go to the stage; no procedure row is linked to it.'));
+            var nb = make('span', 'hl-rv-fnb', null, step); make('span', 'hl-rv-fnum', lab.n, nb).setAttribute('aria-hidden', 'true'); make('strong', 'hl-rv-fnm', lab.name, nb);
+            if (!attack.legacy) mini(step);
+            make('small', 'hl-rv-fct', matches.length + ' linked', step);
+            flowButtons.push(step);
             if (!matches.length) make('p', 'hl-rv-count', 'No explicit procedure join supplied; all rows remain in the table below.', card);
             matches.forEach(function (a) {
-              var chip = link(cell(a.row, attackC.id) + ' · ' + cell(a.row, attackC.name >= 0 ? attackC.name : attackC.tactic), '#hl-rv-procedures-' + (a.index + 1), procedureList); chip.className = 'hl-rv-procedure';
+              var idText = cell(a.row, attackC.id), idM = idText.match(/T\d{4}(?:\.\d{3})?/);
+              var chip = link('', '#hl-rv-procedures-' + (a.index + 1), procedureList); chip.className = 'hl-rv-procedure';
+              make('span', 'hl-rv-tid', idM ? idM[0] : idText, chip);
+              var pn = make('span', 'hl-rv-pname', null, chip);
+              make('strong', '', cell(a.row, attackC.name >= 0 ? attackC.name : attackC.tactic), pn);
+              var sub = [tacticName(cell(a.row, attackC.tactic)), attackC.scope >= 0 ? a.row[attackC.scope] : ''].filter(Boolean).join(' · ');
+              if (sub) make('small', '', sub, pn);
               if (attackC.status >= 0) badge(chip, a.row[attackC.status]);
-              if (attackC.conf >= 0) badge(chip, a.row[attackC.conf]);
-              if (attackC.scope >= 0) make('small', '', a.row[attackC.scope], chip);
+              if (attackC.conf >= 0) { var cb = badge(chip, a.row[attackC.conf]); pipsBefore(cb, a.row[attackC.conf]); }
             });
-          }
+          } else { var li0 = make('li', 'hl-rv-fli', null, ribbon); var s0 = button('', li0, function () { stageCards[si].scrollIntoView({ block: 'nearest', behavior: 'smooth' }); }); s0.className = 'hl-rv-fnode'; var nb0 = make('span', 'hl-rv-fnb', null, s0); make('span', 'hl-rv-fnum', lab.n, nb0).setAttribute('aria-hidden', 'true'); make('strong', 'hl-rv-fnm', lab.name, nb0); flowButtons.push(s0); }
         });
+        linkRead = make('p', 'hl-rv-linkread', '', flowWrap); linkRead.setAttribute('role', 'status'); linkRead.setAttribute('aria-live', 'polite');
       } else missing(body, 'a Stage / What the operator did table');
       if (attack) {
-        // Filters and the live count are visible above both stage cards and the
-        // procedure table. Only this generated copy is ever filtered.
+        // Filters and the live count are visible above both stage cards and the procedure table. Only this generated copy is ever filtered.
         var full = make('section', 'hl-rv-procedures', null, body);
         var table = dashTable(full, attack, attack.legacy ? 'All ATT&CK mapping rows' : 'All ATT&CK procedure rows', 'procedures');
         var tacticCol = attackC.tactic;
         function tactic(value) { return tacticName(value); }
         var tactics = attack.rows.map(function (r) { return tactic(r[tacticCol]); }).filter(function (v, i, a) { return v && a.indexOf(v) === i; });
         var generatedRows = Array.from(table.tBodies[0].rows);
+        // The report's own list of the techniques that carry the case (a smaller table of the same shape with Evidence), when it has one. Each list row marks the first full-table row
+        // with the same technique ID and name that no earlier list row already marked; the evidence text is the list row's own.
+        var keyModel = models.filter(function (m) { return m !== attack && m.token === 'chain' && m.rows.length < attack.rows.length && m.headers.some(function (h) { return /Tactic.*Technique/i.test(h); }) && m.headers.some(function (h) { return /^Status$/i.test(h); }) && m.headers.some(function (h) { return /^Evidence/i.test(h); }); })[0];
+        var keyRows = {};
+        if (keyModel && !attack.legacy) {
+          var kt = col(keyModel, /Tactic.*Technique/i), kn = col(keyModel, /^Name$/i), ke = col(keyModel, /^Evidence/i), claimed = {}, matched = 0;
+          keyModel.rows.forEach(function (kr) {
+            var kid = (kr[kt].match(/T\d{4}(?:\.\d{3})?/) || [])[0]; if (!kid) return;
+            for (var i = 0; i < attack.rows.length; i++) {
+              var ar = attack.rows[i];
+              if (claimed[i] || (cell(ar, attackC.id).match(/T\d{4}(?:\.\d{3})?/) || [])[0] !== kid || cell(ar, attackC.name).toLowerCase() !== kr[kn].toLowerCase()) continue;
+              claimed[i] = true; keyRows[i] = kr[ke]; matched++; break;
+            }
+          });
+          key = { model: keyModel, matched: matched, total: keyModel.rows.length };
+          if (!matched) key = null;
+        }
+        // The table's own cells: the tactic as a button that lights its stages (only when stages with linked rows exist), the technique ID in monospace, a meter beside the confidence, the key mark and its evidence.
+        var anyLinks = stageRows.some(function (a) { return a.length; });
+        generatedRows.forEach(function (row, ri) {
+          var tc = row.cells[tacticCol], tv = text(tc), idM = tv.match(/T\d{4}(?:\.\d{3})?/), tname = tactic(tv);
+          if (tc && tname) {
+            while (tc.firstChild) tc.removeChild(tc.firstChild);
+            if (stages && anyLinks) { var tb = make('button', 'hl-rv-tac', tname, tc); tb.type = 'button'; tb.setAttribute('aria-pressed', 'false'); tb.dataset.rvTactic = tname; tb.title = 'Light the stages this tactic appears in'; }
+            else make('span', '', tname, tc);
+            if (idM) { tc.appendChild(document.createTextNode(' / ')); make('span', 'hl-rv-tid', idM[0], tc); }
+            else if (tv.replace(tname, '').replace(/^[\s/·:|-]+/, '')) tc.appendChild(document.createTextNode(tv.replace(tname, '')));
+          }
+          if (attackC.conf >= 0) { var cb = row.cells[attackC.conf].querySelector('.hl-rv-badge'); if (cb) pipsBefore(cb, attack.rows[ri][attackC.conf]); }
+          if (attackC.id !== attackC.tactic && row.cells[attackC.id]) row.cells[attackC.id].classList.add('hl-rv-tidcell');
+          if (keyRows[ri] !== undefined) {
+            row.classList.add('hl-rv-keyrow');
+            var nc = row.cells[attackC.name >= 0 ? attackC.name : 0], mk = make('span', 'hl-rv-carry', 'Carries the case', nc);
+            var ev = make('details', 'hl-rv-ev', null, nc); make('summary', '', 'Evidence', ev); make('p', '', keyRows[ri], ev);
+          }
+        });
         var specs = [
           { label: 'Status', col: attackC.status, values: ['OBSERVED', 'INFERRED', 'NOT SHOWN'] },
           { label: 'Confidence', col: attackC.conf, values: ['DEFINITE', 'HIGH', 'MODERATE', 'LOW', 'INSUFFICIENT', 'Range', 'Unscaled'] },
           { label: 'Stage', values: stages ? stages.rows.map(function (r) { return r[0]; }) : [], match: function (row, value) { return stageRows[stages.rows.findIndex(function (r) { return r[0] === value; })].includes(generatedRows.indexOf(row)); } },
           { label: 'Tactic', col: tacticCol, values: tactics, match: function (row, value) { return tactic(text(row.cells[tacticCol])) === value; } }
         ];
+        if (key) specs.push({ label: 'Shortlist', values: ['Carries the case'], match: function (row) { return row.classList.contains('hl-rv-keyrow'); } });
         // A legacy table has no Status, may have no Confidence, and may have no Stage table to filter by: a filter with nothing behind it is not drawn.
         if (attack.legacy) specs = specs.filter(function (sp) { return sp.label === 'Tactic' || sp.label === 'Stage' && stages || sp.label === 'Confidence' && attackC.conf >= 0; });
         var stageStates = stageCards.map(function (card) { var state = make('p', 'hl-rv-stage-state', '', card); state.setAttribute('role', 'status'); return state; });
-        filters(full, table, specs, attack.legacy ? 'mapping rows' : 'procedure rows', function (visible, filtering) {
+        var pinnedTactic = null;
+        function lightTactic(name) {
+          var any = false;
+          stageCards.forEach(function (card, si) { var hit = !!name && stageTactics[si].indexOf(name) >= 0; if (hit) any = true; card.classList.toggle('hl-rv-stage-lit', hit); card.classList.toggle('hl-rv-stage-dim', !!name && !hit); });
+          flowButtons.forEach(function (b, si) { var hit = !!name && stageTactics[si] && stageTactics[si].indexOf(name) >= 0; b.classList.toggle('is-linked', hit); b.classList.toggle('is-dim', !!name && !hit); });
+          if (ribbon) ribbon.classList.toggle('has-link', !!name);
+          if (linkRead) linkRead.textContent = !name ? '' : any ? name + ' appears in stage' + (stageTactics.filter(function (t) { return t.indexOf(name) >= 0; }).length > 1 ? 's ' : ' ') + stageTactics.map(function (t, si) { return t.indexOf(name) >= 0 ? stageLabel(stages.rows[si][0], si).n : null; }).filter(Boolean).join(', ') + ' (by the linked procedure rows)' : name + ' appears in no stage: no linked procedure row has this tactic.';
+        }
+        function setPinned(name) {
+          pinnedTactic = name;
+          Array.from(body.querySelectorAll('button.hl-rv-tac')).forEach(function (b) { b.setAttribute('aria-pressed', String(!!name && b.dataset.rvTactic === name)); });
+          lightTactic(name);
+        }
+        body.addEventListener('click', function (e) { var b = e.target.closest && e.target.closest('button.hl-rv-tac'); if (!b) return; setPinned(pinnedTactic === b.dataset.rvTactic ? null : b.dataset.rvTactic); });
+        body.addEventListener('mouseover', function (e) { var b = e.target.closest && e.target.closest('button.hl-rv-tac, .hl-rv-fchip[data-rv-facet="Tactic"]'); if (b) lightTactic(b.dataset.rvTactic || b.dataset.rvValue); });
+        body.addEventListener('mouseout', function (e) { var b = e.target.closest && e.target.closest('button.hl-rv-tac, .hl-rv-fchip[data-rv-facet="Tactic"]'); if (b) lightTactic(pinnedTactic); });
+        body.addEventListener('focusin', function (e) { var b = e.target.closest && e.target.closest('button.hl-rv-tac, .hl-rv-fchip[data-rv-facet="Tactic"]'); if (b) lightTactic(b.dataset.rvTactic || b.dataset.rvValue); });
+        body.addEventListener('focusout', function (e) { var b = e.target.closest && e.target.closest('button.hl-rv-tac, .hl-rv-fchip[data-rv-facet="Tactic"]'); if (b) lightTactic(pinnedTactic); });
+        cons = chainConsole(body, table, specs, attack.legacy ? 'mapping rows' : 'procedure rows', function (visible, filtering, st) {
           var indices = visible.map(function (r) { return generatedRows.indexOf(r); });
           stageCards.forEach(function (card, si) {
             var hits = stageRows[si].filter(function (ri) { return indices.includes(ri); }).length;
             card.classList.toggle('hl-rv-stage-match', filtering && hits > 0);
             card.classList.toggle('hl-rv-stage-muted', filtering && !hits);
-            var step = ribbon.children[si]; if (step) step.setAttribute('aria-pressed', String(filtering && hits > 0));
+            var step = flowButtons[si]; if (step) { step.setAttribute('aria-pressed', String(!!stages && st.facet.Stage === stages.rows[si][0])); step.classList.toggle('is-match', filtering && hits > 0); step.classList.toggle('is-muted', filtering && !hits); }
             stageStates[si].textContent = !filtering ? '' : hits ? hits + ' linked rows match' : 'No linked rows match';
           });
         });
-        var filterArea = full.querySelector('.hl-rv-filters');
-        ribbon.after(filterArea);
-        make('p', 'hl-rv-note', 'Stage filters use explicit procedure links only. Unjoined rows stay in the full table. Muted stages remain readable; the written report below is never filtered.', filterArea);
+        var filterArea = cons.area;
+        if (flowWrap) flowWrap.after(filterArea); else body.insertBefore(filterArea, body.firstChild);
+        filterArea.after(cons.anchor);
+        var note = make('p', 'hl-rv-pn-note', 'Stage filters use explicit procedure links only. Unjoined rows stay in the full table. Muted stages remain readable; the written report below is never filtered. Facet counts are over all ' + attack.rows.length + ' rows of table ' + attack.index + '.' +
+          (key ? ' "Carries the case" marks the rows of the report\'s own list of the techniques that carry the case (' + text(key.model.heading) + ', table ' + key.model.index + '): each list row marks the first row of the full table with the same technique ID and name that no earlier list row marked (' + key.matched + ' of ' + key.total + ' list rows matched); its Evidence text is the list row\'s own. Where one technique ID has several rows this is the choice made, not a reading of which row the report meant.' : ''));
+        infoButton(cons.head, [note], 'How the filters, counts and marks are read');
         var statusTiles = make('div', 'hl-rv-status-tiles', null);
         ['OBSERVED', 'INFERRED', 'NOT SHOWN'].filter(function () { return !attack.legacy; }).forEach(function (value) {
           var n = attack.rows.filter(function (r) { return r[attackC.status] === value; }).length;
@@ -975,8 +1158,13 @@
           var others = models.filter(function (m) { return m !== attack && legacyAttack(m); }), otherRows = others.reduce(function (n, m) { return n + m.rows.length; }, 0);
           var unstated = make('p', 'hl-rv-note hl-rv-unstated', 'Not stated in this report\'s ATT&CK table: ' + absent.join(', ') + '. The view lists the report\'s own rows by tactic as printed and does not grade them.' +
             (others.length ? ' This tab has ' + others.length + ' other ATT&CK mapping table' + (others.length > 1 ? 's' : '') + ' (' + otherRows + ' rows) that this view does not list; they are in the report.' : ''), null);
-          filterArea.after(unstated);
-        } else filterArea.after(statusTiles);
+          cons.anchor.after(unstated);
+        } else cons.anchor.after(statusTiles);
+        // The story and the table sit under the console; the table's own heading is a B eyebrow.
+        var thead = make('div', 'hl-rv-story-head hl-rv-table-head', null); full.insertBefore(thead, full.firstChild);
+        icon(TAB_ICONS.chain, 17, thead, 'hl-rv-eyebrow-icon'); make('h3', 'hl-rv-pn-title', (attack.legacy ? 'All ' + attack.rows.length + ' ATT&CK mapping rows' : 'All ' + attack.rows.length + ' procedure rows'), thead);
+        make('p', 'hl-rv-pn-sub', 'the full table; the tactic buttons light the stages they appear in', thead);
+        cons.watch(full);
       } else missing(body, 'a Tactic / Technique, Status and Confidence procedure table');
       if (attack && attack.legacy) return (stages ? stages.rows.length + ' stages, ' : '') + attack.rows.length + ' ATT&CK mapping rows, status not stated';
       var status = attack ? attack.rows.reduce(function (out, r) { var s = r[attackC.status]; out[s] = (out[s] || 0) + 1; return out; }, {}) : {};

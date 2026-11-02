@@ -13,22 +13,27 @@ function fixture(phone=false, additions={}){
   const dom=new JSDOM('<div class="hl-report-page"><div class="hl-post-content">'+html+'</div></div>',{url:'https://example.test/report/',runScripts:'outside-only'});
   const w=dom.window;w.matchMedia=()=>({matches:phone,addEventListener(){}});w.ResizeObserver=class{observe(){}};w.HTMLElement.prototype.scrollIntoView=function(){};
   const original=w.document.querySelector('.hl-post-content').textContent;w.eval(script);assert.ok(w.document.documentElement.classList.contains('hl-rv-ready'));
-  const d=w.document,area=d.querySelector('#tab-chain .hl-rv-filters'),controls={};
-  area.querySelectorAll('label').forEach(l=>{controls[l.firstChild.textContent.trim()]=l.querySelector('input,select');});
-  function set(label,value){controls[label].value=value;controls[label].dispatchEvent(new w.Event('input'));}
-  return {dom,w,d,area,set,original,rows:()=>[...d.querySelectorAll('#procedures tbody tr')],cards:()=>[...d.querySelectorAll('.hl-rv-stage')]};
+  const d=w.document,area=d.querySelector('#tab-chain .hl-rv-filters');
+  // design D (c3): the console is a search box and chip facets; set(label, value) presses the chip (single choice inside a facet) or types in the search box
+  function set(label,value){
+    if(/^Search/.test(label)){const i=area.querySelector('.hl-rv-csearch input');i.value=value;i.dispatchEvent(new w.Event('input'));return;}
+    const chip=[...area.querySelectorAll('.hl-rv-fchip')].find(c=>c.dataset.rvFacet===label&&c.dataset.rvValue===value);if(!chip)throw new Error('no '+label+' chip for '+value);
+    if(chip.getAttribute('aria-pressed')!=='true')chip.click();
+  }
+  const reset=()=>[...area.querySelectorAll('button')].find(b=>b.textContent==='Reset filters').click();
+  return {dom,w,d,area,set,reset,original,rows:()=>[...d.querySelectorAll('#procedures tbody tr')],cards:()=>[...d.querySelectorAll('.hl-rv-stage')]};
 }
 test('visible chain filters constrain generated rows and highlight readable retained stages',()=>{
   const f=fixture();try{
     assert.equal(f.area.closest('details'),null);assert.equal(f.rows().length,3);
-    assert.equal(f.area.querySelector('[role=status]').textContent,'Showing 3 of 3 procedure rows');
+    assert.equal(f.area.querySelector('[role=status]').textContent,'','the count line shows only while something is filtered');
     const source=f.d.querySelector('#tab-chain .hl-rv-source'),sourceText=source.textContent;
     f.set('Status','OBSERVED');assert.deepEqual(f.rows().map(r=>r.hidden),[false,true,true]);
     assert.equal(f.area.querySelector('[role=status]').textContent,'Showing 1 of 3 procedure rows');
     assert.ok(f.cards()[0].classList.contains('hl-rv-stage-match'));assert.ok(f.cards()[1].classList.contains('hl-rv-stage-muted'));
     assert.equal(f.cards().length,2);assert.ok(f.cards().every(c=>!c.hidden));
     assert.equal(source.textContent,sourceText);assert.equal(source.querySelectorAll('[hidden]').length,0);
-    f.area.querySelector('button').click();assert.ok(f.rows().every(r=>!r.hidden));assert.ok(f.cards().every(c=>!c.classList.contains('hl-rv-stage-muted')));
+    f.reset();assert.ok(f.rows().every(r=>!r.hidden));assert.ok(f.cards().every(c=>!c.classList.contains('hl-rv-stage-muted')));
   }finally{f.dom.window.close();}
 });
 test('stage and tactic filters intersect without inferring joins or recolouring survivors (v6: nothing carries a series colour)',()=>{
@@ -38,9 +43,9 @@ test('stage and tactic filters intersect without inferring joins or recolouring 
     f.set('Stage','Alpha');assert.deepEqual(f.rows().map(r=>r.hidden),[false,true,true]);
     f.set('Tactic','Execution');assert.ok(f.rows().every(r=>r.hidden));assert.equal(f.area.querySelector('[role=status]').textContent,'Showing 0 of 3 procedure rows');
     assert.ok(f.cards().every(c=>c.classList.contains('hl-rv-stage-muted')));
-    f.area.querySelector('button').click();f.set('Tactic','Discovery');assert.deepEqual(f.rows().map(r=>r.hidden),[false,true,false]);
+    f.reset();f.set('Tactic','Discovery');assert.deepEqual(f.rows().map(r=>r.hidden),[false,true,false]);
     assert.ok(f.rows().every(r=>r.dataset.rvSeries===undefined),'surviving rows are not recoloured');
-    f.set('Search procedure rows','no such procedure');assert.ok(f.rows().every(r=>r.hidden));f.area.querySelector('button').click();assert.ok(f.rows().every(r=>!r.hidden));
+    f.set('Search procedure rows','no such procedure');assert.ok(f.rows().every(r=>r.hidden));f.reset();assert.ok(f.rows().every(r=>!r.hidden));
   }finally{f.dom.window.close();}
 });
 test('phone expansion exposes filters and filtered one-page mode retains all source text',async()=>{

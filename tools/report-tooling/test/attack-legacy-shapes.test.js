@@ -20,6 +20,8 @@ const A1=table(['Tactic / Technique','Name','Evidence'],[['Execution / T1059','C
 const A1conf=table(['Tactic / Technique','Name','Conf.','Evidence'],[['Reconnaissance / T1595.002','Vulnerability Scanning','HIGH','Actuator surface'],['Reconnaissance / T1595.003','Wordlist Scanning','HIGH','Path probes']]);
 const A2=table(['Tactic','Technique ID','Technique Name','Evidence','Confidence'],[['Execution','T1204.002','User Execution: Malicious File','user runs it','CONFIRMED'],['Persistence','T1053.005','Scheduled Task','task created','CONFIRMED'],['Defense Evasion','T1055.003','Thread Execution Hijacking','inject_thread','LOW']]);
 const PILOT=table(['Tactic / Technique','Name','Status','Conf.','Scope'],[['Initial Access / T1190','Exploit Public-Facing Application','OBSERVED','HIGH','Agency GLPI'],['Execution / T1059.004','Unix Shell','INFERRED','LOW','host']]);
+const facetLabels=(d)=>['Search '+[...d.querySelectorAll('#hl-rv-view-chain .hl-rv-console .hl-rv-csearch > span')].map(e=>e.textContent.replace(/^Search /,''))[0]].concat([...d.querySelectorAll('#hl-rv-view-chain .hl-rv-console .hl-rv-fr > b')].map(b=>b.textContent));
+const chipValues=(d,facet)=>[...d.querySelectorAll('#hl-rv-view-chain .hl-rv-console .hl-rv-fchips:not(.zz) .hl-rv-fchip[data-rv-facet="'+facet+'"]')].map(c=>c.dataset.rvValue).filter((v,i,a)=>a.indexOf(v)===i);
 const shapes=(f)=>JSON.parse(JSON.stringify(f.w.eval(G.SHAPES_EXPR)));
 const drawn=(f)=>({count:f.d.querySelectorAll('#tab-chain #procedures tbody tr').length,ids:[...f.d.querySelectorAll('#tab-chain #procedures tbody tr td:first-child')].map(e=>e.textContent.trim()),unstated:(f.d.querySelector('#hl-rv-view-chain .hl-rv-unstated')||{}).textContent||null});
 
@@ -31,20 +33,19 @@ test('a legacy "Tactic / Technique | Name | Evidence" table builds the chain vie
     assert.match(d.querySelector('#tab-chain .hl-rv-view-summary p').textContent,/^3 ATT&CK mapping rows, status not stated$/);
     const note=d.querySelector('#hl-rv-view-chain .hl-rv-unstated').textContent;
     assert.match(note,/Not stated in this report's ATT&CK table: Status \(OBSERVED, INFERRED, NOT SHOWN\), Confidence, Scope\./);
-    const labels=[...d.querySelectorAll('#hl-rv-view-chain .hl-rv-filters label')].map(l=>l.firstChild.textContent);
-    assert.deepEqual(labels,['Search procedure rows'.replace('procedure','mapping'),'Tactic'],'no Status, Confidence or Stage filter with nothing behind it');
+    assert.deepEqual(facetLabels(d),['Search mapping rows','Tactic'],'no Status, Confidence or Stage facet with nothing behind it');
     assert.equal(d.querySelectorAll('#hl-rv-view-chain .hl-rv-status-tile').length,0,'no Status tiles: Status is never invented');
     assert.equal(d.querySelectorAll('#hl-rv-view-chain .hl-rv-observed, #hl-rv-view-chain .hl-rv-inferred, #hl-rv-view-chain .hl-rv-not-shown').length,0);
     assert.match(d.querySelector('#tab-overview .hl-rv-view-summary p').textContent,/^3 techniques$/);
-    const tactic=[...d.querySelectorAll('#hl-rv-view-chain .hl-rv-filters select')][0];
-    assert.deepEqual([...tactic.options].map(o=>o.value),['','Execution','Persistence']);
+    assert.deepEqual(chipValues(d,'Tactic'),['Execution','Persistence'],'one chip for each tactic the table holds');
+    assert.deepEqual([...d.querySelectorAll('#hl-rv-view-chain .hl-rv-console .hl-rv-fchips .hl-rv-fchip')].slice(0,2).map(c=>c.textContent),['Execution 1','Persistence 2'],'each chip carries its count over the table rows');
   }finally{f.w.close();}
 });
 test('a legacy table with a Conf. column keeps a Confidence filter and says only Status and Scope are not stated',()=>{
   const f=page([['overview'],['chain',A1conf]]);
   try{
     assert.match(f.d.querySelector('#hl-rv-view-chain .hl-rv-unstated').textContent,/ATT&CK table: Status \(OBSERVED, INFERRED, NOT SHOWN\), Scope\./);
-    assert.deepEqual([...f.d.querySelectorAll('#hl-rv-view-chain .hl-rv-filters label')].map(l=>l.firstChild.textContent),['Search mapping rows','Confidence','Tactic']);
+    assert.deepEqual(facetLabels(f.d),['Search mapping rows','Confidence','Tactic']);
   }finally{f.w.close();}
 });
 test('a legacy "Tactic | Technique ID | Technique Name" table builds the same view; the technique ID counted is the ID column, not the tactic',()=>{
@@ -53,7 +54,7 @@ test('a legacy "Tactic | Technique ID | Technique Name" table builds the same vi
     assert.equal(f.d.querySelectorAll('#tab-chain #procedures tbody tr').length,3);
     assert.match(f.d.querySelector('#tab-overview .hl-rv-view-summary p').textContent,/^3 techniques$/);
     assert.match(f.d.querySelector('#hl-rv-view-chain .hl-rv-unstated').textContent,/Status \(OBSERVED, INFERRED, NOT SHOWN\), Scope\./,'Confidence is in the table, so it is not listed');
-    assert.deepEqual([...f.d.querySelectorAll('#hl-rv-view-chain .hl-rv-filters select')][1].options.length>1,true);
+    assert.equal(chipValues(f.d,'Confidence').length>0,true);
   }finally{f.w.close();}
 });
 test('a Status-bearing table is read exactly as before: Status filter and tiles, no legacy note, no legacy wording',()=>{
@@ -63,7 +64,7 @@ test('a Status-bearing table is read exactly as before: Status filter and tiles,
     assert.equal(d.querySelectorAll('#hl-rv-view-chain .hl-rv-unstated').length,0);assert.equal(d.querySelectorAll('#hl-rv-view-chain .hl-rv-status-tile').length,3);
     assert.match(d.querySelector('#tab-chain .hl-rv-view-summary p').textContent,/^0 stages, 2 procedures: 1 observed, 1 inferred$/);
     assert.match(d.querySelector('#tab-overview .hl-rv-view-summary p').textContent,/^2 techniques$/);
-    assert.deepEqual([...d.querySelectorAll('#hl-rv-view-chain .hl-rv-filters label')].map(l=>l.firstChild.textContent),['Search procedure rows','Status','Confidence','Stage','Tactic']);
+    assert.deepEqual(facetLabels(d),['Search procedure rows','Status','Confidence','Tactic'],'Stage has no table in this fixture, so the Stage facet is not drawn');
   }finally{f.w.close();}
 });
 test('when a Status-bearing table and a legacy one are both present, the Status table wins',()=>{

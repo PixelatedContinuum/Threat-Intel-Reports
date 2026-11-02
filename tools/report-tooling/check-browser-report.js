@@ -1107,7 +1107,7 @@ var MIN_TARGET_PX = 43.99;
 
 /* 4a's two sizes for the bar, and the two it names for the 44 px count (390 is
    its phone width; 768 its tablet). */
-var TAB_BAR_VIEWPORTS = [[768, 1024, 'tablet'], [812, 375, 'landscape phone']];
+var TAB_BAR_VIEWPORTS = [[768, 1024, 'tablet'], [812, 375, 'landscape phone'], [390, 844, 'phone icon strip'], [360, 640, 'small phone icon strip']];
 var TAB_TARGET_VIEWPORTS = [[390, 844, 'phone'], [768, 1024, 'tablet']];
 
 /* One tab's geometry, read the way a finger meets it: scroll the PAGE so the
@@ -1122,6 +1122,8 @@ function tabGeomExpr(id) {
     'var br=bar.getBoundingClientRect();' +
     'if(br.top<2||br.bottom>innerHeight-2){' +
     'if(bar.scrollIntoView)bar.scrollIntoView({block:"center",behavior:"instant"});}' +
+    /* the phone strip swipes sideways: a tab off its edge is reached the way a thumb reaches it, by scrolling the strip to it */
+    'var strip=t.parentElement;if(strip&&strip.scrollWidth>strip.clientWidth+1){var want=t.offsetLeft-strip.offsetLeft-(strip.clientWidth-t.offsetWidth)/2;strip.scrollLeft=Math.max(0,want);}' +
     'var r=t.getBoundingClientRect();' +
     'var client=document.documentElement.clientWidth;' +
     'var clips=[];' +
@@ -1866,9 +1868,10 @@ function squaresVerdict(m, victimRows) {
 var JUDG_EXPR = '(function(){var P=document.getElementById("tab-overview");if(!P)return {panel:false};var p=P.querySelector(".hl-rv-pn--judg");var chips=p?[].slice.call(p.querySelectorAll(".hl-rv-jchip")):[];' +
   'var all=chips.filter(function(c){return c.dataset.rvConf==="";})[0];var rest=chips.filter(function(c){return c.dataset.rvConf!=="";});' +
   'var hidden=p?[].slice.call(p.querySelectorAll(".hl-rv-jrow")).filter(function(r){return r.hidden;}).length:0;' +
-  'return {panel:true,drawn:!!p,rows:p?p.querySelectorAll(".hl-rv-jrow").length:0,hidden:hidden,all:all?+all.querySelector("strong").textContent:null,sum:rest.reduce(function(n,c){return n+(+c.querySelector("strong").textContent||0);},0),folded:!!(p&&p.closest("details"))};})()';
+  'var src=null;[].slice.call(document.querySelectorAll("#tab-confidence .hl-rv-source table")).some(function(t){var hs=[].slice.call(t.rows[0]?t.rows[0].cells:[]).map(function(c){return c.textContent.replace(/\\s+/g," ").trim();});var ci=hs.findIndex(function(h){return /Confidence/i.test(h);});if(ci<0||!hs.some(function(h){return /Claim|Judgment|Finding/i.test(h);}))return false;src=[].slice.call(t.rows).slice(1).map(function(r){return r.cells[ci]?r.cells[ci].textContent.replace(/\\s+/g," ").trim():"";});return true;});' +
+  'return {panel:true,drawn:!!p,rows:p?p.querySelectorAll(".hl-rv-jrow").length:0,hidden:hidden,printed:src,labels:rest.map(function(c){return c.querySelector("span").textContent;}),words:p?[].slice.call(p.querySelectorAll(".hl-rv-jrow")).map(function(r){var w=r.querySelector(".hl-rv-jword");return w?w.textContent:null;}):[],all:all?+all.querySelector("strong").textContent:null,sum:rest.reduce(function(n,c){return n+(+c.querySelector("strong").textContent||0);},0),folded:!!(p&&p.closest("details"))};})()';
 /* Judgments: every row of the judgments table, shown in full (none hidden at rest, no fold), with chip counts that add up to the rows. */
-function judgmentsVerdict(m, judgmentRows) {
+function judgmentsVerdict(m, judgmentRows, printed) {
   if (!m || !m.panel) return { notChecked: true, ok: false, detail: 'no Overview panel was found, so nothing was measured' };
   if (!judgmentRows) return { notChecked: true, ok: false, detail: 'this report has no judgments table (0 source rows)' + (m.rows ? '; ' + m.rows + ' row(s) are drawn from nothing' : '') };
   var bad = [];
@@ -1878,7 +1881,14 @@ function judgmentsVerdict(m, judgmentRows) {
   if (m.folded) bad.push('the view sits inside a fold');
   if (m.all !== judgmentRows) bad.push('the All chip says ' + m.all + ', the table has ' + judgmentRows);
   if (m.sum !== judgmentRows) bad.push('the chip counts add up to ' + m.sum + ', the table has ' + judgmentRows);
-  return { notChecked: false, ok: bad.length === 0, why: bad, detail: m.rows + ' judgment row(s), chips total ' + m.sum + ', against ' + judgmentRows + ' source row(s)' + (bad.length ? '; ' + bad.join('; ') : '') };
+  /* the chips are grouped: the five canonical levels and one "Other / ranges" chip, never one chip per printed string */
+  var ALLOWED = ['DEFINITE', 'HIGH', 'MODERATE', 'LOW', 'INSUFFICIENT', 'Other / ranges'];
+  (m.labels || []).forEach(function (l) { if (ALLOWED.indexOf(l) === -1) bad.push('chip ' + JSON.stringify(l) + ' is not one of the five levels or "Other / ranges"'); });
+  if ((m.labels || []).length > 6) bad.push(m.labels.length + ' level chips are drawn, at most 6 are allowed');
+  /* each row keeps its rating exactly as the source table prints it */
+  printed = printed || m.printed;
+  if (printed && printed.length === (m.words || []).length) { var drift = printed.filter(function (w, i) { return m.words[i] !== w; }); if (drift.length) bad.push(drift.length + ' row(s) show a rating that differs from the printed one (first: ' + JSON.stringify(drift[0]) + ')'); }
+  return { notChecked: false, ok: bad.length === 0, why: bad, detail: m.rows + ' judgment row(s), chips ' + JSON.stringify(m.labels || []) + ' total ' + m.sum + ', against ' + judgmentRows + ' source row(s)' + (bad.length ? '; ' + bad.join('; ') : '') };
 }
 var TILESRC_EXPR = '(function(){return [].slice.call(document.querySelectorAll("#tab-overview .hl-rv-tilecell")).map(function(c){var t=c.querySelector(".hl-rv-tile"),p=c.querySelector(".hl-rv-pop");' +
   'return {kind:t?t.dataset.rvTile||null:null,value:t?t.querySelector("strong").textContent:null,pop:p?p.textContent.replace(/\\s+/g," ").trim():"",hidden:p?p.hidden:null};});})()';
@@ -1971,6 +1981,283 @@ async function overviewScanRows(page, url) {
         await CDP.sleep(200);
         var cp = await page.json(LINKSTATE_EXPR);
         ctl('a key whose handler is gone makes the linked-highlighting row FAIL', linkVerdict(probe, cp, { lit: 0 }, false));
+      }
+    }
+  }
+}
+
+/* ---------- T-0500.1.7.3 c3 (design D, D4): the Attack chain rows ----------
+   Measured from the page's own source tables (the stage table, the ATT&CK table and the report's "carries the case" list), never from the view being checked. Each row has a
+   control that re-creates the defect on the same page and must FAIL. A row measures nothing (NOT CHECKED) on a report that lacks its source: no stage table, no list, no joins. */
+function chainMeasure() {
+  var P = document.getElementById('tab-chain'); if (!P) return { panel: false };
+  function t(e) { return e ? e.textContent.replace(/\s+/g, ' ').trim() : ''; }
+  var tables = [].slice.call(P.querySelectorAll('.hl-rv-source table')).map(function (tb) {
+    var hr = tb.tHead ? tb.tHead.rows[0] : tb.rows[0];
+    return { hs: [].slice.call(hr.cells).map(t), rows: tb.querySelectorAll('tbody tr').length };
+  });
+  function has(m, re) { return m.hs.some(function (h) { return re.test(h); }); }
+  var stageSrc = tables.filter(function (m) { return has(m, /^(Stage|Phase)$/i) && has(m, /What.*(did|does|happens)/i); })[0] || null;
+  var attackSrc = tables.filter(function (m) { return has(m, /Tactic.*Technique/i) || has(m, /^Tactic$/i) && has(m, /^Technique( ID)?$/i); }).sort(function (a, b) { return b.rows - a.rows; })[0] || null;
+  var keySrc = attackSrc ? tables.filter(function (m) { return m !== attackSrc && m.rows < attackSrc.rows && has(m, /Tactic.*Technique/i) && has(m, /^Status$/i) && has(m, /^Evidence/i); })[0] || null : null;
+  var con = P.querySelector('.hl-rv-console'), proc = P.querySelector('.hl-rv-procedures'), tbl = proc ? proc.querySelector('table') : null;
+  var rows = tbl ? [].slice.call(tbl.tBodies[0].rows) : [];
+  var chips = con ? [].slice.call(con.querySelectorAll('.hl-rv-facets .hl-rv-fchip')).map(function (c) { return { f: c.dataset.rvFacet, v: c.dataset.rvValue, n: +c.querySelector('strong').textContent }; }) : [];
+  var nodes = [].slice.call(P.querySelectorAll('.hl-rv-flow .hl-rv-fnode')), cards = [].slice.call(P.querySelectorAll('.hl-rv-stage'));
+  var th = tbl ? tbl.querySelector('thead th') : null, tid = rows.length ? rows[0].querySelector('.hl-rv-tid') : null;
+  var note = con ? [].slice.call(con.querySelectorAll('.hl-rv-pn-note')).map(t).join(' ') : '';
+  var km = note.match(/(\d+) of (\d+) list rows matched/);
+  return {
+    panel: true, console: !!con, search: !!(con && con.querySelector('input[type=search]')), chips: chips, rows: rows.length, hiddenRows: rows.filter(function (r) { return r.hidden; }).length,
+    count: con ? t(con.querySelector('.hl-rv-count')) : null, stageSrc: stageSrc ? stageSrc.rows : 0, attackSrc: attackSrc ? attackSrc.rows : 0, keySrc: keySrc ? keySrc.rows : 0,
+    nodes: nodes.length, cards: cards.length,
+    nodeCounts: nodes.map(function (n) { var s = n.querySelector('.hl-rv-fct'); var m = s && s.textContent.match(/^(\d+) linked/); return m ? +m[1] : null; }),
+    storyRows: cards.map(function (c) { return c.querySelectorAll('a.hl-rv-procedure').length; }),
+    thPos: th ? getComputedStyle(th).position : null, tidFont: tid ? getComputedStyle(tid).fontFamily : null, tidCount: P.querySelectorAll('.hl-rv-procedures td .hl-rv-tid').length,
+    carry: P.querySelectorAll('.hl-rv-procedures .hl-rv-carry').length, ev: P.querySelectorAll('.hl-rv-procedures .hl-rv-ev p').length, keyMatched: km ? +km[1] : null, keyTotal: km ? +km[2] : null,
+    tac: P.querySelectorAll('.hl-rv-procedures button.hl-rv-tac').length, innerW: innerWidth, mini: !!P.querySelector('.hl-rv-minibar'), miniHidden: P.querySelector('.hl-rv-minibar') ? P.querySelector('.hl-rv-minibar').hidden : null
+  };
+}
+function chainState() {
+  var P = document.getElementById('tab-chain'), con = P.querySelector('.hl-rv-console'), rows = [].slice.call(P.querySelectorAll('.hl-rv-procedures tbody tr'));
+  var pressed = [].slice.call(con.querySelectorAll('.hl-rv-facets .hl-rv-fchip[aria-pressed=true]')).map(function (c) { return c.dataset.rvFacet + ':' + c.dataset.rvValue; });
+  return { shown: rows.filter(function (r) { return !r.hidden; }).length, total: rows.length, count: con.querySelector('.hl-rv-count').textContent.replace(/\s+/g, ' ').trim(), pressed: pressed,
+    resetShown: [].slice.call(con.querySelectorAll('button')).some(function (b) { return b.textContent === 'Reset filters' && !b.hidden; }) };
+}
+function chainMini() {
+  var P = document.getElementById('tab-chain'), m = P.querySelector('.hl-rv-minibar'), con = P.querySelector('.hl-rv-console'); if (!m) return { present: false };
+  var r = m.getBoundingClientRect(), c = con.getBoundingClientRect(), card = document.querySelector('.hl-rv-featcard'), cr = card && getComputedStyle(card).display !== 'none' ? card.getBoundingClientRect() : null;
+  var bar = document.querySelector('.hl-rv-bar .hl-rv-mobile-line'), br = bar ? bar.getBoundingClientRect() : null;
+  var mi = m.querySelector('input'), main = con.querySelector('.hl-rv-csearch input');
+  return { present: true, hidden: m.hidden, w: r.width, h: r.height, left: r.left, right: r.right, top: r.top, colLeft: c.left, colRight: c.right, cardRight: cr ? cr.right : null, barBottom: br ? br.bottom : null, hasSearch: !!mi, tableH: (document.querySelector('#tab-chain .hl-rv-procedures') || { getBoundingClientRect: function () { return { height: 0 }; } }).getBoundingClientRect().height, miniValue: mi ? mi.value : null, mainValue: main ? main.value : null };
+}
+function chainLight() {
+  var P = document.getElementById('tab-chain'), b = P.querySelector('.hl-rv-procedures button.hl-rv-tac'); if (!b) return { tactic: null };
+  var name = b.dataset.rvTactic, cards = [].slice.call(P.querySelectorAll('.hl-rv-stage'));
+  var expect = cards.map(function (c, i) { return [].slice.call(c.querySelectorAll('a.hl-rv-procedure .hl-rv-pname small')).some(function (s) { return s.textContent.indexOf(name) === 0; }) ? i : -1; }).filter(function (i) { return i >= 0; });
+  var nodes = [].slice.call(P.querySelectorAll('.hl-rv-flow .hl-rv-fnode'));
+  return { tactic: name, expect: expect, lit: nodes.map(function (n, i) { return n.classList.contains('is-linked') ? i : -1; }).filter(function (i) { return i >= 0; }),
+    litCards: cards.map(function (n, i) { return n.classList.contains('hl-rv-stage-lit') ? i : -1; }).filter(function (i) { return i >= 0; }), read: (P.querySelector('.hl-rv-linkread') || {}).textContent || '' };
+}
+var CHAIN_EXPR = '(' + chainMeasure.toString() + ')()', CHAINSTATE_EXPR = '(' + chainState.toString() + ')()', CHAINMINI_EXPR = '(' + chainMini.toString() + ')()', CHAINLIGHT_EXPR = '(' + chainLight.toString() + ')()';
+/* The console: a chip for every facet value, each with its count over the table; the Status, Confidence and Tactic counts add up to the table's rows (every row has one of each);
+   a press shows exactly that many rows; a second press and Reset bring every row back; the count line is empty at rest. */
+function consoleVerdict(m, pressed, cleared, attackRows) {
+  if (!m || !m.panel) return { notChecked: true, ok: false, detail: 'no Attack chain panel was found, so nothing was measured' };
+  if (!attackRows) return { notChecked: true, ok: false, detail: 'this report has no ATT&CK table (0 source rows)' };
+  var bad = [];
+  if (!m.console) bad.push('no filter console is drawn');
+  if (!m.search) bad.push('the console has no search box');
+  if (m.rows !== attackRows) bad.push('the procedure table draws ' + m.rows + ' rows, the source table has ' + attackRows);
+  if (m.count !== '') bad.push('the count line reads ' + JSON.stringify(m.count) + ' at rest; it shows only while filtered');
+  var by = {}; (m.chips || []).forEach(function (c) { by[c.f] = (by[c.f] || 0) + c.n; });
+  ['Status', 'Confidence', 'Tactic'].forEach(function (f) { if (by[f] !== undefined && by[f] !== attackRows) bad.push(f + ' chip counts add up to ' + by[f] + ', the table has ' + attackRows + ' rows'); });
+  if (!(m.chips || []).length) bad.push('no facet chip is drawn');
+  var first = (m.chips || [])[0];
+  if (first && pressed) {
+    if (pressed.shown !== first.n) bad.push('pressing ' + first.f + ' ' + first.v + ' shows ' + pressed.shown + ' rows, its chip says ' + first.n);
+    if (!new RegExp('^Showing ' + first.n + ' of ' + attackRows + ' ').test(pressed.count)) bad.push('the count line reads ' + JSON.stringify(pressed.count) + ' while filtered');
+    if (pressed.pressed.length !== 1) bad.push(pressed.pressed.length + ' chips are pressed after one press');
+  }
+  if (cleared && (cleared.shown !== attackRows || cleared.count !== '' || cleared.pressed.length)) bad.push('a second press leaves ' + cleared.shown + ' of ' + attackRows + ' rows, count ' + JSON.stringify(cleared.count));
+  return { notChecked: false, ok: bad.length === 0, why: bad, detail: (m.chips || []).length + ' chip(s) over ' + attackRows + ' source row(s); Status/Confidence/Tactic totals ' + JSON.stringify(by) + (bad.length ? '; ' + bad.join('; ') : '') };
+}
+/* The slim bar: hidden at rest, drawn once the console has scrolled past, inside the report column (never over the margin card), under the reading line, sharing the console's search. */
+function miniVerdict(atRest, scrolled, typed) {
+  if (!atRest || !atRest.present) return { notChecked: true, ok: false, detail: 'this report draws no filter console (no ATT&CK table), so there is no slim bar' };
+  if (atRest.tableH !== undefined && atRest.tableH < 700) return { notChecked: true, ok: false, detail: 'the procedure table is ' + Math.round(atRest.tableH) + ' px tall, shorter than the screen, so the console never scrolls past while the table is still in view' };
+  var bad = [];
+  if (atRest.hidden !== true) bad.push('the slim bar is drawn at rest');
+  if (!scrolled || scrolled.hidden) bad.push('the slim bar is not drawn once the console has scrolled past');
+  else {
+    if (scrolled.left < scrolled.colLeft - 1 || scrolled.right > scrolled.colRight + 1) bad.push('the bar spans ' + Math.round(scrolled.left) + '..' + Math.round(scrolled.right) + ', outside the report column ' + Math.round(scrolled.colLeft) + '..' + Math.round(scrolled.colRight));
+    if (scrolled.cardRight !== null && scrolled.left < scrolled.cardRight) bad.push('the bar starts at ' + Math.round(scrolled.left) + ', over the featured card (right edge ' + Math.round(scrolled.cardRight) + ')');
+    if (scrolled.barBottom !== null && scrolled.top < scrolled.barBottom - 1) bad.push('the bar top ' + Math.round(scrolled.top) + ' is above the reading line bottom ' + Math.round(scrolled.barBottom));
+    if (!scrolled.hasSearch) bad.push('the slim bar has no search box');
+  }
+  if (typed && typed.miniValue !== typed.mainValue) bad.push('the slim bar search says ' + JSON.stringify(typed.miniValue) + ' and the console search ' + JSON.stringify(typed.mainValue));
+  return { notChecked: false, ok: bad.length === 0, why: bad, detail: 'hidden at rest ' + atRest.hidden + '; scrolled: ' + (scrolled ? Math.round(scrolled.left) + '..' + Math.round(scrolled.right) + ' in column ' + Math.round(scrolled.colLeft) + '..' + Math.round(scrolled.colRight) : 'not measured') + (bad.length ? '; ' + bad.join('; ') : '') };
+}
+/* The stage flow: a node and a story card for every row of the report's stage table, each node counting exactly the procedure rows its story card lists. */
+function flowVerdict(m) {
+  if (!m || !m.panel) return { notChecked: true, ok: false, detail: 'no Attack chain panel was found, so nothing was measured' };
+  if (!m.stageSrc) return { notChecked: true, ok: false, detail: 'this report has no stage table (0 source rows)' + (m.nodes ? '; ' + m.nodes + ' node(s) are drawn from nothing' : '') };
+  var bad = [];
+  if (m.nodes !== m.stageSrc) bad.push('the flow draws ' + m.nodes + ' nodes, the stage table has ' + m.stageSrc + ' rows');
+  if (m.cards !== m.stageSrc) bad.push('the story draws ' + m.cards + ' stage cards, the stage table has ' + m.stageSrc + ' rows');
+  (m.nodeCounts || []).forEach(function (n, i) { if (n !== null && n !== (m.storyRows || [])[i]) bad.push('node ' + (i + 1) + ' says ' + n + ' linked, its story card lists ' + (m.storyRows || [])[i]); });
+  return { notChecked: false, ok: bad.length === 0, why: bad, detail: m.nodes + ' node(s), ' + m.cards + ' story card(s) against ' + m.stageSrc + ' stage row(s)' + (bad.length ? '; ' + bad.join('; ') : '') };
+}
+/* Linked tactic highlighting: focusing a tactic lights exactly the stages whose linked rows carry that tactic (measured from the story's own rows); leaving clears it. */
+function lightVerdict(lit, cleared) {
+  if (!lit || lit.tactic === null) return { notChecked: true, ok: false, detail: 'this report has no stage table with linked procedure rows, so the table draws no tactic button' };
+  var bad = [];
+  if (lit.lit.join(',') !== lit.expect.join(',')) bad.push('lit stage node(s) [' + lit.lit.join(',') + '], the story rows with tactic ' + lit.tactic + ' are in stage(s) [' + lit.expect.join(',') + ']');
+  if (lit.litCards.join(',') !== lit.expect.join(',')) bad.push('lit story card(s) [' + lit.litCards.join(',') + '], expected [' + lit.expect.join(',') + ']');
+  if (!lit.expect.length && !/appears in no stage/.test(lit.read)) bad.push('the tactic is in no stage and the line does not say so');
+  if (cleared && (cleared.lit.length || cleared.litCards.length)) bad.push('leaving the tactic leaves ' + cleared.lit.length + ' node(s) lit');
+  return { notChecked: false, ok: bad.length === 0, why: bad, detail: 'tactic ' + lit.tactic + ' lights stage(s) [' + lit.lit.join(',') + '] of the ' + lit.expect.length + ' the story rows name' + (bad.length ? '; ' + bad.join('; ') : '') };
+}
+/* The procedure table: every source row drawn, a sticky header (from 900 px wide), the technique IDs in monospace, a mark and an evidence note on exactly the rows of the report's own "carries the case" list. */
+function chainTableVerdict(m, attackRows) {
+  if (!m || !m.panel) return { notChecked: true, ok: false, detail: 'no Attack chain panel was found, so nothing was measured' };
+  if (!attackRows) return { notChecked: true, ok: false, detail: 'this report has no ATT&CK table (0 source rows)' };
+  var bad = [];
+  if (m.rows !== attackRows) bad.push('the table draws ' + m.rows + ' rows, the source has ' + attackRows);
+  if (m.innerW >= 900 && m.thPos !== 'sticky') bad.push('the header is ' + m.thPos + ', not sticky');
+  if (m.tidCount && !/mono|Consolas|Menlo|Courier/i.test(m.tidFont || '')) bad.push('technique IDs are set in ' + m.tidFont);
+  if (m.keySrc) {
+    if (m.keyTotal !== m.keySrc) bad.push('the console note names ' + m.keyTotal + ' list rows, the report\'s list has ' + m.keySrc);
+    if (m.keyMatched === null) bad.push('the key list is not accounted for in the note');
+    else if (m.carry !== m.keyMatched) bad.push(m.carry + ' row(s) are marked, the note says ' + m.keyMatched + ' matched');
+    if (m.ev !== m.carry) bad.push(m.ev + ' evidence note(s) for ' + m.carry + ' marked row(s)');
+  } else if (m.carry) bad.push(m.carry + ' row(s) are marked but the report has no key list');
+  return { notChecked: false, ok: bad.length === 0, why: bad, detail: m.rows + ' row(s) against ' + attackRows + '; ' + m.carry + ' marked of ' + m.keySrc + ' list row(s)' + (bad.length ? '; ' + bad.join('; ') : '') };
+}
+/* The phone icon tab strip (390 and 360): every tab is an icon with its accessible name, only the selected one shows its label, the strip is the tablist, and the Sections menu still lists every tab. */
+function stripMeasure() {
+  var tl = document.querySelector('.hl-rv-tabs'), tabs = tl ? [].slice.call(tl.querySelectorAll('[role=tab]')) : [];
+  function vis(e) { var r = e.getBoundingClientRect(); return r.width > 0 && r.height > 0 && getComputedStyle(e).visibility !== 'hidden'; }
+  var menuBtn = document.querySelector('.hl-rv-mobile-line > button[aria-controls="hl-rv-sections"]');
+  return { present: !!tl && vis(tl), tabs: tabs.length, named: tabs.filter(function (b) { return (b.getAttribute('aria-label') || '').length > 3; }).length, icons: tabs.filter(function (b) { return !!b.querySelector('svg'); }).length,
+    labelsShown: tabs.filter(function (b) { var l = b.querySelector('.hl-rv-tab-label'); return l && vis(l); }).length, selected: tabs.filter(function (b) { return b.getAttribute('aria-selected') === 'true'; }).length,
+    selectedLabelShown: tabs.filter(function (b) { var l = b.querySelector('.hl-rv-tab-label'); return b.getAttribute('aria-selected') === 'true' && l && vis(l); }).length,
+    minW: tabs.length ? Math.min.apply(null, tabs.map(function (b) { return b.getBoundingClientRect().width; })) : 0, minH: tabs.length ? Math.min.apply(null, tabs.map(function (b) { return b.getBoundingClientRect().height; })) : 0,
+    scrolls: tl ? tl.scrollWidth > tl.clientWidth + 1 : false, menu: !!menuBtn && vis(menuBtn), numerals: tabs.filter(function (b) { return /\d/.test(b.textContent); }).length };
+}
+var STRIP_EXPR = '(' + stripMeasure.toString() + ')()';
+function stripVerdict(m, expectTabs) {
+  if (!m) return { notChecked: true, ok: false, detail: 'nothing was measured' };
+  var bad = [];
+  if (!m.present) bad.push('the tab strip is not shown on a phone');
+  if (m.tabs !== expectTabs) bad.push(m.tabs + ' tab(s) in the strip, the report builds ' + expectTabs);
+  if (m.named !== m.tabs) bad.push((m.tabs - m.named) + ' tab(s) have no accessible name');
+  if (m.icons !== m.tabs) bad.push((m.tabs - m.icons) + ' tab(s) have no icon');
+  if (m.selected !== 1) bad.push(m.selected + ' tabs are selected');
+  if (m.selectedLabelShown !== 1 || m.labelsShown !== 1) bad.push(m.labelsShown + ' label(s) are shown, the selected tab alone should show one');
+  if (m.minW < 43.99 || m.minH < 43.99) bad.push('the smallest tab is ' + Math.round(m.minW) + ' by ' + Math.round(m.minH) + ' px');
+  if (!m.menu) bad.push('the Sections menu button is gone');
+  if (m.numerals) bad.push(m.numerals + ' tab(s) carry a digit');
+  return { notChecked: false, ok: bad.length === 0, why: bad, detail: m.tabs + ' icon tab(s), strip ' + (m.scrolls ? 'swipes' : 'fits') + ', Sections menu ' + (m.menu ? 'kept' : 'GONE') + (bad.length ? '; ' + bad.join('; ') : '') };
+}
+/* Plate buttons share one left edge at 390 px: Read the full report, the first of the page's own links and Share start at the same x (the Share indent Joseph saw). */
+function plateEdgeMeasure() {
+  var q = document.querySelector('.hl-quicklinks'); if (!q) return { present: false };
+  var items = [].slice.call(q.children).filter(function (c) { var r = c.getBoundingClientRect(); return r.width > 0 && r.height > 0; });
+  function btn(c) { return c.matches('a,button') ? c : c.querySelector('a,button'); }
+  var lefts = items.map(function (c) { return Math.round(btn(c).getBoundingClientRect().left * 10) / 10; });
+  var rights = items.map(function (c) { return btn(c).getBoundingClientRect().right; });
+  var share = q.querySelector('.hl-rv-share-btn'), sr = share ? share.getBoundingClientRect() : null;
+  var cs = getComputedStyle(q), cols = cs.display === 'grid' ? cs.gridTemplateColumns.split(' ').map(parseFloat).filter(function (n) { return !isNaN(n); }) : [];
+  var x = q.getBoundingClientRect().left + (parseFloat(cs.paddingLeft) || 0) + (parseFloat(cs.borderLeftWidth) || 0), gap = parseFloat(cs.columnGap) || 0, colLefts = [];
+  cols.forEach(function (w) { colLefts.push(x); x += w + gap; });
+  return { present: true, n: items.length, minLeft: Math.min.apply(null, lefts), colLefts: colLefts, shareLeft: sr ? sr.left : null, maxRight: Math.max.apply(null, rights), shareRight: sr ? sr.right : null };
+}
+var PLATEEDGE_EXPR = '(' + plateEdgeMeasure.toString() + ')()';
+function plateEdgeVerdict(m) {
+  if (!m || !m.present) return { notChecked: true, ok: false, detail: 'the page has no plate button column' };
+  var bad = [];
+  if (m.shareLeft === null) return { notChecked: true, ok: false, detail: 'the page has no Share button' };
+  /* Share sits on one of the grid's own column edges: the first column when it has the row or a row to itself, the second beside a partner. Anything else is an indent. */
+  var edges = (m.colLefts || []).concat([m.minLeft]);
+  if (!edges.some(function (e) { return Math.abs(m.shareLeft - e) <= 1; })) bad.push('Share starts at ' + m.shareLeft.toFixed(1) + ', the grid\'s column edges are ' + edges.map(function (e) { return e.toFixed(1); }).join(' and '));
+  return { notChecked: false, ok: bad.length === 0, why: bad, detail: m.n + ' plate button(s); Share left ' + m.shareLeft.toFixed(1) + ', grid left ' + m.minLeft.toFixed(1) + (bad.length ? '; ' + bad.join('; ') : '') };
+}
+/* The page settles a little after the first scroll (the panel's images and folds), so the console is scrolled past in two passes, the second from where the first landed. */
+async function scrollPastConsole(page) {
+  var expr = '(function(){var e=document.querySelector("#tab-chain .hl-rv-console");if(e)window.scrollTo(0,e.getBoundingClientRect().bottom+scrollY-90);})()';
+  await page.evaluate(expr); await CDP.sleep(350); await page.evaluate(expr); await CDP.sleep(450);
+}
+async function chainRows(page, url) {
+  var attackRows = SHAPES && SHAPES.chain && SHAPES.chain.attack && SHAPES.chain.attack.shape ? SHAPES.chain.attack.rows : null;
+  var N = { con: 'the filter console: a chip for every facet value with its count, the counts add up to the table\'s rows, a press shows exactly that many rows, a second press clears, the count line shows only while filtered',
+    mini: 'the slim sticky bar appears once the console has scrolled past, stays inside the report column clear of the margin card and under the reading line, and shares the console\'s search',
+    flow: 'the stage flow draws a card and a story stage for every row of the report\'s stage table, each counting the procedure rows its story lists',
+    light: 'linked tactic highlighting: a focused tactic lights exactly the stages whose linked rows carry it, and leaving clears it',
+    tbl: 'the procedure table draws every source row with a sticky header and monospace technique IDs, and marks exactly the rows of the report\'s own "carries the case" list, each with its evidence' };
+  function row(name, w, h, v) { var n = w + 'x' + h + ': ' + name; if (v.notChecked) check('NOT CHECKED: ' + n, false, v.detail); else check(n, v.ok, v.detail); }
+  function ctl(name, v) { check('control: ' + name, v.ok === false && !v.notChecked, v.ok === false ? 'FAILS as designed: ' + v.detail : 'the control did NOT fire: ' + v.detail); }
+  var states = [[1440, 900], [1280, 900], [390, 844]];
+  for (var i = 0; i < states.length; i++) {
+    var w = states[i][0], h = states[i][1], phone = w < 700;
+    await setViewport(page, w, h);
+    if (!(await gotoAndWait(page, url))) { check('NOT CHECKED: ' + w + 'x' + h + ': Attack chain rows', false, 'the tab controller never built, so nothing was measured'); continue; }
+    if (!hasTab('chain')) { check('NOT CHECKED: ' + w + 'x' + h + ': Attack chain rows', false, 'the report has no Attack chain tab'); continue; }
+    await page.evaluate('location.hash="#tab-chain"'); await CDP.sleep(250);
+    if (phone) { await page.json('(function(){var t=document.querySelector("#tab-chain .hl-rv-view-summary button[aria-expanded=false]:not(.hl-rv-info)");if(t)t.click();return !!t;})()'); await CDP.sleep(250); }
+    var m = await page.json(CHAIN_EXPR);
+    if (w === 1440) {
+      /* one pass at 1440 for the slim bar against the margin card; the console, flow, light and table rows run at 1280 and 390 */
+      var mAtRest = await page.json(CHAINMINI_EXPR);
+      await scrollPastConsole(page);
+      var sc = await page.json(CHAINMINI_EXPR), vM = miniVerdict(mAtRest, sc, null);
+      row(N.mini, w, h, vM);
+      if (!vM.notChecked) {
+        await page.evaluate('(function(){var m=document.querySelector("#tab-chain .hl-rv-minibar");if(m){m.style.cssText="position:fixed;left:0;right:0;top:80px;width:100vw;display:block";m.hidden=false;}})()'); await CDP.sleep(150);
+        ctl('1440x900: a slim bar drawn full width across the margin card makes the slim-bar row FAIL', miniVerdict(mAtRest, await page.json(CHAINMINI_EXPR), null));
+      }
+      continue;
+    }
+    if (phone) { await page.evaluate('(function(){var b=document.querySelector("#tab-chain .hl-rv-console .hl-rv-ftoggle");if(b)b.click();})()'); await CDP.sleep(150); }
+    var first = (m.chips || [])[0], pressedState = null, clearedState = null;
+    if (first) {
+      var sel = '#tab-chain .hl-rv-console .hl-rv-facets .hl-rv-fchip[data-rv-facet=' + JSON.stringify(first.f) + '][data-rv-value=' + JSON.stringify(first.v) + ']';
+      try { await page.click(sel); } catch (e) { /* the verdict says so */ }
+      await CDP.sleep(200); pressedState = await page.json(CHAINSTATE_EXPR);
+      try { await page.click(sel); } catch (e) { /* reported below */ }
+      await CDP.sleep(200); clearedState = await page.json(CHAINSTATE_EXPR);
+    }
+    var vC = consoleVerdict(m, pressedState, clearedState, attackRows); row(N.con, w, h, vC);
+    var vF = flowVerdict(m); row(N.flow, w, h, vF);
+    await page.evaluate('(function(){var b=document.querySelector("#tab-chain .hl-rv-procedures button.hl-rv-tac");if(b){b.scrollIntoView({block:"center"});b.focus();}})()'); await CDP.sleep(200);
+    var lit = await page.json(CHAINLIGHT_EXPR); await page.evaluate('(function(){var b=document.querySelector("#tab-chain .hl-rv-procedures button.hl-rv-tac");if(b)b.blur();})()'); await CDP.sleep(150);
+    var vL = lightVerdict(lit, await page.json(CHAINLIGHT_EXPR)); row(N.light, w, h, vL);
+    var vT = chainTableVerdict(m, attackRows); row(N.tbl, w, h, vT);
+    if (!phone) {
+      await page.evaluate('(function(){window.scrollTo(0,0);})()'); await CDP.sleep(450);
+      var rest = await page.json(CHAINMINI_EXPR);
+      await scrollPastConsole(page);
+      await page.evaluate('(function(){var i=document.querySelector("#tab-chain .hl-rv-minibar input");if(i){i.value="T10";i.dispatchEvent(new Event("input",{bubbles:true}));}})()'); await CDP.sleep(200);
+      var vM2 = miniVerdict(rest, await page.json(CHAINMINI_EXPR), await page.json(CHAINMINI_EXPR)); row(N.mini, w, h, vM2);
+      await page.evaluate('(function(){window.scrollTo(0,0);var i=document.querySelector("#tab-chain .hl-rv-console .hl-rv-csearch input");if(i){i.value="";i.dispatchEvent(new Event("input",{bubbles:true}));}})()'); await CDP.sleep(150);
+    }
+    if (w === 1280) {
+      var ctls = [
+        [vC, 'a chip whose handler is gone makes the console row FAIL', async function () {
+          await page.evaluate('(function(){var c=document.querySelector("#tab-chain .hl-rv-console .hl-rv-facets .hl-rv-fchip");var n=c.cloneNode(true);c.replaceWith(n);})()');
+          var s = '#tab-chain .hl-rv-console .hl-rv-facets .hl-rv-fchip'; try { await page.click(s); } catch (e) { /* reported by the verdict */ } await CDP.sleep(200);
+          var ps = await page.json(CHAINSTATE_EXPR); return consoleVerdict(m, ps, null, attackRows); }],
+        [vF, 'with one stage node removed the flow row FAILS', async function () { await page.evaluate('(function(){var n=document.querySelector("#tab-chain .hl-rv-flow .hl-rv-fnode");if(n)n.closest("li").remove();})()'); return flowVerdict(await page.json(CHAIN_EXPR)); }],
+        [m.keySrc ? vT : { notChecked: true, ok: false, detail: 'this report has no "carries the case" list (0 source rows), so no mark is drawn to remove' }, 'with one carries-the-case mark removed the table row FAILS', async function () { await page.evaluate('(function(){var n=document.querySelector("#tab-chain .hl-rv-procedures .hl-rv-carry");if(n)n.remove();})()'); return chainTableVerdict(await page.json(CHAIN_EXPR), attackRows); }],
+        [vL, 'a tactic button whose handler is gone makes the highlighting row FAIL', async function () {
+          /* the handlers sit on the view body, so a copy without them: stop the events before they reach it */
+          await page.evaluate('(function(){var P=document.getElementById("tab-chain");P.addEventListener("focusin",function(e){e.stopImmediatePropagation();},true);P.addEventListener("mouseover",function(e){e.stopImmediatePropagation();},true);})()');
+          await page.evaluate('(function(){var b=document.querySelector("#tab-chain .hl-rv-procedures button.hl-rv-tac");b.focus();})()'); await CDP.sleep(150);
+          return lightVerdict(await page.json(CHAINLIGHT_EXPR), null); }]
+      ];
+      for (var ci = 0; ci < ctls.length; ci++) {
+        if (ctls[ci][0].notChecked) { check('NOT CHECKED: control: ' + ctls[ci][1], false, 'the row it controls measured nothing on this report (' + ctls[ci][0].detail + '), so there is nothing to break'); continue; }
+        ctl(ctls[ci][1], await ctls[ci][2]());
+      }
+    }
+  }
+  /* the phone icon strip, at the two phone sizes, and the plate's left edge at 390 */
+  var phones = [[390, 844], [360, 640]];
+  for (var pi = 0; pi < phones.length; pi++) {
+    var pw = phones[pi][0], ph = phones[pi][1];
+    await setViewport(page, pw, ph);
+    if (!(await gotoAndWait(page, url))) { check('NOT CHECKED: ' + pw + 'x' + ph + ': phone icon tab strip', false, 'the tab controller never built, so nothing was measured'); continue; }
+    var sm = await page.json(STRIP_EXPR), vS = stripVerdict(sm, liveTokens().length);
+    row('the phone icon tab strip: every tab is an icon with its accessible name, only the selected tab shows its label, the Sections menu is kept', pw, ph, vS);
+    if (pi === 0) {
+      var pe = await page.json(PLATEEDGE_EXPR), vE = plateEdgeVerdict(pe); row('the plate buttons, Share included, start at one left edge', pw, ph, vE);
+      if (!vS.notChecked) {
+        await page.evaluate('(function(){var b=document.querySelector(".hl-rv-tabs [role=tab]");b.removeAttribute("aria-label");b.querySelector(".hl-rv-tab-label").style.display="none";})()');
+        ctl(pw + 'x' + ph + ': a tab with no accessible name makes the phone-strip row FAIL', stripVerdict(await page.json(STRIP_EXPR), liveTokens().length));
+      }
+      if (!vE.notChecked) {
+        await page.evaluate('(function(){var s=document.querySelector(".hl-rv-share");if(s)s.style.cssText="padding:0 8px";})()'); await CDP.sleep(100);
+        ctl(pw + 'x' + ph + ': Share given the old 8px side padding makes the plate-edge row FAIL', plateEdgeVerdict(await page.json(PLATEEDGE_EXPR)));
       }
     }
   }
@@ -2861,7 +3148,7 @@ var BOX_INJECT_SPAN_EXPR = '(function(tab){var p=document.getElementById("tab-"+
   'd.innerHTML="<table class=\\"hl-gate-span-fit\\"><thead><tr><th>Tactic</th><th>Technique</th></tr></thead><tbody>"+tr(["<td rowspan=\\"3\\">Initial Access</td>","<td>T1566.001 Spearphishing Attachment</td>"])+tr(["<td>T1566.002 Spearphishing Link</td>"])+tr(["<td>T1190 Exploit Public-Facing Application</td>"])+"</tbody></table>"+' +
   '"<table class=\\"hl-gate-span-spill\\"><thead><tr><th>Tactic</th><th>Technique</th></tr></thead><tbody>"+tr(["<td rowspan=\\"2\\"><div style=\\"height:240px;margin-bottom:-210px;background:#c33\\">Execution</div></td>","<td>T1059.001 PowerShell</td>"])+tr(["<td>T1204.002 Malicious File</td>"])+"</tbody></table>";' +
   'p.appendChild(d);return true;})(__TAB__)';
-var BOX_INJECT_STAGE_EXPR = '(function(tab){var p=document.getElementById("tab-"+tab);if(!p)return false;var d=document.createElement("div");d.className="hl-rv-stages hl-gate-stage-ctl";d.setAttribute("data-rv-chrome","");d.setAttribute("data-pagefind-ignore","");' +
+var BOX_INJECT_STAGE_EXPR = '(function(tab){var p=document.getElementById("tab-"+tab);if(!p)return false;var d=document.createElement("div");d.className="hl-rv-stages hl-gate-stage-ctl";d.style.cssText="width:17rem;max-width:100%;padding-left:0";d.setAttribute("data-rv-chrome","");d.setAttribute("data-pagefind-ignore","");' +
   'var tok="";for(var i=0;i<9;i++)tok+="Assembly.Load";' +
   'd.innerHTML="<article class=\\"hl-rv-stage\\"><details class=\\"hl-rv-stage-detail\\" open><summary>Stage 2</summary><p>"+tok+"</p></details></article>";' +
   'p.appendChild(d);return true;})(__TAB__)';
@@ -3817,6 +4104,7 @@ async function tabbedChecks(page, opts) {
   await infoRows(page, url);
   await textHiddenRows(page, url);
   await overviewScanRows(page, url);
+  await chainRows(page, url);
   await shareRows(page, url);
   await mispRows(page, url);
   await timelineRows(page, url);
@@ -4576,6 +4864,8 @@ if (require.main === module) {
     heatVerdict: heatVerdict,
     squaresVerdict: squaresVerdict,
     judgmentsVerdict: judgmentsVerdict,
+    consoleVerdict: consoleVerdict, miniVerdict: miniVerdict, flowVerdict: flowVerdict, lightVerdict: lightVerdict, chainTableVerdict: chainTableVerdict, stripVerdict: stripVerdict, plateEdgeVerdict: plateEdgeVerdict,
+    CHAIN_EXPR: CHAIN_EXPR, CHAINSTATE_EXPR: CHAINSTATE_EXPR, CHAINMINI_EXPR: CHAINMINI_EXPR, CHAINLIGHT_EXPR: CHAINLIGHT_EXPR, STRIP_EXPR: STRIP_EXPR, PLATEEDGE_EXPR: PLATEEDGE_EXPR,
     tileSourceVerdict: tileSourceVerdict,
     linkVerdict: linkVerdict,
     RISK_EXPR: RISK_EXPR,

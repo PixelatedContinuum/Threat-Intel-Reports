@@ -29,9 +29,9 @@ var G = require('../check-browser-report.js');
 
 /* ---- the sizes 4a names ------------------------------------------------ */
 
-test('the bar is measured at the two sizes 4a names, not only below 700 px', function () {
+test('the bar is measured at the two sizes 4a names and at the two phone sizes of the icon strip (design D, c3)', function () {
   assert.deepEqual(G.TAB_BAR_VIEWPORTS.map(function (v) { return v[0] + 'x' + v[1]; }),
-    ['768x1024', '812x375']);
+    ['768x1024', '812x375', '390x844', '360x640']);
   assert.deepEqual(G.TAB_TARGET_VIEWPORTS.map(function (v) { return v[0] + 'x' + v[1]; }),
     ['390x844', '768x1024']);
 });

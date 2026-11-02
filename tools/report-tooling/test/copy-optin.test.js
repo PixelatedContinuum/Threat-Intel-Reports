@@ -98,5 +98,5 @@ test('the marker is also read on a pre or code that carries the class itself (a 
 });
 
 test('the script cache-buster moved with the change, on the tabbed branch only', () => {
-  assert.match(layout, /hl-report-tabs\.js' \| relative_url \}\}\?v=20261102\.1/);
+  assert.match(layout, /hl-report-tabs\.js' \| relative_url \}\}\?v=20261102\.2/);
 });

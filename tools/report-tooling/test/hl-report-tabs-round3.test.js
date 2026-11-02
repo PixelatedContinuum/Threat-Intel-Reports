@@ -103,7 +103,11 @@ function gradientSelectors(text){
 const GRAD_OK=['.hl-report-page .hl-post-header','.hl-report-page .hl-post-header__title','.hl-report-page .hl-post-content .hl-rv-panel-head h2','.hl-rv-view',
     '.hl-rv-feat','.hl-rv-featcard','.hl-rv-sponsor-card.is-site','.hl-rv-sponsor-card',
     // D3: the Overview's tiles and scan panels are B's panels; risk bars and the inferred-status hatch are drawn fills
-    '.hl-report-page .hl-rv-tile','.hl-rv-pn','.hl-rv-riskbar > i','.hl-rv-riskbar[data-rv-scale="word"] > i','.hl-rv-cell[data-rv-status="INFERRED"]'];
+    '.hl-report-page .hl-rv-tile','.hl-rv-pn','.hl-rv-riskbar > i','.hl-rv-riskbar[data-rv-scale="word"] > i','.hl-rv-cell[data-rv-status="INFERRED"]',
+    // D4/D5 (T-0500.1.7.3 c3): the stage flow cards, the connectors and spine lines (drawn lines), the chain story's stage cards, the procedure table's panel, and the other tabs' cards, tiles and tables are B panels
+    '.hl-report-page .hl-rv-flow button.hl-rv-fnode','.hl-report-page .hl-rv-flow button.hl-rv-fnode[aria-pressed="true"]','.hl-report-page .hl-rv-flow button.hl-rv-fnode.is-linked','.hl-rv-flow > li:not(:last-child)::after',
+    '.hl-report-page .hl-rv-stage','.hl-rv-stages::before','.hl-report-page .hl-rv-procedures .hl-rv-table-wrap','.hl-rv-victim-card','.hl-rv-diamond-card','.hl-rv-status-tile',
+    '.hl-report-page .hl-rv-view .hl-rv-table-wrap:not(.hl-rv-procedures *)'];
 function assertGradientsAllowed(sels){for(const sel of sels)assert.ok(GRAD_OK.includes(sel),'a gradient on a non-header selector: '+sel);}
 test('CSS control: a grouped rule hides no selector behind its first (allowed, .hl-rv-tabs { background: gradient })',()=>{
   const sels=gradientSelectors('.hl-rv-feat, .hl-rv-tabs { background: linear-gradient(red, blue); }');
@@ -127,7 +131,10 @@ test('CSS: round-3 tokens, the old strip, the pill and the gradient and shadow l
   assertGradientsAllowed(gradSel);
   // design D: glows only on the gold featured panels, the selected tab chip and the popover
   const shadowSel=[...css.replace(/\/\*[\s\S]*?\*\//g,'').matchAll(/([^{}@]+)\{([^{}]*)\}/g)].filter(m=>/box-shadow:(?!\s*none)/.test(m[2])).flatMap(m=>m[1].split(',').map(x=>x.trim()));
-  assert.deepEqual(shadowSel.filter(s=>!['.hl-rv-feat','.hl-rv-featcard','.hl-rv-sponsor-card.is-site','.hl-report-page .hl-rv-tabs button[aria-selected="true"]','.hl-rv-pop'].includes(s)),[],'no shadows or glows except the featured panels, the selected tab chip and the popover');
+  assert.deepEqual(shadowSel.filter(s=>!['.hl-rv-feat','.hl-rv-featcard','.hl-rv-sponsor-card.is-site','.hl-report-page .hl-rv-tabs button[aria-selected="true"]','.hl-rv-pop',
+    // D4 (T-0500.1.7.3 c3), as in the approved mockup: the lit or chosen stage node and the lit story card (a ring and a soft glow), the spine dot's ring, and the slim bar's drop shadow
+    '.hl-report-page .hl-rv-flow button.hl-rv-fnode[aria-pressed="true"]','.hl-report-page .hl-rv-flow button.hl-rv-fnode.is-linked','.hl-rv-minibar','.hl-rv-stage::before','.hl-rv-stage.hl-rv-stage-lit',
+    '.hl-rv-procedures tr.hl-rv-keyrow td:first-child'].includes(s)),[],'no shadows or glows except the featured panels, the selected tab chip and the popover');
   assert.equal(/max\(14px,\s*1em\)/.test(css),false,'no em-relative chrome size');
   const below=[...css.matchAll(/font-size:\s*(\d+(?:\.\d+)?)px/g)].map(m=>+m[1]).filter(n=>n<14);
   assert.deepEqual(below,[],'every font-size in the file is 14px or more (v6.1 micro-label floor; secondary text rides --rv-fs)');

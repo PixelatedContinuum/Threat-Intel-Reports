@@ -244,3 +244,13 @@ test('the process tree\'s kind chip wraps in its column on a phone (the widget\'
   const src = fs.readFileSync(path.join(SITE, 'tools/report-tooling/check-browser-report.js'), 'utf8');
   assert.match(src, /hl-gate-kind-ctl/); assert.match(src, /BOX_OLD_KIND_CSS/);
 });
+
+test('a sticky header cell is displaced by design and counted; the same cell, not sticky, hanging out of its row still faults (T-0500.1.7.3 c3)', () => {
+  const html = (pos) => '<table data-box="10,10,390,400"><thead data-box="10,10,390,50"><tr data-box="10,10,390,50"><th data-box="10,10,200,50" data-cs=\'{"position":"' + pos + '"}\'>A</th></tr></thead></table>';
+  // the header cell has been carried 150px below its row by the scroll
+  const moved = (pos) => html(pos).replace('<th data-box="10,10,200,50"', '<th data-box="10,160,200,200"');
+  const sticky = layout(moved('sticky'));
+  try { const m = sticky.run(); assert.equal(m.hang.filter(f => /th|tr/.test(f.sig)).length, 0, JSON.stringify(m.hang)); assert.ok(m.excluded['sticky header cell'] >= 1, 'counted, not silent'); assert.ok(m.excluded['row of sticky header cells'] >= 1); } finally { sticky.close(); }
+  const plain = layout(moved('static'));
+  try { const m = plain.run(); assert.ok(m.hang.some(f => /^th/.test(f.sig)), 'a th that is not sticky and lies outside its row faults: ' + JSON.stringify(m.hang)); } finally { plain.close(); }
+});

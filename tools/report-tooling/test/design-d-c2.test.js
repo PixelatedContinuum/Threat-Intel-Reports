@@ -103,6 +103,23 @@ test('D3 judgments: every row shown in full with its confidence as printed, a ch
   const g = page([['overview'], ['confidence', table(['Finding', 'Confidence'], [['a', 'HIGH'], ['b', 'LOW']])]]);
   try { assert.match(txt(g.d.querySelector('#tab-overview .hl-rv-pn--judg .hl-rv-unstated')), /Not stated in this report's table: what would change each judgment/); assert.equal(g.d.querySelectorAll('#tab-overview .hl-rv-jchange').length, 0); } finally { g.w.close(); }
 });
+test('C3 judgments chips are grouped: five levels plus one "Other / ranges" chip, the counts add up, each row keeps its printed rating, a grouped chip filters the printed variants together', () => {
+  const MIX = table(['Claim', 'Confidence', 'What would change it'], [['a', 'HIGH', 'x'], ['b', 'HIGH-MODERATE', 'x'], ['c', 'MODERATE (capture provenance)', 'x'], ['d', 'LOW-MODERATE', 'x'], ['e', 'MEDIUM', 'x'], ['f', 'High', 'x'], ['g', 'LOW', 'x']]);
+  const f = page([['overview'], ['confidence', MIX]]);
+  try {
+    const chips = [...f.d.querySelectorAll('#tab-overview .hl-rv-jchip')].map(c => txt(c));
+    assert.deepEqual(chips, ['All 7', 'HIGH 2', 'LOW 1', 'Other / ranges 4'], 'five levels at most and one Other chip, never one chip per printed string');
+    assert.equal(chips.slice(1).reduce((n, c) => n + Number(c.split(' ').pop()), 0), 7, 'the chip counts add up to the row count');
+    const words = [...f.d.querySelectorAll('#tab-overview .hl-rv-jword')].map(txt); assert.deepEqual(words, ['HIGH', 'HIGH-MODERATE', 'MODERATE (capture provenance)', 'LOW-MODERATE', 'MEDIUM', 'High', 'LOW'], 'each row keeps its printed rating');
+    const v = G.judgmentsVerdict(JSON.parse(JSON.stringify(f.w.eval(G.JUDG_EXPR))), 7); assert.equal(v.ok, true, v.detail);
+    f.d.querySelector('[data-rv-conf=OTHER]').click();
+    assert.deepEqual([...f.d.querySelectorAll('#tab-overview .hl-rv-jrow')].filter(r => !r.hidden).map(r => r.dataset.rvConf), ['HIGH-MODERATE', 'MODERATE (capture provenance)', 'LOW-MODERATE', 'MEDIUM']);
+    const bad = JSON.parse(JSON.stringify(f.w.eval(G.JUDG_EXPR))); bad.labels = ['HIGH', 'HIGH-MODERATE', 'MODERATE'];
+    assert.equal(G.judgmentsVerdict(bad, 7).ok, false, 'a chip per printed string FAILS the grouped-chip rule');
+    const drift = JSON.parse(JSON.stringify(f.w.eval(G.JUDG_EXPR))); drift.words[1] = 'HIGH';
+    assert.equal(G.judgmentsVerdict(drift, 7).ok, false, 'a row whose rating was rewritten FAILS');
+  } finally { f.w.close(); }
+});
 test('D3 linked highlighting: wrapping adds no word, never enters a table, a link, a heading or code, and a key lights exactly its own places; a second press clears', () => {
   const prose = '<p>The agency was ACCESS SHOWN at the A federal social-security agency, and Execution came first. Not reached. The <code>Execution</code> code, <a href="#x">Execution</a>.</p><p>COMPROMISED twice: COMPROMISED.</p>';
   const f = page([['overview', { p: prose }], ['victims', VIC], ['chain', ATT]]);
