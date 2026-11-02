@@ -81,10 +81,14 @@ test('the IOC viewer: the cell include and assets/js/ioc-table.js agree on which
   const lit = Array.from(cell.match(/\{%- elsif _ic_t == "sha256"([^%]*)%\}/)[0].matchAll(/_ic_t == "(\w+)"/g)).map((x) => x[1]).sort();
   assert.deepEqual(lit, ['filename', 'md5', 'path', 'registry', 'sha1', 'sha256']);
   const layout = read('_layouts/ioc-table.html');
-  assert.match(layout, /data-act="defang" aria-pressed="true">Defanged<\/button>/);
+  // fix-r1 (review finding 2): no button, no live value; a note says the table is defanged and where the exact values are
+  assert.equal(/data-act="defang"|btn--toggle/.test(layout), false, 'no Defanged/Live button');
+  assert.equal(/data-live|live=true/.test(layout + cell), false, 'no live value kept in the markup');
+  assert.match(layout, /class="hl-ioctable__note">Values are shown defanged[^<]*<a href="\{\{ t\.feed_url \| relative_url \}\}">raw JSON<\/a>/);
   assert.equal(/<code>\{\{ r\.value \}\}<\/code>/.test(layout), false, 'no cell prints a raw value any more');
-  assert.match(layout, /include ioc-cell\.html type=r\.type value=r\.value live=true/);
-  assert.match(js, /var defanged = !defangEl \|\| defangEl\.getAttribute\('aria-pressed'\) !== 'false';/);
+  assert.match(layout, /include ioc-cell\.html type=r\.type value=r\.value %\}/);
+  assert.equal(/var defanged\b|applyDefang|data-live/.test(js), false, 'the script has no toggle state and keeps no live value');
+  assert.match(js, /return DEFANG_TYPES\[type\] \? defang\(c\.textContent, type\) : c\.textContent;/);
 });
 
 /* ---- Jekyll: the includes executed ---- */

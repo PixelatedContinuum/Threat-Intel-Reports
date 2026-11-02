@@ -1,6 +1,6 @@
 {%- comment -%}
-  One IOC value cell, defanged by type (T-0500.1.7.4, decision 5). Params: type, value, live (true on the filterable table: keeps the live value in data-live for the reader's own toggle).
-    - a network type (ipv4 ipv6 domain endpoint url email) prints defanged, every dot [.], hxxp, [@]: the form assets/js/ioc-table.js writes, so the page and its toggle agree;
+  One IOC value cell, defanged by type (T-0500.1.7.4, decision 5). Params: type, value. No live value is kept in the markup (T-0500.1.7.4 fix-r1, review finding 2): the exact value is in the Raw JSON feed only.
+    - a network type (ipv4 ipv6 domain endpoint url email) prints defanged, every dot [.], hxxp, [@]: the form assets/js/ioc-table.js writes, so the page and the viewer's export agree;
     - hash, filename, path and registry values (sha256 md5 sha1 filename path registry) print as the feed recorded them and carry data-literal="<type>": nothing in them
       to disarm, and a bracket inside a path would break the string a hunter pastes (the viewer's own rule since 2026-10-09). The page-wide pass and the gate honour data-literal
       only for those six types and only on a value that is not a URL or an e-mail address;
@@ -9,9 +9,9 @@
 {%- endcomment -%}
 {%- assign _ic_t = include.type | downcase -%}
 {%- if _ic_t == "ipv4" or _ic_t == "ipv6" or _ic_t == "domain" or _ic_t == "endpoint" or _ic_t == "url" or _ic_t == "email" -%}
-<code{% if include.live %} data-live="{{ include.value | escape }}"{% endif %}>{% include defang-text.html text=include.value type=_ic_t %}</code>
+<code>{% include defang-text.html text=include.value type=_ic_t %}</code>
 {%- elsif _ic_t == "sha256" or _ic_t == "md5" or _ic_t == "sha1" or _ic_t == "filename" or _ic_t == "path" or _ic_t == "registry" -%}
-<code{% if include.live %} data-live="{{ include.value | escape }}"{% endif %} data-literal="{{ _ic_t }}">{{ include.value }}</code>
+<code data-literal="{{ _ic_t }}">{{ include.value }}</code>
 {%- else -%}
-<code{% if include.live %} data-live="{{ include.value | escape }}"{% endif %}>{% include defang-text.html text=include.value %}</code>
+<code>{% include defang-text.html text=include.value %}</code>
 {%- endif -%}

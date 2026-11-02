@@ -77,7 +77,10 @@ test('the post layout: a report keeps its header byte for byte; only a detection
   assert.equal(/role="tab"/.test(det), false, 'the detection page stays flat');
   assert.match(post, /section-bar\.js/);
   const ioc = read('_layouts/ioc-table.html');
-  for (const k of ['index-header.html', 'hl-d-kpis', 'data-slug="{{ page.ioc_slug }}"', 'data-act="copy"', 'data-act="txt"', 'data-act="csv"', 'data-act="defang"', 'hl-ioctable__filters', 'ioc-table.js']) assert.ok(ioc.includes(k), 'IOC feed layout keeps ' + k);
+  for (const k of ['index-header.html', 'hl-d-kpis', 'data-slug="{{ page.ioc_slug }}"', 'data-act="copy"', 'data-act="txt"', 'data-act="csv"', 'hl-ioctable__filters', 'ioc-table.js']) assert.ok(ioc.includes(k), 'IOC feed layout keeps ' + k);
+  // fix-r1 (review finding 2): the Defanged/Live button is gone; nothing on the layout shows or copies a live value
+  assert.equal(ioc.includes('data-act="defang"'), false, 'the layout has no Defanged/Live button');
+  assert.equal(/\blive=true\b|data-live/.test(ioc), false, 'the layout keeps no live value');
 });
 
 test('the b3 blocks of the stylesheet are scoped: each selector is under a b3 scope or is one of the b3 components', () => {

@@ -73,12 +73,11 @@ layout: page
     {%- comment -%} Every network-shaped row is rendered DEFANGED (1.2.3.4 is 1[.]2[.]3[.]4, https is
       hxxps; _includes/ioc-cell.html, decision 5 of T-0500.1.7.4, Joseph 2026-11-02) so nothing
       on the page can become a live link or run when pasted. Copy and download follow the
-      display, so they export defanged values. The live value stays on the <code> element's
-      data-live attribute: pressing the button (Defanged) is the reader's own deliberate step
-      to show it, and it restores it exactly. Default is defanged on every load, never
-      remembered. The Raw JSON feed linked above stays exact.
+      display, so they export defanged values. There is no control that shows or copies the
+      live value (T-0500.1.7.4 fix-r1, review finding 2): the exact values are in the Raw JSON
+      feed linked above, which stays exact. The note below is text, not a button.
     {%- endcomment -%}
-    <button type="button" class="hl-ioctable__btn hl-ioctable__btn--toggle" data-act="defang" aria-pressed="true">Defanged</button>
+    <span class="hl-ioctable__note">Values are shown defanged, and copying or downloading from this table gives the defanged form. The exact values are in the <a href="{{ t.feed_url | relative_url }}">raw JSON</a>.</span>
     <span class="hl-ioctable__count" role="status" aria-live="polite">{{ t.total }} shown</span>
   </div>
 
@@ -105,7 +104,7 @@ layout: page
             {%- if r.action %} data-action="{{ r.action | escape }}"{% endif %}
             {%- if r.fp_risk %} data-fp="{{ r.fp_risk | escape }}"{% endif %}>
           <td><span class="hl-ioctable__type">{{ r.type }}</span></td>
-          <td>{% include ioc-cell.html type=r.type value=r.value live=true %}</td>
+          <td>{% include ioc-cell.html type=r.type value=r.value %}</td>
           {%- if t.has_confidence %}<td>{% if r.confidence %}<span class="hl-ioctable__conf">{{ r.confidence }}</span>{% endif %}</td>{% endif -%}
           {%- if t.has_action %}<td>{% if r.action %}{% assign act_word = r.action | split: ' ' | first | slugify %}<span class="hl-ioctable__act hl-ioctable__act--{{ act_word }}" title="{{ r.action | escape }}">{{ r.action }}</span>{% endif %}</td>{% endif -%}
           {%- if t.has_fp_risk %}<td>{% if r.fp_risk %}<span class="hl-ioctable__fp">{{ r.fp_risk }}</span>{% endif %}</td>{% endif -%}
@@ -176,7 +175,7 @@ layout: page
   </p>
 </div>
 
-<script defer src="{{ '/assets/js/ioc-table.js' | relative_url }}?v=4"></script>
+<script defer src="{{ '/assets/js/ioc-table.js' | relative_url }}?v=5"></script>
 {%- endif -%}
 
 {{ content }}

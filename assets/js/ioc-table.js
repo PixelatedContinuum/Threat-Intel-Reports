@@ -1,4 +1,4 @@
-/* IOC feed viewer: filter by type, defang, copy or download what is shown.
+/* IOC feed viewer: filter by type, copy or download what is shown.
 
    The table is rendered at build time by _layouts/ioc-table.html from
    _data/ioc_tables.yml, so it is complete and readable before this file runs.
@@ -8,13 +8,16 @@
    path reads the same visible-row set the filter produced, never the original
    data, because a filtered table that exports the unfiltered set would hand a
    defender a block list they did not ask for and would not notice was wrong.
-   The defang toggle (2026-10-09) rides on the same rule: it rewrites the
-   DISPLAYED value, and copy, .txt and .csv read the display, so a defanged
-   table exports defanged values and a live one exports live values. Since
-   2026-11-02 the table STARTS defanged (the layout prints it that way, the
-   button starts pressed): the reader turns the live values on deliberately. The live
-   value is kept on the <code> element's data-live attribute so switching the
-   toggle off restores it byte for byte rather than re-deriving it.
+
+   THE PAGE NEVER SHOWS OR COPIES A LIVE INDICATOR (T-0500.1.7.4 fix-r1, review finding 2;
+   Joseph, 2026-11-02, decision 5: "I do not want to risk people clicking on something or
+   accidentally pasting it in the wrong way"). Until this change a Defanged/Live button put
+   the live values on screen and "Copy shown" copied them. That control is gone, and so is
+   the live value it kept in an attribute on every cell: the layout prints every network row
+   defanged (_includes/ioc-cell.html), and copy, .txt and .csv read that display, defanged
+   once more on the way out (idempotent) so a layout regression could not put a live value
+   on the clipboard. The exact values are in the raw JSON feed linked above the table,
+   which is unchanged and is what a blocklist should be built from.
 
    Zero chips pressed means NO FILTER, never "match nothing". An empty table that
    looks like a filter result is worse than either. */
@@ -36,8 +39,12 @@
   var DEFANG_TYPES = { ipv4: true, ipv6: true, domain: true, endpoint: true,
                        url: true, email: true };
 
+  /* The export-side guard. The layout has already printed these rows defanged, so for
+     those this returns the text it was given; it exists so that the layout is not the
+     only thing between a live value and the clipboard. A value that is already defanged
+     is put back to plain first, so the result is the same either way. */
   function defang(value, type) {
-    var s = value;
+    var s = String(value).replace(/\[\.\]/g, '.').replace(/\[@\]/g, '@').replace(/\[:\]/g, ':').replace(/\b(h)xx(ps?:\/\/)/gi, '$1tt$2');
     if (type === 'url') s = s.replace(/https?:\/\//gi, function (m) { return m.replace(/tt/i, 'xx'); }); /* every scheme, a URL inside a path included */
     if (type === 'email') s = s.replace(/@/g, '[@]');
     return s.replace(/\./g, '[.]');
@@ -52,7 +59,6 @@
     var chips = Array.prototype.slice.call(root.querySelectorAll('.hl-ioctable__chip'));
     var countEl = root.querySelector('.hl-ioctable__count');
     var clearEl = root.querySelector('.hl-ioctable__clear');
-    var defangEl = root.querySelector('.hl-ioctable__btn[data-act="defang"]');
     var slug = root.getAttribute('data-slug') || 'indicators';
 
     /* Which optional columns this feed's table carries, set by the layout from
@@ -65,9 +71,6 @@
     var hasFp = flag('data-has-fp-risk');
 
     var active = {};
-    /* Defanged is the DEFAULT (decision 5 of T-0500.1.7.4): the layout prints every network row defanged and the button starts pressed. */
-    var defanged = !defangEl || defangEl.getAttribute('aria-pressed') !== 'false';
-
     function activeCount() { return Object.keys(active).length; }
 
     function shown() {
@@ -113,40 +116,12 @@
       });
     });
 
-    /* The live value is recorded once, up front, on EVERY row's <code>, before
-       any rewrite can happen. Restoring then reads that attribute rather than
-       undoing the substitution, so a value that already carried a bracket or an
-       hxxp of its own comes back exactly as the feed recorded it. Hidden rows
-       are rewritten too: a row the filter later reveals must already match the
-       toggle's state, not the state it had when it was hidden. Only the
-       ordinary table's rows are in `rows`; the never-block table is a different
-       element the selector above never finds, so the toggle cannot reach it. */
-    rows.forEach(function (tr) {
-      var c = tr.querySelector('code');
-      if (!c) return;
-      /* what the layout printed (defanged for a network row, the feed's own text for a hash or a filename): the state the button starts in */
-      c.__hlShown = c.textContent;
-      if (!c.hasAttribute('data-live')) c.setAttribute('data-live', c.textContent);
-    });
-
-    function applyDefang() {
-      rows.forEach(function (tr) {
-        var c = tr.querySelector('code');
-        if (!c) return;
-        var live = c.getAttribute('data-live');
-        if (live == null) return;
-        var type = tr.getAttribute('data-type');
-        c.textContent = !defanged ? live : (DEFANG_TYPES[type] ? defang(live, type) : c.__hlShown);
-      });
-      if (defangEl) {
-        defangEl.setAttribute('aria-pressed', defanged ? 'true' : 'false');
-        defangEl.textContent = defanged ? 'Defanged' : 'Defang';
-      }
-    }
-
+    /* What is on screen, defanged once more for a network row (see defang() above). */
     function valueOf(tr) {
       var c = tr.querySelector('code');
-      return c ? c.textContent : '';
+      if (!c) return '';
+      var type = tr.getAttribute('data-type');
+      return DEFANG_TYPES[type] ? defang(c.textContent, type) : c.textContent;
     }
 
     function txt() {
@@ -217,14 +192,10 @@
         download(txt(), slug + '-indicators.txt', 'text/plain');
       } else if (act === 'csv') {
         download(csv(), slug + '-indicators.csv', 'text/csv');
-      } else if (act === 'defang') {
-        defanged = !defanged;
-        applyDefang();
       }
     });
 
     apply();
-    applyDefang();
   }
 
   ready(init);

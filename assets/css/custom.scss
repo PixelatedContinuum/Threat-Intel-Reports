@@ -4961,6 +4961,14 @@ span.hl-vuln__p--ssvc, span.hl-vuln__p--exp, span.hl-vuln__p--cn { cursor: help;
   border: 1px solid currentColor;
 }
 .hl-ioctable__btn:hover { background: rgba(248, 113, 113, 0.12); }
+/* The line that says the table is defanged (it replaced the Defanged/Live button, T-0500.1.7.4 fix-r1): text, never a control. */
+.hl-ioctable__note {
+  flex: 1 1 18em;
+  font-size: 0.76em;
+  line-height: 1.4;
+  color: var(--ioct-dim);
+}
+.hl-ioctable__note a { color: inherit; text-decoration: underline; }
 .hl-ioctable__count {
   font-size: 0.76em;
   color: var(--ioct-dim);
@@ -6652,10 +6660,6 @@ main.content:focus { outline: none; }
 .hl-ioctable__act--block   { color: var(--hl-accent-red, #f87171); }
 .hl-ioctable__act--monitor { color: var(--hl-sev-med-lbl); }
 .hl-ioctable__act--hunt    { color: var(--ioct-dim); }
-.hl-ioctable__btn--toggle[aria-pressed="true"] {
-  border-color: currentColor;
-  background: color-mix(in srgb, currentColor 20%, transparent);
-}
 
 /* ============================================================
    Navbar (2026-10-09): menu button, brand, search field. The links moved into
