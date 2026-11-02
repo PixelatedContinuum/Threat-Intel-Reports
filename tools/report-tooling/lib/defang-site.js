@@ -44,7 +44,7 @@ var fs = require('node:fs');
 var path = require('node:path');
 var D = require('../check-defang.js');
 
-var TOOLTIP_ATTRS = ['title', 'alt', 'aria-label', 'placeholder', 'data-copy'];
+var TOOLTIP_ATTRS = ['title', 'alt', 'aria-label', 'placeholder', 'data-copy', 'data-gloss'];   // data-gloss: the glossary tooltip the script sets on a term (shown through CSS attr())
 var SKIP_TAGS = 'script,style,template,noscript,pre';
 
 function loadAllowData(file) {

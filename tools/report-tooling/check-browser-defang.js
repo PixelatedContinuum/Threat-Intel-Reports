@@ -15,7 +15,7 @@
    WHAT IT DOES, per selected page and width:
      1. loads the page from a local server that serves the built directory and nothing else (third-party https is blocked and counted); installs capture stubs BEFORE any page
         script runs: navigator.clipboard.writeText, navigator.share, URL.createObjectURL (the blob's text is read), document.execCommand('copy');
-     2. opens every <details>, expands every collapsed disclosure button, presses every filter chip, then presses every button whose text, label, title or data-act says copy,
+     2. opens every <details>, expands every collapsed disclosure button, presses (and later un-presses) every button that carries aria-pressed, a filter chip or a toggle in either starting state, and after each of the three passes presses every button whose text, label, title or data-act says copy,
         share, download, export, cite or bibtex (and the picker's "Select all shown" first), reading what each press captured;
      3. per page type: /ioc-feeds/ types a defanged and a raw query (an address, a domain, a URL, a list carrying a withheld value and feeds whose titles carry an address) and
         loads a ?q= link with a raw indicator; the Wire opens every Details panel; /search/ types an address and a name into the site search;
@@ -29,10 +29,10 @@
    2 NOT CHECKED (no browser, a missing dependency, an unreadable site).
    PRINTS: pages, widths, controls pressed by kind, captures by kind and how many were judged and how many exempt, DOM text nodes and tooltip attributes judged, and a CANNOT SEE line.
 
-   --control: the gate's own known positive. It stages a scratch copy of the site and plants, one by one, the defects this gate exists to catch; every planted defect must be
-   reported FAIL for its own page and the untouched pages must PASS. Without it a green run could be a gate that sees nothing. Planted: an inline script that writes a raw address into
-   the page after load; a copy button whose clipboard text is a raw URL; the share sheet given a raw title; a download whose blob holds a raw domain; the IOC search script and the IOC
-   viewer script as they were before the review (the Defanged/Live button and data-live): see check-browser-defang-control.sh for the staging. */
+   THE GATE'S OWN KNOWN POSITIVE is a separate script, tasks/runs/T-0500.1.7.4/build/fix-r1/browser-defang-control.sh: it stages a scratch copy of the site, plants one defect per page (an inline
+   script that writes a raw address after load; a copy button whose clipboard text is a raw URL; the share sheet given a raw title; a download whose blob holds a raw domain; the IOC viewer, the
+   IOC search and the detection picker as they were before the review; a viewer page whose CSV carries a raw data-fp), runs this gate on those pages and on their clean twins, and requires every
+   planted page to be reported for its own defect and every clean twin to pass. Without it a green run could be a gate that sees nothing. */
 
 var path = require('node:path');
 var fs = require('node:fs');
@@ -114,8 +114,9 @@ var DRIVE_FN = async function (opts) {
     await sleep(200);
   }
   if (opts.chips) {
-    Array.prototype.forEach.call(document.querySelectorAll('button[aria-pressed="false"]'), function (b) { try { b.click(); out.chips++; } catch (e) { /* counted */ } });
-    await sleep(200);
+    // every toggle and filter chip, whichever state it starts in: a button that starts pressed (the old Defanged/Live toggle) is flipped too
+    Array.prototype.forEach.call(document.querySelectorAll('button[aria-pressed]'), function (b) { try { b.click(); out.chips++; } catch (e) { /* counted */ } });
+    await sleep(250);
   }
   // the picker's checkboxes are selected before its download button can act
   Array.prototype.forEach.call(document.querySelectorAll('.hl-picker__btn[data-act="all"]'), function (b) { try { b.click(); } catch (e) { /* counted */ } });
@@ -280,7 +281,9 @@ function sleep(ms) { return CDP.sleep(ms); }
       await snapshot(rel, '');
       await drive(rel, type, { expand: true, chips: false });
       await snapshot(rel, '');
-      await drive(rel, type, { expand: false, chips: true });
+      await drive(rel, type, { expand: false, chips: true });    // pass 2: every toggle and chip flipped
+      await snapshot(rel, '');
+      await drive(rel, type, { expand: false, chips: true });    // pass 3: flipped back, copied again
       if (type === 'ioc-feeds-index') await scenarioIocIndex(rel);
       else if (type === 'wire') await scenarioWire(rel);
       else if (rel === 'search/index.html') await scenarioSearch(rel);
