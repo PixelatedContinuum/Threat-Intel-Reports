@@ -102,4 +102,52 @@ function start(pages, opts) {
   });
 }
 
-module.exports = { start: start, contentType: contentType, TYPES: TYPES };
+/* Serve a built Jekyll `_site` directory as it is, and nothing else.
+
+   `start()` above stands a PUBLISHED page up against the working tree, which is
+   right for a gate that tests local CSS/JS on a live page. A gate that tests a
+   BUILD needs the opposite: every byte from the build, nothing from the working
+   tree and nothing proxied from the live site, or the result describes a
+   different artifact than the one handed in. A directory URL serves its
+   index.html, as the site's host does. A path that resolves outside `dir` is a
+   404 whatever the request says (symlinks inside the tree are followed on
+   purpose: a scratch copy may link the parts it did not damage).
+
+   Resolves to { origin, misses, close() } like `start()`. `misses` lists every
+   URL answered 404, so a gate can say "assets not served" beside a console error. */
+function startDir(dir) {
+  var root = path.resolve(dir);
+  var misses = [];
+  return new Promise(function (resolve, reject) {
+    if (!fs.existsSync(root) || !fs.statSync(root).isDirectory()) {
+      return reject(new Error('HL_SITE_DIR ' + dir + ' is not a directory.'));
+    }
+    var srv = http.createServer(function (req, res) {
+      var url = req.url.split('?')[0].split('#')[0];
+      var rel;
+      try { rel = decodeURIComponent(url); } catch (e) { rel = null; }
+      var file = rel === null ? null : path.join(root, rel.replace(/^\/+/, ''));
+      if (file && (file === root || file.indexOf(root + path.sep) === 0)) {
+        try {
+          if (fs.existsSync(file) && fs.statSync(file).isDirectory()) file = path.join(file, 'index.html');
+          if (fs.existsSync(file) && fs.statSync(file).isFile()) {
+            res.writeHead(200, { 'content-type': contentType(file) });
+            return fs.createReadStream(file).pipe(res);
+          }
+        } catch (e) { /* fall through to the 404 */ }
+      }
+      misses.push(url);
+      res.writeHead(404); res.end('not found');
+    });
+    srv.listen(0, '127.0.0.1', function () {
+      resolve({
+        origin: 'http://127.0.0.1:' + srv.address().port,
+        misses: misses,
+        root: root,
+        close: function () { try { srv.close(); } catch (e) { /* already gone */ } }
+      });
+    });
+  });
+}
+
+module.exports = { start: start, startDir: startDir, contentType: contentType, TYPES: TYPES };

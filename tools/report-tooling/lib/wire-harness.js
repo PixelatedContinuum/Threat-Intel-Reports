@@ -154,4 +154,109 @@ function build(JSDOM, parts) {
   };
 }
 
-module.exports = { build: build, headingToDay: headingToDay };
+/* ---------- reading a BUILT three-tab Wire page ----------
+
+   The live-page path above takes a published page and swaps the working tree's
+   assets onto it. A gate that runs against a build has nothing to swap: the page
+   and every asset it loads are the build's own. What it needs from this module is
+   the FACTS the browser's behaviour is asserted against, read from the static
+   HTML (the markup the server sent, before any script or stylesheet touched it),
+   so an expected row count never comes from the code that filters the rows.
+
+   Returns { tabs, sections, problems }:
+     tabs      the nav links, in order: { cls, href, id, label, count }
+     sections  by tab id (headlines, vulns, cves): { present, itemSel, rows, days,
+               dayCounts, disagreements, bars, chips }
+               rows: one record per filter item with the data-* values the
+               filter reads, lower-cased the way the filter compares them
+     problems  structural defects found while reading (a tab whose href has no
+               section, a section with no filter grid, a heading that disagrees
+               with the day its rows carry)
+
+   Nothing here decides PASS or FAIL; the caller turns facts into checks. */
+var TAB_IDS = ['headlines', 'vulns', 'cves'];
+var AXES = ['tag', 'kind', 'list', 'sev', 'det', 'nvd', 'sig', 'vendor', 'age'];
+
+function readBuilt(JSDOM, html) {
+  var d = new JSDOM(html).window.document;
+  var problems = [];
+
+  var tabs = [].slice.call(d.querySelectorAll('.hl-wtabs__nav .hl-wtabs__tab')).map(function (a) {
+    var href = a.getAttribute('href') || '';
+    var n = a.querySelector('.hl-wtabs__n');
+    return {
+      cls: a.className, href: href, id: href.replace(/^#/, ''),
+      label: (a.querySelector('.hl-wtabs__t') || a).textContent.trim(),
+      count: n ? Number(n.textContent.replace(/[^\d]/g, '')) : null
+    };
+  });
+  tabs.forEach(function (t) {
+    var sec = d.getElementById(t.id);
+    if (!sec || !sec.classList.contains('hl-wtabs__sec')) {
+      problems.push('tab "' + t.label + '" points at ' + t.href + ', which is not a .hl-wtabs__sec section');
+    }
+  });
+
+  var sections = {};
+  TAB_IDS.forEach(function (id) {
+    var sec = d.getElementById(id);
+    var out = { present: !!(sec && sec.classList.contains('hl-wtabs__sec')), itemSel: null,
+      rows: [], days: [], dayCounts: {}, disagreements: [], bars: 0, chips: [] };
+    sections[id] = out;
+    if (!out.present) return;
+    var grid = sec.querySelector('[data-filter-grid]');
+    var bars = sec.querySelectorAll('[data-listing-filter]');
+    out.bars = bars.length;
+    if (!grid) { problems.push('#' + id + ' has no [data-filter-grid]'); return; }
+    out.itemSel = grid.getAttribute('data-filter-item') || null;
+    if (!out.itemSel) { problems.push('#' + id + ' grid names no data-filter-item'); return; }
+    var current = null;
+    [].slice.call(grid.children).forEach(function (node) {
+      if (node.hasAttribute('data-filter-group')) {
+        current = headingToDay(node.textContent);
+        if (!current) problems.push('#' + id + ': unparseable day heading "' + node.textContent.trim() + '"');
+      } else if (node.matches(out.itemSel)) {
+        var row = { id: node.getAttribute('id') || '', title: (node.getAttribute('data-title') || '').toLowerCase(),
+          day: node.getAttribute('data-day') || '', heading: current };
+        AXES.forEach(function (a) {
+          var key = a === 'tag' ? 'data-tags' : 'data-' + a;
+          row[a] = (node.getAttribute(key) || '').toLowerCase().split('|').filter(Boolean);
+        });
+        out.rows.push(row);
+        if (row.day) out.dayCounts[row.day] = (out.dayCounts[row.day] || 0) + 1;
+        if (current && row.day && row.day !== current && out.disagreements.length < 5) {
+          out.disagreements.push('#' + id + ': a row under the ' + current + ' heading carries data-day="' + row.day + '"');
+        }
+      }
+    });
+    out.days = Object.keys(out.dayCounts).sort();
+    // Chips of the section's first bar: what each names and the count it prints.
+    if (bars[0]) {
+      [].slice.call(bars[0].querySelectorAll('.hl-chip-btn')).forEach(function (b) {
+        var axis = null, value = null;
+        AXES.forEach(function (a) { if (b.hasAttribute('data-' + a)) { axis = a; value = (b.getAttribute('data-' + a) || '').toLowerCase(); } });
+        var n = b.querySelector('.hl-chip-btn__n');
+        out.chips.push({ axis: axis, value: value, label: b.textContent.trim(), cls: b.className,
+          printed: n ? Number(n.textContent.replace(/[^\d]/g, '')) : null });
+      });
+    }
+  });
+  return { tabs: tabs, sections: sections, problems: problems };
+}
+
+/* How many of `rows` an AND of axes and a search term should leave, by the
+   filter's own published rule (listing-filter.js: chips OR within an axis, axes
+   AND, the term is a substring of "title|tags"). `want` is { axis: [values] }. */
+function expectedCount(rows, want, term) {
+  var t = String(term || '').trim().toLowerCase();
+  return rows.filter(function (r) {
+    var axesOk = Object.keys(want || {}).every(function (a) {
+      var vals = want[a];
+      return !vals.length || vals.some(function (v) { return r[a].indexOf(String(v).toLowerCase()) > -1; });
+    });
+    return axesOk && (!t || (r.title + '|' + r.tag.join('|')).indexOf(t) > -1);
+  }).length;
+}
+
+module.exports = { build: build, headingToDay: headingToDay, readBuilt: readBuilt, expectedCount: expectedCount,
+  TAB_IDS: TAB_IDS };
