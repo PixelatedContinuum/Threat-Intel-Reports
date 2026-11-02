@@ -161,7 +161,7 @@ function sleep(ms) { return CDP.sleep(ms); }
   try { page = await CDP.open('about:blank', { settle: 50 }); } catch (e) { srv.close(); if (e.notChecked) notChecked(e.message); throw e; }
   var ev = page.evaluate;
   var T = { pages: 0, loads: 0, loadFails: [], runs: 0, presses: 0, pressErrors: 0, byKind: {}, captures: { clip: 0, share: 0, blobs: 0, exec: 0 }, judged: 0, exempt: 0, extras: 0, blocked: 0,
-            consoleThrows: [], findings: [], perPage: {} };
+            consoleThrows: [], findings: [], seen: {}, perPage: {} };
   var idxJson = null;
   try { idxJson = JSON.parse(fs.readFileSync(path.join(siteDir, 'assets/data/ioc-index.json'), 'utf8')); } catch (e) { /* the search scenario then says NOT CHECKED for itself */ }
 
@@ -203,7 +203,14 @@ function sleep(ms) { return CDP.sleep(ms); }
   }
   async function snapshot(rel, skip) {
     var html = await ev(SERIALISE_SRC + '(' + JSON.stringify(skip || '') + ')');
-    return scanner.scan(rel, html);
+    var found = scanner.scan(rel, html);
+    // the scanner returns this state's findings; they must be COLLECTED here (an earlier version judged the DOM and dropped the verdict, so a planted DOM defect was never reported).
+    // The same token seen in several states of one page is one finding.
+    found.forEach(function (f) {
+      var key = [f.page, f.ctx, f.kind, f.token].join('\u0001');
+      if (!T.seen[key]) { T.seen[key] = 1; T.findings.push(f); }
+    });
+    return found;
   }
   async function drive(rel, type, opts) {
     var log = await ev(DRIVE_SRC + '(' + JSON.stringify(opts) + ')');
