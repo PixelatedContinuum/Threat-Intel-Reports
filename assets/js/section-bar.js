@@ -10,13 +10,30 @@
     return el ? (el.closest('.hl-dsec') || el) : null;
   });
   var cur = -1, ticking = false;
+  /* A section whose target is not drawn (the detection picker hides an engine with no rules) gets no bar entry: its link is hidden and the
+     grid counts the visible ones. */
+  function visible(i) { var el = secs[i]; return !!(el && el.getClientRects().length); }
+  function syncVisible() {
+    var n = 0;
+    links.forEach(function (a, i) { var v = visible(i); a.hidden = !v; if (v) n++; });
+    var list = bar.querySelector('.hl-sbar__list');
+    if (list && n) list.style.setProperty('--n', n);
+  }
   function sizeBar() { document.documentElement.style.setProperty('--sbh', bar.offsetHeight + 'px'); }
   sizeBar();
   addEventListener('resize', sizeBar);
   function pick() {
     var off = bar.offsetHeight + (document.querySelector('.hl-nav') ? document.querySelector('.hl-nav').offsetHeight : 0) + 24, idx = 0;
-    for (var i = 0; i < secs.length; i++) { if (secs[i] && secs[i].getBoundingClientRect().top <= off) idx = i; }
-    if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 2) idx = secs.length - 1;
+    syncVisible();
+    var first = -1, last = -1;
+    for (var i = 0; i < secs.length; i++) {
+      if (!visible(i)) continue;
+      if (first < 0) first = i;
+      last = i;
+      if (secs[i].getBoundingClientRect().top <= off) idx = i;
+    }
+    if (first >= 0 && idx < first) idx = first;
+    if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 2 && last >= 0) idx = last;
     return idx;
   }
   function set(i) {
