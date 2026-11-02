@@ -1764,23 +1764,26 @@ async function infoProbe(page) {
   var Q = function (i) { return 'document.querySelectorAll(".hl-rv-panel:not([hidden]) .hl-rv-info")[' + i + ']'; };
   var n = await page.json('document.querySelectorAll(".hl-rv-panel:not([hidden]) .hl-rv-info").length');
   var vp = await page.json('({w:innerWidth,h:innerHeight})'), probes = [];
+  /* Timing, not a weaker test: the page is read again every 50 ms for up to 2 s until the wanted state shows (a note that never opens still FAILs). The first sweep of the corpus, with four browsers at once, read "Enter did not open" on a fixed 200 ms in 3 of 44 reports, none of them on a re-run alone. */
+  var settle = async function (i, want) { var v = await state(i); for (var k = 0; k < 40 && v !== want; k++) { await CDP.sleep(50); v = await state(i); } return v; };
+  var focusOn = async function (i) { for (var k = 0; k < 40; k++) { if (await page.json('(function(){var b=' + Q(i) + ';return !!b&&document.activeElement===b;})()')) return true; await CDP.sleep(50); await page.evaluate('(function(){var b=' + Q(i) + ';if(b)b.focus({preventScroll:true});})()'); } return false; };
   var state = function (i) { return page.json('(function(){var b=' + Q(i) + ';var p=b&&document.getElementById(b.getAttribute("aria-controls"));return !!p&&!p.hidden&&b.getAttribute("aria-expanded")==="true";})()'); };
   var box = function (i) { return page.json('(function(){var b=' + Q(i) + ';var p=b&&document.getElementById(b.getAttribute("aria-controls"));if(!p||p.hidden)return null;var r=p.getBoundingClientRect();return {l:r.left,t:r.top,r:r.right,b:r.bottom};})()'); };
   for (var i = 0; i < n; i++) {
     var pr = { i: i, keyOpened: false, tapOpened: false, escCloses: false, box: null, edgeOpened: false, edgeBox: null, edgeRoom: null };
-    await page.evaluate('(function(){var b=' + Q(i) + ';if(b){b.scrollIntoView({block:"center",behavior:"instant"});b.focus();}})()'); await CDP.sleep(150);
+    await page.evaluate('(function(){var b=' + Q(i) + ';if(b){b.scrollIntoView({block:"center",behavior:"instant"});b.focus();}})()'); await CDP.sleep(150); await focusOn(i);
     await pressEnter(page); await CDP.sleep(200);
-    pr.keyOpened = await state(i); pr.box = await box(i);
+    pr.keyOpened = await settle(i, true); pr.box = await box(i);
     await pressKey(page, 'Escape', 'Escape', 27); await CDP.sleep(150);
-    pr.escCloses = !(await state(i));
+    pr.escCloses = (await settle(i, false)) === false;
     await page.evaluate('(function(){[].slice.call(document.querySelectorAll("[data-hl-probe]")).forEach(function(x){x.removeAttribute("data-hl-probe");});var b=' + Q(i) + ';if(b)b.setAttribute("data-hl-probe","1");})()');
     try { await page.click('[data-hl-probe]'); } catch (e) { /* reported below */ }
-    await CDP.sleep(200); pr.tapOpened = await state(i);
+    await CDP.sleep(200); pr.tapOpened = await settle(i, true);
     await pressKey(page, 'Escape', 'Escape', 27); await CDP.sleep(150);
     /* the bottom edge: the button's lower edge 8 px above the bottom of the screen (as far as the page can scroll), where a note placed below it has no room */
-    pr.edgeRoom = await page.json('(function(){var b=' + Q(i) + ';if(!b)return null;b.scrollIntoView({block:"center",behavior:"instant"});var r=b.getBoundingClientRect();window.scrollBy({top:r.bottom-(innerHeight-8),behavior:"instant"});b.focus({preventScroll:true});return innerHeight-b.getBoundingClientRect().bottom;})()'); await CDP.sleep(200);
+    pr.edgeRoom = await page.json('(function(){var b=' + Q(i) + ';if(!b)return null;b.scrollIntoView({block:"center",behavior:"instant"});var r=b.getBoundingClientRect();window.scrollBy({top:r.bottom-(innerHeight-8),behavior:"instant"});b.focus({preventScroll:true});return innerHeight-b.getBoundingClientRect().bottom;})()'); await CDP.sleep(200); await focusOn(i);
     await pressEnter(page); await CDP.sleep(200);
-    pr.edgeOpened = await state(i); pr.edgeBox = await box(i);
+    pr.edgeOpened = await settle(i, true); pr.edgeBox = await box(i);
     await pressKey(page, 'Escape', 'Escape', 27); await CDP.sleep(150);
     probes.push(pr);
   }
