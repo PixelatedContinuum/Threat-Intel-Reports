@@ -59,6 +59,18 @@ test('post.html defangs a report title wherever the layout prints it (header, ci
   assert.doesNotMatch(tabs, /title: document\.title/, 'the tabbed share button must not take the head title');
 });
 
+test('the head display strings go through the include: the SEO tag and the JSON-LD blocks through defang-head.html, the twitter description and the image alt texts through defang-text.html; URLs stay exact', () => {
+  const head = read('_includes/default/head.liquid');
+  assert.match(head, /include defang-head\.html text=_seo/);
+  assert.match(head, /include defang-head\.html text=_sd/);
+  assert.match(head, /include defang-text\.html text=_tw_d0/);
+  assert.match(head, /include defang-text\.html text=_alt_t/);
+  assert.doesNotMatch(head, /content="\{\{ page\.title \| default: site\.title \}\}"/, 'an image alt printed raw');
+  const dh = read('_includes/defang-head.html').replace(/\{%- comment -%\}[\s\S]*?\{%- endcomment -%\}/, '');
+  assert.match(dh, /headline,name,description,alternativeHeadline/);
+  assert.doesNotMatch(dh, /canonical|og:url|og:image"/, 'the include must not touch URLs');
+});
+
 test('the IOC viewer: the cell include and assets/js/ioc-table.js agree on which types are network values, and the table starts defanged', () => {
   const js = read('assets/js/ioc-table.js');
   const m = js.match(/var DEFANG_TYPES = \{([^}]*)\}/);
@@ -183,7 +195,7 @@ test('the rendered-page gate agrees with the includes: what they print is clean,
 /* ---- the gate on a fixture site (no Jekyll needed) ---- */
 function fixtureSite(files) {
   const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'hl-defang-site-'));
-  Object.keys(files).forEach((rel) => { fs.mkdirSync(path.dirname(path.join(dir, rel)), { recursive: true }); fs.writeFileSync(path.join(dir, rel), '<html><head><title>1.2.3.4 head metadata is not scanned</title></head><body><main>' + files[rel] + '<p>fixture text</p></main></body></html>'); });
+  Object.keys(files).forEach((rel) => { fs.mkdirSync(path.dirname(path.join(dir, rel)), { recursive: true }); fs.writeFileSync(path.join(dir, rel), '<html><head><title>1[.]2[.]3[.]4 head metadata is scanned</title></head><body><main>' + files[rel] + '<p>fixture text</p></main></body></html>'); });
   return dir;
 }
 const gate = (dir, extra) => cp.spawnSync(process.execPath, [path.join(__dirname, '..', 'check-defang.js'), '--site', dir, '--allow-data', path.join(root, '_data', 'defang_allow.yml'), '--all'].concat(extra || []), { encoding: 'utf8' });
@@ -240,6 +252,21 @@ test('check-defang --site: a clean fixture PASSes with its denominators, each in
   assert.equal(un.status, 0, un.stdout);
   assert.match(un.stdout, /unlinked\s+1 <a> rendered as text/);
   assert.match(un.stdout, /index\.html -> hxxps:\/\/vendor\[\.\]example\[\.\]net\/r/);
+  // the <head> display strings: a raw tab title, og:title, description and JSON-LD headline each FAIL on any page type; the page's own URLs in the head do not
+  const headPage = (title, meta, ld) => '<html><head><title>' + title + '</title>' + meta + '<link rel="canonical" href="https://the-hunters-ledger.com/actors/x-198.51.100.17/"><script type="application/ld+json">' + ld + '</script></head><body><main><p>x</p></main></body></html>';
+  const LDOK = '{"@context":"https://schema.org","headline":"Op 198[.]51[.]100[.]17","url":"https://the-hunters-ledger.com/actors/x-198.51.100.17/"}';
+  const MOK = '<meta property="og:title" content="Op 198[.]51[.]100[.]17"><meta name="description" content="d">';
+  const mk = (rel, html) => { const d = fs.mkdtempSync(path.join(os.tmpdir(), 'hl-defang-head-')); fs.mkdirSync(path.join(d, path.dirname(rel)), { recursive: true }); fs.writeFileSync(path.join(d, rel), html); return d; };
+  const headOk = gate(mk('actors/a/index.html', headPage('Op 198[.]51[.]100[.]17', MOK, LDOK)));
+  assert.equal(headOk.status, 0, headOk.stdout);
+  assert.match(headOk.stdout, /^  head\s+\d+ <head> display strings scanned/m);
+  const headCases = { 'raw <title>': [headPage('Op 198.51.100.17', MOK, LDOK), 'HEAD-IPV4'], 'raw og:title': [headPage('Op 198[.]51[.]100[.]17', MOK.replace('Op 198[.]51[.]100[.]17', 'Op 198.51.100.17'), LDOK), 'HEAD-IPV4'],
+    'raw description': [headPage('t', MOK.replace('content="d"', 'content="C2 evil-host.example.xyz"'), LDOK), 'HEAD-DOMAIN'], 'raw JSON-LD headline': [headPage('t', MOK, LDOK.replace('Op 198[.]51[.]100[.]17', 'Op 198.51.100.17')), 'HEAD-IPV4'] };
+  ['actors/a/index.html', 'reports/b/index.html', 'hunting-detections/c/index.html', 'index.html'].forEach((rel) => Object.keys(headCases).forEach((name) => {
+    const r = gate(mk(rel, headCases[name][0]));
+    assert.equal(r.status, 1, name + ' on ' + rel + ' must FAIL: ' + r.stdout);
+    assert.match(r.stdout, new RegExp('FINDING .* ' + headCases[name][1] + ' '), name);
+  }));
   // our own mailbox is allowed, a foreign one is not
   assert.equal(gate(fixtureSite({ 'index.html': '<a href="mailto:intel@the-hunters-ledger.com">intel@the-hunters-ledger.com</a>' })).status, 0);
   // zero denominator and a missing directory are NOT CHECKED (exit 2), never PASS
@@ -251,5 +278,5 @@ test('check-defang --site: the rendered check prints its denominators and what i
   const r = gate(fixtureSite({ 'index.html': '<p>nothing here</p>' }));
   assert.equal(r.status, 0);
   for (const label of ['self-test', 'allow data', 'pages', 'excluded', 'text', 'indicators', 'links', 'pre', 'literal']) assert.match(r.stdout, new RegExp('^  ' + label + '\\s', 'm'), label);
-  assert.match(r.stdout, /CANNOT SEE: text a script writes after load; <head> metadata/);
+  assert.match(r.stdout, /CANNOT SEE: text a script writes after load; the data-title search keys/);
 });

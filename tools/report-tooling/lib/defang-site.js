@@ -18,9 +18,11 @@
         rule body and stays exact (decision 5), anywhere else it is page text.
    A <pre> on a detection page is counted, with its raw indicators, never scanned: that is the one exact-by-design surface the gate reads.
 
-   NOT SEEN, said in the PASS line: text the page's scripts write after load (jsdom runs no script); <head> metadata (<title>, meta
-   description, Open Graph, JSON-LD) and the data-title search keys, which keep the raw text on purpose (the filter and the search match on
-   it); the live value kept in a data-live attribute for the IOC viewer's reader-initiated toggle; the downloadable feed files; hrefs to this
+   HEAD (T-0500.1.7.4 ship): the display strings of the <head> are scanned on every page: <title>, the meta content of a title, description or alt name (og:title, twitter:title,
+   description, og:description, twitter:description, og:image:alt, twitter:image:alt) and every JSON-LD string except the URL-valued keys (kind HEAD-<KIND>, or HEAD-JSONLD-INVALID).
+
+   NOT SEEN, said in the PASS line: text the page's scripts write after load (jsdom runs no script); the data-title search keys, which keep
+   the raw text on purpose (the filter and the search match on it); head URLs (canonical, og:url, og:image, JSON-LD url and @id: own page addresses); the live value kept in a data-live attribute for the IOC viewer's reader-initiated toggle; the downloadable feed files; hrefs to this
    site's own pages (they hold slugs that carry the campaign's address).
 
    REPORT PAGES (reports/<slug>/, T-0500.1.7.4 ship) are scanned too: the source lint reads the markdown, this reads what the layout and the page add
@@ -31,7 +33,7 @@
        host+path is under `links` in the allow data, e.g. our own sponsor page);
      - a <pre> marked .hl-copy is rule or copy text and stays exact (counted, never scanned, as the source lint does); any other <pre> (the BibTeX
        block) is page text and is scanned line by line: PRE-IN-REPORT.
-   NOT SEEN on a report page, as everywhere: <head> metadata (<title>, description, Open Graph) and own-site hrefs and image paths (the slug carries the address).
+   NOT SEEN on a report page, as everywhere: own-site hrefs, head URLs and image paths (the slug carries the address).
 
    EXCLUDED, counted and printed: the working docs /report-templates/ and the feed changelogs (decision 7), pagefind and asset directories.
 
@@ -125,7 +127,7 @@ function isIpHost(host) {
 function newStats() {
   return { pages: 0, byType: {}, excluded: {}, textNodes: 0, attrs: 0, matchedFlagged: 0, matchedDefanged: 0, matchedPrivate: 0, matchedAllowed: 0, allowedBy: {},
     links: { total: 0, relative: 0, anchor: 0, external: 0, externalAllowed: 0, mailto: 0, other: 0, labelSkips: 0, reportRefs: 0 },
-    pre: { blocks: 0, lines: 0, rawIndicators: 0, onDetection: 0, offDetection: 0, copyKept: 0, onReport: 0 }, literal: { cells: 0 }, unlinked: { n: 0, targets: [] } };
+    pre: { blocks: 0, lines: 0, rawIndicators: 0, onDetection: 0, offDetection: 0, copyKept: 0, onReport: 0 }, head: { fields: 0, jsonld: 0, tokens: 0 }, literal: { cells: 0 }, unlinked: { n: 0, targets: [] } };
 }
 
 /* Scan one parsed document. `JSDOM` is passed in so tests can hand a document directly. */
@@ -134,6 +136,42 @@ function nearOf(line, token) {
   var i = line.indexOf(String(token).replace(/\[\.\]/g, '.'));
   if (i < 0) i = 0;
   return line.slice(Math.max(0, i - 40), i + String(token).length + 40).replace(/\s+/g, ' ');
+}
+
+/* The <head> display strings (T-0500.1.7.4 ship, lead decision 2026-11-02): a reader sees <title> in the tab and in bookmarks, and og:title, og:description, twitter:title,
+   twitter:description, the image alt texts and the JSON-LD headline, name and description in every share card. Scanned: the <title>, every <meta content> whose name or property names a
+   title, description or alt text, and every string of every JSON-LD block except the URL-valued ones (they are this site's own page addresses, the schema.org context, the licence). URLs
+   in <link>, og:url, og:image and canonical stay exact and are not read. A JSON-LD block that does not parse is a finding (HEAD-JSONLD-INVALID), never skipped. */
+var JSONLD_URL_KEYS = { '@context': 1, '@id': 1, '@type': 1, url: 1, image: 1, logo: 1, contentUrl: 1, identifier: 1, isBasedOn: 1, license: 1, sameAs: 1, mainEntityOfPage: 1, datePublished: 1, dateModified: 1, encodingFormat: 1 };
+function scanHead(doc, rel, type, allow, stats, findings) {
+  var head = doc.head;
+  if (!head) return;
+  var H = stats.head;
+  function note(r, ctx, line) {
+    H.tokens += r.flagged.length + r.defanged;
+    r.flagged.forEach(function (f) { findings.push({ page: rel, type: type, ctx: ctx, kind: 'HEAD-' + f.kind, token: f.token, near: line ? nearOf(line, f.token) : '' }); });
+  }
+  var t = head.querySelector('title');
+  if (t) { H.fields++; note(D.scanLine(t.textContent, allow), 'head:title', t.textContent); }
+  Array.prototype.forEach.call(head.querySelectorAll('meta[content]'), function (m) {
+    var key = (m.getAttribute('property') || '') + ' ' + (m.getAttribute('name') || '');
+    if (!/title|description|alt/i.test(key)) return;
+    var v = m.getAttribute('content') || '';
+    H.fields++;
+    note(D.scanLine(v, allow), 'head:' + key.trim().replace(/\s+/g, '+'), v);
+  });
+  Array.prototype.forEach.call(head.querySelectorAll('script[type="application/ld+json"]'), function (sc) {
+    var j;
+    try { j = JSON.parse(sc.textContent); } catch (e) { findings.push({ page: rel, type: type, ctx: 'head:jsonld', kind: 'HEAD-JSONLD-INVALID', token: String(e.message).slice(0, 80) }); return; }
+    H.jsonld++;
+    (function walk(v, key) {
+      if (Array.isArray(v)) return v.forEach(function (x) { walk(x, key); });
+      if (v && typeof v === 'object') return Object.keys(v).forEach(function (k) { walk(v[k], k); });
+      if (typeof v !== 'string' || JSONLD_URL_KEYS[key]) return;
+      H.fields++;
+      note(D.scanLine(v, allow), 'head:jsonld:' + key, v);
+    })(j, '');
+  });
 }
 
 function scanDocument(doc, rel, data, stats, findings) {
@@ -147,6 +185,7 @@ function scanDocument(doc, rel, data, stats, findings) {
       findings.push({ page: rel, type: type, ctx: ctx, kind: f.kind, token: f.token, near: line ? nearOf(line, f.token) : '' });
     });
   }
+  scanHead(doc, rel, type, allow, stats, findings);
   var body = doc.body;
   if (!body) return;
 
@@ -337,6 +376,20 @@ function selfTest() {
   var rg = run(REP_GOOD, 'reports/x/index.html');
   if (rg.f.length) why.push('report-page defanged twin, reference link or .hl-copy block flagged: ' + rg.f.map(function (x) { return x.kind + ' ' + D.defangForPrint(x.token); }).join(', '));
   if (rg.st.pre.copyKept !== 1) why.push('a .hl-copy block on a report page must be counted as kept exact');
+  // the <head> display strings: a raw title, og:title, description, image alt and JSON-LD headline are flagged; own-page URLs, the schema.org context and a defanged twin are not; a broken JSON-LD block is a finding
+  var HEAD_URLS = '<meta property="og:url" content="https://the-hunters-ledger.com/reports/x-198.51.100.17/"><link rel="canonical" href="https://the-hunters-ledger.com/reports/x-198.51.100.17/">';
+  var HEAD_BAD = '<html><head><title>Op 198.51.100.17 | Ledger</title><meta property="og:title" content="Op 198.51.100.17"><meta name="description" content="C2 evil-host.example.xyz">' +
+    '<meta name="twitter:image:alt" content="Op 198.51.100.17">' + HEAD_URLS + '<script type="application/ld+json">{"@context":"https://schema.org","headline":"Op 198.51.100.17","url":"https://the-hunters-ledger.com/reports/x-198.51.100.17/"}</script></head><body><main><p>x</p></main></body></html>';
+  var HEAD_GOOD = '<html><head><title>Op 198[.]51[.]100[.]17 | Ledger</title><meta property="og:title" content="Op 198[.]51[.]100[.]17"><meta name="description" content="C2 evil-host[.]example[.]xyz">' +
+    '<meta name="twitter:image:alt" content="Op 198[.]51[.]100[.]17">' + HEAD_URLS + '<script type="application/ld+json">{"@context":"https://schema.org","headline":"Op 198[.]51[.]100[.]17","url":"https://the-hunters-ledger.com/reports/x-198.51.100.17/","image":"https://the-hunters-ledger.com/assets/images/cards/x-198.51.100.17.png"}</script></head><body><main><p>x</p></main></body></html>';
+  var hb = run(HEAD_BAD, 'actors/UTA-2026-001/index.html');
+  var hbk = hb.f.map(function (x) { return x.kind + ':' + x.ctx; });
+  ['HEAD-IPV4:head:title', 'HEAD-IPV4:head:og:title', 'HEAD-DOMAIN:head:description', 'HEAD-IPV4:head:twitter:image:alt', 'HEAD-IPV4:head:jsonld:headline'].forEach(function (k) { if (hbk.indexOf(k) === -1) why.push('head known positive not flagged as ' + k); });
+  if (hb.f.length !== 5) why.push('head fixture: expected exactly 5 findings (own-page URLs and the context are not read), got ' + hb.f.length);
+  var hg = run(HEAD_GOOD, 'actors/UTA-2026-001/index.html');
+  if (hg.f.length) why.push('head defanged twin flagged: ' + hg.f.map(function (x) { return x.kind + ' ' + D.defangForPrint(x.token); }).join(', '));
+  var hj = run('<html><head><script type="application/ld+json">{"headline": </script></head><body><main><p>x</p></main></body></html>', 'actors/UTA-2026-001/index.html');
+  if (!hj.f.some(function (x) { return x.kind === 'HEAD-JSONLD-INVALID'; })) why.push('a broken JSON-LD block must be a finding');
   var wire = run('<html><body><main><a href="https://vendor.example.net/post">v</a></main></body></html>', 'wire/index.html');
   if (wire.f.length) why.push('the Wire is exempt from LINK-UNLISTED but was flagged');
   var lab = run('<html><body><main><a href="https://patchstack.com/db/x">patchstack.com</a></main></body></html>', 'actors/index.html');

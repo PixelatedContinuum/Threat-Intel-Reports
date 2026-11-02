@@ -1,0 +1,63 @@
+{%- comment -%}
+  Render-time defang of the DISPLAY STRINGS in a page's <head> (T-0500.1.7.4 ship, lead decision 2026-11-02, Joseph: every indicator a reader sees is defanged). A reader sees <title> in the browser
+  tab and in bookmarks, and og:title, og:description, twitter:title, twitter:description and the JSON-LD headline, name and description in every share card.
+
+  Call:  {%- capture _x %}{% include defang-head.html text=_seo %}{% endcapture -%}  then print {{ _x }}.   Param: text, the HTML that jekyll-seo-tag wrote, or a JSON-LD block.
+  It rewrites, line by line (the tag writes one tag per line, the JSON-LD blocks one or many lines):
+    - the text of a <title> element;
+    - the content="..." of a meta tag whose line names title or description (og:title, twitter:title, description, og:description, twitter:description);
+    - the string value of the JSON keys "headline", "name", "description" and "alternativeHeadline", written compact ("k":"v") or spaced ("k": "v"), every occurrence on the line.
+  Each string goes through defang-text.html, which defangs an IPv4, IPv6, domain, URL or e-mail inside it and nothing else.
+  LEFT EXACT ON PURPOSE: every URL (canonical, og:url, og:image, JSON-LD url, @id, image, contentUrl): they are this site's own page addresses and a defanged one would not work; the schema.org @context.
+  A value is read up to its first double quote, so a JSON string with an escaped quote inside is defanged only up to that quote (check-defang.js --site parses the JSON and would flag the rest).
+{%- endcomment -%}
+{%- capture _dh_nl %}
+{% endcapture -%}
+{%- assign _dh_lines = include.text | split: _dh_nl -%}
+{%- assign _dh_keys = "headline,name,description,alternativeHeadline" | split: "," -%}
+{%- for _dh_ln in _dh_lines -%}
+  {%- assign _dh_cur = _dh_ln -%}
+  {%- if _dh_cur contains "<title>" and _dh_cur contains "</title>" -%}
+    {%- assign _dh_a = _dh_cur | split: "<title>" -%}
+    {%- assign _dh_b = _dh_a[1] | split: "</title>" -%}
+    {%- assign _dh_t0 = _dh_b[0] | append: "" -%}
+    {%- capture _dh_v %}{% include defang-text.html text=_dh_t0 %}{% endcapture -%}
+    {%- capture _dh_cur %}{{ _dh_a[0] }}<title>{{ _dh_v }}</title>{{ _dh_b[1] }}{% endcapture -%}
+  {%- else -%}
+  {%- assign _dh_meta = false -%}
+  {%- if _dh_cur contains "<meta" and _dh_cur contains 'content="' -%}
+    {%- if _dh_cur contains "title" or _dh_cur contains "description" -%}{%- assign _dh_meta = true -%}{%- endif -%}
+  {%- endif -%}
+  {%- if _dh_meta -%}
+    {%- assign _dh_pre = _dh_cur | split: 'content="' | first -%}
+    {%- assign _dh_rest = _dh_cur | remove_first: _dh_pre | remove_first: 'content="' -%}
+    {%- assign _dh_val = _dh_rest | split: '"' | first | append: "" -%}
+    {%- assign _dh_post = _dh_rest | remove_first: _dh_val -%}
+    {%- capture _dh_v %}{% include defang-text.html text=_dh_val %}{% endcapture -%}
+    {%- capture _dh_cur %}{{ _dh_pre }}content="{{ _dh_v }}{{ _dh_post }}{% endcapture -%}
+  {%- endif -%}
+  {%- endif -%}
+  {%- for _dh_k in _dh_keys -%}
+    {%- assign _dh_m1 = '"' | append: _dh_k | append: '":"' -%}
+    {%- assign _dh_m2 = '"' | append: _dh_k | append: '": "' -%}
+    {%- if _dh_cur contains _dh_m1 -%}
+      {%- assign _dh_parts = _dh_cur | split: _dh_m1 -%}
+      {%- capture _dh_cur -%}{{ _dh_parts[0] }}{%- for _dh_p in _dh_parts offset: 1 -%}
+        {%- assign _dh_val = _dh_p | split: '"' | first | append: "" -%}
+        {%- assign _dh_post = _dh_p | remove_first: _dh_val -%}
+        {%- capture _dh_v %}{% include defang-text.html text=_dh_val %}{% endcapture -%}
+        {{- _dh_m1 }}{{ _dh_v }}{{ _dh_post -}}
+      {%- endfor -%}{%- endcapture -%}
+    {%- endif -%}
+    {%- if _dh_cur contains _dh_m2 -%}
+      {%- assign _dh_parts = _dh_cur | split: _dh_m2 -%}
+      {%- capture _dh_cur -%}{{ _dh_parts[0] }}{%- for _dh_p in _dh_parts offset: 1 -%}
+        {%- assign _dh_val = _dh_p | split: '"' | first | append: "" -%}
+        {%- assign _dh_post = _dh_p | remove_first: _dh_val -%}
+        {%- capture _dh_v %}{% include defang-text.html text=_dh_val %}{% endcapture -%}
+        {{- _dh_m2 }}{{ _dh_v }}{{ _dh_post -}}
+      {%- endfor -%}{%- endcapture -%}
+    {%- endif -%}
+  {%- endfor -%}
+{{ _dh_cur }}
+{% endfor -%}
