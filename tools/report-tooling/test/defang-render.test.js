@@ -91,6 +91,15 @@ test('the IOC viewer: the cell include and assets/js/ioc-table.js agree on which
   assert.match(js, /return DEFANG_TYPES\[type\] \? defang\(c\.textContent, type\) : c\.textContent;/);
 });
 
+test('IOC viewer rows: every data-* attribute the CSV export reads goes through the text defang (fix-r1 sweep: data-fp carried an address and shared-service names raw)', () => {
+  const layout = read('_layouts/ioc-table.html');
+  for (const [attrName, field] of [['data-context', 'context'], ['data-confidence', 'confidence'], ['data-action', 'action'], ['data-fp', 'fp_risk']]) {
+    assert.match(layout, new RegExp('capture _\\w+ %\\}\\{% include defang-text\\.html text=r\\.' + field + ' %\\}\\{% endcapture %\\} ' + attrName + '="\\{\\{ _\\w+ \\| escape \\}\\}"'), attrName + ' is written from a defanged capture');
+  }
+  assert.equal(/data-(?:confidence|action|fp)="\{\{ r\./.test(layout), false, 'no data-* attribute is written from the raw field');
+  assert.equal(/title="\{\{ r\.action/.test(layout), false, 'the action tooltip is not the raw field');
+});
+
 /* ---- Jekyll: the includes executed ---- */
 function findJekyll() {
   const cands = [];

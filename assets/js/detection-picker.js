@@ -264,6 +264,13 @@
     });
   }
 
+  /* A rule's name is read from the manifest and can name a host ("Trycloudflare.com Quick-Tunnel DNS Query"). The page prints it defanged; the text this script writes
+     (a checkbox's label, the warning line) goes through here so it does too (T-0500.1.7.4 fix-r1, sweep): every dot between two name characters becomes [.]. The rule
+     BODIES this picker downloads stay exact (decision 5), and are not passed through. */
+  function shownName(s) {
+    return String(s == null ? '' : s).replace(/([A-Za-z0-9_-])\.(?=[A-Za-z0-9_-])/g, '$1[.]');
+  }
+
   function chip(doc, kind, val, label) {
     var b = doc.createElement('button');
     b.className = 'hl-picker__chip';
@@ -309,7 +316,7 @@
       cb.type = 'checkbox';
       cb.className = 'hl-rule-pick';
       cb.setAttribute('data-i', String(i));
-      cb.setAttribute('aria-label', 'Select ' + b.name);
+      cb.setAttribute('aria-label', 'Select ' + shownName(b.name));
       h.insertBefore(cb, h.firstChild);
       b.heading = h;
     });
@@ -318,12 +325,12 @@
     if (bound.mismatched.length) {
       warn.push(bound.mismatched.length + ' rule(s) could not be verified against this page and ' +
         'are not selectable: ' +
-        bound.mismatched.slice(0, 3).map(function (m) { return m.reason; }).join('; '));
+        bound.mismatched.slice(0, 3).map(function (m) { return shownName(m.reason); }).join('; '));
     }
     if (bound.crossReferenced.length) {
       warn.push(bound.crossReferenced.length + ' rule(s) are bundled inside another rule’s ' +
         'block and can only be taken with it: ' +
-        bound.crossReferenced.map(function (r) { return r.name; }).join('; '));
+        bound.crossReferenced.map(function (r) { return shownName(r.name); }).join('; '));
     }
     panel.querySelector('.hl-picker__warn').textContent = warn.join(' ');
 
@@ -430,6 +437,7 @@
     applyFilters: applyFilters,
     bundle: bundle,
     filenameFor: filenameFor,
+    render: render,
     init: init
   };
 });

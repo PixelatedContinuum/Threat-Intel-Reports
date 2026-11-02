@@ -99,14 +99,15 @@ layout: page
       </tr></thead>
       <tbody>
       {%- for r in t.rows -%}
+        {%- comment -%} The data-* attributes are what the viewer's CSV exports, so each goes through the text defang like the visible cell does (fix-r1, sweep: data-fp carried "pastebin.com is a shared-service domain" and an actor address raw). {%- endcomment -%}
         <tr data-type="{{ r.type }}"{% if r.context %}{% capture _cx %}{% include defang-text.html text=r.context %}{% endcapture %} data-context="{{ _cx | escape }}"{% endif %}
-            {%- if r.confidence %} data-confidence="{{ r.confidence | escape }}"{% endif %}
-            {%- if r.action %} data-action="{{ r.action | escape }}"{% endif %}
-            {%- if r.fp_risk %} data-fp="{{ r.fp_risk | escape }}"{% endif %}>
+            {%- if r.confidence %}{% capture _cf %}{% include defang-text.html text=r.confidence %}{% endcapture %} data-confidence="{{ _cf | escape }}"{% endif %}
+            {%- if r.action %}{% capture _ac %}{% include defang-text.html text=r.action %}{% endcapture %} data-action="{{ _ac | escape }}"{% endif %}
+            {%- if r.fp_risk %}{% capture _fp %}{% include defang-text.html text=r.fp_risk %}{% endcapture %} data-fp="{{ _fp | escape }}"{% endif %}>
           <td><span class="hl-ioctable__type">{{ r.type }}</span></td>
           <td>{% include ioc-cell.html type=r.type value=r.value %}</td>
           {%- if t.has_confidence %}<td>{% if r.confidence %}<span class="hl-ioctable__conf">{{ r.confidence }}</span>{% endif %}</td>{% endif -%}
-          {%- if t.has_action %}<td>{% if r.action %}{% assign act_word = r.action | split: ' ' | first | slugify %}<span class="hl-ioctable__act hl-ioctable__act--{{ act_word }}" title="{{ r.action | escape }}">{{ r.action }}</span>{% endif %}</td>{% endif -%}
+          {%- if t.has_action %}<td>{% if r.action %}{% assign act_word = r.action | split: ' ' | first | slugify %}<span class="hl-ioctable__act hl-ioctable__act--{{ act_word }}" title="{{ _ac | escape }}">{{ r.action }}</span>{% endif %}</td>{% endif -%}
           {%- if t.has_fp_risk %}<td>{% if r.fp_risk %}<span class="hl-ioctable__fp">{{ r.fp_risk }}</span>{% endif %}</td>{% endif -%}
         </tr>
       {%- endfor -%}

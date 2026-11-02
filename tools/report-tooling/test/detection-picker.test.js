@@ -288,3 +288,20 @@ test('every rule visible means every element visible', () => {
   const shown = D.visibilityFor(layout, [0, 1]);
   assert.strictEqual(shown.filter(Boolean).length, layout.units.length);
 });
+
+/* ---- fix-r1 sweep: the picker writes a rule's name into a checkbox label and a warning line; a name that carries a host is shown defanged there, the rule body is untouched ---- */
+test('a rule name that carries a host is defanged in the checkbox label and the warning line, and the downloaded body stays exact', () => {
+  const body = 'title: Trycloudflare.com Quick-Tunnel DNS Query\nselection:\n  query|endswith: trycloudflare.com';
+  const rules = [{ name: 'Trycloudflare.com Quick-Tunnel DNS Query', engine: 'sigma', tier: 'Hunting', fence: 0, hash: H.ruleHash(body) }];
+  const dom = new JSDOM('<body><div class="hl-post-content"><h4>Trycloudflare[.]com Quick-Tunnel DNS Query</h4><pre><code>' + body + '</code></pre></div></body>');
+  const doc = dom.window.document;
+  const content = doc.querySelector('.hl-post-content');
+  const bound = D.bind(content, rules, doc);
+  assert.strictEqual(bound.ok.length, 1);
+  const panel = D.render(doc, content, bound, 'demo');
+  const cb = doc.querySelector('input.hl-rule-pick');
+  assert.ok(cb, 'the checkbox is drawn');
+  assert.strictEqual(cb.getAttribute('aria-label'), 'Select Trycloudflare[.]com Quick-Tunnel DNS Query');
+  assert.doesNotMatch(doc.body.innerHTML.replace(/<pre>[\s\S]*?<\/pre>/g, ''), /Trycloudflare\.com/, 'no raw host outside the rule body');
+  assert.strictEqual(bound.ok[0].body.indexOf('trycloudflare.com') > -1, true, 'the rule body is exact');
+});

@@ -287,7 +287,9 @@ function scanDocument(doc, rel, data, stats, findings) {
   });
 }
 
-function scanSite(dir, dataFile, opts) {
+/* The scanner behind scanSite, reusable on HTML that did not come from a file: the browser gate (check-browser-defang.js) hands it the DOM a page has AFTER its scripts ran.
+   scan(rel, html) judges one page exactly as scanSite does (page type, the report's own allow file, links, pre blocks, tooltips, head); stats and findings accumulate. */
+function makeScanner(dataFile, opts) {
   opts = opts || {};
   var JSDOM = require('jsdom').JSDOM;
   var data = loadAllowData(dataFile);
@@ -324,18 +326,39 @@ function scanSite(dir, dataFile, opts) {
     repCache[slug] = Object.assign({}, data, { allow: allow });
     return repCache[slug];
   }
+  function scan(rel, html) {
+    var dom = new JSDOM(html);
+    stats.pages++;
+    var t = pageType(rel); stats.byType[t] = (stats.byType[t] || 0) + 1;
+    var before = findings.length;
+    scanDocument(dom.window.document, rel, t === 'report' ? reportData(rel) : data, stats, findings);
+    dom.window.close();
+    return findings.slice(before);
+  }
+  /* A copied or downloaded text (the clipboard, a share sheet, a blob): every line judged against the allow data of the page it came from. */
+  function scanText(rel, ctx, text) {
+    var t = pageType(rel), d = t === 'report' ? reportData(rel) : data, out = [];
+    String(text).split(/\r?\n/).forEach(function (line) {
+      if (!line.trim()) return;
+      D.scanLine(line, d.allow).flagged.forEach(function (f) { out.push({ page: rel, type: t, ctx: ctx, kind: f.kind, token: f.token, near: nearOf(line, f.token) }); });
+    });
+    return out;
+  }
+  return { scan: scan, scanText: scanText, stats: stats, findings: findings, data: data };
+}
+
+function scanSite(dir, dataFile, opts) {
+  opts = opts || {};
+  var sc = makeScanner(dataFile, opts);
+  var stats = sc.stats, findings = sc.findings;
   walkHtml(dir).forEach(function (f) {
     var rel = path.relative(dir, f).split(path.sep).join('/');
     var ex = excluded(rel);
     if (ex) { stats.excluded[ex] = (stats.excluded[ex] || 0) + 1; return; }
     if (opts.only && !opts.only.test(rel)) return;
-    var dom = new JSDOM(fs.readFileSync(f, 'utf8'));
-    stats.pages++;
-    var t = pageType(rel); stats.byType[t] = (stats.byType[t] || 0) + 1;
-    scanDocument(dom.window.document, rel, t === 'report' ? reportData(rel) : data, stats, findings);
-    dom.window.close();
+    sc.scan(rel, fs.readFileSync(f, 'utf8'));
   });
-  return { stats: stats, findings: findings, data: data };
+  return { stats: stats, findings: findings, data: sc.data };
 }
 
 /* Known positives and their clean twins, run before any verdict is believed. Documentation ranges only (RFC 5737, RFC 2606). */
@@ -397,4 +420,4 @@ function selfTest() {
   return why;
 }
 
-module.exports = { scanSite: scanSite, scanDocument: scanDocument, selfTest: selfTest, loadAllowData: loadAllowData, pageType: pageType, excluded: excluded, newStats: newStats, linkKey: linkKey, linkAllowed: linkAllowed, isIpHost: isIpHost };
+module.exports = { makeScanner: makeScanner, walkHtml: walkHtml, scanSite: scanSite, scanDocument: scanDocument, selfTest: selfTest, loadAllowData: loadAllowData, pageType: pageType, excluded: excluded, newStats: newStats, linkKey: linkKey, linkAllowed: linkAllowed, isIpHost: isIpHost };
