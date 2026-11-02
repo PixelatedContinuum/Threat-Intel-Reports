@@ -65,5 +65,5 @@ redirect_from:
 {% endfor %}
 </div>
 
-<script defer src="{{ '/assets/js/ioc-classify.js' | relative_url }}?v=1"></script>
-<script defer src="{{ '/assets/js/ioc-search.js' | relative_url }}?v=2"></script>
+<script defer src="{{ '/assets/js/ioc-classify.js' | relative_url }}?v=2"></script>
+<script defer src="{{ '/assets/js/ioc-search.js' | relative_url }}?v=3"></script>

@@ -135,9 +135,64 @@
     return out;
   }
 
+  /* --- DISPLAY DEFANG (T-0500.1.7.4 fix-r1, review finding 1) ------------------------------------------------------------------------------------------------------
+     Joseph, 2026-11-02, decision 5: every network indicator the site shows is defanged, so nobody clicks one or pastes it live by accident. The page layouts do that at build
+     time; text a SCRIPT writes after load (the search result sentence, its per-indicator breakdown, the report titles read from the index) does not pass through the layouts,
+     so it goes through these two functions. The classifier keeps matching on the refanged, lowercased form; only what is displayed is defanged.
+
+     The forms are the ones _includes/defang-text.html and the IOC viewer use: http -> hxxp, https -> hxxps, every dot of an address, name or URL -> [.], the @ of an e-mail
+     address -> [@]. A hash, a filename or any other type is returned as it is. Both functions are idempotent: a value that is already defanged comes out unchanged. */
+  var NETWORK_TYPES = { ipv4: 1, ipv6: 1, domain: 1, endpoint: 1, url: 1, email: 1 };
+
+  function unfang(s) {
+    return String(s).replace(/\[\.\]/g, '.').replace(/\[@\]/g, '@').replace(/\[:\]/g, ':').replace(/\b(h)xx(ps?:\/\/)/gi, '$1tt$2');
+  }
+
+  /* One value of a known type. */
+  function defangValue(value, type) {
+    var s = String(value == null ? '' : value);
+    if (!NETWORK_TYPES[type]) return s;
+    s = unfang(s);
+    if (type === 'url') s = s.replace(/https?:\/\//gi, function (m) { return m.replace(/tt/i, 'xx'); }); /* every scheme, a URL inside a path included */
+    if (type === 'email') s = s.replace(/@/g, '[@]');
+    return s.replace(/\./g, '[.]');
+  }
+
+  function defangIpv4Inside(s) {
+    return s.replace(/(^|[^0-9.])((?:\d{1,3}\.){3}\d{1,3})(?![0-9])/g, function (m, pre, ip) {
+      var ok = ip.split('.').every(function (o) { return Number(o) <= 255; });
+      return ok ? pre + ip.replace(/\./g, '[.]') : m;
+    });
+  }
+
+  /* Free text: a report title, a sentence. Words are cut at whitespace , ; and |; the punctuation round a word is taken off, the rest is judged by the classifier above,
+     exactly as a pasted token is, so what the search would match is what is defanged. A URL without a scheme (host/path) has its host defanged; an IPv4 address inside a
+     longer word ("Toolkit-193.233.202.17-Repository") is defanged too. A word that is not an indicator comes back untouched, so a title keeps its own spelling. */
+  function defangText(text) {
+    return String(text == null ? '' : text).replace(/[^\s,;|]+/g, function (word) {
+      var un = unfang(word);
+      var lead = /^[<("'`\[]*/.exec(un)[0];
+      var rest = un.slice(lead.length);
+      var tail = /[>)"'`,;:!?.\]]*$/.exec(rest)[0];
+      var core = rest.slice(0, rest.length - tail.length);
+      if (!core) return word;
+      var k = classify(core);
+      if (k && NETWORK_TYPES[k.type]) return lead + defangValue(core, k.type) + tail;
+      var slash = core.indexOf('/');
+      if (slash > 0) {
+        var h = classify(core.slice(0, slash));
+        if (h && NETWORK_TYPES[h.type]) return lead + defangValue(core.slice(0, slash), h.type) + core.slice(slash) + tail;
+      }
+      var inside = defangIpv4Inside(core);
+      return inside !== core ? lead + inside + tail : word;
+    });
+  }
+
   return {
     classify: classify,
     extract: extract,
+    defangValue: defangValue,
+    defangText: defangText,
     TYPES: ['sha256', 'sha1', 'md5', 'url', 'ipv4', 'email', 'domain', 'filename']
   };
 }));

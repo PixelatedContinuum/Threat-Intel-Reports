@@ -21,7 +21,11 @@
 
    Matching goes through the SAME ioc-classify.js the index generator used. If
    this normalised differently, every search would quietly return nothing and
-   read as "not in any feed". */
+   read as "not in any feed".
+
+   WHAT IS DISPLAYED IS DEFANGED (T-0500.1.7.4 fix-r1, review finding 1; Joseph, 2026-11-02, decision 5). Matching uses the refanged value, as before; the result
+   sentence, the per-indicator breakdown, the report titles read from the index and the query box filled from a ?q= link all go through
+   HLIocClassify.defangValue / defangText, so no network indicator this script writes is live. A raw query the reader types stays as typed in their own box. */
 (function () {
   'use strict';
   var root = document.querySelector('.hl-iocsearch');
@@ -59,6 +63,10 @@
     });
   }
 
+  /* Everything the script puts on the page goes through one of these two: a classified value by its type, a title (free text) as text. */
+  function shownValue(f) { return esc(C.defangValue(f.value, f.type)); }
+  function shownTitle(report) { return esc(C.defangText(report)); }
+
   function clearAll(msg) {
     cards.forEach(function (c) { c.removeAttribute('data-veto'); });
     result.textContent = msg || '';
@@ -85,18 +93,18 @@
   function renderDetail(matched, withheld, missed, idx) {
     var rows = matched.slice(0, DETAIL_CAP).map(function (m) {
       var feeds = idx.indicators[m.type + ':' + m.value].map(function (h) {
-        return esc((idx.reports[h.report] || {}).title || h.report);
+        return shownTitle((idx.reports[h.report] || {}).title || h.report);
       });
       return '<li class="hl-iocsearch__row hl-iocsearch__row--hit">' +
-        '<code>' + esc(m.value) + '</code>' +
+        '<code>' + shownValue(m) + '</code>' +
         '<span class="hl-iocsearch__in-feed">' + feeds.join(', ') + '</span></li>';
     });
     var withheldRows = withheld.slice(0, DETAIL_CAP).map(function (w) {
       var feeds = ((idx.never_block || {})[w.type + ':' + w.value] || []).map(function (h) {
-        return esc((idx.reports[h.report] || {}).title || h.report);
+        return shownTitle((idx.reports[h.report] || {}).title || h.report);
       });
       return '<li class="hl-iocsearch__row hl-iocsearch__row--withheld">' +
-        '<code>' + esc(w.value) + '</code>' +
+        '<code>' + shownValue(w) + '</code>' +
         '<span class="hl-iocsearch__in-feed">intentionally excluded, see ' +
         feeds.join(', ') + '</span></li>';
     });
@@ -190,7 +198,7 @@
       if (!matched.length && !withheld.length) {
         cards.forEach(function (c) { c.removeAttribute('data-veto'); });
         say(found.length === 1
-          ? '<strong>' + esc(found[0].value) + '</strong> does not appear in any published feed.'
+          ? '<strong>' + shownValue(found[0]) + '</strong> does not appear in any published feed.'
           : 'None of your ' + found.length + ' indicators appear in any published feed.',
           'none');
         refilter();
@@ -205,11 +213,11 @@
 
       if (found.length === 1) {
         if (matched.length) {
-          say('<strong>' + esc(matched[0].value) + '</strong> appears in ' + n +
+          say('<strong>' + shownValue(matched[0]) + '</strong> appears in ' + n +
               (n === 1 ? ' feed' : ' feeds') + ' below. Open the card to see the full ' +
               'feed and what else it contains.', 'hit');
         } else {
-          say('<strong>' + esc(withheld[0].value) + '</strong> is recorded in ' + n +
+          say('<strong>' + shownValue(withheld[0]) + '</strong> is recorded in ' + n +
               (n === 1 ? ' feed' : ' feeds') + ' below, but is deliberately left out ' +
               'of this index, because blocking it would affect something legitimate. ' +
               'Open the card to see why.', 'withheld');
@@ -259,5 +267,6 @@
 
   // A shared link lands searched rather than showing the full grid first.
   var linked = readQuery();
-  if (linked) { input.value = linked; run(); }
+  // The box is filled with the DEFANGED form: the matching refangs it again, and a link that carries a live indicator does not put it on the page.
+  if (linked) { input.value = C.defangText(linked); run(); }
 })();

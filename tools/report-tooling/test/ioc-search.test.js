@@ -141,7 +141,8 @@ test('the Clear button restores every card', async function () {
 test('a ?q= deep link lands with the search already run, so a tool can link one indicator', async function () {
   var w = build('http://localhost/ioc-feeds/?q=185.38.150.7');
   await new Promise(function (r) { setTimeout(r, 300); });
-  assert.equal(w.document.querySelector('.hl-iocsearch__in').value, '185.38.150.7');
+  // The box is filled with the DEFANGED form (fix-r1, finding 1): a link that carries a live indicator does not put it on the page; the search refangs it, so the card still narrows.
+  assert.equal(w.document.querySelector('.hl-iocsearch__in').value, '185[.]38[.]150[.]7');
   assert.deepEqual(visible(w), ['alpha']);
   assert.match(resultText(w), /appears in 1 feed/);
   assert.equal(w.document.querySelector('.hl-iocsearch__clear').hidden, false);
@@ -154,7 +155,7 @@ test('a ?q= list is decoded (commas, %0A newlines, + for space) and searched in 
   await new Promise(function (r) { setTimeout(r, 300); });
   assert.deepEqual(visible(w), ['alpha', 'beta']);
   // Other parameters and the filter's own hash are left alone.
-  assert.equal(w.location.search, '?utm=x&q=185.38.150.7%2C%0Ashared.test');
+  assert.equal(w.location.search, '?utm=x&q=185%5B.%5D38%5B.%5D150%5B.%5D7%2C%0Ashared%5B.%5Dtest');
   assert.equal(w.location.hash, '#q=feed');
   assert.equal(w.document.querySelector('.hl-filter__search').value, 'feed');
 });
@@ -229,7 +230,7 @@ test('a list gets a per-indicator breakdown naming each feed', async function ()
   var w = build();
   await type(w, LIST.join(NL));
   var t = detailText(w);
-  assert.match(t, /185\.38\.150\.7/, 'names the matched indicator');
+  assert.match(t, /185\[\.\]38\[\.\]150\[\.\]7/, 'names the matched indicator, defanged');
   assert.match(t, /Alpha/, 'names the feed it is in');
   assert.match(t, /1 of your indicators are not in any published feed/,
     'and says how many missed');
@@ -333,7 +334,7 @@ test('a list mixing a real hit, a withheld value and a genuine miss reports all 
   assert.match(text, /1 of your 3/, 'the matched count still counts only real hits');
   assert.match(text, /1 is intentionally left out/);
   var detail = detailText(w);
-  assert.match(detail, /api\.telegram\.org/);
+  assert.match(detail, /api\[\.\]telegram\[\.\]org/);
   assert.match(detail, /intentionally excluded/);
   assert.match(detail, /1 of your indicators are not in any published feed/);
 });
@@ -353,4 +354,65 @@ test('WHAT THE READER SEES WITHOUT THIS FIX: a plain miss is indistinguishable f
   var nb = idx.never_block['domain:api.telegram.org'];
   assert.equal(hits, undefined, 'api.telegram.org has no ordinary indicators entry');
   assert.ok(nb, 'but it does have a recorded reason not to block it');
+});
+
+
+/* ---- fix-r1, review finding 1: nothing this script writes is a live indicator ----
+   The reproduction (tasks/runs/T-0500.1.7.4/build/fix-r1/repro-search.cjs) searched the built /ioc-feeds/ page with a defanged address and read the raw address back in the
+   result sentence. Every display path is covered here: the single-indicator sentence for a hit, a withheld value and a miss, the breakdown of a list, the report titles read
+   from the index (17 of the 60 real titles carry an address), and the box filled from a ?q= link. Controls: a hash is shown as it is, and the matching itself is unchanged
+   (the defanged and the raw query find the same card). Addresses are RFC 5737 / RFC 2606 and the fixture's own. */
+var LIVE = /(?:\d{1,3}\.){3}\d{1,3}|[a-z0-9-]+\.(?:test|org|com|net|example)\b|https?:\/\//i;
+function everything(w, withBox) {
+  // the box holds what the reader typed or pasted: theirs, not the page's; it is read only for a ?q= link, which the page fills
+  return w.document.querySelector('.hl-iocsearch__result').textContent + '\n' + w.document.querySelector('.hl-iocsearch__detail').textContent +
+    (withBox ? '\n' + w.document.querySelector('.hl-iocsearch__in').value : '');
+}
+var TITLED = {
+  counts: { indicators: 3, reports: 1, multi_report: 0 },
+  reports: { alpha: { title: 'Open Directory at 203.0.113.9 and evil.example.net (see https://c2.example.org/x)' } },
+  indicators: { 'ipv4:203.0.113.9': [{ report: 'alpha' }], 'domain:evil.example.net': [{ report: 'alpha' }], 'url:https://c2.example.org/x': [{ report: 'alpha' }],
+    ['sha256:' + 'a'.repeat(64)]: [{ report: 'alpha' }] },
+  never_block: { 'domain:cdn.example.com': [{ report: 'alpha' }] }
+};
+test('a single indicator is displayed defanged, whether it was typed live or defanged', async function () {
+  for (var q of ['203.0.113.9', '203[.]0[.]113[.]9']) {
+    var w = buildWith(TITLED);
+    await type(w, q);
+    assert.match(resultText(w), /203\[\.\]0\[\.\]113\[\.\]9 appears in 1 feed/, q);
+    assert.deepEqual(visible(w), ['alpha'], 'matching is unchanged: ' + q + ' still finds the feed');
+    assert.doesNotMatch(w.document.querySelector('.hl-iocsearch__result').textContent, LIVE, 'no live indicator in the sentence for ' + q);
+  }
+});
+test('a URL is displayed with hxxp(s) and defanged dots; a miss and a withheld value are defanged too', async function () {
+  var w = buildWith(TITLED);
+  await type(w, 'https://c2.example.org/x');
+  assert.match(resultText(w), /hxxps:\/\/c2\[\.\]example\[\.\]org\/x/);
+  await type(w, 'http://never-seen.example.net/p');
+  assert.match(resultText(w), /hxxp:\/\/never-seen\[\.\]example\[\.\]net\/p does not appear/);
+  assert.doesNotMatch(w.document.querySelector('.hl-iocsearch__result').textContent, LIVE);
+  await type(w, 'cdn.example.com');
+  assert.match(resultText(w), /cdn\[\.\]example\[\.\]com is recorded in 1 feed/);
+  assert.doesNotMatch(w.document.querySelector('.hl-iocsearch__result').textContent, LIVE);
+});
+test('a list: the breakdown shows defanged values and defanged report titles, and nothing live anywhere', async function () {
+  var w = buildWith(TITLED);
+  await type(w, ['203.0.113.9', 'evil.example.net', 'https://c2.example.org/x', 'cdn.example.com', '198.51.100.7'].join(NL));
+  var t = detailText(w);
+  assert.match(t, /203\[\.\]0\[\.\]113\[\.\]9/);
+  assert.match(t, /Open Directory at 203\[\.\]0\[\.\]113\[\.\]9 and evil\[\.\]example\[\.\]net \(see hxxps:\/\/c2\[\.\]example\[\.\]org\/x\)/, 'the report title read from the index is defanged');
+  assert.match(t, /cdn\[\.\]example\[\.\]com/);
+  assert.doesNotMatch(everything(w), LIVE, 'result and breakdown: no live address, name or scheme');
+});
+test('a ?q= link carrying a live indicator is shown defanged in the box and still searched', async function () {
+  var w = build('http://localhost/ioc-feeds/?q=185.38.150.7%2Cshared.test');
+  await new Promise(function (r) { setTimeout(r, 300); });
+  assert.equal(w.document.querySelector('.hl-iocsearch__in').value, '185[.]38[.]150[.]7,shared[.]test');
+  assert.deepEqual(visible(w), ['alpha', 'beta']);
+  assert.doesNotMatch(everything(w, true), LIVE);
+});
+test('control: a hash is displayed as it is', async function () {
+  var w = buildWith(TITLED);
+  await type(w, 'a'.repeat(64));
+  assert.match(resultText(w), new RegExp('a{64} appears in 1 feed'));
 });

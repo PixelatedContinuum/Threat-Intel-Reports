@@ -247,3 +247,32 @@ test('and leaves every real domain in the corpus alone', function () {
     assert.equal(C.classify(d).type, 'domain', d);
   });
 });
+
+/* ---- fix-r1 (review finding 1): the display defang that ioc-search.js uses for every value and title it writes ---- */
+test('defangValue: a network value by type, in the site forms; any other type as it is; idempotent', () => {
+  assert.equal(C.defangValue('203.0.113.9', 'ipv4'), '203[.]0[.]113[.]9');
+  assert.equal(C.defangValue('203.0.113.9:8080', 'ipv4'), '203[.]0[.]113[.]9:8080');
+  assert.equal(C.defangValue('evil.example.org', 'domain'), 'evil[.]example[.]org');
+  assert.equal(C.defangValue('http://a.example.com/x?u=https://b.example.net/', 'url'), 'hxxp://a[.]example[.]com/x?u=hxxps://b[.]example[.]net/');
+  assert.equal(C.defangValue('op@evil.example.org', 'email'), 'op[@]evil[.]example[.]org');
+  assert.equal(C.defangValue('a'.repeat(64), 'sha256'), 'a'.repeat(64));
+  assert.equal(C.defangValue('install.sh', 'filename'), 'install.sh');
+  ['203.0.113.9|ipv4', 'https://evil.example.org/a.php|url', 'op@evil.example.org|email', 'evil.example.org|domain'].forEach((x) => {
+    const [v, t] = x.split('|'); const once = C.defangValue(v, t);
+    assert.equal(C.defangValue(once, t), once, 'idempotent: ' + t);
+  });
+});
+test('defangText: addresses, URLs, hosts and e-mail inside a title are defanged; ordinary words and file names are not', () => {
+  const cases = [
+    ['BellaMain Turkish PhaaS Panel (79.137.192.3)', 'BellaMain Turkish PhaaS Panel (79[.]137[.]192[.]3)'],
+    ['Open Directory at 193.56.255.154 - XiebroC2 v3.1 & Covenant C2', 'Open Directory at 193[.]56[.]255[.]154 - XiebroC2 v3.1 & Covenant C2'],
+    ['Toolkit-193.233.202.17-Repository', 'Toolkit-193[.]233[.]202[.]17-Repository'],
+    ['see https://evil.example.com/a/b.php, and evil.example.net/x; mail op@evil.example.org.', 'see hxxps://evil[.]example[.]com/a/b[.]php, and evil[.]example[.]net/x; mail op[@]evil[.]example[.]org.'],
+    ['PULSAR RAT (server.exe) Technical Analysis', 'PULSAR RAT (server.exe) Technical Analysis'],
+    ['Node.js v1.2.3 and 300.1.1.1', 'Node.js v1.2.3 and 300.1.1.1'],
+    ['Hybrid Loader/Stealer Ecosystem', 'Hybrid Loader/Stealer Ecosystem'],
+    ['already 79[.]137[.]192[.]3 and hxxps://x[.]example[.]com/p', 'already 79[.]137[.]192[.]3 and hxxps://x[.]example[.]com/p']
+  ];
+  cases.forEach(([i, o]) => { assert.equal(C.defangText(i), o); assert.equal(C.defangText(o), o, 'idempotent: ' + o); });
+  assert.equal(C.defangText(null), '');
+});
