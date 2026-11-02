@@ -21,8 +21,8 @@
    HEAD (T-0500.1.7.4 ship): the display strings of the <head> are scanned on every page: <title>, the meta content of a title, description or alt name (og:title, twitter:title,
    description, og:description, twitter:description, og:image:alt, twitter:image:alt) and every JSON-LD string except the URL-valued keys (kind HEAD-<KIND>, or HEAD-JSONLD-INVALID).
 
-   NOT SEEN, said in the PASS line: text the page's scripts write after load (jsdom runs no script); the data-title search keys, which keep
-   the raw text on purpose (the filter and the search match on it); head URLs (canonical, og:url, og:image, JSON-LD url and @id: own page addresses); the live value kept in a data-live attribute for the IOC viewer's reader-initiated toggle; the downloadable feed files; hrefs to this
+   NOT SEEN, said in the PASS line: text the page's scripts write after load (jsdom runs no script; check-browser-defang.js reads it in a real browser); the data-title search keys, which keep
+   the raw text on purpose (the filter and the search match on it); head URLs (canonical, og:url, og:image, JSON-LD url and @id: own page addresses); the downloadable feed files; hrefs to this
    site's own pages (they hold slugs that carry the campaign's address).
 
    REPORT PAGES (reports/<slug>/, T-0500.1.7.4 ship) are scanned too: the source lint reads the markdown, this reads what the layout and the page add
