@@ -59,6 +59,21 @@
     if (!openInfo) return;
     var b = openInfo.btn; openInfo.pop.hidden = true; openInfo.pop.style.transform = ''; b.setAttribute('aria-expanded', 'false'); openInfo = null; if (focus) b.focus();
   }
+  /* Keep an open note inside the viewport on both axes (review F3, T-0500.1.7.3 c5): below its button by default; above it when there is no room below and more room above;
+     then slid by whatever is still outside, 12px from each screen edge. Only a transform is applied (the note's containing block is not always its button's parent), and the
+     stylesheet caps the note's height to the screen, so it can always fit. */
+  function fitInfo(pop, btn) {
+    var m = 12, r = pop.getBoundingClientRect(), br = btn.getBoundingClientRect(), dx = 0, dy = 0;
+    if (r.bottom > innerHeight - m) {
+      var above = br.top + 6 - r.height;
+      if (above >= m || (m - above) < (r.bottom - (innerHeight - m))) dy = above - r.top;
+    }
+    if (r.right > innerWidth - m) dx = innerWidth - m - r.right;
+    if (r.left + dx < m) dx = m - r.left;
+    if (r.bottom + dy > innerHeight - m) dy = innerHeight - m - r.bottom;
+    if (r.top + dy < m) dy = m - r.top;
+    if (dx || dy) pop.style.transform = 'translate(' + Math.round(dx) + 'px, ' + Math.round(dy) + 'px)';
+  }
   function infoButton(host, notes, label) {
     var btn = make('button', 'hl-rv-info', null, host); btn.type = 'button';
     btn.setAttribute('aria-label', label || 'How this is counted'); btn.setAttribute('aria-expanded', 'false');
@@ -70,10 +85,7 @@
       e.preventDefault(); e.stopPropagation();
       if (openInfo && openInfo.btn === btn) { closeInfo(false); return; }
       closeInfo(false); pop.hidden = false; btn.setAttribute('aria-expanded', 'true'); openInfo = { btn: btn, pop: pop };
-      var r = pop.getBoundingClientRect(), dx = 0;
-      if (r.right > innerWidth - 12) dx = innerWidth - 12 - r.right;
-      if (r.left + dx < 12) dx = 12 - r.left;
-      if (dx) pop.style.transform = 'translateX(' + Math.round(dx) + 'px)';
+      fitInfo(pop, btn);
     });
     pop.addEventListener('keydown', function (e) { if (e.key === 'Escape') { e.stopPropagation(); closeInfo(true); } });
     btn.addEventListener('keydown', function (e) { if (e.key === 'Escape' && openInfo) { e.stopPropagation(); closeInfo(true); } });

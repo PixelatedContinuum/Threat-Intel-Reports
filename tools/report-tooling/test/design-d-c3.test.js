@@ -59,6 +59,60 @@ test('D4 stage flow and story: a node and a card for each stage row, each node c
     assert.match(txt(f.d.querySelector('#tab-chain .hl-rv-procedures tr.hl-rv-keyrow .hl-rv-ev')), /EvidenceThe portal request log\./);
   } finally { f.w.close(); }
 });
+test('D4 carries-the-case row compares WHICH rows are marked and WHAT they say, not only how many (review F2, T-0500.1.7.3 c5)', () => {
+  const f = page(STAGES + KEY + ATT);
+  try {
+    const measure = () => JSON.parse(JSON.stringify(f.w.eval(G.CHAIN_EXPR)));
+    const verdict = (m) => G.chainTableVerdict(Object.assign({}, m, { innerW: 800, tidCount: 0 }), 4);
+    const m0 = measure(); assert.equal(verdict(m0).ok, true, verdict(m0).detail);
+    assert.deepEqual(m0.drawn.map(d => d.carry), [false, true, false, true]); assert.equal(m0.drawn[1].ev, 'The portal request log.');
+    const rows = () => [...f.d.querySelectorAll('#tab-chain .hl-rv-procedures tbody tr')];
+    // 1. the mark and its evidence move from the T1190 row to the T1595 row: 2 marked, 2 evidence notes, the console note still says 2 of 2
+    const from = rows()[1], to = rows()[0], ix = from.querySelector('.hl-rv-carry').parentNode.cellIndex;
+    const a = from.querySelector('.hl-rv-carry'), b = from.querySelector('.hl-rv-ev'); to.cells[ix].appendChild(a); to.cells[ix].appendChild(b);
+    const m1 = measure(); assert.equal(m1.carry, 2); assert.equal(m1.ev, 2); assert.equal(m1.keyMatched, 2);
+    const v1 = verdict(m1); assert.equal(v1.ok, false, 'counts are unchanged, the wrong row is marked: ' + v1.detail); assert.match(v1.detail, /row 1 \(T1595 Active Scanning\) carries a mark/); assert.match(v1.detail, /row 2 .* should carry the mark/);
+    from.cells[ix].appendChild(a); from.cells[ix].appendChild(b);
+    assert.equal(verdict(measure()).ok, true, 'put back, it passes again');
+    // 2. the evidence text is replaced, counts unchanged
+    const p = f.d.querySelector('#tab-chain .hl-rv-procedures .hl-rv-ev p'), was = p.textContent; p.textContent = 'Invented evidence.';
+    const m2 = measure(); assert.equal(m2.carry, 2); assert.equal(m2.ev, 2);
+    const v2 = verdict(m2); assert.equal(v2.ok, false); assert.match(v2.detail, /shows evidence "Invented evidence\."/);
+    p.textContent = was; assert.equal(verdict(measure()).ok, true);
+    // 3. the page's mark sits on the right row but the ID drawn there is another technique
+    const tid = rows()[3].querySelector('.hl-rv-tid'); tid.textContent = 'T1000';
+    const v3 = verdict(measure()); assert.equal(v3.ok, false); assert.match(v3.detail, /is drawn as T1000/);
+  } finally { f.w.close(); }
+});
+test('review F3: an opened "i" note with no room below its button is placed above it, and one that fits neither way is slid inside the screen; both axes, 12px from each edge', () => {
+  const f = page(STAGES + KEY + ATT);
+  try {
+    const w = f.w; Object.defineProperty(w, 'innerWidth', { value: 400, configurable: true }); Object.defineProperty(w, 'innerHeight', { value: 800, configurable: true });
+    const btn = f.d.querySelector('.hl-rv-info'), pop = f.d.getElementById(btn.getAttribute('aria-controls'));
+    assert.ok(btn && pop, 'the page draws an i button with its note');
+    // the geometry is stipulated: the note is 300px tall and 360 wide; the button is 44px tall
+    const place = (popTop, left, btnTop) => {
+      pop.getBoundingClientRect = () => ({ left, right: left + 360, top: popTop, bottom: popTop + 300, width: 360, height: 300 });
+      btn.getBoundingClientRect = () => ({ left: 340, right: 384, top: btnTop, bottom: btnTop + 44, width: 44, height: 44 });
+    };
+    const open = () => { btn.click(); }; const close = () => { if (!pop.hidden) btn.click(); };
+    // 1. room below: nothing moves
+    place(200, 20, 160); open(); assert.equal(pop.style.transform, ''); close();
+    // 2. no room below (the note would end at 1000 in an 800px screen), room above: placed above the button (its top 6px into the button), 366px from the screen top
+    place(700, 20, 660); open(); assert.equal(pop.style.transform, 'translate(0px, -334px)'); close(); assert.equal(pop.style.transform, '', 'closing resets it');
+    // 3. no room below, and above is worse (266px short against 212px): stays below and is slid up until it ends 12px above the bottom edge
+    place(700, 20, 40); open(); assert.equal(pop.style.transform, 'translate(0px, -212px)'); close();
+    // 4. above is less wrong than below but still short (106px against 212px): placed above, then slid down to the 12px margin
+    place(700, 20, 200); open(); assert.equal(pop.style.transform, 'translate(0px, -688px)'); close();
+    // 5. sideways as before: the note's right edge at 440 in a 400px screen slides left to the 12px margin, no vertical move
+    place(200, 80, 160); open(); assert.equal(pop.style.transform, 'translate(-52px, 0px)'); close();
+    // 6. both axes at once
+    place(700, 80, 660); open(); assert.equal(pop.style.transform, 'translate(-52px, -334px)'); close();
+    // 7. the stylesheet caps the note's height to the screen
+    const css = fs.readFileSync(path.join(__dirname, '../../../assets/css/hl-report-tabs.css'), 'utf8');
+    assert.match(css, /\.hl-rv-pop \{ max-height: calc\(100vh - 24px\);/);
+  } finally { f.w.close(); }
+});
 test('D4 linked tactic highlighting: a focused tactic lights the stages whose rows carry it, a pressed one stays, leaving clears; a stage with no linked rows is never lit by inference', () => {
   const f = page(STAGES + ATT);
   try {
@@ -99,7 +153,10 @@ test('D4 slim bar: it exists beside the console, hidden at rest, shares one stat
   assert.equal(G.miniVerdict({ present: false }, null, null).notChecked, true);
 });
 test('D4 verdicts: the console, flow and table rows fail on the counts a broken page gives', () => {
-  const base = { panel: true, console: true, search: true, chips: [{ f: 'Status', v: 'A', n: 3 }, { f: 'Status', v: 'B', n: 1 }], rows: 4, count: '', stageSrc: 2, nodes: 2, cards: 2, nodeCounts: [1, 1], storyRows: [1, 1], thPos: 'sticky', tidFont: 'ui-monospace', tidCount: 4, carry: 2, ev: 2, keySrc: 2, keyMatched: 2, keyTotal: 2, innerW: 1280 };
+  const base = { panel: true, console: true, search: true, chips: [{ f: 'Status', v: 'A', n: 3 }, { f: 'Status', v: 'B', n: 1 }], rows: 4, count: '', stageSrc: 2, nodes: 2, cards: 2, nodeCounts: [1, 1], storyRows: [1, 1], thPos: 'sticky', tidFont: 'ui-monospace', tidCount: 4, carry: 2, ev: 2, keySrc: 2, keyMatched: 2, keyTotal: 2, innerW: 1280,
+    srcRows: [{ id: 'T1595', name: 'Active Scanning' }, { id: 'T1190', name: 'Exploit Public-Facing Application' }, { id: 'T1190', name: 'Exploit Public-Facing Application' }, { id: 'T1059.004', name: 'Unix Shell' }],
+    keyList: [{ id: 'T1190', name: 'Exploit Public-Facing Application', ev: 'The portal request log.' }, { id: 'T1059.004', name: 'Unix Shell', ev: 'Shell history.' }],
+    drawn: [{ carry: false, ev: null, id: 'T1595', name: 'Active Scanning' }, { carry: true, ev: 'The portal request log.', id: 'T1190', name: 'Exploit Public-Facing Application' }, { carry: false, ev: null, id: 'T1190', name: 'Exploit Public-Facing Application' }, { carry: true, ev: 'Shell history.', id: 'T1059.004', name: 'Unix Shell' }] };
   assert.equal(G.consoleVerdict(base, { shown: 3, count: 'Showing 3 of 4 procedure rows', pressed: ['Status:A'] }, { shown: 4, count: '', pressed: [] }, 4).ok, true);
   assert.equal(G.consoleVerdict(Object.assign({}, base, { chips: [{ f: 'Status', v: 'A', n: 3 }] }), null, null, 4).ok, false, 'chip counts that do not add up FAIL');
   assert.equal(G.consoleVerdict(base, { shown: 4, count: '', pressed: [] }, null, 4).ok, false, 'a chip that filters nothing FAILS');

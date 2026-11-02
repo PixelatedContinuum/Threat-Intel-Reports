@@ -74,7 +74,9 @@ test('the plate-column verdict passes the expected buttons in one column and FAI
   assert.deepEqual(G.expectedPlateLabels({ detect: false, ioc: false, stix: false }, false), ['Read the full report', 'Share']);
 });
 const IROW = (o) => Object.assign({ i: 0, label: 'How counted: 5 orgs', tabIndex: 0, disabled: false, w: 44, h: 44, expanded: 'false', hasPop: true, popHidden: true, popTextLen: 80, popInReport: false, chrome: true }, o || {});
-const PROBE = (o) => Object.assign({ keyOpened: true, tapOpened: true, inViewport: true, escCloses: true }, o || {});
+const BOXIN = { l: 20, t: 100, r: 380, b: 400 };
+const P1 = (o) => Object.assign({ i: 0, keyOpened: true, tapOpened: true, escCloses: true, box: BOXIN, edgeOpened: true, edgeBox: { l: 20, t: 300, r: 380, b: 600 }, edgeRoom: 8 }, o || {});
+const PROBE = (list) => ({ probes: list || [P1()], vw: 390, vh: 844 });
 test('the popover verdict passes collapsed, named, focusable buttons that open by key and press and close on Escape, and FAILS each defect', () => {
   assert.equal(G.infoVerdict([IROW()], PROBE()).ok, true);
   const bad = (rows, probe, re) => { const v = G.infoVerdict(rows, probe); assert.equal(v.ok, false); assert.match(v.detail, re); };
@@ -84,11 +86,29 @@ test('the popover verdict passes collapsed, named, focusable buttons that open b
   bad([IROW({ popHidden: false })], PROBE(), /not collapsed at rest/);
   bad([IROW({ popTextLen: 0 })], PROBE(), /not collapsed at rest/);
   bad([IROW({ popInReport: true })], PROBE(), /not generated chrome/);
-  bad([IROW()], PROBE({ keyOpened: false }), /Enter on the first "i" did not open/);
-  bad([IROW()], PROBE({ tapOpened: false }), /pointer press/);
-  bad([IROW()], PROBE({ inViewport: false }), /not inside the viewport/);
-  bad([IROW()], PROBE({ escCloses: false }), /Escape did not close/);
+  bad([IROW()], PROBE([P1({ keyOpened: false })]), /Enter on i #0 did not open/);
+  bad([IROW()], PROBE([P1({ tapOpened: false })]), /pointer press on i #0/);
+  bad([IROW()], PROBE([P1({ box: { l: 20, t: 100, r: 400, b: 400 } })]), /not inside the viewport/);
+  bad([IROW()], PROBE([P1({ escCloses: false })]), /Escape did not close/);
   assert.equal(G.infoVerdict([], PROBE()).notChecked, true);
+  bad([IROW()], null, /probe did not run/);
+});
+test('review F3: the popover verdict checks top and bottom as well as left and right, at the bottom edge too, and probes every button of the tab', () => {
+  const bad = (rows, probe, re) => { const v = G.infoVerdict(rows, probe); assert.equal(v.ok, false, v.detail); assert.match(v.detail, re); };
+  // the reviewer's case: a 390x844 viewport with the note at [12,900,378,1200] passed the old x-only test
+  bad([IROW()], PROBE([P1({ box: { l: 12, t: 900, r: 378, b: 1200 } })]), /bottom 1200 in 390x844/);
+  bad([IROW()], PROBE([P1({ box: { l: 12, t: -300, r: 378, b: 40 } })]), /top -300/);
+  bad([IROW()], PROBE([P1({ edgeBox: { l: 12, t: 900, r: 378, b: 1200 } })]), /at the bottom edge of the screen is not inside the viewport/);
+  bad([IROW()], PROBE([P1({ edgeOpened: false, edgeBox: null })]), /bottom edge of the screen did not open/);
+  bad([IROW()], PROBE([P1({ box: null })]), /not drawn/);
+  // every button: a second button that never opens fails although the first works
+  const two = [IROW({ i: 0 }), IROW({ i: 1 })];
+  assert.equal(G.infoVerdict(two, PROBE([P1({ i: 0 }), P1({ i: 1 })])).ok, true);
+  bad(two, PROBE([P1({ i: 0 }), P1({ i: 1, keyOpened: false, tapOpened: false, box: null })]), /Enter on i #1 did not open/);
+  bad(two, PROBE([P1({ i: 0 })]), /1 of the tab's 2 "i" buttons were probed/);
+  const ok = G.infoVerdict(two, PROBE([P1({ i: 0 }), P1({ i: 1 })]));
+  assert.match(ok.detail, /2 "i" button\(s\) measured, 2 probed; of those Enter opens 2, a press opens 2, inside the viewport on all four sides 2 \(centred\) and 2 \(at the bottom edge/);
+  assert.equal(G.infoFits({ l: 0, t: 0, r: 390, b: 844 }, 390, 844), true); assert.equal(G.infoFits({ l: 0, t: 0, r: 390, b: 845 }, 390, 844), false);
 });
 test('the hidden-text verdict passes when every report block is drawn and FAILS when one is hidden, and is NOT CHECKED when nothing was measured', () => {
   assert.equal(G.textHiddenVerdict({ sections: 3, measured: 120, hidden: [], hiddenCount: 0 }).ok, true);

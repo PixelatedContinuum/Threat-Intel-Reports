@@ -254,3 +254,19 @@ test('a sticky header cell is displaced by design and counted; the same cell, no
   const plain = layout(moved('static'));
   try { const m = plain.run(); assert.ok(m.hang.some(f => /^th/.test(f.sig)), 'a th that is not sticky and lies outside its row faults: ' + JSON.stringify(m.hang)); } finally { plain.close(); }
 });
+
+test('a sticky header cell is excused only for the vertical displacement sticky causes: the same sticky cell hanging 80px out of its row sideways still faults, and so does the row that holds it (T-0500.1.7.3 c5, review F1)', () => {
+  const html = (box) => '<table data-box="10,10,390,400"><thead data-box="10,10,390,50"><tr data-box="10,10,390,50"><th data-box="' + box + '" data-cs=\'{"position":"sticky"}\'>A</th></tr></thead></table>';
+  // vertical carry only (the scroll moved the cell 150px down): excused and counted, as before
+  const down = layout(html('10,160,200,200'));
+  try { const m = down.run(); assert.equal(m.hang.filter(f => /th|tr/.test(f.sig)).length, 0, JSON.stringify(m.hang)); assert.ok(m.excluded['sticky header cell'] >= 1); } finally { down.close(); }
+  // 80px past the row on the right: not sticky displacement, a fault
+  const right = layout(html('10,10,470,50'));
+  try { const m = right.run(); assert.ok(m.hang.some(f => /^th(\b|$)(?!ead)/.test(f.sig) && f.side === 'right'), 'sticky cell overhanging right faults: ' + JSON.stringify(m.hang)); } finally { right.close(); }
+  // 80px past the row on the left
+  const left = layout(html('-70,10,200,50'));
+  try { const m = left.run(); assert.ok(m.hang.some(f => /^th(\b|$)(?!ead)/.test(f.sig) && f.side === 'left'), 'sticky cell overhanging left faults: ' + JSON.stringify(m.hang)); } finally { left.close(); }
+  // both at once: carried down AND overhanging right: still a fault
+  const both = layout(html('10,160,470,200'));
+  try { const m = both.run(); assert.ok(m.hang.some(f => /^th(\b|$)(?!ead)/.test(f.sig) && f.side === 'right'), JSON.stringify(m.hang)); } finally { both.close(); }
+});
