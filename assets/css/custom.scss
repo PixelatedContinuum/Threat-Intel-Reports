@@ -4179,17 +4179,17 @@ span.hl-vuln__p--ssvc, span.hl-vuln__p--exp, span.hl-vuln__p--cn { cursor: help;
 .hl-dt {
   /* First column of the row, left of the CVE id: a chevron button that turns down
      when its panel is open, so the row reads as one that expands (Joseph,
-     2026-11-01: as a chip among chips nobody would know it opens). */
+     2026-11-01: as a chip among chips nobody would know it opens). Small and with
+     no box (Joseph, same day): the chevron alone, in the accent colour. */
   display: inline-flex;
   align-items: center;
   justify-content: center;
   align-self: center;
-  width: 1.75em;
-  height: 1.75em;
+  width: 1.1em;
+  height: 1.1em;
   padding: 0;
-  border-radius: 0.35em;
-  border: 1px solid color-mix(in srgb, var(--hl-accent-blue) 55%, transparent);
-  background: color-mix(in srgb, var(--hl-accent-blue) 14%, transparent);
+  border: 0;
+  background: none;
   color: var(--hl-accent-blue) !important;
   cursor: pointer;
   font: inherit;
@@ -4197,19 +4197,15 @@ span.hl-vuln__p--ssvc, span.hl-vuln__p--exp, span.hl-vuln__p--cn { cursor: help;
 .hl-dt[hidden] { display: none; }
 .hl-dt::before {
   content: '';
-  width: 0.42em;
-  height: 0.42em;
+  width: 0.36em;
+  height: 0.36em;
   border-right: 2px solid currentColor;
   border-bottom: 2px solid currentColor;
   transform: translateX(-0.08em) rotate(-45deg);
   transition: transform 0.15s ease;
 }
 .hl-dt[aria-expanded='true']::before { transform: translateY(-0.1em) rotate(45deg); }
-.hl-dt:hover,
-.hl-dt[aria-expanded='true'] {
-  background: color-mix(in srgb, var(--hl-accent-blue) 28%, transparent);
-  border-color: var(--hl-accent-blue);
-}
+.hl-dt:hover { color: var(--hl-text-primary) !important; }
 .hl-dt:focus-visible { outline: 2px solid var(--hl-accent-blue); outline-offset: 2px; }
 /* The button's name, for screen readers only; the chevron is what shows. */
 .hl-dt__sr {
