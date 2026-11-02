@@ -16,7 +16,7 @@
       its article links are curated feed publishers, not actor infrastructure, and the rendered-page gate checks them for IP targets only);
     - a kept external link whose label is only its own host name or host + path ("patchstack.com", "linkedin.com/in/josephrharrison") is not defanged: the label names where the reference goes.
   An element carrying data-literal="<type>" (the IOC viewer's hash, filename, path and registry cells, _includes/ioc-cell.html) keeps its text as written.
-  Tag attributes are never rewritten: an href, a data-title search key, a data-live value stay exactly as the layout wrote them (the rendered-page gate reads the tooltip
+  Tag attributes are never rewritten: an href or a data-title search key stays exactly as the layout wrote it (the IOC viewer's data-confidence, data-action and data-fp, which its CSV export reads, are written defanged by the layout itself) (the rendered-page gate reads the tooltip
   attributes title, alt, aria-label and data-copy, so a layout must defang those where it writes them).
   The markup is cut at "<" and ">", which kramdown and Liquid always escape in text (&lt; &gt;); a raw ">" inside an attribute value would be read as the end of the tag.
 {%- endcomment -%}
