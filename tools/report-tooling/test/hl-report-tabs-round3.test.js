@@ -75,10 +75,10 @@ test('v6: every tab, menu entry and next/previous card carries its hue token, th
     assert.ok([...f.d.querySelectorAll('.hl-rv-nextprev a')].every(a=>TOKENS.includes(a.dataset.rvHue)));
     assert.ok([...f.d.querySelectorAll('.hl-rv-menu-item[href^="#tab-"]')].every(a=>a.dataset.rvHue===a.getAttribute('href').slice(5)));
     assert.equal(f.d.querySelectorAll('.hl-rv-tile[data-rv-hue], .hl-rv-panel[data-rv-hue], .hl-rv-bar[data-rv-hue]').length,0,'the accent lives on the page, the tab, the menu entry and the card only');
-    const q=[...f.d.querySelectorAll('.hl-quicklink')];assert.ok(q.every(a=>a.classList.contains('hl-cta')));
-    assert.deepEqual(q.map(a=>a.style.getPropertyValue('--acc')),['#4ade80','#f87171','#22d3ee']);
+    const q=[...f.d.querySelectorAll('.hl-quicklink')].filter(a=>!a.classList.contains('hl-rv-read')&&!a.classList.contains('hl-rv-share-btn'));assert.ok(q.every(a=>a.classList.contains('hl-cta')));
+    assert.deepEqual(q.map(a=>a.style.getPropertyValue('--acc')),['#4ade80','#f87171','#22d3ee'],'the page\'s own resource links keep one colour per kind; Read the full report and Share are the plate\'s own buttons');
     assert.equal(f.d.querySelector('.hl-share-btn'),null,'the Share button is gone from the resource row');
-    const sb=f.d.querySelector('.hl-post-header > .hl-rv-share .hl-rv-share-btn');assert.ok(sb,'the share icon is in the header box');assert.equal(sb.getAttribute('aria-label'),'Share this report');
+    const sb=f.d.querySelector('.hl-post-header > .hl-rv-actions .hl-rv-share .hl-rv-share-btn');assert.ok(sb,'Share is the last button of the plate column');assert.equal(sb.getAttribute('aria-label'),'Share this report');
     for(const t of TOKENS){
       assert.match(css,new RegExp('--rv-hue-'+t+': #[0-9a-f]{6};'),'token for '+t);
       assert.match(css,new RegExp('\\[data-rv-hue="'+t+'"\\][^{]*\\{ --acc: var\\(--rv-hue-'+t+'\\); \\}'),'rule for '+t);
@@ -99,24 +99,21 @@ test('F2: aria-label sits only on elements that can carry one',()=>{
 function gradientSelectors(text){
   return [...text.matchAll(/(?:linear|radial|conic)-gradient\(/g)].flatMap(m=>{const open=text.lastIndexOf('{',m.index),c=text.lastIndexOf('*/',open),from=Math.max(text.lastIndexOf('}',open)+1,c<0?0:c+2);return text.slice(from,open).split(',').map(x=>x.trim()).filter(Boolean);});
 }
-const GRAD_OK=['.hl-report-page .hl-post-header','.hl-report-page .hl-post-header__title','.hl-report-page .hl-rv-panel-head','.hl-report-page .hl-post-content .hl-rv-source > h2','.hl-rv-view-summary',
-    '.hl-rv-reportband__in','.hl-rv-reportband__in::before',
-    // the gold panel rules are grouped with the tab-foot site card (hl-report-tabs.css lines 185 and 189: `.hl-rv-reportband__in, .hl-rv-sponsor-card.is-site` and the ::before pair)
-    '.hl-rv-sponsor-card.is-site','.hl-rv-sponsor-card.is-site::before',
-    // hl-report-tabs.css lines 320-321: the section header bar is grouped `.hl-report-page .hl-post-content .hl-rv-source > h2, .hl-rv-source.hl-rv-nohead::before` (the first block has no h2, so its label is the bar)
-    '.hl-rv-source.hl-rv-nohead::before'];
+// design D (T-0500.1.7.3): the plate (header box and its title text), the tab title text, the boxed generated view, the gold featured panels (band, margin card, site tab-foot card) and the quiet tab-foot card
+const GRAD_OK=['.hl-report-page .hl-post-header','.hl-report-page .hl-post-header__title','.hl-report-page .hl-post-content .hl-rv-panel-head h2','.hl-rv-view',
+    '.hl-rv-feat','.hl-rv-featcard','.hl-rv-sponsor-card.is-site','.hl-rv-sponsor-card'];
 function assertGradientsAllowed(sels){for(const sel of sels)assert.ok(GRAD_OK.includes(sel),'a gradient on a non-header selector: '+sel);}
 test('CSS control: a grouped rule hides no selector behind its first (allowed, .hl-rv-tabs { background: gradient })',()=>{
-  const sels=gradientSelectors('.hl-rv-reportband__in, .hl-rv-tabs { background: linear-gradient(red, blue); }');
-  assert.deepEqual(sels,['.hl-rv-reportband__in','.hl-rv-tabs']);
+  const sels=gradientSelectors('.hl-rv-feat, .hl-rv-tabs { background: linear-gradient(red, blue); }');
+  assert.deepEqual(sels,['.hl-rv-feat','.hl-rv-tabs']);
   assert.ok(sels.some(x=>x==='.hl-rv-tabs'),'the second selector is seen');
   assert.throws(()=>assertGradientsAllowed(sels),/non-header selector: \.hl-rv-tabs/,'the shared check rejects the second selector');
 });
 test('CSS: round-3 tokens, the old strip, the pill and the gradient and shadow looks are gone; no chrome size below 13px',()=>{
   for(const token of ['--rv-nav','--rv-tab:','--rv-boundary','--rv-accent','--rv-selected-ink','--rv-blue','--rv-series','--rv-meaning'])assert.equal(css.includes(token),false,token+' removed');
-  assert.equal(/\.hl-sponsor-rail \{ display: none/.test(css),false,'the site Sponsors rail is no longer hidden on tabbed pages (the strip or the fixed card shows)');
-  assert.match(css,/@media \(min-width: 1600px\) \{\s*body:has\(\.hl-report-page\) \.hl-sponsor-rail \{[^}]*--rail-gutter: calc\(50vw - 600px\);[^}]*--rail-w: min\(200px, calc\(var\(--rail-gutter\) - 48px\)\);[^}]*left: calc\(\(var\(--rail-gutter\) - var\(--rail-w\)\) \/ 2\);/);
-  assert.match(css,/@media \(min-width: 1281px\) and \(max-width: 1599px\) \{\s*body:has\(\.hl-report-page\) \.hl-sponsor-rail \{\s*position: static;/,'the site strip carries on from 1281 to 1599px');
+  assert.match(css,/body:has\(\.hl-report-page\) \.hl-sponsor-rail \{ display: none !important; \}/,'design D: the site rail stays in the DOM (the tab-foot card reads it) and the featured sponsor band and card replace it on tabbed pages');
+  assert.match(css,/@media \(min-width: 1440px\) \{[^}]*main\.content \{ max-width: var\(--rv-col\) !important; \}/,'from 1440px the column narrows so the margin card has room');
+  assert.match(css,/--rv-col: min\(1240px, calc\(100vw - 320px\)\);/);
   assert.equal(/td\.hl-rv-cell-pill::after/.test(css),false,'no pill drawn behind a cell');
   // v6.1 (Joseph, 2026-10-30): the site's own gradient highlight is reused for the main titles only (header panel, its title text, the
   // tab title, the section header bars, the data-view bar); bodies, tab cells, the toolbar and the bands stay flat.
@@ -124,9 +121,11 @@ test('CSS: round-3 tokens, the old strip, the pill and the gradient and shadow l
   // .hl-panel--featured recipe, which Joseph asked to borrow for highlights: its dark gradient and its gold glow. Nothing else gains a gradient.
   const gradSel=gradientSelectors(css);
   assert.ok(gradSel.length>=5,'the five site-recipe header gradients are present');
-  assert.ok(gradSel.includes('.hl-rv-reportband__in')&&gradSel.includes('.hl-rv-reportband__in::before'),'the featured site-sponsor panel carries its gradient and its glow');
+  assert.ok(gradSel.includes('.hl-rv-feat')&&gradSel.includes('.hl-rv-featcard'),'the featured site-sponsor panels carry their gradient and their glow');
   assertGradientsAllowed(gradSel);
-  assert.deepEqual([...css.matchAll(/box-shadow:\s*([^;}]+)/g)].map(m=>m[1].trim()).filter(v=>!/^none( !important)?$/.test(v)),[],'no shadows or glows');
+  // design D: glows only on the gold featured panels, the selected tab chip and the popover
+  const shadowSel=[...css.replace(/\/\*[\s\S]*?\*\//g,'').matchAll(/([^{}@]+)\{([^{}]*)\}/g)].filter(m=>/box-shadow:(?!\s*none)/.test(m[2])).flatMap(m=>m[1].split(',').map(x=>x.trim()));
+  assert.deepEqual(shadowSel.filter(s=>!['.hl-rv-feat','.hl-rv-featcard','.hl-rv-sponsor-card.is-site','.hl-report-page .hl-rv-tabs button[aria-selected="true"]','.hl-rv-pop'].includes(s)),[],'no shadows or glows except the featured panels, the selected tab chip and the popover');
   assert.equal(/max\(14px,\s*1em\)/.test(css),false,'no em-relative chrome size');
   const below=[...css.matchAll(/font-size:\s*(\d+(?:\.\d+)?)px/g)].map(m=>+m[1]).filter(n=>n<14);
   assert.deepEqual(below,[],'every font-size in the file is 14px or more (v6.1 micro-label floor; secondary text rides --rv-fs)');
@@ -137,29 +136,29 @@ test('CSS: round-3 tokens, the old strip, the pill and the gradient and shadow l
   assert.match(css,/:is\(button, input, select, summary, \[role="tab"\], \[data-rv-chrome\] a, \[data-rv-chrome\]:is\(a, button, input, select, summary\)\) \{ min-height: 44px; min-width: 44px; \}/);
   assert.equal(/min-height:\s*(3\d|[0-3]?\d)px/.test(css.replace(/min-height: 0\b/g,'')),false,'no control min-height below 44px (a 0 reset is allowed)');
 });
-test('CSS: v6.1 type is stated, not inherited: prose 18px (17px on phones), table text 16px (15px phones), mono headers 14px, tab names 17px',()=>{
+test('CSS: v6.1 type is stated, not inherited: prose 18px (17px on phones), table text 16px (15px phones), mono headers 14px, tab names 16px (design D)',()=>{
   assert.match(css,/\.hl-report-page \.hl-post-content \{ width: 100%; max-width: none; min-width: 0; font-size: 18px; line-height: 1\.65;/);
   assert.match(css,/@media \(max-width: 699px\) \{[\s\S]*?\.hl-report-page \.hl-post-content \{ font-size: 17px; \}/);
   assert.match(css,/\.hl-report-page \.hl-post-content :is\(th, td\) \{\s*padding: 10px 14px !important;[^}]*font-size: var\(--rv-fs\) !important;/);
   assert.match(css,/\.hl-report-page \.hl-post-content th \{\s*font-family: var\(--rv-mono\); font-size: var\(--rv-fs-mono\) !important;/);
-  assert.match(css,/\.hl-report-page \.hl-rv-tabs button \{[^}]*font-size: 17px;/);
+  assert.match(css,/\.hl-report-page \.hl-rv-tabs button \{[^}]*font-size: 16px;/);
   assert.equal(/\.hl-report-page \.hl-post-content \.hl-rv-source :is\(p, li, blockquote\) \{ font-size/.test(css),false,'prose fills its column at one stated size, with no per-element override');
 });
 test('CSS: the view states its own text sizes and keeps its tile notes a row under the tiles',()=>{
   assert.match(css,/\.hl-rv-tile > span:not\(\.hl-rv-tile-destination\) \{ font-size: var\(--rv-fs\);/);
   assert.match(css,/\.hl-rv-tile-destination \{[^}]*font-size: var\(--rv-fs-mono\) !important;/);
-  assert.match(css,/\.hl-rv-tile-notes \{ order: -2; display: grid;/);
-  assert.match(css,/@media \(max-width: 1139px\) \{\s*\.hl-rv-tile-notes \{ grid-template-columns: minmax\(0, 1fr\);[\s\S]*?\.hl-rv-tile-note__key \{ display: inline;/);
+  assert.match(css,/\.hl-rv-tilecell > \.hl-rv-info \{ position: absolute; top: 2px; right: 2px; \}/,'design D: the tile notes sit behind each tile\'s "i"');
   assert.match(css,/\.hl-rv-view-summary::before \{ content: 'DATA VIEW';/);
   assert.match(css,/\.hl-rv-panel > \.hl-rv-half \{ grid-column: auto; \}/);
 });
-test('Liquid: the tabbed layout swaps the banner for the report-sponsor bar, reads the same data, and leaves untagged pages on the old include',()=>{
+test('Liquid: the tabbed layout puts the report sponsor in the plate and the featured sponsor above it, reads the same data, and leaves untagged pages on the old include',()=>{
   const post=fs.readFileSync(path.join(root,'_layouts/post.html'),'utf8');
-  assert.ok(post.includes('{% if hl_tabbed %}{% include report-sponsor-bar.html part="report" %}{% else %}{% include sponsor-banner.html %}{% endif %}\n<div class="hl-post-body">'));
-  assert.ok(post.includes('{% if hl_tabbed %}{% include report-sponsor-bar.html part="band" %}{% endif %}\n<div class="hl-post-header'),'the report band is the first thing in the page, before the header');
+  assert.ok(post.includes('{% unless hl_tabbed %}{% include sponsor-banner.html %}{% endunless %}\n<div class="hl-post-body">'),'untagged pages keep sponsor-banner.html in the old place');
+  assert.ok(post.includes('</h1>{% if hl_tabbed %}\n{% include report-sponsor-bar.html part="report" %}{% endif %}\n</div>'),'the report sponsor is the foot of the plate (inside the header box)');
+  assert.ok(post.includes('{% if hl_tabbed %}{% include report-featured-sponsor.html %}{% endif %}\n<div class="hl-post-header'),'the featured sponsor is the first thing in the page, before the header');
   const inc=fs.readFileSync(path.join(root,'_includes/report-sponsor-bar.html'),'utf8');
   assert.ok(inc.includes('page.sponsored_by | join: "|;sep;|" | split: "|;sep;|"'),'same normalisation as sponsor-banner.html');
-  assert.equal(inc.replace(/\{%-? comment -%\}[\s\S]*?\{%-? endcomment -%\}/g,'').includes('monthly'),false,'the Monthly sponsors are the site rail now, with its own filter (sidebar-sponsors.html)');
+  assert.equal(inc.replace(/\{%-? comment -%\}[\s\S]*?\{%-? endcomment -%\}/g,'').includes('monthly'),false,'the Monthly sponsors are the featured include and the site rail, with their own filter');
   assert.ok(fs.readFileSync(path.join(root,'_includes/sidebar-sponsors.html'),'utf8').includes('where: "tier", "monthly" | where: "active", true'));
   assert.ok(inc.includes('data-rv-chrome data-pagefind-ignore'));assert.equal(/<script|onclick=|tracking|utm_/.test(inc.replace(/\{%-? comment -%\}[\s\S]*?\{%-? endcomment -%\}/g,'')),false);
 });

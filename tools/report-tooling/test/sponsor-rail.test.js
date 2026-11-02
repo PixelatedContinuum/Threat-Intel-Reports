@@ -10,33 +10,44 @@ const G = require('../check-browser-report.js');
 const root = path.join(__dirname, '..', '..', '..');
 const css = fs.readFileSync(path.join(root, 'assets/css/hl-report-tabs.css'), 'utf8');
 
-test('CSS: the rail is fixed in the gutter from 1600px with 24px clear nominal, and the site strip carries on from 1281 to 1599px', () => {
-  assert.match(css, /@media \(min-width: 1600px\) \{\s*body:has\(\.hl-report-page\) \.hl-sponsor-rail \{\s*--rail-gutter: calc\(50vw - 600px\);\s*--rail-w: min\(200px, calc\(var\(--rail-gutter\) - 48px\)\);\s*width: var\(--rail-w\); left: calc\(\(var\(--rail-gutter\) - var\(--rail-w\)\) \/ 2\);/);
-  const strip = css.match(/@media \(min-width: 1281px\) and \(max-width: 1599px\) \{[\s\S]*?\n\}\n/)[0];
-  assert.match(strip, /position: static; transform: none; width: auto; max-width: 900px;/);
-  assert.equal(/display:\s*none/.test(strip), false, 'never hidden');
+test('CSS (design D): the site rail is not drawn on tabbed pages; the featured card is fixed in the left margin from 1440px, at least 140px wide there, and the band carries on below', () => {
+  assert.match(css, /body:has\(\.hl-report-page\) \.hl-sponsor-rail \{ display: none !important; \}/);
+  assert.match(css, /--rv-card-w: min\(200px, calc\(\(100vw - var\(--rv-col\)\) \/ 2 - 20px\)\); --rv-card-left: max\(16px, calc\(\(100vw - var\(--rv-col\)\) \/ 2 - 4px - var\(--rv-card-w\)\)\);/);
+  assert.match(css, /\.hl-rv-featcard \{ display: none; \}/, 'the card is not drawn below 1440px');
+  assert.match(css, /@media \(min-width: 1440px\) \{[^@]*\.hl-rv-feat \{ display: none; \}/, 'the band is not drawn from 1440px');
   const printBlock = css.slice(css.indexOf('@media print'));
-  assert.ok(printBlock.includes('.hl-sponsor-rail'), 'print still drops the rail');
+  assert.ok(printBlock.includes('.hl-sponsor-rail') && printBlock.includes('.hl-rv-featcard') && printBlock.includes('.hl-rv-feat'), 'print drops the rail, the band and the card');
 });
 
-const RAIL = (over) => Object.assign({ present: true, display: 'flex', visibility: 'visible', position: 'fixed', left: 80, right: 280, top: 200, bottom: 400, width: 200, height: 200, colLeft: 360, colRight: 1560, colTop: 90, vw: 1920, iw: 1920, visibleItems: 1, allItems: 1 }, over || {});
-test('the rail verdict passes fixed at 1920 and the strip at 1280', () => {
-  assert.equal(G.railVerdict(RAIL(), 'fixed').ok, true, G.railVerdict(RAIL(), 'fixed').detail);
-  const strip = RAIL({ position: 'static', left: 40, right: 1240, top: 70, bottom: 92, width: 1200, height: 22, colLeft: 40, colTop: 92, vw: 1280 });
-  assert.equal(G.railVerdict(strip, 'strip').ok, true, G.railVerdict(strip, 'strip').detail);
+const BOX = (over) => Object.assign({ position: 'fixed', left: 16, right: 156, top: 92, bottom: 334, width: 140, height: 242 }, over || {});
+const RAIL = (over) => Object.assign({ present: true, card: BOX(), band: null, oldRailDrawn: false, colLeft: 180, colRight: 1260, colTop: 94, vw: 1440, iw: 1440 }, over || {});
+const BAND = (over) => RAIL(Object.assign({ card: null, band: BOX({ position: 'static', left: 40, right: 1240, top: 70, bottom: 138, width: 1200, height: 68 }), colLeft: 40, colTop: 162, vw: 1280, iw: 1280 }, over || {}));
+test('the placement verdict passes the card at 1440 and the band at 1280', () => {
+  assert.equal(G.railVerdict(RAIL(), 'card').ok, true, G.railVerdict(RAIL(), 'card').detail);
+  assert.equal(G.railVerdict(BAND(), 'band').ok, true, G.railVerdict(BAND(), 'band').detail);
 });
-test('the rail verdict FAILS when hidden, fixed where the gutter does not fit it, touching the column, off screen, the wrong width, or not a strip', () => {
+test('the placement verdict FAILS a hidden panel, the old rail drawn, both panels drawn, a card that is not fixed, touches the column, is off screen, is too narrow, a fixed band, or a band that is not a band', () => {
   const bad = (m, expect, re) => { const v = G.railVerdict(m, expect); assert.equal(v.ok, false); assert.match(v.detail, re); };
-  bad(RAIL({ display: 'none', width: 0, height: 0 }), 'fixed', /the rail is hidden/);
-  bad(RAIL({ display: 'none', width: 0, height: 0 }), 'strip', /the rail is hidden/);
-  bad(RAIL({ right: 350 }), 'fixed', /from the column/);
-  bad(RAIL({ left: -10 }), 'fixed', /outside the viewport/);
-  bad(RAIL({ position: 'static' }), 'fixed', /not fixed in the gutter/);
-  bad(RAIL({ width: 100 }), 'fixed', /wide \(120 to 200 expected\)/);
-  bad(RAIL({ visibleItems: 0 }), 'fixed', /0 of 1 sponsor card/);
-  bad(RAIL({ position: 'fixed', bottom: 120, height: 22 }), 'strip', /fixed at a width where the gutter does not fit/);
-  bad(RAIL({ position: 'static', bottom: 400, colTop: 90 }), 'strip', /below the top of the report/);
-  bad(RAIL({ position: 'static', bottom: 80, height: 300, colTop: 90 }), 'strip', /not a strip/);
-  assert.equal(G.railVerdict({ present: false }, 'fixed').notChecked, true);
-  assert.equal(G.RAIL_STATES.find(s => s[0] === 1280)[2], 'strip'); assert.equal(G.RAIL_STATES.find(s => s[0] === 1920)[2], 'fixed');
+  bad(RAIL({ card: null }), 'card', /the featured card is hidden/);
+  bad(BAND({ band: null }), 'band', /the featured band is hidden/);
+  bad(RAIL({ oldRailDrawn: true }), 'card', /Sponsors rail is drawn/);
+  bad(RAIL({ band: BOX({ position: 'static', width: 1200, height: 68 }) }), 'card', /band is drawn where the card is expected/);
+  bad(RAIL({ card: BOX({ position: 'static' }) }), 'card', /not fixed in the left margin/);
+  bad(RAIL({ card: BOX({ right: 175 }) }), 'card', /from the column/);
+  bad(RAIL({ card: BOX({ left: -10 }) }), 'card', /outside the viewport/);
+  bad(RAIL({ card: BOX({ width: 100, right: 116 }) }), 'card', /wide \(140 to 200 expected\)/);
+  bad(BAND({ band: BOX({ position: 'fixed', left: 40, right: 1240, top: 70, bottom: 138, width: 1200, height: 68 }) }), 'band', /band is fixed/);
+  bad(BAND({ band: BOX({ position: 'static', left: 40, right: 1240, top: 70, bottom: 400, width: 1200, height: 330 }), colTop: 162 }), 'band', /below the top of the plate/);
+  assert.equal(G.railVerdict({ present: false }, 'card').notChecked, true);
+  assert.equal(G.RAIL_STATES.find(s => s[0] === 1439)[2], 'band'); assert.equal(G.RAIL_STATES.find(s => s[0] === 1440)[2], 'card'); assert.equal(G.RAIL_STATES.find(s => s[0] === 1920)[2], 'card');
+});
+test('the sticky-overlap verdict passes a card with nothing over it and FAILS a sticky bar over it, an element on top of it, or no measurement', () => {
+  const ok = (y) => ({ present: true, y, card: { l: 16, t: 92, r: 156, b: 334 }, over: [], covered: [] });
+  assert.equal(G.stickyOverlapVerdict([ok(0), ok(900), ok(3000)]).ok, true);
+  const v = G.stickyOverlapVerdict([ok(0), Object.assign(ok(900), { over: ['hl-rv-bar'], covered: ['hl-rv-bar'] })]);
+  assert.equal(v.ok, false); assert.match(v.detail, /at scroll 900 hl-rv-bar overlaps the card/); assert.match(v.detail, /topmost element over the card is hl-rv-bar/);
+  assert.equal(G.stickyOverlapVerdict([{ present: false, y: 0 }]).notChecked, true);
+  assert.equal(G.stickyOverlapVerdict([]).notChecked, true);
+  assert.match(G.STICKY_CONTROL_CSS, /width:100vw/, 'the control re-creates a full-width sticky bar');
+  assert.deepEqual(G.STICKY_STATES, [[1440, 900], [1600, 900]]);
 });

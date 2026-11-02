@@ -156,9 +156,9 @@ test('CSS fix 3: the first and last timeline date labels start and end at the ra
   assert.match(CSS, /\.hl-rv-axis span:last-child \{ transform: translateX\(-100%\); text-align: right; \}/);
   assert.doesNotMatch(CSS.match(/\.hl-rv-axis span \{[^}]*\}/)[0], /max-width/);
 });
-test('CSS fix 4: from 900px to 1179px the seven-column tab row uses 16px labels and 28px of left padding, and the 700 to 899px row is unchanged', () => {
-  assert.match(CSS, /@media \(min-width: 900px\) and \(max-width: 1179px\) \{\n  \.hl-report-page \.hl-rv-tabs button \{ font-size: 16px; padding-left: 28px; \}\n\}/);
-  assert.match(CSS, /@media \(min-width: 700px\) and \(max-width: 899px\) \{\n  \.hl-rv-tabs \{ display: flex; \}\n  \.hl-report-page \.hl-rv-tabs button \{ flex: 1 1 auto; white-space: nowrap; padding: 14px 6px 10px 24px; \}/);
+test('CSS fix 4 (design D, T-0500.1.7.3): from 700 to 1179px the seven chips stack the icon over the short label and the row scrolls sideways if it must', () => {
+  assert.match(CSS, /@media \(min-width: 700px\) and \(max-width: 1179px\) \{\n  \.hl-report-page \.hl-rv-tabs button \{ flex: 1 0 auto !important; flex-direction: column;/);
+  assert.match(CSS, /\.hl-rv-tabs \{\n  display: flex; gap: 6px;[^}]*overflow-x: auto;/);
 });
 
 /* T-0500.1.11 (PULSAR-RAT): a table cell with rowspan > 1 lies over the rows it spans, so neither its row's scroll height nor its own rect is a

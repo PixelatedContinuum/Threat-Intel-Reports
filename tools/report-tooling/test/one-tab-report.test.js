@@ -67,17 +67,17 @@ test('the empty-landmark row FAILS on a nav with nothing in it, names it, and is
   assert.equal(G.emptyLandmarkVerdict(null).ok,false);
 });
 
-function tab(o){return Object.assign({id:'tabbtn-overview',selected:true,color:'rgb(163, 113, 247)',line:'rgb(163, 113, 247)',lineW:2,dot:'rgb(163, 113, 247)',dotW:8},o||{});}
+function tab(o){return Object.assign({id:'tabbtn-overview',selected:true,color:'rgb(255, 255, 255)',border:'rgb(150, 100, 200)',hasIcon:true,iconW:32,iconBg:'rgb(163, 113, 247)',iconFg:'rgb(17, 17, 17)'},o||{});}
 test('the tab look row with one tab measures what one tab can show, says it made no comparison, and FAILS when that is wrong',()=>{
   const v=G.tabLookVerdict([tab()]);
   assert.equal(v.notChecked,false);assert.equal(v.single,true);assert.equal(v.ok,true,v.detail);assert.match(v.detail,/no idle tab exists/);
-  for(const [what,t,re] of [['not selected',tab({selected:false}),/not selected/],['no underline',tab({lineW:0,line:'rgba(0, 0, 0, 0)'}),/no underline/],['no dot',tab({dotW:0}),/no accent dot/],['clear dot',tab({dot:'rgba(0, 0, 0, 0)'}),/no accent dot/]]){
+  for(const [what,t,re] of [['not selected',tab({selected:false}),/not selected/],['icon box not filled',tab({iconBg:'rgba(163, 113, 247, 0.13)'}),/not filled/],['no icon',tab({hasIcon:false}),/no icon box/]]){
     const r=G.tabLookVerdict([t]);assert.equal(r.ok,false,what);assert.match(r.detail,re,what);
   }
   assert.equal(G.tabLookVerdict([]).notChecked,true);
 });
-test('the tab look row with two or more tabs is unchanged: it still needs an idle tab to compare',()=>{
-  const two=[tab(),tab({id:'tabbtn-chain',selected:false,color:'rgb(150, 150, 150)',line:'rgba(0, 0, 0, 0)',lineW:0,dot:'rgb(251, 146, 60)'})];
+test('the tab look row with two or more tabs still needs an idle tab to compare',()=>{
+  const two=[tab(),tab({id:'tabbtn-chain',selected:false,color:'rgb(214, 214, 214)',border:'rgb(58, 58, 58)',iconBg:'rgba(251, 146, 60, 0.13)',iconFg:'rgb(251, 146, 60)'})];
   const v=G.tabLookVerdict(two);assert.equal(v.single,undefined);assert.equal(v.ok,true,v.detail);
   two[1].color=two[0].color;assert.equal(G.tabLookVerdict(two).ok,false);
 });

@@ -36,6 +36,51 @@
     if (action) b.addEventListener('click', action);
     return b;
   }
+  // Design D (T-0500.1.7.3): one stroke icon per fixed tab, the plate's action icons, and the small "i" popover.
+  var TAB_ICONS = {
+    overview: '<rect x="3" y="3" width="7" height="9" rx="1.6"/><rect x="14" y="3" width="7" height="5" rx="1.6"/><rect x="14" y="12" width="7" height="9" rx="1.6"/><rect x="3" y="16" width="7" height="5" rx="1.6"/>',
+    victims: '<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.4" fill="currentColor"/>',
+    chain: '<circle cx="5" cy="7" r="2.4"/><circle cx="12" cy="17" r="2.4"/><circle cx="19" cy="7" r="2.4"/><path d="M6.6 8.9l3.8 6.2M13.6 15.1l3.8-6.2"/>',
+    timeline: '<rect x="3" y="4" width="18" height="6.5" rx="1.8"/><rect x="3" y="13.5" width="18" height="6.5" rx="1.8"/><path d="M7 7.25h.01M7 16.75h.01"/>',
+    attribution: '<circle cx="12" cy="8.5" r="3.6"/><path d="M5 20c0-4 3-6.5 7-6.5s7 2.5 7 6.5"/>',
+    indicators: '<path d="M4 9h16M4 15h16M10 4L8 20M16 4l-2 16"/>',
+    confidence: '<path d="M4 17a8 8 0 1 1 16 0"/><path d="M12 17l4-5"/><circle cx="12" cy="17" r="1.3" fill="currentColor"/>'
+  };
+  function icon(inner, size, parent, cls) {
+    var span = make('span', cls || '', null, parent); span.setAttribute('aria-hidden', 'true');
+    span.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="' + size + '" height="' + size + '" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" focusable="false">' + inner + '</svg>';
+    return span;
+  }
+  // The small "i" control: the explanatory notes under generated figures ("How counted", where a count is read from) are moved,
+  // text unchanged, into a popover that opens on tap or Enter and closes on Escape, a second press or a press elsewhere.
+  // The notes stay in the DOM; none of them is report text.
+  var openInfo = null, infoSeq = 0;
+  function closeInfo(focus) {
+    if (!openInfo) return;
+    var b = openInfo.btn; openInfo.pop.hidden = true; openInfo.pop.style.transform = ''; b.setAttribute('aria-expanded', 'false'); openInfo = null; if (focus) b.focus();
+  }
+  function infoButton(host, notes, label) {
+    var btn = make('button', 'hl-rv-info', null, host); btn.type = 'button';
+    btn.setAttribute('aria-label', label || 'How this is counted'); btn.setAttribute('aria-expanded', 'false');
+    var mark = make('span', '', 'i', btn); mark.setAttribute('aria-hidden', 'true');
+    var pop = make('div', 'hl-rv-pop', null, host); pop.hidden = true; pop.setAttribute('role', 'note'); pop.id = 'hl-rv-pop-' + (++infoSeq);
+    btn.setAttribute('aria-controls', pop.id);
+    notes.forEach(function (n) { pop.appendChild(n); });
+    btn.addEventListener('click', function (e) {
+      e.preventDefault(); e.stopPropagation();
+      if (openInfo && openInfo.btn === btn) { closeInfo(false); return; }
+      closeInfo(false); pop.hidden = false; btn.setAttribute('aria-expanded', 'true'); openInfo = { btn: btn, pop: pop };
+      var r = pop.getBoundingClientRect(), dx = 0;
+      if (r.right > innerWidth - 12) dx = innerWidth - 12 - r.right;
+      if (r.left + dx < 12) dx = 12 - r.left;
+      if (dx) pop.style.transform = 'translateX(' + Math.round(dx) + 'px)';
+    });
+    pop.addEventListener('keydown', function (e) { if (e.key === 'Escape') { e.stopPropagation(); closeInfo(true); } });
+    btn.addEventListener('keydown', function (e) { if (e.key === 'Escape' && openInfo) { e.stopPropagation(); closeInfo(true); } });
+    return btn;
+  }
+  document.addEventListener('click', function (e) { if (openInfo && !e.target.closest('.hl-rv-pop, .hl-rv-info')) closeInfo(false); });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeInfo(true); });
   function safeHref(h) {
     if (typeof h !== 'string' || /[\\\s\u0000-\u0020\u007f]/.test(h)) return false;
     if (h.charAt(0) === '#') return true;
@@ -270,9 +315,12 @@
     times.push(mins);
     var tab = button('', tablist, function () { navigateTab(i, true); });
     tab.setAttribute('aria-label', ARIA_LABELS[i]);
-    make('span', 'hl-rv-tab-full', NAMES[i], tab);
-    make('span', 'hl-rv-tab-short', SHORT_NAMES[i], tab);
-    make('small', 'hl-rv-tab-time', mins + ' min', tab);
+    // Design D: an icon box and the label; no numeral and no minutes on the button (the minutes stay on the reading line, the tab title and the title attribute).
+    icon(TAB_ICONS[t], 21, tab, 'hl-rv-tab-icon');
+    var tabLabel = make('span', 'hl-rv-tab-label', null, tab);
+    make('span', 'hl-rv-tab-full', NAMES[i], tabLabel);
+    make('span', 'hl-rv-tab-short', SHORT_NAMES[i], tabLabel);
+    tab.style.flexGrow = String(Math.min(1.4, 0.72 + NAMES[i].length / 40).toFixed(2));
     tab.dataset.rvHue = t; tab.id = 'tabbtn-' + t; tab.setAttribute('role', 'tab'); tab.setAttribute('aria-controls', 'tab-' + t);
     tab.title = QUESTIONS[i] + ' ' + mins + ' min read';
     tab.addEventListener('keydown', function (e) {
@@ -287,6 +335,7 @@
     panel.setAttribute('role', 'tabpanel'); panel.setAttribute('aria-labelledby', tab.id); panel.tabIndex = -1;
     content.appendChild(panel); panels.push(panel);
     var title = make('header', 'hl-rv-panel-head', null, panel);
+    var numeral = make('span', 'hl-rv-panel-num', String(i + 1).padStart(2, '0'), title); numeral.setAttribute('aria-hidden', 'true');
     make('h2', '', NAMES[i], title); make('p', '', QUESTIONS[i] + ' · ' + mins + ' min read', title);
     group.forEach(function (s) { panel.appendChild(s.node); });
     // Two consecutive short sections (no table, no figure, under 3000 characters) sit side by side from 1280px;
@@ -320,9 +369,11 @@
       tabs.forEach(function (t) { t.setAttribute('aria-selected', 'false'); t.tabIndex = -1; });
       tablist.hidden = true; currentLabel.textContent = 'Read as one page';
       oneLink.textContent = 'Back to tabs'; oneLink.href = '#tab-' + TOKENS[active];
+      if (typeof readBtn !== 'undefined' && readBtn) { readBtn.href = '#tab-' + TOKENS[active]; readBtn.querySelector('.hl-quicklink__label').textContent = 'Back to the tabs'; }
     } else {
       sections.forEach(function (s) { var p = panels[TOKENS.indexOf(s.token)]; p.insertBefore(s.node, p.querySelector('.hl-rv-sponsor-card, .hl-rv-nextprev')); });
       tablist.hidden = false; oneLink.textContent = 'Read as one page'; oneLink.href = '#one-page'; select(active);
+      if (typeof readBtn !== 'undefined' && readBtn) { readBtn.href = '#one-page'; readBtn.querySelector('.hl-quicklink__label').textContent = 'Read the full report'; }
     }
     closeMenu(false); measureBar(); updateProgress();
   }
@@ -449,7 +500,8 @@
   // that sits directly under the tile grid (one note under its tile), so the tiles stay short. On a phone the row
   // is one column and each note is keyed by its tile's value and label.
   function tile(parent, value, label, how, tok, short) {
-    var a = link('', '#tab-' + tok, parent); a.className = 'hl-rv-tile'; a.dataset.rvShort = short;
+    var cellBox = make('div', 'hl-rv-tilecell', null, parent);
+    var a = link('', '#tab-' + tok, cellBox); a.className = 'hl-rv-tile'; a.dataset.rvShort = short;
     var big = make('strong', 'hl-rv-value', value, a); make('span', '', label, a);
     if (String(value).length > 8) big.classList.add('hl-rv-value--long');
     var m = { victims: victims, chain: attack, timeline: chronology }[tok];
@@ -458,6 +510,8 @@
     var cell = make('p', 'hl-rv-tile-note', null, notes);
     make('span', 'hl-rv-tile-note__key', value + ' ' + label, cell);
     make('small', '', 'How counted: ' + how + (m ? ' From ' + text(m.heading) + ', table ' + m.index + ', ' + m.rows.length + ' rows.' : ' From the detection guidance.'), cell);
+    infoButton(cellBox, [notes.removeChild(cell)], 'How counted: ' + value + ' ' + label);
+    if (!notes.children.length) notes.remove();
     if (m) a.href = '#' + m.heading.id;
     make('span', 'hl-rv-tile-destination', '↗ ' + NAMES[TOKENS.indexOf(tok)], a);
   }
@@ -481,9 +535,7 @@
       if (chronology) { var dc = col(chronology, /^Date|^Time|^When/i);
         tile(tiles, chronology.rows[0][dc] + ' to ' + chronology.rows[chronology.rows.length - 1][dc], 'observation window', 'First and last rows in the chronology; not an activity duration.', 'timeline', 'observation window'); count++; }
       if (!count) missing(body, 'victim, procedure, indicator or dated chronology tables');
-      var executive = sections.find(function (s) { return s.token === 'overview' && s.heading; });
-      var lead = executive && executive.node.querySelector('p');
-      if (lead) { var intro = make('div', 'hl-rv-lead', null, body); tiles.before(intro); make('blockquote', '', text(lead), intro); link('Read in the report', '#' + executive.heading.id, intro).setAttribute('aria-label', 'Read in the report: ' + text(executive.heading)); }
+      // The report's lead (its bottom line) is the plate's bottom line now (design D); it is not repeated in this view.
       if (judgments && Array.isArray(curation.headline_rows)) {
         var headline = Object.assign({}, judgments, { rows: judgments.rows.filter(function (_, i) { return curation.headline_rows.includes(i); }) });
         var headlineTable = dashTable(tableFold(body, 'Headline judgments (curated for this report)'), headline, 'Headline judgments (curated for this report)'); tiles.before(headlineTable.closest('details'));
@@ -588,7 +640,8 @@
           var n = attack.rows.filter(function (r) { return r[attackC.status] === value; }).length;
           var tile = make('div', 'hl-rv-status-tile hl-rv-' + value.toLowerCase().replace(/ /g, '-'), null, statusTiles);
           make('strong', '', n, tile); badge(tile, value);
-          make('small', '', 'How counted: procedure rows with this status. ' + attack.rows.length + ' rows in table ' + attack.index + '.', tile); sourceLink(attack, tile, value + ' procedure rows');
+          var how = make('small', '', 'How counted: procedure rows with this status. ' + attack.rows.length + ' rows in table ' + attack.index + '.');
+          infoButton(tile, [how], 'How counted: ' + value + ' procedure rows'); sourceLink(attack, tile, value + ' procedure rows');
         });
         if (attack.legacy) {
           // Say what the report's table does not hold; never fill a Status in.
@@ -665,12 +718,16 @@
     var firstSource = sections.find(function (s) { return s.token === t && s.heading; });
     if (firstSource) { var skip = link('Skip this view', '#' + firstSource.heading.id, panel); skip.className = 'hl-rv-skip-view'; view.before(skip); }
     var summary = make('div', 'hl-rv-view-summary', null, view), line = make('p', '', '', summary);
+    icon(TAB_ICONS[t], 17, summary, 'hl-rv-eyebrow-icon');
     var toggle = button('Show the view', summary); toggle.id = 'hl-rv-toggle-' + t;
     var body = make('div', 'hl-rv-view-body', null, view); body.id = 'hl-rv-view-' + t;
     toggle.setAttribute('aria-controls', body.id);
     line.textContent = builders[t](body);
     sourceFooter(body, { overview: [victims, attack, judgments, chronology], victims: [victims], chain: [stages, attack], timeline: [chronology], attribution: [hypotheses, calls], indicators: [indicators], confidence: [judgments] }[t]);
     if ((t === 'overview' || t === 'indicators') && detectionSection) link('Counts from: ' + text(detectionSection.heading) + ', first paragraph', '#' + detectionSection.heading.id, body.querySelector('.hl-rv-source-footer'));
+    // Design D: the "how counted" and "from" notes of this view sit behind its "i" in the bar; "Not stated" lines and the curated note stay visible.
+    var viewNotes = Array.from(body.querySelectorAll('.hl-rv-note:not(.hl-rv-unstated), .hl-rv-source-footer'));
+    if (viewNotes.length) infoButton(summary, viewNotes, 'How this view is counted and where it is read from');
     if (t === 'overview') {
       var overviewLead = body.querySelector('.hl-rv-lead');
       function placeLead() { if (overviewLead) { if (phone.matches) view.before(overviewLead); else body.insertBefore(overviewLead, body.firstChild); } }
@@ -765,10 +822,38 @@
   // Keep resources in the header: the old fixed dock overlaps the wider report.
   var resources = document.querySelector('.hl-report-page .hl-quicklinks');
   var reportHeader = document.querySelector('.hl-report-page .hl-post-header');
-  if (resources && reportHeader) reportHeader.appendChild(resources);
+  // Design D, the plate (T-0500.1.7.3). Order: meta line, title, bottom line; the action buttons are a column to the right
+  // (Read the full report, then the page's own Detections, IOC feed, STIX and MISP, then Share); the report sponsor is the foot.
+  var plateFoot = reportHeader && reportHeader.querySelector('.hl-rvsp--report');
+  function intoPlate(node) { if (plateFoot) reportHeader.insertBefore(node, plateFoot); else reportHeader.appendChild(node); }
+  // The bottom line is a copy of the report's lead, marked as chrome: the first paragraph of a BLUF section when the Overview has one,
+  // else the first paragraph of the first headed Overview section (what the Overview view used to print as its lead). The source stays where it is.
+  var leadSection = sections.find(function (s) { return s.token === 'overview' && s.heading && /\bBLUF\b|bottom line/i.test(text(s.heading)) && s.node.querySelector('p'); })
+    || sections.find(function (s) { return s.token === 'overview' && s.heading; });
+  var leadPara = leadSection && leadSection.node.querySelector('p');
+  var bluf = null;
+  if (reportHeader && leadPara && text(leadPara)) {
+    // A long lead is shown as its first sentences, cut at a sentence end, up to 60 words (always at least the first sentence); the whole paragraph is the first paragraph of the Overview below.
+    var leadText = text(leadPara), sentences = leadText.split(/(?<=[.!?])\s+(?=[A-Z0-9"\u201c'])/), shown = sentences[0], k = 1;
+    while (k < sentences.length && (shown + ' ' + sentences[k]).split(/\s+/).length <= 60) { shown += ' ' + sentences[k]; k++; }
+    bluf = make('p', 'hl-rv-bluf', shown);
+    var nWords = shown.split(/\s+/).length;
+    bluf.classList.add(nWords > 90 ? 'hl-rv-bluf--xlong' : nWords > 48 ? 'hl-rv-bluf--long' : 'hl-rv-bluf--short');
+    var plateTitle = reportHeader.querySelector('.hl-post-header__title');
+    if (plateTitle) plateTitle.after(bluf); else intoPlate(bluf);
+  }
+  var actions = resources || (reportHeader && make('div', 'hl-quicklinks'));
+  if (actions && reportHeader) {
+    actions.classList.add('hl-rv-actions'); actions.setAttribute('role', 'group'); actions.setAttribute('aria-label', 'Report resources');
+    intoPlate(actions);
+    var readBtn = make('a', 'hl-quicklink hl-cta hl-rv-read', null); readBtn.href = '#one-page';
+    readBtn.innerHTML = '<span class="hl-quicklink__icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" focusable="false"><path d="M6 3H3v10h10v-3M9 3h4v4M13 3L7 9"/></svg></span><span class="hl-quicklink__label">Read the full report</span>';
+    actions.prepend(readBtn);
+  }
   // The site's own button recipe (custom.scss .hl-cta), one colour per kind: Detections green, IOC feed red, STIX cyan.
   var kindColours = [[/detect/i, '#4ade80'], [/ioc/i, '#f87171'], [/stix/i, '#22d3ee']];
   if (resources) resources.querySelectorAll('.hl-quicklink').forEach(function (a) {
+    if (a.classList.contains('hl-rv-read')) return;
     var label = text(a.querySelector('.hl-quicklink__label')) + ' ' + (a.id || ''), kind = kindColours.find(function (k) { return k[0].test(label); });
     a.classList.add('hl-cta'); a.style.setProperty('--acc', kind ? kind[1] : '#58a6ff');
   });
@@ -841,8 +926,8 @@
   // Share: a 44px icon button in the top-right corner of the header box (Joseph, 2026-10-30). It calls the browser's own share
   // sheet where there is one and otherwise copies the page address, saying "Link copied" in an aria-live region. No request is
   // made and nothing is tracked. It is built here, so with scripts off it is simply absent.
-  if (reportHeader) {
-    var share = make('div', 'hl-rv-share', null, reportHeader); share.setAttribute('data-rv-chrome', '');
+  if (reportHeader && actions) {
+    var share = make('div', 'hl-rv-share', null, actions); share.setAttribute('data-rv-chrome', '');
     var shareStatus = make('span', 'hl-rv-share-status', '', share); shareStatus.setAttribute('role', 'status'); shareStatus.setAttribute('aria-live', 'polite');
     var shareButton = button('', share, function () {
       if (navigator.share) { navigator.share({ title: document.title, url: location.href }).catch(function () {}); return; }
@@ -850,8 +935,8 @@
       if (navigator.clipboard) navigator.clipboard.writeText(location.href).then(function () { address.remove(); announceShare('Link copied'); }, function () { copy(address, shareStatus, 'Link copied.'); });
       else copy(address, shareStatus, 'Link copied.');
     });
-    shareButton.className = 'hl-rv-share-btn'; shareButton.setAttribute('aria-label', 'Share this report'); shareButton.title = 'Share this report';
-    shareButton.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>';
+    shareButton.className = 'hl-quicklink hl-cta hl-rv-share-btn'; shareButton.setAttribute('aria-label', 'Share this report'); shareButton.title = 'Share this report';
+    shareButton.innerHTML = '<span class="hl-quicklink__icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" focusable="false"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg></span><span class="hl-quicklink__label">Share</span>';
     var shareTimer = 0;
     function announceShare(message) {
       shareStatus.textContent = message;

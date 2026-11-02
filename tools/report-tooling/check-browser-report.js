@@ -620,45 +620,52 @@ function chromeTextExpr(token) {
     'return {count:count,pseudo:pseudo,small:small.slice(0,8),smallCount:small.length};})(' + JSON.stringify(token) + ')';
 }
 
-/* The selected tab is told apart from the others by more than its aria state: its label and underline
-   take the tab's accent while an idle tab is muted with no underline, and every tab carries its own
-   accent dot (CSS content on ::before). Seven tabs, five clean site hues: at least six distinct dots (one fewer than the tabs
-   when a report builds fewer than seven). */
+/* The selected tab is told apart from the others by more than its aria state (design D, T-0500.1.7.3; the v6 look was a label colour, an
+   underline and an accent dot). Each tab is an icon chip: an icon box and a label. The selected chip is FILLED with the tab accent (its icon
+   box is opaque accent, the label white, the border a stronger accent), while an idle chip's icon box is a translucent tint and its label
+   muted. Every tab carries an icon (an svg in its icon box) and no numeral, and the idle chips' accents are distinct: seven tabs, five clean
+   site hues, so at least six distinct accents (one fewer than the tabs when a report builds fewer than seven). */
 var TAB_LOOK_EXPR = '(function(){var tabs=[].slice.call(document.querySelectorAll("[role=tab]"));' +
-  'return tabs.map(function(b){var c=getComputedStyle(b),d=getComputedStyle(b,"::before");' +
-  'return {id:b.id,selected:b.getAttribute("aria-selected")==="true",color:c.color,' +
-  'line:c.borderBottomColor,lineW:parseFloat(c.borderBottomWidth),dot:d.backgroundColor,dotW:parseFloat(d.width)};});})()';
+  'return tabs.map(function(b){var c=getComputedStyle(b),ib=b.querySelector(".hl-rv-tab-icon"),ic=ib?getComputedStyle(ib):null;' +
+  'return {id:b.id,selected:b.getAttribute("aria-selected")==="true",color:c.color,border:c.borderTopColor,' +
+  'hasIcon:!!(ib&&ib.querySelector("svg")),iconW:ib?ib.getBoundingClientRect().width:0,iconBg:ic?ic.backgroundColor:null,iconFg:ic?ic.color:null};});})()';
+function rgbaOf(c) {
+  /* Chrome serialises a color-mix() result as color(srgb r g b / a) with channels 0 to 1 */
+  var cm = /^color\(srgb\s+([\d.]+)\s+([\d.]+)\s+([\d.]+)(?:\s*\/\s*([\d.]+%?))?\s*\)$/.exec(c || '');
+  if (cm) return { r: +cm[1] * 255, g: +cm[2] * 255, b: +cm[3] * 255, a: cm[4] === undefined ? 1 : (/%$/.test(cm[4]) ? parseFloat(cm[4]) / 100 : parseFloat(cm[4])) };
+  var m = /^rgba?\(\s*([\d.]+)[,\s]+([\d.]+)[,\s]+([\d.]+)(?:[,\s/]+([\d.]+%?))?\s*\)$/.exec(c || ''); if (!m) return null; var a = m[4] === undefined ? 1 : (/%$/.test(m[4]) ? parseFloat(m[4]) / 100 : parseFloat(m[4])); return { r: +m[1], g: +m[2], b: +m[3], a: a }; }
 function tabLookVerdict(tabs) {
   if (!tabs || tabs.length < 1) return { notChecked: true, ok: false, detail: 'no tab was rendered, so nothing could be measured' };
-  var clear = function (c) { return !c || c === 'transparent' || /^rgba\(\s*0,\s*0,\s*0,\s*0\s*\)$/.test(c); };
-  /* One tab (T-0500.1.10): there is no idle tab to tell the selected one from and no second dot to tell apart, so the
-     comparisons cannot be made and are not claimed. What one tab can show is measured on its own: it is the selected tab,
-     it has the accent underline, and it carries an accent dot. The row says so in its name (tabLookRowName). */
+  var opaque = function (c) { var x = rgbaOf(c); return !!x && x.a >= 0.99; };
+  var tint = function (c) { var x = rgbaOf(c); return !!x && x.a > 0 && x.a < 0.6; };
+  var why = [];
+  if (tabs.some(function (t) { return !t.hasIcon || !(t.iconW >= 28); })) why.push('a tab has no icon box with an svg of at least 28 px');
+  /* One tab (T-0500.1.10): there is no idle chip to tell the selected one from, so the comparisons are not claimed. What one tab can show is
+     measured on its own: it is selected, its icon box is filled with the accent, and it has an icon. The row says so in its name. */
   if (tabs.length === 1) {
-    var one = tabs[0], oneWhy = [];
-    if (!one.selected) oneWhy.push('the only tab is not selected');
-    if (one.lineW < 2 || clear(one.line)) oneWhy.push('the only tab has no underline (' + one.lineW + 'px ' + one.line + ')');
-    if (!(one.dotW > 0) || clear(one.dot)) oneWhy.push('the only tab has no accent dot');
-    return { notChecked: false, ok: oneWhy.length === 0, why: oneWhy, single: true, distinct: 1,
-      detail: '1 tab: ' + one.id + ' ' + one.color + ' with a ' + one.lineW + 'px ' + one.line + ' line and a ' + one.dotW + 'px ' + one.dot + ' dot' +
-        '; no idle tab exists, so the label-colour and dot-colour comparisons were not made' + (oneWhy.length ? '; ' + oneWhy.join('; ') : '') };
+    var one = tabs[0];
+    if (!one.selected) why.push('the only tab is not selected');
+    if (!opaque(one.iconBg)) why.push('the only tab\'s icon box is not filled with the accent (' + one.iconBg + ')');
+    return { notChecked: false, ok: why.length === 0, why: why, single: true, distinct: 1,
+      detail: '1 tab: ' + one.id + ' ' + one.color + ' with a ' + one.iconBg + ' icon box; no idle tab exists, so the label-colour, border and accent comparisons were not made' + (why.length ? '; ' + why.join('; ') : '') };
   }
   var sel = tabs.filter(function (t) { return t.selected; });
   var idle = tabs.filter(function (t) { return !t.selected; });
-  var why = [];
   if (sel.length !== 1) why.push(sel.length + ' tabs selected');
   else {
-    if (sel[0].lineW < 2 || clear(sel[0].line)) why.push('selected tab has no underline (' + sel[0].lineW + 'px ' + sel[0].line + ')');
+    if (!opaque(sel[0].iconBg)) why.push('the selected tab\'s icon box is not filled with the accent (' + sel[0].iconBg + ')');
     if (idle.some(function (t) { return t.color === sel[0].color; })) why.push('an idle tab has the selected tab\'s label colour ' + sel[0].color);
-    if (idle.some(function (t) { return !clear(t.line); })) why.push('an idle tab is underlined');
+    if (idle.some(function (t) { return t.border === sel[0].border; })) why.push('an idle tab has the selected tab\'s border colour ' + sel[0].border);
+    if (idle.some(function (t) { return opaque(t.iconBg) || !tint(t.iconBg); })) why.push('an idle tab\'s icon box is not a translucent tint');
   }
-  var dots = tabs.map(function (t) { return t.dot; });
-  if (tabs.some(function (t) { return !(t.dotW > 0) || clear(t.dot); })) why.push('a tab has no accent dot');
-  var distinct = dots.filter(function (d, i) { return dots.indexOf(d) === i; }).length;
-  if (distinct < Math.min(6, tabs.length - 1)) why.push('only ' + distinct + ' distinct dot colours across ' + tabs.length + ' tabs');
+  /* a tab's accent is its icon colour when idle and its icon-box fill when selected; seven tabs share five clean site hues (Victims and Attribution
+     are both the Actors fuchsia), so at least six distinct accents of seven, and one fewer than the tabs for a shorter row */
+  var accents = tabs.map(function (t) { return t.selected ? t.iconBg : t.iconFg; });
+  var distinct = accents.filter(function (d, i) { return accents.indexOf(d) === i; }).length;
+  if (distinct < Math.min(6, tabs.length - 1)) why.push('only ' + distinct + ' distinct icon accents across ' + tabs.length + ' tabs');
   return { notChecked: false, ok: why.length === 0, why: why, distinct: distinct,
-    detail: tabs.length + ' tabs: selected ' + (sel[0] ? sel[0].id + ' ' + sel[0].color + ' with a ' + sel[0].lineW + 'px ' + sel[0].line + ' line' : 'none') +
-      '; ' + distinct + ' distinct dot colours' + (why.length ? '; ' + why.join('; ') : '') };
+    detail: tabs.length + ' tabs: selected ' + (sel[0] ? sel[0].id + ' ' + sel[0].color + ' with a ' + sel[0].iconBg + ' filled icon box' : 'none') +
+      '; ' + distinct + ' distinct icon accents across the tabs' + (why.length ? '; ' + why.join('; ') : '') };
 }
 
 /* Keyboard, measured with real key events. A synthetic KeyboardEvent dispatched
@@ -1231,8 +1238,8 @@ async function landmarkRows(page, url) {
   if (v.notChecked) check('NOT CHECKED: ' + name, false, v.detail);
   else check(name, v.ok, v.detail);
 }
-var TAB_LOOK_NAME = 'the selected tab is distinguished by label colour and underline, and every tab carries its own accent dot';
-var TAB_LOOK_NAME_ONE = 'the only tab is selected, underlined in its accent and carries its accent dot (one tab: no idle tab to tell it from)';
+var TAB_LOOK_NAME = 'the selected tab is a filled accent chip with its own label colour and border, and every tab carries its own icon in its accent';
+var TAB_LOOK_NAME_ONE = 'the only tab is selected, a filled accent chip with its icon (one tab: no idle tab to tell it from)';
 async function tabLookRows(page, url) {
   var name = TAB_LOOK_NAME;
   await setViewport(page, 1280, 900);
@@ -1256,14 +1263,13 @@ async function tabLookRows(page, url) {
    browser, not read from the stylesheet. The verdicts are pure so a test can drive each to FAIL. */
 var PANEL_GAP_MIN_PX = 23.5;
 var PANEL_COMPONENTS = [
-  ['report band', '.hl-rv-reportband__in', true],
+  ['featured band', '.hl-rv-feat', true],
   ['header', '.hl-post-header', true],
-  ['report sponsor', '.hl-rvsp--report', true],
-  ['tab row', '.hl-rv-tabs', true],
+  ['tab row', '.hl-rv-tabs', false],
   ['toolbar', '.hl-rv-mobile-line', true],
   ['tab title', '.hl-rv-panel:not([hidden]) .hl-rv-panel-head', false],
   ['data view', '.hl-rv-panel:not([hidden]) .hl-rv-view', true],
-  ['first section panel', '.hl-rv-panel:not([hidden]) .hl-rv-source', true]
+  ['first section', '.hl-rv-panel:not([hidden]) .hl-rv-source', false]
 ];
 var PANEL_EXPR = '(function(){var COMPS=' + JSON.stringify(PANEL_COMPONENTS) + ';' +
   'var page=getComputedStyle(document.body).backgroundColor;' +
@@ -1302,8 +1308,7 @@ var TYPE_SPEC = [
      sentence about the investigation's status) is metadata at the 16px secondary size, not Executive Summary prose; with the status sentence
      it passes the 200-character test and the row measured it against 18 (open-directory-172-105-0-126). It carries .hl-rv-nohead. */
   ['Executive Summary prose', 'LONGP:.hl-rv-panel:not([hidden]) .hl-rv-source:not(.hl-rv-nohead) > p', 18, 17],
-  ['tab name', '.hl-rv-tabs button .hl-rv-tab-full', 17, null],
-  ['tab minutes', '.hl-rv-tabs button .hl-rv-tab-time', 14, null],
+  ['tab name', '.hl-rv-tabs button .hl-rv-tab-full', 16, null],
   ['section panel heading', '.hl-rv-panel:not([hidden]) .hl-rv-source > h2', 20, 18],
   ['data-view summary line', '.hl-rv-panel:not([hidden]) .hl-rv-view-summary p', 16, 15],
   ['stat tile label', '.hl-rv-panel:not([hidden]) .hl-rv-tile > span:not(.hl-rv-tile-destination):not(.hl-rv-value)', 16, 15],
@@ -1342,7 +1347,7 @@ async function panelRows(page, url) {
     var w = states[i][0], h = states[i][1], label = states[i][2], phone = states[i][3];
     await setViewport(page, w, h);
     var nameA = 'the top of the page is separate panels, each at least 24 px apart, on their own surfaces';
-    var nameB = 'text is on the v6.1 scale: tab names 17, secondary and table text 16, mono labels 14, phone floor 15';
+    var nameB = 'text is on the v6.1 scale: tab names 16, secondary and table text 16, mono labels 14, phone floor 15';
     if (!(await gotoAndWait(page, url))) {
       check('NOT CHECKED: ' + label + ': ' + nameA, false, 'the tab controller never built, so nothing was measured');
       check('NOT CHECKED: ' + label + ': ' + nameB, false, 'the tab controller never built, so nothing was measured');
@@ -1366,50 +1371,57 @@ async function panelRows(page, url) {
   }
 }
 
-/* T-0500.1.8, reworked 2026-10-30 (Joseph's decision, amendment 1): the gold featured band at the top of the page is the REPORT sponsor
-   (the page's sponsored_by), labelled "This report is sponsored by"; a report with no sponsor has no band at all. The Monthly (site) sponsor is
-   the site's own Sponsors rail (rows below) and, when no report sponsor exists, the gold card at each tab foot. There is no sponsor mark on the
-   reading line in either case. One row, measured in the browser at 1280 and 390 on two tabs. With a report sponsor: the band has the gold 4px
-   left bar and the dark gradient, the label in gold, a visible tagline and a visible, real "Visit" element (aria-hidden, inside the sponsor's
-   link, inside the panel; with several sponsors, logos only), and the tab-foot card is the report card (tab accent, no gold, no Visit). With no
-   report sponsor: no band is in the DOM, and the tab-foot card is the gold featured card. A page with no sponsor at all draws none of it.
-   The verdict is pure so a test can drive each failure. */
-var GOLD_BAR = 'rgb(184, 144, 47)';
-var GOLD_LABEL = 'rgb(212, 167, 58)';
+/* T-0500.1.7.3 (design D, Joseph 2026-11-01) reworked the sponsor rows of T-0500.1.8: the FEATURED (site, Monthly) sponsor is the gold, more
+   prominent slot, and the REPORT sponsor is the quiet "This report is sponsored by" foot of the plate. One row, measured in the browser at
+   1280 and 390 on two tabs. With a Monthly sponsor in the page's rail data: the featured panel that is drawn at that width (a sticky card in the
+   left margin from 1440 px, a band above the plate below it, exactly one of the two) is gold (a gold border, a dark gradient fill, the label
+   "Featured sponsor" in cream), shows a visible tagline and a visible, real "Visit" element (aria-hidden, inside the sponsor's link, inside the
+   panel; with several sponsors, logos only). With a report sponsor: the foot sits inside the plate, labelled "This report is sponsored by",
+   with no gold, no gradient, no Visit and no "Featured"; no gold report band is in the page. With no report sponsor there is no foot. The
+   tab-foot card is the report card (quiet: no gold, no Visit) when the page has a report sponsor, else the gold featured card. A page with no
+   sponsor at all draws none of it. No sponsor mark sits on the reading line. The verdict is pure so a test can drive each failure. */
+var GOLD_LABEL = 'rgb(244, 233, 200)';
 var FEATURED_LABEL = "Featured sponsor of The Hunter's Ledger";
+var FEATURED_PANEL_LABEL = 'Featured sponsor';
 var BAND_LABEL = 'This report is sponsored by';
+var FEATURED_WIDE_PX = 1440;
+function isGoldColour(c) { var x = rgbaOf(c); return !!x && x.a > 0.2 && x.r >= 170 && x.r <= 215 && x.g >= 130 && x.g <= 175 && x.b >= 30 && x.b <= 75; }
 var FEATURED_EXPR = '(function(){' +
   'function vis(e){if(!e)return false;var cs=getComputedStyle(e);return e.getClientRects().length>0&&cs.visibility!=="hidden"&&cs.display!=="none"&&e.getBoundingClientRect().height>0;}' +
   'function one(sel,root){return [].slice.call((root||document).querySelectorAll(sel)).filter(vis)[0]||null;}' +
   'function measure(root,k){if(!root)return null;var r=root.getBoundingClientRect(),cs=getComputedStyle(root);' +
   'var lab=root.querySelector(k.label),items=[].slice.call(root.querySelectorAll(k.item));' +
-  'return {w:r.width,h:r.height,barW:parseFloat(cs.borderLeftWidth),bar:cs.borderLeftColor,image:cs.backgroundImage!=="none",' +
+  'return {w:r.width,h:r.height,border:cs.borderTopColor,borderW:parseFloat(cs.borderTopWidth),image:cs.backgroundImage!=="none",' +
   'cls:root.className,text:root.textContent.replace(/\\s+/g," ").trim(),' +
   'label:lab?lab.textContent.trim():null,labelVisible:vis(lab),labelColor:lab?getComputedStyle(lab).color:null,' +
-  'many:root.classList.contains("hl-rvsp__zone--many")||!!root.querySelector(".hl-rvsp__zone--many")||root.classList.contains("is-many"),' +
-  'items:items.length,withTagline:items.filter(function(i){return i.hasAttribute("data-tagline")||!!i.querySelector(k.tag);}).length,' +
+  'many:!!root.querySelector(".hl-rvsp__zone--many")||root.classList.contains("is-many")||root.classList.contains("hl-rv-feat--many")||root.querySelectorAll(k.item).length>1,' +
+  'items:items.length,withTagline:items.filter(function(i){return !!i.querySelector(k.tag);}).length,' +
   'taglines:[].slice.call(root.querySelectorAll(k.tag)).map(function(e){return {vis:vis(e),len:e.textContent.trim().length};}),' +
   'ctas:[].slice.call(root.querySelectorAll(k.cta)).map(function(e){var b=e.getBoundingClientRect();return {vis:vis(e),text:e.textContent.trim(),ariaHidden:e.getAttribute("aria-hidden"),inLink:!!e.closest("a[href]"),' +
   'inside:b.left>=r.left-1&&b.right<=r.right+1&&b.top>=r.top-1&&b.bottom<=r.bottom+1,tag:e.tagName};})};}' +
-  'var band=one(".hl-rv-reportband__in"),card=one(".hl-rv-panel:not([hidden]) .hl-rv-sponsor-card");' +
-  'var b=measure(band,{label:".hl-rv-reportband__label",item:".hl-rvsp__item",tag:".hl-rvsp__tagline",cta:".hl-rvsp__cta"});' +
-  'if(b)b.many=!!document.querySelector(".hl-rv-reportband__in.hl-rvsp__zone--many");' +
+  'var wide=innerWidth>=' + FEATURED_WIDE_PX + ';' +
+  'var band=one(".hl-rv-feat"),fcard=one(".hl-rv-featcard"),card=one(".hl-rv-panel:not([hidden]) .hl-rv-sponsor-card");' +
+  'var b=measure(band,{label:".hl-rv-feat__label",item:".hl-rv-feat__item",tag:".hl-rv-feat__tagline",cta:".hl-rv-feat__cta"});' +
+  'var fc=measure(fcard,{label:".hl-rv-featcard__label",item:".hl-rv-featcard__item",tag:".hl-rv-featcard__tagline",cta:".hl-rv-featcard__cta"});' +
   'var c=measure(card,{label:".hl-rv-sponsor-card__label",item:".hl-rv-sponsor-card__item",tag:".hl-rv-sponsor-card__tagline",cta:".hl-rv-sponsor-card__cta"});' +
-  'if(c){c.isReport=card.classList.contains("is-report");' +
-  'var pr=document.createElement("span");pr.style.cssText="color:var(--acc);position:absolute;visibility:hidden";card.appendChild(pr);' +
-  'c.acc=getComputedStyle(card).getPropertyValue("--acc").trim()?getComputedStyle(pr).color:null;card.removeChild(pr);}' +
-  'return {reportSponsors:document.querySelectorAll(".hl-rvsp--report .hl-rvsp__item").length,siteItems:document.querySelectorAll(".hl-sponsor-rail .hl-sponsor-rail__item").length,band:b,bandInDom:!!document.querySelector(".hl-rv-reportband"),card:c,' +
+  'if(c)c.isReport=card.classList.contains("is-report");' +
+  'var foot=one(".hl-rvsp--report"),hdr=document.querySelector(".hl-report-page .hl-post-header"),f=null;' +
+  'if(foot){var fl=foot.querySelector(".hl-rvsp__label");f=measure(foot,{label:".hl-rvsp__label",item:".hl-rvsp__item",tag:".hl-rvsp__tagline",cta:".hl-rvsp__cta"});f.inPlate=!!(hdr&&hdr.contains(foot));' +
+  'f.borderTopOfFoot=getComputedStyle(foot).borderTopColor;f.gold=!!(foot.querySelector(".hl-rvsp__cta"));}' +
+  'return {wide:wide,reportSponsors:document.querySelectorAll(".hl-rvsp--report .hl-rvsp__item").length,siteItems:document.querySelectorAll(".hl-sponsor-rail .hl-sponsor-rail__item").length,' +
+  'band:b,featCard:fc,foot:f,goldBandInDom:!!document.querySelector(".hl-rv-reportband"),card:c,' +
   'markPresent:!!document.querySelector(".hl-rv-sponsor-mark,.hl-rv-sponsor-mark__label")};})()';
-function featuredPanelWhy(name, p, expectGold, label) {
+function featuredPanelWhy(name, p, kind, label) {
+  /* kind: 'gold' (the featured band, margin card and site tab-foot card) or 'quiet' (the report foot and the report tab-foot card) */
   var why = [];
   if (!p) { why.push(name + ' was not found'); return why; }
-  var gold = p.barW >= 4 && p.bar === GOLD_BAR;
-  if (expectGold) {
-    if (!gold) why.push(name + ' has no 4px gold left bar (' + p.barW + 'px ' + p.bar + ')');
+  var gold = isGoldColour(p.border);
+  if (kind === 'gold') {
+    if (!gold) why.push(name + ' has no gold border (' + p.borderW + 'px ' + p.border + ')');
     if (!p.image) why.push(name + ' has no gradient panel fill');
     if (p.label !== label) why.push(name + ' label is ' + JSON.stringify(p.label) + ', not "' + label + '"');
     else if (!p.labelVisible) why.push(name + ' label is not visible');
-    else if (p.labelColor !== GOLD_LABEL) why.push(name + ' label is ' + p.labelColor + ', not gold ' + GOLD_LABEL);
+    else if (p.labelColor !== GOLD_LABEL) why.push(name + ' label is ' + p.labelColor + ', not cream ' + GOLD_LABEL);
     var shownTaglines = p.taglines.filter(function (t) { return t.vis && t.len > 0; }).length;
     var shownCtas = p.ctas.filter(function (c) { return c.vis; }).length;
     if (p.many) {
@@ -1429,43 +1441,50 @@ function featuredPanelWhy(name, p, expectGold, label) {
       });
     }
   } else {
-    if (gold) why.push(name + ' has the gold bar on a report sponsor');
-    if (p.image) why.push(name + ' has a gradient fill on a report sponsor');
+    if (gold) why.push(name + ' has a gold border on a report sponsor');
     if (/Featured/i.test(p.text)) why.push(name + ' says "Featured" on a report sponsor');
     if (p.ctas.length) why.push(name + ' carries a Visit element on a report sponsor');
-    /* the report card keeps the active tab's accent: a 4px left bar whose colour is the panel's --acc. An accent that could not be read is NOT CHECKED, never a pass. */
-    if (!p.acc) return { notChecked: true, why: why.concat(name + ': the active tab accent (--acc) could not be read, so the bar colour was not compared') };
-    if (!(p.barW >= 4)) why.push(name + ' has no 4px left bar in the tab accent (' + p.barW + 'px ' + p.bar + ')');
-    else if (p.bar !== p.acc) why.push(name + ' left bar is ' + p.bar + ', not the active tab accent ' + p.acc);
   }
   return why;
 }
 function featuredSponsorVerdict(m) {
   if (!m) return { notChecked: true, ok: false, detail: 'nothing was measured' };
-  var why = [], measured = [], accUnread = false;
+  var why = [], measured = [];
   if (m.markPresent) why.push('a sponsor mark is on the reading line (Joseph removed it for both sponsor kinds)');
+  if (m.goldBandInDom) why.push('the gold report band is still in the page (design D removed it: the report sponsor is the plate foot)');
+  var drawn = (m.band ? 1 : 0) + (m.featCard ? 1 : 0);
+  if (m.siteItems === 0) {
+    if (drawn) why.push('a featured sponsor panel is drawn although the page has no Monthly sponsor');
+  } else {
+    var want = m.wide ? m.featCard : m.band, other = m.wide ? m.band : m.featCard;
+    if (other) why.push('the ' + (m.wide ? 'band' : 'margin card') + ' is drawn at a width that shows the ' + (m.wide ? 'margin card' : 'band') + ' (exactly one featured panel is expected)');
+    if (!want) why.push('the featured ' + (m.wide ? 'margin card' : 'band') + ' was not found with ' + m.siteItems + ' Monthly sponsor(s) on the page');
+    else { measured.push(m.wide ? 'margin card' : 'band'); why = why.concat(featuredPanelWhy('the featured ' + (m.wide ? 'card' : 'band'), want, 'gold', FEATURED_PANEL_LABEL)); }
+  }
   if (m.reportSponsors === 0) {
-    /* no report sponsor: no band at all, and the gold card is the site sponsor's */
-    if (m.bandInDom || m.band) why.push('a band is drawn on a page with no report sponsor');
+    if (m.foot) why.push('a report sponsor foot is drawn on a page with no report sponsor');
     if (m.siteItems === 0 && m.card) why.push('a tab-foot card is drawn with no sponsor on the page');
-    if (m.siteItems === 0) {
-      return { notChecked: false, ok: why.length === 0, none: true, why: why, detail: 'no sponsor on this page: 0 panels expected, ' + ((m.bandInDom || m.band ? 1 : 0) + (m.markPresent ? 1 : 0) + (m.card ? 1 : 0)) + ' drawn' + (why.length ? '; ' + why.join('; ') : '') };
-    }
-    measured.push('no band');
+    if (m.siteItems === 0) return { notChecked: false, ok: why.length === 0, none: true, why: why, detail: 'no sponsor on this page: 0 panels expected, ' + (drawn + (m.card ? 1 : 0) + (m.markPresent ? 1 : 0)) + ' drawn' + (why.length ? '; ' + why.join('; ') : '') };
     if (!m.card) why.push('the tab-foot card was not found with ' + m.siteItems + ' site sponsor(s) on the page');
     else if (m.card.isReport) why.push('the tab-foot card is the report-sponsor card with no report sponsor');
-    else { measured.push('tab-foot card'); why = why.concat(featuredPanelWhy('the tab-foot card', m.card, true, FEATURED_LABEL)); }
+    else { measured.push('tab-foot card'); why = why.concat(featuredPanelWhy('the tab-foot card', m.card, 'gold', FEATURED_LABEL)); }
   } else {
-    if (!m.band) why.push('the report band was not found with ' + m.reportSponsors + ' report sponsor(s) on the page'); else { measured.push('report band'); why = why.concat(featuredPanelWhy('the report band', m.band, true, BAND_LABEL)); }
-    if (!m.card) why.push('the tab-foot card was not found'); else if (!m.card.isReport) why.push('the tab-foot card is the featured site card although the page has a report sponsor'); else { var rw = featuredPanelWhy('the report-sponsor card', m.card, false); if (rw.notChecked) { accUnread = true; why = why.concat(rw.why); } else { measured.push('tab-foot card (report)'); why = why.concat(rw); } }
+    if (!m.foot) why.push('the report sponsor foot was not found with ' + m.reportSponsors + ' report sponsor(s) on the page');
+    else {
+      measured.push('report foot');
+      if (!m.foot.inPlate) why.push('the report sponsor foot is not inside the plate (the header box)');
+      if (m.foot.label !== BAND_LABEL) why.push('the report sponsor foot label is ' + JSON.stringify(m.foot.label) + ', not "' + BAND_LABEL + '"');
+      if (m.foot.image) why.push('the report sponsor foot has a gradient fill (it is the quiet line)');
+      why = why.concat(featuredPanelWhy('the report sponsor foot', Object.assign({}, m.foot, { border: m.foot.borderTopOfFoot }), 'quiet'));
+    }
+    if (!m.card) why.push('the tab-foot card was not found'); else if (!m.card.isReport) why.push('the tab-foot card is the featured site card although the page has a report sponsor'); else { measured.push('tab-foot card (report)'); why = why.concat(featuredPanelWhy('the report-sponsor card', m.card, 'quiet')); }
   }
-  if (accUnread && !why.some(function (w) { return !/could not be read/.test(w); })) return { notChecked: true, ok: false, detail: why.join('; ') };
-  if (!measured.length) return { notChecked: true, ok: false, detail: 'a sponsor is on the page but no featured-sponsor element could be measured' };
-  return { notChecked: false, ok: why.length === 0, why: why, detail: (m.reportSponsors === 0 ? 'site sponsor, no report sponsor' : 'report sponsor') + ': ' + measured.join(', ') + ' measured' + (why.length ? '; ' + why.join('; ') : '') };
+  if (!measured.length) return { notChecked: true, ok: false, detail: 'a sponsor is on the page but no sponsor element could be measured' };
+  return { notChecked: false, ok: why.length === 0, why: why, detail: (m.reportSponsors === 0 ? 'site sponsor, no report sponsor' : 'report sponsor' + (m.siteItems ? ' and site sponsor' : '')) + ': ' + measured.join(', ') + ' measured at ' + (m.wide ? 'a wide' : 'a narrow') + ' width' + (why.length ? '; ' + why.join('; ') : '') };
 }
 async function featuredSponsorRows(page, url) {
-  var states = [[1280, 900, 'desktop 1280'], [390, 844, 'phone 390']];
-  var name = 'the report sponsor is the gold band (none without one), the Monthly sponsor the gold tab-foot card, and no sponsor mark sits on the reading line';
+  var states = [[1280, 900, 'desktop 1280'], [1440, 900, 'desktop 1440'], [390, 844, 'phone 390']];
+  var name = 'the featured sponsor is the gold card in the left margin (wide) or the gold band (narrow), the report sponsor the quiet plate foot, the Monthly sponsor the gold tab-foot card, and no sponsor mark sits on the reading line';
   for (var i = 0; i < states.length; i++) {
     await setViewport(page, states[i][0], states[i][1]);
     if (!(await gotoAndWait(page, url))) { check('NOT CHECKED: ' + states[i][2] + ': ' + name, false, 'the tab controller never built, so nothing was measured'); continue; }
@@ -1482,39 +1501,40 @@ async function featuredSponsorRows(page, url) {
   }
 }
 
-/* T-0500.1.8: the site's Sponsors rail on a tabbed page. Where the left gutter fits it (viewport 1600 and up) it is the site's fixed card,
-   at least 16 px clear of the 1200 px column and inside the viewport; below that it is the site's in-flow strip under the navbar, above the
-   report, not hidden. The expected mode is stated per viewport, so a rail that is hidden, or fixed where the gutter is too narrow, FAILS. */
-var RAIL_STATES = [[1280, 900, 'strip'], [1440, 900, 'strip'], [1600, 900, 'fixed'], [1920, 1080, 'fixed'], [2560, 1300, 'fixed'], [390, 844, 'strip']];
+/* T-0500.1.8, reworked by T-0500.1.7.3 (design D): the featured sponsor's PLACEMENT. From 1440 px it is a fixed card in the left margin, at least
+   140 px wide, inside the viewport and at least 16 px clear of the report column; below 1440 it is a band above the plate, in the page flow
+   and not hidden; the site's own Sponsors rail is never drawn. The expected mode is stated per viewport, so a card that is hidden, or fixed where
+   the margin is too narrow, FAILS. */
+var RAIL_STATES = [[1280, 900, 'band'], [1439, 900, 'band'], [1440, 900, 'card'], [1600, 900, 'card'], [1920, 1080, 'card'], [2560, 1300, 'card'], [390, 844, 'band']];
 var RAIL_CLEAR_MIN_PX = 16;
-var RAIL_EXPR = '(function(){var r=document.querySelector(".hl-sponsor-rail"),col=document.querySelector(".hl-report-page");' +
-  'if(!r||!col)return {present:false};var cs=getComputedStyle(r),b=r.getBoundingClientRect(),c=col.getBoundingClientRect();' +
-  'var items=[].slice.call(r.querySelectorAll(".hl-sponsor-rail__item")).filter(function(i){var x=i.getBoundingClientRect();return x.width>0&&x.height>0;}).length;' +
-  'return {present:true,display:cs.display,visibility:cs.visibility,position:cs.position,left:b.left,right:b.right,top:b.top,bottom:b.bottom,width:b.width,height:b.height,' +
-  'colLeft:c.left,colRight:c.right,colTop:c.top,vw:document.documentElement.clientWidth,iw:innerWidth,visibleItems:items,allItems:r.querySelectorAll(".hl-sponsor-rail__item").length};})()';
+var RAIL_EXPR = '(function(){var r=document.querySelector(".hl-rv-featcard"),b=document.querySelector(".hl-rv-feat"),old=document.querySelector(".hl-sponsor-rail"),col=document.querySelector(".hl-report-page .hl-post-header");' +
+  'function vis(e){return !!e&&e.getClientRects().length>0&&getComputedStyle(e).display!=="none"&&getComputedStyle(e).visibility!=="hidden";}' +
+  'if(!col||(!r&&!b))return {present:false};var c=col.getBoundingClientRect();' +
+  'function box(e){if(!e||!vis(e))return null;var cs=getComputedStyle(e),x=e.getBoundingClientRect();return {position:cs.position,left:x.left,right:x.right,top:x.top,bottom:x.bottom,width:x.width,height:x.height};}' +
+  'return {present:true,card:box(r),band:box(b),oldRailDrawn:vis(old),colLeft:c.left,colRight:c.right,colTop:c.top,vw:document.documentElement.clientWidth,iw:innerWidth};})()';
 function railVerdict(m, expect) {
-  if (!m || !m.present) return { notChecked: true, ok: false, detail: 'no Sponsors rail is in the page, so there was nothing to place' };
-  var why = [];
-  if (m.display === 'none' || m.visibility === 'hidden' || !m.width || !m.height) why.push('the rail is hidden (display ' + m.display + ', ' + m.width + 'x' + m.height + ')');
+  if (!m || !m.present) return { notChecked: true, ok: false, detail: 'no featured sponsor panel is in the page, so there was nothing to place' };
+  var why = [], box = expect === 'card' ? m.card : m.band, other = expect === 'card' ? m.band : m.card;
+  if (m.oldRailDrawn) why.push('the site Sponsors rail is drawn on a tabbed page (the featured sponsor replaces it)');
+  if (other) why.push('the ' + (expect === 'card' ? 'band' : 'card') + ' is drawn where the ' + expect + ' is expected');
+  if (!box || !box.width || !box.height) { why.push('the featured ' + expect + ' is hidden'); }
   else {
-    if (m.visibleItems < m.allItems || !m.visibleItems) why.push(m.visibleItems + ' of ' + m.allItems + ' sponsor card(s) are visible');
-    if (expect === 'fixed') {
-      if (m.position !== 'fixed') why.push('the rail is ' + m.position + ', not fixed in the gutter');
-      var clear = m.colLeft - m.right;
-      if (clear < RAIL_CLEAR_MIN_PX) why.push('the rail is ' + clear.toFixed(1) + ' px from the column (at least ' + RAIL_CLEAR_MIN_PX + ' needed)');
-      if (m.left < 0) why.push('the rail starts at ' + m.left.toFixed(1) + ' px, outside the viewport');
-      if (m.width < 120 || m.width > 200.5) why.push('the rail is ' + m.width.toFixed(1) + ' px wide (120 to 200 expected)');
+    if (expect === 'card') {
+      if (box.position !== 'fixed') why.push('the card is ' + box.position + ', not fixed in the left margin');
+      var clear = m.colLeft - box.right;
+      if (clear < RAIL_CLEAR_MIN_PX) why.push('the card is ' + clear.toFixed(1) + ' px from the column (at least ' + RAIL_CLEAR_MIN_PX + ' needed)');
+      if (box.left < 0) why.push('the card starts at ' + box.left.toFixed(1) + ' px, outside the viewport');
+      if (box.width < 139.5 || box.width > 200.5) why.push('the card is ' + box.width.toFixed(1) + ' px wide (140 to 200 expected)');
     } else {
-      if (m.position === 'fixed') why.push('the rail is fixed at a width where the gutter does not fit it; the site strip is expected');
-      if (m.bottom > m.colTop + 1) why.push('the strip ends at ' + m.bottom.toFixed(1) + ' px, below the top of the report (' + m.colTop.toFixed(1) + ')');
-      if (m.height > 160) why.push('the strip is ' + m.height.toFixed(1) + ' px tall, not a strip');
+      if (box.position === 'fixed') why.push('the band is fixed; it should be in the page flow');
+      if (box.bottom > m.colTop + 1) why.push('the band ends at ' + box.bottom.toFixed(1) + ' px, below the top of the plate (' + m.colTop.toFixed(1) + ')');
+      if (box.height > 170) why.push('the band is ' + box.height.toFixed(1) + ' px tall, not a band');
     }
   }
-  var clearTxt = m.colLeft - m.right;
-  return { notChecked: false, ok: why.length === 0, why: why, detail: expect + ' mode: position ' + m.position + ', ' + m.width.toFixed(1) + 'x' + m.height.toFixed(1) + ' px at x ' + m.left.toFixed(1) + ' to ' + m.right.toFixed(1) + ', column starts at ' + m.colLeft.toFixed(1) + (expect === 'fixed' ? ' (clear ' + clearTxt.toFixed(1) + ' px)' : '') + ', ' + m.visibleItems + ' of ' + m.allItems + ' card(s) visible' + (why.length ? '; ' + why.join('; ') : '') };
+  return { notChecked: false, ok: why.length === 0, why: why, detail: expect + ' mode: ' + (box ? 'position ' + box.position + ', ' + box.width.toFixed(1) + 'x' + box.height.toFixed(1) + ' px at x ' + box.left.toFixed(1) + ' to ' + box.right.toFixed(1) : 'not drawn') + ', plate starts at ' + m.colLeft.toFixed(1) + (expect === 'card' && box ? ' (clear ' + (m.colLeft - box.right).toFixed(1) + ' px)' : '') + (why.length ? '; ' + why.join('; ') : '') };
 }
 async function sponsorRailRows(page, url) {
-  var name = 'the site Sponsors rail is the fixed gutter card where the gutter fits it and the site strip where it does not, never hidden';
+  var name = 'the featured sponsor is the fixed margin card from 1440 px and the band above the plate below it, and the site rail is never drawn';
   for (var i = 0; i < RAIL_STATES.length; i++) {
     var s = RAIL_STATES[i];
     await setViewport(page, s[0], s[1]);
@@ -1527,8 +1547,239 @@ async function sponsorRailRows(page, url) {
   }
 }
 
-/* T-0500.1.7.1: the share icon in the header box's top-right corner (Joseph, 2026-10-30). Geometry at three widths: present, labelled, a 44 px
-   target inside the header box and in its corner, overlapping neither the eyebrow line, the title nor the resource buttons, keyboard-focusable with
+/* T-0500.1.7.3 (Joseph's screenshot, 2026-11-01): a sticky tab-bar band painted a black bar across the left-margin sponsor card while scrolling.
+   The card must never be overlapped by any sticky or fixed bar at any scroll position. Measured at 1440 and 1600 at several scroll offsets:
+   no other fixed or sticky element's box intersects the card's box, and the topmost element at five points inside the card belongs to the card.
+   The control re-creates the defect (a full-width sticky band over the card's stacking level) on the same page and the verdict must FAIL. */
+var STICKY_STATES = [[1440, 900], [1600, 900]];
+var STICKY_EXPR = '(function(){var card=document.querySelector(".hl-rv-featcard");function vis(e){return !!e&&e.getClientRects().length>0&&getComputedStyle(e).display!=="none"&&getComputedStyle(e).visibility!=="hidden";}' +
+  'if(!vis(card))return {present:false,y:scrollY};var r=card.getBoundingClientRect(),over=[],covered=[];' +
+  'document.querySelectorAll("body *").forEach(function(e){if(card.contains(e)||e.contains(card))return;var cs=getComputedStyle(e);if(cs.position!=="sticky"&&cs.position!=="fixed")return;if(!vis(e))return;if(parseFloat(cs.opacity)<0.02||cs.pointerEvents==="none")return;' +
+  'var b=e.getBoundingClientRect();if(b.width>0&&b.height>0&&b.left<r.right&&b.right>r.left&&b.top<r.bottom&&b.bottom>r.top)over.push((e.className&&String(e.className).split(" ")[0])||e.tagName);});' +
+  'var pts=[[0.2,0.1],[0.8,0.1],[0.5,0.5],[0.2,0.9],[0.8,0.9]];pts.forEach(function(p){var x=r.left+r.width*p[0],y=r.top+r.height*p[1];var t=document.elementFromPoint(x,y);if(!t||!card.contains(t))covered.push((t&&((t.className&&String(t.className).split(" ")[0])||t.tagName))||"nothing");});' +
+  'return {present:true,y:scrollY,card:{l:r.left,t:r.top,r:r.right,b:r.bottom},over:over,covered:covered};})()';
+function stickyOverlapVerdict(samples) {
+  if (!samples || !samples.length || !samples.some(function (x) { return x.present; })) return { notChecked: true, ok: false, detail: 'the margin card was not drawn at any measured position, so nothing was measured' };
+  var why = [], n = 0;
+  samples.forEach(function (x) {
+    if (!x.present) return; n++;
+    if (x.over.length) why.push('at scroll ' + Math.round(x.y) + ' ' + x.over.join(', ') + ' overlaps the card');
+    if (x.covered.length) why.push('at scroll ' + Math.round(x.y) + ' the topmost element over the card is ' + x.covered.join(', ') + ', not the card');
+  });
+  return { notChecked: false, ok: why.length === 0, why: why, detail: n + ' scroll position(s) measured, the card box tested against every sticky and fixed element and five points inside it' + (why.length ? '; ' + why.join('; ') : '') };
+}
+var STICKY_CONTROL_CSS = '.hl-rv-featcard{z-index:1 !important}.hl-rv-bar{width:100vw !important;margin-left:calc(50% - 50vw) !important;margin-right:calc(50% - 50vw) !important;z-index:60 !important}' +
+  '.hl-rv-bar::before{content:"";position:absolute;inset:0;background:#111;z-index:-1}';
+async function stickyFeaturedCardRows(page, url) {
+  var name = 'the featured sponsor card is never overlapped by a sticky bar, at any scroll position';
+  for (var i = 0; i < STICKY_STATES.length; i++) {
+    var w = STICKY_STATES[i][0], h = STICKY_STATES[i][1];
+    await setViewport(page, w, h);
+    if (!(await gotoAndWait(page, url))) { check('NOT CHECKED: ' + w + 'x' + h + ': ' + name, false, 'the tab controller never built, so nothing was measured'); continue; }
+    for (var pass = 0; pass < 2; pass++) {
+      if (pass === 1) await page.evaluate('(function(){var st=document.createElement("style");st.id="hl-sticky-control";st.textContent=' + JSON.stringify(STICKY_CONTROL_CSS) + ';document.head.appendChild(st);})()');
+      var total = await page.json('Math.max(0,document.documentElement.scrollHeight-innerHeight)');
+      var samples = [];
+      var ys = [0, 300, 900, 1800, 3000, 6000, total];
+      for (var k = 0; k < ys.length; k++) {
+        await page.evaluate('window.scrollTo(0,' + Math.min(ys[k], total) + ')');
+        await CDP.sleep(120);
+        samples.push(await page.json(STICKY_EXPR));
+      }
+      var v = stickyOverlapVerdict(samples);
+      if (pass === 0) {
+        if (v.notChecked) check('NOT CHECKED: ' + w + 'x' + h + ': ' + name, false, v.detail); else check(w + 'x' + h + ': ' + name, v.ok, v.detail);
+      } else {
+        check('control: ' + w + 'x' + h + ': with the defect re-created (a full-width sticky band over the card) the overlap row FAILS',
+          v.ok === false && !v.notChecked, v.ok === false ? 'FAILS as designed: ' + v.detail : 'the control did NOT fire: ' + v.detail);
+      }
+    }
+    await page.evaluate('window.scrollTo(0,0)');
+  }
+}
+
+/* T-0500.1.7.3 (design D) rows 4 to 7: no numerals on the tab buttons, the plate's button column, the "i" popovers, and no report text hidden at rest.
+   Each is a pure verdict over a browser measurement and each has a control that re-creates the defect on the same page and must FAIL. */
+
+/* (4) 0 numerals on tab buttons: the button text (label, short label, icon alt) holds no digit; no minutes element is on a button. */
+var NUMERAL_EXPR = '(function(){var tabs=[].slice.call(document.querySelectorAll("[role=tab]"));' +
+  'return tabs.map(function(b){var t=b.textContent.replace(/\\s+/g," ").trim();return {id:b.id,text:t,digits:/\\d/.test(t),minutes:!!b.querySelector(".hl-rv-tab-time,small")};});})()';
+function numeralVerdict(tabs) {
+  if (!tabs || !tabs.length) return { notChecked: true, ok: false, detail: 'no tab button was rendered, so nothing was measured' };
+  var bad = tabs.filter(function (t) { return t.digits || t.minutes; });
+  return { notChecked: false, ok: bad.length === 0, why: bad.map(function (t) { return t.id + ' reads ' + JSON.stringify(t.text) + (t.minutes ? ' with a minutes element' : ''); }),
+    detail: tabs.length + ' tab button(s) measured, ' + bad.length + ' with a numeral or minutes' + (bad.length ? ': ' + bad.map(function (t) { return t.id + ' ' + JSON.stringify(t.text); }).join('; ') : '') };
+}
+async function numeralRows(page, url) {
+  var name = 'no tab button carries a numeral or minutes (the large numeral sits beside the tab title only)';
+  var states = [[1440, 900], [390, 844]];
+  for (var i = 0; i < states.length; i++) {
+    await setViewport(page, states[i][0], states[i][1]);
+    if (!(await gotoAndWait(page, url))) { check('NOT CHECKED: ' + states[i][0] + 'x' + states[i][1] + ': ' + name, false, 'the tab controller never built, so nothing was measured'); continue; }
+    var v = numeralVerdict(await page.json(NUMERAL_EXPR));
+    if (v.notChecked) check('NOT CHECKED: ' + states[i][0] + 'x' + states[i][1] + ': ' + name, false, v.detail); else check(states[i][0] + 'x' + states[i][1] + ': ' + name, v.ok, v.detail);
+    if (i === 0) {
+      await page.evaluate('(function(){var t=document.querySelector("[role=tab]");var n=document.createElement("small");n.className="hl-rv-tab-time";n.textContent="01 9 min";t.appendChild(n);})()');
+      var c = numeralVerdict(await page.json(NUMERAL_EXPR));
+      check('control: a numeral and minutes put back on a tab button make the numeral row FAIL', c.ok === false && !c.notChecked, c.ok === false ? 'FAILS as designed: ' + c.detail : 'the control did NOT fire: ' + c.detail);
+    }
+  }
+}
+
+/* (5) The plate's button column: Read the full report first, then the page's own Detections, IOC feed, STIX and MISP, then Share. The expected
+   list is built from the report's front matter (detection_page, ioc_feed, stix_bundle) and _data/misp_events.yml, not from the page's own DOM.
+   At 1100 px and wider the buttons are one column at the right of the title; on a phone they sit inside the plate. */
+var PLATE_EXPR = '(function(){function vis(e){var r=e.getBoundingClientRect();return r.width>0&&r.height>0&&getComputedStyle(e).visibility!=="hidden";}' +
+  'var h=document.querySelector(".hl-report-page .hl-post-header"),a=h&&h.querySelector(".hl-rv-actions"),t=h&&h.querySelector(".hl-post-header__title");' +
+  'if(!h||!a)return {present:false};var hr=h.getBoundingClientRect(),tr=t?t.getBoundingClientRect():null;' +
+  'var btns=[].slice.call(a.querySelectorAll("a.hl-quicklink,button.hl-quicklink")).filter(vis).map(function(b){var r=b.getBoundingClientRect(),l=b.querySelector(".hl-quicklink__label");return {label:l?l.textContent.trim():b.textContent.trim(),l:r.left,t:r.top,r:r.right,b:r.bottom,w:r.width,h:r.height};});' +
+  'return {present:true,iw:innerWidth,hdr:{l:hr.left,t:hr.top,r:hr.right,b:hr.bottom},titleR:tr?tr.right:null,btns:btns};})()';
+function frontMatterLinks(mdText) {
+  var fm = /^---\n([\s\S]*?)\n---/.exec(mdText || ''); if (!fm) return null;
+  var has = function (k) { return new RegExp('^' + k + ':\\s*\\S', 'm').test(fm[1]); };
+  return { detect: has('detection_page'), ioc: has('ioc_feed'), stix: has('stix_bundle') };
+}
+function expectedPlateLabels(links, hasMisp) {
+  var out = ['Read the full report'];
+  if (links.detect) out.push('Detections'); if (links.ioc) out.push('IOC Feed'); if (links.stix) out.push('STIX'); if (hasMisp) out.push('MISP');
+  out.push('Share'); return out;
+}
+function plateColumnVerdict(m, expected) {
+  if (!m || !m.present) return { notChecked: true, ok: false, detail: 'no button column was found in the plate, so nothing was measured' };
+  if (!expected) return { notChecked: true, ok: false, detail: 'the report front matter could not be read, so the expected buttons are not known' };
+  var got = m.btns.map(function (b) { return b.label; }), why = [];
+  if (got.join('|') !== expected.join('|')) why.push('the plate has [' + got.join(', ') + '] but the page has [' + expected.join(', ') + ']');
+  m.btns.forEach(function (b) { if (b.h < 43.5 || b.w < 43.5) why.push(b.label + ' is ' + b.w.toFixed(0) + 'x' + b.h.toFixed(0) + ' px, under 44'); if (b.l < m.hdr.l || b.r > m.hdr.r + 0.5 || b.t < m.hdr.t || b.b > m.hdr.b + 0.5) why.push(b.label + ' is outside the plate'); });
+  if (m.iw >= 1100 && m.btns.length > 1) {
+    var xs = m.btns.map(function (b) { return Math.round(b.l); });
+    if (xs.some(function (x) { return Math.abs(x - xs[0]) > 1; })) why.push('the buttons are not one column (left edges ' + xs.join(', ') + ')');
+    if (m.titleR !== null && m.btns[0].l < m.titleR - 1) why.push('the button column starts at ' + m.btns[0].l.toFixed(0) + ' px, inside the title (right edge ' + m.titleR.toFixed(0) + ')');
+    for (var k = 1; k < m.btns.length; k++) if (m.btns[k].t < m.btns[k - 1].b - 0.5) why.push(m.btns[k].label + ' overlaps ' + m.btns[k - 1].label);
+  }
+  return { notChecked: false, ok: why.length === 0, why: why, detail: got.length + ' button(s) [' + got.join(', ') + '] against [' + expected.join(', ') + ']' + (why.length ? '; ' + why.join('; ') : '') };
+}
+async function plateRows(page, url, mdText) {
+  var name = 'the plate button column holds Read the full report, the page\'s own Detections, IOC feed, STIX and MISP links, and Share, in one column at the right on desktop';
+  var links = frontMatterLinks(mdText);
+  var states = [[1280, 900], [1440, 900], [390, 844]];
+  for (var i = 0; i < states.length; i++) {
+    await setViewport(page, states[i][0], states[i][1]);
+    if (!(await gotoAndWait(page, url))) { check('NOT CHECKED: ' + states[i][0] + 'x' + states[i][1] + ': ' + name, false, 'the tab controller never built, so nothing was measured'); continue; }
+    var canonical = await page.json('(function(){var l=document.querySelector("link[rel=canonical]");return l?l.href:null;})()');
+    var misp = mispEventFor(new URL(canonical || url).pathname);
+    var expected = links && misp !== undefined ? expectedPlateLabels(links, !!misp) : null;
+    var v = plateColumnVerdict(await page.json(PLATE_EXPR), expected);
+    if (v.notChecked) check('NOT CHECKED: ' + states[i][0] + 'x' + states[i][1] + ': ' + name, false, v.detail); else check(states[i][0] + 'x' + states[i][1] + ': ' + name, v.ok, v.detail);
+    if (i === 0 && expected && expected.length > 2) {
+      /* the control hides the first of the page's own links (Detections where the page has one, else the next), whatever this report carries */
+      var victim = expected[1];
+      await page.evaluate('(function(v){var b=[].slice.call(document.querySelectorAll(".hl-rv-actions .hl-quicklink")).filter(function(x){var l=x.querySelector(".hl-quicklink__label");return l&&l.textContent.trim()===v;})[0];if(b)b.style.display="none";})(' + JSON.stringify(victim) + ')');
+      var c = plateColumnVerdict(await page.json(PLATE_EXPR), expected);
+      check('control: with the ' + victim + ' button hidden the plate-column row FAILS', c.ok === false && !c.notChecked, c.ok === false ? 'FAILS as designed: ' + c.detail : 'the control did NOT fire: ' + c.detail);
+    }
+  }
+}
+
+/* (6) The "i" popovers are reachable by keyboard and by tap. Each "i" button in the open tab: focusable (tabIndex 0, not disabled), named,
+   collapsed at rest with its note hidden and in the DOM, opens on a real key press (Enter) and on a real pointer press, shows its note inside
+   the viewport, and closes on Escape. The note text must be generated chrome, never inside a report section. */
+var INFO_EXPR = '(function(){return [].slice.call(document.querySelectorAll(".hl-rv-panel:not([hidden]) .hl-rv-info")).map(function(b,i){var p=document.getElementById(b.getAttribute("aria-controls"));var r=b.getBoundingClientRect();' +
+  'return {i:i,label:b.getAttribute("aria-label"),tabIndex:b.tabIndex,disabled:b.disabled,w:r.width,h:r.height,expanded:b.getAttribute("aria-expanded"),hasPop:!!p,popHidden:!!p&&p.hidden,popTextLen:p?p.textContent.trim().length:0,popInReport:!!(p&&p.closest(".hl-rv-source")),chrome:b.hasAttribute("data-rv-chrome")&&!!p&&p.hasAttribute("data-rv-chrome")};});})()';
+function infoVerdict(rows, probe) {
+  if (!rows || !rows.length) return { notChecked: true, ok: false, detail: 'this tab has no "i" popover, so nothing was measured' };
+  var why = [];
+  rows.forEach(function (r) {
+    var n = 'i #' + r.i + ' (' + r.label + ')';
+    if (!r.label) why.push(n + ' has no accessible name');
+    if (r.tabIndex < 0 || r.disabled) why.push(n + ' cannot take focus');
+    if (r.w < 43.5 || r.h < 43.5) why.push(n + ' is ' + r.w.toFixed(0) + 'x' + r.h.toFixed(0) + ' px, under 44');
+    if (!r.hasPop || !r.popHidden || r.expanded !== 'false' || r.popTextLen === 0) why.push(n + ' is not collapsed at rest with its note in the DOM');
+    if (r.popInReport || !r.chrome) why.push(n + ' note is not generated chrome');
+  });
+  if (probe) {
+    if (!probe.keyOpened) why.push('pressing Enter on the first "i" did not open its note');
+    if (!probe.tapOpened) why.push('a pointer press on the first "i" did not open its note');
+    if (probe.keyOpened && !probe.inViewport) why.push('the opened note is not inside the viewport');
+    if (!probe.escCloses) why.push('Escape did not close the note');
+  } else why.push('the open/close probe did not run');
+  return { notChecked: false, ok: why.length === 0, why: why, detail: rows.length + ' "i" button(s) measured' + (probe ? '; Enter opens: ' + probe.keyOpened + ', a press opens: ' + probe.tapOpened + ', inside the viewport: ' + probe.inViewport + ', Escape closes: ' + probe.escCloses : '') + (why.length ? '; ' + why.join('; ') : '') };
+}
+async function pressEnter(page) {
+  await page.send('Input.dispatchKeyEvent', { type: 'keyDown', key: 'Enter', code: 'Enter', windowsVirtualKeyCode: 13, nativeVirtualKeyCode: 13, text: '\r', unmodifiedText: '\r' });
+  await page.send('Input.dispatchKeyEvent', { type: 'keyUp', key: 'Enter', code: 'Enter', windowsVirtualKeyCode: 13, nativeVirtualKeyCode: 13 });
+  await CDP.sleep(120);
+}
+async function infoProbe(page) {
+  var probe = { keyOpened: false, tapOpened: false, inViewport: false, escCloses: false };
+  await page.evaluate('(function(){var b=document.querySelector(".hl-rv-panel:not([hidden]) .hl-rv-info");if(b){b.scrollIntoView({block:"center"});b.focus();}})()');
+  await CDP.sleep(150);
+  await pressEnter(page);
+  await CDP.sleep(200);
+  probe.keyOpened = await page.json('(function(){var b=document.querySelector(".hl-rv-panel:not([hidden]) .hl-rv-info");var p=b&&document.getElementById(b.getAttribute("aria-controls"));return !!p&&!p.hidden&&b.getAttribute("aria-expanded")==="true";})()');
+  probe.inViewport = await page.json('(function(){var b=document.querySelector(".hl-rv-panel:not([hidden]) .hl-rv-info");var p=b&&document.getElementById(b.getAttribute("aria-controls"));if(!p||p.hidden)return false;var r=p.getBoundingClientRect();return r.width>0&&r.left>=0&&r.right<=innerWidth+0.5;})()');
+  await pressKey(page, 'Escape', 'Escape', 27);
+  await CDP.sleep(150);
+  probe.escCloses = await page.json('(function(){var b=document.querySelector(".hl-rv-panel:not([hidden]) .hl-rv-info");var p=b&&document.getElementById(b.getAttribute("aria-controls"));return !!p&&p.hidden&&b.getAttribute("aria-expanded")==="false";})()');
+  try { await page.click('.hl-rv-panel:not([hidden]) .hl-rv-info'); } catch (e) { /* reported below */ }
+  await CDP.sleep(200);
+  probe.tapOpened = await page.json('(function(){var b=document.querySelector(".hl-rv-panel:not([hidden]) .hl-rv-info");var p=b&&document.getElementById(b.getAttribute("aria-controls"));return !!p&&!p.hidden&&b.getAttribute("aria-expanded")==="true";})()');
+  await pressKey(page, 'Escape', 'Escape', 27);
+  return probe;
+}
+async function infoRows(page, url) {
+  var name = 'the "i" popovers are reachable by keyboard and by tap, collapsed at rest, inside the viewport when open, and closed by Escape';
+  var states = [[1280, 900], [390, 844]];
+  for (var i = 0; i < states.length; i++) {
+    await setViewport(page, states[i][0], states[i][1]);
+    if (!(await gotoAndWait(page, url))) { check('NOT CHECKED: ' + states[i][0] + 'x' + states[i][1] + ': ' + name, false, 'the tab controller never built, so nothing was measured'); continue; }
+    await page.evaluate('location.hash="#tab-' + firstTab() + '"'); await CDP.sleep(250);
+    var open = await page.json('(function(){var t=document.querySelector(".hl-rv-panel:not([hidden]) .hl-rv-view-summary button[aria-expanded=false]:not(.hl-rv-info)");if(t)t.click();return !!t;})()');
+    if (open) await CDP.sleep(250);
+    var rows = await page.json(INFO_EXPR);
+    if (!rows.length) { check('NOT CHECKED: ' + states[i][0] + 'x' + states[i][1] + ': ' + name, false, 'this report\'s ' + firstTab() + ' tab has no "i" popover (no generated figure with a how-counted note), so nothing was measured'); continue; }
+    var v = infoVerdict(rows, await infoProbe(page));
+    check(states[i][0] + 'x' + states[i][1] + ': ' + name, v.ok, v.detail);
+    if (i === 0) {
+      await page.evaluate('(function(){var b=document.querySelector(".hl-rv-panel:not([hidden]) .hl-rv-info");if(b){var c=b.cloneNode(true);b.replaceWith(c);}})()');
+      var c2 = infoVerdict(await page.json(INFO_EXPR), await infoProbe(page));
+      check('control: an "i" button whose handler is gone makes the popover row FAIL', c2.ok === false && !c2.notChecked, c2.ok === false ? 'FAILS as designed: ' + c2.detail : 'the control did NOT fire: ' + c2.detail);
+    }
+  }
+}
+
+/* (7) No report text is hidden at rest. Every paragraph, list item and table cell of the report's own sections in the open tab is drawn (a
+   box with area, not display:none, not visibility:hidden), except inside a closed <details> (a teardown is the report's own fold). The check
+   covers the open tab, then the next, and it reports how many it measured. The control hides one report paragraph and the row must FAIL. */
+var TEXT_HIDDEN_EXPR = '(function(){var n=0,hidden=[];var secs=[].slice.call(document.querySelectorAll(".hl-rv-panel:not([hidden]) .hl-rv-source"));' +
+  'secs.forEach(function(s){[].slice.call(s.querySelectorAll("p,li,td,th,h2,h3,h4,figcaption")).forEach(function(e){if(!e.textContent.trim())return;var d=e.closest("details");if(d&&!d.open&&d!==e)return;' +
+  'var cs=getComputedStyle(e),r=e.getBoundingClientRect();n++;if(cs.display==="none"||cs.visibility==="hidden"||r.width===0||r.height===0)hidden.push((e.tagName+" "+e.textContent.trim().slice(0,40)));});});' +
+  'return {sections:secs.length,measured:n,hidden:hidden.slice(0,6),hiddenCount:hidden.length};})()';
+function textHiddenVerdict(m) {
+  if (!m || !m.sections || !m.measured) return { notChecked: true, ok: false, detail: 'no report paragraph was measured in the open tab (' + (m ? m.sections + ' sections, ' + m.measured + ' text blocks' : 'nothing measured') + ')' };
+  return { notChecked: false, ok: m.hiddenCount === 0, why: m.hidden, detail: m.sections + ' report section(s), ' + m.measured + ' text block(s) measured, ' + m.hiddenCount + ' hidden' + (m.hiddenCount ? ': ' + m.hidden.join(' | ') : '') };
+}
+async function textHiddenRows(page, url) {
+  var name = 'no report text is hidden at rest in the open tab';
+  var states = [[1280, 900], [390, 844]];
+  for (var i = 0; i < states.length; i++) {
+    await setViewport(page, states[i][0], states[i][1]);
+    if (!(await gotoAndWait(page, url))) { check('NOT CHECKED: ' + states[i][0] + 'x' + states[i][1] + ': ' + name, false, 'the tab controller never built, so nothing was measured'); continue; }
+    for (var t = 0; t < rowTabs().length; t++) {
+      await page.evaluate('location.hash="#tab-' + rowTabs()[t] + '"'); await CDP.sleep(250);
+      var v = textHiddenVerdict(await page.json(TEXT_HIDDEN_EXPR));
+      if (v.notChecked) check('NOT CHECKED: ' + states[i][0] + 'x' + states[i][1] + ' ' + rowTabs()[t] + ': ' + name, false, v.detail); else check(states[i][0] + 'x' + states[i][1] + ' ' + rowTabs()[t] + ': ' + name, v.ok, v.detail);
+    }
+    if (i === 0) {
+      await page.evaluate('(function(){var p=document.querySelector(".hl-rv-panel:not([hidden]) .hl-rv-source p");if(p)p.style.display="none";})()');
+      var c = textHiddenVerdict(await page.json(TEXT_HIDDEN_EXPR));
+      check('control: with one report paragraph hidden the text-hidden row FAILS', c.ok === false && !c.notChecked, c.ok === false ? 'FAILS as designed: ' + c.detail : 'the control did NOT fire: ' + c.detail);
+    }
+  }
+}
+
+/* T-0500.1.7.1, reworked by T-0500.1.7.3 (design D): Share is the last labelled button of the plate's button column (it was a corner icon).
+   Geometry at three widths: present, labelled "Share this report" with the visible word "Share", a 44 px target inside the plate's button column
+   (inside the header box), overlapping neither the eyebrow line, the title, the bottom line nor the other buttons, keyboard-focusable with
    a visible focus ring, with an aria-live region beside it. Behaviour at one width: with no share sheet a click writes the page address to the
    clipboard and says "Link copied" in view; with a share sheet it calls it with the page address and does not touch the clipboard. */
 var SHARE_VIEWPORTS = [[1280, 900], [768, 1024], [390, 844]];
@@ -1537,7 +1788,8 @@ var SHARE_EXPR = '(function(){var h=document.querySelector(".hl-report-page .hl-
   'function vis(e){var r=e.getBoundingClientRect();return r.width>0&&r.height>0&&getComputedStyle(e).visibility!=="hidden";}' +
   'if(!h)return {header:false};var out={header:true,hdr:R(h),present:!!b,shareStillThere:!!document.querySelector(".hl-share-btn")};if(!b)return out;' +
   'out.btn=R(b);out.label=b.getAttribute("aria-label");out.tag=b.tagName;out.type=b.type;out.disabled=b.disabled;out.tabIndex=b.tabIndex;out.inHeader=h.contains(b);' +
-  'var others=[].slice.call(h.querySelectorAll(".hl-post-header__eyebrow > *,.hl-post-header__title,.hl-quicklinks .hl-quicklink,.hl-quicklinks .hl-cta")).filter(vis);' +
+  'var lbl=b.querySelector(".hl-quicklink__label");out.visibleLabel=lbl?lbl.textContent.trim():null;var act=b.closest(".hl-rv-actions");out.inActions=!!act;out.lastInActions=!!act&&act.lastElementChild===b.parentElement;' +
+  'var others=[].slice.call(h.querySelectorAll(".hl-post-header__eyebrow > *,.hl-post-header__title,.hl-rv-bluf,.hl-quicklinks .hl-quicklink:not(.hl-rv-share-btn),.hl-quicklinks .hl-cta:not(.hl-rv-share-btn)")).filter(vis);' +
   'out.checked=others.length;out.overlaps=others.filter(function(e){var o=R(e);return o.l<out.btn.r-0.5&&o.r>out.btn.l+0.5&&o.t<out.btn.b-0.5&&o.b>out.btn.t+0.5;}).map(function(e){return (e.className||e.tagName).toString().split(" ")[0];});' +
   'var live=document.querySelector(".hl-rv-share [role=status][aria-live]");out.live=!!live;out.liveText=live?live.textContent:null;' +
   'b.focus();var cs=getComputedStyle(b);out.focused=document.activeElement===b;out.outlineStyle=cs.outlineStyle;out.outlineWidth=parseFloat(cs.outlineWidth);out.focusVisible=b.matches(":focus-visible");b.blur();' +
@@ -1551,13 +1803,15 @@ function shareGeometryVerdict(m) {
   if (m.tag !== 'BUTTON' || m.type !== 'button') why.push('it is a ' + m.tag + ' (type ' + m.type + '), not a type=button button');
   if (m.btn.w < 44 - 0.5 || m.btn.h < 44 - 0.5) why.push('the target is ' + m.btn.w.toFixed(1) + 'x' + m.btn.h.toFixed(1) + ' px, under 44');
   if (!m.inHeader || m.btn.l < m.hdr.l || m.btn.r > m.hdr.r + 0.5 || m.btn.t < m.hdr.t || m.btn.b > m.hdr.b) why.push('it is not inside the header box');
+  if (!m.inActions) why.push('it is not in the plate\'s button column');
+  else if (!m.lastInActions) why.push('it is not the last button of the column');
+  if (m.visibleLabel !== 'Share') why.push('its visible label is ' + JSON.stringify(m.visibleLabel) + ', not "Share"');
   var fromRight = m.hdr.r - m.btn.r, fromTop = m.btn.t - m.hdr.t;
-  if (fromRight > 16 || fromTop > 16) why.push('it is not in the top-right corner (' + fromRight.toFixed(1) + ' px from the right edge, ' + fromTop.toFixed(1) + ' px from the top)');
   if (m.overlaps.length) why.push('it overlaps ' + m.overlaps.join(', '));
   if (m.disabled || m.tabIndex < 0 || !m.focused) why.push('it cannot take keyboard focus (tabIndex ' + m.tabIndex + ', focused ' + m.focused + ')');
   else if (m.outlineStyle === 'none' || !(m.outlineWidth >= 2) || !m.focusVisible) why.push('no visible focus ring (outline ' + m.outlineStyle + ' ' + m.outlineWidth + 'px, :focus-visible ' + m.focusVisible + ')');
   if (!m.live) why.push('no aria-live status region beside it');
-  return { notChecked: false, ok: why.length === 0, why: why, detail: 'icon ' + m.btn.w.toFixed(0) + 'x' + m.btn.h.toFixed(0) + ' px, ' + fromRight.toFixed(1) + ' px from the right and ' + fromTop.toFixed(1) + ' px from the top of the header box, ' + m.checked + ' neighbouring element(s) checked for overlap, focus ring ' + m.outlineWidth + 'px' + (why.length ? '; ' + why.join('; ') : '') };
+  return { notChecked: false, ok: why.length === 0, why: why, detail: 'button ' + m.btn.w.toFixed(0) + 'x' + m.btn.h.toFixed(0) + ' px, ' + fromRight.toFixed(1) + ' px from the right and ' + fromTop.toFixed(1) + ' px from the top of the header box, ' + m.checked + ' neighbouring element(s) checked for overlap, focus ring ' + m.outlineWidth + 'px' + (why.length ? '; ' + why.join('; ') : '') };
 }
 function shareBehaviourVerdict(m) {
   if (!m) return { notChecked: true, ok: false, detail: 'nothing was measured' };
@@ -1571,7 +1825,7 @@ function shareBehaviourVerdict(m) {
   return { notChecked: false, ok: why.length === 0, why: why, detail: 'no share sheet: clipboard written ' + m.writes.length + ' time(s), status ' + JSON.stringify(m.status) + (m.statusVisible ? ' in view' : ' NOT in view') + '; share sheet present: called ' + m.shares.length + ' time(s), clipboard written ' + (m.writesAfterShare - m.writes.length) + ' more time(s)' + (why.length ? '; ' + why.join('; ') : '') };
 }
 async function shareRows(page, url) {
-  var nameA = 'the share icon is a labelled 44 px button in the header box corner, clear of the eyebrow, title and buttons, with a focus ring';
+  var nameA = 'Share is a labelled 44 px button, the last of the plate\'s button column, clear of the eyebrow, title, bottom line and buttons, with a focus ring';
   var nameB = 'clicking the share icon copies the page address and says "Link copied", or hands it to the share sheet when there is one';
   for (var i = 0; i < SHARE_VIEWPORTS.length; i++) {
     var w = SHARE_VIEWPORTS[i][0], h = SHARE_VIEWPORTS[i][1];
@@ -3358,6 +3612,11 @@ async function tabbedChecks(page, opts) {
   await panelRows(page, url);
   await featuredSponsorRows(page, url);
   await sponsorRailRows(page, url);
+  await stickyFeaturedCardRows(page, url);
+  await numeralRows(page, url);
+  await plateRows(page, url, opts.mdText);
+  await infoRows(page, url);
+  await textHiddenRows(page, url);
   await shareRows(page, url);
   await mispRows(page, url);
   await timelineRows(page, url);
@@ -3793,6 +4052,7 @@ async function main() {
         html: html,
         authored: authoredKnown ? authored : null,
         authoredKnown: authoredKnown,
+        mdText: (function () { try { return authored && authored.path ? fs.readFileSync(authored.path, 'utf8') : null; } catch (e) { return null; } })(),
         pageOrder: pageOrder,
         /* D2: no fallback. With no authored report the count and order are NOT
            KNOWN, and every row that needs them records NOT CHECKED rather than
@@ -4105,6 +4365,15 @@ if (require.main === module) {
     featuredSponsorVerdict: featuredSponsorVerdict,
     FEATURED_EXPR: FEATURED_EXPR,
     railVerdict: railVerdict,
+    stickyOverlapVerdict: stickyOverlapVerdict,
+    numeralVerdict: numeralVerdict,
+    plateColumnVerdict: plateColumnVerdict,
+    expectedPlateLabels: expectedPlateLabels,
+    frontMatterLinks: frontMatterLinks,
+    infoVerdict: infoVerdict,
+    textHiddenVerdict: textHiddenVerdict,
+    STICKY_CONTROL_CSS: STICKY_CONTROL_CSS,
+    STICKY_STATES: STICKY_STATES,
     RAIL_EXPR: RAIL_EXPR,
     RAIL_STATES: RAIL_STATES,
     shareGeometryVerdict: shareGeometryVerdict,

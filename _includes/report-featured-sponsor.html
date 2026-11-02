@@ -1,0 +1,35 @@
+{%- comment -%}
+  The site (Monthly) sponsor on a TABBED report (T-0500.1.7.3, design D; Joseph 2026-11-01). Included from _layouts/post.html
+  only when hl_tabbed, so untabbed pages keep their own sponsor chrome byte for byte. Same filter as sidebar-sponsors.html
+  (Monthly and active; on unlisted pages every Monthly sponsor). Two renderings of the same sponsors, the stylesheet shows one:
+    .hl-rv-feat       a compact gold band above the report header (a slim strip on a phone), below 1440px
+    .hl-rv-featcard   a sticky gold "Featured sponsor" card in the left margin, from 1440px
+  The site's own Sponsors rail (sidebar-sponsors.html) stays in the DOM, because the tab-foot card reads it, and the tabbed
+  CSS hides it. Renders nothing when there is no Monthly sponsor. Reads no new data fields and sends no tracking.
+{%- endcomment -%}
+{%- assign rv_feat = site.data.sponsors.sponsors | where: "tier", "monthly" | where: "active", true -%}
+{%- if page.unlisted -%}{%- assign rv_feat = site.data.sponsors.sponsors | where: "tier", "monthly" -%}{%- endif -%}
+{%- if rv_feat.size > 0 -%}
+<aside class="hl-rv-feat{% if rv_feat.size > 1 %} hl-rv-feat--many{% endif %}" aria-label="Featured sponsor" data-rv-chrome data-pagefind-ignore>
+  <span class="hl-rv-feat__label">Featured sponsor</span>
+  <div class="hl-rv-feat__items">
+  {%- for sponsor in rv_feat %}
+    {% if sponsor.url %}<a class="hl-rv-feat__item" href="{{ sponsor.url }}" target="_blank" rel="sponsored noopener noreferrer"{% else %}<span class="hl-rv-feat__item"{% endif %} data-rv-sponsor="featured" data-name="{{ sponsor.name | escape }}">
+      {%- if sponsor.logo %}<img class="hl-rv-feat__logo" src="{{ sponsor.logo | relative_url }}" alt="{{ sponsor.name | escape }}">{% else %}<span class="hl-rv-feat__wordmark">{{ sponsor.name | escape }}</span>{% endif %}
+      {%- if sponsor.tagline %}<span class="hl-rv-feat__tagline">{{ sponsor.tagline | escape }}</span>{% endif %}
+      {%- if sponsor.url %}<span class="hl-rv-feat__cta" aria-hidden="true">Visit &rarr;</span>{% endif %}
+    {% if sponsor.url %}</a>{% else %}</span>{% endif %}
+  {%- endfor %}
+  </div>
+</aside>
+<aside class="hl-rv-featcard" aria-label="Featured sponsor" data-rv-chrome data-pagefind-ignore>
+  <span class="hl-rv-featcard__label">Featured sponsor</span>
+  {%- for sponsor in rv_feat %}
+  {% if sponsor.url %}<a class="hl-rv-featcard__item" href="{{ sponsor.url }}" target="_blank" rel="sponsored noopener noreferrer"{% else %}<span class="hl-rv-featcard__item"{% endif %} data-rv-sponsor="featured-card" data-name="{{ sponsor.name | escape }}">
+    {%- if sponsor.logo %}<img class="hl-rv-featcard__logo" src="{{ sponsor.logo | relative_url }}" alt="{{ sponsor.name | escape }}">{% else %}<span class="hl-rv-feat__wordmark">{{ sponsor.name | escape }}</span>{% endif %}
+    {%- if sponsor.tagline and rv_feat.size == 1 %}<span class="hl-rv-featcard__tagline">{{ sponsor.tagline | escape }}</span>{% endif %}
+    {%- if sponsor.url %}<span class="hl-rv-featcard__cta" aria-hidden="true">Visit &rarr;</span>{% endif %}
+  {% if sponsor.url %}</a>{% else %}</span>{% endif %}
+  {%- endfor %}
+</aside>
+{%- endif -%}

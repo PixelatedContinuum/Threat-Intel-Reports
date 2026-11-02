@@ -37,18 +37,23 @@ test('v6: each section panel carries its mono label as data (SECTION nn, APPENDI
     assert.equal(reportText(f.d),f.original);
   }finally{f.w.close();}
 });
-test('v6: a stat tile is number, label and destination; its "How counted" note is one cell of the row under the grid, keyed by the tile',()=>{
+test('v6 (design D): a stat tile is number, label and destination; its "How counted" note is the body of the "i" popover on the tile, text unchanged, in the DOM, hidden at rest',()=>{
   const f=fixture();try{
-    const tiles=f.d.querySelector('#tab-overview .hl-rv-tiles'),notes=tiles.nextElementSibling;
-    assert.ok(notes&&notes.classList.contains('hl-rv-tile-notes'),'the note row follows the tile grid');
-    const tl=[...tiles.querySelectorAll('.hl-rv-tile')],cells=[...notes.querySelectorAll('.hl-rv-tile-note')];
-    assert.ok(tl.length>=3);assert.equal(cells.length,tl.length,'one note per tile, in tile order');
-    tl.forEach((t,i)=>{
-      assert.equal(t.querySelector('small'),null,'no note inside the tile');
-      assert.match(cells[i].querySelector('small').textContent,/^How counted: /);
-      assert.equal(cells[i].querySelector('.hl-rv-tile-note__key').textContent,t.querySelector('.hl-rv-value').textContent+' '+t.querySelector('span').textContent);
-      assert.ok(cells[i].hasAttribute('data-rv-chrome')&&notes.hasAttribute('data-rv-chrome'));
+    const tiles=f.d.querySelector('#tab-overview .hl-rv-tiles');
+    assert.equal(tiles.nextElementSibling&&tiles.nextElementSibling.classList.contains('hl-rv-tile-notes'),false,'no note row follows the grid: the notes are in popovers');
+    const cells=[...tiles.querySelectorAll(':scope > .hl-rv-tilecell')];
+    assert.ok(cells.length>=3);
+    cells.forEach(c=>{
+      const t=c.querySelector('a.hl-rv-tile'),i=c.querySelector('button.hl-rv-info'),pop=c.querySelector('.hl-rv-pop');
+      assert.ok(t&&i&&pop);assert.equal(t.querySelector('small'),null,'no note inside the tile');
+      assert.equal(i.getAttribute('aria-expanded'),'false');assert.equal(i.getAttribute('aria-controls'),pop.id);assert.ok(pop.hidden,'hidden at rest');
+      assert.match(pop.querySelector('small').textContent,/^How counted: /,'the note text is unchanged and in the DOM');
+      assert.equal(pop.querySelector('.hl-rv-tile-note__key').textContent,t.querySelector('.hl-rv-value').textContent+' '+t.querySelector('span').textContent);
+      assert.ok(pop.hasAttribute('data-rv-chrome')&&i.hasAttribute('data-rv-chrome'));
+      i.click();assert.equal(pop.hidden,false);assert.equal(i.getAttribute('aria-expanded'),'true','tap opens it');
+      f.d.dispatchEvent(new f.w.KeyboardEvent('keydown',{key:'Escape',bubbles:true}));assert.ok(pop.hidden,'Escape closes it');assert.equal(i.getAttribute('aria-expanded'),'false');
     });
+    const tl=[...tiles.querySelectorAll('.hl-rv-tile')];
     const window_=tl.find(t=>/ to /.test(t.querySelector('.hl-rv-value').textContent));assert.ok(window_.querySelector('.hl-rv-value').textContent.length>8);assert.ok(window_.querySelector('.hl-rv-value').classList.contains('hl-rv-value--long'));
     assert.equal(reportText(f.d),f.original);
   }finally{f.w.close();}

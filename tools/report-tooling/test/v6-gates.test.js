@@ -15,39 +15,50 @@ var JSDOM = require('jsdom').JSDOM;
 var G = require('../check-browser-report.js');
 
 function tab(id, over) {
-  return Object.assign({ id: id, selected: false, color: 'rgb(168, 168, 168)', line: 'rgba(0, 0, 0, 0)', lineW: 2, dot: 'rgb(1, 1, 1)', dotW: 7 }, over || {});
+  return Object.assign({ id: id, selected: false, color: 'rgb(214, 214, 214)', border: 'rgb(58, 58, 58)', hasIcon: true, iconW: 32, iconBg: 'rgba(163, 113, 247, 0.13)', iconFg: 'rgb(1, 1, 1)' }, over || {});
 }
 function good() {
-  var dots = ['rgb(163,113,247)', 'rgb(232,121,249)', 'rgb(251,146,60)', 'rgb(88,166,255)', 'rgb(232,121,249)', 'rgb(34,211,238)', 'rgb(45,212,191)'];
-  return dots.map(function (d, i) {
-    return tab('tabbtn-' + i, i === 2 ? { selected: true, color: 'rgb(251, 146, 60)', line: 'rgb(251, 146, 60)', dot: d } : { dot: d });
+  var acc = ['rgb(163,113,247)', 'rgb(232,121,249)', 'rgb(251,146,60)', 'rgb(88,166,255)', 'rgb(232,121,249)', 'rgb(34,211,238)', 'rgb(45,212,191)'];
+  return acc.map(function (d, i) {
+    return tab('tabbtn-' + i, i === 2 ? { selected: true, color: 'rgb(255, 255, 255)', border: 'rgb(150, 100, 50)', iconBg: 'rgb(251, 146, 60)', iconFg: 'rgb(17, 17, 17)' } : { iconFg: d });
   });
 }
 
-test('the tab look row passes the v6 tab strip: one underlined accent-coloured tab, seven dots in six hues', function () {
+test('the tab look row (design D) passes the chip strip: one filled accent chip, six tinted chips with icons, six distinct accents of seven (two tabs share the fuchsia)', function () {
   var v = G.tabLookVerdict(good());
   assert.strictEqual(v.ok, true, v.detail);
   assert.strictEqual(v.distinct, 6);
 });
-test('the tab look row fails when the selected tab has no underline', function () {
-  var t = good(); t[2].line = 'rgba(0, 0, 0, 0)';
-  assert.strictEqual(G.tabLookVerdict(t).ok, false);
+test('the tab look row fails when the selected chip is not filled with the accent', function () {
+  var t = good(); t[2].iconBg = 'rgba(251, 146, 60, 0.13)';
+  var v = G.tabLookVerdict(t); assert.strictEqual(v.ok, false); assert.match(v.detail, /not filled with the accent/);
 });
-test('the tab look row fails when an idle tab shares the selected label colour', function () {
+test('the tab look row fails when an idle tab shares the selected label colour or border', function () {
   var t = good(); t[4].color = t[2].color;
   var v = G.tabLookVerdict(t); assert.strictEqual(v.ok, false); assert.match(v.detail, /label colour/);
+  var u = good(); u[4].border = u[2].border;
+  assert.match(G.tabLookVerdict(u).detail, /border colour/);
 });
-test('the tab look row fails when an idle tab is underlined, or two tabs are selected', function () {
-  var t = good(); t[0].line = 'rgb(163, 113, 247)';
-  assert.strictEqual(G.tabLookVerdict(t).ok, false);
+test('the tab look row fails when an idle chip is also filled, or two tabs are selected', function () {
+  var t = good(); t[0].iconBg = 'rgb(163, 113, 247)';
+  assert.match(G.tabLookVerdict(t).detail, /translucent tint/);
   var u = good(); u[0].selected = true;
   assert.strictEqual(G.tabLookVerdict(u).ok, false);
 });
-test('the tab look row fails when a tab has no dot, or all dots are one colour', function () {
-  var t = good(); t[1].dotW = 0;
-  assert.strictEqual(G.tabLookVerdict(t).ok, false);
-  var u = good().map(function (x) { return Object.assign(x, { dot: 'rgb(88, 166, 255)' }); });
-  var v = G.tabLookVerdict(u); assert.strictEqual(v.ok, false); assert.match(v.detail, /distinct dot colours/);
+test('the tab look row fails when a tab has no icon, or all icons are one accent', function () {
+  var t = good(); t[1].hasIcon = false;
+  assert.match(G.tabLookVerdict(t).detail, /no icon box/);
+  var u = good().map(function (x) { return Object.assign(x, x.selected ? {} : { iconFg: 'rgb(88, 166, 255)' }); });
+  var v = G.tabLookVerdict(u); assert.strictEqual(v.ok, false); assert.match(v.detail, /distinct icon accents/);
+});
+test('the tab look row passes a six-tab report whose Victims and Attribution share the fuchsia (cloudsync-assembler shape: 5 distinct accents of 6), and FAILS when only four are distinct', function () {
+  var six = ['rgb(163,113,247)', 'rgb(232,121,249)', null, 'rgb(232,121,249)', 'rgb(34,211,238)', 'rgb(45,212,191)'].map(function (d, i) {
+    return tab('tabbtn-' + i, i === 2 ? { selected: true, color: 'rgb(255, 255, 255)', border: 'rgb(150, 100, 50)', iconBg: 'rgb(251, 146, 60)', iconFg: 'rgb(17, 17, 17)' } : { iconFg: d });
+  });
+  var v = G.tabLookVerdict(six);
+  assert.strictEqual(v.ok, true, v.detail); assert.strictEqual(v.distinct, 5);
+  var four = six.map(function (x, i) { return i === 4 ? Object.assign({}, x, { iconFg: 'rgb(232,121,249)' }) : x; });
+  assert.match(G.tabLookVerdict(four).detail, /distinct icon accents/);
 });
 test('the tab look row measured nothing, so it is NOT CHECKED, never a pass', function () {
   assert.strictEqual(G.tabLookVerdict([]).notChecked, true);

@@ -68,16 +68,18 @@ test('Liquid: the MISP link is the same lookup and markup normal reports use; th
   assert.ok(layout.includes('<a class="hl-quicklink" href="{{ _misp_ev.event_url }}" target="_blank" rel="noopener noreferrer" aria-label="MISP event for this report (JSON, from the MISP feed)">'));
   assert.equal(/hl_tabbed[^\n]*misp/i.test(layout), false, 'no tabbed-only MISP branch');
 });
-test('JS: the Share button is gone from the resource row; the share icon is built into the header box, labelled, with a live region', () => {
+test('JS (design D): there is no old Share button in the resource row; Share is the last labelled button of the plate column, with a live region', () => {
   const f = page(); try {
     assert.equal(f.d.querySelector('.hl-share-btn'), null);
     assert.equal(/hl-share-btn/.test(js), false);
-    const b = f.d.querySelector('.hl-post-header > .hl-rv-share > button.hl-rv-share-btn');
+    const b = f.d.querySelector('.hl-post-header > .hl-rv-actions > .hl-rv-share > button.hl-rv-share-btn');
     assert.ok(b); assert.equal(b.getAttribute('aria-label'), 'Share this report'); assert.equal(b.type, 'button');
-    assert.ok(b.querySelector('svg[aria-hidden="true"]'));
+    assert.equal(b.querySelector('.hl-quicklink__label').textContent, 'Share');
+    assert.ok(b.querySelector('svg[focusable="false"]'));
     const live = f.d.querySelector('.hl-rv-share [role="status"][aria-live="polite"]'); assert.ok(live); assert.equal(live.textContent, '');
     assert.ok(f.d.querySelector('.hl-rv-share').hasAttribute('data-rv-chrome'), 'chrome, so no report word changes');
-    assert.equal(f.d.querySelector('.hl-quicklinks').querySelectorAll('.hl-rv-share-btn').length, 0);
+    assert.equal(f.d.querySelector('.hl-rv-actions').lastElementChild, f.d.querySelector('.hl-rv-share'), 'Share is last');
+    assert.equal(f.d.querySelector('.hl-rv-actions').firstElementChild.classList.contains('hl-rv-read'), true, 'Read the full report is first');
   } finally { f.w.close(); }
 });
 test('JS: with no share sheet a click writes the page address to the clipboard and says "Link copied"; with one it calls it and does not copy', async () => {
@@ -95,18 +97,17 @@ test('JS: with no share sheet a click writes the page address to the clipboard a
     assert.equal(/fetch\(|XMLHttpRequest|sendBeacon|utm_/.test(js.slice(js.indexOf('// Share: a 44px icon'), js.indexOf("root.classList.add('hl-rv-ready')"))), false, 'it sends and tracks nothing');
   } finally { f.w.close(); }
 });
-test('CSS: the share icon is a 44px button in the header corner and the eyebrow keeps clear of it; "Link copied" is drawn only while it has text', () => {
-  assert.match(css, /\.hl-report-page \.hl-rv-share \{ position: absolute; top: 8px; right: 8px; z-index: 2; \}/);
-  assert.match(css, /\.hl-report-page \.hl-rv-share-btn \{[^}]*width: 44px; height: 44px; padding: 0;/);
-  assert.match(css, /\.hl-report-page \.hl-post-header__eyebrow \{[^}]*padding-right: 52px;/);
-  assert.match(css, /\.hl-report-page \.hl-post-header \{[^}]*padding: 22px 24px 24px 20px; margin: 0 0 24px; position: relative;/);
+test('CSS (design D): Share is a full-width plate button; "Link copied" is drawn only while it has text', () => {
+  assert.match(css, /\.hl-report-page \.hl-rv-share \{ position: relative; display: flex; \}/);
+  assert.match(css, /\.hl-report-page \.hl-rv-share \.hl-rv-share-btn \{ width: 100%; \}/);
   assert.match(css, /\.hl-report-page \.hl-rv-share-status:not\(:empty\) \{ padding: 6px 12px;/);
+  assert.equal(/\.hl-rv-share \{ position: absolute; top: 8px/.test(css), false, 'the corner icon is gone');
   assert.equal(/hl-share-btn/.test(css), false, 'the old Share button styling is gone');
 });
 
 /* ---- the gate verdicts ---- */
-const SHARE = (over) => Object.assign({ header: true, hdr: { l: 360, t: 94, r: 1560, b: 260, w: 1200, h: 166 }, present: true, shareStillThere: false, btn: { l: 1508, t: 102, r: 1552, b: 146, w: 44, h: 44 }, label: 'Share this report', tag: 'BUTTON', type: 'button', disabled: false, tabIndex: 0, inHeader: true, checked: 6, overlaps: [], live: true, liveText: '', focused: true, outlineStyle: 'solid', outlineWidth: 2, focusVisible: true }, over || {});
-test('the share icon verdict passes the built geometry and FAILS each defect', () => {
+const SHARE = (over) => Object.assign({ header: true, hdr: { l: 360, t: 94, r: 1560, b: 300, w: 1200, h: 206 }, present: true, shareStillThere: false, btn: { l: 1352, t: 220, r: 1552, b: 264, w: 200, h: 44 }, label: 'Share this report', visibleLabel: 'Share', inActions: true, lastInActions: true, tag: 'BUTTON', type: 'button', disabled: false, tabIndex: 0, inHeader: true, checked: 6, overlaps: [], live: true, liveText: '', focused: true, outlineStyle: 'solid', outlineWidth: 2, focusVisible: true }, over || {});
+test('the share button verdict (design D, plate column) passes the built geometry and FAILS each defect', () => {
   assert.equal(G.shareGeometryVerdict(SHARE()).ok, true, G.shareGeometryVerdict(SHARE()).detail);
   const bad = (over, re) => { const v = G.shareGeometryVerdict(SHARE(over)); assert.equal(v.ok, false); assert.match(v.detail, re); };
   bad({ present: false }, /no share icon button/);
@@ -115,7 +116,9 @@ test('the share icon verdict passes the built geometry and FAILS each defect', (
   bad({ tag: 'DIV' }, /not a type=button button/);
   bad({ btn: { l: 1508, t: 102, r: 1540, b: 134, w: 32, h: 32 } }, /under 44/);
   bad({ btn: { l: 100, t: 102, r: 144, b: 146, w: 44, h: 44 }, inHeader: false }, /not inside the header box/);
-  bad({ btn: { l: 900, t: 102, r: 944, b: 146, w: 44, h: 44 } }, /not in the top-right corner/);
+  bad({ inActions: false }, /not in the plate's button column/);
+  bad({ lastInActions: false }, /not the last button of the column/);
+  bad({ visibleLabel: null }, /visible label is null/);
   bad({ overlaps: ['hl-post-header__title'] }, /overlaps hl-post-header__title/);
   bad({ tabIndex: -1, focused: false }, /cannot take keyboard focus/);
   bad({ outlineStyle: 'none', outlineWidth: 0 }, /no visible focus ring/);

@@ -93,7 +93,7 @@ test('the gate carries the two rows and the three controls, each restoring the o
 test('CSS: the old rules are gone from the shipped sheet and the fixed ones are in it', () => {
   /* the old rules, written as the controls write them, must not be the sheet's own: the sheet's bar rule is conditional on a note being absent */
   assert.doesNotMatch(CSS, /^\.hl-rv-view-summary:has\(button\[aria-expanded="false"\]\) \{ border-bottom: 0; border-radius: 7px; \}/m);
-  assert.match(CSS, /\.hl-rv-view:not\(:has\(> \.hl-rv-curated\)\) > \.hl-rv-view-summary:has\(button\[aria-expanded="false"\]\) \{ border-bottom: 0; border-radius: 7px; \}/);
+  assert.match(CSS, /\.hl-rv-view:not\(:has\(> \.hl-rv-curated\)\) > \.hl-rv-view-summary:has\(button\[aria-expanded="false"\]\) \{ border-bottom: 0; border-radius: 10px; \}/);
   assert.match(CSS, /\.hl-rv-view > \.hl-rv-curated \{ padding: 0 var\(--rv-pad\) var\(--rv-pad\); margin: -8px 0 0 !important; \}/, 'the open view keeps the note 8px under its body');
   assert.match(CSS, /\.hl-rv-view:has\(> \.hl-rv-view-summary button\[aria-expanded="false"\]\) > \.hl-rv-curated \{ padding-top: 12px; margin-top: 0 !important; \}/);
 });
