@@ -47,6 +47,18 @@ test('the layouts call the shared include: page.html for every non-report page (
   assert.match(post, /\{% if page\.path contains 'hunting-detections' %\}\{% include defang-html\.html html=content %\}\{% else %\}\{\{ content \}\}\{% endif %\}/, 'a report keeps {{ content }} untouched');
 });
 
+test('post.html defangs a report title wherever the layout prints it (header, citation, BibTeX, Continue Reading cards) and the share sheet takes the visible title', () => {
+  const post = read('_layouts/post.html');
+  // no raw title is printed by the layout; every print goes through the include (T-0500.1.7.4 ship: a report's title carries the campaign's address)
+  assert.doesNotMatch(post, /\{\{\s*page\.title\s*\}\}/, 'page.title printed raw');
+  assert.doesNotMatch(post, /\{\{\s*rp\.title\s*\}\}/, 'rp.title printed raw');
+  assert.equal((post.match(/include defang-text\.html text=page\.title/g) || []).length >= 3, true, 'both headers and the citation take the include');
+  assert.match(post, /include defang-text\.html text=rp\.title/);
+  assert.doesNotMatch(post, /title: document\.title/, 'the share sheet must not take the head title');
+  const tabs = read('assets/js/hl-report-tabs.js');
+  assert.doesNotMatch(tabs, /title: document\.title/, 'the tabbed share button must not take the head title');
+});
+
 test('the IOC viewer: the cell include and assets/js/ioc-table.js agree on which types are network values, and the table starts defanged', () => {
   const js = read('assets/js/ioc-table.js');
   const m = js.match(/var DEFANG_TYPES = \{([^}]*)\}/);
@@ -200,10 +212,29 @@ test('check-defang --site: a clean fixture PASSes with its denominators, each in
   const lit = gate(fixtureSite({ 'index.html': '<code data-literal="filename">ghost.sh</code> <code data-literal="sha256">' + 'a'.repeat(64) + '</code>' }));
   assert.equal(lit.status, 0, lit.stdout);
   assert.match(lit.stdout, /literal\s+2 IOC viewer cell/);
-  // report pages, working docs and changelogs are excluded and said so
-  const ex = gate(fixtureSite({ 'index.html': '<p>x</p>', 'reports/a/index.html': '198.51.100.17', 'report-templates/index.html': '198.51.100.17', 'feeds/misp/changelog/index.html': '198.51.100.17' }));
+  // working docs and changelogs are excluded and said so; a report page is SCANNED (T-0500.1.7.4 ship: it is no longer excluded)
+  const ex = gate(fixtureSite({ 'index.html': '<p>x</p>', 'report-templates/index.html': '198.51.100.17', 'feeds/misp/changelog/index.html': '198.51.100.17' }));
   assert.equal(ex.status, 0, ex.stdout);
-  assert.match(ex.stdout, /excluded\s+1 feed changelog \(decision 7\); 1 report page \(source lint\); 1 working doc \(decision 7\)/);
+  assert.match(ex.stdout, /excluded\s+1 feed changelog \(decision 7\); 1 working doc \(decision 7\)/);
+  assert.doesNotMatch(ex.stdout, /report page \(source lint\)/);
+  // report pages: a raw title, a raw citation, a raw BibTeX block, a link to an IP and a link to a host the page names defanged each FAIL; the clean twin PASSes
+  const REP_OK = '<h1>Open Directory 198[.]51[.]100[.]17</h1><p class="hl-cite__text">Harrison, J. <em>Open Directory 198[.]51[.]100[.]17</em>. https://the-hunters-ledger.com/reports/x-198.51.100.17/</p>' +
+    '<pre><code>title = {Open Directory 198[.]51[.]100[.]17}</code></pre><pre class="hl-copy">rule x { 198.51.100.17 }</pre><p>C2 evil-host[.]example[.]xyz; see <a href="https://vendor.example.net/r">the vendor</a>.</p>';
+  const repGood = gate(fixtureSite({ 'index.html': '<p>x</p>', 'reports/a/index.html': REP_OK }));
+  assert.equal(repGood.status, 0, repGood.stdout);
+  assert.match(repGood.stdout, /pages\s+2 scanned: .*report 1/);
+  const repCases = { 'raw title': ['<h1>Open Directory 198[.]51[.]100[.]17</h1>', '<h1>Open Directory 198.51.100.17</h1>', 'IPV4'],
+    'raw citation': ['<em>Open Directory 198[.]51[.]100[.]17</em>', '<em>Open Directory 198.51.100.17</em>', 'IPV4'],
+    'raw BibTeX': ['title = {Open Directory 198[.]51[.]100[.]17}', 'title = {Open Directory 198.51.100.17}', 'PRE-IN-REPORT'],
+    'link to a host the page names defanged': ['see <a href="https://vendor.example.net/r">', 'see <a href="https://evil-host.example.xyz/x">', 'LINK-ACTOR-HOST'],
+    'link to an IP': ['see <a href="https://vendor.example.net/r">', 'see <a href="http://198.51.100.17/x">', 'LINK-IP'] };
+  Object.keys(repCases).forEach((name) => {
+    const c = repCases[name];
+    assert.ok(REP_OK.includes(c[0]), name + ': the control must change something');
+    const r = gate(fixtureSite({ 'index.html': '<p>x</p>', 'reports/a/index.html': REP_OK.replace(c[0], c[1]) }));
+    assert.equal(r.status, 1, name + ' must FAIL: ' + r.stdout);
+    assert.match(r.stdout, new RegExp('FINDING .* ' + c[2] + ' '), name);
+  });
   // the include's own output is counted and listed, never silent: an <a> rendered as text shows in the gate output with its defanged target
   const un = gate(fixtureSite({ 'index.html': '<span class="hl-unlinked" data-unlinked="hxxps://vendor[.]example[.]net/r">vendor[.]example[.]net</span>' }));
   assert.equal(un.status, 0, un.stdout);

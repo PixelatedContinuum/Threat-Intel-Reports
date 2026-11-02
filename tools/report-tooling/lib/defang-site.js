@@ -23,8 +23,17 @@
    it); the live value kept in a data-live attribute for the IOC viewer's reader-initiated toggle; the downloadable feed files; hrefs to this
    site's own pages (they hold slugs that carry the campaign's address).
 
-   EXCLUDED, counted and printed: report pages (reports/<slug>/, governed by the source lint on their markdown), the working docs
-   /report-templates/ and the feed changelogs (decision 7), pagefind and asset directories.
+   REPORT PAGES (reports/<slug>/, T-0500.1.7.4 ship) are scanned too: the source lint reads the markdown, this reads what the layout and the page add
+   (the title in the header, the citation and BibTeX, the Continue Reading cards, tooltips) and what the markdown became. A report page is judged
+   against the allow data PLUS its own tools/report-tooling/defang-allow/<slug>.txt, the list its source lint uses. On a report page:
+     - a link to a reference (a vendor, MITRE, NVD, our own pages) is kept: LINK-UNLISTED does not apply, LINK-IP and LINK-MAILTO do;
+     - LINK-ACTOR-HOST: a link whose host also appears DEFANGED in the same page's text is a clickable form of a named indicator (unless the
+       host+path is under `links` in the allow data, e.g. our own sponsor page);
+     - a <pre> marked .hl-copy is rule or copy text and stays exact (counted, never scanned, as the source lint does); any other <pre> (the BibTeX
+       block) is page text and is scanned line by line: PRE-IN-REPORT.
+   NOT SEEN on a report page, as everywhere: <head> metadata (<title>, description, Open Graph) and own-site hrefs and image paths (the slug carries the address).
+
+   EXCLUDED, counted and printed: the working docs /report-templates/ and the feed changelogs (decision 7), pagefind and asset directories.
 
    DENOMINATORS: pages scanned and excluded by type, text nodes, indicator-shaped tokens (flagged / defanged / private / allowed),
    attributes, links by class, <pre> blocks and the raw indicators inside them. A run that scanned no text node is NOT CHECKED. */
@@ -57,7 +66,7 @@ function loadAllowData(file) {
     if (!String(mailboxes[a] || '').trim()) throw new Error('defang_allow.yml mailboxes entry "' + a + '" has no reason');
     mb[a.toLowerCase()] = mailboxes[a];
   });
-  return { allow: allow, raw: raw, links: L, mailboxes: mb, rawCount: Object.keys(raw).length, mailboxCount: Object.keys(mb).length };
+  return { allow: allow, rawText: lines.join('\n'), raw: raw, links: L, mailboxes: mb, rawCount: Object.keys(raw).length, mailboxCount: Object.keys(mb).length };
 }
 
 function pageType(rel) {
@@ -73,7 +82,6 @@ function pageType(rel) {
 function excluded(rel) {
   var r = '/' + rel.replace(/\\/g, '/');
   if (/^\/(pagefind|assets)\//.test(r)) return 'asset directory';
-  if (/^\/reports\/.+/.test(r) && r !== '/reports/index.html') return 'report page (source lint)';
   if (/^\/report-templates\//.test(r)) return 'working doc (decision 7)';
   if (/^\/feeds\/[^\/]+\/changelog\//.test(r)) return 'feed changelog (decision 7)';
   return null;
@@ -116,8 +124,8 @@ function isIpHost(host) {
 
 function newStats() {
   return { pages: 0, byType: {}, excluded: {}, textNodes: 0, attrs: 0, matchedFlagged: 0, matchedDefanged: 0, matchedPrivate: 0, matchedAllowed: 0, allowedBy: {},
-    links: { total: 0, relative: 0, anchor: 0, external: 0, externalAllowed: 0, mailto: 0, other: 0, labelSkips: 0 },
-    pre: { blocks: 0, lines: 0, rawIndicators: 0, onDetection: 0, offDetection: 0 }, literal: { cells: 0 }, unlinked: { n: 0, targets: [] } };
+    links: { total: 0, relative: 0, anchor: 0, external: 0, externalAllowed: 0, mailto: 0, other: 0, labelSkips: 0, reportRefs: 0 },
+    pre: { blocks: 0, lines: 0, rawIndicators: 0, onDetection: 0, offDetection: 0, copyKept: 0, onReport: 0 }, literal: { cells: 0 }, unlinked: { n: 0, targets: [] } };
 }
 
 /* Scan one parsed document. `JSDOM` is passed in so tests can hand a document directly. */
@@ -129,7 +137,7 @@ function nearOf(line, token) {
 }
 
 function scanDocument(doc, rel, data, stats, findings) {
-  var type = pageType(rel), isWire = type === 'wire', isDet = type === 'detection';
+  var type = pageType(rel), isWire = type === 'wire', isDet = type === 'detection', isRep = type === 'report';
   var allow = data.allow;
   function note(r, ctx, line) {
     stats.matchedFlagged += r.flagged.length; stats.matchedDefanged += r.defanged; stats.matchedPrivate += r.privateN; stats.matchedAllowed += r.allowedN;
@@ -150,6 +158,14 @@ function scanDocument(doc, rel, data, stats, findings) {
 
   // links first: classify, and collect the text nodes of reference links that are only their own host name
   var skipNodes = new Set();
+  // a report page: the hosts the page itself prints DEFANGED (a named indicator); a link to one of them is a clickable form of it
+  var defHosts = null;
+  if (isRep) {
+    defHosts = new Set();
+    var tw = doc.createTreeWalker(body, 4), tn, parts = [];
+    while ((tn = tw.nextNode())) { if (!tn.parentElement || !tn.parentElement.closest('script,style,template')) parts.push(tn.nodeValue); }
+    (parts.join(' ').match(/[a-z0-9][a-z0-9-]*(?:\[\.\][a-z0-9-]+)+/gi) || []).forEach(function (h) { defHosts.add(h.replace(/\[\.\]/g, '.').toLowerCase().replace(/^www\./, '')); });
+  }
   Array.prototype.forEach.call(body.querySelectorAll('a[href]'), function (a) {
     var href = a.getAttribute('href') || '';
     stats.links.total++;
@@ -164,6 +180,13 @@ function scanDocument(doc, rel, data, stats, findings) {
     if (!key) { if (/^[a-z][a-z0-9+.-]*:/i.test(href)) stats.links.other++; else stats.links.relative++; return; }
     stats.links.external++;
     if (isIpHost(key.host)) { findings.push({ page: rel, type: type, ctx: 'link', kind: 'LINK-IP', token: D.defangForPrint(href) }); return; }
+    if (isRep) {
+      // a reference (vendor, MITRE, NVD, our own page) stays a link; one that points at a host the page names defanged does not
+      var own = linkAllowed(key, data.links);
+      if (!own && defHosts.has(key.host.replace(/^www\./, ''))) { findings.push({ page: rel, type: type, ctx: 'link', kind: 'LINK-ACTOR-HOST', token: D.defangForPrint(href) }); return; }
+      stats.links.reportRefs++;
+      return;
+    }
     var ok = isWire ? 'wire-publisher' : linkAllowed(key, data.links);
     if (!ok) { findings.push({ page: rel, type: type, ctx: 'link', kind: 'LINK-UNLISTED', token: D.defangForPrint(href) }); return; }
     stats.links.externalAllowed++;
@@ -178,12 +201,14 @@ function scanDocument(doc, rel, data, stats, findings) {
   // pre blocks: rule bodies on a detection page (exact by design), page text anywhere else
   Array.prototype.forEach.call(body.querySelectorAll('pre'), function (pre) {
     stats.pre.blocks++;
+    if (isRep && pre.closest('.hl-copy, pre.hl-copy')) { stats.pre.copyKept++; return; }
     var lines = pre.textContent.split(/\r?\n/);
     stats.pre.lines += lines.length;
     var raw = 0, tokens = [];
     lines.forEach(function (l) { var r = D.scanLine(l, allow); raw += r.flagged.length; r.flagged.forEach(function (f) { tokens.push(f); }); });
     stats.pre.rawIndicators += raw;
     if (isDet) stats.pre.onDetection++;
+    else if (isRep) { stats.pre.onReport++; tokens.forEach(function (f) { findings.push({ page: rel, type: type, ctx: 'pre', kind: 'PRE-IN-REPORT', token: f.token }); }); }
     else {
       stats.pre.offDetection++;
       tokens.forEach(function (f) { findings.push({ page: rel, type: type, ctx: 'pre', kind: 'PRE-OUTSIDE-DETECTION', token: f.token }); });
@@ -228,6 +253,22 @@ function scanSite(dir, dataFile, opts) {
   var JSDOM = require('jsdom').JSDOM;
   var data = loadAllowData(dataFile);
   var stats = newStats(), findings = [];
+  // a report page is judged against the site allow data plus the report's own allow file (the list its source lint reads)
+  var repoRoot = path.resolve(path.dirname(dataFile), '..');
+  var allowDir = opts.allowDir || path.join(repoRoot, 'tools', 'report-tooling', 'defang-allow');
+  var reportsDir = opts.reportsDir || path.join(repoRoot, 'reports');
+  var repCache = {};
+  function reportData(rel) {
+    var slug = rel.split('/')[1];
+    if (repCache[slug]) return repCache[slug];
+    var files = [];
+    var folder = path.join(reportsDir, slug);
+    if (fs.existsSync(folder) && fs.statSync(folder).isDirectory() && fs.existsSync(allowDir)) files = D.autoAllow(folder, allowDir).files;
+    var allow = D.makeAllow([{ name: 'defang_allow.yml', text: data.rawText }].concat(files));
+    if (allow.bad.length) throw new Error('report allow file for ' + slug + ' refused entries: ' + allow.bad.map(function (b) { return b.entry + ' (' + b.kind + ')'; }).join(', '));
+    repCache[slug] = Object.assign({}, data, { allow: allow });
+    return repCache[slug];
+  }
   walkHtml(dir).forEach(function (f) {
     var rel = path.relative(dir, f).split(path.sep).join('/');
     var ex = excluded(rel);
@@ -236,7 +277,7 @@ function scanSite(dir, dataFile, opts) {
     var dom = new JSDOM(fs.readFileSync(f, 'utf8'));
     stats.pages++;
     var t = pageType(rel); stats.byType[t] = (stats.byType[t] || 0) + 1;
-    scanDocument(dom.window.document, rel, data, stats, findings);
+    scanDocument(dom.window.document, rel, t === 'report' ? reportData(rel) : data, stats, findings);
     dom.window.close();
   });
   return { stats: stats, findings: findings, data: data };
@@ -268,6 +309,18 @@ function selfTest() {
   if (good.f.length) why.push('defanged/allowed twin flagged: ' + good.f.map(function (x) { return x.kind + ' ' + D.defangForPrint(x.token); }).join(', '));
   var det = run('<html><body><main><pre>rule X { 198.51.100.20 }</pre></main></body></html>', 'hunting-detections/x-detections/index.html');
   if (det.f.length || det.st.pre.onDetection !== 1 || det.st.pre.rawIndicators !== 1) why.push('a <pre> on a detection page must be counted with its raw indicator and not flagged');
+  // a report page: a raw title, citation and BibTeX are flagged; a reference link, a defanged twin and a .hl-copy rule block are not
+  var REP_BAD = '<html><body><main><h1>Open Directory 198.51.100.17</h1><p class="hl-cite__text">Harrison, J. <em>Open Directory 198.51.100.17</em></p><pre><code>title = {Open Directory 198.51.100.17}</code></pre>' +
+    '<p>C2 evil-host[.]example[.]xyz</p><a href="https://evil-host.example.xyz/x">c2</a><a href="http://198.51.100.17/x">ip</a></main></body></html>';
+  var REP_GOOD = '<html><body><main><h1>Open Directory 198[.]51[.]100[.]17</h1><pre><code>title = {Open Directory 198[.]51[.]100[.]17}</code></pre>' +
+    '<pre class="hl-copy">rule x { 198.51.100.17 }</pre><p>See <a href="https://unlisted-vendor.example.net/r">the vendor</a>, <a href="https://attack.mitre.org/techniques/T1001/">MITRE</a> and <a href="/reports/x-198.51.100.17/">own page</a>.</p></main></body></html>';
+  var rb = run(REP_BAD, 'reports/x/index.html');
+  var rbk = rb.f.map(function (x) { return x.kind + ':' + x.ctx; });
+  ['IPV4:text', 'PRE-IN-REPORT:pre', 'LINK-IP:link', 'LINK-ACTOR-HOST:link'].forEach(function (k) { if (rbk.indexOf(k) === -1) why.push('report-page known positive not flagged as ' + k); });
+  if (rb.f.filter(function (x) { return x.kind === 'IPV4' && x.ctx === 'text'; }).length < 2) why.push('report-page raw title and citation must each be flagged');
+  var rg = run(REP_GOOD, 'reports/x/index.html');
+  if (rg.f.length) why.push('report-page defanged twin, reference link or .hl-copy block flagged: ' + rg.f.map(function (x) { return x.kind + ' ' + D.defangForPrint(x.token); }).join(', '));
+  if (rg.st.pre.copyKept !== 1) why.push('a .hl-copy block on a report page must be counted as kept exact');
   var wire = run('<html><body><main><a href="https://vendor.example.net/post">v</a></main></body></html>', 'wire/index.html');
   if (wire.f.length) why.push('the Wire is exempt from LINK-UNLISTED but was flagged');
   var lab = run('<html><body><main><a href="https://patchstack.com/db/x">patchstack.com</a></main></body></html>', 'actors/index.html');

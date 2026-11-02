@@ -778,7 +778,7 @@ function main() {
     else if (argv[a] === '--site') site = argv[++a];
     else if (argv[a] === '--allow-data') allowData = argv[++a];
     else if (argv[a] === '--only') only = argv[++a];
-    else if (argv[a] === '-h' || argv[a] === '--help') { console.log('usage: node check-defang.js <report folder | index.md> [--allow FILE]... [--allow-dir DIR] [--no-auto-allow] [--all]\n       node check-defang.js --site <_site dir> [--allow-data _data/defang_allow.yml] [--only REGEX] [--all]   (the rendered non-report pages)'); process.exit(0); }
+    else if (argv[a] === '-h' || argv[a] === '--help') { console.log('usage: node check-defang.js <report folder | index.md> [--allow FILE]... [--allow-dir DIR] [--no-auto-allow] [--all]\n       node check-defang.js --site <_site dir> [--allow-data _data/defang_allow.yml] [--only REGEX] [--all]   (the rendered pages: every page type, report pages included)'); process.exit(0); }
     else target = argv[a];
   }
   if (site) return mainSite(site, allowData, only, all);
@@ -862,8 +862,8 @@ function mainSite(site, allowData, only, all) {
   var ab = Object.keys(s.allowedBy);
   if (ab.length) console.log('  allowed     hits by name: ' + ab.sort().map(function (e) { return e + ' x' + s.allowedBy[e]; }).join(', '));
   var L = s.links;
-  console.log('  links       ' + L.total + ' <a href>: ' + L.relative + ' own-site/relative, ' + L.anchor + ' anchors, ' + L.external + ' external (' + L.externalAllowed + ' kept: listed reference or Wire publisher, ' + L.labelSkips + ' labelled with their own host name), ' + L.mailto + ' mailto, ' + L.other + ' other scheme');
-  console.log('  pre         ' + s.pre.blocks + ' blocks, ' + s.pre.lines + ' lines: ' + s.pre.onDetection + ' on detection pages kept exact (' + s.pre.rawIndicators + ' raw indicator token(s) inside, rule bodies), ' + s.pre.offDetection + ' elsewhere scanned as page text');
+  console.log('  links       ' + L.total + ' <a href>: ' + L.relative + ' own-site/relative, ' + L.anchor + ' anchors, ' + L.external + ' external (' + L.externalAllowed + ' kept: listed reference or Wire publisher, ' + L.labelSkips + ' labelled with their own host name; ' + L.reportRefs + ' more on report pages: references, none to a host the page names defanged), ' + L.mailto + ' mailto, ' + L.other + ' other scheme');
+  console.log('  pre         ' + s.pre.blocks + ' blocks, ' + s.pre.lines + ' lines: ' + s.pre.onDetection + ' on detection pages kept exact (' + s.pre.rawIndicators + ' raw indicator token(s) inside, rule bodies), ' + s.pre.offDetection + ' elsewhere scanned as page text, ' + s.pre.onReport + ' of those on report pages; ' + s.pre.copyKept + ' .hl-copy blocks on report pages kept exact');
   console.log('  unlinked    ' + s.unlinked.n + ' <a> rendered as text by the include (an off-site target not under `links` in the allow data)' + (s.unlinked.n ? ':' : ''));
   s.unlinked.targets.forEach(function (t) { console.log('              ' + t); });
   console.log('  literal     ' + s.literal.cells + ' IOC viewer cell(s) marked data-literal (hash, filename, path, registry values, as the feed recorded them), each checked for its type');
@@ -875,10 +875,10 @@ function mainSite(site, allowData, only, all) {
   if (F.length > limit) console.log('  (' + (F.length - limit) + ' more findings not printed; --all prints them)');
   if (F.length) {
     console.log('  by type     ' + Object.keys(byType).sort().map(function (t) { return t + ' ' + byType[t]; }).join(', '));
-    console.log('FAIL  ' + F.length + ' finding(s) (' + Object.keys(kinds).sort().map(function (k) { return k + ' ' + kinds[k]; }).join(', ') + ') on the rendered non-report pages');
+    console.log('FAIL  ' + F.length + ' finding(s) (' + Object.keys(kinds).sort().map(function (k) { return k + ' ' + kinds[k]; }).join(', ') + ') on the rendered pages');
     process.exit(1);
   }
-  console.log('PASS  no un-defanged indicator in the visible text of ' + s.pages + ' rendered non-report pages, no link to an IP or to an unlisted host, no foreign mailto; ' + matched + ' indicator tokens scanned. CANNOT SEE: text a script writes after load; <head> metadata and the data-title search keys (raw on purpose); the IOC viewer\'s data-live values (reader-initiated toggle); downloadable feed files; hrefs to this site\'s own pages; rule bodies on detection pages (' + s.pre.onDetection + ' <pre> blocks, exact by decision 5); report pages (source lint); whether a name on the raw or links list is really benign (the list is a reviewer\'s claim)');
+  console.log('PASS  no un-defanged indicator in the visible text of ' + s.pages + ' rendered pages (' + (s.byType.report || 0) + ' of them report pages), no link to an IP or to an unlisted host (a report page: no link to a host it names defanged), no foreign mailto; ' + matched + ' indicator tokens scanned. CANNOT SEE: text a script writes after load; <head> metadata and the data-title search keys (raw on purpose); the IOC viewer\'s data-live values (reader-initiated toggle); downloadable feed files; hrefs to this site\'s own pages; rule bodies on detection pages (' + s.pre.onDetection + ' <pre> blocks, exact by decision 5) and the .hl-copy blocks on report pages (' + s.pre.copyKept + ', exact like the source lint reads them); whether an off-site link on a report page is a reference or actor infrastructure beyond the host test (a link to a host the page names defanged, or to an IP); own-page hrefs and image paths (the slug carries the address); whether a name on the raw or links list is really benign (the list is a reviewer\'s claim)');
   process.exit(0);
 }
 function D_print(t) { return defangForPrint(t); }

@@ -1457,7 +1457,7 @@
     var share = make('div', 'hl-rv-share', null, actions); share.setAttribute('data-rv-chrome', '');
     var shareStatus = make('span', 'hl-rv-share-status', '', share); shareStatus.setAttribute('role', 'status'); shareStatus.setAttribute('aria-live', 'polite');
     var shareButton = button('', share, function () {
-      if (navigator.share) { navigator.share({ title: document.title, url: location.href }).catch(function () {}); return; }
+      if (navigator.share) { navigator.share({ title: (((document.querySelector('.hl-post-header__title') || {}).textContent || '').trim() || document.title), url: location.href }).catch(function () {}); return; }
       var address = make('span', 'hl-rv-share-url', location.href, reportHeader);
       if (navigator.clipboard) navigator.clipboard.writeText(location.href).then(function () { address.remove(); announceShare('Link copied'); }, function () { copy(address, shareStatus, 'Link copied.'); });
       else copy(address, shareStatus, 'Link copied.');
