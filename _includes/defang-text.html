@@ -1,0 +1,33 @@
+{%- comment -%}
+  Render-time defang of the VISIBLE text of a title (T-0500.1.7.4, Joseph 2026-11-02, decision 5): every word that is a dotted-quad IPv4 address has each dot written
+  as [.], the one form the site's report prose and tools/report-tooling/check-defang.js use ("193.233.202.17" prints as "193[.]233[.]202[.]17").
+  Call:  {%- capture shown %}{% include defang-text.html text=some.title %}{% endcapture -%}  then print {{ shown }}.
+  Applies to what a reader sees only. Never use it on a data file, an href, a data- attribute or a search key: the raw address stays there, so the listing filter
+  and the search still find "193.233.202.17" when someone types it. Liquid has no regular expressions, so a word counts as an address when, after the surrounding
+  ( ) , ; " ' and a trailing full stop are taken off (and anything after a ":", a port), it splits on "." into exactly four parts that are each a whole number from 0 to 255 (a word like "v4.3.4.1" or "1.2.3" does not).
+  Private and loopback addresses are defanged too: a title never needs one raw. Output is the text with single spaces between words; HTML collapses runs of space anyway.
+{%- endcomment -%}
+{%- assign _df_words = include.text | split: " " -%}
+{%- assign _df_sp = " " -%}
+{%- capture _df_out -%}
+{%- for _df_w in _df_words -%}
+  {%- assign _df_tail = "" -%}
+  {%- assign _df_x = _df_w -%}
+  {%- assign _df_last = _df_w | slice: -1 -%}
+  {%- if _df_last == "." -%}{%- assign _df_tail = "." -%}{%- assign _df_len = _df_w | size | minus: 1 -%}{%- assign _df_x = _df_w | slice: 0, _df_len -%}{%- endif -%}
+  {%- assign _df_core = _df_x | remove: "(" | remove: ")" | remove: "," | remove: ";" | remove: '"' | remove: "'" | split: ":" | first -%}
+  {%- assign _df_parts = _df_core | split: "." -%}
+  {%- assign _df_ip = false -%}
+  {%- if _df_parts.size == 4 -%}
+    {%- assign _df_ip = true -%}
+    {%- for _df_p in _df_parts -%}
+      {%- assign _df_n = _df_p | plus: 0 -%}
+      {%- assign _df_back = _df_n | append: "" -%}
+      {%- if _df_back != _df_p or _df_n > 255 -%}{%- assign _df_ip = false -%}{%- endif -%}
+    {%- endfor -%}
+  {%- endif -%}
+  {%- if _df_ip -%}{{ _df_x | replace: ".", "[.]" }}{%- else -%}{{ _df_x }}{%- endif -%}{{ _df_tail }}
+  {%- unless forloop.last -%}{{ _df_sp }}{%- endunless -%}
+{%- endfor -%}
+{%- endcapture -%}
+{{- _df_out -}}

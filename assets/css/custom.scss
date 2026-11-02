@@ -36,6 +36,22 @@
   --hl-accent-gold:    #b8902f;
   --hl-accent-gold-light: #f4e9c8;
   --hl-font-display: 'Space Grotesk', 'Segoe UI', system-ui, -apple-system, Arial, sans-serif;
+
+  /* Design D shared tokens (T-0500.1.7.4 b1). One copy for every page that is not a tabbed report; the report
+     stylesheet (hl-report-tabs.css) carries the same values under --rv-*, which tests there assert literally, so
+     a change to gold, the column or the card geometry is made in both places. Gold means "sponsor" and nothing else. */
+  --hl-gold-bright:    #d4a73a;   /* featured-sponsor label, Visit button (= --rv-gold) */
+  --hl-gold-glow:      245, 158, 11;   /* r, g, b of the featured card's wash and glow */
+  --hl-accent-steel:   #9fb4c9;   /* Consulting: moved off gold, which now marks sponsorship only */
+  --hl-field:          #0d1117;
+  --hl-field-line:     #2b3440;
+  --hl-muted-d:        #a8a8a8;   /* secondary text on D surfaces (7.3:1 on the card) */
+  --hl-font-mono:      ui-monospace, 'Cascadia Mono', SFMono-Regular, Menlo, Consolas, monospace;
+  --hl-nav-h:          52px;      /* the thin D header on tablet and desktop */
+  /* content column from 1440px: 1240 less the left-margin card's room (= --rv-col) */
+  --hl-col:            min(1240px, calc(100vw - 320px));
+  --hl-card-w:         min(200px, calc((100vw - var(--hl-col)) / 2 - 20px));
+  --hl-card-left:      max(16px, calc((100vw - var(--hl-col)) / 2 - 4px - var(--hl-card-w)));
 }
 
 /* --- Brand display font: Space Grotesk (self-hosted, SIL OFL 1.1) --- */
@@ -93,12 +109,21 @@ main.content {
   background-image: none !important;
   color: var(--hl-text-primary);
   min-height: 100vh;
-  max-width: 900px !important;
+  max-width: 1240px !important;   /* design D frame (T-0500.1.7.4): 1200px of content, was 900px */
   margin: 0 auto !important;
-  padding: 0 28px 36px !important;
+  padding: 0 20px 36px !important;
   box-sizing: border-box;
   /* Bump all em-based sizes ~10% (theme body = 20px → effective 22px here) */
   font-size: 1.1em;
+}
+/* From 1440px the column gives the featured-sponsor card its left margin (the same column as a tabbed report) */
+@media (min-width: 1440px) {
+  main.content { max-width: var(--hl-col) !important; }
+}
+/* A page with the side Contents panel (an untabbed post: the detection pages) keeps its old 900px column until its own restyle (T-0500.1.7.4 b3):
+   the panel's position and width are solved against that column (.hl-post-toc, left: 50vw + 438px), and in the 1200px frame it would sit on the page header. */
+@media (min-width: 1281px) {
+  main.content:has(.hl-post-toc) { max-width: 900px !important; padding-left: 28px !important; padding-right: 28px !important; }
 }
 
 /* Top gap between navbar and first content element.
@@ -115,7 +140,7 @@ main.content {
   border-top: 1px solid var(--hl-border-row) !important;
   padding: 20px 0 !important;
   margin-top: 2rem;
-  max-width: 900px;
+  max-width: 1200px;
   margin-left: auto;
   margin-right: auto;
 }
@@ -142,11 +167,11 @@ main.content {
 .hl-nav {
   background: #0d1117;
   border-bottom: 1px solid var(--hl-border-card);
-  padding: 0 40px;
+  padding: 0 max(16px, 2vw);
   display: flex;
   align-items: center;
   justify-content: space-between;
-  height: 70px;
+  height: var(--hl-nav-h);   /* the thin D header (was 70px) */
   position: sticky;
   top: 0;
   z-index: 1000;
@@ -169,15 +194,15 @@ main.content {
 }
 
 .hl-brand__icon {
-  width: 38px;
-  height: 38px;
+  width: 34px;
+  height: 34px;
   flex-shrink: 0;
   display: block;
 }
 
 .hl-brand__rule {
   width: 3px;
-  height: 32px;
+  height: 28px;
   border-radius: 2px;
   background: linear-gradient(180deg, #58a6ff, #1f6feb);
   flex-shrink: 0;
@@ -2695,112 +2720,120 @@ button,
 }
 
 /* ============================================================
-   SITE FOOTER
+   SITE FOOTER (design D, T-0500.1.7.4 b1)
+   The frame is the page's: 1200px of content, the left margin kept for the featured-sponsor card from 1440px. Group labels are the mono eyebrow D
+   uses, every link is a 44px target, five groups across, three below 1100px, two below 640px. Same links, same words as before.
    ============================================================ */
 
 .hl-footer {
   background: #0d1117;
   border-top: 1px solid var(--hl-border-card);
-  padding: 24px 40px 16px;
+  padding: 26px 20px max(24px, env(safe-area-inset-bottom));
   margin-top: 3rem;
   box-sizing: border-box;
   width: 100%;
 }
 
 .hl-footer__inner {
-  max-width: 900px;
+  max-width: 1200px;
   margin: 0 auto;
+}
+@media (min-width: 1440px) {
+  .hl-footer__inner { max-width: calc(var(--hl-col) - 40px); }
 }
 
 .hl-footer__links {
-  display: flex;
-  justify-content: center;
-  gap: 40px;
-  flex-wrap: wrap;
-  margin-bottom: 20px;
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 18px 24px;
+  margin-bottom: 18px;
+}
+@media (max-width: 1099px) {
+  .hl-footer__links { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+@media (max-width: 639px) {
+  .hl-footer__links { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 
 .hl-footer__group {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 0;
+  min-width: 0;
 }
 
 .hl-footer__group-label {
-  color: var(--hl-accent-blue);
-  font-size: 0.62em;
+  color: var(--hl-muted-d);
+  font-family: var(--hl-font-mono);
+  font-size: 12px;
   text-transform: uppercase;
-  letter-spacing: 0.12em;
-  font-weight: 700;
-  margin-bottom: 2px;
+  letter-spacing: 0.14em;
+  font-weight: 600;
+  line-height: 1;
+  margin-bottom: 4px;
 }
 
 .hl-footer__link,
 .hl-footer__link:visited {
-  color: var(--hl-text-muted) !important;
-  font-size: 0.78em;
+  display: flex;
+  align-items: center;
+  min-height: 44px;
+  color: #cfcfcf !important;
+  font-size: 16px;
   text-decoration: none !important;
   transition: color 0.15s;
 }
 
 .hl-footer__link:hover {
-  color: var(--hl-text-primary) !important;
-  text-decoration: none !important;
+  color: #ffffff !important;
+  text-decoration: underline !important;
 }
 
 .hl-footer__bottom {
-  color: var(--hl-text-dim);
-  font-size: 0.7em;
-  text-align: center;
-  padding-top: 16px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 6px 24px;
+  color: var(--hl-muted-d);
+  font-size: 15px;
+  text-align: left;
+  padding-top: 14px;
   border-top: 1px solid var(--hl-border-row);
 }
 
 .hl-footer__pgp {
   display: block;
-  margin-top: 6px;
-  font-family: var(--hl-font-mono, ui-monospace, "Cascadia Mono", Menlo, monospace);
-  font-size: 0.92em;
+  font-family: var(--hl-font-mono);
+  font-size: 0.95em;
   letter-spacing: 0.02em;
-  opacity: 0.75;
   overflow-wrap: anywhere;
 }
 
 .hl-footer__pgp a {
-  color: inherit;
+  color: #cfcfcf;
   text-decoration: none;
   border-bottom: 1px dotted currentColor;
 }
 
 .hl-footer__pgp a:hover {
-  color: var(--hl-accent-blue);
+  color: #ffffff;
 }
 
-@media (max-width: 600px) {
-  .hl-footer {
-    padding: 20px 20px 16px;
-  }
-  .hl-footer__links {
-    gap: 28px;
-  }
-  .hl-footer__pgp {
-    font-size: 0.85em;
-  }
-}
-
-/* --- Site sponsors ------------------------------------------ */
+/* --- Site sponsors (the footer block stays; the gold card above it is the featured placement) -------- */
 .hl-site-sponsors {
-  margin-bottom: 24px;
+  margin-bottom: 22px;
   padding-bottom: 20px;
   border-bottom: 1px solid var(--hl-border-row);
 }
 
 .hl-site-sponsors__label {
-  font-size: 0.7em;
+  font-family: var(--hl-font-mono);
+  font-size: 12px;
+  font-weight: 600;
   text-transform: uppercase;
-  letter-spacing: 0.1em;
-  color: var(--hl-text-muted);
-  margin-bottom: 12px;
+  letter-spacing: 0.14em;
+  color: var(--hl-muted-d);
+  margin-bottom: 10px;
 }
 
 .hl-site-sponsors__grid {
@@ -2812,10 +2845,11 @@ button,
 .hl-site-sponsor {
   display: flex;
   align-items: center;
-  gap: 10px;
-  background: var(--hl-bg-card);
+  gap: 14px;
+  min-height: 60px;
+  background: linear-gradient(135deg, var(--hl-bg-card), #0d1117);
   border: 1px solid var(--hl-border-card);
-  border-radius: 6px;
+  border-radius: 10px;
   padding: 10px 14px;
   text-decoration: none !important;
   color: var(--hl-text-primary) !important;
@@ -2823,25 +2857,27 @@ button,
 }
 
 .hl-site-sponsor:hover {
-  border-color: #444 !important;
+  border-color: #555 !important;
   text-decoration: none !important;
 }
 
 .hl-site-sponsor__logo {
-  height: 28px;
+  height: 32px;
   width: auto;
+  max-width: 100%;
   object-fit: contain;
 }
 
 .hl-site-sponsor__name {
-  font-size: 0.85em;
+  font-family: var(--hl-font-display);
+  font-size: 16px;
   font-weight: 600;
   color: var(--hl-text-primary);
 }
 
 .hl-site-sponsor__tagline {
-  font-size: 0.72em;
-  color: var(--hl-text-muted);
+  font-size: 14.5px;
+  color: var(--hl-muted-d);
   margin-top: 2px;
 }
 
@@ -3298,141 +3334,187 @@ a.hl-card:hover { border-color: var(--hl-accent-blue) !important; transform: tra
 }
 
 /* ============================================================
-   SPONSOR RAIL — site-wide monthly-sponsor placement
-   Desktop (>1280px): fixed rail centered in the left margin gutter,
-   in the empty band between the navbar and the Detections/IOC
-   quicklinks (which float at top:42%). Sticky is broken in this theme
-   (ancestor overflow — same reason the TOC + progress bar use fixed),
-   so this uses position:fixed.
-   Tablet/phone (<=1280px): reflows into a horizontal "Sponsors" strip
-   directly under the navbar, aligned to the content column. Renders
-   nothing unless there is >=1 monthly+active sponsor.
+   FEATURED SPONSOR — site-wide Monthly sponsors, the gold card (design D)
+   T-0500.1.7.4 b1 (Joseph, 2026-11-02): replaces the grey Sponsors rail on every page that is not a tabbed report; a tabbed
+   report draws the same card from report-featured-sponsor.html (hl-report-tabs.css, .hl-rv-feat / .hl-rv-featcard) and hides this one.
+   Markup: _includes/sidebar-sponsors.html, one <aside class="hl-sponsor-rail"> that lists EVERY Monthly and active sponsor.
+   From 1440px a sticky card in the left margin, stacked for several sponsors (position: fixed, because sticky is broken in this theme by an
+   ancestor's overflow). Below 1440px a gold band under the header, wrapping for several sponsors. Gold means sponsorship, nothing else.
+   Renders nothing unless there is at least one Monthly and active sponsor. The Visit button is an element, never generated content.
    ============================================================ */
 .hl-sponsor-rail {
-  --rail-w: min(200px, calc(50vw - 500px));         /* clamp: never crosses into the 900px column */
-  position: fixed;
-  width: var(--rail-w);
-  left: calc(21px + (50vw - 471px - var(--rail-w)) / 2);  /* centered in gutter [progress bar .. content edge] */
-  top: calc(20px + 21vh);                           /* center of the empty band above the quicklinks */
-  transform: translateY(-50%);
-  z-index: 450;                                     /* above content/quicklinks(400), below nav(1000) */
+  box-sizing: border-box;
+  position: relative;
+  z-index: 40;
   display: flex;
-  flex-direction: column;
-  gap: 9px;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 22px;
+  width: calc(100% - 40px);
+  max-width: 1200px;
+  margin: 14px auto 0;
+  padding: 10px 14px 10px 20px;
+  min-height: 68px;
+  border: 1px solid color-mix(in srgb, var(--hl-accent-gold) 60%, transparent);
+  border-radius: 10px;
+  background:
+    radial-gradient(110% 240% at 0 0, rgba(var(--hl-gold-glow), 0.22), transparent 52%),
+    linear-gradient(135deg, #1d1810, #0d1117);
+  box-shadow: 0 0 0 1px rgba(var(--hl-gold-glow), 0.08), 0 6px 32px rgba(var(--hl-gold-glow), 0.11);
 }
 .hl-sponsor-rail__label {
-  font-size: 0.72rem;
+  flex: none;
+  display: block;
+  padding: 7px 11px;
+  border: 1px solid rgba(184, 144, 47, 0.65);
+  border-radius: 999px;
+  background: rgba(184, 144, 47, 0.16);
+  font-family: var(--hl-font-display);
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
-  letter-spacing: 0.16em;
-  color: var(--hl-text-muted);
-  font-weight: 600;
-  padding-left: 3px;
-  display: flex;
-  align-items: center;
-  gap: 6px;
+  color: var(--hl-accent-gold-light);
+  white-space: nowrap;
 }
-.hl-sponsor-rail__label::before {
-  content: "";
-  width: 14px;
-  height: 1px;
-  background: var(--hl-accent-gold);
-  display: inline-block;
+.hl-sponsor-rail__items {
+  flex: 1 1 auto;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 24px;
+  min-width: 0;
 }
 .hl-sponsor-rail__item {
-  display: block;
-  background: var(--hl-bg-card);
-  border: 1px solid var(--hl-border-card);
-  border-radius: 8px;
-  padding: 14px 15px;
+  flex: 1 1 auto;
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  min-width: 0;
+  min-height: 44px;
+  color: var(--hl-text-primary) !important;
   text-decoration: none !important;
-  transition: border-color 0.15s, transform 0.15s, box-shadow 0.15s;
-}
-.hl-sponsor-rail__item:hover {
-  border-color: var(--hl-accent-gold);
-  transform: translateY(-2px);
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.38);
 }
 .hl-sponsor-rail__logo {
   display: block;
-  max-width: 100%;
-  max-height: 42px;
+  flex: none;
+  height: 34px;
   width: auto;
-  height: auto;
+  max-width: 200px;
   object-fit: contain;
-  margin-bottom: 8px;
+  /* the theme gives every img padding and a border: a logo gets neither */
+  padding: 0 !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: none !important;
+  box-shadow: none !important;
+  margin: 0 !important;
 }
-.hl-sponsor-rail__text {
-  min-width: 0;
+.hl-sponsor-rail__text { flex: 1 1 auto; min-width: 0; }
+/* with a logo the name is for assistive technology (and the tab-foot card); without one it is the wordmark */
+.hl-sponsor-rail__item:not(.hl-sponsor-rail__item--wordmark) .hl-sponsor-rail__name {
+  position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap;
 }
 .hl-sponsor-rail__name {
-  font-size: 0.92rem;
-  font-weight: 600;
-  color: var(--hl-text-primary);
-  line-height: 1.2;
+  font-family: var(--hl-font-display);
+  font-size: 24px;
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: 0.04em;
+  color: #ffffff;
 }
 .hl-sponsor-rail__tagline {
-  font-size: 0.78rem;
-  color: var(--hl-text-muted);
-  line-height: 1.42;
-  margin-top: 4px;
+  font-size: 16px;
+  line-height: 1.35;
+  color: #e6dcc0;
+  margin-top: 0;
+}
+.hl-sponsor-rail__cta {
+  flex: none;
+  margin-left: auto;
+  padding: 9px 14px;
+  border: 1px solid rgba(184, 144, 47, 0.75);
+  border-radius: 6px;
+  background: rgba(var(--hl-gold-glow), 0.14);
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 1.4;
+  color: #ffffff;
+  white-space: nowrap;
+}
+a.hl-sponsor-rail__item:hover .hl-sponsor-rail__cta { background: rgba(var(--hl-gold-glow), 0.24); border-color: var(--hl-gold-bright); }
+a.hl-sponsor-rail__item:focus-visible { outline: 2px solid #ffffff; outline-offset: 3px; border-radius: 6px; }
+/* several sponsors in the band: logos and wordmarks only, side by side; the footer block carries every tagline */
+.hl-sponsor-rail--many .hl-sponsor-rail__item { flex: none; }
+.hl-sponsor-rail--many .hl-sponsor-rail__tagline,
+.hl-sponsor-rail--many .hl-sponsor-rail__cta { display: none; }
+
+/* Phones: a slim band, label over the sponsor, Visit to the right */
+@media (max-width: 719px) {
+  .hl-sponsor-rail { display: grid; grid-template-columns: minmax(0, 1fr); gap: 4px; padding: 9px 12px 10px 14px; min-height: 0; width: calc(100% - 32px); }
+  .hl-sponsor-rail__label { justify-self: start; padding: 0; border: 0; background: none; font-size: 14px; }
+  .hl-sponsor-rail__item { flex-wrap: wrap; gap: 6px 14px; }
+  .hl-sponsor-rail__logo { height: 28px; }
+  .hl-sponsor-rail__name { font-size: 22px; }
+  .hl-sponsor-rail__text { flex: 1 1 100%; order: 3; }
+  .hl-sponsor-rail__tagline { font-size: 15px; line-height: 1.3; }
+  .hl-sponsor-rail__cta { margin-left: auto; }
 }
 
-/* Tablet/phone: fixed left rail -> compact horizontal strip under the navbar.
-   Cards hug their content (flex:0 1 auto) and wrap, instead of stretching
-   full-width — keeps the strip slim. Slim padding + 24px logo. */
-@media (max-width: 1280px) {
+/* From 1440px: a sticky gold card in the left margin, stacked for several sponsors, scrolling inside itself if they outgrow the screen */
+@media (min-width: 1440px) {
   .hl-sponsor-rail {
-    position: static;
-    transform: none;
-    width: auto;
-    max-width: 900px;
-    margin: 0 auto;
-    padding: 9px 28px 3px;         /* slim vertical; 28px sides align with main.content */
-    flex-direction: row;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 8px;
+    position: fixed;
+    z-index: 450;                         /* above content and the quicklinks (400), below the nav (1000) */
+    left: var(--hl-card-left);
+    top: calc(var(--hl-nav-h) + 22px);
+    width: var(--hl-card-w);
+    max-width: none;
+    margin: 0;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-items: stretch;
+    gap: 10px;
+    padding: 14px;
+    min-height: 0;
+    max-height: calc(100dvh - var(--hl-nav-h) - 44px);
+    overflow-y: auto;
+    border-radius: 10px;
+    background:
+      radial-gradient(130% 150% at 0 0, rgba(var(--hl-gold-glow), 0.24), transparent 58%),
+      linear-gradient(135deg, #1d1810, #0d1117);
   }
   .hl-sponsor-rail__label {
-    width: 100%;
-    margin-bottom: 0;
+    display: flex; align-items: center; gap: 7px; padding: 0; border: 0; background: none;
+    font-size: 12px; line-height: 1.25; letter-spacing: 0.12em; white-space: normal;   /* 112px of text at 1440: the label wraps rather than clips */
   }
-  .hl-sponsor-rail__item {
-    flex: 0 1 auto;                /* hug content + wrap, not full-width */
-    display: inline-flex;
-    align-items: center;
-    gap: 9px;
-    padding: 6px 10px;
-  }
-  .hl-sponsor-rail__logo {
-    margin-bottom: 0;
-    max-height: 24px;
-    flex-shrink: 0;
-  }
-  .hl-sponsor-rail__name { font-size: 0.78rem; }
-  .hl-sponsor-rail__tagline { font-size: 0.68rem; line-height: 1.35; margin-top: 1px; }
+  .hl-sponsor-rail__label::before { flex: none; }
+  .hl-sponsor-rail__label::before { content: ""; width: 14px; height: 2px; background: #f59e0b; }
+  .hl-sponsor-rail__items { flex-direction: column; align-items: stretch; flex-wrap: nowrap; gap: 0; }
+  .hl-sponsor-rail__item { flex-direction: column; align-items: flex-start; gap: 10px; padding: 12px 0; }
+  .hl-sponsor-rail__item:first-child { padding-top: 0; }
+  .hl-sponsor-rail__item:last-child { padding-bottom: 0; }
+  .hl-sponsor-rail__item + .hl-sponsor-rail__item { border-top: 1px solid rgba(184, 144, 47, 0.28); }
+  .hl-sponsor-rail__logo { height: 30px; max-width: 100%; }
+  .hl-sponsor-rail__name { font-size: 20px; letter-spacing: 0.02em; }
+  .hl-sponsor-rail__tagline { font-size: 15px; }
+  .hl-sponsor-rail__cta { margin: 0; width: 100%; box-sizing: border-box; text-align: center; }
+  /* with several sponsors the card is a stack of logos; the Visit button stays so each one is still an obvious link */
+  .hl-sponsor-rail--many .hl-sponsor-rail__item { flex: none; }
+  .hl-sponsor-rail--many .hl-sponsor-rail__cta { display: block; padding: 6px 10px; font-size: 15px; }
 }
-@media (max-width: 640px) {
-  .hl-sponsor-rail { padding: 9px 16px 3px; }   /* 16px sides align with main.content mobile */
-}
-@media (max-width: 400px) {
-  .hl-sponsor-rail__tagline {                  /* cut to fit on tiny screens */
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-  }
-}
+@media print { .hl-sponsor-rail { display: none !important; } }
 
 /* ============================================================
    SPONSOR RAIL — MOBILE INTERACTION FIXES
    When a monthly+active sponsor exists, the rail reflows into a
-   horizontal strip under the nav (<=1280px). That in-flow strip
+   gold band under the nav (<=1439px). That in-flow strip
    interacts with two existing fixed-position features; these rules
    correct both. Scoped to :has(.hl-sponsor-rail) so they stay inert
    when there is no sponsor (the rail is not rendered at all).
    ============================================================ */
-@media (max-width: 1280px) {
+@media (max-width: 1439px) {
   /* (1) The fixed mobile "Contents" bar (.hl-post-toc-mobile — position:fixed,
      top:navHeight, z-index:999) painted directly over the strip. Drop the
      strip below the bar so it is no longer sliced in half. */
@@ -6573,7 +6655,7 @@ main.content:focus { outline: none; }
    a blue control with a label rather than a grey glyph that reads as decoration. */
 .hl-nav__menu {
   flex-shrink: 0;
-  height: 40px;
+  height: 44px;
   padding: 0 14px 0 11px;
   display: flex;
   align-items: center;
@@ -6607,7 +6689,7 @@ main.content:focus { outline: none; }
   gap: 8px;
   margin-left: auto;   /* right end of the bar on every width */
   flex-shrink: 0;
-  height: 36px;
+  height: 40px;
   padding: 0 10px;
   background: #161b22;
   border: 1px solid var(--hl-border-card);
@@ -6632,23 +6714,58 @@ main.content:focus { outline: none; }
   transition: width 0.2s ease;
 }
 .hl-nav__search-input:focus { width: 300px; }
-.hl-nav__search-input::placeholder { color: #6e7681; }
+.hl-nav__search-input::placeholder { color: #8d949c; }
 .hl-nav__search-input::-webkit-search-decoration,
 .hl-nav__search-input::-webkit-search-cancel-button { -webkit-appearance: none; }
+
+/* Design D (T-0500.1.7.4): the six main sections inline from 1100px, the search field folded to its icon until 1440px (it opens over the links when
+   focused, the same pattern as a phone). Below 1100px the drawer is the only list, as before. */
+.hl-nav__sections { display: none; align-items: center; gap: 2px; margin-left: auto; }
+.hl-nav__sections a,
+.hl-nav__sections a:visited {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0 12px;
+  margin-bottom: -1px;
+  border-bottom: 2px solid transparent;
+  color: #cfcfcf !important;
+  font-family: var(--hl-font-display);
+  font-size: 15px;
+  font-weight: 500;
+  text-decoration: none !important;
+  white-space: nowrap;
+}
+.hl-nav__sections a:hover,
+.hl-nav__sections a[aria-current="page"] { color: #ffffff !important; border-bottom-color: var(--sc, var(--hl-accent-blue)); }
+.hl-nav__sections a:focus-visible { outline: 2px solid #ffffff; outline-offset: -2px; border-radius: 4px; }
+@media (min-width: 1100px) {
+  .hl-nav__sections { display: flex; }
+  .hl-nav__sections + .hl-nav__search { margin-left: 0; }
+}
+@media (min-width: 1100px) and (max-width: 1439px) {
+  .hl-nav__search { position: relative; padding: 0 8px; }
+  .hl-nav__search-input {
+    position: absolute; right: 100%; top: -1px; height: 40px; width: 0; opacity: 0; margin-right: 6px; padding: 0; box-sizing: border-box;
+    background: #161b22; border: 1px solid var(--hl-accent-blue); border-radius: 8px; box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45); z-index: 2;
+    transition: width 0.2s ease, opacity 0.15s ease;
+  }
+  .hl-nav__search:focus-within .hl-nav__search-input { width: 300px; opacity: 1; padding: 0 12px; }
+}
 
 /* Phones: one row, menu + brand on the left, the search icon on the right.
    The field opens over the bar as an absolutely positioned box when focused,
    so it never reflows the row. 16px font stops iOS zooming the page. */
 @media (max-width: 768px) {
   .hl-nav { height: 58px; padding-top: 0; padding-bottom: 0; flex-wrap: nowrap; gap: 10px; }
-  .hl-nav__menu { height: 38px; padding: 0 9px; }
+  .hl-nav__menu { height: 44px; min-width: 44px; padding: 0 9px; justify-content: center; }
   .hl-nav__menu-label { display: none; }
   .hl-nav__search { position: relative; margin-left: auto; padding: 0 8px; }
   .hl-nav__search-input {
     position: absolute;
     right: 100%;
     top: -1px;
-    height: 36px;
+    height: 40px;
     width: 0;
     opacity: 0;
     margin-right: 6px;
@@ -6699,7 +6816,7 @@ body.hl-drawer-locked { overflow: hidden; }
   display: flex;
   align-items: center;
   justify-content: space-between;
-  height: 70px;
+  height: 64px;
   padding: 0 16px 0 22px;
   border-bottom: 1px solid var(--hl-border-card);
 }
@@ -6739,8 +6856,11 @@ body.hl-drawer-locked { overflow: hidden; }
 }
 .hl-drawer__link,
 .hl-drawer__link:visited {
-  display: block;
-  padding: 10px 10px;
+  display: flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 8px 10px;
+  border-left: 3px solid var(--sc, transparent);   /* the section's hue, set per link in navbar.liquid */
   border-radius: 8px;
   color: var(--hl-text-secondary) !important;
   font-size: 1.05rem;
@@ -6748,12 +6868,11 @@ body.hl-drawer-locked { overflow: hidden; }
   text-decoration: none !important;
   transition: background 0.12s, color 0.12s;
 }
-.hl-drawer__link:hover { background: #161b22; color: var(--hl-text-primary) !important; }
+.hl-drawer__link:hover { background: color-mix(in srgb, var(--sc, #58a6ff) 12%, transparent); color: var(--hl-text-primary) !important; }
 .hl-drawer__link:focus-visible { outline: 2px solid var(--hl-accent-blue); outline-offset: -2px; }
 .hl-drawer__link[aria-current="page"] {
   color: var(--hl-text-primary) !important;
-  background: color-mix(in srgb, var(--hl-accent-blue) 12%, transparent);
-  box-shadow: inset 3px 0 0 var(--hl-accent-blue);
+  background: color-mix(in srgb, var(--sc, var(--hl-accent-blue)) 16%, transparent);
 }
 @media (prefers-reduced-motion: reduce) {
   .hl-drawer, .hl-drawer__backdrop, .hl-nav__search-input { transition: none; }
@@ -6833,6 +6952,16 @@ body.hl-drawer-locked { overflow: hidden; }
 #hl-search .pagefind-ui__result-nested .pagefind-ui__result-link { font-size: 0.95rem; font-weight: 600; color: var(--hl-text-primary); }
 #hl-search .pagefind-ui__result-nested .pagefind-ui__result-link::before { content: none; }
 #hl-search .pagefind-ui__result-nested .pagefind-ui__result-excerpt { font-size: 0.88rem; }
+/* A long unbroken string in an excerpt (a hash, a path, a defanged address) widened the result past the phone viewport: /search/ scrolled sideways
+   (scrollWidth 477 at 390 with ?q=cobalt, T-0500.1.7.4 audit). Pagefind's result-inner is a flex column sized to its content; let it shrink and wrap. */
+#hl-search .pagefind-ui__results,
+#hl-search .pagefind-ui__result,
+#hl-search .pagefind-ui__result-inner,
+#hl-search .pagefind-ui__result-nested { min-width: 0; max-width: 100%; box-sizing: border-box; }
+#hl-search .pagefind-ui__result-inner { align-items: stretch; }
+#hl-search .pagefind-ui__result-title,
+#hl-search .pagefind-ui__result-link,
+#hl-search .pagefind-ui__result-excerpt { max-width: 100%; overflow-wrap: anywhere; }
 
 /* Search box, clear button, filters and the load-more button. */
 #hl-search .pagefind-ui__search-input { border-radius: 10px; font-size: 1.05rem; }

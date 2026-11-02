@@ -1,5 +1,6 @@
-{%- comment -%} One filterable listing card. Params: url, title, date (ISO), severity, tags (array),
+{%- comment -%} One filterable listing card. The visible title is defanged at render time (defang-text.html, T-0500.1.7.4); data-title keeps the raw text for the filter and the search. Params: url, title, date (ISO), severity, tags (array),
   part_label (optional — small gold chip above the meta line, used by series clusters / series cards). {%- endcomment -%}
+{%- capture _shown_title %}{% include defang-text.html text=include.title %}{% endcapture -%}
 {%- assign sevlabel = include.severity | upcase -%}
 {%- if include.severity == "med" -%}{%- assign sevlabel = "MED" -%}{%- endif -%}
 <a href="{{ include.url | relative_url }}" class="hl-card hl-catalog-card"
@@ -12,7 +13,7 @@
     <div>
       {%- if include.part_label -%}<div class="hl-card__part">{{ include.part_label }}</div>{%- endif -%}
       <div class="hl-card__meta hl-catalog-card__meta">{{ sevlabel }} &middot; {{ include.date | date: "%b %Y" }}</div>
-      <div class="hl-card__title">{{ include.title }}</div>
+      <div class="hl-card__title">{{ _shown_title }}</div>
     </div>
   </div>
   {%- if include.tags -%}

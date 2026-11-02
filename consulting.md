@@ -6,7 +6,7 @@ permalink: /consulting/
 thumbnail: /assets/images/cards/consulting.png
 ---
 
-<div class="hl-page-header" style="--ph-accent: #b8902f;">
+<div class="hl-page-header" style="--ph-accent: #9fb4c9;">
   <div class="hl-page-header__label">Consulting &amp; Advisory</div>
   <div class="hl-page-header__title">Threat Intelligence That Works for Your Team</div>
   <div class="hl-page-header__desc">An independent practice run alongside active security operations work. Engagements stay selective, quality and fit over volume. If it's a fit, you get the same depth that goes into the research on this site, applied directly to your environment.</div>
@@ -14,7 +14,7 @@ thumbnail: /assets/images/cards/consulting.png
 
 {% include section-header.html label="Services" accent="#58a6ff" %}
 
-<div class="hl-panel hl-panel--featured" style="--acc: #b8902f;">
+<div class="hl-panel hl-panel--featured" style="--acc: #9fb4c9;">
   <span class="hl-panel__eyebrow">Flagship</span>
   <div class="hl-panel__title">Retainer Advisory</div>
   <p class="hl-panel__body">Standing access to everything below (malware analysis, IR advisory, detection reviews, threat-model work) without re-scoping a new engagement each time. When something comes up, your team has a resource to call rather than starting from scratch. Structured around your cadence; retainer slots kept small.</p>

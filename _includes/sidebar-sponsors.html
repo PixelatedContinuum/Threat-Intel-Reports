@@ -1,24 +1,31 @@
 {%- comment -%}
-  Left-margin Sponsors rail — renders monthly + active sponsors site-wide.
-  Same filter as site-sponsors.html (footer). On desktop this is a fixed
-  rail in the left margin; at <=1280px the CSS reflows it into a horizontal
-  strip under the navbar (see .hl-sponsor-rail in custom.scss). Renders
-  nothing when there are no monthly+active sponsors.
+  The site (Monthly) sponsors, as the gold "Featured sponsor" card (design D; T-0500.1.7.4, Joseph 2026-11-02). One element for every width: from 1440px a
+  sticky card in the left margin, below that a gold band under the header (assets/css/custom.scss, "FEATURED SPONSOR"). It replaces the old grey rail and
+  keeps its class names, because hl-report-tabs.js reads .hl-sponsor-rail__item / __name / __tagline for the tab-foot card; a tabbed report does not draw
+  it (its own report-featured-sponsor.html does), so the rail stays in the DOM there and nowhere shows twice.
+
+  Data-driven, not hard-coded: it lists EVERY Monthly and active sponsor in _data/sponsors.yml, however many (none: nothing is rendered; one: logo, tagline and
+  Visit; several: stacked in the margin, wrapping in the band, tagline and Visit dropped from the card and band, which still print in the footer block). It is
+  independent of a report's own sponsor (sponsored_by), which a report page draws itself and which may be the same company.
+  On unlisted pages every Monthly sponsor shows (not-yet-active included), so a private preview reflects the published treatment; public pages stay on active: true.
+  No script and no tracking. A sponsor with no logo shows its name as a wordmark; with a logo the name is kept for assistive technology and for the tab-foot card.
 {%- endcomment -%}
 {% assign active_site_sponsors = site.data.sponsors.sponsors | where: "tier", "monthly" | where: "active", true %}
-{%- comment -%} Preview mode: on unlisted pages, show all monthly sponsors (incl. not-yet-active) so the private preview reflects the published treatment. Public pages stay gated on active:true. {%- endcomment -%}
 {% if page.unlisted %}{% assign active_site_sponsors = site.data.sponsors.sponsors | where: "tier", "monthly" %}{% endif %}
 {% if active_site_sponsors.size > 0 %}
-<aside class="hl-sponsor-rail" aria-label="Sponsors">
-  <div class="hl-sponsor-rail__label">Sponsors</div>
+<aside class="hl-sponsor-rail{% if active_site_sponsors.size > 1 %} hl-sponsor-rail--many{% endif %}" aria-label="Sponsors" data-sponsor-count="{{ active_site_sponsors.size }}">
+  <div class="hl-sponsor-rail__label">Featured sponsor{% if active_site_sponsors.size > 1 %}s{% endif %}</div>
+  <div class="hl-sponsor-rail__items">
   {% for sponsor in active_site_sponsors %}
-  <a class="hl-sponsor-rail__item" href="{{ sponsor.url }}" target="_blank" rel="noopener noreferrer">
+  <a class="hl-sponsor-rail__item{% unless sponsor.logo %} hl-sponsor-rail__item--wordmark{% endunless %}" href="{{ sponsor.url }}" target="_blank" rel="sponsored noopener noreferrer">
     {% if sponsor.logo %}<img class="hl-sponsor-rail__logo" src="{{ sponsor.logo | relative_url }}" alt="{{ sponsor.name }}">{% endif %}
     <div class="hl-sponsor-rail__text">
       <div class="hl-sponsor-rail__name">{{ sponsor.name }}</div>
       {% if sponsor.tagline %}<div class="hl-sponsor-rail__tagline">{{ sponsor.tagline }}</div>{% endif %}
     </div>
+    {% if sponsor.url %}<span class="hl-sponsor-rail__cta" aria-hidden="true">Visit &rarr;</span>{% endif %}
   </a>
   {% endfor %}
+  </div>
 </aside>
 {% endif %}
