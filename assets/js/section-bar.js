@@ -18,9 +18,13 @@
     links.forEach(function (a, i) { var v = visible(i); a.hidden = !v; if (v) n++; });
     var list = bar.querySelector('.hl-sbar__list');
     if (list && n) list.style.setProperty('--n', n);
+    sizeBar();   /* hiding an entry changes the column count and so the bar's height, which the scroll padding reads */
   }
-  function sizeBar() { document.documentElement.style.setProperty('--sbh', bar.offsetHeight + 'px'); }
-  sizeBar();
+  var lastH = -1;
+  function sizeBar() { var h = bar.offsetHeight; if (h !== lastH) { lastH = h; document.documentElement.style.setProperty('--sbh', h + 'px'); } }
+  syncVisible();
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(function () { syncVisible(); onScroll(); });
+  addEventListener('load', function () { syncVisible(); onScroll(); });   /* the picker script may hide an engine's section after this script ran */
   addEventListener('resize', sizeBar);
   function pick() {
     var off = bar.offsetHeight + (document.querySelector('.hl-nav') ? document.querySelector('.hl-nav').offsetHeight : 0) + 24, idx = 0;
