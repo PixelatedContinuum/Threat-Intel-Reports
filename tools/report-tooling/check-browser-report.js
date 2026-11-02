@@ -1281,6 +1281,10 @@ async function tabLookRows(page, url) {
   await page.evaluate('location.hash="#tab-' + otherTab() + '"');
   await CDP.sleep(150);
   var v = tabLookVerdict(await page.json(TAB_LOOK_EXPR));
+  /* T-0500.1.7.3 (c4): the tab chip's colour, background and border change over 0.15s; on a loaded machine the 150 ms wait ended
+     mid-change (shadow-xworm-opendirectory: the selected tab still wore the idle label colour). A verdict that passes is final;
+     one that fails is measured again, up to 12 times 250 ms, and only the last reading counts, so a tab that never settles still FAILs. */
+  for (var settle = 0; !v.ok && !v.notChecked && settle < 12; settle++) { await CDP.sleep(250); v = tabLookVerdict(await page.json(TAB_LOOK_EXPR)); }
   if (v.single) name = TAB_LOOK_NAME_ONE;
   if (v.notChecked) check('NOT CHECKED: ' + name, false, v.detail);
   else check(name, v.ok, v.detail);
@@ -3181,6 +3185,11 @@ var BOX_INJECT_MARK_EXPR = '(function(tab){var p=document.getElementById("tab-"+
 async function boxFitState(page, label, hash) {
   await page.evaluate('location.hash=' + JSON.stringify(hash));
   await CDP.sleep(90);
+  /* T-0500.1.7.3 (c4): opening a <details> starts a transform transition on its chevron (0.12s); measured mid-turn the 16px
+     icon's bounding box is wider than its box (1.6px past its span on gotenberg, on the control copy), a fault that comes and goes
+     with timing. The rows judge where things END UP, so transitions are switched off in the page before anything is opened. */
+  await page.evaluate('(function(){if(!document.getElementById("hl-gate-no-transition")){var s=document.createElement("style");s.id="hl-gate-no-transition";' +
+    's.textContent="*,*::before,*::after{transition:none!important;animation:none!important}";document.head.appendChild(s);}})()');
   /* every teardown open and, on a phone, every data view's body open: a closed one is the reader's to open, a defect inside it is still a defect */
   await page.evaluate('(function(){document.querySelectorAll("details").forEach(function(d){d.open=true;});' +
     'document.querySelectorAll("button[aria-expanded=false][id^=hl-rv-toggle-]").forEach(function(b){b.click();});})()');
