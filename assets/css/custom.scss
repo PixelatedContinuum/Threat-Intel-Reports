@@ -6781,6 +6781,11 @@ main.content:focus { outline: none; }
   }
   .hl-nav__search:focus-within .hl-nav__search-input { width: min(260px, calc(100vw - 150px)); opacity: 1; padding: 0 12px; }
 }
+/* D labels the Menu button on a phone too; below 380px there is no room for the word beside the brand and the search icon */
+@media (min-width: 380px) and (max-width: 768px) {
+  .hl-nav__menu { padding: 0 13px 0 10px; }
+  .hl-nav__menu-label { display: inline; }
+}
 
 /* --- Navigation drawer ------------------------------------------------- */
 .hl-drawer__backdrop {
