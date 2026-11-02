@@ -119,6 +119,14 @@ test('a page missing one template\u2019s toggle fails', function () {
   assert.equal(CW.checkDetailsPage(wrongDoc).status, 'FAIL');
 });
 
+test('a toggle without its accessible name fails', function () {
+  var unnamed = INDEX.replace(TOGGLE_RE, '<button type="button" class="hl-dt" aria-expanded="false" hidden title="Show details"></button>');
+  assert.notEqual(unnamed, INDEX, 'the mutation must apply');
+  var r = CW.checkDetailsPage(unnamed);
+  assert.equal(r.status, 'FAIL');
+  assert.match(JSON.stringify(r.problems), /carries no Details toggle|expected 2/);
+});
+
 test('a toggle moved off the front of the row fails', function () {
   var moved = INDEX.replace(/(<button type="button" class="hl-dt"[^>]*>[\s\S]*?<\/button>)(<a class="hl-vuln__cve"[^>]*>[^<]*<\/a>)/, '$2$1');
   assert.notEqual(moved, INDEX, 'the mutation must apply');
