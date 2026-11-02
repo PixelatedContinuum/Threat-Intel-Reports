@@ -12,7 +12,9 @@ const read = (p) => fs.readFileSync(path.join(root, p), 'utf8');
 const css = read('assets/css/custom.scss');
 const strip = (s) => s.replace(/\{%-? comment -?%\}[\s\S]*?\{%-? endcomment -?%\}/g, '');
 const b2Start = css.indexOf('DESIGN D: HOME AND SECTION INDEXES (T-0500.1.7.4 b2)');
-const b2 = css.slice(css.indexOf('*/', b2Start) + 2);
+const b3Start = css.indexOf('DESIGN D: ACTOR, FAMILY AND TECHNIQUE PAGES AS DASHBOARDS (T-0500.1.7.4 b3)');
+assert.ok(b3Start > b2Start, 'the b3 blocks follow the b2 block');
+const b2 = css.slice(css.indexOf('*/', b2Start) + 2, css.lastIndexOf('/*', b3Start));   // the b2 block only; b3 has its own scopes (design-d-b3.test.js)
 
 const RUBY_LIQUID = 'begin; require "liquid"; require "json"; rescue LoadError; exit 3; end';
 const haveLiquid = (() => { const r = cp.spawnSync('/usr/bin/ruby', ['-e', RUBY_LIQUID], { encoding: 'utf8' }); return !r.error && r.status === 0; })();
@@ -30,9 +32,11 @@ const PAGES = { 'index.md': 'home', 'reports/index.md': 'list', 'hunting-detecti
 
 test('the ten pages opt in with hl_idx and the layout turns it into the scope class; no other page is scoped', () => {
   for (const [p, kind] of Object.entries(PAGES)) assert.match(read(p), new RegExp('^hl_idx: ' + kind + '$', 'm'), p);
-  assert.match(read('_layouts/page.html'), /class="hl-page\{% if page\.hl_idx %\} hl-idx hl-idx--\{\{ page\.hl_idx \}\}\{% endif %\}"/);
+  // b3: the scope class is set from hl_idx (the index pages and the single pages) or from the layout of the dashboards and the IOC feed pages
+  assert.match(read('_layouts/page.html'), /class="hl-page\{% if _hl_idx %\} hl-idx hl-idx--\{\{ _hl_idx \}\}\{% endif %\}"/);
+  assert.match(read('_layouts/page.html'), /_hl_idx = page\.hl_idx/);
   const others = ['sponsor.md', 'support.md', 'consulting.md', 'subscribe.md', 'pgp.md', 'about-me/index.md', 'changes/index.md', 'search/index.md', 'behind-the-reports/index.md'];
-  for (const p of others) assert.equal(/^hl_idx:/m.test(read(p)), false, p + ' is not an index page (b3)');
+  for (const p of others) assert.match(read(p), /^hl_idx: single$/m, p + ' is a single page (b3): scope hl-idx--single');
 });
 
 test('every index page prints its plate through the one include, with the old class names kept', () => {

@@ -42,7 +42,9 @@ test('the featured include (design D): Monthly and active only (every Monthly on
     assert.match(feat.slice(feat.lastIndexOf('{%', cta), cta), /if sponsor\.url/, 'no Visit with no link to visit: ' + cls);
   }
   assert.match(feat, /^\{%- assign rv_feat/m); assert.match(feat, /\{%- if rv_feat\.size > 0 -%\}/, 'no Monthly sponsor, nothing rendered');
-  assert.ok(layout.includes('{% if hl_tabbed %}{% include report-featured-sponsor.html %}{% endif %}\n<div class="hl-post-header'), 'the featured include is the first thing in the report column, tabbed pages only');
+  // b3: a detection page takes its own plate in the first branch; every report keeps the old header in the else branch, byte for byte
+  assert.ok(layout.includes('{% if hl_tabbed %}{% include report-featured-sponsor.html %}{% endif %}\n{%- if _is_det0 -%}'), 'the featured include is the first thing in the report column, tabbed pages only');
+  assert.ok(layout.includes('{%- else %}\n<div class="hl-post-header{% if page.path contains \'hunting-detections\' %} hl-post-header--detect{% endif %}">'), 'a report keeps its header');
 });
 test('the Visit call to action is an element, never generated CSS content', () => {
   assert.equal(/content:\s*['"][^'"]*Visit/.test(css), false);
