@@ -1721,6 +1721,9 @@ async function plateRows(page, url, mdText) {
    the viewport, and closes on Escape. The note text must be generated chrome, never inside a report section. */
 var INFO_EXPR = '(function(){return [].slice.call(document.querySelectorAll(".hl-rv-panel:not([hidden]) .hl-rv-info")).map(function(b,i){var p=document.getElementById(b.getAttribute("aria-controls"));var r=b.getBoundingClientRect();' +
   'return {i:i,label:b.getAttribute("aria-label"),tabIndex:b.tabIndex,disabled:b.disabled,w:r.width,h:r.height,expanded:b.getAttribute("aria-expanded"),hasPop:!!p,popHidden:!!p&&p.hidden,popTextLen:p?p.textContent.trim().length:0,popInReport:!!(p&&p.closest(".hl-rv-source")),chrome:b.hasAttribute("data-rv-chrome")&&!!p&&p.hasAttribute("data-rv-chrome")};});})()';
+/* Every "i" button of the open tab is probed (review F3 of T-0500.1.7.3): opened by Enter and by a real pointer press, its note's rectangle read on all four sides against the
+   viewport, closed by Escape; then once more with the button scrolled to the bottom edge of the screen, where a note placed below it has no room. */
+function infoFits(b, vw, vh) { return !!b && b.r - b.l > 0 && b.l >= -0.5 && b.r <= vw + 0.5 && b.t >= -0.5 && b.b <= vh + 0.5; }
 function infoVerdict(rows, probe) {
   if (!rows || !rows.length) return { notChecked: true, ok: false, detail: 'this tab has no "i" popover, so nothing was measured' };
   var why = [];
@@ -1732,13 +1735,25 @@ function infoVerdict(rows, probe) {
     if (!r.hasPop || !r.popHidden || r.expanded !== 'false' || r.popTextLen === 0) why.push(n + ' is not collapsed at rest with its note in the DOM');
     if (r.popInReport || !r.chrome) why.push(n + ' note is not generated chrome');
   });
-  if (probe) {
-    if (!probe.keyOpened) why.push('pressing Enter on the first "i" did not open its note');
-    if (!probe.tapOpened) why.push('a pointer press on the first "i" did not open its note');
-    if (probe.keyOpened && !probe.inViewport) why.push('the opened note is not inside the viewport');
-    if (!probe.escCloses) why.push('Escape did not close the note');
-  } else why.push('the open/close probe did not run');
-  return { notChecked: false, ok: why.length === 0, why: why, detail: rows.length + ' "i" button(s) measured' + (probe ? '; Enter opens: ' + probe.keyOpened + ', a press opens: ' + probe.tapOpened + ', inside the viewport: ' + probe.inViewport + ', Escape closes: ' + probe.escCloses : '') + (why.length ? '; ' + why.join('; ') : '') };
+  var probes = !probe ? null : Array.isArray(probe.probes) ? probe.probes : null, vw = probe && probe.vw, vh = probe && probe.vh, edgeRoom = null;
+  if (!probes) why.push('the open/close probe did not run');
+  else {
+    if (probes.length !== rows.length) why.push(probes.length + ' of the tab\'s ' + rows.length + ' "i" buttons were probed');
+    probes.forEach(function (p) {
+      var n = 'i #' + p.i;
+      if (!p.keyOpened) why.push('pressing Enter on ' + n + ' did not open its note');
+      if (!p.tapOpened) why.push('a pointer press on ' + n + ' did not open its note');
+      if (p.keyOpened && !infoFits(p.box, vw, vh)) why.push('the note of ' + n + ' is not inside the viewport (' + (p.box ? 'left ' + Math.round(p.box.l) + ', top ' + Math.round(p.box.t) + ', right ' + Math.round(p.box.r) + ', bottom ' + Math.round(p.box.b) : 'not drawn') + ' in ' + vw + 'x' + vh + ')');
+      if (!p.edgeOpened) why.push('pressing Enter on ' + n + ' scrolled to the bottom edge of the screen did not open its note');
+      else if (!infoFits(p.edgeBox, vw, vh)) why.push('the note of ' + n + ' at the bottom edge of the screen is not inside the viewport (' + (p.edgeBox ? 'left ' + Math.round(p.edgeBox.l) + ', top ' + Math.round(p.edgeBox.t) + ', right ' + Math.round(p.edgeBox.r) + ', bottom ' + Math.round(p.edgeBox.b) : 'not drawn') + ' in ' + vw + 'x' + vh + ')');
+      if (!p.escCloses) why.push('Escape did not close the note of ' + n);
+      if (p.edgeRoom !== null && p.edgeRoom !== undefined) edgeRoom = edgeRoom === null ? p.edgeRoom : Math.min(edgeRoom, p.edgeRoom);
+    });
+  }
+  var nOpen = probes ? probes.filter(function (p) { return p.keyOpened; }).length : 0, nTap = probes ? probes.filter(function (p) { return p.tapOpened; }).length : 0;
+  var nFit = probes ? probes.filter(function (p) { return p.keyOpened && infoFits(p.box, vw, vh); }).length : 0, nEdge = probes ? probes.filter(function (p) { return p.edgeOpened && infoFits(p.edgeBox, vw, vh); }).length : 0;
+  var nEsc = probes ? probes.filter(function (p) { return p.escCloses; }).length : 0;
+  return { notChecked: false, ok: why.length === 0, why: why, detail: rows.length + ' "i" button(s) measured' + (probes ? ', ' + probes.length + ' probed; of those Enter opens ' + nOpen + ', a press opens ' + nTap + ', inside the viewport on all four sides ' + nFit + ' (centred) and ' + nEdge + ' (at the bottom edge' + (edgeRoom !== null ? ', least room below the button ' + Math.round(edgeRoom) + ' px' : '') + '), Escape closes ' + nEsc : '') + (why.length ? '; ' + why.slice(0, 4).join('; ') + (why.length > 4 ? '; and ' + (why.length - 4) + ' more' : '') : '') };
 }
 async function pressEnter(page) {
   await page.send('Input.dispatchKeyEvent', { type: 'keyDown', key: 'Enter', code: 'Enter', windowsVirtualKeyCode: 13, nativeVirtualKeyCode: 13, text: '\r', unmodifiedText: '\r' });
@@ -1746,39 +1761,62 @@ async function pressEnter(page) {
   await CDP.sleep(120);
 }
 async function infoProbe(page) {
-  var probe = { keyOpened: false, tapOpened: false, inViewport: false, escCloses: false };
-  await page.evaluate('(function(){var b=document.querySelector(".hl-rv-panel:not([hidden]) .hl-rv-info");if(b){b.scrollIntoView({block:"center"});b.focus();}})()');
-  await CDP.sleep(150);
-  await pressEnter(page);
-  await CDP.sleep(200);
-  probe.keyOpened = await page.json('(function(){var b=document.querySelector(".hl-rv-panel:not([hidden]) .hl-rv-info");var p=b&&document.getElementById(b.getAttribute("aria-controls"));return !!p&&!p.hidden&&b.getAttribute("aria-expanded")==="true";})()');
-  probe.inViewport = await page.json('(function(){var b=document.querySelector(".hl-rv-panel:not([hidden]) .hl-rv-info");var p=b&&document.getElementById(b.getAttribute("aria-controls"));if(!p||p.hidden)return false;var r=p.getBoundingClientRect();return r.width>0&&r.left>=0&&r.right<=innerWidth+0.5;})()');
-  await pressKey(page, 'Escape', 'Escape', 27);
-  await CDP.sleep(150);
-  probe.escCloses = await page.json('(function(){var b=document.querySelector(".hl-rv-panel:not([hidden]) .hl-rv-info");var p=b&&document.getElementById(b.getAttribute("aria-controls"));return !!p&&p.hidden&&b.getAttribute("aria-expanded")==="false";})()');
-  try { await page.click('.hl-rv-panel:not([hidden]) .hl-rv-info'); } catch (e) { /* reported below */ }
-  await CDP.sleep(200);
-  probe.tapOpened = await page.json('(function(){var b=document.querySelector(".hl-rv-panel:not([hidden]) .hl-rv-info");var p=b&&document.getElementById(b.getAttribute("aria-controls"));return !!p&&!p.hidden&&b.getAttribute("aria-expanded")==="true";})()');
-  await pressKey(page, 'Escape', 'Escape', 27);
-  return probe;
+  var Q = function (i) { return 'document.querySelectorAll(".hl-rv-panel:not([hidden]) .hl-rv-info")[' + i + ']'; };
+  var n = await page.json('document.querySelectorAll(".hl-rv-panel:not([hidden]) .hl-rv-info").length');
+  var vp = await page.json('({w:innerWidth,h:innerHeight})'), probes = [];
+  var state = function (i) { return page.json('(function(){var b=' + Q(i) + ';var p=b&&document.getElementById(b.getAttribute("aria-controls"));return !!p&&!p.hidden&&b.getAttribute("aria-expanded")==="true";})()'); };
+  var box = function (i) { return page.json('(function(){var b=' + Q(i) + ';var p=b&&document.getElementById(b.getAttribute("aria-controls"));if(!p||p.hidden)return null;var r=p.getBoundingClientRect();return {l:r.left,t:r.top,r:r.right,b:r.bottom};})()'); };
+  for (var i = 0; i < n; i++) {
+    var pr = { i: i, keyOpened: false, tapOpened: false, escCloses: false, box: null, edgeOpened: false, edgeBox: null, edgeRoom: null };
+    await page.evaluate('(function(){var b=' + Q(i) + ';if(b){b.scrollIntoView({block:"center",behavior:"instant"});b.focus();}})()'); await CDP.sleep(150);
+    await pressEnter(page); await CDP.sleep(200);
+    pr.keyOpened = await state(i); pr.box = await box(i);
+    await pressKey(page, 'Escape', 'Escape', 27); await CDP.sleep(150);
+    pr.escCloses = !(await state(i));
+    await page.evaluate('(function(){[].slice.call(document.querySelectorAll("[data-hl-probe]")).forEach(function(x){x.removeAttribute("data-hl-probe");});var b=' + Q(i) + ';if(b)b.setAttribute("data-hl-probe","1");})()');
+    try { await page.click('[data-hl-probe]'); } catch (e) { /* reported below */ }
+    await CDP.sleep(200); pr.tapOpened = await state(i);
+    await pressKey(page, 'Escape', 'Escape', 27); await CDP.sleep(150);
+    /* the bottom edge: the button's lower edge 8 px above the bottom of the screen (as far as the page can scroll), where a note placed below it has no room */
+    pr.edgeRoom = await page.json('(function(){var b=' + Q(i) + ';if(!b)return null;b.scrollIntoView({block:"center",behavior:"instant"});var r=b.getBoundingClientRect();window.scrollBy({top:r.bottom-(innerHeight-8),behavior:"instant"});b.focus({preventScroll:true});return innerHeight-b.getBoundingClientRect().bottom;})()'); await CDP.sleep(200);
+    await pressEnter(page); await CDP.sleep(200);
+    pr.edgeOpened = await state(i); pr.edgeBox = await box(i);
+    await pressKey(page, 'Escape', 'Escape', 27); await CDP.sleep(150);
+    probes.push(pr);
+  }
+  return { probes: probes, vw: vp.w, vh: vp.h };
 }
 async function infoRows(page, url) {
-  var name = 'the "i" popovers are reachable by keyboard and by tap, collapsed at rest, inside the viewport when open, and closed by Escape';
+  var name = 'every "i" popover of the tab is reachable by keyboard and by tap, collapsed at rest, inside the viewport on all four sides when open (centred and at the bottom edge of the screen), and closed by Escape';
   var states = [[1280, 900], [390, 844]];
-  for (var i = 0; i < states.length; i++) {
-    await setViewport(page, states[i][0], states[i][1]);
-    if (!(await gotoAndWait(page, url))) { check('NOT CHECKED: ' + states[i][0] + 'x' + states[i][1] + ': ' + name, false, 'the tab controller never built, so nothing was measured'); continue; }
+  async function prepare(w, h) {
+    await setViewport(page, w, h);
+    if (!(await gotoAndWait(page, url))) return false;
     await page.evaluate('location.hash="#tab-' + firstTab() + '"'); await CDP.sleep(250);
     var open = await page.json('(function(){var t=document.querySelector(".hl-rv-panel:not([hidden]) .hl-rv-view-summary button[aria-expanded=false]:not(.hl-rv-info)");if(t)t.click();return !!t;})()');
     if (open) await CDP.sleep(250);
+    return true;
+  }
+  for (var i = 0; i < states.length; i++) {
+    var w = states[i][0], h = states[i][1];
+    if (!(await prepare(w, h))) { check('NOT CHECKED: ' + w + 'x' + h + ': ' + name, false, 'the tab controller never built, so nothing was measured'); continue; }
     var rows = await page.json(INFO_EXPR);
-    if (!rows.length) { check('NOT CHECKED: ' + states[i][0] + 'x' + states[i][1] + ': ' + name, false, 'this report\'s ' + firstTab() + ' tab has no "i" popover (no generated figure with a how-counted note), so nothing was measured'); continue; }
+    if (!rows.length) { check('NOT CHECKED: ' + w + 'x' + h + ': ' + name, false, 'this report\'s ' + firstTab() + ' tab has no "i" popover (no generated figure with a how-counted note), so nothing was measured'); continue; }
     var v = infoVerdict(rows, await infoProbe(page));
-    check(states[i][0] + 'x' + states[i][1] + ': ' + name, v.ok, v.detail);
+    check(w + 'x' + h + ': ' + name, v.ok, v.detail);
     if (i === 0) {
-      await page.evaluate('(function(){var b=document.querySelector(".hl-rv-panel:not([hidden]) .hl-rv-info");if(b){var c=b.cloneNode(true);b.replaceWith(c);}})()');
-      var c2 = infoVerdict(await page.json(INFO_EXPR), await infoProbe(page));
-      check('control: an "i" button whose handler is gone makes the popover row FAIL', c2.ok === false && !c2.notChecked, c2.ok === false ? 'FAILS as designed: ' + c2.detail : 'the control did NOT fire: ' + c2.detail);
+      /* each control starts from a fresh load, so one broken button never hides the next control's result */
+      var ctlRun = async function (label, setup, needTwo) {
+        if (needTwo && rows.length < 2) { check('NOT CHECKED: control: ' + label, false, 'this tab has ' + rows.length + ' "i" button, so there is no later button to break'); return; }
+        if (!(await prepare(w, h))) { check('NOT CHECKED: control: ' + label, false, 'the tab controller never built'); return; }
+        await page.evaluate(setup);
+        var c2 = infoVerdict(await page.json(INFO_EXPR), await infoProbe(page));
+        check('control: ' + label, c2.ok === false && !c2.notChecked, c2.ok === false ? 'FAILS as designed: ' + c2.detail : 'the control did NOT fire: ' + c2.detail);
+      };
+      await ctlRun('an "i" button whose handler is gone makes the popover row FAIL', '(function(){var b=document.querySelector(".hl-rv-panel:not([hidden]) .hl-rv-info");if(b){var c=b.cloneNode(true);b.replaceWith(c);}})()', false);
+      await ctlRun('a LATER "i" button (the last of the tab) whose handler is gone makes the popover row FAIL, though the first still works', '(function(){var a=document.querySelectorAll(".hl-rv-panel:not([hidden]) .hl-rv-info");var b=a[a.length-1];if(b){var c=b.cloneNode(true);b.replaceWith(c);}})()', true);
+      await ctlRun('a note forced below the bottom of the viewport makes the popover row FAIL', '(function(){var s=document.createElement("style");s.textContent=".hl-rv-pop{position:fixed !important;top:100vh !important;bottom:auto !important;transform:none !important;}";document.head.appendChild(s);})()', false);
+      await ctlRun('a note forced above the top of the viewport makes the popover row FAIL', '(function(){var s=document.createElement("style");s.textContent=".hl-rv-pop{position:fixed !important;top:-2000px !important;bottom:auto !important;transform:none !important;}";document.head.appendChild(s);})()', false);
     }
   }
 }
@@ -1998,7 +2036,7 @@ function chainMeasure() {
   function t(e) { return e ? e.textContent.replace(/\s+/g, ' ').trim() : ''; }
   var tables = [].slice.call(P.querySelectorAll('.hl-rv-source table')).map(function (tb) {
     var hr = tb.tHead ? tb.tHead.rows[0] : tb.rows[0];
-    return { hs: [].slice.call(hr.cells).map(t), rows: tb.querySelectorAll('tbody tr').length };
+    return { hs: [].slice.call(hr.cells).map(t), rows: tb.querySelectorAll('tbody tr').length, cells: [].slice.call(tb.querySelectorAll('tbody tr')).map(function (tr) { return [].slice.call(tr.cells).map(t); }) };
   });
   function has(m, re) { return m.hs.some(function (h) { return re.test(h); }); }
   var stageSrc = tables.filter(function (m) { return has(m, /^(Stage|Phase)$/i) && has(m, /What.*(did|does|happens)/i); })[0] || null;
@@ -2011,6 +2049,19 @@ function chainMeasure() {
   var th = tbl ? tbl.querySelector('thead th') : null, tid = rows.length ? rows[0].querySelector('.hl-rv-tid') : null;
   var note = con ? [].slice.call(con.querySelectorAll('.hl-rv-pn-note')).map(t).join(' ') : '';
   var km = note.match(/(\d+) of (\d+) list rows matched/);
+  /* F2 (review of T-0500.1.7.3): the identities and the evidence text, read from the report's own source tables and from the drawn rows, so the verdict can compare WHICH rows are marked and WHAT they say */
+  var TID = /T\d{4}(?:\.\d{3})?/;
+  function ix(m, re, d) { for (var i = 0; i < m.hs.length; i++) if (re.test(m.hs[i])) return i; return d; }
+  var sId = attackSrc ? ix(attackSrc, /Tactic.*Technique/i, 0) : 0, sNm = attackSrc ? ix(attackSrc, /^Name$/i, 1) : 1;
+  var srcRows = attackSrc ? attackSrc.cells.map(function (c) { return { id: ((c[sId] || '').match(TID) || [''])[0], name: c[sNm] || '' }; }) : [];
+  var kId = keySrc ? ix(keySrc, /Tactic.*Technique/i, 0) : 0, kNm = keySrc ? ix(keySrc, /^Name$/i, 1) : 1, kEv = keySrc ? ix(keySrc, /^Evidence/i, -1) : -1;
+  var keyList = keySrc ? keySrc.cells.map(function (c) { return { id: ((c[kId] || '').match(TID) || [''])[0], name: c[kNm] || '', ev: kEv >= 0 ? c[kEv] || '' : '' }; }) : [];
+  var drawn = rows.map(function (r) {
+    var nc = r.cells[sNm] ? r.cells[sNm].cloneNode(true) : null;
+    if (nc) [].slice.call(nc.querySelectorAll('.hl-rv-carry, .hl-rv-ev')).forEach(function (x) { x.remove(); });
+    var tidEl = r.querySelector('.hl-rv-tid'), evp = r.querySelector('.hl-rv-ev p');
+    return { carry: !!r.querySelector('.hl-rv-carry'), ev: evp ? t(evp) : null, id: tidEl ? t(tidEl) : (((r.cells[0] ? t(r.cells[0]) : '').match(TID)) || [''])[0], name: nc ? t(nc) : '' };
+  });
   return {
     panel: true, console: !!con, search: !!(con && con.querySelector('input[type=search]')), chips: chips, rows: rows.length, hiddenRows: rows.filter(function (r) { return r.hidden; }).length,
     count: con ? t(con.querySelector('.hl-rv-count')) : null, stageSrc: stageSrc ? stageSrc.rows : 0, attackSrc: attackSrc ? attackSrc.rows : 0, keySrc: keySrc ? keySrc.rows : 0,
@@ -2018,7 +2069,7 @@ function chainMeasure() {
     nodeCounts: nodes.map(function (n) { var s = n.querySelector('.hl-rv-fct'); var m = s && s.textContent.match(/^(\d+) linked/); return m ? +m[1] : null; }),
     storyRows: cards.map(function (c) { return c.querySelectorAll('a.hl-rv-procedure').length; }),
     thPos: th ? getComputedStyle(th).position : null, tidFont: tid ? getComputedStyle(tid).fontFamily : null, tidCount: P.querySelectorAll('.hl-rv-procedures td .hl-rv-tid').length,
-    carry: P.querySelectorAll('.hl-rv-procedures .hl-rv-carry').length, ev: P.querySelectorAll('.hl-rv-procedures .hl-rv-ev p').length, keyMatched: km ? +km[1] : null, keyTotal: km ? +km[2] : null,
+    carry: P.querySelectorAll('.hl-rv-procedures .hl-rv-carry').length, ev: P.querySelectorAll('.hl-rv-procedures .hl-rv-ev p').length, keyMatched: km ? +km[1] : null, keyTotal: km ? +km[2] : null, srcRows: srcRows, keyList: keyList, drawn: drawn,
     tac: P.querySelectorAll('.hl-rv-procedures button.hl-rv-tac').length, innerW: innerWidth, mini: !!P.querySelector('.hl-rv-minibar'), miniHidden: P.querySelector('.hl-rv-minibar') ? P.querySelector('.hl-rv-minibar').hidden : null
   };
 }
@@ -2115,6 +2166,30 @@ function chainTableVerdict(m, attackRows) {
     if (m.keyMatched === null) bad.push('the key list is not accounted for in the note');
     else if (m.carry !== m.keyMatched) bad.push(m.carry + ' row(s) are marked, the note says ' + m.keyMatched + ' matched');
     if (m.ev !== m.carry) bad.push(m.ev + ' evidence note(s) for ' + m.carry + ' marked row(s)');
+    /* Counts alone pass a mark and its evidence moved to the wrong row, or the evidence replaced by other text (review F1 of T-0500.1.7.3, finding F2). The expected marks are derived
+       from the report's own two source tables by the rule the note states: a list row marks the first source row with the same technique ID and name that no earlier list row marked.
+       Each drawn row must then be marked exactly when expected, carry the list row's own evidence text, and be the source row it should be. */
+    if (!m.srcRows || !m.keyList || !m.drawn) bad.push('the identities and evidence text of the marked rows were not measured');
+    else {
+      var want = {}, claimed = {};
+      m.keyList.forEach(function (k) {
+        if (!k.id) return;
+        for (var i = 0; i < m.srcRows.length; i++) { if (claimed[i] || m.srcRows[i].id !== k.id || m.srcRows[i].name.toLowerCase() !== k.name.toLowerCase()) continue; claimed[i] = true; want[i] = k.ev; break; }
+      });
+      var wrong = [];
+      for (var di = 0; di < Math.max(m.drawn.length, m.srcRows.length); di++) {
+        var d = m.drawn[di], sr = m.srcRows[di], should = want[di] !== undefined;
+        if (!d || !sr) { wrong.push('row ' + (di + 1) + ' exists in only one of the drawn table and the source table'); continue; }
+        var tag = 'row ' + (di + 1) + ' (' + sr.id + ' ' + sr.name + ')';
+        if (should && !d.carry) wrong.push(tag + ' should carry the mark and does not');
+        else if (!should && d.carry) wrong.push(tag + ' carries a mark the report\'s list does not give it');
+        else if (should) {
+          if (d.ev !== want[di]) wrong.push(tag + ' shows evidence ' + JSON.stringify(String(d.ev).slice(0, 60)) + ', the list says ' + JSON.stringify(String(want[di]).slice(0, 60)));
+          if (d.id !== sr.id || d.name.toLowerCase() !== sr.name.toLowerCase()) wrong.push(tag + ' is drawn as ' + d.id + ' ' + d.name);
+        }
+      }
+      if (wrong.length) bad.push(wrong.length + ' marked-row fault(s): ' + wrong.slice(0, 3).join('; '));
+    }
   } else if (m.carry) bad.push(m.carry + ' row(s) are marked but the report has no key list');
   return { notChecked: false, ok: bad.length === 0, why: bad, detail: m.rows + ' row(s) against ' + attackRows + '; ' + m.carry + ' marked of ' + m.keySrc + ' list row(s)' + (bad.length ? '; ' + bad.join('; ') : '') };
 }
@@ -2232,6 +2307,17 @@ async function chainRows(page, url) {
           var s = '#tab-chain .hl-rv-console .hl-rv-facets .hl-rv-fchip'; try { await page.click(s); } catch (e) { /* reported by the verdict */ } await CDP.sleep(200);
           var ps = await page.json(CHAINSTATE_EXPR); return consoleVerdict(m, ps, null, attackRows); }],
         [vF, 'with one stage node removed the flow row FAILS', async function () { await page.evaluate('(function(){var n=document.querySelector("#tab-chain .hl-rv-flow .hl-rv-fnode");if(n)n.closest("li").remove();})()'); return flowVerdict(await page.json(CHAIN_EXPR)); }],
+        /* review F2 (T-0500.1.7.3 c5): equal counts, wrong content. Each control changes the page, reads the verdict, and puts the page back before the next control. */
+        [m.keySrc ? vT : { notChecked: true, ok: false, detail: 'this report has no "carries the case" list (0 source rows), so no mark is drawn to move' }, 'a carries-the-case mark and its evidence moved to another row (counts unchanged) makes the table row FAIL', async function () {
+          var moved = await page.json('(function(){var P=document.getElementById("tab-chain"),rows=[].slice.call(P.querySelectorAll(".hl-rv-procedures tbody tr"));var from=rows.filter(function(r){return r.querySelector(".hl-rv-carry");})[0],to=rows.filter(function(r){return !r.querySelector(".hl-rv-carry");})[0];if(!from||!to)return false;var a=from.querySelector(".hl-rv-carry"),b=from.querySelector(".hl-rv-ev"),cell=to.cells[a.parentNode.cellIndex];window.__hlC5={a:a,b:b,home:a.parentNode};cell.appendChild(a);cell.appendChild(b);return true;})()');
+          var v = moved ? chainTableVerdict(await page.json(CHAIN_EXPR), attackRows) : { notChecked: true, ok: false, detail: 'every row of the table is marked, so there is no unmarked row to move a mark to' };
+          await page.evaluate('(function(){var s=window.__hlC5;if(s){s.home.appendChild(s.a);s.home.appendChild(s.b);window.__hlC5=null;}})()');
+          return v; }],
+        [m.keySrc ? vT : { notChecked: true, ok: false, detail: 'this report has no "carries the case" list (0 source rows), so no mark is drawn to move' }, 'the evidence text of a marked row replaced by other text (counts unchanged) makes the table row FAIL', async function () {
+          var old = await page.json('(function(){var p=document.querySelector("#tab-chain .hl-rv-procedures .hl-rv-ev p");if(!p)return null;var o=p.textContent;p.textContent="Invented evidence that the report does not give.";window.__hlC5o={p:p,o:o};return o;})()');
+          var v = old !== null ? chainTableVerdict(await page.json(CHAIN_EXPR), attackRows) : { notChecked: true, ok: false, detail: 'no evidence note is drawn' };
+          await page.evaluate('(function(){var s=window.__hlC5o;if(s){s.p.textContent=s.o;window.__hlC5o=null;}})()');
+          return v; }],
         [m.keySrc ? vT : { notChecked: true, ok: false, detail: 'this report has no "carries the case" list (0 source rows), so no mark is drawn to remove' }, 'with one carries-the-case mark removed the table row FAILS', async function () { await page.evaluate('(function(){var n=document.querySelector("#tab-chain .hl-rv-procedures .hl-rv-carry");if(n)n.remove();})()'); return chainTableVerdict(await page.json(CHAIN_EXPR), attackRows); }],
         [vL, 'a tactic button whose handler is gone makes the highlighting row FAIL', async function () {
           /* the handlers sit on the view body, so a copy without them: stop the events before they reach it */
@@ -4867,7 +4953,7 @@ if (require.main === module) {
     plateColumnVerdict: plateColumnVerdict,
     expectedPlateLabels: expectedPlateLabels,
     frontMatterLinks: frontMatterLinks,
-    infoVerdict: infoVerdict,
+    infoVerdict: infoVerdict, infoFits: infoFits,
     textHiddenVerdict: textHiddenVerdict,
     riskBarVerdict: riskBarVerdict,
     heatVerdict: heatVerdict,

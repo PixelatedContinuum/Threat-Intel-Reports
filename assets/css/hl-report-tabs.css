@@ -678,6 +678,7 @@ html:has(.hl-report-page) .hl-toast__label { font-size: var(--rv-fs); }
   background: #1b1b1b; border: 1px solid #3a3a3a; border-radius: 10px; box-shadow: 0 18px 50px rgba(0, 0, 0, 0.65);
   font-size: var(--rv-fs); line-height: 1.5; color: var(--rv-text); display: flex; flex-direction: column; gap: 10px;
 }
+.hl-rv-pop { max-height: calc(100vh - 24px); max-height: calc(100dvh - 24px); overflow-y: auto; overscroll-behavior: contain; box-sizing: border-box; }
 .hl-rv-pop[hidden] { display: none !important; }
 .hl-rv-pop > * { margin: 0 !important; padding: 0 !important; border: 0 !important; font-size: var(--rv-fs) !important; line-height: 1.5; color: var(--rv-text) !important; }
 .hl-rv-pop small { font-size: var(--rv-fs) !important; color: var(--rv-text); }
