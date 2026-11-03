@@ -7954,7 +7954,11 @@ a.hl-cred-pill--link:hover { border-color: #fbbf24; color: var(--hl-text-primary
 }
 
 /* the nKEV and CVE rows: the live layout, in D's scale and colours; the open popover stays inside its row (it ran 3px past the screen at 390 and 6px at 320) */
-.hl-idx--wire .hl-vuln { font-size: var(--hl-fs-small); padding: 9px 12px; border-bottom: 1px solid #222222; }
+.hl-idx--wire .hl-vuln { font-size: var(--hl-fs-body); padding: 9px 12px; border-bottom: 1px solid #222222; }
+/* the KEV and CVE rows read at the headline rows' size (T-0542): ids and the vendor/product line at body size, chips, badges and severity one step under, the opened detail panel and pop-overs at body size */
+.hl-idx--wire .hl-post-content .hl-vuln__cve, .hl-idx--wire .hl-vuln__cve { font-size: var(--hl-fs-body); }
+.hl-idx--wire .hl-vuln__b, .hl-idx--wire .hl-vuln__sev, .hl-idx--wire .hl-vuln__ev, .hl-idx--wire .hl-vuln__p, .hl-idx--wire .hl-vuln__w { font-size: var(--hl-fs-small); }
+.hl-idx--wire .hl-vuln .hl-dt__panel, .hl-idx--wire .hl-vuln__popbody { font-size: var(--hl-fs-body); }
 .hl-idx--wire .hl-vuln:target { background: color-mix(in srgb, var(--hl-accent-blue) 12%, #141414); }
 .hl-idx--wire .hl-vuln__popbody {
   max-width: min(26em, calc(100% - 24px));
@@ -7979,6 +7983,20 @@ a.hl-cred-pill--link:hover { border-color: #fbbf24; color: var(--hl-text-primary
 /* the legend panel of the nKEV tab */
 .hl-idx--wire .hl-legend-mobile { border: 1px solid var(--hl-border-card); border-top: 1px solid var(--hl-border-card); border-radius: 10px; background: linear-gradient(135deg, #171717, #0f1319); }
 .hl-idx--wire .hl-legend-mobile summary { display: flex; align-items: center; min-height: 48px; padding: 0 16px; font: 600 16px var(--hl-font-display); letter-spacing: 0; text-transform: none; color: #ffffff; }
+/* the legend reads as a control at every width (T-0542): an accent edge, a hint line drawn in ::before (the page gate pins the summary markup), a round chevron button on the right that turns when open, and a hover state.
+   The base ▸ marker is drawn only under 1281px, so on a desktop the bar had no affordance at all. */
+.hl-idx--wire .hl-legend-mobile { border-left: 3px solid var(--hl-accent-blue); transition: border-color 0.15s ease; }
+.hl-idx--wire .hl-legend-mobile:hover, .hl-idx--wire .hl-legend-mobile[open] { border-color: var(--hl-accent-blue); }
+.hl-idx--wire .hl-legend-mobile summary { cursor: pointer; gap: 10px; flex-wrap: wrap; padding: 8px 12px 8px 16px; font-size: var(--hl-fs-body); color: var(--hl-accent-blue); border-radius: 0 9px 9px 0; }
+.hl-idx--wire .hl-legend-mobile summary:hover { background: color-mix(in srgb, var(--hl-accent-blue) 9%, transparent); }
+.hl-idx--wire .hl-legend-mobile summary::before { content: 'what each badge, chip and colour means'; order: 1; display: inline; transform: none; font: 400 var(--hl-fs-small) var(--hl-font-display); color: var(--hl-text-muted); }
+.hl-idx--wire .hl-legend-mobile[open] summary::before { transform: none; }
+.hl-idx--wire .hl-legend-mobile summary::after {
+  content: '\25BE'; order: 2; margin-left: auto; flex: 0 0 auto; display: grid; place-items: center; width: 32px; height: 32px; border-radius: 50%;
+  border: 1px solid var(--hl-accent-blue); color: var(--hl-accent-blue); font-size: var(--hl-fs-small); line-height: 1; transition: transform 0.2s ease, background 0.15s ease;
+}
+.hl-idx--wire .hl-legend-mobile summary:hover::after { background: color-mix(in srgb, var(--hl-accent-blue) 18%, transparent); }
+.hl-idx--wire .hl-legend-mobile[open] summary::after { transform: rotate(180deg); }
 
 /* The Wire keeps the full D frame. Its legend aside carries .hl-post-toc, which would otherwise put the page back in the 900px column that
    the detection pages keep (rule at the top of this file); in D the legend is the inline "Legend" bar at every width and the margin copy is not drawn.
