@@ -131,13 +131,13 @@ html:has(.hl-report-page) { --rv-col: min(1240px, calc(100vw - 320px)); }
 .hl-report-page .hl-rv-threat { color: var(--rv-bad); border: 0; background: none; padding: 0; border-radius: 0; }
 .hl-report-page .hl-rv-threat::before { content: ''; width: 7px; height: 7px; border-radius: 50%; background: currentColor; }
 .hl-report-page .hl-post-header__title {
-  font-family: var(--rv-display); font-size: clamp(28px, 4.6vw, 55px) !important; font-weight: 700; line-height: 1.16; letter-spacing: -0.02em; margin: 0 !important; padding: 0 0 4px !important; color: var(--rv-text) !important; text-wrap: balance;
+  font-family: var(--rv-display); font-size: clamp(26px, 3.6vw, 42px) !important; font-weight: 700; line-height: 1.16; letter-spacing: -0.02em; margin: 0 !important; padding: 0 0 4px !important; color: var(--rv-text) !important; text-wrap: balance;
   background: linear-gradient(100deg, #ffffff 44%, color-mix(in srgb, var(--acc) 64%, #ffffff) 100%) !important; -webkit-background-clip: text !important; background-clip: text !important; -webkit-text-fill-color: transparent;
 }
 /* the bottom line: a generated copy of the report's lead, a little under title weight */
 .hl-report-page .hl-rv-bluf { margin: 10px 0 0 !important; max-width: 62em; font-family: var(--rv-display); font-weight: 500; line-height: 1.34; letter-spacing: -0.004em; color: #f1f1f1 !important; text-wrap: pretty; }
-.hl-rv-bluf--short { font-size: clamp(20px, 2.3vw, 28px); }
-.hl-rv-bluf--long { font-size: clamp(18px, 1.9vw, 22px); }
+.hl-rv-bluf--short { font-size: clamp(19px, 1.8vw, 22px); }
+.hl-rv-bluf--long { font-size: clamp(18px, 1.6vw, 20px); }
 .hl-rv-bluf--xlong { font-size: clamp(16px, 1.5vw, 18px); line-height: 1.5; }
 /* the share status: always in the page (so the live region announces), drawn only while it has text */
 .hl-report-page .hl-rv-share { position: relative; display: flex; }
