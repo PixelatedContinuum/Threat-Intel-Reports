@@ -179,6 +179,7 @@
           {%- endfor -%}
         {%- endfor -%}
       {%- endif -%}
+      {%- if _dh_tag_out == _dh_tagn -%}{%- assign _dh_tag_out = _dh_tag -%}{%- endif -%}
       {{- "<" -}}{{- _dh_tag_out -}}{{- ">" -}}
       {%- if _dh_txt_raw -%}{{- _dh_txt -}}
       {%- elsif _dh_txt contains "." or _dh_txt contains "@" or _dh_txt contains ":" -%}
