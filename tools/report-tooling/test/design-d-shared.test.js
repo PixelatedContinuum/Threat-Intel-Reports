@@ -21,8 +21,11 @@ test('shared tokens: gold, column and card geometry are the report stylesheet\'s
   assert.match(css, /--hl-gold-bright:\s*#d4a73a;/); assert.match(rcss, /--rv-gold: #d4a73a;/);
   assert.match(css, /--hl-accent-gold:\s*#b8902f;/); assert.match(rcss, /--rv-gold-bar: #b8902f;/);
   assert.match(css, /--hl-col:\s*min\(1240px, calc\(100vw - 320px\)\);/); assert.match(rcss, /--rv-col: min\(1240px, calc\(100vw - 320px\)\);/);
-  assert.match(css, /--hl-card-w:\s*min\(200px, calc\(\(100vw - var\(--hl-col\)\) \/ 2 - 20px\)\);/);
-  assert.match(css, /--hl-card-left:\s*max\(16px, calc\(\(100vw - var\(--hl-col\)\) \/ 2 - 4px - var\(--hl-card-w\)\)\);/);
+  // C2 (review 2): ONE formula for the card's place, in custom.scss; the report sheet reads it (sponsor-rail.test.js). It is the report sheet's former formula, so a report card does not move.
+  assert.match(css, /--hl-rail-gap:\s*clamp\(20px, calc\(\(100vw - var\(--hl-col\)\) \/ 2 \* 0\.15\), 56px\);/);
+  assert.match(css, /--hl-card-w:\s*max\(140px, min\(200px, calc\(\(100vw - var\(--hl-col\)\) \/ 2 - 8px - var\(--hl-rail-gap\)\)\)\);/);
+  assert.match(css, /--hl-card-left:\s*max\(8px, calc\(\(100vw - var\(--hl-col\)\) \/ 2 - var\(--hl-rail-gap\) - var\(--hl-card-w\)\)\);/);
+  assert.equal((css.match(/--hl-card-w:/g) || []).length, 1, 'defined once');
   assert.match(css, /--hl-accent-steel:\s*#9fb4c9;/);
 });
 

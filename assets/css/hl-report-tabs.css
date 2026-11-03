@@ -196,7 +196,7 @@ a.hl-rv-feat__item:hover .hl-rv-feat__cta, a.hl-rv-featcard__item:hover .hl-rv-f
 .hl-rv-feat--many .hl-rv-feat__tagline, .hl-rv-feat--many .hl-rv-feat__cta { display: none; }
 .hl-rv-featcard { display: none; }
 @media (min-width: 1440px) {
-  html:has(.hl-report-page) { --rv-rail-gap: clamp(20px, calc((100vw - var(--rv-col)) / 2 * 0.15), 56px); --rv-card-w: max(140px, min(200px, calc((100vw - var(--rv-col)) / 2 - 8px - var(--rv-rail-gap)))); --rv-card-left: max(8px, calc((100vw - var(--rv-col)) / 2 - var(--rv-rail-gap) - var(--rv-card-w))); } /* a deliberate gap between the card and the report column: the card keeps its 140px floor and sits 8px from the screen edge at 1440 and 1600, and from 1800px it moves out to leave 48-56px (it hugged the plate, 4px, at every width) */
+  html:has(.hl-report-page) { --rv-rail-gap: var(--hl-rail-gap); --rv-card-w: var(--hl-card-w); --rv-card-left: var(--hl-card-left); } /* a deliberate gap between the card and the report column: the card keeps its 140px floor and sits 8px from the screen edge at 1440 and 1600, and from 1800px it moves out to leave 48-56px (it hugged the plate, 4px, at every width) */
   .hl-rv-feat { display: none; }
   .hl-rv-featcard {
     display: flex; flex-direction: column; gap: 10px; position: fixed; z-index: 75; left: var(--rv-card-left); top: calc(var(--hl-rv-nav-h, 64px) + 22px); width: var(--rv-card-w);

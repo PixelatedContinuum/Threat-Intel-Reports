@@ -38,8 +38,8 @@
   --hl-font-display: 'Space Grotesk', 'Segoe UI', system-ui, -apple-system, Arial, sans-serif;
 
   /* Design D shared tokens (T-0500.1.7.4 b1). One copy for every page that is not a tabbed report; the report
-     stylesheet (hl-report-tabs.css) carries the same values under --rv-*, which tests there assert literally, so
-     a change to gold, the column or the card geometry is made in both places. Gold means "sponsor" and nothing else. */
+     stylesheet (hl-report-tabs.css) carries gold and the column under --rv-*, which tests there assert literally, so
+     a change to gold or the column is made in both places; the sponsor card's geometry is defined once (below) and read by both. Gold means "sponsor" and nothing else. */
   --hl-gold-bright:    #d4a73a;   /* featured-sponsor label, Visit button (= --rv-gold) */
   --hl-gold-glow:      245, 158, 11;   /* r, g, b of the featured card's wash and glow */
   --hl-accent-steel:   #9fb4c9;   /* Consulting: moved off gold, which now marks sponsorship only */
@@ -50,8 +50,11 @@
   --hl-nav-h:          52px;      /* the thin D header on tablet and desktop */
   /* content column from 1440px: 1240 less the left-margin card's room (= --rv-col) */
   --hl-col:            min(1240px, calc(100vw - 320px));
-  --hl-card-w:         min(200px, calc((100vw - var(--hl-col)) / 2 - 20px));
-  --hl-card-left:      max(16px, calc((100vw - var(--hl-col)) / 2 - 4px - var(--hl-card-w)));
+  /* THE one definition of the sponsor card's place in the left margin (T-0500.1.7.4 review 2, C2). Every page reads it: the non-report pages' .hl-sponsor-rail below and,
+     through hl-report-tabs.css (--rv-rail-gap, --rv-card-w, --rv-card-left are set from these three), the report page's card. Change the geometry here and nowhere else. */
+  --hl-rail-gap:       clamp(20px, calc((100vw - var(--hl-col)) / 2 * 0.15), 56px);   /* a deliberate gap between the card and the column */
+  --hl-card-w:         max(140px, min(200px, calc((100vw - var(--hl-col)) / 2 - 8px - var(--hl-rail-gap))));
+  --hl-card-left:      max(8px, calc((100vw - var(--hl-col)) / 2 - var(--hl-rail-gap) - var(--hl-card-w)));
 }
 
 /* --- Brand display font: Space Grotesk (self-hosted, SIL OFL 1.1) --- */
