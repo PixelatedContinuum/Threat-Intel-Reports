@@ -714,6 +714,42 @@ function init() {
   });
 }
 
+/* T-0548: a link to a Wire row (a site-search result, a shared URL) opens that row's
+   Details pane, as if the reader had clicked its toggle. The tab needs no code here:
+   the row is the :target, and custom.scss shows its section through :has(:target).
+   The pane opens through the toggle's own click listener, so a hash-opened pane is
+   built, closed and retried exactly as a clicked one. A pane already open stays
+   open. A hash that names no row does nothing. A headline row has no toggle, so it
+   only lands on the row. */
+function rowForHash() {
+  var raw = location.hash.slice(1);
+  if (!raw) { return null; }
+  var id;
+  try { id = decodeURIComponent(raw); } catch (e) { return null; }
+  var row = document.getElementById(id);
+  if (!row || !(row.classList.contains('hl-vuln') || row.classList.contains('hl-wire__row'))) {
+    return null;
+  }
+  return row;
+}
+function openForHash() {
+  var row = rowForHash();
+  if (!row) { return; }
+  var btn = row.querySelector('.hl-dt');
+  // A toggle the script never woke (no state for its tab) keeps its hidden attribute,
+  // so only a live toggle is clicked.
+  if (btn && !btn.hasAttribute('hidden') && btn.getAttribute('aria-expanded') !== 'true') {
+    btn.click();
+  }
+  // The nKEV and CVE rows get an 80px scroll margin from custom.scss (.hl-vuln); a
+  // headline row has none, and the sticky nav would cover it. Until that rule covers
+  // .hl-wire__row too, the same 80px is set here (T-0548, measured in a browser).
+  if (!row.classList.contains('hl-vuln')) { row.style.scrollMarginTop = '80px'; }
+  row.scrollIntoView({ block: 'start' });
+}
+
 init();
+openForHash();
+window.addEventListener('hashchange', openForHash);
 
 })();

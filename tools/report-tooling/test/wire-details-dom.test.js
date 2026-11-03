@@ -41,12 +41,13 @@ function build(rows, genAt) {
 /* A miniature of the real markup, same classes, data attributes and the real id
    shape: the page's row ids carry the doubled prefix the template writes, so
    id="cve-{{ downcased }}" is "cve-cve-2026-1001". Same here. */
-function pageHtml() {
+function pageHtml(opts) {
+  var hid = opts && opts.headlineId ? ' id="' + opts.headlineId + '"' : '';
   return '<body>' +
     '<section id="headlines" class="hl-wtabs__sec" data-filter-scope>' +
     '<div class="hl-wire" data-filter-grid data-filter-item=".hl-wire__row">' +
     '<div class="hl-wire__day" data-filter-group>2026 October 31</div>' +
-    '<div class="hl-wire__row" data-title="acme widget tipper overheats cve-2026-1001 cve-2026-9999 cve-2026-7777" data-tags="acme|cve-2026-1001|cve-2026-9999|cve-2026-7777" data-labels="Acme|CVE-2026-1001|CVE-2026-9999|CVE-2026-7777" data-kind="research" data-day="2026-10-31">' +
+    '<div class="hl-wire__row"' + hid + ' data-title="acme widget tipper overheats cve-2026-1001 cve-2026-9999 cve-2026-7777" data-tags="acme|cve-2026-1001|cve-2026-9999|cve-2026-7777" data-labels="Acme|CVE-2026-1001|CVE-2026-9999|CVE-2026-7777" data-kind="research" data-day="2026-10-31">' +
     '<a class="hl-wire__item hl-wire__item--research" href="https://blog.example.acme/setup"><span class="hl-wire__src">Acme</span><span class="hl-wire__title">Acme widget tipper overheats</span></a>' +
     '</div>' +
     '<div class="hl-wire__row" data-title="vulncheck widget wiki ky" data-kind="vuln" data-day="2026-10-31">' +
@@ -68,8 +69,11 @@ function pageHtml() {
 
 function openDom(rows, opts) {
   opts = opts || {};
-  var dom = new JSDOM(pageHtml(), { url: 'https://the-hunters-ledger.test/wire/', runScripts: 'outside-only' });
+  var dom = new JSDOM(pageHtml(opts), { url: 'https://the-hunters-ledger.test/wire/' + (opts.hash || ''), runScripts: 'outside-only' });
   var win = dom.window;
+  // jsdom has no layout; record which rows the script asked to scroll into view.
+  opts.scrolled = [];
+  win.Element.prototype.scrollIntoView = function () { opts.scrolled.push(this.id); };
   win.fetch = function () {
     opts.calls = (opts.calls || 0) + 1;
     if (opts.badFetch) { return Promise.resolve({ ok: false, status: 503, json: function () { return Promise.resolve({}); } }); }
@@ -234,4 +238,127 @@ test('a capped description says the full text is on NVD; a short one does not (S
   clicks(doc2, row2.querySelector('.hl-dt'));
   await settle();
   assert.doesNotMatch(row2.querySelector('.hl-dt__panel').textContent, /the full text is on NVD/);
+});
+
+/* T-0548: a link to a Wire row (a site-search result) opens that row's Details pane,
+   through the toggle's own click path, and scrolls the row into view. */
+
+var CVE_ROWS = Object.assign({}, NKEV_ROWS, {
+  'cve-2026-9999': {
+    added: null, published: '2026-10-31', title: 'Widget tipper overheats.', desc: '',
+    cwe: [], affected: [], fixed: '2.2.0', kev_due: '', evidence: '', cisa_added: '', disclosed: '',
+    msf: [], edb: [], reports: [], reports_more: 0, stories: 0, aliases: [],
+    et_sids: [], nuclei: '', cisa_sigma: [], snort3_sids: [], ssvc_expl: '', ssvc_auto: '',
+    ssvc_impact: '', cvss: '', cvss_version: '', severity: '', scored_by: '',
+    cvss_vector: '', epss: '', epss_pct: '', epss_date: '', epss_pre: '', epss_max: '',
+    epss_xmodel: '', signals: [], kev_product: null, kev_product_n: 0
+  }
+});
+
+function paneOf(doc, rowId) {
+  return doc.getElementById(rowId).querySelector('.hl-dt__panel');
+}
+
+test('a hash on load opens the nKEV row’s pane and scrolls the row into view', async function () {
+  var env = openDom(NKEV_ROWS, { hash: '#cve-cve-2026-1001' });
+  var doc = env.dom.window.document;
+  var rowEl = doc.getElementById('cve-cve-2026-1001');
+  var btn = rowEl.querySelector('.hl-dt');
+  assert.equal(btn.getAttribute('aria-expanded'), 'true', 'the toggle reads expanded');
+  assert.equal(env.opts.calls, 1, 'one details fetch, from the same path a click takes');
+  assert.match(paneOf(doc, 'cve-cve-2026-1001').textContent, /Loading details\.\.\./);
+  await settle();
+  assert.match(paneOf(doc, 'cve-cve-2026-1001').textContent, /The record description\./);
+  assert.deepEqual(env.opts.scrolled, ['cve-cve-2026-1001']);
+  assert.equal(rowEl.style.scrollMarginTop, '', 'a nKEV row keeps the margin custom.scss gives it');
+});
+
+test('a hash on load opens the CVEs row’s pane, the CVEs tab’s own renderer', async function () {
+  var env = openDom(CVE_ROWS, { hash: '#cves-cve-2026-9999' });
+  var doc = env.dom.window.document;
+  assert.equal(doc.getElementById('cves-cve-2026-9999').querySelector('.hl-dt').getAttribute('aria-expanded'), 'true');
+  await settle();
+  var t = paneOf(doc, 'cves-cve-2026-9999').textContent;
+  assert.match(t, /Why listed/, 'the CVEs fact sheet, not the nKEV one');
+  assert.deepEqual(env.opts.scrolled, ['cves-cve-2026-9999']);
+});
+
+test('a hashchange to a row opens its pane, without a reload', async function () {
+  var env = openDom(NKEV_ROWS);
+  var doc = env.dom.window.document;
+  var win = env.dom.window;
+  assert.equal(paneOf(doc, 'cve-cve-2026-1001'), null, 'no pane before the hash moves');
+  win.location.hash = '#cve-cve-2026-1001';
+  await settle();
+  await settle();
+  assert.equal(doc.getElementById('cve-cve-2026-1001').querySelector('.hl-dt').getAttribute('aria-expanded'), 'true');
+  await settle();
+  assert.match(paneOf(doc, 'cve-cve-2026-1001').textContent, /The record description\./);
+  assert.deepEqual(env.opts.scrolled, ['cve-cve-2026-1001']);
+});
+
+test('a hash that names nothing on the page does nothing', async function () {
+  var env = openDom(NKEV_ROWS, { hash: '#no-such-row' });
+  var doc = env.dom.window.document;
+  await settle();
+  assert.equal(doc.querySelectorAll('.hl-dt__panel').length, 0, 'no pane opened');
+  assert.equal(env.opts.calls, undefined, 'no details fetch');
+  assert.deepEqual(env.opts.scrolled, []);
+  assert.equal(doc.querySelector('.hl-dt').getAttribute('aria-expanded'), 'false');
+});
+
+test('a day anchor, a section anchor and a hash later changed to nothing are all no-ops', async function () {
+  var env = openDom(NKEV_ROWS, { hash: '#vulns-2026-10-31' });
+  var doc = env.dom.window.document;
+  await settle();
+  assert.equal(doc.querySelectorAll('.hl-dt__panel').length, 0, 'a day heading is not a row');
+  var win = env.dom.window;
+  win.location.hash = '#vulns';
+  await settle();
+  win.location.hash = '#';
+  await settle();
+  assert.equal(doc.querySelectorAll('.hl-dt__panel').length, 0);
+  assert.deepEqual(env.opts.scrolled, []);
+});
+
+test('a hash to a row whose pane is already open leaves it open', async function () {
+  var env = openDom(NKEV_ROWS);
+  var doc = env.dom.window.document;
+  var win = env.dom.window;
+  clicks(doc, doc.getElementById('cve-cve-2026-1001').querySelector('.hl-dt'));
+  await settle();
+  win.location.hash = '#elsewhere';
+  await settle();
+  win.location.hash = '#cve-cve-2026-1001';
+  await settle();
+  await settle();
+  var btn = doc.getElementById('cve-cve-2026-1001').querySelector('.hl-dt');
+  assert.equal(btn.getAttribute('aria-expanded'), 'true', 'still expanded, not toggled shut');
+  assert.equal(doc.querySelectorAll('#cve-cve-2026-1001 .hl-dt__panel').length, 1, 'one panel, not two');
+  assert.equal(env.opts.calls, 1, 'no second fetch for an open pane');
+  assert.deepEqual(env.opts.scrolled, ['cve-cve-2026-1001']);
+});
+
+test('a headline row lands on its id and has no pane to open', async function () {
+  var env = openDom(NKEV_ROWS, { hash: '#h-202610310000-acme-setup', headlineId: 'h-202610310000-acme-setup' });
+  var doc = env.dom.window.document;
+  await settle();
+  assert.deepEqual(env.opts.scrolled, ['h-202610310000-acme-setup'], 'the row is scrolled to');
+  assert.equal(doc.querySelectorAll('.hl-dt__panel').length, 0, 'a headline row has no Details pane');
+  assert.equal(env.opts.calls, undefined, 'no details fetch for a headline');
+  // the sticky nav would cover a headline row that has no scroll margin of its own
+  assert.equal(doc.getElementById('h-202610310000-acme-setup').style.scrollMarginTop, '80px');
+});
+
+test('the click path still opens and closes a pane after the hash code is in (control)', async function () {
+  var env = openDom(NKEV_ROWS);
+  var doc = env.dom.window.document;
+  var btn = doc.getElementById('cve-cve-2026-1001').querySelector('.hl-dt');
+  clicks(doc, btn);
+  assert.equal(btn.getAttribute('aria-expanded'), 'true');
+  await settle();
+  assert.match(paneOf(doc, 'cve-cve-2026-1001').textContent, /The record description\./);
+  clicks(doc, btn);
+  assert.equal(paneOf(doc, 'cve-cve-2026-1001'), null);
+  assert.deepEqual(env.opts.scrolled, [], 'a plain click does not scroll');
 });
