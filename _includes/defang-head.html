@@ -9,7 +9,8 @@
     - the string value of the JSON keys "headline", "name", "description" and "alternativeHeadline", written compact ("k":"v") or spaced ("k": "v"), every occurrence on the line.
   Each string goes through defang-text.html, which defangs an IPv4, IPv6, domain, URL or e-mail inside it and nothing else.
   LEFT EXACT ON PURPOSE: every URL (canonical, og:url, og:image, JSON-LD url, @id, image, contentUrl): they are this site's own page addresses and a defanged one would not work; the schema.org @context.
-  A value is read up to its first double quote, so a JSON string with an escaped quote inside is defanged only up to that quote (check-defang.js --site parses the JSON and would flag the rest).
+  A JSON value is read to its closing quote, not its first double quote: a quote preceded by an odd number of backslashes is part of the string (T-0500.1.7.4 review 2, T1), so a headline
+  "Campaign \"Blue\" at 198.51.100.17" is defanged to the end. The escape sequences are kept as written; only the display text changes.
 {%- endcomment -%}
 {%- capture _dh_nl %}
 {% endcapture -%}
@@ -38,26 +39,41 @@
   {%- endif -%}
   {%- endif -%}
   {%- for _dh_k in _dh_keys -%}
-    {%- assign _dh_m1 = '"' | append: _dh_k | append: '":"' -%}
-    {%- assign _dh_m2 = '"' | append: _dh_k | append: '": "' -%}
-    {%- if _dh_cur contains _dh_m1 -%}
-      {%- assign _dh_parts = _dh_cur | split: _dh_m1 -%}
-      {%- capture _dh_cur -%}{{ _dh_parts[0] }}{%- for _dh_p in _dh_parts offset: 1 -%}
-        {%- assign _dh_val = _dh_p | split: '"' | first | append: "" -%}
-        {%- assign _dh_post = _dh_p | remove_first: _dh_val -%}
-        {%- capture _dh_v %}{% include defang-text.html text=_dh_val %}{% endcapture -%}
-        {{- _dh_m1 }}{{ _dh_v }}{{ _dh_post -}}
-      {%- endfor -%}{%- endcapture -%}
-    {%- endif -%}
-    {%- if _dh_cur contains _dh_m2 -%}
-      {%- assign _dh_parts = _dh_cur | split: _dh_m2 -%}
-      {%- capture _dh_cur -%}{{ _dh_parts[0] }}{%- for _dh_p in _dh_parts offset: 1 -%}
-        {%- assign _dh_val = _dh_p | split: '"' | first | append: "" -%}
-        {%- assign _dh_post = _dh_p | remove_first: _dh_val -%}
-        {%- capture _dh_v %}{% include defang-text.html text=_dh_val %}{% endcapture -%}
-        {{- _dh_m2 }}{{ _dh_v }}{{ _dh_post -}}
-      {%- endfor -%}{%- endcapture -%}
-    {%- endif -%}
+    {%- for _dh_sp in (1..2) -%}
+      {%- if _dh_sp == 1 -%}{%- assign _dh_m = '"' | append: _dh_k | append: '":"' -%}{%- else -%}{%- assign _dh_m = '"' | append: _dh_k | append: '": "' -%}{%- endif -%}
+      {%- if _dh_cur contains _dh_m -%}
+        {%- assign _dh_parts = _dh_cur | split: _dh_m -%}
+        {%- capture _dh_cur -%}{{ _dh_parts[0] }}{%- for _dh_p in _dh_parts offset: 1 -%}
+          {%- comment -%} the value runs to the first double quote that is not escaped: a segment that ends in an odd number of backslashes ends at an escaped quote, so the next segment belongs to the same string {%- endcomment -%}
+          {%- assign _dh_segs = _dh_p | split: '"' -%}
+          {%- assign _dh_val = "" -%}
+          {%- assign _dh_open = true -%}
+          {%- for _dh_sg in _dh_segs -%}
+            {%- if _dh_open -%}
+              {%- assign _dh_val = _dh_val | append: _dh_sg -%}
+              {%- assign _dh_bs = 0 -%}
+              {%- assign _dh_rm = _dh_sg -%}
+              {%- for _dh_i in (1..40) -%}
+                {%- assign _dh_lc = _dh_rm | slice: -1 -%}
+                {%- if _dh_lc == "\" -%}
+                  {%- assign _dh_bs = _dh_bs | plus: 1 -%}
+                  {%- assign _dh_rn = _dh_rm.size | minus: 1 -%}
+                  {%- assign _dh_rm = _dh_rm | slice: 0, _dh_rn -%}
+                {%- else -%}{%- break -%}
+                {%- endif -%}
+              {%- endfor -%}
+              {%- assign _dh_odd = _dh_bs | modulo: 2 -%}
+              {%- if _dh_odd == 1 and forloop.last == false -%}{%- assign _dh_val = _dh_val | append: '"' -%}
+              {%- else -%}{%- assign _dh_open = false -%}
+              {%- endif -%}
+            {%- endif -%}
+          {%- endfor -%}
+          {%- assign _dh_post = _dh_p | remove_first: _dh_val -%}
+          {%- capture _dh_v %}{% include defang-text.html text=_dh_val %}{% endcapture -%}
+          {{- _dh_m }}{{ _dh_v }}{{ _dh_post -}}
+        {%- endfor -%}{%- endcapture -%}
+      {%- endif -%}
+    {%- endfor -%}
   {%- endfor -%}
 {{ _dh_cur }}
 {% endfor -%}

@@ -35,6 +35,23 @@
       {%- assign _dt_v = _dt_v | replace: "https://", "hxxps://" | replace: "http://", "hxxp://" | replace: "HTTPS://", "hxxps://" | replace: "HTTP://", "hxxp://" -%}
     {%- endif -%}
     {%- if _dt_ty == "email" -%}{%- assign _dt_v = _dt_v | replace: "@", "[@]" -%}{%- endif -%}
+    {%- if _dt_ty == "ipv6" -%}
+      {%- comment -%} T-0500.1.7.4 review 2 (T2): every colon of an IPv6 address, the way the compressed form is written below ("2001[:]db8[:][:]7") {%- endcomment -%}
+      {%- assign _dt_v = _dt_v | replace: "[:]", ":" | replace: ":", "[:]" -%}
+    {%- elsif _dt_ty == "url" or _dt_ty == "endpoint" -%}
+      {%- comment -%} a bracketed IPv6 literal host ("http://[2001:db8::7]:80/p", "[2001:db8::7]:443"): the colons inside the brackets are the address {%- endcomment -%}
+      {%- if _dt_v contains "[" and _dt_v contains "]" -%}{%- unless _dt_v contains "[:]" -%}
+        {%- assign _dt_vb = _dt_v | split: "[" -%}
+        {%- if _dt_vb.size == 2 -%}
+          {%- assign _dt_vc = _dt_vb[1] | split: "]" -%}
+          {%- if _dt_vc.size > 0 and _dt_vc[0] contains ":" -%}
+            {%- assign _dt_vlit = _dt_vc[0] | replace: ":", "[:]" -%}
+            {%- assign _dt_vtail = _dt_vb[1] | slice: _dt_vc[0].size, 100000 -%}
+            {%- assign _dt_v = _dt_vb[0] | append: "[" | append: _dt_vlit | append: _dt_vtail -%}
+          {%- endif -%}
+        {%- endif -%}
+      {%- endunless -%}{%- endif -%}
+    {%- endif -%}
     {{- _dt_v | replace: ".", "[.]" -}}
   {%- else -%}{{- _dt_in -}}{%- endif -%}
 {%- elsif _dt_in contains "." or _dt_in contains "@" or _dt_in contains ":" -%}
@@ -55,8 +72,9 @@
     {%- assign _dt_out = _dt_w -%}
     {%- if _dt_w contains "." or _dt_w contains "@" or _dt_w contains ":" -%}
     {%- assign _dt_wu = _dt_w -%}
-    {%- if _dt_w contains "[.]" -%}{%- assign _dt_wu = _dt_w | replace: "[.]", "." -%}{%- endif -%}
-    {%- unless _dt_wu contains "[@]" or _dt_wu contains "[:]" or _dt_wu contains "§§" -%}
+    {%- comment -%} T-0500.1.7.4 review 2 (T5): a word that already holds [.] [@] or [:] is un-defanged first and defanged again from scratch, so a half-done "op[@]actor-domain.com" comes out whole; a word that is no indicator comes back as it was written (below) {%- endcomment -%}
+    {%- if _dt_w contains "[" -%}{%- assign _dt_wu = _dt_w | replace: "[.]", "." | replace: "[@]", "@" | replace: "[:]", ":" -%}{%- endif -%}
+    {%- unless _dt_wu contains "§§" -%}
       {%- comment -%} 1. take off what surrounds the word: ( " ' < ` and a leading full stop, then , ; ) " ' > ` ! ? : and a trailing full stop {%- endcomment -%}
       {%- assign _dt_lead = "" -%}
       {%- assign _dt_x = _dt_wu -%}
@@ -116,6 +134,64 @@
           {%- endif -%}
         {%- endif -%}
       {%- endif -%}
+      {%- comment -%} IPv6 (T-0500.1.7.4 review 2, T2/T4): the tail strip above takes trailing colons off ("2001:db8::"), so they are put back for the shape test. An address is an
+         optional "[", groups of up to four hex digits between colons with either one "::" or all seven colons, at least one decimal digit (so "Add::Bad" is not one), an optional "]" and port
+         or "/prefix" after it. Every colon becomes [:] and nothing else changes. {%- endcomment -%}
+      {%- assign _dt_is6 = false -%}
+      {%- assign _dt_v6 = "" -%}
+      {%- assign _dt_v6rest = "" -%}
+      {%- assign _dt_tailcol = "" -%}
+      {%- if _dt_sn == 0 and _dt_x contains ":" -%}{%- assign _dt_go6 = true -%}{%- elsif _dt_sn == 0 and _dt_tail contains ":" -%}{%- assign _dt_go6 = true -%}{%- else -%}{%- assign _dt_go6 = false -%}{%- endif -%}
+      {%- if _dt_go6 -%}
+        {%- assign _dt_tl6 = _dt_tail -%}
+        {%- for _dt_i in (1..4) -%}
+          {%- assign _dt_c = _dt_tl6 | slice: 0 -%}
+          {%- if _dt_c == ":" -%}{%- assign _dt_tailcol = _dt_tailcol | append: ":" -%}{%- assign _dt_tl6 = _dt_tl6 | slice: 1, 100 -%}{%- endif -%}
+        {%- endfor -%}
+        {%- assign _dt_cand = _dt_x | append: _dt_tailcol -%}
+        {%- assign _dt_cand0 = _dt_cand -%}
+        {%- if _dt_cand contains "]" -%}
+          {%- assign _dt_cand = _dt_cand | split: "]" | first | append: "" -%}
+        {%- elsif _dt_cand contains "/" -%}
+          {%- assign _dt_cand = _dt_cand | split: "/" | first | append: "" -%}
+        {%- endif -%}
+        {%- assign _dt_v6rest = _dt_cand0 | slice: _dt_cand.size, 100000 -%}
+        {%- assign _dt_nocol = _dt_cand | remove: ":" -%}
+        {%- assign _dt_ncol = _dt_cand.size | minus: _dt_nocol.size -%}
+        {%- if _dt_cand contains "." or _dt_cand contains ":::" or _dt_ncol < 2 or _dt_ncol > 7 -%}
+        {%- elsif _dt_cand contains "::" or _dt_ncol == 7 -%}
+          {%- assign _dt_dbl = _dt_cand | split: "::" -%}
+          {%- if _dt_dbl.size < 3 -%}
+            {%- assign _dt_is6 = true -%}
+            {%- assign _dt_gs = _dt_cand | replace: "::", ":" | split: ":" -%}
+            {%- for _dt_g in _dt_gs -%}
+              {%- if _dt_g.size > 4 -%}{%- assign _dt_is6 = false -%}
+              {%- else -%}
+                {%- assign _dt_gr = _dt_g | downcase | remove: "0" | remove: "1" | remove: "2" | remove: "3" | remove: "4" | remove: "5" | remove: "6" | remove: "7" | remove: "8" | remove: "9" | remove: "a" | remove: "b" | remove: "c" | remove: "d" | remove: "e" | remove: "f" -%}
+                {%- if _dt_gr != "" -%}{%- assign _dt_is6 = false -%}{%- endif -%}
+              {%- endif -%}
+            {%- endfor -%}
+            {%- assign _dt_nodig = _dt_cand | remove: "0" | remove: "1" | remove: "2" | remove: "3" | remove: "4" | remove: "5" | remove: "6" | remove: "7" | remove: "8" | remove: "9" -%}
+            {%- if _dt_nodig.size == _dt_cand.size -%}{%- assign _dt_is6 = false -%}{%- endif -%}
+            {%- comment -%} what follows the address: nothing, a "/prefix" of digits, or after a "]" a ":port" {%- endcomment -%}
+            {%- if _dt_is6 and _dt_v6rest != "" -%}
+              {%- assign _dt_r1 = _dt_v6rest | slice: 0 -%}
+              {%- assign _dt_rb = _dt_v6rest | slice: 1, 100 | remove: "0" | remove: "1" | remove: "2" | remove: "3" | remove: "4" | remove: "5" | remove: "6" | remove: "7" | remove: "8" | remove: "9" -%}
+              {%- if _dt_r1 == "/" and _dt_rb == "" -%}
+              {%- elsif _dt_r1 == "]" -%}
+                {%- assign _dt_rb2 = _dt_v6rest | slice: 1, 100 -%}
+                {%- assign _dt_rb3 = _dt_rb2 | remove: ":" | remove: "0" | remove: "1" | remove: "2" | remove: "3" | remove: "4" | remove: "5" | remove: "6" | remove: "7" | remove: "8" | remove: "9" | remove: "/" -%}
+                {%- if _dt_rb3 != "" -%}{%- assign _dt_is6 = false -%}{%- endif -%}
+              {%- else -%}{%- assign _dt_is6 = false -%}
+              {%- endif -%}
+            {%- endif -%}
+          {%- endif -%}
+        {%- endif -%}
+      {%- endif -%}
+      {%- if _dt_is6 -%}
+        {%- assign _dt_x = _dt_cand -%}
+        {%- assign _dt_tail = _dt_tl6 -%}
+      {%- endif -%}
       {%- assign _dt_em = _dt_x | split: "@" -%}
       {%- assign _dt_cn = _dt_x | split: ":" -%}
       {%- assign _dt_hasdot = false -%}
@@ -160,17 +236,10 @@
           {%- assign _dt_hdef = _dt_em[1] | replace: ".", "[.]" -%}
           {%- assign _dt_res = _dt_em[0] | append: "[@]" | append: _dt_hdef -%}
         {%- endif -%}
-      {%- elsif _dt_cn.size > 3 and _dt_hasdot == false -%}
-        {%- comment -%} 4. an IPv6 address: three or more colons, every group at most four hex digits. {%- endcomment -%}
-        {%- assign _dt_ok = true -%}
-        {%- for _dt_g in _dt_cn -%}
-          {%- if _dt_g.size > 4 -%}{%- assign _dt_ok = false -%}
-          {%- else -%}
-            {%- assign _dt_gr = _dt_g | downcase | remove: "0" | remove: "1" | remove: "2" | remove: "3" | remove: "4" | remove: "5" | remove: "6" | remove: "7" | remove: "8" | remove: "9" | remove: "a" | remove: "b" | remove: "c" | remove: "d" | remove: "e" | remove: "f" -%}
-            {%- if _dt_gr != "" -%}{%- assign _dt_ok = false -%}{%- endif -%}
-          {%- endif -%}
-        {%- endfor -%}
-        {%- if _dt_ok -%}{%- assign _dt_res = _dt_x | replace: ":", "[:]" -%}{%- endif -%}
+      {%- elsif _dt_is6 -%}
+        {%- comment -%} 4. an IPv6 address (shape test above): every colon becomes [:]; a port or prefix after it keeps its characters {%- endcomment -%}
+        {%- assign _dt_res = _dt_x | replace: ":", "[:]" | append: _dt_v6rest -%}
+        {%- assign _dt_tail = _dt_tl6 -%}
       {%- else -%}
         {%- assign _dt_psrc = _dt_x -%}
       {%- endif -%}

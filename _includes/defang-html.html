@@ -26,6 +26,10 @@
 {%- assign _dh_raw = site.data.defang_allow.raw -%}
 {%- assign _dh_mbx = site.data.defang_allow.mailboxes -%}
 {%- assign _dh_attrs = "title,alt,aria-label" | split: "," -%}
+{%- assign _dh_qs = "d,s" | split: "," -%}
+{%- capture _dh_nlc %}
+{% endcapture -%}
+{%- capture _dh_tabc %}	{% endcapture -%}
 {%- assign _dh_pieces = include.html | append: "" | split: "<" -%}
 {%- assign _dh_skip = "" -%}
 {%- assign _dh_unl = false -%}
@@ -39,7 +43,7 @@
     {%- assign _dh_fast = false -%}
     {%- if _dh_skip == "" -%}
       {%- unless _dh_p contains "." or _dh_p contains "@" or _dh_p contains ":" -%}
-        {%- assign _dh_f2 = _dh_p | slice: 0, 2 -%}
+        {%- assign _dh_f2 = _dh_p | slice: 0, 2 | downcase -%}
         {%- unless _dh_f2 == "a " or _dh_f2 == "a>" or _dh_f2 == "pr" or _dh_f2 == "sc" or _dh_f2 == "st" or _dh_f2 == "te" or _dh_f2 == "/a" -%}{%- assign _dh_fast = true -%}{%- endunless -%}
       {%- endunless -%}
     {%- endif -%}
@@ -58,9 +62,12 @@
       {%- assign _dh_tag = _dh_p | split: ">" | first | append: "" -%}
       {%- assign _dh_n = _dh_tag.size | plus: 1 -%}
       {%- assign _dh_txt = _dh_p | slice: _dh_n, 10000000 -%}
-      {%- assign _dh_tl = _dh_tag | downcase -%}
+      {%- comment -%} a tag may be broken over lines or tabbed: read it with single spaces (T-0500.1.7.4 review 2) {%- endcomment -%}
+      {%- assign _dh_tagn = _dh_tag -%}
+      {%- if _dh_tag contains _dh_nlc or _dh_tag contains _dh_tabc -%}{%- assign _dh_tagn = _dh_tag | replace: _dh_nlc, " " | replace: _dh_tabc, " " -%}{%- endif -%}
+      {%- assign _dh_tl = _dh_tagn | downcase -%}
       {%- assign _dh_nm = _dh_tl | split: " " | first | append: "" -%}
-      {%- assign _dh_tag_out = _dh_tag -%}
+      {%- assign _dh_tag_out = _dh_tagn -%}
       {%- assign _dh_txt_raw = false -%}
       {%- assign _dh_lab = "" -%}
       {%- assign _dh_lab2 = "" -%}
@@ -70,46 +77,80 @@
       {%- elsif _dh_tl contains 'data-literal="' -%}
         {%- comment -%} an IOC viewer value whose type has nothing to disarm (hash, filename, path, registry): _includes/ioc-cell.html sets the marker, the gate checks it {%- endcomment -%}
         {%- assign _dh_txt_raw = true -%}
-      {%- elsif _dh_nm == "a" and _dh_tl contains 'href="' -%}
-        {%- assign _dh_href = _dh_tag | split: 'href="' | last | append: "" | split: '"' | first | append: "" -%}
-        {%- assign _dh_hl = _dh_href | downcase -%}
-        {%- assign _dh_c1 = _dh_hl | slice: 0 -%}
-        {%- assign _dh_c2 = _dh_hl | slice: 0, 2 -%}
-        {%- assign _dh_c7 = _dh_hl | slice: 0, 7 -%}
-        {%- assign _dh_kind = "rel" -%}
-        {%- if _dh_c1 == "/" and _dh_c2 != "//" -%}{%- assign _dh_kind = "rel" -%}
-        {%- elsif _dh_c2 == "//" or _dh_hl contains "://" -%}{%- assign _dh_kind = "ext" -%}
-        {%- elsif _dh_c1 == "#" or _dh_c1 == "?" or _dh_hl == "" -%}{%- assign _dh_kind = "rel" -%}
-        {%- elsif _dh_c7 == "mailto:" -%}{%- assign _dh_kind = "mail" -%}
-        {%- elsif _dh_hl contains ":" -%}
-          {%- assign _dh_sch = _dh_hl | split: ":" | first | append: "" -%}
-          {%- unless _dh_sch contains "/" or _dh_sch contains "." -%}{%- assign _dh_kind = "other" -%}{%- endunless -%}
-        {%- endif -%}
+      {%- elsif _dh_nm == "a" and _dh_tl contains "href" -%}
+        {%- comment -%} T-0500.1.7.4 review 2 (T3): EVERY occurrence of "href" in the tag is read as a possible attribute, whatever its quote style (double, single, none), case, or spaces around "=".
+           The anchor is kept only when every candidate target is safe; one unsafe candidate unlinks it (fail closed: a "href=" written inside another attribute's value costs a link, never lets one through). {%- endcomment -%}
+        {%- assign _dh_cands = _dh_tl | split: "href" -%}
+        {%- assign _dh_eqlen = false -%}
+        {%- if _dh_tl.size == _dh_tagn.size -%}{%- assign _dh_eqlen = true -%}{%- endif -%}
         {%- assign _dh_keep = true -%}
-        {%- if _dh_kind == "other" -%}{%- assign _dh_keep = false -%}
-        {%- elsif _dh_kind == "mail" -%}
-          {%- assign _dh_maddr = _dh_hl | remove_first: "mailto:" | split: "?" | first | append: "" -%}
-          {%- unless _dh_mbx[_dh_maddr] -%}{%- assign _dh_keep = false -%}{%- endunless -%}
-        {%- elsif _dh_kind == "ext" -%}
-          {%- assign _dh_key = _dh_hl | remove_first: "https:" | remove_first: "http:" | remove_first: "//" | remove_first: "www." | split: "?" | first | append: "" | split: "#" | first | append: "" -%}
-          {%- assign _dh_hostk = _dh_key | split: "/" | first | append: "" -%}
-          {%- assign _dh_lab = _dh_hostk -%}
-          {%- assign _dh_kn = _dh_key.size | minus: 1 -%}
-          {%- assign _dh_kl = _dh_key | slice: _dh_kn -%}
-          {%- assign _dh_lab2 = _dh_key -%}
-          {%- if _dh_kl == "/" -%}{%- assign _dh_lab2 = _dh_key | slice: 0, _dh_kn -%}{%- endif -%}
-          {%- if _dh_unlink -%}
-            {%- assign _dh_keep = false -%}
-            {%- assign _dh_ks = _dh_key | append: "/" -%}
-            {%- for _dh_e in _dh_links -%}
-              {%- assign _dh_ee = _dh_e | downcase | append: "/" -%}
-              {%- assign _dh_pf = _dh_ks | slice: 0, _dh_ee.size -%}
-              {%- if _dh_pf == _dh_ee -%}{%- assign _dh_keep = true -%}{%- endif -%}
-            {%- endfor -%}
+        {%- assign _dh_href = "" -%}
+        {%- assign _dh_off = 0 -%}
+        {%- for _dh_cp in _dh_cands -%}
+          {%- if forloop.first -%}
+            {%- assign _dh_off = _dh_cp.size | plus: 4 -%}
+          {%- else -%}
+            {%- assign _dh_pc = _dh_cp -%}
+            {%- if _dh_eqlen -%}{%- assign _dh_pc = _dh_tagn | slice: _dh_off, _dh_cp.size -%}{%- endif -%}
+            {%- assign _dh_off = _dh_off | plus: _dh_cp.size | plus: 4 -%}
+            {%- assign _dh_v = _dh_pc | lstrip -%}
+            {%- assign _dh_e1 = _dh_v | slice: 0 -%}
+            {%- if _dh_e1 == "=" -%}
+              {%- assign _dh_v = _dh_v | slice: 1, 100000 | lstrip -%}
+              {%- assign _dh_q = _dh_v | slice: 0 -%}
+              {%- if _dh_q == '"' -%}{%- assign _dh_hv = _dh_v | slice: 1, 100000 | split: '"' | first | append: "" -%}
+              {%- elsif _dh_q == "'" -%}{%- assign _dh_hv = _dh_v | slice: 1, 100000 | split: "'" | first | append: "" -%}
+              {%- else -%}{%- assign _dh_hv = _dh_v | split: " " | first | append: "" -%}
+              {%- endif -%}
+              {%- assign _dh_hl = _dh_hv | strip | downcase -%}
+              {%- assign _dh_c1 = _dh_hl | slice: 0 -%}
+              {%- assign _dh_c2 = _dh_hl | slice: 0, 2 -%}
+              {%- assign _dh_c7 = _dh_hl | slice: 0, 7 -%}
+              {%- assign _dh_kind = "rel" -%}
+              {%- if _dh_c1 == "/" and _dh_c2 != "//" -%}{%- assign _dh_kind = "rel" -%}
+              {%- elsif _dh_c2 == "//" or _dh_hl contains "://" -%}{%- assign _dh_kind = "ext" -%}
+              {%- elsif _dh_c1 == "#" or _dh_c1 == "?" or _dh_hl == "" -%}{%- assign _dh_kind = "rel" -%}
+              {%- elsif _dh_c7 == "mailto:" -%}{%- assign _dh_kind = "mail" -%}
+              {%- elsif _dh_hl contains ":" -%}
+                {%- assign _dh_sch = _dh_hl | split: ":" | first | append: "" -%}
+                {%- unless _dh_sch contains "/" or _dh_sch contains "." -%}{%- assign _dh_kind = "other" -%}{%- endunless -%}
+              {%- endif -%}
+              {%- comment -%} fail closed: a backslash host ("\\198.51.100.17"), an entity-written scheme or colon, a space inside the target {%- endcomment -%}
+              {%- if _dh_c1 == "\" or _dh_hl contains "&#" or _dh_hl contains "&colon;" or _dh_hl contains "&tab;" or _dh_hl contains "&newline;" -%}{%- assign _dh_kind = "other" -%}{%- endif -%}
+              {%- assign _dh_keep_c = true -%}
+              {%- assign _dh_lab_c = "" -%}
+              {%- assign _dh_lab2_c = "" -%}
+              {%- if _dh_kind == "other" -%}{%- assign _dh_keep_c = false -%}
+              {%- elsif _dh_kind == "mail" -%}
+                {%- assign _dh_maddr = _dh_hl | remove_first: "mailto:" | split: "?" | first | append: "" -%}
+                {%- unless _dh_mbx[_dh_maddr] -%}{%- assign _dh_keep_c = false -%}{%- endunless -%}
+              {%- elsif _dh_kind == "ext" -%}
+                {%- assign _dh_key = _dh_hl | remove_first: "https:" | remove_first: "http:" | remove_first: "//" | remove_first: "www." | split: "?" | first | append: "" | split: "#" | first | append: "" -%}
+                {%- assign _dh_hostk = _dh_key | split: "/" | first | append: "" -%}
+                {%- assign _dh_lab_c = _dh_hostk -%}
+                {%- assign _dh_kn = _dh_key.size | minus: 1 -%}
+                {%- assign _dh_kl = _dh_key | slice: _dh_kn -%}
+                {%- assign _dh_lab2_c = _dh_key -%}
+                {%- if _dh_kl == "/" -%}{%- assign _dh_lab2_c = _dh_key | slice: 0, _dh_kn -%}{%- endif -%}
+                {%- if _dh_unlink -%}
+                  {%- assign _dh_keep_c = false -%}
+                  {%- assign _dh_ks = _dh_key | append: "/" -%}
+                  {%- for _dh_e in _dh_links -%}
+                    {%- assign _dh_ee = _dh_e | downcase | append: "/" -%}
+                    {%- assign _dh_pf = _dh_ks | slice: 0, _dh_ee.size -%}
+                    {%- if _dh_pf == _dh_ee -%}{%- assign _dh_keep_c = true -%}{%- endif -%}
+                  {%- endfor -%}
+                {%- endif -%}
+              {%- endif -%}
+              {%- if _dh_keep_c == false and _dh_keep -%}{%- assign _dh_keep = false -%}{%- assign _dh_href = _dh_hv -%}
+              {%- elsif _dh_keep_c and _dh_keep -%}{%- assign _dh_lab = _dh_lab_c -%}{%- assign _dh_lab2 = _dh_lab2_c -%}
+              {%- endif -%}
+            {%- endif -%}
           {%- endif -%}
-        {%- endif -%}
+        {%- endfor -%}
         {%- if _dh_keep == false -%}
           {%- assign _dh_lab = "" -%}
+          {%- assign _dh_href = _dh_href | replace: '"', "&quot;" | replace: "<", "&lt;" | replace: ">", "&gt;" -%}
           {%- capture _dh_hd %}{% include defang-text.html text=_dh_href %}{% endcapture -%}
           {%- assign _dh_tag_out = 'span class="hl-unlinked" data-unlinked="' | append: _dh_hd | append: '"' -%}
           {%- assign _dh_unl = true -%}
@@ -119,20 +160,23 @@
         {%- assign _dh_unl = false -%}
       {%- endif -%}
       {%- comment -%} the tooltip attributes a reader can hover: title, alt and aria-label go through the text defang; href, data-* and every other attribute stay exactly as written {%- endcomment -%}
-      {%- if _dh_tag_out contains '="' and _dh_tag_out contains "." or _dh_tag_out contains '="' and _dh_tag_out contains "@" -%}
+      {%- if _dh_tag_out contains "=" -%}
         {%- for _dh_at in _dh_attrs -%}
-          {%- assign _dh_ak = " " | append: _dh_at | append: '="' -%}
-          {%- if _dh_tag_out contains _dh_ak -%}
-            {%- assign _dh_av = _dh_tag_out | split: _dh_ak | last | append: "" | split: '"' | first | append: "" -%}
-            {%- if _dh_av contains "." or _dh_av contains "@" or _dh_av contains ":" -%}
-              {%- capture _dh_avd %}{% include defang-text.html text=_dh_av %}{% endcapture -%}
-              {%- if _dh_avd != _dh_av -%}
-                {%- assign _dh_ao = _dh_ak | append: _dh_av | append: '"' -%}
-                {%- assign _dh_an = _dh_ak | append: _dh_avd | append: '"' -%}
-                {%- assign _dh_tag_out = _dh_tag_out | replace_first: _dh_ao, _dh_an -%}
+          {%- for _dh_qn in _dh_qs -%}
+            {%- if _dh_qn == "d" -%}{%- assign _dh_qc = '"' -%}{%- else -%}{%- assign _dh_qc = "'" -%}{%- endif -%}
+            {%- assign _dh_ak = " " | append: _dh_at | append: "=" | append: _dh_qc -%}
+            {%- if _dh_tag_out contains _dh_ak -%}
+              {%- assign _dh_av = _dh_tag_out | split: _dh_ak | last | append: "" | split: _dh_qc | first | append: "" -%}
+              {%- if _dh_av contains "." or _dh_av contains "@" or _dh_av contains ":" -%}
+                {%- capture _dh_avd %}{% include defang-text.html text=_dh_av %}{% endcapture -%}
+                {%- if _dh_avd != _dh_av -%}
+                  {%- assign _dh_ao = _dh_ak | append: _dh_av | append: _dh_qc -%}
+                  {%- assign _dh_an = _dh_ak | append: _dh_avd | append: _dh_qc -%}
+                  {%- assign _dh_tag_out = _dh_tag_out | replace_first: _dh_ao, _dh_an -%}
+                {%- endif -%}
               {%- endif -%}
             {%- endif -%}
-          {%- endif -%}
+          {%- endfor -%}
         {%- endfor -%}
       {%- endif -%}
       {{- "<" -}}{{- _dh_tag_out -}}{{- ">" -}}

@@ -135,7 +135,7 @@ function buildSite(pageBody, extra) {
   const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'hl-defang-render-'));
   fs.mkdirSync(path.join(dir, 'src', '_includes'), { recursive: true });
   fs.mkdirSync(path.join(dir, 'src', '_data'), { recursive: true });
-  for (const f of ['defang-text.html', 'defang-html.html', 'ioc-cell.html']) fs.copyFileSync(path.join(root, '_includes', f), path.join(dir, 'src', '_includes', f));
+  for (const f of ['defang-text.html', 'defang-html.html', 'defang-head.html', 'ioc-cell.html']) fs.copyFileSync(path.join(root, '_includes', f), path.join(dir, 'src', '_includes', f));
   for (const f of ['defang_tlds.yml', 'defang_allow.yml']) fs.copyFileSync(path.join(root, '_data', f), path.join(dir, 'src', '_data', f));
   fs.writeFileSync(path.join(dir, 'src', '_config.yml'), 'baseurl: ""\nurl: "https://x.example"\nplugins: []\n');
   Object.keys(extra || {}).forEach((rel) => { fs.mkdirSync(path.dirname(path.join(dir, 'src', rel)), { recursive: true }); fs.writeFileSync(path.join(dir, 'src', rel), extra[rel]); });
@@ -220,6 +220,68 @@ test('the rendered-page gate agrees with the includes: what they print is clean,
   assert.match(g.stdout, /^PASS /m);
   assert.equal(c.status, 1, 'the control (the same markup, no include) must FAIL the gate');
   for (const kind of ['IPV4', 'DOMAIN', 'EMAIL', 'URL', 'LINK-IP']) assert.match(c.stdout, new RegExp('FINDING .* ' + kind + ' '), 'control: ' + kind + ' is reported');
+});
+
+/* ---- T-0500.1.7.4 review round 2 (lane A): the reviewer's reproductions T1 to T5, each a failing-then-passing case ---- */
+const R2_TEXT = [
+  // T2/T4: IPv6 in running text, compressed forms that end in "::", a prefix length, a bracketed literal with a port, trailing punctuation
+  ['seen 2001:db8:1:: and fe80::1 and ::1 here', 'seen 2001[:]db8[:]1[:][:] and fe80[:][:]1 and [:][:]1 here'],
+  ['2001:db8::7 2001:db8:: 2001:db8:1:2:3:4:5:6', '2001[:]db8[:][:]7 2001[:]db8[:][:] 2001[:]db8[:]1[:]2[:]3[:]4[:]5[:]6'],
+  ['Seen at 2001:db8:1:2:3:4:5:6. Then 2001:db8::.', 'Seen at 2001[:]db8[:]1[:]2[:]3[:]4[:]5[:]6. Then 2001[:]db8[:][:].'],
+  ['net 2001:db8::/32 and [2001:db8::1]:443 and (2001:db8::1).', 'net 2001[:]db8[:][:]/32 and [2001[:]db8[:][:]1]:443 and (2001[:]db8[:][:]1).'],
+  // what is not an address stays as written
+  ['Add::Bad std::vector 10:30:45 aa:bb:cc:dd:ee:ff Note: ok', 'Add::Bad std::vector 10:30:45 aa:bb:cc:dd:ee:ff Note: ok'],
+  // T5: a half-defanged word is finished from scratch, never skipped, never double-bracketed
+  ['op[@]actor-domain.com', 'op[@]actor-domain[.]com'],
+  ['mail op[@]a-b.example.org, or op@c[.]example.net now', 'mail op[@]a-b[.]example[.]org, or op[@]c[.]example[.]net now'],
+  ['2001[:]db8::7 and host[:]8080', '2001[:]db8[:][:]7 and host[:]8080'],
+  ['op[@]actor-domain[.]com 2001[:]db8[:][:]7', 'op[@]actor-domain[.]com 2001[:]db8[:][:]7']
+];
+const R2_HTML = [
+  // T3: an anchor to an actor address is no link in either quote style, unquoted, upper case, with spaces around "=", or broken over lines
+  ["<a href='https://198.51.100.17/'>Actor host</a>", '<span class="hl-unlinked" data-unlinked="hxxps://198[.]51[.]100[.]17/">Actor host</span>'],
+  ['<a href="https://198.51.100.17/">Actor host</a>', '<span class="hl-unlinked" data-unlinked="hxxps://198[.]51[.]100[.]17/">Actor host</span>'],
+  ['<a href=https://198.51.100.18/>unq</a> <a href=/reports/>own</a>', '<span class="hl-unlinked" data-unlinked="hxxps://198[.]51[.]100[.]18/">unq</span> <a href=/reports/>own</a>'],
+  ["<A HREF='https://198.51.100.17/'>x</A> <a HREF = 'https://198.51.100.18/' >y</a>", '<span class="hl-unlinked" data-unlinked="hxxps://198[.]51[.]100[.]17/">x</span> <span class="hl-unlinked" data-unlinked="hxxps://198[.]51[.]100[.]18/">y</span>'],
+  ['<a href = "https://198.51.100.17/">z</a>', '<span class="hl-unlinked" data-unlinked="hxxps://198[.]51[.]100[.]17/">z</span>'],
+  ["<a\n href='https://198.51.100.17/'\n class=\"x\">ml</a>", '<span class="hl-unlinked" data-unlinked="hxxps://198[.]51[.]100[.]17/">ml</span>'],
+  // fail closed: an "href=" written inside another attribute, an entity-written scheme, a quote in the target
+  ['<a title="see href=https://198.51.100.17/" href="/reports/">t</a>', '<span class="hl-unlinked" data-unlinked="hxxps://198[.]51[.]100[.]17/&quot;">t</span>'],
+  ['<a href="&#104;ttp://198.51.100.17/">e</a>', '<span class="hl-unlinked" data-unlinked="&#104;ttp://198[.]51[.]100[.]17/">e</span>'],
+  // the allow list and our own pages are unaffected by the quote style
+  ["<a href='https://attack.mitre.org/techniques/T1001/'>mitre</a> <a href='/reports/'>own</a>", "<a href='https://attack.mitre.org/techniques/T1001/'>mitre</a> <a href='/reports/'>own</a>"],
+  // T2/T4: IPv6 in a code element, in text, and in title / alt / aria-label tooltips of either quote style
+  ['<code>2001:db8::</code> <code>2001:db8::7</code> <p>net 2001:db8::/32</p>', '<code>2001[:]db8[:][:]</code> <code>2001[:]db8[:][:]7</code> <p>net 2001[:]db8[:][:]/32</p>'],
+  ['<span title="2001:db8:1:2:3:4:5:6">Hover</span>', '<span title="2001[:]db8[:]1[:]2[:]3[:]4[:]5[:]6">Hover</span>'],
+  ["<span title='2001:db8::7 and 198.51.100.17'>Hover</span>", "<span title='2001[:]db8[:][:]7 and 198[.]51[.]100[.]17'>Hover</span>"],
+  ['<img alt="host 2001:db8::7" src="/a.png"> <a href="/x/" aria-label="v6 2001:db8::1">go</a>', '<img alt="host 2001[:]db8[:][:]7" src="/a.png"> <a href="/x/" aria-label="v6 2001[:]db8[:][:]1">go</a>']
+];
+const R2_HEAD = [
+  // T1: a JSON string with escaped quotes is defanged to its closing quote; an own-page URL stays exact; the escapes are kept as written
+  ['{"headline":"Campaign \\"Blue\\" at 198.51.100.17","url":"https://the-hunters-ledger.com/reports/198.51.100.17/"}', '{"headline":"Campaign \\"Blue\\" at 198[.]51[.]100[.]17","url":"https://the-hunters-ledger.com/reports/198.51.100.17/"}'],
+  ['{"name": "A \\"q\\" 198.51.100.17", "description": "d \\\\ 198.51.100.18 and \\"z\\" 198.51.100.19", "url": "https://the-hunters-ledger.com/x/"}', '{"name": "A \\"q\\" 198[.]51[.]100[.]17", "description": "d \\\\ 198[.]51[.]100[.]18 and \\"z\\" 198[.]51[.]100[.]19", "url": "https://the-hunters-ledger.com/x/"}'],
+  ['{"headline":"plain 198.51.100.17","description":"two 198.51.100.18 values 198.51.100.19"}', '{"headline":"plain 198[.]51[.]100[.]17","description":"two 198[.]51[.]100[.]18 values 198[.]51[.]100[.]19"}'],
+  ['{"headline":"v6 2001:db8::7 \\"q\\" 2001:db8::"}', '{"headline":"v6 2001[:]db8[:][:]7 \\"q\\" 2001[:]db8[:][:]"}']
+];
+
+test('review round 2, T1-T5: escaped-quote JSON-LD, IPv6 in text, code and tooltips, single-quoted and other anchor forms, half-defanged words (reviewer reproductions)', (t) => {
+  if (!JEKYLL) return t.skip('NOT CHECKED: no jekyll gem on this machine, so the Liquid include was not executed');
+  const body = R2_TEXT.map((c, i) => cap(c[0]) + '<!--T' + i + '-->{% include defang-text.html text=t %}<!--U' + i + '-->').join('\n') + '\n' +
+    R2_HTML.map((c, i) => '{% capture h %}{% raw %}' + c[0] + '{% endraw %}{% endcapture %}<!--H' + i + '-->{% include defang-html.html html=h %}<!--I' + i + '-->').join('\n') + '\n' +
+    R2_HEAD.map((c, i) => '{% capture h %}{% raw %}' + c[0] + '{% endraw %}{% endcapture %}<!--J' + i + '-->{% include defang-head.html text=h %}<!--K' + i + '-->').join('\n') + '\n' +
+    cap('2001:db8::7') + '<!--V0-->{% include defang-text.html text=t type="ipv6" %}<!--W0-->\n' +
+    cap('http://[2001:db8::7]:80/p') + '<!--V1-->{% include defang-text.html text=t type="url" %}<!--W1-->\n' +
+    cap('[2001:db8::7]:443') + '<!--V2-->{% include defang-text.html text=t type="endpoint" %}<!--W2-->\n' +
+    '<!--V3-->{% include ioc-cell.html type="ipv6" value="2001:db8::" %}<!--W3-->';
+  const { html } = buildSite(body);
+  const got = (a, k) => html.split('<!--' + a + k + '-->')[1].split('<!--' + String.fromCharCode(a.charCodeAt(0) + 1) + k + '-->')[0].replace(/\n$/, '');
+  R2_TEXT.forEach((c, i) => assert.equal(got('T', i), c[1], 'text case ' + i));
+  R2_HTML.forEach((c, i) => assert.equal(got('H', i), c[1], 'html case ' + i));
+  R2_HEAD.forEach((c, i) => assert.equal(got('J', i), c[1], 'head case ' + i));
+  assert.equal(got('V', 0), '2001[:]db8[:][:]7', 'a typed ipv6 value');
+  assert.equal(got('V', 1), 'hxxp://[2001[:]db8[:][:]7]:80/p', 'a typed url with a bracketed IPv6 host');
+  assert.equal(got('V', 2), '[2001[:]db8[:][:]7]:443', 'a typed endpoint with a bracketed IPv6 host');
+  assert.equal(got('V', 3), '<code>2001[:]db8[:][:]</code>', 'an ipv6 viewer cell');
 });
 
 /* ---- the gate on a fixture site (no Jekyll needed) ---- */
