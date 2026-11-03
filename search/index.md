@@ -65,6 +65,9 @@ hl_idx: single
       showImages: false,
       excerptLength: 30,
       resetStyles: false,
+      // Several ticked Sections show the union of their results (T-0553). Pagefind ANDs an array of
+      // values for one filter; this folder holds a front for pagefind.js that sends { any: [...] } instead.
+      bundlePath: base + '/assets/js/pagefind-any/',
       // The Wire rows (T-0548) live in a second index, /pagefind-wire/, merged here at a
       // lower weight so a report or detection page outranks a Wire row that matches the
       // same term. Pagefind cannot weight individual records inside one index.
