@@ -6,7 +6,7 @@
       only for those six types and only on a value that is not a URL or an e-mail address;
     - EXCEPTION (T-0500.1.7.4 fix-r1, browser gate): a filename, path or registry value that names a host or an address is not literal and goes through the text defang like prose: a UNC path
       (starts with two backslashes: \\host.tld\share), a value with "://" in it, or one with two adjacent all-digit dot-separated parts of 1 to 3 digits (an IPv4 address inside a name, as in
-      "1468_US_23.106.161.1_28-01-26.cab"). The 2219 literal cells of the 61 viewer pages hold 5 such values (all on one page); every other literal value is unchanged.
+      "1468_US_23.106.161.1_28-01-26.cab"). Measured on the 61 viewer pages (T-0500.1.7.4 fix-r1): 5 distinct such values in 21 cells, all on one feed page; 2,198 data-literal cells remain in the built site (review 2 build, hashes included); every other literal value is unchanged.
     - every other type (pattern, a free-text note) goes through the text defang like any other prose.
   The Raw JSON feed behind the page stays exact.
 {%- endcomment -%}

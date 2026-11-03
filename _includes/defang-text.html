@@ -35,10 +35,12 @@
       {%- assign _dt_v = _dt_v | replace: "https://", "hxxps://" | replace: "http://", "hxxp://" | replace: "HTTPS://", "hxxps://" | replace: "HTTP://", "hxxp://" -%}
     {%- endif -%}
     {%- if _dt_ty == "email" -%}{%- assign _dt_v = _dt_v | replace: "@", "[@]" -%}{%- endif -%}
-    {%- if _dt_ty == "ipv6" -%}
-      {%- comment -%} T-0500.1.7.4 review 2 (T2): every colon of an IPv6 address, the way the compressed form is written below ("2001[:]db8[:][:]7") {%- endcomment -%}
+    {%- assign _dt_isv6bare = false -%}
+    {%- if _dt_ty == "ipv6" -%}{%- unless _dt_v contains "[" -%}{%- assign _dt_isv6bare = true -%}{%- endunless -%}{%- endif -%}
+    {%- if _dt_isv6bare -%}
+      {%- comment -%} T-0500.1.7.4 review 2 (T2): every colon of an IPv6 address, the way the compressed form is written below ("2001[:]db8[:][:]7"); a bracketed "[addr]:port" takes the branch below, so only the address loses its colons {%- endcomment -%}
       {%- assign _dt_v = _dt_v | replace: "[:]", ":" | replace: ":", "[:]" -%}
-    {%- elsif _dt_ty == "url" or _dt_ty == "endpoint" -%}
+    {%- elsif _dt_ty == "url" or _dt_ty == "endpoint" or _dt_ty == "ipv6" -%}
       {%- comment -%} a bracketed IPv6 literal host ("http://[2001:db8::7]:80/p", "[2001:db8::7]:443"): the colons inside the brackets are the address {%- endcomment -%}
       {%- if _dt_v contains "[" and _dt_v contains "]" -%}{%- unless _dt_v contains "[:]" -%}
         {%- assign _dt_vb = _dt_v | split: "[" -%}

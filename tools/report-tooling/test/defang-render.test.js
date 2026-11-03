@@ -235,7 +235,9 @@ const R2_TEXT = [
   ['op[@]actor-domain.com', 'op[@]actor-domain[.]com'],
   ['mail op[@]a-b.example.org, or op@c[.]example.net now', 'mail op[@]a-b[.]example[.]org, or op[@]c[.]example[.]net now'],
   ['2001[:]db8::7 and host[:]8080', '2001[:]db8[:][:]7 and host[:]8080'],
-  ['op[@]actor-domain[.]com 2001[:]db8[:][:]7', 'op[@]actor-domain[.]com 2001[:]db8[:][:]7']
+  ['op[@]actor-domain[.]com 2001[:]db8[:][:]7', 'op[@]actor-domain[.]com 2001[:]db8[:][:]7'],
+  // host:port in free text (lane B found the viewer script leaves it raw; the includes defang the host and keep the port)
+  ['beacon evil.example.xyz:443 and (evil.example.xyz:80) 198.51.100.17:8080 sub.evil.example.xyz:443.', 'beacon evil[.]example[.]xyz:443 and (evil[.]example[.]xyz:80) 198[.]51[.]100[.]17:8080 sub[.]evil[.]example[.]xyz:443.']
 ];
 const R2_HTML = [
   // T3: an anchor to an actor address is no link in either quote style, unquoted, upper case, with spaces around "=", or broken over lines
@@ -272,6 +274,7 @@ test('review round 2, T1-T5: escaped-quote JSON-LD, IPv6 in text, code and toolt
     cap('2001:db8::7') + '<!--V0-->{% include defang-text.html text=t type="ipv6" %}<!--W0-->\n' +
     cap('http://[2001:db8::7]:80/p') + '<!--V1-->{% include defang-text.html text=t type="url" %}<!--W1-->\n' +
     cap('[2001:db8::7]:443') + '<!--V2-->{% include defang-text.html text=t type="endpoint" %}<!--W2-->\n' +
+    cap('[2001:db8::7]:443') + '<!--V4-->{% include defang-text.html text=t type="ipv6" %}<!--W4-->\n' + cap('::ffff:192.0.2.1') + '<!--V5-->{% include defang-text.html text=t type="ipv6" %}<!--W5-->\n' +
     '<!--V3-->{% include ioc-cell.html type="ipv6" value="2001:db8::" %}<!--W3-->';
   const { html } = buildSite(body);
   const got = (a, k) => html.split('<!--' + a + k + '-->')[1].split('<!--' + String.fromCharCode(a.charCodeAt(0) + 1) + k + '-->')[0].replace(/\n$/, '');
@@ -282,6 +285,8 @@ test('review round 2, T1-T5: escaped-quote JSON-LD, IPv6 in text, code and toolt
   assert.equal(got('V', 1), 'hxxp://[2001[:]db8[:][:]7]:80/p', 'a typed url with a bracketed IPv6 host');
   assert.equal(got('V', 2), '[2001[:]db8[:][:]7]:443', 'a typed endpoint with a bracketed IPv6 host');
   assert.equal(got('V', 3), '<code>2001[:]db8[:][:]</code>', 'an ipv6 viewer cell');
+  assert.equal(got('V', 4), '[2001[:]db8[:][:]7]:443', 'a typed ipv6 value with a port: only the address loses its colons (the form assets/js/ioc-table.js writes)');
+  assert.equal(got('V', 5), '[:][:]ffff[:]192[.]0[.]2[.]1', 'an IPv4-mapped address');
 });
 
 /* ---- the gate on a fixture site (no Jekyll needed) ---- */
