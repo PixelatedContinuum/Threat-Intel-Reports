@@ -429,4 +429,26 @@ function selfTest() {
   return why;
 }
 
-module.exports = { makeScanner: makeScanner, walkHtml: walkHtml, scanSite: scanSite, scanDocument: scanDocument, selfTest: selfTest, loadAllowData: loadAllowData, pageType: pageType, excluded: excluded, newStats: newStats, linkKey: linkKey, linkAllowed: linkAllowed, isIpHost: isIpHost };
+/* The Wire details panels (assets/js/wire-details.js) are written by script from wire/details-nkev.json: third-party advisory text (version numbers, vendor domains and file names, advisory
+   URLs, vendor e-mail addresses), none of it actor infrastructure (decision 5 keeps references as they are). Lead decision, T-0500.1.7.4 fix-r1: the browser gate exempts a finding found
+   INSIDE a Wire details panel only when its token is part of a string value of that file. Anything else in a panel (a token the file does not hold), and anything outside a panel, is still
+   judged in full. wireDetailsStrings reads the file's string values; wireDetailsSplit sorts a panel's findings into kept and exempt. */
+function wireDetailsStrings(jsonText) {
+  var out = [];
+  (function walk(v) {
+    if (typeof v === 'string') out.push(v);
+    else if (Array.isArray(v)) v.forEach(walk);
+    else if (v && typeof v === 'object') Object.keys(v).forEach(function (k) { walk(v[k]); });
+  })(JSON.parse(jsonText));
+  return out;
+}
+function wireDetailsSplit(findings, strings) {
+  var kept = [], exempt = [];
+  findings.forEach(function (f) {
+    var t = String(f.token || '');
+    (t && strings.some(function (s) { return s.indexOf(t) > -1; }) ? exempt : kept).push(f);
+  });
+  return { kept: kept, exempt: exempt };
+}
+
+module.exports = { makeScanner: makeScanner, walkHtml: walkHtml, scanSite: scanSite, scanDocument: scanDocument, selfTest: selfTest, loadAllowData: loadAllowData, pageType: pageType, excluded: excluded, newStats: newStats, linkKey: linkKey, linkAllowed: linkAllowed, isIpHost: isIpHost, wireDetailsStrings: wireDetailsStrings, wireDetailsSplit: wireDetailsSplit };

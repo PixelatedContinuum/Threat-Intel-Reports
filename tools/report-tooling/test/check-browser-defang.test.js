@@ -73,3 +73,17 @@ test('makeScanner.scanText with the page\'s data-literal cells: a captured filen
   assert.ok(sc.scanText(P, 'clip:copy', 'http://198.51.100.17/a', lits).length >= 1, 'a URL-shaped value is never honoured as literal');
   assert.ok(sc.scanText(P, 'clip:copy', '198.51.100.17', lits).length >= 1, 'a sha256 cell that is not a hash is never honoured');
 });
+
+test('wireDetailsSplit: a finding in a Wire details panel is exempt only when its token is a string of the details file; a token the file does not hold is kept (the browser control covers the page-type scope)', () => {
+  const sc = S.makeScanner(ALLOW);
+  const file = JSON.stringify({ rows: { 'cve-1': { desc: 'Cisco ASA Software: 9.16.2.7 and Outlook.com, see https://help.example-vendor.com/a b', fixed: ['9.16.2.11'] } } });
+  const strings = S.wireDetailsStrings(file);
+  assert.deepStrictEqual(strings.length, 2, 'every string value is read, nested and in arrays');
+  const panel = PAGE('<div class="hl-dt__panel"><p>Cisco ASA Software: 9.16.2.7 and Outlook.com</p><p>Planted: C2 at 198.51.100.17</p></div>');
+  const found = sc.scan('wire/index.html', panel);
+  assert.ok(found.length >= 3, 'the unexempted scanner flags the version, the vendor name and the planted address: ' + JSON.stringify(found.map((f) => f.token)));
+  const sp = S.wireDetailsSplit(found, strings);
+  assert.deepStrictEqual(sp.kept.map((f) => f.token), ['198.51.100.17'], 'only the planted address is kept');
+  assert.ok(sp.exempt.length >= 2 && sp.exempt.every((f) => /9\.16\.2\.7|Outlook\.com/.test(f.token)));
+  assert.strictEqual(S.wireDetailsSplit(found, []).kept.length, found.length, 'an empty or unreadable details file exempts nothing');
+});

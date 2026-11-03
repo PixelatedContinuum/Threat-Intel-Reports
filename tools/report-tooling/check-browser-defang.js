@@ -142,12 +142,17 @@ var DRIVE_FN = async function (opts) {
 };
 var DRIVE_SRC = '(' + DRIVE_FN.toString() + ')';
 
-var SERIALISE_FN = function (skip) {
+var SERIALISE_FN = function (skip, cutSel) {
   Array.prototype.forEach.call(document.querySelectorAll('input,textarea'), function (e) {
     if (skip && e.matches(skip)) { if (e.tagName === 'TEXTAREA') e.textContent = ''; else e.setAttribute('value', ''); return; }
     if (e.tagName === 'TEXTAREA') e.textContent = e.value; else e.setAttribute('value', e.value);
   });
-  return '<!DOCTYPE html>' + document.documentElement.outerHTML;
+  if (!cutSel) return '<!DOCTYPE html>' + document.documentElement.outerHTML;
+  // cutSel (the Wire details panels): the page without those panels, and the panels apart, each judged on its own
+  var panels = Array.prototype.map.call(document.querySelectorAll(cutSel), function (n) { return n.outerHTML; });
+  var c = document.documentElement.cloneNode(true);
+  Array.prototype.forEach.call(c.querySelectorAll(cutSel), function (n) { n.textContent = ''; });
+  return JSON.stringify({ html: '<!DOCTYPE html>' + c.outerHTML, panels: panels });
 };
 var SERIALISE_SRC = '(' + SERIALISE_FN.toString() + ')';
 
@@ -161,7 +166,7 @@ function sleep(ms) { return CDP.sleep(ms); }
   try { page = await CDP.open('about:blank', { settle: 50 }); } catch (e) { srv.close(); if (e.notChecked) notChecked(e.message); throw e; }
   var ev = page.evaluate;
   var T = { pages: 0, loads: 0, loadFails: [], runs: 0, presses: 0, pressErrors: 0, byKind: {}, captures: { clip: 0, share: 0, blobs: 0, exec: 0 }, judged: 0, exempt: 0, extras: 0, blocked: 0,
-            consoleThrows: [], findings: [], seen: {}, literals: [], literalCells: 0, stubs: 0, perPage: {} };
+            consoleThrows: [], findings: [], seen: {}, literals: [], literalCells: 0, stubs: 0, wirePanels: 0, wireKept: 0, wireExemptTokens: {}, perPage: {} };
   var idxJson = null;
   try { idxJson = JSON.parse(fs.readFileSync(path.join(siteDir, 'assets/data/ioc-index.json'), 'utf8')); } catch (e) { /* the search scenario then says NOT CHECKED for itself */ }
 
@@ -201,9 +206,23 @@ function sleep(ms) { return CDP.sleep(ms); }
       (p.exec || []).forEach(function (t) { judgeCapture(rel, 'exec', p.label, t, exempt); });
     });
   }
+  var WIRE_PANEL = '.hl-dt__panel';
+  var wireStrings = null;
+  try { wireStrings = SITE.wireDetailsStrings(fs.readFileSync(path.join(siteDir, 'wire', 'details-nkev.json'), 'utf8')); } catch (e) { wireStrings = null; }
   async function snapshot(rel, skip) {
-    var html = await ev(SERIALISE_SRC + '(' + JSON.stringify(skip || '') + ')');
+    var isWire = SITE.pageType(rel) === 'wire';
+    var raw = await ev(SERIALISE_SRC + '(' + JSON.stringify(skip || '') + (isWire ? ',' + JSON.stringify(WIRE_PANEL) : '') + ')');
+    var html = raw, panels = [];
+    if (isWire) { var o = JSON.parse(raw); html = o.html; panels = o.panels; }
     var found = scanner.scan(rel, html);
+    // Wire details panels: judged apart; a finding whose token is a string of wire/details-nkev.json is third-party advisory text and is counted as exempt (lib/defang-site.js, wireDetailsSplit); every other finding in a panel is kept.
+    panels.forEach(function (ph) {
+      var pf = scanner.scan(rel, '<!DOCTYPE html><html><body>' + ph + '</body></html>');
+      if (!wireStrings) { found = found.concat(pf); T.wirePanelNoFile = true; return; }
+      var sp = SITE.wireDetailsSplit(pf, wireStrings);
+      T.wirePanels++; T.wireKept += sp.kept.length; sp.exempt.forEach(function (f) { T.wireExemptTokens[f.kind + '\u0001' + f.token] = 1; });
+      found = found.concat(sp.kept);
+    });
     // the scanner returns this state's findings; they must be COLLECTED here (an earlier version judged the DOM and dropped the verdict, so a planted DOM defect was never reported).
     // The same token seen in several states of one page is one finding.
     found.forEach(function (f) {
@@ -326,6 +345,7 @@ function sleep(ms) { return CDP.sleep(ms); }
   console.log('captures           clipboard ' + T.captures.clip + ', share sheet ' + T.captures.share + ', downloads (blob text) ' + T.captures.blobs + ', execCommand copy ' + T.captures.exec +
               ' = ' + (T.captures.clip + T.captures.share + T.captures.blobs + T.captures.exec) + '; judged ' + T.judged + ', exempt ' + T.exempt + ' (taken from a <pre> rule block, or on a detection page: decision 5)');
   console.log('literal cells      ' + T.literalCells + ' data-literal cells read across the page loads; a captured line is judged without a value that equals one of them (hash, filename, path, registry as recorded)');
+  console.log('wire exemption     ' + (wireStrings ? Object.keys(T.wireExemptTokens).length + ' distinct finding(s) inside Wire details panels exempt (' + T.wirePanels + ' panel states judged apart): the token is a string value of wire/details-nkev.json (third-party advisory text, lead decision T-0500.1.7.4 fix-r1); ' + T.wireKept + ' panel finding(s) kept as findings' : 'NONE (wire/details-nkev.json not readable: every finding in a panel is kept)'));
   console.log('scenarios          ' + T.extras + ' (IOC search queries and ?q= link, Wire details, site search)');
   var zero = [];
   if (!T.loads) zero.push('no page loaded');
