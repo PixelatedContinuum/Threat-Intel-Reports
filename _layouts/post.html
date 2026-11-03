@@ -51,7 +51,7 @@ document.addEventListener('DOMContentLoaded', function () {
   <div class="hl-post-header__eyebrow">
     <span class="hl-post-header__badge hl-post-header__badge--detect hl-d-kicker">Detection Rules</span>
     <span class="hl-post-header__sep">·</span>
-    <span class="hl-post-header__date">{{ page.date | date: "%B %d, %Y" }}</span>
+    <span class="hl-post-header__date">{{ page.date | date: "%B %d, %Y" }}{% if page.last_updated %} · <a class="hl-last-updated" href="#revisions" title="Revision history">Updated {{ page.last_updated | date: "%b %d, %Y" }}</a>{% endif %}</span>
   </div>
   <h1 class="hl-post-header__title">{% include defang-text.html text=page.title %}</h1>
   {%- if _dcat or _dmisp %}
