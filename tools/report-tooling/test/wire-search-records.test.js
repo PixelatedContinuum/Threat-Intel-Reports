@@ -215,3 +215,71 @@ test('the defang page scan leaves the Wire bundle directory out like /pagefind/'
   assert.strictEqual(S.excluded('pagefind/pagefind.js'), 'asset directory');
   assert.strictEqual(S.excluded('wire/index.html'), null);
 });
+
+/* T-0548 fix1: the records hold what the Details pane shows, tab by tab (assets/js/wire-details.js) */
+function rec(b, tail) { return b.records.filter(function (r) { return r.url.endsWith(tail); })[0]; }
+function withNkev(entry) { return build({ nkev: JSON.stringify({ rows: { 'cve-2026-0001': entry } }) }); }
+function withCves(entry) { return build({ cve: JSON.stringify({ rows: { 'cve-2026-0003': entry } }) }); }
+
+test('nKEV with an empty desc and a title indexes no title line (the pane shows its no-description message there, not the title)', function () {
+  var k = rec(withNkev({ added: '2026-11-01', title: 'Zebra widget title', desc: '' }), 'cve-cve-2026-0001');
+  assert.ok(k.content.indexOf('Zebra widget title') < 0, 'the title is not shown on the nKEV tab');
+  assert.ok(k.content.indexOf('widget') < 0);
+});
+
+test('CVE with an empty desc indexes the title', function () {
+  var c = rec(withCves({ published: '2026-10-29', title: 'Zebra widget title', desc: '' }), 'cves-cve-2026-0003');
+  assert.ok(c.content.indexOf('Zebra widget title') > -1);
+});
+
+test('a row with no Details entry indexes the pane no-entry message', function () {
+  var k = rec(build({ nkev: JSON.stringify({ rows: {} }) }), 'cve-cve-2026-0001');
+  assert.ok(k.content.indexOf('No details in our data for this CVE.') > -1);
+});
+
+test('why listed (CVEs tab): the chips claims are indexed in words, only when the pane would show them; the nKEV tab has no such section', function () {
+  var e = { published: '2026-10-29', title: 't', desc: 'd', signals: ['crit_noauth_kev_product', 'msf', 'edb', 'epss90'], cvss: '9.8', cvss_vector: 'CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H', kev_product: 'Acme Gadget', kev_product_n: 3, epss_pct: 0.95,
+    msf: ['modules/exploits/a/b.rb'], edb: [1234] };
+  var c = rec(withCves(e), 'cves-cve-2026-0003').content;
+  ['reachable over the network with no privileges and no user action', 'Acme Gadget: CISA has listed earlier CVEs', 'A Metasploit module for this CVE', 'An Exploit-DB entry for this CVE', 'top 10% for likelihood of exploitation'].forEach(function (t) {
+    assert.ok(c.indexOf(t) > -1, 'content holds: ' + t);
+  });
+  var off = rec(withCves({ published: '2026-10-29', desc: 'd', signals: [], kev_product: 'Acme Gadget' }), 'cves-cve-2026-0003').content;
+  assert.ok(off.indexOf('CISA has listed') < 0 && off.indexOf('A Metasploit module') < 0, 'no signal, no claim');
+  assert.ok(off.indexOf('Acme Gadget') < 0, 'kev_product alone is not shown by the pane');
+  var n = rec(withNkev(e), 'cve-cve-2026-0001').content;
+  assert.ok(n.indexOf('CISA has listed') < 0 && n.indexOf('top 10%') < 0);
+});
+
+test('exploitation (nKEV tab): KEV and CISA wording and the cited hosts', function () {
+  var n = rec(withNkev({ added: '2026-11-01', cisa_added: '2026-11-01', disclosed: '2026-10-30', gap: 2, desc: 'd', reports: [{ url: 'https://vendor.example.com/r', host: 'vendor.example.com' }] }), 'cve-cve-2026-0001').content;
+  ['Added to VulnCheck KEV.', 'On CISA KEV.', 'NVD published it days before the KEV add.', 'vendor[.]example[.]com'].forEach(function (t) {
+    assert.ok(n.indexOf(t) > -1, 'content holds: ' + t);
+  });
+  assert.ok(rec(withNkev({ added: '2026-11-01', desc: 'd' }), 'cve-cve-2026-0001').content.indexOf('Not on CISA KEV.') > -1);
+});
+
+test('severity: band word, who scored it, the vector in words and the SSVC labels; the score digits stay out', function () {
+  var n = rec(withNkev({ added: '2026-11-01', desc: 'd', cvss: '7.5', severity: 'high', cvss_version: '3.1', scored_by: 'ADP', cvss_vector: 'CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:N/A:N', ssvc_expl: 'poc', ssvc_auto: 'yes', ssvc_impact: 'partial' }), 'cve-cve-2026-0001').content;
+  ['CVSS v3.1 base score, High, scored by CISA\'s ADP.', 'attack vector Network', 'privileges required None', 'confidentiality High', 'Exploitation: poc. Automatable: yes. Technical impact: partial.'].forEach(function (t) {
+    assert.ok(n.indexOf(t) > -1, 'content holds: ' + t);
+  });
+  assert.ok(n.indexOf('7.5') < 0 && n.indexOf('CVSS:3.1/') < 0, 'no score digits, no raw vector');
+  var cn = rec(withCves({ published: '2026-10-29', desc: 'd', cvss: '5.0', severity: 'medium', cvss_version: '3.1', scored_by: 'cve.now' }), 'cves-cve-2026-0003').content;
+  assert.ok(cn.indexOf('Medium, from cve[.]now, because our NVD data holds no score for it.') > -1);
+});
+
+test('what to do, fixed versions and likelihood: the pane wording; EPSS values stay out; a fixed value that fails the version shape is not indexed', function () {
+  var n = rec(withNkev({ added: '2026-11-01', desc: 'd', fixed: '1.3, 1.4', kev_due: '2026-11-20', epss: '0.5', epss_pct: 0.9, epss_date: '2026-11-01' }), 'cve-cve-2026-0001').content;
+  ['Fixed in 1.3, 1.4', "CISA's due date for US federal agencies."].forEach(function (t) { assert.ok(n.indexOf(t) > -1, t); });
+  assert.ok(n.indexOf('0.5') < 0 && n.indexOf('percentile') < 0 && n.indexOf('EPSS') < 0);
+  var bad = rec(withNkev({ added: '2026-11-01', desc: 'd', fixed: 'see advisory' }), 'cve-cve-2026-0001').content;
+  assert.ok(bad.indexOf('Fixed in') < 0 && bad.indexOf('advisory') < 0);
+});
+
+test('the pane drops an invalid rule or exploit value, so the record does too, and no URL is ever indexed', function () {
+  var n = rec(withNkev({ added: '2026-11-01', desc: 'd', msf: ['not/a/module.txt'], edb: ['abc'], et_sids: ['x1'], nuclei: 'http://evil.example/t.sh', aliases: ['https://evil.example/a', 'GHSA-aaaa-bbbb-cccc'] }), 'cve-cve-2026-0001').content;
+  assert.ok(n.indexOf('module.txt') < 0 && n.indexOf('EDB-abc') < 0 && n.indexOf('SID x1') < 0 && n.indexOf('Nuclei t.sh') < 0 && n.indexOf('evil') < 0);
+  assert.ok(n.indexOf('GHSA-aaaa-bbbb-cccc') > -1);
+  assert.ok(!/https?:\/\//.test(n));
+});
