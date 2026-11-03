@@ -492,4 +492,34 @@ function wireDetailsSplit(findings, strings) {
   return { kept: kept, exempt: exempt };
 }
 
-module.exports = { makeScanner: makeScanner, walkHtml: walkHtml, scanSite: scanSite, scanDocument: scanDocument, selfTest: selfTest, loadAllowData: loadAllowData, pageType: pageType, excluded: excluded, newStats: newStats, linkKey: linkKey, linkAllowed: linkAllowed, isIpHost: isIpHost, wireDetailsStrings: wireDetailsStrings, wireDetailsSplit: wireDetailsSplit, _literalProblem: literalProblem };
+/* The site-search RECORDS (T-0548): build-search-index.js adds one Pagefind record per Wire row, and Pagefind's bundle (/pagefind/, excluded above) holds their text, so a reader
+   sees it as a search-result excerpt. The build writes the records it indexed to a JSON file; this scans every string a reader can see in a result (content and meta title) with the
+   scanner that reads the pages (scanLine, the same allow data). `file` is that JSON ({ records: [ { url, content, meta, filters } ] }); a missing or unparseable file, or one with no
+   record, throws so the caller reports NOT CHECKED (a zero denominator is never a PASS). */
+function scanRecords(file, dataFile) {
+  var data = loadAllowData(dataFile);
+  var J = JSON.parse(fs.readFileSync(file, 'utf8'));
+  var recs = J && Array.isArray(J.records) ? J.records : null;
+  if (!recs) throw new Error('search records file has no records array: ' + file);
+  var st = { records: recs.length, fields: 0, lines: 0, matchedFlagged: 0, matchedDefanged: 0, matchedPrivate: 0, matchedAllowed: 0, bySection: {} };
+  var findings = [];
+  recs.forEach(function (r) {
+    var sec = (r.meta && r.meta.section) || 'none';
+    st.bySection[sec] = (st.bySection[sec] || 0) + 1;
+    var fields = [['content', String(r.content || '')], ['meta.title', String((r.meta && r.meta.title) || '')]];
+    Object.keys(r.meta || {}).forEach(function (k) { if (k !== 'title' && k !== 'section' && k !== 'date') fields.push(['meta.' + k, String(r.meta[k])]); });
+    fields.forEach(function (f) {
+      st.fields++;
+      f[1].split(/\r?\n/).forEach(function (line) {
+        if (!line.trim()) return;
+        st.lines++;
+        var res = D.scanLine(line, data.allow);
+        st.matchedFlagged += res.flagged.length; st.matchedDefanged += res.defanged; st.matchedPrivate += res.privateN; st.matchedAllowed += res.allowedN;
+        res.flagged.forEach(function (x) { findings.push({ page: 'search-record ' + String(r.url || '').replace(/^.*#/, '#'), type: 'search-record', ctx: sec + ':' + f[0], kind: 'RECORD-' + x.kind, token: x.token, near: nearOf(line, x.token) }); });
+      });
+    });
+  });
+  return { stats: st, findings: findings, data: data };
+}
+
+module.exports = { scanRecords: scanRecords, makeScanner: makeScanner, walkHtml: walkHtml, scanSite: scanSite, scanDocument: scanDocument, selfTest: selfTest, loadAllowData: loadAllowData, pageType: pageType, excluded: excluded, newStats: newStats, linkKey: linkKey, linkAllowed: linkAllowed, isIpHost: isIpHost, wireDetailsStrings: wireDetailsStrings, wireDetailsSplit: wireDetailsSplit, _literalProblem: literalProblem };

@@ -144,7 +144,8 @@ test('a Details toggle on the headline row fails', function () {
 });
 
 test('a page whose headlines wrapper is gone fails', function () {
-  var bad = INDEX.replace('<div class="hl-wire__row" data-title=', '<div data-title=');
+  // T-0548: the wrapper now carries a conditional id (the search anchor) between its class and data-title
+  var bad = INDEX.replace('<div class="hl-wire__row"{% if h_id != "" %} id="{{ h_id | escape }}"{% endif %} data-title=', '<div data-title=');
   assert.equal(CW.checkDetailsPage(bad).status, 'FAIL');
 });
 

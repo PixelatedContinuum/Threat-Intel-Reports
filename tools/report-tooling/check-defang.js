@@ -768,7 +768,7 @@ function run(target, allowFiles, opts) {
 }
 
 function main() {
-  var argv = process.argv.slice(2), target = null, allowFiles = [], all = false, site = null, allowData = null, only = null;
+  var argv = process.argv.slice(2), target = null, allowFiles = [], all = false, site = null, allowData = null, only = null, records = null;
   var allowDir = path.join(__dirname, 'defang-allow'), autoOn = true;
   for (var a = 0; a < argv.length; a++) {
     if (argv[a] === '--allow') allowFiles.push(argv[++a]);
@@ -778,10 +778,11 @@ function main() {
     else if (argv[a] === '--site') site = argv[++a];
     else if (argv[a] === '--allow-data') allowData = argv[++a];
     else if (argv[a] === '--only') only = argv[++a];
+    else if (argv[a] === '--records') records = argv[++a];
     else if (argv[a] === '-h' || argv[a] === '--help') { console.log('usage: node check-defang.js <report folder | index.md> [--allow FILE]... [--allow-dir DIR] [--no-auto-allow] [--all]\n       node check-defang.js --site <_site dir> [--allow-data _data/defang_allow.yml] [--only REGEX] [--all]   (the rendered pages: every page type, report pages included)'); process.exit(0); }
     else target = argv[a];
   }
-  if (site) return mainSite(site, allowData, only, all);
+  if (site) return mainSite(site, allowData, only, all, records);
   if (!target) { console.log('NOT CHECKED  usage: node check-defang.js <report folder | index.md> [--allow FILE]... [--all]'); process.exit(2); }
   if (!fs.existsSync(target)) { console.log('NOT CHECKED  not found: ' + target); process.exit(2); }
   for (var af = 0; af < allowFiles.length; af++) if (!allowFiles[af] || !fs.existsSync(allowFiles[af])) { console.log('NOT CHECKED  allow file not found: ' + allowFiles[af]); process.exit(2); }
@@ -839,7 +840,7 @@ function main() {
 
 /* ---------- the rendered non-report pages (lib/defang-site.js) ---------- */
 
-function mainSite(site, allowData, only, all) {
+function mainSite(site, allowData, only, all, records) {
   var S = require('./lib/defang-site.js');
   if (!allowData) allowData = path.join(__dirname, '..', '..', '_data', 'defang_allow.yml');
   if (!fs.existsSync(site) || !fs.statSync(site).isDirectory()) { console.log('NOT CHECKED  not a directory: ' + site); process.exit(2); }
@@ -849,6 +850,13 @@ function mainSite(site, allowData, only, all) {
   var R;
   try { R = S.scanSite(site, allowData, { only: only ? new RegExp(only) : null }); } catch (e) { console.log('NOT CHECKED  ' + e.message); process.exit(2); }
   var s = R.stats, F = R.findings;
+  // T-0548: the site-search records (Wire rows added to the Pagefind index by build-search-index.js); /pagefind/ is excluded above, so the records the build wrote are the gated input
+  var RS = null;
+  if (records) {
+    if (!fs.existsSync(records)) { console.log('NOT CHECKED  search records file not found: ' + records); process.exit(2); }
+    try { RS = S.scanRecords(records, allowData); } catch (e) { console.log('NOT CHECKED  ' + e.message); process.exit(2); }
+    F = F.concat(RS.findings);
+  }
   console.log('check-defang --site: ' + site);
   console.log('  self-test   known positives flagged (IPv4, domain, e-mail, URL, link to an IP, unlisted link, foreign mailto, raw pre outside a detection page, tooltip attribute), defanged twins, own-page links and a detection rule body clean');
   console.log('  allow data  ' + allowData + ': ' + R.data.rawCount + ' raw names, ' + R.data.mailboxCount + ' own mailboxes, ' + R.data.links.length + ' link entries');
@@ -868,6 +876,13 @@ function mainSite(site, allowData, only, all) {
   console.log('  unlinked    ' + s.unlinked.n + ' <a> rendered as text by the include (an off-site target not under `links` in the allow data)' + (s.unlinked.n ? ':' : ''));
   s.unlinked.targets.forEach(function (t) { console.log('              ' + t); });
   console.log('  literal     ' + s.literal.cells + ' IOC viewer cell(s) marked data-literal (hash, filename, path, registry values, as the feed recorded them), each checked for its type');
+  if (RS) {
+    var rt = RS.stats;
+    console.log('  records     ' + rt.records + ' site-search records (' + Object.keys(rt.bySection).sort().map(function (k) { return k + ' ' + rt.bySection[k]; }).join(', ') + '), ' + rt.fields + ' fields and ' + rt.lines + ' lines scanned: ' + rt.matchedFlagged + ' un-defanged (flagged), ' + rt.matchedDefanged + ' already defanged, ' + rt.matchedPrivate + ' private/reserved, ' + rt.matchedAllowed + ' allowed by name (content and title of each record; the date and section are not text)');
+    if (rt.records === 0 || rt.lines === 0) { console.log('NOT CHECKED  the search records file holds no record or no text (zero denominator)'); process.exit(2); }
+  } else {
+    console.log('  records     NOT GATED: no --records file given, so the text build-search-index.js puts in the search index was not scanned');
+  }
   if (s.pages === 0 || s.textNodes === 0) { console.log('NOT CHECKED  no page or no text node was scanned (zero denominator)'); process.exit(2); }
   var limit = all ? F.length : 60;
   var kinds = {}, byType = {};
