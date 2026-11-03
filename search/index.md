@@ -106,6 +106,11 @@ hl_idx: single
       ['/actors/',             'actors',     'Threat Actor'],
       ['/techniques/',         'techniques', 'ATT&CK Technique'],
       ['/families/',           'families',   'Family'],
+      // The three Wire sections come before the generic /wire/ entry: the first
+      // match wins, and a row's own anchor is what tells its section apart.
+      ['/wire/#cve-',          'wire-nkev',      'Wire: nKEV'],
+      ['/wire/#cves-',         'wire-cves',      'Wire: CVEs'],
+      ['/wire/#h-',            'wire-headlines', 'Wire: Headlines'],
       ['/wire/',               'wire',       'The Wire'],
       ['/behind-the-reports/', 'behind',     'Behind the Reports']
     ];

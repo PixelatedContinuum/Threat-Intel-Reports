@@ -6628,6 +6628,13 @@ main.content:focus { outline: none; }
   border-color:var(--hl-accent-blue);
   color:var(--hl-accent-blue);
 }
+/* /search/ sits under the masthead plate. The plate's `.hl-idx .hl-d-plate`
+   rule sets margin: 10px 0 0, which zeroes the header's 2rem bottom margin, so
+   the search box touched the plate. The other listing pages get their gap from
+   the first block under the plate (.hl-idx .hl-d-kpis, margin-top 12px). This
+   gives #hl-search the same 12px. Scoped to .hl-idx so no other page moves. */
+.hl-idx .hl-search { margin-top: 12px; }
+
 .hl-search__notice {
   color:var(--hl-text-muted);
   border:1px dashed var(--hl-border-card);
@@ -6941,6 +6948,9 @@ body.hl-drawer-locked { overflow: hidden; }
 #hl-search .hl-sr--stix       { --sr-acc: #22d3ee; }
 #hl-search .hl-sr--actors     { --sr-acc: #e879f9; }
 #hl-search .hl-sr--wire       { --sr-acc: #58a6ff; }
+#hl-search .hl-sr--wire-nkev      { --sr-acc: #bc8cff; }
+#hl-search .hl-sr--wire-cves      { --sr-acc: #2dd4bf; }
+#hl-search .hl-sr--wire-headlines { --sr-acc: #58a6ff; }
 #hl-search .hl-sr--behind     { --sr-acc: #f97316; }
 #hl-search .hl-sr--pages      { --sr-acc: #60a5fa; }
 
