@@ -11,23 +11,36 @@ const tok = n => { const m = scss.match(new RegExp('--hl-fs-' + n + ':\\s*(\\d+(
 
 test('the scale: meta and tag at least 15px, label and small 16px, body 18px, card 20px, section 26px, in rising order', () => {
   const t = { meta: tok('meta'), tag: tok('tag'), small: tok('small'), label: tok('label'), body: tok('body'), card: tok('card'), section: tok('section') };
-  assert.ok(t.meta >= 14 && t.tag >= 14, 'no reader-facing text under 14px; tags and chips at least 14px');
+  assert.ok(t.meta >= 15 && t.tag >= 15, 'no reader-facing text under 15px; tags and chips at least 15px');
   assert.ok(t.label >= t.small, 'a label is at least as large as the secondary text it labels');
   assert.ok(t.card > t.body && t.section > t.card, 'card title above body, section title above card title');
   assert.ok(t.section - t.body >= 6, 'a section title is clearly larger than body');
 });
 
-test('no literal font size under 14px in custom.scss outside the logotype, the heading permalink glyph and the dash tile unit', () => {
-  const css = strip(scss), bad = [];
+/* The floor is 15px (--hl-fs-meta). Named exceptions, each reasoned in tasks/runs/T-0538/typescale-report.md "Kept below 15px": the logotype and the
+   heading permalink glyph (not reading text); the sponsor card labels in the gated 140-200px margin (14px chrome floor); the Wire tab at 360px
+   (phone squeeze); the gate-pinned ATT&CK strip cells and the glyphs set in fixed circles. Review of T-0538 (Luna) found the first version checked 14px. */
+const KEEP = /hl-brand__top|hl-heading-anchor::after|hl-sponsor-rail__label|hl-rv-featcard__label|hl-idx--wire \.hl-wtabs__tab|hl-attack__|hl-rv-info span|hl-rv-cmark > span|hl-facts-anchor/;
+const under = (src, floor) => {
+  const css = strip(src), bad = [];
   const rule = /([^{}]+)\{([^{}]*)\}/g; let m;
   while ((m = rule.exec(css))) {
     const sel = m[1].trim().replace(/\s+/g, ' '); if (/^@/.test(sel)) continue;
     for (const d of m[2].split(';')) {
       const px = d.match(/(?:^|\s)font-size\s*:\s*(\d+(?:\.\d+)?)px/) || d.match(/(?:^|\s)font\s*:\s*[^;]*?\s(\d+(?:\.\d+)?)px/);
-      if (px && +px[1] < 14 && !/hl-brand__top|hl-heading-anchor::after/.test(sel)) bad.push(sel + ' { ' + d.trim() + ' }');
+      if (px && +px[1] < floor && !KEEP.test(sel)) bad.push(sel + ' { ' + d.trim() + ' }');
     }
   }
-  assert.deepEqual(bad, [], 'literal sizes under 14px: use a --hl-fs-* token');
+  return bad;
+};
+
+test('no literal font size under 15px in custom.scss or hl-report-tabs.css outside the named exceptions', () => {
+  assert.deepEqual(under(scss, 15), [], 'custom.scss literal sizes under 15px: use a --hl-fs-* token');
+  assert.deepEqual(under(rcss, 15), [], 'hl-report-tabs.css literal sizes under 15px: use a --hl-fs-* token');
+});
+
+test('control: the floor check fires on a planted 13px label', () => {
+  assert.equal(under('.x .hl-planted__label { font: 700 13px var(--hl-font-mono); }', 15).length, 1);
 });
 
 test('the Wire: the source name is the headline title size, a topic tag is the tag token, the day head is the card token', () => {
