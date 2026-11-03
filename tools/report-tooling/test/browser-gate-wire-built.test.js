@@ -94,7 +94,7 @@ test('readBuilt names a tab whose target section is missing, and a row whose dat
   var f = WH.readBuilt(JSDOM, wirePage({ vulnsId: 'vulns-x' }));
   assert.ok(f.problems.some(function (p) { return /nKEVs.*#vulns.*not a \.hl-wtabs__sec/.test(p); }), f.problems.join('; '));
   assert.equal(f.sections.vulns.present, false);
-  assert.equal(f.sections.vulns.rows.length, 0, 'a missing section reads as zero rows, which the gate turns into a FAIL');
+  assert.equal(f.sections.vulns.rows.length, 0, 'a missing section reads as zero rows; the gate FAILs it through the structure and the "every tab section holds rows" checks (their denominators are the 3 tabs), never through a zero-denominator FAIL');
   var g = WH.readBuilt(JSDOM, wirePage({ badDay: '2026-10-30' }));
   assert.equal(g.sections.headlines.disagreements.length, 1);
   assert.match(g.sections.headlines.disagreements[0], /2026-11-01 heading carries data-day="2026-10-30"/);

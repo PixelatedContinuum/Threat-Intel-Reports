@@ -319,18 +319,9 @@ async function runLive() {
    BUILT mode: the three-tab Wire, driven as built.
    ====================================================================== */
 
-var checks = [];   // { name, verdict: PASS | FAIL | NOT CHECKED }
+var LEDGER = require('./lib/gate-ledger.js').makeLedger(function (l) { console.log(l); });   // chk / skipped / verdict: see lib/gate-ledger.js (a zero denominator is NOT CHECKED, not FAIL)
+var checks = LEDGER.checks, chk = LEDGER.chk;
 
-/* One check, one denominator. `n` is how many things the check examined and
-   `unit` says what they were; a check that examined none cannot pass. */
-function chk(name, pass, n, unit, detail) {
-  var verdict = pass ? 'PASS' : 'FAIL';
-  var zero = !(n > 0);
-  if (zero) { verdict = 'FAIL'; detail = 'ZERO DENOMINATOR: nothing was examined. ' + (detail || ''); }
-  checks.push({ name: name, verdict: verdict });
-  console.log('   ' + (verdict === 'PASS' ? 'PASS  ' : 'FAIL  ') + name + '  [n=' + (n || 0) + ' ' + unit + ']');
-  if (detail) console.log('         ' + detail);
-}
 /* A step that threw (an element the page was meant to have is not there) is a FAIL of that step,
    not the end of the run: the gate keeps going and says what it could not do. A browser that died
    (e.notChecked) is not the page's fault and still ends the run as NOT CHECKED. */
@@ -338,11 +329,7 @@ function aborted(step, e) {
   if (e && e.notChecked) throw e;
   chk(step + ' ran to the end', false, 1, 'steps', 'aborted: ' + String(e && e.message).replace(/\s+/g, ' ').slice(0, 260));
 }
-function skipped(name, why) {
-  checks.push({ name: name, verdict: 'NOT CHECKED' });
-  console.log('   NOT CHECKED  ' + name);
-  console.log('         ' + why);
-}
+var skipped = LEDGER.skipped;
 
 // "rgb(1, 2, 3)" and "color(srgb 0.1 0.2 0.3)" both come out of getComputedStyle; read either as 0-255.
 function parseColor(c) {
@@ -852,13 +839,9 @@ async function runBuilt() {
     if (srv) srv.close();
   }
 
-  var fails = checks.filter(function (c) { return c.verdict === 'FAIL'; });
-  var ncs = checks.filter(function (c) { return c.verdict === 'NOT CHECKED'; });
-  var passes = checks.length - fails.length - ncs.length;
-  var verdict = fails.length ? 'FAIL' : ncs.length ? 'NOT CHECKED' : 'PASS';
-  console.log('\n' + verdict + '  /wire/ in a real browser, BUILT mode  (' + passes + ' PASS, ' + fails.length + ' FAIL, ' +
-    ncs.length + ' NOT CHECKED, of ' + checks.length + ' checks)');
-  process.exit(fails.length ? 1 : ncs.length ? 2 : 0);
+  var V = LEDGER.verdict();
+  console.log('\n' + V.verdict + '  /wire/ in a real browser, BUILT mode  (' + V.passes + ' PASS, ' + V.fails + ' FAIL, ' + V.notChecked + ' NOT CHECKED, of ' + V.total + ' checks)');
+  process.exit(V.code);
 }
 
 (BUILT_MODE ? runBuilt() : runLive()).catch(function (e) {
