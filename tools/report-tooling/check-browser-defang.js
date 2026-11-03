@@ -161,7 +161,7 @@ function sleep(ms) { return CDP.sleep(ms); }
   try { page = await CDP.open('about:blank', { settle: 50 }); } catch (e) { srv.close(); if (e.notChecked) notChecked(e.message); throw e; }
   var ev = page.evaluate;
   var T = { pages: 0, loads: 0, loadFails: [], runs: 0, presses: 0, pressErrors: 0, byKind: {}, captures: { clip: 0, share: 0, blobs: 0, exec: 0 }, judged: 0, exempt: 0, extras: 0, blocked: 0,
-            consoleThrows: [], findings: [], seen: {}, literals: [], literalCells: 0, perPage: {} };
+            consoleThrows: [], findings: [], seen: {}, literals: [], literalCells: 0, stubs: 0, perPage: {} };
   var idxJson = null;
   try { idxJson = JSON.parse(fs.readFileSync(path.join(siteDir, 'assets/data/ioc-index.json'), 'utf8')); } catch (e) { /* the search scenario then says NOT CHECKED for itself */ }
 
@@ -244,7 +244,8 @@ function sleep(ms) { return CDP.sleep(ms); }
     await snapshot(rel, '');
   }
   async function scenarioWire(rel) {
-    var n = await ev('(function(){var b=document.querySelectorAll(".hl-dt");b.forEach(function(x){try{x.click()}catch(e){}});return b.length})()');
+    // a toggle opens or closes its panel, and the expander pass has usually opened them all already: press only the ones that are closed, then count the panels that are open
+    var n = await ev('(function(){var b=document.querySelectorAll(".hl-dt"),k=0;b.forEach(function(x){if(x.getAttribute("aria-expanded")!=="true"){k++;try{x.click()}catch(e){}}});return b.length})()');
     await sleep(1800);   // the two details files are fetched once each
     var panels = await ev('document.querySelectorAll(".hl-dt__panel").length');
     T.extras++; (T.perPage[rel].scenarios = T.perPage[rel].scenarios || []).push('Wire details opened: ' + n + ' toggles pressed, ' + panels + ' panels in the DOM');
@@ -279,6 +280,14 @@ function sleep(ms) { return CDP.sleep(ms); }
       T.perPage[rel] = T.perPage[rel] || { type: type, runs: 0 };
       var before = T.findings.length;
       var loaded = false;
+      // a redirect stub (Jekyll's "Redirecting..." page: a script and a meta refresh to the live host) leaves the local server by design; it is judged as the small static file it is and counted, not driven
+      var stub = '';
+      try { stub = fs.readFileSync(path.join(siteDir, rel), 'utf8'); } catch (e) { stub = ''; }
+      if (stub.length < 2000 && /<title>Redirecting(?:&hellip;|\.\.\.)<\/title>/.test(stub) && /http-equiv="refresh"/.test(stub)) {
+        T.stubs++; T.perPage[rel].runs++;
+        scanner.scan(rel, stub).forEach(function (f) { T.findings.push(f); });
+        continue;
+      }
       try { loaded = await navigate(rel, w); } catch (e) { loaded = false; }
       if (!loaded) { T.loadFails.push(rel + ' @' + w); T.findings.push({ page: rel, type: type, ctx: 'load', kind: 'LOAD-FAILED', token: 'the page did not reach readyState complete at ' + w }); continue; }
       T.loads++; T.runs++; T.perPage[rel].runs++;
@@ -309,6 +318,7 @@ function sleep(ms) { return CDP.sleep(ms); }
   var byPage = {};
   T.findings.forEach(function (f) { var k = f.page + ' [' + f.type + ']'; (byPage[k] = byPage[k] || []).push(f); });
   console.log('');
+  console.log('redirect stubs     ' + T.stubs + ' page(s) are Jekyll redirect stubs (script + meta refresh to the live host): read as static files, not driven');
   console.log('pages visited      ' + T.loads + ' loads of ' + (T.pages * widths.length) + ' planned (' + T.pages + ' pages x ' + widths.length + ' width(s)); failed to load: ' + T.loadFails.length);
   console.log('DOM states judged  ' + st.pages + ' (page as loaded, after expanders, after chips, after each scenario); text nodes ' + st.textNodes + ', tooltip attributes ' + st.attrs + ', indicator tokens: ' +
               st.matchedFlagged + ' flagged, ' + st.matchedDefanged + ' defanged, ' + st.matchedPrivate + ' private, ' + st.matchedAllowed + ' allowed');
