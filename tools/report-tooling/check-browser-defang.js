@@ -208,7 +208,8 @@ function sleep(ms) { return CDP.sleep(ms); }
   }
   var WIRE_PANEL = '.hl-dt__panel';
   var wireStrings = null;
-  try { wireStrings = SITE.wireDetailsStrings(fs.readFileSync(path.join(siteDir, 'wire', 'details-nkev.json'), 'utf8')); } catch (e) { wireStrings = null; }
+  // the two fact-sheet files the panels are built from: the nKEVs tab (details-nkev.json) and the CVEs tab (details-cves.json), the same kind of third-party CVE-record text
+  try { wireStrings = ['details-nkev.json', 'details-cves.json'].reduce(function (all, f) { return all.concat(SITE.wireDetailsStrings(fs.readFileSync(path.join(siteDir, 'wire', f), 'utf8'))); }, []); } catch (e) { wireStrings = null; }
   async function snapshot(rel, skip) {
     var isWire = SITE.pageType(rel) === 'wire';
     var raw = await ev(SERIALISE_SRC + '(' + JSON.stringify(skip || '') + (isWire ? ',' + JSON.stringify(WIRE_PANEL) : '') + ')');
@@ -345,7 +346,7 @@ function sleep(ms) { return CDP.sleep(ms); }
   console.log('captures           clipboard ' + T.captures.clip + ', share sheet ' + T.captures.share + ', downloads (blob text) ' + T.captures.blobs + ', execCommand copy ' + T.captures.exec +
               ' = ' + (T.captures.clip + T.captures.share + T.captures.blobs + T.captures.exec) + '; judged ' + T.judged + ', exempt ' + T.exempt + ' (taken from a <pre> rule block, or on a detection page: decision 5)');
   console.log('literal cells      ' + T.literalCells + ' data-literal cells read across the page loads; a captured line is judged without a value that equals one of them (hash, filename, path, registry as recorded)');
-  console.log('wire exemption     ' + (wireStrings ? Object.keys(T.wireExemptTokens).length + ' distinct finding(s) inside Wire details panels exempt (' + T.wirePanels + ' panel states judged apart): the token is a string value of wire/details-nkev.json (third-party advisory text, lead decision T-0500.1.7.4 fix-r1); ' + T.wireKept + ' panel finding(s) kept as findings' : 'NONE (wire/details-nkev.json not readable: every finding in a panel is kept)'));
+  console.log('wire exemption     ' + (wireStrings ? Object.keys(T.wireExemptTokens).length + ' distinct finding(s) inside Wire details panels exempt (' + T.wirePanels + ' panel states judged apart): the token is a string value of wire/details-nkev.json or wire/details-cves.json (third-party advisory text, lead decision T-0500.1.7.4 fix-r1); ' + T.wireKept + ' panel finding(s) kept as findings' : 'NONE (wire/details-nkev.json or details-cves.json not readable: every finding in a panel is kept)'));
   console.log('scenarios          ' + T.extras + ' (IOC search queries and ?q= link, Wire details, site search)');
   var zero = [];
   if (!T.loads) zero.push('no page loaded');

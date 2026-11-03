@@ -429,9 +429,9 @@ function selfTest() {
   return why;
 }
 
-/* The Wire details panels (assets/js/wire-details.js) are written by script from wire/details-nkev.json: third-party advisory text (version numbers, vendor domains and file names, advisory
+/* The Wire details panels (assets/js/wire-details.js) are written by script from wire/details-nkev.json and wire/details-cves.json (the two tabs' fact sheets): third-party advisory text (version numbers, vendor domains and file names, advisory
    URLs, vendor e-mail addresses), none of it actor infrastructure (decision 5 keeps references as they are). Lead decision, T-0500.1.7.4 fix-r1: the browser gate exempts a finding found
-   INSIDE a Wire details panel only when its token is part of a string value of that file. Anything else in a panel (a token the file does not hold), and anything outside a panel, is still
+   INSIDE a Wire details panel only when its token is part of a string value of those files. Anything else in a panel (a token the file does not hold), and anything outside a panel, is still
    judged in full. wireDetailsStrings reads the file's string values; wireDetailsSplit sorts a panel's findings into kept and exempt. */
 function wireDetailsStrings(jsonText) {
   var out = [];
