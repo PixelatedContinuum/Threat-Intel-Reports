@@ -7897,7 +7897,9 @@ a.hl-cred-pill--link:hover { border-color: #fbbf24; color: var(--hl-text-primary
   border: 1px solid color-mix(in srgb, var(--h) 34%, #333333);
   border-radius: 999px;
   background: color-mix(in srgb, var(--h) 7%, #14171c);
-  font: 600 var(--hl-fs-small)/1 inherit;
+  font-weight: 600;
+  font-size: var(--hl-fs-small);
+  line-height: 1;
   font-family: inherit;
   color: #e6e6e6;
   white-space: nowrap;
