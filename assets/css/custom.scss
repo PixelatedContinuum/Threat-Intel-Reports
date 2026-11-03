@@ -7898,7 +7898,7 @@ a.hl-cred-pill--link:hover { border-color: #fbbf24; color: var(--hl-text-primary
   border-radius: 999px;
   background: color-mix(in srgb, var(--h) 7%, #14171c);
   font-weight: 600;
-  font-size: var(--hl-fs-small);
+  font-size: 17px;   /* the Wire tabs and search box size: one step over --hl-fs-small, under the 18px rows (T-0551) */
   line-height: 1;
   font-family: inherit;
   color: #e6e6e6;
