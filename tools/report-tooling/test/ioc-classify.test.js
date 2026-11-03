@@ -276,3 +276,15 @@ test('defangText: addresses, URLs, hosts and e-mail inside a title are defanged;
   cases.forEach(([i, o]) => { assert.equal(C.defangText(i), o); assert.equal(C.defangText(o), o, 'idempotent: ' + o); });
   assert.equal(C.defangText(null), '');
 });
+
+/* ---- fix-r2, review finding S3: the display defang covers IPv6 ---- */
+test('S3: defangValue defangs a bare or bracketed IPv6 value and is idempotent; defangText defangs an address in a title but not a time, a MAC or std::string', function () {
+  var C = require('../../../assets/js/ioc-classify.js');
+  assert.strictEqual(C.defangValue('2001:db8::7', 'ipv6'), '2001[:]db8[:][:]7');
+  assert.strictEqual(C.defangValue('2001[:]db8[:][:]7', 'ipv6'), '2001[:]db8[:][:]7');
+  assert.strictEqual(C.defangValue('[2001:db8::7]:443', 'endpoint'), '[2001[:]db8[:][:]7]:443');
+  assert.strictEqual(C.defangValue('http://[2001:db8::7]/p', 'url'), 'hxxp://[2001[:]db8[:][:]7]/p');
+  assert.strictEqual(C.defangValue('pool.evil.test:10032', 'endpoint'), 'pool[.]evil[.]test:10032', 'control: a port colon is kept');
+  assert.strictEqual(C.defangText('Beacon to 2001:db8::7, then 2001:db8:: and 2001:db8:1:2:3:4:5:6.'), 'Beacon to 2001[:]db8[:][:]7, then 2001[:]db8[:][:] and 2001[:]db8[:]1[:]2[:]3[:]4[:]5[:]6.');
+  assert.strictEqual(C.defangText('at 12:30:45 mac aa:bb:cc:dd:ee:ff std::string'), 'at 12:30:45 mac aa:bb:cc:dd:ee:ff std::string', 'control: not addresses');
+});

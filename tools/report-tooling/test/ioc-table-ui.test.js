@@ -41,6 +41,7 @@ function shown(type, value) {
   var v = value;
   if (type === 'url') v = v.replace(/https:\/\//g, 'hxxps://').replace(/http:\/\//g, 'hxxp://');
   if (type === 'email') v = v.replace(/@/g, '[@]');
+  if (type === 'ipv6') v = /\[/.test(v) ? v.replace(/\[([^\]]*)\]/, function (m, a) { return '[' + a.replace(/:/g, '[:]') + ']'; }) : v.replace(/:/g, '[:]');
   return v.replace(/\./g, '[.]');
 }
 
@@ -539,4 +540,50 @@ test('the never-block table is not read by the viewer, and carries no live value
   assert.deepEqual(nb.map(function (c) { return c.textContent; }),
     NB_ROWS.map(function (r) { return shown(r.type, r.value); }));
   nb.forEach(function (c) { assert.equal(c.hasAttribute('data-live'), false); });
+});
+
+/* ---- fix-r2, review finding S3: IPv6 values copy, download as .txt and as .csv defanged ----
+   The export guard put every [:] back to a colon and then defanged only dots, schemes and @, so an IPv6 value left raw in all three outputs (the review's two fixtures, a bare
+   address and a bracketed endpoint). Addresses are RFC 3849 documentation prefixes. The same value is given three ways: as the layout prints it, raw (a layout regression) and
+   with the colons already defanged; each must come out as the same defanged text. The hash row is the control: it is left as recorded. */
+var V6 = [
+  { raw: '2001:db8::7', want: '2001[:]db8[:][:]7' },
+  { raw: '2001:db8::', want: '2001[:]db8[:][:]' },
+  { raw: '2001:db8:1:2:3:4:5:6', want: '2001[:]db8[:]1[:]2[:]3[:]4[:]5[:]6' },
+  { raw: '[2001:db8::7]:443', want: '[2001[:]db8[:][:]7]:443' },
+  { raw: '::ffff:192.0.2.1', want: '[:][:]ffff[:]192[.]0[.]2[.]1' }
+];
+['layout-printed', 'raw in the markup', 'colons already defanged'].forEach(function (how, hi) {
+  test('S3: IPv6 values are defanged on copy, .txt and .csv (' + how + ')', function () {
+    var rows = V6.map(function (v) { return { type: 'ipv6', value: v.raw, context: 'v6 c2' }; }).concat([{ type: 'sha256', value: 'c'.repeat(64), context: null }]);
+    var p = page(rows);
+    Array.prototype.slice.call(p.doc.querySelectorAll('.hl-ioctable__table tbody code')).forEach(function (c, i) {
+      if (hi === 1 && i < V6.length) c.textContent = V6[i].raw;
+      if (hi === 2 && i < V6.length) c.textContent = V6[i].want;
+    });
+    var want = V6.map(function (v) { return v.want; }).concat(['c'.repeat(64)]);
+    click(p.doc, '.hl-ioctable__btn[data-act="copy"]');
+    assert.deepEqual(p.cap.clipboard.split('\n'), want, 'copy');
+    click(p.doc, '.hl-ioctable__btn[data-act="txt"]');
+    assert.deepEqual(p.dom.window.__lastDownloadText.split('\n'), want, '.txt');
+    click(p.doc, '.hl-ioctable__btn[data-act="csv"]');
+    assert.deepEqual(p.dom.window.__lastDownloadText.split('\n').slice(1).map(function (l) { return l.split(',')[0]; }), want, '.csv value column');
+    p.dom.window.__lastDownloadText.split('\n').slice(1, 1 + V6.length).forEach(function (l, i) { assert.equal(l.indexOf(V6[i].raw), -1, 'no raw IPv6 anywhere in the csv row ' + i); });
+  });
+});
+
+test('S3: a bracketed IPv6 host inside a url or endpoint cell is defanged too, and the port and the scheme keep their colons', function () {
+  var p = page([{ type: 'url', value: 'http://[2001:db8::7]:8080/a:b', context: null }, { type: 'endpoint', value: '[2001:db8::7]:443', context: null }, { type: 'endpoint', value: 'pool.evil.test:10032', context: null }]);
+  Array.prototype.slice.call(p.doc.querySelectorAll('.hl-ioctable__table tbody code')).forEach(function (c, i) { c.textContent = ['http://[2001:db8::7]:8080/a:b', '[2001:db8::7]:443', 'pool.evil.test:10032'][i]; });
+  click(p.doc, '.hl-ioctable__btn[data-act="copy"]');
+  assert.deepEqual(p.cap.clipboard.split('\n'), ['hxxp://[2001[:]db8[:][:]7]:8080/a:b', '[2001[:]db8[:][:]7]:443', 'pool[.]evil[.]test:10032']);
+});
+
+test('S3: the viewer\'s export guard and the search page\'s HLIocClassify.defangValue agree on every IPv6 form (one rule, two files)', function () {
+  var C = require(path.join(__dirname, '..', '..', '..', 'assets', 'js', 'ioc-classify.js'));
+  var p = page(V6.map(function (v) { return { type: 'ipv6', value: v.raw, context: null }; }));
+  Array.prototype.slice.call(p.doc.querySelectorAll('.hl-ioctable__table tbody code')).forEach(function (c, i) { c.textContent = V6[i].raw; });
+  click(p.doc, '.hl-ioctable__btn[data-act="copy"]');
+  assert.deepEqual(p.cap.clipboard.split('\n'), V6.map(function (v) { return C.defangValue(v.raw, 'ipv6'); }));
+  V6.forEach(function (v) { assert.equal(C.defangValue(v.raw, 'ipv6'), v.want); assert.equal(C.defangValue(v.want, 'ipv6'), v.want, 'idempotent'); });
 });
