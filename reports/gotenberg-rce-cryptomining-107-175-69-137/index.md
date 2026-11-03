@@ -261,7 +261,7 @@ citation is correct.
 
 ### The six stages at a glance
 
-Section 3 gives the order of the stages and the evidence behind each. This table sets the same six stages side by side with where the report shows them.
+Section 3 gives the order of the stages and the evidence behind each. This table sets the same six stages side by side with where I show them.
 
 | Stage | What the operator did | Where it is shown |
 |---|---|---|
@@ -850,7 +850,7 @@ These are the events the report dates, taken from Sections 3 and 6. Timing the r
 | Date (UTC) | Observation |
 |---|---|
 | 2026-08-26 | The miner binaries carry a build timestamp of this date, so the payload was staged five days before the campaign |
-| 2026-08-31 02:50:03 | First genuine line of the operator's own callback log, the start of the campaign window; the report treats the timezone as the writing host's own system clock, since nothing in the corpus independently confirms it |
+| 2026-08-31 02:50:03 | First genuine line of the operator's own callback log, the start of the campaign window; I treat the timezone as the writing host's own system clock, since nothing in the corpus independently confirms it |
 | 2026-08-31, eleven minutes into the campaign | Both deployed miner configuration files were regenerated live, before the mass deployment wave ran |
 | 2026-08-31 03:44:22 | Last genuine line of the callback log, the end of the 54-minute window |
 | 2026-08-31, for five days | Port 12577 on `107[.]175[.]69[.]137` carried a certificate whose subject claimed to be a well-known CDN provider but was issued by an unrelated certificate authority; the report dates it to the campaign date, and the port is gone now |

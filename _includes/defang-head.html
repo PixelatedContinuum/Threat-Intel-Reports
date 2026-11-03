@@ -2,7 +2,7 @@
   Render-time defang of the DISPLAY STRINGS in a page's <head> (T-0500.1.7.4 ship, lead decision 2026-11-02, Joseph: every indicator a reader sees is defanged). A reader sees <title> in the browser
   tab and in bookmarks, and og:title, og:description, twitter:title, twitter:description and the JSON-LD headline, name and description in every share card.
 
-  Call:  {%- capture _x %}{% include defang-head.html text=_seo %}{% endcapture -%}  then print {{ _x }}.   Param: text, the HTML that jekyll-seo-tag wrote, or a JSON-LD block.
+  Call:  capture the output of the include of defang-head.html with text=_seo into a variable named _x, then print that variable.   Param: text, the HTML that jekyll-seo-tag wrote, or a JSON-LD block.
   It rewrites, line by line (the tag writes one tag per line, the JSON-LD blocks one or many lines):
     - the text of a <title> element;
     - the content="..." of a meta tag whose line names title or description (og:title, twitter:title, description, og:description, twitter:description);

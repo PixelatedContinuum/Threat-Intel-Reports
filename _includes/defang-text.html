@@ -2,7 +2,7 @@
   Render-time defang of VISIBLE TEXT (T-0500.1.7.4, Joseph 2026-11-02, decision 5: "We should defang everything ... I do not want to risk people clicking on something or
   accidentally pasting it in the wrong way"). The one shared include; _includes/defang-html.html calls it for every text node of a page and cards call it for their titles.
 
-  Call:  {%- capture shown %}{% include defang-text.html text=some.title %}{% endcapture -%}  then print {{ shown }}.
+  Call:  capture the output of the include of defang-text.html with text=some.title into a variable named shown, then print that variable.
   Params: text (required); type (optional, an IOC table type: ipv4 ipv6 domain endpoint url email defang the whole value the way assets/js/ioc-table.js does, every other
   type is returned as it is).
 

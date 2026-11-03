@@ -4,7 +4,7 @@
   and the single pages), and a detection page's body passes through it in _layouts/post.html. A page or a component built on those layouts needs to call nothing:
   its text is defanged on the way out. Call it directly only for a fragment that is printed OUTSIDE those two layouts:
 
-    {%- capture _html %}...markup...{% endcapture -%}{% include defang-html.html html=_html %}      (add  unlink=false  to keep every link, as the Wire does)
+    capture the markup into a variable named _html, then include defang-html.html with html=_html      (add  unlink=false  to keep every link, as the Wire does)
 
   WHAT IT DOES, one pass over the markup cut at "<":
     - text between tags goes through defang-text.html (URLs, IPv4, IPv6, domains, e-mails -> hxxp / [.] / [@] / [:]; a name in _data/defang_allow.yml `raw` is left alone);

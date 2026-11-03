@@ -79,7 +79,7 @@ The command fetches `/y/y.ps1` from `202[.]71[.]14[.]31` and runs the saved scri
 
 On September 29, 2026 the host exposed `hxxp://202[.]71[.]14[.]31/y/` as an open directory listing one file, `y.ps1`, with that same SHA-256. So the script VirusTotal first saw on September 25 was still being served unchanged four days later. That brackets the September 26 scan but does not prove what its visitor received, and whether `/x/x.exe` is still served is NOT CHECKED.
 
-The chain below restates the first four stages above, the ones whose order the report states: the saved pages, then the pasted command, then the script, then the executable. The capabilities in the executable are not given a run order and stay in Section 5.
+The chain below restates the first four stages above, the ones whose order I state: the saved pages, then the pasted command, then the script, then the executable. The capabilities in the executable are not given a run order and stay in Section 5.
 
 | Stage | What happens | Where it is shown |
 |---|---|---|
