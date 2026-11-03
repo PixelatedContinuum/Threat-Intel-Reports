@@ -87,3 +87,41 @@ test('wireDetailsSplit: a finding in a Wire details panel is exempt only when it
   assert.ok(sp.exempt.length >= 2 && sp.exempt.every((f) => /9\.16\.2\.7|Outlook\.com/.test(f.token)));
   assert.strictEqual(S.wireDetailsSplit(found, []).kept.length, found.length, 'an empty or unreadable details file exempts nothing');
 });
+
+/* ---- fix-r2, review finding S4: a literal is exempt as a WHOLE cell, never as a substring, and a network-bearing path is not a literal ----
+   The reviewer's two probes: a filename literal "evil-host.example.xyz" removed from a copied "http://evil-host.example.xyz/a" left zero findings, and a UNC path with a raw host
+   (data-literal="path") was accepted as a literal and its cell skipped. The controls are the cases that must still pass: the literal as the whole line, as a whole CSV field (quoted or
+   not), an ordinary Windows path and a filename that looks like a domain (gs.sh). The names are RFC 2606 / the review's own fixture. */
+const UNC = String.fromCharCode(92, 92) + 'evil-host.example.xyz' + String.fromCharCode(92) + 'share';
+test('S4: the literal exemption is whole-field: a filename literal does not hide the same host inside a copied URL or a longer line', () => {
+  const sc = S.makeScanner(ALLOW);
+  const P = 'ioc-feeds/x/index.html';
+  const lits = [{ type: 'filename', value: 'evil-host.example.xyz' }];
+  assert.ok(sc.scanText(P, 'clip:copy', 'http://evil-host.example.xyz/a', lits).length >= 1, 'a URL that holds the literal as a substring is judged (the review probe)');
+  assert.ok(sc.scanText(P, 'clip:copy', 'evil-host.example.xyz,beacon http://evil-host.example.xyz/a', lits).length >= 1, 'a URL inside another field of the row is judged');
+  assert.ok(sc.scanText(P, 'clip:copy', 'see evil-host.example.xyz now', lits).length >= 1, 'the literal inside a sentence is not a whole cell');
+  assert.ok(sc.scanText(P, 'clip:copy', 'evil-host.example.xyz.other.net', lits).length >= 1, 'a longer name that starts with the literal is judged');
+  // controls: the whole cell, in every shape the viewer writes it, still passes
+  assert.deepStrictEqual(sc.scanText(P, 'clip:copy', 'evil-host.example.xyz', lits), [], '.txt / clipboard line that is the literal');
+  assert.deepStrictEqual(sc.scanText(P, 'blob:csv', 'evil-host.example.xyz,filename,dropped,HIGH', lits), [], 'csv first field');
+  assert.deepStrictEqual(sc.scanText(P, 'blob:csv', '"evil-host.example.xyz",filename,"dropped, then run"', lits), [], 'csv quoted field');
+  assert.deepStrictEqual(sc.scanText(P, 'blob:csv', 'value,type\nevil-host.example.xyz\tfilename', lits), [], 'a tab-separated field');
+  assert.ok(sc.scanText(P, 'blob:csv', 'hxxp://x[.]example[.]xyz/a,filename', []).length === 0, 'control: a defanged value passes with no literal list');
+});
+test('S4: a network-bearing path, filename or registry value is not a literal: the DOM cell is judged and the capture exemption is refused', () => {
+  const sc = S.makeScanner(ALLOW);
+  const P = 'ioc-feeds/x/index.html';
+  const bad = sc.scan(P, PAGE('<p>safe text</p><code data-literal="path">' + UNC + '</code>'));
+  assert.ok(bad.some((f) => f.kind === 'LITERAL-MISUSE'), 'the UNC path cell is reported as a misused literal: ' + JSON.stringify(bad.map((f) => f.kind)));
+  assert.ok(bad.some((f) => f.ctx !== 'literal'), 'and its text is judged like prose, so the raw host is a finding in its own right');
+  assert.ok(sc.scanText(P, 'clip:copy', UNC, [{ type: 'path', value: UNC }]).length >= 1, 'a UNC path is not honoured as a captured literal either');
+  [['filename', 'http://evil-host.example.xyz/x.exe'], ['filename', '1468_US_23.106.161.1_28-01-26.cab'], ['registry', 'HKLM' + String.fromCharCode(92) + 'x' + String.fromCharCode(92) + 'http://evil-host.example.xyz'],
+   ['path', '//evil-host.example.xyz/share']].forEach(([ty, v]) => {
+    assert.ok(sc.scan(P, PAGE('<code data-literal="' + ty + '">' + v + '</code>')).some((f) => f.kind === 'LITERAL-MISUSE'), ty + ' ' + v);
+  });
+  // controls: an ordinary Windows path, a registry key, a filename that merely looks like a domain and a version number in a name stay literal
+  [['path', 'C:' + String.fromCharCode(92) + 'Windows' + String.fromCharCode(92) + 'x.exe'], ['registry', 'HKLM' + String.fromCharCode(92) + 'SYSTEM' + String.fromCharCode(92) + 'Svc.Key'],
+   ['filename', 'gs.sh'], ['filename', 'setup_1.2.exe'], ['sha256', 'a'.repeat(64)]].forEach(([ty, v]) => {
+    assert.deepStrictEqual(sc.scan(P, PAGE('<code data-literal="' + ty + '">' + v + '</code>')), [], ty + ' ' + v + ' stays literal');
+  });
+});
