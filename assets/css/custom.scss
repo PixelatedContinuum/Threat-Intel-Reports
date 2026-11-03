@@ -48,6 +48,8 @@
   --hl-muted-d:        #a8a8a8;   /* secondary text on D surfaces (7.3:1 on the card) */
   --hl-font-mono:      ui-monospace, 'Cascadia Mono', SFMono-Regular, Menlo, Consolas, monospace;
   --hl-nav-h:          52px;      /* the thin D header on tablet and desktop */
+  --hl-nav-mh:         58px;      /* the phone header (768px and below) */
+  --hl-nav-vis:        var(--hl-nav-h);   /* the header height a reader can see right now; the phone auto-hide script in _layouts/default.html sets it to 0px while the header is hidden */
   /* content column from 1440px: 1240 less the left-margin card's room (= --rv-col) */
   --hl-col:            min(1240px, calc(100vw - 320px));
   /* THE one definition of the sponsor card's place in the left margin (T-0500.1.7.4 review 2, C2). Every page reads it: the non-report pages' .hl-sponsor-rail below and,
@@ -6776,7 +6778,8 @@ main.content:focus { outline: none; }
    The field opens over the bar as an absolutely positioned box when focused,
    so it never reflows the row. 16px font stops iOS zooming the page. */
 @media (max-width: 768px) {
-  .hl-nav { height: 58px; padding-top: 0; padding-bottom: 0; flex-wrap: nowrap; gap: 10px; }
+  :root { --hl-nav-vis: var(--hl-nav-mh); }
+  .hl-nav { height: var(--hl-nav-mh); padding-top: 0; padding-bottom: 0; flex-wrap: nowrap; gap: 10px; }
   .hl-nav__menu { height: 44px; min-width: 44px; padding: 0 9px; justify-content: center; }
   .hl-nav__menu-label { display: none; }
   .hl-nav__search { position: relative; margin-left: auto; padding: 0 8px; }
@@ -7990,8 +7993,9 @@ a.hl-cred-pill--link:hover { border-color: #fbbf24; color: var(--hl-text-primary
   --field-line: var(--hl-field-line);
   --grey: #9ca3af;
 }
-html:has(.hl-sbar) { scroll-padding-top: calc(var(--hl-nav-h) + var(--sbh, 86px) + 8px); }
-@media (max-width: 700px) { html:has(.hl-sbar) { scroll-padding-top: calc(var(--sbh, 70px) + 8px); } }
+/* the bar and the anchor padding both read --hl-nav-vis, the header height actually showing (52px on a desktop, 58px on a phone while it is shown, 0 while it is hidden) */
+html:has(.hl-sbar) { scroll-padding-top: calc(var(--hl-nav-vis) + var(--sbh, 86px) + 8px); }
+@media (max-width: 700px) { html:has(.hl-sbar) { scroll-padding-top: calc(var(--hl-nav-vis) + var(--sbh, 70px) + 8px); } }
 .hl-idx--dash .hl-d-plate .hl-actor__alias { display: block; margin-top: 6px; font: 500 clamp(18px, 2vw, 24px)/1.2 var(--hl-font-display); color: var(--hl-muted-d); -webkit-text-fill-color: currentColor; letter-spacing: 0; }
 .hl-idx--dash .hl-d-plate .hl-xref__id {
   font: 700 0.72em var(--hl-font-mono); letter-spacing: 0; color: var(--ph-accent);
@@ -8015,7 +8019,7 @@ html:has(.hl-sbar) { scroll-padding-top: calc(var(--hl-nav-h) + var(--sbh, 86px)
 /* ---------- the sticky icon section bar ---------- */
 .hl-sbar {
   position: sticky;
-  top: var(--hl-nav-h);
+  top: var(--hl-nav-vis);
   z-index: 900;
   margin-top: 14px;
   background: rgba(17, 17, 17, 0.95);
@@ -8023,7 +8027,7 @@ html:has(.hl-sbar) { scroll-padding-top: calc(var(--hl-nav-h) + var(--sbh, 86px)
   backdrop-filter: blur(10px);
   border-bottom: 1px solid var(--hl-border-card);
 }
-@media (max-width: 700px) { .hl-sbar { top: 0; } }
+@media (max-width: 768px) { .hl-sbar { transition: top 0.28s ease; } }   /* in step with the header's slide (.hl-nav transition) */
 .hl-sbar a[hidden] { display: none; }
 .hl-sbar__list { display: grid; grid-template-columns: repeat(var(--n, 4), minmax(0, 1fr)); gap: 8px; padding: 8px 0; }
 .hl-sbar a {

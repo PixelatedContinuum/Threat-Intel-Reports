@@ -71,8 +71,16 @@
         if (!toc || toc.style.top === '') return;   // only on report pages with an active TOC bar
         toc.style.transform = hidden ? 'translateY(-' + nav.offsetHeight + 'px)' : '';
       }
-      function hide() { nav.classList.add('hl-nav--hidden'); setToc(true); }
-      function show() { nav.classList.remove('hl-nav--hidden'); setToc(false); }
+      /* --hl-nav-vis is the height of header a reader can see: the sticky section bar of the actor, family and technique dashboards sits under it
+         (top: var(--hl-nav-vis)) and the anchor scroll padding adds it (T-0500.1.7.4 review 2, C1). On a phone it follows the auto-hide: the nav's
+         real height while shown, 0 while hidden; above 768px (or without this script) the stylesheet's own value stands. */
+      var root = document.documentElement;
+      function setVis(hidden) {
+        if (mq.matches) root.style.setProperty('--hl-nav-vis', hidden ? '0px' : nav.offsetHeight + 'px');
+        else root.style.removeProperty('--hl-nav-vis');
+      }
+      function hide() { nav.classList.add('hl-nav--hidden'); setToc(true); setVis(true); }
+      function show() { nav.classList.remove('hl-nav--hidden'); setToc(false); setVis(false); }
 
       function update() {
         ticking = false;
@@ -88,6 +96,17 @@
         if (!ticking) { window.requestAnimationFrame(update); ticking = true; }
       }, { passive: true });
       if (mq.addEventListener) mq.addEventListener('change', show);  // reset when leaving phone width
+      /* A section-bar link scrolls to its section. Set the header to the state the scroll will end in, before it starts, so the scroll padding
+         the browser reads is the real one: a target above the bar means an upward scroll (the header returns), below it a downward one (it hides). */
+      var sbar = document.querySelector('.hl-sbar');
+      if (sbar) sbar.addEventListener('click', function (e) {
+        var a = e.target && e.target.closest ? e.target.closest('a[href^="#"]') : null;
+        if (!a || !mq.matches) return;
+        var t = document.getElementById(a.getAttribute('href').slice(1));
+        if (!t) return;
+        if (t.getBoundingClientRect().top < sbar.getBoundingClientRect().bottom) show(); else hide();
+        lastY = window.pageYOffset;
+      });
     })();
     </script>
   </body>
