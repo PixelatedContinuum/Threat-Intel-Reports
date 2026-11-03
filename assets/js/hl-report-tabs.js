@@ -889,7 +889,7 @@
     opt = opt || {};
     var cellBox = make('div', 'hl-rv-tilecell', null, parent);
     var a = opt.noLink ? make('div', 'hl-rv-tile', null, cellBox) : link('', opt.href || '#tab-' + tok, cellBox); a.className = 'hl-rv-tile'; a.dataset.rvShort = short; if (opt.kind) a.dataset.rvTile = opt.kind;
-    var big = make('strong', 'hl-rv-value', value, a); make('span', '', label, a);
+    var big = make('strong', 'hl-rv-value', opt.kind === 'threat' && /^critical$/i.test(value) ? 'CRIT.' : value, a); make('span', '', label, a); if (big.textContent !== String(value)) a.dataset.rvFull = value;
     if (String(value).length > 8) big.classList.add('hl-rv-value--long');
     if (opt.viz) {
       var viz = make('span', 'hl-rv-tile-viz' + (opt.viz.dots ? ' hl-rv-tile-viz--dots' : '') + (opt.viz.bar !== undefined ? ' hl-rv-tile-viz--bar' : ''), null, a); viz.setAttribute('aria-hidden', 'true');
@@ -974,7 +974,7 @@
       }
       scanBand(body); riskPanel(body); judgmentsPanel(body);
       if (!count) missing(body, 'a victim grade, procedure, risk, detection, indicator or dated chronology source to count');
-      var line = Array.from(tiles.querySelectorAll('.hl-rv-tile')).map(function (t) { return text(t.querySelector('strong')) + ' ' + t.dataset.rvShort; }).join(' · ');
+      var line = Array.from(tiles.querySelectorAll('.hl-rv-tile')).map(function (t) { return (t.dataset.rvFull || text(t.querySelector('strong'))) + ' ' + t.dataset.rvShort; }).join(' · ');
       return line || 'Headline figures remain in the full report';
     },
     victims: function (body) {

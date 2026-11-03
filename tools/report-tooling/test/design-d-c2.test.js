@@ -35,7 +35,7 @@ test('D3 tiles: a report with a victim grade table and an ATT&CK table keeps the
 test('D3 tiles: with no victim table the fallback set is built from what the report has: threat level, overall risk (the table\'s Overall row), techniques, rules, IOC entries; each tile is of a named kind with a source in its note', () => {
   const f = page([['overview', RISK, 'Risk assessment'], ['chain', ATT]], { meta: '<p>Threat Level: CRITICAL</p>', site: { rules: { total: 13, sigma: 5, yara: 0, suricata: 8, detection: 6, hunting: 7 }, iocs: { total: 42, feed_url: '/ioc-feeds/x.json' }, techniques: null, detection_page: '/hunting-detections/x/' } });
   try {
-    assert.deepEqual(tilesOf(f), [['threat', 'CRITICAL'], ['risk', '8.3/10'], ['techniques', '3'], ['drules', '13'], ['iocs', '42']]);
+    assert.deepEqual(tilesOf(f), [['threat', 'CRIT.'], ['risk', '8.3/10'], ['techniques', '3'], ['drules', '13'], ['iocs', '42']]);
     f.d.querySelectorAll('#tab-overview .hl-rv-tilecell').forEach(c => { const t = c.querySelector('.hl-rv-tile'); assert.match(txt(c.querySelector('.hl-rv-pop')), /How counted: .+ From .+\./, t.dataset.rvTile); });
     assert.equal(f.d.querySelector('[data-rv-tile=threat]').tagName, 'DIV', 'the threat tile has no destination, so it is not a link');
     assert.equal(f.d.querySelector('[data-rv-tile=iocs]').getAttribute('href'), '/ioc-feeds/x.json');

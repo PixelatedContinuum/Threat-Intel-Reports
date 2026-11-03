@@ -838,7 +838,7 @@ function shapesInPage(SPECS, ALT) {
     if (chron) { var dc = col(chron, /^Date|^Time|^When/i); tiles.push(chron.rows[0][dc] + ' to ' + chron.rows[chron.rows.length - 1][dc]); }
   } else {
     var meta = [].slice.call(document.querySelectorAll('.hl-rv-source > p')).map(txt).filter(function (t) { return /^(Campaign Identifier|Last Updated|Threat Level):/.test(t); }).join(' ');
-    var th = meta.match(/(?:^|\s)Threat Level:\s*(CRITICAL|HIGH|MEDIUM|MODERATE|LOW)\b/i); if (th) tiles.push(th[1]);
+    var th = meta.match(/(?:^|\s)Threat Level:\s*(CRITICAL|HIGH|MEDIUM|MODERATE|LOW)\b/i); if (th) tiles.push(/^critical$/i.test(th[1]) ? 'CRIT.' : th[1]);
     var risks = (tabs.overview || []).filter(function (m) { return m.valid && m.headers.some(function (h) { return /^(Risk (Dimension|Factor)|Dimension)$/i.test(h); }) && m.headers.some(function (h) { return /^Score|^Rating/i.test(h); }); });
     var overall = null;
     risks.forEach(function (m) { if (overall) return; var nc = col(m, /^(Risk (Dimension|Factor)|Dimension)$/i), sc = col(m, /^Score|^Rating/i);
@@ -917,7 +917,7 @@ function viewShapeVerdictBase(token, shape, line, primaryCount, notice, src) {
   if (!m && !wordsOnly) return { absent: false, ok: false, detail: 'the report has ' + need + ' but the summary ' + JSON.stringify(line) + ' states no figure' };
   var why2 = [];
   var wantFigure = token === 'overview' ? Number(String((src.tiles || []).join(' ')).match(/\d+/) || NaN) : src.rows;
-  if (wordsOnly && String(line || '').indexOf(String((src.tiles || [])[0] || '\u0000')) < 0) why2.push('the summary ' + JSON.stringify(line) + ' does not state the first tile, ' + JSON.stringify((src.tiles || [])[0]));
+  if (wordsOnly && String(line || '').indexOf(String((src.tiles || [])[0] || '\u0000').replace(/\.$/, '')) < 0) why2.push('the summary ' + JSON.stringify(line) + ' does not state the first tile, ' + JSON.stringify((src.tiles || [])[0]));
   if (m && Number(m[0]) !== wantFigure) why2.push('summary states ' + m[0] + ', the source has ' + wantFigure + (token === 'overview' ? ' for the first figure in the tiles' : ' rows'));
   if (primaryCount !== src.rows) why2.push('the view draws ' + primaryCount + ' ' + TAB_PRIMARY[token] + ', the source has ' + src.rows + (token === 'overview' ? ' tiles' : ' rows'));
   var idNote = '';
