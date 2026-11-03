@@ -22,11 +22,14 @@
      4. serialises the DOM as it stands (input values written back into the markup, except the IOC search box a query was typed into: that text is the reader's own) and judges
         it with scanDocument: text nodes, tooltip attributes (title, alt, aria-label, placeholder, data-copy, data-gloss), links, the head; and judges every captured string
         line by line.
-   EXEMPT BY DECISION 5 (counted, never judged): a copy or download taken from a <pre> (the .hl-copy rule blocks), and any copy or download on a detection page (rule bodies and
-   the picker's rule bundle); the machine feed files are not reached by this gate at all.
+   EXEMPT BY DECISION 5 (counted, never judged): a copy or download taken from a <pre> (the .hl-copy rule blocks) and, on a detection page only, the rule picker's bundle download; a share
+   is never exempt, nor is anything else a detection page does (lib/browser-defang-core.js captureExempt). The machine feed files are not reached by this gate at all.
+   INPUT VALUES are judged (the serialiser writes them into the markup and the scanner reads the value of every displayed input); the one exemption is the box the gate itself typed into,
+   while it still holds exactly what was typed.
 
-   EXIT: 0 PASS; 1 FAIL (a raw indicator in the rendered DOM or in a captured string, a page that did not load, or a zero denominator: pages, text nodes or controls);
-   2 NOT CHECKED (no browser, a missing dependency, an unreadable site).
+   EXIT: 0 PASS; 1 FAIL (a raw indicator in the rendered DOM, an input's value or a captured string, or a page that did not load); 2 NOT CHECKED (no browser, a missing dependency, an
+   unreadable site, no page selected, or any surface that could not be checked: a zero denominator of pages, text nodes, controls or captures, an unreadable ioc-index.json, a scenario that
+   did not run). A FAIL outranks a NOT CHECKED; a NOT CHECKED outranks a PASS, so a run with a surface it could not check never ends PASS (T-0500.1.7.4 fix-r2, finding S1).
    PRINTS: pages, widths, controls pressed by kind, captures by kind and how many were judged and how many exempt, DOM text nodes and tooltip attributes judged, and a CANNOT SEE line.
 
    THE GATE'S OWN KNOWN POSITIVE is a separate script, tasks/runs/T-0500.1.7.4/build/fix-r1/browser-defang-control.sh: it stages a scratch copy of the site, plants one defect per page (an inline
@@ -39,11 +42,12 @@ var fs = require('node:fs');
 
 function notChecked(reason) { console.log('NOT CHECKED  ' + reason); process.exit(2); }
 
-var CDP, SERVER, SITE;
+var CDP, SERVER, SITE, CORE;
 try {
   CDP = require('./lib/cdp.js');
   SERVER = require('./lib/page-server.js');
   SITE = require('./lib/defang-site.js');
+  CORE = require('./lib/browser-defang-core.js');
 } catch (e) { notChecked(e.message + '. Run `npm ci` in tools/report-tooling, then re-run.'); }
 
 var ROOT = path.join(__dirname, '..', '..');
@@ -76,7 +80,7 @@ function selectPages() {
 }
 var sel = selectPages();
 if (listOnly) { console.log(sel.pages.join('\n')); console.log('# ' + sel.pages.length + ' of ' + sel.total + ' pages; ' + sel.notes.join('; ')); process.exit(0); }
-if (!sel.pages.length) { console.log('FAIL  no page selected (' + sel.total + ' pages in the site): a gate that visits nothing passes nothing'); process.exit(1); }
+if (!sel.pages.length) { console.log('NOT CHECKED  no page selected (' + sel.total + ' pages in the site, selection ' + (only ? only : 'all') + '): a gate that visits nothing has checked nothing, and says so (exit 2), neither PASS nor FAIL'); process.exit(2); }
 
 /* The stubs, installed before the page's own scripts. They record and return, they never write the real clipboard or leave the page. */
 var CAPTURE_SRC = '(' + function () {
@@ -132,29 +136,17 @@ var DRIVE_FN = async function (opts) {
     var before = [cap.clip.length, cap.share.length, cap.blobs.length, cap.exec.length];
     var label = String(b.getAttribute('data-act') || b.getAttribute('aria-label') || b.textContent || '').trim().slice(0, 48);
     var cls = String(b.className || '').split(/\s+/).filter(Boolean).slice(0, 2).join('.');
-    var inPre = !!b.closest('pre');
+    var inPre = !!b.closest('pre'), inPicker = !!b.closest('.hl-picker');
     try { b.click(); } catch (e) { out.presses.push({ label: label, cls: cls, error: String(e.message) }); continue; }
     await sleep(140);
-    out.presses.push({ label: label, cls: cls, inPre: inPre, clip: cap.clip.slice(before[0]), share: cap.share.slice(before[1]), blobs: cap.blobs.slice(before[2]), exec: cap.exec.slice(before[3]) });
+    out.presses.push({ label: label, cls: cls, inPre: inPre, inPicker: inPicker, clip: cap.clip.slice(before[0]), share: cap.share.slice(before[1]), blobs: cap.blobs.slice(before[2]), exec: cap.exec.slice(before[3]) });
   }
   out.here = location.pathname + location.search;
   return out;
 };
 var DRIVE_SRC = '(' + DRIVE_FN.toString() + ')';
 
-var SERIALISE_FN = function (skip, cutSel) {
-  Array.prototype.forEach.call(document.querySelectorAll('input,textarea'), function (e) {
-    if (skip && e.matches(skip)) { if (e.tagName === 'TEXTAREA') e.textContent = ''; else e.setAttribute('value', ''); return; }
-    if (e.tagName === 'TEXTAREA') e.textContent = e.value; else e.setAttribute('value', e.value);
-  });
-  if (!cutSel) return '<!DOCTYPE html>' + document.documentElement.outerHTML;
-  // cutSel (the Wire details panels): the page without those panels, and the panels apart, each judged on its own
-  var panels = Array.prototype.map.call(document.querySelectorAll(cutSel), function (n) { return n.outerHTML; });
-  var c = document.documentElement.cloneNode(true);
-  Array.prototype.forEach.call(c.querySelectorAll(cutSel), function (n) { n.textContent = ''; });
-  return JSON.stringify({ html: '<!DOCTYPE html>' + c.outerHTML, panels: panels });
-};
-var SERIALISE_SRC = '(' + SERIALISE_FN.toString() + ')';
+var SERIALISE_SRC = '(' + CORE.SERIALISE_FN.toString() + ')';
 
 function sleep(ms) { return CDP.sleep(ms); }
 
@@ -166,7 +158,7 @@ function sleep(ms) { return CDP.sleep(ms); }
   try { page = await CDP.open('about:blank', { settle: 50 }); } catch (e) { srv.close(); if (e.notChecked) notChecked(e.message); throw e; }
   var ev = page.evaluate;
   var T = { pages: 0, loads: 0, loadFails: [], runs: 0, presses: 0, pressErrors: 0, byKind: {}, captures: { clip: 0, share: 0, blobs: 0, exec: 0 }, judged: 0, exempt: 0, extras: 0, blocked: 0,
-            consoleThrows: [], findings: [], seen: {}, literals: [], literalCells: 0, stubs: 0, wirePanels: 0, wireKept: 0, wireExemptTokens: {}, perPage: {} };
+            consoleThrows: [], findings: [], seen: {}, literals: [], literalCells: 0, stubs: 0, wirePanels: 0, wireKept: 0, wireExemptTokens: {}, perPage: {}, unavailable: [] };
   var idxJson = null;
   try { idxJson = JSON.parse(fs.readFileSync(path.join(siteDir, 'assets/data/ioc-index.json'), 'utf8')); } catch (e) { /* the search scenario then says NOT CHECKED for itself */ }
 
@@ -199,20 +191,21 @@ function sleep(ms) { return CDP.sleep(ms); }
       var k = p.cls || p.label || 'button';
       T.byKind[k] = (T.byKind[k] || 0) + 1;
       if (p.error) { T.pressErrors++; return; }
-      var exempt = pageType === 'detection' || p.inPre;
-      (p.clip || []).forEach(function (t) { judgeCapture(rel, 'clip', p.label, t, exempt); });
-      (p.share || []).forEach(function (t) { judgeCapture(rel, 'share', p.label, t, exempt); });
-      (p.blobs || []).forEach(function (t) { judgeCapture(rel, 'blob', p.label, t, exempt); });
-      (p.exec || []).forEach(function (t) { judgeCapture(rel, 'exec', p.label, t, exempt); });
+      // exact by decision 5 only for a copy or download taken from a rule block (or, on a detection page, from the rule picker); a share is always judged (CORE.captureExempt)
+      (p.clip || []).forEach(function (t) { judgeCapture(rel, 'clip', p.label, t, CORE.captureExempt(pageType, p, 'clip')); });
+      (p.share || []).forEach(function (t) { judgeCapture(rel, 'share', p.label, t, CORE.captureExempt(pageType, p, 'share')); });
+      (p.blobs || []).forEach(function (t) { judgeCapture(rel, 'blob', p.label, t, CORE.captureExempt(pageType, p, 'blob')); });
+      (p.exec || []).forEach(function (t) { judgeCapture(rel, 'exec', p.label, t, CORE.captureExempt(pageType, p, 'exec')); });
     });
   }
+  function unavailable(why) { T.unavailable.push(why); console.log('   NOT CHECKED  ' + why); }
   var WIRE_PANEL = '.hl-dt__panel';
   var wireStrings = null;
   // the two fact-sheet files the panels are built from: the nKEVs tab (details-nkev.json) and the CVEs tab (details-cves.json), the same kind of third-party CVE-record text
   try { wireStrings = ['details-nkev.json', 'details-cves.json'].reduce(function (all, f) { return all.concat(SITE.wireDetailsStrings(fs.readFileSync(path.join(siteDir, 'wire', f), 'utf8'))); }, []); } catch (e) { wireStrings = null; }
-  async function snapshot(rel, skip) {
+  async function snapshot(rel, skip, typed) {
     var isWire = SITE.pageType(rel) === 'wire';
-    var raw = await ev(SERIALISE_SRC + '(' + JSON.stringify(skip || '') + (isWire ? ',' + JSON.stringify(WIRE_PANEL) : '') + ')');
+    var raw = await ev(SERIALISE_SRC + '(' + JSON.stringify(skip || '') + ',' + JSON.stringify(typeof typed === 'string' ? typed : null) + (isWire ? ',' + JSON.stringify(WIRE_PANEL) : '') + ')');
     var html = raw, panels = [];
     if (isWire) { var o = JSON.parse(raw); html = o.html; panels = o.panels; }
     var found = scanner.scan(rel, html);
@@ -240,22 +233,27 @@ function sleep(ms) { return CDP.sleep(ms); }
 
   /* ---- per-type scenarios (each snapshot is judged as a page state) ---- */
   async function scenarioIocIndex(rel) {
-    if (!idxJson) { T.extras++; console.log('   NOT CHECKED  ioc-index.json unreadable: the search scenario did not run'); return; }
-    var keys = Object.keys(idxJson.indicators);
+    // Every way this scenario cannot run is a surface that was NOT CHECKED (fix-r2, review finding S1): it is counted into the verdict, not only printed.
+    if (!idxJson) { T.extras++; unavailable(rel + ': assets/data/ioc-index.json unreadable, so the IOC search scenario did not run'); return; }
+    if (!(await ev('!!document.querySelector(".hl-iocsearch__in") && !!document.querySelector(".hl-iocsearch__result")'))) { T.extras++; unavailable(rel + ': no IOC search box (.hl-iocsearch__in) or result line on the page, so the IOC search scenario did not run'); return; }
+    var keys = Object.keys(idxJson.indicators || {});
     var pick = function (t) { var k = keys.filter(function (x) { return x.indexOf(t + ':') === 0 && !/^ipv4:(10\.|192\.168\.|127\.)/.test(x); }); return k.map(function (x) { return x.slice(t.length + 1); }); };
     var ips = pick('ipv4'), doms = pick('domain').filter(function (d) { return /^[a-z0-9-]+\.[a-z]{2,}$/.test(d); }), urls = pick('url');
-    var titled = Object.keys(idxJson.reports).filter(function (r) { return /\d+\.\d+\.\d+\.\d+/.test(idxJson.reports[r].title); });
+    if (ips.length < 2 || doms.length < 3 || !urls.length) { T.extras++; unavailable(rel + ': ioc-index.json holds too few indicators to build the queries (' + ips.length + ' addresses, ' + doms.length + ' domains, ' + urls.length + ' URLs; needs 2, 3 and 1)'); return; }
+    var titled = Object.keys(idxJson.reports || {}).filter(function (r) { return /\d+\.\d+\.\d+\.\d+/.test(idxJson.reports[r].title); });
     var inTitled = keys.filter(function (k) { return /^(domain|ipv4):/.test(k) && idxJson.indicators[k].some(function (h) { return titled.indexOf(h.report) > -1; }); }).slice(0, 3).map(function (k) { return k.replace(/^[a-z0-9]+:/, ''); });
     var nb = Object.keys(idxJson.never_block || {}).filter(function (k) { return /^(domain|url):/.test(k); }).map(function (k) { return k.replace(/^[a-z0-9]+:/, ''); });
     var queries = [['defanged address', ips[0].replace(/\./g, '[.]')], ['raw address', ips[0]], ['domain', doms[0]], ['URL', urls[0]],
       ['list of five', [ips[0], doms[0], urls[0], ips[1], doms[1]].join('\n')], ['list whose feed titles carry an address', inTitled.join('\n')],
       ['list with a withheld value and a miss', [ips[0], nb[0] || doms[2], 'not-in-any-feed.example.net'].join('\n')]];
     for (var i = 0; i < queries.length; i++) {
+      if (!queries[i][1]) { T.extras++; unavailable(rel + ': IOC search query "' + queries[i][0] + '" is empty (nothing in the index to build it from)'); continue; }
       await ev('(function(q){var i=document.querySelector(".hl-iocsearch__in");i.value=q;i.dispatchEvent(new Event("input",{bubbles:true}));})(' + JSON.stringify(queries[i][1]) + ')');
       await sleep(600);
       var res = await ev('document.querySelector(".hl-iocsearch__result").textContent.length');
       T.extras++; (T.perPage[rel].scenarios = T.perPage[rel].scenarios || []).push(queries[i][0] + ' (result ' + res + ' chars)');
-      await snapshot(rel, '.hl-iocsearch__in');   // the box holds what was typed: the reader's own text
+      if (!res) unavailable(rel + ': IOC search query "' + queries[i][0] + '" produced no result sentence, so there was nothing to judge (is the search script running?)');
+      await snapshot(rel, '.hl-iocsearch__in', queries[i][1]);   // the box holds exactly what the gate typed: the reader's own text. If the page rewrote it, it is judged.
     }
     // a ?q= link that carries a raw indicator: the page fills the box itself, so the box is judged
     await page.send('Page.navigate', { url: srv.origin + '/ioc-feeds/?q=' + encodeURIComponent([ips[0], doms[0]].join('\n')) });
@@ -269,19 +267,22 @@ function sleep(ms) { return CDP.sleep(ms); }
     await sleep(1800);   // the two details files are fetched once each
     var panels = await ev('document.querySelectorAll(".hl-dt__panel").length');
     T.extras++; (T.perPage[rel].scenarios = T.perPage[rel].scenarios || []).push('Wire details opened: ' + n + ' toggles pressed, ' + panels + ' panels in the DOM');
-    if (!n || !panels) T.findings.push({ page: rel, type: 'wire', ctx: 'scenario', kind: 'ZERO-DENOMINATOR', token: 'no Wire details toggle pressed or no panel opened (' + n + '/' + panels + ')' });
+    if (!n || !panels) unavailable(rel + ': no Wire details toggle pressed or no panel opened (' + n + ' toggles / ' + panels + ' panels): a zero denominator, so the Wire details panels were not judged');
     await snapshot(rel, '');
   }
+  var SITE_SEARCH_BOX = '#hl-search input, input[type=search], .pagefind-ui__search-input';
   async function scenarioSearch(rel) {
-    var has = await ev('!!document.querySelector("#hl-search input, input[type=search], .pagefind-ui__search-input")');
-    var qs = idxJson ? [Object.keys(idxJson.indicators).filter(function (k) { return k.indexOf('ipv4:') === 0; })[0].slice(5), 'xworm'] : ['xworm'];
+    var has = await ev('!!document.querySelector(' + JSON.stringify(SITE_SEARCH_BOX) + ')');
+    var v4 = idxJson ? Object.keys(idxJson.indicators || {}).filter(function (k) { return k.indexOf('ipv4:') === 0; }) : [];
+    var qs = v4.length ? [v4[0].slice(5), 'xworm'] : ['xworm'];
+    if (!has) unavailable(rel + ': no site search box found (' + SITE_SEARCH_BOX + '), so no site search query was typed');
     for (var i = 0; i < qs.length; i++) {
       if (has) {
-        await ev('(function(q){var i=document.querySelector("#hl-search input, input[type=search], .pagefind-ui__search-input");i.focus();i.value=q;i.dispatchEvent(new Event("input",{bubbles:true}));})(' + JSON.stringify(qs[i]) + ')');
+        await ev('(function(q){var i=document.querySelector(' + JSON.stringify(SITE_SEARCH_BOX) + ');i.focus();i.value=q;i.dispatchEvent(new Event("input",{bubbles:true}));})(' + JSON.stringify(qs[i]) + ')');
         await sleep(2000);
       }
       T.extras++; (T.perPage[rel].scenarios = T.perPage[rel].scenarios || []).push('site search "' + qs[i] + '" (' + (has ? 'typed' : 'NO SEARCH BOX FOUND') + ')');
-      await snapshot(rel, 'input');
+      await snapshot(rel, has ? SITE_SEARCH_BOX : '', qs[i]);   // only the box the gate typed into, and only while it still holds what was typed
     }
   }
 
@@ -348,21 +349,23 @@ function sleep(ms) { return CDP.sleep(ms); }
   console.log('literal cells      ' + T.literalCells + ' data-literal cells read across the page loads; a captured line is judged without a value that equals one of them (hash, filename, path, registry as recorded)');
   console.log('wire exemption     ' + (wireStrings ? Object.keys(T.wireExemptTokens).length + ' distinct finding(s) inside Wire details panels exempt (' + T.wirePanels + ' panel states judged apart): the token is a string value of wire/details-nkev.json or wire/details-cves.json (third-party advisory text, lead decision T-0500.1.7.4 fix-r1); ' + T.wireKept + ' panel finding(s) kept as findings' : 'NONE (wire/details-nkev.json or details-cves.json not readable: every finding in a panel is kept)'));
   console.log('scenarios          ' + T.extras + ' (IOC search queries and ?q= link, Wire details, site search)');
-  var zero = [];
-  if (!T.loads) zero.push('no page loaded');
-  if (!st.textNodes) zero.push('no text node judged');
-  if (!T.presses) zero.push('no control pressed on any page');
-  if (!T.judged) zero.push('no captured string judged (the clipboard stub never fired: it is not proven to work)');
-  zero.forEach(function (z) { T.findings.push({ page: '(run)', type: 'run', ctx: 'denominator', kind: 'ZERO-DENOMINATOR', token: z }); byPage['(run) [run]'] = (byPage['(run) [run]'] || []).concat([{ kind: 'ZERO-DENOMINATOR', token: z, ctx: 'denominator' }]); });
+  // zero denominators are NOT CHECKED surfaces (gate-honesty-contract: a count of nothing is never a pass and never a defect of the page)
+  if (!T.loads && !T.stubs && !T.loadFails.length) unavailable('no page loaded');
+  if (!T.loads && T.stubs) unavailable('every selected page is a redirect stub: none was driven, so no script ran');
+  if (T.loads && !st.textNodes) unavailable('no text node judged');
+  if (T.loads && !T.presses) unavailable('no control pressed on any page');
+  if (T.loads && !T.judged) unavailable('no captured string judged (the clipboard stub never fired: it is not proven to work)');
   Object.keys(byPage).sort().forEach(function (k) {
     var l = byPage[k], seen = {};
     console.log('FAIL  ' + k + ': ' + l.length);
     l.forEach(function (f) { var line = '        ' + f.kind + ' [' + f.ctx + '] ' + require('./check-defang.js').defangForPrint(String(f.token)).slice(0, 110) + (f.near ? '   near: ' + require('./check-defang.js').defangForPrint(String(f.near)).slice(0, 80) : ''); if (!seen[line] && Object.keys(seen).length < 6) { seen[line] = 1; console.log(line); } });
   });
-  if (outFile) fs.writeFileSync(outFile, JSON.stringify({ totals: { pages: T.pages, loads: T.loads, presses: T.presses, captures: T.captures, judged: T.judged, exempt: T.exempt, textNodes: st.textNodes, attrs: st.attrs }, findings: T.findings, perPage: T.perPage }, null, 1));
-  var failed = T.findings.length > 0;
+  var V = CORE.verdictOf({ findings: T.findings, unavailable: T.unavailable });
+  if (outFile) fs.writeFileSync(outFile, JSON.stringify({ verdict: V.status, totals: { pages: T.pages, loads: T.loads, presses: T.presses, captures: T.captures, judged: T.judged, exempt: T.exempt, textNodes: st.textNodes, attrs: st.attrs, inputValues: st.inputValues }, findings: T.findings, unavailable: T.unavailable, perPage: T.perPage }, null, 1));
   console.log('');
-  console.log((failed ? 'FAIL' : 'PASS') + '  ' + (failed ? T.findings.length + ' finding(s) on ' + Object.keys(byPage).length + ' page(s)' : 'no raw network indicator in the rendered DOM of ' + T.loads + ' page loads, in anything copied, shared or downloaded by ' + T.presses + ' presses, or in the IOC search, Wire details and site search scenarios') +
-              '. CANNOT SEE: the real system clipboard and share sheet (stubbed: what the page hands them is judged), print and PDF output, hover and keyboard-only states beyond the presses above, browsers other than Chromium, pages and widths not in the selection above, text a third-party script writes (blocked), CSS generated content (::before/::after content: attr()), the machine feed downloads and rule bodies (exact by decision 5).');
-  process.exit(failed ? 1 : 0);
+  var cannot = 'CANNOT SEE: the real system clipboard and share sheet (stubbed: what the page hands them is judged), print and PDF output, hover and keyboard-only states beyond the presses above, browsers other than Chromium, pages and widths not in the selection above, text a third-party script writes (blocked), CSS generated content (::before/::after content: attr()), the machine feed downloads and rule bodies (exact by decision 5).';
+  if (V.status === 'FAIL') console.log('FAIL  ' + T.findings.length + ' finding(s) on ' + Object.keys(byPage).length + ' page(s)' + (V.unavailable ? '; ' + V.unavailable + ' surface(s) were also NOT CHECKED (listed above)' : '') + '. ' + cannot);
+  else if (V.status === 'NOT CHECKED') console.log('NOT CHECKED  ' + V.unavailable + ' surface(s) could not be checked (listed above as NOT CHECKED lines); nothing that did run found a raw indicator, but this is not a PASS: ' + T.unavailable.map(function (u) { return u.slice(0, 160); }).join(' | ') + '. ' + cannot);
+  else console.log('PASS  no raw network indicator in the rendered DOM (text, tooltips, input values) of ' + T.loads + ' page loads, in anything copied, shared or downloaded by ' + T.presses + ' presses, or in the IOC search, Wire details and site search scenarios. ' + cannot);
+  process.exit(V.code);
 })().catch(function (e) { console.log('FAIL  gate crashed: ' + (e && e.stack || e)); process.exit(1); });

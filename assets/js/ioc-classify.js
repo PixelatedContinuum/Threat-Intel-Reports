@@ -48,6 +48,7 @@
     return String(s)
       .replace(/\[\.\]/g, '.')
       .replace(/\[:\]/g, ':')
+      .replace(/\[@\]/g, '@')
       .replace(/^hxxp/i, 'http');
   }
 
@@ -116,6 +117,7 @@
       .replace(/\[\.\]/g, '.')
       .replace(/\(\.\)/g, '.')
       .replace(/\[:\]/g, ':')
+      .replace(/\[@\]/g, '@')   /* the e-mail form this site prints (op[@]evil[.]example): without it the brackets are token breaks and the link searches the e-mail's domain instead */
       .replace(/\bhxxp/gi, 'http'))
       .split(/[\s,;<>"'()\[\]{}|]+/);
     for (var i = 0; i < tokens.length; i++) {
@@ -148,6 +150,14 @@
     return String(s).replace(/\[\.\]/g, '.').replace(/\[@\]/g, '@').replace(/\[:\]/g, ':').replace(/\b(h)xx(ps?:\/\/)/gi, '$1tt$2');
   }
 
+  /* IPv6 (fix-r2, review finding S3). The colons of an address become [:], the form _includes/defang-text.html prints ("2001[:]db8[:][:]7"). classify() does not emit an ipv6 type, but a
+     table cell can carry one and a title can name one, so the display functions handle it. A bracketed literal keeps the brackets and a port after them ("[2001:db8::7]:443" ->
+     "[2001[:]db8[:][:]7]:443"); in any other network type only a bracketed literal is touched, so a port, a scheme colon and a time in a path keep theirs. */
+  function ipv6Colons(s, type) {
+    if (type === 'ipv6' && s.indexOf('[') === -1) return s.replace(/:/g, '[:]');
+    return s.replace(/\[([0-9a-f:.]*:[0-9a-f:.]*)\]/gi, function (m, a) { return '[' + a.replace(/:/g, '[:]') + ']'; });
+  }
+
   /* One value of a known type. */
   function defangValue(value, type) {
     var s = String(value == null ? '' : value);
@@ -155,7 +165,30 @@
     s = unfang(s);
     if (type === 'url') s = s.replace(/https?:\/\//gi, function (m) { return m.replace(/tt/i, 'xx'); }); /* every scheme, a URL inside a path included */
     if (type === 'email') s = s.replace(/@/g, '[@]');
-    return s.replace(/\./g, '[.]');
+    return ipv6Colons(s, type).replace(/\./g, '[.]');
+  }
+
+  /* A bare IPv6 address by grammar, not by shape: hex groups of 1 to 4 digits, one optional "::", an optional IPv4 tail, eight groups or fewer with "::". A time (12:30:45), a MAC
+     (aa:bb:cc:dd:ee:ff, six groups) and "std::string" are not addresses; "2001:db8::", "::1" and "2001:db8:1:2:3:4:5:6" are. */
+  function isIpv6(a) {
+    if (!/^[0-9a-f:.]+$/i.test(a) || a.indexOf(':') === -1 || /:::/.test(a)) return false;
+    var halves = a.split('::');
+    if (halves.length > 2) return false;
+    var tail4 = /(\d{1,3}\.){3}\d{1,3}$/.test(a);
+    var groups = 0, ok = true;
+    halves.forEach(function (h, hi) {
+      if (!h) return;
+      h.split(':').forEach(function (g, gi, all) {
+        if (tail4 && hi === halves.length - 1 && gi === all.length - 1) {
+          groups += 2;
+          if (!/^(\d{1,3}\.){3}\d{1,3}$/.test(g) || g.split('.').some(function (o) { return Number(o) > 255; })) ok = false;
+        } else if (/^[0-9a-f]{1,4}$/i.test(g)) groups++;
+        else ok = false;
+      });
+    });
+    if (!ok) return false;
+    if (halves.length === 2) return groups <= 7 && /[0-9a-f]/i.test(a);
+    return groups === 8;
   }
 
   function defangIpv4Inside(s) {
@@ -171,6 +204,9 @@
   function defangText(text) {
     return String(text == null ? '' : text).replace(/[^\s,;|]+/g, function (word) {
       var un = unfang(word);
+      /* a bare or bracketed IPv6 address (and "[addr]:port") before the generic trimming below, which would cut the trailing colons of "2001:db8::" off as punctuation */
+      var m6 = /^([<("'`]*)(\[?)([0-9a-f:.]*[0-9a-f:])(\]?)(:\d{1,5})?([>)"'`,;!?.]*)$/i.exec(un);
+      if (m6 && !!m6[2] === !!m6[4] && (m6[2] || !m6[5]) && isIpv6(m6[3])) return m6[1] + defangValue(m6[2] + m6[3] + m6[4], 'ipv6') + (m6[5] || '') + m6[6];
       var lead = /^[<("'`\[]*/.exec(un)[0];
       var rest = un.slice(lead.length);
       var tail = /[>)"'`,;:!?.\]]*$/.exec(rest)[0];
@@ -193,6 +229,7 @@
     extract: extract,
     defangValue: defangValue,
     defangText: defangText,
+    isIpv6: isIpv6,
     TYPES: ['sha256', 'sha1', 'md5', 'url', 'ipv4', 'email', 'domain', 'filename']
   };
 }));

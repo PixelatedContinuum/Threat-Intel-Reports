@@ -47,6 +47,11 @@
     var s = String(value).replace(/\[\.\]/g, '.').replace(/\[@\]/g, '@').replace(/\[:\]/g, ':').replace(/\b(h)xx(ps?:\/\/)/gi, '$1tt$2');
     if (type === 'url') s = s.replace(/https?:\/\//gi, function (m) { return m.replace(/tt/i, 'xx'); }); /* every scheme, a URL inside a path included */
     if (type === 'email') s = s.replace(/@/g, '[@]');
+    /* IPv6 (fix-r2, review finding S3): the refang above put every [:] back to a colon, so the colons of an address are defanged again here, the form the layout prints
+       ("2001[:]db8[:][:]7"). A bare ipv6 value loses all its colons; a bracketed literal ("[2001:db8::7]:443", also inside a url or endpoint) loses the ones inside the brackets and
+       keeps the port's. Same rule as HLIocClassify.defangValue (ioc-classify.js), which a test holds equal. */
+    if (type === 'ipv6' && s.indexOf('[') === -1) s = s.replace(/:/g, '[:]');
+    else s = s.replace(/\[([0-9a-f:.]*:[0-9a-f:.]*)\]/gi, function (m, a) { return '[' + a.replace(/:/g, '[:]') + ']'; });
     return s.replace(/\./g, '[.]');
   }
 

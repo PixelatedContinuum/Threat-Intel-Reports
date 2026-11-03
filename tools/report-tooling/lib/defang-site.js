@@ -125,9 +125,9 @@ function isIpHost(host) {
 }
 
 function newStats() {
-  return { pages: 0, byType: {}, excluded: {}, textNodes: 0, attrs: 0, matchedFlagged: 0, matchedDefanged: 0, matchedPrivate: 0, matchedAllowed: 0, allowedBy: {},
+  return { pages: 0, byType: {}, excluded: {}, textNodes: 0, attrs: 0, inputValues: 0, matchedFlagged: 0, matchedDefanged: 0, matchedPrivate: 0, matchedAllowed: 0, allowedBy: {},
     links: { total: 0, relative: 0, anchor: 0, external: 0, externalAllowed: 0, mailto: 0, other: 0, labelSkips: 0, reportRefs: 0 },
-    pre: { blocks: 0, lines: 0, rawIndicators: 0, onDetection: 0, offDetection: 0, copyKept: 0, onReport: 0 }, head: { fields: 0, jsonld: 0, tokens: 0 }, literal: { cells: 0 }, unlinked: { n: 0, targets: [] } };
+    pre: { blocks: 0, lines: 0, rawIndicators: 0, onDetection: 0, offDetection: 0, copyKept: 0, onReport: 0 }, head: { fields: 0, jsonld: 0, tokens: 0 }, literal: { cells: 0, exemptLines: 0, exemptFields: 0 }, unlinked: { n: 0, targets: [] } };
 }
 
 /* Scan one parsed document. `JSDOM` is passed in so tests can hand a document directly. */
@@ -174,12 +174,42 @@ function scanHead(doc, rel, type, allow, stats, findings) {
   });
 }
 
-/* data-literal cells of the IOC viewer: see _includes/ioc-cell.html. A value is honoured only for these six types and only when it is not shaped like a URL, an e-mail address or an IP address. */
+/* data-literal cells of the IOC viewer: see _includes/ioc-cell.html. A value is honoured only for these six types and only when it is not shaped like a URL, an e-mail address or an IP address,
+   and (fix-r2, review finding S4) only when it is not NETWORK-BEARING: the same test the layout applies before it prints a cell as a literal (_includes/ioc-cell.html), so the layout and
+   this gate agree on what a literal is. Network-bearing: a UNC path (two backslashes or two slashes first, "\\\\host.tld\\share"), a "://" anywhere, or an IPv4 address inside the name
+   (two adjacent all-digit dot-separated parts of 1 to 3 digits below 256, as in "1468_US_23.106.161.1_28-01-26.cab"). Such a value is not literal: it is judged like prose. */
 var LIT_TYPES = { sha256: /^[0-9a-f]{64}$/i, md5: /^[0-9a-f]{32}$/i, sha1: /^[0-9a-f]{40}$/i, filename: null, path: null, registry: null };
+function networkBearing(val) {
+  if (/^(?:\\\\|\/\/)/.test(val)) return 'starts like a UNC path (two backslashes or two slashes: a host)';
+  if (val.indexOf('://') > -1) return 'holds a "://" (a URL)';
+  var parts = val.split('.'), prev = false;
+  for (var i = 0; i < parts.length; i++) {
+    var p = parts[i], isnum = i > 0 && i < parts.length - 1 && /^(?:0|[1-9]\d{0,2})$/.test(p) && Number(p) < 256;
+    if (isnum && prev) return 'holds an IPv4 address (two adjacent all-digit dot-separated parts)';
+    prev = isnum;
+  }
+  return '';
+}
 function literalProblem(ty, val) {
   return !Object.prototype.hasOwnProperty.call(LIT_TYPES, ty) ? 'unknown literal type "' + ty + '"' :
     (LIT_TYPES[ty] && !LIT_TYPES[ty].test(val)) ? 'does not look like a ' + ty :
-    /^[a-z][a-z0-9+.-]*:\/\//i.test(val) || /^[^\s@]+@[^\s@]+\.[a-z]{2,}$/i.test(val) || /^(?:\d{1,3}\.){3}\d{1,3}$/.test(val) ? 'is shaped like a URL, an e-mail address or an IP address' : '';
+    /^[a-z][a-z0-9+.-]*:\/\//i.test(val) || /^[^\s@]+@[^\s@]+\.[a-z]{2,}$/i.test(val) || /^(?:\d{1,3}\.){3}\d{1,3}$/.test(val) ? 'is shaped like a URL, an e-mail address or an IP address' :
+    (!LIT_TYPES[ty] && networkBearing(val)) ? 'is network-bearing: ' + networkBearing(val) : '';
+}
+
+/* The fields of one captured line, as {value, start, end} spans of the raw line: a CSV row (RFC 4180 quoting, as the viewer writes it) or a tab-separated row; a line with no separator
+   is one field. A quoted field's value is unquoted, its span covers the quotes. */
+function lineFields(line) {
+  var out = [], cur = '', q = false, start = 0;
+  for (var i = 0; i < line.length; i++) {
+    var c = line[i];
+    if (q) { if (c === '"' && line[i + 1] === '"') { cur += '"'; i++; } else if (c === '"') q = false; else cur += c; }
+    else if (c === '"' && cur === '') q = true;
+    else if (c === ',' || c === '\t') { out.push({ value: cur, start: start, end: i }); cur = ''; start = i + 1; }
+    else cur += c;
+  }
+  out.push({ value: cur, start: start, end: line.length });
+  return out;
 }
 
 function scanDocument(doc, rel, data, stats, findings) {
@@ -282,13 +312,18 @@ function scanDocument(doc, rel, data, stats, findings) {
     stats.textNodes++;
     node.nodeValue.split(/\r?\n/).forEach(function (line) { if (line.trim()) note(D.scanLine(line, allow), 'text', line); });
   }
-  // tooltip attributes
+  // tooltip attributes, and (fix-r2, review finding S5) the value an <input> shows: a script-written box content is displayed text. Not judged: the value of a hidden input, a checkbox, a radio
+  // button, a file, image, range or colour control (nothing of it is printed).
   Array.prototype.forEach.call(body.querySelectorAll('*'), function (e) {
     if (e.closest(SKIP_TAGS)) return;
     TOOLTIP_ATTRS.forEach(function (at) {
       var v = e.getAttribute(at);
       if (v) { stats.attrs++; note(D.scanLine(v, allow), 'attr:' + at, v); }
     });
+    if (e.tagName === 'INPUT' && !/^(hidden|checkbox|radio|file|image|range|color)$/i.test(e.getAttribute('type') || '')) {
+      var iv = e.getAttribute('value');
+      if (iv) { stats.attrs++; stats.inputValues = (stats.inputValues || 0) + 1; iv.split(/\r?\n/).forEach(function (l) { if (l.trim()) note(D.scanLine(l, allow), 'attr:value', l); }); }
+    }
   });
 }
 
@@ -343,13 +378,19 @@ function makeScanner(dataFile, opts) {
   /* A copied or downloaded text (the clipboard, a share sheet, a blob): every line judged against the allow data of the page it came from. */
   function scanText(rel, ctx, text, literals) {
     var t = pageType(rel), d = t === 'report' ? reportData(rel) : data, out = [];
-    // literals: [{type, value}] read from the page's own data-literal cells. A captured line that holds one of them as the viewer printed it is judged without it, exactly as the page-wide pass skips the cell
-    // (only a value literalProblem accepts; the longest first). Anything else on the line is still judged.
-    var lits = (literals || []).filter(function (l) { return l.value && !literalProblem(l.type, l.value); }).map(function (l) { return l.value; }).sort(function (a, b) { return b.length - a.length; });
+    // literals: [{type, value}] read from the page's own data-literal cells. A captured line is judged without a field that IS one of them, whole: the line itself (the .txt and the
+    // clipboard) or one whole field of a CSV or tab-separated row (fix-r2, review finding S4: the exemption used to cut the literal out of the line wherever it appeared, so a filename
+    // literal "evil-host.example.xyz" hid the host of a copied "http://evil-host.example.xyz/a"). Only a value literalProblem accepts counts; anything left in the line is still judged.
+    var lits = {};
+    (literals || []).forEach(function (l) { if (l.value && !literalProblem(l.type, l.value)) lits[l.value] = 1; });
     String(text).split(/\r?\n/).forEach(function (line) {
-      lits.forEach(function (v) { if (line.indexOf(v) > -1) line = line.split(v).join(' '); });
       if (!line.trim()) return;
-      D.scanLine(line, d.allow).flagged.forEach(function (f) { out.push({ page: rel, type: t, ctx: ctx, kind: f.kind, token: f.token, near: nearOf(line, f.token) }); });
+      if (lits[line.trim()]) { stats.literal.exemptLines++; return; }
+      // blank the whole fields that are literals, keep every other character where it was: the rest of the line is judged exactly as before
+      var kept = line, cuts = lineFields(line).filter(function (f) { return lits[f.value.trim()]; });
+      for (var ci = cuts.length - 1; ci >= 0; ci--) { kept = kept.slice(0, cuts[ci].start) + ' ' + kept.slice(cuts[ci].end); stats.literal.exemptFields++; }
+      if (!kept.trim()) return;
+      D.scanLine(kept, d.allow).flagged.forEach(function (f) { out.push({ page: rel, type: t, ctx: ctx, kind: f.kind, token: f.token, near: nearOf(line, f.token) }); });
     });
     return out;
   }
@@ -451,4 +492,4 @@ function wireDetailsSplit(findings, strings) {
   return { kept: kept, exempt: exempt };
 }
 
-module.exports = { makeScanner: makeScanner, walkHtml: walkHtml, scanSite: scanSite, scanDocument: scanDocument, selfTest: selfTest, loadAllowData: loadAllowData, pageType: pageType, excluded: excluded, newStats: newStats, linkKey: linkKey, linkAllowed: linkAllowed, isIpHost: isIpHost, wireDetailsStrings: wireDetailsStrings, wireDetailsSplit: wireDetailsSplit };
+module.exports = { makeScanner: makeScanner, walkHtml: walkHtml, scanSite: scanSite, scanDocument: scanDocument, selfTest: selfTest, loadAllowData: loadAllowData, pageType: pageType, excluded: excluded, newStats: newStats, linkKey: linkKey, linkAllowed: linkAllowed, isIpHost: isIpHost, wireDetailsStrings: wireDetailsStrings, wireDetailsSplit: wireDetailsSplit, _literalProblem: literalProblem };
