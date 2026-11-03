@@ -142,7 +142,8 @@ jobs:
       # pane is fetched at runtime) are added as records beside the pages. It prints
       # "Indexed N pages" and the record counts per section, fails when a section has
       # source rows but no record, and writes the records it indexed to
-      # /tmp/wire-search-records.json for the defang gate below.
+      # /tmp/wire-search-records.json for the defang gate below. --wire-bundle pagefind-wire puts the Wire records in a second index at _site/pagefind-wire/ that /search/ merges
+      # at indexWeight 0.3, so reports and detection pages rank before Wire rows (Pagefind cannot weight single records).
       - name: Build the search index
         working-directory: tools/report-tooling
         run: |
@@ -151,7 +152,7 @@ jobs:
           # back root-owned and Pagefind (running as the runner user) could not
           # create _site/pagefind: "PermissionDenied" on the first run, 2026-10-09.
           sudo chown -R "$(id -u):$(id -g)" ../../_site
-          node build-search-index.js --site ../../_site --records-out /tmp/wire-search-records.json 2>&1 | tee /tmp/pagefind.txt
+          node build-search-index.js --site ../../_site --records-out /tmp/wire-search-records.json --wire-bundle pagefind-wire 2>&1 | tee /tmp/pagefind.txt
 
       # Decision 5 of the site restyle (T-0500.1.7.4, Joseph 2026-11-02): no rendered page shows a raw network indicator or links to actor
       # infrastructure. The gate reads the built _site (check-defang.js --site), report pages included (their title, citation, BibTeX and Continue Reading
@@ -228,6 +229,9 @@ jobs:
           test ! -f _site/feeds/misp/_state.json
           test -f _site/pagefind/pagefind.js
           test -f _site/pagefind/pagefind-ui.js
+          # the Wire rows' second index, merged by /search/ (mergeIndex); without it the search page loses every Wire result (T-0548)
+          test -f _site/pagefind-wire/pagefind.js
+          test -f _site/pagefind-wire/pagefind-entry.json
           echo "search index: $(grep -m1 -o 'Indexed [0-9]* pages' /tmp/pagefind.txt || echo 'page count not reported')"
           echo "search index: $(grep -m1 '^Wire records:' /tmp/pagefind.txt | cut -c1-300 || echo 'no Wire records line')"
           cards=$(grep -o 'hl-catalog-card' _site/reports/index.html | wc -l)

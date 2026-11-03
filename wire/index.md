@@ -510,7 +510,7 @@ reads back from the built page (it fails the index step on a duplicate). A vuln 
 </div>
 
 <script defer src="{{ '/assets/js/listing-filter.js' | relative_url }}?v=16"></script>
-<script defer src="{{ '/assets/js/wire-details.js' | relative_url }}?v=5"></script>
+<script defer src="{{ '/assets/js/wire-details.js' | relative_url }}?v=6"></script>
 
 {%- else -%}
 

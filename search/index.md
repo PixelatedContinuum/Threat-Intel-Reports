@@ -13,7 +13,8 @@ hl_idx: single
 </header>
 
 {%- comment -%}
-  The index (/pagefind/) is produced by Pagefind in the deploy workflow, after
+  The index (/pagefind/, plus /pagefind-wire/ for the Wire rows, merged at query time
+  with mergeIndex and indexWeight 0.3) is produced by Pagefind in the deploy workflow, after
   the Jekyll build and before the artifact upload. It does not exist in a local
   `jekyll build`, so the script's onerror shows a plain notice instead of an
   empty box. ?q= in the URL seeds the query and is kept in step with the input
@@ -64,6 +65,10 @@ hl_idx: single
       showImages: false,
       excerptLength: 30,
       resetStyles: false,
+      // The Wire rows (T-0548) live in a second index, /pagefind-wire/, merged here at a
+      // lower weight so a report or detection page outranks a Wire row that matches the
+      // same term. Pagefind cannot weight individual records inside one index.
+      mergeIndex: [{ bundlePath: base + '/pagefind-wire/', indexWeight: 0.3 }],
       translations: {
         placeholder: 'Search reports, detections, IOCs, STIX…',
         clear_search: 'Clear',

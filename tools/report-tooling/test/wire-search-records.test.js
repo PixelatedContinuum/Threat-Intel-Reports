@@ -193,3 +193,25 @@ test('--wire-bundle writes the Wire records to a second bundle and leaves the fi
   assert.strictEqual(e1, 1);
   assert.strictEqual(e2, 5);
 });
+
+/* T-0548 part rank: the second bundle is only useful if the workflow builds it, the search page merges it at a weight below 1, and nothing prunes or scans it as a page */
+test('the workflow builds the Wire bundle, the search page merges the same name at indexWeight below 1', function () {
+  var wf = fs.readFileSync(path.join(ROOT, '.github', 'workflows', 'pages.yml'), 'utf8');
+  var m = wf.match(/build-search-index\.js [^\n]*--wire-bundle (\S+)/);
+  assert.ok(m, 'pages.yml runs build-search-index.js with --wire-bundle');
+  var name = m[1];
+  assert.ok(wf.indexOf('test -f _site/' + name + '/pagefind.js') >= 0, 'the sanity step checks the Wire bundle exists');
+  var page = fs.readFileSync(path.join(ROOT, 'search', 'index.md'), 'utf8');
+  var mi = page.match(/mergeIndex:\s*\[\{\s*bundlePath:\s*base \+ '\/([^\/']+)\/',\s*indexWeight:\s*([0-9.]+)\s*\}\]/);
+  assert.ok(mi, 'search/index.md passes mergeIndex with bundlePath and indexWeight');
+  assert.strictEqual(mi[1], name);
+  assert.ok(parseFloat(mi[2]) > 0 && parseFloat(mi[2]) < 1);
+  var wire = fs.readFileSync(path.join(ROOT, 'wire', 'index.md'), 'utf8');
+  assert.match(wire, /wire-details\.js' \| relative_url \}\}\?v=6"/);
+});
+
+test('the defang page scan leaves the Wire bundle directory out like /pagefind/', function () {
+  assert.strictEqual(S.excluded('pagefind-wire/pagefind.js'), 'asset directory');
+  assert.strictEqual(S.excluded('pagefind/pagefind.js'), 'asset directory');
+  assert.strictEqual(S.excluded('wire/index.html'), null);
+});

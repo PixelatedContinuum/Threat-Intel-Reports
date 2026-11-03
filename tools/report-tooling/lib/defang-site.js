@@ -83,7 +83,7 @@ function pageType(rel) {
 
 function excluded(rel) {
   var r = '/' + rel.replace(/\\/g, '/');
-  if (/^\/(pagefind|assets)\//.test(r)) return 'asset directory';
+  if (/^\/(pagefind[^\/]*|assets)\//.test(r)) return 'asset directory';
   if (/^\/report-templates\//.test(r)) return 'working doc (decision 7)';
   if (/^\/feeds\/[^\/]+\/changelog\//.test(r)) return 'feed changelog (decision 7)';
   return null;
