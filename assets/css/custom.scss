@@ -6827,6 +6827,55 @@ main.content:focus { outline: none; }
   }
   .hl-nav__search:focus-within .hl-nav__search-input { width: min(260px, calc(100vw - 150px)); opacity: 1; padding: 0 12px; }
 }
+/* --- Clear (X) button on every site search box (T-0552, assets/js/search-clear.js) ------------
+   The script wraps a box in .hl-clr (the navbar box stays where it is and gets the button as a
+   sibling) and shows the button only while the box has text. The look is /search/'s own Clear
+   button: --hl-bg-row field, --hl-border-card line, muted text that goes primary with a blue
+   border on hover. The browser's native type=search cancel icon is suppressed on these boxes so
+   there is one X, not two. Padding is added on the right only while the button shows, so the
+   text starts where it always did. */
+.hl-clr { position: relative; display: block; min-width: 0; --clr-s: 28px; }
+.hl-clr__in::-webkit-search-cancel-button,
+.hl-clr__in::-webkit-search-decoration,
+.hl-clr__in::-webkit-search-results-button { -webkit-appearance: none; appearance: none; display: none; }
+.hl-clr__in::-ms-clear { display: none; }
+.hl-clr__btn {
+  position: absolute; top: 50%; right: 8px; transform: translateY(-50%);
+  display: inline-flex; align-items: center; justify-content: center;
+  width: var(--clr-s, 28px); height: var(--clr-s, 28px); margin: 0; padding: 0;
+  border: 1px solid var(--hl-border-card); border-radius: 8px;
+  background: var(--hl-bg-row); color: var(--hl-text-muted);
+  cursor: pointer; line-height: 1;
+}
+.hl-clr__btn[hidden] { display: none; }
+.hl-clr__btn:hover { color: var(--hl-text-primary); border-color: var(--hl-accent-blue); }
+.hl-clr__btn:focus-visible { outline: 2px solid var(--hl-accent-blue); outline-offset: 1px; color: var(--hl-text-primary); }
+.hl-clr.is-filled > input.hl-clr__in.hl-clr__in { padding-right: 46px; }
+@media (max-width: 1099px) {
+  .hl-clr { --clr-s: 36px; }   /* a touch target on a phone or tablet */
+}
+.hl-atk-tools > .hl-clr { flex: 1 1 260px; min-width: 180px; --clr-s: 24px; }
+.hl-atk-tools > .hl-clr > .hl-atk-search { width: 100%; box-sizing: border-box; }
+.hl-atk-tools > .hl-clr.is-filled > input.hl-clr__in.hl-clr__in { padding-right: 36px; }
+
+/* The navbar box: the button is the box's sibling inside the form. It shows while the box has
+   text and has focus. Inline (wide screens) it sits at the end of the form; where the box is
+   the floating field (1100 to 1439px, and phones) it is placed over that field's right end. */
+.hl-clr__btn--nav {
+  position: static; transform: none; flex-shrink: 0;
+  width: 24px; height: 24px; margin-left: 6px; border-radius: 6px;
+}
+.hl-nav__search:not(.is-filled) .hl-clr__btn--nav,
+.hl-nav__search:not(:focus-within) .hl-clr__btn--nav { display: none; }
+@media (min-width: 1100px) and (max-width: 1439px) {
+  .hl-clr__btn--nav { position: absolute; right: calc(100% + 14px); top: 7px; margin: 0; z-index: 3; }
+  .hl-nav__search.is-filled:focus-within .hl-nav__search-input.hl-clr__in { padding-right: 40px; }
+}
+@media (max-width: 768px) {
+  .hl-clr__btn--nav { position: absolute; right: calc(100% + 14px); top: 7px; margin: 0; z-index: 3; width: 28px; height: 28px; }
+  .hl-nav__search.is-filled:focus-within .hl-nav__search-input.hl-clr__in { padding-right: 44px; }
+}
+
 /* D labels the Menu button on a phone too; below 380px there is no room for the word beside the brand and the search icon */
 @media (min-width: 380px) and (max-width: 768px) {
   .hl-nav__menu { padding: 0 13px 0 10px; }
@@ -6951,6 +7000,8 @@ body.hl-drawer-locked { overflow: hidden; }
 #hl-search .hl-sr--wire-nkev      { --sr-acc: #bc8cff; }
 #hl-search .hl-sr--wire-cves      { --sr-acc: #2dd4bf; }
 #hl-search .hl-sr--wire-headlines { --sr-acc: #58a6ff; }
+#hl-search .hl-sr--techniques { --sr-acc: #fb923c; }
+#hl-search .hl-sr--families   { --sr-acc: #2dd4bf; }
 #hl-search .hl-sr--behind     { --sr-acc: #f97316; }
 #hl-search .hl-sr--pages      { --sr-acc: #60a5fa; }
 
@@ -7032,24 +7083,88 @@ body.hl-drawer-locked { overflow: hidden; }
 }
 #hl-search .pagefind-ui__search-clear:hover { color: var(--hl-text-primary); border-color: var(--hl-accent-blue); }
 #hl-search .pagefind-ui__drawer { gap: 28px; }
+/* Section filter (T-0552). It reads as the listing pages' filter rows do: a mono kicker over a stack of
+   pills, each pill in its section's own accent (the hues of the result chips above), a hollow dot that
+   fills when the section is on, the same 7% / 16% / 30% wash steps as .hl-chip-btn, a count after the name.
+   The checkbox stays the real control: it is stretched over the pill and made transparent, so a click
+   anywhere on the pill toggles it and the keyboard still reaches it. The accent is picked by the value
+   Pagefind writes on the checkbox (name "section"); the Wire sections share one family of hues.
+   search/index.md opens the block with Pagefind's openFilters option. */
 #hl-search .pagefind-ui__filter-panel {
-  padding: 14px 16px;
+  padding: 16px 16px 14px;
   background: var(--hl-bg-card);
   border: 1px solid var(--hl-border-card);
   border-radius: 10px;
   align-self: flex-start;
+  min-width: min(290px, 100%);
 }
+#hl-search .pagefind-ui__filter-block { padding-top: 0; }
 #hl-search .pagefind-ui__filter-name {
-  font-family: var(--hl-font-display);
-  font-weight: 700;
-  font-size: var(--hl-fs-small);
-  letter-spacing: 0.14em;
+  font-family: var(--hl-font-mono);
+  font-weight: 600;
+  font-size: var(--hl-fs-label);
+  letter-spacing: 0.06em;
   text-transform: uppercase;
-  color: var(--hl-text-muted);
+  color: var(--hl-muted-d);
+  height: auto;
+  padding: 2px 0;
 }
-#hl-search .pagefind-ui__filter-checkbox { accent-color: var(--hl-accent-blue); }
-#hl-search .pagefind-ui__filter-label { color: var(--hl-text-secondary); font-size: 0.95rem; }
-#hl-search .pagefind-ui__filter-value:hover .pagefind-ui__filter-label { color: var(--hl-text-primary); }
+#hl-search .pagefind-ui__filter-name::after { right: 4px; color: var(--hl-muted-d); }
+#hl-search .pagefind-ui__filter-name:hover { color: var(--hl-text-primary); }
+#hl-search .pagefind-ui__filter-group { gap: 6px; padding-top: 12px; }
+#hl-search .pagefind-ui__filter-value {
+  --sc: var(--hl-accent-blue);
+  position: relative;
+  display: block;
+  min-height: 40px;
+  border: 1px solid color-mix(in srgb, var(--sc) 34%, #333333);
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--sc) 7%, #14171c);
+  transition: background 0.15s, border-color 0.15s;
+}
+#hl-search .pagefind-ui__filter-value::before { content: none; }
+#hl-search .pagefind-ui__filter-value:hover { border-color: var(--sc); background: color-mix(in srgb, var(--sc) 16%, #14171c); }
+#hl-search .pagefind-ui__filter-value.pagefind-ui__filter-value--checked { border-color: var(--sc); background: color-mix(in srgb, var(--sc) 30%, #14171c); }
+#hl-search .pagefind-ui__filter-value:has(.pagefind-ui__filter-checkbox:focus-visible) { outline: 2px solid var(--sc); outline-offset: 2px; }
+#hl-search .pagefind-ui__filter-checkbox {
+  position: absolute; inset: 0; z-index: 1;
+  width: 100%; height: 100%; margin: 0;
+  opacity: 0; cursor: pointer;
+}
+#hl-search .pagefind-ui__filter-label {
+  display: block;
+  padding: 0 14px 0 36px;
+  line-height: 38px;
+  color: #e6e6e6;
+  font-weight: 600;
+  font-size: var(--hl-fs-small);
+  font-variant-numeric: tabular-nums;
+  cursor: pointer;
+}
+#hl-search .pagefind-ui__filter-label::before {
+  content: "";
+  position: absolute; left: 15px; top: 50%;
+  width: 10px; height: 10px; margin-top: -5px;
+  box-sizing: border-box;
+  border-radius: 50%;
+  border: 2px solid var(--sc);
+  transition: background 0.15s;
+}
+#hl-search .pagefind-ui__filter-value--checked .pagefind-ui__filter-label::before { background: var(--sc); }
+#hl-search .pagefind-ui__filter-value:hover .pagefind-ui__filter-label,
+#hl-search .pagefind-ui__filter-value--checked .pagefind-ui__filter-label { color: #ffffff; }
+#hl-search .pagefind-ui__filter-value:has(input[value="Reports"])            { --sc: #a371f7; }
+#hl-search .pagefind-ui__filter-value:has(input[value="Detections"])         { --sc: #4ade80; }
+#hl-search .pagefind-ui__filter-value:has(input[value="IOC Feeds"])          { --sc: #f87171; }
+#hl-search .pagefind-ui__filter-value:has(input[value="STIX"])               { --sc: #22d3ee; }
+#hl-search .pagefind-ui__filter-value:has(input[value="Actors"])             { --sc: #e879f9; }
+#hl-search .pagefind-ui__filter-value:has(input[value="Techniques"])         { --sc: #fb923c; }
+#hl-search .pagefind-ui__filter-value:has(input[value="Families"])           { --sc: #2dd4bf; }
+#hl-search .pagefind-ui__filter-value:has(input[value="Behind the Reports"]) { --sc: #f97316; }
+#hl-search .pagefind-ui__filter-value:has(input[value="Wire: nKEV"])         { --sc: #bc8cff; }
+#hl-search .pagefind-ui__filter-value:has(input[value="Wire: CVEs"])         { --sc: #2dd4bf; }
+#hl-search .pagefind-ui__filter-value:has(input[value="Wire: Headlines"])    { --sc: #58a6ff; }
+#hl-search .pagefind-ui__filter-value:has(input[value="Pages"])              { --sc: #60a5fa; }
 #hl-search .pagefind-ui__message {
   font-family: var(--hl-font-display);
   font-weight: 700;
@@ -7079,6 +7194,8 @@ body.hl-drawer-locked { overflow: hidden; }
 @media (max-width: 640px) {
   #hl-search .pagefind-ui__filter-panel { padding: 6px 14px; }
   #hl-search .pagefind-ui__filter-name { padding: 10px 0; }
+  #hl-search .pagefind-ui__filter-value { min-height: 44px; }
+  #hl-search .pagefind-ui__filter-label { line-height: 42px; }
 }
 
 

@@ -69,6 +69,8 @@ hl_idx: single
       // lower weight so a report or detection page outranks a Wire row that matches the
       // same term. Pagefind cannot weight individual records inside one index.
       mergeIndex: [{ bundlePath: base + '/pagefind-wire/', indexWeight: 0.3 }],
+      // The Section filter starts open (T-0552); Pagefind compares this list with the filter's lower-cased name.
+      openFilters: ['section'],
       translations: {
         placeholder: 'Search reports, detections, IOCs, STIX…',
         clear_search: 'Clear',
