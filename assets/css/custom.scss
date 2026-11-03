@@ -7468,7 +7468,8 @@ a.hl-cred-pill--link:hover { border-color: #fbbf24; color: var(--hl-text-primary
   background: radial-gradient(120% 150% at 0 0, color-mix(in srgb, var(--sv) 9%, transparent), transparent 58%), linear-gradient(135deg, var(--hl-bg-card), #0d1117) !important;
   transition: transform 0.15s, border-color 0.15s;
 }
-.hl-idx .hl-card[data-sev="critical"] { --sv: #ef4444; }
+/* --svt is the TEXT colour of a card's meta line; it defaults to --sv. #ef4444 12.5px on the card's own 9% red wash computes 4.24:1 (review round 2, C3); #f87171 (= --hl-accent-red) computes 5.77:1 */
+.hl-idx .hl-card[data-sev="critical"] { --sv: #ef4444; --svt: #f87171; }
 .hl-idx .hl-card[data-sev="high"] { --sv: #fb923c; }
 .hl-idx .hl-card[data-sev="med"], .hl-idx .hl-card[data-sev="medium"] { --sv: #fbbf24; }
 .hl-idx .hl-card[data-sev="low"] { --sv: #60a5fa; }
@@ -7491,12 +7492,12 @@ a.hl-cred-pill--link:hover { border-color: #fbbf24; color: var(--hl-text-primary
   font: 600 12.5px/1.2 var(--hl-font-mono);
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: var(--sv);
+  color: var(--svt, var(--sv));
 }
 .hl-idx .hl-catalog-card .hl-catalog-card__meta,
 .hl-idx .hl-actor-card__meta,
 .hl-idx .hl-family-card__meta,
-.hl-idx .hl-impact-card .hl-impact-card__meta { color: var(--sv); }
+.hl-idx .hl-impact-card .hl-impact-card__meta { color: var(--svt, var(--sv)); }
 .hl-idx .hl-card__title {
   margin: 6px 0 0;
   font: 600 18px/1.28 var(--hl-font-display) !important;
