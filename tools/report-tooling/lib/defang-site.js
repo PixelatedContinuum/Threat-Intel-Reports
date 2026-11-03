@@ -125,7 +125,7 @@ function isIpHost(host) {
 }
 
 function newStats() {
-  return { pages: 0, byType: {}, excluded: {}, textNodes: 0, attrs: 0, matchedFlagged: 0, matchedDefanged: 0, matchedPrivate: 0, matchedAllowed: 0, allowedBy: {},
+  return { pages: 0, byType: {}, excluded: {}, textNodes: 0, attrs: 0, inputValues: 0, matchedFlagged: 0, matchedDefanged: 0, matchedPrivate: 0, matchedAllowed: 0, allowedBy: {},
     links: { total: 0, relative: 0, anchor: 0, external: 0, externalAllowed: 0, mailto: 0, other: 0, labelSkips: 0, reportRefs: 0 },
     pre: { blocks: 0, lines: 0, rawIndicators: 0, onDetection: 0, offDetection: 0, copyKept: 0, onReport: 0 }, head: { fields: 0, jsonld: 0, tokens: 0 }, literal: { cells: 0, exemptLines: 0, exemptFields: 0 }, unlinked: { n: 0, targets: [] } };
 }
@@ -312,13 +312,18 @@ function scanDocument(doc, rel, data, stats, findings) {
     stats.textNodes++;
     node.nodeValue.split(/\r?\n/).forEach(function (line) { if (line.trim()) note(D.scanLine(line, allow), 'text', line); });
   }
-  // tooltip attributes
+  // tooltip attributes, and (fix-r2, review finding S5) the value an <input> shows: a script-written box content is displayed text. Not judged: the value of a hidden input, a checkbox, a radio
+  // button, a file, image, range or colour control (nothing of it is printed).
   Array.prototype.forEach.call(body.querySelectorAll('*'), function (e) {
     if (e.closest(SKIP_TAGS)) return;
     TOOLTIP_ATTRS.forEach(function (at) {
       var v = e.getAttribute(at);
       if (v) { stats.attrs++; note(D.scanLine(v, allow), 'attr:' + at, v); }
     });
+    if (e.tagName === 'INPUT' && !/^(hidden|checkbox|radio|file|image|range|color)$/i.test(e.getAttribute('type') || '')) {
+      var iv = e.getAttribute('value');
+      if (iv) { stats.attrs++; stats.inputValues = (stats.inputValues || 0) + 1; iv.split(/\r?\n/).forEach(function (l) { if (l.trim()) note(D.scanLine(l, allow), 'attr:value', l); }); }
+    }
   });
 }
 

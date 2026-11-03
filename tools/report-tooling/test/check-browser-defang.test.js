@@ -34,11 +34,18 @@ test('--list selects every page of a small type and samples a big one at even sp
   assert.match(some.stdout, /# 5 of 13 pages; actor: sampled 4 of 12; home: all 1/);
 });
 
-test('a run that selects no page FAILs (exit 1): a gate that visits nothing passes nothing', () => {
+test('a run that selects no page is NOT CHECKED (exit 2), never FAIL and never PASS: a gate that visits nothing has checked nothing (T-0500.1.7.4 fix-r2, S1; it asserted exit 1)', () => {
   const d = site({ 'index.html': PAGE('<p>home</p>') });
   const r = cp.spawnSync('node', [GATE, '--site', d, '--only', '^no-such-page$'], { encoding: 'utf8' });
-  assert.strictEqual(r.status, 1);
-  assert.match(r.stdout, /no page selected/);
+  assert.strictEqual(r.status, 2);
+  assert.match(r.stdout, /NOT CHECKED .*no page selected/);
+  assert.doesNotMatch(r.stdout, /^(PASS|FAIL)/m);
+});
+test('an empty site (no page at all) is NOT CHECKED (exit 2) too', () => {
+  const d = site({ 'pagefind/index.html': PAGE('<p>asset directory: excluded</p>') });
+  const r = cp.spawnSync('node', [GATE, '--site', d], { encoding: 'utf8' });
+  assert.strictEqual(r.status, 2);
+  assert.match(r.stdout, /NOT CHECKED .*no page selected \(0 pages/);
 });
 
 test('a missing --site is NOT CHECKED (exit 2), never a pass', () => {
