@@ -21,13 +21,13 @@ hl_idx: home
   <p class="hl-home-hero__lede">Hands-on malware analysis turned into structured, evidence-based intelligence, technically deep enough to trust and clear enough to act on. Free and open: published by a solo analyst for the defender community, with no paywall or signup.</p>
 </article>
 <div class="hl-d-kpis hl-d-kpis--home" style="--fc: 4;">
-  <div class="hl-d-kpi" style="--kc:#58a6ff;"><span class="hl-d-kpi__n">{{ n_reports }}</span><span class="hl-d-kpi__cap">Reports</span></div>
-  <div class="hl-d-kpi" style="--kc:#4ade80;"><span class="hl-d-kpi__n">{{ n_det }}</span><span class="hl-d-kpi__cap">Detection Rules</span></div>
-  <div class="hl-d-kpi" style="--kc:#2dd4bf;"><span class="hl-d-kpi__n">{{ n_techniques }}</span><span class="hl-d-kpi__cap">ATT&amp;CK Techniques Covered</span></div>
-  <div class="hl-d-kpi" style="--kc:#f87171;"><span class="hl-d-kpi__n">{{ n_ioc }}</span><span class="hl-d-kpi__cap">IOCs</span></div>
-  <div class="hl-d-kpi" style="--kc:#a78bfa;"><span class="hl-d-kpi__n">{{ n_stix }}</span><span class="hl-d-kpi__cap">STIX Bundles</span></div>
-  <div class="hl-d-kpi" style="--kc:#f472b6;"><span class="hl-d-kpi__n">{{ n_families }}</span><span class="hl-d-kpi__cap">Malware &amp; Tools Profiled</span></div>
-  <div class="hl-d-kpi" style="--kc:#fb923c;"><span class="hl-d-kpi__n">{{ n_actors }}</span><span class="hl-d-kpi__cap">Threat Actors Tracked</span></div>
+  <a class="hl-d-kpi hl-d-kpi--link" style="--kc:#58a6ff;" href="{{ '/reports/' | relative_url }}"><span class="hl-d-kpi__n">{{ n_reports }}</span><span class="hl-d-kpi__cap">Reports</span></a>
+  <a class="hl-d-kpi hl-d-kpi--link" style="--kc:#4ade80;" href="{{ '/hunting-detections/' | relative_url }}"><span class="hl-d-kpi__n">{{ n_det }}</span><span class="hl-d-kpi__cap">Detection Rules</span></a>
+  <a class="hl-d-kpi hl-d-kpi--link" style="--kc:#2dd4bf;" href="{{ '/techniques/' | relative_url }}"><span class="hl-d-kpi__n">{{ n_techniques }}</span><span class="hl-d-kpi__cap">ATT&amp;CK Techniques Covered</span></a>
+  <a class="hl-d-kpi hl-d-kpi--link" style="--kc:#f87171;" href="{{ '/ioc-feeds/' | relative_url }}"><span class="hl-d-kpi__n">{{ n_ioc }}</span><span class="hl-d-kpi__cap">IOCs</span></a>
+  <a class="hl-d-kpi hl-d-kpi--link" style="--kc:#a78bfa;" href="{{ '/stix/' | relative_url }}"><span class="hl-d-kpi__n">{{ n_stix }}</span><span class="hl-d-kpi__cap">STIX Bundles</span></a>
+  <a class="hl-d-kpi hl-d-kpi--link" style="--kc:#f472b6;" href="{{ '/families/' | relative_url }}"><span class="hl-d-kpi__n">{{ n_families }}</span><span class="hl-d-kpi__cap">Malware &amp; Tools Profiled</span></a>
+  <a class="hl-d-kpi hl-d-kpi--link" style="--kc:#fb923c;" href="{{ '/actors/' | relative_url }}"><span class="hl-d-kpi__n">{{ n_actors }}</span><span class="hl-d-kpi__cap">Threat Actors Tracked</span></a>
   {%- if site.data.impact.actions_reported %}
   <a class="hl-d-kpi hl-d-kpi--link" style="--kc:#fbbf24;" href="{{ '/impact/' | relative_url }}"><span class="hl-d-kpi__n">{{ site.data.impact.actions_reported }}</span><span class="hl-d-kpi__cap">Takedowns &amp; Victim Actions</span></a>
   {%- endif %}

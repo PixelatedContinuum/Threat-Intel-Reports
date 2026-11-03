@@ -128,7 +128,7 @@ main.content {
 /* A page with the side Contents panel (an untabbed report) keeps its old 900px column; the detection pages took the D frame in b3 (.hl-idx--det) and show the contents as an inline disclosure:
    the panel's position and width are solved against that column (.hl-post-toc, left: 50vw + 438px), and in the 1200px frame it would sit on the page header. */
 @media (min-width: 1281px) {
-  main.content:has(.hl-post-toc):not(:has(.hl-idx--det)) { max-width: 900px !important; padding-left: 28px !important; padding-right: 28px !important; }
+  main.content:has(.hl-post-toc):not(:has(.hl-idx--det, .hl-idx--wire)) { max-width: 900px !important; padding-left: 28px !important; padding-right: 28px !important; }
 }
 
 /* Top gap between navbar and first content element.
