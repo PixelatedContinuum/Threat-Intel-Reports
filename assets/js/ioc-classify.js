@@ -48,6 +48,7 @@
     return String(s)
       .replace(/\[\.\]/g, '.')
       .replace(/\[:\]/g, ':')
+      .replace(/\[@\]/g, '@')
       .replace(/^hxxp/i, 'http');
   }
 
@@ -116,6 +117,7 @@
       .replace(/\[\.\]/g, '.')
       .replace(/\(\.\)/g, '.')
       .replace(/\[:\]/g, ':')
+      .replace(/\[@\]/g, '@')   /* the e-mail form this site prints (op[@]evil[.]example): without it the brackets are token breaks and the link searches the e-mail's domain instead */
       .replace(/\bhxxp/gi, 'http'))
       .split(/[\s,;<>"'()\[\]{}|]+/);
     for (var i = 0; i < tokens.length; i++) {

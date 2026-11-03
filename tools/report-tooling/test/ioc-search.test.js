@@ -291,8 +291,8 @@ var INDEX_NB = Object.assign({}, INDEX, {
   }
 });
 
-function buildWith(index) {
-  var dom = new JSDOM('<body>' + PAGE + '</body>', { runScripts: 'outside-only' });
+function buildWith(index, url) {
+  var dom = new JSDOM('<body>' + PAGE + '</body>', url ? { runScripts: 'outside-only', url: url } : { runScripts: 'outside-only' });
   var w = dom.window;
   w.fetch = function () {
     return Promise.resolve({ ok: true, json: function () { return Promise.resolve(index); } });
@@ -415,4 +415,30 @@ test('control: a hash is displayed as it is', async function () {
   var w = buildWith(TITLED);
   await type(w, 'a'.repeat(64));
   assert.match(resultText(w), new RegExp('a{64} appears in 1 feed'));
+});
+
+/* ---- fix-r2, review finding S2: a defanged e-mail in a ?q= link finds the same hit as the raw e-mail ----
+   The ?q= link box is filled with the DEFANGED form (op[@]evil[.]example[.]org); extract() turned the [@] brackets into token breaks, so the link searched the e-mail's
+   DOMAIN instead of the e-mail and reported it absent from every feed while typing the raw e-mail found it. One e-mail fixture, three routes to it. */
+var MAILED = {
+  counts: { indicators: 2, reports: 1, multi_report: 0 },
+  reports: { alpha: { title: 'Mailer feed' } },
+  indicators: { 'email:op@evil.example.org': [{ report: 'alpha' }] }
+};
+test('S2: a raw e-mail, a typed defanged e-mail and a ?q= link carrying the defanged e-mail all find the same feed, and a miss stays a miss', async function () {
+  var wr = buildWith(MAILED);
+  await type(wr, 'op@evil.example.org');
+  assert.deepEqual(visible(wr), ['alpha'], 'raw e-mail typed (control: this already worked)');
+  var wt = buildWith(MAILED);
+  await type(wt, 'op[@]evil[.]example[.]org');
+  assert.deepEqual(visible(wt), ['alpha'], 'defanged e-mail typed');
+  assert.match(resultText(wt), /op\[@\]evil\[\.\]example\[\.\]org appears in 1 feed/);
+  var wd = buildWith(MAILED, 'http://localhost/ioc-feeds/?q=' + encodeURIComponent('op[@]evil[.]example[.]org'));
+  await new Promise(function (r) { setTimeout(r, 300); });
+  assert.equal(wd.document.querySelector('.hl-iocsearch__in').value, 'op[@]evil[.]example[.]org');
+  assert.deepEqual(visible(wd), ['alpha'], 'the ?q= link carrying the defanged e-mail finds the same hit as typing the raw e-mail');
+  assert.match(resultText(wd), /appears in 1 feed/);
+  var wm = buildWith(MAILED);
+  await type(wm, 'nobody[@]evil[.]example[.]org');
+  assert.match(resultText(wm), /nobody\[@\]evil\[\.\]example\[\.\]org does not appear/, 'a defanged e-mail that is not indexed is reported as that e-mail, not as its domain');
 });
