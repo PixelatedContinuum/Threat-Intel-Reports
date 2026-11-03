@@ -3,6 +3,7 @@
 {%- capture _shown_title %}{% include defang-text.html text=include.title %}{% endcapture -%}
 {%- assign sevlabel = include.severity | upcase -%}
 {%- if include.severity == "med" -%}{%- assign sevlabel = "MED" -%}{%- endif -%}
+{%- if include.severity == "critical" -%}{%- assign sevlabel = "CRIT." -%}{%- endif -%}
 <a href="{{ include.url | relative_url }}" class="hl-card hl-catalog-card"
    data-title="{{ include.title | downcase | escape }}"
    data-tags="{{ include.tags | join: '|' | downcase | escape }}"
