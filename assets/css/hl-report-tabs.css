@@ -29,7 +29,7 @@ html:has(.hl-report-page) {
   --rv-line: #3a3a3a;
   --rv-row-line: #2e2e2e;
   --rv-fs: 16px;      /* secondary text floor at desktop and tablet; the Executive Summary prose stays 18px */
-  --rv-fs-mono: 14px; /* mono micro-labels */
+  --rv-fs-mono: 15px; /* mono micro-labels (T-0538: 15px, the site's --hl-fs-meta; was 14px); a phone keeps 14px */
   --rv-text: var(--hl-text-primary, #eeeeee);
   --rv-muted: #a8a8a8; /* 7.3:1 on the card, 7.6:1 on the header row; the site token stays #888 for the rest of the site */
   --rv-ok: var(--hl-accent-green, #4ade80);
@@ -182,7 +182,7 @@ html:has(.hl-report-page) { --rv-col: min(1240px, calc(100vw - 320px)); }
   box-shadow: 0 0 0 1px rgba(245, 158, 11, 0.08), 0 6px 32px rgba(245, 158, 11, 0.11);
 }
 .hl-rv-feat { display: flex; align-items: center; gap: 8px 22px; margin: 0 0 24px; padding: 10px 14px 10px 20px; min-height: 68px; border-radius: 10px; }
-.hl-rv-feat__label, .hl-rv-featcard__label { flex: none; font-family: var(--rv-display); font-size: 14px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: #f4e9c8; line-height: 1; }
+.hl-rv-feat__label, .hl-rv-featcard__label { flex: none; font-family: var(--rv-display); font-size: var(--rv-fs); font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: #f4e9c8; line-height: 1; }
 .hl-rv-feat__label { border: 1px solid rgba(184, 144, 47, 0.65); background: rgba(184, 144, 47, 0.16); padding: 7px 11px; border-radius: 999px; white-space: nowrap; }
 .hl-rv-feat__items { flex: 1 1 auto; display: flex; flex-wrap: wrap; align-items: center; gap: 8px 24px; min-width: 0; }
 .hl-rv-feat__item, .hl-rv-featcard__item { display: flex; align-items: center; gap: 18px; min-width: 0; min-height: 44px; color: var(--rv-text); text-decoration: none !important; }
@@ -332,13 +332,13 @@ a.hl-rv-feat__item:hover .hl-rv-feat__cta, a.hl-rv-featcard__item:hover .hl-rv-f
 .hl-report-page .hl-post-content .hl-rv-source > h2 {
   display: flex; align-items: baseline; flex-wrap: wrap; gap: 6px 12px; min-height: 0; margin: 0 0 16px !important; padding: 0 !important; color: var(--rv-text) !important;
   background: none !important; border: 0 !important; border-radius: 0 !important;
-  font-family: var(--rv-display); font-size: 26px !important; font-weight: 700 !important; line-height: 1.25; letter-spacing: -0.012em;
+  font-family: var(--rv-display); font-size: var(--hl-fs-section, 26px) !important; font-weight: 700 !important; line-height: 1.25; letter-spacing: -0.012em;
 }
 /* the B-style eyebrow above the heading: a small mark and the section label in mono uppercase; decorative and silent to screen readers */
 .hl-report-page .hl-post-content .hl-rv-source > h2[data-rv-sec]::before,
 .hl-rv-source.hl-rv-nohead::before {
   content: attr(data-rv-sec); content: attr(data-rv-sec) / ''; box-sizing: border-box; flex: 0 0 100%; display: flex; align-items: center; gap: 8px; margin: 0 0 2px;
-  font-family: var(--rv-mono); font-size: var(--rv-fs-mono); font-weight: 400; letter-spacing: 0.12em; text-transform: uppercase; line-height: 1.2; color: var(--acc);
+  font-family: var(--rv-mono); font-size: var(--hl-fs-body, 18px); font-weight: 400; letter-spacing: 0.08em; text-transform: uppercase; line-height: 1.2; color: var(--acc);
 }
 .hl-report-page .hl-post-content .hl-rv-source > h2[data-rv-sec]::before { padding-left: 24px; background: no-repeat left center / 17px 17px url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23a8a8a8' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 4h11l3 3v13H5z'/%3E%3Cpath d='M9 11h6M9 15h6'/%3E%3C/svg%3E"); }
 /* the first block of a report has no h2 (Campaign Identifier, Last Updated, Threat Level): its label is the eyebrow alone */
@@ -380,7 +380,7 @@ a.hl-rv-feat__item:hover .hl-rv-feat__cta, a.hl-rv-featcard__item:hover .hl-rv-f
 .hl-report-page .hl-post-content pre { background: var(--rv-bg); border: 1px solid var(--rv-line); border-radius: var(--rv-radius); padding: 16px; margin: 0 0 20px; overflow-x: auto; max-width: 100%; }
 .hl-report-page .hl-post-content pre code { background: none !important; border: 0 !important; padding: 0; font-size: var(--rv-fs); color: var(--rv-text) !important; }
 .hl-report-page .hl-post-content .hl-rv-metadata { margin: 0; line-height: 1.8; font-size: 16px; }
-.hl-report-page .hl-post-content .hl-rv-metadata strong { font-family: var(--rv-mono); font-size: var(--rv-fs-mono); font-weight: 400; letter-spacing: 0.08em; text-transform: uppercase; color: var(--rv-muted); }
+.hl-report-page .hl-post-content .hl-rv-metadata strong { font-family: var(--rv-mono); font-size: var(--hl-fs-label, 16px); font-weight: 400; letter-spacing: 0.06em; text-transform: uppercase; color: var(--rv-muted); }
 .hl-report-page .hl-post-content figure { margin: 0 0 24px; text-align: left; width: 100%; }
 .hl-report-page .hl-post-content figure img { display: block; max-width: 100%; width: 100%; height: auto; margin: 0; padding: 0; background: var(--rv-bg); border: 1px solid var(--rv-line); border-radius: var(--rv-radius); cursor: zoom-in; }
 .hl-report-page .hl-post-content figcaption { font-size: var(--rv-fs); font-style: normal; color: var(--rv-muted); text-align: left; margin-top: 8px; }
@@ -625,7 +625,7 @@ a.hl-rv-feat__item:hover .hl-rv-feat__cta, a.hl-rv-featcard__item:hover .hl-rv-f
 /* "In this tab": the site's .hl-post-toc panel */
 .hl-rv-contents { padding: 0 16px; margin: 0 0 24px; }
 .hl-report-page .hl-post-content details.hl-rv-contents { margin: 0 0 24px; } /* the generic details rule (12px) would otherwise win: 24px between this panel and the next */
-.hl-report-page .hl-rv-contents summary { display: flex; align-items: center; font-family: var(--rv-mono); font-size: var(--rv-fs-mono); font-weight: 400; letter-spacing: 0.1em; text-transform: uppercase; color: var(--acc) !important; cursor: pointer; }
+.hl-report-page .hl-rv-contents summary { display: flex; align-items: center; font-family: var(--rv-mono); font-size: var(--rv-fs); font-weight: 400; letter-spacing: 0.1em; text-transform: uppercase; color: var(--acc) !important; cursor: pointer; }
 .hl-rv-contents nav { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 22rem), 1fr)); gap: 0 24px; padding-bottom: 8px; }
 .hl-rv-contents a { display: flex; align-items: center; padding-left: 10px; border-left: 2px solid transparent; font-size: var(--rv-fs); color: var(--rv-text); text-decoration: none; }
 .hl-rv-contents a[aria-current="location"] { border-left-color: var(--acc); }
@@ -732,7 +732,7 @@ html:has(.hl-report-page) .hl-toast__label { font-size: var(--rv-fs); }
 .hl-rv-pn-head > .hl-rv-info { position: absolute; top: 4px; right: 6px; }
 .hl-rv-pn-head > .hl-rv-pop { top: 44px; right: 10px; }
 .hl-rv-pn-head .hl-rv-eyebrow-icon { color: var(--pn, var(--acc)); }
-.hl-report-page .hl-rv-view h3.hl-rv-pn-title { margin: 0 !important; font-family: var(--rv-mono); font-size: var(--rv-fs-mono) !important; font-weight: 600 !important; letter-spacing: 0.12em; text-transform: uppercase; color: var(--pn, var(--acc)) !important; }
+.hl-report-page .hl-rv-view h3.hl-rv-pn-title { margin: 0 !important; font-family: var(--rv-mono); font-size: var(--rv-fs) !important; font-weight: 600 !important; letter-spacing: 0.08em; text-transform: uppercase; color: var(--pn, var(--acc)) !important; }
 .hl-report-page .hl-rv-view p.hl-rv-pn-sub { margin: 0; font-size: var(--rv-fs); line-height: 1.4; color: var(--rv-muted) !important; }
 .hl-report-page .hl-rv-view p.hl-rv-pn-more { font-size: var(--rv-fs); color: var(--rv-muted) !important; }
 .hl-report-page .hl-rv-view p.hl-rv-linkread { margin: auto 0 0; padding: 10px 14px; border: 1px dashed var(--rv-line); border-radius: 8px; font-size: var(--rv-fs); line-height: 1.45; color: var(--rv-muted) !important; }
@@ -916,7 +916,7 @@ html:has(.hl-report-page) .hl-toast__label { font-size: var(--rv-fs); }
 /* the featured sponsor on a phone: a slim strip, label over wordmark with Visit beside it, the tagline under; the tab-foot gold card stacks */
 @media (max-width: 719px) {
   .hl-rv-feat { display: grid; grid-template-columns: minmax(0, 1fr); gap: 4px; padding: 9px 12px 10px 14px; min-height: 0; margin-bottom: 24px; }
-  .hl-rv-feat__label { justify-self: start; padding: 0; border: 0; background: none; font-size: 14px; }
+  .hl-rv-feat__label { justify-self: start; padding: 0; border: 0; background: none; font-size: var(--rv-fs); }
   .hl-rv-feat__item { flex-wrap: wrap; gap: 6px 14px; }
   .hl-rv-feat__logo { height: 28px; }
   .hl-rv-feat__tagline { flex: 1 1 100%; order: 3; font-size: var(--rv-fs); line-height: 1.3; }
@@ -1113,11 +1113,11 @@ html:has(.hl-report-page) .hl-toast__label { font-size: var(--rv-fs); }
 .hl-rv-procedures tr.hl-rv-keyrow td:first-child { box-shadow: inset 3px 0 0 var(--rv-gold); }
 .hl-rv-carry { display: inline-flex; margin: 4px 0 0 8px; padding: 1px 9px; border: 1px solid color-mix(in srgb, var(--rv-gold) 70%, transparent); border-radius: 999px; background: color-mix(in srgb, var(--rv-gold) 14%, transparent); font-family: var(--rv-mono); font-size: var(--rv-fs-mono); letter-spacing: 0.04em; color: var(--rv-gold); white-space: nowrap; }
 .hl-report-page .hl-rv-ev { margin-top: 6px; font-size: var(--rv-fs); }
-.hl-report-page .hl-rv-ev > summary { min-height: 44px; display: flex; align-items: center; cursor: pointer; font-family: var(--rv-mono); font-size: var(--rv-fs-mono); letter-spacing: 0.06em; text-transform: uppercase; color: var(--rv-muted); }
+.hl-report-page .hl-rv-ev > summary { min-height: 44px; display: flex; align-items: center; cursor: pointer; font-family: var(--rv-mono); font-size: var(--rv-fs); letter-spacing: 0.06em; text-transform: uppercase; color: var(--rv-muted); }
 .hl-report-page .hl-rv-ev > p { margin: 0 0 6px; color: var(--rv-text); font-size: var(--rv-fs) !important; line-height: 1.5; }
 
 /* ---------- Design D, D5: the other five tabs, B panel restyle of their existing views (no content change) ---------- */
-.hl-report-page .hl-rv-table-fold > summary { min-height: 44px; font-family: var(--rv-mono); font-size: var(--rv-fs-mono); font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--acc); }
+.hl-report-page .hl-rv-table-fold > summary { min-height: 44px; font-family: var(--rv-mono); font-size: var(--rv-fs); font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--acc); }
 .hl-rv-victim-card, .hl-rv-diamond-card, .hl-rv-status-tile {
   border-radius: 10px; background: radial-gradient(120% 140% at 0 0, color-mix(in srgb, var(--acc) 7%, transparent), transparent 60%), linear-gradient(135deg, var(--rv-card), #0d1117);
 }
