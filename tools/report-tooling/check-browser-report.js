@@ -1632,7 +1632,8 @@ function stickyOverlapVerdict(samples) {
   });
   return { notChecked: false, ok: why.length === 0, why: why, detail: n + ' scroll position(s) measured, the card box tested against every sticky and fixed element and five points inside it' + (why.length ? '; ' + why.join('; ') : '') };
 }
-var STICKY_CONTROL_CSS = '.hl-rv-featcard{z-index:1 !important}.hl-rv-bar{width:100vw !important;margin-left:calc(50% - 50vw) !important;margin-right:calc(50% - 50vw) !important;z-index:60 !important}' +
+/* T-0556 w6a: the card now sits below the masthead and the pinned nav (top follows --c3-fixed-top), so the control also drops it to 20px from the top, under the bar that sticks there, to re-create the overlap it was written to catch */
+var STICKY_CONTROL_CSS = '.hl-rv-featcard{z-index:1 !important;top:20px !important}.hl-rv-bar{width:100vw !important;margin-left:calc(50% - 50vw) !important;margin-right:calc(50% - 50vw) !important;z-index:60 !important}' +
   '.hl-rv-bar::before{content:"";position:absolute;inset:0;background:#111;z-index:-1}';
 async function stickyFeaturedCardRows(page, url) {
   var name = 'the featured sponsor card is never overlapped by a sticky bar, at any scroll position';
