@@ -87,7 +87,9 @@ test('the post layout: a report keeps its header byte for byte; only a detection
 test('the b3 blocks of the stylesheet are scoped: each selector is under a b3 scope or is one of the b3 components', () => {
   const start = css.indexOf('DESIGN D: ACTOR, FAMILY AND TECHNIQUE PAGES AS DASHBOARDS (T-0500.1.7.4 b3)');
   assert.ok(start > 0);
-  const body = css.slice(css.lastIndexOf('/*', start)).replace(/\/\*[\s\S]*?\*\//g, '');
+  const b3 = css.slice(css.lastIndexOf('/*', start));
+  // T-0556: the redesign waves append their own scoped blocks after the b3 ones (each opens with a "T-0556 wN" banner); this test is about the b3 blocks only
+  const body = b3.split('/* ===== T-0556 w')[0].replace(/\/\*[\s\S]*?\*\//g, '');
   const sels = []; let depth = 0; let cur = '';
   for (const ch of body) {
     if (ch === '{') { const t = cur.trim(); if (!t.startsWith('@')) sels.push(t); cur = ''; depth++; }
