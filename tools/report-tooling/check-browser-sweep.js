@@ -88,8 +88,8 @@ var FOCUS_FN = 'function tup1(e){var c=getComputedStyle(e);return [c.outlineStyl
 var STOP_EXPR = '(function(){' + FOCUS_FN + ';var e=document.activeElement;if(!e||e===document.body||e===document.documentElement)return{none:true};' +
   'if(!e.__hlStop)e.__hlStop=++window.__hlStopN;var c=getComputedStyle(e);var r=e.getBoundingClientRect();var f=tup(e);var ol=(c.outlineStyle!=="none"&&parseFloat(c.outlineWidth)>0&&!/rgba\\(.*, 0\\)$/.test(c.outlineColor));' +
   'var on=r.width>0&&r.height>0&&r.bottom>0&&r.right>0&&r.left<innerWidth&&r.top<innerHeight;var hit=on?document.elementFromPoint(Math.min(Math.max(r.left+r.width/2,0),innerWidth-1),Math.min(Math.max(r.top+r.height/2,0),innerHeight-1)):null;' +
-  'var covered=on&&hit&&hit!==e&&!e.contains(hit)&&!hit.contains(e);e.blur();var u=tup(e);e.focus();' +
-  'var native=e.tagName==="INPUT"&&/^(date|time|datetime-local|month|week)$/.test(e.type);' +
+  'var covered=on&&hit&&hit!==e&&!e.contains(hit)&&!hit.contains(e);' +
+  'var native=e.tagName==="INPUT"&&/^(date|time|datetime-local|month|week)$/.test(e.type);var u=f;if(!native){e.blur();u=tup(e);e.focus()}' +
   'return{id:e.__hlStop,tag:e.tagName.toLowerCase(),cls:String(e.getAttribute("class")||"").split(/\\s+/)[0],text:(e.textContent||e.getAttribute("aria-label")||e.value||"").trim().slice(0,28),href:e.getAttribute("href"),outline:ol,outlineDesc:c.outlineStyle+" "+c.outlineWidth+" "+c.outlineColor,changed:f!==u,onScreen:on,covered:!!covered,coveredBy:covered&&hit?hit.tagName.toLowerCase()+"."+String(hit.className).split(" ")[0]:null,native:native,w:Math.round(r.width),h:Math.round(r.height)}})()';
 
 async function tabKey(page, shift) {
@@ -100,11 +100,12 @@ async function tabKey(page, shift) {
 }
 async function tabThrough(page, max) {
   await page.evaluate('window.__hlStopN=0;document.documentElement.style.scrollBehavior="auto";document.activeElement&&document.activeElement.blur();window.scrollTo(0,0)');
-  var stops = [], last = null, repeats = 0;
+  var stops = [], last = null, repeats = 0, nones = 0;
   for (var i = 0; i < max; i++) {
     await tabKey(page, false);
     var s = await page.json(STOP_EXPR);
-    if (s.none) break;
+    if (s.none) { if (++nones > 3) break; continue; }   /* a date field's picker or the browser's own bar can take a press: three in a row end the walk */
+    nones = 0;
     if (s.id === last) { repeats++; continue; }   /* a date field takes several Tab presses (day, month, year): one stop */
     last = s.id;
     stops.push(s);
@@ -174,7 +175,7 @@ async function main() {
 
     if (ONLY.indexOf('keyboard') > -1) {
       await setViewport(page, 1440, 900);
-      var KB = [['home', '/', 60], ['a report', pickReport(), 45], ['Wire headlines', '/wire/#headlines', 40], ['search', '/search/', 25]];
+      var KB = [['home', '/', 60], ['a report', pickReport(), 45], ['Wire headlines', '/wire/#headlines', 60], ['search', '/search/', 25]];
       for (var ki = 0; ki < KB.length; ki++) {
         if (!KB[ki][1]) { LEDGER.skipped('keyboard: ' + KB[ki][0], 'no such page'); continue; }
         await load(page, origin + KB[ki][1]);
