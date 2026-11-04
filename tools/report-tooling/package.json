@@ -15,7 +15,9 @@
     "verify:browser": "node check-browser-wire.js && node check-browser-report.js && node check-browser-downloads.js",
     "verify:browser:wire": "node check-browser-wire.js",
     "verify:browser:report": "node check-browser-report.js",
-    "verify:browser:downloads": "node check-browser-downloads.js"
+    "verify:browser:downloads": "node check-browser-downloads.js",
+    "verify:browser:home": "node check-browser-home.js",
+    "verify:browser:sweep": "node check-browser-sweep.js"
   },
   "devDependencies": {
     "js-yaml": "^4.1.0",

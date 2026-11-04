@@ -9333,3 +9333,12 @@ a.hl-kc:hover { border-color: var(--kc); color: #ffffff; }
 .hl-idx--wire #cves .hl-wire__day { --wd: #2dd4bf; }
 .hl-idx--wire .hl-wire__day::before, .hl-idx--wire #vulns .hl-wire__day::before, .hl-idx--wire #cves .hl-wire__day::before { content: ''; display: inline-block; width: 10px; height: 10px; margin-right: 10px; background: var(--wd); vertical-align: 0.05em; }
 /* ===== end T-0556 w5c ===== */
+
+/* ===== T-0556 w6: home page at a phone width ===== */
+/* the section head wraps as a whole rather than the words inside it: heading and link on one row, the note under them; the lead kicker is set in the sans at 390 so "Critical", the category and "Latest report" share one row */
+@media (max-width: 639px) {
+  .c3-sec { flex-wrap: wrap; row-gap: 2px; }
+  .c3-sec h2 { flex: 0 0 auto; }
+  .c3-sec__sub { order: 3; flex: 1 0 100%; margin-right: 0; }
+  .c3-kick { gap: 4px 12px; font-family: var(--hl-font-sans); letter-spacing: 0.01em; }
+}

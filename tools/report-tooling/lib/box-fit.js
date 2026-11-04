@@ -50,10 +50,12 @@
 /* In the page. Returns one measurement object per call. Kept in ES5 because the other in-page expressions are. */
 function boxFit(opt) {
   var useMark = !(opt && opt.centredMark === false);
-  var root = document.querySelector('.hl-report-page');
+  var leadEm = (opt && opt.leadingEm) || 0, srOnly = !!(opt && opt.srOnly); /* T-0556 w6, home page: a heading set at line-height 1.12 has a font box taller than its line; overhang up to leadingEm of the font size is leading, not a hang. Off for the report page. */
+  var rootSel = (opt && opt.root) || '.hl-report-page'; /* T-0556 w6: the home page gate measures .c3-home with the same rows */
+  var root = document.querySelector(rootSel);
   var excluded = {}, hang = [], bars = [], measured = 0, barsMeasured = 0, stripsMeasured = 0, scrollers = 0;
   function ex(k) { excluded[k] = (excluded[k] || 0) + 1; }
-  if (!root) return { notChecked: 'no .hl-report-page on the page', measured: 0 };
+  if (!root) return { notChecked: 'no ' + rootSel + ' on the page', measured: 0 };
   function px(v) { var n = parseFloat(v); return isNaN(n) ? 0 : n; }
   function r1(n) { return Math.round(n * 10) / 10; }
   function sig(e) {
@@ -149,6 +151,7 @@ function boxFit(opt) {
     var r = e.getBoundingClientRect();
     measured++;
     if (e.closest('.c3-cover__tex')) { ex('decorative cover texture'); continue; }   /* T-0556 w6a: aria-hidden, script-filled hex texture, clipped by design; named by class, not by aria-hidden */
+    if (srOnly && (function () { for (var q = e; q && q !== root.parentElement; q = q.parentElement) { var qc = getComputedStyle(q); if (/rect\(0(px)?,? 0(px)?,? 0(px)?,? 0(px)?\)/.test(qc.clip) || (px(qc.width) <= 1 && px(qc.height) <= 1 && qc.overflow === 'hidden')) return true; } return false; })()) { ex('screen-reader-only text'); continue; }
     if (r.width <= 2 && r.height <= 2) { ex('painted at 2px or less'); continue; }
     if (r.height < 1 || r.width < 1) { ex('no size'); continue; }
     if (cs.visibility === 'hidden' || cs.visibility === 'collapse') { ex('visibility hidden'); continue; }
@@ -173,7 +176,8 @@ function boxFit(opt) {
         else hang.push({ kind: cs.overflowX === 'visible' ? 'spill-x' : 'clipped-x', sig: sig(e), path: path(e), client: e.clientWidth, scroll: e.scrollWidth, over: dx });
       }
       if (dy > 2) {
-        if (/auto|scroll/.test(cs.overflowY)) isScroller = true;
+        if (leadEm && cs.overflowY === 'visible' && dy <= leadEm * px(cs.fontSize)) ex('line-box leading');
+        else if (/auto|scroll/.test(cs.overflowY)) isScroller = true;
         else if (/hidden|clip/.test(cs.overflowY) && ((cs.webkitLineClamp && cs.webkitLineClamp !== 'none') || (cs.lineClamp && cs.lineClamp !== 'none'))) ex('line clamp');
         else if (cs.overflowY === 'visible' && paintedOk('y')) ex('unpainted overhang');
         else if (e.tagName === 'TR' && rowSpanExplains(e)) ex('row holding a rowspan cell that lies inside the rows it spans');
@@ -218,7 +222,8 @@ function boxFit(opt) {
         if (stickyV && stickyHit) ex(stickyV);
         if (out) {
           var horiz = out.side === 'left' || out.side === 'right';
-          if (/auto|scroll/.test(horiz ? ocs.overflowX : ocs.overflowY)) ex('child inside a scroll container');
+          if (leadEm && !horiz && out.by <= leadEm * px(cs.fontSize)) ex('line-box leading');
+          else if (/auto|scroll/.test(horiz ? ocs.overflowX : ocs.overflowY)) ex('child inside a scroll container');
           else if (horiz && /hidden|clip/.test(ocs.overflowX) && ocs.textOverflow === 'ellipsis' && ocs.whiteSpace === 'nowrap') ex('child inside an ellipsis box');
           else if (cs.position === 'absolute' && centredMark(e, r, boxEl, orc)) ex('centred mark on a decorative track');
           else hang.push({ kind: cs.position === 'absolute' ? 'abs-out-of-container' : 'out-of-parent', sig: sig(e), path: path(e), side: out.side, by: r1(out.by), parent: sig(boxEl),
@@ -281,6 +286,8 @@ function boxFit(opt) {
 
 var EXPR = '(' + boxFit.toString() + ')()';
 /* the same expression with the centred-mark exclusion off: what the hang row did before fix5a. Used only by the gate's control and the unit tests. */
+/* the same rows over another root (the home page, T-0556 w6) */
+function exprFor(rootSelector, more) { return '(' + boxFit.toString() + ')(' + JSON.stringify(Object.assign({ root: rootSelector }, more || {})) + ')'; }
 var EXPR_NO_MARK = '(' + boxFit.toString() + ')({ centredMark: false })';
 
 function sumExcluded(states) {
@@ -433,4 +440,4 @@ function viewVerdict(states, which) {
   return { ok: true, count: 0, findings: [], detail: '0 faults; ' + detail };
 }
 
-module.exports = { EXPR: EXPR, EXPR_NO_MARK: EXPR_NO_MARK, boxFit: boxFit, verdict: verdict, describe: describe, VIEW_EXPR: VIEW_EXPR, viewFit: viewFit, viewVerdict: viewVerdict };
+module.exports = { exprFor: exprFor, EXPR: EXPR, EXPR_NO_MARK: EXPR_NO_MARK, boxFit: boxFit, verdict: verdict, describe: describe, VIEW_EXPR: VIEW_EXPR, viewFit: viewFit, viewVerdict: viewVerdict };

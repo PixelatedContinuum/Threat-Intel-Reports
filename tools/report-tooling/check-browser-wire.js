@@ -575,45 +575,72 @@ async function runBuilt() {
     } catch (e) { aborted('the tab checks', e); }
 
     try {
-    /* ---- 4. computed colour ---- */
-    /* Every publisher row takes its --wire-src; the check reads the variable the
-       row resolved and compares what the source name and the title actually
-       painted. A probe element turns "#fb923c", var() chains and color-mix()
-       into the same rgb the browser painted, so nothing is compared as text. */
-    var colour = await page.json('(function(){function px(v){var p=document.createElement("span");p.style.color=v;document.body.appendChild(p);var c=getComputedStyle(p).color;p.remove();return c}' +
-      'var rows=document.querySelectorAll("#headlines .hl-wire__item");var o={n:rows.length,srcBad:[],noVar:0,pubs:{},colours:{},tc:[]};' +
-      'for(var i=0;i<rows.length;i++){var it=rows[i],v=getComputedStyle(it).getPropertyValue("--wire-src").trim();' +
+    /* ---- 4. computed colour ----
+       The publisher rule (T-0556 w5b, re-baselined by w6; Joseph asked for the hue back and for readable, main-ink prose):
+         edge   each headline row carries a 3px solid left edge in its publisher's --wire-src
+         name   the source name is painted in the publisher's hue: --wire-src-t where a hue misses AA on the row, else --wire-src
+         read   that name reaches WCAG 4.5:1 against the row's background
+         title  the headline title is main ink, never the publisher's hue (every title one colour, a grey, at least 7:1)
+         chips  the Headlines topic chips carry no per-topic hue (the hue belongs to the source); each reads at 4.5:1
+       The probe reads the variables the row resolved and what the browser painted; a probe element turns "#fb923c" and var() chains
+       into the same rgb, so nothing is compared as text. Each rule has a CONTROL below: the same verdict over a copy with one defect. */
+    var COLOUR_PROBE = '(function(){function px(v){var p=document.createElement("span");p.style.color=v;document.body.appendChild(p);var c=getComputedStyle(p).color;p.remove();return c}' +
+      'function bgOf(e){var L=[];for(var a=e;a;a=a.parentElement){var b=getComputedStyle(a).backgroundColor;var m=String(b).match(/rgba?\\(([^)]+)\\)/);if(m){var v=m[1].split(/[ ,\\/]+/).filter(Boolean).map(parseFloat);var al=v.length>3?v[3]:1;if(al>0){L.push([v[0],v[1],v[2],al]);if(al>=1)break}}}' +
+      'var c=[255,255,255];for(var i=L.length-1;i>=0;i--){var l=L[i];c=[l[0]*l[3]+c[0]*(1-l[3]),l[1]*l[3]+c[1]*(1-l[3]),l[2]*l[3]+c[2]*(1-l[3])]}return c}' +
+      'var rows=document.querySelectorAll("#headlines .hl-wire__item");var o={n:rows.length,noVar:0,pubs:{},colours:{},edgeBad:[],srcBad:[],srcRows:[],titles:{},titleRows:[]};' +
+      'for(var i=0;i<rows.length;i++){var it=rows[i],cs=getComputedStyle(it),v=cs.getPropertyValue("--wire-src").trim(),vt=cs.getPropertyValue("--wire-src-t").trim();' +
       'var src=it.querySelector(".hl-wire__src"),ti=it.querySelector(".hl-wire__title");if(!v||!src||!ti){o.noVar++;continue}' +
-      'var want=px(v),mix=px("color-mix(in srgb, "+v+" 30%, #f4f4f4)");o.colours[want]=1;' +
-      'var pub=(it.className.match(/hl-wire__item--src-([\\w-]+)/)||[0,"?"])[1];o.pubs[pub]=1;' +
-      'if(getComputedStyle(src).color!==want)o.srcBad.push(pub+" "+getComputedStyle(src).color+" != "+want);' +
-      'o.tc.push([getComputedStyle(ti).color,mix])}' +
-      'o.pubs=Object.keys(o.pubs);o.colours=Object.keys(o.colours);return o})()');
-    var titleBad = 0;
-    colour.tc.forEach(function (p) { if (!near(parseColor(p[0]), parseColor(p[1]), 2)) titleBad++; });
-    chk('each headline\'s source name is painted in its publisher\'s --wire-src',
-      colour.srcBad.length === 0 && colour.noVar === 0, colour.n, 'headline rows',
-      colour.pubs.length + ' publishers, ' + colour.colours.length + ' distinct colours' +
-        (colour.srcBad.length ? '  WRONG: ' + colour.srcBad.slice(0, 3).join(' | ') : '') +
-        (colour.noVar ? '  ' + colour.noVar + ' rows carry no --wire-src or no source/title element' : ''));
-    chk('publishers get different colours (a rule that collapses them all to one hue fails)',
-      colour.colours.length >= 4 && colour.pubs.length >= 4, colour.pubs.length, 'publishers',
-      colour.colours.length + ' distinct --wire-src colours across ' + colour.pubs.length + ' publishers (need at least 4 of each)');
-    chk('each headline title is its publisher\'s hue mixed 30% into #f4f4f4',
-      titleBad === 0, colour.tc.length, 'titles', titleBad ? titleBad + ' titles off the mix by more than 2/255' : 'within 2/255 of the mix');
+      'var want=px(v),wantT=px(vt||v);o.colours[want]=1;var pub=(it.className.match(/hl-wire__item--src-([\\w-]+)/)||[0,"?"])[1];o.pubs[pub]=1;' +
+      'var bw=parseFloat(cs.borderLeftWidth),bs=cs.borderLeftStyle,bc=cs.borderLeftColor;if(!(bw===3&&bs==="solid"&&bc===want))o.edgeBad.push(pub+" edge "+bw+"px "+bs+" "+bc+" != 3px solid "+want);' +
+      'var sc=getComputedStyle(src).color;if(sc!==wantT)o.srcBad.push(pub+" "+sc+" != "+wantT);o.srcRows.push([sc,bgOf(it)]);o.titleRows.push([getComputedStyle(ti).color,bgOf(it)])}' +
+      'o.pubs=Object.keys(o.pubs);o.colours=Object.keys(o.colours);' +
+      'var cs2=document.querySelectorAll("#headlines .hl-chip-btn--topic:not(.is-on)");o.chips=[];for(var j=0;j<cs2.length;j++)o.chips.push([getComputedStyle(cs2[j]).color,bgOf(cs2[j]),getComputedStyle(cs2[j]).borderTopColor]);return o})()';
+    function lumOf(c) { var f = function (v) { v = v / 255; return v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4); }; return 0.2126 * f(c[0]) + 0.7152 * f(c[1]) + 0.0722 * f(c[2]); }
+    function ratioOf(a, b) { var l1 = lumOf(a), l2 = lumOf(b); return (Math.max(l1, l2) + 0.05) / (Math.min(l1, l2) + 0.05); }
+    function colourVerdicts(d) {
+      var minName = 99, minTitle = 99, minChip = 99, nameBad = 0, titleBad = 0, chipBad = 0;
+      d.srcRows.forEach(function (r) { var k = ratioOf(parseColor(r[0]), r[1]); minName = Math.min(minName, k); if (k < 4.5) nameBad++; });
+      var tcol = {};
+      d.titleRows.forEach(function (r) { var c = parseColor(r[0]), k = ratioOf(c, r[1]); minTitle = Math.min(minTitle, k); tcol[r[0]] = 1;
+        if (k < 7 || Math.max(c[0], c[1], c[2]) - Math.min(c[0], c[1], c[2]) > 8) titleBad++; });
+      var tn = Object.keys(tcol).length;
+      var chipHues = {};
+      d.chips.forEach(function (r) { var c = parseColor(r[0]), k = ratioOf(c, r[1]); minChip = Math.min(minChip, k); if (k < 4.5) chipBad++; chipHues[r[0]] = 1; });
+      var ch = Object.keys(chipHues).length;
+      return {
+        edge: { ok: d.edgeBad.length === 0 && d.noVar === 0, n: d.n, detail: d.pubs.length + ' publishers, ' + d.colours.length + ' distinct edge colours' + (d.edgeBad.length ? '  WRONG: ' + d.edgeBad.slice(0, 3).join(' | ') : '') + (d.noVar ? '  ' + d.noVar + ' rows carry no --wire-src or no source/title element' : '') },
+        name: { ok: d.srcBad.length === 0 && d.noVar === 0, n: d.n, detail: d.pubs.length + ' publishers' + (d.srcBad.length ? '  WRONG: ' + d.srcBad.slice(0, 3).join(' | ') : '') },
+        read: { ok: nameBad === 0, n: d.srcRows.length, detail: 'lowest name contrast ' + minName.toFixed(2) + ':1 (need 4.5)' + (nameBad ? '; ' + nameBad + ' rows under it' : '') },
+        title: { ok: titleBad === 0 && tn === 1, n: d.titleRows.length, detail: tn + ' distinct title colour(s), lowest contrast ' + minTitle.toFixed(2) + ':1 (need 7 and a grey)' + (titleBad ? '; ' + titleBad + ' titles hued or under 7:1' : '') },
+        chips: { ok: chipBad === 0 && ch === 1, n: d.chips.length, detail: ch + ' distinct chip colour(s) (the hue belongs to the source, so 1), lowest contrast ' + minChip.toFixed(2) + ':1 (need 4.5)' + (chipBad ? '; ' + chipBad + ' chips under it' : '') },
+        distinct: { ok: d.colours.length >= 4 && d.pubs.length >= 4, n: d.pubs.length, detail: d.colours.length + ' distinct --wire-src colours across ' + d.pubs.length + ' publishers (need at least 4 of each)' }
+      };
+    }
+    var colour = await page.json(COLOUR_PROBE);
+    var CV = colourVerdicts(colour);
+    chk('each headline row carries a 3px solid left edge in its publisher\'s --wire-src', CV.edge.ok, CV.edge.n, 'headline rows', CV.edge.detail);
+    chk('each headline\'s source name is painted in its publisher\'s hue (--wire-src, or --wire-src-t where the hue misses AA)', CV.name.ok, CV.name.n, 'headline rows', CV.name.detail);
+    chk('each source name reaches WCAG 4.5:1 against its row', CV.read.ok, CV.read.n, 'headline rows', CV.read.detail);
+    chk('publishers get different colours (a rule that collapses them all to one hue fails)', CV.distinct.ok, CV.distinct.n, 'publishers', CV.distinct.detail);
+    chk('each headline title is main ink: one grey, never the publisher\'s hue, at least 7:1', CV.title.ok, CV.title.n, 'titles', CV.title.detail);
+    chk('the Headlines topic chips carry no per-topic hue and read at 4.5:1 (the hue belongs to the source)', CV.chips.ok, CV.chips.n, 'headline topic chips', CV.chips.detail);
 
-    var chipC = await page.json('(function(){function px(v){var p=document.createElement("span");p.style.color=v;document.body.appendChild(p);var c=getComputedStyle(p).color;p.remove();return c}' +
-      'var cs=document.querySelectorAll(".hl-wtabs__sec .hl-chip-btn--topic:not(.is-on)");var o={n:cs.length,bad:[],noVar:0,hl:0,hues:{}};' +
-      'for(var i=0;i<cs.length;i++){var v=getComputedStyle(cs[i]).getPropertyValue("--wire-topic").trim();if(!v){o.noVar++;continue}' +
-      'var want=px(v),got=getComputedStyle(cs[i]).color;if(cs[i].closest("#headlines")){o.hl++;o.hues[want]=1}' +
-      'if(got!==want)o.bad.push((cs[i].textContent.trim().slice(0,18))+" "+got+" != "+want)}o.hues=Object.keys(o.hues).length;return o})()');
-    chk('each topic chip, not selected, is painted in its --wire-topic',
-      chipC.bad.length === 0 && chipC.noVar === 0, chipC.n, 'topic chips (all three tabs)',
-      chipC.hl + ' on the Headlines tab in ' + chipC.hues + ' hues' +
-        (chipC.bad.length ? '  WRONG: ' + chipC.bad.slice(0, 3).join(' | ') : '') +
-        (chipC.noVar ? '  ' + chipC.noVar + ' chips carry no --wire-topic' : ''));
-    chk('the Headlines topic chips span several hues',
-      chipC.hues >= 4, chipC.hl, 'headline topic chips', chipC.hues + ' distinct hues (need at least 4)');
+    /* controls: the same verdict on a copy of the page with one defect injected; each must FAIL, or the check reads nothing */
+    var COLOUR_CONTROLS = [
+      ['edge', 'edge removed', '.hl-idx--wire .hl-wire__item{border-left:0!important}'],
+      ['name', 'source name in plain grey', '.hl-idx--wire .hl-wire__src{color:#a8a8a8!important}'],
+      ['read', 'source name in a hue under 4.5:1', '.hl-idx--wire .hl-wire__src{color:#3a1f1f!important}'],
+      ['title', 'titles painted in the publisher hue', '.hl-idx--wire .hl-wire__title{color:var(--wire-src)!important}'],
+      ['chips', 'topic chips painted in a hue each', '#headlines .hl-chip-btn--topic:nth-child(3n+1){color:#f87171!important}#headlines .hl-chip-btn--topic:nth-child(3n+2){color:#4ade80!important}#headlines .hl-chip-btn--topic:nth-child(3n){color:#a371f7!important}']
+    ];
+    for (var cci = 0; cci < COLOUR_CONTROLS.length; cci++) {
+      await goto('#headlines');
+      await ev('(function(){var s=document.createElement("style");s.id="hl-gate-colour-ctl";s.textContent=' + JSON.stringify(COLOUR_CONTROLS[cci][2]) + ';document.head.appendChild(s)})()');
+      await sleep(150);
+      var cv = colourVerdicts(await page.json(COLOUR_PROBE))[COLOUR_CONTROLS[cci][0]];
+      chk('control: ' + COLOUR_CONTROLS[cci][1] + ' fails the ' + COLOUR_CONTROLS[cci][0] + ' check', !cv.ok, cv.n, 'rows', cv.ok ? 'the control did NOT fail: this check reads nothing' : 'failed as designed: ' + cv.detail.slice(0, 110));
+    }
+    await goto('#headlines');
 
     } catch (e) { aborted('the colour checks', e); }
 
