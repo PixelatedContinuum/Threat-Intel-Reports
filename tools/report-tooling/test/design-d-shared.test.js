@@ -64,7 +64,9 @@ test('the featured-sponsor CSS: a gold band below 1440px, a fixed card in the le
 test('Consulting is off gold (steel), on the page, the layout glow and the home tile; gold stays with sponsorship', () => {
   const c = read('consulting.md'); assert.equal(/b8902f/i.test(c), false); assert.ok(c.includes('--ph-accent: #9fb4c9;') && c.includes('--acc: #9fb4c9;'));
   assert.match(read('_layouts/page.html'), /consulting' -%\}\{%- assign _glow_accent = '#9fb4c9'/);
-  assert.match(read('index.md'), /\/consulting\/' \| relative_url \}\}" class="hl-nav-tile" style="--acc: #9fb4c9;"/);
+  // T-0556 w2: the home page's Consulting tile became a row of the 'About & Connect' list (the list rows carry no per-item colour), so the check is that the row exists and the home page holds no gold
+  assert.match(read('index.md'), /\/consulting\/' \| relative_url \}\}"><span class="c3-li__t">Consulting<\/span>/);
+  assert.equal(/b8902f|f59e0b|d4a73a/i.test(read('index.md')), false);
   assert.match(read('_includes/default/navbar.liquid'), /style="--sc:#9fb4c9" href="\{\{ '\/consulting\/'/);
 });
 

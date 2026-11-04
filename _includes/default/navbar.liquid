@@ -1,9 +1,25 @@
+{%- comment -%} Concept 3 masthead (T-0556 w2): the thin top line (when the Wire last refreshed, today's date), then the mark, the serif wordmark and the tagline. It scrolls away in the page flow; the .hl-nav bar below it is the part that stays pinned
+  (position: sticky, assets/css/custom.scss), so the phone auto-hide and --hl-nav-vis act on the bar exactly as before. The date is the build's, refreshed to the reader's own day by the small script in _layouts/default.html. The wordmark is the page's h1 on the home page only. {%- endcomment -%}
+{%- assign _wire_t = site.data.wire.generated_at -%}
+<div class="hl-mast">
+  <div class="hl-mast__inner">
+    <div class="hl-mast__top">
+      <span class="hl-mast__live">{% if _wire_t %}<a href="{{ '/wire/' | relative_url }}">The Wire</a> updated {{ _wire_t | date: "%H:%M" }} UTC{% else %}<a href="{{ '/wire/' | relative_url }}">The Wire</a>{% endif %}</span>
+      <span class="hl-mast__date" id="hl-mast-date">{{ site.time | date: "%A %-d %B %Y" }}</span>
+    </div>
+    <div class="hl-mast__main">
+      <a class="hl-mast__mark" href="{{ '/' | relative_url }}" aria-label="The Hunter&#8217;s Ledger, home"><svg viewBox="0 0 28 28" width="30" height="30" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false"><path d="M7 6v16M7 14h7M14 6v16M19 6v16h5" stroke="#eeeeee" stroke-width="2" fill="none"/><path d="M17 4v20" stroke="#58a6ff" stroke-width="2"/></svg></a>
+      {% if page.url == '/' %}<h1 class="hl-mast__word"><a href="{{ '/' | relative_url }}">The Hunter&#8217;s Ledger</a></h1>{% else %}<div class="hl-mast__word"><a href="{{ '/' | relative_url }}">The Hunter&#8217;s Ledger</a></div>{% endif %}
+      <p class="hl-mast__tag">Original malware and infrastructure research, with the detections and indicators to act on it. Free, no paywall.</p>
+    </div>
+  </div>
+</div>
 <header class="hl-nav">
   <button class="hl-nav__menu" type="button" aria-controls="hl-drawer" aria-expanded="false" aria-label="Open menu">
     <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true" focusable="false"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
     <span class="hl-nav__menu-label">Menu</span>
   </button>
-  <a class="hl-nav__brand" href="{{ '/' | relative_url }}">
+  <a class="hl-nav__brand" href="{{ '/' | relative_url }}" aria-label="The Hunter&#8217;s Ledger, home">
     <svg class="hl-brand__icon" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false"><rect width="64" height="64" rx="14" fill="#161b22"/><rect x="1" y="1" width="62" height="62" rx="13" fill="none" stroke="#30363d" stroke-width="1.5"/><g stroke="#58a6ff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" fill="none"><path d="M19 16 V48 M35 16 V48 M19 32 H35"/><path d="M35 48 H50"/></g></svg>
     <span class="hl-brand__rule" aria-hidden="true"></span>
     <span class="hl-brand__stack">
@@ -20,6 +36,7 @@
     <a href="{{ '/stix/' | relative_url }}" style="--sc:#22d3ee"{% if page.url contains '/stix/' %} aria-current="page"{% endif %}>STIX</a>
     <a href="{{ '/wire/' | relative_url }}" style="--sc:#58a6ff"{% if page.url contains '/wire/' %} aria-current="page"{% endif %}>The Wire</a>
     <a href="{{ '/actors/' | relative_url }}" style="--sc:#e879f9"{% if page.url contains '/actors/' %} aria-current="page"{% endif %}>Actors</a>
+    <a href="{{ '/techniques/' | relative_url }}" style="--sc:#fb923c"{% if page.url contains '/techniques/' %} aria-current="page"{% endif %}>Techniques</a>
   </nav>
   {%- comment -%} A plain GET form posting ?q= to /search/, which reads the parameter and
     runs the query, so the bar itself loads no search script. The magnifier is a <label>
