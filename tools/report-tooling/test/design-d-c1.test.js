@@ -123,7 +123,7 @@ test('the colour parser reads the color(srgb ...) form Chrome gives a color-mix(
   assert.equal(G.tabLookVerdict(tabs).ok, true, G.tabLookVerdict(tabs).detail);
   const filled = tabs.map((x, i) => i === 1 ? Object.assign({}, x, { iconBg: 'color(srgb 0.64 0.44 0.97 / 1)' }) : x);
   assert.match(G.tabLookVerdict(filled).detail, /translucent tint/);
-  const band = { w: 1200, h: 68, border: 'color(srgb 0.721569 0.564706 0.184314 / 0.6)', borderW: 1, image: true, text: 'Featured sponsor', label: 'Featured sponsor', labelVisible: true, labelColor: 'rgb(244, 233, 200)', many: false, items: 1, withTagline: 1, taglines: [{ vis: true, len: 9 }], ctas: [{ vis: true, text: 'Visit →', ariaHidden: 'true', inLink: true, inside: true, tag: 'SPAN' }] };
+  const band = { w: 1200, h: 68, border: 'color(srgb 0.721569 0.564706 0.184314 / 0.6)', borderW: 1, image: false, text: 'Featured sponsor', label: 'Featured sponsor', labelVisible: true, labelColor: 'rgb(244, 233, 200)', many: false, items: 1, withTagline: 1, taglines: [{ vis: true, len: 9 }], ctas: [{ vis: true, text: 'Visit →', ariaHidden: 'true', inLink: true, inside: true, tag: 'SPAN' }] };
   const v = G.featuredSponsorVerdict({ wide: false, reportSponsors: 0, siteItems: 1, band, featCard: null, foot: null, goldBandInDom: false, card: Object.assign({}, band, { isReport: false, label: "Featured sponsor of The Hunter's Ledger" }), markPresent: false });
   assert.equal(v.ok, true, v.detail);
 });

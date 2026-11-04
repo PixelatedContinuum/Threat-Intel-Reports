@@ -144,7 +144,7 @@ test('JS: with a report sponsor the card is unchanged (tab accent, "Sponsored by
 /* the gate row's verdict (design D), each failure driven by the measurement a broken layout would give */
 const GOLD = 'rgba(184, 144, 47, 0.6)', CREAM = 'rgb(244, 233, 200)';
 function panel(over) {
-  return Object.assign({ w: 1200, h: 68, border: GOLD, borderW: 1, image: true, cls: '', text: 'Featured sponsor Hunt.io tagline Visit', label: 'Featured sponsor', labelVisible: true, labelColor: CREAM, many: false, items: 1, withTagline: 1,
+  return Object.assign({ w: 1200, h: 68, border: GOLD, borderW: 1, image: false, cls: '', text: 'Featured sponsor Hunt.io tagline Visit', label: 'Featured sponsor', labelVisible: true, labelColor: CREAM, many: false, items: 1, withTagline: 1,
     taglines: [{ vis: true, len: 30 }], ctas: [{ vis: true, text: 'Visit →', ariaHidden: 'true', inLink: true, inside: true, tag: 'SPAN' }] }, over || {});
 }
 function siteCard(over) { return panel(Object.assign({ isReport: false, label: LABEL, text: LABEL + ' Hunt.io' }, over || {})); }
@@ -172,10 +172,10 @@ test('the gate row FAILS a sponsor mark on the reading line, for a site sponsor 
   assert.match(G.featuredSponsorVerdict(reportState({ markPresent: true })).detail, /sponsor mark is on the reading line/);
   assert.equal(G.featuredSponsorVerdict({ wide: false, reportSponsors: 0, siteItems: 0, band: null, featCard: null, foot: null, goldBandInDom: false, card: null, markPresent: true }).ok, false);
 });
-test('the gate row FAILS when the featured panel loses its gold, its gradient, its label, its tagline or its Visit element', () => {
+test('the gate row FAILS when the featured panel loses its gold, gains a gradient (flat since T-0556 w1), loses its label, its tagline or its Visit element', () => {
   const bad = (over, re) => { const v = G.featuredSponsorVerdict(noReport({ band: panel(over) })); assert.equal(v.ok, false); assert.match(v.detail, re); };
   bad({ border: 'rgb(58, 58, 58)' }, /no gold border/);
-  bad({ image: false }, /no gradient/);
+  bad({ image: true }, /paints a gradient fill/);
   bad({ label: 'Sponsored by' }, /not "Featured sponsor"/);
   bad({ labelColor: 'rgb(168, 168, 168)' }, /not cream/);
   bad({ taglines: [{ vis: false, len: 30 }] }, /shows 0 of 1 tagline/);

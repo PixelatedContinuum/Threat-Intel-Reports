@@ -1410,7 +1410,7 @@ async function panelRows(page, url) {
 /* T-0500.1.7.3 (design D, Joseph 2026-11-01) reworked the sponsor rows of T-0500.1.8: the FEATURED (site, Monthly) sponsor is the gold, more
    prominent slot, and the REPORT sponsor is the quiet "This report is sponsored by" foot of the plate. One row, measured in the browser at
    1280 and 390 on two tabs. With a Monthly sponsor in the page's rail data: the featured panel that is drawn at that width (a sticky card in the
-   left margin from 1440 px, a band above the plate below it, exactly one of the two) is gold (a gold border, a dark gradient fill, the label
+   left margin from 1440 px, a band above the plate below it, exactly one of the two) is gold (a gold border, a flat dark warm fill with no gradient since T-0556 w1, the label
    "Featured sponsor" in cream), shows a visible tagline and a visible, real "Visit" element (aria-hidden, inside the sponsor's link, inside the
    panel; with several sponsors, logos only). With a report sponsor: the foot sits inside the plate, labelled "This report is sponsored by",
    with no gold, no gradient, no Visit and no "Featured"; no gold report band is in the page. With no report sponsor there is no foot. The
@@ -1454,7 +1454,7 @@ function featuredPanelWhy(name, p, kind, label) {
   var gold = isGoldColour(p.border);
   if (kind === 'gold') {
     if (!gold) why.push(name + ' has no gold border (' + p.borderW + 'px ' + p.border + ')');
-    if (!p.image) why.push(name + ' has no gradient panel fill');
+    if (p.image) why.push(name + ' paints a gradient fill (the gold panel is a flat warm fill since T-0556 w1)');
     if (p.label !== label) why.push(name + ' label is ' + JSON.stringify(p.label) + ', not "' + label + '"');
     else if (!p.labelVisible) why.push(name + ' label is not visible');
     else if (p.labelColor !== GOLD_LABEL) why.push(name + ' label is ' + p.labelColor + ', not cream ' + GOLD_LABEL);
@@ -3248,10 +3248,10 @@ var BOX_INJECT_STAGE_EXPR = '(function(tab){var p=document.getElementById("tab-"
 var BOX_OLD_WRAP_CSS = '\n.hl-report-page.hl-report-page .hl-rv-stage.hl-rv-stage { overflow-wrap: normal !important; }\n';
 /* T-0500.1.11 fix5a: the inline code chip. A paragraph holding a chip whose text ends in a space, on a full last line, let the chip's closing
    edge (5px padding + 1px border) hang 5.2px past the paragraph (rovodev-mirai-matrix-c2, a teardown paragraph at 360px). The stylesheet now gives such a
-   paragraph 6px of right padding. The control injects 45 paragraphs whose chip text runs from 14 to 58 characters (every residue of a line, so one lands
+   paragraph 6px of right padding. The control injects 225 paragraphs (T-0556 w1: was 45; each chip length now also at five box widths, 0 to 8px narrower in 2px steps, because a font change moved the one residue that used to land in the zone) whose chip text runs from 14 to 58 characters (every residue of a line, so one lands
    in the zone) and measures them at 360px on the shipped stylesheet (0 faults expected) and on a copy with the padding put back to 0 (at least 1). */
 var BOX_INJECT_CODE_EXPR = '(function(tab){var p=document.getElementById("tab-"+tab);if(!p)return false;var d=document.createElement("div");d.className="hl-rv-source hl-gate-code-ctl";d.setAttribute("data-rv-chrome","");d.setAttribute("data-pagefind-ignore","");' +
-  'var h="";for(var k=14;k<=58;k++){var t=new Array(k+1).join("x");h+="<p>Raw <code>| "+t+" | </code> and more</p>";}d.innerHTML=h;p.appendChild(d);return true;})(__TAB__)';
+  'var h="";for(var k=14;k<=58;k++){var t=new Array(k+1).join("x");for(var m=0;m<=8;m+=2){h+="<p style=\\"margin-right:"+m+"px\\">Raw <code>| "+t+" | </code> and more</p>";}}d.innerHTML=h;p.appendChild(d);return true;})(__TAB__)';
 var BOX_OLD_CODE_CSS = '\n.hl-report-page.hl-report-page .hl-post-content.hl-post-content :is(p, li, dd):has(code) { padding-right: 0 !important; }\n';
 /* T-0500.1.11 fix5a: the process tree's kind chip. Its sheet says white-space: nowrap; in a node whose summary text column is narrower than the chip (three or more deep on a phone) the chip hung out
    of the summary and was clipped by the node (opendirectory-62 at 390 and 360px). The control injects one node with a chip no phone column can hold, with the widget's own class names, and measures it at
@@ -3374,7 +3374,7 @@ async function boxFitRows(page, url, html) {
     if (!stRes[0] || !stRes[1]) check('NOT CHECKED: ' + stName, false, 'a control page did not build, had no ' + tab + ' tab panel to put the card in, or measured no elements');
     else check(stName, stRes[0].length === 0 && stRes[1].length > 0, 'shipped stylesheet: ' + stRes[0].length + ' fault(s) on the card (0 expected); old overflow-wrap: ' + stRes[1].length + ' fault(s)' + (stRes[1].length ? ', first: ' + BOXFIT.describe(stRes[1][0]) : ' (at least 1 expected)'));
   }
-  var cdName = 'control: a paragraph holding an inline code chip that ends in a space keeps the chip inside its box at 360px, and the hang row FAILS it on a copy with the old padding (45 paragraphs the gate injects)';
+  var cdName = 'control: a paragraph holding an inline code chip that ends in a space keeps the chip inside its box at 360px, and the hang row FAILS it on a copy with the old padding (225 paragraphs the gate injects)';
   if (!base) check('NOT CHECKED: ' + cdName, false, 'assets/css/hl-report-tabs.css could not be read, so no copy could be built');
   else {
     var cdRes = [];
@@ -3390,7 +3390,7 @@ async function boxFitRows(page, url, html) {
       } finally { cdsrv.close(); }
     }
     if (!cdRes[0] || !cdRes[1]) check('NOT CHECKED: ' + cdName, false, 'a control page did not build, had no ' + tab + ' tab panel to put the paragraphs in, or measured no elements');
-    else check(cdName, cdRes[0].length === 0 && cdRes[1].length > 0, 'shipped stylesheet: ' + cdRes[0].length + ' fault(s) on the 45 paragraphs (0 expected); old padding: ' + cdRes[1].length + ' fault(s)' + (cdRes[1].length ? ', first: ' + BOXFIT.describe(cdRes[1][0]) : ' (at least 1 expected)'));
+    else check(cdName, cdRes[0].length === 0 && cdRes[1].length > 0, 'shipped stylesheet: ' + cdRes[0].length + ' fault(s) on the 225 paragraphs (0 expected); old padding: ' + cdRes[1].length + ' fault(s)' + (cdRes[1].length ? ', first: ' + BOXFIT.describe(cdRes[1][0]) : ' (at least 1 expected)'));
   }
   var mkName = 'control: the hang row ignores a timing bead centred on the end of its track and FAILS a bead whose centre is off the track or that leaves the track\'s row, and the old row (exclusion off) FAILS the first (three tracks the gate injects)';
   await setViewport(page, 1280, 900);
