@@ -3618,7 +3618,7 @@ a.hl-sponsor-rail__item:focus-visible { outline: 2px solid #ffffff; outline-offs
 .hl-attack__seg[data-count="0"]:hover .hl-attack__fill { background: rgba(128,128,128,0.22); }
 .hl-attack__seg:focus-visible { outline: 2px solid rgba(74,158,255,0.9); outline-offset: 2px; }
 .hl-attack__seglabel { font-size: var(--hl-fs-meta); line-height: 1.25; opacity: 0.8; margin-top: 4px; text-align: center;
-  overflow: visible; white-space: normal; overflow-wrap: break-word; }
+  overflow: visible; white-space: normal; overflow-wrap: break-word; hyphens: auto; }   /* T-0556 w1: IBM Plex Sans is wider than the old body face, so 'Reconnaissance' no longer fit a 100px cell at 390; it now hyphenates at a syllable instead of breaking after its 13th letter */
 .hl-attack__detail { margin-top: 0.8em; padding-top: 0.7em;
   border-top: 1px solid rgba(128,128,128,0.25); }
 .hl-attack__detail[hidden] { display: none; }
