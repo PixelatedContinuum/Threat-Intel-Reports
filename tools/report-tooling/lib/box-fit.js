@@ -38,6 +38,7 @@
      position:fixed              placed against the viewport (the back-to-top button, the toast), not a parent
      sticky header cell          a th with position:sticky (the procedure table's header, T-0500.1.7.3 c3) is displaced from its row by design while the page scrolls, and the
                                  row holding it is judged by its other cells; a th that is NOT sticky and hangs out of its row still faults (test/box-fit.test.js)
+     decorative cover texture    the concept 3 cover's aria-hidden hex texture (.c3-cover__tex), clipped by its cover on purpose (T-0556 w6a); a clipped box of any other class still faults
      painted at 2px or less / no size / visibility:hidden   nothing painted, so nothing hangs out
      svg internals               the svg root is measured, its shapes are the drawing
      centred mark                an empty, absolutely placed mark whose centre lies inside its decorative (aria-hidden) container and which lies inside that
@@ -147,6 +148,7 @@ function boxFit(opt) {
     if (!rects.length) continue;
     var r = e.getBoundingClientRect();
     measured++;
+    if (e.closest('.c3-cover__tex')) { ex('decorative cover texture'); continue; }   /* T-0556 w6a: aria-hidden, script-filled hex texture, clipped by design; named by class, not by aria-hidden */
     if (r.width <= 2 && r.height <= 2) { ex('painted at 2px or less'); continue; }
     if (r.height < 1 || r.width < 1) { ex('no size'); continue; }
     if (cs.visibility === 'hidden' || cs.visibility === 'collapse') { ex('visibility hidden'); continue; }

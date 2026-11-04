@@ -596,7 +596,8 @@ function targetsExpr(token) {
    computed size: the tab bar, the header, the sponsor strip, the panel heads and every [data-rv-chrome]
    node in the tab (permalinks, table tools, the whole data view). Text drawn by CSS content (the
    SECTION nn label, DATA VIEW, the tab dots) is not a text node, so every element in those regions is
-   also asked for its ::before and ::after. The report's own prose is not measured here: it is the
+   also asked for its ::before and ::after. T-0556 w6a: the cover's hex texture (.c3-cover__tex, aria-hidden, script-filled decoration at 11 and 12 px) is the one
+   named exclusion, by class, never by aria-hidden alone; every other text in the header stays measured (test/v6-gates.test.js plants a 11 px label beside a texture). The report's own prose is not measured here: it is the
    author's text and is set larger. getClientRects() decides visibility, as in the 44 px count. */
 var CHROME_FLOOR_PX = 12.99;
 function chromeTextExpr(token) {
@@ -609,10 +610,10 @@ function chromeTextExpr(token) {
     'function vis(el){return !!el&&el.getClientRects().length>0&&getComputedStyle(el).visibility!=="hidden";}' +
     'roots.forEach(function(root){var w=document.createTreeWalker(root,NodeFilter.SHOW_TEXT),n;' +
     'while((n=w.nextNode())){if(!/\\S/.test(n.nodeValue)||seen.has(n))continue;seen.add(n);' +
-    'var el=n.parentElement;if(!vis(el))continue;count++;var px=parseFloat(getComputedStyle(el).fontSize);' +
+    'var el=n.parentElement;if(!vis(el)||el.closest(".c3-cover__tex"))continue;count++;var px=parseFloat(getComputedStyle(el).fontSize);' +
     'if(px<' + CHROME_FLOOR_PX + ')small.push({px:px,what:(n.nodeValue.trim()).slice(0,30),cls:String(el.className||el.tagName).slice(0,30)});}});' +
     'var els=[];roots.concat(heads).forEach(function(r){els.push(r);[].slice.call(r.querySelectorAll("*")).forEach(function(e){els.push(e);});});' +
-    'var done=new Set();els.forEach(function(el){if(done.has(el))return;done.add(el);if(!vis(el))return;' +
+    'var done=new Set();els.forEach(function(el){if(done.has(el))return;done.add(el);if(!vis(el)||el.closest(".c3-cover__tex"))return;' +
     '["::before","::after"].forEach(function(ps){var c=getComputedStyle(el,ps);' +
     'if(!c.content||c.content==="none"||c.content==="normal"||c.content==="\\"\\"")return;' +
     'if(c.display==="none")return;pseudo++;var px=parseFloat(c.fontSize);' +
@@ -620,52 +621,47 @@ function chromeTextExpr(token) {
     'return {count:count,pseudo:pseudo,small:small.slice(0,8),smallCount:small.length};})(' + JSON.stringify(token) + ')';
 }
 
-/* The selected tab is told apart from the others by more than its aria state (design D, T-0500.1.7.3; the v6 look was a label colour, an
-   underline and an accent dot). Each tab is an icon chip: an icon box and a label. The selected chip is FILLED with the tab accent (its icon
-   box is opaque accent, the label white, the border a stronger accent), while an idle chip's icon box is a translucent tint and its label
-   muted. Every tab carries an icon (an svg in its icon box) and no numeral, and the idle chips' accents are distinct: seven tabs, five clean
-   site hues, so at least six distinct accents (one fewer than the tabs when a report builds fewer than seven). */
+/* The tab row, concept 3 (T-0556 w6a; it replaces the design D "filled accent chip with its own icon" rule, which pinned the look Joseph replaced).
+   From 700 px the tabs are numbered text on a ruled line: every tab carries a number drawn by CSS (a counter in ::before), no tab shows an icon,
+   and the selected tab, and only it, has one accent underline (an inset 2px bottom shadow) in the same accent as its number, with a label colour its
+   idle neighbours do not have. Below 700 px the approved icon strip stays and has its own row (stripVerdict). */
 var TAB_LOOK_EXPR = '(function(){var tabs=[].slice.call(document.querySelectorAll("[role=tab]"));' +
-  'return tabs.map(function(b){var c=getComputedStyle(b),ib=b.querySelector(".hl-rv-tab-icon"),ic=ib?getComputedStyle(ib):null;' +
-  'return {id:b.id,selected:b.getAttribute("aria-selected")==="true",color:c.color,border:c.borderTopColor,' +
-  'hasIcon:!!(ib&&ib.querySelector("svg")),iconW:ib?ib.getBoundingClientRect().width:0,iconBg:ic?ic.backgroundColor:null,iconFg:ic?ic.color:null};});})()';
+  'return tabs.map(function(b){var c=getComputedStyle(b),bf=getComputedStyle(b,"::before"),ib=b.querySelector(".hl-rv-tab-icon");' +
+  'return {id:b.id,selected:b.getAttribute("aria-selected")==="true",color:c.color,shadow:c.boxShadow,numContent:bf.content,numColor:bf.color,' +
+  'iconShown:!!ib&&getComputedStyle(ib).display!=="none"&&ib.getBoundingClientRect().width>0};});})()';
 function rgbaOf(c) {
   /* Chrome serialises a color-mix() result as color(srgb r g b / a) with channels 0 to 1 */
   var cm = /^color\(srgb\s+([\d.]+)\s+([\d.]+)\s+([\d.]+)(?:\s*\/\s*([\d.]+%?))?\s*\)$/.exec(c || '');
   if (cm) return { r: +cm[1] * 255, g: +cm[2] * 255, b: +cm[3] * 255, a: cm[4] === undefined ? 1 : (/%$/.test(cm[4]) ? parseFloat(cm[4]) / 100 : parseFloat(cm[4])) };
   var m = /^rgba?\(\s*([\d.]+)[,\s]+([\d.]+)[,\s]+([\d.]+)(?:[,\s/]+([\d.]+%?))?\s*\)$/.exec(c || ''); if (!m) return null; var a = m[4] === undefined ? 1 : (/%$/.test(m[4]) ? parseFloat(m[4]) / 100 : parseFloat(m[4])); return { r: +m[1], g: +m[2], b: +m[3], a: a }; }
+/* the inset bottom shadow a tab uses as its underline: Chrome serialises it "rgb(88, 166, 255) 0px -2px 0px 0px inset" */
+function tabUnderline(shadow) {
+  var m = /^(rgba?\([^)]*\)|color\([^)]*\))\s+0px\s+(-?[\d.]+)px\s+0px(?:\s+0px)?\s+inset$/.exec(String(shadow || '').trim());
+  return m ? { color: m[1], thick: Math.abs(parseFloat(m[2])) } : null;
+}
 function tabLookVerdict(tabs) {
   if (!tabs || tabs.length < 1) return { notChecked: true, ok: false, detail: 'no tab was rendered, so nothing could be measured' };
-  var opaque = function (c) { var x = rgbaOf(c); return !!x && x.a >= 0.99; };
-  var tint = function (c) { var x = rgbaOf(c); return !!x && x.a > 0 && x.a < 0.6; };
   var why = [];
-  if (tabs.some(function (t) { return !t.hasIcon || !(t.iconW >= 28); })) why.push('a tab has no icon box with an svg of at least 28 px');
-  /* One tab (T-0500.1.10): there is no idle chip to tell the selected one from, so the comparisons are not claimed. What one tab can show is
-     measured on its own: it is selected, its icon box is filled with the accent, and it has an icon. The row says so in its name. */
-  if (tabs.length === 1) {
-    var one = tabs[0];
-    if (!one.selected) why.push('the only tab is not selected');
-    if (!opaque(one.iconBg)) why.push('the only tab\'s icon box is not filled with the accent (' + one.iconBg + ')');
-    return { notChecked: false, ok: why.length === 0, why: why, single: true, distinct: 1,
-      detail: '1 tab: ' + one.id + ' ' + one.color + ' with a ' + one.iconBg + ' icon box; no idle tab exists, so the label-colour, border and accent comparisons were not made' + (why.length ? '; ' + why.join('; ') : '') };
-  }
-  var sel = tabs.filter(function (t) { return t.selected; });
-  var idle = tabs.filter(function (t) { return !t.selected; });
+  var numbered = function (t) { var c = String(t.numContent || ''); return c !== '' && c !== 'none' && c !== 'normal' && c !== '""'; };
+  tabs.forEach(function (t) { if (!numbered(t)) why.push(t.id + ' carries no number'); if (t.iconShown) why.push(t.id + ' still shows an icon'); });
+  var sel = tabs.filter(function (t) { return t.selected; }), idle = tabs.filter(function (t) { return !t.selected; });
+  var u = null;
   if (sel.length !== 1) why.push(sel.length + ' tabs selected');
   else {
-    if (!opaque(sel[0].iconBg)) why.push('the selected tab\'s icon box is not filled with the accent (' + sel[0].iconBg + ')');
-    if (idle.some(function (t) { return t.color === sel[0].color; })) why.push('an idle tab has the selected tab\'s label colour ' + sel[0].color);
-    if (idle.some(function (t) { return t.border === sel[0].border; })) why.push('an idle tab has the selected tab\'s border colour ' + sel[0].border);
-    if (idle.some(function (t) { return opaque(t.iconBg) || !tint(t.iconBg); })) why.push('an idle tab\'s icon box is not a translucent tint');
+    u = tabUnderline(sel[0].shadow);
+    if (!u || u.thick < 1.99 || u.thick > 4) why.push('the selected tab has no accent underline of 2 to 4 px (box-shadow ' + sel[0].shadow + ')');
+    else if (u.color !== sel[0].numColor) why.push('the selected tab\'s underline ' + u.color + ' is not the colour of its number ' + sel[0].numColor);
+    /* one tab: there is no idle tab to tell it from, so the comparisons are not made and the row says so */
+    idle.forEach(function (t) {
+      if (tabUnderline(t.shadow)) why.push('an idle tab (' + t.id + ') also has an underline');
+      if (t.numColor === sel[0].numColor) why.push('an idle tab (' + t.id + ') has the selected tab\'s number colour ' + t.numColor);
+      if (t.color === sel[0].color) why.push('an idle tab (' + t.id + ') has the selected tab\'s label colour ' + t.color);
+    });
   }
-  /* a tab's accent is its icon colour when idle and its icon-box fill when selected; seven tabs share five clean site hues (Victims and Attribution
-     are both the Actors fuchsia), so at least six distinct accents of seven, and one fewer than the tabs for a shorter row */
-  var accents = tabs.map(function (t) { return t.selected ? t.iconBg : t.iconFg; });
-  var distinct = accents.filter(function (d, i) { return accents.indexOf(d) === i; }).length;
-  if (distinct < Math.min(6, tabs.length - 1)) why.push('only ' + distinct + ' distinct icon accents across ' + tabs.length + ' tabs');
-  return { notChecked: false, ok: why.length === 0, why: why, distinct: distinct,
-    detail: tabs.length + ' tabs: selected ' + (sel[0] ? sel[0].id + ' ' + sel[0].color + ' with a ' + sel[0].iconBg + ' filled icon box' : 'none') +
-      '; ' + distinct + ' distinct icon accents across the tabs' + (why.length ? '; ' + why.join('; ') : '') };
+  var single = tabs.length === 1;
+  return { notChecked: false, ok: why.length === 0, why: why, single: single,
+    detail: tabs.length + ' tab(s), all numbered text: selected ' + (sel[0] ? sel[0].id + ' ' + sel[0].color + (u ? ' with a ' + u.thick + 'px ' + u.color + ' underline' : ' with no underline') : 'none') +
+      (single ? '; one tab, so no idle tab exists and the idle comparisons were not made' : '; ' + idle.length + ' idle tab(s) with no underline and a different number colour') + (why.length ? '; ' + why.join('; ') : '') };
 }
 
 /* Keyboard, measured with real key events. A synthetic KeyboardEvent dispatched
@@ -1269,72 +1265,92 @@ async function landmarkRows(page, url) {
   if (v.notChecked) check('NOT CHECKED: ' + name, false, v.detail);
   else check(name, v.ok, v.detail);
 }
-var TAB_LOOK_NAME = 'the selected tab is a filled accent chip with its own label colour and border, and every tab carries its own icon in its accent';
-var TAB_LOOK_NAME_ONE = 'the only tab is selected, a filled accent chip with its icon (one tab: no idle tab to tell it from)';
+var TAB_LOOK_NAME = 'the tabs are numbered text from 700 px, no icons, and the selected tab alone has one accent underline and its own label colour';
+var TAB_LOOK_NAME_ONE = 'the only tab is numbered text, selected, with the accent underline (one tab: no idle tab to tell it from)';
 async function tabLookRows(page, url) {
-  var name = TAB_LOOK_NAME;
-  await setViewport(page, 1280, 900);
-  if (!(await gotoAndWait(page, url))) {
-    check('NOT CHECKED: ' + name, false, 'the tab controller never built at 1280x900 (no .hl-rv-ready), so nothing was measured');
-    return;
+  /* 1280 is the desktop row; 700 is the first width of the concept 3 look (the rule starts at 700 px, so its first pixel is measured). */
+  var widths = [[1280, 900, ''], [700, 900, 'at 700 px: ']];
+  for (var wi = 0; wi < widths.length; wi++) {
+    var name = widths[wi][2] + TAB_LOOK_NAME;
+    await setViewport(page, widths[wi][0], widths[wi][1]);
+    if (!(await gotoAndWait(page, url))) {
+      check('NOT CHECKED: ' + name, false, 'the tab controller never built at ' + widths[wi][0] + 'x' + widths[wi][1] + ' (no .hl-rv-ready), so nothing was measured');
+      continue;
+    }
+    await page.evaluate('location.hash="#tab-' + otherTab() + '"');
+    await CDP.sleep(150);
+    var v = tabLookVerdict(await page.json(TAB_LOOK_EXPR));
+    /* T-0500.1.7.3 (c4): a tab's colour and underline change over 0.15s; on a loaded machine the 150 ms wait ended mid-change.
+       A verdict that passes is final; one that fails is measured again, up to 12 times 250 ms, and only the last reading counts, so a tab that never settles still FAILs. */
+    for (var settle = 0; !v.ok && !v.notChecked && settle < 12; settle++) { await CDP.sleep(250); v = tabLookVerdict(await page.json(TAB_LOOK_EXPR)); }
+    if (v.single) name = widths[wi][2] + TAB_LOOK_NAME_ONE;
+    if (v.notChecked) { check('NOT CHECKED: ' + name, false, v.detail); continue; }
+    check(name, v.ok, v.detail);
+    if (wi === 0 && v.ok) {
+      /* T-0556 w6a controls: the same page with the concept 3 look broken two ways must FAIL the row. (1) the underline removed from every tab; (2) the underline put on every tab. */
+      var ctls = [
+        ['the selected tab\'s underline removed makes the tab-look row FAIL', '[role=tab]{box-shadow:none !important}'],
+        ['an underline on every tab (not only the selected one) makes the tab-look row FAIL', '[role=tab]{box-shadow:inset 0 -2px 0 #58a6ff !important}'],
+        ['an icon shown on every tab makes the tab-look row FAIL', '.hl-rv-tab-icon{display:inline-flex !important;width:32px !important}']
+      ];
+      for (var ci = 0; ci < ctls.length; ci++) {
+        await page.evaluate('(function(){var s=document.createElement("style");s.id="w6a-tab-ctl";s.textContent=' + JSON.stringify(ctls[ci][1]) + ';document.head.appendChild(s);})()');
+        await CDP.sleep(300);
+        var cv = tabLookVerdict(await page.json(TAB_LOOK_EXPR));
+        await page.evaluate('(function(){var s=document.getElementById("w6a-tab-ctl");if(s)s.remove();})()');
+        check('control: ' + ctls[ci][0], cv.ok === false && !cv.notChecked, cv.ok === false ? 'FAILS as designed: ' + cv.detail : 'the control did NOT fire: ' + cv.detail);
+      }
+    }
   }
-  await page.evaluate('location.hash="#tab-' + otherTab() + '"');
-  await CDP.sleep(150);
-  var v = tabLookVerdict(await page.json(TAB_LOOK_EXPR));
-  /* T-0500.1.7.3 (c4): the tab chip's colour, background and border change over 0.15s; on a loaded machine the 150 ms wait ended
-     mid-change (shadow-xworm-opendirectory: the selected tab still wore the idle label colour). A verdict that passes is final;
-     one that fails is measured again, up to 12 times 250 ms, and only the last reading counts, so a tab that never settles still FAILs. */
-  for (var settle = 0; !v.ok && !v.notChecked && settle < 12; settle++) { await CDP.sleep(250); v = tabLookVerdict(await page.json(TAB_LOOK_EXPR)); }
-  if (v.single) name = TAB_LOOK_NAME_ONE;
-  if (v.notChecked) check('NOT CHECKED: ' + name, false, v.detail);
-  else check(name, v.ok, v.detail);
 }
 
 /* Design v6.1 (T-0500.1.7), Joseph's review of the v6 preview: "no clear separation between anything" and "the text is too small".
-   Two rows. (1) The top of the page is a stack of separate containers: each adjacent pair is at least 24 px apart (23.5 allows for
-   sub-pixel layout), each is a bordered panel on a surface that is not the page's own, and the tab row and the reading toolbar are on
-   different surfaces. (2) The type scale: the report's prose stays 18 px, and at desktop widths tab names are 17 px, secondary text and
+   Two rows. (1) The top of the page: v6.1 made it separate panels at least 24 px apart; CONCEPT 3 (T-0556 w6a, replacing that rule, which pinned the look
+   Joseph replaced) attaches the header, the tab row and what follows, and separates them with rules. Measured in the browser: the tab row starts where the
+   header ends (within 1.5 px, so the two share one edge), the header and the tab row each end in a visible rule of at least 1 px (their own bottom border,
+   or the top border of what follows), the toolbar after the tabs is under 24 px away (nothing floats as a panel of its own), and no component overlaps the
+   one above it (the header, tab row, toolbar, tab title and data view are sorted by top and each must start at or below the bottom of the one before).
+   (2) The type scale: the report's prose stays 18 px, and at desktop widths tab names are 17 px, secondary text and
    table cells 16 px, mono micro-labels 14 px; on a phone secondary text and table cells keep a 15 px floor. Both are measured in the
    browser, not read from the stylesheet. The verdicts are pure so a test can drive each to FAIL. */
 var PANEL_GAP_MIN_PX = 23.5;
+var PANEL_ATTACH_PX = 1.5;
 var PANEL_COMPONENTS = [
-  ['featured band', '.hl-rv-feat', true],
-  ['header', '.hl-post-header', true],
-  ['tab row', '.hl-rv-tabs', false],
-  ['toolbar', '.hl-rv-mobile-line', true],
-  ['tab title', '.hl-rv-panel:not([hidden]) .hl-rv-panel-head', false],
-  ['data view', '.hl-rv-panel:not([hidden]) .hl-rv-view', true],
-  ['first section', '.hl-rv-panel:not([hidden]) .hl-rv-source', false]
+  ['featured band', '.hl-rv-feat'],
+  ['header', '.hl-post-header'],
+  ['tab row', '.hl-rv-tabs'],
+  ['toolbar', '.hl-rv-mobile-line'],
+  ['tab title', '.hl-rv-panel:not([hidden]) .hl-rv-panel-head'],
+  ['data view', '.hl-rv-panel:not([hidden]) .hl-rv-view'],
+  ['first section', '.hl-rv-panel:not([hidden]) .hl-rv-source']
 ];
 var PANEL_EXPR = '(function(){var COMPS=' + JSON.stringify(PANEL_COMPONENTS) + ';' +
-  'var page=getComputedStyle(document.body).backgroundColor;' +
   'function vis(e){return !!e&&e.getClientRects().length>0&&getComputedStyle(e).visibility!=="hidden";}' +
+  'function rule(cs,side){var w=parseFloat(cs["border"+side+"Width"]);var c=cs["border"+side+"Color"]||"";return w>0&&cs["border"+side+"Style"]!=="none"&&!/rgba\\(.*,\\s*0\\)$/.test(c)?w:0;}' +
   'var out=[];COMPS.forEach(function(c){var e=[].slice.call(document.querySelectorAll(c[1])).filter(vis)[0];if(!e)return;' +
-  'var r=e.getBoundingClientRect(),cs=getComputedStyle(e);out.push({name:c[0],boxed:c[2],top:r.top+scrollY,bottom:r.bottom+scrollY,' +
-  'border:parseFloat(cs.borderTopWidth)+parseFloat(cs.borderLeftWidth),bg:cs.backgroundColor,image:cs.backgroundImage!=="none"});});' +
-  'return {page:page,items:out};})()';
+  'var r=e.getBoundingClientRect(),cs=getComputedStyle(e);out.push({name:c[0],top:r.top+scrollY,bottom:r.bottom+scrollY,ruleTop:rule(cs,"Top"),ruleBottom:rule(cs,"Bottom")});});' +
+  'return {items:out};})()';
 function panelStackVerdict(m) {
-  if (!m || !m.items || m.items.length < 4) return { notChecked: true, ok: false, detail: 'fewer than four top components were found, so no gap was measured' };
+  if (!m || !m.items || m.items.length < 3) return { notChecked: true, ok: false, detail: 'fewer than three top components were found, so nothing was measured' };
   var items = m.items.slice().sort(function (a, b) { return a.top - b.top; });
-  var clear = function (c) { return !c || c === 'transparent' || /^rgba\(\s*0,\s*0,\s*0,\s*0\s*\)$/.test(c); };
+  var named = function (n) { return items.filter(function (x) { return x.name === n; })[0]; };
+  var hdr = named('header'), tabs = named('tab row'), bar = named('toolbar');
+  if (!hdr || !tabs) return { notChecked: true, ok: false, detail: 'the header or the tab row was not found, so the attachment was not measured' };
   var why = [], gaps = [];
-  for (var i = 0; i < items.length; i++) {
-    var it = items[i];
-    if (it.boxed) {
-      if (!(it.border >= 1)) why.push(it.name + ' has no border');
-      if (it.bg === m.page && !it.image) why.push(it.name + ' is on the page surface ' + it.bg);
-      if (clear(it.bg) && !it.image) why.push(it.name + ' has no surface of its own');
-    }
-    if (i > 0) {
-      /* a report sponsor is the attached foot of the header panel (one box), so it is not a gap to measure */
-      var prev = items[i - 1], gap = it.top - prev.bottom;
-      if (it.name === 'report sponsor' && prev.name === 'header') { if (Math.abs(gap) > 1.5) why.push('the report sponsor is not attached to the header (' + gap.toFixed(1) + ' px)'); continue; }
-      gaps.push(prev.name + '->' + it.name + ' ' + gap.toFixed(1));
-      if (gap < PANEL_GAP_MIN_PX) why.push(prev.name + ' to ' + it.name + ' is ' + gap.toFixed(1) + ' px apart');
-    }
+  for (var i = 1; i < items.length; i++) {
+    var gap = items[i].top - items[i - 1].bottom;
+    gaps.push(items[i - 1].name + '->' + items[i].name + ' ' + gap.toFixed(1));
+    if (gap < -PANEL_ATTACH_PX) why.push(items[i].name + ' overlaps ' + items[i - 1].name + ' by ' + (-gap).toFixed(1) + ' px');
   }
-  var tabs = items.filter(function (x) { return x.name === 'tab row'; })[0], bar = items.filter(function (x) { return x.name === 'toolbar'; })[0];
-  if (tabs && bar && tabs.bg === bar.bg) why.push('the tab row and the toolbar are on one surface ' + bar.bg);
+  var g1 = tabs.top - hdr.bottom;
+  if (Math.abs(g1) > PANEL_ATTACH_PX) why.push('the tab row is not attached to the header (' + g1.toFixed(1) + ' px between them)');
+  if (!(hdr.ruleBottom >= 1 || tabs.ruleTop >= 1)) why.push('no rule between the header and the tab row');
+  var after = bar || items.filter(function (x) { return x.top >= tabs.bottom - 0.5 && x !== tabs && x.name !== 'featured band'; })[0];
+  if (after) {
+    var g2 = after.top - tabs.bottom;
+    if (g2 >= PANEL_GAP_MIN_PX) why.push('the ' + after.name + ' floats ' + g2.toFixed(1) + ' px below the tab row (attached is under ' + PANEL_GAP_MIN_PX + ')');
+    if (!(tabs.ruleBottom >= 1 || after.ruleTop >= 1 || (after.name === 'toolbar' && after.ruleBottom >= 1))) why.push('no rule under the tab row');
+  } else why.push('nothing follows the tab row, so the body was not measured');
   return { notChecked: false, ok: why.length === 0, why: why, gaps: gaps, detail: items.length + ' components, gaps ' + gaps.join(', ') + (why.length ? '; ' + why.join('; ') : '') };
 }
 var TYPE_SPEC = [
@@ -1382,7 +1398,7 @@ async function panelRows(page, url) {
   for (var i = 0; i < states.length; i++) {
     var w = states[i][0], h = states[i][1], label = states[i][2], phone = states[i][3];
     await setViewport(page, w, h);
-    var nameA = 'the top of the page is separate panels, each at least 24 px apart, on their own surfaces';
+    var nameA = 'the top of the page is header, tabs and body attached and separated by rules, nothing overlapping';
     var nameB = 'text is on the v6.1 scale: tab names 16, secondary and table text 16, mono labels 14, phone floor 15';
     if (!(await gotoAndWait(page, url))) {
       check('NOT CHECKED: ' + label + ': ' + nameA, false, 'the tab controller never built, so nothing was measured');
@@ -1399,6 +1415,17 @@ async function panelRows(page, url) {
       var pv = panelStackVerdict(await page.json(PANEL_EXPR));
       if (pv.notChecked) check('NOT CHECKED: ' + label + ' ' + token + ': ' + nameA, false, pv.detail);
       else check(label + ' ' + token + ': ' + nameA, pv.ok, pv.detail);
+      if (t === 0 && pv.ok) {
+        /* T-0556 w6a controls on the same page: the tab row pulled 40 px away from the header (the old floating panel), then pushed 20 px up over it, then its rule taken away */
+        var pctl = [['the tab row 40 px below the header', '.hl-rv-tabs,.hl-rv-bar{margin-top:40px !important}'], ['the tab row 20 px up over the header', '.hl-rv-tabs{position:relative !important;margin-top:-20px !important}'], ['every rule under the header and the tab row removed', '.hl-post-header{border-bottom:0 !important}.hl-rv-tabs{border-bottom:0 !important}.hl-rv-mobile-line{border:0 !important}']];
+        for (var pci = 0; pci < pctl.length; pci++) {
+          await page.evaluate('(function(){var s=document.createElement("style");s.id="w6a-panel-ctl";s.textContent=' + JSON.stringify(pctl[pci][1]) + ';document.head.appendChild(s);})()');
+          await CDP.sleep(200);
+          var pcv = panelStackVerdict(await page.json(PANEL_EXPR));
+          await page.evaluate('(function(){var s=document.getElementById("w6a-panel-ctl");if(s)s.remove();})()');
+          check('control: ' + label + ': ' + pctl[pci][0] + ' makes the top-of-page row FAIL', pcv.ok === false && !pcv.notChecked, pcv.ok === false ? 'FAILS as designed: ' + pcv.detail : 'the control did NOT fire: ' + pcv.detail);
+        }
+      }
       await page.evaluate('document.querySelectorAll(".hl-rv-view details").forEach(function(d){d.open=true;})');
       var tv = typeScaleVerdict(await page.json(TYPE_EXPR), phone);
       if (tv.notChecked) check('NOT CHECKED: ' + label + ' ' + token + ': ' + nameB, false, tv.detail);
@@ -1669,7 +1696,8 @@ var PLATE_EXPR = '(function(){function vis(e){var r=e.getBoundingClientRect();re
   'var h=document.querySelector(".hl-report-page .hl-post-header"),a=h&&h.querySelector(".hl-rv-actions"),t=h&&h.querySelector(".hl-post-header__title");' +
   'if(!h||!a)return {present:false};var hr=h.getBoundingClientRect(),tr=t?t.getBoundingClientRect():null;' +
   'var btns=[].slice.call(a.querySelectorAll("a.hl-quicklink,button.hl-quicklink")).filter(vis).map(function(b){var r=b.getBoundingClientRect(),l=b.querySelector(".hl-quicklink__label");return {label:l?l.textContent.trim():b.textContent.trim(),l:r.left,t:r.top,r:r.right,b:r.bottom,w:r.width,h:r.height};});' +
-  'return {present:true,iw:innerWidth,hdr:{l:hr.left,t:hr.top,r:hr.right,b:hr.bottom},titleR:tr?tr.right:null,btns:btns};})()';
+  'var cv=h.querySelector(".hl-rv-cover"),cr=cv?cv.getBoundingClientRect():null;' +
+  'return {present:true,iw:innerWidth,hdr:{l:hr.left,t:hr.top,r:hr.right,b:hr.bottom},titleL:tr?tr.left:null,titleR:tr?tr.right:null,cover:cr&&cr.width>0&&cr.height>0?{l:cr.left,t:cr.top,r:cr.right,b:cr.bottom}:null,btns:btns};})()';
 function frontMatterLinks(mdText) {
   var fm = /^---\n([\s\S]*?)\n---/.exec(mdText || ''); if (!fm) return null;
   var has = function (k) { return new RegExp('^' + k + ':\\s*\\S', 'm').test(fm[1]); };
@@ -1686,16 +1714,27 @@ function plateColumnVerdict(m, expected) {
   var got = m.btns.map(function (b) { return b.label; }), why = [];
   if (got.join('|') !== expected.join('|')) why.push('the plate has [' + got.join(', ') + '] but the page has [' + expected.join(', ') + ']');
   m.btns.forEach(function (b) { if (b.h < 43.5 || b.w < 43.5) why.push(b.label + ' is ' + b.w.toFixed(0) + 'x' + b.h.toFixed(0) + ' px, under 44'); if (b.l < m.hdr.l || b.r > m.hdr.r + 0.5 || b.t < m.hdr.t || b.b > m.hdr.b + 0.5) why.push(b.label + ' is outside the plate'); });
-  if (m.iw >= 1100 && m.btns.length > 1) {
-    var xs = m.btns.map(function (b) { return Math.round(b.l); });
-    if (xs.some(function (x) { return Math.abs(x - xs[0]) > 1; })) why.push('the buttons are not one column (left edges ' + xs.join(', ') + ')');
-    if (m.titleR !== null && m.btns[0].l < m.titleR - 1) why.push('the button column starts at ' + m.btns[0].l.toFixed(0) + ' px, inside the title (right edge ' + m.titleR.toFixed(0) + ')');
-    for (var k = 1; k < m.btns.length; k++) if (m.btns[k].t < m.btns[k - 1].b - 0.5) why.push(m.btns[k].label + ' overlaps ' + m.btns[k - 1].label);
+  /* T-0556 w6a, concept 3: the buttons are a ROW at the LEFT of the plate (flex-wrap), beside the cover, not a column at the right of the title.
+     They read in the page's order (a button is on a later visual row, or to the right of the one before on the same row), the first button of every
+     visual row starts at one left edge, which is the title's left edge on a wide plate, and no button touches the cover. */
+  var cv = m.cover;
+  if (m.btns.length > 1) {
+    for (var k = 1; k < m.btns.length; k++) {
+      var pb = m.btns[k - 1], cb = m.btns[k], later = cb.t >= pb.t + pb.h / 2, right = Math.abs(cb.t - pb.t) < pb.h / 2 && cb.l >= pb.r - 0.5;
+      if (!later && !right) why.push(cb.label + ' is not after ' + pb.label + ' in reading order (' + cb.l.toFixed(0) + ',' + cb.t.toFixed(0) + ' against ' + pb.l.toFixed(0) + ',' + pb.t.toFixed(0) + ')');
+    }
+    for (var o1 = 0; o1 < m.btns.length; o1++) for (var o2 = o1 + 1; o2 < m.btns.length; o2++) { var x1 = m.btns[o1], x2 = m.btns[o2]; if (x1.l < x2.r - 0.5 && x2.l < x1.r - 0.5 && x1.t < x2.b - 0.5 && x2.t < x1.b - 0.5) why.push(x2.label + ' overlaps ' + x1.label); }
+    var starts = [];
+    m.btns.forEach(function (b, k2) { if (k2 === 0 || b.t >= m.btns[k2 - 1].t + m.btns[k2 - 1].h / 2) starts.push(Math.round(b.l)); });
+    if (starts.some(function (x) { return Math.abs(x - starts[0]) > 1; })) why.push('the rows of buttons do not start at one left edge (' + starts.join(', ') + ')');
   }
+  if (m.titleL !== null && m.btns.length && Math.abs(m.btns[0].l - m.titleL) > 1) why.push('the button row starts at ' + m.btns[0].l.toFixed(0) + ' px, not at the title\'s left edge (' + m.titleL.toFixed(0) + ')');
+  if (cv) m.btns.forEach(function (b) { if (b.l < cv.r - 0.5 && b.r > cv.l + 0.5 && b.t < cv.b - 0.5 && b.b > cv.t + 0.5) why.push(b.label + ' overlaps the cover'); });
+  if (m.iw >= 900 && cv && m.btns.some(function (b) { return b.r > cv.l + 0.5; })) why.push('a button reaches the right-hand cover column (cover starts at ' + cv.l.toFixed(0) + ' px)');
   return { notChecked: false, ok: why.length === 0, why: why, detail: got.length + ' button(s) [' + got.join(', ') + '] against [' + expected.join(', ') + ']' + (why.length ? '; ' + why.join('; ') : '') };
 }
 async function plateRows(page, url, mdText) {
-  var name = 'the plate button column holds Read the full report, the page\'s own Detections, IOC feed, STIX and MISP links, and Share, in one column at the right on desktop';
+  var name = 'the plate button row holds Read the full report, the page\'s own Detections, IOC feed, STIX and MISP links, and Share, in reading order, from one left edge and clear of the cover';
   var links = frontMatterLinks(mdText);
   var states = [[1280, 900], [1440, 900], [390, 844]];
   for (var i = 0; i < states.length; i++) {
@@ -1711,7 +1750,16 @@ async function plateRows(page, url, mdText) {
       var victim = expected[1];
       await page.evaluate('(function(v){var b=[].slice.call(document.querySelectorAll(".hl-rv-actions .hl-quicklink")).filter(function(x){var l=x.querySelector(".hl-quicklink__label");return l&&l.textContent.trim()===v;})[0];if(b)b.style.display="none";})(' + JSON.stringify(victim) + ')');
       var c = plateColumnVerdict(await page.json(PLATE_EXPR), expected);
-      check('control: with the ' + victim + ' button hidden the plate-column row FAILS', c.ok === false && !c.notChecked, c.ok === false ? 'FAILS as designed: ' + c.detail : 'the control did NOT fire: ' + c.detail);
+      check('control: with the ' + victim + ' button hidden the plate-row row FAILS', c.ok === false && !c.notChecked, c.ok === false ? 'FAILS as designed: ' + c.detail : 'the control did NOT fire: ' + c.detail);
+      /* T-0556 w6a: two geometry controls on a fresh load: the row reversed (reading order broken) and the row pushed to the right of the title (the old column's side) */
+      var geo = [['the buttons in reverse order', '.hl-report-page .hl-rv-actions{flex-direction:row-reverse !important;justify-content:flex-end !important}'], ['the button row pushed away from the title\'s left edge', '.hl-report-page .hl-rv-actions{margin-left:48px !important}']];
+      for (var gi = 0; gi < geo.length; gi++) {
+        if (!(await gotoAndWait(page, url))) { check('NOT CHECKED: control: ' + geo[gi][0], false, 'the page did not rebuild for the control'); continue; }
+        await page.evaluate('(function(){var s=document.createElement("style");s.textContent=' + JSON.stringify(geo[gi][1]) + ';document.head.appendChild(s);})()');
+        await CDP.sleep(200);
+        var gv = plateColumnVerdict(await page.json(PLATE_EXPR), expected);
+        check('control: ' + geo[gi][0] + ' makes the plate-row row FAIL', gv.ok === false && !gv.notChecked, gv.ok === false ? 'FAILS as designed: ' + gv.detail : 'the control did NOT fire: ' + gv.detail);
+      }
     }
   }
 }
@@ -4938,7 +4986,7 @@ if (require.main === module) {
        verdicts behind them, so a test can prove each row can fail. */
     MIN_TARGET_PX: MIN_TARGET_PX,
     TAB_BAR_VIEWPORTS: TAB_BAR_VIEWPORTS,
-    tabLookVerdict: tabLookVerdict,
+    tabLookVerdict: tabLookVerdict, tabUnderline: tabUnderline,
     emptyLandmarkVerdict: emptyLandmarkVerdict,
     LANDMARK_EXPR: LANDMARK_EXPR,
     menuSelectVerdict: menuSelectVerdict,

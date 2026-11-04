@@ -1,7 +1,7 @@
 'use strict';
 
 /* Tests for the two rows design v6 (T-0500.1.7) added to check-browser-report.js: no chrome text under
-   13 px, and the selected tab told apart from the others with an accent dot on every tab.
+   13 px, and the selected tab told apart from the others (T-0556 w6a: now the concept 3 rule, see the tab look tests below).
 
    A row added to a gate is worth nothing until something proves it can FAIL, so each verdict is driven with
    the measurement a broken layout would produce. These do not drive a browser: the measurement comes from
@@ -14,51 +14,50 @@ var assert = require('node:assert');
 var JSDOM = require('jsdom').JSDOM;
 var G = require('../check-browser-report.js');
 
+/* T-0556 w6a: the tab look row is the concept 3 rule (numbered text tabs, one accent underline on the selected tab, no icons), replacing the design D chip rule.
+   A tab is what TAB_LOOK_EXPR measures: label colour, box-shadow, the ::before number's content and colour, whether an icon is shown. */
+var ACC = 'rgb(88, 166, 255)', UL = ACC + ' 0px -2px 0px 0px inset';
 function tab(id, over) {
-  return Object.assign({ id: id, selected: false, color: 'rgb(214, 214, 214)', border: 'rgb(58, 58, 58)', hasIcon: true, iconW: 32, iconBg: 'rgba(163, 113, 247, 0.13)', iconFg: 'rgb(1, 1, 1)' }, over || {});
+  return Object.assign({ id: id, selected: false, color: 'rgb(168, 168, 168)', shadow: 'none', numContent: 'counter(hlrvtab)', numColor: 'rgb(168, 168, 168)', iconShown: false }, over || {});
 }
 function good() {
-  var acc = ['rgb(163,113,247)', 'rgb(232,121,249)', 'rgb(251,146,60)', 'rgb(88,166,255)', 'rgb(232,121,249)', 'rgb(34,211,238)', 'rgb(45,212,191)'];
-  return acc.map(function (d, i) {
-    return tab('tabbtn-' + i, i === 2 ? { selected: true, color: 'rgb(255, 255, 255)', border: 'rgb(150, 100, 50)', iconBg: 'rgb(251, 146, 60)', iconFg: 'rgb(17, 17, 17)' } : { iconFg: d });
-  });
+  return [0, 1, 2, 3, 4, 5, 6].map(function (i) { return i === 2 ? tab('tabbtn-' + i, { selected: true, color: 'rgb(226, 226, 226)', shadow: UL, numColor: ACC }) : tab('tabbtn-' + i); });
 }
 
-test('the tab look row (design D) passes the chip strip: one filled accent chip, six tinted chips with icons, six distinct accents of seven (two tabs share the fuchsia)', function () {
+test('the tab look row (concept 3) passes numbered text tabs with one accent underline on the selected tab', function () {
   var v = G.tabLookVerdict(good());
   assert.strictEqual(v.ok, true, v.detail);
-  assert.strictEqual(v.distinct, 6);
+  assert.match(v.detail, /7 tab\(s\), all numbered text: selected tabbtn-2 .* with a 2px /);
 });
-test('the tab look row fails when the selected chip is not filled with the accent', function () {
-  var t = good(); t[2].iconBg = 'rgba(251, 146, 60, 0.13)';
-  var v = G.tabLookVerdict(t); assert.strictEqual(v.ok, false); assert.match(v.detail, /not filled with the accent/);
+test('control: the tab look row fails when the selected tab has no underline, or a thin or thick one, or one that is not its number colour', function () {
+  var t = good(); t[2].shadow = 'none';
+  var v = G.tabLookVerdict(t); assert.strictEqual(v.ok, false); assert.match(v.detail, /no accent underline/);
+  var u = good(); u[2].shadow = ACC + ' 0px -1px 0px 0px inset'; assert.match(G.tabLookVerdict(u).detail, /no accent underline/);
+  var w = good(); w[2].shadow = ACC + ' 0px -6px 0px 0px inset'; assert.match(G.tabLookVerdict(w).detail, /no accent underline/);
+  var x = good(); x[2].numColor = 'rgb(168, 168, 168)'; assert.match(G.tabLookVerdict(x).detail, /not the colour of its number/);
 });
-test('the tab look row fails when an idle tab shares the selected label colour or border', function () {
-  var t = good(); t[4].color = t[2].color;
-  var v = G.tabLookVerdict(t); assert.strictEqual(v.ok, false); assert.match(v.detail, /label colour/);
-  var u = good(); u[4].border = u[2].border;
-  assert.match(G.tabLookVerdict(u).detail, /border colour/);
+test('control: the tab look row fails when an idle tab is underlined, or shares the selected number or label colour', function () {
+  var t = good(); t[4].shadow = UL;
+  var v = G.tabLookVerdict(t); assert.strictEqual(v.ok, false); assert.match(v.detail, /idle tab \(tabbtn-4\) also has an underline/);
+  var u = good(); u[4].numColor = ACC; assert.match(G.tabLookVerdict(u).detail, /selected tab's number colour/);
+  var w = good(); w[4].color = w[2].color; assert.match(G.tabLookVerdict(w).detail, /selected tab's label colour/);
 });
-test('the tab look row fails when an idle chip is also filled, or two tabs are selected', function () {
-  var t = good(); t[0].iconBg = 'rgb(163, 113, 247)';
-  assert.match(G.tabLookVerdict(t).detail, /translucent tint/);
-  var u = good(); u[0].selected = true;
-  assert.strictEqual(G.tabLookVerdict(u).ok, false);
+test('control: the tab look row fails when two tabs are selected, none is, a tab has no number, or a tab still shows an icon', function () {
+  var t = good(); t[0].selected = true; assert.match(G.tabLookVerdict(t).detail, /2 tabs selected/);
+  var u = good(); u[2].selected = false; assert.match(G.tabLookVerdict(u).detail, /0 tabs selected/);
+  var w = good(); w[1].numContent = 'none'; assert.match(G.tabLookVerdict(w).detail, /tabbtn-1 carries no number/);
+  var x = good(); x[3].iconShown = true; assert.match(G.tabLookVerdict(x).detail, /tabbtn-3 still shows an icon/);
 });
-test('the tab look row fails when a tab has no icon, or all icons are one accent', function () {
-  var t = good(); t[1].hasIcon = false;
-  assert.match(G.tabLookVerdict(t).detail, /no icon box/);
-  var u = good().map(function (x) { return Object.assign(x, x.selected ? {} : { iconFg: 'rgb(88, 166, 255)' }); });
-  var v = G.tabLookVerdict(u); assert.strictEqual(v.ok, false); assert.match(v.detail, /distinct icon accents/);
+test('the tab look row passes a six-tab report, and a one-tab report says it made no idle comparison', function () {
+  assert.strictEqual(G.tabLookVerdict(good().slice(0, 6)).ok, true);
+  var one = G.tabLookVerdict([tab('tabbtn-overview', { selected: true, shadow: UL, numColor: ACC })]);
+  assert.strictEqual(one.ok, true, one.detail); assert.strictEqual(one.single, true); assert.match(one.detail, /no idle tab exists/);
+  assert.strictEqual(G.tabLookVerdict([tab('tabbtn-overview', { selected: true })]).ok, false);
 });
-test('the tab look row passes a six-tab report whose Victims and Attribution share the fuchsia (cloudsync-assembler shape: 5 distinct accents of 6), and FAILS when only four are distinct', function () {
-  var six = ['rgb(163,113,247)', 'rgb(232,121,249)', null, 'rgb(232,121,249)', 'rgb(34,211,238)', 'rgb(45,212,191)'].map(function (d, i) {
-    return tab('tabbtn-' + i, i === 2 ? { selected: true, color: 'rgb(255, 255, 255)', border: 'rgb(150, 100, 50)', iconBg: 'rgb(251, 146, 60)', iconFg: 'rgb(17, 17, 17)' } : { iconFg: d });
-  });
-  var v = G.tabLookVerdict(six);
-  assert.strictEqual(v.ok, true, v.detail); assert.strictEqual(v.distinct, 5);
-  var four = six.map(function (x, i) { return i === 4 ? Object.assign({}, x, { iconFg: 'rgb(232,121,249)' }) : x; });
-  assert.match(G.tabLookVerdict(four).detail, /distinct icon accents/);
+test('the tab underline reader takes what Chrome writes and nothing else', function () {
+  assert.deepStrictEqual(G.tabUnderline(UL), { color: ACC, thick: 2 });
+  assert.strictEqual(G.tabUnderline('none'), null);
+  assert.strictEqual(G.tabUnderline('rgba(0, 0, 0, 0.3) 0px 4px 8px 0px'), null);
 });
 test('the tab look row measured nothing, so it is NOT CHECKED, never a pass', function () {
   assert.strictEqual(G.tabLookVerdict([]).notChecked, true);
@@ -90,4 +89,14 @@ test('the text floor expression never counts text with no box, and a missing pan
 test('the text floor reads the bar and the header as well as the tab panel', function () {
   var r = run('<div class="hl-post-header" style="font-size:11px">Header small</div><div class="hl-rv-bar" style="font-size:14px">Bar fine</div><section id="tab-overview"></section>');
   assert.strictEqual(r.count, 2); assert.strictEqual(r.smallCount, 1);
+});
+
+test('T-0556 w6a: the cover texture is excluded from the text floor by class; a small label beside it, and a small aria-hidden pre of another class, still count', function () {
+  var tex = '<pre class="c3-cover__tex" aria-hidden="true" style="font-size:11px">0x4f 0x2a</pre>';
+  var only = run('<div class="hl-post-header">' + tex + '</div><section id="tab-overview"></section>');
+  assert.strictEqual(only.smallCount, 0); assert.strictEqual(only.count, 0);
+  var beside = run('<div class="hl-post-header">' + tex + '<b style="font-size:11px">Label</b></div><section id="tab-overview"></section>');
+  assert.strictEqual(beside.smallCount, 1);
+  var other = run('<div class="hl-post-header"><pre class="other" aria-hidden="true" style="font-size:11px">0x4f</pre></div><section id="tab-overview"></section>');
+  assert.strictEqual(other.smallCount, 1);
 });

@@ -270,3 +270,11 @@ test('a sticky header cell is excused only for the vertical displacement sticky 
   const both = layout(html('10,160,470,200'));
   try { const m = both.run(); assert.ok(m.hang.some(f => /^th(\b|$)(?!ead)/.test(f.sig) && f.side === 'right'), JSON.stringify(m.hang)); } finally { both.close(); }
 });
+
+test('T-0556 w6a: a clipped cover texture is excluded and counted; the same clipped box of another class is a clipped-y fault', () => {
+  const cs = 'data-cs="{&quot;overflowY&quot;:&quot;hidden&quot;}"';
+  const f = layout('<div data-box="0,0,300,100"><pre class="c3-cover__tex" ' + cs + ' data-box="0,0,300,100" data-sh="160">hex</pre></div>');
+  try { const m = f.run(); assert.deepEqual(m.hang, []); assert.equal(m.excluded['decorative cover texture'], 1); } finally { f.close(); }
+  const g = layout('<div data-box="0,0,300,100"><pre class="other" ' + cs + ' data-box="0,0,300,100" data-sh="160">hex</pre></div>');
+  try { const m = g.run(); assert.deepEqual(kinds(m, 'hang'), ['clipped-y:pre.other']); } finally { g.close(); }
+});
