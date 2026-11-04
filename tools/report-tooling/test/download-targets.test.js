@@ -235,3 +235,21 @@ test('a type covering the whole feed is never picked as the filter', function ()
   var f = { types: ['ipv4', 'sha256'], total: 50, counts: { ipv4: 50, sha256: 0 } };
   assert.notEqual(T.pickType(f), 'ipv4');
 });
+
+/* ---- the CSV header (T-0556 w6) ---- */
+
+test('the CSV header accepts the base columns and the optional ones in the viewer\'s order', function () {
+  assert.equal(T.csvHeaderOk('value,type,context'), true);
+  assert.equal(T.csvHeaderOk('value,type,context,confidence,action'), true);
+  assert.equal(T.csvHeaderOk('value,type,context,confidence,action,fp_risk'), true);
+  assert.equal(T.csvHeaderOk('value,type,context,fp_risk'), true);
+});
+
+test('the CSV header still fails a dropped, reordered, repeated or invented column', function () {
+  assert.equal(T.csvHeaderOk('value,type'), false);
+  assert.equal(T.csvHeaderOk('type,value,context'), false);
+  assert.equal(T.csvHeaderOk('value,type,context,action,confidence'), false);
+  assert.equal(T.csvHeaderOk('value,type,context,confidence,confidence'), false);
+  assert.equal(T.csvHeaderOk('value,type,context,bogus'), false);
+  assert.equal(T.csvHeaderOk(''), false);
+});

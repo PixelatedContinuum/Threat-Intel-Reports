@@ -352,7 +352,7 @@ async function main() {
 
           var lines = csvFiles[0].content.replace(/\s+$/, '').split(/\r?\n/);
           check('the CSV carries its header and exactly the filtered rows',
-            lines[0] === 'value,type,context' && lines.length - 1 === vis.shown,
+            T.csvHeaderOk(lines[0]) && lines.length - 1 === vis.shown,
             'header "' + lines[0] + '", ' + (lines.length - 1) + ' data rows, ' +
               vis.shown + ' on screen (' + feed.total + ' would mean the filter was ignored)');
 

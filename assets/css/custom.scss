@@ -9342,3 +9342,6 @@ a.hl-kc:hover { border-color: var(--kc); color: #ffffff; }
   .c3-sec__sub { order: 3; flex: 1 0 100%; margin-right: 0; }
   .c3-kick { gap: 4px 12px; font-family: var(--hl-font-sans); letter-spacing: 0.01em; }
 }
+
+/* the search page's Clear button is faded out (opacity 0, pointer-events none) while the box is empty but stayed a Tab stop: a keyboard user landed on a control they could not see (T-0556 w6 keyboard sweep). Hidden, it leaves the tab order; it comes back when the box has text and Pagefind drops its suppressed class. */
+#hl-search .pagefind-ui__search-clear.pagefind-ui__suppressed { visibility: hidden; }

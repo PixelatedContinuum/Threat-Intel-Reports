@@ -85,7 +85,7 @@ function clipProbe() {
 }
 
 function contrastProbe() {
-  var o = { runs: 0, unmeasured: 0, ariaHiddenSkipped: 0, bad: [] };
+  var o = { runs: 0, unmeasured: 0, ariaHiddenSkipped: 0, transparent: 0, pageGrid: 0, bad: [] };
   function parse(s) {
     var m = String(s).match(/rgba?\(([^)]+)\)/);
     if (!m) return null;
@@ -123,12 +123,13 @@ function contrastProbe() {
       if (p.getAttribute && p.getAttribute('aria-hidden') === 'true') { skip = true; break; }
       if (pc.display === 'none') { skip = true; break; }
       op *= parseFloat(pc.opacity);
-      if (pc.backgroundImage && pc.backgroundImage !== 'none') img = true;
+      if (pc.backgroundImage && pc.backgroundImage !== 'none') { if (p === document.body || p === document.documentElement) o.pageGrid++; else img = true; }   /* the page's own faint grid is read as its flat colour: its lines sit within a few per cent of the page luminance */
       var bg = parse(pc.backgroundColor);
       if (bg && bg.a > 0) { layers.push(bg); if (bg.a >= 1) break; }
     }
     if (skip) { o.ariaHiddenSkipped++; continue; }
     if (e.disabled || (e.closest && e.closest('[disabled]'))) continue;
+    if (op < 0.05) { o.transparent = (o.transparent || 0) + 1; continue; }   /* opacity 0: nothing is painted (the back-to-top button before the page scrolls) */
     o.runs++;
     if (img) { o.unmeasured++; continue; }
     var base = { r: 255, g: 255, b: 255, a: 1 };
@@ -145,6 +146,28 @@ function contrastProbe() {
       if (!seen[key]) { seen[key] = { sig: sig(e), fg: hex(eff), bg: hex(base), ratio: Math.round(rt * 100) / 100, need: need, size: size, n: 0, text: n.nodeValue.trim().slice(0, 40) }; o.bad.push(seen[key]); }
       seen[key].n++;
     }
+  }
+  /* placeholders and the typed text of fields: a placeholder is not a text node, so it is read from ::placeholder */
+  var fields = document.querySelectorAll('input[placeholder], textarea[placeholder]');
+  for (var fi = 0; fi < fields.length; fi++) {
+    var fe = fields[fi], fcs = getComputedStyle(fe), fr = fe.getBoundingClientRect();
+    if (fcs.display === 'none' || fcs.visibility === 'hidden' || fr.width < 1 || fe.type === 'hidden') continue;
+    var fl = [], fimg = false;
+    for (var fp = fe; fp; fp = fp.parentElement) {
+      var fpc = getComputedStyle(fp);
+      if (fpc.backgroundImage && fpc.backgroundImage !== 'none' && fp !== document.body && fp !== document.documentElement) fimg = true;
+      var fb = parse(fpc.backgroundColor);
+      if (fb && fb.a > 0) { fl.push(fb); if (fb.a >= 1) break; }
+    }
+    o.fields = (o.fields || 0) + 1;
+    if (fimg) { o.unmeasured++; continue; }
+    var fbase = { r: 255, g: 255, b: 255, a: 1 };
+    for (var fk = fl.length - 1; fk >= 0; fk--) fbase = over(fl[fk], fbase);
+    var ph = parse(getComputedStyle(fe, '::placeholder').color);
+    if (!ph) { o.unmeasured++; continue; }
+    var phe = over(ph, fbase), phr = ratio(phe, fbase);
+    o.runs++;
+    if (phr + 0.005 < 4.5) o.bad.push({ sig: sig(fe) + '::placeholder', fg: hex(phe), bg: hex(fbase), ratio: Math.round(phr * 100) / 100, need: 4.5, size: parseFloat(fcs.fontSize), n: 1, text: fe.getAttribute('placeholder').slice(0, 30) });
   }
   return o;
 }
@@ -165,7 +188,7 @@ function clipDetail(o) {
 function contrastDetail(o) {
   var b = o.bad.slice().sort(function (a, c) { return a.ratio - c.ratio; });
   return (b.length ? b.length + ' failing pair(s): ' + b.slice(0, 6).map(function (x) { return x.sig + ' ' + x.fg + ' on ' + x.bg + ' = ' + x.ratio + ' (need ' + x.need + ', ' + x.size + 'px, x' + x.n + ' "' + x.text + '")'; }).join(' | ') : '0 failing pairs') +
-    '; ' + o.unmeasured + ' run(s) over an image or gradient not measured';
+    '; ' + o.unmeasured + ' run(s) over an image or gradient not measured, ' + o.transparent + ' at opacity 0 (not painted), ' + o.ariaHiddenSkipped + ' aria-hidden left out';
 }
 
 module.exports = { OVERFLOW_EXPR: OVERFLOW_EXPR, CLIP_EXPR: CLIP_EXPR, CONTRAST_EXPR: CONTRAST_EXPR, overflowOk: overflowOk, overflowDetail: overflowDetail, clipDetail: clipDetail, contrastDetail: contrastDetail };

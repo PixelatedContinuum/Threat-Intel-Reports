@@ -167,8 +167,17 @@ function pickType(feed) {
   return strict[0] || feed.types[0] || null;
 }
 
+/* The feed viewer's CSV header (assets/js/ioc-table.js `csv()`): value,type,context always, then confidence, action and fp_risk in that order,
+   each only when the feed's table carries that column. The gate used to expect the three base columns only, so every feed with a confidence
+   and an action column failed it (T-0556 w6: sliver feed, header "value,type,context,confidence,action", 83 rows right). A header that drops
+   a base column, reorders, repeats or invents a column is still wrong. */
+function csvHeaderOk(header) {
+  return /^value,type,context(,confidence)?(,action)?(,fp_risk)?$/.test(String(header));
+}
+
 module.exports = {
   EXT: EXT,
+  csvHeaderOk: csvHeaderOk,
   countRules: countRules,
   foreignEngineIn: foreignEngineIn,
   importsBeforeRules: importsBeforeRules,
