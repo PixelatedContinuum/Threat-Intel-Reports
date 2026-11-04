@@ -3618,7 +3618,7 @@ a.hl-sponsor-rail__item:focus-visible { outline: 2px solid #ffffff; outline-offs
 .hl-attack__seg[data-count="0"]:hover .hl-attack__fill { background: rgba(128,128,128,0.22); }
 .hl-attack__seg:focus-visible { outline: 2px solid rgba(74,158,255,0.9); outline-offset: 2px; }
 .hl-attack__seglabel { font-size: var(--hl-fs-meta); line-height: 1.25; opacity: 0.8; margin-top: 4px; text-align: center;
-  overflow: visible; white-space: normal; overflow-wrap: break-word; hyphens: auto; }   /* T-0556 w1: IBM Plex Sans is wider than the old body face, so 'Reconnaissance' no longer fit a 100px cell at 390; it now hyphenates at a syllable instead of breaking after its 13th letter */
+  overflow: visible; white-space: normal; overflow-wrap: break-word; }
 .hl-attack__detail { margin-top: 0.8em; padding-top: 0.7em;
   border-top: 1px solid rgba(128,128,128,0.25); }
 .hl-attack__detail[hidden] { display: none; }
@@ -8405,6 +8405,7 @@ a.hl-kc:hover { border-color: var(--kc); color: #ffffff; }
 .hl-idx--det .hl-attack__fill { border-radius: 3px 3px 0 0; background: color-mix(in srgb, var(--acc) 75%, #14171c); }
 .hl-idx--det .hl-attack__seg:hover .hl-attack__fill, .hl-idx--det .hl-attack__seg.is-open .hl-attack__fill { background: var(--acc); }
 .hl-idx--det .hl-attack__seglabel { font-size: var(--hl-fs-meta); opacity: 0.85; color: #d6d6d6; }
+@media (max-width: 480px) { .hl-idx--det .hl-attack__seglabel { font-size: 14px; letter-spacing: -0.01em; } }   /* T-0556 w1: the 14px the report page's own strip already uses; 'Reconnaissance' in IBM Plex Sans needs it to stay on one line in a 100px cell (probed at 390: 2 line boxes at 15px, 1 at 14px) */
 .hl-idx--det .hl-attack__chip { font: 600 var(--hl-fs-meta) var(--hl-font-mono); border-radius: 3px; padding: 4px 8px; background: color-mix(in srgb, var(--acc) 16%, #14171c); border-color: color-mix(in srgb, var(--acc) 45%, transparent); color: #ffffff; }
 .hl-idx--det details.hl-teardown { margin: 12px 0 0; border: 1px solid var(--hl-border-card); border-radius: 3px; background: var(--hl-bg-row); }
 .hl-idx--det details.hl-teardown > summary { min-height: 52px; display: flex; align-items: center; padding: 8px 16px; font: 600 16px var(--hl-font-sans); color: #ffffff; cursor: pointer; }
