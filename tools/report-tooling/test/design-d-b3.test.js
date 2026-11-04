@@ -60,7 +60,8 @@ test('page.html scopes the dashboards and the IOC feed pages by layout and the s
   for (const p of ['sponsor.md', 'support.md', 'consulting.md', 'subscribe.md', 'about-me/index.md', 'pgp.md', 'behind-the-reports/index.md', 'behind-the-reports/ai-workflow.md', 'behind-the-reports/collection-platform.md', 'behind-the-reports/gates-and-distribution.md', 'changes/index.md', 'search/index.md', 'feeds/misp/index.md']) {
     const src = read(p);
     assert.match(src, /^hl_idx: single$/m, p);
-    assert.match(src, /<header class="hl-page-header hl-d-plate"/, p + ' plate');
+    // T-0556 w3: the two single pages that carry an index head take the section-head class hl-sh; the others keep the plate as it was
+    assert.match(src, ['changes/index.md', 'feeds/misp/index.md'].includes(p) ? /<header class="hl-page-header hl-d-plate hl-sh"/ : /<header class="hl-page-header hl-d-plate"/, p + ' plate');
     assert.match(src, /<h1 class="hl-page-header__title">/, p + ' h1');
   }
   assert.match(read('404.html'), /hl-idx hl-idx--single/);
@@ -96,7 +97,7 @@ test('the b3 blocks of the stylesheet are scoped: each selector is under a b3 sc
   }
   assert.equal(depth, 0, 'braces balance');
   assert.ok(sels.length > 250, 'parsed ' + sels.length + ' selectors');
-  const OK = /^(\.hl-idx--(dash|single|det|feed)\b|\.hl-idx \.(hl-grid--dash|hl-dash-card|hl-d-bh)|\.hl-idx \.hl-d-bh|html:has\(\.hl-sbar\)|\.(hl-sbar|hl-dh|hl-g2e?|hl-g2e__wide|hl-d-bh|hl-chipbar|hl-kc|hl-console|hl-crow|hl-badge|hl-meta|hl-mbar|hl-heat|hl-tgrid|hl-tac|hl-stack|hl-cflegend|hl-dash-card__d|hl-d-res|hl-d-kpi__mv|hl-dh__s|hl-dh__i)|a\.hl-d-kpi|a\.hl-kc|\.hl-d-kpi)/;
+  const OK = /^(\.hl-idx--(dash|single|det|feed|list)\b|\.hl-idx \.(hl-grid--dash|hl-dash-card|hl-d-bh)|\.hl-idx \.hl-d-bh|html:has\(\.hl-sbar\)|\.(hl-sbar|hl-dh|hl-g2e?|hl-g2e__wide|hl-d-bh|hl-chipbar|hl-kc|hl-console|hl-crow|hl-badge|hl-meta|hl-mbar|hl-heat|hl-tgrid|hl-tac|hl-stack|hl-cflegend|hl-dash-card__d|hl-d-res|hl-d-kpi__mv|hl-dh__s|hl-dh__i)|a\.hl-d-kpi|a\.hl-kc|\.hl-d-kpi)/;
   const bad = [];
   for (const s of sels) for (const one of s.split(',')) { const t = one.trim(); if (t && !OK.test(t)) bad.push(t); }
   assert.deepEqual(bad, []);

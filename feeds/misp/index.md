@@ -6,7 +6,7 @@ description: "Subscribe to The Hunters Ledger as a MISP feed: one event per publ
 hl_idx: single
 ---
 
-<header class="hl-page-header hl-d-plate" style="--ph-accent: #22d3ee;">
+<header class="hl-page-header hl-d-plate hl-sh" style="--ph-accent: #22d3ee;">
   <div class="hl-page-header__label hl-d-kicker">MISP Feed</div>
   <h1 class="hl-page-header__title">Subscribe as a MISP feed</h1>
   <div class="hl-page-header__desc">Every published campaign as one MISP event: the indicators from its STIX bundle, the Suricata, YARA and Sigma rules from its detection page, the CVEs it names, ATT&amp;CK galaxy tags, and links back to the report. Static files in the MISP feed format, so MISP pulls it on its own schedule and OpenCTI reads it through its MISP feed connector, with no MISP instance in between. Free under <strong>CC BY 4.0</strong>.</div>

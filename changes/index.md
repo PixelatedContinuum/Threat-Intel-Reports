@@ -6,7 +6,7 @@ permalink: /changes/
 hl_idx: single
 ---
 
-<header class="hl-page-header hl-d-plate" style="--ph-accent: #a371f7;">
+<header class="hl-page-header hl-d-plate hl-sh" style="--ph-accent: #a371f7;">
   <div class="hl-page-header__label hl-d-kicker">Changes</div>
   <h1 class="hl-page-header__title">Revisions to published reports</h1>
   <div class="hl-page-header__desc">A report that was revised after it went out says so, and says what changed. This page collects those notes in one place, newest first, so you can see what moved without rereading every report. Follow it as an <a href="/changes/feed.xml">Atom feed</a> or a <a href="/changes/feed.json">JSON Feed</a>.</div>
