@@ -8458,3 +8458,24 @@ a.hl-kc:hover { border-color: var(--kc); color: #ffffff; }
 .hl-idx--det .hl-gloss:not(:hover):not(:focus)::after { display: none; }
 /* The same for the permalink anchor's tooltip at any width on a detection page: not drawn until the anchor is hovered or focused (an invisible one widened the page by 9px at 768, agent-exe-detections, measured in b3) */
 .hl-idx--det .hl-heading-anchor:not(:hover):not(:focus)::after { display: none; }
+
+/* ===== T-0556 w2: concept 3 indicator cover (_includes/c3-cover.html) ===== */
+.c3-cover { position: relative; display: block; overflow: hidden; background: var(--hl-field); border: 1px solid var(--hl-border-card); color: var(--hl-text-primary); --c3-edge: var(--hl-sev-high-lbl); }
+.c3-cover--critical { --c3-edge: var(--hl-sev-critical-lbl); }
+.c3-cover--high { --c3-edge: var(--hl-sev-high-lbl); }
+.c3-cover--med { --c3-edge: var(--hl-sev-med-lbl); }
+.c3-cover--low { --c3-edge: var(--hl-sev-low-lbl); }
+.c3-cover__edge { position: absolute; left: 0; top: 0; bottom: 0; width: 3px; background: var(--c3-edge); }
+.c3-cover__tex { position: absolute; inset: 0; margin: 0; padding: 8px 10px; border: 0; background: none; font: 400 11px/1.5 var(--hl-font-mono); color: rgba(168, 168, 168, 0.2); white-space: pre; overflow: hidden; pointer-events: none; user-select: none; }
+.c3-cover__id { position: absolute; left: 14px; right: 14px; bottom: 10px; }
+.c3-cover__kicker { display: block; font: 500 var(--hl-fs-meta) var(--hl-font-mono); letter-spacing: 0.04em; color: var(--hl-muted-d); }
+.c3-cover__label { display: block; font: 500 var(--hl-fs-card)/1.2 var(--hl-font-mono); color: var(--hl-text-primary); overflow-wrap: anywhere; }
+.c3-cover--row { height: 72px; }
+.c3-cover--row .c3-cover__label { font-size: var(--hl-fs-small); }
+.c3-cover--header { min-height: 150px; }
+.c3-cover--header .c3-cover__id { left: 18px; right: 18px; bottom: 16px; }
+.c3-cover--lead { min-height: 210px; }
+.c3-cover--lead .c3-cover__edge { width: 4px; }
+.c3-cover--lead .c3-cover__tex { padding: 14px 16px; font-size: 12px; }
+.c3-cover--lead .c3-cover__id { left: 22px; right: 22px; bottom: 20px; }
+.c3-cover--lead .c3-cover__label { font-size: clamp(26px, 3vw, 38px); }
