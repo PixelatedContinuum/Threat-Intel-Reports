@@ -1318,6 +1318,7 @@ var PANEL_ATTACH_PX = 1.5;
 var PANEL_COMPONENTS = [
   ['featured band', '.hl-rv-feat'],
   ['header', '.hl-post-header'],
+  ['bottom line', '.hl-rv-bluf'],   /* T-0556.3: the bottom line is its own box directly under the header card; the tab row attaches to it */
   ['tab row', '.hl-rv-tabs'],
   ['toolbar', '.hl-rv-mobile-line'],
   ['tab title', '.hl-rv-panel:not([hidden]) .hl-rv-panel-head'],
@@ -1343,9 +1344,10 @@ function panelStackVerdict(m, opt) {
     gaps.push(items[i - 1].name + '->' + items[i].name + ' ' + gap.toFixed(1));
     if (gap < -PANEL_ATTACH_PX) why.push(items[i].name + ' overlaps ' + items[i - 1].name + ' by ' + (-gap).toFixed(1) + ' px');
   }
-  var g1 = tabs.top - hdr.bottom;
-  if (Math.abs(g1) > PANEL_ATTACH_PX) why.push('the tab row is not attached to the header (' + g1.toFixed(1) + ' px between them)');
-  if (!(hdr.ruleBottom >= 1 || tabs.ruleTop >= 1)) why.push('no rule between the header and the tab row');
+  var above = named('bottom line') || hdr;   /* T-0556.3 */
+  var g1 = tabs.top - above.bottom;
+  if (Math.abs(g1) > PANEL_ATTACH_PX) why.push('the tab row is not attached to the ' + (above === hdr ? 'header' : 'bottom line box') + ' (' + g1.toFixed(1) + ' px between them)');
+  if (!(above.ruleBottom >= 1 || tabs.ruleTop >= 1)) why.push('no rule between the ' + (above === hdr ? 'header' : 'bottom line box') + ' and the tab row');
   var after = bar || items.filter(function (x) { return x.top >= tabs.bottom - 0.5 && x !== tabs && x.name !== 'featured band'; })[0];
   if (after) {
     var g2 = after.top - tabs.bottom;
@@ -1418,7 +1420,7 @@ async function panelRows(page, url) {
       else check(label + ' ' + token + ': ' + nameA, pv.ok, pv.detail);
       if (t === 0 && pv.ok) {
         /* T-0556 w6a controls on the same page: the tab row pulled 40 px away from the header (the old floating panel), then pushed 20 px up over it, then its rule taken away */
-        var pctl = [['the tab row 40 px below the header', '.hl-rv-tabs,.hl-rv-bar{margin-top:40px !important}'], ['the tab row 20 px up over the header', '.hl-rv-tabs{position:relative !important;margin-top:-20px !important}'], ['every rule under the header and the tab row removed', '.hl-post-header{border-bottom:0 !important}.hl-rv-tabs{border-bottom:0 !important}.hl-rv-mobile-line{border:0 !important}']];
+        var pctl = [['the tab row 40 px below the header', '.hl-rv-tabs,.hl-rv-bar{margin-top:40px !important}'], ['the tab row 20 px up over the header', '.hl-rv-tabs{position:relative !important;margin-top:-20px !important}'], ['every rule under the header and the tab row removed', '.hl-post-header,.hl-rv-bluf{border-bottom:0 !important}.hl-rv-tabs{border-bottom:0 !important}.hl-rv-mobile-line{border:0 !important}']];
         for (var pci = 0; pci < pctl.length; pci++) {
           await page.evaluate('(function(){var s=document.createElement("style");s.id="w6a-panel-ctl";s.textContent=' + JSON.stringify(pctl[pci][1]) + ';document.head.appendChild(s);})()');
           await CDP.sleep(200);

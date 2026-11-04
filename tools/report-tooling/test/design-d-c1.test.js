@@ -23,8 +23,9 @@ function build(extraHeader) {
 test('JS: the plate carries meta, title, then a chrome bottom line cut at a sentence end (at most 60 words), and a button column: Read the full report, the page links, Share', () => {
   const f = build('<aside class="hl-rvsp hl-rvsp--report"></aside>'); try {
     const h = f.d.querySelector('.hl-post-header'); const kids = [...h.children].map(e => e.className.split(' ')[0]);
-    assert.deepEqual(kids, ['hl-post-header__eyebrow', 'hl-post-header__title', 'hl-rv-bluf', 'hl-quicklinks', 'hl-rvsp'], 'meta, title, bottom line, button column, then the sponsor foot');
-    const b = h.querySelector('.hl-rv-bluf'); assert.ok(b.hasAttribute('data-rv-chrome'));
+    assert.deepEqual(kids, ['hl-post-header__eyebrow', 'hl-post-header__title', 'hl-quicklinks', 'hl-rvsp'], 'meta, title, button column, then the sponsor foot (T-0556.3: the bottom line is its own box under the card)');
+    assert.equal(h.nextElementSibling.className.split(' ')[0], 'hl-rv-bluf', 'the bottom line sits directly under the card');
+    const b = f.d.querySelector('.hl-rv-bluf'); assert.ok(b.hasAttribute('data-rv-chrome'));
     assert.match(b.textContent, /^First sentence of the lead\.( Second sentence)?/);
     assert.ok(b.textContent.split(/\s+/).length <= 60 || !/Second/.test(b.textContent), 'a lead over 60 words is cut at a sentence end');
     assert.equal(/End\.$/.test(b.textContent), false, 'the long tail is not copied');

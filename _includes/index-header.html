@@ -6,10 +6,11 @@
   <div class="hl-sh__text">
   <div class="hl-page-header__label hl-d-kicker">{{ include.label }}</div>
   <h1 class="hl-page-header__title">{{ include.title }}</h1>
-  <div class="hl-page-header__desc">{{ include.desc }}</div>
   </div>
   {% include c3-cover.html label=include.cover_label severity=include.cover_severity kicker=include.cover_kicker size="header" %}
 </header>
+{%- comment -%} T-0556.3: with a cover the header card is kicker, title and cover only; the description is its own summary box directly under the card (same class, same words). {%- endcomment %}
+<div class="hl-page-header__desc hl-sh__sum">{{ include.desc }}</div>
 {%- else -%}
 <header class="hl-page-header hl-d-plate hl-sh" style="--ph-accent: {{ include.accent | default: '#58a6ff' }};">
   <div class="hl-page-header__label hl-d-kicker">{{ include.label }}</div>

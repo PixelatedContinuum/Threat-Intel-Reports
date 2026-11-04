@@ -1379,7 +1379,8 @@
     var nWords = shown.split(/\s+/).length;
     bluf.classList.add(nWords > 90 ? 'hl-rv-bluf--xlong' : nWords > 48 ? 'hl-rv-bluf--long' : 'hl-rv-bluf--short');
     var plateTitle = reportHeader.querySelector('.hl-post-header__title');
-    if (plateTitle) plateTitle.after(bluf); else intoPlate(bluf);
+    // T-0556.3: the bottom line is its own summary box directly under the title card, not a paragraph inside it.
+    reportHeader.after(bluf);
   }
   var actions = resources || (reportHeader && make('div', 'hl-quicklinks'));
   if (actions && reportHeader) {
