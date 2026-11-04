@@ -29,7 +29,10 @@ layout: page
 {%- capture _label -%}{% if named %}Named Actor{% else %}Threat Actor{% endif %}{%- endcapture -%}
 {%- capture _title -%}{{ shown }}{% if a.alias %} <span class="hl-actor__alias">{{ a.alias }}</span>{% endif %}{%- endcapture -%}
 {%- capture _desc -%}{% if a %}{{ a.type }}{% else %}This designation's data is missing from <code>_data/actors.yml</code>. Re-run <code>generate-actors.js</code>.{% endif %}{%- endcapture -%}
-{% include index-header.html accent="#e879f9" label=_label title=_title desc=_desc %}
+{%- comment -%} Cover severity: the highest severity among this actor's own reports in actors_index.yml; neutral when the index has none. {%- endcomment -%}
+{%- assign _cov_sev = "neutral" -%}
+{%- for r in ix.reports -%}{%- if r.severity == "critical" -%}{%- assign _cov_sev = "critical" -%}{%- elsif r.severity == "high" and _cov_sev != "critical" -%}{%- assign _cov_sev = "high" -%}{%- elsif r.severity == "med" and _cov_sev != "critical" and _cov_sev != "high" -%}{%- assign _cov_sev = "med" -%}{%- elsif r.severity == "low" and _cov_sev == "neutral" -%}{%- assign _cov_sev = "low" -%}{%- endif -%}{%- endfor -%}
+{% include index-header.html accent="#e879f9" label=_label title=_title desc=_desc cover_label=shown cover_severity=_cov_sev cover_kicker=_label %}
 
 {%- if a -%}
 {%- assign n_rep = ix.reports.size | default: 0 -%}

@@ -1,8 +1,19 @@
 {%- comment -%} The head of an index page. T-0556 w3: concept 3 section head (small kicker, serif title, plain standfirst, ruled underneath); the class hl-sh marks it, CSS in the T-0556 w3 block of custom.scss. Before that, the masthead plate of design D (T-0500.1.7.4 b2): kicker, h1, lede. The old class names stay on the elements
-  (hl-page-header, __label, __title, __desc) so anything that reads them keeps working. Params: accent (hex), label, title, desc (HTML, already escaped by the caller).
+  (hl-page-header, __label, __title, __desc) so anything that reads them keeps working. Params: accent (hex), label, title, desc (HTML, already escaped by the caller). Optional (T-0556 w5b): cover_label (+ cover_severity, cover_kicker) puts a c3-cover header tile beside the text; without cover_label the markup is unchanged.
   The text is passed through unchanged; the defang include in page.html runs over the whole page afterwards. {%- endcomment -%}
+{%- if include.cover_label -%}
+<header class="hl-page-header hl-d-plate hl-sh hl-sh--cover" style="--ph-accent: {{ include.accent | default: '#58a6ff' }};">
+  <div class="hl-sh__text">
+  <div class="hl-page-header__label hl-d-kicker">{{ include.label }}</div>
+  <h1 class="hl-page-header__title">{{ include.title }}</h1>
+  <div class="hl-page-header__desc">{{ include.desc }}</div>
+  </div>
+  {% include c3-cover.html label=include.cover_label severity=include.cover_severity kicker=include.cover_kicker size="header" %}
+</header>
+{%- else -%}
 <header class="hl-page-header hl-d-plate hl-sh" style="--ph-accent: {{ include.accent | default: '#58a6ff' }};">
   <div class="hl-page-header__label hl-d-kicker">{{ include.label }}</div>
   <h1 class="hl-page-header__title">{{ include.title }}</h1>
   <div class="hl-page-header__desc">{{ include.desc }}</div>
 </header>
+{%- endif -%}

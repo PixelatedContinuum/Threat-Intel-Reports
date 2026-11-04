@@ -18,7 +18,7 @@ layout: page
 {%- assign f = site.data.family_index.families | where: "slug", page.family_slug | first -%}
 {%- capture _label -%}{% if f %}{{ f.kind | replace: "-", " " }}{% else %}Family{% endif %}{%- endcapture -%}
 {%- capture _desc -%}{% if f %}{% if f.summary %}{{ f.summary }} {% endif %}Named by {{ f.report_count }} report{% if f.report_count != 1 %}s{% endif %}, {{ f.rule_count }} detection rule{% if f.rule_count != 1 %}s{% endif %}, {{ f.feed_count }} IOC feed{% if f.feed_count != 1 %}s{% endif %}{% if f.actor_count > 0 %} and {{ f.actor_count }} tracked actor{% if f.actor_count != 1 %}s{% endif %}{% endif %}.{% else %}This family is missing from <code>_data/family_index.yml</code>. Re-run <code>generate-xref.js</code>.{% endif %}{%- endcapture -%}
-{% include index-header.html accent="#2dd4bf" label=_label title=page.title desc=_desc %}
+{% include index-header.html accent="#2dd4bf" label=_label title=page.title desc=_desc cover_label=page.title cover_severity="neutral" cover_kicker="FAMILY" %}
 
 {%- if f -%}
 {%- assign n_rep = f.report_count | default: 0 -%}
