@@ -19,6 +19,14 @@ position: 2.8
   <div class="hl-d-kpi" style="--kc:#ef4444;"><span class="hl-d-kpi__n">{{ ix.max_score }}</span><span class="hl-d-kpi__cap">Highest score</span><span class="hl-d-kpi__note">reports plus rules</span></div>
 </div>
 
+<h2 id="most-mapped">Most mapped techniques</h2>
+{%- assign top = ix.techniques | sort: "score" | reverse -%}
+<ol class="hl-xref__top">
+{%- for t in top limit: 15 -%}
+  <li><a href="{{ t.url | relative_url }}"><code>{{ t.id }}</code> {{ t.name }}</a> <span class="hl-xref__muted">{{ t.report_count }} report{% if t.report_count != 1 %}s{% endif %}, {{ t.rule_count }} rule{% if t.rule_count != 1 %}s{% endif %}{% if t.actor_count > 0 %}, {{ t.actor_count }} actor{% if t.actor_count != 1 %}s{% endif %}{% endif %}</span></li>
+{%- endfor -%}
+</ol>
+
 <div class="hl-filter hl-d-cons hl-d-cons--solo" data-pagefind-ignore style="--acc: #fb923c;">
   <div class="hl-d-srch"><div class="hl-d-search">{% include d-icon.html name="search" %}<input class="hl-filter__search hl-heatmap__search" id="hl-heatmap-q" type="text" placeholder="Filter techniques by ID or name…" aria-label="Filter techniques" autocomplete="off"></div></div>
 </div>
@@ -43,13 +51,6 @@ position: 2.8
 
 <p class="hl-xref__muted">A technique that belongs to more than one tactic appears in each of its columns. The matrix lists only techniques something on the site maps, so an empty tactic is a gap in the corpus, not in the matrix.{% if ix.unresolved.size > 0 %} Not shown: {% for u in ix.unresolved %}{{ u.id }}{% unless forloop.last %}, {% endunless %}{% endfor %}, carried by a report or rule but not present in ATT&amp;CK v{{ ix.attack_version }}.{% endif %}</p>
 
-<h2 id="most-mapped">Most mapped techniques</h2>
-{%- assign top = ix.techniques | sort: "score" | reverse -%}
-<ol class="hl-xref__top">
-{%- for t in top limit: 15 -%}
-  <li><a href="{{ t.url | relative_url }}"><code>{{ t.id }}</code> {{ t.name }}</a> <span class="hl-xref__muted">{{ t.report_count }} report{% if t.report_count != 1 %}s{% endif %}, {{ t.rule_count }} rule{% if t.rule_count != 1 %}s{% endif %}{% if t.actor_count > 0 %}, {{ t.actor_count }} actor{% if t.actor_count != 1 %}s{% endif %}{% endif %}</span></li>
-{%- endfor -%}
-</ol>
 
 <p class="hl-xref__licence">MITRE ATT&amp;CK&reg; is a registered trademark of The MITRE Corporation. The heatmap is built from each report's own ATT&amp;CK mapping table and each detection page's coverage lines; it is this publication's reading of its own evidence, not a measure of how common a technique is in the wild.</p>
 

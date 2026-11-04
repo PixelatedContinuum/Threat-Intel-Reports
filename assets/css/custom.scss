@@ -7348,7 +7348,14 @@ body.hl-drawer-locked { overflow: hidden; }
   display: grid; grid-auto-flow: column; grid-auto-columns: minmax(118px, 1fr);
   gap: 6px; overflow-x: auto; padding-bottom: 10px; margin-bottom: 0.8rem;
   scrollbar-width: thin;
+  /* Scrollbar on top (T-0554): the matrix is wider than the page and taller than
+     the screen, so a bottom scrollbar meant scrolling down to scroll across.
+     Mirroring the box vertically draws its scrollbar above the columns; each
+     column is mirrored back, so what is drawn, the DOM order and the tab order
+     are unchanged. The bottom padding becomes the gap under the scrollbar. */
+  transform: rotateX(180deg);
 }
+.hl-heatmap > .hl-heatmap__col { transform: rotateX(180deg); }
 .hl-heatmap__col { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
 .hl-heatmap__col.is-empty { opacity: 0.35; }
 .hl-heatmap__tactic {
