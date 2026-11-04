@@ -1,7 +1,10 @@
-This directory holds three typefaces, self-hosted, each under the SIL Open Font License, Version 1.1 (text once, below the copyright lines).
+This directory holds four typefaces, self-hosted, each under the SIL Open Font License, Version 1.1 (text once, below the copyright lines).
 
 Source Serif 4 (source-serif-4-var.woff2, source-serif-4-var-italic.woff2):
 Copyright 2014 - 2023 Adobe (http://www.adobe.com/), with Reserved Font Name ‘Source’. All Rights Reserved. Source is a trademark of Adobe in the United States and/or other countries.
+
+Space Grotesk (space-grotesk.woff2, used for the logo wordmark only):
+Copyright 2020 The Space Grotesk Project Authors (https://github.com/floriankarsten/space-grotesk)
 
 IBM Plex Sans and IBM Plex Mono (ibm-plex-sans-var.woff2, ibm-plex-mono-400.woff2, ibm-plex-mono-500.woff2):
 Copyright © 2017 IBM Corp. with Reserved Font Name "Plex"

@@ -116,6 +116,15 @@
   src: url('/assets/fonts/ibm-plex-mono-500.woff2') format('woff2');
 }
 
+/* --- Logo wordmark face: Space Grotesk (self-hosted, SIL OFL 1.1). Used only by .hl-brand__top and .hl-brand__main. --- */
+@font-face {
+  font-family: 'Space Grotesk';
+  font-style: normal;
+  font-weight: 300 700; /* variable */
+  font-display: swap;
+  src: url('/assets/fonts/space-grotesk.woff2') format('woff2');
+}
+
 /* --- Global theme overrides --------------------------------- */
 /* Theme sets body { font-size: 1.25em } = 20px — let it cascade.
    We only override background, color, and heading colors. */
@@ -252,18 +261,20 @@ main.content {
 }
 
 .hl-brand__top {
-  font-family: var(--hl-font-sans);
+  font-family: 'Space Grotesk', 'Segoe UI', system-ui, -apple-system, Arial, sans-serif;
   font-weight: 500;
   font-size: 11px;
   line-height: 1;
+  letter-spacing: 0.22em;
   color: #f0f6fc;
 }
 
 .hl-brand__main {
-  font-family: var(--hl-font-serif);
+  font-family: 'Space Grotesk', 'Segoe UI', system-ui, -apple-system, Arial, sans-serif;
   font-weight: 700;
   font-size: 17px;
   line-height: 1;
+  letter-spacing: 0.12em;
   color: #ffffff;
   display: flex;
   align-items: baseline;
@@ -285,7 +296,7 @@ main.content {
     flex-wrap: wrap;
     gap: 12px;
   }
-  .hl-brand__top { font-size: 9px; }
+  .hl-brand__top { font-size: 9px; letter-spacing: 0.2em; }
   .hl-brand__main { font-size: 15px; }
   .hl-brand__rule { height: 27px; }
   .hl-brand__icon { width: 32px; height: 32px; }
@@ -9033,8 +9044,12 @@ a.hl-kc:hover { border-color: var(--kc); color: #ffffff; }
 .hl-mast__tag { margin: 0 0 0 auto; max-width: 32ch; font: 400 var(--hl-fs-small)/1.5 var(--hl-font-sans); color: var(--hl-muted-d); text-align: right; }
 
 /* The bar: menu button, mark, the sections left, the search box right, held to the page frame. */
-.hl-nav { background: var(--hl-bg-page); border-top: 1px solid #333333; border-bottom: 1px solid #333333; gap: 14px;
-  padding-left: max(20px, calc((100% - var(--c3-frame)) / 2)); padding-right: max(20px, calc((100% - var(--c3-frame)) / 2)); }
+/* The bar's background runs the full width (it must cover the page when it sticks); its two rules run only across the content column, like the line under the masthead's top row. */
+.hl-nav { --hl-nav-px: max(20px, calc((100% - var(--c3-frame)) / 2)); background: var(--hl-bg-page); border-top: 0; border-bottom: 0; gap: 14px;
+  padding-left: var(--hl-nav-px); padding-right: var(--hl-nav-px); }
+.hl-nav::before, .hl-nav::after { content: ''; position: absolute; left: var(--hl-nav-px); right: var(--hl-nav-px); height: 1px; background: #333333; pointer-events: none; }
+.hl-nav::before { top: 0; }
+.hl-nav::after { bottom: 0; }
 .hl-nav__brand .hl-brand__rule, .hl-nav__brand .hl-brand__stack { display: none; }
 .hl-nav__brand .hl-brand__icon { width: 30px; height: 30px; }
 /* while the masthead is on screen its logo is the only mark; the bar's keeps its place (no shift) and shows once the masthead has scrolled away */
@@ -9044,7 +9059,7 @@ a.hl-kc:hover { border-color: var(--kc); color: #ffffff; }
 .hl-nav__search { margin-left: auto; border-radius: var(--hl-radius); background: var(--hl-field); }
 @media (min-width: 1100px) { .hl-nav__sections + .hl-nav__search { margin-left: auto; } }
 @media (max-width: 768px) {
-  .hl-nav { padding-left: max(16px, env(safe-area-inset-left)); padding-right: max(16px, env(safe-area-inset-right)); }
+  .hl-nav { --hl-nav-px: max(16px, env(safe-area-inset-left)); padding-left: var(--hl-nav-px); padding-right: max(16px, env(safe-area-inset-right)); }
   .hl-mast { padding-left: max(16px, env(safe-area-inset-left)); padding-right: max(16px, env(safe-area-inset-right)); }
   .hl-mast__date { display: none; }
   .hl-mast__main { flex-wrap: wrap; gap: 12px 14px; padding: 16px 0 14px; }
