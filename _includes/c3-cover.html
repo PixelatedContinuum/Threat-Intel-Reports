@@ -1,0 +1,14 @@
+{%- comment -%} Concept 3 indicator cover (T-0556 w2). One include for every cover on the site, fed by catalog.yml `cover_label` (a one- or two-word name of the report's main threat or risk), so a change of label is a data edit.
+  Params: label (real, reader-facing text), severity (critical|high|med|low, picks the edge colour), size (lead|row|header), kicker (optional small line over the label), hex (optional text the texture is made from, default the label).
+  The faint hex texture is decoration: the <pre> is aria-hidden, empty in the HTML and filled by assets/js/c3-cover.js from data-hex, so no text of it reaches a reader, a search index or a crawler. Block elements only, so it sits inside a link. {%- endcomment -%}
+{%- assign _c3_size = include.size | default: "row" -%}
+{%- assign _c3_sev = include.severity | default: "high" -%}
+{%- assign _c3_hex = include.hex | default: include.label -%}
+<div class="c3-cover c3-cover--{{ _c3_size }} c3-cover--{{ _c3_sev }}" data-pagefind-ignore>
+  <i class="c3-cover__edge" aria-hidden="true"></i>
+  <pre class="c3-cover__tex" aria-hidden="true" data-hex="{{ _c3_hex | escape }}"></pre>
+  <div class="c3-cover__id">
+    {%- if include.kicker %}<small class="c3-cover__kicker">{{ include.kicker }}</small>{% endif %}
+    <b class="c3-cover__label">{{ include.label }}</b>
+  </div>
+</div>

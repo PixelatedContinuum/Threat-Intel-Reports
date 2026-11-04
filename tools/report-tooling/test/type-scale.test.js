@@ -19,8 +19,8 @@ test('the scale: meta and tag at least 15px, label and small 16px, body 18px, ca
 
 /* The floor is 15px (--hl-fs-meta). Named exceptions, each reasoned in tasks/runs/T-0538/typescale-report.md "Kept below 15px": the logotype and the
    heading permalink glyph (not reading text); the sponsor card labels in the gated 140-200px margin (14px chrome floor); the Wire tab at 360px
-   (phone squeeze); the gate-pinned ATT&CK strip cells and the glyphs set in fixed circles. Review of T-0538 (Luna) found the first version checked 14px. */
-const KEEP = /hl-brand__top|hl-heading-anchor::after|hl-sponsor-rail__label|hl-rv-featcard__label|hl-idx--wire \.hl-wtabs__tab|hl-attack__|hl-rv-info span|hl-rv-cmark > span|hl-facts-anchor/;
+   (phone squeeze); the gate-pinned ATT&CK strip cells and the glyphs set in fixed circles. T-0556 w2: the cover's hex texture (.c3-cover__tex), an aria-hidden pre that is empty in the HTML and filled by script: decoration, no reading text. Review of T-0538 (Luna) found the first version checked 14px. */
+const KEEP = /hl-brand__top|hl-heading-anchor::after|hl-sponsor-rail__label|hl-rv-featcard__label|hl-idx--wire \.hl-wtabs__tab|hl-attack__|hl-rv-info span|hl-rv-cmark > span|hl-facts-anchor|c3-cover__tex/;
 const under = (src, floor) => {
   const css = strip(src), bad = [];
   const rule = /([^{}]+)\{([^{}]*)\}/g; let m;

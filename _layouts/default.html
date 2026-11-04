@@ -40,6 +40,24 @@
     {% capture _footer %}{% include default/footer.liquid %}{% endcapture %}
     {{ _footer | split: " " | join: " "}}
     <script async src="https://eocampaign1.com/form/68e56ce4-2980-11f1-960c-1d8405c03c10.js" data-form="68e56ce4-2980-11f1-960c-1d8405c03c10"></script>
+    <script defer src="{{ '/assets/js/c3-cover.js' | relative_url }}?v=1"></script>
+    <script>
+    /* Masthead date: the build's date is printed in the HTML; show the reader's own today instead (T-0556 w2). */
+    (function () {
+      var el = document.getElementById('hl-mast-date');
+      if (!el || !window.Intl || !Intl.DateTimeFormat) return;
+      try { el.textContent = new Intl.DateTimeFormat('en-GB', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' }).format(new Date()).replace(',', ''); } catch (e) {}
+    })();
+    /* Fixed cards of the left margin sit below the header that is on screen: masthead height left on screen plus the bar (T-0556 w2). */
+    (function () {
+      var nav = document.querySelector('.hl-nav'), mast = document.querySelector('.hl-mast'), root = document.documentElement, ticking = false;
+      if (!nav || !mast) return;
+      function set() { ticking = false; root.style.setProperty('--c3-fixed-top', (Math.max(0, mast.offsetHeight - window.pageYOffset) + nav.offsetHeight) + 'px'); }
+      window.addEventListener('scroll', function () { if (!ticking) { ticking = true; window.requestAnimationFrame(set); } }, { passive: true });
+      window.addEventListener('resize', set);
+      set();
+    })();
+    </script>
     <button class="hl-back-top" id="hl-back-top" aria-label="Back to top">↑</button>
     <script>
     (function () {

@@ -10,6 +10,7 @@ entries:
     severity: critical
     tags: [Open Dir, Toolkit, Exploitation, Brazil]
     report_url: /reports/opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015/
+    cover_label: "Agency Intrusion"
     stix_url: /stix/opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015.json
     detection_url: /hunting-detections/opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015-detections
     ioc_url: /ioc-feeds/opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015-iocs.json
@@ -18,6 +19,7 @@ entries:
     severity: high
     tags: [ClickFix, Stealer, Loader, PowerShell]
     report_url: /reports/newdouble-clickfix/
+    cover_label: "Steam Takeover"
     detection_url: /hunting-detections/newdouble-clickfix-detections
     stix_url: /stix/newdouble-clickfix.json
     ioc_url: /ioc-feeds/newdouble-clickfix-iocs.json
@@ -26,6 +28,7 @@ entries:
     severity: high
     tags: [Cryptojacking, Mass Exploitation, CVE-2026-42589, XMRig]
     report_url: /reports/gotenberg-rce-cryptomining-107-175-69-137/
+    cover_label: "Mass RCE"
     stix_url: /stix/gotenberg-rce-cryptomining-107-175-69-137.json
     detection_url: /hunting-detections/gotenberg-rce-cryptomining-107-175-69-137-detections
     ioc_url: /ioc-feeds/gotenberg-rce-cryptomining-107-175-69-137-iocs.json
@@ -34,6 +37,7 @@ entries:
     severity: high
     tags: [Sliver, Post-Ex, EtherHiding, Blockchain C2]
     report_url: /reports/sliver-c2-windows-postex-staging-193-233-202-17/
+    cover_label: "AD Takeover"
     stix_url: /stix/sliver-c2-windows-postex-staging-193-233-202-17.json
     detection_url: /hunting-detections/sliver-c2-windows-postex-staging-193-233-202-17-detections
     ioc_url: /ioc-feeds/sliver-c2-windows-postex-staging-193-233-202-17-iocs.json
@@ -42,6 +46,7 @@ entries:
     severity: high
     tags: [Telecom, Cisco IOS-XE, WebLogic, Cred Theft]
     report_url: /reports/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817/
+    cover_label: "Carrier Breach"
     # Restored 2026-09-01: report-to-stix de-names every bundle it writes, so this copy and the
     # one OpenCTI imports are byte-identical and neither carries the 14 victim-bearing objects
     # the old bundle did. Verified by `check_victim_naming.py --slug opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817`.
@@ -53,6 +58,7 @@ entries:
     severity: high
     tags: [Toolkit, RAT, Access Broker]
     report_url: /reports/cloudsync-assembler-toolkit-91-197-98-188/
+    cover_label: "Hidden Admin"
     stix_url: /stix/cloudsync-assembler-toolkit-91-197-98-188.json
     detection_url: /hunting-detections/cloudsync-assembler-toolkit-91-197-98-188-detections
     ioc_url: /ioc-feeds/cloudsync-assembler-toolkit-91-197-98-188-iocs.json
@@ -61,6 +67,7 @@ entries:
     severity: med
     tags: [Cryptojacking, Open Dir, China]
     report_url: /reports/gocloud-multiservice-cryptojacking-149-28-112-221/
+    cover_label: "Cryptojacking"
     stix_url: /stix/gocloud-multiservice-cryptojacking-149-28-112-221.json
     detection_url: /hunting-detections/gocloud-multiservice-cryptojacking-149-28-112-221-detections
     ioc_url: /ioc-feeds/gocloud-multiservice-cryptojacking-149-28-112-221-iocs.json
@@ -69,6 +76,7 @@ entries:
     severity: high
     tags: [AI Abuse, Open Dir, Data Theft, E-Commerce, China]
     report_url: /reports/multivector-ecommerce-rce-toolkit-192-3-1-116/
+    cover_label: "Ecommerce Breach"
     stix_url: /stix/multivector-ecommerce-rce-toolkit-192-3-1-116.json
     detection_url: /hunting-detections/multivector-ecommerce-rce-toolkit-192-3-1-116-detections
     detection_title: "Detection Rules: MultiVector Grey-Market PII Harvesting Operation"
@@ -78,6 +86,7 @@ entries:
     severity: high
     tags: [Government, Exploitation, Open Dir, SE-Asia]
     report_url: /reports/seasia-gov-exploitation-toolkit-144-172-106-236/
+    cover_label: "Gov Breach"
     stix_url: /stix/seasia-gov-exploitation-toolkit-144-172-106-236.json
     detection_url: /hunting-detections/seasia-gov-exploitation-toolkit-144-172-106-236-detections
     detection_title: "Detection Rules: SE-Asia Government Exploitation Toolkit"
@@ -87,6 +96,7 @@ entries:
     severity: high
     tags: [RAT, HVNC, MaaS, Brazil]
     report_url: /reports/kaido-quasar-rat-144-172-109-203/
+    cover_label: "Session Hijack"
     stix_url: /stix/kaido-quasar-rat-144-172-109-203.json
     detection_url: /hunting-detections/kaido-quasar-rat-detections
     detection_tiers: [detection, hunting]
@@ -96,6 +106,7 @@ entries:
     severity: high
     tags: [Stealer, MaaS, Builder, Brazil]
     report_url: /reports/evilsoul-engine-stealer-maas-144-172-103-98/
+    cover_label: "Account Theft"
     stix_url: /stix/evilsoul-engine-stealer-maas-144-172-103-98.json
     detection_url: /hunting-detections/evilsoul-engine-stealer-maas-detections
     detection_tiers: [detection, hunting]
@@ -105,6 +116,7 @@ entries:
     severity: med
     tags: [Post-Ex, Priv Esc, C2, Open Dir]
     report_url: /reports/flaskc2-postex-toolkit-67-215-232-25/
+    cover_label: "SQL Backdoor"
     stix_url: /stix/flaskc2-postex-toolkit-67-215-232-25.json
     detection_url: /hunting-detections/flaskc2-postex-toolkit-67-215-232-25-detections
     detection_tiers: [detection, hunting]
@@ -119,6 +131,7 @@ entries:
     series_order: 0
     series_title: "Multi-Actor AI-Agent Framework Abuse"
     report_url: /reports/ai-agent-frameworks-2026-05-23/
+    cover_label: "AI Agent Abuse"
     stix_url: /stix/ai-agent-frameworks-2026-05-23.json
     detection_url: /hunting-detections/ai-agent-frameworks-2026-05-23-detections
     detection_tiers: [detection, hunting]
@@ -131,6 +144,7 @@ entries:
     series: ai-agent-frameworks
     series_order: 1
     report_url: /reports/russian-gemini-credential-mill-213.165.51.115/
+    cover_label: "Healthcare Breach"
     stix_url: /stix/russian-gemini-credential-mill-213.165.51.115.json
     detection_url: /hunting-detections/russian-gemini-credential-mill-213.165.51.115-detections
     detection_tiers: [detection, hunting]
@@ -143,6 +157,7 @@ entries:
     series: ai-agent-frameworks
     series_order: 2
     report_url: /reports/turkish-arpa-openclaw-state-insurer-209.38.205.158/
+    cover_label: "Monitoring Hijack"
     stix_url: /stix/turkish-arpa-openclaw-state-insurer-209.38.205.158.json
     detection_url: /hunting-detections/turkish-arpa-openclaw-state-insurer-209.38.205.158-detections
     detection_tiers: [detection, hunting]
@@ -155,6 +170,7 @@ entries:
     series: ai-agent-frameworks
     series_order: 5
     report_url: /reports/ghost-cryptojacker-vova75rus-77.110.96.200/
+    cover_label: "GPU Cryptojacking"
     stix_url: /stix/ghost-cryptojacker-vova75rus-77.110.96.200.json
     detection_url: /hunting-detections/ghost-cryptojacker-vova75rus-77.110.96.200-detections
     detection_tiers: [detection, hunting]
@@ -167,6 +183,7 @@ entries:
     series: ai-agent-frameworks
     series_order: 3
     report_url: /reports/rovodev-mirai-matrix-c2-87.106.143.220/
+    cover_label: "AI-Built Malware"
     stix_url: /stix/rovodev-mirai-matrix-c2-87.106.143.220.json
     detection_url: /hunting-detections/rovodev-mirai-matrix-c2-87.106.143.220-detections
     detection_tiers: [detection, hunting]
@@ -179,6 +196,7 @@ entries:
     series: ai-agent-frameworks
     series_order: 4
     report_url: /reports/korean-claude-openclaw-221.150.15.104/
+    cover_label: "Safety Bypass"
     stix_url: /stix/korean-claude-openclaw-221.150.15.104.json
     detection_url: /hunting-detections/korean-claude-openclaw-221.150.15.104-detections
     detection_tiers: [detection, hunting]
@@ -190,6 +208,7 @@ entries:
     severity: high
     tags: [Exploitation, Cred Theft, Phishing, Open Dir]
     report_url: /reports/opendirectory-216-126-227-49-cve-2026-41940-cpanel-harvester-20260517/
+    cover_label: "Hosting Takeover"
     stix_url: /stix/opendirectory-216-126-227-49-cve-2026-41940-cpanel-harvester-20260517.json
     detection_url: /hunting-detections/opendirectory-216-126-227-49-cve-2026-41940-cpanel-harvester-20260517-detections
     detection_tiers: [detection, hunting]
@@ -202,6 +221,7 @@ entries:
     series: opendir-79-137-192-3
     series_order: 1
     report_url: /reports/bellamain-turkish-phaas-79-137-192-3-20260516/
+    cover_label: "Card Phishing"
     stix_url: /stix/bellamain-turkish-phaas-79-137-192-3-20260516.json
     detection_url: /hunting-detections/bellamain-turkish-phaas-79-137-192-3-20260516-detections
     detection_tiers: [detection, hunting]
@@ -214,6 +234,7 @@ entries:
     series: opendir-79-137-192-3
     series_order: 2
     report_url: /reports/inkognito-russian-vpn-phishing-185-221-196-118-20260516/
+    cover_label: "Brand Phishing"
     stix_url: /stix/inkognito-russian-vpn-phishing-185-221-196-118-20260516.json
     detection_url: /hunting-detections/inkognito-russian-vpn-phishing-185-221-196-118-20260516-detections
     detection_tiers: [detection, hunting]
@@ -227,6 +248,7 @@ entries:
     series_order: 0
     series_title: "Multi-Cluster Open Directory — 79.137.192.3 (Rhadamanthys / BellaMain / Inkognito)"
     report_url: /reports/opendirectory-79-137-192-3-20260515/
+    cover_label: "Infostealer"
     stix_url: /stix/opendirectory-79-137-192-3-20260515.json
     detection_url: /hunting-detections/opendirectory-79-137-192-3-20260515-detections
     detection_tiers: [detection, hunting]
@@ -239,6 +261,7 @@ entries:
     severity: high
     tags: [Loader, RAT, MaaS, Open Dir]
     report_url: /reports/opendirectory-62-60-237-100-20260506/
+    cover_label: "Phishing to RAT"
     stix_url: /stix/opendirectory-62-60-237-100-20260506.json
     detection_url: /hunting-detections/opendirectory-62-60-237-100-20260506-detections
     detection_tiers: [detection, hunting]
@@ -249,6 +272,7 @@ entries:
     severity: high
     tags: [C2, Toolkit, Open Dir, Multi-Family]
     report_url: /reports/opendirectory-45-130-148-125-20260430/
+    cover_label: "Hands-On Intrusion"
     stix_url: /stix/opendirectory-45-130-148-125-20260430.json
     detection_url: /hunting-detections/opendirectory-45-130-148-125-20260430-detections
     detection_tiers: [detection, hunting]
@@ -259,6 +283,7 @@ entries:
     severity: high
     tags: [Ransomware, Loader, Evasion, Open Dir]
     report_url: /reports/open-directory-94-103-1-13-20260423/
+    cover_label: "Ransomware Crypter"
     stix_url: /stix/open-directory-94-103-1-13-20260423.json
     detection_url: /hunting-detections/open-directory-94-103-1-13-20260423-detections
     detection_tiers: [detection, hunting]
@@ -269,6 +294,7 @@ entries:
     severity: high
     tags: [Exfil, Cred Theft, Open Dir, Threat]
     report_url: /reports/shinyhunters-dls-91-215-85-22-20260417/
+    cover_label: "Data Extortion"
     stix_url: /stix/shinyhunters-dls-91-215-85-22-20260417.json
     detection_url: /hunting-detections/shinyhunters-dls-91-215-85-22-20260417-detections
     detection_tiers: [detection, hunting]
@@ -279,6 +305,7 @@ entries:
     severity: high
     tags: [Toolkit, C2, Injection, Open Dir]
     report_url: /reports/new-files-found-20260408/
+    cover_label: "Injection Evasion"
     stix_url: /stix/new-files-found-20260408.json
     detection_url: /hunting-detections/new-files-found-20260408-detections
     detection_tiers: [detection, hunting]
@@ -289,6 +316,7 @@ entries:
     severity: high
     tags: [Toolkit, C2, Open Dir, Evasion]
     report_url: /reports/open-directory-172-105-0-126-20260406/
+    cover_label: "Evasive Beacon"
     stix_url: /stix/open-directory-172-105-0-126-20260406.json
     detection_url: /hunting-detections/open-directory-172-105-0-126-20260406-detections
     detection_tiers: [detection, hunting]
@@ -299,6 +327,7 @@ entries:
     severity: high
     tags: [RAT, MaaS, C2, Multi-Family]
     report_url: /reports/shadow-xworm-opendirectory/
+    cover_label: "Tax Season RAT"
     stix_url: /stix/shadow-xworm-opendirectory.json
     detection_url: /hunting-detections/shadow-xworm-opendirectory-detections
     detection_tiers: [detection, hunting]
@@ -309,6 +338,7 @@ entries:
     severity: high
     tags: [C2, Multi-Family, Open Dir, Injection]
     report_url: /reports/open-directory-193-56-255-154-xiebroc2/
+    cover_label: "Multi-C2 Control"
     stix_url: /stix/open-directory-193-56-255-154-xiebroc2.json
     detection_url: /hunting-detections/open-directory-193-56-255-154-xiebroc2-detections
     detection_tiers: [detection, hunting]
@@ -319,6 +349,7 @@ entries:
     severity: high
     tags: [MaaS, C2, Open Dir, Multi-Family]
     report_url: /reports/zerotrace-74-0-42-25-20260316/
+    cover_label: "Credential Hoard"
     stix_url: /stix/zerotrace-74-0-42-25-20260316.json
     detection_url: /hunting-detections/opendirectory-74-0-42-25-20260316-detections
     detection_tiers: [detection, hunting]
@@ -329,6 +360,7 @@ entries:
     severity: med
     tags: [C2, Loader, Go, Evasion]
     report_url: /reports/sliver-open-directory/
+    cover_label: "EDR Evasion"
     stix_url: /stix/sliver-open-directory.json
     detection_url: /hunting-detections/sliver-open-directory-detections
     detection_tiers: [detection, hunting]
@@ -339,6 +371,7 @@ entries:
     severity: high
     tags: [Toolkit, Priv Esc, RCE, .NET]
     report_url: /reports/webserver-compromise-kit-91-236-230-250/
+    cover_label: "IIS Takeover"
     stix_url: /stix/webserver-compromise-kit-91-236-230-250.json
     detection_url: /hunting-detections/webserver-compromise-kit-91-236-230-250-detections
     detection_tiers: [detection, hunting]
@@ -349,6 +382,7 @@ entries:
     severity: critical
     tags: [RAT, Cred Theft, Persistence, Evasion]
     report_url: /reports/remcos-opendirectory/
+    cover_label: "Persistent Access"
     stix_url: /stix/remcos-opendirectory.json
     detection_url: /hunting-detections/remcos-opendirectory-detections
     detection_tiers: [detection, hunting]
@@ -359,6 +393,7 @@ entries:
     severity: high
     tags: [Cryptojacking, Dropper, Persistence, Evasion]
     report_url: /reports/nsminer-cryptojacker/
+    cover_label: "Trojan Miner"
     stix_url: /stix/nsminer-cryptojacker.json
     detection_url: /hunting-detections/nsminer-cryptojacker-detections
     detection_tiers: [detection, hunting]
@@ -369,6 +404,7 @@ entries:
     severity: high
     tags: [RAT, Injection, .NET, Cred Theft]
     report_url: /reports/dual-rat-analysis/
+    cover_label: "Dual RAT Access"
     stix_url: /stix/dual-rat-analysis.json
     detection_url: /hunting-detections/dual-rat-analysis-detections
     detection_tiers: [detection, hunting]
@@ -379,6 +415,7 @@ entries:
     severity: critical
     tags: [RAT, Cred Theft, Evasion, .NET]
     report_url: /reports/PULSAR-RAT/
+    cover_label: "Remote Takeover"
     stix_url: /stix/PULSAR-RAT.json
     detection_url: /hunting-detections/PULSAR-RAT-detections
     detection_tiers: [detection, hunting]
@@ -389,6 +426,7 @@ entries:
     severity: high
     tags: [Loader, Stealer, Cred Theft, Evasion]
     report_url: /reports/Hybrid-Loader-Stealer-Sogou/
+    cover_label: "Cracked Installer"
     stix_url: /stix/Hybrid-Loader-Stealer-Sogou.json
     detection_url: /hunting-detections/Hybrid-Loader-Stealer-Sogou-detections
     detection_tiers: [detection, hunting]
@@ -399,6 +437,7 @@ entries:
     severity: med
     tags: [Loader, Stealer, Go, Injection]
     report_url: /reports/malware-analysis-houselet/
+    cover_label: "Fake Installer"
     stix_url: /stix/malware-analysis-houselet.json
     detection_url: /hunting-detections/malware-analysis-houselet-detections
     detection_tiers: [detection, hunting]
@@ -409,6 +448,7 @@ entries:
     severity: med
     tags: [Scanner, Python, Exploitation]
     report_url: /reports/AdvancedRouterScanner/
+    cover_label: "Router Botnet"
     stix_url: /stix/AdvancedRouterScanner.json
     detection_url: /hunting-detections/AdvancedRouterScanner-detections
     detection_tiers: [hunting]
@@ -419,6 +459,7 @@ entries:
     severity: high
     tags: [Webshell, PHP, Exfil, C2]
     report_url: /reports/webshells-to-the-cloud/
+    cover_label: "Cloud Exfiltration"
     stix_url: /stix/webshells-to-the-cloud.json
     detection_url: /hunting-detections/webshells-to-the-cloud-detections
     detection_tiers: [hunting]
@@ -429,6 +470,7 @@ entries:
     severity: med
     tags: [RAT, Loader, PowerShell, Evasion]
     report_url: /reports/quasar-xworm-powershell/
+    cover_label: "Defender Blinding"
     stix_url: /stix/quasar-xworm-powershell.json
     detection_url: /hunting-detections/quasar-xworm-powershell-detections
     detection_tiers: [hunting]
@@ -442,6 +484,7 @@ entries:
     series: arsenal-237
     series_order: 1
     report_url: /reports/arsenal-237-new-files/
+    cover_label: "Ransomware Toolkit"
     stix_url: /stix/arsenal-237-new-files.json
 
   - title: "Arsenal-237: Threat Actor R&D Repository Exposed"
@@ -452,6 +495,7 @@ entries:
     series_order: 0
     series_title: "Arsenal-237 — Threat Actor R&D Repository (109.230.231.37)"
     report_url: /reports/109.230.231.37-Executive-Overview/
+    cover_label: "Ransomware R&D"
     stix_url: /stix/109.230.231.37-Executive-Overview.json
 
   # ---------------- Arsenal-237 granular files (detection + IOC only) ----------------
