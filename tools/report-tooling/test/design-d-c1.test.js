@@ -54,20 +54,28 @@ test('the numeral verdict passes clean buttons and FAILS a digit, minutes, or no
   assert.equal(G.numeralVerdict([T({ minutes: true })]).ok, false);
   assert.equal(G.numeralVerdict([]).notChecked, true);
 });
-const BTN = (label, t, o) => Object.assign({ label, l: 1100, t, r: 1300, b: t + 44, w: 200, h: 44 }, o || {});
-const PLATE = (btns, o) => Object.assign({ present: true, iw: 1280, hdr: { l: 180, t: 90, r: 1320, b: 500 }, titleR: 1000, btns }, o || {});
-test('the plate-column verdict passes the expected buttons in one column and FAILS a missing link, a different order, a short button, left-edge drift, overlap with the title, or an unreadable front matter', () => {
+/* T-0556 w6a: the plate's buttons are a row at the left of the plate (concept 3), not a column at the right of the title. A button is l,t,r,b,w,h; the plate has a left column (title) and a cover at the right. */
+const BTN = (label, l, t, o) => Object.assign({ label, l, t, r: l + 150, b: t + 44, w: 150, h: 44 }, o || {});
+const PLATE = (btns, o) => Object.assign({ present: true, iw: 1280, hdr: { l: 180, t: 90, r: 1320, b: 500 }, titleL: 210, titleR: 900, cover: { l: 1000, t: 90, r: 1320, b: 500 }, btns }, o || {});
+test('the plate-row verdict passes the expected buttons in a left-aligned row and FAILS a missing link, reverse order, a short button, left-edge drift, a button off the title edge, one on the cover, an overlap, or an unreadable front matter', () => {
   const links = G.frontMatterLinks('---\ntitle: x\ndetection_page: /d/\nioc_feed: /i/\nstix_bundle: /s.json\n---\nbody');
   assert.deepEqual(links, { detect: true, ioc: true, stix: true });
   const exp = G.expectedPlateLabels(links, true); assert.deepEqual(exp, ['Read the full report', 'Detections', 'IOC Feed', 'STIX', 'MISP', 'Share']);
-  const good = exp.map((l, i) => BTN(l, 100 + i * 50));
-  assert.equal(G.plateColumnVerdict(PLATE(good), exp).ok, true, G.plateColumnVerdict(PLATE(good), exp).detail);
+  /* six buttons of 150 px at x 210, 368, 526 on two visual rows (the left column is 700 px wide and a row wraps): first of each row at 210 */
+  const at = (i) => BTN(exp[i], 210 + (i % 3) * 158, 100 + Math.floor(i / 3) * 52);
+  const good = exp.map((l, i) => at(i));
+  const v0 = G.plateColumnVerdict(PLATE(good), exp); assert.equal(v0.ok, true, v0.detail);
   assert.match(G.plateColumnVerdict(PLATE(good.filter(b => b.label !== 'Detections')), exp).detail, /but the page has/);
   assert.match(G.plateColumnVerdict(PLATE(good.slice().reverse()), exp).detail, /but the page has/);
+  const rev = good.map((b, i) => Object.assign({}, good[5 - i], { label: exp[i] }));
+  assert.match(G.plateColumnVerdict(PLATE(rev), exp).detail, /not after .* in reading order/);
   assert.match(G.plateColumnVerdict(PLATE(good.map(b => Object.assign({}, b, { h: 30 }))), exp).detail, /under 44/);
-  assert.match(G.plateColumnVerdict(PLATE(good.map((b, i) => i === 2 ? Object.assign({}, b, { l: 1000 }) : b)), exp).detail, /not one column/);
-  assert.match(G.plateColumnVerdict(PLATE(good.map(b => Object.assign({}, b, { l: 900, r: 1100 }))), exp).detail, /inside the title/);
-  assert.match(G.plateColumnVerdict(PLATE(good.map((b, i) => Object.assign({}, b, { t: 100 + i * 20, b: 144 + i * 20 }))), exp).detail, /overlaps/);
+  assert.match(G.plateColumnVerdict(PLATE(good.map((b, i) => i === 3 ? Object.assign({}, b, { l: 240, r: 390 }) : b)), exp).detail, /do not start at one left edge/);
+  assert.match(G.plateColumnVerdict(PLATE(good.map(b => Object.assign({}, b, { l: b.l + 40, r: b.r + 40 }))), exp).detail, /not at the title's left edge/);
+  assert.match(G.plateColumnVerdict(PLATE(good.map((b, i) => i === 2 ? Object.assign({}, b, { l: 900, r: 1050 }) : b)), exp).detail, /overlaps the cover/);
+  assert.match(G.plateColumnVerdict(PLATE(good.map((b, i) => i === 1 ? Object.assign({}, b, { l: 215, r: 365, t: 100, b: 144 }) : b)), exp).detail, /overlaps/);
+  const col = exp.map((l, i) => BTN(l, 1100, 100 + i * 50));
+  assert.equal(G.plateColumnVerdict(PLATE(col), exp).ok, false, 'the old column at the right is the replaced layout and now fails');
   assert.equal(G.plateColumnVerdict(PLATE(good), null).notChecked, true);
   assert.equal(G.plateColumnVerdict({ present: false }, exp).notChecked, true);
   assert.equal(G.frontMatterLinks('no front matter'), null);
@@ -117,12 +125,7 @@ test('the hidden-text verdict passes when every report block is drawn and FAILS 
   assert.equal(G.textHiddenVerdict({ sections: 0, measured: 0, hidden: [], hiddenCount: 0 }).notChecked, true);
 });
 
-test('the colour parser reads the color(srgb ...) form Chrome gives a color-mix(): a translucent tint is not a fill, a gold border is gold', () => {
-  const t = (id, sel, bg, fg) => ({ id, selected: sel, color: sel ? 'rgb(255, 255, 255)' : 'rgb(214, 214, 214)', border: sel ? 'rgb(1, 2, 3)' : 'rgb(58, 58, 58)', hasIcon: true, iconW: 32, iconBg: bg, iconFg: fg });
-  const tabs = [t('a', true, 'rgb(163, 113, 247)', 'rgb(17, 17, 17)'), ...['rgb(232,121,249)', 'rgb(251,146,60)', 'rgb(88,166,255)', 'rgb(34,211,238)', 'rgb(45,212,191)'].map((c, i) => t('b' + i, false, 'color(srgb 0.64 0.44 0.97 / 0.13)', c))];
-  assert.equal(G.tabLookVerdict(tabs).ok, true, G.tabLookVerdict(tabs).detail);
-  const filled = tabs.map((x, i) => i === 1 ? Object.assign({}, x, { iconBg: 'color(srgb 0.64 0.44 0.97 / 1)' }) : x);
-  assert.match(G.tabLookVerdict(filled).detail, /translucent tint/);
+test('the colour parser reads the color(srgb ...) form Chrome gives a color-mix(): a gold border is gold (T-0556 w6a: the tab-chip half of this test moved to v6-gates with the concept 3 tab rule)', () => {
   const band = { w: 1200, h: 68, border: 'color(srgb 0.721569 0.564706 0.184314 / 0.6)', borderW: 1, image: false, text: 'Featured sponsor', label: 'Featured sponsor', labelVisible: true, labelColor: 'rgb(244, 233, 200)', many: false, items: 1, withTagline: 1, taglines: [{ vis: true, len: 9 }], ctas: [{ vis: true, text: 'Visit →', ariaHidden: 'true', inLink: true, inside: true, tag: 'SPAN' }] };
   const v = G.featuredSponsorVerdict({ wide: false, reportSponsors: 0, siteItems: 1, band, featCard: null, foot: null, goldBandInDom: false, card: Object.assign({}, band, { isReport: false, label: "Featured sponsor of The Hunter's Ledger" }), markPresent: false });
   assert.equal(v.ok, true, v.detail);

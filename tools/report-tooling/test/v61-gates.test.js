@@ -1,7 +1,6 @@
 'use strict';
 
-/* Tests for the two rows v6.1 (T-0500.1.7) added to check-browser-report.js: the top of the page is separate panels 24 px apart
-   on their own surfaces, and the type scale. A row is worth nothing until something proves it can FAIL, so each verdict is driven
+/* Tests for the two rows v6.1 (T-0500.1.7) added to check-browser-report.js: the top of the page (T-0556 w6a: now attached and ruled, not 24 px panels), and the type scale. A row is worth nothing until something proves it can FAIL, so each verdict is driven
    with the measurement a broken layout would produce (the browser itself is not driven here; lib/cdp.js measures at run time).
    See homelab-soc/docs/gate-honesty-contract.md. */
 
@@ -9,51 +8,59 @@ var test = require('node:test');
 var assert = require('node:assert');
 var G = require('../check-browser-report.js');
 
-var PAGE = 'rgb(17, 17, 17)';
+/* T-0556 w6a: the top-of-page row is the concept 3 rule (header, tab row and body attached and separated by rules, nothing overlapping), replacing the v6.1
+   24 px gap rule. A component is what PANEL_EXPR measures: name, top, bottom and the visible rule (px) on its top and bottom edge. */
 function it(name, top, bottom, over) {
-  return Object.assign({ name: name, boxed: name !== 'tab title', top: top, bottom: bottom, border: 1, bg: 'rgb(28, 28, 28)', image: false }, over || {});
+  return Object.assign({ name: name, top: top, bottom: bottom, ruleTop: 0, ruleBottom: 0 }, over || {});
 }
 function good() {
-  return { page: PAGE, items: [
-    it('site band', 0, 58, { bg: 'rgb(11, 11, 11)' }),
-    it('header', 82, 240, { bg: PAGE, image: true }),
-    it('tab row', 264, 354, { bg: 'rgb(58, 58, 58)' }),
-    it('toolbar', 378, 434, { bg: 'rgb(38, 38, 38)' }),
-    it('tab title', 458, 518),
-    it('data view', 542, 900)
+  return { items: [
+    it('header', 82, 380, { ruleBottom: 1 }),
+    it('tab row', 380, 428, { ruleBottom: 1 }),
+    it('toolbar', 440, 488, { ruleBottom: 1 }),
+    it('tab title', 488, 560),
+    it('data view', 580, 900)
   ] };
 }
 
-test('the panel stack row passes the v6.1 top: 24 px gaps, bordered panels, tab row and toolbar on different surfaces', function () {
+test('the top-of-page row passes the concept 3 stack: header, tab row attached at one edge, rules between, a toolbar under 24 px below, nothing overlapping', function () {
   var v = G.panelStackVerdict(good());
   assert.strictEqual(v.ok, true, v.detail);
 });
-test('the panel stack row FAILS when two components are 16 px apart (the v6 gap)', function () {
-  var m = good(); m.items[3].top = 354 + 16; m.items[3].bottom = m.items[3].top + 56;
+test('control: the row FAILS when the tab row floats 16 px or more below the header (the old separate-panel layout)', function () {
+  var m = good(); m.items[1].top = 380 + 16; m.items[1].bottom = 444; m.items[2].top = 456; m.items[2].bottom = 504; m.items[3].top = 504;
   var v = G.panelStackVerdict(m);
-  assert.strictEqual(v.ok, false); assert.match(v.detail, /tab row to toolbar is 16\.0 px apart/);
+  assert.strictEqual(v.ok, false); assert.match(v.detail, /tab row is not attached to the header \(16\.0 px/);
 });
-test('the panel stack row FAILS when the tab row and the toolbar share a surface (what Joseph saw)', function () {
-  var m = good(); m.items[2].bg = m.items[3].bg;
-  var v = G.panelStackVerdict(m);
-  assert.strictEqual(v.ok, false); assert.match(v.detail, /one surface/);
+test('control: the row FAILS when the tab row lies over the header, or the toolbar over the tab row', function () {
+  var m = good(); m.items[1].top = 360; m.items[1].bottom = 408;
+  assert.match(G.panelStackVerdict(m).detail, /tab row overlaps header by 20\.0 px/);
+  var n = good(); n.items[2].top = 410;
+  assert.match(G.panelStackVerdict(n).detail, /toolbar overlaps tab row by 18\.0 px/);
 });
-test('the panel stack row FAILS for a panel on the page surface or with no border', function () {
-  var m = good(); m.items[5].bg = PAGE;
-  assert.match(G.panelStackVerdict(m).detail, /data view is on the page surface/);
-  m = good(); m.items[5].border = 0;
-  assert.match(G.panelStackVerdict(m).detail, /data view has no border/);
+test('control: the row FAILS when the header and the tab row have no rule, or the tab row has none under it', function () {
+  var m = good(); m.items[0].ruleBottom = 0;
+  assert.match(G.panelStackVerdict(m).detail, /no rule between the header and the tab row/);
+  m.items[1].ruleTop = 1; assert.strictEqual(G.panelStackVerdict(m).ok, true, 'the tab row\'s own top rule counts as the rule between them');
+  var n = good(); n.items[1].ruleBottom = 0; n.items[2].ruleBottom = 0;
+  assert.match(G.panelStackVerdict(n).detail, /no rule under the tab row/);
 });
-test('an attached report sponsor is one box with the header; a detached one FAILS', function () {
-  var m = good(); m.items.splice(2, 0, it('report sponsor', 240, 320, { bg: 'rgb(38, 38, 38)' })); m.items[3].top = 344; m.items[3].bottom = 434; m.items[4].top = 458;
-  var v = G.panelStackVerdict(m); assert.strictEqual(v.ok, true, v.detail);
-  m.items[2].top = 270; m.items[2].bottom = 350; m.items[3].top = 374; m.items[3].bottom = 440; m.items[4].top = 464;
-  v = G.panelStackVerdict(m); assert.strictEqual(v.ok, false); assert.match(v.detail, /not attached/);
+test('control: the row FAILS when the toolbar floats 24 px or more below the tab row', function () {
+  var m = good(); m.items[2].top = 428 + 30; m.items[2].bottom = 506; m.items[3].top = 506;
+  assert.match(G.panelStackVerdict(m).detail, /toolbar floats 30\.0 px below the tab row/);
 });
-test('the panel stack row is NOT CHECKED, never PASS, when it found almost nothing', function () {
-  var v = G.panelStackVerdict({ page: PAGE, items: [it('header', 0, 100)] });
+test('on a phone the toolbar distance is not measured, but attachment, rules and overlap still are', function () {
+  var m = good(); m.items[2].top = 428 + 24; m.items[2].bottom = 500; m.items[3].top = 500;
+  assert.strictEqual(G.panelStackVerdict(m, { phone: true }).ok, true);
+  assert.strictEqual(G.panelStackVerdict(m).ok, false);
+  m.items[1].top = 380 + 16; m.items[1].bottom = 444;
+  assert.match(G.panelStackVerdict(m, { phone: true }).detail, /not attached/);
+});
+test('the top-of-page row is NOT CHECKED, never PASS, when it found almost nothing or no header and tab row', function () {
+  var v = G.panelStackVerdict({ items: [it('header', 0, 100)] });
   assert.strictEqual(v.notChecked, true); assert.strictEqual(v.ok, false);
   assert.strictEqual(G.panelStackVerdict(null).notChecked, true);
+  assert.strictEqual(G.panelStackVerdict({ items: [it('toolbar', 0, 40), it('tab title', 40, 80), it('data view', 90, 200)] }).notChecked, true);
 });
 
 function scale(over, phone) {

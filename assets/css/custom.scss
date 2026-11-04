@@ -8988,7 +8988,7 @@ a.hl-kc:hover { border-color: var(--kc); color: #ffffff; }
 .c3-cover__tex { position: absolute; inset: 0; margin: 0; padding: 8px 10px; border: 0; background: none; font: 400 11px/1.5 var(--hl-font-mono); color: rgba(168, 168, 168, 0.2); white-space: pre; overflow: hidden; pointer-events: none; user-select: none; }
 .c3-cover__id { position: absolute; left: 14px; right: 14px; bottom: 10px; }
 .c3-cover__kicker { display: block; font: 500 var(--hl-fs-meta) var(--hl-font-mono); letter-spacing: 0.04em; color: var(--hl-muted-d); }
-.c3-cover__label { display: block; font: 500 var(--hl-fs-card)/1.2 var(--hl-font-mono); color: var(--hl-text-primary); overflow-wrap: anywhere; }
+.c3-cover__label { display: block; font: 500 var(--hl-fs-card)/1.45 var(--hl-font-mono); color: var(--hl-text-primary); overflow-wrap: anywhere; }
 .c3-cover--row { height: 72px; }
 .c3-cover--row .c3-cover__label { font-size: var(--hl-fs-small); }
 .c3-cover--header { min-height: 150px; }
@@ -9040,6 +9040,8 @@ a.hl-kc:hover { border-color: var(--kc); color: #ffffff; }
 @media (min-width: 1440px) {
   :root { --c3-fixed-top: calc(var(--hl-nav-h) + 136px); }
   .hl-sponsor-rail { top: calc(var(--c3-fixed-top) + 22px); max-height: calc(100dvh - var(--c3-fixed-top) - 44px); }
+  /* T-0556 w6a: the report page's own fixed card did not follow the masthead (the report gate found the bar over it at scroll 0) */
+  html .hl-rv-featcard { top: calc(var(--c3-fixed-top) + 22px); max-height: calc(100dvh - var(--c3-fixed-top) - 44px); }
 }
 
 /* The footer: the same links in ruled columns, serif group labels. */
