@@ -8490,7 +8490,7 @@ a.hl-kc:hover { border-color: var(--kc); color: #ffffff; }
 .hl-idx--det .hl-sbar a[aria-current="true"] { color: var(--hl-text-primary); box-shadow: inset 0 -2px 0 #58a6ff; }
 .hl-idx--det .hl-sbar__ib { display: none; }
 .hl-idx--det .hl-sbar__tt { flex-direction: row; align-items: baseline; gap: 6px; }
-.hl-idx--det .hl-sbar__tn { order: -1; font-size: 13px; }
+.hl-idx--det .hl-sbar__tn { order: -1; font-size: var(--hl-fs-meta); }
 .hl-idx--det .hl-sbar a[aria-current="true"] .hl-sbar__tn { color: #58a6ff; }
 /* contents disclosure, picker, ATT&CK strip: one accent (the link blue), neutral chips */
 .hl-idx--det .hl-post-toc-mobile summary::before { border-color: var(--hl-border-card); color: var(--hl-muted-d); }
@@ -8501,12 +8501,12 @@ a.hl-kc:hover { border-color: var(--kc); color: #ffffff; }
 .hl-idx--det .hl-picker__btn, .hl-idx--det .hl-attack__export { background: transparent; border-color: #333333; font-weight: 500; }
 .hl-idx--det .hl-attack__chip { background: transparent; border-color: #333333; font-family: var(--hl-font-sans); font-weight: 500; }
 /* body type: serif prose at a measure, bold is bold ink, labels in the body face, rule tables flat */
-.hl-idx--det .hl-post-content > :is(p, ul, ol) { max-width: 740px; font-family: var(--hl-font-serif); font-size: 19px; line-height: 1.7; color: #e2e2e2; }
+.hl-idx--det .hl-post-content > p, .hl-idx--det .hl-post-content > ul, .hl-idx--det .hl-post-content > ol { max-width: 740px; font-family: var(--hl-font-serif); font-size: 19px; line-height: 1.7; color: #e2e2e2; }
 .hl-idx--det .hl-post-content > p:first-of-type:has(> strong:first-child) { max-width: none; font-family: var(--hl-font-sans); font-size: var(--hl-fs-small); line-height: 1.8; }
 .hl-idx--det .hl-post-content > p:first-of-type:has(> strong:first-child) strong { font-family: var(--hl-font-sans); font-weight: 600; letter-spacing: 0; color: var(--hl-text-primary); }
 .hl-idx--det .hl-post-content strong, .hl-idx--det .hl-post-content b { color: #ffffff; font-weight: 700; }
 .hl-idx--det .hl-post-content blockquote { border-left-color: #58a6ff; background: transparent; }
-.hl-idx--det .hl-post-content table th { background: #1f1f1f; font: 600 14px var(--hl-font-sans); letter-spacing: 0; color: var(--hl-muted-d) !important; border-top: 0 !important; }
+.hl-idx--det .hl-post-content table th { background: #1f1f1f; font: 600 var(--hl-fs-meta) var(--hl-font-sans); letter-spacing: 0; color: var(--hl-muted-d) !important; border-top: 0 !important; }
 .hl-idx--det .hl-post-content a { color: #58a6ff !important; }
 /* IOC feed page body: flat buttons, neutral type chips with a small square in the type's colour (the colour is the key, not decoration) */
 .hl-idx--feed .hl-ioctable__link { background: transparent; border-color: #333333; font-weight: 500; }

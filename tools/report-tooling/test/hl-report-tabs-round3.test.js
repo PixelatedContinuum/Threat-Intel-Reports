@@ -158,7 +158,9 @@ test('CSS: the view states its own text sizes and keeps its tile notes a row und
 test('Liquid: the tabbed layout puts the report sponsor in the plate and the featured sponsor above it, reads the same data, and leaves untagged pages on the old include',()=>{
   const post=fs.readFileSync(path.join(root,'_layouts/post.html'),'utf8');
   assert.ok(post.includes('{% unless hl_tabbed %}{% include sponsor-banner.html %}{% endunless %}\n<div class="hl-post-body">'),'untagged pages keep sponsor-banner.html in the old place');
-  assert.ok(post.includes('</h1>{% if hl_tabbed %}\n{% include report-sponsor-bar.html part="report" %}{% endif %}\n</div>'),'the report sponsor is the foot of the plate (inside the header box)');
+  assert.ok(post.includes('</h1>{% if hl_tabbed %}\n')&&post.includes('{% include report-sponsor-bar.html part="report" %}{% endif %}\n</div>'),'the report sponsor is the foot of the plate (inside the header box)');
+  /* T-0556 w4: the byline and the cover (c3-cover include) now sit between the title and the sponsor foot; the foot is still the last thing in the box */
+  assert.ok(post.indexOf('class="hl-rv-byline"')>post.indexOf('</h1>{% if hl_tabbed %}')&&post.indexOf('include c3-cover.html label=_rcat.cover_label')>post.indexOf('class="hl-rv-byline"')&&post.indexOf('include report-sponsor-bar.html part="report"')>post.indexOf('include c3-cover.html label=_rcat.cover_label'),'byline, then cover, then the sponsor foot');
   assert.ok(post.includes('{% if hl_tabbed %}{% include report-featured-sponsor.html %}{% endif %}\n{%- if _is_det0 -%}')&&post.includes('{%- else %}\n<div class="hl-post-header'),'the featured sponsor is the first thing in the page, before the header (b3: a detection page takes its own plate in the first branch, a report keeps this one)');
   const inc=fs.readFileSync(path.join(root,'_includes/report-sponsor-bar.html'),'utf8');
   assert.ok(inc.includes('page.sponsored_by | join: "|;sep;|" | split: "|;sep;|"'),'same normalisation as sponsor-banner.html');
