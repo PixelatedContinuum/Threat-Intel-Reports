@@ -1289,8 +1289,8 @@ async function tabLookRows(page, url) {
     if (wi === 0 && v.ok) {
       /* T-0556 w6a controls: the same page with the concept 3 look broken two ways must FAIL the row. (1) the underline removed from every tab; (2) the underline put on every tab. */
       var ctls = [
-        ['the selected tab\'s underline removed makes the tab-look row FAIL', '[role=tab]{box-shadow:none !important}'],
-        ['an underline on every tab (not only the selected one) makes the tab-look row FAIL', '[role=tab]{box-shadow:inset 0 -2px 0 #58a6ff !important}'],
+        ['the selected tab\'s underline removed makes the tab-look row FAIL', 'html .hl-report-page .hl-rv-tabs button[role=tab]{box-shadow:none !important}'],
+        ['an underline on every tab (not only the selected one) makes the tab-look row FAIL', 'html .hl-report-page .hl-rv-tabs button[role=tab]{box-shadow:inset 0 -2px 0 #58a6ff !important}'],
         ['an icon shown on every tab makes the tab-look row FAIL', '.hl-rv-tab-icon{display:inline-flex !important;width:32px !important}']
       ];
       for (var ci = 0; ci < ctls.length; ci++) {
@@ -1330,7 +1330,8 @@ var PANEL_EXPR = '(function(){var COMPS=' + JSON.stringify(PANEL_COMPONENTS) + '
   'var out=[];COMPS.forEach(function(c){var e=[].slice.call(document.querySelectorAll(c[1])).filter(vis)[0];if(!e)return;' +
   'var r=e.getBoundingClientRect(),cs=getComputedStyle(e);out.push({name:c[0],top:r.top+scrollY,bottom:r.bottom+scrollY,ruleTop:rule(cs,"Top"),ruleBottom:rule(cs,"Bottom")});});' +
   'return {items:out};})()';
-function panelStackVerdict(m) {
+function panelStackVerdict(m, opt) {
+  var phone = !!(opt && opt.phone);   /* below 700 px the approved icon strip and its toolbar keep their own spacing (w4 did not restyle them): the toolbar's distance is not part of the rule there; attachment, rules and overlap still are */
   if (!m || !m.items || m.items.length < 3) return { notChecked: true, ok: false, detail: 'fewer than three top components were found, so nothing was measured' };
   var items = m.items.slice().sort(function (a, b) { return a.top - b.top; });
   var named = function (n) { return items.filter(function (x) { return x.name === n; })[0]; };
@@ -1348,7 +1349,7 @@ function panelStackVerdict(m) {
   var after = bar || items.filter(function (x) { return x.top >= tabs.bottom - 0.5 && x !== tabs && x.name !== 'featured band'; })[0];
   if (after) {
     var g2 = after.top - tabs.bottom;
-    if (g2 >= PANEL_GAP_MIN_PX) why.push('the ' + after.name + ' floats ' + g2.toFixed(1) + ' px below the tab row (attached is under ' + PANEL_GAP_MIN_PX + ')');
+    if (!phone && g2 >= PANEL_GAP_MIN_PX) why.push('the ' + after.name + ' floats ' + g2.toFixed(1) + ' px below the tab row (attached is under ' + PANEL_GAP_MIN_PX + ')');
     if (!(tabs.ruleBottom >= 1 || after.ruleTop >= 1 || (after.name === 'toolbar' && after.ruleBottom >= 1))) why.push('no rule under the tab row');
   } else why.push('nothing follows the tab row, so the body was not measured');
   return { notChecked: false, ok: why.length === 0, why: why, gaps: gaps, detail: items.length + ' components, gaps ' + gaps.join(', ') + (why.length ? '; ' + why.join('; ') : '') };
@@ -1412,7 +1413,7 @@ async function panelRows(page, url) {
       await CDP.sleep(250);
       await page.evaluate('window.scrollTo(0,0)');
       await CDP.sleep(150);
-      var pv = panelStackVerdict(await page.json(PANEL_EXPR));
+      var pv = panelStackVerdict(await page.json(PANEL_EXPR), { phone: phone });
       if (pv.notChecked) check('NOT CHECKED: ' + label + ' ' + token + ': ' + nameA, false, pv.detail);
       else check(label + ' ' + token + ': ' + nameA, pv.ok, pv.detail);
       if (t === 0 && pv.ok) {
@@ -1421,7 +1422,7 @@ async function panelRows(page, url) {
         for (var pci = 0; pci < pctl.length; pci++) {
           await page.evaluate('(function(){var s=document.createElement("style");s.id="w6a-panel-ctl";s.textContent=' + JSON.stringify(pctl[pci][1]) + ';document.head.appendChild(s);})()');
           await CDP.sleep(200);
-          var pcv = panelStackVerdict(await page.json(PANEL_EXPR));
+          var pcv = panelStackVerdict(await page.json(PANEL_EXPR), { phone: phone });
           await page.evaluate('(function(){var s=document.getElementById("w6a-panel-ctl");if(s)s.remove();})()');
           check('control: ' + label + ': ' + pctl[pci][0] + ' makes the top-of-page row FAIL', pcv.ok === false && !pcv.notChecked, pcv.ok === false ? 'FAILS as designed: ' + pcv.detail : 'the control did NOT fire: ' + pcv.detail);
         }
@@ -4246,7 +4247,8 @@ async function tabbedChecks(page, opts) {
   await sponsorRailRows(page, url);
   await stickyFeaturedCardRows(page, url);
   await numeralRows(page, url);
-  await plateRows(page, url, opts.mdText);
+  /* T-0556 w6a: the buttons are built from the PUBLISHED copy's front matter (it carries stix_bundle and thumbnail, added at publication); the vault copy that mdText reads lacks stix_bundle, which is why this row failed at baseline */
+  await plateRows(page, url, opts.siteMdText || opts.mdText);
   await infoRows(page, url);
   await textHiddenRows(page, url);
   await overviewScanRows(page, url);
@@ -4686,6 +4688,7 @@ async function main() {
         html: html,
         authored: authoredKnown ? authored : null,
         authoredKnown: authoredKnown,
+        siteMdText: (function () { try { return fs.readFileSync(path.join(__dirname, '..', '..', 'reports', s, 'index.md'), 'utf8'); } catch (e) { return null; } })(),
         mdText: (function () { try { return authored && authored.path ? fs.readFileSync(authored.path, 'utf8') : null; } catch (e) { return null; } })(),
         pageOrder: pageOrder,
         /* D2: no fallback. With no authored report the count and order are NOT

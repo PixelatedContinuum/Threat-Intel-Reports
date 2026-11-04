@@ -49,6 +49,13 @@ test('control: the row FAILS when the toolbar floats 24 px or more below the tab
   var m = good(); m.items[2].top = 428 + 30; m.items[2].bottom = 506; m.items[3].top = 506;
   assert.match(G.panelStackVerdict(m).detail, /toolbar floats 30\.0 px below the tab row/);
 });
+test('on a phone the toolbar distance is not measured, but attachment, rules and overlap still are', function () {
+  var m = good(); m.items[2].top = 428 + 24; m.items[2].bottom = 500; m.items[3].top = 500;
+  assert.strictEqual(G.panelStackVerdict(m, { phone: true }).ok, true);
+  assert.strictEqual(G.panelStackVerdict(m).ok, false);
+  m.items[1].top = 380 + 16; m.items[1].bottom = 444;
+  assert.match(G.panelStackVerdict(m, { phone: true }).detail, /not attached/);
+});
 test('the top-of-page row is NOT CHECKED, never PASS, when it found almost nothing or no header and tab row', function () {
   var v = G.panelStackVerdict({ items: [it('header', 0, 100)] });
   assert.strictEqual(v.notChecked, true); assert.strictEqual(v.ok, false);
