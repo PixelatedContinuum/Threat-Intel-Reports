@@ -82,7 +82,7 @@ hl_idx: home
   </div>
 </section>
 
-<div class="c3-sec"><h2>Latest research</h2><span class="c3-sec__sub">newest first</span><a href="{{ '/reports/' | relative_url }}">All {{ n_reports }} reports &rarr;</a></div>
+<div class="c3-sec" style="--sec: #ef4444;"><h2>Latest research</h2><span class="c3-sec__sub">newest first</span><a href="{{ '/reports/' | relative_url }}">All {{ n_reports }} reports &rarr;</a></div>
 <div class="c3-rows">
 {%- assign emitted_series = "" -%}
 {%- if lead.series -%}{%- assign emitted_series = lead.series | append: ";" -%}{%- endif -%}
@@ -147,9 +147,9 @@ hl_idx: home
 <p class="hl-creds-note c3-note">Takedowns &amp; Victim Actions counts only what was reported back to me; most of my reports get no reply.</p>
 {%- endif %}
 
-<div class="c3-sec"><h2>Explore</h2></div>
+<div class="c3-sec" style="--sec: #4ade80;"><h2>Explore</h2></div>
 <div class="c3-cols">
-  <div>
+  <div style="--sec: #4ade80;">
     <h3>Use the research</h3>
     <ul>
       <li><a href="{{ '/reports/' | relative_url }}"><span class="c3-li__t">Reports</span><span class="c3-li__n">{{ n_reports }}</span><span class="c3-li__d">In-depth malware analysis &amp; reverse engineering</span></a></li>
@@ -158,7 +158,7 @@ hl_idx: home
       <li><a href="{{ '/stix/' | relative_url }}"><span class="c3-li__t">STIX Bundles</span><span class="c3-li__n">{{ n_stix }}</span><span class="c3-li__d">STIX 2.1 bundles for OpenCTI &amp; MISP</span></a></li>
     </ul>
   </div>
-  <div>
+  <div style="--sec: #a371f7;">
     <h3>Browse the corpus</h3>
     <ul>
       <li><a href="{{ '/actors/' | relative_url }}"><span class="c3-li__t">Threat Actors</span><span class="c3-li__n">{{ n_actors }}</span><span class="c3-li__d">Tracked actors and the evidence behind each</span></a></li>
@@ -167,14 +167,14 @@ hl_idx: home
       <li><a href="{{ '/impact/' | relative_url }}"><span class="c3-li__t">Takedowns &amp; Victim Actions</span>{% if site.data.impact.actions_reported %}<span class="c3-li__n">{{ site.data.impact.actions_reported }}</span>{% endif %}<span class="c3-li__d">What hosts, CERTs and victims did after my reports</span></a></li>
     </ul>
   </div>
-  <div>
+  <div style="--sec: #22d3ee;">
     <h3>Stay current</h3>
     <ul>
       <li><a href="{{ '/wire/' | relative_url }}"><span class="c3-li__t">The Wire</span><span class="c3-li__n">every 15 min</span><span class="c3-li__d">Headlines from public threat research, every 15 minutes</span></a></li>
       <li><a href="{{ '/changes/' | relative_url }}"><span class="c3-li__t">Changes</span><span class="c3-li__d">Revisions to published reports, newest first</span></a></li>
     </ul>
   </div>
-  <div>
+  <div style="--sec: #f97316;">
     <h3>About &amp; Connect</h3>
     <ul>
       <li><a href="{{ '/about-me/' | relative_url }}"><span class="c3-li__t">About Me</span><span class="c3-li__d">Background &amp; how to reach me</span></a></li>
@@ -185,7 +185,7 @@ hl_idx: home
   </div>
 </div>
 
-<section class="c3-about" aria-labelledby="c3-about-h">
+<section class="c3-about" aria-labelledby="c3-about-h" style="--sec: #58a6ff;">
   <div class="c3-about__head">
     <h2 id="c3-about-h">About the ledger</h2>
     <h3 class="c3-about__kick">Original Threat Intelligence Research</h3>

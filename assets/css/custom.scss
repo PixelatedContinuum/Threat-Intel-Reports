@@ -20,8 +20,8 @@
   --hl-border-row:     #222222;
   --hl-text-primary:   #eeeeee;
   --hl-text-secondary: #eeeeee;
-  --hl-text-muted:     #888888;
-  --hl-text-dim:       #888888;
+  --hl-text-muted:     #a8a8a8;
+  --hl-text-dim:       #a8a8a8;
   --hl-accent-blue:    #58a6ff;
   --hl-sev-critical:       #dc2626;
   --hl-sev-critical-lbl:   #ef4444;
@@ -9257,3 +9257,39 @@ a.hl-kc:hover { border-color: var(--kc); color: #ffffff; }
   .hl-idx--dash .hl-d-plate.hl-sh--cover { grid-template-columns: minmax(0, 1fr); }
   .hl-idx--dash .hl-sh--cover .c3-cover--header { min-height: 120px; }
 }
+
+
+/* ===== T-0556 w5c: section colour, readable notes ===== */
+/* 1. Section colour. Each section head carries its own accent in --sec (home: set inline per section; plain pages: from the section-header include; detail pages: --da of the section; index pages: --ph-accent). The cue is a square before the serif title and the rule under it in that colour; the title text stays ink (--sec-t) so it reads at full contrast, and every accent also passes 4.5:1 as text on #111111 (red #ef4444 5.02, purple #a371f7 5.63, orange #f97316 6.74, blue #58a6ff 7.48, cyan #22d3ee 10.45, green #4ade80 10.84). */
+.c3-sec, .c3-cols > div, .c3-about { --sec: var(--hl-accent-blue); --sec-t: var(--hl-text-primary); }
+.c3-sec h2, .c3-cols h3, .c3-about h2 { color: var(--sec-t); }
+.c3-sec h2::before, .c3-cols h3::before, .c3-about h2::before { content: ''; display: inline-block; flex: none; width: 14px; height: 14px; margin-right: 12px; background: var(--sec); vertical-align: 0.02em; }
+.c3-cols h3::before { width: 11px; height: 11px; margin-right: 10px; vertical-align: 0.04em; }
+.c3-sec { border-bottom: 2px solid var(--sec); }
+.c3-cols h3 { border-bottom: 2px solid var(--sec); }
+.c3-about { border-top: 2px solid var(--sec); }
+.hl-idx--single .hl-section-header { color: var(--hl-text-primary); border-bottom: 2px solid var(--sec); padding-bottom: 8px; }
+.hl-idx--single .hl-section-header__bar { width: 14px; height: 14px; border-radius: 0; opacity: 1; }
+.hl-idx--dash .hl-dh { border-bottom: 2px solid var(--da); }
+.hl-idx--dash .hl-dh h2::before { color: var(--da); }
+.hl-idx--list .hl-d-plate.hl-sh, .hl-idx--single .hl-d-plate.hl-sh, .hl-idx--dash .hl-d-plate.hl-sh--cover { border-bottom: 2px solid var(--ph-accent); }
+.hl-idx--list .hl-sh .hl-d-kicker, .hl-idx--single .hl-sh .hl-d-kicker { color: var(--hl-text-primary); }
+.hl-idx--list .hl-sh .hl-d-kicker::before, .hl-idx--single .hl-sh .hl-d-kicker::before { width: 10px; height: 10px; }
+
+/* 2. Readable notes. The two grey tokens are now #a8a8a8 (7.9:1 on #111111), and these sentence-length notes, captions, standfirsts and card descriptions take the main ink; short labels, dates, counts and kicker words keep the grey. (.hl-idx x3 so one rule beats the page-type rules above it.) */
+.c3-sec__sub, .c3-note, .c3-row__g, .c3-li__d, .c3-about__lede, .c3-lead__stand, .hl-mast__tag { color: var(--hl-text-primary); }
+.hl-idx.hl-idx.hl-idx .hl-creds-note, .hl-idx.hl-idx.hl-idx .hl-mission__note, .hl-idx.hl-idx.hl-idx .hl-contribute, .hl-idx.hl-idx.hl-idx .hl-d-kpi__note, .hl-idx.hl-idx.hl-idx .hl-d-eb__sub, .hl-idx.hl-idx.hl-idx .hl-nav-tile__desc,
+.hl-idx.hl-idx.hl-idx .hl-actor-card__type, .hl-idx.hl-idx.hl-idx .hl-family-card__summary, .hl-idx.hl-idx.hl-idx .hl-impact-card__desc, .hl-idx.hl-idx.hl-idx .hl-feed__note, .hl-idx.hl-idx.hl-idx .hl-iocsearch__hint,
+.hl-idx.hl-idx.hl-idx .hl-xref__muted, .hl-idx.hl-idx.hl-idx .hl-actor__muted, .hl-idx.hl-idx.hl-idx .hl-xref__licence, .hl-idx.hl-idx.hl-idx .hl-d-fine, .hl-idx.hl-idx.hl-idx .hl-wire__freshness,
+.hl-idx.hl-idx.hl-idx .hl-dash__muted, .hl-idx.hl-idx.hl-idx .hl-dash__empty, .hl-idx.hl-idx.hl-idx .hl-dash__lic, .hl-idx.hl-idx.hl-idx .hl-d-bh__s, .hl-idx.hl-idx.hl-idx .hl-dash-card__d,
+.hl-idx.hl-idx.hl-idx .hl-picker__note, .hl-idx.hl-idx.hl-idx .hl-ioctable__untyped, .hl-idx.hl-idx.hl-idx .hl-ioctable__licence, .hl-idx.hl-idx.hl-idx .hl-filter__empty, .hl-idx.hl-idx.hl-idx .hl-cta-note,
+.hl-idx.hl-idx.hl-idx .hl-page-header__desc, .hl-idx.hl-idx.hl-idx .hl-panel__body, .hl-idx.hl-idx.hl-idx .hl-panel__desc, .hl-idx.hl-idx.hl-idx .hl-legend-mobile summary::before, .hl-idx.hl-idx.hl-idx p > em,
+.hl-idx.hl-idx.hl-idx .hl-d-kpi__note, .hl-idx.hl-idx.hl-idx .hl-feed__meta, .hl-idx.hl-idx.hl-idx .hl-post-content > p, .hl-idx.hl-idx.hl-idx .hl-post-content > ul, .hl-idx.hl-idx.hl-idx .hl-post-content > ol { color: var(--hl-text-primary); }
+.hl-site-sponsor__tagline, .hl-idx.hl-idx.hl-idx .hl-wire__callout, .hl-idx.hl-idx.hl-idx .hl-vuln__dim, .hl-idx.hl-idx.hl-idx .hl-dash__note, .hl-idx.hl-idx.hl-idx .hl-crow__ctx, .hl-idx.hl-idx.hl-idx .hl-changes__note,
+.hl-idx--wire.hl-idx .hl-post-content p, .hl-idx--single.hl-idx .hl-post-content p, .hl-idx--wire.hl-idx .hl-vuln span:not([class]) { color: var(--hl-text-primary); }
+/* The Wire: its three sections already carry a tab colour (Headlines blue, nKEV purple, CVEs teal); each day head repeats it as a square and its rule. */
+.hl-idx--wire .hl-wire__day, .hl-idx--wire #vulns .hl-wire__day, .hl-idx--wire #vulns .hl-vulns .hl-wire__day, .hl-idx--wire #cves .hl-wire__day { --wd: var(--hl-accent-blue); border-bottom: 2px solid var(--wd); color: var(--hl-text-primary); }
+.hl-idx--wire #vulns .hl-wire__day, .hl-idx--wire #vulns .hl-vulns .hl-wire__day { --wd: #bc8cff; }
+.hl-idx--wire #cves .hl-wire__day { --wd: #2dd4bf; }
+.hl-idx--wire .hl-wire__day::before, .hl-idx--wire #vulns .hl-wire__day::before, .hl-idx--wire #cves .hl-wire__day::before { content: ''; display: inline-block; width: 10px; height: 10px; margin-right: 10px; background: var(--wd); vertical-align: 0.05em; }
+/* ===== end T-0556 w5c ===== */
