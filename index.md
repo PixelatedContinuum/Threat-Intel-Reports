@@ -42,6 +42,9 @@ hl_idx: home
     <div class="c3-kick"><span class="c3-sev c3-sev--{{ lead_sev }}">{{ lead_sevlabel }}</span>{% if lead_page.category %}<span>{{ lead_page.category }}</span>{% endif %}<span>Latest report</span></div>
     <h2 class="c3-lead__h" id="c3-lead-h"><a href="{{ lead.report_url | relative_url }}">{{ lead.title }}</a></h2>
     <p class="c3-lead__stand">{{ lead_page.description | default: lead.title }}</p>
+    {%- if lead.tags %}
+    <div class="hl-tags c3-lead__tags">{% for t in lead.tags %}{% include tag-badge.html tag=t %}{% endfor %}</div>
+    {%- endif %}
     <div class="c3-byline"><span><b>Joseph Harrison</b></span><span>{{ lead.date | date: "%-d %B %Y" }}</span><span>{{ lead_min }} min in full</span></div>
     <div class="c3-btns">
       <a class="c3-btn c3-btn--pri" href="{{ lead.report_url | relative_url }}">Read the report</a>
@@ -79,7 +82,7 @@ hl_idx: home
   </div>
 </section>
 
-<div class="c3-sec"><h2>Latest research</h2><a href="{{ '/reports/' | relative_url }}">All {{ n_reports }} reports &rarr;</a></div>
+<div class="c3-sec"><h2>Latest research</h2><span class="c3-sec__sub">newest first</span><a href="{{ '/reports/' | relative_url }}">All {{ n_reports }} reports &rarr;</a></div>
 <div class="c3-rows">
 {%- assign emitted_series = "" -%}
 {%- if lead.series -%}{%- assign emitted_series = lead.series | append: ";" -%}{%- endif -%}
@@ -144,6 +147,7 @@ hl_idx: home
 <p class="hl-creds-note c3-note">Takedowns &amp; Victim Actions counts only what was reported back to me; most of my reports get no reply.</p>
 {%- endif %}
 
+<div class="c3-sec"><h2>Explore</h2></div>
 <div class="c3-cols">
   <div>
     <h3>Use the research</h3>
