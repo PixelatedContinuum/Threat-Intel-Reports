@@ -53,7 +53,7 @@ test('the Visit call to action is an element, never generated CSS content', () =
 });
 test('CSS: the featured panel is gold and shared by the band, the margin card and the site tab-foot card; the report sponsor foot and the report card are quiet', () => {
   assert.match(css, /--rv-gold: #d4a73a;/); assert.match(css, /--rv-gold-bar: #b8902f;/);
-  assert.match(css, /\.hl-rv-feat, \.hl-rv-featcard, \.hl-rv-sponsor-card\.is-site \{\s*border: 1px solid color-mix\(in srgb, var\(--rv-gold-bar\) 60%, transparent\);\s*background: radial-gradient\([^)]*rgba\(245, 158, 11, 0\.22\)[^;]*linear-gradient\(135deg, #1d1810, #0d1117\);\s*box-shadow: 0 0 0 1px rgba\(245, 158, 11, 0\.08\)/);
+  assert.match(css, /\.hl-rv-feat, \.hl-rv-featcard, \.hl-rv-sponsor-card\.is-site \{\s*border: 1px solid color-mix\(in srgb, var\(--rv-gold-bar\) 60%, transparent\);\s*background: #1d1810;\s*box-shadow: 0 0 0 1px rgba\(245, 158, 11, 0\.08\)/);   // T-0556 w1: flat warm fill, the gold ring kept, the gradient and the glow gone
   assert.equal(/sponsor-mark/.test(css), false, 'no CSS is left for the reading-line mark');
   assert.equal(/reportband/.test(css), false, 'the gold report band is gone from the stylesheet');
   const rules = [...css.replace(/\/\*[\s\S]*?\*\//g, '').matchAll(/([^{}@]+)\{([^{}]*)\}/g)].map(m => [m[1].trim(), m[2]]);

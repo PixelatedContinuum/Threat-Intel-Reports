@@ -99,19 +99,13 @@ test('F2: aria-label sits only on elements that can carry one',()=>{
 function gradientSelectors(text){
   return [...text.matchAll(/(?:linear|radial|conic)-gradient\(/g)].flatMap(m=>{const open=text.lastIndexOf('{',m.index),c=text.lastIndexOf('*/',open),from=Math.max(text.lastIndexOf('}',open)+1,c<0?0:c+2);return text.slice(from,open).split(',').map(x=>x.trim()).filter(Boolean);});
 }
-// design D (T-0500.1.7.3): the plate (header box and its title text), the tab title text, the boxed generated view, the gold featured panels (band, margin card, site tab-foot card) and the quiet tab-foot card
-const GRAD_OK=['.hl-report-page .hl-post-header','.hl-report-page .hl-post-header__title','.hl-report-page .hl-post-content .hl-rv-panel-head h2','.hl-rv-view',
-    '.hl-rv-feat','.hl-rv-featcard','.hl-rv-sponsor-card.is-site','.hl-rv-sponsor-card',
-    // D3: the Overview's tiles and scan panels are B's panels; risk bars and the inferred-status hatch are drawn fills
-    '.hl-report-page .hl-rv-tile','.hl-rv-pn','.hl-rv-riskbar > i','.hl-rv-riskbar[data-rv-scale="word"] > i','.hl-rv-cell[data-rv-status="INFERRED"]',
-    // D4/D5 (T-0500.1.7.3 c3): the stage flow cards, the connectors and spine lines (drawn lines), the chain story's stage cards, the procedure table's panel, and the other tabs' cards, tiles and tables are B panels
-    '.hl-report-page .hl-rv-flow button.hl-rv-fnode','.hl-report-page .hl-rv-flow button.hl-rv-fnode[aria-pressed="true"]','.hl-report-page .hl-rv-flow button.hl-rv-fnode.is-linked','.hl-rv-flow > li:not(:last-child)::after',
-    '.hl-report-page .hl-rv-stage','.hl-rv-stages::before','.hl-report-page .hl-rv-procedures .hl-rv-table-wrap','.hl-rv-victim-card','.hl-rv-diamond-card','.hl-rv-status-tile',
-    '.hl-report-page .hl-rv-view .hl-rv-table-wrap:not(.hl-rv-procedures *)'];
+// T-0556 w1 (Joseph's concept 3): no box, header, tile, panel, connector or sponsor panel paints a gradient any more; surfaces are flat.
+// What stays is data drawn as a fill: the risk bars and the inferred-status hatch.
+const GRAD_OK=['.hl-rv-riskbar > i','.hl-rv-riskbar[data-rv-scale="word"] > i','.hl-rv-cell[data-rv-status="INFERRED"]'];
 function assertGradientsAllowed(sels){for(const sel of sels)assert.ok(GRAD_OK.includes(sel),'a gradient on a non-header selector: '+sel);}
-test('CSS control: a grouped rule hides no selector behind its first (allowed, .hl-rv-tabs { background: gradient })',()=>{
-  const sels=gradientSelectors('.hl-rv-feat, .hl-rv-tabs { background: linear-gradient(red, blue); }');
-  assert.deepEqual(sels,['.hl-rv-feat','.hl-rv-tabs']);
+test('CSS control: a grouped rule hides no selector behind its first (allowed, .hl-rv-tabs { background: gradient }, where the allowed one is a data fill (T-0556 w1))',()=>{
+  const sels=gradientSelectors('.hl-rv-riskbar > i, .hl-rv-tabs { background: linear-gradient(red, blue); }');
+  assert.deepEqual(sels,['.hl-rv-riskbar > i','.hl-rv-tabs']);
   assert.ok(sels.some(x=>x==='.hl-rv-tabs'),'the second selector is seen');
   assert.throws(()=>assertGradientsAllowed(sels),/non-header selector: \.hl-rv-tabs/,'the shared check rejects the second selector');
 });
@@ -126,8 +120,9 @@ test('CSS: round-3 tokens, the old strip, the pill and the gradient and shadow l
   // T-0500.1.8 (Joseph, 2026-10-30, "Yes, both places"): the gold featured site-sponsor panel (the band and the tab-foot card) reuses the site's
   // .hl-panel--featured recipe, which Joseph asked to borrow for highlights: its dark gradient and its gold glow. Nothing else gains a gradient.
   const gradSel=gradientSelectors(css);
-  assert.ok(gradSel.length>=5,'the five site-recipe header gradients are present');
-  assert.ok(gradSel.includes('.hl-rv-feat')&&gradSel.includes('.hl-rv-featcard'),'the featured site-sponsor panels carry their gradient and their glow');
+  // T-0556 w1: the five site-recipe header gradients and the gold panels' gradient are gone (flat surfaces); only the drawn data fills remain
+  assert.deepEqual([...new Set(gradSel)].sort(),[...GRAD_OK].sort(),'the only gradients left are the risk bars and the inferred-status hatch');
+  assert.ok(!gradSel.includes('.hl-rv-feat')&&!gradSel.includes('.hl-rv-featcard'),'the featured site-sponsor panels are flat: a gold border and a flat warm fill, no gradient and no glow');
   assertGradientsAllowed(gradSel);
   // design D: glows only on the gold featured panels, the selected tab chip and the popover
   const shadowSel=[...css.replace(/\/\*[\s\S]*?\*\//g,'').matchAll(/([^{}@]+)\{([^{}]*)\}/g)].filter(m=>/box-shadow:(?!\s*none)/.test(m[2])).flatMap(m=>m[1].split(',').map(x=>x.trim()));
@@ -157,7 +152,7 @@ test('CSS: the view states its own text sizes and keeps its tile notes a row und
   assert.match(css,/\.hl-rv-tile > span:not\(\.hl-rv-tile-destination\) \{ font-size: var\(--rv-fs\);/);
   assert.match(css,/\.hl-rv-tile-destination \{[^}]*font-size: var\(--rv-fs-mono\) !important;/);
   assert.match(css,/\.hl-rv-tilecell > \.hl-rv-info \{ position: absolute; top: 2px; right: 2px; \}/,'design D: the tile notes sit behind each tile\'s "i"');
-  assert.match(css,/\.hl-rv-view-summary::before \{ content: 'DATA VIEW';/);
+  assert.match(css,/\.hl-rv-view-summary::before \{ content: 'Data view';/);
   assert.match(css,/\.hl-rv-panel > \.hl-rv-half \{ grid-column: auto; \}/);
 });
 test('Liquid: the tabbed layout puts the report sponsor in the plate and the featured sponsor above it, reads the same data, and leaves untagged pages on the old include',()=>{

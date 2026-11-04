@@ -94,7 +94,9 @@ test('the b2 block is scoped: every selector begins with .hl-idx (or is the Wire
 
 test('the Wire skin keeps the live colour variables: publisher and topic hues, tinted titles, the hash tabs, and the popover stays inside its row', () => {
   assert.match(b2, /\.hl-idx--wire \.hl-wire__src \{[^}]*color: var\(--wire-src\)/, 'a source name takes its publisher\'s hue');
-  assert.match(b2, /\.hl-idx--wire \.hl-wire__item,[^{]*\{[^}]*linear-gradient\(90deg, color-mix\(in srgb, var\(--wire-src\) 6%/, 'a row is washed with its publisher\'s hue');
+  // T-0556 w1: a row is flat (no wash in its publisher's hue); the hue stays on the source name and the title, asserted above and below
+  assert.match(b2, /\.hl-idx--wire \.hl-wire__item,[^{]*\{[^}]*background: none;/, 'a row paints no wash');
+  assert.equal(/linear-gradient\(90deg, color-mix\(in srgb, var\(--wire-src\)/.test(b2), false, 'no publisher-hue gradient is left on a row');
   assert.match(b2, /\.hl-idx--wire \.hl-wire__title \{[^}]*color-mix\(in srgb, var\(--wire-src\) 30%, #f4f4f4\)/, 'the title is tinted by its publisher');
   assert.match(b2, /--h: var\(--wire-topic, var\(--hl-accent-blue\)\)/, 'a chip takes its topic hue');
   assert.match(b2, /\.hl-idx--wire \.hl-wire__label \{/);
