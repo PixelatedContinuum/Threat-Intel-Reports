@@ -8475,7 +8475,7 @@ a.hl-kc:hover { border-color: var(--kc); color: #ffffff; }
 @media (max-width: 899px) {
   .hl-idx--det .hl-post-header.hl-d-plate { grid-template-columns: minmax(0, 1fr); padding: 20px 18px 0; }
   .hl-idx--det .hl-post-header.hl-d-plate > .hl-d-res { grid-column: 1; margin: 14px 0 20px; }
-  .hl-idx--det .hl-post-header.hl-d-plate > .hl-d-cover { grid-column: 1; grid-row: auto; margin: 0 -18px; min-height: 110px; }
+  .hl-idx--det .hl-post-header.hl-d-plate > .hl-d-cover { grid-column: 1; grid-row: auto; margin: 18px -18px 0; min-height: 110px; }
   .hl-d-cover .c3-cover { border-left: 0; border-top: 1px solid var(--hl-border-card); min-height: 110px; }
 }
 /* the figure tiles (detection and feed pages): one ruled strip, no box per tile */
