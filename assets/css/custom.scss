@@ -8862,19 +8862,28 @@ a.hl-kc:hover { border-color: var(--kc); color: #ffffff; }
 .hl-idx--dash .hl-crow__rl a { min-height: 32px; padding: 0; border: 0; border-radius: 0; background: none; font: 500 var(--hl-fs-small)/1 var(--hl-font-sans); color: var(--hl-accent-blue); }
 .hl-idx--dash .hl-crow__rl a:hover { color: #79c0ff; text-decoration: underline; }
 .hl-idx--dash .hl-crow__rtxt { color: #eeeeee; }
-.hl-idx--dash .hl-crow__code { background: var(--hl-field); border-radius: 0; color: #eeeeee; }
+.hl-idx--dash .hl-crow__code { background: var(--hl-bg-card); border-color: var(--hl-border-card); border-radius: 0; color: #eeeeee; }
 .hl-idx--dash .hl-mbar, .hl-idx--dash .hl-mbar i { border-radius: 0; }
 .hl-idx--dash .hl-mbar i { background: var(--hl-accent-blue); }
 
 /* boxes and cards on the detail pages: flat, one rule, no tint */
-.hl-idx--dash .hl-d-box { padding: 14px 18px; background: var(--hl-field); border-radius: 0; }
+/* T-0556 w5d: sub-panels are open, ruled sub-sections on the page background, not filled boxes (Joseph, 2026-11-04) */
+.hl-idx--dash .hl-d-box { padding: 14px 0 0; background: none; border: 0; border-top: 1px solid var(--hl-border-card); border-radius: 0; }
+.hl-idx--dash .hl-g2, .hl-idx--dash .hl-g2e { gap: 0 36px; }
+.hl-idx--dash .hl-g2e__wide { margin-top: 0; }
+.hl-idx--dash .hl-dash__gap { margin-top: 18px; }
+.hl-idx--dash .hl-d-box + .hl-d-box { margin-top: 18px; }
+.hl-idx--dash .hl-g2 > .hl-d-box + .hl-d-box, .hl-idx--dash .hl-g2e > .hl-d-box + .hl-d-box { margin-top: 0; }
+.hl-idx--dash .hl-g2e > .hl-g2e__wide { margin-top: 18px; }
+@media (max-width: 899px) { .hl-idx--dash .hl-g2 > .hl-d-box + .hl-d-box, .hl-idx--dash .hl-g2e > .hl-d-box + .hl-d-box { margin-top: 18px; } }
 .hl-idx--dash .hl-d-bh__i { display: none; }
 .hl-idx--dash .hl-d-bh h3.hl-d-bh__t, .hl-idx--dash .hl-d-bh__t { font: 600 19px/1.25 var(--hl-font-serif) !important; color: #eeeeee !important; }
 .hl-idx--dash .hl-d-bh__s { font-size: var(--hl-fs-meta); }
-.hl-idx--dash .hl-dash__note { border: 0; border-left: 2px solid var(--hl-field-line); border-radius: 0; background: none; padding: 2px 0 2px 16px; color: #dcdcdc; }
-.hl-idx--dash .hl-dash__empty { border-radius: 0; }
-.hl-idx--dash .hl-dash__kv dt { font-family: var(--hl-font-mono); }
-.hl-idx--dash .hl-well { border-radius: 0; background: var(--hl-field); }
+.hl-idx--dash .hl-dash__note { border: 0; border-left: 2px solid var(--hl-border-card); border-radius: 0; background: none; padding: 2px 0 2px 16px; color: #dcdcdc; }
+.hl-idx--dash .hl-dash__empty { border-radius: 0; background: none; border-color: var(--hl-border-card); }
+.hl-idx--dash .hl-dash__kv dt { font: 600 var(--hl-fs-small)/1.3 var(--hl-font-sans); letter-spacing: 0; color: var(--hl-muted-d); }
+.hl-idx--dash .hl-dash__kv dd { color: var(--hl-text-primary); }
+.hl-idx--dash .hl-well { border-radius: 0; background: var(--hl-bg-card); border-color: var(--hl-border-card); }
 .hl-idx--dash .hl-well code { color: #eeeeee; }
 .hl-idx--dash .hl-grid--dash { display: block !important; }
 .hl-idx--dash .hl-dash-card {
@@ -9011,9 +9020,16 @@ a.hl-kc:hover { border-color: var(--kc); color: #ffffff; }
 .hl-mast__live a, .hl-mast__live a:visited { color: inherit !important; text-decoration: none !important; }
 .hl-mast__live a:hover { color: #ffffff !important; text-decoration: underline !important; }
 .hl-mast__main { display: flex; align-items: center; gap: 18px; padding: 22px 0 18px; }
-.hl-mast__mark { flex: none; display: grid; place-items: center; width: 52px; height: 52px; border: 1px solid var(--hl-accent-blue); border-radius: var(--hl-radius); background: var(--hl-field); }
-.hl-mast__word { margin: 0; padding: 0; border: 0; font: 700 clamp(26px, 4.4vw, 52px)/1 var(--hl-font-serif); letter-spacing: -0.015em; }
-.hl-mast__word a, .hl-mast__word a:visited { color: #ffffff !important; text-decoration: none !important; }
+.hl-mast__logo { margin: 0; padding: 0; border: 0; font: inherit; }
+.hl-mast__brand, .hl-mast__brand:visited { display: flex; align-items: center; gap: 22px; text-decoration: none !important; }
+.hl-mast__brand:hover { text-decoration: none !important; }
+/* The bar's lockup at about 2.3 times its size: icon 34 -> 78, rule 28 -> 64, THE HUNTER'S 11 -> 25, LEDGER 17 -> 39, dot 6 -> 14 (same proportions and colours) */
+.hl-mast__brand .hl-brand__icon { width: 78px; height: 78px; }
+.hl-mast__brand .hl-brand__rule { width: 7px; height: 64px; border-radius: 4px; }
+.hl-mast__brand .hl-brand__stack { gap: 7px; }
+.hl-mast__brand .hl-brand__top { font-size: 25px; }
+.hl-mast__brand .hl-brand__main { font-size: 39px; }
+.hl-mast__brand .hl-brand__dot { width: 14px; height: 14px; border-radius: 4px; margin-left: 16px; }
 .hl-mast__tag { margin: 0 0 0 auto; max-width: 32ch; font: 400 var(--hl-fs-small)/1.5 var(--hl-font-sans); color: var(--hl-muted-d); text-align: right; }
 
 /* The bar: menu button, mark, the sections left, the search box right, held to the page frame. */
@@ -9021,6 +9037,8 @@ a.hl-kc:hover { border-color: var(--kc); color: #ffffff; }
   padding-left: max(20px, calc((100% - var(--c3-frame)) / 2)); padding-right: max(20px, calc((100% - var(--c3-frame)) / 2)); }
 .hl-nav__brand .hl-brand__rule, .hl-nav__brand .hl-brand__stack { display: none; }
 .hl-nav__brand .hl-brand__icon { width: 30px; height: 30px; }
+/* while the masthead is on screen its logo is the only mark; the bar's keeps its place (no shift) and shows once the masthead has scrolled away */
+.hl-nav--atmast .hl-nav__brand { visibility: hidden; }
 .hl-nav__sections { margin-left: 8px; gap: 0; }
 .hl-nav__sections a, .hl-nav__sections a:visited { padding: 0 14px; }
 .hl-nav__search { margin-left: auto; border-radius: var(--hl-radius); background: var(--hl-field); }
@@ -9030,8 +9048,13 @@ a.hl-kc:hover { border-color: var(--kc); color: #ffffff; }
   .hl-mast { padding-left: max(16px, env(safe-area-inset-left)); padding-right: max(16px, env(safe-area-inset-right)); }
   .hl-mast__date { display: none; }
   .hl-mast__main { flex-wrap: wrap; gap: 12px 14px; padding: 16px 0 14px; }
-  .hl-mast__mark { width: 44px; height: 44px; }
-  .hl-mast__word { font-size: clamp(24px, 7vw, 36px); }
+  .hl-mast__brand { gap: 14px; }
+  .hl-mast__brand .hl-brand__icon { width: 52px; height: 52px; }
+  .hl-mast__brand .hl-brand__rule { width: 5px; height: 42px; }
+  .hl-mast__brand .hl-brand__stack { gap: 5px; }
+  .hl-mast__brand .hl-brand__top { font-size: 16px; }
+  .hl-mast__brand .hl-brand__main { font-size: 26px; }
+  .hl-mast__brand .hl-brand__dot { width: 10px; height: 10px; margin-left: 11px; }
   .hl-mast__tag { margin: 0; max-width: none; text-align: left; flex: 1 1 100%; }
 }
 

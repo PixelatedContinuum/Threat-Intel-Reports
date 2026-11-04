@@ -52,7 +52,7 @@
     (function () {
       var nav = document.querySelector('.hl-nav'), mast = document.querySelector('.hl-mast'), root = document.documentElement, ticking = false;
       if (!nav || !mast) return;
-      function set() { ticking = false; root.style.setProperty('--c3-fixed-top', (Math.max(0, mast.offsetHeight - window.pageYOffset) + nav.offsetHeight) + 'px'); }
+      function set() { ticking = false; nav.classList.toggle('hl-nav--atmast', window.pageYOffset < mast.offsetHeight - 4); root.style.setProperty('--c3-fixed-top', (Math.max(0, mast.offsetHeight - window.pageYOffset) + nav.offsetHeight) + 'px'); }
       window.addEventListener('scroll', function () { if (!ticking) { ticking = true; window.requestAnimationFrame(set); } }, { passive: true });
       window.addEventListener('resize', set);
       set();
