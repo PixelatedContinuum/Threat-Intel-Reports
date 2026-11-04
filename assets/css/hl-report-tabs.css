@@ -1210,12 +1210,18 @@ html:has(.hl-report-page) {
 
 /* ---- Side contents list (built by hl-report-tabs.js, one per tab) ---- */
 .hl-rv-side { display: none; }
+/* T-0556.2: the list sits in the RIGHT margin, outside the report column, so the text keeps the column the header, tabs and footer use. It shows from 1440px, where the column
+   leaves a margin (the same breakpoint and the same --hl-card-* / --hl-rail-gap tokens as the sponsor card in the left margin, mirrored); below that the phone and tablet "In this tab" disclosure covers it.
+   The panel keeps one column plus a zero-width track: the list is wider than its track, so it overhangs into the margin, and still sticks inside the panel's rows. */
 @media (min-width: 1100px) {
-  .hl-rv-panel:not([hidden]) { grid-template-columns: 220px minmax(0, 1fr); column-gap: 44px; row-gap: 0; }
-  .hl-rv-panel > * { grid-column: 2; }
-  .hl-rv-panel > .hl-rv-half { grid-column: 2; }
+  .hl-rv-panel:not([hidden]) { grid-template-columns: minmax(0, 1fr); column-gap: 0; row-gap: 0; }
+  .hl-rv-panel > *, .hl-rv-panel > .hl-rv-half { grid-column: 1; }
+}
+@media (min-width: 1440px) {
+  .hl-rv-panel:not([hidden]) { grid-template-columns: minmax(0, 1fr) 0; }
   .hl-rv-panel > .hl-rv-side {
-    display: block; grid-column: 1; grid-row: 1 / span 99; align-self: start; position: sticky; margin-top: 28px;
+    display: block; grid-column: 2; grid-row: 1 / span 99; align-self: start; justify-self: start; position: sticky; margin-top: 28px;
+    width: var(--hl-card-w); margin-left: min(var(--hl-rail-gap), calc((100vw - var(--hl-col)) / 2 - 8px - var(--hl-card-w)));
     top: calc(var(--hl-rv-nav-h, 0px) + var(--hl-rv-bar-h, 52px) + 16px); max-height: calc(100dvh - var(--hl-rv-nav-h, 0px) - var(--hl-rv-bar-h, 52px) - 32px); overflow-y: auto;
     font-family: var(--hl-font-sans); font-size: var(--hl-fs-meta); line-height: 1.4;
   }
