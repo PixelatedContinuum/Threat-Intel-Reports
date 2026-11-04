@@ -42,13 +42,13 @@ hl_idx: home
     <h2 id="c3-about-h">About the ledger</h2>
     <h3 class="c3-about__kick">Original Threat Intelligence Research</h3>
     <p class="c3-about__lede">Hands-on malware analysis turned into structured, evidence-based intelligence, technically deep enough to trust and clear enough to act on. Free and open: published by a solo analyst for the defender community, with no paywall or signup.</p>
+    <div class="hl-mission__note">Not a collection of open-source intel reports, IOCs, or TTPs. Findings are from original research, though they may overlap with known threats.</div>
   </div>
   <div class="hl-mission c3-about__body">
     <h3 class="c3-about__kick">Mission</h3>
     <p>Most threat intelligence fails defenders in one of two ways. It is either too shallow to be actionable (headlines dressed up as analysis), or technically rigorous but locked behind paywalls, stripped of indicators, and written for researchers rather than the people responding at 2am.</p>
     <p>The Hunter's Ledger exists to fill that gap. Every report here is built from original research: real samples, real infrastructure, real detections. The goal is intelligence that a defender can open, read, and act on the same day, with IOCs ready to ingest, detection rules ready to deploy, and analysis deep enough to actually understand what a threat does and how to stop it.</p>
     <p class="hl-mission__close">All of it is free. Defenders should not have to pay to defend.</p>
-    <div class="hl-mission__note">Not a collection of open-source intel reports, IOCs, or TTPs. Findings are from original research, though they may overlap with known threats.</div>
   </div>
 </section>
 
