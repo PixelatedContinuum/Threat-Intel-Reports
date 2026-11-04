@@ -62,6 +62,10 @@ document.addEventListener('DOMContentLoaded', function () {
     {%- if _dmisp %}<a class="hl-d-res__a" href="{{ _dmisp.event_url | relative_url }}" target="_blank" rel="noopener noreferrer">{% include d-icon.html name="table" %}MISP</a>{% endif -%}
   </div>
   {%- endif %}
+  {%- comment -%} T-0556 w4: the same cover as the report's header (w2's c3-cover include, this campaign's catalog entry); no entry or no cover_label, no cover. {%- endcomment -%}
+  {%- if _dcat.cover_label %}
+  <div class="hl-d-cover">{% include c3-cover.html label=_dcat.cover_label severity=_dcat.severity size="header" %}</div>
+  {%- endif %}
 </div>
 {%- if _dman and _dman.size > 0 %}
 {%- assign _n_all = _dman.size -%}
@@ -114,6 +118,12 @@ document.addEventListener('DOMContentLoaded', function () {
     <span class="hl-post-header__date">{{ page.date | date: "%B %d, %Y" }}{% if page.last_updated %} · <a class="hl-last-updated" href="#revisions" title="Revision history">Updated {{ page.last_updated | date: "%b %d, %Y" }}</a>{% endif %}</span>
   </div>
   <h1 class="hl-post-header__title">{% include defang-text.html text=page.title %}</h1>{% if hl_tabbed %}
+{%- comment -%} T-0556 w4 (concept 3): the byline, the cover (w2's c3-cover include, fed by this report's catalog entry; no entry or no cover_label, no cover) and the sponsor foot. The bottom line and the action buttons are placed by hl-report-tabs.js, the facts strip is the Overview data view's figure tiles. {%- endcomment -%}
+{%- assign _rcat = site.data.catalog.entries | where: "report_url", page.url | first -%}
+<p class="hl-rv-byline"><span>By <b>Joseph Harrison</b></span><span>The Hunter's Ledger</span></p>
+{%- if _rcat.cover_label %}
+<div class="hl-rv-cover">{% include c3-cover.html label=_rcat.cover_label severity=_rcat.severity size="header" %}</div>
+{%- endif %}
 {% include report-sponsor-bar.html part="report" %}{% endif %}
 </div>
 {%- endif %}

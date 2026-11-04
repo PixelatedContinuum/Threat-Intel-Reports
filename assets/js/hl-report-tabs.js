@@ -400,6 +400,18 @@
     var numeral = make('span', 'hl-rv-panel-num', String(i + 1).padStart(2, '0'), title); numeral.setAttribute('aria-hidden', 'true');
     make('h2', '', NAMES[i], title); make('p', '', QUESTIONS[i] + ' · ' + mins + ' min read', title);
     group.forEach(function (s) { panel.appendChild(s.node); });
+    // Concept 3 (T-0556 w4): this tab's sections as a ruled contents list beside the prose. Links only, built from the headings that are already there;
+    // DOM order of the report is unchanged (the list sits between the tab title and the first section).
+    var heads = group.filter(function (s) { return s.heading && s.heading.id; });
+    if (heads.length) {
+      var side = make('nav', 'hl-rv-side', null); side.setAttribute('aria-label', NAMES[i] + ': sections in this tab'); side.setAttribute('data-pagefind-ignore', '');
+      make('p', 'hl-rv-side-h', 'In this tab', side);
+      heads.forEach(function (s) {
+        var num = (s.heading.getAttribute('data-rv-sec') || '').match(/(\d+)/), a = link('', '#' + s.heading.id, side);
+        make('b', '', num ? num[1] : '·', a).setAttribute('aria-hidden', 'true'); a.appendChild(document.createTextNode(text(s.heading).replace(/§$/, '').replace(/^\s*\d+[.)]\s+/, '').trim()));
+      });
+      panel.insertBefore(side, title.nextSibling);
+    }
     // Two consecutive short sections (no table, no figure, under 3000 characters) sit side by side from 1280px;
     // the class only changes the grid column, DOM order is unchanged.
     var short = group.map(function (s) { return !s.node.classList.contains('hl-rv-nohead') && s.node.textContent.length < 3000 && !s.node.querySelector('table, figure, img'); });
@@ -1427,7 +1439,7 @@
     var current = list[0]; list.forEach(function (s) { if (s.heading.getBoundingClientRect().top <= top) current = s; });
     if (currentSection !== current) {
       currentSection = current; sectionLabel.textContent = text(current.heading).replace(/§$/, '').trim(); sectionLabel.title = sectionLabel.textContent;
-      document.querySelectorAll('.hl-rv-contents a,.hl-rv-page-contents a,.hl-rv-menu-sections a').forEach(function (a) { if (a.hash === '#' + current.heading.id) a.setAttribute('aria-current', 'location'); else a.removeAttribute('aria-current'); });
+      document.querySelectorAll('.hl-rv-contents a,.hl-rv-page-contents a,.hl-rv-menu-sections a,.hl-rv-side a').forEach(function (a) { if (a.hash === '#' + current.heading.id) a.setAttribute('aria-current', 'location'); else a.removeAttribute('aria-current'); });
       if (Date.now() > navigatingUntil && scrollY > bar.offsetTop && !beforePrint) history.replaceState(null, '', '#' + current.heading.id);
     }
     prevSection.disabled = current === list[0]; nextSection.disabled = current === list[list.length - 1];
