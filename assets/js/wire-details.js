@@ -297,8 +297,8 @@ function secWhyListed(panel, d, asOfDay) {
     if (signals.indexOf('edb') !== -1 && edb && edb.length) {
       lineInto(panel, "An Exploit-DB entry for this CVE, confirmed against Exploit-DB's own list.");
     }
-    if (signals.indexOf('vedas_weaponized') !== -1) {
-      lineInto(panel, 'Exploit maturity 80%+ (VEDAS), with CVSS 7.0 or higher and network reachability.');
+    if (signals.indexOf('epss_vedas') !== -1) {
+      lineInto(panel, "EPSS at least 1% and A.R.P. Syndicate's VEDAS exploit-maturity estimate at least 80%, with CVSS at least 7.0; not evidence of exploitation or working exploit code.");
     }
     var pct = num(d.epss_pct);
     if (signals.indexOf('epss90') !== -1 && !isNaN(pct) && pct >= 0.90) {

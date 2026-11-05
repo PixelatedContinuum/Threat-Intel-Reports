@@ -41,7 +41,7 @@ var VULNS_STALE_HOURS = 24;
 var VULN_STATUSES = { ok: 1, stale: 1, unavailable: 1 };
 // T-0522: the CVEs tab has its own read (cve.now), warned about the same way: past a day, never failed.
 var CVES_STALE_HOURS = 24;
-var CVES_CAP = 150;
+var CVES_CAP = 200;
 var CVE_SHAPE = /^CVE-\d{4}-\d{4,}$/;
 var DAY_SHAPE = /^\d{4}-\d{2}-\d{2}$/;
 // T-0399: each row's CVSS base score, all four fields empty or all set. A row
@@ -519,9 +519,9 @@ var CVES_KEYS = ['cve', 'published', 'vendor', 'product', 'title', 'cvss', 'cvss
 /* Revision 3 (Joseph, 2026-11-01): the original four selection arms are crit_noauth_kev_product (CVSS 9.0 or
    higher, AV:N/PR:N/UI:N in the row's own vector, AND a product CISA has listed before), msf, edb and
    epss90 (FIRST percentile 0.90 or higher). nuclei and et are shown as the Rules chip and are NOT arms:
-   a row with only those admits nothing. T-0564 adds vedas_weaponized (VEDAS >= 0.80, CVSS >= 7, AV:N). */
-var CVES_SIGNALS = { crit_noauth_kev_product: 1, msf: 1, edb: 1, epss90: 1, vedas_weaponized: 1, nuclei: 1, et: 1 };
-var CVES_ARMS = ['crit_noauth_kev_product', 'msf', 'edb', 'epss90', 'vedas_weaponized'];
+   a row with only those admits nothing. T-0564 adds epss_vedas (EPSS >= 0.01, VEDAS >= 0.80, CVSS >= 7). */
+var CVES_SIGNALS = { crit_noauth_kev_product: 1, msf: 1, edb: 1, epss90: 1, epss_vedas: 1, nuclei: 1, et: 1 };
+var CVES_ARMS = ['crit_noauth_kev_product', 'msf', 'edb', 'epss90', 'epss_vedas'];
 var CVSS_VECTOR = /^(?:CVSS:\d\.\d\/)?[A-Za-z]{1,3}:[A-Za-z0-9]{1,3}(?:\/[A-Za-z]{1,3}:[A-Za-z0-9]{1,3})*$/;
 var CVES_BODY_KEYS = ['description', 'summary', 'context'];
 var EPSS_HIGH_PCT = 0.90;
@@ -539,8 +539,8 @@ function signalFacts(r) {
     nuclei: typeof r.nuclei === 'string' && r.nuclei !== '',
     et: Array.isArray(r.et_sids) && r.et_sids.length > 0,
     epss90: !isEmpty(r.epss_pct) && epct >= EPSS_HIGH_PCT,
-    vedas_weaponized: typeof r.vedas === 'number' && r.vedas >= 0.80 && r.vedas <= 1 &&
-      !isEmpty(r.cvss) && cv >= 7 && tokens.indexOf('AV:N') !== -1
+    epss_vedas: typeof r.vedas === 'number' && r.vedas >= 0.80 && r.vedas <= 1 &&
+      !isEmpty(r.cvss) && cv >= 7 && !isEmpty(r.epss) && Number(r.epss) >= 0.01
   };
 }
 function checkCves(doc, now) {
@@ -581,7 +581,7 @@ function checkCves(doc, now) {
   var seen = Object.create(null);
   var nSev = { critical: 0, high: 0, medium: 0, low: 0 };
   var nUnscored = 0;
-  var nSig = { crit_noauth_kev_product: 0, msf: 0, edb: 0, epss90: 0, vedas_weaponized: 0, nuclei: 0, et: 0 };
+  var nSig = { crit_noauth_kev_product: 0, msf: 0, edb: 0, epss90: 0, epss_vedas: 0, nuclei: 0, et: 0 };
   var byVendor = Object.create(null);
   rows.forEach(function (r, n) {
     r = r || {};
@@ -1022,6 +1022,7 @@ function checkVedasCopy(legend, label) {
   var out = [];
   ["Exploit maturity (VEDAS)", "Estimation of Vulnerability Prevalence &amp; Exploit Maturity",
     "A.R.P. Syndicate", "150+ identifiers", "every 6 to 8 hours", "The source publishes no formula.",
+    "On the CVEs tab, I pair EPSS at least 1% with VEDAS at least 80% and CVSS at least 7.0 for the EPSS + maturity reason.",
     "A high score is not evidence that working exploit code exists or that the CVE has been exploited",
     "exploitation is what the nKEVs tab and CISA KEV are for", "An unscored CVE shows no maturity chip.",
     'href="https://www.exploit.observer/"', 'href="https://github.com/ARPSyndicate/cve-scores"'
@@ -1272,9 +1273,10 @@ function checkCvesTab(src, includes) {
      [/over the network with no login and no user action/, 'the plain-words rule for the critical arm'],
      [/in a product CISA has listed before/, 'the KEV-product half of the critical arm'],
      [/top 10%/, 'the EPSS arm in plain words'],
+     [/EPSS at least 1% paired with VEDAS exploit maturity at least 80% and CVSS at least 7.0/, 'the paired EPSS and VEDAS arm in plain words'],
      [/moves to the nKEVs tab when it is added to VulnCheck KEV/, 'that a row moves to the nKEVs tab when its CVE is added'],
      [/confirmed against Rapid7's or Exploit-DB's own index/, 'that Metasploit and Exploit-DB claims are confirmed against the publishers\' indexes'],
-     [/at most 150 CVEs/, 'that the list is capped at 150'],
+     [/at most 200 CVEs/, 'that the list is capped at 200'],
      [/ranked by how many reasons they meet, then by EPSS, then by exploit maturity, then by CVSS/, 'how the CVEs shown are ranked']].forEach(function (c) {
       if (!c[0].test(callout[0])) problems.push('the CVEs callout no longer states ' + c[1]);
     });
@@ -1316,7 +1318,7 @@ function checkCvesTab(src, includes) {
     if (!/CC BY 4\.0/.test(legend) || !/Empirical Security/.test(legend)) {
       problems.push('the CVEs legend lost the cve.now licence or the EPSS attribution');
     }
-    [[/show at most 150\. When more qualify, the 150 shown are ranked by how many reasons they meet, then by EPSS, then by exploit maturity, then by CVSS/, 'the cap and the ranking'],
+    [[/show at most 200\. When more qualify, the 200 shown are ranked by how many reasons they meet, then by EPSS, then by exploit maturity, then by CVSS/, 'the cap and the ranking'],
      [/titles, SSVC decision points \(CISA's own assessment, from <a [^>]*>Vulnrichment<\/a>\), fixed versions and advisory ids come from <a [^>]*>cve\.now<\/a>/, 'what cve.now supplies and that SSVC is CISA\'s assessment'],
      [/NVD record through VulnCheck, mostly the CNA's score, unless the row says cve\.now/, 'that CVSS comes from the NVD record through VulnCheck unless the row says cve.now'],
      [/Metasploit modules come from Rapid7's <a [^>]*>metasploit-framework<\/a> module index and Exploit-DB entries from <a [^>]*>Exploit-DB<\/a>'s own index/, 'that Metasploit and Exploit-DB come from the publishers\' own indexes'],

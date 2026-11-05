@@ -22,7 +22,7 @@ test('the VEDAS fixture is valid: four headlines, two nKEVs, three CVEs, sparse 
   assert.equal(d.items.length, 4);
   assert.equal(d.vulns.length, 2);
   assert.equal(d.cves.length, 3);
-  assert.equal(d.cves.filter(function (v) { return v.signals.includes('vedas_weaponized'); }).length, 1);
+  assert.equal(d.cves.filter(function (v) { return v.signals.includes('epss_vedas'); }).length, 1);
 });
 
 test('built fixture renders optional chips, legends, credit and Details links; VEDAS and msf filters work', {
@@ -50,7 +50,12 @@ test('built fixture renders optional chips, legends, credit and Details links; V
       assert.ok(row, id);
       var chip = row.querySelector('.hl-vuln__p--vedas');
       assert.equal(chip ? chip.textContent : null, chips[n], id);
-      assert.ok(row.querySelector('.hl-vuln__p--epss'), id + ' EPSS control');
+      var epss = row.querySelector('.hl-vuln__p--epss');
+      assert.equal(epss.textContent, 'EPSS 12%', id + ' EPSS control');
+      epss.click();
+      assert.equal(epss.parentElement.open, true, id + ' EPSS popover opens');
+      assert.ok(epss.parentElement.querySelector('svg polyline'), id + ' EPSS sparkline');
+      epss.click();
       if (chip) {
         assert.match(chip.title, /A\.R\.P\. Syndicate's VEDAS exploit-maturity estimate; cache updated/);
         assert.ok(chip.previousElementSibling.classList.contains('hl-vuln__pop--epss'), 'maturity next to EPSS');
@@ -60,9 +65,11 @@ test('built fixture renders optional chips, legends, credit and Details links; V
     var visible = function () {
       return Array.from(sec.querySelectorAll('.hl-vuln')).filter(function (r) { return r.style.display !== 'none'; }).map(function (r) { return r.id; });
     };
-    var button = sec.querySelector('button[data-sig="vedas_weaponized"]');
-    assert.match(button.textContent, /Exploit maturity 80%\+\s*1/);
-    assert.match(doc.getElementById(ids[0]).textContent, /Exploit maturity 80%\+/);
+    var button = sec.querySelector('button[data-sig="epss_vedas"]');
+    assert.match(button.textContent, /EPSS \+ maturity\s*1/);
+    assert.match(doc.getElementById(ids[0]).textContent, /EPSS \+ maturity/);
+    assert.match(doc.getElementById(ids[0]).querySelector('.hl-vuln__w--vedas').title, /not evidence of exploitation or working exploit code/);
+    assert.match(sec.querySelector('.hl-wire__callout--c').textContent, /at most 200 CVEs/);
     button.click();
     assert.deepEqual(visible(), [ids[0]]);
     sec.querySelector('button[data-sig=""]').click();
@@ -88,7 +95,7 @@ test('built fixture renders optional chips, legends, credit and Details links; V
       var link = row.querySelector('a[href^="https://www.exploit.observer/?keyword="]');
       assert.ok(link, id + ' Details link');
       assert.equal(link.textContent, 'Exploit Observer');
-      if (id === ids[0]) assert.match(row.querySelector('.hl-dt__panel').textContent, /Exploit maturity 80%\+ \(VEDAS\)/);
+      if (id === ids[0]) assert.match(row.querySelector('.hl-dt__panel').textContent, /EPSS at least 1% and A\.R\.P\. Syndicate/);
       assert.equal(link.href, 'https://www.exploit.observer/?keyword=' + id.replace(/^cves?-/, '').toUpperCase());
     }
   } finally {

@@ -137,7 +137,7 @@ cves_counts:
   medium: 0
   low: 0
   unscored: 0
-  vedas_weaponized: 1
+  epss_vedas: 1
   msf: 1
   edb: 1
   epss90: 0
@@ -161,7 +161,7 @@ cves:
     epss_max: '0.12'
     epss_spark: 0,10 120,0
     signals:
-      - vedas_weaponized
+      - epss_vedas
     msf: []
     edb: []
     et_sids: []

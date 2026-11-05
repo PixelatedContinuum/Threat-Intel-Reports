@@ -252,17 +252,17 @@ test('an undrawn fourth label needs no colour', function () {
 
 /* The CVEs tab's structure (T-0522), in the smallest form the gate accepts. */
 var VEDAS_CREDIT = "VEDAS exploit maturity from <a href=\"https://github.com/ARPSyndicate/cve-scores\">A.R.P. Syndicate</a>";
-var VEDAS_LEGEND = "<dt class=\"hl-legend__k\">Exploit maturity (VEDAS)</dt>\n<dd>A.R.P. Syndicate describes VEDAS as &ldquo;Estimation of Vulnerability Prevalence &amp; Exploit Maturity&rdquo;. Its README names OSINT from <a href=\"https://www.exploit.observer/\" target=\"_blank\" rel=\"noopener noreferrer\">Exploit Observer</a>, coverage of 150+ identifiers and updates every 6 to 8 hours. The source publishes no formula. A high score is not evidence that working exploit code exists or that the CVE has been exploited; exploitation is what the nKEVs tab and CISA KEV are for. An unscored CVE shows no maturity chip.</dd><p>VEDAS exploit maturity from <a href=\"https://github.com/ARPSyndicate/cve-scores\">A.R.P. Syndicate</a></p>";
+var VEDAS_LEGEND = "<dt class=\"hl-legend__k\">Exploit maturity (VEDAS)</dt>\n<dd>A.R.P. Syndicate describes VEDAS as &ldquo;Estimation of Vulnerability Prevalence &amp; Exploit Maturity&rdquo;. Its README names OSINT from <a href=\"https://www.exploit.observer/\" target=\"_blank\" rel=\"noopener noreferrer\">Exploit Observer</a>, coverage of 150+ identifiers and updates every 6 to 8 hours. The source publishes no formula. On the CVEs tab, I pair EPSS at least 1% with VEDAS at least 80% and CVSS at least 7.0 for the EPSS + maturity reason. A high score is not evidence that working exploit code exists or that the CVE has been exploited; exploitation is what the nKEVs tab and CISA KEV are for. An unscored CVE shows no maturity chip.</dd><p>VEDAS exploit maturity from <a href=\"https://github.com/ARPSyndicate/cve-scores\">A.R.P. Syndicate</a></p>";
 
 var CVES_TAB_OK = [
   '<a class="hl-wtabs__tab hl-wtabs__tab--c" href="#cves">CVEs</a>',
   '<section id="cves" class="hl-wtabs__sec" data-filter-scope>',
   '<p class="hl-wire__freshness hl-wire__freshness--c">CVEs: Listing, titles, SSVC (CISA\'s own assessment), fixed versions and advisory ids from <a href="https://cve.now/">cve.now</a> (<a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>) &middot; Scores from NVD through VulnCheck, or from cve.now where a row says so &middot; Exploits from Rapid7 and Exploit-DB &middot; KEV products from CISA &middot; EPSS from <a href="https://www.first.org/epss/">FIRST</a> &middot; ' + VEDAS_CREDIT + ' &middot; <a href="{{ \'/wire/cves.xml\' | relative_url }}">Atom feed (CVEs)</a></p>',
-  '<div class="hl-wire__callout hl-wire__callout--c"><p>My selection of CVEs published in the last 30 days that are not on a KEV list yet. Each is here for at least one of three reasons: Critical (CVSS 9.0 or higher), reachable over the network with no login and no user action, in a product CISA has listed before; a Metasploit module or Exploit-DB entry, confirmed against Rapid7\'s or Exploit-DB\'s own index; or EPSS in the top 10%.</p><p>Being listed does not mean anyone has been seen exploiting the CVE. "Product on CISA KEV" is a fact about the product, not this CVE. The list excludes anything on VulnCheck KEV or CISA KEV, and a CVE moves to the nKEVs tab when it is added to VulnCheck KEV. It shows at most 150 CVEs, ranked by how many reasons they meet, then by EPSS, then by exploit maturity, then by CVSS.</p></div>',
+  '<div class="hl-wire__callout hl-wire__callout--c"><p>My selection of CVEs published in the last 30 days that are not on a KEV list yet. Each is here for at least one of four reasons: Critical (CVSS 9.0 or higher), reachable over the network with no login and no user action, in a product CISA has listed before; a Metasploit module or Exploit-DB entry, confirmed against Rapid7\'s or Exploit-DB\'s own index; EPSS in the top 10%; or EPSS at least 1% paired with VEDAS exploit maturity at least 80% and CVSS at least 7.0.</p><p>Being listed does not mean anyone has been seen exploiting the CVE. "Product on CISA KEV" is a fact about the product, not this CVE. The list excludes anything on VulnCheck KEV or CISA KEV, and a CVE moves to the nKEVs tab when it is added to VulnCheck KEV. It shows at most 200 CVEs, ranked by how many reasons they meet, then by EPSS, then by exploit maturity, then by CVSS.</p></div>',
   '{%- capture cves_legend_html -%}',
   VEDAS_LEGEND,
   '<dl class="hl-legend__list"><dt><span class="hl-vuln__cve">CVE-YYYY-NNNN</span></dt><dd>The CVE.</dd></dl>',
-  '<p class="hl-legend__p">I choose which CVEs appear here, by the rule above, and show at most 150. When more qualify, the 150 shown are ranked by how many reasons they meet, then by EPSS, then by exploit maturity, then by CVSS.</p>',
+  '<p class="hl-legend__p">I choose which CVEs appear here, by the rule above, and show at most 200. When more qualify, the 200 shown are ranked by how many reasons they meet, then by EPSS, then by exploit maturity, then by CVSS.</p>',
   '<p class="hl-legend__p">The CVE listing, titles, SSVC decision points (CISA\'s own assessment, from <a href="https://github.com/cisagov/vulnrichment">Vulnrichment</a>), fixed versions and advisory ids come from <a href="https://cve.now/">cve.now</a> (CC BY 4.0). CVSS scores and vectors come from the CVE\'s NVD record through VulnCheck, mostly the CNA\'s score, unless the row says cve.now. Metasploit modules come from Rapid7\'s <a href="https://github.com/rapid7/metasploit-framework">metasploit-framework</a> module index and Exploit-DB entries from <a href="https://www.exploit-db.com/">Exploit-DB</a>\'s own index. "Product on CISA KEV" comes from CISA\'s <a href="https://www.cisa.gov/known-exploited-vulnerabilities-catalog">KEV catalog</a>. EPSS scores are FIRST\'s (<a href="https://www.first.org/epss/">first.org/epss</a>), generated by Empirical Security.</p>',
   '{%- endcapture -%}',
   '<details class="hl-legend-mobile" data-pagefind-ignore><summary>Legend</summary>{{ cves_legend_html }}</details>',
@@ -1153,10 +1153,10 @@ test('cves statuses: stale and unavailable warn, an old file warns once, over a 
   assert.match(old.cveWarnings[0], /no cves section/);
   assert.match(CW.check(cvdoc(null, { cves_generated_at: '2026-08-17T10:00:00Z' }), SOURCES, NOW).cveWarnings.join(' '), /hours old, over 24/);
   var many = [];
-  for (var i = 0; i < 150; i++) many.push(cvrow({ cve: 'CVE-2026-' + (9000 + i) }));
+  for (var i = 0; i < 200; i++) many.push(cvrow({ cve: 'CVE-2026-' + (9000 + i) }));
   assert.doesNotMatch(CW.check(cvdoc(many), SOURCES, NOW).cveWarnings.join(' '), /over the cap/);
-  many.push(cvrow({ cve: 'CVE-2026-9150' }));
-  assert.match(CW.check(cvdoc(many), SOURCES, NOW).cveWarnings.join(' '), /151 rows, over the cap of 150/);
+  many.push(cvrow({ cve: 'CVE-2026-9200' }));
+  assert.match(CW.check(cvdoc(many), SOURCES, NOW).cveWarnings.join(' '), /201 rows, over the cap of 200/);
   assert.match(CW.check(cvdoc([]), SOURCES, NOW).cveWarnings.join(' '), /ok but there are no rows/);
 });
 
@@ -1355,7 +1355,8 @@ test('cvss_vector, kev_product and kev_product_n are held to their shapes', func
 test('each corrected attribution sentence is pinned: callout, short line and legend, claim by claim', function () {
   var pins = [
     // callout
-    ["It shows at most 150 CVEs,", /capped at 150/],
+    ["It shows at most 200 CVEs,", /capped at 200/],
+    ["EPSS at least 1% paired with VEDAS exploit maturity at least 80% and CVSS at least 7.0", /paired EPSS and VEDAS arm/],
     ["CVEs, ranked by how many reasons they meet", /how the CVEs shown are ranked/],
     // short line
     ["Listing, titles, SSVC (CISA's own assessment), fixed versions and advisory ids from <a href=\"https://cve.now/\">cve.now</a>", /short CVEs line no longer says what cve\.now supplies/],
@@ -1363,7 +1364,7 @@ test('each corrected attribution sentence is pinned: callout, short line and leg
     ["Exploits from Rapid7 and Exploit-DB", /short CVEs line no longer says where the exploits come from/],
     ["KEV products from CISA", /short CVEs line no longer says where the KEV products come from/],
     // legend
-    ["and show at most 150. When more qualify, the 150 shown are ranked by how many reasons they meet, then by EPSS, then by exploit maturity, then by CVSS.", /legend no longer says the cap and the ranking/],
+    ["and show at most 200. When more qualify, the 200 shown are ranked by how many reasons they meet, then by EPSS, then by exploit maturity, then by CVSS.", /legend no longer says the cap and the ranking/],
     ["The CVE listing, titles, SSVC decision points (CISA's own assessment, from", /legend no longer says what cve\.now supplies/],
     ["CVSS scores and vectors come from the CVE's NVD record through VulnCheck, mostly the CNA's score, unless the row says cve.now. Metasploit modules", /legend no longer says that CVSS comes from the NVD record/],
     ["module index and Exploit-DB entries from", /legend no longer says that Metasploit and Exploit-DB come from the publishers/],
@@ -1591,23 +1592,25 @@ test('VEDAS accepts absence and both bounds on both tabs; rejects invalid number
   });
 });
 
-test('the fifth signal needs its score, network vector and CVSS, and its count agrees', function () {
-  var base = { signals: ['vedas_weaponized'], vedas: 0.8, cvss: '7.0', severity: 'high',
+test('the paired signal needs EPSS, maturity and CVSS, and its count agrees', function () {
+  var base = { signals: ['epss_vedas'], epss: '0.01', vedas: 0.8, cvss: '7.0', severity: 'high',
     msf: [], edb: [], nuclei: '', et_sids: [], epss_pct: '0.1', kev_product: '', kev_product_n: '',
     cvss_vector: 'CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H' };
   var check = function (over) {
     return CW.check(cvdoc([cvrow(Object.assign({}, base, over))], {
-      cves_counts: { total: 1, vedas_weaponized: 1 }
+      cves_counts: { total: 1, epss_vedas: 1 }
     }), SOURCES, NOW);
   };
   assert.deepEqual(check({}).cveWarnings, []);
-  [{ vedas: 0.7999 }, { cvss: '6.9' }, { cvss_vector: 'CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H' },
+  assert.deepEqual(check({ cvss_vector: 'CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H' }).cveWarnings, [], 'pair has no network-vector gate');
+  [{ vedas: 0.7999 }, { cvss: '6.9' }, { epss: '0.009999' }, { epss: '' }, { epss: undefined }, { epss: 'bad' },
     { vedas: undefined }].forEach(function (over) {
-    assert.match(check(over).cveWarnings.join(' '), /lists signal vedas_weaponized but the row shows no/);
+    assert.match(check(over).cveWarnings.join(' '), /lists signal epss_vedas but the row shows no/);
   });
-  assert.match(check({ signals: [] }).cveWarnings.join(' '), /shows vedas_weaponized but does not list/);
-  var wrong = cvdoc([cvrow(base)], { cves_counts: { total: 1, vedas_weaponized: 2 } });
-  assert.match(CW.check(wrong, SOURCES, NOW).cveWarnings.join(' '), /vedas_weaponized disagrees.*declared 2, actual 1/);
+  assert.match(check({ signals: [] }).cveWarnings.join(' '), /shows epss_vedas but does not list/);
+  assert.match(check({ signals: ['vedas_weaponized'] }).cveWarnings.join(' '), /unknown signal/);
+  var wrong = cvdoc([cvrow(base)], { cves_counts: { total: 1, epss_vedas: 2 } });
+  assert.match(CW.check(wrong, SOURCES, NOW).cveWarnings.join(' '), /epss_vedas disagrees.*declared 2, actual 1/);
 });
 
 test('VEDAS legend claims and source hrefs are pinned separately in each tab', function () {
@@ -1615,6 +1618,7 @@ test('VEDAS legend claims and source hrefs are pinned separately in each tab', f
   assert.equal(CW.checkPage(page, inc).status, 'PASS');
   var pins = ['Exploit maturity (VEDAS)', 'Estimation of Vulnerability Prevalence &amp; Exploit Maturity',
     '150+ identifiers', 'every 6 to 8 hours', 'The source publishes no formula.',
+    'On the CVEs tab, I pair EPSS at least 1% with VEDAS at least 80% and CVSS at least 7.0 for the EPSS + maturity reason.',
     'A high score is not evidence that working exploit code exists or that the CVE has been exploited',
     'exploitation is what the nKEVs tab and CISA KEV are for', 'An unscored CVE shows no maturity chip.',
     'href="https://www.exploit.observer/"', 'href="https://github.com/ARPSyndicate/cve-scores"'];
