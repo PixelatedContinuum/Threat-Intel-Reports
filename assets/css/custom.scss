@@ -9222,7 +9222,8 @@ a.hl-kc:hover { border-color: var(--kc); color: #ffffff; }
 .hl-idx--det .hl-picker__btn, .hl-idx--det .hl-attack__export { background: transparent; border-color: #333333; font-weight: 500; }
 .hl-idx--det .hl-attack__chip { background: transparent; border-color: #333333; font-family: var(--hl-font-sans); font-weight: 500; }
 /* body type: serif prose at a measure, bold is bold ink, labels in the body face, rule tables flat */
-.hl-idx--det .hl-post-content > p, .hl-idx--det .hl-post-content > ul, .hl-idx--det .hl-post-content > ol { max-width: 740px; font-family: var(--hl-font-serif); font-size: 19px; line-height: 1.7; color: #e2e2e2; }
+/* T-0556.4: detection prose fills the column like report prose (T-0556.3); the 740px cap left the right of the column empty. Font, size, line height and ink unchanged. Blockquotes had no cap here. */
+.hl-idx--det .hl-post-content > p, .hl-idx--det .hl-post-content > ul, .hl-idx--det .hl-post-content > ol { max-width: none; font-family: var(--hl-font-serif); font-size: 19px; line-height: 1.7; color: #e2e2e2; }
 .hl-idx--det .hl-post-content > p:first-of-type:has(> strong:first-child) { max-width: none; font-family: var(--hl-font-sans); font-size: var(--hl-fs-small); line-height: 1.8; }
 .hl-idx--det .hl-post-content > p:first-of-type:has(> strong:first-child) strong { font-family: var(--hl-font-sans); font-weight: 600; letter-spacing: 0; color: var(--hl-text-primary); }
 .hl-idx--det .hl-post-content strong, .hl-idx--det .hl-post-content b { color: #ffffff; font-weight: 700; }
