@@ -1482,6 +1482,8 @@ test('the feed: the real wire/cves.xml passes; an unescaped output, a PoC word, 
     [xml.replace('<category term="cves-tab"', '<category term="github-poc" label="GitHub PoC"/><category term="cves-tab"'), /mentions a GitHub proof of concept/],
     [xml.replace('scores from NVD through VulnCheck, unless a row says cve.now; exploits from Rapid7\'s', 'scores from NVD through VulnCheck; exploits from Rapid7\'s'), /no longer qualifies/],
     [xml.replace('{% if r.scored_by == "cve.now" %}', '{% if r.scored_by == "never" %}'), /no longer says when a score came from cve\.now/],
+    [xml.replace('The feed shows at most 200 CVEs', 'The feed shows at most 150 CVEs'), /does not say "at most 200 CVEs"/],
+    [xml.replace('EPSS from FIRST; VEDAS exploit maturity from A.R.P. Syndicate (github.com/ARPSyndicate/cve-scores). Selection', 'EPSS from FIRST. Selection'), /does not credit A\.R\.P\. Syndicate/],
     [xml.replace('exploits from Rapid7 and Exploit-DB;', 'exploits carried by cve.now (Metasploit, Exploit-DB);').replace('Rapid7\'s and Exploit-DB\'s own indexes', 'Metasploit and Exploit-DB lists that cve.now carries'), /Rapid7 and Exploit-DB|carries Metasploit/]
   ];
   cases.forEach(function (c, i) {

@@ -1435,6 +1435,10 @@ function checkCvesFeed(xml) {
   if (!/Rapid7/.test(body) || !/Exploit-DB/.test(body)) problems.push('wire/cves.xml no longer credits Rapid7 and Exploit-DB for the exploits');
   if (/carries[^.]{0,160}(?:Metasploit|Exploit-DB)/i.test(body)) problems.push('wire/cves.xml says cve.now carries Metasploit or Exploit-DB data');
   if (/\b(?:rules?|Nuclei|ET Open|Snort)\b[^.<]{0,80}\badmit/i.test(body)) problems.push('wire/cves.xml says a rule admits a CVE');
+  /* T-0564: the feed states the same cap as the page and the exporter, and credits VEDAS wherever it carries the pairing. */
+  var feedCap = body.match(/at most (\d+) CVEs/);
+  if (!feedCap || Number(feedCap[1]) !== CVES_CAP) problems.push('wire/cves.xml does not say "at most ' + CVES_CAP + ' CVEs" (the cap the page and exporter use)');
+  if (/w_vedas/.test(body) && !['subtitle', 'rights'].every(function (t) { var m = body.match(new RegExp('<' + t + '>([\\s\\S]*?)</' + t + '>')); return m && /A\.R\.P\. Syndicate/.test(m[1]); })) problems.push('wire/cves.xml carries the EPSS + maturity reason but does not credit A.R.P. Syndicate in both the subtitle and the rights line');
   return verdict(problems.length ? 'FAIL' : 'PASS', null, problems, [], null);
 }
 
