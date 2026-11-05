@@ -10,7 +10,7 @@
   </div>
   {% include c3-cover.html label=include.cover_label severity=include.cover_severity kicker=include.cover_kicker size="header" %}
 </header>
-{%- comment -%} T-0556.7: actors opt into a subtitle inside the header; families retain the separate summary box. Both print the same desc without shortening. {%- endcomment %}
+{%- comment -%} Actors (T-0556.7) and families (T-0556.8) opt into a subtitle inside the header. Both print the same desc without shortening. {%- endcomment %}
 {% unless include.desc_in_header %}<div class="hl-page-header__desc hl-sh__sum">{{ include.desc }}</div>{% endunless %}
 {%- else -%}
 <header class="hl-page-header hl-d-plate hl-sh" style="--ph-accent: {{ include.accent | default: '#58a6ff' }};">
