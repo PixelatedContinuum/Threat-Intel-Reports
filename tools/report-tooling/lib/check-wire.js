@@ -52,6 +52,12 @@ var CVSS_VERSIONS = { '4.0': 1, '3.1': 1, '3.0': 1, '2.0': 1 };
 // 'cve.now': Revision 3's arm A takes cve.now's score and vector when our NVD data holds none, and the row says so.
 var SCORED_BY = { NVD: 1, CNA: 1, ADP: 1, 'cve.now': 1 };
 
+function vedasProblem(r) {
+  if (!hasKey(r, 'vedas')) return '';
+  return typeof r.vedas === 'number' && Number.isFinite(r.vedas) && r.vedas >= 0 && r.vedas <= 1
+    ? '' : 'has vedas ' + JSON.stringify(r.vedas) + ', not a number in [0, 1]';
+}
+
 function scoreProblem(r) {
   var present = SCORE_KEYS.filter(function (k) { return hasKey(r, k); });
   if (present.length === 0) return '';
@@ -388,6 +394,8 @@ function checkVulns(doc, now) {
   rows.forEach(function (r, n) {
     r = r || {};
     var where = 'vulns row ' + (n + 1) + ' (' + String(r.cve || '?') + ')';
+    var vp = vedasProblem(r);
+    if (vp) problems.push(where + ' ' + vp);
     if (hasKey(r, 'description')) {
       problems.push(where + ' carries a description field. The Wire publishes ' +
         'no body text, VulnCheck\'s included.');
@@ -508,12 +516,12 @@ var CVES_KEYS = ['cve', 'published', 'vendor', 'product', 'title', 'cvss', 'cvss
   'scored_by', 'epss', 'epss_pct', 'epss_date', 'epss_max', 'epss_spark', 'signals', 'msf', 'edb',
   'et_sids', 'nuclei', 'cisa_sigma', 'snort3_sids', 'ssvc_expl', 'ssvc_auto', 'ssvc_impact',
   'fixed', 'aliases', 'stories', 'cvss_vector', 'kev_product', 'kev_product_n'];
-/* Revision 3 (Joseph, 2026-11-01): the four selection arms are crit_noauth_kev_product (CVSS 9.0 or
+/* Revision 3 (Joseph, 2026-11-01): the original four selection arms are crit_noauth_kev_product (CVSS 9.0 or
    higher, AV:N/PR:N/UI:N in the row's own vector, AND a product CISA has listed before), msf, edb and
    epss90 (FIRST percentile 0.90 or higher). nuclei and et are shown as the Rules chip and are NOT arms:
-   a row with only those admits nothing. */
-var CVES_SIGNALS = { crit_noauth_kev_product: 1, msf: 1, edb: 1, epss90: 1, nuclei: 1, et: 1 };
-var CVES_ARMS = ['crit_noauth_kev_product', 'msf', 'edb', 'epss90'];
+   a row with only those admits nothing. T-0564 adds vedas_weaponized (VEDAS >= 0.80, CVSS >= 7, AV:N). */
+var CVES_SIGNALS = { crit_noauth_kev_product: 1, msf: 1, edb: 1, epss90: 1, vedas_weaponized: 1, nuclei: 1, et: 1 };
+var CVES_ARMS = ['crit_noauth_kev_product', 'msf', 'edb', 'epss90', 'vedas_weaponized'];
 var CVSS_VECTOR = /^(?:CVSS:\d\.\d\/)?[A-Za-z]{1,3}:[A-Za-z0-9]{1,3}(?:\/[A-Za-z]{1,3}:[A-Za-z0-9]{1,3})*$/;
 var CVES_BODY_KEYS = ['description', 'summary', 'context'];
 var EPSS_HIGH_PCT = 0.90;
@@ -530,7 +538,9 @@ function signalFacts(r) {
     edb: Array.isArray(r.edb) && r.edb.length > 0,
     nuclei: typeof r.nuclei === 'string' && r.nuclei !== '',
     et: Array.isArray(r.et_sids) && r.et_sids.length > 0,
-    epss90: !isEmpty(r.epss_pct) && epct >= EPSS_HIGH_PCT
+    epss90: !isEmpty(r.epss_pct) && epct >= EPSS_HIGH_PCT,
+    vedas_weaponized: typeof r.vedas === 'number' && r.vedas >= 0.80 && r.vedas <= 1 &&
+      !isEmpty(r.cvss) && cv >= 7 && tokens.indexOf('AV:N') !== -1
   };
 }
 function checkCves(doc, now) {
@@ -571,11 +581,13 @@ function checkCves(doc, now) {
   var seen = Object.create(null);
   var nSev = { critical: 0, high: 0, medium: 0, low: 0 };
   var nUnscored = 0;
-  var nSig = { crit_noauth_kev_product: 0, msf: 0, edb: 0, epss90: 0, nuclei: 0, et: 0 };
+  var nSig = { crit_noauth_kev_product: 0, msf: 0, edb: 0, epss90: 0, vedas_weaponized: 0, nuclei: 0, et: 0 };
   var byVendor = Object.create(null);
   rows.forEach(function (r, n) {
     r = r || {};
     var where = 'cves row ' + (n + 1) + ' (' + String(r.cve || '?') + ')';
+    var vp = vedasProblem(r);
+    if (vp) problems.push(where + ' ' + vp);
     CVES_BODY_KEYS.forEach(function (k) {
       if (hasKey(r, k)) {
         problems.push(where + ' carries a ' + k + ' field. The Wire publishes no body text, and ' +
@@ -1006,6 +1018,22 @@ function checkHeadlineRow(src) {
 
    Structure, not output: that the browser then hides one copy and shows the
    other is the browser check. */
+function checkVedasCopy(legend, label) {
+  var out = [];
+  ["Exploit maturity (VEDAS)", "Estimation of Vulnerability Prevalence &amp; Exploit Maturity",
+    "A.R.P. Syndicate", "150+ identifiers", "every 6 to 8 hours", "The source publishes no formula.",
+    "A high score is not evidence that working exploit code exists or that the CVE has been exploited",
+    "exploitation is what the nKEVs tab and CISA KEV are for", "An unscored CVE shows no maturity chip.",
+    'href="https://www.exploit.observer/"', 'href="https://github.com/ARPSyndicate/cve-scores"'
+  ].forEach(function (pin) {
+    if (legend.indexOf(pin) < 0) out.push(label + ' lost VEDAS copy or credit: ' + pin);
+  });
+  if (!/VEDAS exploit maturity from <a [^>]*href="https:\/\/github\.com\/ARPSyndicate\/cve-scores"[^>]*>A\.R\.P\. Syndicate<\/a>/.test(legend)) {
+    out.push(label + ' lost the VEDAS source credit');
+  }
+  return out;
+}
+
 function checkLegend(src) {
   var problems = [];
   var capOpen = src.search(/\{%-?\s*capture\s+legend_html\s*-?%\}/);
@@ -1017,14 +1045,18 @@ function checkLegend(src) {
   }
   var before = src.slice(0, capOpen);
   var legend = src.slice(capOpen, capEnd);
+  problems = problems.concat(checkVedasCopy(legend, "legend"));
 
   // 1. Attribution above the filter bar, outside the legend.
   var line = before.match(/<p class="hl-wire__freshness hl-wire__freshness--v">[\s\S]*?<\/p>/);
+  if (line && !/VEDAS exploit maturity from <a [^>]*href="https:\/\/github\.com\/ARPSyndicate\/cve-scores"[^>]*>A\.R\.P\. Syndicate<\/a>/.test(line[0])) {
+    problems.push('the short v line lost VEDAS credit to A.R.P. Syndicate');
+  }
   if (!line) {
     problems.push('the short nKEVs line (hl-wire__freshness--v) is missing above the legend, ' +
       'so the nKEV definition and the attribution are no longer visible without opening it');
   } else {
-    ['vulncheck.com/kev', 'first.org/epss', 'vulns.xml'].forEach(function (needle) {
+    ['vulncheck.com/kev', 'first.org/epss', 'vulns.xml', 'href="https://github.com/ARPSyndicate/cve-scores"'].forEach(function (needle) {
       if (line[0].indexOf(needle) < 0) {
         problems.push('the short nKEVs line no longer links ' + needle + ', so that ' +
           'attribution or feed is visible only inside the legend');
@@ -1051,7 +1083,7 @@ function checkLegend(src) {
   }
   var anchors = legend.match(/<a\b[^>]*>/gi) || [];
   anchors.forEach(function (a) {
-    if (!/href="https:\/\/(www\.vulncheck\.com|www\.first\.org|cve\.now)\//.test(a)) {
+    if (!/href="https:\/\/(www\.vulncheck\.com|www\.first\.org|cve\.now|www\.exploit\.observer|github\.com\/ARPSyndicate\/cve-scores)[\/"]/.test(a)) {
       problems.push('a link in the legend that is not an attribution link: ' + a +
         ' (a sample chip must be a span, not a link)');
     }
@@ -1243,11 +1275,14 @@ function checkCvesTab(src, includes) {
      [/moves to the nKEVs tab when it is added to VulnCheck KEV/, 'that a row moves to the nKEVs tab when its CVE is added'],
      [/confirmed against Rapid7's or Exploit-DB's own index/, 'that Metasploit and Exploit-DB claims are confirmed against the publishers\' indexes'],
      [/at most 150 CVEs/, 'that the list is capped at 150'],
-     [/ranked by how many reasons they meet, then by EPSS, then by CVSS/, 'how the CVEs shown are ranked']].forEach(function (c) {
+     [/ranked by how many reasons they meet, then by EPSS, then by exploit maturity, then by CVSS/, 'how the CVEs shown are ranked']].forEach(function (c) {
       if (!c[0].test(callout[0])) problems.push('the CVEs callout no longer states ' + c[1]);
     });
   }
   var line = sec.match(/<p class="hl-wire__freshness hl-wire__freshness--c">[\s\S]*?<\/p>/);
+  if (line && !/VEDAS exploit maturity from <a [^>]*href="https:\/\/github\.com\/ARPSyndicate\/cve-scores"[^>]*>A\.R\.P\. Syndicate<\/a>/.test(line[0])) {
+    problems.push('the short c line lost VEDAS credit to A.R.P. Syndicate');
+  }
   if (!line) problems.push('the short CVEs line (hl-wire__freshness--c) is missing');
   else {
     [[/Listing, titles, SSVC \(CISA's own assessment\), fixed versions and advisory ids from/, 'what cve.now supplies and that SSVC is CISA\'s own assessment'],
@@ -1258,7 +1293,7 @@ function checkCvesTab(src, includes) {
       if (!c[0].test(line[0])) problems.push('the short CVEs line no longer says ' + c[1]);
     });
     // T-0531: the links themselves, not the words, since the line also names cve.now in its text.
-    ['href="https://cve.now/', 'href="https://www.first.org/epss/', 'cves.xml'].forEach(function (needle) {
+    ['href="https://cve.now/', 'href="https://www.first.org/epss/', 'cves.xml', 'href="https://github.com/ARPSyndicate/cve-scores"'].forEach(function (needle) {
       if (line[0].indexOf(needle) < 0) problems.push('the short CVEs line no longer links ' + needle);
     });
   }
@@ -1269,18 +1304,19 @@ function checkCvesTab(src, includes) {
   if (capOpen < 0 || capEnd < 0) problems.push('the CVEs legend is missing: no `capture cves_legend_html` block');
   else {
     var legend = src.slice(capOpen, capEnd);
+    problems = problems.concat(checkVedasCopy(legend, "CVEs legend"));
     if (/\sdata-[a-z]/i.test(legend)) problems.push('the CVEs legend markup carries a data-* attribute, which the filter script would read as a filter attribute');
     if (/<(button|input|details|summary|select|textarea)\b/i.test(legend)) problems.push('the CVEs legend markup holds a control or details element: samples must not be interactive');
     if (/\sid\s*=/i.test(legend)) problems.push('the CVEs legend markup carries an id, but it is printed twice, so the id would repeat');
     (legend.match(/<a\b[^>]*>/gi) || []).forEach(function (a) {
-      if (!/href="https:\/\/(cve\.now|www\.first\.org|www\.exploit-db\.com|www\.cisa\.gov|github\.com\/(?:cisagov\/vulnrichment|rapid7\/metasploit-framework))[\/"]/.test(a)) {
+      if (!/href="https:\/\/(cve\.now|www\.first\.org|www\.exploit-db\.com|www\.cisa\.gov|github\.com\/(?:cisagov\/vulnrichment|rapid7\/metasploit-framework|ARPSyndicate\/cve-scores)|www\.exploit\.observer)[\/"]/.test(a)) {
         problems.push('a link in the CVEs legend that is not an attribution link: ' + a);
       }
     });
     if (!/CC BY 4\.0/.test(legend) || !/Empirical Security/.test(legend)) {
       problems.push('the CVEs legend lost the cve.now licence or the EPSS attribution');
     }
-    [[/show at most 150\. When more qualify, the 150 shown are ranked by how many reasons they meet, then by EPSS, then by CVSS/, 'the cap and the ranking'],
+    [[/show at most 150\. When more qualify, the 150 shown are ranked by how many reasons they meet, then by EPSS, then by exploit maturity, then by CVSS/, 'the cap and the ranking'],
      [/titles, SSVC decision points \(CISA's own assessment, from <a [^>]*>Vulnrichment<\/a>\), fixed versions and advisory ids come from <a [^>]*>cve\.now<\/a>/, 'what cve.now supplies and that SSVC is CISA\'s assessment'],
      [/NVD record through VulnCheck, mostly the CNA's score, unless the row says cve\.now/, 'that CVSS comes from the NVD record through VulnCheck unless the row says cve.now'],
      [/Metasploit modules come from Rapid7's <a [^>]*>metasploit-framework<\/a> module index and Exploit-DB entries from <a [^>]*>Exploit-DB<\/a>'s own index/, 'that Metasploit and Exploit-DB come from the publishers\' own indexes'],

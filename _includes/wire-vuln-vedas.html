@@ -1,0 +1,2 @@
+{%- comment -%} A missing score draws nothing; a measured zero is still a score. {%- endcomment -%}
+{%- if r.vedas != nil and r.vedas != "" -%}<span class="hl-vuln__p hl-vuln__p--vedas" title="A.R.P. Syndicate's VEDAS exploit-maturity estimate{% if wire.vedas_generated_at %}; cache updated {{ wire.vedas_generated_at | date: '%-d %B %Y, %H:%M' | escape }} UTC{% endif %}">Maturity {{ r.vedas | times: 100 | round: 0 | escape }}%</span>{%- endif -%}

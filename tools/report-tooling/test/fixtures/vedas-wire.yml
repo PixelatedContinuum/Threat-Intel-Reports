@@ -1,0 +1,251 @@
+generated_at: '2026-11-05T20:48:28.213Z'
+window_days: 30
+counts:
+  total: 4
+  research: 3
+  news: 1
+topics:
+  - label: security
+    count: 2
+    color: 3
+  - label: ransomware
+    count: 1
+    color: 4
+  - label: malware
+    count: 1
+    color: 5
+label_colors:
+  security: 3
+  ransomware: 4
+  malware: 5
+items:
+  - title: Synthetic research fixture
+    url: https://example.org/research
+    source: AlienVault
+    date: '2026-11-05T20:48:28.213Z'
+    kind: research
+    labels:
+      - security
+      - ransomware
+  - title: Synthetic news fixture
+    url: https://example.org/news
+    source: BleepingComputer
+    date: '2026-11-05T20:48:28.213Z'
+    kind: news
+    labels: []
+  - title: Synthetic rule fixture
+    url: https://example.org/rules
+    source: Cisco Talos
+    date: '2026-11-05T20:48:28.213Z'
+    kind: research
+    labels:
+      - malware
+  - title: Synthetic advisory fixture
+    url: https://example.org/advisory
+    source: Microsoft
+    date: '2026-11-05T20:48:28.213Z'
+    kind: research
+    labels:
+      - security
+vedas_generated_at: '2026-11-05T20:48:28.213Z'
+vulns_status: ok
+vulns_generated_at: '2026-11-05T20:48:28.213Z'
+vulns_counts:
+  total: 2
+  cisa: 1
+  older: 0
+vulns:
+  - cve: CVE-2026-9011
+    published: '2026-11-05'
+    vendor: Fixture
+    product: Widget
+    title: Synthetic fixture CVE record.
+    cvss: '9.8'
+    cvss_version: '3.1'
+    severity: critical
+    scored_by: CNA
+    epss: '0.12'
+    epss_pct: '0.5'
+    epss_date: '2026-11-05'
+    epss_max: '0.12'
+    epss_spark: 0,10 120,0
+    signals: []
+    msf: []
+    edb: []
+    et_sids: []
+    nuclei: ''
+    cisa_sigma: []
+    snort3_sids: []
+    ssvc_expl: ''
+    ssvc_auto: ''
+    ssvc_impact: ''
+    fixed: ''
+    aliases: []
+    stories: 0
+    cvss_vector: CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:L/A:N
+    kev_product: ''
+    kev_product_n: ''
+    reports: []
+    reports_more: 0
+    added: '2026-11-05'
+    vedas: 1
+    cisa_added: '2026-11-05'
+    evidence: ''
+    older: false
+  - cve: CVE-2026-9012
+    published: '2026-11-05'
+    vendor: Fixture
+    product: Widget
+    title: Synthetic fixture CVE record.
+    cvss: '7.5'
+    cvss_version: '3.1'
+    severity: high
+    scored_by: CNA
+    epss: '0.12'
+    epss_pct: '0.5'
+    epss_date: '2026-11-05'
+    epss_max: '0.12'
+    epss_spark: 0,10 120,0
+    signals: []
+    msf: []
+    edb: []
+    et_sids: []
+    nuclei: ''
+    cisa_sigma: []
+    snort3_sids: []
+    ssvc_expl: ''
+    ssvc_auto: ''
+    ssvc_impact: ''
+    fixed: ''
+    aliases: []
+    stories: 0
+    cvss_vector: CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:L/A:N
+    kev_product: ''
+    kev_product_n: ''
+    reports: []
+    reports_more: 0
+    added: '2026-11-05'
+    cisa_added: ''
+    evidence: ''
+    older: false
+cves_status: ok
+cves_generated_at: '2026-11-05T20:48:28.213Z'
+cves_counts:
+  total: 3
+  high: 2
+  critical: 1
+  medium: 0
+  low: 0
+  unscored: 0
+  vedas_weaponized: 1
+  msf: 1
+  edb: 1
+  epss90: 0
+  crit_noauth_kev_product: 0
+cve_vendors:
+  - label: Fixture
+    count: 3
+cves:
+  - cve: CVE-2026-9001
+    published: '2026-11-05'
+    vendor: Fixture
+    product: Widget
+    title: Synthetic fixture CVE record.
+    cvss: '7.5'
+    cvss_version: '3.1'
+    severity: high
+    scored_by: CNA
+    epss: '0.12'
+    epss_pct: '0.5'
+    epss_date: '2026-11-05'
+    epss_max: '0.12'
+    epss_spark: 0,10 120,0
+    signals:
+      - vedas_weaponized
+    msf: []
+    edb: []
+    et_sids: []
+    nuclei: ''
+    cisa_sigma: []
+    snort3_sids: []
+    ssvc_expl: ''
+    ssvc_auto: ''
+    ssvc_impact: ''
+    fixed: ''
+    aliases: []
+    stories: 0
+    cvss_vector: CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:L/A:N
+    kev_product: ''
+    kev_product_n: ''
+    reports: []
+    reports_more: 0
+    vedas: 0.852
+  - cve: CVE-2026-9002
+    published: '2026-11-05'
+    vendor: Fixture
+    product: Widget
+    title: Synthetic fixture CVE record.
+    cvss: '9.8'
+    cvss_version: '3.1'
+    severity: critical
+    scored_by: CNA
+    epss: '0.12'
+    epss_pct: '0.5'
+    epss_date: '2026-11-05'
+    epss_max: '0.12'
+    epss_spark: 0,10 120,0
+    signals:
+      - msf
+    msf:
+      - modules/exploits/linux/http/fixture.rb
+    edb: []
+    et_sids: []
+    nuclei: ''
+    cisa_sigma: []
+    snort3_sids: []
+    ssvc_expl: ''
+    ssvc_auto: ''
+    ssvc_impact: ''
+    fixed: ''
+    aliases: []
+    stories: 0
+    cvss_vector: CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:L/A:N
+    kev_product: ''
+    kev_product_n: ''
+    reports: []
+    reports_more: 0
+  - cve: CVE-2026-9003
+    published: '2026-11-05'
+    vendor: Fixture
+    product: Widget
+    title: Synthetic fixture CVE record.
+    cvss: '7.5'
+    cvss_version: '3.1'
+    severity: high
+    scored_by: CNA
+    epss: '0.12'
+    epss_pct: '0.5'
+    epss_date: '2026-11-05'
+    epss_max: '0.12'
+    epss_spark: 0,10 120,0
+    signals:
+      - edb
+    msf: []
+    edb:
+      - '12345'
+    et_sids: []
+    nuclei: ''
+    cisa_sigma: []
+    snort3_sids: []
+    ssvc_expl: ''
+    ssvc_auto: ''
+    ssvc_impact: ''
+    fixed: ''
+    aliases: []
+    stories: 0
+    cvss_vector: CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:L/A:N
+    kev_product: ''
+    kev_product_n: ''
+    reports: []
+    reports_more: 0
+    vedas: 0

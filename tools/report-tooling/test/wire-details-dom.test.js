@@ -135,6 +135,10 @@ test('a nKEV row opens the full fact sheet in the design\u2019s fixed order', as
   assert.match(t, /Wire headlines: 2 naming this CVE\./);
   var nvd = [].filter.call(p.querySelectorAll('a'), function (a) { return a.textContent === 'NVD'; })[0];
   assert.equal(nvd.getAttribute('href'), 'https://nvd.nist.gov/vuln/detail/CVE-2026-1001');
+  var observer = [].filter.call(p.querySelectorAll('a'), function (a) { return a.textContent === 'Exploit Observer'; })[0];
+  assert.equal(observer.getAttribute('href'), 'https://www.exploit.observer/?keyword=CVE-2026-1001');
+  assert.equal(observer.target, '_blank');
+  assert.equal(observer.rel, 'noopener noreferrer');
 });
 
 test('the CVEs panel says why listed, with the cve.now scoring line', async function () {

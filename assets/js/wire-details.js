@@ -48,6 +48,7 @@ var URL_LIMIT = 500;
 var NVD_PREFIX = 'https://nvd.nist.gov/vuln/detail/';
 var CWE_PREFIX = 'https://cwe.mitre.org/data/definitions/';
 var CVENOW_PREFIX = 'https://cve.now/';
+var OBSERVER_PREFIX = 'https://www.exploit.observer/?keyword=';
 var NUCLEI_PREFIX = 'https://github.com/projectdiscovery/nuclei-templates/blob/main/';
 var SIGMA_PREFIX = 'https://github.com/cisagov/SIGMA_Rules/blob/develop/';
 var MSF_PREFIX = 'https://github.com/rapid7/metasploit-framework/blob/master/';
@@ -296,6 +297,9 @@ function secWhyListed(panel, d, asOfDay) {
     if (signals.indexOf('edb') !== -1 && edb && edb.length) {
       lineInto(panel, "An Exploit-DB entry for this CVE, confirmed against Exploit-DB's own list.");
     }
+    if (signals.indexOf('vedas_weaponized') !== -1) {
+      lineInto(panel, 'Exploit maturity 80%+ (VEDAS), with CVSS 7.0 or higher and network reachability.');
+    }
     var pct = num(d.epss_pct);
     if (signals.indexOf('epss90') !== -1 && !isNaN(pct) && pct >= 0.90) {
       lineInto(panel, "FIRST's EPSS puts this CVE in the top 10% for likelihood of exploitation " +
@@ -521,6 +525,8 @@ function secLinks(panel, d, cveId) {
   linkInto(row, encUrl(NVD_PREFIX, cveId), 'NVD', false);
   row.appendChild(document.createTextNode(', '));
   linkInto(row, encUrl(CVENOW_PREFIX, cveId), 'cve.now', false);
+  row.appendChild(document.createTextNode(', '));
+  linkInto(row, encUrl(OBSERVER_PREFIX, cveId), 'Exploit Observer', false);
   row.appendChild(document.createTextNode('.'));
   panel.appendChild(row);
   var al = lst(d.aliases);

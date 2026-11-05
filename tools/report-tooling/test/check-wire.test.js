@@ -251,14 +251,18 @@ test('an undrawn fourth label needs no colour', function () {
    merely duplicating work. */
 
 /* The CVEs tab's structure (T-0522), in the smallest form the gate accepts. */
+var VEDAS_CREDIT = "VEDAS exploit maturity from <a href=\"https://github.com/ARPSyndicate/cve-scores\">A.R.P. Syndicate</a>";
+var VEDAS_LEGEND = "<dt class=\"hl-legend__k\">Exploit maturity (VEDAS)</dt>\n<dd>A.R.P. Syndicate describes VEDAS as &ldquo;Estimation of Vulnerability Prevalence &amp; Exploit Maturity&rdquo;. Its README names OSINT from <a href=\"https://www.exploit.observer/\" target=\"_blank\" rel=\"noopener noreferrer\">Exploit Observer</a>, coverage of 150+ identifiers and updates every 6 to 8 hours. The source publishes no formula. A high score is not evidence that working exploit code exists or that the CVE has been exploited; exploitation is what the nKEVs tab and CISA KEV are for. An unscored CVE shows no maturity chip.</dd><p>VEDAS exploit maturity from <a href=\"https://github.com/ARPSyndicate/cve-scores\">A.R.P. Syndicate</a></p>";
+
 var CVES_TAB_OK = [
   '<a class="hl-wtabs__tab hl-wtabs__tab--c" href="#cves">CVEs</a>',
   '<section id="cves" class="hl-wtabs__sec" data-filter-scope>',
-  '<p class="hl-wire__freshness hl-wire__freshness--c">CVEs: Listing, titles, SSVC (CISA\'s own assessment), fixed versions and advisory ids from <a href="https://cve.now/">cve.now</a> (<a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>) &middot; Scores from NVD through VulnCheck, or from cve.now where a row says so &middot; Exploits from Rapid7 and Exploit-DB &middot; KEV products from CISA &middot; EPSS from <a href="https://www.first.org/epss/">FIRST</a> &middot; <a href="{{ \'/wire/cves.xml\' | relative_url }}">Atom feed (CVEs)</a></p>',
-  '<div class="hl-wire__callout hl-wire__callout--c"><p>My selection of CVEs published in the last 30 days that are not on a KEV list yet. Each is here for at least one of three reasons: Critical (CVSS 9.0 or higher), reachable over the network with no login and no user action, in a product CISA has listed before; a Metasploit module or Exploit-DB entry, confirmed against Rapid7\'s or Exploit-DB\'s own index; or EPSS in the top 10%.</p><p>Being listed does not mean anyone has been seen exploiting the CVE. "Product on CISA KEV" is a fact about the product, not this CVE. The list excludes anything on VulnCheck KEV or CISA KEV, and a CVE moves to the nKEVs tab when it is added to VulnCheck KEV. It shows at most 150 CVEs, ranked by how many reasons they meet, then by EPSS, then by CVSS.</p></div>',
+  '<p class="hl-wire__freshness hl-wire__freshness--c">CVEs: Listing, titles, SSVC (CISA\'s own assessment), fixed versions and advisory ids from <a href="https://cve.now/">cve.now</a> (<a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>) &middot; Scores from NVD through VulnCheck, or from cve.now where a row says so &middot; Exploits from Rapid7 and Exploit-DB &middot; KEV products from CISA &middot; EPSS from <a href="https://www.first.org/epss/">FIRST</a> &middot; ' + VEDAS_CREDIT + ' &middot; <a href="{{ \'/wire/cves.xml\' | relative_url }}">Atom feed (CVEs)</a></p>',
+  '<div class="hl-wire__callout hl-wire__callout--c"><p>My selection of CVEs published in the last 30 days that are not on a KEV list yet. Each is here for at least one of three reasons: Critical (CVSS 9.0 or higher), reachable over the network with no login and no user action, in a product CISA has listed before; a Metasploit module or Exploit-DB entry, confirmed against Rapid7\'s or Exploit-DB\'s own index; or EPSS in the top 10%.</p><p>Being listed does not mean anyone has been seen exploiting the CVE. "Product on CISA KEV" is a fact about the product, not this CVE. The list excludes anything on VulnCheck KEV or CISA KEV, and a CVE moves to the nKEVs tab when it is added to VulnCheck KEV. It shows at most 150 CVEs, ranked by how many reasons they meet, then by EPSS, then by exploit maturity, then by CVSS.</p></div>',
   '{%- capture cves_legend_html -%}',
+  VEDAS_LEGEND,
   '<dl class="hl-legend__list"><dt><span class="hl-vuln__cve">CVE-YYYY-NNNN</span></dt><dd>The CVE.</dd></dl>',
-  '<p class="hl-legend__p">I choose which CVEs appear here, by the rule above, and show at most 150. When more qualify, the 150 shown are ranked by how many reasons they meet, then by EPSS, then by CVSS.</p>',
+  '<p class="hl-legend__p">I choose which CVEs appear here, by the rule above, and show at most 150. When more qualify, the 150 shown are ranked by how many reasons they meet, then by EPSS, then by exploit maturity, then by CVSS.</p>',
   '<p class="hl-legend__p">The CVE listing, titles, SSVC decision points (CISA\'s own assessment, from <a href="https://github.com/cisagov/vulnrichment">Vulnrichment</a>), fixed versions and advisory ids come from <a href="https://cve.now/">cve.now</a> (CC BY 4.0). CVSS scores and vectors come from the CVE\'s NVD record through VulnCheck, mostly the CNA\'s score, unless the row says cve.now. Metasploit modules come from Rapid7\'s <a href="https://github.com/rapid7/metasploit-framework">metasploit-framework</a> module index and Exploit-DB entries from <a href="https://www.exploit-db.com/">Exploit-DB</a>\'s own index. "Product on CISA KEV" comes from CISA\'s <a href="https://www.cisa.gov/known-exploited-vulnerabilities-catalog">KEV catalog</a>. EPSS scores are FIRST\'s (<a href="https://www.first.org/epss/">first.org/epss</a>), generated by Empirical Security.</p>',
   '{%- endcapture -%}',
   '<details class="hl-legend-mobile" data-pagefind-ignore><summary>Legend</summary>{{ cves_legend_html }}</details>',
@@ -302,8 +306,9 @@ var PAGE_OK = [
   '<section id="vulns" class="hl-wtabs__sec" data-filter-scope>',
   // The nKEVs tab's shape (T-0468.1): the short attribution line, the legend captured once, printed
   // twice (the narrow details, then the aside after the grid), the grid itself with no legend in it.
-  '<p class="hl-wire__freshness hl-wire__freshness--v">nKEVs: CVEs newly added &middot; Data: <a href="https://www.vulncheck.com/kev">VulnCheck KEV</a> &middot; EPSS from <a href="https://www.first.org/epss/">FIRST</a> &middot; <a href="{{ \'/wire/vulns.xml\' | relative_url }}">Atom feed (nKEVs)</a></p>',
+  '<p class="hl-wire__freshness hl-wire__freshness--v">nKEVs: CVEs newly added &middot; Data: <a href="https://www.vulncheck.com/kev">VulnCheck KEV</a> &middot; EPSS from <a href="https://www.first.org/epss/">FIRST</a> &middot; ' + VEDAS_CREDIT + ' &middot; <a href="{{ \'/wire/vulns.xml\' | relative_url }}">Atom feed (nKEVs)</a></p>',
   '{%- capture legend_html -%}',
+  VEDAS_LEGEND,
   '<dl class="hl-legend__list"><dt><span class="hl-vuln__cve">CVE-YYYY-NNNN</span></dt><dd>The CVE.</dd></dl>',
   '<p class="hl-legend__p">I do not curate this data. EPSS from FIRST, generated by Empirical Security: <a href="https://www.vulncheck.com/kev">vulncheck.com/kev</a> <a href="https://www.first.org/epss/">first.org/epss</a></p>',
   '{%- endcapture -%}',
@@ -1358,7 +1363,7 @@ test('each corrected attribution sentence is pinned: callout, short line and leg
     ["Exploits from Rapid7 and Exploit-DB", /short CVEs line no longer says where the exploits come from/],
     ["KEV products from CISA", /short CVEs line no longer says where the KEV products come from/],
     // legend
-    ["and show at most 150. When more qualify, the 150 shown are ranked by how many reasons they meet, then by EPSS, then by CVSS.", /legend no longer says the cap and the ranking/],
+    ["and show at most 150. When more qualify, the 150 shown are ranked by how many reasons they meet, then by EPSS, then by exploit maturity, then by CVSS.", /legend no longer says the cap and the ranking/],
     ["The CVE listing, titles, SSVC decision points (CISA's own assessment, from", /legend no longer says what cve\.now supplies/],
     ["CVSS scores and vectors come from the CVE's NVD record through VulnCheck, mostly the CNA's score, unless the row says cve.now. Metasploit modules", /legend no longer says that CVSS comes from the NVD record/],
     ["module index and Exploit-DB entries from", /legend no longer says that Metasploit and Exploit-DB come from the publishers/],
@@ -1403,7 +1408,7 @@ test('the gate follows the include chain: every wire-* include the page names is
   var inc = realIncludes();
   assert.deepEqual(Object.keys(inc).sort(),
     ['wire-cve-why.html', rowInc, 'wire-vuln-epss.html', 'wire-vuln-new.html',
-     'wire-vuln-news.html', 'wire-vuln-rules.html', 'wire-vuln-sev.html']);
+     'wire-vuln-news.html', 'wire-vuln-rules.html', 'wire-vuln-sev.html', 'wire-vuln-vedas.html']);
   var page = readReal('wire/index.md');
   var r = CW.checkPage(page, inc);
   assert.equal(r.status, 'PASS', r.problems.join(' | '));
@@ -1429,6 +1434,7 @@ test('one escaping mutation per include, and one PoC mutation per include, each 
     'wire-vuln-epss.html': ['{{ r.ratio_now | escape }}', '{{ r.ratio_now }}'],
     'wire-vuln-rules.html': ['SID {{ sid | escape }}', 'SID {{ sid }}'],
     'wire-vuln-new.html': ['>{{ al | escape }}</a>{%- elsif', '>{{ al }}</a>{%- elsif'],
+    'wire-vuln-vedas.html': ["date: '%-d %B %Y, %H:%M' | escape", "date: '%-d %B %Y, %H:%M'"],
     'wire-cve-why.html': ['{%- assign sg = "" | split: "" -%}', '{%- assign sg = "" | split: "" -%}<i>{{ r.vendor }}</i>']
   };
   Object.keys(escapes).forEach(function (name) {
@@ -1563,4 +1569,62 @@ test('an include named only by another include is followed too', function () {
   assert.equal(CW.checkPage(PAGE_OK, chained).status, 'PASS');
   delete chained['wire-vuln-extra.html'];
   assert.match(CW.checkPage(PAGE_OK, chained).problems.join(' '), /NOT CHECKED: _includes\/wire-vuln-extra\.html could not be read/);
+});
+
+
+/* T-0564: optional VEDAS is a numeric estimate, not a public exploit claim. */
+test('VEDAS accepts absence and both bounds on both tabs; rejects invalid numbers and types', function () {
+  [undefined, 0, 0.8, 1].forEach(function (v) {
+    var n = vrow(), c = cvrow();
+    if (v !== undefined) { n.vedas = v; c.vedas = v; }
+    [CW.check(vdoc([n]), SOURCES, NOW), CW.check(cvdoc([c]), SOURCES, NOW)].forEach(function (r) {
+      assert.equal(r.status, 'PASS', r.problems.join(' | '));
+      assert.doesNotMatch(r.problems.join(' '), /vedas/);
+    });
+  });
+  [-0.0001, 1.0001, NaN, Infinity, '0.8', null, '', true].forEach(function (v) {
+    [CW.check(vdoc([vrow({ vedas: v })]), SOURCES, NOW),
+      CW.check(cvdoc([cvrow({ vedas: v })]), SOURCES, NOW)].forEach(function (r) {
+      assert.equal(r.status, 'FAIL');
+      assert.match(r.problems.join(' '), /vedas.*not a number in \[0, 1\]/);
+    });
+  });
+});
+
+test('the fifth signal needs its score, network vector and CVSS, and its count agrees', function () {
+  var base = { signals: ['vedas_weaponized'], vedas: 0.8, cvss: '7.0', severity: 'high',
+    msf: [], edb: [], nuclei: '', et_sids: [], epss_pct: '0.1', kev_product: '', kev_product_n: '',
+    cvss_vector: 'CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H' };
+  var check = function (over) {
+    return CW.check(cvdoc([cvrow(Object.assign({}, base, over))], {
+      cves_counts: { total: 1, vedas_weaponized: 1 }
+    }), SOURCES, NOW);
+  };
+  assert.deepEqual(check({}).cveWarnings, []);
+  [{ vedas: 0.7999 }, { cvss: '6.9' }, { cvss_vector: 'CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H' },
+    { vedas: undefined }].forEach(function (over) {
+    assert.match(check(over).cveWarnings.join(' '), /lists signal vedas_weaponized but the row shows no/);
+  });
+  assert.match(check({ signals: [] }).cveWarnings.join(' '), /shows vedas_weaponized but does not list/);
+  var wrong = cvdoc([cvrow(base)], { cves_counts: { total: 1, vedas_weaponized: 2 } });
+  assert.match(CW.check(wrong, SOURCES, NOW).cveWarnings.join(' '), /vedas_weaponized disagrees.*declared 2, actual 1/);
+});
+
+test('VEDAS legend claims and source hrefs are pinned separately in each tab', function () {
+  var page = readReal('wire/index.md'), inc = realIncludes();
+  assert.equal(CW.checkPage(page, inc).status, 'PASS');
+  var pins = ['Exploit maturity (VEDAS)', 'Estimation of Vulnerability Prevalence &amp; Exploit Maturity',
+    '150+ identifiers', 'every 6 to 8 hours', 'The source publishes no formula.',
+    'A high score is not evidence that working exploit code exists or that the CVE has been exploited',
+    'exploitation is what the nKEVs tab and CISA KEV are for', 'An unscored CVE shows no maturity chip.',
+    'href="https://www.exploit.observer/"', 'href="https://github.com/ARPSyndicate/cve-scores"'];
+  pins.forEach(function (pin) {
+    var at = -1, count = 0;
+    while ((at = page.indexOf(pin, at + 1)) !== -1) {
+      var mutant = page.slice(0, at) + 'XX' + page.slice(at + pin.length);
+      assert.equal(CW.checkPage(mutant, inc).status, 'FAIL', pin + ' occurrence ' + count);
+      count++;
+    }
+    assert.ok(count >= 2, 'both tabs must carry ' + pin);
+  });
 });

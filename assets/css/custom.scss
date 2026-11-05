@@ -4167,6 +4167,7 @@ span.hl-vuln__p--det { cursor: help; }
 /* T-0468: the EPSS chip opens a popover with the 30-day sparkline. The chip is
    the same details pattern as "src"; the body is a little wider for the line. */
 .hl-vuln__p--epss { font-variant-numeric: tabular-nums; }
+.hl-vuln__p--vedas { color: #a78bfa; border-color: rgba(167, 139, 250, .4); font-variant-numeric: tabular-nums; cursor: help; }
 .hl-vuln__xm { color: #e3b341; }
 .hl-vuln__popbody--epss { min-width: 16em; max-width: min(26em, 85vw); }
 /* T-0496: the Rules chip opens a popover with one group per rule source (ET Open, Nuclei,
@@ -4219,6 +4220,7 @@ span.hl-vuln__p--ssvc, span.hl-vuln__p--exp, span.hl-vuln__p--cn { cursor: help;
 .hl-vuln__w--msf  { --w: #fb923c; }
 .hl-vuln__w--edb  { --w: #fbbf24; }
 .hl-vuln__w--epss { --w: #22d3ee; }
+.hl-vuln__w--vedas { --w: #a78bfa; }
 .hl-legend__list dt .hl-vuln__w { font-size: var(--hl-fs-meta); }
 /* T-0531: a CVEs row carries more chips than an nKEV row (the reason tags), and on a wide screen
    they took the whole row and cut the vendor and product to one letter. The name now keeps at least

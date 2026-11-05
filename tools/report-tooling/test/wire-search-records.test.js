@@ -207,7 +207,7 @@ test('the workflow builds the Wire bundle, the search page merges the same name 
   assert.strictEqual(mi[1], name);
   assert.ok(parseFloat(mi[2]) > 0 && parseFloat(mi[2]) < 1);
   var wire = fs.readFileSync(path.join(ROOT, 'wire', 'index.md'), 'utf8');
-  assert.match(wire, /wire-details\.js' \| relative_url \}\}\?v=6"/);
+  assert.match(wire, /wire-details\.js' \| relative_url \}\}\?v=7"/);
 });
 
 test('the defang page scan leaves the Wire bundle directory out like /pagefind/', function () {
