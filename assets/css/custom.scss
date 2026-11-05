@@ -23,6 +23,8 @@
   --hl-text-muted:     #a8a8a8;
   --hl-text-dim:       #a8a8a8;
   --hl-accent-blue:    #58a6ff;
+  --hl-accent-purple:  #bc8cff;   /* Wire nKEVs, matching its KPI and day headings */
+  --hl-accent-teal:    #2dd4bf;   /* Wire CVEs, matching its KPI and day headings */
   --hl-sev-critical:       #dc2626;
   --hl-sev-critical-lbl:   #ef4444;
   --hl-sev-high:           #f97316;
@@ -3952,8 +3954,8 @@ a.hl-sponsor-rail__item:focus-visible { outline: 2px solid #ffffff; outline-offs
    for Vulnerabilities, the same pair as the callouts. Muted grey at 0.8em was
    hard to see; the unselected tab now keeps its colour at lower strength. */
 .hl-wtabs__tab--h { --tab: var(--hl-accent-blue); }
-.hl-wtabs__tab--v { --tab: #bc8cff; }
-.hl-wtabs__tab--c { --tab: #2dd4bf; }
+.hl-wtabs__tab--v { --tab: var(--hl-accent-purple); }
+.hl-wtabs__tab--c { --tab: var(--hl-accent-teal); }
 .hl-post-content .hl-wtabs__tab,
 .hl-wtabs__tab {
   font-size: 0.95em;
@@ -8017,7 +8019,7 @@ a.hl-cred-pill--link:hover { border-color: #fbbf24; color: var(--hl-text-primary
 .hl-idx--wire .hl-legend-mobile[open] summary::after { transform: rotate(180deg); }
 
 /* The Wire keeps the full D frame. Its legend aside carries .hl-post-toc, which would otherwise put the page back in the 900px column that
-   the detection pages keep (rule at the top of this file); in D the legend is the inline "Legend" bar at every width and the margin copy is not drawn.
+   the detection pages keep (rule at the top of this file). Below 1440px the inline "Legend" bar shows; from 1440px the full margin copy shows.
    Both copies stay in the HTML, as before (the legend is printed twice, one is shown). */
 @media (min-width: 1281px) {
   main.content:has(.hl-idx--wire) { max-width: 1240px !important; padding-left: 20px !important; padding-right: 20px !important; }
@@ -8027,6 +8029,49 @@ a.hl-cred-pill--link:hover { border-color: #fbbf24; color: var(--hl-text-primary
 }
 .hl-idx--wire aside.hl-legend { display: none !important; }
 .hl-idx--wire .hl-legend-mobile { display: block !important; margin: 12px 0 0; }
+/* T-0556.6: mirror the report contents rail, with a zero-width second track.
+   The rail begins beside its tab's list and sticks below the site navigation.
+   Native details stays open by default, folds with the keyboard, and scrolls
+   independently so every entry fits the viewport. */
+@media (min-width: 1440px) {
+  .hl-idx--wire .hl-legend-mobile { display: none !important; }
+  .hl-idx--wire .hl-wtabs:has(#vulns:target) #vulns,
+  .hl-idx--wire .hl-wtabs:has(#vulns :target) #vulns,
+  .hl-idx--wire .hl-wtabs:has(#cves:target) #cves,
+  .hl-idx--wire .hl-wtabs:has(#cves :target) #cves {
+    display: grid; grid-template-columns: minmax(0, 1fr) 0; column-gap: 0;
+  }
+  .hl-idx--wire .hl-wtabs__sec > * { grid-column: 1; min-width: 0; }
+  .hl-idx--wire aside.hl-legend {
+    display: block !important;
+    box-sizing: border-box;
+    position: sticky;
+    grid-column: 2; grid-row: 1 / span 99; align-self: start;
+    left: auto;
+    margin-top: 16px;
+    margin-left: min(var(--hl-rail-gap), calc((100vw - var(--hl-col)) / 2 - 8px - var(--hl-card-w)));
+    width: var(--hl-card-w);
+    top: calc(var(--hl-nav-vis) + 16px);
+    max-height: calc(100dvh - var(--hl-nav-vis) - 32px);
+    padding: 10px 6px;
+    font: 400 var(--hl-fs-small)/1.45 var(--hl-font-sans);
+    overflow-y: auto;
+    overflow-wrap: anywhere;
+    scrollbar-color: var(--hl-border-card) transparent;
+  }
+  .hl-idx--wire .hl-legend .hl-legend__body { padding: 0 2px; }
+  .hl-idx--wire .hl-legend .hl-post-toc__heading { padding: 0 2px 8px; }
+  .hl-idx--wire .hl-legend__fold > summary { flex-wrap: wrap; }
+  .hl-idx--wire .hl-legend__fold > summary::after {
+    content: 'what each badge, chip and colour means';
+    flex-basis: 100%;
+    font-weight: 400;
+    color: var(--hl-text-primary);
+  }
+  .hl-idx--wire .hl-legend__list dt > span {
+    max-width: 100%; white-space: normal; overflow-wrap: anywhere;
+  }
+}
 .hl-idx .hl-heatmap__tactic > span:first-child { overflow-wrap: normal; }
 .hl-idx .hl-heatmap { grid-auto-columns: minmax(160px, 1fr); }
 .hl-idx .hl-heatmap__tactic { font-size: var(--hl-fs-meta); letter-spacing: 0.02em; }
@@ -8648,7 +8693,7 @@ a.hl-kc:hover { border-color: var(--kc); color: #ffffff; }
   background: none;
   box-shadow: none;
   font: 600 18px/1.25 var(--hl-font-serif);
-  color: #cfcfcf !important;
+  color: var(--tab) !important;
 }
 .hl-idx--wire .hl-wtabs__tab--h { border-left: 0; }
 .hl-idx--wire .hl-wtabs__tab .hl-d-ico { display: none; }
@@ -8656,9 +8701,9 @@ a.hl-kc:hover { border-color: var(--kc); color: #ffffff; }
 .hl-idx--wire .hl-wtabs__tab--h .hl-wtabs__n {
   margin: 0 0 0 auto;
   font: 400 var(--hl-fs-small)/1 var(--hl-font-mono);
-  color: var(--hl-muted-d);
+  color: var(--tab);
 }
-.hl-idx--wire .hl-wtabs__tab:hover { background: rgba(255, 255, 255, 0.03); color: #ffffff !important; }
+.hl-idx--wire .hl-wtabs__tab:hover { background: rgba(255, 255, 255, 0.03); color: var(--tab) !important; }
 /* selected: Headlines by default, a targeted #vulns or #cves (or an anchor inside one) selects its own; the same selectors the live rules use */
 .hl-idx--wire .hl-wtabs__tab--h,
 .hl-idx--wire .hl-post-content .hl-wtabs__tab--h,
@@ -8668,8 +8713,8 @@ a.hl-kc:hover { border-color: var(--kc); color: #ffffff; }
 .hl-idx--wire .hl-wtabs:has(#cves :target) .hl-wtabs__tab--c {
   background: none;
   border-color: var(--hl-border-card);
-  box-shadow: inset 0 -2px 0 var(--hl-accent-blue);
-  color: #ffffff !important;
+  box-shadow: inset 0 -2px 0 var(--tab);
+  color: var(--tab) !important;
 }
 /* ... and Headlines, once another tab is selected, goes back to a plain tab */
 .hl-idx--wire .hl-wtabs:has(#vulns:target) .hl-wtabs__tab--h,
@@ -8679,7 +8724,7 @@ a.hl-kc:hover { border-color: var(--kc); color: #ffffff; }
   background: none;
   border-color: var(--hl-border-card);
   box-shadow: none;
-  color: #cfcfcf !important;
+  color: var(--tab) !important;
 }
 .hl-idx--wire .hl-wtabs:has(#vulns:target) .hl-wtabs__tab--h .hl-wtabs__n,
 .hl-idx--wire .hl-wtabs:has(#vulns :target) .hl-wtabs__tab--h .hl-wtabs__n,
@@ -8688,7 +8733,7 @@ a.hl-kc:hover { border-color: var(--kc); color: #ffffff; }
 .hl-idx--wire .hl-wtabs:has(#vulns:target) .hl-wtabs__tab--v .hl-wtabs__n,
 .hl-idx--wire .hl-wtabs:has(#vulns :target) .hl-wtabs__tab--v .hl-wtabs__n,
 .hl-idx--wire .hl-wtabs:has(#cves:target) .hl-wtabs__tab--c .hl-wtabs__n,
-.hl-idx--wire .hl-wtabs:has(#cves :target) .hl-wtabs__tab--c .hl-wtabs__n { color: var(--hl-muted-d); }
+.hl-idx--wire .hl-wtabs:has(#cves :target) .hl-wtabs__tab--c .hl-wtabs__n { color: var(--tab); }
 .hl-idx--wire .hl-wtabs__tab--v { border-left: 1px solid var(--hl-border-card); }
 @media (max-width: 639px) {
   .hl-idx--wire .hl-wtabs__nav { grid-template-columns: minmax(0, 1fr); }

@@ -308,7 +308,7 @@ reads back from the built page (it fails the index step on a duplicate). A vuln 
 </div>
 
 {%- comment -%} T-0468.2: the heading is a details summary, so a reader can fold the legend out of the way and open it again. Open on load. {%- endcomment -%}
-<aside class="hl-post-toc hl-legend" aria-label="Legend" data-pagefind-ignore>
+<aside class="hl-post-toc hl-legend" aria-label="Legend" tabindex="0" data-pagefind-ignore>
 <details class="hl-legend__fold" open>
 <summary class="hl-post-toc__heading" title="Show or hide the legend">Legend</summary>
 <div class="hl-legend__body">{{ legend_html }}</div>
@@ -490,7 +490,7 @@ reads back from the built page (it fails the index step on a duplicate). A vuln 
 {%- endfor -%}
 </div>
 
-<aside class="hl-post-toc hl-legend" aria-label="CVEs legend" data-pagefind-ignore>
+<aside class="hl-post-toc hl-legend" aria-label="CVEs legend" tabindex="0" data-pagefind-ignore>
 <details class="hl-legend__fold" open>
 <summary class="hl-post-toc__heading" title="Show or hide the legend">Legend</summary>
 <div class="hl-legend__body">{{ cves_legend_html }}</div>
