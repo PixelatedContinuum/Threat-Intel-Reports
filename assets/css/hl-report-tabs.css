@@ -1317,3 +1317,12 @@ html:has(.hl-report-page) {
   .hl-report-page .hl-rv-bluf, .hl-report-page .hl-rv-bluf.hl-rv-bluf--short, .hl-report-page .hl-rv-bluf.hl-rv-bluf--long, .hl-report-page .hl-rv-bluf.hl-rv-bluf--xlong { padding: 14px 18px 16px; font-size: 17px; }
 }
 /* ===== end T-0556.3 ===== */
+
+/* T-0556.5: cover and short home-style chart share the right column. The
+   column spans only the text/actions rows, so it cannot stretch the card. */
+.hl-report-page .hl-post-header > .hl-rv-cover:has(.c3-chart--compact) { height: auto; align-self: stretch; contain: size; padding-bottom: 22px; }
+.hl-report-page .hl-rv-cover:has(.c3-chart--compact) .c3-cover { flex: 1 1 96px; min-height: 48px; max-height: 96px; }
+@media (max-width: 899px) {
+  .hl-report-page .hl-post-header > .hl-rv-cover:has(.c3-chart--compact) { contain: none; height: auto; padding-bottom: 0; }
+  .hl-report-page .hl-rv-cover:has(.c3-chart--compact) .c3-cover { flex: none; height: 96px; }
+}

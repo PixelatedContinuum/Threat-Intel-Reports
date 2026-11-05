@@ -34,7 +34,7 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 </script>
 {% endif %}
-{% comment %}Match complete class tokens only inside kramdown h2 opening tags. Keep this Liquid whitespace-free so the untagged render stays byte-identical.{% endcomment %}{% assign hl_tabbed = false %}{% assign hl_tab_tokens = 'overview,victims,chain,timeline,attribution,indicators,confidence' | split: ',' %}{% assign hl_h2_tags = content | split: '<h2 ' %}{% for hl_h2 in hl_h2_tags offset:1 %}{% assign hl_open_tag = hl_h2 | split: '>' | first %}{% if hl_open_tag contains 'class="' %}{% assign hl_classes = hl_open_tag | split: 'class="' | last | split: '"' | first | prepend: ' ' | append: ' ' %}{% for hl_token in hl_tab_tokens %}{% assign hl_class = hl_token | prepend: ' hl-tab-' | append: ' ' %}{% if hl_classes contains hl_class %}{% assign hl_tabbed = true %}{% endif %}{% endfor %}{% endif %}{% endfor %}{% if hl_tabbed %}{% include report-subscribe-guard.html %}<link rel="stylesheet" href="{{ '/assets/css/hl-report-tabs.css' | relative_url }}?v=20261104.1" data-rv-chrome data-pagefind-ignore>
+{% comment %}Match complete class tokens only inside kramdown h2 opening tags. Keep this Liquid whitespace-free so the untagged render stays byte-identical.{% endcomment %}{% assign hl_tabbed = false %}{% assign hl_tab_tokens = 'overview,victims,chain,timeline,attribution,indicators,confidence' | split: ',' %}{% assign hl_h2_tags = content | split: '<h2 ' %}{% for hl_h2 in hl_h2_tags offset:1 %}{% assign hl_open_tag = hl_h2 | split: '>' | first %}{% if hl_open_tag contains 'class="' %}{% assign hl_classes = hl_open_tag | split: 'class="' | last | split: '"' | first | prepend: ' ' | append: ' ' %}{% for hl_token in hl_tab_tokens %}{% assign hl_class = hl_token | prepend: ' hl-tab-' | append: ' ' %}{% if hl_classes contains hl_class %}{% assign hl_tabbed = true %}{% endif %}{% endfor %}{% endif %}{% endfor %}{% if hl_tabbed %}{% include report-subscribe-guard.html %}<link rel="stylesheet" href="{{ '/assets/css/hl-report-tabs.css' | relative_url }}?v=20261104.2" data-rv-chrome data-pagefind-ignore>
 {% endif %}{%- assign _is_det0 = false -%}{%- if page.path contains 'hunting-detections' %}{% assign _is_det0 = true %}{% endif -%}<div class="hl-page{% if hl_tabbed %} hl-report-page{% endif %}{% if _is_det0 %} hl-idx hl-idx--det{% endif %}" style="--ph-accent: {% if page.path contains 'hunting-detections' %}#4ade80{% else %}#f87171{% endif %};">{% if hl_tabbed %}{% include report-featured-sponsor.html %}{% endif %}
 {%- if _is_det0 -%}{%- comment -%}
   A detection page in design D (T-0500.1.7.4 b3): the plate with its resource buttons, KPI tiles computed from the page's own rule manifest and ATT&CK table, then the page as before
@@ -64,7 +64,7 @@ document.addEventListener('DOMContentLoaded', function () {
   {%- endif %}
   {%- comment -%} T-0556 w4: the same cover as the report's header (w2's c3-cover include, this campaign's catalog entry); no entry or no cover_label, no cover. {%- endcomment -%}
   {%- if _dcat.cover_label %}
-  <div class="hl-d-cover">{% include c3-cover.html label=_dcat.cover_label severity=_dcat.severity size="header" %}</div>
+  <div class="hl-d-cover">{% include c3-cover.html label=_dcat.cover_label severity=_dcat.severity size="header" %}{% include compact-attack-chart.html detection=_datk %}</div>
   {%- endif %}
 </div>
 {%- if _dman and _dman.size > 0 %}
@@ -122,7 +122,7 @@ document.addEventListener('DOMContentLoaded', function () {
 {%- assign _rcat = site.data.catalog.entries | where: "report_url", page.url | first -%}
 <p class="hl-rv-byline"><span>By <b>Joseph Harrison</b></span><span>The Hunter's Ledger</span></p>
 {%- if _rcat.cover_label %}
-<div class="hl-rv-cover">{% include c3-cover.html label=_rcat.cover_label severity=_rcat.severity size="header" %}</div>
+<div class="hl-rv-cover">{% include c3-cover.html label=_rcat.cover_label severity=_rcat.severity size="header" %}{% include compact-attack-chart.html report_url=page.url %}</div>
 {%- endif %}
 {% include report-sponsor-bar.html part="report" %}{% endif %}
 </div>

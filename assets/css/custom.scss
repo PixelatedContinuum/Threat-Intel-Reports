@@ -9369,3 +9369,21 @@ a.hl-kc:hover { border-color: var(--kc); color: #ffffff; }
   .hl-idx--dash .hl-sh__sum { padding: 14px 18px 16px; }
 }
 /* ===== end T-0556.3 ===== */
+
+/* T-0556.5: the home lead chart's short form beside a title. Main ink for
+   every label; blue bars retain the home chart's palette. */
+.c3-chart--compact { padding: 10px 0 0; color: var(--hl-text-primary); }
+.c3-chart--compact .c3-chart__h { margin: 0 0 6px; gap: 0; font: 400 15px/1.35 var(--hl-font-sans); letter-spacing: 0; color: var(--hl-text-primary); }
+.c3-chart--compact .c3-chart__rows { gap: 6px; }
+.c3-chart--compact .c3-chart__row { grid-template-columns: minmax(0, 1fr) 2em; gap: 3px 8px; font-size: 15px; color: var(--hl-text-primary); }
+.c3-chart--compact .c3-chart__t { grid-column: 1; grid-row: 1; }
+.c3-chart--compact .c3-chart__n { grid-column: 2; grid-row: 1; }
+.c3-chart--compact .c3-chart__bar { grid-column: 1 / -1; grid-row: 2; height: 6px; }
+/* Size containment makes the left text and controls determine the desktop
+   card height. The short cover can shrink into the remaining space. */
+.hl-idx--det .hl-post-header.hl-d-plate > .hl-d-cover:has(.c3-chart--compact) { height: auto; align-self: stretch; contain: size; padding-bottom: 0; }
+.hl-d-cover:has(.c3-chart--compact) .c3-cover { flex: 1 1 96px; min-height: 48px; max-height: 96px; }
+@media (max-width: 899px) {
+  .hl-idx--det .hl-post-header.hl-d-plate > .hl-d-cover:has(.c3-chart--compact) { contain: none; height: auto; }
+  .hl-d-cover:has(.c3-chart--compact) .c3-cover { flex: none; height: 96px; }
+}

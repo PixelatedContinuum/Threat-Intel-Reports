@@ -1,0 +1,29 @@
+{%- comment -%}
+  T-0556.5: short form of index.md's c3-chart. Reports use the identical
+  attack_index technique -> reports.url join; detection pages use their own
+  detection_attack rows. Count each technique once per tactic, show the two
+  largest tactics, and keep the full mapping in the page's existing content.
+{%- endcomment -%}
+{%- capture cc_raw -%}
+  {%- if include.detection -%}
+    {%- for cc_row in include.detection.rows -%}{{ cc_row.tactic }}|{%- endfor -%}
+  {%- elsif include.report_url -%}
+    {%- for cc_tech in site.data.attack_index.techniques -%}
+      {%- assign cc_report = cc_tech.reports | where: 'url', include.report_url | first -%}
+      {%- if cc_report -%}{{ cc_report.tactic }}|{%- endif -%}
+    {%- endfor -%}
+  {%- endif -%}
+{%- endcapture -%}
+{%- assign cc_tactics = cc_raw | split: '|' -%}
+{%- assign cc_groups = cc_tactics | group_by_exp: 't', 't' | sort: 'size' | reverse -%}
+{%- if cc_tactics.size > 0 -%}
+<div class="c3-chart c3-chart--compact">
+  <p class="c3-chart__h"><span>{{ cc_tactics.size }} techniques &middot; {{ cc_groups.size }} tactics</span><span>ATT&amp;CK &middot; top tactics</span></p>
+  <ol class="c3-chart__rows">
+    {%- assign cc_max = cc_groups.first.size -%}
+    {%- for cc_group in cc_groups limit:2 %}
+    <li class="c3-chart__row{% if cc_group.size == cc_max %} c3-chart__row--top{% endif %}"><span class="c3-chart__t">{{ cc_group.name }}</span><span class="c3-chart__bar" aria-hidden="true"><i style="width: {{ cc_group.size | times: 100 | divided_by: cc_max }}%"></i></span><span class="c3-chart__n">{{ cc_group.size }}</span></li>
+    {%- endfor %}
+  </ol>
+</div>
+{%- endif -%}

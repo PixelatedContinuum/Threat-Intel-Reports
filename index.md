@@ -162,7 +162,7 @@ hl_idx: home
 <p class="hl-creds-note c3-note">Takedowns &amp; Victim Actions counts only what was reported back to me; most of my reports get no reply.</p>
 {%- endif %}
 
-<div class="c3-sec" style="--sec: #4ade80;"><h2>Explore</h2></div>
+<div class="c3-sec" style="--sec: var(--hl-accent-blue);"><h2>Explore</h2></div>
 <div class="c3-cols">
   <div style="--sec: #4ade80;">
     <h3>Use the research</h3>
