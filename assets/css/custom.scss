@@ -9432,3 +9432,16 @@ a.hl-kc:hover { border-color: var(--kc); color: #ffffff; }
   .hl-idx--det .hl-post-header.hl-d-plate > .hl-d-cover:has(.c3-chart--compact) { contain: none; height: auto; }
   .hl-d-cover:has(.c3-chart--compact) .c3-cover { flex: none; height: 96px; }
 }
+
+
+/* T-0556.7: six short text roles. Existing item/severity colours and prose
+   stay intact; the three home roles use distinct palette accents. */
+.c3-about__head > .c3-about__kick { color: var(--hl-accent-blue) !important; }
+.c3-about__body > .c3-about__kick { color: var(--hl-accent-purple) !important; }
+.hl-idx .c3-about .hl-mission__close { color: var(--hl-accent-green); }
+.hl-report-page .hl-post-header .hl-post-header__badge--report { color: var(--hl-accent-purple); }
+.hl-idx--det .hl-post-header__badge.hl-d-kicker { color: var(--hl-accent-green); }
+.hl-idx--list:has(.hl-grid--actors) .hl-sh .hl-d-kicker { color: var(--hl-accent-purple); }
+/* Actor types belong immediately under the designation. No line clamp: every
+   actor's complete description remains readable, including on a phone. */
+.hl-idx--dash .hl-sh--cover .hl-sh__subtitle { margin: 12px 0 0; max-width: none; font: 400 var(--hl-fs-body)/1.5 var(--hl-font-sans); color: var(--hl-text-primary); }
