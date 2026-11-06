@@ -9488,7 +9488,17 @@ a.hl-kc:hover { border-color: var(--kc); color: #ffffff; }
 .hl-vuln__more { border: 1px solid var(--hl-border-card); border-radius: 4px; background: var(--hl-bg-card); color: var(--hl-accent-blue); font: inherit; font-size: .85em; padding: .1em .45em; cursor: pointer; white-space: nowrap; }
 .hl-vuln__more:focus-visible { outline: 2px solid var(--hl-accent-blue); outline-offset: 3px; }
 .hl-vuln__gap-fact { font-size: .8em; color: var(--hl-text-secondary); }
-.hl-vuln__preauth, .hl-vuln__tool, .hl-vuln__w--wp { font-size: .8em; color: var(--hl-accent-green); }
+/* T-0565.1: these chips render as bubbles like .hl-vuln__b (they showed as bare words). */
+.hl-vuln__preauth, .hl-vuln__tool, .hl-vuln__w--wp {
+  --b: #3fb950;
+  font-size: var(--hl-fs-meta);
+  padding: 0.1em 0.55em;
+  border-radius: 3px;
+  white-space: nowrap;
+  color: var(--b);
+  border: 1px solid color-mix(in srgb, var(--b) 42%, var(--hl-border-card));
+  background: color-mix(in srgb, var(--b) 13%, transparent);
+}
 @media (max-width: 700px) {
   .hl-idx--wire .hl-vuln, .hl-idx--wire .hl-vuln--cve { grid-template-columns: auto minmax(0, 1fr); }
   .hl-idx--wire .hl-vuln__badges { justify-content: flex-start; }

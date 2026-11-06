@@ -44,10 +44,13 @@
       var used = buttonWidth + gap, kept = 0, overflow = 0;
       chips.forEach(function (chip) {
         var width = measure ? chip.getBoundingClientRect().width : 0;
-        // Context is deliberately overflow-only. Offscreen rows use the fallback
+        // Offscreen rows use the fallback
         // without reading layout; the viewport observer measures them on arrival.
-        var keep = rank(chip) < 9 && (budget > 0 && width > 0
-          ? used + width + gap <= budget : kept < 3);
+        // Priority chips come first (sorted above); any later chip that still
+        // fits in the measured width stays visible too (Joseph 2026-11-06:
+        // "show a few more tags"). Unmeasured rows show the priority chips only.
+        var keep = budget > 0 && width > 0
+          ? used + width + gap <= budget : rank(chip) < 9 && kept < 4;
         if (keep) { used += width + gap; kept++; }
         else { overflow++; chip.hidden = !expanded; }
       });
