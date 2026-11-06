@@ -151,7 +151,7 @@ test('the CVEs panel says why listed, with the cve.now scoring line', async func
       ssvc_impact: '', cvss: '9.8', cvss_version: '3.1', severity: 'critical',
       scored_by: 'cve.now', cvss_vector: 'CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H',
       epss: '0.9', epss_pct: '0.95', epss_date: '2026-11-01', epss_pre: '', epss_max: '',
-      epss_xmodel: '', signals: ['crit_noauth_kev_product', 'epss90'],
+      epss_xmodel: '', signals: ['nuclei', 'et', 'epss90'],
       kev_product: 'Widget', kev_product_n: 3
     }
   });
@@ -163,7 +163,9 @@ test('the CVEs panel says why listed, with the cve.now scoring line', async func
   await settle();
   var t = p.textContent;
   assert.match(t, /Why listed/);
-  assert.match(t, /Rated Critical \(CVSS 9\.8\) and reachable over the network with no privileges and no user action/);
+  assert.match(t, /A Nuclei template names this CVE/);
+  assert.match(t, /An ET Open Suricata rule names this CVE/);
+  assert.doesNotMatch(t, /Rated Critical/);
   assert.match(t, /Widget: CISA has listed 3 earlier CVEs in this product on its KEV catalog\. That is a fact about the product, not about this CVE\./);
   assert.match(t, /FIRST's EPSS puts this CVE in the top 10%/);
   assert.match(t, /Not on VulnCheck KEV or CISA KEV as of 2026-11-01\. Being listed does not mean anyone has been seen exploiting it\./);

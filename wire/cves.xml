@@ -17,7 +17,7 @@ sitemap: false
 {%- assign sev_bands = "critical,high,medium,low" | split: "," %}
 <feed xmlns="http://www.w3.org/2005/Atom">
   <title>{{ site.title | xml_escape }}: The Wire, CVEs (significant new CVEs not yet on a KEV list)</title>
-  <subtitle>This feed is my selection of new CVEs with a critical flaw in a product CISA has listed before, a confirmed public exploit, a high EPSS percentile, or EPSS at least 1% paired with VEDAS exploit maturity at least 80% and CVSS at least 7.0, that are not on VulnCheck KEV or CISA KEV. Being listed does not mean exploitation has been seen. The feed shows at most 200 CVEs, ranked by how many reasons they meet, then EPSS, then exploit maturity, then CVSS. Listing, titles, SSVC (CISA's assessment), fixed versions and advisory ids come from cve.now (CC BY 4.0); scores from NVD through VulnCheck, unless a row says cve.now; exploits from Rapid7's and Exploit-DB's own indexes; KEV products from CISA; EPSS from FIRST; VEDAS exploit maturity from A.R.P. Syndicate.</subtitle>
+  <subtitle>This feed is my selection of new CVEs with a confirmed Metasploit module or Exploit-DB entry, a Nuclei template, an ET Open rule, a high EPSS percentile, or EPSS at least 1% paired with VEDAS exploit maturity at least 80% and CVSS at least 7.0, that are not on VulnCheck KEV or CISA KEV. Being listed does not mean exploitation has been seen. The feed shows at most 200 CVEs, ranked by how many reasons they meet, then EPSS, then exploit maturity, then CVSS. Listing, titles, SSVC (CISA's assessment), fixed versions and advisory ids come from cve.now (CC BY 4.0); scores from NVD through VulnCheck, unless a row says cve.now; exploits from Rapid7's and Exploit-DB's own indexes; KEV products from CISA; EPSS from FIRST; VEDAS exploit maturity from A.R.P. Syndicate.</subtitle>
   <link href="{{ site.url }}/wire/cves.xml" rel="self" type="application/atom+xml"/>
   <link href="{{ site.url }}/wire/#cves" rel="alternate" type="text/html"/>
   <link href="https://cve.now/" rel="via" type="text/html" title="cve.now"/>
@@ -53,9 +53,6 @@ sitemap: false
     <published>{{ vday | xml_escape }}T00:00:00Z</published>
     <updated>{{ vday | xml_escape }}T00:00:00Z</updated>
     <category term="cves-tab" label="CVEs tab"/>
-    {%- if w_ab %}
-    <category term="critical-no-login-kev-product" label="Critical, no login needed, product on CISA KEV"/>
-    {%- endif %}
     {%- if w_epss %}
     <category term="epss-top-10" label="EPSS top 10%"/>
     {%- endif %}
@@ -83,7 +80,7 @@ sitemap: false
     <category term="severity-{{ r.severity | xml_escape }}" label="CVSS {{ r.severity | upcase | xml_escape }} {{ r.cvss | xml_escape }}"/>
     {%- endif %}
     {%- assign epss_len = r.epss | append: "" | size %}
-    <summary type="text">Published {{ vday | xml_escape }}{% if sev != "" %}; CVSS v{{ r.cvss_version | xml_escape }} {{ r.cvss | xml_escape }} {{ r.severity | upcase | xml_escape }}, scored by {% if r.scored_by == "cve.now" %}cve.now (no score in our NVD data){% else %}{% if r.scored_by == "NVD" %}NVD{% elsif r.scored_by == "ADP" %}CISA's ADP{% else %}the CNA{% endif %} (VulnCheck NVD++){% endif %}{% endif %}{% if epss_len > 0 %}; EPSS {{ r.epss | times: 1.0 | round: 3 }}{% endif %}{% if w_ab %}; Critical and reachable with no login, in a product on CISA KEV ({{ kn }} before; a fact about the product, not this CVE){% endif %}{% if w_epss %}; EPSS top 10%{% endif %}{% if w_vedas %}; EPSS at least 1% with VEDAS exploit maturity at least 80% (A.R.P. Syndicate's estimate, not evidence of exploitation){% endif %}{% if msf_len > 0 %}; {{ msf_len }} Metasploit module{% if msf_len != 1 %}s{% endif %} (confirmed){% endif %}{% if edb_len > 0 %}; {{ edb_len }} Exploit-DB entr{% if edb_len == 1 %}y{% else %}ies{% endif %} (confirmed){% endif %}. Not in a KEV list when selected; exploitation not implied.</summary>
+    <summary type="text">Published {{ vday | xml_escape }}{% if sev != "" %}; CVSS v{{ r.cvss_version | xml_escape }} {{ r.cvss | xml_escape }} {{ r.severity | upcase | xml_escape }}, scored by {% if r.scored_by == "cve.now" %}cve.now (no score in our NVD data){% else %}{% if r.scored_by == "NVD" %}NVD{% elsif r.scored_by == "ADP" %}CISA's ADP{% else %}the CNA{% endif %} (VulnCheck NVD++){% endif %}{% endif %}{% if epss_len > 0 %}; EPSS {{ r.epss | times: 1.0 | round: 3 }}{% endif %}{% if kp_len > 0 and kn > 0 %}; Product on CISA KEV before ({{ kn }} earlier entries; a fact about the product, not this CVE){% endif %}{% if w_nuclei %}; Nuclei template{% endif %}{% if w_et %}; ET Open rule{% endif %}{% if w_epss %}; EPSS top 10%{% endif %}{% if w_vedas %}; EPSS at least 1% with VEDAS exploit maturity at least 80% (A.R.P. Syndicate's estimate, not evidence of exploitation){% endif %}{% if msf_len > 0 %}; {{ msf_len }} Metasploit module{% if msf_len != 1 %}s{% endif %} (confirmed){% endif %}{% if edb_len > 0 %}; {{ edb_len }} Exploit-DB entr{% if edb_len == 1 %}y{% else %}ies{% endif %} (confirmed){% endif %}. Not in a KEV list when selected; exploitation not implied.</summary>
   </entry>
   {%- endif %}
   {%- endfor %}

@@ -211,7 +211,7 @@ function readBuilt(JSDOM, html) {
     out.itemSel = grid.getAttribute('data-filter-item') || null;
     if (!out.itemSel) { problems.push('#' + id + ' grid names no data-filter-item'); return; }
     var current = null;
-    [].slice.call(grid.children).forEach(function (node) {
+    [].slice.call(grid.querySelectorAll('[data-filter-group], ' + out.itemSel)).forEach(function (node) {
       if (node.hasAttribute('data-filter-group')) {
         current = headingToDay(node.textContent);
         if (!current) problems.push('#' + id + ': unparseable day heading "' + node.textContent.trim() + '"');

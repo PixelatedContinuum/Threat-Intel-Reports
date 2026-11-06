@@ -258,7 +258,7 @@ var CVES_TAB_OK = [
   '<a class="hl-wtabs__tab hl-wtabs__tab--c" href="#cves">CVEs</a>',
   '<section id="cves" class="hl-wtabs__sec" data-filter-scope>',
   '<p class="hl-wire__freshness hl-wire__freshness--c">CVEs: Listing, titles, SSVC (CISA\'s own assessment), fixed versions and advisory ids from <a href="https://cve.now/">cve.now</a> (<a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>) &middot; Scores from NVD through VulnCheck, or from cve.now where a row says so &middot; Exploits from Rapid7 and Exploit-DB &middot; KEV products from CISA &middot; EPSS from <a href="https://www.first.org/epss/">FIRST</a> &middot; ' + VEDAS_CREDIT + ' &middot; <a href="{{ \'/wire/cves.xml\' | relative_url }}">Atom feed (CVEs)</a></p>',
-  '<div class="hl-wire__callout hl-wire__callout--c"><p>My selection of CVEs published in the last 30 days that are not on a KEV list yet. Each is here for at least one of four reasons: Critical (CVSS 9.0 or higher), reachable over the network with no login and no user action, in a product CISA has listed before; a Metasploit module or Exploit-DB entry, confirmed against Rapid7\'s or Exploit-DB\'s own index; EPSS in the top 10%; or EPSS at least 1% paired with VEDAS exploit maturity at least 80% and CVSS at least 7.0.</p><p>Being listed does not mean anyone has been seen exploiting the CVE. "Product on CISA KEV" is a fact about the product, not this CVE. The list excludes anything on VulnCheck KEV or CISA KEV, and a CVE moves to the nKEVs tab when it is added to VulnCheck KEV. It shows at most 200 CVEs, ranked by how many reasons they meet, then by EPSS, then by exploit maturity, then by CVSS.</p></div>',
+  '<div class="hl-wire__callout hl-wire__callout--c"><p>Nuclei templates come from ProjectDiscovery\'s template index; ET Open rules come from Emerging Threats\' Suricata ruleset. the tooling reasons together admitted 53 CVEs, eight later listed on VulnCheck KEV; Nuclei accounted for seven of 34.</p><p>My selection of CVEs published in the last 30 days that are not on a KEV list yet. Each is here for at least one of six reasons: a Metasploit module or Exploit-DB entry, confirmed against Rapid7\'s or Exploit-DB\'s own index; a Nuclei template; an ET Open rule; EPSS in the top 10%; or EPSS at least 1% paired with VEDAS exploit maturity at least 80% and CVSS at least 7.0.</p><p>Being listed does not mean anyone has been seen exploiting the CVE. "Product on CISA KEV" is a fact about the product, not this CVE. The list excludes anything on VulnCheck KEV or CISA KEV, and a CVE moves to the nKEVs tab when it is added to VulnCheck KEV. It shows at most 200 CVEs, ranked by how many reasons they meet, then by EPSS, then by exploit maturity, then by CVSS.</p></div>',
   '{%- capture cves_legend_html -%}',
   VEDAS_LEGEND,
   '<dl class="hl-legend__list"><dt><span class="hl-vuln__cve">CVE-YYYY-NNNN</span></dt><dd>The CVE.</dd></dl>',
@@ -1031,7 +1031,7 @@ function cvrow(over) {
     title: 'An issue was discovered in Widget through 1.2.', cvss: '9.8', cvss_version: '3.1',
     severity: 'critical', scored_by: 'NVD', epss: '0.45200', epss_pct: '0.97100', epss_date: '2026-08-18',
     epss_max: '0.45200', epss_spark: '0.0,20.0 62.1,12.0 120.0,0.0',
-    signals: ['crit_noauth_kev_product', 'msf', 'edb', 'epss90', 'nuclei'],
+    signals: ['msf', 'edb', 'epss90', 'nuclei'],
     msf: ['modules/exploits/linux/http/x.rb'], edb: ['48208'], et_sids: [],
     nuclei: 'http/cves/2026/CVE-2026-7001.yaml', cisa_sigma: [], snort3_sids: [],
     ssvc_expl: 'poc', ssvc_auto: 'yes', ssvc_impact: 'total', fixed: '', aliases: [], stories: 0,
@@ -1053,7 +1053,7 @@ function cvdoc(rows, over) {
       critical: rows.filter(function (r) { return r.severity === 'critical'; }).length,
       high: rows.filter(function (r) { return r.severity === 'high'; }).length,
       medium: 0, low: 0, unscored: 0,
-      crit_noauth_kev_product: nSig('crit_noauth_kev_product'), msf: nSig('msf'), edb: nSig('edb'), epss90: nSig('epss90'), nuclei: nSig('nuclei'), et: nSig('et')
+      msf: nSig('msf'), edb: nSig('edb'), epss90: nSig('epss90'), nuclei: nSig('nuclei'), et: nSig('et')
     },
     cve_vendors: Object.keys(vend).map(function (k) { return { label: k, count: vend[k] }; }),
     cves: rows
@@ -1085,9 +1085,9 @@ test('a bad cves row warns per field, and the headlines still PASS', function ()
     cvrow({ cve: 'CVE-2026-0004', published: '2026-08-30' }),
     cvrow({ cve: 'CVE-2026-0005', signals: ['msf'], msf: [] }),
     cvrow({ cve: 'CVE-2026-0006', signals: ['edb'], epss_pct: '0.1' }),
-    cvrow({ cve: 'CVE-2026-0007', signals: ['edb', 'msf', 'nuclei', 'crit_noauth_kev_product'] }),
+    cvrow({ cve: 'CVE-2026-0007', signals: ['edb', 'msf', 'nuclei'] }),
     cvrow({ cve: 'CVE-2026-0008', signals: ['nuclei', 'et'], msf: [], edb: [], nuclei: 'http/cves/2026/x.yaml', et_sids: [2036001], epss_pct: '0.1', cvss_vector: '', kev_product: '', kev_product_n: '' }),
-    cvrow({ cve: 'CVE-2026-0009', signals: ['telepathy', 'crit_noauth_kev_product', 'msf', 'edb', 'epss90', 'nuclei'] }),
+    cvrow({ cve: 'CVE-2026-0009', signals: ['telepathy', 'msf', 'edb', 'epss90', 'nuclei'] }),
     cvrow({ cve: 'CVE-2026-0010', vendor: 'A|B' }),
     cvrow({ cve: 'CVE-2026-0011', title: new Array(502).join('x') }),
     cvrow({ cve: 'CVE-2026-0012', cisa_added: '2026-08-18' }),
@@ -1099,7 +1099,7 @@ test('a bad cves row warns per field, and the headlines still PASS', function ()
   [/no CVE id in CVE shape/, /0002\).*published "2026-13-40", not a real day/,
    /0003\).*published 2026-06-01, outside the 30-day window/, /0004\).*published 2026-08-30, after cves_generated_at/,
    /0005\).*lists signal msf but the row shows no msf fact/, /0006\).*shows msf but does not list it as a signal/, /0006\).*shows nuclei but does not list/,
-   /0007\).*shows epss90 but does not list it as a signal/, /0008\).*lists no selection arm/, /0009\).*unknown signal "telepathy"/,
+   /0007\).*shows epss90 but does not list it as a signal/, /0009\).*unknown signal "telepathy"/,
    /0010\).*vendor containing "\|"/, /0011\).*title of 501 characters/, /0012\).*carries a CISA KEV date/,
    /0013\).*epss "1.5"/, /0014\).*control character in vendor/].forEach(function (re) { assert.match(w, re); });
 });
@@ -1182,8 +1182,8 @@ test('the callout losing a public claim is caught, claim by claim', function () 
    ["excludes anything on VulnCheck KEV or CISA KEV", /excludes anything on VulnCheck KEV or CISA KEV/],
    ["moves to the nKEVs tab when", /moves to the nKEVs tab/],
    ["is a fact about the product", /fact about the product/],
-   ["no login and no user action", /plain-words rule for the critical arm/],
-   ["in a product CISA has listed before", /KEV-product half of the critical arm/],
+   ["six reasons", /six admission reasons/],
+   ["a Nuclei template; an ET Open rule", /two new tooling reasons/],
    ["top 10%", /EPSS arm in plain words/],
    ["confirmed against Rapid7's or Exploit-DB's own index", /confirmed against the publishers/],
    ["(CISA's own assessment)", /CISA's own assessment/], [">CC BY 4.0<", /licence/]].forEach(function (c) {
@@ -1314,23 +1314,17 @@ test('a tab-hiding rule written without :has(), or a missing CVEs rule, is caugh
 
 /* ---- Revision 3: the four arms, the vector and the product on CISA KEV ---- */
 
-test('the arms: nuclei and et alone admit nothing; each arm alone does; an arm claimed without its facts warns', function () {
-  var only = function (over) { return CW.check(cvdoc([cvrow(Object.assign({ cve: 'CVE-2026-8101', signals: [], msf: [], edb: [], nuclei: '', et_sids: [],
-    epss_pct: '0.1', cvss_vector: '', kev_product: '', kev_product_n: '' }, over))]), SOURCES, NOW).cveWarnings.join('\n'); };
-  assert.match(only({ signals: ['nuclei'], nuclei: 'http/cves/2026/a.yaml' }), /lists no selection arm/);
-  assert.match(only({ signals: ['et'], et_sids: [2036001] }), /lists no selection arm/);
-  assert.doesNotMatch(only({ signals: ['msf'], msf: ['modules/exploits/x.rb'] }), /selection arm|signal/);
-  assert.doesNotMatch(only({ signals: ['edb'], edb: ['48208'] }), /selection arm|signal/);
-  assert.doesNotMatch(only({ signals: ['epss90'], epss_pct: '0.90000' }), /selection arm|signal/);
-  assert.doesNotMatch(only({ signals: ['crit_noauth_kev_product'], cvss_vector: 'CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H', kev_product: 'Acme Widget', kev_product_n: 2 }), /selection arm|signal/);
-  // each claim without its fact
-  assert.match(only({ signals: ['epss90'], epss_pct: '0.89000' }), /lists signal epss90 but the row shows no epss90 fact/);
-  assert.match(only({ signals: ['crit_noauth_kev_product'], cvss_vector: 'CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H', kev_product: 'Acme Widget', kev_product_n: 2 }), /lists signal crit_noauth_kev_product but the row shows no/);
-  assert.match(only({ signals: ['crit_noauth_kev_product'], cvss: '8.9', cvss_vector: 'CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H', kev_product: 'Acme Widget', kev_product_n: 2 }), /lists signal crit_noauth_kev_product but the row shows no/);
-  assert.match(only({ signals: ['crit_noauth_kev_product'], cvss_vector: 'CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H', kev_product: 'Acme Widget', kev_product_n: 0 }), /lists signal crit_noauth_kev_product but the row shows no/);
-  assert.match(only({ signals: ['crit_noauth_kev_product'], cvss_vector: 'CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H', kev_product: '', kev_product_n: 2 }), /lists signal crit_noauth_kev_product but the row shows no/);
-  // and the fact without the claim
-  assert.match(only({ epss_pct: '0.95000' }), /shows epss90 but does not list it/);
+test('six arms admit independently; retired reason fails; product context alone admits nothing', function () {
+  function only(over) { return CW.check(cvdoc([cvrow(Object.assign({signals: [], msf: [], edb: [], nuclei: '', et_sids: [], epss_pct: '0.1'}, over))]), SOURCES, NOW); }
+  [{signals:['nuclei'],nuclei:'http/cves/2026/a.yaml'}, {signals:['et'],et_sids:[2036001]},
+   {signals:['msf'],msf:['modules/exploits/x.rb']}, {signals:['edb'],edb:['48208']},
+   {signals:['epss90'],epss_pct:'0.9'}, {signals:['epss_vedas'],epss:'0.01',vedas:0.8}
+  ].forEach(function (over) { var r=only(over); assert.equal(r.status,'PASS'); assert.deepEqual(r.cveWarnings,[]); });
+  var retired=only({signals:['crit_noauth_kev_product']});
+  assert.equal(retired.status,'FAIL'); assert.match(retired.problems.join(' '),/retired reason/);
+  assert.match(only({}).cveWarnings.join(' '), /lists no selection arm/);
+  assert.match(only({signals:['nuclei']}).cveWarnings.join(' '), /no nuclei fact/);
+  assert.match(only({signals:['et']}).cveWarnings.join(' '), /no et fact/);
 });
 
 test('cvss_vector, kev_product and kev_product_n are held to their shapes', function () {
@@ -1463,13 +1457,15 @@ test('an include may build only its own link targets, and one that builds none m
   assert.equal(CW.checkPage(page, inc).status, 'PASS');
 });
 
-test('the CVEs tab says nothing that makes a rule admit a CVE (Revision 3: Rules never admit a row)', function () {
-  var bad = CW.checkPage(PAGE_OK.replace('not on a KEV list yet.', 'not on a KEV list yet. A CVE can be listed when a public rule or a high EPSS percentile admitted it.'), INCLUDES_OK);
-  assert.equal(bad.status, 'FAIL');
-  assert.match(bad.problems.join(' '), /says a rule admits a CVE/);
-  var real = readReal('wire/index.md').replace("when one of the other reasons on its row admitted it", "when a public rule or a high EPSS percentile admitted it");
-  assert.match(CW.checkPage(real, realIncludes()).problems.join(' '), /says a rule admits a CVE/);
-  assert.equal(CW.checkPage(readReal('wire/index.md'), realIncludes()).status, 'PASS');
+test('retired reason cannot return to page or include, and tooling copy is pinned', function () {
+  var page=readReal('wire/index.md'), inc=realIncludes();
+  assert.equal(CW.checkPage(page,inc).status,'PASS');
+  var bad=Object.assign({},inc); bad['wire-cve-why.html']+='crit_noauth_kev_product';
+  assert.match(CW.checkPage(page,bad).problems.join(' '),/retired/);
+  ['six reasons', 'a Nuclei template; an ET Open rule',
+   "Nuclei templates come from ProjectDiscovery's template index; ET Open rules come from Emerging Threats' Suricata ruleset.",
+   'the tooling reasons together admitted 53 CVEs, eight later listed on VulnCheck KEV; Nuclei accounted for seven of 34.'
+  ].forEach(function (pin) { assert.equal(CW.checkPage(page.replace(pin,'removed'),inc).status,'FAIL',pin); });
 });
 
 test('the feed: the real wire/cves.xml passes; an unescaped output, a PoC word, a lost cve.now qualifier or a wrong source fails', function () {
@@ -1519,7 +1515,7 @@ test('one escaping mutation per newly escaped nKEV value fails the page gate (co
     ['evidence {{ r.evidence | escape }}', 'evidence {{ r.evidence }}'],
     ['KEV {{ vday | escape }}, {% if gap_n', 'KEV {{ vday }}, {% if gap_n'],
     ['id="vulns-{{ vday | escape }}"', 'id="vulns-{{ vday }}"'],
-    ['{{ vday | date: "%A %-d %B %Y" | escape }}', '{{ vday | date: "%A %-d %B %Y" }}']
+    ['data-prio="{{ r.prio | escape }}"', 'data-prio="{{ r.prio }}"']
   ];
   mutants.forEach(function (m, i) {
     assert.ok(page.indexOf(m[0]) > -1, 'escape mutation ' + i + ' anchor missing: ' + m[0]);
@@ -1633,4 +1629,11 @@ test('VEDAS legend claims and source hrefs are pinned separately in each tab', f
     }
     assert.ok(count >= 2, 'both tabs must carry ' + pin);
   });
+});
+
+test('nKEV grouping copy stays pinned on the real template',function(){
+ var page=readReal('wire/index.md'), inc=realIncludes();
+ ['Exploited soon after disclosure','Disclosed 30 days to a year before listing','Older CVEs newly listed','Disclosure date unknown','Every VulnCheck KEV entry stays visible.','Filters open matching batches and counts show matching rows.'].forEach(function(pin){
+   assert.equal(CW.checkPage(page.replace(pin,'removed'),inc).status,'FAIL',pin);
+ });
 });

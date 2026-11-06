@@ -275,20 +275,8 @@ function secWhyListed(panel, d, asOfDay) {
   headInto(panel, 'Why listed');
   var signals = lst(d.signals);
   if (signals) {
-    if (signals.indexOf('crit_noauth_kev_product') !== -1) {
-      var cvss = num(d.cvss);
-      var vec = str(d.cvss_vector);
-      var kp = str(d.kev_product).trim();
-      var kn = num(d.kev_product_n);
-      if (!isNaN(cvss) && cvss >= 9 && CVSS_VECTOR_SHAPE.test(vec) &&
-          vec.indexOf('AV:N') !== -1 && vec.indexOf('PR:N') !== -1 && vec.indexOf('UI:N') !== -1 &&
-          kp && !isNaN(kn) && kn > 0) {
-        lineInto(panel, 'Rated Critical (CVSS ' + d.cvss + ') and reachable over the network ' +
-          'with no privileges and no user action, read from its CVSS vector (' + vec + '). ' +
-          kp + ': CISA has listed ' + Math.floor(kn) + ' earlier CVE' + (kn === 1 ? '' : 's') +
-          ' in this product on its KEV catalog. That is a fact about the product, not about this CVE.');
-      }
-    }
+    if (signals.indexOf('nuclei') !== -1) lineInto(panel, 'A Nuclei template names this CVE.');
+    if (signals.indexOf('et') !== -1) lineInto(panel, 'An ET Open Suricata rule names this CVE.');
     var msf = lst(d.msf);
     if (signals.indexOf('msf') !== -1 && msf && msf.length) {
       lineInto(panel, "A Metasploit module for this CVE, confirmed against Rapid7's own module list.");
@@ -306,6 +294,9 @@ function secWhyListed(panel, d, asOfDay) {
         'in the next 30 days (percentile ' + Math.floor(pct * 100) + ').');
     }
   }
+  var kp = str(d.kev_product), kn = num(d.kev_product_n);
+  if (kp && kn > 0) lineInto(panel, kp + ': CISA has listed ' + kn +
+    ' earlier CVEs in this product on its KEV catalog. That is a fact about the product, not about this CVE.');
   var closeDay = dayOf(asOfDay);
   lineInto(panel, closeDay
     ? WHYNOW_HEAD + closeDay + '. ' + WHYNOW_NOTE

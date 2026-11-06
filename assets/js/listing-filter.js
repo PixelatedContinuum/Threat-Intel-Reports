@@ -16,6 +16,11 @@ function init(bar) {
   // A group heading (a date row on the Wire) owns every item that follows it
   // until the next heading. Inert on pages that render none.
   var groups = [].slice.call(grid.querySelectorAll('[data-filter-group]'));
+  var containers = [].slice.call(grid.querySelectorAll('[data-filter-container]'));
+  var batches = [].slice.call(grid.querySelectorAll('[data-filter-batch]'));
+  batches.forEach(function (b) { b.addEventListener('toggle', function () {
+    if (!b.hasAttribute('data-auto-open')) b._readerOpen = b.open;
+  }); });
   var search = bar.querySelector('.hl-filter__search');
   var count = bar.querySelector('[data-filter-count]');
   var empty = bar.querySelector('[data-filter-empty]');
@@ -200,6 +205,27 @@ function init(bar) {
       }
       if (any) { g.style.removeProperty('display'); }
       else { g.style.setProperty('display', 'none', 'important'); }
+    });
+    // Nested nKEV groups and batches count matching rows, including folded ones.
+    var filtered = !!term || dims.some(function (d) { return d.keys().length > 0; }) ||
+      !!(dateInput && dateInput.value);
+    containers.forEach(function (box) {
+      var kids = [].slice.call(box.querySelectorAll(cardSel));
+      var n = kids.filter(function (c) { return c.style.display !== 'none'; }).length;
+      if (n) box.style.removeProperty('display');
+      else box.style.setProperty('display', 'none', 'important');
+      var label = box.querySelector('[data-container-count]');
+      if (label) label.textContent = String(n);
+      if (box.hasAttribute('data-filter-batch')) {
+        if (filtered && n && !box.open) {
+          box.setAttribute('data-auto-open', '');
+          box.open = true;
+        } else if (!filtered && box.hasAttribute('data-auto-open')) {
+          box.open = !!box._readerOpen;
+          // toggle events are queued; remove the marker after those events run.
+          window.setTimeout(function () { box.removeAttribute('data-auto-open'); }, 0);
+        }
+      }
     });
     if (count) count.textContent = 'Showing ' + shown + ' of ' + cards.length;
     if (empty) empty.hidden = shown !== 0;
@@ -407,12 +433,27 @@ function init(bar) {
     var id = decode(String(window.location.hash || '').replace(/^#/, ''));
     if (!id || id.indexOf('=') > -1) return;
     var el = document.getElementById(id);
-    if (!el || !grid.contains(el) || el.style.display !== 'none') return;
-    dims.forEach(function (d) { setDim(d, []); });
-    if (search) search.value = '';
-    if (dateInput) dateInput.value = '';
-    apply();
-    if (el.scrollIntoView) el.scrollIntoView();
+    if (!el || !grid.contains(el)) return;
+    // Digest anchors name a day whose first ranked row may sit inside a batch.
+    var row = el.matches(cardSel) ? el : null;
+    var targetDay = el.getAttribute('data-day-target');
+    if (targetDay) row = cards.filter(function (c) { return c.getAttribute('data-day') === targetDay; })[0];
+    if (!row) row = el;
+    var hidden = row.style.display === 'none';
+    if (hidden) {
+      dims.forEach(function (d) { setDim(d, []); });
+      if (search) search.value = '';
+      if (dateInput) dateInput.value = '';
+      apply();
+    }
+    var opened = false;
+    for (var parent = row.parentElement; parent && parent !== grid; parent = parent.parentElement) {
+      if (parent.hasAttribute('data-filter-batch') && !parent.open) {
+        parent.open = true;
+        opened = true;
+      }
+    }
+    if ((hidden || opened || targetDay) && row.scrollIntoView) row.scrollIntoView();
   }
 
   window.addEventListener('hashchange', function () {

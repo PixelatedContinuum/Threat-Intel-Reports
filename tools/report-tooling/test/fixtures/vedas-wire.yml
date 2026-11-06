@@ -141,7 +141,6 @@ cves_counts:
   msf: 1
   edb: 1
   epss90: 0
-  crit_noauth_kev_product: 0
 cve_vendors:
   - label: Fixture
     count: 3

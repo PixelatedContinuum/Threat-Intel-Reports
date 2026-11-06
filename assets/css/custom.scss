@@ -9447,3 +9447,12 @@ a.hl-kc:hover { border-color: var(--kc); color: #ffffff; }
 /* Actor types belong immediately under the designation. No line clamp: every
    actor's complete description remains readable, including on a phone. */
 .hl-idx--dash .hl-sh--cover .hl-sh__subtitle { margin: 12px 0 0; max-width: none; font: 400 var(--hl-fs-body)/1.5 var(--hl-font-sans); color: var(--hl-text-primary); }
+
+/* T-0565: nKEV age groups and folded daily WordPress batches. */
+.hl-vuln-group > .hl-wire__day { font-size: 1rem; line-height: 1.5; }
+.hl-vuln-batch { border: 1px solid var(--border-color, #30363d); border-radius: 6px; margin: .5rem 0; }
+.hl-vuln-batch > summary { cursor: pointer; padding: .75rem; color: #bc8cff; font-size: .85rem; }
+.hl-vuln-batch[open] > summary { border-bottom: 1px solid #30363d; }
+.hl-vuln-day-anchor { display: block; scroll-margin-top: 90px; }
+.hl-vuln__w--nuclei { --w: #7ee787; }
+.hl-vuln__w--et { --w: #58a6ff; }

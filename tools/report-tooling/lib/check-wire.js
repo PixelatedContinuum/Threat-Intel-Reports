@@ -497,6 +497,35 @@ function checkVulns(doc, now) {
         ', actual ' + badn.map(function (k) { return k + '=' + nNkev[k]; }).join(' '));
     }
   }
+  // T-0565 contract: older files remain readable; a grouped export must be complete.
+  if (rows.some(function (r) { return hasKey(r, 'age_group') || hasKey(r, 'prio'); })) {
+    var ages = {new: 0, mid: 0, old: 0, unknown: 0}, ranks = {}, batches = {}, wp = 0;
+    rows.forEach(function (r) {
+      var days = isEmpty(r.disclosed) ? NaN : (realDay(r.added) - realDay(r.disclosed)) / 86400000;
+      var age = isNaN(days) ? 'unknown' : days < 30 ? 'new' : days <= 365 ? 'mid' : 'old';
+      if (r.age_group !== age) warnings.push(r.cve + ' age_group differs from disclosure-to-listing age');
+      if (hasKey(ages, r.age_group)) ages[r.age_group]++;
+      if (!Number.isInteger(r.prio) || r.prio < 1 || r.prio > rows.length || ranks[r.prio])
+        warnings.push(r.cve + ' prio is not a unique rank in 1..' + rows.length);
+      ranks[r.prio] = true;
+      if (hasKey(r, 'wp') && r.wp !== true) warnings.push(r.cve + ' wp must be true or absent');
+      if (r.wp) wp++;
+      if (hasKey(r, 'batch')) {
+        if (!r.wp || r.batch !== 'wp-' + r.added) warnings.push(r.cve + ' batch must match its WordPress added day');
+        batches[r.batch] = (batches[r.batch] || 0) + 1;
+      }
+    });
+    Object.keys(ages).forEach(function (a) {
+      if (vc['age_' + a] !== ages[a]) warnings.push('vulns_counts age_' + a + ' disagrees with rows');
+    });
+    if (vc.wp !== wp) warnings.push('vulns_counts wp disagrees with rows');
+    var declared = Array.isArray(vc.batches) ? vc.batches : [];
+    if (declared.length !== Object.keys(batches).length) warnings.push('vulns_counts batches disagrees with rows');
+    declared.forEach(function (b) {
+      if (b.key !== 'wp-' + b.day || b.n !== batches[b.key] || b.n < 20)
+        warnings.push('vulns_counts batch differs from rows or has fewer than 20 rows');
+    });
+  }
   return { problems: problems, warnings: warnings, total: rows.length };
 }
 
@@ -516,24 +545,16 @@ var CVES_KEYS = ['cve', 'published', 'vendor', 'product', 'title', 'cvss', 'cvss
   'scored_by', 'epss', 'epss_pct', 'epss_date', 'epss_max', 'epss_spark', 'signals', 'msf', 'edb',
   'et_sids', 'nuclei', 'cisa_sigma', 'snort3_sids', 'ssvc_expl', 'ssvc_auto', 'ssvc_impact',
   'fixed', 'aliases', 'stories', 'cvss_vector', 'kev_product', 'kev_product_n'];
-/* Revision 3 (Joseph, 2026-11-01): the original four selection arms are crit_noauth_kev_product (CVSS 9.0 or
-   higher, AV:N/PR:N/UI:N in the row's own vector, AND a product CISA has listed before), msf, edb and
-   epss90 (FIRST percentile 0.90 or higher). nuclei and et are shown as the Rules chip and are NOT arms:
-   a row with only those admits nothing. T-0564 adds epss_vedas (EPSS >= 0.01, VEDAS >= 0.80, CVSS >= 7). */
-var CVES_SIGNALS = { crit_noauth_kev_product: 1, msf: 1, edb: 1, epss90: 1, epss_vedas: 1, nuclei: 1, et: 1 };
-var CVES_ARMS = ['crit_noauth_kev_product', 'msf', 'edb', 'epss90', 'epss_vedas'];
+/* T-0565: tooling sources admit alongside the two probability reasons. */
+var CVES_SIGNALS = { msf: 1, edb: 1, nuclei: 1, et: 1, epss90: 1, epss_vedas: 1 };
+var CVES_ARMS = ['msf', 'edb', 'nuclei', 'et', 'epss90', 'epss_vedas'];
 var CVSS_VECTOR = /^(?:CVSS:\d\.\d\/)?[A-Za-z]{1,3}:[A-Za-z0-9]{1,3}(?:\/[A-Za-z]{1,3}:[A-Za-z0-9]{1,3})*$/;
 var CVES_BODY_KEYS = ['description', 'summary', 'context'];
 var EPSS_HIGH_PCT = 0.90;
 function signalFacts(r) {
   var epct = Number(r.epss_pct);
   var cv = Number(r.cvss);
-  var vec = typeof r.cvss_vector === 'string' ? r.cvss_vector : '';
-  var tokens = vec.split('/');
   return {
-    crit_noauth_kev_product: !isEmpty(r.cvss) && cv >= 9 && tokens.indexOf('AV:N') !== -1 &&
-      tokens.indexOf('PR:N') !== -1 && tokens.indexOf('UI:N') !== -1 &&
-      typeof r.kev_product === 'string' && r.kev_product !== '' && isCount(r.kev_product_n) && r.kev_product_n > 0,
     msf: Array.isArray(r.msf) && r.msf.length > 0,
     edb: Array.isArray(r.edb) && r.edb.length > 0,
     nuclei: typeof r.nuclei === 'string' && r.nuclei !== '',
@@ -581,7 +602,7 @@ function checkCves(doc, now) {
   var seen = Object.create(null);
   var nSev = { critical: 0, high: 0, medium: 0, low: 0 };
   var nUnscored = 0;
-  var nSig = { crit_noauth_kev_product: 0, msf: 0, edb: 0, epss90: 0, epss_vedas: 0, nuclei: 0, et: 0 };
+  var nSig = { msf: 0, edb: 0, epss90: 0, epss_vedas: 0, nuclei: 0, et: 0 };
   var byVendor = Object.create(null);
   rows.forEach(function (r, n) {
     r = r || {};
@@ -634,6 +655,7 @@ function checkCves(doc, now) {
     if (!listed) warnings.push(where + ' has signals that are not a list');
     else {
       listed.forEach(function (s) {
+        if (s === 'crit_noauth_kev_product') problems.push(where + ' lists retired reason crit_noauth_kev_product');
         if (!CVES_SIGNALS[s]) warnings.push(where + ' lists unknown signal ' + JSON.stringify(s));
       });
       var facts = signalFacts(r);
@@ -656,6 +678,7 @@ function checkCves(doc, now) {
   });
 
   var cc = doc.cves_counts || {};
+  if (hasKey(cc, 'crit_noauth_kev_product')) problems.push('cves_counts carries retired reason crit_noauth_kev_product');
   if (rows.length && Number(cc.total) !== rows.length) {
     warnings.push('cves_counts total disagrees with the rows: declared ' + cc.total + ', actual ' + rows.length);
   }
@@ -1109,6 +1132,12 @@ function checkLegend(src) {
   } else if (/legend_html|hl-legend/.test(grid[0])) {
     problems.push('the legend sits inside the vulnerability grid, where the filter script would count it as rows');
   }
+  if (src.indexOf('data-age-group=') !== -1) {
+    ['Exploited soon after disclosure', 'Disclosed 30 days to a year before listing', 'Older CVEs newly listed',
+     'Disclosure date unknown', 'Every VulnCheck KEV entry stays visible.',
+     'Filters open matching batches and counts show matching rows.'
+    ].forEach(function (pin) { if (src.indexOf(pin) < 0) problems.push('nKEVs lost grouping copy: ' + pin); });
+  }
   return problems;
 }
 
@@ -1166,7 +1195,7 @@ function checkNkevRow(src) {
   if (src === null || src === undefined) {
     return ['NOT CHECKED: wire/index.md is absent, so the nKEV row template could not be verified'];
   }
-  var m = /\{%-?\s*for r in wire\.vulns -?%\}[\s\S]*?\{%-?\s*endfor\s*-?%\}\s*<\/div>/.exec(src);
+  var m = /\{%-?\s*for r in (?:wire\.vulns|unit_rows) -?%\}[\s\S]*?\{%-?\s*endfor\s*-?%\}\s*<\/div>/.exec(src);
   if (!m) {
     return ['could not find the nKEV row template (for r in wire.vulns), so its outputs were not verified'];
   }
@@ -1270,8 +1299,8 @@ function checkCvesTab(src, includes) {
      [/does not mean anyone has been seen exploiting/, 'that being listed is not evidence of exploitation'],
      [/excludes anything on VulnCheck KEV or CISA KEV/, 'that the list excludes anything on VulnCheck KEV or CISA KEV'],
      [/is a fact about the product, not this CVE/, 'that "product on CISA KEV" is a fact about the product, not about the CVE'],
-     [/over the network with no login and no user action/, 'the plain-words rule for the critical arm'],
-     [/in a product CISA has listed before/, 'the KEV-product half of the critical arm'],
+     [/six reasons/, 'the six admission reasons'],
+     [/a Nuclei template; an ET Open rule/, 'the two new tooling reasons'],
      [/top 10%/, 'the EPSS arm in plain words'],
      [/EPSS at least 1% paired with VEDAS exploit maturity at least 80% and CVSS at least 7.0/, 'the paired EPSS and VEDAS arm in plain words'],
      [/moves to the nKEVs tab when it is added to VulnCheck KEV/, 'that a row moves to the nKEVs tab when its CVE is added'],
@@ -1369,9 +1398,14 @@ function checkCvesTab(src, includes) {
     if (m) problems.push(x[0] + ' mentions a GitHub proof of concept (' + JSON.stringify(m[0]) + '). PoCs cannot be validated, so the Wire does not claim, count, filter or link them.');
   });
 
-  // Review F3: Rules (Nuclei, ET Open, Sigma, Snort) are shown on a row but never admit one (Revision 3).
-  var admit = sec.replace(/\{%-?\s*comment\s*-?%\}[\s\S]*?\{%-?\s*endcomment\s*-?%\}/g, '').match(/\b(?:public rules?|rules?|Nuclei|ET Open|Snort)\b[^.<]{0,80}\b(?:admit|admits|admitted|qualif\w+)\b/i);
-  if (admit) problems.push('the CVEs tab says a rule admits a CVE (' + JSON.stringify(admit[0].slice(0, 80)) + '). Rules are shown on a row and never admit one.');
+  // The retired reason must disappear from markup, includes and reader copy.
+  scanned.forEach(function (x) {
+    if (/crit_noauth_kev_product|w_ab|Critical with no login needed in a product/.test(x[1]))
+      problems.push(x[0] + ' carries the retired crit_noauth_kev_product reason');
+  });
+  ["Nuclei templates come from ProjectDiscovery's template index; ET Open rules come from Emerging Threats' Suricata ruleset.",
+   'the tooling reasons together admitted 53 CVEs, eight later listed on VulnCheck KEV; Nuclei accounted for seven of 34.'
+  ].forEach(function (pin) { if (sec.indexOf(pin) < 0) problems.push('CVEs legend lost tooling copy: ' + pin); });
 
   // 4. escaping, on the tab's markup and every include in the chain
   unescapedOutputs(sec).forEach(function (m) {
@@ -1434,7 +1468,8 @@ function checkCvesFeed(xml) {
   }
   if (!/Rapid7/.test(body) || !/Exploit-DB/.test(body)) problems.push('wire/cves.xml no longer credits Rapid7 and Exploit-DB for the exploits');
   if (/carries[^.]{0,160}(?:Metasploit|Exploit-DB)/i.test(body)) problems.push('wire/cves.xml says cve.now carries Metasploit or Exploit-DB data');
-  if (/\b(?:rules?|Nuclei|ET Open|Snort)\b[^.<]{0,80}\badmit/i.test(body)) problems.push('wire/cves.xml says a rule admits a CVE');
+  if (/critical flaw in a product|critical-no-login-kev-product|w_ab|crit_noauth_kev_product/.test(body)) problems.push('wire/cves.xml carries the retired reason');
+  if (!/a Nuclei template, an ET Open rule/.test(body)) problems.push('wire/cves.xml lost tooling reasons');
   /* T-0564: the feed states the same cap as the page and the exporter, and credits VEDAS wherever it carries the pairing. */
   var feedCap = body.match(/at most (\d+) CVEs/);
   if (!feedCap || Number(feedCap[1]) !== CVES_CAP) problems.push('wire/cves.xml does not say "at most ' + CVES_CAP + ' CVEs" (the cap the page and exporter use)');
@@ -1576,7 +1611,7 @@ function checkDetailsPage(src) {
     problems.push('the Details toggle markup appears ' + nToggles + ' time(s), expected 2: one in ' +
       'the nKEV row template, one in the CVEs row template');
   }
-  var nkevSlice = (src.match(/\{%-?\s*for r in wire\.vulns -?%\}[\s\S]*?\{%-?\s*endfor\s*-?%\}\s*<\/div>/) || [''])[0];
+  var nkevSlice = (src.match(/\{%-?\s*for r in (?:wire\.vulns|unit_rows) -?%\}[\s\S]*?\{%-?\s*endfor\s*-?%\}\s*<\/div>/) || [''])[0];
   if (!nkevSlice) {
     problems.push('could not find the nKEV row template (for r in wire.vulns), so its Details toggle could not be verified');
   } else if (!DETAILS_TOGGLE.test(nkevSlice)) {
