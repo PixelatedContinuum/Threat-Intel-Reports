@@ -1725,6 +1725,7 @@ function checkDayLayout(src, includes) {
   var sec = src.slice(src.indexOf('<section id="cves"'), src.indexOf('</section>', src.indexOf('<section id="cves"')));
   unescapedOutputs(sec).forEach(function (m) { out.push('CVEs prints '+m+' without escape'); });
   ['assign wp_unauth_group_min = 2', 'assign product_group_min = 5',
+   'id="cves-{{ gname | escape }}" data-day-target="{{ gname | escape }}"',
    'include wire-fold-keys.html rows=group_rows mode="nkev"',
    'include wire-fold-keys.html rows=g.items mode="cves"',
    'include wire-fold.html rows=rendered_rows keys=fold_keys labels=fold_labels thresholds=fold_thresholds'

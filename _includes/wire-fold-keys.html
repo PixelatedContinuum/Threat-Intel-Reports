@@ -40,8 +40,8 @@ first refusal; product groups only see the remaining rows. CISA stays plain.
 {%- assign cisa_size = fold_row.cisa_added | size -%}
 {%- unless include.mode == "nkev" and cisa_size == 10 -%}
 {%- if vendor_key != "" and product_key != "" -%}
-{%- assign vendor_key = vendor_key | uri_escape -%}
-{%- assign product_key = product_key | uri_escape -%}
+{%- assign vendor_key = vendor_key | url_encode -%}
+{%- assign product_key = product_key | url_encode -%}
 {%- assign policy_key = "product:" | append: vendor_key | append: ":" | append: product_key -%}
 {%- endif -%}
 {%- endunless -%}

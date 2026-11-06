@@ -553,7 +553,7 @@ reads back from the built page (it fails the index step on a duplicate). A vuln 
 {%- for g in cgroups -%}
 {%- assign gname = g.name | append: "" -%}{%- assign gname_len = gname | size -%}
 {%- if gname_len == 10 -%}
-<div class="hl-wire__day" id="cves-{{ gname | escape }}" data-filter-group>{{ gname | date: "%A %-d %B %Y" | escape }} &middot; {{ g.items.size }} published</div>
+<div class="hl-wire__day" id="cves-{{ gname | escape }}" data-day-target="{{ gname | escape }}" data-filter-group>{{ gname | date: "%A %-d %B %Y" | escape }} &middot; {{ g.items.size }} published</div>
 {%- assign rendered_rows = "" | split: "" -%}
 {%- for r in g.items -%}
 {%- capture rendered_row -%}
