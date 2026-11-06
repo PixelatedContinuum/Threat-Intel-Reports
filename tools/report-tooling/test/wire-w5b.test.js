@@ -29,3 +29,11 @@ test('overflow fallback is native, keyboard accessible, searchable and reversibl
  b.dispatchEvent(new w.KeyboardEvent('keydown',{key:'Escape'}));assert.equal(c.hidden,true);assert.equal(b.getAttribute('aria-expanded'),'false');
  }finally{d.window.close();}
 });
+test('T-0565.2 Product exploited before filter is pinned, narrows only, and its removal fails the gate',()=>{
+ assert.equal(CW.checkPage(page,includes).status,'PASS');
+ for(const pin of ['data-sig="kev_product">Product exploited before','kev_product{% endif %}"','Product exploited before</dt><dd>Filter only, never admits']) {
+  assert.ok(page.includes(pin),pin); assert.equal(CW.checkPage(page.replace(pin,'removed'),includes).status,'FAIL',pin);
+ }
+ // It never becomes an admission reason: the shared reason include does not emit it.
+ assert.ok(!includes['wire-cve-why.html'].includes('"kev_product"'));
+});

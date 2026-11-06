@@ -1709,7 +1709,9 @@ function checkDayLayout(src, includes) {
   ].forEach(function (pin) { if (!c.includes(pin)) out.push('CVEs explanation lost: ' + pin); });
   if (/data-age-group=|data-age="recent">Recent|data-age="">Include older/.test(src)) out.push('nKEVs must use day groups and no age filter');
   ['group_by: "added"', 'sort: "prio"', 'id="vulns-{{ day_group.name | escape }}"', 'data-sig="wp_unauth"',
-   'w_wp', 'r.nomi == true', 'https://github.com/nomi-sec/PoC-in-GitHub/blob/master/', 'wire-chips.js'
+   'w_wp', 'r.nomi == true', 'https://github.com/nomi-sec/PoC-in-GitHub/blob/master/', 'wire-chips.js',
+   // T-0565.2: the KEV-product filter narrows the CVEs tab; it is never an admission reason.
+   'data-sig="kev_product">Product exploited before', 'kev_product{% endif %}"', 'Product exploited before</dt><dd>Filter only, never admits'
   ].forEach(function (pin) { if (!src.includes(pin)) out.push('Wire layout lost: ' + pin); });
   if (/nomi_poc/.test(src)) out.push('nomi_poc is not an admission reason');
   if (/hl-wire__callout--c/.test(src.replace(/\{%[\s\S]*?%\}/g, ''))) out.push('CVEs intro must be in explanation');
