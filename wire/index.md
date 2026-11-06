@@ -218,22 +218,22 @@ reads back from the built page (it fails the index step on a duplicate). A vuln 
 {%- capture legend_html -%}
 <div class="hl-legend__h">Chip key</div>
 <dl class="hl-legend__list">
-<dt class="hl-legend__k">CVE</dt><dd>NVD record</dd>
-<dt class="hl-legend__k">Vendor / product</dt><dd>Affected software</dd>
-<dt class="hl-legend__k">Severity</dt><dd>CVSS band</dd>
-<dt class="hl-legend__k">CISA KEV</dt><dd>Also on CISA KEV</dd>
-<dt class="hl-legend__k">EPSS</dt><dd>Predicted exploitation</dd>
-<dt class="hl-legend__k">VEDAS</dt><dd>Exploit maturity estimate</dd>
-<dt class="hl-legend__k">Sources</dt><dd>Exploitation citations</dd>
-<dt class="hl-legend__k">News</dt><dd>Wire coverage</dd>
-<dt class="hl-legend__k">Rules</dt><dd>Public detection coverage</dd>
-<dt class="hl-legend__k">SSVC</dt><dd>CISA assessment</dd>
-<dt class="hl-legend__k">Exploits</dt><dd>Publisher-confirmed entries</dd>
+<dt><span class="hl-vuln__cve">CVE</span></dt><dd>NVD record</dd>
+<dt><span class="hl-vuln__vp"><b>Vendor</b> Product</span></dt><dd>Affected software</dd>
+<dt><span class="hl-vuln__sev hl-vuln__sev--critical">CRITICAL</span> <span class="hl-vuln__sev hl-vuln__sev--high">HIGH</span> <span class="hl-vuln__sev hl-vuln__sev--medium">MEDIUM</span> <span class="hl-vuln__sev hl-vuln__sev--low">LOW</span></dt><dd>CVSS band</dd>
+<dt><span class="hl-vuln__b hl-vuln__b--cisa">CISA KEV</span></dt><dd>Also on CISA KEV</dd>
+<dt><span class="hl-vuln__p hl-vuln__p--epss">EPSS</span></dt><dd>Predicted exploitation</dd>
+<dt><span class="hl-vuln__p hl-vuln__p--vedas">VEDAS</span></dt><dd>Exploit maturity estimate</dd>
+<dt><span class="hl-vuln__p">Sources</span></dt><dd>Exploitation citations</dd>
+<dt><span class="hl-vuln__p">News</span></dt><dd>Wire coverage</dd>
+<dt><span class="hl-vuln__p hl-vuln__p--det">Rules</span></dt><dd>Public detection coverage</dd>
+<dt><span class="hl-vuln__p hl-vuln__p--ssvc">SSVC</span></dt><dd>CISA assessment</dd>
+<dt><span class="hl-vuln__p hl-vuln__p--exp">Exploits</span></dt><dd>Publisher-confirmed entries</dd>
 <dt class="hl-legend__k">Fixed in / advisories</dt><dd>Record context</dd>
-<dt class="hl-legend__k">cve.now</dt><dd>CVE record</dd>
-<dt class="hl-legend__k">Pre-auth (no login)</dt><dd>Network, no privileges or interaction</dd>
-<dt class="hl-legend__k">Evidence</dt><dd>Earliest cited report</dd>
-<dt class="hl-legend__k">Listed after disclosure</dt><dd>Timing detail in overflow</dd>
+<dt><span class="hl-vuln__p hl-vuln__p--cn">cve.now</span></dt><dd>CVE record</dd>
+<dt><span class="hl-vuln__preauth">Pre-auth (no login)</span></dt><dd>Network, no privileges or interaction</dd>
+<dt><span class="hl-vuln__ev">Evidence</span></dt><dd>Earliest cited report</dd>
+<dt><span class="hl-vuln__gap-fact">listed after disclosure</span></dt><dd>Timing detail in overflow</dd>
 </dl>
 {%- endcapture -%}
 <details class="hl-legend-mobile" data-pagefind-ignore>
@@ -479,27 +479,27 @@ reads back from the built page (it fails the index step on a duplicate). A vuln 
 {%- capture cves_legend_html -%}
 <div class="hl-legend__h">Chip key</div>
 <dl class="hl-legend__list">
-<dt class="hl-legend__k">CVE</dt><dd>NVD record</dd>
-<dt class="hl-legend__k">Vendor / product</dt><dd>Affected software</dd>
-<dt class="hl-legend__k">Severity</dt><dd>CVSS band</dd>
-<dt class="hl-legend__k">CISA KEV</dt><dd>Also on CISA KEV</dd>
-<dt class="hl-legend__k">EPSS</dt><dd>Predicted exploitation</dd>
-<dt class="hl-legend__k">VEDAS</dt><dd>Exploit maturity estimate</dd>
-<dt class="hl-legend__k">Sources</dt><dd>Exploitation citations</dd>
-<dt class="hl-legend__k">News</dt><dd>Wire coverage</dd>
-<dt class="hl-legend__k">Rules</dt><dd>Public detection coverage</dd>
-<dt class="hl-legend__k">SSVC</dt><dd>CISA assessment</dd>
-<dt class="hl-legend__k">Exploits</dt><dd>Publisher-confirmed entries</dd>
+<dt><span class="hl-vuln__cve">CVE</span></dt><dd>NVD record</dd>
+<dt><span class="hl-vuln__vp"><b>Vendor</b> Product</span></dt><dd>Affected software</dd>
+<dt><span class="hl-vuln__sev hl-vuln__sev--critical">CRITICAL</span> <span class="hl-vuln__sev hl-vuln__sev--high">HIGH</span> <span class="hl-vuln__sev hl-vuln__sev--medium">MEDIUM</span> <span class="hl-vuln__sev hl-vuln__sev--low">LOW</span></dt><dd>CVSS band</dd>
+<dt><span class="hl-vuln__b hl-vuln__b--cisa">CISA KEV</span></dt><dd>Also on CISA KEV</dd>
+<dt><span class="hl-vuln__p hl-vuln__p--epss">EPSS</span></dt><dd>Predicted exploitation</dd>
+<dt><span class="hl-vuln__p hl-vuln__p--vedas">VEDAS</span></dt><dd>Exploit maturity estimate</dd>
+<dt><span class="hl-vuln__p">Sources</span></dt><dd>Exploitation citations</dd>
+<dt><span class="hl-vuln__p">News</span></dt><dd>Wire coverage</dd>
+<dt><span class="hl-vuln__p hl-vuln__p--det">Rules</span></dt><dd>Public detection coverage</dd>
+<dt><span class="hl-vuln__p hl-vuln__p--ssvc">SSVC</span></dt><dd>CISA assessment</dd>
+<dt><span class="hl-vuln__p hl-vuln__p--exp">Exploits</span></dt><dd>Publisher-confirmed entries</dd>
 <dt class="hl-legend__k">Fixed in / advisories</dt><dd>Record context</dd>
-<dt class="hl-legend__k">cve.now</dt><dd>CVE record</dd>
-<dt class="hl-legend__k">Nuclei / ET Open</dt><dd>Admission by detection tooling</dd>
-<dt class="hl-legend__k">Metasploit / Exploit-DB</dt><dd>Admission by exploit tooling</dd>
-<dt class="hl-legend__k">EPSS top decile</dt><dd>Admission by percentile</dd>
-<dt class="hl-legend__k">EPSS + maturity</dt><dd>Admission by paired scores</dd>
-<dt class="hl-legend__k">WordPress unauthenticated</dt><dd>Admission by record fields</dd>
-<dt class="hl-legend__k">KEV product</dt><dd>Earlier product listings</dd>
+<dt><span class="hl-vuln__p hl-vuln__p--cn">cve.now</span></dt><dd>CVE record</dd>
+<dt><span class="hl-vuln__w hl-vuln__w--nuclei">Nuclei</span> <span class="hl-vuln__w hl-vuln__w--et">ET Open</span></dt><dd>Admission by detection tooling</dd>
+<dt><span class="hl-vuln__w hl-vuln__w--msf">Metasploit</span> <span class="hl-vuln__w hl-vuln__w--edb">Exploit-DB</span></dt><dd>Admission by exploit tooling</dd>
+<dt><span class="hl-vuln__w hl-vuln__w--epss">EPSS top decile</span></dt><dd>Admission by percentile</dd>
+<dt><span class="hl-vuln__w hl-vuln__w--vedas">EPSS + maturity</span></dt><dd>Admission by paired scores</dd>
+<dt><span class="hl-vuln__w hl-vuln__w--wp">WordPress unauthenticated</span></dt><dd>Admission by record fields</dd>
+<dt><span class="hl-vuln__w hl-vuln__w--kev">KEV product</span></dt><dd>Earlier product listings</dd>
 <dt class="hl-legend__k">Product exploited before</dt><dd>Filter only, never admits</dd>
-<dt class="hl-legend__k">PoC on GitHub</dt><dd>nomi-sec index context</dd>
+<dt><span class="hl-vuln__p hl-vuln__p--nomi">PoC on GitHub</span></dt><dd>nomi-sec index context</dd>
 </dl>
 {%- endcapture -%}
 <details class="hl-legend-mobile" data-pagefind-ignore>
