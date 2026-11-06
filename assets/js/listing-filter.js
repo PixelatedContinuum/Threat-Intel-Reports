@@ -429,7 +429,9 @@ function init(bar) {
      CVE under the default "Recent", or a filter the reader set) would land on
      nothing. Clear this bar's filters so the target shows, then bring it into
      view. Inert when the hash names nothing inside this grid. */
+  var cancelAnchorTracking = function () {};
   function revealTarget() {
+    cancelAnchorTracking();
     var id = decode(String(window.location.hash || '').replace(/^#/, ''));
     if (!id || id.indexOf('=') > -1) return;
     var el = document.getElementById(id);
@@ -457,8 +459,9 @@ function init(bar) {
       // A dated heading is the destination of a day link. Scrolling to the
       // first row instead can push the heading above a phone's viewport.
       var landing = targetDay && el.hasAttribute('data-filter-group') ? el : row;
+      var tracking = true;
       var scroll = function () {
-        if (decode(String(window.location.hash || '').replace(/^#/, '')) === id) {
+        if (tracking && decode(String(window.location.hash || '').replace(/^#/, '')) === id) {
           landing.scrollIntoView({ block: 'start', behavior: 'instant' });
         }
       };
@@ -472,6 +475,26 @@ function init(bar) {
       // anchor. Correct the initial landing after those layout passes finish.
       settle();
       if (document.fonts && document.fonts.ready) document.fonts.ready.then(settle);
+      // Viewport chip fitting can resize rows after the first two frames, and
+      // the browser can apply its native fragment scroll after load. Keep the
+      // landing steady through that short layout window, then release it.
+      // Any reader interaction releases it immediately.
+      var observer = window.ResizeObserver ? new ResizeObserver(settle) : null;
+      if (observer) observer.observe(grid);
+      window.addEventListener('load', settle);
+      var stopEvents = ['wheel', 'touchstart', 'pointerdown', 'keydown'];
+      var stop = function () {
+        tracking = false;
+        if (observer) observer.disconnect();
+        window.removeEventListener('load', settle);
+        stopEvents.forEach(function (name) { window.removeEventListener(name, stop); });
+        window.clearTimeout(timer);
+      };
+      stopEvents.forEach(function (name) { window.addEventListener(name, stop, { passive: true }); });
+      // A native smooth fragment animation can outlive the resize callbacks
+      // and finish at the pre-fit coordinates. Correct once after it settles.
+      var timer = window.setTimeout(function () { scroll(); stop(); }, 2000);
+      cancelAnchorTracking = stop;
     }
   }
 

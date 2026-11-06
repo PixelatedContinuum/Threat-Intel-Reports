@@ -39,3 +39,13 @@ test('built W5c folds preserve members, controls, search/filter counts and ancho
  for(const row of d.querySelectorAll('#vulns .hl-vuln[data-day="2026-10-11"]'))assert.equal(row.closest('[data-filter-batch]'),null,'four-row day stays plain');
  }finally{dom.window.close();}
 });
+test('anchor correction follows late layout and releases on reader interaction',()=>{
+ const dom=new JSDOM('<section data-filter-scope><div data-listing-filter data-filter-state="query"><input class="hl-filter__search"></div><div data-filter-grid data-filter-item=".hl-vuln"><h2 id="day" data-filter-group data-day-target="2026-11-05">Day</h2><div class="hl-vuln" data-day="2026-11-05" data-title="row"></div></div></section>',{url:'https://fixture.test/#day',runScripts:'outside-only'});
+ try{const w=dom.window,observers=[],scrolled=[],timers=[];w.Element.prototype.scrollIntoView=function(){scrolled.push(this.id);};w.requestAnimationFrame=fn=>fn();w.setTimeout=fn=>{timers.push(fn);return timers.length;};w.clearTimeout=()=>{};
+ w.ResizeObserver=class{constructor(fn){this.fn=fn;observers.push(this);}observe(){}disconnect(){this.disconnected=true;}};
+ w.eval(read('assets/js/listing-filter.js'));assert.equal(scrolled.at(-1),'day');assert.equal(observers.length,1);
+ const before=scrolled.length;observers[0].fn();assert.ok(scrolled.length>before,'late row sizing corrects landing');
+ w.dispatchEvent(new w.Event('wheel'));assert.equal(observers[0].disconnected,true);const stopped=scrolled.length;observers[0].fn();assert.equal(scrolled.length,stopped,'reader owns scroll after interaction');
+ timers.forEach(fn=>fn());assert.equal(scrolled.length,stopped,'settling timer cannot steal the reader scroll back');
+ }finally{dom.window.close();}
+});
