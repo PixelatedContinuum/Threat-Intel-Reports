@@ -9,10 +9,12 @@
     var cve = row.classList.contains('hl-vuln--cve');
     var chips = Array.from(box.children);
     function rank(chip) {
+      // The CVSS score is what readers look at first: always shown, on both tabs
+      // (Joseph 2026-11-06).
+      if (chip.matches('.hl-vuln__sev')) return -1;
       if (cve) {
         if (chip.matches('.hl-vuln__w:not(.hl-vuln__w--kev)')) return 0;
         if (chip.matches('.hl-vuln__p--vedas') && (row.dataset.sig || '').split('|').indexOf('epss_vedas') !== -1) return 0;
-        if (chip.matches('.hl-vuln__sev')) return 1;
         if (chip.querySelector('.hl-vuln__p--epss')) return 2;
       } else {
         if (chip.matches('.hl-vuln__b--cisa')) return 0;
@@ -49,8 +51,8 @@
         // Priority chips come first (sorted above); any later chip that still
         // fits in the measured width stays visible too (Joseph 2026-11-06:
         // "show a few more tags"). Unmeasured rows show the priority chips only.
-        var keep = budget > 0 && width > 0
-          ? used + width + gap <= budget : rank(chip) < 9 && kept < 4;
+        var keep = rank(chip) < 0 || (budget > 0 && width > 0
+          ? used + width + gap <= budget : rank(chip) < 9 && kept < 4);
         if (keep) { used += width + gap; kept++; }
         else { overflow++; chip.hidden = !expanded; }
       });
