@@ -114,7 +114,17 @@ function el(tag, cls, text) {
   if (text !== undefined && text !== null) { node.textContent = text; }
   return node;
 }
-function headInto(panel, text) { panel.appendChild(el('div', 'hl-dt__h', text)); }
+/* T-0569: each section heading carries a colour key (Joseph, 2026-11-06), matched to the
+   row chip it explains where there is one; CSS sets the colours. */
+var HEAD_KEYS = {
+  'CVE record': 'rec', 'Affected and fixed': 'fix', 'What to do': 'todo', 'Exploitation': 'expl',
+  'Why listed': 'why', 'Public exploits': 'exp', 'Detection': 'det', 'Severity': 'sev',
+  'Likelihood': 'epss', 'Likelihood (EPSS)': 'epss', 'Links': 'links'
+};
+function headInto(panel, text) {
+  var k = HEAD_KEYS[text];
+  panel.appendChild(el('div', k ? 'hl-dt__h hl-dt__h--' + k : 'hl-dt__h', text));
+}
 function lineInto(panel, text) { panel.appendChild(el('p', 'hl-dt__line', text)); }
 
 /* An external link. `target` is always already the fixed prefix plus an encoded,

@@ -4328,6 +4328,17 @@ span.hl-vuln__p--ssvc, span.hl-vuln__p--exp, span.hl-vuln__p--cn { cursor: help;
   color: var(--hl-text-muted);
 }
 .hl-dt__h:first-child { margin-top: 0; }
+/* T-0569: heading colours, each the colour of the row chip it explains (Joseph, 2026-11-06). */
+.hl-dt__h--rec   { color: var(--hl-accent-blue); }
+.hl-dt__h--fix   { color: #2dd4bf; }
+.hl-dt__h--todo  { color: #3fb950; }
+.hl-dt__h--expl  { color: #f87171; }
+.hl-dt__h--why   { color: #22d3ee; }
+.hl-dt__h--exp   { color: #fb923c; }
+.hl-dt__h--det   { color: #7ee787; }
+.hl-dt__h--sev   { color: #e3b341; }
+.hl-dt__h--epss  { color: #79c0ff; }
+.hl-dt__h--links { color: #bc8cff; }
 .hl-dt__line { margin: 0.2em 0; overflow-wrap: anywhere; }
 .hl-dt__line:first-child { margin-top: 0; }
 .hl-dt__quote {
