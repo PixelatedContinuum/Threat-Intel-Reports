@@ -11,6 +11,7 @@ position: 2.5
 {% include index-header.html accent="#58a6ff" label="The Wire" title="Threat Intelligence Headlines" desc="Threat reporting, newly exploited vulnerabilities and significant new CVEs, refreshed every 15 minutes." %}
 
 {%- assign wire = site.data.wire -%}
+{%- assign wp_batch_group_min = 5 -%}
 {%- if wire and wire.items and wire.items != empty -%}
 {%- assign n_headlines = wire.counts.research | plus: wire.counts.news -%}
 {%- assign n_vulns = wire.vulns_counts.total | default: 0 | plus: 0 -%}
@@ -144,7 +145,7 @@ reads back from the built page (it fails the index step on a duplicate). A vuln 
 {%- capture legend_html -%}
 <div class="hl-legend__h">Groups and order</div>
 <p class="hl-legend__p">Every VulnCheck KEV entry stays visible. Groups measure the time from disclosure to KEV listing: under 30 days, 30 days to a year, over a year, then unknown disclosure dates.</p>
-<p class="hl-legend__p">Within each group, CISA-listed CVEs come first, then network flaws needing no privileges or user action, then rows with detection rules or tooling, then higher EPSS, newer KEV additions and CVE id. A WordPress batch of at least 20 on one day folds into an expandable line in each group, placed at its first row's rank. Filters open matching batches and counts show matching rows.</p>
+<p class="hl-legend__p">Within each group, CISA-listed CVEs come first, then network flaws needing no privileges or user action, then rows with detection rules or tooling, then higher EPSS, newer KEV additions and CVE id. A WordPress batch of at least 20 on one day folds into an expandable line where an age group holds at least {{ wp_batch_group_min }} of its rows, placed at its first row's rank. Smaller groups show individual rows. Filters open matching batches and counts show matching rows.</p>
 <div class="hl-legend__h">Reading a row</div>
 <dl class="hl-legend__list">
 <dt><span class="hl-vuln__cve">CVE-YYYY-NNNN</span></dt>
@@ -288,11 +289,13 @@ reads back from the built page (it fails the index step on a duplicate). A vuln 
 {%- assign seen_batches = "|" -%}
 {%- for unit in group_rows -%}
 {%- assign batch_key = unit.batch | append: "" -%}
+{%- assign batch_rows = group_rows | where: "batch", batch_key -%}
+{%- if batch_rows.size < wp_batch_group_min -%}{%- assign batch_key = "" -%}{%- endif -%}
 {%- assign batch_token = batch_key | prepend: "|" | append: "|" -%}
 {%- if batch_key != "" and seen_batches contains batch_token -%}{%- continue -%}{%- endif -%}
 {%- if batch_key != "" -%}
 {%- assign seen_batches = seen_batches | append: batch_token -%}
-{%- assign unit_rows = group_rows | where: "batch", batch_key -%}
+{%- assign unit_rows = batch_rows -%}
 <details class="hl-vuln-batch" data-filter-container data-filter-batch="{{ batch_key | escape }}">
 <summary><span data-container-count>{{ unit_rows.size }}</span> WordPress plugin and theme CVEs added on {{ unit.added | date: "%-d %B" | escape }}</summary>
 {%- else -%}

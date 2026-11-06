@@ -51,11 +51,11 @@ vedas_generated_at: '2026-11-05T20:48:28.213Z'
 vulns_status: ok
 vulns_generated_at: '2026-11-05T20:48:28.213Z'
 vulns_counts:
-  total: 26
+  total: 46
   cisa: 1
-  older: 2
+  older: 18
   critical: 1
-  high: 25
+  high: 45
   medium: 0
   low: 0
   unscored: 0
@@ -66,18 +66,21 @@ vulns_counts:
   detect: 3
   reported: 0
   stories: 0
-  disclosed: 25
+  disclosed: 45
   prenvd: 0
-  epss: 26
+  epss: 46
   epss_pre: 0
-  age_new: 2
+  age_new: 6
   age_mid: 21
-  age_old: 2
+  age_old: 18
   age_unknown: 1
-  wp: 22
+  wp: 42
   batches:
     - key: wp-2026-10-13
       day: '2026-10-13'
+      'n': 20
+    - key: wp-2026-10-12
+      day: '2026-10-12'
       'n': 20
 vulns:
   - cve: CVE-2026-9100
@@ -1165,6 +1168,846 @@ vulns:
     prio: 25
     wp: true
     batch: wp-2026-10-13
+  - cve: CVE-2026-9300
+    published: '2026-11-05'
+    vendor: WordPress
+    product: Straddling batch plugin 0
+    title: Synthetic fixture CVE record.
+    cvss: '7.5'
+    cvss_version: '3.1'
+    severity: high
+    scored_by: CNA
+    epss: '0.12'
+    epss_pct: '0.5'
+    epss_date: '2026-11-05'
+    epss_max: '0.12'
+    epss_spark: 0,10 120,0
+    signals: []
+    msf: []
+    edb: []
+    et_sids: []
+    nuclei: ''
+    cisa_sigma: []
+    snort3_sids: []
+    ssvc_expl: ''
+    ssvc_auto: ''
+    ssvc_impact: ''
+    fixed: ''
+    aliases: []
+    stories: 0
+    cvss_vector: CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:L/A:N
+    kev_product: ''
+    kev_product_n: ''
+    reports: []
+    reports_more: 0
+    added: '2026-10-12'
+    cisa_added: ''
+    evidence: ''
+    older: false
+    age_group: new
+    disclosed: '2026-10-01'
+    gap: 11
+    prio: 27
+    wp: true
+    batch: wp-2026-10-12
+  - cve: CVE-2026-9301
+    published: '2026-11-05'
+    vendor: WordPress
+    product: Straddling batch plugin 1
+    title: Synthetic fixture CVE record.
+    cvss: '7.5'
+    cvss_version: '3.1'
+    severity: high
+    scored_by: CNA
+    epss: '0.12'
+    epss_pct: '0.5'
+    epss_date: '2026-11-05'
+    epss_max: '0.12'
+    epss_spark: 0,10 120,0
+    signals: []
+    msf: []
+    edb: []
+    et_sids: []
+    nuclei: ''
+    cisa_sigma: []
+    snort3_sids: []
+    ssvc_expl: ''
+    ssvc_auto: ''
+    ssvc_impact: ''
+    fixed: ''
+    aliases: []
+    stories: 0
+    cvss_vector: CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:L/A:N
+    kev_product: ''
+    kev_product_n: ''
+    reports: []
+    reports_more: 0
+    added: '2026-10-12'
+    cisa_added: ''
+    evidence: ''
+    older: false
+    age_group: new
+    disclosed: '2026-10-01'
+    gap: 11
+    prio: 28
+    wp: true
+    batch: wp-2026-10-12
+  - cve: CVE-2026-9302
+    published: '2026-11-05'
+    vendor: WordPress
+    product: Straddling batch plugin 2
+    title: Synthetic fixture CVE record.
+    cvss: '7.5'
+    cvss_version: '3.1'
+    severity: high
+    scored_by: CNA
+    epss: '0.12'
+    epss_pct: '0.5'
+    epss_date: '2026-11-05'
+    epss_max: '0.12'
+    epss_spark: 0,10 120,0
+    signals: []
+    msf: []
+    edb: []
+    et_sids: []
+    nuclei: ''
+    cisa_sigma: []
+    snort3_sids: []
+    ssvc_expl: ''
+    ssvc_auto: ''
+    ssvc_impact: ''
+    fixed: ''
+    aliases: []
+    stories: 0
+    cvss_vector: CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:L/A:N
+    kev_product: ''
+    kev_product_n: ''
+    reports: []
+    reports_more: 0
+    added: '2026-10-12'
+    cisa_added: ''
+    evidence: ''
+    older: false
+    age_group: new
+    disclosed: '2026-10-01'
+    gap: 11
+    prio: 29
+    wp: true
+    batch: wp-2026-10-12
+  - cve: CVE-2026-9303
+    published: '2026-11-05'
+    vendor: WordPress
+    product: Straddling batch plugin 3
+    title: Synthetic fixture CVE record.
+    cvss: '7.5'
+    cvss_version: '3.1'
+    severity: high
+    scored_by: CNA
+    epss: '0.12'
+    epss_pct: '0.5'
+    epss_date: '2026-11-05'
+    epss_max: '0.12'
+    epss_spark: 0,10 120,0
+    signals: []
+    msf: []
+    edb: []
+    et_sids: []
+    nuclei: ''
+    cisa_sigma: []
+    snort3_sids: []
+    ssvc_expl: ''
+    ssvc_auto: ''
+    ssvc_impact: ''
+    fixed: ''
+    aliases: []
+    stories: 0
+    cvss_vector: CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:L/A:N
+    kev_product: ''
+    kev_product_n: ''
+    reports: []
+    reports_more: 0
+    added: '2026-10-12'
+    cisa_added: ''
+    evidence: ''
+    older: false
+    age_group: new
+    disclosed: '2026-10-01'
+    gap: 11
+    prio: 30
+    wp: true
+    batch: wp-2026-10-12
+  - cve: CVE-2026-9304
+    published: '2026-11-05'
+    vendor: WordPress
+    product: Straddling batch plugin 4
+    title: Synthetic fixture CVE record.
+    cvss: '7.5'
+    cvss_version: '3.1'
+    severity: high
+    scored_by: CNA
+    epss: '0.12'
+    epss_pct: '0.5'
+    epss_date: '2026-11-05'
+    epss_max: '0.12'
+    epss_spark: 0,10 120,0
+    signals: []
+    msf: []
+    edb: []
+    et_sids: []
+    nuclei: ''
+    cisa_sigma: []
+    snort3_sids: []
+    ssvc_expl: ''
+    ssvc_auto: ''
+    ssvc_impact: ''
+    fixed: ''
+    aliases: []
+    stories: 0
+    cvss_vector: CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:L/A:N
+    kev_product: ''
+    kev_product_n: ''
+    reports: []
+    reports_more: 0
+    added: '2026-10-12'
+    cisa_added: ''
+    evidence: ''
+    older: true
+    age_group: old
+    disclosed: '2024-01-01'
+    gap: 1015
+    prio: 31
+    wp: true
+    batch: wp-2026-10-12
+  - cve: CVE-2026-9305
+    published: '2026-11-05'
+    vendor: WordPress
+    product: Straddling batch plugin 5
+    title: Synthetic fixture CVE record.
+    cvss: '7.5'
+    cvss_version: '3.1'
+    severity: high
+    scored_by: CNA
+    epss: '0.12'
+    epss_pct: '0.5'
+    epss_date: '2026-11-05'
+    epss_max: '0.12'
+    epss_spark: 0,10 120,0
+    signals: []
+    msf: []
+    edb: []
+    et_sids: []
+    nuclei: ''
+    cisa_sigma: []
+    snort3_sids: []
+    ssvc_expl: ''
+    ssvc_auto: ''
+    ssvc_impact: ''
+    fixed: ''
+    aliases: []
+    stories: 0
+    cvss_vector: CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:L/A:N
+    kev_product: ''
+    kev_product_n: ''
+    reports: []
+    reports_more: 0
+    added: '2026-10-12'
+    cisa_added: ''
+    evidence: ''
+    older: true
+    age_group: old
+    disclosed: '2024-01-01'
+    gap: 1015
+    prio: 32
+    wp: true
+    batch: wp-2026-10-12
+  - cve: CVE-2026-9306
+    published: '2026-11-05'
+    vendor: WordPress
+    product: Straddling batch plugin 6
+    title: Synthetic fixture CVE record.
+    cvss: '7.5'
+    cvss_version: '3.1'
+    severity: high
+    scored_by: CNA
+    epss: '0.12'
+    epss_pct: '0.5'
+    epss_date: '2026-11-05'
+    epss_max: '0.12'
+    epss_spark: 0,10 120,0
+    signals: []
+    msf: []
+    edb: []
+    et_sids: []
+    nuclei: ''
+    cisa_sigma: []
+    snort3_sids: []
+    ssvc_expl: ''
+    ssvc_auto: ''
+    ssvc_impact: ''
+    fixed: ''
+    aliases: []
+    stories: 0
+    cvss_vector: CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:L/A:N
+    kev_product: ''
+    kev_product_n: ''
+    reports: []
+    reports_more: 0
+    added: '2026-10-12'
+    cisa_added: ''
+    evidence: ''
+    older: true
+    age_group: old
+    disclosed: '2024-01-01'
+    gap: 1015
+    prio: 33
+    wp: true
+    batch: wp-2026-10-12
+  - cve: CVE-2026-9307
+    published: '2026-11-05'
+    vendor: WordPress
+    product: Straddling batch plugin 7
+    title: Synthetic fixture CVE record.
+    cvss: '7.5'
+    cvss_version: '3.1'
+    severity: high
+    scored_by: CNA
+    epss: '0.12'
+    epss_pct: '0.5'
+    epss_date: '2026-11-05'
+    epss_max: '0.12'
+    epss_spark: 0,10 120,0
+    signals: []
+    msf: []
+    edb: []
+    et_sids: []
+    nuclei: ''
+    cisa_sigma: []
+    snort3_sids: []
+    ssvc_expl: ''
+    ssvc_auto: ''
+    ssvc_impact: ''
+    fixed: ''
+    aliases: []
+    stories: 0
+    cvss_vector: CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:L/A:N
+    kev_product: ''
+    kev_product_n: ''
+    reports: []
+    reports_more: 0
+    added: '2026-10-12'
+    cisa_added: ''
+    evidence: ''
+    older: true
+    age_group: old
+    disclosed: '2024-01-01'
+    gap: 1015
+    prio: 34
+    wp: true
+    batch: wp-2026-10-12
+  - cve: CVE-2026-9308
+    published: '2026-11-05'
+    vendor: WordPress
+    product: Straddling batch plugin 8
+    title: Synthetic fixture CVE record.
+    cvss: '7.5'
+    cvss_version: '3.1'
+    severity: high
+    scored_by: CNA
+    epss: '0.12'
+    epss_pct: '0.5'
+    epss_date: '2026-11-05'
+    epss_max: '0.12'
+    epss_spark: 0,10 120,0
+    signals: []
+    msf: []
+    edb: []
+    et_sids: []
+    nuclei: ''
+    cisa_sigma: []
+    snort3_sids: []
+    ssvc_expl: ''
+    ssvc_auto: ''
+    ssvc_impact: ''
+    fixed: ''
+    aliases: []
+    stories: 0
+    cvss_vector: CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:L/A:N
+    kev_product: ''
+    kev_product_n: ''
+    reports: []
+    reports_more: 0
+    added: '2026-10-12'
+    cisa_added: ''
+    evidence: ''
+    older: true
+    age_group: old
+    disclosed: '2024-01-01'
+    gap: 1015
+    prio: 35
+    wp: true
+    batch: wp-2026-10-12
+  - cve: CVE-2026-9309
+    published: '2026-11-05'
+    vendor: WordPress
+    product: Straddling batch plugin 9
+    title: Synthetic fixture CVE record.
+    cvss: '7.5'
+    cvss_version: '3.1'
+    severity: high
+    scored_by: CNA
+    epss: '0.12'
+    epss_pct: '0.5'
+    epss_date: '2026-11-05'
+    epss_max: '0.12'
+    epss_spark: 0,10 120,0
+    signals: []
+    msf: []
+    edb: []
+    et_sids: []
+    nuclei: ''
+    cisa_sigma: []
+    snort3_sids: []
+    ssvc_expl: ''
+    ssvc_auto: ''
+    ssvc_impact: ''
+    fixed: ''
+    aliases: []
+    stories: 0
+    cvss_vector: CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:L/A:N
+    kev_product: ''
+    kev_product_n: ''
+    reports: []
+    reports_more: 0
+    added: '2026-10-12'
+    cisa_added: ''
+    evidence: ''
+    older: true
+    age_group: old
+    disclosed: '2024-01-01'
+    gap: 1015
+    prio: 36
+    wp: true
+    batch: wp-2026-10-12
+  - cve: CVE-2026-9310
+    published: '2026-11-05'
+    vendor: WordPress
+    product: Straddling batch plugin 10
+    title: Synthetic fixture CVE record.
+    cvss: '7.5'
+    cvss_version: '3.1'
+    severity: high
+    scored_by: CNA
+    epss: '0.12'
+    epss_pct: '0.5'
+    epss_date: '2026-11-05'
+    epss_max: '0.12'
+    epss_spark: 0,10 120,0
+    signals: []
+    msf: []
+    edb: []
+    et_sids: []
+    nuclei: ''
+    cisa_sigma: []
+    snort3_sids: []
+    ssvc_expl: ''
+    ssvc_auto: ''
+    ssvc_impact: ''
+    fixed: ''
+    aliases: []
+    stories: 0
+    cvss_vector: CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:L/A:N
+    kev_product: ''
+    kev_product_n: ''
+    reports: []
+    reports_more: 0
+    added: '2026-10-12'
+    cisa_added: ''
+    evidence: ''
+    older: true
+    age_group: old
+    disclosed: '2024-01-01'
+    gap: 1015
+    prio: 37
+    wp: true
+    batch: wp-2026-10-12
+  - cve: CVE-2026-9311
+    published: '2026-11-05'
+    vendor: WordPress
+    product: Straddling batch plugin 11
+    title: Synthetic fixture CVE record.
+    cvss: '7.5'
+    cvss_version: '3.1'
+    severity: high
+    scored_by: CNA
+    epss: '0.12'
+    epss_pct: '0.5'
+    epss_date: '2026-11-05'
+    epss_max: '0.12'
+    epss_spark: 0,10 120,0
+    signals: []
+    msf: []
+    edb: []
+    et_sids: []
+    nuclei: ''
+    cisa_sigma: []
+    snort3_sids: []
+    ssvc_expl: ''
+    ssvc_auto: ''
+    ssvc_impact: ''
+    fixed: ''
+    aliases: []
+    stories: 0
+    cvss_vector: CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:L/A:N
+    kev_product: ''
+    kev_product_n: ''
+    reports: []
+    reports_more: 0
+    added: '2026-10-12'
+    cisa_added: ''
+    evidence: ''
+    older: true
+    age_group: old
+    disclosed: '2024-01-01'
+    gap: 1015
+    prio: 38
+    wp: true
+    batch: wp-2026-10-12
+  - cve: CVE-2026-9312
+    published: '2026-11-05'
+    vendor: WordPress
+    product: Straddling batch plugin 12
+    title: Synthetic fixture CVE record.
+    cvss: '7.5'
+    cvss_version: '3.1'
+    severity: high
+    scored_by: CNA
+    epss: '0.12'
+    epss_pct: '0.5'
+    epss_date: '2026-11-05'
+    epss_max: '0.12'
+    epss_spark: 0,10 120,0
+    signals: []
+    msf: []
+    edb: []
+    et_sids: []
+    nuclei: ''
+    cisa_sigma: []
+    snort3_sids: []
+    ssvc_expl: ''
+    ssvc_auto: ''
+    ssvc_impact: ''
+    fixed: ''
+    aliases: []
+    stories: 0
+    cvss_vector: CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:L/A:N
+    kev_product: ''
+    kev_product_n: ''
+    reports: []
+    reports_more: 0
+    added: '2026-10-12'
+    cisa_added: ''
+    evidence: ''
+    older: true
+    age_group: old
+    disclosed: '2024-01-01'
+    gap: 1015
+    prio: 39
+    wp: true
+    batch: wp-2026-10-12
+  - cve: CVE-2026-9313
+    published: '2026-11-05'
+    vendor: WordPress
+    product: Straddling batch plugin 13
+    title: Synthetic fixture CVE record.
+    cvss: '7.5'
+    cvss_version: '3.1'
+    severity: high
+    scored_by: CNA
+    epss: '0.12'
+    epss_pct: '0.5'
+    epss_date: '2026-11-05'
+    epss_max: '0.12'
+    epss_spark: 0,10 120,0
+    signals: []
+    msf: []
+    edb: []
+    et_sids: []
+    nuclei: ''
+    cisa_sigma: []
+    snort3_sids: []
+    ssvc_expl: ''
+    ssvc_auto: ''
+    ssvc_impact: ''
+    fixed: ''
+    aliases: []
+    stories: 0
+    cvss_vector: CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:L/A:N
+    kev_product: ''
+    kev_product_n: ''
+    reports: []
+    reports_more: 0
+    added: '2026-10-12'
+    cisa_added: ''
+    evidence: ''
+    older: true
+    age_group: old
+    disclosed: '2024-01-01'
+    gap: 1015
+    prio: 40
+    wp: true
+    batch: wp-2026-10-12
+  - cve: CVE-2026-9314
+    published: '2026-11-05'
+    vendor: WordPress
+    product: Straddling batch plugin 14
+    title: Synthetic fixture CVE record.
+    cvss: '7.5'
+    cvss_version: '3.1'
+    severity: high
+    scored_by: CNA
+    epss: '0.12'
+    epss_pct: '0.5'
+    epss_date: '2026-11-05'
+    epss_max: '0.12'
+    epss_spark: 0,10 120,0
+    signals: []
+    msf: []
+    edb: []
+    et_sids: []
+    nuclei: ''
+    cisa_sigma: []
+    snort3_sids: []
+    ssvc_expl: ''
+    ssvc_auto: ''
+    ssvc_impact: ''
+    fixed: ''
+    aliases: []
+    stories: 0
+    cvss_vector: CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:L/A:N
+    kev_product: ''
+    kev_product_n: ''
+    reports: []
+    reports_more: 0
+    added: '2026-10-12'
+    cisa_added: ''
+    evidence: ''
+    older: true
+    age_group: old
+    disclosed: '2024-01-01'
+    gap: 1015
+    prio: 41
+    wp: true
+    batch: wp-2026-10-12
+  - cve: CVE-2026-9315
+    published: '2026-11-05'
+    vendor: WordPress
+    product: Straddling batch plugin 15
+    title: Synthetic fixture CVE record.
+    cvss: '7.5'
+    cvss_version: '3.1'
+    severity: high
+    scored_by: CNA
+    epss: '0.12'
+    epss_pct: '0.5'
+    epss_date: '2026-11-05'
+    epss_max: '0.12'
+    epss_spark: 0,10 120,0
+    signals: []
+    msf: []
+    edb: []
+    et_sids: []
+    nuclei: ''
+    cisa_sigma: []
+    snort3_sids: []
+    ssvc_expl: ''
+    ssvc_auto: ''
+    ssvc_impact: ''
+    fixed: ''
+    aliases: []
+    stories: 0
+    cvss_vector: CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:L/A:N
+    kev_product: ''
+    kev_product_n: ''
+    reports: []
+    reports_more: 0
+    added: '2026-10-12'
+    cisa_added: ''
+    evidence: ''
+    older: true
+    age_group: old
+    disclosed: '2024-01-01'
+    gap: 1015
+    prio: 42
+    wp: true
+    batch: wp-2026-10-12
+  - cve: CVE-2026-9316
+    published: '2026-11-05'
+    vendor: WordPress
+    product: Straddling batch plugin 16
+    title: Synthetic fixture CVE record.
+    cvss: '7.5'
+    cvss_version: '3.1'
+    severity: high
+    scored_by: CNA
+    epss: '0.12'
+    epss_pct: '0.5'
+    epss_date: '2026-11-05'
+    epss_max: '0.12'
+    epss_spark: 0,10 120,0
+    signals: []
+    msf: []
+    edb: []
+    et_sids: []
+    nuclei: ''
+    cisa_sigma: []
+    snort3_sids: []
+    ssvc_expl: ''
+    ssvc_auto: ''
+    ssvc_impact: ''
+    fixed: ''
+    aliases: []
+    stories: 0
+    cvss_vector: CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:L/A:N
+    kev_product: ''
+    kev_product_n: ''
+    reports: []
+    reports_more: 0
+    added: '2026-10-12'
+    cisa_added: ''
+    evidence: ''
+    older: true
+    age_group: old
+    disclosed: '2024-01-01'
+    gap: 1015
+    prio: 43
+    wp: true
+    batch: wp-2026-10-12
+  - cve: CVE-2026-9317
+    published: '2026-11-05'
+    vendor: WordPress
+    product: Straddling batch plugin 17
+    title: Synthetic fixture CVE record.
+    cvss: '7.5'
+    cvss_version: '3.1'
+    severity: high
+    scored_by: CNA
+    epss: '0.12'
+    epss_pct: '0.5'
+    epss_date: '2026-11-05'
+    epss_max: '0.12'
+    epss_spark: 0,10 120,0
+    signals: []
+    msf: []
+    edb: []
+    et_sids: []
+    nuclei: ''
+    cisa_sigma: []
+    snort3_sids: []
+    ssvc_expl: ''
+    ssvc_auto: ''
+    ssvc_impact: ''
+    fixed: ''
+    aliases: []
+    stories: 0
+    cvss_vector: CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:L/A:N
+    kev_product: ''
+    kev_product_n: ''
+    reports: []
+    reports_more: 0
+    added: '2026-10-12'
+    cisa_added: ''
+    evidence: ''
+    older: true
+    age_group: old
+    disclosed: '2024-01-01'
+    gap: 1015
+    prio: 44
+    wp: true
+    batch: wp-2026-10-12
+  - cve: CVE-2026-9318
+    published: '2026-11-05'
+    vendor: WordPress
+    product: Straddling batch plugin 18
+    title: Synthetic fixture CVE record.
+    cvss: '7.5'
+    cvss_version: '3.1'
+    severity: high
+    scored_by: CNA
+    epss: '0.12'
+    epss_pct: '0.5'
+    epss_date: '2026-11-05'
+    epss_max: '0.12'
+    epss_spark: 0,10 120,0
+    signals: []
+    msf: []
+    edb: []
+    et_sids: []
+    nuclei: ''
+    cisa_sigma: []
+    snort3_sids: []
+    ssvc_expl: ''
+    ssvc_auto: ''
+    ssvc_impact: ''
+    fixed: ''
+    aliases: []
+    stories: 0
+    cvss_vector: CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:L/A:N
+    kev_product: ''
+    kev_product_n: ''
+    reports: []
+    reports_more: 0
+    added: '2026-10-12'
+    cisa_added: ''
+    evidence: ''
+    older: true
+    age_group: old
+    disclosed: '2024-01-01'
+    gap: 1015
+    prio: 45
+    wp: true
+    batch: wp-2026-10-12
+  - cve: CVE-2026-9319
+    published: '2026-11-05'
+    vendor: WordPress
+    product: Straddling batch plugin 19
+    title: Synthetic fixture CVE record.
+    cvss: '7.5'
+    cvss_version: '3.1'
+    severity: high
+    scored_by: CNA
+    epss: '0.12'
+    epss_pct: '0.5'
+    epss_date: '2026-11-05'
+    epss_max: '0.12'
+    epss_spark: 0,10 120,0
+    signals: []
+    msf: []
+    edb: []
+    et_sids: []
+    nuclei: ''
+    cisa_sigma: []
+    snort3_sids: []
+    ssvc_expl: ''
+    ssvc_auto: ''
+    ssvc_impact: ''
+    fixed: ''
+    aliases: []
+    stories: 0
+    cvss_vector: CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:L/A:N
+    kev_product: ''
+    kev_product_n: ''
+    reports: []
+    reports_more: 0
+    added: '2026-10-12'
+    cisa_added: ''
+    evidence: ''
+    older: true
+    age_group: old
+    disclosed: '2024-01-01'
+    gap: 1015
+    prio: 46
+    wp: true
+    batch: wp-2026-10-12
 cves_status: ok
 cves_generated_at: '2026-11-05T20:48:28.213Z'
 cves_counts:
