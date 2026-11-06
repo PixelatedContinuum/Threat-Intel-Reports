@@ -113,6 +113,15 @@ reads back from the built page (it fails the index step on a duplicate). A vuln 
 </section>
 
 <section id="vulns" class="hl-wtabs__sec" data-filter-scope data-details="{{ '/wire/details-nkev.json' | relative_url }}?v={{ wire.vulns_generated_at | default: wire.generated_at | escape }}">
+<details class="hl-wire-explanation" id="nkev-explanation" data-pagefind-ignore>
+<summary>Explanation and data used</summary>
+<div class="hl-wire-explanation__body">
+<p>I keep already exploited CVEs here, using additions to VulnCheck's Known Exploited Vulnerabilities (KEV) catalog. CISA listing is not required: the CISA KEV badge marks CVEs on both catalogs. A low EPSS or a missing rule does not remove a row, because VulnCheck has already recorded exploitation.</p>
+<p>I group rows by the time from NVD publication to VulnCheck listing: under 30 days, 30 to 365 days, and over 365 days. These groups separate recently disclosed flaws from older flaws newly entering the catalog; a newly listed CVE is not necessarily a newly exploited CVE. Missing disclosure dates have their own group. Listing dates stand in for timing here; they do not establish when exploitation began.</p>
+<p>Within each group I apply tie-breakers in order: CISA-listed first; then network flaws needing no privileges or user action (AV:N, PR:N, UI:N); then any Metasploit module, Exploit-DB entry, Nuclei template, ET Open rule, CISA Sigma rule or Snort 3 rule; then higher EPSS (missing last), newer VulnCheck additions and CVE id. These datapoints order confirmed exploitation rather than deciding whether it deserves a row.</p>
+<p>I fold large same-day WordPress plugin and theme batches to keep one batch from dominating the list. The batch stays at its first row's rank and opens to every member; search and filters open matching rows. A batch needs at least 20 WordPress entries on one day, and at least {{ wp_batch_group_min }} in an age group to fold there. Smaller portions stay as individual rows. Folding preserves the evidence that dropping rows would hide.</p>
+</div>
+</details>
 {%- assign vstatus = wire.vulns_status | default: "unavailable" -%}
 {%- assign sev_bands = "critical,high,medium,low" | split: "," -%}
 
@@ -355,6 +364,18 @@ reads back from the built page (it fails the index step on a duplicate). A vuln 
 </section>
 
 <section id="cves" class="hl-wtabs__sec" data-filter-scope data-details="{{ '/wire/details-cves.json' | relative_url }}?v={{ wire.cves_generated_at | default: wire.generated_at | escape }}">
+<details class="hl-wire-explanation" id="cves-explanation" data-pagefind-ignore>
+<summary>Explanation and data used</summary>
+<div class="hl-wire-explanation__body">
+<p>I use this tab to pick CVEs likely to be exploited soon out of the flood of disclosures. It covers recent publications absent from both VulnCheck KEV and CISA KEV. Admission is a selection signal, not evidence that exploitation has happened.</p>
+<p>Any one of the six reasons admits a CVE. FIRST's Exploit Prediction Scoring System (EPSS) percentile of at least 0.90 puts it in the top 10% for predicted exploitation likelihood. That is a relative rank, not a 90% probability. The other score-based reason pairs EPSS probability of at least 1% with A.R.P. Syndicate's VEDAS exploit-maturity estimate of at least 80% and a Common Vulnerability Scoring System (CVSS) score of at least 7.0. I require the pair because VEDAS alone performed below the cohort's exploitation rate in my replay.</p>
+<p>A Metasploit module confirmed in Rapid7's index, an Exploit-DB entry confirmed in its publisher's index, a ProjectDiscovery Nuclei template, or an Emerging Threats ET Open rule each also admits a CVE. These identify available tooling or detection coverage. I have not tested the exploits, and a template or rule naming a CVE does not establish exploitation.</p>
+<p>My July to September 2026 replay judged 36,786 eligible CVEs once, seven days after publication, using the inputs available then. Later exploitation means a VulnCheck KEV addition after that point, through 5 November 2026: 116 CVEs met that outcome. The EPSS percentile reason selected 24 CVEs, three later listed; the EPSS and VEDAS pair selected 40, four later listed; tooling selected 53, eight later listed. Together they selected 102, with 12 later listed. These sets overlap, so their counts do not add.</p>
+<p>Those are small, in-sample results, not promised hit rates. July VEDAS history was unavailable; 323 eligible CVEs could not be judged for the paired reason. The replay took one look at day seven, while the live list rechecks throughout its publication window. Follow-up is shorter for later publications; October was too recent to judge.</p>
+<p>I retired the reason combining CVSS at least 9.0, network access with no login or user action, and a product previously on CISA KEV. It selected 267 CVEs in the same replay, only three later listed. That volume bought little coverage. Historical CNA/ADP scores stood in for unavailable historical live-source scores, so this is a bounded result. The "product on CISA KEV before" chip remains context about the product, not this CVE.</p>
+<p>Severity, standalone EPSS probability or maturity, news counts, SSVC assessments, fixed versions and advisory identifiers add context without independently admitting rows. The Rules chip also includes CISA Sigma and Snort 3 coverage, which do not admit CVEs. I combine the admission reasons by showing at most 200 rows, ranked by number of reasons met, then EPSS, exploit maturity and CVSS; publication-day headings organize the display. Missing chips mean missing confirmed data, not proof of absence.</p>
+</div>
+</details>
 {%- assign cstatus = wire.cves_status | default: "unavailable" -%}
 {%- assign sev_bands = "critical,high,medium,low" | split: "," -%}
 

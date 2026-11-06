@@ -257,6 +257,7 @@ var VEDAS_LEGEND = "<dt class=\"hl-legend__k\">Exploit maturity (VEDAS)</dt>\n<d
 var CVES_TAB_OK = [
   '<a class="hl-wtabs__tab hl-wtabs__tab--c" href="#cves">CVEs</a>',
   '<section id="cves" class="hl-wtabs__sec" data-filter-scope>',
+  '<details class="hl-wire-explanation"><summary>Explanation and data used</summary><p>My CVE selection.</p></details>',
   '<p class="hl-wire__freshness hl-wire__freshness--c">CVEs: Listing, titles, SSVC (CISA\'s own assessment), fixed versions and advisory ids from <a href="https://cve.now/">cve.now</a> (<a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>) &middot; Scores from NVD through VulnCheck, or from cve.now where a row says so &middot; Exploits from Rapid7 and Exploit-DB &middot; KEV products from CISA &middot; EPSS from <a href="https://www.first.org/epss/">FIRST</a> &middot; ' + VEDAS_CREDIT + ' &middot; <a href="{{ \'/wire/cves.xml\' | relative_url }}">Atom feed (CVEs)</a></p>',
   '<div class="hl-wire__callout hl-wire__callout--c"><p>Nuclei templates come from ProjectDiscovery\'s template index; ET Open rules come from Emerging Threats\' Suricata ruleset. the tooling reasons together admitted 53 CVEs, eight later listed on VulnCheck KEV; Nuclei accounted for seven of 34.</p><p>My selection of CVEs published in the last 30 days that are not on a KEV list yet. Each is here for at least one of six reasons: a Metasploit module or Exploit-DB entry, confirmed against Rapid7\'s or Exploit-DB\'s own index; a Nuclei template; an ET Open rule; EPSS in the top 10%; or EPSS at least 1% paired with VEDAS exploit maturity at least 80% and CVSS at least 7.0.</p><p>Being listed does not mean anyone has been seen exploiting the CVE. "Product on CISA KEV" is a fact about the product, not this CVE. The list excludes anything on VulnCheck KEV or CISA KEV, and a CVE moves to the nKEVs tab when it is added to VulnCheck KEV. It shows at most 200 CVEs, ranked by how many reasons they meet, then by EPSS, then by exploit maturity, then by CVSS.</p></div>',
   '{%- capture cves_legend_html -%}',
@@ -304,6 +305,7 @@ var PAGE_OK = [
   '{%- endfor -%}',
   '</section>',
   '<section id="vulns" class="hl-wtabs__sec" data-filter-scope>',
+  '<details class="hl-wire-explanation"><summary>Explanation and data used</summary><p>My nKEV ordering.</p></details>',
   // The nKEVs tab's shape (T-0468.1): the short attribution line, the legend captured once, printed
   // twice (the narrow details, then the aside after the grid), the grid itself with no legend in it.
   '<p class="hl-wire__freshness hl-wire__freshness--v">nKEVs: CVEs newly added &middot; Data: <a href="https://www.vulncheck.com/kev">VulnCheck KEV</a> &middot; EPSS from <a href="https://www.first.org/epss/">FIRST</a> &middot; ' + VEDAS_CREDIT + ' &middot; <a href="{{ \'/wire/vulns.xml\' | relative_url }}">Atom feed (nKEVs)</a></p>',
@@ -1465,7 +1467,14 @@ test('retired reason cannot return to page or include, and tooling copy is pinne
   ['six reasons', 'a Nuclei template; an ET Open rule',
    "Nuclei templates come from ProjectDiscovery's template index; ET Open rules come from Emerging Threats' Suricata ruleset.",
    'the tooling reasons together admitted 53 CVEs, eight later listed on VulnCheck KEV; Nuclei accounted for seven of 34.'
-  ].forEach(function (pin) { assert.equal(CW.checkPage(page.replace(pin,'removed'),inc).status,'FAIL',pin); });
+  ].forEach(function (pin) {
+    // Mutate the callout's reason count even when the explanation repeats it.
+    var changed = pin === 'six reasons'
+      ? page.replace(/(<div class="hl-wire__callout hl-wire__callout--c">[\s\S]*?)six reasons/, '$1removed')
+      : page.replace(pin, 'removed');
+    assert.notEqual(changed, page, pin);
+    assert.equal(CW.checkPage(changed,inc).status,'FAIL',pin);
+  });
 });
 
 test('the feed: the real wire/cves.xml passes; an unescaped output, a PoC word, a lost cve.now qualifier or a wrong source fails', function () {

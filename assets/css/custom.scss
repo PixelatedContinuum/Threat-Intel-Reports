@@ -3932,6 +3932,27 @@ a.hl-sponsor-rail__item:focus-visible { outline: 2px solid #ffffff; outline-offs
 .hl-wire__callout p { margin: 0 0 0.6em; }
 .hl-wire__callout p:last-child { margin-bottom: 0; }
 
+/* T-0565: native, keyboard-operable explanation panels on both vulnerability tabs. */
+.hl-wire-explanation {
+  margin: 16px 0;
+  border: 1px solid var(--hl-border-card);
+  border-left: 3px solid var(--hl-accent-blue);
+  border-radius: 3px;
+  background: var(--hl-bg-row);
+}
+.hl-wire-explanation > summary {
+  padding: 14px 16px;
+  cursor: pointer;
+  color: var(--hl-accent-blue);
+  font-weight: 600;
+}
+.hl-wire-explanation > summary:hover { background: rgba(88,166,255,0.06); }
+.hl-wire-explanation > summary:focus-visible { outline: 2px solid var(--hl-accent-blue); outline-offset: -2px; }
+.hl-wire-explanation[open] > summary { border-bottom: 1px solid var(--hl-border-card); }
+.hl-wire-explanation__body { padding: 16px; }
+.hl-wire-explanation__body p { margin: 0 0 1em; }
+.hl-wire-explanation__body p:last-child { margin-bottom: 0; }
+
 /* --- The Wire: tabs, switched by the URL hash with CSS only ----
    No JavaScript: each tab is a link to #headlines, #vulns or #cves, and :target
    shows the section. Any anchor INSIDE #vulns or #cves (a day, a CVE) opens it

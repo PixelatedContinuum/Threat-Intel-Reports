@@ -996,6 +996,7 @@ function checkPage(src, includes) {
       'returning reader can get new markup against the old script');
   }
 
+  problems = problems.concat(checkExplanations(src));
   problems = problems.concat(checkLegend(src));
   problems = problems.concat(checkTabNav(src));
   problems = problems.concat(checkCvesTab(src, includes));
@@ -1056,6 +1057,30 @@ function checkVedasCopy(legend, label) {
     out.push(label + ' lost the VEDAS source credit');
   }
   return out;
+}
+
+/* T-0565 W3c: exactly one collapsed, native explanation in each tab. These
+   checks pin structure and dash-free copy; the browser checks exercise native
+   keyboard behavior and filter/anchor isolation. They do not validate claims. */
+function checkExplanations(src) {
+  var problems = [];
+  ['vulns', 'cves'].forEach(function (tab) {
+    var section = src.match(new RegExp('<section id="' + tab + '"[^>]*>([\\s\\S]*?)</section>'));
+    var panels = section ? section[1].match(/<details\b[^>]*class="hl-wire-explanation"[^>]*>[\s\S]*?<\/details>/g) || [] : [];
+    if (panels.length !== 1) {
+      problems.push(tab + ' needs exactly one Explanation and data used panel');
+      return;
+    }
+    var panel = panels[0];
+    if (/^<details\b[^>]*\sopen(?:\s|=|>)/.test(panel)) problems.push(tab + ' explanation must be collapsed by default');
+    if (!/<summary>Explanation and data used<\/summary>/.test(panel)) problems.push(tab + ' explanation lost its native summary title');
+    // Strip Liquid and tags to scope the punctuation check to public copy.
+    var copy = panel.replace(/\{%[\s\S]*?%\}|\{\{[\s\S]*?\}\}|<[^>]*>/g, '');
+    if (/[\u2013\u2014]|&(?:mdash|ndash|#0*(?:8211|8212)|#x0*201[34]);/i.test(copy)) problems.push(tab + ' explanation copy contains an em or en dash');
+    var before = section[1].slice(0, section[1].indexOf(panel));
+    if (/data-filter-grid|data-listing-filter/.test(before)) problems.push(tab + ' explanation must precede filter controls and grids');
+  });
+  return problems;
 }
 
 function checkLegend(src) {
