@@ -9477,3 +9477,19 @@ a.hl-kc:hover { border-color: var(--kc); color: #ffffff; }
 .hl-vuln-day-anchor { display: block; scroll-margin-top: 90px; }
 .hl-vuln__w--nuclei { --w: #7ee787; }
 .hl-vuln__w--et { --w: #58a6ff; }
+
+/* T-0565.1: the title owns at least half the content space. Chips measure only
+   the remainder; long titles wrap instead of losing text to the badges. */
+.hl-idx--wire .hl-vuln,
+.hl-idx--wire .hl-vuln--cve { grid-template-columns: auto 9.5em minmax(0, 3fr) minmax(0, 2fr); }
+.hl-idx--wire .hl-vuln__vp { white-space: normal; overflow: visible; text-overflow: clip; overflow-wrap: anywhere; }
+.hl-idx--wire .hl-vuln__badges { min-width: 0; width: 100%; align-items: baseline; justify-content: flex-end; }
+.hl-vuln__badges > [hidden] { display: none !important; }
+.hl-vuln__more { border: 1px solid var(--hl-border-card); border-radius: 4px; background: var(--hl-bg-card); color: var(--hl-accent-blue); font: inherit; font-size: .85em; padding: .1em .45em; cursor: pointer; white-space: nowrap; }
+.hl-vuln__more:focus-visible { outline: 2px solid var(--hl-accent-blue); outline-offset: 3px; }
+.hl-vuln__gap-fact { font-size: .8em; color: var(--hl-text-secondary); }
+.hl-vuln__preauth, .hl-vuln__tool, .hl-vuln__w--wp { font-size: .8em; color: var(--hl-accent-green); }
+@media (max-width: 700px) {
+  .hl-idx--wire .hl-vuln, .hl-idx--wire .hl-vuln--cve { grid-template-columns: auto minmax(0, 1fr); }
+  .hl-idx--wire .hl-vuln__badges { justify-content: flex-start; }
+}

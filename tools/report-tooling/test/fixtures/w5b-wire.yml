@@ -1,0 +1,2251 @@
+generated_at: '2026-11-05T20:48:28.213Z'
+window_days: 30
+counts:
+  total: 4
+  research: 3
+  news: 1
+topics:
+  - label: security
+    count: 2
+    color: 3
+  - label: ransomware
+    count: 1
+    color: 4
+  - label: malware
+    count: 1
+    color: 5
+label_colors:
+  security: 3
+  ransomware: 4
+  malware: 5
+items:
+  - title: Synthetic research fixture
+    url: https://example.org/research
+    source: AlienVault
+    date: '2026-11-05T20:48:28.213Z'
+    kind: research
+    labels:
+      - security
+      - ransomware
+  - title: Synthetic news fixture
+    url: https://example.org/news
+    source: BleepingComputer
+    date: '2026-11-05T20:48:28.213Z'
+    kind: news
+    labels: []
+  - title: Synthetic rule fixture
+    url: https://example.org/rules
+    source: Cisco Talos
+    date: '2026-11-05T20:48:28.213Z'
+    kind: research
+    labels:
+      - malware
+  - title: Synthetic advisory fixture
+    url: https://example.org/advisory
+    source: Microsoft
+    date: '2026-11-05T20:48:28.213Z'
+    kind: research
+    labels:
+      - security
+vedas_generated_at: '2026-11-05T20:48:28.213Z'
+vulns_status: ok
+vulns_generated_at: '2026-11-05T20:48:28.213Z'
+vulns_counts:
+  total: 46
+  cisa: 1
+  older: 18
+  critical: 1
+  high: 45
+  medium: 0
+  low: 0
+  unscored: 0
+  et: 2
+  nuclei: 1
+  cisa_sigma: 0
+  snort3: 0
+  detect: 3
+  reported: 0
+  stories: 0
+  disclosed: 45
+  prenvd: 0
+  epss: 46
+  epss_pre: 0
+  age_new: 6
+  age_mid: 21
+  age_old: 18
+  age_unknown: 1
+  wp: 42
+  batches:
+    - key: wp-2026-10-13
+      day: '2026-10-13'
+      'n': 20
+vulns:
+  - cve: CVE-2026-9100
+    published: '2026-11-05'
+    vendor: Fixture
+    product: Widget
+    title: Unauthenticated access in the example product allows an attacker to change protected application settings.
+    cvss: '9.8'
+    cvss_version: '3.1'
+    severity: critical
+    scored_by: CNA
+    epss: '0.12'
+    epss_pct: '0.5'
+    epss_date: '2026-11-05'
+    epss_max: '0.12'
+    epss_spark: 0,10 120,0
+    signals: []
+    msf: []
+    edb: []
+    et_sids:
+      - 2036001
+    nuclei: ''
+    cisa_sigma: []
+    snort3_sids: []
+    ssvc_expl: ''
+    ssvc_auto: ''
+    ssvc_impact: ''
+    fixed: ''
+    aliases: []
+    stories: 0
+    cvss_vector: CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:L/A:N
+    kev_product: ''
+    kev_product_n: ''
+    reports: []
+    reports_more: 0
+    added: '2026-11-05'
+    cisa_added: '2026-11-05'
+    evidence: ''
+    older: false
+    age_group: new
+    disclosed: '2026-11-01'
+    gap: 4
+    prio: 1
+    vedas: 1
+  - cve: CVE-2026-9101
+    published: '2026-11-05'
+    vendor: Fixture
+    product: Widget
+    title: Unauthenticated access in the example product allows an attacker to change protected application settings.
+    cvss: '7.5'
+    cvss_version: '3.1'
+    severity: high
+    scored_by: CNA
+    epss: '0.12'
+    epss_pct: '0.5'
+    epss_date: '2026-11-05'
+    epss_max: '0.12'
+    epss_spark: 0,10 120,0
+    signals: []
+    msf: []
+    edb: []
+    et_sids: []
+    nuclei: http/cves/2026/CVE-2026-9101.yaml
+    cisa_sigma: []
+    snort3_sids: []
+    ssvc_expl: ''
+    ssvc_auto: ''
+    ssvc_impact: ''
+    fixed: ''
+    aliases: []
+    stories: 0
+    cvss_vector: CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:L/A:N
+    kev_product: ''
+    kev_product_n: ''
+    reports: []
+    reports_more: 0
+    added: '2026-11-04'
+    cisa_added: ''
+    evidence: ''
+    older: false
+    age_group: mid
+    disclosed: '2026-08-01'
+    gap: 95
+    prio: 2
+  - cve: CVE-2024-9102
+    published: '2026-11-05'
+    vendor: Fixture
+    product: Widget
+    title: Unauthenticated access in the example product allows an attacker to change protected application settings.
+    cvss: '7.5'
+    cvss_version: '3.1'
+    severity: high
+    scored_by: CNA
+    epss: '0.12'
+    epss_pct: '0.5'
+    epss_date: '2026-11-05'
+    epss_max: '0.12'
+    epss_spark: 0,10 120,0
+    signals: []
+    msf: []
+    edb: []
+    et_sids: []
+    nuclei: ''
+    cisa_sigma: []
+    snort3_sids: []
+    ssvc_expl: ''
+    ssvc_auto: ''
+    ssvc_impact: ''
+    fixed: ''
+    aliases: []
+    stories: 0
+    cvss_vector: CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:L/A:N
+    kev_product: ''
+    kev_product_n: ''
+    reports: []
+    reports_more: 0
+    added: '2026-11-03'
+    cisa_added: ''
+    evidence: ''
+    older: true
+    age_group: old
+    disclosed: '2024-01-01'
+    gap: 1037
+    prio: 3
+  - cve: CVE-2026-9103
+    published: '2026-11-05'
+    vendor: Fixture
+    product: Widget
+    title: Unauthenticated access in the example product allows an attacker to change protected application settings.
+    cvss: '7.5'
+    cvss_version: '3.1'
+    severity: high
+    scored_by: CNA
+    epss: '0.12'
+    epss_pct: '0.5'
+    epss_date: '2026-11-05'
+    epss_max: '0.12'
+    epss_spark: 0,10 120,0
+    signals: []
+    msf: []
+    edb: []
+    et_sids: []
+    nuclei: ''
+    cisa_sigma: []
+    snort3_sids: []
+    ssvc_expl: ''
+    ssvc_auto: ''
+    ssvc_impact: ''
+    fixed: ''
+    aliases: []
+    stories: 0
+    cvss_vector: CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:L/A:N
+    kev_product: ''
+    kev_product_n: ''
+    reports: []
+    reports_more: 0
+    added: '2026-11-02'
+    cisa_added: ''
+    evidence: ''
+    older: false
+    age_group: unknown
+    disclosed: ''
+    gap: ''
+    prio: 4
+  - cve: CVE-2026-9104
+    published: '2026-11-05'
+    vendor: WordPress
+    product: Unbatched plugin
+    title: Unauthenticated access in the example product allows an attacker to change protected application settings.
+    cvss: '7.5'
+    cvss_version: '3.1'
+    severity: high
+    scored_by: CNA
+    epss: '0.12'
+    epss_pct: '0.5'
+    epss_date: '2026-11-05'
+    epss_max: '0.12'
+    epss_spark: 0,10 120,0
+    signals: []
+    msf: []
+    edb: []
+    et_sids: []
+    nuclei: ''
+    cisa_sigma: []
+    snort3_sids: []
+    ssvc_expl: ''
+    ssvc_auto: ''
+    ssvc_impact: ''
+    fixed: ''
+    aliases: []
+    stories: 0
+    cvss_vector: CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:L/A:N
+    kev_product: ''
+    kev_product_n: ''
+    reports: []
+    reports_more: 0
+    added: '2026-11-01'
+    cisa_added: ''
+    evidence: ''
+    older: false
+    age_group: new
+    disclosed: '2026-10-20'
+    gap: 12
+    prio: 5
+    wp: true
+  - cve: CVE-2026-9105
+    published: '2026-11-05'
+    vendor: WordPress
+    product: Unbatched theme
+    title: Unauthenticated access in the example product allows an attacker to change protected application settings.
+    cvss: '7.5'
+    cvss_version: '3.1'
+    severity: high
+    scored_by: CNA
+    epss: '0.12'
+    epss_pct: '0.5'
+    epss_date: '2026-11-05'
+    epss_max: '0.12'
+    epss_spark: 0,10 120,0
+    signals: []
+    msf: []
+    edb: []
+    et_sids: []
+    nuclei: ''
+    cisa_sigma: []
+    snort3_sids: []
+    ssvc_expl: ''
+    ssvc_auto: ''
+    ssvc_impact: ''
+    fixed: ''
+    aliases: []
+    stories: 0
+    cvss_vector: CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:L/A:N
+    kev_product: ''
+    kev_product_n: ''
+    reports: []
+    reports_more: 0
+    added: '2026-10-30'
+    cisa_added: ''
+    evidence: ''
+    older: true
+    age_group: old
+    disclosed: '2024-02-01'
+    gap: 1002
+    prio: 26
+    wp: true
+  - cve: CVE-2026-9200
+    published: '2026-11-05'
+    vendor: WordPress
+    product: Batch plugin 0
+    title: Unauthenticated access in the example product allows an attacker to change protected application settings.
+    cvss: '7.5'
+    cvss_version: '3.1'
+    severity: high
+    scored_by: CNA
+    epss: '0.12'
+    epss_pct: '0.5'
+    epss_date: '2026-11-05'
+    epss_max: '0.12'
+    epss_spark: 0,10 120,0
+    signals: []
+    msf: []
+    edb: []
+    et_sids:
+      - 2036002
+    nuclei: ''
+    cisa_sigma: []
+    snort3_sids: []
+    ssvc_expl: ''
+    ssvc_auto: ''
+    ssvc_impact: ''
+    fixed: ''
+    aliases: []
+    stories: 0
+    cvss_vector: CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:L/A:N
+    kev_product: ''
+    kev_product_n: ''
+    reports: []
+    reports_more: 0
+    added: '2026-10-13'
+    cisa_added: ''
+    evidence: ''
+    older: false
+    age_group: mid
+    disclosed: '2026-07-01'
+    gap: 104
+    prio: 6
+    wp: true
+    batch: wp-2026-10-13
+  - cve: CVE-2026-9201
+    published: '2026-11-05'
+    vendor: WordPress
+    product: Batch plugin 1
+    title: Unauthenticated access in the example product allows an attacker to change protected application settings.
+    cvss: '7.5'
+    cvss_version: '3.1'
+    severity: high
+    scored_by: CNA
+    epss: '0.12'
+    epss_pct: '0.5'
+    epss_date: '2026-11-05'
+    epss_max: '0.12'
+    epss_spark: 0,10 120,0
+    signals: []
+    msf: []
+    edb: []
+    et_sids: []
+    nuclei: ''
+    cisa_sigma: []
+    snort3_sids: []
+    ssvc_expl: ''
+    ssvc_auto: ''
+    ssvc_impact: ''
+    fixed: ''
+    aliases: []
+    stories: 0
+    cvss_vector: CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:L/A:N
+    kev_product: ''
+    kev_product_n: ''
+    reports: []
+    reports_more: 0
+    added: '2026-10-13'
+    cisa_added: ''
+    evidence: ''
+    older: false
+    age_group: mid
+    disclosed: '2026-07-01'
+    gap: 104
+    prio: 7
+    wp: true
+    batch: wp-2026-10-13
+  - cve: CVE-2026-9202
+    published: '2026-11-05'
+    vendor: WordPress
+    product: Batch plugin 2
+    title: Unauthenticated access in the example product allows an attacker to change protected application settings.
+    cvss: '7.5'
+    cvss_version: '3.1'
+    severity: high
+    scored_by: CNA
+    epss: '0.12'
+    epss_pct: '0.5'
+    epss_date: '2026-11-05'
+    epss_max: '0.12'
+    epss_spark: 0,10 120,0
+    signals: []
+    msf: []
+    edb: []
+    et_sids: []
+    nuclei: ''
+    cisa_sigma: []
+    snort3_sids: []
+    ssvc_expl: ''
+    ssvc_auto: ''
+    ssvc_impact: ''
+    fixed: ''
+    aliases: []
+    stories: 0
+    cvss_vector: CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:L/A:N
+    kev_product: ''
+    kev_product_n: ''
+    reports: []
+    reports_more: 0
+    added: '2026-10-13'
+    cisa_added: ''
+    evidence: ''
+    older: false
+    age_group: mid
+    disclosed: '2026-07-01'
+    gap: 104
+    prio: 8
+    wp: true
+    batch: wp-2026-10-13
+  - cve: CVE-2026-9203
+    published: '2026-11-05'
+    vendor: WordPress
+    product: Batch plugin 3
+    title: Unauthenticated access in the example product allows an attacker to change protected application settings.
+    cvss: '7.5'
+    cvss_version: '3.1'
+    severity: high
+    scored_by: CNA
+    epss: '0.12'
+    epss_pct: '0.5'
+    epss_date: '2026-11-05'
+    epss_max: '0.12'
+    epss_spark: 0,10 120,0
+    signals: []
+    msf: []
+    edb: []
+    et_sids: []
+    nuclei: ''
+    cisa_sigma: []
+    snort3_sids: []
+    ssvc_expl: ''
+    ssvc_auto: ''
+    ssvc_impact: ''
+    fixed: ''
+    aliases: []
+    stories: 0
+    cvss_vector: CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:L/A:N
+    kev_product: ''
+    kev_product_n: ''
+    reports: []
+    reports_more: 0
+    added: '2026-10-13'
+    cisa_added: ''
+    evidence: ''
+    older: false
+    age_group: mid
+    disclosed: '2026-07-01'
+    gap: 104
+    prio: 9
+    wp: true
+    batch: wp-2026-10-13
+  - cve: CVE-2026-9204
+    published: '2026-11-05'
+    vendor: WordPress
+    product: Batch plugin 4
+    title: Unauthenticated access in the example product allows an attacker to change protected application settings.
+    cvss: '7.5'
+    cvss_version: '3.1'
+    severity: high
+    scored_by: CNA
+    epss: '0.12'
+    epss_pct: '0.5'
+    epss_date: '2026-11-05'
+    epss_max: '0.12'
+    epss_spark: 0,10 120,0
+    signals: []
+    msf: []
+    edb: []
+    et_sids: []
+    nuclei: ''
+    cisa_sigma: []
+    snort3_sids: []
+    ssvc_expl: ''
+    ssvc_auto: ''
+    ssvc_impact: ''
+    fixed: ''
+    aliases: []
+    stories: 0
+    cvss_vector: CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:L/A:N
+    kev_product: ''
+    kev_product_n: ''
+    reports: []
+    reports_more: 0
+    added: '2026-10-13'
+    cisa_added: ''
+    evidence: ''
+    older: false
+    age_group: mid
+    disclosed: '2026-07-01'
+    gap: 104
+    prio: 10
+    wp: true
+    batch: wp-2026-10-13
+  - cve: CVE-2026-9205
+    published: '2026-11-05'
+    vendor: WordPress
+    product: Batch plugin 5
+    title: Unauthenticated access in the example product allows an attacker to change protected application settings.
+    cvss: '7.5'
+    cvss_version: '3.1'
+    severity: high
+    scored_by: CNA
+    epss: '0.12'
+    epss_pct: '0.5'
+    epss_date: '2026-11-05'
+    epss_max: '0.12'
+    epss_spark: 0,10 120,0
+    signals: []
+    msf: []
+    edb: []
+    et_sids: []
+    nuclei: ''
+    cisa_sigma: []
+    snort3_sids: []
+    ssvc_expl: ''
+    ssvc_auto: ''
+    ssvc_impact: ''
+    fixed: ''
+    aliases: []
+    stories: 0
+    cvss_vector: CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:L/A:N
+    kev_product: ''
+    kev_product_n: ''
+    reports: []
+    reports_more: 0
+    added: '2026-10-13'
+    cisa_added: ''
+    evidence: ''
+    older: false
+    age_group: mid
+    disclosed: '2026-07-01'
+    gap: 104
+    prio: 11
+    wp: true
+    batch: wp-2026-10-13
+  - cve: CVE-2026-9206
+    published: '2026-11-05'
+    vendor: WordPress
+    product: Batch plugin 6
+    title: Unauthenticated access in the example product allows an attacker to change protected application settings.
+    cvss: '7.5'
+    cvss_version: '3.1'
+    severity: high
+    scored_by: CNA
+    epss: '0.12'
+    epss_pct: '0.5'
+    epss_date: '2026-11-05'
+    epss_max: '0.12'
+    epss_spark: 0,10 120,0
+    signals: []
+    msf: []
+    edb: []
+    et_sids: []
+    nuclei: ''
+    cisa_sigma: []
+    snort3_sids: []
+    ssvc_expl: ''
+    ssvc_auto: ''
+    ssvc_impact: ''
+    fixed: ''
+    aliases: []
+    stories: 0
+    cvss_vector: CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:L/A:N
+    kev_product: ''
+    kev_product_n: ''
+    reports: []
+    reports_more: 0
+    added: '2026-10-13'
+    cisa_added: ''
+    evidence: ''
+    older: false
+    age_group: mid
+    disclosed: '2026-07-01'
+    gap: 104
+    prio: 12
+    wp: true
+    batch: wp-2026-10-13
+  - cve: CVE-2026-9207
+    published: '2026-11-05'
+    vendor: WordPress
+    product: Batch plugin 7
+    title: Unauthenticated access in the example product allows an attacker to change protected application settings.
+    cvss: '7.5'
+    cvss_version: '3.1'
+    severity: high
+    scored_by: CNA
+    epss: '0.12'
+    epss_pct: '0.5'
+    epss_date: '2026-11-05'
+    epss_max: '0.12'
+    epss_spark: 0,10 120,0
+    signals: []
+    msf: []
+    edb: []
+    et_sids: []
+    nuclei: ''
+    cisa_sigma: []
+    snort3_sids: []
+    ssvc_expl: ''
+    ssvc_auto: ''
+    ssvc_impact: ''
+    fixed: ''
+    aliases: []
+    stories: 0
+    cvss_vector: CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:L/A:N
+    kev_product: ''
+    kev_product_n: ''
+    reports: []
+    reports_more: 0
+    added: '2026-10-13'
+    cisa_added: ''
+    evidence: ''
+    older: false
+    age_group: mid
+    disclosed: '2026-07-01'
+    gap: 104
+    prio: 13
+    wp: true
+    batch: wp-2026-10-13
+  - cve: CVE-2026-9208
+    published: '2026-11-05'
+    vendor: WordPress
+    product: Batch plugin 8
+    title: Unauthenticated access in the example product allows an attacker to change protected application settings.
+    cvss: '7.5'
+    cvss_version: '3.1'
+    severity: high
+    scored_by: CNA
+    epss: '0.12'
+    epss_pct: '0.5'
+    epss_date: '2026-11-05'
+    epss_max: '0.12'
+    epss_spark: 0,10 120,0
+    signals: []
+    msf: []
+    edb: []
+    et_sids: []
+    nuclei: ''
+    cisa_sigma: []
+    snort3_sids: []
+    ssvc_expl: ''
+    ssvc_auto: ''
+    ssvc_impact: ''
+    fixed: ''
+    aliases: []
+    stories: 0
+    cvss_vector: CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:L/A:N
+    kev_product: ''
+    kev_product_n: ''
+    reports: []
+    reports_more: 0
+    added: '2026-10-13'
+    cisa_added: ''
+    evidence: ''
+    older: false
+    age_group: mid
+    disclosed: '2026-07-01'
+    gap: 104
+    prio: 14
+    wp: true
+    batch: wp-2026-10-13
+  - cve: CVE-2026-9209
+    published: '2026-11-05'
+    vendor: WordPress
+    product: Batch plugin 9
+    title: Unauthenticated access in the example product allows an attacker to change protected application settings.
+    cvss: '7.5'
+    cvss_version: '3.1'
+    severity: high
+    scored_by: CNA
+    epss: '0.12'
+    epss_pct: '0.5'
+    epss_date: '2026-11-05'
+    epss_max: '0.12'
+    epss_spark: 0,10 120,0
+    signals: []
+    msf: []
+    edb: []
+    et_sids: []
+    nuclei: ''
+    cisa_sigma: []
+    snort3_sids: []
+    ssvc_expl: ''
+    ssvc_auto: ''
+    ssvc_impact: ''
+    fixed: ''
+    aliases: []
+    stories: 0
+    cvss_vector: CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:L/A:N
+    kev_product: ''
+    kev_product_n: ''
+    reports: []
+    reports_more: 0
+    added: '2026-10-13'
+    cisa_added: ''
+    evidence: ''
+    older: false
+    age_group: mid
+    disclosed: '2026-07-01'
+    gap: 104
+    prio: 15
+    wp: true
+    batch: wp-2026-10-13
+  - cve: CVE-2026-9210
+    published: '2026-11-05'
+    vendor: WordPress
+    product: Batch plugin 10
+    title: Unauthenticated access in the example product allows an attacker to change protected application settings.
+    cvss: '7.5'
+    cvss_version: '3.1'
+    severity: high
+    scored_by: CNA
+    epss: '0.12'
+    epss_pct: '0.5'
+    epss_date: '2026-11-05'
+    epss_max: '0.12'
+    epss_spark: 0,10 120,0
+    signals: []
+    msf: []
+    edb: []
+    et_sids: []
+    nuclei: ''
+    cisa_sigma: []
+    snort3_sids: []
+    ssvc_expl: ''
+    ssvc_auto: ''
+    ssvc_impact: ''
+    fixed: ''
+    aliases: []
+    stories: 0
+    cvss_vector: CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:L/A:N
+    kev_product: ''
+    kev_product_n: ''
+    reports: []
+    reports_more: 0
+    added: '2026-10-13'
+    cisa_added: ''
+    evidence: ''
+    older: false
+    age_group: mid
+    disclosed: '2026-07-01'
+    gap: 104
+    prio: 16
+    wp: true
+    batch: wp-2026-10-13
+  - cve: CVE-2026-9211
+    published: '2026-11-05'
+    vendor: WordPress
+    product: Batch plugin 11
+    title: Unauthenticated access in the example product allows an attacker to change protected application settings.
+    cvss: '7.5'
+    cvss_version: '3.1'
+    severity: high
+    scored_by: CNA
+    epss: '0.12'
+    epss_pct: '0.5'
+    epss_date: '2026-11-05'
+    epss_max: '0.12'
+    epss_spark: 0,10 120,0
+    signals: []
+    msf: []
+    edb: []
+    et_sids: []
+    nuclei: ''
+    cisa_sigma: []
+    snort3_sids: []
+    ssvc_expl: ''
+    ssvc_auto: ''
+    ssvc_impact: ''
+    fixed: ''
+    aliases: []
+    stories: 0
+    cvss_vector: CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:L/A:N
+    kev_product: ''
+    kev_product_n: ''
+    reports: []
+    reports_more: 0
+    added: '2026-10-13'
+    cisa_added: ''
+    evidence: ''
+    older: false
+    age_group: mid
+    disclosed: '2026-07-01'
+    gap: 104
+    prio: 17
+    wp: true
+    batch: wp-2026-10-13
+  - cve: CVE-2026-9212
+    published: '2026-11-05'
+    vendor: WordPress
+    product: Batch plugin 12
+    title: Unauthenticated access in the example product allows an attacker to change protected application settings.
+    cvss: '7.5'
+    cvss_version: '3.1'
+    severity: high
+    scored_by: CNA
+    epss: '0.12'
+    epss_pct: '0.5'
+    epss_date: '2026-11-05'
+    epss_max: '0.12'
+    epss_spark: 0,10 120,0
+    signals: []
+    msf: []
+    edb: []
+    et_sids: []
+    nuclei: ''
+    cisa_sigma: []
+    snort3_sids: []
+    ssvc_expl: ''
+    ssvc_auto: ''
+    ssvc_impact: ''
+    fixed: ''
+    aliases: []
+    stories: 0
+    cvss_vector: CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:L/A:N
+    kev_product: ''
+    kev_product_n: ''
+    reports: []
+    reports_more: 0
+    added: '2026-10-13'
+    cisa_added: ''
+    evidence: ''
+    older: false
+    age_group: mid
+    disclosed: '2026-07-01'
+    gap: 104
+    prio: 18
+    wp: true
+    batch: wp-2026-10-13
+  - cve: CVE-2026-9213
+    published: '2026-11-05'
+    vendor: WordPress
+    product: Batch plugin 13
+    title: Unauthenticated access in the example product allows an attacker to change protected application settings.
+    cvss: '7.5'
+    cvss_version: '3.1'
+    severity: high
+    scored_by: CNA
+    epss: '0.12'
+    epss_pct: '0.5'
+    epss_date: '2026-11-05'
+    epss_max: '0.12'
+    epss_spark: 0,10 120,0
+    signals: []
+    msf: []
+    edb: []
+    et_sids: []
+    nuclei: ''
+    cisa_sigma: []
+    snort3_sids: []
+    ssvc_expl: ''
+    ssvc_auto: ''
+    ssvc_impact: ''
+    fixed: ''
+    aliases: []
+    stories: 0
+    cvss_vector: CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:L/A:N
+    kev_product: ''
+    kev_product_n: ''
+    reports: []
+    reports_more: 0
+    added: '2026-10-13'
+    cisa_added: ''
+    evidence: ''
+    older: false
+    age_group: mid
+    disclosed: '2026-07-01'
+    gap: 104
+    prio: 19
+    wp: true
+    batch: wp-2026-10-13
+  - cve: CVE-2026-9214
+    published: '2026-11-05'
+    vendor: WordPress
+    product: Batch plugin 14
+    title: Unauthenticated access in the example product allows an attacker to change protected application settings.
+    cvss: '7.5'
+    cvss_version: '3.1'
+    severity: high
+    scored_by: CNA
+    epss: '0.12'
+    epss_pct: '0.5'
+    epss_date: '2026-11-05'
+    epss_max: '0.12'
+    epss_spark: 0,10 120,0
+    signals: []
+    msf: []
+    edb: []
+    et_sids: []
+    nuclei: ''
+    cisa_sigma: []
+    snort3_sids: []
+    ssvc_expl: ''
+    ssvc_auto: ''
+    ssvc_impact: ''
+    fixed: ''
+    aliases: []
+    stories: 0
+    cvss_vector: CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:L/A:N
+    kev_product: ''
+    kev_product_n: ''
+    reports: []
+    reports_more: 0
+    added: '2026-10-13'
+    cisa_added: ''
+    evidence: ''
+    older: false
+    age_group: mid
+    disclosed: '2026-07-01'
+    gap: 104
+    prio: 20
+    wp: true
+    batch: wp-2026-10-13
+  - cve: CVE-2026-9215
+    published: '2026-11-05'
+    vendor: WordPress
+    product: Batch plugin 15
+    title: Unauthenticated access in the example product allows an attacker to change protected application settings.
+    cvss: '7.5'
+    cvss_version: '3.1'
+    severity: high
+    scored_by: CNA
+    epss: '0.12'
+    epss_pct: '0.5'
+    epss_date: '2026-11-05'
+    epss_max: '0.12'
+    epss_spark: 0,10 120,0
+    signals: []
+    msf: []
+    edb: []
+    et_sids: []
+    nuclei: ''
+    cisa_sigma: []
+    snort3_sids: []
+    ssvc_expl: ''
+    ssvc_auto: ''
+    ssvc_impact: ''
+    fixed: ''
+    aliases: []
+    stories: 0
+    cvss_vector: CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:L/A:N
+    kev_product: ''
+    kev_product_n: ''
+    reports: []
+    reports_more: 0
+    added: '2026-10-13'
+    cisa_added: ''
+    evidence: ''
+    older: false
+    age_group: mid
+    disclosed: '2026-07-01'
+    gap: 104
+    prio: 21
+    wp: true
+    batch: wp-2026-10-13
+  - cve: CVE-2026-9216
+    published: '2026-11-05'
+    vendor: WordPress
+    product: Batch plugin 16
+    title: Unauthenticated access in the example product allows an attacker to change protected application settings.
+    cvss: '7.5'
+    cvss_version: '3.1'
+    severity: high
+    scored_by: CNA
+    epss: '0.12'
+    epss_pct: '0.5'
+    epss_date: '2026-11-05'
+    epss_max: '0.12'
+    epss_spark: 0,10 120,0
+    signals: []
+    msf: []
+    edb: []
+    et_sids: []
+    nuclei: ''
+    cisa_sigma: []
+    snort3_sids: []
+    ssvc_expl: ''
+    ssvc_auto: ''
+    ssvc_impact: ''
+    fixed: ''
+    aliases: []
+    stories: 0
+    cvss_vector: CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:L/A:N
+    kev_product: ''
+    kev_product_n: ''
+    reports: []
+    reports_more: 0
+    added: '2026-10-13'
+    cisa_added: ''
+    evidence: ''
+    older: false
+    age_group: mid
+    disclosed: '2026-07-01'
+    gap: 104
+    prio: 22
+    wp: true
+    batch: wp-2026-10-13
+  - cve: CVE-2026-9217
+    published: '2026-11-05'
+    vendor: WordPress
+    product: Batch plugin 17
+    title: Unauthenticated access in the example product allows an attacker to change protected application settings.
+    cvss: '7.5'
+    cvss_version: '3.1'
+    severity: high
+    scored_by: CNA
+    epss: '0.12'
+    epss_pct: '0.5'
+    epss_date: '2026-11-05'
+    epss_max: '0.12'
+    epss_spark: 0,10 120,0
+    signals: []
+    msf: []
+    edb: []
+    et_sids: []
+    nuclei: ''
+    cisa_sigma: []
+    snort3_sids: []
+    ssvc_expl: ''
+    ssvc_auto: ''
+    ssvc_impact: ''
+    fixed: ''
+    aliases: []
+    stories: 0
+    cvss_vector: CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:L/A:N
+    kev_product: ''
+    kev_product_n: ''
+    reports: []
+    reports_more: 0
+    added: '2026-10-13'
+    cisa_added: ''
+    evidence: ''
+    older: false
+    age_group: mid
+    disclosed: '2026-07-01'
+    gap: 104
+    prio: 23
+    wp: true
+    batch: wp-2026-10-13
+  - cve: CVE-2026-9218
+    published: '2026-11-05'
+    vendor: WordPress
+    product: Batch plugin 18
+    title: Unauthenticated access in the example product allows an attacker to change protected application settings.
+    cvss: '7.5'
+    cvss_version: '3.1'
+    severity: high
+    scored_by: CNA
+    epss: '0.12'
+    epss_pct: '0.5'
+    epss_date: '2026-11-05'
+    epss_max: '0.12'
+    epss_spark: 0,10 120,0
+    signals: []
+    msf: []
+    edb: []
+    et_sids: []
+    nuclei: ''
+    cisa_sigma: []
+    snort3_sids: []
+    ssvc_expl: ''
+    ssvc_auto: ''
+    ssvc_impact: ''
+    fixed: ''
+    aliases: []
+    stories: 0
+    cvss_vector: CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:L/A:N
+    kev_product: ''
+    kev_product_n: ''
+    reports: []
+    reports_more: 0
+    added: '2026-10-13'
+    cisa_added: ''
+    evidence: ''
+    older: false
+    age_group: mid
+    disclosed: '2026-07-01'
+    gap: 104
+    prio: 24
+    wp: true
+    batch: wp-2026-10-13
+  - cve: CVE-2026-9219
+    published: '2026-11-05'
+    vendor: WordPress
+    product: Batch plugin 19
+    title: Unauthenticated access in the example product allows an attacker to change protected application settings.
+    cvss: '7.5'
+    cvss_version: '3.1'
+    severity: high
+    scored_by: CNA
+    epss: '0.12'
+    epss_pct: '0.5'
+    epss_date: '2026-11-05'
+    epss_max: '0.12'
+    epss_spark: 0,10 120,0
+    signals: []
+    msf: []
+    edb: []
+    et_sids: []
+    nuclei: ''
+    cisa_sigma: []
+    snort3_sids: []
+    ssvc_expl: ''
+    ssvc_auto: ''
+    ssvc_impact: ''
+    fixed: ''
+    aliases: []
+    stories: 0
+    cvss_vector: CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:L/A:N
+    kev_product: ''
+    kev_product_n: ''
+    reports: []
+    reports_more: 0
+    added: '2026-10-13'
+    cisa_added: ''
+    evidence: ''
+    older: false
+    age_group: mid
+    disclosed: '2026-07-01'
+    gap: 104
+    prio: 25
+    wp: true
+    batch: wp-2026-10-13
+  - cve: CVE-2026-9300
+    published: '2026-11-05'
+    vendor: WordPress
+    product: Straddling batch plugin 0
+    title: Unauthenticated access in the example product allows an attacker to change protected application settings.
+    cvss: '7.5'
+    cvss_version: '3.1'
+    severity: high
+    scored_by: CNA
+    epss: '0.12'
+    epss_pct: '0.5'
+    epss_date: '2026-11-05'
+    epss_max: '0.12'
+    epss_spark: 0,10 120,0
+    signals: []
+    msf: []
+    edb: []
+    et_sids: []
+    nuclei: ''
+    cisa_sigma: []
+    snort3_sids: []
+    ssvc_expl: ''
+    ssvc_auto: ''
+    ssvc_impact: ''
+    fixed: ''
+    aliases: []
+    stories: 0
+    cvss_vector: CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:L/A:N
+    kev_product: ''
+    kev_product_n: ''
+    reports: []
+    reports_more: 0
+    added: '2026-10-12'
+    cisa_added: ''
+    evidence: ''
+    older: false
+    age_group: new
+    disclosed: '2026-10-01'
+    gap: 11
+    prio: 27
+    wp: true
+  - cve: CVE-2026-9301
+    published: '2026-11-05'
+    vendor: WordPress
+    product: Straddling batch plugin 1
+    title: Unauthenticated access in the example product allows an attacker to change protected application settings.
+    cvss: '7.5'
+    cvss_version: '3.1'
+    severity: high
+    scored_by: CNA
+    epss: '0.12'
+    epss_pct: '0.5'
+    epss_date: '2026-11-05'
+    epss_max: '0.12'
+    epss_spark: 0,10 120,0
+    signals: []
+    msf: []
+    edb: []
+    et_sids: []
+    nuclei: ''
+    cisa_sigma: []
+    snort3_sids: []
+    ssvc_expl: ''
+    ssvc_auto: ''
+    ssvc_impact: ''
+    fixed: ''
+    aliases: []
+    stories: 0
+    cvss_vector: CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:L/A:N
+    kev_product: ''
+    kev_product_n: ''
+    reports: []
+    reports_more: 0
+    added: '2026-10-12'
+    cisa_added: ''
+    evidence: ''
+    older: false
+    age_group: new
+    disclosed: '2026-10-01'
+    gap: 11
+    prio: 28
+    wp: true
+  - cve: CVE-2026-9302
+    published: '2026-11-05'
+    vendor: WordPress
+    product: Straddling batch plugin 2
+    title: Unauthenticated access in the example product allows an attacker to change protected application settings.
+    cvss: '7.5'
+    cvss_version: '3.1'
+    severity: high
+    scored_by: CNA
+    epss: '0.12'
+    epss_pct: '0.5'
+    epss_date: '2026-11-05'
+    epss_max: '0.12'
+    epss_spark: 0,10 120,0
+    signals: []
+    msf: []
+    edb: []
+    et_sids: []
+    nuclei: ''
+    cisa_sigma: []
+    snort3_sids: []
+    ssvc_expl: ''
+    ssvc_auto: ''
+    ssvc_impact: ''
+    fixed: ''
+    aliases: []
+    stories: 0
+    cvss_vector: CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:L/A:N
+    kev_product: ''
+    kev_product_n: ''
+    reports: []
+    reports_more: 0
+    added: '2026-10-12'
+    cisa_added: ''
+    evidence: ''
+    older: false
+    age_group: new
+    disclosed: '2026-10-01'
+    gap: 11
+    prio: 29
+    wp: true
+  - cve: CVE-2026-9303
+    published: '2026-11-05'
+    vendor: WordPress
+    product: Straddling batch plugin 3
+    title: Unauthenticated access in the example product allows an attacker to change protected application settings.
+    cvss: '7.5'
+    cvss_version: '3.1'
+    severity: high
+    scored_by: CNA
+    epss: '0.12'
+    epss_pct: '0.5'
+    epss_date: '2026-11-05'
+    epss_max: '0.12'
+    epss_spark: 0,10 120,0
+    signals: []
+    msf: []
+    edb: []
+    et_sids: []
+    nuclei: ''
+    cisa_sigma: []
+    snort3_sids: []
+    ssvc_expl: ''
+    ssvc_auto: ''
+    ssvc_impact: ''
+    fixed: ''
+    aliases: []
+    stories: 0
+    cvss_vector: CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:L/A:N
+    kev_product: ''
+    kev_product_n: ''
+    reports: []
+    reports_more: 0
+    added: '2026-10-12'
+    cisa_added: ''
+    evidence: ''
+    older: false
+    age_group: new
+    disclosed: '2026-10-01'
+    gap: 11
+    prio: 30
+    wp: true
+  - cve: CVE-2026-9304
+    published: '2026-11-05'
+    vendor: WordPress
+    product: Straddling batch plugin 4
+    title: Unauthenticated access in the example product allows an attacker to change protected application settings.
+    cvss: '7.5'
+    cvss_version: '3.1'
+    severity: high
+    scored_by: CNA
+    epss: '0.12'
+    epss_pct: '0.5'
+    epss_date: '2026-11-05'
+    epss_max: '0.12'
+    epss_spark: 0,10 120,0
+    signals: []
+    msf: []
+    edb: []
+    et_sids: []
+    nuclei: ''
+    cisa_sigma: []
+    snort3_sids: []
+    ssvc_expl: ''
+    ssvc_auto: ''
+    ssvc_impact: ''
+    fixed: ''
+    aliases: []
+    stories: 0
+    cvss_vector: CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:L/A:N
+    kev_product: ''
+    kev_product_n: ''
+    reports: []
+    reports_more: 0
+    added: '2026-10-12'
+    cisa_added: ''
+    evidence: ''
+    older: true
+    age_group: old
+    disclosed: '2024-01-01'
+    gap: 1015
+    prio: 31
+    wp: true
+  - cve: CVE-2026-9305
+    published: '2026-11-05'
+    vendor: WordPress
+    product: Straddling batch plugin 5
+    title: Unauthenticated access in the example product allows an attacker to change protected application settings.
+    cvss: '7.5'
+    cvss_version: '3.1'
+    severity: high
+    scored_by: CNA
+    epss: '0.12'
+    epss_pct: '0.5'
+    epss_date: '2026-11-05'
+    epss_max: '0.12'
+    epss_spark: 0,10 120,0
+    signals: []
+    msf: []
+    edb: []
+    et_sids: []
+    nuclei: ''
+    cisa_sigma: []
+    snort3_sids: []
+    ssvc_expl: ''
+    ssvc_auto: ''
+    ssvc_impact: ''
+    fixed: ''
+    aliases: []
+    stories: 0
+    cvss_vector: CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:L/A:N
+    kev_product: ''
+    kev_product_n: ''
+    reports: []
+    reports_more: 0
+    added: '2026-10-12'
+    cisa_added: ''
+    evidence: ''
+    older: true
+    age_group: old
+    disclosed: '2024-01-01'
+    gap: 1015
+    prio: 32
+    wp: true
+  - cve: CVE-2026-9306
+    published: '2026-11-05'
+    vendor: WordPress
+    product: Straddling batch plugin 6
+    title: Unauthenticated access in the example product allows an attacker to change protected application settings.
+    cvss: '7.5'
+    cvss_version: '3.1'
+    severity: high
+    scored_by: CNA
+    epss: '0.12'
+    epss_pct: '0.5'
+    epss_date: '2026-11-05'
+    epss_max: '0.12'
+    epss_spark: 0,10 120,0
+    signals: []
+    msf: []
+    edb: []
+    et_sids: []
+    nuclei: ''
+    cisa_sigma: []
+    snort3_sids: []
+    ssvc_expl: ''
+    ssvc_auto: ''
+    ssvc_impact: ''
+    fixed: ''
+    aliases: []
+    stories: 0
+    cvss_vector: CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:L/A:N
+    kev_product: ''
+    kev_product_n: ''
+    reports: []
+    reports_more: 0
+    added: '2026-10-12'
+    cisa_added: ''
+    evidence: ''
+    older: true
+    age_group: old
+    disclosed: '2024-01-01'
+    gap: 1015
+    prio: 33
+    wp: true
+  - cve: CVE-2026-9307
+    published: '2026-11-05'
+    vendor: WordPress
+    product: Straddling batch plugin 7
+    title: Unauthenticated access in the example product allows an attacker to change protected application settings.
+    cvss: '7.5'
+    cvss_version: '3.1'
+    severity: high
+    scored_by: CNA
+    epss: '0.12'
+    epss_pct: '0.5'
+    epss_date: '2026-11-05'
+    epss_max: '0.12'
+    epss_spark: 0,10 120,0
+    signals: []
+    msf: []
+    edb: []
+    et_sids: []
+    nuclei: ''
+    cisa_sigma: []
+    snort3_sids: []
+    ssvc_expl: ''
+    ssvc_auto: ''
+    ssvc_impact: ''
+    fixed: ''
+    aliases: []
+    stories: 0
+    cvss_vector: CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:L/A:N
+    kev_product: ''
+    kev_product_n: ''
+    reports: []
+    reports_more: 0
+    added: '2026-10-12'
+    cisa_added: ''
+    evidence: ''
+    older: true
+    age_group: old
+    disclosed: '2024-01-01'
+    gap: 1015
+    prio: 34
+    wp: true
+  - cve: CVE-2026-9308
+    published: '2026-11-05'
+    vendor: WordPress
+    product: Straddling batch plugin 8
+    title: Unauthenticated access in the example product allows an attacker to change protected application settings.
+    cvss: '7.5'
+    cvss_version: '3.1'
+    severity: high
+    scored_by: CNA
+    epss: '0.12'
+    epss_pct: '0.5'
+    epss_date: '2026-11-05'
+    epss_max: '0.12'
+    epss_spark: 0,10 120,0
+    signals: []
+    msf: []
+    edb: []
+    et_sids: []
+    nuclei: ''
+    cisa_sigma: []
+    snort3_sids: []
+    ssvc_expl: ''
+    ssvc_auto: ''
+    ssvc_impact: ''
+    fixed: ''
+    aliases: []
+    stories: 0
+    cvss_vector: CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:L/A:N
+    kev_product: ''
+    kev_product_n: ''
+    reports: []
+    reports_more: 0
+    added: '2026-10-12'
+    cisa_added: ''
+    evidence: ''
+    older: true
+    age_group: old
+    disclosed: '2024-01-01'
+    gap: 1015
+    prio: 35
+    wp: true
+  - cve: CVE-2026-9309
+    published: '2026-11-05'
+    vendor: WordPress
+    product: Straddling batch plugin 9
+    title: Unauthenticated access in the example product allows an attacker to change protected application settings.
+    cvss: '7.5'
+    cvss_version: '3.1'
+    severity: high
+    scored_by: CNA
+    epss: '0.12'
+    epss_pct: '0.5'
+    epss_date: '2026-11-05'
+    epss_max: '0.12'
+    epss_spark: 0,10 120,0
+    signals: []
+    msf: []
+    edb: []
+    et_sids: []
+    nuclei: ''
+    cisa_sigma: []
+    snort3_sids: []
+    ssvc_expl: ''
+    ssvc_auto: ''
+    ssvc_impact: ''
+    fixed: ''
+    aliases: []
+    stories: 0
+    cvss_vector: CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:L/A:N
+    kev_product: ''
+    kev_product_n: ''
+    reports: []
+    reports_more: 0
+    added: '2026-10-12'
+    cisa_added: ''
+    evidence: ''
+    older: true
+    age_group: old
+    disclosed: '2024-01-01'
+    gap: 1015
+    prio: 36
+    wp: true
+  - cve: CVE-2026-9310
+    published: '2026-11-05'
+    vendor: WordPress
+    product: Straddling batch plugin 10
+    title: Unauthenticated access in the example product allows an attacker to change protected application settings.
+    cvss: '7.5'
+    cvss_version: '3.1'
+    severity: high
+    scored_by: CNA
+    epss: '0.12'
+    epss_pct: '0.5'
+    epss_date: '2026-11-05'
+    epss_max: '0.12'
+    epss_spark: 0,10 120,0
+    signals: []
+    msf: []
+    edb: []
+    et_sids: []
+    nuclei: ''
+    cisa_sigma: []
+    snort3_sids: []
+    ssvc_expl: ''
+    ssvc_auto: ''
+    ssvc_impact: ''
+    fixed: ''
+    aliases: []
+    stories: 0
+    cvss_vector: CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:L/A:N
+    kev_product: ''
+    kev_product_n: ''
+    reports: []
+    reports_more: 0
+    added: '2026-10-12'
+    cisa_added: ''
+    evidence: ''
+    older: true
+    age_group: old
+    disclosed: '2024-01-01'
+    gap: 1015
+    prio: 37
+    wp: true
+  - cve: CVE-2026-9311
+    published: '2026-11-05'
+    vendor: WordPress
+    product: Straddling batch plugin 11
+    title: Unauthenticated access in the example product allows an attacker to change protected application settings.
+    cvss: '7.5'
+    cvss_version: '3.1'
+    severity: high
+    scored_by: CNA
+    epss: '0.12'
+    epss_pct: '0.5'
+    epss_date: '2026-11-05'
+    epss_max: '0.12'
+    epss_spark: 0,10 120,0
+    signals: []
+    msf: []
+    edb: []
+    et_sids: []
+    nuclei: ''
+    cisa_sigma: []
+    snort3_sids: []
+    ssvc_expl: ''
+    ssvc_auto: ''
+    ssvc_impact: ''
+    fixed: ''
+    aliases: []
+    stories: 0
+    cvss_vector: CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:L/A:N
+    kev_product: ''
+    kev_product_n: ''
+    reports: []
+    reports_more: 0
+    added: '2026-10-12'
+    cisa_added: ''
+    evidence: ''
+    older: true
+    age_group: old
+    disclosed: '2024-01-01'
+    gap: 1015
+    prio: 38
+    wp: true
+  - cve: CVE-2026-9312
+    published: '2026-11-05'
+    vendor: WordPress
+    product: Straddling batch plugin 12
+    title: Unauthenticated access in the example product allows an attacker to change protected application settings.
+    cvss: '7.5'
+    cvss_version: '3.1'
+    severity: high
+    scored_by: CNA
+    epss: '0.12'
+    epss_pct: '0.5'
+    epss_date: '2026-11-05'
+    epss_max: '0.12'
+    epss_spark: 0,10 120,0
+    signals: []
+    msf: []
+    edb: []
+    et_sids: []
+    nuclei: ''
+    cisa_sigma: []
+    snort3_sids: []
+    ssvc_expl: ''
+    ssvc_auto: ''
+    ssvc_impact: ''
+    fixed: ''
+    aliases: []
+    stories: 0
+    cvss_vector: CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:L/A:N
+    kev_product: ''
+    kev_product_n: ''
+    reports: []
+    reports_more: 0
+    added: '2026-10-12'
+    cisa_added: ''
+    evidence: ''
+    older: true
+    age_group: old
+    disclosed: '2024-01-01'
+    gap: 1015
+    prio: 39
+    wp: true
+  - cve: CVE-2026-9313
+    published: '2026-11-05'
+    vendor: WordPress
+    product: Straddling batch plugin 13
+    title: Unauthenticated access in the example product allows an attacker to change protected application settings.
+    cvss: '7.5'
+    cvss_version: '3.1'
+    severity: high
+    scored_by: CNA
+    epss: '0.12'
+    epss_pct: '0.5'
+    epss_date: '2026-11-05'
+    epss_max: '0.12'
+    epss_spark: 0,10 120,0
+    signals: []
+    msf: []
+    edb: []
+    et_sids: []
+    nuclei: ''
+    cisa_sigma: []
+    snort3_sids: []
+    ssvc_expl: ''
+    ssvc_auto: ''
+    ssvc_impact: ''
+    fixed: ''
+    aliases: []
+    stories: 0
+    cvss_vector: CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:L/A:N
+    kev_product: ''
+    kev_product_n: ''
+    reports: []
+    reports_more: 0
+    added: '2026-10-12'
+    cisa_added: ''
+    evidence: ''
+    older: true
+    age_group: old
+    disclosed: '2024-01-01'
+    gap: 1015
+    prio: 40
+    wp: true
+  - cve: CVE-2026-9314
+    published: '2026-11-05'
+    vendor: WordPress
+    product: Straddling batch plugin 14
+    title: Unauthenticated access in the example product allows an attacker to change protected application settings.
+    cvss: '7.5'
+    cvss_version: '3.1'
+    severity: high
+    scored_by: CNA
+    epss: '0.12'
+    epss_pct: '0.5'
+    epss_date: '2026-11-05'
+    epss_max: '0.12'
+    epss_spark: 0,10 120,0
+    signals: []
+    msf: []
+    edb: []
+    et_sids: []
+    nuclei: ''
+    cisa_sigma: []
+    snort3_sids: []
+    ssvc_expl: ''
+    ssvc_auto: ''
+    ssvc_impact: ''
+    fixed: ''
+    aliases: []
+    stories: 0
+    cvss_vector: CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:L/A:N
+    kev_product: ''
+    kev_product_n: ''
+    reports: []
+    reports_more: 0
+    added: '2026-10-12'
+    cisa_added: ''
+    evidence: ''
+    older: true
+    age_group: old
+    disclosed: '2024-01-01'
+    gap: 1015
+    prio: 41
+    wp: true
+  - cve: CVE-2026-9315
+    published: '2026-11-05'
+    vendor: WordPress
+    product: Straddling batch plugin 15
+    title: Unauthenticated access in the example product allows an attacker to change protected application settings.
+    cvss: '7.5'
+    cvss_version: '3.1'
+    severity: high
+    scored_by: CNA
+    epss: '0.12'
+    epss_pct: '0.5'
+    epss_date: '2026-11-05'
+    epss_max: '0.12'
+    epss_spark: 0,10 120,0
+    signals: []
+    msf: []
+    edb: []
+    et_sids: []
+    nuclei: ''
+    cisa_sigma: []
+    snort3_sids: []
+    ssvc_expl: ''
+    ssvc_auto: ''
+    ssvc_impact: ''
+    fixed: ''
+    aliases: []
+    stories: 0
+    cvss_vector: CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:L/A:N
+    kev_product: ''
+    kev_product_n: ''
+    reports: []
+    reports_more: 0
+    added: '2026-10-12'
+    cisa_added: ''
+    evidence: ''
+    older: true
+    age_group: old
+    disclosed: '2024-01-01'
+    gap: 1015
+    prio: 42
+    wp: true
+  - cve: CVE-2026-9316
+    published: '2026-11-05'
+    vendor: WordPress
+    product: Straddling batch plugin 16
+    title: Unauthenticated access in the example product allows an attacker to change protected application settings.
+    cvss: '7.5'
+    cvss_version: '3.1'
+    severity: high
+    scored_by: CNA
+    epss: '0.12'
+    epss_pct: '0.5'
+    epss_date: '2026-11-05'
+    epss_max: '0.12'
+    epss_spark: 0,10 120,0
+    signals: []
+    msf: []
+    edb: []
+    et_sids: []
+    nuclei: ''
+    cisa_sigma: []
+    snort3_sids: []
+    ssvc_expl: ''
+    ssvc_auto: ''
+    ssvc_impact: ''
+    fixed: ''
+    aliases: []
+    stories: 0
+    cvss_vector: CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:L/A:N
+    kev_product: ''
+    kev_product_n: ''
+    reports: []
+    reports_more: 0
+    added: '2026-10-11'
+    cisa_added: ''
+    evidence: ''
+    older: true
+    age_group: old
+    disclosed: '2024-01-01'
+    gap: 1014
+    prio: 43
+    wp: true
+  - cve: CVE-2026-9317
+    published: '2026-11-05'
+    vendor: WordPress
+    product: Straddling batch plugin 17
+    title: Unauthenticated access in the example product allows an attacker to change protected application settings.
+    cvss: '7.5'
+    cvss_version: '3.1'
+    severity: high
+    scored_by: CNA
+    epss: '0.12'
+    epss_pct: '0.5'
+    epss_date: '2026-11-05'
+    epss_max: '0.12'
+    epss_spark: 0,10 120,0
+    signals: []
+    msf: []
+    edb: []
+    et_sids: []
+    nuclei: ''
+    cisa_sigma: []
+    snort3_sids: []
+    ssvc_expl: ''
+    ssvc_auto: ''
+    ssvc_impact: ''
+    fixed: ''
+    aliases: []
+    stories: 0
+    cvss_vector: CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:L/A:N
+    kev_product: ''
+    kev_product_n: ''
+    reports: []
+    reports_more: 0
+    added: '2026-10-11'
+    cisa_added: ''
+    evidence: ''
+    older: true
+    age_group: old
+    disclosed: '2024-01-01'
+    gap: 1014
+    prio: 44
+    wp: true
+  - cve: CVE-2026-9318
+    published: '2026-11-05'
+    vendor: WordPress
+    product: Straddling batch plugin 18
+    title: Unauthenticated access in the example product allows an attacker to change protected application settings.
+    cvss: '7.5'
+    cvss_version: '3.1'
+    severity: high
+    scored_by: CNA
+    epss: '0.12'
+    epss_pct: '0.5'
+    epss_date: '2026-11-05'
+    epss_max: '0.12'
+    epss_spark: 0,10 120,0
+    signals: []
+    msf: []
+    edb: []
+    et_sids: []
+    nuclei: ''
+    cisa_sigma: []
+    snort3_sids: []
+    ssvc_expl: ''
+    ssvc_auto: ''
+    ssvc_impact: ''
+    fixed: ''
+    aliases: []
+    stories: 0
+    cvss_vector: CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:L/A:N
+    kev_product: ''
+    kev_product_n: ''
+    reports: []
+    reports_more: 0
+    added: '2026-10-11'
+    cisa_added: ''
+    evidence: ''
+    older: true
+    age_group: old
+    disclosed: '2024-01-01'
+    gap: 1014
+    prio: 45
+    wp: true
+  - cve: CVE-2026-9319
+    published: '2026-11-05'
+    vendor: WordPress
+    product: Straddling batch plugin 19
+    title: Unauthenticated access in the example product allows an attacker to change protected application settings.
+    cvss: '7.5'
+    cvss_version: '3.1'
+    severity: high
+    scored_by: CNA
+    epss: '0.12'
+    epss_pct: '0.5'
+    epss_date: '2026-11-05'
+    epss_max: '0.12'
+    epss_spark: 0,10 120,0
+    signals: []
+    msf: []
+    edb: []
+    et_sids: []
+    nuclei: ''
+    cisa_sigma: []
+    snort3_sids: []
+    ssvc_expl: ''
+    ssvc_auto: ''
+    ssvc_impact: ''
+    fixed: ''
+    aliases: []
+    stories: 0
+    cvss_vector: CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:L/A:N
+    kev_product: ''
+    kev_product_n: ''
+    reports: []
+    reports_more: 0
+    added: '2026-10-11'
+    cisa_added: ''
+    evidence: ''
+    older: true
+    age_group: old
+    disclosed: '2024-01-01'
+    gap: 1014
+    prio: 46
+    wp: true
+cves_status: ok
+cves_generated_at: '2026-11-05T20:48:28.213Z'
+cves_counts:
+  total: 7
+  critical: 4
+  high: 3
+  medium: 0
+  low: 0
+  unscored: 0
+  msf: 1
+  edb: 1
+  nuclei: 1
+  et: 1
+  epss90: 1
+  epss_vedas: 1
+  wp_unauth: 1
+cve_vendors:
+  - label: Fixture
+    count: 6
+cves:
+  - cve: CVE-2026-9001
+    published: '2026-11-05'
+    vendor: Fixture
+    product: Widget
+    title: Synthetic fixture CVE record. Additional product title to exercise readable wrapping and chip fit.
+    cvss: '7.5'
+    cvss_version: '3.1'
+    severity: high
+    scored_by: CNA
+    epss: '0.12'
+    epss_pct: '0.5'
+    epss_date: '2026-11-05'
+    epss_max: '0.12'
+    epss_spark: 0,10 120,0
+    signals:
+      - epss_vedas
+    msf: []
+    edb: []
+    et_sids: []
+    nuclei: ''
+    cisa_sigma: []
+    snort3_sids: []
+    ssvc_expl: ''
+    ssvc_auto: ''
+    ssvc_impact: ''
+    fixed: ''
+    aliases: []
+    stories: 0
+    cvss_vector: CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:L/A:N
+    kev_product: ''
+    kev_product_n: ''
+    reports: []
+    reports_more: 0
+    vedas: 0.852
+    nomi: true
+  - cve: CVE-2026-9002
+    published: '2026-11-05'
+    vendor: Fixture
+    product: Widget
+    title: Synthetic fixture CVE record. Additional product title to exercise readable wrapping and chip fit.
+    cvss: '9.8'
+    cvss_version: '3.1'
+    severity: critical
+    scored_by: CNA
+    epss: '0.12'
+    epss_pct: '0.5'
+    epss_date: '2026-11-05'
+    epss_max: '0.12'
+    epss_spark: 0,10 120,0
+    signals:
+      - msf
+    msf:
+      - modules/exploits/linux/http/fixture.rb
+    edb: []
+    et_sids: []
+    nuclei: ''
+    cisa_sigma: []
+    snort3_sids: []
+    ssvc_expl: ''
+    ssvc_auto: ''
+    ssvc_impact: ''
+    fixed: ''
+    aliases: []
+    stories: 0
+    cvss_vector: CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:L/A:N
+    kev_product: ''
+    kev_product_n: ''
+    reports: []
+    reports_more: 0
+    nomi: false
+  - cve: CVE-2026-9003
+    published: '2026-11-05'
+    vendor: Fixture
+    product: Widget
+    title: Synthetic fixture CVE record. Additional product title to exercise readable wrapping and chip fit.
+    cvss: '7.5'
+    cvss_version: '3.1'
+    severity: high
+    scored_by: CNA
+    epss: '0.12'
+    epss_pct: '0.5'
+    epss_date: '2026-11-05'
+    epss_max: '0.12'
+    epss_spark: 0,10 120,0
+    signals:
+      - edb
+    msf: []
+    edb:
+      - '12345'
+    et_sids: []
+    nuclei: ''
+    cisa_sigma: []
+    snort3_sids: []
+    ssvc_expl: ''
+    ssvc_auto: ''
+    ssvc_impact: ''
+    fixed: ''
+    aliases: []
+    stories: 0
+    cvss_vector: CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:L/A:N
+    kev_product: ''
+    kev_product_n: ''
+    reports: []
+    reports_more: 0
+    vedas: 0
+    nomi: false
+  - cve: CVE-2026-9020
+    published: '2026-11-05'
+    vendor: Fixture
+    product: Widget
+    title: Synthetic fixture CVE record. Additional product title to exercise readable wrapping and chip fit.
+    cvss: '9.8'
+    cvss_version: '3.1'
+    severity: critical
+    scored_by: CNA
+    epss: '0.12'
+    epss_pct: '0.5'
+    epss_date: '2026-11-05'
+    epss_max: '0.12'
+    epss_spark: 0,10 120,0
+    signals:
+      - nuclei
+    msf: []
+    edb: []
+    et_sids: []
+    nuclei: http/cves/2026/CVE-2026-9020.yaml
+    cisa_sigma: []
+    snort3_sids: []
+    ssvc_expl: ''
+    ssvc_auto: ''
+    ssvc_impact: ''
+    fixed: ''
+    aliases: []
+    stories: 0
+    cvss_vector: CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:L/A:N
+    kev_product: Fixture Widget
+    kev_product_n: 3
+    reports: []
+    reports_more: 0
+    nomi: false
+  - cve: CVE-2026-9021
+    published: '2026-11-05'
+    vendor: Fixture
+    product: Widget
+    title: Synthetic fixture CVE record. Additional product title to exercise readable wrapping and chip fit.
+    cvss: '9.8'
+    cvss_version: '3.1'
+    severity: critical
+    scored_by: CNA
+    epss: '0.12'
+    epss_pct: '0.5'
+    epss_date: '2026-11-05'
+    epss_max: '0.12'
+    epss_spark: 0,10 120,0
+    signals:
+      - et
+    msf: []
+    edb: []
+    et_sids:
+      - 2036001
+    nuclei: ''
+    cisa_sigma: []
+    snort3_sids: []
+    ssvc_expl: ''
+    ssvc_auto: ''
+    ssvc_impact: ''
+    fixed: ''
+    aliases: []
+    stories: 0
+    cvss_vector: CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:L/A:N
+    kev_product: ''
+    kev_product_n: ''
+    reports: []
+    reports_more: 0
+    nomi: false
+  - cve: CVE-2026-9022
+    published: '2026-11-05'
+    vendor: Fixture
+    product: Widget
+    title: Synthetic fixture CVE record. Additional product title to exercise readable wrapping and chip fit.
+    cvss: '9.8'
+    cvss_version: '3.1'
+    severity: critical
+    scored_by: CNA
+    epss: '0.12'
+    epss_pct: '0.95'
+    epss_date: '2026-11-05'
+    epss_max: '0.12'
+    epss_spark: 0,10 120,0
+    signals:
+      - epss90
+    msf: []
+    edb: []
+    et_sids: []
+    nuclei: ''
+    cisa_sigma: []
+    snort3_sids: []
+    ssvc_expl: ''
+    ssvc_auto: ''
+    ssvc_impact: ''
+    fixed: ''
+    aliases: []
+    stories: 0
+    cvss_vector: CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:L/A:N
+    kev_product: ''
+    kev_product_n: ''
+    reports: []
+    reports_more: 0
+    nomi: false
+  - cve: CVE-2026-99999
+    published: '2026-11-05'
+    vendor: WordPress
+    product: Example Plugin
+    title: Unauthenticated arbitrary file upload in Example Plugin permits changes to protected content. Additional product title to exercise readable wrapping and chip fit.
+    cvss: '7.5'
+    cvss_version: '3.1'
+    severity: high
+    scored_by: CNA
+    epss: '0.005'
+    epss_pct: '0.5'
+    epss_date: '2026-11-05'
+    epss_max: '0.12'
+    epss_spark: 0,10 120,0
+    signals:
+      - wp_unauth
+    msf: []
+    edb: []
+    et_sids: []
+    nuclei: ''
+    cisa_sigma: []
+    snort3_sids: []
+    ssvc_expl: ''
+    ssvc_auto: ''
+    ssvc_impact: ''
+    fixed: ''
+    aliases: []
+    stories: 0
+    cvss_vector: CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:L/A:N
+    kev_product: ''
+    kev_product_n: ''
+    reports: []
+    reports_more: 0
+    vedas: 0
+    nomi: true

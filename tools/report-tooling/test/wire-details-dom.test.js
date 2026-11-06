@@ -166,7 +166,7 @@ test('the CVEs panel says why listed, with the cve.now scoring line', async func
   assert.match(t, /A Nuclei template names this CVE/);
   assert.match(t, /An ET Open Suricata rule names this CVE/);
   assert.doesNotMatch(t, /Rated Critical/);
-  assert.match(t, /Widget: CISA has listed 3 earlier CVEs in this product on its KEV catalog\. That is a fact about the product, not about this CVE\./);
+  assert.match(t, /Widget: CISA has listed 3 earlier entries in this product on its KEV catalog\. That is a fact about the product, not about this CVE\./);
   assert.match(t, /FIRST's EPSS puts this CVE in the top 10%/);
   assert.match(t, /Not on VulnCheck KEV or CISA KEV as of 2026-11-01\. Being listed does not mean anyone has been seen exploiting it\./);
   assert.match(t, /CVSS v3\.1 base score 9\.8, Critical, from cve\.now, because our NVD data holds no score for it\./);
@@ -194,8 +194,8 @@ test('one earlier KEV CVE in the product reads in the singular', async function 
   clicks(doc, rowEl.querySelector('.hl-dt'));
   await settle();
   var t = rowEl.querySelector('.hl-dt__panel').textContent;
-  assert.match(t, /Widget: CISA has listed 1 earlier CVE in this product on its KEV catalog\./);
-  assert.doesNotMatch(t, /1 earlier CVEs/);
+  assert.match(t, /Widget: CISA has listed 1 earlier entry in this product on its KEV catalog\./);
+  assert.doesNotMatch(t, /1 earlier entries/);
 });
 
 test('a scored-by ADP row says so in the design\u2019s words', async function () {

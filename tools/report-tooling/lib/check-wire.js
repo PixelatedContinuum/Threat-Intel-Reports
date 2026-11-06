@@ -546,8 +546,8 @@ var CVES_KEYS = ['cve', 'published', 'vendor', 'product', 'title', 'cvss', 'cvss
   'et_sids', 'nuclei', 'cisa_sigma', 'snort3_sids', 'ssvc_expl', 'ssvc_auto', 'ssvc_impact',
   'fixed', 'aliases', 'stories', 'cvss_vector', 'kev_product', 'kev_product_n'];
 /* T-0565: tooling sources admit alongside the two probability reasons. */
-var CVES_SIGNALS = { msf: 1, edb: 1, nuclei: 1, et: 1, epss90: 1, epss_vedas: 1 };
-var CVES_ARMS = ['msf', 'edb', 'nuclei', 'et', 'epss90', 'epss_vedas'];
+var CVES_SIGNALS = { msf: 1, edb: 1, nuclei: 1, et: 1, epss90: 1, epss_vedas: 1, wp_unauth: 1 };
+var CVES_ARMS = ['msf', 'edb', 'nuclei', 'et', 'epss90', 'epss_vedas', 'wp_unauth'];
 var CVSS_VECTOR = /^(?:CVSS:\d\.\d\/)?[A-Za-z]{1,3}:[A-Za-z0-9]{1,3}(?:\/[A-Za-z]{1,3}:[A-Za-z0-9]{1,3})*$/;
 var CVES_BODY_KEYS = ['description', 'summary', 'context'];
 var EPSS_HIGH_PCT = 0.90;
@@ -555,6 +555,7 @@ function signalFacts(r) {
   var epct = Number(r.epss_pct);
   var cv = Number(r.cvss);
   return {
+    wp_unauth: Array.isArray(r.signals) && r.signals.includes('wp_unauth'),
     msf: Array.isArray(r.msf) && r.msf.length > 0,
     edb: Array.isArray(r.edb) && r.edb.length > 0,
     nuclei: typeof r.nuclei === 'string' && r.nuclei !== '',
@@ -602,7 +603,7 @@ function checkCves(doc, now) {
   var seen = Object.create(null);
   var nSev = { critical: 0, high: 0, medium: 0, low: 0 };
   var nUnscored = 0;
-  var nSig = { msf: 0, edb: 0, epss90: 0, epss_vedas: 0, nuclei: 0, et: 0 };
+  var nSig = { msf: 0, edb: 0, epss90: 0, epss_vedas: 0, nuclei: 0, et: 0, wp_unauth: 0 };
   var byVendor = Object.create(null);
   rows.forEach(function (r, n) {
     r = r || {};
@@ -655,6 +656,7 @@ function checkCves(doc, now) {
     if (!listed) warnings.push(where + ' has signals that are not a list');
     else {
       listed.forEach(function (s) {
+        if (s === 'nomi_poc') problems.push(where + ' lists retired reason nomi_poc; nomi is context only');
         if (s === 'crit_noauth_kev_product') problems.push(where + ' lists retired reason crit_noauth_kev_product');
         if (!CVES_SIGNALS[s]) warnings.push(where + ' lists unknown signal ' + JSON.stringify(s));
       });
@@ -997,9 +999,9 @@ function checkPage(src, includes) {
   }
 
   problems = problems.concat(checkExplanations(src));
-  problems = problems.concat(checkLegend(src));
+  problems = problems.concat(src.includes('data-wire-layout="days"') ? checkDayLayout(src, includes) : checkLegend(src));
   problems = problems.concat(checkTabNav(src));
-  problems = problems.concat(checkCvesTab(src, includes));
+  if (!src.includes('data-wire-layout="days"')) problems = problems.concat(checkCvesTab(src, includes));
   problems = problems.concat(checkNkevRow(src));
   problems = problems.concat(checkHeadlineRow(src));
 
@@ -1691,3 +1693,59 @@ function checkDetailsPage(src) {
 
 module.exports = { checkHeadlineRow: checkHeadlineRow, check: check, checkPage: checkPage, checkTabCss: checkTabCss, checkCvesFeed: checkCvesFeed, checkVulnsFeed: checkVulnsFeed, checkTabNav: checkTabNav, checkDetailsPage: checkDetailsPage, checkDetailsScript: checkDetailsScript, checkDetailsJsonPage: checkDetailsJsonPage, STALE_HOURS: STALE_HOURS,
   VULNS_STALE_HOURS: VULNS_STALE_HOURS };
+
+
+function checkDayLayout(src, includes) {
+  var out = [];
+  var panels = src.match(/<details class="hl-wire-explanation"[\s\S]*?<\/details>/g) || [];
+  panels.forEach(function (panel, i) { out = out.concat(checkVedasCopy(panel, i ? 'CVEs explanation' : 'nKEVs explanation')); });
+  var n = panels[0] || '', c = panels[1] || '';
+  ["I do not curate", 'Empirical Security', 'Every VulnCheck KEV entry stays visible.',
+   'Filters open matching batches and counts show matching rows.', 'newest day first', 'at least 20 entries'
+  ].forEach(function (pin) { if (!n.includes(pin)) out.push('nKEVs explanation lost: ' + pin); });
+  ['seven reasons', 'WordPress-class', 'unauthenticated', 'five weakness groups', '8.3%', '7.0%', '6.4%',
+   'after seeing the data', '6.3%', '8.6%', '3.7%', '123 of 244', '50%', 'one-third trigger', 'does not admit',
+   'CC0', 'at most 200', 'with baseline-admitted rows first', 'sources and left them out', 'CC BY 4.0', 'Empirical Security'
+  ].forEach(function (pin) { if (!c.includes(pin)) out.push('CVEs explanation lost: ' + pin); });
+  if (/data-age-group=|data-age="recent">Recent|data-age="">Include older/.test(src)) out.push('nKEVs must use day groups and no age filter');
+  ['group_by: "added"', 'sort: "prio"', 'id="vulns-{{ day_group.name | escape }}"', 'data-sig="wp_unauth"',
+   'w_wp', 'r.nomi == true', 'https://github.com/nomi-sec/PoC-in-GitHub/blob/master/', 'wire-chips.js'
+  ].forEach(function (pin) { if (!src.includes(pin)) out.push('Wire layout lost: ' + pin); });
+  if (/nomi_poc/.test(src)) out.push('nomi_poc is not an admission reason');
+  if (/hl-wire__callout--c/.test(src.replace(/\{%[\s\S]*?%\}/g, ''))) out.push('CVEs intro must be in explanation');
+  ['legend_html', 'cves_legend_html'].forEach(function (name) {
+    var m = src.match(new RegExp('capture '+name+'[\\s\\S]*?%\\}([\\s\\S]*?)\\{%-? endcapture'));
+    if (!m) { out.push(name+' missing'); return; }
+    if (/\d|%|<p\b|\bwhy\b/i.test(m[1])) out.push(name+' must be a key without figures or explanations');
+    if (/\sdata-|\sid=|<(?:button|details|input|a)\b/.test(m[1])) out.push(name+' samples must be inert');
+    if ((src.match(new RegExp('\\{\\{\\s*'+name+'\\s*\\}\\}', 'g')) || []).length !== 2) out.push(name+' must print twice');
+  });
+  var heading = src.match(/<h2 class="hl-wire__day"[\s\S]*?<\/h2>/);
+  if (heading) unescapedOutputs(heading[0]).filter(function(m) { return !/\.size\s*\}\}$/.test(m); }).forEach(function (m) { out.push('the nKEV row template prints '+m+' without escape'); });
+  var sec = src.slice(src.indexOf('<section id="cves"'), src.indexOf('</section>', src.indexOf('<section id="cves"')));
+  unescapedOutputs(sec).forEach(function (m) { out.push('CVEs prints '+m+' without escape'); });
+  var seen = new Set();
+  function walk(text) {
+    (text.match(/\{%-?\s*include\s+(wire-[\w.-]+)/g) || []).forEach(function (match) {
+      var name = match.replace(/^\{%-?\s*include\s+/, '');
+      if (seen.has(name)) return; seen.add(name);
+      var inc = includes && includes[name];
+      if (typeof inc !== 'string') { out.push('NOT CHECKED: _includes/'+name+' could not be read'); return; }
+      var clean = inc.replace(/\{%-?\s*comment\s*-?%\}[\s\S]*?\{%-?\s*endcomment\s*-?%\}/g, '');
+      unescapedOutputs(clean).forEach(function (m) { out.push('_includes/'+name+' prints '+m+' without escape'); });
+      if (/\bpocs?\b|proof[- ]of[- ]concept/i.test(clean)) out.push('_includes/'+name+' mentions a GitHub proof of concept outside the nomi index chip');
+      if (/nomi_poc|crit_noauth_kev_product|w_ab/.test(clean)) out.push('_includes/'+name+' carries a retired reason');
+      (clean.match(/href="[^"]*"/g) || []).forEach(function (href) {
+        if (!(INCLUDE_LINKS[name] || []).some(function (re) { return re.test(href); })) out.push('_includes/'+name+' links to '+href+' outside its allowed targets');
+      });
+      walk(clean);
+    });
+  }
+  walk(src);
+  ["a ProjectDiscovery Nuclei template", "Nuclei templates come from ProjectDiscovery's template index; ET Open rules come from Emerging Threats' Suricata ruleset.",
+   'the tooling reasons together admitted 53 CVEs, eight later listed on VulnCheck KEV; Nuclei accounted for seven of 34.'
+  ].forEach(function (pin) { if (!c.includes(pin)) out.push('CVEs explanation lost tooling copy: '+pin); });
+  // A source URL mutated into XXhref is no longer an attribution link.
+  if ((src.match(/href="https:\/\/github.com\/ARPSyndicate\/cve-scores"/g) || []).length !== 3) out.push('Wire lost VEDAS source href');
+  return out;
+}

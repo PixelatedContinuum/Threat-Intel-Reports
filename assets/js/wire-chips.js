@@ -1,0 +1,83 @@
+/* Reserve title space in CSS, then fit priority chips into the remaining width.
+ * Context stays in the DOM and in the search index while collapsed. */
+(function () {
+  'use strict';
+  var seq = 0;
+  document.querySelectorAll('.hl-vuln').forEach(function (row) {
+    var box = row.querySelector('.hl-vuln__badges');
+    if (!box) return;
+    var cve = row.classList.contains('hl-vuln--cve');
+    var chips = Array.from(box.children);
+    function rank(chip) {
+      if (cve) {
+        if (chip.matches('.hl-vuln__w:not(.hl-vuln__w--kev)')) return 0;
+        if (chip.matches('.hl-vuln__p--vedas') && (row.dataset.sig || '').split('|').indexOf('epss_vedas') !== -1) return 0;
+        if (chip.matches('.hl-vuln__sev')) return 1;
+        if (chip.querySelector('.hl-vuln__p--epss')) return 2;
+      } else {
+        if (chip.matches('.hl-vuln__b--cisa')) return 0;
+        if (chip.matches('.hl-vuln__preauth')) return 1;
+        if (chip.matches('.hl-vuln__tool')) return 2;
+        if (chip.querySelector('.hl-vuln__p--epss')) return 3;
+      }
+      return 9;
+    }
+    chips.sort(function (a, b) { return rank(a) - rank(b); });
+    chips.forEach(function (chip) { box.appendChild(chip); });
+    row.dataset.title += ' ' + box.textContent.trim().toLowerCase();
+    var btn = document.createElement('button');
+    btn.type = 'button'; btn.className = 'hl-vuln__more';
+    box.id = 'wire-chips-' + (++seq);
+    btn.setAttribute('aria-controls', box.id);
+    btn.setAttribute('aria-expanded', 'false');
+    box.appendChild(btn);
+    var expanded = false, busy = false, inView = false;
+    function fit(measure) {
+      if (busy) return;
+      busy = true;
+      chips.forEach(function (chip) { chip.hidden = false; });
+      btn.hidden = false;
+      btn.textContent = '+' + chips.length;
+      var budget = measure ? box.clientWidth : 0;
+      var buttonWidth = measure ? btn.getBoundingClientRect().width || 48 : 48;
+      var gap = measure ? parseFloat(getComputedStyle(box).columnGap) || 5 : 5;
+      var used = buttonWidth + gap, kept = 0, overflow = 0;
+      chips.forEach(function (chip) {
+        var width = measure ? chip.getBoundingClientRect().width : 0;
+        // Context is deliberately overflow-only. Offscreen rows use the fallback
+        // without reading layout; the viewport observer measures them on arrival.
+        var keep = rank(chip) < 9 && (budget > 0 && width > 0
+          ? used + width + gap <= budget : kept < 3);
+        if (keep) { used += width + gap; kept++; }
+        else { overflow++; chip.hidden = !expanded; }
+      });
+      btn.hidden = overflow === 0;
+      btn.textContent = expanded ? '−' + overflow : '+' + overflow;
+      btn.setAttribute('aria-label', (expanded ? 'Hide ' : 'Show ') + overflow + ' more details');
+      btn.setAttribute('aria-expanded', String(expanded));
+      box.classList.toggle('is-expanded', expanded);
+      busy = false;
+    }
+    btn.addEventListener('click', function () { expanded = !expanded; fit(inView); });
+    btn.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && expanded) { expanded = false; fit(inView); }
+    });
+    if (window.ResizeObserver) {
+      var previous = -1;
+      new ResizeObserver(function (entries) {
+        var width = entries[0].contentRect.width;
+        if (width !== previous) { previous = width; if (inView) fit(true); }
+      }).observe(box);
+    } else window.addEventListener('resize', function () { if (inView) fit(true); });
+    fit(false);
+    if (window.IntersectionObserver) {
+      new IntersectionObserver(function (entries) {
+        inView = entries[0].isIntersecting;
+        if (inView) fit(true);
+      }, { rootMargin: '200px' }).observe(row);
+    }
+    if (document.fonts && document.fonts.ready) {
+      document.fonts.ready.then(function () { if (inView) fit(true); });
+    }
+  });
+})();

@@ -1404,7 +1404,7 @@ test('the gate follows the include chain: every wire-* include the page names is
   var rowInc = 'wire-details-row.html';
   var inc = realIncludes();
   assert.deepEqual(Object.keys(inc).sort(),
-    ['wire-cve-why.html', rowInc, 'wire-vuln-epss.html', 'wire-vuln-new.html',
+    ['wire-cve-why.html', rowInc, 'wire-nkev-priority.html', 'wire-vuln-epss.html', 'wire-vuln-new.html',
      'wire-vuln-news.html', 'wire-vuln-rules.html', 'wire-vuln-sev.html', 'wire-vuln-vedas.html']);
   var page = readReal('wire/index.md');
   var r = CW.checkPage(page, inc);
@@ -1464,13 +1464,13 @@ test('retired reason cannot return to page or include, and tooling copy is pinne
   assert.equal(CW.checkPage(page,inc).status,'PASS');
   var bad=Object.assign({},inc); bad['wire-cve-why.html']+='crit_noauth_kev_product';
   assert.match(CW.checkPage(page,bad).problems.join(' '),/retired/);
-  ['six reasons', 'a Nuclei template; an ET Open rule',
+  ['seven reasons', 'a ProjectDiscovery Nuclei template',
    "Nuclei templates come from ProjectDiscovery's template index; ET Open rules come from Emerging Threats' Suricata ruleset.",
    'the tooling reasons together admitted 53 CVEs, eight later listed on VulnCheck KEV; Nuclei accounted for seven of 34.'
   ].forEach(function (pin) {
     // Mutate the callout's reason count even when the explanation repeats it.
-    var changed = pin === 'six reasons'
-      ? page.replace(/(<div class="hl-wire__callout hl-wire__callout--c">[\s\S]*?)six reasons/, '$1removed')
+    var changed = pin === 'seven reasons'
+      ? page.replace(/(<details class="hl-wire-explanation" id="cves-explanation"[\s\S]*?)seven reasons/, '$1removed')
       : page.replace(pin, 'removed');
     assert.notEqual(changed, page, pin);
     assert.equal(CW.checkPage(changed,inc).status,'FAIL',pin);
@@ -1518,12 +1518,8 @@ test('one escaping mutation per newly escaped nKEV value fails the page gate (co
     ['vuln/detail/{{ r.cve | escape }}', 'vuln/detail/{{ r.cve }}'],
     ['noreferrer">{{ r.cve | escape }}</a>', 'noreferrer">{{ r.cve }}</a>'],
     ['CISA KEV {{ r.cisa_added | escape }}', 'CISA KEV {{ r.cisa_added }}'],
-    ['A CVE from {{ cve_year | escape }}', 'A CVE from {{ cve_year }}'],
-    ['added in {{ vday | slice: 0, 4 | escape }}', 'added in {{ vday | slice: 0, 4 }}'],
-    ['>CVE-{{ cve_year | escape }}</span>', '>CVE-{{ cve_year }}</span>'],
     ['evidence {{ r.evidence | escape }}', 'evidence {{ r.evidence }}'],
-    ['KEV {{ vday | escape }}, {% if gap_n', 'KEV {{ vday }}, {% if gap_n'],
-    ['id="vulns-{{ vday | escape }}"', 'id="vulns-{{ vday }}"'],
+    ['id="vulns-{{ day_group.name | escape }}"', 'id="vulns-{{ day_group.name }}"'],
     ['data-prio="{{ r.prio | escape }}"', 'data-prio="{{ r.prio }}"']
   ];
   mutants.forEach(function (m, i) {
@@ -1642,7 +1638,7 @@ test('VEDAS legend claims and source hrefs are pinned separately in each tab', f
 
 test('nKEV grouping copy stays pinned on the real template',function(){
  var page=readReal('wire/index.md'), inc=realIncludes();
- ['Listed within 30 days of disclosure','Disclosed 30 days to a year before listing','Older CVEs newly listed','Disclosure date unknown','Every VulnCheck KEV entry stays visible.','Filters open matching batches and counts show matching rows.'].forEach(function(pin){
+ ['newest day first','at least 20 entries','Every VulnCheck KEV entry stays visible.','Filters open matching batches and counts show matching rows.'].forEach(function(pin){
    assert.equal(CW.checkPage(page.replace(pin,'removed'),inc).status,'FAIL',pin);
  });
 });

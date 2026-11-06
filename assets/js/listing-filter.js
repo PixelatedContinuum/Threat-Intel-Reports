@@ -201,7 +201,7 @@ function init(bar) {
       var any = false;
       for (var n = g.nextElementSibling; n; n = n.nextElementSibling) {
         if (n.hasAttribute('data-filter-group')) break;
-        if (n.matches(cardSel) && n.style.display !== 'none') { any = true; break; }
+        if ((n.matches(cardSel) && n.style.display !== 'none') || Array.from(n.querySelectorAll(cardSel)).some(function (r) { return r.style.display !== 'none'; })) { any = true; break; }
       }
       if (any) { g.style.removeProperty('display'); }
       else { g.style.setProperty('display', 'none', 'important'); }
@@ -453,7 +453,26 @@ function init(bar) {
         opened = true;
       }
     }
-    if ((hidden || opened || targetDay) && row.scrollIntoView) row.scrollIntoView();
+    if ((hidden || opened || targetDay) && row.scrollIntoView) {
+      // A dated heading is the destination of a day link. Scrolling to the
+      // first row instead can push the heading above a phone's viewport.
+      var landing = targetDay && el.hasAttribute('data-filter-group') ? el : row;
+      var scroll = function () {
+        if (decode(String(window.location.hash || '').replace(/^#/, '')) === id) {
+          landing.scrollIntoView({ block: 'start', behavior: 'instant' });
+        }
+      };
+      var settle = function () {
+        if (window.requestAnimationFrame) window.requestAnimationFrame(function () {
+          window.requestAnimationFrame(scroll);
+        });
+      };
+      scroll();
+      // Viewport chip fitting and font metrics can shorten rows above the
+      // anchor. Correct the initial landing after those layout passes finish.
+      settle();
+      if (document.fonts && document.fonts.ready) document.fonts.ready.then(settle);
+    }
   }
 
   window.addEventListener('hashchange', function () {

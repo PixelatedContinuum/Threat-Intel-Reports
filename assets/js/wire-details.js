@@ -285,6 +285,7 @@ function secWhyListed(panel, d, asOfDay) {
     if (signals.indexOf('edb') !== -1 && edb && edb.length) {
       lineInto(panel, "An Exploit-DB entry for this CVE, confirmed against Exploit-DB's own list.");
     }
+    if (signals.indexOf('wp_unauth') !== -1) { lineInto(panel, 'WordPress unauthenticated: the record meets the selected weakness groups.'); }
     if (signals.indexOf('epss_vedas') !== -1) {
       lineInto(panel, "EPSS at least 1% and A.R.P. Syndicate's VEDAS exploit-maturity estimate at least 80%, with CVSS at least 7.0; not evidence of exploitation or working exploit code.");
     }
@@ -295,8 +296,8 @@ function secWhyListed(panel, d, asOfDay) {
     }
   }
   var kp = str(d.kev_product), kn = num(d.kev_product_n);
-  if (kp && kn > 0) lineInto(panel, kp + ': CISA has listed ' + Math.floor(kn) + ' earlier CVE' +
-    (kn === 1 ? '' : 's') + ' in this product on its KEV catalog. That is a fact about the product, not about this CVE.');
+  if (kp && kn > 0) lineInto(panel, kp + ': CISA has listed ' + Math.floor(kn) + ' earlier entr' +
+    (kn === 1 ? 'y' : 'ies') + ' in this product on its KEV catalog. That is a fact about the product, not about this CVE.');
   var closeDay = dayOf(asOfDay);
   lineInto(panel, closeDay
     ? WHYNOW_HEAD + closeDay + '. ' + WHYNOW_NOTE

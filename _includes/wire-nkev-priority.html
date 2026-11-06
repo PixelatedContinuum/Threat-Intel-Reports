@@ -1,0 +1,5 @@
+{%- if r.cvss_vector contains 'AV:N/' and r.cvss_vector contains 'PR:N/' and r.cvss_vector contains 'UI:N' -%}<span class="hl-vuln__preauth">Pre-auth (no login)</span>{%- endif -%}
+{%- if r.msf.size > 0 -%}<span class="hl-vuln__tool">Metasploit</span>{%- endif -%}
+{%- if r.nuclei != '' and r.nuclei -%}<span class="hl-vuln__tool">Nuclei</span>{%- endif -%}
+{%- if r.et_sids.size > 0 -%}<span class="hl-vuln__tool">ET Open</span>{%- endif -%}
+{%- if r.edb.size > 0 -%}<span class="hl-vuln__tool">Exploit-DB</span>{%- endif -%}
