@@ -1222,7 +1222,7 @@ function checkNkevRow(src) {
   if (src === null || src === undefined) {
     return ['NOT CHECKED: wire/index.md is absent, so the nKEV row template could not be verified'];
   }
-  var m = /\{%-?\s*for r in (?:wire\.vulns|unit_rows) -?%\}[\s\S]*?\{%-?\s*endfor\s*-?%\}\s*<\/div>/.exec(src);
+  var m = /\{%-?\s*for r in (?:wire\.vulns|unit_rows|group_rows) -?%\}[\s\S]*?(?:\{%-?\s*endcapture\s*-?%\}|\{%-?\s*endfor\s*-?%\}\s*<\/div>)/.exec(src);
   if (!m) {
     return ['could not find the nKEV row template (for r in wire.vulns), so its outputs were not verified'];
   }
@@ -1638,7 +1638,7 @@ function checkDetailsPage(src) {
     problems.push('the Details toggle markup appears ' + nToggles + ' time(s), expected 2: one in ' +
       'the nKEV row template, one in the CVEs row template');
   }
-  var nkevSlice = (src.match(/\{%-?\s*for r in (?:wire\.vulns|unit_rows) -?%\}[\s\S]*?\{%-?\s*endfor\s*-?%\}\s*<\/div>/) || [''])[0];
+  var nkevSlice = (src.match(/\{%-?\s*for r in (?:wire\.vulns|unit_rows|group_rows) -?%\}[\s\S]*?(?:\{%-?\s*endcapture\s*-?%\}|\{%-?\s*endfor\s*-?%\}\s*<\/div>)/) || [''])[0];
   if (!nkevSlice) {
     problems.push('could not find the nKEV row template (for r in wire.vulns), so its Details toggle could not be verified');
   } else if (!DETAILS_TOGGLE.test(nkevSlice)) {
@@ -1724,6 +1724,15 @@ function checkDayLayout(src, includes) {
   if (heading) unescapedOutputs(heading[0]).filter(function(m) { return !/\.size\s*\}\}$/.test(m); }).forEach(function (m) { out.push('the nKEV row template prints '+m+' without escape'); });
   var sec = src.slice(src.indexOf('<section id="cves"'), src.indexOf('</section>', src.indexOf('<section id="cves"')));
   unescapedOutputs(sec).forEach(function (m) { out.push('CVEs prints '+m+' without escape'); });
+  ['assign wp_unauth_group_min = 2', 'assign product_group_min = 5',
+   'include wire-fold-keys.html rows=group_rows mode="nkev"',
+   'include wire-fold-keys.html rows=g.items mode="cves"',
+   'include wire-fold.html rows=rendered_rows keys=fold_keys labels=fold_labels thresholds=fold_thresholds'
+  ].forEach(function (pin) { if (!src.includes(pin)) out.push('Wire fold contract lost: '+pin); });
+  ['fold five or more same-day CVEs for the same product into one line'].forEach(function (pin) {
+    if (!n.includes(pin) || !c.includes(pin)) out.push('Both panels must explain product folds: '+pin);
+  });
+  if (!c.includes('I fold two or more WordPress plugin CVEs admitted only by the no login rule')) out.push('CVEs lost WordPress fold explanation');
   var seen = new Set();
   function walk(text) {
     (text.match(/\{%-?\s*include\s+(wire-[\w.-]+)/g) || []).forEach(function (match) {
@@ -1732,7 +1741,10 @@ function checkDayLayout(src, includes) {
       var inc = includes && includes[name];
       if (typeof inc !== 'string') { out.push('NOT CHECKED: _includes/'+name+' could not be read'); return; }
       var clean = inc.replace(/\{%-?\s*comment\s*-?%\}[\s\S]*?\{%-?\s*endcomment\s*-?%\}/g, '');
-      unescapedOutputs(clean).forEach(function (m) { out.push('_includes/'+name+' prints '+m+' without escape'); });
+      // Only captured, already-audited row HTML may bypass escaping here.
+      unescapedOutputs(clean).filter(function (m) {
+        return !(name === 'wire-fold.html' && /^\{\{ (?:member_html|row_html) \}\}$/.test(m));
+      }).forEach(function (m) { out.push('_includes/'+name+' prints '+m+' without escape'); });
       if (/\bpocs?\b|proof[- ]of[- ]concept/i.test(clean)) out.push('_includes/'+name+' mentions a GitHub proof of concept outside the nomi index chip');
       if (/nomi_poc|crit_noauth_kev_product|w_ab/.test(clean)) out.push('_includes/'+name+' carries a retired reason');
       (clean.match(/href="[^"]*"/g) || []).forEach(function (href) {

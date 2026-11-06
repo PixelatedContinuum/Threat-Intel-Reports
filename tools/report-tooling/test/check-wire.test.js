@@ -1404,13 +1404,13 @@ test('the gate follows the include chain: every wire-* include the page names is
   var rowInc = 'wire-details-row.html';
   var inc = realIncludes();
   assert.deepEqual(Object.keys(inc).sort(),
-    ['wire-cve-why.html', rowInc, 'wire-nkev-priority.html', 'wire-vuln-epss.html', 'wire-vuln-new.html',
+    ['wire-cve-why.html', rowInc, 'wire-fold-keys.html', 'wire-fold.html', 'wire-nkev-priority.html', 'wire-vuln-epss.html', 'wire-vuln-new.html',
      'wire-vuln-news.html', 'wire-vuln-rules.html', 'wire-vuln-sev.html', 'wire-vuln-vedas.html']);
   var page = readReal('wire/index.md');
   var r = CW.checkPage(page, inc);
   assert.equal(r.status, 'PASS', r.problems.join(' | '));
   // an include the page names but the caller did not supply is NOT CHECKED, never a pass
-  ['wire-cve-why.html', 'wire-vuln-epss.html', 'wire-vuln-new.html',
+  ['wire-cve-why.html', 'wire-fold-keys.html', 'wire-fold.html', 'wire-vuln-epss.html', 'wire-vuln-new.html',
    'wire-vuln-news.html', 'wire-vuln-rules.html', 'wire-vuln-sev.html'].forEach(function (name) {
     var some = Object.assign({}, inc); delete some[name];
     var x = CW.checkPage(page, some);

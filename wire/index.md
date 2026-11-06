@@ -12,6 +12,8 @@ position: 2.5
 
 {%- assign wire = site.data.wire -%}
 {%- assign wp_batch_group_min = 20 -%}
+{%- assign wp_unauth_group_min = 2 -%}
+{%- assign product_group_min = 5 -%}
 {%- if wire and wire.items and wire.items != empty -%}
 {%- assign n_headlines = wire.counts.research | plus: wire.counts.news -%}
 {%- assign n_vulns = wire.vulns_counts.total | default: 0 | plus: 0 -%}
@@ -118,7 +120,7 @@ reads back from the built page (it fails the index step on a duplicate). A vuln 
 <div class="hl-wire-explanation__body">
 <p>I keep already exploited CVEs here, using additions to VulnCheck's Known Exploited Vulnerabilities (KEV) catalog. CISA listing is not required: the CISA KEV badge marks CVEs on both catalogs. A low EPSS or a missing rule does not remove a row, because VulnCheck has already recorded exploitation.</p>
 <p>I group rows by the day VulnCheck added them, newest day first. Each date shows how many CVEs were added that day. Inside a day I use the exporter's priority order: CISA-listed first, then network flaws needing no privileges or user action (AV:N, PR:N, UI:N), then public exploit or detection tooling, then higher EPSS (missing last), with CVE id breaking ties. These datapoints order confirmed exploitation rather than deciding whether it deserves a row.</p>
-<p>I fold a day's WordPress plugin and theme batch when it contains at least 20 entries. One folded line stays at the first member's rank and opens to every member. Every VulnCheck KEV entry stays visible. Filters open matching batches and counts show matching rows. Smaller batches stay as individual rows.</p>
+<p>I fold a day's WordPress plugin and theme batch when it contains at least 20 entries. One folded line stays at the first member's rank and opens to every member. Every VulnCheck KEV entry stays visible. Filters open matching batches and counts show matching rows. Smaller batches stay as individual rows. I also fold five or more same-day CVEs for the same product into one line.</p>
 <p>I give the title room before chips. The +N button opens the remaining context in place, including the gap from NVD publication to listing when known. VulnCheck gives no separate date of first exploitation.</p>
 <p>I also checked ENISA's EU Vulnerability Database as a second source here. It flagged none of the rows that only VulnCheck lists, and for the five CVEs it alone marks as exploited, the sources it cited did not support that mark, so I left it out.</p>
 <h3>Reading the data and filters</h3>
@@ -303,22 +305,9 @@ reads back from the built page (it fails the index step on a duplicate). A vuln 
 {%- assign group_rows = day_group.items | sort: "prio" -%}
 <div class="hl-vuln-group" data-filter-container data-wire-layout="days">
 <h2 class="hl-wire__day" id="vulns-{{ day_group.name | escape }}" data-day-target="{{ day_group.name | escape }}" data-filter-group>{{ day_group.name | date: "%A %-d %B %Y" | escape }} &middot; <span data-container-count>{{ group_rows.size }}</span> added</h2>
-{%- assign seen_batches = "|" -%}
-{%- for unit in group_rows -%}
-{%- assign batch_key = unit.batch | append: "" -%}
-{%- assign batch_rows = group_rows | where: "batch", batch_key -%}
-{%- if batch_rows.size < wp_batch_group_min -%}{%- assign batch_key = "" -%}{%- endif -%}
-{%- assign batch_token = batch_key | prepend: "|" | append: "|" -%}
-{%- if batch_key != "" and seen_batches contains batch_token -%}{%- continue -%}{%- endif -%}
-{%- if batch_key != "" -%}
-{%- assign seen_batches = seen_batches | append: batch_token -%}
-{%- assign unit_rows = batch_rows -%}
-<details class="hl-vuln-batch" data-filter-container data-filter-batch="{{ batch_key | escape }}">
-<summary><span data-container-count>{{ unit_rows.size }}</span> WordPress plugin and theme CVEs added on {{ unit.added | date: "%-d %B" | escape }}</summary>
-{%- else -%}
-{%- assign unit_rows = group_rows | where: "cve", unit.cve -%}
-{%- endif -%}
-{%- for r in unit_rows -%}
+{%- assign rendered_rows = "" | split: "" -%}
+{%- for r in group_rows -%}
+{%- capture rendered_row -%}
 {%- comment -%}
   A row that is not canonical is skipped rather than drawn broken; check-wire.js
   warns about it. Liquid treats an empty string as true, so the guard checks the
@@ -343,9 +332,11 @@ reads back from the built page (it fails the index step on a duplicate). A vuln 
 {%- assign n_reps = r.reports | size -%}{%- assign n_more = r.reports_more | default: 0 | plus: 0 -%}{%- assign n_st = r.stories | default: 0 -%}
 <div class="hl-vuln" id="cve-{{ r.cve | downcase | escape }}" data-prio="{{ r.prio | escape }}" data-title="{{ r.cve | downcase | escape }} {{ r.vendor | downcase | escape }} {{ r.product | downcase | escape }} {{ r.title | downcase | escape }}" data-list="{% if cisa_len == 10 %}cisa{% else %}vconly{% endif %}" data-vendor="{{ r.vendor | escape }}" data-age="{% if r.older == true %}older{% else %}recent{% endif %}" data-sev="{{ sev | escape }}" data-det="{{ det | join: '|' | escape }}" data-nvd="{{ nvd_key | escape }}" data-day="{{ vday | escape }}">{% comment %} T-0532: the Details toggle, first in the row, hidden until the script removes it. {% endcomment %}<button type="button" class="hl-dt" aria-expanded="false" hidden title="Show details"><span class="hl-dt__sr">Details</span></button><a class="hl-vuln__cve" href="https://nvd.nist.gov/vuln/detail/{{ r.cve | escape }}" target="_blank" rel="noopener noreferrer">{{ r.cve | escape }}</a><span class="hl-vuln__vp" title="{{ r.vendor | escape }} {{ r.product | escape }}">{% if r.vendor and r.vendor != "" %}<b>{{ r.vendor | escape }}</b> {{ r.product | escape }}{% else %}<span class="hl-vuln__none">vendor not given</span>{% endif %}{% if r.title and r.title != "" %} {{ r.title | escape }}{% endif %}</span><span class="hl-vuln__badges">{% include wire-nkev-priority.html %}{% include wire-vuln-sev.html %}{% if cisa_len == 10 %}<span class="hl-vuln__b hl-vuln__b--cisa" title="Added to CISA KEV {{ r.cisa_added | escape }}{% if r.kev_due and r.kev_due != '' %}; CISA due date {{ r.kev_due | escape }}{% endif %}">CISA KEV</span>{% endif %}{% comment %} evidence is the earliest citation date; drawn only when it says something the day heading does not. {% endcomment %}{% if ev_len == 10 and r.evidence < vday %}<span class="hl-vuln__ev">evidence {{ r.evidence | escape }}</span>{% endif %}{% if gap_len > 0 and r.disclosed != "" %}<span class="hl-vuln__gap-fact">listed {% if gap_n < 0 %}{{ gap_abs | escape }}{% else %}{{ gap_n | escape }}{% endif %} days {% if gap_n < 0 %}before{% else %}after{% endif %} disclosure</span>{% endif %}{% include wire-vuln-epss.html %}{% include wire-vuln-vedas.html %}{% comment %} T-0407 pointers as compact chips, one line per row: the reports VulnCheck cites open from a click (a native details element, no script), the headline count links to the Headlines search, Rules N opens the public rules (ET Open, Nuclei, CISA Sigma, Snort 3 community) that name the CVE. {% endcomment %}{% if n_reps > 0 %}{% assign n_src = n_reps | plus: n_more %}<details class="hl-vuln__pop"><summary class="hl-vuln__p" title="Exploitation reported by {{ n_src }} source{% if n_src != 1 %}s{% endif %} VulnCheck cites">{{ n_src }} src</summary><span class="hl-vuln__popbody">Reported by{% for rp in r.reports %}{% assign rp_head = rp.url | slice: 0, 8 %}{% if rp_head == "https://" %}<a href="{{ rp.url | escape }}" target="_blank" rel="noopener noreferrer nofollow">{{ rp.host | escape }}</a>{% endif %}{% endfor %}{% if n_more > 0 %}<span class="hl-vuln__dim">+{{ n_more }} more in VulnCheck KEV</span>{% endif %}</span></details>{% endif %}{% include wire-vuln-news.html %}{% include wire-vuln-rules.html %}{% include wire-vuln-new.html %}</span></div>
 {%- endif -%}
+{%- endcapture -%}
+{%- assign rendered_rows = rendered_rows | push: rendered_row -%}
 {%- endfor -%}
-{%- if batch_key != "" -%}</details>{%- endif -%}
-{%- endfor -%}
+{%- include wire-fold-keys.html rows=group_rows mode="nkev" -%}
+{%- include wire-fold.html rows=rendered_rows keys=fold_keys labels=fold_labels thresholds=fold_thresholds -%}
 </div>
 {%- endfor -%}
 </div>
@@ -375,6 +366,7 @@ reads back from the built page (it fails the index step on a duplicate). A vuln 
 <p>Any one of the seven reasons admits a CVE. FIRST's Exploit Prediction Scoring System (EPSS) percentile of at least 0.90 puts it in the top 10% for predicted exploitation likelihood. That is a relative rank, not a 90% probability. The other score-based reason pairs EPSS probability of at least 1% with A.R.P. Syndicate's VEDAS exploit-maturity estimate of at least 80% and a Common Vulnerability Scoring System (CVSS) score of at least 7.0. I require the pair because VEDAS alone performed below the cohort's exploitation rate in my replay.</p>
 <p>A Metasploit module confirmed in Rapid7's index, an Exploit-DB entry confirmed in its publisher's index, a ProjectDiscovery Nuclei template, or an Emerging Threats ET Open rule each also admits a CVE. These identify available tooling or detection coverage. I have not tested the exploits, and a template or rule naming a CVE does not establish exploitation.</p>
 <p>I treat a CVE as WordPress-class when its source identifies Wordfence, WPScan or Patchstack, or its affected product names WordPress. I admit these CVEs when the description says unauthenticated and the CWE falls in five weakness groups: SQL injection, file upload, privilege escalation, path traversal or local file inclusion, and server-side request forgery. In my longer replay, the added rows later listed as exploited were 8.3% on the 2025 design set, 7.0% on the January to June 2026 test set and 6.4% on the July to September comparison. I chose this addition after seeing the data; these are measured shares, not promised hit rates.</p>
+<p>I fold two or more WordPress plugin CVEs admitted only by the no login rule on the same day into one line, and I fold five or more same-day CVEs for the same product into one line.</p>
 <p>The PoC on GitHub chip links only to nomi-sec's own per-CVE JSON index (CC0), never to the repositories it lists. I have not tested that code. Pairing this index with no privileges required added rows with later-exploited shares of 6.3%, 8.6% and 3.7% on the same sets. It does not admit a CVE: at today's measured volume the union would have pushed 123 of 244 new-arm-only rows (50%) past the cap, exceeding my pre-set one-third trigger for keeping only the WordPress addition.</p>
 <p>My July to September 2026 replay judged 36,786 eligible CVEs once, seven days after publication, using the inputs available then. Later exploitation means a VulnCheck KEV addition after that point, through 5 November 2026: 116 CVEs met that outcome. The EPSS percentile reason selected 24 CVEs, three later listed; the EPSS and VEDAS pair selected 40, four later listed; tooling selected 53, eight later listed. Together they selected 102, with 12 later listed. These sets overlap, so their counts do not add.</p>
 <p>Those are small, in-sample results, not promised hit rates. July VEDAS history was unavailable; 323 eligible CVEs could not be judged for the paired reason. The replay took one look at day seven, while the live list rechecks throughout its publication window. Follow-up is shorter for later publications; October was too recent to judge.</p>
@@ -562,7 +554,9 @@ reads back from the built page (it fails the index step on a duplicate). A vuln 
 {%- assign gname = g.name | append: "" -%}{%- assign gname_len = gname | size -%}
 {%- if gname_len == 10 -%}
 <div class="hl-wire__day" id="cves-{{ gname | escape }}" data-filter-group>{{ gname | date: "%A %-d %B %Y" | escape }} &middot; {{ g.items.size }} published</div>
+{%- assign rendered_rows = "" | split: "" -%}
 {%- for r in g.items -%}
+{%- capture rendered_row -%}
 {%- assign cve_head = r.cve | slice: 0, 4 -%}
 {%- if cve_head == "CVE-" -%}
 {%- assign vday = gname -%}
@@ -576,7 +570,11 @@ reads back from the built page (it fails the index step on a duplicate). A vuln 
 {%- include wire-cve-why.html -%}
 <div class="hl-vuln hl-vuln--cve" id="cves-{{ r.cve | downcase | escape }}" data-title="{{ r.cve | downcase | escape }} {{ r.vendor | downcase | escape }} {{ r.product | downcase | escape }} {{ r.title | downcase | escape }}" data-vendor="{{ r.vendor | escape }}" data-sev="{{ sev }}" data-sig="{{ sg | join: '|' }}" data-day="{{ vday | escape }}">{% comment %} T-0532: the Details toggle, first in the row, hidden until the script removes it. {% endcomment %}<button type="button" class="hl-dt" aria-expanded="false" hidden title="Show details"><span class="hl-dt__sr">Details</span></button><a class="hl-vuln__cve" href="https://nvd.nist.gov/vuln/detail/{{ r.cve | escape }}" target="_blank" rel="noopener noreferrer">{{ r.cve | escape }}</a>{% assign ttl_len = r.title | append: "" | size %}<span class="hl-vuln__vp" title="{{ r.vendor | escape }} {{ r.product | escape }}{% if ttl_len > 0 %}: {{ r.title | escape }}{% endif %}">{% if r.vendor and r.vendor != "" %}<b>{{ r.vendor | escape }}</b> {{ r.product | escape }}{% else %}<span class="hl-vuln__none">vendor not given</span>{% endif %}{% if r.title and r.title != "" %} {{ r.title | escape }}{% endif %}</span><span class="hl-vuln__badges">{% include wire-vuln-sev.html %}{% if kp_len > 0 and kn > 0 %}<span class="hl-vuln__w hl-vuln__w--kev" title="{{ kp | escape }}: CISA has listed {{ kn }} earlier CVE{% if kn != 1 %}s{% endif %} in this product on its KEV catalog. That is a fact about the product, not about this CVE.">KEV product</span>{% endif %}{% if w_wp %}<span class="hl-vuln__w hl-vuln__w--wp">WordPress unauthenticated</span>{% endif %}{% if w_nuclei %}<span class="hl-vuln__w hl-vuln__w--nuclei" title="A template in ProjectDiscovery's Nuclei index names this CVE">Nuclei</span>{% endif %}{% if w_et %}<span class="hl-vuln__w hl-vuln__w--et" title="An Emerging Threats ET Open Suricata rule names this CVE">ET Open</span>{% endif %}{% if w_msf %}<span class="hl-vuln__w hl-vuln__w--msf" title="A Metasploit module for this CVE, confirmed against Rapid7's own module list">Metasploit</span>{% endif %}{% if w_edb %}<span class="hl-vuln__w hl-vuln__w--edb" title="An Exploit-DB entry for this CVE, confirmed against Exploit-DB's own list">Exploit-DB</span>{% endif %}{% if w_epss %}<span class="hl-vuln__w hl-vuln__w--epss" title="FIRST's EPSS puts this CVE in the top 10% for likelihood of exploitation in the next 30 days (percentile {{ w_pc }})">EPSS top 10%</span>{% endif %}{% if w_vedas %}<span class="hl-vuln__w hl-vuln__w--vedas" title="EPSS at least 1% and A.R.P. Syndicate's VEDAS exploit-maturity estimate at least 80%, with CVSS at least 7.0; not evidence of exploitation or working exploit code">EPSS + maturity</span>{% endif %}{% include wire-vuln-epss.html cve_mode=true %}{% include wire-vuln-vedas.html %}{% include wire-vuln-news.html %}{% include wire-vuln-rules.html %}{% include wire-vuln-new.html %}{% if r.nomi == true %}<a class="hl-vuln__p hl-vuln__p--nomi" href="https://github.com/nomi-sec/PoC-in-GitHub/blob/master/{{ r.cve | split: '-' | slice: 1 | first | escape }}/{{ r.cve | escape }}.json" target="_blank" rel="noopener noreferrer">PoC on GitHub</a>{% endif %}<a class="hl-vuln__p hl-vuln__p--cn" href="https://cve.now/{{ r.cve | escape }}" target="_blank" rel="noopener noreferrer" title="{{ r.cve | escape }} on cve.now">cve.now</a></span></div>
 {%- endif -%}
+{%- endcapture -%}
+{%- assign rendered_rows = rendered_rows | push: rendered_row -%}
 {%- endfor -%}
+{%- include wire-fold-keys.html rows=g.items mode="cves" -%}
+{%- include wire-fold.html rows=rendered_rows keys=fold_keys labels=fold_labels thresholds=fold_thresholds -%}
 {%- endif -%}
 {%- endfor -%}
 </div>

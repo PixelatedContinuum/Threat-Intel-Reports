@@ -1,0 +1,29 @@
+{%- comment -%}
+Generic ordered fold renderer. Parallel arrays supply rendered rows, group keys,
+labels and minimum sizes. Empty keys stay plain. Emit each qualifying group at
+its first member and preserve member order. All policy belongs to the caller.
+{%- endcomment -%}
+{%- assign emitted_keys = "" | split: "" -%}
+{%- for row_html in include.rows -%}
+{%- assign fold_index = forloop.index0 -%}
+{%- assign fold_key = include.keys[fold_index] -%}
+{%- assign fold_min = include.thresholds[fold_index] -%}
+{%- assign fold_size = 0 -%}
+{%- if fold_key != "" -%}
+{%- for candidate_key in include.keys -%}
+{%- if candidate_key == fold_key -%}{%- assign fold_size = fold_size | plus: 1 -%}{%- endif -%}
+{%- endfor -%}
+{%- endif -%}
+{%- if fold_key != "" and fold_size >= fold_min -%}
+{%- unless emitted_keys contains fold_key -%}
+{%- assign emitted_keys = emitted_keys | push: fold_key -%}
+<details class="hl-vuln-batch" data-filter-container data-filter-batch="{{ fold_key | escape }}">
+<summary><span data-container-count>{{ fold_size | escape }}</span> {{ include.labels[fold_index] | escape }}</summary>
+{%- for member_html in include.rows -%}
+{%- assign member_index = forloop.index0 -%}
+{%- if include.keys[member_index] == fold_key -%}{{ member_html }}{%- endif -%}
+{%- endfor -%}
+</details>
+{%- endunless -%}
+{%- else -%}{{ row_html }}{%- endif -%}
+{%- endfor -%}

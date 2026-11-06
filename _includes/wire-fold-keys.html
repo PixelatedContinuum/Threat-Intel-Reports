@@ -1,0 +1,54 @@
+{%- comment -%}
+Day-scoped policy, separate from the generic renderer. WordPress groups get
+first refusal; product groups only see the remaining rows. CISA stays plain.
+{%- endcomment -%}
+{%- assign fold_keys = "" | split: "" -%}
+{%- assign fold_labels = "" | split: "" -%}
+{%- assign fold_thresholds = "" | split: "" -%}
+{%- assign wp_keys = "" | split: "" -%}
+{%- for fold_row in include.rows -%}
+{%- assign wp_key = "" -%}
+{%- if include.mode == "nkev" -%}
+{%- assign cisa_size = fold_row.cisa_added | size -%}
+{%- if cisa_size != 10 -%}{%- assign wp_key = fold_row.batch | default: "" -%}{%- endif -%}
+{%- else -%}
+{%- assign signal_count = fold_row.signals | size -%}
+{%- if signal_count == 1 and fold_row.signals contains "wp_unauth" -%}
+{%- assign wp_key = "wp-unauth-" | append: fold_row.published -%}
+{%- endif -%}
+{%- endif -%}
+{%- assign wp_keys = wp_keys | push: wp_key -%}
+{%- endfor -%}
+{%- for fold_row in include.rows -%}
+{%- assign policy_index = forloop.index0 -%}
+{%- assign policy_key = wp_keys[policy_index] -%}
+{%- assign wp_count = 0 -%}
+{%- for candidate_key in wp_keys -%}
+{%- if candidate_key == policy_key -%}{%- assign wp_count = wp_count | plus: 1 -%}{%- endif -%}
+{%- endfor -%}
+{%- assign policy_min = wp_unauth_group_min -%}
+{%- assign policy_label = "WordPress plugin CVEs, no login needed" -%}
+{%- if include.mode == "nkev" -%}
+{%- assign policy_min = wp_batch_group_min -%}
+{%- assign added_label = fold_row.added | date: "%-d %B" -%}
+{%- assign policy_label = "WordPress plugin and theme CVEs added on " | append: added_label -%}
+{%- endif -%}
+{%- if policy_key == "" or wp_count < policy_min -%}
+{%- assign policy_key = "" -%}
+{%- assign vendor_key = fold_row.vendor | default: "" | normalize_whitespace | strip | downcase -%}
+{%- assign product_key = fold_row.product | default: "" | normalize_whitespace | strip | downcase -%}
+{%- assign cisa_size = fold_row.cisa_added | size -%}
+{%- unless include.mode == "nkev" and cisa_size == 10 -%}
+{%- if vendor_key != "" and product_key != "" -%}
+{%- assign vendor_key = vendor_key | uri_escape -%}
+{%- assign product_key = product_key | uri_escape -%}
+{%- assign policy_key = "product:" | append: vendor_key | append: ":" | append: product_key -%}
+{%- endif -%}
+{%- endunless -%}
+{%- assign policy_min = product_group_min -%}
+{%- assign policy_label = fold_row.vendor | append: " " | append: fold_row.product | normalize_whitespace | strip | append: " CVEs" -%}
+{%- endif -%}
+{%- assign fold_keys = fold_keys | push: policy_key -%}
+{%- assign fold_labels = fold_labels | push: policy_label -%}
+{%- assign fold_thresholds = fold_thresholds | push: policy_min -%}
+{%- endfor -%}
