@@ -11,8 +11,11 @@
 #
 # Triggers. A push to main (content, layouts, data) or to wire-data (a 15-minute
 # refresh) both build the SAME thing: main's tree plus the newest Wire file. The
-# `concurrency` group cancels an in-flight build when a newer push arrives, so
-# a burst of pushes costs one deploy, never a queue. Measured 2026-10-28 over 100
+# `concurrency` group lets an in-flight build finish and keeps only the newest
+# waiting run (GitHub cancels older pending runs in the group), so a burst of
+# pushes costs at most one extra deploy. It used to cancel the in-flight build;
+# on 2026-11-06 (T-0565.1) builds ran past the 15-minute refresh and a layout push
+# was cancelled twice before it could deploy. Measured 2026-10-28 over 100
 # runs: median build 131 s, mean 140 s, maximum 557 s, 5 cancelled by this rule; a
 # 15-minute spacing leaves room for all but a rare slow build, and GitHub's
 # 10-builds-an-hour Pages soft limit does not apply to a custom Actions workflow
@@ -49,7 +52,7 @@ permissions:
 
 concurrency:
   group: pages-deploy
-  cancel-in-progress: true
+  cancel-in-progress: false
 
 jobs:
   build:
