@@ -1642,7 +1642,7 @@ test('VEDAS legend claims and source hrefs are pinned separately in each tab', f
 
 test('nKEV grouping copy stays pinned on the real template',function(){
  var page=readReal('wire/index.md'), inc=realIncludes();
- ['Exploited soon after disclosure','Disclosed 30 days to a year before listing','Older CVEs newly listed','Disclosure date unknown','Every VulnCheck KEV entry stays visible.','Filters open matching batches and counts show matching rows.'].forEach(function(pin){
+ ['Listed within 30 days of disclosure','Disclosed 30 days to a year before listing','Older CVEs newly listed','Disclosure date unknown','Every VulnCheck KEV entry stays visible.','Filters open matching batches and counts show matching rows.'].forEach(function(pin){
    assert.equal(CW.checkPage(page.replace(pin,'removed'),inc).status,'FAIL',pin);
  });
 });

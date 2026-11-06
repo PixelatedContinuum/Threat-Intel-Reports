@@ -1158,7 +1158,7 @@ function checkLegend(src) {
     problems.push('the legend sits inside the vulnerability grid, where the filter script would count it as rows');
   }
   if (src.indexOf('data-age-group=') !== -1) {
-    ['Exploited soon after disclosure', 'Disclosed 30 days to a year before listing', 'Older CVEs newly listed',
+    ['Listed within 30 days of disclosure', 'Disclosed 30 days to a year before listing', 'Older CVEs newly listed',
      'Disclosure date unknown', 'Every VulnCheck KEV entry stays visible.',
      'Filters open matching batches and counts show matching rows.'
     ].forEach(function (pin) { if (src.indexOf(pin) < 0) problems.push('nKEVs lost grouping copy: ' + pin); });

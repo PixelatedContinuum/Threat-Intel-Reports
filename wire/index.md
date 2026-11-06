@@ -295,7 +295,7 @@ reads back from the built page (it fails the index step on a duplicate). A vuln 
 {%- assign group_rows = wire.vulns | where: "age_group", age_key | sort: "prio" -%}
 {%- if group_rows.size > 0 -%}
 <div class="hl-vuln-group" data-filter-container data-age-group="{{ age_key | escape }}">
-<h2 class="hl-wire__day">{% case age_key %}{% when "new" %}Exploited soon after disclosure{% when "mid" %}Disclosed 30 days to a year before listing{% when "old" %}Older CVEs newly listed{% else %}Disclosure date unknown{% endcase %} <span data-container-count>{{ group_rows.size }}</span></h2>
+<h2 class="hl-wire__day">{% case age_key %}{% when "new" %}Listed within 30 days of disclosure{% when "mid" %}Disclosed 30 days to a year before listing{% when "old" %}Older CVEs newly listed{% else %}Disclosure date unknown{% endcase %} <span data-container-count>{{ group_rows.size }}</span></h2>
 {%- assign seen_batches = "|" -%}
 {%- for unit in group_rows -%}
 {%- assign batch_key = unit.batch | append: "" -%}
