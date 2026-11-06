@@ -4300,6 +4300,10 @@ span.hl-vuln__p--ssvc, span.hl-vuln__p--exp, span.hl-vuln__p--cn { cursor: help;
 }
 .hl-vuln { grid-template-columns: auto 9.5em minmax(0, 1fr) auto; }
 .hl-vuln--cve { grid-template-columns: auto 9.5em minmax(12em, 1fr) auto; }
+/* The CVE id sits level with the chevron, centred on the row, however many lines
+   the title wraps to (Joseph, 2026-11-06: it sat on the first line while the chevron
+   was centred). */
+.hl-vuln > .hl-vuln__cve { align-self: center; }
 .hl-wire__row { display: flex; flex-direction: column; }
 .hl-dt__panel {
   font-size: var(--hl-fs-small);
@@ -4680,7 +4684,7 @@ span.hl-vuln__p--ssvc, span.hl-vuln__p--exp, span.hl-vuln__p--cn { cursor: help;
   /* the chevron keeps its own column; the row's other parts stack beside it */
   .hl-vuln, .hl-vuln--cve { grid-template-columns: auto minmax(0, 1fr); column-gap: 0.6em; }
   .hl-vuln > :not(.hl-dt):not(.hl-dt__panel) { grid-column: 2; }
-  .hl-vuln > .hl-dt { grid-row: 1; align-self: start; }
+  .hl-vuln > .hl-dt { grid-row: 1; align-self: center; }
 }
 
 /* ---------- Indicator search on /ioc-feeds/ (Track A4) ----------
