@@ -252,7 +252,7 @@ test('an undrawn fourth label needs no colour', function () {
 
 /* The CVEs tab's structure (T-0522), in the smallest form the gate accepts. */
 var VEDAS_CREDIT = "VEDAS exploit maturity from <a href=\"https://github.com/ARPSyndicate/cve-scores\">A.R.P. Syndicate</a>";
-var VEDAS_LEGEND = "<dt class=\"hl-legend__k\">Exploit maturity (VEDAS)</dt>\n<dd>A.R.P. Syndicate describes VEDAS as &ldquo;Estimation of Vulnerability Prevalence &amp; Exploit Maturity&rdquo;. Its README names OSINT from <a href=\"https://www.exploit.observer/\" target=\"_blank\" rel=\"noopener noreferrer\">Exploit Observer</a>, coverage of 150+ identifiers and updates every 6 to 8 hours. The source publishes no formula. On the CVEs tab, I pair EPSS at least 1% with VEDAS at least 80% and CVSS at least 7.0 for the EPSS + maturity reason. A high score is not evidence that working exploit code exists or that the CVE has been exploited; exploitation is what the nKEVs tab and CISA KEV are for. An unscored CVE shows no maturity chip.</dd><p>VEDAS exploit maturity from <a href=\"https://github.com/ARPSyndicate/cve-scores\">A.R.P. Syndicate</a></p>";
+var VEDAS_LEGEND = "<dt class=\"hl-legend__k\">VEDAS (exploit maturity)</dt>\n<dd>A.R.P. Syndicate describes VEDAS as &ldquo;Estimation of Vulnerability Prevalence &amp; Exploit Maturity&rdquo;. Its README names OSINT from <a href=\"https://www.exploit.observer/\" target=\"_blank\" rel=\"noopener noreferrer\">Exploit Observer</a>, coverage of 150+ identifiers and updates every 6 to 8 hours. The source publishes no formula. On the CVEs tab, I pair EPSS at least 1% with VEDAS at least 80% and CVSS at least 7.0 for the EPSS + VEDAS reason. A high score is not evidence that working exploit code exists or that the CVE has been exploited; exploitation is what the nKEVs tab and CISA KEV are for. An unscored CVE shows no VEDAS chip.</dd><p>VEDAS exploit maturity from <a href=\"https://github.com/ARPSyndicate/cve-scores\">A.R.P. Syndicate</a></p>";
 
 var CVES_TAB_OK = [
   '<a class="hl-wtabs__tab hl-wtabs__tab--c" href="#cves">CVEs</a>',
@@ -1619,11 +1619,11 @@ test('the paired signal needs EPSS, maturity and CVSS, and its count agrees', fu
 test('VEDAS legend claims and source hrefs are pinned separately in each tab', function () {
   var page = readReal('wire/index.md'), inc = realIncludes();
   assert.equal(CW.checkPage(page, inc).status, 'PASS');
-  var pins = ['Exploit maturity (VEDAS)', 'Estimation of Vulnerability Prevalence &amp; Exploit Maturity',
+  var pins = ['VEDAS (exploit maturity)', 'Estimation of Vulnerability Prevalence &amp; Exploit Maturity',
     '150+ identifiers', 'every 6 to 8 hours', 'The source publishes no formula.',
-    'On the CVEs tab, I pair EPSS at least 1% with VEDAS at least 80% and CVSS at least 7.0 for the EPSS + maturity reason.',
+    'On the CVEs tab, I pair EPSS at least 1% with VEDAS at least 80% and CVSS at least 7.0 for the EPSS + VEDAS reason.',
     'A high score is not evidence that working exploit code exists or that the CVE has been exploited',
-    'exploitation is what the nKEVs tab and CISA KEV are for', 'An unscored CVE shows no maturity chip.',
+    'exploitation is what the nKEVs tab and CISA KEV are for', 'An unscored CVE shows no VEDAS chip.',
     'href="https://www.exploit.observer/"', 'href="https://github.com/ARPSyndicate/cve-scores"'];
   pins.forEach(function (pin) {
     var at = -1, count = 0;

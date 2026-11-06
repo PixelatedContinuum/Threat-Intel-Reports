@@ -44,7 +44,7 @@ test('built fixture renders optional chips, legends, credit and Details links; V
     win.eval(fs.readFileSync(path.join(ROOT, 'assets/js/wire-details.js'), 'utf8'));
     var ids = ['cves-cve-2026-9001', 'cves-cve-2026-9002', 'cves-cve-2026-9003',
       'cve-cve-2026-9011', 'cve-cve-2026-9012'];
-    var chips = ['Maturity 85%', null, 'Maturity 0%', 'Maturity 100%', null];
+    var chips = ['VEDAS 85%', null, 'VEDAS 0%', 'VEDAS 100%', null];
     ids.forEach(function (id, n) {
       var row = doc.getElementById(id);
       assert.ok(row, id);
@@ -66,10 +66,10 @@ test('built fixture renders optional chips, legends, credit and Details links; V
       return Array.from(sec.querySelectorAll('.hl-vuln')).filter(function (r) { return r.style.display !== 'none'; }).map(function (r) { return r.id; });
     };
     var button = sec.querySelector('button[data-sig="epss_vedas"]');
-    assert.match(button.textContent, /EPSS \+ maturity\s*1/);
-    assert.match(doc.getElementById(ids[0]).textContent, /EPSS \+ maturity/);
+    assert.match(button.textContent, /EPSS \+ VEDAS\s*1/);
+    assert.match(doc.getElementById(ids[0]).textContent, /EPSS \+ VEDAS/);
     assert.match(doc.getElementById(ids[0]).querySelector('.hl-vuln__w--vedas').title, /not evidence of exploitation or working exploit code/);
-    assert.match(sec.querySelector('.hl-wire__callout--c').textContent, /at most 200 CVEs/);
+    assert.match(sec.querySelector('#cves-explanation').textContent, /showing at most 200 rows/);
     button.click();
     assert.deepEqual(visible(), [ids[0]]);
     sec.querySelector('button[data-sig=""]').click();
@@ -80,12 +80,16 @@ test('built fixture renders optional chips, legends, credit and Details links; V
     ['vulns', 'cves'].forEach(function (id) {
       var s = doc.getElementById(id);
       assert.equal(s.querySelectorAll('.hl-legend__body').length, 2);
+      // T-0565.1 made the legend a chip key; the VEDAS copy and credit live in the tab's explanation panel.
       s.querySelectorAll('.hl-legend__body').forEach(function (l) {
-        assert.match(l.textContent, /Exploit maturity \(VEDAS\)/);
-        assert.match(l.textContent, /150\+ identifiers/);
-        assert.match(l.textContent, /source publishes no formula/);
-        assert.ok(l.querySelector('a[href="https://github.com/ARPSyndicate/cve-scores"]'));
+        assert.ok(l.querySelector('.hl-vuln__p--vedas'), 'legend shows the VEDAS chip');
+        assert.match(l.textContent, /Exploit maturity estimate/);
       });
+      var ex = doc.getElementById(id === 'vulns' ? 'nkev-explanation' : 'cves-explanation');
+      assert.match(ex.textContent, /VEDAS \(exploit maturity\)/);
+      assert.match(ex.textContent, /150\+ identifiers/);
+      assert.match(ex.textContent, /source publishes no formula/);
+      assert.ok(ex.querySelector('a[href="https://github.com/ARPSyndicate/cve-scores"]'));
       assert.ok(s.querySelector('.hl-wire__freshness a[href="https://github.com/ARPSyndicate/cve-scores"]'));
     });
     for (var id of ids) {

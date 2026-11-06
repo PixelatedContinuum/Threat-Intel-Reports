@@ -31,7 +31,7 @@ test('T-0565 rendered groups, batches, filters, priorities, chips and both ancho
  batch.open=false;w.location.hash='#vulns-2026-10-13';await new Promise(r=>w.setTimeout(r,10));assert.equal(batch.open,true);assert.equal(scrolled.at(-1),'vulns-2026-10-13');
  const c=d.getElementById('cves');for(const arm of ['nuclei','et','msf','edb','epss90','epss_vedas','wp_unauth']){c.querySelector('button[data-sig="'+arm+'"]').click();assert.equal([...c.querySelectorAll('.hl-vuln')].filter(r=>r.style.display!=='none').length,1,arm);c.querySelector('button[data-sig=""]').click();}
  assert.ok(d.querySelector('#cves-cve-2026-9020 .hl-vuln__w--kev'));assert.equal(d.querySelectorAll('[data-sig*="crit_noauth"]').length,0);
- assert.equal(d.querySelectorAll('.hl-vuln .hl-vuln__p--epss').length,53);assert.equal(d.querySelector('#cve-cve-2026-9100 .hl-vuln__p--vedas').textContent,'Maturity 100%');assert.equal(d.querySelector('#cves-cve-2026-9001 .hl-vuln__p--vedas').textContent,'Maturity 85%');
+ assert.equal(d.querySelectorAll('.hl-vuln .hl-vuln__p--epss').length,53);assert.equal(d.querySelector('#cve-cve-2026-9100 .hl-vuln__p--vedas').textContent,'VEDAS 100%');assert.equal(d.querySelector('#cves-cve-2026-9001 .hl-vuln__p--vedas').textContent,'VEDAS 85%');
  }finally{dom.window.close();}
 });
 

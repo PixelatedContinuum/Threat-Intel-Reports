@@ -29,6 +29,11 @@ test('overflow fallback is native, keyboard accessible, searchable and reversibl
  b.dispatchEvent(new w.KeyboardEvent('keydown',{key:'Escape'}));assert.equal(c.hidden,true);assert.equal(b.getAttribute('aria-expanded'),'false');
  }finally{d.window.close();}
 });
+test('T-0569 the CVEs short line credits A.R.P. Syndicate for VEDAS, and losing it fails',()=>{
+ assert.equal(CW.checkPage(page,includes).status,'PASS');
+ const pin='&middot; VEDAS exploit maturity from <a href="https://github.com/ARPSyndicate/cve-scores" target="_blank" rel="noopener noreferrer">A.R.P. Syndicate</a> &middot; <a href="{{ \'/wire/cves.xml\'';
+ assert.ok(page.includes(pin)); assert.equal(CW.checkPage(page.replace(pin,'&middot; <a href="{{ \'/wire/cves.xml\''),includes).status,'FAIL');
+});
 test('T-0565.2 Product exploited before filter is pinned, narrows only, and its removal fails the gate',()=>{
  assert.equal(CW.checkPage(page,includes).status,'PASS');
  for(const pin of ['data-sig="kev_product">Product exploited before','kev_product{% endif %}"','Product exploited before</dt><dd>Filter only, never admits']) {

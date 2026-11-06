@@ -58,7 +58,7 @@ sitemap: false
     <category term="epss-top-10" label="EPSS top 10%"/>
     {%- endif %}
     {%- if w_vedas %}
-    <category term="epss-plus-maturity" label="EPSS + maturity"/>
+    <category term="epss-plus-maturity" label="EPSS + VEDAS"/>
     {%- endif %}
     {%- if msf_len > 0 %}
     <category term="metasploit-module" label="Metasploit module"/>

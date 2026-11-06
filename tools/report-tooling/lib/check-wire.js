@@ -1046,11 +1046,11 @@ function checkHeadlineRow(src) {
    other is the browser check. */
 function checkVedasCopy(legend, label) {
   var out = [];
-  ["Exploit maturity (VEDAS)", "Estimation of Vulnerability Prevalence &amp; Exploit Maturity",
+  ["VEDAS (exploit maturity)", "Estimation of Vulnerability Prevalence &amp; Exploit Maturity",
     "A.R.P. Syndicate", "150+ identifiers", "every 6 to 8 hours", "The source publishes no formula.",
-    "On the CVEs tab, I pair EPSS at least 1% with VEDAS at least 80% and CVSS at least 7.0 for the EPSS + maturity reason.",
+    "On the CVEs tab, I pair EPSS at least 1% with VEDAS at least 80% and CVSS at least 7.0 for the EPSS + VEDAS reason.",
     "A high score is not evidence that working exploit code exists or that the CVE has been exploited",
-    "exploitation is what the nKEVs tab and CISA KEV are for", "An unscored CVE shows no maturity chip.",
+    "exploitation is what the nKEVs tab and CISA KEV are for", "An unscored CVE shows no VEDAS chip.",
     'href="https://www.exploit.observer/"', 'href="https://github.com/ARPSyndicate/cve-scores"'
   ].forEach(function (pin) {
     if (legend.indexOf(pin) < 0) out.push(label + ' lost VEDAS copy or credit: ' + pin);
@@ -1500,7 +1500,7 @@ function checkCvesFeed(xml) {
   /* T-0564: the feed states the same cap as the page and the exporter, and credits VEDAS wherever it carries the pairing. */
   var feedCap = body.match(/at most (\d+) CVEs/);
   if (!feedCap || Number(feedCap[1]) !== CVES_CAP) problems.push('wire/cves.xml does not say "at most ' + CVES_CAP + ' CVEs" (the cap the page and exporter use)');
-  if (/w_vedas/.test(body) && !['subtitle', 'rights'].every(function (t) { var m = body.match(new RegExp('<' + t + '>([\\s\\S]*?)</' + t + '>')); return m && /A\.R\.P\. Syndicate/.test(m[1]); })) problems.push('wire/cves.xml carries the EPSS + maturity reason but does not credit A.R.P. Syndicate in both the subtitle and the rights line');
+  if (/w_vedas/.test(body) && !['subtitle', 'rights'].every(function (t) { var m = body.match(new RegExp('<' + t + '>([\\s\\S]*?)</' + t + '>')); return m && /A\.R\.P\. Syndicate/.test(m[1]); })) problems.push('wire/cves.xml carries the EPSS + VEDAS reason but does not credit A.R.P. Syndicate in both the subtitle and the rights line');
   return verdict(problems.length ? 'FAIL' : 'PASS', null, problems, [], null);
 }
 
@@ -1714,6 +1714,9 @@ function checkDayLayout(src, includes) {
    'data-sig="kev_product">Product exploited before', 'kev_product{% endif %}"', 'Product exploited before</dt><dd>Filter only, never admits'
   ].forEach(function (pin) { if (!src.includes(pin)) out.push('Wire layout lost: ' + pin); });
   if (/nomi_poc/.test(src)) out.push('nomi_poc is not an admission reason');
+  // T-0569: checkCvesTab no longer runs on the day layout, so the CVEs short line's VEDAS credit is checked here.
+  var cLine = src.match(/<p class="hl-wire__freshness hl-wire__freshness--c">[\s\S]*?<\/p>/);
+  if (!cLine || !/VEDAS exploit maturity from <a [^>]*href="https:\/\/github\.com\/ARPSyndicate\/cve-scores"[^>]*>A\.R\.P\. Syndicate<\/a>/.test(cLine[0])) out.push('the short CVEs line lost VEDAS credit to A.R.P. Syndicate');
   if (/hl-wire__callout--c/.test(src.replace(/\{%[\s\S]*?%\}/g, ''))) out.push('CVEs intro must be in explanation');
   ['legend_html', 'cves_legend_html'].forEach(function (name) {
     var m = src.match(new RegExp('capture '+name+'[\\s\\S]*?%\\}([\\s\\S]*?)\\{%-? endcapture'));
@@ -1761,6 +1764,7 @@ function checkDayLayout(src, includes) {
    'the tooling reasons together admitted 53 CVEs, eight later listed on VulnCheck KEV; Nuclei accounted for seven of 34.'
   ].forEach(function (pin) { if (!c.includes(pin)) out.push('CVEs explanation lost tooling copy: '+pin); });
   // A source URL mutated into XXhref is no longer an attribution link.
-  if ((src.match(/href="https:\/\/github.com\/ARPSyndicate\/cve-scores"/g) || []).length !== 3) out.push('Wire lost VEDAS source href');
+  // T-0569: four, the CVEs short line credits A.R.P. Syndicate again beside the nKEVs line and both panels.
+  if ((src.match(/href="https:\/\/github.com\/ARPSyndicate\/cve-scores"/g) || []).length !== 4) out.push('Wire lost VEDAS source href');
   return out;
 }
