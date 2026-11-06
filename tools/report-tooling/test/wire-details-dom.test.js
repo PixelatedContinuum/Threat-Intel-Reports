@@ -175,6 +175,29 @@ test('the CVEs panel says why listed, with the cve.now scoring line', async func
   assert.match(t, /Widget tipper overheats\./, 'the row title stands in for the absent record description');
 });
 
+test('one earlier KEV CVE in the product reads in the singular', async function () {
+  var env = openDom({
+    'cve-2026-9999': {
+      added: null, published: '2026-10-31', title: 'Widget tipper overheats.', desc: '',
+      cwe: [], affected: [], fixed: '2.2.0', kev_due: '', evidence: '', cisa_added: '', disclosed: '',
+      msf: [], edb: [], reports: [], reports_more: 0, stories: 0, aliases: [],
+      et_sids: [], nuclei: '', cisa_sigma: [], snort3_sids: [], ssvc_expl: '', ssvc_auto: '',
+      ssvc_impact: '', cvss: '9.8', cvss_version: '3.1', severity: 'critical',
+      scored_by: 'cve.now', cvss_vector: 'CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H',
+      epss: '0.9', epss_pct: '0.95', epss_date: '2026-11-01', epss_pre: '', epss_max: '',
+      epss_xmodel: '', signals: ['nuclei', 'et', 'epss90'],
+      kev_product: 'Widget', kev_product_n: 1
+    }
+  });
+  var doc = env.dom.window.document;
+  var rowEl = doc.getElementById('cves-cve-2026-9999');
+  clicks(doc, rowEl.querySelector('.hl-dt'));
+  await settle();
+  var t = rowEl.querySelector('.hl-dt__panel').textContent;
+  assert.match(t, /Widget: CISA has listed 1 earlier CVE in this product on its KEV catalog\./);
+  assert.doesNotMatch(t, /1 earlier CVEs/);
+});
+
 test('a scored-by ADP row says so in the design\u2019s words', async function () {
   var env = openDom({
     'cve-2026-1001': Object.assign({}, NKEV_ROWS['cve-2026-1001'], { scored_by: 'ADP' })

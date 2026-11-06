@@ -295,8 +295,8 @@ function secWhyListed(panel, d, asOfDay) {
     }
   }
   var kp = str(d.kev_product), kn = num(d.kev_product_n);
-  if (kp && kn > 0) lineInto(panel, kp + ': CISA has listed ' + kn +
-    ' earlier CVEs in this product on its KEV catalog. That is a fact about the product, not about this CVE.');
+  if (kp && kn > 0) lineInto(panel, kp + ': CISA has listed ' + Math.floor(kn) + ' earlier CVE' +
+    (kn === 1 ? '' : 's') + ' in this product on its KEV catalog. That is a fact about the product, not about this CVE.');
   var closeDay = dayOf(asOfDay);
   lineInto(panel, closeDay
     ? WHYNOW_HEAD + closeDay + '. ' + WHYNOW_NOTE

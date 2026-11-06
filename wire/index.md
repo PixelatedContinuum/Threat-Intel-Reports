@@ -442,7 +442,7 @@ reads back from the built page (it fails the index step on a duplicate). A vuln 
 <dt><span class="hl-vuln__w hl-vuln__w--kev">KEV product</span></dt>
 <dd>The product has earlier entries in CISA's KEV catalog. This context stays on the row; it supplies no admission reason.</dd>
 <dt><span class="hl-vuln__w hl-vuln__w--nuclei">Nuclei</span> <span class="hl-vuln__w hl-vuln__w--et">ET Open</span></dt>
-<dd>Nuclei templates come from ProjectDiscovery's template index; ET Open rules come from Emerging Threats' Suricata ruleset. In my July to September 2026 replay, judged seven days after publication, the tooling reasons together admitted 53 CVEs, eight later listed on VulnCheck KEV; Nuclei accounted for seven of 34.</dd>
+<dd>Nuclei templates come from ProjectDiscovery's template index; ET Open rules come from Emerging Threats' Suricata ruleset. In my July to September 2026 replay, judged seven days after publication, the tooling reasons together admitted 53 CVEs, eight later listed on VulnCheck KEV; Nuclei accounted for seven of 34. These are small, in-sample counts, not promised hit rates.</dd>
 <dt><span class="hl-vuln__w hl-vuln__w--msf">Metasploit</span> <span class="hl-vuln__w hl-vuln__w--edb">Exploit-DB</span></dt>
 <dd>A Metasploit module, or an Exploit-DB entry, exists for the CVE, confirmed against Rapid7's or Exploit-DB's own list.</dd>
 <dt><span class="hl-vuln__w hl-vuln__w--epss">EPSS top 10%</span></dt>
