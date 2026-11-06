@@ -266,6 +266,12 @@ jobs:
       - name: Deploy
         id: deployment
         uses: actions/deploy-pages@v4
+        with:
+          # Default 600000 ms. On 2026-11-06 GitHub's file sync ran past it
+          # ("Timeout reached, aborting!" at syncing_files) and a built site
+          # was not deployed; 20 minutes still fits under the 15-minute refresh
+          # now that in-flight runs are not cancelled.
+          timeout: 1200000
 
   # The source-side gates that the pre-commit hook runs locally, run here on
   # every push so a bypassed hook (or a push from a machine without it) is still
