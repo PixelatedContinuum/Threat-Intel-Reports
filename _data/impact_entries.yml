@@ -141,8 +141,7 @@ entries:
     recipient: the team handling the victim's incident
     title: A case I never published reached the team handling the incident
     description: >-
-      An attacker's AI coding agent had left its working files on an open server, including logins its tools recorded as working against systems I read as a company's, password hashes the attacker had cracked, and scripts aimed at the company's domain controller.
+      An attacker's AI coding agent had left its working files on an open server, including logins its tools recorded as working against systems I read as a company's.
       I never published a report on this case. I sent the company and the national CERT a private notice instead, and the CERT opened a case and asked for the details I had offered.
-      A team that described itself as handling the incident for the company, copied in by the CERT, then asked me for the evidence directly, saying it needed it to proceed with its investigation and remediation.
-      I sent it account names, hosts and script names over an encrypted channel, with every password and credential withheld.
+      A team that described itself as handling the incident for the company, copied in by the CERT, then asked me for the evidence directly, saying it needed it to proceed with its investigation and remediation, and I sent it.
     verified: reported
