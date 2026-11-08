@@ -123,6 +123,8 @@ MUTED = _C["muted"]            # kicker and secondary text on the site
 DIV = _C["border_card"]
 BLUE = _C["blue"]
 GOLD = _C["gold_bright"]       # sponsor only (custom.scss): the sponsor hub card
+HUE = _T["hues"]["kinds"]      # section hues (r2-base): a kind's colour, from the token file
+REPORT_HUE = HUE["reports"]["dark"]   # the kicker of a per-report card names its kind
 RADIUS = _T["radius_px"]       # 3 px, every box and pill
 # faint site grid: 24 px step, blue at 3% alpha (tokens page.grid_*)
 _GRID_PX = _T["page"]["grid_px"]
@@ -226,7 +228,7 @@ def _header(im, d, spine, pill_text, pill_fill, pill_ink):
            font=fp, fill=pill_ink)
 
 
-def _footer(d, left_text):
+def _footer(d, left_text, mark=BLUE):
     ml, mr = _s(72), _s(72)
     d.line([(ml, _s(H - 96)), (BW - mr, _s(H - 96))], fill=DIV, width=_s(1))
     fm = _font("mono", 19)
@@ -236,7 +238,7 @@ def _footer(d, left_text):
     twd = _scratch.textlength(DOMAIN, font=fd)
     xr = BW - mr - twd
     d.rectangle([xr - _s(22), ym + _s(6), xr - _s(22) + _s(11), ym + _s(6) + _s(11)],
-                fill=BLUE)                       # section-mark square, radius 0
+                fill=mark)                       # section-mark square, radius 0
     d.text((xr, ym), DOMAIN, font=fd, fill=TXT)
 
 
@@ -246,7 +248,7 @@ def render_card(fields, out_path):
     d = ImageDraw.Draw(im)
     _header(im, d, bd, fields["severity"], bd, ptx)
     ml, mr = _s(72), _s(72)
-    _tracked(d, (ml, _s(206)), fields["kicker"], _font("sans-semibold", 19), MUTED, _s(3))
+    _tracked(d, (ml, _s(206)), fields["kicker"], _font("sans-semibold", 19), REPORT_HUE, _s(3))
     f, lines = _fit_title(fields["title"], BW - ml - mr, 3, 62, 34)
     lh = int(f.size * 1.14)
     y = _s(244)
@@ -293,7 +295,7 @@ def ensure_thumbnail_line(text, slug):
 
 
 # -------------------------------------------------- hub / listing-page cards
-HUB_ACCENT = "#22d3ee"   # cyan — matches the /stix/ page header --ph-accent
+HUB_ACCENT = HUE["stix"]["dark"]   # cyan, the STIX section hue (token file)
 
 
 def _wrap(text, font, max_w, max_lines):
@@ -315,7 +317,7 @@ def _wrap(text, font, max_w, max_lines):
     return lines
 
 
-def render_hub_card(fields, out_path, accent=HUB_ACCENT, kicker_color=MUTED):
+def render_hub_card(fields, out_path, accent=HUB_ACCENT, kicker_color=None):
     """Render a 1200x630 social card for a listing / hub page (e.g. /stix/).
 
     Unlike render_card (per-report) there is no severity or date; `accent`
@@ -325,9 +327,10 @@ def render_hub_card(fields, out_path, accent=HUB_ACCENT, kicker_color=MUTED):
 
     fields keys: pill, kicker, title, subtitle, footer_left.
     """
+    kicker_color = kicker_color or accent      # r2d: the kicker and footer square take the page's hue
     im = _background()
     d = ImageDraw.Draw(im)
-    _header(im, d, accent, fields["pill"], accent, "#06232b")
+    _header(im, d, accent, fields["pill"], accent, BG)     # ground-coloured ink on the hue
     ml, mr = _s(72), _s(72)
     _tracked(d, (ml, _s(206)), fields["kicker"], _font("sans-semibold", 19), kicker_color, _s(3))
     f, lines = _fit_title(fields["title"], BW - ml - mr, 3, 76, 40)
@@ -342,6 +345,6 @@ def render_hub_card(fields, out_path, accent=HUB_ACCENT, kicker_color=MUTED):
         for ln in _wrap(fields["subtitle"], fs, BW - ml - mr, 2):
             d.text((ml, sy), ln, font=fs, fill=MUTED)
             sy += int(fs.size * 1.18)
-    _footer(d, fields.get("footer_left", ""))
+    _footer(d, fields.get("footer_left", ""), mark=accent)
     os.makedirs(os.path.dirname(out_path), exist_ok=True)
     im.resize((W, H), Image.LANCZOS).save(out_path, optimize=True)

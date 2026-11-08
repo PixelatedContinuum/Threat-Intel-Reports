@@ -11,7 +11,10 @@ generate_card.py for the per-report path.
 Each card is wired to its page via a `thumbnail:` line (landing pages) or a
 Jekyll `defaults` rule in _config.yml (the detection corpus); head.liquid turns
 page.thumbnail into og:image / twitter:image — same mechanism as report cards.
-`accent` matches each page's header --ph-accent so the card and page agree.
+`accent` is the page's section hue from the brand token file (T-0563 round 2: each
+hub card in its section's hue; about, consulting and subscribe take The Wire blue,
+support the Actors magenta, behind-the-reports the Techniques orange; sponsor stays
+sponsor gold). Page headers still carry their own --ph-accent; the card leads them.
 """
 import os
 import sys
@@ -22,60 +25,59 @@ CARDS = os.path.join(REPO, "assets", "images", "cards")
 
 CC = "CC BY 4.0"
 
-# slug -> card spec. `accent` colors the spine + pill (matches each page's
-# --ph-accent); pill/kicker/title/subtitle mirror the page's header block.
+# slug -> card spec. `accent` colors the spine, pill, kicker and footer square; pill/kicker/title/subtitle mirror the page's header block.
 HUBS = {
     "stix": dict(
-        accent="#22d3ee", pill="STIX 2.1", kicker="THREAT INTELLIGENCE",
+        accent=cardlib.HUE["stix"]["dark"], pill="STIX 2.1", kicker="THREAT INTELLIGENCE",
         title="STIX Bundles",
         subtitle="Per-campaign STIX 2.1 bundles — import into OpenCTI, MISP, "
                  "or any STIX-aware platform.",
         footer_left=CC),
     "reports": dict(
-        accent="#a371f7", pill="REPORTS", kicker="ORIGINAL RESEARCH",
+        accent=cardlib.HUE["reports"]["dark"], pill="REPORTS", kicker="ORIGINAL RESEARCH",
         title="Threat Intelligence Reports",
         subtitle="Original malware analysis and reverse engineering — every "
                  "report ships with detection rules and IOCs.",
         footer_left=""),
     "ioc-feeds": dict(
-        accent="#f87171", pill="IOC FEEDS", kicker="MACHINE-READABLE",
+        accent=cardlib.HUE["iocs"]["dark"], pill="IOC FEEDS", kicker="MACHINE-READABLE",
         title="Indicators of Compromise",
         subtitle="Structured feeds ready for your SIEM, EDR, or CTI platform.",
         footer_left=CC),
     "hunting-detections": dict(
-        accent="#4ade80", pill="DETECTIONS", kicker="DETECTION ENGINEERING",
+        accent=cardlib.HUE["detections"]["dark"], pill="DETECTIONS", kicker="DETECTION ENGINEERING",
         title="Sigma, YARA & Suricata Rules",
         subtitle="Detection logic from original research, mapped to MITRE ATT&CK.",
         footer_left=CC),
     "about": dict(
-        accent="#60a5fa", pill="ABOUT", kicker="ABOUT THE AUTHOR",
+        accent=cardlib.HUE["wire"]["dark"], pill="ABOUT", kicker="ABOUT THE AUTHOR",
         title="Joseph Harrison",
         subtitle="SOC Operations Lead & Threat Intelligence Researcher.",
         footer_left=""),
     "consulting": dict(
-        accent="#58a6ff", pill="CONSULTING", kicker="CONSULTING & ADVISORY",
+        accent=cardlib.HUE["wire"]["dark"], pill="CONSULTING", kicker="CONSULTING & ADVISORY",
         title="Threat Intelligence That Works for Your Team",
         subtitle="The depth behind this site, applied directly to your environment.",
         footer_left=""),
     "subscribe": dict(
-        accent="#3b82f6", pill="SUBSCRIBE", kicker="STAY INFORMED",
+        accent=cardlib.HUE["wire"]["dark"], pill="SUBSCRIBE", kicker="STAY INFORMED",
         title="Subscribe to The Hunter's Ledger",
         subtitle="New reports, detections, and IOC feeds — the moment they publish.",
         footer_left=""),
     "support": dict(
-        accent="#f472b6", pill="SUPPORT", kicker="SUPPORT THE WORK",
+        accent=cardlib.HUE["actors"]["dark"], pill="SUPPORT", kicker="SUPPORT THE WORK",
         title="Keep This Research Independent",
         subtitle="Run by a single researcher. No corporate backing, "
                  "no paywalls, no ads.",
         footer_left=""),
     "sponsor": dict(
-        accent="#d4a73a", pill="SPONSOR", kicker="SPONSORSHIP",
+        accent=cardlib.GOLD, pill="SPONSOR", kicker="SPONSORSHIP",
         title="Reach Defenders Who Build, Buy, and Use Detection",
         subtitle="Place your brand alongside technical research working "
                  "defenders actually use.",
         footer_left=""),
     "behind-the-reports": dict(
-        accent="#f97316", pill="PROCESS", kicker="BEHIND THE REPORTS",
+        accent=cardlib.HUE["techniques"]["dark"], pill="PROCESS", kicker="BEHIND THE REPORTS",
         title="How the Intelligence Is Produced",
         subtitle="The systems, the design decisions, and why they were built.",
         footer_left=""),
