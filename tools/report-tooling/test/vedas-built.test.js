@@ -69,7 +69,7 @@ test('built fixture renders optional chips, legends, credit and Details links; V
     assert.match(button.textContent, /EPSS \+ VEDAS\s*1/);
     assert.match(doc.getElementById(ids[0]).textContent, /EPSS \+ VEDAS/);
     assert.match(doc.getElementById(ids[0]).querySelector('.hl-vuln__w--vedas').title, /not evidence of exploitation or working exploit code/);
-    assert.match(sec.querySelector('#cves-explanation').textContent, /showing at most 200 rows/);
+    assert.match(sec.querySelector('#cves-explanation').textContent, /showing at most 250 rows/);
     button.click();
     assert.deepEqual(visible(), [ids[0]]);
     sec.querySelector('button[data-sig=""]').click();
