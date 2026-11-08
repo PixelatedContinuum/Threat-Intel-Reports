@@ -2804,7 +2804,7 @@ malware-analysis-houselet-detections:
     engine: sigma
     tier: Hunting
     fence: 4
-    hash: "fc2c179a"
+    hash: "7414f768"
     head: "title: Command Line Referencing Virtualization o"
     robustness: 2
     confidence: "MODERATE"

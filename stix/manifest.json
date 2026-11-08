@@ -616,13 +616,13 @@
       "file": "malware-analysis-houselet.json",
       "url": "https://the-hunters-ledger.com/stix/malware-analysis-houselet.json",
       "report_url": "https://the-hunters-ledger.com/reports/malware-analysis-houselet/",
-      "bundle_id": "bundle--5224ae03-7fc2-4cae-b039-538ec9a44f24",
+      "bundle_id": "bundle--022c439c-80d7-4341-88d3-3ac5331531f0",
       "report_id": "report--66cfa6ea-e048-5321-893d-ff84b9a53c13",
-      "sha256": "07514b9e143169ec53cd0759861657f16f4b3c2f1dbebf7439fd633688c38fb9",
-      "bytes": 16560,
+      "sha256": "5ebdfc333f9b968ddb6abbde14476ed0ced1c239963d853c4a6f51d8fa23cec0",
+      "bytes": 16664,
       "objects": 10,
       "indicators": 5,
-      "modified": "2026-11-08T12:15:49.15924Z"
+      "modified": "2026-11-08T12:40:30.754345Z"
     },
     {
       "slug": "AdvancedRouterScanner",
