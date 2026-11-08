@@ -63,7 +63,9 @@ REPO = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from hl_doc_theme import (  # noqa: E402
     BORDER, GOLD, BLUE, RED, SEV, PAGE, MARGIN, S, rule, bullets, panel, stat_strip,
-    dark_table, paint_cover, make_interior_painter, section, Lockup, sym, hexs)
+    dark_table, paint_cover, make_interior_painter, section, Lockup, sym, hexs, theme)
+
+T = theme("dark")      # round 2 colour: T.hue(i) / T.hue_for(kind), from the base, never typed
 
 DATA = os.path.join(REPO, "_data")
 BRIEFS = os.path.join(REPO, "docs", "briefs")
@@ -304,15 +306,19 @@ def render(slug, content, entry, fm, sponsors, out_path=None):
         (str(atk.get("total", 0)), "ATT&amp;CK techniques"),
         (str(len(det)), "detections to deploy"),
         (str(len(block)), "indicators to block"),
-    ], width=CONTENT_W))
+    ], width=CONTENT_W,
+        # each figure takes the hue of what it counts; severity keeps the severity colour. The
+        # techniques figure stays ink here: the techniques hue (orange) is within a shade of the
+        # high-severity colour (#fb923c vs #f97316) and severity colour must mean severity only.
+        colors=[sev_col, None, T.hue_for("detections"), T.hue_for("iocs")]))
     if content.get("what_it_means"):
         story.append(Spacer(1, 9))
-        story.append(section("What this means", CONTENT_W, sev_col))
+        story.append(section("What this means", CONTENT_W, T.hue(1)))
         story.append(Paragraph(xesc(content["what_it_means"]), S["body"]))
     do = [d for d in (content.get("do_now") or []) if str(d).strip()]
     if do:
-        story.append(section("What to do now", CONTENT_W, sev_col))
-        story.append(panel(bullets([xesc(d) for d in do]), accent=sev_col, width=CONTENT_W))
+        story.append(section("What to do now", CONTENT_W, T.hue(2)))
+        story.append(panel(bullets([xesc(d) for d in do]), accent=T.hue(2), width=CONTENT_W))
     story.append(PageBreak())
 
     # -------- act now
@@ -338,7 +344,7 @@ def render(slug, content, entry, fm, sponsors, out_path=None):
                          Paragraph(xesc(", ".join(r.get("attack") or [])), S["cell"])])
         story.append(dark_table(rows, [CONTENT_W * .42, CONTENT_W * .13,
                                        CONTENT_W * .15, CONTENT_W * .30],
-                                header_fill=sev_col))
+                                header_fill=T.hue_for("detections")))
         if len(det) > 5:
             story.append(Spacer(1, 4))
             story.append(Paragraph(
@@ -348,7 +354,7 @@ def render(slug, content, entry, fm, sponsors, out_path=None):
         story.append(Paragraph("No detection rules were published for this campaign.",
                                S["body"]))
 
-    story.append(section("Indicators safe to block", CONTENT_W, BLUE))
+    story.append(section("Indicators safe to block", CONTENT_W, T.hue_for("iocs")))
     if block:
         story.append(Paragraph(
             "Blocking any of these costs the operator and nobody else.",
@@ -359,7 +365,8 @@ def render(slug, content, entry, fm, sponsors, out_path=None):
         for b in block[:5]:
             rows.append([Paragraph(xesc(b["value"]), S["mono"]),
                          Paragraph(xesc(b["context"])[:120], S["cell"])])
-        story.append(dark_table(rows, [CONTENT_W * .46, CONTENT_W * .54], header_fill=BLUE))
+        story.append(dark_table(rows, [CONTENT_W * .46, CONTENT_W * .54],
+                                header_fill=T.hue_for("iocs")))
         if len(block) > 5:
             story.append(Spacer(1, 4))
             story.append(Paragraph(
@@ -369,7 +376,7 @@ def render(slug, content, entry, fm, sponsors, out_path=None):
         story.append(Paragraph("No blockable indicators in the published feed.", S["body"]))
 
     if hunt:
-        story.append(section("Watch, do not block", CONTENT_W, RED))
+        story.append(section("Watch, do not block", CONTENT_W, T.hue(6)))
         story.append(panel([
             Paragraph(
                 "These are genuinely used by the operator, which is why they are recorded. "
@@ -377,7 +384,7 @@ def render(slug, content, entry, fm, sponsors, out_path=None):
                 "never put them in a blocklist.", S["body"]),
             Paragraph(" &nbsp;&middot;&nbsp; ".join(
                 xesc(h["value"]) for h in hunt[:10]), S["mono"]),
-        ], accent=RED, width=CONTENT_W))
+        ], accent=T.hue(6), width=CONTENT_W))
 
     # -------- standout
     standout = [s for s in (content.get("standout") or [])
@@ -390,9 +397,9 @@ def render(slug, content, entry, fm, sponsors, out_path=None):
         story.append(Paragraph(
             "The parts of this campaign worth a technical reader's time. Routine tradecraft is "
             "left in the full report.", S["subtitle"]))
-        for s in standout:
+        for n, s in enumerate(standout, start=1):
             if s.get("heading"):
-                story.append(section(xesc(s["heading"]), CONTENT_W, sev_col))
+                story.append(section(xesc(s["heading"]), CONTENT_W, T.hue(n)))
             if s.get("body"):
                 for para in str(s["body"]).split("\n\n"):
                     if para.strip():

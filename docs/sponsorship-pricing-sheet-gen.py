@@ -42,7 +42,9 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from hl_doc_theme import (  # noqa: E402
     CARD, BORDER, HAIRLINE, GOLD, BLUE, INK, MUTED, FONT, PAGE, MARGIN, S,
     rule, bullets, panel, stat_strip, dark_table, paint_cover, make_interior_painter,
-    section, Lockup, hexs, SITE_URL)
+    section, Lockup, hexs, SITE_URL, theme)
+
+T = theme("dark")      # round 2 colour: T.hue(i) / T.hue_for(kind), from the base, never typed
 
 if "--out" in sys.argv:
     OUT = os.path.abspath(sys.argv[sys.argv.index("--out") + 1])
@@ -79,7 +81,7 @@ story.append(Paragraph(
     "working defenders actively integrate.", S["subtitle"]))
 story.append(rule())
 
-story.append(section("The Audience", CONTENT_W))
+story.append(section("The Audience", CONTENT_W, T.hue(1)))
 story.append(Paragraph(
     "A focused, <b>technical security audience</b>, concentrated where security buying decisions "
     "get made: the people who evaluate, recommend, deploy, and buy detection and tooling "
@@ -88,7 +90,8 @@ story.append(Paragraph(
 story.append(Spacer(1, 3))
 # Figures a reader can check, rather than analytics nobody can audit.
 story.append(stat_strip([("3,500+", "on LinkedIn"), ("112", "Suricata rules live"),
-                         ("57", "IOC feeds"), ("41", "STIX bundles")], width=CONTENT_W))
+                         ("57", "IOC feeds"), ("41", "STIX bundles")], width=CONTENT_W,
+                         colors=[None, T.hue_for("detections"), T.hue_for("iocs"), T.hue_for("stix")]))
 story.append(Spacer(1, 7))
 story.append(Paragraph(
     "The Suricata rules ship in a consolidated feed registered for suricata-update, running in "
@@ -183,29 +186,37 @@ story.append(Paragraph(
     "month. The placements, the benefits, and the editorial independence are identical either "
     "way.", S["body"]))
 
+from reportlab.lib.styles import ParagraphStyle  # noqa: E402
 H, C, B = S["cell_h"], S["cell"], S["cell_b"]
+
+
+def row_label(text, i):
+    """Row label in the i-th rotation hue, so neighbouring rows of the pay table differ."""
+    return Paragraph(text, ParagraphStyle("rl%d" % i, parent=B, textColor=T.hue(i)))
+
+
 pay = [[Paragraph("How you pay", H), Paragraph("Monthly Sponsor", H),
         Paragraph("Report Sponsor", H)],
-       [Paragraph("As you go", B), Paragraph("$500 per month", C),
+       [row_label("As you go", 1), Paragraph("$500 per month", C),
         Paragraph("$150 per new report, or $100 from the catalog", C)],
-       [Paragraph("Bundled", B), Paragraph("Not applicable", C),
+       [row_label("Bundled", 2), Paragraph("Not applicable", C),
         Paragraph("3 new reports $335 (26% off) &nbsp;&middot;&nbsp; 6 for $630 (30% off)", C)],
-       [Paragraph("Annual", B),
+       [row_label("Annual", 3),
         Paragraph("<b>$5,000 per year.</b> Two months free, a $1,000 saving, 17% off", C),
         Paragraph("<b>$1,170 for 12 new reports.</b> A $630 saving, 35% off", C)],
-       [Paragraph("First time", B),
+       [row_label("First time", 4),
         Paragraph("First 3 months at $300, or a first year at $4,400", C),
         Paragraph("First new report $100", C)]]
 story.append(dark_table(pay, [1.2 * inch, (CONTENT_W - 1.2 * inch) * 0.48, (CONTENT_W - 1.2 * inch) * 0.52], header_fill=GOLD))
 
 # ---------------------------------------------------------------- the rest
-story.append(section("Optional Add-Ons", CONTENT_W))
+story.append(section("Optional Add-Ons", CONTENT_W, T.hue(4)))
 story += bullets([
     "Newsletter mention, $50, one-off sponsored mention in a subscriber email send",
     "Extra LinkedIn or X post, $50, a single dedicated sponsored post",
 ])
 
-story.append(section("Commissioned Research", CONTENT_W))
+story.append(section("Commissioned Research", CONTENT_W, T.hue(5)))
 story.append(panel([
     Paragraph(
         "Name a threat your organization needs intelligence on and I will go and get it: original "
@@ -217,7 +228,7 @@ story.append(panel([
         "directory is a very different piece of work from a fifty-address infrastructure cluster "
         "with a malware family behind it. Tell me what you want to know and I will come back with "
         "a defined scope and a fixed price before any work starts.", S["body"]),
-], accent=BLUE, width=CONTENT_W))
+], accent=T.hue(5), width=CONTENT_W))
 story.append(Spacer(1, 6))
 story.append(Paragraph(
     "<b>Flexible and custom:</b> bundles of any size, catalog mixes, multi-month, co-marketing, or "

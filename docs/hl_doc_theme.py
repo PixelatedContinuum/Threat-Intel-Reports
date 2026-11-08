@@ -104,6 +104,16 @@ class Theme:
         self.card, self.row, self.edge, self.hairline = card, row, edge, hairline
         self.S = self._styles()
 
+    # Round 2 colour (T-0563 r2a): hues come from the base (hl_brand), never typed. The light
+    # theme gets the darker variants that pass 4.5:1 on white and #f6f8fa.
+    def hue(self, i):
+        """Rotation hue i (1..7, wraps): Wire blue, Reports, Detections, Techniques, STIX, Actors, IOC."""
+        return hl.hue(i) if self.dark else hl.hue_light(i)
+
+    def hue_for(self, kind):
+        """The hue of what a thing is: reports, detections, iocs, stix, wire, actors, techniques."""
+        return hl.hue_for(kind) if self.dark else hl.hue_for_light(kind)
+
     def _styles(self):
         ink, muted = self.ink, self.muted
 
@@ -262,9 +272,14 @@ def panel(flowables, accent=None, width=None, t=DARK):
     return tb
 
 
-def stat_strip(pairs, width=6.6 * inch, t=DARK):
-    """Serif figure over a sans label, in a row of cells on the card ground (the site's creds strip)."""
-    cells = [[Paragraph(str(fig), t.S["stat_fig"]), Paragraph(lbl, t.S["stat_lbl"])] for fig, lbl in pairs]
+def stat_strip(pairs, width=6.6 * inch, t=DARK, colors=None):
+    """Serif figure over a sans label, in a row of cells on the card ground (the site's creds strip).
+    `colors` (optional, one per pair, None = ink) colours each figure by what it counts."""
+    colors = list(colors or [None] * len(pairs))
+    figs = [ParagraphStyle("stat_fig_c%d" % i, parent=t.S["stat_fig"], textColor=c) if c is not None
+            else t.S["stat_fig"] for i, c in enumerate(colors)]
+    cells = [[Paragraph(str(fig), figs[i]), Paragraph(lbl, t.S["stat_lbl"])]
+             for i, (fig, lbl) in enumerate(pairs)]
     col = width / len(cells)
     tb = Table([[Table([[c[0]], [c[1]]], colWidths=[col - 12]) for c in cells]], colWidths=[col] * len(cells))
     tb.setStyle(TableStyle([
