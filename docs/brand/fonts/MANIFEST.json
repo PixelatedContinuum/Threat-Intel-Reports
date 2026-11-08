@@ -1,0 +1,154 @@
+{
+  "_generated_by": "docs/brand/make_fonts.py",
+  "instances": [
+    {
+      "file": "ttf/HLSerif-Regular.ttf",
+      "reportlab_name": "HLSerif-Regular",
+      "family": "HL Serif",
+      "style": "Regular",
+      "source": "assets/fonts/source-serif-4-var.woff2",
+      "axes_pinned": {
+        "wght": 400,
+        "opsz": 20
+      },
+      "glyphs": 331,
+      "cmap_codepoints": 231,
+      "static": true,
+      "sha256": "cf55284e6c139df038fda9ea53d8ff8cd805bd2ec026468e282be498b9f27da6",
+      "bytes": 52696
+    },
+    {
+      "file": "ttf/HLSerif-SemiBold.ttf",
+      "reportlab_name": "HLSerif-SemiBold",
+      "family": "HL Serif",
+      "style": "SemiBold",
+      "source": "assets/fonts/source-serif-4-var.woff2",
+      "axes_pinned": {
+        "wght": 600,
+        "opsz": 20
+      },
+      "glyphs": 331,
+      "cmap_codepoints": 231,
+      "static": true,
+      "sha256": "e5708e13a0a57614d45263a9a3570946c9ac38d0ac67f0e2e48a43fc82b318b1",
+      "bytes": 52864
+    },
+    {
+      "file": "ttf/HLSerif-Bold.ttf",
+      "reportlab_name": "HLSerif-Bold",
+      "family": "HL Serif",
+      "style": "Bold",
+      "source": "assets/fonts/source-serif-4-var.woff2",
+      "axes_pinned": {
+        "wght": 700,
+        "opsz": 20
+      },
+      "glyphs": 331,
+      "cmap_codepoints": 231,
+      "static": true,
+      "sha256": "6b82c0f53e3706d74c0d6cfe0c1bcc91e7021b36c801c435eb9ef8afb1a86d13",
+      "bytes": 52752
+    },
+    {
+      "file": "ttf/HLSerif-Italic.ttf",
+      "reportlab_name": "HLSerif-Italic",
+      "family": "HL Serif",
+      "style": "Italic",
+      "source": "assets/fonts/source-serif-4-var-italic.woff2",
+      "axes_pinned": {
+        "wght": 400
+      },
+      "glyphs": 336,
+      "cmap_codepoints": 231,
+      "static": true,
+      "sha256": "736402197f24d74d5816195059e5f43d506f5a4617371a8d8f284a6784bc7771",
+      "bytes": 54496
+    },
+    {
+      "file": "ttf/HLSans-Regular.ttf",
+      "reportlab_name": "HLSans-Regular",
+      "family": "HL Sans",
+      "style": "Regular",
+      "source": "assets/fonts/ibm-plex-sans-var.woff2",
+      "axes_pinned": {
+        "wght": 400
+      },
+      "glyphs": 270,
+      "cmap_codepoints": 232,
+      "static": true,
+      "sha256": "79c8c7152ad5bba60754551a5b3ea511e403ae414a33aaef4156de881fa28bd6",
+      "bytes": 55976
+    },
+    {
+      "file": "ttf/HLSans-SemiBold.ttf",
+      "reportlab_name": "HLSans-SemiBold",
+      "family": "HL Sans",
+      "style": "SemiBold",
+      "source": "assets/fonts/ibm-plex-sans-var.woff2",
+      "axes_pinned": {
+        "wght": 600
+      },
+      "glyphs": 270,
+      "cmap_codepoints": 232,
+      "static": true,
+      "sha256": "e5cebbade095789622883129137e82ca09d40ac4ce42c09dbba2928b0588a7b8",
+      "bytes": 56112
+    },
+    {
+      "file": "ttf/HLMono-Regular.ttf",
+      "reportlab_name": "HLMono-Regular",
+      "family": "HL Mono",
+      "style": "Regular",
+      "source": "assets/fonts/ibm-plex-mono-400.woff2",
+      "axes_pinned": null,
+      "glyphs": 280,
+      "cmap_codepoints": 229,
+      "static": true,
+      "sha256": "9eaf80962bf9d6a8f907aeca796dc50a703dcfe09d7e92dc410962ea69f2d806",
+      "bytes": 41016
+    },
+    {
+      "file": "ttf/HLMono-Medium.ttf",
+      "reportlab_name": "HLMono-Medium",
+      "family": "HL Mono",
+      "style": "Medium",
+      "source": "assets/fonts/ibm-plex-mono-500.woff2",
+      "axes_pinned": null,
+      "glyphs": 280,
+      "cmap_codepoints": 229,
+      "static": true,
+      "sha256": "1beec45612b69b0a0b171961ee0b20ceb8a3bd97272657f17dd86ff23a7d95df",
+      "bytes": 41548
+    },
+    {
+      "file": "ttf/SpaceGrotesk-Medium.ttf",
+      "reportlab_name": "SpaceGrotesk-Medium",
+      "family": "Space Grotesk",
+      "style": "Medium",
+      "source": "assets/fonts/space-grotesk.woff2",
+      "axes_pinned": {
+        "wght": 500
+      },
+      "glyphs": 291,
+      "cmap_codepoints": 230,
+      "static": true,
+      "sha256": "cba066c73ae3369704733a38bd3942eb8bd7ed0524293377081a8a68f7881142",
+      "bytes": 32156
+    },
+    {
+      "file": "ttf/SpaceGrotesk-Bold.ttf",
+      "reportlab_name": "SpaceGrotesk-Bold",
+      "family": "Space Grotesk",
+      "style": "Bold",
+      "source": "assets/fonts/space-grotesk.woff2",
+      "axes_pinned": {
+        "wght": 700
+      },
+      "glyphs": 291,
+      "cmap_codepoints": 230,
+      "static": true,
+      "sha256": "9e61a5dc6c5eb70a6c656be19191fb71b13c83f35abf438e859288c8027e5679",
+      "bytes": 32016
+    }
+  ]
+}

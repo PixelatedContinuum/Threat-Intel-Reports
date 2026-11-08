@@ -1,0 +1,90 @@
+/* The Hunter's Ledger document base (concept 3), for HTML rendered to PDF with Brave. T-0563 w1.
+   Reads ONLY the custom properties in tokens.css (generated from assets/css/custom.scss by
+   gen_tokens.py). Nothing here hard-codes a brand colour; layout numbers are document choices.
+   Load order: tokens.css, @font-face rules, this file (hl_doc_html.head() does all three).
+
+   Classes: .hl-doc (wrapper), .hl-mast (masthead), .hl-kicker, .hl-title, .hl-standfirst,
+   .hl-sec (section head; set --sec inline for the section hue), .hl-sec--sub, .hl-plate (a card with
+   a coloured left edge), .hl-table, .hl-code, .hl-foot, .hl-grid (the site's faint page grid). */
+
+:root {
+  --doc-fs-body: 14.5px;          /* the site's 18px body, scaled for a printed page (ratio kept in h2) */
+  --doc-fs-small: 12.5px;
+  --doc-fs-meta: 11.5px;
+  --doc-fs-title: 34px;
+  --doc-fs-h2: 21px;              /* 26 / 18 x 14.5 */
+  --doc-fs-h3: 15.5px;
+  --doc-lh: 1.6;
+  --lk: 0.62;                     /* lockup scale against the site's masthead lockup (1 = icon 78px) */
+}
+* { box-sizing: border-box; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+html, body { margin: 0; padding: 0; background: var(--hl-bg-page); color: var(--hl-text-primary); }
+body { font: 400 var(--doc-fs-body)/var(--doc-lh) var(--hl-font-sans); }
+body.hl-grid { background-image: linear-gradient(var(--hl-grid-line) 1px, transparent 1px), linear-gradient(90deg, var(--hl-grid-line) 1px, transparent 1px); background-size: var(--hl-grid-size) var(--hl-grid-size); }
+.hl-doc { max-width: 760px; margin: 0 auto; padding: 0; }
+a { color: var(--hl-accent-blue); text-decoration: none; }
+strong, b { font-weight: 600; color: inherit; }
+p { margin: 0 0 .9em; }
+ul, ol { margin: 0 0 1em; padding-left: 1.3em; }
+li { margin-bottom: .35em; }
+li::marker { color: var(--hl-accent-blue); }
+hr { border: 0; border-top: 1px solid var(--hl-hairline); margin: 24px 0; }
+
+/* ---- masthead: the site's top row, then the lockup (concept 3, navbar.liquid / custom.scss "T-0556 w2") ---- */
+.hl-mast__top { display: flex; justify-content: space-between; gap: 16px; padding: 7px 0; font: 400 var(--doc-fs-meta)/1.4 var(--hl-font-mono); color: var(--hl-muted-d); border-bottom: 1px solid var(--hl-border-card); }
+.hl-mast__main { display: flex; align-items: center; gap: 18px; padding: 18px 0 16px; }
+.hl-mast__tag { margin: 0 0 0 auto; max-width: 30ch; font: 400 var(--doc-fs-small)/1.5 var(--hl-font-sans); color: var(--hl-muted-d); text-align: right; }
+.hl-brand { display: flex; align-items: center; gap: calc(22px * var(--lk)); text-decoration: none; }
+.hl-brand__icon { width: calc(78px * var(--lk)); height: calc(78px * var(--lk)); display: block; flex: none; }
+.hl-brand__rule { width: calc(7px * var(--lk)); height: calc(64px * var(--lk)); border-radius: calc(4px * var(--lk)); background: var(--hl-accent-blue); flex: none; }
+.hl-brand__stack { display: flex; flex-direction: column; gap: calc(7px * var(--lk)); }
+.hl-brand__top { font: 500 calc(25px * var(--lk))/1 var(--hl-font-wordmark); letter-spacing: 0.22em; color: #f0f6fc; }
+.hl-brand__main { display: flex; align-items: baseline; font: 700 calc(39px * var(--lk))/1 var(--hl-font-wordmark); letter-spacing: 0.12em; color: #ffffff; }
+.hl-brand__dot { display: inline-block; width: calc(14px * var(--lk)); height: calc(14px * var(--lk)); border-radius: calc(4px * var(--lk)); background: var(--hl-accent-blue); margin-left: calc(16px * var(--lk)); }
+
+/* ---- title block ---- */
+.hl-kicker { display: block; font: 500 var(--doc-fs-meta)/1.4 var(--hl-font-mono); letter-spacing: 0.04em; color: var(--hl-muted-d); margin: 0 0 8px; }
+.hl-title { margin: 22px 0 10px; font: 600 var(--doc-fs-title)/1.15 var(--hl-font-serif); letter-spacing: 0; color: var(--hl-text-primary); }
+.hl-standfirst { margin: 0 0 22px; font: 400 17px/1.55 var(--hl-font-serif); color: var(--hl-text-muted); }
+
+/* ---- section head: a 14px square in the section colour, a serif title in ink, a 2px rule in the same colour ---- */
+.hl-sec { --sec: var(--hl-sec); display: block; margin: 34px 0 16px; padding-bottom: 8px; border-bottom: var(--hl-sec-rule) solid var(--sec); break-after: avoid; }
+.hl-sec > h2, .hl-sec > h3 { display: flex; align-items: center; margin: 0; padding: 0; font: var(--hl-sec-title-weight) var(--doc-fs-h2)/var(--hl-sec-title-lh) var(--hl-font-serif); letter-spacing: 0; color: var(--hl-text-primary); }
+.hl-sec > h2::before, .hl-sec > h3::before { content: ''; flex: none; width: var(--hl-sec-square); height: var(--hl-sec-square); margin-right: 12px; background: var(--sec); }
+.hl-sec--sub > h2, .hl-sec--sub > h3 { font-size: var(--doc-fs-h3); }
+.hl-sec--sub > h2::before, .hl-sec--sub > h3::before { width: var(--hl-sec-sub-square); height: var(--hl-sec-sub-square); margin-right: 10px; }
+.hl-sec--sub { margin-top: 22px; }
+h3.hl-h3 { margin: 18px 0 6px; font: 600 var(--doc-fs-body)/1.3 var(--hl-font-sans); color: var(--hl-text-primary); break-after: avoid; }
+
+/* ---- plate: the site's cover/card treatment, a field ground, 1px border, a 3px edge (colour set by --edge) ---- */
+.hl-plate { --edge: var(--hl-accent-blue); position: relative; margin: 0 0 18px; padding: 14px 18px 14px 21px; background: var(--hl-field); border: 1px solid var(--hl-border-card); border-radius: 0; break-inside: avoid; }
+.hl-plate::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px; background: var(--edge); }
+.hl-plate dl { display: grid; grid-template-columns: max-content 1fr; gap: 4px 18px; margin: 0; }
+.hl-plate dt { font: 500 var(--doc-fs-meta)/1.6 var(--hl-font-mono); letter-spacing: 0.04em; color: var(--hl-muted-d); }
+.hl-plate dd { margin: 0; font-size: var(--doc-fs-small); }
+
+/* ---- table, code ---- */
+.hl-table { width: 100%; border-collapse: collapse; margin: 0 0 18px; font-size: var(--doc-fs-small); }
+.hl-table th { text-align: left; padding: 7px 10px; background: var(--hl-code-inline-bg); color: var(--hl-muted-d); font: 500 var(--doc-fs-meta)/1.4 var(--hl-font-mono); letter-spacing: 0.04em; border: 1px solid var(--hl-border-card); }
+.hl-table td { padding: 7px 10px; border: 1px solid var(--hl-border-card); vertical-align: top; }
+.hl-table tr { break-inside: avoid; }
+code, .hl-code { font-family: var(--hl-font-mono); }
+code { font-size: .88em; background: var(--hl-code-inline-bg); border: 1px solid var(--hl-border-card); border-radius: var(--hl-radius); padding: 1px 5px; color: var(--hl-code-text); overflow-wrap: anywhere; }
+pre { margin: 0 0 18px; padding: 12px 16px; background: var(--hl-code-block-bg); border: 1px solid var(--hl-code-block-border); border-left: 3px solid var(--hl-code-block-border); border-radius: var(--hl-radius); font-size: 12.5px; line-height: 1.5; white-space: pre-wrap; overflow-wrap: anywhere; break-inside: avoid; }
+pre code { background: none; border: 0; padding: 0; font-size: inherit; color: var(--hl-code-text); }
+
+/* ---- severity chip (data, never decoration) ---- */
+.hl-chip { display: inline-block; padding: 1px 8px; border-radius: var(--hl-radius); font: 500 var(--doc-fs-meta)/1.5 var(--hl-font-mono); border: 1px solid currentColor; }
+.hl-chip--critical { color: var(--hl-sev-critical-lbl); } .hl-chip--high { color: var(--hl-sev-high-lbl); }
+.hl-chip--med { color: var(--hl-sev-med-lbl); } .hl-chip--low { color: var(--hl-sev-low-lbl); }
+
+/* ---- footer ---- */
+.hl-foot { margin-top: 36px; padding-top: 14px; border-top: 1px solid var(--hl-hairline); font: 400 var(--doc-fs-meta)/1.6 var(--hl-font-mono); color: var(--hl-muted-d); }
+
+/* ---- print: A4, the page ground painted into the margins ---- */
+@page { size: A4; margin: 14mm 12mm; background: #111111; }
+@media print {
+  html, body { background: var(--hl-bg-page) !important; }
+  .hl-mast { break-after: avoid; }
+  h1, h2, h3 { break-after: avoid; }
+}
