@@ -2,7 +2,7 @@ import sys, os
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 import cardlib as c
 
-REPO = r"C:/Users/josep/Documents/GitHub/Threat-Intel-Reports"
+REPO = os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", ".."))  # was a Windows path (T-0563)
 
 # ---- pure helpers ----
 def test_format_card_date():

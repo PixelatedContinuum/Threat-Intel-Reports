@@ -53,7 +53,7 @@ HUBS = {
         subtitle="SOC Operations Lead & Threat Intelligence Researcher.",
         footer_left=""),
     "consulting": dict(
-        accent="#b8902f", pill="CONSULTING", kicker="CONSULTING & ADVISORY",
+        accent="#58a6ff", pill="CONSULTING", kicker="CONSULTING & ADVISORY",
         title="Threat Intelligence That Works for Your Team",
         subtitle="The depth behind this site, applied directly to your environment.",
         footer_left=""),
@@ -69,7 +69,7 @@ HUBS = {
                  "no paywalls, no ads.",
         footer_left=""),
     "sponsor": dict(
-        accent="#f59e0b", pill="SPONSOR", kicker="SPONSORSHIP",
+        accent="#d4a73a", pill="SPONSOR", kicker="SPONSORSHIP",
         title="Reach Defenders Who Build, Buy, and Use Detection",
         subtitle="Place your brand alongside technical research working "
                  "defenders actually use.",

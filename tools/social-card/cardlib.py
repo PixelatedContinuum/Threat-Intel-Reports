@@ -13,7 +13,10 @@ import yaml
 from PIL import Image, ImageDraw, ImageFont
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-SG_PATH = os.path.join(HERE, "SpaceGrotesk.ttf")
+# Brand tokens and static fonts are the shared base (T-0563 w1): docs/brand/.
+BRAND = os.path.join(HERE, "..", "..", "docs", "brand")
+FONT_DIR = os.path.join(BRAND, "fonts", "ttf")
+LOCKUP_PATH = os.path.join(BRAND, "logos", "hl-lockup-transparent.png")
 DOMAIN = "the-hunters-ledger.com"
 
 
@@ -106,32 +109,42 @@ def _s(v):
     return int(v * SS)
 
 
-BG = "#111111"
-GRID = "#1a1a1d"
-BLUE = "#58a6ff"
-GOLD = "#b8902f"
-TXT = "#eeeeee"
-MUTED = "#8a8a8a"
-DIV = "#2a2a2a"
-SEV = {"CRITICAL": ("#dc2626", "#ef4444", "#ffffff"),
-       "HIGH": ("#f97316", "#fb923c", "#160a02"),
-       "MEDIUM": ("#eab308", "#facc15", "#160f02"),
-       "LOW": ("#3b82f6", "#60a5fa", "#ffffff")}
+def _load_tokens():
+    import json
+    with open(os.path.join(BRAND, "tokens.json"), encoding="utf-8") as fh:
+        return json.load(fh)["tokens"]
 
 
-def _font(size, weight=500):
-    f = ImageFont.truetype(SG_PATH, int(size * SS))
-    try:
-        f.set_variation_by_axes([weight])
-    except Exception:
-        pass
-    return f
+_T = _load_tokens()
+_C = _T["colors"]
+BG = _C["ground"]
+TXT = _C["ink"]
+MUTED = _C["muted"]            # kicker and secondary text on the site
+DIV = _C["border_card"]
+BLUE = _C["blue"]
+GOLD = _C["gold_bright"]       # sponsor only (custom.scss): the sponsor hub card
+RADIUS = _T["radius_px"]       # 3 px, every box and pill
+# faint site grid: 24 px step, blue at 3% alpha (tokens page.grid_*)
+_GRID_PX = _T["page"]["grid_px"]
+_GRID_RGBA = tuple(_T["page"]["grid_rgba"])
+SEV = {k.upper() if k != "med" else "MEDIUM": (v["bar"], v["label"], p)
+       for (k, v), p in zip(_T["severity"].items(),
+                            ("#ffffff", "#160a02", "#160f02", "#ffffff"))}
+
+_FACES = {"serif-semibold": "HLSerif-SemiBold.ttf", "serif-bold": "HLSerif-Bold.ttf",
+          "sans": "HLSans-Regular.ttf", "sans-semibold": "HLSans-SemiBold.ttf",
+          "mono": "HLMono-Regular.ttf", "mono-medium": "HLMono-Medium.ttf"}
+
+
+def _font(face, size):
+    """Static TTF from the shared brand fonts (no variable-font axes)."""
+    return ImageFont.truetype(os.path.join(FONT_DIR, _FACES[face]), int(size * SS))
 
 
 _scratch = ImageDraw.Draw(Image.new("RGB", (4, 4)))
 
 
-def _tracked(d, pos, text, font, fill, track):
+def _tracked(d, pos, text, font, fill, track):  # per-glyph; no kerning, fine for caps labels
     x, y = pos
     for ch in text:
         d.text((x, y), ch, font=font, fill=fill)
@@ -139,27 +152,34 @@ def _tracked(d, pos, text, font, fill, track):
 
 
 def _background():
-    im = Image.new("RGB", (BW, BH), BG)
-    d = ImageDraw.Draw(im)
-    step = _s(48)
-    for x in range(0, BW, step):
-        d.line([(x, 0), (x, BH)], fill=GRID, width=_s(1))
-    for y in range(0, BH, step):
-        d.line([(0, y), (BW, y)], fill=GRID, width=_s(1))
+    im = Image.new("RGB", (BW, BH), BG).convert("RGBA")
     gl = Image.new("RGBA", (BW, BH), (0, 0, 0, 0))
     gd = ImageDraw.Draw(gl)
-    r, g, b = tuple(int(BLUE[i:i + 2], 16) for i in (1, 3, 5))
-    gw = _s(170)
-    for x in range(gw):
-        gd.line([(x, 0), (x, BH)], fill=(r, g, b, int(40 * (1 - x / gw))))
-    return Image.alpha_composite(im.convert("RGBA"), gl).convert("RGB")
+    step = _s(_GRID_PX)
+    r, g, b, a = _GRID_RGBA
+    col = (int(r), int(g), int(b), int(round(a * 255)))
+    for x in range(0, BW, step):
+        gd.line([(x, 0), (x, BH)], fill=col, width=_s(1))
+    for y in range(0, BH, step):
+        gd.line([(0, y), (BW, y)], fill=col, width=_s(1))
+    return Image.alpha_composite(im, gl).convert("RGB")
+
+
+def _lockup(im, x, y, height):
+    """Paste the live-site lockup (transparent PNG from docs/brand) at a CSS-px height."""
+    lk = Image.open(LOCKUP_PATH).convert("RGBA")
+    h = _s(height)
+    w = int(lk.width * h / lk.height)
+    lk = lk.resize((w, h), Image.LANCZOS)
+    im.paste(lk, (x, y), lk)
+    return w
 
 
 def _fit_title(title, max_w, max_lines=3, start=62, lo=34):
     size = start
     lines = [title]
     while size >= lo:
-        f = _font(size, 700)
+        f = _font("serif-semibold", size)
         words = title.split()
         lines, cur, ok = [], "", True
         for w in words:
@@ -177,7 +197,7 @@ def _fit_title(title, max_w, max_lines=3, start=62, lo=34):
         if ok and len(lines) <= max_lines:
             return f, lines
         size -= 2
-    return _font(lo, 700), lines[:max_lines]
+    return _font("serif-semibold", lo), lines[:max_lines]
 
 
 def _ellipsize(text, font, max_w):
@@ -191,45 +211,54 @@ def _ellipsize(text, font, max_w):
     return text + "…"
 
 
+def _header(im, d, spine, pill_text, pill_fill, pill_ink):
+    """Spine, lockup (top left) and the pill (top right), shared by both card kinds."""
+    d.rectangle([0, 0, _s(8), BH], fill=spine)
+    ml, mr, top = _s(72), _s(72), _s(52)
+    _lockup(im, ml, top, 50)
+    fp = _font("sans-semibold", 19)
+    tw = _scratch.textlength(pill_text, font=fp)
+    pw, ph = tw + _s(34), _s(40)
+    px0 = BW - mr - pw
+    d.rounded_rectangle([px0, top + _s(2), px0 + pw, top + _s(2) + ph],
+                        radius=_s(RADIUS), fill=pill_fill)
+    d.text((px0 + _s(17), top + _s(2) + (ph - fp.size) // 2 - _s(1)), pill_text,
+           font=fp, fill=pill_ink)
+
+
+def _footer(d, left_text):
+    ml, mr = _s(72), _s(72)
+    d.line([(ml, _s(H - 96)), (BW - mr, _s(H - 96))], fill=DIV, width=_s(1))
+    fm = _font("mono", 19)
+    ym = _s(H - 76)
+    d.text((ml, ym), left_text, font=fm, fill=MUTED)
+    fd = _font("mono-medium", 19)
+    twd = _scratch.textlength(DOMAIN, font=fd)
+    xr = BW - mr - twd
+    d.rectangle([xr - _s(22), ym + _s(6), xr - _s(22) + _s(11), ym + _s(6) + _s(11)],
+                fill=BLUE)                       # section-mark square, radius 0
+    d.text((xr, ym), DOMAIN, font=fd, fill=TXT)
+
+
 def render_card(fields, out_path):
     bd, lt, ptx = SEV.get(fields["severity"], SEV["HIGH"])
     im = _background()
     d = ImageDraw.Draw(im)
-    d.rectangle([0, 0, _s(8), BH], fill=bd)                       # severity spine
-    ml, mr, top = _s(72), _s(72), _s(60)
-    d.rounded_rectangle([ml, top, ml + _s(5), top + _s(30)], radius=_s(2), fill=BLUE)
-    _tracked(d, (ml + _s(15), top + _s(4)), "THE HUNTER'S LEDGER",
-             _font(18, 600), TXT, _s(2.2))
-    fp = _font(19, 700)
-    pt = fields["severity"]
-    tw = _scratch.textlength(pt, font=fp)
-    pw, ph = tw + _s(34), _s(40)
-    px0 = BW - mr - pw
-    d.rounded_rectangle([px0, top - _s(4), px0 + pw, top - _s(4) + ph],
-                        radius=_s(20), fill=bd)
-    d.text((px0 + _s(17), top + _s(5)), pt, font=fp, fill=ptx)
-    _tracked(d, (ml, _s(206)), fields["kicker"], _font(19, 600), GOLD, _s(3))
+    _header(im, d, bd, fields["severity"], bd, ptx)
+    ml, mr = _s(72), _s(72)
+    _tracked(d, (ml, _s(206)), fields["kicker"], _font("sans-semibold", 19), MUTED, _s(3))
     f, lines = _fit_title(fields["title"], BW - ml - mr, 3, 62, 34)
-    lh = int(f.size * 1.12)
+    lh = int(f.size * 1.14)
     y = _s(244)
     for ln in lines:
         d.text((ml, y), ln, font=f, fill=TXT)
         y += lh
     if fields.get("subtitle"):
-        fs = _font(21, 400)
-        d.text((ml, y + _s(14)),
+        fs = _font("sans", 21)
+        d.text((ml, y + _s(22)),
                _ellipsize(fields["subtitle"], fs, BW - ml - mr),
                font=fs, fill=MUTED)
-    d.line([(ml, _s(H - 96)), (BW - mr, _s(H - 96))], fill=DIV, width=_s(1))
-    fm = _font(19, 500)
-    ym = _s(H - 76)
-    d.text((ml, ym), fields["date"], font=fm, fill=MUTED)
-    fd = _font(19, 600)
-    twd = _scratch.textlength(DOMAIN, font=fd)
-    xr = BW - mr - twd
-    d.rounded_rectangle([xr - _s(20), ym + _s(5), xr - _s(20) + _s(11), ym + _s(5) + _s(11)],
-                        radius=_s(2), fill=BLUE)
-    d.text((xr, ym), DOMAIN, font=fd, fill="#b8b8b8")
+    _footer(d, fields["date"])
     os.makedirs(os.path.dirname(out_path), exist_ok=True)
     im.resize((W, H), Image.LANCZOS).save(out_path, optimize=True)
 
@@ -286,53 +315,33 @@ def _wrap(text, font, max_w, max_lines):
     return lines
 
 
-def render_hub_card(fields, out_path, accent=HUB_ACCENT, kicker_color=GOLD):
+def render_hub_card(fields, out_path, accent=HUB_ACCENT, kicker_color=MUTED):
     """Render a 1200x630 social card for a listing / hub page (e.g. /stix/).
 
     Unlike render_card (per-report) there is no severity or date; `accent`
     colors the left spine + the top-right pill, while the grid background,
-    brand mark, gold kicker and domain footer match the report cards so hub
+    lockup, kicker and domain footer match the report cards so hub
     cards sit in the same visual family.
 
     fields keys: pill, kicker, title, subtitle, footer_left.
     """
     im = _background()
     d = ImageDraw.Draw(im)
-    d.rectangle([0, 0, _s(8), BH], fill=accent)                  # accent spine
-    ml, mr, top = _s(72), _s(72), _s(60)
-    d.rounded_rectangle([ml, top, ml + _s(5), top + _s(30)], radius=_s(2), fill=BLUE)
-    _tracked(d, (ml + _s(15), top + _s(4)), "THE HUNTER'S LEDGER",
-             _font(18, 600), TXT, _s(2.2))
-    fp = _font(19, 700)                                          # top-right pill
-    pt = fields["pill"]
-    tw = _scratch.textlength(pt, font=fp)
-    pw, ph = tw + _s(34), _s(40)
-    px0 = BW - mr - pw
-    d.rounded_rectangle([px0, top - _s(4), px0 + pw, top - _s(4) + ph],
-                        radius=_s(20), fill=accent)
-    d.text((px0 + _s(17), top + _s(5)), pt, font=fp, fill="#06232b")
-    _tracked(d, (ml, _s(206)), fields["kicker"], _font(19, 600), kicker_color, _s(3))
+    _header(im, d, accent, fields["pill"], accent, "#06232b")
+    ml, mr = _s(72), _s(72)
+    _tracked(d, (ml, _s(206)), fields["kicker"], _font("sans-semibold", 19), kicker_color, _s(3))
     f, lines = _fit_title(fields["title"], BW - ml - mr, 3, 76, 40)
-    lh = int(f.size * 1.10)
+    lh = int(f.size * 1.12)
     y = _s(238)
     for ln in lines:
         d.text((ml, y), ln, font=f, fill=TXT)
         y += lh
     if fields.get("subtitle"):
-        fs = _font(21, 400)
-        sy = y + _s(16)
+        fs = _font("sans", 21)
+        sy = y + _s(22)
         for ln in _wrap(fields["subtitle"], fs, BW - ml - mr, 2):
             d.text((ml, sy), ln, font=fs, fill=MUTED)
             sy += int(fs.size * 1.18)
-    d.line([(ml, _s(H - 96)), (BW - mr, _s(H - 96))], fill=DIV, width=_s(1))
-    fm = _font(19, 500)
-    ym = _s(H - 76)
-    d.text((ml, ym), fields.get("footer_left", ""), font=fm, fill=MUTED)
-    fd = _font(19, 600)
-    twd = _scratch.textlength(DOMAIN, font=fd)
-    xr = BW - mr - twd
-    d.rounded_rectangle([xr - _s(20), ym + _s(5), xr - _s(20) + _s(11), ym + _s(5) + _s(11)],
-                        radius=_s(2), fill=BLUE)
-    d.text((xr, ym), DOMAIN, font=fd, fill="#b8b8b8")
+    _footer(d, fields.get("footer_left", ""))
     os.makedirs(os.path.dirname(out_path), exist_ok=True)
     im.resize((W, H), Image.LANCZOS).save(out_path, optimize=True)
