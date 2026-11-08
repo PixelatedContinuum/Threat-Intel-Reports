@@ -86,7 +86,7 @@
       {%- when '/ioc-feeds/' -%}{%- assign nav_sc = '#f87171' -%}
       {%- when '/stix/' -%}{%- assign nav_sc = '#22d3ee' -%}
       {%- when '/subscribe/' -%}{%- assign nav_sc = '#58a6ff' -%}
-      {%- when '/support/' -%}{%- assign nav_sc = '#f472b6' -%}
+      {%- when '/support/' -%}{%- assign nav_sc = '#e879f9' -%}
       {%- else -%}{%- assign nav_sc = '#9ca3af' -%}
     {%- endcase -%}
     <a class="hl-drawer__link" style="--sc:{{ nav_sc }}" href="{{ nav_page.url | relative_url }}"{% if page.url == nav_page.url %} aria-current="page"{% endif %}>{{ nav_page.nav_title | default: nav_page.title }}</a>

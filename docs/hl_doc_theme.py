@@ -130,15 +130,15 @@ class Theme:
         return {
             "cover_title": st("cover_title", "serif_semibold", 34, 39, alignment=TA_CENTER, spaceAfter=4),
             "cover_sub": st("cover_sub", "serif", 17, 22, alignment=TA_CENTER, spaceAfter=16),
-            "cover_body": st("cover_body", "sans", 10.5, 16, muted, alignment=TA_CENTER),
+            "cover_body": st("cover_body", "sans", 10.5, 16, alignment=TA_CENTER),  # sentences in main ink (T-0563 review round 2)
             "cover_eyebrow": st("cover_eyebrow", "mono_medium", 8, 11, muted, alignment=TA_CENTER, spaceAfter=7),
             "eyebrow": st("eyebrow", "mono_medium", 8, 11, muted, spaceAfter=3),
             "title": st("title", "serif_semibold", 24, 28, spaceAfter=4),
-            "subtitle": st("subtitle", "sans", 10.5, 15, muted, spaceAfter=3),
+            "subtitle": st("subtitle", "sans", 10.5, 15, spaceAfter=3),  # sentences in main ink
             "h2": st("h2", "serif_semibold", 14.5, 18, spaceBefore=13, spaceAfter=5),
             "h3": st("h3", "sans_semibold", 10.5, 13.5, spaceBefore=9, spaceAfter=3),
             "body": st("body", "sans", 9.5, 14.5, spaceAfter=5),
-            "small": st("small", "sans", 8, 11.5, muted),
+            "small": st("small", "sans", 8, 11.5),  # notes and disclaimers are sentences: main ink
             "bullet": st("bullet", "sans", 8.8, 13, leftIndent=12, bulletIndent=1, spaceAfter=3),
             "cell": st("cell", "sans", 8.4, 11.5),
             "cell_b": st("cell_b", "sans_semibold", 8.4, 11.5),
