@@ -8,7 +8,7 @@ permalink: /impact/
 position: 2.95
 ---
 
-{% capture _desc %}When an investigation turns up live attacker infrastructure or an organisation that has been hit, I report it: to the hosting provider, registrar or platform, to the national CERT, or to the victim's own security team. These are the actions recipients reported back to me, plus any my own case records show. Most of my reports get no reply, so this is only what made it back to me.{% endcapture %}
+{% capture _desc %}When an investigation turns up live attacker infrastructure or an organisation that has been hit, I report it: to the hosting provider, registrar or platform, to the national CERT, or to the victim's own security team. These are the actions recipients reported back to me, plus any my own case records show. Not every investigation becomes a published report, and the cards below include actions from cases I only ever reported privately. Most of my reports get no reply, so this is only what made it back to me.{% endcapture %}
 {% include index-header.html accent="#fbbf24" label="Impact" title="Takedowns &amp; Victim Actions" desc=_desc %}
 
 {%- assign entries = site.data.impact_entries.entries | sort: "date" | reverse -%}

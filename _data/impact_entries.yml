@@ -133,3 +133,16 @@ entries:
       The vendor replied that it had actioned the reported accounts after an internal investigation with its security team, and later that it had actioned the reported instances and needed nothing further.
       It did not share its findings.
     verified: reported
+
+  - ids: [24]
+    count: 1
+    date: "2026-11"
+    category: victim-action
+    recipient: the victim's security team
+    title: Victim's incident team took my evidence into its investigation
+    description: >-
+      An attacker's AI coding agent had left its working files on an open server, including logins its tools recorded as working against a company's systems, password hashes the attacker had cracked, and scripts aimed at the company's domain controller.
+      I never published a report on this case. I sent the company and the national CERT a private notice instead, and the CERT opened a case and asked for the details I had offered.
+      The company's incident team then asked me for the evidence directly, saying it needed it to proceed with its investigation and remediation.
+      I sent it account names, hosts and script names over an encrypted channel, with every password and credential withheld.
+    verified: reported
