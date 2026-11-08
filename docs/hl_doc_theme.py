@@ -1,139 +1,237 @@
-"""The Hunter's Ledger document theme, shared by every PDF that leaves here.
+"""The Hunter's Ledger document theme for reportlab PDFs, on the concept 3 base.
 
-Why this is a module and not three copies of the same constants
-----------------------------------------------------------------
-As of 2026-09-13 there were three generators with three private copies of the
-palette: the pricing sheet, the quarterly sponsor brief, and whatever came next.
-Two already disagreed. A brand kept as duplicated literals drifts silently, and
-the drift only shows up when two documents land on the same desk.
+T-0563 w2a. This module no longer keeps a palette or a font list of its own. Every colour, font,
+size ratio and the lockup come from `docs/brand/hl_brand.py`, which reads `docs/brand/tokens.json`,
+which `docs/brand/gen_tokens.py` derives from the site stylesheet (`assets/css/custom.scss`).
+What lives here is only what a PDF needs that a web page does not: paragraph styles in points,
+platypus components (section head, panel, stat strip, table), page painters, and a light variant.
 
-So the tokens live here once, mirrored from assets/css/custom.css, and the page
-furniture lives here as functions rather than as instructions in a comment.
+One theme, every reportlab document that leaves here (pricing sheet, sponsor brief, quarterly
+update, invoice) consumes it, so they cannot drift from each other or from the site.
 
-The look
---------
-Dark throughout. The site is dark chrome and these documents are read on screens
-and forwarded as attachments, not printed, so the usual argument for a light
-interior does not apply here. Joseph's call, 2026-09-13: "people are not likely
-to print it out and are way more likely to download it and email it or share it
-electronically."
+The look (site rules, inventory Part 1)
+---------------------------------------
+Ground #111111, ink #eeeeee, accent blue for rules, links and section marks. Gold means sponsor and
+nothing else: `GOLD` here is the site's `--hl-gold-bright`, and a generic rule, h3 or numeral does
+not use it. Source Serif 4 for titles, section titles and big numerals, IBM Plex Sans for body,
+IBM Plex Mono for data only (ids, dates, counts, hashes, IOCs), Space Grotesk only inside the lockup.
+A section head is a square in the section colour, a serif title, and a 2px rule under it.
 
-Requires: reportlab (5.0.1 verified).
+Dark is the default. `theme("light")` gives the same fonts and layout on a white page for the
+documents that keep a light option (quarterly update, invoice). Light mode uses blue and gold only
+for rules and marks, never for small text, because #58a6ff is 2.4:1 on white.
+
+Glyph gap (BASE, reported to the lead): the site's Latin subset has no U+2192 (arrow) or U+25CF
+(black circle). `sym()` sets those two in a system TrueType that has them (embedded as a subset by
+reportlab) and the module prints a note if none is found, so nothing falls back silently.
+
+Requires: reportlab (the gates venv, .venv-gates/bin/python3).
 """
 import os
+import sys
 
 from reportlab.lib import colors
-from reportlab.lib.pagesizes import letter
-from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
+from reportlab.lib.enums import TA_CENTER, TA_LEFT
+from reportlab.lib.styles import ParagraphStyle
 from reportlab.lib.units import inch
 from reportlab.lib.utils import ImageReader
 from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.ttfonts import TTFont
-from reportlab.platypus import HRFlowable, Image as RLImage, Paragraph, Table, TableStyle
+from reportlab.platypus import (HRFlowable, Flowable, Image as RLImage, Paragraph, Table,
+                                TableStyle)
 
 REPO = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "brand"))
+import hl_brand as hl  # noqa: E402
 
-# ---------------------------------------------------------------- tokens
-# Mirrors assets/css/custom.css. If they ever disagree, that file is right.
-INK        = colors.HexColor("#0D1117")  # page ground. See LOGO_ON_DARK note below.
-PANEL      = colors.HexColor("#161B22")  # raised surface, one step off the ground
-PANEL_EDGE = colors.HexColor("#2A2A2A")  # --hl-border-card
-GOLD       = colors.HexColor("#B8902F")  # --hl-accent-gold
-BLUE       = colors.HexColor("#58A6FF")  # --hl-accent-blue
-GREEN      = colors.HexColor("#4ADE80")  # --hl-accent-green
-RED        = colors.HexColor("#F87171")  # --hl-accent-red
-PAPER      = colors.HexColor("#EEEEEE")  # --hl-text-primary
-DIM        = colors.HexColor("#8B949E")  # readable secondary on INK
-FAINT      = colors.HexColor("#6E7681")  # captions, page furniture
+hl.register_fonts()
 
-# Severity, for anything ranked. Mirrors --hl-sev-*.
-SEV = {"critical": colors.HexColor("#DC2626"), "high": colors.HexColor("#F97316"),
-       "medium": colors.HexColor("#EAB308"), "med": colors.HexColor("#EAB308"),
-       "low": colors.HexColor("#3B82F6")}
+# ---------------------------------------------------------------- tokens (re-exported, never re-typed)
+GROUND, CARD, ROW = hl.GROUND, hl.CARD, hl.ROW
+BORDER, BORDER_ROW, HAIRLINE = hl.BORDER, hl.BORDER_ROW, hl.HAIRLINE
+INK, MUTED = hl.INK, hl.MUTED
+BLUE, GREEN, RED = hl.BLUE, hl.GREEN, hl.RED
+GOLD = hl.GOLD_BRIGHT            # sponsor and nothing else (custom.scss:46)
+SEV = hl.SEV_BAR                 # severity bars, keys critical/high/med/low
+SEC = hl.SEC
+CODE_TEXT = hl.CODE_TEXT
+FONT = hl.FONT
+px = hl.px
 
-# LOGO_ON_DARK is OPAQUE on #0D1117, which is why INK is that value and not the
-# site's #111111. Any other ground renders the lockup as a visible plate floating
-# on the page. Checked pixel by pixel on 2026-09-13, not assumed from the filename.
-LOGO_ON_DARK = os.path.join(REPO, "assets", "brand", "logo-lockup",
-                            "logo-horizontal-on-dark-bg.png")
-SG_TTF = os.path.join(REPO, "tools", "social-card", "SpaceGrotesk.ttf")
-
-# Space Grotesk is the site's display face. The vendored TTF is the LIGHT weight:
-# deliberate at cover size, too thin for headings, so DISPLAY is used large only.
-DISPLAY = "Helvetica-Bold"
-MONO = "Courier"
-try:
-    pdfmetrics.registerFont(TTFont("SpaceGrotesk", SG_TTF))
-    DISPLAY = "SpaceGrotesk"
-except Exception as exc:                                        # pragma: no cover
-    print(f"  note: Space Grotesk unavailable ({exc}); display falls back to Helvetica")
-
-PAGE = letter
+PAGE = hl.PAGE
 MARGIN = dict(leftMargin=0.68 * inch, rightMargin=0.68 * inch,
-              topMargin=0.62 * inch, bottomMargin=0.7 * inch)
+              topMargin=0.82 * inch, bottomMargin=0.7 * inch)
+SITE_URL = "the-hunters-ledger.com"
 
-_base = getSampleStyleSheet()["Normal"]
+# ---------------------------------------------------------------- glyph fallback (see module docstring)
+SYM = None
+for _p in ("/usr/share/fonts/liberation/LiberationSans-Regular.ttf",
+           "/usr/share/fonts/TTF/LiberationSans-Regular.ttf",
+           "/usr/share/fonts/TTF/DejaVuSans.ttf"):
+    if os.path.isfile(_p):
+        try:
+            pdfmetrics.registerFont(TTFont("HLSymbols", _p))
+            SYM = _p
+            break
+        except Exception:                                           # pragma: no cover
+            continue
+if SYM is None:                                                     # pragma: no cover
+    print("  note: no system font with U+2192 / U+25CF found; those two glyphs will not render")
 
 
-def style(name, **kw):
-    return ParagraphStyle(name, parent=_base, **kw)
+def sym(text):
+    """Wrap the two glyphs the site subset lacks (arrow, black circle) in the fallback font."""
+    if SYM is None:
+        return text
+    for ch in ("→", "●", "&#9679;", "&#8594;"):
+        text = text.replace(ch, f"<font name='HLSymbols'>{ch}</font>")
+    return text
 
 
-# ---------------------------------------------------------------- type scale
-S = {
-    "cover_title":   style("cover_title", fontName=DISPLAY, fontSize=34, textColor=PAPER,
-                           leading=39, alignment=1, spaceAfter=4),
-    "cover_sub":     style("cover_sub", fontName=DISPLAY, fontSize=17, textColor=GOLD,
-                           leading=22, alignment=1, spaceAfter=16),
-    "cover_body":    style("cover_body", fontName="Helvetica", fontSize=10.5, textColor=DIM,
-                           leading=16, alignment=1),
-    "cover_eyebrow": style("cover_eyebrow", fontName="Helvetica-Bold", fontSize=8,
-                           textColor=GOLD, leading=11, alignment=1, spaceAfter=7),
-    "eyebrow":       style("eyebrow", fontName="Helvetica-Bold", fontSize=8, textColor=GOLD,
-                           leading=11, spaceAfter=2),
-    "title":         style("title", fontName=DISPLAY, fontSize=23, textColor=PAPER,
-                           leading=27, spaceAfter=4),
-    "subtitle":      style("subtitle", fontName="Helvetica", fontSize=10.5, textColor=DIM,
-                           leading=15, spaceAfter=3),
-    "h2":            style("h2", fontName="Helvetica-Bold", fontSize=13, textColor=PAPER,
-                           leading=16, spaceBefore=13, spaceAfter=5),
-    "h3":            style("h3", fontName="Helvetica-Bold", fontSize=10.5, textColor=GOLD,
-                           leading=13.5, spaceBefore=9, spaceAfter=3),
-    "body":          style("body", fontName="Helvetica", fontSize=9.5, textColor=PAPER,
-                           leading=14.5, spaceAfter=5),
-    "small":         style("small", fontName="Helvetica", fontSize=8, textColor=FAINT,
-                           leading=11.5),
-    "bullet":        style("bullet", fontName="Helvetica", fontSize=8.8, textColor=PAPER,
-                           leading=13, leftIndent=12, bulletIndent=1, spaceAfter=3),
-    "cell":          style("cell", fontName="Helvetica", fontSize=8.4, textColor=PAPER,
-                           leading=11.5),
-    "cell_b":        style("cell_b", fontName="Helvetica-Bold", fontSize=8.4, textColor=PAPER,
-                           leading=11.5),
-    "cell_h":        style("cell_h", fontName="Helvetica-Bold", fontSize=8.4, textColor=INK,
-                           leading=11.5),
-    "mono":          style("mono", fontName=MONO, fontSize=8, textColor=BLUE, leading=11.5),
-    "stat_fig":      style("stat_fig", fontName=DISPLAY, fontSize=19, textColor=GOLD,
-                           leading=22, alignment=1, spaceAfter=1),
-    "stat_lbl":      style("stat_lbl", fontName="Helvetica", fontSize=7.4, textColor=DIM,
-                           leading=9.5, alignment=1),
-}
+# ---------------------------------------------------------------- themes
+def _blend(a, b, t):
+    """a + (b - a) * t, per channel; for the light variant's derived greys."""
+    return colors.Color(a.red + (b.red - a.red) * t, a.green + (b.green - a.green) * t,
+                        a.blue + (b.blue - a.blue) * t)
+
+
+class Theme:
+    """One document mode: ground, ink and the grey steps, plus its paragraph styles in `S`."""
+
+    def __init__(self, name, ground, ink, muted, card, row, edge, hairline):
+        self.name, self.dark = name, name == "dark"
+        self.ground, self.ink, self.muted = ground, ink, muted
+        self.card, self.row, self.edge, self.hairline = card, row, edge, hairline
+        self.S = self._styles()
+
+    def _styles(self):
+        ink, muted = self.ink, self.muted
+
+        def st(name, font, size, lead, color=ink, **kw):
+            return ParagraphStyle(name + "_" + self.name, fontName=FONT[font], fontSize=size,
+                                  leading=lead, textColor=color, alignment=kw.pop("alignment", TA_LEFT), **kw)
+
+        return {
+            "cover_title": st("cover_title", "serif_semibold", 34, 39, alignment=TA_CENTER, spaceAfter=4),
+            "cover_sub": st("cover_sub", "serif", 17, 22, alignment=TA_CENTER, spaceAfter=16),
+            "cover_body": st("cover_body", "sans", 10.5, 16, muted, alignment=TA_CENTER),
+            "cover_eyebrow": st("cover_eyebrow", "mono_medium", 8, 11, muted, alignment=TA_CENTER, spaceAfter=7),
+            "eyebrow": st("eyebrow", "mono_medium", 8, 11, muted, spaceAfter=3),
+            "title": st("title", "serif_semibold", 24, 28, spaceAfter=4),
+            "subtitle": st("subtitle", "sans", 10.5, 15, muted, spaceAfter=3),
+            "h2": st("h2", "serif_semibold", 14.5, 18, spaceBefore=13, spaceAfter=5),
+            "h3": st("h3", "sans_semibold", 10.5, 13.5, spaceBefore=9, spaceAfter=3),
+            "body": st("body", "sans", 9.5, 14.5, spaceAfter=5),
+            "small": st("small", "sans", 8, 11.5, muted),
+            "bullet": st("bullet", "sans", 8.8, 13, leftIndent=12, bulletIndent=1, spaceAfter=3),
+            "cell": st("cell", "sans", 8.4, 11.5),
+            "cell_b": st("cell_b", "sans_semibold", 8.4, 11.5),
+            "cell_h": st("cell_h", "sans_semibold", 8.4, 11.5),
+            "data": st("data", "mono", 8.4, 11.5),
+            "mono": st("mono", "mono", 8, 11.5, CODE_TEXT if self.dark else ink),
+            "stat_fig": st("stat_fig", "serif_semibold", 20, 23, alignment=TA_CENTER, spaceAfter=1),
+            "stat_lbl": st("stat_lbl", "sans", 7.4, 9.5, muted, alignment=TA_CENTER),
+        }
+
+
+DARK = Theme("dark", GROUND, INK, MUTED, CARD, ROW, BORDER, HAIRLINE)
+_W = colors.white
+LIGHT = Theme("light", _W, GROUND, _blend(_W, GROUND, 0.62), _blend(_W, GROUND, 0.04),
+              _blend(_W, GROUND, 0.02), _blend(_W, GROUND, 0.16), _blend(_W, GROUND, 0.10))
+S = DARK.S
+
+
+def theme(mode="dark"):
+    if mode == "dark":
+        return DARK
+    if mode == "light":
+        return LIGHT
+    raise ValueError("theme mode must be 'dark' or 'light'")
+
+
+def hexs(c):
+    """'#rrggbb' for a reportlab colour, for <font color=...> inside a Paragraph (so a token is never retyped)."""
+    return "#%02x%02x%02x" % (round(c.red * 255), round(c.green * 255), round(c.blue * 255))
+
+
+def style(name, parent=None, **kw):
+    """A ParagraphStyle on the dark body style, for one-off styles in a generator."""
+    return ParagraphStyle(name, parent=parent or S["body"], **kw)
+
+
+# ---------------------------------------------------------------- flowables
+class DocSection(Flowable):
+    """Section head: a 14px square in the section colour, a serif title, a 2px rule across the width.
+    The geometry is the site's (tokens.json section_head); only the title size is a document choice."""
+
+    def __init__(self, title, width, color=None, t=DARK, size=14.5, sub=False):
+        super().__init__()
+        g = hl.TOKENS["section_head"]
+        self.title, self.width, self.t = title, width, t
+        self.color = color or BLUE
+        self.size = size
+        self.sq = px(g["sub_square" if sub else "square"])
+        self.gap = px(g["sub_square_margin_right" if sub else "square_margin_right"])
+        self.rule = px(g["sub_rule" if sub else "rule"])
+        self.height = size * 1.15 + px(8) + self.rule
+        self.spaceBefore, self.spaceAfter, self.keepWithNext = 9, 6, 1
+
+    def wrap(self, aw, ah):
+        return self.width, self.height
+
+    def draw(self):
+        c = self.canv
+        base = self.height - self.size * 0.95
+        c.setFillColor(self.color)
+        c.rect(0, base + (self.size * 0.72 - self.sq) / 2, self.sq, self.sq, stroke=0, fill=1)
+        c.setFillColor(self.t.ink)
+        c.setFont(FONT["serif_semibold"], self.size)
+        c.drawString(self.sq + self.gap, base, self.title)
+        c.setFillColor(self.color)
+        c.rect(0, 0, self.width, self.rule, stroke=0, fill=1)
+
+
+def section(title, width, color=None, t=DARK, sub=False):
+    return DocSection(title, width, color=color, t=t, sub=sub)
+
+
+class Lockup(Flowable):
+    """The site lockup, drawn as vectors, centred. On the light theme it sits on a ground-coloured plate,
+    because the wordmark is light ink."""
+
+    def __init__(self, scale=1.4, t=DARK, which="masthead", align="CENTER"):
+        super().__init__()
+        self.scale, self.t, self.which, self.hAlign = scale, t, which, align
+        self.w, self.h = hl.lockup_size(scale, which)
+        self.pad = 0 if t.dark else 16
+        self.width, self.height = self.w + 2 * self.pad, self.h + 2 * self.pad
+
+    def wrap(self, aw, ah):
+        return self.width, self.height
+
+    def draw(self):
+        c = self.canv
+        if not self.t.dark:
+            c.setFillColor(GROUND)
+            c.roundRect(0, 0, self.width, self.height, 3, stroke=0, fill=1)
+        hl.draw_lockup(c, self.pad, self.pad, self.scale, self.which)
 
 
 # ---------------------------------------------------------------- components
-def rule(color=GOLD, w=1.2, sb=3, sa=7):
-    return HRFlowable(width="100%", thickness=w, color=color, spaceBefore=sb, spaceAfter=sa,
-                      lineCap="round")
+def rule(color=None, w=None, sb=3, sa=7, t=DARK):
+    """A full-width rule. Default is the site's 2px blue; pass a hairline colour and 0.5 for a divider."""
+    return HRFlowable(width="100%", thickness=w if w is not None else px(2),
+                      color=color or BLUE, spaceBefore=sb, spaceAfter=sa, lineCap="butt")
 
 
-def bullets(items, style_key="bullet"):
-    return [Paragraph(t, S[style_key], bulletText="•") for t in items]
+def bullets(items, style_key="bullet", t=DARK):
+    return [Paragraph(sym(x), t.S[style_key], bulletText="•") for x in items]
 
 
 def scaled(path, max_w, max_h):
-    """Fit an image in a box, preserving aspect. Returns None when the file is
-    absent, so a missing asset degrades to no image rather than crashing a
-    document that has to ship."""
-    if not os.path.exists(path):
+    """Fit an image in a box, preserving aspect. Returns None when the file is absent, so a missing
+    asset degrades to no image rather than crashing a document that has to ship."""
+    if not path or not os.path.exists(path):
         print(f"  note: asset missing, skipping: {path}")
         return None
     iw, ih = ImageReader(path).getSize()
@@ -141,94 +239,116 @@ def scaled(path, max_w, max_h):
     return RLImage(path, iw * s, ih * s)
 
 
-def panel(flowables, accent=GOLD, width=None):
-    """A raised surface with an accent bar down its left edge. This is the site's
-    hl-panel, which is the single component that makes these documents read as the
-    site rather than as a generic report."""
-    inner = Table([[f] for f in flowables], colWidths=[(width or 6.6 * inch) - 16])
+def panel(flowables, accent=None, width=None, t=DARK):
+    """The site's plate: a card ground, a 1px border and a 3px edge in the accent colour."""
+    accent = accent or BLUE
+    wd = width or 6.6 * inch
+    inner = Table([[f] for f in flowables], colWidths=[wd - 3 - 26])
     inner.setStyle(TableStyle([
         ("LEFTPADDING", (0, 0), (-1, -1), 0), ("RIGHTPADDING", (0, 0), (-1, -1), 0),
         ("TOPPADDING", (0, 0), (-1, -1), 0), ("BOTTOMPADDING", (0, 0), (-1, -1), 2),
     ]))
-    t = Table([["", inner]], colWidths=[3, (width or 6.6 * inch) - 3])
-    t.setStyle(TableStyle([
+    tb = Table([["", inner]], colWidths=[3, wd - 3])
+    tb.setStyle(TableStyle([
         ("BACKGROUND", (0, 0), (0, 0), accent),
-        ("BACKGROUND", (1, 0), (1, 0), PANEL),
+        ("BACKGROUND", (1, 0), (1, 0), t.card),
+        ("BOX", (0, 0), (-1, -1), 0.75, t.edge),
         ("VALIGN", (0, 0), (-1, -1), "TOP"),
         ("LEFTPADDING", (0, 0), (0, 0), 0), ("RIGHTPADDING", (0, 0), (0, 0), 0),
         ("TOPPADDING", (0, 0), (0, 0), 0), ("BOTTOMPADDING", (0, 0), (0, 0), 0),
         ("LEFTPADDING", (1, 0), (1, 0), 13), ("RIGHTPADDING", (1, 0), (1, 0), 13),
-        ("TOPPADDING", (1, 0), (1, 0), 11), ("BOTTOMPADDING", (1, 0), (1, 0), 11),
+        ("TOPPADDING", (1, 0), (1, 0), 9), ("BOTTOMPADDING", (1, 0), (1, 0), 9),
     ]))
-    return t
+    return tb
 
 
-def stat_strip(pairs, width=6.6 * inch):
-    """Figure-over-label cells in a row, the site's creds strip. Reads as an
-    instrument panel, which is most of why the site feels like a tool."""
-    cells = [[Paragraph(str(fig), S["stat_fig"]), Paragraph(lbl, S["stat_lbl"])]
-             for fig, lbl in pairs]
+def stat_strip(pairs, width=6.6 * inch, t=DARK):
+    """Serif figure over a sans label, in a row of cells on the card ground (the site's creds strip)."""
+    cells = [[Paragraph(str(fig), t.S["stat_fig"]), Paragraph(lbl, t.S["stat_lbl"])] for fig, lbl in pairs]
     col = width / len(cells)
-    t = Table([[Table([[c[0]], [c[1]]], colWidths=[col - 12]) for c in cells]],
-              colWidths=[col] * len(cells))
-    t.setStyle(TableStyle([
-        ("BACKGROUND", (0, 0), (-1, -1), PANEL),
-        ("BOX", (0, 0), (-1, -1), 0.6, PANEL_EDGE),
-        ("INNERGRID", (0, 0), (-1, -1), 0.6, PANEL_EDGE),
+    tb = Table([[Table([[c[0]], [c[1]]], colWidths=[col - 12]) for c in cells]], colWidths=[col] * len(cells))
+    tb.setStyle(TableStyle([
+        ("BACKGROUND", (0, 0), (-1, -1), t.card),
+        ("BOX", (0, 0), (-1, -1), 0.75, t.edge),
+        ("INNERGRID", (0, 0), (-1, -1), 0.75, t.edge),
         ("VALIGN", (0, 0), (-1, -1), "MIDDLE"),
         ("TOPPADDING", (0, 0), (-1, -1), 11), ("BOTTOMPADDING", (0, 0), (-1, -1), 11),
     ]))
-    return t
+    return tb
 
 
-def dark_table(rows, col_widths, header_fill=GOLD, zebra=True):
-    """Header band in an accent, body on the panel surface. Grid lines are the
-    panel edge rather than white, because a bright grid on a dark ground fights
-    the text for attention."""
-    t = Table(rows, colWidths=col_widths, repeatRows=1)
+def dark_table(rows, col_widths, header_fill=None, zebra=True, t=DARK):
+    """Header row on the card ground with a 2px rule in `header_fill` (the section or severity colour)
+    under it, body rows on the row ground with hairlines. `header_fill` keeps its old name so callers
+    that pass a severity colour read the same; it is now the rule colour, not a fill."""
+    header_fill = header_fill or BLUE
+    tb = Table(rows, colWidths=col_widths, repeatRows=1)
     cmds = [
-        ("BACKGROUND", (0, 0), (-1, 0), header_fill),
-        ("BACKGROUND", (0, 1), (-1, -1), PANEL),
-        ("GRID", (0, 0), (-1, -1), 0.5, PANEL_EDGE),
+        ("BACKGROUND", (0, 0), (-1, 0), t.card),
+        ("BACKGROUND", (0, 1), (-1, -1), t.row),
+        ("LINEBELOW", (0, 0), (-1, 0), px(2), header_fill),
+        ("LINEBELOW", (0, 1), (-1, -1), 0.5, t.edge),
+        ("BOX", (0, 0), (-1, -1), 0.5, t.edge),
         ("VALIGN", (0, 0), (-1, -1), "MIDDLE"),
         ("LEFTPADDING", (0, 0), (-1, -1), 8), ("RIGHTPADDING", (0, 0), (-1, -1), 8),
-        ("TOPPADDING", (0, 0), (-1, -1), 6), ("BOTTOMPADDING", (0, 0), (-1, -1), 6),
+        ("TOPPADDING", (0, 0), (-1, -1), 5), ("BOTTOMPADDING", (0, 0), (-1, -1), 5),
     ]
     if zebra:
         for i in range(2, len(rows), 2):
-            cmds.append(("BACKGROUND", (0, i), (-1, i), INK))
-    t.setStyle(TableStyle(cmds))
-    return t
+            cmds.append(("BACKGROUND", (0, i), (-1, i), t.card))
+    tb.setStyle(TableStyle(cmds))
+    return tb
 
 
 # ---------------------------------------------------------------- page painters
-def paint_cover(canvas, doc):
-    """Full-bleed ground with the gold-over-blue accent spine down the left edge.
-    The spine is the site's per-section accent rail, reduced to punctuation."""
-    canvas.saveState()
+def paint_ground(canvas, t=DARK, grid=False):
+    """Fill the whole page with the theme ground (for generators with their own page chrome)."""
+    _ground(canvas, t, grid)
+
+
+def _ground(canvas, t, grid):
     w, h = PAGE
-    canvas.setFillColor(INK)
-    canvas.rect(0, 0, w, h, stroke=0, fill=1)
-    canvas.setFillColor(GOLD)
-    canvas.rect(0, 0, 5, h, stroke=0, fill=1)
-    canvas.setFillColor(BLUE)
-    canvas.rect(0, 0, 5, h * 0.18, stroke=0, fill=1)
-    canvas.restoreState()
-
-
-def make_interior_painter(footer_left="the-hunters-ledger.com"):
-    """Interior pages carry the same ground, a hairline accent at the head and a
-    quiet footer. Returned as a closure so each document names itself."""
-    def paint(canvas, doc):
+    if t.dark:
+        hl.draw_ground(canvas, w, h, grid=grid)
+    else:
         canvas.saveState()
-        w, h = PAGE
-        canvas.setFillColor(INK)
+        canvas.setFillColor(t.ground)
         canvas.rect(0, 0, w, h, stroke=0, fill=1)
-        canvas.setFillColor(GOLD)
-        canvas.rect(0, h - 3.5, w, 3.5, stroke=0, fill=1)
-        canvas.setFont("Helvetica", 7.4)
-        canvas.setFillColor(FAINT)
-        canvas.drawString(0.68 * inch, 0.45 * inch, footer_left)
-        canvas.drawRightString(w - 0.68 * inch, 0.45 * inch, str(doc.page))
+        canvas.restoreState()
+
+
+def make_cover_painter(t=DARK):
+    def paint(canvas, doc):
+        _ground(canvas, t, grid=True)
+    return paint
+
+
+paint_cover = make_cover_painter(DARK)
+
+
+def make_interior_painter(footer_left=SITE_URL, t=DARK):
+    """Interior pages: the ground, the bar-size lockup top left over a hairline (dark only; the light
+    page gets the mono name), and a mono footer on a hairline."""
+    def paint(canvas, doc):
+        _ground(canvas, t, grid=False)
+        w, h = PAGE
+        lm, rm = MARGIN["leftMargin"], w - MARGIN["rightMargin"]
+        canvas.saveState()
+        top = h - 0.34 * inch
+        if t.dark:
+            lh = hl.lockup_size(0.62, "bar")[1]
+            hl.draw_lockup(canvas, lm, top - lh / 2, 0.62, "bar")
+        else:
+            canvas.setFont(FONT["mono_medium"], 7.4)
+            canvas.setFillColor(t.muted)
+            canvas.drawString(lm, top - 3, "THE HUNTER'S LEDGER")
+        canvas.setStrokeColor(t.edge)
+        canvas.setLineWidth(0.5)
+        canvas.line(lm, h - 0.58 * inch, rm, h - 0.58 * inch)
+        canvas.line(lm, 0.62 * inch, rm, 0.62 * inch)
+        canvas.setFont(FONT["mono"], 7.4)
+        canvas.setFillColor(t.muted)
+        canvas.drawString(lm, 0.44 * inch, footer_left)
+        canvas.drawRightString(rm, 0.44 * inch, str(doc.page))
         canvas.restoreState()
     return paint

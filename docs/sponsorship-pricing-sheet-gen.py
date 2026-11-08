@@ -15,9 +15,15 @@ quarterly spotlight post and a peak-month view count that had all been removed.
 A prospect would have taken the stale sheet into a procurement conversation.
 
 Look and palette come from docs/hl_doc_theme.py, shared with every other document
-that leaves here so the brand cannot drift between them.
+that leaves here so the brand cannot drift between them. That theme is built on
+docs/brand (T-0563: concept 3 tokens, Source Serif 4 / IBM Plex, the site lockup).
 
-Requires: reportlab (5.0.1 verified), PyYAML. Run with python3 on Linux.
+    python3 docs/sponsorship-pricing-sheet-gen.py [--out PATH]
+
+Without --out it writes the live file above. Gold appears only on the two sponsor
+tiers and the editorial-independence note, because gold means sponsorship.
+
+Requires: reportlab (5.0.1 verified), PyYAML. Run under .venv-gates/bin/python3 on Linux.
 """
 import os
 import sys
@@ -34,24 +40,24 @@ DATA = os.path.join(_REPO, "_data", "sponsors.yml")
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from hl_doc_theme import (  # noqa: E402
-    INK, PANEL, PANEL_EDGE, GOLD, BLUE, PAPER, DIM, FAINT, PAGE, MARGIN, S,
-    rule, bullets, scaled, panel, stat_strip, dark_table, paint_cover,
-    make_interior_painter, LOGO_ON_DARK)
+    CARD, BORDER, HAIRLINE, GOLD, BLUE, INK, MUTED, FONT, PAGE, MARGIN, S,
+    rule, bullets, panel, stat_strip, dark_table, paint_cover, make_interior_painter,
+    section, Lockup, hexs, SITE_URL)
+
+if "--out" in sys.argv:
+    OUT = os.path.abspath(sys.argv[sys.argv.index("--out") + 1])
 
 with open(DATA, encoding="utf-8") as fh:
     SPONSORS = yaml.safe_load(fh)
 TIERS = {t["id"]: t for t in SPONSORS["tiers"]}
 MONTHLY, REPORT = TIERS["monthly"], TIERS["report"]
 
-CONTENT_W = PAGE[0] - MARGIN["leftMargin"] - MARGIN["rightMargin"]
+CONTENT_W = PAGE[0] - MARGIN["leftMargin"] - MARGIN["rightMargin"] - 12  # minus the frame padding (6 + 6)
 story = []
 
 # ---------------------------------------------------------------- cover
 story.append(Spacer(1, 2.15 * inch))
-_logo = scaled(LOGO_ON_DARK, 3.5 * inch, 1.15 * inch)
-if _logo:
-    _logo.hAlign = "CENTER"
-    story.append(_logo)
+story.append(Lockup(1.25))
 story.append(Spacer(1, 0.62 * inch))
 story.append(Paragraph("Sponsorship", S["cover_title"]))
 story.append(Paragraph("Pricing and Packages", S["cover_sub"]))
@@ -73,7 +79,7 @@ story.append(Paragraph(
     "working defenders actively integrate.", S["subtitle"]))
 story.append(rule())
 
-story.append(Paragraph("The Audience", S["h2"]))
+story.append(section("The Audience", CONTENT_W))
 story.append(Paragraph(
     "A focused, <b>technical security audience</b>, concentrated where security buying decisions "
     "get made: the people who evaluate, recommend, deploy, and buy detection and tooling "
@@ -103,23 +109,23 @@ story.append(rule())
 
 def tier_card(tier, accent, flagship=False):
     """Built from _data/sponsors.yml. Nothing here restates the offer."""
-    name = style_para(tier["name"], size=13.5, color=PAPER, bold=True)
+    name = style_para(tier["name"], size=14, color=INK, font="serif_semibold")
     head = [name]
     if flagship:
-        head.append(style_para("FLAGSHIP", size=7, color=accent, bold=True, space=4))
+        head.append(style_para("FLAGSHIP", size=7, color=accent, font="mono_medium", space=4))
     price = style_para(
-        f"{xesc(tier['price'])} <font size=9 color='#8B949E'>/ "
-        f"{xesc(tier['price_note']).lower()}</font>", size=16, color=accent, bold=True)
+        f"{xesc(tier['price'])} <font size=9 name='{FONT['sans']}' color='{hexs(MUTED)}'>/ "
+        f"{xesc(tier['price_note']).lower()}</font>", size=18, color=accent, font="serif_semibold")
     out = head + [price]
     if tier.get("annual_price"):
         # The site renders annual_price and annual_note as separate spans, so the
         # note is written to sit beside the figure rather than run on from it.
         ann = f"Or {xesc(tier['annual_price'])}"
         if tier.get("annual_note"):
-            ann += f" <font size=7.5 color='#8B949E'>{xesc(tier['annual_note'])}</font>"
-        out.append(style_para(ann, size=9.5, color=accent, bold=True))
+            ann += f" <font size=7.5 name='{FONT['sans']}' color='{hexs(MUTED)}'>{xesc(tier['annual_note'])}</font>"
+        out.append(style_para(ann, size=10, color=accent, font="serif_semibold"))
     if tier.get("annual_saving"):
-        out.append(style_para(xesc(tier["annual_saving"]), size=8, color=DIM, space=5))
+        out.append(style_para(xesc(tier["annual_saving"]), size=8, color=MUTED, space=5))
     extra = []
     if tier.get("catalog_price"):
         extra.append(f"{xesc(tier['catalog_price'])} {xesc(tier['catalog_price_note'])}")
@@ -127,30 +133,30 @@ def tier_card(tier, accent, flagship=False):
         extra.append(xesc(tier["intro_price"]))
     if extra:
         out.append(style_para(" &nbsp;&middot;&nbsp; ".join(extra), size=8.4,
-                              color=accent, bold=True, space=6))
-    out.append(style_para(xesc(tier["description"]), size=8.5, color=DIM, space=7,
-                          italic=True))
+                              color=accent, font="sans_semibold", space=6))
+    out.append(style_para(xesc(tier["description"]), size=8.5, color=MUTED, space=7,
+                          font="serif_italic"))
     return out + bullets([xesc(b) for b in tier["benefits"]])
 
 
-def style_para(text, size, color, bold=False, italic=False, space=2):
+def style_para(text, size, color, font="sans", space=2):
     from reportlab.lib.styles import ParagraphStyle
-    fn = "Helvetica-Bold" if bold else ("Helvetica-Oblique" if italic else "Helvetica")
     return Paragraph(text, ParagraphStyle(
-        f"p{size}{color}{bold}{italic}", fontName=fn, fontSize=size, textColor=color,
+        f"p{size}{color}{font}", fontName=FONT[font], fontSize=size, textColor=color,
         leading=size * 1.28, spaceAfter=space))
 
 
 col = (CONTENT_W - 10) / 2
-cards = Table([[tier_card(MONTHLY, GOLD, flagship=True), tier_card(REPORT, BLUE)]],
+# Both tiers are sponsorship, so both carry gold (the flagship is marked by its label).
+cards = Table([[tier_card(MONTHLY, GOLD, flagship=True), tier_card(REPORT, GOLD)]],
               colWidths=[col, col])
 cards.setStyle(TableStyle([
     ("VALIGN", (0, 0), (-1, -1), "TOP"),
-    ("BACKGROUND", (0, 0), (-1, 0), PANEL),
-    ("LINEABOVE", (0, 0), (0, 0), 2.5, GOLD),
-    ("LINEABOVE", (1, 0), (1, 0), 2.5, BLUE),
-    ("BOX", (0, 0), (0, 0), 0.6, PANEL_EDGE),
-    ("BOX", (1, 0), (1, 0), 0.6, PANEL_EDGE),
+    ("BACKGROUND", (0, 0), (-1, 0), CARD),
+    ("LINEABOVE", (0, 0), (0, 0), 1.5, GOLD),
+    ("LINEABOVE", (1, 0), (1, 0), 1.5, GOLD),
+    ("BOX", (0, 0), (0, 0), 0.75, BORDER),
+    ("BOX", (1, 0), (1, 0), 0.75, BORDER),
     ("LEFTPADDING", (0, 0), (-1, -1), 13), ("RIGHTPADDING", (0, 0), (-1, -1), 13),
     ("TOPPADDING", (0, 0), (-1, -1), 12), ("BOTTOMPADDING", (0, 0), (-1, -1), 12),
 ]))
@@ -190,16 +196,16 @@ pay = [[Paragraph("How you pay", H), Paragraph("Monthly Sponsor", H),
        [Paragraph("First time", B),
         Paragraph("First 3 months at $300, or a first year at $4,400", C),
         Paragraph("First new report $100", C)]]
-story.append(dark_table(pay, [1.2 * inch, CONTENT_W * 0.40, CONTENT_W * 0.42]))
+story.append(dark_table(pay, [1.2 * inch, (CONTENT_W - 1.2 * inch) * 0.48, (CONTENT_W - 1.2 * inch) * 0.52], header_fill=GOLD))
 
 # ---------------------------------------------------------------- the rest
-story.append(Paragraph("Optional Add-Ons", S["h2"]))
+story.append(section("Optional Add-Ons", CONTENT_W))
 story += bullets([
     "Newsletter mention, $50, one-off sponsored mention in a subscriber email send",
     "Extra LinkedIn or X post, $50, a single dedicated sponsored post",
 ])
 
-story.append(Paragraph("Commissioned Research", S["h2"]))
+story.append(section("Commissioned Research", CONTENT_W))
 story.append(panel([
     Paragraph(
         "Name a threat your organization needs intelligence on and I will go and get it: original "
@@ -218,17 +224,17 @@ story.append(Paragraph(
     "something not listed. Tell me what you are trying to achieve and I will shape a package "
     "around it.", S["body"]))
 
-story.append(Paragraph("Editorial Independence", S["h2"]))
+story.append(section("Editorial Independence", CONTENT_W, GOLD))
 story.append(panel([Paragraph(
     "Sponsorship buys placement and brand association, not content control. Sponsors do not review "
     "reports before publication, do not influence findings or attribution, and are never named as "
     "contributors. Placement is always disclosed. This is not native advertising.", S["body"])],
     accent=GOLD, width=CONTENT_W))
 
-story.append(Spacer(1, 14))
-story.append(rule(PANEL_EDGE, 0.7, 2, 6))
+story.append(Spacer(1, 4))
+story.append(rule(BORDER, 0.5, 2, 6))
 story.append(Paragraph(
-    "Get in touch &nbsp;&middot;&nbsp; <font color='#58A6FF'><b>intel@the-hunters-ledger.com</b>"
+    f"Get in touch &nbsp;&middot;&nbsp; <font color='{hexs(BLUE)}'><b>intel@the-hunters-ledger.com</b>"
     "</font> &nbsp;&middot;&nbsp; linkedin.com/in/josephrharrison &nbsp;&middot;&nbsp; "
     "the-hunters-ledger.com/sponsor/", S["body"]))
 story.append(Paragraph(

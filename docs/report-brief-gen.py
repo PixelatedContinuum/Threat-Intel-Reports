@@ -24,6 +24,10 @@ rather than a blank page. Same shape as quarterly_update_gen.py.
     python3 docs/report-brief-gen.py --slug <slug> --init     # writes docs/briefs/<slug>.yml
     ...edit that file...
     python3 docs/report-brief-gen.py --slug <slug>             # renders the PDF
+    python3 docs/report-brief-gen.py --slug <slug> --out PATH  # renders it somewhere else
+
+The look is docs/hl_doc_theme.py on docs/brand (T-0563, concept 3). The severity colour
+runs the rules and table heads; gold appears only on "Prepared for" (the sponsor).
 
 THE SAFETY RULE THAT MATTERS MOST
 ----------------------------------
@@ -41,7 +45,7 @@ a value appearing in both buckets is still excluded.
 treating it as "do not block" previously matched 169 entries including operator
 IPs and SHA256 hashes. This reads the bucket, never an action field.
 
-Requires: reportlab, PyYAML.
+Requires: reportlab, PyYAML. Run under .venv-gates/bin/python3.
 """
 import argparse
 import glob
@@ -58,14 +62,13 @@ from reportlab.platypus import (SimpleDocTemplate, Paragraph, Spacer, Table,
 REPO = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from hl_doc_theme import (  # noqa: E402
-    INK, PANEL, PANEL_EDGE, GOLD, BLUE, GREEN, RED, PAPER, DIM, FAINT, SEV,
-    PAGE, MARGIN, S, rule, bullets, scaled, panel, stat_strip, dark_table,
-    paint_cover, make_interior_painter, LOGO_ON_DARK, style)
+    BORDER, GOLD, BLUE, RED, SEV, PAGE, MARGIN, S, rule, bullets, panel, stat_strip,
+    dark_table, paint_cover, make_interior_painter, section, Lockup, sym, hexs)
 
 DATA = os.path.join(REPO, "_data")
 BRIEFS = os.path.join(REPO, "docs", "briefs")
 OUTDIR = os.path.join(REPO, "docs", "briefs", "out")
-CONTENT_W = PAGE[0] - MARGIN["leftMargin"] - MARGIN["rightMargin"]
+CONTENT_W = PAGE[0] - MARGIN["leftMargin"] - MARGIN["rightMargin"] - 12  # minus the frame padding (6 + 6)
 
 
 def _yaml(name):
@@ -259,12 +262,12 @@ def init_stub(slug, entry, fm):
 
 
 # ---------------------------------------------------------------- render
-def render(slug, content, entry, fm, sponsors):
+def render(slug, content, entry, fm, sponsors, out_path=None):
     det, fell_back = act_now_rules(slug)
     block, hunt, feed_name, flagged = load_feed(slug, entry)
     atk = attack_rows(slug)
     sev = str(entry.get("severity") or "").lower()
-    sev_col = SEV.get(sev, GOLD)
+    sev_col = SEV.get(sev, BLUE)
 
     sponsor = None
     sid = fm.get("sponsored_by")
@@ -273,10 +276,7 @@ def render(slug, content, entry, fm, sponsors):
         sponsor = sponsors.get(sid)
 
     story = [Spacer(1, 1.9 * inch)]
-    lg = scaled(LOGO_ON_DARK, 3.2 * inch, 1.05 * inch)
-    if lg:
-        lg.hAlign = "CENTER"
-        story.append(lg)
+    story.append(Lockup(1.2))
     story.append(Spacer(1, 0.5 * inch))
     story.append(Paragraph("THREAT BRIEF", S["cover_eyebrow"]))
     story.append(Paragraph(xesc(content["title"]), S["cover_title"]))
@@ -285,7 +285,8 @@ def render(slug, content, entry, fm, sponsors):
     story.append(Spacer(1, 1.5 * inch))
     if sponsor:
         story.append(Paragraph("PREPARED FOR", S["cover_eyebrow"]))
-        story.append(Paragraph(xesc(sponsor.get("name", sid)), S["cover_body"]))
+        story.append(Paragraph(f"<font color='{hexs(GOLD)}'>{xesc(sponsor.get('name', sid))}</font>",
+                               S["cover_body"]))
     story.append(Spacer(1, 0.5 * inch))
     story.append(Paragraph("Independent threat intelligence research<br/>"
                            "the-hunters-ledger.com", S["cover_body"]))
@@ -306,11 +307,11 @@ def render(slug, content, entry, fm, sponsors):
     ], width=CONTENT_W))
     if content.get("what_it_means"):
         story.append(Spacer(1, 9))
-        story.append(Paragraph("What this means", S["h2"]))
+        story.append(section("What this means", CONTENT_W, sev_col))
         story.append(Paragraph(xesc(content["what_it_means"]), S["body"]))
     do = [d for d in (content.get("do_now") or []) if str(d).strip()]
     if do:
-        story.append(Paragraph("What to do now", S["h2"]))
+        story.append(section("What to do now", CONTENT_W, sev_col))
         story.append(panel(bullets([xesc(d) for d in do]), accent=sev_col, width=CONTENT_W))
     story.append(PageBreak())
 
@@ -333,7 +334,7 @@ def render(slug, content, entry, fm, sponsors):
         for r in det[:5]:
             rows.append([Paragraph(xesc(r.get("name", "")), S["cell"]),
                          Paragraph(xesc(str(r.get("engine", "")).upper()), S["cell"]),
-                         Paragraph("&#9679;" * (r.get("robustness") or 0), S["cell"]),
+                         Paragraph(sym("&#9679;" * (r.get("robustness") or 0)), S["cell"]),
                          Paragraph(xesc(", ".join(r.get("attack") or [])), S["cell"])])
         story.append(dark_table(rows, [CONTENT_W * .42, CONTENT_W * .13,
                                        CONTENT_W * .15, CONTENT_W * .30],
@@ -347,7 +348,7 @@ def render(slug, content, entry, fm, sponsors):
         story.append(Paragraph("No detection rules were published for this campaign.",
                                S["body"]))
 
-    story.append(Paragraph("Indicators safe to block", S["h2"]))
+    story.append(section("Indicators safe to block", CONTENT_W, BLUE))
     if block:
         story.append(Paragraph(
             "Blocking any of these costs the operator and nobody else.",
@@ -368,7 +369,7 @@ def render(slug, content, entry, fm, sponsors):
         story.append(Paragraph("No blockable indicators in the published feed.", S["body"]))
 
     if hunt:
-        story.append(Paragraph("Watch, do not block", S["h2"]))
+        story.append(section("Watch, do not block", CONTENT_W, RED))
         story.append(panel([
             Paragraph(
                 "These are genuinely used by the operator, which is why they are recorded. "
@@ -391,25 +392,25 @@ def render(slug, content, entry, fm, sponsors):
             "left in the full report.", S["subtitle"]))
         for s in standout:
             if s.get("heading"):
-                story.append(Paragraph(xesc(s["heading"]), S["h2"]))
+                story.append(section(xesc(s["heading"]), CONTENT_W, sev_col))
             if s.get("body"):
                 for para in str(s["body"]).split("\n\n"):
                     if para.strip():
                         story.append(Paragraph(xesc(para.strip()), S["body"]))
 
     story.append(Spacer(1, 14))
-    story.append(rule(PANEL_EDGE, 0.7, 2, 6))
+    story.append(rule(BORDER, 0.5, 2, 6))
     url = (entry.get("report_url") or "").strip()
     story.append(Paragraph(
         f"Full report, detection package and machine-readable IOC feed: "
-        f"<font color='#58A6FF'>the-hunters-ledger.com{xesc(url)}</font>", S["body"]))
+        f"<font color='{hexs(BLUE)}'>the-hunters-ledger.com{xesc(url)}</font>", S["body"]))
     story.append(Paragraph(
         "I researched, wrote and published this independently. Sponsorship buys placement, never "
         "influence: the sponsor did not see it before it went live, and had no say in its "
         "findings, its attribution or its conclusions.", S["small"]))
 
-    os.makedirs(OUTDIR, exist_ok=True)
-    out = os.path.join(OUTDIR, f"HuntersLedger-Brief-{slug}.pdf")
+    out = out_path or os.path.join(OUTDIR, f"HuntersLedger-Brief-{slug}.pdf")
+    os.makedirs(os.path.dirname(os.path.abspath(out)), exist_ok=True)
     doc = SimpleDocTemplate(out, pagesize=PAGE, **MARGIN,
                             title=f"Threat Brief: {content['title']}",
                             author="The Hunters Ledger")
@@ -478,6 +479,7 @@ def main():
     ap.add_argument("--slug")
     ap.add_argument("--init", action="store_true", help="write an editable content stub")
     ap.add_argument("--selftest", action="store_true")
+    ap.add_argument("--out", help="explicit output PDF path (default docs/briefs/out/)")
     a = ap.parse_args()
     if a.selftest:
         return selftest()
@@ -497,7 +499,7 @@ def main():
     with open(path, encoding="utf-8") as fh:
         content = yaml.safe_load(fh)
     sponsors = {s["id"]: s for s in (_yaml("sponsors.yml").get("sponsors") or [])}
-    return render(a.slug, content, entry, fm, sponsors)
+    return render(a.slug, content, entry, fm, sponsors, a.out)
 
 
 if __name__ == "__main__":
