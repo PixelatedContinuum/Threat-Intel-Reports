@@ -43,7 +43,7 @@
       var budget = measure ? box.clientWidth : 0;
       var buttonWidth = measure ? btn.getBoundingClientRect().width || 48 : 48;
       var gap = measure ? parseFloat(getComputedStyle(box).columnGap) || 5 : 5;
-      var used = buttonWidth + gap, kept = 0, overflow = 0;
+      var used = buttonWidth + gap, kept = 0, overflow = 0, blocked = false, out = [];
       chips.forEach(function (chip) {
         var width = measure ? chip.getBoundingClientRect().width : 0;
         // Offscreen rows use the fallback
@@ -51,14 +51,23 @@
         // Priority chips come first (sorted above); any later chip that still
         // fits in the measured width stays visible too (Joseph 2026-11-06:
         // "show a few more tags"). Unmeasured rows show the priority chips only.
-        var keep = rank(chip) < 0 || (budget > 0 && width > 0
-          ? used + width + gap <= budget : rank(chip) < 9 && kept < 4);
+        // T-0565.1 review (settled under T-0576): once a priority chip (rank 0-8) does not
+        // fit, every later chip overflows too, so a lower-priority chip is never shown
+        // while a higher one is hidden.
+        var r = rank(chip);
+        var keep = r < 0 || (!blocked && (budget > 0 && width > 0
+          ? used + width + gap <= budget : r < 9 && kept < 4));
         if (keep) { used += width + gap; kept++; }
-        else { overflow++; chip.hidden = !expanded; }
+        else { overflow++; out.push(chip); if (r < 9) blocked = true; }
       });
+      // An expanded row whose overflow has emptied (a wider viewport) is collapsed, so
+      // a later narrowing hides the overflow again instead of showing it under a '−N'.
+      if (overflow === 0) expanded = false;
+      out.forEach(function (chip) { chip.hidden = !expanded; });
       btn.hidden = overflow === 0;
       btn.textContent = expanded ? '−' + overflow : '+' + overflow;
-      btn.setAttribute('aria-label', (expanded ? 'Hide ' : 'Show ') + overflow + ' more details');
+      // The accessible name starts with the visible text (WCAG 2.5.3).
+      btn.setAttribute('aria-label', btn.textContent + ': ' + (expanded ? 'hide ' : 'show ') + overflow + ' more details');
       btn.setAttribute('aria-expanded', String(expanded));
       box.classList.toggle('is-expanded', expanded);
       busy = false;
@@ -85,4 +94,7 @@
       document.fonts.ready.then(function () { if (inView) fit(true); });
     }
   });
+  // listing-filter.js runs first and applies a shared ?cq=/?vq= search before the chip text
+  // above joins data-title; re-apply it now (T-0565.1 review, settled under T-0576).
+  document.dispatchEvent(new Event('hl:refilter'));
 })();
