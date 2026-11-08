@@ -181,13 +181,13 @@
       "file": "ai-agent-frameworks-2026-05-23.json",
       "url": "https://the-hunters-ledger.com/stix/ai-agent-frameworks-2026-05-23.json",
       "report_url": "https://the-hunters-ledger.com/reports/ai-agent-frameworks-2026-05-23/",
-      "bundle_id": "bundle--cbc98c73-c106-4262-b341-8d4a5ec582f7",
+      "bundle_id": "bundle--e705203a-bb4f-4478-b48e-62a8ad4950cf",
       "report_id": "report--b0d9cd2f-d73f-5e19-a193-66cc1aa0e090",
-      "sha256": "414a2cced3abf0c7e00da9759f42815c2b7ee633d5afda0096771f5b8d09c68b",
-      "bytes": 1681663,
+      "sha256": "a3407e21461244cc786166f968b92d5c67aaa79b3521b7f8858ada73e11c4270",
+      "bytes": 1682494,
       "objects": 2189,
       "indicators": 92,
-      "modified": "2026-10-17T16:28:28.514103Z"
+      "modified": "2026-11-08T12:15:47.908878Z"
     },
     {
       "slug": "flaskc2-postex-toolkit-67-215-232-25",
@@ -256,13 +256,13 @@
       "file": "russian-gemini-credential-mill-213.165.51.115.json",
       "url": "https://the-hunters-ledger.com/stix/russian-gemini-credential-mill-213.165.51.115.json",
       "report_url": "https://the-hunters-ledger.com/reports/russian-gemini-credential-mill-213.165.51.115/",
-      "bundle_id": "bundle--9e519c09-9107-4c22-ae3d-e77bf868e684",
+      "bundle_id": "bundle--1003d0b7-26f0-4aeb-98c5-68c5636a78ba",
       "report_id": "report--a827f1aa-9f5c-538f-89b0-fe00bfc685e7",
-      "sha256": "d492f06aef28997938f12c82f399ce09036e4b3e9d51d8629e5618c11379b018",
-      "bytes": 369203,
+      "sha256": "07e13d2dd009343c18e16d53d974562f1d4cf74250a6be85e97630ad73a12483",
+      "bytes": 369931,
       "objects": 442,
       "indicators": 41,
-      "modified": "2026-10-17T16:28:37.215536Z"
+      "modified": "2026-11-08T12:15:49.39252Z"
     },
     {
       "slug": "turkish-arpa-openclaw-state-insurer-209.38.205.158",
@@ -616,13 +616,13 @@
       "file": "malware-analysis-houselet.json",
       "url": "https://the-hunters-ledger.com/stix/malware-analysis-houselet.json",
       "report_url": "https://the-hunters-ledger.com/reports/malware-analysis-houselet/",
-      "bundle_id": "bundle--3d77d49f-7a7c-4dfc-a149-0db2282908b4",
+      "bundle_id": "bundle--5224ae03-7fc2-4cae-b039-538ec9a44f24",
       "report_id": "report--66cfa6ea-e048-5321-893d-ff84b9a53c13",
-      "sha256": "608bf62a9688aa01f9b1747623f6f42c213ed19f4a9e3419ebd763c72681eb48",
-      "bytes": 16447,
+      "sha256": "07514b9e143169ec53cd0759861657f16f4b3c2f1dbebf7439fd633688c38fb9",
+      "bytes": 16560,
       "objects": 10,
       "indicators": 5,
-      "modified": "2026-10-11T05:08:00.87136Z"
+      "modified": "2026-11-08T12:15:49.15924Z"
     },
     {
       "slug": "AdvancedRouterScanner",

@@ -425,7 +425,7 @@ ai-agent-frameworks-2026-05-23-detections:
     engine: sigma
     tier: Hunting
     fence: 14
-    hash: "91fb71c3"
+    hash: "75d099ad"
     head: "title: >- Claude Code settings.local.json or set"
     robustness: 2
     confidence: "MODERATE — the rule's own description states this is a hunting lead, not an alert"
@@ -2804,7 +2804,7 @@ malware-analysis-houselet-detections:
     engine: sigma
     tier: Hunting
     fence: 4
-    hash: "d9702f50"
+    hash: "fc2c179a"
     head: "title: Command Line Referencing Virtualization o"
     robustness: 2
     confidence: "MODERATE"
@@ -5177,7 +5177,7 @@ russian-gemini-credential-mill-213.165.51.115-detections:
     engine: sigma
     tier: Hunting
     fence: 11
-    hash: "9161558b"
+    hash: "66010c22"
     head: "title: Executable Script or Skill File Created i"
     robustness: 2
     confidence: "MODERATE"

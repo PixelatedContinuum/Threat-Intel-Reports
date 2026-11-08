@@ -575,6 +575,8 @@ level: high
 **Rationale:** The `~/.gemini/` directory paired with executable content is a genuine operator-side installation signal, but the original rule had no exclusions at all, so it matched the Gemini CLI's own vendor-managed skill and plugin trees. Revised 2026-09-07 after measurement against live telemetry: of 19 matching events over 14 days, **18 were vendor software writing vendor filenames into vendor directories**, and the `*SKILL.md` arm alone carried **14 of the 19**. The `*GEMINI.md` and `*.ps1` arms matched **nothing**. The fix excludes the vendor trees (`/.gemini/*/builtin/`, `/.gemini/*/plugins/`, `/.gemini/extensions/`) rather than removing the filename arms, so operator-authored `SKILL.md` and `GEMINI.md` outside those trees still match. Measured effect: 19 to 1 over the same window. The rule was also renamed. Its previous title asserted "on Server Host", which the selection logic never implemented, and a subscriber scanning a rule list reads the title.
 **False Positives:** Operator-authored hook scripts under the CLI's own hook directory, which is a supported feature. Allowlist the specific hook filenames in use. Also a filesystem-level copy, migration or restore of a home directory, which replays every path in the copied tree through file-creation telemetry, including a backup target such as `/mnt/.../@home/user/.gemini/...`.
 **Tested and rejected (do not re-argue these):** Scoping to `/root/.gemini/*` as a proxy for server-class hosts takes the rule from 19 matches to 0, and was rejected because it misses any operator running as a non-root user, which is the default on most modern VPS images. The hypothesis that periodic btrfs snapshots drive this was refuted on mechanism: a btrfs snapshot is a copy-on-write metadata operation producing one subvolume directory entry, not one event per file. The 119 `.gemini/` events attributed to `/usr/bin/btrfs` were a single one-day bulk copy during a 2026-08-28 drive migration, with zero on the other 89 days of a 90-day window.
+**Revisited 2026-11-08 (measured, triage run `2026-11-08-1141`, task T-0570.1):** The 2026-09-07 vendor-tree exclusion covered the `agy` tree (`builtin/`, `plugins/`, `extensions/`) and missed the Google Antigravity IDE's per-session scratchpad, `~/.gemini/antigravity/brain/<session>/scratch/`. The two alerts were the IDE's own agent runtime, `.../antigravity/resources/bin/language_server`, creating and later deleting a helper script (`parse_pcap.py`, 2026-11-05 02:03:15 and 02:15:39 UTC) in that scratch directory; the same writer put `parse_pcap.py.metadata.json` sidecars beside it at the same two times, which this rule does not match. The operator asked the agent to parse a capture, but the path and the writer are the product's: a scratchpad is a built-in feature (the installed `language_server` binary carries `CreateScratchProjectFolderRequest`, `GetScratchpadPath` and `GetEnableScratchpad`; `scratch/` directories exist in 3 of 12 session directories on disk, created at session start), and every one of the 457 file events under `*/.gemini/*` over 90 days was written by `language_server` or `agy`. Any subscriber who lets the agent script a task would hit it, once per scripting session, so this is a narrow rule defect and not a constant storm. A `filter_antigravity_scratch` block now excludes a write whose target contains `/.gemini/antigravity/brain/*/scratch/` AND whose process image ends `/antigravity/resources/bin/language_server`; the two halves are ANDed on purpose, because the path alone would excuse any process writing into a directory called `scratch`, and the writer alone would blind the rule to the agent writing skills or `GEMINI.md` into `~/.gemini/skills/`, the surface this rule exists to watch. Measured on the rule's own index with EQL, exhaustive (fewer than the 1000 size limit returned, no shard failures, `is_partial` false): 2 matching events before and 0 after, over both a 14-day window (now minus 336 hours) and a 90-day window (now minus 90 days), and the removed events are exactly those two. Control: an unfiltered `file where true` query returned at the cap (10,000 or more) in both windows, so the harness is not under-reporting. Coverage cost: none against the documented campaign tradecraft, whose paths (`~/.gemini/skills/cf-c2-manager/SKILL.md`, `~/.gemini/GEMINI.md`, `~/.gemini/tmp/root/chats/`) sit outside `antigravity/brain/` and use Gemini CLI, which has no `brain/` tree. Attacker-controllability: both halves are settable by the same account. The directory shape is any user-writable path with that form (the session segment is free text), and the writer path is under the user's home, so a same-account attacker can place or copy a binary there; neither can be satisfied by naming a file alone. Requiring both is stricter than either, and the second step touches the vendor install, which is itself unusual; the gap is recorded under Blind Spots and kept. A missing process image costs noise and not coverage, since the exclusion does not match and the event alerts. Not checked: Google's own documentation for the scratchpad was not opened, so "stock" rests on the install layout, the shipped binary's strings and the product-written sidecar (confidence MODERATE); whether a clean install writes scratch scripts the same way (one machine, one scripting session in 90 days); and the `Image` to `process.executable` mapping in the production deployment pipeline (the measurement used `process.executable` directly).
+**Blind Spots:** An operator who stages a script at `~/.gemini/antigravity/brain/<any>/scratch/x.py` through a binary at a path ending `/antigravity/resources/bin/language_server` is not matched, and a same-account attacker can arrange both halves. This is the same class of gap the 2026-09-07 exclusion accepted for the `agy` vendor trees.
 **Deployment:** Sysmon (Linux), auditd, file-integrity monitoring. There is no portable host-class field in Sigma or in ECS, so server-vs-workstation scoping remains a deployment decision made by asset group or IP range, and is deliberately no longer claimed in the title.
 
 ```yaml
@@ -593,7 +595,7 @@ references:
     - https://the-hunters-ledger.com/hunting-detections/russian-gemini-credential-mill-213.165.51.115-detections/
 author: The Hunters Ledger
 date: '2026-05-25'
-modified: '2026-09-07'
+modified: '2026-11-08'
 tags:
     - attack.resource-development
     - attack.t1587
@@ -608,6 +610,8 @@ logsource:
       Elastic Defend file events, auditd watches on the user home, or Sysmon for Linux
       FileCreate. Paths are matched verbatim, so a bulk filesystem copy or restore that
       replays a home directory will produce matches for the copied tree.
+      The filter_antigravity_scratch exclusion also needs the writing process image on the event;
+      where it is absent the exclusion does not match and the event still alerts.
 detection:
     selection_gemini_dir:
         TargetFilename|contains: '/.gemini/'
@@ -623,11 +627,19 @@ detection:
             - '/.gemini/*/builtin/'
             - '/.gemini/*/plugins/'
             - '/.gemini/extensions/'
-    condition: selection_gemini_dir and selection_executable and not filter_vendor_trees
+    filter_antigravity_scratch:
+        # sourced: confirmed events 2026-11-05T02:03:15Z and 02:15:39Z on omarchy, triage run 2026-11-08-1141 (T-0570.1)
+        TargetFilename|contains: '/.gemini/antigravity/brain/*/scratch/'
+        Image|endswith: '/antigravity/resources/bin/language_server'
+    condition: selection_gemini_dir and selection_executable and not 1 of filter_*
 falsepositives:
     - >-
       Operator-authored hook scripts under the CLI's own hook directory, which is a
       supported feature; allowlist the specific hook filenames in use
+    - >-
+      The Google Antigravity IDE agent runtime writing a helper script into its own
+      per-session scratchpad (~/.gemini/antigravity/brain/<session>/scratch/); excluded
+      at source by filter_antigravity_scratch when the writer is its language_server
     - >-
       A filesystem-level copy, migration or restore of a home directory, which replays
       every path in the copied tree through file-creation telemetry
