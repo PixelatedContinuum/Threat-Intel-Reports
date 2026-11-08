@@ -8,7 +8,7 @@ hide: true
 hl_idx: single
 ---
 
-<header class="hl-page-header hl-d-plate" style="--ph-accent: #f97316;">
+<header class="hl-page-header hl-d-plate" style="--ph-accent: #fb923c;">
   <div class="hl-page-header__label hl-d-kicker">Behind the Reports</div>
   <h1 class="hl-page-header__title">Finding the Threat, Choosing the Target</h1>
   <div class="hl-page-header__desc">The collection platform that discovers malware on adversary infrastructure, and how I decide which of what it finds is worth a week of my life.</div>

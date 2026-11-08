@@ -8,7 +8,7 @@ description: "The gates that stop the Hunters Ledger pipeline reporting success 
 hl_idx: single
 ---
 
-<header class="hl-page-header hl-d-plate" style="--ph-accent: #f97316;">
+<header class="hl-page-header hl-d-plate" style="--ph-accent: #fb923c;">
   <div class="hl-page-header__label hl-d-kicker">Behind the Reports</div>
   <h1 class="hl-page-header__title">Verifying and Shipping It</h1>
   <div class="hl-page-header__desc">The checks that stop the pipeline lying to me about its own work, and where the finished intelligence actually goes.</div>

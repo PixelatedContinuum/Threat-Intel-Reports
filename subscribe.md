@@ -8,7 +8,7 @@ position: 5
 hl_idx: single
 ---
 
-<header class="hl-page-header hl-d-plate" style="--ph-accent: #3b82f6;">
+<header class="hl-page-header hl-d-plate" style="--ph-accent: #58a6ff;">
   <div class="hl-page-header__label hl-d-kicker">Stay Informed</div>
   <h1 class="hl-page-header__title">Subscribe to The Hunter's Ledger</h1>
   <div class="hl-page-header__desc">New threat intelligence reports, detection rules, and IOC feeds, delivered the moment they publish. Pick whatever fits how you work. No marketing, no noise.</div>

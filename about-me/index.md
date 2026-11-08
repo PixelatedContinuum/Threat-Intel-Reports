@@ -8,7 +8,7 @@ thumbnail: /assets/images/cards/about.png
 hl_idx: single
 ---
 
-<header class="hl-page-header hl-d-plate" style="--ph-accent: #60a5fa;">
+<header class="hl-page-header hl-d-plate" style="--ph-accent: #58a6ff;">
   <div class="hl-page-header__label hl-d-kicker">About</div>
   <h1 class="hl-page-header__title">Joseph Harrison</h1>
   <div class="hl-page-header__desc">SOC Operations Lead &amp; Threat Intelligence Researcher</div>

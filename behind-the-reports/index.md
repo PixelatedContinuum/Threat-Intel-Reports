@@ -8,7 +8,7 @@ hide: true
 hl_idx: single
 ---
 
-<header class="hl-page-header hl-d-plate" style="--ph-accent: #f97316;">
+<header class="hl-page-header hl-d-plate" style="--ph-accent: #fb923c;">
   <div class="hl-page-header__label hl-d-kicker">Behind the Reports</div>
   <h1 class="hl-page-header__title">How the Intelligence Is Produced</h1>
   <div class="hl-page-header__desc">The whole path an investigation takes, from a scanner finding an open directory to a detection rule running in somebody else's SOC.</div>

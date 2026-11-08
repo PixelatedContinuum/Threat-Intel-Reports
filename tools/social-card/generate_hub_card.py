@@ -14,7 +14,7 @@ page.thumbnail into og:image / twitter:image — same mechanism as report cards.
 `accent` is the page's section hue from the brand token file (T-0563 round 2: each
 hub card in its section's hue; about, consulting and subscribe take The Wire blue,
 support the Actors magenta, behind-the-reports the Techniques orange; sponsor stays
-sponsor gold). Page headers still carry their own --ph-accent; the card leads them.
+sponsor gold). Page headers use the same hue (T-0563 d1).
 """
 import os
 import sys

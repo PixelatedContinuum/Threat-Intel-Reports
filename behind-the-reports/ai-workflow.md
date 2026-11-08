@@ -8,7 +8,7 @@ hide: true
 hl_idx: single
 ---
 
-<header class="hl-page-header hl-d-plate" style="--ph-accent: #f97316;">
+<header class="hl-page-header hl-d-plate" style="--ph-accent: #fb923c;">
   <div class="hl-page-header__label hl-d-kicker">Behind the Reports</div>
   <h1 class="hl-page-header__title">How a Solo Analyst Uses AI Agents to Produce Timely, Trustworthy Threat Intelligence</h1>
   <div class="hl-page-header__desc">The workflow, the design decisions, and why it was built this way.</div>

@@ -294,6 +294,11 @@ jobs:
       - name: Unit tests
         working-directory: tools/report-tooling
         run: npm test
+      # The outbound documents (PDFs, emails, cards) read docs/brand/tokens.json and tokens.css, which gen_tokens.py derives from
+      # assets/css/custom.scss (T-0563). A stylesheet change that moves a token fails here until `python3 docs/brand/gen_tokens.py` is re-run
+      # and the two files are committed. Stdlib only, so the runner's python3 is enough. Exit 0 PASS, 1 FAIL (drift).
+      - name: Brand tokens match the stylesheet
+        run: python3 docs/brand/gen_tokens.py --check
       - name: Source-side gates
         working-directory: tools/report-tooling
         run: |
