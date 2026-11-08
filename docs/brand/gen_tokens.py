@@ -209,6 +209,101 @@ def hexv(value):
     return v
 
 
+
+# ------------------------------------------------------------------ colour rule hues (T-0563 round 2)
+
+# The fixed rotation of the colour rule (tasks/runs/T-0563/briefs/round2-colour-rule.md): two
+# neighbouring sections or items never share a hue. Names are the navbar section names.
+HUE_ROTATION = ["The Wire", "Reports", "Detections", "Techniques", "STIX", "Actors", "IOC feeds"]
+# Kind of thing -> navbar section whose hue it takes.
+HUE_KINDS = {"reports": "Reports", "detections": "Detections", "iocs": "IOC feeds", "stix": "STIX",
+             "wire": "The Wire", "actors": "Actors", "techniques": "Techniques"}
+LIGHT_GROUNDS = ("#ffffff", "#f6f8fa")
+DARK_GROUNDS = ("#111111", "#1a1a1a")
+AA = 4.5
+
+
+def _lin(c):
+    c /= 255.0
+    return c / 12.92 if c <= 0.04045 else ((c + 0.055) / 1.055) ** 2.4
+
+
+def luminance(h):
+    r, g, b = (int(h[i:i + 2], 16) for i in (1, 3, 5))
+    return 0.2126 * _lin(r) + 0.7152 * _lin(g) + 0.0722 * _lin(b)
+
+
+def contrast(a, b):
+    la, lb = sorted((luminance(a), luminance(b)), reverse=True)
+    return (la + 0.05) / (lb + 0.05)
+
+
+def _to_oklab(h):
+    r, g, b = (_lin(int(h[i:i + 2], 16)) for i in (1, 3, 5))
+    l = (0.4122214708 * r + 0.5363325363 * g + 0.0514459929 * b) ** (1 / 3)
+    m = (0.2119034982 * r + 0.6806995451 * g + 0.1073969566 * b) ** (1 / 3)
+    s = (0.0883024619 * r + 0.2817188376 * g + 0.6299787005 * b) ** (1 / 3)
+    return (0.2104542553 * l + 0.7936177850 * m - 0.0040720468 * s,
+            1.9779984951 * l - 2.4285922050 * m + 0.4505937099 * s,
+            0.0259040371 * l + 0.7827717662 * m - 0.8086757660 * s)
+
+
+def _from_oklab(L, a, b):
+    l = (L + 0.3963377774 * a + 0.2158037573 * b) ** 3
+    m = (L - 0.1055613458 * a - 0.0638541728 * b) ** 3
+    s = (L - 0.0894841775 * a - 1.2914855480 * b) ** 3
+    lin = (4.0767416621 * l - 3.3077115913 * m + 0.2309699292 * s,
+           -1.2684380046 * l + 2.6097574011 * m - 0.3413193965 * s,
+           -0.0041960863 * l - 0.7034186147 * m + 1.7076147010 * s)
+    return lin
+
+
+def _oklab_to_hex(L, a, b):
+    out = []
+    for v in _from_oklab(L, a, b):
+        v = min(1.0, max(0.0, v))                                   # clip to sRGB
+        v = 12.92 * v if v <= 0.0031308 else 1.055 * v ** (1 / 2.4) - 0.055
+        out.append(round(v * 255))
+    return "#%02x%02x%02x" % tuple(out)
+
+
+def light_variant(h):
+    """Darken `h` in OKLab (same hue angle and chroma, lower lightness) in 0.002 steps until it
+    passes 4.5:1 on every light ground. Returns the first (lightest) passing hex."""
+    import math
+    L, a, b = _to_oklab(h)
+    C, hue = math.hypot(a, b), math.atan2(b, a)
+    a, b = C * math.cos(hue), C * math.sin(hue)
+    while L > 0:
+        cand = _oklab_to_hex(L, a, b)
+        if all(contrast(cand, g) >= AA for g in LIGHT_GROUNDS):
+            return cand
+        L -= 0.002
+    raise SystemExit(f"no light variant of {h} reaches {AA}:1")
+
+
+def derive_hues(section_hues):
+    for n in HUE_ROTATION + list(HUE_KINDS.values()):
+        if n not in section_hues:
+            raise SystemExit(f"colour rule names section {n!r}, not in navbar section hues {sorted(section_hues)}")
+    if len(set(HUE_ROTATION)) != len(HUE_ROTATION) or set(HUE_ROTATION) != set(section_hues):
+        raise SystemExit("HUE_ROTATION must list every navbar section hue exactly once")
+    rows = []
+    for i, name in enumerate(HUE_ROTATION, 1):
+        dark = section_hues[name]
+        light = light_variant(dark)
+        rows.append({
+            "index": i, "section": name, "dark": dark, "light": light,
+            "ratio_dark": {g: round(contrast(dark, g), 2) for g in DARK_GROUNDS},
+            "ratio_light": {g: round(contrast(light, g), 2) for g in LIGHT_GROUNDS},
+        })
+    kinds = {k: {"section": s, "index": HUE_ROTATION.index(s) + 1,
+                 "dark": section_hues[s], "light": next(r["light"] for r in rows if r["section"] == s)}
+             for k, s in HUE_KINDS.items()}
+    return {"rotation": rows, "kinds": kinds, "dark_grounds": list(DARK_GROUNDS),
+            "light_grounds": list(LIGHT_GROUNDS), "min_ratio": AA,
+            "light_method": "OKLab: hue angle and chroma kept, lightness lowered in 0.002 steps to the first value >= 4.5:1 on both light grounds"}
+
 # ------------------------------------------------------------------ token derivation
 
 def derive(scss_path=DEFAULT_SCSS, navbar_path=NAVBAR):
@@ -386,6 +481,7 @@ def derive(scss_path=DEFAULT_SCSS, navbar_path=NAVBAR):
         "section_head": section_head,
         "kicker": kicker,
         "section_hues": section_hues,
+        "hues": derive_hues(section_hues),
         "css_root": {k: R[k] for k in R},
     }
     provenance = {
@@ -445,6 +541,15 @@ def render_css(tokens):
         lines.append(f"  --hl-sev-{k}-bar: {v['bar']};")
     for name, hexv_ in tokens["section_hues"].items():
         lines.append(f"  --hl-hue-{re.sub(r'[^a-z0-9]+', '-', name.lower()).strip('-')}: {hexv_};")
+    emitted = {re.sub(r"[^a-z0-9]+", "-", n.lower()).strip("-") for n in tokens["section_hues"]}
+    hues = tokens["hues"]
+    for r in hues["rotation"]:
+        lines.append(f"  --hl-hue-{r['index']}: {r['dark']};")
+        lines.append(f"  --hl-hue-{r['index']}-light: {r['light']};")
+    for k, v in hues["kinds"].items():
+        if k not in emitted:                                  # iocs, wire (the others exist above)
+            lines.append(f"  --hl-hue-{k}: {v['dark']};")
+        lines.append(f"  --hl-hue-{k}-light: {v['light']};")
     lines.append("}")
     return "\n".join(lines) + "\n"
 

@@ -54,6 +54,33 @@ SEV_BAR = {k: HC(v["bar"]) for k, v in TOKENS["severity"].items()}
 SEV_LABEL = {k: HC(v["label"]) for k, v in TOKENS["severity"].items()}
 SEC = {k: HC(v) for k, v in TOKENS["section_hues"].items()}      # nav hue per section
 SEC_DEFAULT = HC(TOKENS["section_head"]["default_color"])         # blue
+
+# ---- colour rule hues (T-0563 round 2): rotation, kind map and light-ground variants, all derived
+# by gen_tokens.py (tokens.json "hues"). 1-based index, wraps past 7, so hue(i) never raises.
+_H = TOKENS["hues"]
+HUES = [HC(r["dark"]) for r in _H["rotation"]]               # Wire, Reports, Detections, Techniques, STIX, Actors, IOC
+HUES_LIGHT = [HC(r["light"]) for r in _H["rotation"]]
+_KIND = {k: v for k, v in _H["kinds"].items()}
+
+
+def hue(i):
+    """The i-th hue (1-based, wraps) of the fixed rotation on the dark ground (#111111)."""
+    return HUES[(int(i) - 1) % len(HUES)]
+
+
+def hue_light(i):
+    """Same, darkened to pass 4.5:1 on #ffffff and #f6f8fa."""
+    return HUES_LIGHT[(int(i) - 1) % len(HUES_LIGHT)]
+
+
+def hue_for(kind):
+    """Hue of a kind: reports, detections, iocs, stix, wire, actors, techniques (KeyError otherwise)."""
+    return HC(_KIND[kind]["dark"])
+
+
+def hue_for_light(kind):
+    return HC(_KIND[kind]["light"])
+
 CODE_TEXT, CODE_INLINE_BG, CODE_BLOCK_BG = (HC(TOKENS["code"][k]) for k in ("text", "inline_bg", "block_bg"))
 RADIUS = TOKENS["radius_px"]
 SCALE_PX = TOKENS["type_scale_px"]            # meta 15, small 16, body 18, card 20, section 26 (CSS px)
