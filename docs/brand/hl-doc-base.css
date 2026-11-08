@@ -33,19 +33,19 @@ hr { border: 0; border-top: 1px solid var(--hl-hairline); margin: 24px 0; }
 /* ---- masthead: the site's top row, then the lockup (concept 3, navbar.liquid / custom.scss "T-0556 w2") ---- */
 .hl-mast__top { display: flex; justify-content: space-between; gap: 16px; padding: 7px 0; font: 400 var(--doc-fs-meta)/1.4 var(--hl-font-mono); color: var(--hl-muted-d); border-bottom: 1px solid var(--hl-border-card); }
 .hl-mast__main { display: flex; align-items: center; gap: 18px; padding: 18px 0 16px; }
-.hl-mast__tag { margin: 0 0 0 auto; max-width: 30ch; font: 400 var(--doc-fs-small)/1.5 var(--hl-font-sans); color: var(--hl-muted-d); text-align: right; }
+.hl-mast__tag { margin: 0 0 0 auto; max-width: 30ch; font: 400 var(--doc-fs-small)/1.5 var(--hl-font-sans); color: var(--hl-text-primary); text-align: right; }
 .hl-brand { display: flex; align-items: center; gap: calc(22px * var(--lk)); text-decoration: none; }
 .hl-brand__icon { width: calc(78px * var(--lk)); height: calc(78px * var(--lk)); display: block; flex: none; }
 .hl-brand__rule { width: calc(7px * var(--lk)); height: calc(64px * var(--lk)); border-radius: calc(4px * var(--lk)); background: var(--hl-accent-blue); flex: none; }
 .hl-brand__stack { display: flex; flex-direction: column; gap: calc(7px * var(--lk)); }
-.hl-brand__top { font: 500 calc(25px * var(--lk))/1 var(--hl-font-wordmark); letter-spacing: 0.22em; color: #f0f6fc; }
-.hl-brand__main { display: flex; align-items: baseline; font: 700 calc(39px * var(--lk))/1 var(--hl-font-wordmark); letter-spacing: 0.12em; color: #ffffff; }
+.hl-brand__top { font: 500 calc(25px * var(--lk))/1 var(--hl-font-wordmark); letter-spacing: 0.22em; color: var(--hl-brand-top); }
+.hl-brand__main { display: flex; align-items: baseline; font: 700 calc(39px * var(--lk))/1 var(--hl-font-wordmark); letter-spacing: 0.12em; color: var(--hl-brand-main); }
 .hl-brand__dot { display: inline-block; width: calc(14px * var(--lk)); height: calc(14px * var(--lk)); border-radius: calc(4px * var(--lk)); background: var(--hl-accent-blue); margin-left: calc(16px * var(--lk)); }
 
 /* ---- title block ---- */
 .hl-kicker { display: block; font: 500 var(--doc-fs-meta)/1.4 var(--hl-font-mono); letter-spacing: 0.04em; color: var(--hl-muted-d); margin: 0 0 8px; }
 .hl-title { margin: 22px 0 10px; font: 600 var(--doc-fs-title)/1.15 var(--hl-font-serif); letter-spacing: 0; color: var(--hl-text-primary); }
-.hl-standfirst { margin: 0 0 22px; font: 400 17px/1.55 var(--hl-font-serif); color: var(--hl-text-muted); }
+.hl-standfirst { margin: 0 0 22px; font: 400 17px/1.55 var(--hl-font-serif); color: var(--hl-text-primary); }
 
 /* ---- section head: a 14px square in the section colour, a serif title in ink, a 2px rule in the same colour ---- */
 .hl-sec { --sec: var(--hl-sec); display: block; margin: 34px 0 16px; padding-bottom: 8px; border-bottom: var(--hl-sec-rule) solid var(--sec); break-after: avoid; }
@@ -82,7 +82,7 @@ pre code { background: none; border: 0; padding: 0; font-size: inherit; color: v
 .hl-foot { margin-top: 36px; padding-top: 14px; border-top: 1px solid var(--hl-hairline); font: 400 var(--doc-fs-meta)/1.6 var(--hl-font-mono); color: var(--hl-muted-d); }
 
 /* ---- print: A4, the page ground painted into the margins ---- */
-@page { size: A4; margin: 14mm 12mm; background: #111111; }
+@page { size: A4; margin: 14mm 12mm; }   /* the page ground is the @page rule at the end of tokens.css (generated) */
 @media print {
   html, body { background: var(--hl-bg-page) !important; }
   .hl-mast { break-after: avoid; }

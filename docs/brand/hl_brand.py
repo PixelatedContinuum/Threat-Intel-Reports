@@ -69,7 +69,7 @@ def hue(i):
 
 
 def hue_light(i):
-    """Same, darkened to pass 4.5:1 on #ffffff and #f6f8fa."""
+    """Same, darkened to pass 4.5:1 on #ffffff, #f6f8fa and #f5f5f5."""
     return HUES_LIGHT[(int(i) - 1) % len(HUES_LIGHT)]
 
 
@@ -80,6 +80,11 @@ def hue_for(kind):
 
 def hue_for_light(kind):
     return HC(_KIND[kind]["light"])
+
+
+# Sponsor gold as TEXT on a light ground: the sponsor gold darkened in OKLab to pass 4.5:1 on white,
+# #f6f8fa and #f5f5f5 (tokens.json hues.gold, with the ratios). GOLD_BRIGHT stays the dark-ground value.
+GOLD_BRIGHT_ON_LIGHT = HC(_H["gold"]["light"])
 
 CODE_TEXT, CODE_INLINE_BG, CODE_BLOCK_BG = (HC(TOKENS["code"][k]) for k in ("text", "inline_bg", "block_bg"))
 RADIUS = TOKENS["radius_px"]
@@ -151,16 +156,17 @@ def draw_ground(c, w, h, grid=False):
 
 # ---- lockup (vector, from the site's own geometry)
 def _icon(c, x, y, size):
-    """The HL mark: 64x64 viewBox, rounded square #161b22 with a #30363d border and blue strokes (navbar.liquid)."""
+    """The HL mark: 64x64 viewBox, rounded plate with a border and blue strokes; plate and border colours are
+    tokens brand.icon_fill / icon_border, read from the navbar's own SVG by gen_tokens.py."""
     k = size / 64.0
     c.saveState()
     c.translate(x, y)
     c.scale(k, k)                               # y up; the SVG is y down, so flip inside a 64 box
     c.translate(0, 64)
     c.scale(1, -1)
-    c.setFillColor(HC("#161b22"))
+    c.setFillColor(HC(TOKENS["brand"]["icon_fill"]))
     c.roundRect(0, 0, 64, 64, 14, stroke=0, fill=1)
-    c.setStrokeColor(HC("#30363d"))
+    c.setStrokeColor(HC(TOKENS["brand"]["icon_border"]))
     c.setLineWidth(1.5)
     c.roundRect(1, 1, 62, 62, 13, stroke=1, fill=0)
     c.setStrokeColor(BLUE)

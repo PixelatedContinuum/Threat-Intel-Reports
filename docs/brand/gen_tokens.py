@@ -15,7 +15,7 @@ Usage (run from anywhere; stdlib only, so /usr/bin/python3 works):
 
     python3 gen_tokens.py            # (re)write tokens.json and tokens.css
     python3 gen_tokens.py --check    # exit 1 if either file no longer matches the stylesheet
-    python3 gen_tokens.py --check --scss PATH   # check against another copy of the stylesheet
+    python3 gen_tokens.py --check --scss PATH [--navbar PATH]   # check against other copies of the stylesheet / navbar
     python3 gen_tokens.py --print    # print the derived tokens to stdout, write nothing
 
 How it fails safe
@@ -218,7 +218,10 @@ HUE_ROTATION = ["The Wire", "Reports", "Detections", "Techniques", "STIX", "Acto
 # Kind of thing -> navbar section whose hue it takes.
 HUE_KINDS = {"reports": "Reports", "detections": "Detections", "iocs": "IOC feeds", "stix": "STIX",
              "wire": "The Wire", "actors": "Actors", "techniques": "Techniques"}
-LIGHT_GROUNDS = ("#ffffff", "#f6f8fa")
+# The light grounds the renderers actually use: white (page), #f6f8fa (the email/HTML card ground) and
+# #f5f5f5 (the reportlab light theme's card, hl_doc_theme.LIGHT.card = white blended 4% toward #111111,
+# which hexs() rounds to #f5f5f5; a test in the f1 report re-derives it). A text colour must pass on all.
+LIGHT_GROUNDS = ("#ffffff", "#f6f8fa", "#f5f5f5")
 DARK_GROUNDS = ("#111111", "#1a1a1a")
 AA = 4.5
 
@@ -282,7 +285,7 @@ def light_variant(h):
     raise SystemExit(f"no light variant of {h} reaches {AA}:1")
 
 
-def derive_hues(section_hues):
+def derive_hues(section_hues, gold_bright):
     for n in HUE_ROTATION + list(HUE_KINDS.values()):
         if n not in section_hues:
             raise SystemExit(f"colour rule names section {n!r}, not in navbar section hues {sorted(section_hues)}")
@@ -300,9 +303,13 @@ def derive_hues(section_hues):
     kinds = {k: {"section": s, "index": HUE_ROTATION.index(s) + 1,
                  "dark": section_hues[s], "light": next(r["light"] for r in rows if r["section"] == s)}
              for k, s in HUE_KINDS.items()}
-    return {"rotation": rows, "kinds": kinds, "dark_grounds": list(DARK_GROUNDS),
+    gl = light_variant(gold_bright)
+    gold = {"dark": gold_bright, "light": gl,
+            "ratio_dark": {g: round(contrast(gold_bright, g), 2) for g in DARK_GROUNDS},
+            "ratio_light": {g: round(contrast(gl, g), 2) for g in LIGHT_GROUNDS}}
+    return {"rotation": rows, "kinds": kinds, "gold": gold, "dark_grounds": list(DARK_GROUNDS),
             "light_grounds": list(LIGHT_GROUNDS), "min_ratio": AA,
-            "light_method": "OKLab: hue angle and chroma kept, lightness lowered in 0.002 steps to the first value >= 4.5:1 on both light grounds"}
+            "light_method": "OKLab: hue angle and chroma kept, lightness lowered in 0.002 steps to the first value >= 4.5:1 on every light ground (white, #f6f8fa, #f5f5f5)"}
 
 # ------------------------------------------------------------------ token derivation
 
@@ -425,6 +432,11 @@ def derive(scss_path=DEFAULT_SCSS, navbar_path=NAVBAR):
     if not svg or not tag:
         raise SystemExit("navbar.liquid: lockup SVG or tagline not found")
     brand["icon_svg"] = svg.group(0)
+    fills = re.findall(r'<rect width="64" height="64" rx="14" fill="(#[0-9a-fA-F]{6})"', svg.group(0))
+    strokes = re.findall(r'<rect x="1" y="1" width="62" height="62" rx="13" fill="none" stroke="(#[0-9a-fA-F]{6})"', svg.group(0))
+    if len(fills) != 1 or len(strokes) != 1:
+        raise SystemExit("navbar.liquid: lockup icon plate fill/border not found")
+    brand["icon_fill"], brand["icon_border"] = hexv(fills[0]), hexv(strokes[0])
     brand["tagline"] = re.sub(r"\s+", " ", tag.group(1)).strip()
     hues = re.findall(r'<a href="[^"]*"\s+style="--sc:(#[0-9a-fA-F]{6})"[^>]*>([^<]+)</a>', nav_html)
     if not hues:
@@ -481,7 +493,7 @@ def derive(scss_path=DEFAULT_SCSS, navbar_path=NAVBAR):
         "section_head": section_head,
         "kicker": kicker,
         "section_hues": section_hues,
-        "hues": derive_hues(section_hues),
+        "hues": derive_hues(section_hues, colors["gold_bright"]),
         "css_root": {k: R[k] for k in R},
     }
     provenance = {
@@ -524,6 +536,10 @@ def render_css(tokens):
     lines += [
         f"  --hl-font-wordmark: {f['wordmark']};",
         f"  --hl-hairline: {c['hairline']};",
+        f"  --hl-brand-top: {b['top']['color']};",
+        f"  --hl-brand-main: {b['main']['color']};",
+        f"  --hl-icon-fill: {b['icon_fill']};",
+        f"  --hl-icon-border: {b['icon_border']};",
         f"  --hl-code-text: {tokens['code']['text']};",
         f"  --hl-code-inline-bg: {tokens['code']['inline_bg']};",
         f"  --hl-code-block-bg: {tokens['code']['block_bg']};",
@@ -550,7 +566,9 @@ def render_css(tokens):
         if k not in emitted:                                  # iocs, wire (the others exist above)
             lines.append(f"  --hl-hue-{k}: {v['dark']};")
         lines.append(f"  --hl-hue-{k}-light: {v['light']};")
+    lines.append(f"  --hl-gold-bright-on-light: {hues['gold']['light']};")
     lines.append("}")
+    lines.append(f"@page {{ background: {c['ground']}; }}")     # the page margins; @page takes no var()
     return "\n".join(lines) + "\n"
 
 
@@ -559,8 +577,8 @@ def render_json(tokens, provenance):
     return json.dumps(doc, indent=2, ensure_ascii=False, sort_keys=False) + "\n"
 
 
-def check(scss_path, tokens_json=TOKENS_JSON, tokens_css=TOKENS_CSS):
-    tokens, prov = derive(scss_path)
+def check(scss_path, tokens_json=TOKENS_JSON, tokens_css=TOKENS_CSS, navbar_path=NAVBAR):
+    tokens, prov = derive(scss_path, navbar_path)
     problems = []
     try:
         on_disk = json.load(open(tokens_json, encoding="utf-8"))
@@ -596,9 +614,10 @@ def main():
     ap.add_argument("--check", action="store_true")
     ap.add_argument("--print", action="store_true")
     ap.add_argument("--scss", default=DEFAULT_SCSS)
+    ap.add_argument("--navbar", default=NAVBAR, help="check against another copy of navbar.liquid")
     a = ap.parse_args()
     if a.check:
-        tokens, prov, problems = check(a.scss)
+        tokens, prov, problems = check(a.scss, navbar_path=a.navbar)
         print(f"checked against {a.scss}")
         print(f"denominator: {prov['root_declarations_parsed']} root declarations parsed, "
               f"{prov['root_declarations_independent_count']} by independent line count; "

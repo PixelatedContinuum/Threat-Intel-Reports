@@ -122,6 +122,7 @@ TXT = _C["ink"]
 MUTED = _C["muted"]            # kicker and secondary text on the site
 DIV = _C["border_card"]
 BLUE = _C["blue"]
+STEEL = _C["steel"]           # consulting (the page header, drawer link and hub card)
 GOLD = _C["gold_bright"]       # sponsor only (custom.scss): the sponsor hub card
 HUE = _T["hues"]["kinds"]      # section hues (r2-base): a kind's colour, from the token file
 REPORT_HUE = HUE["reports"]["dark"]   # the kicker of a per-report card names its kind

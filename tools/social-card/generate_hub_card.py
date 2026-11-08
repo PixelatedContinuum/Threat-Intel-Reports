@@ -12,9 +12,11 @@ Each card is wired to its page via a `thumbnail:` line (landing pages) or a
 Jekyll `defaults` rule in _config.yml (the detection corpus); head.liquid turns
 page.thumbnail into og:image / twitter:image — same mechanism as report cards.
 `accent` is the page's section hue from the brand token file (T-0563 round 2: each
-hub card in its section's hue; about, consulting and subscribe take The Wire blue,
-support the Actors magenta, behind-the-reports the Techniques orange; sponsor stays
-sponsor gold). Page headers use the same hue (T-0563 d1).
+hub card in its section's hue; about and subscribe take The Wire blue, consulting
+the steel of its page header, support the Actors magenta, behind-the-reports the
+Techniques orange; sponsor is the sponsor gold, --hl-gold-bright). The page header
+(`--ph-accent` in the page, the matching glow line in _layouts/page.html) and the drawer
+link (_includes/default/navbar.liquid) carry the same colour as the card (T-0563 d1, f1).
 """
 import os
 import sys
@@ -55,7 +57,7 @@ HUBS = {
         subtitle="SOC Operations Lead & Threat Intelligence Researcher.",
         footer_left=""),
     "consulting": dict(
-        accent=cardlib.HUE["wire"]["dark"], pill="CONSULTING", kicker="CONSULTING & ADVISORY",
+        accent=cardlib.STEEL, pill="CONSULTING", kicker="CONSULTING & ADVISORY",
         title="Threat Intelligence That Works for Your Team",
         subtitle="The depth behind this site, applied directly to your environment.",
         footer_left=""),

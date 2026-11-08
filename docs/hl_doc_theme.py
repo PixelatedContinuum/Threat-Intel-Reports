@@ -18,8 +18,8 @@ IBM Plex Mono for data only (ids, dates, counts, hashes, IOCs), Space Grotesk on
 A section head is a square in the section colour, a serif title, and a 2px rule under it.
 
 Dark is the default. `theme("light")` gives the same fonts and layout on a white page for the
-documents that keep a light option (quarterly update, invoice). Light mode uses blue and gold only
-for rules and marks, never for small text, because #58a6ff is 2.4:1 on white.
+documents that keep a light option (quarterly update, invoice). Light mode takes the hues and the sponsor gold from their derived light variants
+(`Theme.hue`, `Theme.gold`), each >= 4.5:1 on white, #f6f8fa and #f5f5f5; the plain blue is 2.4:1 on white.
 
 Glyph gap (BASE, reported to the lead): the site's Latin subset has no U+2192 (arrow) or U+25CF
 (black circle). `sym()` sets those two in a system TrueType that has them (embedded as a subset by
@@ -52,6 +52,7 @@ BORDER, BORDER_ROW, HAIRLINE = hl.BORDER, hl.BORDER_ROW, hl.HAIRLINE
 INK, MUTED = hl.INK, hl.MUTED
 BLUE, GREEN, RED = hl.BLUE, hl.GREEN, hl.RED
 GOLD = hl.GOLD_BRIGHT            # sponsor and nothing else (custom.scss:46)
+GOLD_ON_LIGHT = hl.GOLD_BRIGHT_ON_LIGHT   # the same gold as text on white/#f6f8fa/#f5f5f5: derived, >= 4.5:1
 SEV = hl.SEV_BAR                 # severity bars, keys critical/high/med/low
 SEC = hl.SEC
 CODE_TEXT = hl.CODE_TEXT
@@ -109,6 +110,11 @@ class Theme:
     def hue(self, i):
         """Rotation hue i (1..7, wraps): Wire blue, Reports, Detections, Techniques, STIX, Actors, IOC."""
         return hl.hue(i) if self.dark else hl.hue_light(i)
+
+    @property
+    def gold(self):
+        """Sponsor gold for this mode: the site's gold on dark, its derived 4.5:1 variant on light."""
+        return GOLD if self.dark else GOLD_ON_LIGHT
 
     def hue_for(self, kind):
         """The hue of what a thing is: reports, detections, iocs, stix, wire, actors, techniques."""

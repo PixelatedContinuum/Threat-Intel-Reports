@@ -8,7 +8,7 @@ hide: true
 hl_idx: single
 ---
 
-<header class="hl-page-header hl-d-plate" style="--ph-accent: #f59e0b;">
+<header class="hl-page-header hl-d-plate" style="--ph-accent: #d4a73a;">
   <div class="hl-page-header__label hl-d-kicker">Sponsor The Hunter's Ledger</div>
   <h1 class="hl-page-header__title">Reach Defenders Who Build, Buy, and Use Detection</h1>
   <div class="hl-page-header__desc">An independent threat intelligence publication. Every report ships with working YARA, Sigma, and Suricata detections, validated IOC packages, and evidence-tied attribution. Sponsorship places your brand alongside the kind of technical research that working defenders actively consume and integrate.</div>
