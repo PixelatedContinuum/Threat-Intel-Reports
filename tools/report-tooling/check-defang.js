@@ -405,6 +405,10 @@ function scanLine(rawLine, allow) {
   while ((m = IP_RE.exec(line))) {
     var o = [m[1], m[3], m[5], m[7]].map(Number);
     if (o.some(function (n) { return n > 255; })) continue;
+    /* T-0589: a part written with a leading zero ("030", "00", "01") is not an address: the page include (_includes/defang-text.html) round-trips
+       each part through a number and prints such a quad raw, so a version string like 9.4.0.030 is not defanged there; the gate must not flag it.
+       A lone "0" is a valid part (10.0.0.1 stays an address). Keep the two sides identical. */
+    if ([m[1], m[3], m[5], m[7]].some(function (t) { return t.length > 1 && t.charAt(0) === '0'; })) continue;
     spans.push([m.index, m.index + m[0].length]);
     if (isPrivateIPv4(o)) { out.privateN++; continue; }
     var seps = [m[2], m[4], m[6]];

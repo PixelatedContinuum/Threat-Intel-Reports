@@ -398,3 +398,13 @@ test('bot id guard: an allowed host does not pass a path with a real bot id; the
     assert.doesNotMatch(r.stdout, /8123456789/);
   });
 });
+
+test('T-0589: a dotted quad with a leading-zero part (9.4.0.030, 9.4.0.00, 01.2.3.4) is not an IPv4; 9.4.0.30 and 1.0.0.0 still are (the page include reads it the same way)', function () {
+  ['Barracuda ESG 9.4.0.030 fixed', 'Barracuda ESG 9.4.0.00', 'host 01.2.3.4 here', 'a 8.8.8.08 b'].forEach(function (ln) {
+    assert.deepStrictEqual(L.scanLine(ln, allow).flagged, [], ln);
+  });
+  ['Barracuda ESG 9.4.0.30 fixed', 'a 1.0.0.0 b', 'a 8.8.8.8 b'].forEach(function (ln) {
+    assert.deepStrictEqual(L.scanLine(ln, allow).flagged.map(function (x) { return x.kind; }), ['IPV4'], ln);
+  });
+  assert.deepStrictEqual(L.scanLine('lan 10.0.0.1 and 192.168.0.1', allow).flagged, [], 'a lone 0 is a valid part: private ranges still count as addresses (private, not flagged)');
+});

@@ -128,6 +128,8 @@ const TEXT_CASES = [
   ['http://web.archive.org/web/2026/https://shinyhunte.rs/p', 'hxxp://web[.]archive[.]org/web/2026/hxxps://shinyhunte[.]rs/p'],
   ['  lead and trail  ', '  lead and trail  '],
   ['ends with newlines 198.51.100.17\n', 'ends with newlines 198[.]51[.]100[.]17\n'],
+  /* T-0589: a part with a leading zero is not an address on either side (the Barracuda ESG version 9.4.0.030 broke the Wire build); 9.4.0.30 is one */
+  ['Barracuda ESG 9.4.0.030 and 9.4.0.00 but 9.4.0.30', 'Barracuda ESG 9.4.0.030 and 9.4.0.00 but 9[.]4[.]0[.]30'],
   ['GHOST Cryptojacker Kit: no indicator here.', 'GHOST Cryptojacker Kit: no indicator here.']
 ];
 
