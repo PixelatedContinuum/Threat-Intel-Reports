@@ -439,7 +439,7 @@ level: medium
 
 **Blind Spots:** Only catches the decode-and-execute pairing inside one command line; a dropper that decodes in one invocation and executes in a later one produces two innocuous-looking events. The `>/tmp/` and `bash ` literals break on variants using other staging directories or interpreters.
 
-**Validation:** Run echo YmFzaCAtYyAiaWQK | base64 -d>/tmp/t.sh; bash /tmp/t.sh on a test host and confirm a hit; a command line that decodes to /tmp but contains no later `bash /tmp/` run must NOT fire. A command that decodes into one tmp file and runs a different tmp file does fire, because the two paths are not compared.
+**Validation:** Run echo YmFzaCAtYyAiaWQK \| base64 -d>/tmp/t.sh; bash /tmp/t.sh on a test host and confirm a hit; a command line that decodes to /tmp but contains no later `bash /tmp/` run must NOT fire. A command that decodes into one tmp file and runs a different tmp file does fire, because the two paths are not compared.
 
 **Deployment:** Host telemetry (auditd execve rules, Sysmon for Linux, or an EDR agent). Not for alerting; correlate hits with deployment or provisioning context.
 
