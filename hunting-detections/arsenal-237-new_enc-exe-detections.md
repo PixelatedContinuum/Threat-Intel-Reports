@@ -10,9 +10,13 @@ thumbnail: /assets/images/cards/arsenal-237-new-files.png
 ---
 
 **Campaign:** Arsenal-237-Backup-Targeting-Ransomware
+
 **Date:** 2026-01-27
+
 **Author:** The Hunters Ledger
+
 **License:** CC BY 4.0
+
 **IOC Feed:** https://the-hunters-ledger.com/ioc-feeds/arsenal-237-new_enc-exe.json
 
 ---
@@ -42,13 +46,21 @@ Coverage below is retiered from the original draft: every rule was re-scored for
 #### Volume Shadow Copy Deletion Command
 
 **Tier:** Detection
+
 **Robustness:** 3
+
 **ATT&CK Coverage:** T1490 (Inhibit System Recovery)
+
 **Confidence:** HIGH
+
 **Rationale:** The exact command string, or the `vssadmin` and `delete shadows` substrings co-occurring, is the canonical VSS anti-recovery command used across dozens of ransomware families. This is a technique-level chokepoint: the attacker cannot achieve VSS-based recovery inhibition via `vssadmin.exe` without invoking this exact CLI syntax, regardless of how the surrounding binary is rebuilt or renamed.
+
 **False Positives:** Legitimate backup-rotation and disk-space-management scripts occasionally invoke `vssadmin delete shadows`; the `/all /quiet` flags are consistent with unattended/automated use but are not unique to malicious use.
+
 **Blind Spots:** Misses WMI-based (`Win32_ShadowCopy.Delete()`) or PowerShell (`Get-WmiObject Win32_Shadowcopy | Remove-WmiObject`) alternatives to the `vssadmin` CLI; a build that shells out through a renamed copy of `vssadmin.exe` or calls the underlying VSS COM API directly evades this string-based check entirely.
+
 **Validation:** Scan new_enc.exe (hash below) — must match; a legitimate script's `vssadmin` invocation that never combines "delete" with "shadows" (e.g., `vssadmin list shadows`) must NOT fire.
+
 **Deployment:** Endpoint AV/EDR file scanning, retroactive scan of file shares, IR artifact triage.
 
 ```yara
@@ -80,13 +92,21 @@ rule TOOLKIT_Arsenal237_VSS_Shadow_Copy_Deletion_Command {
 #### Commvault Backup Service Targeting (misattributed as Veritas at authoring)
 
 **Tier:** Hunting (re-tiered from Detection 2026-09-13; see note below)
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1489 (Service Stop), T1490 (Inhibit System Recovery, GxVss integrates with Volume Shadow Copy)
+
 **Confidence:** MODERATE
+
 **Rationale:** Requires 3 of 5 distinct backup-software internal service short-names (GxVss, GxBlr, GxFWD, GxCVD, GxCIMgr) to co-occur. **Correction, 2026-09-13: these are Commvault's own product-internal service names, not Veritas's.** Confirmed against Commvault's own published documentation (`documentation.commvault.com`, "Descriptions of Services"), which lists `GxCVD` ("fetch or save metadata on the CommServe server") and `GxFWD` ("tunneling Commvault connections across firewalls") verbatim, plus the closely related `GxVssProv` and `GxClMgrS` for the remaining two. The rule was published under the wrong vendor's name. That the strings are a real vendor's product-internal names rather than this campaign's own chosen literals is still true, and is still why this is a tool-family artifact rather than a pure campaign marker; the vendor identity in every other field was simply wrong. *Fix applied during an earlier retiering:* split from a source rule whose condition let a bare, un-fullword'd match on the single word "veeam" satisfy the same rule alone; that weaker branch is demoted to its own Hunting rule below so it no longer governs this rule's overall precision, and sits right beside this one now that both are Hunting. That earlier pass mentioned a third vendor (Veeam) without resolving which of the three (Veritas, Veeam, Commvault) the strings actually belonged to; they belong to none of the first two
+
 **False Positives:** Real, not merely possible, once the vendor is identified correctly. Any genuine Commvault backup agent installation, which is a common enterprise deployment, can be expected to reference 3 or more of these documented internal service names together. This was previously assessed as "none known" on the mistaken assumption that a niche competitor's product was this specific to any single deployment. Not empirically fixture-tested against a real Commvault binary (none was available), so this is a corrected, primary-source-backed judgment call, not a demonstrated hit; a hit against real software needs analyst confirmation before any conclusion, which is why this is Hunting rather than Detection
+
 **Blind Spots:** A rebuild that drops or renames 3 or more of the five Gx short-names evades this rule; targets on-disk string references, not live Service Control Manager activity. Whether the malware sample's actual purpose (targeting a legitimate enterprise backup agent to disable it pre-encryption) is genuinely Commvault-specific, or whether the operator's own code merely references these Commvault names generically, was not re-examined here; only the vendor-attribution text was corrected
+
 **Validation:** Scan new_enc.exe (hash below), must match; software referencing only one or two of the five short-names must NOT fire. Untested: an actual Commvault agent installer or binary, which is the carrier that would confirm the false-positive risk empirically
+
 **Deployment:** Endpoint AV/EDR file scanning, email gateway attachment scanning, retroactive scan of file shares, IR artifact triage, with analyst triage on every hit
 
 ```yara
@@ -118,11 +138,17 @@ rule TOOLKIT_Arsenal237_Commvault_Backup_Service_Targeting {
 #### Veeam Backup Software Bareword Reference
 
 **Tier:** Hunting
+
 **Robustness:** 1
+
 **ATT&CK Coverage:** T1489 (Service Stop)
+
 **Confidence:** LOW
+
 **Rationale:** Salvaged from the same source rule as the Veritas combination above. The source condition let a bare, case-insensitive, non-`fullword` match on "veeam" alone satisfy the entire rule with no combination requirement — a single common product-name token that could appear inside longer strings (paths, filenames, unrelated documentation) rather than a distinguishing combination. Kept as a standalone Hunting lead for Veeam Backup targeting rather than folded into the Veritas Detection rule, since the two target unrelated products.
+
 **False Positives:** A bare "veeam" substring can appear in legitimate Veeam-aware backup-management tooling, log analysis scripts, or documentation referencing the product by name.
+
 **Deployment:** Broad endpoint/EDR scanning sweep, retroactive hunt across file shares; treat hits as triage candidates, not alerts.
 
 ```yara
@@ -150,11 +176,17 @@ rule TOOLKIT_Arsenal237_Veeam_Backup_Reference {
 #### RustRansomNoteTask Persistence Marker
 
 **Tier:** Hunting
+
 **Robustness:** 1
+
 **ATT&CK Coverage:** T1053.005 (Scheduled Task)
+
 **Confidence:** LOW
+
 **Rationale:** Salvaged from a broader source rule ("Campaign and Version Identifier Detection") whose `any of them` condition let a single-build campaign-tracking ID and a single-release version string trigger the same rule alone — both pure per-build atomics, already carried in the IOC feed, with no combination or behavioral value beyond the ID/version value itself. What survives is the scheduled-task name this build creates to re-display its ransom note persistently across logons — a real, if fully renameable, persistence behavior (T1053.005).
+
 **False Positives:** A legitimate scheduled task coincidentally sharing this exact name is not expected but cannot be fully ruled out.
+
 **Deployment:** Endpoint AV/EDR file scanning, IR artifact triage, retroactive scan of file shares.
 
 ```yara
@@ -182,11 +214,17 @@ rule TOOLKIT_Arsenal237_RustRansomNoteTask_Persistence_Marker {
 #### Anti-Analysis / Anti-Sandbox Combination
 
 **Tier:** Hunting
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1497.001 (Virtualization/Sandbox Evasion: System Checks), T1622 (Debugger Evasion)
+
 **Confidence:** MODERATE
+
 **Rationale:** *Fix applied during retiering:* the source condition let the BIOS-registry-path check and the `IsDebuggerPresent` API string each trigger the entire rule alone with no combination required — both are individually common in legitimate hardware-detection, licensing, and anti-tamper/anti-piracy code, and neither is a distinguishing signal by itself. Rewritten to require each to co-occur with at least one other anti-analysis indicator (a VM-vendor string, the paired sandbox-context terms, or each other). The 3-of-5 VM-vendor and both-of-2 sandbox-context combinations are unchanged from source and remain the strongest branches. The registry-path string itself has also been corrected: the source's escaping resolves to two literal backslash bytes between each path component, which only matches if the compiled binary stores doubled backslashes; the standard single-backslash encoding has been added as a second variant so the rule matches either encoding without assuming which one this build actually uses.
+
 **False Positives:** Legitimate hardware-detection, installer-compatibility, or licensing/anti-tamper software commonly combines 2 or more of these same signal types (e.g., checking both the BIOS vendor string and for a debugger before running). This is a broad technique-class heuristic, not a family-specific one — analyst review of the specific binary is required before treating a hit as malicious.
+
 **Deployment:** Broad endpoint/EDR scanning sweep, retroactive hunt across file shares; treat hits as triage candidates, not alerts.
 
 ```yara
@@ -231,11 +269,17 @@ rule TOOLKIT_Arsenal237_AntiAnalysis_Sandbox_Combination {
 #### Analysis Tool Process Awareness
 
 **Tier:** Hunting
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1518.001 (Software Discovery: Security Software Discovery), T1057 (Process Discovery)
+
 **Confidence:** MODERATE
+
 **Rationale:** Requires 6 of 9 named reverse-engineering/network-analysis tool references to co-occur — a broad anti-analysis technique-class heuristic (checking whether investigator tooling is present) that is common across commodity malware generally and is not specific to this family. *Fix applied during retiering:* the source's bare "ida" string is 3 bytes, under the project's 4-byte specificity floor, and risks matching as a substring inside unrelated words. Replaced with "ida.exe" and "ida64.exe" (both already named individually in the IOC feed's own tool list), and the combination threshold raised from 5-of-8 to 6-of-9 to hold the same proportional bar as the source.
+
 **False Positives:** Legitimate IT asset-inventory scripts, software-catalog tools, or a malware analyst's own pre-configured VM image can reference several of these tool names together; the 6-of-9 threshold reduces but does not eliminate this.
+
 **Deployment:** Broad endpoint/EDR scanning sweep, retroactive hunt across file shares; treat hits as triage candidates, not alerts.
 
 ```yara
@@ -271,12 +315,19 @@ rule TOOLKIT_Arsenal237_Analysis_Tool_Process_Awareness {
 #### Rust ChaCha20 Implementation Fingerprint
 
 **Tier:** Hunting
+
 **Robustness:** 1
+
 **ATT&CK Coverage:** None
+
 **ATT&CK Note:** No dedicated ATT&CK technique: this is a compiled-language/family classification signal, not an attacker technique.
+
 **Confidence:** LOW
+
 **Rationale:** *Fix applied during retiering:* the source condition ("2 of them") let the two universal Rust-compilation markers ("core::panicking" and "cargo") alone satisfy the rule with no ChaCha-specific evidence at all — that combination is present in effectively any Rust-compiled executable, malicious or not, since both strings are routine artifacts of the Rust standard library and build toolchain. Rewritten to mandate the ChaCha implementation-specific constant name plus at least one generic marker, so the rule can no longer fire on a Rust binary that lacks the ChaCha-specific string.
+
 **False Positives:** Not characterized against a goodware corpus. "Chacha_256_constant" has not been confirmed absent from unrelated software built on the same or a similar ChaCha20 crate implementation (e.g., Rust's widely-used `rand_chacha` crate, used far beyond ransomware for general-purpose seeded randomness).
+
 **Deployment:** Broad endpoint/EDR scanning sweep, retroactive hunt across file shares; treat hits as triage candidates pending goodware validation, not alerts.
 
 ```yara
@@ -313,13 +364,21 @@ rule TOOLKIT_Arsenal237_Rust_ChaCha20_Implementation_Fingerprint {
 #### Volume Shadow Copy Deletion via Vssadmin
 
 **Tier:** Detection
+
 **Robustness:** 3
+
 **ATT&CK Coverage:** T1490 (Inhibit System Recovery)
+
 **Confidence:** HIGH
+
 **Rationale:** `vssadmin delete shadows` is the canonical, technique-level VSS anti-recovery command — a chokepoint the attacker cannot avoid touching to eliminate this specific recovery mechanism via the `vssadmin` CLI. *Fix applied during retiering:* the source `filter` block excluded command lines containing the literal string `VSSADMIN_DELETE_SHADOWS`, a value with no correspondence to any real `vssadmin` command-line syntax — it could never have matched, and so could never have suppressed a real event. Removed for clarity (it was functionally inert either way, since `selection and not filter` collapses to `selection` when the filter never matches). `level: critical` has been demoted to `level: high`: a rare-but-real legitimate false-positive population exists (backup rotation and disk-space-management scripts), which is a `high`, not `critical`, FP profile under the project's level-discipline gate.
+
 **False Positives:** Legitimate backup, disk-space-management, or system-restore maintenance scripts that invoke `vssadmin delete shadows`.
+
 **Blind Spots:** Misses WMI- or PowerShell-based shadow-copy deletion that never invokes `vssadmin.exe` by name; requires process-creation command-line telemetry (Sysmon Event ID 1 or native Security 4688 with command-line auditing enabled).
+
 **Validation:** Trigger a `vssadmin delete shadows /all /quiet` execution — must match; a `vssadmin list shadows` (enumeration only, no deletion) command must NOT fire.
+
 **Deployment:** Sysmon process creation, native Windows Security 4688 with command-line auditing, EDR process telemetry.
 
 ```yaml
@@ -359,11 +418,17 @@ level: high
 #### RustRansomNoteTask Scheduled Task File Creation
 
 **Tier:** Hunting
+
 **Robustness:** 1
+
 **ATT&CK Coverage:** T1053.005 (Scheduled Task)
+
 **Confidence:** LOW
+
 **Rationale:** A single, attacker-chosen literal specific to this build; a naming-convention rebrand evades it entirely (Gate 1: durability outranks as-written precision). *Fix applied during retiering:* `level: high` was inflated for a fully renameable single-artifact selector; demoted to `level: medium`, the Hunting-appropriate level for a suspicious-but-brittle lead.
+
 **False Positives:** A legitimate scheduled task using similar naming is not expected but cannot be fully ruled out.
+
 **Deployment:** Windows file-event telemetry (Sysmon Event ID 11 or file integrity monitoring), with scheduled-task audit logging as a companion source.
 
 **FP remediation, 2026-08-13.** The selector was a bare `contains` on `RustRansomNoteTask` with no path constraint, so it matched the string anywhere on disk, including inside this rule's own YAML. Checking the rule into git reproduced the marker in a worktree and the detection detected itself, 24 events across two separate git operations, all of them `git.exe` writing copies under `rule-submissions/sigma/`. That is not a local habit: storing detection content in a versioned repo on a monitored host is close to standard detection-as-code practice, so this fires for any SOC that works the way SigmaHQ contributors do.
@@ -410,12 +475,19 @@ level: medium
 #### Arsenal-237 Backup Service Multi-Termination (Correlation)
 
 **Tier:** Hunting (correlation rule) — bundled below with its required non-alerting base rule
+
 **Robustness:** 2 (correlation) / 1 (base rule alone)
+
 **ATT&CK Coverage:** T1489 (Service Stop)
+
 **Confidence:** MODERATE
+
 **Rationale:** The source rule's own description stated an unrealizable intent — "3+ distinct backup services to stop within 5 minutes" — that a single-event Sigma selection cannot express, and had been silently downgraded to fire on any single matching service stop. Rebuilt here as a genuine Sigma `value_count` correlation: a base rule (not alerting alone) matching any backup-related service-stop event, paired with a correlation counting distinct `param1` service names per host within a 5-minute window, restoring the originally intended multi-service threshold instead of the silent single-event downgrade. Capped at Hunting rather than Detection: a single product's own coordinated restart (a Backup Exec agent update or reinstall cycling several of its own Gx-prefixed sub-services together) can plausibly satisfy this threshold without any malicious action, and this false-positive rate has not been characterized against real telemetry.
+
 **False Positives:** A legitimate, coordinated backup-infrastructure maintenance window that restarts 3 or more backup-related services within 5 minutes (e.g. a scheduled patch or reinstall cycle touching multiple Commvault agent sub-services, or a Veeam/VSS component update).
+
 **Blind Spots:** The correlation is a Sigma `value_count` over `param1`. Converted to EQL with the sysmon pipeline it becomes `sequence by host.name with maxspan=5m [...] by param1 with runs=3`, which counts three stop events for one and the same service name, not three distinct services, so the EQL form does not implement the distinct-service claim. The Lucene backend cannot convert correlation rules, so the rule needs a backend that implements `value_count` natively.
+
 **Deployment:** SIEM correlation engine with Windows System-log Service Control Manager telemetry (EventID 7036) ingested (5-minute temporal join on `host.name`).
 
 ```yaml
@@ -502,12 +574,19 @@ level: medium
 #### Arsenal-237 Database Service Multi-Termination (Correlation)
 
 **Tier:** Hunting (correlation rule) — bundled below with its required non-alerting base rule
+
 **Robustness:** 2 (correlation) / 1 (base rule alone)
+
 **ATT&CK Coverage:** T1489 (Service Stop)
+
 **Confidence:** LOW
+
 **Rationale:** Same restructuring as the backup-service correlation above: the source rule's own description stated an unrealizable "2+ distinct database services within 10 minutes" intent that a single-event selection cannot express. Rebuilt as a `value_count` correlation. Held at Hunting with LOWER confidence than the backup-service correlation: "sql" and "oracle" are generic substrings that can each match multiple distinct service display names belonging to a single legitimate product installation (for example, a SQL Server engine service and its companion Agent service both contain "sql" in their display names), so a routine Windows Update or patch cycle touching one database product can plausibly satisfy the 2-distinct-value threshold on its own. *Fix applied during retiering:* the redundant `sqlservr` entry was dropped from the source's service-name list — it is already a substring of `sql` and added no new matching capability.
+
 **False Positives:** Coordinated, legitimate database maintenance (e.g. a Windows Update or SQL Server patch cycle that restarts the database engine and agent services together) within the same 10-minute window.
+
 **Blind Spots:** The correlation is a Sigma `value_count` over `param1`. Converted to EQL with the sysmon pipeline it becomes `sequence by host.name with maxspan=10m [...] by param1 with runs=2`, which counts two stop events for one and the same service name, not two distinct services, so the EQL form does not implement the distinct-service claim. The Lucene backend cannot convert correlation rules, so the rule needs a backend that implements `value_count` natively.
+
 **Deployment:** SIEM correlation engine with Windows System-log Service Control Manager telemetry (EventID 7036) ingested (10-minute temporal join on `host.name`).
 
 ```yaml

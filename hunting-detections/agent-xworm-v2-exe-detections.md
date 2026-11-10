@@ -10,9 +10,13 @@ thumbnail: /assets/images/cards/109.230.231.37-Executive-Overview.png
 ---
 
 **Campaign:** XWorm-RAT-v2.4.0-OpenDirectory-109.230.231.37
+
 **Date:** 2026-01-12
+
 **Author:** The Hunters Ledger
+
 **License:** CC BY 4.0
+
 **IOC Feed:** https://the-hunters-ledger.com/ioc-feeds/agent-xworm-v2-exe.json
 
 ---
@@ -42,13 +46,21 @@ Coverage below is retiered from the original draft: every rule was re-scored for
 #### XWorm v2.x Embedded PowerShell Reconnaissance Command Templates
 
 **Tier:** Detection
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1059.001 (PowerShell), T1082 (System Information Discovery), T1482 (Domain Trust Discovery), T1057 (Process Discovery), T1007 (System Service Discovery)
+
 **Confidence:** HIGH
+
 **Rationale:** The five strings are literal, multi-token PowerShell invocation templates embedded in the binary (an abbreviated `-NoP -C` flag style chained with specific cmdlet and property sequences), matching the exact reconnaissance commands documented in the sample's confirmed capability analysis. Requiring 3 of 5 distinct multi-word templates makes coincidental co-occurrence in unrelated software implausible. No goodware-corpus scan was run against this specific combination, so confidence is capped at HIGH rather than DEFINITE.
+
 **False Positives:** Some legitimate lightweight remote-administration or health-check tooling could embed similar Get-Process or Get-Service one-liners individually, but the exact abbreviated `-NoP -C` flag style combined with 3 of these 5 specific literal templates together is not expected in unrelated software.
+
 **Blind Spots:** A rebuild that rewrites these template strings (for example, full flag names instead of `-NoP -C`, or a reordered WMI property list) evades detection; the rule targets the embedded template text, not the PowerShell process actually launched.
+
 **Validation:** Scan `agent_xworm_v2.exe` (hash below): must match. An unrelated .NET remote-administration tool using different PowerShell one-liner phrasing must NOT fire.
+
 **Deployment:** Endpoint AV/EDR file scanning, email gateway attachment scanning, retroactive scan of file shares, IR artifact triage on hosts that resolved 109.230.231.37.
 
 ```yara
@@ -92,11 +104,17 @@ rule MAL_XWorm_V2_PowerShell_Recon_Templates {
 #### XWorm v2.x Family Multi-Signal Combination
 
 **Tier:** Hunting
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1071.001 (Web Protocols), T1057 (Process Discovery), T1007 (System Service Discovery), T1564.003 (Hidden Window)
+
 **Confidence:** MODERATE
+
 **Rationale:** This rule keeps the original three-branch structure intact. Branch one anchors on the custom `AgentSec_` secret-naming convention plus WebSocket namespace usage plus a generic decimal version-pattern regex. Branches two and three lean heavily on ubiquitous .NET Framework namespace strings (`mscorlib`, `System.Diagnostics.Process`, `System.Security.Cryptography`) and common WinAPI or method names (`ShowWindow`, `GetConsoleWindow`, `ToBase64String`, `MD5`, `ComputeHash`) that are individually common in unrelated .NET software. Because the condition ORs all three branches together, overall precision is governed by the weakest branch, so the rule is kept at Hunting despite branch one's more distinctive anchor. No goodware-corpus scan was run.
+
 **False Positives:** Branches two and three are expected to co-fire with legitimate .NET utilities that combine process and service discovery, cryptographic hashing, and Base64 encoding, a common combination in monitoring agents, installers, and admin tooling. Branch one's `version_pattern` regex (any `2.N.N` substring) is itself extremely common in embedded .NET version metadata.
+
 **Deployment:** Broad endpoint and EDR scanning sweep, retroactive hunt across file shares. Treat hits outside the `AgentSec_`/WebSocket branch as lower-confidence triage candidates.
 
 ```yara
@@ -146,11 +164,17 @@ rule MAL_XWorm_V2_Family_Combination {
 #### XWorm AgentSec Authentication Secret Pattern
 
 **Tier:** Hunting
+
 **Robustness:** 1
+
 **ATT&CK Coverage:** T1071.001 (Web Protocols — C2 authentication)
+
 **Confidence:** MODERATE
+
 **Rationale:** The regex generalizes the `AgentSec_` prefix and 40-50 character alphanumeric shape beyond this one build's literal secret value, giving it recurrence value across future builds that share this operator's naming convention. It is a single-criterion match with no corroborating combination, so it is capped at Hunting rather than Detection even though the specific nine-character prefix plus length-bounded random suffix is unlikely to appear in unrelated software.
+
 **False Positives:** Unlikely for unrelated software: the literal `AgentSec_` prefix followed immediately by 40 to 50 alphanumeric characters is not a pattern expected outside this naming convention. Residual risk comes from an unrelated tool coincidentally reusing the same variable or constant naming style.
+
 **Deployment:** Endpoint AV/EDR file scanning, IR artifact triage, retroactive scan of file shares.
 
 ```yara
@@ -177,11 +201,17 @@ rule MAL_XWorm_AgentSec_Secret_Pattern {
 #### Generic .NET WebSocket C2 Capability Combination
 
 **Tier:** Hunting
+
 **Robustness:** 1
+
 **ATT&CK Coverage:** T1071.001 (Web Protocols), T1132.001 (Standard Encoding)
+
 **Confidence:** LOW
+
 **Rationale:** Every individual string is a standard .NET WebSocket API name or a common English networking term (`Heartbeat`, `Reconnect`, `Frame`). Legitimate .NET applications implementing WebSocket clients (chat, streaming, telemetry, dashboards) are expected to use the same API surface and similar terminology. This is kept as a Hunting-only broad toolkit heuristic; there is no bespoke XWorm-specific anchor beyond the co-occurrence pattern itself.
+
 **False Positives:** Expect co-fire with legitimate .NET WebSocket client or server applications; analyst review of binary provenance is required before treating a hit as malicious.
+
 **Deployment:** Broad endpoint and EDR scanning sweep. Treat hits as triage candidates, not alerts.
 
 ```yara
@@ -226,13 +256,21 @@ rule SUSP_XWorm_V2_WebSocket_Generic_Combination {
 #### XWorm v2.x Full PowerShell Reconnaissance Sequence on Same Host
 
 **Tier:** Detection (correlation rule) — bundled below with its 3 required non-alerting base rules
+
 **Robustness:** 3 (correlation) / 1 (each base rule individually)
+
 **ATT&CK Coverage:** T1059.001 (PowerShell), T1082 (System Information Discovery), T1057 (Process Discovery), T1007 (System Service Discovery), T1482 (Domain Trust Discovery)
+
 **Confidence:** HIGH
+
 **Rationale:** This is a retiering fix. The original rule fired at `level: high` on any one of three individually common PowerShell fragments via a single `ScriptBlockText` field with a list of contains values (OR semantics), an inflated-level-on-generic-selector defect, since `Win32_ComputerSystem` alone is common in legitimate inventory scripting. Each `-NoP -C ...` fragment is a command-line prefix for a separate `powershell.exe` process launch, not three lines inside one script block, matching the process-spawn pattern the original EDR hunting query targeted (`ProcessCommandLine has "-NoP -C"`). The rule has been restructured into three named base rules on `process_creation`, each matching one literal command-line launch, combined via a temporal correlation requiring all three on the same host within a 5-minute window. No individual command is alerting-grade alone, but a legitimate administrative workflow launching all three of these exact literal one-liners together in that window is implausible; the correlation is what earns Detection-grade precision, not any single fragment.
+
 **False Positives:** Any one base rule alone is common in legitimate inventory or RMM scripting and does not alert. The correlation requiring all three within 5 minutes on the same host is not expected outside this malware's embedded reconnaissance routine.
+
 **Blind Spots:** A rebuild that rewrites one or more of the three literal command fragments, or that spreads the reconnaissance sweep beyond the 5-minute window, evades the correlation. Requires process-creation telemetry (Sysmon Event ID 1 or EDR equivalent).
+
 **Validation:** Trigger all three base process launches on the same host within 5 minutes: the correlation must fire. A host showing only one or two of the three process launches must NOT trigger the correlation.
+
 **Deployment:** SIEM correlation engine with Sysmon/EDR process-creation telemetry ingested (5-minute temporal join on `host.name`).
 
 ```yaml
@@ -381,11 +419,17 @@ level: high
 #### PowerShell -NoP -C Execution from a User-Writable-Directory Parent (XWorm V2)
 
 **Tier:** Hunting
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1059.001 (PowerShell)
+
 **Confidence:** MODERATE
+
 **Rationale:** *Title fix 2026-10-10 (round 2: made distinct from the XWorm agent page's rule, and the description now says the Microsoft/Visual Studio exclusion is a path-text filter, not a signature check):* the rule was titled "from .NET Process", but nothing in the selection tests for a .NET parent, so the title now describes the parent-path test the logic applies. This is a retiering fix, demoted from `level: high`. This is a generic process-ancestry and command-line-flag heuristic, not XWorm-specific, and is a well-documented noise source in real SOC operation: numerous legitimate Electron-based application updaters (Slack, Discord, Teams, VS Code extensions) and RMM or deployment tooling routinely spawn `powershell.exe` with abbreviated flags from AppData or Temp as part of normal update mechanisms. The existing filter on parent paths containing Microsoft or Visual Studio (path text only) narrows this somewhat but does not exclude the broader population of non-Microsoft Electron or RMM updaters. It is kept as Hunting rather than Cut because the `-NoP -C` flag plus user-directory-parent combination is a genuine, non-atomic behavioral lead worth analyst triage.
+
 **False Positives:** Legitimate development tools and software installers or updaters spawning PowerShell helper scripts from AppData or Temp (Electron auto-updaters, RMM agents, browser or messaging-app updaters). The existing filter excludes only Microsoft- and Visual-Studio-branded parent paths.
+
 **Deployment:** Sysmon/EDR process-creation telemetry with parent-child lineage.
 
 ```yaml
@@ -445,11 +489,17 @@ level: medium
 #### XWorm AgentSec Authentication Secret Pattern in TCP Payload
 
 **Tier:** Hunting
+
 **Robustness:** 1
+
 **ATT&CK Coverage:** T1071.001 (Web Protocols)
+
 **Confidence:** MODERATE
+
 **Rationale:** The sample's confirmed capability analysis lists the `AgentSec_` secret as a high-confidence indicator with expected network visibility, and the regex generalizes beyond this one build's literal secret value to catch future builds sharing the naming convention. However, the sample's C2 channel was never observed live (it was offline when the sample was recovered) and the malware's documented C2 characteristics describe Base64-encoded command and data transmission over WebSocket. If the authentication exchange itself is wrapped in the same encoding, a raw-payload literal match would not fire against real traffic. Given this unconfirmed wire-format risk, the rule is capped at Hunting rather than Detection.
+
 **False Positives:** The `AgentSec_` prefix followed by 40 to 50 alphanumeric characters is not expected in unrelated network traffic. The greater risk here is under-detection (never firing) rather than over-firing, given the unconfirmed encoding.
+
 **Deployment:** Network IDS/IPS on egress and internal segments. Treat hits as a strong lead requiring packet capture review to confirm wire format.
 
 ```

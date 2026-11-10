@@ -10,9 +10,13 @@ thumbnail: /assets/images/cards/PULSAR-RAT.png
 ---
 
 **Campaign:** PULSAR-RAT-185.208.159.182
+
 **Date:** 2025-12-01
+
 **Author:** The Hunters Ledger
+
 **License:** CC BY 4.0
+
 **Reference:** https://the-hunters-ledger.com/reports/PULSAR-RAT/
 
 ---
@@ -44,13 +48,21 @@ Pulsar RAT (analyzed here as `server.exe`) is an actively maintained, rebranded 
 #### Pulsar RAT Namespace + Module String Combination
 
 **Tier:** Detection
+
 **Robustness:** 3
+
 **ATT&CK Coverage:** T1219 (Remote Access Software)
+
 **Confidence:** HIGH
+
 **Rationale:** The rule requires all six family-specific compiled strings (`$pulsar`, `$hvnc`, `$keylog`, `$msgpack`, `$bcrypt`, `$winre`) — anchored on the `Pulsar.Common` namespace root, the actual class-library identifier of the open-source Pulsar RAT codebase — plus 2 of the 2 surveillance-module strings. No single string is a renameable campaign-specific literal; the combination identifies the codebase itself, which survives typical recompilation (a new C2 config or build date does not change the namespace or module names) and file renaming. The condition checks the MZ header, the `PE\0\0` signature and a 1-2MB file size; it does not test the optional-header magic, so a 64-bit (PE32+) file of that size also matches. These checks constrain matches to builds consistent with the analyzed sample.
+
 **False Positives:** None known — no legitimate .NET application combines the `Pulsar.Common` namespace, an HVNC module, a keylogger, MessagePack serialization, BCryptEncrypt, and a WinRE `Recovery\OEM\` path string; the all-of-six requirement makes incidental collision effectively impossible.
+
 **Blind Spots:** A build that renames the `Pulsar.Common` namespace and re-implements the HVNC/keylogger/credential modules under new names would evade all string anchors; the 1-2MB filesize gate excludes Pulsar builds packed or bundled outside this size range. The `filesize` test is undefined in a live process-memory scan, so the rule does not match a running process; it applies to files and to saved dumps.
+
 **Validation:** Scan the analyzed Pulsar RAT sample (`hash1` below) — all six core strings plus at least 2 of the two surveillance-module strings must match; a benign .NET application that uses MessagePack serialization and calls BCrypt APIs, without the `Pulsar.Common` namespace or the WinRE path string, must NOT fire.
+
 **Deployment:** Endpoint AV/EDR file scan, scanning of saved memory dumps, static triage of unknown MSIL/.NET binaries retrieved from open directories or download links. Live process-memory scanning does not match: the condition's `filesize` test is undefined there, so only files and saved dumps are scanned.
 
 ```yara
@@ -103,13 +115,21 @@ rule RAT_Pulsar_Critical_Variant {
 #### Windows Recovery Environment OEM Directory File Write
 
 **Tier:** Detection
+
 **Robustness:** 3
+
 **ATT&CK Coverage:** T1542.001 (Pre-OS Boot: System Firmware — the technique mapping already established in the companion report for this WinRE persistence behavior)
+
 **Confidence:** HIGH (string/path evidence is direct); underlying WinRE-write behavior itself MODERATE (the companion report rates it "HIGHLY LIKELY" rather than fully confirmed dynamically — the capability is inferred from static string evidence, not an independently triggered live partition write)
+
 **Rationale:** The `\Recovery\OEM\` path is the OS-defined location this specific persistence technique depends on — not a renameable literal but the structural chokepoint of WinRE abuse itself, so the rule survives infrastructure and build changes. The original SPL query also matched a bare `mountvol`-plus-path command-line reference as an independent OR leg; that leg is redundant here, since any command line containing both `mountvol` and a `Recovery\OEM` reference already contains the `Recovery\OEM` substring the file-write rule below keys on. The companion report documents this as the campaign's most difficult-to-remediate persistence mechanism, since it survives standard registry-based cleanup.
+
 **False Positives:** OEM factory-imaging or recovery-partition maintenance tooling that legitimately writes into `Recovery\OEM\` during authorized re-imaging (very low volume on already-deployed production fleets).
+
 **Blind Spots:** A command-line-only reference to `Recovery\OEM` (for example, `mountvol` used to list or navigate the partition without writing a file) is not captured by this file-write-scoped rule; a variant that stages its payload under a differently-named recovery-adjacent directory would also evade it.
+
 **Validation:** Trigger by writing a file into `%SYSTEMDRIVE%\Recovery\OEM\` — must alert. The selection tests the path only and has no writing-process filter, so a write by Windows Update or an OEM recovery tool during an authorized re-imaging workflow also alerts; those are the false positives listed above, and they are separated from malicious writes by looking at the writing process in the alert, not by the rule.
+
 **Deployment:** Endpoint EDR / Sysmon-fed SIEM (FileCreate telemetry); prioritize for immediate triage given the CRITICAL severity and very low expected false-positive volume.
 
 ```yaml
@@ -153,13 +173,19 @@ level: high
 #### Registry RunOnce Key Value Set
 
 **Tier:** Hunting
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1547.001 (Boot or Logon Autostart Execution: Registry Run Keys)
+
 **Confidence:** MODERATE
+
 **Rationale:** Sysmon/EDR registry-set telemetry on any `CurrentVersion\RunOnce` key write is a durable technique-level signal that survives campaign infrastructure changes, since the OS-defined key path itself carries the detection value rather than any campaign-specific literal. The selector has no value-name or writing-process filter, and RunOnce — while used by fewer legitimate installers than the standard Run key — does see real deployment/update-tooling use, so this is scoped to Hunting rather than alerting-grade.
+
 **False Positives:** The rule's most frequent false positives trace to two well-defined, universally-occurring channels, both filtered in the query above. The first is the Windows Restart Manager, where `csrss.exe` writes per-user `RunOnce\Application Restart #N` entries to relaunch applications after a servicing reboot. The second is Microsoft Edge's or Edge WebView2's own signed installer registering a `msedge_cleanup_{GUID}` post-update entry from its canonical `Program Files\Microsoft\{Edge,EdgeWebView}\Application\*\Installer\setup.exe` path. Both occur on any actively-updated Windows 11 endpoint and are not specific to any one network: measured over a 14-day window they were 7 of this rule's 9 fires, and filtering them cut it to 2.
 
 RunOnce still sees legitimate use beyond those two channels, most often MSI-based driver and application installers invoked through `msiexec.exe`, and other vendor setup executables staged under `%TEMP%`. `msiexec.exe` is deliberately left unfiltered because it is also a documented living-off-the-land binary for delivering attacker-controlled MSI packages, so those hits, and any RunOnce write outside the two filtered paths, still warrant analyst review.
+
 **Deployment:** Endpoint EDR / Sysmon-fed SIEM (registry-set telemetry); analyst review of hits, cross-referenced against the WinRE rule above and the IOC feed's registry indicators for higher-confidence correlation.
 
 ```yaml
@@ -214,16 +240,23 @@ level: medium
 #### cmd.exe Launched with Non-Standard /headless Argument
 
 **Tier:** Hunting
+
 **Robustness:** 1
+
 **ATT&CK Coverage:** T1564.003 (Hide Artifacts: Hidden Window)
+
 **Confidence:** LOW
+
 **Rationale:** This rule previously carried a second selector matching `conhost` with `--headless`. That selector has been removed. `--headless` is not attacker-chosen syntax, it is the argument signature Windows' own ConPTY API passes whenever an application hosts a console without a visible window, so Windows Terminal, VS Code, OpenSSH, WSL and effectively every Electron application with an integrated terminal produce it identically. Measured over a 14-day window, that branch accounted for **45 of the rule's 45 matches**, every one a signed Microsoft `conhost.exe` spawned by mainstream developer tooling, with no corroborating threat intelligence on any of them.
 
 A salvage rewrite was considered and rejected. Re-anchoring on parent-process trust would need either an open-ended denylist of legitimate ConPTY consumers, which will always lag new software, or an unsigned-parent requirement, which abandons the flag as the discriminator and converges on a more general "unsigned binary executes something" technique that belongs in a different rule. The original analysis had already noted it could not find a campaign-specific parent anchor; that gap is real and this rule stops pretending otherwise.
 
 What survives is the `cmd.exe` plus `/headless` selector. *Logic fix 2026-10-10:* it was written as two independent command-line substrings (`cmd.exe` and `/headless`), so any process whose command line mentioned both fired, not only `cmd.exe` being launched. It now tests the process image (`\cmd.exe`) and the `/headless` argument. `cmd.exe` has no native `/headless` switch, so the string only appears where an operator or script author placed it deliberately. That branch matched nothing in the same window, which is the intended state for a narrow anomaly selector. Robustness drops 2 to 1 and confidence MODERATE to LOW to reflect that this now rests on a single decorative flag with no corroborating anchor.
+
 **False Positives:** None observed in the measured window. The retired `conhost` branch carried the entire false-positive burden.
+
 **Deployment:** Endpoint EDR / Sysmon-fed SIEM (process_creation with command line); analyst review, prioritizing hits with an unusual parent process or an accompanying network connection.
+
 **Coverage gap:** A durable "hidden console execution" detection needs parent-process trust context this campaign's analysis never confirmed, or a process-creation show-window / `CREATE_NO_WINDOW` flag if the telemetry source exposes one. Either would be a materially more durable anchor than string-matching ConPTY's own implementation-detail argument.
 
 ```yaml
@@ -268,11 +301,17 @@ level: low
 #### Non-Browser Process Accessing Browser Credential Store Files
 
 **Tier:** Hunting
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1555.003 (Credentials from Password Stores: Web Browsers)
+
 **Confidence:** MODERATE
+
 **Rationale:** The specific credential-store filenames (`Login Data`, `logins.json`, `key4.db`) combined with a NOT-browser-process filter is a genuine multi-condition selector encoding a recognized technique rather than a bare IOC, and it survives campaign infrastructure changes since the filenames and browser process list are OS/application-defined, not attacker-chosen. The companion IOC feed rates this behavior's false-positive risk "Medium" (backup, sync, and profile-migration tools also touch these files), so it is scoped to Hunting rather than Detection.
+
 **False Positives:** Browser-sync, backup, profile-migration, or endpoint-security scanning tools that legitimately read these credential-store files.
+
 **Deployment:** Endpoint EDR with file-access telemetry; analyst review of hits, particularly any accompanying process with no legitimate business reason to read browser profile data.
 
 ```yaml
@@ -321,11 +360,17 @@ level: medium
 #### Connection to Public Paste-Hosting Service Domain
 
 **Tier:** Hunting
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1102.001 (Web Service: Dead Drop Resolver)
+
 **Confidence:** MODERATE
+
 **Rationale:** Public paste-hosting services used as a dead-drop resolver for dynamic C2 configuration is a durable technique-level signal — the operator can swap which paste service or paste ID they use without evading the rule's domain list, and the technique doesn't depend on infrastructure the operator owns. The companion IOC feed explicitly rates the false-positive risk for this behavior "High," since these are widely used legitimate developer services; the original SPL query's `count > 5` volume threshold is not reproduced here as a formal Sigma correlation (a single-event selection keeps the rule simple for what is already an explicitly broad Hunting lead), but should be applied during triage. The host test is the exact name or a subdomain of it (`.pastebin.com`), so a look-alike such as `notpastebin.com` or `pastebin.com.example.net` does not match.
+
 **False Positives:** Legitimate developer or administrative use of public paste services to share code, logs, or configuration snippets.
+
 **Deployment:** Endpoint network-connection telemetry (Sysmon Event ID 3 or equivalent) where `DestinationHostname` is populated; analyst review with a volume/frequency threshold applied during triage (the original analysis used more than five connections in a lookback window as an informal cutoff) and correlation against the campaign's other indicators before any action.
 
 ```yaml

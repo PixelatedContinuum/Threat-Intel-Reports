@@ -9,9 +9,13 @@ hide: true
 ---
 
 **Campaign:** AI-Agent-Frameworks-MultiActor-2026-05-23
+
 **Date:** 2026-05-25
+
 **Author:** The Hunters Ledger
+
 **License:** CC BY 4.0
+
 **Reference:** https://the-hunters-ledger.com/reports/ai-agent-frameworks-2026-05-23/
 
 ---
@@ -53,14 +57,23 @@ This campaign spans 8 operator cases rather than distinct malware families, so r
 #### LLM-Personalized Credential Mutation Script
 
 **Tier:** Detection
+
 **Robustness:** 3
+
 **ATT&CK Coverage:** T1110.003 (Password Spraying), T1059.006 (Python), T1552.001 (Credentials in Files)
+
 **ATT&CK Note:** Novel TTP.
+
 **Confidence:** HIGH
+
 **Rationale:** First qualitative change in credential-mutation tradecraft since the hashcat-rules era (~2015). `russian-ai_sniper_brute.py` invokes Gemini 2.5 Flash with a red-team password analyst prompt to generate 20 per-target mutations from email+domain+last-known-password — the prompt fragments and operator output filenames are distinctive and require no single renameable literal alone.
+
 **False Positives:** None known. *Logic fix (round 2, 2026-10-10):* the generic labels `Target User:` and `Target Domain:` ($p5, $p6) alone satisfied the first branch, so a file with just those two lines fired. They now count only beside one of the four distinctive prompt fragments ($p1 to $p4). The rule fires on any two of the four prompt fragments, on one prompt fragment with both labels, on one of the three operator output filenames together with a Gemini API string, or on one prompt fragment together with a Gemini API string and a WordPress login string; it does not require the LLM API call, the prompt and the "Output ONLY the 20 passwords" constraint together. No benign-corpus run was made, so "none known" means none observed, not none measured.
+
 **Blind Spots:** A rebuild using different prompt wording or a different LLM SDK evades; the rule targets on-disk script artifacts, not in-memory-only execution.
+
 **Validation:** Scan the captured `russian-ai_sniper_brute.py`-class script — must match; a benign password-policy or generic LLM-integration script must NOT fire.
+
 **Deployment:** Filesystem scan on suspicious server hosts, DLP scanning for operator tool repositories, sandbox detonation of suspicious Python scripts.
 
 ```yara
@@ -107,13 +120,21 @@ rule TOOLKIT_LLM_Personalized_Credential_Mutator {
 #### libpam_cache LD_PRELOAD Rootkit Family Signature
 
 **Tier:** Detection
+
 **Robustness:** 3
+
 **ATT&CK Coverage:** T1574.006 (Dynamic Linker Hijacking), T1014 (Rootkit), T1564.001 (Hidden Files and Directories), T1027 (Obfuscated Files)
+
 **Confidence:** HIGH
+
 **Rationale:** Byte-identical across at least 2 customer deployments (77.110.96.200, 77.110.125.145); VT 0/0 at discovery. The rule requires ELF64 structural validation (dynsym enumeration confirming `readdir`/`fopen` are hooked) AND multiple kit-standard string buckets AND the string `LD_PRELOAD` AND the string `libpam_cache` — no single element carries the rule alone. No ELF type, constructor or file-name test is made: the two strings are searched in the file body.
+
 **False Positives:** None known — the combination of an ELF64 file that defines `readdir` and `fopen` as dynamic-symbol functions, three of the four hide strings (`xmrig`, `lolMiner`, `khugepaged_`, `inotify_guard`), two of the three miner path strings, all three `/proc` net-hook strings, the string `LD_PRELOAD` and the string `libpam_cache` is not present in legitimate PAM caching modules or system libraries. No `elf.type`, file-name or constructor test is made.
+
 **Blind Spots:** A full rebuild hooking different libc functions or dropping the PAM-style name would evade; the rule targets the on-disk `.so` (and saved memory dumps of it), not a memory-only injection.
+
 **Validation:** Scan `libpam_cache.so` (hash below) — must match; a legitimate PAM module (e.g. `pam_unix.so`) must NOT fire.
+
 **Deployment:** Endpoint AV/EDR file scans on Linux servers and scans of saved dumps (the `filesize < 100KB` condition does not match in a live process-memory scan), filesystem integrity monitoring on `/lib/security/`, auditd-augmented IR.
 
 ```yara
@@ -164,13 +185,21 @@ rule MAL_Linux_GHOST_LDPreload_Rootkit_Family {
 #### GHOST Kit Installer Function Signatures (ghost.sh)
 
 **Tier:** Detection
+
 **Robustness:** 3
+
 **ATT&CK Coverage:** T1574.006 (Dynamic Linker Hijacking), T1014 (Rootkit), T1611 (Escape to Host), T1053.003 (Cron), T1543.002 (Systemd Service)
+
 **Confidence:** HIGH
+
 **Rationale:** `ghost.sh` contains 43 named functions with distinctive operator-coined names not present in any other publicly-known tool; `_anti_hisana`, `_compile_hide_so`, and `_container_escape` were confirmed via cross-host search to appear only on two hosts in the same /16 range.
+
 **False Positives:** None known — these function names do not appear in any legitimate system administration script or known open-source tooling.
+
 **Blind Spots:** A rebrand renaming the kit's function-naming convention evades; targets the on-disk installer script only.
+
 **Validation:** Scan `ghost.sh` (hash below) — must match; unrelated shell installers must NOT fire.
+
 **Deployment:** Filesystem scan on Linux servers, shell script artifact triage during IR, scanning of saved dumps that hold the script text. Live process-memory scanning does not match: the condition's `filesize` test is undefined there, so only files and saved dumps are scanned.
 
 ```yara
@@ -212,13 +241,21 @@ rule MAL_Linux_GHOST_Kit_Installer_Shell {
 #### ARPA Observability Harvester Systemd Service Pattern
 
 **Tier:** Detection
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1543.002 (Systemd Service), T1119 (Automated Collection), T1041 (Exfiltration Over C2 Channel)
+
 **Confidence:** HIGH
+
 **Rationale:** The Turkish ARPA operator deploys five distinctively named systemd units and a self-branded string ("ARPA Korelasyon Motoru") found only on the operator's host. *Fix applied during retiering:* the original condition included a bare-OR path on the stolen victim JWT JTI value alone — a single-victim atomic that would never recur for a different ARPA deployment. That string has been removed from the rule (it remains in the IOC feed as a victim indicator); the rule now anchors only on the operator's own durable service names, branding, and ingestion endpoint. *Fix applied in T-0222:* the footer string `ARPA © 2026` no longer fires alone; it needs one unit name beside it, because an unrelated organisation named ARPA could carry that footer.
+
 **False Positives:** None known — the five literal unit names (`arpa-instana-api`, `arpa-autolearn`, `arpa-continuous`, `arpa-daemon`, `arpa-parallel`, each with `.service`) and the branding string `ARPA Korelasyon Motoru` are operator-specific and not present in any legitimate observability platform configuration. The rule fires on any two unit names, on the branding string alone, or on one unit name beside the ingestion endpoint `/api/ingest/instana` or the footer `ARPA © 2026`; no `arpa-*.service` wildcard is tested, only these literals, and the footer string alone does not fire.
+
 **Blind Spots:** A rebuild that drops the `ARPA Korelasyon Motoru` string and keeps fewer than two of the five unit names (and no unit name beside the endpoint or footer string) would evade; targets on-disk/installed-unit artifacts.
+
 **Validation:** Scan a captured ARPA systemd unit file or platform binary — must match; unrelated observability-platform tooling must NOT fire.
+
 **Deployment:** Filesystem scan on Linux servers (particularly observability/monitoring hosts), systemd unit audit, IR artifact triage.
 
 ```yara
@@ -255,13 +292,21 @@ rule MAL_Linux_ARPA_Observability_Harvester_Systemd {
 #### Pandora/Mirai Naku Architecture Naming Pattern
 
 **Tier:** Detection
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1498 (Network Denial of Service), T1498.002 (Reflection Amplification), T1059.004 (Unix Shell)
+
 **Confidence:** HIGH
+
 **Rationale:** The Rovodev/Pandora operator's 11-architecture Mirai suite uses the bespoke `Naku.{arch}` naming scheme, botnet ID `PandoraNet`, and a custom 22-character charset baked into every binary. *Fix applied during retiering:* the original condition let a bare match on either of two hardcoded distribution-server IPs trigger the ELF branch alone; those IPs (already in the IOC feed) have been removed so the rule anchors only on the operator-coined botnet ID, charset, path fragments, and attack-method names.
+
 **False Positives:** None known — the specific combination of `PandoraNet` botnet ID, `Naku.{arch}` naming, and the 22-char custom charset is not present in any other known Mirai variant.
+
 **Blind Spots:** A full rebrand of the botnet ID and charset would evade; targets ELF binaries and dropper scripts, not a live network protocol.
+
 **Validation:** Scan a captured `Naku.{arch}` binary or `pandora.sh` dropper — must match; an unrelated Mirai variant must NOT fire.
+
 **Deployment:** ELF binary scanning on compromised IoT/Linux hosts, open-directory enumeration, download artifact scanning.
 
 ```yara
@@ -301,14 +346,23 @@ rule MAL_Linux_Pandora_Mirai_Naku_Suite {
 #### Russian A2A C2 Python-stdlib BaseHTTPServer
 
 **Tier:** Detection
+
 **Robustness:** 3
+
 **ATT&CK Coverage:** T1059.006 (Python), T1071.001 (Web Protocols), T1132.001 (Standard Encoding)
+
 **ATT&CK Note:** Novel TTP: operator-built, unauthenticated Python-stdlib C2.
+
 **Confidence:** HIGH
+
 **Rationale:** `c2_server.py` uses Python stdlib `BaseHTTPRequestHandler` with zero authentication across 5 endpoints, the operator banner "A2A C2 MULTI-AGENT CONSOLE", and an `X-Agent-ID` self-assertion header. *Fix applied during retiering:* the original condition let a bare match on either C2 domain (`c2.tralalarkefe.com` / `payloads.tralalarkefe.com` — both already in the IOC feed) trigger the rule alone; the domain-only path now requires co-occurrence with at least one API endpoint string. *Logic fix 2026-10-10:* the heading and rule name claim a Python-stdlib `BaseHTTPServer` implementation, but no branch tested for it (the operator banner alone fired). Every branch now also requires the `BaseHTTPRequestHandler` string, which the captured `c2_server.py` subclasses (see the Russian Gemini credential-mill report). This was not re-run against the captured file, which is not held on the workstation.
+
 **False Positives:** None known — the "A2A C2 MULTI-AGENT CONSOLE" banner is operator-bespoke, and the combinations of `BaseHTTPRequestHandler` with the `/api/v1/` endpoint path strings and the `X-Agent-ID` header (or with the two decode strings) are not known to appear in legitimate server-management frameworks, but no goodware corpus was measured and the rule does not test that the endpoints are unauthenticated.
+
 **Blind Spots:** A rebuild dropping the banner string and renaming all endpoints/header would evade; targets on-disk Python source, not a compiled/obfuscated variant.
+
 **Validation:** Scan the captured `c2_server.py` — must match; unrelated Python HTTP servers must NOT fire.
+
 **Deployment:** Filesystem scan on compromised servers, Python source artifact triage, scanning of saved dumps of Python processes. Live process-memory scanning does not match: the condition's `filesize` test is undefined there, so only files and saved dumps are scanned.
 
 ```yara
@@ -356,12 +410,19 @@ rule MAL_Python_Russian_A2A_C2_BaseHTTPServer {
 #### AI-Generated Offensive Code Structural Signature
 
 **Tier:** Hunting
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1587 (Develop Capabilities), T1059.006 (Python)
+
 **ATT&CK Note:** Novel TTP: AI-generated code structural signature.
+
 **Confidence:** MODERATE (each criterion alone is low-confidence; the combination is higher)
+
 **Rationale:** Cross-operator validated across three independent operators' Python attack code (Case 1, Case 2, Case 3). The co-occurrence of verbose docstrings + bare-except or defensive try/except (the condition accepts either handler form, 2026-10-10 wording fix) + educational variable names + a rate-limiting marker (zero anti-analysis is observed in the cases but is not tested by the rule) is common in benign, actively-developed Python, so this is explicitly not suitable for automated alerting alone.
+
 **False Positives:** Legitimate Python developers routinely write verbose docstrings and defensive error handling; the FP rate increases meaningfully in active development environments.
+
 **Deployment:** Hunting/hypothesis generation on suspicious server hosts; combine with operator-adjacent artifact signals (credential files, C2 artifacts, scanning tools) before treating a hit as actionable.
 
 ```yara
@@ -412,14 +473,23 @@ rule SUSP_AI_Generated_Offensive_Code_Python {
 #### AI Operator Handoff Document
 
 **Tier:** Hunting
+
 **Robustness:** 1
+
 **ATT&CK Coverage:** T1587 (Develop Capabilities), T1059.006 (Python)
+
 **ATT&CK Note:** Novel TTP; no dedicated MITRE sub-technique exists for this specific behavior.
+
 **Confidence:** MODERATE
+
 **Rationale:** First-documented artifact class — operator-authored Markdown files written FOR AI agent consumption to re-prime new sessions (Case 1 Russian Gemini operator: `C2_MIGRATION_GUIDE.md`; Case 3 Rovodev operator: 22+ documents at `/root/matrix/`). *Fix applied during retiering:* the original condition let the bare domain string `tralalarkefe.com` ($i4) trigger the rule alone, an atomic-only path; it now requires the domain to co-occur with an AI-addressing header, session-priming directive, or infrastructure marker — the domain itself is already in the IOC feed. *Logic fix 2026-10-10:* `$h4` ("To: Claude") is a substring of `$h3` ("To: Claude Code"), so one "To: Claude Code" line satisfied the `2 of ($h*)` branch alone, which is the header-only match the Blind Spots below say is not covered. That branch now counts only distinct header forms (`$h1`, `$h2`, `$h3`, `$h5`, `$h6`, plus the Markdown-bold forms below); `$h4` still counts as a header in the branch that pairs a header with a directive. *Round 2 (2026-10-10):* the companion report quotes the exemplar header as `**To:** Gemini CLI` and `**From:** Gemini CLI` (Markdown bold, colon inside the bold), which the plain `To: Gemini CLI` strings do not match, so `$h1b` and `$h2b` were added for that form. The rule was re-tiered from Detection to Hunting: two header lines, or a header plus a directive, fire on benign AI-assisted documentation, and the report itself names operational content as the disambiguator.
+
 **False Positives:** Legitimate AI-assisted project documentation. A file with `To: Gemini CLI` and `From: Gemini CLI` lines, or an AI-addressed header with a session-priming directive such as "read this file first", fires without any C2 or credential content (confirmed on a synthetic benign fixture, round 2, 2026-10-10). The companion report rates this artifact class MEDIUM false-positive risk and names operational content (C2 endpoint patterns, credential tables) as the disambiguator, which the condition does not test. Triage a hit by that content.
+
 **Blind Spots:** An operator who stops using this exact heading/directive convention evades; single-criterion matches (header OR directive alone) are lower confidence and not covered here.
+
 **Validation:** Scan a captured operator handoff document (e.g. `C2_MIGRATION_GUIDE.md`) — must match. A legitimate project README or runbook that carries an AI-addressed header and a session directive also matches; telling them apart takes the operational-content review above. Not run against the captured exemplars (not on this workstation).
+
 **Deployment:** Filesystem scan on compromised or suspicious server hosts, IR artifact triage, DLP scanning of server-accessible file shares.
 
 ```yara
@@ -483,13 +553,21 @@ rule TOOLKIT_AI_Operator_Handoff_Document {
 #### /etc/ld.so.preload Modification (LD_PRELOAD Rootkit Persistence)
 
 **Tier:** Detection
+
 **Robustness:** 3
+
 **ATT&CK Coverage:** T1574.006 (Dynamic Linker Hijacking), T1014 (Rootkit)
+
 **Confidence:** HIGH
+
 **Rationale:** `/etc/ld.so.preload` is THE system-wide LD_PRELOAD persistence chokepoint — a technique-level invariant an attacker cannot avoid touching to achieve this exact persistence mechanism, including the GHOST kit's `libpam_cache.so` rootkit (byte-identical across 2 customer deployments, 0/0 AV at discovery). *Tag fix applied during retiering:* added the missing `attack.t1574.006` technique tag, plus the `attack.execution` tactic tag `sigma check` requires alongside it (the original carried tactic-only tags with no technique).
+
 **False Positives:** Performance/instrumentation libraries that legitimately use LD_PRELOAD (libfaketime, libsegfault, libtcmalloc, valgrind, vtune) — typically confined to dev/test environments.
+
 **Blind Spots:** Misses persistence mechanisms other than LD_PRELOAD (services, cron, `.bashrc`); requires file-event telemetry on `/etc/`.
+
 **Validation:** Trigger the GHOST installer's rootkit-registration step — the write must match; a `dpkg`/`apt` package upgrade touching the same file's mtime without content change should be reviewed by parent-process, not auto-suppressed.
+
 **Deployment:** Linux file integrity monitoring, auditd, Sysmon for Linux — deploy on all production server hosts; tune out development environments via host-tag exclusion.
 
 ```yaml
@@ -532,14 +610,23 @@ level: high
 #### Cryptojacker libpam_cache Drop to /lib/security
 
 **Tier:** Detection
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1574.006 (Dynamic Linker Hijacking), T1036.005 (Match Legitimate Resource Name or Location)
+
 **ATT&CK Note:** T1036.005 replaces the earlier T1027 line, which carried no tag: the PAM-style name is masquerading, not obfuscation.
+
 **Confidence:** HIGH
+
 **Rationale:** Requires the PAM-style path AND the `libpam_cache` name component together — no legitimate distro ships a module by that name. *Fixes applied during retiering:* added the missing `attack.t1574.006` technique tag plus the `attack.execution` tactic tag `sigma check` requires alongside it, and converted the `selection_name` single-item list to a scalar (`sigma check`'s single-value-list rule).
+
 **False Positives:** Legitimate distro packages installing PAM modules — verify parent process is `apt`/`dpkg`/`rpm`/`yum` and not a shell or unknown binary.
+
 **Blind Spots:** A rebuild renaming the rootkit away from the `libpam_cache` convention evades; the rule targets the write event, not post-load hiding.
+
 **Validation:** Trigger the rootkit drop step — must match; a genuine distro PAM-module package install must NOT fire (parent process check).
+
 **Deployment:** Sysmon for Linux file-creation events or an EDR file-event feed that supplies the full path as `TargetFilename`, plus file integrity monitoring on `/lib/security/`. Raw auditd `-w` watch records carry PATH items rather than a `TargetFilename` and would need normalising to a full-path field first; this page declares no such normalisation.
 
 ```yaml
@@ -592,13 +679,21 @@ level: high
 #### GHOST Kit ComfyUI Fake Custom Node PerformanceMonitor Registration (Case 9)
 
 **Tier:** Detection
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1543.002 (Systemd Service — Python module persistence analog), T1496.001 (Compute Hijacking)
+
 **Confidence:** HIGH
+
 **Rationale:** "PerformanceMonitor" is not present in any legitimate ComfyUI custom node package; the display name "GPU Performance Monitor" plus installation from the kit-author's now-suspended GitHub repos is distinctly malicious. *Tag fix applied during retiering:* added the missing `attack.t1496.001` technique tag. *Description fix 2026-10-10:* the description also claimed process-creation detection of the pip install, but the logsource is `file_event` and both selections test `TargetFilename`; the description now says file creation only.
+
 **False Positives:** No known legitimate ComfyUI custom node uses the PerformanceMonitor node name.
+
 **Blind Spots:** A rebrand of the fake node's name would evade; the kit-author repos are now suspended (new pip installs fail) but locally cached copies may persist on already-infected hosts.
+
 **Validation:** Trigger the ComfyUI custom-node installation step — must match; installation of an unrelated, legitimately-named ComfyUI node must NOT fire.
+
 **Deployment:** ComfyUI host filesystem monitoring, Python process monitoring on GPU compute hosts, AI/ML infrastructure endpoint agents.
 
 ```yaml
@@ -651,13 +746,21 @@ level: high
 #### Cloudflared Access TCP Tunnel Registration
 
 **Tier:** Detection
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1090.004 (Domain Fronting), T1021.001 (RDP), T1021.004 (SSH)
+
 **Confidence:** HIGH
+
 **Rationale:** The exact combination of the `cloudflared` binary with `access`, `tcp`, and `--hostname` flags is a specific, narrow command pattern rarely used outside a formally managed Cloudflare Zero Trust deployment; the Russian operator (Case 1) used it to maintain persistent RDP/SSH access to a US healthcare victim. *Tag fix applied during retiering:* added the missing `attack.t1090.004` technique tag. *Title fix 2026-10-10:* the title said "to Non-Allowlisted Hostname", but the rule has no hostname allowlist and matches any `cloudflared access tcp --hostname` invocation; the title now says that, and the allowlist stays a local tuning step.
+
 **False Positives:** Legitimate Cloudflare Zero Trust TCP application proxies configured by network administrators — allowlist known deployment hostnames.
+
 **Blind Spots:** Legitimate enterprise Zero Trust deployments using this exact command are a real, if allowlist-manageable, population; the rule does not itself enforce a hostname allowlist (Sigma has no environment-aware NOT-IN-list mechanism).
+
 **Validation:** Trigger a `cloudflared access tcp --hostname <host> --url localhost:<port>` command — must match; a plain `cloudflared tunnel run` (no `access tcp`) must NOT fire.
+
 **Deployment:** Sysmon process creation, auditd execve, Linux endpoint agent.
 
 ```yaml
@@ -707,13 +810,21 @@ level: high
 #### Instana API Enumeration Script via -SkipCertificateCheck to an ocpinstana Endpoint (ARPA Observability Harvester, Case 2)
 
 **Tier:** Detection
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1119 (Automated Collection), T1530 (Data from Cloud Storage Object — MODERATE)
+
 **Confidence:** HIGH (PowerShell Script Block Logging detection); MODERATE (network-side proxy detection)
+
 **Rationale:** The specific combination of `-SkipCertificateCheck` with `ocpinstana` endpoint references in a PowerShell script block is characteristic of the Turkish ARPA operator's `instana_local_collector.ps1`. *Fixes applied during retiering:* removed a bare `apiToken` OR-path (an extremely common, generic variable/header name in legitimate API scripts that would have fired this HIGH-level rule on ordinary REST-API automation) and a literal, never-filled-in placeholder string `'[victim-tenant]'` that could never match real telemetry. The stolen JWT JTI remains available in the IOC feed as a victim indicator rather than as a rule OR-path. *Title fix 2026-10-10:* the title claimed detection "via Stolen JWT from Non-Management-Platform Source", but the logic is two `ScriptBlockText` substrings with no token or source-host test; the title now describes those substrings.
+
 **False Positives:** Legitimate Instana API clients that use `-SkipCertificateCheck` for internal OCP self-signed certificates — narrow by source host.
+
 **Blind Spots:** A script avoiding `-SkipCertificateCheck` (e.g. using a properly-trusted cert) evades; PowerShell Script Block Logging must be enabled for this telemetry to exist at all.
+
 **Validation:** Trigger a PowerShell script combining `-SkipCertificateCheck` and an `ocpinstana`-referencing endpoint — must match; an unrelated PowerShell script using `-SkipCertificateCheck` alone (e.g. against a different internal API) must NOT fire.
+
 **Deployment:** PowerShell Script Block Logging (Event 4104) on Windows hosts where the collector runs.
 
 ```yaml
@@ -765,13 +876,21 @@ level: high
 #### AI Coding-Agent Tooling Co-Located with Offensive Tooling on the Same Host
 
 **Tier:** Detection (correlation rule) — bundled below with its 2 required Hunting-grade base rules, which do not alert on their own
+
 **Robustness:** 2 (correlation) / 1 (each base rule individually)
+
 **ATT&CK Coverage:** T1587 (Develop Capabilities), T1588.002 (Obtain Capabilities: Tool)
+
 **Confidence:** MODERATE — co-presence of AI tools and offensive tooling on a server host warrants investigation but is not conclusive by itself
+
 **Rationale:** Neither base selector is meaningful alone — AI coding-agent execution and generic scanning/tunneling tool execution are both common on legitimate developer and security-research hosts. The temporal correlation (both signals on the *same host* within 24 hours) is what discriminated the real Case 7 (Weevely+frp+Claude) operator from two demoted false positives (a legitimate SaaS-security consultant and a HuggingFace researcher) where only one signal type was present. *Title fix 2026-10-10:* the two base rules were titled "on Server Host", but no selection tests host role (Sigma has no such field), so they now say "on a Linux Host"; scoping to server-class hosts is done in the SIEM correlation engine, as the Deployment line says. *Tag fixes applied during retiering:* added the missing technique-ID tags to all three rules (`attack.t1587` on both the AI-tool base and the correlation; `attack.t1588.002` on both the offensive-tool base and the correlation).
+
 **False Positives:** The two base rules alone are extremely broad (any AI-coding-agent user; any admin running `nmap`/`masscan`). The correlation rule itself: "a host legitimately used both for AI-assisted development and authorized security testing" — narrower, but real in security-research environments.
+
 **Blind Spots:** In Sigma semantics, an operator running AI-tool and offensive-tool sessions more than 24 hours apart, or split across separate hosts, evades the correlation. The `temporal` type is unordered, and `sigma convert -t eql -p sysmon` renders it as `sample by host.name` with no time bound, so on an Elastic EQL deployment the 24-hour window is not enforced and the two signals correlate across whatever interval the query searches. Lucene cannot convert a correlation at all, so there is no Lucene form of this set.
+
 **Validation:** Replay both base selectors against the same `host.name` — the correlation must fire; a host showing only one signal type must NOT trigger the correlation. Whether events further apart than 24 hours also fire depends on the backend: a backend that implements `timespan` suppresses them, the EQL conversion does not.
+
 **Deployment:** Endpoint agent filesystem/process scanning with host-role classification feeding a SIEM correlation engine (temporal join on `host.name`; 24h in Sigma, unbounded in the EQL conversion).
 
 ```yaml
@@ -877,12 +996,19 @@ level: high
 #### Claude Code settings.local.json or settings.json Modified
 
 **Tier:** Hunting
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1685 (Disable or Modify Tools)
+
 **Confidence:** MODERATE — the rule's own description states this is a hunting lead, not an alert
+
 **Rationale:** File-event telemetry cannot inspect file content, so a hit only means "this permissions file changed"; it cannot itself distinguish an operator pre-authorizing a curl-to-shell pattern from a routine, legitimate settings edit. *Tag fixes applied during retiering, verified against the real `sigma check` tool:* the original carried tactic-only tags with no technique; `attack.t1562.001` was tried first but the tool rejects it as invalid (MITRE renumbered Disable or Modify Tools to the top-level technique **T1685**, no longer a Defense Evasion sub-technique tree under T1685), and the tool then required the new ATT&CK v19 `attack.defense-impairment` (TA0112) tactic tag alongside it, which has been added. An unpaired `attack.execution` tactic tag (unsupported by the file-modification-only logic) was dropped. *FP remediation (2026-09-07):* the deployed selector also matched inside third-party npm packages' own vendored `node_modules` trees and a Docker container's overlay diff (observed: `es-abstract`, `selfsigned`), none of which Claude Code ever reads as a settings file, so a `filter_vendor` exclusion on `node_modules` was added. Measured over a 14-day window against the rule's own source index: 50 events matched before the fix, 47 after, removing exactly those 3 vendored-tree/overlay matches and nothing else, at zero coverage cost. The `claude` and `git` writers that account for the remaining volume are deliberately NOT excluded here: a `claude`-driven write to its own settings file is indistinguishable at the file-event layer from a malicious one, which is precisely the T1685 scenario this rule exists to catch, and `git` checking out or removing the tracked `settings.json` during routine worktree lifecycle is specific to how heavily one environment uses git worktrees, not a defect in the rule. Both are handled as local Kibana exceptions scoped by `file.path` to the git-tracked `settings.json` only, because that file's content is independently reviewable via `git diff`/`git log` regardless of whether this rule fires, while the untracked `settings.local.json` has no such backstop, so every subscriber's rule, and this environment's own coverage of that file, is unchanged. *FP remediation (2026-09-30, run `2026-09-30-0212`):* the selector used `contains`, which also matched sibling files Claude Code never reads as settings, namely the atomic-save temporaries `settings.json.tmp.<pid>.<hex>`, `.bak*` copies and `.pre-*` copies. Any install produces the temporaries on every atomic save, so this fires in any environment. The two entries now use `endswith`. Measured on the rule's own source index (size 1000, control at the cap): over 30 days 122 matching events before and 92 after, over 14 days 66 before and 52 after, and all 30 removed events over 30 days were sibling files. The index holds 18 claude `settings.json.tmp.*` creations and 16 renames onto the real path. 16 of the 18 measured tmp creations were followed by a rename onto the real path, which still alerts. The other 2 (09-05 `...388086.88bc1ecf1413` and 09-26 `...2443957.4e4baacd47cc`) left no recorded rename and no recorded deletion, so they were either aborted writes or events Defend lost, and that is undetermined. Under the new rule those 2 produce no event. A tmp file Claude Code never reads is not itself a settings change, so the practical cost is limited to those unobserved writes, but it is not zero. The `claude` binary is deliberately still NOT excluded at source, for the reason recorded above: a prompt-injected session editing its own permissions is the T1685 case this rule exists to catch, and that matches the 2026-09-07 decision. *FP remediation (2026-11-08, triage run `2026-11-08-1141`, task T-0570.1):* Claude Desktop (the Linux packaging, `claude-desktop` 4.23118.0-1) writes the settings files it is about to evaluate into a scratch directory it creates itself, `/tmp/claude-strict-settings-<random>/.claude/settings.json` and `settings.local.json`; the shipped `app.asar` contains the literal `scratch("claude-strict-settings-")` followed by a `writeFileAtomic` of each settings file, and nothing in the investigated environment's own tooling creates that name. These are not user or project configuration locations that Claude Code reads, and every installation of the app produces them, so this fires in any environment running the same software. A `filter_desktop_scratch` block now excludes a write whose target begins `/tmp/claude-strict-settings-` AND whose writing process image begins `/usr/lib/claude-desktop/`; both conditions are required together. Measured on the rule's own source index pattern (`auditbeat-*,logs-*,filebeat-*`, 14 days from 2026-10-25T10:40Z to 2026-11-08T11:40Z, one host, `size:0` with `track_total_hits` for exact counts): 3362 matching events before and 3064 after, removing 298 events (8.9%), and all 298 were written by `/usr/lib/claude-desktop/claude-desktop` across 150 distinct paths, so the process condition removes exactly the same events as the path condition alone. Control: an unfiltered `file.path` query over the same window returned 87,039,168 events and a size-1000 pull returned the cap, so the harness is not truncating the 3362; shards 104 of 104 successful. Coverage cost: a Claude Desktop write to that scratch path no longer alerts; the one event in the window on a real settings path (the `claude` CLI under the user config directory) is not in the removed class and still alerts, and the `claude` binary is still deliberately NOT excluded at source. Attacker-controllability: the path half is attacker-settable (`/tmp` is world-writable and the name is guessable), so it is never used alone. The image half is anchored with `startswith: /usr/lib/claude-desktop/`, a package-owned, root-writable directory, rather than a renameable `endswith: /claude-desktop`, so an unprivileged process cannot satisfy it by naming a binary; a same-account attacker cannot place a binary under `/usr/lib`. The residual gap is a root-level attacker, and, for Claude Desktop installed elsewhere (AppImage, `/opt`), the scratch writes are not excluded and keep alerting, which costs noise and not coverage. Where the file event carries no process image the filter does not match and the event still alerts. Not checked: the number of subscribers running a packaged Claude Desktop on Linux; the origin in code of 3 `claude-desktop` writes to `.claude/worktrees/*/.claude/settings.local.json` (probably its own worktree feature, left alone). Our own pytest fixtures (2640 events, 78.5%) and repo acceptance fixtures under `tasks/runs/` (259, 7.7%) were judged environment-specific and handled as local Kibana exceptions, not source filters, because an exclusion for a test-directory naming convention is one an attacker can reproduce.
+
 **False Positives:** Routine or legitimate edits to Claude Code settings are common; review the added permission entries after the alert fires. Third-party npm packages occasionally ship a fixture file at this path fragment inside their own `node_modules` tree (observed: `es-abstract`, `selfsigned`); these have no effect on Claude Code's real configuration and are excluded via `filter_vendor`. Sibling files such as `settings.json.tmp.<pid>.<hex>`, `.bak*` and `.pre-*` no longer match, because the selector anchors on the real filename with `endswith`. Claude Desktop's own scratch writes under `/tmp/claude-strict-settings-*/.claude/` no longer match when the process image is under `/usr/lib/claude-desktop/` (`filter_desktop_scratch`).
+
 **Blind Spots:** File events do not carry content, so a `claude`-driven write to its own settings file is not distinguishable from a legitimate one and is deliberately still alerted. `filter_desktop_scratch` hides a write to `/tmp/claude-strict-settings-*/.claude/settings*.json` by a process whose image starts `/usr/lib/claude-desktop/`; that needs root to place a binary there, and Claude Code would also have to treat that scratch directory as a settings location for the write to matter. Claude Desktop installed outside `/usr/lib/claude-desktop/` is not excluded. Where the event has no process image the exclusion does not match and the event alerts.
+
 **Deployment:** Linux file-event telemetry (file integrity monitoring, auditd, Sysmon for Linux) on developer and server hosts. The logsource is `product: linux`, so macOS hosts are not covered by this rule as written.
 
 ```yaml
@@ -944,12 +1070,19 @@ level: medium
 #### Linux DNS Query to the Gemini API or AI Studio Domain (Hunting Lead)
 
 **Tier:** Hunting
+
 **Robustness:** 1
+
 **ATT&CK Coverage:** None
+
 **ATT&CK Note:** T1552.001 (Credentials in Files) was withdrawn: a DNS-query rule observes a lookup, not a credential file.
+
 **Confidence:** MODERATE
+
 **Rationale:** `generativelanguage.googleapis.com` is Google's own legitimate API domain — durable (attacker can't rotate it), but shared by an enormous population of legitimate AI applications, so precision fails the Detection bar without host-role classification. The earlier `attack.t1552.001` tag was removed because a DNS query observes no credential file.
+
 **False Positives:** High on hosts running legitimate AI applications; low on general-purpose server hosts with no expected AI workload.
+
 **Deployment:** Network proxy/firewall with host-role classification, DNS query monitoring. Hunting-only without host classification.
 
 ```yaml
@@ -993,12 +1126,19 @@ level: low
 #### Linux File Event Under a .rovodev Directory (Atlassian Rovodev Agent Presence Lead)
 
 **Tier:** Hunting
+
 **Robustness:** 1
+
 **ATT&CK Coverage:** None
+
 **ATT&CK Note:** T1587 (Develop Capabilities) was withdrawn: a directory path of a legitimate agent does not observe capability development.
+
 **Confidence:** MODERATE — the `.rovodev/` directory alone could appear on any host where a developer legitimately uses Rovodev
+
 **Rationale:** Signal strength increases significantly when co-located with offensive tooling or on non-developer server infrastructure, but the rule as written is a single directory-path selector with no such co-location check. *Fix applied during retiering:* converted the single-item `TargetFilename|contains` list to a scalar. The earlier `attack.t1587` tag was removed because the path observes no capability development.
+
 **False Positives:** Medium on development hosts, low on production server infrastructure with no expected AI agent tooling.
+
 **Deployment:** Sysmon for Linux file events or an EDR file-event feed that supplies the full path as `TargetFilename`; file integrity monitoring and an endpoint agent filesystem scan can supply the same lead. Raw auditd directory watches would need normalising to a full-path field first; this page declares no such normalisation.
 
 ```yaml
@@ -1037,11 +1177,17 @@ level: medium
 #### Trycloudflare.com Quick-Tunnel DNS Query
 
 **Tier:** Hunting
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1090.004 (Domain Fronting)
+
 **Confidence:** MODERATE
+
 **Rationale:** The `*.trycloudflare.com` suffix keys on Cloudflare's ephemeral-tunnel *service* rather than a rotatable attacker-owned domain, so it survives subdomain rotation — but it is also Cloudflare's genuinely free, widely-used developer tunnel product, so a meaningful legitimate population exists. *Retiered from Detection to Hunting during this pass:* the original `level: high` overstated confidence — Sigma has no host-role field to restrict this selector to server-class hosts, so as written it fires identically on any developer or CI host using the same free service; demoted to `level: medium`. Tag fix: added the missing `attack.t1090.004` technique tag. *Title fix 2026-10-10:* the title still said "from Non-Developer Server Host" and the description claimed process-creation coverage; the logic is one `dns_query` selection, so both now say DNS query on any Linux host.
+
 **False Positives:** Developers and CI/CD pipelines using Cloudflare Tunnel for local development exposure (ngrok-alternative use case) — exempt known developer/CI hosts by hostname or subnet.
+
 **Deployment:** Linux DNS query telemetry (`dns_query`) only. The selector is `query|endswith: .trycloudflare.com`, so it matches queries for subdomains (the quick-tunnel names) and not a query for the bare apex name; it does not read proxy or firewall logs and does not inspect process creation or `cloudflared` execution.
 
 ```yaml
@@ -1080,13 +1226,19 @@ level: medium
 #### Egress to Operator-Hosting ASN Ranges from a Linux Host (Baseline Pivot)
 
 **Tier:** Hunting
+
 **Robustness:** 1
+
 **ATT&CK Coverage:** T1583.003 (Virtual Private Server)
+
 **Confidence:** LOW — ASN-based egress rules have inherently high FP rates in cloud-connected environments
+
 **Rationale:** All five operator-controlled servers in this campaign are hosted on AEZA, Contabo, DigitalOcean, 1&1 IONOS, and Korea Telecom; the rule's own title already flags it as a hunting baseline, not an alert. *Tag fix applied during retiering:* added the missing `attack.t1583.003` technique tag.
 
 *Scope reviewed against live telemetry 2026-08-06 and deliberately left at all five ranges.* A 14-day measurement was expected to show the two mainstream-hosting ranges (DigitalOcean `209.38.0.0/16`, 1&1 IONOS `87.106.0.0/16`) generating most of the volume, which would have justified dropping them. The measurement showed the opposite. Across 2,371 matching events, every one came from a single internet-scanning process on one host, and the two mainstream ranges accounted for 207 of them, under 9 percent. Contabo (1,067) and AEZA (1,089) carried the volume, and those are precisely the ranges worth keeping. Removing the mainstream ranges would therefore have surrendered the Case 2 and Case 3 infrastructure coverage while barely moving the noise floor. Where a deployment sees high volume from this rule, identify the source process first: a host that scans or crawls the internet will match all five ranges by design, and that is an exclusion to write locally, not a reason to narrow a published rule.
+
 **False Positives:** High in environments with significant cloud/CDN traffic — CDN egress, legitimate cloud API traffic, and third-party service integrations routinely originate from these ASNs. Any host performing internet-wide scanning or crawling will match continuously; scope such hosts out locally by source process rather than narrowing the ranges.
+
 **Deployment:** Linux endpoint network-connection telemetry that records the destination address (the rule's `network_connection` logsource); firewall or flow logs can ask the same address question but carry no process attribution, which the Rationale's source-process triage needs. Hunting only; do not configure as an automated alert.
 
 ```yaml
@@ -1134,11 +1286,17 @@ level: low
 #### Web Request to API, Auth, Payment or Transaction URI Path (Machine-Speed Sequence Building Block)
 
 **Tier:** Hunting
+
 **Robustness:** 1
+
 **ATT&CK Coverage:** T1657 (Financial Theft)
+
 **Confidence:** LOW — the 60-second window and API sequence correlate with the observed case but the underlying LLM vendor is unidentified
+
 **Rationale:** The rule is explicitly a selection-only building block for a SIEM correlation search (4+ distinct API endpoints from one source IP within 60 seconds) — the URI-substring selector alone matches enormous volumes of ordinary web traffic on any API-driven site. *Tags replaced during retiering:* the original `attack.credential-access` + `attack.exfiltration` tactic tags had no matching technique-ID tag and don't cleanly correspond to a generic `/api/`, `/auth/`, `/payment/`, `/transaction/` URI-substring selector; replaced with `attack.impact` + `attack.t1657` (Financial Theft), the technique already named in the rule's own evidence.
+
 **False Positives:** High — automated payment processing systems, health checks, and load-balancer probes generate similar API call sequences.
+
 **Deployment:** SIEM correlation with payment/authentication API access logs ingested, minimum 30-day baseline required to establish normal API call velocity per source IP.
 
 ```yaml
@@ -1191,13 +1349,21 @@ level: low
 #### A2A C2 X-Agent-Id Header + API Endpoint Pattern
 
 **Tier:** Detection
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1071.001 (Web Protocols), T1132.001 (Standard Encoding — encoding layer, not itself matched)
+
 **Confidence:** HIGH
+
 **Rationale:** Requires the POST method, the `/api/v1/` URI prefix (anchored at the start of the URI with `startswith`; a URI that carries `/api/v1/` further along, such as `/proxy/api/v1/x`, no longer matches), and the `X-Agent-Id` custom header name in the same request — an operator-bespoke combination not present in legitimate server-management frameworks. An attacker would need to change the URI convention AND the header name simultaneously to evade.
+
 **False Positives:** None known — `X-Agent-Id` is not a standard or common custom header name; `/api/v1/` alone is generic but is never the sole anchor in this rule.
+
 **Blind Spots:** Evaded by a protocol rewrite dropping the `X-Agent-Id` header or the `/api/v1/` URI convention; does not cover the Cloudflare-Tunnel-fronted variant of this same channel once the tunnel terminates the visible HTTP layer.
+
 **Validation:** Replay a captured A2A C2 HTTP POST request — must alert; an unrelated API request using a generic `/api/v1/` path without the `X-Agent-Id` header must NOT fire.
+
 **Deployment:** Network IDS/IPS on server-segment egress, HTTP-capable IDS with header inspection.
 
 ```
@@ -1211,11 +1377,17 @@ alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL DETECT AI-Agent-Campaign
 #### trycloudflare.com DNS Query Egress
 
 **Tier:** Hunting
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1583.006 (Web Services — Cloudflare Tunnel), T1090.004 (Domain Fronting)
+
 **Confidence:** MODERATE
+
 **Rationale:** Keys on Cloudflare's ephemeral-tunnel service suffix rather than an attacker-rotatable literal, so it survives subdomain rotation — but the same free service is widely used by legitimate developers and CI/CD pipelines. *Title fix 2026-10-10:* the heading and `msg` said "from Server Hosts", but a Suricata rule on `$HOME_NET` cannot tell a server from a workstation; both now describe the DNS query only, and server scope comes from where the sensor sits (see Deployment). `rev` 2 to 3.
+
 **False Positives:** Developer and CI/CD hosts legitimately using `trycloudflare.com` for temporary exposure of local services.
+
 **Deployment:** Network IDS/IPS on server-segment egress, DNS monitoring.
 
 ```
@@ -1227,11 +1399,17 @@ alert dns $HOME_NET any -> any any (msg:"THL HUNT AI-Agent-Campaign trycloudflar
 #### Kryptex Mining Pool DNS Query (Any kryptex.network Subdomain)
 
 **Tier:** Hunting
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1496.001 (Compute Hijacking)
+
 **Confidence:** MODERATE
+
 **Rationale:** `kryptex.network` is a third-party mining-pool domain the GHOST kit operator does not control — durable in that rotating the operator's own infrastructure does not change it — but a domain match with no other discriminator is kept at Hunting for consistency with this file's other DNS-only signatures. *Fix applied during retiering:* added a `threshold` clause (absent from the original) to cap alert volume from a persistently-beaconing miner.
+
 **False Positives:** The rule matches any subdomain of `kryptex.network` (a query for `cfx.kryptex.network`, `etc.kryptex.network` or `www.kryptex.network` all fire; the bare apex and look-alikes such as `notkryptex.network` do not). Any legitimate, consented use of the Kryptex platform (a real consumer mining service) from a corporate network would also match — uncommon outside a strict acceptable-use environment.
+
 **Deployment:** Network IDS/IPS, DNS monitoring, threat hunting on all server-class hosts.
 
 ```
@@ -1241,11 +1419,17 @@ alert dns $HOME_NET any -> any any (msg:"THL HUNT AI-Agent-Campaign Kryptex Mini
 #### Generic Cryptojacker Mining Pool DNS Pattern (c3pool / nanopool / moneroocean / hashvault)
 
 **Tier:** Hunting
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1496.001 (Compute Hijacking)
+
 **Confidence:** MODERATE — generic cryptomining indicator not tied to a specific kit family; both the GHOST kit and unrelated cryptojackers use these public pools as fallback destinations
+
 **Rationale:** *Fix applied during retiering:* the original was a single PCRE-only rule (`pcre:"/(?:c3pool\.org|nanopool\.org|xmrig\.com|moneroocean\.stream|hashvault\.pro)/i"`) with no `content` prefilter — a named Suricata anti-pattern that forces regex evaluation on every DNS packet. Split into 4 individual `content`-anchored rules, one per pool domain, eliminating the PCRE entirely. `xmrig.com` was dropped from the set — it is the legitimate XMRig mining-software project's own homepage domain, not a pool destination, and its inclusion in the original PCRE list appears to be a data-quality error (see Coverage Gaps).
+
 **False Positives:** These pool domains have no legitimate enterprise use; the per-rule `threshold` limits alert volume for hosts running a persistent miner.
+
 **Deployment:** Network IDS/IPS perimeter monitoring, DNS monitoring.
 
 ```
@@ -1258,11 +1442,17 @@ alert dns $HOME_NET any -> any any (msg:"THL HUNT AI-Agent-Campaign hashvault.pr
 #### QUIC SNI Containing bing.com on UDP 14433/14444 (Hysteria v2 Masquerade Lead, Case 9)
 
 **Tier:** Hunting
+
 **Robustness:** 1
+
 **ATT&CK Coverage:** T1090.004 (Domain Fronting), T1665 (Hide Infrastructure)
+
 **Confidence:** MODERATE
+
 **Rationale:** SNI masquerade (presenting `bing.com` while tunneling GHOST kit backdoor traffic over Hysteria v2/QUIC) is a durable evasion *technique*, but the specific masquerade domain choice is trivially changed in a future build. *Fixes applied during retiering:* the original rule matched the SNI via raw byte-offset `content` on the QUIC packet (`content:"|00 00|"; offset:0; content:"bing.com"; content:"|00 01|"`) with no sticky buffer at all. QUIC Initial packets are encrypted per RFC 9001, so a literal ASCII "bing.com" match at a fixed byte offset is unlikely to fire against real traffic as intended. First rewritten to the `tls.sni` sticky buffer, but the real `suricata -T` engine (8.0.5) rejected that combination; Suricata exposes QUIC-derived fields through their own dedicated `quic.*` buffers rather than reusing `tls.*`, so the rule now uses `quic.sni` — confirmed passing against the live engine.
+
 **False Positives:** Low as of rev 2. Previously Medium, and in practice worse than that: with no destination constraint the rule matched every legitimate `bing.com` QUIC connection.
+
 **Deployment:** Network IDS with QUIC/TLS inspection enabled (`app-layer.protocols.quic.enabled: yes`). Confirm the QUIC parser probes non-standard UDP ports on your build, since the destination constraint below is off-443.
 
 **FP remediation note (2026-08-20):** the rule's `msg` promised a "Non-Microsoft Destination" and the rule implemented no destination test whatsoever, matching `-> any any` on the SNI string alone. Every routine Bing, Edge, Windows Search and Copilot QUIC connection matched it, in any environment. Production confirmed this: 71 alerts across five ordinary internal clients, every one of them to port 443 against CDN infrastructure, none on the operator ports.

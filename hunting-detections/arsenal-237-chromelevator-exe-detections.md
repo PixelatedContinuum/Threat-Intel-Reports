@@ -10,9 +10,13 @@ thumbnail: /assets/images/cards/arsenal-237-new-files.png
 ---
 
 **Campaign:** Arsenal-237-109.230.231.37-Malware-Repository
+
 **Date:** 2026-01-27
+
 **Author:** The Hunters Ledger
+
 **License:** CC BY 4.0
+
 **IOC Feed:** https://the-hunters-ledger.com/ioc-feeds/arsenal-237-chromelevator-exe.json
 
 ---
@@ -42,12 +46,19 @@ Coverage below is retiered from the original draft: every rule was re-scored for
 #### Direct Syscall Framework (Native API / EDR Bypass)
 
 **Tier:** Detection
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1106 (Native API)
+
 **Confidence:** HIGH
+
 **Rationale:** Direct-syscall implementations resolve their Nt/Zw syscall numbers at runtime by walking ntdll's exports and matching against the literal function-name strings before extracting the syscall stub, so the ASCII names are a byproduct of the resolution technique rather than an arbitrary build choice, and they persist across a rename of the binary or a rotation of infrastructure. The rule requires either all five of a tight memory-injection-relevant Zw* set, or all ten declared Zw* strings plus ten or more pattern-matched occurrences, both high-specificity combinations unlikely in software that calls the documented Win32 API surface instead.
+
 **False Positives:** Legitimate low-level tooling that resolves the same Native API set as literal strings, for example debuggers, process-inspection utilities, and some EDR/AV self-instrumentation, can reference several of these names together; the five-of-five and all-ten thresholds narrow this to a small population worth baselining per environment.
+
 **Blind Spots:** An operator using indirect syscalls (jumping into the middle of a legitimate ntdll stub rather than resolving and calling by name) or hashed/obfuscated API resolution that never places the plaintext function names in the binary evades this rule entirely.
+
 **Validation:** Confirm the rule fires against a binary implementing manual Nt/Zw resolution (for example a SysWhispers-style syscall stub generator) and does not fire against a standard signed system utility or common EDR agent binary from the deployment environment.
 
 ```yara
@@ -96,12 +107,19 @@ rule Arsenal237_Direct_Syscall_Framework {
 #### Reflective DLL Injection Framework
 
 **Tier:** Detection
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1620 (Reflective Code Loading), T1055.001 (Process Injection: DLL Injection)
+
 **Confidence:** HIGH
+
 **Rationale:** "ReflectiveLoader" is the export name conventionalized by the original Stephen Fewer reflective-DLL-injection technique and reused across most tools that implement it, so the string is a technique marker rather than a property of this one build. The rule's strongest branches require it alongside either the full four-syscall or four-Win32-API injection sequence (allocate, write, protect, execute-thread), a specific combination that survives a rename of the sample and stays rare in unrelated software.
+
 **False Positives:** Legitimate injection-based tooling (some game overlays, accessibility software, and debuggers) uses the same four-API sequence, but rarely also carries a literal "ReflectiveLoader" string; residual risk is limited to other red-team or commercial reflective-loading libraries that reuse the same export name for compatibility.
+
 **Blind Spots:** A custom reflective loader that renames its entry export away from "ReflectiveLoader" evades every branch except the weaker bare-word "reflective" branch, which still requires a co-occurring injection API. The header-anchor branch (`$dos_header at 0 and $nt_header at 60`) is a redundant corroborating check alongside the `$pe_sig` byte pattern, not the rule's primary discriminator.
+
 **Validation:** Confirm the rule fires on a binary containing a reflective loader with the conventional export name and the classic injection API sequence, and does not fire on common installers or other legitimate injection-capable software that lack the "ReflectiveLoader" string.
 
 ```yara
@@ -163,11 +181,17 @@ rule Reflective_DLL_Injection_Framework {
 #### Browser Credential Extraction Multi-Signal Combination
 
 **Tier:** Hunting
+
 **Robustness:** 1
+
 **ATT&CK Coverage:** T1555.003 (Credentials from Web Browsers), T1620 (Reflective Code Loading)
+
 **Confidence:** MODERATE
+
 **Rationale:** Every branch of this rule ultimately depends on a renameable build artifact: the literal filename and embedded resource name in the strongest branch, a custom log string ("Named pipe server created") in the reflective-loading branch, or generic command-line flags in the arguments branch. A rebuild that changes the filename, resource name, and log strings defeats the rule outright, which keeps it below Detection despite the multi-signal combination logic.
+
 **False Positives:** The combination `3 of (chrome.exe, brave.exe, msedge.exe) and 2 of (Extracted, cookies, passwords, payments)` is a goodware-collision risk. Chromium-based browsers ship a "import bookmarks and settings" feature that references sibling browser executable names, and their own Settings UI carries the literal strings "cookies" (site data controls), "passwords" (the password manager), and "payments" (saved payment methods) — a legitimate chrome.exe, brave.exe, or msedge.exe binary can plausibly satisfy this branch with no malicious content present. The command-line-flag branch (`2 of (--verbose, --fingerprint, --output-path, --help)` plus any browser name) is similarly broad, since `--verbose` and `--help` are common generic CLI conventions that a Chromium binary can also contain.
+
 **Deployment:** Retroactive file-share and endpoint scanning, IR artifact triage on hosts associated with the Arsenal-237 toolkit's distribution infrastructure. Review every hit rather than auto-blocking, and treat hits driven solely by the browser-name/UI-string branch as likely benign until the filename/payload branch or a process-context signal corroborates.
 
 ```yara
@@ -240,12 +264,19 @@ rule Chromelevator_Browser_Credential_Extraction {
 #### Process Injection API Sequence Targeting Browser Processes
 
 **Tier:** Detection
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1055.001 (Process Injection: DLL Injection)
+
 **Confidence:** HIGH
+
 **Rationale:** Requires all four stages of the classic injection sequence (allocate, write, protect, remote-thread-creation) inside a single CallTrace against a named browser target, a specific technique-level combination that does not depend on the malware's own filename and survives a rebuild.
+
 **False Positives:** Legitimate installers, debuggers, and some password-manager or automation tooling that inject into a running browser process for integration purposes can trigger the full sequence; expect occasional review-worthy hits rather than zero.
+
 **Blind Spots:** An injection implementation using direct syscalls instead of the Win32 API names in this sequence (see the companion Direct Syscall Usage rule) or targeting a browser process by full path rather than a name ending in one of the four listed executables evades this selector.
+
 **Validation:** Confirm the rule fires against a captured injection sequence targeting chrome.exe/brave.exe/msedge.exe/firefox.exe and does not fire on ordinary browser-extension or browser-helper-process activity that does not perform cross-process memory writes.
 
 ```yaml
@@ -302,14 +333,23 @@ level: high
 #### Non-Browser Process Creating Files at Browser Credential Database Paths
 
 **Tier:** Hunting
+
 **Robustness:** 1
+
 **ATT&CK Coverage:** T1555.003 (Credentials from Web Browsers)
+
 **ATT&CK Note:** The rule observes a file-creation event at a browser credential-store path, not a read of the store, so T1555.003 names what the tool is after and not something the event proves.
+
 **Confidence:** MODERATE
+
 **Rationale:** The rule matches Sysmon `file_event` records (file creation or overwrite) whose path is a Chrome, Brave or Edge credential database (`Login Data` in any `User Data` directory, plus `Cookies`, `Network\Cookies` and `Web Data` under each browser's `Default` profile), written by a process that is not one of four browser executables and is not a SYSTEM-user process. A file-creation event does not record a read, and the page's summary describes this tool as injecting a payload into the browser process and extracting the stores from within it (its own memory space and SQLite stores), so the access that steals credentials is not visible to this rule. What the rule can see is a non-browser process creating or overwriting a file at those paths (a restore, a profile import or migration, or a side file such as `Login Data-journal`, which the generic branch also matches). That makes it a hunting lead and not the technique chokepoint the earlier text claimed: it moves from Detection to Hunting and from `level: high` to `medium`. The specific-path selector's double-escaped backslashes were corrected earlier (see Coverage Gaps), and this revision also adds `Web Data` for Brave and Edge and the `Network\Cookies` location that current Chromium builds use.
+
 **False Positives:** Browser backup and sync tools, password managers, profile migration or restore tools, and system-recovery tooling write into these paths; the browser-name and SYSTEM-user exclusions narrow this but do not eliminate it.
+
 **Blind Spots:** Does not see reads: a tool that opens or copies a credential database elsewhere, or that extracts the stores from the browser's own memory (the injection route documented for this tool; see the Process Injection rule above), creates no event at these paths. The image exclusion is by file name (`\chrome.exe`, `\brave.exe`, `\msedge.exe`, `\firefox.exe`), so a process of one of those names started from any directory is excluded too. Firefox profiles are not covered by the path selectors. The SYSTEM exclusion works only where the file-create event carries the `User` field (see `logsource.definition`).
+
 **Validation:** From a non-browser process, create `Login Data`, `Cookies` (also under `Network\`) or `Web Data` under the `Default` profile of Chrome, Brave or Edge: the rule must fire. The same file created by the browser's own process, or by a SYSTEM-user process, must NOT fire, and a process that only reads the file produces no event and does not fire.
+
 **Deployment:** Endpoint EDR (Sysmon Event ID 11 file creation), SIEM.
 
 ```yaml
@@ -384,12 +424,19 @@ level: medium
 #### chromelevator.exe Process Creation with Extraction Flags
 
 **Tier:** Hunting
+
 **Robustness:** 1
+
 **ATT&CK Coverage:** T1555.003 (Credentials from Web Browsers)
+
 **Confidence:** MODERATE
+
 **Rationale:** Both selectors, the filename and the three command-line flags, are choices the operator made for this specific build and can be changed on a rebuild without affecting functionality; the image name together with any one of the flags narrows false positives today but does not survive a rename.
+
 **False Positives:** Low today given the `chromelevator.exe` image name, but the command-line test is an OR over `--verbose`, `--fingerprint` and `--output-path`, so one of them alone is enough with that image name (the tool accepts each flag on its own, per the companion report); any renamed internal tool that reuses one of those flag names would also match.
+
 **Blind Spots:** The tool's default run with no command-line flags (documented in the companion report) matches neither flag selector, so a flagless execution is not detected by this rule.
+
 **Deployment:** Scoping and retroactive hunting for this specific build; not a durable signal for the campaign once the operator renames the binary.
 
 ```yaml
@@ -435,11 +482,17 @@ level: medium
 #### Direct Syscall Usage Targeting Browser Processes
 
 **Tier:** Hunting
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1106 (Native API)
+
 **Confidence:** MODERATE
+
 **Rationale:** Covers the same direct-syscall technique as the companion Detection-tier Process Injection rule and the Direct Syscall Framework YARA rule, but requires only one of five Zw* calls (`CallTrace|contains`, not `contains|all`) against a browser target rather than the full sequence, a meaningfully broader, lower-bar selector. Retagged with T1106 (Native API), the technique this rule actually detects; the original attack.t1622 (Debugger Evasion) tag is kept alongside it since direct syscalls can incidentally also skip hooked stubs a debugger has instrumented, but T1106 is the primary fit.
+
 **False Positives:** A single Zw* call touching a browser process, for example a legitimate process-monitoring, screen-capture, or window-management tool opening a handle, is common enough that this rule needs analyst review rather than auto-alerting; level lowered from critical accordingly.
+
 **Deployment:** Threat-hunting scope-widening alongside the Detection-tier Process Injection Pattern rule; expect a higher benign hit rate and triage against process ancestry and the target browser's user context.
 
 ```yaml

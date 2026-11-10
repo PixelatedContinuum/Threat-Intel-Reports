@@ -9,9 +9,13 @@ hide: true
 ---
 
 **Campaign:** OpenStrike-CSBeacon-Toolkit-172.105.0.126
+
 **Date:** 2026-04-06
+
 **Author:** The Hunters Ledger
+
 **License:** CC BY 4.0
+
 **Reference:** https://the-hunters-ledger.com/reports/open-directory-172-105-0-126-20260406/
 
 ---
@@ -51,13 +55,21 @@ This campaign recovered two distinct code families sharing operator infrastructu
 #### OpenStrike C Beacon Debug Strings Plus One Secondary Marker
 
 **Tier:** Detection
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1071.001 (Web Protocols), T1573.001 (Symmetric Cryptography)
+
 **Confidence:** HIGH
+
 **ATT&CK Note:** T1573.001 is carried only by the secondary strings `abcdefghijklmnop` (the shared AES IV), `aes_cbc_encrypt` and `hmac_sha256`; a match whose secondary clause is satisfied by the GCC compiler banner alone carries no encryption string, and a match through the status-message pair carries no branded string.
+
 **False Positives:** Low for the branch that uses the `[*] OpenStrike Beacon starting...` startup banner, which is a branded string. The alternate primary branch, the `[+] Registration successful` and `beacon ready` pair, is generic status text and not branded: with the `GCC: (GNU) 15-win32` build banner as the only secondary string, any MinGW GCC 15 build of a program that prints both phrases matches. The secondary group (`aes_cbc_encrypt`, `hmac_sha256`, the shared AES IV, and the GCC compiler banner) is generic in isolation and never sufficient on its own, but any one of the four satisfies the second clause once the primary clause matches, so the rule does not require AES or HMAC strings.
+
 **Blind Spots:** A stripped-logging release build that removes every banner/status print string evades this rule; the generic crypto-function names and compiler banner carry no weight alone.
+
 **Validation:** Scan `beacon.exe` (hash1 below) — must match; a benign C application linking a stock AES/HMAC library must NOT fire (its banner and status strings differ).
+
 **Deployment:** Endpoint AV/EDR file scan. The condition tests `filesize`, which is undefined in a process-memory scan, so the rule does not match there; a memory-scan form would need the `filesize` test removed and is not written or tested here.
 
 ```yara
@@ -102,12 +114,19 @@ rule RAT_OpenStrike_C_Beacon {
 #### OpenStrike Shellcode Loader Chain Debug Strings
 
 **Tier:** Detection
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1620 (Reflective Code Loading)
+
 **Confidence:** HIGH
+
 **False Positives:** None known for the four crash-handler and entry-point branches, which need an SEH/VEH exception format string or the INT3-offset message together with `[*] Loading %s`; those format strings are distinctive to this loader family's error-handling code. The `run.exe` branch is different: it needs only `[+] %lu @ %p exec` and the `GCC: (GNU) 15-win32` build banner, no crash-handler string and no Loading string, so any MinGW GCC 15 build that prints that format string matches, and its benign prevalence was not measured.
+
 **Blind Spots:** A release build that strips debug/crash-handler print statements evades this rule; covers `run.exe` via the `$run` + `$compiler` pairing specifically, since it lacks the SEH/VEH/INT3 strings used by the other four binaries.
+
 **Validation:** Scan `run.exe` (hash1 below), or any of `sc_loader.exe`/`veh_loader.exe`/`dbg_loader.exe`/`stager.exe` — must match; a benign C/C++ application with its own exception-handling debug output must NOT fire (the specific format-string combinations differ).
+
 **Deployment:** Endpoint AV/EDR file scan. The condition tests `filesize`, which is undefined in a process-memory scan, so the rule does not match there; a memory-scan form would need the `filesize` test removed and is not written or tested here.
 
 ```yara
@@ -142,13 +161,21 @@ rule TOOLKIT_OpenStrike_Loader_Chain {
 #### OpenStrike Python Universal Beacon Self-Identification Banner
 
 **Tier:** Detection
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1059.006 (Python), T1071.001 (Web Protocols)
+
 **Confidence:** HIGH
+
 **False Positives:** None known — `OpenStrike Universal Beacon` is a self-identifying branded string with no plausible legitimate collision; the RSA-2048 modulus prefix and `/qz99` staging path are hardcoded operator constants.
+
 **Rationale:** The rule keys on the operator's own banner string plus one corroborating constant, a combination specific to this build of the tool family. It scores Robustness 2, not 3: a mandatory self-identification banner is not a technique invariant, and a rebrand or a regenerated key defeats it, as the Blind Spots line states.
+
 **Blind Spots:** A rebrand that removes the self-identification banner from the Python source evades this rule; a build using a regenerated RSA keypair changes the modulus prefix, and the rule then needs the `/qz99` URI or the `bof_executor` plus shared IV pair alongside the banner. The banner alone does not match: the rule requires the banner and one of the three corroborating branches.
+
 **Validation:** Scan `beacon_universal.py` — must match; a benign Python script coincidentally using ctypes and a hardcoded IV must NOT fire (it lacks the OpenStrike banner and campaign-specific constants).
+
 **Deployment:** Endpoint AV/EDR file scan, static triage of unknown Python scripts.
 
 ```yara
@@ -181,14 +208,23 @@ rule TOOLKIT_OpenStrike_Python_Beacon {
 #### Cobalt Strike 3.x MALC Malleable Profile Beacon
 
 **Tier:** Detection
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1071.001 (Web Protocols), T1620 (Reflective Code Loading)
+
 **ATT&CK Note:** The MALC User-Agent string maps to T1071.001. T1620 applies only when the `ReflectiveLoader` string or the `66 90 CC` bytes are among the two corroborating strings; the rule does not require either one, and it does not test where the bytes sit in the file.
+
 **Confidence:** HIGH
+
 **Rationale:** The rule was renamed from "Tripwired ReflectiveLoader" because the condition never required the tripwire: it tests the three bytes `66 90 CC` only as one of five optional corroborators, anywhere in the file, and does not locate the ReflectiveLoader entry point. The MALC User-Agent string (`$ua`) is the mandatory anchor — a distinctive, multi-byte Malleable C2 profile artifact with no legitimate collision. The entry-point tripwire bytes (`66 90 CC`) are retained as one option within a 2-of-5 corroborating group backed by four solid string alternatives, since a 3-byte pattern alone is too short to anchor a rule reliably; no match path is carried by the tripwire bytes alone.
+
 **False Positives:** None known — the MALC User-Agent suffix is a distinctive Malleable C2 profile artifact absent from legitimate software; requiring 2 corroborating strings from the original DLL name, ReflectiveLoader export, spawn-to path, shared custom AES IV, or entry-point tripwire bytes further reduces coincidental collision risk.
+
 **Blind Spots:** A rebuilt beacon using a different Malleable C2 profile (no MALC UA) evades this rule entirely; a release build with a default rundll32 spawn-to and unmodified reflective loader would also evade if it additionally used a different profile UA.
+
 **Validation:** Scan `beacon_patched.x64.dll` (hash1 below) — must match; a stock/default Cobalt Strike 3.x beacon DLL with the default Malleable C2 profile must NOT fire (its User-Agent lacks the MALC suffix).
+
 **Deployment:** Endpoint AV/EDR file scan. The condition tests `filesize`, which is undefined in a process-memory scan, so the rule does not match there; a memory-scan form would need the `filesize` test removed and is not written or tested here.
 
 ```yara
@@ -232,13 +268,21 @@ rule MALW_CobaltStrike3x_MALC_Malleable_Profile_Beacon {
 #### Cobalt Strike Malleable C2 Profile MALC User-Agent in Proxy Traffic
 
 **Tier:** Detection
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1071.001 (Web Protocols)
+
 **Confidence:** HIGH
+
 **Rationale:** The match is tail-anchored (`endswith: 'MALC)'`) rather than a bare substring, consistent with the sibling Suricata rule's tail-anchored match — this reduces the already-low likelihood of an incidental substring collision.
+
 **False Positives:** Internal applications or monitoring tools with custom user-agent strings ending in the substring `MALC)` (verify against known software inventory before tuning out).
+
 **Blind Spots:** A rebuilt beacon using a different Malleable C2 profile (no MALC suffix) evades this rule entirely; requires proxy logging with full User-Agent header visibility.
+
 **Validation:** Replay proxy logs containing the MALC-suffixed UA — must match; ordinary browser/application traffic must NOT fire.
+
 **Deployment:** Proxy logs, SIEM, network TAP with HTTP inspection.
 
 ```yaml
@@ -281,14 +325,21 @@ level: high
 #### Python Interpreter With Ctypes and VirtualAlloc on the Command Line (OpenStrike Beacon Technique)
 
 **Tier:** Hunting
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1059.006 (Python), T1620 (Reflective Code Loading)
+
 **Confidence:** HIGH for the technique pairing; MODERATE for false-positive discrimination
+
 **Rationale:** The rule carries no OpenStrike marker. A `python.exe`, `pythonw.exe` or `python3.exe` process whose own command line names both `ctypes` and `VirtualAlloc` (inline code or an argument, not a script's contents) is a durable technique-level combination — it survives the malware being renamed or rewritten, since it is keyed on the in-memory shellcode-staging technique rather than a filename. Legitimate security-research and automation tooling produce the same combination often enough that it needs analyst triage rather than blind alerting, so `level` is set to medium and the rule sits in Hunting rather than Detection.
+
 **Blind Spots:** Fires only when `ctypes` and `VirtualAlloc` appear in the command line itself, as with `python -c` or an inline argument. A Python beacon started from a script file, such as `python beacon_universal.py`, puts neither string on the command line and is not matched; only the interpreter names `python.exe`, `pythonw.exe` and `python3.exe` are tested, so a renamed or embedded interpreter is also missed.
+
 **False Positives:**
 - Security research tools or CTF scripts using ctypes with VirtualAlloc in Python.
 - Legitimate automation scripts performing memory-mapped operations via ctypes.
+
 **Deployment:** Endpoint EDR (Sysmon Event ID 1), script block logging, SIEM; analyst review of hits, filtering by script path or user account in high-noise environments.
 
 ```yaml
@@ -344,12 +395,19 @@ level: medium
 #### Cobalt Strike Malleable C2 MALC User-Agent Detected
 
 **Tier:** Detection
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1071.001 (Web Protocols)
+
 **Confidence:** HIGH
+
 **False Positives:** None known — MALC is not a known legitimate user-agent substring; `endswith` anchors the match to the tail of the UA buffer for targeted fidelity; `nocase` catches case variants.
+
 **Blind Spots:** A rebuilt beacon using a different Malleable C2 profile (no MALC suffix) evades this rule entirely; requires HTTP header visibility (no effect against fully encrypted/non-HTTP channels).
+
 **Validation:** Replay a PCAP containing the MALC-suffixed UA — must alert; ordinary browser/application HTTP traffic must NOT.
+
 **Deployment:** Perimeter IDS/IPS, proxy with HTTP user-agent logging.
 
 ```

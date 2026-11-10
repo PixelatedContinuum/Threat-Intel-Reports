@@ -7,9 +7,13 @@ hide: true
 ---
 
 **Campaign:** INV-2026-067<br>
+
 **Date:** 2026-10-09<br>
+
 **Author:** The Hunters Ledger<br>
+
 **License:** CC BY 4.0<br>
+
 **Reference:** https://the-hunters-ledger.com/reports/opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015/
 
 ---
@@ -53,15 +57,25 @@ All five Sigma rules passed `sigma check` with SigmaHQ's own configuration, `yam
 #### WebLogic Java Process Spawns Shell Writing a JSP Into a WebLogic Internal Directory
 
 **Tier:** Detection
+
 **Robustness:** 2
+
 **Upstream Coverage:** covered
+
 **ATT&CK Coverage:** T1505.003 (Web Shell), T1059.004 (Unix Shell)
+
 **ATT&CK Note:** The same activity also satisfies SigmaHQ's `proc_creation_lnx_susp_java_children` (a Java parent with `/bin/sh` in the command line), so upstream already covers the shell spawn. This rule adds the two WebLogic-specific tokens that make it alert-grade. It stays Detection tier on the site, and novelty only matters if it is submitted.
+
 **Confidence:** MODERATE
+
 **False Positives:** WebLogic deployment or patching scripts started from a Java based tool that copy JSP files into exploded application directories. I have no baseline from a WebLogic host, so the rate is unknown.
+
 **Blind Spots:** A request that Base64-wraps its script, or builds the directory name at run time, hides `_WL_internal` from the command line. A plant written by the JVM itself (no shell child) never shows here. The anchor strings are the literals my read of the request body names, not a verbatim copy of the script, which is held only in the original capture.
+
 **Validation:** `sigma check` PASS, `yamllint` PASS, `test_rules.py` PASS, `test_logsource.py` PASS, `sigma convert` EQL PASS and Lucene PASS (sysmon pipeline; field mapping into a deployed index NOT CHECKED). Fires on a real or synthetic event: NOT CHECKED. A benign case that must not fire: a Java parent spawning `/bin/sh -c "ls /tmp"`.
+
 **Deployment:** Linux EDR or auditd process telemetry on WebLogic hosts.
+
 **Evidence:** An operator request body (sha256 prefix 64c6c3f5034c, 1,273 bytes) holds an XMLDecoder object that starts `java.lang.ProcessBuilder` with `/bin/sh -c`. The script finds every directory named `_WL_internal` or `stage` under the domain home, writes one JSP into every subdirectory beneath each, and prints a success marker. Script-only: the request was never seen sent, and no reply and no victim file is held.
 
 ```yaml
@@ -106,14 +120,23 @@ level: high
 #### Shell Process Creates a JSP File Under a WebLogic _WL_internal Directory
 
 **Tier:** Detection
+
 **Robustness:** 2
+
 **Upstream Coverage:** not_covered
+
 **ATT&CK Coverage:** T1505.003 (Web Shell)
+
 **Confidence:** MODERATE
+
 **False Positives:** Administrators extracting or copying JSP files into WebLogic temporary directories by hand during troubleshooting. WebLogic's own extraction is done by the Java process and does not match the shell condition.
+
 **Blind Spots:** The shell condition assumes the write is a shell redirection. If the script writes with `cat`, `tee` or `cp`, the creating process is that tool and the rule misses it. A plant written by the JVM itself also misses. Needs file creation telemetry with the creating process, which is not a default on most Linux hosts.
+
 **Validation:** `sigma check` PASS, `yamllint` PASS, `test_rules.py` PASS, `test_logsource.py` PASS, `sigma convert` EQL PASS and Lucene PASS (sysmon pipeline; field mapping NOT CHECKED). Fires on a real or synthetic event: NOT CHECKED. Benign case that must not fire: the WebLogic JVM extracting a deployed web application into the same directory.
+
 **Deployment:** Linux EDR file-creation events on WebLogic hosts.
+
 **Evidence:** Same request body as the rule above (sha256 prefix 64c6c3f5034c). The mechanism the script uses to write each JSP (redirection, `cat`, `tee`) is not stated in my read, which is why the shell condition is a Blind Spot and not a certainty.
 
 ```yaml
@@ -153,15 +176,25 @@ level: high
 #### GLPI htmLawed Test Page POST Request (CVE-2022-35914, Renamed Copy Included)
 
 **Tier:** Detection
+
 **Robustness:** 2
+
 **Upstream Coverage:** not_covered
+
 **ATT&CK Coverage:** T1190 (Exploit Public-Facing Application)
+
 **ATT&CK Note:** SigmaHQ has no rule for this CVE. CrowdSec (scenario and virtual-patch rule) and a Juniper IPS signature exist, found by a web search on 2026-10-09 and read only as titles and summaries. The CrowdSec descriptions key on the default file name, `htmLawedTest.php`, and so would not match the renamed copy the operator's helper posts to.
+
 **Confidence:** HIGH
+
 **False Positives:** Unlikely. GLPI's `vendor` directory is not meant to be served, and a POST to a PHP file inside it has no application reason. A vulnerability scanner that probes the default path with GET is not matched.
+
 **Blind Spots:** The access log does not carry the request body, so the rule cannot see the `hhook` and `text` fields and cannot tell a probe from an exploit. A server that blocks `/vendor/` at the web server still logs the request, so a hit shows only that the request arrived. A copy moved out of the `htmlawed` directory is missed.
+
 **Validation:** `sigma check` PASS, `yamllint` PASS, `test_rules.py` PASS, `test_logsource.py` PASS, `sigma convert` EQL PASS and Lucene PASS (sysmon pipeline; field mapping NOT CHECKED). Fires on a real or synthetic event: NOT CHECKED. Benign case that must not fire: a POST to the GLPI login form.
+
 **Deployment:** Web server or reverse proxy access logs in front of GLPI.
+
 **Evidence:** The operator's helper (sha256 prefix c195c55f4e8f, 28 lines) holds one hard-coded URL, a renamed copy of the htmLawed test page under GLPI's `vendor/htmlawed/htmlawed/` directory, labels it with this CVE, sends no credential, and posts three form fields named `sid`, `hhook` and `text`. Its output was recovered in the operator's staging files as a 14-piece package that matches the vendor's own manifest hash, so the channel executed commands. The renamed suffix is a victim-side detail I have left out.
 
 ```yaml
@@ -203,14 +236,23 @@ level: high
 #### Java Process Spawns Shell to Rewrite Log Files
 
 **Tier:** Hunting
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1070 (Indicator Removal)
+
 **ATT&CK Note:** I used the parent technique. The operator removes only the lines naming its own planted page, which fits the Linux log sub-techniques loosely, and I did not want to claim a sub-technique the evidence does not pick.
+
 **Confidence:** LOW
+
 **False Positives:** Log housekeeping scripts started from a Java based scheduler or management agent. A shell that pipes a log through `grep -v` is common administration, which is why this sits at Hunting.
+
 **Blind Spots:** The operator's scrub also needs the exact command text, which I have only as a description (a `grep -v` into a temporary file, then a copy back over each log). A variant using `sed -i` or `awk` is missed. After a successful scrub the log no longer names the planted page, so the file system is the place to look.
+
 **Validation:** `sigma check` PASS, `yamllint` PASS, `test_rules.py` PASS, `test_logsource.py` PASS, `sigma convert` EQL PASS and Lucene PASS (sysmon pipeline; field mapping NOT CHECKED). Fires on a real or synthetic event: NOT CHECKED. Benign case that must not fire: a Java parent running `/bin/sh -c "ls /tmp"`.
+
 **Deployment:** Linux EDR or auditd process telemetry on application server hosts.
+
 **Evidence:** An operator cleanup request (sha256 prefix 6c44d4ae4c5a, 1,325 bytes) deletes the planted page at one path, then for every `*.log*` file under the user projects directory rewrites it without the lines matching the page name. Script-only; the order of use against the count probe below is not established.
 
 ```yaml
@@ -252,14 +294,23 @@ level: medium
 #### Zabbix Daemon Child Process Touching Credential Files or Instance Metadata
 
 **Tier:** Hunting
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1072 (Software Deployment Tools), T1552 (Unsecured Credentials)
+
 **ATT&CK Note:** T1072 is the closest fit for abusing a monitoring suite's script execution, though not an exact one. The case marks the Zabbix login itself as inferred, so this rule describes what the scripts ask for, not a confirmed victim event.
+
 **Confidence:** LOW
+
 **False Positives:** Monitoring items or global scripts that deliberately check `authorized_keys` or shell history for compliance, and authorized network scanning started from a Zabbix global script. A Zabbix agent running a user parameter that reads one of these files will also match.
+
 **Blind Spots:** The tokens are the file names and addresses my read of the operator scripts names. The command text is hand-decoded in places and no output of any of these requests is held, so I do not know that any of them ran. A command that builds the path at run time is missed. It needs the parent process name, which the Zabbix daemons set but some EDR sensors do not resolve.
+
 **Validation:** `sigma check` PASS, `yamllint` PASS, `test_rules.py` PASS, `test_logsource.py` PASS, `sigma convert` EQL PASS and Lucene PASS (sysmon pipeline; field mapping NOT CHECKED). Fires on a real or synthetic event: NOT CHECKED. Benign case that must not fire: a Zabbix agent running its standard `system.uptime` item.
+
 **Deployment:** Linux process telemetry on Zabbix servers, proxies and monitored hosts.
+
 **Evidence:** The operator's Zabbix API scripts create global scripts and `system.run` items. Scripts that request root and administrator shell histories, the password digest and authorized-key files, and instance metadata tokens are read as source only. The item export the operator holds contains 11,240 non-empty `system.run` values from monitored hosts, 1,431 of them carrying Nmap output markers, but which operator script created them is not shown.
 
 ```yaml
@@ -329,15 +380,25 @@ Hit counts are alerts; for every rule above each alert fell in a different flow 
 #### Reverse Relay READY2 Announce on TCP 53
 
 **Tier:** Detection
+
 **Robustness:** 2
+
 **Upstream Coverage:** not_covered
+
 **ATT&CK Coverage:** T1090.001 (Internal Proxy), T1095 (Non-Application Layer Protocol)
+
 **ATT&CK Note:** Port 53 is not evidence of DNS here, so T1071.004 is deliberately not claimed.
+
 **Confidence:** HIGH
+
 **False Positives:** None known. A resolver's TCP exchange starts with a two-byte length and a twelve-byte header, so a whole first payload of `READY2` plus a newline is not a DNS message. The only support for that is a synthetic control, since none of my negative captures holds a real DNS-over-TCP exchange.
+
 **Blind Spots:** A recompile that changes the announce string defeats it; the case already shows two lane labels, `READY` and `READY2`. A recompile to another port is only partly covered by the port-agnostic hunting rule below. It sees the first segment only if the sensor sits on the egress path of the host running the relay. Encrypted or tunnelled variants are not covered.
+
 **Validation:** `suricata -T` PASS (8.0.7). Replay on the relay run capture: 22 of 22 relay sessions, 0 on the onward flow; 0 on 2,411 flows from other captures; 0 on the 12-flow synthetic negative set. Not run against a real DNS-over-TCP capture: NOT CHECKED.
+
 **Deployment:** Perimeter sensor on the egress path, with `$HOME_NET` covering the hosts that can run a Java relay.
+
 **Evidence:** All 22 relay sessions in the contained run opened with exactly these seven bytes as the first and only relay segment. The operator's own relay log records 1,051 check-ins across its two lanes, so the announce is the one thing every session produces whether or not the controller ever tasks it. Relay source sha256 prefix 986f697d2ef6.
 
 ```
@@ -347,14 +408,23 @@ alert tcp $HOME_NET any -> $EXTERNAL_NET 53 (msg:"THL DETECT INV-2026-067 Revers
 #### Reverse Relay Controller DIAL Tasking Line from TCP 53
 
 **Tier:** Detection
+
 **Robustness:** 2
+
 **Upstream Coverage:** not_covered
+
 **ATT&CK Coverage:** T1090.001 (Internal Proxy), T1095 (Non-Application Layer Protocol)
+
 **Confidence:** MODERATE, because the line format comes from the relay's parsing code and my stand-in controller exercised it; no real controller line was seen. The operator's relay log records tunnel-up events, which fits the format without proving the bytes.
+
 **False Positives:** None known. The rule needs `DIAL`, a host token and a decimal port in one short line sent from port 53 to an internal host. No real DNS-over-TCP traffic was available to test against.
+
 **Blind Spots:** A controller that changes the verb, or sends the instruction in the same segment as other data, is missed. The payload is only useful for scoping if the sensor logs it: the host and port in the line name the internal destination the operator asked for, so enable payload logging for this signature in `eve.json`.
+
 **Validation:** `suricata -T` PASS (8.0.7). Replay: 2 of 2 instruction lines in the run capture (both from my stand-in), 0 on 2,411 other flows, 0 on the synthetic negatives. Fires on a real controller line: NOT CHECKED.
+
 **Deployment:** Same sensor; destination is any internal host, because the relay may sit anywhere inside.
+
 **Evidence:** The relay's parsing block accepts one line, trimmed and split on spaces, and acts only when the first token is `DIAL` with at least two more tokens; anything else closes the socket and reconnects. A `DIAL` to a closed port produced the `FAIL` reply and a `DIAL` to a reachable address produced `OK` and a spliced connection.
 
 ```
@@ -364,15 +434,25 @@ alert tcp $EXTERNAL_NET 53 -> $HOME_NET any (msg:"THL DETECT INV-2026-067 Revers
 #### GLPI htmLawed Test Page POST with hhook Parameter
 
 **Tier:** Detection
+
 **Robustness:** 2
+
 **Upstream Coverage:** not_covered
+
 **ATT&CK Coverage:** T1190 (Exploit Public-Facing Application)
+
 **ATT&CK Note:** The ET Open ruleset on my sensor (30 files in the rules directory, last refreshed 2026-10-09) holds no rule mentioning htmLawed or this CVE. CrowdSec and Juniper coverage exists in other formats and keys on the default file name.
+
 **Confidence:** MODERATE
+
 **False Positives:** Unlikely. It needs a POST into GLPI's bundled htmlawed directory carrying both `hhook=` and `text=` in the body, which no ordinary GLPI page sends.
+
 **Blind Spots:** It sees only cleartext HTTP. The help desk in this case is served over HTTPS, so the rule fires only on a sensor behind TLS termination or on a reverse proxy's plain-HTTP leg. A body with the fields in multipart encoding, or request-body inspection disabled, is missed. The value the operator sends in `hhook` is not recorded in my notes, so the rule does not use it.
+
 **Validation:** `suricata -T` PASS (8.0.7). Synthetic only: 2 of 2 constructed POSTs matched (default and renamed path), 0 of 3 constructed benign HTTP requests, 0 on 2,411 flows from other captures. Fires on real exploit traffic: NOT CHECKED.
+
 **Deployment:** Sensor behind the TLS terminator in front of GLPI, or on the proxy-to-GLPI segment. The Sigma web-log rule above is the cleaner option where logs, not packets, are available.
+
 **Evidence:** The operator's helper (sha256 prefix c195c55f4e8f) posts the form fields `sid`, `hhook` and `text` to its single hard-coded URL under the `vendor/htmlawed/htmlawed/` directory and sends `sid` again as a cookie, with a placeholder value and no credential.
 
 ```
@@ -384,13 +464,21 @@ alert http $EXTERNAL_NET any -> $HTTP_SERVERS any (msg:"THL DETECT INV-2026-067 
 #### Reverse Relay READY2 Announce on a Non-DNS Port
 
 **Tier:** Hunting
+
 **Robustness:** 1
+
 **ATT&CK Coverage:** T1090.001 (Internal Proxy), T1095 (Non-Application Layer Protocol)
+
 **Confidence:** LOW
+
 **False Positives:** Unlikely, but I have no evidence for any port other than 53. The source takes its port as a compile-time value, so a different port is plausible and unobserved.
+
 **Blind Spots:** Same announce-string dependency as the Detection rule; adds only port coverage.
+
 **Validation:** `suricata -T` PASS (8.0.7). Synthetic positive: 1 of 1 on port 8080. Real capture: 0 (the relay used 53); 0 on 2,411 other flows and the 12-flow synthetic negative set. Fires on a real non-53 relay: NOT CHECKED.
+
 **Deployment:** Same sensor.
+
 **Evidence:** The source makes its destination port a compile-time value (my read of the source); only port 53 was ever observed.
 
 ```
@@ -400,13 +488,21 @@ alert tcp $HOME_NET any -> $EXTERNAL_NET !53 (msg:"THL HUNT INV-2026-067 Reverse
 #### Short Printable ASCII Line as Client Payload on TCP 53
 
 **Tier:** Hunting
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1095 (Non-Application Layer Protocol)
+
 **Confidence:** MODERATE
+
 **False Positives:** Anything that speaks a plaintext line protocol on port 53, including SSH or HTTP deliberately run on that port to get through a filter. That is also a reason to look at the hit. A DNS-over-TCP message starts with a length whose first byte is below the printable range for any query under 8 KB, so ordinary resolvers do not match, but no real DNS-over-TCP traffic was in my test captures.
+
 **Blind Spots:** It fires on the first matching packet of a flow, so a plaintext line that arrives after non-matching data is also caught, and a protocol whose first line is longer than 40 bytes is missed. It does not need the relay's string, so it should survive a rename of the announce token and would flag a `READY` lane whose bytes I never saw.
+
 **Validation:** `suricata -T` PASS (8.0.7). Relay run capture: 22 of 22 relay sessions. Synthetic SSH banner on port 53: 1 of 1. 0 on 2,411 other flows, 0 on the synthetic negative set. Rate on real DNS-over-TCP traffic: NOT CHECKED.
+
 **Deployment:** Same sensor, as a hunt query or low-severity alert.
+
 **Evidence:** All 22 relay sessions open with a printable ASCII line of 7 bytes ending in a newline on port 53. Zeek raised a DNS weird on all 22 and Suricata produced no DNS record for any of them, which is the same anomaly seen from the engine side.
 
 ```
@@ -416,13 +512,21 @@ alert tcp $HOME_NET any -> $EXTERNAL_NET 53 (msg:"THL HUNT INV-2026-067 Short Pr
 #### Reverse Relay PING Keepalive After READY2 Announce
 
 **Tier:** Hunting
+
 **Robustness:** 1
+
 **ATT&CK Coverage:** T1090.001 (Internal Proxy)
+
 **Confidence:** MODERATE
+
 **False Positives:** None known when the announce was seen first, because the flowbit gates it. Without the announce rule loaded the flowbit is never set and the rule never fires, so it cannot stand alone and must not be deployed without the announce rule.
+
 **Blind Spots:** It adds only liveness: the same session already alerted at the announce. Its value is distinguishing a session that stayed up from one that closed.
+
 **Validation:** `suricata -T` PASS (8.0.7). Relay run capture: 11 alerts in 2 flows, which is the 11 keepalives on the wire. 0 elsewhere, including the synthetic negative set where a bare `PING` on another port did not fire it.
+
 **Deployment:** Same sensor, with the announce rule.
+
 **Evidence:** `PING` plus a newline (5 bytes) every 15 seconds while the session is idle.
 
 ```
@@ -432,13 +536,21 @@ alert tcp $HOME_NET any -> $EXTERNAL_NET any (msg:"THL HUNT INV-2026-067 Reverse
 #### Reverse Relay OK Reply After DIAL
 
 **Tier:** Hunting
+
 **Robustness:** 1
+
 **ATT&CK Coverage:** T1090.001 (Internal Proxy)
+
 **Confidence:** MODERATE
+
 **False Positives:** None known, because it needs the DIAL rule to have set its flowbit in the same flow. It cannot stand alone.
+
 **Blind Spots:** Corroboration only. The DIAL rule already alerts on the tasking. This reply shows the internal connection succeeded, which is the scoping question. I reworked it from the earlier form, which tried to match the reply as the whole to-server stream and fired 0 times because the stream already held the announce and a keepalive.
+
 **Validation:** `suricata -T` PASS (8.0.7). Relay run capture: 1 of 1 `OK` reply. 0 elsewhere.
+
 **Deployment:** Same sensor, with the DIAL rule.
+
 **Evidence:** `OK` plus a newline (3 bytes) sent 1 ms after the onward handshake completed.
 
 ```
@@ -448,13 +560,21 @@ alert tcp $HOME_NET any -> $EXTERNAL_NET any (msg:"THL HUNT INV-2026-067 Reverse
 #### Reverse Relay FAIL Reply After DIAL
 
 **Tier:** Hunting
+
 **Robustness:** 1
+
 **ATT&CK Coverage:** T1090.001 (Internal Proxy)
+
 **Confidence:** MODERATE
+
 **False Positives:** None known, gated the same way as the `OK` rule.
+
 **Blind Spots:** Corroboration only. A `FAIL` shows the operator tasked a destination that did not answer, which is also useful scoping information for a defender.
+
 **Validation:** `suricata -T` PASS (8.0.7). Relay run capture: 1 of 1 `FAIL` reply. 0 elsewhere.
+
 **Deployment:** Same sensor, with the DIAL rule.
+
 **Evidence:** `FAIL` plus a newline (5 bytes) sent after a `DIAL` to a closed port, with the relay reconnecting within 1 ms.
 
 ```

@@ -10,9 +10,13 @@ thumbnail: /assets/images/cards/arsenal-237-new-files.png
 ---
 
 **Campaign:** Arsenal-237-109.230.231.37-Malware-Repository
+
 **Date:** 2026-01-25
+
 **Author:** The Hunters Ledger
+
 **License:** CC BY 4.0
+
 **IOC Feed:** https://the-hunters-ledger.com/ioc-feeds/arsenal-237-killer-crowdstrike-dll.json
 
 ---
@@ -42,13 +46,21 @@ Coverage below is retiered from the original draft: every rule was re-scored for
 #### BYOVD Kernel Driver Install + CrowdStrike Falcon Termination (Correlation)
 
 **Tier:** Detection (correlation rule) — bundled below with its 2 required non-alerting base rules
+
 **Robustness:** 3 (correlation) / 1 (Falcon-termination base) / 2 (driver-service-creation base)
+
 **ATT&CK Coverage:** T1685 (Disable or Modify Tools), T1068 (Exploitation for Privilege Escalation)
+
 **Confidence:** HIGH
+
 **Rationale:** Neither base signal is reliable alone. *Fix applied during retiering:* the Falcon-termination rule's original `filter_legitimate` clause checked `ParentImage` and `User` against the `process_termination` logsource, but Sysmon's process-termination event (EventID 5) is documented to carry only the `Image` field, with no parent-process or user-context attribution, so that filter cannot reliably separate a forced kill from a routine Falcon restart on this logsource. The driver-service-creation rule's own description already stated that its intended correlation with a CrowdStrike termination "within 60 seconds" had been dropped because "single-event Sigma rules cannot express cross-event correlation." Both problems share one fix: rebuilding the pairing as a genuine Sigma temporal correlation. Kernel-mode driver service registration is the mechanism BYOVD requires to load a vulnerable driver at all, and this toolkit's own documented execution timeline runs from driver deployment through security-product termination in well under a minute, so a same-host co-occurrence within the correlation window is a high-confidence pairing rather than two unrelated routine events. *Logic fix 2026-10-10:* the correlation was `type: temporal`, which matches the two events in either order, but the title, description and Validation say the driver install comes first. It is now `temporal_ordered`, with the driver-service-creation base rule listed first.
+
 **False Positives:** A coordinated security-product migration (uninstalling CrowdStrike while installing a different vendor's kernel-mode filter driver in the same maintenance window) could produce both artifacts together. Uncommon, and typically scheduled, documented change activity rather than silent background noise.
+
 **Blind Spots:** A driver-mapping technique that loads the vulnerable driver without registering it as an SCM service (bypassing the classic CreateService/StartService BYOVD pattern) evades the driver-service-creation base entirely, defeating the correlation. Events spanning a host reboot or exceeding the 60-second window also evade.
+
 **Validation:** Trigger a kernel-mode driver service installation (EventID 7045, ServiceType kernel mode driver) followed within 60 seconds by termination of csagent.exe, CSFalconService.exe, or CSFalconContainer.exe on the same host: the correlation must fire. A CrowdStrike sensor update or restart alone, or a routine third-party driver install alone, must NOT fire the correlation.
+
 **Deployment:** Sysmon (or equivalent EDR telemetry covering process termination and kernel-driver-service creation) ingested into a SIEM correlation engine supporting Sigma temporal correlation, deployed on all CrowdStrike-protected endpoints.
 
 ```yaml
@@ -175,13 +187,21 @@ level: high
 #### Known-Vulnerable Driver Loaded from Temporary Directory (BYOVD)
 
 **Tier:** Detection
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1685 (Disable or Modify Tools), T1068 (Exploitation for Privilege Escalation)
+
 **Confidence:** HIGH
+
 **Rationale:** Anchors on the two specific, legitimately-signed-but-vulnerable driver files this toolkit embeds (BdApiUtil64.sys and the ProcExp-family driver), combined with a Temp-directory load path that is not how either product is normally installed. *Fix applied during retiering:* the original selector's driver-name list included the bare substring `.sys` alongside the two named drivers; since every kernel driver's filename ends in `.sys`, that entry alone satisfied the list for any driver load whatsoever, silently widening the rule from "these two named vulnerable drivers" to "any driver loaded from Temp." Removed, restoring the rule's intended scope. A different, unnamed vulnerable driver evades this rule entirely, since it depends on a curated pair of known driver identities rather than a generic "vulnerable driver" primitive; that curated-identity dependency is the ceiling on its durability. The rule's own description already correctly identified that its other intended correlation, CrowdStrike Falcon sensor-offline telemetry, is Falcon console/API-side data with no Windows/Sysmon expression and could not be rebuilt in Sigma; that portion stands as originally scoped.
+
 **False Positives:** Legitimate use of Process Explorer (ProcExp) run directly from a temporary or download-extraction directory rather than an installed path is plausible among IT and security-savvy users. Baidu Antivirus's driver is a much rarer legitimate presence outside its home market.
+
 **Blind Spots:** Any other cataloged vulnerable driver evades detection; the rule targets only the two specific drivers this toolkit's BYOVD engine embeds, not a generic vulnerable-driver primitive.
+
 **Validation:** Trigger a load of BdApiUtil64.sys or a ProcExp-family driver from a path containing `\Temp\`: must match. A load of either driver from its normal installed path, or an unrelated driver loaded from Temp, must NOT fire.
+
 **Deployment:** Sysmon EventID 6 (driver load) ingestion, EDR kernel-module monitoring, endpoint driver-load auditing on all Windows hosts.
 
 ```yaml

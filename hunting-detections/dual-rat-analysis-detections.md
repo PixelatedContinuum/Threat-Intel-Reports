@@ -9,9 +9,13 @@ hide: true
 ---
 
 **Campaign:** Dual-RAT-185.208.159.182-Quasar-NjRAT
+
 **Date:** 2025-12-06
+
 **Author:** The Hunters Ledger
+
 **License:** CC BY 4.0
+
 **Reference:** https://the-hunters-ledger.com/reports/dual-rat-analysis/
 
 ---
@@ -51,13 +55,21 @@ Each rule-type section below (`YARA Rules`, `Sigma Rules`, `Suricata Signatures`
 #### NjRAT/XWorm Triple-Redundant Persistence (Combined Static Signature)
 
 **Tier:** Detection
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1053.005 (Scheduled Task), T1547.001 (Registry Run Keys), T1547.009 (Shortcut Modification)
+
 **Confidence:** HIGH
+
 **Rationale:** Requires all five literal artifacts of the persistence-establishment routine to be present simultaneously: the `conhost` task/file name, the `minute /mo 1` frequency parameter, the exact registry Run-key path, the compound `Startup\conhost.lnk` filename, and the `schtasks /create` invocation. No legitimate, unrelated software plausibly contains all five strings together; an operator would need to rename every one of them in a rebuild to evade.
+
 **False Positives:** None known — the five-string combination has no plausible legitimate collision.
+
 **Blind Spots:** A rebuild that renames the `conhost` artifact and its dependent strings (task name, LNK filename, Run-key value) evades this rule; targets on-disk/in-memory string content, not a memory-only variant that never touches these code paths.
+
 **Validation:** Scan the analyzed sample (`hash1` below) — all five strings must match; unrelated legitimate software must NOT fire.
+
 **Deployment:** Endpoint AV/EDR file scan, static triage of unknown .NET binaries.
 
 ```yara
@@ -103,11 +115,17 @@ rule NjRAT_XWorm_Triple_Persistence {
 #### Zone.Identifier and DeleteFile Strings in a PE (Mark-of-the-Web Removal Capability Lead)
 
 **Tier:** Hunting
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1070.004 (Indicator Removal: File Deletion)
+
 **Confidence:** MODERATE
+
 **Rationale:** *Wording fix 2026-10-11:* the rule was titled and described as a Quasar RAT detection, but its strings (`:Zone.Identifier`, `DeleteFile`) are not family-specific, as the next sentences say. The heading, the rule name (`SUSP_PE_ZoneIdentifier_DeleteFile_Strings`, was `Quasar_RAT_MarkOfWeb_Removal`), its UUIDv5 id and the description now say what the strings test. Requires both a `:Zone.Identifier` alternate-data-stream reference and a `DeleteFile` API reference to be present together — a durable technique-level combination (Zone.Identifier is an OS-defined artifact name, not something the operator chooses), but neither string alone is family-specific, and legitimate MOTW-management utilities (unblock-file tools, some self-extracting installers) can plausibly contain both. Corrected from the original rule, which gated this condition behind `pe.imphash() == "8a3b1d8c…"` — a 66-character literal (not a valid 32-character MD5 imphash) evaluated with no `import "pe"` in the file, a compile-breaking defect; the broken gate has been removed.
+
 **False Positives:** Self-extracting installers or "unblock file" utilities that read and delete Zone.Identifier streams as part of legitimate first-run handling.
+
 **Deployment:** Endpoint AV/EDR file scan, static triage of unknown .NET binaries.
 
 ```yara
@@ -141,11 +159,17 @@ rule SUSP_PE_ZoneIdentifier_DeleteFile_Strings {
 #### NjRAT/XWorm Capability Bucket (VB.NET Baseline + Distinctive Config/API Combination)
 
 **Tier:** Hunting
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1125 (Video Capture), T1653 (Power Settings), T1102.001 (Bidirectional Dead Drop Resolver)
+
 **Confidence:** MODERATE
+
 **Rationale:** Corrected from the original rule, which OR'd across seven buckets of mostly generic strings (`Mutex`, `InstallDir`, bare `Startup`, bare `Run`, bare `conhost`, `webcam`, `microphone`, `keylogger`, `raw/`) — several of which are dangerous as unqualified single-string triggers (`Run` is a 3-character substring that matches an enormous share of all PE strings tables; bare `conhost` collides with the legitimate Windows Console Host binary). Rewritten to require the VB.NET runtime baseline (`Microsoft.VisualBasic` + `System.Windows.Forms`, both present) AND 3-or-more of a tightened 13-item bucket of genuinely distinctive tokens — two builder-specific config-key artifacts (`Groub`, `USBNM`), a rare NT API (`RtlSetProcessIsCritical`), a rare video-capture API (`capCreateCaptureWindowA`), and specific compound strings (`minute /mo 1`, `Startup\conhost.lnk`) rather than their generic bare substrings. Also removed the same broken `pe.imphash()` gate pattern (this file's literal was the sample's own SHA256, not an imphash at all) and widened the filesize bound from 50000 bytes (1.3x the analyzed sample) to 150KB for build-to-build headroom.
+
 **False Positives:** A VB.NET WinForms application is a large legitimate software category; 3-of-13 on the tightened bucket meaningfully narrows this but a coincidental match combining, e.g., video-capture code and a `RtlSetProcessIsCritical` reference in unrelated software cannot be fully excluded.
+
 **Deployment:** Endpoint AV/EDR file scan, static triage of unknown VB.NET binaries.
 
 ```yara
@@ -204,13 +228,21 @@ rule NjRAT_XWorm_Core_Detection {
 #### Quasar RAT Scheduled Task Persistence via schtasks.exe
 
 **Tier:** Detection
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1053.005 (Scheduled Task)
+
 **Confidence:** HIGH
+
 **Rationale:** Corrected from the original rule, which declared `service: security` with `EventID: 106` and a `CommandLine` field — an invalid combination (Event ID 106 is a TaskScheduler-Operational-log "Task Registered" event carrying only `TaskName`/`UserContext`, not the Security log, and it does not carry a `CommandLine` field at all). Re-anchored on the `process_creation` event that genuinely contains this command line: `schtasks.exe` invoked with the task name `"RuntimeBroker"`, an `ONLOGON` trigger, and a reference to `Client.exe` all present together.
+
 **False Positives:** Legitimate administrative scripts that create a scheduled task literally named "RuntimeBroker" with an ONLOGON trigger pointing at a file named Client.exe (an implausible combination in practice).
+
 **Blind Spots:** A rebuild that renames the task or target binary evades; does not cover task creation via the Task Scheduler COM API instead of schtasks.exe.
+
 **Validation:** Trigger the malware's install routine — the schtasks.exe invocation must match; unrelated scheduled-task creation must NOT fire.
+
 **Deployment:** Endpoint EDR / Sysmon-fed SIEM (process-creation telemetry).
 
 ```yaml
@@ -259,13 +291,21 @@ level: high
 #### Quasar RAT Mark of the Web Removal
 
 **Tier:** Detection
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1070.004 (Indicator Removal: File Deletion)
+
 **Confidence:** HIGH
+
 **Rationale:** Already well-formed in the original file — `TargetFilename` containing the Zone.Identifier ADS name AND `Image` ending `\Client.exe` together is a tight combination. Level raised from the original `medium` to `high` to match its Detection-tier precision (a bare Zone.Identifier deletion alone would be Hunting-grade noise per the site's baseline-FP discipline; the `Image` constraint is what elevates it).
+
 **False Positives:** Legitimate file management tools coincidentally named Client.exe.
+
 **Blind Spots:** A rebuild that renames Client.exe evades.
+
 **Validation:** Trigger the malware's MOTW-suppression routine — the deletion event must match; unrelated Zone.Identifier deletions (e.g. by browsers) must NOT fire, since they are not named Client.exe.
+
 **Deployment:** Endpoint EDR / Sysmon-fed SIEM (FileDelete telemetry).
 
 ```yaml
@@ -298,13 +338,21 @@ level: high
 #### Quasar RAT C2 Connection on TCP 4782
 
 **Tier:** Detection
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1071.001 (Web Protocols), T1573 (Encrypted Channel)
+
 **Confidence:** HIGH
+
 **Rationale:** Corrected from the original rule, which required the specific C2 IP `185.208.159.182` as an additional AND condition. That atomic is carried in the IOC feed for blocking; this rule keeps only the durable `Image` + `DestinationPort` combination so it still fires if the operator rotates C2 infrastructure while keeping the same builder-default binary name and port.
+
 **False Positives:** Legitimate applications coincidentally named Client.exe using TCP port 4782 (an uncommon, non-standard port).
+
 **Blind Spots:** A rebuild that renames Client.exe or changes the C2 port evades.
+
 **Validation:** Trigger the malware's C2 beacon — the connection event must match; unrelated traffic on port 4782 from a differently-named process must NOT fire.
+
 **Deployment:** Endpoint EDR / Sysmon-fed SIEM (network-connection telemetry).
 
 ```yaml
@@ -350,13 +398,21 @@ level: high
 #### NjRAT/XWorm Pastebin Dead-Drop C2 Resolution
 
 **Tier:** Detection
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1102.001 (Dead Drop Resolver), T1071.001 (Web Protocols)
+
 **Confidence:** HIGH
+
 **Rationale:** Corrected from the original rule, which OR'd `Image` against two names: `conhost.exe` (the malware's actual installed name) and `server (1).exe` (an artifact of this analysis's own browser download/deduplication naming — not a name the malware itself uses or would reuse in any other infection). The one-off filename has been dropped; `conhost.exe` alone is retained because the legitimate Windows Console Host process does not originate outbound network connections, making a process by that name reaching Pastebin over HTTPS a strong anomaly on its own.
+
 **False Positives:** Unlikely — the legitimate Windows conhost.exe process does not make outbound network connections in normal operation; a coincidentally-named third-party tool reaching Pastebin is the only realistic collision.
+
 **Blind Spots:** A rebuild that installs under a different filename evades.
+
 **Validation:** Trigger the malware's dead-drop resolution — the connection event must match; unrelated legitimate access to Pastebin from a properly-named process (browser, dev tool) must NOT fire.
+
 **Deployment:** Endpoint EDR / Sysmon-fed SIEM (network-connection telemetry).
 
 ```yaml
@@ -403,14 +459,23 @@ level: high
 #### NjRAT/XWorm Triple-Redundant Persistence: Base Rules + All-Three Correlation
 
 **Tier:** Hunting (3 base rules) / Detection (correlation) — co-located in one fence because SigmaHQ correlation syntax requires the referenced base rules to be evaluated alongside the correlation; see Multi-Family Organization.
+
 **Robustness:** Base rules 1 each (single mechanism, keyed on the renameable "conhost" artifact name in isolation); correlation 2 (all three independently-renameable mechanisms co-occurring on the same host within a short window is a materially stronger signal than any one alone).
+
 **ATT&CK Coverage:** T1053.005 (Scheduled Task), T1547.001 (Registry Run Keys), T1547.009 (Shortcut Modification)
+
 **Confidence:** HIGH for the correlation; MODERATE for each base rule individually.
+
 **Rationale:** *Logic fix 2026-10-11:* the correlation was titled "2-of-3" but was an `event_count` with `gte: 2` over the three base rules, which counts events and not distinct rules, so two hits of one mechanism on a host also fired it. A Sigma correlation cannot count distinct rules (that would take three pairwise correlations, not added), so it is now a `temporal` correlation over all three, matching the report's account that the sample sets up all three in one run. Decomposed from the original rule, which mixed three different Sysmon event types (Task Scheduler EventID 106, registry EventID 13, file-creation EventID 11) under a single invalid `service: security` logsource with a `condition: 1 of selection*` — a structure Sigma does not support (one rule, one logsource) and that, even read charitably, only required any ONE of the three mechanisms to fire. Rebuilt as three independent base rules on their correct logsource categories (`process_creation` for the schtasks.exe invocation, `registry_set`, `file_event`), each individually a Hunting-tier single-mechanism lead, plus a `type: temporal` correlation that elevates to Detection when all three co-occur on the same host within 10 minutes — directly reflecting the "triple-redundant, self-healing" persistence behavior documented for this campaign.
+
 **False Positives (base rules, individually):** A scheduled task, registry Run-key value, or Startup-folder shortcut literally named/valued "conhost" from an unrelated source (implausible per-mechanism, but each is a single renameable literal in isolation).
+
 **False Positives (correlation):** Very unlikely, would require all 3 independently-implausible conhost-named artifacts to appear on the same host within the same 10-minute window for an unrelated reason.
+
 **Blind Spots (correlation):** A rebuild that renames the shared "conhost" artifact across all three mechanisms evades the whole cluster; a deployment that establishes only one or two of the three persistence mechanisms (not observed in this campaign) triggers only the Hunting-tier base rules, not the correlation. The Elastic EQL conversion of a temporal correlation is a `sample by` over the host with no time bound, so the 10-minute window holds in Sigma semantics only, and Lucene has no form for it.
+
 **Validation:** Trigger the malware's install routine — all 3 base events must fire within 10 minutes and the correlation must alert; an environment with one or two coincidental "conhost"-named artifacts but not all three must NOT trigger the correlation.
+
 **Deployment:** Endpoint EDR / Sysmon-fed SIEM with correlation-rule support (process-creation, registry, and file-creation telemetry).
 
 ```yaml
@@ -563,14 +628,23 @@ tags:
 #### Quasar RAT Remote Thread Creation Into System Processes
 
 **Tier:** Hunting
+
 **Robustness:** 1
+
 **ATT&CK Coverage:** T1055 (Process Injection)
+
 **ATT&CK Note:** Sysmon event 8 records the creation of a remote thread in another process, which several process-injection sub-techniques use (DLL injection and portable executable injection among them). The event does not identify which one, so the parent technique is tagged. T1055.003 (Thread Execution Hijacking) suspends and redirects an existing thread and is not what this event logs.
+
 **Confidence:** HIGH
+
 **Rationale:** Re-tiered from Detection to Hunting on 2026-10-11: the one source-process anchor is a generic, renameable filename (Robustness 1), the durability of a value the tool happens to use rather than of the injection behaviour. Corrected from the original rule, which selected on `category: process_creation` with `ParentImage` ending `\Client.exe`, `Image` matching a system-process name, and `CommandLine|contains: 'inject'` — a combination that has no realistic basis (classic thread injection does not spawn a new, literally-named child process with an "inject" command-line argument; `CreateRemoteThread` takes no command-line parameter at all). Re-anchored on the `create_remote_thread` category (Sysmon Event ID 8), which is the log source that genuinely captures this technique, with `SourceImage` ending `\Client.exe` and `TargetImage` matching one of the three process names referenced in the original evidence.
+
 **False Positives:** Legitimate software coincidentally named Client.exe that legitimately injects into explorer.exe, svchost.exe, or dllhost.exe (architecturally possible, not observed).
+
 **Blind Spots:** The only Quasar-specific anchor is the source filename `Client.exe`, which the operator can change in a rebuild, so a rename evades; does not cover injection into other target processes.
+
 **Validation:** Trigger the malware's injection routine — the create_remote_thread event with this source/target pairing must match; unrelated remote-thread creation must NOT fire.
+
 **Deployment:** Endpoint EDR / Sysmon-fed SIEM (Sysmon Event ID 8 telemetry).
 
 ```yaml
@@ -621,11 +695,17 @@ level: medium
 #### Suspicious Access to Dead-Drop Services from a Non-Browser Process
 
 **Tier:** Hunting
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1102.001 (Dead Drop Resolver)
+
 **Confidence:** MODERATE
+
 **Rationale:** Already well-formed in the original file. Flags a non-browser, non-chat-client process reaching Pastebin, GitHub raw-content hosting, or Discord — a durable, family-agnostic technique lead that survives infrastructure rotation entirely, but real developer/CI tooling legitimately fetches from these same hosts often enough that this stays a triage-required Hunting signal rather than an alerting-grade Detection rule.
+
 **False Positives:** Legitimate developer access to paste/raw-content services; corporate tooling using GitHub for configuration retrieval.
+
 **Deployment:** Endpoint EDR / Sysmon-fed SIEM (network-connection telemetry); pair with the family-specific Detection rules above for attribution before high-confidence alerting.
 
 ```yaml
@@ -674,13 +754,21 @@ tags:
 #### Remote Thread Created by a Process Resident in AppData Roaming or Temp
 
 **Tier:** Hunting
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1055 (Process Injection)
+
 **ATT&CK Note:** Sysmon event 8 records the creation of a remote thread in another process, which several process-injection sub-techniques use (DLL injection and portable executable injection among them). The event does not identify which one, so the parent technique is tagged. T1055.003 (Thread Execution Hijacking) suspends and redirects an existing thread and is not what this event logs.
+
 **Confidence:** MODERATE
+
 **Rationale:** Corrected from the original rule, which declared a non-existent `api_call` logsource category with a `CallTrace` field searched for the literal string "CreateRemoteThread" — no such category exists in SigmaHQ, and standard Windows telemetry does not expose arbitrary API calls this way (`CallTrace` is populated only by Sysmon Event ID 8 CreateRemoteThread and Event ID 10 ProcessAccess, neither of which records the literal function name as searchable text). Re-anchored on the `create_remote_thread` category, which is the real source for this event. No target-process constraint is carried from the original evidence, so this remains a behavioral heuristic rather than a family-specific rule, and the title no longer claims NjRAT/XWorm attribution the logic cannot support.
+
 **Retiering note (2026-07-30):** the selector was narrowed from `\AppData\` to `\AppData\Roaming\` and `\AppData\Local\Temp\`. The unqualified AppData match swept in `\AppData\Local\Programs\`, the canonical per-user install root for a large population of ordinary signed applications (editors, chat clients, browsers, developer tooling) whose updaters legitimately create remote threads. Measured against live telemetry the original selector produced tens of thousands of fires per endpoint at a very high benign rate, which is a false-positive profile no environment permitting per-user installs can absorb. Roaming and Local Temp are where the campaign's implants actually resided, so the narrowing preserves the intended coverage while removing the dominant benign population.
+
 **False Positives:** Auto-updaters, games and hardware-control utilities that unpack to Local Temp and perform remote thread injection for benign reasons. Installer and update processes staged in Temp are the main residual source.
+
 **Deployment:** Endpoint EDR / Sysmon-fed SIEM (Sysmon Event ID 8 telemetry); triage against process reputation before escalating.
 
 ```yaml
@@ -740,12 +828,19 @@ level: medium
 #### Outbound TCP Payload to Port 4782 (Quasar Default Port, Port-Only Lead)
 
 **Tier:** Hunting
+
 **Robustness:** 1
+
 **ATT&CK Coverage:** T1095 (Non-Application Layer Protocol)
+
 **ATT&CK Note:** The report records the Quasar binary protocol over raw TCP on port 4782 (T1095) and its custom encryption (T1573). The rule tests only an established TCP flow with payload to port 4782 and inspects no payload, so T1095 is the technique the port is a lead for and T1573 is not listed.
+
 **Confidence:** MODERATE
+
 **Rationale:** Corrected from the original rule, whose `content` match was the file's own SHA256 hash string converted pairs-of-hex-digits into raw bytes and searched for in network traffic — a file digest has no reason to appear in the malware's actual protocol bytes, so that condition could never legitimately fire. No genuine protocol byte pattern was captured in the underlying evidence (only the port and "custom encryption" are documented), so the content match has been removed rather than replaced with another guess. TCP/4782 is the Quasar-family default port, but a port is configurable and the port number is the rule's only discriminator, so it scores Robustness 1 and makes no claim of a protocol fingerprint: anything else on that port also matches.
+
 **False Positives:** Any legitimate or unrelated service that happens to use TCP/4782 (uncommon but not impossible); the `threshold` limits alert volume per source.
+
 **Deployment:** Network IDS/IPS at perimeter and internal segmentation points; hunt-tune before alerting.
 
 ```
@@ -757,11 +852,17 @@ alert tcp $HOME_NET any -> $EXTERNAL_NET 4782 (msg:"THL HUNT Dual-RAT-Quasar-NjR
 #### HTTP User-Agent Containing iPhone OS 11_4_1 (Value Reported in NjRAT/XWorm Traffic)
 
 **Tier:** Hunting
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1071.001 (Web Protocols)
+
 **Confidence:** MODERATE
+
 **Rationale:** Corrected from the original rule, which mixed a raw (non-sticky-buffer) content match against a "User-Agent: " header prefix with a separate `http.user_agent` sticky-buffer match for "Mobile"/"Safari" — redundant and, if the underlying request is TLS-wrapped, unable to see either buffer in cleartext at all. Rewritten as a single `http.user_agent` sticky-buffer match against the full, dated OS-version substring from the observed UA string (iOS 11.4.1 — an implausible version for genuine 2026-era mobile traffic, and a strong indicator of a hardcoded, non-updating spoofed value rather than a real device). This assumes the request is visible as cleartext HTTP; if the underlying transport is TLS end-to-end, this signature will not see the header at all and only the host-level Sigma coverage above applies.
+
 **False Positives:** A corporate proxy or testing tool that rewrites/replays an old, fixed iPhone Safari User-Agent string for unrelated reasons (uncommon).
+
 **Deployment:** Network IDS/IPS at perimeter and internal segmentation points; hunt-tune before alerting.
 
 ```

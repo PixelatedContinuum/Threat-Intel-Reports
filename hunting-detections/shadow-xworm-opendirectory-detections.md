@@ -9,9 +9,13 @@ hide: true
 ---
 
 **Campaign:** OpenDirectory-DualRAT-MaaS-151.245.112.70
+
 **Date:** 2026-04-04
+
 **Author:** The Hunters Ledger
+
 **License:** CC BY 4.0
+
 **Reference:** https://the-hunters-ledger.com/reports/shadow-xworm-opendirectory/
 
 ---
@@ -51,13 +55,21 @@ This campaign distributes two unrelated RAT families from one open-directory ser
 #### Shadow RAT Client: Namespace Strings, Version and Mutex Fingerprint
 
 **Tier:** Detection
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1027.002 (Software Packing — .NET Reactor), T1573.001 (Symmetric Cryptography — AES-256 encrypted C2)
+
 **Confidence:** HIGH
+
 **Rationale:** `Shadow.Common.*` is the namespace root of this Quasar-fork codebase and survives the sample's .NET Reactor packing pass intact. The rule has three branches: three of four strings from the three namespace names and the Costura asset name; the `2.6.4.0` version constant together with the single-instance mutex GUID; or `Shadow Client` plus `Shadow Client Startup` plus one namespace name. Every branch needs at least two strings, so no single renameable literal carries the rule alone. *Robustness fix 2026-10-11 (round 2):* scored 2, not 3: these are family string combinations, and the version constant and mutex GUID are per-build values. *Rename and wording fix 2026-10-11:* the heading and rule name said v2.6.4.0 and promised a namespace plus Costura fingerprint, but the version is tested only by the second branch and the Costura asset is optional in the first, so the heading and rule name (`RAT_ShadowRAT_v2640_Client`, now `RAT_ShadowRAT_Client_Namespace_Version_Mutex`, with the matching deterministic `id`) no longer name a version or promise the Costura asset.
+
 **False Positives:** None known. The `Shadow.Common.*` namespace hierarchy and the `costura.shadow.common.dll.compressed` asset name are distinctive compiled identifiers not seen in any known legitimate .NET software; the version-plus-mutex branch rests on the GUID, since `2.6.4.0` alone is an ordinary version string. Not goodware-validated.
+
 **Blind Spots:** The three branches evade separately. Renaming the `Shadow.*` namespace strings (and the Costura asset) removes the first and third branches, but the version-plus-mutex branch still matches unchanged, so a rebuild must also change the `2.6.4.0` constant or the mutex GUID; conversely, a file holding only `2.6.4.0` and the mutex GUID matches with no namespace or Costura string. The rule targets client files and saved dumps, not a hypothetical script-only loader. The condition tests `filesize`, which is undefined in a libyara live process-memory scan, so the rule matches files and saved dumps only.
+
 **Validation:** Scan a Shadow RAT client build (either `hash1` below): at least one of the three branches must match; a benign Costura-packed .NET application must NOT fire.
+
 **Deployment:** Endpoint AV/EDR file scan and email gateway attachment scan, of files or saved dumps. Live process-memory scanning is not covered: the `filesize` test is undefined there.
 
 ```yara
@@ -106,13 +118,21 @@ rule RAT_ShadowRAT_Client_Namespace_Version_Mutex {
 #### Shadow RAT v2.6.4.0: Shadow.Common.dll Shared Library
 
 **Tier:** Detection
+
 **Robustness:** 3
+
 **ATT&CK Coverage:** T1573.001 (Symmetric Cryptography — AES-256 crypto), T1542.003 (Bootkit — WinRE namespace presence)
+
 **Confidence:** HIGH
+
 **Rationale:** `Shadow.Common.Cryptography.Aes256` is a distinctive, family-specific class name required alongside two of four message-namespace strings drawn from separate functional areas (HVNC, GDI, WinRE client-management, DNS) — an operator would need to rename the crypto class and rework multiple unrelated namespace branches simultaneously to evade.
+
 **False Positives:** None known — `Shadow.Common.Cryptography.Aes256` does not appear in any known legitimate .NET library.
+
 **Blind Spots:** Misses a rebrand that renames the crypto class and strips the namespace strings; a memory-only extraction that never touches disk is not covered by a live process-memory scan, because the `filesize` test cannot match there (a saved dump written to a file can be scanned).
+
 **Validation:** Scan `Shadow.Common.dll` (`hash1` below) — the crypto class plus 2-of-4 namespace requirement must match; a benign .NET library implementing AES independently must NOT fire.
+
 **Deployment:** Endpoint file scan, scanning of saved dumps (for extracted Costura.Fody assemblies). Live process-memory scanning does not match: the condition's `filesize` test is undefined there, so only files and saved dumps are scanned.
 
 ```yara
@@ -146,13 +166,21 @@ rule RAT_ShadowRAT_CommonDLL {
 #### Shadow RAT AMSI Patch Shellcode or Asterisk-Padded AMSI and ETW String Fragments
 
 **Tier:** Detection
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1685 (Disable or Modify Tools — AMSI + ETW bypass), T1027 (Obfuscated Files or Information — asterisk-padding obfuscation)
+
 **Confidence:** HIGH
+
 **Rationale:** The 15-byte sequence is the byte pattern the report records for the AMSI patch. *Round 2 fix 2026-10-11:* the report annotates it as making `AmsiScanBuffer` return `E_INVALIDARG`, but disassembled as x64 it is `mov eax,0x80070057; mov rax,[rsp]; add rsp,8; jmp rsp`, which overwrites the value in rax and jumps to the stack pointer, not to the saved return address, so the bytes do not themselves show the claimed effect and the functional behavior is NOT CHECKED. The rule matches the recorded pattern, not a verified working patch. Robustness is 2, scored on the weakest (string) branches. The two OR'd string-combination branches add coverage from the asterisk-padding deobfuscation pattern used to hide the `amsi`/`Buffer`/`EtwEventWrite`/`ntdll` literals from static string scanners. *String fix 2026-10-11 (round 2):* the ETW branch used the fragments `EtwEv` and `ntdll`, but the report's padded literals (`**E****t*wEv*e***n*******t**Wr*i*****t**e`, `n***t**d***ll*.*d*****l*l`) do not contain either contiguously, so that branch could not match them; it now uses the two padded literals as the report records them, and every string also carries `wide`, because .NET stores string constants as UTF-16. Whether the compiled client holds these literals as recorded is NOT CHECKED. *Rename and wording fix 2026-10-11:* the heading and rule name said Shadow RAT v2.6.4.0 and an AMSI + ETW chain, but each of the three branches fires alone, so a file with only the AMSI half or only the ETW half matches, and nothing ties a match to Shadow RAT or its version; the rule name is now `RAT_ShadowRAT_AMSI_Patch_Or_Padded_Bypass_Strings` with the matching deterministic `id`. The claim that legitimate software never embeds the shellcode bytes was not tested: a security tool or another malware family that reuses the same patch would match the first branch.
+
 **False Positives:** None known from the byte pattern in this sample set; not goodware-validated, and another tool or family that reuses the same AMSI patch bytes would match. The third branch (`.Replace("*", "")` plus the two padded EtwEventWrite and ntdll.dll literals) needs the long padded literals, which ordinary P/Invoke code does not contain.
+
 **Blind Spots:** A build using a different register/opcode encoding to achieve the same `E_INVALIDARG` return, or one that strips the asterisk-obfuscated literals entirely, evades the corresponding branch (though the byte pattern branch stands independently).
+
 **Validation:** Scan a Shadow RAT client build (`hash1` below) — the shellcode bytes or the obfuscated-string combination must match; a benign .NET binary referencing `ntdll.dll` in ordinary P/Invoke declarations must NOT fire on that branch alone (it also requires `.Replace("*", "")` and the padded literals). Replay against the captured client is NOT CHECKED.
+
 **Deployment:** Endpoint AV/EDR file scan, of files or saved dumps. The condition tests `filesize`, which is undefined in a libyara live process-memory scan, so the rule matches files and saved dumps only.
 
 ```yara
@@ -197,13 +225,21 @@ rule RAT_ShadowRAT_AMSI_Patch_Or_Padded_Bypass_Strings {
 #### Shadow RAT v2.6.4.0: Cryptocurrency Clipper Module
 
 **Tier:** Detection
+
 **Robustness:** 3
+
 **ATT&CK Coverage:** T1115 (Clipboard Data)
+
 **Confidence:** HIGH
+
 **Rationale:** `SetClipboardMonitoringEnabled` and `SendClipboardData` are custom message-handler method names, not Windows APIs — no legitimate software implements these exact identifiers. Requiring both plus two of three currency-address field names means an operator would need to rename the clipper's entire method-naming convention to evade.
+
 **False Positives:** None known — `SetClipboardMonitoringEnabled` is not a Windows API; it is a custom Shadow RAT message handler method name.
+
 **Blind Spots:** A rebuild that renames both handler methods and the currency field names evades; targets the on-disk client/DLL or a saved dump, not a memory-only injected variant scanned live.
+
 **Validation:** Scan `Shadow.Common.dll` (`hash1` below) — both handler names plus 2-of-3 currency fields must match; a benign clipboard-utility application must NOT fire.
+
 **Deployment:** Endpoint file scan, scanning of saved dumps. Live process-memory scanning does not match: the condition's `filesize` test is undefined there, so only files and saved dumps are scanned.
 
 ```yara
@@ -238,13 +274,21 @@ rule RAT_ShadowRAT_Crypto_Clipper {
 #### Shadow RAT v2.6.4.0: WinRE Persistence Module
 
 **Tier:** Detection
+
 **Robustness:** 3
+
 **ATT&CK Coverage:** T1542.003 (Bootkit — WinRE persistence)
+
 **Confidence:** HIGH
+
 **Rationale:** `DoAddWinREPersistence`/`DoRemoveWinREPersistence` and the `Shadow.Common.Messages.ClientManagement.WinRE` namespace string are unique compiled identifiers to this family. WinRE persistence survives OS reinstallation and has limited EDR behavioral coverage, making file-level detection the primary viable layer.
+
 **False Positives:** None known — method names and namespace are specific to Shadow RAT; no known legitimate software uses these identifiers.
+
 **Blind Spots:** A rebrand that renames both the method names and the namespace evades; does not cover the WinRE persistence mechanism at runtime (no dynamic confirmation of the actual boot-time hook).
+
 **Validation:** Scan `Shadow.Common.dll` (`hash1` below) — one of the two method names plus the namespace string must match; unrelated WinRE-management tooling (e.g., legitimate recovery utilities) must NOT fire.
+
 **Deployment:** Endpoint file scan, scanning of saved dumps. Live process-memory scanning does not match: the condition's `filesize` test is undefined there, so only files and saved dumps are scanned.
 
 ```yara
@@ -278,13 +322,21 @@ rule RAT_ShadowRAT_WinRE_Persistence {
 #### XWorm 3.0-5.0: Config and Builder Markers
 
 **Tier:** Detection
+
 **Robustness:** 3
+
 **ATT&CK Coverage:** T1027 (Obfuscated Files or Information — config encryption), T1497.001 (Virtualization/Sandbox Evasion: System Checks — hosting detection), T1053.005 (Scheduled Task — schtask persistence), T1091 (Replication Through Removable Media — USB spread)
+
 **Confidence:** HIGH
+
 **Rationale:** Only the first OR-branch depends on this campaign's build-specific config keys; the second and third branches (`<Xwormmm>` group tag + `ip-api.com` hosting check; hosting check + 1-minute schtask flag + `USB.exe`) key entirely on default XWorm 3.0-5.0 builder markers that persist across builds and operators, so the rule keeps detecting this family even if the campaign-specific config keys rotate on a rebuild.
+
 **False Positives:** None known — the config keys double as process mutexes unique to XWorm builder output, and the `USB.exe`/hosting-check/schtask combination has no known legitimate collision. `USB.exe` alone is a generic filename, but the 3-way AND requirement mitigates that.
+
 **Blind Spots:** A heavily customized fork that changes the group tag, removes the ip-api.com hosting check, and renames `USB.exe` simultaneously would evade all three branches.
+
 **Validation:** Scan an XWorm 3.0-5.0 build (either `hash1` below) — at least one branch must match; a benign remote-access or hosting-diagnostic tool must NOT fire.
+
 **Deployment:** Endpoint AV/EDR file scan, email gateway attachment scan.
 
 ```yara
@@ -334,11 +386,17 @@ rule RAT_XWorm_30_50_Config {
 #### .NET Rijndael, ECB, MD5 and Anti-Analysis String Combination (XWorm Config Crypto Lead)
 
 **Tier:** Hunting
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1027 (Obfuscated Files or Information — config encryption), T1497.001 (Virtualization/Sandbox Evasion: System Checks — anti-analysis checks)
+
 **Confidence:** MODERATE
+
 **Rationale:** All four mandatory strings (`RijndaelManaged`, `ECB`, `MD5CryptoServiceProvider`, `FromBase64String`) are standard .NET Framework class/method names used by countless legitimate and unrelated malicious crypto implementations — this is a common "insecure but simple" pattern copied broadly across many code bases, not a Shadow/XWorm-specific construction on its own. Two of the three corroborating anti-analysis strings (`Win32_ComputerSystem`, `IsAttached`) are themselves generic terms; only `SbieDll` is genuinely distinctive. This durable-but-generic technique pattern belongs in Hunting, matching the original analysis's own framing as a supporting indicator. The rule identifier keeps the original `Rijndael256ECB` and `XWorm` wording (renaming would re-derive its `id` and change the deployed artifact's rule name): the 256-bit block size and the XWorm attribution come from the report's account of the sample, and the rule tests neither, so read the name as the lead it was written for and the `family` field as a lead label, not an attribution.
+
 **False Positives:** Individual strings appear routinely in legitimate .NET applications using cryptography or WMI/system queries; the combination is more distinctive but not unique — any application combining basic AES/MD5 crypto with a WMI computer-system check and an unrelated "IsAttached" property could coincidentally satisfy this rule.
+
 **Deployment:** Endpoint AV/EDR file scan; treat as a supporting/corroborating indicator alongside the Detection-tier XWorm config rule above, not as standalone confirmation.
 
 ```yara
@@ -385,13 +443,21 @@ rule RAT_XWorm_Rijndael256ECB_Crypto {
 #### One-Minute Highest-Privilege Scheduled Task With an AppData Roaming Path (XWorm Persistence Pattern)
 
 **Tier:** Detection
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1053.005 (Scheduled Task)
+
 **Confidence:** HIGH
+
 **Rationale:** The combination of a 1-minute recurrence interval, HIGHEST privilege level, and a user-writable AppData path on the `schtasks.exe` command line is a command-text pattern that does not depend on any XWorm-specific literal — no task name, mutex, or install filename is required. Changing any one of the interval, the privilege level or the path text evades it, so it is a lead on the pattern, not a technique invariant (Robustness 2). *Wording and boundary fix 2026-10-11:* the title and description named XWorm, but nothing in the selection is XWorm-specific, so they now describe the pattern. The interval test was the substring `/mo 1`, which also matches `/mo 10`, `/mo 15` and `/mo 1440`, so a 15-minute task passed as a one-minute task; it is now `/mo 1 ` with a trailing space. *Boundary fix 2026-10-11 (round 2):* the trailing-space test lost the valid spelling with `/mo 1` as the last argument, so `/mo 1` at the end of the line is now accepted too (`/mo 15` and `/mo 1440` still do not match).
+
 **False Positives:** No legitimate software known to the report creates a one-minute-interval, HIGHEST-privilege scheduled task whose command line holds `AppData\Roaming`; the path can sit anywhere on the command line (the task name, the action or another argument) and the action is not tested, so a task that merely mentions that path matches. IT deployment tools that use short-interval tasks typically run from Program Files, not AppData. This was not measured against a goodware corpus.
+
 **Blind Spots:** A slower respawn interval or a lower privilege level evades this specific rule (though doing so would also blunt the malware's own persistence goal); switches written with a dash (`-sc`, `-mo`) or in long form evade; does not cover persistence mechanisms other than scheduled tasks.
+
 **Validation:** Trigger the malware's persistence routine — the `schtasks.exe` invocation must match; a legitimate IT deployment script scheduling a task from Program Files at a longer interval must NOT fire.
+
 **Deployment:** SIEM (Sysmon Event ID 1 / process_creation), EDR.
 
 ```yaml
@@ -447,11 +513,17 @@ level: high
 #### Shadow RAT Registry Run Key Persistence
 
 **Tier:** Hunting
+
 **Robustness:** 1
+
 **ATT&CK Coverage:** T1547.001 (Registry Run Keys / Startup Folder)
+
 **Confidence:** HIGH (behavior); brittle as a rule
+
 **Rationale:** The registry value name `Shadow Client Startup` and the `\SubDir\` install-path fragment are each single build-chosen literals joined by OR, not AND: either alone is sufficient to fire, so a rebuild must rename both the value name and the install directory to evade. Durability governs over the rule's currently clean false-positive profile, so this is a Hunting anchor rather than a Detection one. *Logic and wording fix 2026-10-11:* the earlier description required the Run value name, but the install-path branch fired on a write to any registry key whose data held `\SubDir\Client.exe`; that branch now also requires a `\CurrentVersion\Run\` key, and the description states both alternatives. The earlier Rationale also said renaming either literal evades; with an OR it takes both.
+
 **False Positives:** Unlikely for the value name "Shadow Client Startup", which no known legitimate software uses. The install-path alternative fires on any Run value whose data contains `\SubDir\Client.exe` or `\SubDir\$77Client.exe`, so unrelated software or an administrator tool that installs a `Client.exe` under a `SubDir` folder also matches; a rebuild renaming both literals evades entirely.
+
 **Deployment:** SIEM (Sysmon Event ID 13 / registry_set), EDR registry monitoring.
 
 ```yaml
@@ -497,11 +569,17 @@ level: medium
 #### AMSI Library Load by a Process Outside System32, Program Files and Common Interpreters (AMSI Patching Pattern)
 
 **Tier:** Hunting
+
 **Robustness:** 3
+
 **ATT&CK Coverage:** T1685 (Disable or Modify Tools — AMSI Bypass)
+
 **Confidence:** HIGH (technique); MEDIUM precision as written
+
 **Rationale:** This rule keys on no Shadow-RAT-specific literal at all: it is a durable, generic technique signal (a process outside the filtered locations loading `amsi.dll`) that would also catch other AMSI-patching malware. Durability is high, but the process exclusion list does not filter the many legitimate developer tools, custom .NET applications, and non-Program-Files installs that load `amsi.dll` during ordinary work, so this is a meaningfully noisy selector requiring analyst triage rather than auto-alerting. *Wording fix 2026-10-11:* the title and description said amsi.dll was loaded from a non-standard path, but the two filters test the loading process's image path and `ImageLoaded` is matched on the file name only; the malware loads the genuine System32 amsi.dll, so a path test on the DLL would not catch it.
+
 **False Positives:** Custom development tools, non-standard .NET installations, or portable applications built by developers running from user profile paths; security research tools that explicitly load `amsi.dll` for testing purposes.
+
 **Deployment:** SIEM (Sysmon Event ID 7 / image_load), EDR.
 
 ```yaml
@@ -556,11 +634,17 @@ level: medium
 #### ETW Bypass via Process Access to ntdll.dll Memory Region
 
 **Tier:** Hunting
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1685 (Disable or Modify Tools — ETW Bypass)
+
 **Confidence:** HIGH (technique); LOW precision as written
+
 **Rationale:** Full-rights process access (`PROCESS_ALL_ACCESS`) with `ntdll.dll` in the call trace is the correct mechanism for ETW patching, but `ntdll.dll` routes almost every `OpenProcess` call on Windows, so the `CallTrace` clause has close to zero discriminating power on its own; the six-name source-image exclusion list (`svchost.exe`, `lsass.exe`, `csrss.exe`, `services.exe`, `winlogon.exe`, `wininit.exe`) matches on the file name alone, so a process of one of those names started from any directory is excluded too, and it does not filter EDR/AV agents, debuggers, or process-inspection tools, all of which routinely acquire full access to other processes. This selector would very likely fire on ordinary endpoint activity — a broad hunting lead for injection/ETW-patching activity, not an alerting-grade signal by itself.
+
 **False Positives:** EDR/antivirus agents, debugging tools and performance profilers, and process-inspection tools (Process Explorer, Task Manager "show details") that legitimately request full process access as part of normal operation; application compatibility shims that modify ntdll behavior at runtime.
+
 **Deployment:** SIEM (Sysmon Event ID 10 / process_access), EDR — correlate with other Shadow RAT indicators before treating a hit as confirmed.
 
 ```yaml
@@ -611,11 +695,17 @@ level: medium
 #### Windows Firewall Disabled via Netsh Opmode Command
 
 **Tier:** Hunting
+
 **Robustness:** 3
+
 **ATT&CK Coverage:** T1686.003 (Windows Host Firewall — refined from the parent T1686 for specificity)
+
 **Confidence:** MODERATE
+
 **Rationale:** The `netsh firewall set opmode disable` syntax is the specific, durable command chokepoint for this technique and is not tied to any Shadow-RAT-specific literal, but the command itself is routinely used by administrators and IT automation during legitimate maintenance windows — a real, not theoretical, source of false positives per the original analysis.
+
 **False Positives:** Legitimate administrators disabling Windows Firewall during planned maintenance or network reconfiguration; IT automation scripts that manage firewall state as part of policy enforcement workflows; software installers that temporarily disable the firewall during service installation.
+
 **Deployment:** SIEM (Sysmon Event ID 1 / process_creation), EDR — correlate with other Shadow RAT indicators for confirmation.
 
 ```yaml
@@ -661,11 +751,17 @@ level: medium
 #### XWorm Registry Run Key Persistence Using Malware Install Name
 
 **Tier:** Hunting
+
 **Robustness:** 1
+
 **ATT&CK Coverage:** T1547.001 (Registry Run Keys / Startup Folder)
+
 **Confidence:** HIGH (behavior); brittle as a rule
+
 **Rationale:** Both AND-ed clauses (`TargetObject` suffix and `Details` substring) test the same operator-chosen install name ("XWormClient") rather than two independent signals, so the combination adds no durability beyond a single renamed literal. XWorm's install filename is a builder configuration option any operator can set arbitrarily; a differently-named build evades this rule entirely.
+
 **False Positives:** Unlikely today — no known legitimate software uses the value name "XWormClient"; a differently-configured XWorm build (or a different operator's build) evades entirely.
+
 **Deployment:** SIEM (Sysmon Event ID 13 / registry_set), EDR registry monitoring.
 
 ```yaml
@@ -704,11 +800,17 @@ level: medium
 #### Executable Shortcut Created in Windows Startup Folder by Non-System Process
 
 **Tier:** Hunting
+
 **Robustness:** 3
+
 **ATT&CK Coverage:** T1547.009 (Shortcut Modification — Startup Folder persistence)
+
 **Confidence:** HIGH (technique); MEDIUM precision as written
+
 **Rationale:** This is a durable, XWorm-independent technique signal (any `.lnk` written to the Startup folder by a non-system-path process) rather than a keyed-on malware literal, but the original analysis already documented real legitimate collisions (staging-directory installers, non-Program-Files update managers) that make this a triage lead rather than an alerting-grade rule.
+
 **False Positives:** Software installers running from user-writable staging directories that create startup shortcuts as part of setup; legitimate update managers or tray applications deployed outside Program Files that add startup shortcuts.
+
 **Deployment:** SIEM (Sysmon Event ID 11 / file_event), EDR.
 
 ```yaml
@@ -753,11 +855,17 @@ level: medium
 #### Non-Browser Process DNS Query to ip-api.com (Host Name Used by XWorm's Hosting Check)
 
 **Tier:** Hunting
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1497.001 (Virtualization/Sandbox Evasion: System Checks)
+
 **Confidence:** HIGH that XWorm 3.0-5.0 builds query this endpoint (documented builder behavior); LOW that a DNS query for the host name is XWorm, because the event shows only the name and not the URL or parameters, and the campaign's own IOC feed flags the domain as high FP risk
+
 **Rationale:** `ip-api.com` is a popular free geolocation API used broadly by legitimate scripts, monitoring tools, and desktop applications. DNS-layer visibility cannot see the `/line/?fields=hosting` path that narrows the companion Suricata signature for the same behavior, so a browser-only exclusion filter leaves substantial non-browser legitimate traffic unfiltered. *Logic and wording fix 2026-10-11:* the earlier description also excluded network tools, but only six browsers are filtered; and the name test was the substring `ip-api.com`, which also matched `notip-api.com` and `ip-api.com.example.net`, so it is now the exact name or a name ending `.ip-api.com`.
+
 **False Positives:** Legitimate applications using ip-api.com for geolocation or network diagnostics; network monitoring and IT asset management tools that use ip-api.com as a data source; weather, travel, or location-aware desktop applications performing connectivity checks.
+
 **Deployment:** SIEM (Sysmon Event ID 22 / dns_query) or an EDR DNS sensor that reports the querying process. DNS-server or network DNS monitoring does not carry the process, so the browser filter cannot be applied there.
 
 ```yaml
@@ -809,11 +917,17 @@ level: medium
 #### WMI Win32_ComputerSystem Query from User-Writable Directory
 
 **Tier:** Hunting
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1497.001 (Virtualization/Sandbox Evasion: System Checks), T1082 (System Information Discovery)
+
 **Confidence:** MODERATE
+
 **Rationale:** `Win32_ComputerSystem` is one of the most common WMI classes referenced by legitimate system-information and inventory tooling, and AppData/Temp-hosted parent processes are common for legitimate portable and Electron-based applications (auto-updaters, chat/collaboration clients) that also perform WMI queries during normal operation — the combination narrows but does not eliminate benign hits.
+
 **False Positives:** Legitimate system inventory or asset management tools running WMI queries from user-writable paths (unusual but possible in portable tool deployments); IT automation scripts placed in AppData by software deployment systems; portable or Electron-based applications performing routine WMI queries from AppData.
+
 **Deployment:** SIEM (Sysmon Event ID 1 / process_creation), EDR.
 
 ```yaml
@@ -859,12 +973,19 @@ level: medium
 #### Zone.Identifier Stream Deleted From an Executable (.exe) by a Process Outside Browser and System Paths
 
 **Tier:** Hunting
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1553.005 (Subvert Trust Controls: Mark-of-the-Web Bypass)
+
 **Confidence:** HIGH (behavior, both families); logsource category corrected from the original
+
 **Rationale:** Re-anchored on the **deletion** event (`category: file_delete`, corrected from the original rule's `file_event`/creation category) — a plain `:Zone.Identifier` file-creation selector matches every downloaded file system-wide, since Windows creates this ADS automatically on every download, and is pure baseline noise. Scoping to deletion turns this into a genuine hunting lead for MOTW-clearing behavior specifically, though self-updating legitimate software also clears its own MOTW, so an analyst triages the hits. *Logic and wording fix 2026-10-11:* the description said executable files, but the selection matched the stream of any file; it now requires the file name to end `.exe`, which is what the report records for both families (they clear the MOTW on their own executables). The telemetry assumption is stated in `logsource.definition`.
+
 **False Positives:** Self-updating legitimate software (browsers, some installers) that clears its own Zone.Identifier stream after a user-consented first run; administrative scripts that bulk-clear MOTW on downloaded files; software deployment and packaging tools that remove MOTW from downloaded installers during staging.
+
 **Blind Spots:** Needs file-delete telemetry that reports alternate data streams; where the sensor does not, the rule never fires. The converted queries select Sysmon EID 23 only, so deletions reported as EID 26 are not matched without a custom mapping, and no sensor replay was run, so ADS-delete realization is NOT CHECKED. A malware copy renamed to another extension, a `.dll`, or a clearing process under `C:\Windows\` or `C:\Program Files\` or a browser name is not seen.
+
 **Deployment:** Endpoint EDR / Sysmon-fed SIEM (FileDelete telemetry), correlated with process creation for the same image.
 
 ```yaml
@@ -926,11 +1047,17 @@ level: medium
 #### XWorm Anti-Analysis Hosting Detection via ip-api.com
 
 **Tier:** Hunting
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1497.001 (Virtualization/Sandbox Evasion: System Checks)
+
 **Confidence:** HIGH for the behavior (documented XWorm 3.0-5.0 builder feature); the campaign's own IOC feed flags the underlying domain as high FP risk
+
 **Rationale:** The `http.host` + `http.uri` combination (`ip-api.com` + `/line/` + `fields=hosting`) is a family-wide default builder marker, not a campaign-specific literal, and is more precise than a bare domain match since it requires the specific hosting-check URL path. It remains Hunting rather than Detection because `ip-api.com` is a popular free geolocation service used broadly by legitimate scripts, monitoring tools, and desktop software — the underlying IOC feed entry for this URL is explicitly flagged `false_positive_risk: HIGH` with a note not to block it outright.
+
 **False Positives:** Legitimate applications, scripts, or monitoring dashboards using ip-api.com for IP geolocation or network diagnostics — this is a widely-used free API with substantial legitimate traffic.
+
 **Deployment:** Network IDS/IPS at perimeter and internal segmentation points; hunt-tune before alerting.
 
 ```suricata

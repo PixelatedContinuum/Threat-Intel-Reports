@@ -10,9 +10,13 @@ thumbnail: /assets/images/cards/arsenal-237-new-files.png
 ---
 
 **Campaign:** Arsenal-237-109.230.231.37-Malware-Repository
+
 **Date:** 2026-01-26
+
 **Author:** The Hunters Ledger
+
 **License:** CC BY 4.0
+
 **IOC Feed:** https://the-hunters-ledger.com/ioc-feeds/arsenal-237-BdApiUtil64-sys.json
 
 ---
@@ -42,13 +46,21 @@ Coverage below is retiered from the original draft: every rule was re-scored for
 #### BdApiUtil64.sys Baidu Driver Identity (Signer, PDB, and Internal Object Names)
 
 **Tier:** Detection
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1068 (Exploitation for Privilege Escalation — BYOVD with a legitimately-signed driver)
+
 **Confidence:** HIGH
+
 **Rationale:** This rule fingerprints the BdApiUtil64.sys driver itself — the legitimate-but-weaponized artifact at the center of this BYOVD technique — by combining internal, code-embedded strings (a build-server PDB path, the vendor's legal signer name, the product name, and internal kernel object names the driver registers at load) rather than its on-disk filename. A signed driver's embedded identity is a materially more durable anchor than a filename: an operator can trivially rename BdApiUtil64.sys to any arbitrary path before dropping it, but cannot strip these strings without altering the driver's code, which would invalidate the Baidu digital signature and defeat the entire point of using a validly-signed driver for this technique. The 2-of-6 combination requirement means the rule does not hinge on any single string and would still fire against a partially-modified copy of the same driver.
+
 **False Positives:** None expected outside a genuine Baidu Antivirus installation, which enterprise telemetry generally describes as very rare. A real Baidu AV install would trip all six strings, not just two.
+
 **Blind Spots:** A fully recompiled variant of this driver with the identifying strings stripped or replaced would evade — not observed for this component, and doing so would require Baidu's original source or a binary patch sophisticated enough to preserve a valid Baidu signature, which is not how BYOVD abuse of this driver has been documented to work.
+
 **Validation:** Scan the BdApiUtil64.sys sample (hash below) — must match; an unrelated signed kernel driver from a different vendor must NOT fire.
+
 **Deployment:** Endpoint AV/EDR file scanning, driver-load-time scanning, retroactive scan of `System32\drivers` and temp directories, IR artifact triage on hosts where the driver may have loaded.
 
 ```yara
@@ -89,13 +101,21 @@ rule TOOLKIT_BdApiUtil64_Baidu_Driver_Identity {
 #### BdApiUtil64.sys IOCTL Abuse (DeviceIoControl + Documented IOCTL Codes)
 
 **Tier:** Detection
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1685 (Disable or Modify Tools), T1068 (Exploitation for Privilege Escalation — BYOVD)
+
 **Confidence:** HIGH
+
 **Rationale:** This rule targets any tooling that abuses BdApiUtil64.sys's documented capabilities via DeviceIoControl, keyed on the driver's own device object name (`\.\BdApiUtil`, fixed by the driver's own code, not chosen by the calling malware's author) plus 2-of-5 of the driver's documented IOCTL codes as raw byte patterns. The IOCTL surface a vulnerable driver exposes is a durable anchor: a caller wanting to abuse this specific driver's kernel-termination, SSDT-bypass, service-manipulation, or file-access primitives must reference this exact device path and these exact codes — properties of the target driver, not choices the calling malware's operator can rename away.
+
 **False Positives:** None known outside genuine Baidu Antivirus operations referencing their own device object — rare in enterprise environments per the driver vendor's general rarity.
+
 **Blind Spots:** A caller that resolves the device path or IOCTL codes dynamically or in an obfuscated form (rather than embedding them as plain strings/bytes) would evade static detection; this rule targets on-disk/in-memory string and byte presence, not runtime IOCTL dispatch.
+
 **Validation:** Scan a tool that calls DeviceIoControl against `\.\BdApiUtil` with 2 or more of the documented IOCTL codes — must match; unrelated software calling DeviceIoControl against a different device must NOT fire.
+
 **Deployment:** Endpoint AV/EDR file scanning, IR artifact triage on hosts where BdApiUtil64.sys loaded, retroactive scan of file shares and staging directories.
 
 ```yara
@@ -135,11 +155,17 @@ rule TOOLKIT_BdApiUtil64_IOCTL_Abuse {
 #### Kernel SSDT Bypass Pattern (Generic Rootkit Technique)
 
 **Tier:** Hunting
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1014 (Rootkit)
+
 **Confidence:** LOW
+
 **Rationale:** This rule targets the SSDT (System Service Descriptor Table) resolution, hook-detection, and indirect-syscall lookup pattern documented in BdApiUtil64.sys's advanced termination path, but the underlying strings are not specific to this campaign's driver. `MmGetSystemRoutineAddress` and `RtlInitUnicodeString` are near-universal kernel-driver imports, and legitimate kernel-mode anti-cheat and security-research tooling performs its own SSDT hook detection for defensive purposes using the same API combination. The two byte patterns add a technique signal (a hook-check comparison against `0xb8`, and a shift-by-2 array-indexing sequence typical of SSDT lookups) but both are short, generic instruction shapes that also occur outside SSDT-specific code. Durable in the sense that no campaign-specific literal is required, but not precise enough for alerting. *Description fix 2026-10-10:* the meta description said the rule combines hook-detection AND indirect-syscall lookup, but the condition is `1 of ($hook_check, $ssdt_lookup)`, so either byte pattern is enough alongside the SSDT string and both APIs; the description now says so.
+
 **False Positives:** Expected against legitimate kernel-mode anti-cheat and security-research tooling that performs its own SSDT hook detection; `MmGetSystemRoutineAddress` and `RtlInitUnicodeString` are routine imports across a wide range of unrelated kernel drivers, and the byte patterns are generic instruction shapes rather than anything unique to malicious SSDT bypass.
+
 **Deployment:** Broad kernel-driver scanning sweep, IR artifact triage; treat hits as triage candidates requiring analyst review of the driver's signer and provenance, not alerts.
 
 ```yara
@@ -176,11 +202,17 @@ rule SUSP_Kernel_SSDT_Bypass_Pattern {
 #### Kernel-Mode Security-Process Termination (Generic Rootkit Technique)
 
 **Tier:** Hunting
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1685 (Disable or Modify Tools)
+
 **Confidence:** LOW
+
 **Rationale:** This rule targets the process-management API combination (`PsLookupProcessByProcessId`, `ZwTerminateProcess`, `ObOpenObjectByPointer`, `ObDereferenceObject`) BdApiUtil64.sys uses to terminate security products from kernel mode, paired with named AV/EDR process strings. It is not specific to this campaign's driver, and the same four APIs are routinely imported by legitimate AV/EDR kernel components themselves for their own process-monitoring and competitor-compatibility logic — an EDR driver enumerating and inspecting process objects, including competitor products by name, is standard behavior for that product category, not a malicious tell on its own. *Logic fix 2026-10-10:* the description said "kernel-mode drivers" but the condition tested only the MZ header, so any user-mode PE with the four API names and two product names matched. It now also requires the PE subsystem to be Native, which is what a Windows kernel driver carries.
+
 **False Positives:** Expected against legitimate AV/EDR kernel components, which routinely import all four process-management APIs for their own process-monitoring logic and may reference competitor product names for compatibility or conflict-detection purposes.
+
 **Deployment:** Broad kernel-driver scanning sweep, IR artifact triage; treat hits as triage candidates, not alerts.
 
 ```yara
@@ -227,13 +259,21 @@ rule SUSP_Kernel_Driver_Security_Process_Termination {
 #### BdApiUtil64.sys BYOVD Kill Pattern: Driver Load Followed by Security-Product Termination (Correlation)
 
 **Tier:** Detection (correlation rule) — bundled below with its 2 required non-alerting base rules
+
 **Robustness:** 2 (correlation) — 2 for the driver-load base rule (anchored on signature identity), 1 for the termination base rule individually (anchored on a renameable process-name list)
+
 **ATT&CK Coverage:** T1068 (Exploitation for Privilege Escalation — BYOVD), T1685 (Disable or Modify Tools)
+
 **Confidence:** HIGH
+
 **Rationale:** Neither base signal is reliable alone — a Baidu-signed driver load can, rarely, reflect a genuine Baidu Antivirus install, and named security-product terminations happen during routine updates and uninstalls. But this driver's documented capability neutralizes a full security suite within 60 seconds of load, so the two events occurring on the same host inside that window is a BYOVD kill-chain signal a coincidental unrelated pairing would not produce. This operationalizes a correlation the source draft's own equivalent rule explicitly could not express in a single Sigma condition and left as a manual-correlation instruction to the analyst ("must manually correlate against a preceding BdApiUtil/Baidu driver load... within a short window"). *Retiering fixes applied:* the source draft's driver-load selector included a bare hash-match OR-branch (three hashes, already present in the IOC feed) that would trigger the rule alone with no behavioral corroboration — removed, since it added nothing beyond the feed entry. The same selector also carried a `selection_expired` branch that, despite its name, never actually tested certificate expiration (it checked `SignatureStatus: Valid`, not a date) and was otherwise a strictly broader, weaker duplicate of the signature-identity branch (`ImageLoaded endswith '.sys'` is true of every driver-load event) — merged away. See Coverage Gaps for full detail. *Logic fix 2026-10-10:* the correlation was `type: temporal`, which matches the two events in either order, but the title and description say the driver load comes first. It is now `temporal_ordered`, with the driver-load base rule listed first.
+
 **False Positives:** A coincidental Baidu Antivirus install combined with an unrelated security-product restart in the same 60-second window is possible but highly unlikely — review the specific driver file hash and signature timestamp before dismissing a hit.
+
 **Blind Spots:** An operator who first strips the driver's identifying signature/name strings (defeating the driver-load base rule — see the corresponding YARA rule's Blind Spots) or who spaces the two events more than 60 seconds apart evades the correlation.
+
 **Validation:** Replay both base selectors against the same `host.name` within the 60-second window — the correlation must fire; a host showing only one signal type, or the two signals more than 60 seconds apart, must NOT trigger the correlation.
+
 **Deployment:** SIEM correlation engine with Sysmon driver-load (Event ID 6) and process-termination (Event ID 5) telemetry ingested (60-second temporal join on `host.name`).
 
 ```yaml
@@ -352,11 +392,17 @@ level: critical
 #### Bprotect Service Creation (BdApiUtil64.sys Deployment Marker)
 
 **Tier:** Hunting
+
 **Robustness:** 1
+
 **ATT&CK Coverage:** T1547.006 (Kernel Modules and Extensions)
+
 **Confidence:** LOW
+
 **Rationale:** Requires a Windows service named exactly `Bprotect` whose `ImagePath` references `BdApiUtil` — a specific two-field combination, but both values are chosen at deployment time (the `sc create` service name and the on-disk driver path) rather than baked into unmodifiable driver code. An operator sophisticated enough to expect this rule can rename the driver file and choose a different service name in the same `sc create` command, evading both anchors. Per the project's BYOVD durability guidance, deployment-time literals rank below the driver's own embedded signer identity, which is why this stays Hunting despite the source draft's `critical` rating.
+
 **False Positives:** Legitimate Baidu Antivirus installation using this exact service name — rare outside a genuine Baidu AV deployment.
+
 **Deployment:** Windows service-creation monitoring (Event ID 7045), SIEM correlation, IR artifact triage.
 
 ```yaml

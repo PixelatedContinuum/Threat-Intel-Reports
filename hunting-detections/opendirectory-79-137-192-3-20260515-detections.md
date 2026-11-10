@@ -9,9 +9,13 @@ hide: true
 ---
 
 **Campaign:** OpenDirectory-MultiCluster-Rhadamanthys-BellaMain-Inkognito-79.137.192.3
+
 **Date:** 2026-05-15
+
 **Author:** The Hunters Ledger
+
 **License:** CC BY 4.0
+
 **Reference:** https://the-hunters-ledger.com/reports/opendirectory-79-137-192-3-20260515/
 
 ---
@@ -57,13 +61,21 @@ This detection package targets three operationally-separate operators that share
 #### Rhadamanthys .frontb Stage-2 Section Marker
 
 **Tier:** Detection
+
 **Robustness:** 3
+
 **ATT&CK Coverage:** T1027 (Obfuscated Files or Information), T1140 (Deobfuscate/Decode Files or Information)
+
 **Confidence:** HIGH
+
 **Rationale:** The `.frontb` PE section name is a family-wide Rhadamanthys Stage-2 characteristic (a pre-allocated empty runtime buffer for the decrypted payload), not specific to this one MaaS customer — it is expected to recur across other customers' Stage-2 builds. Paired with the `Roland` decoy string from the Stage-2 plaintext, also part of the family's shared anti-analysis tradecraft.
+
 **False Positives:** None known — `.frontb` is not a standard MSVC/MinGW/Delphi/Go section name, and the co-required `Roland` decoy string has no legitimate-software collision.
+
 **Blind Spots:** A future Rhadamanthys build variant that renames the `.frontb` section would evade; the rule targets the on-disk Stage-2 payload, not a memory-only unpack state that discards section headers.
+
 **Validation:** Scan the reference Stage-2 sample — both the section name and the Roland string must match; a legitimate PE with an unrelated empty data section must NOT fire (the Roland co-condition prevents that).
+
 **Deployment:** Endpoint AV/EDR file scan, static triage of extracted/decrypted Stage-2 payloads.
 
 ```yara
@@ -107,13 +119,21 @@ rule MALW_Rhadamanthys_FrontbSection
 #### Rhadamanthys Operator-Modified Q3VM Bytecode Magic
 
 **Tier:** Detection
+
 **Robustness:** 3
+
 **ATT&CK Coverage:** T1027.013 (Encrypted/Encoded File)
+
 **Confidence:** HIGH
+
 **Rationale:** The operator-modified Q3VM derivative bytecode magic (`0x14744214`, vs. stock Q3VM `0x12721444`) characterizes this Rhadamanthys build lineage generally, not a per-customer artifact — unlike the customer-specific cipher-material rules below, this is expected to catch other MaaS customers running the same Stage-2 version. Paired with the family-wide `Roland` decoy string.
+
 **False Positives:** None known — the modified magic value does not occur outside a Rhadamanthys Stage-2 build of this lineage.
+
 **Blind Spots:** A future Rhadamanthys build that changes the modified-magic value (or reverts to stock Q3VM) would evade.
+
 **Validation:** Scan the reference Stage-2 sample — the 4-byte magic and the Roland string must both match; a file embedding only stock Q3VM (`0x12721444`) must NOT fire.
+
 **Deployment:** Endpoint AV/EDR file scan, scanning of a saved dump of the unpacked Stage-2. Live process-memory scanning does not match: the condition's `filesize` test is undefined there, so only files and saved dumps are scanned.
 
 ```yara
@@ -146,13 +166,21 @@ rule MALW_Rhadamanthys_Q3VMBytecodeModifiedMagic
 #### Rhadamanthys Operator Loader Build/Campaign Strings
 
 **Tier:** Detection
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1027 (Obfuscated Files or Information)
+
 **Confidence:** HIGH
+
 **Rationale:** Requires 2-of-4 operator-specific strings: two build/campaign ID literals, a 45-character operator credential/token, and the customer panel ID also used in the Suricata URI-path rule below. The panel ID was independently observed stable across two beacons roughly 40 days apart, giving this combination real cross-time durability evidence beyond a single sample.
+
 **False Positives:** None known — all four strings are operator-chosen values with no legitimate-software collision; the 2-of-4 threshold means an operator must rotate at least three of the four to evade, since any two remaining strings still match.
+
 **Blind Spots:** A loader rebuild must rotate at least three of the four strings to evade (any two remaining strings still satisfy `2 of them`); the rule does not generalize to other MaaS customers (these are this operator's own values).
+
 **Validation:** Scan the reference loader sample — at least 2 of the 4 strings must match; unrelated software must NOT fire.
+
 **Deployment:** Endpoint AV/EDR file scan, static triage of loader binaries.
 
 ```yara
@@ -186,14 +214,23 @@ rule MALW_Rhadamanthys_OperatorLoaderStrings
 #### BellaMain PhaaS Panel Source Strings (Admin Directory, Wadanz Functions, Alias)
 
 **Tier:** Detection
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** None
+
 **ATT&CK Note:** The rule is a static string match on panel files and observes no technique. The report maps the kit's Telegram Bot API exfiltration to T1102 and its phishing pages to T1566.002; those are behaviours of the kit, not events this rule tests.
+
 **Confidence:** HIGH
+
 **Rationale:** Requires the obfuscated admin-directory name, or the Wadanz developer's session-encryption function names, or the operator alias combined with a secondary anchor. The Wadanz function names are a developer-signature artifact — durable across panel redeployments and potentially useful for pivoting to other panels by the same developer.
+
 **False Positives:** None known — the admin directory string and Wadanz function names have no legitimate-software collision. The rule has no PHP marker or file-extension test, so any file under 500 KB that holds one of those strings matches, including a threat-report or analysis note that quotes them.
+
 **Blind Spots:** A future BellaMain build from a different developer (no Wadanz function names, different admin directory) would evade.
+
 **Validation:** Scan the BellaMain panel archive/PHP source — the admin dir string or Wadanz function names must match; unrelated PHP source must NOT fire.
+
 **Deployment:** Web-server file-integrity scanning, hosting-provider abuse triage, static triage of seized panel archives.
 
 ```yara
@@ -233,12 +270,19 @@ rule MALW_BellaMain_PHPPanel
 #### Rhadamanthys Stage-2 Import Combination (USER32, ADVAPI32 and GDI32 Imports, No WS2_32 or CRYPT32)
 
 **Tier:** Hunting
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** None
+
 **ATT&CK Note:** An import-table test observes no technique. The report maps the Stage-2 packing and decode behaviour to T1027.002 and T1140; the rule tests neither.
+
 **Confidence:** MODERATE
+
 **Rationale:** The rule requires six named imports (three from USER32, one from ADVAPI32, two from GDI32) and the absence of any WS2_32 or CRYPT32 import. It does not count imports or limit the import table to those six, so a binary with many other imports also matches. That combination is a structural pattern for this Stage-2 build, but — as flagged in the original analysis — a minimal-import-surface signal alone can match unrelated GDI-heavy applications. Intended as a corroborating signal alongside the other Rhadamanthys rules in this file, not a standalone alert.
+
 **False Positives:** Unrelated GDI-heavy applications with a similarly minimal import table could coincidentally match; not intended for standalone alerting.
+
 **Deployment:** Endpoint AV/EDR file scan as a secondary/corroborating signal only — pair with another Rhadamanthys Detection-tier rule before treating a hit as high-confidence.
 
 ```yara
@@ -276,11 +320,17 @@ rule MALW_Rhadamanthys_Stage2_ImportSurface
 #### Rhadamanthys Customer-Specific Stage-2 CBC-XOR IV
 
 **Tier:** Hunting
+
 **Robustness:** 1
+
 **ATT&CK Coverage:** T1027 (Obfuscated Files or Information), T1140 (Deobfuscate/Decode Files or Information)
+
 **Confidence:** MODERATE
+
 **Rationale:** A single 16-byte cryptographic IV embedded at a fixed offset in this customer's Stage-2. The byte pattern itself has negligible collision risk with unrelated software, but durability across future rebuilds by this same customer is inferred, not confirmed by a second observed sample — a single-anchor rule keyed on one build's embedded constant is brittle by definition, even when the constant itself is highly specific.
+
 **False Positives:** None known on the byte pattern itself.
+
 **Deployment:** Static triage / pivot-hunting for this specific MaaS customer's Stage-2 builds; not for standalone alerting given the single-sample-only confirmation of this constant.
 
 ```yara
@@ -311,11 +361,17 @@ rule MALW_Rhadamanthys_CustomerCBCXOR_IV
 #### Rhadamanthys Customer-Specific Loader RC4 Key
 
 **Tier:** Hunting
+
 **Robustness:** 1
+
 **ATT&CK Coverage:** T1140 (Deobfuscate/Decode Files or Information), T1027.002 (Software Packing)
+
 **Confidence:** MODERATE
+
 **Rationale:** Same brittleness profile as the CBC-XOR IV rule above — a single 31-byte RC4 key embedded at a fixed offset in this customer's loader, used to decrypt the embedded Stage-2 PE. Near-zero collision risk on the byte pattern, but cross-rebuild stability is unconfirmed from a single sample.
+
 **False Positives:** None known on the byte pattern itself.
+
 **Deployment:** Static triage / pivot-hunting for this specific MaaS customer's loader builds; not for standalone alerting.
 
 ```yara
@@ -346,12 +402,19 @@ rule MALW_Rhadamanthys_LoaderRC4Key
 #### Tofsee 2023 Build Static Tradecraft (Co-Tenant Reference)
 
 **Tier:** Hunting
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1027.001 (Binary Padding)
+
 **ATT&CK Note:** The condition tests PE shape (section sizes, the WinHTTP import shape, three injection API names), eight rare API names and four English words. Service creation (T1543.003), mail protocols (T1071.003), external proxy (T1090.002), sandbox evasion (T1497) and indicator removal (T1027.005) are what the investigation draft records for the Tofsee family; no string in this rule tests them, so they are not claimed.
+
 **Confidence:** MODERATE
+
 **Rationale:** Tofsee is an unrelated spam-botnet family that co-tenants `79.137.192.3`; it is not part of the Rhadamanthys/BellaMain/Inkognito campaign investigated here, retained as an analyst reference. The rule is explicitly family-bound (not campaign-bound): a broad structural + behavioral combination (import shape in which `WinHttpWriteData` is imported while `WinHttpOpen`, `WinHttpConnect` and `WinHttpOpenRequest` are not, injection API triad, rare-API bucket, and two of four short English words standing in for the build's word-salad version metadata) intended for hunting sweeps against this 2023 Tofsee build lineage, not for blocking actions. *Wording fix 2026-10-11:* the description and this sentence used to say the rule triggers on word-salad version metadata; the condition counts the strings `Hole`, `Bill`, `Fire` and `Selfie` (ASCII or UTF-16) anywhere in the file and never reads the version resource (no `pe.version_info` test), so those words in code, data or an unrelated resource satisfy it. The draft this rule was lifted from says the word-salad strings are build-specific and can vary.
+
 **False Positives:** Some legitimate heavily-packed or obfuscated software with similarly unusual import shapes could coincidentally match individual clauses; the word clause is weak (two common four- to six-letter English words anywhere in a PE), so the narrowing comes from the import-shape, section-size, injection-API and rare-API clauses together. The full combination is narrow but not goodware-validated to zero FP.
+
 **Deployment:** Endpoint AV/EDR file scan; hunting sweep for this specific Tofsee build lineage.
 
 ```yara
@@ -422,13 +485,21 @@ rule Tofsee_Bloater_2023_StaticTradecraft
 #### BellaMain PhaaS Panel HTTP Request Patterns
 
 **Tier:** Detection
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1071.001 (Web Protocols)
+
 **Confidence:** HIGH
+
 **Rationale:** Corrected from the original: the rule's condition OR'd a durable URI-path selector against a pure IP/domain host-match branch (`cs-host|contains: 79.137.192.3 or cryptone.bot`). Per the tiering rubric, a hard-coded IP/domain branch with no behavioral qualifier is an IOC-feed entry, not rule logic — both values are already in the feed. The host-match branch has been removed; the surviving rule is the bespoke BellaMain PHP admin-endpoint path list, which is host-independent and survives the panel being redeployed on new infrastructure.
+
 **False Positives:** Unlikely — the BellaMain panel PHP entry-point paths are bespoke and unlikely to collide with legitimate proxy/web traffic.
+
 **Blind Spots:** A future BellaMain build that renames its PHP entry points would evade; does not cover the panel if deployed with a different URL structure.
+
 **Validation:** Trigger a request to one of the listed BellaMain PHP paths — must match; unrelated proxy traffic must NOT fire.
+
 **Deployment:** Web/proxy log monitoring, egress-proxy alerting.
 
 ```yaml
@@ -473,14 +544,23 @@ level: high
 #### InstallUtil.exe Spawned by a Process in a User-Writable Path (Rhadamanthys Hollowing Precursor)
 
 **Tier:** Hunting
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1218.004 (InstallUtil)
+
 **ATT&CK Note:** The report maps the loader's EAX-redirect hollowing to T1055.012; this rule sees only the creation of the host process and not the hollowing, so that technique is not tagged. The report's own table writes InstallUtil as T1218.008, which ATT&CK v19.2 defines as Odbcconf; InstallUtil is T1218.004.
+
 **Confidence:** MODERATE
+
 **Rationale:** The LOLBin-abuse pattern (InstallUtil.exe spawned from a user-writable parent path) survives recompiles because it describes how the loader launches, not a malware-specific string, which gives Robustness 2. It carries no family-specific test and tests no hollowing, memory or thread-context behaviour, and the only exclusions are msiexec, devenv and MSBuild, so installers and updaters that run from AppData or ProgramData and call InstallUtil are not excluded. For that reason it is a Hunting lead (level medium) and is not alert-grade; it was Detection, Robustness 3, level high before the 2026-10-11 review.
+
 **False Positives:** Legitimate developer or installer workflows that invoke InstallUtil.exe from temp directories, and installers or updaters that run from AppData\Roaming, Users\Public or ProgramData and use InstallUtil (none of the latter observed in this corpus).
+
 **Blind Spots:** A future build that hollows a different LOLBin, or launches InstallUtil.exe from a parent path not in the suspicious-path list, would evade. The rule tests only the creation of the InstallUtil.exe process, so it cannot tell a hollowed instance from a benign one.
+
 **Validation:** Trigger the loader's launch of InstallUtil.exe — the child-process creation must match (only the creation is tested, not the hollowing); msiexec/devenv/MSBuild-spawned InstallUtil.exe must NOT fire.
+
 **Deployment:** Endpoint EDR / Sysmon-fed SIEM (process-creation telemetry).
 
 ```yaml
@@ -533,13 +613,21 @@ level: medium
 #### Rhadamanthys SibCode Software Registry Key Marker
 
 **Tier:** Hunting
+
 **Robustness:** 1
+
 **ATT&CK Coverage:** T1112 (Modify Registry)
+
 **Confidence:** HIGH
+
 **Rationale:** Confirmed across four independent sibling Stage-2 sandbox runs (this sample plus three others), not a single-sample artifact: a family-wide execution marker with no known benign collision. *Tier fix 2026-10-11 (round 2):* it is one registry value name that the developer removed in v0.9.1, so it identifies the older lineage only and a rename costs the operator nothing; Robustness 1, Hunting, level medium (it was Detection, Robustness 3). *Boundary fix 2026-10-11 (round 2):* the key-path test was `contains`, so `SibCode\snBackup` matched too; the Sysmon `TargetObject` for a value write ends with the value name, so the test is now `endswith`. *Logic fix 2026-10-11:* the description names `HKU\<SID>\Software\SibCode\sn` (the per-user hive, which is how the report records the write), but the selection was the key-path substring alone, so a machine-wide `HKLM\SOFTWARE\SibCode\sn` write matched as well; the rule now also requires the `HKU\` prefix Sysmon renders for a per-user key. Tags verified against the current ATT&CK technique-tactic data via `sigma check`: T1112 (Modify Registry) requires its `attack.persistence` and/or `attack.defense-impairment` tactic tag(s) present; both are carried below, matching the original tagging.
+
 **False Positives:** None known — the `SibCode\sn` key path has no documented benign software using it.
+
 **Blind Spots:** A future build that writes this marker under a different registry path would evade. The report ties the marker to pre-v0.9.1 builds (the developer removed it in v0.9.1 per the cited Check Point changelog), so newer builds do not write it and the rule covers the older lineage only. This is a footprint/marker, not a blocking control on its own.
+
 **Validation:** Trigger execution of a Rhadamanthys Stage-2 sample — the registry write must match; unrelated software's registry activity must NOT fire.
+
 **Deployment:** Endpoint EDR / Sysmon-fed SIEM (registry telemetry).
 
 ```yaml
@@ -584,13 +672,21 @@ level: medium
 #### Rhadamanthys Customer Panel-ID URL Pattern
 
 **Tier:** Detection
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1071.001 (Web Protocols)
+
 **Confidence:** HIGH
+
 **Rationale:** The 24-hex-character customer panel ID in the beacon URL path was observed stable across two beacons roughly 40 days apart (2026-04-03 and 2026-05-13) — real cross-time evidence of durability, and it survives the C2 moving to new IP/domain infrastructure since it keys on a URL path token, not a host match. This is the strongest network-layer fleet-enumeration pivot in the package.
+
 **False Positives:** None known — a 24-hex-character path token matching this exact value has negligible collision risk with unrelated HTTP traffic.
+
 **Blind Spots:** Evaded if the operator's MaaS panel rotates the panel ID; misses non-HTTP or differently-structured beacon URL schemes (an alternate URL prefix was observed in one sibling sample).
+
 **Validation:** Replay a PCAP of a Rhadamanthys beacon carrying this panel ID in the URI — must alert; unrelated HTTP traffic must NOT.
+
 **Deployment:** Network IDS/IPS at perimeter and internal segmentation points.
 
 ```suricata

@@ -9,9 +9,13 @@ hide: true
 ---
 
 **Campaign:** KAIDO-EvilSoul-Engine-MaaS-144.172.103.98
+
 **Date:** 2026-07-03
+
 **Author:** The Hunters Ledger
+
 **License:** CC BY 4.0
+
 **Reference:** https://the-hunters-ledger.com/reports/kaido-quasar-rat-144-172-109-203/
 
 ---
@@ -47,13 +51,21 @@ KAIDO is a rebranded 64-bit fork of the open-source Quasar RAT carrying an HVNC 
 #### KAIDO Quasar-Fork Namespace + Costura Asset
 
 **Tier:** Detection
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1219 (Remote Access Software)
+
 **Confidence:** HIGH
+
 **Rationale:** *Logic fix 2026-10-11:* the heading and description require a namespace and a Costura asset, but the condition was `2 of ($ns1, $ns2, $cost, $desk)`, so the second namespace string and the `Default_runhost` literal satisfied it with no Costura asset. It is now the Costura asset name plus one of the two namespace strings; the HVNC hidden-desktop literal was dropped from the rule. A fixture with `$ns2` and `Default_runhost` only matched the old rule and does not match the new one. `Kaido.Common.Messages` is the namespace root of the rebranded Quasar fork and survives the sample's obfuscation pass intact (no literal `Quasar` string remains); paired with the Costura-embedded asset name, this combination is specific to this build lineage in the samples examined. Round 2 (2026-10-11): the earlier text said the operator cannot rename it without re-architecting the codebase, which the Blind Spots below contradict (a rebrand of the `Kaido.*` namespaces and the asset name evades the rule); the identifiers are operator-chosen strings and the rule is durable only until a rebuild renames them. Either of the two namespace strings, with the asset name, matches; the `Kaido.Common.Messages` root is not required by itself.
+
 **False Positives:** None known — `Kaido.Common.Messages` and `costura.kaido.common.dll` are distinctive compiled identifiers not present in legitimate .NET software; `fullword` further reduces substring-collision risk.
+
 **Blind Spots:** A full rebrand that renames the `Kaido.*` namespace root would evade this rule; a memory-only variant that never lands on disk is not covered by a live process-memory scan, because the `filesize` test cannot match there (a saved dump written to a file can be scanned).
+
 **Validation:** Scan a KAIDO sample (e.g. `hash1` below) — the namespace + Costura asset must match; a benign Costura-packed .NET application must NOT fire. A file with the asset name and only the HVNC helper namespace also fires.
+
 **Deployment:** Endpoint AV/EDR file scan, scanning of saved dumps of `svchost.exe`-masquerading processes, static triage of unknown MSIL binaries. Live process-memory scanning does not match: the condition's `filesize` test is undefined there, so only files and saved dumps are scanned.
 
 ```yara
@@ -94,13 +106,21 @@ rule RAT_KAIDO_Quasar_Fork_Namespace {
 #### KAIDO HVNC DXGI Named-Pipe Transport
 
 **Tier:** Detection
+
 **Robustness:** 3
+
 **ATT&CK Coverage:** T1219 (Remote Access Software), T1113 (Screen Capture — MODERATE, static-only)
+
 **Confidence:** HIGH
+
 **Rationale:** The DXGI-hook HVNC frame transport uses a distinctive pipe-name prefix, environment variable, frame magic value, and reader and capture-loop thread names, and the browser-clone code adds a log message — none generic Windows or .NET runtime terms. The rule requires two of the five strings (the pipe prefix, the environment variable, the two thread names and the BrowserClone message count equally toward the two), or the frame magic together with the pipe prefix or the environment variable, so no single renameable literal carries it.
+
 **False Positives:** None known — `KAIDO_DXGI_PIPE`, `kaido_dxgi_`, and the paired thread names are family-specific compiled strings; the hex frame magic fires only together with the pipe prefix or the environment variable, never alone.
+
 **Blind Spots:** Misses a build in which fewer than two of the five strings survive and the frame magic is not paired with the pipe prefix or the environment variable. Renaming the pipe prefix, the environment variable and the two thread names is enough on its own, because the BrowserClone message is then a single string and the frame magic alone does not match. The DXGI capture path only exists in builds carrying the HVNC module.
+
 **Validation:** Scan a KAIDO HVNC-capable sample — at least two of the five strings (pipe prefix, environment variable, the two thread names, the BrowserClone message), or the frame magic with the pipe prefix or the environment variable, must match; a benign screen-capture or remote-desktop tool must NOT fire.
+
 **Deployment:** Endpoint AV/EDR file scan, scanning of saved dumps taken during suspected HVNC activity. Live process-memory scanning does not match: the condition's `filesize` test is undefined there, so only files and saved dumps are scanned.
 
 ```yara
@@ -135,14 +155,23 @@ rule RAT_KAIDO_HVNC_DXGI_Pipe {
 #### KAIDO Anti-Analysis Sleep Obfuscation Debug String With Family Namespace
 
 **Tier:** Detection
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1497 (Virtualization/Sandbox Evasion)
+
 **ATT&CK Note:** The report maps the build's AES-256-GCM configuration and wire encryption to T1573.001. This rule tests no cryptographic string or framing pattern (only the `[ANTI]` debug string and the family namespace), so it does not cover that technique.
+
 **Confidence:** MODERATE
+
 **Rationale:** The developer-left anti-analysis debug string is distinctive but stands alone as a single string; the rule pairs it with the family namespace so both must be present. A secondary/corroborating anchor — the debug string could be stripped from a cleaned build, hence Robustness 2 rather than 3.
+
 **False Positives:** None known — the debug string is family-specific and the rule requires it *and* the `Kaido.Common.Messages` namespace string.
+
 **Blind Spots:** A release build that removes the developer debug string evades this rule (the namespace rule above still fires). The rule contains no cryptography test of any kind; an earlier heading named a config crypto framing that the condition never implemented.
+
 **Validation:** Scan a KAIDO sample carrying the `[ANTI]` debug string — must match; a benign .NET binary without the `[ANTI]` string or the `Kaido.Common.Messages` namespace must NOT fire.
+
 **Deployment:** Endpoint AV/EDR file scan; secondary/corroborating rule, not primary detection.
 
 ```yara
@@ -179,14 +208,21 @@ rule RAT_KAIDO_AntiAnalysis_SleepObfuscation {
 #### Zone.Identifier ADS Deletion by a Process Outside System32 and Defender Paths (MOTW Bypass)
 
 **Tier:** Hunting
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1553.005 (Mark-of-the-Web Bypass)
+
 **Confidence:** HIGH (behavior) / triage required (attribution)
+
 **Rationale:** The malware reads then deletes its own `Zone.Identifier` alternate data stream shortly after launch (the report records this at T+2.4s in a behavioral run), a MOTW bypass. The rule matches the deletion of any such stream by any process outside the two filter paths; it has no test for the deleting process being the deleted file's own image and no KAIDO indicator, so a hit is a MOTW-clearing lead and not an attribution. Anchored on the **deletion** event (`category: file_delete`) rather than file creation — a plain `:Zone.Identifier` file-event selector would match every downloaded file (the ADS is created on every download) and is pure baseline noise. Scoping to deletion turns it into a genuine Hunting lead for MOTW-clearing behavior, but self-updating software also clears its own MOTW, so an analyst triages the hits.
+
 **False Positives:**
 - Self-updating legitimate software (browsers, some installers) that clears its own Zone.Identifier stream after a user-consented first run.
 - Administrative scripts that bulk-clear MOTW on downloaded files.
+
 **Blind Spots:** Needs file-delete telemetry that reports alternate data streams; where the sensor does not, the rule never fires. A process that clears the stream from inside System32 or the Defender folder is excluded.
+
 **Deployment:** Endpoint EDR / Sysmon-fed SIEM (FileDelete telemetry), correlated with process creation for the same image.
 
 ```yaml
@@ -233,11 +269,17 @@ level: medium
 #### KAIDO HVNC DXGI Named-Pipe Creation
 
 **Tier:** Hunting
+
 **Robustness:** 1
+
 **ATT&CK Coverage:** T1219 (Remote Access Software), T1113 (Screen Capture — static/structural evidence)
+
 **Confidence:** HIGH (structural anchor); underlying HVNC runtime behavior itself MODERATE (C2-gated, not dynamically triggered)
+
 **Rationale:** The `kaido_dxgi_` named-pipe prefix is a family-specific transport artifact with no known legitimate collision, so today's FP is near-zero — but it is a single operator-chosen literal that a rebuild renames trivially. Durability governs over as-written precision, so this is a Hunting anchor, not a Detection one. The YARA HVNC rule (which requires a multi-string combination) carries the Detection-grade coverage for the same capability.
+
 **False Positives:** Unlikely — the `kaido_dxgi_` pipe-name prefix has not been observed in any legitimate Windows or third-party software to date.
+
 **Deployment:** Endpoint EDR with named-pipe telemetry (Sysmon Event ID 17/18).
 
 ```yaml
@@ -277,14 +319,21 @@ level: medium
 #### Process Named svchost.exe Running From an AppData Path With a Parent Outside System32 and SysWOW64
 
 **Tier:** Hunting
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1036.005 (Match Legitimate Name or Location)
+
 **ATT&CK Note:** T1547.001 (Registry Run Keys / Startup Folder) was listed here as related persistence and is withdrawn: the rule tests a process-creation event for an image name, an AppData path and the parent's directory, and nothing in it observes a Run key or a Startup folder. The Coverage Gaps section already records that no persistence artifact was observed.
+
 **Confidence:** MODERATE (install routine recovered from static analysis, not dynamically observed — the malware is C2-gated)
+
 **Rationale:** The RAT installs into `%AppData%\<subdir>\svchost.exe`, masquerading as the Windows service host from a user-writable path. The rule carries no KAIDO marker: it matches any process whose image ends in `\svchost.exe` under an `\AppData\` path and whose parent image is not under `C:\Windows\System32\` or `C:\Windows\SysWOW64\` (a parent such as `C:\Windows\explorer.exe` is therefore not excluded). The svchost-in-AppData masquerade is a durable technique pattern, but it is used by many unrelated families and carries a meaningful benign FP, so it is a generic masquerade *hunting* indicator, not a KAIDO-specific detection on its own.
+
 **False Positives:**
 - Rare legitimate portable or sideloaded applications that ship a binary literally named `svchost.exe` in a user profile path (unusual but not impossible for poorly-vetted freeware).
 - Other unrelated malware families that reuse the same masquerade pattern.
+
 **Deployment:** Endpoint EDR / Sysmon-fed SIEM; pair with the YARA/Suricata KAIDO anchors for family attribution before high-confidence alerting.
 
 ```yaml
@@ -339,13 +388,21 @@ level: medium
 #### KAIDO TeamKAIDO C2 TLS Certificate Issuer
 
 **Tier:** Detection
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1071.001 (Web Protocols), T1573.001 (Symmetric Cryptography — TLS transport)
+
 **Confidence:** HIGH
+
 **Rationale:** The live C2 host presents a TLS certificate with Issuer O=`TeamKAIDO` (subject CN=`kaido-c2`) paired with JA4X `bbd6cc0fca29_bbd6cc0fca29_795797892f9c`. The issuer org string is operator-branded, sits in the right app-layer buffer (`tls.cert_issuer`), and survives infrastructure rotation — the highest-value fleet-enumeration pivot in the investigation (Censys/Shodan support cert-issuer and JA4X search).
+
 **False Positives:** None known — `TeamKAIDO` as a certificate issuer organization string is a distinctive operator-branded value not shared with legitimate CAs or common self-signed certificate generators.
+
 **Blind Spots:** Evaded if the operator re-issues certificates under a different (or empty) issuer O= string; misses plaintext or non-TLS channels.
+
 **Validation:** Replay a PCAP of a KAIDO TLS handshake presenting the `TeamKAIDO` issuer — must alert; ordinary TLS to a public CA must NOT.
+
 **Deployment:** Network IDS/IPS with TLS certificate inspection (JA3/JA4 fingerprinting recommended as a complementary passive pivot).
 
 ```suricata
@@ -357,12 +414,19 @@ alert tls $HOME_NET any -> $EXTERNAL_NET any (msg:"THL DETECT KAIDO-EvilSoul-Maa
 #### Outbound TCP Payload to Port 4782 (Quasar Default Port, KAIDO C2 Port)
 
 **Tier:** Hunting
+
 **Robustness:** 1
+
 **ATT&CK Coverage:** T1095 (Non-Application Layer Protocol)
+
 **ATT&CK Note:** The report records the Quasar binary protocol over raw TCP on port 4782 (T1095). The rule tests only an established TCP flow with payload to port 4782 and does not parse the protocol, so the mapping is the technique the port is a lead for and not something the rule confirms.
+
 **Confidence:** HIGH for the port/protocol pairing; the rule itself is a port-anchored lead
+
 **Rationale:** The RAT's primary C2 channel is a raw Quasar binary protocol over TCP/4782 with no HTTP layer. TCP/4782 is the Quasar-family default port, but a port is configurable and the port number is the rule's only discriminator, so it scores Robustness 1 and makes no claim of a protocol fingerprint. The rule carries no content anchor (the protocol is non-standard and unparseable by Suricata's app-layer engine), so it is a port-based hunting lead rather than an alerting-grade signature: anything else on 4782 will also fire, and Quasar packets themselves are not parsed, so coverage of actual Quasar traffic is NOT CHECKED.
+
 **False Positives:** Any legitimate or unrelated service that happens to use TCP/4782 (uncommon but not impossible); the `threshold` limits alert volume per source.
+
 **Deployment:** Network IDS/IPS at perimeter and internal segmentation points; hunt-tune before alerting.
 
 ```suricata

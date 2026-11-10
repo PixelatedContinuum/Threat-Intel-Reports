@@ -9,9 +9,13 @@ hide: true
 ---
 
 **Campaign:** CloudSync-Assembler-Toolkit-91.197.98.188
+
 **Date:** 2026-08-03
+
 **Author:** The Hunters Ledger
+
 **License:** CC BY 4.0
+
 **Reference:** https://the-hunters-ledger.com/reports/cloudsync-assembler-toolkit-91-197-98-188/
 
 ---
@@ -55,12 +59,19 @@ Rules covering behavior common to more than one component are labeled at the cam
 #### CloudSync Tor Panel: Netscan Build
 
 **Tier:** Detection
+
 **Robustness:** 3
+
 **ATT&CK Coverage:** T1046 (Network Service Discovery)
+
 **Confidence:** HIGH
+
 **False Positives:** None known. The five strings are the netscan panel's API route and HTML markup, but the condition is `3 of them`, so three HTML markers satisfy it with neither the API route nor the CIDR placeholder text; the strings are not known to occur together outside the later CloudSync build generation, which was not measured against a goodware corpus
+
 **Blind Spots:** Misses the earlier CloudSync build generation entirely (`bk.exe`/`svhost4.exe`), which does not carry a network-scanner panel tab at all, see the companion C2-protocol rule below for coverage of that generation
+
 **Validation:** Scan the binary directly; a genuine hit requires 3 of the 5 embedded panel strings to be present anywhere in the PE; the rule reads the whole file and does not test that they sit in the resource section. A clean Windows or third-party remote-access tool installer must not fire.
+
 **Deployment:** Endpoint AV/EDR file scan, scanning of a saved dump of the implant process, scanning of any recovered staging directory. Live process-memory scanning does not match: the condition's `filesize` test is undefined there, so only files and saved dumps are scanned.
 
 ```yara
@@ -101,12 +112,19 @@ rule RAT_CloudSync_TorPanel_NetscanBuild {
 #### Paralell Injector and SvchostPayload Type Names
 
 **Tier:** Detection
+
 **Robustness:** 3
+
 **ATT&CK Coverage:** T1055 (Process Injection), T1620 (Reflective Code Loading)
+
 **Confidence:** HIGH
+
 **False Positives:** None known, the debug PDB path fragment is a build-specific artifact, and the obfuscated member names (`VoidNexus`, `ShadowWeave`, `CrystalCore`, `UmbraGate`) are not generic .NET or Crypto Obfuscator output
+
 **Blind Spots:** A rebuild that strips debug information or renames the obfuscated members would defeat this rule; it applies most directly to the on-disk `cls.exe` sibling build, the in-memory `Crystal-Monk.dll`/`SvchostPayload` assemblies never touch disk on a victim and are reached only through a saved dump written out as a file, because a live process-memory scan cannot satisfy the `filesize` test
+
 **Validation:** Confirm the rule fires on `cls.exe`. A generic Crypto-Obfuscator-protected .NET binary unrelated to this toolkit must not fire, since the match requires the PDB fragment or 2 of the 7 distinctive member-name strings together.
+
 **Deployment:** Endpoint AV/EDR file scan, scanning of a saved dump of `MSBuild.exe` process space taken during or after a suspected injection event. Live process-memory scanning does not match: the condition's `filesize` test is undefined there, so only files and saved dumps are scanned.
 
 ```yara
@@ -142,13 +160,21 @@ rule RAT_SvchostPayload_ParalellInjector_TypeNames {
 #### svhost.js Fileless Loader: Custom Alphabet
 
 **Tier:** Detection
+
 **Robustness:** 2
+
 **Logic fix 2026-10-11:** the condition used to be `$alpha or all of ($shape*)`, where the shape strings were `(function(){})["constructor"]` and `String.fromCharCode`. Both idioms appear together in ordinary minified JavaScript (a benign fixture holding just those two strings matched the old rule and does not match the new one), so the second branch fired on unrelated scripts, against this block's own Validation line. It was removed, which leaves one operator-chosen literal, and Robustness is lowered from 3 to 2 to say so.
+
 **ATT&CK Coverage:** T1027 (Obfuscated Files or Information), T1140 (Deobfuscate/Decode Files or Information)
+
 **Confidence:** HIGH
+
 **False Positives:** None known, the 16-character custom substitution alphabet is operator-chosen and not a published or reused encoding scheme
+
 **Blind Spots:** A recompiled loader using a different substitution alphabet would evade this rule, because the alphabet is the only anchor; it detects the on-disk loader file only, not the payloads it decrypts in memory
+
 **Validation:** Confirm the rule fires on `svhost.js`. A benign WSH script or an unrelated obfuscated JavaScript sample must not fire, since the alphabet string is the only anchor and is not expected to appear by chance. A script that merely contains the function-constructor idiom and String.fromCharCode must also not fire.
+
 **Deployment:** Endpoint AV/EDR file scan, email/web gateway script scanning, scheduled-task and Startup-folder script sweeps
 
 ```yara
@@ -178,12 +204,19 @@ rule Loader_SvchostJS_CustomAlphabet {
 #### Deployment Orchestrator Console Banners
 
 **Tier:** Detection
+
 **Robustness:** 3
+
 **ATT&CK Coverage:** T1136.002 (Create Account: Domain Account), T1098 (Account Manipulation)
+
 **Confidence:** HIGH
+
 **False Positives:** None known, not measured against a goodware corpus. The condition is `3 of them` over ten strings plus at least one console banner, and it enforces neither the banner sequence nor the AD/German-group combination: three console banners fire, and so does one banner with `New-ADUser` and `Guest$`; `New-ADUser`, `Guest$` and `Administratoren` with no banner no longer fire (they did before 2026-10-11)
+
 **Blind Spots:** A recompiled orchestrator with reworded banners or a different target-locale group-name set would evade this rule; it does not fire on the AD/web-shell/AnyDesk actions themselves, see the companion Sigma rules for that behavioral coverage
+
 **Validation:** Confirm the rule fires on `ab.exe`. A generic PowerShell AD-administration script that references `New-ADUser` alone, without the console banners or German group names, must not fire (the rule requires at least one console banner and 3 of 10 strings together).
+
 **Deployment:** Endpoint AV/EDR file scan, download/attachment gateway scanning
 
 ```yara
@@ -223,12 +256,19 @@ rule Loader_ABExe_DeploymentOrchestrator_Banners {
 #### ct.bat Proxy-Aware USB Worm Stub
 
 **Tier:** Detection
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1105 (Ingress Tool Transfer), T1091 (Replication Through Removable Media)
+
 **Confidence:** HIGH
+
 **False Positives:** Any single one of the five strings could plausibly appear in unrelated scripts, and any two of them satisfy the condition, including generic pairs such as `DefaultCredentials` with `SystemUpdate`; two or more together inside a file under 5 KB is not a pattern known from legitimate software, but its specificity was not measured
+
 **Blind Spots:** A trivially reworded stub (renamed Run value, restructured WMIC query) would evade this rule; it does not require the AMSI-bypass string, which is present but not solely relied upon given the type-name reversal noted in the companion Sigma rule
+
 **Validation:** Confirm the rule fires on `ct.bat`. The condition is `2 of them`, so `DefaultCredentials` plus `SystemUpdate` (or `amsiInitFailed`) fires with no USB enumeration or autorun string; a benign proxy-aware download script that holds only `DefaultCredentials` and none of the other four must not fire.
+
 **Deployment:** Email/web gateway attachment scanning, endpoint AV/EDR file scan, USB-drop analysis
 
 ```yara
@@ -261,12 +301,19 @@ rule Loader_CtBat_ProxyAwareUSBWormStub {
 #### CloudSync C2 Protocol: Dual Build Coverage
 
 **Tier:** Hunting
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1071 (Application Layer Protocol), T1571 (Non-Standard Port)
+
 **Confidence:** MODERATE
+
 **False Positives:** The condition is `2 of them` over six strings, and two of them are generic: `[Shares]` and `[END]` together fire with no CloudSync-specific marker, so any PE under 60 MB that holds both matches. The `=== AUTO UPDATE ===` banner, the `[C2_END]` terminator and the two registration field names are the CloudSync-specific strings, and none of them is required. For that reason the rule is Hunting, Robustness 2, not Detection (it was Detection, Robustness 3); no logic change was made because no sample is on the workstation to confirm which two strings the earlier `bk.exe` build holds
+
 **Blind Spots:** A future CloudSync build that changes both the terminator tokens and every field name simultaneously would evade this rule; it does not detect the protocol on the wire (see the companion Suricata rules for network-layer coverage of the same protocol)
+
 **Validation:** Confirm on both `svhost4.exe` (uses `[C2_END]`) and `bk.exe` (uses `[END]`) that at least 2 of the 6 strings are present. A benign network utility or Tor client alone must not fire.
+
 **Deployment:** Endpoint AV/EDR file scan, scanning of a saved dump of the dropped implant process. Live process-memory scanning does not match: the condition's `filesize` test is undefined there, so only files and saved dumps are scanned.
 
 ```yara
@@ -303,12 +350,19 @@ rule RAT_CloudSync_C2Protocol_DualBuild {
 #### CloudSync Working-Directory, Dropped-Tor-Binary and Mutex String Artifacts (Any Three of Seven)
 
 **Tier:** Hunting
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1090.003 (Multi-hop Proxy), T1036.005 (Match Legitimate Name or Location)
+
 **Confidence:** MODERATE
+
 **False Positives:** The individual strings (`hidden_service`, `taskhostw.exe`, `first_run.flag`, the `C:\Users\Public` path fragments) are common enough in isolation that this rule is scoped to hunting rather than alerting; review each hit rather than auto-blocking
+
 **Blind Spots:** Broader and lower-precision than the dedicated panel and protocol Detection rules above by design, intended to catch variants that changed the panel markup or protocol strings but kept the working-directory and mutex conventions
+
 **Validation:** Confirm the rule fires on `bk.exe`. Three of the seven strings fire; only two are path strings (`C:\Users\Public\fs\`, `C:\Users\Public\filesystem`), so a hit does not by itself show a Public-profile working directory. Run against a sample of benign software installers to confirm the 3-of-7 threshold does not fire on unrelated Windows utilities that happen to reference `C:\Users\Public\`.
+
 **Deployment:** Threat hunting sweep across endpoint file inventories; not recommended for auto-block
 
 ```yara
@@ -350,12 +404,19 @@ rule RAT_CloudSync_PublicWorkdir_Artifacts {
 #### CloudSync Guest Dollar Local Account Persistence Command
 
 **Tier:** Detection
+
 **Robustness:** 3
+
 **ATT&CK Coverage:** T1136.001 (Create Account: Local Account)
+
 **Confidence:** HIGH
+
 **False Positives:** Unlikely, local accounts ending in a literal dollar sign are not a standard Windows naming convention; the `not /domain` filter also excludes the unrelated domain-level backdoor activity covered separately below
+
 **Blind Spots:** Requires process-creation command-line visibility; an implant that creates the account via a Win32 API call rather than shelling out to `net user` would not be caught by this rule
+
 **Validation:** Trigger with `net user Guest$ <password> /add` from a command prompt (no `/domain` switch) on a test host and confirm the alert fires. A legitimate `net user` command targeting a domain account with `/domain` present must NOT fire.
+
 **Deployment:** Endpoint process-creation telemetry (Sysmon Event ID 1 or equivalent EDR command-line logging)
 
 ```yaml
@@ -394,12 +455,19 @@ level: high
 #### CloudSync Windows Update Service Masquerade Installation
 
 **Tier:** Detection
+
 **Robustness:** 3
+
 **ATT&CK Coverage:** T1543.003 (Windows Service)
+
 **Confidence:** HIGH
+
 **False Positives:** Unlikely, the genuine Windows Update service display name is "Windows Update" (short form); "Windows Update Service" does not occur in stock Windows
+
 **Blind Spots:** Only fires on the `svhost4` build's exact display-name choice; a rebuilt CloudSync variant using a different masquerade name would not be caught, pair with the companion working-directory rule for broader coverage
+
 **Validation:** Install a test service with display name exactly "Windows Update Service" and confirm Event ID 7045 triggers the rule. Confirm the genuine `wuauserv` service (display name "Windows Update") does NOT fire.
+
 **Deployment:** Windows Service Control Manager event log (Event ID 7045)
 
 ```yaml
@@ -436,12 +504,19 @@ level: high
 #### CloudSync Tor Hidden Service Staging Under Public Profile
 
 **Tier:** Detection
+
 **Robustness:** 3
+
 **ATT&CK Coverage:** T1090.003 (Multi-hop Proxy), T1036.005 (Match Legitimate Name or Location)
+
 **Confidence:** HIGH
+
 **False Positives:** Unlikely, legitimate software does not write an executable named `taskhostw.exe` or create a `hidden_service` directory under the shared Public profile
+
 **Blind Spots:** Misses a rebuild that renames both the dropped Tor binary and the hidden-service directory; does not require the specific `\fs\` or `\filesystem\` working-directory name, which is deliberate given that name is build-variant
+
 **Validation:** Drop a file named `taskhostw.exe` under `C:\Users\Public\` (or create a `\hidden_service\` subdirectory with a file inside it) and confirm the alert fires. Legitimate software installation under `C:\Users\Public\Desktop\` or similar standard subfolders must NOT fire.
+
 **Deployment:** Endpoint file-creation telemetry (Sysmon Event ID 11 or equivalent)
 
 ```yaml
@@ -486,13 +561,21 @@ level: high
 #### MSBuild Launched Without a Project File by a Hidden or Bypass-Policy PowerShell Parent
 
 **Tier:** Detection
+
 **Robustness:** 3
+
 **ATT&CK Coverage:** T1127.001 (Trusted Developer Utilities: MSBuild), T1055 (Process Injection)
+
 **Confidence:** HIGH
+
 **Wording fix 2026-10-11:** the title and description named a wscript, PowerShell, MSBuild chain and a hidden, bypassed PowerShell. The selection tests the PowerShell parent flags with OR (a hidden window or a policy bypass, not both) and never looks at wscript, which a process-creation event cannot show beyond the direct parent. The title now names what is tested.
+
 **False Positives:** Developer or CI tooling that launches MSBuild from a hidden PowerShell wrapper without a visible project path on the command line, rare, but review any hit from a build server before escalating
+
 **Blind Spots:** An attacker who passes any string containing one of the filtered project-file extensions (even a decoy) would evade the filter; the rule also depends on the parent process being `powershell.exe` directly, an intermediate `cmd.exe` hop would need a chained/correlated rule
+
 **Validation:** Launch `powershell -w hidden -ep bypass -c "Start-Process MSBuild.exe"` with no project argument on a test host and confirm the alert fires. Launching MSBuild against a real `.csproj` file from the same PowerShell invocation must NOT fire.
+
 **Deployment:** Endpoint process-creation telemetry (Sysmon Event ID 1 or equivalent), prioritized for triage given this is the hardest-to-detect chain in the case
 
 ```yaml
@@ -552,12 +635,19 @@ level: high
 #### MSBuild Process Making a Direct Outbound Network Connection
 
 **Tier:** Detection
+
 **Robustness:** 3
+
 **ATT&CK Coverage:** T1127.001 (Trusted Developer Utilities: MSBuild)
+
 **Confidence:** HIGH
+
 **False Positives:** Not exhaustively surveyed across all CI/build-server configurations; review any hit from a known build host before escalating
+
 **Blind Spots:** Requires network-connection telemetry with process attribution; a proxy-routed or tunneled connection that changes the observed process identity would evade this
+
 **Validation:** Inject a network-capable payload into a test `MSBuild.exe` process and confirm an outbound connection triggers the alert. A NuGet-restore build that uses a separate `dotnet.exe`/`nuget.exe` client process (not MSBuild itself) making the connection must NOT fire.
+
 **Deployment:** Endpoint network-connection telemetry (Sysmon Event ID 3 or equivalent), deliberately not port-restricted since this campaign's beacon uses port 4443 rather than 80/443
 
 ```yaml
@@ -594,12 +684,19 @@ level: high
 #### Windows Defender Tampering Via Set-MpPreference Disable Switches
 
 **Tier:** Detection
+
 **Robustness:** 3
+
 **ATT&CK Coverage:** T1685 (Disable or Modify Tools)
+
 **Confidence:** HIGH
+
 **False Positives:** Administrative hardening or troubleshooting scripts that legitimately toggle Defender preferences
+
 **Blind Spots:** An attacker using the WMI `MSFT_MpPreference` class directly (bypassing the PowerShell cmdlet wrapper) would not produce this exact command line and would evade the rule
+
 **Validation:** Run `Set-MpPreference -DisableRealtimeMonitoring $true` on a test host and confirm the alert fires. A benign Defender status query (`Get-MpPreference`) must NOT fire.
+
 **Deployment:** Endpoint process-creation telemetry (Sysmon Event ID 1 or equivalent); PowerShell Script Block Logging (Event ID 4104) is a useful supplementary source when the command line itself is further obfuscated
 
 ```yaml
@@ -641,13 +738,21 @@ level: high
 #### Photo Studio Masquerade Loader Files Under LocalAppData
 
 **Tier:** Detection
+
 **Robustness:** 3
+
 **ATT&CK Coverage:** T1036.005 (Match Legitimate Name or Location)
+
 **Confidence:** HIGH
+
 **Logic fix 2026-10-11:** the selection used to match a `\Photo Studio\` segment under any root, so the title's LocalAppData was not enforced. It now requires `\AppData\Local\Photo Studio\` (the loader writes to `%LOCALAPPDATA%\Photo Studio\`, report section on the svhost.js loader). A profile with a redirected LocalAppData would not match.
+
 **False Positives:** Unlikely, no common legitimate application installs script files under a "Photo Studio" LocalAppData folder
+
 **Blind Spots:** A rebuild that changes the masquerade folder name would evade this rule entirely; pair with the wscript-to-MSBuild chain rule for coverage of a renamed variant
+
 **Validation:** Create a `.js` or `.vbs` file inside `%LOCALAPPDATA%\Photo Studio\` on a test host and confirm the alert fires. Script files created under an unrelated, genuinely-installed application's LocalAppData folder must NOT fire.
+
 **Deployment:** Endpoint file-creation telemetry (Sysmon Event ID 11 or equivalent)
 
 ```yaml
@@ -686,12 +791,19 @@ level: high
 #### WindowsUpdateService Scheduled Task Creation By Dotnet RAT Chain
 
 **Tier:** Detection
+
 **Robustness:** 3
+
 **ATT&CK Coverage:** T1053.005 (Scheduled Task)
+
 **Confidence:** HIGH
+
 **False Positives:** Unlikely, "WindowsUpdateService" is not a task name used by any genuine Windows Update component
+
 **Blind Spots:** This scheduled-task mechanism is specific to the .NET RAT chain, CloudSync itself persists only via a registry Run key and a Windows service and does not use this task, so this rule must not be read as covering CloudSync as well
+
 **Validation:** Run `schtasks /create /tn "WindowsUpdateService" /tr notepad.exe /sc onlogon` on a test host and confirm the alert fires. A genuine Windows Update-related scheduled task under the standard `\Microsoft\Windows\WindowsUpdate\` task path must NOT fire, since it will not match this literal task name via `schtasks`.
+
 **Deployment:** Endpoint process-creation telemetry (Sysmon Event ID 1 or equivalent)
 
 ```yaml
@@ -733,13 +845,21 @@ level: high
 #### Temp Log File Deleted Matching Fileless Loader Staging Pattern
 
 **Tier:** Detection
+
 **Robustness:** 3
+
 **ATT&CK Coverage:** T1070.004 (File Deletion)
+
 **Confidence:** HIGH
+
 **Logic fix 2026-10-11:** the selection used to be a `\Temp\log_` substring plus a trailing `_<digits>_<digits>` test, so `log_setup_1_2` or a file in a Temp subfolder also matched. It is now one expression: the file `log_<digits>_<digits>` directly in the user's `AppData\Local\Temp`. The pattern carries no `$` end anchor on purpose: Elastic regular expressions match the whole field and treat `^` and `$` as literal characters, so an anchored pattern would never match there (the previous `$`-anchored test could not match in Elastic either). The cost is that in anchor-free Sigma semantics a name with extra text after the second number also matches.
+
 **False Positives:** A coincidental temp filename matching the `log_<digits>_<digits>` shape from unrelated software has not been surveyed, though the pattern is distinctive
+
 **Blind Spots:** This detects the deletion, not the earlier read, pair with the Photo Studio and wscript-chain rules above to catch the loader earlier in its lifecycle
+
 **Validation:** Create and delete a file named `log_12345_67890` inside `%TEMP%` on a test host and confirm the alert fires. Deletion of an unrelated temp file with a different naming shape must NOT fire.
+
 **Deployment:** Endpoint file-deletion telemetry (Sysmon Event ID 23/26 or equivalent)
 
 ```yaml
@@ -777,13 +897,21 @@ level: high
 #### Active Directory Tier-0 Backdoor Account Creation Or Privileged Group Addition
 
 **Tier:** Detection
+
 **Robustness:** 3
+
 **ATT&CK Coverage:** T1136.002 (Create Account: Domain Account), T1098.007 (Additional Local or Domain Groups)
+
 **Confidence:** HIGH
+
 **Logic fix 2026-10-11:** the account-creation branch used `SamAccountName|contains: '$'`, so a dollar sign anywhere in the name fired, while the description says the name ends in one. It is now `endswith`.
+
 **False Positives:** Legitimate onboarding of a new privileged administrator, or a genuine computer/service account naming collision with the dollar-sign check
+
 **Blind Spots:** Windows security auditing must be enabled for account-management and group-management events; a host without domain-controller audit logging in place will not generate the source events this rule depends on
+
 **Validation:** Create a test user account with a name ending in `$` (Event ID 4720) or add a test account to the local Administrators group (Event ID 4732) and confirm the alert fires. Creating a genuine computer account (which logs under a different event ID, not 4720) must NOT fire this rule.
+
 **Deployment:** Windows Security event log on domain controllers and member servers (Event IDs 4720, 4728, 4732, 4756); locale-independent by design, matched by well-known group SIDs and RID suffixes rather than group display names, so it generalizes beyond this campaign's German-localized target
 
 ```yaml
@@ -841,13 +969,21 @@ level: high
 #### Winlogon SpecialAccounts UserList Registry Write
 
 **Tier:** Detection
+
 **Robustness:** 3
+
 **ATT&CK Coverage:** T1564.002 (Hidden Users)
+
 **Confidence:** HIGH
+
 **Logic fix 2026-10-10:** the selector was `TargetObject|endswith: '\SpecialAccounts\UserList'`. A registry value write reports the key path followed by the value name (`...\SpecialAccounts\UserList\<account>`), so a path ending at `UserList` could never match the write that hides an account, which is the event the Validation line tells the reader to trigger. It now matches the `Winlogon\SpecialAccounts\UserList\` path segment.
+
 **False Positives:** Deliberate administrative hiding of a legitimate local service account from the logon screen
+
 **Blind Spots:** None significant, this key is written almost exclusively for account-hiding purposes; requires registry-value telemetry on the relevant Winlogon hive path
+
 **Validation:** Write any value, whatever its data, under `HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon\SpecialAccounts\UserList` on a test host and confirm the alert fires. Registry writes elsewhere under `Winlogon\` that do not touch `SpecialAccounts\UserList` must NOT fire.
+
 **Deployment:** Endpoint registry telemetry (Sysmon Event ID 12/13 or equivalent)
 
 ```yaml
@@ -886,12 +1022,19 @@ level: high
 #### ASPX File Written to IIS aspnet_client Directory
 
 **Tier:** Detection
+
 **Robustness:** 3
+
 **ATT&CK Coverage:** T1505.003 (Web Shell)
+
 **Confidence:** HIGH
+
 **False Positives:** Unlikely, the aspnet_client directory does not normally receive new .aspx files after IIS/ASP.NET installation
+
 **Blind Spots:** A web shell dropped to a different IIS directory (outside `aspnet_client`) would not be caught by this rule; pair with the w3wp.exe-spawns-shell rule below for behavioral coverage of web-shell use regardless of drop location
+
 **Validation:** Create a test `.aspx` file inside a local IIS installation's `aspnet_client` directory and confirm the alert fires. New `.aspx` files created elsewhere in the web root during normal application deployment must NOT fire.
+
 **Deployment:** Endpoint file-creation telemetry on IIS web servers (Sysmon Event ID 11 or equivalent)
 
 ```yaml
@@ -927,12 +1070,19 @@ level: high
 #### IIS Worker Process Spawning A Command Shell
 
 **Tier:** Detection
+
 **Robustness:** 3
+
 **ATT&CK Coverage:** T1505.003 (Web Shell), T1059.001 (PowerShell)
+
 **Confidence:** HIGH
+
 **False Positives:** Rare IIS management or deployment automation that legitimately spawns a shell from the worker process
+
 **Blind Spots:** A web shell that executes commands via .NET reflection or an in-process runspace rather than spawning a child process (as Sharp4WebCmd itself is capable of, since it embeds a PowerShell runspace) would not be caught by this rule
+
 **Validation:** From a test IIS host, have the worker process spawn `cmd.exe` or `powershell.exe` (e.g., via a deliberately vulnerable test page) and confirm the alert fires. Normal IIS request handling with no shell child process must NOT fire.
+
 **Deployment:** Endpoint process-creation telemetry on IIS web servers (Sysmon Event ID 1 or equivalent)
 
 ```yaml
@@ -972,13 +1122,21 @@ level: high
 #### AnyDesk Unattended Password Piped Over Stdin
 
 **Tier:** Detection
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1219.002 (Remote Desktop Software)
+
 **Confidence:** HIGH
+
 **Logic fix 2026-10-11 (privacy wording corrected in round 2):** the description and deployment line said the credential never reaches process-creation logs; that holds only for the AnyDesk child, not for the shell command line the rule selects. The selection was three unordered substrings (`echo`, `AnyDesk.exe`, `--set-password`) with no pipe, so a command line merely naming all three in any order matched, and the title's "By Non-AnyDesk Process" was not tested. It now requires `echo`, then a pipe, then `AnyDesk.exe`, then `--set-password`, in order. The "non-AnyDesk" qualifier is dropped from the title because the process that carries the pipe text is always a shell, never AnyDesk itself; the report shows the form `echo <token> | AnyDesk.exe --set-password`.
+
 **False Positives:** Legitimate IT automation that pipes a password to AnyDesk during scripted unattended deployment
+
 **Blind Spots:** A deployment script that reads the password from a file or environment variable rather than an inline `echo` pipe would evade this rule
+
 **Validation:** Run `echo testpassword | AnyDesk.exe --set-password` on a test host and confirm the alert fires. A manual, interactive AnyDesk password change through the GUI must NOT fire, since it never appears as a process-creation command line.
+
 **Deployment:** Endpoint process-creation telemetry (Sysmon Event ID 1 or equivalent). AnyDesk.exe's own command line does not carry the password, but the shell command line this rule matches can, so handle a matching event and its stored copy as containing a credential and redact that field before sharing an alert.
 
 ```yaml
@@ -1021,13 +1179,21 @@ level: medium
 #### PowerShell Net.WebClient Proxy Set to Default Credentials
 
 **Tier:** Detection
+
 **Robustness:** 3
+
 **ATT&CK Coverage:** T1090 (Proxy)
+
 **Confidence:** HIGH
+
 **Logic fix 2026-10-11:** the title said a PowerShell download, but the selection was three command-line substrings with no process test and no download method, so the parent `cmd.exe` line that carries the same text also matched. The selection now requires a PowerShell image (`powershell.exe` or `pwsh.exe`, or the matching original file name) and the title says what the command line configures. A download is not tested; the report describes the stub fetching the payload with this WebClient.
+
 **False Positives:** Unlikely, legitimate proxy-aware download scripts rarely combine WebClient with explicit DefaultCredentials proxy inheritance in this exact form
+
 **Blind Spots:** The download URL itself is not required by this rule (deliberately, since the staging IP is perishable); a script using `Invoke-WebRequest` instead of `Net.WebClient` with the same proxy-inheritance intent would evade this specific pattern
+
 **Validation:** Run a PowerShell one-liner constructing `New-Object Net.WebClient` with `.Proxy.Credentials = [System.Net.CredentialCache]::DefaultCredentials` on a test host and confirm the alert fires. A WebClient download with no explicit proxy-credential configuration must NOT fire.
+
 **Deployment:** Endpoint process-creation telemetry (Sysmon Event ID 1 or equivalent), this is the stub's always-present stage, firing even on runs where the subsequent payload write fails, so it is the highest-yield single anchor for this component
 
 ```yaml
@@ -1075,12 +1241,19 @@ level: high
 #### AMSI Bypass Command Line With amsiInitFailed, SetValue and NonPublic Reflection Strings
 
 **Tier:** Detection
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1685 (Disable or Modify Tools)
+
 **Confidence:** HIGH
+
 **False Positives:** Unlikely, legitimate scripts do not reflectively clear the AMSI initialization-failed field
+
 **Blind Spots:** Deliberately does NOT key on the literal "AmsiUtils" type-name string, since this campaign's stub constructs that string from a reversed literal specifically to evade signature matching on it; a variant that also renames or obfuscates the field name "amsiInitFailed" itself would evade this rule
+
 **Validation:** Run a PowerShell one-liner combining `amsiInitFailed`, `SetValue`, and `NonPublic` (the standard AMSI-bypass-via-reflection shape) on a test host and confirm the alert fires. Unrelated PowerShell reflection code that does not touch AMSI must NOT fire.
+
 **Deployment:** Endpoint process-creation telemetry with CommandLine populated (Sysmon Event ID 1 or Security 4688 with command-line auditing). PowerShell Script Block Logging (Event ID 4104) holds the script text in `ScriptBlockText`, a different field this rule does not read, so it does not extend this rule to obfuscated variants
 
 ```yaml
@@ -1125,13 +1298,21 @@ level: high
 #### Run Key SystemUpdate Value Pointing To Startup Folder Tilde Executable
 
 **Tier:** Detection
+
 **Robustness:** 3
+
 **ATT&CK Coverage:** T1547.001 (Registry Run Keys / Startup Folder)
+
 **Confidence:** HIGH
+
 **Logic fix 2026-10-11 (data test tightened in round 2):** the data test used to be `\Startup\~` alone, so a tilde-prefixed text file, or a directory named Startup anywhere, also matched although the title and description say a tilde executable in the user's Startup folder. It is now the per-user Startup path followed by a tilde name ending `.exe`, as the report describes (`~<RANDOM>.exe` in the user's Startup folder, index.md:567). The description says an HKCU Run value, but the selection only tested the key-path suffix, so an HKLM `Run\SystemUpdate` value also matched. Sysmon records a per-user key under `HKU\<SID>\...` (never as `HKCU`), so the hive is now tested as `TargetObject` starting with `HKU\`. The stub runs in the logged-on user's context (report: it writes `HKCU\...\Run\SystemUpdate`).
+
 **False Positives:** Unlikely, the combination of the SystemUpdate value name and a Startup-folder tilde-prefixed target is not a known legitimate pattern
+
 **Blind Spots:** This rule fires only once the stub's download and drop stages have already succeeded, the proxy-WebClient rule above is the anchor that fires even on incomplete runs
+
 **Validation:** Set an `HKCU\Software\Microsoft\Windows\CurrentVersion\Run\SystemUpdate` value pointing to a test file inside the per-user Startup folder (`...\Start Menu\Programs\Startup\`) named `~12345.exe` and confirm the alert fires. The same value pointing at `~12345.txt` in that folder must NOT fire. A Run value named SystemUpdate pointing anywhere outside the Startup folder must NOT fire, and neither must an `HKLM\...\Run\SystemUpdate` value that points at a Startup tilde file.
+
 **Deployment:** Endpoint registry telemetry (Sysmon Event ID 13 or equivalent)
 
 ```yaml
@@ -1173,12 +1354,19 @@ level: high
 #### Tilde Prefixed Executable Written To User Startup Folder
 
 **Tier:** Hunting
+
 **Robustness:** 1
+
 **ATT&CK Coverage:** T1036.005 (Match Legitimate Name or Location)
+
 **Confidence:** MODERATE
+
 **False Positives:** Installer temp-extraction artifacts that transiently use tilde-prefixed names, and legitimate portable applications that place a randomly-named launcher shortcut in Startup
+
 **Blind Spots:** Broader and weaker in isolation than the paired Run-key rule above, a tilde-prefixed filename in Startup is a real but not conclusive signal on its own; intended for triage alongside the SystemUpdate Run-key rule, not standalone alerting
+
 **Validation:** Copy any executable with a tilde-prefixed filename into a test Startup folder and confirm the alert fires. Review hits for the co-occurring SystemUpdate Run-key rule before treating a hit as confirmed malicious.
+
 **Deployment:** Threat hunting sweep of Startup folder contents; not recommended for auto-block
 
 ```yaml
@@ -1224,12 +1412,19 @@ level: medium
 #### CloudSync C2 Registration Marker
 
 **Tier:** Detection
+
 **Robustness:** 3
+
 **ATT&CK Coverage:** T1071 (Application Layer Protocol), T1571 (Non-Standard Port)
+
 **Confidence:** HIGH
+
 **False Positives:** None known, this exact 19-character banner is not expected in unrelated TCP traffic
+
 **Blind Spots:** Detects only the registration/auto-update message type; does not fire on heartbeat-only traffic (see the companion heartbeat rule below), and is defeated entirely if the operator moves the protocol behind TLS
+
 **Validation:** Confirmed via the real rule-parsing engine against a captured session containing the literal string. A benign TLS or unrelated cleartext TCP session must not contain this exact banner.
+
 **Deployment:** Network IDS/IPS at the perimeter or internal segmentation boundary; deliberately not IP/port-pinned so the rule survives infrastructure rotation
 
 ```
@@ -1239,12 +1434,19 @@ alert tcp $HOME_NET any -> $EXTERNAL_NET any (msg:"THL DETECT CloudSync-Assemble
 #### CloudSync C2 Heartbeat And Terminator Marker
 
 **Tier:** Detection
+
 **Robustness:** 3
+
 **ATT&CK Coverage:** T1071 (Application Layer Protocol), T1571 (Non-Standard Port)
+
 **Confidence:** HIGH
+
 **False Positives:** None known, the combination of the `[Shares]` heartbeat header with either terminator token is not expected in unrelated traffic
+
 **Blind Spots:** The terminator alternation covers both known build generations ([C2_END] and [END]); a future build changing both the heartbeat header and the terminator simultaneously would evade this rule; opaque once the protocol runs over the Tor hidden service rather than the direct staging-host ports
+
 **Validation:** Confirmed via the real rule-parsing engine, including the PCRE alternation. A session containing `[Shares]` without either terminator token, or either terminator without `[Shares]`, must not fire.
+
 **Deployment:** Network IDS/IPS at the perimeter or internal segmentation boundary
 
 ```
@@ -1258,13 +1460,21 @@ alert tcp $HOME_NET any -> $EXTERNAL_NET any (msg:"THL DETECT CloudSync-Assemble
 #### SentinelStealer c3lestial.fun TLS SNI
 
 **Tier:** Hunting
+
 **Robustness:** 0
+
 **ATT&CK Coverage:** T1071.001 (Web Protocols)
+
 **Confidence:** MODERATE
+
 **Rationale:** A single domain is the only discriminator, so Gate 1 scores it Robustness 0: the same indicator is already in the campaign IOC feed (`threat-intel-vault/ioc-feeds/cloudsync-assembler-toolkit-91-197-98-188-iocs.json`) and the rule is kept only as a Hunting standing signature for a sourced commodity-stealer domain. The SNI test is a domain-boundary test (`.c3lestial.fun` with `dotprefix` and `endswith`): it accepts `c3lestial.fun` and its subdomains, and rejects `c3lestial.fun.example.invalid` and `evilc3lestial.fun`. It tests no stealer behaviour, only the name a client presents.
+
 **False Positives:** The domain sits on shared/Hostinger hosting with 20+ unrelated communicating files observed, so a hit may indicate a different malware family sharing the same hosting rather than SentinelStealer specifically, a "something malicious" signal even when the specific family attribution is uncertain
+
 **Blind Spots:** This domain is not operator-owned, so it could stop resolving to SentinelStealer's infrastructure at any time without notice; it belongs to a separately-tracked, sourced commodity component and must never be presented alongside the operator's own CloudSync/.NET-chain infrastructure
+
 **Validation:** The rule loads under `suricata -T` on the sensor (syntax acceptance only; no packet replay was run, so a TLS session presenting the name was not exercised). Expected to fire on an SNI of `c3lestial.fun` or `x.c3lestial.fun`; must not fire on `c3lestial.fun.example.invalid`, `evilc3lestial.fun` or an unrelated domain (by the documented semantics of `dotprefix` with `endswith`, not exercised on traffic).
+
 **Deployment:** Network IDS/IPS at the perimeter; survives IP rotation since it matches on the TLS SNI rather than a destination address
 
 ```
@@ -1274,14 +1484,23 @@ alert tls $HOME_NET any -> $EXTERNAL_NET any (msg:"THL HUNT CloudSync-Assembler-
 #### SentinelStealer c3lestial.fun DNS Query
 
 **Tier:** Hunting
+
 **Robustness:** 0
+
 **ATT&CK Coverage:** None
+
 **ATT&CK Note:** The report places the DNS resolution before the TLS connection to the same name. Web Protocols (T1071.001) describes that following TLS connection and is carried by the TLS SNI rule above, not by this DNS rule, which sees only a name lookup.
+
 **Confidence:** MODERATE
+
 **Rationale:** A single domain is the only discriminator, so Gate 1 scores it Robustness 0: the same indicator is already in the campaign IOC feed and the rule is kept only as a Hunting standing signature. The name test is a domain-boundary test (`.c3lestial.fun` with `dotprefix` and `endswith`): it accepts `c3lestial.fun` and its subdomains, and rejects `evilc3lestial.fun` and `c3lestial.fun.example.invalid`.
+
 **False Positives:** Same shared-hosting caveat as the TLS SNI rule above; DNS resolution alone is a slightly weaker signal than a completed TLS session since it does not confirm subsequent communication
+
 **Blind Spots:** Useful in environments where TLS inspection is unavailable but DNS logging is; pair with the TLS SNI rule above where both log sources are available
+
 **Validation:** The rule loads under `suricata -T` on the sensor (syntax acceptance only; no DNS replay was run). Expected to fire on a query for `c3lestial.fun` or `x.c3lestial.fun`; must not fire on `evilc3lestial.fun`, `c3lestial.fun.example.invalid` or an unrelated domain (by the documented semantics of `dotprefix` with `endswith`, not exercised on traffic).
+
 **Deployment:** Network IDS/IPS or DNS sinkhole/monitoring at the perimeter
 
 ```

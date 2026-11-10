@@ -10,9 +10,13 @@ thumbnail: /assets/images/cards/109.230.231.37-Executive-Overview.png
 ---
 
 **Campaign:** Arsenal-237-109.230.231.37-Malware-Repository
+
 **Date:** 2026-01-12
+
 **Author:** The Hunters Ledger
+
 **License:** CC BY 4.0
+
 **IOC Feed:** https://the-hunters-ledger.com/ioc-feeds/agent-exe.json
 
 ---
@@ -42,11 +46,17 @@ Coverage below is retiered from the original draft: every rule was re-scored for
 #### Golang RAT Multi-Signal Combination (Behavioral Combination)
 
 **Tier:** Hunting
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1036.005 (Match Legitimate Resource Name or Location), T1622 (Debugger Evasion), T1056.001 (Input Capture: Keylogging), T1573 (Encrypted Channel)
+
 **Confidence:** MODERATE
+
 **Rationale:** This rule fixes a hard compile error in the original "comprehensive" rule — its condition referenced `$antidebug_*`, `$crypto_*`, `$net_*`, and `$surv_*`, wildcard prefixes that match none of the rule's actual string identifiers (`$antidebug1`, `$crypto1`, `$net1`, `$surv1` — no underscore before the number). The real `yarac` compiler rejects this outright (`undefined string "$antidebug_*"`); as published, the rule never loaded at all. The wildcard references have been corrected to restore the intended logic: one of two combinations requiring Golang runtime evidence plus crypto imports plus anti-debug or surveillance APIs, each also requiring at least one of the WinDefenderSvc.exe / WindowsDefenderUpdate / .wd_installed masquerade strings. Both behavioral branches still depend on that masquerade-string family, so a naming-convention rebrand defeats every non-hash path — that renameable dependency, not the richness of the combination, is why this sits at Hunting rather than Detection. *Logic fix 2026-10-10:* the rule also carried two "hash match" branches that were hex-text strings searched for inside the file bytes. A sample does not contain its own SHA-256, so those branches could not fire on a real file, and they have been removed. Exact-file matching on the two sample hashes belongs to the IOC feed (the two SHA-256 values are in [`agent-exe.json`](/ioc-feeds/agent-exe.json)), per the project rule that a hash is an IOC and not a YARA string; the hashes stay in the rule's `hash1`/`hash2` meta fields as provenance.
+
 **False Positives:** The Golang-plus-crypto-plus-anti-debug combination alone is common in legitimate Go network tooling, but both behavioral branches require it to co-occur with a Windows-Defender-masquerade literal, which is not expected in unrelated software; residual risk is a coincidental unrelated tool reusing the same masquerade filename or registry value name.
+
 **Deployment:** Endpoint AV/EDR file scanning, email gateway attachment scanning, retroactive scan of file shares, IR artifact triage on hosts that resolved 109.230.231.37.
 
 ```yara
@@ -123,11 +133,17 @@ rule TOOLKIT_PoetRAT_Golang_Multi_Signal_Combination {
 #### WinDefenderSvc.exe + WindowsDefenderUpdate Masquerade Pair
 
 **Tier:** Hunting
+
 **Robustness:** 1
+
 **ATT&CK Coverage:** T1036.005 (Match Legitimate Resource Name or Location), T1547.001 (Registry Run Keys / Startup Folder)
+
 **Confidence:** LOW
+
 **Rationale:** Requires two independently attacker-chosen literal strings — the WinDefenderSvc.exe filename plus the WindowsDefenderUpdate registry value name, the WinDefenderSvc.exe filename plus the `Start Menu\Programs\Startup` path string (the second persistence location the sample uses, see the companion report), or the .wd_installed marker plus generic Golang runtime evidence — to co-occur inside the same file. That is a step above a single atomic (an unrelated program embedding one string by coincidence is far less likely to also embed the other), but every discriminating literal here is an attacker-chosen masquerade artifact rather than a technique-level chokepoint, so a naming-convention rebrand defeats every branch. Kept as a Hunting lead for recurrence of this specific dropper/build family, not promoted to Detection.
+
 **False Positives:** Unlikely for the exact two-literal pairing, but not zero. The `.wd_installed`-plus-Golang-runtime branch effectively reduces to the marker filename alone, since "any Golang binary" is close to a universal condition that adds no real discriminating power.
+
 **Deployment:** Endpoint AV/EDR file scanning, IR artifact triage, retroactive scan of file shares.
 
 ```yara
@@ -166,11 +182,17 @@ rule TOOLKIT_PoetRAT_WinDefender_Masquerade_Persistence_Pair {
 #### Generic Golang RAT Capability Combination
 
 **Tier:** Hunting
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1056.001 (Input Capture: Keylogging), T1021.001 (Remote Desktop Protocol), T1059.001 (PowerShell), T1543.003 (Windows Service), T1573 (Encrypted Channel)
+
 **Confidence:** LOW
+
 **Rationale:** A broad, campaign-agnostic combination of Golang runtime evidence with common capability and networking APIs — keylogging, RDP, PowerShell, or service-creation strings alongside crypto and network imports. It is durable in the sense that it does not depend on any campaign-specific literal, but every individual API in the combination is routine in legitimate Go-based remote-access, automation, and monitoring tools. The source file's own severity rating (MEDIUM) already reflected this as a broader, non-alerting-grade pattern; retained here as an explicitly-labeled Hunting rule rather than Detection.
+
 **False Positives:** Expected against legitimate Go-compiled remote-support, automation, or hotkey-capture tooling that combines any two capability APIs with TLS and networking imports — analyst review of the specific binary (signer, provenance, install context) is required before treating a hit as malicious.
+
 **Deployment:** Broad endpoint/EDR scanning sweep, retroactive hunt across file shares; treat hits as triage candidates, not alerts.
 
 ```yara
@@ -222,11 +244,17 @@ rule TOOLKIT_Golang_RAT_Generic_Capability_Combination {
 #### PoetRAT Dual Persistence: Startup Drop + Registry Run Key Write (Correlation)
 
 **Tier:** Hunting (correlation rule) — bundled below with its 2 required non-alerting base rules
+
 **Robustness:** 2 (correlation) / 1 (each base rule individually)
+
 **ATT&CK Coverage:** T1547.001 (Registry Run Keys / Startup Folder), T1036.005 (Match Legitimate Resource Name or Location)
+
 **Confidence:** LOW — both base signals are individually brittle single-literal selectors; the correlation adds real but limited value
+
 **Rationale:** Neither base selector survives a naming-convention rebrand — the Startup-folder filename and the Run-key value name are both attacker-chosen literals from the same masquerade decision, unlike an independent two-capability correlation. The malware's own dual-persistence design — "redundant survival: removal of one mechanism does not eliminate persistence," per the existing IOC feed's documented behavioral findings — means a genuine infection of this specific build produces both artifacts together, close in time; a coincidental unrelated program matching one selector is meaningfully less likely to also match the other. This operationalizes the malware-analyst's own recommended detection strategy ("monitor for simultaneous creation of both persistence mechanisms") as a real correlation rule instead of three disconnected atomic selectors. *Retiering note:* the source draft published these two artifacts, plus a third (the `.wd_installed` marker), as three separate single-field Sigma selectors — `TargetFilename|contains: ...WinDefenderSvc.exe` and `TargetObject|endswith: ...WindowsDefenderUpdate`, both at `level: critical` — textbook pure-IOC selectors per the project's Cut checklist, and both literals were already present in the IOC feed. Rather than cut them outright, this pass restructured the two persistence-mechanism selectors into the temporal correlation below; the third (`.wd_installed`, an install de-duplication marker rather than a persistence mechanism) had no comparable pairing and was routed to the feed instead (see Coverage Gaps).
+
 **False Positives:** A coordinated rebrand of both artifact names in one future build evades the correlation entirely. Legitimate software is not expected to write both artifacts with these exact names, but the correlation inherits each base rule's narrow FP profile rather than adding new false-positive risk of its own.
+
 **Deployment:** SIEM correlation engine with Sysmon/EDR file-event and registry-event telemetry ingested (10-minute temporal join on host.name); Windows file integrity monitoring and registry auditing as the underlying data sources.
 
 ```yaml

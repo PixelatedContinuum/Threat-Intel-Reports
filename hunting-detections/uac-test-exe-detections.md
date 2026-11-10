@@ -10,9 +10,13 @@ thumbnail: /assets/images/cards/109.230.231.37-Executive-Overview.png
 ---
 
 **Campaign:** Arsenal-237-109.230.231.37-Malware-Repository
+
 **Date:** 2026-01-12
+
 **Author:** The Hunters Ledger
+
 **License:** CC BY 4.0
+
 **IOC Feed:** https://the-hunters-ledger.com/ioc-feeds/uac-test-exe.json
 
 ---
@@ -42,13 +46,21 @@ Coverage below is retiered from the original draft: every rule was re-scored for
 #### Generic CMSTPLUA/Fodhelper UAC Bypass Technique Combination
 
 **Tier:** Detection
+
 **Robustness:** 3
+
 **ATT&CK Coverage:** T1548.002 (Abuse Elevation Control Mechanism: Bypass User Account Control)
+
 **Confidence:** HIGH
+
 **Rationale:** Anchors on the OS-level constants the two bypass techniques cannot avoid touching: the ICMLuaUtil/CMSTPLUA interface CLSID (`{6EDD6D74-C007-4E75-B76A-E5740995E24C}`), the CMLUAUTIL and ColorDataProxy elevation CLSIDs, and the Fodhelper registry location, each combined with generic supporting COM/registry API or filename strings that widen scope without weakening the anchor. The Fodhelper location is accepted in two forms: the full `ms-settings\shell\open\command` path plus one registry API name, or the shorter `Software\Classes\ms-settings` parent key, which counts only together with the `fodhelper.exe` name and a registry API name (the parent key plus a registry API name alone does not match). None of these strings are the operator's to choose; abandoning them means abandoning the technique itself, so the rule survives a full recompile or rename of the tool. It is deliberately technique-level rather than sample-specific and is expected to also match other tools implementing the same two bypass methods.
+
 **False Positives:** No benign hit in a benign-file corpus run (6,035 files from this workstation: Linux system binaries, .NET framework DLLs, scripts, Sigma and YARA rule files; 0 hits, with a known-positive self-test passing). That corpus holds no Windows system binaries or Windows goodware, so a Windows-goodware result is NOT CHECKED and the rule is not shown clean there. The CLSIDs and the Fodhelper path are not expected in ordinary applications, but a Windows default-app or settings-management utility that handles `ms-settings` could carry the full path plus a registry API name, which the first Fodhelper branch accepts. The rule fires on any tool implementing the same two bypass techniques (other proof-of-concept tools, red-team frameworks, or malware), which is the intended technique-level behavior, not a false positive. Treat a Windows-goodware scan as a manual-review precondition before enabling automated blocking.
+
 **Blind Spots:** A bypass implementation using a different, less-documented technique (neither CMSTPLUA nor Fodhelper) evades entirely. The rule inspects on-disk/in-memory strings, not obfuscated or packed variants that encrypt these constants.
+
 **Validation:** Scan a binary embedding the CMSTPLUA CLSID with a COM API name, or the full Fodhelper path with a registry API name, or the `Software\Classes\ms-settings` parent key with `fodhelper.exe` and a registry API name, must match; an unrelated application that merely references Windows Settings or makes registry API calls without the bypass-specific CLSID/path must NOT fire, and neither must a binary holding only the `ms-settings` parent key and a registry API name (checked with a constructed fixture: the old condition fired on it, this one does not).
+
 **Deployment:** Endpoint AV/EDR file scanning, email gateway attachment scanning, retroactive scan of file shares, IR artifact triage on hosts that resolved 109.230.231.37.
 
 ```yara
@@ -107,11 +119,17 @@ rule HKTOOL_UAC_Bypass_CMSTPLUA_Fodhelper_Generic {
 #### uac_test.exe Comprehensive Multi-Signal Combination (Hash Match or Behavioral Combination)
 
 **Tier:** Hunting
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1548.002 (Abuse Elevation Control Mechanism: Bypass User Account Control)
+
 **Confidence:** MODERATE
+
 **Rationale:** The hash branch compares the file's SHA-256 with `hash1` (`hash.sha256`). Of the four behavioral branches, three pair a technique anchor (the CMSTPLUA CLSID, the Fodhelper registry path, or the CMSTPLUA elevation moniker) with two or more of this build's own console/status strings (`$msg_*`, `$com_*`): the transparent, human-readable narration this tool prints at each step ("[+] COM bypass executed!", "[*] Calling CoGetObject with elevation moniker..."). The fourth branch carries no technique anchor at all: four of the `$msg_*` status messages, two Rust library paths and one token API name. That narration is a hallmark of a demonstration/test build, not of a weaponized tool, and it is exactly the kind of literal an operator drops when hardening a build for real use. Strip the print statements and every behavioral branch here stops firing, leaving only the exact-hash path. The Rust compiler-artifact strings (`$rust_lib*`) add no bypass-specific signal of their own; they only confirm the binary is Rust-compiled. Kept at Hunting rather than Cut because the multi-signal combination remains a real, low-noise lead for recurrence of this exact tool or a close derivative that retains its console output.
+
 **False Positives:** None known for the hash-match branch (exact SHA-256 comparison). Three behavioral branches require a technique-specific CLSID, registry-path or moniker literal to co-occur with this build's own status-message text, which is not expected in unrelated software. The fourth behavioral branch has no technique literal behind it: it fires on four of this build's status messages, two Rust library paths and a token API name, so it is bounded only by how distinctive that narration text is. Residual risk is limited to a close rebuild of this same PoC that keeps its console output. No benign hit in the 6,035-file workstation corpus run (Linux-leaning, no Windows system binaries; a Windows-goodware result is NOT CHECKED).
+
 **Deployment:** Endpoint AV/EDR file scanning, retroactive scan of file shares, IR artifact triage on hosts that resolved 109.230.231.37.
 
 ```yara
@@ -192,11 +210,17 @@ rule HKTOOL_UAC_Test_PoC_Comprehensive {
 #### Rust-Compiled UAC Bypass Tool (Generic Capability Combination)
 
 **Tier:** Hunting
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1548.002 (Abuse Elevation Control Mechanism: Bypass User Account Control), T1033 (System Owner/User Discovery)
+
 **Confidence:** LOW
+
 **Rationale:** The technique-anchored branch (Rust artifacts plus the CMSTPLUA CLSID or Fodhelper registry path) is durable but is a Rust-scoped subset of the Detection-tier rule above: it adds coverage only for the case where the sample happens to be Rust-compiled. The second branch (two of "UAC", "elevation", "administrator", "bypass", case-insensitive, plus one privilege-check API) has no comparable anchor. Those four words are common in legitimate Windows administration, installer, and permissions-management tooling, and `CheckTokenMembership`/`GetTokenInformation`/`OpenProcessToken` are standard APIs for any program that checks its own privilege level. That branch alone would be a magnet for unrelated Rust software that merely discusses administrator rights, which caps the whole rule at Hunting.
+
 **False Positives:** Expected against legitimate Rust-compiled Windows tooling that checks or discusses administrative privileges (installers, permission managers, admin-rights diagnostic utilities) without implementing an actual bypass; analyst review of the specific binary is required before treating a hit as malicious.
+
 **Deployment:** Broad endpoint/EDR scanning sweep, retroactive hunt across file shares; treat hits as triage candidates, not alerts.
 
 ```yara
@@ -251,13 +275,21 @@ rule HKTOOL_Rust_Compiled_UAC_Bypass {
 #### UAC Bypass via Fodhelper Registry Hijacking
 
 **Tier:** Detection
+
 **Robustness:** 3
+
 **ATT&CK Coverage:** T1548.002 (Abuse Elevation Control Mechanism: Bypass User Account Control)
+
 **Confidence:** HIGH
+
 **Rationale:** The per-user `Software\Classes\ms-settings\shell\open\command` key (HKCU) is the exact registry key the Fodhelper hijack technique depends on: fodhelper.exe checks this key on launch and executes whatever `DelegateExecute`/default value it finds there without a UAC prompt. An attacker cannot rename or relocate this key and still be exploiting the Fodhelper technique, so the selector survives any rebuild of the tool creating it. The selection matches the key itself or its `(Default)` or `DelegateExecute` value, on a create or set event, under a user hive (`HKU\`) only; a subkey or a longer key name that merely starts with the path does not match, and a machine-hive (HKLM) write does not match. Sysmon reports a per-user write to `HKCU\Software\Classes` with the `HKU\<SID>` prefix, as either `HKU\<SID>\Software\Classes\...` or `HKU\<SID>_Classes\...`; the selection accepts both spellings. Which spelling a given Sysmon build emits was not checked against a live event. The filter excludes the two legitimate writers of this key (fodhelper.exe itself, and the Settings app), leaving only third-party writers as a strong, low-noise indicator.
+
 **False Positives:** Legitimate system administration or registry-cleanup tooling that touches this exact key (extremely rare); legitimate Windows Settings application activity is excluded by the filter.
+
 **Blind Spots:** Misses UAC bypass techniques that don't use this specific registry key (for example CMSTPLUA, sdclt, eventvwr, or other UACME-catalogued methods). Requires registry-event telemetry (Sysmon Event ID 12 for key creation and 13 for value writes, with monitoring that covers the per-user Classes hive). A write made through a different hive path that is not rendered under `HKU\` is not matched.
+
 **Validation:** Trigger creation of the key, or of a `DelegateExecute` or default value under it, from a non-fodhelper/non-SystemSettings process, must match; a Windows Settings application writing its own legitimate configuration under this key must NOT fire, and neither must an HKLM write, a write to a subkey below `command`, or a delete event for the key. The hive-spelling forms were checked with constructed field values only; a live Sysmon event replay is NOT CHECKED.
+
 **Deployment:** Windows registry auditing, Sysmon Event ID 12 and 13, EDR registry-event telemetry.
 
 ```yaml
@@ -317,13 +349,21 @@ level: high
 #### UAC Bypass via CMSTPLUA COM Interface CLSID in Process Command Line
 
 **Tier:** Detection
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1548.002 (Abuse Elevation Control Mechanism: Bypass User Account Control)
+
 **Confidence:** HIGH
+
 **Rationale:** *Retiering split:* the source rule OR'd this narrow, durable CLSID-in-CommandLine selector together with a broad `ParentImage: DllHost.exe` plus `IntegrityLevel: High` selector under one `level: high` rule. Scored as written (the tie-breaker rule is to score the logic, not the title), that combined OR condition inherited the weaker branch's precision: DllHost.exe legitimately spawns numerous elevated COM consumers, including some Windows Update components, which the rule's own false-positive note already conceded. Splitting preserves both ideas at their honest tier instead of overclaiming the broad branch or discarding the narrow one. This half keeps the CMSTPLUA interface CLSID (`{6EDD6D74-C007-4E75-B76A-E5740995E24C}`), a constant the operator cannot change without abandoning the technique, isolated in the `CommandLine` field, where its presence indicates a script- or command-line-driven invocation of the same technique this file's YARA rules detect inside compiled binaries. The paired broad selector is retiered separately below as a Hunting rule.
+
 **False Positives:** None known: this exact CLSID is not expected to appear in a legitimate process command line, since COM consumers normally resolve interfaces programmatically rather than passing raw CLSIDs as command-line text.
+
 **Blind Spots:** Compiled-binary implementations of the CMSTPLUA bypass, including uac_test.exe itself (which invokes the interface from within its own code with no relevant command-line arguments), never surface the CLSID in `CommandLine` and are invisible to this rule. It is strongest against script- or one-liner-based implementations (for example PowerShell) of the same technique. Requires process command-line logging (Sysmon Event ID 1 or 4688 with command-line auditing enabled).
+
 **Validation:** Trigger a process launch whose command line contains the literal CLSID string, must match; an unrelated process referencing a different CLSID must NOT fire.
+
 **Deployment:** Sysmon process creation (Event ID 1), Windows Event ID 4688 with command-line auditing, EDR process telemetry.
 
 ```yaml
@@ -361,13 +401,21 @@ level: high
 #### Suspicious Child Process Spawned by fodhelper.exe
 
 **Tier:** Detection
+
 **Robustness:** 3
+
 **ATT&CK Coverage:** T1548.002 (Abuse Elevation Control Mechanism: Bypass User Account Control)
+
 **Confidence:** HIGH
+
 **Rationale:** fodhelper.exe is a fixed Windows system binary; under normal operation it spawns only the Settings host processes listed in the filter. Any other child process is a direct behavioral consequence of the registry hijack itself, since fodhelper.exe reads the hijacked key and executes whatever it points to at its own elevated integrity, rather than a renameable artifact of any specific tool. The operator cannot avoid this parent/child relationship and still be exploiting this technique. Complements the registry-write rule above by covering the execution-time half of the same technique.
+
 **False Positives:** Windows Settings application launching its own legitimate components (excluded by the filter).
+
 **Blind Spots:** Requires process-creation telemetry with parent/child linkage (Sysmon Event ID 1). Covers only the Fodhelper technique, not CMSTPLUA or other bypass methods.
+
 **Validation:** Trigger fodhelper.exe spawning any process other than SystemSettings.exe/SettingsPageHost.exe, must match; fodhelper.exe launching the Settings app normally must NOT fire.
+
 **Deployment:** Sysmon process creation (Event ID 1), EDR process-ancestry telemetry.
 
 ```yaml
@@ -409,11 +457,17 @@ level: high
 #### DllHost.exe Spawning Process at High Integrity Level (Potential COM Elevation Abuse)
 
 **Tier:** Hunting
+
 **Robustness:** 1
+
 **ATT&CK Coverage:** T1548.002 (Abuse Elevation Control Mechanism: Bypass User Account Control)
+
 **Confidence:** LOW
+
 **Rationale:** *Retiering split, demoted from the source's `level: high`:* this selector, DllHost.exe as parent with the child process at High integrity and no further discriminator, is the broad half of the source's combined CMSTPLUA rule (see the Detection-tier CLSID rule above for the narrow half). DllHost.exe is a legitimate multi-purpose COM surrogate host; numerous benign elevated-COM scenarios, including some Windows Update components per the rule's own false-positive note, spawn children this way. Per the project's level-discipline tie-breaker, `high`/`critical` on a selector this broad is an inflated-confidence signal, not a metadata typo, and belongs at Hunting with a `medium` level and analyst review rather than automated alerting.
+
 **False Positives:** Legitimate COM-based elevation by trusted Windows components; some Windows Update processes use this exact parent/integrity pattern.
+
 **Deployment:** Sysmon process creation (Event ID 1) with integrity-level logging enabled; hunting sweep, not an alerting rule.
 
 ```yaml

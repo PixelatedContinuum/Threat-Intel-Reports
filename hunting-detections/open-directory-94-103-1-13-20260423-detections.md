@@ -9,9 +9,13 @@ hide: true
 ---
 
 **Campaign:** open-directory-94-103-1-13-20260423
+
 **Date:** 2026-04-23
+
 **Author:** The Hunters Ledger
+
 **License:** CC BY 4.0
+
 **Reference:** https://the-hunters-ledger.com/reports/open-directory-94-103-1-13-20260423/
 
 ---
@@ -57,13 +61,21 @@ Rules are grouped by family within each Detection/Hunting subsection (this repla
 #### Stage-4 Mutex GUID (Cross-Build Invariant)
 
 **Tier:** Detection
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1027.011 (Fileless Storage), T1053.005 (Scheduled Task), T1112 (Modify Registry)
+
 **Confidence:** DEFINITE
+
 **Rationale:** The mutex GUID is byte-identical across two independently-compiled builds (mymain and myfile), which is strong evidence it is hardcoded in the crypter's shared Stage-4 source template rather than regenerated per build — a `Guid.NewGuid()` call would have produced two different values. That makes it a tool-family artifact rather than a one-off masquerade string.
+
 **False Positives:** None known — the GUID has zero public prior hits and is not present in any known legitimate software.
+
 **Blind Spots:** A future builder revision that regenerates this GUID per build would evade the rule; the non-PE branch of the condition matches on the mutex string alone, which is intentional (Stage-4 runs fileless and may only exist as a raw memory region).
+
 **Validation:** Scan a memory region or extracted Stage-4 module — the mutex GUID must match; a benign .NET binary with an unrelated GUID mutex must NOT fire.
+
 **Deployment:** Scan dumped memory regions or an extracted Stage-4 module (primary, since Stage-4 runs fileless): the non-PE branch matches a raw region on the mutex GUID alone and does not test `filesize`. Endpoint file scanning covers the PE branch. A live process scan cannot satisfy the PE branch, because `filesize` is undefined there, and I have not tested whether the non-PE branch fires in that mode.
 
 ```yara
@@ -93,13 +105,21 @@ rule MALW_ChaosLoader_Stage4_MutexGUID_CrossBuildInvariant {
 #### Batch Dropper Structural Anchors
 
 **Tier:** Detection
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1059.001 (PowerShell), T1059.003 (Windows Command Shell), T1027 (Obfuscation), T1140 (Deobfuscate/Decode)
+
 **Confidence:** HIGH
+
 **Rationale:** The forced SysWOW64 PowerShell launch line and the `.Replace('@','A').Replace('#','/')` alphabet-substitution trick are both flagged as builder-wide structural anchors present in both observed builds — these are decode-pipeline mechanics baked into the crypter's own code, not per-victim literals, so they survive a rebuild that only rotates keys and filenames.
+
 **False Positives:** Low — the forced 32-bit PowerShell launch string, the specific alphabet-substitution string, and one of two decode-pipeline branches (the `$host.UI.RawUI.WindowTitle` self-read, or the `StartsWith(` plus `Substring(32)` marker-strip pair) are required together in a file between 1 MB and 5 MB; individual components appear in legitimate scripts but not in this combination at this file size.
+
 **Blind Spots:** A builder revision that changes the decode alphabet or drops the forced-SysWOW64 launch (e.g., moving to native 64-bit PowerShell) would evade this rule; the rule reads the bytes of a file between 1 MB and 5 MB and tests no `.bat` extension and no batch syntax, so a PowerShell script or any other file of that size holding the strings also matches; it does not cover the loader once it has decoded into memory.
+
 **Validation:** Scan `mymain.bat` / `myfile.bat` (hashes below) or a future build sharing the same decode pipeline — must match; a legitimate oversized PowerShell deployment script must NOT fire.
+
 **Deployment:** Endpoint file-system scanner, gateway content inspection, AV on-access scan.
 
 ```yara
@@ -133,13 +153,21 @@ rule MALW_ChaosLoader_BatchDropper_StructuralAnchors {
 #### Stage-5a Ransomware Payload
 
 **Tier:** Detection
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1486 (Data Encrypted for Impact), T1490 (Inhibit System Recovery), T1547.001 (Registry Run Keys), T1657 (Financial Theft — clipboard hijacker)
+
 **Confidence:** DEFINITE
+
 **Rationale:** `ConsoleApplication7` and `driveNotification` are Chaos-builder template artifacts, not indicators unique to this operator — a public sibling sample (`d0c78ca7...`) confirms the same namespace and class names appear across unrelated Chaos/TorBrowserTor deployments. That makes the combination a durable, family-wide anchor rather than a one-off literal: it survives this operator's key rotation and would also catch other operators using the same builder configuration.
+
 **False Positives:** Low — `ConsoleApplication7` alone has FP potential in unrelated developer test binaries left at default Visual Studio naming; the required combination with `driveNotification` plus 2 of the remaining four strings is uniquely malicious.
+
 **Blind Spots:** A Chaos builder release that changes its default namespace/class template would evade the mandatory anchors; targets on-disk PE content or a saved dump of the decrypted PE, not the on-disk `.bat` dropper before decode.
+
 **Validation:** Scan the decrypted Stage-5a PE (hash below) — must match; an unrelated .NET console application using default Visual Studio naming alone must NOT fire (the `driveNotification` requirement prevents this).
+
 **Deployment:** Scanner for saved dumps, endpoint AV, file-system scanner targeting `%APPDATA%`. Live process-memory scanning does not match: the condition's `filesize` test is undefined there, so only files and saved dumps are scanned.
 
 ```yara
@@ -172,13 +200,21 @@ rule RANSOM_ChaosBuilder_TorBrowserTor_Stage5a {
 #### Filesystem Artefacts (Post-Encryption)
 
 **Tier:** Detection
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1486 (Data Encrypted for Impact), T1491.001 (Internal Defacement)
+
 **Confidence:** HIGH
+
 **Rationale:** The `.torbrowsertor` extension is the defining marker of this Chaos-builder configuration and is shared across the family, not just this operator's two builds — durable against this operator's own key rotation. The two BTC wallets are confirmed builder defaults (reused across unrelated Chaos/TorBrowserTor campaigns per wallet-cluster analysis), which similarly makes them stable detection anchors even though they carry low attribution value for this specific operator.
+
 **False Positives:** None known — `.torbrowsertor` is not a legitimate file extension, and the rule needs that string together with the note name, the Telegram handle or a default wallet; a wallet address alone does not fire, because the extension string is mandatory. Any file that quotes the extension with one of those strings, such as an analyst's write-up of this campaign, also matches.
+
 **Blind Spots:** A builder release that changes the configured extension, note filename, or default wallets would evade the rule; scans file contents only, never file names or extensions (an encrypted victim file named `*.torbrowsertor` does not fire on its name), and not the live encryption process itself.
+
 **Validation:** Scan a file whose body contains `.torbrowsertor` together with `READ ME PLEASE.txt`, `@TorBrowserTor` or a default wallet (for example a copy of the Stage-5a payload) — must match; a directory of files that are merely named `*.torbrowsertor` with none of those strings in their bytes must NOT fire, and neither must a file holding a wallet or the handle without the extension string.
+
 **Deployment:** File-system scanner, EDR file-creation monitoring.
 
 ```yara
@@ -209,13 +245,21 @@ rule RANSOM_ChaosBuilder_TorBrowserTor_FilesystemArtefacts {
 #### Orcus RAT v7 Wardow Crack
 
 **Tier:** Detection
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1573 (Encrypted Channel), T1056.001 (Keylogging), T1113 (Screen Capture), T1071.001 (Web Protocols)
+
 **Confidence:** DEFINITE
+
 **Rationale:** `CrackedByWardow`, the fixed IV, and the keyleak magic filename are hardcoded by the crack tool itself, not by any individual operator — the report records all three as family-wide in this crack. The rule does not require all three: it requires the AES key, either the fixed IV or the keyleak filename, and one Orcus structure string (`Orcus.Service` or `IServicePipe`), so a build missing either the IV or the filename still matches. This is as durable as a static-string anchor gets: renaming the payload or rotating C2 infrastructure has no effect on it. It scores Robustness 2, not 3: the key, IV and filename are constants of one crack tool, a specific tool-family combination, and a future crack revision that changes them defeats it.
+
 **False Positives:** None known — `CrackedByWardow` is not used by any legitimate software; the required combination is unambiguous.
+
 **Blind Spots:** Evaded by an un-cracked or differently-cracked Orcus v7 build, or a future crack revision that changes these constants; does not cover the underlying Orcus RAT family broadly, only this specific crack.
+
 **Validation:** Scan `myfile.exe` (hash below) or any other Wardow-cracked Orcus sample — must match; a stock (non-cracked) Orcus v7 build must NOT fire.
+
 **Deployment:** Endpoint AV/EDR file scan and `%APPDATA%\Microsoft\Speech\` directory monitoring. The condition tests `filesize`, which is undefined in a process-memory scan, so the rule does not match there; a memory-scan form would need the `filesize` test removed and is not written or tested here.
 
 ```yara
@@ -253,13 +297,21 @@ rule RAT_OrcusRAT_v7_WardowCrack {
 #### Stage-5b UAC Bypass PE (Cross-Build Invariant)
 
 **Tier:** Hunting (re-tiered from Detection 2026-09-13, see note below)
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1548.002 (Bypass UAC), T1134.004 (Parent PID Spoofing)
+
 **Confidence:** MODERATE (downgraded from DEFINITE 2026-09-13)
+
 **Rationale:** The AppInfo RPC interface GUID and `AiEnableDesktopRpcInterface` name are the fixed Windows chokepoint UACME technique #41 must call, an attacker cannot rename them without abandoning the technique. The rule additionally requires 2 of 3 corroborating strings ($ppid_anchor, $conhost_arg, $ntapi) tied to this specific loader's implementation choices (the NtApiDotNet library, the `--headless` conhost invocation, and the `IColorDataProxy` interface name), which is why this sits at Robustness 2 rather than 3: the technique-level anchor is durable, but the required corroboration is implementation-specific. This exact PE is byte-identical across both observed builds (mymain and myfile) with only 8/77 VT detections. **Re-tiering note, 2026-09-13:** every one of this rule's five mandatory-or-corroborating strings (two mandatory, three corroborating) is a publicly documented Windows interface or a public open-source library, not something coined by this operator. Confirmed by primary and near-primary sources: the AppInfo interface GUID and `AiEnableDesktopRpcInterface` name are documented in Google Project Zero's "Calling Local Windows RPC Servers from .NET" and in independent security research (Tyranid's Lair) as the real, standard Windows AppInfo/UAC service RPC interface, version 1.0. `NtApiDotNet` is James Forshaw's widely used, actively maintained open-source .NET library for exactly this kind of Windows RPC and NT API research. UACME technique #41 itself is a public, named technique in the widely used `hfiref0x/UACME` open-source catalog. This is the same shape as the PublicTool_DirtyFrag_LinuxKernel_LPE and PublicTool_CVE_2023_21839_WebLogic_GoExploit rules elsewhere in this campaign's WebLogic detection file, both correctly tiered Hunting because they detect a public tool or technique broadly rather than an operator-specific artifact. The rule's own original False Positives field already said as much ("legitimate red-team or research tooling built on NtApiDotNet that implements the same UACME #41 technique... would also match") but that assessment was rated Low with Confidence DEFINITE regardless; the corrected tier and confidence reflect that acknowledgment being taken seriously rather than overridden by it
+
 **False Positives:** Real, not merely Low. Any research or red-team tool combining NtApiDotNet with the AppInfo RPC interface to exercise UACME technique #41, a public, actively studied technique, would satisfy this rule's mandatory anchors regardless of authorship. Not empirically fixture-tested against an actual NtApiDotNet-based tool (none was built here; doing so would require compiling a working .NET RPC client against the real AppInfo interface), so this is a corrected, evidence-backed judgment call rather than a demonstrated hit
+
 **Blind Spots:** A rebuild that drops NtApiDotNet in favor of raw RPC calls, or renames the `IColorDataProxy` interface and changes the conhost launch flag, would evade the corroborating-string requirement even though the core AppInfo GUID/RPC-name anchor remains
+
 **Validation:** Scan the Stage-5b PE (`hash1` below) or a saved memory dump written out as a file and containing it, it fires (a live process-memory scan cannot satisfy the `filesize` test). Untested: an actual NtApiDotNet-based research tool exercising the same public interface, which is the carrier that would confirm the false-positive risk empirically
+
 **Deployment:** Endpoint AV/EDR file scan, scanner for saved dumps (Stage-5b is delivered encrypted and only exists in cleartext post-decryption), with analyst triage on every hit. Live process-memory scanning does not match: the condition's `filesize` test is undefined there, so only files and saved dumps are scanned.
 
 ```yara
@@ -291,11 +343,17 @@ rule MALW_ChaosLoader_Stage5b_UACBypass_CrossBuildInvariant {
 #### mymain Build In-Memory Crypter Keys
 
 **Tier:** Hunting
+
 **Robustness:** 1
+
 **ATT&CK Coverage:** T1027 (Obfuscation), T1140 (Deobfuscate/Decode), T1620 (Reflective Code Loading)
+
 **Confidence:** DEFINITE (behavior) / build-specific (durability)
+
 **Rationale:** All four strings are randomized key material generated for the mymain build specifically (AES passphrase, XOR key, magic marker, and Stage-4 assembly name) — unlike the Stage-4 mutex GUID and Stage-5b PE hash, there is no cross-build evidence these are hardcoded builder constants rather than per-campaign key material. A future build would plausibly regenerate all four together, so durability governs over today's clean precision: this stays Hunting rather than Detection despite zero known false positives.
+
 **False Positives:** None known — all four strings are random-looking private keys unique to this build with no collision against any known legitimate software.
+
 **Deployment:** Memory scanner (primary — strings appear only in decrypted runtime stages, not in the on-disk `.bat`).
 
 ```yara
@@ -322,11 +380,17 @@ rule MALW_ChaosLoader_mymain_InMemory_CrypterKeys {
 #### myfile Build In-Memory Crypter Keys
 
 **Tier:** Hunting
+
 **Robustness:** 1
+
 **ATT&CK Coverage:** T1027 (Obfuscation), T1140 (Deobfuscate/Decode), T1620 (Reflective Code Loading)
+
 **Confidence:** DEFINITE (behavior) / build-specific (durability)
+
 **Rationale:** Equivalent to the mymain rule above, targeting the myfile build's unique key material and its USB-spread self-copy typo filename `Recieve please.exe`. Same durability caveat: these are per-build literals, not confirmed cross-build invariants.
+
 **False Positives:** None known — every string is build-specific with zero public occurrence, but any two of the five fire, including the short assembly name `fudkk` with the typo filename, which together need no key material.
+
 **Deployment:** Memory scanner (primary).
 
 ```yara
@@ -362,13 +426,21 @@ rule MALW_ChaosLoader_myfile_InMemory_CrypterKeys {
 #### Stage-5b UAC Bypass via PPID Spoof: Conhost Child of Taskmgr
 
 **Tier:** Detection
+
 **Robustness:** 3
+
 **ATT&CK Coverage:** T1548.002 (Bypass UAC), T1134.004 (Parent PID Spoofing)
+
 **Confidence:** DEFINITE
+
 **Rationale:** This keys on process ancestry and a command-line flag, not an attacker-chosen cosmetic name — `taskmgr.exe` is a fixed OS binary, and `conhost.exe --headless` spawned directly from it is the PPID-spoofing mechanics of UACME technique #41 itself. The rule survives any future rebuild that keeps using this specific bypass technique, regardless of file renaming or hash rotation.
+
 **False Positives:** None known — `taskmgr.exe` spawning `conhost.exe --headless` has no legitimate software precedent.
+
 **Blind Spots:** A rebuild that switches to a different UAC-bypass technique (a different auto-elevated donor process, or a technique that doesn't spawn conhost) evades this rule entirely.
+
 **Validation:** Trigger the Stage-5b module — the process-ancestry match must fire; a user manually opening an elevated Task Manager for normal administration must NOT fire (Task Manager does not spawn conhost/cmd children during normal use).
+
 **Deployment:** Endpoint EDR / Sysmon-fed SIEM (process-creation telemetry).
 
 ```yaml
@@ -417,13 +489,21 @@ level: high
 #### Encrypted File Extension Created + Anti-Recovery Command Correlation
 
 **Tier:** Detection
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1486 (Data Encrypted for Impact), T1490 (Inhibit System Recovery)
+
 **Confidence:** HIGH
+
 **Rationale:** Corrected from the original: the published rule's title and description described a correlation between `.torbrowsertor` file creation and anti-recovery command execution, but the `detection:` block never implemented the extension-creation half — the condition matched only the generic anti-recovery commands (`selection_antirecovery`) alone, which is common to legitimate backup-cleanup activity as well as most ransomware families. This is now two base rules plus a genuine Sigma correlation: the `.torbrowsertor` extension is a durable, family-wide anchor (Chaos-builder invariant, not this operator's own choice — see the YARA filesystem-artefacts rule), and requiring it alongside an anti-recovery command on the same host within a 10-minute window is a materially higher-fidelity signal than either alone.
+
 **False Positives:** None known — `.torbrowsertor` is not a legitimate extension, and the co-occurrence of that extension with shadow-copy/backup destruction on the same host within minutes has no benign explanation. The correlation has no count requirement: one `.torbrowsertor` file creation and one anti-recovery command suffice, so a hit shows co-occurrence and not an extension-creation burst or ongoing encryption.
+
 **Blind Spots:** Converted to EQL with the sysmon pipeline, the temporal correlation becomes `sample by Computer` with no time limit, so the 10-minute window is not enforced there; the Lucene backend cannot convert correlation rules. The anti-recovery base rule matches a `bcdedit` command only when `recoveryenabled no` is also in the command line. Requires both base rules' logsources (`file_event` and `process_creation`) to be collected and correlatable by `Computer`; a host with only one telemetry source enabled will not produce the correlation match (though the extension-creation base rule alone still fires as Detection-tier).
+
 **Validation:** Trigger Stage-5a end-to-end — both the extension-creation and anti-recovery-command base rules must fire within the window and the correlation must match; a legitimate backup job deleting shadow copies with no `.torbrowsertor` files present anywhere on the host must NOT trigger the correlation.
+
 **Deployment:** Endpoint EDR / Sysmon-fed SIEM (file-creation + process-creation telemetry, correlated).
 
 ```yaml
@@ -542,11 +622,17 @@ level: high
 #### Stage-4 Masquerade Scheduled Task Created at Root Path
 
 **Tier:** Hunting
+
 **Robustness:** 1
+
 **ATT&CK Coverage:** T1053.005 (Scheduled Task), T1036.005 (Match Legitimate Resource Name or Location)
+
 **Confidence:** DEFINITE (for this build) / build-specific (durability)
+
 **Rationale:** "Microsoft Defender" is an attacker-chosen masquerade name picked purely for stealth — the operator has no functional reason to keep it stable, and a future build could trivially rename it to any other plausible system-component name. Durability governs over today's clean precision (no legitimate root-path task uses this exact name), so this is Hunting rather than Detection. No Sysmon/Security-log field reliably exposes the task's RunLevel or trigger type as a separate queryable field, so a name-independent technique-level rewrite (root-path + elevated + boot-trigger) was not attempted — it would require guessing at field availability rather than working from confirmed telemetry.
+
 **False Positives:** No known legitimate software creates a root-path scheduled task named "Microsoft Defender" — but the anchor is a renameable literal, not a technique invariant.
+
 **Deployment:** Endpoint EDR / Sysmon-fed SIEM (Windows Security auditing, Event 4698).
 
 ```yaml
@@ -597,11 +683,17 @@ level: medium
 #### Stage-4 Fileless Payload Written to Masquerade Registry Key
 
 **Tier:** Hunting
+
 **Robustness:** 1
+
 **ATT&CK Coverage:** T1027.011 (Fileless Storage), T1112 (Modify Registry), T1036.005 (Match Legitimate Resource Name or Location)
+
 **Confidence:** DEFINITE (for this build) / build-specific (durability)
+
 **Rationale:** Same durability caveat as the scheduled-task rule above — `Microsoft Defender\Payload` is an attacker-chosen masquerade path with no functional reason to stay stable across builds. No reliable Sigma field exposes registry value *size*, which is the actual invariant of this technique (Stage-4 always writes a large blob for the boot re-loader to consume); a size-based rewrite could not be built from confirmed field availability.
+
 **False Positives:** No known legitimate software writes to this exact registry path for THIS build; the masquerade path is structurally distinct from the legitimate Defender key.
+
 **Deployment:** Endpoint EDR / Sysmon-fed SIEM (registry telemetry).
 
 ```yaml
@@ -651,12 +743,19 @@ level: medium
 #### Admin Account Creating a VBE Directory File or mapping.csv in Temp (Anti-Sandbox Gate Artefacts)
 
 **Tier:** Hunting
+
 **Robustness:** 1
+
 **ATT&CK Coverage:** T1497 (Virtualization/Sandbox Evasion)
+
 **ATT&CK Note:** The malware's gate is the sandbox-evasion check (T1497). T1036 (Masquerading) is not claimed: no selection tests a rename or a masquerade, only the account name and the VBE or mapping.csv paths in Temp.
+
 **Confidence:** HIGH
+
 **Rationale:** The malware's gate checks for the admin account, the VBE directory and the mapping.csv file together and exits when all three are present, so the three together identify the operator's own development or staging host and not a victim. This rule tests less than that: one file-creation event by an account whose name contains `admin` is enough, and a default `Administrator` account matches the name test. Value is narrow and hunting-specific: spotting file creations that resemble the gate's artefacts in telemetry, or validating a suspected staging host.
+
 **False Positives:** Legitimate VBScript Editor (VBE) installations on administrator accounts may create `%TEMP%\VBE\` directories; administrative accounts using tools that generate `mapping.csv` files in `%TEMP%`. Tune by excluding known-good admin workstations and software deployment systems.
+
 **Deployment:** Endpoint EDR / Sysmon-fed SIEM (file-creation telemetry) — threat-hunting use only, not for direct alerting.
 
 ```yaml
@@ -711,11 +810,17 @@ level: medium
 #### Masquerade Persistence via Run Key "Microsoft Store"
 
 **Tier:** Hunting
+
 **Robustness:** 1
+
 **ATT&CK Coverage:** T1547.001 (Registry Run Keys), T1036.005 (Match Legitimate Resource Name or Location)
+
 **Confidence:** HIGH (for these builds) / build-specific (durability)
+
 **Rationale:** Both the Run-key value name ("Microsoft Store") and the self-copy filenames (`svchost.exe`, `projectxx.exe`) are choices specific to these two observed builds — a third build could rename either or both independently. No name-independent technique-level rewrite was attempted: `svchost.exe` masquerading outside `System32` is a durable general pattern, but `projectxx.exe` does not fit any system-process masquerade pattern, so a rewrite would only cover half the family.
+
 **False Positives:** No known legitimate software creates a Run key named "Microsoft Store" pointing to `svchost.exe` or `projectxx.exe` in `%APPDATA%` for these builds; a future build renaming either value would evade this rule.
+
 **Deployment:** Endpoint EDR / Sysmon-fed SIEM (registry telemetry).
 
 ```yaml
@@ -764,11 +869,17 @@ level: medium
 #### Anti-Recovery / Shadow Copy Deletion Commands Executed
 
 **Tier:** Hunting
+
 **Robustness:** 1
+
 **ATT&CK Coverage:** T1490 (Inhibit System Recovery)
+
 **Confidence:** MODERATE (standalone) / HIGH when correlated with `.torbrowsertor` extension creation (see the Detection-tier correlation rule above)
+
 **Rationale:** Rescoped from the original rule, which claimed (in its title and description) to require BOTH `.torbrowsertor` extension creation and an anti-recovery command, but whose actual `detection:` block only ever implemented the anti-recovery-command half. As a standalone signal, `vssadmin`/`wbadmin`/`bcdedit` shadow-copy and recovery-disabling commands are common to legitimate backup-cleanup activity and to the vast majority of ransomware families — genuinely useful for scoping, but not safe to alert on alone. This rule is now also referenced as a base rule by the Detection-tier correlation above (`name: chaos_antirecovery_commands`).
+
 **False Positives:** Legitimate backup software cleanup operations (`vssadmin`, `wbadmin`); system administrators running manual shadow-copy management. Correlate with concurrent `.torbrowsertor` file creation for confirmation (see the correlation rule above).
+
 **Deployment:** Endpoint EDR / Sysmon-fed SIEM (process-creation telemetry).
 
 > **YAML location note:** this rule's full definition (`name: chaos_antirecovery_commands`) is presented above under **Detection Rules → Chaos / TorBrowserTor Ransomware → "Encrypted File Extension Created + Anti-Recovery Command Correlation"**, in the same fenced YAML block as its correlation partner. Sigma correlation rules must resolve referenced base rules within the same document, so it cannot be duplicated here as a second copy. Its tier is Hunting, as documented in this entry; only the physical YAML placement differs from the type→tier layout.
@@ -776,12 +887,19 @@ level: medium
 #### Task Manager Disabled via User Registry Policy Outside Group Policy Hosts
 
 **Tier:** Hunting
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1685 (Disable or Modify Tools)
+
 **Confidence:** HIGH
+
 **Rationale:** The original metadata's citation of "T1685 (Disable or Modify Tools)" is confirmed correct against the current MITRE ATT&CK technique catalog — verified directly against the installed `pySigma`/`sigma check` ATT&CK data rather than assumed from memory. ATT&CK has restructured what was previously T1685 (Disable or Modify Tools) sub-techniques into standalone top-level techniques under a newer "Defense Impairment" tactic (TA0112): T1685 (Disable or Modify Tools), T1686 (Disable or Modify System Firewall), T1687 (Exploitation for Defense Impairment). `DisableTaskMgr` is a fixed, Windows-defined policy value name (not attacker-chosen), which gives the underlying artifact strong durability — Robustness 2. The tier stays Hunting on precision grounds: Group Policy sets this value legitimately, and the rule's own `filter_gpo` exclusion covers only two of the many legitimate deployment vectors (login scripts, SCCM/Intune-pushed reg.exe calls, and other administrative tooling are not filtered), so real enterprise false positives are expected without further tuning.
+
 **False Positives:** Any process outside the two filter paths that sets the value, including management agents and administrators; Group Policy enforcing kiosk or restricted desktop configurations that disable Task Manager; enterprise endpoint management software applying policy-based restrictions through a path not covered by `filter_gpo`.
+
 **Registry value rendering:** raw Sysmon Event 13 renders a DWORD in `Details` as `DWORD (0x00000001)`; the Elastic Sysmon pipeline can render the same value as the decimal `1`, so both forms are listed. The per-user scope comes from the `HKU\` prefix (Sysmon renders HKCU as `HKU\<SID>`), which excludes the machine-wide `HKLM` copy of the policy.
+
 **Deployment:** Endpoint EDR / Sysmon-fed SIEM (registry telemetry), correlate the writing process image path with `%APPDATA%` to raise confidence.
 
 ```yaml
@@ -840,12 +958,19 @@ level: medium
 #### Loopback Connection on Port 20268 by a Process Outside System32 (Orcus Wardow Crack Tunnel Port)
 
 **Tier:** Hunting
+
 **Robustness:** 1
+
 **ATT&CK Coverage:** T1090.001 (Internal Proxy)
+
 **ATT&CK Note:** Web Protocols (T1071.001) is not claimed. The report supports a loopback endpoint with an unrecovered upstream tunnel, not HTTP on this local connection, so the protocol carried over the port is not known.
+
 **Confidence:** HIGH (for this campaign) / port is campaign-configured, not crack-tool-hardcoded
+
 **Rationale:** Unlike the family-wide `CrackedByWardow` crack constants (which the YARA rule above anchors on), port 20268 is an Orcus builder configuration value the operator set for this campaign specifically — it is not confirmed to be a crack-tool default. A future campaign from the same operator, or any other Wardow-crack user, could configure a different port. Removing the specific port would leave only "loopback connection from a non-system process," which is far too broad to be useful even as a Hunting signal (many legitimate applications use arbitrary localhost ports), so the port anchor is retained as the best available balance.
+
 **False Positives:** Local development services or automated testing frameworks using port 20268 in developer environments. The rule already excludes process images under `System32` and `SysWOW64`; treat a hit as a lead requiring corroboration, not a standalone alert.
+
 **Deployment:** Endpoint EDR / Sysmon-fed SIEM (network-connection telemetry).
 
 ```yaml
@@ -898,11 +1023,17 @@ level: medium
 #### Stage-2 Operator Backdoor Account "pentest" Created
 
 **Tier:** Hunting
+
 **Robustness:** 1
+
 **ATT&CK Coverage:** T1136.001 (Create Account: Local Account), T1078.003 (Valid Accounts: Local Accounts)
+
 **Confidence:** HIGH (behavior) / single-observation (durability)
+
 **Rationale:** The username/password pair is hardcoded in the operator's own controller script (`interact.py`) rather than generated per-target, which plausibly makes it stable across this operator's victims — but that reuse is inferred from a single observed script, not confirmed across multiple campaigns the way the Stage-4 mutex GUID was confirmed across two independent builds. Removing the credential literal leaves only "net.exe invoked with 'user' and '/add'," which is far too generic to retain value, so the credential anchor is required; Gate-1 durability (single-observation evidence) keeps this at Hunting despite near-zero false-positive risk. Promote to Detection if the same credential pair is confirmed reused in a second, independent campaign.
+
 **False Positives:** Implausible — the exact username "pentest" paired with password "Qwerty12345" in a `net user /add` invocation has no known benign explanation.
+
 **Deployment:** Endpoint EDR / Sysmon-fed SIEM (process-creation telemetry); also hunt for successful logons and Administrators-group membership changes involving the username `pentest`.
 
 ```yaml
@@ -967,11 +1098,17 @@ level: medium
 #### XOR-Encoded Payload Staging Download (.xor URI Suffix)
 
 **Tier:** Hunting
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1105 (Ingress Tool Transfer), T1071.001 (Web Protocols)
+
 **Confidence:** MODERATE
+
 **Rationale:** Salvaged via capability-abstraction from the original `/gp.xor`-specific rule (a single short URI-path literal with no corroborating anchor, which would have been Robustness 1). The underlying evidence in this investigation explicitly frames the `.xor`-suffixed download convention as surviving infrastructure rotation — any script performing a GET against an HTTP target ending in `.xor` followed by in-memory `Reflection.Assembly.Load` is the same loader pattern regardless of which IP or filename is used. Broadening the content match from `/gp.xor` to the `.xor` suffix keeps that durability while accepting a small increase in false-positive surface (matching any `.xor`-suffixed download, not only this campaign's specific payload), which is why this stays Hunting rather than Detection.
+
 **False Positives:** Any unrelated HTTP download whose URI happens to end in `.xor` (uncommon — `.xor` is not a standard web content type, but other XOR-encoded stagers could also use this suffix); the `threshold` limits alert volume per source.
+
 **Deployment:** Network IDS/IPS at perimeter and internal segmentation points; hunt-tune before alerting.
 
 ```suricata

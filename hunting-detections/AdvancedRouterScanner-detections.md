@@ -10,9 +10,13 @@ thumbnail: /assets/images/cards/AdvancedRouterScanner.png
 ---
 
 **Campaign:** AdvancedRouterScanner-Global-Router-Exploitation
+
 **Date:** 2025-10-25
+
 **Author:** The Hunters Ledger
+
 **License:** CC BY 4.0
+
 **Reference:** https://the-hunters-ledger.com/reports/AdvancedRouterScanner/
 
 ---
@@ -40,13 +44,19 @@ AdvancedRouterScanner is a purpose-built exploitation framework targeting embedd
 #### Suspicious Router CGI Access
 
 **Tier:** Hunting
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1190 (Exploit Public-Facing Application)
+
 **Confidence:** MODERATE
+
 **Rationale:** The selector list mixes genuinely malicious-only paths (`/web_shell_cmd.gch`, `/system.cmd`, `/shell?command=` — command-injection/webshell markers with no legitimate use) with core router administrative-UI endpoints (`/apply.cgi`, `/boaform/admin/formLogin`, `/cgi-bin/config.cgi`, `/login.cgi`, `/setup.cgi`) that see routine legitimate admin traffic. Because the selection is OR-matched, a hit on any administrative-surface path fires the rule exactly like a hit on a high-fidelity exploit path, so `level: high` on the combined selector overstated confidence — demoted to `medium` and scoped to Hunting. The endpoint set itself is durable (inherent to the vulnerable device's web application layout, not something the operator can rename), which keeps it a useful triage lead regardless of infrastructure rotation. *Logic fix 2026-10-10:* the `/shell?command=` entry was listed under `cs-uri-stem`, which holds the path only and never the query string, so that entry could not match. It is now tested as a `/shell` stem plus a `command=` query, which is the request shape the entry describes.
+
 **False Positives:**
 - Legitimate administrative logins and configuration changes via `/login.cgi`, `/setup.cgi`, `/apply.cgi`, and `/boaform/admin/formLogin` on the router's own management interface.
 - Vulnerability scanners and asset-inventory tools that probe the same CGI paths for version fingerprinting.
+
 **Deployment:** Web/proxy log monitoring at the network perimeter or router-fleet management plane; analyst review of hits, prioritizing `/web_shell_cmd.gch`, `/system.cmd`, and `/shell?command=` matches.
 
 ```yaml
@@ -90,13 +100,19 @@ level: medium
 #### Authentication Attempt with Default-Style Username and Password Substrings
 
 **Tier:** Hunting
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1110.001 (Password Guessing)
+
 **Confidence:** MODERATE
+
 **Rationale:** The rule requires both a default-style username AND a default-style password from small curated lists, a genuinely tight AND-based match — but it evaluates a single authentication event with no count or threshold aggregation, so it detects "an auth attempt used default-like credentials," not repeated brute-force attempts. The rule was retitled on 2026-10-10 from "Default Credential Brute Force" to say what the logic tests (round 2 of the same day: the username and password tests are substring matches, not exact default values); a brute-force reading comes from counting hits per source in the SIEM. Default credentials remain in active legitimate use on unhardened router/IoT fleets — the exact device category this campaign targets — so this is a real, recurring benign-hit scenario rather than a one-time setup artifact. `level` demoted from `high` to `medium` and scoped to Hunting accordingly; the durable, technique-level signal (an attacker enumerating known default credentials against the auth surface) still makes it a valuable triage lead.
+
 **False Positives:**
 - Legitimate administrators authenticating to routers/IoT devices that were never hardened off default credentials.
 - Automated asset-inventory or compliance-scanning tools that intentionally test for default-credential exposure.
+
 **Deployment:** Authentication log monitoring at the router/IoT fleet management plane; pair hits with a device-hardening audit rather than blind alerting.
 
 ```yaml

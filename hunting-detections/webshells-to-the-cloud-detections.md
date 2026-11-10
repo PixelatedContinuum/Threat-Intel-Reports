@@ -10,9 +10,13 @@ thumbnail: /assets/images/cards/webshells-to-the-cloud.png
 ---
 
 **Campaign:** Webshells-To-Cloud-Modular-Intrusion
+
 **Date:** 2025-10-20
+
 **Author:** The Hunters Ledger
+
 **License:** CC BY 4.0
+
 **Reference:** https://the-hunters-ledger.com/reports/webshells-to-the-cloud/
 
 ---
@@ -40,13 +44,19 @@ This campaign is a modular, multi-phase intrusion chain: PHP webshell deployment
 #### Suspicious File Manager / phpMyAdmin Access
 
 **Tier:** Hunting
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1190 (Exploit Public-Facing Application)
+
 **Confidence:** HIGH
+
 **Rationale:** The selector list mixes a distinctive, technique-specific path (`file-manager/backend/makefile` — the exploited backend endpoint of the vulnerable CloudPanel file-manager component) with a bare directory substring (`phpmyadmin/js/`) that also matches routine `.js` asset loading on any legitimately deployed phpMyAdmin instance. Because the condition is OR-matched, a hit on the generic branch fires identically to a hit on the distinctive branch, so `level: high` on the combined selector overstated confidence — demoted to `medium` and scoped to Hunting.
+
 **False Positives:**
 - Routine JavaScript asset loading on any legitimately deployed phpMyAdmin instance under normal page rendering (matches the `phpmyadmin/js/` branch).
 - Legitimate administrative access to a deployed file-manager instance predating compromise.
+
 **Deployment:** Web/proxy log monitoring at the application server; prioritize analyst review of hits on `file-manager/backend/makefile` specifically.
 
 ```yaml
@@ -81,13 +91,19 @@ level: medium
 #### Suspicious Clp-Fm Cookie
 
 **Tier:** Hunting
+
 **Robustness:** 1
+
 **ATT&CK Coverage:** T1505.003 (Server Software Component: Web Shell)
+
 **Confidence:** HIGH
+
 **Rationale:** `clp-fm` is a single session-cookie-name literal set by the file-manager webshell component observed in this campaign — durable only for as long as the operator's tooling keeps this exact name, and trivially renamed on a rebuild or a different toolkit. Per the durability rubric a single-cookie-name anchor is a Hunting-grade indicator, not a Detection one.
+
 **False Positives:**
 - Possible collision if CloudPanel's own File Manager feature uses a similarly-named session cookie on an unexploited instance.
 - Unlikely otherwise. This cookie name is not known to be used by other software.
+
 **Deployment:** Web/proxy log or WAF cookie inspection at the application server.
 
 ```yaml
@@ -120,13 +136,20 @@ level: medium
 #### Suspicious User Creation (zeroday)
 
 **Tier:** Hunting
+
 **Robustness:** 1
+
 **ATT&CK Coverage:** T1136.001 (Create Account: Local Account)
+
 **Confidence:** HIGH
+
 **Rationale:** Keys on a single operator-chosen username (`zeroday`) appearing in the arguments of a `useradd` invocation. *Logic fix 2026-10-11:* the rule used to test `a0: 'zeroday'` on a `type=SYSCALL` record, but in raw auditd `a0` of a SYSCALL record is the first raw syscall argument (for `execve`, a pointer to the filename), never a command-line argument, so the rule could not match a real `useradd zeroday`. The command-line arguments are in the `type=EXECVE` record, where `a0` is the command (`useradd` or its path) and `a1` onward are its arguments, so the rule now tests an EXECVE record with `a0` ending in `useradd` and the username as an exact value of one of `a1` to `a8`. A first draft that matched the username as a keyword converted to an EQL query with a bare string constant as a boolean operand, which Elasticsearch EQL does not accept, so exact-field tests were used instead. The username's position varies with options (`useradd zeroday`, `useradd -m zeroday`, `useradd -m -s /bin/bash zeroday`), which is why it is tested at positions `a1` to `a8` rather than one. Before this fix the claim of detection rested on a field that raw auditd does not populate that way, and no `useradd zeroday` event was replayed here. The underlying technique — local account creation via `useradd` — is far too common to alert on by itself; the `zeroday` literal is what makes this rule actionable today, but it is trivially renamed on the next deployment. Durability governs over today's clean precision, so this stays a Hunting anchor rather than Detection despite the near-zero current false-positive rate.
+
 **False Positives:**
 - Legitimate administrator provisioning a local account that happens to share this name (verify against IT asset management).
+
 **Blind Spots:** Needs an auditd `execve` audit rule so the invocation is logged as an EXECVE record; without it nothing is logged. The username must be exactly one of the first eight arguments, so `zerodayx` does not fire, a `useradd` call with more than eight arguments puts it out of reach, and an option joined to the value (`--comment=zeroday`) is not matched. A different username, or an account created without invoking `useradd` (editing `/etc/passwd`, or an `adduser` variant that does not call it), is missed. The rule was not replayed against a real auditd log of `useradd zeroday` (NOT CHECKED).
+
 **Deployment:** Linux host auditd-fed SIEM with an `execve` audit rule installed; cross-reference hits against the account credential pair already carried in the IOC feed.
 
 ```yaml
@@ -172,12 +195,18 @@ level: medium
 #### Webshell File Creation
 
 **Tier:** Hunting
+
 **Robustness:** 1
+
 **ATT&CK Coverage:** T1505.003 (Server Software Component: Web Shell)
+
 **Confidence:** HIGH
+
 **Rationale:** Keys on one exact, full file path — a single-build artifact that a re-deployment defeats simply by choosing a different filename. The parent directory (`/htdocs/app/files/public/`) is independently documented elsewhere in this investigation as a notable path, which supports treating the directory as the durable element and the filename as the brittle one, but the rule as written requires the full combination, so it scores as a Hunting anchor rather than Detection.
+
 **False Positives:**
 - Unlikely. This exact file path is specific to the compromised application instance observed in this campaign.
+
 **Deployment:** Linux file-integrity monitoring / EDR file-event telemetry on the application server.
 
 ```yaml
@@ -210,12 +239,18 @@ level: medium
 #### Rclone Execution
 
 **Tier:** Hunting
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1567.002 (Exfiltration to Cloud Storage)
+
 **Confidence:** HIGH
+
 **Rationale:** `rclone.exe` is a legitimate, publicly available cloud-sync utility reused for exfiltration across many unrelated campaigns and threat actors — the binary name is a durable, well-known dual-use artifact, but that same popularity brings a real, common legitimate-use collision (rclone is mainstream IT backup/sync tooling). `level: high` on a bare image-name match with no command-line or destination scoping overstated confidence for a tool this widely used legitimately.
+
 **False Positives:**
 - Legitimate IT administration or backup automation using rclone for authorized cloud-sync tasks.
+
 **Deployment:** Endpoint EDR / Sysmon-fed SIEM process-creation telemetry; correlate with an unexpected remote/cloud destination before escalating.
 
 ```yaml
@@ -249,12 +284,18 @@ level: medium
 #### Dropbox API Traffic
 
 **Tier:** Hunting
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1567.002 (Exfiltration to Cloud Storage)
+
 **Confidence:** HIGH
+
 **Rationale:** `api.dropboxapi.com` is Dropbox's own fixed API hostname — durable in that the operator cannot rotate it, but it is also a mainstream SaaS domain that any organization with a legitimate Dropbox integration contacts routinely. The rule's own original framing already called for allowlist tuning, consistent with a Hunting disposition; `level: medium` was already correctly calibrated.
+
 **False Positives:**
 - Legitimate enterprise Dropbox integrations or file-sync clients (tune to server-class hosts or add a known-good source allowlist).
+
 **Deployment:** Proxy/web-gateway log monitoring; highest value in environments with no legitimate Dropbox usage baseline.
 
 ```yaml
@@ -287,13 +328,20 @@ level: medium
 #### Suspicious WordPress Install
 
 **Tier:** Hunting
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** None
+
 **ATT&CK Note:** T1505.003 (Server Software Component: Web Shell) was listed here and is withdrawn: a POST to the WordPress installer is not a webshell, and the rule observes no web shell behavior. It describes the operator standing up a new web application on already-compromised hosting (see Coverage Gaps); no technique is mapped because the evidence does not show whether the installed site is attacker infrastructure or an administrator's.
+
 **Confidence:** MODERATE
+
 **Rationale:** `/wp-admin/install.php` is a fixed WordPress core path — durable, since the operator cannot rename WordPress's own installer script — but whether a POST to it is rare enough to alert on depends entirely on whether the monitored hosting environment routinely provisions fresh WordPress sites (shared hosting does; a narrowly-scoped application server should not). Without that environment context, "rare FP" cannot be confidently claimed, so this stays Hunting.
+
 **False Positives:**
 - Legitimate first-time setup of a new WordPress installation by an administrator.
+
 **Deployment:** Web/proxy log monitoring; highest value on hosts that are not expected to run general-purpose CMS software.
 
 ```yaml
@@ -325,14 +373,20 @@ level: medium
 #### Nginx Configuration File Modified
 
 **Tier:** Hunting
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1090 (Proxy)
+
 **Confidence:** MODERATE
+
 **Rationale:** The rule's own description already frames this as a hunting lead requiring a manual content diff, since file-event telemetry cannot inspect the `proxy_pass` directive that would confirm malicious reverse-proxy intent. `/etc/nginx/` is nginx's own fixed configuration directory (durable, not attacker-renameable), but any write under it by a process whose image path contains `nginx`, `php`, `httpd` or `apache2` matches, so this is explicitly a triage starting point, not an alerting-grade signal. Certificate renewals, configuration-management pushes and routine admin edits run outside those processes and do not match (the FP remediation note below records 36 alerts falling to 0 after the process filter). `level: medium` was already correctly calibrated.
+
 **False Positives:**
 - Legitimate infrastructure changes adding a proxy upstream to an external, authorized destination, when the writing process is nginx, php or a web server.
 - Web-hosting control-panel software whose PHP backend writes nginx vhost configuration in response to an administrator action (CloudPanel and similar nginx plus PHP-FPM panels), and an nginx module or embedded scripting engine such as njs configured to rewrite its own configuration.
 - Not expected to match, because the writing image is outside the web-server family: certbot and TLS certificate renewals, configuration-management pushes, package upgrades and `sed -i` admin edits. A process whose image path merely contains one of the four strings (for example a binary under a directory named `php`) does match, because the test is a substring on the image path.
+
 **Deployment:** Linux file-integrity monitoring; pair every hit with a manual diff of the changed configuration file.
 
 **FP remediation note (2026-08-20):** the rule shipped with no process filter and no exclusions at all, so every write under `/etc/nginx/` matched, package upgrades, configuration-management pushes, certbot renewals and ordinary admin edits alike. The false positives listed above were written down at authoring time and never implemented in the detection logic. Production confirmed the consequence: 36 alerts, 100 percent of them `/usr/bin/sed` performing a routine `sed -i` in-place edit burst.
@@ -394,11 +448,17 @@ level: medium
 #### Suspicious POST Parameter mxx
 
 **Tier:** Hunting
+
 **Robustness:** 1
+
 **ATT&CK Coverage:** T1505.003 (Server Software Component: Web Shell)
+
 **Confidence:** HIGH
+
 **Rationale:** `mxx=` is a short, non-dictionary POST-parameter token independently documented as a notable artifact of this campaign's webshell tooling — low collision risk with legitimate software, but it is a single operator/tool-chosen literal that a rebuild or parameter rename trivially defeats, capping it at Hunting rather than Detection. The original rule shipped with no `flow`, `classtype`, or `metadata`; reformatted here to the current Suricata authoring standard (added `flow`, `threshold`, `classtype`, `metadata`, and scoped the header from `any any -> any any` to inbound traffic at the monitored web server). `sid` is preserved unchanged from the original to keep the existing published-feed SID mapping stable; `rev` incremented to 2 to reflect the scoping change.
+
 **False Positives:** Unlikely — "mxx" has not been observed as a parameter name in mainstream legitimate web software; residual risk from any unrelated third-party application that happens to reuse the same short parameter name.
+
 **Deployment:** Network IDS/IPS inspecting HTTP POST bodies at the perimeter or reverse-proxy tier.
 
 ```suricata

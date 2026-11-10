@@ -9,9 +9,13 @@ hide: true
 ---
 
 **Campaign:** BellaMain-TurkishPhaaS-79.137.192.3
+
 **Date:** 2026-05-16
+
 **Author:** The Hunters Ledger
+
 **License:** CC BY 4.0
+
 **Reference:** https://the-hunters-ledger.com/reports/bellamain-turkish-phaas-79-137-192-3-20260516/
 
 ---
@@ -43,13 +47,21 @@ hide: true
 #### BellaMain Wadanz Author Functions
 
 **Tier:** Detection
+
 **Robustness:** 3
+
 **ATT&CK Coverage:** T1505.003 (Web Shell / server-side implant), T1027.013 (Obfuscated Files or Information — custom session cipher)
+
 **Confidence:** HIGH
+
 **Rationale:** `sifreleWadanz`/`sifrecozWadanz` are developer-chosen compiled function names, not per-deployment configuration — they persist across any redeploy or fork of this codebase the same way a namespace root would, unless the code itself is rewritten. Requiring both names together, plus one of two co-located database strings, leaves no single renameable literal carrying the rule.
+
 **False Positives:** None known — the Wadanz pseudonym suffix on these exact function names has not been observed in any legitimate PHP framework or library.
+
 **Blind Spots:** A fork that renames both cipher functions (a genuine code rewrite, not a redeploy) evades this rule; the rule targets on-disk PHP source, not a runtime memory artifact.
+
 **Validation:** Scan the analyzed panel archive or `database/fonk.php` — both function names must match; a legitimate, unrelated PHP session-handling library must NOT fire.
+
 **Deployment:** PHP web-root scanner (ModSecurity, OSSEC file-integrity, ClamAV PHP ruleset), post-incident forensic triage of compromised web servers.
 
 ```yara
@@ -88,13 +100,21 @@ rule TOOLKIT_BellaMain_WadanzFunctions {
 #### BellaMain Admin Panel and Evidence-Destruction Commands
 
 **Tier:** Detection
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1505.003 (Web Shell), T1070 (Indicator Removal — evidence-destruction command context)
+
 **Confidence:** HIGH
+
 **Rationale:** Salvaged from the original rule, which required the obfuscated admin path `V5VgjLU0jsDe` plus the database user on every match — both are single deployment-specific literals (a redeploy of this codebase can regenerate the admin path and rotate the database credentials, per the rule's own original false-positive note that the path is randomly generated). Reworked into an OR of two branches: two or more of the Telegram-bot evidence-destruction command strings (`/hesapsil`, `/kartsil`, `/girislogsil`) — developer-chosen command-dispatch vocabulary that a redeploy does not regenerate — OR the original admin-path-plus-credential combination, which still confirms an exact copy of this deployment. The command-string branch is what carries the rule to Detection grade.
+
 **False Positives:** None known — `/hesapsil`, `/kartsil`, and `/girislogsil` are bespoke Turkish command strings with no plausible legitimate collision, and the admin-path/credential branch is highly specific to this deployment.
+
 **Blind Spots:** A rebuild that renames two or more of the three command strings AND regenerates the admin path/credentials evades; the rule targets on-disk PHP source, not deployed network paths.
+
 **Validation:** Scan `manager.php` (or the analyzed kit archive) — the two-of-three command-string branch must match independent of the admin path; a legitimate, unrelated PHP application must NOT fire.
+
 **Deployment:** PHP web-root scanner, file-integrity monitoring on web servers, forensic PHP corpus triage.
 
 ```yara
@@ -125,13 +145,21 @@ rule TOOLKIT_BellaMain_AdminPanel {
 #### BellaMain Anti-Researcher Canary Strings
 
 **Tier:** Detection
+
 **Robustness:** 3
+
 **ATT&CK Coverage:** T1497 (Virtualization/Sandbox Evasion — anti-researcher variant)
+
 **Confidence:** HIGH
+
 **Rationale:** The Turkish-language troll-response strings are hardcoded response text chosen once by the developer and shared across every kit's `girislog.php` — they persist across redeployment the same way the Wadanz functions do. Requiring 2 of 4 distinctive canary strings, plus one of two secondary markers, keeps the FP floor low even though one secondary marker (`?lg=`) is a common-looking parameter name on its own.
+
 **False Positives:** None known against legitimate software — Turkish profanity/troll strings with this specific combination are not expected in unrelated files (the rule has no PHP marker or file-name test, so a report or analysis note that quotes the strings also matches); a hit on a stored (non-actively-deployed) copy of a BellaMain kit sample is still a true positive for kit provenance, not a false positive.
+
 **Blind Spots:** A fork that rewrites the troll-response text evades; scanning finds the code artifact regardless of whether the kit is actively deployed, so a hit does not by itself confirm live phishing activity.
+
 **Validation:** Scan a recovered kit archive's `girislog.php` — 2 of 4 canary strings plus one secondary marker must match; unrelated PHP session-handling code must NOT fire.
+
 **Deployment:** PHP web-root scanner, threat intel file corpus triage, malware archive scanning; apply analyst triage before treating a hit as an active-deployment indicator.
 
 ```yara
@@ -170,13 +198,21 @@ rule TOOLKIT_BellaMain_AntiResearcherCanary {
 #### BellaMain Mysqldump Invocation by PHP Web Process
 
 **Tier:** Detection
+
 **Robustness:** 3
+
 **ATT&CK Coverage:** T1560 (Archive Collected Data — mysqldump output piped to Telegram), T1070 (Indicator Removal — evidence-destruction command context)
+
 **Confidence:** HIGH
+
 **Rationale:** Unchanged from the original rule, which is already technique-anchored: `mysqldump` invoked by a PHP/web-server parent process with a plaintext password on its command line (a `-p<password>` option with the value attached, the form the panel's `backup.php` uses, or a `--password=` option) is a chokepoint behavior with no single renameable literal — a web application should never legitimately spawn a database-dump utility with credentials on the command line, regardless of how BellaMain itself is renamed or redeployed.
+
 **False Positives:** Legitimate PHP-based database management tools (phpMyAdmin export function) invoked by an administrator; automated backup scripts incorrectly launched from web process context during provisioning or testing.
+
 **Blind Spots:** A rebuild that pipes credentials via a file or environment variable instead of a command-line password option evades; `-p` followed by a space (the password prompt form) is not matched, and `-P` (port) followed by a space is not matched. Sigma's `|re` is case-sensitive, but `sigma convert -t eql` renders it as `regex~`, which is case-insensitive, so on that backend an attached port option (`-P3306`) also matches; on the Lucene rendering it does not. a bespoke backup wrapper running under a web-server account could coincidentally match.
+
 **Validation:** Trigger the malware's backup/evidence-destruction command — the mysqldump child-process event must match (`mysqldump -u root -pSecret db`, `-p'Secret'` and `--password=Secret` fire; `mysqldump -u root -p db`, `--port=3307`, `--protocol=tcp` and `-P 3306` do not); a scheduled backup job running under a dedicated backup service account (not php/apache2/nginx/httpd) must NOT fire.
+
 **Deployment:** Endpoint EDR / Sysmon-for-Linux process-creation telemetry on PHP web servers.
 
 ```yaml
@@ -236,11 +272,17 @@ level: high
 #### BellaMain USOM Poll, Telegram Bot Outbound, and Correlations
 
 **Tier:** Hunting
+
 **Robustness:** 1 (both base rules) / 2 (both correlations)
+
 **ATT&CK Coverage:** T1518.001 (Software Discovery: Security Software), T1102.002 (Web Service: Bidirectional Communication), T1041 (Exfiltration Over C2 Channel), T1119 (Automated Collection)
+
 **Confidence:** MODERATE
+
 **Rationale:** *Round 2 (2026-10-11):* the second base rule and the burst correlation were titled "High-Frequency Multi-Bot", although the base rule matches one request and nothing tests distinct bots; they are now titled for what they match. The USOM and Telegram correlation was an unordered `temporal` correlation, so a Telegram request before the poll also fired it and the Elastic conversion had no five-minute bound; it is now `temporal_ordered` (poll, then Telegram), which the report supports (the kit polls USOM and then sends the notification) and which converts with a `maxspan` bound. *Wording fix 2026-10-11:* the first base rule was titled "from Web Server", but its selection tests only the destination host and URI path and has no source-host role, so the title and the description now say any source host in the proxy log. Four linked rules published together in one fence because the USOM+Telegram correlation cross-references both base rules below (mirrors the AdaptixC2 beacon-cadence base+correlation co-location pattern already published in `opendirectory-45-130-148-125-20260430-detections.md`, extended here to a 4-rule cluster since one correlation depends on two independent base rules rather than one). The USOM-poll base rule flags a bare HTTP request to the USOM blocklist endpoint — common, legitimate CERT/security-tool behavior with high acknowledged FP risk on its own. The Telegram-bot base rule flags a single HTTP request to `api.telegram.org/bot*` — an unanchored, extremely common event any legitimate Telegram bot integration produces. `level` on both base rules is `low`; neither is intended as a standalone alert. The USOM+Telegram correlation replaces the original single-event rule, whose `selection_usom and selection_telegram` condition required one field (`cs-host`) to simultaneously equal two mutually exclusive values on the same log line — a condition that could never match any event — and is now a proper Sigma temporal correlation across both base rules, grouped by source IP within a 5-minute window matching the paired Suricata signature's 300-second threshold. The burst correlation adds a genuine volumetric anomaly (5+ Telegram Bot API requests in 60 seconds from one host), but its base selector does not verify the calls use distinct bot tokens — a single high-volume legitimate notification bot can trigger it identically to BellaMain's four-bot simultaneous-fire pattern, so `level` is recalibrated from the original `high` to `medium` and the pair moved from Detection to Hunting.
+
 **False Positives:** Turkish CERT partner organizations, security researchers, or security products that legitimately poll the USOM blocklist; any web application with a legitimate Telegram bot integration (order notifications, monitoring alerts, CI/CD pipelines); a host that legitimately both monitors the USOM blocklist and operates an unrelated Telegram notification bot within the same time window; web application platforms with legitimate high-frequency Telegram notification integrations (e.g., e-commerce order-notification bots) firing on concurrent order events — tune by excluding known-legitimate source IPs.
+
 **Deployment:** Egress proxy SIEM with time-window correlation (Elastic EQL conversion: the ordered correlation becomes `sequence by src_ip with maxspan=5m` and the burst correlation a 60-second `runs=5` sequence; neither has a Lucene form); neither base rule is intended as a standalone alert — hunt-tune both correlations before alerting.
 
 ```yaml
@@ -412,11 +454,17 @@ level: medium
 #### BellaMain USOM Blocklist Poll From an Internal Host (Network Layer)
 
 **Tier:** Hunting
+
 **Robustness:** 1
+
 **ATT&CK Coverage:** T1518.001 (Software Discovery: Security Software)
+
 **Confidence:** MODERATE
+
 **Rationale:** Corrected from the original, which was titled and rationalized as "USOM Egress Combined with Telegram Outbound" but whose condition only ever implemented the USOM-poll half — Suricata cannot natively express the cross-flow, cross-host-scoped AND-correlation with Telegram traffic that the paired Sigma correlation rule above now implements at the log layer. The rule matches an HTTP request from any `$HOME_NET` host to a host ending `usom.gov.tr` for a URI containing `url-list.txt`; it has no web-server or host-role test (an earlier title said "from Web Server"). As a standalone network signal, USOM blocklist polling has real overlap with legitimate Turkish security tooling (the IOC feed itself flags this URL as HIGH false-positive risk on its own), so this is Hunting, not Detection. The host test is a suffix test with no dot boundary, so a host such as `xusom.gov.tr` also qualifies.
+
 **False Positives:** Turkish security tools, CERT-affiliated platforms, and threat-intelligence products that legitimately poll the USOM blocklist from any network segment.
+
 **Deployment:** Network IDS/IPS at perimeter and internal segmentation points, on traffic the sensor can read as HTTP: plaintext HTTP or a decrypted (TLS-inspected) stream. The fetch in the report is an HTTPS request to `https://www.usom.gov.tr/url-list.txt`, so on a sensor that does not decrypt TLS this rule does not see the fetch the report documents, and an ordinary encrypted USOM poll is outside what this rule demonstrates; correlate hits with Telegram Bot API traffic from the same source within roughly 5 minutes (see the paired Sigma correlation rule) before treating as a high-confidence lead.
 
 ```suricata

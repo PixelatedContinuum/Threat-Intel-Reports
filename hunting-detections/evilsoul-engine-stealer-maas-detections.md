@@ -9,9 +9,13 @@ hide: true
 ---
 
 **Campaign:** KAIDO / EvilSoul-Engine Multi-Product MaaS Operator (144.172.103.98)
+
 **Date:** 2026-07-03
+
 **Author:** The Hunters Ledger
+
 **License:** CC BY 4.0
+
 **Reference:** https://the-hunters-ledger.com/reports/evilsoul-engine-stealer-maas-144-172-103-98/
 
 ---
@@ -50,13 +54,21 @@ EvilSoul-Engine is a Node/Electron stealer-builder MaaS kit distributed under mu
 #### EvilSoul-Engine Obfuscator XOR Key and Catchphrase
 
 **Tier:** Detection
+
 **Robustness:** 3
+
 **ATT&CK Coverage:** T1027 (Obfuscated Files or Information), T1588.002 (Obtain Capabilities: Tool)
+
 **Confidence:** HIGH
+
 **Rationale:** The obfuscator's XOR key literal `see-you-in-the-hellwizard-1082@239$328927bA` and catchphrase comment live in the loader stage, which every EvilSoul-Engine build carries pre-packing. They survive the js-confuser layer because the loader is what invokes the obfuscated payload, not what gets obfuscated itself — an operator would have to modify the obfuscator's own source to evade, not just repack a build. Combined with the split-domain anti-grep pattern (Hunting rule below), this is the single most durable EvilSoul-Engine anchor across all product tiers (`stealer.js`, `299a2e7f`, Maploot, Tinarox).
+
 **False Positives:** None known — the XOR key string is a 43-character operator-chosen literal with zero plausible legitimate-software collision; the catchphrase comment is similarly distinctive.
+
 **Blind Spots:** A rewrite of the obfuscator itself (new XOR key, new catchphrase) evades this rule; memory-only variants that never touch disk are reached only through a saved dump written to a file, because a live process-memory scan cannot satisfy the `filesize` test.
+
 **Validation:** Scan a recovered EvilSoul-Engine loader stage (e.g. `hash1` below) — the XOR key or the catchphrase-plus-secondary-anchor combination must match; a benign obfuscated JS bundle from an unrelated project must NOT fire.
+
 **Deployment:** Endpoint file scan on staged/dropped JS and Electron `app.asar` archives, scanning of a saved dump taken during detonation. Live process-memory scanning does not match: the condition's `filesize` test is undefined there, so only files and saved dumps are scanned.
 
 ```yara
@@ -98,13 +110,21 @@ rule EvilSoul_Engine_Obfuscator_XOR_Key {
 #### EvilSoul-Engine Maploot/Tinarox Discord-Embed Exfil Titles
 
 **Tier:** Detection
+
 **Robustness:** 3
+
 **ATT&CK Coverage:** T1555.003 (Credentials from Web Browsers), T1539 (Steal Web Session Cookie)
+
 **Confidence:** HIGH
+
 **Rationale:** The Maploot/Tinarox embed-title strings are the literal text sent to the operator's Discord webhook as embed titles for each exfil category (Discord tokens, browser data, Exodus wallet, Steam session, Minecraft session). Independently confirmed byte-for-byte identical between the two "twin" builds after de-obfuscation, meaning they are compiled into the product line's source rather than randomized per build — an operator would have to rebrand the entire product line to evade.
+
 **False Positives:** LOW — the branded embed-title strings ("EvilSoul Stealer - (Discord ~" and "EvilSoul Stealer - (BrowserData ~", plus the three "EvilSoul (...)" titles) are distinctive, with no legitimate-software collision risk.
+
 **Blind Spots:** A full rebrand of the Electron product line (new embed titles, new masquerade name) evades this rule; targets on-disk `app.asar` archives, not memory-only variants.
+
 **Validation:** Scan a Maploot or Tinarox `app.asar`/`resources/app` extraction — 2 of the embed-title strings, or 1 plus the masquerade/endpoint context, must match; a legitimate Electron game or utility must NOT fire.
+
 **Deployment:** Endpoint file scan on Electron `app.asar` / unpacked `resources/app` directories, scanning of a saved dump taken during detonation. Live process-memory scanning does not match: the condition's `filesize` test is undefined there, so only files and saved dumps are scanned.
 
 ```yara
@@ -151,13 +171,21 @@ rule EvilSoul_Engine_Maploot_Tinarox_Embed_Titles {
 #### EvilSoul-Engine 299a2e7f Socket.IO WebPanel Build
 
 **Tier:** Detection
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1071.001 (Web Protocols — C2), T1105 (Ingress Tool Transfer)
+
 **Confidence:** HIGH
+
 **Rationale:** The args-file suffix `evilsoulblockkstarjkjaksghjhsjkahjskjak81929ijsahsjkj` is a deliberately long, high-entropy operator-chosen string hardcoded into the 299a2e7f build's argument-passing convention — near-zero collision risk and present in every build sharing this codebase. The condition was tightened during this review: the originally-published rule let the webhook-relay IP:port string (`198.1.195.210:3000/tralalero`) trigger the rule on its own, which is an IP-anchored atomic that would break on relay-infrastructure rotation and fails durability (Gate 1) as a standalone trigger. It now only counts as one member of the multi-string combination requirement, so the rule can never fire on the bare IP literal alone.
+
 **False Positives:** LOW — the args-file suffix is a long, operator-unique, non-dictionary token; the panel/handle/relay/fallback-key/update-cmd combination requires 2 independent matches.
+
 **Blind Spots:** A rebuild that changes the args-file suffix convention evades the primary anchor; the secondary combination fires while any 2 of its 5 members remain, so evading it also needs at least 4 of the 5 renamed or removed on top of changing the args-file suffix.
+
 **Validation:** Scan a 299a2e7f pkg-Node build or a saved dump of its process memory written to a file — the args-file suffix, or 2 of the secondary combination, must match; an unrelated Node.js single-EXE application must NOT fire.
+
 **Deployment:** Endpoint file scan (temp directories, staged payloads), scanning of a saved dump taken during detonation of pkg-Node single-EXE builds. Live process-memory scanning does not match: the condition's `filesize` test is undefined there, so only files and saved dumps are scanned.
 
 ```yara
@@ -201,13 +229,21 @@ rule EvilSoul_Engine_299a2e7f_SocketIO_WebPanel {
 #### xaitax ChromElevator ABE-Bypass Tool: @breakingupslow Fork
 
 **Tier:** Detection
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1555.003 (Credentials from Web Browsers), T1539 (Steal Web Session Cookie), T1055.012 (Process Hollowing), T1620 (Reflective Code Loading)
+
 **Confidence:** HIGH
+
 **Rationale:** *Logic fix 2026-10-11:* the condition used to carry a third branch, 2 of 5 strings taken from the stock upstream tool (`Direct Syscall-Based Reflective Hollowing`, the completion-pipe name, the key JSON field, `ChainingModeGCM`, `PAYLOAD_DLL`), so an unmodified xaitax build matched while this block said stock upstream must NOT fire. The branch and its strings were removed, so the rule now needs the fork banner or the fork copyright line. A fixture holding only 2 of the stock strings matched the old rule and does not match the new one. The remaining anchors are two operator-chosen text strings, so Robustness is lowered from 3 to 2. The `chromelevator.exe` + `chrome_decrypt.dll` pair is a public red-team tool (xaitax "Chrome-App-Bound-Encryption-Decryption") adopted by the EvilSoul-Engine operator as a supply-chain component rather than authored in-house. The rule anchors on the operator-fork banner and copyright strings unique to the `@breakingupslow`-attributed build — not the tool's stock upstream strings — so it stays precise to this fork's redistributions (by this operator or any other actor redistributing the same fork) without over-matching every public xaitax fork in the wild.
+
 **False Positives:** LOW — the co-credit banner and copyright-notice strings are specific to this fork; generic ABE-tool detection is intentionally avoided by anchoring on the fork attribution text rather than the underlying decryption logic (public prior art that would over-match on every xaitax fork).
+
 **Blind Spots:** A rebuild that strips the banner/copyright strings (reverting to stock xaitax or a differently-attributed fork) evades this specific rule; targets the on-disk EXE/DLL pair, not memory-only injection artifacts beyond what the combination strings capture.
+
 **Validation:** Scan the analyzed `chromelevator.exe`/`chrome_decrypt.dll` pair — the banner or the copyright string must match; the stock upstream xaitax build without fork attribution must NOT fire.
+
 **Deployment:** Endpoint AV/EDR scan on `%TEMP%\executor\`, scanning of a saved dump taken during detonation. Live process-memory scanning does not match: the condition's `filesize` test is undefined there, so only files and saved dumps are scanned.
 
 ```yara
@@ -251,11 +287,17 @@ rule Tool_xaitax_ChromElevator_EvilSoul_Fork {
 #### EvilSoul-Engine Split-Domain Anti-Grep Pattern
 
 **Tier:** Hunting
+
 **Robustness:** 1
+
 **ATT&CK Coverage:** T1027 (Obfuscated Files or Information)
+
 **Confidence:** HIGH (string match) / durability LOW (tied to one domain)
+
 **Rationale:** All four string variants anchor on the same split fragments of one domain — `evilsoul.xyz`, broken as `'evilso'+'ul.xyz'` to defeat a plaintext grep for the domain. This is real evasion tradecraft (T1027) and the domain is already a BLOCK-listed IOC, but the rule's entire discriminating power is that one domain's substrings: an operator rotating to a new backend domain breaks this rule immediately, and no independent behavioral signal survives removing the literal. Durability, not current precision, governs the tier.
+
 **False Positives:** None known against current samples — the split fragments are distinctive to `evilsoul.xyz`. The rule's value is in catching *obfuscated* occurrences of the domain in source that a plaintext string search would miss, not in surviving a domain rotation.
+
 **Deployment:** Endpoint file scan on staged/dropped JS and Electron `app.asar` archives; static triage of suspected EvilSoul-Engine builds where a plaintext grep for `evilsoul.xyz` has already come back negative.
 
 ```yara
@@ -301,13 +343,21 @@ rule EvilSoul_Engine_SplitDomain_AntiGrep {
 #### Browser Relaunched with CDP Debugging by Non-Browser Parent
 
 **Tier:** Detection
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1185 (Browser Session Hijacking), T1539 (Steal Web Session Cookie)
+
 **Confidence:** HIGH
+
 **Rationale:** *Round 2 (2026-10-11):* the invariant-technique claim and the Event ID 3 deployment promise were withdrawn, and Robustness lowered from 3 to 2. *Logic fix 2026-10-11:* the title and description say a browser process was relaunched, but the selection used to be the three command-line flags alone, so any process carrying them (a wrapper script, a helper) matched. It now also requires a Chrome, Edge or Brave image. Both the EvilSoul-Engine stealer payload and the xaitax ABE-bypass tools relaunch the victim's own installed browser headless with Chrome DevTools Protocol debugging enabled, then pull already-decrypted cookies via `Network.getAllCookies` — defeating Chrome's App-Bound Encryption without administrator rights. The rule requires all three flags (`--remote-debugging-port`, `--headless`, `--user-data-dir`) together and a Chrome, Edge or Brave image, and excludes browser-self-relaunch, explorer.exe and node or python parents. That is the command-line pattern the report records, not a chokepoint of the technique: a CDP session can be started without `--user-data-dir` or from another Chromium build, which the Blind Spots below record, so this is a tool-behaviour pattern (Robustness 2) and not an invariant of cookie theft over CDP.
+
 **False Positives:** Legitimate browser automation frameworks (Selenium, Puppeteer, Playwright) launched from an unlisted parent process; QA/CI pipelines that headlessly drive a browser for testing from a non-standard automation harness.
+
 **Blind Spots:** Misses a relaunch of any other Chromium browser (Opera, Vivaldi and others are not in the image list), CDP-based cookie theft that omits `--user-data-dir` (uses the default profile instead), or that spawns from an allow-listed parent process name the attacker has spoofed.
+
 **Validation:** Launch a browser with all three flags from an unrelated parent (e.g. a script host) — must alert; the same flags launched by `node.exe` running a known test harness must NOT fire (filtered).
+
 **Deployment:** EDR process-creation monitoring or Sysmon Event ID 1. The rule reads only process-creation fields; it has no network-connection (Event ID 3) component.
 
 ```yaml
@@ -374,13 +424,21 @@ level: high
 #### Python Process Opens LSASS Handle (ABE Decryptor Pattern)
 
 **Tier:** Detection
+
 **Robustness:** 3
+
 **ATT&CK Coverage:** T1003.001 (LSASS Memory), T1539 (Steal Web Session Cookie)
+
 **Confidence:** HIGH
+
 **Rationale:** The `stealer.js` build's most advanced credential-theft component downloads a portable Python interpreter, pipes a decryptor script over stdin (never touching disk as a `.py` file), enables `SeDebugPrivilege`, and impersonates the `lsass.exe` process token to decrypt the Chrome App-Bound-Encryption key via Windows CNG. The rule matches on the process-access relationship alone (a Python-hosted process opening an LSASS handle), which is durable regardless of how the decryptor script reaches the interpreter — legitimate Python tooling rarely has any reason to touch LSASS. **Corrected during this review:** the originally-published title and description claimed to detect the `-u -` stdin-execution flag combination, but the `detection:` block never inspects the launch command line — only the process-access relationship. The description below has been rewritten to match the actual logic.
+
 **False Positives:** EDR or security-research tooling written in Python that legitimately inspects LSASS; authorized credential-recovery or forensic tooling in incident-response workflows.
+
 **Blind Spots:** Misses the technique entirely if reimplemented in a compiled language rather than Python, or if the LSASS access is proxied through a legitimate signed binary rather than a direct Python-to-LSASS handle.
+
 **Validation:** Trigger a Python process opening a handle to `lsass.exe` — must alert; unrelated `python.exe` activity with no LSASS access must NOT fire.
+
 **Deployment:** EDR process-creation + process-access correlation, SIEM correlation on Sysmon Event ID 1 + Event ID 10.
 
 ```yaml
@@ -428,13 +486,21 @@ level: high
 #### Whole-Drive Defender Exclusion Combined with Real-Time Monitoring Disable
 
 **Tier:** Detection
+
 **Robustness:** 3
+
 **ATT&CK Coverage:** T1685 (Disable or Modify Tools)
+
 **Confidence:** HIGH
+
 **Rationale:** *Logic fix 2026-10-11:* the second selection used to accept either `-DisableRealtimeMonitoring` or `-DisableBehaviorMonitoring`, so a script that excluded `C:\` and disabled only behavior monitoring fired although the title requires real-time monitoring to be disabled. It now requires `Set-MpPreference -DisableRealtimeMonitoring $true`, the cmdlet the report documents. The `299a2e7f` build's `DisableProtections` function whole-drive-excludes `C:\` from Windows Defender and disables real-time monitoring via PowerShell cmdlets in the same script block. A whole-drive exclusion path (`C:\` specifically) combined with a real-time-monitoring disable in the same execution context is a strong, technique-level chokepoint — legitimate software almost never excludes an entire drive letter, and an attacker achieving the same suppression via PowerShell has no alternate cmdlet pairing that avoids both signals simultaneously. **Corrected during this review:** the originally-published markdown metadata cited the legacy technique ID `T1685 (Disable or Modify Tools)`, but the ATT&CK data used by `sigma check` has this technique renumbered to `T1685 (Disable or Modify Tools)`; the YAML tag `attack.t1685` was already correct, so the markdown label has been updated to match rather than the tag — a live-validator lesson in not hand-correcting a tag against a hardcoded assumption.
+
 **False Positives:** IT-administration deployment scripts that legitimately exclude `C:\` during imaging or migration (uncommon but not impossible).
+
 **Blind Spots:** Misses the same suppression achieved via the Windows Security Center API, a registry policy write, or a compiled binary rather than a PowerShell script block; requires Script Block Logging (Event ID 4104) to be enabled.
+
 **Validation:** Run a PowerShell script block containing both cmdlet patterns — must alert; a script excluding only a narrow application directory must NOT fire.
+
 **Deployment:** SIEM correlation on PowerShell Script Block Logging (Windows Event ID 4104).
 
 ```yaml
@@ -481,13 +547,21 @@ level: high
 #### Scheduled Task Created with Microsoft Corporation Author and Hidden Flag
 
 **Tier:** Detection
+
 **Robustness:** 3
+
 **ATT&CK Coverage:** T1053.005 (Scheduled Task), T1036.004 (Masquerade Task or Service)
+
 **Confidence:** HIGH
+
 **Rationale:** *Logic fix 2026-10-11:* the `TaskContent` test listed the Author string and the hidden flag as alternatives (a `contains` list is OR), so a task with either alone fired although the title requires both. It is now `contains|all`. The `stealer.js` build's persistence mechanism registers a scheduled task with Task XML `Author` set to the literal string `Microsoft Corporation` while also setting the hidden flag — a masquerade pattern designed to blend into Task Scheduler listings alongside genuine Microsoft-authored tasks. Genuine Microsoft tasks are installed by the OS image or Windows Update, not created ad hoc at runtime by a user-context process, which is why a registration by a non-SYSTEM account carrying this exact Author string and the hidden flag is the hunt the report describes. Round 2 (2026-10-11): the rule used to claim any registration with the string is a near-certain fake; it now excludes the SYSTEM creator the report excludes and makes no claim of certainty.
+
 **False Positives:** Not measured. Tasks created by the SYSTEM account are excluded by the filter, which removes the OS and Windows Update installs. A non-SYSTEM installer, administrator script or Microsoft component that registers a hidden task with this author string would still fire.
+
 **Blind Spots:** Misses persistence that spoofs a different vendor's authorship string, or that skips the hidden flag; requires Task Scheduler/Security auditing of object creation (Event ID 4698) with TaskContent captured.
+
 **Validation:** Register a scheduled task with `<Author>Microsoft Corporation</Author>` and `<Hidden>true</Hidden>` — must alert; the same task registered by the SYSTEM account must NOT fire.
+
 **Deployment:** SIEM correlation on Windows Event ID 4698 (Scheduled Task Created).
 
 ```yaml
@@ -544,11 +618,17 @@ level: high
 #### ChromElevator ABE-Bypass Tool Dropped to TEMP Executor Directory
 
 **Tier:** Hunting
+
 **Robustness:** 1
+
 **ATT&CK Coverage:** T1105 (Ingress Tool Transfer), T1555.003 (Credentials from Web Browsers)
+
 **Confidence:** HIGH (string match) / durability LOW (renameable filenames + directory)
+
 **Rationale:** *Logic fix 2026-10-11:* the path test was `\executor\` under any directory, so the title's TEMP was not enforced. It now requires `\Temp\executor\` (the report gives `%TEMP%\executor\`). The `299a2e7f` build downloads the xaitax ChromElevator ABE-bypass tool pair from a GitHub-hosted supply-chain mirror to a consistent staging path, `%TEMP%\executor\`. Both the filenames and the staging directory are download-script conventions the operator (or any other actor redistributing the same public tool) could trivially rename — durability, not today's low FP rate, governs the tier. **Corrected during this review:** demoted from the originally-published `level: high` to `medium` to match the Hunting tier.
+
 **False Positives:** Extremely unlikely against current samples — `chromelevator.exe` and `chrome_decrypt.dll` are not legitimate Windows or common third-party software filenames; the `%TEMP%\executor\` directory name is also distinctive. Any operator or actor who renames the download destination evades entirely.
+
 **Deployment:** EDR file-creation monitoring, SIEM correlation on Sysmon Event ID 11; use as a scoping lead for the broader ABE-bypass supply-chain pattern rather than a standalone alert.
 
 ```yaml
@@ -595,11 +675,17 @@ level: medium
 #### EvilSoul-Engine Watchdog Persistence Files Created in User TEMP or the Startup Folder
 
 **Tier:** Hunting
+
 **Robustness:** 1
+
 **ATT&CK Coverage:** T1564.001 (Hidden Files and Directories), T1053.005 (Scheduled Task)
+
 **Confidence:** MODERATE
+
 **Rationale:** *Logic fix 2026-10-11:* the selection was the three filenames in any directory with only System32 and Program Files excluded, so a hit in any other folder (a Downloads folder, a project tree) fired although the title says TEMP or Startup. Each name is now tied to the location the report gives: `updatesystem.cmd` and `watcher.vbs` under `AppData\Local\Temp`, `update.bat` in the per-user Startup folder. The System32 and Program Files exclusion no longer applies and was dropped. The `299a2e7f` build layers redundant "persistence-of-persistence": a `update.bat` in the Startup folder plus a hidden random-named `.lnk`, a hidden `updatesystem.cmd`, and a `watcher.vbs` watchdog in `%TEMP%`, subsequently attribute-flagged hidden. These are plausible-sounding, genuinely generic filenames (unlike the bespoke component names elsewhere in this campaign) that a legitimate update script could coincidentally share — moderate FP risk was already acknowledged at publication and the tier reflects that.
+
 **False Positives:** Legitimate software update scripts that happen to share these generic filenames in the user Temp or Startup folders; custom internal IT automation using similarly named watchdog scripts.
+
 **Deployment:** SIEM correlation on Sysmon Event ID 11 (FileCreate) filtered to the named artifacts; correlate with the Defender-suppression or CDP-cookie-theft Detection rules above for higher-confidence triage.
 
 ```yaml
@@ -656,13 +742,21 @@ level: medium
 #### EvilSoul-Engine Webhook-Resolution Relay POST /tralalero
 
 **Tier:** Detection
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1071.001 (Web Protocols), T1041 (Exfiltration Over C2 Channel)
+
 **Confidence:** HIGH
+
 **Rationale:** The `299a2e7f` build hardcodes no Discord webhook directly — instead it POSTs `{key: <licenseKey>}` to a relay and receives the actual webhook URL back at runtime. `/tralalero` is a distinctive, non-dictionary URI path with no legitimate-traffic collision risk. **Corrected during this review:** the originally-published rule pinned the destination to the single relay IP (`198.1.195.210`), which is an atomic that breaks the moment the operator moves the relay; the destination is now `any` (the header reads `$HOME_NET any -> any any`), so the rule survives relay-IP rotation while still keying on the durable URI content; because the destination is not limited to external hosts, a POST from one internal host to another also matches. The `/tralalero` test is an unanchored `contains` on the URI, so a longer path that includes it matches too. `rev` bumped to 2 to reflect the change.
+
 **False Positives:** None known — `/tralalero` combined with an HTTP POST method is not a pattern seen in legitimate web traffic.
+
 **Blind Spots:** Misses the relay entirely if the operator changes the URI convention in a future build; does not by itself confirm which license key or webhook was resolved (see the IOC feed for the specific relay IP and license-key values).
+
 **Validation:** Replay a POST request to any host with `/tralalero` in the URI — must alert; unrelated POST traffic to the same or a different host without that URI must NOT fire.
+
 **Deployment:** Network IDS/IPS at network egress.
 
 ```

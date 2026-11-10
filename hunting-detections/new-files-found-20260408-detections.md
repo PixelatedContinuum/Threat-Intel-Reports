@@ -9,9 +9,13 @@ hide: true
 ---
 
 **Campaign:** OpenStrike-CSBeacon-Toolkit-172.105.0.126
+
 **Date:** 2026-04-08
+
 **Author:** The Hunters Ledger
+
 **License:** CC BY 4.0
+
 **Reference:** https://the-hunters-ledger.com/reports/new-files-found-20260408/
 
 > **Scope note:** These rules cover **only new artifacts and behaviors** discovered in the April 8 expanded analysis of 106 additional files from the same open directory (172.105.0.126:8888). Rules for the originally published seven samples (beacon.exe gen-3, loader chain, Python beacon, CS 3.x tripwired DLL, MALC user-agent, 172.105.0.126:8443 C2 infrastructure) are in the companion file at `/hunting-detections/open-directory-172-105-0-126-20260406-detections/`. Do not deploy both files without deduplication review.
@@ -47,13 +51,21 @@ OpenStrike is a bespoke Cobalt Strike-derivative toolkit combining a custom-buil
 #### OpenStrike Gen-4 Beacon
 
 **Tier:** Detection
+
 **Robustness:** 3
+
 **ATT&CK Coverage:** T1071.001 (Web Protocols), T1573.001 (Symmetric Cryptography), T1041 (Exfiltration Over C2 Channel)
+
 **Confidence:** HIGH
+
 **Rationale:** The `/updates?id=%08x` and `/submit?id=%08x` URI format strings and the `[*] OpenStrike Beacon starting...` banner are unique to the gen-4 WinHTTP beacon rewrite and do not appear in any known legitimate software; the condition requires either the banner alone or both URI format strings together, plus one of four corroborating build/crypto artifacts. No single renameable literal carries the rule.
+
 **False Positives:** None known — URI format strings with 8-hex-digit IDs and the OpenStrike banner string are specific to this beacon; `ChainingModeCBC` is a BCrypt mode string that does appear in other software but only functions here as corroboration alongside the primary URI/banner anchors.
+
 **Blind Spots:** A full source-level rewrite of the URI scheme and removal of the startup banner would evade this rule; the rule targets the on-disk binary or a saved dump, not network traffic (see the companion Suricata/Sigma URI rules for that layer).
+
 **Validation:** Scan `beacon_windows_x64.exe` (hash1 below) — must match; a benign WinHTTP-based application must NOT fire.
+
 **Deployment:** Endpoint AV/EDR file scan, scanner for saved dumps, gateway content inspection. Live process-memory scanning does not match: the condition's `filesize` test is undefined there, so only files and saved dumps are scanned.
 
 ```yara
@@ -99,13 +111,21 @@ rule TOOLKIT_OpenStrike_Gen4_Beacon
 #### OpenStrike Gen-1 and Gen-2 Prototype Beacons
 
 **Tier:** Detection
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1071.001 (Web Protocols), T1573.002 (Asymmetric Cryptography — RSA-1024 registration)
+
 **Confidence:** HIGH
+
 **Rationale:** `Cookie: SESSIONID=%d` is the gen-1 identification mechanism absent from any gen-3/gen-4 rule; the RSA-1024 modulus prefix `008cadd72dbf3cc108` is byte-for-byte identical in mini_beacon2.exe and the CS 4.4 Key B ecosystem; the `{ 00 00 BE EF }` magic is the on-wire registration packet header. Requires one of the three protocol/crypto markers AND the GCC 15-win32 compiler string, so the RSA-prefix corroboration alone (theoretically shareable with other RSA-1024 software) never carries the match by itself. Scored Robustness 2 rather than 3 because the compiler-string requirement is a build-toolchain artifact rather than a technique chokepoint.
+
 **False Positives:** None known — `Cookie: SESSIONID=%d` is specific to the gen-1 prototype; the RSA modulus prefix could theoretically appear in other RSA-1024 software but is always corroborated by the GCC 15 compiler string in this rule's condition.
+
 **Blind Spots:** A build using a different compiler toolchain (no `GCC: (GNU) 15-win32` string) evades the rule even if the protocol markers are present.
+
 **Validation:** Scan `mini_beacon.exe` or `mini_beacon2.exe` (hash1 below) — must match; a benign RSA-1024 CNG application built with a different toolchain must NOT fire.
+
 **Deployment:** Endpoint AV/EDR file scan, scanner for saved dumps. Live process-memory scanning does not match: the condition's `filesize` test is undefined there, so only files and saved dumps are scanned.
 
 ```yara
@@ -140,13 +160,21 @@ rule TOOLKIT_OpenStrike_Proto_Beacons
 #### Cobalt Strike Artifact Kit EAX-Redirect Service Variant
 
 **Tier:** Detection
+
 **Robustness:** 3
+
 **ATT&CK Coverage:** T1055.003 (Thread Execution Hijacking), T1543.003 (Windows Service), T1036.004 (Masquerade Task or Service), T1218.011 (Rundll32)
+
 **Confidence:** HIGH
+
 **Rationale:** `DceRpcSs` as a service name combined with `\\.\pipe\MSSE-%d-server` is the stock Cobalt Strike Artifact Kit service-variant default — reproducing this combination requires modifying and recompiling the Artifact Kit source, not just editing a config value. No legitimate Windows component uses either string. Corrected from the original: the ATT&CK Coverage previously cited T1055.012 (Process Hollowing), which requires `NtUnmapViewOfSection`; this variant never unmaps the target and instead redirects execution via `SetThreadContext` on a suspended thread, which the MITRE decision tree maps to T1055.003 (Thread Execution Hijacking).
+
 **False Positives:** None known — `DceRpcSs` is not a legitimate Windows service name; `MSSE-%d-server` is the Artifact Kit default; no legitimate Windows binary combines both.
+
 **Blind Spots:** An Artifact Kit build with source-level customization of the service name and pipe-format string evades this rule; the rule targets the on-disk service binary, not the runtime hollowing behavior itself (see the companion Sigma rules for that layer).
+
 **Validation:** Scan `artifact32svc.exe` / `artifact64svc.exe` (hash1 below) — must match; an unrelated legitimate Windows service binary must NOT fire.
+
 **Deployment:** Endpoint AV/EDR file scan, scanner for saved dumps. Live process-memory scanning does not match: the condition's `filesize` test is undefined there, so only files and saved dumps are scanned.
 
 ```yara
@@ -179,13 +207,21 @@ rule MALW_ArtifactKit_EAXRedirect_Svc
 #### CovertVPN Layer 2 Bridge Module
 
 **Tier:** Detection
+
 **Robustness:** 3
+
 **ATT&CK Coverage:** T1095 (Non-Application Layer Protocol), T1572 (Protocol Tunneling), T1543.003 (Windows Service — npf.sys kernel driver)
+
 **Confidence:** HIGH
+
 **Rationale:** `AAAABBBBCCCCDDDDEEEEFFFFGGGGHHHH` is the unpatched AES key config placeholder embedded in covertvpn.dll — a nonsensical 32-character development sentinel with no plausible legitimate collision. The rule requires this placeholder AND at least one of the WinPcap deployment or HTTP-channel corroborating strings, so the config placeholder alone (already highly distinctive) is never the sole gate.
+
 **False Positives:** None known — the 32-character AAAA...HHHH AES placeholder is a development artifact unique to this module; `wpcap.dll` embedded in a non-WinPcap installer binary is anomalous.
+
 **Blind Spots:** A production build that patches the placeholder with a randomized AES key would evade this rule; the rule targets the on-disk module, not the ICMP/TCP/UDP transport channels themselves.
+
 **Validation:** Scan `covertvpn.dll` (hash1 below) — must match; a legitimate WinPcap-based application must NOT fire (it will not carry the AES placeholder).
+
 **Deployment:** Endpoint AV/EDR file scan, scanner for saved dumps, DLP gateway. Live process-memory scanning does not match: the condition's `filesize` test is undefined there, so only files and saved dumps are scanned.
 
 ```yara
@@ -222,11 +258,17 @@ rule MALW_CovertVPN_L2Bridge
 #### OpenStrike DLL Loader
 
 **Tier:** Hunting
+
 **Robustness:** 1
+
 **ATT&CK Coverage:** T1129 (Shared Modules), T1036.005 (Match Legitimate Name or Location)
+
 **Confidence:** MODERATE
+
 **Rationale:** Retiered from Detection. The rule's real discriminating power rests on the single hardcoded path `C:\Windows\Temp\beacon.dll` — a one-line source edit in a future build fully evades it. The paired diagnostic format strings (`DLL loaded at %p`, `LoadLibrary failed: %lu`) and the GCC 15-win32 compiler string add negligible durability of their own: both are generic-enough developer print statements and a shared toolchain artifact respectively, so with the path removed the rule would fire on very little that is distinctive. Per the tiering rubric, a rule whose low false-positive rate today derives from one renameable literal is scored on durability, not as-written precision.
+
 **False Positives:** Low today — no legitimate software is known to hardcode a `beacon.dll` load target in `C:\Windows\Temp`; a future OpenStrike build that renames the drop path or the DLL evades entirely.
+
 **Deployment:** Endpoint AV/EDR file scan, scanner for saved dumps; treat as a triage lead requiring confirmation from the companion Detection-tier rules or the file-path IOC feed entry. Live process-memory scanning does not match: the condition's `filesize` test is undefined there, so only files and saved dumps are scanned.
 
 ```yara
@@ -268,13 +310,21 @@ rule TOOLKIT_OpenStrike_DllLoader
 #### Artifact Kit EAX-Redirect Process Hollowing via Rundll32 No Arguments
 
 **Tier:** Detection
+
 **Robustness:** 3
+
 **ATT&CK Coverage:** T1055.003 (Thread Execution Hijacking), T1218.011 (Rundll32)
+
 **Confidence:** HIGH
+
 **Rationale:** `rundll32.exe` spawned with no command-line arguments by `services.exe` is the precise behavioral signature of EAX-redirect hollowing — a technique-level pattern independent of any single sample or build. Legitimate Windows services virtually never spawn `rundll32.exe` without arguments (they always pass a DLL path and entry point). Corrected from the original: the technique tag was the bare parent T1055 with no sub-technique; the rule's own description confirms `SetThreadContext` on a suspended thread with no `NtUnmapViewOfSection` call, which the MITRE decision tree maps to T1055.003 (Thread Execution Hijacking) rather than T1055.012 (Process Hollowing). Added the T1218.011 tag for the Rundll32 execution vehicle, matching the rule's original prose ATT&CK Coverage line that the YAML tags omitted.
+
 **False Positives:** Legitimate Windows services that invoke `rundll32.exe` without arguments (extremely rare; verify by examining the parent service binary path and cross-referencing against asset inventory).
+
 **Blind Spots:** A variant that always passes at least one argument to rundll32 (even a decoy) evades the `not filter_has_args` condition; misses EAX-redirect variants that target a process other than rundll32.
+
 **Validation:** Trigger the Artifact Kit service variant — the bare rundll32 spawn from services.exe must match; a legitimate Windows service invoking rundll32.exe with its normal DLL,entrypoint arguments must NOT fire.
+
 **Deployment:** Endpoint EDR (Sysmon Event ID 1), SIEM.
 
 ```yaml
@@ -321,14 +371,23 @@ level: high
 #### Cobalt Strike Artifact Kit MSSE Named Pipe Creation
 
 **Tier:** Detection
+
 **Robustness:** 3
+
 **ATT&CK Coverage:** None
+
 **ATT&CK Note:** T1055.003 (Thread Execution Hijacking) is the technique of the Artifact Kit service variant's chain (the companion YARA rule above describes the `SetThreadContext` redirect), but this rule sees only a `pipe_created` event, which cannot observe thread hijacking, and no other technique is observed by a pipe name. The id is therefore not claimed here or in the tags.
+
 **Confidence:** HIGH
+
 **Rationale:** The `MSSE-[number]-server` named pipe pattern is the Cobalt Strike Artifact Kit default pipe name, generated by `GetTickCount() % 9898`. This pipe is created and immediately self-connected within the same process to transfer XOR-encoded shellcode via kernel pipe indirection. No legitimate Windows component creates pipes matching this pattern. Corrected from the original: the technique tag (bare T1055, then T1055.003) is not carried, because a `pipe_created` event cannot observe the thread hijacking that the companion EAX-redirect rundll32 rule covers for the same chain.
+
 **False Positives:** Unlikely — the rule requires the whole pipe name to be `\MSSE-` followed by one to four digits and `-server` (the range `GetTickCount() % 9898` produces, 0 to 9897), which is the Artifact Kit default; no legitimate Windows component is known to use it. The prefix and suffix tests alone would also match a name such as `\MSSE-abc-server`, which the digit test now excludes.
+
 **Blind Spots:** An Artifact Kit build with a source-level customized pipe-name template evades this rule, as does a build whose template prints the number with more than four digits. Zero-padding up to four digits (for example `%04d`) still matches.
+
 **Validation:** Trigger the Artifact Kit service variant's shellcode staging — the pipe creation must match; unrelated legitimate named-pipe creation must NOT fire.
+
 **Deployment:** Endpoint EDR (Sysmon Event ID 17), SIEM.
 
 ```yaml
@@ -371,13 +430,19 @@ level: high
 #### DceRpcSs Masquerading Service Installation
 
 **Tier:** Hunting
+
 **Robustness:** 1
+
 **ATT&CK Coverage:** T1036.005 (Match Legitimate Name or Location)
+
 **Confidence:** HIGH (behavior) / triage required (durability)
+
 **Rationale:** Retiered from Detection. `ServiceName: 'DceRpcSs'` is the rule's sole discriminator — `EventID: 7045` alone is an ambient "any service installed" event with no distinguishing value, so nothing behavioral survives if the literal is removed. `DceRpcSs` is not a programmatically-derived toolkit constant (unlike the MSSE pipe pattern, which is generated by `GetTickCount() % 9898`); it reads as an operator/campaign naming choice a future build or deployment can change with a one-line edit. Demoted from `critical` to `medium` to match the tier.
+
 **False Positives:**
 - Unlikely today. `DceRpcSs` is not a legitimate Windows service name and has no known collision.
 - A future campaign or unrelated actor choosing the same masquerade name would also match; treat a hit as a lead requiring corroboration (binary path, hash) rather than an automatic incident.
+
 **Deployment:** Windows Security/System Event Log (Event ID 7045), SIEM; pair with the YARA Artifact Kit rule for file-level confirmation.
 
 ```yaml
@@ -421,12 +486,18 @@ level: medium
 #### CovertVPN WinPcap npf.sys Kernel Driver Loaded from Temp Directory
 
 **Tier:** Hunting
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1543.003 (Windows Service — kernel driver)
+
 **Confidence:** MODERATE
+
 **Rationale:** The rule requires a driver-load event for a file named `npf.sys` whose path contains `\Temp\` (the report records the dropper writing `%TEMP%\npf.sys` and loading it from there). The test is a path-component test, not a user-directory test: `C:\Windows\Temp\npf.sys` and `C:\Temp\npf.sys` match as well. The service mapping is context for what this driver does in the report; the rule observes a driver load, not a service creation. A copy in `System32\drivers` or any other non-Temp path does not match; an earlier version tested only for the absence of those two driver directories, so any other location matched. `npf.sys` is the genuine, unmodified WinPcap kernel driver filename — durable in the sense that it can't be renamed without breaking WinPcap functionality, and not specific to CovertVPN (any tool embedding WinPcap for raw capture would trip it). Retiered from Detection on precision, not durability: the rule's own original false-positive assessment rated this MEDIUM ("legitimate WinPcap/Npcap installers occasionally stage npf.sys in %TEMP% during initial setup before moving to System32\drivers"), which does not clear the "reliably fires on malice, rare FP" bar for Detection. Corrected from the original: the technique tag was T1547.006 (Kernel Modules and Extensions, a Linux/macOS-scoped sub-technique) and carried an orphaned `attack.command-and-control` tactic tag with no paired C2 technique — realigned to T1543.003 (Windows Service), matching the rule's own prose ATT&CK Coverage line and MITRE's Windows-service scoping for kernel-driver services; the T1095 (Non-Application Layer Protocol) claim in the original prose describes the CovertVPN ICMP/raw-capture *capability* the driver enables, not this file-load event itself, so it is not re-added as a tag here.
+
 **False Positives:**
 - Legitimate WinPcap or Npcap installers that stage npf.sys in a temporary directory before moving it to System32\drivers (uncommon; verify by checking for a subsequent persistent driver installation in System32\drivers).
+
 **Deployment:** Endpoint EDR (Sysmon Event ID 6), SIEM.
 
 ```yaml
@@ -472,13 +543,19 @@ level: medium
 #### Cobalt Strike Beacon DLL Dropped to Windows Temp Directory
 
 **Tier:** Hunting
+
 **Robustness:** 1
+
 **ATT&CK Coverage:** T1129 (Shared Modules), T1036.005 (Match Legitimate Name or Location)
+
 **Confidence:** MODERATE
+
 **Rationale:** Retiered from Detection. `TargetFilename: 'C:\Windows\Temp\beacon.dll'` is the rule's entire selection — a single hardcoded path with no process-context qualifier. `beacon.dll` is also the Cobalt Strike Artifact Kit / aggressor-script default output filename used broadly across unrelated CS deployments, so the filename component itself carries less campaign-specific weight than it first appears; a future build renaming either the path or the DLL evades the rule outright. Added the T1036.005 tag to match the rule's own prose ATT&CK Coverage line, which the original YAML omitted.
+
 **False Positives:**
 - Unlikely today. The filename `beacon.dll` at this exact path is not used by any known legitimate software.
 - Any other Cobalt Strike deployment (unrelated to this campaign) using the same default Artifact Kit output filename and a similar drop path would also match.
+
 **Deployment:** Endpoint EDR (Sysmon Event ID 11), SIEM.
 
 ```yaml
@@ -523,11 +600,17 @@ level: medium
 #### Cobalt Strike Malleable C2 BOIE9 IE9 User-Agent in Proxy Traffic
 
 **Tier:** Hunting
+
 **Robustness:** 1
+
 **ATT&CK Coverage:** T1071.001 (Web Protocols)
+
 **Confidence:** MODERATE
+
 **Rationale:** Retiered from Detection. The `BOIE9;ENUSSEM` suffix is a Malleable C2 profile configuration value — a text field an operator can change per deployment without any infrastructure cost or rebuild, which places it in the same durability bucket as any other single UA-string indicator regardless of today's zero known collisions.
+
 **False Positives:** Unlikely today — `BOIE9;ENUSSEM` does not appear in any known legitimate browser or application user-agent string; a future campaign using a different Malleable profile UA evades this rule entirely.
+
 **Deployment:** Proxy logs, network TAP with HTTP inspection, SIEM.
 
 ```yaml
@@ -569,12 +652,19 @@ level: medium
 #### OpenStrike Gen-4 Beacon Task Polling HTTP GET to /updates with Hex Beacon ID
 
 **Tier:** Hunting
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1071.001 (Web Protocols)
+
 **Confidence:** MODERATE
+
 **Rationale:** Retiered from Detection. The 8-hex-digit beacon ID format (the report describes a djb2 hash variant of ComputerName XOR PID; the rule tests only the eight-hex-digit shape, not the derivation) is a genuine protocol-design element, more durable than a simple config string — but the original rule's own false-positive assessment ("LOW-MEDIUM ... web applications may legitimately use /updates?id= endpoints ... correlate with ~5-second beaconing interval and POST to /submit?id= for high confidence") states plainly that the rule as written does not reach high confidence standalone. A `threshold` clause controls alert *volume*, not per-match precision, so it does not change this assessment.
+
 **Regex note:** the earlier regex was written with `^` and `$`, which Elastic's regex engine reads as literal characters, so it could not match there. The path is now pinned with `startswith` and the regex covers the whole field without anchors; on Elastic the field must be exactly `/updates?id=` plus 8 lowercase hex characters, while a backend that searches inside the string would also accept trailing characters after the ID.
+
 **False Positives:** Web applications using `/updates` as an API endpoint with an `id` parameter of exactly 8 lowercase hex characters (uncommon in enterprise environments; verify against known application inventory and require a correlated POST to `/submit?id=` with the same ID before treating as high confidence).
+
 **Deployment:** Proxy logs, SIEM; correlate with the companion `/submit?id=` rule and beaconing-interval analysis before escalating.
 
 ```yaml
@@ -620,12 +710,19 @@ level: medium
 #### OpenStrike Gen-4 Beacon Output Submission HTTP POST to /submit with Hex Beacon ID
 
 **Tier:** Hunting
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1041 (Exfiltration Over C2 Channel), T1071.001 (Web Protocols)
+
 **Confidence:** MODERATE
+
 **Rationale:** Retiered from Detection, mirroring the companion `/updates` polling rule — same URI-scheme durability profile and the same self-admitted LOW-MEDIUM standalone precision requiring correlation with the matched GET for high confidence. Added the T1071.001 tag to match the rule's own prose ATT&CK Coverage line, which the original YAML omitted.
+
 **Regex note:** the earlier regex was written with `^` and `$`, which Elastic's regex engine reads as literal characters, so it could not match there. The path is now pinned with `startswith` and the regex covers the whole field without anchors; on Elastic the field must be exactly `/submit?id=` plus 8 lowercase hex characters, while a backend that searches inside the string would also accept trailing characters after the ID.
+
 **False Positives:** API endpoints using `/submit` with an `id` parameter of exactly 8 hex characters accepting POST data (uncommon in enterprise environments; correlate with a matched GET to `/updates?id=` for the same ID before treating as high confidence).
+
 **Deployment:** Proxy logs, SIEM; correlate with the companion `/updates?id=` rule.
 
 ```yaml
@@ -678,11 +775,17 @@ level: medium
 #### OpenStrike Gen-4 Beacon Network Task Poll (GET /updates)
 
 **Tier:** Hunting
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1071.001 (Web Protocols)
+
 **Confidence:** MODERATE
+
 **Rationale:** Retiered from Detection to align with the companion Sigma rule. The URI is not IP-anchored (matches any `$EXTERNAL_NET` destination, surviving C2 infrastructure rotation) and the 8-hex-digit ID format is a genuine protocol-design element, but standalone URI-pattern precision is the same LOW-MEDIUM the Sigma equivalent documents — `threshold` bounds alert volume, it does not change whether a single match is a true or false positive.
+
 **False Positives:** Web applications using `/updates` as an API endpoint with an 8-lowercase-hex `id` parameter (uncommon in enterprise environments); the `threshold` limits alert volume per source but does not eliminate standalone ambiguity.
+
 **Deployment:** Perimeter IDS/IPS, network TAP; correlate with the companion `/submit` signature before escalating.
 
 ```
@@ -692,11 +795,17 @@ alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL HUNT OpenStrike Gen4 Bea
 #### OpenStrike Gen-4 Beacon Output Submission (POST /submit)
 
 **Tier:** Hunting
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1041 (Exfiltration Over C2 Channel), T1071.001 (Web Protocols)
+
 **Confidence:** MODERATE
+
 **Rationale:** Retiered from Detection, mirroring the `/updates` polling signature — same URI-scheme durability and the same standalone precision limitation.
+
 **False Positives:** POST requests to a `/submit?id=[8hex]`-shaped endpoint carrying binary content (uncommon in enterprise environments, but not impossible on generic API infrastructure); correlate with the matched GET signature for higher confidence.
+
 **Deployment:** Perimeter IDS/IPS, network TAP; correlate with the companion `/updates` signature.
 
 ```
@@ -706,11 +815,17 @@ alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL HUNT OpenStrike Gen4 Bea
 #### Cobalt Strike Malleable C2 BOIE9 IE9 User-Agent Detected
 
 **Tier:** Hunting
+
 **Robustness:** 1
+
 **ATT&CK Coverage:** T1071.001 (Web Protocols)
+
 **Confidence:** MODERATE
+
 **Rationale:** Retiered from Detection. The `endswith` anchor to the tail of the User-Agent buffer is correctly implemented (matches the suffix, including the closing paren, not a mid-string substring), and there is no known legitimate collision today — but a Malleable C2 UA string is a profile-configuration value an operator can change per deployment, placing it in the same durability bucket as any other single UA-string indicator.
+
 **False Positives:** Unlikely today — this suffix does not appear in any known legitimate UA string; a future deployment using a different Malleable profile evades this rule entirely.
+
 **Deployment:** Perimeter IDS/IPS, proxy with HTTP user-agent logging.
 
 ```
@@ -720,11 +835,17 @@ alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL HUNT Cobalt Strike Malle
 #### CovertVPN HTTP Data Channel GET /receive Endpoint
 
 **Tier:** Hunting
+
 **Robustness:** 1
+
 **ATT&CK Coverage:** T1572 (Protocol Tunneling), T1071.001 (Web Protocols)
+
 **Confidence:** MODERATE
+
 **Rationale:** `/receive` is a single short literal in the HTTP URI, and the rule's own original assessment already rated it MEDIUM false-positive risk ("/receive is a common REST API path segment"). No corroborating content anchor (host, method, body pattern) was available to pair with it for a Detection-grade signature.
+
 **False Positives:** Any unrelated HTTP request whose URI happens to start with the 8-character substring `/receive` (uncommon but not impossible on generic REST/CGI-driven web infrastructure); the `threshold` limits alert volume per source but does not eliminate standalone ambiguity.
+
 **Deployment:** Perimeter IDS/IPS, network TAP with HTTP inspection; hunt-tune before alerting, and correlate with other CovertVPN indicators (npf.sys load, ICMP anomalies).
 
 ```
@@ -734,11 +855,17 @@ alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL HUNT CovertVPN HTTP Data
 #### CovertVPN ICMP Tunnel Oversized Payload with Data-Frame Marker (0xDD)
 
 **Tier:** Hunting
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1095 (Non-Application Layer Protocol), T1572 (Protocol Tunneling)
+
 **Confidence:** MODERATE
+
 **Rationale:** The oversized-ICMP-echo-plus-fixed-offset-byte-marker pattern is a genuine protocol-level technique signature, durable against IP rotation and binary rename. Retiered from Detection on precision: the rule's own original assessment rated MEDIUM false-positive risk ("large ICMP payloads can occur in legitimate network diagnostics ... assess false positive rate in environments with active network diagnostic tooling"), which does not clear the "rare FP" bar for Detection without environment-specific baselining. The rule tests one byte value (`0xDD`, the data frame) at offset 4; the keepalive frame (`0xCC`) is not matched, which is why the title names only the data-frame marker (see Coverage Gaps).
+
 **False Positives:** Legitimate network diagnostic tooling generating large ICMP echo payloads (e.g., `ping -l` on Windows, MTU path discovery) whose payload happens to carry the `0xDD` byte at offset 4; the `threshold` limits alert volume but does not eliminate standalone ambiguity — baseline against diagnostic tooling in the deployment environment before alerting.
+
 **Deployment:** Perimeter IDS/IPS, network TAP (requires ICMP inspection capability).
 
 ```

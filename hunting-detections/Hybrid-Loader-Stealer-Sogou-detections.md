@@ -10,9 +10,13 @@ thumbnail: /assets/images/cards/Hybrid-Loader-Stealer-Sogou.png
 ---
 
 **Campaign:** Sogou-Hybrid-Loader-Stealer-Ecosystem
+
 **Date:** 2025-11-21
+
 **Author:** The Hunters Ledger
+
 **License:** CC BY 4.0
+
 **Reference:** https://the-hunters-ledger.com/reports/Hybrid-Loader-Stealer-Sogou/
 
 ---
@@ -44,13 +48,21 @@ SogouStealer is a hybrid loader/stealer ecosystem distributed as a fake, cracked
 #### SogouStealer Ecosystem Indicators (Combined Fingerprint)
 
 **Tier:** Detection
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1036.005 (Masquerading: Match Legitimate Name or Location)
+
 **Confidence:** HIGH
+
 **Rationale:** Requires three independently-anchored clauses to all hold: a disposable-domain-fragment match, two of a twelve-member API/packing/masquerade-string bucket, and one of eight bespoke dropped-component filenames. No single renameable literal carries the rule alone — an operator must simultaneously rotate domains, rework the packing/API footprint, and rename every dropped component to fully evade, a substantial engineering lift short of a full rebuild.
+
 **False Positives:** None known — the combination requires a distinctive component filename (e.g. `beacon_sdk.dll`, `SGDownload.exe`) alongside domain and packing/API evidence; no legitimate software plausibly carries this specific combination.
+
 **Blind Spots:** A comprehensive rebrand that renames all eight dropped components AND rotates every listed domain fragment AND strips the Sogou-branding strings would evade; the rule targets the on-disk installer/dropper, not memory-only variants.
+
 **Validation:** Scan the analyzed installer sample (`hash1` below) — all three clauses must match; a legitimate, unrelated NSIS-packed installer must NOT fire.
+
 **Deployment:** Endpoint AV/EDR file scan, email-gateway attachment scanning, download-quarantine scanning.
 
 ```yara
@@ -123,13 +135,21 @@ rule SogouStealer_Ecosystem_Indicators {
 #### SogouStealer C2 Scheduler and Signature-Database Components
 
 **Tier:** Detection
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1071.001 (Web Protocols)
+
 **Confidence:** HIGH
+
 **Rationale:** Corrected from the original: a YARA operator-precedence bug (`(A and B) or C or D`) let the signature-database or CGI-marker string alone fire the rule with no PE-header gate, matching any file type — not just Windows executables. Reparenthesized so the MZ check gates the full OR-set, and tightened from "1 of 4" to "2 of 4" so a single component rename or one incidental string collision cannot trigger it; an attacker must rename or drop at least three of the four distinctive C2/scheduler artifacts to evade, since any two that remain still satisfy the 2-of-4 condition.
+
 **False Positives:** None known — three of the four anchors (`userNetSchedule.exe`, `SGCurlHelper.dll`, `UrlSignatureV.dat`) are bespoke filenames with no plausible legitimate collision; the fourth (`/cgi1`) is weaker alone but the 2-of-4 requirement means it never carries a match by itself.
+
 **Blind Spots:** A rebuild must rename or drop at least three of the four anchors to evade (two remaining anchors still match); the rule targets on-disk artifacts, not the live network protocol.
+
 **Validation:** Scan the analyzed sample or a dropped scheduler/curl-helper component — must satisfy 2 of the 4 anchors; a benign file containing only one incidental match (e.g. an unrelated file with `/cgi1` in a URL string) must NOT fire.
+
 **Deployment:** Endpoint AV/EDR file scan, static triage of dropped components.
 
 ```yara
@@ -164,12 +184,19 @@ rule SogouStealer_C2_Scheduler_SignatureDB {
 #### SogouStealer Loader/Downloader Components
 
 **Tier:** Hunting
+
 **Robustness:** 1
+
 **ATT&CK Coverage:** None
+
 **ATT&CK Note:** T1622 (Debugger Evasion) was listed here and is withdrawn: the anti-analysis bucket is `1 of` three strings, so the bare word `overlay` or `QueryPerformanceCounter` alone satisfies it, and neither is a debugger check. A hit therefore does not show debugger evasion; the rule's discriminating part is the `beacon_sdk.dll` or `SGDownload.exe` filename string.
+
 **Confidence:** MODERATE
+
 **Rationale:** The rule's real discriminating power rests on a single distinctive literal (`beacon_sdk.dll` or `SGDownload.exe`) — both bespoke and unlikely to collide with legitimate software today, but a rename in a future build fully evades the rule. The paired anti-debug/overlay condition (`IsDebuggerPresent`, `QueryPerformanceCounter`, `overlay`) is near-ubiquitous in native Windows binaries and adds negligible discriminating value on its own. (Corrected from the original: the `overlay` string was declared but never referenced in the condition — a YARA hard compile error — and has been wired into the anti-analysis bucket.)
+
 **False Positives:** Low but not zero — a future build that renames both `beacon_sdk.dll` and `SGDownload.exe` evades entirely; conversely, the filenames alone have no known legitimate collision.
+
 **Deployment:** Endpoint AV/EDR file scan; a broader sweep of a file corpus for either component filename independent of the full ecosystem combination in the Detection-tier rule above.
 
 ```yara
@@ -210,13 +237,21 @@ rule SogouStealer_Loader_Downloader {
 #### SogouStealer Persistence via Run Keys
 
 **Tier:** Detection
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1547.001 (Registry Run Keys / Startup Folder)
+
 **Confidence:** HIGH
+
 **Rationale:** Requires the registry value location to be a genuine Run/RunOnce autostart key AND the written value data to reference one of three bespoke component filenames — a combination an operator cannot satisfy without both persisting via this technique and retaining a recognizable component name. The `attack.t1547.009` LNK-modification tag on the original rule has been removed: the detection logic is registry-only and never evaluates shortcut files, and the YAML title, which still read "and LNK Modification", was corrected on 2026-10-10 to match the heading and the logic (see Coverage Gaps).
+
 **False Positives:** None known — `beacon_sdk.dll`, `SGDownload.exe`, and `userNetSchedule.exe` are bespoke filenames with no plausible legitimate collision in a Run/RunOnce value.
+
 **Blind Spots:** A rebuild that renames all three referenced components evades; persistence via a different mechanism (scheduled task, service, LNK modification — none of which this rule inspects) is not covered.
+
 **Validation:** Trigger the malware's persistence routine — the registry write must match; a legitimate application's unrelated Run-key entry must NOT fire.
+
 **Deployment:** Endpoint EDR / Sysmon-fed SIEM (registry telemetry).
 
 ```yaml
@@ -256,13 +291,21 @@ level: high
 #### SogouStealer Artifact Drop and Staging
 
 **Tier:** Detection
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1105 (Ingress Tool Transfer)
+
 **Confidence:** HIGH
+
 **Rationale:** Matches file-creation events against eight bespoke component filenames spanning the ecosystem's loader, downloader, network-helper, and signature-database roles. Retagged from the original, which carried three tactic labels (`attack.execution`, `attack.stealth`, `attack.persistence`) with no technique-ID tag at all — a SigmaHQ validation failure; the file-creation behavior itself is most precisely T1105.
+
 **False Positives:** None known — all eight filenames are bespoke to this malware ecosystem.
+
 **Blind Spots:** A rebuild that renames all eight components evades; a memory-only variant that never writes these files to disk is not covered.
+
 **Validation:** Trigger the dropper/installer — at least one component filename must be written to disk and match; unrelated legitimate software must NOT fire.
+
 **Deployment:** Endpoint EDR / Sysmon-fed SIEM (file-creation telemetry).
 
 ```yaml
@@ -304,11 +347,17 @@ level: high
 #### SogouStealer Masquerading NSIS Installer Execution
 
 **Tier:** Hunting
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1036.005 (Masquerading: Match Legitimate Name or Location)
+
 **Confidence:** MODERATE
+
 **Rationale:** The command-line OR-list mixes genuinely distinctive campaign markers (`拼音`, `吾爱破解`, the pinned `v15.1.0.1570` version string) with two terms — `NSIS`, `Nullsoft` — that are generic to the entire NSIS installer ecosystem used by a large volume of legitimate software. Because the list is OR-matched, a hit on the generic pair fires the rule identically to a hit on the distinctive markers, so the original `level: high` overstated confidence for the generic-term branch. Demoted to Hunting/`medium`; the Image-class AND-gate and the distinctive markers still make this a useful triage lead.
+
 **False Positives:** Legitimate NSIS-based installers whose command line coincidentally references the generic `NSIS`/`Nullsoft` build-tool strings alongside a generically-named `setup.exe`/`install.exe`/`installer.exe`. The Chinese-language cracked-build markers and the specific version string are unlikely to collide with legitimate software.
+
 **Deployment:** Endpoint EDR / Sysmon-fed SIEM process-creation monitoring; prioritize hits carrying `拼音`, `吾爱破解`, or `v15.1.0.1570` over hits carrying only `NSIS`/`Nullsoft`.
 
 ```yaml
@@ -362,11 +411,17 @@ level: medium
 #### SogouStealer CGI1 C2 URI Pattern
 
 **Tier:** Hunting
+
 **Robustness:** 1
+
 **ATT&CK Coverage:** T1071.001 (Web Protocols)
+
 **Confidence:** MODERATE
+
 **Rationale:** `/cgi1` is a single short literal in the HTTP URI — brittle if the operator changes the C2 endpoint convention in a future build — but unlike the domain- and IP-based indicators in this campaign, it survives infrastructure rotation (a new C2 domain or IP reusing the same URI convention still fires). No corroborating content anchor (host, method, body pattern) was available to combine with it for a Detection-grade signature.
+
 **False Positives:** Any unrelated HTTP request whose URI happens to contain the 5-character substring `/cgi1` (uncommon but not impossible on generic CGI-driven web infrastructure); the `threshold` limits alert volume per source.
+
 **Deployment:** Network IDS/IPS at perimeter and internal segmentation points; hunt-tune before alerting.
 
 ```suricata

@@ -10,9 +10,13 @@ thumbnail: /assets/images/cards/109.230.231.37-Executive-Overview.png
 ---
 
 **Campaign:** Arsenal-237-109.230.231.37-Malware-Repository
+
 **Date:** 2026-01-12
+
 **Author:** The Hunters Ledger
+
 **License:** CC BY 4.0
+
 **IOC Feed:** https://the-hunters-ledger.com/ioc-feeds/agent-xworm-exe.json
 
 ---
@@ -42,13 +46,21 @@ Coverage below is retiered from the original draft: every rule was re-scored for
 #### XWorm Embedded PowerShell Reconnaissance Templates
 
 **Tier:** Detection
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1059.001 (PowerShell)
+
 **Confidence:** HIGH
+
 **Rationale:** Requires 2 of 4 embedded PowerShell one-liner fragments with an unusual flag ordering (`-NoP -C` ahead of the cmdlet chain) and specific cmdlet-and-filter combinations (`Get-Process|Sort CPU`, `Get-Service|?{$_.Status -eq 'Running'}`, `Get-WmiObject Win32_ComputerSystem`, the `PartOfDomain,Domain,DomainRole` field list). These are XWorm's built-in reconnaissance templates rather than operator-configurable values, so they persist across builds that retain this feature — durable to C2 rotation and filename changes, though a rebuild that drops or rewrites these specific templates would evade it.
+
 **False Positives:** None known — this specific flag ordering combined with this specific cmdlet-and-filter phrasing is not a standard PowerShell administration pattern.
+
 **Blind Spots:** A rebuild using PowerShell's standard long-form flags (`-NoProfile -Command`) or different reconnaissance cmdlets evades; the rule targets the executable's embedded string constants, not runtime script-block content.
+
 **Validation:** Scan `agent_xworm.exe` (hash below) — must match; an unrelated PowerShell automation script or admin tool must NOT fire.
+
 **Deployment:** Endpoint AV/EDR file scanning, email gateway attachment scanning, retroactive scan of file shares.
 
 ```yara
@@ -86,14 +98,23 @@ rule MAL_Windows_XWorm_PowerShell_Recon_Templates {
 #### XWorm AgentSec Authentication Pattern
 
 **Tier:** Detection
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1095 (Non-Application Layer Protocol)
+
 **ATT&CK Note:** T1071.001 (Web Protocols) is withdrawn. The report records a `System.Net.Sockets.TcpClient` connection with a heartbeat, Base64 framing and a shared secret, and no HTTP; the YARA rule matches an on-disk string of the C2 authentication secret. T1095 (Non-Application Layer Protocol) is the closer fit, MODERATE, because no live capture of the protocol exists (the C2 was offline at discovery).
+
 **Confidence:** HIGH
+
 **Rationale:** A capability-abstraction of this build's literal authentication secret: rather than matching the exact 40-character value (a hash-equivalent — see Coverage Gaps), this regex matches the `AgentSec_` naming *convention* plus a length constraint. A future build with a freshly-generated secret still matches; only a rebrand of the prefix itself evades it.
+
 **False Positives:** None known — `AgentSec_` is not a standard credential- or variable-naming convention outside this build family.
+
 **Blind Spots:** A build using a differently-prefixed or differently-structured secret evades; the rule targets the on-disk string, not the runtime authentication exchange (see the companion Suricata signature for the network-observable form of the same pattern).
+
 **Validation:** Scan `agent_xworm.exe` (hash below) — must match; unrelated software using generic terms like "AuthSecret" or "APIKey" without the exact `AgentSec_` prefix must NOT fire.
+
 **Deployment:** Endpoint AV/EDR file scanning, email gateway attachment scanning, retroactive scan of file shares, IR artifact triage on hosts that resolved 109.230.231.37.
 
 ```yara
@@ -122,12 +143,19 @@ rule MAL_Windows_XWorm_AgentSec_Authentication_Pattern {
 #### XWorm RAT Capability Combination
 
 **Tier:** Hunting
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1095 (Non-Application Layer Protocol), T1132.001 (Standard Encoding), T1564.003 (Hide Artifacts: Hidden Window)
+
 **ATT&CK Note:** T1071.001 (Web Protocols) is withdrawn. The report records a `System.Net.Sockets.TcpClient` connection with a heartbeat, Base64 framing and a shared secret, and no HTTP; the rule's networking branch tests the `System.Net.Sockets` and `TcpClient` strings. T1095 (Non-Application Layer Protocol) is the closer fit, MODERATE, because no live capture of the protocol exists (the C2 was offline at discovery).
+
 **Confidence:** MODERATE
+
 **Rationale:** Three OR'd branches combine XWorm-specific constant/method names (`HEARTBEAT_MS`, `RECONNECT_MS`, `SERVER_HOST`, `AGENT_SECRET`; `HandleCmd`, `GetMachineId`, `GetSysInfo`, `BuildFrame`) with generic .NET framework and WinAPI strings (`System.Net.Sockets`, `ToBase64String`, `ShowWindow`, `TcpClient`). The first branch (config+cmd+net combination) is reasonably distinctive; the second (.NET+stealth+encode+net) leans almost entirely on framework-ubiquitous strings — console-hiding plus Base64 plus TCP networking describes a wide population of legitimate remote-support and automation tooling, not just this family. None of the three branches has been run against a broad clean-software corpus, the explicit precondition for Detection tier on a combination rule this broad. Retained as a Hunting-tier toolkit signature rather than promoted on the strength of the narrower first branch alone.
+
 **False Positives:** Branch 1 (config+cmd+net) is the tightest and least likely to false-positive on unrelated software; Branch 2 (.NET+stealth+encode+net) is expected to co-fire with legitimate .NET remote-access, monitoring, or silent-install tooling that hides its console and communicates over TCP with Base64 framing — a combination not unique to XWorm.
+
 **Deployment:** Broad endpoint/EDR scanning sweep, retroactive hunt across file shares, email gateway attachment scanning; treat hits as triage candidates, not alerts.
 
 ```yara
@@ -197,11 +225,17 @@ rule MAL_Windows_XWorm_RAT_Capability_Combination {
 #### PowerShell -NoP -C Execution from a User-Writable-Directory Parent (XWorm Agent)
 
 **Tier:** Hunting
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1059.001 (PowerShell)
+
 **Confidence:** LOW
+
 **Rationale:** Combines a PowerShell command-line flag pattern (`-NoP -C`) with a parent-process-location heuristic (AppData/Temp/Users) and a two-vendor exclusion filter. *Title fix 2026-10-10 (round 2: title made distinct from the XWorm v2 page's rule, which shared it and failed corpus-wide Sigma checking):* the rule was titled "from Suspicious .NET Process", but a process-creation event carries no .NET marker and no selection tests for one, so the title and description now describe the parent-path test that exists. *Retiering note:* the source draft carried this at `level: high` while its own falsepositives field already named "legitimate development tools, software installers" as expected hitters — an honest signal that this sits at Hunting, not Detection (Gate 4). The ParentImage path condition matches nearly any interactively-launched process on a modern Windows host, so the real narrowing comes almost entirely from the command-line flag pattern; the two-vendor filter (Microsoft, Visual Studio) does not cover the much larger population of legitimate installers and automation tools that also invoke PowerShell this way from a user-profile path.
+
 **False Positives:** Software installers, build scripts, and IT automation tooling that invoke PowerShell with abbreviated flags from AppData/Temp/user-profile locations — a common, not rare, pattern.
+
 **Deployment:** SIEM/EDR process-creation telemetry; review parent binary provenance (signer, install context) before treating a hit as malicious.
 
 ```yaml
@@ -247,11 +281,17 @@ level: medium
 #### File Creation Matching XWorm Naming Convention
 
 **Tier:** Hunting
+
 **Robustness:** 1
+
 **ATT&CK Coverage:** T1105 (Ingress Tool Transfer)
+
 **Confidence:** LOW
+
 **Rationale:** A bare `TargetFilename` naming-convention selector — trivially evaded by a custom builder output filename, which XWorm's MaaS builder supports. *Retiering note:* the source draft tagged this `attack.persistence` / `attack.privilege-escalation` / `attack.t1547.001` (Registry Run Keys / Startup Folder), but the selector has no path restriction to a Startup folder or Run-key location — it matches file creation anywhere a matching name appears. The tags did not match the logic (score the logic, not the title); retagged to Ingress Tool Transfer, which is what a naming-pattern match on a freshly-created executable actually evidences. Kept at Hunting rather than Cut because the three-substring family (`xworm`, `xclient`, `agent_xworm`) retains recurrence value against unmodified or default-named deployments, beyond the single `agent_xworm.exe` filename atomic already in the feed.
+
 **False Positives:** Security research and malware-analysis environments; any renamed build defeats this selector entirely.
+
 **Deployment:** Windows file-integrity monitoring, EDR file-creation telemetry; review the full file path and hash of any hit.
 
 ```yaml
@@ -292,14 +332,23 @@ level: medium
 #### XWorm AgentSec Authentication Secret Pattern
 
 **Tier:** Detection
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1095 (Non-Application Layer Protocol)
+
 **ATT&CK Note:** T1071.001 (Web Protocols) is withdrawn. The report records a `System.Net.Sockets.TcpClient` connection with a heartbeat, Base64 framing and a shared secret, and no HTTP; this signature is `alert tcp ... any any` with `content` and `pcre` on the raw payload and no HTTP keyword or buffer. T1095 (Non-Application Layer Protocol) is the closer fit, MODERATE, because no live capture of the protocol exists (the C2 was offline at discovery).
+
 **Confidence:** HIGH
+
 **Rationale:** The network-observable form of the same `AgentSec_` naming-convention pattern salvaged in the YARA rule above — the malware's authentication handshake transmits this secret over the wire, per its own C2-authentication design. `content:"AgentSec_"` (9 bytes, bespoke prefix) gates the PCRE rather than the PCRE running unprefiltered, and the pattern survives secret rotation (a fresh per-build secret still matches the prefix-plus-length structure) and C2 IP rotation entirely (no destination anchor).
+
 **False Positives:** None known — `AgentSec_` is not a standard protocol token; the rule does not depend on the current, possibly-offline C2 IP.
+
 **Blind Spots:** A build using a differently-prefixed or differently-structured authentication token evades; requires a completed TCP handshake reaching the authentication exchange, so does not fire on connection attempts alone.
+
 **Validation:** Replay a captured or reconstructed authentication frame containing the `AgentSec_` token — must alert; ordinary TCP traffic containing the substring "Agent" (e.g., HTTP User-Agent headers) must NOT fire.
+
 **Deployment:** Network IDS/IPS at the perimeter and server-segment egress.
 
 ```

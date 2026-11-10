@@ -10,9 +10,13 @@ thumbnail: /assets/images/cards/109.230.231.37-Executive-Overview.png
 ---
 
 **Campaign:** Arsenal-237-109.230.231.37-Malware-Repository
+
 **Date:** 2026-01-18
+
 **Author:** The Hunters Ledger
+
 **License:** CC BY 4.0
+
 **IOC Feed:** https://the-hunters-ledger.com/ioc-feeds/enc-dec-ransomware-family.json
 
 ---
@@ -42,13 +46,21 @@ Coverage below is retiered from the original draft: every rule was re-scored for
 #### Rust Ransomware Artifacts Combination
 
 **Tier:** Detection
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1486 (Data Encrypted for Impact)
+
 **Confidence:** HIGH
+
 **Rationale:** *Fix applied during retiering:* the original condition read `uint16(0) == 0x5A4D and 2 of ($rust_debug*) or ($rsa_key_marker and ($enc_message or $key_gen))`. YARA's `and` binds tighter than `or`, so this parsed as `(uint16(0)==0x5A4D and 2 of ($rust_debug*)) or ($rsa_key_marker and (...))` — the second branch carried no PE-header gate at all. Explicit parentheses now apply the MZ check to both branches. The two project-specific Rust source paths (`chacha20_pervictim.rs`, `netusesrc/modules/disks.rs`) are not generic crate names — they name this family's own per-victim-key and network-share modules — and combined 2-of-3 with the third-party `aead` crate dependency path, or alternatively the embedded RSA key marker paired with one of two bespoke operator console messages, this is a durable multi-signal combination that no single renameable literal carries alone.
+
 **False Positives:** None known — the combination of project-specific Rust debug paths, or an embedded RSA public key alongside a bespoke encryption-status console message, is not expected in unrelated software.
+
 **Blind Spots:** A build stripped of debug symbols (no embedded Rust source paths) and with rebranded console messages would evade every branch; the rule targets on-disk static artifacts, not in-memory-only execution.
+
 **Validation:** Scan a captured enc/dec family sample (e.g., `enc_pervictim.exe`) — must match; an unrelated Rust cryptographic tool must NOT fire.
+
 **Deployment:** Endpoint AV/EDR file scanning, email gateway attachment scanning, retroactive scan of file shares, IR artifact triage.
 
 ```yara
@@ -92,11 +104,17 @@ rule MAL_EncDec_Rust_Ransomware_Artifacts {
 #### ChaCha20 Encryption Constant
 
 **Tier:** Hunting
+
 **Robustness:** 3
+
 **ATT&CK Coverage:** T1486 (Data Encrypted for Impact)
+
 **Confidence:** MODERATE
+
 **Rationale:** "expand 32-byte k" is the RFC 8439 ChaCha20 initialization constant — the malware cannot substitute or rename it without breaking standard ChaCha20 interoperability, so this is a genuine technique-level invariant that survives recompilation and rebranding (Robustness 3). It fails the Detection bar on precision alone: the constant is a required component of any standard ChaCha20 implementation, and legitimate ChaCha20 consumers are a real, non-trivial population. No goodware-corpus validation has been performed to characterize the actual hit rate on a clean fleet, so this stays Hunting until that validation exists.
+
 **False Positives:** Legitimate software statically linking a standard ChaCha20 implementation — VPN clients (WireGuard, OpenVPN with ChaCha20-Poly1305 cipher suites), SSH clients using the chacha20-poly1305@openssh.com cipher, TLS 1.3 stacks offering a ChaCha20-Poly1305 cipher suite, and secure-messaging applications are all expected to embed this exact string.
+
 **Deployment:** Endpoint AV/EDR static file scanning, retroactive scan of file shares, IR artifact triage — correlate a hit with the Rust Artifacts or VSS Deletion rules before treating it as ransomware-indicative.
 
 ```yara
@@ -122,11 +140,17 @@ rule MAL_EncDec_ChaCha20_Constant {
 #### VSS Deletion Concatenated String
 
 **Tier:** Hunting
+
 **Robustness:** 1
+
 **ATT&CK Coverage:** T1490 (Inhibit System Recovery)
+
 **Confidence:** MODERATE
+
 **Rationale:** This 45-byte string is not a command the malware issues as written — a real process-creation call to vssadmin/wmic requires space-delimited argv tokens, not a gapless concatenation. The more plausible explanation is that this reflects several short, adjacent string-table constants (`vssadmin`, `delete`, `shadows`, `/all`, `/quiet`, `wmic`, `shadowcopy`) packed back-to-back with no separating bytes by this family's Rust build toolchain, which a naive string-extraction pass then reads as one contiguous run. That gives it real value for recognizing this specific build lineage today, but a toolchain change, added dependency, or reordered source could shift the layout and break the exact match — it is not guaranteed to survive a genuine recompile the way the command-line-level Sigma detection below does, which is why the same underlying technique is carried at Detection tier there instead.
+
 **False Positives:** None known — the exact 45-byte gapless concatenation of these seven tokens is not expected in unrelated software.
+
 **Deployment:** Endpoint AV/EDR static file scanning, retroactive scan of file shares, IR artifact triage for recurrence of this specific build family.
 
 ```yara
@@ -158,13 +182,21 @@ rule MAL_EncDec_VSS_Deletion_Concatenated_String {
 #### Volume Shadow Copy Deletion via Vssadmin or Wmic (Generic Ransomware Precursor, Seen in the enc/dec Family)
 
 **Tier:** Detection
+
 **Robustness:** 3
+
 **ATT&CK Coverage:** T1490 (Inhibit System Recovery)
+
 **Confidence:** HIGH
+
 **Rationale:** *Fixes applied during retiering:* `level` demoted from `critical` to `high` — the rule's own false-positive list concedes VSS deletion occurs, rarely, during legitimate system maintenance and backup-software uninstallation, which is inconsistent with `critical`'s never-FP bar; `high` ("rare FP after baselining; manual review") is the honest level. `status` changed from `stable` to `experimental` per project convention for a freshly-retiered rule. A `references:` entry pointing at this file was added — the original carried none. The underlying technique — invoking vssadmin.exe or wmic.exe with this specific delete-shadows/shadowcopy-delete argument combination — is a technique-level chokepoint for this recovery-inhibition mechanism: an attacker cannot rename vssadmin.exe's command syntax, so this survives infrastructure rotation and binary rebuilds untouched.
+
 **False Positives:** Legitimate system maintenance and backup-software uninstallation routines occasionally invoke VSS deletion with these exact commands, though this is rare in most environments; review the parent process before treating a hit as confirmed malicious. The rule carries no enc/dec-specific indicator, so a hit does not attribute the activity to this family.
+
 **Blind Spots:** Misses VSS deletion via PowerShell cmdlets, direct COM/WMI API calls that bypass vssadmin.exe/wmic.exe process creation, or a custom VSS-deletion implementation that does not shell out to either tool.
+
 **Validation:** Trigger `vssadmin delete shadows /all /quiet` or `wmic shadowcopy delete` — must match; an unrelated vssadmin invocation without the delete-shadows/all combination (e.g., `vssadmin list shadows`) must NOT fire.
+
 **Deployment:** SIEM/EDR process-creation telemetry (Sysmon Event ID 1, Windows Security 4688), real-time alerting — a well-established, high-value ransomware precursor signal.
 
 ```yaml

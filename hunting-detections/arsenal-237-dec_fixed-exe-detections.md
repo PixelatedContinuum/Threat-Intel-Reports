@@ -10,9 +10,13 @@ thumbnail: /assets/images/cards/arsenal-237-new-files.png
 ---
 
 **Campaign:** Arsenal-237-New-Files-109.230.231.37
+
 **Date:** 2026-01-27
+
 **Author:** The Hunters Ledger
+
 **License:** CC BY 4.0
+
 **IOC Feed:** https://the-hunters-ledger.com/ioc-feeds/arsenal-237-dec_fixed-exe.json
 
 ---
@@ -42,13 +46,21 @@ Coverage below is retiered from the original draft: every rule was re-scored for
 #### ChaCha20 Constant with Arsenal-237 Decryptor Error Strings (Poly1305 Tag-Failure Message)
 
 **Tier:** Detection
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1486 (Data Encrypted for Impact — decryption/reversal context)
+
 **Confidence:** HIGH
+
 **Rationale:** Requires the RFC 7539 ChaCha20 256-bit-key constant (`expand 32-byte k`) together with at least one of the tool's own bespoke decryption-failure error strings. The constant alone is common to any ChaCha20 implementation (WireGuard, TLS 1.3, numerous legitimate secure-communication and backup tools); requiring co-occurrence with the specific, developer-written error phrasing narrows the match to this tool family. The combination survives a rebuild that only rotates the embedded victim key — the crypto constant and error-handling text are unrelated to per-victim key material. *Heading fix 2026-10-10:* the heading read "ChaCha20-Poly1305 AEAD Decryption Implementation", but the logic matches the ChaCha20 constant and two error strings and has no Poly1305 or AEAD element; the heading now says that. The tool is ChaCha20-Poly1305 in the companion report, and `Decryption failed - wrong key or corrupted file` is its Poly1305 tag-failure message.
+
 **False Positives:** None known for the full combination. The ChaCha20 constant by itself is ubiquitous, which is why the rule never matches on it alone.
+
 **Blind Spots:** A source-level rebuild using different (e.g., localized) error message text would evade; a match does not by itself confirm coverage of the related encryptor variants unless they share this exact error phrasing.
+
 **Validation:** Scan dec_fixed.exe (hash below) — must match; a generic ChaCha20/libsodium/WireGuard binary without this tool's specific error phrasing must NOT fire.
+
 **Deployment:** Endpoint AV/EDR file scanning, IR artifact triage, retroactive scan of file shares for victim-side recovery tooling.
 
 ```yara
@@ -87,13 +99,21 @@ rule TOOLKIT_Arsenal237_ChaCha20_Poly1305_Decryptor {
 #### Decryptor CLI + Error + Cleanup Combination
 
 **Tier:** Detection
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1059 (Command and Scripting Interpreter), T1083 (File and Directory Discovery), T1070.004 (Indicator Removal: File Deletion)
+
 **Confidence:** HIGH
+
 **Rationale:** Combines the tool's distinctive `--folder-a` batch-decryption flag (not a generic argument name) with 2-of-3 file-format validation error strings and the readme.txt ransom-note cleanup marker, all required in the same binary. No single element is unique on its own, but the four-way combination is specific to this tool's implementation — an unrelated utility would need to coincidentally embed all of them together.
+
 **False Positives:** readme.txt and generic-sounding error text are individually common, but the mandatory `--folder-a` flag anchors the combination to this specific tool family.
+
 **Blind Spots:** A rebuild renaming the CLI flag or rewording the error strings evades; targets the on-disk PE, not a packed or obfuscated variant.
+
 **Validation:** Scan dec_fixed.exe (hash below) — must match; an unrelated batch file-processing utility referencing a generic --folder argument or readme.txt alone must NOT fire.
+
 **Deployment:** Endpoint AV/EDR file scanning, IR artifact triage, retroactive scan of file shares.
 
 ```yara
@@ -132,11 +152,17 @@ rule TOOLKIT_Arsenal237_Decryptor_CLI_Combination {
 #### dec_fixed.exe Execution with --folder-a Parameter
 
 **Tier:** Hunting
+
 **Robustness:** 1
+
 **ATT&CK Coverage:** T1059 (Command and Scripting Interpreter), T1083 (File and Directory Discovery)
+
 **Confidence:** LOW
+
 **Rationale:** Requires both the exact filename (`dec_fixed.exe`) and the `--folder-a` CLI flag together — two literals from the same build. The "dec_fixed" name itself already signals a corrected/versioned build, so a renamed future build evades this rule entirely; kept as a Hunting lead for recurrence of this specific build rather than promoted to Detection. *Retiering note:* the source rule's hash-match branch has been removed — see Coverage Gaps.
+
 **False Positives:** Legitimate victim-side decryption operations by IT/incident-response staff (the tool's designed use case), or manual testing of a recovered sample by an analyst.
+
 **Deployment:** Sysmon/EDR process-creation monitoring, IR artifact triage, victim identification sweeps.
 
 ```yaml
@@ -175,11 +201,17 @@ level: medium
 #### readme.txt Ransom-Note Deletion by dec_fixed.exe
 
 **Tier:** Hunting
+
 **Robustness:** 1
+
 **ATT&CK Coverage:** T1070.004 (Indicator Removal: File Deletion)
+
 **Confidence:** LOW
+
 **Rationale:** readme.txt is a common filename; requiring the deletion to be performed specifically by the decryptor's own process image narrows what would otherwise be baseline noise (any process deleting a file named readme.txt) to a lead tied to this tool's documented post-decryption cleanup behavior. *Retiering note:* the source rule's broader cmd.exe/powershell.exe selector branches have been removed — see Coverage Gaps.
+
 **False Positives:** A rebuild of the decryptor under a different process name would evade this exact selector while performing the same cleanup; IT cleanup scripts deleting an unrelated readme.txt via a similarly-named tool are a coincidental collision risk.
+
 **Deployment:** Sysmon/EDR file-deletion event monitoring (Sysmon Event ID 23 or equivalent), correlated with the process-execution rule above.
 
 ```yaml

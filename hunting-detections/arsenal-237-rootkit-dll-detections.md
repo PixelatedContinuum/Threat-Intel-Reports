@@ -9,9 +9,13 @@ hide: true
 ---
 
 **Campaign:** Arsenal-237-109.230.231.37-Malware-Repository
+
 **Date:** 2026-01-27
+
 **Author:** The Hunters Ledger
+
 **License:** CC BY 4.0
+
 **IOC Feed:** https://the-hunters-ledger.com/ioc-feeds/arsenal-237-rootkit-dll.json
 
 ---
@@ -43,12 +47,19 @@ A third Sigma rule was retired on 2026-07-30 after production measurement: a sin
 #### BYOVD Baidu Driver Embedding
 
 **Tier:** Detection
+
 **Robustness:** 3
+
 **ATT&CK Coverage:** T1068 (Exploitation for Privilege Escalation)
+
 **Confidence:** HIGH
+
 **Rationale:** Every branch requires the embedded driver's own identity strings — `BdApiUtil64.sys`/`BdApiUtil`, its native registry service path, or its IOCTL structure — extracted from a legitimately-signed third-party driver bundled inside the sample. These strings are baked into the driver's own compiled identity; the operator cannot alter them without breaking the exploit or invalidating the code signature, so the rule survives dropper renaming and infrastructure rotation. One branch (`$driver_signature`, a generic DOS-stub byte pattern) is decorative rather than discriminating — it is always paired with a real driver-name string, so it does not weaken precision, but it adds no detection value on its own.
+
 **False Positives:** Legitimate Baidu software installations (rare in enterprise environments).
+
 **Blind Spots:** Does not fire if a build embeds a different vulnerable driver instead of BdApiUtil64.sys, or if the driver's identity strings are stripped or encrypted before being written to disk.
+
 **Validation:** Compiles clean with yarac; all anchors are ≥4-byte identity strings or hex patterns. No goodware-corpus sweep performed.
 
 ```yara
@@ -89,12 +100,19 @@ rule Arsenal237_BYOVD_Baidu_Driver
 #### Security Product Process-Name Kill-List (Multi-Vendor Spread or Single-Vendor Depth)
 
 **Tier:** Detection
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1685 (Disable or Modify Tools)
+
 **Confidence:** HIGH
+
 **Rationale:** Two of the three branches require a broad, multi-vendor spread of real security-product process names — the first needs 5+ Defender names AND 3+ CrowdStrike names AND 3+ third-party AV names together in one file and no termination API string, the third needs 3+ Defender, 2+ CrowdStrike and 4+ third-party names plus a termination API string. The middle branch is single-vendor: 8+ Defender names or 4+ CrowdStrike names, plus one termination API string, with no second vendor required. *Wording fix 2026-10-11, completed in round 2:* the rule was titled and described as multi-vendor throughout, which only two of its three branches are, and its meta description said a termination API name is part of every match, which the first branch does not need; both now say so. These are the actual vendor executable names, not attacker-chosen literals — the operator cannot rename them without losing the ability to target the real processes, so the artifact is durable even though each individual string is a plain filename. Legitimate software has little reason to embed this many distinct security-vendor process names together; the single-vendor branch is the exception, see False Positives.
+
 **False Positives:** Legitimate security product updates or uninstallations; system administrator maintenance activities. The single-vendor-deep branch (8+ Defender names or 4+ CrowdStrike names plus a termination API string, with no second vendor required) can also fire on that vendor's own repair, update or uninstall tooling, and that branch has not been run against a goodware corpus, which is why this sits at `high` rather than `critical`.
+
 **Blind Spots:** Does not fire against a narrowly-targeted killer that terminates fewer than the required breadth/depth thresholds, or one that resolves target processes dynamically rather than embedding their names as strings.
+
 **Validation:** Compiles clean with yarac; all string anchors are ≥4-byte vendor process names. No goodware-corpus sweep performed.
 
 ```yara
@@ -165,11 +183,17 @@ rule Arsenal237_Security_Product_Killer
 #### Comprehensive Multi-Branch Combination
 
 **Tier:** Hunting
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1068 (Exploitation for Privilege Escalation), T1685 (Disable or Modify Tools), T1055.001 (DLL Injection), T1564.001 (Hidden Files and Directories)
+
 **Confidence:** MODERATE
+
 **Rationale:** This rule unions the logic of the other three YARA rules plus two weaker branches: an analysis-tool-naming branch (3 of procexp.exe/procmon.exe/Wireshark.exe/x64dbg.exe/volatility.exe) and a hex-prologue-plus-API branch whose function patterns are common MSVC compiler prologues and whose APIs (OpenProcess, CreateThread) are near-universal in legitimate software. Because any single branch firing satisfies the whole rule, its overall precision is capped by its weakest branch rather than its strongest, which is why it sits below its narrower siblings despite covering the same ground.
+
 **False Positives:** Software bundling references to multiple analysis/debugging tools (IT asset-inventory or compatibility-checking tools); generic process-manipulation software matching the function-pattern-plus-API branch.
+
 **Deployment note:** Broad scanning sweep; treat hits as triage candidates alongside the narrower Detection-tier rules above, not as a standalone alert.
 
 ```yara
@@ -260,11 +284,17 @@ rule Arsenal237_Rootkit_DLL_Comprehensive
 #### Rust Runtime Plus Process-Manipulation APIs
 
 **Tier:** Hunting
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1055 (Process Injection), T1068 (Exploitation for Privilege Escalation), T1685 (Disable or Modify Tools)
+
 **Confidence:** MODERATE
+
 **Rationale:** The source rule's third branch, `5 of ($rust_*)`, fired on Rust-runtime evidence alone — panic strings and allocator/thread symbols present in nearly every non-trivial Rust binary regardless of intent. That branch has been removed as a Retiering Fix (see Coverage Gaps): being Rust-compiled carries no malice signal by itself. The two surviving branches still require Rust evidence to co-occur with process-manipulation or driver-loading APIs (OpenProcess, TerminateProcess, CreateRemoteThread, ZwLoadDriver), a real but broad combination — legitimate Rust-based system utilities and remote-administration tools can plausibly combine these.
+
 **False Positives:** Legitimate Rust-compiled software performing process management, monitoring, or driver interaction (system utilities, some anti-cheat or endpoint agents).
+
 **Deployment note:** Broad scanning sweep; treat hits as triage candidates requiring analyst review of the specific binary's provenance.
 
 ```yara
@@ -318,12 +348,19 @@ rule Arsenal237_Rust_Compiled_Malware
 #### BdApiUtil64.sys BYOVD Driver Loading
 
 **Tier:** Detection
+
 **Robustness:** 3
+
 **ATT&CK Coverage:** T1068 (Exploitation for Privilege Escalation)
+
 **Confidence:** HIGH
+
 **Rationale:** Matches a real driver-load event against the vulnerable driver's own filename or its file-hash triad. Both anchors are baked into a legitimately-signed third-party binary — the operator cannot change the hash without recompiling a different (unsigned, non-functional-for-this-exploit) driver, and the filename branch accepts the driver's own name `BdApiUtil64.sys` or the sibling name `BdApiUtil.sys` as the end of the loaded path. This is a known LOLDriver; loading it by its true name or hash is the technique's actual chokepoint, not an attacker-chosen artifact. The two anchors differ in strength: the hash is the signed binary's content, while the filename is only a name, so a renamed copy is caught by the hash branch alone and an unrelated driver that merely carries one of the two file names matches the name branch. The level is `high` and not `critical`, because Baidu software legitimately loads this same signed driver, so the match cannot be never-FP.
+
 **False Positives:** Legitimate Baidu software installations, which load this same signed driver under its own name and hash (rare in enterprise environments). The match proves that the vulnerable driver was loaded, not that it was loaded by this toolkit.
+
 **Blind Spots:** Requires driver-load telemetry (Sysmon Event ID 6 or equivalent EDR driver-load logging) to be enabled, with the `Hashes` field populated for the hash branch. Does not fire if the operator substitutes a different vulnerable driver; a renamed copy matches only through the hash branch.
+
 **Validation:** Passes `sigma check` against the SigmaHQ validators; hash values verified against the corrected BdApiUtil64.sys hash triad.
 
 ```yaml
@@ -361,12 +398,19 @@ level: high
 #### High-Privilege Process Access to Security Product Processes
 
 **Tier:** Detection
+
 **Robustness:** 3
+
 **ATT&CK Coverage:** T1055.001 (DLL Injection)
+
 **Confidence:** HIGH
+
 **Rationale:** *Logic fix 2026-10-11:* the rule used to list a third mask, 0x1010, which is PROCESS_QUERY_LIMITED_INFORMATION plus PROCESS_VM_READ. That is read-only access, so it fired on any monitor reading these processes and did not match the "full or memory-write" access the description claimed; it has been removed. The report gives no access mask for rootkit.dll, so the full-access masks are the technique-class choice, not a value taken from the sample. Salvaged from the source "API Hooking from DLL Context" rule. The original also required `SourceImage|endswith: '\rootkit.dll'` — but a DLL is never its own process image in Sysmon/EDR telemetry (a loaded DLL shows up as the *hosting* EXE's image, never its own filename), so that clause could never match real telemetry and made the whole rule unfireable. Removing it and keeping the two genuinely durable clauses — a named security-product target plus a full-access `GrantedAccess` mask (0x1F0FFF or 0x1FFFFF) — recovers a rule that is broader (not tied to one build's filename) and more durable (keyed on the actual technique chokepoint) than the original.
+
 **False Positives:** Security software performing legitimate cross-process monitoring of other installed security products; interactive debugging of a security-product process by an analyst or developer.
+
 **Blind Spots:** Requires process-access telemetry (Sysmon Event ID 10 or equivalent). Does not fire against access-rights masks outside the two listed full-access values (including write-capable masks that are not full access, and read-only masks), or against injection techniques that avoid OpenProcess entirely (e.g., APC-only or thread-hijack primitives that request narrower access).
+
 **Validation:** Passes `sigma check` against the SigmaHQ validators.
 
 ```yaml
@@ -433,11 +477,17 @@ Vendor breadth was added; same-vendor process multiplicity was not.
 #### PowerShell Execution with rootkit.dll on Parent Command Line
 
 **Tier:** Hunting
+
 **Robustness:** 1
+
 **ATT&CK Coverage:** T1059.001 (PowerShell)
+
 **Confidence:** LOW
+
 **Rationale:** The source rule combined two independently-triggering clauses via OR: a parent-command-line reference to rootkit.dll, or a set of common PowerShell obfuscation/automation flags (`-enc`, `-EncodedCommand`, `-w hidden`, `-WindowStyle Hidden`, `bypass`) with no requirement that they relate to rootkit.dll at all. That second branch matches ubiquitous, legitimate PowerShell deployment and automation activity industry-wide and has produced false positives in production deployments — it is cut here (see Coverage Gaps). The surviving parent-command-line clause is narrower and still tied to this campaign, but `rootkit.dll` is this build's own filename and can be renamed in a future build, so it remains a brittle, single-literal lead rather than a durable detector.
+
 **False Positives:** Legitimate software or scripts that happen to reference a file literally named rootkit.dll on a PowerShell parent command line (not expected, but not impossible).
+
 **Deployment note:** Scoping lead for this specific build family; a naming-convention change in a future build evades it entirely.
 
 ```yaml

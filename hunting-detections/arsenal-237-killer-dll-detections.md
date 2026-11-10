@@ -9,9 +9,13 @@ hide: true
 ---
 
 **Campaign:** Arsenal-237-109.230.231.37-Malware-Repository
+
 **Date:** 2026-01-25
+
 **Author:** The Hunters Ledger
+
 **License:** CC BY 4.0
+
 **IOC Feed:** https://the-hunters-ledger.com/ioc-feeds/arsenal-237-killer-dll.json
 
 ---
@@ -41,13 +45,21 @@ Coverage below is retiered from the original draft: every rule was re-scored for
 #### BYOVD Dual Vulnerable-Driver Embedding (Baidu + Sysinternals ProcExp Combination)
 
 **Tier:** Detection
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1027.009 (Obfuscated Files or Information: Embedded Payloads), T1068 (Exploitation for Privilege Escalation)
+
 **Confidence:** HIGH
+
 **Rationale:** Merges the strongest logic from the original file's two overlapping embedded-driver rules. Requires two of four Baidu `BdApiUtil64.sys` strings and two of three Sysinternals Process Explorer driver strings (the report names the embedded file `ProcExpDriver.sys`, but no rule string contains that name; the strings are the `PROCEXP152.SYS` driver path, the `17.0.7` version string and the `\\.\PROCEXP152` device name) to be present together in one PE, plus at least one of the two drivers' IOCTL byte codes; either driver's code alone satisfies that last term, so the two codes are not both required. Deliberately pairing two unrelated vendors' vulnerable drivers inside one PE is not a pattern expected in legitimate software; a legitimate installation of either product alone does not satisfy this rule. *Fix applied during retiering:* the original "comprehensive" rule's hash-as-ASCII-string branch (`$hash = "10eb1fbb...788d" nocase`) searched the file's own content for its own SHA256 hex digest as text — not how a Rust-compiled binary would ever embed its own hash, and functionally dead logic. That branch has been dropped entirely (the real hash is already in the IOC feed); this rule instead carries the file's genuine embedded-driver combination forward as its own clean Detection-tier signature.
+
 **False Positives:** None known — no legitimate software has a reason to embed both an antivirus vendor's kernel driver and a process-utility vendor's kernel driver together inside the same PE. The rule tests strings that name the two drivers, not the driver bytes, so a security or driver-blocklist tool that lists both drivers by path and version string could also match; no such tool has been observed.
+
 **Blind Spots:** A rebuild substituting a different pair of vulnerable drivers (a different LOLDrivers entry) evades; targets the on-disk dropper, not a memory-only variant.
+
 **Validation:** Scan `killer.dll` (hash below) — must match; a standalone legitimate Process Explorer executable or Baidu Antivirus installer, containing only one driver family, must NOT fire.
+
 **Deployment:** Endpoint AV/EDR file scanning, email gateway attachment scanning, retroactive scan of file shares, IR artifact triage.
 
 ```yara
@@ -100,11 +112,17 @@ rule MAL_Windows_KillerDLL_BYOVD_Dual_Driver_Embedding
 #### Single Vulnerable-Driver Embedding (Baidu OR ProcExp Alone)
 
 **Tier:** Hunting
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1027.009 (Obfuscated Files or Information: Embedded Payloads), T1068 (Exploitation for Privilege Escalation)
+
 **Confidence:** LOW
+
 **Rationale:** *Retiering note:* the source file's `Embedded_Vulnerable_Driver_BdApi_ProcExp` rule OR'd "either driver family alone" branches together with the dual-family case, dragging the whole rule's precision down to its weakest path. Split out here as its own explicitly-labeled Hunting rule. Sysinternals Process Explorer legitimately bundles its own signed `PROCEXP152` driver as an embedded PE resource, so a genuine, unmodified Process Explorer executable independently satisfies `#mz >= 2` and `2 of ($procexp_*)` — this branch fires on one of the most widely deployed IT/security utilities in existence. The Baidu-alone branch is narrower (Baidu Antivirus has a smaller install base) but is not FP-free either, since a legitimate Baidu Antivirus deployment embeds the same path/description/version strings.
+
 **False Positives:** Expected against legitimate, unmodified Sysinternals Process Explorer installations (any version bundling the PROCEXP152 driver, including 17.0.7). Lower but non-zero risk against legitimate Baidu Antivirus deployments.
+
 **Deployment:** Broad endpoint/EDR scanning sweep, retroactive hunt across file shares; treat hits as triage candidates requiring host-context review (is Process Explorer or Baidu AV a known, sanctioned install on this host?), not alerts.
 
 ```yara
@@ -145,11 +163,17 @@ rule SUSP_Windows_KillerDLL_Single_Vulnerable_Driver_Embedded
 #### Security-Product Termination + IOCTL Behavioral Combination
 
 **Tier:** Hunting
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1685 (Disable or Modify Tools), T1068 (Exploitation for Privilege Escalation)
+
 **Confidence:** LOW
+
 **Rationale:** Carried forward from the source file's "behavioral pattern" branch of `Killer_DLL_BYOVD_Comprehensive`. Requires 3 of 5 targeted security-product filenames, 2 of 4 service-manipulation API strings, one driver-specific IOCTL byte code, and one driver-family reference. The IOCTL requirement gives this real discriminating power beyond generic AV-compatibility tooling, but the driver-family requirement can be satisfied by the bare "Baidu, Inc." or "Sysinternals - www.sysinternals.com" company-name strings alone, which a multi-vendor AV-management or compatibility utility could plausibly contain alongside common service-management API imports. That combination of generic elements keeps this at Hunting rather than Detection.
+
 **False Positives:** Plausible against IT/security-compatibility tooling that legitimately enumerates multiple AV vendor process names and uses standard service-management APIs (uninstaller utilities, endpoint migration tools, asset-management scripts).
+
 **Deployment:** Endpoint/EDR scanning sweep, memory scanning, IR artifact triage; corroborate with the dual-driver Detection rule or an actual mass-termination event before treating a hit as malicious.
 
 ```yara
@@ -200,14 +224,23 @@ rule SUSP_Windows_KillerDLL_SecurityProduct_Termination_IOCTL_Combo
 #### Mass Security-Product Termination: 3+ Distinct Products Within 60 Seconds (Correlation)
 
 **Tier:** Detection (correlation rule) — bundled below with its 1 required Hunting-grade base rule, which does not alert on its own
+
 **Robustness:** 3 (correlation) / 1 (base rule individually)
+
 **ATT&CK Coverage:** T1685 (Disable or Modify Tools)
+
 **Confidence:** HIGH (correlation) / LOW (base rule alone)
+
 **Rationale:** *Retiering note:* the source rule's own description explains that its intended volumetric threshold — 3 or more distinct security processes terminating within 60 seconds — could not be expressed as a single-event Sigma rule and was dropped, leaving a single-event selector that "should be correlated... at review time." Sigma's `value_count` correlation type expresses exactly this threshold natively: this rule counts distinct `Image` values matching the base selector, grouped by host, within a 60-second window, and fires only at 3 or more. This operationalizes the malware-analyst's own documented detection strategy ("Alert on simultaneous termination of 3+ security products within 60-second window") as a real correlation instead of a single-event selector with a manual-review caveat. A lone security-product termination (the base rule) is common and unremarkable; 3+ distinct vendors dying together in 60 seconds is not.
+
 **False Positives:** A coordinated, scripted replacement or migration of multiple third-party security products within one maintenance window — uncommon outside a planned AV/EDR migration.
+
 **Blind Spots:** An attacker who staggers terminations beyond 60 seconds, or who targets fewer than 3 distinct products from the 11 process names the base rule lists, evades the correlation. Sigma's `value_count` counts distinct `Image` values; converted to EQL with the sysmon pipeline it becomes `sequence by host.name with maxspan=60s [...] by Image with runs=3`, which counts three terminations of one and the same image, not three distinct products, so the EQL form does not implement the distinct-product claim. The Lucene backend cannot convert correlation rules, so this rule needs a backend that implements `value_count` natively.
+
 **Validation:** Replay 3 or more distinct termination events from the target list against the same `host.name` within 60 seconds — the correlation must fire; 1–2 distinct terminations in the same window must NOT trigger the correlation.
+
 **Deployment:** SIEM correlation engine with process-termination telemetry ingested (Sysmon Event ID 5 or EDR equivalent).
+
 **Update (2026-07-30):** the base rule's target list gained three vendors, CrowdStrike (`CSFalconService.exe`), Symantec (`ccSvcHst.exe`) and Sophos (`SophosHealth.exe`), folded in from a redundant single-event termination rule retired from the companion rootkit.dll detection file, which fired on every ordinary antivirus process exit and is superseded by this correlation. Coverage was widened by vendor only. Additional processes belonging to vendors already listed (`MpCmdRun.exe` and `SecurityHealthService.exe` for Defender, `CSFalconContainer.exe` and `CSAgent.exe` for CrowdStrike) were deliberately left out: the correlation counts distinct process names as a stand-in for distinct products, so stacking several processes from one vendor would let that vendor's routine update cycle reach the 3-distinct threshold unaided and inject false positives into this `high`-severity rule.
 
 ```yaml
@@ -297,13 +330,21 @@ level: high
 #### Baidu BdApiUtil Vulnerable Driver Load
 
 **Tier:** Detection
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1068 (Exploitation for Privilege Escalation)
+
 **Confidence:** HIGH
+
 **Rationale:** *Retiering note:* the source rule ("DeviceIoControl Abuse with BYOVD IOCTL Codes") titled itself around raw IOCTL/DeviceIoControl telemetry, but its own description already explains that data requires kernel-callback/ETW-TI visibility with no standard Sigma logsource, and the actual `driver_load` selector logic detects the vulnerable driver load instead — the reliably observable precondition for the IOCTL abuse. That selector bundled both driver families (Baidu and ProcExp) into one rule at a single `level: high`, which mismatched their very different false-positive profiles. Split here: the Baidu half, where the underlying product has a materially smaller legitimate install base, retains Detection tier; the ProcExp half (below, Hunting) does not.
+
 **False Positives:** Legitimate, currently-installed Baidu Antivirus software — baseline as expected in environments where this specific product is deployed; otherwise rare.
+
 **Blind Spots:** Only covers this specific vulnerable driver; a rebuild substituting a different LOLDrivers entry evades.
+
 **Validation:** Trigger a load of the BdApiUtil64.sys driver — must match; loads of unrelated drivers must NOT fire.
+
 **Deployment:** Sysmon Event ID 6 (driver load) or EDR-equivalent driver-load telemetry.
 
 ```yaml
@@ -342,11 +383,17 @@ level: high
 #### Sysinternals ProcExp152 Vulnerable Driver Load
 
 **Tier:** Hunting
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1068 (Exploitation for Privilege Escalation)
+
 **Confidence:** LOW
+
 **Rationale:** Split from the source "DeviceIoControl Abuse with BYOVD IOCTL Codes" rule (see the Baidu Detection rule above for the split rationale). Sysinternals Process Explorer is an extremely widely deployed IT/security utility that legitimately loads this exact driver during ordinary use — the source rule's own false-positives list already flagged this ("Legitimate use of Sysinternals Process Explorer (if version 17.0.7 - review required)"). *Retiering note:* demoted from the source's `level: high` to `medium` to reflect that this is a non-rare legitimate event, not an edge case.
+
 **False Positives:** Legitimate, common use of Sysinternals Process Explorer (any version shipping the PROCEXP152 driver, including 17.0.7).
+
 **Deployment:** Sysmon Event ID 6 (driver load) or EDR-equivalent driver-load telemetry; correlate with an actual IOCTL-abuse or mass-termination signal before treating a hit as malicious.
 
 ```yaml
@@ -386,16 +433,23 @@ level: medium
 #### Kernel-Mode Driver Service Installed (Event 7045)
 
 **Tier:** Hunting
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1068 (Exploitation for Privilege Escalation), T1543.003 (Windows Service)
+
 **Confidence:** LOW
+
 **Rationale:** Installation of a new kernel-mode driver service is the setup step of killer.dll's install-abuse-remove cleanup pattern, but the event alone does not distinguish a legitimate hardware or security-software driver install from this specific technique. *Retiering note:* the source rule's own description explains its intended correlation — pairing this with a matching service-deletion event within 30 seconds — was dropped because single-event Sigma rules cannot express cross-event timing. Unlike the mass-termination rule above, no concrete deletion-side selector existed anywhere in the source material to correlate against (Windows has no direct System-log analog to 7045 for service deletion), so fabricating one was avoided rather than guessed at; see Coverage Gaps.
+
 **Retiering note (2026-07-30):** three corrections. The claim that this event is "comparatively rare on most endpoints" was wrong and has been removed from both the rationale and the rule description. Windows re-registers every boot-start, auto-start and demand-start kernel driver service through the Service Control Manager on each restart, so a routine reboot emits a burst of these events for drivers that were already installed. `level` moved from `medium` to `low` to match the `Tier: Hunting` and `Confidence: LOW` already recorded here; at `medium` the Sigma-to-Elastic deployment path creates an enabled alerting rule, which contradicts the hunting-lead framing. A filter now excludes `\system32\drivers\wd\`, Microsoft Defender's dynamically-updated driver folder, which only Defender can write to and which it re-registers on every boot. The rule's `id` was also replaced: the previous value was not a valid UUID v4 and would be rejected by SigmaHQ's validator.
+
 **False Positives:** Driver installation testing by IT staff (should be reviewed); legitimate hardware or security-software driver installation, including OEM utilities such as Samsung Magician, AMD GPU and Intel chipset drivers, and third-party AV/EDR self-protection drivers like Malwarebytes Chameleon reinstalling on update; reboot-driven re-registration of already-installed boot-start and auto-start driver services, which emits this event for each one.
 
 The query also excludes Elastic Defend's own two kernel drivers, and that exclusion ships at source rather than as a local tune for a specific reason. This rule is Sigma-to-Elastic content, so it cannot be deployed without Elastic Agent, and Elastic Agent registers `elastic-endpoint-driver.sys` and `ElasticElam.sys` on every boot. Every deployment therefore inherits the same self-trigger on every restart. Measured over a 14-day window those two drivers were 6 of this rule's 24 fires, and excluding them cut it to 18. Note the residual blind spot this creates: a driver staged at a path ending in exactly one of those two filenames would no longer alert, which is a deliberate camouflage move rather than the generic case this rule exists to catch.
 
 Vendor drivers beyond Elastic's are deliberately **not** excluded. Whitelisting Samsung, AMD, Intel and Malwarebytes by name is whack-a-mole with no stopping point, and those are properties of a particular machine's hardware rather than of deploying this rule. Scope them locally where they occur.
+
 **Deployment:** Windows Event Log 7045 (System log), Sysmon-augmented service monitoring.
 
 ```yaml
@@ -450,15 +504,21 @@ level: low
 #### Driver File (.sys) Created in Temp Directory
 
 **Tier:** Hunting
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1027 (Obfuscated Files or Information), T1068 (Exploitation for Privilege Escalation)
+
 **Confidence:** LOW
+
 **Rationale:** Detects `.sys` files created in temp directories, killer.dll's staging location for its randomized-filename embedded drivers before service installation. Durable in that it does not depend on any specific filename (the malware itself uses a randomized lowercase charset), but legitimate driver installers — particularly third-party hardware vendors and some VPN/virtualization tooling — commonly stage `.sys` files in temp directories before proper installation, a pattern the source rule's own false-positives list already documents. *Retiering note:* demoted from the source's `level: high` to `medium` given this acknowledged, non-rare legitimate population.
+
 **False Positives:** Legitimate hardware and chipset vendor installers staging `.sys` files under their own root-level directories or under `Program Files (x86)` before final installation. AMD Software was confirmed staging `amdkmdag.sys` from `C:\AMD\...`; NVIDIA and Intel packages follow the same mechanic and are excluded on that basis, though not directly observed. A manually-run, downloaded driver installer executed directly from Downloads/Temp/AppData is still not excluded by the parent-image filter, nor is any vendor path outside the filter list.
 
 Two gaps were closed here after live measurement. The `Program Files` exclusion was a plain string bug: `\Program Files\` does not match `\Program Files (x86)\`, since the segment is followed by a space rather than a separator, so every 32-bit vendor installer on any Windows host hit this rule. The vendor-root gap is the same defect one level up, as installers routinely stage from branded root directories outside both excluded trees.
 
 On the breadth this costs: over a 14-day window the unfiltered selection matched 124 events, the two original exclusions cut that to 3, and the four additions cut it to 0. The rule remains broad in principle, since a `.sys` file written to any path containing a `\Temp\` segment (the user and system Temp directories, and nested ones such as `C:\ProgramData\Temp\`) by an unlisted process still fires. The selection requires that `\Temp\` segment, so a driver staged directly in ProgramData or Users\Public, outside a Temp directory, does not match. The named exclusions do create a lookalike-path risk, where a dropper staged as `C:\AMD\stage\driver.sys` now evades this rule. That risk is not new in kind: the rule already excluded all of `Program Files` and `System32` by literal path. The sibling Event 7045 rule is the compensating layer, since a driver still has to be registered as a kernel service to load, and that step is caught independently of where the file was staged.
+
 **Deployment:** Sysmon Event ID 11 (file creation) or EDR-equivalent file-event telemetry, filtered to temp-path `.sys` creation.
 
 ```yaml
@@ -523,14 +583,23 @@ level: medium
 #### Kernel Driver Service Creation by Rundll32 (Registry)
 
 **Tier:** Hunting
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1685 (Disable or Modify Tools), T1068 (Exploitation for Privilege Escalation)
+
 **Confidence:** LOW
+
 **Rationale:** *Round 2, 2026-10-10: re-tiered from Detection to Hunting, because the rule's Image test is unverified (see Blind Spots) and its original selector could not match Sysmon's rendering.* `rundll32.exe` registering a kernel-driver-type service would be a rare, technique-level chokepoint for the BYOVD install step — legitimate driver installation goes through Plug-and-Play/INF-based setup or a dedicated installer executable, essentially never through `rundll32.exe`. Durable: keys on the parent-process/service-type pairing, not on killer.dll's name or hash. *Retiering note:* demoted from the source's `level: critical` to `high` — the rule's own documented false positives ("administrative scripts using rundll32 for driver deployment") mean this isn't strictly never-FP, and the project convention caps most Detection-tier rules at `high`. *Logic fix 2026-10-10:* the rule carried a `filter_legitimate` clause testing `TargetObject` for `\System32\Drivers\`, which the Blind Spots said excluded drivers staged there; `TargetObject` is the `Services\<name>` registry key, which does not contain a driver file path, so the clause excluded nothing. It has been removed, and the Blind Spots and Validation text corrected to say the rule has no driver-path test.
+
 **False Positives:** Legitimate software installation via rundll32 (extremely rare for kernel drivers); administrative scripts using rundll32 for driver deployment (should be reviewed).
+
 **Blind Spots:** *Round 2, 2026-10-10:* the Image test is unverified. The report names the `CreateServiceW` API call (killer-dll report lines 237 to 246), and a service created through the Service Control Manager can have its registry values written by `services.exe` rather than by the calling process, in which case `Image` is not `rundll32.exe` and the rule never fires; this was not checked against a `killer.dll` run. The rule cannot see the driver file path, because a service's `ImagePath` is written as a separate registry value from the type value this selector reads, so it makes no distinction between a driver staged under `System32\Drivers` and one staged elsewhere; a rebuild avoiding `rundll32.exe` as the registering process evades. Round 2: the earlier selector matched the symbolic text `SERVICE_KERNEL_DRIVER`, which is the API constant from the report, not what Sysmon Event 13 records; it records the DWORD as `DWORD (0x00000001)` (the SigmaHQ regression event for `registry_set_creation_service_susp_folder` shows that form for a `Services\npcap\Start` write), so the rule now tests the `\Type` value name and that rendered value. A `Type` of 1 is the only kernel-driver value matched; file-system and other driver types are not.
+
 **Validation:** Trigger the killer.dll service-creation step (or a synthetic equivalent — rundll32.exe registering a kernel-driver-type service) — must match; a signed installer registering a driver from its own Program Files path must NOT fire.
+
 **Registry value rendering (round 2, 2026-10-11):** raw Sysmon Event 13 renders a DWORD in `Details` as `DWORD (0x........)`, but the Elastic Sysmon pipeline (`logs-windows.sysmon_operational` 3.8.3, script "Set registry fields") writes `registry.data.strings` as the decimal value with type `SZ_DWORD`, per the T-0222 registry telemetry proposal (`Docs/2026-10-10-anthropic-api-credit/fixes/registry-telemetry-proposal.md`). The selection therefore accepts both forms. The decimal form was read from the pipeline script, not from a live event: no Windows endpoint reports to the stack, so neither form has been seen arriving.
+
 **Deployment:** Sysmon/EDR registry-event monitoring (Sysmon Event ID 13), Windows Event Log auditing on the Services registry hive.
 
 ```yaml

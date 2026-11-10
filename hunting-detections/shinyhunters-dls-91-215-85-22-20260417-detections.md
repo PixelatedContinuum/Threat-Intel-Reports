@@ -9,9 +9,13 @@ hide: true
 ---
 
 **Campaign:** ShinyHunters-DLS-91.215.85.22-20260417<br>
+
 **Date:** 2026-04-17<br>
+
 **Author:** The Hunters Ledger<br>
+
 **License:** CC BY 4.0<br>
+
 **Reference:** https://the-hunters-ledger.com/reports/shinyhunters-dls-91-215-85-22-20260417/
 
 ---
@@ -39,13 +43,21 @@ This is a Data Leak Site / extortion infrastructure investigation; there are no 
 #### ShinyHunters DLS Ransom Note (INFORMATION.txt)
 
 **Tier:** Detection
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1657 (Financial Theft / Extortion), T1583.001 (Acquire Infrastructure: Domains)
+
 **Confidence:** HIGH
+
 **Rationale:** Exact verbatim phrases from the actor-authored INFORMATION.txt ransom note (either of two sentences), combined with any one of three .onion mirror addresses or the bare `pay_or_leak` path token. The condition does not require an .onion address: a phrase plus `pay_or_leak` alone fires. This wording has persisted unchanged across every analyzed dump and through three PGP key-rotation events (2020–2026) — the actor would have to rewrite their own canonical ransom note to evade it, a materially higher cost than renaming a single binary. *Round 2 fix 2026-10-11:* scored 2, not 3: the phrase, address and path token are a mutable artifact combination, not a technique invariant, and the match shows a copy of the note and nothing about exfiltration. *Wording fix 2026-10-11:* the description used to say the exact opening phrase and the .onion references; the second phrase is not the opening one and the .onion addresses are one of two alternatives.
+
 **False Positives:** None known — the verbatim DLS phrases are exclusive to ShinyHunters infrastructure as far as the report records. Combining a phrase with an .onion address or the `pay_or_leak` path token removes most residual ambiguity, but a write-up or archive that quotes the note matches as well. The note ships inside the leak archives the leak site serves, so a copy on an enterprise share can come from someone who downloaded a leak (a researcher or an incident responder) and does not show that the organization was a victim. Not goodware-validated.
+
 **Blind Spots:** A full rewrite of the canonical ransom note text would evade this rule; it detects the note file itself, not the exfiltration or delivery mechanism that placed it.
+
 **Validation:** Scan a copy of the DLS INFORMATION.txt ransom note — must match; scan an unrelated ransomware note or generic text file — must NOT match.
+
 **Deployment:** Endpoint AV/EDR on-access scan; CASB / DLP file-content inspection on shared drives and cloud-sync folders; email attachment scanning; forensic disk triage and saved dumps scanned as files on suspected victim hosts (live process-memory scanning is not covered: the `filesize` test is undefined there).
 
 ```yara
@@ -85,13 +97,21 @@ rule MALW_ShinyHunters_RansomNote {
 #### ShinyHunters Taunt-Filename Naming Convention
 
 **Tier:** Detection
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1657 (Financial Theft / Extortion), T1485 (Data Destruction — adversary-side punitive leak)
+
 **Confidence:** HIGH
+
 **Rationale:** Actor-branded taunt filenames appear in 25+ of 30 DLS archives confirmed in this investigation, most recently in the 2026-04-15 fresh tranche. The rule requires the mandatory `shinyhunters` actor tag AND one of five taunt-phrase variants — a naming convention distinctive to this campaign, not a single one-off filename, so it has continued to hold across many months and dozens of independent victim dumps.
+
 **False Positives:** None known — the compound condition requiring both a taunt-phrase token AND the `shinyhunters` actor tag is sufficiently distinctive; neither component alone is common in legitimate enterprise file naming.
+
 **Blind Spots:** A rebrand of the taunt-phrase convention in future dumps would evade this rule; intended for filename/path-bearing artifacts (archive names, browser download history, LNK targets, directory-listing exports) rather than arbitrary file content.
+
 **Validation:** Scan a file or forensic artifact containing one of the taunt-phrase archive names — must match; scan an unrelated archive filename — must NOT match.
+
 **Deployment:** Endpoint AV/EDR file-name scanning; CASB alerts on cloud-sync folders and SharePoint upload events; DLP filename pattern policies; forensic triage of suspect hosts.
 
 ```yara
@@ -125,11 +145,17 @@ rule MALW_ShinyHunters_TauntFilename {
 #### ShinyHunters Actor Identity: Domain + Collective Name
 
 **Tier:** Hunting
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1583.001 (Acquire Infrastructure: Domains), T1657 (Financial Theft / Extortion)
+
 **Confidence:** HIGH
+
 **Rationale:** Originally this rule also matched on any single one of four PGP fingerprints alone — a hash-style atomic that invalidates on the actor's next key rotation (2 of the 4 are already marked revoked). That branch was removed; the fingerprints remain available for exact-match lookups in the campaign IOC feed. The rule now requires the `shinyhunte.rs` domain AND the self-styled `Scattered LAPSUS$ Hunters` collective name to co-occur — a durable two-string combination — but researchers and TI platforms may legitimately collect documents containing both, so it is scoped to Hunting rather than Detection.
+
 **False Positives:** Threat-intelligence analysts or security researchers collecting actor-identity documents for investigation purposes; add a tuning exclusion for known TI workstations or SIEM enrichment pipelines.
+
 **Deployment:** Endpoint AV/EDR; threat-intelligence collection review; email attachment scanning for PGP key distribution messages.
 
 ```yara
@@ -156,11 +182,17 @@ rule MALW_ShinyHunters_PGP_Identity {
 #### ShinyHunters Clearnet Identity Page (shinyhunte.rs HTML)
 
 **Tier:** Hunting
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1583.001 (Acquire Infrastructure: Domains)
+
 **Confidence:** HIGH
+
 **Rationale:** The shinyhunte.rs clearnet identity page carries distinctive markers. The rule requires one of two page-title strings (`Scattered LAPSUS$ Hunters | DLS` or `ShinyHunters Data Leak Site`) together with at least one of the PGP URL path, the main .onion mirror address or the `/pay_or_leak/` path; it does not require all three. *Wording fix 2026-10-11:* the earlier text said the title, the PGP path and the mirror address all co-occur. Designed for proxy-cache review, threat-intel collection pipeline scanning, and CASB inspection of cached web content, not real-time endpoint scanning, since web crawlers and researcher browser caches produce meaningful FP volume.
+
 **False Positives:** Web crawlers, threat-intel platforms, and browser-cached content from security researchers; scope deployment to threat-intel collection systems and proxy cache archives rather than production endpoint scanning.
+
 **Deployment:** Threat-intel collection pipeline; proxy cache and TLS-inspection archive review; CASB web-content scanning; SOC web-browsing anomaly investigation.
 
 ```yara
@@ -197,14 +229,20 @@ rule MALW_ShinyHunters_DLS_HTML {
 #### ShinyHunters DLS: Web Proxy Hit on DLS Content Path
 
 **Tier:** Hunting
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1657 (Financial Theft / Extortion), T1485 (Data Destruction — adversary-side punitive leak impact)
+
 **Confidence:** HIGH
+
 **Rationale:** Originally OR'd this URI-path selection with a bare-host selection (`91.215.85.22` / `shinyhunte.rs`) that duplicated the atomic domain/IP indicators now retired to the feed. The host branch was removed; the rule now fires on the `/pay_or_leak/` content-directory path or the `INFORMATION.txt` ransom-note filename alone, both specific to the DLS's own web-application structure and valid even if the DLS migrates to new hosting infrastructure. `INFORMATION.txt` is a generic filename in isolation, which keeps this Hunting rather than Detection.
+
 **False Positives:**
 - Threat intelligence analysts or security researchers manually retrieving DLS content for analysis
 - Automated threat-intel crawler services indexing extortion infrastructure
 - A coincidentally-named `INFORMATION.txt` on an unrelated internal or third-party web application
+
 **Deployment:** Web proxy logs (Squid, Zscaler, BlueCoat, Palo Alto); TLS-inspection proxy; CASB URL-filtering logs.
 
 ```yaml
@@ -248,13 +286,19 @@ level: medium
 #### ShinyHunters DLS: Salesforce Bulk Export OAuth App Authorization
 
 **Tier:** Hunting
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1528 (Steal Application Access Token), T1213 (Data from Information Repositories)
+
 **Confidence:** MODERATE — requires Salesforce Shield / Event Monitoring to be enabled; app-name matching depends on how third-party OAuth clients are registered.
+
 **Rationale:** The ShinyHunters 2026 campaign relied on vishing to convince helpdesk staff to authorize Salesforce bulk-export OAuth connected apps. This rule targets ConnectedApp authorization events matching DataLoader/DataExporter/DataImporter/Bulk API name patterns (native Salesforce DataLoader filtered), a durable technique-level anchor, but legitimate ETL/data-migration projects genuinely use apps with these name patterns — real, expected benign hits keep this Hunting.
+
 **False Positives:**
 - Legitimate use of Salesforce Data Loader by authorized administrators performing data migrations
 - ETL pipeline integrations using Salesforce Bulk API with app names matching these patterns
+
 **Deployment:** Salesforce Shield Event Monitoring (ConnectedApp event type); SIEM ingestion of Salesforce Event Log Files.
 
 ```yaml
@@ -304,14 +348,20 @@ level: medium
 #### ShinyHunters DLS: Okta MFA Factor Deactivation or Unexpected Enrollment
 
 **Tier:** Hunting
+
 **Robustness:** 1
+
 **ATT&CK Coverage:** T1566.004 (Phishing: Spearphishing Voice), T1528 (Steal Application Access Token), T1098 (Account Manipulation)
+
 **Confidence:** MODERATE — the individual events are common in legitimate IT operations; the detection value comes from correlating the two events by user within a time window, which standard Sigma syntax cannot express in one rule (see Coverage Gaps).
+
 **Rationale:** As written, this rule fires on either an MFA factor deactivation OR a new factor enrollment individually — both are routine, ubiquitous IT operations with no distinguishing filter, which is genuinely broad. It is kept as a Hunting lead (not Cut) because it gives an analyst the raw material for a manual, time-windowed pivot (deactivate immediately followed by activate for the same user) that reflects the actual ShinyHunters vishing → MFA-takeover TTP — real value for a scheduled hunt, not for real-time alerting.
+
 **False Positives:**
 - Legitimate employee MFA resets followed by self-enrollment on a new device
 - IT administrators assisting users with routine device replacement
 - Bulk MFA enrollment during onboarding campaigns
+
 **Deployment:** Okta System Log ingestion via SIEM; Okta System Log API polling; security data lake with Okta event stream. Run as a scheduled/manual hunt query with time-window grouping by target user ID — not for real-time alert routing.
 
 ```yaml
@@ -361,13 +411,19 @@ level: medium
 #### ShinyHunters DLS: PROSPERO Bulletproof Hosting CIDR Range Access
 
 **Tier:** Hunting
+
 **Robustness:** 1
+
 **ATT&CK Coverage:** T1583.003 (Acquire Infrastructure: Virtual Private Server), T1090.003 (Multi-hop Proxy)
+
 **Confidence:** MODERATE — range-level indicator; specificity is lower than IP or domain indicators.
+
 **Rationale:** PROSPERO AS200593 CIDR ranges are shared bulletproof-hosting infrastructure — the DLS sits on 91.215.85.22 within the first prefix, but other threat actors and unrelated services may co-tenant these ranges. This is a context-enrichment indicator for elevating alert priority when combined with other ShinyHunters IOCs, not a standalone actionable alert; `level` stays `low` as originally assessed.
+
 **False Positives:**
 - Legitimate services co-hosted on PROSPERO AS200593: shared bulletproof hosting environment where other tenants may include unrelated or lower-risk operations
 - Threat intelligence platform automated scanning of known malicious ranges
+
 **Deployment:** Perimeter firewall / NGFW logs; network flow data (NetFlow/IPFIX); SIEM enrichment pipeline for alert triage.
 
 ```yaml
@@ -416,13 +472,21 @@ level: low
 #### ShinyHunters DLS: HTTP Request to DLS Content Path (pay_or_leak)
 
 **Tier:** Detection
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1657 (Financial Theft / Extortion)
+
 **Confidence:** HIGH
+
 **Rationale:** Originally anchored on destination IP `91.215.85.22` with a non-differentiating `http.method; content:"GET"` check; nearly all HTTP requests are GET, so the content check added no real filtering beyond the hardcoded IP (Robustness 0 as written). Salvaged by re-anchoring to the distinctive DLS content-directory URI path `/pay_or_leak/` in the `http.uri` buffer, which the actor would have to restructure their own site to change and which survives hosting-IP or domain rotation entirely. `rev` bumped to `2` to reflect the content change; `sid` was first preserved for feed-map continuity, then renumbered from 9001003 to 9300103 to remove a collision with rules in other reports.
+
 **False Positives:** None known — the path token is a distinctive multi-word string; coincidental collision with unrelated infrastructure is extremely unlikely.
+
 **Blind Spots:** Evaded if the actor restructures the DLS URL scheme; HTTPS traffic where the URI is only visible via TLS decryption/inspection.
+
 **Validation:** Replay a PCAP of an HTTP GET request with URI containing `/pay_or_leak/` — must alert; ordinary HTTP GET requests to unrelated paths must NOT.
+
 **Deployment:** Perimeter IDS/IPS; network tap on internet egress; NDR platform.
 
 ```suricata
@@ -434,13 +498,21 @@ alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL DETECT ShinyHunters DLS 
 #### ShinyHunters DLS: HTTP Host Header shinyhunte.rs
 
 **Tier:** Hunting
+
 **Robustness:** 1
+
 **ATT&CK Coverage:** T1583.001 (Acquire Infrastructure: Domains), T1657 (Financial Theft / Extortion)
+
 **Confidence:** HIGH
+
 **Rationale:** Host-header content match in the `http.host` sticky buffer with `endswith` is a durable content anchor — it is independent of the current origin IP and continues to fire if the CDN backend rotates, unlike a destination-IP match. No legitimate enterprise service uses this actor-branded identity domain.
+
 **False Positives:** None known — the domain is actor-exclusive. Suppress by source IP for known threat-intel platform egress ranges.
+
 **Blind Spots:** Evaded if the operator migrates off the shinyhunte.rs domain entirely; misses HTTPS traffic where only the TLS SNI is visible (covered by the companion TLS SNI rule below).
+
 **Validation:** Replay a PCAP of an HTTP request with Host header `shinyhunte.rs` — must alert; ordinary HTTP traffic to unrelated hosts must NOT.
+
 **Deployment:** Network IDS/IPS at perimeter (Suricata/Snort); TLS-inspection proxy with Suricata integration; NDR platforms.
 
 ```suricata
@@ -450,13 +522,21 @@ alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL HUNT ShinyHunters DLS - 
 #### ShinyHunters DLS: TLS SNI shinyhunte.rs
 
 **Tier:** Hunting
+
 **Robustness:** 1
+
 **ATT&CK Coverage:** T1583.001 (Acquire Infrastructure: Domains), T1657 (Financial Theft / Extortion)
+
 **Confidence:** HIGH
+
 **Rationale:** TLS SNI content match captures HTTPS connections to the same actor-identity domain where the HTTP Host header is encrypted and unavailable to the sensor. Same durability profile as the HTTP Host rule above — content-anchored, independent of origin IP.
+
 **False Positives:** None known — the domain is actor-exclusive. Suppress by source IP for known threat-intel platform egress ranges.
+
 **Blind Spots:** Evaded if the operator migrates off the shinyhunte.rs domain entirely; encrypted-SNI (ECH) deployments would hide the SNI value from inspection.
+
 **Validation:** Replay a PCAP of a TLS ClientHello with SNI `shinyhunte.rs` — must alert; ordinary TLS handshakes to unrelated domains must NOT.
+
 **Deployment:** Network IDS/IPS at perimeter (Suricata/Snort); TLS-inspection proxy with Suricata integration; NDR platforms.
 
 ```suricata

@@ -10,9 +10,13 @@ thumbnail: /assets/images/cards/nsminer-cryptojacker.png
 ---
 
 **Campaign:** NsMiner-125.19.150.122-Cryptojacking
+
 **Date:** 2026-02-02
+
 **Author:** The Hunters Ledger
+
 **License:** CC BY 4.0
+
 **Reference:** https://the-hunters-ledger.com/reports/nsminer-cryptojacker/
 
 ---
@@ -44,12 +48,19 @@ NsMiner is a multi-stage cryptojacking operation delivered via a trojanized NSIS
 #### NsMiner_Dropper_Downloader
 
 **Tier:** Detection
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1105 (Ingress Tool Transfer), T1071.002 (File Transfer Protocols)
+
 **Confidence:** HIGH
+
 **False Positives:** None known — the fullword wide `NsMiner` branding string does not appear in legitimate NSIS installers, and the FTP-downloader branch requires both generic FTP API names plus at least two of the three hardcoded strings (the C2 URL, the FTP user name and the FTP password) alongside them, not the API names alone. Two of the three is enough, so the user name and password together, without the URL, also satisfy it.
+
 **Blind Spots:** The FTP-downloader branch (`FtpGetFileA`/`InternetConnectA` API strings + two of the three C2 URL, user and password strings) stops matching once the operator rotates the `hrtests.ru` C2 domain and FTP credentials — a low-effort operator change. The NSIS-dropper branch (`Nullsoft Scriptable Install System` + `NsMiner` fullword wide) is durable to infrastructure rotation but would be evaded by a full rebrand that removes the `NsMiner` name from the dropper build.
+
 **Validation:** Scan the analyzed dropper (hash1) and downloader (hash2) samples — both must match; a benign NSIS-packaged freeware installer must NOT fire.
+
 **Deployment:** Endpoint AV/EDR file scan, static triage of unknown NSIS-packed binaries.
 
 ```yara
@@ -98,12 +109,19 @@ rule NsMiner_Dropper_Downloader {
 #### NsMiner_Persistence_Directory
 
 **Tier:** Detection
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1496 (Resource Hijacking)
+
 **Confidence:** HIGH
+
 **False Positives:** None known — no legitimate software embeds the literal path `\AppData\Roaming\NsMiner\` combined with one of the three family-specific filenames; the generic `C:\Users\` clause is required alongside the distinctive path and adds negligible additional risk on its own.
+
 **Blind Spots:** Requires both the `NsMiner`-branded persistence path and at least one of the three shipped filenames (`NsCpuCNMiner32.exe`, `NsCpuCNMiner64.exe`, `tftp.exe`) to survive unmodified — a rebrand that renames both the install directory and every shipped binary would evade this rule. The generic `C:\Users\` clause contributes no real specificity on its own.
+
 **Validation:** Scan the analyzed dropper referencing the persistence path — must match; a benign installer writing to an unrelated `%AppData%` subdirectory must NOT fire.
+
 **Deployment:** Endpoint AV/EDR file scan, scanning of saved dumps of processes referencing the NsMiner install path. Live process-memory scanning does not match: the condition's `filesize` test is undefined there, so only files and saved dumps are scanned.
 
 ```yara
@@ -140,12 +158,19 @@ rule NsMiner_Persistence_Directory {
 #### File Event Under the NsMiner AppData Roaming Directory
 
 **Tier:** Hunting
+
 **Robustness:** 1
+
 **ATT&CK Coverage:** None
+
 **ATT&CK Note:** T1547.001 (Registry Run Keys / Startup Folder) was listed here at MODERATE and is withdrawn. The rule tests a file event under a family-branded directory; nothing in it observes a Run key or a Startup folder, and the specific autostart mechanism was never observed (see Coverage Gaps). The rule keeps the persistence tactic tag only, for the report's staging-directory finding, without a technique.
+
 **Confidence:** HIGH (a file event under the NsMiner directory is observed); the autostart mechanism is not covered.
+
 **Rationale:** `\AppData\Roaming\NsMiner\` is a distinctive, family-branded path with near-zero FP today, but it is a single operator-chosen literal — any rebuild that renames the install directory evades this rule entirely. Durability governs over as-written precision, so this is a Hunting anchor rather than a Detection one.
+
 **False Positives:** Unlikely — no legitimate software has been observed writing a file under a directory literally named `NsMiner` in `%AppData%\Roaming`. The rule matches any file event whose path contains `\AppData\Roaming\NsMiner\`; it does not test that a directory was created, only that a file was written there.
+
 **Deployment:** Endpoint EDR / Sysmon-fed SIEM (Event ID 11 File Creation telemetry).
 
 ```yaml
@@ -181,11 +206,17 @@ level: medium
 #### Suspicious FTP Connection from Non-Standard Application
 
 **Tier:** Hunting
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1071.002 (File Transfer Protocols)
+
 **Confidence:** HIGH for the technique pattern; the rule is a generic FTP-usage heuristic, not family-specific.
+
 **Rationale:** Port 21 plus a non-standard-application heuristic is a durable, technique-level signal — it survives infrastructure rotation and binary renaming trivially since it keys on behavior rather than identity. But the filter list excludes only three applications (`filezilla.exe`, `winscp.exe`, `explorer.exe`), omitting the built-in Windows `ftp.exe` client and many other legitimate FTP consumers, so the false-positive rate is meaningfully higher than Detection tier tolerates. This keeps it a genuine Hunting lead for FTP credential-stuffing activity like NsMiner's downloader, not an alerting-grade signature.
+
 **False Positives:** Legitimate FTP clients not covered by the filter exclusion list (including the built-in Windows `ftp.exe` command-line client, browser FTP support, backup/sync software); scripts or automation tooling using FTP for legitimate file transfer.
+
 **Deployment:** Endpoint EDR / Sysmon-fed SIEM (Event ID 3 Network Connection telemetry); tune the filter exclusion list to the environment before broader deployment.
 
 ```yaml

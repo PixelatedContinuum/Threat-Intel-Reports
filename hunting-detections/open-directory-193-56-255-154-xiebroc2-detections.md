@@ -9,9 +9,13 @@ hide: true
 ---
 
 **Campaign:** OpenDirectory-XiebroC2-Covenant-193.56.255.154
+
 **Date:** 2026-04-03
+
 **Author:** The Hunters Ledger
+
 **License:** CC BY 4.0
+
 **Reference:** https://the-hunters-ledger.com/reports/open-directory-193-56-255-154-xiebroc2/
 
 ---
@@ -66,14 +70,23 @@ Rules are grouped by family within each tier subsection (Detection Rules / Hunti
 #### XiebroC2 v3.1 Go TCP Implant: Source-Code Artifact Combination
 
 **Tier:** Detection
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1573.001 (Symmetric Cryptography — AES-128-ECB key), T1620 (Reflective Code Loading — go-clr CLR hosting import), T1055.012 / T1055 (RunPE injection error strings)
+
 **ATT&CK Note:** The rule needs any three of seven strings and requires none of them. T1573.001 is carried by the AES key (`$s1`), T1620 by the go-clr import (`$s3`), and T1055.012 / T1055 by the RunPE error strings (`$s4`, `$s5`); a match through other strings, for example `$s2`, `$s6` and `$s7`, carries none of those three techniques.
+
 **Rationale:** Any three of seven static strings from the XiebroC2 3.1 source, a specific combination for one version of one tool family, scores Robustness 2, not 3: it is a source-code artifact set, not a procedure invariant, and the version-specific typo does not generalise to other builds.
+
 **Confidence:** HIGH
+
 **False Positives:** The hand-typed AES key literal (`$s1`), the pclntab typo (`WindosVersion`, `$s2`) and the custom RunPE parser error strings (`$s4`, `$s5`) are compile-time artifacts of XiebroC2 3.1 builds. The `go-clr` import path (`$s3`) is a public library path that any Go program importing `github.com/Ne0nd0g/go-clr` carries, including other red team frameworks, as the sibling Sigma rule on this page lists. Whether `ClientUnstaller` (`$s6`) and the `NtQueryInformationProcess returned NTSTATUS:` string (`$s7`) are unique to XiebroC2 was not established. Because any three of the seven strings suffice, a binary that carries go-clr and two of the weaker strings could match; goodware prevalence was not measured.
+
 **Blind Spots:** A rebuild must leave fewer than three of the seven strings to evade: rotating the AES key, fixing the source typo and dropping the go-clr dependency removes only `$s1`, `$s2` and `$s3`, and the four remaining strings (`$s4` to `$s7`) still satisfy the three-of-seven count, so a build also has to change at least two of those four; the rule targets on-disk Go binaries (it is a file-scan rule; see Deployment), not a decrypted-traffic-only variant.
+
 **Validation:** Scan a XiebroC2 3.1-lineage sample — 3 of the 7 distinct strings must match; a file holding the AES key literal plus a single other string must NOT fire; a benign Go binary (including one that legitimately embeds .NET interop) must NOT fire.
+
 **Deployment:** Endpoint AV/EDR disk scan. The condition tests `filesize`, which is undefined in a process-memory scan, so the rule does not match there; a memory-scan form would need the `filesize` test removed and is not written or tested here.
 
 ```yara
@@ -108,13 +121,21 @@ rule RAT_XiebroC2_v31_Go_TCP_Implant {
 #### Covenant C2 GruntStager Combined Build Detection
 
 **Tier:** Detection
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1071.001 (Web Protocols — HTTP C2)
+
 **ATT&CK Note:** The strings are a session token, a build ID and four Covenant identifiers (including the `SESSIONID=` cookie fragment). None is a User-Agent or a key-exchange string, so Masquerading (T1036) and Asymmetric Cryptography (T1573.002) are not claimed.
+
 **Confidence:** HIGH
+
 **False Positives:** None known — the session token and build ID are GUID/hex-format values unique to this Covenant listener; no legitimate software embeds them.
+
 **Blind Spots:** A newly-configured Covenant listener with a different session token and build ID evades this rule entirely; targets on-disk PE files under 50 KB (the condition tests the MZ header and size, not a .NET/CLR header), not memory-only Grunt payloads that never touch disk, and a build larger than 50 KB is missed.
+
 **Validation:** Scan either GruntStager build — both must match on the shared token+build-ID pair; an unrelated legitimate .NET PE must NOT fire.
+
 **Deployment:** Endpoint AV/EDR disk scan of PE files under 50 KB (no .NET/CLR header test); scanner for saved dumps of .NET processes performing `Assembly.Load()`. Live process-memory scanning does not match: the condition's `filesize` test is undefined there, so only files and saved dumps are scanned.
 
 ```yara
@@ -150,12 +171,19 @@ rule RAT_Covenant_GruntStager_OpenDirectory {
 #### Covenant PowerShell Fileless Loader: GruntHTTP.ps1
 
 **Tier:** Detection
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1059.001 (PowerShell), T1027 (Obfuscated Files — Base64+Deflate payload), T1140 (Deobfuscate/Decode Files or Information), T1620 (Reflective Code Loading)
+
 **Confidence:** HIGH
+
 **False Positives:** None known — the session token is a unique GUID-format value; legitimate PowerShell scripts do not embed Covenant session tokens.
+
 **Blind Spots:** A newly-configured Covenant listener with a different session token evades this exact rule (the four generic decode/load strings alone are still a Hunting-grade technique lead — see the Sigma coverage below); tests no file name or extension, so any file under 100 KB holding the token and the four strings matches, whatever its type.
+
 **Validation:** Scan `GruntHTTP.ps1` or an equivalent loader from the same listener — must match; a legitimate PowerShell deployment script that happens to combine Deflate decompression with `Reflection.Assembly::Load()` (rare, but possible) warrants manual review before dismissal.
+
 **Deployment:** Endpoint AV/EDR scan targeting `.ps1` files; AMSI telemetry; PowerShell ScriptBlock logging (Event ID 4104).
 
 ```yara
@@ -193,12 +221,19 @@ rule MALW_Covenant_PSFilelessLoader_GruntHTTP {
 #### XiebroC2 v3.1 Binary-Patchable Config: Padded-IPv4 Structural Pattern
 
 **Tier:** Hunting
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** None
+
 **ATT&CK Note:** The rule matches a space-padded IPv4 string and tests no port, so Non-Standard Port (T1571) is not claimed; the padded field is how XiebroC2 3.1 stores its C2 address.
+
 **Confidence:** MODERATE
+
 **Rationale:** The original rule keyed solely on the literal `193.56.255.154` padded to a fixed width — since that IP is already an atomic in the IOC feed, and the rule would evade entirely if the operator redeployed with a new C2 host, it failed the durability gate as written. Rewritten as a structural regex matching any dotted-quad IPv4 literal followed by 20+ trailing padding spaces (the actual binary-patchable config technique XiebroC2 3.1 uses so operators can repoint the C2 address without recompiling), paired with one of two source-artifact strings to hold precision. *Round 3 fix 2026-10-11:* only `main/Helper/sysinfo.WindosVersion` is family-specific; `github.com/Ne0nd0g/go-clr` is a public library path that other Go tools carry (the sibling CLR rule says so), so the go-clr anchor alone does not make the pairing family-specific. This version survives a C2 IP change; it is Hunting rather than Detection because the regex has not been validated against a broad goodware corpus.
+
 **False Positives:** Unlikely but unverified — the padded-IPv4 + trailing-space pattern combined with a XiebroC2 source artifact has not been tested against a broad goodware corpus; a benign installer that happens to embed a long space-padded dotted-quad string is theoretically possible.
+
 **Deployment:** Endpoint disk scan; also usable on saved dumps of Go processes; intended to catch future XiebroC2 3.1-lineage builds regardless of the operator's chosen C2 IP. Live process-memory scanning does not match: the condition's `filesize` test is undefined there, so only files and saved dumps are scanned.
 
 ```yara
@@ -233,12 +268,19 @@ rule RAT_XiebroC2_v31_PaddedConfig_Structural {
 #### Covenant C2 GruntStager HTTP Beacon: Campaign Session Token Detected
 
 **Tier:** Hunting
+
 **Robustness:** 1
+
 **ATT&CK Coverage:** T1071.001 (Application Layer Protocol: Web Protocols)
+
 **Confidence:** LOW
+
 **False Positives:** None known — the session token is a GUID-format value unique to this Covenant listener; it will not appear in legitimate HTTP/proxy traffic.
+
 **Blind Spots:** The report places the token in the POST body, which proxy query-string fields do not log, so this selector is expected to miss the observed traffic (hence Hunting, Robustness 1, Confidence LOW); it is useful only where the token reaches the query string. A newly-configured Covenant listener with a different session token evades this rule; requires proxy logging of the URI query string (not all proxies log this by default).
+
 **Validation:** Not replayed. The report records the token in the POST body (`i=<build id>&data=<base64>&session=<token>`), and a proxy `c-uri-query` field carries the query string, not the body, so the recorded POST is not expected to fire this selector; it fires on a request whose query string holds `session=<token>`. The POST body is what the Suricata rule on this page (sid 9000101) inspects. Ordinary HTTP/HTTPS proxy traffic without the token must NOT fire.
+
 **Deployment:** HTTP proxy logs (Squid, Bluecoat, Zscaler, etc.); web gateway telemetry; requires proxy logging of the request URI query string. A body-level check needs the Suricata rule on this page or a proxy that logs request bodies.
 
 Corrected from the original: the condition was `1 of (selection_session_token, selection_ua)`, an OR that let a bare sighting of the Chrome 41/Windows 7 User-Agent *alone*, with no URI or token match, fire the rule at `level: high`. That UA can appear on any legacy enterprise endpoint unrelated to this campaign, so the OR-combination understated the true false-positive rate of the weaker branch. Narrowed to the session-token clause alone (near-zero FP on its own); the UA pattern is retained as corroborating context in the description rather than a live alerting condition. The invalid `product: windows` paired with `category: proxy` (proxy logs are network-appliance logs, not Windows host logs) is also removed, and the field name is corrected from `cs-uri-query` to the real SigmaHQ `category: proxy` taxonomy field `c-uri-query` (confirmed against published proxy rules, `sigma check` rejects the `cs-` prefix as a non-existent field for this logsource).
@@ -283,13 +325,19 @@ level: high
 #### Shell Process Spawned from main.exe (XiebroC2 Implant Parent-Child Pattern)
 
 **Tier:** Hunting
+
 **Robustness:** 1
+
 **ATT&CK Coverage:** T1059.001 (PowerShell), T1059.003 (Windows Command Shell)
+
 **Confidence:** MODERATE
+
 **Rationale:** The rule's only discriminator is the parent process filename `main.exe`, a common generic executable name with real potential for legitimate collision (Go/Rust/C build tooling routinely produces binaries with this exact name). The original title claimed "Hidden Window" execution, but Sysmon process-creation telemetry does not expose window-visibility or `CREATE_NO_WINDOW` flags, so the rule is retitled to describe what it actually observes — a parent-child spawn relationship. It clears the bar for a Hunting lead rather than Cut because the child-process-type qualifier (cmd/powershell/pwsh) adds a real, if weak, behavioral signal beyond the bare filename. Demoted from the original `level: high` given the acknowledged MEDIUM false-positive rate.
+
 **False Positives:**
 - Legitimate Go-based tooling or software distribution systems named `main.exe` that spawn shell subprocesses as part of normal operation
 - Development or build environments where a Go binary named `main.exe` orchestrates build steps via `cmd.exe`
+
 **Deployment:** Sysmon Event ID 1 (ProcessCreate); EDR process tree telemetry; most useful as a secondary pivot on a host already flagged by the YARA/hash-based XiebroC2 detections above, not as a standalone alert.
 
 ```yaml
@@ -339,14 +387,20 @@ level: medium
 #### PowerShell Fileless Loader: Deflate Decode with Reflective Assembly Load
 
 **Tier:** Hunting
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1059.001 (PowerShell), T1140 (Deobfuscate/Decode Files or Information), T1620 (Reflective Code Loading)
+
 **Confidence:** MODERATE
+
 **Rationale:** The four-string combination (`DeflateStream`, `Reflection.Assembly`, `FromBase64String`, `MemoryStream`) co-occurring in one ScriptBlock is a durable, campaign-independent technique fingerprint for reflective in-memory .NET assembly loading — it would survive a full Covenant listener rotation, unlike the token-anchored rule above. However, the combination carries an acknowledged MEDIUM false-positive rate (legitimate software-deployment scripts occasionally combine Deflate decompression with reflective assembly loading), so the original `level: high` overstated confidence for a generic, technique-only selector; demoted to Hunting with a recalibrated `level: medium`. The YARA rule for this same loader (Detection tier, above) carries the high-confidence, campaign-specific coverage. Also corrected: the original tag `attack.t1027.011` (Fileless Storage) does not match the observed behavior — the technique is reflective in-memory *execution*, not fileless *storage* of the payload (the Base64 blob is plainly readable on disk inside the .ps1 file) — replaced with `attack.t1620`.
+
 **False Positives:**
 - Legitimate software deployment scripts that compress and load .NET assemblies via PowerShell (uncommon but possible in enterprise environments with custom tooling)
 - Security research or red team tooling other than Covenant that uses the same delivery pattern
 - PowerShell-based application packaging tools that compress payloads with Deflate and load them reflectively
+
 **Deployment:** PowerShell ScriptBlock Logging (Event ID 4104); requires ScriptBlock logging enabled via Group Policy.
 
 ```yaml
@@ -398,17 +452,25 @@ level: medium
 #### Process Outside a .NET Host List Loading the Windows CLR at Runtime
 
 **Tier:** Hunting
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1620 (Reflective Code Loading — in-process CLR hosting via go-clr)
+
 **Confidence:** HIGH
+
 **Rationale:** The rule keys on the technique (a process loading the CLR that is not a known .NET host) and not on any filename or campaign literal, which is why the durability is good. Precision is poor: `mscoree.dll` and `clr.dll` load into every .NET Framework application, and only 15 toolchain host names are excluded, so nearly every managed desktop application not on that list matches. Nothing in the selection identifies a Go binary or XiebroC2. It was re-tiered from Detection to Hunting for that reason, and its level lowered from high to low.
+
 **False Positives:**
 - Any managed (.NET Framework) application whose image is not in the filter list, which is most managed desktop and service software
 - Legitimate applications built with Go that embed .NET interop via documented COM interop mechanisms (rare but possible in enterprise software)
 - Custom in-house Go tooling that intentionally hosts the CLR for legitimate automation purposes
 - Security research tools or red team frameworks other than XiebroC2 that use go-clr
+
 **Blind Spots:** The load is not tied to Go or to go-clr, so the volume of unrelated managed software decides the usefulness of the rule. Misses XiebroC2 builds that never exercise the go-clr inline-assembly command (pure TCP-shell operation without CLR hosting); an incomplete filter list could mask an unlisted legitimate .NET host process.
+
 **Validation:** Trigger the go-clr inline-assembly command on a XiebroC2 sample and confirm the load event fires. Launching any process in the filter list (`dotnet.exe`, `powershell.exe`, etc.) must NOT fire. An ordinary managed application that is not in the filter list WILL fire; that is the false-positive population.
+
 **Deployment:** Sysmon Event ID 7 (ImageLoad); requires Sysmon with ImageLoad enabled.
 
 Corrected from the original: the YAML `tags` block listed `attack.t1055.012` (Process Hollowing) despite the rule's own description and detection logic describing an image-load event of `mscoree.dll`/`clr.dll`. That is T1620 (Reflective Code Loading), not process hollowing (which requires suspended-process creation and entry-point patching, an entirely different Sysmon event covered separately). The tag is corrected below and the unsupported `attack.privilege-escalation` tactic tag (this rule detects in-process CLR hosting, not escalation into a higher-privileged process) is dropped. The selection does not depend on any filename, IP, or campaign-specific literal, which makes it durable but also non-specific.
@@ -483,12 +545,19 @@ level: low
 #### Covenant GruntStager C2 Beacon: Campaign Session Token in HTTP POST
 
 **Tier:** Detection
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1071.001 (Web Protocols)
+
 **Confidence:** HIGH
+
 **False Positives:** None known — the session token is a GUID-format value unique to this Covenant listener; will not appear in legitimate traffic.
+
 **Blind Spots:** A newly-configured Covenant listener with a different session token evades this rule; requires HTTP request-body inspection enabled on the sensor (not all deployments enable this by default).
+
 **Validation:** Replay a captured GruntStager beacon POST — must alert; ordinary HTTP POST traffic without the token must NOT.
+
 **Deployment:** Network IDS/IPS inline or tap; HTTP inspection on port 443 (cleartext); requires HTTP body inspection enabled on the sensor.
 
 Corrected from the original: the `http` app-layer rule pinned destination port `443`. Suricata selects the HTTP parser by protocol recognition, not port, so pinning blind-spots any future port migration by the operator; changed to `any`. The old `reference:url,pixelatedcontinuum.github.io/...` line and the non-standard `metadata` schema (`affected_product`, `attack_target`, `created_at`, ...) are replaced with the required `metadata:author The_Hunters_Ledger, date, reference` schema pointing at the current site domain. A `threshold` was added for beacon noise control. `sid` is preserved unchanged from the original publication; `rev` bumped to reflect the logic/metadata change.
@@ -500,13 +569,21 @@ alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL DETECT OpenDirectory-Xie
 #### Covenant GruntStager Masquerade: Chrome 41 Windows 7 UA With /en-us/ URI
 
 **Tier:** Detection
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1071.001 (Web Protocols), T1036 (Masquerading)
+
 **ATT&CK Note:** The report records the Covenant listener running cleartext HTTP on port 443 (T1571). The rule header leaves the destination port as `any`, as the sticky-buffer convention requires, and tests the user agent and URI path only, so it does not cover T1571 and fires on this user agent and path on any port.
+
 **Confidence:** HIGH
+
 **False Positives:** The Chrome 41 UA alone may appear on legacy enterprise endpoints with genuinely outdated browsers; the mandatory combination with the `/en-us/` masquerade URI path (both content matches are ANDed in Suricata by default) substantially narrows this.
+
 **Blind Spots:** A rebuild using a different masquerade UA or URI convention evades this rule; requires the sensor to parse plaintext HTTP on port 443 rather than assuming all port-443 traffic is TLS. The user agent is matched on `Windows NT 6.1` and `Chrome/41.0.2228.0` as two separate substrings in either order.
+
 **Validation:** Replay a captured GruntStager probe/beacon request — must alert; modern-browser HTTPS traffic to port 443 must NOT.
+
 **Deployment:** Network IDS/IPS with HTTP inspection. To see the campaign's traffic the sensor must parse plaintext HTTP on port 443 (the report's listener) and not assume all port-443 traffic is TLS; the rule itself does not test the port.
 
 Same port and metadata-schema corrections as the rule above.

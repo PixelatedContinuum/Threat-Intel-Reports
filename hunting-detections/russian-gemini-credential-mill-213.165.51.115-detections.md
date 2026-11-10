@@ -9,9 +9,13 @@ hide: true
 ---
 
 **Campaign:** Russian-Gemini-Credential-Mill-UTA-2026-012-213.165.51.115
+
 **Date:** 2026-05-25
+
 **Author:** The Hunters Ledger
+
 **License:** CC BY 4.0
+
 **Reference:** https://the-hunters-ledger.com/reports/russian-gemini-credential-mill-213.165.51.115/
 
 > **Calibration / Prior-Art Note:** Trend Micro (TrendAI Research) published independent coverage of this same operator on 2026-05-22 ("One Man, One AI, One Fake Persona: Inside the 5-Year Influence and Fraud 'Patriot Bait' Campaign"; operator tracked as "bandcampro"). Cross-identification is DEFINITE via five-point IOC match: `@americanpatriotus` Telegram channel, 73 stolen Gemini API keys in operator inventory, 20-mutation-per-target generation, Quantum Patriot pipeline branding, and `GEMINI.md` jailbreak-persistence file. Rules in this file complement the Trend Micro coverage with per-case source-code-derived signatures not previously published. **AI Operator Handoff Document novelty MAINTAINED** (Trend Micro covers `GEMINI.md` jailbreak persistence; architecturally distinct from the operator-authored `C2_INFRA_TRANSFER.md / DEPLOYED_TOOLS.md / C2_MIGRATION_GUIDE.md` structured session-handoff documents). **LLM Credential Mutation novelty REFRAMED** as first source-code analysis with verbatim prompt reproduction (operational pattern independently confirmed by Trend Micro). **Unauthenticated Python-stdlib C2**: no prior art found in either publication.
@@ -47,13 +51,21 @@ This operator runs a custom Python A2A ("agent-to-agent") C2 stack combined with
 #### LLM-Personalized Credential Mutator Family
 
 **Tier:** Detection
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1110.003 (Password Spraying), T1059.006 (Python), T1587 (Develop Capabilities)
+
 **Confidence:** HIGH
+
 **Rationale:** Requires the Gemini API import AND one of three verbatim prompt fragments (the role-priming sentence, the `Most Recent Password from dump:` field name, or the `generate exactly 20 likely current mutations` instruction) AND one of four operator-bespoke markers (the output names `AI_SNIPER_GOODS` and `AI_ADMIN_MUTANTS`, the target-file name `ULTRA_GOLD_TARGETS`, or the success-line format `[+++ AI SUPER GOOD +++]`). The prompt wording and markers are bespoke enough that no legitimate software plausibly combines them with a Gemini API import; the rule fails as soon as any one of its three mandatory groups fails: dropping the `google.generativeai` reference, rewording all three prompt fragments, or renaming all four markers each evades on its own. *Wording fix 2026-10-11:* the description used to pair the role-priming prompt with the `AI_SNIPER` naming, but the role-priming sentence is only one of three alternatives and `AI_SNIPER_GOODS` only one of four.
+
 **False Positives:** None known: the combination of a Gemini API client reference, one of three bespoke prompt fragments and one of four bespoke output or target markers has negligible legitimate-software overlap. Not goodware-validated.
+
 **Blind Spots:** The three clauses are ANDed, so any one of them failing evades: dropping or renaming the `google.generativeai` reference, rewording all three prompt fragments (without the role-priming sentence, the `Most Recent Password from dump:` field and the `generate exactly 20 likely current mutations` instruction), or renaming all four operator markers; the rule targets Python source in files, not a compiled variant.
+
 **Validation:** Scan `ai_sniper_brute.py` or a functional equivalent — the three-clause combination must match; a benign script that merely imports `google.generativeai` (with no role-priming prompt or bespoke output filename) must NOT fire.
+
 **Deployment:** Endpoint AV/EDR file scan, SIEM file-creation alert, git-hook pre-commit scan on CI/CD pipelines, developer workstation endpoint protection.
 
 ```yara
@@ -95,13 +107,21 @@ rule MAL_Python_LLMPersonalized_Credential_Mutator_Family {
 #### A2A C2 Server (Unauthenticated Python stdlib)
 
 **Tier:** Detection
+
 **Robustness:** 3
+
 **ATT&CK Coverage:** T1071.001 (Web Protocols), T1132.001 (Standard Encoding), T1087 (Account Discovery — `/api/v1/agents` dumps all beacons)
+
 **Confidence:** HIGH
+
 **Rationale:** The operator's own banner string ("A2A C2 MULTI-AGENT CONSOLE"), or the combination of `BaseHTTPRequestHandler` with three of five bespoke `/api/v1/` endpoint paths, is essentially a fingerprint of this specific framework — no legitimate web application framework pairs `BaseHTTPServer.BaseHTTPRequestHandler` with this endpoint set. The decode clause is satisfied by either `base64.b64decode` or `decode('utf-16le')`, so UTF-16LE decoding is not required, and the endpoint clause is three of five paths.
+
 **False Positives:** None known.
+
 **Blind Spots:** A rewrite onto a different HTTP framework (Flask/FastAPI) with renamed endpoints and a dropped banner string evades detection.
+
 **Validation:** Scan `c2_server.py` or a functional equivalent — the banner or endpoint-combination clause, plus a decode string (`base64.b64decode` alone is enough), must both match; an unrelated `BaseHTTPRequestHandler`-based Python service with different endpoints must NOT fire.
+
 **Deployment:** Endpoint AV/EDR file scan, server-side file integrity monitoring, threat hunting on Linux server filesystems.
 
 ```yara
@@ -138,13 +158,21 @@ rule MAL_Python_A2A_C2_Server_Unauthenticated {
 #### A2A C2 Client Console / Exec Tool
 
 **Tier:** Detection
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1071.001 (Web Protocols), T1132.001 (Standard Encoding), T1059.006 (Python)
+
 **Confidence:** HIGH
+
 **Rationale:** The `X-Agent-ID` bespoke header is required, together with any one of the UTF-16LE `encode('utf-16le')` call, the `/api/v1/interact` endpoint or the `/api/v1/get_results` endpoint, and any one of four corroborating operator-specific markers (the console banner, the `HOSTNAME_user` agent-ID format, the `/api/v1/agents` endpoint or `time.sleep(2)`). *Wording fix 2026-10-11:* the earlier text said the header, UTF-16LE encoding and `get_results` polling are all required; the condition accepts any one of the three, and the UTF-16LE call is not required. This header-plus-endpoint pattern is not found in common legitimate Python HTTP client libraries, but it was not goodware-validated. *Robustness fix 2026-10-11 (round 2):* scored 2, not 3: the mandatory `X-Agent-ID` string is a renameable header name and the optional pair (the UTF-16LE call and the endpoint names) is generic, so this is a family string combination, not a technique invariant.
+
 **False Positives:** None known; not goodware-validated. The weakest path is the `X-Agent-ID` header, one of the three client strings and the generic `time.sleep(2)`.
+
 **Blind Spots:** A rewrite that renames the header evades, whatever else it keeps; a rewrite that drops the three client strings (UTF-16LE call and both endpoints) evades.
+
 **Validation:** Scan `console.py`/`exec.py` or a functional equivalent — all three clauses must be present to match: the header, one of the UTF-16LE call or the two endpoints, and one corroborating marker (replay is NOT CHECKED); a generic Python HTTP client with a custom header name (but not `X-Agent-ID` specifically) must NOT fire.
+
 **Deployment:** Endpoint AV/EDR file scan, server-side file integrity monitoring, threat hunting on Linux operator-side hosts.
 
 ```yara
@@ -178,13 +206,21 @@ rule MAL_Python_A2A_C2_Client_Console {
 #### PowerShell WindowsUpdateManager Stealer Loader
 
 **Tier:** Detection
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1547.001 (Registry Run Keys), T1036 (Masquerading), T1105 (Ingress Tool Transfer), T1059.001 (PowerShell)
+
 **Confidence:** HIGH
+
 **Rationale:** Requires the `WindowsUpdateManager` masquerade value name AND a corroborating path/key context AND one of four C2-artifact markers (domain, payload-domain, endpoint path, or bespoke header — two of which, the endpoint path and the header, do not depend on the operator's specific domain) AND a PowerShell networking primitive. Because the C2-artifact clause has non-domain fallback options, the rule still fires after full domain rotation.
+
 **False Positives:** None known — the `WindowsUpdateManager` string combined with a Run-key text or script-path string and any of the four C2-artifact markers is not a pattern found in any legitimate Windows Update or Windows Defender component. No hive is tested, and the script-path string alone satisfies the Run-key clause.
+
 **Blind Spots:** A rebuild that renames the registry value AND replaces all four C2-artifact markers with something outside this anchor set evades detection.
+
 **Validation:** Scan `WindowsUpdateManager.ps1` or a functional equivalent — all four clauses must match; a legitimate PowerShell script using `Invoke-RestMethod` with no `WindowsUpdateManager` reference must NOT fire.
+
 **Deployment:** Endpoint AV/EDR file scan and file integrity monitoring on `%LOCALAPPDATA%\Microsoft\`. Script text recovered from PowerShell script-block logging (Event 4104) can be scanned as a file; the rule does not read events itself.
 
 ```yara
@@ -222,14 +258,23 @@ rule MAL_PowerShell_WindowsUpdateManager_Stealer_Loader {
 #### C2_INFRA_TRANSFER Explicit AI-to-AI Header Pair (Narrow)
 
 **Tier:** Hunting
+
 **Robustness:** 1
+
 **ATT&CK Coverage:** T1587 (Develop Capabilities)
+
 **ATT&CK Note:** The rule tests two header strings and no C2 content, so Web Protocols (T1071.001) is not claimed.
+
 **Confidence:** MODERATE
+
 **Rationale:** The rule tests two literal strings, `**To:** Gemini CLI` and `**From:** Gemini CLI`, anywhere in a file under 100 KB, with no line boundary, no Markdown structure and no C2 content. The captured operator handoff carries both, but a legitimate Gemini-to-Gemini build handoff written the same way matches too, and no corpus was measured, so nothing here claims the pair is unique to this operator or first published. *Logic fix 2026-10-11:* the rule used to carry two more branches, `When starting a new session` with either header or `**Subject:**`, and a Cyrillic persona marker with either header or `**Subject:**`, so a file with neither the pair nor both headers fired; the heading and Blind Spots called the rule narrow and said the session-start directive is covered by the Family rule, so those branches are removed and the condition is the header pair alone.
+
 **False Positives:** A routine handoff note between two Gemini CLI sessions that uses the same bold-markdown To/From convention; any document that quotes both literals. No benign corpus was scanned.
+
 **Blind Spots:** A reformatted handoff document that drops the exact `**To:**`/`**From:**` bold-markdown convention evades this narrow rule (the broader Family rule above provides fallback coverage via the session-start directive).
+
 **Validation:** Scan `C2_INFRA_TRANSFER.md` or a functional equivalent — the header pair must match; unrelated Markdown documentation referencing "Gemini CLI" in prose (not as a To/From header) must NOT fire, while a routine Gemini-to-Gemini handoff using both headers WILL fire (a known positive).
+
 **Deployment:** Endpoint file-creation monitoring, SIEM filesystem alert, threat hunting in `~/.gemini/`, `~/.claude/`, `~/.codex/` directories on server-class hosts.
 
 ```yara
@@ -255,13 +300,21 @@ rule MAL_Markdown_C2_INFRA_TRANSFER_Pattern {
 #### AI Operator Handoff Document Family
 
 **Tier:** Hunting
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1587 (Develop Capabilities), T1071.001 (Web Protocols — C2 endpoint references within the document)
+
 **Confidence:** MODERATE
+
 **Rationale:** Requires a session-priming marker (the To/From Gemini CLI header pair, a session-start load directive, or a knowledge-transfer marker paired with a named handoff-document filename) AND co-occurrence with at least one of four C2 artifact strings: `/api/v1/update`, `/api/v1/interact`, the `cloudflared access tcp` fragment, or the `X-Agent-ID` header. The co-occurrence requirement narrows the broad "AI-assisted documentation" surface but does not remove it. *Tier fix 2026-10-11 (round 2):* a project's own session-start directive plus an ordinary `/api/v1/update` API guide or a `cloudflared access tcp` command satisfies the condition with no operator or C2 content, so the rule is Hunting: the matched text is a lead to read, not proof that these generic strings are C2 artifacts. *Wording fix 2026-10-11:* the description named credential-table patterns, which no string tests, and the second clause is one string, not a C2 endpoint pattern.
+
 **False Positives:** AI-augmented developer documentation (e.g., a project's own `CLAUDE.md`) can contain a session-start directive; it would also need one of the four C2 strings, so the co-occurrence suppresses most of that class. Documentation that quotes `cloudflared access tcp` or `X-Agent-ID`, or an API guide with a generic `/api/v1/update` path, alongside a session-start sentence would still match. Not goodware-validated.
+
 **Blind Spots:** A handoff document that omits all four C2-artifact strings (e.g., references C2 infrastructure only by IP, with no `/api/v1/` path or bespoke header) evades the second clause.
+
 **Validation:** Scan a captured AI Operator Handoff Document (`C2_INFRA_TRANSFER.md`, `DEPLOYED_TOOLS.md`) — both clauses must match (replay is NOT CHECKED); a legitimate `CLAUDE.md`/`AGENTS.md` project file with no C2 content must NOT fire, while one holding a session-start directive and an ordinary `/api/v1/update` API guide WILL fire (a known positive).
+
 **Deployment:** Endpoint file-creation monitoring, filesystem hunt on server-class Linux hosts, git-repo secret-scanning pipeline. Recommended additional scoping: prioritize `.md` files under `~/.gemini/`, `~/.claude/`, `~/.codex/` on server-class hosts over developer workstations.
 
 ```yara
@@ -301,11 +354,17 @@ rule MAL_Markdown_AI_Operator_Handoff_Document_Family {
 #### Russian Operator Persona Strings
 
 **Tier:** Hunting
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1587 (Develop Capabilities — operator infrastructure docs)
+
 **Confidence:** MODERATE
+
 **Rationale:** Requires one of three Cyrillic persona strings (informal address terms for Gemini, a victim-machine nickname, or a session-start idiom) AND one of five operational markers. Two of the five operational markers (`/api/v1/` and the bare `AIzaSy` key prefix) are individually generic — they appear across many unrelated APIs and any project with a legitimate Gemini key — so the composite condition carries real, analyst-triage-worthy FP risk rather than alerting-grade precision. Framed by design as a forensic/attribution aid, not a production detection.
+
 **False Positives:** Standalone, the Cyrillic persona strings appear in ordinary Russian-language content; combined with the generic `/api/v1/` path fragment or a bare `AIzaSy` key prefix (present in any legitimate Gemini-integrated codebase authored in Russian), the composite condition can still produce non-operator hits.
+
 **Deployment:** Threat hunting on server-class Linux hosts, forensic investigation of seized operator infrastructure, post-incident artifact analysis. Deploy only with the full composite condition — never on the persona strings alone.
 
 ```yara
@@ -339,13 +398,21 @@ rule MAL_Russian_Operator_Persona_Strings {
 #### Stolen LLM API Key Validator
 
 **Tier:** Hunting
+
 **Robustness:** 1
+
 **ATT&CK Coverage:** T1078 (Valid Accounts — stolen API keys), T1059.006 (Python), T1552.001 (Unsecured Credentials in Files)
+
 **Confidence:** MODERATE
+
 **Rationale:** *Logic fix 2026-10-10:* the key test was the literal text `AIzaSy[0-9a-zA-Z_-]` (brackets included), which is regex source text and cannot match an actual `AIzaSy` key, although the description says the script holds the keys in a block string. The rule now accepts either that literal pattern text (a script that carries the key-prefix regex) or at least 3 actual key shapes (`AIzaSy` followed by 33 key characters). The captured `check_keys.py` was not re-scanned in this pass, so it is not confirmed which form it contains. Requires the `AIzaSy` key-prefix pattern text or at least 3 key shapes AND a bulk-storage or search marker (`raw_keys`/`re.findall`) AND a validation-pipeline marker (the models endpoint, a valid-keys output, or a retest marker), with a 2-of-N reinforcement across all seven anchors. A single-key SDK usage does not satisfy the key-shape branch; the claim in earlier versions that every bulk-key validator is malicious tooling is withdrawn, since a legitimate key-rotation or key-audit script has the same shape.
+
 **False Positives:** A legitimate developer script that validates API keys. *Round 2, 2026-10-10:* with a single key-shaped string, a `raw_keys` marker and the models endpoint, the previous round's condition fired on a synthetic benign single-key validator, so the claim that every such script is malicious was not supported and the rule was re-tiered from Detection to Hunting. The key-shape branch now needs at least 3 key-shaped strings (the documented inventory holds 40+ keys); the `AIzaSy[0-9a-zA-Z_-]` pattern-text branch is unchanged and still fires on any script that carries that regex source plus a bulk-storage or search marker and a validation-pipeline marker, which includes a benign key-checking script. A script holding 40+ Gemini API keys in a block string with a validation loop against Google's models endpoint, which is the documented tool, is not a legitimate development pattern.
+
 **Blind Spots:** A rewrite that stores keys in a different structure (e.g., one per line in an external file, loaded without the `raw_keys`/`findall` marker in-code) evades the second clause.
+
 **Validation:** Scan `check_keys.py` or a functional equivalent — all four condition clauses must be satisfied. A single-key SDK integration with one key-shaped string does not satisfy the key clause; a benign script that carries the `AIzaSy[0-9a-zA-Z_-]` pattern text with the other markers does fire and is separated from the operator's tool by reading what it validates.
+
 **Deployment:** Endpoint AV/EDR file scan, SIEM file-creation monitoring, developer workstation endpoint protection, CI/CD secret scanning.
 
 ```yara
@@ -388,13 +455,21 @@ rule MAL_Python_Stolen_LLM_Key_Validator {
 #### 1Password Vault Export File Written by a Non-1Password Process
 
 **Tier:** Detection
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1555.005 (Credentials from Password Stores — Password Managers), T1005 (Data from Local System)
+
 **Confidence:** HIGH
+
 **Rationale:** Requires a 1Password vault-export file extension/name pattern AND a filter excluding the legitimate 1Password application images. This combination — export artifact plus a non-1Password writing process — is a durable technique signal independent of any campaign-specific domain or filename.
+
 **False Positives:** Legitimate authorized 1Password vault migration or backup workflows by IT staff; the 1Password CLI (`op.exe`) used for authorized scripted access is not excluded by the current filter and should be allowlisted per-deployment.
+
 **Blind Spots:** A theft routine that renames the exported file before it touches disk (avoiding the `.1pux`/`.1pif`/`1Password Export` pattern) evades detection.
+
 **Validation:** Trigger a 1Password vault export from a non-1Password process (e.g., a Python script writing or copying an export file) — must match; a export created and immediately handled by `1Password.exe` itself must NOT fire.
+
 **Deployment:** Endpoint EDR / Sysmon-fed SIEM (file-creation telemetry).
 
 ```yaml
@@ -444,13 +519,21 @@ level: high
 #### AI Operator Handoff Document Bespoke Filename Created on Server Filesystem
 
 **Tier:** Detection
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1587 (Develop Capabilities)
+
 **Confidence:** HIGH
+
 **Rationale:** **Salvage-split from the original combined rule**: the original `condition: selection_specific_names or selection_gemini_dir_context` OR'd this bespoke-filename branch together with a broader `~/.gemini/` + generic-tooling-filename branch that includes `GEMINI.md`/`SKILL.md` (the *standard* legitimate Gemini CLI config filenames). Splitting isolates the two bespoke, no-known-legitimate-collision filenames (`C2_MIGRATION_GUIDE.md`, `C2_INFRA_TRANSFER.md`) into a Detection-grade rule; the broader/generic branch is now its own Hunting rule below.
+
 **False Positives:** None known — these specific filenames are not used by any known legitimate software.
+
 **Blind Spots:** A rebuild that renames both exemplar filenames evades detection. Fallback coverage for the `~/.gemini/` directory context is provided by the **Executable Script or Skill File Created in Gemini CLI Config Directory** rule (`dca5d3c0`), not by the handoff-filename Hunting rule below: as of 2026-09-07 that rule's `SKILL.md` and `GEMINI.md` arms were removed as duplicates, so `dca5d3c0` is now the only directory-context fallback.
+
 **Validation:** Create a file named `C2_INFRA_TRANSFER.md` or `C2_MIGRATION_GUIDE.md` anywhere on a monitored filesystem — must match; creation of an unrelated Markdown file must NOT fire.
+
 **Deployment:** File integrity monitoring, Sysmon Event ID 11, EDR file-creation telemetry.
 
 ```yaml
@@ -492,13 +575,21 @@ level: high
 #### Mass WordPress wp-login.php Credential Validation Rate Exceeded (Correlation)
 
 **Tier:** Detection (correlation) / base selection below is Hunting — non-alerting, tallied separately
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1110.003 (Password Spraying), T1059.006 (Python)
+
 **Confidence:** HIGH
+
 **Rationale:** **Salvage-rewrite from a bare selection to a proper Sigma `event_count` correlation.** The original rule's `detection:` block matched any single POST to `/wp-login.php` with no aggregation — as written it fires on ordinary, ubiquitous WordPress login traffic, since a single request to this endpoint is not itself anomalous (the original text acknowledged this in prose but never encoded the threshold). This entry contains **two Sigma objects, tallied separately, co-located in one block per correlation-rule convention**: the base selection (below, tier Hunting on its own — non-alerting, informational, exists only to feed the correlation) and the correlation itself (tier Detection — the actual alert). The correlation encodes the operator's real signature: 500+ requests to `/wp-login.php` from one source within 60 seconds, derived from the operator's 3-worker `ThreadPoolExecutor` pipeline against 30,000+ target sites. Volume-based, so it survives target-list and infrastructure rotation entirely.
+
 **False Positives:** Authorized load-testing or offensive-security assessments against WordPress installations at or above the threshold; tune the count threshold upward for environments with known legitimate load-testing activity.
+
 **Blind Spots:** An operator who throttles below the 500/60s threshold (e.g., reduces worker count) evades the correlation; the `c-ip` group-by field name assumes a W3C-extended-format webserver log — adjust the field name to match your log source's actual client-IP field.
+
 **Validation:** Replay 500+ POSTs to `/wp-login.php` from one source within 60 seconds — the correlation must fire; fewer than 500 requests, or the same volume spread across many source IPs, must NOT fire.
+
 **Deployment:** Web Application Firewall, reverse proxy access logs, Zeek http.log, SIEM with Sigma correlation-rule support.
 
 ```yaml
@@ -569,14 +660,22 @@ level: high
 #### Executable Script or Skill File Created in Gemini CLI Config Directory
 
 **Tier:** Hunting
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1587 (Develop Capabilities), T1059.006 (Python)
+
 **Confidence:** MODERATE
+
 **Rationale:** The `~/.gemini/` directory paired with executable content is a genuine operator-side installation signal, but the original rule had no exclusions at all, so it matched the Gemini CLI's own vendor-managed skill and plugin trees. Revised 2026-09-07 after measurement against live telemetry: of 19 matching events over 14 days, **18 were vendor software writing vendor filenames into vendor directories**, and the `*SKILL.md` arm alone carried **14 of the 19**. The `*GEMINI.md` and `*.ps1` arms matched **nothing**. The fix excludes the vendor trees (`/.gemini/*/builtin/`, `/.gemini/*/plugins/`, `/.gemini/extensions/`) rather than removing the filename arms, so operator-authored `SKILL.md` and `GEMINI.md` outside those trees still match. Measured effect: 19 to 1 over the same window. The rule was also renamed. Its previous title asserted "on Server Host", which the selection logic never implemented, and a subscriber scanning a rule list reads the title.
+
 **False Positives:** Operator-authored hook scripts under the CLI's own hook directory, which is a supported feature. Allowlist the specific hook filenames in use. Also a filesystem-level copy, migration or restore of a home directory, which replays every path in the copied tree through file-creation telemetry, including a backup target such as `/mnt/.../@home/user/.gemini/...`.
+
 **Tested and rejected (do not re-argue these):** Scoping to `/root/.gemini/*` as a proxy for server-class hosts takes the rule from 19 matches to 0, and was rejected because it misses any operator running as a non-root user, which is the default on most modern VPS images. The hypothesis that periodic btrfs snapshots drive this was refuted on mechanism: a btrfs snapshot is a copy-on-write metadata operation producing one subvolume directory entry, not one event per file. The 119 `.gemini/` events attributed to `/usr/bin/btrfs` were a single one-day bulk copy during a 2026-08-28 drive migration, with zero on the other 89 days of a 90-day window.
 **Revisited 2026-11-08 (measured, triage run `2026-11-08-1141`, task T-0570.1):** The 2026-09-07 vendor-tree exclusion covered the `agy` tree (`builtin/`, `plugins/`, `extensions/`) and missed the Google Antigravity IDE's per-session scratchpad, `~/.gemini/antigravity/brain/<session>/scratch/`. The two alerts were the IDE's own agent runtime, `.../antigravity/resources/bin/language_server`, creating and later deleting a helper script (`parse_pcap.py`, 2026-11-05 02:03:15 and 02:15:39 UTC) in that scratch directory; the same writer put `parse_pcap.py.metadata.json` sidecars beside it at the same two times, which this rule does not match. The operator asked the agent to parse a capture, but the path and the writer are the product's: a scratchpad is a built-in feature (the installed `language_server` binary carries `CreateScratchProjectFolderRequest`, `GetScratchpadPath` and `GetEnableScratchpad`; `scratch/` directories exist in 3 of 12 session directories on disk, created at session start), and every one of the 457 file events under `*/.gemini/*` over 90 days was written by `language_server` or `agy`. Any subscriber who lets the agent script a task would hit it, once per scripting session, so this is a narrow rule defect and not a constant storm. A `filter_antigravity_scratch` block now excludes a write whose target contains `/.gemini/antigravity/brain/*/scratch/` AND whose process image ends `/antigravity/resources/bin/language_server`; the two halves are ANDed on purpose, because the path alone would excuse any process writing into a directory called `scratch`, and the writer alone would blind the rule to the agent writing skills or `GEMINI.md` into `~/.gemini/skills/`, the surface this rule exists to watch. Measured on the rule's own index with EQL, exhaustive (fewer than the 1000 size limit returned, no shard failures, `is_partial` false): 2 matching events before and 0 after, over both a 14-day window (now minus 336 hours) and a 90-day window (now minus 90 days), and the removed events are exactly those two. Control: an unfiltered `file where true` query returned at the cap (10,000 or more) in both windows, so the harness is not under-reporting. Coverage cost: none against the documented campaign tradecraft, whose paths (`~/.gemini/skills/cf-c2-manager/SKILL.md`, `~/.gemini/GEMINI.md`, `~/.gemini/tmp/root/chats/`) sit outside `antigravity/brain/` and use Gemini CLI, which has no `brain/` tree. Attacker-controllability: both halves are settable by the same account. The directory shape is any user-writable path with that form (the session segment is free text), and the writer path is under the user's home, so a same-account attacker can place or copy a binary there; neither can be satisfied by naming a file alone. Requiring both is stricter than either, and the second step touches the vendor install, which is itself unusual; the gap is recorded under Blind Spots and kept. A missing process image costs noise and not coverage, since the exclusion does not match and the event alerts. Not checked: Google's own documentation for the scratchpad was not opened, so "stock" rests on the install layout, the shipped binary's strings and the product-written sidecar (confidence MODERATE); whether a clean install writes scratch scripts the same way (one machine, one scripting session in 90 days); and the `Image` to `process.executable` mapping in the production deployment pipeline (the measurement used `process.executable` directly).
+
 **Blind Spots:** An operator who stages a script at `~/.gemini/antigravity/brain/<any>/scratch/x.py` through a binary at a path ending `/antigravity/resources/bin/language_server` is not matched, and a same-account attacker can arrange both halves. This is the same class of gap the 2026-09-07 exclusion accepted for the `agy` vendor trees.
+
 **Deployment:** Sysmon (Linux), auditd, file-integrity monitoring. There is no portable host-class field in Sigma or in ECS, so server-vs-workstation scoping remains a deployment decision made by asset group or IP range, and is deliberately no longer claimed in the title.
 
 ```yaml
@@ -649,11 +748,17 @@ level: medium
 #### Cloudflared Access TCP Tunnel to Potentially Unauthorized Hostname
 
 **Tier:** Hunting
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1090.004 (Domain Fronting), T1572 (Protocol Tunneling), T1021.001 (RDP via tunnel), T1021.004 (SSH via tunnel)
+
 **Confidence:** MODERATE
+
 **Rationale:** Anchored on the technique (`cloudflared access tcp --hostname`, the command form the operator used; the rule tests `access`, `tcp` and `--hostname` as three unordered substrings) rather than any specific domain, so it survives full rotation of the operator's infrastructure — but it requires an organization-specific allowlist to be populated before deployment, and ships with only a placeholder value.
+
 **False Positives:** Organizations with legitimate Cloudflare Tunnel deployments using the `access tcp` command form (as opposed to the more common `tunnel run` service registration); developer workstations running cloudflared for legitimate service exposure.
+
 **Deployment:** Sysmon for Linux or EDR process-creation events that supply `Image` and `CommandLine`, on server-class hosts. Raw auditd EXECVE records carry neither field in normalised form and would need normalising first; this page declares no such normalisation. Populate `filter_known_legit` with your organization's known Cloudflare Tunnel hostnames before deployment.
 
 ```yaml
@@ -705,11 +810,17 @@ level: medium
 #### WindowsUpdateManager PowerShell Beacon Registry Run Key Persistence
 
 **Tier:** Hunting
+
 **Robustness:** 1
+
 **ATT&CK Coverage:** T1547.001 (Registry Run Keys), T1036 (Masquerading)
+
 **Confidence:** MODERATE
+
 **Rationale:** Keyed on two operator-chosen literals, the `WindowsUpdateManager` masquerade value name and the `WindowsUpdateManager.ps1` file name in the value data, with no combinatorial fallback in the Sigma logic itself (unlike the YARA loader rule, which pairs this same value name with an additional C2-artifact clause). A rebuild that renames either one fully evades. Today's false-positive rate is low (no legitimate Windows component uses this exact value name), but durability, not current precision, caps the tier here — **level recalibrated from the original `high` to `medium`** to match the Hunting tier per the level-discipline gate, since the rule does not survive a rename. *Logic fix 2026-10-11:* the title and description say the Run value points to the PowerShell script and is a per-user key, but the selection was the value-name substring alone, so a machine-wide `HKLM` value of that name matched and no PowerShell script was tested; the rule now also requires the `HKU\` hive prefix and `WindowsUpdateManager.ps1` in `Details`. *Boundary fix 2026-10-11 (round 2):* the value-name test was `contains`, so a value named `WindowsUpdateManagerBackup` matched; it is now `endswith`, which makes the value name exact. A hit is a configured Run value that names the script; it is not proof that the unextracted beacon ran.
+
 **False Positives:** None known today — `WindowsUpdateManager` is not a legitimate Windows Update component registry value; risk is entirely in the rule going stale after a rebuild, not in false alarms against current builds. A machine-wide (`HKLM`) value of the same name no longer matches.
+
 **Deployment:** Sysmon Event ID 13 (registry value set) and EDR registry monitoring that reports `TargetObject` and `Details`. Windows Event ID 4657 carries `ObjectName` and `NewValue` instead and would need a field mapping this rule does not declare, so it is not a deployment source as written. Pair with the YARA PowerShell-loader rule (which requires a corroborating C2-artifact clause) for higher-confidence composite alerting.
 
 ```yaml
@@ -758,12 +869,19 @@ level: medium
 #### Python Process With c2_server or BaseHTTPServer in the Command Line (A2A C2 Server Pattern)
 
 **Tier:** Hunting
+
 **Robustness:** 1
+
 **ATT&CK Coverage:** T1071.001 (Web Protocols), T1132.001 (Standard Encoding), T1059.006 (Python)
+
 **Confidence:** MODERATE
+
 **Rationale:** Keyed on the `c2_server`/`BaseHTTPServer` command-line substring, a script-naming/library-usage literal that a rebuild can trivially rename or replace. Retained as a hunting query, not a production alert, per the original assessment. *Wording fix 2026-10-11:* the earlier title and description promised a non-standard port and UTF-16LE encoding; the selection is a Python image path plus either token, with no port or encoding test.
+
 **False Positives:** Legitimate Python web services on non-standard ports (Django dev server, Flask, etc.); security testing frameworks (Impacket, Responder) using similar port patterns.
+
 **Blind Spots:** Versioned interpreter paths (`python3.11`) and a script started through another launcher evade; the two command-line tokens are the only anchor.
+
 **Deployment:** EDR process-creation telemetry, auditd execve, threat hunting. Combine with the network-layer Suricata signature for higher-fidelity composite alerting.
 
 ```yaml
@@ -811,12 +929,19 @@ level: low
 #### AI Operator Handoff Filename Created in Gemini CLI Config Directory
 
 **Tier:** Hunting
+
 **Robustness:** 1
+
 **ATT&CK Coverage:** T1587 (Develop Capabilities)
+
 **Confidence:** MODERATE
+
 **Rationale:** **Salvage-split from the original combined rule** (companion to the Detection-tier bespoke-filename rule above), isolating the operator's AI Operator Handoff Document naming convention inside the `~/.gemini/` directory context. Revised 2026-09-07 after measurement against live telemetry, which found the rule was **producing no unique detections at all**. Its `SKILL.md` and `GEMINI.md` arms were byte-identical to the same two arms in the companion `dca5d3c0` rule, so every event matching them fired both rules: over 14 days this rule matched 14 events, the intersection with `dca5d3c0` was also **14 of 14**, and its two unique arms (`DEPLOYED_TOOLS.md`, `CLOUDFLARE_INFRA.md`) matched **nothing**. Both vendor filename arms were therefore removed. Measured effect: 14 to 0 over the same window, at **zero coverage cost**, because operator-authored `SKILL.md` and `GEMINI.md` remain covered by `dca5d3c0`, which keeps both filenames and excludes only the vendor trees. The rule was also renamed: its previous title asserted "on Server Host", which the selection logic never implemented.
+
 **False Positives:** A project genuinely tracking deployed tooling or Cloudflare infrastructure notes under the agent config directory. Confirm the file content and author. The `SKILL.md` and `GEMINI.md` collision with legitimate Gemini CLI installations no longer applies, because those arms are gone.
+
 **Salvage-split lesson (worth keeping):** the original split moved the bespoke filenames into a Detection rule but left the broad arm duplicated in **both** halves rather than moved into one. That doubles alert volume per event while coverage stays flat, and it inflates every downstream false-positive count by exactly the duplication. Check for arm overlap whenever a rule is split.
+
 **Deployment:** File integrity monitoring, Sysmon Event ID 11, EDR file-creation telemetry. There is no portable host-class field in Sigma or in ECS, so server-vs-workstation scoping is a deployment decision and is deliberately no longer claimed in the title.
 
 ```yaml
@@ -864,14 +989,23 @@ level: medium
 #### LSASS Process Access With a Credential-Dumping GrantedAccess Mask and No Source Process Filter
 
 **Tier:** Hunting
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1003.001 (LSASS Memory)
+
 **ATT&CK Note:** Security Account Manager (T1003.002) is withdrawn: the report records local SAM hashes in the operator's ledger, not an LSASS process-access event, and this rule tests LSASS access only.
+
 **Confidence:** MODERATE
+
 **Rationale:** **Retitled during tiering**: the original title ("NTLM Hash Dump Followed by Cloudflare Tunnel Exfiltration Within 10 Minutes") described a two-stage correlation, but the YAML logic below only ever implemented the first stage (LSASS process-access with credential-dumping-associated `GrantedAccess` masks); the Cloudflare Tunnel egress half was never encoded and would require a separate SIEM temporal join (see Coverage Gaps). The GrantedAccess-mask pattern itself is a well-established LSASS-credential-access signature independent of this campaign's specific infrastructure. *Round 2 fix 2026-10-11:* the description no longer calls this the first stage of an observed sequence and the SAM technique (T1003.002) is not claimed, because the report records captured SAM hashes and no LSASS access event. *Tier, level and boundary fix 2026-10-11:* the rule ships no source-process filter, and its own false-positive list names AV/EDR sensors and domain controller synchronization as expected hits, so it cannot alert unattended and moves from Detection to Hunting, with `level` from high to medium. The Validation line used to promise that a trusted sensor does not fire because of an Image filter, but no filter exists. The mask test was a substring (`|contains`), which also matched longer values that start with these digits; it is now an exact match on each of the three masks.
+
 **False Positives:** Legitimate AV/EDR processes accessing lsass.exe for telemetry (no source-process filter ships with the rule, so these match until the deployer excludes them by `SourceImage`); domain controller synchronization operations.
+
 **Blind Spots:** Captures only the LSASS-access stage; does not by itself confirm exfiltration occurred. Credential-dumping tools that request a narrower access mask than the three listed evade this rule.
+
 **Validation:** Run a credential-dumping tool against `lsass.exe`: if it requests one of the three listed masks the rule must fire. A security sensor that opens `lsass.exe` with one of those masks also fires, since the rule has no source-process filter; exclude your deployed sensors by `SourceImage` before using it for anything beyond hunting.
+
 **Deployment:** EDR correlation rules, SIEM temporal correlation queries, Sysmon Event ID 10 (lsass access) + network log correlation (pair with DNS/network monitoring for `*.trycloudflare.com` / `*.tralalarkefe.com` egress within a 10-minute window for the full two-stage signal — see Coverage Gaps).
 
 ```yaml
@@ -923,13 +1057,21 @@ level: medium
 #### A2A C2 Beacon POST to Operator Endpoint with X-Agent-ID Header
 
 **Tier:** Detection
+
 **Robustness:** 3
+
 **ATT&CK Coverage:** T1071.001 (Web Protocols), T1132.001 (Standard Encoding), T1041 (Exfiltration Over C2 Channel)
+
 **Confidence:** HIGH
+
 **Rationale:** Anchors on the operator-bespoke `X-Agent-ID` header name, the POST method, and the `/api/v1/` endpoint family — none of which reference the operator's specific domain, so the rule survives complete infrastructure rotation. No legitimate web application framework uses this header name in this endpoint naming pattern. Added a literal `content` prefilter ahead of the URI `pcre` (not present in the original) so the regex is gated behind a content match per current formatting standards.
+
 **False Positives:** None known — the combination of any of the four paths `/api/v1/update`, `/api/v1/interact`, `/api/v1/telemetry` or `/api/v1/get_results` with the `X-Agent-ID` header is operator-bespoke and has no known legitimate-software counterpart.
+
 **Blind Spots:** A rewrite that renames the header and endpoint family evades detection; TLS-encrypted traffic without inline decryption is not inspectable at the HTTP layer by this signature alone (pair with the TLS/JA-fingerprint layer if available).
+
 **Validation:** Replay a PCAP of an A2A C2 beacon check-in — must alert; an unrelated HTTP POST carrying neither the header nor the endpoint pattern must NOT fire.
+
 **Deployment:** Inline or passive HTTP inspection, Zeek http.log, WAF/proxy with content inspection.
 
 ```suricata
@@ -941,12 +1083,19 @@ alert http $HOME_NET any -> any any (msg:"THL DETECT - A2A C2 Beacon POST to Ope
 #### cloudflared Tunnel Port Egress (UDP 7844 to Any External Host)
 
 **Tier:** Hunting
+
 **Robustness:** 1
+
 **ATT&CK Coverage:** T1572 (Protocol Tunneling)
+
 **ATT&CK Note:** The rule sees a destination port only (no SNI, Host header or domain), so Domain Fronting (T1090.004) is not claimed, and a Cloudflare Tunnel is not domain fronting.
+
 **Confidence:** MODERATE
+
 **Rationale:** Cloudflare Tunnel's control-plane connects to Cloudflare's edge over UDP/TCP 7844 specifically — Cloudflare's dedicated tunnel port, not general web QUIC (443) — so this is meaningfully narrower than matching all UDP/443 and does not fire on ordinary browsing or Cloudflare WARP. *Wording fix 2026-10-11 (rev 5):* the earlier heading and `msg` said QUIC egress to the Cloudflare edge, but the rule matches any UDP packet from `$HOME_NET` to any `$EXTERNAL_NET` address on destination port 7844 (rate-limited per source): it has no Cloudflare address range and no QUIC check. It is a port-based signal that any Cloudflare Tunnel deployment that uses UDP 7844 (legitimate or not), and any other service using UDP 7844, will trigger, and a tunnel that uses TCP 7844 instead does not match this rule, so it stays a hunting lead rather than an alert. *Robustness fix 2026-10-11 (round 2):* scored 1, not 2: one destination port is the only anchor.
+
 **False Positives:** Legitimate Cloudflare Tunnel deployments also use UDP 7844, and so can any other service that uses that destination port.
+
 **Deployment:** Network flow telemetry / IDS on egress; Zeek conn.log with a UDP/7844 filter. Corroborate with DNS visibility for `*.tralalarkefe.com` and the campaign's Cloudflare quick-tunnel subdomain (both carried in the IOC feed) and/or scope the source to segments where Cloudflare Tunnel is not expected.
 
 ```suricata

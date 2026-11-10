@@ -7,10 +7,15 @@ permalink: /hunting-detections/opendirectory-13-140-145-210-weblogic-deserializa
 thumbnail: /assets/images/cards/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817.png
 hide: true
 ---
+
 **Campaign:** WebLogicDeserialization-TelecomHarvester-13.140.145.210
+
 **Date:** 2026-08-17
+
 **Author:** The Hunters Ledger
+
 **License:** CC BY 4.0
+
 **Reference:** https://the-hunters-ledger.com/reports/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817/
 
 ---
@@ -60,13 +65,21 @@ The seven capability clusters:
 #### WSMA_CVE_2023_20198_DoubleEncode_Exfil
 
 **Tier:** Detection
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1190 (Exploit Public-Facing Application), T1048.003 (Exfiltration Over Unencrypted Non-C2 Protocol)
+
 **Confidence:** HIGH
+
 **Rationale:** The rule requires one operator-specific spelling of the encoded path together with the `fileCopy` operation name and the WSMA namespace or the sequential-hex token. That is a build and tool fingerprint: the operator can change the encoding pattern, as the Blind Spots line states, so it scores Robustness 2 and not 3.
+
 **False Positives:** None known. The double-encoded WSMA path form (capital `H`, only `w`/`u` encoded) does not occur in legitimate WSMA usage or in the public CVE-2023-20198 proof-of-concept tooling, which uses a different, single-encoded lowercase form
+
 **Blind Spots:** Needs the `fileCopy` operation name in the same file as the encoded path, so an access log or capture that holds only the path (the request body is not logged) does not match. Not run against the original script in this pass (NOT CHECKED). Misses any future campaign where the operator changes the encoding pattern; this is a file/log-content rule, not a live network signature. See the companion Suricata rules for wire-level coverage
+
 **Validation:** Scan the operator's own exfiltration script (`exfil_nvram.sh`); a carved nginx access log or a file holding only the double-encoded path must NOT fire; a stock, unmodified Cisco WSMA client script using the documented single-encoded path form must NOT fire
+
 **Deployment:** File scanning of recovered operator scripts and of any captured request-body or replay file that holds the script text. A captured web server access log is not a valid input: it carries the encoded path but not the `fileCopy` operation name, so it does not satisfy the rule.
 
 ```yara
@@ -91,6 +104,7 @@ rule WSMA_CVE_2023_20198_DoubleEncode_Exfil {
       $path and $copy and 1 of ($wsma, $token)
 }
 ```
+
 **File name:** `vuln_cve_2023_20198_wsma_doubleencode_exfil.yar`
 
 **WebLogic T3/JNDI Exploitation**
@@ -98,12 +112,19 @@ rule WSMA_CVE_2023_20198_DoubleEncode_Exfil {
 #### WebLogic_CVE_2024_21182_OpaqueReference_JNDI
 
 **Tier:** Detection
+
 **Robustness:** 3
+
 **ATT&CK Coverage:** T1190 (Exploit Public-Facing Application)
+
 **Confidence:** HIGH
+
 **False Positives:** Any file that names all three classes matches, not only operator tooling: WebLogic's own internals, advisories and write-ups about CVE-2024-21182 (see Blind Spots). The rule tests the three class names alone, so a hit shows that a file mentions the OpaqueReference primitive and not that it exploits it; read the reflection and lookup code in the file to tell the two apart
+
 **Blind Spots:** The three class names are tested as strings only, so WebLogic internals, advisories and write-ups that name all three also match. Misses variants that reach the same primitive through different class names, or that exploit the underlying JNDI weakness purely over the T3/IIOP wire protocol without ever appearing as Java source or bytecode
+
 **Validation:** Scan the operator's Java source (any of the seven byte-identical copies of the reflection block); a legitimate WebLogic JNDI administration utility must NOT fire
+
 **Deployment:** Source-code and bytecode scanning of recovered operator tooling, static-analysis pipelines ingesting suspected exploit code
 
 ```yara
@@ -126,17 +147,25 @@ rule WebLogic_CVE_2024_21182_OpaqueReference_JNDI {
       all of ($ref1, $ref2, $ref3)
 }
 ```
+
 **File name:** `vuln_cve_2024_21182_weblogic_opaquereference_jndi.yar`
 
 #### WebLogic_JNDI_HelloFromLdap_CallbackMarker
 
 **Tier:** Detection
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1132.001 (Standard Encoding, serialized-object callback validation)
+
 **Confidence:** HIGH
+
 **False Positives:** None known. This exact Java-serialized String is a plumbing test the operator wrote for their own LDAP server, not a string that appears in legitimate Java serialization traffic
+
 **Blind Spots:** Needs the raw serialized bytes (stream header, string type tag, length 15, then the text). The bare text `hello_from_ldap` in source code, a log or a document does not match, and a base64 or otherwise encoded copy does not either. Only fires if the operator reuses this exact test string in a future campaign; a renamed validation string evades entirely
+
 **Validation:** Scan `string_payload.bin` or any capture containing the raw serialized bytes; generic Java-serialized traffic containing unrelated Strings must NOT fire
+
 **Deployment:** File scanning of recovered operator artifacts and of payload files carved from a saved traffic capture. The condition tests `filesize`, which is undefined in a process-memory scan, so the rule does not match there; a memory-scan form would need the `filesize` test removed and is not written or tested here.
 
 ```yara
@@ -158,6 +187,7 @@ rule WebLogic_JNDI_HelloFromLdap_CallbackMarker {
       $ser_hex
 }
 ```
+
 **File name:** `crime_weblogic_telecom_ldap_callback_marker.yar`
 
 **Internal Windows Post-Exploitation**
@@ -165,13 +195,21 @@ rule WebLogic_JNDI_HelloFromLdap_CallbackMarker {
 #### Webshell_PHP_XCMD_Header_Dispatcher
 
 **Tier:** Detection
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1505.003 (Web Shell)
+
 **Confidence:** MODERATE
+
 **Rationale:** The only evidence of h.php is the operator's script, which writes a persistent `h.php` dispatching on an `X-CMD` request header; the report records no captured outcome and no copy of the file. The rule matches `<?php`, an `X-CMD` or `HTTP_X_CMD` string, and one execution-function string anywhere in a PHP file of under 200 KB. It tests no order, distance or data flow, and `exec(` also matches inside `shell_exec(`.
+
 **False Positives:** A poorly-designed internal debug or operations tool that intentionally maps a custom HTTP header to shell-command execution without other access controls. Rare, but not unheard of in legacy internal tooling. Because no data flow is tested, a PHP file that merely names an `X-CMD` header (to log, display or reject it) and separately runs any hard-coded command through `exec(`, `system(`, `passthru(` or `shell_exec` also matches. The `X-CMD` string is the only discriminator; it stays Detection because a custom header of that name in a PHP file is itself uncommon, and a hit still needs a read of the file to confirm the header reaches the call.
+
 **Blind Spots:** Misses webshells that read the command from a POST body, cookie, or a differently-named header instead of `X-CMD`; misses obfuscated or encoded variants where the exec function call is base64-wrapped or built via string concatenation
+
 **Validation:** Scan a PHP file combining the literal header check with a direct `shell_exec`/`system`/`passthru`/`exec` call; a PHP file that uses `shell_exec` for a hard-coded command and never names `X-CMD` or `HTTP_X_CMD` must NOT fire. A PHP file that names the header only to display it and separately runs a hard-coded command WILL fire, because the rule tests no data flow
+
 **Deployment:** Web-root file-integrity scanning, upload/WAF content inspection, forensic triage of a compromised web server
 
 ```yara
@@ -200,17 +238,25 @@ rule Webshell_PHP_XCMD_Header_Dispatcher {
       1 of ($exec1, $exec2, $exec3, $exec4)
 }
 ```
+
 **File name:** `webshell_php_xcmd_header_dispatcher.yar`
 
 #### GeoServer_CVE_2024_36401_ValueReference_Exec
 
 **Tier:** Detection
+
 **Robustness:** 3
+
 **ATT&CK Coverage:** T1190 (Exploit Public-Facing Application)
+
 **Confidence:** HIGH
+
 **False Positives:** None known from legitimate GeoServer traffic: OGC-filter requests do not construct a `valueReference` parameter that literally invokes `Runtime.getRuntime()` via `exec()`. The rule reads file or captured-request content, so a proof-of-concept write-up, advisory or scanner template that quotes the payload also matches
+
 **Blind Spots:** Misses variants of the CVE-2024-36401 payload that use a different Java reflection or execution primitive (for example `ProcessBuilder` instead of `Runtime.exec`), or that obfuscate the payload string
+
 **Validation:** Scan a captured exploitation script or logged request body containing the literal `exec(java.lang.Runtime.getRuntime(),` payload; a benign OGC filter request using `valueReference` for an unrelated property lookup must NOT fire
+
 **Deployment:** File and log scanning, WAF/API-gateway content inspection
 
 ```yara
@@ -233,6 +279,7 @@ rule GeoServer_CVE_2024_36401_ValueReference_Exec {
       all of them
 }
 ```
+
 **File name:** `vuln_cve_2024_36401_geoserver_valuereference_exec.yar`
 
 ### Hunting Rules
@@ -242,12 +289,19 @@ rule GeoServer_CVE_2024_36401_ValueReference_Exec {
 #### Rootkit_Userland_OriginalsBackup_TarSet
 
 **Tier:** Hunting (re-tiered from Detection 2026-09-13, see note below)
+
 **Robustness:** 1
+
 **ATT&CK Coverage:** T1554 (Compromise Host Software Binary), T1014 (Rootkit)
+
 **Confidence:** MODERATE
+
 **False Positives:** Confirmed, not merely possible. A plain, uncompressed tar of these seven common Linux administration binaries, carrying nothing but placeholder content and no malware at all, matches this rule. This was reproduced independently twice, once by hand, once by an automated benign-corpus harness (`.claude/scripts/yara_fp_check.py`) built specifically to test it. The rule's original False Positives field ("None known... would not present all seven paths as a top-level manifest in this exact combination") was wrong: an ordinary sysadmin backup that happens to bundle exactly these seven tools presents exactly that manifest, and there is nothing else in the condition to tell the two apart. A hit needs analyst review before any conclusion is drawn, which is why this is Hunting rather than Detection
+
 **Blind Spots:** The rule is a plaintext-token lead, not a tar parser: it matches the `ustar` marker and the seven path strings anywhere in a file under 5 MB, so a plain text file holding them also matches, and it sees an archive only in uncompressed form. This specific artifact (`orig_bins.tgz`) is gzip-compressed, and gzip compression destroys the plaintext string patterns this rule keys on, so deploy alongside a scanning pipeline that decompresses archives before scanning, or against extracted/forensic copies. The trojanized replacement binaries themselves were never recovered in either capture and cannot be detected by content; see Coverage Gaps. A tightening was attempted (excluding tars that also carry common non-target binaries such as `bash`, `sh`, `ls`) and it did suppress a realistic broader-backup fixture while still firing on the narrow seven-member shape, but it could only be tested against a synthetic reconstruction of the real evidence, not the actual captured `orig_bins.tgz` (hash `daee2d57...`), so it is not shipped as a claimed fix. Re-tiering to Hunting was chosen instead because it needs no unverified claim and matches `detection-rule-tiering` Gate 2's own routing ("high-value but meaningfully noisy" to Hunting)
+
 **Validation:** Decompress `orig_bins.tgz` to a raw `.tar` and scan it, it fires. Scan a plain administrative backup tar containing exactly these seven paths and nothing else, it also fires, which is the point: this is now documented as an analyst-triage lead, not an alerting-grade signal
+
 **Deployment:** Forensic archive scanning, EDR file-content inspection pipelines that decompress common archive formats before scanning, with analyst triage on every hit
 
 ```yara
@@ -276,6 +330,7 @@ rule Rootkit_Userland_OriginalsBackup_TarSet {
       $ustar and all of ($m1, $m2, $m3, $m4, $m5, $m6, $m7)
 }
 ```
+
 **File name:** `gen_userland_rootkit_originals_backup_archive.yar`
 
 **Linux Kernel LPE (Public Dirty Frag)**
@@ -283,12 +338,19 @@ rule Rootkit_Userland_OriginalsBackup_TarSet {
 #### PublicTool_DirtyFrag_LinuxKernel_LPE
 
 **Tier:** Hunting
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1068 (Exploitation for Privilege Escalation)
+
 **Confidence:** MODERATE
+
 **False Positives:** None known for the string combination itself, but this rule intentionally detects the *public* "Dirty Frag" tool broadly. Any red team, researcher, or unrelated intruder running the same unmodified public exploit will also match. That is why this is Hunting rather than Detection: a hit needs analyst confirmation that it belongs to this operator's campaign rather than independent reuse of the same public tool
+
 **Blind Spots:** The rule matches file content, so renaming the file or recompiling with the required strings intact does not evade it; it misses a variant from which the cipher name or all but one of the five proof-of-concept strings have been removed or encoded; misses the exploit entirely if the analyzed artifact is a stripped compiled binary with no surviving strings
+
 **Validation:** Scan `df_exploit` or `exp.c`; an unrelated ELF binary or C source file must NOT fire
+
 **Deployment:** File scanning, hunting sweep across Linux hosts for a known public LPE tool
 
 ```yara
@@ -315,6 +377,7 @@ rule PublicTool_DirtyFrag_LinuxKernel_LPE {
       $cipher and 2 of ($verbose, $seed, $iters, $target, $suoutput)
 }
 ```
+
 **File name:** `susp_dirtyfrag_linux_kernel_lpe_pubtool.yar`
 
 **WebLogic T3/JNDI Exploitation**
@@ -322,12 +385,19 @@ rule PublicTool_DirtyFrag_LinuxKernel_LPE {
 #### PublicTool_CVE_2023_21839_WebLogic_GoExploit
 
 **Tier:** Hunting
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1190 (Exploit Public-Facing Application), T1588.005 (Obtain Capabilities: Exploits)
+
 **Confidence:** MODERATE
+
 **False Positives:** None known for the string combination, but this detects the public tool broadly, as with the Dirty Frag rule, including any unrelated party running the same unmodified exploit. Hunting tier for the same reason
+
 **Blind Spots:** Misses the exploit if built from a different working directory (the build path is the primary anchor); misses any hand-modified fork that renames the source files
+
 **Validation:** Scan `cve21839` or `wl_exploit` (both confirmed byte-identical except for 106 bytes of build metadata); an unrelated Go ELF binary must NOT fire
+
 **Deployment:** File scanning, hunting sweep for the known public CVE-2023-21839 tool
 
 ```yara
@@ -354,6 +424,7 @@ rule PublicTool_CVE_2023_21839_WebLogic_GoExploit {
       $path and 1 of ($f1, $f2, $f3, $f4)
 }
 ```
+
 **File name:** `susp_cve_2023_21839_weblogic_go_exploit_pubtool.yar`
 
 ---
@@ -367,12 +438,19 @@ rule PublicTool_CVE_2023_21839_WebLogic_GoExploit {
 #### Chisel Client Establishing a Reverse SOCKS Tunnel
 
 **Tier:** Detection
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1572 (Protocol Tunneling)
+
 **Confidence:** HIGH
+
 **False Positives:** Authorized use of chisel for legitimate remote-support or internal tunneling by an IT team
+
 **Blind Spots:** Misses chisel invoked via a renamed binary with the process name changed to something innocuous; misses forward-SOCKS or plain port-forward chisel modes that don't use the reverse-SOCKS shorthand
+
 **Validation:** Run `chisel_win.exe client <server> R:socks` on a test host; a chisel invocation without any SOCKS reverse flag (a plain port-forward) must NOT fire
+
 **Deployment:** Windows EDR / Sysmon on internal, network-adjacent hosts
 
 ```yaml
@@ -408,6 +486,7 @@ falsepositives:
     - Authorized use of chisel for legitimate remote-support or internal tunneling by an IT team
 level: high
 ```
+
 **File name:** `proc_creation_win_chisel_reverse_socks_tunnel.yml`
 
 **Internal Windows Post-Exploitation**
@@ -415,13 +494,21 @@ level: high
 #### Registry Hive Save of SAM or SYSTEM via reg.exe
 
 **Tier:** Detection
+
 **Robustness:** 3
+
 **ATT&CK Coverage:** T1003.002 (Security Account Manager)
+
 **Confidence:** HIGH
+
 **Rationale:** The report records a script written to export the SAM and SYSTEM hives into a web root (no captured outcome, so whether it ran is not known). The rule is keyed on the `reg save` of those two hives, which is the same step whatever the destination, and does not test the destination path, so a title that said "Non-Standard Location" was withdrawn.
+
 **False Positives:** Scheduled or scripted backup jobs that export the SAM or SYSTEM hive to a controlled backup location
+
 **Blind Spots:** Matches only the `HKLM\SAM` and `HKLM\SYSTEM` spellings, so `HKEY_LOCAL_MACHINE\SAM` is missed. The save test is a space-delimited token (` save `), so `reg.exe query HKLM\SAM /v autosave` does not match, while a value literally named `save` followed by another argument would. Misses hive theft performed via a non-`reg.exe` method, meaning direct API calls, a custom dumping tool, or volume shadow copy access
+
 **Validation:** Run `reg save HKLM\SAM C:\temp\sam.bak` on a test host; a legitimate scheduled backup task exporting the SAM hive to a known backup share should be reviewed against the false-positive list, not silently excluded
+
 **Deployment:** Windows EDR / Sysmon, all hosts
 
 ```yaml
@@ -460,17 +547,25 @@ falsepositives:
     - Scheduled or scripted backup jobs that export the SAM or SYSTEM hive to a controlled backup location
 level: high
 ```
+
 **File name:** `proc_creation_win_reg_save_sam_system_webroot.yml`
 
 #### Command Shell Spawned by a Web Server or Application Server Process
 
 **Tier:** Detection
+
 **Robustness:** 3
+
 **ATT&CK Coverage:** T1059.001 (PowerShell), T1059.003 (Windows Command Shell)
+
 **Confidence:** HIGH
+
 **False Positives:** Application performance monitoring or health-check agents integrated into the web server that intentionally spawn a shell; legitimate administrative scripting hooked into an IIS or Java application-server deployment pipeline
+
 **Blind Spots:** Misses shells spawned two or more hops downstream of the web-server process (webshell then scheduled task then shell); misses non-Windows web servers
+
 **Validation:** Exploit a test IIS or WebLogic/GeoServer instance to spawn `cmd.exe` or `powershell.exe` as a direct child; a legitimate `w3wp.exe`-hosted management API that shells out to run a signed, known maintenance script should be reviewed rather than silently excluded
+
 **Deployment:** Windows EDR / Sysmon on all IIS, Apache, and Java application-server hosts
 
 ```yaml
@@ -512,17 +607,25 @@ falsepositives:
     - Legitimate administrative scripting hooked into an IIS or Java application-server deployment pipeline
 level: high
 ```
+
 **File name:** `proc_creation_win_shell_spawned_from_webserver_process.yml`
 
 #### PowerShell Remoting Session Establishment Command
 
 **Tier:** Detection
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1021.006 (Windows Remote Management)
+
 **Confidence:** HIGH
+
 **False Positives:** Legitimate remote administration via PowerShell remoting, common where Ansible, DSC, or SCOM manage the WinRM estate
+
 **Blind Spots:** Misses WinRM sessions established via a compiled tool rather than PowerShell's own cmdlets; misses WMI-based lateral movement entirely
+
 **Validation:** Run `New-PSSession -ComputerName <host>` on a test host; a known configuration-management tool's scheduled WinRM session establishment should be allow-listed by source host rather than excluded by rule
+
 **Deployment:** Windows EDR / Sysmon, all hosts, prioritized on internet-facing or recently-exploited application servers
 
 ```yaml
@@ -560,17 +663,25 @@ falsepositives:
     - Legitimate remote administration via PowerShell remoting, common where Ansible, DSC or SCOM manage the WinRM estate
 level: high
 ```
+
 **File name:** `proc_creation_win_winrm_session_establishment_webshell.yml`
 
 #### Net Use Command Targeting an Administrative Share With Explicit Credentials
 
 **Tier:** Detection
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1021.002 (SMB/Windows Admin Shares)
+
 **Confidence:** HIGH
+
 **False Positives:** IT support scripts that intentionally authenticate to IPC$ with alternate credentials for administrative tasks
+
 **Blind Spots:** Misses credential spraying performed directly via SMB (not through `net.exe`) or via a compiled tool; misses a single successful authentication with no separately-logged failed attempts
+
 **Validation:** Run `net use \\<host>\IPC$ /user:test test` on a test host; a known IT helpdesk tool's scripted use of alternate credentials against IPC$ should be allow-listed by source host
+
 **Deployment:** Windows EDR / Sysmon, all hosts
 
 ```yaml
@@ -605,6 +716,7 @@ falsepositives:
     - IT support scripts that intentionally authenticate to IPC$ with alternate credentials for administrative tasks
 level: high
 ```
+
 **File name:** `proc_creation_win_ipc_share_credential_spray.yml`
 
 **Linux Kernel LPE (Public Dirty Frag)**
@@ -612,12 +724,19 @@ level: high
 #### Content Change to /etc/passwd or /usr/bin/su by a Non-Package Account Tool
 
 **Tier:** Detection
+
 **Robustness:** 3
+
 **ATT&CK Coverage:** T1098 (Account Manipulation), T1222.002 (Linux and Mac File and Directory Permissions Modification)
+
 **Confidence:** HIGH
+
 **False Positives:** Legitimate account provisioning against `/etc/passwd` via `systemd-sysusers`, `useradd`, or `chfn` is excluded above (`filter_system_account_tools`); this closed 4 of 4 lifetime alerts, all reproduced legitimate provisioning. A package-manager transaction that patches `/usr/bin/su` by updating `coreutils` is NOT filtered and should still be correlated and excluded before alerting.
+
 **Blind Spots:** Misses privilege escalation that creates a new uid-0 account elsewhere in `/etc/passwd` rather than overwriting line 1, or that patches a different SUID binary instead of `/usr/bin/su`. `filter_system_account_tools` also recognizes the invoking tool by binary path, not whether a package manager actually triggered it: an attacker who runs the genuine `useradd`, `chfn`, or `systemd-sysusers` binary directly against `/etc/passwd`, with no package transaction involved at all, is now silently excluded here too. That gap is exactly what the companion process_creation rule below targets, by watching argument shapes and process ancestry rather than tool identity.
+
 **Validation:** Overwrite `/usr/bin/su` directly, or touch `/etc/passwd` from a process whose image path does not end in `/systemd-sysusers`, `/useradd`, or `/chfn`; both must fire. Run `systemd-sysusers`, `useradd`, or `chfn` against `/etc/passwd` (or trigger the pacman `20-systemd-sysusers.hook` or a dpkg `adduser --system` post-install path) and confirm it does NOT fire, while a parallel `/usr/bin/su` overwrite in the same test still fires, confirming the filter is scoped to the `/etc/passwd` arm only.
+
 **Deployment:** Linux EDR / Sysmon for Linux file events (the measured deployment used Elastic Endpoint file events), all hosts, prioritized on any host exposed to a page-cache-write kernel exploit. Raw auditd is not a source as written: it splits the path (PATH record) from the executable (SYSCALL record), and this rule needs `TargetFilename` and `Image` in one event, which needs a normalisation pipeline the rule does not declare. Deploy alongside the companion process_creation rule below, which restores the direct-invocation coverage this rule's package-tool exclusion gives up.
 
 *Fixed 2026-09-02 (measured on `logs-endpoint.events.file-*` over the full 55-day retained window).* The rule's original title claimed detection "outside a package transaction", which the query never implemented: `selection` matched any write to `/etc/passwd` or `/usr/bin/su` with no correlation to package-manager activity at all, so every legitimate account-provisioning write also alerted. Measured lifetime: 4 of 4 alerts were legitimate provisioning, reproduced independently on two unrelated package ecosystems, pacman's `20-systemd-sysusers.hook` on one host and dpkg's `adduser --system` (invoking `useradd` and `chfn`) on another. A genuine package-transaction correlation is not achievable with this telemetry: Elastic Endpoint file events carry no `process.parent.name` or `process.parent.executable`, only an opaque `process.parent.entity_id`, and the cross-index join needed to resolve the invoking process returns zero hits on one host and only a generic `perl` interpreter on the other, neither of which identifies a package transaction. `filter_system_account_tools` therefore excludes by invoking-tool identity instead, scoped to `/etc/passwd` only so `/usr/bin/su` keeps full, unfiltered coverage. Measured 4 to 0, with a residual check confirming zero other `/etc/passwd` or `/usr/bin/su` events in the 55-day corpus. The coverage this costs, an attacker running the genuine account tools directly with no package transaction involved, is accepted deliberately and mitigated by the companion rule below (`ea34e2ee-aedb-4ead-a572-2fb6531e41a2`).
@@ -683,17 +802,25 @@ falsepositives:
         filtered tools.
 level: high
 ```
+
 **File name:** `file_event_lnx_passwd_su_privesc_tamper.yml`
 
 #### Useradd or Usermod Setting a Root-Equivalent or Duplicate UID Outside a Known Package Manager
 
 **Tier:** Detection
+
 **Robustness:** 3
+
 **ATT&CK Coverage:** T1136.001 (Local Account), T1098 (Account Manipulation)
+
 **Confidence:** HIGH
+
 **False Positives:** A deliberately provisioned dual-root-equivalent service account documented as a business exception, for example a legacy appliance or application that requires `--non-unique` or `-u 0`. A configuration-management tool (Ansible, Puppet, Chef, cloud-init) that shells out to `useradd` or `usermod` directly instead of through a package manager, since the parent-image filter below only excludes package-manager parents, not provisioning frameworks.
+
 **Blind Spots:** Misses privilege escalation via `useradd`/`usermod` that avoids these specific flags entirely, for example `usermod -aG sudo` or `usermod -aG wheel` to add an existing account to a privileged group, or any route that edits `/etc/passwd`, `/etc/shadow`, or `/etc/sudoers` directly rather than going through these two tools; the companion file_event rule (`9d64a8dc-f752-4455-9329-73ff8738d150`) covers the direct-file-edit path for `/etc/passwd` and `/usr/bin/su` specifically. The package-manager parent filter is also a fixed list of known binaries, not a true transaction correlation: a configuration-management tool not on that list, or a bespoke provisioning script that itself shells out to `useradd`/`usermod`, is not distinguished from an attacker doing the same thing.
+
 **Validation:** Run `usermod -u 0 <existing-non-root-account>` or `useradd -o -u 0 backdoor` directly from an interactive shell on a test host; must fire. Trigger a real package installation whose postinst script calls `useradd` (for example a package that provisions a system account) and confirm it does NOT fire, because its parent resolves to the package manager.
+
 **Deployment:** Linux EDR / Sysmon for Linux / auditd (SYSCALL and EXECVE records correlated to a resolved parent), all hosts. Deploy alongside the companion file_event rule (`9d64a8dc-f752-4455-9329-73ff8738d150`), which covers the same technique from the file-write side and gives up direct-invocation coverage that this rule restores.
 
 *Authored 2026-09-02 to close the gap recorded against `9d64a8dc-f752-4455-9329-73ff8738d150`.* That rule's `filter_system_account_tools` exclusion recognizes `systemd-sysusers`, `useradd`, and `chfn` by binary path alone, with no way to confirm a package manager actually invoked them, because Elastic Endpoint file events carry no resolved parent-process field. An attacker who runs those same binaries directly, with a shell or an SSH session as the real parent, is therefore invisible to that rule. Process-creation telemetry does carry `ParentImage`, so this rule targets the same tools from that side instead: a high-signal argument shape that grants a root-equivalent or duplicate UID/GID, which fires unless the parent resolves to a known package manager.
@@ -780,6 +907,7 @@ falsepositives:
         these should extend filter_parent_pkgmgr with its process name.
 level: high
 ```
+
 **File name:** `proc_creation_lnx_useradd_usermod_uid0_privesc.yml`
 
 ### Hunting Rules
@@ -789,12 +917,19 @@ level: high
 #### Chisel or PuTTY Plink Binary Written to Disk
 
 **Tier:** Hunting
+
 **Robustness:** 1
+
 **ATT&CK Coverage:** T1105 (Ingress Tool Transfer)
+
 **Confidence:** MODERATE
+
 **False Positives:** Legitimate administrative use of PuTTY plink for scripted SFTP/SCP or SSH automation; authorized use of chisel by an internal red team or IT support function
+
 **Blind Spots:** Misses either tool renamed to a non-standard filename; misses delivery via an archive or installer rather than a direct binary write
+
 **Validation:** Copy `chisel_win.exe` or `plink.exe` to a test host; treat any hit as a hunting lead requiring confirmation of the file's origin (an external HTTP fetch is the high-confidence variant) before escalating
+
 **Deployment:** Windows EDR / Sysmon, all hosts
 
 ```yaml
@@ -830,6 +965,7 @@ falsepositives:
     - Authorized use of chisel by an internal red team or IT support function
 level: medium
 ```
+
 **File name:** `file_event_win_chisel_plink_external_fetch_drop.yml`
 
 **Userland Rootkit & AAA-Host Anti-Forensics**
@@ -837,12 +973,19 @@ level: medium
 #### Content Change to a Core Process or Network Inspection Utility
 
 **Tier:** Hunting
+
 **Robustness:** 1
+
 **ATT&CK Coverage:** T1014 (Rootkit)
+
 **Confidence:** MODERATE
+
 **False Positives:** Routine package-manager updates to `procps`, `psmisc`, `findutils`, or `rpm`; operating-system or distribution upgrades that replace these utilities during a normal maintenance window
+
 **Blind Spots:** A single hit alone is expected noise, since individual per-file changes are common after routine updates. Sigma cannot express the "multiple hits across this set on the same host in a short window, outside a package transaction" correlation that is the actual high-confidence rootkit-install signature; an analyst must apply that correlation manually. The Detection-tier coverage for this specific artifact lives in the YARA tar-archive rule instead, which anchors on the structural originals-backup pattern rather than individual file events
+
 **Validation:** Modify any of the seven listed binaries on a test host; a routine `yum`/`apt` update touching one of these binaries as part of a scheduled patch cycle is the expected single-hit false positive and should not be escalated alone
+
 **Deployment:** Linux EDR / Sysmon for Linux / FIM tooling, all hosts, especially AAA/RADIUS and other security-relevant infrastructure
 
 ```yaml
@@ -889,17 +1032,25 @@ falsepositives:
     - Operating-system or distribution upgrades that replace these utilities during a normal maintenance window
 level: medium
 ```
+
 **File name:** `file_event_lnx_userland_rootkit_binary_tamper.yml`
 
 #### Creation or Modification of the safe_pollRadiusLog Watchdog Script
 
 **Tier:** Hunting
+
 **Robustness:** 1
+
 **ATT&CK Coverage:** T1543 (Create or Modify System Process), T1070.006 (Indicator Removal: Timestomp, contextual; the file's mtime was backdated, but the `file_event` category does not carry that field)
+
 **Confidence:** MODERATE
+
 **False Positives:** Unlikely. This is a campaign-specific filename, and any legitimate script sharing it should be independently verified rather than excluded outright
+
 **Blind Spots:** A single hardcoded path (`/usr/local/bin/safe_pollRadiusLog.sh`, matched exactly, so a copy of the file elsewhere does not match); a renamed variant in a future campaign evades entirely. This rule has genuine retrospective-hunting and attribution value for this specific campaign but is not durable against operator rotation, which is why it is capped at Hunting despite the very low false-positive rate
+
 **Validation:** Create or modify a file at this exact path on a test host; there is no legitimate software distribution that ships a file with this name at this path
+
 **Deployment:** Linux EDR / Sysmon for Linux, prioritized on AAA/RADIUS infrastructure
 
 ```yaml
@@ -931,18 +1082,27 @@ falsepositives:
     - Unlikely; this is a campaign-specific filename, and any legitimate script sharing it should be independently verified rather than excluded outright
 level: medium
 ```
+
 **File name:** `file_event_lnx_radius_watchdog_backdoor_script.yml`
 
 #### Java Process Spawning a Unix Shell With an Inline Command
 
 **Tier:** Hunting
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1059.004 (Unix Shell)
+
 **Confidence:** HIGH
+
 **Rationale:** The rule tests one shape: a Java process (parent image ending in `/java`) directly starting `bash`, `sh` or `dash` with the text ` -c ` in the command line. That is a common shape of command execution after a JVM compromise, but not an unavoidable one: an exploit that reaches a shell through an intermediate process, or that runs a command without a shell, does not produce it (see Blind Spots), so the durability is that of one process relationship (Robustness 2). The rule tests nothing about the exploitation that came before, and any Java service that shells out with ` -c ` matches; the title previously claimed that the shell followed WebLogic JNDI exploitation. It is Hunting tier at level medium for that reason.
+
 **False Positives:** Java-based build, backup, or health-check tooling that intentionally shells out to run a maintenance command; application servers configured to invoke OS-level scripts as part of legitimate scheduled jobs
+
 **Blind Spots:** Misses RCE payloads that reach a shell through an intermediate process rather than `java` spawning the shell directly; misses non-Java application servers entirely
+
 **Validation:** Have a test Java process start `/bin/bash -c 'id'` directly: the rule must fire. A Java process starting `/bin/bash script.sh` without ` -c `, one starting a tool such as `/usr/bin/id` directly, and one reaching a shell through an intermediate process, must NOT fire. A Java backup or health-check tool that itself runs `bash -c` WILL fire and is reviewed against the false-positive list.
+
 **Deployment:** Linux EDR / Sysmon for Linux on WebLogic, GeoServer, or any Java application-server host
 
 ```yaml
@@ -985,6 +1145,7 @@ falsepositives:
     - Application servers configured to invoke OS-level scripts as part of legitimate scheduled jobs
 level: medium
 ```
+
 **File name:** `proc_creation_lnx_java_spawns_shell_weblogic_rce.yml`
 
 **Tunnelling & Internal Pivot**
@@ -1000,12 +1161,19 @@ level: medium
 #### Network-Device Self-Exfiltration via Outbound PUT with User-Agent cisco-IOS
 
 **Tier:** Detection
+
 **Robustness:** 3
+
 **ATT&CK Coverage:** T1048.003 (Exfiltration Over Unencrypted Non-C2 Protocol), T1041 (Exfiltration Over C2 Channel)
+
 **Confidence:** HIGH
+
 **False Positives:** None known. Legitimate Cisco IOS-XE devices do not PUT their own firmware, core dumps, or configuration files to arbitrary internet destinations outside a vendor-managed workflow, and that workflow does not use this method
+
 **Blind Spots:** Misses the exfiltration if a future campaign spoofs a different User-Agent string, or if the compromised device is a different vendor whose self-identifying User-Agent differs from `cisco-IOS`
+
 **Validation:** Configure a lab IOS-XE device to WSMA `fileCopy` a file to an external HTTP listener and confirm the alert fires; a legitimate software check-in from the same device class to vendor update infrastructure (which uses GET, not PUT, for that purpose) must NOT fire
+
 **Deployment:** Perimeter / egress sensor, prioritized on any network segment carrying traffic from carrier-managed customer-premises equipment
 
 ```
@@ -1015,12 +1183,19 @@ alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL DETECT WebLogicTelecomHa
 #### Cisco IOS-XE Double-Encoded WSMA Path Bypass (Operator Fingerprint)
 
 **Tier:** Detection
+
 **Robustness:** 3
+
 **ATT&CK Coverage:** T1190 (Exploit Public-Facing Application)
+
 **Confidence:** HIGH
+
 **False Positives:** None known. This exact double-encoded string does not occur in legitimate WSMA client traffic or in the public CVE-2023-20198 proof-of-concept tooling, which uses a different, single-encoded lowercase form
+
 **Blind Spots:** Misses the wider CVE-2023-20198 exploitation class entirely; see the companion GENERIC rule below for that coverage. Misses a future campaign where this operator changes the encoding pattern
+
 **Validation:** Send a test HTTP POST containing this exact URI string to a lab web server and confirm the alert fires; a request using the generic, single-encoded public proof-of-concept path must NOT fire this rule (it fires the separate GENERIC rule instead)
+
 **Deployment:** Perimeter sensor in front of any IOS-XE WebUI management interface
 
 ```
@@ -1032,12 +1207,19 @@ alert http $EXTERNAL_NET any -> $HOME_NET any (msg:"THL DETECT WebLogicTelecomHa
 > **Not operator-specific.** This rule fires on the generic public CVE-2023-20198 auth-bypass URI, which is a materially broader detection than the operator fingerprint above. It also fires on the five other, unrelated intruders confirmed hitting the same victim router with this exact public URI. Do not treat a hit on this rule alone as attribution to this operator.
 
 **Tier:** Detection
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1190
+
 **Confidence:** HIGH
+
 **False Positives:** None known. This specific URI and query-string combination is the confirmed public CVE-2023-20198 auth-bypass confirmation path and does not occur in ordinary IOS-XE WebUI browsing
+
 **Blind Spots:** Deliberately broad by design (see the callout above); cross-reference with the operator-specific double-encoded-path rule or source IP before attributing a hit to this campaign
+
 **Validation:** Send a test HTTP POST to `/webui/logoutconfirm.html?logon_hash=1` against a lab web server and confirm the alert fires; ordinary logout traffic on an unrelated web application lacking the `logon_hash=1` parameter must NOT fire
+
 **Deployment:** Perimeter sensor in front of any IOS-XE WebUI management interface
 
 ```
@@ -1049,17 +1231,25 @@ alert http $EXTERNAL_NET any -> $HOME_NET any (msg:"THL DETECT GENERIC-CVE-2023-
 > **Not operator-specific.** This rule matches the forged-token *shape* used across the public CVE-2023-20198 exploitation class, not this operator's specific literal value (`0123456789abcdefab`).
 
 **Tier:** Detection
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1190
+
 **Confidence:** HIGH
+
 **False Positives:** None known for a well-formed HTTP Authorization header. Legitimate clients always send a recognized auth scheme (Basic, Bearer, Digest, and similar) as a prefix; a bare 18-character hex string with nothing else (upper or lower case, because the PCRE is case-insensitive) is not a real credential format used by any standard client
+
 **Blind Spots:** Generic CVE-class signature. Will fire on any of the other observed intruders or future unrelated actors using a forged bare-hex token of the same length. Misses a forged token of a different length or one wrapped in a scheme prefix to evade this exact-length check
+
 **Validation:** Send a test HTTP request with `Authorization: 0123456789abcdefab` (no scheme) against a lab web server and confirm the alert fires; a request with a genuine `Authorization: Basic <base64>` header must NOT fire
+
 **Deployment:** Perimeter sensor in front of any IOS-XE WebUI management interface
 
 ```
 alert http $EXTERNAL_NET any -> $HOME_NET any (msg:"THL DETECT GENERIC-CVE-2023-20198 Cisco IOS-XE Forged Bare-Hex Authorization Token (Public Exploit Class)"; flow:established,to_server; content:"Authorization"; http_header; pcre:"/^Authorization:\s*[a-f0-9]{18}\s*$/mHi"; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817-detections/; classtype:web-application-attack; sid:9301804; rev:2; metadata:author The_Hunters_Ledger, date 2026-08-17;)
 ```
+
 **Design note:** The `H` PCRE flag pins the match to the normalized HTTP header buffer, and the fixed `{18}` count (not a variable-length run) means this pattern cannot absorb the buffer's own CRLF line terminator the way a greedy quantifier could.
 
 **WebLogic T3/JNDI Exploitation**
@@ -1067,28 +1257,43 @@ alert http $EXTERNAL_NET any -> $HOME_NET any (msg:"THL DETECT GENERIC-CVE-2023-
 #### WebLogic T3/IIOP JNDI OpaqueReference Injection
 
 **Tier:** Detection
+
 **Robustness:** 3
+
 **ATT&CK Coverage:** T1190 (Exploit Public-Facing Application)
+
 **Confidence:** HIGH
+
 **False Positives:** None known. Legitimate WebLogic T3/IIOP administrative traffic does not carry these specific JNDI reference class names; they are the CVE-2023-21839/CVE-2024-21182 exploitation primitive itself
+
 **Blind Spots:** Port-scoped to 7001, this campaign's observed target port, so it misses the same exploitation traffic against a WebLogic instance running on a non-default T3 port. Misses the exploit entirely if the payload is fragmented such that `OpaqueReference` never appears as a contiguous string within a single inspected segment
+
 **Validation:** Send a captured or reconstructed CVE-2023-21839/CVE-2024-21182 exploitation payload against a lab WebLogic instance on port 7001 and confirm the alert fires; ordinary WebLogic T3 administrative traffic (console login, cluster heartbeat) must NOT fire
+
 **Deployment:** Perimeter / internal segment sensor in front of any WebLogic T3 listener
 
 ```
 alert tcp $EXTERNAL_NET any -> $HOME_NET 7001 (msg:"THL DETECT WebLogicTelecomHarvester WebLogic T3-IIOP JNDI OpaqueReference Injection (CVE-2023-21839/CVE-2024-21182)"; flow:established,to_server; content:"OpaqueReference"; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817-detections/; classtype:attempted-admin; sid:9301806; rev:2; metadata:author The_Hunters_Ledger, date 2026-08-17;)
 ```
+
 **Design note:** This rule matches on `OpaqueReference` as a suffix common to both `AggregatableOpaqueReference` and `ForeignOpaqueReference`, the two class names that co-occur in every observed variant of this exploitation chain.
 
 #### GeoServer OGC-Filter RCE via valueReference exec()
 
 **Tier:** Detection
+
 **Robustness:** 3
+
 **ATT&CK Coverage:** T1190
+
 **Confidence:** HIGH
+
 **False Positives:** None known. Legitimate GeoServer OGC-filter requests do not construct a `valueReference` value that invokes `exec(`
+
 **Blind Spots:** Misses obfuscated or URL-encoded variants of the payload where `exec(` does not appear as a contiguous literal string in the URI; misses exploitation of the same CVE delivered via a request body rather than the URI
+
 **Validation:** Send the CVE-2024-36401 test payload (`valueReference=exec(java.lang.Runtime.getRuntime(),'whoami')`) against a lab GeoServer instance and confirm the alert fires; an ordinary WFS `GetPropertyValue` request using a benign `valueReference` must NOT fire
+
 **Deployment:** Perimeter sensor in front of any GeoServer instance
 
 ```
@@ -1102,13 +1307,21 @@ alert http $EXTERNAL_NET any -> $HOME_NET any (msg:"THL DETECT WebLogicTelecomHa
 #### WebSocket Upgrade Handshake to an External Host (Tunnel Hunting Lead)
 
 **Tier:** Hunting
+
 **Robustness:** 1
+
 **ATT&CK Coverage:** T1572 (Protocol Tunneling)
+
 **Confidence:** LOW
+
 **Rationale:** The report records chisel v1.23.1 (a reverse tunnel carried over WebSocket). The rule matches an `Upgrade:` request header followed within 16 bytes by the word `websocket`, in any letter case and with any spacing in that gap, from `$HOME_NET` to `$EXTERNAL_NET`, and nothing chisel-specific, so it flags any outbound WebSocket upgrade handshake that the sensor can read as HTTP as a lead for tunnel hunting. It reads the header text itself, so it fires only on a plaintext or decrypted (TLS-inspected) handshake; an ordinary TLS connection hides the header and does not match.
+
 **False Positives:** Any legitimate application using WebSockets. Chat applications, live dashboards, monitoring tools, and many modern web apps use this same upgrade handshake. This rule is intentionally broad and requires analyst triage of the destination and subsequent traffic pattern; a persistent, otherwise-idle connection carrying periodic small frames is more consistent with a tunnel than an interactive WebSocket application
+
 **Blind Spots:** Cannot distinguish chisel specifically from any other WebSocket-based tool without deeper protocol fingerprinting. The four captured chisel server key fingerprints in the IOC feed are a stronger pivot once a candidate connection is identified, but they are not wire-visible without TLS interception, since chisel typically runs over HTTPS
+
 **Validation:** Send a plaintext HTTP/1.1 request with an `Upgrade: websocket` header (or a differently cased or spaced form such as `Upgrade:WebSocket`) from a lab host to an external server and confirm the alert fires; a chisel or other WebSocket connection over TLS fires only where the sensor decrypts it. Expect it to also fire on unrelated legitimate WebSocket traffic, which is the reason for the Hunting tier. An `Upgrade: h2c` request must NOT fire
+
 **Deployment:** Egress sensor, hunting sweep rather than a blocking rule
 
 ```
@@ -1120,13 +1333,21 @@ alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL HUNT WebLogicTelecomHarv
 #### PRTG Bulk Device Inventory Query via table.json
 
 **Tier:** Hunting
+
 **Robustness:** 1
+
 **ATT&CK Coverage:** T1018 (Remote System Discovery)
+
 **ATT&CK Note:** T1555 was listed here as contextual and is withdrawn. The rule matches a `table.json?content=devices&count=500` request, which enumerates up to 500 monitored devices with their hosts and groups (the fleet-enumeration step in the operator's script); it observes no password-store access. The credential-extraction rule below carries T1555.
+
 **Confidence:** LOW
+
 **False Positives:** Legitimate bulk device-inventory queries are a normal part of PRTG dashboard usage, monitoring integrations, and reporting tools; this specific query shape is not inherently malicious on its own
+
 **Blind Spots:** Cannot distinguish an operator's reconnaissance pull from a legitimate administrator's or integration's bulk query without additional context (source IP reputation, time of day, or correlation with the credential-extraction rule above)
+
 **Validation:** Send a test `table.json?content=devices&count=500` request against a lab PRTG instance and confirm the alert fires; expect this to also fire on legitimate administrative and integration traffic, which is the reason for the Hunting tier
+
 **Deployment:** Perimeter or internal sensor, hunting sweep rather than a blocking rule
 
 ```
@@ -1136,17 +1357,25 @@ alert http $EXTERNAL_NET any -> $HOME_NET any (msg:"THL HUNT WebLogicTelecomHarv
 #### Malicious LDAP-JNDI Callback Response
 
 **Tier:** Hunting
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1190
+
 **Confidence:** MODERATE
+
 **False Positives:** *Round 2, 2026-10-10:* the rule matches the string `javaCodeBase` anywhere in the payload of any inbound TCP response to a `$HOME_NET` client. It does not establish that the traffic is LDAP or that the string is an attribute value, so a downloaded web page, source file or document that contains the text also fires. The string is uncommon in ordinary LDAP directory responses (user lookups, group membership, authentication binds), which is why it is still a useful lead; it is not proof of a JNDI callback. Re-tiered from Detection to Hunting
+
 **Blind Spots:** Covers only the reference mode (`javaCodeBase`); a serialized-object response (`javaSerializedData`, documented as a separate mode in the report at lines 653 to 655) is not tested, and the earlier `msg` that listed both was corrected. Misses the callback if it uses RMI instead of LDAP for the JNDI response. Port-agnostic by design (`any` dest port), trading a small amount of specificity for coverage across this operator's non-standard port 1389 and any future port choice
+
 **Validation:** Stand up a malicious JNDI/LDAP callback server serving a `javaCodeBase` reference and trigger a test JNDI lookup against it from a lab Java application; ordinary LDAP directory traffic (an Active Directory bind and search, for example) must NOT fire (an LDAP bind and search carries no `javaCodeBase`); a web page or file download containing that text will fire
+
 **Deployment:** Egress sensor, prioritized on any segment where a Java application server can reach the internet
 
 ```
 alert tcp $EXTERNAL_NET any -> $HOME_NET any (msg:"THL HUNT WebLogicTelecomHarvester Inbound TCP Response Carrying javaCodeBase (JNDI Reference Callback Lead)"; flow:established,to_client; content:"javaCodeBase"; reference:url,the-hunters-ledger.com/hunting-detections/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817-detections/; classtype:attempted-admin; sid:9301807; rev:4; metadata:author The_Hunters_Ledger, date 2026-08-17;)
 ```
+
 **Direction fix 2026-10-10:** the header read `$HOME_NET any -> $EXTERNAL_NET any` with `flow:established,to_client`. `to_client` selects packets sent by the server of the flow, so that pairing matched an internal host answering an external client, not an external callback server answering the victim. The attacker-side LDAP server is the `$EXTERNAL_NET` source and the Java application server is the `$HOME_NET` destination, so the header is now `$EXTERNAL_NET any -> $HOME_NET any`; `rev` 2 to 3. *Round 2:* `msg` narrowed from a malicious-LDAP claim covering `javaCodeBase/javaSerializedData` to the one string the rule tests, tier token changed to `HUNT`, `rev` 3 to 4. Not replayed against a capture in this pass.
 
 **Internal Windows Post-Exploitation**
@@ -1154,13 +1383,21 @@ alert tcp $EXTERNAL_NET any -> $HOME_NET any (msg:"THL HUNT WebLogicTelecomHarve
 #### PRTG getobjectproperty.htm Request With passhash Authentication
 
 **Tier:** Hunting
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1555 (Credentials from Password Stores)
+
 **Confidence:** HIGH
+
 **Rationale:** The report describes a seven-stage script that, using working administrative API credentials, pulls stored Windows, Linux and SNMP credentials for monitored devices (staged, with no captured outcome). The rule matches a request URI that contains `getobjectproperty.htm` and `passhash=`. It tests no property name, so it does not tell a credential-property read from any other property read, and it applies no count and no threshold, so every matching request alerts. It was re-tiered from Detection to Hunting because PRTG integrations and scripts that authenticate with a `passhash` call this endpoint routinely.
+
 **False Positives:** PRTG API clients, integrations and administrator scripts that authenticate with `passhash=` and read object properties through `getobjectproperty.htm`; the endpoint is ordinary API usage, so the request is not specific to extraction
+
 **Blind Spots:** Requires visibility into plaintext HTTP. If the target serves PRTG exclusively over HTTPS/TLS without SSL inspection, this signature will not fire, and detection should rely on the corresponding PRTG audit-log signal instead (see Coverage Gaps). Misses credential extraction performed via a session cookie rather than a `passhash=` parameter
+
 **Validation:** Send a test `getobjectproperty.htm?name=windowsloginpassword&passhash=<value>` request against a lab PRTG instance and confirm the alert fires; an ordinary authenticated PRTG dashboard page load must NOT fire, and a request for `getobjectproperty.htm` that does not carry `passhash=` must NOT fire. An API client reading any other property with `passhash=` WILL fire
+
 **Deployment:** Perimeter sensor in front of any PRTG instance. The rule needs an `$EXTERNAL_NET` source and a `$HOME_NET` destination, so a sensor on an internal segment sees nothing from it for PRTG traffic that stays inside `$HOME_NET` unless `$EXTERNAL_NET` is redefined.
 
 ```
@@ -1170,12 +1407,19 @@ alert http $EXTERNAL_NET any -> $HOME_NET any (msg:"THL HUNT WebLogicTelecomHarv
 #### Non-Standard X-CMD Webshell Dispatch Header
 
 **Tier:** Hunting
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1505.003 (Web Shell)
+
 **Confidence:** MODERATE
+
 **False Positives:** An internal API or proxy that legitimately uses a custom `X-CMD` header for an unrelated purpose. Uncommon, but the header name alone is not unique enough to guarantee zero collision
+
 **Blind Spots:** Misses the webshell entirely if the operator renames the header in a future campaign; misses command dispatch via a POST body or cookie instead of a header
+
 **Validation:** Send a test HTTP request carrying a header named `X-CMD` against a lab web server and confirm the alert fires. The test is on the header name (the `http.header_names` buffer), so a request that carries only standard headers, and one whose `User-Agent` value merely contains the text `X-CMD:`, must NOT fire
+
 **Deployment:** Perimeter sensor in front of the specific compromised web root, or broadly as a hunting sweep given the MODERATE confidence
 
 ```
@@ -1187,13 +1431,21 @@ alert http $EXTERNAL_NET any -> $HOME_NET any (msg:"THL HUNT WebLogicTelecomHarv
 #### Cisco WSMA fileCopy Request With a dstURL Parameter
 
 **Tier:** Hunting
+
 **Robustness:** 3
+
 **ATT&CK Coverage:** T1048.003
+
 **Confidence:** MODERATE
+
 **Rationale:** The report describes the operator invoking `fileCopy` with `srcURL=nvram:/<file>` and a `dstURL=http://<operator-host>/<file>`, so the router uploads its own files. The rule matches the WSMA filesystem namespace, `fileCopy` and a `dstURL=` parameter in the request body; the value of `dstURL` is never inspected, so any scheme (`http://`, `ftp://`, `tftp://`) and any destination host, external or internal, qualifies. The report also records `fileCopy` as legitimate WSMA functionality, and the discriminator it supplies (an external HTTP destination) is not tested here. The rule is therefore a lead on `fileCopy` requests with a destination parameter, re-tiered from Detection to Hunting, and not a detector of exfiltration.
+
 **False Positives:** Legitimate WSMA `fileCopy` administrative usage carries the same three strings: a management platform or script copying a file to an internal server through WSMA fires when its request arrives from an address outside `$HOME_NET` (a management platform hosted elsewhere, or a sensor that defines `$EXTERNAL_NET` broadly). The strings together describe the `fileCopy` primitive the operator used, not the operator's use of it
+
 **Blind Spots:** Matches only the request body within the sensor's stream-reassembly depth, so an unusually fragmented SOAP body could evade. The `dstURL` value is not inspected, so the rule does not separate an external HTTP destination from an internal or non-HTTP one; pair with network context (the rule assumes `$EXTERNAL_NET` as the source contacting `$HOME_NET`, which covers this campaign's shape)
+
 **Validation:** Send a test WSMA `fileCopy` SOAP request with a `dstURL=` parameter from an `$EXTERNAL_NET` address against a lab IOS-XE device and confirm the alert fires, with an `http://`, an `ftp://` or an internal destination alike. A request with `fileCopy` but no `dstURL=`, or without the WSMA filesystem namespace, must NOT fire. A legitimate `fileCopy` with a `dstURL=` sent from an `$EXTERNAL_NET` address WILL fire
+
 **Deployment:** Perimeter sensor in front of any Cisco IOS-XE device with WSMA enabled
 
 ```

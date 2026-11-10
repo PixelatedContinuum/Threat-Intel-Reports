@@ -9,9 +9,13 @@ hide: true
 ---
 
 **Campaign:** Korean-ClaudeCode-Allowlist-OpenClaw-221.150.15.104
+
 **Date:** 2026-05-27
+
 **Author:** The Hunters Ledger
+
 **License:** CC BY 4.0
+
 **Reference:** https://the-hunters-ledger.com/reports/korean-claude-openclaw-221.150.15.104/
 
 ---
@@ -43,13 +47,21 @@ No malware binary exists in this campaign. The primary evidence is the operator'
 #### Generic Curl-Pipe-Bash Pattern in Claude Code Allowlist
 
 **Tier:** Hunting
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1685 (Disable or Modify Tools), T1059.004 (Unix Shell)
+
 **Confidence:** MODERATE
+
 **Rationale:** Matches a file under 10 KB (`filesize < 10KB`) that carries the `"permissions"` and `"allow"` keys and one quoted entry of the form `Bash(curl ... | bash)` or `Bash(curl ... | sh)`. Curl and the pipe must sit in the same entry: no double quote, carriage return or line feed may lie between `Bash(curl` and the pipe, and there is no limit on the distance between them, so a long URL or long arguments still match. The rule is a pattern match on those bytes and is not a JSON parser; an entry with an escaped quote (`\"`) between the curl and the pipe is read as two pieces and does not match. The rule does not check that the entry is inside the `permissions.allow` array, only that the file has both keys. It catches any pipe-to-shell installer allowlist entry regardless of which tooling is referenced, so it survives the operator swapping OpenClaw for another framework. The tradeoff is precision: developer endpoints with legitimate internal installer allowlists (corporate package feeds delivered via `curl | bash`) trigger this identically to attacker customization, so it stays Hunting rather than Detection.
+
 **False Positives:** Developer endpoints whose Claude Code allowlists include approved internal installer pipelines, for example corporate package feeds delivered via `curl | bash`.
+
 **Blind Spots:** An entry that downloads with `wget`, or pipes into a shell through `| zsh` or `| sudo bash`, does not match; an entry written as `curl ... | bash -s` does not match either, because the entry must end in `| bash)` or `| sh)`. A file of 10 KB or more is not scanned.
+
 **Validation:** A `settings.local.json` holding `Bash(curl -fsSL https://example.test/install.sh | bash)` in its `allow` array must fire. A file whose `allow` array holds `Bash(curl https://example.test/status)` in one entry and a separate `Bash(echo done | bash)` entry must NOT fire. A single entry whose URL is 350 characters long must fire (no span limit).
+
 **Deployment:** Server-class endpoints, CI/CD agents, jump hosts, finance/HR workstations for highest signal-to-noise ratio. On developer workstations, use as a delta-alert (new allowlist entry detected) routed to allowlist review rather than a block trigger.
 
 ```yara
@@ -79,15 +91,23 @@ rule TOOL_ClaudeCode_CurlBash_Allowlist_Generic {
 #### OpenClaw-Specific Claude Code Allowlist
 
 **Tier:** Hunting
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1685 (Disable or Modify Tools), T1059.004 (Unix Shell)
+
 **Confidence:** MODERATE
+
 **Rationale:** Matches a file under 10 KB (`filesize < 10KB`) that carries at least three of the six distinct OpenClaw permission-allowlist entries found in the operator's `settings.local.json` (the `curl|bash` installer, `npm i -g openclaw`, `openclaw onboard`, the docs fetch, the gateway start, the UI open). Each of the six entries is its own string and no entry counts twice (the gateway string is the prefix `Bash(openclaw gateway --port`, so it confirms the start of that entry and not its port number or closing parenthesis), so the match needs three different allowlist lines and not one line repeated. The rule keys on those literal entry strings, which the operator or the OpenClaw project can change, so it is a scoping lead and not an alert. Anyone who adopts OpenClaw legitimately and pre-approves its documented install steps in Claude Code produces the same file: the report records that OpenClaw is a publicly distributed framework with legitimate adopters, and that a single file cannot show who wrote the allowlist.
+
 **False Positives:**
 - A legitimate OpenClaw adopter who pre-approved three or more of its documented install and start commands in their own Claude Code configuration.
 - A security team or researcher holding a copy of the operator's file or a similar sample; the rule reads file bytes and cannot tell a live configuration from a stored copy.
+
 **Blind Spots:** An operator who rewrites the allowlist to reference fewer than three of the six entries (for example pre-authorizing only the npm path behind a generic command alias) evades this rule. It does not test the file name or location, only a size limit and the strings. It misses non-JSON permission mechanisms if Claude Code's config format changes.
+
 **Validation:** Scan a file holding the operator's documented allowlist (the installer, npm, onboard, docs fetch, gateway and UI entries) and confirm the rule fires. A `settings.local.json` holding only two of the six entries, or only the text `openclaw.ai` without an allowlist entry, must NOT fire. A stock Claude Code `settings.local.json` with no OpenClaw entries must NOT fire.
+
 **Deployment:** Endpoint file scanner or YARA-over-filesystem hunt on developer and admin workstations, run against `settings.local.json` files under `.claude/` directories (the rule does not test the path, so the scan scope is what limits it). Treat a hit as a lead to review the file's owner, not as an alert.
 
 ```yara
@@ -132,13 +152,19 @@ rule TOOL_ClaudeCode_OpenClaw_Allowlist_Specific {
 #### Claude Code settings.local.json Written or Modified
 
 **Tier:** Hunting
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1685 (Disable or Modify Tools)
+
 **Confidence:** MODERATE
+
 **Rationale:** Sigma `file_event` rules match on path metadata, not file content, in most back ends, so this rule cannot itself confirm OpenClaw-specific allowlist strings are present — it only signals that the file was written. Because Claude Code writes this same path during routine, everyday interactive use (any time a user accepts a new tool permission), the rule fires on ubiquitous benign activity on any fleet with real Claude Code adoption. The path is pinned with `startswith`, `endswith` and a whole-field regex written without `^` or `$` (Elastic's regex engine has no anchors and would read them as literal characters). The path itself is durable (Claude Code, not the operator, dictates the filename), but precision fails Detection grade — this is a scoping lead that must be paired with the YARA content rule above, not an alert.
+
 **False Positives:**
 - Routine Claude Code operation on any developer host. This file is written or updated whenever a user accepts a new tool permission, which is common, everyday interactive activity, not evidence of attacker customization by itself.
 - Legitimate OpenClaw adopters on developer-class workstations who have explicitly added OpenClaw allowlist entries to their own Claude Code configuration.
+
 **Deployment:** Linux endpoints with file-event telemetry (Sysmon for Linux or an EDR file-event feed; raw auditd records carry the file name in a PATH record that a pipeline must normalize into a file event before this rule's `TargetFilename` field exists). Pair every hit with a YARA content scan (see the YARA allowlist rule above) before treating it as a finding; do not alert on this rule alone.
 
 **FP remediation, 2026-08-13.** The selector was a bare `contains` on `/.claude/settings.local.json`, which matched the filename anywhere on disk. It fired 16 times on an inert forensic copy of a threat actor's own config sitting four directories deep under a collection tree, pulled down by `wget` and staged by `cp` and `python3.12`. That is not a quirk of one network. The same shape fires for any defender holding a malware corpus, any SOC storing collected artifacts, and any researcher who mirrors a compromised host's home directory, because a file-creation event cannot distinguish a live config controlling a host from an inert copy of one.
@@ -195,13 +221,21 @@ level: medium
 #### Command Line With Curl, openclaw.ai and a Pipe-to-Shell Fragment (OpenClaw Installer Shape)
 
 **Tier:** Hunting
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1059.004 (Unix Shell), T1685 (Disable or Modify Tools)
+
 **Confidence:** MODERATE
+
 **Rationale:** Detects a process-creation event whose command line holds the substrings `curl` and `openclaw.ai` and one of the fragments `| bash`, `|bash`, `| sh` or `|sh`, the shape of the OpenClaw `curl|bash` installer pipeline when one shell process carries the whole pipeline in its command line. The three tests are unordered substring tests with no token boundary: `curl https://x.test/a; echo openclaw.ai; echo "| bash"` satisfies them, and so does a command line that pipes into `bashful` or into `sha256sum` (the `| sh` fragment is a prefix of `| sha256sum`). The `openclaw.ai` literal keeps the match narrow in practice, and the rule makes no claim that the command downloads OpenClaw and pipes it to a shell. It stays Hunting rather than Detection because that same command line is exactly what a legitimate developer or evaluator runs when installing OpenClaw manually — the rule cannot distinguish attacker-driven, allowlist-suppressed execution from a human deliberately typing the documented install command, and no parent-process (Claude Code) correlation is available in the captured evidence to make that distinction. It is also domain-anchored (`openclaw.ai`), so it does not survive the vendor rotating install infrastructure — see the broader curl|bash YARA Hunting rule for the domain-independent resilience anchor.
+
 **False Positives:** Legitimate OpenClaw evaluation or installation on developer-class workstations, run manually and independent of any Claude Code allowlist.
+
 **Blind Spots:** The pipe has to appear in a command line, and nothing ties the `curl`, the host name and the pipe into one pipeline. When the shell starts `curl` and `bash` as two separate processes, neither command line carries the pipe and this rule does not fire. A mirrored or renamed installer host also evades the `openclaw.ai` literal.
+
 **Validation:** Run `sh -c 'curl -fsSL https://openclaw.ai/install.sh | bash'` on a test host and confirm the rule fires. A `curl https://openclaw.ai/` download with no pipe into a shell, and a `curl | bash` pipeline for a different host, must NOT fire. A command line that merely mentions all three fragments in any order, for example `echo curl openclaw.ai '| bash'`, WILL fire.
+
 **Deployment:** Linux endpoints with process-creation telemetry (auditd, Sysmon for Linux, ESA, EDR); the logsource is `product: linux`, so a macOS feed needs its own logsource mapping. Priority targets: CI/CD agents, build servers, server-class hosts with no expected reason to install AI-agent tooling.
 
 ```yaml
@@ -252,11 +286,17 @@ level: medium
 #### OpenClaw Gateway Service Started
 
 **Tier:** Hunting
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1090.001 (Internal Proxy), T1685 (Disable or Modify Tools)
+
 **Confidence:** MODERATE
+
 **Rationale:** Detects invocation of the OpenClaw local-gateway service. The original selection OR-combined an image-name match with a bare `CommandLine` match on `gateway` + `--port` — the command-line branch alone is a generic pattern that would fire on any unrelated service using those two common tokens together, such as VPN gateways, API gateways, and countless other internal tools. Tightened here to require the `openclaw` binary image **and** the `gateway`/`--port` arguments together, removing the standalone false-positive-prone branch. Even tightened, legitimate OpenClaw adopters running the gateway locally trigger this identically to attacker-driven use, so it remains Hunting.
+
 **False Positives:** Legitimate OpenClaw adopters on developer-class workstations running the gateway for sanctioned evaluation or use.
+
 **Deployment:** Linux endpoints with process-creation telemetry; the logsource is `product: linux`, so macOS endpoints are not covered by this rule as written. Cross-correlate with port-18789 listener inventory for confirmation; scope alerting priority to server-class, jump-host, and non-developer endpoints for highest signal-to-noise ratio.
 
 ```yaml
@@ -305,13 +345,21 @@ level: medium
 #### NPM Registry Fetch for OpenClaw Package
 
 **Tier:** Hunting
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1105 (Ingress Tool Transfer)
+
 **ATT&CK Note:** T1059.007 (JavaScript) and T1685 (Disable or Modify Tools) are withdrawn. The rule sees a proxy-logged request for a package name; it observes no script execution and no tampering with any tool. T1105 describes what the request is, a tool being pulled onto a host, at MODERATE because a developer fetching the same package produces the identical request.
+
 **Confidence:** MODERATE
+
 **Rationale:** Detects HTTP requests to the npm registry for the `openclaw` package name — the alternative installation path documented in the operator's allowlist (`npm i -g openclaw`). Requiring both the registry host and the package-name substring together is a reasonable combination, but it still cannot distinguish an attacker-driven install from a developer intentionally evaluating the framework, and npm proxy/HTTP-inspection telemetry is not universally available. Deployed as a Hunting lead on hosts with no expected reason to fetch AI-agent tooling.
+
 **False Positives:** Legitimate developers evaluating or installing OpenClaw on sanctioned developer workstations.
+
 **Blind Spots:** The host is matched exactly (`registry.npmjs.org`), so a proxy that logs the host with a port suffix, an npm mirror or a private registry proxy does not match. A package fetched from a cache the proxy never sees is not logged at all.
+
 **Deployment:** Web proxy logs that record the requested host and URI path (`cs-host`, `cs-uri-stem`); DNS logs hold only hostnames and cannot show the package name. Highest value on server-class and CI/CD agent hosts with no legitimate reason to fetch this package.
 
 ```yaml

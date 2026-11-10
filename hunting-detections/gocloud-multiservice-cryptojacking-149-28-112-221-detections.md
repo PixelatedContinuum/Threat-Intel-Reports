@@ -9,9 +9,13 @@ hide: true
 ---
 
 **Campaign:** GOCLOUD-MultiService-Cryptojacking-149.28.112.221
+
 **Date:** 2026-07-26
+
 **Author:** The Hunters Ledger
+
 **License:** CC BY 4.0
+
 **Reference:** https://the-hunters-ledger.com/reports/gocloud-multiservice-cryptojacking-149-28-112-221/
 
 ---
@@ -56,13 +60,21 @@ All node-1 samples are plain-text scripts, so these rules carry no PE or ELF mag
 #### GOCLOUD_Windows_Deploy_Worm_Lingkai
 
 **Tier:** Detection
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1036.005 (Match Legitimate Resource Name or Location), T1053.005 (Scheduled Task), T1021.002 (SMB Admin Shares), T1496.001 (Compute Hijacking)
+
 **Confidence:** HIGH
+
 **Logic fix 2026-10-11:** the description said the rule detects by the combination of the brand, the masquerade triad and the wallet, but the condition was `$wallettp or 3 of them` over eight strings, and the generic ones (`pool.supportxmr.com:443`, `attrib +H +S`, 网吧) could make up the three. Those three strings were removed from the rule and the condition now names the three alternatives in the description. A fixture holding only the pool address, `attrib +H +S` and the TimeService path matched the old rule and does not match the new one.
+
 **False Positives:** None known. The checksum-invalid typo wallet, or the TimeService masquerade triad, or the operator brand with two of the three masquerade strings, is unique to this toolkit.
+
 **Blind Spots:** Misses a variant that changes the wallet and also changes the task names or the TimeService path enough that neither the full triad nor brand plus two of the three still match.
+
 **Validation:** Fire it against `deploy.ps1` / `allinone.ps1` / `setup.bat`; a benign PowerShell installer or a legitimate XMRig config must NOT fire.
+
 **Deployment:** Endpoint file scan, script-drop monitoring on `%APPDATA%` and `%TEMP%`, mail and web gateway.
 
 ```yara
@@ -97,13 +109,21 @@ rule GOCLOUD_Windows_Deploy_Worm_Lingkai {
 #### GOCLOUD_Windows_Miner_WinJenkins
 
 **Tier:** Detection
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1053.005 (Scheduled Task), T1685 (Disable or Modify Tools), T1071.001 (Web Protocols), T1496.001 (Compute Hijacking)
+
 **Confidence:** HIGH
+
 **Round 2 (2026-10-11):** the meta description listed the fixed-order heartbeat as part of every match; the heartbeat is only one of three optional supporting strings and only its `/r?host=` prefix is tested, so the description now says that. **Logic fix 2026-10-11:** the condition was `3 of them` over six strings, so the three generic ones (`/r?host=`, `"donate-level": 0` and the Defender disable) satisfied it without the task name or the pool-password convention that this paragraph rests on. It now requires `$task`, `$pass` and `$defoff` together plus at least one of the heartbeat, worker-label and donate strings. A fixture holding only the heartbeat path, the donate-level line and the Defender disable matched the old rule and does not match the new one.
+
 **False Positives:** None known. The WinJenkinsHeartbeat task name paired with the `win_jenkins_` pool-password convention and the pre-download Defender disable is specific to this deployer.
+
 **Blind Spots:** Misses a rebuilt deployer that renames the heartbeat task and abandons the `win_jenkins_` worker convention.
+
 **Validation:** Fire it against `winminer.ps1`; a benign miner-management script must NOT fire.
+
 **Deployment:** Endpoint file scan, PowerShell script-drop monitoring.
 
 ```yara
@@ -140,13 +160,21 @@ rule GOCLOUD_Windows_Miner_WinJenkins {
 #### GOCLOUD_Linux_Miner_v7
 
 **Tier:** Detection
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1543.002 (Systemd Service), T1564.001 (Hidden Files and Directories), T1071.001 (Web Protocols), T1496.001 (Compute Hijacking)
+
 **Confidence:** HIGH
+
 **Logic fix 2026-10-11 (Luna review):** the description lists the banner and the heartbeat among the fingerprint, and the first clause was `$x11 and 2 of them`, where `2 of them` counts `$x11` itself, so the directory string plus one other string matched. It is now the directory string plus two of the other five. Neither the banner nor the heartbeat is required by either clause, as the description now says. A fixture with the directory string and `c3pool_miner.service` only matched the old rule and does not match the new one.
+
 **False Positives:** Not measured against a goodware corpus. The stock c3pool installer carries the service unit and the pool address (2 of the 6 strings) and reaches neither branch. The directory string and the banner do not appear in it, but neither is required: the four-of-six branch can be met without both (a fixture of the service unit, the worker label, the heartbeat prefix and the pool address fires), so on that branch the specificity comes from the `gocloud_` worker label and the other four strings together, and only the directory branch rests on the dot-suffixed X11 string.
+
 **Blind Spots:** A rebuild that drops the banner and renames the hiding directory still matches the four-of-six branch while four of the six strings remain; it evades only when fewer than four remain and the directory branch is gone too. The served static `config.json` fast path carries a `WORKER` placeholder and will not match the worker-label string.
+
 **Validation:** Fire it against `miner.sh`; a stock c3pool `setup_c3pool_miner.sh` must NOT fire.
+
 **Deployment:** Linux endpoint file scan, `/tmp` write monitoring.
 
 ```yara
@@ -182,12 +210,19 @@ rule GOCLOUD_Linux_Miner_v7 {
 #### GOCLOUD_BatchExploit_Dispatcher
 
 **Tier:** Detection
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1190 (Exploit Public-Facing Application), T1596.005 (Scan Databases), T1059.006 (Python), T1105 (Ingress Tool Transfer)
+
 **Confidence:** HIGH
+
 **False Positives:** None known. The GOCLOUD BatchExploit self-brand and the operator's live FOFA API key are not shared by benign scanning tooling.
+
 **Blind Spots:** Misses a fork that rotates the FOFA key and drops the brand string; the FOFA key alone is an atomic and is also carried in the IOC feed.
+
 **Validation:** Fire it against `batch_exploit.py` / `fofa_batch.py`; a generic FOFA client library must NOT fire.
+
 **Deployment:** Server-side file scan on suspected staging hosts, retro-hunt across script corpora.
 
 ```yara
@@ -222,12 +257,19 @@ rule GOCLOUD_BatchExploit_Dispatcher {
 #### GOCLOUD_OmniHunter_v4_Orchestrator
 
 **Tier:** Detection
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1190 (Exploit Public-Facing Application), T1596.005 (Scan Databases), T1505.003 (Web Shell)
+
 **Confidence:** HIGH
+
 **False Positives:** None known. The tomcatwar.jsp webshell name and the hard-coded Hikvision iSecure session cookie are operator artefacts, not generic scanner strings.
+
 **Blind Spots:** Misses OmniHunter v1/v2 (untraced) and any v5 that renames its modules or rotates the Hikvision cookie.
+
 **Validation:** Fire it against `omnihunter.py`; a benign vulnerability scanner must NOT fire.
+
 **Deployment:** Server-side file scan, retro-hunt across script corpora.
 
 ```yara
@@ -261,12 +303,19 @@ rule GOCLOUD_OmniHunter_v4_Orchestrator {
 #### GOCLOUD_LAN_Probe_Attack_Banner
 
 **Tier:** Detection
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1021.002 (SMB Admin Shares), T1570 (Lateral Tool Transfer)
+
 **Confidence:** HIGH
+
 **False Positives:** None known. The cleartext `=== ATTACK ===` banner is required and is unique to this probe; the other six tokens (`SMB`, `WMI`, `SCHTASKS`, `OK!`, `ADMIN$`, `IPC$`) are bare strings, any three of which suffice, so the banner carries the specificity.
+
 **Blind Spots:** `a.py` writes only canary payloads (`calc.exe`, text files), so a match confirms the probe, not an active miner drop; a renamed banner would not match.
+
 **Validation:** Fire it against `a.py`; a benign SMB administration script must NOT fire.
+
 **Deployment:** Server-side file scan, retro-hunt across script corpora.
 
 ```yara
@@ -302,13 +351,21 @@ rule GOCLOUD_LAN_Probe_Attack_Banner {
 #### GOCLOUD_Listener2_Control_Plane
 
 **Tier:** Hunting
+
 **Robustness:** 1
+
 **ATT&CK Coverage:** T1571 (Non-Standard Port), T1059.006 (Python), T1105 (Ingress Tool Transfer)
+
 **Confidence:** MODERATE
+
 **Rationale:** Re-tiered from Detection to Hunting on 2026-10-11: both required anchors are operator-chosen constants (the `CONTROL_PORT` name and the number 9997), and the four supporting tokens are short and common, so one edit to either constant defeats the rule. That is the durability of a value the tool happens to use, not of the tool's behaviour (Robustness 1). No goodware corpus was run, so treat hits as leads.
+
 **False Positives:** None known. The rule requires the strings `CONTROL_PORT` and `9997`, plus any two of `all:`, `list`, `4444` and `id\n`; the last four are short common tokens, so a small script that holds a `CONTROL_PORT` constant set to 9997 together with any two of them would also match (none seen). Of the controller behaviour in the report, only that constant and port are required; the `list` and `all:` verbs, the 4444 shell-catch port and the `id` command pushed on connect are each optional.
+
 **Blind Spots:** Misses the co-resident listener variants (`listener.py`, `fast_listener.py`) that were never captured, and any rewrite that changes the control port or the `CONTROL_PORT` constant name. The report's shell-catch port set is 4444, 5555, 6666, 7777 and 8888; the rule tests only the literal `4444`.
+
 **Validation:** Fire it against `listener2.py`; a benign netcat-style listener must NOT fire.
+
 **Deployment:** Server-side file scan on suspected C2 hosts.
 
 ```yara
@@ -350,12 +407,19 @@ All rules use ATT&CK v19 tactic tags and pass SigmaHQ `sigma check` with 0 issue
 #### Svchost Executed From Non-System Directory
 
 **Tier:** Detection
+
 **Robustness:** 3
+
 **ATT&CK Coverage:** T1036.005 (Match Legitimate Name or Location)
+
 **Confidence:** HIGH
+
 **False Positives:** Rare third-party software that ships a bundled binary literally named svchost.exe outside the system tree.
+
 **Blind Spots:** Misses a miner that keeps the binary inside System32, SysWOW64 or WinSxS (the filter is a `contains` test on the drive-rooted directory, so any subdirectory of the three is excluded too) or masquerades under a different system-process name.
+
 **Validation:** Run a renamed XMRig from `%APPDATA%\Microsoft\Windows\TimeService\svchost.exe` and confirm it fires; a genuine `C:\Windows\System32\svchost.exe` must NOT fire.
+
 **Deployment:** EDR / Sysmon Event ID 1.
 
 ```yaml
@@ -394,12 +458,19 @@ level: high
 #### Defender Real-Time Monitoring Disabled With Exclusion Added
 
 **Tier:** Detection
+
 **Robustness:** 3
+
 **ATT&CK Coverage:** T1685 (Disable or Modify Tools)
+
 **Confidence:** HIGH
+
 **False Positives:** Endpoint-management scripts that intentionally reconfigure Defender.
+
 **Blind Spots:** Requires Script Block Logging; misses tampering performed through the registry or WMI rather than the Set-MpPreference cmdlet pairing.
+
 **Validation:** Run the GOCLOUD miner install and confirm both the disable and the exclusion-add fire together; a single legitimate `Set-MpPreference` with no exclusion-add must NOT fire.
+
 **Deployment:** PowerShell Script Block logging (Event ID 4104).
 
 ```yaml
@@ -435,12 +506,19 @@ level: high
 #### Certutil Download Cradle Fetching Remote Payload
 
 **Tier:** Detection
+
 **Robustness:** 3
+
 **ATT&CK Coverage:** T1105 (Ingress Tool Transfer), T1140 (Deobfuscate/Decode Files or Information)
+
 **Confidence:** HIGH
+
 **False Positives:** Rare administrative use of certutil to retrieve certificate revocation data.
+
 **Blind Spots:** Misses payload delivery via BITS, curl, or PowerShell download methods rather than certutil.
+
 **Validation:** Run the GOCLOUD WMI LAN-spread step and confirm the `certutil -urlcache -split -f http://...` fetch fires; benign certutil certificate operations must NOT fire.
+
 **Deployment:** EDR / Sysmon Event ID 1.
 
 ```yaml
@@ -486,12 +564,19 @@ level: high
 #### Remote Scheduled Task Creation Running As SYSTEM
 
 **Tier:** Detection
+
 **Robustness:** 3
+
 **ATT&CK Coverage:** T1053.005 (Scheduled Task)
+
 **Confidence:** HIGH
+
 **False Positives:** Enterprise administration tools that provision SYSTEM scheduled tasks on remote hosts.
+
 **Blind Spots:** Misses lateral movement via WMI, service creation, or WinRM rather than remote schtasks; a token-riding worm that already holds admin on the target may still trip it.
+
 **Validation:** Run the GOCLOUD worm's LAN-spread against a lab host and confirm the remote `schtasks /create /s <host> /ru SYSTEM` fires; routine local task creation must NOT fire.
+
 **Deployment:** EDR / Sysmon Event ID 1 on the source host.
 
 ```yaml
@@ -533,12 +618,19 @@ level: high
 #### Scheduled Task Registering SYSTEM Action In User AppData
 
 **Tier:** Detection
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1053.005 (Scheduled Task), T1036.005 (Match Legitimate Name or Location)
+
 **Confidence:** HIGH
+
 **False Positives:** Unusual installers that register SYSTEM tasks pointing at per-user AppData paths.
+
 **Blind Spots:** Misses persistence registered through the Task Scheduler API or an XML import that does not pass the AppData path on the schtasks command line.
+
 **Validation:** Run `deploy.ps1` and confirm the WindowsTimeSync task creation with a `%APPDATA%` action and `/ru SYSTEM` fires; a normal per-user task must NOT fire.
+
 **Deployment:** EDR / Sysmon Event ID 1.
 
 ```yaml
@@ -587,12 +679,19 @@ level: high
 #### Process Executed From X11-Socket-Lookalike Temp Directory
 
 **Tier:** Detection
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1564.001 (Hidden Files and Directories), T1496.001 (Compute Hijacking)
+
 **Confidence:** HIGH
+
 **False Positives:** Unlikely. The standard X11 socket directory `/tmp/.X11-unix/` carries no trailing dot and suffix.
+
 **Blind Spots:** Misses a variant that changes the hiding directory name; requires process-execution telemetry (Sysmon for Linux or auditd) that captures the full image path.
+
 **Validation:** Run `miner.sh` and confirm the XMRig launch from `/tmp/.X11-unix.<rand>` fires; a normal X11 server referencing `/tmp/.X11-unix/` must NOT fire.
+
 **Deployment:** Sysmon for Linux / auditd execve telemetry.
 
 ```yaml
@@ -632,10 +731,15 @@ level: high
 #### Hidden And System Attributes Set On User AppData Path
 
 **Tier:** Hunting
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1564.001 (Hidden Files and Directories)
+
 **Confidence:** MODERATE
+
 **False Positives:** Some legitimate applications hide per-user data directories with attrib. Review the target path and the parent process before acting.
+
 **Deployment:** EDR / Sysmon Event ID 1, analyst triage.
 
 ```yaml
@@ -675,10 +779,15 @@ level: medium
 #### Script Host Executing VBScript From Windows Temp
 
 **Tier:** Hunting
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1059.005 (Visual Basic)
+
 **Confidence:** MODERATE
+
 **False Positives:** Legitimate setup scripts occasionally stage a VBScript in a temporary directory. Pivot on the script name and the child processes.
+
 **Deployment:** EDR / Sysmon Event ID 1, analyst triage.
 
 ```yaml
@@ -718,10 +827,15 @@ level: medium
 #### Net Use Mapping Administrative Share With Explicit Credential
 
 **Tier:** Hunting
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1021.002 (SMB / Windows Admin Shares)
+
 **Confidence:** MODERATE
+
 **False Positives:** Administrative scripts routinely map admin shares for management. The GOCLOUD signal is a blank-password Administrator against C$, ADMIN$, or IPC$ in sequence; triage on the credential and the share set.
+
 **Deployment:** EDR / Sysmon Event ID 1, analyst triage.
 
 ```yaml
@@ -764,10 +878,15 @@ level: medium
 #### PowerShell IEX Download Cradle From Remote Host
 
 **Tier:** Hunting
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1059.001 (PowerShell), T1105 (Ingress Tool Transfer)
+
 **Confidence:** MODERATE
+
 **False Positives:** Provisioning and bootstrap scripts legitimately fetch and run remote code. Pivot on the URL and the calling context.
+
 **Deployment:** PowerShell Script Block logging (Event ID 4104), analyst triage.
 
 ```yaml
@@ -812,10 +931,15 @@ level: medium
 #### Systemd Or Cron Executing Binary From Tmp
 
 **Tier:** Hunting
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1543.002 (Systemd Service), T1496.001 (Compute Hijacking)
+
 **Confidence:** MODERATE
+
 **False Positives:** Some legitimate software executes helper binaries from /tmp. A systemd or cron parent launching a `/tmp` binary is the GOCLOUD miner-persistence shape; triage the binary.
+
 **Deployment:** Sysmon for Linux / auditd execve telemetry, analyst triage.
 
 ```yaml
@@ -865,13 +989,21 @@ Each signature is one physical line and was accepted by the real `suricata -T` e
 #### GOCLOUD XMRig Heartbeat, Fixed Parameter Order
 
 **Tier:** Detection
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1071.001 (Web Protocols)
+
 **Confidence:** HIGH
+
 **Round 2 (2026-10-11, rev 4):** the `msg` and Validation said GET, but the rule tests only `http.uri`, and the report does not give the heartbeat's HTTP method, so the method is no longer claimed. **Wording fix 2026-10-11 (rev 3):** the `msg` said the heartbeat goes to the payload host, but the header is `$HOME_NET any -> $EXTERNAL_NET any` and the rule tests no destination, on purpose (an address would not survive rotation of the payload host), so any external server receiving this URI shape fires. The `msg` no longer says "to Payload Host".
+
 **False Positives:** None known. The `/r?host=` prefix followed by the `&status=OK&ts=` tail in one URI is a distinctive parameter order.
+
 **Blind Spots:** Fires only on the plaintext HTTP heartbeat; a TLS-wrapped or parameter-reordered beacon evades the URI match.
+
 **Validation:** Replay a captured heartbeat request and confirm it fires (any HTTP method with this URI shape fires, since only the URI is tested); ordinary web browsing must NOT fire.
+
 **Deployment:** IDS / IPS at the network egress.
 
 ```
@@ -881,12 +1013,19 @@ alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL DETECT GOCLOUD-Cryptojac
 #### GOCLOUD XMRig Worker-Label Heartbeat
 
 **Tier:** Detection
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1071.001 (Web Protocols)
+
 **Confidence:** HIGH
+
 **False Positives:** None known. The `gocloud_` and `winjenkins_` worker-name prefixes are toolkit conventions, not generic query parameters.
+
 **Blind Spots:** A rebuilt deployer that renames its worker prefixes evades; TLS hides the URI. Complements the parameter-order rule so a beacon still trips if the operator reorders parameters.
+
 **Validation:** Replay a heartbeat carrying `worker=gocloud_...` or `worker=winjenkins_...` and confirm it fires.
+
 **Deployment:** IDS / IPS at the network egress.
 
 ```
@@ -898,13 +1037,21 @@ alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL DETECT GOCLOUD-Cryptojac
 #### GOCLOUD LAN Lateral-Movement Report Banner
 
 **Tier:** Detection
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1041 (Exfiltration Over C2 Channel)
+
 **ATT&CK Note:** The rule sees only the cleartext result report that `a.py` sends to the operator. The report maps the probe's SMB admin-share use and canary file copy to T1021.002 and T1570; those are the probe's behaviours (the YARA rule on the script fingerprints the file that performs them), and this network rule does not observe them, so they are not listed here.
+
 **Confidence:** HIGH
+
 **False Positives:** None known. The literal `=== ATTACK ===` banner followed by an `OK!` result marker is unique to the `a.py` probe.
+
 **Blind Spots:** Covers only the cleartext report path; an encrypted or reformatted banner evades.
+
 **Validation:** Replay the `a.py` report to the listener and confirm it fires.
+
 **Deployment:** IDS / IPS, internal segment monitoring.
 
 ```
@@ -916,12 +1063,19 @@ alert tcp $HOME_NET any -> $EXTERNAL_NET any (msg:"THL DETECT GOCLOUD-Cryptojack
 #### GOCLOUD Windows Worm Component Retrieval
 
 **Tier:** Detection
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1105 (Ingress Tool Transfer)
+
 **Confidence:** HIGH
+
 **False Positives:** Near zero. A legitimate file literally named worm.vbs served over HTTP would be required.
+
 **Blind Spots:** A renamed worm component evades; TLS hides the URI. Sibling filenames `infect.ps1` / `allinone.ps1` / `deploy.ps1` are less distinctive and are left to the IOC-feed URLs rather than a rule.
+
 **Validation:** Request `/worm.vbs` over HTTP and confirm it fires.
+
 **Deployment:** IDS / IPS at the network egress.
 
 ```
@@ -935,10 +1089,15 @@ alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL DETECT GOCLOUD-Cryptojac
 #### GOCLOUD Linux Miner Delivery One-Liner
 
 **Tier:** Hunting
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1105 (Ingress Tool Transfer)
+
 **Confidence:** MODERATE
+
 **False Positives:** Any traffic carrying the literal `miner.sh|bash` string, which is rare but possible in benign automation discussion or logs. Triage the flow direction and the surrounding request.
+
 **Deployment:** IDS / IPS, analyst triage.
 
 ```

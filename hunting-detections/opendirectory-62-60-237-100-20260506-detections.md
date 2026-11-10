@@ -9,9 +9,13 @@ hide: true
 ---
 
 **Campaign:** OpenDirectory-MultiFamily-MaaS-62.60.237.100
+
 **Date:** 2026-05-06
+
 **Author:** The Hunters Ledger
+
 **License:** CC BY 4.0
+
 **Reference:** https://the-hunters-ledger.com/reports/opendirectory-62-60-237-100-20260506/
 
 ---
@@ -44,13 +48,21 @@ Multi-stage commodity loader chain (HijackLoader / Penguish / Rugmi) delivering 
 #### networkspec17.log PNG-IDAT Carrier
 
 **Tier:** Detection
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1027.013 (Encrypted/Encoded File), T1027.009 (Embedded Payloads)
+
 **Confidence:** HIGH
+
 **Rationale:** Anchored on the loader's own custom 4-byte framing marker at absolute file offset 0, a constant in the stage-3 carrier format. The marker is required in every condition branch, so no OR-path bypasses it. Beyond the marker one of three corroborators must hold: the per-build 4-byte XOR key at offset 4 (the report records the key stored in plaintext at file offset 4 to 7 of `networkspec17.log`); or both ASCII sentinels `IDAT` and `IEND` anywhere in the file, which makes the rule independent of the key; or the filename `networkspec17.log` together with the XOR key anywhere in the file. *Wording fix 2026-10-11:* the description and Blind Spots used to present the offset-4 key as mandatory.
+
 **False Positives:** None known — no legitimate file format begins with this 4-byte marker (the genuine PNG signature is entirely different).
+
 **Blind Spots:** A new first-chunk marker evades every branch. A new XOR key alone does not: with the marker unchanged the `IDAT` and `IEND` sentinel branch still matches. The rule targets this loader family's stage-3 carrier format, not the decoded payload.
+
 **Validation:** Scan a networkspec17.log-equivalent carrier: the marker at offset 0 must match together with the XOR key at offset 4, or with both sentinels; a legitimate PNG file (signature `89 50 4E 47`) must NOT fire, and neither must a file that has the sentinels but not the marker at offset 0.
+
 **Deployment:** File-system hunting and email gateway attachment scanning, of files or saved dumps. Memory scanning is not covered: the condition tests `filesize`, which is undefined in a libyara process-memory scan. `$idat_marker at 0` also needs the start of a file, which a memory block does not provide.
 
 ```yara
@@ -82,13 +94,21 @@ rule MALW_HijackLoader_NetworkSpec17_IDAT_Carrier {
 #### pe_03 HijackLoader Stage-3 Loader (API Hash Table)
 
 **Tier:** Detection
+
 **Robustness:** 3
+
 **ATT&CK Coverage:** T1620 (Reflective Code Loading), T1055.012 (Process Hollowing), T1480 (Execution Guardrails), T1027 (Obfuscated Files)
+
 **Confidence:** HIGH
+
 **Rationale:** Anchored on the loader's API-hash table — deterministic hash constants (X65599/`RtlHashUnicodeString` polynomial) applied to the specific Windows API names the loader must resolve to function. This is a technique chokepoint the loader cannot avoid executing, not an operator-editable config value, and the first branch requires 3 of 5 matching constants; a second branch fires on the Qihoo PDB string plus one constant.
+
 **False Positives:** None known — hash DWORDs for this specific hash algorithm and API-name set have no known legitimate collision; the first branch's 3-of-5 threshold rules out coincidental single-value matches; the second branch accepts a single hash DWORD, so the Qihoo PDB string carries that branch.
+
 **Blind Spots:** A rebuild that changes the hash algorithm or the resolved API set evades this rule; the Qihoo-PDB fallback branch (paired with only 1 hash match) is weaker and included only as a corroborating signal.
+
 **Validation:** Scan pe_03 or a sibling stage-3 loader build — either at least 3 of 5 hash DWORDs, or the Qihoo PDB string with one hash DWORD, must match; unrelated PE files using a different hash-based API resolution scheme must NOT fire.
+
 **Deployment:** Endpoint AV/EDR, saved-dump scanning, sandbox detonation. Live process-memory scanning does not match: the condition's `filesize` test is undefined there, so only files and saved dumps are scanned.
 
 ```yara
@@ -126,13 +146,21 @@ rule MALW_HijackLoader_Penguish_Stage3_Loader_PE {
 #### Multi-Vector Lure: GrimResource Redirect String or Mega.io Bucket Path With a Corroborator
 
 **Tier:** Hunting
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1218.014 (MMC), T1059.005 (Visual Basic), T1059.007 (JavaScript), T1105 (Ingress Tool Transfer)
+
 **Confidence:** MODERATE
+
 **Rationale:** Anchored on the GrimResource technique's own `res://apds.dll/redirect.html` redirect string, a publicly documented technique marker and not an operator-chosen literal. *Wording fix 2026-10-11:* the string alone, with the size limit, matches any file that contains it; the rule does not require the MMC snap-in structure (`<MMC_ConsoleFile`), which only the second branch lists as one of three optional corroborators. The Mega.io staging-bucket branch (already IOC-feed-tracked) matches the bucket path together with the PowerShell array-reverse, `javascript:eval(` or MMC root string, and gives independent coverage of the campaign's macro-document lures that fetch from the same bucket without GrimResource.
+
 **False Positives:** None known from the evidence. The GrimResource string has no documented legitimate use, but the rule does not require it to sit inside an .msc file, so a write-up, a test file or a detection corpus that quotes the string matches as well. The bucket branch matches any file that holds the bucket path with one of its three corroborators.
+
 **Blind Spots:** Each branch evades separately. A different code-execution technique inside an .msc file (not GrimResource), or a rebuild targeting a different COM redirect endpoint, evades the GrimResource branch only; the bucket branch does not depend on GrimResource and still matches, but needs the bucket path, which is a per-wave value, plus one of three corroborators. The GrimResource string is publicly documented, so reports, test files and detection corpora that quote it also match (the reason this is a Hunting rule).
+
 **Validation:** Scan a GrimResource-weaponized .msc file: the resource string must match; a legitimate/benign .msc administrative console file without the string must NOT fire.
+
 **Deployment:** Email gateway attachment scanning and endpoint file-system scanning. A web proxy applies it only if it scans the downloaded content body; a URL-only proxy rule cannot satisfy the content corroborators. Memory scanning is not covered: the condition tests `filesize`, which is undefined in a libyara process-memory scan.
 
 ```yara
@@ -166,11 +194,17 @@ rule MALW_HijackLoader_MultiVector_Lure_GrimResource_MSC {
 #### Inno Setup Wrapper Build Wave (Operator Codenames, AppId and Loader Filename)
 
 **Tier:** Hunting
+
 **Robustness:** 1
+
 **ATT&CK Coverage:** T1027.009 (Embedded Payloads), T1204.002 (Malicious File), T1036.005 (Match Legitimate Name or Location)
+
 **Confidence:** MODERATE
+
 **Rationale:** Every anchor (the campaign AppId GUID, the `Apophyge`/`Veteran` Inno Setup script codenames, and the renamed loader filename `CrystSupervisor32.exe`) is an Inno Setup build-script value the operator sets in a single `.iss` line and can change on any rebuild — the same durability class as a mutex or drop-path chosen per build, not a technique-level invariant (this is why it is demoted from the original Detection classification). The rule name keeps the original `AntiTriage` wording (renaming would re-derive its `id`) but no Pascal Script test is made. The anti-triage *technique* itself (Pascal Script `InitializeSetup`→`WinExec`→return `False`) is separately covered behaviorally by the Sigma process-tree rule below.
+
 **False Positives:** None known against unrelated legitimate software today — but the same build-specific anchors are exactly what the operator is most likely to change in the next campaign wave, which is the reason for the Hunting tier rather than a precision concern.
+
 **Deployment:** Endpoint AV/EDR on-access scanner, gateway sandboxing, email attachment scanning. Treat hits as leads for this specific build wave and its direct siblings, not a durable family detector.
 
 ```yara
@@ -203,13 +237,21 @@ rule MALW_HijackLoader_InnoSetup_AntiTriage_Wrapper {
 #### ExceptionHandler.dll Plowshare Dispatcher
 
 **Tier:** Hunting
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1574.001 (DLL), T1055.012 (Process Hollowing), T1027 (Obfuscated Files)
+
 **Confidence:** MODERATE
+
 **Rationale:** *Wording and tier fix 2026-10-11:* the condition has three branches and the first, the PDB path (`I:\CompanySource\Plowshare\...`), is enough on its own with the MZ and size tests, so no corroboration is required; the second needs both payload filenames and the pipe name, and the third needs only the `Plowshare` codename and the pipe name. The report records that the operator started from Wondershare's own crash reporter, preserved its original 2014 compile timestamp and added nothing visibly malicious to the strings table (report section 4.3), so the PDB path, the `Plowshare` codename and the `WondershareCrashServices` pipe name are strings an unmodified vendor build can be expected to carry as well. The two payload filenames are the only rule strings the report ties to the operator's added loader code (the DLL reads `shadermgr93.rc` and passes `networkspec17.log` to the stage-2 shellcode). No unmodified Wondershare `ExceptionHandler.dll` was available to test against, so the rule can separate the operator's DLL from the vendor's only through the second branch. It moves from Detection to Hunting for that reason.
+
 **False Positives:** The PDB branch and the codename-plus-pipe branch can match an unmodified Wondershare crash reporter that carries the same PDB path, codename and pipe name; this was not tested (no vendor sample). The filename branch (`networkspec17.log`, `shadermgr93.rc` and the pipe name together) is specific to this operator's wave.
+
 **Blind Spots:** A rebuild with a different PDB path and a different pipe name evades all three branches; a rebuild that keeps the vendor strings but renames the two payload files still matches the PDB and codename branches, which is also why those branches cannot tell it from the vendor's file.
+
 **Validation:** Scan the ExceptionHandler.dll dropped artifact; it must match. An unmodified Wondershare crash reporter is expected to match the PDB or codename branch as well and has not been tested, so it is not a valid negative control; a benign DLL without any of the strings must NOT fire.
+
 **Deployment:** Endpoint AV/EDR on-access scanner and file-system hunting, of files or saved dumps. Memory scanning is not covered: the condition tests `filesize`, which is undefined in a libyara process-memory scan.
 
 ```yara
@@ -255,13 +297,21 @@ rule MALW_HijackLoader_ExceptionHandler_Plowshare_Dispatcher {
 #### MMC Spawning Mshta, Rundll32 or a Script or Command Interpreter (GrimResource Pattern Seen in HijackLoader)
 
 **Tier:** Detection
+
 **Robustness:** 3
+
 **ATT&CK Coverage:** T1218.014 (MMC), T1059 (Command and Scripting Interpreter)
+
 **Confidence:** HIGH
+
 **Rationale:** `mmc.exe` spawning a script/command interpreter is a family-agnostic technique chokepoint for GrimResource — MMC must spawn something to execute the XSL-redirected payload, so this signal survives any operator rebrand and depends on no campaign-specific filename or codename. Corrected from the original: the ATT&CK Coverage previously over-claimed VBScript/JavaScript sub-techniques the selection logic does not actually distinguish (the Image list mixes `mshta.exe`, `rundll32.exe`, and generic shells); retagged to the parent T1059 alongside T1218.014.
+
 **False Positives:** Custom enterprise MMC snap-ins that legitimately spawn PowerShell or cmd.exe for administrative actions (rare — verify the specific MSC file source and the spawned command line for administrative context); the filter excludes children of an `mmc.exe` whose own command line carries one of the four most common legitimate snap-ins from `System32` (`eventvwr.msc`, `compmgmt.msc`, `devmgmt.msc`, `diskmgmt.msc`). It tests the parent's command line, not the child's, and the `System32` path means a weaponised file outside a `System32` directory that merely carries one of those names is not excluded.
+
 **Blind Spots:** An operator technique change that avoids spawning a new process (in-process script execution) evades; the legitimate-snap-in filter list is not exhaustive.
+
 **Validation:** Detonate a GrimResource-weaponized `.msc` file — `mmc.exe` must spawn one of the listed interpreters; opening `eventvwr.msc`/`compmgmt.msc`/`devmgmt.msc`/`diskmgmt.msc` normally must NOT fire.
+
 **Deployment:** EDR process-creation monitoring, SIEM Sysmon EID 1.
 
 ```yaml
@@ -320,13 +370,21 @@ level: high
 #### HijackLoader GrimResource MMC Spawning PowerShell Adding Defender Exclusion
 
 **Tier:** Detection
+
 **Robustness:** 3
+
 **ATT&CK Coverage:** T1218.014 (MMC), T1685 (Disable or Modify Tools), T1059.001 (PowerShell)
+
 **Confidence:** HIGH
+
 **Rationale:** Requires TWO independently-anchored, family-agnostic technique signals to co-occur: the abnormal `mmc.exe`→shell parent-child chokepoint (shared with the rule above) AND a command line containing `Add-MpPreference` plus an `ExclusionExtension` or `ExclusionPath` token. *Logic fix 2026-10-11:* the command-line test used to be a four-item OR (`Add-MpPreference`, `ExclusionExtension`, `ExclusionPath` or `Set-MpPreference`), so `Set-MpPreference` or any single token from an `mmc.exe` child fired; the description always required the Add-MpPreference exclusion form. Neither clause depends on any campaign-specific filename or codename, so the combination survives an operator rebrand. The original file's "T1685 (Disable or Modify Tools)" citation is correct as-is: current ATT&CK data separates a "Defense Impairment" tactic (TA0112) from the legacy Impair Defenses numbering, with T1685 as the present-day ID for this technique; the tag is retained unchanged.
+
 **False Positives:** Automated endpoint management solutions that use MMC-based snap-ins to deliver Defender configuration changes (verify via change-management records); security administrators who open MMC snap-ins and separately run PowerShell to manage Defender exclusions in the same session are extremely unlikely to reproduce this exact process-parent relationship (MMC does not propagate as the parent for manually opened PowerShell windows).
+
 **Blind Spots:** An operator technique that disables Defender via a non-PowerShell/cmd mechanism (direct registry write, WMI), or through `Set-MpPreference`, evades the command-line clause; an encoded command (`-EncodedCommand`) hides the tokens from a `CommandLine` test; an operator that drops the MMC-chain entirely (different initial-access vector) evades both clauses.
+
 **Validation:** Detonate the Tier-2 GrimResource `.msc` chain: both the `mmc.exe` parent and a command line holding `Add-MpPreference` with `ExclusionPath` or `ExclusionExtension` must be present; an `mmc.exe` child that runs only `Set-MpPreference`, and an unrelated legitimate PowerShell Defender-configuration session (not parented by `mmc.exe`), must NOT fire.
+
 **Deployment:** EDR process-creation monitoring and SIEM Sysmon EID 1: the selection needs ParentImage, Image and CommandLine from one process-creation event. PowerShell-Operational EID 4104 does not carry the parent or image and would need a separate selector, so it is not a deployment source for this rule.
 
 ```yaml
@@ -389,11 +447,17 @@ level: high
 #### HijackLoader CrystSupervisor32 or WVault Renamed Vendor Binary Process Creation
 
 **Tier:** Hunting
+
 **Robustness:** 1
+
 **ATT&CK Coverage:** T1036.005 (Match Legitimate Name or Location), T1574.001 (DLL)
+
 **Confidence:** HIGH (for this build wave)
+
 **Rationale:** All three selectors hinge entirely on `Image|endswith` matching this wave's operator-renamed filenames (`CrystSupervisor32.exe`, `WVault.exe`), precisely the pattern the tiering standard names as disqualifying for Detection. The condition is an OR of three selections, so any one of them fires and none requires the Inno wrapper to be the parent of the whole chain. The `is-*.tmp\` Inno Setup extraction path is common to every Inno Setup installer, legitimate or malicious, and adds no discrimination on its own. *Logic fix 2026-10-11:* the third selection used to test the parent command line for the bare substring `is-`, which matches any word ending in `is-` (`this-`, `analysis-`); it now tests `\is-`, the extraction directory component. Demoted from the original Detection classification for the filename reason.
+
 **False Positives:** Not settled. The report calls `CrystSupervisor32.exe` both a renamed Wondershare `SlideShowEditor.exe` and the genuine signed Wondershare side-load host, so whether a legitimate Wondershare installer uses this exact name was not established, and the `falsepositives` field in the YAML below keeps that possibility (and legitimate Qihoo installs of `PromoUtil.exe`) open. Both names are untested against a clean Wondershare or Qihoo install; treat a hit as a lead until the Authenticode chain and install path are checked.
+
 **Deployment:** EDR process-creation monitoring, SIEM Sysmon EID 1; treat hits as leads for this build wave, not a durable family detector.
 
 ```yaml
@@ -451,11 +515,17 @@ level: medium
 #### HijackLoader Covert IPC Named Pipe WondershareCrashServices Created
 
 **Tier:** Hunting
+
 **Robustness:** 1
+
 **ATT&CK Coverage:** T1559 (Inter-Process Communication), T1036.005 (Match Legitimate Name or Location)
+
 **Confidence:** HIGH
+
 **Rationale:** The pipe name is a single operator-chosen literal compiled into `ExceptionHandler.dll` — the same durability class as a mutex name; a rebuild that renames the pipe fully evades this rule. The location-based exclusion filter (legitimate Wondershare paths) is a sound design pattern, but does not change the underlying literal's brittleness. Demoted from the original Detection classification for this reason.
+
 **False Positives:** Legitimate Wondershare DVD Creator or SlideShow Editor installations where `ExceptionHandler.dll` creates this pipe from a genuine Program Files install path (filtered by the exclusion above); security testing tools that explicitly simulate Wondershare crash-reporter IPC.
+
 **Deployment:** EDR named-pipe monitoring, SIEM Sysmon EID 17.
 
 ```yaml
@@ -504,11 +574,17 @@ level: medium
 #### HijackLoader Operator Persistence Directory Codename File Written Under ProgramData or Users
 
 **Tier:** Hunting
+
 **Robustness:** 1
+
 **ATT&CK Coverage:** T1036.005 (Match Legitimate Name or Location)
+
 **Confidence:** HIGH
+
 **Rationale:** Five distinct operator codenames (`adv_ctrl`, `brokerbg`, `exttracer_net48`, `thread_adapter`, `Sulfathiazole`) are already documented as rotating across campaign variants, direct evidence that this literal set changes build-to-build. No naming convention beyond "an English dictionary word or phrase" was identified in the evidence that would support a more durable, structural rule; a sixth wave will very likely introduce a new, uncovered codename. *Wording fix 2026-10-11:* the earlier title named only `adv_ctrl` and ProgramData, and the text said directory creation; the selection is an OR of `adv_ctrl` and the four sibling codenames, accepts any path starting `C:\ProgramData\` or `C:\Users\`, and sees a file event, so the heading, description and this sentence now say a file written inside such a directory. ATT&CK Coverage was trimmed earlier to the technique the selection logic supports (T1685 was dropped because the rule observes no tool-disabling action).
+
 **False Positives:** Legitimate software installers that coincidentally use one of these five directory names (extremely unlikely — they are distinctive operator codenames, not standard Windows or common third-party path components); EDR agents or security tools using similarly named directories for internal state.
+
 **Deployment:** EDR file-creation monitoring, SIEM Sysmon EID 11.
 
 ```yaml
@@ -566,11 +642,17 @@ level: medium
 #### Legacy .job Scheduled Task File Created in Windows\Tasks (Autorunsc Blind Spot)
 
 **Tier:** Hunting
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1053.005 (Scheduled Task)
+
 **Confidence:** HIGH (technique-level); MODERATE that any single hit is this specific campaign
+
 **Rationale:** Salvaged from the original two-branch rule, which required either the exact operator task name `watchermgmt` or a `ParentImage` match against this wave's renamed loader filenames — both rename-brittle, Robustness-1 anchors. Re-anchored on the technique's invariant primitive: any legacy `.job`-format scheduled-task file written to `C:\Windows\Tasks\` is itself a known autorunsc (Sysinternals Autoruns) enumeration blind spot in modern (post-Vista) Windows environments, since the current Task Scheduler API/UI writes XML tasks to `C:\Windows\System32\Tasks\` instead. This broadens coverage to any future wave of this campaign — or any unrelated actor — using the same legacy-format persistence trick, in exchange for the acknowledged legitimate-tooling collisions below (why this stays Hunting rather than Detection).
+
 **False Positives:** Legacy scheduled tasks created by third-party software installers writing `.job` files to `C:\Windows\Tasks\` (uncommon in modern environments); enterprise management tools (SCCM, Ansible, PDQ) that use the legacy `.job` format for scheduled-task deployment.
+
 **Deployment:** EDR file-creation monitoring, SIEM Sysmon EID 11, file-system hunting. Correlate hits against the process-tree/persistence-directory rules above for HijackLoader-specific attribution.
 
 ```yaml
@@ -621,12 +703,19 @@ level: medium
 #### Office VBA Macro Security Disabled via Registry VBAWarnings Set to 1
 
 **Tier:** Hunting
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1112 (Modify Registry), T1204.002 (Malicious File)
+
 **Confidence:** HIGH
+
 **Rationale:** A genuinely durable, family-agnostic technique signal — `VBAWarnings=1` pre-conditioning is not tied to any HijackLoader-specific filename, GUID, or codename, and is used broadly by macro-malware campaigns generally. Kept at Hunting because legitimate IT administrators do set this value via registry or GPO, a real and non-trivial false-positive scenario the original rule already correctly acknowledged with `level: medium`. Trimmed ATT&CK Coverage from the original, which also cited T1685 (Disable or Modify Tools) — a valid technique ID, but not reflected in the rule's own `tags:` and a poor fit on the merits (T1685 covers disabling security tooling such as AV/EDR/logging, not an Office application security prompt); scoped to T1112 + T1204.002, which the selection logic and tags already reflect.
+
 **False Positives:** Legitimate IT administrators deploying macro-enabled Office solutions who intentionally set `VBAWarnings=1` via GPO or management scripts (correlate with change-management records and the deploying user account); software developers testing Office VBA macros in a development environment; enterprise Office deployments that centrally manage macro trust settings (these should be deployed via GPO, not a per-user registry write from cmd.exe/PowerShell).
+
 **Registry value rendering (round 2, 2026-10-11):** raw Sysmon Event 13 renders a DWORD in `Details` as `DWORD (0x........)`, but the Elastic Sysmon pipeline (`logs-windows.sysmon_operational` 3.8.3, script "Set registry fields") writes `registry.data.strings` as the decimal value with type `SZ_DWORD`, per the T-0222 registry telemetry proposal (`Docs/2026-10-10-anthropic-api-credit/fixes/registry-telemetry-proposal.md`). The selection therefore accepts both forms. The decimal form was read from the pipeline script, not from a live event: no Windows endpoint reports to the stack, so neither form has been seen arriving. **Also fixed in the same pass:** the selection carried two `TargetObject|contains` keys in one mapping, so YAML kept only the second and the `\Security\VBAWarnings` test was silently dropped (the rule matched any Office 16/19 write of the data value 1); the tests are now separate selections. The description says an HKCU write, and Sysmon renders a per-user key as `HKU\<SID>\...`, so the hive is now tested as `HKU\`; a machine-policy key under HKLM no longer matches.
+
 **Deployment:** SIEM Sysmon EID 13, EDR registry monitoring.
 
 ```yaml
@@ -688,11 +777,17 @@ level: medium
 #### HijackLoader WVault.exe Hollow-Host Launched Directly from Inno Setup Temp Directory
 
 **Tier:** Hunting
+
 **Robustness:** 1
+
 **ATT&CK Coverage:** T1055.012 (Process Hollowing), T1036.005 (Match Legitimate Name or Location)
+
 **Confidence:** HIGH (structural); the underlying per-host environment-variable IPC mechanism itself is not observable via this selector
+
 **Rationale:** Retitled and trimmed from the original "per-host environment variable IPC pattern" framing. Sysmon does not log the per-host env-var IPC mechanism by default (the original rule's own documentation acknowledged this), so the `detection:` block never actually inspected environment-variable content — only process ancestry. Removed a reversed `CrystSupervisor32.exe`-child-of-`WVault.exe` branch with no support in the documented process tree (`WVault.exe` is always the descendant, never the ancestor, of `CrystSupervisor32.exe`), and removed a `WVault.exe`-child-of-`CrystSupervisor32.exe` branch that fully duplicated the Inno Setup process-tree rule above. What remains is the one genuinely distinct selector: `WVault.exe` launched with a parent image that sits directly in an `is-XXXXX.tmp\` directory (a whole-field regex written without `^` or `$`, which Elastic's regex engine would read as literals; case-sensitive, matching Inno's lowercase `is-` and `.tmp`), catching the direct `is-*.tmp\`→`WVault.exe` hollow-host launch — a shorter chain link than the process-tree rule's coverage. Still rename-brittle (Robustness 1), same as the process-tree rule.
+
 **False Positives:** Legitimate Wondershare software chains where a similarly-launched process runs from an Inno Setup temp directory in genuine DVD Creator workflows (verify the file hashes and install path — the legitimate chain runs from Program Files, not `is-*.tmp` or `C:\ProgramData\adv_ctrl\`).
+
 **Deployment:** EDR process-creation monitoring, SIEM Sysmon EID 1.
 
 ```yaml
@@ -740,12 +835,19 @@ level: medium
 #### WVault.exe Process Executing From a ProgramData Path
 
 **Tier:** Hunting
+
 **Robustness:** 1
+
 **ATT&CK Coverage:** T1036.005 (Match Legitimate Name or Location)
+
 **Confidence:** HIGH
+
 **Rationale:** Net-new rule salvaged from a Cut YARA rule (`MALW_HijackLoader_WVault_HollowHost_NetRAT`, see Coverage Gaps) that attempted to fingerprint the genuine, unmodified Qihoo 360 PromoUtil.exe binary via its PDB path and VersionInfo company string, both present in every legitimate installation of Qihoo 360's own widely-deployed security software, plus a file-content string search for the deployment path `C:\ProgramData\WVault.exe`, which YARA content matching cannot evaluate (a file's own on-disk location is not part of its byte content). The underlying TTP, a genuine, validly-signed vendor binary renamed and dropped to a non-standard path to serve as an injection host, is evidence-backed in the report, but it is a filesystem/process property, so it is re-anchored on process-creation telemetry. *Wording fix 2026-10-11:* the earlier title said "or Renamed Vendor Binary"; the selection is the single file name `WVault.exe` plus a `\ProgramData\` path component, with no test for any other renamed binary (the report's wider hollow-host pattern, "any renamed `PromoUtil.exe`", is not detected by this rule).
+
 **False Positives:** Rare legitimate portable or sideloaded applications that ship a binary literally named `WVault.exe` in a user-writable path (no known legitimate software uses this exact name); the primary residual risk is an unrelated malware family reusing the identical "rename a signed vendor binary, drop to ProgramData" masquerade pattern — a real but acceptable Hunting-tier collision, not a precision defect.
+
 **Blind Spots:** A renamed binary that is not called WVault.exe, or a WVault.exe outside a `\ProgramData\` path, evades; the rule has no `OriginalFileName` test and no signature test, and what the genuine file's version resource carries was not checked here.
+
 **Deployment:** Endpoint EDR / Sysmon-fed SIEM (process-creation telemetry); pair with the YARA API-hash-table rule (pe_03) above for HijackLoader-specific attribution before treating a hit as this campaign.
 
 ```yaml
@@ -798,13 +900,21 @@ level: medium
 #### AsyncRAT SSL JA3 Fingerprint 07af4aa9e4d215a5ee63f9a0a277fbe3
 
 **Tier:** Detection
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1071.001 (Web Protocols), T1573.001 (Symmetric Cryptography)
+
 **Confidence:** MODERATE (HIGH that the analysed sample produced this JA3; MODERATE that other TLS clients do not share it, which was not measured)
+
 **Rationale:** JA3 is a TLS-client fingerprint reflecting the RAT client's own TLS stack (library, cipher-suite, and extension ordering) — destination-IP-independent and unaffected by C2 infrastructure rotation. VirusTotal's IDS ruleset labels this JA3 `Malicious JA3 SSL-Client Fingerprint detected (AsyncRAT)` and attributes the rule to Abuse.ch SSLBL (the report cites that label); on 2026-10-11 the hash was not in the SSLBL JA3 blacklist CSV (106 rows, last updated 2021-08-03) and its SSLBL fingerprint page showed no records, so the SSLBL listing itself is NOT CHECKED against the primary source. The fingerprint is not unique to this one campaign; any host running the same RAT client build will match regardless of which C2 IP it is configured against. The strongest network-layer rule in this set.
+
 **False Positives:** JA3 hash collisions across unrelated TLS client implementations that happen to share the same library/cipher-suite/extension configuration are a known general limitation of JA3 fingerprinting; the `count 3 / seconds 300` threshold (`type limit`) only caps repeat alerts at three per source per five minutes and does not require three matches, so it does not lower false positives. Whether benign TLS clients on a similar Windows TLS configuration produce this hash was not measured.
+
 **Blind Spots:** A RAT-builder update that changes the underlying TLS library or cipher-suite ordering changes the JA3 hash and evades this rule; does not cover non-TLS C2 channels.
+
 **Validation:** Replay a PCAP of this RAT's TLS handshake — the JA3 must match; ordinary enterprise TLS traffic must NOT match this specific hash.
+
 **Deployment:** Network IDS on internal LAN segments, perimeter TAP; complements the destination-IP indicator carried in the IOC feed.
 
 ```suricata

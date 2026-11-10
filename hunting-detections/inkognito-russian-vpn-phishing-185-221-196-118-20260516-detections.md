@@ -9,9 +9,13 @@ hide: true
 ---
 
 **Campaign:** Inkognito-Russian-VPN-Phishing-185.221.196.118-20260516
+
 **Date:** 2026-05-16
+
 **Author:** The Hunters Ledger
+
 **License:** CC BY 4.0
+
 **Reference:** https://the-hunters-ledger.com/reports/inkognito-russian-vpn-phishing-185-221-196-118-20260516/
 
 ---
@@ -47,13 +51,21 @@ hide: true
 #### Inkognito INK VPN JS Bundle (Brand/API String Combination)
 
 **Tier:** Detection
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1036.005 (Masquerading: Match Legitimate Resource Name or Location), T1608.005 (Stage Capabilities: Link Target)
+
 **Confidence:** HIGH
+
 **Rationale:** The original condition required an *exact* filesize match (`== 261587`) alongside the string combination — Vite's content-hashed build filename and exact byte count change on every rebuild, so an exact-size gate is a single-build fingerprint (Robustness 1) despite the string combination looking durable. Re-anchored to a filesize *bound* instead of exact equality; the 5-of-7 string threshold requires 5 of the 6 non-build-specific markers (API endpoint paths, brand strings, Russian tagline) only when the build-hashed filename string `index-CoeWw2zM.js` does not match; when it does match, it counts as one of the five and 4 non-build markers suffice, so the rule now survives a routine rebuild rather than only the one captured build (SHA256 preserved in meta for reference).
+
 **False Positives:** None known — the required 5-of-7 combination (the six non-build markers: the API paths `/api/auth/login`, `/api/vpn-hosts` and `/api/subscriptions`, the brand strings `INK VPN` and `Inkognito`, and the Russian-language tagline, plus the build-specific bundle filename string) is not plausible in unrelated software.
+
 **Blind Spots:** A full rebrand that changes the API endpoint naming, both brand strings, and the tagline simultaneously would evade; the rule targets the on-disk/cached JS asset, not a memory-only variant.
+
 **Validation:** Fetch the current INK VPN production bundle from the operator's infrastructure — must match 5 of 7; an unrelated JavaScript bundle must NOT fire.
+
 **Deployment:** Web-proxy DLP pipeline; threat-hunting tool HTTP-response body scanning; endpoint DLP on downloaded-file content.
 
 ```yara
@@ -95,13 +107,21 @@ rule MALW_Inkognito_JSBundle_VPN_SPA
 #### Inkognito INK VPN Favicon SVG (Hash-or-Brand-String)
 
 **Tier:** Detection
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1036.005 (Masquerading: Match Legitimate Resource Name or Location)
+
 **Confidence:** HIGH (hash branch) / MODERATE (string branch)
+
 **Rationale:** The condition is a hash-OR-strings hybrid: the exact-hash clause alone would be Robustness 0 (a pure hash, already carried in the IOC feed), but the rule's `or` branch requires three brand markers (`Inkognito`, `INK`, `inkconnect`) simultaneously and remains functional even with the hash clause removed — so the rule as a whole survives the underlying sample changing, unlike a pure-hash rule.
+
 **False Positives:** LOW — the three-marker AND-combination in the string branch is unlikely outside Inkognito-controlled content; the hash branch has no FP risk by construction.
+
 **Blind Spots:** A favicon that drops all three brand markers while changing content would evade the string branch (the hash branch would also miss it, being sample-specific).
+
 **Validation:** Scan the analyzed favicon or any modified variant retaining the three brand markers — must match; an unrelated SVG file must NOT fire.
+
 **Deployment:** Web-proxy DLP pipeline; endpoint DLP on downloaded-file hash/content.
 
 ```yara
@@ -147,13 +167,21 @@ rule MALW_Inkognito_Favicon_SVG
 #### Inkognito Brand-Impersonation Subdomain DNS Query (Wildcard)
 
 **Tier:** Hunting
+
 **Robustness:** 1
+
 **ATT&CK Coverage:** T1566.002 (Phishing: Spearphishing Link), T1684.001 (Impersonation), T1036.005 (Match Legitimate Resource Name or Location)
+
 **Confidence:** HIGH
+
 **Rationale:** The original rule enumerated 25 specific brand-impersonation subdomains via `QueryName|contains` — a static list that could never catch the remaining 440+ subdomains in the operator's inventory, let alone future additions (Robustness 1). Re-anchored to a wildcard on the parent zone (`QueryName|endswith: '.inklens.ru'`) with a filter excluding the operator's own enumerated DevOps subdomains, so the rule now covers the entire brand-impersonation platform regardless of which specific brand name is queried — a technique-level chokepoint (the platform itself), not an enumerated list.
+
 **False Positives:** Security researchers or threat hunters explicitly querying inklens.ru subdomains for investigation purposes; automated scanner infrastructure probing known-bad domain lists.
+
 **Blind Spots:** Misses entirely if the operator abandons inklens.ru for a new phishing platform domain (an infrastructure-rotation event that would require a rule refresh regardless of rule design); the DevOps filter could itself be evaded if the operator names a new brand-impersonation subdomain with one of the eleven filtered first labels (the entries are exact labels followed by a dot, not prefixes; currently no evidence of this).
+
 **Validation:** Query any subdomain of inklens.ru (e.g., a brand-impersonation subdomain) — must match; a query for one of the filtered operator DevOps subdomains (e.g., `staging-agent.inklens.ru`) must NOT fire.
+
 **Deployment:** Sysmon Event ID 22 (DNS query) on Windows hosts, the rule's `dns_query` logsource. Other DNS sources (resolver logs, Zeek dns.log, DNS filtering services) would need their query-name field mapped to `QueryName`, which this page does not declare.
 
 ```yaml
@@ -273,12 +301,19 @@ level: high
 #### Inkognito Custom X-Admin-Token Header in HTTP Request
 
 **Tier:** Hunting
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1071.001 (Application Layer Protocol: Web Protocols)
+
 **ATT&CK Note:** T1583.004 (Server) describes acquiring a server, which a header-name match does not observe, so it is not listed.
+
 **Confidence:** MODERATE
+
 **Rationale:** `X-Admin-Token` is not defined by any public RFC and is the Inkognito operator's own admin-API authentication primitive, giving it real durability (survives domain rotation) — but the header name itself could plausibly be independently invented by another developer, an acknowledged non-trivial false-positive path rather than a rare one. That combination (durable but not rare-FP) places it in Hunting rather than Detection.
+
 **False Positives:** Internally-developed web applications that independently use X-Admin-Token as a custom auth header name; developer workstations testing API endpoints.
+
 **Deployment:** Suricata IDS/IPS at perimeter or inline. The rule header already limits the destination to `$EXTERNAL_NET`, so confirm that variable is `!$HOME_NET` on your sensor rather than the literal `any`; tune against your own traffic before considering promotion to alerting.
 
 ```suricata
@@ -288,12 +323,19 @@ alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL HUNT Inkognito Custom X-
 #### Inkognito X-Admin-Token in CORS Allow-Headers Response
 
 **Tier:** Hunting
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1071.001 (Application Layer Protocol: Web Protocols)
+
 **ATT&CK Note:** T1583.004 (Server) describes acquiring a server, which a header-name match does not observe, so it is not listed.
+
 **Confidence:** MODERATE
+
 **Rationale:** *Logic fix 2026-10-11 (rev 4):* the rule used to match `Access-Control-Allow-Headers` and `X-Admin-Token` as two independent strings anywhere in the response headers, so the token in any later header also fired, although the title puts it inside the Allow-Headers value. A PCRE gated behind both content matches now requires the token on the same header line, after the header name. It still tests no Inkognito-specific indicator: any server that lists this header name in its CORS configuration matches, as the false positives below say. Same underlying artifact as the request-header rule, observed instead in the CORS `Access-Control-Allow-Headers` response context — slightly more deliberate (server-controlled CORS configuration rather than any client request) but the header-name collision risk is identical, so it carries the same tier and robustness.
+
 **False Positives:** Internally-developed web applications that independently expose X-Admin-Token in their own CORS configuration; security research or authorized assessment of Inkognito-controlled domains.
+
 **Deployment:** Suricata IDS/IPS at perimeter; requires inline traffic inspection for HTTPS (TLS inspection or plain HTTP).
 
 ```suricata

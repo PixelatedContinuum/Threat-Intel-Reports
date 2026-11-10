@@ -10,9 +10,13 @@ thumbnail: /assets/images/cards/quasar-xworm-powershell.png
 ---
 
 **Campaign:** QuasarRAT-Xworm-PowerShell-Loader-193.233.164.21
+
 **Date:** 2025-10-17
+
 **Author:** The Hunters Ledger
+
 **License:** CC BY 4.0
+
 **Reference:** https://the-hunters-ledger.com/hunting-detections/quasar-xworm-powershell-detections/
 
 ---
@@ -40,14 +44,21 @@ This campaign chains a VBScript dropper, a PowerShell loader that pulls a payloa
 #### PowerShell Defender Exclusion Script Naming update.png
 
 **Tier:** Hunting
+
 **Robustness:** 1
+
 **ATT&CK Coverage:** T1685 (Disable or Modify Tools)
+
 **Confidence:** MODERATE
+
 **Rationale:** Matches a file that holds `Add-MpPreference`, `-ExclusionPath`, `-ExclusionProcess` and the string `update.png`, all four required (`all of them`). The first three together are a real Defender-tampering technique that legitimate administrators and security tooling also use. *Wording fix 2026-10-11:* the earlier text said the rule keys on the technique and not the campaign, but the `update.png` literal is required, so a generic exclusion script without it does not match; the literal is the campaign's payload file name, is trivially renamed, and it is also what makes the rule narrow today. It is therefore a campaign-bound Hunting rule with a technique-level core, and no file-size bound is applied, so any file of any size holding the four strings matches.
+
 **Blind Spots:** A build that renames `update.png` evades although it still uses the technique; an exclusion script that uses `Set-MpPreference` or splits the cmdlet and parameter names across string concatenation evades; the rule does not read which paths or processes are excluded.
+
 **False Positives:**
 - Legitimate administrator or endpoint-management scripts that add Defender exclusions for approved software.
 - Security or backup products that register their own process/path exclusions during installation.
+
 **Deployment:** Endpoint AV/EDR file scan of dropped `.ps1` scripts; SIEM correlation with `Add-MpPreference` command-line events (Sysmon/PowerShell script-block logging).
 
 ```yara
@@ -91,13 +102,19 @@ rule PS_Defender_Exclusion_Quasar_Xworm {
 #### VBScript-Spawned PowerShell In-Memory Payload Download
 
 **Tier:** Hunting
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1059.001 (PowerShell), T1105 (Ingress Tool Transfer)
+
 **Confidence:** MODERATE
+
 **Rationale:** Detects a PowerShell process spawned by `wscript.exe` that uses .NET `HttpClient` calls to pull a payload disguised as an image, consistent with the QuasarRAT/Xworm loader chain. The `wscript.exe` → `powershell.exe` ancestry combined with in-memory `HttpClient`/`GetAsync` is a genuine behavioral lead, but its as-written precision leans on the renameable `update.png` literal and the behavior-only form has meaningful benign hitters (admin and deployment tooling), so it is scoped to Hunting rather than alerting-grade. Level recalibrated from `high` to `medium` accordingly.
+
 **False Positives:**
 - Legitimate administrative or software-deployment scripts that launch PowerShell from a Windows Script Host wrapper and fetch content over HTTP.
 - Internal automation that uses .NET `HttpClient` from PowerShell to download update artifacts.
+
 **Deployment:** Endpoint EDR / Sysmon-fed SIEM (process_creation with command line), triaged by an analyst; pair with the payload-URL and C2 indicators in the IOC feed for confirmation.
 
 ```yaml

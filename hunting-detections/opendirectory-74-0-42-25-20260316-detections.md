@@ -9,9 +9,13 @@ hide: true
 ---
 
 **Campaign:** ZeroTrace-MultiFamily-MaaS-74.0.42.25
+
 **Date:** 2026-03-17
+
 **Author:** The Hunters Ledger
+
 **License:** CC BY 4.0
+
 **Reference:** https://the-hunters-ledger.com/reports/zerotrace-74-0-42-25-20260316/
 
 ---
@@ -71,13 +75,21 @@ The same type → tier → family nesting is applied within the Sigma and Surica
 #### XWorm Client Stub (Four Plaintext Status Messages)
 
 **Tier:** Detection
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1219 (Remote Access Software)
+
 **Confidence:** MODERATE
+
 **Rationale:** The stub encrypts its configuration (C2 host, port, key, separator, version tag, USB file name), so none of those values can be matched in the file. This rule keys on four messages that the stub's own code carries in the clear, stored as UTF-16 strings: `Plugins Removed!`, `Modified successfully!`, `Plugin Error! ` (with its trailing space) and the header value `Content-length: 5235`. All four are required. They are text from the stub's own code and not one of its encrypted settings, so changing the C2, the key or the mutex in the builder does not change them. I rate Robustness 2 because they are properties of this code base and not of the technique: a fork that rewrites those messages evades. In the triage string output all four are present in all seven stubs from this open directory (33,280 to 40,960 bytes). That is a string-level check, not a run of the compiled rule on the sample bytes, and it is why I hold the rule at MODERATE.
+
 **False Positives:** None known. I have not scanned a Windows goodware set with this rule, and I have not checked whether another family carries these four messages together.
+
 **Blind Spots:** A rebuild that edits any one of the four messages evades, because all four are required. A stub passed through a string-encrypting obfuscator evades, since these are plain literals; I have not tested such a build. The rule tests the MZ header, a 150KB size bound and the strings, not the .NET language or the XWorm version, and it targets the on-disk stub, not memory-only injection variants. The stub's configuration values (C2, key, mutex, version) are not matched at all, so this rule cannot tell one operator's build from another's.
+
 **Validation:** Scan the analyzed stub (`hash1` below); it must match. Remove any one of the four strings from a copy and the match must stop. An unrelated .NET application must NOT fire. I could not run these on the sample bytes for this revision, because no lab snapshot holds these samples.
+
 **Deployment:** Endpoint AV/EDR file scan, email-gateway attachment scanning, download-quarantine scanning.
 
 > **Correction, 2026-10-17:** This rule replaces `RAT_XWorm_V56_Stub`, which I withdrew. That rule required one of the panel's typo strings (`New Clinet : `, `Groub : `) on every path. Checked against the triage string output of the seven stubs from this directory, it matches none of them: six do not contain either typo string, and the seventh (`new_20vzzzzzz_202828.exe`) has the typos but neither the mutex nor `<Xwormmm>`. The mutex appears in the triage strings of only one stub, `XClient.exe`. I did not catch this before publishing because I tested the rule against synthetic fixtures built from its own strings and never against the sample bytes. If you deployed `RAT_XWorm_V56_Stub`, remove it and deploy this rule. The builder rule below is not affected: the builder holds those strings in the clear.
@@ -120,13 +132,21 @@ rule RAT_XWorm_Client_Stub {
 #### XWorm V5.6 Builder and C2 Panel
 
 **Tier:** Detection
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1219 (Remote Access Software)
+
 **Confidence:** HIGH
+
 **Rationale:** Requires 3 of 5 anchors from the builder/panel binary. The version string and its byte-encoded skull-emoji form are correlated (both hinge on the same "XWorm V5.6" literal), so the rule's real strength rests on the 1-20MB filesize gate — unusual for a lean RAT payload but typical for this bundled VB.NET builder — combined with at least one of the two operator-specific typo strings or the sandbox-check URL.
+
 **False Positives:** None known — the combination of the version literal (present in two independent encodings) with the 1-20MB filesize gate is not expected in unrelated software.
+
 **Blind Spots:** A build satisfying the "3 of 5" bar purely through the version-string pair plus the generic ip-api.com sandbox-check URL (without either typo string) would survive a partial rebrand that keeps the version tag; a full rebrand removing all five anchors evades entirely.
+
 **Validation:** Scan the analyzed builder/panel sample (`hash1` below) — 3 of the 5 anchors must match; unrelated 1-20MB VB.NET software must NOT fire.
+
 **Deployment:** Endpoint AV/EDR file scan, static triage of unknown large VB.NET binaries.
 
 ```yara
@@ -162,13 +182,21 @@ rule TOOLKIT_XWorm_V56_Builder {
 #### XwormLoader Native Reflective PE Loader
 
 **Tier:** Detection
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1620 (Reflective Code Loading)
+
 **Confidence:** HIGH
+
 **Rationale:** The 4-byte NOT-then-subtract-0x3E decryption opcode sequence is required in every match and is paired with either the `.NET Framework` LDR-path spoof string or both operator-authored decoy comment strings (`This is garbage code #`, `Welcome to the random numbers generator!`) — the decoy comments in particular are unusual enough that no legitimate software plausibly contains them, and an operator would need to rewrite the custom cipher AND strip the decoy comments to fully evade.
+
 **False Positives:** None known — the decoy comment strings are distinctive developer artifacts; the 4-byte opcode sequence is never used as a sole anchor.
+
 **Blind Spots:** A rebuild using a different byte-level cipher AND removing both decoy comment strings would evade; the rule targets the native C++ loader stage specifically, not the downstream reflectively-loaded payload.
+
 **Validation:** Scan the analyzed XwormLoader sample (`hash1` below) — the opcode pattern plus at least one string condition must match; unrelated native C++ binaries must NOT fire.
+
 **Deployment:** Endpoint AV/EDR file scan, static triage of unknown native loaders.
 
 ```yara
@@ -204,13 +232,21 @@ rule MALW_XwormLoader_ReflectivePE {
 #### Aspdkzb ConfuserEx Fileless Loader Cluster
 
 **Tier:** Detection
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1027.002 (Software Packing)
+
 **Confidence:** HIGH
+
 **Rationale:** "ConfuserEx" alone is a widely-used open-source .NET obfuscator string that appears in both malicious and legitimate protected software, but the rule requires it alongside one of three campaign-specific internal namespace strings (`Faidowra`, `Zvafsyattl`, `Aspdkzb`) that only appear in this loader cluster's builds; an operator would need to both swap obfuscators and rename every internal namespace reference to evade. Filesize bound widened from the original 310-330KB to 300-330KB after cross-checking all nine analyzed cluster variants — two samples (312832 bytes = 305.5KB) fell below the original 310KB floor and would have been missed.
+
 **False Positives:** None known — the campaign-specific namespace strings have no plausible legitimate collision; "ConfuserEx" alone is never sufficient to trigger a match.
+
 **Blind Spots:** A rebuild using a different obfuscator or renaming all three internal namespace strings evades; the tight filesize band also means a padded or re-linked build outside that range would not match even with matching strings.
+
 **Validation:** Scan an Aspdkzb-cluster loader sample (`hash1` below) — must satisfy both the ConfuserEx marker and a namespace string; an unrelated ConfuserEx-protected .NET application must NOT fire.
+
 **Deployment:** Endpoint AV/EDR file scan, static triage of unknown ConfuserEx-protected binaries.
 
 ```yara
@@ -244,13 +280,21 @@ rule MALW_Aspdkzb_ConfuserEx_Loader {
 #### PureRAT v4.1.9 .NET Reactor Payload
 
 **Tier:** Detection
+
 **Robustness:** 3
+
 **ATT&CK Coverage:** T1219 (Remote Access Software)
+
 **Confidence:** HIGH
+
 **Rationale:** The primary branch requires `Faidowra.IO.ModelConfiguration` (the Faidowra-branded string) together with `ProtoBuf.Strategies.ServerModel` (a protobuf-net namespace string that any build of that library can hold), so one brand string carries the branch's specificity; the fallback branch (pinned version string plus 2 of 3 distinctive internal method/class names) still fires if a future build strips the Faidowra branding but retains the underlying v4.1.9 codebase.
+
 **False Positives:** None known — the Faidowra-branded `Faidowra.IO.ModelConfiguration` string is unique to this campaign, but the paired `ProtoBuf.Strategies.ServerModel` is a library string; the fallback branch's internal names (`OrderChain`, `DefinitionChooser`, `ProcEnumerator`) have no plausible legitimate collision when combined with the pinned version string.
+
 **Blind Spots:** A build that both strips all Faidowra branding AND renames the version string and two of the three fallback method names would evade; the rule targets the extracted/unpacked .NET Reactor payload, not the outer obfuscated loader stages.
+
 **Validation:** Scan the extracted PureRAT v4.1.9 payload (`hash1` below) — one of the two branches must match; an unrelated .NET Reactor-protected application must NOT fire.
+
 **Deployment:** Endpoint AV/EDR file scan, scanning of saved dumps taken during suspected in-memory payload extraction. Live process-memory scanning does not match: the condition's `filesize` test is undefined there, so only files and saved dumps are scanned.
 
 ```yara
@@ -287,13 +331,21 @@ rule RAT_PureRAT_v419_Payload {
 #### Raven RAT Delphi Victim Stub
 
 **Tier:** Detection
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1219 (Remote Access Software), T1113 (Screen Capture — HVNC branch)
+
 **Confidence:** HIGH
+
 **Rationale:** The first branch requires all three custom Delphi HVNC class names together — a naming set specific to this codebase's hidden-VNC implementation rather than stock Delphi/VCL classes. The second branch (2 of 4 targeted crypto-wallet names plus the "WindowsService" persistence-value string) is comparatively weaker on its own: the wallet names are shared targets across many unrelated stealer families, and "WindowsService" is a generic term rather than a family-unique artifact. This is documented as a caveat rather than split into a separate rule, since the branch still requires 3 co-occurring conditions and the overall rule remains net-positive for Detection.
+
 **False Positives:** None known against the first (HVNC class name) branch. The second branch has a plausible, if narrow, false-positive path: legitimate crypto-portfolio or multi-wallet management software that references 2+ of the same wallet names and separately contains the substring "WindowsService" (e.g., in a bundled background-sync service description).
+
 **Blind Spots:** A rebrand renaming all three HVNC class names evades the first branch; the second branch is evaded by renaming the "WindowsService" persistence value or targeting different wallets, and is inherently weaker against unrelated wallet-stealing malware reusing the same target list.
+
 **Validation:** Scan the analyzed Raven RAT stub template (`hash1` below) — the HVNC class-name branch must match; a benign Delphi VNC/remote-desktop or crypto-portfolio application must NOT fire.
+
 **Deployment:** Endpoint AV/EDR file scan, static triage of unknown Delphi binaries.
 
 ```yara
@@ -338,14 +390,23 @@ rule RAT_RavenRAT_Stub {
 #### XWorm V5.6 Operator Configuration Registry Key Write
 
 **Tier:** Detection
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1112 (Modify Registry)
+
 **Confidence:** HIGH
+
 **Rationale:** `HKCU\SOFTWARE\XWorm` is a distinctive registry key path not used by legitimate software; the operator's Telegram bot token and clipper wallet addresses are written here at runtime, so presence of the key indicates an active or recently active infection regardless of C2 infrastructure rotation.
+
 **False Positives:** Unlikely — no known legitimate software uses the HKCU\SOFTWARE\XWorm registry key path.
+
 **Blind Spots:** A build that renames the registry key namespace evades; the rule requires the write to actually occur, so a variant that stores this configuration elsewhere (environment variable, file) is not covered.
+
 **Validation:** Trigger the malware's config-write routine — the registry key must match; unrelated software's registry activity must NOT fire.
+
 **Hive rendering (round 2, 2026-10-11):** the selection used the literal `HKCU\` path, but Sysmon records a per-user key as `HKU\<SID>\...` and never as `HKCU`, so it could not match Sysmon events (the T-0222 registry telemetry proposal flags this; what Defend renders was not read). The selection now tests `HKU\` at the start and the key path after it, as rule 0163 does.
+
 **Deployment:** Endpoint EDR / Sysmon-fed SIEM (registry telemetry).
 
 ```yaml
@@ -386,13 +447,21 @@ level: high
 #### vlc_boxed.exe Run Key Persistence via VLC Name Masquerade
 
 **Tier:** Detection
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1547.001 (Registry Run Keys / Startup Folder), T1036.005 (Match Legitimate Name or Location)
+
 **Confidence:** HIGH
+
 **Rationale:** The Run key value name `vlctask` and the target path `%APPDATA%\vlcapp\vlc.exe` are both specific to this malware's masquerade: legitimate VLC Media Player installs to %ProgramFiles% and never registers a Run key named `vlctask`. *Logic fix 2026-10-11:* the rule used to test the value name alone, so renaming the target directory or pointing `vlctask` anywhere else still fired and the two-string claim was untrue; it now requires both the value name at the end of the key path and a value data (`Details`) that ends in `\vlcapp\vlc.exe`. *Boundary fix 2026-10-11 (round 2):* both tests were `contains`, so a value named `vlctaskBackup` or data ending `vlc.exe.bak` also matched; both are now `endswith`. Both strings are required (AND), so changing either one is enough to evade.
+
 **False Positives:** Unlikely — legitimate VLC Media Player does not use the vlctask Run key value name or the AppData\vlcapp path.
+
 **Blind Spots:** A rebrand renaming either the Run key value name or the target directory evades, because the rule needs both; data that does not end in `\vlcapp\vlc.exe` (a quoted path or trailing arguments) does not match; a value written without data in the event, or a sensor that does not report `Details`, never fires; only covers this specific masquerade, not a future build imitating a different application.
+
 **Validation:** Trigger the malware's persistence routine: a Run-key write of value `vlctask` with data ending `\vlcapp\vlc.exe` must match; a `vlctask` value pointing elsewhere, a value named `vlctaskBackup`, data ending `vlc.exe.bak`, and a genuine VLC Media Player installation, must NOT fire.
+
 **Deployment:** Endpoint EDR / Sysmon-fed SIEM (registry telemetry).
 
 ```yaml
@@ -440,12 +509,19 @@ level: high
 #### Raven RAT Persistence via WindowsService Run Key Masquerade
 
 **Tier:** Hunting
+
 **Robustness:** 1
+
 **ATT&CK Coverage:** T1547.001 (Registry Run Keys / Startup Folder), T1036.005 (Match Legitimate Name or Location)
+
 **Confidence:** MODERATE
+
 **Rationale:** Demoted from the original `level: high`: "WindowsService" is a generic, operator-chosen Run-key value name rather than a family-specific artifact: trivially renamed in a future build and not costly for the operator to change, so durability is low even though today's collision rate with legitimate software is limited. The existing System32/SysWOW64 path filter reduces some obvious FPs but does not address poorly-installed legitimate software using the same generic value name, so this remains an analyst-triaged hunting lead rather than an alerting-grade rule. *Logic fix 2026-10-11:* the description names the per-user key (`HKCU`), but the selection was the key-path substring alone, so a machine-wide `HKLM` or `Wow6432Node` Run value of the same name matched too; the rule now also requires the `HKU\` hive prefix Sysmon uses for a per-user key. The report records the value under both the unqualified `SOFTWARE\Microsoft\Windows\CurrentVersion\Run` path (section 5) and `HKCU` (IOC lists), so a machine-wide write is a documented gap and not covered. *Boundary fix 2026-10-11 (round 2):* the value-name test was `contains`, so a value named `WindowsServiceHelper` or `WindowsServiceBackup` matched; it is now `endswith`, which makes the value name exact.
+
 **False Positives:** Poorly named legitimate software that uses 'WindowsService' as a Run key value name in a non-System32/SysWOW64 install path.
+
 **Blind Spots:** A machine-wide (`HKLM`) Run value with this name no longer matches; the report does not settle which hive the sample writes (the IOC list says `HKCU`). The value name is a single literal.
+
 **Deployment:** Endpoint EDR / Sysmon-fed SIEM (registry telemetry); correlate hits against the process image path and known-software inventory before escalating.
 
 ```yaml
@@ -496,14 +572,21 @@ level: medium
 #### PowerShell ExecutionPolicy Bypass, a .ps1 and a User-Writable Path in the Command Line From a Non-Standard Parent
 
 **Tier:** Hunting
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1059.001 (PowerShell)
+
 **ATT&CK Note:** Fileless Storage (T1027.011) is the campaign behavior the report describes for `puf.ps1` and `sync.ps1`; nothing in a process-creation event tests it, so it is not claimed here.
+
 **Confidence:** MODERATE
+
 **Rationale:** `-ExecutionPolicy Bypass` loading a `.ps1` file is common in both malicious and legitimate administrative tooling. The rule originally narrowed on nothing but a four-entry denylist of standard parent processes, which is a broad NOT-filter rather than a positive behavioral anchor, so every developer tool, CI agent, package manager and automation framework that launches PowerShell this way passed straight through. `selection_staging_path` adds a positive anchor by requiring one of six user-writable staging directory names to appear in the command line, which is where a dropper puts its script and where routine tooling generally does not. *Wording fix 2026-10-11:* the staging test is a substring over the whole `CommandLine`, so any argument containing `\Temp\` satisfies it, not only the script path, and the report does not record where `puf.ps1` and `sync.ps1` ran from, so that anchor is not tied to the campaign. The old title's "fileless PE dropper" is the campaign behavior the report describes (`Assembly.Load` in memory, no disk write), and nothing in the query tests it, so the title now names what is tested. A parent-image denylist is environment-specific and belongs in local tuning; this remains a hunting rule.
 
 The staging anchor is command-text co-occurrence over the whole `CommandLine`, not the script's own path: a system script given a `\Temp\` data argument also matches, and the position of the `.ps1` relative to the staging directory is not tested. The parent-image denylist is applied as a NOT filter and is environment-specific; it belongs in local tuning. The campaign's "fileless PE dropper" behavior is not tested, so this remains a hunting rule.
+
 **False Positives:** Software installers and updaters that stage a setup script under `%TEMP%` or `%APPDATA%` and invoke it with a policy bypass; any PowerShell command line that contains a `.ps1`, the bypass flag and one of the staging directory names anywhere (a system script with a user-path data argument); legitimate administrative scripts run from a user-writable path via remote management tools, scheduled tasks, or deployment systems not on the standard-parent denylist.
+
 **Deployment:** Endpoint EDR / Sysmon-fed SIEM; tune the filter_standard_parents list per environment before using for anything beyond hunting.
 
 ```yaml
@@ -563,13 +646,21 @@ level: medium
 #### WScript Spawning Msiexec Silent Install With ALLUSERS=2 (ScreenConnect Dropper Pattern)
 
 **Tier:** Hunting
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1059.005 (Visual Basic), T1218.007 (Msiexec)
+
 **Confidence:** MODERATE
+
 **Rationale:** The parent-child pairing of `wscript.exe` spawning `msiexec.exe` with both `/quiet` and `ALLUSERS=2` is the installer step of the ScreenConnect phishing dropper described in the report (`Attachment.vbs` downloads the MSI and runs `msiexec /i [msi] /quiet ALLUSERS=2`). *Wording and tier fix 2026-10-11:* the earlier heading and description presented a ScreenConnect chain, but the rule tests only the parent image and two command-line tokens: it does not identify the MSI, its download source or ScreenConnect, and its own false-positive entry concedes that legitimate deployment scripts install silently from `wscript.exe`, which contradicted the description's "not expected behavior" sentence. A rule whose false-positive list admits the benign form is Hunting, so it moves from Detection and `level` from high to medium. Dropped the unsupported `attack.initial-access` tactic tag carried in the original rule (no accompanying T1566 technique tag was present).
+
 **False Positives:** Legitimate software deployment scripts that invoke msiexec silently from wscript.exe with `ALLUSERS=2`, the benign form the rule's own false-positive entry has always conceded; validate the MSI path, its download source and the installed product against known-good deployment infrastructure.
+
 **Blind Spots:** A dropper using a different scripting engine (JScript, PowerShell, `cscript.exe`) to launch the same silent MSI install evades the `wscript.exe` parent requirement; misses installs that omit `ALLUSERS=2` or `/quiet`; a command line holding the flags in a different form (`/qn`) evades.
+
 **Validation:** Trigger the phishing dropper chain: the parent-child-cmdline combination must match; a silent MSI deployment from a different parent process must NOT fire. A silent install launched by an administrator's own VBScript matches too and is the known benign form, so a hit proves the pattern and not ScreenConnect.
+
 **Deployment:** Endpoint EDR / Sysmon-fed SIEM (process-creation telemetry).
 
 ```yaml
@@ -623,13 +714,21 @@ level: medium
 #### PureRAT v4.1.9 Four-Byte Preamble on Ports 56001 to 56003
 
 **Tier:** Detection
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1573.002 (Asymmetric Cryptography), T1071.001 (Web Protocols)
+
 **Confidence:** HIGH
+
 **Rationale:** The published 4-byte `04 00 00 00` preamble that PureRAT v4.1.9 sends on its non-standard C2 ports (56001-56003) before the TLS handshake is a protocol-framing artifact recorded in the report from binary analysis and attributed to external research (Netresec, August 2025). Salvaged from the original IP-pinned rule by widening the destination from a single hardcoded C2 IP to `$EXTERNAL_NET`: the content anchor and port combination now survive infrastructure rotation, which the original single-IP version could not. `rev` bumped to 2 for that change. *Wording fix 2026-10-11 (rev 4):* the earlier heading and `msg` said "Before TLS", but the rule matches the four bytes in the first four bytes of the payload buffer Suricata inspects on those three ports (`depth:4` is an absolute bound from the start of that buffer; this rule has no stream-start constraint, so it is not shown to mean the first bytes of the connection) and never looks at a TLS ClientHello, so it fires on any TCP flow to those ports that opens with those bytes; the heading and `msg` now say what is matched. *Robustness fix 2026-10-11 (round 2):* scored 2, not 3: the three destination ports are configurable and the preamble is a 4-byte little-endian length of 4, which the family's framing uses but another tool could too, so the rule is a protocol-framing fingerprint of this family on selected ports, not a technique invariant. "Confirmed C2 Ports" dropped from the `msg` because the ports are confirmed for one C2 and the destination is no longer pinned to it.
+
 **False Positives:** None known from the evidence; no benign traffic corpus was tested. Any other protocol that opens with the same four bytes (`04 00 00 00`, a little-endian length of 4) on destination ports 56001 to 56003 would match, because the rule does not check for a TLS ClientHello after the preamble.
+
 **Blind Spots:** The rule matches the four bytes at the start of an inspected payload buffer, so a later segment that opens with the same bytes also matches, and a first message that is split or prefixed differently is not matched; no replay was run. A future PureRAT build that changes the preamble value or moves off these three ports evades; the TLS payload after the preamble is opaque to the sensor, so the rule cannot confirm that a handshake follows.
+
 **Validation:** Replay a PCAP of PureRAT v4.1.9's handshake on ports 56001-56003 (none was available to this lane): it must alert. Ordinary TLS traffic on unrelated ports must NOT; a TLS ClientHello sent to these ports with no preamble must NOT.
+
 **Deployment:** Network IDS/IPS at perimeter and internal segmentation points.
 
 ```suricata

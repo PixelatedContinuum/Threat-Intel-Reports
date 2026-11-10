@@ -10,9 +10,13 @@ thumbnail: /assets/images/cards/arsenal-237-new-files.png
 ---
 
 **Campaign:** Arsenal-237-109.230.231.37-Malware-Repository
+
 **Date:** 2026-01-25
+
 **Author:** The Hunters Ledger
+
 **License:** CC BY 4.0
+
 **IOC Feed:** https://the-hunters-ledger.com/ioc-feeds/arsenal-237-lpe-exe.json
 
 ---
@@ -42,13 +46,21 @@ Coverage below is retiered from the original draft: every rule was re-scored for
 #### Token Manipulation API Sequence
 
 **Tier:** Detection
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1134.001 (Token Impersonation/Theft)
+
 **Confidence:** HIGH
+
 **Rationale:** Requires all six APIs in the process-enumeration-to-impersonation chain (`CreateToolhelp32Snapshot`, `Process32FirstW`, `Process32NextW`, `OpenProcessToken`, `DuplicateTokenEx`, `ImpersonateLoggedOnUser`) to co-occur, plus references to at least two of the four SYSTEM-privileged target processes (`winlogon.exe`, `lsass.exe`, `services.exe`, `csrss.exe`). Each API individually is common in legitimate administration and security tooling, but the full six-API sequence combined with SYSTEM-process targeting is the token-theft pattern itself, not a component that survives being isolated from it: recompiling or renaming the binary does not remove the need to call this exact sequence to achieve the technique.
+
 **False Positives:** Legitimate process-management and EDR/security tooling that enumerates processes and duplicates tokens for its own privileged operations (process explorers, some backup or remote-support agents) can share this API combination; treat a hit as a strong lead requiring binary-provenance review, not an unconditional block.
+
 **Blind Spots:** A rewrite performing token theft via direct syscalls or a different API chain (for example `NtOpenProcessToken`) evades this rule.
+
 **Validation:** Scan `lpe.exe` (hash below); must match. A legitimate process-explorer or backup-agent binary that also imports these six APIs should be reviewed for the SYSTEM-process pairing before being treated as a false positive.
+
 **Deployment:** Endpoint AV/EDR file scanning, IR artifact triage, retroactive scan of file shares and installer repositories.
 
 ```yara
@@ -95,13 +107,21 @@ rule Arsenal237_LPE_Token_Manipulation {
 #### UAC Bypass via ms-settings Registry Hijack
 
 **Tier:** Detection
+
 **Robustness:** 3
+
 **ATT&CK Coverage:** T1548.002 (Bypass User Account Control)
+
 **Confidence:** HIGH
+
 **Rationale:** All five strings are direct artifacts of one specific, well-documented UAC-bypass technique: the `ms-settings\Shell\Open\command` registry hijack that abuses `fodhelper.exe`'s auto-elevation. None of the five is a name the malware author invented; the registry path, `DelegateExecute`, and `fodhelper.exe` are fixed OS/technique artifacts the attacker cannot rename away from and still perform this exact bypass. Requiring all five together (the path, the delegate-execute marker, both `reg add`/`reg delete` command verbs, and the target binary name) is a technique chokepoint, not a coincidental combination. Retiering fix: the source rule's registry-path string was over-escaped (eight raw backslash characters between each path component in the file, compiling to two literal backslashes per separator), which would never match the single-backslash form this path actually takes as embedded text; corrected to the properly-escaped single-backslash form.
+
 **False Positives:** None known; legitimate software does not embed the combination of this exact registry path with `reg add`/`reg delete` command construction and `fodhelper.exe` references.
+
 **Blind Spots:** A build using a different UAC-bypass technique (for example `sdclt.exe`, `eventvwr.exe`, or `ComputerDefaults.exe` hijacks) evades this rule entirely; it is specific to the ms-settings/fodhelper variant.
+
 **Validation:** Scan `lpe.exe` (hash below); must match. Unrelated software referencing `fodhelper.exe` alone, without the paired registry-path and `DelegateExecute` strings, must NOT fire.
+
 **Deployment:** Endpoint AV/EDR file scanning, IR artifact triage, retroactive scan of file shares.
 
 ```yara
@@ -133,13 +153,21 @@ rule Arsenal237_LPE_UAC_Bypass {
 #### Scheduled Task SYSTEM Escalation Lifecycle
 
 **Tier:** Detection
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1053.005 (Scheduled Task)
+
 **Confidence:** HIGH
+
 **Rationale:** Requires all five command-line fragments needed to build the create-then-delete SYSTEM task lifecycle (`schtasks`, `/create`, `/tn`, `/ru SYSTEM`, `/delete`) to co-occur as embedded strings. `/tn` and `/ru SYSTEM` are schtasks-specific syntax fragments, not generic words, and embedding both the create AND delete command templates together in one compiled binary is characteristic of purpose-built escalation tooling rather than a one-off administrative script.
+
 **False Positives:** Legitimate deployment or RMM tooling that embeds the full schtasks create-plus-delete command template in a single compiled binary is uncommon but not impossible; review the calling binary's provenance before treating a hit as malicious.
+
 **Blind Spots:** Task names are likely randomized at runtime and are not hardcoded in the malware, so this rule cannot rely on any specific task name; a build that constructs the schtasks command line dynamically at runtime with no embedded template strings would evade static string matching.
+
 **Validation:** Scan `lpe.exe` (hash below); must match. A legitimate IT-automation tool that only embeds `/create` and `/ru SYSTEM` without the paired `/delete` cleanup template must NOT fire.
+
 **Deployment:** Endpoint AV/EDR file scanning, IR artifact triage, retroactive scan of file shares.
 
 ```yara
@@ -171,13 +199,21 @@ rule Arsenal237_LPE_Schtasks {
 #### Named Pipe Token Impersonation API Sequence
 
 **Tier:** Detection
+
 **Robustness:** 3
+
 **ATT&CK Coverage:** T1134.001 (Token Impersonation/Theft)
+
 **Confidence:** HIGH
+
 **Rationale:** Retiering fix: this rule is split out of the source file's single "Named Pipe Impersonation Pattern" rule, whose condition was `all of ($pipe*) or ($ps and $ps_pipe)`. That OR let a much weaker branch (bare `powershell` plus the .NET class name `NamedPipeClientStream`, with no pipe-specific evidence at all) fire the entire rule, dragging a genuinely strong signal down to that branch's precision. Split so the native API sequence keeps its Detection-grade confidence; the weaker branch is now its own Hunting-tier rule below. `CreateNamedPipeW` + `ConnectNamedPipe` + `ImpersonateNamedPipeClient` is the literal Win32 API sequence for named-pipe token impersonation (a technique chokepoint), combined with the pipe namespace prefix and a Print Spooler (`spoolss`) reference. Also retagged from the source's T1055.001 (Dynamic-link Library Injection, unrelated to named-pipe impersonation) to T1134.001, the technique this behavior actually maps to, matching the correction already applied to the companion Sigma rule. Retiering fix: the pipe-prefix string was over-escaped in the source (sixteen raw backslash characters around the prefix, compiling to double the correct number of literal backslashes), which would never match the real `\\.\pipe\` prefix as embedded text; corrected to the properly-escaped form.
+
 **False Positives:** None known; the combination of the full native API sequence with the pipe-namespace prefix and the Print Spooler reference is not present in legitimate software.
+
 **Blind Spots:** A build using a different named-pipe API sequence, or one targeting a service other than the Print Spooler, evades this rule.
+
 **Validation:** Scan `lpe.exe` (hash below); must match. A tool that only calls `CreateNamedPipeW` for legitimate IPC, without `ImpersonateNamedPipeClient`, must NOT fire.
+
 **Deployment:** Endpoint AV/EDR file scanning, IR artifact triage, retroactive scan of file shares.
 
 ```yara
@@ -211,11 +247,17 @@ rule Arsenal237_LPE_Named_Pipe_Token_Theft {
 #### PowerShell Named Pipe Client Connector
 
 **Tier:** Hunting
+
 **Robustness:** 1
+
 **ATT&CK Coverage:** T1134.001 (Token Impersonation/Theft)
+
 **Confidence:** LOW
+
 **Rationale:** The weaker branch split out of the source file's combined "Named Pipe Impersonation Pattern" rule (see the Detection-tier rule above). `powershell` alone is a near-ubiquitous string, and `NamedPipeClientStream` is a .NET class name used by legitimate cross-process IPC scripts and monitoring tooling, not exclusively by this malware's documented PowerShell one-line connector (`New-Object IO.Pipes.NamedPipeClientStream(...)`. Neither string is a technique chokepoint on its own; kept as a Hunting lead for the wrapper's PowerShell-based fallback path rather than folded back into the Detection-tier rule.
+
 **False Positives:** Legitimate PowerShell scripts and remoting/monitoring tools that use `System.IO.Pipes.NamedPipeClientStream` for IPC share both strings; expect co-fire with unrelated software.
+
 **Deployment:** Broad endpoint/EDR scanning sweep, retroactive hunt across file shares; treat hits as triage candidates, not alerts.
 
 ```yara
@@ -244,11 +286,17 @@ rule Arsenal237_LPE_Named_Pipe_PS_Connector {
 #### Generic WMIC Process Creation Combination
 
 **Tier:** Hunting
+
 **Robustness:** 1
+
 **ATT&CK Coverage:** T1047 (Windows Management Instrumentation)
+
 **Confidence:** LOW
+
 **Rationale:** Requires four strings (`wmic`, `process`, `call`, `create`) to co-occur, but three of the four are common English/programming words with little discriminating power on their own; only `wmic` narrows the candidate pool meaningfully. The combination is durable in the sense that it targets a fixed LOLBin command syntax rather than a renameable literal, but static string presence alone (versus an actual process-creation event) is a weak signal for this specific technique. Retained as a Hunting lead, matching the source file's own MEDIUM severity rating for this rule.
+
 **False Positives:** Any binary that references WMIC administration (installers, RMM agents, system-inventory tools, documentation viewers) can contain all four strings without ever invoking `wmic process call create` itself.
+
 **Deployment:** Broad endpoint/EDR scanning sweep, retroactive hunt across file shares; treat hits as triage candidates, not alerts.
 
 ```yara
@@ -285,13 +333,21 @@ rule Arsenal237_LPE_WMIC {
 #### UAC Bypass via Ms-Settings Registry Hijack
 
 **Tier:** Detection
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1548.002 (Bypass User Account Control)
+
 **Confidence:** HIGH
+
 **Rationale:** `fodhelper.exe` spawned directly by `reg.exe` is the process-creation signature of the ms-settings registry-hijack UAC bypass and is inherently rare regardless of what invoked `reg.exe`; that branch alone survives a rename of the malware binary. The paired `ParentImage|endswith '\lpe.exe'` branch is a renameable literal specific to this sample, but it rides alongside the durable `reg.exe` branch rather than standing alone, so the rule as a whole still clears the durability litmus. The rule's own description already documents that the companion registry-write event was dropped as a separate, uncorrelatable event under a different logsource; this rule detects the `fodhelper.exe` launch alone, which is independently a strong indicator. **Reviewed 2026-09-12 and deliberately kept:** the `\lpe.exe` branch was a candidate for removal as a campaign-specific literal, but the two parents are an OR, so dropping it would lose the case where `lpe.exe` spawns `fodhelper.exe` directly with no `reg.exe` in between. It stays on the site for that coverage. Strip it in the extracted copy if this rule is ever submitted upstream, where a campaign binary name in a generic technique rule is a defect.
+
 **False Positives:** Legitimate software installation (extremely rare).
+
 **Blind Spots:** A build that launches `fodhelper.exe` through an intermediary process other than `reg.exe` (for example a renamed copy of `lpe.exe` invoked through `cmd.exe`) evades the durable branch and falls back to the renameable `lpe.exe` literal only.
+
 **Validation:** Launch `fodhelper.exe` with `reg.exe` as its immediate parent; must fire. A normal user-initiated `fodhelper.exe` launch from `explorer.exe` must NOT fire.
+
 **Deployment:** Sysmon Event ID 1 (Process Creation) telemetry, EDR process-creation monitoring.
 
 ```yaml
@@ -331,13 +387,21 @@ level: high
 #### Scheduled Task Created as SYSTEM
 
 **Tier:** Detection
+
 **Robustness:** 3
+
 **ATT&CK Coverage:** T1053.005 (Scheduled Task)
+
 **Confidence:** HIGH
+
 **Rationale:** `schtasks.exe` invoked with `/create`, `/ru`, and `SYSTEM` together, by an account whose name does not contain SYSTEM or Administrator, is the exact command syntax needed to escalate via this LOLBin; a rename of the calling binary does not change what `schtasks.exe` requires on its own command line. Retiering fix: the source rule's `references:` field held a plain-text caveat ("Task names are likely randomized...") instead of a URL, which is a SigmaHQ field-type violation; the caveat has been moved into this Rationale/Blind Spots prose and `references:` now points to this detection page.
+
 **False Positives:** System administrators manually creating SYSTEM tasks (should be reviewed); legitimate administrative scripts using `schtasks.exe`.
+
 **Blind Spots:** Task names are likely randomized at runtime and are not hardcoded in the malware, so detection deliberately does not rely on any specific task name; a build that creates the task without the literal `/ru SYSTEM` parameter (for example via a different privilege-specification syntax) evades this rule.
+
 **Validation:** Run `schtasks /create /tn <any> /ru SYSTEM` as a user whose account name contains neither SYSTEM nor Administrator; must fire. The same command run by an account named Administrator or SYSTEM must NOT fire. The filter matches on the account name only, so a member of the `Administrators` group with another name does fire.
+
 **Deployment:** Sysmon Event ID 1 (Process Creation) telemetry, EDR process-creation monitoring, Windows Security Event ID 4698.
 
 ```yaml
@@ -388,11 +452,17 @@ level: high
 #### Print Spooler Named Pipe Creation (Possible Token-Impersonation Staging)
 
 **Tier:** Hunting
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1134.001 (Token Impersonation/Theft)
+
 **Confidence:** MODERATE
+
 **Rationale:** *Title fix 2026-10-10:* the rule was titled "Named Pipe Impersonation Attack (lpe.exe)", but the selection is a pipe-name substring with no process or image test, so any process creating a `spoolss` pipe fires it; the title and heading now say that. `spoolss` is the real Print Spooler named-pipe name, a fixed OS artifact rather than an attacker-chosen literal, so it survives a rename of the malware binary. Retiering fix: the source selector was `PipeName|contains: ['spoolss', 'pipe']`; the bare `pipe` branch is a near-unconstrained substring match (most legitimate named pipes contain the word "pipe") that would fire on routine, unrelated IPC activity with no discriminating value, so it has been removed, leaving `spoolss` as the sole selector, with the single-item list converted to a scalar per SigmaHQ convention. Retagged from the source's T1055.001 (Dynamic-link Library Injection, unrelated to named-pipe impersonation) to T1134.001, the technique this behavior actually maps to. PipeName-only telemetry cannot correlate which process or API sequence created the pipe, so even the tightened selector stays Hunting rather than Detection; pair with process-access telemetry (see the Detection-tier Token Impersonation rule above) for higher confidence.
+
 **False Positives:** Legitimate Print Spooler activity on hosts with print services enabled (common).
+
 **Deployment:** Sysmon Event ID 17/18 (Pipe Created/Connected) telemetry; correlate with process-access events on the same host for triage.
 
 ```yaml
@@ -431,11 +501,17 @@ level: medium
 #### WMIC Process Call Create by a User Not Named SYSTEM or Administrator
 
 **Tier:** Hunting
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1047 (Windows Management Instrumentation)
+
 **Confidence:** MODERATE
+
 **Rationale:** *Title fix 2026-10-10:* the rule was titled "for Privilege Escalation (lpe.exe)", but the selection is `wmic.exe process call create` from any account not named SYSTEM or Administrator, with no lpe.exe or escalation test; the title and heading now say that. `wmic.exe` invoked with the `process call create` syntax is a fixed, durable LOLBin command pattern, and the user filter narrows out the accounts that would legitimately run it as an administrative action. The pattern is also common in legitimate remote-administration and deployment tooling, so it does not clear the Detection bar on precision even though it is level-honest already at `medium`; carried forward as Hunting.
+
 **False Positives:** Legitimate administrative scripts and RMM/deployment tooling using WMIC (common); review context before treating a hit as malicious.
+
 **Deployment:** Sysmon Event ID 1 (Process Creation) telemetry, EDR process-creation monitoring.
 
 ```yaml
@@ -482,13 +558,21 @@ level: medium
 #### Process Access to SYSTEM Processes with Token-Duplication Access Rights
 
 **Tier:** Hunting
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1134.001 (Token Impersonation/Theft)
+
 **Confidence:** LOW
+
 **Rationale:** *Round 2, 2026-10-10:* this rule was Detection and combined a process-access mask with a `CallTrace` that had to name `OpenProcessToken`, `DuplicateTokenEx` or `ImpersonateLoggedOnUser`. Sysmon Event 10 records `CallTrace` as module-and-offset frames, not function names, so on stock Sysmon the second selector had no event to match and the rule could not fire; the `0x1410` and `0x1000` masks it admitted were also not the rights the companion report shows `lpe.exe` requesting. The report's token-theft loop calls `OpenProcess(PROCESS_QUERY_INFORMATION | PROCESS_DUP_HANDLE)` (`0x0440`; with `PROCESS_QUERY_LIMITED_INFORMATION` added it is `0x1440`) against each process, then `OpenProcessToken`, `DuplicateTokenEx` and `ImpersonateLoggedOnUser`. The rule now keeps only the part Sysmon can see: a handle to `winlogon.exe`, `lsass.exe`, `services.exe` or `csrss.exe` granted exactly `0x0440` or `0x1440`. The API-name corroboration is dropped rather than kept as a selector that cannot match; it would need an EDR or enriched profile whose call trace carries resolved function names. Access rights to these four processes are requested by security and management software too, so this is a Hunting lead, not an alert.
+
 **False Positives:** Security products, process-monitoring and management tools that open these processes for token or handle duplication. Expect hits from any tool that duplicates handles to SYSTEM processes.
+
 **Blind Spots:** A token theft that requests different access rights, goes through direct syscalls, or targets a SYSTEM-privileged process outside this four-item list evades the rule. It cannot confirm that `OpenProcessToken`, `DuplicateTokenEx` or `ImpersonateLoggedOnUser` followed the open.
+
 **Validation:** Run `OpenProcess(PROCESS_QUERY_INFORMATION | PROCESS_DUP_HANDLE)` against `winlogon.exe` from a test process and confirm Sysmon reports `GrantedAccess` `0x0440` or `0x1440`; the rule must fire only on those values. Not replayed against `lpe.exe` (not on this workstation).
+
 **Deployment:** Sysmon Event ID 10 (Process Access) telemetry with the SYSTEM-process targets not filtered out, or EDR process-access monitoring.
 
 ```yaml

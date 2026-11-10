@@ -9,9 +9,13 @@ hide: true
 ---
 
 **Campaign:** MultiVector-Ecommerce-RCE-Toolkit-192.3.1.116
+
 **Date:** 2026-07-21
+
 **Author:** The Hunters Ledger
+
 **License:** CC BY 4.0
+
 **Reference:** https://the-hunters-ledger.com/reports/multivector-ecommerce-rce-toolkit-192-3-1-116/
 
 ---
@@ -41,12 +45,19 @@ All five rules below target the **payload class**, not this operator's specific 
 #### Logback FileAppender Arbitrary File Write to JSP
 
 **Tier:** Detection
+
 **Robustness:** 3
+
 **ATT&CK Coverage:** T1190 (Exploit Public-Facing Application), T1505.003 (Web Shell)
+
 **Confidence:** HIGH
+
 **False Positives:** None known. A Logback `FileAppender` writing its output to a `.jsp` destination is never legitimate: appenders write log text, not application code, and no production logging configuration targets a servlet-container-executable extension.
+
 **Blind Spots:** Misses the technique if the target extension is renamed away from `.jsp` (e.g. `.jspx`, `.jsp.bak` moved into place by a second step) or if a different appender class is used to the same effect.
+
 **Validation:** Scan the `logback-evil.xml`-style payload (a `FileAppender` whose `<file>` value ends in `.jsp`) and confirm a match; a normal Logback configuration writing to a `.log` or `.txt` destination must NOT fire.
+
 **Deployment:** File/attachment scanning, upload-directory sweeps, incident-response triage of recovered configuration files.
 
 ```yara
@@ -81,12 +92,19 @@ rule EXPL_Logback_FileAppender_JSP_ArbitraryWrite {
 #### SnakeYAML Deserialization Gadget (CVE-2022-1471 Family)
 
 **Tier:** Detection
+
 **Robustness:** 3
+
 **ATT&CK Coverage:** T1190 (Exploit Public-Facing Application)
+
 **Confidence:** HIGH
+
 **False Positives:** None known. The three-string combination is the textbook SnakeYAML unsafe-deserialization gadget chain (`ScriptEngineManager` loading a remote `URLClassLoader`); no legitimate YAML document constructs a scripting engine via a remote class loader.
+
 **Blind Spots:** Misses gadget chains built from a different base class (e.g. `javax.naming.InitialContext`, other CVE-2022-1471-family variants that avoid `ScriptEngineManager`), and misses payloads that obfuscate the YAML tags.
+
 **Validation:** Scan the `poc.yml`-style payload (containing all three `!!javax.script.ScriptEngineManager`, `!!java.net.URLClassLoader` and `!!java.net.URL` tags) and confirm a match; an ordinary application YAML configuration file must NOT fire.
+
 **Deployment:** File/attachment scanning, upload-directory sweeps, incident-response triage of recovered configuration files.
 
 ```yara
@@ -121,13 +139,21 @@ rule EXPL_SnakeYAML_ScriptEngineManager_Gadget_CVE_2022_1471_Family {
 #### Generic JSP Web Shell Strings (Request Parameter and Bash -c Exec)
 
 **Tier:** Detection
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1505.003 (Web Shell)
+
 **Confidence:** HIGH
+
 **Rationale:** The report records `cmd.jsp` as a minimal JSP that reads a single HTTP parameter and runs it through the shell. This rule matches four strings anywhere in a JSP-sized file of under 30 KB: a `request.getParameter(...)` call, `Runtime.getRuntime().exec`, `/bin/bash` and a quoted `"-c"`. It tests no order and no distance between them, and no JSP marker (`<%`, a `.jsp` name or a page directive), so a Java source file or a document holding the four strings also matches. It shows that the pieces of such a shell are present and does not show that the parameter reaches the exec call.
+
 **False Positives:** Low but not zero: a small number of legitimate diagnostic or internal-tooling JSP pages in development environments do shell out to `/bin/bash -c` using a request parameter; these are themselves poor practice and worth flagging even when not attacker-authored.
+
 **Blind Spots:** Misses web shells built on a different execution primitive (`ProcessBuilder`, reflection-based invocation), a different shell (`/bin/sh`, `cmd.exe`), a quoted `-c` written another way, or a file of 30 KB or more. The four strings are matched anywhere in the file with no order, distance, line or method test, so splitting the parameter read from the exec call does not evade the rule; for the same reason the rule shows no data flow.
+
 **Validation:** Scan the `cmd.jsp`-style payload (`request.getParameter` combined with `Runtime.getRuntime().exec` and a `/bin/bash -c` invocation) and confirm a match; a normal JSP page that reads a parameter for display purposes only, with no exec call, must NOT fire.
+
 **Deployment:** Web-root/upload-directory scanning, incident-response triage, webshell-hunting sweeps of Java application servers.
 
 ```yara
@@ -163,13 +189,21 @@ rule WEBSHELL_Generic_JSP_Bash_Exec_Parameter {
 #### XXE-to-SSRF Internal/Cloud-Metadata Probe
 
 **Tier:** Detection
+
 **Robustness:** 3
+
 **ATT&CK Coverage:** T1190 (Exploit Public-Facing Application), T1552.005 (Cloud Instance Metadata API)
+
 **Confidence:** HIGH
+
 **Rationale:** The report describes an SVG that probes four internal targets and calls an external-entity declaration referencing the cloud metadata address a high-precision signal. The rule matches one external-entity declaration written as `<!ENTITY`, an optional `%`, the entity name, the keyword `SYSTEM`, and a quoted literal whose text reaches `169.254.169.254`, `127.0.0.1:6379`, `127.0.0.1:3306` or a `:8080/actuator` path before the closing quote or a `>`. `SYSTEM` has to be the declaration's identifier keyword directly after the name, so an internal entity whose quoted value merely contains the text `SYSTEM http://169.254.169.254/` does not match, and the strings appearing separately in a document do not match. The name and the quoted literal have no length limit.
+
 **False Positives:** None known. An XML external-entity declaration whose `SYSTEM` identifier is the cloud instance-metadata address, a loopback Redis or MySQL port, or an actuator path has no legitimate purpose in a document a server is expected to parse. The `:8080/actuator` branch does not test the host, so a declaration pointing at any host's `:8080/actuator` path matches.
+
 **Blind Spots:** Misses a declaration that identifies its resource with `PUBLIC`, an entity name that starts with a non-ASCII character, and a document of 20 KB or more. Misses XXE payloads targeting a different internal address/port than the four covered here, misses parameter-entity or out-of-band (blind) XXE variants that reference an external DTD instead of embedding the target directly, and misses the plain local-file-read XXE variant (e.g. `file:///etc/passwd`) which is a much older, already broadly-signatured technique not re-covered here.
+
 **Validation:** Scan the `internal_scan.svg`-style payload (an `<!ENTITY ... SYSTEM "http://169.254.169.254/...">` declaration, or the Redis/MySQL/Actuator internal-service variants) and confirm a match, including one whose entity name is hundreds of characters long; an ordinary SVG or XML document with no external entity declarations, and an internal entity such as `<!ENTITY note "SYSTEM http://169.254.169.254/">` (a quoted value, no identifier keyword), must NOT fire.
+
 **Deployment:** File-upload scanning (especially SVG/XML upload features), incident-response triage of recovered documents.
 
 ```yara
@@ -206,12 +240,19 @@ _Corrected 2026-09-13: one rule, below. Previously stated "None" here; that was 
 #### Logback insertFromJNDI RCE (CVE-2021-42550)
 
 **Tier:** Hunting (re-tiered from Detection 2026-09-13, see note below)
+
 **Robustness:** 2 (downgraded from 3 2026-09-13)
+
 **ATT&CK Coverage:** T1190 (Exploit Public-Facing Application)
+
 **Confidence:** MODERATE (downgraded from HIGH 2026-09-13)
+
 **False Positives:** Confirmed, not merely absent. A realistic, legitimate Logback config was built and tested: an enterprise application using `insertFromJNDI` exactly as Logback documents the feature, to pull shared logging configuration from its own internal, benign `ldap://` directory server. It fires. The rule's original claim ("not a pattern that occurs in legitimate logging configuration") was wrong: `insertFromJNDI` paired with an `ldap://`/`rmi://` scheme is Logback's own documented, intended use of the JNDI lookup feature. The actual exploit (CVE-2021-42550) is about an attacker controlling the *target* of that lookup, which static file content cannot distinguish from a legitimate internal target, so there is no content-only tightening available for the same reason the Rootkit_Userland tar rule in a different campaign has none: the malicious and benign cases are byte-identical
+
 **Blind Spots:** Misses payloads that use a different JNDI scheme unlikely to be blocked by allowlists (e.g. `dns://`, `corba://`), and misses the exploit entirely if delivered as a compiled/serialized configuration rather than the plaintext XML form matched here. Cannot distinguish an attacker-controlled JNDI target from a legitimate internal one from file content alone, which is the reason for the re-tier
+
 **Validation:** Scan the `logback-rce.xml`-style payload (an XML file containing an `<insertFromJNDI env-entry-name="ldap://...">` element), it fires. A legitimate enterprise Logback config pointing the same feature at an internal directory server also fires, confirmed by direct testing, which is why this needs analyst review rather than automatic action
+
 **Deployment:** File/attachment scanning, upload-directory sweeps, incident-response triage of recovered configuration files, with analyst triage on every hit
 
 ```yara
@@ -248,12 +289,19 @@ Web-access-log telemetry (`logsource.category: webserver`) covers most of this c
 #### Manufactured Log-Data Harvesting via Jolokia Logger Manipulation Then Actuator Logfile Read (Correlation)
 
 **Tier:** Detection (correlation), bundled below with its 2 required Hunting-grade base rules, which do not alert on their own
+
 **Robustness:** 3 (correlation) / 1 (each base rule individually)
+
 **ATT&CK Coverage:** T1213 (Data from Information Repositories), T1190 (Exploit Public-Facing Application)
+
 **Confidence:** HIGH (correlation) / LOW (either base rule alone)
+
 **False Positives:** A single operations engineer legitimately using Jolokia to raise logging for live debugging from the same source IP as their own log review, within the same short window, uncommon outside a genuine incident-response or troubleshooting session, and should be corroborated against known management-network IP ranges.
+
 **Blind Spots:** The base rule reads the URL only. The report describes the write as a POST to the Jolokia path using a `setProperty` operation, whose operation name and values sit in the request body and not in the access log, so the documented traffic shape may not match; only the `/jolokia/write/<mbean>/<attribute>/<value>` URL form is seen, and the level value is never tested. Neither base rule filters the source, so internal management traffic matches too. The correlation groups by source address only (`c-ip`) and carries no target identity: a Jolokia write to one application followed by a logfile read of a different application from the same source address (a shared proxy or NAT address, or a scanner sweeping hosts) also fires. An operator who manipulates logging and reads the log file from two different source IPs (e.g. via a proxy chain) evades the `c-ip` grouping; an operator who waits longer than 15 minutes between the write and the read also evades this specific window.
+
 **Validation:** Replay a request whose path has the form `/jolokia/write/<mbean>/<attribute>/<value>` and whose URI contains `Logger` or `logging.level`, followed by an actuator logfile GET that returns 200, from the same source IP within 15 minutes: the correlation must fire. A write sent as a POST to the Jolokia root path with the operation in the body is not covered by the base rule and does not start the sequence. Either event alone, or the same two events from two different source IPs, must NOT trigger the correlation; the same two events against two different servers from one source IP WILL trigger it.
+
 **Deployment:** SIEM correlation engine ingesting web/proxy access-log telemetry (`cs-uri-stem`, `cs-uri`, `sc-status`, `c-ip`).
 
 ```yaml
@@ -377,13 +425,21 @@ level: high
 #### Successful Request From a Non-Private Client Address to an Alibaba Druid Monitoring Console Path
 
 **Tier:** Detection
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1213 (Data from Information Repositories)
+
 **ATT&CK Note:** T1596.005 (Scan Databases) is withdrawn: it describes searching reconnaissance databases, not an HTTP request to the console. The report maps the operator's reading of the exposed Druid console to T1213 (schema, endpoints and SQL history), which is what a successful request returns.
+
 **Confidence:** HIGH
+
 **False Positives:** Authorized internal monitoring dashboards reached through a public address, an administrator who has logged in to a console that is meant to be reachable, or an approved attack-surface-management scan intentionally checking for this exposure. The rule tests the response code and the client address, not authentication, so a 200 from a logged-in session matches as well as one from an open console. Any hit still warrants confirming the console is properly restricted.
+
 **Blind Spots:** Misses the exposure if the console is mounted under a non-default path, or if the environment logs status codes as a string field the ingestion pipeline doesn't map cleanly to `sc-status`. Where a reverse proxy or load balancer terminates the connection and the web log records the proxy's private address in `c-ip`, every request looks private and the rule never fires. Clients on carrier-grade NAT (`100.64.0.0/10`) are treated as non-private.
+
 **Validation:** Replay a GET from a public address to `/druid/index.html` (or the other listed paths) that returns 200: the rule must fire; the same request returning 401/403/404, or the same 200 from an RFC 1918 or loopback client address, must NOT fire.
+
 **Deployment:** Web/proxy access-log ingestion, WAF log ingestion.
 
 ```yaml
@@ -448,12 +504,19 @@ level: high
 #### Large HTTP 200 Response to a Spring Boot Actuator Heap Dump or Jolokia HotSpotDiagnostic URI
 
 **Tier:** Detection
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1005 (Data from Local System), T1552.001 (Credentials In Files)
+
 **Confidence:** HIGH
+
 **False Positives:** Requests from internal addresses match as well, because the source is not tested. Authorized developer or support engineer pulling a heap dump for legitimate memory-leak diagnosis from an approved internal source.
+
 **Blind Spots:** The 1,000,000-byte response-size threshold is a reasonable default, not a universal one: a small heap or an aggressively-compressed response could fall under it; tune `sc-bytes` against the target environment's own actuator response sizes.
+
 **Validation:** Replay an external GET to `/actuator/heapdump` that returns 200 with a response body over 1MB: the rule must fire; the same request blocked with a 401/403, or returning a small error body, must NOT fire. Any 200 response of 1,000,000 bytes or more to a URI containing `HotSpotDiagnostic` WILL fire whatever its content. Whether the returned bytes are a heap dump holding credentials is not tested.
+
 **Deployment:** Web/proxy access-log ingestion.
 
 ```yaml
@@ -507,12 +570,19 @@ level: high
 #### High-Volume Distinct Requests Against a Password-Reset or Verification-Code Endpoint (Correlation)
 
 **Tier:** Detection (correlation), bundled below with its Hunting-grade base rule, which does not alert on its own
+
 **Robustness:** 2 (correlation) / 1 (base rule individually)
+
 **ATT&CK Coverage:** T1110.001 (Password Guessing)
+
 **Confidence:** HIGH (correlation) / LOW (base rule alone)
+
 **False Positives:** A misbehaving client retry loop or a load-testing script exercising the same endpoint. Uncommon in normal user behavior at this volume.
+
 **Blind Spots:** Cannot confirm the ideal discriminator (one constant verification-context token paired with only the numeric code changing) because standard web-access-log telemetry does not expose individual query parameters by name; volume alone is the available proxy, so a low-and-slow brute force spread across many hours evades the 10-minute window. A defender with parsed API-gateway or WAF logs exposing the context-token parameter directly should key on "one constant token value, many distinct code values" instead, for materially higher precision.
+
 **Validation:** Replay 50 or more distinct requests to the same password-reset endpoint from one source within 10 minutes: the correlation must fire; fewer than 50, or the same volume spread across multiple source IPs, must NOT trigger the correlation.
+
 **Deployment:** SIEM correlation engine ingesting web/proxy access-log telemetry.
 
 ```yaml
@@ -593,12 +663,19 @@ level: high
 #### Newly Registered Account Probing Administrative Routes Within Minutes (Correlation)
 
 **Tier:** Detection (correlation), bundled below with its 2 required Hunting-grade base rules, which do not alert on their own
+
 **Robustness:** 2 (correlation) / 1 (each base rule individually)
+
 **ATT&CK Coverage:** T1585 (Establish Accounts), T1078 (Valid Accounts)
+
 **Confidence:** HIGH (correlation) / LOW (either base rule alone)
+
 **False Positives:** A legitimate new employee or partner account being set up and then immediately granted admin access by design. Uncommon for a genuine self-service signup flow.
+
 **Blind Spots:** An operator who registers the account from one source IP and probes admin routes from another (e.g. via a proxy or a serverless relay, both patterns observed elsewhere in this campaign) evades the `c-ip` grouping; misses probing that starts more than 15 minutes after registration.
+
 **Validation:** Replay an account-registration POST followed by a request to one of the listed administrative routes from the same source IP within 15 minutes: the correlation must fire; either event alone must NOT trigger it.
+
 **Deployment:** SIEM correlation engine ingesting web/proxy access-log telemetry.
 
 ```yaml
@@ -722,12 +799,19 @@ level: high
 #### Single Source Touching Many Distinct Ports From a Fixed Service-Discovery Profile (Correlation)
 
 **Tier:** Hunting
+
 **Robustness:** 2 (correlation) / 1 (base rule individually)
+
 **ATT&CK Coverage:** T1046 (Network Service Discovery)
+
 **Confidence:** MODERATE
+
 **False Positives:** Routine internal vulnerability scanning or asset-discovery tooling covering the same common service ports; the underlying ports are also touched individually by ordinary traffic and legitimate scanning. Confirm against known scanner IP ranges before treating as hostile.
+
 **Blind Spots:** The correlation is a Sigma `value_count` over `dst_port`. Converted to EQL with the sysmon pipeline it becomes `sequence by src_ip with maxspan=5m [...] by dst_port with runs=8`, which counts eight matching events that share one destination port, not eight distinct ports, so the EQL form does not implement the distinct-port claim. The Lucene backend cannot convert correlation rules. Neither base-rule selector tests the source or direction of a connection.
+
 **Deployment:** Firewall/flow-log correlation engine; useful as an early tripwire for a low-sophistication, unstealthy sweep rather than a standalone high-confidence alert.
+
 **Retiering note (2026-07-30):** the base rule now excludes connections the firewall rejected, via a `filter_rejected` selector on the `action` field. Deployed against perimeter firewall telemetry without that filter, the rule counts dropped packets, and because unsolicited internet scanning of any public address is a permanent background condition the paired correlation fires indefinitely on traffic that never reached a service. Observed in production across a 14-day window: four separate commodity-cloud sources (two AWS, one DigitalOcean, one Huawei Cloud) triggered the correlation while the firewall blocked all 5,175 associated packets, so every alert described activity that had already been stopped. Note that `action` values are not standardised across firewall vendors; verify the token your platform emits for a rejected connection and extend the filter list if it differs.
 
 **Check your feed before applying the filter.** Many pfSense and OPNsense deployments ship *only* blocked traffic to the SIEM, because the logging is driven by the default deny rule rather than by per-rule pass logging. On such a feed every document carries the rejected disposition, so `filter_rejected` excludes the entire dataset and the rule silently matches nothing, worse than the noise it was meant to remove, because it looks deployed and reports clean. Verify first with a terms aggregation on the disposition field over your firewall index: if the only value returned is a block/deny token, do **not** apply this filter. Either enable pass logging so the disposition becomes meaningful, or scope the base rule's source to internal ranges instead, which retains the rule's real value of catching lateral service discovery from a compromised internal host and does not depend on disposition at all. This is measured behaviour rather than a hypothetical, seen on a real OPNsense deployment where every firewall document across a 14-day window carried a single `block` action and no pass events existed at all.
@@ -847,12 +931,19 @@ Network-layer coverage below intentionally duplicates a few techniques already c
 #### LDAP Anonymous BindRequest to a Non-Standard Directory Port
 
 **Tier:** Detection
+
 **Robustness:** 3
+
 **ATT&CK Coverage:** T1190 (Exploit Public-Facing Application)
+
 **Confidence:** HIGH
+
 **False Positives:** None known on ports 1389/1099 specifically: these are not standard LDAP/RMI-registry ports in most environments, so legitimate directory-service traffic is unlikely to appear there. An internal LDAP proxy or test harness deliberately using these ports would be the only expected exception.
+
 **Blind Spots:** Only matches the anonymous/simple-bind, LDAPv3, empty-DN BER encoding captured in evidence; a bind using SASL, a non-empty DN, or LDAPv2 produces different bytes and will not match. Misses the technique entirely if the target server enforces TLS (LDAPS) before any bind bytes are sent in cleartext.
+
 **Validation:** Replay a raw anonymous LDAPv3 BindRequest (`30 0c 02 01 01 60 07 02 01 03 04 00 80 00`) to TCP/1389 or TCP/1099: the rule must fire; the same byte sequence on TCP/389 (standard LDAP) must NOT fire, since this rule is deliberately scoped to the non-standard ports observed in evidence.
+
 **Deployment:** Network IDS at the network egress point, positioned to see outbound application-server traffic.
 
 ```
@@ -862,12 +953,19 @@ alert tcp $HOME_NET any -> $EXTERNAL_NET [1389,1099] (msg:"THL DETECT MultiVecto
 #### SnakeYAML Gadget Chain in HTTP Request Body
 
 **Tier:** Detection
+
 **Robustness:** 3
+
 **ATT&CK Coverage:** T1190 (Exploit Public-Facing Application)
+
 **Confidence:** HIGH
+
 **False Positives:** None known. Same reasoning as the YARA equivalent: no legitimate YAML document constructs a scripting engine via a remote class loader.
+
 **Blind Spots:** Only matches the request body; a payload delivered via a different transport (raw TCP to a non-HTTP deserialization endpoint) is not covered. Misses obfuscated or split-tag variants.
+
 **Validation:** Replay a POST containing both `!!javax.script.ScriptEngineManager` and `!!java.net.URLClassLoader` in the body: the rule must fire; an ordinary YAML/JSON POST body must NOT fire.
+
 **Deployment:** Network IDS in front of Java application servers accepting YAML input.
 
 ```
@@ -877,12 +975,19 @@ alert http $EXTERNAL_NET any -> $HOME_NET any (msg:"THL DETECT MultiVector-192.3
 #### XXE Entity Declaration Targeting Cloud Metadata in Upload
 
 **Tier:** Detection
+
 **Robustness:** 3
+
 **ATT&CK Coverage:** T1190 (Exploit Public-Facing Application), T1552.005 (Cloud Instance Metadata API)
+
 **Confidence:** HIGH
+
 **False Positives:** None known. No legitimate uploaded XML/SVG document declares an external entity resolving to the cloud metadata address.
+
 **Blind Spots:** Scoped to the cloud-metadata variant only; the internal-service variants observed in evidence (`127.0.0.1:6379`, `127.0.0.1:3306`, `:8080/actuator/`) share the same `<!ENTITY ... SYSTEM` structure and can be added as additional `content` alternatives by a defender extending this signature. Misses out-of-band/blind XXE that references an external DTD instead of embedding the target address directly.
+
 **Validation:** Replay an upload containing `<!ENTITY xxe SYSTEM "http://169.254.169.254/...">`: the rule must fire; an ordinary SVG/XML upload with no entity declarations must NOT fire.
+
 **Deployment:** Network IDS in front of any file-upload feature accepting XML or SVG.
 
 ```
@@ -892,12 +997,19 @@ alert http $EXTERNAL_NET any -> $HOME_NET any (msg:"THL DETECT MultiVector-192.3
 #### Gopher-Scheme SSRF Protocol Smuggling in HTTP URI
 
 **Tier:** Detection
+
 **Robustness:** 3
+
 **ATT&CK Coverage:** T1190 (Exploit Public-Facing Application)
+
 **Confidence:** HIGH
+
 **False Positives:** None known. Modern browsers and clients do not construct `gopher://` URIs; its appearance in an HTTP URI parameter is a protocol-smuggling technique, not organic traffic.
+
 **Blind Spots:** Misses the same technique if the gopher URI is percent-encoded (`gopher%3A%2F%2F`) or split across multiple parameters/requests.
+
 **Validation:** Replay a request with `gopher://` inside a URI parameter: the rule must fire; a URI with no `gopher://` substring must NOT fire.
+
 **Deployment:** Network IDS in front of any application feature that accepts a URL as a parameter (SSRF-prone image fetchers, webhook validators, OCR/preview services).
 
 ```
@@ -907,12 +1019,19 @@ alert http $EXTERNAL_NET any -> $HOME_NET any (msg:"THL DETECT MultiVector-192.3
 #### Gopher-Scheme SSRF Protocol Smuggling in HTTP Request Body
 
 **Tier:** Detection
+
 **Robustness:** 3
+
 **ATT&CK Coverage:** T1190 (Exploit Public-Facing Application)
+
 **Confidence:** HIGH
+
 **False Positives:** None known; same reasoning as the URI variant, applied to POST-body delivery.
+
 **Blind Spots:** Same as the URI variant; misses percent-encoded or split delivery.
+
 **Validation:** Replay a POST body containing `gopher://`: the rule must fire; an ordinary POST body with no `gopher://` substring must NOT fire.
+
 **Deployment:** Network IDS in front of any application feature that accepts a URL in a POST body.
 
 ```
@@ -922,14 +1041,23 @@ alert http $EXTERNAL_NET any -> $HOME_NET any (msg:"THL DETECT MultiVector-192.3
 #### HTTP Request Body With Redis CONFIG SET dir Followed by BGSAVE
 
 **Tier:** Detection
+
 **Robustness:** 3
+
 **ATT&CK Coverage:** T1190 (Exploit Public-Facing Application)
+
 **ATT&CK Note:** The report maps the attempted key write to T1098.004 (SSH Authorized Keys). This rule matches the Redis `CONFIG SET dir` and `BGSAVE` verbs in an HTTP body and tests no `authorized_keys` or `.ssh` string, so it does not cover that technique; the same two verbs also write a cron file or a web shell.
+
 **Confidence:** MODERATE
+
 **Rationale:** The report describes the operator's script injecting CRLF-separated Redis commands (`CONFIG SET dir`, `CONFIG SET dbfilename`, `SET`, `BGSAVE`) through an SSRF vector to write an SSH public key, and names Redis verbs arriving over a non-Redis transport as the network discriminator. The rule matches two contents in an HTTP request body, in order: `CONFIG SET dir`, then `BGSAVE` after it (`distance:0`). It tests no Redis protocol framing and no CRLF separation and does not parse the commands, so it shows that the two verbs appear in that order in a body and not that Redis executed them, whichever file the commands go on to write.
+
 **False Positives:** Rare but not zero, and unmeasured. Any inbound POST whose body carries both strings in order matches: a Redis web administration console that sends commands over HTTP, or a ticket, wiki or paste submission that quotes a Redis persistence procedure. The `$EXTERNAL_NET` to `$HOME_NET` direction limits this to inbound requests.
+
 **Blind Spots:** Misses the technique if the operator uses a different Redis command sequence to the same effect (e.g. `MODULE LOAD` in newer Redis versions), or CRLF-encodes the commands in a way that splits them across the matched substrings.
+
 **Validation:** Replay an HTTP POST body containing `CONFIG SET dir` followed later by `BGSAVE`: the rule must fire. A body containing `BGSAVE` before `CONFIG SET dir`, a body containing only one of them, and an ordinary POST body must NOT fire. A body that quotes both verbs in order as documentation WILL fire.
+
 **Deployment:** Network IDS in front of any application feature with a known or suspected SSRF vector (URL fetchers, OCR/image services, webhook validators).
 
 ```
@@ -939,12 +1067,19 @@ alert http $EXTERNAL_NET any -> $HOME_NET any (msg:"THL DETECT MultiVector-192.3
 #### Eureka Apps-Delta Response Containing XStream Gadget Markers (Flowbits Pair)
 
 **Tier:** Detection
+
 **Robustness:** 3
+
 **ATT&CK Coverage:** T1190 (Exploit Public-Facing Application), T1105 (Ingress Tool Transfer)
+
 **Confidence:** HIGH
+
 **False Positives:** None known. A legitimate Eureka service registry never returns `java.lang.ProcessBuilder` inside an `/eureka/apps/delta` response body; this string only appears as an XStream deserialization gadget marker.
+
 **Blind Spots:** Misses gadget chains built on a different marker class (`AnnotationInvocationHandler`, `PriorityQueue`, and others named in evidence but not repeated in this single rule); a defender should add those as OR'd companion rules for full coverage of the gadget-marker family.
+
 **Validation:** Replay an `/eureka/apps/delta` request followed by a same-flow response containing `java.lang.ProcessBuilder` in the body: the checker rule must fire; the response alone on a flow where the setter never matched, or the request alone with a clean response, must NOT fire.
+
 **Deployment:** Network IDS positioned to see traffic between an internal Eureka client and any Eureka registry, including external ones. **Ships as a linked flowbits pair, deploy both rules together.** `http.uri` (request-side) and `http.response_body` (response-side) cannot be combined in a single rule on the deployed Suricata engine (8.0.5), so the original single-rule design is split into a silent setter (sid:9301407, matches the `/eureka/apps/delta` request and sets flowbit `thl.mvec.eureka.delta`, `flowbits:noalert` so it never alerts on its own) and a checker (sid:1000008, matches the gadget marker in the response body of the same flow, but only if the setter's flowbit is set). **If sid:9301407 is not loaded, sid:1000008 will never fire**; it silently depends on its setter being present in the same ruleset.
 
 ```
@@ -955,12 +1090,19 @@ alert http $EXTERNAL_NET any -> $HOME_NET any (msg:"THL DETECT MultiVector-192.3
 #### JWT alg-none Authentication Bypass Attempt
 
 **Tier:** Detection
+
 **Robustness:** 3
+
 **ATT&CK Coverage:** T1606.001 (Web Cookies, forged/manipulated web credential)
+
 **Confidence:** HIGH
+
 **False Positives:** None known. `eyJhbGciOiJub25lIn0` is the fixed, deterministic base64 encoding of the JSON header `{"alg":"none"}`; it is a mathematical constant of that exact header text, not an operator-specific string, and its presence in an `Authorization: Bearer` value is the signature of the well-documented "alg:none" JWT signature-bypass technique. No legitimately-issued production JWT uses an unsigned `none` algorithm.
+
 **Blind Spots:** Misses the companion technique observed in this campaign (an HMAC-secret brute force that successfully forges a *signed* token with a guessed weak key), since a successfully-forged, properly-signed JWT is byte-for-byte indistinguishable from a legitimate one at the network layer (see Coverage Gaps).
+
 **Validation:** Replay a request with header `Authorization: Bearer eyJhbGciOiJub25lIn0...`: the rule must fire; a normal signed `Authorization: Bearer eyJhbGciOiJIUzI1NiIs...` header must NOT fire.
+
 **Deployment:** Network IDS or API gateway in front of any JWT-authenticated API.
 
 ```
@@ -970,13 +1112,21 @@ alert http $EXTERNAL_NET any -> $HOME_NET any (msg:"THL DETECT MultiVector-192.3
 #### Alibaba Druid Monitoring Console Served to an External Client (Network Layer, Flowbits Pair)
 
 **Tier:** Detection
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1213 (Data from Information Repositories)
+
 **ATT&CK Note:** T1596.005 (Scan Databases) is withdrawn for the same reason as on the Sigma rule above: it describes searching reconnaissance databases, not an HTTP request to the console.
+
 **Confidence:** HIGH
+
 **False Positives:** Authorized internal monitoring dashboards reached from a public address, an administrator who logged in to a console meant to be reachable, or an approved attack-surface scan. The `JavaClassPath` response-body check narrows this considerably compared to a bare URI match. The signature does not test authentication: it fires when the console's own content is returned to a client outside `$HOME_NET`, whether or not that client logged in.
+
 **Blind Spots:** Misses the exposure if the console is mounted under a non-default path, or if a proxy strips/alters the response body before it reaches the sensor.
+
 **Validation:** Replay a GET to a `/druid/` path on a flow that then returns HTTP 200 with `JavaClassPath` in the response body: the checker rule must fire; the same request blocked with 401/403, or a `/druid/` request on a flow that never sets the setter's flowbit, must NOT fire.
+
 **Deployment:** Network IDS at the perimeter, as a complement to the Sigma access-log rule for environments without centralized web-log ingestion. **Ships as a linked flowbits pair, deploy both rules together.** `http.uri` (request-side) and `http.response_body` (response-side) cannot be combined in a single rule on the deployed Suricata engine (8.0.5), so the original single-rule design is split into a silent setter (sid:1000010, matches the external `/druid/` request and sets flowbit `thl.mvec.druid.uri`, `flowbits:noalert` so it never alerts on its own) and a checker (sid:1000011, matches the 200-status, `JavaClassPath`-bearing response on the same flow, but only if the setter's flowbit is set). **If sid:1000010 is not loaded, sid:1000011 will never fire**; it silently depends on its setter being present in the same ruleset. This split also corrects a directionality slip in the original single-rule version, which mixed a request-only buffer into a response-direction (`to_client`) declaration; the setter below correctly matches the external client's request (`to_server`, since the victim's Druid console is the TCP server) and the checker matches the victim's response (`to_client`).
 
 ```
@@ -989,10 +1139,15 @@ alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL DETECT MultiVector-192.3
 #### Password-Reset Endpoint POST Burst (restPassword Variant)
 
 **Tier:** Hunting
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1110.001 (Password Guessing)
+
 **Confidence:** MODERATE
+
 **False Positives:** A legitimate high-traffic password-reset flow, a retry loop in a buggy client, or load-testing traffic. Unlike the Sigma correlation equivalent, this rule's `threshold` counts raw match volume and cannot confirm that the requests are distinct (only that 50+ matched within the window), so it is coarser and kept at Hunting rather than Detection.
+
 **Deployment:** Network IDS at the perimeter; review hits rather than auto-alert.
 
 ```
@@ -1002,10 +1157,15 @@ alert http $EXTERNAL_NET any -> $HOME_NET any (msg:"THL HUNT MultiVector-192.3.1
 #### Password-Reset Endpoint POST Burst (forgetPwd Variant)
 
 **Tier:** Hunting
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1110.001 (Password Guessing)
+
 **Confidence:** MODERATE
+
 **False Positives:** Same as the `restPassword` variant above: a legitimate high-traffic reset flow or retry loop, kept at Hunting for the same coarse-volumetric reason.
+
 **Deployment:** Network IDS at the perimeter; review hits rather than auto-alert.
 
 ```

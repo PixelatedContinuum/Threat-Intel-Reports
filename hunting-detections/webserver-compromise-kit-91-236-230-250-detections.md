@@ -9,9 +9,13 @@ hide: true
 ---
 
 **Campaign:** WebServer-Compromise-Kit-91.236.230.250
+
 **Date:** 2026-02-08
+
 **Author:** The Hunters Ledger
+
 **License:** CC BY 4.0
+
 **Reference:** https://the-hunters-ledger.com/reports/webserver-compromise-kit-91-236-230-250/
 
 ---
@@ -43,13 +47,21 @@ This campaign is a manual, multi-stage web server intrusion: an ASP.NET reverse 
 #### ASP.NET Reverse Shell (InsomniaShell P/Invoke or Spawn Shell Banner Pattern)
 
 **Tier:** Detection
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1505.003 (Server Software Component: Web Shell)
+
 **Confidence:** HIGH
+
 **Rationale:** Corrected from the original: a parenthesization bug let either the bare `<%` ASP-tag byte or the bare `MZ` PE header alone satisfy the top-level condition, bypassing every string check and matching virtually any Windows executable. Reparenthesized so the header check gates the full behavioral clause, and the compiled-DLL header alternative was then dropped: its test read `0x4D5A`, which is the byte pair `ZM` and so could never match a PE file, and the behavioral clause tests source text (a `[DllImport("WS2_32.dll"` declaration, a `Page_Load` method name) that a compiled assembly would not carry in that form. The rule therefore scans ASP.NET page source whose first two bytes are `<%`. It has two branches. The first requires a `[DllImport("WS2_32.dll"` or `[DllImport("kernel32.dll"` declaration, a `WSASocket` or `connect(` reference, `CreateProcess`, and two of the three STARTUPINFO handle names (`hStdInput`, `hStdOutput`, `hStdError`), the raw-P/Invoke socket plus `CreateProcess` I/O-handle redirection combination that a managed-code webshell shelling out via `Process.Start` alone (China Chopper, ASPXSpy) does not carry. The second branch needs the `Spawn Shell` banner and two of the handle names, with no P/Invoke declaration and no `CreateProcess` reference. Both branches also need `Page_Load` or `CodeBehind=`.
+
 **False Positives:** None known. The first branch would also match a legitimate ASP.NET page that declares a kernel32 P/Invoke, contains `connect(`, calls `CreateProcess` and names two STARTUPINFO handle fields (a remote-console or diagnostic web tool built that way); the second branch needs the literal `Spawn Shell` banner plus two handle names. A 6,035-file workstation corpus produced 0 hits with a known-positive self-test passing, but it holds no ASP.NET pages, so neither branch has a measured benign-hit rate on ASP.NET goodware.
+
 **Blind Spots:** A webshell using only managed sockets (no P/Invoke) evades the first branch but is still matched by the second if it prints the `Spawn Shell` banner and names two STARTUPINFO handle fields; a variant that changes the banner and also avoids the first branch's P/Invoke, `CreateProcess` and handle-name set evades both. A file with a byte order mark or leading whitespace before `<%` fails the header test. The rule targets on-disk ASP.NET source, not compiled or precompiled assemblies or memory-only variants.
+
 **Validation:** Scan the analyzed sample (`hash1` below) — must match; a legitimate ASP.NET page using `Page_Load`/`CodeBehind=` alone (the overwhelming majority of ASP.NET files) must NOT fire.
+
 **Deployment:** IIS webroot file scanning, email/upload-gateway attachment scanning, endpoint AV/EDR file scan.
 
 ```yara
@@ -121,13 +133,21 @@ rule Webshell_ASPNET_InsomniaShell_Reverse {
 #### PrintSpoofer Privilege Escalation Tool (SeImpersonate Abuse)
 
 **Tier:** Detection
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1134.001 (Access Token Manipulation: Token Impersonation/Theft)
+
 **Confidence:** HIGH
+
 **Rationale:** Three matching clauses, two of which anchor on technique-level artifacts rather than the tool name. (1) Tool identity: the `PrintSpoofer` name or the `@itm4n` tag, plus `SeImpersonatePrivilege`, `ImpersonateNamedPipeClient` and one of `CreateProcessAsUserW`/`CreateProcessWithTokenW`. (2) Named pipe: either the compiled pipe format string (`\pipe\%ws\pipe\spoolss`) used to build the exploitation pipe path, or the pair of the `\pipe\spoolss` suffix and the world-access security descriptor string `D:(A;OICI;GA;;;WD)`, together with `ImpersonateNamedPipeClient`, `OpenThreadToken`, `DuplicateTokenEx` and both process-creation APIs (`CreateProcessAsUserW` and `CreateProcessWithTokenW`). (3) Print Spooler RPC: two or more of `RpcOpenPrinter`, `RpcRemoteFindFirstPrinterChangeNotification` and `NdrClientCall3`, with `ImpersonateNamedPipeClient` and one of the two process-creation APIs; this clause does not test `OpenThreadToken` or `DuplicateTokenEx`. Clauses (2) and (3) do not need the tool name, so they still match a rename or recompile that keeps the literal API names, the pipe string or the RPC function names; they reflect the "Potato"-family Print Spooler RPC named-pipe impersonation trick, but they test those strings in the file and not the runtime behavior. Robustness is therefore 2 (a tool and implementation fingerprint): a build that resolves the APIs dynamically or by hash, or changes the pipe string, evades them, since the exploitation itself does not depend on how those names are stored. *Correction 2026-10-11:* the pipe format string had been written with four backslashes per separator in the rule source (`\\\\pipe\\\\%ws\\\\pipe\\\\spoolss`), which YARA decodes to two, so it matched different bytes from the compiled string `\pipe\%ws\pipe\spoolss` and that alternative could not fire; the source literal now has two backslashes per separator, which decode to one. It has not been run against the analyzed sample, which is not available on the workstation.
+
 **False Positives:** None known. Clause (1) fires on the tool name or author tag with a handful of token APIs and needs neither the pipe string nor the RPC calls; clause (3) fires on the RPC cluster with one impersonation API and one process-creation API and needs neither `OpenThreadToken` nor `DuplicateTokenEx`; only clause (2) requires the full token-API set. None of these combinations is known from legitimate software. A 6,035-file workstation corpus (Linux system binaries, .NET framework DLLs, scripts and rule files) produced 0 hits with a known-positive self-test passing; it holds no Windows goodware, so a Windows-binary result is NOT CHECKED.
+
 **Blind Spots:** Covers this specific Print Spooler RPC exploitation chain; does not cover SeImpersonate-abuse variants that trigger a different service (e.g. BITS- or DCOM/OXID-resolver-based "Potato" variants) or that bypass all listed APIs via direct syscalls.
+
 **Validation:** Scan the analyzed sample (`hash1` below) or a renamed or recompiled PrintSpoofer build that retains the stated anchors: must match via the pipe clause (pipe format string or the `\pipe\spoolss` plus security-descriptor pair, with the token and process-creation APIs) or the RPC-cluster clause even without the tool-name string present; a benign administrative tool using `ImpersonateNamedPipeClient` alone (e.g. a legitimate named-pipe server) must NOT fire. Sample replay: NOT CHECKED (constructed fixtures only).
+
 **Deployment:** Endpoint AV/EDR file scan, static triage of unknown binaries dropped to web-accessible or user-writable paths.
 
 ```yara
@@ -206,14 +226,23 @@ rule PrivEsc_PrintSpoofer_SeImpersonate {
 #### revsocks Reverse SOCKS5 Proxy (Go Binary)
 
 **Tier:** Detection
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1090.001 (Proxy: Internal Proxy)
+
 **ATT&CK Note:** The DNS-tunneling disjunct and its T1071.004 label were removed in round 2 (see the Rationale); the page's Coverage Gaps section records the DNS channel as not covered.
+
 **Confidence:** HIGH
+
 **Rationale:** Tightened from the original: the Go build-path string alone (`github.com/kost/revsocks`) was a standalone top-level disjunct, so that single string could fire the rule with no corroborating signal, and a trailing `($go_path and $version)` clause was fully redundant dead logic (already implied by the bare disjunct). Folded into one paired `go_path + version-string` requirement and removed the redundant clause. The DNS-tunneling disjunct was then removed: `-dns` is a prefix of `-dnsdelay`, so a pair of those two literals is two overlapping substrings, not two independent artifacts, and a counting repair still lets a file with only `-dnsdelay` and an unrelated `-dnsfoo` satisfy it. A weakest-branch rule cannot carry Detection, so the branch was cut rather than kept as a weaker pair, and the unverified `dnstype` alternative went with it; a build that depends only on that branch is no longer matched, and no captured build was replayed to measure what was lost. Every remaining disjunct requires two or more independent artifacts: the build path with a version string, import-path clustering (three vendored library paths) with two flag substrings, or the hardcoded anachronistic User-Agent with `-connect` and a second flag. Robustness is 2: these are strings the source defines, and a fork that renames its flags and drops the vendored libraries evades them. The rule still fires on a recompiled or rebranded fork that keeps the underlying revsocks source (retains the vendored libraries and flag names) even if the attacker strips the literal repository path.
+
 **False Positives:** None known — the specific combinations required (the build path plus a `main.Version=` string; or 3+ vendored tunneling-library import paths plus 2+ CLI flags; or the anachronistic IE11/Win7 User-Agent plus `-connect` and a proxy/tunnel flag) are not observed in unrelated Go software. A 6,035-file workstation corpus produced 0 hits with a known-positive self-test passing, but it is not a Go goodware set and holds no Windows binaries, so a Go-goodware result is NOT CHECKED.
+
 **Blind Spots:** A build that depends only on the removed DNS-tunneling flag pair is no longer matched. A from-scratch reimplementation of the same reverse-SOCKS concept using different libraries, flag names, and no shared User-Agent default would evade; the 5-15MB file-size bound assumes standard Go static linking and could miss an unusually stripped or packed build.
+
 **Validation:** Scan the analyzed sample (`hash1` below) — must match; a generic unrelated Go binary that happens to embed one individual library path without flag/User-Agent corroboration must NOT fire.
+
 **Deployment:** Endpoint AV/EDR file scan, static triage of large (5-15MB) unsigned Go binaries dropped to user-writable paths.
 
 ```yara
@@ -287,13 +316,21 @@ rule Proxy_Revsocks_Go_Binary {
 #### IIS Worker Process Spawns Interactive Shell
 
 **Tier:** Detection
+
 **Robustness:** 3
+
 **ATT&CK Coverage:** T1505.003 (Server Software Component: Web Shell)
+
 **Confidence:** HIGH
+
 **Rationale:** Anchors on process ancestry (`w3wp.exe` spawning an interpreter) rather than any campaign-specific literal, so it detects the technique regardless of which webshell payload is used or how it is recompiled. Recalibrated from the original `critical` to `high`: the false-positives list below documents a real, if rare, legitimate path (administrative scripts invoked through an IIS management interface), so the "never-FP" bar for `critical` is not met.
+
 **False Positives:** Legitimate administrative scripts invoked through an IIS-hosted management interface; scheduled tasks or health-check scripts running under an IIS application-pool identity (rare in well-managed environments).
+
 **Blind Spots:** Misses a webshell that never spawns a native shell/interpreter (e.g. one that only reads files or uses in-process .NET reflection); misses interpreters not in the listed set.
+
 **Validation:** Trigger command execution through the analyzed webshell — must match; normal IIS request handling with no shell spawn must NOT fire.
+
 **Deployment:** Endpoint EDR / Sysmon-fed SIEM (process-creation telemetry).
 
 ```yaml
@@ -335,13 +372,21 @@ level: high
 #### Named Pipe Created Matching Print Spooler RPC Impersonation Pattern
 
 **Tier:** Detection
+
 **Robustness:** 3
+
 **ATT&CK Coverage:** T1134.001 (Access Token Manipulation: Token Impersonation/Theft)
+
 **Confidence:** HIGH
+
 **Rationale:** Anchors on the named-pipe naming convention created by the Print Spooler RPC impersonation trick, filtering out the one legitimate cause (the spooler service itself). Not specific to PrintSpoofer by name — fires on any "Potato"-family tool using the same RPC trigger. Recalibrated from the original `critical` to `high` for consistency with the site's level convention (reserving `critical` for the rare case where no plausible benign path exists at all).
+
 **False Positives:** Unlikely — this is a highly specific pattern with no known legitimate cause outside the Print Spooler service itself, which is explicitly excluded by the filter.
+
 **Blind Spots:** Covers only the `spoolss`-suffixed pipe convention; a privilege-escalation tool using a different trigger service or a renamed pipe with no `spoolss` suffix is not covered.
+
 **Validation:** Trigger the exploitation chain — the non-spooler pipe-creation event must match; the legitimate Print Spooler service creating its own pipe must NOT fire.
+
 **Deployment:** Endpoint EDR / Sysmon-fed SIEM (named-pipe telemetry, Sysmon Event ID 17).
 
 ```yaml
@@ -384,13 +429,21 @@ level: high
 #### Reverse SOCKS Proxy Execution via Revsocks Command-Line Flags
 
 **Tier:** Detection
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1090.001 (Proxy: Internal Proxy)
+
 **Confidence:** HIGH
+
 **Rationale:** Requires two of revsocks' distinctive CLI flags to co-occur (`-connect` with `-socks`, or `-dns` with `-listen`) rather than matching on any single flag, which meaningfully narrows the match versus generic proxy/tunnel tooling that may share one flag name in isolation.
+
 **False Positives:** Legitimate authorized red-team or offensive-security exercises using revsocks under change control.
+
 **Blind Spots:** A build that renames its CLI flags evades this rule entirely; covers command-line-visible execution only, not a variant that reads its configuration from a file or environment variable.
+
 **Validation:** Execute revsocks (or a build sharing its flag set) with either flag pair — must match; unrelated process command lines using only one of the flags in isolation must NOT fire.
+
 **Deployment:** Endpoint EDR / Sysmon-fed SIEM (process-creation / command-line telemetry).
 
 ```yaml
@@ -439,13 +492,21 @@ level: high
 #### Reverse Shell "Spawn Shell" Banner
 
 **Tier:** Detection
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1095 (Non-Application Layer Protocol)
+
 **Confidence:** HIGH
+
 **Rationale:** Anchors on the reverse shell's own greeting banner within the first 20 bytes of an established outbound TCP stream — payload content, not infrastructure, so the signature survives a C2 IP or hosting-provider change. No standard application-layer buffer exists for this bespoke raw-socket protocol, so a depth-bounded raw content match is the correct scoping for this specific channel rather than a generic flow-only check.
+
 **False Positives:** None known — the literal phrase "Spawn Shell" within the first 20 bytes of an established outbound TCP session to an external host is not observed in standard client/server software, common libraries, or legitimate remote-administration tools.
+
 **Blind Spots:** Evaded by a variant that removes or relocates the banner beyond the first 20 bytes, or that wraps the channel in TLS; detects session-establishment only, not subsequent command traffic.
+
 **Validation:** Replay a capture of the reverse shell's initial handshake — must alert; unrelated benign TCP sessions to external hosts must NOT fire.
+
 **Deployment:** Network IDS/IPS at perimeter and internal segmentation points.
 
 ```suricata
@@ -457,11 +518,17 @@ alert tcp $HOME_NET any -> $EXTERNAL_NET any (msg:"THL DETECT WebServer-Compromi
 #### Anachronistic IE11/Win7 User-Agent (Possible revsocks)
 
 **Tier:** Hunting
+
 **Robustness:** 1
+
 **ATT&CK Coverage:** T1071.001 (Web Protocols), T1090.001 (Proxy: Internal Proxy)
+
 **Confidence:** MODERATE
+
 **Rationale:** Anchors on the exact hardcoded default User-Agent string compiled into revsocks (`Mozilla/5.0 (Windows NT 6.1; Trident/7.0; rv:11.0) like Gecko`), matched in full and case-sensitively (start and end of the `http.user_agent` buffer) in the correct app-layer buffer, so it survives C2 infrastructure rotation. Robustness is 1: its only discriminator is that one User-Agent constant, which a rebuild or a flag change replaces at no cost. Revisions 1 to 3 matched only the case-insensitive fragment `Windows NT 6.1; Trident/7.0`, which also matched other user agents that merely contain it (for example a `MSIE 7.0; Windows NT 6.1; Trident/7.0` compatibility-view string); revision 4 matches the whole string, so a revsocks build that alters any part of the string no longer matches. This specific "generic old IE11" User-Agent string, however, is a widely reused default across many unrelated HTTP client libraries and tools, and genuine legacy Windows 7/IE11 traffic still occurs in some environments, so it does not clear the Detection bar for rare/no false positives on its own. The YARA rule above carries Detection-grade coverage for the same artifact in one of its disjuncts, which requires the User-Agent in combination with `-connect` and a second revsocks CLI flag.
+
 **False Positives:** Genuine (if increasingly rare) traffic from actual Windows 7/IE11 endpoints, particularly in long-lifecycle industrial-control or medical-device network segments; other unrelated tools and HTTP libraries that reuse this same widely-known default browser-like User-Agent string.
+
 **Deployment:** Network IDS/IPS at perimeter and internal segmentation points; correlate hits with the revsocks YARA/Sigma indicators above before treating as high-confidence.
 
 ```suricata

@@ -7,9 +7,13 @@ hide: true
 ---
 
 **Campaign:** Gotenberg-RCE-107.175.69.137
+
 **Date:** 2026-09-16
+
 **Author:** The Hunters Ledger
+
 **License:** CC BY 4.0
+
 **Reference:** https://the-hunters-ledger.com/reports/gotenberg-rce-cryptomining-107-175-69-137/
 
 ---
@@ -39,13 +43,21 @@ The file covers the campaign at both ends. The network rules key on the exploit'
 #### Gotenberg ExifTool Metadata Key CVE-2026-42589 Injection Attempt
 
 **Tier:** Detection
+
 **Robustness:** 3
+
 **Upstream Coverage:** not_covered (the SigmaHQ webserver and proxy rule classes define no request-body field at all, so no upstream rule's condition can evaluate true on body content; the fieldless-keyword rule class was compared against the upstream corpus, 86 same-class neighbours, 0 shared literal atoms)
+
 **ATT&CK Coverage:** T1190 (Exploit Public-Facing Application)
+
 **Confidence:** HIGH
+
 **False Positives:** Authorized security testing or red-team exercises sending the same proof-of-concept payload against a Gotenberg instance; otherwise unlikely, no legitimate metadata-write payload shape tested against the live anchor matched
+
 **Blind Spots:** Requires telemetry that captures the raw request body; Gotenberg's own application log does not record the metadata payload on a request that parses as valid JSON, so this rule cannot run on that log. Misses any future exploit variant whose key no longer carries the `-if` conditional plus `system(` shape.
+
 **Validation:** Replay a captured exploit request against the rule and confirm the anchor bytes match the wire form `5c 6e 2d 69 66 5c 6e ...`; a legitimate metadata write (single-key, multi-key, newline-in-value) must NOT fire.
+
 **Deployment:** Reverse proxy, WAF, or network sensor in front of Gotenberg, anywhere the raw request body is captured and searchable. The single-quoted YAML value `'\n-if\nsystem('` below is a literal backslash-n sequence and is correct as written: it is the JSON-escaped wire form, not a newline escape.
 
 ```yaml
@@ -93,13 +105,21 @@ level: high
 #### ExifTool Invoked With Condition Option Executing Shell Commands
 
 **Tier:** Detection
+
 **Robustness:** 3
+
 **Upstream Coverage:** not_covered (no upstream Sigma rule keys on ExifTool process telemetry at all: a search of the local SigmaHQ clone for exiftool-anchored rules in every rule tree returned zero files, so no upstream condition can evaluate true on this activity)
+
 **ATT&CK Coverage:** T1190 (Exploit Public-Facing Application), T1059.004 (Unix Shell)
+
 **Confidence:** HIGH
+
 **False Positives:** Bespoke tooling whose legitimate -if condition evaluates Perl code that calls system(), which has no known legitimate purpose but cannot be fully excluded; authorized security testing replaying the payload
+
 **Blind Spots:** Any future variant that reaches code execution without calling system() directly (a backtick, exec(, qx(, or open-with-pipe Perl vector) defeats the `system(` term while remaining the same vulnerability; the -if argv split is the real chokepoint. Also blind wherever the host has no command-line process telemetry.
+
 **Validation:** On a test Gotenberg host, fire the injected metadata key and confirm an exiftool process event whose command line carries both `-if` and `system(`; a legitimate metadata write must NOT produce a matching exiftool command line.
+
 **Deployment:** Host telemetry on any server running Gotenberg or another ExifTool-backed service: auditd execve rules, Sysmon for Linux, or an EDR agent.
 
 ```yaml
@@ -149,13 +169,21 @@ level: high
 #### Polkitd Daemon Executed From a Non-Standard Directory
 
 **Tier:** Detection
+
 **Robustness:** 3
+
 **Upstream Coverage:** partially_covered (the upstream rule "Potentially Suspicious Execution From Tmp Folder", `Image|startswith: '/tmp/'`, evaluates true on the /tmp drop variant but not on the /usr/bin/polkitd.d/ persistent variant and encodes none of the name-versus-location logic; this rule is the location-mismatch abstraction of the same behavior)
+
 **ATT&CK Coverage:** T1036.005 (Match Legitimate Resource Name or Location)
+
 **Confidence:** HIGH
+
 **False Positives:** Custom Polkit builds deployed at non-standard prefixes (Nix store paths, container image layer paths); authorized security tooling or tests that stage a binary named polkitd
+
 **Blind Spots:** Misses the same operator's second masquerade name, systemd-logind, and any future build that picks a different daemon name; the anchor is the polkitd name mismatched against its legitimate location, not the miner itself. The filter list covers the two most common legitimate Polkit locations but a distribution that installs polkitd elsewhere produces a benign hit.
+
 **Validation:** On a test host, launch a copy of any binary named polkitd from /tmp and confirm a hit; the distribution's own polkitd at /usr/lib/polkit-1/ must NOT fire.
+
 **Deployment:** Host telemetry on any Linux server (auditd execve rules, Sysmon for Linux, or an EDR agent). Alerting-grade: a process named polkitd outside the Polkit package path is malicious or broken.
 
 ```yaml
@@ -201,14 +229,23 @@ level: high
 #### Shell Spawned by Systemd Executes Binary After Path Export and Directory Change
 
 **Tier:** Detection
+
 **Robustness:** 3
+
 **Upstream Coverage:** not_covered (no upstream Linux rule keys on a systemd-spawned shell wrapper combining PATH export, directory change and exec; the closest upstream persistence rules are unit-file creation and auditd service-creation events, whose conditions evaluate different fields)
+
 **ATT&CK Coverage:** T1543.002 (Systemd Service)
+
 **ATT&CK Note:** The rule keys on the runtime launch shape of a systemd unit rather than on the unit-file write itself, because no unit-file write for the persistent variant was observed in this corpus; the unit text is known only from the shipped miner package. The ExecStart wrapper it detects (`export PATH=...;cd ...;exec ...` in one shell invocation) is that unit's own launch command.
+
 **Confidence:** HIGH
+
 **False Positives:** Legitimate service units whose ExecStart wraps an export PATH plus cd plus exec sequence in one shell invocation, uncommon but documented practice for relocatable services
+
 **Blind Spots:** A persistent unit written in a different ExecStart style (separate environment directives, a wrapper script file, or cd via an environment file) does not match this command-line shape. The unit inside this campaign's miner package also ships as systemd-vconsole-setup.service, a name some distributions legitimately use, so no rule in this file keys on the unit name.
+
 **Validation:** Install a test unit with ExecStart=/bin/sh -c "export PATH='/opt/t':$PATH;cd '/opt/t';exec './bin'" and confirm the process event fires; a unit launching a script by absolute path with no export/cd/exec wrapper must NOT fire.
+
 **Deployment:** Host telemetry on Linux servers where systemd service launches are logged with parentage and command line (auditd with execve and parent tracking, Sysmon for Linux, or an EDR agent). This is the rule that catches the persistence a reboot does not clear.
 
 ```yaml
@@ -268,11 +305,17 @@ level: high
 #### Gotenberg Metadata-Write Endpoint Anomalous Latency (Possible CVE-2026-42589)
 
 **Tier:** Hunting
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1190 (Exploit Public-Facing Application)
+
 **Confidence:** MODERATE
+
 **False Positives:** Genuinely slow ExifTool metadata writes under load, on large or malformed documents, or during resource contention; the measured clean-request baseline sat at roughly 250 to 650 milliseconds, and any real deployment must establish its own distribution before treating this as signal
+
 **Blind Spots:** Sees only sleep-based exploitation that pauses inside the request handler; a non-sleep command in the injected payload produces no latency signal. The latency unit is an assumption carried in the logsource definition and must be verified against a real deployment before the 2-second threshold is trusted.
+
 **Deployment:** Gotenberg's own structured access log, only where body-capturing telemetry is unavailable. Not for alerting; triage hits by correlating the timestamped request with document size and concurrent load.
 
 ```yaml
@@ -317,12 +360,19 @@ level: low
 #### Pkill Kill Sweep Against Rival Cryptominer Process Names
 
 **Tier:** Hunting
+
 **Robustness:** 1
+
 **ATT&CK Coverage:** T1059.004 (Unix Shell)
+
 **Confidence:** HIGH that the behavior is real and miner-related, LOW that any single hit is this operator
+
 **False Positives:** Administrators cleaning up a confirmed miner infection by hand; another cryptojacking operator's own displacement sweep on the same host, which is the behavior this rule detects and is expected to fire on
+
 **Blind Spots:** The observed kill list also includes kernel-thread-shaped names (kworker/u4, kworker/u16) and the operator's own mask name (polkitd), all deliberately excluded from this selection because pkill sweeps touching those names are far noisier; a sweep naming only those is missed. Rename-fragile by construction.
+
 **Validation:** Run pkill -9 -f kdevtmpfsi on a test host and confirm the hit; a pkill of an ordinary application name must NOT fire.
+
 **Deployment:** Host telemetry for scoping and triage. Expect hits from defenders and from rival operators as often as from this campaign; correlate with miner presence before judging.
 
 ```yaml
@@ -376,13 +426,21 @@ level: medium
 #### Base64 Decode Redirected to Tmp Followed by Bash Run of a Tmp Path in One Command Line
 
 **Tier:** Hunting
+
 **Robustness:** 1
+
 **ATT&CK Coverage:** T1059.004 (Unix Shell), T1140 (Deobfuscate/Decode Files or Information)
+
 **Confidence:** HIGH that the shape matches the campaign's staging step; the anchor itself is generic staging behavior
+
 **Logic fix 2026-10-11:** the selection was four unordered substrings in two groups (`base64 -d`, `>/tmp/`, `bash `, `/tmp/`), so a command line carrying them in any order matched, and the written path was never tied to the executed path. It is now one ordered pattern, `base64 -d` then `>/tmp/` then `bash /tmp/`. The two paths are still not compared, because Sigma and the Elastic query languages have no back-reference; a command that decodes into one /tmp file and runs a different /tmp file also matches, and the title says so.
+
 **False Positives:** Provisioning, cloud-init or installer scripts that decode payloads to tmp and run them; authorized security tooling staging encoded scripts
+
 **Blind Spots:** Only catches the decode-and-execute pairing inside one command line; a dropper that decodes in one invocation and executes in a later one produces two innocuous-looking events. The `>/tmp/` and `bash ` literals break on variants using other staging directories or interpreters.
+
 **Validation:** Run echo YmFzaCAtYyAiaWQK | base64 -d>/tmp/t.sh; bash /tmp/t.sh on a test host and confirm a hit; a command line that decodes to /tmp but contains no later `bash /tmp/` run must NOT fire. A command that decodes into one tmp file and runs a different tmp file does fire, because the two paths are not compared.
+
 **Deployment:** Host telemetry (auditd execve rules, Sysmon for Linux, or an EDR agent). Not for alerting; correlate hits with deployment or provisioning context.
 
 ```yaml
@@ -436,13 +494,21 @@ The Detection-tier signature was accepted by the production rule-parsing engine 
 #### Gotenberg ExifTool Metadata Key Injection over HTTP (CVE-2026-42589)
 
 **Tier:** Detection
+
 **Robustness:** 3
+
 **Upstream Coverage:** not_covered (no Suricata upstream submission target exists in this project's workflow; the anchor is this case's own measured wire form)
+
 **ATT&CK Coverage:** T1190 (Exploit Public-Facing Application)
+
 **Confidence:** HIGH
+
 **False Positives:** Authorized security testing or red-team exercises sending the same proof-of-concept payload; otherwise unlikely, the anchor fires only on a POST to the metadata-write endpoint whose body carries the escaped injection shape
+
 **Blind Spots:** Misses exploit variants that no longer carry the `-if` conditional plus `system(` shape, and any path where the request body is not reassembled (fragmented bodies, chunked encodings, or a sensor without request-body inspection).
+
 **Validation:** Replay the campaign pcap and confirm one alert per injected request; the six tested legitimate metadata-write shapes must NOT fire.
+
 **Deployment:** Packet sensor or IDS tap anywhere it can see the traffic between the operator and the Gotenberg instance. The comment above the rule is load-bearing: the hex content bytes are the intentional wire-escaped form and must not be corrected.
 
 ```suricata
@@ -462,12 +528,19 @@ The three signatures below hunt the campaign's out-of-band callback channel rath
 #### Out-of-Band Tagged Callback URI Shape
 
 **Tier:** Hunting
+
 **Robustness:** 1
+
 **ATT&CK Coverage:** T1071.001 (Application Layer Protocol: Web Protocols)
+
 **Confidence:** MODERATE
+
 **False Positives:** Any web application whose URI paths carry the underscore-delimited tag-host-uid shape (a segment of single-letter-prefixed digits, then a token, then a trailing integer), which is uncommon but not impossible in ordinary web apps
+
 **Blind Spots:** The prefix set (T, W, C, N, PPROBE plus digit index) is the operator's own scheme and rotates cheaply; a future build with a new prefix or a reordered path is missed. The deploy-stage D-callback carries no underscore, so it is covered by the verdict-body signature below, not this one.
+
 **Validation:** Against a test listener, issue GET /T123_testhost_0 and confirm the alert; an ordinary GET with an underscored path lacking the numeric-prefixed shape must NOT fire.
+
 **Deployment:** Packet sensor or IDS tap watching egress from managed hosts. Not for blocking; correlate hits with the destination before judging.
 
 ```suricata
@@ -477,12 +550,19 @@ alert http $HOME_NET any -> any any (msg:"THL HUNT Gotenberg-RCE Tagged Out-of-B
 #### Out-of-Band Deploy Verdict Body (MINER_OK)
 
 **Tier:** Hunting
+
 **Robustness:** 1
+
 **ATT&CK Coverage:** T1071.001 (Application Layer Protocol: Web Protocols)
+
 **Confidence:** HIGH that a hit is this toolkit's deploy channel; the literal is the operator's own verdict token, written by their deploy script
+
 **False Positives:** Some other application using the literal string MINER_OK in a request body, none known
+
 **Blind Spots:** A future build that renames the verdict tokens (or posts verdicts in a second request with no body) is missed; the token is an attacker-chosen constant.
+
 **Validation:** POST a body containing MINER_OK from a test host and confirm the alert; a POST body without that literal must NOT fire.
+
 **Deployment:** Packet sensor watching egress. Not for blocking; the body content is diagnostic of the install verdict channel.
 
 ```suricata
@@ -492,13 +572,21 @@ alert http $HOME_NET any -> any any (msg:"THL HUNT Gotenberg-RCE Miner Deploy Ve
 #### Out-of-Band Command Output Body Markers (START/END Brackets)
 
 **Tier:** Hunting
+
 **Robustness:** 1
+
 **ATT&CK Coverage:** T1041 (Exfiltration Over C2 Channel)
+
 **ATT&CK Note:** The behavior is command output from an injected command being posted back to the operator's listener through the same HTTP channel that delivered the commands, so the exfiltration technique and its C2 transport are both this channel's description.
+
 **Confidence:** MODERATE
+
 **False Positives:** Any application that posts a body containing both ===START=== and ===END=== literal markers, none known in ordinary traffic
+
 **Blind Spots:** The marker strings are attacker-chosen constants; a build that rewords the brackets is missed. Bodies that carry the START marker but are truncated before END (the campaign's own listener had non-atomic write corruption) do not match, because the rule requires both literals.
+
 **Validation:** POST a body bracketed by ===START=== and ===END=== from a test host and confirm the alert; a body carrying only one of the two markers must NOT fire.
+
 **Deployment:** Packet sensor watching egress. Not for blocking.
 
 ```suricata

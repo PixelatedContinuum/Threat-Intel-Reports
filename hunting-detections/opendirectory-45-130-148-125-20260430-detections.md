@@ -9,9 +9,13 @@ hide: true
 ---
 
 **Campaign:** AdaptixC2-OpenDirectory-Toolkit-45.130.148.125
+
 **Date:** 2026-04-30
+
 **Author:** The Hunters Ledger
+
 **License:** CC BY 4.0
+
 **Reference:** https://the-hunters-ledger.com/reports/opendirectory-45-130-148-125-20260430/
 
 ---
@@ -68,13 +72,21 @@ Two YARA false-positive clusters were identified during analysis and must be fil
 #### AdaptixC2 Windows Beacon: Stock Framework Fingerprint
 
 **Tier:** Detection
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1071.001 (Web Protocols)
+
 **Confidence:** HIGH
+
 **Rationale:** `9Connector` and `13ConnectorHTTP` are Itanium-ABI RTTI typeinfo names for AdaptixC2's stock `Connector`/`ConnectorHTTP` transport-plugin classes, and `GetVersions` is the framework's unrenamed RDI loader export — none of these are attacker-configurable; an operator would need to fork and rebuild the AdaptixC2 source itself to remove them. The rule requires both RTTI names and the `X-Beacon-Id` heartbeat-header string (also framework source-level), plus either `GetVersions` or the `Mingw-w64 runtime failure:` string. The second string lets an EXE build, which may carry no `GetVersions` export, and any other MinGW-built file satisfy that clause, so `GetVersions` is not required. The combination survives infrastructure rotation and any listener-profile customization. It scores Robustness 2, not 3: it is a combination of stock-framework artifacts of one tool family, not a technique chokepoint, and a fork or rebuild that changes them defeats it (see Blind Spots).
+
 **False Positives:** None known — the RTTI typeinfo strings and the `X-Beacon-Id` literal are not present in any known legitimate software; `filesize < 300KB` further scopes the match to the beacon's actual size class.
+
 **Blind Spots:** A forked/patched AdaptixC2 build that strips or renames the RTTI class names and the `X-Beacon-Id` header would evade; memory-only variants that never touch disk are not covered, because this rule is not a memory-scan rule (see Deployment).
+
 **Validation:** Scan `agent.x64.dll`/`agent.x64.exe`/`msupdate.dll` (hash1 below and its sideload sibling) — must match; an unrelated Windows PE must NOT fire.
+
 **Deployment:** Endpoint AV/EDR file scan, static triage of unknown MinGW-built PE binaries. The condition tests `filesize`, which is undefined in a process-memory scan, so the rule does not match there; a memory-scan form would need the `filesize` test removed and is not written or tested here.
 
 ```yara
@@ -121,13 +133,21 @@ rule MALW_AdaptixC2_Windows_Beacon_Stock
 #### Ligolo-ng v0.8.3 Reverse Tunnel Agent
 
 **Tier:** Detection
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1090.001 (Internal Proxy), T1572 (Protocol Tunneling)
+
 **Confidence:** HIGH
+
 **Rationale:** `nicocha30/ligolo-ng/pkg/` is the tool's Go module import path, compiled into every build of the binary — durable at the tool level and unfakeable without forking and renaming the upstream project. Paired with either the string `0.8.3` or the one specific build commit, this anchors Ligolo-ng builds that carry that version string or that commit, which is wider than this operator's single binary and narrower than every v0.8.x release: a 0.8.x build with a different version string and a different commit does not match.
+
 **False Positives:** None known — Ligolo-ng has no legitimate end-user or enterprise presence; the only expected match is authorized penetration-testing use of the same tool. `0.8.3` is matched as a bare substring beside the module import path, so a Ligolo-ng build of another release whose binary contains that character sequence (a longer version-like string, for example) also satisfies `$s2`; the commit hash `$s3` is the exact anchor.
+
 **Blind Spots:** A renamed/recompiled fork built under a different Go module path would evade entirely; a future Ligolo-ng release built from a different commit and version string falls outside this rule's `$s2 or $s3` scoping (the import-path anchor `$s1` alone is intentionally not sufficient, to avoid over-broad matching on any tool sharing a similar package layout).
+
 **Validation:** Scan the analyzed `agent.exe` (hash1 below) — must match; an unrelated Go binary must NOT fire.
+
 **Deployment:** Endpoint AV/EDR file scan, static triage of unknown Go binaries staged for lateral movement.
 
 ```yara
@@ -164,11 +184,17 @@ rule MALW_Ligolo_ng_v083_Agent
 #### AdaptixC2 Operator .NET Injector: si_build Build Fingerprint
 
 **Tier:** Hunting
+
 **Robustness:** 1
+
 **ATT&CK Coverage:** T1055 (Process Injection), T1055.002 (PE Injection)
+
 **Confidence:** HIGH (fingerprint) / MODERATE (forward attribution value)
+
 **Rationale:** Both anchors — the Linux PDB path and the bare `si_build` string — reduce to the same underlying literal (the operator's build-directory/project name); an operator who renames that project before rebuilding evades both simultaneously, so this doesn't clear the durability bar for Detection. It retains real hunting value: this exact build-name choice already recurred identically across this operator's dev and production builds, so a future sample carrying the same string would be a strong forward link to this actor's build pipeline.
+
 **False Positives:** None known to date — `si_build` and the `/tmp/si_build/obj/Release/net472/` PDB path are not present in any known legitimate .NET software.
+
 **Deployment:** Endpoint AV/EDR file scan, static triage of unknown small .NET assemblies; cross-sample hunting for this operator's build fingerprint in future unrelated submissions.
 
 ```yara
@@ -202,11 +228,17 @@ rule MALW_AdaptixC2_Operator_Injector_SI
 #### AdaptixC2 PowerShell Loader: AMSI Bypass and SI Injector Invocation
 
 **Tier:** Hunting
+
 **Robustness:** 1
+
 **ATT&CK Coverage:** T1059.001 (PowerShell), T1685 (AMSI Bypass), T1620 (Reflective Code Loading)
+
 **Confidence:** HIGH
+
 **Rationale:** The rule requires all four strings, but only `[SI]::Inject(` is genuinely operator-specific (this actor's custom injector class); the AMSI string-concatenation split, the `*iUtils` reflection target, and the base64 MZ prefix are generic loader-construction technique markers, not unique to this operator. Renaming the `SI` class in a future build breaks the AND condition entirely, so durability caps at Hunting despite very low current false-positive risk.
+
 **False Positives:** None known — the co-occurrence of a string-concatenated AMSI bypass, a class named `SI` with an `Inject` method, and an embedded base64 PE in one script block is considered highly unlikely outside adversary tooling.
+
 **Deployment:** SIEM with PowerShell Script Block Logging (Windows Event ID 4104) ingested; endpoint EDR ScriptBlock telemetry.
 
 ```yara
@@ -247,13 +279,21 @@ rule MALW_AdaptixC2_PowerShell_Loader_BeaconPS1
 #### Ligolo-ng Reverse Tunnel Agent Execution
 
 **Tier:** Detection
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1090.001 (Internal Proxy), T1572 (Protocol Tunneling)
+
 **Confidence:** HIGH
+
 **Rationale:** Durable Go CLI/behavioral combination — default process image name, or the tool's `--connect`/`-connect` flag paired with its default port. The original rule also OR'd in a bare SHA256 hash match; that branch was trimmed during this backfill because a hash-only selector is a transient per-sample atomic (Gate 1 Robustness 0) that duplicates the value already tracked in the campaign IOC feed and added no incremental behavioral coverage.
+
 **False Positives:** Authorized security assessment or network administration use of Ligolo-ng — correlate against authorized change records and known red team activity windows; security research and lab environments where Ligolo-ng is used for legitimate network tunneling evaluation.
+
 **Blind Spots:** A renamed binary using a non-default connect port with obfuscated CLI flags evades both surviving branches.
+
 **Validation:** Trigger `ligolo.exe --connect <host>:11601` (or the equivalent default-port connect) — must match; an unrelated executable performing routine outbound TCP connections must NOT fire.
+
 **Deployment:** Endpoint EDR with Sysmon Event ID 1 (Process Creation); pair with the YARA rule above for file-level coverage.
 
 ```yaml
@@ -295,13 +335,21 @@ level: high
 #### PowerShell Creating a Remote Thread in a Long-Lived Windows Host Process
 
 **Tier:** Detection
+
 **Robustness:** 3
+
 **ATT&CK Coverage:** T1055 (Process Injection), T1055.002 (Portable Executable Injection)
+
 **Confidence:** HIGH
+
 **Rationale:** Keys on a technique chokepoint rather than any attacker-chosen literal. Both the source (`powershell.exe`) and the targets are operating-system binaries, so the rule survives a rebuild, a rename of the malware, and rotation of every network indicator in this campaign. The injection itself is confirmed in execution for this loader, with the new thread starting at the base of a freshly allocated region inside `explorer.exe`.
+
 **False Positives:** Endpoint security agents and remote-management suites that instrument a running shell from a PowerShell host — baseline by signer rather than by image name, since the injecting product's path varies. Software deployment tooling that patches a running shell is rare and should correlate with a change window.
+
 **Blind Spots:** An operator who injects from a different interpreter (`wscript.exe`, a compiled dropper) or into a host process outside the listed set evades this rule. The target list covers the common masquerade hosts rather than every possibility, so pair it with a broader untuned hunt if coverage matters more than volume.
+
 **Validation:** The loader reads its target PID from `Get-Process explorer` and exits at its own guard when that returns nothing, so on a host with no live `explorer.exe` the chain stops before injecting and emits no Event ID 8. Confirm a live target exists before concluding the rule failed to fire.
+
 **Deployment:** Sysmon Event ID 8 (CreateRemoteThread) ingested into the SIEM. Pair with Event ID 10 (ProcessAccess with `0x1FFFFF` granted access) for corroboration.
 
 ```yaml
@@ -346,11 +394,17 @@ level: high
 #### AdaptixC2 PowerShell Loader: AMSI Bypass and SI Injector Invocation
 
 **Tier:** Hunting
+
 **Robustness:** 1
+
 **ATT&CK Coverage:** T1059.001 (PowerShell), T1685 (AMSI Bypass), T1620 (Reflective Code Loading)
+
 **Confidence:** HIGH
+
 **Rationale:** Sigma sibling of the YARA PowerShell-loader rule above — three co-occurring strings are highly specific to this loader, but `[SI]::Inject(` is a renameable literal the operator controls in their own source; a rebuild that renames the injector class evades the rule. Durability caps this at Hunting despite very low current false-positive risk.
+
 **False Positives:** Custom internal PowerShell tooling that coincidentally uses both an AMSI bypass via string concatenation and a class named SI with an Inject method — considered highly unlikely outside of adversary tooling.
+
 **Deployment:** SIEM with PowerShell Script Block Logging (Windows Event ID 4104) ingested; endpoint EDR ScriptBlock telemetry.
 
 ```yaml
@@ -388,13 +442,21 @@ level: medium
 #### Potential AMSI Bypass via Reflection Over Assembly Types and Private Field Zeroing
 
 **Tier:** Hunting
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1059.001 (PowerShell), T1685 (Disable or Modify Tools)
+
 **Confidence:** MODERATE for the shape; HIGH that the shape is present in this loader
+
 **Rationale:** The companion rule above matches this loader's AMSI bypass by its literal concatenation `amsi'+'Con'+'text`, which the operator controls in their own source — a rebuild that re-splits the string as `'am'+'siCon'+'text'` evades it entirely. This rule instead matches the structural shape: enumerate assembly types (`GetTypes()`), name a NonPublic Static field, and call `SetValue($null,0)` or `SetValue($null, 0)` (the zero write the report records). The wildcard type filter is not tested, and the three strings need only occur in the same script block, in any order. That survives both a rename of the target field and a re-split of the concatenation. It also covers the wider family of AMSI bypasses built the same way, which is why it earns a place despite the noisier profile.
+
 **False Positives:** Development, debugging and unit-test tooling that reflects over private static members. Some administrative modules and application shims legitimately patch private static fields at runtime. Baseline the calling script path and its signer before promoting a hit.
+
 **Blind Spots:** An operator who reaches AMSI through a different primitive — patching `AmsiScanBuffer` in memory, hardware breakpoints, or loading a patched `amsi.dll` — produces no script-block artefact at all and is invisible here. This rule covers the reflection family only.
+
 **Validation:** A script block holding `GetTypes()`, `NonPublic,Static` and `SetValue($null,0)` must fire; one that calls `SetValue` on a private static field with another value or a non-null target (for example `SetValue($obj,'x')`) must NOT fire. This loader emits **neither** `AmsiUtils` nor `amsiInitFailed` as literals, so any rule keyed on either string returns zero hits against it even with full script-block logging enabled. That is the specific failure this rule exists to cover.
+
 **Deployment:** SIEM with PowerShell Script Block Logging (Windows Event ID 4104) ingested. Expect to tune against your own developer and admin tooling before this is alertable.
 
 ```yaml
@@ -440,12 +502,19 @@ level: medium
 #### AdaptixC2 Default Listener: Anomalous Firefox 20 User-Agent
 
 **Tier:** Hunting
+
 **Robustness:** 1
+
 **ATT&CK Coverage:** T1071.001 (Web Protocols)
+
 **ATT&CK Note:** The RC4 payload encryption the report records (T1573.001) is not tested by a User-Agent match and is not claimed.
+
 **Confidence:** HIGH for the anomaly signal; catches any operator running the framework default, not this operator specifically
+
 **Rationale:** Firefox 20 (February 2013) is anomalous in any 2026 traffic and is the AdaptixC2 default listener UA — but the UA is a listener-profile field the operator can change at will, and the file's own Coverage Gaps documented this exact risk. Standard proxy logsources also don't expose the corroborating `X-Beacon-Id` header, so this rule anchors on the UA alone. Durability and single-field precision cap this at Hunting.
+
 **False Positives:** Legacy embedded systems or industrial control software using a hardcoded Firefox 20 UA string — cross-reference against known asset inventory to exclude.
+
 **Deployment:** Web proxy log pipeline (Squid, Zscaler, Palo Alto URL filtering); Zeek HTTP log ingestion.
 
 ```yaml
@@ -475,11 +544,17 @@ level: medium
 #### AdaptixC2 Beacon: High-Frequency Deterministic HTTP POST Cadence to Stock URIs
 
 **Tier:** Hunting
+
 **Robustness:** 1
+
 **ATT&CK Coverage:** T1071.001 (Web Protocols)
+
 **Confidence:** MODERATE — timing patterns require log aggregation; FP possible from monitoring agents
+
 **Rationale:** Base selection (POST to two stock/operator-added URI paths) and its correlation rule (>5 requests/30s from one source) are published as a linked pair. The URI paths are listener-profile fields the operator can change at will — the campaign IOC feed itself flags the jQuery URI as MODERATE FP risk "NOT alone" — and >5-requests/30s health-check and CI/CD traffic can produce a similar cadence, so neither the base selection nor the correlation clears the Detection precision bar independently.
+
 **False Positives:** Legitimate health-check endpoints polled at high frequency by infrastructure monitoring agents — add known monitoring source IPs to an allowlist filter; CI/CD pipeline job runners issuing rapid POST requests to status endpoints during build phases.
+
 **Deployment:** Web proxy SIEM with count-by-source aggregation over a 30-second sliding window; Zeek or NGFW flow logs.
 
 ```yaml
@@ -532,12 +607,19 @@ level: medium
 #### PowerShell Image Load of a Module Whose Description Contains the si_build Build String
 
 **Tier:** Hunting
+
 **Robustness:** 1
+
 **ATT&CK Coverage:** T1055 (Process Injection), T1055.002 (PE Injection), T1620 (Reflective Code Loading)
+
 **ATT&CK Note:** The injection and reflective-loading techniques describe what the loaded injector.dll does in the report. The rule observes only a PowerShell image load with a matching Description, not the injection or the reflective load.
+
 **Confidence:** HIGH
+
 **Rationale:** Sigma sibling of the YARA `si_build` rule above (it tests an image-load Description string and no .NET property) — the `si_build` build-placeholder string is a distinctive operator fingerprint, but it is a renameable literal (the operator's own project/build-directory name); a future build that changes the project name evades this rule entirely. Retains the same forward cross-sample hunting value as its YARA counterpart.
+
 **False Positives:** Internal developer tooling where a developer has named a build artifact `si_build` and loaded it via PowerShell — cross-reference against software asset inventory.
+
 **Deployment:** Endpoint EDR with Sysmon Event ID 7 (Image Load) telemetry; endpoint DLL inspection pipeline.
 
 ```yaml
@@ -572,11 +654,17 @@ level: medium
 #### Suspicious Active Directory Reconnaissance Tool Execution
 
 **Tier:** Hunting
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1087.002 (Domain Account Discovery), T1069.002 (Domain Groups), T1482 (Domain Trust Discovery)
+
 **Confidence:** HIGH
+
 **Rationale:** SharpHound, PowerView, and ADRecon are stable, long-standing upstream tool/cmdlet names — durable at the tool-family level. Precision, not durability, keeps this in Hunting: all three are equally common in legitimate red-team and penetration-testing engagements, which the rule's own false-positive profile explicitly acknowledges (MEDIUM FP, requires change-management correlation) — the level-`high` originally assigned overstated confidence for a rule with this much acknowledged legitimate overlap.
+
 **False Positives:** Authorized security assessment or red team exercises — correlate against change management records and authorized testing windows; EDR or vulnerability assessment platforms that incorporate BloodHound data collection natively.
+
 **Deployment:** Endpoint EDR with Sysmon Event ID 1 (Process Creation) or equivalent; SIEM process-creation pipeline.
 
 ```yaml
@@ -630,13 +718,21 @@ level: medium
 #### AdaptixC2 Default Listener X-Beacon-Id Heartbeat Header (Broad, Any IP)
 
 **Tier:** Detection
+
 **Robustness:** 3
+
 **ATT&CK Coverage:** T1071.001 (Web Protocols)
+
 **Confidence:** HIGH
+
 **Rationale:** `X-Beacon-Id` is the AdaptixC2 heartbeat header name as defined in the framework's own source code — not a listener-profile field, so an operator cannot change it without forking and patching AdaptixC2 itself. This is the most durable stock-framework indicator in the whole package and catches any operator running stock AdaptixC2, not only the 45.130.148.125 operator.
+
 **False Positives:** None known — `X-Beacon-Id` is not a standard HTTP header and is not used by any known legitimate application.
+
 **Blind Spots:** A forked/patched AdaptixC2 build that renames the heartbeat header evades entirely; misses non-HTTP transports (TCP, SMB named pipe) that AdaptixC2 also supports.
+
 **Validation:** Replay or observe a beacon heartbeat POST carrying the header — must alert; ordinary HTTP traffic without the header must NOT fire.
+
 **Deployment:** Perimeter IDS/IPS; inline NGFW; east-west network sensor in segmented environments.
 
 ```
@@ -646,13 +742,21 @@ alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL DETECT - AdaptixC2 Defau
 #### AdaptixC2 Beacon Empty-Body POST Carrying the X-Beacon-Id Header
 
 **Tier:** Detection
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1071.001 (Web Protocols), T1573.001 (Symmetric Encryption — RC4)
+
 **Confidence:** HIGH
+
 **Rationale:** Tightens the broad `X-Beacon-Id` rule above with the beacon's actual request shape, confirmed on the wire. The beacon issues a `POST` with `Content-Length: 0` and carries all of its data in a roughly 148-character base64 `X-Beacon-Id` header. A POST with no body alongside a large custom header is close to non-existent in legitimate traffic, so this pairing is a materially stronger discriminator than the header alone and than either the User-Agent or the URI set. Neither element is adjustable from the listener profile.
+
 **False Positives:** None known. Some API clients issue empty-body POSTs, but not while carrying a long custom base64 header — require both conditions, as written, rather than either alone.
+
 **Blind Spots:** TLS blinds this rule completely, as it does every other HTTP-buffer rule in this package. A forked build that renames the header or pads the body evades it, though such a build also evades the broad rule above.
+
 **Validation:** A beacon heartbeat must alert. Ordinary form or JSON POSTs, which carry a non-zero `Content-Length`, must not fire. Engine-validated with `suricata -T` on 2026-08-12.
+
 **Deployment:** Perimeter IDS/IPS; east-west sensor. Complements rather than replaces SID 5001002, which stays as the broader framework catch.
 
 ```
@@ -664,11 +768,17 @@ alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL DETECT AdaptixC2 Beacon 
 #### AdaptixC2 Stock Listener URI /api/v1/status with Firefox 20 UA
 
 **Tier:** Hunting
+
 **Robustness:** 1
+
 **ATT&CK Coverage:** T1071.001 (Web Protocols)
+
 **Confidence:** HIGH (current traffic); durability limited
+
 **Rationale:** Combines the Firefox 20 stock UA with the default `/api/v1/status` URI on a POST — both fields are AdaptixC2 listener-profile settings the operator can reconfigure at will. The file's own Coverage Gaps section documents this exact risk ("an operator who reads detection reporting will change the UA and URI paths"), so this is a durability-capped Hunting lead rather than a Detection signature.
+
 **False Positives:** Legitimate `/api/v1/status` traffic combined with a coincidental Firefox 20 UA is not realistically expected today, but the combination has no protection against a future listener-profile change.
+
 **Deployment:** Perimeter IDS/IPS; inline NGFW; edge network sensor.
 
 ```
@@ -678,11 +788,17 @@ alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL HUNT - AdaptixC2 Stock L
 #### AdaptixC2 Operator-Added jQuery URI with Firefox 20 UA
 
 **Tier:** Hunting
+
 **Robustness:** 1
+
 **ATT&CK Coverage:** T1071.001 (Web Protocols)
+
 **Confidence:** HIGH (current traffic); durability limited
+
 **Rationale:** The `/jquery-3.3.1.min.js` URI was added by this operator beyond AdaptixC2 stock defaults, but — per the campaign IOC feed's own annotation — this URI carries MODERATE false-positive risk when matched without the destination IP or header context, and remains a listener-profile field the operator can change. Same durability cap as the sibling stock-URI rule above.
+
 **False Positives:** Legitimate jQuery 3.3.1 CDN traffic combined with a coincidental Firefox 20 UA is not realistically expected today, but the URI alone (without the UA pairing) would be a meaningful FP risk — this rule intentionally requires both.
+
 **Deployment:** Perimeter IDS/IPS; edge sensor; proxy with IDS inspection capability.
 
 ```
@@ -692,13 +808,21 @@ alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL HUNT - AdaptixC2 Operato
 #### AdaptixC2 Stock Listener Response Envelope (Server-Side)
 
 **Tier:** Hunting
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1071.001 (Web Protocols)
+
 **Confidence:** MODERATE — high precision where response bodies are visible, but the template is operator-editable
+
 **Rationale:** Every other network rule in this package inspects the request. This one inspects the reply, which gives defenders a second, independent angle on the same session. The listener wraps its payload in a fixed JSON envelope, and the config fields `ans_pre_size` and `ans_size` decode to exactly its prefix and total lengths — 26 characters for `{"status": "ok", "data": "` and 47 with the closing `", "metrics": "sync"}`. That correspondence is what identifies the envelope as the framework's stock template rather than something this operator authored.
+
 **False Positives:** A JSON API that happens to emit the same three keys in the same order with the same spacing. Rare, but the rule matches on structure rather than on anything secret, so treat hits as leads and confirm against the request side.
+
 **Blind Spots:** `page-payload` is a listener-profile field, so an operator who edits the template breaks this rule outright — which is exactly why it is tiered Hunting rather than Detection despite its precision. TLS blinds it, and sensors that do not reassemble response bodies will never evaluate it.
+
 **Validation:** Requires response-body inspection to be enabled on the sensor; many deployments inspect requests only, in which case this rule is inert rather than failing. Engine-validated with `suricata -T` on 2026-08-12.
+
 **Deployment:** Network sensor with `file.data` reassembly on HTTP responses; proxy logs that retain response bodies.
 
 ```

@@ -10,9 +10,13 @@ thumbnail: /assets/images/cards/arsenal-237-new-files.png
 ---
 
 **Campaign:** Arsenal-237-EncC2-Ransomware-TorC2
+
 **Date:** 2026-01-27
+
 **Author:** The Hunters Ledger
+
 **License:** CC BY 4.0
+
 **IOC Feed:** https://the-hunters-ledger.com/ioc-feeds/arsenal-237-enc_c2-exe.json
 
 ---
@@ -52,12 +56,19 @@ Coverage below is retiered from the original draft against the project's Detecti
 #### RaaS Builder ID & C2 Beacon Schema Combination
 
 **Tier:** Detection
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1071.001 (Web Protocols — C2 JSON schema), T1486 (Data Encrypted for Impact — `encryption_key` field)
+
 **Confidence:** HIGH
+
 **Rationale:** The rule ORs two branches. The second — `builder_id` + `encryption_key` + `victim_id` + `machine_info` co-occurring — is the malware's specific C2/builder-tracking JSON field-name schema; this four-way combination survives a rebuild with a different builder ID, a different onion address, or a renamed binary, since it doesn't depend on any of those. The first branch (`TEST_BUILD_001` + `builder_id`) is weaker in isolation but only widens coverage for this specific beta build without weakening the combination's overall precision.
+
 **False Positives:** None expected for the four-field branch: unrelated software would need to coincidentally embed `builder_id`, `victim_id`, `encryption_key` and `machine_info` together, which is not a pattern seen outside this RaaS builder's schema. The first branch needs only `TEST_BUILD_001` and `builder_id`. The rule has no file-type or size gate, so any file that holds those strings matches, including a report or analysis note that quotes the schema.
+
 **Blind Spots:** Won't match a build that obfuscates or encrypts its JSON field-name strings, or that replaces the JSON/serde schema with a binary serialization format.
+
 **Validation:** Verified against the confirmed sample's embedded C2 beacon schema (`builder_id`, `victim_id`, `encryption_key`, `machine_info` fields) and the `TEST_BUILD_001` identifier documented in static analysis.
 
 ```yara
@@ -90,10 +101,15 @@ rule raas_builder_tracking {
 #### Tor C2 Beacon Endpoint Path
 
 **Tier:** Hunting
+
 **Robustness:** 1
+
 **ATT&CK Coverage:** T1090.003 (Multi-hop Proxy — Tor), T1071.001 (Web Protocols)
+
 **Confidence:** MODERATE
+
 **Rationale:** Anchored on the C2 beacon's endpoint-path literals (`/c2/beacon.php`, `POST /c2/beacon.php`), which a rebuilt binary can trivially change. Renameable, so it caps at Hunting rather than Detection.
+
 **False Positives:** Low but not zero; an unrelated PHP-backed application using the identical endpoint path is theoretically possible but not expected.
 
 ```yara
@@ -120,10 +136,15 @@ rule tor_hidden_service_c2_endpoint {
 #### Ransom Note Text with Supporting Ransomware Artifact
 
 **Tier:** Hunting
+
 **Robustness:** 1
+
 **ATT&CK Coverage:** T1486 (Data Encrypted for Impact)
+
 **Confidence:** MODERATE
+
 **Rationale:** Requires the sample's distinctive ransom-note text plus at least one supporting string. The ransom message is a deliberate, renameable branding choice for the next campaign build, so this stays Hunting rather than Detection.
+
 **False Positives:** Low; the anchor string (`YOUR FILES HAVE BEEN ENCRYPTED!`) is distinctive, though the supporting strings alone (`README.txt`, `ureq`) are common and could not trigger a match without the anchor.
 
 ```yara
@@ -153,10 +174,15 @@ rule enc_c2_ransomware_operations {
 #### TEB-Based Anti-Debug Stall Loop
 
 **Tier:** Hunting
+
 **Robustness:** 1
+
 **ATT&CK Coverage:** T1622 (Debugger Evasion)
+
 **Confidence:** LOW
+
 **Rationale:** Keys on the `NtCurrentTeb` string together with at least one of the `StackBase` string or a Sleep call byte pattern (1000 ms or 5000 ms) — the TEB stack-base validation primitive and its Sleep-based stall, either of which alone satisfies the second half of the condition. *Description fix 2026-10-10:* this line and the meta description said the stack-base primitive PLUS a Sleep stall, but the condition is `$teb_api and ($sleep_loop or $sleep_1000 or $stack_base)`; the wording now matches. *Evidence status (round 2, 2026-10-10):* `NtCurrentTeb` and `StackBase` are identifiers from the decompiler pseudocode in the companion report (lines 513-545), which does not show that either string is present in the compiled binary, and the two Sleep byte patterns are 32-bit-style `push imm32` / indirect `call` shapes while the report describes an x64 build; none of the four was extracted from the sample. This rule is therefore a technique-class heuristic that has not been shown to match the sample it is named after, so Robustness is lowered from 2 to 1 and confidence to LOW. TEB stack-base validation is a publicly documented, widely reused anti-debug technique also present in unrelated anti-cheat, DRM, and anti-tamper software, so a match indicates the technique, not this malware family specifically.
+
 **False Positives:** Moderate; other legitimate software implementing the same public TEB anti-debug technique would also match.
 
 ```yara
@@ -190,12 +216,19 @@ rule teb_anti_debug_detection {
 #### HTTP POST to Tor Hidden-Service C2 Beacon Endpoint
 
 **Tier:** Detection
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1071.001 (Web Protocols), T1090.003 (Multi-hop Proxy)
+
 **Confidence:** HIGH
+
 **Rationale:** Anchored to the POST method, `.onion` host suffix, and the confirmed `/c2/beacon.php` URI path together — a combination that survives onion-address rotation entirely, since no specific address is checked. This is the most durable network signal in the corpus.
+
 **False Positives:** Unlikely; requires a POST request to any `.onion` host at this exact URI path.
+
 **Blind Spots:** Requires network telemetry that resolves the HTTP layer of Tor-hidden-service traffic (a Tor-aware proxy or onion-resolving sensor); won't fire if visibility is limited to raw SOCKS/relay traffic, or if a future build changes the beacon URI path.
+
 **Validation:** Verified against the confirmed C2 beacon structure (POST method, `.onion` host, `/c2/beacon.php` endpoint, JSON body) documented in static analysis.
 
 ```yaml
@@ -233,10 +266,15 @@ level: critical
 #### enc_c2.exe Process Execution
 
 **Tier:** Hunting
+
 **Robustness:** 1
+
 **ATT&CK Coverage:** T1204.002 (Malicious File)
+
 **Confidence:** MODERATE
+
 **Rationale:** Filename/`OriginalFileName`-anchored only — defeated by renaming the binary in a rebuild. The original also OR'd in a standalone command-line branch matching generic flags (`--folder`, `--c2`, `--bid`) independent of the filename match; those flag names are usable by unrelated software, so that branch has been dropped and only the filename anchor retained.
+
 **False Positives:** Unrelated software coincidentally named or renamed to enc_c2.exe.
 
 ```yaml
@@ -269,10 +307,15 @@ tags:
 #### Bulk-Capable File Creation with .locked Extension
 
 **Tier:** Hunting
+
 **Robustness:** 1
+
 **ATT&CK Coverage:** T1486 (Data Encrypted for Impact)
+
 **Confidence:** MODERATE
+
 **Rationale:** The `.locked` extension is operator-chosen and renameable in a rebuild. The rule also has no volume threshold — a single file write fires it, where the underlying ransomware behavior is really a bulk pattern (dozens to hundreds of files in a short window). Both factors cap this at Hunting.
+
 **False Positives:** Legitimate software using a `.locked` extension for lock/marker files; isolated, non-bulk file renames.
 
 ```yaml
@@ -309,10 +352,15 @@ tags:
 #### Registry Persistence Key Referencing Build Identifiers
 
 **Tier:** Hunting
+
 **Robustness:** 1
+
 **ATT&CK Coverage:** T1547.001 (Registry Run Keys / Startup Folder)
+
 **Confidence:** MODERATE
+
 **Rationale:** The confirmed sample uses a single-run model with no observed persistence; this rule is forward-looking coverage for a future variant that adds registry-based persistence. It is keyed on `enc_c2`/`TEST_BUILD_001`, both build-specific identifiers that change across builds, capping it at Hunting.
+
 **False Positives:** Unlikely; keyed on build-specific malware identifiers that would not appear in unrelated registry writes.
 
 ```yaml
@@ -351,10 +399,15 @@ tags:
 #### enc_c2.exe Process Access with Sleep in the Call Trace (Call-Stack Corroboration)
 
 **Tier:** Hunting
+
 **Robustness:** 1
+
 **ATT&CK Coverage:** T1622 (Debugger Evasion)
+
 **Confidence:** LOW
+
 **Rationale:** Anchored to the same renameable `enc_c2.exe` filename as the process-execution rule, and requires call-stack-capable `process_access` telemetry that is not enabled by default in most Sysmon configurations. *Telemetry limit (round 2, 2026-10-10):* Sysmon Event 10 records `CallTrace` as module-and-offset frames (for example `ntdll.dll+16bcc4|...`), not function names or call arguments, and the report's stall loop calls `Sleep(1000)` inside the process, which does not itself open another process. On stock Sysmon this rule therefore has no event it can match. It is kept only for an EDR or enriched telemetry profile whose process-access `CallTrace` carries resolved function names, and is marked as needing that telemetry rather than as Sysmon coverage. Retained for its corroboration value alongside the TEB anti-debug YARA rule, not as an independent high-confidence signal. *Title fix 2026-10-10:* the rule was titled "TEB Anti-Debug Sleep Loop Detection", but the logic is the process image plus a Sleep-related call-trace substring, with no TEB test and no repetition; the title and description now say that.
+
 **False Positives:** Legitimate applications with sleep loops (rate limiting, polling) that happen to be named or renamed to enc_c2.exe.
 
 ```yaml
@@ -397,12 +450,19 @@ tags:
 #### C2 Beacon POST to /c2/beacon.php (Host Not Tested)
 
 **Tier:** Detection
+
 **Robustness:** 2
+
 **ATT&CK Coverage:** T1071.001 (Web Protocols), T1090.003 (Multi-hop Proxy)
+
 **Confidence:** HIGH
+
 **Rationale:** The published rule matched `.onion` in the `http_uri` buffer, but a standard request to this C2 (`POST /c2/beacon.php` with the domain in the `Host` header) never places `.onion` in the URI, so the AND-combined content match could not fire against the malware's own documented traffic shape — and there was no content match for `/c2/beacon.php` at all despite it being named in `msg`. Rewritten to match the actual beacon path in the URI buffer and drop the redundant exact-domain `http_host` match (already carried in the IOC feed), which also makes the signature resilient to onion-address rotation.
+
 **False Positives:** Unlikely; requires a POST whose URI contains `/c2/beacon.php` (an unanchored substring, so a longer path or a query string that contains it also matches) and a header block containing `Content-Type: application/json`.
+
 **Blind Spots:** The rule tests no `.onion` host and no Tor marker: it fires on a POST to `/c2/beacon.php` with a JSON `Content-Type` to any external host, so a Tor hit and an ordinary-web hit look the same to it. It only sees traffic on a sensor that resolves the HTTP layer, which for a Tor-hidden-service C2 means a Tor-aware proxy or onion-resolving sensor, as for the Sigma equivalent. It is anchored to the `/c2/beacon.php` URI convention, so a rebuilt variant using a different endpoint path evades it.
+
 **Validation:** Verified against the confirmed C2 beacon's HTTP method, URI, and Content-Type header as documented in static analysis.
 
 ```
