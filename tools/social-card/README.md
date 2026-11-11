@@ -22,9 +22,15 @@ python tools/social-card/tests/test_cardlib.py              # tests (plain pytho
 |---|---|
 | Title | report front matter `title` |
 | Kicker | `category` (uppercased) → first `_data/catalog.yml` tag → `THREAT INTELLIGENCE` |
-| Severity (spine + pill) | `_data/catalog.yml` entry `severity` |
+| Severity (spine + pill) | `_data/catalog.yml` entry `severity`; else a preview's parked (commented) catalog entry; else the report front matter's own `severity`; else `HIGH` |
 | Date | report front matter `date` |
 | Subtitle | report front matter `description` (one line, word-boundary truncated) |
+
+A report with no catalog entry and no severity of its own is drawn `HIGH`, and the CLI prints a
+warning on **stderr** naming the slug, so a publisher can see the value is a guess. A preview
+keeps its catalog entry as a commented block (`hunters-ledger-publish`,
+`references/preview-and-go-live.md` Step 4), and the generator reads that block, so a preview
+card carries the severity the report will have at go-live.
 
 IOCs are intentionally **not** shown (content decision 2026-06-02).
 

@@ -18,11 +18,22 @@ import cardlib as c
 REPO = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
 
 
+def warn_if_fallback(slug, fields):
+    """True (and a warning on stderr) when the severity is the guess, not the report's."""
+    if fields.get("severity_source") != "fallback":
+        return False
+    print(f"warning: {slug}: no severity in the catalog, a parked catalog entry or the "
+          f"report's front matter; card drawn {fields['severity']} as a fallback",
+          file=sys.stderr)
+    return True
+
+
 def render_slug(slug):
     fields = c.card_fields(REPO, slug)
     out = os.path.join(REPO, "assets", "images", "cards", f"{slug}.png")
     c.render_card(fields, out)
     print(f"  {slug}.png  [{fields['severity']}]")
+    warn_if_fallback(slug, fields)
     return out
 
 

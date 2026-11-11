@@ -71,11 +71,44 @@ def _catalog_entry(repo_root, slug):
     return None
 
 
-def severity_for_slug(repo_root, slug):
-    entry = _catalog_entry(repo_root, slug)
-    if entry and entry.get("severity"):
-        return severity_label(entry["severity"])
-    return "HIGH"  # conservative fallback (warned in generate_card)
+def _parked_catalog_entry(repo_root, slug):
+    """The catalog entry a preview keeps for go-live: a commented-out block in catalog.yml.
+
+    Preview mode parks the entry as a comment block (hunters-ledger-publish,
+    references/preview-and-go-live.md, Step 4), so yaml.safe_load sees no entry for the
+    slug. Read the comment blocks, drop the banner lines, and parse what is left as
+    catalog entries.
+    """
+    with open(os.path.join(repo_root, "_data/catalog.yml"), encoding="utf-8") as fh:
+        lines = fh.read().splitlines()
+    blocks, cur = [], []
+    for raw in lines:
+        stripped = raw.lstrip()
+        if stripped.startswith("#"):
+            cur.append(stripped[1:])
+        elif cur:
+            blocks.append(cur)
+            cur = []
+    if cur:
+        blocks.append(cur)
+    target = f"/reports/{slug}/"
+    for block in blocks:
+        body = "\n".join(ln for ln in block if not ln.strip().startswith("====="))
+        try:
+            data = yaml.safe_load(body)
+        except yaml.YAMLError:
+            continue
+        if isinstance(data, dict):
+            if "report_url" in data:          # a single entry parked without its list dash
+                data = [data]
+            else:
+                data = data.get("entries")
+        if not isinstance(data, list):
+            continue
+        for e in data:
+            if isinstance(e, dict) and e.get("report_url") == target:
+                return e
+    return None
 
 
 def _report_dir_for_slug(repo_root, slug):
@@ -85,16 +118,55 @@ def _report_dir_for_slug(repo_root, slug):
     raise FileNotFoundError(f"No report with permalink slug '{slug}'")
 
 
+def _front_matter_severity(repo_root, slug):
+    """The severity the report itself declares in its front matter, if any."""
+    try:
+        idx = _report_dir_for_slug(repo_root, slug)
+    except FileNotFoundError:
+        return None
+    fm = load_front_matter(idx)
+    for key in ("severity", "threat_level"):
+        if fm.get(key):
+            return fm[key]
+    return None
+
+
+def severity_with_source(repo_root, slug):
+    """(label, source) for a report's card severity.
+
+    Source is "catalog" (the live entry), "catalog-parked" (the commented block a preview
+    keeps for go-live), "front-matter" (the report's own declaration) or "fallback".
+    The catalog wins because it is the site's single source of truth for severity; a
+    parked entry is the catalog entry the preview gets at go-live.
+    """
+    entry = _catalog_entry(repo_root, slug)
+    if entry and entry.get("severity"):
+        return severity_label(entry["severity"]), "catalog"
+    parked = _parked_catalog_entry(repo_root, slug)
+    if parked and parked.get("severity"):
+        return severity_label(parked["severity"]), "catalog-parked"
+    declared = _front_matter_severity(repo_root, slug)
+    if declared:
+        return severity_label(declared), "front-matter"
+    return "HIGH", "fallback"  # conservative fallback (warned in generate_card)
+
+
+def severity_for_slug(repo_root, slug):
+    return severity_with_source(repo_root, slug)[0]
+
+
 def card_fields(repo_root, slug):
     idx = _report_dir_for_slug(repo_root, slug)
     fm = load_front_matter(idx)
     entry = _catalog_entry(repo_root, slug)
     tags = (entry or {}).get("tags", [])
+    severity, severity_source = severity_with_source(repo_root, slug)
     return {
         "slug": slug,
         "title": fm["title"],
         "kicker": derive_kicker(fm.get("category"), tags),
-        "severity": severity_for_slug(repo_root, slug),
+        "severity": severity,
+        "severity_source": severity_source,
         "date": format_card_date(fm["date"]),
         "subtitle": (fm.get("description") or "").strip(),
     }
