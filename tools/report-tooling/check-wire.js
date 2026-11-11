@@ -1,8 +1,17 @@
 #!/usr/bin/env node
 'use strict';
 
-/* CLI for the wire gate. Reads the two data files, prints one verdict, exits
-   0 PASS, 1 FAIL, 2 NOT CHECKED.
+/* CLI for the wire gate. Reads the two data files and the page sources, prints
+   one verdict per check, then ends with exactly one machine line:
+
+     WIRE-VERDICT page=<PASS|FAIL|NOT_CHECKED> data=<PASS|FAIL|NOT_CHECKED> stale=<PASS|FAIL|NOT_CHECKED>
+
+   `page` is the page, its templates, the two feeds, the Details files and
+   custom.scss, plus an out-of-range VEDAS value in wire.yml (the Vulnerabilities
+   tab draws it: the build must fail and wire.yml must be kept); `data` is every
+   other check on the values in wire.yml; `stale` is the age check alone. The exit code is the worst of the three: 0 PASS, 1 FAIL,
+   2 NOT CHECKED (a FAIL outranks a NOT CHECKED). A workflow reads the line, not
+   the prose above it (T-0603 A5, S32).
 
    Missing dependencies are NOT CHECKED with the remedy named, never a pass. A
    fresh clone has no node_modules, and a gate that silently passed in that state
@@ -33,8 +42,30 @@ try {
 } catch (e) {
   console.log('NOT CHECKED  ' + e.message +
     '. Run `npm ci` in tools/report-tooling, then re-run this gate.');
+  console.log('WIRE-VERDICT page=NOT_CHECKED data=NOT_CHECKED stale=NOT_CHECKED');
   process.exit(2);
 }
+
+// Worst class wins: FAIL, then NOT CHECKED, then PASS.
+function worst(list) {
+  if (list.indexOf('FAIL') >= 0) return 'FAIL';
+  if (list.indexOf('NOT CHECKED') >= 0) return 'NOT CHECKED';
+  return 'PASS';
+}
+function tag(v) { return v.replace(' ', '_'); }
+function finish(page, data, stale) {
+  console.log('WIRE-VERDICT page=' + tag(page) + ' data=' + tag(data) + ' stale=' + tag(stale));
+  var w = worst([page, data, stale]);
+  process.exit(w === 'PASS' ? 0 : (w === 'FAIL' ? 1 : 2));
+}
+
+/* A crash in a check is a gate defect, not a verdict about the page: say so on the machine line
+   too, so a reader of the last line never sees a stack trace and a stale exit code 1. */
+process.on('uncaughtException', function (e) {
+  console.log('NOT CHECKED  the gate itself threw: ' + (e && e.stack ? e.stack.split('\n')[0] : e));
+  console.log('WIRE-VERDICT page=NOT_CHECKED data=NOT_CHECKED stale=NOT_CHECKED');
+  process.exit(2);
+});
 
 function load(p) {
   try { return yaml.load(fs.readFileSync(p, 'utf8')); }
@@ -98,28 +129,28 @@ if (!srcDoc) {
 
 var r = CW.check(doc, sources, Date.now(), remoteWire());
 
+/* A data NOT CHECKED no longer ends the run: the page, feeds, CSS and Details files do not need
+   wire.yml, and skipping them hid a broken page behind a missing file (T-0603 wire-3). */
 if (r.status === 'NOT CHECKED') {
   console.log('NOT CHECKED  ' + r.reason);
-  process.exit(2);
-}
+} else {
+  var head = r.status + '  ' + WIRE;
+  if (r.counts) {
+    head += '  (' + r.counts.total + ' items: ' + r.counts.research +
+      ' research, ' + r.counts.news + ' news, ' + r.counts.vuln + ' vuln digest; ' +
+      r.counts.vulns + ' nKEV rows, ' + r.counts.cves + ' CVEs rows)';
+  }
+  console.log(head);
 
-var head = r.status + '  ' + WIRE;
-if (r.counts) {
-  head += '  (' + r.counts.total + ' items: ' + r.counts.research +
-    ' research, ' + r.counts.news + ' news, ' + r.counts.vuln + ' vuln digest; ' +
-    r.counts.vulns + ' nKEV rows, ' + r.counts.cves + ' CVEs rows)';
+  r.problems.forEach(function (p) { console.log('   FAIL  ' + p); });
+  if (r.warnings.length) {
+    console.log('   WARN  unclassified source(s), add to _data/wire-sources.yml: ' +
+      r.warnings.join(', '));
+  }
+  // Never FAIL lines: a Vulnerabilities-tab fault must not take the headlines down with it.
+  (r.vulnWarnings || []).forEach(function (w) { console.log('   WARN  vulns: ' + w); });
+  (r.cveWarnings || []).forEach(function (w) { console.log('   WARN  cves: ' + w); });
 }
-console.log(head);
-
-r.problems.forEach(function (p) { console.log('   FAIL  ' + p); });
-if (r.warnings.length) {
-  console.log('   WARN  unclassified source(s), add to _data/wire-sources.yml: ' +
-    r.warnings.join(', '));
-}
-// Never FAIL lines: pages.yml drops wire.yml on any non-stale FAIL, and a
-// Vulnerabilities-tab fault must not take the headlines down with it.
-(r.vulnWarnings || []).forEach(function (w) { console.log('   WARN  vulns: ' + w); });
-(r.cveWarnings || []).forEach(function (w) { console.log('   WARN  cves: ' + w); });
 
 /* The data is only half of it. The page decides how each row's day is derived,
    and the day filter is only correct while that derivation happens once. */
@@ -171,22 +202,12 @@ var detailsChecks = [
   ['assets/js/wire-details.js', CW.checkDetailsScript(readOr(DETAILS_JS)), '(text nodes and validated hrefs only)'],
   ['page: Details structure', CW.checkDetailsPage(pageSrc), '(nKEV and CVEs toggles first in the row, none on headlines, the wrapper filter item, versioned data-details)']
 ];
-var anyNotChecked = false;
-var anyDetailsFail = false;
+var pageStatuses = [p.status, tc.status, fd.status, fvn.status, r.valuePage];
 detailsChecks.forEach(function (c) {
   console.log(c[1].status + '  ' + c[0] + (c[1].status === 'PASS' ? '  ' + c[2] : ''));
   if (c[1].reason) console.log('   ' + c[1].reason);
   c[1].problems.forEach(function (x) { console.log('   FAIL  ' + x); });
-  if (c[1].status === 'FAIL') anyDetailsFail = true;
-  if (c[1].status === 'NOT CHECKED') anyNotChecked = true;
+  pageStatuses.push(c[1].status);
 });
 
-if (r.status === 'PASS' && p.status === 'PASS' && tc.status === 'PASS' && fd.status === 'PASS' && fvn.status === 'PASS' &&
-    !anyDetailsFail) {
-  if (anyNotChecked) process.exit(2);
-  process.exit(0);
-}
-// A page-side FAIL starts with "FAIL  <path>" in the log, which pages.yml reads as a bug on main.
-if (r.status === 'FAIL' || p.status === 'FAIL' || tc.status === 'FAIL' || fd.status === 'FAIL' || fvn.status === 'FAIL') process.exit(1);
-// NOT CHECKED on the page or the CSS alone is not a pass, and is not a FAIL either.
-process.exit(2);
+finish(worst(pageStatuses), r.data, r.stale);

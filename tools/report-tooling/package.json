@@ -12,7 +12,7 @@
     "verify:lookup": "node check-ioc-index.js",
     "verify:attack": "node check-detection-attack.js",
     "verify:ioc-tables": "node check-ioc-tables.js",
-    "verify:browser": "node check-browser-wire.js && node check-browser-report.js && node check-browser-downloads.js",
+    "verify:browser": "HL_SITE_DIR=${HL_SITE_DIR:-../../_site} node check-browser-wire.js; w=$?; node check-browser-report.js; r=$?; node check-browser-downloads.js; d=$?; [ $w -eq 1 ] || [ $r -eq 1 ] || [ $d -eq 1 ] && exit 1; [ $w -ne 0 ] || [ $r -ne 0 ] || [ $d -ne 0 ] && exit 2; exit 0",
     "verify:browser:wire": "node check-browser-wire.js",
     "verify:browser:report": "node check-browser-report.js",
     "verify:browser:downloads": "node check-browser-downloads.js",
