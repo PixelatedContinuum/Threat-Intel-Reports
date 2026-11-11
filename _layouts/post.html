@@ -34,7 +34,7 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 </script>
 {% endif %}
-{% comment %}Match complete class tokens only inside kramdown h2 opening tags. Keep this Liquid whitespace-free so the untagged render stays byte-identical.{% endcomment %}{% assign hl_tabbed = false %}{% assign hl_tab_tokens = 'overview,victims,chain,timeline,attribution,indicators,confidence' | split: ',' %}{% assign hl_h2_tags = content | split: '<h2 ' %}{% for hl_h2 in hl_h2_tags offset:1 %}{% assign hl_open_tag = hl_h2 | split: '>' | first %}{% if hl_open_tag contains 'class="' %}{% assign hl_classes = hl_open_tag | split: 'class="' | last | split: '"' | first | prepend: ' ' | append: ' ' %}{% for hl_token in hl_tab_tokens %}{% assign hl_class = hl_token | prepend: ' hl-tab-' | append: ' ' %}{% if hl_classes contains hl_class %}{% assign hl_tabbed = true %}{% endif %}{% endfor %}{% endif %}{% endfor %}{% if hl_tabbed %}{% include report-subscribe-guard.html %}<link rel="stylesheet" href="{{ '/assets/css/hl-report-tabs.css' | relative_url }}?v=20261104.2" data-rv-chrome data-pagefind-ignore>
+{% comment %}Match complete class tokens only inside kramdown h2 opening tags. Keep this Liquid whitespace-free so the untagged render stays byte-identical.{% endcomment %}{% assign hl_tabbed = false %}{% assign hl_tab_tokens = 'overview,victims,chain,timeline,attribution,indicators,confidence' | split: ',' %}{% assign hl_h2_tags = content | split: '<h2 ' %}{% for hl_h2 in hl_h2_tags offset:1 %}{% assign hl_open_tag = hl_h2 | split: '>' | first %}{% if hl_open_tag contains 'class="' %}{% assign hl_classes = hl_open_tag | split: 'class="' | last | split: '"' | first | prepend: ' ' | append: ' ' %}{% for hl_token in hl_tab_tokens %}{% assign hl_class = hl_token | prepend: ' hl-tab-' | append: ' ' %}{% if hl_classes contains hl_class %}{% assign hl_tabbed = true %}{% endif %}{% endfor %}{% endif %}{% endfor %}{% if hl_tabbed %}{% include report-subscribe-guard.html %}
 {% endif %}{%- assign _is_det0 = false -%}{%- if page.path contains 'hunting-detections' %}{% assign _is_det0 = true %}{% endif -%}<div class="hl-page{% if hl_tabbed %} hl-report-page{% endif %}{% if _is_det0 %} hl-idx hl-idx--det{% endif %}" style="--ph-accent: {% if page.path contains 'hunting-detections' %}#4ade80{% else %}#f87171{% endif %};">{% if hl_tabbed %}{% include report-featured-sponsor.html %}{% endif %}
 {%- if _is_det0 -%}{%- comment -%}
   A detection page in design D (T-0500.1.7.4 b3): the plate with its resource buttons, KPI tiles computed from the page's own rule manifest and ATT&CK table, then the page as before
@@ -57,7 +57,7 @@ document.addEventListener('DOMContentLoaded', function () {
   {%- if _dcat or _dmisp %}
   <div class="hl-d-res" role="group" aria-label="Related resources" data-pagefind-ignore>
     {%- if _dcat.report_url %}<a class="hl-d-res__a hl-d-res__a--pri" href="{{ _dcat.report_url | relative_url }}">{% include d-icon.html name="ext" %}Read the full report</a>{% endif -%}
-    {%- if _dcat.ioc_url %}<a class="hl-d-res__a" href="{{ _dcat.ioc_url | remove: '-iocs.json' | append: '/' | relative_url }}">{% include d-icon.html name="target" %}IOC feed</a>{% endif -%}
+    {%- if _dcat.ioc_url %}{%- comment -%} The catalog stores the raw JSON, and older feeds are named `<slug>.json` while newer ones are `<slug>-iocs.json`; the reader-facing page is always `/ioc-feeds/<slug>/` (one directory per feed). Strip either suffix, never append a slash to the file name. {%- endcomment -%}{%- assign _ioc_page = _dcat.ioc_url | remove: '-iocs.json' | remove: '.json' | append: '/' -%}<a class="hl-d-res__a" href="{{ _ioc_page | relative_url }}">{% include d-icon.html name="target" %}IOC feed</a>{% endif -%}
     {%- if _dcat.stix_url %}<a class="hl-d-res__a" href="{{ _dcat.stix_url | relative_url }}">{% include d-icon.html name="share" %}STIX</a>{% endif -%}
     {%- if _dmisp %}<a class="hl-d-res__a" href="{{ _dmisp.event_url | relative_url }}" target="_blank" rel="noopener noreferrer">{% include d-icon.html name="table" %}MISP</a>{% endif -%}
   </div>
@@ -204,8 +204,65 @@ the coverage above is narrower than the rule set.</em></p>
 </details>
   {%- endif -%}
 {%- endif %}
+    {%- comment -%}
+      One stable ATT&CK anchor per report, without touching a report file.
+
+      Technique and actor pages link to `/reports/<slug>/#mitre-attck-mapping` (technique.html:108,
+      actor.html:250), but kramdown builds the heading id from the heading text, so most reports
+      carry `7-mitre-attck-mapping`, `11-mitre-attck-mapping--hl-tab-chain` or
+      `7-mitre-attck-framework-mapping`, and the plain fragment matches nothing. On 2026-11-11 that
+      was 1,662 dead links of 1,753.
+
+      So the layout adds the one fragment every link already uses as an empty span inside the
+      report's real ATT&CK heading, just before that heading's closing tag. That keeps the
+      heading's first child (the section number the report tabs read) and every sibling selector
+      intact. The first h2 whose id contains `mitre-attck` wins; a report with no such h2 gets the
+      same treatment on the first h3 (webserver-compromise-kit's "MITRE ATT&CK" h3). Where the
+      exact id already exists, nothing is added.
+    {%- endcomment -%}
+    {%- assign _body = content -%}
+    {%- unless page.path contains 'hunting-detections' -%}
+      {%- assign _atk_target = '' -%}
+      {%- assign _atk_exact = false -%}
+      {%- if _body contains 'id="mitre-attck-mapping"' -%}{%- assign _atk_exact = true -%}{%- endif -%}
+      {%- assign _h2_scan = _body | split: '<h2 ' -%}
+      {%- for _c in _h2_scan offset: 1 -%}
+        {%- assign _tag = _c | split: '>' | first -%}
+        {%- if _tag contains 'id="' -%}
+          {%- assign _hid = _tag | split: 'id="' | last | split: '"' | first -%}
+          {%- if _hid contains 'mitre-attck' -%}
+            {%- if _hid == 'mitre-attck-mapping' -%}
+              {%- assign _atk_exact = true -%}
+            {%- else -%}
+              {%- assign _atk_target = '<h2 ' | append: _c | split: '</h2>' | first | append: '</h2>' -%}
+              {%- assign _atk_repl = _atk_target | replace: '</h2>', '<span id="mitre-attck-mapping"></span></h2>' -%}
+            {%- endif -%}
+            {%- break -%}
+          {%- endif -%}
+        {%- endif -%}
+      {%- endfor -%}
+      {%- if _atk_target == '' and _atk_exact == false -%}
+        {%- assign _h3_scan = _body | split: '<h3 ' -%}
+        {%- for _c in _h3_scan offset: 1 -%}
+          {%- assign _tag = _c | split: '>' | first -%}
+          {%- if _tag contains 'id="' -%}
+            {%- assign _hid = _tag | split: 'id="' | last | split: '"' | first -%}
+            {%- if _hid contains 'mitre-attck' -%}
+              {%- if _hid == 'mitre-attck-mapping' -%}
+                {%- assign _atk_exact = true -%}
+              {%- else -%}
+                {%- assign _atk_target = '<h3 ' | append: _c | split: '</h3>' | first | append: '</h3>' -%}
+                {%- assign _atk_repl = _atk_target | replace: '</h3>', '<span id="mitre-attck-mapping"></span></h3>' -%}
+              {%- endif -%}
+              {%- break -%}
+            {%- endif -%}
+          {%- endif -%}
+        {%- endfor -%}
+      {%- endif -%}
+      {%- if _atk_target != '' -%}{%- assign _body = _body | replace: _atk_target, _atk_repl -%}{%- endif -%}
+    {%- endunless -%}
     {%- comment -%} A detection page is not a report: its prose and tables are defanged at render time (decision 5, T-0500.1.7.4), its <pre> rule bodies stay exact. A report's own text is defanged in its source and gated there. {%- endcomment %}
-    {% if page.path contains 'hunting-detections' %}{% include defang-html.html html=content %}{% else %}{{ content }}{% endif %}
+    {% if page.path contains 'hunting-detections' %}{% include defang-html.html html=content %}{% else %}{{ _body }}{% endif %}
 {%- comment -%}
   Cite this report. A ready citation line and a BibTeX record, both built
   from the front matter the page already carries (title, date, last_updated,
@@ -964,20 +1021,20 @@ the coverage above is narrower than the rule set.</em></p>
 <script src="{{ '/assets/js/hl-facts.js' | relative_url }}?v=1" defer></script>
 {% unless page.glossary == false %}
 <script type="application/json" id="hl-glossary-data">{{ site.data.glossary | jsonify }}</script>
-<script src="{{ '/assets/js/glossary.js' | relative_url }}" defer></script>
+<script src="{{ '/assets/js/glossary.js' | relative_url }}?v=1" defer></script>
 {% endunless %}
 {% if page.figure_nav %}
 <script type="application/json" id="hl-figure-nav">{{ page.figure_nav | jsonify }}</script>
-<script src="{{ '/assets/js/figure-nav.js' | relative_url }}" defer></script>
+<script src="{{ '/assets/js/figure-nav.js' | relative_url }}?v=1" defer></script>
 {% endif %}
 {%- comment -%}
   Only for a report that declares a process_tree, so no other page pays for it.
   Carries ?v= because the module and the markup it enhances ship together: the
   include can change in the same push as the script, and a returning reader with
-  the old file cached would get new markup driven by old behaviour. Most scripts
-  in this layout carry no ?v=; this one and the two that already do are the cases
-  where markup and script are versioned as a pair. Bump it whenever
-  hl-process-tree.js changes.
+  the old file cached would get new markup driven by old behaviour. Every script
+  this layout emits now carries a ?v= (A19: five carried none); this one and the
+  pair with dated values are the cases where markup and script ship as a pair.
+  Bump it whenever hl-process-tree.js changes.
 {%- endcomment -%}
 {% if page.process_tree %}
 <script src="{{ '/assets/js/hl-process-tree.js' | relative_url }}?v=1" defer></script>
@@ -1004,13 +1061,13 @@ the coverage above is narrower than the rule set.</em></p>
 {%- assign hl_sd_tbl = site.data.ioc_tables[hl_sd_ioc] -%}
 {%- capture hl_sd_json -%}{"detection_page":{{ page.detection_page | default: '' | jsonify }},"techniques":{% if hl_sd_atk and page.detection_page %}{"total":{{ hl_sd_atk.total | default: 0 }},"tactics":{{ hl_sd_atk.tactics | default: 0 }},"rows":[{% for r in hl_sd_atk.rows %}{"tactic":{{ r.tactic | jsonify }},"id":{{ r.id | jsonify }},"name":{{ r.name | jsonify }}}{% unless forloop.last %},{% endunless %}{% endfor %}]}{% else %}null{% endif %},"rules":{% if hl_sd_man and page.detection_page %}{"total":{{ hl_sd_man.size }},"sigma":{{ hl_sd_man | where: 'engine', 'sigma' | size }},"yara":{{ hl_sd_man | where: 'engine', 'yara' | size }},"suricata":{{ hl_sd_man | where: 'engine', 'suricata' | size }},"detection":{{ hl_sd_man | where: 'tier', 'Detection' | size }},"hunting":{{ hl_sd_man | where: 'tier', 'Hunting' | size }}}{% else %}null{% endif %},"iocs":{% if hl_sd_tbl and page.ioc_feed %}{"total":{{ hl_sd_tbl.total | default: 0 }},"feed_url":{{ hl_sd_tbl.feed_url | default: '' | jsonify }}}{% else %}null{% endif %}}{%- endcapture -%}
 <script type="application/json" id="hl-report-site-data" data-rv-chrome data-pagefind-ignore>{{ hl_sd_json | replace: '<', '\u003c' | replace: '>', '\u003e' | replace: '&', '\u0026' }}</script>
-<script src="{{ '/assets/js/hl-report-tabs.js' | relative_url }}?v=20261104.1" defer data-rv-chrome data-pagefind-ignore></script>{% else %}<script src="{{ '/assets/js/register-switch.js' | relative_url }}" defer></script>{% endif %}
+<script src="{{ '/assets/js/hl-report-tabs.js' | relative_url }}?v=20261104.1" defer data-rv-chrome data-pagefind-ignore></script>{% else %}<script src="{{ '/assets/js/register-switch.js' | relative_url }}?v=1" defer></script>{% endif %}
 {% if page.path contains "hunting-detections" %}
 {% assign hl_slug = page.path | split: "/" | last | remove: ".md" %}
 {% assign hl_manifest = site.data.detection_manifests[hl_slug] %}
 {% if hl_manifest %}
 <script type="application/json" id="hl-detection-manifest">{{ hl_manifest | jsonify }}</script>
-<script src="{{ '/assets/js/hl-hash.js' | relative_url }}" defer></script>
+<script src="{{ '/assets/js/hl-hash.js' | relative_url }}?v=1" defer></script>
 <script src="{{ '/assets/js/detection-picker.js' | relative_url }}?v=2" defer></script>
 {% endif %}
 <script src="{{ '/assets/js/section-bar.js' | relative_url }}?v=1" defer></script>

@@ -39,13 +39,20 @@ layout: page
      data-has-confidence="{{ t.has_confidence }}" data-has-action="{{ t.has_action }}"
      data-has-fp-risk="{{ t.has_fp_risk }}">
 
-  {%- comment -%} KPI tiles (T-0500.1.7.4 b3): the total and one tile per indicator type, the numbers the chips below also print (t.counts); nothing here is computed beyond them. {%- endcomment -%}
+  {%- comment -%} KPI tiles (T-0500.1.7.4 b3): the total and the five largest indicator types, the numbers the chips below also print (t.counts); nothing here is computed beyond them. A50: iterating the hash gives the types in file order, which is alphabetical, so the strip used to drop types larger than ones it showed. Each pair becomes a zero-padded "count|type" string, the strings sort descending, and the top five are printed. {%- endcomment -%}
   {%- assign _nt = t.counts | size -%}
+  {%- assign _ranked = '' | split: '' -%}
+  {%- for c in t.counts -%}
+    {%- capture _rc -%}{{ c[1] | prepend: '0000000000' | slice: -10, 10 }}|{{ c[0] }}{%- endcapture -%}
+    {%- assign _ranked = _ranked | push: _rc -%}
+  {%- endfor -%}
+  {%- assign _ranked = _ranked | sort | reverse -%}
   <div class="hl-d-kpis" style="--fc: {% if _nt > 5 %}6{% else %}{{ _nt | plus: 1 }}{% endif %};" data-pagefind-ignore>
     <div class="hl-d-kpi" style="--kc: #f87171;"><span class="hl-d-kpi__n">{{ t.total }}</span><span class="hl-d-kpi__cap">Indicators</span><span class="hl-d-kpi__note">in this feed</span></div>
-    {%- for c in t.counts %}{% if forloop.index <= 5 %}
-    <div class="hl-d-kpi" style="--kc: #58a6ff;"><span class="hl-d-kpi__n">{{ c[1] }}</span><span class="hl-d-kpi__cap">{{ c[0] }}</span></div>
-    {%- endif %}{% endfor %}
+    {%- for c in _ranked limit: 5 -%}
+    {%- assign _cv = c | split: '|' -%}
+    <div class="hl-d-kpi" style="--kc: #58a6ff;"><span class="hl-d-kpi__n">{{ _cv[0] | plus: 0 }}</span><span class="hl-d-kpi__cap">{{ _cv[1] }}</span></div>
+    {%- endfor -%}
   </div>
 
   <div class="hl-ioctable__links">
