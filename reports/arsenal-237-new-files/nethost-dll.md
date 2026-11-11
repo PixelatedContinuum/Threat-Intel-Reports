@@ -786,8 +786,8 @@ Blocking these addresses is worth doing, but it buys temporary disruption only. 
 
 #### sub_180005639: C2 Connection Orchestrator (PRIMARY FUNCTION)
 
-**Address:** 0x180005639
-**Purpose:** Central orchestrator for all C2 connectivity attempts
+**Address:** 0x180005639<br>
+**Purpose:** Central orchestrator for all C2 connectivity attempts<br>
 **Call Stack:** Called early in DLL initialization, blocks until C2 connection established
 
 **Execution Flow:**
@@ -817,9 +817,9 @@ There is no timeout on the connection attempts, so the call can block indefinite
 
 #### sub_180051190: TCP Socket Connection
 
-**Address:** 0x180051190
-**Purpose:** Create TCP socket and attempt connection to single target
-**Parameters:** IPv4 address and port (parsed from C2 string)
+**Address:** 0x180051190<br>
+**Purpose:** Create TCP socket and attempt connection to single target<br>
+**Parameters:** IPv4 address and port (parsed from C2 string)<br>
 **Returns:** 0 on success, non-zero on failure
 
 **Implementation:**
@@ -841,9 +841,9 @@ There is no timeout on the connection attempts, so the call can block indefinite
 
 #### sub_180001f8d: Command Lookup & Parser
 
-**Address:** 0x180001f8d
-**Purpose:** Parse received command string and locate handler
-**Parameters:** Command string, command length
+**Address:** 0x180001f8d<br>
+**Purpose:** Parse received command string and locate handler<br>
+**Parameters:** Command string, command length<br>
 **Returns:** Pointer to command handler data or NULL
 
 **Mechanism:**
@@ -863,9 +863,9 @@ antivirus, firewall, clipboard, download, upload
 
 #### sub_180044f30: Network Receive Wrapper
 
-**Address:** 0x180044f30
-**Purpose:** Receive C2 commands from socket
-**Parameters:** Socket handle, receive buffer, buffer size
+**Address:** 0x180044f30<br>
+**Purpose:** Receive C2 commands from socket<br>
+**Parameters:** Socket handle, receive buffer, buffer size<br>
 **Returns:** 0 on success, 1 on error
 
 **Special Handling:**

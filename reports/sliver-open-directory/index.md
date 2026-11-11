@@ -41,6 +41,7 @@ stix_bundle: /stix/sliver-open-directory.json
 An exposed open directory at `45[.]94[.]31[.]220`, hosted on bulletproof infrastructure operated by 1337 Services GmbH (AS210558), yielded a complete attacker build workspace containing 270 files, 69 subdirectories, and 144 MB of offensive tooling. The workspace includes a fully operational Sliver C2 implant wrapped in a ScareCrow loader with 15 layered EDR evasion techniques, custom source code for five evasion modules, a fraudulent VMware code-signing certificate with its unencrypted private key, and a Sliver beacon generation command revealing complete C2 configuration. The toolkit was built on 2026-02-14 at 15:01 UTC and discovered approximately 6.75 hours later, likely before successful victim deployment.
 
 I categorize this as cybercrime at HIGH confidence, 80 percent, and designate the operator **<a href="/actors/UTA-2026-001/">UTA-2026-001</a>** *(an internal tracking label used by The Hunters Ledger, see Section 6)*.
+
 **Threat Level:** MEDIUM, C2 infrastructure offline at analysis time; no confirmed victims; automated build pipeline means functionally equivalent beacons can be regenerated in approximately 8 minutes.
 The intelligence here is descriptive, covering what was built, and explanatory, covering how the evasion works. Anticipatory intelligence is a documented gap, because actual victim deployment and targeting remain unconfirmed.
 
@@ -1108,6 +1109,7 @@ The detection file is at [`sliver-open-directory-detections`]({{ "/hunting-detec
 
 It covers YARA (file and memory), Sigma (behavioral), Suricata (network), EDR queries across multiple platforms, and SIEM queries for Splunk and Elastic.
 The rules target architectural constants that survive polymorphic regeneration, the SysWhispers3 hash seed, the Donut VEH bootstrap pattern, the XZ config header mode byte structure, and the fraudulent certificate serial, alongside specific-hash rules for the confirmed samples.
+
 **License:** CC BY 4.0
 
 ---

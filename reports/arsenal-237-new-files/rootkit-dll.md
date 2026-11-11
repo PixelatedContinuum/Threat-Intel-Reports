@@ -599,8 +599,8 @@ rootkit.dll embeds the same Baidu antivirus driver (BdApiUtil64.sys) used in kil
 
 The Baidu driver contains an unprotected IOCTL interface allowing unprivileged user-mode code to perform kernel-level operations:
 
-**IOCTL Code:** 0x800024B4
-**Capability:** Arbitrary kernel memory write/read
+**IOCTL Code:** 0x800024B4<br>
+**Capability:** Arbitrary kernel memory write/read<br>
 **Attack:** Process termination with kernel privileges (bypassing user-mode restrictions)
 
 ### Deployment and Loading

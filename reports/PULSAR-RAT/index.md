@@ -358,8 +358,8 @@ Based on analysis of embedded strings and YARA rule matches, **server.exe** is c
 ### How Pulsar RAT Reaches Target Systems
 
 ### Executive Impact Summary
-> **Delivery Risk:** High. Multiple infection pathways identified
-> **User Interaction:** Required for initial execution in most observed delivery scenarios
+> **Delivery Risk:** High. Multiple infection pathways identified<br>
+> **User Interaction:** Required for initial execution in most observed delivery scenarios<br>
 > **Key Takeaway:** Prevention at the delivery stage is the most effective control layer
 
 ### Primary Distribution Method
@@ -487,9 +487,9 @@ Phishing delivery requires user execution. Training focused on executable attach
 ### Comprehensive Threat Intelligence Mapping
 
 ### Executive Impact Summary
-> **Framework Purpose:** Industry-standard classification of adversary tactics and techniques
-> **Business Value:** Enables threat hunting, detection engineering, and gap analysis
-> **Intelligence Sharing:** Common language for discussing threats across organizations
+> **Framework Purpose:** Industry-standard classification of adversary tactics and techniques<br>
+> **Business Value:** Enables threat hunting, detection engineering, and gap analysis<br>
+> **Intelligence Sharing:** Common language for discussing threats across organizations<br>
 > **Key Takeaway:** Understanding attacker techniques enables proactive defense
 
 ### What is MITRE ATT&CK?
@@ -989,9 +989,9 @@ Then plan against the critical-priority gaps first, which here means Defense Eva
 > **Analyst note:** This section documents Pulsar RAT's functional modules as confirmed through static code analysis of `server.exe`. Each subsection leads with a confidence level and the specific code evidence that supports it. Defenders can use this detail to build targeted detection rules and evaluate which controls are directly tested by each capability.
 
 ### Executive Impact Summary
-> **Business Risk:** Critical. Complete system compromise possible
-> **Detection Difficulty:** High. Advanced evasion techniques present
-> **Remediation Complexity:** High. Multiple persistence mechanisms
+> **Business Risk:** Critical. Complete system compromise possible<br>
+> **Detection Difficulty:** High. Advanced evasion techniques present<br>
+> **Remediation Complexity:** High. Multiple persistence mechanisms<br>
 > **Key Takeaway:** Well-engineered malware requiring comprehensive response
 
 ### Quick Reference: Pulsar RAT Capabilities Matrix
@@ -1038,9 +1038,9 @@ Then plan against the critical-priority gaps first, which here means Defense Eva
 > **Analyst note:** Persistence mechanisms are the techniques malware uses to survive reboots and re-establish access after the user logs off. Pulsar implements two distinct persistence methods at different privilege levels, one standard (registry RunOnce) and one advanced (Windows Recovery Environment). The WinRE technique survives some OS reinstallation scenarios, which is why remediation decisions hinge on whether this method was activated.
 
 ### Executive Summary
-> **Persistence Risk:** High. Multiple mechanisms including advanced recovery partition abuse
-> **Detection Challenge:** Medium. Standard registry persistence is detectable; WinRE requires specialized analysis
-> **Remediation Impact:** High. May require complete system rebuild for assured removal
+> **Persistence Risk:** High. Multiple mechanisms including advanced recovery partition abuse<br>
+> **Detection Challenge:** Medium. Standard registry persistence is detectable; WinRE requires specialized analysis<br>
+> **Remediation Impact:** High. May require complete system rebuild for assured removal<br>
 > **Business Impact:** Survives standard remediation in some scenarios, enabling long-term access
 
 I hold this HIGH, because the technique is present in the code, though verification is still required for specific systems.
@@ -1617,8 +1617,8 @@ The malware uses:
 ### 7. INCIDENT RESPONSE PROCEDURES
 
 ### Executive Impact Summary
-> **Response Urgency:** Critical. Immediate isolation required
-> **Business Disruption:** High. System rebuilds may be necessary
+> **Response Urgency:** Critical. Immediate isolation required<br>
+> **Business Disruption:** High. System rebuilds may be necessary<br>
 > **Decision Complexity:** High. Rebuild vs. cleanup requires careful consideration
 
 ### Quick Verification Guide
@@ -1922,8 +1922,8 @@ In practice most enterprise security teams default to rebuild for any RAT compro
 ### 8. LONG-TERM DEFENSIVE STRATEGY
 
 ### Executive Impact Summary
-> **Implementation Timeline:** Several weeks for initial EDR deployment
-> **Business Impact:** Some operational disruption during deployment
+> **Implementation Timeline:** Several weeks for initial EDR deployment<br>
+> **Business Impact:** Some operational disruption during deployment<br>
 > **Risk Reduction:** High. Prevents most commodity malware execution
 
 ### Endpoint Security Enhancements

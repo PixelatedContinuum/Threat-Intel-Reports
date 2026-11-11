@@ -47,7 +47,7 @@ new text. The other 3 rules already used the keyword and are untouched.
 ## 2026-09-09 — SIDs 3500103 and 3500104 moved Detection to Hunting
 
 **Rules:** `THL ShinyHunters DLS - HTTP Host Header shinyhunte.rs` (SID 3500103, vault SID
-9001001) and `THL ShinyHunters DLS - TLS SNI shinyhunte.rs` (SID 3500104, vault SID 9001002)
+9001001) and `THL ShinyHunters DLS - TLS SNI shinyhunte.rs` (SID 3500104, vault SID 9001002)<br>
 **Published:** 2026-04-17 · **Tier changed:** 2026-09-09 · **Feed:** 112 rules, unchanged
 (tier reclassification only; no SID renumbered, no rule added or removed)
 
@@ -97,7 +97,7 @@ once, exactly as these two are, and neither one implies the other.
 
 ## 2026-08-21 — SID 3500029 withdrawn
 
-**Rule:** `THL Inkognito KittenX Decommission Tombstone HTTP Response (Infrastructure Pivot Indicator)`
+**Rule:** `THL Inkognito KittenX Decommission Tombstone HTTP Response (Infrastructure Pivot Indicator)`<br>
 **Published:** 2026-05-16 · **Withdrawn:** 2026-08-21 · **Feed:** 99 rules → 98
 
 **If you ran this rule, treat every alert it produced as a false positive.** No action is
