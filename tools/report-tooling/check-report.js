@@ -343,6 +343,15 @@ function checkDom(doc, label) {
 
 function checkMarkdown(md, label) {
   if (DEPS_REASON) return depsNotChecked(label || 'report');
+  /* A report with no text has no tables, no headings and no front matter, so every
+     sub-check passes on nothing. Zero bytes measured is NOT CHECKED, never PASS. */
+  if (typeof md !== 'string' || !md.trim()) {
+    var why = 'report is empty (0 non-whitespace bytes), so nothing was verified';
+    return { status: 'NOT CHECKED', path: label || 'report', reason: why, problems: [], missing: [],
+             glossary: glossaryNotChecked(why), figureNav: figureNavNotChecked(why),
+             tiers: tiersNotChecked(why), tabs: tabsNotChecked(why),
+             revisions: revisionsNotChecked(why) };
+  }
   var html = extractTables(md).join('\n');
   var doc = new JSDOM('<body>' + html + '</body>').window.document;
   var r = checkDom(doc, label || 'report');

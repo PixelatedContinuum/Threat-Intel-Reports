@@ -153,7 +153,7 @@ function checkVictimNaming(slugs) {
         text: 'the staged diff introduces no token absent from the text it replaced, so it ' +
               'cannot publish a name that was not already published. The gate was not run.' };
     }
-    var r = cp.spawnSync('python3', [VICTIM_GATE, '--slug', slug, '--publish'],
+    var r = cp.spawnSync('python3', [VICTIM_GATE, '--slug', slug, '--site', ROOT, '--publish'],
       { encoding: 'utf8' });
     if (r.error) {
       return { label: 'victim naming: ' + slug, status: 'NOT CHECKED',

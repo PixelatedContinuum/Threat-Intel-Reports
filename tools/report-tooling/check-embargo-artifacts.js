@@ -76,10 +76,12 @@ try {
 var notChecked = [];
 var problems = [];
 var embargoed = 0;
+var scanned = 0;
 
 dirs.forEach(function (dir) {
   var idx = path.join(REPORTS, dir, 'index.md');
   if (!fs.existsSync(idx)) return;
+  scanned++;
 
   var fm = frontMatter(idx);
   if (fm === null) {
@@ -130,6 +132,15 @@ if (problems.length) {
   process.exit(1);
 }
 
-console.log('PASS  ' + dirs.length + ' report(s) scanned, ' + embargoed +
+/* Floor: a gate that read no report index measured nothing. Zero embargoed is a real answer;
+   zero scanned is not. REPO and the reports directory can be set by a cwd or checkout that
+   holds no reports at all. */
+if (scanned === 0) {
+  console.log('NOT CHECKED  0 report index.md files read under ' + path.relative(REPO, REPORTS) +
+    ' (' + dirs.length + ' directories listed), so no embargo flag was evaluated');
+  process.exit(2);
+}
+
+console.log('PASS  ' + scanned + ' report(s) scanned, ' + embargoed +
   ' embargoed, none with an IOC feed in the repo');
 process.exit(0);
