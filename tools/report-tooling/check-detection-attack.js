@@ -141,6 +141,13 @@ function main() {
     process.exit(1);
   }
 
+  // Floor: no detection page in the manifest means every per-page check above passed on
+  // nothing. NOT CHECKED, never PASS.
+  if (pageCount === 0) {
+    console.log('NOT CHECKED  0 detection page(s) in the manifest, so no ATT&CK strip data was verified');
+    process.exit(2);
+  }
+
   console.log('PASS  ' + OUT);
   console.log('   note  ' + pageCount + ' detection page(s), ' + rowCount +
     ' technique row(s), ATT&CK ' + catalog.version +

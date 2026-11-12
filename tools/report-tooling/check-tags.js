@@ -37,6 +37,14 @@ if (r.status === 'NOT CHECKED') {
   process.exit(2);
 }
 
+/* Floor, in the CLI and not the helper (the helper's tests rely on checking a vocabulary against
+   an empty catalog). A run that read 0 entries or 0 tags measured nothing: NOT CHECKED. */
+if (r.status === 'PASS' && r.counts && (r.counts.entries === 0 || r.counts.tags === 0)) {
+  console.log('NOT CHECKED  the catalog gave ' + r.counts.entries + ' entries and ' + r.counts.tags +
+    ' tags to check, so no catalog tag was verified. Restore _data/catalog.yml and re-run.');
+  process.exit(2);
+}
+
 var head = r.status + '  ' + CATALOG + ' against ' + TAGS;
 if (r.counts) {
   head += '  (' + r.counts.entries + ' entries, ' + r.counts.tags + ' tags, ' +

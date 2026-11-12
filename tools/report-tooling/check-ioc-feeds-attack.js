@@ -143,6 +143,15 @@ function main() {
     return;
   }
 
+  // Floor: feeds parsed but not one technique-ID-shaped value in any of them means this run
+  // measured nothing (an emptied or renamed field looks exactly like this). NOT CHECKED.
+  if (valuesChecked === 0) {
+    console.log('NOT CHECKED  ' + scanned + ' feed(s) parsed, 0 bare technique-ID-shaped ' +
+      'value(s) found, so no ATT&CK ID was checked');
+    process.exit(2);
+    return;
+  }
+
   console.log('PASS  ' + scanned + ' feed(s), ' + valuesChecked +
     ' bare technique-ID-shaped value(s) checked against ATT&CK ' + catalog.version +
     ' (' + catalog.count + ' techniques)');
