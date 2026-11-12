@@ -42,7 +42,7 @@ test('the layouts call the shared include: page.html for every non-report page (
   const page = read('_layouts/page.html');
   assert.match(page, /include defang-html\.html html=content unlink=false/);
   assert.match(page, /if page\.url == '\/wire\/'/);
-  assert.match(page, /\{% elsif page\.url contains '\/report-templates\/' or page\.url contains '\/changelog\/' %\}\{\{ content \}\}\{% else %\}\{% include defang-html\.html html=content %\}\{% endif %\}/, 'the working docs keep their text (decision 7)');
+  assert.match(page, /\{% elsif page\.url contains '\/changelog\/' %\}\{\{ content \}\}\{% else %\}\{% include defang-html\.html html=content %\}\{% endif %\}/, 'the working docs keep their text (decision 7)');
   const post = read('_layouts/post.html');
   assert.match(post, /\{% if page\.path contains 'hunting-detections' %\}\{% include defang-html\.html html=content %\}\{% else %\}\{\{ _body \}\}\{% endif %\}/, 'a report body is never run through the defang include; _body is content with an anchor id added to its ATT&CK heading (T-0603 A2)');
 });
@@ -324,9 +324,12 @@ test('check-defang --site: a clean fixture PASSes with its denominators, each in
   assert.equal(lit.status, 0, lit.stdout);
   assert.match(lit.stdout, /literal\s+2 IOC viewer cell/);
   // working docs and changelogs are excluded and said so; a report page is SCANNED (T-0500.1.7.4 ship: it is no longer excluded)
-  const ex = gate(fixtureSite({ 'index.html': '<p>x</p>', 'report-templates/index.html': '198.51.100.17', 'feeds/misp/changelog/index.html': '198.51.100.17' }));
+  const ex = gate(fixtureSite({ 'index.html': '<p>x</p>', 'feeds/misp/changelog/index.html': '198.51.100.17' }));
   assert.equal(ex.status, 0, ex.stdout);
-  assert.match(ex.stdout, /excluded\s+1 feed changelog \(decision 7\); 1 working doc \(decision 7\)/);
+  assert.match(ex.stdout, /excluded\s+1 feed changelog \(decision 7\)/);
+  // control (T-0605 L15): the /report-templates/ exemption went with the page, so a page at that path is scanned like any other
+  const rt = gate(fixtureSite({ 'index.html': '<p>x</p>', 'report-templates/index.html': '198.51.100.17' }));
+  assert.equal(rt.status, 1, rt.stdout);
   assert.doesNotMatch(ex.stdout, /report page \(source lint\)/);
   // report pages: a raw title, a raw citation, a raw BibTeX block, a link to an IP and a link to a host the page names defanged each FAIL; the clean twin PASSes
   const REP_OK = '<h1>Open Directory 198[.]51[.]100[.]17</h1><p class="hl-cite__text">Harrison, J. <em>Open Directory 198[.]51[.]100[.]17</em>. https://the-hunters-ledger.com/reports/x-198.51.100.17/</p>' +

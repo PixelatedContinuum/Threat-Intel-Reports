@@ -51,7 +51,7 @@ hl_idx: single
 <div class="hl-feat-grid">
   <div class="hl-feat" style="--fa: #58a6ff;">
     <div class="hl-feat__dot"></div>
-    <div class="hl-feat__stat">112 Suricata rules</div>
+    <div class="hl-feat__stat">130 Suricata rules</div>
     <p class="hl-feat__desc">In a consolidated feed registered for suricata-update, running in stacks whose operators have never opened this site.</p>
   </div>
   <div class="hl-feat" style="--fa: #4ade80;">
@@ -66,7 +66,7 @@ hl_idx: single
   </div>
 </div>
 
-<p style="color: var(--hl-text-secondary); font-size: 0.9em; line-height: 1.6; margin: 14px 2px 2px;">And the reach compounds beyond the site. Every campaign also ships as <strong>machine-readable intelligence</strong>, a consolidated Suricata feed currently carrying 112 rules across 35 campaigns, 57 IOC feeds in JSON, and 41 STIX bundles built for OpenCTI and MISP. All of it is public and machine-readable, so it can go straight into a detection stack without anyone loading a page here. That is reach that does not depend on a visit to the site.</p>
+<p style="color: var(--hl-text-secondary); font-size: 0.9em; line-height: 1.6; margin: 14px 2px 2px;">And the reach compounds beyond the site. Every campaign also ships as <strong>machine-readable intelligence</strong>, a consolidated Suricata feed currently carrying 130 rules across 38 campaigns, 60 IOC feeds in JSON, and 44 STIX bundles built for OpenCTI and MISP. All of it is public and machine-readable, so it can go straight into a detection stack without anyone loading a page here. That is reach that does not depend on a visit to the site.</p>
 
 {% include section-header.html label="Sponsorship Tiers" accent="#b8902f" %}
 

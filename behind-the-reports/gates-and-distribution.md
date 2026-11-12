@@ -96,11 +96,11 @@ Publication defaults to an unlisted preview. The pages are live and reachable by
 
 A single catalog entry drives everything. One record per campaign produces the report card, the detection page listing, the IOC feed listing, and the home page block, so the three deliverables cannot drift apart or go live half-listed.
 
-Publishing also regenerates the consolidated public Suricata feed, currently 112 rules, and revalidates the whole thing against a live engine before staging it. That is a deliberate backstop. If a rule ever slipped past authoring, because the sensor was down or because I hand-edited something, it gets caught before it reaches anyone pointing an IDS at the feed. When the engine rejects the batch it suppresses per-rule errors, so the validator bisects the file to name exactly which rule failed rather than reporting that something, somewhere, is broken.
+Publishing also regenerates the consolidated public Suricata feed, currently 130 rules, and revalidates the whole thing against a live engine before staging it. That is a deliberate backstop. If a rule ever slipped past authoring, because the sensor was down or because I hand-edited something, it gets caught before it reaches anyone pointing an IDS at the feed. When the engine rejects the batch it suppresses per-rule errors, so the validator bisects the file to name exactly which rule failed rather than reporting that something, somewhere, is broken.
 
 ### Machine-readable, for the platforms that want it
 
-Every published campaign also becomes a STIX 2.1 bundle, 41 of them so far, modelling the report as a linked graph of indicators, malware, tools, infrastructure, techniques, vulnerabilities, and the actor where one can be named. They import into OpenCTI, MISP, or anything else that speaks STIX.
+Every published campaign also becomes a STIX 2.1 bundle, 44 of them so far, modelling the report as a linked graph of indicators, malware, tools, infrastructure, techniques, vulnerabilities, and the actor where one can be named. They import into OpenCTI, MISP, or anything else that speaks STIX.
 
 Two design decisions in there matter more than the format. Object IDs are deterministic, so re-importing an updated bundle upserts rather than duplicating, and shared entities resolve to a single node across every campaign. That means a platform can answer "show me every report touching this technique, this address, this actor" instead of holding thirty-eight disconnected islands.
 

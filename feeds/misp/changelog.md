@@ -5,6 +5,12 @@ permalink: /feeds/misp/changelog/
 description: "Every event withdrawn from The Hunters Ledger MISP feed, with the reason, so a subscriber who matched on it can find out what it was."
 ---
 
+<header class="hl-page-header hl-d-plate" style="--ph-accent: #22d3ee;">
+  <div class="hl-page-header__label hl-d-kicker">MISP Feed</div>
+  <h1 class="hl-page-header__title">Every withdrawn event, and why</h1>
+  <div class="hl-page-header__desc">Every event taken out of the feed after it published, with the reason, so a subscriber who matched on an attribute can find out what it was. A withdrawn UUID is never reissued.</div>
+</header>
+
 Changes to the MISP feed at [`/feeds/misp/`](/feeds/misp/).
 
 Events are added as campaigns publish and updated in place when a report, a detection page or
