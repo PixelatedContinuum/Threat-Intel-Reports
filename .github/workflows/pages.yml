@@ -250,6 +250,20 @@ jobs:
             *) echo "::error::check-links.js --site FAILED (exit $rc): a built page links to a page or file that is not in the build"; exit 1 ;;
           esac
 
+      # T-0605 L19: the Detections, IOC and STIX panels of every report open inside the viewport, with their first item uncovered and without moving the page, at 375 and 1280 px, in headless Chrome on the built _site (check-browser-hero.js; its own planted-defect controls must fail). Exit 2 (no browser, no report page, a bad argument) fails the job: a gate that opened nothing is not a pass.
+      - name: Gate the hero panels in a real browser
+        working-directory: tools/report-tooling
+        run: |
+          set +e
+          HL_SITE_DIR=../../_site node check-browser-hero.js
+          rc=$?
+          set -e
+          case $rc in
+            0) echo "PASS         check-browser-hero.js" ;;
+            2) echo "::error::check-browser-hero.js NOT CHECKED (exit 2): no browser, no built report page, or a bad argument"; exit 1 ;;
+            *) echo "::error::check-browser-hero.js FAILED (exit $rc): a hero panel opens off screen, under another element, or moves the page"; exit 1 ;;
+          esac
+
       # A report's detection_page, ioc_feed and stix_bundle values must each name a page or file that exists (check-companions.js, T-0603).
       # Until the review of T-0603's final this gate ran only from `npm run verify`, so a push could deploy a dangling value.
       - name: Gate the reports' companion links

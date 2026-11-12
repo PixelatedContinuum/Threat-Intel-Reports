@@ -1021,7 +1021,7 @@ the coverage above is narrower than the rule set.</em></p>
 <script src="{{ '/assets/js/hl-facts.js' | relative_url }}?v=1" defer></script>
 {% unless page.glossary == false %}
 <script type="application/json" id="hl-glossary-data">{{ site.data.glossary | jsonify }}</script>
-<script src="{{ '/assets/js/glossary.js' | relative_url }}?v=1" defer></script>
+<script src="{{ '/assets/js/glossary.js' | relative_url }}?v=20261112.1" defer></script>
 {% endunless %}
 {% if page.figure_nav %}
 <script type="application/json" id="hl-figure-nav">{{ page.figure_nav | jsonify }}</script>
@@ -1061,7 +1061,7 @@ the coverage above is narrower than the rule set.</em></p>
 {%- assign hl_sd_tbl = site.data.ioc_tables[hl_sd_ioc] -%}
 {%- capture hl_sd_json -%}{"detection_page":{{ page.detection_page | default: '' | jsonify }},"techniques":{% if hl_sd_atk and page.detection_page %}{"total":{{ hl_sd_atk.total | default: 0 }},"tactics":{{ hl_sd_atk.tactics | default: 0 }},"rows":[{% for r in hl_sd_atk.rows %}{"tactic":{{ r.tactic | jsonify }},"id":{{ r.id | jsonify }},"name":{{ r.name | jsonify }}}{% unless forloop.last %},{% endunless %}{% endfor %}]}{% else %}null{% endif %},"rules":{% if hl_sd_man and page.detection_page %}{"total":{{ hl_sd_man.size }},"sigma":{{ hl_sd_man | where: 'engine', 'sigma' | size }},"yara":{{ hl_sd_man | where: 'engine', 'yara' | size }},"suricata":{{ hl_sd_man | where: 'engine', 'suricata' | size }},"detection":{{ hl_sd_man | where: 'tier', 'Detection' | size }},"hunting":{{ hl_sd_man | where: 'tier', 'Hunting' | size }}}{% else %}null{% endif %},"iocs":{% if hl_sd_tbl and page.ioc_feed %}{"total":{{ hl_sd_tbl.total | default: 0 }},"feed_url":{{ hl_sd_tbl.feed_url | default: '' | jsonify }}}{% else %}null{% endif %}}{%- endcapture -%}
 <script type="application/json" id="hl-report-site-data" data-rv-chrome data-pagefind-ignore>{{ hl_sd_json | replace: '<', '\u003c' | replace: '>', '\u003e' | replace: '&', '\u0026' }}</script>
-<script src="{{ '/assets/js/hl-report-tabs.js' | relative_url }}?v=20261104.1" defer data-rv-chrome data-pagefind-ignore></script>{% else %}<script src="{{ '/assets/js/register-switch.js' | relative_url }}?v=1" defer></script>{% endif %}
+<script src="{{ '/assets/js/hl-report-tabs.js' | relative_url }}?v=20261112.1" defer data-rv-chrome data-pagefind-ignore></script>{% else %}<script src="{{ '/assets/js/register-switch.js' | relative_url }}?v=1" defer></script>{% endif %}
 {% if page.path contains "hunting-detections" %}
 {% assign hl_slug = page.path | split: "/" | last | remove: ".md" %}
 {% assign hl_manifest = site.data.detection_manifests[hl_slug] %}

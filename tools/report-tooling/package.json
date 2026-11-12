@@ -19,6 +19,7 @@
     "verify:browser:report": "node check-browser-report.js",
     "verify:browser:downloads": "node check-browser-downloads.js",
     "verify:browser:home": "node check-browser-home.js",
+    "verify:browser:hero": "node check-browser-hero.js",
     "verify:browser:sweep": "node check-browser-sweep.js"
   },
   "devDependencies": {
