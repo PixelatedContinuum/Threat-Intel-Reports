@@ -79,11 +79,8 @@ test('v6: every tab, menu entry and next/previous card carries its hue token, th
     assert.deepEqual(q.map(a=>a.style.getPropertyValue('--acc')),['#4ade80','#f87171','#22d3ee'],'the page\'s own resource links keep one colour per kind; Read the full report and Share are the plate\'s own buttons');
     assert.equal(f.d.querySelector('.hl-share-btn'),null,'the Share button is gone from the resource row');
     const sb=f.d.querySelector('.hl-post-header > .hl-rv-actions .hl-rv-share .hl-rv-share-btn');assert.ok(sb,'Share is the last button of the plate column');assert.equal(sb.getAttribute('aria-label'),'Share this report');
-    for(const t of TOKENS){
-      assert.match(css,new RegExp('--rv-hue-'+t+': #[0-9a-f]{6};'),'token for '+t);
-      assert.match(css,new RegExp('\\[data-rv-hue="'+t+'"\\][^{]*\\{ --acc: var\\(--rv-hue-'+t+'\\); \\}'),'rule for '+t);
-    }
-    assert.equal(new Set(TOKENS.map(t=>css.match(new RegExp('--rv-hue-'+t+': (#[0-9a-f]{6});'))[1])).size>=6,true,'at most one repeated hue: the site has five clean section hues for seven tabs');
+    assert.match(css,/\.hl-report-page \{ --acc: #58a6ff; \}/,'one accent for every tab: the shared hue is the link blue');
+    assert.doesNotMatch(css,/\[data-rv-hue="[a-z]+"\][^{]*\{\s*--acc:/,'no per-tab accent rule: every tab resolves to the one hue');
   }finally{f.w.close();}
 });
 test('F2: aria-label sits only on elements that can carry one',()=>{

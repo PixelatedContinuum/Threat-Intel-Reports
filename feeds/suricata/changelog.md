@@ -4,6 +4,12 @@ layout: page
 permalink: /feeds/suricata/changelog/
 ---
 
+<header class="hl-page-header hl-d-plate" style="--ph-accent: #4ade80;">
+  <div class="hl-page-header__label hl-d-kicker">Suricata Feed</div>
+  <h1 class="hl-page-header__title">Every withdrawn SID, and why</h1>
+  <div class="hl-page-header__desc">Every rule taken out of the consolidated feed after it published, with the reason, so a subscriber who alerted on a SID can find out what it matched. Withdrawn SIDs are never reissued.</div>
+</header>
+
 Changes to the consolidated Suricata feed at
 [`/feeds/suricata/hunters-ledger.rules`](/feeds/suricata/hunters-ledger.rules),
 distributed as the `suricata-update` source `the-hunters-ledger/open` under registered
@@ -143,7 +149,7 @@ operator fingerprints, the custom `X-Admin-Token` header and Yandex Webmaster ID
 passing control. They stand.
 
 Full retraction, including what it costs the attribution:
-[§4.6 of the Inkognito report](/reports/inkognito-russian-vpn-phishing-185-221-196-118-20260516/#46-operator-fingerprint-signatures--yandexgoogle-account-control-asset-hashes-and-one-retraction).
+[§4.6 of the Inkognito report](/reports/inkognito-russian-vpn-phishing-185-221-196-118-20260516/#operator-fingerprint-signatures-yandexgoogle-account-control-asset-hashes-and-one-retraction).
 
 <details markdown="1">
 <summary>Why this got published, and what changed as a result</summary>

@@ -13,16 +13,16 @@
      every section in order (print drops the panel chrome and the tab bar);
    - the dark theme only: the site pins dark, so there is no light mirror of these tokens.
 
-   Accents (site section hues, custom.scss section pages): Overview purple (Reports), Victims amber
-   (Impact), Chain orange (Techniques), Timeline blue (The Wire), Attribution fuchsia (Actors),
-   Indicators cyan (STIX), Confidence teal (Families). Red and green stay with status and with the
-   Detections and IOC feed buttons. */
+   Accent: one for the whole report page, the link blue (#58a6ff). The accent is used for lines,
+   marks, labels and links, never as a fill, and it does not follow the selected tab (concept 3,
+   T-0556 w4: a hue per tab was tried and dropped). Red and green stay with status and with the
+   Detections and IOC feed buttons; the site section hues in custom.scss are untouched, and the
+   per-item colours (severity, confidence, distribution) are what separates one row from another. */
 
 /* ---------- Tokens ---------- */
 html:has(.hl-report-page) {
-  /* elevation ladder (v6.1): well #0b0b0b < page #111111 < panel #1c1c1c < raised bar/cell #262626; panels carry a 1px #3a3a3a border.
+  /* elevation ladder (v6.1): page #111111 < panel #1c1c1c < raised bar/cell #262626; panels carry a 1px #3a3a3a border.
      The site tokens (#1a1a1a card on #111 page) were one step apart and read as one surface, so the report scope sets its own ladder. */
-  --rv-well: #0b0b0b;
   --rv-bg: var(--hl-bg-page, #111111);
   --rv-card: #1c1c1c;
   --rv-row: #262626;
@@ -40,23 +40,10 @@ html:has(.hl-report-page) {
   --rv-radius: 3px;
   --rv-pad: 24px;
   --rv-mono: var(--hl-font-mono);
-  --rv-hue-overview: #a371f7;
-  --rv-hue-victims: #e879f9; /* Actors hue: Impact amber (#fbbf24) reads as the site's medium-severity label colour on the tier bars */
-  --rv-hue-chain: #fb923c;
-  --rv-hue-timeline: #58a6ff;
-  --rv-hue-attribution: #e879f9;
-  --rv-hue-indicators: #22d3ee;
-  --rv-hue-confidence: #2dd4bf;
 }
-/* The accent in force follows the selected tab (hl-report-tabs.js sets data-rv-hue on the page). */
-.hl-report-page { --acc: var(--rv-hue-overview); }
-.hl-report-page[data-rv-hue="overview"], .hl-rv-tabs [data-rv-hue="overview"], .hl-rv-nextprev [data-rv-hue="overview"], .hl-rv-menu-item[data-rv-hue="overview"] { --acc: var(--rv-hue-overview); }
-.hl-report-page[data-rv-hue="victims"], .hl-rv-tabs [data-rv-hue="victims"], .hl-rv-nextprev [data-rv-hue="victims"], .hl-rv-menu-item[data-rv-hue="victims"] { --acc: var(--rv-hue-victims); }
-.hl-report-page[data-rv-hue="chain"], .hl-rv-tabs [data-rv-hue="chain"], .hl-rv-nextprev [data-rv-hue="chain"], .hl-rv-menu-item[data-rv-hue="chain"] { --acc: var(--rv-hue-chain); }
-.hl-report-page[data-rv-hue="timeline"], .hl-rv-tabs [data-rv-hue="timeline"], .hl-rv-nextprev [data-rv-hue="timeline"], .hl-rv-menu-item[data-rv-hue="timeline"] { --acc: var(--rv-hue-timeline); }
-.hl-report-page[data-rv-hue="attribution"], .hl-rv-tabs [data-rv-hue="attribution"], .hl-rv-nextprev [data-rv-hue="attribution"], .hl-rv-menu-item[data-rv-hue="attribution"] { --acc: var(--rv-hue-attribution); }
-.hl-report-page[data-rv-hue="indicators"], .hl-rv-tabs [data-rv-hue="indicators"], .hl-rv-nextprev [data-rv-hue="indicators"], .hl-rv-menu-item[data-rv-hue="indicators"] { --acc: var(--rv-hue-indicators); }
-.hl-report-page[data-rv-hue="confidence"], .hl-rv-tabs [data-rv-hue="confidence"], .hl-rv-nextprev [data-rv-hue="confidence"], .hl-rv-menu-item[data-rv-hue="confidence"] { --acc: var(--rv-hue-confidence); }
+/* One accent for the report: the link blue, on every tab (hl-report-tabs.js still stamps data-rv-hue
+   on the page, the tabs, the menu and the previous/next cards; nothing reads it for colour). */
+.hl-report-page { --acc: #58a6ff; }
 
 /* ---------- Frame ---------- */
 html:has(.hl-report-page) main.content { max-width: 1240px !important; padding-inline: 20px !important; }
@@ -195,7 +182,7 @@ a.hl-rv-feat__item:hover .hl-rv-feat__cta, a.hl-rv-featcard__item:hover .hl-rv-f
 .hl-rv-feat--many .hl-rv-feat__tagline, .hl-rv-feat--many .hl-rv-feat__cta { display: none; }
 .hl-rv-featcard { display: none; }
 @media (min-width: 1440px) {
-  html:has(.hl-report-page) { --rv-rail-gap: var(--hl-rail-gap); --rv-card-w: var(--hl-card-w); --rv-card-left: var(--hl-card-left); } /* a deliberate gap between the card and the report column: the card keeps its 140px floor and sits 8px from the screen edge at 1440 and 1600, and from 1800px it moves out to leave 48-56px (it hugged the plate, 4px, at every width) */
+  html:has(.hl-report-page) { --rv-card-w: var(--hl-card-w); --rv-card-left: var(--hl-card-left); } /* the card's width and left offset come from the one geometry block in custom.scss; it keeps its 140px floor and sits 8px from the screen edge at 1440 and 1600, and from 1800px it moves out to leave 48-56px (it hugged the plate, 4px, at every width) */
   .hl-rv-feat { display: none; }
   .hl-rv-featcard {
     display: flex; flex-direction: column; gap: 10px; position: fixed; z-index: 75; left: var(--rv-card-left); top: calc(var(--hl-rv-nav-h, 64px) + 22px); width: var(--rv-card-w);
@@ -641,7 +628,7 @@ a.hl-rv-feat__item:hover .hl-rv-feat__cta, a.hl-rv-featcard__item:hover .hl-rv-f
 /* ---------- Floating and body-level pieces ---------- */
 .hl-rv-back { position: fixed; z-index: 80; bottom: calc(16px + env(safe-area-inset-bottom, 0px)); right: max(16px, env(safe-area-inset-right, 0px)); padding: 0 14px; min-height: 44px; min-width: 44px; background: var(--rv-card); color: var(--rv-text); border: 1px solid var(--rv-line); border-radius: var(--rv-radius); font-family: inherit; font-size: var(--rv-fs); line-height: 1.4; cursor: pointer; }
 html:has(.hl-report-page) .hl-toast__close { min-width: 44px; min-height: 44px; }
-html:has(.hl-report-page) .hl-toast__close:focus-visible { outline: 2px solid var(--rv-hue-overview); outline-offset: 2px; }
+html:has(.hl-report-page) .hl-toast__close:focus-visible { outline: 2px solid var(--acc, #58a6ff); outline-offset: 2px; }
 html:has(.hl-report-page) .hl-toast__label { font-size: var(--rv-fs); }
 @media screen and (max-width: 900px) {
   html:has(.hl-report-page) .hl-toast { display: block; width: min(300px, calc(100vw - 32px)); left: 16px; bottom: calc(76px + env(safe-area-inset-bottom, 0px)); padding-right: 62px; }
@@ -1140,7 +1127,6 @@ html:has(.hl-report-page) .hl-toast__label { font-size: var(--rv-fs); }
 html:has(.hl-report-page) {
   --rv-link: #58a6ff;
   /* one accent for the report: concept 3 has the link blue, not a hue per tab. Status words and data fills keep their own colours. */
-  --rv-hue-overview: #58a6ff; --rv-hue-victims: #58a6ff; --rv-hue-chain: #58a6ff; --rv-hue-timeline: #58a6ff; --rv-hue-attribution: #58a6ff; --rv-hue-indicators: #58a6ff; --rv-hue-confidence: #58a6ff;
   --rv-card: #1a1a1a; --rv-line: #2a2a2a; --rv-row-line: #2a2a2a; --rv-row: #1f1f1f;
 }
 

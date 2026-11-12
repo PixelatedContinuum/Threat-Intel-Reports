@@ -36,7 +36,7 @@ test('CSS: the featured sponsor is the gold panel (band above the plate, margin 
   assert.ok(Number((css.match(/\.hl-rv-bar \{\s*position: sticky; z-index: (\d+)/) || [])[1]) < 75, 'the sticky bar sits below the card (z-index 60 against 75)');
 });
 test('CSS: the page top is a ladder of separate containers 24px apart: plate, tab row, toolbar, tab title, view, sections (design D)', () => {
-  assert.match(css, /--rv-well: #0b0b0b;[\s\S]*--rv-card: #1c1c1c;[\s\S]*--rv-row: #262626;[\s\S]*--rv-line: #3a3a3a;/);
+  assert.match(css, /--rv-bg: var\(--hl-bg-page, #111111\);[\s\S]*--rv-card: #1c1c1c;[\s\S]*--rv-row: #262626;[\s\S]*--rv-line: #3a3a3a;/, 'the elevation ladder, bottom to top');
   assert.match(css, /margin: 0 0 24px; position: relative;\n\}/, 'plate');
   assert.match(css, /\.hl-rv-tabs \{\s*display: flex; gap: 6px; margin: 0 0 24px; padding: 0; background: none; border: 0;/, 'tab row: seven chips 6px apart');
   assert.match(css, /\.hl-report-page \.hl-rv-tabs button \{[^}]*background: #14171c/, 'idle chips');

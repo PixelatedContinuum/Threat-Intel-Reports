@@ -31,7 +31,7 @@ layout: page
 {%- assign n_det = t.detections.size | default: 0 -%}
 {%- assign n_tac = t.tactics.size | default: 0 -%}
 {%- assign _parent = nil -%}{%- if page.technique_id contains "." -%}{%- assign _parent = page.technique_id | split: "." | first -%}{%- endif -%}
-<div class="hl-xref hl-dash">
+<div class="hl-xref hl-dash" data-pagefind-weight="0.4">
 
   <div class="hl-d-kpis" style="--fc: 4;">
     {%- capture _cap -%}Report{% if n_rep != 1 %}s{% endif %}{%- endcapture -%}

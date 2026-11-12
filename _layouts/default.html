@@ -61,7 +61,26 @@
     {% if page.url == '/subscribe/' %}
     <script async src="https://eocampaign1.com/form/68e56ce4-2980-11f1-960c-1d8405c03c10.js" data-form="68e56ce4-2980-11f1-960c-1d8405c03c10"></script>
     {% endif %}
+    {% comment %}
+      T-0605 L06: c3-cover.js only fills the hex texture of a cover, so only the pages that print a
+      cover load it: the home page, every actor and family page (their header always carries one),
+      and a report or detection page whose catalog entry has cover_label (post.html prints the cover
+      only then). Measured on the T-0605 build: 194 of 605 pages carry a cover.
+    {% endcomment %}
+    {%- assign _c3_cover = false -%}
+    {%- if page.url == '/' or page.layout == 'actor' or page.layout == 'family' -%}
+      {%- assign _c3_cover = true -%}
+    {%- elsif page.layout == 'post' -%}
+      {%- if page.path contains 'hunting-detections' -%}
+        {%- for _e in site.data.catalog.entries -%}{%- assign _e1 = _e.detection_url | append: '/' -%}{%- if _e.detection_url and _e1 == page.url -%}{%- if _e.cover_label -%}{%- assign _c3_cover = true -%}{%- endif -%}{%- break -%}{%- endif -%}{%- endfor -%}
+      {%- else -%}
+        {%- assign _e = site.data.catalog.entries | where: "report_url", page.url | first -%}
+        {%- if _e.cover_label -%}{%- assign _c3_cover = true -%}{%- endif -%}
+      {%- endif -%}
+    {%- endif -%}
+    {% if _c3_cover %}
     <script defer src="{{ '/assets/js/c3-cover.js' | relative_url }}?v=1"></script>
+    {% endif %}
     <script>
     /* Masthead date: the build's date is printed in the HTML; show the reader's own today instead (T-0556 w2). */
     (function () {
