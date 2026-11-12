@@ -11,7 +11,7 @@
 #     (reports/index.md:14). A cover_label without report_url renders nowhere.
 #   detection_url, detection_title - the /hunting-detections/ card and the report's Detections button;
 #     detection_title replaces "Detection Rules - {title}" (hunting-detections/index.md:49), and the
-#     detection page finds its report entry by detection_url, slash or no slash (_layouts/post.html:45).
+#     detection page finds its report entry by detection_url written WITHOUT a trailing slash (_layouts/post.html:45 appends one).
 #     detection_title without detection_url has no reader.
 #   ioc_url, ioc_title - the /ioc-feeds/ card and the report's IOC button; the value is the raw feed
 #     filename, because the button strips .json or -iocs.json to reach /ioc-feeds/<slug>/

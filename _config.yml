@@ -73,7 +73,7 @@ include:
 
 exclude:
   - "README.md"
-  - "report-templates"
+  - "report-templates"   # T-0603 (Joseph, 2026-11-11): the working templates are no longer published; /report-templates/ returns 404 by decision
   - ".github/*"
   - "docs/*"
   - "tools/*"

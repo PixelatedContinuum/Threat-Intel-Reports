@@ -229,6 +229,20 @@ jobs:
             *) echo "::error::check-links.js --site FAILED (exit $rc): a built page links to a page or file that is not in the build"; exit 1 ;;
           esac
 
+      # A report's detection_page, ioc_feed and stix_bundle values must each name a page or file that exists (check-companions.js, T-0603).
+      # Until the review of T-0603's final this gate ran only from `npm run verify`, so a push could deploy a dangling value.
+      - name: Gate the reports' companion links
+        working-directory: tools/report-tooling
+        run: |
+          set +e
+          node check-companions.js
+          rc=$?
+          set -e
+          case $rc in
+            0) echo "PASS         check-companions.js" ;;
+            *) echo "::error::check-companions.js did not pass (exit $rc): a report names a detection page, IOC feed or STIX bundle that does not exist, or the gate could not run"; exit 1 ;;
+          esac
+
       - name: Sanity-check the build
         run: |
           set -eu
@@ -417,7 +431,8 @@ jobs:
           for r in ../../reports/*/index.md; do
             rc=0
             node check-report.js "$r" > /tmp/cr.txt 2>&1 || rc=$?
-            if [ $rc -eq 1 ]; then echo "::error::check-report FAILED for $r"; cat /tmp/cr.txt; fail=1; fi
+            if [ $rc -eq 1 ]; then echo "::error::check-report FAILED for $r"; cat /tmp/cr.txt; fail=1;
+            elif [ $rc -ne 0 ]; then echo "::warning::check-report NOT CHECKED (exit $rc) for $r"; cat /tmp/cr.txt; fi
           done
           echo "::endgroup::"
           exit $fail
