@@ -710,9 +710,16 @@ function checkCves(doc, now) {
   return { problems: problems, warnings: warnings, total: rows.length };
 }
 
-function verdict(status, reason, problems, warnings, counts, vulnWarnings, cveWarnings) {
+/* `data` and `stale` are the two classes the CLI's WIRE-VERDICT line carries for wire.yml: `stale` is
+   the age check alone, `data` is every other check on the values. A verdict that checked neither
+   (an absent file, no items, a clone behind origin, origin unreadable) is NOT CHECKED on both. */
+function verdict(status, reason, problems, warnings, counts, vulnWarnings, cveWarnings, parts) {
   return {
     status: status,
+    data: parts ? parts.data : (status === 'NOT CHECKED' ? 'NOT CHECKED' : status),
+    stale: parts ? parts.stale : (status === 'NOT CHECKED' ? 'NOT CHECKED' : status),
+    // A value fault filed under the page class (see check()); PASS when none.
+    valuePage: parts && parts.page ? parts.page : 'PASS',
     reason: reason || null,
     problems: problems || [],
     warnings: warnings || [],
@@ -934,9 +941,23 @@ function check(doc, sources, now, remote) {
     }
   });
 
+  /* Three kinds of fault in one list. `stale:` is the age check. An out-of-range VEDAS value is filed
+     under the PAGE class, not the data class (Joseph's design, 2026-11-11): the Vulnerabilities tab draws it,
+     the build must fail on it, and wire.yml must be kept, whereas a data FAIL drops the file and blanks the
+     Wire. Every other value fault stays data. */
+  var isStale = function (x) { return x.indexOf('stale:') === 0; };
+  var isVedas = function (x) { return / has vedas /.test(x); };
+  var staleFail = problems.some(isStale);
+  var vedasFail = problems.some(isVedas);
+  var dataFail = problems.some(function (x) { return !isStale(x) && !isVedas(x); });
   return verdict(problems.length ? 'FAIL' : 'PASS', null, problems, warnings.sort(), {
     total: items.length, research: nResearch, news: nNews, vuln: nVuln, vulns: v.total, cves: cv.total
-  }, v.warnings, cv.warnings);
+  }, v.warnings, cv.warnings, {
+    // No parseable generated_at means the age check could not run: NOT CHECKED, not a pass.
+    stale: staleFail ? 'FAIL' : (gen ? 'PASS' : 'NOT CHECKED'),
+    data: dataFail ? 'FAIL' : 'PASS',
+    page: vedasFail ? 'FAIL' : 'PASS'
+  });
 }
 
 /* Verifies wire/index.md still derives each row's day EXACTLY ONCE.
@@ -999,9 +1020,13 @@ function checkPage(src, includes) {
   }
 
   problems = problems.concat(checkExplanations(src));
-  problems = problems.concat(src.includes('data-wire-layout="days"') ? checkDayLayout(src, includes) : checkLegend(src));
+  /* The day layout is the only layout the page has had since T-0569. Its marker going missing must
+     fail, not select an older set of checks (T-0603 C25 removed the old legend and CVEs-tab checks). */
+  if (!src.includes('data-wire-layout="days"')) {
+    problems.push('the page lost data-wire-layout="days", the marker of the day layout every pin below is written for');
+  }
+  problems = problems.concat(checkDayLayout(src, includes));
   problems = problems.concat(checkTabNav(src));
-  if (!src.includes('data-wire-layout="days"')) problems = problems.concat(checkCvesTab(src, includes));
   problems = problems.concat(checkNkevRow(src));
   problems = problems.concat(checkHeadlineRow(src));
 
@@ -1085,113 +1110,9 @@ function checkExplanations(src) {
   return problems;
 }
 
-function checkLegend(src) {
-  var problems = [];
-  var capOpen = src.search(/\{%-?\s*capture\s+legend_html\s*-?%\}/);
-  var capEnd = src.search(/\{%-?\s*endcapture\s*-?%\}/);
-  if (capOpen < 0 || capEnd < capOpen) {
-    problems.push('the nKEVs legend is missing: no `capture legend_html` block, so ' +
-      'the chip and filter explanations the tab relies on are gone');
-    return problems;
-  }
-  var before = src.slice(0, capOpen);
-  var legend = src.slice(capOpen, capEnd);
-  problems = problems.concat(checkVedasCopy(legend, "legend"));
 
-  // 1. Attribution above the filter bar, outside the legend.
-  var line = before.match(/<p class="hl-wire__freshness hl-wire__freshness--v">[\s\S]*?<\/p>/);
-  if (line && !/VEDAS exploit maturity from <a [^>]*href="https:\/\/github\.com\/ARPSyndicate\/cve-scores"[^>]*>A\.R\.P\. Syndicate<\/a>/.test(line[0])) {
-    problems.push('the short v line lost VEDAS credit to A.R.P. Syndicate');
-  }
-  if (!line) {
-    problems.push('the short nKEVs line (hl-wire__freshness--v) is missing above the legend, ' +
-      'so the nKEV definition and the attribution are no longer visible without opening it');
-  } else {
-    ['vulncheck.com/kev', 'first.org/epss', 'vulns.xml', 'href="https://github.com/ARPSyndicate/cve-scores"'].forEach(function (needle) {
-      if (line[0].indexOf(needle) < 0) {
-        problems.push('the short nKEVs line no longer links ' + needle + ', so that ' +
-          'attribution or feed is visible only inside the legend');
-      }
-    });
-  }
-  if (!/I do not curate/.test(legend)) {
-    problems.push('the legend lost the statement that the data is VulnCheck\'s and not curated here');
-  }
-  if (!/Empirical Security/.test(legend)) {
-    problems.push('the legend lost the EPSS attribution (generated by Empirical Security)');
-  }
-
-  // 2. Samples are not interactive, not countable, not filterable.
-  if (/\sdata-[a-z]/i.test(legend)) {
-    problems.push('the legend markup carries a data-* attribute, which the filter script ' +
-      'would read as a filter attribute');
-  }
-  if (/<(button|input|details|summary|select|textarea)\b/i.test(legend)) {
-    problems.push('the legend markup holds a control or details element: samples must not be interactive');
-  }
-  if (/\sid\s*=/i.test(legend)) {
-    problems.push('the legend markup carries an id, but it is printed twice, so the id would repeat');
-  }
-  var anchors = legend.match(/<a\b[^>]*>/gi) || [];
-  anchors.forEach(function (a) {
-    if (!/href="https:\/\/(www\.vulncheck\.com|www\.first\.org|cve\.now|www\.exploit\.observer|github\.com\/ARPSyndicate\/cve-scores)[\/"]/.test(a)) {
-      problems.push('a link in the legend that is not an attribution link: ' + a +
-        ' (a sample chip must be a span, not a link)');
-    }
-  });
-
-  // 3. Printed twice, once in each place, never inside the grid.
-  var prints = src.match(/\{\{\s*legend_html\s*\}\}/g) || [];
-  if (prints.length !== 2) {
-    problems.push('the legend is printed ' + prints.length + ' time(s), expected 2 ' +
-      '(the aside and the narrow-screen details)');
-  }
-  if (!/<aside class="hl-post-toc hl-legend" aria-label="Legend"/.test(src)) {
-    problems.push('the legend aside is missing, or lost its aria-label="Legend" or the ' +
-      'report table of contents class hl-post-toc');
-  }
-  if (!/<details class="hl-legend-mobile"[^>]*>\s*<summary>Legend<\/summary>/.test(src)) {
-    problems.push('the narrow-screen legend details is missing or has no Legend summary');
-  }
-  var grid = src.match(/data-filter-item="\.hl-vuln"[\s\S]*?\{%-?\s*endfor\s*-?%\}\s*<\/div>/);
-  if (!grid) {
-    problems.push('could not find the vulnerability grid, so the legend could not be shown to sit outside it');
-  } else if (/legend_html|hl-legend/.test(grid[0])) {
-    problems.push('the legend sits inside the vulnerability grid, where the filter script would count it as rows');
-  }
-  if (src.indexOf('data-age-group=') !== -1) {
-    ['Listed within 30 days of disclosure', 'Disclosed 30 days to a year before listing', 'Older CVEs newly listed',
-     'Disclosure date unknown', 'Every VulnCheck KEV entry stays visible.',
-     'Filters open matching batches and counts show matching rows.'
-    ].forEach(function (pin) { if (src.indexOf(pin) < 0) problems.push('nKEVs lost grouping copy: ' + pin); });
-  }
-  return problems;
-}
-
-
-/* The CVEs tab (T-0522), as structure. Five guarantees live in the template and nothing else would
-   notice one breaking:
-
-   1. The tab exists and is reachable: a nav link to #cves, a section with that id inside the
-      filter scope, and the filter script's cache-bust (the same rule as the day gate).
-   2. The legend is printed twice from one capture, outside the grid, with samples that are not
-      interactive or countable (the nKEVs legend's rules, for its own capture).
-   3. The public claims survive: the callout still says being listed is not evidence of
-      exploitation, that the list is a selection, what it excludes and when a row moves to the nKEVs tab, that
-      Metasploit and Exploit-DB claims are confirmed against the publishers' indexes, the cap and the
-      ranking; the attribution line above it (the callout's sources since T-0531, when the callout
-      was cut to the selection rule and its limits) says what cve.now supplies, that the SSVC points
-      are CISA's own assessment, the cve.now licence, where scores, exploits and KEV products come
-      from, and links cve.now, FIRST and the feed.
-   4. Every data-driven value the tab draws is escaped (T-0407 found unescaped vendor and product
-      text on the nKEV tab). Checked on the tab's own markup and the shared include that draws the
-      cve.now chips: each {{ }} output either carries `escape` or is a number or literal the
-      template itself built.
-   5. The include's only link targets are the four it names (advisories, EUVD, Metasploit, Exploit-DB),
-      and nothing on the page or in the include mentions a GitHub proof of concept (Revision 2).
-
-   `includes` is { name: text } for the _includes this tab uses, or absent when they could not be
-   read (then 5 and the include half of 4 are NOT CHECKED, said in a problem line, never a pass). */
+/* Liquid outputs a wire template may print without `escape`: names the template builds as numbers or
+   literals itself (T-0522). unescapedOutputs() flags every other {{ }} output. */
 var SAFE_OUT = /^(?:c_[a-z]+|ex_n|msf_len|edb_len|kn|w_pc|ep_pct|pc_n|pc_sfx|st_n|rn_rules|sev|sev\s*\|\s*upcase|vc|cves_legend_html|wire\.window_days|wire\.cves\.size|g\.items\.size|forloop\.index|sg\s*\|\s*join:\s*'\|'|'[^']*'\s*\|\s*relative_url)$/;
 // An expression ending in a numeric filter yields a number whatever the data held.
 var NUMERIC_END = /\|\s*(?:round(?::\s*\d+)?|times:\s*[\d.]+|plus:\s*\d+|minus:\s*\d+|size|floor|modulo:\s*\d+)\s*$/;
@@ -1302,164 +1223,6 @@ function checkTabNav(src) {
   });
   return problems;
 }
-function checkCvesTab(src, includes) {
-  var problems = [];
-  var open = src.search(/<section id="cves"/);
-  if (open < 0) {
-    problems.push('the CVEs tab is missing: no <section id="cves">');
-    return problems;
-  }
-  var secEnd = src.indexOf('</section>', open);
-  var sec = src.slice(open, secEnd < 0 ? src.length : secEnd);
-  if (!/<section id="cves" class="hl-wtabs__sec" data-filter-scope[\s>]/.test(src)) {
-    problems.push('the CVEs section lost its hl-wtabs__sec class or data-filter-scope, so the tab CSS or its own filter bar would not find it');
-  }
-  if (!/<a class="hl-wtabs__tab hl-wtabs__tab--c" href="#cves"/.test(src)) {
-    problems.push('the tab bar has no link to #cves');
-  }
-
-  // 3. public claims
-  var callout = sec.match(/<div class="hl-wire__callout hl-wire__callout--c">[\s\S]*?<\/div>/);
-  if (!callout) problems.push('the CVEs callout (hl-wire__callout--c) is missing');
-  else {
-    [[/My selection/, 'that the list is my selection'],
-     [/does not mean anyone has been seen exploiting/, 'that being listed is not evidence of exploitation'],
-     [/excludes anything on VulnCheck KEV or CISA KEV/, 'that the list excludes anything on VulnCheck KEV or CISA KEV'],
-     [/is a fact about the product, not this CVE/, 'that "product on CISA KEV" is a fact about the product, not about the CVE'],
-     [/six reasons/, 'the six admission reasons'],
-     [/a Nuclei template; an ET Open rule/, 'the two new tooling reasons'],
-     [/top 10%/, 'the EPSS arm in plain words'],
-     [/EPSS at least 1% paired with VEDAS exploit maturity at least 80% and CVSS at least 7.0/, 'the paired EPSS and VEDAS arm in plain words'],
-     [/moves to the nKEVs tab when it is added to VulnCheck KEV/, 'that a row moves to the nKEVs tab when its CVE is added'],
-     [/confirmed against Rapid7's or Exploit-DB's own index/, 'that Metasploit and Exploit-DB claims are confirmed against the publishers\' indexes'],
-     [new RegExp('at most ' + CVES_CAP + ' CVEs'), 'that the list is capped at ' + CVES_CAP],
-     [/ranked by how many reasons they meet, then by EPSS, then by exploit maturity, then by CVSS/, 'how the CVEs shown are ranked']].forEach(function (c) {
-      if (!c[0].test(callout[0])) problems.push('the CVEs callout no longer states ' + c[1]);
-    });
-  }
-  var line = sec.match(/<p class="hl-wire__freshness hl-wire__freshness--c">[\s\S]*?<\/p>/);
-  if (line && !/VEDAS exploit maturity from <a [^>]*href="https:\/\/github\.com\/ARPSyndicate\/cve-scores"[^>]*>A\.R\.P\. Syndicate<\/a>/.test(line[0])) {
-    problems.push('the short c line lost VEDAS credit to A.R.P. Syndicate');
-  }
-  if (!line) problems.push('the short CVEs line (hl-wire__freshness--c) is missing');
-  else {
-    [[/Listing, titles, SSVC \(CISA's own assessment\), fixed versions and advisory ids from/, 'what cve.now supplies and that SSVC is CISA\'s own assessment'],
-     [/CC BY 4\.0/, 'the cve.now licence'],
-     [/Scores from NVD through VulnCheck, or from cve\.now where a row says so/, 'where the scores come from (NVD through VulnCheck, or cve.now where a row says so)'],
-     [/Exploits from Rapid7 and Exploit-DB/, 'where the exploits come from'],
-     [/KEV products from CISA/, 'where the KEV products come from']].forEach(function (c) {
-      if (!c[0].test(line[0])) problems.push('the short CVEs line no longer says ' + c[1]);
-    });
-    // T-0531: the links themselves, not the words, since the line also names cve.now in its text.
-    ['href="https://cve.now/', 'href="https://www.first.org/epss/', 'cves.xml', 'href="https://github.com/ARPSyndicate/cve-scores"'].forEach(function (needle) {
-      if (line[0].indexOf(needle) < 0) problems.push('the short CVEs line no longer links ' + needle);
-    });
-  }
-
-  // 2. legend
-  var capOpen = src.search(/\{%-?\s*capture\s+cves_legend_html\s*-?%\}/);
-  var capEnd = capOpen < 0 ? -1 : src.indexOf('endcapture', capOpen);
-  if (capOpen < 0 || capEnd < 0) problems.push('the CVEs legend is missing: no `capture cves_legend_html` block');
-  else {
-    var legend = src.slice(capOpen, capEnd);
-    problems = problems.concat(checkVedasCopy(legend, "CVEs legend"));
-    if (/\sdata-[a-z]/i.test(legend)) problems.push('the CVEs legend markup carries a data-* attribute, which the filter script would read as a filter attribute');
-    if (/<(button|input|details|summary|select|textarea)\b/i.test(legend)) problems.push('the CVEs legend markup holds a control or details element: samples must not be interactive');
-    if (/\sid\s*=/i.test(legend)) problems.push('the CVEs legend markup carries an id, but it is printed twice, so the id would repeat');
-    (legend.match(/<a\b[^>]*>/gi) || []).forEach(function (a) {
-      if (!/href="https:\/\/(cve\.now|www\.first\.org|www\.exploit-db\.com|www\.cisa\.gov|github\.com\/(?:cisagov\/vulnrichment|rapid7\/metasploit-framework|ARPSyndicate\/cve-scores)|www\.exploit\.observer)[\/"]/.test(a)) {
-        problems.push('a link in the CVEs legend that is not an attribution link: ' + a);
-      }
-    });
-    if (!/CC BY 4\.0/.test(legend) || !/Empirical Security/.test(legend)) {
-      problems.push('the CVEs legend lost the cve.now licence or the EPSS attribution');
-    }
-    [[/show at most 250\. When more qualify, the 250 shown are ranked by how many reasons they meet, then by EPSS, then by exploit maturity, then by CVSS/, 'the cap and the ranking'],
-     [/titles, SSVC decision points \(CISA's own assessment, from <a [^>]*>Vulnrichment<\/a>\), fixed versions and advisory ids come from <a [^>]*>cve\.now<\/a>/, 'what cve.now supplies and that SSVC is CISA\'s assessment'],
-     [/NVD record through VulnCheck, mostly the CNA's score, unless the row says cve\.now/, 'that CVSS comes from the NVD record through VulnCheck unless the row says cve.now'],
-     [/Metasploit modules come from Rapid7's <a [^>]*>metasploit-framework<\/a> module index and Exploit-DB entries from <a [^>]*>Exploit-DB<\/a>'s own index/, 'that Metasploit and Exploit-DB come from the publishers\' own indexes'],
-     [/"Product on CISA KEV" comes from CISA's <a [^>]*>KEV catalog<\/a>/, 'that "Product on CISA KEV" comes from CISA\'s KEV catalog']].forEach(function (c) {
-      if (!c[0].test(legend)) problems.push('the CVEs legend no longer says ' + c[1]);
-    });
-  }
-  var prints = src.match(/\{\{\s*cves_legend_html\s*\}\}/g) || [];
-  if (prints.length !== 2) problems.push('the CVEs legend is printed ' + prints.length + ' time(s), expected 2');
-  if (!/<aside class="hl-post-toc hl-legend" aria-label="CVEs legend"/.test(src)) {
-    problems.push('the CVEs legend aside is missing, or lost its aria-label="CVEs legend" or the hl-post-toc class');
-  }
-  var grid = sec.match(/data-filter-item="\.hl-vuln"[\s\S]*?<\/aside>/);
-  var gridOnly = grid ? grid[0].replace(/<aside[\s\S]*$/, '') : '';
-  if (!grid) problems.push('could not find the CVEs grid');
-  else if (/cves_legend_html|hl-legend/.test(gridOnly)) problems.push('the CVEs legend sits inside the CVEs grid, where the filter script would count it as rows');
-
-  /* The accuracy rule behind the attribution lines: cve.now no longer supplies the Metasploit or Exploit-DB
-     data (Revision 2: the publishers' own indexes do), so no sentence anywhere on the page may say cve.now
-     carries them. A false source line is a claim we cannot back. */
-  var carries = src.replace(/\{%-?\s*comment\s*-?%\}[\s\S]*?\{%-?\s*endcomment\s*-?%\}/g, '').match(/carries[^.]{0,160}(?:Metasploit|Exploit-DB)/i);
-  if (carries) problems.push('the page says cve.now carries Metasploit or Exploit-DB data (' + JSON.stringify(carries[0].slice(0, 80)) + '). Those come from Rapid7\'s and Exploit-DB\'s own indexes.');
-
-  /* The include chain (review F4). Every wire-* include the page names, and every one those name in turn,
-     is part of the rendered tab, so each is held to the same rules as the page: no PoC claim, every
-     data-derived output escaped, and only the link targets it is allowed. support-cta.html and the other
-     site-wide includes are not tab includes and are not read. A name that cannot be read is NOT CHECKED,
-     said as a problem line, never a pass. */
-  var stripComments = function (s) { return s.replace(/\{%-?\s*comment\s*-?%\}[\s\S]*?\{%-?\s*endcomment\s*-?%\}/g, ''); };
-  var chain = [], seenInc = Object.create(null);
-  (function walk(text) {
-    (stripComments(text).match(/\{%-?\s*include\s+wire-[A-Za-z0-9_.\/-]+/g) || []).forEach(function (m) {
-      var name = m.replace(/^\{%-?\s*include\s+/, '');
-      if (seenInc[name]) return;
-      seenInc[name] = 1; chain.push(name);
-      if (includes && typeof includes[name] === 'string') walk(includes[name]);
-    });
-  })(src);
-
-  // Revision 2: a GitHub PoC cannot be validated, so it is not claimed, counted, filtered or mentioned.
-  var pocRe = /\bpocs?\b|\bpoc_n\b|proof[- ]of[- ]concept/i;
-  var scanned = [['the page', stripComments(src)]];
-  chain.forEach(function (n) {
-    if (includes && typeof includes[n] === 'string') scanned.push(['_includes/' + n, stripComments(includes[n])]);
-  });
-  scanned.forEach(function (x) {
-    var m = x[1].match(pocRe);
-    if (m) problems.push(x[0] + ' mentions a GitHub proof of concept (' + JSON.stringify(m[0]) + '). PoCs cannot be validated, so the Wire does not claim, count, filter or link them.');
-  });
-
-  // The retired reason must disappear from markup, includes and reader copy.
-  scanned.forEach(function (x) {
-    if (/crit_noauth_kev_product|w_ab|Critical with no login needed in a product/.test(x[1]))
-      problems.push(x[0] + ' carries the retired crit_noauth_kev_product reason');
-  });
-  ["Nuclei templates come from ProjectDiscovery's template index; ET Open rules come from Emerging Threats' Suricata ruleset.",
-   'the tooling reasons together admitted 53 CVEs, eight later listed on VulnCheck KEV; Nuclei accounted for seven of 34.'
-  ].forEach(function (pin) { if (sec.indexOf(pin) < 0) problems.push('CVEs legend lost tooling copy: ' + pin); });
-
-  // 4. escaping, on the tab's markup and every include in the chain
-  unescapedOutputs(sec).forEach(function (m) {
-    problems.push('the CVEs tab prints ' + m + ' without escape, and it is not a number or literal the template built');
-  });
-  chain.forEach(function (name) {
-    var inc = includes && includes[name];
-    if (typeof inc !== 'string') {
-      problems.push('NOT CHECKED: _includes/' + name + ' could not be read, so its escaping, link targets and no-PoC rule were not verified');
-      return;
-    }
-    unescapedOutputs(stripComments(inc)).forEach(function (m) {
-      problems.push('_includes/' + name + ' prints ' + m + ' without escape, and it is not a number or literal the template built');
-    });
-    // 5. only the link targets this include is allowed to build
-    var allowed = INCLUDE_LINKS[name] || [];
-    (inc.match(/href="[^"]*"/g) || []).forEach(function (h) {
-      var ok = allowed.some(function (re) { return re.test(h); });
-      if (!ok) {
-        problems.push('_includes/' + name + ' links to ' + h + ', which is not one of its ' +
-          (allowed.length === 4 ? 'four named' : 'allowed link') + ' targets');
-      }
-    });
-  });
-  return problems;
-}
-
 /* Which links each tab include may build (review F4). An include not listed may build none. */
 var INCLUDE_LINKS = {
   'wire-vuln-new.html': [
@@ -1714,7 +1477,7 @@ function checkDayLayout(src, includes) {
    'data-sig="kev_product">Product exploited before', 'kev_product{% endif %}"', 'Product exploited before</dt><dd>Filter only, never admits'
   ].forEach(function (pin) { if (!src.includes(pin)) out.push('Wire layout lost: ' + pin); });
   if (/nomi_poc/.test(src)) out.push('nomi_poc is not an admission reason');
-  // T-0569: checkCvesTab no longer runs on the day layout, so the CVEs short line's VEDAS credit is checked here.
+  // T-0569: the CVEs short line's VEDAS credit is checked here.
   var cLine = src.match(/<p class="hl-wire__freshness hl-wire__freshness--c">[\s\S]*?<\/p>/);
   if (!cLine || !/VEDAS exploit maturity from <a [^>]*href="https:\/\/github\.com\/ARPSyndicate\/cve-scores"[^>]*>A\.R\.P\. Syndicate<\/a>/.test(cLine[0])) out.push('the short CVEs line lost VEDAS credit to A.R.P. Syndicate');
   if (/hl-wire__callout--c/.test(src.replace(/\{%[\s\S]*?%\}/g, ''))) out.push('CVEs intro must be in explanation');
