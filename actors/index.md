@@ -90,5 +90,5 @@ position: 2.7
 
 <p class="hl-actor__muted">Designations are numbered in the order they were created and are never reused. A designation whose report is published preview-style is listed once the report goes live. For a UTA the confidence shown is the published report's figure for "one trackable operator", and named-actor attribution is INSUFFICIENT by definition. For a named actor it is the report's figure for the attribution to that handle, HIGH or above, which is why no designation was assigned; the real-world identity behind a handle is not claimed.</p>
 
-<script defer src="{{ '/assets/js/listing-filter.js' | relative_url }}?v=11"></script>
+<script defer src="{{ '/assets/js/listing-filter.js' | relative_url }}?v=19"></script>
 <script defer src="{{ '/assets/js/index-console.js' | relative_url }}?v=1"></script>

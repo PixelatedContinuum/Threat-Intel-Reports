@@ -69,5 +69,5 @@ position: 2.95
 
 <p class="hl-actor__muted">Each card is one action, or a group of identical actions from one round of reports, and says where it comes from: the recipient's word, my own check, or my case records alone. Victim actions are described in general terms only, with no organisation, sector or country, because the victims and the national CERTs that relayed my reports shared them in confidence. Most reports get no reply at all, and some of these actions may have had causes beyond my report.</p>
 
-<script defer src="{{ '/assets/js/listing-filter.js' | relative_url }}?v=11"></script>
+<script defer src="{{ '/assets/js/listing-filter.js' | relative_url }}?v=19"></script>
 <script defer src="{{ '/assets/js/index-console.js' | relative_url }}?v=1"></script>

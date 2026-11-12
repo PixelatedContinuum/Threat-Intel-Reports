@@ -2,14 +2,14 @@
 title: Search
 layout: page
 permalink: /search/
-description: "Full-text search across every published report, detection page, IOC feed and STIX bundle on The Hunter's Ledger."
+description: "Full-text search across every published report, detection page and IOC feed on The Hunter's Ledger."
 hl_idx: single
 ---
 
 <header class="hl-page-header hl-d-plate" style="--ph-accent: #58a6ff;">
   <div class="hl-page-header__label hl-d-kicker">Search</div>
   <h1 class="hl-page-header__title">Search the Ledger</h1>
-  <div class="hl-page-header__desc">Full-text search across every published report, detection page, IOC feed and STIX bundle. Type an indicator, a technique, a tool name or a phrase, and narrow by section.</div>
+  <div class="hl-page-header__desc">Full-text search across every published report, detection page and IOC feed. Type an indicator, a technique, a tool name or a phrase, and narrow by section.</div>
 </header>
 
 {%- comment -%}
@@ -75,7 +75,7 @@ hl_idx: single
       // The Section filter starts open (T-0552); Pagefind compares this list with the filter's lower-cased name.
       openFilters: ['section'],
       translations: {
-        placeholder: 'Search reports, detections, IOCs, STIX…',
+        placeholder: 'Search reports, detections, IOCs…',
         clear_search: 'Clear',
         load_more: 'Load more results',
         search_label: 'Search the site',
