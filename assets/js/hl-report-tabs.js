@@ -7,6 +7,8 @@
   if (!content) return;
   var root = document.documentElement;
   var page = content.closest('.hl-report-page');
+  // T-0603 A55: the address the page was opened with, read before anything can rewrite it. A reload restores the old scroll position while the tabs are being built, and select() at start-up ran the reading-line update, which rewrote the address to the first heading's id before go() read it, so the tab was lost (reproduced on the short report, fixed by this and by `booting` below).
+  var startHash = location.hash, booting = true;
   // ALL_TOKENS is the fixed tab order a report may tag; TOKENS (and the arrays indexed with it) is narrowed below to the
   // tabs that hold a section, so a report with nothing tagged for Victims or Timeline gets no empty tab (T-0500.1.9).
   var ALL_TOKENS = ['overview', 'victims', 'chain', 'timeline', 'attribution', 'indicators', 'confidence'];
@@ -62,16 +64,26 @@
   /* Keep an open note inside the viewport on both axes (review F3, T-0500.1.7.3 c5): below its button by default; above it when there is no room below and more room above;
      then slid by whatever is still outside, 12px from each screen edge. Only a transform is applied (the note's containing block is not always its button's parent), and the
      stylesheet caps the note's height to the screen, so it can always fit. */
+  // T-0603 A54: the top edge is the bottom of whatever header is stuck to the top of the screen, not 12px, so a note never opens under the sticky header (it covered 40px at 1280).
+  function stuckTop() {
+    var bottom = 0;
+    ['.hl-nav', '.hl-rv-bar'].forEach(function (sel) {
+      var e = document.querySelector(sel); if (!e) return;
+      var cs = getComputedStyle(e), r = e.getBoundingClientRect();
+      if ((cs.position === 'sticky' || cs.position === 'fixed') && r.top <= 1 && r.bottom > bottom) bottom = r.bottom;
+    });
+    return bottom;
+  }
   function fitInfo(pop, btn) {
-    var m = 12, r = pop.getBoundingClientRect(), br = btn.getBoundingClientRect(), dx = 0, dy = 0;
+    var m = 12, mt = Math.max(m, stuckTop() + 8), r = pop.getBoundingClientRect(), br = btn.getBoundingClientRect(), dx = 0, dy = 0;
     if (r.bottom > innerHeight - m) {
       var above = br.top + 6 - r.height;
-      if (above >= m || (m - above) < (r.bottom - (innerHeight - m))) dy = above - r.top;
+      if (above >= mt || (mt - above) < (r.bottom - (innerHeight - m))) dy = above - r.top;
     }
     if (r.right > innerWidth - m) dx = innerWidth - m - r.right;
     if (r.left + dx < m) dx = m - r.left;
     if (r.bottom + dy > innerHeight - m) dy = innerHeight - m - r.bottom;
-    if (r.top + dy < m) dy = m - r.top;
+    if (r.top + dy < mt) dy = mt - r.top;
     if (dx || dy) pop.style.transform = 'translate(' + Math.round(dx) + 'px, ' + Math.round(dy) + 'px)';
   }
   function infoButton(host, notes, label) {
@@ -903,6 +915,7 @@
     var a = opt.noLink ? make('div', 'hl-rv-tile', null, cellBox) : link('', opt.href || '#tab-' + tok, cellBox); a.className = 'hl-rv-tile'; a.dataset.rvShort = short; if (opt.kind) a.dataset.rvTile = opt.kind;
     var big = make('strong', 'hl-rv-value', opt.kind === 'threat' && /^critical$/i.test(value) ? 'CRIT.' : value, a); make('span', '', label, a); if (big.textContent !== String(value)) a.dataset.rvFull = value;
     if (String(value).length > 8) big.classList.add('hl-rv-value--long');
+    else if (/^[A-Za-z]{5,}$/.test(String(value))) { big.classList.add('hl-rv-value--word'); big.style.setProperty('--hl-rv-chars', String(value).length); }   // a severity word (MEDIUM): set to fit its tile, never wrapped
     if (opt.viz) {
       var viz = make('span', 'hl-rv-tile-viz' + (opt.viz.dots ? ' hl-rv-tile-viz--dots' : '') + (opt.viz.bar !== undefined ? ' hl-rv-tile-viz--bar' : ''), null, a); viz.setAttribute('aria-hidden', 'true');
       if (opt.viz.bar !== undefined) { var f = make('i', '', null, viz); f.style.width = Math.round(Math.max(0, Math.min(1, opt.viz.bar)) * 100) + '%'; }
@@ -1399,11 +1412,31 @@
   });
   // Keep the site's resource popovers functional without constructing a TOC.
   var resourcePairs = [['hl-detect-tab', 'hl-detect-panel'], ['hl-ioc-tab', 'hl-ioc-panel'], ['hl-stix-tab', 'hl-stix-panel']];
-  function closeResources(except) { resourcePairs.forEach(function (pair) { var b = document.getElementById(pair[0]), p = document.getElementById(pair[1]); if (p && p !== except) { p.classList.remove(pair[1] + '--open'); if (b) b.setAttribute('aria-expanded', 'false'); } }); }
+  // T-0603 A53: a panel opens at its own button, not at a fixed corner: below the button when it fits, above it when that fits, and otherwise on the larger side with its own scroll. It stays inside the viewport and below the sticky reading bar, and follows its button while it is open.
+  var openResource = null, EDGE = 16;
+  // The top limit is the bottom of the site header while it is on screen (it is not sticky at the top of the page, and it draws over a panel that is placed under it), else the sticky reading bar's 64px.
+  function topLimit() { var nav = document.querySelector('.hl-nav'), b = nav ? nav.getBoundingClientRect().bottom : 0; return Math.max(64, b > 0 ? b + 8 : 0); }
+  function placeResource(b, p) {
+    var r = b.getBoundingClientRect(), w = p.offsetWidth, h = p.scrollHeight + (p.offsetHeight - p.clientHeight), gap = 8, lim = topLimit();
+    var below = innerHeight - r.bottom - gap - EDGE, above = r.top - gap - lim, top, max = '';
+    if (h <= below) top = r.bottom + gap;
+    else if (h <= above) top = r.top - gap - h;
+    else if (below >= above) { top = r.bottom + gap; max = Math.max(120, below) + 'px'; }
+    else { top = lim; max = Math.max(120, above) + 'px'; }
+    p.style.maxHeight = max; p.style.overflowY = max ? 'auto' : '';
+    p.style.left = Math.max(EDGE, Math.min(r.left, innerWidth - w - EDGE)) + 'px';
+    p.style.top = Math.max(0, top) + 'px';
+  }
+  function closeResources(except) { resourcePairs.forEach(function (pair) { var b = document.getElementById(pair[0]), p = document.getElementById(pair[1]); if (p && p !== except) { p.classList.remove(pair[1] + '--open'); if (b) b.setAttribute('aria-expanded', 'false'); } }); if (!except) openResource = null; }
+  window.addEventListener('scroll', function () { if (openResource) placeResource(openResource[0], openResource[1]); }, { passive: true });
+  window.addEventListener('resize', function () { if (openResource) placeResource(openResource[0], openResource[1]); });
   resourcePairs.forEach(function (pair) {
     var b = document.getElementById(pair[0]), p = document.getElementById(pair[1]); if (!b || !p) return;
     document.body.appendChild(p); p.classList.add('hl-rv-resource');
-    b.addEventListener('click', function () { var open = b.getAttribute('aria-expanded') !== 'true'; closeResources(p); b.setAttribute('aria-expanded', String(open)); p.classList.toggle(pair[1] + '--open', open); });
+    b.addEventListener('click', function () {
+      var open = b.getAttribute('aria-expanded') !== 'true'; closeResources(p); b.setAttribute('aria-expanded', String(open)); p.classList.toggle(pair[1] + '--open', open);
+      if (open) { placeResource(b, p); openResource = [b, p]; } else openResource = null;
+    });
     p.querySelectorAll('.hl-ioc-cpbtn').forEach(function (c) { c.addEventListener('click', function () { var src = c.parentElement.querySelector('.hl-ioc-panel__val'); if (src) copy(src, copyStatus, 'Indicator copied as printed.', c); }); });
   });
   document.addEventListener('click', function (e) { if (!e.target.closest('.hl-quicklinks,.hl-rv-resource')) closeResources(); });
@@ -1441,7 +1474,7 @@
     if (currentSection !== current) {
       currentSection = current; sectionLabel.textContent = text(current.heading).replace(/§$/, '').trim(); sectionLabel.title = sectionLabel.textContent;
       document.querySelectorAll('.hl-rv-contents a,.hl-rv-page-contents a,.hl-rv-menu-sections a,.hl-rv-side a').forEach(function (a) { if (a.hash === '#' + current.heading.id) a.setAttribute('aria-current', 'location'); else a.removeAttribute('aria-current'); });
-      if (Date.now() > navigatingUntil && scrollY > bar.offsetTop && !beforePrint) history.replaceState(null, '', '#' + current.heading.id);
+      if (!booting && Date.now() > navigatingUntil && scrollY > bar.offsetTop && !beforePrint) history.replaceState(null, '', '#' + current.heading.id);
     }
     prevSection.disabled = current === list[0]; nextSection.disabled = current === list[list.length - 1];
     var first = list[0].node.getBoundingClientRect().top + scrollY;
@@ -1484,7 +1517,8 @@
     }
   }
   root.classList.add('hl-rv-ready'); mode(false); select(0);
-  if (location.hash) go(location.hash, true);
+  if (startHash) go(startHash, true);
+  booting = false;
   if (document.fonts) document.fonts.ready.then(function () { measureBar(); if (location.hash) go(location.hash, false); });
 
   function drawTimeline(parent, m) {
