@@ -254,7 +254,11 @@ jobs:
         working-directory: tools/report-tooling
         run: |
           set +e
-          HL_SITE_DIR=../../_site node check-browser-hero.js
+          # The gate's own search tries /usr/bin/chromium first; on the runner that one never wrote its DevToolsActivePort into the gate's profile (run 43254559884), so name Google Chrome, which the runner image ships, and say which binary ran.
+          for c in /usr/bin/google-chrome /usr/bin/google-chrome-stable; do if [ -x "$c" ]; then export HL_CHROME="$c"; break; fi; done
+          echo "browser: ${HL_CHROME:-none of /usr/bin/google-chrome, /usr/bin/google-chrome-stable}  $(${HL_CHROME:-false} --version 2>/dev/null)"
+          ls -l /usr/bin/chromium /usr/bin/chromium-browser /usr/bin/google-chrome 2>&1
+          HL_CDP_LAUNCH_WAIT_MS=90000 HL_SITE_DIR=../../_site node check-browser-hero.js
           rc=$?
           set -e
           case $rc in
