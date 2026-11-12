@@ -5,7 +5,17 @@
     https://github.com/sylhare/Type-on-Strap/blob/master/LICENSE
 -->
 <html lang="en">
-  {% capture _head %}{% include default/head.liquid %}{% endcapture %}
+  {% comment %}
+  Load-bearing whitespace, do not "tidy". The three captures in this layout
+  (head, navbar and footer) keep every newline and indent their includes write.
+  Liquid's `split: " "` is Ruby's whitespace
+  split, not a split on a literal space: it splits on runs of any whitespace and
+  drops leading and trailing whitespace, and `join: " "` puts one space back.
+  Each block is therefore minified before it is printed, which is why a built
+  page does not look like its include source. Removing or reflowing these
+  filters changes the bytes of every built page (M15). Add comments inside a
+  Liquid comment tag like this one, never as plain HTML or as reindented markup.
+  {% endcomment %}{% capture _head %}{% include default/head.liquid %}{% endcapture %}
   {% if page.unlisted %}{% assign _head = _head | replace: "</head>", '<meta name="robots" content="noindex, nofollow"></head>' %}{% endif %}
   {{ _head | split: " " | join: " "}}
   <body>
@@ -38,8 +48,19 @@
       {{ content }}
     </main>
     {% capture _footer %}{% include default/footer.liquid %}{% endcapture %}
-    {{ _footer | split: " " | join: " "}}
+    {{ _footer | split: " " | join: " "}}{% comment %}
+      M15, load-bearing: the same minify the head and footer captures get (see the comment at
+      the top of this file). Liquid's `split: " "` splits on runs of any whitespace, so the
+      footer include's newlines and indents collapse to single spaces before the page is
+      printed. Keep this tag on this same line: a comment on a line of its own prints that
+      line's newline and changes the bytes of every built page.
+    {% endcomment %}{% comment %}
+      A24 (J4, 2026-11-11): the newsletter vendor's form script, only where the form is. It
+      pulled about 360 KB of reCAPTCHA onto all 570 pages for a form hidden on almost all.
+    {% endcomment %}
+    {% if page.url == '/subscribe/' %}
     <script async src="https://eocampaign1.com/form/68e56ce4-2980-11f1-960c-1d8405c03c10.js" data-form="68e56ce4-2980-11f1-960c-1d8405c03c10"></script>
+    {% endif %}
     <script defer src="{{ '/assets/js/c3-cover.js' | relative_url }}?v=1"></script>
     <script>
     /* Masthead date: the build's date is printed in the HTML; show the reader's own today instead (T-0556 w2). */
