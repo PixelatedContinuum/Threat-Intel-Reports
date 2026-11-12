@@ -2,7 +2,7 @@
 title: BdApiUtil64.sys (Arsenal-237 BYOVD Component) - Technical Analysis & Remediation Guidance
 date: '2026-01-26'
 detection_page: /hunting-detections/arsenal-237-BdApiUtil64-sys-detections/
-ioc_feed: /ioc-feeds/arsenal-237-BdApiUtil64-sys.json
+ioc_feed: /ioc-feeds/arsenal-237-BdApiUtil64-sys/
 detection_sections:
   - label: "YARA Detection Rules"
     anchor: "#yara-rules"
@@ -15,6 +15,7 @@ ioc_highlights:
     note: "BdApiUtil64.sys SHA256 (vulnerable Baidu driver)"
 layout: post
 permalink: /reports/bdapiutil64-sys/
+thumbnail: /assets/images/cards/bdapiutil64-sys.png
 hide: true
 ---
 

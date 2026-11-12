@@ -2,7 +2,7 @@
 title: nethost.dll (Arsenal-237 C2 Communication Module) - Technical Analysis & Threat Assessment
 date: '2026-01-26'
 detection_page: /hunting-detections/arsenal-237-nethost-dll-detections/
-ioc_feed: /ioc-feeds/arsenal-237-nethost-dll.json
+ioc_feed: /ioc-feeds/arsenal-237-nethost-dll/
 detection_sections:
   - label: "YARA Rules"
     anchor: "#yara-rules"
@@ -15,6 +15,7 @@ ioc_highlights:
     note: "nethost.dll SHA256"
 layout: post
 permalink: /reports/arsenal-237/nethost-dll/
+thumbnail: /assets/images/cards/nethost-dll.png
 hide: true
 ---
 

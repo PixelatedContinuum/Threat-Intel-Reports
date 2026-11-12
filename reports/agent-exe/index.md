@@ -2,7 +2,7 @@
 title: agent.exe (PoetRAT Malware) - Technical Analysis & Threat Intelligence Report
 date: '2026-01-12'
 detection_page: /hunting-detections/agent-exe-detections/
-ioc_feed: /ioc-feeds/agent-exe.json
+ioc_feed: /ioc-feeds/agent-exe/
 detection_sections:
   - label: "YARA Rules"
     anchor: "#yara-rules"
@@ -15,6 +15,7 @@ ioc_highlights:
     note: "agent.exe SHA256 (PoetRAT)"
 layout: post
 permalink: /reports/agent-exe/
+thumbnail: /assets/images/cards/agent-exe.png
 hide: true
 ---
 

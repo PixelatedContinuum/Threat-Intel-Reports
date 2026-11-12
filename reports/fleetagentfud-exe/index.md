@@ -2,7 +2,7 @@
 title: FleetAgentFUD.exe - WebSocket RAT with FUD Evasion & PowerShell Execution
 date: '2026-01-11'
 detection_page: /hunting-detections/fleetagentfud-exe-detections/
-ioc_feed: /ioc-feeds/fleetagentfud-exe.json
+ioc_feed: /ioc-feeds/fleetagentfud-exe/
 detection_sections:
   - label: "YARA Rules"
     anchor: "#yara-rules"
@@ -15,6 +15,7 @@ ioc_highlights:
     note: "Arsenal-237 repository host"
 layout: post
 permalink: /reports/fleetagentfud-exe/
+thumbnail: /assets/images/cards/fleetagentfud-exe.png
 hide: true
 ---
 

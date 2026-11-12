@@ -2,7 +2,7 @@
 title: rootkit.dll (Arsenal-237 Defense Evasion Framework) - Technical Analysis & Threat Assessment
 date: '2026-01-20'
 detection_page: /hunting-detections/arsenal-237-rootkit-dll-detections/
-ioc_feed: /ioc-feeds/arsenal-237-rootkit-dll.json
+ioc_feed: /ioc-feeds/arsenal-237-rootkit-dll/
 detection_sections:
   - label: "YARA Rules"
     anchor: "#yara-rules"
@@ -15,6 +15,7 @@ ioc_highlights:
     note: "rootkit.dll SHA256"
 layout: post
 permalink: /reports/arsenal-237/rootkit-dll/
+thumbnail: /assets/images/cards/rootkit-dll.png
 hide: true
 ---
 

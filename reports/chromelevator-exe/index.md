@@ -2,7 +2,7 @@
 title: chromelevator.exe - Browser Credential Extraction Tool - Technical Analysis & Defense Strategy
 date: '2026-01-22'
 detection_page: /hunting-detections/arsenal-237-chromelevator-exe-detections/
-ioc_feed: /ioc-feeds/arsenal-237-chromelevator-exe.json
+ioc_feed: /ioc-feeds/arsenal-237-chromelevator-exe/
 detection_sections:
   - label: "YARA Rules"
     anchor: "#yara-rules"
@@ -17,6 +17,7 @@ ioc_highlights:
     note: "chromelevator.exe SHA256"
 layout: post
 permalink: /reports/arsenal-237-new-files/chromelevator-exe/
+thumbnail: /assets/images/cards/chromelevator-exe.png
 hide: true
 ---
 

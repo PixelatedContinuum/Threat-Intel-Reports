@@ -2,7 +2,7 @@
 title: lpe.exe (Arsenal-237 LPE Module) - Privilege Escalation Analysis & Threat Assessment
 date: '2026-01-25'
 detection_page: /hunting-detections/arsenal-237-lpe-exe-detections/
-ioc_feed: /ioc-feeds/arsenal-237-lpe-exe.json
+ioc_feed: /ioc-feeds/arsenal-237-lpe-exe/
 detection_sections:
   - label: "YARA Detection Rules"
     anchor: "#yara-rules"
@@ -15,6 +15,7 @@ ioc_highlights:
     note: "lpe.exe SHA256"
 layout: post
 permalink: /reports/arsenal-237-lpe-exe/
+thumbnail: /assets/images/cards/arsenal-237-lpe-exe.png
 hide: true
 ---
 

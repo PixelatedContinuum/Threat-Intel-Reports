@@ -78,6 +78,46 @@ def test_severity_uncatalogued_parked_entry_without_dash():
     finally:
         shutil.rmtree(root)
 
+def _nested_repo(root, catalog):
+    """One report whose permalink is nested (/reports/group/leaf/), so slug != its folder path."""
+    os.makedirs(os.path.join(root, "_data"))
+    os.makedirs(os.path.join(root, "reports", "leaf-folder"))
+    with open(os.path.join(root, "_data", "catalog.yml"), "w", encoding="utf-8") as fh:
+        fh.write(catalog)
+    with open(os.path.join(root, "reports", "leaf-folder", "index.md"), "w", encoding="utf-8") as fh:
+        fh.write('---\ntitle: "Nested"\ndate: 2026-05-06\n'
+                 'permalink: /reports/group/leaf/\ndescription: "d"\n---\nBody\n')
+
+def test_severity_nested_permalink_live_catalog():
+    """A report at /reports/group/leaf/ has slug leaf; its live catalog severity must be found."""
+    import tempfile, shutil
+    root = tempfile.mkdtemp()
+    try:
+        _nested_repo(root, 'entries:\n  - title: "Nested"\n    severity: critical\n'
+                           '    tags: [Tag A]\n    report_url: /reports/group/leaf/\n')
+        assert c.severity_for_slug(root, "leaf") == "CRITICAL"
+        f = c.card_fields(root, "leaf")
+        assert f["severity_source"] == "catalog" and f["kicker"] == "TAG A", f
+    finally:
+        shutil.rmtree(root)
+
+def test_severity_nested_permalink_parked_entry():
+    """The same for a parked (commented) entry of a nested permalink."""
+    import tempfile, shutil
+    root = tempfile.mkdtemp()
+    try:
+        _nested_repo(root, 'entries:\n  - title: "Other"\n    severity: high\n'
+                           '    report_url: /reports/other/\n'
+                           '  # ===== PENDING GO-LIVE =====\n'
+                           '  #  - title: "Nested"\n'
+                           '  #    severity: low\n'
+                           '  #    report_url: /reports/group/leaf/\n'
+                           '  # ===========================\n')
+        assert c.severity_for_slug(root, "leaf") == "LOW"
+        assert c.card_fields(root, "leaf")["severity_source"] == "catalog-parked"
+    finally:
+        shutil.rmtree(root)
+
 def test_severity_uncatalogued_front_matter():
     """Branch 2: no live or parked entry, but the report declares a severity itself."""
     import tempfile, shutil

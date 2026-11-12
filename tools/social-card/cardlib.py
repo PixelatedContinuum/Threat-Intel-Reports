@@ -61,10 +61,24 @@ def slug_of(index_md_path):
     return fm.get("permalink", "").strip("/").split("/")[-1]
 
 
+def _report_url_for_slug(repo_root, slug):
+    """The report's own permalink (the catalog's report_url), not /reports/<slug>/.
+
+    A nested permalink such as /reports/arsenal-237/nethost-dll/ has slug nethost-dll, so
+    rebuilding the URL from the slug misses its catalog entry. Falls back to the flat form
+    when no report carries the slug.
+    """
+    try:
+        perm = load_front_matter(_report_dir_for_slug(repo_root, slug)).get("permalink", "")
+    except FileNotFoundError:
+        perm = ""
+    return perm.strip() or f"/reports/{slug}/"
+
+
 def _catalog_entry(repo_root, slug):
     with open(os.path.join(repo_root, "_data/catalog.yml"), encoding="utf-8") as fh:
         data = yaml.safe_load(fh)
-    target = f"/reports/{slug}/"
+    target = _report_url_for_slug(repo_root, slug)
     for e in data.get("entries", []):
         if e.get("report_url") == target:
             return e
@@ -91,7 +105,7 @@ def _parked_catalog_entry(repo_root, slug):
             cur = []
     if cur:
         blocks.append(cur)
-    target = f"/reports/{slug}/"
+    target = _report_url_for_slug(repo_root, slug)
     for block in blocks:
         body = "\n".join(ln for ln in block if not ln.strip().startswith("====="))
         try:

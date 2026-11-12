@@ -2,7 +2,7 @@
 title: enc/dec Ransomware Family - Technical Analysis & Threat Intelligence Report
 date: '2026-01-18'
 detection_page: /hunting-detections/enc-dec-ransomware-family-detections/
-ioc_feed: /ioc-feeds/enc-dec-ransomware-family.json
+ioc_feed: /ioc-feeds/enc-dec-ransomware-family/
 detection_sections:
   - label: "YARA Rules"
     anchor: "#yara-rules"
@@ -13,6 +13,7 @@ ioc_highlights:
     note: "Arsenal-237 distribution server"
 layout: post
 permalink: /reports/enc-dec-ransomware-family/
+thumbnail: /assets/images/cards/enc-dec-ransomware-family.png
 hide: true
 ---
 

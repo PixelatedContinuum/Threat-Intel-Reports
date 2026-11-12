@@ -2,7 +2,7 @@
 title: agent_xworm_v2.exe (XWorm RAT v2.4.0) - Technical Analysis & Threat Intelligence Report
 date: '2026-01-10'
 detection_page: /hunting-detections/agent-xworm-v2-exe-detections/
-ioc_feed: /ioc-feeds/agent-xworm-v2-exe.json
+ioc_feed: /ioc-feeds/agent-xworm-v2-exe/
 detection_sections:
   - label: "YARA Rules"
     anchor: "#yara-rules"
@@ -15,6 +15,7 @@ ioc_highlights:
     note: "XWorm v2.4.0 C2"
 layout: post
 permalink: /reports/agent-xworm-v2-exe/
+thumbnail: /assets/images/cards/agent-xworm-v2-exe.png
 hide: true
 ---
 
