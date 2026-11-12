@@ -1,0 +1,16 @@
+# The site menu: the ONLY source of both lists in _includes/default/navbar.liquid (T-0603 lane B, S7 and B11).
+# The drawer's "Explore" group lists every entry below, in this order. The top bar shows the entries that carry `bar:`, in the order of that rank, under `bar_label`.
+# A page's `position:` front matter NO LONGER adds a link: to add, remove or reorder a menu entry, edit this file. (The existing `position:` keys are unread; tools/report-tooling/test/nav-data.test.js fails if they drift from this file.)
+# Fields: url (the page's permalink), label (drawer text), color (the section hue, --sc), bar (rank in the top bar, optional), bar_label (top bar text).
+pages:
+  - {url: /reports/, label: Reports, color: "#a371f7", bar: 1, bar_label: Reports}
+  - {url: /wire/, label: The Wire, color: "#58a6ff", bar: 5, bar_label: The Wire}
+  - {url: /actors/, label: Threat Actors, color: "#e879f9", bar: 6, bar_label: Actors}
+  - {url: /techniques/, label: ATT&CK Techniques, color: "#fb923c", bar: 7, bar_label: Techniques}
+  - {url: /families/, label: Malware Families, color: "#2dd4bf"}
+  - {url: /impact/, label: Impact, color: "#fbbf24"}
+  - {url: /hunting-detections/, label: Detection Library, color: "#4ade80", bar: 2, bar_label: Detections}
+  - {url: /ioc-feeds/, label: IOC Feeds, color: "#f87171", bar: 3, bar_label: IOC feeds}
+  - {url: /stix/, label: STIX Bundles, color: "#22d3ee", bar: 4, bar_label: STIX}
+  - {url: /subscribe/, label: Subscribe, color: "#58a6ff"}
+  - {url: /support/, label: Support, color: "#e879f9"}

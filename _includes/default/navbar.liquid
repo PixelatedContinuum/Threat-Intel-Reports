@@ -36,13 +36,10 @@
   {%- comment -%} Design D (T-0500.1.7.4): the six sections a reader reaches most, inline from 1100px, each with its section hue on the active/hover underline. The drawer
     below stays the full list (and the only list on a phone); these are real anchors in the HTML at every width. {%- endcomment -%}
   <nav class="hl-nav__sections" aria-label="Site sections">
-    <a href="{{ '/reports/' | relative_url }}" style="--sc:#a371f7"{% if page.url contains '/reports/' %} aria-current="page"{% endif %}>Reports</a>
-    <a href="{{ '/hunting-detections/' | relative_url }}" style="--sc:#4ade80"{% if page.url contains '/hunting-detections/' %} aria-current="page"{% endif %}>Detections</a>
-    <a href="{{ '/ioc-feeds/' | relative_url }}" style="--sc:#f87171"{% if page.url contains '/ioc-feeds/' %} aria-current="page"{% endif %}>IOC feeds</a>
-    <a href="{{ '/stix/' | relative_url }}" style="--sc:#22d3ee"{% if page.url contains '/stix/' %} aria-current="page"{% endif %}>STIX</a>
-    <a href="{{ '/wire/' | relative_url }}" style="--sc:#58a6ff"{% if page.url contains '/wire/' %} aria-current="page"{% endif %}>The Wire</a>
-    <a href="{{ '/actors/' | relative_url }}" style="--sc:#e879f9"{% if page.url contains '/actors/' %} aria-current="page"{% endif %}>Actors</a>
-    <a href="{{ '/techniques/' | relative_url }}" style="--sc:#fb923c"{% if page.url contains '/techniques/' %} aria-current="page"{% endif %}>Techniques</a>
+    {%- assign _nav_bar = site.data.nav.pages | where_exp: "item", "item.bar" | sort: "bar" -%}
+    {%- for n in _nav_bar %}
+    <a href="{{ n.url | relative_url }}" style="--sc:{{ n.color }}"{% if page.url contains n.url %} aria-current="page"{% endif %}>{{ n.bar_label }}</a>
+    {%- endfor %}
   </nav>
   {%- comment -%} A plain GET form posting ?q= to /search/, which reads the parameter and
     runs the query, so the bar itself loads no search script. The magnifier is a <label>
@@ -57,8 +54,8 @@
 </header>
 {%- comment -%}
   Site navigation lives in a drawer that slides in from the left (assets/js/nav-drawer.js).
-  The primary group is driven by `position:` front matter exactly as the old bar was, so
-  adding a section is still one key on its page. The second group is the set of pages the
+  The primary group is read from _data/nav.yml (the only source of the menu: a page's `position:`
+  front matter no longer adds a link). The second group is the set of pages the
   footer also carries. Links are real anchors in the HTML whether or not the drawer is open,
   so crawlers and a reader without JavaScript (the footer repeats them) lose nothing.
 {%- endcomment -%}
@@ -72,25 +69,8 @@
   </div>
   <div class="hl-drawer__group">
     <div class="hl-drawer__label">Explore</div>
-    {%- assign nav_pages = site.pages | where_exp: "item", "item.position" | sort: 'position' -%}
-    {%- for nav_page in nav_pages -%}
-      {%- unless nav_page.title == null or nav_page.hide or nav_page.title == site.title -%}
-    {%- case nav_page.url -%}
-      {%- when '/reports/' -%}{%- assign nav_sc = '#a371f7' -%}
-      {%- when '/wire/' -%}{%- assign nav_sc = '#58a6ff' -%}
-      {%- when '/actors/' -%}{%- assign nav_sc = '#e879f9' -%}
-      {%- when '/techniques/' -%}{%- assign nav_sc = '#fb923c' -%}
-      {%- when '/families/' -%}{%- assign nav_sc = '#2dd4bf' -%}
-      {%- when '/impact/' -%}{%- assign nav_sc = '#fbbf24' -%}
-      {%- when '/hunting-detections/' -%}{%- assign nav_sc = '#4ade80' -%}
-      {%- when '/ioc-feeds/' -%}{%- assign nav_sc = '#f87171' -%}
-      {%- when '/stix/' -%}{%- assign nav_sc = '#22d3ee' -%}
-      {%- when '/subscribe/' -%}{%- assign nav_sc = '#58a6ff' -%}
-      {%- when '/support/' -%}{%- assign nav_sc = '#e879f9' -%}
-      {%- else -%}{%- assign nav_sc = '#9ca3af' -%}
-    {%- endcase -%}
-    <a class="hl-drawer__link" style="--sc:{{ nav_sc }}" href="{{ nav_page.url | relative_url }}"{% if page.url == nav_page.url %} aria-current="page"{% endif %}>{{ nav_page.nav_title | default: nav_page.title }}</a>
-      {%- endunless -%}
+    {%- for n in site.data.nav.pages -%}
+    <a class="hl-drawer__link" style="--sc:{{ n.color }}" href="{{ n.url | relative_url }}"{% if page.url == n.url %} aria-current="page"{% endif %}>{{ n.label }}</a>
     {%- endfor -%}
   </div>
   <div class="hl-drawer__group">

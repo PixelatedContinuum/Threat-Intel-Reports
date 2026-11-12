@@ -160,7 +160,7 @@
         {%- assign _dh_unl = false -%}
       {%- endif -%}
       {%- comment -%} the tooltip attributes a reader can hover: title, alt and aria-label go through the text defang; href, data-* and every other attribute stay exactly as written {%- endcomment -%}
-      {%- if _dh_tag_out contains "=" -%}
+      {%- if _dh_tag_out contains "title=" or _dh_tag_out contains "alt=" or _dh_tag_out contains "aria-label=" -%}
         {%- for _dh_at in _dh_attrs -%}
           {%- for _dh_qn in _dh_qs -%}
             {%- if _dh_qn == "d" -%}{%- assign _dh_qc = '"' -%}{%- else -%}{%- assign _dh_qc = "'" -%}{%- endif -%}

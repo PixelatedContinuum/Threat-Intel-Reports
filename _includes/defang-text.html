@@ -59,7 +59,6 @@
 {%- elsif _dt_in contains "." or _dt_in contains "@" or _dt_in contains ":" -%}
 {%- capture _dt_nl %}
 {% endcapture -%}
-{%- assign _dt_tlds = site.data.defang_tlds -%}
 {%- assign _dt_raw = site.data.defang_allow.raw -%}
 {%- assign _dt_mbx = site.data.defang_allow.mailboxes -%}
 {%- assign _dt_schemes = "sftp://,https://,http://,ftp://,wss://,ws://" | split: "," -%}
@@ -76,6 +75,12 @@
     {%- assign _dt_wu = _dt_w -%}
     {%- comment -%} T-0500.1.7.4 review 2 (T5): a word that already holds [.] [@] or [:] is un-defanged first and defanged again from scratch, so a half-done "op[@]actor-domain.com" comes out whole; a word that is no indicator comes back as it was written (below) {%- endcomment -%}
     {%- if _dt_w contains "[" -%}{%- assign _dt_wu = _dt_w | replace: "[.]", "." | replace: "[@]", "@" | replace: "[:]", ":" -%}{%- endif -%}
+    {%- assign _dt_skipw = false -%}
+    {%- assign _dt_wd = _dt_wu -%}
+    {%- assign _dt_lc1 = _dt_wu | slice: -1 -%}
+    {%- if _dt_lc1 == "." -%}{%- assign _dt_wd = _dt_wu | remove_last: "." -%}{%- endif -%}
+    {%- unless _dt_wd contains "." or _dt_wd contains "@" or _dt_wd contains "://" -%}{%- assign _dt_wd1 = _dt_wd | remove_first: ":" -%}{%- unless _dt_wd1 contains ":" -%}{%- assign _dt_skipw = true -%}{%- endunless -%}{%- endunless -%}
+    {%- if _dt_skipw -%}{%- else -%}
     {%- unless _dt_wu contains "§§" -%}
       {%- comment -%} 1. take off what surrounds the word: ( " ' < ` and a leading full stop, then , ; ) " ' > ` ! ? : and a trailing full stop {%- endcomment -%}
       {%- assign _dt_lead = "" -%}
@@ -96,6 +101,9 @@
           {%- assign _dt_x = _dt_x | slice: 0, _dt_n -%}
         {%- endif -%}
       {%- endfor -%}
+      {%- assign _dt_fastw = false -%}
+      {%- unless _dt_x contains "." or _dt_x contains "@" or _dt_x contains ":" -%}{%- assign _dt_t2 = _dt_tail | slice: 0, 2 -%}{%- unless _dt_t2 == "::" -%}{%- assign _dt_fastw = true -%}{%- endunless -%}{%- endunless -%}
+      {%- if _dt_fastw -%}{%- assign _dt_out = _dt_w -%}{%- else -%}
       {%- assign _dt_res = _dt_x -%}
       {%- assign _dt_head = "" -%}
       {%- assign _dt_psrc = "" -%}
@@ -234,7 +242,7 @@
         {%- assign _dt_edom = _dt_em[1] | downcase -%}
         {%- assign _dt_etld = _dt_edom | split: "." | last | append: "" -%}
         {%- assign _dt_addr = _dt_xl -%}
-        {%- if _dt_tlds[_dt_etld] and _dt_raw[_dt_edom] == nil and _dt_mbx[_dt_addr] == nil -%}
+        {%- if site.data.defang_tlds[_dt_etld] and _dt_raw[_dt_edom] == nil and _dt_mbx[_dt_addr] == nil -%}
           {%- assign _dt_hdef = _dt_em[1] | replace: ".", "[.]" -%}
           {%- assign _dt_res = _dt_em[0] | append: "[@]" | append: _dt_hdef -%}
         {%- endif -%}
@@ -285,7 +293,7 @@
               {%- if _dt_pq contains "-" -%}{%- assign _dt_hasdash = true -%}{%- endif -%}
               {%- if _dt_pq contains ".." -%}{%- assign _dt_ok = false -%}{%- endif -%}
               {%- for _dt_p in _dt_parts -%}{%- if _dt_p == "" -%}{%- assign _dt_ok = false -%}{%- endif -%}{%- endfor -%}
-              {%- if _dt_ok and _dt_tlds[_dt_tld] and _dt_raw[_dt_pl] == nil -%}
+              {%- if _dt_ok and site.data.defang_tlds[_dt_tld] and _dt_raw[_dt_pl] == nil -%}
                 {%- assign _dt_pr = _dt_pq | replace: ".", "[.]" -%}
               {%- elsif _dt_parts.size == 4 and _dt_ok and _dt_hasdash == false -%}
                 {%- comment -%} letters then an address ("v2.6.4.0"): the report lint reads the four numbers after the letters as an address, so the page does too {%- endcomment -%}
@@ -341,7 +349,9 @@
       {%- endif -%}
       {%- assign _dt_out = _dt_lead | append: _dt_pfx | append: _dt_res | append: _dt_tail -%}
       {%- if _dt_wu != _dt_w and _dt_out == _dt_wu -%}{%- assign _dt_out = _dt_w -%}{%- endif -%}
+      {%- endif -%}
     {%- endunless -%}
+    {%- endif -%}
     {%- endif -%}
     {{- _dt_out -}}
     {%- unless forloop.last -%}{{ " " }}{%- endunless -%}
