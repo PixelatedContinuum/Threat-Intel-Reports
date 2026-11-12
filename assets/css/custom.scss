@@ -3617,7 +3617,7 @@ a.hl-sponsor-rail__item:focus-visible { outline: 2px solid #ffffff; outline-offs
   padding: 3px 10px; border-radius: 3px; cursor: pointer; color: inherit;
   background: transparent; border: 1px solid currentColor; opacity: 0.8; }
 .hl-attack__export:hover, .hl-attack__export:focus-visible { opacity: 1; }
-.hl-attack__bars { display: grid; grid-template-columns: repeat(auto-fill, minmax(104px, 1fr)); gap: 10px 4px; align-items: start; }
+.hl-attack__bars { display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 10px 4px; align-items: start; }   /* T-0603 A10: 120px, not 104px: "Reconnaissance" at 15px is about 112px wide and broke mid-word on 60 of 60 detection pages at 1440 (the report page keeps its own 104px strip, pinned by attack-strip-row.test.js) */
 .hl-attack__seg { min-width: 0; background: none; border: 0; padding: 0 2px;
   cursor: pointer; display: grid; grid-template-columns: minmax(0, 1fr); grid-template-rows: 62px auto; align-content: start; color: inherit;
   height: auto; }
@@ -8459,7 +8459,7 @@ a.hl-kc:hover { border-color: var(--kc); color: #ffffff; }
 .hl-idx--det .hl-post-content > hr { margin: 22px 0; border: 0; border-top: 1px solid var(--hl-border-card); }
 .hl-idx--det .hl-post-content h2 {
   margin: 38px 0 14px !important; padding: 0 !important; border: 0 !important; border-radius: 0; background: none !important;
-  font: 700 clamp(26px, 3vw, 38px)/1.1 var(--hl-font-serif) !important; letter-spacing: -0.02em;
+  font: 700 clamp(25px, 2.7vw, 34px)/1.1 var(--hl-font-serif) !important; letter-spacing: -0.02em;   /* T-0603 A11: below the h1 (clamp(26px, 2.9vw, 38px)) at every width */
 }
 .hl-idx--det .hl-post-content h3 { margin: 30px 0 10px !important; padding: 0 !important; border: 0 !important; font: 700 24px/1.2 var(--hl-font-serif) !important; letter-spacing: -0.01em; }
 .hl-idx--det .hl-post-content h3.hl-tier-detection { color: #4ade80 !important; background: none !important; }
@@ -9520,3 +9520,22 @@ a.hl-kc:hover { border-color: var(--kc); color: #ffffff; }
   .hl-idx--wire .hl-vuln, .hl-idx--wire .hl-vuln--cve { grid-template-columns: auto minmax(0, 1fr); }
   .hl-idx--wire .hl-vuln__badges { justify-content: flex-start; }
 }
+
+/* ===== T-0603 V1 (A48, S29, A49): one stat strip =====
+   Every stat strip (index plates, detection and feed pages, actor, family, technique, Wire, impact) is .hl-d-kpis. The variants above painted the strip
+   itself (the 2a2a2a or 1a1a1a ground, or the 1px gap) so a row that was not full showed the ground as a grey slab, 152 pages in the B1 build.
+   Here the tiles carry the ground and the ruling, the strip paints nothing, and a row that is not full lets its tiles grow. Each variant keeps its own
+   look (cards with a gap, ruled strip, ruling by shadow); no tile colour is touched: the per-tile accent (--kc) and its markers are unchanged. */
+.hl-idx .hl-d-kpis { display: flex; flex-wrap: wrap; background: none; }
+.hl-idx .hl-d-kpis > .hl-d-kpi { flex: 1 1 8rem; background: var(--hl-bg-card); container-type: inline-size; }
+.hl-idx--det .hl-d-kpis, .hl-idx--feed .hl-d-kpis { border-color: transparent; }
+.hl-idx--det .hl-d-kpis > .hl-d-kpi, .hl-idx--feed .hl-d-kpis > .hl-d-kpi { box-shadow: 0 0 0 1px var(--hl-border-card); }
+.hl-idx--dash .hl-d-kpis > a.hl-d-kpi:hover { background: color-mix(in srgb, #ffffff 3%, var(--hl-bg-card)); }
+/* a word in a tile (INSUFFICIENT, MODERATE) is set to fit the tile it is in: 7.6em is the width of the longest word, measured in the page */
+.hl-idx--dash .hl-d-kpi__n--word { font-size: unquote("min(clamp(20px, 1.9vw, 26px), calc(100cqi / 7.6))"); }   /* unquote: this Sass reads min() as its own function */
+
+/* ===== T-0603 V1 (A51): two small defects the second pass measured =====
+   1. One rule under a section header, not two: the header draws a 2px rule in its colour, and the panel directly under it drew its own 1px (2px for the featured one) grey top border, 17 of 35 headers on 5 pages. The panel keeps its other three borders. */
+.hl-idx--single .hl-section-header + .hl-panel { border-top-width: 0; }
+/* 2. A code block's text is not painted like a selection: the theme gives `.highlight code` the inline-code ground (#373e47) and `.hl-post-content pre code` (which clears it) does not reach /pgp/, so each line of the key block looked selected. */
+.highlight pre code, pre.highlight code { background: none; border: 0; padding: 0; border-radius: 0; }
