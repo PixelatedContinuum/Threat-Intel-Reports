@@ -64,5 +64,5 @@ position: 2.9
 
 <p class="hl-xref__muted">The vocabulary that decides each family's canonical name lives in <code>_data/families.yml</code>; a label it does not know is listed by name in the generated index rather than guessed into a page.</p>
 
-<script defer src="{{ '/assets/js/listing-filter.js' | relative_url }}?v=11"></script>
+<script defer src="{{ '/assets/js/listing-filter.js' | relative_url }}?v=19"></script>
 <script defer src="{{ '/assets/js/index-console.js' | relative_url }}?v=1"></script>

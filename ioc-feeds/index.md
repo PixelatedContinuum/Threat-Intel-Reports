@@ -21,16 +21,16 @@ redirect_from:
 <details class="hl-feed">
   <summary class="hl-feed__toggle">
     <span aria-hidden="true">📡</span>
-    <span>Subscribe as a MISP feed (MISP, OpenCTI)</span>
+    <span>Subscribe as a MISP feed</span>
     <span class="hl-feed__chev" aria-hidden="true">▾</span>
   </summary>
   <div class="hl-feed__body">
-    <p class="hl-feed__desc">Every published campaign as one MISP event, carrying its indicators, its Suricata, YARA and Sigma rules, its CVEs and ATT&amp;CK galaxy tags. Static files in the MISP feed format: MISP pulls it natively and OpenCTI reads it through its MISP feed connector. Free under <strong>CC BY 4.0</strong>.</p>
+    <p class="hl-feed__desc">Every published campaign as one MISP event, carrying its indicators, its Suricata, YARA and Sigma rules, its CVEs and ATT&amp;CK galaxy tags. Static files in the MISP feed format: MISP pulls it natively. OpenCTI takes the STIX bundles instead; this feed is not an OpenCTI ingest path. Free under <strong>CC BY 4.0</strong>.</p>
     <div class="hl-feed__cmd">
       <code id="hl-misp-cmd">https://the-hunters-ledger.com/feeds/misp/</code>
       <button type="button" class="hl-feed__copy" onclick="navigator.clipboard.writeText(document.getElementById('hl-misp-cmd').textContent);var b=this;b.textContent='Copied';setTimeout(function(){b.textContent='Copy';},1500);">Copy</button>
     </div>
-    <p class="hl-feed__note">In MISP: Sync Actions, List Feeds, Add Feed, source format <strong>MISP feed</strong>, that URL. In OpenCTI: the <code>connector-misp-feed</code> connector with <code>MISP_FEED_URL</code> set to it.</p>
+    <p class="hl-feed__note">In MISP: Sync Actions, List Feeds, Add Feed, source format <strong>MISP feed</strong>, that URL. OpenCTI imports the STIX bundles, not the feed.</p>
     <div class="hl-feed__links">
       <a href="/feeds/misp/">How to subscribe and what an event carries →</a>
       <a href="/feeds/misp/manifest.json">manifest.json →</a>

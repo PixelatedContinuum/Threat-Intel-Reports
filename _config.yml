@@ -44,9 +44,9 @@ cloudflare_analytics_token: "d2247d7d41d343ae8916378d68d0da25"
 # Google is ALREADY VERIFIED and needs nothing here. It was verified 2026-09-08 by the DNS route
 # (Search Console's Cloudflare integration wrote a google-site-verification TXT at the apex), which
 # creates a Domain property covering every subdomain and both protocols. That is the stronger
-# property type, and it survives any change to this file or the theme. Leaving the key empty is
-# correct, not an oversight. Do not add a meta tag as well.
-google_site_verification: ""
+# property type, and it survives any change to this file or the theme. The key is omitted rather
+# than left empty: jekyll-seo-tag treats an empty string as set and emits a blank verification tag
+# on every page. Do not add a meta tag as well.
 bing_site_verification: ""
 
 # BUILD SETTINGS
@@ -63,7 +63,6 @@ sass:
 plugins:
   - jekyll-remote-theme
   - jekyll-seo-tag
-  - jekyll-paginate
   - jekyll-redirect-from
   - jekyll-sitemap
 
@@ -73,17 +72,16 @@ include:
   - ".well-known"
 
 exclude:
-  - ".jekyll-cache"
-  - ".jekyll-metadata"
-  - ".idea"
-  - "vendor/*"
-  - "assets/node_modules/*"
+  - "README.md"
+  - "report-templates"
   - ".github/*"
   - "docs/*"
   - "tools/*"
 
-# Theme activation
-remote_theme: sylhare/Type-on-Strap
+# Theme activation. Pinned to the commit the build used on 2026-11-11, so an upstream push cannot
+# change the rendered site without a commit here. To move it, replace the SHA with the new one and
+# build once before committing.
+remote_theme: sylhare/Type-on-Strap@262379c43ac1629bb92f353c9b9525e3c52f82fe
 
 # Section default link-preview card (og:image via page.thumbnail in head.liquid)
 # for the behind-the-reports editorial pages. Deliverable pages set their own

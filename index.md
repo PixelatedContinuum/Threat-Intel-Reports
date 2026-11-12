@@ -10,7 +10,7 @@ hl_idx: home
 {% assign n_reports = site.data.catalog.entries | where_exp: "e", "e.report_url" | size %}
 {% assign n_det = site.data.metrics.detection_rules %}
 {% assign n_ioc = site.data.metrics.iocs %}
-{% assign n_stix = site.static_files | where_exp: "f", "f.path contains '/stix/'" | where: "extname", ".json" | size %}
+{% assign n_stix = site.static_files | where_exp: "f", "f.path contains '/stix/'" | where: "extname", ".json" | where_exp: "f", "f.name != 'manifest.json'" | size %}
 {% assign n_families = site.data.family_index.families | size %}
 {% assign n_actors = site.data.actors.actors | size %}
 {%- capture det_techniques -%}{%- for d in site.data.detection_attack -%}{%- for r in d[1].rows -%}{{ r.id | split: "." | first }} {% endfor -%}{%- endfor -%}{%- endcapture -%}
