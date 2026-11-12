@@ -259,110 +259,110 @@
     },
     "1c4057d8-6ee8-5c89-b45d-adc83d437048": {
       "slug": "arsenal-237-full_test_enc-exe",
-      "hash": "25bbb384088355bd80b51f91127043f1f00c9c5daa8833c8eec02bfd77892bed",
-      "timestamp": 1791727759,
+      "hash": "a376345721a8e60864a3364152fdfc34e8d29fa1e94dfaa43ac4d25325b4d23a",
+      "timestamp": 1794454356,
       "first_published": "2026-10-09"
     },
     "caefd6be-08dd-561f-86e2-b3b02308da81": {
       "slug": "arsenal-237-new_enc-exe",
-      "hash": "efdf4492af0a2ae910f130387276048760b77fb0587a449e6bc923498d17a22d",
-      "timestamp": 1791727763,
+      "hash": "fb038837a25888248bf080a22bfa96983541d97ffc9342b7e75675c443693e62",
+      "timestamp": 1794454361,
       "first_published": "2026-10-09"
     },
     "b3f1cee9-dc86-5d92-ae5e-b375141a3dde": {
       "slug": "arsenal-237-dec_fixed-exe",
-      "hash": "d4d3d2376b666279a13aa94cbc60aa7f20d6c38594730c83aa18fd3e37569c06",
-      "timestamp": 1791687667,
+      "hash": "49b6bfbcefca14bd6ecaff96c6db580708ec1f2bf27d2d31d9c21ce13b92920d",
+      "timestamp": 1794454354,
       "first_published": "2026-10-09"
     },
     "b021c858-4e87-550d-adc4-b56553cc8004": {
       "slug": "arsenal-237-enc_c2-exe",
-      "hash": "2183a338d440761e18fb12a3f50a057e72659b871c0934e9fd559a4f0702e043",
-      "timestamp": 1791727758,
+      "hash": "9ee93442ec723b57351d813fe09d13e2f3fd2953c9e7e85d7b4aac098e35000e",
+      "timestamp": 1794454355,
       "first_published": "2026-10-09"
     },
     "59b99578-e9d7-5ba7-9a9c-5a6088427a92": {
       "slug": "arsenal-237-chromelevator-exe",
-      "hash": "7c24a4c560d3f897fefd405f0f8d9ab33627b0f2cad0addd240aa018741c7920",
-      "timestamp": 1791727757,
+      "hash": "9edd51deb4f5c80b692fab624bbaf63c02f7fcaf07beee6f0dfce58c67652594",
+      "timestamp": 1794454353,
       "first_published": "2026-10-09"
     },
     "bbb50559-558b-53f6-8a3a-19961ddf05ef": {
       "slug": "arsenal-237-nethost-dll",
-      "hash": "62c843108f5499afa5b6972b63d10ab1aa8c3639a15a436ffb22d6e69a12ddf0",
-      "timestamp": 1791727762,
+      "hash": "5d1f85da41a571dda820e3cafe9b49aa94054e1c97fe3cda5c83dc95f03dc8fd",
+      "timestamp": 1794454360,
       "first_published": "2026-10-09"
     },
     "e501fdef-3d5e-5128-b862-ad46cf063906": {
       "slug": "arsenal-237-rootkit-dll",
-      "hash": "8041f817752933eeb73d1201ab03873d22bf1aa9b7a87db063600ce0b3e01444",
-      "timestamp": 1791727764,
+      "hash": "b8ad4637cc0588c447622fd0c08301d597d035418a71853a67f13c2d5ca1b9d7",
+      "timestamp": 1794454362,
       "first_published": "2026-10-09"
     },
     "bf15ec86-d80c-5067-8f63-4c2f4186cda3": {
       "slug": "arsenal-237-BdApiUtil64-sys",
-      "hash": "11eb029f6ad06d878c8114a470cf15078c04b4c8f28b71bef5e0541a710c3eb1",
-      "timestamp": 1791687665,
+      "hash": "6028004c49750d43a30a3e9925cdc19e790ccbb9d980017a6602806bb8f38c5b",
+      "timestamp": 1794454352,
       "first_published": "2026-10-09"
     },
     "75ed19ed-9b89-5f63-a2ca-193a80458317": {
       "slug": "arsenal-237-lpe-exe",
-      "hash": "8f9d46cfa022d87913216e8ab11baaf9d71c8e65c73fe22765b1cee8907b0bec",
-      "timestamp": 1791727761,
+      "hash": "56cc47f11d705c2615e283799853d3d396d25657a3500721469f13db96e0846d",
+      "timestamp": 1794454359,
       "first_published": "2026-10-09"
     },
     "3a2e305f-b524-5b35-8fa8-54a3a55c08b1": {
       "slug": "arsenal-237-killer-crowdstrike-dll",
-      "hash": "acd3a1abc98398366dcebb2803234d6c5c5f7cb5a26bb3943faec373577d6123",
-      "timestamp": 1791687670,
+      "hash": "c629ae925c70d4101834d9df5852c49bb97f6cb517f44170d002f150de07b4f3",
+      "timestamp": 1794454357,
       "first_published": "2026-10-09"
     },
     "8b4993d6-5ab8-5280-bfaa-f37bd2e53bd6": {
       "slug": "arsenal-237-killer-dll",
-      "hash": "2debd5e653c9927e27e615c0e13143bc5ea6c61c2003b46b01aeb32bff96e7b0",
-      "timestamp": 1791727760,
+      "hash": "952a07313a263eaa0551d83ccc36e560df7ee9efb5a39be2d3c1ba28b871fddb",
+      "timestamp": 1794454358,
       "first_published": "2026-10-09"
     },
     "1f7ee918-f66f-5770-90bf-ff912bd48050": {
       "slug": "enc-dec-ransomware-family",
-      "hash": "1d35155322f4778a965f6d694bfaf6f46e145600106c7554f6b27f8cd09d39b7",
-      "timestamp": 1791727768,
+      "hash": "80ee8ec05a81d96a914b1915c1e65ee66d2b5e8c55b8c7a6fb3a1f4de413beef",
+      "timestamp": 1794454363,
       "first_published": "2026-10-09"
     },
     "14e13c91-19dc-5501-978c-2729a8ef67eb": {
       "slug": "uac-test-exe",
-      "hash": "45b9c80c7ab9aaefd009d515bac68014747f2cc3d056accb82f64264c6bd1561",
-      "timestamp": 1791727794,
+      "hash": "d1c1cd974d1c27806e3b4c4a5059f5679f0cb2204242c4ac59e441b7ff5592a6",
+      "timestamp": 1794454366,
       "first_published": "2026-10-09"
     },
     "f5f6f585-f601-5e0c-a7bc-b9e973ed73f0": {
       "slug": "fleetagentfud-exe",
-      "hash": "78820d05b79769dcc3d18f71ecda53b5b5f11ccb22c625fc6e4abc53af110755",
-      "timestamp": 1791727771,
+      "hash": "eb46f68ef45cf7ac81a9a484fcd887eead8bdc4c516434793836481d8b37ca88",
+      "timestamp": 1794454365,
       "first_published": "2026-10-09"
     },
     "b64d8288-b76d-5380-af9b-4cbfa23ffe6b": {
       "slug": "fleetagentadvanced-exe",
-      "hash": "7483e766c82629b2e0e496bd7de99300906abd262bcaa2c9c53d90252ad3b394",
-      "timestamp": 1791727770,
+      "hash": "7ee37b0626d7541ed9f8db32043649d18ad919aacc60c4b66637a9c43d5ded44",
+      "timestamp": 1794454364,
       "first_published": "2026-10-09"
     },
     "aab2ba34-9ec2-5c61-948e-6a10c7b18488": {
       "slug": "agent-xworm-v2-exe",
-      "hash": "0f6b3173b7532eb6e20c471fa2358bab79415eb86262052127c828297052e7b1",
-      "timestamp": 1791690192,
+      "hash": "677c402615dd6756ee40e454aa7ff7ad2b13f952acca4643c2c25ecc80d64edf",
+      "timestamp": 1794454351,
       "first_published": "2026-10-09"
     },
     "a621bfc3-8efc-54bd-ace7-c4d50940fc7d": {
       "slug": "agent-xworm-exe",
-      "hash": "f4dcb48aa26094c2bf1a8fdfac7df2159758beb77e5bf32cd2b0873bc35c94d6",
-      "timestamp": 1791727755,
+      "hash": "63350d796cacf77b0ab48d9cb0af3113696c86b190b4fe56dcfbb1831d5a191c",
+      "timestamp": 1794454350,
       "first_published": "2026-10-09"
     },
     "94c995c7-3161-5b68-9185-60ec73870738": {
       "slug": "agent-exe",
-      "hash": "bb0ce0b25712a617a1882ca9a4de6d9f2bedd5509f8357c73659d14ca40c7693",
-      "timestamp": 1791687661,
+      "hash": "381cdc171f873df552e90199d50294ca0eb3108347ceb72b8e6703fc7e8f007b",
+      "timestamp": 1794454349,
       "first_published": "2026-10-09"
     }
   },

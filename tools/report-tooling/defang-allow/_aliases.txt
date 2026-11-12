@@ -2,3 +2,21 @@
 # <folder name of the other copy>  <site slug>  # reason
 opendirectory-193-56-255-154-20260403  open-directory-193-56-255-154-xiebroc2  # vault folder name of the xiebroc2 report (the site renamed the folder)
 opendirectory-74-0-42-25-20260316  zerotrace-74-0-42-25-20260316  # vault folder name of the zerotrace report (the site renamed the folder)
+agent-exe  109.230.231.37-Executive-Overview  # T-0603 R2: the report moved from the Executive-Overview folder to its own folder; same allow list
+agent-xworm-exe  109.230.231.37-Executive-Overview  # T-0603 R2: the report moved from the Executive-Overview folder to its own folder; same allow list
+agent-xworm-v2-exe  109.230.231.37-Executive-Overview  # T-0603 R2: the report moved from the Executive-Overview folder to its own folder; same allow list
+enc-dec-ransomware-family  109.230.231.37-Executive-Overview  # T-0603 R2: the report moved from the Executive-Overview folder to its own folder; same allow list
+fleetagentadvanced-exe  109.230.231.37-Executive-Overview  # T-0603 R2: the report moved from the Executive-Overview folder to its own folder; same allow list
+fleetagentfud-exe  109.230.231.37-Executive-Overview  # T-0603 R2: the report moved from the Executive-Overview folder to its own folder; same allow list
+uac-test-exe  109.230.231.37-Executive-Overview  # T-0603 R2: the report moved from the Executive-Overview folder to its own folder; same allow list
+bdapiutil64-sys  arsenal-237-new-files  # T-0603 R2: the report moved from the arsenal-237-new-files folder to its own folder; same allow list
+chromelevator-exe  arsenal-237-new-files  # T-0603 R2: the report moved from the arsenal-237-new-files folder to its own folder; same allow list
+dec_fixed-exe  arsenal-237-new-files  # T-0603 R2: the report moved from the arsenal-237-new-files folder to its own folder; same allow list
+enc_c2-exe  arsenal-237-new-files  # T-0603 R2: the report moved from the arsenal-237-new-files folder to its own folder; same allow list
+full_test_enc-exe  arsenal-237-new-files  # T-0603 R2: the report moved from the arsenal-237-new-files folder to its own folder; same allow list
+killer-crowdstrike-dll  arsenal-237-new-files  # T-0603 R2: the report moved from the arsenal-237-new-files folder to its own folder; same allow list
+killer-dll  arsenal-237-new-files  # T-0603 R2: the report moved from the arsenal-237-new-files folder to its own folder; same allow list
+arsenal-237-lpe-exe  arsenal-237-new-files  # T-0603 R2: the report moved from the arsenal-237-new-files folder to its own folder; same allow list
+nethost-dll  arsenal-237-new-files  # T-0603 R2: the report moved from the arsenal-237-new-files folder to its own folder; same allow list
+new-enc-exe  arsenal-237-new-files  # T-0603 R2: the report moved from the arsenal-237-new-files folder to its own folder; same allow list
+rootkit-dll  arsenal-237-new-files  # T-0603 R2: the report moved from the arsenal-237-new-files folder to its own folder; same allow list

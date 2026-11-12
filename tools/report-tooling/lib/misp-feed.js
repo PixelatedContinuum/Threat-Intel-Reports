@@ -75,6 +75,8 @@ function dateStr(v) {
   return String(v || '');
 }
 function slugOf(entry) {
+  /* misp_slug pins the event identity of an entry whose report arrived after its feed event (T-0603 R2). */
+  if (entry.misp_slug) return String(entry.misp_slug);
   if (entry.report_url) return String(entry.report_url).replace(/^\/reports\//, '').replace(/\/$/, '');
   if (entry.detection_url) return String(entry.detection_url).split('/').pop().replace(/-detections$/, '');
   if (entry.ioc_url) return String(entry.ioc_url).split('/').pop().replace(/-iocs\.json$/, '');
