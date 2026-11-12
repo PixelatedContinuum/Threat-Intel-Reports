@@ -1125,6 +1125,6 @@ alert tcp any any -> any any (msg:"THL HUNT GOCLOUD-Cryptojacking Linux Miner De
 ---
 
 ## License
-Detection rules are licensed under **Creative Commons Attribution 4.0 International (CC BY 4.0)**.
+Detection rules are licensed under **Creative Commons Attribution 4.0 International (CC BY 4.0)**.  
 Free to use, including commercially, with attribution to The Hunters Ledger.
 

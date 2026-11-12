@@ -6150,7 +6150,7 @@ turkish-arpa-openclaw-state-insurer-209.38.205.158-detections:
     head: "title: File Named rca_key.pem Or rca_key.ppk Cre"
     robustness: 1
     confidence: "MODERATE"
-  - name: "Sigma Rule 3: Systemd Unit Creation Matching `arpa-*` Naming Pattern"
+  - name: "Sigma Rule 3: Systemd Unit Creation Matching arpa-* Naming Pattern"
     engine: sigma
     tier: Hunting
     fence: 13

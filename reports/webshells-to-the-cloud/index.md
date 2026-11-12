@@ -381,7 +381,7 @@ A: Cloud access monitoring, API security controls, regular access reviews, and l
 - [From Webshells to The Cloud IOCs]({{ "/ioc-feeds/webshells-to-the-cloud.json" | relative_url }})
 
 ### Detections
-- [From Webshells to The Cloud Detections]({{ "/hunting-detections/webshells-to-the-cloud/" | relative_url }})
+- [From Webshells to The Cloud Detections]({{ "/hunting-detections/webshells-to-the-cloud-detections/" | relative_url }})
 
 ---
 

@@ -1095,13 +1095,13 @@ level: medium
 
 **Confidence:** HIGH
 
-**Rationale:** The rule tests one shape: a Java process (parent image ending in `/java`) directly starting `bash`, `sh` or `dash` with the text ` -c ` in the command line. That is a common shape of command execution after a JVM compromise, but not an unavoidable one: an exploit that reaches a shell through an intermediate process, or that runs a command without a shell, does not produce it (see Blind Spots), so the durability is that of one process relationship (Robustness 2). The rule tests nothing about the exploitation that came before, and any Java service that shells out with ` -c ` matches; the title previously claimed that the shell followed WebLogic JNDI exploitation. It is Hunting tier at level medium for that reason.
+**Rationale:** The rule tests one shape: a Java process (parent image ending in `/java`) directly starting `bash`, `sh` or `dash` with the text `-c` in the command line. That is a common shape of command execution after a JVM compromise, but not an unavoidable one: an exploit that reaches a shell through an intermediate process, or that runs a command without a shell, does not produce it (see Blind Spots), so the durability is that of one process relationship (Robustness 2). The rule tests nothing about the exploitation that came before, and any Java service that shells out with `-c` matches; the title previously claimed that the shell followed WebLogic JNDI exploitation. It is Hunting tier at level medium for that reason.
 
 **False Positives:** Java-based build, backup, or health-check tooling that intentionally shells out to run a maintenance command; application servers configured to invoke OS-level scripts as part of legitimate scheduled jobs
 
 **Blind Spots:** Misses RCE payloads that reach a shell through an intermediate process rather than `java` spawning the shell directly; misses non-Java application servers entirely
 
-**Validation:** Have a test Java process start `/bin/bash -c 'id'` directly: the rule must fire. A Java process starting `/bin/bash script.sh` without ` -c `, one starting a tool such as `/usr/bin/id` directly, and one reaching a shell through an intermediate process, must NOT fire. A Java backup or health-check tool that itself runs `bash -c` WILL fire and is reviewed against the false-positive list.
+**Validation:** Have a test Java process start `/bin/bash -c 'id'` directly: the rule must fire. A Java process starting `/bin/bash script.sh` without `-c`, one starting a tool such as `/usr/bin/id` directly, and one reaching a shell through an intermediate process, must NOT fire. A Java backup or health-check tool that itself runs `bash -c` WILL fire and is reviewed against the false-positive list.
 
 **Deployment:** Linux EDR / Sysmon for Linux on WebLogic, GeoServer, or any Java application-server host
 

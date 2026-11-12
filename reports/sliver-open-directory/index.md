@@ -961,7 +961,7 @@ update.exe → NtCreateThread()           (execution)
 
 - **18-19 MB anonymous private memory region** (`PAGE_EXECUTE_READWRITE`, VadS tag) in any process: the Donut staging region size and protection are distinctive. Memory region scanner (malfind plugin) and EDR memory scanning detect this.
 - **NOP sled followed by `0x9A` (CALLF)** at allocation base+0x59: Donut VEH bootstrap entry pattern; confirmed by memory forensics tool hexdump.
-- `**STATUS_CONFLICTING_ADDRESSES` (C0000018)** in process LastStatus: injection precursor; observed across multiple debugger sessions.
+- `STATUS_CONFLICTING_ADDRESSES` (C0000018) in process LastStatus: injection precursor; observed across multiple debugger sessions.
 - **Process Ghosting five-step chain**: `CreateFile` with `DELETE_ON_CLOSE` → `SetFileInformationByHandle(FileDispositionInfo)` → `NtCreateSection(SEC_IMAGE)` → `NtCreateProcessEx`, unusual and specific sequence detectable via kernel-level ETW callbacks.
 - **Process with no resolvable on-disk image path**: Process Ghosting artifact; detectable via Process Explorer, EDR, or memory forensics tool.
 - **ETW silence anomaly**: `sihost.exe` post-injection producing zero ETW events despite active network behavior is a high-confidence signal. A process that is active but produces no telemetry is itself the detection.

@@ -1047,5 +1047,5 @@ alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL DETECT Sliver-C2-WinPost
 ---
 
 ## License
-Detection rules are licensed under **Creative Commons Attribution 4.0 International (CC BY 4.0)**.
+Detection rules are licensed under **Creative Commons Attribution 4.0 International (CC BY 4.0)**.  
 Free to use, including commercially, with attribution to The Hunters Ledger.

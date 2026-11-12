@@ -713,7 +713,7 @@ The GET-based exfiltration from the DLL beacon is the critical detection gap: co
       <td>T1036.005</td>
       <td>Match Legitimate Name/Location</td>
       <td class="likely">MODERATE</td>
-      <td>Mozilla/5.0 User-Agent mimicking legitimate browser; spawn-to `rundll32.exe`</td>
+      <td>Mozilla/5.0 User-Agent mimicking legitimate browser; spawn-to rundll32.exe</td>
     </tr>
     <tr>
       <td>Defense Evasion</td>

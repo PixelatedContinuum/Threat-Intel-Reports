@@ -794,7 +794,7 @@ falsepositives:
 level: medium
 ```
 
-#### Sigma Rule 3: Systemd Unit Creation Matching `arpa-*` Naming Pattern
+#### Sigma Rule 3: Systemd Unit Creation Matching arpa-* Naming Pattern
 
 **Tier:** Hunting
 
