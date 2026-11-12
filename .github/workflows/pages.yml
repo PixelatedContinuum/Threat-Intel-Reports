@@ -170,6 +170,27 @@ jobs:
           source: ./
           destination: ./_site
 
+      # Prune the remote theme's unused scripts and fonts from the built site (T-0605 L02). The theme copies its whole assets/ tree: KaTeX,
+      # Mermaid, Font Awesome, Pacifico and a search script ship on every deploy (about 3.9 MB of JS, 1.6 MB of fonts) that no page loads.
+      # tools/report-tooling/prune-theme-assets.js decides by measuring, not by a name list: a theme-only file under assets/js or assets/fonts
+      # stays only if a built page, a stylesheet or a script of ours (or a kept theme file) references it. It prints what it scanned, kept and
+      # removed, then re-reads every page and kept stylesheet and fails when any href, src, url() or @import points at a removed file.
+      # Exit 0 PASS, 1 FAIL (a reference to a removed file), 2 NOT CHECKED (the build could not be read): both fail the job, as the link gate does.
+      # It runs before the later gates so they see the pruned site. jekyll-build-pages runs as root, so _site comes back root-owned.
+      - name: Prune the theme files no page references
+        working-directory: tools/report-tooling
+        run: |
+          sudo chown -R "$(id -u):$(id -g)" ../../_site
+          set +e
+          node prune-theme-assets.js --site ../../_site --source ../..
+          rc=$?
+          set -e
+          case $rc in
+            0) echo "PASS         prune-theme-assets.js" ;;
+            2) echo "::error::prune-theme-assets.js NOT CHECKED (exit 2): it could not read the build"; exit 1 ;;
+            *) echo "::error::prune-theme-assets.js FAILED (exit $rc): a built page references a theme file the prune removed"; exit 1 ;;
+          esac
+
       # Site search. Pagefind indexes the built HTML in place and writes its
       # bundle to _site/pagefind/, which /search/ loads at runtime. Only pages
       # carrying data-pagefind-body (set in _layouts/default.html, withheld from
@@ -449,6 +470,20 @@ jobs:
             0) echo "PASS         validate-misp-feed.py" ;;
             2) echo "::warning::validate-misp-feed.py NOT CHECKED (exit 2); see its log above" ;;
             *) echo "::error::validate-misp-feed.py FAILED (exit $rc)"; exit 1 ;;
+          esac
+
+      # The social-card library (tools/social-card/cardlib.py) renders the cards the report pages and the announcements use; its tests had
+      # no CI step (T-0605 L53). The file is plain Python with its own runner (exit 1 on any failure) and imports Pillow and PyYAML, which the
+      # runner's python3 does not carry, so they are installed here the way the PyMISP step installs its package.
+      - name: Social-card tests
+        run: |
+          set -u
+          python3 -m pip install --quiet --disable-pip-version-check pillow pyyaml
+          rc=0
+          python3 tools/social-card/tests/test_cardlib.py || rc=$?
+          case $rc in
+            0) echo "PASS         tools/social-card/tests/test_cardlib.py" ;;
+            *) echo "::error::tools/social-card/tests/test_cardlib.py FAILED (exit $rc)"; exit 1 ;;
           esac
 
   # A failed run used to announce itself nowhere (33 failures in 300 runs, one

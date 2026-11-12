@@ -1258,6 +1258,22 @@ test('the day layout marker is required, and the credit, licence and no-curation
 });
 
 
+/* T-0605 L57: the page-side copy of the guard wire/cves.xml has. The real page passes (control); a sentence
+   saying cve.now carries Metasploit or Exploit-DB data fails, and one that only names them after a full stop does not. */
+test('the page may not say cve.now carries Metasploit or Exploit-DB data (control: the real page passes)', function () {
+  var page = readReal('wire/index.md');
+  var inc = realIncludes();
+  assert.equal(CW.checkPage(page, inc).status, 'PASS');
+  var anchor = 'cve.now carries them (CISA Vulnrichment)';
+  assert.ok(page.indexOf(anchor) > -1, 'the real page carries the anchor sentence');
+  var bad = CW.checkPage(page.replace(anchor, 'cve.now carries Metasploit modules and Exploit-DB entries (CISA Vulnrichment)'), inc);
+  assert.equal(bad.status, 'FAIL');
+  assert.match(bad.problems.join(' | '), /the page says cve\.now carries Metasploit or Exploit-DB data/);
+  var ok = CW.checkPage(page.replace(anchor, 'cve.now carries them (CISA Vulnrichment). Metasploit and Exploit-DB come from their own indexes'), inc);
+  assert.doesNotMatch(ok.problems.join(' | '), /cve\.now carries Metasploit/);
+});
+
+
 /* T-0564: optional VEDAS is a numeric estimate, not a public exploit claim. */
 test('VEDAS accepts absence and both bounds on both tabs; rejects invalid numbers and types', function () {
   [undefined, 0, 0.8, 1].forEach(function (v) {
