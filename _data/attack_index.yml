@@ -2,7 +2,7 @@
 # ATT&CK tables, _data/detection_attack.yml, _data/actors_index.yml and the
 # catalog. Do NOT edit by hand; re-run the generator. Published sources only.
 attack_version: '19.2'
-max_score: 110
+max_score: 128
 tactics:
   - name: Reconnaissance
     slug: reconnaissance
@@ -71,12 +71,13 @@ tactics:
       - T1566.003
       - T1566.004
     technique_count: 16
-    report_count: 46
+    report_count: 47
     rule_count: 61
   - name: Execution
     slug: execution
     techniques:
       - T1047
+      - T1053
       - T1053.003
       - T1053.005
       - T1059
@@ -98,13 +99,14 @@ tactics:
       - T1569.002
       - T1574.001
       - T1574.006
-    technique_count: 22
-    report_count: 102
-    rule_count: 140
+    technique_count: 23
+    report_count: 126
+    rule_count: 168
   - name: Persistence
     slug: persistence
     techniques:
       - T1037.004
+      - T1053
       - T1053.003
       - T1053.005
       - T1078
@@ -124,6 +126,7 @@ tactics:
       - T1505.003
       - T1542.001
       - T1542.003
+      - T1542.005
       - T1543
       - T1543.002
       - T1543.003
@@ -134,13 +137,14 @@ tactics:
       - T1547.009
       - T1554
       - T1653
-    technique_count: 30
-    report_count: 86
-    rule_count: 141
+    technique_count: 32
+    report_count: 105
+    rule_count: 155
   - name: Privilege Escalation
     slug: privilege-escalation
     techniques:
       - T1037.004
+      - T1053
       - T1053.003
       - T1053.005
       - T1055
@@ -163,6 +167,7 @@ tactics:
       - T1134
       - T1134.001
       - T1134.002
+      - T1134.003
       - T1134.004
       - T1543
       - T1543.002
@@ -175,9 +180,9 @@ tactics:
       - T1548.001
       - T1548.002
       - T1611
-    technique_count: 35
-    report_count: 118
-    rule_count: 123
+    technique_count: 37
+    report_count: 144
+    rule_count: 177
   - name: Stealth
     slug: stealth
     techniques:
@@ -207,6 +212,7 @@ tactics:
       - T1055.015
       - T1070
       - T1070.004
+      - T1070.005
       - T1070.006
       - T1078
       - T1078.001
@@ -217,6 +223,7 @@ tactics:
       - T1134
       - T1134.001
       - T1134.002
+      - T1134.003
       - T1134.004
       - T1140
       - T1218
@@ -229,9 +236,11 @@ tactics:
       - T1480.002
       - T1497
       - T1497.001
+      - T1497.002
       - T1497.003
       - T1542.001
       - T1542.003
+      - T1542.005
       - T1564.001
       - T1564.002
       - T1564.003
@@ -240,23 +249,27 @@ tactics:
       - T1620
       - T1622
       - T1684.001
-    technique_count: 59
-    report_count: 221
-    rule_count: 216
+    technique_count: 63
+    report_count: 262
+    rule_count: 255
   - name: Defense Impairment
     slug: defense-impairment
     techniques:
       - T1112
+      - T1207
+      - T1222
       - T1222.002
       - T1553.002
       - T1553.004
       - T1553.005
+      - T1601.002
       - T1685
+      - T1685.001
       - T1686
       - T1686.003
-    technique_count: 8
-    report_count: 26
-    rule_count: 41
+    technique_count: 12
+    report_count: 41
+    rule_count: 54
   - name: Credential Access
     slug: credential-access
     techniques:
@@ -296,8 +309,8 @@ tactics:
       - T1606.001
       - T1649
     technique_count: 35
-    report_count: 88
-    rule_count: 55
+    report_count: 92
+    rule_count: 60
   - name: Discovery
     slug: discovery
     techniques:
@@ -322,6 +335,7 @@ tactics:
       - T1482
       - T1497
       - T1497.001
+      - T1497.002
       - T1497.003
       - T1518
       - T1518.001
@@ -329,9 +343,9 @@ tactics:
       - T1613
       - T1614
       - T1622
-    technique_count: 28
-    report_count: 133
-    rule_count: 23
+    technique_count: 29
+    report_count: 166
+    rule_count: 51
   - name: Lateral Movement
     slug: lateral-movement
     techniques:
@@ -350,8 +364,8 @@ tactics:
       - T1563.002
       - T1570
     technique_count: 14
-    report_count: 27
-    rule_count: 20
+    report_count: 28
+    rule_count: 21
   - name: Collection
     slug: collection
     techniques:
@@ -375,12 +389,13 @@ tactics:
       - T1602.001
       - T1602.002
     technique_count: 19
-    report_count: 73
-    rule_count: 36
+    report_count: 85
+    rule_count: 40
   - name: Command and Control
     slug: command-and-control
     techniques:
       - T1001
+      - T1001.002
       - T1008
       - T1071
       - T1071.001
@@ -410,9 +425,9 @@ tactics:
       - T1573.001
       - T1573.002
       - T1665
-    technique_count: 30
-    report_count: 151
-    rule_count: 226
+    technique_count: 31
+    report_count: 166
+    rule_count: 254
   - name: Exfiltration
     slug: exfiltration
     techniques:
@@ -422,8 +437,8 @@ tactics:
       - T1567
       - T1567.002
     technique_count: 5
-    report_count: 26
-    rule_count: 20
+    report_count: 31
+    rule_count: 21
   - name: Impact
     slug: impact
     techniques:
@@ -440,11 +455,12 @@ tactics:
       - T1499
       - T1529
       - T1531
+      - T1561
       - T1565.001
       - T1657
-    technique_count: 15
-    report_count: 29
-    rule_count: 39
+    technique_count: 16
+    report_count: 43
+    rule_count: 59
 techniques:
   - id: T1001
     name: Data Obfuscation
@@ -465,6 +481,25 @@ techniques:
     rule_count: 0
     actor_count: 0
     score: 1
+  - id: T1001.002
+    name: Steganography
+    tactic: Command and Control
+    tactics:
+      - Command and Control
+    reports:
+      - url: /reports/fleetagentfud-exe/
+        title: 'Arsenal-237: FleetAgentFUD.exe'
+        date: '2026-01-11'
+        tactic: Command and Control
+        confidence: HIGH
+    detections: []
+    actors: []
+    url: /techniques/T1001.002/
+    mitre_url: https://attack.mitre.org/techniques/T1001/002/
+    report_count: 1
+    rule_count: 0
+    actor_count: 0
+    score: 1
   - id: T1003
     name: OS Credential Dumping
     tactic: Credential Access
@@ -476,15 +511,20 @@ techniques:
         date: '2026-08-18'
         tactic: Credential Access
         confidence: HIGH
+      - url: /reports/arsenal-237-new-files/killer-dll/
+        title: 'Arsenal-237 New Files: killer.dll (BYOVD Process Termination)'
+        date: '2026-01-24'
+        tactic: Credential Access
+        confidence: HIGH
     detections: []
     actors:
       - UTA-2026-023
     url: /techniques/T1003/
     mitre_url: https://attack.mitre.org/techniques/T1003/
-    report_count: 1
+    report_count: 2
     rule_count: 0
     actor_count: 1
-    score: 1
+    score: 2
   - id: T1003.001
     name: LSASS Memory
     tactic: Credential Access
@@ -731,6 +771,36 @@ techniques:
         date: '2026-02-10'
         tactic: Collection
         confidence: HIGH
+      - url: /reports/bdapiutil64-sys/
+        title: 'Arsenal-237 New Files: BdApiUtil64.sys (Vulnerable Baidu Driver)'
+        date: '2026-01-26'
+        tactic: Collection
+        confidence: HIGH
+      - url: /reports/arsenal-237-new-files/enc_c2-exe/
+        title: 'Arsenal-237 New Files: enc_c2.exe (Rust Ransomware with Tor C2)'
+        date: '2026-01-24'
+        tactic: Collection
+        confidence: HIGH
+      - url: /reports/agent-exe/
+        title: 'Arsenal-237: agent.exe (PoetRAT)'
+        date: '2026-01-12'
+        tactic: Collection
+        confidence: HIGH
+      - url: /reports/fleetagentfud-exe/
+        title: 'Arsenal-237: FleetAgentFUD.exe'
+        date: '2026-01-11'
+        tactic: Collection
+        confidence: HIGH
+      - url: /reports/agent-xworm-v2-exe/
+        title: 'Arsenal-237: agent_xworm_v2.exe (XWorm RAT v2.4.0)'
+        date: '2026-01-10'
+        tactic: Collection
+        confidence: HIGH
+      - url: /reports/agent-xworm-exe/
+        title: 'Arsenal-237: agent_xworm.exe (XWorm RAT v6)'
+        date: '2026-01-09'
+        tactic: Collection
+        confidence: HIGH
       - url: /reports/PULSAR-RAT/
         title: PULSAR RAT (server.exe) — Technical Analysis & Business Risk Assessment
         date: '2025-12-15'
@@ -771,29 +841,59 @@ techniques:
       - n-3-xl
     url: /techniques/T1005/
     mitre_url: https://attack.mitre.org/techniques/T1005/
-    report_count: 12
+    report_count: 18
     rule_count: 3
     actor_count: 11
-    score: 15
+    score: 21
   - id: T1007
     name: System Service Discovery
     tactic: Discovery
     tactics:
       - Discovery
     reports:
+      - url: /reports/arsenal-237-new-files/killer-dll/
+        title: 'Arsenal-237 New Files: killer.dll (BYOVD Process Termination)'
+        date: '2026-01-24'
+        tactic: Discovery
+        confidence: HIGH
       - url: /reports/arsenal-237-new-files/
         title: 'Arsenal-237 New Files: Advanced Toolkit Analysis'
         date: '2026-01-20'
         tactic: Discovery
         confidence: HIGH
-    detections: []
+      - url: /reports/agent-xworm-v2-exe/
+        title: 'Arsenal-237: agent_xworm_v2.exe (XWorm RAT v2.4.0)'
+        date: '2026-01-10'
+        tactic: Discovery
+        confidence: HIGH
+      - url: /reports/agent-xworm-exe/
+        title: 'Arsenal-237: agent_xworm.exe (XWorm RAT v6)'
+        date: '2026-01-09'
+        tactic: Discovery
+        confidence: HIGH
+    detections:
+      - url: /hunting-detections/arsenal-237-nethost-dll-detections
+        title: 'Arsenal-237 New Files: nethost.dll (DLL Hijacking Persistence)'
+        date: '2026-01-26'
+        report_url: /reports/arsenal-237/nethost-dll/
+        rules: Arsenal-237 NetHost PowerShell C2 Command Templates (YARA, Detection)
+        count: 1
+      - url: /hunting-detections/agent-xworm-v2-exe-detections
+        title: 'Arsenal-237: agent_xworm_v2.exe (XWorm RAT v2.4.0)'
+        date: '2026-01-10'
+        report_url: /reports/agent-xworm-v2-exe/
+        rules: >-
+          XWorm v2.x Embedded PowerShell Reconnaissance Command Templates (YARA, Detection); XWorm
+          v2.x Family Multi-Signal Combination (YARA, Hunting); XWorm v2.x Full PowerShell
+          Reconnaissance Sequence on Same Host (SIGMA, Detection)
+        count: 3
     actors: []
     url: /techniques/T1007/
     mitre_url: https://attack.mitre.org/techniques/T1007/
-    report_count: 1
-    rule_count: 0
+    report_count: 4
+    rule_count: 4
     actor_count: 0
-    score: 1
+    score: 8
   - id: T1008
     name: Fallback Channels
     tactic: Command and Control
@@ -877,6 +977,16 @@ techniques:
         date: '2026-08-18'
         tactic: Stealth
         confidence: HIGH
+      - url: /reports/bdapiutil64-sys/
+        title: 'Arsenal-237 New Files: BdApiUtil64.sys (Vulnerable Baidu Driver)'
+        date: '2026-01-26'
+        tactic: Stealth
+        confidence: HIGH
+      - url: /reports/arsenal-237-new-files/killer-dll/
+        title: 'Arsenal-237 New Files: killer.dll (BYOVD Process Termination)'
+        date: '2026-01-24'
+        tactic: Stealth
+        confidence: HIGH
       - url: /reports/arsenal-237-new-files/
         title: 'Arsenal-237 New Files: Advanced Toolkit Analysis'
         date: '2026-01-20'
@@ -919,6 +1029,12 @@ techniques:
           in PAM Security Directory (SIGMA, Detection); Auditd - PAM Security Library Directory File
           Creation by Non-Package-Manager (SIGMA, Hunting)
         count: 4
+      - url: /hunting-detections/arsenal-237-BdApiUtil64-sys-detections
+        title: 'Arsenal-237 New Files: BdApiUtil64.sys (Vulnerable Baidu Driver)'
+        date: '2026-01-26'
+        report_url: /reports/bdapiutil64-sys/
+        rules: Kernel SSDT Bypass Pattern (Generic Rootkit Technique) (YARA, Hunting)
+        count: 1
     actors:
       - UTA-2026-014
       - UTA-2026-016
@@ -927,10 +1043,10 @@ techniques:
       - vova75rus
     url: /techniques/T1014/
     mitre_url: https://attack.mitre.org/techniques/T1014/
-    report_count: 2
-    rule_count: 11
+    report_count: 4
+    rule_count: 12
     actor_count: 5
-    score: 13
+    score: 16
   - id: T1016
     name: System Network Configuration Discovery
     tactic: Discovery
@@ -1082,14 +1198,20 @@ techniques:
           Rule 1: PowerShell Instana Local Collector (YARA, Detection); HTTP POST to ARPA Instana
           Ingestion Endpoint (IP-Agnostic) (SURICATA, Detection)
         count: 2
+      - url: /hunting-detections/arsenal-237-nethost-dll-detections
+        title: 'Arsenal-237 New Files: nethost.dll (DLL Hijacking Persistence)'
+        date: '2026-01-26'
+        report_url: /reports/arsenal-237/nethost-dll/
+        rules: Arsenal-237 NetHost PowerShell C2 Command Templates (YARA, Detection)
+        count: 1
     actors:
       - UTA-2026-013
     url: /techniques/T1020/
     mitre_url: https://attack.mitre.org/techniques/T1020/
     report_count: 2
-    rule_count: 2
+    rule_count: 3
     actor_count: 1
-    score: 4
+    score: 5
   - id: T1021
     name: Remote Services
     tactic: Lateral Movement
@@ -1130,6 +1252,11 @@ techniques:
         date: '2026-09-07'
         tactic: Lateral Movement
         confidence: HIGH
+      - url: /reports/agent-exe/
+        title: 'Arsenal-237: agent.exe (PoetRAT)'
+        date: '2026-01-12'
+        tactic: Lateral Movement
+        confidence: HIGH
     detections:
       - url: /hunting-detections/sliver-c2-windows-postex-staging-193-233-202-17-detections
         title: Sliver C2 Windows Post-Exploitation Staging, 193.233.202.17
@@ -1149,15 +1276,21 @@ techniques:
         report_url: /reports/russian-gemini-credential-mill-213.165.51.115/
         rules: Cloudflared Access TCP Tunnel to Potentially Unauthorized Hostname (SIGMA, Hunting)
         count: 1
+      - url: /hunting-detections/agent-exe-detections
+        title: 'Arsenal-237: agent.exe (PoetRAT)'
+        date: '2026-01-12'
+        report_url: /reports/agent-exe/
+        rules: Generic Golang RAT Capability Combination (YARA, Hunting)
+        count: 1
     actors:
       - UTA-2026-012
       - UTA-2026-024
     url: /techniques/T1021.001/
     mitre_url: https://attack.mitre.org/techniques/T1021/001/
-    report_count: 1
-    rule_count: 3
+    report_count: 2
+    rule_count: 4
     actor_count: 2
-    score: 4
+    score: 6
   - id: T1021.002
     name: SMB/Windows Admin Shares
     tactic: Lateral Movement
@@ -1404,9 +1537,34 @@ techniques:
         date: '2026-02-05'
         tactic: Stealth
         confidence: HIGH
+      - url: /reports/new-enc-exe/
+        title: 'Arsenal-237 New Files: new_enc.exe (Human-Operated Rust Ransomware)'
+        date: '2026-01-26'
+        tactic: Stealth
+        confidence: HIGH
       - url: /reports/arsenal-237-new-files/
         title: 'Arsenal-237 New Files: Advanced Toolkit Analysis'
         date: '2026-01-20'
+        tactic: Stealth
+        confidence: HIGH
+      - url: /reports/agent-exe/
+        title: 'Arsenal-237: agent.exe (PoetRAT)'
+        date: '2026-01-12'
+        tactic: Stealth
+        confidence: HIGH
+      - url: /reports/fleetagentfud-exe/
+        title: 'Arsenal-237: FleetAgentFUD.exe'
+        date: '2026-01-11'
+        tactic: Stealth
+        confidence: HIGH
+      - url: /reports/agent-xworm-v2-exe/
+        title: 'Arsenal-237: agent_xworm_v2.exe (XWorm RAT v2.4.0)'
+        date: '2026-01-10'
+        tactic: Stealth
+        confidence: HIGH
+      - url: /reports/agent-xworm-exe/
+        title: 'Arsenal-237: agent_xworm.exe (XWorm RAT v6)'
+        date: '2026-01-09'
         tactic: Stealth
         confidence: HIGH
       - url: /reports/PULSAR-RAT/
@@ -1502,6 +1660,21 @@ techniques:
         report_url: /reports/open-directory-193-56-255-154-xiebroc2/
         rules: 'Covenant PowerShell Fileless Loader: GruntHTTP.ps1 (YARA, Detection)'
         count: 1
+      - url: /hunting-detections/arsenal-237-killer-dll-detections
+        title: 'Arsenal-237 New Files: killer.dll (BYOVD Process Termination)'
+        date: '2026-01-24'
+        report_url: /reports/arsenal-237-new-files/killer-dll/
+        rules: Driver File (.sys) Created in Temp Directory (SIGMA, Hunting)
+        count: 1
+      - url: /hunting-detections/fleetagentadvanced-exe-detections
+        title: 'Arsenal-237: FleetAgentAdvanced.exe'
+        date: '2026-01-10'
+        report_url: /reports/fleetagentadvanced-exe/
+        rules: >-
+          FleetAgentAdvanced Dropper Hash and Coined Function-Name Combination (YARA, Detection);
+          .NET Base64 Decode and File Write in a Process-Access Call Trace (No Telemetry Source
+          Demonstrated) (SIGMA, Hunting)
+        count: 2
     actors:
       - UTA-2026-002
       - UTA-2026-003
@@ -1524,10 +1697,10 @@ techniques:
       - vova75rus
     url: /techniques/T1027/
     mitre_url: https://attack.mitre.org/techniques/T1027/
-    report_count: 19
-    rule_count: 20
+    report_count: 24
+    rule_count: 23
     actor_count: 19
-    score: 39
+    score: 47
   - id: T1027.001
     name: Binary Padding
     tactic: Stealth
@@ -1694,6 +1867,11 @@ techniques:
         date: '2026-04-06'
         tactic: Stealth
         confidence: HIGH
+      - url: /reports/arsenal-237-new-files/killer-dll/
+        title: 'Arsenal-237 New Files: killer.dll (BYOVD Process Termination)'
+        date: '2026-01-24'
+        tactic: Stealth
+        confidence: HIGH
       - url: /reports/arsenal-237-new-files/
         title: 'Arsenal-237 New Files: Advanced Toolkit Analysis'
         date: '2026-01-20'
@@ -1708,15 +1886,23 @@ techniques:
           networkspec17.log PNG-IDAT Carrier (YARA, Detection); Inno Setup Wrapper Build Wave
           (Operator Codenames, AppId and Loader Filename) (YARA, Hunting)
         count: 2
+      - url: /hunting-detections/arsenal-237-killer-dll-detections
+        title: 'Arsenal-237 New Files: killer.dll (BYOVD Process Termination)'
+        date: '2026-01-24'
+        report_url: /reports/arsenal-237-new-files/killer-dll/
+        rules: >-
+          BYOVD Dual Vulnerable-Driver Embedding (Baidu + Sysinternals ProcExp Combination) (YARA,
+          Detection); Single Vulnerable-Driver Embedding (Baidu OR ProcExp Alone) (YARA, Hunting)
+        count: 2
     actors:
       - UTA-2026-004
       - UTA-2026-007
     url: /techniques/T1027.009/
     mitre_url: https://attack.mitre.org/techniques/T1027/009/
-    report_count: 3
-    rule_count: 2
+    report_count: 4
+    rule_count: 4
     actor_count: 2
-    score: 5
+    score: 8
   - id: T1027.010
     name: Command Obfuscation
     tactic: Stealth
@@ -1738,6 +1924,16 @@ techniques:
         date: '2026-06-12'
         tactic: Stealth
         confidence: HIGH
+      - url: /reports/bdapiutil64-sys/
+        title: 'Arsenal-237 New Files: BdApiUtil64.sys (Vulnerable Baidu Driver)'
+        date: '2026-01-26'
+        tactic: Stealth
+        confidence: HIGH
+      - url: /reports/arsenal-237/rootkit-dll/
+        title: 'Arsenal-237 New Files: rootkit.dll (Kernel-Mode Rootkit)'
+        date: '2026-01-20'
+        tactic: Stealth
+        confidence: HIGH
     detections:
       - url: /hunting-detections/flaskc2-postex-toolkit-67-215-232-25-detections
         title: Flask C2 & MSSQL CLR Backdoor on a Windows Post-Exploitation Staging Host
@@ -1751,10 +1947,10 @@ techniques:
       - UTA-2026-020
     url: /techniques/T1027.010/
     mitre_url: https://attack.mitre.org/techniques/T1027/010/
-    report_count: 3
+    report_count: 5
     rule_count: 2
     actor_count: 1
-    score: 5
+    score: 7
   - id: T1027.011
     name: Fileless Storage
     tactic: Stealth
@@ -1902,7 +2098,34 @@ techniques:
         date: '2026-02-10'
         tactic: Discovery
         confidence: HIGH
-    detections: []
+      - url: /reports/fleetagentfud-exe/
+        title: 'Arsenal-237: FleetAgentFUD.exe'
+        date: '2026-01-11'
+        tactic: Discovery
+        confidence: HIGH
+      - url: /reports/agent-xworm-v2-exe/
+        title: 'Arsenal-237: agent_xworm_v2.exe (XWorm RAT v2.4.0)'
+        date: '2026-01-10'
+        tactic: Discovery
+        confidence: HIGH
+      - url: /reports/agent-xworm-exe/
+        title: 'Arsenal-237: agent_xworm.exe (XWorm RAT v6)'
+        date: '2026-01-09'
+        tactic: Discovery
+        confidence: HIGH
+    detections:
+      - url: /hunting-detections/uac-test-exe-detections
+        title: 'Arsenal-237: uac_test.exe'
+        date: '2026-01-12'
+        report_url: /reports/uac-test-exe/
+        rules: Rust-Compiled UAC Bypass Tool (Generic Capability Combination) (YARA, Hunting)
+        count: 1
+      - url: /hunting-detections/fleetagentfud-exe-detections
+        title: 'Arsenal-237: FleetAgentFUD.exe'
+        date: '2026-01-11'
+        report_url: /reports/fleetagentfud-exe/
+        rules: FleetAgentFUD Rapid System Reconnaissance (Correlation) (SIGMA, Hunting)
+        count: 1
     actors:
       - UTA-2026-002
       - UTA-2026-003
@@ -1910,10 +2133,10 @@ techniques:
       - UTA-2026-024
     url: /techniques/T1033/
     mitre_url: https://attack.mitre.org/techniques/T1033/
-    report_count: 7
-    rule_count: 0
+    report_count: 10
+    rule_count: 2
     actor_count: 4
-    score: 7
+    score: 12
   - id: T1036
     name: Masquerading
     tactic: Stealth
@@ -2162,6 +2385,21 @@ techniques:
         date: '2026-03-10'
         tactic: Stealth
         confidence: DEFINITE
+      - url: /reports/arsenal-237-new-files/killer-dll/
+        title: 'Arsenal-237 New Files: killer.dll (BYOVD Process Termination)'
+        date: '2026-01-24'
+        tactic: Stealth
+        confidence: HIGH
+      - url: /reports/agent-exe/
+        title: 'Arsenal-237: agent.exe (PoetRAT)'
+        date: '2026-01-12'
+        tactic: Stealth
+        confidence: HIGH
+      - url: /reports/fleetagentadvanced-exe/
+        title: 'Arsenal-237: FleetAgentAdvanced.exe'
+        date: '2026-01-10'
+        tactic: Stealth
+        confidence: HIGH
     detections:
       - url: /hunting-detections/gotenberg-rce-cryptomining-107-175-69-137-detections
         title: Gotenberg CVE-2026-42589 Mass Exploitation and Cryptomining
@@ -2271,6 +2509,29 @@ techniques:
         report_url: /reports/sliver-open-directory/
         rules: Process Claims MicrosoftEdgeUpdate Identity from Non-Standard Location (SIGMA, Hunting)
         count: 1
+      - url: /hunting-detections/agent-exe-detections
+        title: 'Arsenal-237: agent.exe (PoetRAT)'
+        date: '2026-01-12'
+        report_url: /reports/agent-exe/
+        rules: >-
+          Golang RAT Multi-Signal Combination (Behavioral Combination) (YARA, Hunting);
+          WinDefenderSvc.exe + WindowsDefenderUpdate Masquerade Pair (YARA, Hunting); PoetRAT Dual
+          Persistence: Startup Drop + Registry Run Key Write (Correlation) (SIGMA, Hunting)
+        count: 3
+      - url: /hunting-detections/fleetagentfud-exe-detections
+        title: 'Arsenal-237: FleetAgentFUD.exe'
+        date: '2026-01-11'
+        report_url: /reports/fleetagentfud-exe/
+        rules: FleetAgent Family Signature (YARA, Hunting)
+        count: 1
+      - url: /hunting-detections/fleetagentadvanced-exe-detections
+        title: 'Arsenal-237: FleetAgentAdvanced.exe'
+        date: '2026-01-10'
+        report_url: /reports/fleetagentadvanced-exe/
+        rules: >-
+          FleetAgentAdvanced .NET Masquerade Configuration and API Combination (YARA, Hunting);
+          FleetAgentAdvanced Persistence with Microsoft .NET Masquerading (SIGMA, Hunting)
+        count: 2
       - url: /hunting-detections/Hybrid-Loader-Stealer-Sogou-detections
         title: Hybrid Loader/Stealer Ecosystem Masquerading as Sogou
         date: '2025-11-20'
@@ -2297,10 +2558,10 @@ techniques:
       - vova75rus
     url: /techniques/T1036.005/
     mitre_url: https://attack.mitre.org/techniques/T1036/005/
-    report_count: 14
-    rule_count: 33
+    report_count: 17
+    rule_count: 39
     actor_count: 15
-    score: 47
+    score: 56
   - id: T1036.007
     name: Double File Extension
     tactic: Stealth
@@ -2451,6 +2712,31 @@ techniques:
         date: '2026-02-10'
         tactic: Exfiltration
         confidence: HIGH
+      - url: /reports/arsenal-237-new-files/enc_c2-exe/
+        title: 'Arsenal-237 New Files: enc_c2.exe (Rust Ransomware with Tor C2)'
+        date: '2026-01-24'
+        tactic: Exfiltration
+        confidence: HIGH
+      - url: /reports/agent-exe/
+        title: 'Arsenal-237: agent.exe (PoetRAT)'
+        date: '2026-01-12'
+        tactic: Exfiltration
+        confidence: HIGH
+      - url: /reports/fleetagentfud-exe/
+        title: 'Arsenal-237: FleetAgentFUD.exe'
+        date: '2026-01-11'
+        tactic: Exfiltration
+        confidence: HIGH
+      - url: /reports/agent-xworm-v2-exe/
+        title: 'Arsenal-237: agent_xworm_v2.exe (XWorm RAT v2.4.0)'
+        date: '2026-01-10'
+        tactic: Exfiltration
+        confidence: HIGH
+      - url: /reports/agent-xworm-exe/
+        title: 'Arsenal-237: agent_xworm.exe (XWorm RAT v6)'
+        date: '2026-01-09'
+        tactic: Exfiltration
+        confidence: HIGH
       - url: /reports/dual-rat-analysis/
         title: 'Dual-RAT Analysis: Pulsar RAT vs. NjRAT/XWorm'
         date: '2025-12-20'
@@ -2549,10 +2835,10 @@ techniques:
       - n-3-xl
     url: /techniques/T1041/
     mitre_url: https://attack.mitre.org/techniques/T1041/
-    report_count: 18
+    report_count: 23
     rule_count: 13
     actor_count: 14
-    score: 31
+    score: 36
   - id: T1046
     name: Network Service Discovery
     tactic: Discovery
@@ -2664,22 +2950,35 @@ techniques:
         date: '2026-07-26'
         tactic: Execution
         confidence: HIGH
+      - url: /reports/arsenal-237-lpe-exe/
+        title: 'Arsenal-237 New Files: lpe.exe (Privilege Escalation)'
+        date: '2026-01-25'
+        tactic: Execution
+        confidence: HIGH
       - url: /reports/arsenal-237-new-files/
         title: 'Arsenal-237 New Files: Advanced Toolkit Analysis'
         date: '2026-01-20'
         tactic: Execution
         confidence: HIGH
-    detections: []
+    detections:
+      - url: /hunting-detections/arsenal-237-lpe-exe-detections
+        title: 'Arsenal-237 New Files: lpe.exe (Privilege Escalation)'
+        date: '2026-01-25'
+        report_url: /reports/arsenal-237-lpe-exe/
+        rules: >-
+          Generic WMIC Process Creation Combination (YARA, Hunting); WMIC Process Call Create by a
+          User Not Named SYSTEM or Administrator (SIGMA, Hunting)
+        count: 2
     actors:
       - UTA-2026-020
       - UTA-2026-021
       - UTA-2026-024
     url: /techniques/T1047/
     mitre_url: https://attack.mitre.org/techniques/T1047/
-    report_count: 4
-    rule_count: 0
+    report_count: 5
+    rule_count: 2
     actor_count: 3
-    score: 4
+    score: 7
   - id: T1048.003
     name: Exfiltration Over Unencrypted Non-C2 Protocol
     tactic: Exfiltration
@@ -2741,6 +3040,27 @@ techniques:
     rule_count: 0
     actor_count: 2
     score: 3
+  - id: T1053
+    name: Scheduled Task/Job
+    tactic: Execution
+    tactics:
+      - Execution
+      - Persistence
+      - Privilege Escalation
+    reports:
+      - url: /reports/arsenal-237-new-files/killer-crowdstrike-dll/
+        title: 'Arsenal-237 New Files: killer_crowdstrike.dll (CrowdStrike-Specific Termination)'
+        date: '2026-01-18'
+        tactic: Execution
+        confidence: HIGH
+    detections: []
+    actors: []
+    url: /techniques/T1053/
+    mitre_url: https://attack.mitre.org/techniques/T1053/
+    report_count: 1
+    rule_count: 0
+    actor_count: 0
+    score: 1
   - id: T1053.003
     name: Cron
     tactic: Execution
@@ -2844,10 +3164,25 @@ techniques:
         date: '2026-04-05'
         tactic: Persistence
         confidence: HIGH
+      - url: /reports/new-enc-exe/
+        title: 'Arsenal-237 New Files: new_enc.exe (Human-Operated Rust Ransomware)'
+        date: '2026-01-26'
+        tactic: Persistence
+        confidence: HIGH
+      - url: /reports/arsenal-237-lpe-exe/
+        title: 'Arsenal-237 New Files: lpe.exe (Privilege Escalation)'
+        date: '2026-01-25'
+        tactic: Execution
+        confidence: HIGH
       - url: /reports/arsenal-237-new-files/
         title: 'Arsenal-237 New Files: Advanced Toolkit Analysis'
         date: '2026-01-20'
         tactic: Execution
+        confidence: HIGH
+      - url: /reports/fleetagentadvanced-exe/
+        title: 'Arsenal-237: FleetAgentAdvanced.exe'
+        date: '2026-01-10'
+        tactic: Persistence
         confidence: HIGH
       - url: /reports/dual-rat-analysis/
         title: 'Dual-RAT Analysis: Pulsar RAT vs. NjRAT/XWorm'
@@ -2909,6 +3244,31 @@ techniques:
           XWorm 3.0-5.0: Config and Builder Markers (YARA, Detection); One-Minute Highest-Privilege
           Scheduled Task With an AppData Roaming Path (XWorm Persistence Pattern) (SIGMA, Detection)
         count: 2
+      - url: /hunting-detections/arsenal-237-new_enc-exe-detections
+        title: 'Arsenal-237 New Files: new_enc.exe (Human-Operated Rust Ransomware)'
+        date: '2026-01-26'
+        report_url: /reports/new-enc-exe/
+        rules: >-
+          RustRansomNoteTask Persistence Marker (YARA, Hunting); RustRansomNoteTask Scheduled Task
+          File Creation (SIGMA, Hunting)
+        count: 2
+      - url: /hunting-detections/arsenal-237-lpe-exe-detections
+        title: 'Arsenal-237 New Files: lpe.exe (Privilege Escalation)'
+        date: '2026-01-25'
+        report_url: /reports/arsenal-237-lpe-exe/
+        rules: >-
+          Scheduled Task SYSTEM Escalation Lifecycle (YARA, Detection); Scheduled Task Created as
+          SYSTEM (SIGMA, Detection)
+        count: 2
+      - url: /hunting-detections/fleetagentadvanced-exe-detections
+        title: 'Arsenal-237: FleetAgentAdvanced.exe'
+        date: '2026-01-10'
+        report_url: /reports/fleetagentadvanced-exe/
+        rules: >-
+          FleetAgentAdvanced Dropper Hash and Coined Function-Name Combination (YARA, Detection);
+          FleetAgentAdvanced Scheduled-Task Masquerade Creation and task.xml Deletion (Correlation)
+          (SIGMA, Hunting)
+        count: 2
       - url: /hunting-detections/dual-rat-analysis-detections
         title: 'Dual-RAT Analysis: Pulsar RAT vs. NjRAT/XWorm'
         date: '2025-12-20'
@@ -2928,10 +3288,10 @@ techniques:
       - n-3-xl
     url: /techniques/T1053.005/
     mitre_url: https://attack.mitre.org/techniques/T1053/005/
-    report_count: 10
-    rule_count: 16
+    report_count: 13
+    rule_count: 22
     actor_count: 7
-    score: 26
+    score: 35
   - id: T1055
     name: Process Injection
     tactic: Stealth
@@ -2984,6 +3344,21 @@ techniques:
         date: '2026-01-20'
         tactic: Stealth
         confidence: HIGH
+      - url: /reports/arsenal-237-new-files/killer-crowdstrike-dll/
+        title: 'Arsenal-237 New Files: killer_crowdstrike.dll (CrowdStrike-Specific Termination)'
+        date: '2026-01-18'
+        tactic: Privilege Escalation
+        confidence: HIGH
+      - url: /reports/fleetagentfud-exe/
+        title: 'Arsenal-237: FleetAgentFUD.exe'
+        date: '2026-01-11'
+        tactic: Stealth
+        confidence: HIGH
+      - url: /reports/fleetagentadvanced-exe/
+        title: 'Arsenal-237: FleetAgentAdvanced.exe'
+        date: '2026-01-10'
+        tactic: Stealth
+        confidence: HIGH
       - url: /reports/PULSAR-RAT/
         title: PULSAR RAT (server.exe) — Technical Analysis & Business Risk Assessment
         date: '2025-12-15'
@@ -3023,6 +3398,30 @@ techniques:
           (Generic API Cluster) (YARA, Hunting); Suspicious Process Access from AppData to Browser
           or Explorer Process (SIGMA, Hunting)
         count: 3
+      - url: /hunting-detections/arsenal-237-rootkit-dll-detections
+        title: 'Arsenal-237 New Files: rootkit.dll (Kernel-Mode Rootkit)'
+        date: '2026-01-20'
+        report_url: /reports/arsenal-237/rootkit-dll/
+        rules: Rust Runtime Plus Process-Manipulation APIs (YARA, Hunting)
+        count: 1
+      - url: /hunting-detections/fleetagentfud-exe-detections
+        title: 'Arsenal-237: FleetAgentFUD.exe'
+        date: '2026-01-11'
+        report_url: /reports/fleetagentfud-exe/
+        rules: >-
+          VirtualProtect Call Setting RWX Named in a Call Trace, from an AppData Process (EDR
+          API-Call Telemetry) (SIGMA, Hunting)
+        count: 1
+      - url: /hunting-detections/fleetagentadvanced-exe-detections
+        title: 'Arsenal-237: FleetAgentAdvanced.exe'
+        date: '2026-01-10'
+        report_url: /reports/fleetagentadvanced-exe/
+        rules: >-
+          FleetAgentAdvanced Dropper Hash and Coined Function-Name Combination (YARA, Detection);
+          FleetAgentAdvanced .NET Masquerade Configuration and API Combination (YARA, Hunting);
+          Remote Thread Created by a FleetAgentAdvanced Binary or an AppData Process (SIGMA,
+          Hunting)
+        count: 3
       - url: /hunting-detections/dual-rat-analysis-detections
         title: 'Dual-RAT Analysis: Pulsar RAT vs. NjRAT/XWorm'
         date: '2025-12-20'
@@ -3041,10 +3440,10 @@ techniques:
       - n-3-xl
     url: /techniques/T1055/
     mitre_url: https://attack.mitre.org/techniques/T1055/
-    report_count: 10
-    rule_count: 11
+    report_count: 13
+    rule_count: 16
     actor_count: 7
-    score: 21
+    score: 29
   - id: T1055.001
     name: Dynamic-link Library Injection
     tactic: Stealth
@@ -3057,14 +3456,35 @@ techniques:
         date: '2026-01-20'
         tactic: Stealth
         confidence: HIGH
-    detections: []
+      - url: /reports/arsenal-237/rootkit-dll/
+        title: 'Arsenal-237 New Files: rootkit.dll (Kernel-Mode Rootkit)'
+        date: '2026-01-20'
+        tactic: Stealth
+        confidence: HIGH
+    detections:
+      - url: /hunting-detections/arsenal-237-chromelevator-exe-detections
+        title: 'Arsenal-237 New Files: chromelevator.exe (Browser Credential Theft)'
+        date: '2026-01-22'
+        report_url: /reports/arsenal-237-new-files/chromelevator-exe/
+        rules: >-
+          Reflective DLL Injection Framework (YARA, Detection); Process Injection API Sequence
+          Targeting Browser Processes (SIGMA, Detection)
+        count: 2
+      - url: /hunting-detections/arsenal-237-rootkit-dll-detections
+        title: 'Arsenal-237 New Files: rootkit.dll (Kernel-Mode Rootkit)'
+        date: '2026-01-20'
+        report_url: /reports/arsenal-237/rootkit-dll/
+        rules: >-
+          Comprehensive Multi-Branch Combination (YARA, Hunting); High-Privilege Process Access to
+          Security Product Processes (SIGMA, Detection)
+        count: 2
     actors: []
     url: /techniques/T1055.001/
     mitre_url: https://attack.mitre.org/techniques/T1055/001/
-    report_count: 1
-    rule_count: 0
+    report_count: 2
+    rule_count: 4
     actor_count: 0
-    score: 1
+    score: 6
   - id: T1055.002
     name: Portable Executable Injection
     tactic: Stealth
@@ -3349,6 +3769,21 @@ techniques:
         date: '2026-02-10'
         tactic: Collection
         confidence: HIGH
+      - url: /reports/agent-exe/
+        title: 'Arsenal-237: agent.exe (PoetRAT)'
+        date: '2026-01-12'
+        tactic: Credential Access
+        confidence: HIGH
+      - url: /reports/agent-xworm-v2-exe/
+        title: 'Arsenal-237: agent_xworm_v2.exe (XWorm RAT v2.4.0)'
+        date: '2026-01-10'
+        tactic: Credential Access
+        confidence: HIGH
+      - url: /reports/agent-xworm-exe/
+        title: 'Arsenal-237: agent_xworm.exe (XWorm RAT v6)'
+        date: '2026-01-09'
+        tactic: Credential Access
+        confidence: HIGH
       - url: /reports/dual-rat-analysis/
         title: 'Dual-RAT Analysis: Pulsar RAT vs. NjRAT/XWorm'
         date: '2025-12-20'
@@ -3375,6 +3810,14 @@ techniques:
           Anchored) (YARA, Detection); Remcos Surveillance Module (Generic API Cluster) (YARA,
           Hunting)
         count: 3
+      - url: /hunting-detections/agent-exe-detections
+        title: 'Arsenal-237: agent.exe (PoetRAT)'
+        date: '2026-01-12'
+        report_url: /reports/agent-exe/
+        rules: >-
+          Golang RAT Multi-Signal Combination (Behavioral Combination) (YARA, Hunting); Generic
+          Golang RAT Capability Combination (YARA, Hunting)
+        count: 2
     actors:
       - UTA-2026-003
       - UTA-2026-005
@@ -3387,10 +3830,10 @@ techniques:
       - n-3-xl
     url: /techniques/T1056.001/
     mitre_url: https://attack.mitre.org/techniques/T1056/001/
-    report_count: 11
-    rule_count: 4
+    report_count: 14
+    rule_count: 6
     actor_count: 9
-    score: 15
+    score: 20
   - id: T1056.002
     name: GUI Input Capture
     tactic: Collection
@@ -3508,9 +3951,29 @@ techniques:
         date: '2026-02-10'
         tactic: Discovery
         confidence: HIGH
+      - url: /reports/bdapiutil64-sys/
+        title: 'Arsenal-237 New Files: BdApiUtil64.sys (Vulnerable Baidu Driver)'
+        date: '2026-01-26'
+        tactic: Discovery
+        confidence: HIGH
+      - url: /reports/arsenal-237-new-files/killer-dll/
+        title: 'Arsenal-237 New Files: killer.dll (BYOVD Process Termination)'
+        date: '2026-01-24'
+        tactic: Discovery
+        confidence: HIGH
       - url: /reports/arsenal-237-new-files/
         title: 'Arsenal-237 New Files: Advanced Toolkit Analysis'
         date: '2026-01-20'
+        tactic: Discovery
+        confidence: HIGH
+      - url: /reports/agent-xworm-v2-exe/
+        title: 'Arsenal-237: agent_xworm_v2.exe (XWorm RAT v2.4.0)'
+        date: '2026-01-10'
+        tactic: Discovery
+        confidence: HIGH
+      - url: /reports/agent-xworm-exe/
+        title: 'Arsenal-237: agent_xworm.exe (XWorm RAT v6)'
+        date: '2026-01-09'
         tactic: Discovery
         confidence: HIGH
       - url: /reports/PULSAR-RAT/
@@ -3518,7 +3981,22 @@ techniques:
         date: '2025-12-15'
         tactic: Discovery
         confidence: HIGH
-    detections: []
+    detections:
+      - url: /hunting-detections/arsenal-237-new_enc-exe-detections
+        title: 'Arsenal-237 New Files: new_enc.exe (Human-Operated Rust Ransomware)'
+        date: '2026-01-26'
+        report_url: /reports/new-enc-exe/
+        rules: Analysis Tool Process Awareness (YARA, Hunting)
+        count: 1
+      - url: /hunting-detections/agent-xworm-v2-exe-detections
+        title: 'Arsenal-237: agent_xworm_v2.exe (XWorm RAT v2.4.0)'
+        date: '2026-01-10'
+        report_url: /reports/agent-xworm-v2-exe/
+        rules: >-
+          XWorm v2.x Embedded PowerShell Reconnaissance Command Templates (YARA, Detection); XWorm
+          v2.x Family Multi-Signal Combination (YARA, Hunting); XWorm v2.x Full PowerShell
+          Reconnaissance Sequence on Same Host (SIGMA, Detection)
+        count: 3
     actors:
       - UTA-2026-001
       - UTA-2026-002
@@ -3532,10 +4010,10 @@ techniques:
       - UTA-2026-021
     url: /techniques/T1057/
     mitre_url: https://attack.mitre.org/techniques/T1057/
-    report_count: 15
-    rule_count: 0
+    report_count: 19
+    rule_count: 4
     actor_count: 10
-    score: 15
+    score: 23
   - id: T1059
     name: Command and Scripting Interpreter
     tactic: Execution
@@ -3547,6 +4025,11 @@ techniques:
           FACEIT ClickFix Pages Point CS2 Players to a Script URL That VirusTotal Ties to a
           Steam-Focused Executable
         date: '2026-09-28'
+        tactic: Execution
+        confidence: HIGH
+      - url: /reports/arsenal-237-new-files/dec_fixed-exe/
+        title: 'Arsenal-237 New Files: dec_fixed.exe (Ransomware Decryptor)'
+        date: '2026-01-23'
         tactic: Execution
         confidence: HIGH
       - url: /reports/arsenal-237-new-files/
@@ -3573,13 +4056,21 @@ techniques:
           MMC Spawning Mshta, Rundll32 or a Script or Command Interpreter (GrimResource Pattern Seen
           in HijackLoader) (SIGMA, Detection)
         count: 1
+      - url: /hunting-detections/arsenal-237-dec_fixed-exe-detections
+        title: 'Arsenal-237 New Files: dec_fixed.exe (Ransomware Decryptor)'
+        date: '2026-01-23'
+        report_url: /reports/arsenal-237-new-files/dec_fixed-exe/
+        rules: >-
+          Decryptor CLI + Error + Cleanup Combination (YARA, Detection); dec_fixed.exe Execution
+          with --folder-a Parameter (SIGMA, Hunting)
+        count: 2
     actors: []
     url: /techniques/T1059/
     mitre_url: https://attack.mitre.org/techniques/T1059/
-    report_count: 4
-    rule_count: 1
+    report_count: 5
+    rule_count: 3
     actor_count: 0
-    score: 5
+    score: 8
   - id: T1059.001
     name: PowerShell
     tactic: Execution
@@ -3653,9 +4144,44 @@ techniques:
         date: '2026-03-10'
         tactic: Execution
         confidence: DEFINITE
+      - url: /reports/new-enc-exe/
+        title: 'Arsenal-237 New Files: new_enc.exe (Human-Operated Rust Ransomware)'
+        date: '2026-01-26'
+        tactic: Execution
+        confidence: HIGH
+      - url: /reports/arsenal-237-lpe-exe/
+        title: 'Arsenal-237 New Files: lpe.exe (Privilege Escalation)'
+        date: '2026-01-25'
+        tactic: Execution
+        confidence: HIGH
       - url: /reports/arsenal-237-new-files/
         title: 'Arsenal-237 New Files: Advanced Toolkit Analysis'
         date: '2026-01-20'
+        tactic: Execution
+        confidence: HIGH
+      - url: /reports/arsenal-237/rootkit-dll/
+        title: 'Arsenal-237 New Files: rootkit.dll (Kernel-Mode Rootkit)'
+        date: '2026-01-20'
+        tactic: Execution
+        confidence: HIGH
+      - url: /reports/agent-exe/
+        title: 'Arsenal-237: agent.exe (PoetRAT)'
+        date: '2026-01-12'
+        tactic: Execution
+        confidence: HIGH
+      - url: /reports/fleetagentfud-exe/
+        title: 'Arsenal-237: FleetAgentFUD.exe'
+        date: '2026-01-11'
+        tactic: Execution
+        confidence: HIGH
+      - url: /reports/agent-xworm-v2-exe/
+        title: 'Arsenal-237: agent_xworm_v2.exe (XWorm RAT v2.4.0)'
+        date: '2026-01-10'
+        tactic: Execution
+        confidence: HIGH
+      - url: /reports/agent-xworm-exe/
+        title: 'Arsenal-237: agent_xworm.exe (XWorm RAT v6)'
+        date: '2026-01-09'
         tactic: Execution
         confidence: HIGH
       - url: /reports/quasar-xworm-powershell/
@@ -3772,6 +4298,53 @@ techniques:
           WebClient DownloadFile Execution (Sliver Stager Download Pattern) (SIGMA, Hunting);
           PowerShell Drops Executable to TEMP Directory (SIGMA, Hunting)
         count: 3
+      - url: /hunting-detections/arsenal-237-nethost-dll-detections
+        title: 'Arsenal-237 New Files: nethost.dll (DLL Hijacking Persistence)'
+        date: '2026-01-26'
+        report_url: /reports/arsenal-237/nethost-dll/
+        rules: >-
+          Arsenal-237 NetHost PowerShell C2 Command Templates (YARA, Detection); Arsenal-237
+          nethost.dll PowerShell Template Execution (SIGMA, Detection)
+        count: 2
+      - url: /hunting-detections/arsenal-237-rootkit-dll-detections
+        title: 'Arsenal-237 New Files: rootkit.dll (Kernel-Mode Rootkit)'
+        date: '2026-01-20'
+        report_url: /reports/arsenal-237/rootkit-dll/
+        rules: PowerShell Execution with rootkit.dll on Parent Command Line (SIGMA, Hunting)
+        count: 1
+      - url: /hunting-detections/agent-exe-detections
+        title: 'Arsenal-237: agent.exe (PoetRAT)'
+        date: '2026-01-12'
+        report_url: /reports/agent-exe/
+        rules: Generic Golang RAT Capability Combination (YARA, Hunting)
+        count: 1
+      - url: /hunting-detections/fleetagentfud-exe-detections
+        title: 'Arsenal-237: FleetAgentFUD.exe'
+        date: '2026-01-11'
+        report_url: /reports/fleetagentfud-exe/
+        rules: >-
+          FleetAgentFUD PowerShell Execution Policy Bypass Strings (YARA, Hunting); FleetAgentFUD
+          FUD RAT Behavioral Pattern (YARA, Hunting); PowerShell Execution Policy Bypass with Hidden
+          Window from an AppData Parent (SIGMA, Hunting); PowerShell Execution Policy Bypass from an
+          AppData Parent (Broad Variant) (SIGMA, Hunting)
+        count: 4
+      - url: /hunting-detections/agent-xworm-v2-exe-detections
+        title: 'Arsenal-237: agent_xworm_v2.exe (XWorm RAT v2.4.0)'
+        date: '2026-01-10'
+        report_url: /reports/agent-xworm-v2-exe/
+        rules: >-
+          XWorm v2.x Embedded PowerShell Reconnaissance Command Templates (YARA, Detection); XWorm
+          v2.x Full PowerShell Reconnaissance Sequence on Same Host (SIGMA, Detection); PowerShell
+          -NoP -C Execution from a User-Writable-Directory Parent (XWorm V2) (SIGMA, Hunting)
+        count: 3
+      - url: /hunting-detections/agent-xworm-exe-detections
+        title: 'Arsenal-237: agent_xworm.exe (XWorm RAT v6)'
+        date: '2026-01-09'
+        report_url: /reports/agent-xworm-exe/
+        rules: >-
+          XWorm Embedded PowerShell Reconnaissance Templates (YARA, Detection); PowerShell -NoP -C
+          Execution from a User-Writable-Directory Parent (XWorm Agent) (SIGMA, Hunting)
+        count: 2
       - url: /hunting-detections/quasar-xworm-powershell-detections
         title: Quasar + XWorm + PowerShell
         date: '2025-10-10'
@@ -3794,10 +4367,10 @@ techniques:
       - n-3-xl
     url: /techniques/T1059.001/
     mitre_url: https://attack.mitre.org/techniques/T1059/001/
-    report_count: 15
-    rule_count: 23
+    report_count: 22
+    rule_count: 36
     actor_count: 13
-    score: 38
+    score: 58
   - id: T1059.003
     name: Windows Command Shell
     tactic: Execution
@@ -4360,6 +4933,16 @@ techniques:
         date: '2026-01-20'
         tactic: Privilege Escalation
         confidence: HIGH
+      - url: /reports/arsenal-237/rootkit-dll/
+        title: 'Arsenal-237 New Files: rootkit.dll (Kernel-Mode Rootkit)'
+        date: '2026-01-20'
+        tactic: Privilege Escalation
+        confidence: HIGH
+      - url: /reports/agent-exe/
+        title: 'Arsenal-237: agent.exe (PoetRAT)'
+        date: '2026-01-12'
+        tactic: Privilege Escalation
+        confidence: HIGH
       - url: /reports/AdvancedRouterScanner/
         title: AdvancedRouterScanner
         date: '2025-10-20'
@@ -4381,6 +4964,47 @@ techniques:
           CVE-2026-20817 WER LPE PoC: Process Handle Opened to WerFault.exe by an Unlisted Source
           (SIGMA, Hunting)
         count: 1
+      - url: /hunting-detections/arsenal-237-BdApiUtil64-sys-detections
+        title: 'Arsenal-237 New Files: BdApiUtil64.sys (Vulnerable Baidu Driver)'
+        date: '2026-01-26'
+        report_url: /reports/bdapiutil64-sys/
+        rules: >-
+          BdApiUtil64.sys Baidu Driver Identity (Signer, PDB, and Internal Object Names) (YARA,
+          Detection); BdApiUtil64.sys IOCTL Abuse (DeviceIoControl + Documented IOCTL Codes) (YARA,
+          Detection); BdApiUtil64.sys BYOVD Kill Pattern: Driver Load Followed by Security-Product
+          Termination (Correlation) (SIGMA, Detection)
+        count: 3
+      - url: /hunting-detections/arsenal-237-killer-dll-detections
+        title: 'Arsenal-237 New Files: killer.dll (BYOVD Process Termination)'
+        date: '2026-01-24'
+        report_url: /reports/arsenal-237-new-files/killer-dll/
+        rules: >-
+          BYOVD Dual Vulnerable-Driver Embedding (Baidu + Sysinternals ProcExp Combination) (YARA,
+          Detection); Single Vulnerable-Driver Embedding (Baidu OR ProcExp Alone) (YARA, Hunting);
+          Security-Product Termination + IOCTL Behavioral Combination (YARA, Hunting); Baidu
+          BdApiUtil Vulnerable Driver Load (SIGMA, Detection); Sysinternals ProcExp152 Vulnerable
+          Driver Load (SIGMA, Hunting); Kernel-Mode Driver Service Installed (Event 7045) (SIGMA,
+          Hunting); Driver File (.sys) Created in Temp Directory (SIGMA, Hunting); Kernel Driver
+          Service Creation by Rundll32 (Registry) (SIGMA, Hunting)
+        count: 8
+      - url: /hunting-detections/arsenal-237-rootkit-dll-detections
+        title: 'Arsenal-237 New Files: rootkit.dll (Kernel-Mode Rootkit)'
+        date: '2026-01-20'
+        report_url: /reports/arsenal-237/rootkit-dll/
+        rules: >-
+          BYOVD Baidu Driver Embedding (YARA, Detection); Comprehensive Multi-Branch Combination
+          (YARA, Hunting); Rust Runtime Plus Process-Manipulation APIs (YARA, Hunting);
+          BdApiUtil64.sys BYOVD Driver Loading (SIGMA, Detection)
+        count: 4
+      - url: /hunting-detections/arsenal-237-killer-crowdstrike-dll-detections
+        title: 'Arsenal-237 New Files: killer_crowdstrike.dll (CrowdStrike-Specific Termination)'
+        date: '2026-01-18'
+        report_url: /reports/arsenal-237-new-files/killer-crowdstrike-dll/
+        rules: >-
+          BYOVD Kernel Driver Install + CrowdStrike Falcon Termination (Correlation) (SIGMA,
+          Detection); Known-Vulnerable Driver Loaded from Temporary Directory (BYOVD) (SIGMA,
+          Detection)
+        count: 2
     actors:
       - UTA-2026-005
       - UTA-2026-006
@@ -4389,10 +5013,10 @@ techniques:
       - UTA-2026-024
     url: /techniques/T1068/
     mitre_url: https://attack.mitre.org/techniques/T1068/
-    report_count: 8
-    rule_count: 2
+    report_count: 10
+    rule_count: 19
     actor_count: 5
-    score: 10
+    score: 29
   - id: T1069.002
     name: Domain Groups
     tactic: Discovery
@@ -4528,9 +5152,29 @@ techniques:
         date: '2026-02-10'
         tactic: Stealth
         confidence: HIGH
+      - url: /reports/bdapiutil64-sys/
+        title: 'Arsenal-237 New Files: BdApiUtil64.sys (Vulnerable Baidu Driver)'
+        date: '2026-01-26'
+        tactic: Stealth
+        confidence: HIGH
+      - url: /reports/arsenal-237-lpe-exe/
+        title: 'Arsenal-237 New Files: lpe.exe (Privilege Escalation)'
+        date: '2026-01-25'
+        tactic: Stealth
+        confidence: HIGH
+      - url: /reports/arsenal-237-new-files/killer-dll/
+        title: 'Arsenal-237 New Files: killer.dll (BYOVD Process Termination)'
+        date: '2026-01-24'
+        tactic: Stealth
+        confidence: HIGH
       - url: /reports/arsenal-237-new-files/
         title: 'Arsenal-237 New Files: Advanced Toolkit Analysis'
         date: '2026-01-20'
+        tactic: Stealth
+        confidence: HIGH
+      - url: /reports/fleetagentadvanced-exe/
+        title: 'Arsenal-237: FleetAgentAdvanced.exe'
+        date: '2026-01-10'
         tactic: Stealth
         confidence: HIGH
       - url: /reports/dual-rat-analysis/
@@ -4554,6 +5198,22 @@ techniques:
           Inline Self-Deletion cmd.exe Command Line (PING, DEL, Start and Remcos Folder) (SIGMA,
           Detection)
         count: 2
+      - url: /hunting-detections/arsenal-237-dec_fixed-exe-detections
+        title: 'Arsenal-237 New Files: dec_fixed.exe (Ransomware Decryptor)'
+        date: '2026-01-23'
+        report_url: /reports/arsenal-237-new-files/dec_fixed-exe/
+        rules: >-
+          Decryptor CLI + Error + Cleanup Combination (YARA, Detection); readme.txt Ransom-Note
+          Deletion by dec_fixed.exe (SIGMA, Hunting)
+        count: 2
+      - url: /hunting-detections/fleetagentadvanced-exe-detections
+        title: 'Arsenal-237: FleetAgentAdvanced.exe'
+        date: '2026-01-10'
+        report_url: /reports/fleetagentadvanced-exe/
+        rules: >-
+          FleetAgentAdvanced Scheduled-Task Masquerade Creation and task.xml Deletion (Correlation)
+          (SIGMA, Hunting)
+        count: 1
       - url: /hunting-detections/dual-rat-analysis-detections
         title: 'Dual-RAT Analysis: Pulsar RAT vs. NjRAT/XWorm'
         date: '2025-12-20'
@@ -4573,10 +5233,29 @@ techniques:
       - UTA-2026-024
     url: /techniques/T1070.004/
     mitre_url: https://attack.mitre.org/techniques/T1070/004/
-    report_count: 11
-    rule_count: 5
+    report_count: 15
+    rule_count: 8
     actor_count: 8
-    score: 16
+    score: 23
+  - id: T1070.005
+    name: Network Share Connection Removal
+    tactic: Stealth
+    tactics:
+      - Stealth
+    reports:
+      - url: /reports/arsenal-237-new-files/killer-dll/
+        title: 'Arsenal-237 New Files: killer.dll (BYOVD Process Termination)'
+        date: '2026-01-24'
+        tactic: Stealth
+        confidence: HIGH
+    detections: []
+    actors: []
+    url: /techniques/T1070.005/
+    mitre_url: https://attack.mitre.org/techniques/T1070/005/
+    report_count: 1
+    rule_count: 0
+    actor_count: 0
+    score: 1
   - id: T1070.006
     name: Timestomp
     tactic: Stealth
@@ -4764,9 +5443,34 @@ techniques:
         date: '2026-02-05'
         tactic: Command and Control
         confidence: HIGH
+      - url: /reports/arsenal-237-new-files/enc_c2-exe/
+        title: 'Arsenal-237 New Files: enc_c2.exe (Rust Ransomware with Tor C2)'
+        date: '2026-01-24'
+        tactic: Command and Control
+        confidence: HIGH
       - url: /reports/arsenal-237-new-files/
         title: 'Arsenal-237 New Files: Advanced Toolkit Analysis'
         date: '2026-01-20'
+        tactic: Command and Control
+        confidence: HIGH
+      - url: /reports/agent-exe/
+        title: 'Arsenal-237: agent.exe (PoetRAT)'
+        date: '2026-01-12'
+        tactic: Command and Control
+        confidence: HIGH
+      - url: /reports/fleetagentfud-exe/
+        title: 'Arsenal-237: FleetAgentFUD.exe'
+        date: '2026-01-11'
+        tactic: Command and Control
+        confidence: HIGH
+      - url: /reports/agent-xworm-v2-exe/
+        title: 'Arsenal-237: agent_xworm_v2.exe (XWorm RAT v2.4.0)'
+        date: '2026-01-10'
+        tactic: Command and Control
+        confidence: HIGH
+      - url: /reports/agent-xworm-exe/
+        title: 'Arsenal-237: agent_xworm.exe (XWorm RAT v6)'
+        date: '2026-01-09'
         tactic: Command and Control
         confidence: HIGH
       - url: /reports/dual-rat-analysis/
@@ -4996,6 +5700,41 @@ techniques:
         report_url: /reports/webserver-compromise-kit-91-236-230-250/
         rules: Anachronistic IE11/Win7 User-Agent (Possible revsocks) (SURICATA, Hunting)
         count: 1
+      - url: /hunting-detections/arsenal-237-nethost-dll-detections
+        title: 'Arsenal-237 New Files: nethost.dll (DLL Hijacking Persistence)'
+        date: '2026-01-26'
+        report_url: /reports/arsenal-237/nethost-dll/
+        rules: Arsenal-237 NetHost Rust C2 String Combination (YARA, Hunting)
+        count: 1
+      - url: /hunting-detections/arsenal-237-enc_c2-exe-detections
+        title: 'Arsenal-237 New Files: enc_c2.exe (Rust Ransomware with Tor C2)'
+        date: '2026-01-24'
+        report_url: /reports/arsenal-237-new-files/enc_c2-exe/
+        rules: >-
+          RaaS Builder ID & C2 Beacon Schema Combination (YARA, Detection); Tor C2 Beacon Endpoint
+          Path (YARA, Hunting); HTTP POST to Tor Hidden-Service C2 Beacon Endpoint (SIGMA,
+          Detection); C2 Beacon POST to /c2/beacon.php (Host Not Tested) (SURICATA, Detection)
+        count: 4
+      - url: /hunting-detections/fleetagentfud-exe-detections
+        title: 'Arsenal-237: FleetAgentFUD.exe'
+        date: '2026-01-11'
+        report_url: /reports/fleetagentfud-exe/
+        rules: >-
+          WebSocket Handshake, Registration-Field and Command-String Combinations (FleetAgentFUD
+          Reference Sample) (YARA, Hunting); FleetAgentFUD FUD RAT Behavioral Pattern (YARA,
+          Hunting); FleetAgentFUD X-Agent-Secret WebSocket Authentication Header (SURICATA,
+          Detection); FleetAgentFUD Default .NET WebClient User-Agent + WebSocket Upgrade (SURICATA,
+          Hunting)
+        count: 4
+      - url: /hunting-detections/agent-xworm-v2-exe-detections
+        title: 'Arsenal-237: agent_xworm_v2.exe (XWorm RAT v2.4.0)'
+        date: '2026-01-10'
+        report_url: /reports/agent-xworm-v2-exe/
+        rules: >-
+          XWorm v2.x Family Multi-Signal Combination (YARA, Hunting); XWorm AgentSec Authentication
+          Secret Pattern (YARA, Hunting); Generic .NET WebSocket C2 Capability Combination (YARA,
+          Hunting); XWorm AgentSec Authentication Secret Pattern in TCP Payload (SURICATA, Hunting)
+        count: 4
       - url: /hunting-detections/dual-rat-analysis-detections
         title: 'Dual-RAT Analysis: Pulsar RAT vs. NjRAT/XWorm'
         date: '2025-12-20'
@@ -5041,10 +5780,10 @@ techniques:
       - n-3-xl
     url: /techniques/T1071.001/
     mitre_url: https://attack.mitre.org/techniques/T1071/001/
-    report_count: 29
-    rule_count: 81
+    report_count: 34
+    rule_count: 94
     actor_count: 19
-    score: 110
+    score: 128
   - id: T1071.002
     name: File Transfer Protocols
     tactic: Command and Control
@@ -5434,9 +6173,44 @@ techniques:
         date: '2026-02-10'
         tactic: Discovery
         confidence: HIGH
+      - url: /reports/bdapiutil64-sys/
+        title: 'Arsenal-237 New Files: BdApiUtil64.sys (Vulnerable Baidu Driver)'
+        date: '2026-01-26'
+        tactic: Discovery
+        confidence: HIGH
+      - url: /reports/arsenal-237-new-files/enc_c2-exe/
+        title: 'Arsenal-237 New Files: enc_c2.exe (Rust Ransomware with Tor C2)'
+        date: '2026-01-24'
+        tactic: Discovery
+        confidence: HIGH
       - url: /reports/arsenal-237-new-files/
         title: 'Arsenal-237 New Files: Advanced Toolkit Analysis'
         date: '2026-01-20'
+        tactic: Discovery
+        confidence: HIGH
+      - url: /reports/agent-exe/
+        title: 'Arsenal-237: agent.exe (PoetRAT)'
+        date: '2026-01-12'
+        tactic: Discovery
+        confidence: HIGH
+      - url: /reports/fleetagentfud-exe/
+        title: 'Arsenal-237: FleetAgentFUD.exe'
+        date: '2026-01-11'
+        tactic: Discovery
+        confidence: HIGH
+      - url: /reports/agent-xworm-v2-exe/
+        title: 'Arsenal-237: agent_xworm_v2.exe (XWorm RAT v2.4.0)'
+        date: '2026-01-10'
+        tactic: Discovery
+        confidence: HIGH
+      - url: /reports/fleetagentadvanced-exe/
+        title: 'Arsenal-237: FleetAgentAdvanced.exe'
+        date: '2026-01-10'
+        tactic: Discovery
+        confidence: HIGH
+      - url: /reports/agent-xworm-exe/
+        title: 'Arsenal-237: agent_xworm.exe (XWorm RAT v6)'
+        date: '2026-01-09'
         tactic: Discovery
         confidence: HIGH
       - url: /reports/PULSAR-RAT/
@@ -5456,6 +6230,28 @@ techniques:
         report_url: /reports/shadow-xworm-opendirectory/
         rules: WMI Win32_ComputerSystem Query from User-Writable Directory (SIGMA, Hunting)
         count: 1
+      - url: /hunting-detections/arsenal-237-nethost-dll-detections
+        title: 'Arsenal-237 New Files: nethost.dll (DLL Hijacking Persistence)'
+        date: '2026-01-26'
+        report_url: /reports/arsenal-237/nethost-dll/
+        rules: Arsenal-237 NetHost Rust C2 String Combination (YARA, Hunting)
+        count: 1
+      - url: /hunting-detections/fleetagentfud-exe-detections
+        title: 'Arsenal-237: FleetAgentFUD.exe'
+        date: '2026-01-11'
+        report_url: /reports/fleetagentfud-exe/
+        rules: >-
+          FleetAgentFUD FUD RAT Behavioral Pattern (YARA, Hunting); FleetAgentFUD Rapid System
+          Reconnaissance (Correlation) (SIGMA, Hunting)
+        count: 2
+      - url: /hunting-detections/agent-xworm-v2-exe-detections
+        title: 'Arsenal-237: agent_xworm_v2.exe (XWorm RAT v2.4.0)'
+        date: '2026-01-10'
+        report_url: /reports/agent-xworm-v2-exe/
+        rules: >-
+          XWorm v2.x Embedded PowerShell Reconnaissance Command Templates (YARA, Detection); XWorm
+          v2.x Full PowerShell Reconnaissance Sequence on Same Host (SIGMA, Detection)
+        count: 2
     actors:
       - UTA-2026-001
       - UTA-2026-002
@@ -5474,10 +6270,10 @@ techniques:
       - n-3-xl
     url: /techniques/T1082/
     mitre_url: https://attack.mitre.org/techniques/T1082/
-    report_count: 22
-    rule_count: 1
+    report_count: 29
+    rule_count: 6
     actor_count: 15
-    score: 23
+    score: 35
   - id: T1083
     name: File and Directory Discovery
     tactic: Discovery
@@ -5524,9 +6320,34 @@ techniques:
         date: '2026-02-10'
         tactic: Discovery
         confidence: HIGH
+      - url: /reports/new-enc-exe/
+        title: 'Arsenal-237 New Files: new_enc.exe (Human-Operated Rust Ransomware)'
+        date: '2026-01-26'
+        tactic: Discovery
+        confidence: HIGH
+      - url: /reports/arsenal-237-new-files/enc_c2-exe/
+        title: 'Arsenal-237 New Files: enc_c2.exe (Rust Ransomware with Tor C2)'
+        date: '2026-01-24'
+        tactic: Discovery
+        confidence: HIGH
+      - url: /reports/arsenal-237-new-files/dec_fixed-exe/
+        title: 'Arsenal-237 New Files: dec_fixed.exe (Ransomware Decryptor)'
+        date: '2026-01-23'
+        tactic: Discovery
+        confidence: HIGH
       - url: /reports/arsenal-237-new-files/
         title: 'Arsenal-237 New Files: Advanced Toolkit Analysis'
         date: '2026-01-20'
+        tactic: Discovery
+        confidence: HIGH
+      - url: /reports/fleetagentfud-exe/
+        title: 'Arsenal-237: FleetAgentFUD.exe'
+        date: '2026-01-11'
+        tactic: Discovery
+        confidence: HIGH
+      - url: /reports/fleetagentadvanced-exe/
+        title: 'Arsenal-237: FleetAgentAdvanced.exe'
+        date: '2026-01-10'
         tactic: Discovery
         confidence: HIGH
       - url: /reports/PULSAR-RAT/
@@ -5534,7 +6355,15 @@ techniques:
         date: '2025-12-15'
         tactic: Discovery
         confidence: HIGH
-    detections: []
+    detections:
+      - url: /hunting-detections/arsenal-237-dec_fixed-exe-detections
+        title: 'Arsenal-237 New Files: dec_fixed.exe (Ransomware Decryptor)'
+        date: '2026-01-23'
+        report_url: /reports/arsenal-237-new-files/dec_fixed-exe/
+        rules: >-
+          Decryptor CLI + Error + Cleanup Combination (YARA, Detection); dec_fixed.exe Execution
+          with --folder-a Parameter (SIGMA, Hunting)
+        count: 2
     actors:
       - UTA-2026-004
       - UTA-2026-006
@@ -5543,10 +6372,10 @@ techniques:
       - n-3-xl
     url: /techniques/T1083/
     mitre_url: https://attack.mitre.org/techniques/T1083/
-    report_count: 10
-    rule_count: 0
+    report_count: 15
+    rule_count: 2
     actor_count: 5
-    score: 10
+    score: 17
   - id: T1087
     name: Account Discovery
     tactic: Discovery
@@ -5558,6 +6387,11 @@ techniques:
         date: '2026-08-18'
         tactic: Discovery
         confidence: MODERATE
+      - url: /reports/fleetagentfud-exe/
+        title: 'Arsenal-237: FleetAgentFUD.exe'
+        date: '2026-01-11'
+        tactic: Discovery
+        confidence: HIGH
     detections:
       - url: /hunting-detections/russian-gemini-credential-mill-213.165.51.115-detections
         title: Russian Gemini CLI Credential Mill (213.165.51.115)
@@ -5570,10 +6404,10 @@ techniques:
       - UTA-2026-023
     url: /techniques/T1087/
     mitre_url: https://attack.mitre.org/techniques/T1087/
-    report_count: 1
+    report_count: 2
     rule_count: 1
     actor_count: 2
-    score: 2
+    score: 3
   - id: T1087.001
     name: Local Account
     tactic: Discovery
@@ -5682,6 +6516,12 @@ techniques:
         report_url: /reports/cloudsync-assembler-toolkit-91-197-98-188/
         rules: PowerShell Net.WebClient Proxy Set to Default Credentials (SIGMA, Detection)
         count: 1
+      - url: /hunting-detections/arsenal-237-nethost-dll-detections
+        title: 'Arsenal-237 New Files: nethost.dll (DLL Hijacking Persistence)'
+        date: '2026-01-26'
+        report_url: /reports/arsenal-237/nethost-dll/
+        rules: Arsenal-237 NetHost Rust C2 String Combination (YARA, Hunting)
+        count: 1
       - url: /hunting-detections/webshells-to-the-cloud-detections
         title: From Webshells to The Cloud
         date: '2025-10-15'
@@ -5695,9 +6535,9 @@ techniques:
     url: /techniques/T1090/
     mitre_url: https://attack.mitre.org/techniques/T1090/
     report_count: 4
-    rule_count: 2
+    rule_count: 3
     actor_count: 3
-    score: 6
+    score: 7
   - id: T1090.001
     name: Internal Proxy
     tactic: Command and Control
@@ -5871,6 +6711,11 @@ techniques:
         date: '2026-04-17'
         tactic: Command and Control
         confidence: HIGH
+      - url: /reports/arsenal-237-new-files/enc_c2-exe/
+        title: 'Arsenal-237 New Files: enc_c2.exe (Rust Ransomware with Tor C2)'
+        date: '2026-01-24'
+        tactic: Command and Control
+        confidence: HIGH
       - url: /reports/arsenal-237-new-files/
         title: 'Arsenal-237 New Files: Advanced Toolkit Analysis'
         date: '2026-01-20'
@@ -5900,16 +6745,25 @@ techniques:
         report_url: /reports/shinyhunters-dls-91-215-85-22-20260417/
         rules: 'ShinyHunters DLS: PROSPERO Bulletproof Hosting CIDR Range Access (SIGMA, Hunting)'
         count: 1
+      - url: /hunting-detections/arsenal-237-enc_c2-exe-detections
+        title: 'Arsenal-237 New Files: enc_c2.exe (Rust Ransomware with Tor C2)'
+        date: '2026-01-24'
+        report_url: /reports/arsenal-237-new-files/enc_c2-exe/
+        rules: >-
+          Tor C2 Beacon Endpoint Path (YARA, Hunting); HTTP POST to Tor Hidden-Service C2 Beacon
+          Endpoint (SIGMA, Detection); C2 Beacon POST to /c2/beacon.php (Host Not Tested) (SURICATA,
+          Detection)
+        count: 3
     actors:
       - UTA-2026-009
       - UTA-2026-018
       - UTA-2026-021
     url: /techniques/T1090.003/
     mitre_url: https://attack.mitre.org/techniques/T1090/003/
-    report_count: 5
-    rule_count: 5
+    report_count: 6
+    rule_count: 8
     actor_count: 3
-    score: 10
+    score: 14
   - id: T1090.004
     name: Domain Fronting
     tactic: Command and Control
@@ -6072,6 +6926,14 @@ techniques:
         report_url: /reports/webserver-compromise-kit-91-236-230-250/
         rules: Reverse Shell "Spawn Shell" Banner (SURICATA, Detection)
         count: 1
+      - url: /hunting-detections/agent-xworm-exe-detections
+        title: 'Arsenal-237: agent_xworm.exe (XWorm RAT v6)'
+        date: '2026-01-09'
+        report_url: /reports/agent-xworm-exe/
+        rules: >-
+          XWorm AgentSec Authentication Pattern (YARA, Detection); XWorm RAT Capability Combination
+          (YARA, Hunting); XWorm AgentSec Authentication Secret Pattern (SURICATA, Detection)
+        count: 3
       - url: /hunting-detections/dual-rat-analysis-detections
         title: 'Dual-RAT Analysis: Pulsar RAT vs. NjRAT/XWorm'
         date: '2025-12-20'
@@ -6087,9 +6949,9 @@ techniques:
     url: /techniques/T1095/
     mitre_url: https://attack.mitre.org/techniques/T1095/
     report_count: 5
-    rule_count: 15
+    rule_count: 18
     actor_count: 3
-    score: 20
+    score: 23
   - id: T1098
     name: Account Manipulation
     tactic: Persistence
@@ -6534,9 +7396,24 @@ techniques:
         date: '2026-03-10'
         tactic: Command and Control
         confidence: DEFINITE
+      - url: /reports/arsenal-237-new-files/killer-dll/
+        title: 'Arsenal-237 New Files: killer.dll (BYOVD Process Termination)'
+        date: '2026-01-24'
+        tactic: Command and Control
+        confidence: HIGH
       - url: /reports/arsenal-237-new-files/
         title: 'Arsenal-237 New Files: Advanced Toolkit Analysis'
         date: '2026-01-20'
+        tactic: Command and Control
+        confidence: HIGH
+      - url: /reports/agent-xworm-v2-exe/
+        title: 'Arsenal-237: agent_xworm_v2.exe (XWorm RAT v2.4.0)'
+        date: '2026-01-10'
+        tactic: Command and Control
+        confidence: HIGH
+      - url: /reports/agent-xworm-exe/
+        title: 'Arsenal-237: agent_xworm.exe (XWorm RAT v6)'
+        date: '2026-01-09'
         tactic: Command and Control
         confidence: HIGH
     detections:
@@ -6650,6 +7527,26 @@ techniques:
         report_url: /reports/nsminer-cryptojacker/
         rules: NsMiner_Dropper_Downloader (YARA, Detection)
         count: 1
+      - url: /hunting-detections/arsenal-237-nethost-dll-detections
+        title: 'Arsenal-237 New Files: nethost.dll (DLL Hijacking Persistence)'
+        date: '2026-01-26'
+        report_url: /reports/arsenal-237/nethost-dll/
+        rules: Arsenal-237 NetHost PowerShell C2 Command Templates (YARA, Detection)
+        count: 1
+      - url: /hunting-detections/fleetagentfud-exe-detections
+        title: 'Arsenal-237: FleetAgentFUD.exe'
+        date: '2026-01-11'
+        report_url: /reports/fleetagentfud-exe/
+        rules: >-
+          FleetAgentFUD FUD RAT Behavioral Pattern (YARA, Hunting); Executable File Created in
+          Public or Windows Temp Folders by an AppData Process (SIGMA, Hunting)
+        count: 2
+      - url: /hunting-detections/agent-xworm-exe-detections
+        title: 'Arsenal-237: agent_xworm.exe (XWorm RAT v6)'
+        date: '2026-01-09'
+        report_url: /reports/agent-xworm-exe/
+        rules: File Creation Matching XWorm Naming Convention (SIGMA, Hunting)
+        count: 1
       - url: /hunting-detections/Hybrid-Loader-Stealer-Sogou-detections
         title: Hybrid Loader/Stealer Ecosystem Masquerading as Sogou
         date: '2025-11-20'
@@ -6682,10 +7579,10 @@ techniques:
       - vova75rus
     url: /techniques/T1105/
     mitre_url: https://attack.mitre.org/techniques/T1105/
-    report_count: 18
-    rule_count: 26
+    report_count: 21
+    rule_count: 30
     actor_count: 17
-    score: 44
+    score: 51
   - id: T1106
     name: Native API
     tactic: Execution
@@ -6727,8 +7624,18 @@ techniques:
         date: '2026-03-10'
         tactic: Execution
         confidence: DEFINITE
+      - url: /reports/arsenal-237-new-files/killer-dll/
+        title: 'Arsenal-237 New Files: killer.dll (BYOVD Process Termination)'
+        date: '2026-01-24'
+        tactic: Execution
+        confidence: HIGH
       - url: /reports/arsenal-237-new-files/
         title: 'Arsenal-237 New Files: Advanced Toolkit Analysis'
+        date: '2026-01-20'
+        tactic: Execution
+        confidence: HIGH
+      - url: /reports/arsenal-237/rootkit-dll/
+        title: 'Arsenal-237 New Files: rootkit.dll (Kernel-Mode Rootkit)'
         date: '2026-01-20'
         tactic: Execution
         confidence: HIGH
@@ -6746,6 +7653,14 @@ techniques:
           ScareCrow Go Loader (OneDriveSync.exe) (YARA, Hunting); ScareCrow Build Pipeline Source
           Code Artifacts (YARA, Hunting)
         count: 2
+      - url: /hunting-detections/arsenal-237-chromelevator-exe-detections
+        title: 'Arsenal-237 New Files: chromelevator.exe (Browser Credential Theft)'
+        date: '2026-01-22'
+        report_url: /reports/arsenal-237-new-files/chromelevator-exe/
+        rules: >-
+          Direct Syscall Framework (Native API / EDR Bypass) (YARA, Detection); Direct Syscall Usage
+          Targeting Browser Processes (SIGMA, Hunting)
+        count: 2
     actors:
       - UTA-2026-001
       - UTA-2026-002
@@ -6755,10 +7670,10 @@ techniques:
       - n-3-xl
     url: /techniques/T1106/
     mitre_url: https://attack.mitre.org/techniques/T1106/
-    report_count: 9
-    rule_count: 2
+    report_count: 11
+    rule_count: 4
     actor_count: 6
-    score: 11
+    score: 15
   - id: T1110
     name: Brute Force
     tactic: Credential Access
@@ -6980,6 +7895,21 @@ techniques:
         date: '2026-04-23'
         tactic: Persistence
         confidence: DEFINITE
+      - url: /reports/bdapiutil64-sys/
+        title: 'Arsenal-237 New Files: BdApiUtil64.sys (Vulnerable Baidu Driver)'
+        date: '2026-01-26'
+        tactic: Stealth
+        confidence: HIGH
+      - url: /reports/arsenal-237/rootkit-dll/
+        title: 'Arsenal-237 New Files: rootkit.dll (Kernel-Mode Rootkit)'
+        date: '2026-01-20'
+        tactic: Stealth
+        confidence: HIGH
+      - url: /reports/arsenal-237-new-files/killer-crowdstrike-dll/
+        title: 'Arsenal-237 New Files: killer_crowdstrike.dll (CrowdStrike-Specific Termination)'
+        date: '2026-01-18'
+        tactic: Persistence
+        confidence: HIGH
     detections:
       - url: /hunting-detections/sliver-c2-windows-postex-staging-193-233-202-17-detections
         title: Sliver C2 Windows Post-Exploitation Staging, 193.233.202.17
@@ -7031,10 +7961,10 @@ techniques:
       - UTA-2026-024
     url: /techniques/T1112/
     mitre_url: https://attack.mitre.org/techniques/T1112/
-    report_count: 5
+    report_count: 8
     rule_count: 8
     actor_count: 7
-    score: 13
+    score: 16
   - id: T1113
     name: Screen Capture
     tactic: Collection
@@ -7089,6 +8019,16 @@ techniques:
       - url: /reports/remcos-opendirectory/
         title: Remcos RAT OpenDirectory Campaign
         date: '2026-02-10'
+        tactic: Collection
+        confidence: HIGH
+      - url: /reports/agent-xworm-v2-exe/
+        title: 'Arsenal-237: agent_xworm_v2.exe (XWorm RAT v2.4.0)'
+        date: '2026-01-10'
+        tactic: Collection
+        confidence: HIGH
+      - url: /reports/agent-xworm-exe/
+        title: 'Arsenal-237: agent_xworm.exe (XWorm RAT v6)'
+        date: '2026-01-09'
         tactic: Collection
         confidence: HIGH
       - url: /reports/dual-rat-analysis/
@@ -7147,10 +8087,10 @@ techniques:
       - n-3-xl
     url: /techniques/T1113/
     mitre_url: https://attack.mitre.org/techniques/T1113/
-    report_count: 13
+    report_count: 15
     rule_count: 6
     actor_count: 9
-    score: 19
+    score: 21
   - id: T1115
     name: Clipboard Data
     tactic: Collection
@@ -7170,6 +8110,11 @@ techniques:
       - url: /reports/remcos-opendirectory/
         title: Remcos RAT OpenDirectory Campaign
         date: '2026-02-10'
+        tactic: Collection
+        confidence: HIGH
+      - url: /reports/fleetagentfud-exe/
+        title: 'Arsenal-237: FleetAgentFUD.exe'
+        date: '2026-01-11'
         tactic: Collection
         confidence: HIGH
       - url: /reports/PULSAR-RAT/
@@ -7195,14 +8140,22 @@ techniques:
         report_url: /reports/remcos-opendirectory/
         rules: Remcos Surveillance Module (Log-String Anchored) (YARA, Detection)
         count: 1
+      - url: /hunting-detections/fleetagentfud-exe-detections
+        title: 'Arsenal-237: FleetAgentFUD.exe'
+        date: '2026-01-11'
+        report_url: /reports/fleetagentfud-exe/
+        rules: >-
+          FleetAgentFUD FUD RAT Behavioral Pattern (YARA, Hunting); FleetAgentFUD Repeated Clipboard
+          Monitoring (Correlation) (SIGMA, Detection)
+        count: 2
     actors:
       - UTA-2026-003
     url: /techniques/T1115/
     mitre_url: https://attack.mitre.org/techniques/T1115/
-    report_count: 5
-    rule_count: 2
+    report_count: 6
+    rule_count: 4
     actor_count: 1
-    score: 7
+    score: 10
   - id: T1119
     name: Automated Collection
     tactic: Collection
@@ -7415,6 +8368,21 @@ techniques:
         date: '2026-04-06'
         tactic: Execution
         confidence: HIGH
+      - url: /reports/bdapiutil64-sys/
+        title: 'Arsenal-237 New Files: BdApiUtil64.sys (Vulnerable Baidu Driver)'
+        date: '2026-01-26'
+        tactic: Execution
+        confidence: HIGH
+      - url: /reports/arsenal-237-new-files/killer-dll/
+        title: 'Arsenal-237 New Files: killer.dll (BYOVD Process Termination)'
+        date: '2026-01-24'
+        tactic: Execution
+        confidence: HIGH
+      - url: /reports/fleetagentfud-exe/
+        title: 'Arsenal-237: FleetAgentFUD.exe'
+        date: '2026-01-11'
+        tactic: Stealth
+        confidence: HIGH
     detections:
       - url: /hunting-detections/new-files-found-20260408-detections
         title: OpenStrike Expanded Toolkit — 106 New Files (2026-04-08)
@@ -7424,14 +8392,20 @@ techniques:
           OpenStrike DLL Loader (YARA, Hunting); Cobalt Strike Beacon DLL Dropped to Windows Temp
           Directory (SIGMA, Hunting)
         count: 2
+      - url: /hunting-detections/fleetagentfud-exe-detections
+        title: 'Arsenal-237: FleetAgentFUD.exe'
+        date: '2026-01-11'
+        report_url: /reports/fleetagentfud-exe/
+        rules: FleetAgent Family Signature (YARA, Hunting)
+        count: 1
     actors:
       - UTA-2026-004
     url: /techniques/T1129/
     mitre_url: https://attack.mitre.org/techniques/T1129/
-    report_count: 2
-    rule_count: 2
+    report_count: 5
+    rule_count: 3
     actor_count: 1
-    score: 4
+    score: 8
   - id: T1132
     name: Data Encoding
     tactic: Command and Control
@@ -7488,6 +8462,21 @@ techniques:
         date: '2026-04-08'
         tactic: Command and Control
         confidence: HIGH
+      - url: /reports/arsenal-237-new-files/enc_c2-exe/
+        title: 'Arsenal-237 New Files: enc_c2.exe (Rust Ransomware with Tor C2)'
+        date: '2026-01-24'
+        tactic: Command and Control
+        confidence: HIGH
+      - url: /reports/agent-xworm-v2-exe/
+        title: 'Arsenal-237: agent_xworm_v2.exe (XWorm RAT v2.4.0)'
+        date: '2026-01-10'
+        tactic: Command and Control
+        confidence: HIGH
+      - url: /reports/agent-xworm-exe/
+        title: 'Arsenal-237: agent_xworm.exe (XWorm RAT v6)'
+        date: '2026-01-09'
+        tactic: Command and Control
+        confidence: HIGH
       - url: /reports/PULSAR-RAT/
         title: PULSAR RAT (server.exe) — Technical Analysis & Business Risk Assessment
         date: '2025-12-15'
@@ -7527,6 +8516,18 @@ techniques:
           Command Line (A2A C2 Server Pattern) (SIGMA, Hunting); A2A C2 Beacon POST to Operator
           Endpoint with X-Agent-ID Header (SURICATA, Detection)
         count: 4
+      - url: /hunting-detections/agent-xworm-v2-exe-detections
+        title: 'Arsenal-237: agent_xworm_v2.exe (XWorm RAT v2.4.0)'
+        date: '2026-01-10'
+        report_url: /reports/agent-xworm-v2-exe/
+        rules: Generic .NET WebSocket C2 Capability Combination (YARA, Hunting)
+        count: 1
+      - url: /hunting-detections/agent-xworm-exe-detections
+        title: 'Arsenal-237: agent_xworm.exe (XWorm RAT v6)'
+        date: '2026-01-09'
+        report_url: /reports/agent-xworm-exe/
+        rules: XWorm RAT Capability Combination (YARA, Hunting)
+        count: 1
     actors:
       - UTA-2026-004
       - UTA-2026-006
@@ -7536,10 +8537,10 @@ techniques:
       - UTA-2026-024
     url: /techniques/T1132.001/
     mitre_url: https://attack.mitre.org/techniques/T1132/001/
-    report_count: 7
-    rule_count: 8
+    report_count: 10
+    rule_count: 10
     actor_count: 6
-    score: 15
+    score: 20
   - id: T1132.002
     name: Non-Standard Encoding
     tactic: Command and Control
@@ -7617,6 +8618,11 @@ techniques:
         date: '2026-05-06'
         tactic: Privilege Escalation
         confidence: MODERATE
+      - url: /reports/arsenal-237-new-files/killer-crowdstrike-dll/
+        title: 'Arsenal-237 New Files: killer_crowdstrike.dll (CrowdStrike-Specific Termination)'
+        date: '2026-01-18'
+        tactic: Privilege Escalation
+        confidence: HIGH
       - url: /reports/PULSAR-RAT/
         title: PULSAR RAT (server.exe) — Technical Analysis & Business Risk Assessment
         date: '2025-12-15'
@@ -7633,10 +8639,10 @@ techniques:
       - UTA-2026-021
     url: /techniques/T1134/
     mitre_url: https://attack.mitre.org/techniques/T1134/
-    report_count: 4
+    report_count: 5
     rule_count: 0
     actor_count: 2
-    score: 4
+    score: 5
   - id: T1134.001
     name: Token Impersonation/Theft
     tactic: Stealth
@@ -7669,6 +8675,11 @@ techniques:
         date: '2026-02-20'
         tactic: Privilege Escalation
         confidence: HIGH
+      - url: /reports/arsenal-237-lpe-exe/
+        title: 'Arsenal-237 New Files: lpe.exe (Privilege Escalation)'
+        date: '2026-01-25'
+        tactic: Privilege Escalation
+        confidence: HIGH
       - url: /reports/arsenal-237-new-files/
         title: 'Arsenal-237 New Files: Advanced Toolkit Analysis'
         date: '2026-01-20'
@@ -7688,16 +8699,26 @@ techniques:
           PrintSpoofer Privilege Escalation Tool (SeImpersonate Abuse) (YARA, Detection); Named Pipe
           Created Matching Print Spooler RPC Impersonation Pattern (SIGMA, Detection)
         count: 2
+      - url: /hunting-detections/arsenal-237-lpe-exe-detections
+        title: 'Arsenal-237 New Files: lpe.exe (Privilege Escalation)'
+        date: '2026-01-25'
+        report_url: /reports/arsenal-237-lpe-exe/
+        rules: >-
+          Token Manipulation API Sequence (YARA, Detection); Named Pipe Token Impersonation API
+          Sequence (YARA, Detection); PowerShell Named Pipe Client Connector (YARA, Hunting); Print
+          Spooler Named Pipe Creation (Possible Token-Impersonation Staging) (SIGMA, Hunting);
+          Process Access to SYSTEM Processes with Token-Duplication Access Rights (SIGMA, Hunting)
+        count: 5
     actors:
       - UTA-2026-005
       - UTA-2026-006
       - UTA-2026-024
     url: /techniques/T1134.001/
     mitre_url: https://attack.mitre.org/techniques/T1134/001/
-    report_count: 7
-    rule_count: 2
+    report_count: 8
+    rule_count: 7
     actor_count: 3
-    score: 9
+    score: 15
   - id: T1134.002
     name: Create Process with Token
     tactic: Stealth
@@ -7720,6 +8741,11 @@ techniques:
         date: '2026-04-23'
         tactic: Privilege Escalation
         confidence: HIGH
+      - url: /reports/arsenal-237-lpe-exe/
+        title: 'Arsenal-237 New Files: lpe.exe (Privilege Escalation)'
+        date: '2026-01-25'
+        tactic: Privilege Escalation
+        confidence: HIGH
     detections: []
     actors:
       - UTA-2026-005
@@ -7727,10 +8753,30 @@ techniques:
       - UTA-2026-024
     url: /techniques/T1134.002/
     mitre_url: https://attack.mitre.org/techniques/T1134/002/
-    report_count: 3
+    report_count: 4
     rule_count: 0
     actor_count: 3
-    score: 3
+    score: 4
+  - id: T1134.003
+    name: Make and Impersonate Token
+    tactic: Stealth
+    tactics:
+      - Stealth
+      - Privilege Escalation
+    reports:
+      - url: /reports/arsenal-237-lpe-exe/
+        title: 'Arsenal-237 New Files: lpe.exe (Privilege Escalation)'
+        date: '2026-01-25'
+        tactic: Privilege Escalation
+        confidence: HIGH
+    detections: []
+    actors: []
+    url: /techniques/T1134.003/
+    mitre_url: https://attack.mitre.org/techniques/T1134/003/
+    report_count: 1
+    rule_count: 0
+    actor_count: 0
+    score: 1
   - id: T1134.004
     name: Parent PID Spoofing
     tactic: Stealth
@@ -7787,16 +8833,25 @@ techniques:
         date: '2026-01-20'
         tactic: Discovery
         confidence: HIGH
-    detections: []
+    detections:
+      - url: /hunting-detections/arsenal-237-full_test_enc-exe-detections
+        title: 'Arsenal-237 New Files: full_test_enc.exe (Advanced Rust Ransomware)'
+        date: '2026-01-20'
+        report_url: /reports/arsenal-237-new-files/full_test_enc-exe/
+        rules: >-
+          Comprehensive Ransomware Indicator Combination (YARA, Detection); net use Execution Error
+          String (YARA, Hunting); Arsenal-237 Ransomware Chain: Net Use Execution + .lockbox
+          Creation (Correlation) (SIGMA, Hunting)
+        count: 3
     actors:
       - UTA-2026-021
       - UTA-2026-024
     url: /techniques/T1135/
     mitre_url: https://attack.mitre.org/techniques/T1135/
     report_count: 3
-    rule_count: 0
+    rule_count: 3
     actor_count: 2
-    score: 3
+    score: 6
   - id: T1136.001
     name: Local Account
     tactic: Persistence
@@ -7983,6 +9038,16 @@ techniques:
         date: '2026-03-10'
         tactic: Stealth
         confidence: DEFINITE
+      - url: /reports/arsenal-237-new-files/killer-crowdstrike-dll/
+        title: 'Arsenal-237 New Files: killer_crowdstrike.dll (CrowdStrike-Specific Termination)'
+        date: '2026-01-18'
+        tactic: Stealth
+        confidence: HIGH
+      - url: /reports/fleetagentfud-exe/
+        title: 'Arsenal-237: FleetAgentFUD.exe'
+        date: '2026-01-11'
+        tactic: Stealth
+        confidence: HIGH
       - url: /reports/PULSAR-RAT/
         title: PULSAR RAT (server.exe) — Technical Analysis & Business Risk Assessment
         date: '2025-12-15'
@@ -8056,10 +9121,10 @@ techniques:
       - UTA-2026-024
     url: /techniques/T1140/
     mitre_url: https://attack.mitre.org/techniques/T1140/
-    report_count: 15
+    report_count: 17
     rule_count: 12
     actor_count: 13
-    score: 27
+    score: 29
   - id: T1185
     name: Browser Session Hijacking
     tactic: Collection
@@ -8415,9 +9480,34 @@ techniques:
         date: '2026-02-05'
         tactic: Execution
         confidence: HIGH
+      - url: /reports/arsenal-237-new-files/enc_c2-exe/
+        title: 'Arsenal-237 New Files: enc_c2.exe (Rust Ransomware with Tor C2)'
+        date: '2026-01-24'
+        tactic: Execution
+        confidence: HIGH
       - url: /reports/arsenal-237-new-files/
         title: 'Arsenal-237 New Files: Advanced Toolkit Analysis'
         date: '2026-01-20'
+        tactic: Execution
+        confidence: HIGH
+      - url: /reports/agent-exe/
+        title: 'Arsenal-237: agent.exe (PoetRAT)'
+        date: '2026-01-12'
+        tactic: Execution
+        confidence: HIGH
+      - url: /reports/fleetagentfud-exe/
+        title: 'Arsenal-237: FleetAgentFUD.exe'
+        date: '2026-01-11'
+        tactic: Execution
+        confidence: HIGH
+      - url: /reports/agent-xworm-v2-exe/
+        title: 'Arsenal-237: agent_xworm_v2.exe (XWorm RAT v2.4.0)'
+        date: '2026-01-10'
+        tactic: Execution
+        confidence: HIGH
+      - url: /reports/agent-xworm-exe/
+        title: 'Arsenal-237: agent_xworm.exe (XWorm RAT v6)'
+        date: '2026-01-09'
         tactic: Execution
         confidence: HIGH
       - url: /reports/dual-rat-analysis/
@@ -8440,6 +9530,20 @@ techniques:
           Hunting); Office VBA Macro Security Disabled via Registry VBAWarnings Set to 1 (SIGMA,
           Hunting)
         count: 2
+      - url: /hunting-detections/arsenal-237-enc_c2-exe-detections
+        title: 'Arsenal-237 New Files: enc_c2.exe (Rust Ransomware with Tor C2)'
+        date: '2026-01-24'
+        report_url: /reports/arsenal-237-new-files/enc_c2-exe/
+        rules: enc_c2.exe Process Execution (SIGMA, Hunting)
+        count: 1
+      - url: /hunting-detections/fleetagentfud-exe-detections
+        title: 'Arsenal-237: FleetAgentFUD.exe'
+        date: '2026-01-11'
+        report_url: /reports/fleetagentfud-exe/
+        rules: >-
+          Executable File Created in Public or Windows Temp Folders by an AppData Process (SIGMA,
+          Hunting)
+        count: 1
     actors:
       - UTA-2026-001
       - UTA-2026-007
@@ -8448,10 +9552,10 @@ techniques:
       - UTA-2026-010
     url: /techniques/T1204.002/
     mitre_url: https://attack.mitre.org/techniques/T1204/002/
-    report_count: 7
-    rule_count: 2
+    report_count: 12
+    rule_count: 4
     actor_count: 5
-    score: 9
+    score: 16
   - id: T1204.004
     name: Malicious Copy and Paste
     tactic: Execution
@@ -8484,6 +9588,25 @@ techniques:
     rule_count: 3
     actor_count: 0
     score: 4
+  - id: T1207
+    name: Rogue Domain Controller
+    tactic: Defense Impairment
+    tactics:
+      - Defense Impairment
+    reports:
+      - url: /reports/arsenal-237-new-files/killer-crowdstrike-dll/
+        title: 'Arsenal-237 New Files: killer_crowdstrike.dll (CrowdStrike-Specific Termination)'
+        date: '2026-01-18'
+        tactic: Stealth
+        confidence: HIGH
+    detections: []
+    actors: []
+    url: /techniques/T1207/
+    mitre_url: https://attack.mitre.org/techniques/T1207/
+    report_count: 1
+    rule_count: 0
+    actor_count: 0
+    score: 1
   - id: T1210
     name: Exploitation of Remote Services
     tactic: Lateral Movement
@@ -8898,6 +10021,25 @@ techniques:
     rule_count: 1
     actor_count: 0
     score: 1
+  - id: T1222
+    name: File and Directory Permissions Modification
+    tactic: Defense Impairment
+    tactics:
+      - Defense Impairment
+    reports:
+      - url: /reports/bdapiutil64-sys/
+        title: 'Arsenal-237 New Files: BdApiUtil64.sys (Vulnerable Baidu Driver)'
+        date: '2026-01-26'
+        tactic: Stealth
+        confidence: HIGH
+    detections: []
+    actors: []
+    url: /techniques/T1222/
+    mitre_url: https://attack.mitre.org/techniques/T1222/
+    report_count: 1
+    rule_count: 0
+    actor_count: 0
+    score: 1
   - id: T1222.002
     name: Linux and Mac Permissions
     tactic: Defense Impairment
@@ -9027,6 +10169,11 @@ techniques:
         date: '2026-04-30'
         tactic: Discovery
         confidence: HIGH
+      - url: /reports/agent-xworm-v2-exe/
+        title: 'Arsenal-237: agent_xworm_v2.exe (XWorm RAT v2.4.0)'
+        date: '2026-01-10'
+        tactic: Discovery
+        confidence: HIGH
     detections:
       - url: /hunting-detections/opendirectory-45-130-148-125-20260430-detections
         title: AdaptixC2 Open Directory Exposure (45.130.148.125)
@@ -9034,15 +10181,23 @@ techniques:
         report_url: /reports/opendirectory-45-130-148-125-20260430/
         rules: Suspicious Active Directory Reconnaissance Tool Execution (SIGMA, Hunting)
         count: 1
+      - url: /hunting-detections/agent-xworm-v2-exe-detections
+        title: 'Arsenal-237: agent_xworm_v2.exe (XWorm RAT v2.4.0)'
+        date: '2026-01-10'
+        report_url: /reports/agent-xworm-v2-exe/
+        rules: >-
+          XWorm v2.x Embedded PowerShell Reconnaissance Command Templates (YARA, Detection); XWorm
+          v2.x Full PowerShell Reconnaissance Sequence on Same Host (SIGMA, Detection)
+        count: 2
     actors:
       - UTA-2026-006
       - UTA-2026-024
     url: /techniques/T1482/
     mitre_url: https://attack.mitre.org/techniques/T1482/
-    report_count: 2
-    rule_count: 1
+    report_count: 3
+    rule_count: 3
     actor_count: 2
-    score: 3
+    score: 6
   - id: T1485
     name: Data Destruction
     tactic: Impact
@@ -9087,9 +10242,39 @@ techniques:
         date: '2026-03-16'
         tactic: Impact
         confidence: HIGH
+      - url: /reports/new-enc-exe/
+        title: 'Arsenal-237 New Files: new_enc.exe (Human-Operated Rust Ransomware)'
+        date: '2026-01-26'
+        tactic: Impact
+        confidence: HIGH
+      - url: /reports/arsenal-237-new-files/enc_c2-exe/
+        title: 'Arsenal-237 New Files: enc_c2.exe (Rust Ransomware with Tor C2)'
+        date: '2026-01-24'
+        tactic: Impact
+        confidence: HIGH
+      - url: /reports/arsenal-237-new-files/dec_fixed-exe/
+        title: 'Arsenal-237 New Files: dec_fixed.exe (Ransomware Decryptor)'
+        date: '2026-01-23'
+        tactic: Impact
+        confidence: HIGH
       - url: /reports/arsenal-237-new-files/
         title: 'Arsenal-237 New Files: Advanced Toolkit Analysis'
         date: '2026-01-20'
+        tactic: Impact
+        confidence: HIGH
+      - url: /reports/fleetagentfud-exe/
+        title: 'Arsenal-237: FleetAgentFUD.exe'
+        date: '2026-01-11'
+        tactic: Impact
+        confidence: HIGH
+      - url: /reports/agent-xworm-v2-exe/
+        title: 'Arsenal-237: agent_xworm_v2.exe (XWorm RAT v2.4.0)'
+        date: '2026-01-10'
+        tactic: Impact
+        confidence: HIGH
+      - url: /reports/agent-xworm-exe/
+        title: 'Arsenal-237: agent_xworm.exe (XWorm RAT v6)'
+        date: '2026-01-09'
         tactic: Impact
         confidence: HIGH
     detections:
@@ -9102,14 +10287,50 @@ techniques:
           (YARA, Detection); Encrypted File Extension Created + Anti-Recovery Command Correlation
           (SIGMA, Detection)
         count: 3
+      - url: /hunting-detections/arsenal-237-enc_c2-exe-detections
+        title: 'Arsenal-237 New Files: enc_c2.exe (Rust Ransomware with Tor C2)'
+        date: '2026-01-24'
+        report_url: /reports/arsenal-237-new-files/enc_c2-exe/
+        rules: >-
+          RaaS Builder ID & C2 Beacon Schema Combination (YARA, Detection); Ransom Note Text with
+          Supporting Ransomware Artifact (YARA, Hunting); Bulk-Capable File Creation with .locked
+          Extension (SIGMA, Hunting)
+        count: 3
+      - url: /hunting-detections/arsenal-237-dec_fixed-exe-detections
+        title: 'Arsenal-237 New Files: dec_fixed.exe (Ransomware Decryptor)'
+        date: '2026-01-23'
+        report_url: /reports/arsenal-237-new-files/dec_fixed-exe/
+        rules: >-
+          ChaCha20 Constant with Arsenal-237 Decryptor Error Strings (Poly1305 Tag-Failure Message)
+          (YARA, Detection)
+        count: 1
+      - url: /hunting-detections/arsenal-237-full_test_enc-exe-detections
+        title: 'Arsenal-237 New Files: full_test_enc.exe (Advanced Rust Ransomware)'
+        date: '2026-01-20'
+        report_url: /reports/arsenal-237-new-files/full_test_enc-exe/
+        rules: >-
+          Ransom Note, Ransom ID Label, and .lockbox Extension (YARA, Detection); Comprehensive
+          Ransomware Indicator Combination (YARA, Detection); RustCrypto ChaCha20 + RSA Crate
+          Combination (YARA, Hunting); Custom Crypto-Engine Error Strings (YARA, Hunting);
+          Arsenal-237 Ransomware Chain: Net Use Execution + .lockbox Creation (Correlation) (SIGMA,
+          Hunting)
+        count: 5
+      - url: /hunting-detections/enc-dec-ransomware-family-detections
+        title: 'Arsenal-237: enc/dec Ransomware Family'
+        date: '2026-01-18'
+        report_url: /reports/enc-dec-ransomware-family/
+        rules: >-
+          Rust Ransomware Artifacts Combination (YARA, Detection); ChaCha20 Encryption Constant
+          (YARA, Hunting)
+        count: 2
     actors:
       - UTA-2026-005
     url: /techniques/T1486/
     mitre_url: https://attack.mitre.org/techniques/T1486/
-    report_count: 3
-    rule_count: 3
+    report_count: 9
+    rule_count: 14
     actor_count: 1
-    score: 6
+    score: 23
   - id: T1489
     name: Service Stop
     tactic: Impact
@@ -9126,9 +10347,29 @@ techniques:
         date: '2026-07-03'
         tactic: Impact
         confidence: HIGH
+      - url: /reports/bdapiutil64-sys/
+        title: 'Arsenal-237 New Files: BdApiUtil64.sys (Vulnerable Baidu Driver)'
+        date: '2026-01-26'
+        tactic: Impact
+        confidence: HIGH
+      - url: /reports/new-enc-exe/
+        title: 'Arsenal-237 New Files: new_enc.exe (Human-Operated Rust Ransomware)'
+        date: '2026-01-26'
+        tactic: Impact
+        confidence: HIGH
+      - url: /reports/arsenal-237-new-files/killer-dll/
+        title: 'Arsenal-237 New Files: killer.dll (BYOVD Process Termination)'
+        date: '2026-01-24'
+        tactic: Impact
+        confidence: HIGH
       - url: /reports/arsenal-237-new-files/
         title: 'Arsenal-237 New Files: Advanced Toolkit Analysis'
         date: '2026-01-20'
+        tactic: Impact
+        confidence: HIGH
+      - url: /reports/arsenal-237-new-files/killer-crowdstrike-dll/
+        title: 'Arsenal-237 New Files: killer_crowdstrike.dll (CrowdStrike-Specific Termination)'
+        date: '2026-01-18'
         tactic: Impact
         confidence: HIGH
       - url: /reports/dual-rat-analysis/
@@ -9136,16 +10377,26 @@ techniques:
         date: '2025-12-20'
         tactic: Impact
         confidence: HIGH
-    detections: []
+    detections:
+      - url: /hunting-detections/arsenal-237-new_enc-exe-detections
+        title: 'Arsenal-237 New Files: new_enc.exe (Human-Operated Rust Ransomware)'
+        date: '2026-01-26'
+        report_url: /reports/new-enc-exe/
+        rules: >-
+          Commvault Backup Service Targeting (misattributed as Veritas at authoring) (YARA,
+          Hunting); Veeam Backup Software Bareword Reference (YARA, Hunting); Arsenal-237 Backup
+          Service Multi-Termination (Correlation) (SIGMA, Hunting); Arsenal-237 Database Service
+          Multi-Termination (Correlation) (SIGMA, Hunting)
+        count: 4
     actors:
       - UTA-2026-021
       - n-3-xl
     url: /techniques/T1489/
     mitre_url: https://attack.mitre.org/techniques/T1489/
-    report_count: 4
-    rule_count: 0
+    report_count: 8
+    rule_count: 4
     actor_count: 2
-    score: 4
+    score: 12
   - id: T1490
     name: Inhibit System Recovery
     tactic: Impact
@@ -9157,6 +10408,16 @@ techniques:
         date: '2026-04-23'
         tactic: Impact
         confidence: DEFINITE
+      - url: /reports/new-enc-exe/
+        title: 'Arsenal-237 New Files: new_enc.exe (Human-Operated Rust Ransomware)'
+        date: '2026-01-26'
+        tactic: Impact
+        confidence: HIGH
+      - url: /reports/arsenal-237-new-files/killer-dll/
+        title: 'Arsenal-237 New Files: killer.dll (BYOVD Process Termination)'
+        date: '2026-01-24'
+        tactic: Impact
+        confidence: HIGH
       - url: /reports/arsenal-237-new-files/
         title: 'Arsenal-237 New Files: Advanced Toolkit Analysis'
         date: '2026-01-20'
@@ -9172,14 +10433,31 @@ techniques:
           Anti-Recovery Command Correlation (SIGMA, Detection); Anti-Recovery / Shadow Copy Deletion
           Commands Executed (SIGMA, Hunting)
         count: 3
+      - url: /hunting-detections/arsenal-237-new_enc-exe-detections
+        title: 'Arsenal-237 New Files: new_enc.exe (Human-Operated Rust Ransomware)'
+        date: '2026-01-26'
+        report_url: /reports/new-enc-exe/
+        rules: >-
+          Volume Shadow Copy Deletion Command (YARA, Detection); Commvault Backup Service Targeting
+          (misattributed as Veritas at authoring) (YARA, Hunting); Volume Shadow Copy Deletion via
+          Vssadmin (SIGMA, Detection)
+        count: 3
+      - url: /hunting-detections/enc-dec-ransomware-family-detections
+        title: 'Arsenal-237: enc/dec Ransomware Family'
+        date: '2026-01-18'
+        report_url: /reports/enc-dec-ransomware-family/
+        rules: >-
+          VSS Deletion Concatenated String (YARA, Hunting); Volume Shadow Copy Deletion via Vssadmin
+          or Wmic (Generic Ransomware Precursor, Seen in the enc/dec Family) (SIGMA, Detection)
+        count: 2
     actors:
       - UTA-2026-005
     url: /techniques/T1490/
     mitre_url: https://attack.mitre.org/techniques/T1490/
-    report_count: 2
-    rule_count: 3
+    report_count: 4
+    rule_count: 8
     actor_count: 1
-    score: 5
+    score: 12
   - id: T1491.001
     name: Internal Defacement
     tactic: Impact
@@ -9407,6 +10685,11 @@ techniques:
         date: '2026-02-10'
         tactic: Stealth
         confidence: HIGH
+      - url: /reports/new-enc-exe/
+        title: 'Arsenal-237 New Files: new_enc.exe (Human-Operated Rust Ransomware)'
+        date: '2026-01-26'
+        tactic: Stealth
+        confidence: HIGH
       - url: /reports/arsenal-237-new-files/
         title: 'Arsenal-237 New Files: Advanced Toolkit Analysis'
         date: '2026-01-20'
@@ -9445,6 +10728,12 @@ techniques:
           Hunting); WMI Win32_ComputerSystem Query from User-Writable Directory (SIGMA, Hunting);
           XWorm Anti-Analysis Hosting Detection via ip-api.com (SURICATA, Hunting)
         count: 5
+      - url: /hunting-detections/arsenal-237-new_enc-exe-detections
+        title: 'Arsenal-237 New Files: new_enc.exe (Human-Operated Rust Ransomware)'
+        date: '2026-01-26'
+        report_url: /reports/new-enc-exe/
+        rules: Anti-Analysis / Anti-Sandbox Combination (YARA, Hunting)
+        count: 1
       - url: /hunting-detections/malware-analysis-houselet-detections
         title: Houselet.exe — The Go-Based Loader Masquerading as PlayStation Remote Play
         date: '2025-11-10'
@@ -9460,10 +10749,30 @@ techniques:
       - UTA-2026-014
     url: /techniques/T1497.001/
     mitre_url: https://attack.mitre.org/techniques/T1497/001/
-    report_count: 11
-    rule_count: 7
+    report_count: 12
+    rule_count: 8
     actor_count: 6
-    score: 18
+    score: 20
+  - id: T1497.002
+    name: User Activity Based Checks
+    tactic: Stealth
+    tactics:
+      - Stealth
+      - Discovery
+    reports:
+      - url: /reports/new-enc-exe/
+        title: 'Arsenal-237 New Files: new_enc.exe (Human-Operated Rust Ransomware)'
+        date: '2026-01-26'
+        tactic: Stealth
+        confidence: HIGH
+    detections: []
+    actors: []
+    url: /techniques/T1497.002/
+    mitre_url: https://attack.mitre.org/techniques/T1497/002/
+    report_count: 1
+    rule_count: 0
+    actor_count: 0
+    score: 1
   - id: T1497.003
     name: Time Based Checks
     tactic: Stealth
@@ -9829,6 +11138,16 @@ techniques:
         date: '2026-03-16'
         tactic: Discovery
         confidence: HIGH
+      - url: /reports/bdapiutil64-sys/
+        title: 'Arsenal-237 New Files: BdApiUtil64.sys (Vulnerable Baidu Driver)'
+        date: '2026-01-26'
+        tactic: Discovery
+        confidence: HIGH
+      - url: /reports/new-enc-exe/
+        title: 'Arsenal-237 New Files: new_enc.exe (Human-Operated Rust Ransomware)'
+        date: '2026-01-26'
+        tactic: Discovery
+        confidence: HIGH
       - url: /reports/arsenal-237-new-files/
         title: 'Arsenal-237 New Files: Advanced Toolkit Analysis'
         date: '2026-01-20'
@@ -9843,16 +11162,22 @@ techniques:
           BellaMain USOM Poll, Telegram Bot Outbound, and Correlations (SIGMA, Hunting); BellaMain
           USOM Blocklist Poll From an Internal Host (Network Layer) (SURICATA, Hunting)
         count: 2
+      - url: /hunting-detections/arsenal-237-new_enc-exe-detections
+        title: 'Arsenal-237 New Files: new_enc.exe (Human-Operated Rust Ransomware)'
+        date: '2026-01-26'
+        report_url: /reports/new-enc-exe/
+        rules: Analysis Tool Process Awareness (YARA, Hunting)
+        count: 1
     actors:
       - UTA-2026-006
       - UTA-2026-008
       - UTA-2026-024
     url: /techniques/T1518.001/
     mitre_url: https://attack.mitre.org/techniques/T1518/001/
-    report_count: 6
-    rule_count: 2
+    report_count: 8
+    rule_count: 3
     actor_count: 3
-    score: 8
+    score: 11
   - id: T1528
     name: Steal Application Access Token
     tactic: Credential Access
@@ -9907,6 +11232,11 @@ techniques:
         date: '2026-02-10'
         tactic: Impact
         confidence: HIGH
+      - url: /reports/arsenal-237/rootkit-dll/
+        title: 'Arsenal-237 New Files: rootkit.dll (Kernel-Mode Rootkit)'
+        date: '2026-01-20'
+        tactic: Impact
+        confidence: HIGH
       - url: /reports/Hybrid-Loader-Stealer-Sogou/
         title: Hybrid Loader/Stealer Ecosystem Masquerading as Sogou
         date: '2025-11-20'
@@ -9917,10 +11247,10 @@ techniques:
       - n-3-xl
     url: /techniques/T1529/
     mitre_url: https://attack.mitre.org/techniques/T1529/
-    report_count: 3
+    report_count: 4
     rule_count: 0
     actor_count: 1
-    score: 3
+    score: 4
   - id: T1530
     name: Data from Cloud Storage
     tactic: Collection
@@ -10132,6 +11462,26 @@ techniques:
     rule_count: 2
     actor_count: 1
     score: 3
+  - id: T1542.005
+    name: TFTP Boot
+    tactic: Stealth
+    tactics:
+      - Stealth
+      - Persistence
+    reports:
+      - url: /reports/arsenal-237-new-files/killer-crowdstrike-dll/
+        title: 'Arsenal-237 New Files: killer_crowdstrike.dll (CrowdStrike-Specific Termination)'
+        date: '2026-01-18'
+        tactic: Stealth
+        confidence: HIGH
+    detections: []
+    actors: []
+    url: /techniques/T1542.005/
+    mitre_url: https://attack.mitre.org/techniques/T1542/005/
+    report_count: 1
+    rule_count: 0
+    actor_count: 0
+    score: 1
   - id: T1543
     name: Create or Modify System Process
     tactic: Persistence
@@ -10144,6 +11494,11 @@ techniques:
         date: '2026-08-18'
         tactic: Persistence
         confidence: MODERATE
+      - url: /reports/arsenal-237-new-files/killer-crowdstrike-dll/
+        title: 'Arsenal-237 New Files: killer_crowdstrike.dll (CrowdStrike-Specific Termination)'
+        date: '2026-01-18'
+        tactic: Privilege Escalation
+        confidence: HIGH
     detections:
       - url: >-
           /hunting-detections/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817-detections
@@ -10156,10 +11511,10 @@ techniques:
       - UTA-2026-023
     url: /techniques/T1543/
     mitre_url: https://attack.mitre.org/techniques/T1543/
-    report_count: 1
+    report_count: 2
     rule_count: 1
     actor_count: 1
-    score: 2
+    score: 3
   - id: T1543.002
     name: Systemd Service
     tactic: Persistence
@@ -10263,9 +11618,29 @@ techniques:
         date: '2026-04-08'
         tactic: Persistence
         confidence: HIGH
+      - url: /reports/bdapiutil64-sys/
+        title: 'Arsenal-237 New Files: BdApiUtil64.sys (Vulnerable Baidu Driver)'
+        date: '2026-01-26'
+        tactic: Persistence
+        confidence: HIGH
+      - url: /reports/arsenal-237-new-files/killer-dll/
+        title: 'Arsenal-237 New Files: killer.dll (BYOVD Process Termination)'
+        date: '2026-01-24'
+        tactic: Privilege Escalation
+        confidence: HIGH
       - url: /reports/arsenal-237-new-files/
         title: 'Arsenal-237 New Files: Advanced Toolkit Analysis'
         date: '2026-01-20'
+        tactic: Persistence
+        confidence: HIGH
+      - url: /reports/arsenal-237/rootkit-dll/
+        title: 'Arsenal-237 New Files: rootkit.dll (Kernel-Mode Rootkit)'
+        date: '2026-01-20'
+        tactic: Persistence
+        confidence: HIGH
+      - url: /reports/agent-exe/
+        title: 'Arsenal-237: agent.exe (PoetRAT)'
+        date: '2026-01-12'
         tactic: Persistence
         confidence: HIGH
       - url: /reports/PULSAR-RAT/
@@ -10294,16 +11669,28 @@ techniques:
           2 Bridge Module (YARA, Detection); CovertVPN WinPcap npf.sys Kernel Driver Loaded from
           Temp Directory (SIGMA, Hunting)
         count: 3
+      - url: /hunting-detections/arsenal-237-killer-dll-detections
+        title: 'Arsenal-237 New Files: killer.dll (BYOVD Process Termination)'
+        date: '2026-01-24'
+        report_url: /reports/arsenal-237-new-files/killer-dll/
+        rules: Kernel-Mode Driver Service Installed (Event 7045) (SIGMA, Hunting)
+        count: 1
+      - url: /hunting-detections/agent-exe-detections
+        title: 'Arsenal-237: agent.exe (PoetRAT)'
+        date: '2026-01-12'
+        report_url: /reports/agent-exe/
+        rules: Generic Golang RAT Capability Combination (YARA, Hunting)
+        count: 1
     actors:
       - UTA-2026-004
       - UTA-2026-021
       - n-3-xl
     url: /techniques/T1543.003/
     mitre_url: https://attack.mitre.org/techniques/T1543/003/
-    report_count: 6
-    rule_count: 4
+    report_count: 10
+    rule_count: 6
     actor_count: 3
-    score: 10
+    score: 16
   - id: T1547
     name: Boot or Logon Autostart Execution
     tactic: Persistence
@@ -10318,6 +11705,11 @@ techniques:
         date: '2026-09-28'
         tactic: Persistence
         confidence: HIGH
+      - url: /reports/arsenal-237-new-files/killer-crowdstrike-dll/
+        title: 'Arsenal-237 New Files: killer_crowdstrike.dll (CrowdStrike-Specific Termination)'
+        date: '2026-01-18'
+        tactic: Persistence
+        confidence: HIGH
       - url: /reports/AdvancedRouterScanner/
         title: AdvancedRouterScanner
         date: '2025-10-20'
@@ -10327,10 +11719,10 @@ techniques:
     actors: []
     url: /techniques/T1547/
     mitre_url: https://attack.mitre.org/techniques/T1547/
-    report_count: 2
+    report_count: 3
     rule_count: 0
     actor_count: 0
-    score: 2
+    score: 3
   - id: T1547.001
     name: Registry Run Keys / Startup Folder
     tactic: Persistence
@@ -10398,6 +11790,26 @@ techniques:
       - url: /reports/arsenal-237-new-files/
         title: 'Arsenal-237 New Files: Advanced Toolkit Analysis'
         date: '2026-01-20'
+        tactic: Persistence
+        confidence: HIGH
+      - url: /reports/agent-exe/
+        title: 'Arsenal-237: agent.exe (PoetRAT)'
+        date: '2026-01-12'
+        tactic: Persistence
+        confidence: HIGH
+      - url: /reports/agent-xworm-v2-exe/
+        title: 'Arsenal-237: agent_xworm_v2.exe (XWorm RAT v2.4.0)'
+        date: '2026-01-10'
+        tactic: Persistence
+        confidence: HIGH
+      - url: /reports/fleetagentadvanced-exe/
+        title: 'Arsenal-237: FleetAgentAdvanced.exe'
+        date: '2026-01-10'
+        tactic: Persistence
+        confidence: HIGH
+      - url: /reports/agent-xworm-exe/
+        title: 'Arsenal-237: agent_xworm.exe (XWorm RAT v6)'
+        date: '2026-01-09'
         tactic: Persistence
         confidence: HIGH
       - url: /reports/dual-rat-analysis/
@@ -10468,6 +11880,28 @@ techniques:
         report_url: /reports/remcos-opendirectory/
         rules: Remcos UAC Bypass and Persistence (YARA, Detection)
         count: 1
+      - url: /hunting-detections/arsenal-237-enc_c2-exe-detections
+        title: 'Arsenal-237 New Files: enc_c2.exe (Rust Ransomware with Tor C2)'
+        date: '2026-01-24'
+        report_url: /reports/arsenal-237-new-files/enc_c2-exe/
+        rules: Registry Persistence Key Referencing Build Identifiers (SIGMA, Hunting)
+        count: 1
+      - url: /hunting-detections/agent-exe-detections
+        title: 'Arsenal-237: agent.exe (PoetRAT)'
+        date: '2026-01-12'
+        report_url: /reports/agent-exe/
+        rules: >-
+          WinDefenderSvc.exe + WindowsDefenderUpdate Masquerade Pair (YARA, Hunting); PoetRAT Dual
+          Persistence: Startup Drop + Registry Run Key Write (Correlation) (SIGMA, Hunting)
+        count: 2
+      - url: /hunting-detections/fleetagentadvanced-exe-detections
+        title: 'Arsenal-237: FleetAgentAdvanced.exe'
+        date: '2026-01-10'
+        report_url: /reports/fleetagentadvanced-exe/
+        rules: >-
+          FleetAgentAdvanced Dropper Hash and Coined Function-Name Combination (YARA, Detection);
+          FleetAgentAdvanced Persistence with Microsoft .NET Masquerading (SIGMA, Hunting)
+        count: 2
       - url: /hunting-detections/dual-rat-analysis-detections
         title: 'Dual-RAT Analysis: Pulsar RAT vs. NjRAT/XWorm'
         date: '2025-12-20'
@@ -10499,10 +11933,10 @@ techniques:
       - n-3-xl
     url: /techniques/T1547.001/
     mitre_url: https://attack.mitre.org/techniques/T1547/001/
-    report_count: 15
-    rule_count: 15
+    report_count: 19
+    rule_count: 20
     actor_count: 7
-    score: 30
+    score: 39
   - id: T1547.004
     name: Winlogon Helper DLL
     tactic: Persistence
@@ -10539,19 +11973,30 @@ techniques:
       - Persistence
       - Privilege Escalation
     reports:
+      - url: /reports/bdapiutil64-sys/
+        title: 'Arsenal-237 New Files: BdApiUtil64.sys (Vulnerable Baidu Driver)'
+        date: '2026-01-26'
+        tactic: Persistence
+        confidence: HIGH
       - url: /reports/arsenal-237-new-files/
         title: 'Arsenal-237 New Files: Advanced Toolkit Analysis'
         date: '2026-01-20'
         tactic: Persistence
         confidence: HIGH
-    detections: []
+    detections:
+      - url: /hunting-detections/arsenal-237-BdApiUtil64-sys-detections
+        title: 'Arsenal-237 New Files: BdApiUtil64.sys (Vulnerable Baidu Driver)'
+        date: '2026-01-26'
+        report_url: /reports/bdapiutil64-sys/
+        rules: Bprotect Service Creation (BdApiUtil64.sys Deployment Marker) (SIGMA, Hunting)
+        count: 1
     actors: []
     url: /techniques/T1547.006/
     mitre_url: https://attack.mitre.org/techniques/T1547/006/
-    report_count: 1
-    rule_count: 0
+    report_count: 2
+    rule_count: 1
     actor_count: 0
-    score: 1
+    score: 3
   - id: T1547.009
     name: Shortcut Modification
     tactic: Persistence
@@ -10646,6 +12091,11 @@ techniques:
         date: '2026-02-10'
         tactic: Privilege Escalation
         confidence: HIGH
+      - url: /reports/arsenal-237-lpe-exe/
+        title: 'Arsenal-237 New Files: lpe.exe (Privilege Escalation)'
+        date: '2026-01-25'
+        tactic: Privilege Escalation
+        confidence: HIGH
       - url: /reports/arsenal-237-new-files/
         title: 'Arsenal-237 New Files: Advanced Toolkit Analysis'
         date: '2026-01-20'
@@ -10681,15 +12131,36 @@ techniques:
           EnableLUA to 0 From cmd.exe (SIGMA, Detection); EnableLUA Registry Value Set to Disable
           User Account Control (Registry State) (SIGMA, Detection)
         count: 4
+      - url: /hunting-detections/arsenal-237-lpe-exe-detections
+        title: 'Arsenal-237 New Files: lpe.exe (Privilege Escalation)'
+        date: '2026-01-25'
+        report_url: /reports/arsenal-237-lpe-exe/
+        rules: >-
+          UAC Bypass via ms-settings Registry Hijack (YARA, Detection); UAC Bypass via Ms-Settings
+          Registry Hijack (SIGMA, Detection)
+        count: 2
+      - url: /hunting-detections/uac-test-exe-detections
+        title: 'Arsenal-237: uac_test.exe'
+        date: '2026-01-12'
+        report_url: /reports/uac-test-exe/
+        rules: >-
+          Generic CMSTPLUA/Fodhelper UAC Bypass Technique Combination (YARA, Detection);
+          uac_test.exe Comprehensive Multi-Signal Combination (Hash Match or Behavioral Combination)
+          (YARA, Hunting); Rust-Compiled UAC Bypass Tool (Generic Capability Combination) (YARA,
+          Hunting); UAC Bypass via Fodhelper Registry Hijacking (SIGMA, Detection); UAC Bypass via
+          CMSTPLUA COM Interface CLSID in Process Command Line (SIGMA, Detection); Suspicious Child
+          Process Spawned by fodhelper.exe (SIGMA, Detection); DllHost.exe Spawning Process at High
+          Integrity Level (Potential COM Elevation Abuse) (SIGMA, Hunting)
+        count: 7
     actors:
       - UTA-2026-005
       - UTA-2026-024
     url: /techniques/T1548.002/
     mitre_url: https://attack.mitre.org/techniques/T1548/002/
-    report_count: 6
-    rule_count: 7
+    report_count: 7
+    rule_count: 16
     actor_count: 2
-    score: 13
+    score: 23
   - id: T1550.001
     name: Application Access Token
     tactic: Lateral Movement
@@ -11187,6 +12658,15 @@ techniques:
           Install Artifacts (YARA, Detection); Non-Browser Process Accessing Chrome or Firefox
           Credential Store Files (SIGMA, Hunting)
         count: 3
+      - url: /hunting-detections/arsenal-237-chromelevator-exe-detections
+        title: 'Arsenal-237 New Files: chromelevator.exe (Browser Credential Theft)'
+        date: '2026-01-22'
+        report_url: /reports/arsenal-237-new-files/chromelevator-exe/
+        rules: >-
+          Browser Credential Extraction Multi-Signal Combination (YARA, Hunting); Non-Browser
+          Process Creating Files at Browser Credential Database Paths (SIGMA, Hunting);
+          chromelevator.exe Process Creation with Extraction Flags (SIGMA, Hunting)
+        count: 3
       - url: /hunting-detections/PULSAR-RAT-detections
         title: PULSAR RAT (server.exe) — Technical Analysis & Business Risk Assessment
         date: '2025-12-15'
@@ -11205,9 +12685,9 @@ techniques:
     url: /techniques/T1555.003/
     mitre_url: https://attack.mitre.org/techniques/T1555/003/
     report_count: 11
-    rule_count: 7
+    rule_count: 10
     actor_count: 8
-    score: 18
+    score: 21
   - id: T1555.004
     name: Windows Credential Manager
     tactic: Credential Access
@@ -11354,7 +12834,12 @@ techniques:
     tactic: Execution
     tactics:
       - Execution
-    reports: []
+    reports:
+      - url: /reports/arsenal-237-new-files/killer-crowdstrike-dll/
+        title: 'Arsenal-237 New Files: killer_crowdstrike.dll (CrowdStrike-Specific Termination)'
+        date: '2026-01-18'
+        tactic: Execution
+        confidence: HIGH
     detections:
       - url: /hunting-detections/opendirectory-62-60-237-100-20260506-detections
         title: HijackLoader / Penguish / Rugmi to AsyncRAT Multi-Vector Phishing Campaign
@@ -11365,10 +12850,10 @@ techniques:
     actors: []
     url: /techniques/T1559/
     mitre_url: https://attack.mitre.org/techniques/T1559/
-    report_count: 0
+    report_count: 1
     rule_count: 1
     actor_count: 0
-    score: 1
+    score: 2
   - id: T1560
     name: Archive Collected Data
     tactic: Collection
@@ -11401,6 +12886,25 @@ techniques:
     rule_count: 1
     actor_count: 2
     score: 3
+  - id: T1561
+    name: Disk Wipe
+    tactic: Impact
+    tactics:
+      - Impact
+    reports:
+      - url: /reports/arsenal-237-new-files/killer-crowdstrike-dll/
+        title: 'Arsenal-237 New Files: killer_crowdstrike.dll (CrowdStrike-Specific Termination)'
+        date: '2026-01-18'
+        tactic: Impact
+        confidence: HIGH
+    detections: []
+    actors: []
+    url: /techniques/T1561/
+    mitre_url: https://attack.mitre.org/techniques/T1561/
+    report_count: 1
+    rule_count: 0
+    actor_count: 0
+    score: 1
   - id: T1563.002
     name: RDP Hijacking
     tactic: Lateral Movement
@@ -11447,6 +12951,11 @@ techniques:
         date: '2026-01-20'
         tactic: Stealth
         confidence: HIGH
+      - url: /reports/arsenal-237/rootkit-dll/
+        title: 'Arsenal-237 New Files: rootkit.dll (Kernel-Mode Rootkit)'
+        date: '2026-01-20'
+        tactic: Stealth
+        confidence: HIGH
     detections:
       - url: /hunting-detections/gocloud-multiservice-cryptojacking-149-28-112-221-detections
         title: GOCLOUD Multi-Service Cryptojacking
@@ -11485,6 +12994,12 @@ techniques:
         report_url: /reports/ghost-cryptojacker-vova75rus-77.110.96.200/
         rules: MAL_Linux_GHOST_libpam_cache_Rootkit_Family (YARA, Detection)
         count: 1
+      - url: /hunting-detections/arsenal-237-rootkit-dll-detections
+        title: 'Arsenal-237 New Files: rootkit.dll (Kernel-Mode Rootkit)'
+        date: '2026-01-20'
+        report_url: /reports/arsenal-237/rootkit-dll/
+        rules: Comprehensive Multi-Branch Combination (YARA, Hunting)
+        count: 1
     actors:
       - UTA-2026-014
       - UTA-2026-016
@@ -11494,10 +13009,10 @@ techniques:
       - vova75rus
     url: /techniques/T1564.001/
     mitre_url: https://attack.mitre.org/techniques/T1564/001/
-    report_count: 4
-    rule_count: 7
+    report_count: 5
+    rule_count: 8
     actor_count: 6
-    score: 11
+    score: 13
   - id: T1564.002
     name: Hidden Users
     tactic: Stealth
@@ -11540,7 +13055,39 @@ techniques:
         date: '2026-04-05'
         tactic: Stealth
         confidence: HIGH
+      - url: /reports/fleetagentfud-exe/
+        title: 'Arsenal-237: FleetAgentFUD.exe'
+        date: '2026-01-11'
+        tactic: Stealth
+        confidence: HIGH
+      - url: /reports/agent-xworm-v2-exe/
+        title: 'Arsenal-237: agent_xworm_v2.exe (XWorm RAT v2.4.0)'
+        date: '2026-01-10'
+        tactic: Stealth
+        confidence: HIGH
+      - url: /reports/fleetagentadvanced-exe/
+        title: 'Arsenal-237: FleetAgentAdvanced.exe'
+        date: '2026-01-10'
+        tactic: Stealth
+        confidence: HIGH
+      - url: /reports/agent-xworm-exe/
+        title: 'Arsenal-237: agent_xworm.exe (XWorm RAT v6)'
+        date: '2026-01-09'
+        tactic: Stealth
+        confidence: HIGH
     detections:
+      - url: /hunting-detections/agent-xworm-v2-exe-detections
+        title: 'Arsenal-237: agent_xworm_v2.exe (XWorm RAT v2.4.0)'
+        date: '2026-01-10'
+        report_url: /reports/agent-xworm-v2-exe/
+        rules: XWorm v2.x Family Multi-Signal Combination (YARA, Hunting)
+        count: 1
+      - url: /hunting-detections/agent-xworm-exe-detections
+        title: 'Arsenal-237: agent_xworm.exe (XWorm RAT v6)'
+        date: '2026-01-09'
+        report_url: /reports/agent-xworm-exe/
+        rules: XWorm RAT Capability Combination (YARA, Hunting)
+        count: 1
       - url: /hunting-detections/PULSAR-RAT-detections
         title: PULSAR RAT (server.exe) — Technical Analysis & Business Risk Assessment
         date: '2025-12-15'
@@ -11552,10 +13099,10 @@ techniques:
       - UTA-2026-005
     url: /techniques/T1564.003/
     mitre_url: https://attack.mitre.org/techniques/T1564/003/
-    report_count: 2
-    rule_count: 1
+    report_count: 6
+    rule_count: 3
     actor_count: 2
-    score: 3
+    score: 9
   - id: T1565.001
     name: Stored Data Manipulation
     tactic: Impact
@@ -11591,15 +13138,20 @@ techniques:
         date: '2026-07-21'
         tactic: Initial Access
         confidence: MODERATE
+      - url: /reports/arsenal-237-new-files/killer-dll/
+        title: 'Arsenal-237 New Files: killer.dll (BYOVD Process Termination)'
+        date: '2026-01-24'
+        tactic: Initial Access
+        confidence: HIGH
     detections: []
     actors:
       - UTA-2026-019
     url: /techniques/T1566/
     mitre_url: https://attack.mitre.org/techniques/T1566/
-    report_count: 1
+    report_count: 2
     rule_count: 0
     actor_count: 1
-    score: 1
+    score: 2
   - id: T1566.001
     name: Spearphishing Attachment
     tactic: Initial Access
@@ -12191,6 +13743,16 @@ techniques:
         date: '2026-02-10'
         tactic: Command and Control
         confidence: HIGH
+      - url: /reports/agent-exe/
+        title: 'Arsenal-237: agent.exe (PoetRAT)'
+        date: '2026-01-12'
+        tactic: Command and Control
+        confidence: HIGH
+      - url: /reports/fleetagentfud-exe/
+        title: 'Arsenal-237: FleetAgentFUD.exe'
+        date: '2026-01-11'
+        tactic: Command and Control
+        confidence: HIGH
       - url: /reports/dual-rat-analysis/
         title: 'Dual-RAT Analysis: Pulsar RAT vs. NjRAT/XWorm'
         date: '2025-12-20'
@@ -12203,6 +13765,14 @@ techniques:
         report_url: /reports/open-directory-94-103-1-13-20260423/
         rules: Orcus RAT v7 Wardow Crack (YARA, Detection)
         count: 1
+      - url: /hunting-detections/agent-exe-detections
+        title: 'Arsenal-237: agent.exe (PoetRAT)'
+        date: '2026-01-12'
+        report_url: /reports/agent-exe/
+        rules: >-
+          Golang RAT Multi-Signal Combination (Behavioral Combination) (YARA, Hunting); Generic
+          Golang RAT Capability Combination (YARA, Hunting)
+        count: 2
       - url: /hunting-detections/dual-rat-analysis-detections
         title: 'Dual-RAT Analysis: Pulsar RAT vs. NjRAT/XWorm'
         date: '2025-12-20'
@@ -12213,10 +13783,10 @@ techniques:
       - UTA-2026-005
     url: /techniques/T1573/
     mitre_url: https://attack.mitre.org/techniques/T1573/
-    report_count: 3
-    rule_count: 2
+    report_count: 5
+    rule_count: 4
     actor_count: 1
-    score: 5
+    score: 9
   - id: T1573.001
     name: Symmetric Cryptography
     tactic: Command and Control
@@ -13533,6 +15103,25 @@ techniques:
     rule_count: 2
     actor_count: 3
     score: 5
+  - id: T1601.002
+    name: Downgrade System Image
+    tactic: Defense Impairment
+    tactics:
+      - Defense Impairment
+    reports:
+      - url: /reports/arsenal-237-new-files/killer-dll/
+        title: 'Arsenal-237 New Files: killer.dll (BYOVD Process Termination)'
+        date: '2026-01-24'
+        tactic: Stealth
+        confidence: HIGH
+    detections: []
+    actors: []
+    url: /techniques/T1601.002/
+    mitre_url: https://attack.mitre.org/techniques/T1601/002/
+    report_count: 1
+    rule_count: 0
+    actor_count: 0
+    score: 1
   - id: T1602.001
     name: SNMP (MIB Dump)
     tactic: Collection
@@ -13944,6 +15533,14 @@ techniques:
         report_url: /reports/zerotrace-74-0-42-25-20260316/
         rules: XwormLoader Native Reflective PE Loader (YARA, Detection)
         count: 1
+      - url: /hunting-detections/arsenal-237-chromelevator-exe-detections
+        title: 'Arsenal-237 New Files: chromelevator.exe (Browser Credential Theft)'
+        date: '2026-01-22'
+        report_url: /reports/arsenal-237-new-files/chromelevator-exe/
+        rules: >-
+          Reflective DLL Injection Framework (YARA, Detection); Browser Credential Extraction
+          Multi-Signal Combination (YARA, Hunting)
+        count: 2
     actors:
       - UTA-2026-001
       - UTA-2026-002
@@ -13960,9 +15557,9 @@ techniques:
     url: /techniques/T1620/
     mitre_url: https://attack.mitre.org/techniques/T1620/
     report_count: 13
-    rule_count: 19
+    rule_count: 21
     actor_count: 12
-    score: 32
+    score: 34
   - id: T1622
     name: Debugger Evasion
     tactic: Stealth
@@ -13980,9 +15577,34 @@ techniques:
         date: '2026-04-06'
         tactic: Stealth
         confidence: HIGH
+      - url: /reports/new-enc-exe/
+        title: 'Arsenal-237 New Files: new_enc.exe (Human-Operated Rust Ransomware)'
+        date: '2026-01-26'
+        tactic: Stealth
+        confidence: HIGH
+      - url: /reports/arsenal-237-new-files/enc_c2-exe/
+        title: 'Arsenal-237 New Files: enc_c2.exe (Rust Ransomware with Tor C2)'
+        date: '2026-01-24'
+        tactic: Stealth
+        confidence: HIGH
+      - url: /reports/arsenal-237-new-files/killer-dll/
+        title: 'Arsenal-237 New Files: killer.dll (BYOVD Process Termination)'
+        date: '2026-01-24'
+        tactic: Stealth
+        confidence: HIGH
+      - url: /reports/arsenal-237-new-files/dec_fixed-exe/
+        title: 'Arsenal-237 New Files: dec_fixed.exe (Ransomware Decryptor)'
+        date: '2026-01-23'
+        tactic: Stealth
+        confidence: HIGH
       - url: /reports/arsenal-237-new-files/
         title: 'Arsenal-237 New Files: Advanced Toolkit Analysis'
         date: '2026-01-20'
+        tactic: Stealth
+        confidence: HIGH
+      - url: /reports/agent-exe/
+        title: 'Arsenal-237: agent.exe (PoetRAT)'
+        date: '2026-01-12'
         tactic: Stealth
         confidence: HIGH
       - url: /reports/dual-rat-analysis/
@@ -13995,7 +15617,27 @@ techniques:
         date: '2025-11-20'
         tactic: Stealth
         confidence: HIGH
-    detections: []
+    detections:
+      - url: /hunting-detections/arsenal-237-new_enc-exe-detections
+        title: 'Arsenal-237 New Files: new_enc.exe (Human-Operated Rust Ransomware)'
+        date: '2026-01-26'
+        report_url: /reports/new-enc-exe/
+        rules: Anti-Analysis / Anti-Sandbox Combination (YARA, Hunting)
+        count: 1
+      - url: /hunting-detections/arsenal-237-enc_c2-exe-detections
+        title: 'Arsenal-237 New Files: enc_c2.exe (Rust Ransomware with Tor C2)'
+        date: '2026-01-24'
+        report_url: /reports/arsenal-237-new-files/enc_c2-exe/
+        rules: >-
+          TEB-Based Anti-Debug Stall Loop (YARA, Hunting); enc_c2.exe Process Access with Sleep in
+          the Call Trace (Call-Stack Corroboration) (SIGMA, Hunting)
+        count: 2
+      - url: /hunting-detections/agent-exe-detections
+        title: 'Arsenal-237: agent.exe (PoetRAT)'
+        date: '2026-01-12'
+        report_url: /reports/agent-exe/
+        rules: Golang RAT Multi-Signal Combination (Behavioral Combination) (YARA, Hunting)
+        count: 1
     actors:
       - UTA-2026-004
       - UTA-2026-008
@@ -14003,10 +15645,10 @@ techniques:
       - UTA-2026-010
     url: /techniques/T1622/
     mitre_url: https://attack.mitre.org/techniques/T1622/
-    report_count: 5
-    rule_count: 0
+    report_count: 10
+    rule_count: 4
     actor_count: 4
-    score: 5
+    score: 14
   - id: T1649
     name: Steal or Forge Authentication Certificates
     tactic: Credential Access
@@ -14235,10 +15877,45 @@ techniques:
         date: '2026-03-10'
         tactic: Defense Impairment
         confidence: DEFINITE
+      - url: /reports/bdapiutil64-sys/
+        title: 'Arsenal-237 New Files: BdApiUtil64.sys (Vulnerable Baidu Driver)'
+        date: '2026-01-26'
+        tactic: Stealth
+        confidence: HIGH
+      - url: /reports/arsenal-237-new-files/killer-dll/
+        title: 'Arsenal-237 New Files: killer.dll (BYOVD Process Termination)'
+        date: '2026-01-24'
+        tactic: Stealth
+        confidence: HIGH
       - url: /reports/arsenal-237-new-files/
         title: 'Arsenal-237 New Files: Advanced Toolkit Analysis'
         date: '2026-01-20'
         tactic: Defense Impairment
+        confidence: HIGH
+      - url: /reports/arsenal-237/rootkit-dll/
+        title: 'Arsenal-237 New Files: rootkit.dll (Kernel-Mode Rootkit)'
+        date: '2026-01-20'
+        tactic: Stealth
+        confidence: HIGH
+      - url: /reports/arsenal-237-new-files/killer-crowdstrike-dll/
+        title: 'Arsenal-237 New Files: killer_crowdstrike.dll (CrowdStrike-Specific Termination)'
+        date: '2026-01-18'
+        tactic: Stealth
+        confidence: HIGH
+      - url: /reports/fleetagentfud-exe/
+        title: 'Arsenal-237: FleetAgentFUD.exe'
+        date: '2026-01-11'
+        tactic: Stealth
+        confidence: HIGH
+      - url: /reports/agent-xworm-v2-exe/
+        title: 'Arsenal-237: agent_xworm_v2.exe (XWorm RAT v2.4.0)'
+        date: '2026-01-10'
+        tactic: Stealth
+        confidence: HIGH
+      - url: /reports/agent-xworm-exe/
+        title: 'Arsenal-237: agent_xworm.exe (XWorm RAT v6)'
+        date: '2026-01-09'
+        tactic: Stealth
         confidence: HIGH
       - url: /reports/PULSAR-RAT/
         title: PULSAR RAT (server.exe) — Technical Analysis & Business Risk Assessment
@@ -14351,6 +16028,51 @@ techniques:
           PowerShell AMSI Bypass via amsiInitFailed Reflection (SIGMA, Detection); Windows Defender
           Real-Time Protection Disabled (SIGMA, Hunting)
         count: 2
+      - url: /hunting-detections/arsenal-237-BdApiUtil64-sys-detections
+        title: 'Arsenal-237 New Files: BdApiUtil64.sys (Vulnerable Baidu Driver)'
+        date: '2026-01-26'
+        report_url: /reports/bdapiutil64-sys/
+        rules: >-
+          BdApiUtil64.sys IOCTL Abuse (DeviceIoControl + Documented IOCTL Codes) (YARA, Detection);
+          Kernel-Mode Security-Process Termination (Generic Rootkit Technique) (YARA, Hunting);
+          BdApiUtil64.sys BYOVD Kill Pattern: Driver Load Followed by Security-Product Termination
+          (Correlation) (SIGMA, Detection)
+        count: 3
+      - url: /hunting-detections/arsenal-237-killer-dll-detections
+        title: 'Arsenal-237 New Files: killer.dll (BYOVD Process Termination)'
+        date: '2026-01-24'
+        report_url: /reports/arsenal-237-new-files/killer-dll/
+        rules: >-
+          Security-Product Termination + IOCTL Behavioral Combination (YARA, Hunting); Mass
+          Security-Product Termination: 3+ Distinct Products Within 60 Seconds (Correlation) (SIGMA,
+          Detection); Kernel Driver Service Creation by Rundll32 (Registry) (SIGMA, Hunting)
+        count: 3
+      - url: /hunting-detections/arsenal-237-rootkit-dll-detections
+        title: 'Arsenal-237 New Files: rootkit.dll (Kernel-Mode Rootkit)'
+        date: '2026-01-20'
+        report_url: /reports/arsenal-237/rootkit-dll/
+        rules: >-
+          Security Product Process-Name Kill-List (Multi-Vendor Spread or Single-Vendor Depth)
+          (YARA, Detection); Comprehensive Multi-Branch Combination (YARA, Hunting); Rust Runtime
+          Plus Process-Manipulation APIs (YARA, Hunting)
+        count: 3
+      - url: /hunting-detections/arsenal-237-killer-crowdstrike-dll-detections
+        title: 'Arsenal-237 New Files: killer_crowdstrike.dll (CrowdStrike-Specific Termination)'
+        date: '2026-01-18'
+        report_url: /reports/arsenal-237-new-files/killer-crowdstrike-dll/
+        rules: >-
+          BYOVD Kernel Driver Install + CrowdStrike Falcon Termination (Correlation) (SIGMA,
+          Detection); Known-Vulnerable Driver Loaded from Temporary Directory (BYOVD) (SIGMA,
+          Detection)
+        count: 2
+      - url: /hunting-detections/fleetagentfud-exe-detections
+        title: 'Arsenal-237: FleetAgentFUD.exe'
+        date: '2026-01-11'
+        report_url: /reports/fleetagentfud-exe/
+        rules: >-
+          FleetAgentFUD PowerShell Execution Policy Bypass Strings (YARA, Hunting); PowerShell
+          Execution Policy Bypass with Hidden Window from an AppData Parent (SIGMA, Hunting)
+        count: 2
       - url: /hunting-detections/quasar-xworm-powershell-detections
         title: Quasar + XWorm + PowerShell
         date: '2025-10-10'
@@ -14370,10 +16092,34 @@ techniques:
       - n-3-xl
     url: /techniques/T1685/
     mitre_url: https://attack.mitre.org/techniques/T1685/
-    report_count: 14
-    rule_count: 24
+    report_count: 21
+    rule_count: 37
     actor_count: 10
-    score: 38
+    score: 58
+  - id: T1685.001
+    name: Disable or Modify Windows Event Log
+    tactic: Defense Impairment
+    tactics:
+      - Defense Impairment
+    reports:
+      - url: /reports/bdapiutil64-sys/
+        title: 'Arsenal-237 New Files: BdApiUtil64.sys (Vulnerable Baidu Driver)'
+        date: '2026-01-26'
+        tactic: Stealth
+        confidence: HIGH
+      - url: /reports/arsenal-237-new-files/killer-dll/
+        title: 'Arsenal-237 New Files: killer.dll (BYOVD Process Termination)'
+        date: '2026-01-24'
+        tactic: Stealth
+        confidence: HIGH
+    detections: []
+    actors: []
+    url: /techniques/T1685.001/
+    mitre_url: https://attack.mitre.org/techniques/T1685/001/
+    report_count: 2
+    rule_count: 0
+    actor_count: 0
+    score: 2
   - id: T1686
     name: Disable or Modify System Firewall
     tactic: Defense Impairment

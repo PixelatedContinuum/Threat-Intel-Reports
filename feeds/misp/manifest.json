@@ -4810,6 +4810,518 @@
     "threat_level_id": 1,
     "timestamp": 1791727780
   },
+  "bf15ec86-d80c-5067-8f63-4c2f4186cda3": {
+    "Orgc": {
+      "name": "The Hunters Ledger",
+      "uuid": "8bc8284b-deb5-546c-a233-57ea34b2ea0d"
+    },
+    "Tag": [
+      {
+        "name": "tlp:clear",
+        "colour": "#ffffff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"BYOVD\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"Priv Esc\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Rootkit - T1014\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Exploitation for Privilege Escalation - T1068\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Kernel Modules and Extensions - T1547.006\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Disable or Modify Tools - T1685\"",
+        "colour": "#0088cc"
+      }
+    ],
+    "info": "Arsenal-237 New Files: BdApiUtil64.sys (Vulnerable Baidu Driver)",
+    "date": "2026-01-26",
+    "analysis": 2,
+    "threat_level_id": 1,
+    "timestamp": 1794454352
+  },
+  "bbb50559-558b-53f6-8a3a-19961ddf05ef": {
+    "Orgc": {
+      "name": "The Hunters Ledger",
+      "uuid": "8bc8284b-deb5-546c-a233-57ea34b2ea0d"
+    },
+    "Tag": [
+      {
+        "name": "tlp:clear",
+        "colour": "#ffffff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"DLL Hijack\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"Persistence\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"System Service Discovery - T1007\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Automated Exfiltration - T1020\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"PowerShell - T1059.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Web Protocols - T1071.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"System Information Discovery - T1082\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Proxy - T1090\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Ingress Tool Transfer - T1105\"",
+        "colour": "#0088cc"
+      }
+    ],
+    "info": "Arsenal-237 New Files: nethost.dll (DLL Hijacking Persistence)",
+    "date": "2026-01-26",
+    "analysis": 2,
+    "threat_level_id": 1,
+    "timestamp": 1794454360
+  },
+  "caefd6be-08dd-561f-86e2-b3b02308da81": {
+    "Orgc": {
+      "name": "The Hunters Ledger",
+      "uuid": "8bc8284b-deb5-546c-a233-57ea34b2ea0d"
+    },
+    "Tag": [
+      {
+        "name": "tlp:clear",
+        "colour": "#ffffff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"Ransomware\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"Rust\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Scheduled Task - T1053.005\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Process Discovery - T1057\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Service Stop - T1489\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Inhibit System Recovery - T1490\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"System Checks - T1497.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Security Software Discovery - T1518.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Debugger Evasion - T1622\"",
+        "colour": "#0088cc"
+      }
+    ],
+    "info": "Arsenal-237 New Files: new_enc.exe (Human-Operated Rust Ransomware)",
+    "date": "2026-01-26",
+    "analysis": 2,
+    "threat_level_id": 1,
+    "timestamp": 1794454361
+  },
+  "75ed19ed-9b89-5f63-a2ca-193a80458317": {
+    "Orgc": {
+      "name": "The Hunters Ledger",
+      "uuid": "8bc8284b-deb5-546c-a233-57ea34b2ea0d"
+    },
+    "Tag": [
+      {
+        "name": "tlp:clear",
+        "colour": "#ffffff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"Priv Esc\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Windows Management Instrumentation - T1047\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Scheduled Task - T1053.005\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Token Impersonation/Theft - T1134.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Bypass User Account Control - T1548.002\"",
+        "colour": "#0088cc"
+      }
+    ],
+    "info": "Arsenal-237 New Files: lpe.exe (Privilege Escalation)",
+    "date": "2026-01-25",
+    "analysis": 2,
+    "threat_level_id": 1,
+    "timestamp": 1794454359
+  },
+  "b021c858-4e87-550d-adc4-b56553cc8004": {
+    "Orgc": {
+      "name": "The Hunters Ledger",
+      "uuid": "8bc8284b-deb5-546c-a233-57ea34b2ea0d"
+    },
+    "Tag": [
+      {
+        "name": "tlp:clear",
+        "colour": "#ffffff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"Ransomware\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"C2\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"Rust\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Web Protocols - T1071.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Multi-hop Proxy - T1090.003\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Malicious File - T1204.002\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Data Encrypted for Impact - T1486\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Registry Run Keys / Startup Folder - T1547.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Debugger Evasion - T1622\"",
+        "colour": "#0088cc"
+      }
+    ],
+    "info": "Arsenal-237 New Files: enc_c2.exe (Rust Ransomware with Tor C2)",
+    "date": "2026-01-24",
+    "analysis": 2,
+    "threat_level_id": 1,
+    "timestamp": 1794454355
+  },
+  "8b4993d6-5ab8-5280-bfaa-f37bd2e53bd6": {
+    "Orgc": {
+      "name": "The Hunters Ledger",
+      "uuid": "8bc8284b-deb5-546c-a233-57ea34b2ea0d"
+    },
+    "Tag": [
+      {
+        "name": "tlp:clear",
+        "colour": "#ffffff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"BYOVD\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"Evasion\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Obfuscated Files or Information - T1027\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Embedded Payloads - T1027.009\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Exploitation for Privilege Escalation - T1068\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Windows Service - T1543.003\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Disable or Modify Tools - T1685\"",
+        "colour": "#0088cc"
+      }
+    ],
+    "info": "Arsenal-237 New Files: killer.dll (BYOVD Process Termination)",
+    "date": "2026-01-24",
+    "analysis": 2,
+    "threat_level_id": 1,
+    "timestamp": 1794454358
+  },
+  "b3f1cee9-dc86-5d92-ae5e-b375141a3dde": {
+    "Orgc": {
+      "name": "The Hunters Ledger",
+      "uuid": "8bc8284b-deb5-546c-a233-57ea34b2ea0d"
+    },
+    "Tag": [
+      {
+        "name": "tlp:clear",
+        "colour": "#ffffff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"Ransomware\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"Rust\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Command and Scripting Interpreter - T1059\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"File Deletion - T1070.004\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"File and Directory Discovery - T1083\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Data Encrypted for Impact - T1486\"",
+        "colour": "#0088cc"
+      }
+    ],
+    "info": "Arsenal-237 New Files: dec_fixed.exe (Ransomware Decryptor)",
+    "date": "2026-01-23",
+    "analysis": 2,
+    "threat_level_id": 2,
+    "timestamp": 1794454354
+  },
+  "59b99578-e9d7-5ba7-9a9c-5a6088427a92": {
+    "Orgc": {
+      "name": "The Hunters Ledger",
+      "uuid": "8bc8284b-deb5-546c-a233-57ea34b2ea0d"
+    },
+    "Tag": [
+      {
+        "name": "tlp:clear",
+        "colour": "#ffffff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"Cred Theft\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "hunters-ledger:topic=\".NET\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Dynamic-link Library Injection - T1055.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Native API - T1106\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Credentials from Web Browsers - T1555.003\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Reflective Code Loading - T1620\"",
+        "colour": "#0088cc"
+      }
+    ],
+    "info": "Arsenal-237 New Files: chromelevator.exe (Browser Credential Theft)",
+    "date": "2026-01-22",
+    "analysis": 2,
+    "threat_level_id": 1,
+    "timestamp": 1794454353
+  },
+  "1c4057d8-6ee8-5c89-b45d-adc83d437048": {
+    "Orgc": {
+      "name": "The Hunters Ledger",
+      "uuid": "8bc8284b-deb5-546c-a233-57ea34b2ea0d"
+    },
+    "Tag": [
+      {
+        "name": "tlp:clear",
+        "colour": "#ffffff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"Ransomware\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"Rust\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Network Share Discovery - T1135\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Data Encrypted for Impact - T1486\"",
+        "colour": "#0088cc"
+      }
+    ],
+    "info": "Arsenal-237 New Files: full_test_enc.exe (Advanced Rust Ransomware)",
+    "date": "2026-01-20",
+    "analysis": 2,
+    "threat_level_id": 1,
+    "timestamp": 1794454356
+  },
+  "e501fdef-3d5e-5128-b862-ad46cf063906": {
+    "Orgc": {
+      "name": "The Hunters Ledger",
+      "uuid": "8bc8284b-deb5-546c-a233-57ea34b2ea0d"
+    },
+    "Tag": [
+      {
+        "name": "tlp:clear",
+        "colour": "#ffffff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"Rootkit\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"Evasion\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Process Injection - T1055\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Dynamic-link Library Injection - T1055.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"PowerShell - T1059.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Exploitation for Privilege Escalation - T1068\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Hidden Files and Directories - T1564.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Disable or Modify Tools - T1685\"",
+        "colour": "#0088cc"
+      }
+    ],
+    "info": "Arsenal-237 New Files: rootkit.dll (Kernel-Mode Rootkit)",
+    "date": "2026-01-20",
+    "analysis": 2,
+    "threat_level_id": 1,
+    "timestamp": 1794454362
+  },
+  "3a2e305f-b524-5b35-8fa8-54a3a55c08b1": {
+    "Orgc": {
+      "name": "The Hunters Ledger",
+      "uuid": "8bc8284b-deb5-546c-a233-57ea34b2ea0d"
+    },
+    "Tag": [
+      {
+        "name": "tlp:clear",
+        "colour": "#ffffff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"Evasion\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"BYOVD\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Exploitation for Privilege Escalation - T1068\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Disable or Modify Tools - T1685\"",
+        "colour": "#0088cc"
+      }
+    ],
+    "info": "Arsenal-237 New Files: killer_crowdstrike.dll (CrowdStrike-Specific Termination)",
+    "date": "2026-01-18",
+    "analysis": 2,
+    "threat_level_id": 1,
+    "timestamp": 1794454357
+  },
+  "1f7ee918-f66f-5770-90bf-ff912bd48050": {
+    "Orgc": {
+      "name": "The Hunters Ledger",
+      "uuid": "8bc8284b-deb5-546c-a233-57ea34b2ea0d"
+    },
+    "Tag": [
+      {
+        "name": "tlp:clear",
+        "colour": "#ffffff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"Ransomware\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"Rust\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Data Encrypted for Impact - T1486\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Inhibit System Recovery - T1490\"",
+        "colour": "#0088cc"
+      }
+    ],
+    "info": "Arsenal-237: enc/dec Ransomware Family",
+    "date": "2026-01-18",
+    "analysis": 2,
+    "threat_level_id": 1,
+    "timestamp": 1794454363
+  },
   "94c995c7-3161-5b68-9185-60ec73870738": {
     "Orgc": {
       "name": "The Hunters Ledger",
@@ -4862,401 +5374,12 @@
       }
     ],
     "info": "Arsenal-237: agent.exe (PoetRAT)",
-    "date": "2026-01-15",
-    "analysis": 2,
-    "threat_level_id": 2,
-    "timestamp": 1791687661
-  },
-  "a621bfc3-8efc-54bd-ace7-c4d50940fc7d": {
-    "Orgc": {
-      "name": "The Hunters Ledger",
-      "uuid": "8bc8284b-deb5-546c-a233-57ea34b2ea0d"
-    },
-    "Tag": [
-      {
-        "name": "tlp:clear",
-        "colour": "#ffffff"
-      },
-      {
-        "name": "hunters-ledger:topic=\"RAT\"",
-        "colour": "#58a6ff"
-      },
-      {
-        "name": "hunters-ledger:topic=\"C2\"",
-        "colour": "#58a6ff"
-      },
-      {
-        "name": "misp-galaxy:mitre-attack-pattern=\"PowerShell - T1059.001\"",
-        "colour": "#0088cc"
-      },
-      {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Non-Application Layer Protocol - T1095\"",
-        "colour": "#0088cc"
-      },
-      {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Ingress Tool Transfer - T1105\"",
-        "colour": "#0088cc"
-      },
-      {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Standard Encoding - T1132.001\"",
-        "colour": "#0088cc"
-      },
-      {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Hidden Window - T1564.003\"",
-        "colour": "#0088cc"
-      }
-    ],
-    "info": "Arsenal-237: agent_xworm.exe (XWorm RAT v6)",
-    "date": "2026-01-15",
-    "analysis": 2,
-    "threat_level_id": 2,
-    "timestamp": 1791727755
-  },
-  "aab2ba34-9ec2-5c61-948e-6a10c7b18488": {
-    "Orgc": {
-      "name": "The Hunters Ledger",
-      "uuid": "8bc8284b-deb5-546c-a233-57ea34b2ea0d"
-    },
-    "Tag": [
-      {
-        "name": "tlp:clear",
-        "colour": "#ffffff"
-      },
-      {
-        "name": "hunters-ledger:topic=\"RAT\"",
-        "colour": "#58a6ff"
-      },
-      {
-        "name": "hunters-ledger:topic=\"C2\"",
-        "colour": "#58a6ff"
-      },
-      {
-        "name": "misp-galaxy:mitre-attack-pattern=\"System Service Discovery - T1007\"",
-        "colour": "#0088cc"
-      },
-      {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Process Discovery - T1057\"",
-        "colour": "#0088cc"
-      },
-      {
-        "name": "misp-galaxy:mitre-attack-pattern=\"PowerShell - T1059.001\"",
-        "colour": "#0088cc"
-      },
-      {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Web Protocols - T1071.001\"",
-        "colour": "#0088cc"
-      },
-      {
-        "name": "misp-galaxy:mitre-attack-pattern=\"System Information Discovery - T1082\"",
-        "colour": "#0088cc"
-      },
-      {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Standard Encoding - T1132.001\"",
-        "colour": "#0088cc"
-      },
-      {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Domain Trust Discovery - T1482\"",
-        "colour": "#0088cc"
-      },
-      {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Hidden Window - T1564.003\"",
-        "colour": "#0088cc"
-      }
-    ],
-    "info": "Arsenal-237: agent_xworm_v2.exe (XWorm RAT v2.4.0)",
-    "date": "2026-01-15",
-    "analysis": 2,
-    "threat_level_id": 2,
-    "timestamp": 1791690192
-  },
-  "bf15ec86-d80c-5067-8f63-4c2f4186cda3": {
-    "Orgc": {
-      "name": "The Hunters Ledger",
-      "uuid": "8bc8284b-deb5-546c-a233-57ea34b2ea0d"
-    },
-    "Tag": [
-      {
-        "name": "tlp:clear",
-        "colour": "#ffffff"
-      },
-      {
-        "name": "hunters-ledger:topic=\"BYOVD\"",
-        "colour": "#58a6ff"
-      },
-      {
-        "name": "hunters-ledger:topic=\"Priv Esc\"",
-        "colour": "#58a6ff"
-      },
-      {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Rootkit - T1014\"",
-        "colour": "#0088cc"
-      },
-      {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Exploitation for Privilege Escalation - T1068\"",
-        "colour": "#0088cc"
-      },
-      {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Kernel Modules and Extensions - T1547.006\"",
-        "colour": "#0088cc"
-      },
-      {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Disable or Modify Tools - T1685\"",
-        "colour": "#0088cc"
-      }
-    ],
-    "info": "Arsenal-237 New Files: BdApiUtil64.sys (Vulnerable Baidu Driver)",
-    "date": "2026-01-15",
+    "date": "2026-01-12",
     "analysis": 2,
     "threat_level_id": 1,
-    "timestamp": 1791687665
+    "timestamp": 1794454349
   },
-  "59b99578-e9d7-5ba7-9a9c-5a6088427a92": {
-    "Orgc": {
-      "name": "The Hunters Ledger",
-      "uuid": "8bc8284b-deb5-546c-a233-57ea34b2ea0d"
-    },
-    "Tag": [
-      {
-        "name": "tlp:clear",
-        "colour": "#ffffff"
-      },
-      {
-        "name": "hunters-ledger:topic=\"Cred Theft\"",
-        "colour": "#58a6ff"
-      },
-      {
-        "name": "hunters-ledger:topic=\".NET\"",
-        "colour": "#58a6ff"
-      },
-      {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Dynamic-link Library Injection - T1055.001\"",
-        "colour": "#0088cc"
-      },
-      {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Native API - T1106\"",
-        "colour": "#0088cc"
-      },
-      {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Credentials from Web Browsers - T1555.003\"",
-        "colour": "#0088cc"
-      },
-      {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Reflective Code Loading - T1620\"",
-        "colour": "#0088cc"
-      }
-    ],
-    "info": "Arsenal-237 New Files: chromelevator.exe (Browser Credential Theft)",
-    "date": "2026-01-15",
-    "analysis": 2,
-    "threat_level_id": 1,
-    "timestamp": 1791727757
-  },
-  "b3f1cee9-dc86-5d92-ae5e-b375141a3dde": {
-    "Orgc": {
-      "name": "The Hunters Ledger",
-      "uuid": "8bc8284b-deb5-546c-a233-57ea34b2ea0d"
-    },
-    "Tag": [
-      {
-        "name": "tlp:clear",
-        "colour": "#ffffff"
-      },
-      {
-        "name": "hunters-ledger:topic=\"Ransomware\"",
-        "colour": "#58a6ff"
-      },
-      {
-        "name": "hunters-ledger:topic=\"Rust\"",
-        "colour": "#58a6ff"
-      },
-      {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Command and Scripting Interpreter - T1059\"",
-        "colour": "#0088cc"
-      },
-      {
-        "name": "misp-galaxy:mitre-attack-pattern=\"File Deletion - T1070.004\"",
-        "colour": "#0088cc"
-      },
-      {
-        "name": "misp-galaxy:mitre-attack-pattern=\"File and Directory Discovery - T1083\"",
-        "colour": "#0088cc"
-      },
-      {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Data Encrypted for Impact - T1486\"",
-        "colour": "#0088cc"
-      }
-    ],
-    "info": "Arsenal-237 New Files: dec_fixed.exe (Ransomware Decryptor)",
-    "date": "2026-01-15",
-    "analysis": 2,
-    "threat_level_id": 1,
-    "timestamp": 1791687667
-  },
-  "b021c858-4e87-550d-adc4-b56553cc8004": {
-    "Orgc": {
-      "name": "The Hunters Ledger",
-      "uuid": "8bc8284b-deb5-546c-a233-57ea34b2ea0d"
-    },
-    "Tag": [
-      {
-        "name": "tlp:clear",
-        "colour": "#ffffff"
-      },
-      {
-        "name": "hunters-ledger:topic=\"Ransomware\"",
-        "colour": "#58a6ff"
-      },
-      {
-        "name": "hunters-ledger:topic=\"C2\"",
-        "colour": "#58a6ff"
-      },
-      {
-        "name": "hunters-ledger:topic=\"Rust\"",
-        "colour": "#58a6ff"
-      },
-      {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Web Protocols - T1071.001\"",
-        "colour": "#0088cc"
-      },
-      {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Multi-hop Proxy - T1090.003\"",
-        "colour": "#0088cc"
-      },
-      {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Malicious File - T1204.002\"",
-        "colour": "#0088cc"
-      },
-      {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Data Encrypted for Impact - T1486\"",
-        "colour": "#0088cc"
-      },
-      {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Registry Run Keys / Startup Folder - T1547.001\"",
-        "colour": "#0088cc"
-      },
-      {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Debugger Evasion - T1622\"",
-        "colour": "#0088cc"
-      }
-    ],
-    "info": "Arsenal-237 New Files: enc_c2.exe (Rust Ransomware with Tor C2)",
-    "date": "2026-01-15",
-    "analysis": 2,
-    "threat_level_id": 1,
-    "timestamp": 1791727758
-  },
-  "1c4057d8-6ee8-5c89-b45d-adc83d437048": {
-    "Orgc": {
-      "name": "The Hunters Ledger",
-      "uuid": "8bc8284b-deb5-546c-a233-57ea34b2ea0d"
-    },
-    "Tag": [
-      {
-        "name": "tlp:clear",
-        "colour": "#ffffff"
-      },
-      {
-        "name": "hunters-ledger:topic=\"Ransomware\"",
-        "colour": "#58a6ff"
-      },
-      {
-        "name": "hunters-ledger:topic=\"Rust\"",
-        "colour": "#58a6ff"
-      },
-      {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Network Share Discovery - T1135\"",
-        "colour": "#0088cc"
-      },
-      {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Data Encrypted for Impact - T1486\"",
-        "colour": "#0088cc"
-      }
-    ],
-    "info": "Arsenal-237 New Files: full_test_enc.exe (Advanced Rust Ransomware)",
-    "date": "2026-01-15",
-    "analysis": 2,
-    "threat_level_id": 1,
-    "timestamp": 1791727759
-  },
-  "3a2e305f-b524-5b35-8fa8-54a3a55c08b1": {
-    "Orgc": {
-      "name": "The Hunters Ledger",
-      "uuid": "8bc8284b-deb5-546c-a233-57ea34b2ea0d"
-    },
-    "Tag": [
-      {
-        "name": "tlp:clear",
-        "colour": "#ffffff"
-      },
-      {
-        "name": "hunters-ledger:topic=\"Evasion\"",
-        "colour": "#58a6ff"
-      },
-      {
-        "name": "hunters-ledger:topic=\"BYOVD\"",
-        "colour": "#58a6ff"
-      },
-      {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Exploitation for Privilege Escalation - T1068\"",
-        "colour": "#0088cc"
-      },
-      {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Disable or Modify Tools - T1685\"",
-        "colour": "#0088cc"
-      }
-    ],
-    "info": "Arsenal-237 New Files: killer_crowdstrike.dll (CrowdStrike-Specific Termination)",
-    "date": "2026-01-15",
-    "analysis": 2,
-    "threat_level_id": 1,
-    "timestamp": 1791687670
-  },
-  "8b4993d6-5ab8-5280-bfaa-f37bd2e53bd6": {
-    "Orgc": {
-      "name": "The Hunters Ledger",
-      "uuid": "8bc8284b-deb5-546c-a233-57ea34b2ea0d"
-    },
-    "Tag": [
-      {
-        "name": "tlp:clear",
-        "colour": "#ffffff"
-      },
-      {
-        "name": "hunters-ledger:topic=\"BYOVD\"",
-        "colour": "#58a6ff"
-      },
-      {
-        "name": "hunters-ledger:topic=\"Evasion\"",
-        "colour": "#58a6ff"
-      },
-      {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Obfuscated Files or Information - T1027\"",
-        "colour": "#0088cc"
-      },
-      {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Embedded Payloads - T1027.009\"",
-        "colour": "#0088cc"
-      },
-      {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Exploitation for Privilege Escalation - T1068\"",
-        "colour": "#0088cc"
-      },
-      {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Windows Service - T1543.003\"",
-        "colour": "#0088cc"
-      },
-      {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Disable or Modify Tools - T1685\"",
-        "colour": "#0088cc"
-      }
-    ],
-    "info": "Arsenal-237 New Files: killer.dll (BYOVD Process Termination)",
-    "date": "2026-01-15",
-    "analysis": 2,
-    "threat_level_id": 1,
-    "timestamp": 1791727760
-  },
-  "75ed19ed-9b89-5f63-a2ca-193a80458317": {
+  "14e13c91-19dc-5501-978c-2729a8ef67eb": {
     "Orgc": {
       "name": "The Hunters Ledger",
       "uuid": "8bc8284b-deb5-546c-a233-57ea34b2ea0d"
@@ -5271,15 +5394,11 @@
         "colour": "#58a6ff"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Windows Management Instrumentation - T1047\"",
-        "colour": "#0088cc"
+        "name": "hunters-ledger:topic=\"Evasion\"",
+        "colour": "#58a6ff"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Scheduled Task - T1053.005\"",
-        "colour": "#0088cc"
-      },
-      {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Token Impersonation/Theft - T1134.001\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"System Owner/User Discovery - T1033\"",
         "colour": "#0088cc"
       },
       {
@@ -5287,248 +5406,11 @@
         "colour": "#0088cc"
       }
     ],
-    "info": "Arsenal-237 New Files: lpe.exe (Privilege Escalation)",
-    "date": "2026-01-15",
+    "info": "Arsenal-237: uac_test.exe",
+    "date": "2026-01-12",
     "analysis": 2,
-    "threat_level_id": 1,
-    "timestamp": 1791727761
-  },
-  "bbb50559-558b-53f6-8a3a-19961ddf05ef": {
-    "Orgc": {
-      "name": "The Hunters Ledger",
-      "uuid": "8bc8284b-deb5-546c-a233-57ea34b2ea0d"
-    },
-    "Tag": [
-      {
-        "name": "tlp:clear",
-        "colour": "#ffffff"
-      },
-      {
-        "name": "hunters-ledger:topic=\"DLL Hijack\"",
-        "colour": "#58a6ff"
-      },
-      {
-        "name": "hunters-ledger:topic=\"Persistence\"",
-        "colour": "#58a6ff"
-      },
-      {
-        "name": "misp-galaxy:mitre-attack-pattern=\"System Service Discovery - T1007\"",
-        "colour": "#0088cc"
-      },
-      {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Automated Exfiltration - T1020\"",
-        "colour": "#0088cc"
-      },
-      {
-        "name": "misp-galaxy:mitre-attack-pattern=\"PowerShell - T1059.001\"",
-        "colour": "#0088cc"
-      },
-      {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Web Protocols - T1071.001\"",
-        "colour": "#0088cc"
-      },
-      {
-        "name": "misp-galaxy:mitre-attack-pattern=\"System Information Discovery - T1082\"",
-        "colour": "#0088cc"
-      },
-      {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Proxy - T1090\"",
-        "colour": "#0088cc"
-      },
-      {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Ingress Tool Transfer - T1105\"",
-        "colour": "#0088cc"
-      }
-    ],
-    "info": "Arsenal-237 New Files: nethost.dll (DLL Hijacking Persistence)",
-    "date": "2026-01-15",
-    "analysis": 2,
-    "threat_level_id": 1,
-    "timestamp": 1791727762
-  },
-  "caefd6be-08dd-561f-86e2-b3b02308da81": {
-    "Orgc": {
-      "name": "The Hunters Ledger",
-      "uuid": "8bc8284b-deb5-546c-a233-57ea34b2ea0d"
-    },
-    "Tag": [
-      {
-        "name": "tlp:clear",
-        "colour": "#ffffff"
-      },
-      {
-        "name": "hunters-ledger:topic=\"Ransomware\"",
-        "colour": "#58a6ff"
-      },
-      {
-        "name": "hunters-ledger:topic=\"Rust\"",
-        "colour": "#58a6ff"
-      },
-      {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Scheduled Task - T1053.005\"",
-        "colour": "#0088cc"
-      },
-      {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Process Discovery - T1057\"",
-        "colour": "#0088cc"
-      },
-      {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Service Stop - T1489\"",
-        "colour": "#0088cc"
-      },
-      {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Inhibit System Recovery - T1490\"",
-        "colour": "#0088cc"
-      },
-      {
-        "name": "misp-galaxy:mitre-attack-pattern=\"System Checks - T1497.001\"",
-        "colour": "#0088cc"
-      },
-      {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Security Software Discovery - T1518.001\"",
-        "colour": "#0088cc"
-      },
-      {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Debugger Evasion - T1622\"",
-        "colour": "#0088cc"
-      }
-    ],
-    "info": "Arsenal-237 New Files: new_enc.exe (Human-Operated Rust Ransomware)",
-    "date": "2026-01-15",
-    "analysis": 2,
-    "threat_level_id": 1,
-    "timestamp": 1791727763
-  },
-  "e501fdef-3d5e-5128-b862-ad46cf063906": {
-    "Orgc": {
-      "name": "The Hunters Ledger",
-      "uuid": "8bc8284b-deb5-546c-a233-57ea34b2ea0d"
-    },
-    "Tag": [
-      {
-        "name": "tlp:clear",
-        "colour": "#ffffff"
-      },
-      {
-        "name": "hunters-ledger:topic=\"Rootkit\"",
-        "colour": "#58a6ff"
-      },
-      {
-        "name": "hunters-ledger:topic=\"Evasion\"",
-        "colour": "#58a6ff"
-      },
-      {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Process Injection - T1055\"",
-        "colour": "#0088cc"
-      },
-      {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Dynamic-link Library Injection - T1055.001\"",
-        "colour": "#0088cc"
-      },
-      {
-        "name": "misp-galaxy:mitre-attack-pattern=\"PowerShell - T1059.001\"",
-        "colour": "#0088cc"
-      },
-      {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Exploitation for Privilege Escalation - T1068\"",
-        "colour": "#0088cc"
-      },
-      {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Hidden Files and Directories - T1564.001\"",
-        "colour": "#0088cc"
-      },
-      {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Disable or Modify Tools - T1685\"",
-        "colour": "#0088cc"
-      }
-    ],
-    "info": "Arsenal-237 New Files: rootkit.dll (Kernel-Mode Rootkit)",
-    "date": "2026-01-15",
-    "analysis": 2,
-    "threat_level_id": 1,
-    "timestamp": 1791727764
-  },
-  "1f7ee918-f66f-5770-90bf-ff912bd48050": {
-    "Orgc": {
-      "name": "The Hunters Ledger",
-      "uuid": "8bc8284b-deb5-546c-a233-57ea34b2ea0d"
-    },
-    "Tag": [
-      {
-        "name": "tlp:clear",
-        "colour": "#ffffff"
-      },
-      {
-        "name": "hunters-ledger:topic=\"Ransomware\"",
-        "colour": "#58a6ff"
-      },
-      {
-        "name": "hunters-ledger:topic=\"Rust\"",
-        "colour": "#58a6ff"
-      },
-      {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Data Encrypted for Impact - T1486\"",
-        "colour": "#0088cc"
-      },
-      {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Inhibit System Recovery - T1490\"",
-        "colour": "#0088cc"
-      }
-    ],
-    "info": "Arsenal-237: enc/dec Ransomware Family",
-    "date": "2026-01-15",
-    "analysis": 2,
-    "threat_level_id": 1,
-    "timestamp": 1791727768
-  },
-  "b64d8288-b76d-5380-af9b-4cbfa23ffe6b": {
-    "Orgc": {
-      "name": "The Hunters Ledger",
-      "uuid": "8bc8284b-deb5-546c-a233-57ea34b2ea0d"
-    },
-    "Tag": [
-      {
-        "name": "tlp:clear",
-        "colour": "#ffffff"
-      },
-      {
-        "name": "hunters-ledger:topic=\"Dropper\"",
-        "colour": "#58a6ff"
-      },
-      {
-        "name": "hunters-ledger:topic=\"Persistence\"",
-        "colour": "#58a6ff"
-      },
-      {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Obfuscated Files or Information - T1027\"",
-        "colour": "#0088cc"
-      },
-      {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Match Legitimate Resource Name or Location - T1036.005\"",
-        "colour": "#0088cc"
-      },
-      {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Scheduled Task - T1053.005\"",
-        "colour": "#0088cc"
-      },
-      {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Process Injection - T1055\"",
-        "colour": "#0088cc"
-      },
-      {
-        "name": "misp-galaxy:mitre-attack-pattern=\"File Deletion - T1070.004\"",
-        "colour": "#0088cc"
-      },
-      {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Registry Run Keys / Startup Folder - T1547.001\"",
-        "colour": "#0088cc"
-      }
-    ],
-    "info": "Arsenal-237: FleetAgentAdvanced.exe",
-    "date": "2026-01-15",
-    "analysis": 2,
-    "threat_level_id": 2,
-    "timestamp": 1791727770
+    "threat_level_id": 3,
+    "timestamp": 1794454366
   },
   "f5f6f585-f601-5e0c-a7bc-b9e973ed73f0": {
     "Orgc": {
@@ -5594,12 +5476,12 @@
       }
     ],
     "info": "Arsenal-237: FleetAgentFUD.exe",
-    "date": "2026-01-15",
+    "date": "2026-01-11",
     "analysis": 2,
-    "threat_level_id": 2,
-    "timestamp": 1791727771
+    "threat_level_id": 1,
+    "timestamp": 1794454365
   },
-  "14e13c91-19dc-5501-978c-2729a8ef67eb": {
+  "aab2ba34-9ec2-5c61-948e-6a10c7b18488": {
     "Orgc": {
       "name": "The Hunters Ledger",
       "uuid": "8bc8284b-deb5-546c-a233-57ea34b2ea0d"
@@ -5610,27 +5492,145 @@
         "colour": "#ffffff"
       },
       {
-        "name": "hunters-ledger:topic=\"Priv Esc\"",
+        "name": "hunters-ledger:topic=\"RAT\"",
         "colour": "#58a6ff"
       },
       {
-        "name": "hunters-ledger:topic=\"Evasion\"",
+        "name": "hunters-ledger:topic=\"C2\"",
         "colour": "#58a6ff"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"System Owner/User Discovery - T1033\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"System Service Discovery - T1007\"",
         "colour": "#0088cc"
       },
       {
-        "name": "misp-galaxy:mitre-attack-pattern=\"Bypass User Account Control - T1548.002\"",
+        "name": "misp-galaxy:mitre-attack-pattern=\"Process Discovery - T1057\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"PowerShell - T1059.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Web Protocols - T1071.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"System Information Discovery - T1082\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Standard Encoding - T1132.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Domain Trust Discovery - T1482\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Hidden Window - T1564.003\"",
         "colour": "#0088cc"
       }
     ],
-    "info": "Arsenal-237: uac_test.exe",
-    "date": "2026-01-15",
+    "info": "Arsenal-237: agent_xworm_v2.exe (XWorm RAT v2.4.0)",
+    "date": "2026-01-10",
     "analysis": 2,
-    "threat_level_id": 2,
-    "timestamp": 1791727794
+    "threat_level_id": 1,
+    "timestamp": 1794454351
+  },
+  "b64d8288-b76d-5380-af9b-4cbfa23ffe6b": {
+    "Orgc": {
+      "name": "The Hunters Ledger",
+      "uuid": "8bc8284b-deb5-546c-a233-57ea34b2ea0d"
+    },
+    "Tag": [
+      {
+        "name": "tlp:clear",
+        "colour": "#ffffff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"Dropper\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"Persistence\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Obfuscated Files or Information - T1027\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Match Legitimate Resource Name or Location - T1036.005\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Scheduled Task - T1053.005\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Process Injection - T1055\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"File Deletion - T1070.004\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Registry Run Keys / Startup Folder - T1547.001\"",
+        "colour": "#0088cc"
+      }
+    ],
+    "info": "Arsenal-237: FleetAgentAdvanced.exe",
+    "date": "2026-01-10",
+    "analysis": 2,
+    "threat_level_id": 1,
+    "timestamp": 1794454364
+  },
+  "a621bfc3-8efc-54bd-ace7-c4d50940fc7d": {
+    "Orgc": {
+      "name": "The Hunters Ledger",
+      "uuid": "8bc8284b-deb5-546c-a233-57ea34b2ea0d"
+    },
+    "Tag": [
+      {
+        "name": "tlp:clear",
+        "colour": "#ffffff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"RAT\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"C2\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"PowerShell - T1059.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Non-Application Layer Protocol - T1095\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Ingress Tool Transfer - T1105\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Standard Encoding - T1132.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Hidden Window - T1564.003\"",
+        "colour": "#0088cc"
+      }
+    ],
+    "info": "Arsenal-237: agent_xworm.exe (XWorm RAT v6)",
+    "date": "2026-01-09",
+    "analysis": 2,
+    "threat_level_id": 1,
+    "timestamp": 1794454350
   },
   "6b2ddd6b-2861-5626-b59e-9cf736ff2568": {
     "Orgc": {

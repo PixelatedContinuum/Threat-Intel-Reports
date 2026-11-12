@@ -46,6 +46,15 @@ test('slugOf names an entry by its report, else its detection page, else its fee
   assert.equal(M.slugOf({ title: 'x' }), null);
 });
 
+test('slugOf prefers misp_slug, which pins the event identity once a report is added; without it the report slug is used', function () {
+  const e = { report_url: '/reports/arsenal-237-new-files/killer-dll/', detection_url: '/hunting-detections/arsenal-237-killer-dll-detections' };
+  assert.equal(M.slugOf(e), 'arsenal-237-new-files/killer-dll');
+  const pinned = Object.assign({ misp_slug: 'arsenal-237-killer-dll' }, e);
+  assert.equal(M.slugOf(pinned), 'arsenal-237-killer-dll');
+  assert.equal(M.eventUuid(M.slugOf(pinned)), M.eventUuid('arsenal-237-killer-dll'));
+  assert.notEqual(M.eventUuid(M.slugOf(pinned)), M.eventUuid(M.slugOf(e)));
+});
+
 test('STIX indicators become typed attributes; bare observables, rule indicators and odd patterns are handled as documented', function () {
   const s = M.attributesFromStix(BUNDLE, 'example');
   const by = {};

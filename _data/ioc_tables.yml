@@ -318,10 +318,10 @@
   slug: "agent-exe"
   page_url: "/ioc-feeds/agent-exe/"
   title: "Arsenal-237: agent.exe (PoetRAT)"
-  date: "2026-01-15"
-  severity: "med"
+  date: "2026-01-12"
+  severity: "critical"
   feed_url: "/ioc-feeds/agent-exe.json"
-  report_url: null
+  report_url: "/reports/agent-exe/"
   detection_url: "/hunting-detections/agent-exe-detections"
   total: 12
   untyped: 22
@@ -415,10 +415,10 @@
   slug: "agent-xworm-exe"
   page_url: "/ioc-feeds/agent-xworm-exe/"
   title: "Arsenal-237: agent_xworm.exe (XWorm RAT v6)"
-  date: "2026-01-15"
-  severity: "med"
+  date: "2026-01-09"
+  severity: "critical"
   feed_url: "/ioc-feeds/agent-xworm-exe.json"
-  report_url: null
+  report_url: "/reports/agent-xworm-exe/"
   detection_url: "/hunting-detections/agent-xworm-exe-detections"
   total: 5
   untyped: 41
@@ -468,10 +468,10 @@
   slug: "agent-xworm-v2-exe"
   page_url: "/ioc-feeds/agent-xworm-v2-exe/"
   title: "Arsenal-237: agent_xworm_v2.exe (XWorm RAT v2.4.0)"
-  date: "2026-01-15"
-  severity: "med"
+  date: "2026-01-10"
+  severity: "high"
   feed_url: "/ioc-feeds/agent-xworm-v2-exe.json"
-  report_url: null
+  report_url: "/reports/agent-xworm-v2-exe/"
   detection_url: "/hunting-detections/agent-xworm-v2-exe-detections"
   total: 5
   untyped: 45
@@ -1282,10 +1282,10 @@
   slug: "arsenal-237-BdApiUtil64-sys"
   page_url: "/ioc-feeds/arsenal-237-BdApiUtil64-sys/"
   title: "Arsenal-237 New Files: BdApiUtil64.sys (Vulnerable Baidu Driver)"
-  date: "2026-01-15"
+  date: "2026-01-26"
   severity: "critical"
   feed_url: "/ioc-feeds/arsenal-237-BdApiUtil64-sys.json"
-  report_url: null
+  report_url: "/reports/bdapiutil64-sys/"
   detection_url: "/hunting-detections/arsenal-237-BdApiUtil64-sys-detections"
   total: 29
   untyped: 37
@@ -1481,10 +1481,10 @@
   slug: "arsenal-237-chromelevator-exe"
   page_url: "/ioc-feeds/arsenal-237-chromelevator-exe/"
   title: "Arsenal-237 New Files: chromelevator.exe (Browser Credential Theft)"
-  date: "2026-01-15"
+  date: "2026-01-22"
   severity: "critical"
   feed_url: "/ioc-feeds/arsenal-237-chromelevator-exe.json"
-  report_url: null
+  report_url: "/reports/arsenal-237-new-files/chromelevator-exe/"
   detection_url: "/hunting-detections/arsenal-237-chromelevator-exe-detections"
   total: 20
   untyped: 74
@@ -1626,10 +1626,10 @@
   slug: "arsenal-237-dec_fixed-exe"
   page_url: "/ioc-feeds/arsenal-237-dec_fixed-exe/"
   title: "Arsenal-237 New Files: dec_fixed.exe (Ransomware Decryptor)"
-  date: "2026-01-15"
-  severity: "critical"
+  date: "2026-01-23"
+  severity: "med"
   feed_url: "/ioc-feeds/arsenal-237-dec_fixed-exe.json"
-  report_url: null
+  report_url: "/reports/arsenal-237-new-files/dec_fixed-exe/"
   detection_url: "/hunting-detections/arsenal-237-dec_fixed-exe-detections"
   total: 13
   untyped: 13
@@ -1727,10 +1727,10 @@
   slug: "arsenal-237-enc_c2-exe"
   page_url: "/ioc-feeds/arsenal-237-enc_c2-exe/"
   title: "Arsenal-237 New Files: enc_c2.exe (Rust Ransomware with Tor C2)"
-  date: "2026-01-15"
+  date: "2026-01-24"
   severity: "critical"
   feed_url: "/ioc-feeds/arsenal-237-enc_c2-exe.json"
-  report_url: null
+  report_url: "/reports/arsenal-237-new-files/enc_c2-exe/"
   detection_url: "/hunting-detections/arsenal-237-enc_c2-exe-detections"
   total: 15
   untyped: 72
@@ -1844,10 +1844,10 @@
   slug: "arsenal-237-full_test_enc-exe"
   page_url: "/ioc-feeds/arsenal-237-full_test_enc-exe/"
   title: "Arsenal-237 New Files: full_test_enc.exe (Advanced Rust Ransomware)"
-  date: "2026-01-15"
+  date: "2026-01-20"
   severity: "critical"
   feed_url: "/ioc-feeds/arsenal-237-full_test_enc-exe.json"
-  report_url: null
+  report_url: "/reports/arsenal-237-new-files/full_test_enc-exe/"
   detection_url: "/hunting-detections/arsenal-237-full_test_enc-exe-detections"
   total: 7
   untyped: 50
@@ -1910,10 +1910,10 @@
   slug: "arsenal-237-killer-crowdstrike-dll"
   page_url: "/ioc-feeds/arsenal-237-killer-crowdstrike-dll/"
   title: "Arsenal-237 New Files: killer_crowdstrike.dll (CrowdStrike-Specific Termination)"
-  date: "2026-01-15"
+  date: "2026-01-18"
   severity: "critical"
   feed_url: "/ioc-feeds/arsenal-237-killer-crowdstrike-dll.json"
-  report_url: null
+  report_url: "/reports/arsenal-237-new-files/killer-crowdstrike-dll/"
   detection_url: "/hunting-detections/arsenal-237-killer-crowdstrike-dll-detections"
   total: 12
   untyped: 17
@@ -2007,10 +2007,10 @@
   slug: "arsenal-237-killer-dll"
   page_url: "/ioc-feeds/arsenal-237-killer-dll/"
   title: "Arsenal-237 New Files: killer.dll (BYOVD Process Termination)"
-  date: "2026-01-15"
+  date: "2026-01-24"
   severity: "critical"
   feed_url: "/ioc-feeds/arsenal-237-killer-dll.json"
-  report_url: null
+  report_url: "/reports/arsenal-237-new-files/killer-dll/"
   detection_url: "/hunting-detections/arsenal-237-killer-dll-detections"
   total: 11
   untyped: 25
@@ -2098,10 +2098,10 @@
   slug: "arsenal-237-lpe-exe"
   page_url: "/ioc-feeds/arsenal-237-lpe-exe/"
   title: "Arsenal-237 New Files: lpe.exe (Privilege Escalation)"
-  date: "2026-01-15"
+  date: "2026-01-25"
   severity: "critical"
   feed_url: "/ioc-feeds/arsenal-237-lpe-exe.json"
-  report_url: null
+  report_url: "/reports/arsenal-237-lpe-exe/"
   detection_url: "/hunting-detections/arsenal-237-lpe-exe-detections"
   total: 8
   untyped: 25
@@ -2171,10 +2171,10 @@
   slug: "arsenal-237-nethost-dll"
   page_url: "/ioc-feeds/arsenal-237-nethost-dll/"
   title: "Arsenal-237 New Files: nethost.dll (DLL Hijacking Persistence)"
-  date: "2026-01-15"
+  date: "2026-01-26"
   severity: "critical"
   feed_url: "/ioc-feeds/arsenal-237-nethost-dll.json"
-  report_url: null
+  report_url: "/reports/arsenal-237/nethost-dll/"
   detection_url: "/hunting-detections/arsenal-237-nethost-dll-detections"
   total: 12
   untyped: 101
@@ -2273,10 +2273,10 @@
   slug: "arsenal-237-new_enc-exe"
   page_url: "/ioc-feeds/arsenal-237-new_enc-exe/"
   title: "Arsenal-237 New Files: new_enc.exe (Human-Operated Rust Ransomware)"
-  date: "2026-01-15"
+  date: "2026-01-26"
   severity: "critical"
   feed_url: "/ioc-feeds/arsenal-237-new_enc-exe.json"
-  report_url: null
+  report_url: "/reports/new-enc-exe/"
   detection_url: "/hunting-detections/arsenal-237-new_enc-exe-detections"
   total: 8
   untyped: 146
@@ -2344,10 +2344,10 @@
   slug: "arsenal-237-rootkit-dll"
   page_url: "/ioc-feeds/arsenal-237-rootkit-dll/"
   title: "Arsenal-237 New Files: rootkit.dll (Kernel-Mode Rootkit)"
-  date: "2026-01-15"
+  date: "2026-01-20"
   severity: "critical"
   feed_url: "/ioc-feeds/arsenal-237-rootkit-dll.json"
-  report_url: null
+  report_url: "/reports/arsenal-237/rootkit-dll/"
   detection_url: "/hunting-detections/arsenal-237-rootkit-dll-detections"
   total: 19
   untyped: 19
@@ -3297,10 +3297,10 @@
   slug: "enc-dec-ransomware-family"
   page_url: "/ioc-feeds/enc-dec-ransomware-family/"
   title: "Arsenal-237: enc/dec Ransomware Family"
-  date: "2026-01-15"
+  date: "2026-01-18"
   severity: "critical"
   feed_url: "/ioc-feeds/enc-dec-ransomware-family.json"
-  report_url: null
+  report_url: "/reports/enc-dec-ransomware-family/"
   detection_url: "/hunting-detections/enc-dec-ransomware-family-detections"
   total: 44
   untyped: 63
@@ -4367,10 +4367,10 @@
   slug: "fleetagentadvanced-exe"
   page_url: "/ioc-feeds/fleetagentadvanced-exe/"
   title: "Arsenal-237: FleetAgentAdvanced.exe"
-  date: "2026-01-15"
-  severity: "med"
+  date: "2026-01-10"
+  severity: "high"
   feed_url: "/ioc-feeds/fleetagentadvanced-exe.json"
-  report_url: null
+  report_url: "/reports/fleetagentadvanced-exe/"
   detection_url: "/hunting-detections/fleetagentadvanced-exe-detections"
   total: 15
   untyped: 55
@@ -4482,10 +4482,10 @@
   slug: "fleetagentfud-exe"
   page_url: "/ioc-feeds/fleetagentfud-exe/"
   title: "Arsenal-237: FleetAgentFUD.exe"
-  date: "2026-01-15"
-  severity: "med"
+  date: "2026-01-11"
+  severity: "high"
   feed_url: "/ioc-feeds/fleetagentfud-exe.json"
-  report_url: null
+  report_url: "/reports/fleetagentfud-exe/"
   detection_url: "/hunting-detections/fleetagentfud-exe-detections"
   total: 5
   untyped: 48
@@ -19574,10 +19574,10 @@
   slug: "uac-test-exe"
   page_url: "/ioc-feeds/uac-test-exe/"
   title: "Arsenal-237: uac_test.exe"
-  date: "2026-01-15"
-  severity: "med"
+  date: "2026-01-12"
+  severity: "low"
   feed_url: "/ioc-feeds/uac-test-exe.json"
-  report_url: null
+  report_url: "/reports/uac-test-exe/"
   detection_url: "/hunting-detections/uac-test-exe-detections"
   total: 12
   untyped: 50

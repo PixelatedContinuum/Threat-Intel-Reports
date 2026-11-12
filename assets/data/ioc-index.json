@@ -1,5 +1,5 @@
 {
- "generated_at": "2026-10-21T19:22:25Z",
+ "generated_at": "2026-11-12T03:32:32Z",
  "counts": {
   "indicators": 2056,
   "reports": 60,
@@ -102,25 +102,25 @@
   },
   "agent-exe.json": {
    "title": "Arsenal-237: agent.exe (PoetRAT)",
-   "date": "2026-01-15",
-   "severity": "med",
-   "report_url": null,
+   "date": "2026-01-12",
+   "severity": "critical",
+   "report_url": "/reports/agent-exe/",
    "detection_url": "/hunting-detections/agent-exe-detections",
    "ioc_url": "/ioc-feeds/agent-exe.json"
   },
   "agent-xworm-exe.json": {
    "title": "Arsenal-237: agent_xworm.exe (XWorm RAT v6)",
-   "date": "2026-01-15",
-   "severity": "med",
-   "report_url": null,
+   "date": "2026-01-09",
+   "severity": "critical",
+   "report_url": "/reports/agent-xworm-exe/",
    "detection_url": "/hunting-detections/agent-xworm-exe-detections",
    "ioc_url": "/ioc-feeds/agent-xworm-exe.json"
   },
   "agent-xworm-v2-exe.json": {
    "title": "Arsenal-237: agent_xworm_v2.exe (XWorm RAT v2.4.0)",
-   "date": "2026-01-15",
-   "severity": "med",
-   "report_url": null,
+   "date": "2026-01-10",
+   "severity": "high",
+   "report_url": "/reports/agent-xworm-v2-exe/",
    "detection_url": "/hunting-detections/agent-xworm-v2-exe-detections",
    "ioc_url": "/ioc-feeds/agent-xworm-v2-exe.json"
   },
@@ -134,89 +134,89 @@
   },
   "arsenal-237-BdApiUtil64-sys.json": {
    "title": "Arsenal-237 New Files: BdApiUtil64.sys (Vulnerable Baidu Driver)",
-   "date": "2026-01-15",
+   "date": "2026-01-26",
    "severity": "critical",
-   "report_url": null,
+   "report_url": "/reports/bdapiutil64-sys/",
    "detection_url": "/hunting-detections/arsenal-237-BdApiUtil64-sys-detections",
    "ioc_url": "/ioc-feeds/arsenal-237-BdApiUtil64-sys.json"
   },
   "arsenal-237-chromelevator-exe.json": {
    "title": "Arsenal-237 New Files: chromelevator.exe (Browser Credential Theft)",
-   "date": "2026-01-15",
+   "date": "2026-01-22",
    "severity": "critical",
-   "report_url": null,
+   "report_url": "/reports/arsenal-237-new-files/chromelevator-exe/",
    "detection_url": "/hunting-detections/arsenal-237-chromelevator-exe-detections",
    "ioc_url": "/ioc-feeds/arsenal-237-chromelevator-exe.json"
   },
   "arsenal-237-dec_fixed-exe.json": {
    "title": "Arsenal-237 New Files: dec_fixed.exe (Ransomware Decryptor)",
-   "date": "2026-01-15",
-   "severity": "critical",
-   "report_url": null,
+   "date": "2026-01-23",
+   "severity": "med",
+   "report_url": "/reports/arsenal-237-new-files/dec_fixed-exe/",
    "detection_url": "/hunting-detections/arsenal-237-dec_fixed-exe-detections",
    "ioc_url": "/ioc-feeds/arsenal-237-dec_fixed-exe.json"
   },
   "arsenal-237-enc_c2-exe.json": {
    "title": "Arsenal-237 New Files: enc_c2.exe (Rust Ransomware with Tor C2)",
-   "date": "2026-01-15",
+   "date": "2026-01-24",
    "severity": "critical",
-   "report_url": null,
+   "report_url": "/reports/arsenal-237-new-files/enc_c2-exe/",
    "detection_url": "/hunting-detections/arsenal-237-enc_c2-exe-detections",
    "ioc_url": "/ioc-feeds/arsenal-237-enc_c2-exe.json"
   },
   "arsenal-237-full_test_enc-exe.json": {
    "title": "Arsenal-237 New Files: full_test_enc.exe (Advanced Rust Ransomware)",
-   "date": "2026-01-15",
+   "date": "2026-01-20",
    "severity": "critical",
-   "report_url": null,
+   "report_url": "/reports/arsenal-237-new-files/full_test_enc-exe/",
    "detection_url": "/hunting-detections/arsenal-237-full_test_enc-exe-detections",
    "ioc_url": "/ioc-feeds/arsenal-237-full_test_enc-exe.json"
   },
   "arsenal-237-killer-crowdstrike-dll.json": {
    "title": "Arsenal-237 New Files: killer_crowdstrike.dll (CrowdStrike-Specific Termination)",
-   "date": "2026-01-15",
+   "date": "2026-01-18",
    "severity": "critical",
-   "report_url": null,
+   "report_url": "/reports/arsenal-237-new-files/killer-crowdstrike-dll/",
    "detection_url": "/hunting-detections/arsenal-237-killer-crowdstrike-dll-detections",
    "ioc_url": "/ioc-feeds/arsenal-237-killer-crowdstrike-dll.json"
   },
   "arsenal-237-killer-dll.json": {
    "title": "Arsenal-237 New Files: killer.dll (BYOVD Process Termination)",
-   "date": "2026-01-15",
+   "date": "2026-01-24",
    "severity": "critical",
-   "report_url": null,
+   "report_url": "/reports/arsenal-237-new-files/killer-dll/",
    "detection_url": "/hunting-detections/arsenal-237-killer-dll-detections",
    "ioc_url": "/ioc-feeds/arsenal-237-killer-dll.json"
   },
   "arsenal-237-lpe-exe.json": {
    "title": "Arsenal-237 New Files: lpe.exe (Privilege Escalation)",
-   "date": "2026-01-15",
+   "date": "2026-01-25",
    "severity": "critical",
-   "report_url": null,
+   "report_url": "/reports/arsenal-237-lpe-exe/",
    "detection_url": "/hunting-detections/arsenal-237-lpe-exe-detections",
    "ioc_url": "/ioc-feeds/arsenal-237-lpe-exe.json"
   },
   "arsenal-237-nethost-dll.json": {
    "title": "Arsenal-237 New Files: nethost.dll (DLL Hijacking Persistence)",
-   "date": "2026-01-15",
+   "date": "2026-01-26",
    "severity": "critical",
-   "report_url": null,
+   "report_url": "/reports/arsenal-237/nethost-dll/",
    "detection_url": "/hunting-detections/arsenal-237-nethost-dll-detections",
    "ioc_url": "/ioc-feeds/arsenal-237-nethost-dll.json"
   },
   "arsenal-237-new_enc-exe.json": {
    "title": "Arsenal-237 New Files: new_enc.exe (Human-Operated Rust Ransomware)",
-   "date": "2026-01-15",
+   "date": "2026-01-26",
    "severity": "critical",
-   "report_url": null,
+   "report_url": "/reports/new-enc-exe/",
    "detection_url": "/hunting-detections/arsenal-237-new_enc-exe-detections",
    "ioc_url": "/ioc-feeds/arsenal-237-new_enc-exe.json"
   },
   "arsenal-237-rootkit-dll.json": {
    "title": "Arsenal-237 New Files: rootkit.dll (Kernel-Mode Rootkit)",
-   "date": "2026-01-15",
+   "date": "2026-01-20",
    "severity": "critical",
-   "report_url": null,
+   "report_url": "/reports/arsenal-237/rootkit-dll/",
    "detection_url": "/hunting-detections/arsenal-237-rootkit-dll-detections",
    "ioc_url": "/ioc-feeds/arsenal-237-rootkit-dll.json"
   },
@@ -246,9 +246,9 @@
   },
   "enc-dec-ransomware-family.json": {
    "title": "Arsenal-237: enc/dec Ransomware Family",
-   "date": "2026-01-15",
+   "date": "2026-01-18",
    "severity": "critical",
-   "report_url": null,
+   "report_url": "/reports/enc-dec-ransomware-family/",
    "detection_url": "/hunting-detections/enc-dec-ransomware-family-detections",
    "ioc_url": "/ioc-feeds/enc-dec-ransomware-family.json"
   },
@@ -270,17 +270,17 @@
   },
   "fleetagentadvanced-exe.json": {
    "title": "Arsenal-237: FleetAgentAdvanced.exe",
-   "date": "2026-01-15",
-   "severity": "med",
-   "report_url": null,
+   "date": "2026-01-10",
+   "severity": "high",
+   "report_url": "/reports/fleetagentadvanced-exe/",
    "detection_url": "/hunting-detections/fleetagentadvanced-exe-detections",
    "ioc_url": "/ioc-feeds/fleetagentadvanced-exe.json"
   },
   "fleetagentfud-exe.json": {
    "title": "Arsenal-237: FleetAgentFUD.exe",
-   "date": "2026-01-15",
-   "severity": "med",
-   "report_url": null,
+   "date": "2026-01-11",
+   "severity": "high",
+   "report_url": "/reports/fleetagentfud-exe/",
    "detection_url": "/hunting-detections/fleetagentfud-exe-detections",
    "ioc_url": "/ioc-feeds/fleetagentfud-exe.json"
   },
@@ -534,9 +534,9 @@
   },
   "uac-test-exe.json": {
    "title": "Arsenal-237: uac_test.exe",
-   "date": "2026-01-15",
-   "severity": "med",
-   "report_url": null,
+   "date": "2026-01-12",
+   "severity": "low",
+   "report_url": "/reports/uac-test-exe/",
    "detection_url": "/hunting-detections/uac-test-exe-detections",
    "ioc_url": "/ioc-feeds/uac-test-exe.json"
   },

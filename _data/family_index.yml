@@ -374,6 +374,18 @@ families:
         detection_url: /hunting-detections/opendirectory-74-0-42-25-20260316-detections
         ioc_url: /ioc-feeds/opendirectory-74-0-42-25-20260316-iocs.json
         stix_url: /stix/zerotrace-74-0-42-25-20260316.json
+      - url: /reports/agent-xworm-v2-exe/
+        title: 'Arsenal-237: agent_xworm_v2.exe (XWorm RAT v2.4.0)'
+        date: '2026-01-10'
+        detection_url: /hunting-detections/agent-xworm-v2-exe-detections
+        ioc_url: /ioc-feeds/agent-xworm-v2-exe.json
+        stix_url: null
+      - url: /reports/agent-xworm-exe/
+        title: 'Arsenal-237: agent_xworm.exe (XWorm RAT v6)'
+        date: '2026-01-09'
+        detection_url: /hunting-detections/agent-xworm-exe-detections
+        ioc_url: /ioc-feeds/agent-xworm-exe.json
+        stix_url: null
       - url: /reports/dual-rat-analysis/
         title: 'Dual-RAT Analysis: Pulsar RAT vs. NjRAT/XWorm'
         date: '2025-12-20'
@@ -409,6 +421,25 @@ families:
         label: XwormLoader
         rules:
           - MALW_XwormLoader_ReflectivePE
+      - url: /hunting-detections/agent-xworm-v2-exe-detections
+        title: 'Arsenal-237: agent_xworm_v2.exe (XWorm RAT v2.4.0)'
+        date: '2026-01-10'
+        report_url: /reports/agent-xworm-v2-exe/
+        label: XWorm
+        rules:
+          - MAL_XWorm_V2_PowerShell_Recon_Templates
+          - MAL_XWorm_V2_Family_Combination
+          - MAL_XWorm_AgentSec_Secret_Pattern
+          - SUSP_XWorm_V2_WebSocket_Generic_Combination
+      - url: /hunting-detections/agent-xworm-exe-detections
+        title: 'Arsenal-237: agent_xworm.exe (XWorm RAT v6)'
+        date: '2026-01-09'
+        report_url: /reports/agent-xworm-exe/
+        label: XWorm
+        rules:
+          - MAL_Windows_XWorm_PowerShell_Recon_Templates
+          - MAL_Windows_XWorm_AgentSec_Authentication_Pattern
+          - MAL_Windows_XWorm_RAT_Capability_Combination
       - url: /hunting-detections/dual-rat-analysis-detections
         title: 'Dual-RAT Analysis: Pulsar RAT vs. NjRAT/XWorm'
         date: '2025-12-20'
@@ -434,8 +465,8 @@ families:
       - UTA-2026-003
     tooling_labels:
       - XWorm
-    report_count: 4
-    rule_count: 7
+    report_count: 6
+    rule_count: 14
     feed_count: 1
     actor_count: 1
   - name: Quasar RAT
@@ -1828,12 +1859,67 @@ unmapped:
   - label: AI-augmented operator tradecraft (capability-building)
     where:
       - feed korean-claude-openclaw-221.150.15.104-iocs.json
+  - label: Arsenal-237
+    where:
+      - detection arsenal-237-chromelevator-exe-detections
+      - detection arsenal-237-dec_fixed-exe-detections
+      - detection arsenal-237-full_test_enc-exe-detections
+      - detection arsenal-237-nethost-dll-detections
+      - detection arsenal-237-new_enc-exe-detections
+      - feed arsenal-237-full_test_enc-exe.json
+  - label: Arsenal-237 BYOVD Component
+    where:
+      - feed arsenal-237-BdApiUtil64-sys.json
+  - label: Arsenal-237 BYOVD Defense Evasion Module
+    where:
+      - feed arsenal-237-killer-dll.json
+  - label: Arsenal-237 BYOVD Defense Evasion Module (CrowdStrike Variant)
+    where:
+      - feed arsenal-237-killer-crowdstrike-dll.json
+  - label: Arsenal-237 Malware Toolkit
+    where:
+      - feed arsenal-237-BdApiUtil64-sys.json
+      - feed arsenal-237-killer-crowdstrike-dll.json
+      - feed arsenal-237-killer-dll.json
+      - feed arsenal-237-lpe-exe.json
+  - label: Arsenal-237 Privilege Escalation Module
+    where:
+      - feed arsenal-237-lpe-exe.json
+  - label: Arsenal-237-BYOVD-Component
+    where:
+      - detection arsenal-237-BdApiUtil64-sys-detections
+  - label: Arsenal-237-BYOVD-Killer-DLL
+    where:
+      - detection arsenal-237-killer-dll-detections
+  - label: Arsenal-237-LPE-Wrapper
+    where:
+      - detection arsenal-237-lpe-exe-detections
   - label: Aspdkzb
     where:
       - detection opendirectory-74-0-42-25-20260316-detections
   - label: Custom-Python-A2A-C2 + Gemini-CLI-Augmented-Credential-Mill
     where:
       - feed russian-gemini-credential-mill-213.165.51.115-iocs.json
+  - label: EncDec-Ransomware
+    where:
+      - detection enc-dec-ransomware-family-detections
+  - label: FleetAgent
+    where:
+      - detection fleetagentfud-exe-detections
+  - label: FleetAgentAdvanced
+    where:
+      - detection fleetagentadvanced-exe-detections
+      - feed fleetagentadvanced-exe.json
+  - label: FleetAgentAdvanced (custom development - UNKNOWN attribution)
+    where:
+      - feed fleetagentadvanced-exe.json
+  - label: FleetAgentFUD
+    where:
+      - detection fleetagentfud-exe-detections
+      - feed fleetagentfud-exe.json
+  - label: FleetAgentFUD (custom development - UNKNOWN attribution)
+    where:
+      - feed fleetagentfud-exe.json
   - label: Generic JSP Web Shell
     where:
       - detection multivector-ecommerce-rce-toolkit-192-3-1-116-detections
@@ -1843,6 +1929,9 @@ unmapped:
   - label: Ghost ASP Webshell
     where:
       - detection flaskc2-postex-toolkit-67-215-232-25-detections
+  - label: Golang-RAT-Generic
+    where:
+      - detection agent-exe-detections
   - label: Inkognito-FraudOperation
     where:
       - detection inkognito-russian-vpn-phishing-185-221-196-118-20260516-detections
@@ -1851,6 +1940,12 @@ unmapped:
       brand-impersonation phishing + fake crypto exchange + BEC infrastructure)
     where:
       - feed inkognito-russian-vpn-phishing-185-221-196-118-20260516-iocs.json
+  - label: Kernel-SSDT-Bypass-Generic
+    where:
+      - detection arsenal-237-BdApiUtil64-sys-detections
+  - label: Kernel-Security-Process-Termination-Generic
+    where:
+      - detection arsenal-237-BdApiUtil64-sys-detections
   - label: LLM-Credential-Mutator
     where:
       - detection ai-agent-frameworks-2026-05-23-detections
@@ -1895,6 +1990,10 @@ unmapped:
   - label: Operator toolkit (no malware family; server-side shell, Python, PHP and Java tooling)
     where:
       - feed opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015-iocs.json
+  - label: PoetRAT
+    where:
+      - detection agent-exe-detections
+      - feed agent-exe.json
   - label: Public tool - CVE-2023-21839 Go exploit (not this operator's own code)
     where:
       - >-
@@ -1923,6 +2022,9 @@ unmapped:
   - label: Stolen-LLM-Key-Validator
     where:
       - detection russian-gemini-credential-mill-213.165.51.115-detections
+  - label: UAC-Bypass-PoC
+    where:
+      - detection uac-test-exe-detections
   - label: Unattributed operator-built Python/Bash toolkit; possible 'Beast' self-branding (unverified)
     where:
       - feed opendirectory-216-126-227-49-cve-2026-41940-cpanel-harvester-20260517-iocs.json
@@ -1936,6 +2038,10 @@ unmapped:
       - >-
         detection
         opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817-detections
+  - label: XWorm RAT
+    where:
+      - feed agent-xworm-exe.json
+      - feed agent-xworm-v2-exe.json
   - label: XXE-to-SSRF Internal/Cloud-Metadata Probe
     where:
       - detection multivector-ecommerce-rce-toolkit-192-3-1-116-detections

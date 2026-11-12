@@ -21,14 +21,17 @@ events:
   - slug: agent-exe
     uuid: 94c995c7-3161-5b68-9185-60ec73870738
     event_url: /feeds/misp/94c995c7-3161-5b68-9185-60ec73870738.json
+    report_url: /reports/agent-exe/
     detection_url: /hunting-detections/agent-exe-detections/
   - slug: agent-xworm-exe
     uuid: a621bfc3-8efc-54bd-ace7-c4d50940fc7d
     event_url: /feeds/misp/a621bfc3-8efc-54bd-ace7-c4d50940fc7d.json
+    report_url: /reports/agent-xworm-exe/
     detection_url: /hunting-detections/agent-xworm-exe-detections/
   - slug: agent-xworm-v2-exe
     uuid: aab2ba34-9ec2-5c61-948e-6a10c7b18488
     event_url: /feeds/misp/aab2ba34-9ec2-5c61-948e-6a10c7b18488.json
+    report_url: /reports/agent-xworm-v2-exe/
     detection_url: /hunting-detections/agent-xworm-v2-exe-detections/
   - slug: ai-agent-frameworks-2026-05-23
     uuid: 207c913d-e57f-534b-ac8a-08e8ebf9933d
@@ -38,46 +41,57 @@ events:
   - slug: arsenal-237-BdApiUtil64-sys
     uuid: bf15ec86-d80c-5067-8f63-4c2f4186cda3
     event_url: /feeds/misp/bf15ec86-d80c-5067-8f63-4c2f4186cda3.json
+    report_url: /reports/bdapiutil64-sys/
     detection_url: /hunting-detections/arsenal-237-BdApiUtil64-sys-detections/
   - slug: arsenal-237-chromelevator-exe
     uuid: 59b99578-e9d7-5ba7-9a9c-5a6088427a92
     event_url: /feeds/misp/59b99578-e9d7-5ba7-9a9c-5a6088427a92.json
+    report_url: /reports/arsenal-237-new-files/chromelevator-exe/
     detection_url: /hunting-detections/arsenal-237-chromelevator-exe-detections/
   - slug: arsenal-237-dec_fixed-exe
     uuid: b3f1cee9-dc86-5d92-ae5e-b375141a3dde
     event_url: /feeds/misp/b3f1cee9-dc86-5d92-ae5e-b375141a3dde.json
+    report_url: /reports/arsenal-237-new-files/dec_fixed-exe/
     detection_url: /hunting-detections/arsenal-237-dec_fixed-exe-detections/
   - slug: arsenal-237-enc_c2-exe
     uuid: b021c858-4e87-550d-adc4-b56553cc8004
     event_url: /feeds/misp/b021c858-4e87-550d-adc4-b56553cc8004.json
+    report_url: /reports/arsenal-237-new-files/enc_c2-exe/
     detection_url: /hunting-detections/arsenal-237-enc_c2-exe-detections/
   - slug: arsenal-237-full_test_enc-exe
     uuid: 1c4057d8-6ee8-5c89-b45d-adc83d437048
     event_url: /feeds/misp/1c4057d8-6ee8-5c89-b45d-adc83d437048.json
+    report_url: /reports/arsenal-237-new-files/full_test_enc-exe/
     detection_url: /hunting-detections/arsenal-237-full_test_enc-exe-detections/
   - slug: arsenal-237-killer-crowdstrike-dll
     uuid: 3a2e305f-b524-5b35-8fa8-54a3a55c08b1
     event_url: /feeds/misp/3a2e305f-b524-5b35-8fa8-54a3a55c08b1.json
+    report_url: /reports/arsenal-237-new-files/killer-crowdstrike-dll/
     detection_url: /hunting-detections/arsenal-237-killer-crowdstrike-dll-detections/
   - slug: arsenal-237-killer-dll
     uuid: 8b4993d6-5ab8-5280-bfaa-f37bd2e53bd6
     event_url: /feeds/misp/8b4993d6-5ab8-5280-bfaa-f37bd2e53bd6.json
+    report_url: /reports/arsenal-237-new-files/killer-dll/
     detection_url: /hunting-detections/arsenal-237-killer-dll-detections/
   - slug: arsenal-237-lpe-exe
     uuid: 75ed19ed-9b89-5f63-a2ca-193a80458317
     event_url: /feeds/misp/75ed19ed-9b89-5f63-a2ca-193a80458317.json
+    report_url: /reports/arsenal-237-lpe-exe/
     detection_url: /hunting-detections/arsenal-237-lpe-exe-detections/
   - slug: arsenal-237-nethost-dll
     uuid: bbb50559-558b-53f6-8a3a-19961ddf05ef
     event_url: /feeds/misp/bbb50559-558b-53f6-8a3a-19961ddf05ef.json
+    report_url: /reports/arsenal-237/nethost-dll/
     detection_url: /hunting-detections/arsenal-237-nethost-dll-detections/
   - slug: arsenal-237-new_enc-exe
     uuid: caefd6be-08dd-561f-86e2-b3b02308da81
     event_url: /feeds/misp/caefd6be-08dd-561f-86e2-b3b02308da81.json
+    report_url: /reports/new-enc-exe/
     detection_url: /hunting-detections/arsenal-237-new_enc-exe-detections/
   - slug: arsenal-237-rootkit-dll
     uuid: e501fdef-3d5e-5128-b862-ad46cf063906
     event_url: /feeds/misp/e501fdef-3d5e-5128-b862-ad46cf063906.json
+    report_url: /reports/arsenal-237/rootkit-dll/
     detection_url: /hunting-detections/arsenal-237-rootkit-dll-detections/
   - slug: bellamain-turkish-phaas-79-137-192-3-20260516
     uuid: 82cbc83b-05d1-5a93-bb60-69c8c5f9aa04
@@ -97,6 +111,7 @@ events:
   - slug: enc-dec-ransomware-family
     uuid: 1f7ee918-f66f-5770-90bf-ff912bd48050
     event_url: /feeds/misp/1f7ee918-f66f-5770-90bf-ff912bd48050.json
+    report_url: /reports/enc-dec-ransomware-family/
     detection_url: /hunting-detections/enc-dec-ransomware-family-detections/
   - slug: evilsoul-engine-stealer-maas-144-172-103-98
     uuid: eb873bde-1e1d-5a29-8b4c-dc02cedd1584
@@ -111,10 +126,12 @@ events:
   - slug: fleetagentadvanced-exe
     uuid: b64d8288-b76d-5380-af9b-4cbfa23ffe6b
     event_url: /feeds/misp/b64d8288-b76d-5380-af9b-4cbfa23ffe6b.json
+    report_url: /reports/fleetagentadvanced-exe/
     detection_url: /hunting-detections/fleetagentadvanced-exe-detections/
   - slug: fleetagentfud-exe
     uuid: f5f6f585-f601-5e0c-a7bc-b9e973ed73f0
     event_url: /feeds/misp/f5f6f585-f601-5e0c-a7bc-b9e973ed73f0.json
+    report_url: /reports/fleetagentfud-exe/
     detection_url: /hunting-detections/fleetagentfud-exe-detections/
   - slug: ghost-cryptojacker-vova75rus-77.110.96.200
     uuid: d368b117-5414-5c50-b434-c21cfb5f6797
@@ -272,6 +289,7 @@ events:
   - slug: uac-test-exe
     uuid: 14e13c91-19dc-5501-978c-2729a8ef67eb
     event_url: /feeds/misp/14e13c91-19dc-5501-978c-2729a8ef67eb.json
+    report_url: /reports/uac-test-exe/
     detection_url: /hunting-detections/uac-test-exe-detections/
   - slug: webserver-compromise-kit-91-236-230-250
     uuid: e4a63f98-8afb-50e9-ad9a-4986fc498af9
