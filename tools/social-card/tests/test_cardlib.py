@@ -32,6 +32,89 @@ def test_severity_for_slug():
     assert c.severity_for_slug(REPO, "PULSAR-RAT") == "CRITICAL"
     assert c.severity_for_slug(REPO, "opendirectory-62-60-237-100-20260506") == "HIGH"
 
+# ---- severity for a slug the catalog has no live entry for (preview) ----
+def _fake_repo(root, slug, extra_fm="", catalog=""):
+    """A repo with one report and a catalog entry for some other slug."""
+    os.makedirs(os.path.join(root, "_data"))
+    os.makedirs(os.path.join(root, "reports", slug))
+    with open(os.path.join(root, "_data", "catalog.yml"), "w", encoding="utf-8") as fh:
+        fh.write('entries:\n  - title: "Other"\n    severity: high\n'
+                 '    report_url: /reports/other/\n' + catalog)
+    with open(os.path.join(root, "reports", slug, "index.md"), "w", encoding="utf-8") as fh:
+        fh.write('---\ntitle: "Test"\ndate: 2026-05-06\n'
+                 f'permalink: /reports/{slug}/\ndescription: "d"\n{extra_fm}---\nBody\n')
+
+def test_severity_uncatalogued_parked_entry():
+    """Branch 1: a preview parks its catalog entry as a commented block; the card reads it."""
+    import tempfile, shutil
+    root = tempfile.mkdtemp()
+    try:
+        slug = "preview-parked"
+        _fake_repo(root, slug, catalog=(
+            "  # ===== PENDING GO-LIVE - test (uncomment at launch) =====\n"
+            '  #  - title: "Test"\n'
+            "  #    date: 2026-05-06\n"
+            "  #    severity: low\n"
+            "  #    report_url: /reports/preview-parked/\n"
+            "  # ========================================================\n"))
+        assert c.severity_for_slug(root, slug) == "LOW"
+        assert c.card_fields(root, slug)["severity_source"] == "catalog-parked"
+    finally:
+        shutil.rmtree(root)
+
+def test_severity_uncatalogued_parked_entry_without_dash():
+    """A hand-written parked block with no list dash is still the entry, not a fallback."""
+    import tempfile, shutil
+    root = tempfile.mkdtemp()
+    try:
+        slug = "preview-flat"
+        _fake_repo(root, slug, catalog=(
+            "  # ===== PENDING GO-LIVE - flat entry =====\n"
+            '  #  title: "Test"\n'
+            "  #  severity: critical\n"
+            "  #  report_url: /reports/preview-flat/\n"
+            "  # =======================================\n"))
+        assert c.severity_for_slug(root, slug) == "CRITICAL"
+    finally:
+        shutil.rmtree(root)
+
+def test_severity_uncatalogued_front_matter():
+    """Branch 2: no live or parked entry, but the report declares a severity itself."""
+    import tempfile, shutil
+    root = tempfile.mkdtemp()
+    try:
+        slug = "preview-declared"
+        _fake_repo(root, slug, extra_fm="severity: med\n")
+        assert c.severity_for_slug(root, slug) == "MEDIUM"
+        assert c.card_fields(root, slug)["severity_source"] == "front-matter"
+    finally:
+        shutil.rmtree(root)
+
+def test_severity_uncatalogued_fallback_warns():
+    """Branch 3: nothing declares a severity, so the fallback is drawn and the CLI says so."""
+    import tempfile, shutil, io, contextlib
+    import generate_card
+    root = tempfile.mkdtemp()
+    try:
+        slug = "preview-bare"
+        _fake_repo(root, slug)
+        f = c.card_fields(root, slug)
+        assert f["severity"] == "HIGH"
+        assert f["severity_source"] == "fallback"
+        err = io.StringIO()
+        with contextlib.redirect_stderr(err):
+            warned = generate_card.warn_if_fallback(slug, f)
+        assert warned is True
+        assert slug in err.getvalue() and "fallback" in err.getvalue()
+        # control: a catalogued report's own severity draws no warning
+        err2 = io.StringIO()
+        with contextlib.redirect_stderr(err2):
+            generate_card.warn_if_fallback("PULSAR-RAT", c.card_fields(REPO, "PULSAR-RAT"))
+        assert err2.getvalue() == ""
+    finally:
+        shutil.rmtree(root)
+
+
 def test_card_fields():
     f = c.card_fields(REPO, "PULSAR-RAT")
     assert f["severity"] == "CRITICAL"
