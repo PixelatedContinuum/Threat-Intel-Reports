@@ -72,7 +72,10 @@ test('Consulting is off gold (steel), on the page, the layout glow and the home 
 
 test('the header: six inline sections from 1100px, a labelled 44px Menu, the search folded to its icon from 1100 to 1439px', () => {
   const nav = read('_includes/default/navbar.liquid');
-  for (const u of ['/reports/', '/hunting-detections/', '/ioc-feeds/', '/stix/', '/wire/', '/actors/']) assert.ok(nav.includes("<a href=\"{{ '" + u + "' | relative_url }}\" style=\"--sc:"), u);
+  /* T-0603 S7/B11: the inline sections are no longer hard-coded anchors; the navbar loops _data/nav.yml and the bar shows the entries that carry `bar`. */
+  const bar = require('js-yaml').load(read('_data/nav.yml')).pages.filter((n) => n.bar).map((n) => n.url);
+  assert.ok(nav.includes('site.data.nav.pages'), 'the navbar reads _data/nav.yml');
+  for (const u of ['/reports/', '/hunting-detections/', '/ioc-feeds/', '/stix/', '/wire/', '/actors/']) assert.ok(bar.includes(u), u);
   assert.match(css, /@media \(min-width: 1100px\) \{\s*\.hl-nav__sections \{ display: flex; \}/);
   assert.match(css, /@media \(min-width: 1100px\) and \(max-width: 1439px\) \{\s*\.hl-nav__search \{ position: relative;/);
   assert.match(css, /\.hl-nav__menu \{\s*flex-shrink: 0;\s*height: 44px;/);
