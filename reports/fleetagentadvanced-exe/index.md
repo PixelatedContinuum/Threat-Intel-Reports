@@ -2,7 +2,7 @@
 title: FleetAgentAdvanced.exe - Technical Analysis & Threat Intelligence Report
 date: '2026-01-10'
 detection_page: /hunting-detections/fleetagentadvanced-exe-detections/
-ioc_feed: /ioc-feeds/fleetagentadvanced-exe.json
+ioc_feed: /ioc-feeds/fleetagentadvanced-exe/
 detection_sections:
   - label: "YARA Rules"
     anchor: "#yara-rules"
@@ -15,6 +15,7 @@ ioc_highlights:
     note: "FleetAgentAdvanced.exe SHA256"
 layout: post
 permalink: /reports/fleetagentadvanced-exe/
+thumbnail: /assets/images/cards/fleetagentadvanced-exe.png
 hide: true
 ---
 

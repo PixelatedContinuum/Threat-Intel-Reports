@@ -2,7 +2,7 @@
 title: killer_crowdstrike.dll (BYOVD Defense Evasion Variant) - Technical Analysis & Threat Intelligence Report
 date: '2026-01-18'
 detection_page: /hunting-detections/arsenal-237-killer-crowdstrike-dll-detections/
-ioc_feed: /ioc-feeds/arsenal-237-killer-crowdstrike-dll.json
+ioc_feed: /ioc-feeds/arsenal-237-killer-crowdstrike-dll/
 detection_sections:
   - label: "Sigma Detection Rules"
     anchor: "#sigma-rules"
@@ -11,6 +11,7 @@ ioc_highlights:
     note: "Arsenal-237 server"
 layout: post
 permalink: /reports/arsenal-237-new-files/killer-crowdstrike-dll/
+thumbnail: /assets/images/cards/killer-crowdstrike-dll.png
 hide: true
 ---
 

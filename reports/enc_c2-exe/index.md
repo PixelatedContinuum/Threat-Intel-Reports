@@ -2,7 +2,7 @@
 title: enc_c2.exe (Arsenal-237) - Rust-Based Ransomware Technical Analysis & Threat Intelligence
 date: '2026-01-24'
 detection_page: /hunting-detections/arsenal-237-enc_c2-exe-detections/
-ioc_feed: /ioc-feeds/arsenal-237-enc_c2-exe.json
+ioc_feed: /ioc-feeds/arsenal-237-enc_c2-exe/
 detection_sections:
   - label: "YARA Rules"
     anchor: "#yara-rules"
@@ -17,6 +17,7 @@ ioc_highlights:
     note: "enc_c2.exe SHA256"
 layout: post
 permalink: /reports/arsenal-237-new-files/enc_c2-exe/
+thumbnail: /assets/images/cards/enc_c2-exe.png
 hide: true
 ---
 

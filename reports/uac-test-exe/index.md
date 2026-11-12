@@ -2,7 +2,7 @@
 title: uac_test.exe - UAC Bypass Proof-of-Concept Analysis
 date: '2026-01-12'
 detection_page: /hunting-detections/uac-test-exe-detections/
-ioc_feed: /ioc-feeds/uac-test-exe.json
+ioc_feed: /ioc-feeds/uac-test-exe/
 detection_sections:
   - label: "YARA Rules"
     anchor: "#yara-rules"
@@ -13,6 +13,7 @@ ioc_highlights:
     note: "Arsenal-237 distribution server"
 layout: post
 permalink: /reports/uac-test-exe/
+thumbnail: /assets/images/cards/uac-test-exe.png
 hide: true
 ---
 

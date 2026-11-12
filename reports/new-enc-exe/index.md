@@ -2,7 +2,7 @@
 title: new_enc.exe (Arsenal-237 Rust Ransomware v0.5-beta) - Technical Analysis & Threat Assessment
 date: '2026-01-26'
 detection_page: /hunting-detections/arsenal-237-new_enc-exe-detections/
-ioc_feed: /ioc-feeds/arsenal-237-new_enc-exe.json
+ioc_feed: /ioc-feeds/arsenal-237-new_enc-exe/
 detection_sections:
   - label: "YARA Rules"
     anchor: "#yara-rules"
@@ -15,6 +15,7 @@ ioc_highlights:
     note: "new_enc.exe SHA256"
 layout: post
 permalink: /reports/new-enc-exe/
+thumbnail: /assets/images/cards/new-enc-exe.png
 hide: true
 ---
 

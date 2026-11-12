@@ -2,7 +2,7 @@
 title: dec_fixed.exe (Arsenal-237 Ransomware Decryptor) - Threat Intelligence Analysis
 date: '2026-01-23'
 detection_page: /hunting-detections/arsenal-237-dec_fixed-exe-detections/
-ioc_feed: /ioc-feeds/arsenal-237-dec_fixed-exe.json
+ioc_feed: /ioc-feeds/arsenal-237-dec_fixed-exe/
 detection_sections:
   - label: "YARA Rules"
     anchor: "#yara-rules"
@@ -15,6 +15,7 @@ ioc_highlights:
     note: "dec_fixed.exe SHA256"
 layout: post
 permalink: /reports/arsenal-237-new-files/dec_fixed-exe/
+thumbnail: /assets/images/cards/dec_fixed-exe.png
 hide: true
 ---
 

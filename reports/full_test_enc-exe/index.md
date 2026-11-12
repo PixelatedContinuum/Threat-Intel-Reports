@@ -2,7 +2,7 @@
 title: full_test_enc.exe (Arsenal-237) - Rust-Based Ransomware Technical Analysis
 date: '2026-01-20'
 detection_page: /hunting-detections/arsenal-237-full_test_enc-exe-detections/
-ioc_feed: /ioc-feeds/arsenal-237-full_test_enc-exe.json
+ioc_feed: /ioc-feeds/arsenal-237-full_test_enc-exe/
 detection_sections:
   - label: "YARA Rules"
     anchor: "#yara-rules"
@@ -15,6 +15,7 @@ ioc_highlights:
     note: "full_test_enc.exe SHA256"
 layout: post
 permalink: /reports/arsenal-237-new-files/full_test_enc-exe/
+thumbnail: /assets/images/cards/full_test_enc-exe.png
 hide: true
 ---
 
