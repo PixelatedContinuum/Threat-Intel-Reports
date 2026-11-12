@@ -39,6 +39,7 @@
   --hl-accent-gold-light: #f4e9c8;
   --hl-font-serif:   'Source Serif 4', Georgia, 'Times New Roman', serif;   /* headlines, section titles, big numerals, report prose */
   --hl-font-sans:    'IBM Plex Sans', system-ui, -apple-system, 'Segoe UI', Arial, sans-serif;   /* interface text: nav, buttons, labels, captions */
+  --hl-font-display: var(--hl-font-serif);   /* the old name for headlines, kept: docs/brand/gen_tokens.py records it and the outbound documents read it from tokens.css */
 
   /* Design D shared tokens (T-0500.1.7.4 b1). One copy for every page that is not a tabbed report; the report
      stylesheet (hl-report-tabs.css) carries gold and the column under --rv-*, which tests there assert literally, so

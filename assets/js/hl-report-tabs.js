@@ -172,6 +172,8 @@
   var viewData = document.getElementById('hl-report-view-data');
   if (viewData) { try { curation = JSON.parse(viewData.textContent); } catch (e) { console.warn('Report view data unavailable', e); } }
   var sections = [], currentBlock;
+  // T-0603: an h2 with no number is an appendix only on a report that numbers its sections. A report with no numbered h2 at all (the 18 moved to this layout) had every section, the summary included, labelled APPENDIX.
+  var numbered = sourceNodes.some(function (n) { return n.nodeType === 1 && n.tagName === 'H2' && n.firstChild && /^\s*\d+\./.test(n.firstChild.textContent); });
   try {
   sourceNodes.forEach(function (n) {
     if (!currentBlock || n.nodeType === 1 && n.tagName === 'H2') {
@@ -185,7 +187,7 @@
       // A section with an h2 is labelled by its number; the first block, which has no h2, is the campaign record.
       if (h) {
         var num = h.firstChild && h.firstChild.textContent.match(/^\s*(\d+)\./);
-        h.setAttribute('data-rv-sec', num ? 'SECTION ' + (num[1].length < 2 ? '0' + num[1] : num[1]) : 'APPENDIX');
+        h.setAttribute('data-rv-sec', num ? 'SECTION ' + (num[1].length < 2 ? '0' + num[1] : num[1]) : numbered ? 'APPENDIX' : 'SECTION');
       } else { currentBlock.classList.add('hl-rv-nohead'); currentBlock.setAttribute('data-rv-sec', 'CAMPAIGN RECORD'); }
     }
     currentBlock.appendChild(n);
@@ -1382,7 +1384,8 @@
   // else the first paragraph of the first headed Overview section (what the Overview view used to print as its lead). The source stays where it is.
   var leadSection = sections.find(function (s) { return s.token === 'overview' && s.heading && /\bBLUF\b|bottom line/i.test(text(s.heading)) && s.node.querySelector('p'); })
     || sections.find(function (s) { return s.token === 'overview' && s.heading; });
-  var leadPara = leadSection && leadSection.node.querySelector('p');
+  // T-0603: a paragraph that is only a bold label ("**Business Impact Summary**", the first paragraph of the BLUF on two migrated reports) is a sub-heading, not the lead: take the first paragraph that is more than its own bold text.
+  var leadPara = leadSection && (Array.prototype.find.call(leadSection.node.querySelectorAll('p'), function (q) { var b = q.children.length === 1 && /^(STRONG|B)$/.test(q.firstElementChild.tagName) ? q.firstElementChild : null; return !(b && text(b) === text(q)); }) || leadSection.node.querySelector('p'));
   var bluf = null;
   if (reportHeader && leadPara && text(leadPara)) {
     // A long lead is shown as its first sentences, cut at a sentence end, up to 60 words (always at least the first sentence); the whole paragraph is the first paragraph of the Overview below.

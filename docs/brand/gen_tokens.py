@@ -440,7 +440,20 @@ def derive(scss_path=DEFAULT_SCSS, navbar_path=NAVBAR):
     brand["tagline"] = re.sub(r"\s+", " ", tag.group(1)).strip()
     hues = re.findall(r'<a href="[^"]*"\s+style="--sc:(#[0-9a-fA-F]{6})"[^>]*>([^<]+)</a>', nav_html)
     if not hues:
-        raise SystemExit("navbar.liquid: no section hues (--sc) found")
+        # Since T-0603 the top bar is built from _data/nav.yml: the entries that carry `bar:` are the section links, in the order of
+        # that rank, each with its hue (`color`) and its bar text (`bar_label`). One entry per line, as that file writes them.
+        nav_yml = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(navbar_path))), "_data", "nav.yml")
+        rows = []
+        if os.path.exists(nav_yml):
+            for line in open(nav_yml, encoding="utf-8"):
+                m_c = re.search(r'color:\s*"(#[0-9a-fA-F]{6})"', line)
+                m_b = re.search(r'\bbar:\s*(\d+)', line)
+                m_l = re.search(r'bar_label:\s*([^,}]+)', line)
+                if m_c and m_b and m_l:
+                    rows.append((int(m_b.group(1)), m_c.group(1), m_l.group(1).strip().strip('"')))
+        hues = [(c, name) for _, c, name in sorted(rows)]
+    if not hues:
+        raise SystemExit("navbar.liquid and _data/nav.yml: no section hues (--sc) found")
     section_hues = {name.strip(): hexv(h) for h, name in hues}
 
     # Section head (concept 3, "w5c"): square before a serif title, 2px rule under the head.
