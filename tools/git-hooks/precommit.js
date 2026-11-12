@@ -51,7 +51,7 @@ function stagedPaths() {
 }
 
 function runCheck(c) {
-  var r = cp.spawnSync(process.execPath, [path.join(TOOLS, c.cmd)], {
+  var r = cp.spawnSync(process.execPath, [path.join(TOOLS, c.cmd)].concat(c.args || []), {
     cwd: TOOLS, encoding: 'utf8'
   });
   if (r.error) {
@@ -60,6 +60,16 @@ function runCheck(c) {
   var text = ((r.stdout || '') + (r.stderr || '')).trim();
   var status = r.status === 0 ? 'PASS' : (r.status === 2 ? 'NOT CHECKED' : 'FAIL');
   return { status: status, text: text };
+}
+
+// A staged report markdown file routes to the companion-value gate (T-0605 L54): a report's
+// detection_page, ioc_feed and stix_bundle must name something that exists. check-companions.js
+// reads the whole source tree, so one staged report is enough to run it; --root pins it to the
+// repo this hook runs in (a worktree commit is judged against its own tree). It was in CI only,
+// so a dangling value was found after the push. Routed here and not in lib/staged-gate.js
+// because it needs no staged-path list: the gate takes no paths.
+function wantsCompanions(paths) {
+  return paths.some(function (p) { return /^reports\/.+\.md$/.test(p.replace(/\\/g, '/')); });
 }
 
 // Every campaign slug the staged change set touches. The victim-naming gate is per-campaign
@@ -284,8 +294,10 @@ function checkReports(files) {
 
   var p = SG.plan(staged.all, { existing: staged.existing });
 
+  var wantCompanions = wantsCompanions(staged.existing);
+
   if (!p.checks.length && !p.reports.length && !p.owed.length && !p.wantBundleSafety &&
-      !stagedSlugs(staged.all).length) {
+      !wantCompanions && !stagedSlugs(staged.all).length) {
     say('machinery gate  nothing staged that carries machinery (' +
       staged.all.length + ' path(s) checked against the routing rules)');
     process.exit(0);
@@ -296,6 +308,10 @@ function checkReports(files) {
     var r = runCheck(c);
     results.push({ label: c.label, status: r.status, text: r.text });
   });
+  if (wantCompanions) {
+    var cc = runCheck({ cmd: 'check-companions.js', args: ['--root', ROOT] });
+    results.push({ label: 'report companion links', status: cc.status, text: cc.text });
+  }
   if (p.reports.length) results = results.concat(checkReports(p.reports));
   results = results.concat(checkVictimNaming(stagedSlugs(staged.all)));
   results = results.concat(checkBundleSafety(p.wantBundleSafety));

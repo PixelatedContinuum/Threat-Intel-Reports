@@ -13,8 +13,8 @@
    is real and published, the behaviour under test is local.
 
    WHY IT PROXIES THE REST. Not everything the page loads lives here. `main.css`
-   and `main.min.js` are Jekyll-built, the theme's fonts come out of the gem, and
-   vendor bundles are copied at build time. Those exist on the published site and
+   is Jekyll-built, the theme's remaining files come out of the gem, and
+   vendor bundles are copied at build time (the build prunes the theme files no page references, T-0605 L02). Those exist on the published site and
    nowhere in the working tree. Proxying them beats carving an exclusion into the
    console check, because an exclusion wide enough to cover them would also hide
    a genuinely missing asset. Anything missing in BOTH places is named. */

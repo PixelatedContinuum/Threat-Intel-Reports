@@ -49,7 +49,7 @@
 #                                           completeness, control and browser gates, which need the render
 #   openssl                                 a throwaway certificate for the local https server the
 #                                           browser gate fetches from; missing, those gates are NOT CHECKED
-#   network to the-hunters-ledger.com       the theme's main.css and main.min.js exist only on the live
+#   network to the-hunters-ledger.com       the theme's main.css exists only on the live
 #                                           site; unreachable, the page would run unstyled, so the
 #                                           completeness, control and browser gates are NOT CHECKED
 #   a Chrome or Chromium (HL_CHROME, or /usr/bin/chromium, /usr/bin/google-chrome, /usr/bin/brave)

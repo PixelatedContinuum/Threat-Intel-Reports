@@ -10,11 +10,12 @@
      /assets/css/custom.css  the compiled stylesheet from the working tree
      /assets/...             the working tree's own assets, so the page runs the
                              CSS and JS under test and not the deployed copies
-     anything else           fetched from the live site (the theme's main.css,
-                             main.min.js and fonts exist nowhere in this repo)
+     anything else           fetched from the live site (the theme's main.css
+                             exists nowhere in this repo; no page loads the
+                             theme's main.min.js or its fonts any more)
 
    The live fetch is a REAL dependency, so it is checked before the ready file is
-   written: when main.css or main.min.js cannot be had, the server exits 3 and
+   written: when main.css cannot be had, the server exits 3 and
    says so, and new-report-gates.sh reports the browser gates NOT CHECKED. A page
    styled by a missing stylesheet would FAIL for the wrong reason or, worse, pass
    by measuring nothing.
@@ -109,8 +110,8 @@ function main() {
     process.exit(3);
   }
 
-  // The two theme assets the page cannot run without, fetched before anything is served.
-  var need = ['/assets/css/main.css', '/assets/js/main.min.js'];
+  // The theme asset the page cannot run without, fetched before anything is served. main.min.js is not in the list: no layout loads it, and the build prunes it (T-0605 L02).
+  var need = ['/assets/css/main.css'];
   var pending = need.length;
   need.forEach(function (p) {
     liveGet(live, p, function (err, r) {

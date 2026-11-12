@@ -53,7 +53,7 @@ while the site copy is checked), so a paragraph lost in between shows as missing
 (what would be `_data/report_views/<report folder>.yml`) when it sits outside this checkout, for example beside
 the vault report; it goes to the render, so the gates measure the curated views the live page will carry. Exit 0 only when every line is PASS; 1 on any FAIL; 2 when only NOT CHECKED remain. It
 needs ruby with the jekyll, jekyll-seo-tag, kramdown-parser-gfm and sass gems, openssl, a
-Chrome, and network to the live site for the theme's `main.css` and `main.min.js`; when one is
+Chrome, and network to the live site for the theme's `main.css`; when it is
 missing the gates that need it are NOT CHECKED and the script says which (`--help`).
 
 **A report is not the pilot (T-0500.1.9).** The page builds only the tabs that hold a section, so a report

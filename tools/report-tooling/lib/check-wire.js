@@ -1477,6 +1477,8 @@ function checkDayLayout(src, includes) {
    'data-sig="kev_product">Product exploited before', 'kev_product{% endif %}"', 'Product exploited before</dt><dd>Filter only, never admits'
   ].forEach(function (pin) { if (!src.includes(pin)) out.push('Wire layout lost: ' + pin); });
   if (/nomi_poc/.test(src)) out.push('nomi_poc is not an admission reason');
+  // T-0605 L57: the page-side copy of the guard wire/cves.xml has (checkCvesFeed): cve.now supplies SSVC, fixed version and advisory ids, never the exploit chips.
+  if (/carries[^.]{0,160}(?:Metasploit|Exploit-DB)/i.test(src)) out.push('the page says cve.now carries Metasploit or Exploit-DB data');
   // T-0569: the CVEs short line's VEDAS credit is checked here.
   var cLine = src.match(/<p class="hl-wire__freshness hl-wire__freshness--c">[\s\S]*?<\/p>/);
   if (!cLine || !/VEDAS exploit maturity from <a [^>]*href="https:\/\/github\.com\/ARPSyndicate\/cve-scores"[^>]*>A\.R\.P\. Syndicate<\/a>/.test(cLine[0])) out.push('the short CVEs line lost VEDAS credit to A.R.P. Syndicate');
