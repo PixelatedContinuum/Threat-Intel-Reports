@@ -1,3 +1,0 @@
-{%- comment -%} A section head in design D (T-0500.1.7.4 b2): icon, mono eyebrow label, optional subtitle. Params: label, accent (hex), icon (a d-icon name, optional), sub (optional), tag (h2 default). {%- endcomment -%}
-{%- assign _t = include.tag | default: "h2" -%}
-<div class="hl-d-eb" style="--ea: {{ include.accent | default: '#aaaaaa' }};">{% if include.icon %}{% include d-icon.html name=include.icon class="hl-d-eb__ico" %}{% endif %}<{{ _t }} class="hl-d-eb__t">{{ include.label }}</{{ _t }}>{% if include.sub %}<span class="hl-d-eb__sub">{{ include.sub }}</span>{% endif %}</div>

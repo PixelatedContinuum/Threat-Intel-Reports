@@ -39,7 +39,6 @@ html:has(.hl-report-page) {
   --rv-gold-bar: #b8902f; /* its 4px left bar and glow, the site's gold */
   --rv-radius: 3px;
   --rv-pad: 24px;
-  --rv-display: var(--hl-font-serif);
   --rv-mono: var(--hl-font-mono);
   --rv-hue-overview: #a371f7;
   --rv-hue-victims: #e879f9; /* Actors hue: Impact amber (#fbbf24) reads as the site's medium-severity label colour on the tier bars */

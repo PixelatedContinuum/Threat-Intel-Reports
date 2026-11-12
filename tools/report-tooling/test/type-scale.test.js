@@ -51,7 +51,6 @@ test('the Wire: the source name is the headline title size, a topic tag is the t
 });
 
 test('home section titles are section-size titles, not 13px eyebrows', () => {
-  assert.match(scss, /\.hl-idx \.hl-d-eb__t \{[^}]*font: 700 var\(--hl-fs-section\)\/1\.15 var\(--hl-font-serif\) !important;/);   // T-0556 w1: headlines name the serif token
   assert.match(scss, /\.hl-idx \.hl-nav-tile__title \{[^}]*font: 600 var\(--hl-fs-card\)\//);
   assert.match(scss, /\.hl-idx \.hl-d-kpi__cap \{[^}]*font-size: var\(--hl-fs-body\)/);
 });
