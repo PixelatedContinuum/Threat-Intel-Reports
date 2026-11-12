@@ -39,7 +39,6 @@
   --hl-accent-gold-light: #f4e9c8;
   --hl-font-serif:   'Source Serif 4', Georgia, 'Times New Roman', serif;   /* headlines, section titles, big numerals, report prose */
   --hl-font-sans:    'IBM Plex Sans', system-ui, -apple-system, 'Segoe UI', Arial, sans-serif;   /* interface text: nav, buttons, labels, captions */
-  --hl-font-display: var(--hl-font-serif);   /* the old name for headlines, kept so nothing reading it breaks */
 
   /* Design D shared tokens (T-0500.1.7.4 b1). One copy for every page that is not a tabbed report; the report
      stylesheet (hl-report-tabs.css) carries gold and the column under --rv-*, which tests there assert literally, so
@@ -183,32 +182,10 @@ main.content {
 }
 
 /* Theme's prev/next post navigation — restyle to match dark theme */
-#post-nav {
-  background: var(--hl-bg-page) !important;
-  border-top: 1px solid var(--hl-border-row) !important;
-  padding: 20px 0 !important;
-  margin-top: 2rem;
-  max-width: 1200px;
-  margin-left: auto;
-  margin-right: auto;
-}
 
-#post-nav a,
-#post-nav a:visited {
-  color: var(--hl-accent-blue) !important;
-  font-size: 0.85em !important;
-}
 
-#post-nav p,
-#post-nav .meta {
-  color: var(--hl-text-dim) !important;
-  font-size: var(--hl-fs-meta) !important;
-}
 
 /* Keep old theme header hidden — replaced by .hl-nav */
-.site-header {
-  display: none !important;
-}
 
 /* --- Navigation bar (replaces theme .site-header) ----------- */
 /* Uses rem/px so it's unaffected by the theme's nav ul { font-size: 0 } */
@@ -306,32 +283,9 @@ main.content {
 
 
 /* --- Home hero (value proposition) -------------------------- */
-.hl-home-hero {
-  margin: 34px 0 42px;
-}
 
-.hl-home-hero__title {
-  font-family: var(--hl-font-serif);
-  font-weight: 700;
-  font-size: 2.4rem !important;
-  line-height: 1.12;
-  color: #ffffff !important;
-  margin: 0 0 16px;
-  max-width: 18ch;
-}
 
-.hl-home-hero__lede {
-  font-size: 1.05rem;
-  line-height: 1.65;
-  color: var(--hl-text-secondary);
-  margin: 0 0 22px;
-  max-width: 62ch;
-}
 
-@media (max-width: 700px) {
-  .hl-home-hero { margin: 24px 0 30px; }
-  .hl-home-hero__title { font-size: 1.9rem !important; }
-}
 
 /* ============================================================
    POST LAYOUT — Individual report and detection pages
@@ -905,40 +859,10 @@ main.content {
 }
 
 /* --- Prose section card ------------------------------------ */
-.hl-prose-section {
-  background: var(--hl-bg-row);
-  border: 1px solid var(--hl-border-row);
-  border-radius: 3px;
-  padding: 14px 18px;
-  margin-bottom: 10px;
-}
 
-.hl-prose-section__label {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-size: var(--hl-fs-label);
-  color: #bbbbbb;
-  margin-bottom: 9px;
-  font-weight: 600;
-}
 
-.hl-prose-section__bar {
-  width: 2px;
-  height: 12px;
-  border-radius: 1px;
-}
 
-.hl-prose-section__body {
-  color: var(--hl-text-primary);
-  font-size: 0.9em;
-  line-height: 1.65;
-  margin: 0;
-}
 
-.hl-prose-section__body a {
-  color: var(--hl-accent-blue);
-}
 
 /* --- Nav tile grid ----------------------------------------- */
 .hl-nav-grid {
@@ -1022,15 +946,6 @@ main.content {
    the legacy .hl-hero banner + .hl-hero__logo were retired in the brand refresh.) */
 
 /* --- "View all" link --------------------------------------- */
-.hl-view-all {
-  display: block;
-  text-align: right;
-  color: var(--hl-accent-blue) !important;
-  font-size: 0.9em;
-  margin-bottom: 2rem;
-  text-decoration: none !important;
-}
-.hl-view-all:hover { text-decoration: underline !important; }
 
 /* --- Post page layout -------------------------------------- */
 /* No grid — TOC floats in the page margin via fixed positioning */
@@ -2031,14 +1946,12 @@ img { max-width: 100%; height: auto; }
   .hl-card__inner { padding: 12px; gap: 10px; }
 
   /* --- Prose sections -------------------------------------- */
-  .hl-prose-section { padding: 12px 14px; }
   .hl-nav-tile { padding: 12px 14px; }
 
   /* --- Masthead + section spacing -------------------------- */
   .hl-section-header { margin: 1.5rem 0 12px; font-size: 0.8em; }
 
   /* --- Post nav: tighter ---------------------------------- */
-  #post-nav { padding: 14px 10px !important; }
 
   /* --- Back-to-top button: smaller + safer position ------- */
   .hl-back-top {
@@ -2932,16 +2845,9 @@ button,
 /* Tier axis (Detection / Hunting) — a second chip row, rendered only when the
    catalog carries `detection_tiers`. Active chips are tier-colored to match the
    in-page subsection dividers (green = Detection, amber = Hunting). */
-.hl-filter__chips--tier { margin-top: 9px; align-items: center; }
 .hl-filter__dim {
   font-size: var(--hl-fs-label);
   color: var(--hl-text-muted); font-weight: 600; margin-right: 2px; align-self: center;
-}
-.hl-chip-btn--detection.is-on {
-  background: rgba(74, 222, 128, 0.16); border-color: var(--hl-accent-green, #4ade80); color: #b7f7cf;
-}
-.hl-chip-btn--hunting.is-on {
-  background: rgba(250, 204, 21, 0.16); border-color: #facc15; color: #fde68a;
 }
 
 /* severity-colored meta on catalog cards */
@@ -3034,40 +2940,17 @@ button,
   border-left: 2px solid var(--hl-border-card); padding-left: 12px; }
 
 /* --- Home: About & Connect tile row (3-up legacy + 4-up) --- */
-.hl-tile-row3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 9px; margin-bottom: 14px; }
-.hl-tile-row4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 9px; margin-bottom: 14px; }
 .hl-contribute { font-size: 0.88em; color: var(--hl-text-secondary); line-height: 1.6; }
 .hl-contribute a { color: var(--hl-accent-blue); }
 
 /* --- Home: Resources inline links -------------------------- */
-.hl-resources { font-size: 0.92em; color: var(--hl-text-muted); }
-.hl-resources a { color: var(--hl-accent-blue); text-decoration: none; }
-.hl-resources a:hover { text-decoration: underline; }
 
 /* --- Card hover (clickable cards: listings + home grid) ---- */
 .hl-card { transition: border-color 0.15s ease, transform 0.15s ease, box-shadow 0.15s ease; }
 a.hl-card:hover { border-color: var(--hl-accent-blue) !important; box-shadow: none; }
 
-@media (max-width: 700px) { .hl-tile-row3 { grid-template-columns: 1fr; } }
-@media (max-width: 760px) { .hl-tile-row4 { grid-template-columns: repeat(2, 1fr); } }
-@media (max-width: 460px) { .hl-tile-row4 { grid-template-columns: 1fr; } }
 
 /* --- Premium polish: gradient hero (glow + headline), lifted pills, card glow --- */
-.hl-home-hero { position: relative; isolation: isolate; }
-.hl-home-hero::before {
-  /* Top fade glow. The top edge reaches UP under the sticky 70px nav (tucks
-     ~8px behind it, hidden by the opaque nav bg) so the glow meets the nav
-     with no dark gap. Reach to nav bottom = .hl-page padding-top (48px) +
-     hero margin-top (34px) = 82px; -90px clears it by 8px. height grows in
-     step (460->486) so the lower fade stays put — only the top moves. */
-  content: ''; position: absolute; top: -90px; left: 50%; right: auto; transform: translateX(-50%); width: 100vw; height: 486px; z-index: -1;
-  background: none;
-  pointer-events: none;
-}
-.hl-home-hero__title {
-  letter-spacing: -0.02em;
-  color: var(--hl-text-primary) !important;
-}
 .hl-cred-pill { background: var(--hl-bg-row); box-shadow: none; }
 a.hl-card:hover { border-color: var(--hl-accent-blue) !important; box-shadow: none; }
 
@@ -3504,10 +3387,6 @@ a.hl-sponsor-rail__item:focus-visible { outline: 2px solid #ffffff; outline-offs
      The in-flow strip pushes the header down, exposing that bright edge as a
      hard line. Reach the glow further up so the edge re-tucks under the opaque
      nav (over-reach is harmless — the nav hides it). */
-  body:has(.hl-sponsor-rail) .hl-home-hero::before {
-    top: -180px;
-    height: 580px;
-  }
   body:has(.hl-sponsor-rail) .hl-page:has(.hl-page-header)::before {
     top: -190px;
     height: 400px;
@@ -3716,7 +3595,6 @@ a.hl-sponsor-rail__item:focus-visible { outline: 2px solid #ffffff; outline-offs
    the reader is reading rather than in a list detached from the rules. */
 .hl-rule-pick { margin-right: 0.5em; vertical-align: middle; cursor: pointer; }
 /* A rule whose body lives inside an earlier bundle cannot be taken on its own. */
-.hl-rule-xref { font-size: var(--hl-fs-meta); opacity: 0.7; margin-left: 0.4em; font-style: italic; }
 .hl-rule-hidden { display: none; }
 
 /* ---- Infographic navigation chips (figure_nav) ---- */
@@ -3918,11 +3796,6 @@ a.hl-sponsor-rail__item:focus-visible { outline: 2px solid #ffffff; outline-offs
   padding: 0.7em 1em;
   margin: 0 0 0.9em;
 }
-.hl-wire__callout--v {
-  background: color-mix(in srgb, #bc8cff 7%, var(--hl-bg-card));
-  border-color: color-mix(in srgb, #bc8cff 32%, var(--hl-border-card));
-  border-left-color: #bc8cff;
-}
 /* T-0522: the CVEs tab's callout (teal, the tab's colour) holds three short paragraphs. */
 .hl-wire__callout--c {
   background: color-mix(in srgb, #2dd4bf 7%, var(--hl-bg-card));
@@ -4064,11 +3937,9 @@ a.hl-sponsor-rail__item:focus-visible { outline: 2px solid #ffffff; outline-offs
    badge's colour, severity chips their band's (the --s the badge sets). */
 .hl-vc-cisa      { --wire-topic: #f87171; }
 .hl-vc-vulncheck { --wire-topic: #bc8cff; }
-.hl-vc-old       { --wire-topic: #d29922; }
 .hl-vc-none      { --wire-topic: #8b949e; }
 .hl-vc-prenvd    { --wire-topic: #f778ba; }
 .hl-chip-btn--topic[class*="hl-vuln__sev--"] { --wire-topic: var(--s); }
-.hl-filter__dim--gap { margin-left: 1.2em; }
 
 .hl-vuln {
   display: grid;
@@ -4104,13 +3975,9 @@ a.hl-sponsor-rail__item:focus-visible { outline: 2px solid #ffffff; outline-offs
   border: 1px solid color-mix(in srgb, var(--b, var(--hl-text-muted)) 42%, var(--hl-border-card));
   background: color-mix(in srgb, var(--b, var(--hl-text-muted)) 13%, transparent);
 }
-.hl-vuln__b--vc   { --b: #bc8cff; }
 .hl-vuln__b--cisa { --b: #f87171; }
-.hl-vuln__b--old  { --b: #d29922; }
 /* T-0468: days from NVD publication to the VulnCheck KEV add, and the badge for a
    CVE VulnCheck added before NVD published it. */
-.hl-vuln__b--gap    { --b: #79c0ff; font-variant-numeric: tabular-nums; cursor: help; }
-.hl-vuln__b--prenvd { --b: #f778ba; cursor: help; }
 /* Severity (T-0399): the row's CVSS base score, square-cornered so it does not
    read as one more list badge beside VulnCheck KEV and CISA KEV. */
 .hl-vuln__sev {
@@ -4236,7 +4103,6 @@ span.hl-vuln__p--ssvc, span.hl-vuln__p--exp, span.hl-vuln__p--cn { cursor: help;
   border: 1px solid color-mix(in srgb, var(--w) 45%, var(--hl-border-card));
   background: color-mix(in srgb, var(--w) 12%, transparent);
 }
-.hl-vuln__w--ab   { --w: #ff6b6b; }
 .hl-vuln__w--kev  { --w: #f0883e; }
 .hl-vuln__w--msf  { --w: #fb923c; }
 .hl-vuln__w--edb  { --w: #fbbf24; }
@@ -4436,8 +4302,6 @@ span.hl-vuln__p--ssvc, span.hl-vuln__p--exp, span.hl-vuln__p--cn { cursor: help;
 /* A sample is a picture of the chip, not the chip: nothing to click, hover or tab to. */
 .hl-legend__list dt > span { pointer-events: none; cursor: default; }
 .hl-legend__list dt .hl-vuln__vp { overflow: visible; white-space: normal; font-size: var(--hl-fs-small); }
-.hl-legend__p { margin: 6px 0 0; font-size: var(--hl-fs-small); line-height: 1.45; color: var(--hl-text-secondary); overflow-wrap: break-word; }
-.hl-post-content .hl-legend__p a, .hl-legend__p a { color: var(--hl-accent-blue); }
 
 /* Narrow screens: the legend is a closed details above the filter bar, drawn like the
    report's mobile Contents bar (same colours, label type and caret) but in the flow, not
@@ -4687,7 +4551,6 @@ span.hl-vuln__p--ssvc, span.hl-vuln__p--exp, span.hl-vuln__p--cn { cursor: help;
      more chips than fit; a wrapped line shows every chip. Rows with few chips
      stay on one line. */
   .hl-vuln__badges { flex-wrap: wrap; row-gap: 0.25em; }
-  .hl-filter__dim--gap { margin-left: 0; }
   /* T-0532: the details panel, narrow. On a phone the details paragraphs
      (descriptions, affected version lines, links) cap at a readable height and
      scroll rather than pushing the whole tab down. */
@@ -5151,30 +5014,6 @@ span.hl-vuln__p--ssvc, span.hl-vuln__p--exp, span.hl-vuln__p--cn { cursor: help;
   --pt-operator-lbl: #a51b1b;
   --pt-endgame-lbl:  #7f1d1d;
   --pt-artifact-lbl: #52525b;
-}
-
-@media (prefers-color-scheme: light) {
-  :root:not([data-theme="dark"]) .hl-ptree {
-    --pt-surface:    #ffffff;
-    --pt-surface-2:  #f4f4f5;
-    --pt-surface-3:  #ebebed;
-    --pt-line:       #d4d4d8;
-    --pt-line-soft:  #e4e4e7;
-    --pt-ink:        #18181b;
-    --pt-ink-2:      #3f3f46;
-    --pt-ink-3:      #5f5f68;
-    --pt-code-bg:    #f4f4f5;
-    --pt-link:       #1857b8;
-    --pt-focus:      #1857b8;
-    --pt-dropper:    #a16207;
-    --pt-operator:   #b91c1c;
-    --pt-endgame:    #7f1d1d;
-    --pt-artifact:   #52525b;
-    --pt-dropper-lbl:  #854d0e;
-    --pt-operator-lbl: #a51b1b;
-    --pt-endgame-lbl:  #7f1d1d;
-    --pt-artifact-lbl: #52525b;
-  }
 }
 
 /* --- Header bar --------------------------------------------- */
@@ -5735,25 +5574,6 @@ span.hl-vuln__p--ssvc, span.hl-vuln__p--exp, span.hl-vuln__p--cn { cursor: help;
   --im-persists-lbl: #a51b1b;
 }
 
-@media (prefers-color-scheme: light) {
-  :root:not([data-theme="dark"]) .hl-imodes {
-    --im-surface:    #ffffff;
-    --im-surface-2:  #f4f4f5;
-    --im-surface-3:  #ebebed;
-    --im-line:       #d4d4d8;
-    --im-line-soft:  #e4e4e7;
-    --im-ink:        #18181b;
-    --im-ink-2:      #3f3f46;
-    --im-ink-3:      #5f5f68;
-    --im-code-bg:    #f4f4f5;
-    --im-focus:      #1857b8;
-    --im-cleared:      #1d4ed8;
-    --im-cleared-lbl:  #1e40af;
-    --im-persists:     #b91c1c;
-    --im-persists-lbl: #a51b1b;
-  }
-}
-
 /* --- Header bar (optional meta line) -------------------------- */
 .hl-imodes .hl-imodes-head {
   padding: 11px 18px;
@@ -6056,7 +5876,6 @@ span.hl-vuln__p--ssvc, span.hl-vuln__p--exp, span.hl-vuln__p--cn { cursor: help;
   --cx-ink:        #eeeeee;
   --cx-ink-2:      #c6c6c6;
   --cx-ink-3:      #8d8d8d;
-  --cx-code-bg:    #0e0e0e;
   --cx-focus:      #58a6ff;
 
   /* two differentiating accents, deliberately equal in weight: neither
@@ -6088,33 +5907,12 @@ span.hl-vuln__p--ssvc, span.hl-vuln__p--exp, span.hl-vuln__p--cn { cursor: help;
   --cx-ink:        #18181b;
   --cx-ink-2:      #3f3f46;
   --cx-ink-3:      #5f5f68;
-  --cx-code-bg:    #f4f4f5;
   --cx-focus:      #1857b8;
   --cx-axis-a:      #0369a1;
   --cx-axis-a-lbl:  #075985;
   --cx-axis-b:      #6d28d9;
   --cx-axis-b-lbl:  #5b21b6;
   --cx-note:        #92620a;
-}
-
-@media (prefers-color-scheme: light) {
-  :root:not([data-theme="dark"]) .hl-capaxes {
-    --cx-surface:    #ffffff;
-    --cx-surface-2:  #f4f4f5;
-    --cx-surface-3:  #ebebed;
-    --cx-line:       #d4d4d8;
-    --cx-line-soft:  #e4e4e7;
-    --cx-ink:        #18181b;
-    --cx-ink-2:      #3f3f46;
-    --cx-ink-3:      #5f5f68;
-    --cx-code-bg:    #f4f4f5;
-    --cx-focus:      #1857b8;
-    --cx-axis-a:      #0369a1;
-    --cx-axis-a-lbl:  #075985;
-    --cx-axis-b:      #6d28d9;
-    --cx-axis-b-lbl:  #5b21b6;
-    --cx-note:        #92620a;
-  }
 }
 
 /* --- Header bar: the "do not average" instruction, always visible --- */
@@ -7151,93 +6949,14 @@ body.hl-drawer-locked { overflow: hidden; }
 .hl-actor-card__bar--low      { background: #fb923c; }
 .hl-actor-card__bar--none     { background: #6e7681; }
 
-.hl-actor__facts {
-  display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 10px 18px;
-  margin: 0 0 1.6rem; padding: 16px 18px;
-  background: var(--hl-bg-card); border: 1px solid var(--hl-border-card); border-radius: 3px;
-}
-.hl-actor__facts--wide { grid-template-columns: 1fr; }
-.hl-actor__facts > div { min-width: 0; }
-.hl-actor__facts dt {
-  font-size: var(--hl-fs-meta); font-weight: 700;
-  color: var(--hl-text-muted); margin: 0 0 3px;
-}
-.hl-actor__facts dd { margin: 0; font-size: 0.9em; line-height: 1.45; overflow-wrap: anywhere; }
-.hl-actor__status {
-  display: inline-block; font-size: var(--hl-fs-meta); font-weight: 700;
-  padding: 2px 8px; border-radius: 3px; border: 1px solid;
-}
-.hl-actor__status--active  { color: #4ade80; border-color: #16653455; background: #16653433; }
-.hl-actor__status--merged  { color: #58a6ff; border-color: #1f6feb55; background: #1f6feb33; }
-.hl-actor__status--retired { color: #9ca3af; border-color: #4b556355; background: #37415133; }
-.hl-actor__conf { font-weight: 700; }
-.hl-actor__conf--definite, .hl-actor__conf--high { color: #4ade80; }
-.hl-actor__conf--moderate     { color: #facc15; }
-.hl-actor__conf--low          { color: #fb923c; }
-.hl-actor__conf--insufficient { color: #f87171; }
-.hl-actor__pct { color: var(--hl-text-secondary); font-size: 0.9em; }
 .hl-actor__muted { color: var(--hl-text-muted); font-size: 0.86em; }
-.hl-actor__note { font-size: 0.9em; }
 .hl-actor__summary { font-size: 1.02em; line-height: 1.6; }
 
-.hl-actor__reports { display: grid; gap: 10px; margin-bottom: 1.6rem; }
-.hl-actor__report {
-  background: var(--hl-bg-card); border: 1px solid var(--hl-border-card); border-left: 3px solid #6e7681;
-  border-radius: 3px; padding: 12px 14px;
-}
-.hl-actor__report--primary { border-left-color: #e879f9; }
-.hl-actor__report-head { display: flex; flex-wrap: wrap; gap: 6px 12px; align-items: baseline; margin-bottom: 4px; }
-.hl-actor__role {
-  font-size: var(--hl-fs-meta); font-weight: 700; color: #e879f9;
-}
-.hl-actor__report--mentions .hl-actor__role { color: var(--hl-text-muted); }
-.hl-actor__report-meta { font-size: var(--hl-fs-meta); color: var(--hl-text-muted); }
-.hl-actor__report-title { font-weight: 600; font-size: 0.95em; line-height: 1.35; display: block; }
-.hl-actor__report-links { display: flex; flex-wrap: wrap; gap: 4px 14px; margin-top: 7px; font-size: 0.8em; }
 
-.hl-actor__attack { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 12px; margin-bottom: 1.6rem; }
-.hl-actor__tactic { background: var(--hl-bg-card); border: 1px solid var(--hl-border-card); border-radius: 3px; padding: 10px 12px; }
-.hl-actor__tactic-name {
-  font-size: var(--hl-fs-meta); font-weight: 700; color: #e879f9; margin-bottom: 6px;
-}
-.hl-actor__techniques { list-style: none; margin: 0; padding: 0; font-size: 0.82em; line-height: 1.5; }
-.hl-actor__techniques li { padding: 2px 0; }
-.hl-actor__techniques code { font-size: 0.92em; }
-.hl-actor__related { font-size: 0.9em; line-height: 1.55; }
-.hl-actor__licence { font-size: 0.8em; color: var(--hl-text-muted); margin-top: 2rem; }
 
-.hl-actor__targeting { margin: 0 0 0.8rem; }
-.hl-actor__targeting > div { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 10px; margin-bottom: 8px; }
-.hl-actor__targeting dt {
-  font-size: var(--hl-fs-meta); font-weight: 700;
-  color: var(--hl-text-muted); margin: 0; min-width: 62px;
-}
-.hl-actor__targeting dd { margin: 0; }
-.hl-actor__targeting-note { margin: 6px 0 0; font-size: 0.92em; color: var(--hl-text-secondary); }
 
-.hl-actor__idents { display: grid; gap: 8px; margin: 0 0 0.8rem; }
-.hl-actor__ident {
-  display: grid; grid-template-columns: 112px auto; gap: 2px 12px; align-items: baseline;
-  background: var(--hl-bg-card); border: 1px solid var(--hl-border-card); border-left: 3px solid #e879f9;
-  border-radius: 3px; padding: 9px 13px;
-}
-.hl-actor__ident-kind {
-  font-size: var(--hl-fs-meta); font-weight: 700;
-  color: #e879f9; align-self: center;
-}
-.hl-actor__ident-value { grid-column: 2; font-size: 0.9em; overflow-wrap: anywhere; }
-.hl-actor__ident-context { grid-column: 2; font-size: 0.82em; color: var(--hl-text-muted); }
 
-@media (max-width: 640px) {
-  .hl-actor__ident { grid-template-columns: 1fr; }
-  .hl-actor__ident-kind { align-self: start; }
-  .hl-actor__ident-value, .hl-actor__ident-context { grid-column: 1; }
-}
 
-@media (max-width: 640px) {
-  .hl-actor__facts { grid-template-columns: 1fr 1fr; padding: 12px 14px; }
-  .hl-actor__facts--wide { grid-template-columns: 1fr; }
-}
 
 /* --- Cross-reference pages: /techniques/ and /families/ ----------------- */
 /* Techniques take amber (#fb923c) and families teal (#2dd4bf), both distinct
@@ -7245,32 +6964,8 @@ body.hl-drawer-locked { overflow: hidden; }
    item list mirrors .hl-actor__report so the three cross-reference surfaces
    read as one family of pages. */
 .hl-xref__id { font-size: 0.82em; vertical-align: middle; }
-.hl-xref__nav { font-size: 0.86em; margin: 0 0 1.2rem; }
 .hl-xref__muted { color: var(--hl-text-muted); font-size: 0.86em; }
 .hl-xref__licence { font-size: 0.8em; color: var(--hl-text-muted); margin-top: 2rem; }
-.hl-xref__list { display: grid; gap: 10px; margin-bottom: 1.6rem; }
-.hl-xref__item {
-  background: var(--hl-bg-card); border: 1px solid var(--hl-border-card); border-left: 3px solid #6e7681;
-  border-radius: 3px; padding: 12px 14px;
-}
-.hl-xref__item--report    { border-left-color: #a371f7; }
-.hl-xref__item--detection { border-left-color: #4ade80; }
-.hl-xref__item--feed      { border-left-color: #f87171; }
-.hl-xref__item-head { display: flex; flex-wrap: wrap; gap: 6px 12px; align-items: baseline; margin-bottom: 4px; }
-.hl-xref__role { font-size: var(--hl-fs-meta); font-weight: 700; color: var(--hl-text-muted); }
-.hl-xref__item--report .hl-xref__role    { color: #a371f7; }
-.hl-xref__item--detection .hl-xref__role { color: #4ade80; }
-.hl-xref__item--feed .hl-xref__role      { color: #f87171; }
-.hl-xref__item-meta { font-size: var(--hl-fs-meta); color: var(--hl-text-muted); }
-.hl-xref__item-meta code { text-transform: none; letter-spacing: 0; font-size: var(--hl-fs-meta); }
-.hl-xref__conf--definite, .hl-xref__conf--high { color: #4ade80; }
-.hl-xref__conf--moderate     { color: #facc15; }
-.hl-xref__conf--low          { color: #fb923c; }
-.hl-xref__conf--insufficient { color: #f87171; }
-.hl-xref__item-title { font-weight: 600; font-size: 0.95em; line-height: 1.35; display: block; }
-.hl-xref__item-links { display: flex; flex-wrap: wrap; gap: 4px 14px; margin-top: 7px; font-size: 0.8em; }
-.hl-xref__rules { margin-top: 6px; font-family: var(--hl-font-mono, monospace); font-size: 0.78em; color: var(--hl-text-secondary); overflow-wrap: anywhere; }
-.hl-xref__actors { font-size: 0.9em; line-height: 1.55; }
 .hl-xref__top { font-size: 0.92em; line-height: 1.6; }
 .hl-xref__top code { font-size: 0.9em; }
 
@@ -7304,8 +6999,6 @@ body.hl-drawer-locked { overflow: hidden; }
 .hl-heatmap__tactic > span:first-child { min-width: 0; overflow-wrap: anywhere; }
 a.hl-attack__chip { color: inherit; text-decoration: none !important; }
 a.hl-attack__chip:hover { border-color: var(--hl-accent-blue); color: var(--hl-text-primary); }
-.hl-actor__technique-src { color: var(--hl-text-secondary); text-decoration: none; }
-.hl-actor__technique-src:hover { color: var(--hl-text-primary); text-decoration: underline; }
 .hl-heatmap__cell {
   --hl-heat-t: calc(var(--hl-heat, 0) / var(--hl-heat-max, 1));
   display: block; text-decoration: none !important; border-radius: 3px; padding: 4px 6px;
@@ -7338,8 +7031,6 @@ a.hl-attack__chip:hover { border-color: var(--hl-accent-blue); color: var(--hl-t
   }
 }
 a.hl-impact-card:hover { border-color: var(--ia) !important; }
-a.hl-cred-pill--link { text-decoration: none !important; }
-a.hl-cred-pill--link:hover { border-color: #fbbf24; color: var(--hl-text-primary); }
 
 /* ============================================================
    DESIGN D: HOME AND SECTION INDEXES (T-0500.1.7.4 b2)
@@ -7347,7 +7038,7 @@ a.hl-cred-pill--link:hover { border-color: #fbbf24; color: var(--hl-text-primary
    changes. The tokens are the shared D tokens above; the mockups are tasks/runs/T-0500.1.7.4/mockups/ and
    the colour values are theirs. The old rules above stay for the pages b3 restyles.
    ============================================================ */
-.hl-idx { padding-top: 14px; --hl-d-line: var(--hl-border-card); }
+.hl-idx { padding-top: 14px; }
 .hl-idx .hl-d-ico { width: 1em; height: 1em; flex: none; }
 
 /* ---------- the masthead plate (index pages and the home hero) ---------- */
@@ -7372,8 +7063,7 @@ a.hl-cred-pill--link:hover { border-color: #fbbf24; color: var(--hl-text-primary
   font: 600 var(--hl-fs-label)/1.3 var(--hl-font-sans);
   color: var(--pc);
 }
-.hl-idx .hl-d-plate .hl-page-header__title,
-.hl-idx .hl-d-plate .hl-home-hero__title {
+.hl-idx .hl-d-plate .hl-page-header__title {
   margin: 6px 0 0;
   padding: 0;
   max-width: none;
@@ -7384,8 +7074,7 @@ a.hl-cred-pill--link:hover { border-color: #fbbf24; color: var(--hl-text-primary
   border: 0;
   color: var(--hl-text-primary) !important;
 }
-.hl-idx .hl-d-plate .hl-page-header__desc,
-.hl-idx .hl-d-plate .hl-home-hero__lede {
+.hl-idx .hl-d-plate .hl-page-header__desc {
   margin: 12px 0 0;
   max-width: 62em;
   font-weight: 400; font-size: clamp(18px, 1.9vw, 22px); line-height: 1.5; font-family: inherit;
@@ -7394,8 +7083,6 @@ a.hl-cred-pill--link:hover { border-color: #fbbf24; color: var(--hl-text-primary
 }
 .hl-idx .hl-d-plate .hl-page-header__desc a { color: #ffffff; text-decoration-color: var(--pc); text-underline-offset: 3px; }
 .hl-idx .hl-d-plate .hl-page-header__desc strong { color: #ffffff; }
-.hl-idx--home .hl-home-hero { margin: 10px 0 0; isolation: auto; }
-.hl-idx--home .hl-home-hero::before { display: block; opacity: 1; }
 .hl-idx--home .hl-d-plate::before { display: none; }
 /* the page-level top glow of an index page (the plate's accent, behind the whole top of the page) stays: it is D's body::before */
 
@@ -7437,26 +7124,6 @@ a.hl-cred-pill--link:hover { border-color: #fbbf24; color: var(--hl-text-primary
 .hl-idx .hl-creds-note { margin: 14px 0 0; font-size: var(--hl-fs-small); color: var(--hl-muted-d); max-width: none; }
 
 /* ---------- eyebrow section heads ---------- */
-.hl-idx .hl-d-eb {
-  --ec: var(--ea, var(--ph-accent));
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 3px 10px;
-  margin: 34px 0 14px;
-}
-.hl-idx .hl-d-eb__ico { width: 24px; height: 24px; color: var(--ec); }
-.hl-idx h2.hl-d-eb__t,
-.hl-idx .hl-d-eb__t {
-  margin: 0;
-  padding: 0;
-  border: 0;
-  font: 700 var(--hl-fs-section)/1.15 var(--hl-font-serif) !important;
-  letter-spacing: -0.015em;
-  text-transform: none;
-  color: color-mix(in srgb, var(--ec) 70%, #ffffff);
-}
-.hl-idx .hl-d-eb__sub { flex: 1 1 auto; font-size: var(--hl-fs-small); line-height: 1.3; color: var(--hl-muted-d); }
 
 /* ---------- boxes (mission, contribute) ---------- */
 .hl-idx .hl-d-box {
@@ -7490,10 +7157,6 @@ a.hl-cred-pill--link:hover { border-color: #fbbf24; color: var(--hl-text-primary
 
 /* ---------- navigation tiles (home) ---------- */
 .hl-idx .hl-nav-grid { display: grid; gap: 12px; margin: 0; }
-.hl-idx .hl-nav-grid--t4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
-.hl-idx .hl-nav-grid--t2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-@media (max-width: 1099px) { .hl-idx .hl-nav-grid--t4 { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
-@media (max-width: 519px) { .hl-idx .hl-nav-grid--t4, .hl-idx .hl-nav-grid--t2 { grid-template-columns: 1fr; } }
 .hl-idx .hl-nav-tile {
   --ta: var(--acc);
   display: flex;
@@ -7510,20 +7173,8 @@ a.hl-cred-pill--link:hover { border-color: #fbbf24; color: var(--hl-text-primary
 }
 .hl-idx .hl-nav-tile::before { display: none; }
 .hl-idx .hl-nav-tile:hover { border-color: color-mix(in srgb, var(--ta) 65%, var(--hl-border-card)) !important; box-shadow: none; }
-.hl-idx .hl-nav-tile__ico {
-  display: grid;
-  place-items: center;
-  width: 34px;
-  height: 34px;
-  border-radius: 3px;
-  color: var(--ta);
-  background: color-mix(in srgb, var(--ta) 13%, transparent);
-  border: 1px solid color-mix(in srgb, var(--ta) 30%, transparent);
-}
-.hl-idx .hl-nav-tile__ico .hl-d-ico { width: 20px; height: 20px; }
 .hl-idx .hl-nav-tile__title { margin: 0; font: 600 var(--hl-fs-card)/1.2 var(--hl-font-serif) !important; color: #ffffff !important; }
 .hl-idx .hl-nav-tile__desc { margin: 0; font-size: var(--hl-fs-body); line-height: 1.4; color: var(--hl-muted-d); }
-.hl-idx .hl-view-all { display: inline-flex; align-items: center; min-height: 44px; margin: 10px 0 0; font: 600 16px var(--hl-font-sans); color: #79c0ff !important; text-align: left; }
 
 /* ---------- catalog cards and their grids ---------- */
 .hl-idx .hl-grid {
@@ -7532,10 +7183,8 @@ a.hl-cred-pill--link:hover { border-color: #fbbf24; color: var(--hl-text-primary
   margin: 0 0 12px;
   align-items: stretch;
 }
-.hl-idx .hl-grid--c4 { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
-@media (min-width: 1200px) { .hl-idx .hl-grid--c4 { grid-template-columns: repeat(4, minmax(0, 1fr)) !important; } }
 @media (max-width: 1099px) { .hl-idx .hl-grid { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; } }
-@media (max-width: 639px) { .hl-idx .hl-grid, .hl-idx .hl-grid--c4 { grid-template-columns: minmax(0, 1fr) !important; } }
+@media (max-width: 639px) { .hl-idx .hl-grid { grid-template-columns: minmax(0, 1fr) !important; } }
 .hl-idx .hl-card {
   --sv: #9ca3af;
   position: relative;
@@ -7594,7 +7243,6 @@ a.hl-cred-pill--link:hover { border-color: #fbbf24; color: var(--hl-text-primary
 .hl-idx .hl-impact-card__desc { color: #dcdcdc; }
 .hl-idx .hl-actor-card__alias { margin-left: 6px; font-size: var(--hl-fs-meta); font-weight: 500; color: var(--hl-muted-d); }
 .hl-idx .hl-impact-card .hl-card__meta:last-child { margin-top: 8px; color: var(--hl-muted-d); text-transform: none; letter-spacing: 0.02em; font-size: var(--hl-fs-meta); }
-.hl-idx .hl-card.is-hidden { display: none !important; }
 /* a report series: the boxed set was gold; gold now means sponsorship only (decision 3), so the set takes the site's steel */
 .hl-idx .hl-series-cluster {
   border-color: color-mix(in srgb, var(--hl-accent-steel) 32%, transparent);
@@ -7770,7 +7418,6 @@ a.hl-cred-pill--link:hover { border-color: #fbbf24; color: var(--hl-text-primary
 .hl-idx .hl-xref__muted, .hl-idx .hl-actor__muted { margin: 18px 0 0; font-size: var(--hl-fs-small); line-height: 1.55; color: var(--hl-muted-d); }
 .hl-idx .hl-xref__licence { margin: 18px 0 0; font-size: var(--hl-fs-small); color: var(--hl-muted-d); }
 .hl-idx > p em, .hl-idx p > em { color: var(--hl-muted-d); }
-.hl-idx .hl-d-fine { margin: 22px 0 0; font-size: var(--hl-fs-small); color: var(--hl-muted-d); }
 
 /* ---------- ATT&CK heatmap ---------- */
 .hl-idx .hl-heatmap { gap: 6px; margin: 12px 0 10px; padding-bottom: 12px; grid-auto-columns: minmax(150px, 1fr); }
@@ -7917,7 +7564,6 @@ a.hl-cred-pill--link:hover { border-color: #fbbf24; color: var(--hl-text-primary
   color: #dcdcdc;
   background: var(--hl-bg-card);
 }
-.hl-idx--wire .hl-wire__callout--v { --cc: #bc8cff; }
 .hl-idx--wire .hl-wire__callout--c { --cc: #2dd4bf; }
 .hl-idx--wire .hl-wire__callout a { color: #79c0ff; }
 .hl-idx--wire .hl-wire__freshness { margin: 14px 0 10px; font-size: var(--hl-fs-small); line-height: 1.55; color: var(--hl-muted-d); }
@@ -7974,7 +7620,6 @@ a.hl-cred-pill--link:hover { border-color: #fbbf24; color: var(--hl-text-primary
 .hl-idx--wire .hl-filter--wire .hl-filter__empty { margin: 10px 0; padding: 22px; font-size: 16px; border: 1px dashed var(--hl-border-card); border-radius: 3px; color: var(--hl-muted-d); }
 .hl-idx--wire .hl-filter--wire .hl-filter__reset { min-height: 44px; font-size: inherit; color: #79c0ff; text-decoration: underline; }
 @media (max-width: 1099px) { .hl-idx--wire .hl-filter--wire .hl-chip-btn { min-height: 44px; } }
-.hl-idx--wire .hl-filter__dim--gap { margin-left: 14px; }
 
 /* day heads and headline rows */
 .hl-idx--wire .hl-wire { margin-top: 6px; }
@@ -8121,12 +7766,7 @@ a.hl-cred-pill--link:hover { border-color: #fbbf24; color: var(--hl-text-primary
    tasks/runs/T-0500.1.7.4/mockups/{actor,family,technique}-dashboard*.html. Dark only.
    ============================================================ */
 .hl-idx--dash {
-  --line: var(--hl-border-card);
   --line-soft: #222222;
-  --muted: var(--hl-muted-d);
-  --f-display: var(--hl-font-sans);
-  --f-mono: var(--hl-font-mono);
-  --field-line: var(--hl-field-line);
   --grey: #9ca3af;
 }
 /* the bar and the anchor padding both read --hl-nav-vis, the header height actually showing (52px on a desktop, 58px on a phone while it is shown, 0 while it is hidden) */
@@ -8386,7 +8026,7 @@ a.hl-kc:hover { border-color: var(--kc); color: #ffffff; }
    Scoped to .hl-idx--det (post.html sets it for a page under /hunting-detections/). The page stays flat; the picker, the ATT&CK strip, the
    copy buttons and the contents list are the ones their scripts build, restyled here. No tabs.
    ============================================================ */
-.hl-idx--det { padding-top: 14px; --hl-d-line: var(--hl-border-card); --line: var(--hl-border-card); --line-soft: #222222; --muted: var(--hl-muted-d); --f-mono: var(--hl-font-mono); }
+.hl-idx--det { padding-top: 14px; --line-soft: #222222; }
 .hl-idx--det .hl-d-ico { width: 1em; height: 1em; flex: none; }
 /* plate */
 .hl-idx--det .hl-post-header.hl-d-plate {
@@ -8610,7 +8250,6 @@ a.hl-kc:hover { border-color: var(--kc); color: #ffffff; }
 .hl-idx--list .hl-grid[data-filter-grid]:not(.hl-grid--actors) a.hl-catalog-card:hover .hl-card__title { color: var(--hl-accent-blue) !important; }
 .hl-idx--list .hl-grid[data-filter-grid]:not(.hl-grid--actors) .hl-card__title { margin: 3px 0 0; font-size: 21px; line-height: 1.3; }
 .hl-idx--list .hl-grid[data-filter-grid]:not(.hl-grid--actors) .hl-card__tags { margin: 0; padding: 3px 0 0; gap: 0 0; align-content: flex-start; }
-.hl-idx--list .hl-card.is-hidden { display: none !important; }
 /* tags in a row read as grey text: Cobalt strike · Loader · Brazil */
 .hl-idx--list .hl-grid[data-filter-grid]:not(.hl-grid--actors) .hl-tag { padding: 0; border: 0; border-radius: 0; background: none; font: 400 var(--hl-fs-small)/1.5 var(--hl-font-sans); letter-spacing: 0; color: var(--hl-muted-d); }
 .hl-idx--list .hl-grid[data-filter-grid]:not(.hl-grid--actors) .hl-tag { white-space: nowrap; }
@@ -8782,7 +8421,6 @@ a.hl-kc:hover { border-color: var(--kc); color: #ffffff; }
 
 /* ---------- The Wire: the note under the tabs, the freshness line ---------- */
 .hl-idx--wire .hl-wire__callout,
-.hl-idx--wire .hl-wire__callout--v,
 .hl-idx--wire .hl-wire__callout--c {
   margin: 16px 0 0;
   padding: 0 0 0 14px;
@@ -9402,9 +9040,9 @@ a.hl-kc:hover { border-color: var(--kc); color: #ffffff; }
 
 /* 2. Readable notes. The two grey tokens are now #a8a8a8 (7.9:1 on #111111), and these sentence-length notes, captions, standfirsts and card descriptions take the main ink; short labels, dates, counts and kicker words keep the grey. (.hl-idx x3 so one rule beats the page-type rules above it.) */
 .c3-sec__sub, .c3-note, .c3-row__g, .c3-li__d, .c3-about__lede, .c3-lead__stand, .hl-mast__tag { color: var(--hl-text-primary); }
-.hl-idx.hl-idx.hl-idx .hl-creds-note, .hl-idx.hl-idx.hl-idx .hl-mission__note, .hl-idx.hl-idx.hl-idx .hl-contribute, .hl-idx.hl-idx.hl-idx .hl-d-kpi__note, .hl-idx.hl-idx.hl-idx .hl-d-eb__sub, .hl-idx.hl-idx.hl-idx .hl-nav-tile__desc,
+.hl-idx.hl-idx.hl-idx .hl-creds-note, .hl-idx.hl-idx.hl-idx .hl-mission__note, .hl-idx.hl-idx.hl-idx .hl-contribute, .hl-idx.hl-idx.hl-idx .hl-d-kpi__note, .hl-idx.hl-idx.hl-idx .hl-nav-tile__desc,
 .hl-idx.hl-idx.hl-idx .hl-actor-card__type, .hl-idx.hl-idx.hl-idx .hl-family-card__summary, .hl-idx.hl-idx.hl-idx .hl-impact-card__desc, .hl-idx.hl-idx.hl-idx .hl-feed__note, .hl-idx.hl-idx.hl-idx .hl-iocsearch__hint,
-.hl-idx.hl-idx.hl-idx .hl-xref__muted, .hl-idx.hl-idx.hl-idx .hl-actor__muted, .hl-idx.hl-idx.hl-idx .hl-xref__licence, .hl-idx.hl-idx.hl-idx .hl-d-fine, .hl-idx.hl-idx.hl-idx .hl-wire__freshness,
+.hl-idx.hl-idx.hl-idx .hl-xref__muted, .hl-idx.hl-idx.hl-idx .hl-actor__muted, .hl-idx.hl-idx.hl-idx .hl-xref__licence, .hl-idx.hl-idx.hl-idx .hl-wire__freshness,
 .hl-idx.hl-idx.hl-idx .hl-dash__muted, .hl-idx.hl-idx.hl-idx .hl-dash__empty, .hl-idx.hl-idx.hl-idx .hl-dash__lic, .hl-idx.hl-idx.hl-idx .hl-d-bh__s, .hl-idx.hl-idx.hl-idx .hl-dash-card__d,
 .hl-idx.hl-idx.hl-idx .hl-picker__note, .hl-idx.hl-idx.hl-idx .hl-ioctable__untyped, .hl-idx.hl-idx.hl-idx .hl-ioctable__licence, .hl-idx.hl-idx.hl-idx .hl-filter__empty, .hl-idx.hl-idx.hl-idx .hl-cta-note,
 .hl-idx.hl-idx.hl-idx .hl-page-header__desc, .hl-idx.hl-idx.hl-idx .hl-panel__body, .hl-idx.hl-idx.hl-idx .hl-panel__desc, .hl-idx.hl-idx.hl-idx .hl-legend-mobile summary::before, .hl-idx.hl-idx.hl-idx p > em,
@@ -9489,7 +9127,6 @@ a.hl-kc:hover { border-color: var(--kc); color: #ffffff; }
 .hl-vuln-batch { border: 1px solid var(--border-color, #30363d); border-radius: 6px; margin: .5rem 0; }
 .hl-vuln-batch > summary { cursor: pointer; padding: .75rem; color: #bc8cff; font-size: .85rem; }
 .hl-vuln-batch[open] > summary { border-bottom: 1px solid #30363d; }
-.hl-vuln-day-anchor { display: block; scroll-margin-top: 90px; }
 .hl-vuln__w--nuclei { --w: #7ee787; }
 .hl-vuln__w--et { --w: #58a6ff; }
 
