@@ -265,7 +265,7 @@
   }
 
   /* A rule's name is read from the manifest and can name a host ("Trycloudflare.com Quick-Tunnel DNS Query"). The page prints it defanged; the text this script writes
-     (a checkbox's label, the warning line) goes through here so it does too (T-0500.1.7.4 fix-r1, sweep): every dot between two name characters becomes [.]. The rule
+     (a checkbox's label, the warning line, the download note that names the file) goes through here so it does too (T-0500.1.7.4 fix-r1, sweep): every dot between two name characters becomes [.]. The rule
      BODIES this picker downloads stay exact (decision 5), and are not passed through. */
   function shownName(s) {
     return String(s == null ? '' : s).replace(/([A-Za-z0-9_-])\.(?=[A-Za-z0-9_-])/g, '$1[.]');
@@ -378,7 +378,7 @@
       });
       panel.querySelector('.hl-picker__note').textContent =
         'Downloaded ' + names.length + ' file(s): ' +
-        names.map(function (e) { return filenameFor(slug, e); }).join(', ');
+        names.map(function (e) { return shownName(filenameFor(slug, e)); }).join(', ');
     }
 
     panel.addEventListener('click', function (ev) {
