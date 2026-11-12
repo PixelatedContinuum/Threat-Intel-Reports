@@ -29,7 +29,6 @@ color_theme: dark
 # to `true` (katex) or `default` (mermaid) only when a page actually uses it.
 katex: false
 mermaid: false
-google_analytics:
 
 # Cloudflare Web Analytics. Snippet install, not "Automatic setup": the apex is grey-clouded
 # so Cloudflare never sees a request to inject into. Token is public by design (it ships in

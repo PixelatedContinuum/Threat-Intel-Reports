@@ -235,13 +235,12 @@ jobs:
 
       # Every internal link on the built pages resolves to a built file (T-0603 M1, A1). Exit 1: a dead link or a
       # trailing slash on a file URL, fail the job. Exit 2: the gate could not read the build, fail the job too (a
-      # link gate that measured nothing is not a pass). Dead #anchors are printed as warnings until the remaining
-      # ones are triaged; drop "--anchors warn" then.
+      # link gate that measured nothing is not a pass). Dead #anchors fail the job too (T-0605: the last one fixed).
       - name: Gate the built pages for dead internal links
         working-directory: tools/report-tooling
         run: |
           set +e
-          node check-links.js --site ../../_site --anchors warn
+          node check-links.js --site ../../_site
           rc=$?
           set -e
           case $rc in

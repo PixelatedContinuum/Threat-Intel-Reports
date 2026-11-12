@@ -1,6 +1,6 @@
 # Single source of truth for /reports/, /hunting-detections/, /ioc-feeds/ and the home "Latest".
 # One entry per item. An entry appears in a listing iff it has that listing's *_url.
-# Titles are normalized per listing: detections render "Detection Rules — {title}",
+# Titles are normalized per listing: detections render "{title}",
 # IOC feeds render "{title} — IOC Feed" (use detection_title / ioc_title to override).
 # Publishing a campaign = add one entry here (no more editing four files).
 # Optional fields: everything but title, date, severity and tags. An entry appears in a listing
@@ -10,7 +10,7 @@
 #     then (_layouts/post.html:66), and /reports/ and the home Latest grid list report_url entries
 #     (reports/index.md:14). A cover_label without report_url renders nowhere.
 #   detection_url, detection_title - the /hunting-detections/ card and the report's Detections button;
-#     detection_title replaces "Detection Rules - {title}" (hunting-detections/index.md:49), and the
+#     detection_title replaces "{title}" (hunting-detections/index.md:49), and the
 #     detection page finds its report entry by detection_url written WITHOUT a trailing slash (_layouts/post.html:45 appends one).
 #     detection_title without detection_url has no reader.
 #   ioc_url, ioc_title - the /ioc-feeds/ card and the report's IOC button; the value is the raw feed
@@ -271,7 +271,7 @@ entries:
     stix_url: /stix/opendirectory-79-137-192-3-20260515.json
     detection_url: /hunting-detections/opendirectory-79-137-192-3-20260515-detections
     detection_tiers: [detection, hunting]
-    detection_title: "Detection Rules — Multi-Cluster Open Directory 79.137.192.3 (Rhadamanthys MaaS / BellaMain / Inkognito)"
+    detection_title: "Detection Rules: Multi-Cluster Open Directory 79.137.192.3 (Rhadamanthys MaaS / BellaMain / Inkognito)"
     ioc_url: /ioc-feeds/opendirectory-79-137-192-3-20260515-iocs.json
     ioc_title: "Multi-Cluster Open Directory 79.137.192.3 (Rhadamanthys MaaS / BellaMain / Inkognito) — IOC Feed"
 
