@@ -24,7 +24,7 @@ function scan(mainHtml) {
   try {
     fs.writeFileSync(path.join(d, 'index.html'),
       '<!DOCTYPE html><html><body><main>' + mainHtml + '</main></body></html>');
-    return spawnSync(process.execPath, [GATE, '--site', d, '--all'], { encoding: 'utf8' });
+    return spawnSync(process.execPath, [GATE, '--site', d, '--all', '--pages-only'], { encoding: 'utf8' });
   } finally { fs.rmSync(d, { recursive: true, force: true }); }
 }
 

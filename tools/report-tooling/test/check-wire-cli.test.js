@@ -177,12 +177,10 @@ test('a crash inside a check still ends with the verdict line, NOT CHECKED on ev
   assert.equal(r.last, 'WIRE-VERDICT page=NOT_CHECKED data=NOT_CHECKED stale=NOT_CHECKED');
 });
 
-/* M37, third half. `check-defang.js --site` without `--records` prints "records NOT GATED" and exits 0,
-   so a local run reads PASS having skipped the search-record text. pages.yml passes --records, so CI is
-   covered; a local run is not. The gate file belongs to another lane, so this expectation is recorded
-   as a todo (it runs, and its failure is reported but does not fail the suite) until check-defang.js
-   exits 2 in that case; remove `todo` when it does. */
-test('check-defang --site without --records is NOT CHECKED (exit 2), not a pass', { todo: 'check-defang.js exits 0 with "records NOT GATED" (T-0603 M37, proposal)' }, function () {
+/* M37, third half. `check-defang.js --site` without `--records` skips the search-record text, so it
+   must read NOT CHECKED (exit 2), never PASS. pages.yml passes --records; a local run that wants the
+   pages alone says --pages-only. */
+test('check-defang --site without --records is NOT CHECKED (exit 2), not a pass', function () {
   var dir = fs.mkdtempSync(path.join(os.tmpdir(), 'hl-wirecli-site-'));
   try {
     fs.writeFileSync(path.join(dir, 'index.html'), '<!doctype html><html><head><title>Test page</title></head><body><main><p>Hello reader, nothing to flag here.</p></main></body></html>');

@@ -44,7 +44,7 @@ test('the layouts call the shared include: page.html for every non-report page (
   assert.match(page, /if page\.url == '\/wire\/'/);
   assert.match(page, /\{% elsif page\.url contains '\/report-templates\/' or page\.url contains '\/changelog\/' %\}\{\{ content \}\}\{% else %\}\{% include defang-html\.html html=content %\}\{% endif %\}/, 'the working docs keep their text (decision 7)');
   const post = read('_layouts/post.html');
-  assert.match(post, /\{% if page\.path contains 'hunting-detections' %\}\{% include defang-html\.html html=content %\}\{% else %\}\{\{ content \}\}\{% endif %\}/, 'a report keeps {{ content }} untouched');
+  assert.match(post, /\{% if page\.path contains 'hunting-detections' %\}\{% include defang-html\.html html=content %\}\{% else %\}\{\{ _body \}\}\{% endif %\}/, 'a report body is never run through the defang include; _body is content with an anchor id added to its ATT&CK heading (T-0603 A2)');
 });
 
 test('post.html defangs a report title wherever the layout prints it (header, citation, BibTeX, Continue Reading cards) and the share sheet takes the visible title', () => {
@@ -215,7 +215,7 @@ test('the rendered-page gate agrees with the includes: what they print is clean,
   const html = '<p>' + raw.replace(/&amp;/g, '&').replace(/&/g, '&amp;') + '</p><a href="http://198.51.100.17/x">go</a>';
   const defd = '{% capture h %}{% raw %}' + html + '{% endraw %}{% endcapture %}{% include defang-html.html html=h %}';
   const bare = '{% raw %}' + html + '{% endraw %}';
-  const run = (out) => cp.spawnSync(process.execPath, [path.join(__dirname, '..', 'check-defang.js'), '--site', out, '--allow-data', path.join(root, '_data', 'defang_allow.yml'), '--all'], { encoding: 'utf8' });
+  const run = (out) => cp.spawnSync(process.execPath, [path.join(__dirname, '..', 'check-defang.js'), '--site', out, '--allow-data', path.join(root, '_data', 'defang_allow.yml'), '--all', '--pages-only'], { encoding: 'utf8' });
   const good = buildSite(defd), ctl = buildSite(bare);
   const g = run(good.out), c = run(ctl.out);
   assert.equal(g.status, 0, g.stdout);
@@ -297,7 +297,7 @@ function fixtureSite(files) {
   Object.keys(files).forEach((rel) => { fs.mkdirSync(path.dirname(path.join(dir, rel)), { recursive: true }); fs.writeFileSync(path.join(dir, rel), '<html><head><title>1[.]2[.]3[.]4 head metadata is scanned</title></head><body><main>' + files[rel] + '<p>fixture text</p></main></body></html>'); });
   return dir;
 }
-const gate = (dir, extra) => cp.spawnSync(process.execPath, [path.join(__dirname, '..', 'check-defang.js'), '--site', dir, '--allow-data', path.join(root, '_data', 'defang_allow.yml'), '--all'].concat(extra || []), { encoding: 'utf8' });
+const gate = (dir, extra) => cp.spawnSync(process.execPath, [path.join(__dirname, '..', 'check-defang.js'), '--site', dir, '--allow-data', path.join(root, '_data', 'defang_allow.yml'), '--all', '--pages-only'].concat(extra || []), { encoding: 'utf8' });
 
 test('check-defang --site: a clean fixture PASSes with its denominators, each injected raw indicator FAILs with its kind (the control that fires), exit codes 0 / 1 / 2', () => {
   const clean = fixtureSite({ 'index.html': '<p>Host 198[.]51[.]100[.]17 and <a href="/actors/UTA-2026-001/">198[.]51[.]100[.]17</a> and <a href="https://attack.mitre.org/techniques/T1001/">attack.mitre.org</a></p>',

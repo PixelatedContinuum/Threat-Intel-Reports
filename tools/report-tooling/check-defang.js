@@ -772,7 +772,7 @@ function run(target, allowFiles, opts) {
 }
 
 function main() {
-  var argv = process.argv.slice(2), target = null, allowFiles = [], all = false, site = null, allowData = null, only = null, records = null;
+  var argv = process.argv.slice(2), target = null, allowFiles = [], all = false, site = null, allowData = null, only = null, records = null, pagesOnly = false;
   var allowDir = path.join(__dirname, 'defang-allow'), autoOn = true;
   for (var a = 0; a < argv.length; a++) {
     if (argv[a] === '--allow') allowFiles.push(argv[++a]);
@@ -783,10 +783,11 @@ function main() {
     else if (argv[a] === '--allow-data') allowData = argv[++a];
     else if (argv[a] === '--only') only = argv[++a];
     else if (argv[a] === '--records') records = argv[++a];
+    else if (argv[a] === '--pages-only') pagesOnly = true;
     else if (argv[a] === '-h' || argv[a] === '--help') { console.log('usage: node check-defang.js <report folder | index.md> [--allow FILE]... [--allow-dir DIR] [--no-auto-allow] [--all]\n       node check-defang.js --site <_site dir> [--allow-data _data/defang_allow.yml] [--only REGEX] [--all]   (the rendered pages: every page type, report pages included)'); process.exit(0); }
     else target = argv[a];
   }
-  if (site) return mainSite(site, allowData, only, all, records);
+  if (site) return mainSite(site, allowData, only, all, records, pagesOnly);
   if (!target) { console.log('NOT CHECKED  usage: node check-defang.js <report folder | index.md> [--allow FILE]... [--all]'); process.exit(2); }
   if (!fs.existsSync(target)) { console.log('NOT CHECKED  not found: ' + target); process.exit(2); }
   for (var af = 0; af < allowFiles.length; af++) if (!allowFiles[af] || !fs.existsSync(allowFiles[af])) { console.log('NOT CHECKED  allow file not found: ' + allowFiles[af]); process.exit(2); }
@@ -844,7 +845,7 @@ function main() {
 
 /* ---------- the rendered non-report pages (lib/defang-site.js) ---------- */
 
-function mainSite(site, allowData, only, all, records) {
+function mainSite(site, allowData, only, all, records, pagesOnly) {
   var S = require('./lib/defang-site.js');
   if (!allowData) allowData = path.join(__dirname, '..', '..', '_data', 'defang_allow.yml');
   if (!fs.existsSync(site) || !fs.statSync(site).isDirectory()) { console.log('NOT CHECKED  not a directory: ' + site); process.exit(2); }
@@ -897,6 +898,12 @@ function mainSite(site, allowData, only, all, records) {
     console.log('  by type     ' + Object.keys(byType).sort().map(function (t) { return t + ' ' + byType[t]; }).join(', '));
     console.log('FAIL  ' + F.length + ' finding(s) (' + Object.keys(kinds).sort().map(function (k) { return k + ' ' + kinds[k]; }).join(', ') + ') on the rendered pages');
     process.exit(1);
+  }
+  /* T-0603 M37: without --records the search-index text was not scanned, so a clean page scan is not a
+     PASS for the site. Exit 2 (NOT CHECKED) unless the caller says --pages-only, which states the skip. */
+  if (!RS && !pagesOnly) {
+    console.log('NOT CHECKED  the ' + s.pages + ' rendered pages carry no finding, but the search records were NOT GATED (no --records file). Pass --records <file> from build-search-index.js --records-out, or --pages-only to gate the pages alone.');
+    process.exit(2);
   }
   console.log('PASS  no un-defanged indicator in the visible text of ' + s.pages + ' rendered pages (' + (s.byType.report || 0) + ' of them report pages), no link to an IP or to an unlisted host (a report page: no link to a host it names defanged), no foreign mailto; ' + matched + ' indicator tokens scanned. CANNOT SEE: text a script writes after load (check-browser-defang.js reads that in a real browser); the data-title search keys (raw on purpose); head URLs (canonical, og:url, og:image, JSON-LD url and @id: own page addresses); downloadable feed files; hrefs to this site\'s own pages; rule bodies on detection pages (' + s.pre.onDetection + ' <pre> blocks, exact by decision 5) and the .hl-copy blocks on report pages (' + s.pre.copyKept + ', exact like the source lint reads them); whether an off-site link on a report page is a reference or actor infrastructure beyond the host test (a link to a host the page names defanged, or to an IP); own-page hrefs and image paths (the slug carries the address); whether a name on the raw or links list is really benign (the list is a reviewer\'s claim)');
   process.exit(0);

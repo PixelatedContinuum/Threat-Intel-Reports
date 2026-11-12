@@ -212,6 +212,23 @@ jobs:
             *) echo "::error::check-defang.js --site FAILED (exit $rc): a rendered page carries a raw or clickable indicator"; exit 1 ;;
           esac
 
+      # Every internal link on the built pages resolves to a built file (T-0603 M1, A1). Exit 1: a dead link or a
+      # trailing slash on a file URL, fail the job. Exit 2: the gate could not read the build, fail the job too (a
+      # link gate that measured nothing is not a pass). Dead #anchors are printed as warnings until the remaining
+      # ones are triaged; drop "--anchors warn" then.
+      - name: Gate the built pages for dead internal links
+        working-directory: tools/report-tooling
+        run: |
+          set +e
+          node check-links.js --site ../../_site --anchors warn
+          rc=$?
+          set -e
+          case $rc in
+            0) echo "PASS         check-links.js --site" ;;
+            2) echo "::error::check-links.js --site NOT CHECKED (exit 2): the gate could not read the build"; exit 1 ;;
+            *) echo "::error::check-links.js --site FAILED (exit $rc): a built page links to a page or file that is not in the build"; exit 1 ;;
+          esac
+
       - name: Sanity-check the build
         run: |
           set -eu
