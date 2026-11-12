@@ -218,6 +218,43 @@
     }
   }
 
+  /* Where a tooltip's left edge goes so it stays on screen: the mark's own left edge, moved left
+     only as far as it must be, and never past the margin. Pure arithmetic, so it is testable
+     without a layout engine. The two flip classes above place the tooltip against the column,
+     not the screen: on a phone the column is the screen less its padding, so a flip to the right
+     edge put the tooltip off the left edge of the screen (T-0605 L08). Returns the offset to add
+     to the mark's left edge, in px (0 or negative); a viewport narrower than the tooltip and its
+     margins pins it to the margin. */
+  function tipOffset(markLeft, tipWidth, viewportWidth, margin) {
+    if (!viewportWidth || !tipWidth) return 0;
+    var left = Math.max(margin, Math.min(markLeft, viewportWidth - tipWidth - margin));
+    return left - markLeft;
+  }
+
+  /* Sets --hl-gloss-left (and --hl-gloss-top when it must open above) on a mark just before its
+     tooltip shows, from the real viewport. It does nothing for a tooltip the page positions
+     itself (position: fixed, the report pages, which hl-report-tabs.js places). The tooltip's
+     own width is read when it can be, else its largest width. Returns true when it set a value. */
+  var TIP_MARGIN = 8, TIP_GAP = 6;
+  function placeTooltip(mark) {
+    var doc = mark && mark.ownerDocument, view = doc && doc.defaultView;
+    if (!view || !mark.getClientRects || !view.getComputedStyle) return false;
+    var cs = view.getComputedStyle(mark, '::after');
+    if (cs.position === 'fixed') return false;
+    var vw = doc.documentElement.clientWidth, vh = doc.documentElement.clientHeight;
+    var first = mark.getClientRects()[0];
+    if (!first || !vw) return false;
+    var cap = Math.min(TOOLTIP_MAX_PX, 0.78 * vw), measured = parseFloat(cs.width), h = parseFloat(cs.height);
+    var w = measured > 0 ? Math.min(measured, cap) : cap;
+    mark.classList.remove('hl-gloss--right');
+    mark.style.setProperty('--hl-gloss-left', tipOffset(first.left, w, vw, TIP_MARGIN) + 'px');
+    // Below the term when it fits, else above it when that fits, else below (the page scrolls).
+    var below = first.bottom + TIP_GAP + h <= vh - TIP_MARGIN, above = first.top - TIP_GAP - h >= TIP_MARGIN;
+    if (h > 0 && !below && above) mark.style.setProperty('--hl-gloss-top', -(h + TIP_GAP) + 'px');
+    else mark.style.removeProperty('--hl-gloss-top');
+    return true;
+  }
+
   function init() {
     var doc = document;
     var body = doc.querySelector('.hl-post-content') || doc.querySelector('.hl-post-body');
@@ -229,6 +266,9 @@
     if (!terms || !terms.length) return;
     markTerms(body, terms, doc);
     scheduleEdgeClasses(body);
+    var onTip = function (e) { var m = e.target && e.target.closest && e.target.closest('.hl-gloss'); if (m) placeTooltip(m); };
+    body.addEventListener('pointerover', onTip);
+    body.addEventListener('focusin', onTip);
   }
 
   return {
@@ -237,6 +277,8 @@
     markTerms: markTerms,
     prefersRightAnchor: prefersRightAnchor,
     applyEdgeClasses: applyEdgeClasses,
+    tipOffset: tipOffset,
+    placeTooltip: placeTooltip,
     scheduleEdgeClasses: scheduleEdgeClasses,
     init: init
   };

@@ -3555,7 +3555,7 @@ a.hl-sponsor-rail__item:focus-visible { outline: 2px solid #ffffff; outline-offs
 .hl-gloss { border-bottom: 1px dotted var(--hl-text-muted, #888888); cursor: help;
   position: relative; }
 .hl-gloss:hover, .hl-gloss:focus { border-bottom-color: currentColor; outline: none; }
-.hl-gloss::after { content: attr(data-gloss); position: absolute; left: 0; top: 1.5em;
+.hl-gloss::after { content: attr(data-gloss); position: absolute; left: var(--hl-gloss-left, 0px); top: var(--hl-gloss-top, 1.5em);
   z-index: 40; width: max-content; max-width: min(320px, 78vw);
   padding: 0.5em 0.7em; border-radius: 3px; font-size: var(--hl-fs-meta);
   line-height: 1.45; font-weight: 400; text-align: left; white-space: normal;

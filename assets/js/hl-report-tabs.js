@@ -25,6 +25,12 @@
   if (!headings.length || headings.some(function (h) { return !token(h); })) return;
   if (ALL_TOKENS.some(function (t) { return document.getElementById('tab-' + t) || document.getElementById('tabbtn-' + t); }) || document.getElementById('one-page')) return;
   function text(n) { return (n ? n.textContent : '').replace(/\s+/g, ' ').trim(); }
+  function firstSentence(q) { return (text(q).match(/^.*?[.!?](?:\s|$)/) || [text(q)])[0].trim(); }
+  // T-0605 L18: a paragraph that is only a label, not a statement: all of it bold ("**C2 Infrastructure:**"), or one whose first sentence is a lead-in that ends in a colon.
+  function labelOnly(q) {
+    var t = text(q), b = q.children.length === 1 && /^(STRONG|B)$/.test(q.firstElementChild.tagName) ? q.firstElementChild : null;
+    return !t || /:$/.test(firstSentence(q)) || !!(b && text(b) === t);
+  }
   function make(tag, cls, value, parent) {
     var n = document.createElement(tag);
     if (cls) n.className = cls;
@@ -175,7 +181,10 @@
   // T-0603: an h2 with no number is an appendix only on a report that numbers its sections. A report with no numbered h2 at all (the 18 moved to this layout) had every section, the summary included, labelled APPENDIX.
   var numbered = sourceNodes.some(function (n) { return n.nodeType === 1 && n.tagName === 'H2' && n.firstChild && /^\s*\d+\./.test(n.firstChild.textContent); });
   try {
+  // T-0605 L16: whitespace before the first h2 is not a campaign record. It used to open an empty block, labelled CAMPAIGN RECORD, above the report's own title; it now travels with the first section.
+  var leading = [];
   sourceNodes.forEach(function (n) {
+    if (!currentBlock && n.nodeType === 3 && !/\S/.test(n.textContent)) { leading.push(n); return; }
     if (!currentBlock || n.nodeType === 1 && n.tagName === 'H2') {
       // These two structural wrappers deliberately are not chrome: excluding a
       // panel/block would also exclude the unchanged report it contains.
@@ -189,6 +198,7 @@
         var num = h.firstChild && h.firstChild.textContent.match(/^\s*(\d+)\./);
         h.setAttribute('data-rv-sec', num ? 'SECTION ' + (num[1].length < 2 ? '0' + num[1] : num[1]) : numbered ? 'APPENDIX' : 'SECTION');
       } else { currentBlock.classList.add('hl-rv-nohead'); currentBlock.setAttribute('data-rv-sec', 'CAMPAIGN RECORD'); }
+      leading.forEach(function (w) { currentBlock.appendChild(w); }); leading = [];
     }
     currentBlock.appendChild(n);
   });
@@ -420,9 +430,12 @@
     if (heads.length) {
       var side = make('nav', 'hl-rv-side', null); side.setAttribute('aria-label', NAMES[i] + ': sections in this tab'); side.setAttribute('data-pagefind-ignore', '');
       make('p', 'hl-rv-side-h', 'In this tab', side);
-      heads.forEach(function (s) {
-        var num = (s.heading.getAttribute('data-rv-sec') || '').match(/(\d+)/), a = link('', '#' + s.heading.id, side);
-        make('b', '', num ? num[1] : '·', a).setAttribute('aria-hidden', 'true'); a.appendChild(document.createTextNode(text(s.heading).replace(/§$/, '').replace(/^\s*\d+[.)]\s+/, '').trim()));
+      // T-0605 L17: the source's own number ("7." or "Section 7:") is printed only when every entry in this rail has one, and is never left in the text; a rail that mixed numbered and plain entries read as two styles.
+      var railRows = heads.map(function (s) { var t = text(s.heading).replace(/§$/, '').trim(), m = t.match(/^(?:Section\s+)?(\d+)\s*[.):]\s+/i); return { s: s, n: m && m[1], label: m ? t.slice(m[0].length).trim() : t }; });
+      var railNumbered = railRows.every(function (r) { return r.n; });
+      railRows.forEach(function (r) {
+        var a = link('', '#' + r.s.heading.id, side);
+        make('b', '', railNumbered ? (r.n.length < 2 ? '0' + r.n : r.n) : '·', a).setAttribute('aria-hidden', 'true'); a.appendChild(document.createTextNode(r.label));
       });
       panel.insertBefore(side, title.nextSibling);
     }
@@ -915,7 +928,7 @@
     opt = opt || {};
     var cellBox = make('div', 'hl-rv-tilecell', null, parent);
     var a = opt.noLink ? make('div', 'hl-rv-tile', null, cellBox) : link('', opt.href || '#tab-' + tok, cellBox); a.className = 'hl-rv-tile'; a.dataset.rvShort = short; if (opt.kind) a.dataset.rvTile = opt.kind;
-    var big = make('strong', 'hl-rv-value', opt.kind === 'threat' && /^critical$/i.test(value) ? 'CRIT.' : value, a); make('span', '', label, a); if (big.textContent !== String(value)) a.dataset.rvFull = value;
+    var big = make('strong', 'hl-rv-value', value, a); make('span', '', label, a); if (big.textContent !== String(value)) a.dataset.rvFull = value;
     if (String(value).length > 8) big.classList.add('hl-rv-value--long');
     else if (/^[A-Za-z]{5,}$/.test(String(value))) { big.classList.add('hl-rv-value--word'); big.style.setProperty('--hl-rv-chars', String(value).length); }   // a severity word (MEDIUM): set to fit its tile, never wrapped
     if (opt.viz) {
@@ -1217,9 +1230,9 @@
       var diamond = make('div', 'hl-rv-diamond', null, body); make('span', 'hl-rv-diamond-label', 'Diamond Model', diamond);
       [['Adversary', 'attribution', /Threat Actor|Actor Assessment|Attribution/i], ['Capability', 'chain', /classification/i], ['Infrastructure', 'timeline', /infrastructure/i], ['Victim', 'victims', /Who.*Hit|victim|access|impact/i]].forEach(function (v) {
         var block = sections.find(function (s) { return s.token === v[1] && s.heading && v[2].test(text(s.heading)); });
-        var p = block && block.node.querySelector('p');
+        var p = block && Array.prototype.find.call(block.node.querySelectorAll('p'), function (q) { return !labelOnly(q); });
         var card = make('article', 'hl-rv-diamond-card', null, diamond); make('h3', '', v[0], card);
-        if (p) { make('blockquote', '', (text(p).match(/^.*?[.!?](?:\s|$)/) || [text(p)])[0].trim(), card); link('Read in the report', '#' + block.heading.id, card).setAttribute('aria-label', 'Read in the report: ' + v[0] + ': ' + text(block.heading)); }
+        if (p) { make('blockquote', '', firstSentence(p), card); link('Read in the report', '#' + block.heading.id, card).setAttribute('aria-label', 'Read in the report: ' + v[0] + ': ' + text(block.heading)); }
         else make('p', '', 'No structured ' + v[0].toLowerCase() + ' statement found. Read the full sections below.', card);
       });
       if (hypotheses) dashTable(tableFold(body, 'Read all ' + hypotheses.rows.length + ' competing hypotheses'), hypotheses, 'Competing hypotheses', 'hypotheses'); else missing(body, 'a Hypothesis / Where it stands table');
