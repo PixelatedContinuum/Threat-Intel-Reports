@@ -3,6 +3,25 @@
 # Titles are normalized per listing: detections render "Detection Rules — {title}",
 # IOC feeds render "{title} — IOC Feed" (use detection_title / ioc_title to override).
 # Publishing a campaign = add one entry here (no more editing four files).
+# Optional fields: everything but title, date, severity and tags. An entry appears in a listing
+# iff that listing's *_url is set. What each one means, what reads it, and what it needs beside it:
+#   report_url, cover_label - the report page a card links to, and its cover-header label; the entry
+#     is found by report_url (_layouts/post.html:122), the cover is drawn from cover_label and only
+#     then (_layouts/post.html:66), and /reports/ and the home Latest grid list report_url entries
+#     (reports/index.md:14). A cover_label without report_url renders nowhere.
+#   detection_url, detection_title - the /hunting-detections/ card and the report's Detections button;
+#     detection_title replaces "Detection Rules - {title}" (hunting-detections/index.md:49), and the
+#     detection page finds its report entry by detection_url, slash or no slash (_layouts/post.html:45).
+#     detection_title without detection_url has no reader.
+#   ioc_url, ioc_title - the /ioc-feeds/ card and the report's IOC button; the value is the raw feed
+#     filename, because the button strips .json or -iocs.json to reach /ioc-feeds/<slug>/
+#     (_layouts/post.html:60), and ioc_title replaces "{title} - IOC Feed" (ioc-feeds/index.md:57).
+#     ioc_title without ioc_url has no reader.
+#   stix_url - the /stix/ card and the report's STIX button (stix/index.md:14, _layouts/post.html:61);
+#     independent of the others. series, series_order, series_title - one series per slug: every
+#     member carries series and series_order with exactly one order-0 parent (index.md:120, sorted at
+#     _includes/series-cluster.html:7), and series_title sits on any one member (series-cluster.html:9).
+#     detection_tiers is set on 51 entries and read by nothing; do not add it.
 
 entries:
   - title: "Help Desks to Host Shells Across Brazil's Public Sector"

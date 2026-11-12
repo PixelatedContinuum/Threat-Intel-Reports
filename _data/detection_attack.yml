@@ -3116,7 +3116,7 @@
     - tactic: "Execution"
       id: "T1569.002"
       name: "Service Execution"
-      rules: "Rule 8: ARPA Platform Systemd Service Units (YARA, Detection); Sigma Rule 3: Systemd Unit Creation Matching `arpa-*` Naming Pattern (SIGMA, Hunting)"
+      rules: "Rule 8: ARPA Platform Systemd Service Units (YARA, Detection); Sigma Rule 3: Systemd Unit Creation Matching arpa-* Naming Pattern (SIGMA, Hunting)"
       count: 2
     - tactic: "Persistence"
       id: "T1098.004"
@@ -3126,7 +3126,7 @@
     - tactic: "Persistence"
       id: "T1543.002"
       name: "Systemd Service"
-      rules: "Rule 2: ARPA Observability Harvester Platform (YARA, Detection); Rule 8: ARPA Platform Systemd Service Units (YARA, Detection); Sigma Rule 3: Systemd Unit Creation Matching `arpa-*` Naming Pattern (SIGMA, Hunting)"
+      rules: "Rule 2: ARPA Observability Harvester Platform (YARA, Detection); Rule 8: ARPA Platform Systemd Service Units (YARA, Detection); Sigma Rule 3: Systemd Unit Creation Matching arpa-* Naming Pattern (SIGMA, Hunting)"
       count: 3
     - tactic: "Stealth"
       id: "T1078"

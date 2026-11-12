@@ -1056,12 +1056,12 @@ The complete machine-readable IOC feed is available in the structured JSON forma
 
 **High-Reliability Detection Anchors:**
 
-- `**Plugins Removed!`**, `**Modified successfully!`**, `**Plugin Error! `** and `**Content-length: 5235`**: four status messages in the XWorm client stub's own code, stored as plaintext UTF-16 and present in the triage strings of all seven stubs from this directory; they are not part of the encrypted settings, so a change of C2, key or mutex does not remove them
-- `**5tK099W0Z6AMZVxQ`**: the mutex of `XClient.exe`, plaintext in that stub; also its AES key derivation seed; it is set per build, and I found it in the triage strings of only that one of the seven stubs, so it identifies that build and is not a family anchor
-- `**\x04\x00\x00\x00`**: PureRAT TCP preamble; appears before TLS handshake on ports 56001-56003; network-detectable before encryption
-- `**Faidowra.IO.ModelConfiguration`**: PureRAT v4.1.9 namespace; specific to this build's deobfuscation
-- `**Ayzyqztcoa`**: PureRAT TLS certificate CN; auto-generated per build; unique to this campaign instance
-- `**%TEMP%\test_debug.txt`**: ScreenConnect dropper debug artifact; contains timestamps and HTTP status codes; OPSEC failure indicator
+- `**Plugins Removed!`, `**Modified successfully!`, `**Plugin Error! ` and `**Content-length: 5235`: four status messages in the XWorm client stub's own code, stored as plaintext UTF-16 and present in the triage strings of all seven stubs from this directory; they are not part of the encrypted settings, so a change of C2, key or mutex does not remove them
+- `**5tK099W0Z6AMZVxQ`: the mutex of `XClient.exe`, plaintext in that stub; also its AES key derivation seed; it is set per build, and I found it in the triage strings of only that one of the seven stubs, so it identifies that build and is not a family anchor
+- `**\x04\x00\x00\x00`: PureRAT TCP preamble; appears before TLS handshake on ports 56001-56003; network-detectable before encryption
+- `**Faidowra.IO.ModelConfiguration`: PureRAT v4.1.9 namespace; specific to this build's deobfuscation
+- `**Ayzyqztcoa`: PureRAT TLS certificate CN; auto-generated per build; unique to this campaign instance
+- `**%TEMP%\test_debug.txt`: ScreenConnect dropper debug artifact; contains timestamps and HTTP status codes; OPSEC failure indicator
 
 ---
 

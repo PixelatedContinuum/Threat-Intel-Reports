@@ -10226,7 +10226,7 @@ techniques:
         rules: >-
           Rule 2: ARPA Observability Harvester Platform (YARA, Detection); Rule 8: ARPA Platform
           Systemd Service Units (YARA, Detection); Sigma Rule 3: Systemd Unit Creation Matching
-          `arpa-*` Naming Pattern (SIGMA, Hunting)
+          arpa-* Naming Pattern (SIGMA, Hunting)
         count: 3
     actors:
       - UTA-2026-013
@@ -11863,7 +11863,7 @@ techniques:
         report_url: /reports/turkish-arpa-openclaw-state-insurer-209.38.205.158/
         rules: >-
           Rule 8: ARPA Platform Systemd Service Units (YARA, Detection); Sigma Rule 3: Systemd Unit
-          Creation Matching `arpa-*` Naming Pattern (SIGMA, Hunting)
+          Creation Matching arpa-* Naming Pattern (SIGMA, Hunting)
         count: 2
     actors:
       - UTA-2026-004

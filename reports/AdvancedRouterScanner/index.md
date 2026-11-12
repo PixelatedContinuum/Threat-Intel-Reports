@@ -671,7 +671,7 @@ A: Network segmentation, regular firmware updates, credential management, and co
 - [AdvancedRouterScanner IOCs]({{ "/ioc-feeds/AdvancedRouterScanner.json" | relative_url }})
 
 ### Detections
-- [AdvancedRouterScanner Detections]({{ "/hunting-detections/AdvancedRouterScanner/" | relative_url }})
+- [AdvancedRouterScanner Detections]({{ "/hunting-detections/AdvancedRouterScanner-detections/" | relative_url }})
 
 ---
 

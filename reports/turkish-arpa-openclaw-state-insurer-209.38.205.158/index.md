@@ -192,8 +192,8 @@ The ARPA platform is operator-built custom tooling, not a commodity malware fami
 </thead>
 <tbody>
 <tr><td>Classification</td><td>Observability-data harvester platform + operator-recruited insider toolkit + custom analytics ETL</td><td>DEFINITE, self-branded by operator</td></tr>
-<tr><td>Family</td><td>ARPA Korelasyon Motoru (operator-built; not derivative)</td><td>DEFINITE, appears in `correlation_v3.py` docstring + dashboard footer + GitHub repository name + systemd unit naming</td></tr>
-<tr><td>Upstream substrate</td><td>OpenClaw AI agent framework</td><td>HIGH, `~/.openclaw/` and `~/.clawdbot/` directories present on operator host alongside ARPA-specific code</td></tr>
+<tr><td>Family</td><td>ARPA Korelasyon Motoru (operator-built; not derivative)</td><td>DEFINITE, appears in correlation_v3.py docstring + dashboard footer + GitHub repository name + systemd unit naming</td></tr>
+<tr><td>Upstream substrate</td><td>OpenClaw AI agent framework</td><td>HIGH, ~/.openclaw/ and ~/.clawdbot/ directories present on operator host alongside ARPA-specific code</td></tr>
 <tr><td>Sophistication</td><td>Advanced</td><td>HIGH, production-grade Python application with 5 systemd daemons, 4-backend persistence, 7,552-element unified topology graph, AI-augmented query layer, AI/ML anomaly-detection modules</td></tr>
 <tr><td>Threat actor type</td><td>Single operator (individual or small team)</td><td>MODERATE, single-VPS no-diversity architecture + late-evening working hours + residential ISP source consistent with individual operator; state-aligned-vs-political-factional sub-type INSUFFICIENT</td></tr>
 <tr><td>Primary motivation</td><td>State-aligned-or-political espionage targeting state-affiliated financial-sector intelligence</td><td>MODERATE, 780-file zero-monetization sweep formally rules out commercial sub-types; sub-types (a) state-aligned-loosely-controlled (~40%) and (c) political/factional (~35%) tied at MODERATE high-end</td></tr>

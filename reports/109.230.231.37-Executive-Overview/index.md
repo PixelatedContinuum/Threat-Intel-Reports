@@ -62,7 +62,7 @@ Successful infection enables threat actors to establish persistent remote access
 
 1. **BLOCK CRITICAL INFRASTRUCTURE:** Add **109[.]230[.]231[.]37** to firewall deny lists, web proxy blocklists, and DNS sinkhole configurations. This indicator appears across all Xworm RAT variants and represents the highest-confidence single blocking opportunity.
 
-2. **DEPLOY DETECTION SIGNATURES:** Import YARA rules to endpoint detection platforms and Sigma rules to SIEM platforms. Detection packages are organized by malware sample. **Priority: deploy enc/dec ransomware family detection rules immediately** (see [enc/dec Ransomware Detection Package]({{ "/hunting-detections/enc-dec-ransomware-family/" | relative_url }})) and the Quick Reference links below.
+2. **DEPLOY DETECTION SIGNATURES:** Import YARA rules to endpoint detection platforms and Sigma rules to SIEM platforms. Detection packages are organized by malware sample. **Priority: deploy enc/dec ransomware family detection rules immediately** (see [enc/dec Ransomware Detection Package]({{ "/hunting-detections/enc-dec-ransomware-family-detections/" | relative_url }})) and the Quick Reference links below.
 
 3. **HUNT FOR EXISTING INFECTIONS:** Hunt for persistence artifacts (Registry Run keys named "WindowsDefenderUpdate" or "Microsoft .NET Runtime Optimization"), suspicious scheduled tasks (Microsoft-themed task names executing from `%AppData%`), **ransomware executables (enc\*.exe, dec\*.exe, updated_enc.exe, test_gui_enc\*.exe patterns)**, and network connections to 109[.]230[.]231[.]37. Detailed hunting queries are in the Quick Start Detection Guide below.
 
@@ -86,13 +86,13 @@ This analysis covers seven publication-quality malware reports on 16 samples sel
 
 Each malware sample analyzed in this investigation has three companion resources: a technical report with behavioral analysis and response guidance, a detection package with YARA/Sigma rules for hunting and prevention, and a machine-readable IOC feed in JSON format for SIEM/EDR ingestion.
 
-**agent.exe (Golang RAT):** | [Technical Report]({{ "/reports/agent-exe/" | relative_url }}) | [Detection Package]({{ "/hunting-detections/agent-exe/" | relative_url }}) | [IOC Feed]({{ "/ioc-feeds/agent-exe.json" | relative_url }})
-**agent_xworm.exe (XWorm RAT v6):** | [Technical Report]({{ "/reports/agent-xworm-exe/" | relative_url }}) | [Detection Package]({{ "/hunting-detections/agent-xworm-exe/" | relative_url }}) | [IOC Feed]({{ "/ioc-feeds/agent-xworm-exe.json" | relative_url }})
-**agent_xworm_v2.exe (XWorm RAT v2.4.0):** | [Technical Report]({{ "/reports/agent-xworm-v2-exe/" | relative_url }}) | [Detection Package]({{ "/hunting-detections/agent-xworm-v2-exe/" | relative_url }}) | [IOC Feed]({{ "/ioc-feeds/agent-xworm-v2-exe.json" | relative_url }})
-**enc/dec Ransomware Family (10 variants):** | [Technical Report]({{ "/reports/enc-dec-ransomware-family/" | relative_url }}) | [Detection Package]({{ "/hunting-detections/enc-dec-ransomware-family/" | relative_url }}) | [IOC Feed]({{ "/ioc-feeds/enc-dec-ransomware-family.json" | relative_url }})
-**FleetAgentAdvanced.exe (Multi-Persistence Dropper):** | [Technical Report]({{ "/reports/fleetagentadvanced-exe/" | relative_url }}) | [Detection Package]({{ "/hunting-detections/fleetagentadvanced-exe/" | relative_url }}) | [IOC Feed]({{ "/ioc-feeds/fleetagentadvanced-exe.json" | relative_url }})
-**FleetAgentFUD.exe (WebSocket RAT):** | [Technical Report]({{ "/reports/fleetagentfud-exe/" | relative_url }}) | [Detection Package]({{ "/hunting-detections/fleetagentfud-exe/" | relative_url }}) | [IOC Feed]({{ "/ioc-feeds/fleetagentfud-exe.json" | relative_url }})
-**uac_test.exe (UAC Bypass PoC):** | [Technical Report]({{ "/reports/uac-test-exe/" | relative_url }}) | [Detection Package]({{ "/hunting-detections/uac-test-exe/" | relative_url }}) | [IOC Feed]({{ "/ioc-feeds/uac-test-exe.json" | relative_url }})
+**agent.exe (Golang RAT):** | [Technical Report]({{ "/reports/agent-exe/" | relative_url }}) | [Detection Package]({{ "/hunting-detections/agent-exe-detections/" | relative_url }}) | [IOC Feed]({{ "/ioc-feeds/agent-exe.json" | relative_url }})
+**agent_xworm.exe (XWorm RAT v6):** | [Technical Report]({{ "/reports/agent-xworm-exe/" | relative_url }}) | [Detection Package]({{ "/hunting-detections/agent-xworm-exe-detections/" | relative_url }}) | [IOC Feed]({{ "/ioc-feeds/agent-xworm-exe.json" | relative_url }})
+**agent_xworm_v2.exe (XWorm RAT v2.4.0):** | [Technical Report]({{ "/reports/agent-xworm-v2-exe/" | relative_url }}) | [Detection Package]({{ "/hunting-detections/agent-xworm-v2-exe-detections/" | relative_url }}) | [IOC Feed]({{ "/ioc-feeds/agent-xworm-v2-exe.json" | relative_url }})
+**enc/dec Ransomware Family (10 variants):** | [Technical Report]({{ "/reports/enc-dec-ransomware-family/" | relative_url }}) | [Detection Package]({{ "/hunting-detections/enc-dec-ransomware-family-detections/" | relative_url }}) | [IOC Feed]({{ "/ioc-feeds/enc-dec-ransomware-family.json" | relative_url }})
+**FleetAgentAdvanced.exe (Multi-Persistence Dropper):** | [Technical Report]({{ "/reports/fleetagentadvanced-exe/" | relative_url }}) | [Detection Package]({{ "/hunting-detections/fleetagentadvanced-exe-detections/" | relative_url }}) | [IOC Feed]({{ "/ioc-feeds/fleetagentadvanced-exe.json" | relative_url }})
+**FleetAgentFUD.exe (WebSocket RAT):** | [Technical Report]({{ "/reports/fleetagentfud-exe/" | relative_url }}) | [Detection Package]({{ "/hunting-detections/fleetagentfud-exe-detections/" | relative_url }}) | [IOC Feed]({{ "/ioc-feeds/fleetagentfud-exe.json" | relative_url }})
+**uac_test.exe (UAC Bypass PoC):** | [Technical Report]({{ "/reports/uac-test-exe/" | relative_url }}) | [Detection Package]({{ "/hunting-detections/uac-test-exe-detections/" | relative_url }}) | [IOC Feed]({{ "/ioc-feeds/uac-test-exe.json" | relative_url }})
 
 ---
 
@@ -420,12 +420,12 @@ index=firewall OR index=proxy
 **1. Deploy Complete Detection Packages**
 
 Each malware sample has a dedicated detection guide (see [Hunting Detections]({{ "/hunting-detections/" | relative_url }}) section):
-- [agent.exe - PoetRAT malware detections]({{ "/hunting-detections/agent-exe/" | relative_url }})
-- [agent_xworm.exe - Xworm RAT v6 detections]({{ "/hunting-detections/agent-xworm-exe/" | relative_url }})
-- [agent_xworm_v2.exe - Xworm RAT v2.4.0 detections]({{ "/hunting-detections/agent-xworm-v2-exe/" | relative_url }})
-- [FleetAgentAdvanced.exe - Multi-persistence dropper detections]({{ "/hunting-detections/fleetagentadvanced-exe/" | relative_url }})
-- [FleetAgentFUD.exe - WebSocket RAT detections]({{ "/hunting-detections/fleetagentfud-exe/" | relative_url }})
-- [uac_test.exe - UAC bypass PoC detections]({{ "/hunting-detections/uac-test-exe/" | relative_url }})
+- [agent.exe - PoetRAT malware detections]({{ "/hunting-detections/agent-exe-detections/" | relative_url }})
+- [agent_xworm.exe - Xworm RAT v6 detections]({{ "/hunting-detections/agent-xworm-exe-detections/" | relative_url }})
+- [agent_xworm_v2.exe - Xworm RAT v2.4.0 detections]({{ "/hunting-detections/agent-xworm-v2-exe-detections/" | relative_url }})
+- [FleetAgentAdvanced.exe - Multi-persistence dropper detections]({{ "/hunting-detections/fleetagentadvanced-exe-detections/" | relative_url }})
+- [FleetAgentFUD.exe - WebSocket RAT detections]({{ "/hunting-detections/fleetagentfud-exe-detections/" | relative_url }})
+- [uac_test.exe - UAC bypass PoC detections]({{ "/hunting-detections/uac-test-exe-detections/" | relative_url }})
 
 **2. Establish Enhanced Monitoring**
 
