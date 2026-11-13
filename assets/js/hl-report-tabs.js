@@ -782,6 +782,17 @@
           return b;
         });
         var ends = make('div', 'hl-rv-cends', null, tp); make('span', '', crows[0].display, ends); make('span', '', crows[crows.length - 1].display, ends);
+        // T-0524.2: the curated timeline callout (curation.timeline_callout) also marks the crowded window here: a shaded band over it and the
+        // callout's own text under the rail, pointing at the Timeline tab, where the same window is redrawn event by event.
+        var oco = curation.timeline_callout, ocf = oco && Date.parse(oco.from), oct = oco && Date.parse(oco.to) + 86400000;
+        if (oco && !isNaN(ocf) && !isNaN(oct) && oct > ocf) {
+          var oband = make('div', 'hl-rv-callout-band hl-rv-callout-band--rail', null, rail); oband.setAttribute('aria-hidden', 'true');
+          oband.style.left = 'calc(' + 100 * Math.max(0, (ocf - min) / (max - min || 1)) + '% - 26px)';
+          oband.style.width = 'calc(' + 100 * Math.min(1, (oct - ocf) / (max - min || 1)) + '% + 52px)';
+          var obox = make('aside', 'hl-rv-callout', null, tp); obox.setAttribute('aria-label', oco.label || 'Timeline callout');
+          make('h4', '', oco.label || 'Callout', obox);
+          var op = make('p', '', (oco.text || '') + ' ', obox); link('See the window event by event in the Timeline tab', '#' + chronology.heading.id, op); // a plain inline link: .hl-rv-cmore is inline-flex and does not wrap at phone width
+        }
         function place() {
           var width = rail.clientWidth; if (!width) return; var slots = [];
           marks.forEach(function (b) { var a = +b.dataset.start, z = +b.dataset.end, x = max === min ? width / 2 : ((a + z) / 2 - min) / (max - min) * width, w = 44, slot = 0;
@@ -1028,7 +1039,8 @@
       Object.keys(counts).forEach(function (g) { var row = make('div', 'hl-rv-grade-row', null, bars); make('span', '', g, row); var track = make('div', 'hl-rv-track', null, row); var fill = make('div', 'hl-rv-fill', null, track); fill.style.width = 100 * counts[g] / denominator + '%'; make('strong', '', counts[g], row); });
       var cards = make('div', 'hl-rv-victim-cards', null, body);
       victims.rows.forEach(function (r) { var card = make('article', 'hl-rv-victim-card', null, cards); make('h3', '', r[0], card); r.slice(1).forEach(function (value, i) { var line = make('p', '', null, card); make('strong', '', victims.headers[i + 1] + ': ', line); if (/Grade/i.test(victims.headers[i + 1])) badge(line, value); else make('span', '', value, line); }); sourceLink(victims, card, r[0]); });
-      dashTable(tableFold(body, 'Read all ' + victims.rows.length + ' victim rows and qualifiers'), victims, 'Victim access and qualifiers', 'victims'); return victims.rows.length + ' organisation rows · ' + (tallyParagraph ? 'target tally ' + denominator + ': ' : '') + Object.keys(counts).map(function (g) { return counts[g] + ' ' + g; }).join(' · ');
+      // T-0524.2 (Joseph, 2026-11-13): no folded copy of the victim table here; the cards are the view and the report's own table sits under it in the same tab, so a third copy only repeated it.
+      return victims.rows.length + ' organisation rows · ' + (tallyParagraph ? 'target tally ' + denominator + ': ' : '') + Object.keys(counts).map(function (g) { return counts[g] + ' ' + g; }).join(' · ');
     },
     chain: function (body) {
       // Design D, D4 (T-0500.1.7.3 c3): stage flow cards, the filter console (chip facets with counts) with a slim sticky bar under the tabs, the chain story with
@@ -1062,8 +1074,8 @@
           var heading = make('summary', '', r[0], detail); var nm = String(r[0]).match(/^(\d+\.\s*)(.+)$/); if (nm) { heading.textContent = ''; make('span', 'hl-rv-stage-no', nm[1], heading); heading.appendChild(document.createTextNode(nm[2])); }
           phone.addEventListener('change', function () { detail.open = !phone.matches; });
           card = detail;
-          make('p', '', r[1], card);
-          if (r[2]) { make('h4', '', stages.headers[2], card); make('p', '', r[2], card); } sourceLink(stages, card);
+          // T-0524.2 (Joseph, 2026-11-13): the stage's own text is the stage table in the same tab; the card carries the stage, its linked procedures and a link to that text.
+          sourceLink(stages, card);
           // Only explicit shared procedure names join. Never infer a stage from tactic alone.
           if (attack) {
             // Optional editorial joins are supplied only by the current report.

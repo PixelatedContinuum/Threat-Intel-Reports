@@ -719,7 +719,7 @@ function selectedTabExpr() {
    the same elements is a real reconciliation rather than a text match. */
 var TAB_PRIMARY = {
   overview: '.hl-rv-tile',
-  victims: '#victims tbody tr',
+  victims: '.hl-rv-victim-card',   /* T-0524.2: the cards are the victims view; the folded table copy is gone (Joseph, 2026-11-13) */
   chain: '.hl-rv-stage',
   timeline: '.hl-rv-marker',
   attribution: '#hypotheses tbody tr',
@@ -2839,7 +2839,7 @@ function mutatedTabsScript(mutations, file) {
 /* What a view drew, for the card verdict: its summary line, the count of its primary elements, its notice, the first-column text of
    each row it drew (for the views that draw their source table) and, for Overview, every tile's value. */
 var IDENT_SEL = {
-  victims: '#victims tbody tr td:first-child',
+  victims: '.hl-rv-victim-card > h3',
   attribution: '#hypotheses tbody tr td:first-child',
   indicators: '.hl-rv-chips li code',
   confidence: '#judgments tbody tr td:first-child'

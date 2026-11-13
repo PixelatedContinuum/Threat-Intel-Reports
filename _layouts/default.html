@@ -76,6 +76,8 @@
       {%- else -%}
         {%- assign _e = site.data.catalog.entries | where: "report_url", page.url | first -%}
         {%- if _e.cover_label -%}{%- assign _c3_cover = true -%}{%- endif -%}
+        {%- comment -%} T-0524.2: an unlisted preview prints its cover from preview_cover_label (post.html), so it needs the texture script too. {%- endcomment -%}
+        {%- if _e == nil and page.unlisted and page.preview_cover_label -%}{%- assign _c3_cover = true -%}{%- endif -%}
       {%- endif -%}
     {%- endif -%}
     {% if _c3_cover %}

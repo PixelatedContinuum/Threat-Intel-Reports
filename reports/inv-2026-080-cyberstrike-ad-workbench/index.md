@@ -415,7 +415,10 @@ The operator's behaviour maps to 69 procedure rows covering 66 distinct techniqu
 
 The counts are 42 OBSERVED and 27 INFERRED, and row confidence is HIGH on 29, MODERATE on 37 and LOW on 3. Three of the OBSERVED rows carry a qualifier in their evidence: the service-execution row, where the SYSTEM service ran and the dump runs on the same host failed; the password-spraying row, where every attempt failed; and the Windows-service row, where each service was transient.
 
-OBSERVED never means a victim log or a victim grade: I hold no victim telemetry, so it is always the operator's own record of a result. No row maps Impact, phishing or supply chain, because nothing held shows encryption, wiping, defacement or a lure. The DNS Server plugin route has no dedicated technique in v20.0 and is recorded by its effects, under Windows Management Instrumentation, Domain Account and Account Manipulation.
+OBSERVED never means a victim log or a victim grade: I hold no victim telemetry, so it is always the operator's own record of a result. No row maps Impact, phishing or supply chain, because nothing held shows encryption, wiping, defacement or a lure. The DNS Server plugin route has no dedicated technique in v20.0 and is recorded by its effects, under Windows Management Instrumentation, Domain Account and Account Manipulation. The attack chain above links each stage to its rows, and the full table is in the collapse below.
+
+<details markdown="1" class="hl-teardown">
+<summary>All 69 procedure rows, with status, confidence and evidence</summary>
 
 | Tactic / Technique | Name | Status | Conf. | Evidence |
 |---|---|---|---|---|
@@ -488,6 +491,8 @@ OBSERVED never means a victim log or a victim grade: I hold no victim telemetry,
 | Command and Control / T1105 | Ingress Tool Transfer | INFERRED | HIGH | `certutil -urlcache` of chisel from 8090; HIGH that the script issues it (read in full), execution output not held |
 | Command and Control / T1132.001 | Standard Encoding | OBSERVED | MODERATE | 252 base64 segments pulled; 900 and 4,000-char pushes |
 | Exfiltration / T1041 | Exfiltration Over C2 Channel | OBSERVED | HIGH | 252 of 252 segments of a 25 MB file via the shell |
+
+</details>
 
 ## 11. Indicators of Compromise
 {: .hl-tier-2}

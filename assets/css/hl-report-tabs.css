@@ -1325,7 +1325,9 @@ html:has(.hl-report-page) {
 .hl-rv-zoom-rail { position: relative; margin-inline: 22px; border-top: 1px solid var(--rv-line); }
 .hl-report-page .hl-rv-zmark { position: absolute; top: 0; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; justify-content: flex-start; gap: 4px; padding: 2px; width: 44px; height: var(--rv-mark-h); min-width: 44px; min-height: 44px; font-size: var(--rv-num); border: 0; background: transparent; line-height: 1.2; }
 .hl-rv-zmark > span:last-child { font-size: var(--rv-num); font-weight: 600; color: var(--rv-muted); font-variant-numeric: tabular-nums; }
-.hl-rv-zoom-axis { position: relative; height: 28px; margin-inline: 22px; border-top: 1px solid var(--rv-line); }
+.hl-rv-zoom-axis { position: relative; height: 40px; margin-inline: 22px; border-top: 1px solid var(--rv-line); }
 .hl-rv-zoom-axis span { position: absolute; top: 6px; font-size: var(--rv-fs); color: var(--rv-muted); white-space: nowrap; }
 .hl-rv-zoom-axis span::before { content: ""; position: absolute; left: 0; top: -10px; height: 8px; border-left: 1px solid var(--rv-line); }
 @media (max-width: 479px) { .hl-rv-callout-band, .hl-rv-zoom-rail, .hl-rv-zoom-axis { display: none; } }
+/* the same band on the Overview's Observation window rail: the rail is the positioned box, so the band spans the rail's full height */
+.hl-rv-callout-band--rail { top: 0; bottom: 0; }
