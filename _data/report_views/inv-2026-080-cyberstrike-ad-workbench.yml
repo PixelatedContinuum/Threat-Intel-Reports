@@ -289,6 +289,6 @@
     "from": "2026-10-04",
     "to": "2026-10-07",
     "label": "Hands-on window, 4 to 7 October 2026",
-    "text": "10 of the 17 dated events fall in these three days. This is an AI pentest platform at work: one operator went from a vulnerability verdict on the agency's server to decrypted passwords on the public internet in 5 h 17 min, and was building a domain-admin DLL and running credential dumps against other hosts in the same window. Times are printed as the rows give them, on the operator's server clock (timezone unstated) or in UTC where marked."
+    "text": "10 of the 17 dated events fall in these three days. This is an AI pentest platform at work: one operator went from a vulnerability verdict on the agency's server to decrypted passwords on the public internet in 5 h 17 min, and its domain-admin DLL was compiled and a domain member server's memory dump was written inside the same window. Times are printed as the rows give them, on the operator's server clock (timezone unstated) or in UTC where marked."
   }
 }
