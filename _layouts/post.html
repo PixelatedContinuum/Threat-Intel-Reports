@@ -192,7 +192,9 @@ document.addEventListener('DOMContentLoaded', function () {
 <thead><tr><th>Tactic / Technique</th><th>Name</th><th>Rules</th></tr></thead>
 <tbody>
 {%- for row in _atk.rows %}
-<tr><td>{{ row.tactic }} / <a href="{{ row.id | prepend: '/techniques/' | append: '/' | relative_url }}">{{ row.id }}</a></td><td>{{ row.name }}</td><td>{% include defang-text.html text=row.rules %}</td></tr>
+{%- comment -%}Link a technique only when its cross-reference page exists: an unlisted (preview) campaign's technique has no page until go-live (generate-xref.js reads published sources only), and a link to it is dead (T-0524.2).{%- endcomment -%}
+{%- assign _atk_page = site.data.attack_index.techniques | where: "id", row.id | first %}
+<tr><td>{{ row.tactic }} / {% if _atk_page %}<a href="{{ row.id | prepend: '/techniques/' | append: '/' | relative_url }}">{{ row.id }}</a>{% else %}{{ row.id }}{% endif %}</td><td>{{ row.name }}</td><td>{% include defang-text.html text=row.rules %}</td></tr>
 {%- endfor %}
 </tbody>
 </table>

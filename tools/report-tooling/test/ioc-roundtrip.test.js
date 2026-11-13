@@ -75,7 +75,14 @@ test('an uppercase paste of an indexed hash still matches', function () {
 // index whose coverage disagrees with the catalog (`test/check-ioc-index.test.js`,
 // "an indicator pointing at an embargoed report FAILS"), and check-embargo-artifacts.js
 // refuses to let a held campaign's IOC feed sit in this public repo.
-test('the index records no withheld feed', function () {
-  assert.deepEqual(idx.coverage.embargoed, [],
-    'the generator withheld a feed; confirm the site still holds it before indexing');
+// A feed may be withheld while its campaign is an unlisted preview: its catalog entry is
+// parked (commented out), so no live entry names it (hunters-ledger-publish, Preview Mode;
+// T-0524.2). A withheld feed that a LIVE catalog entry still points at is the defect.
+test('the index withholds only feeds no live catalog entry points at', function () {
+  var cat = fs.readFileSync(path.join(__dirname, '..', '..', '..', '_data', 'catalog.yml'), 'utf8');
+  var live = cat.split('\n').filter(function (l) { return !/^\s*#/.test(l); }).join('\n');
+  idx.coverage.embargoed.forEach(function (name) {
+    assert.ok(live.indexOf('/ioc-feeds/' + name) === -1,
+      'the generator withheld ' + name + ' but a live catalog entry points at it');
+  });
 });
