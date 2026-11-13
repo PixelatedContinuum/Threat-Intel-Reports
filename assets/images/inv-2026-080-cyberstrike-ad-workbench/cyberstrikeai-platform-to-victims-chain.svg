@@ -1,0 +1,90 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1470" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif">
+  <!-- vertical-chain layout, 4 cards: operator and platform, stock tools, targets by grade, defender point -->
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#cccccc"/>
+    </marker>
+    <filter id="cardShadow" x="-2%" y="-2%" width="104%" height="108%">
+      <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#000" flood-opacity="0.55"/>
+    </filter>
+  </defs>
+
+  <rect width="1000" height="1470" fill="#161616"/>
+  <rect x="0.5" y="0.5" width="999" height="1469" fill="none" stroke="#2a2a2a" stroke-width="1"/>
+
+  <text x="500" y="62" text-anchor="middle" font-size="40" font-weight="700" fill="#ffffff">An AI Agent Platform Drives Stock Tools</text>
+  <text x="500" y="106" text-anchor="middle" font-size="24" fill="#f5f5f5">One operator, one Paris server, 22 victim rows graded</text>
+  <text x="500" y="140" text-anchor="middle" font-size="18" fill="#cccccc">Every tool is public and documented, so blocking them and the basics breaks the chain</text>
+  <line x1="60" y1="166" x2="940" y2="166" stroke="#2a2a2a" stroke-width="1"/>
+
+  <!-- STEP 1: orange, operator and platform -->
+  <g filter="url(#cardShadow)">
+    <rect x="60" y="196" width="880" height="220" rx="8" fill="#1a1a1a" stroke="#2a2a2a" stroke-width="1"/>
+    <rect x="60" y="196" width="880" height="46" rx="8" fill="#f97316"/>
+    <rect x="60" y="229" width="880" height="13" fill="#f97316"/>
+    <text x="80" y="227" font-size="17" font-weight="700" fill="#111111" letter-spacing="0.5">STEP 1</text>
+    <text x="200" y="227" font-size="23" font-weight="600" fill="#111111">Operator and platform</text>
+    <text x="80" y="282" font-size="21" fill="#ffffff">One operator runs CyberStrikeAI from a Paris server</text>
+    <text x="80" y="316" font-size="17" fill="#e5e5e5" font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">/root/CyberStrikeAI/tmp/workspace/projects/&lt;uuid&gt;</text>
+    <text x="80" y="350" font-size="18" fill="#e5e5e5">A public AI penetration-testing agent platform, written in Go</text>
+    <text x="80" y="384" font-size="18" fill="#fb923c" font-weight="600">Its default prompt tells the model the work is authorised</text>
+  </g>
+  <line x1="500" y1="416" x2="500" y2="456" stroke="#cccccc" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- STEP 2: red, stock public tools -->
+  <g filter="url(#cardShadow)">
+    <rect x="60" y="462" width="880" height="220" rx="8" fill="#1a1a1a" stroke="#2a2a2a" stroke-width="1"/>
+    <rect x="60" y="462" width="880" height="46" rx="8" fill="#dc2626"/>
+    <rect x="60" y="495" width="880" height="13" fill="#dc2626"/>
+    <text x="80" y="493" font-size="17" font-weight="700" fill="#ffffff" letter-spacing="0.5">STEP 2</text>
+    <text x="200" y="493" font-size="23" font-weight="600" fill="#ffffff">The platform drives public tools</text>
+    <text x="80" y="548" font-size="21" fill="#ffffff">Off-the-shelf offensive tooling, no new malware found</text>
+    <text x="80" y="584" font-size="20" font-weight="600" fill="#ffffff">JexBoss · Kerberoasting · chisel · GodPotato fork</text>
+    <text x="80" y="616" font-size="20" font-weight="600" fill="#ffffff">PwnKit · Rubeus · public Veeam proof of concept</text>
+    <text x="80" y="652" font-size="18" fill="#fb923c" font-weight="600">Chisel, PwnKit and the Veeam proof of concept match public sources</text>
+  </g>
+  <line x1="500" y1="682" x2="500" y2="722" stroke="#cccccc" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- STEP 3: deep red, targets by grade -->
+  <g filter="url(#cardShadow)">
+    <rect x="60" y="728" width="880" height="290" rx="8" fill="#1a1a1a" stroke="#2a2a2a" stroke-width="1"/>
+    <rect x="60" y="728" width="880" height="46" rx="8" fill="#7f1d1d"/>
+    <rect x="60" y="761" width="880" height="13" fill="#7f1d1d"/>
+    <text x="80" y="759" font-size="17" font-weight="700" fill="#ffffff" letter-spacing="0.5">STEP 3</text>
+    <text x="200" y="759" font-size="23" font-weight="600" fill="#ffffff">The tools reach the targets, by grade</text>
+    <text x="80" y="814" font-size="21" fill="#ffffff">22 victim rows, one per organisation or group</text>
+    <text x="80" y="854" font-size="19" font-weight="700" fill="#ffffff">ACCESS SHOWN</text>
+    <text x="262" y="854" font-size="19" font-weight="700" fill="#ffffff">2</text>
+    <text x="300" y="854" font-size="18" fill="#e5e5e5">a public-safety agency's servers; an SSH jump host</text>
+    <text x="80" y="890" font-size="19" font-weight="700" fill="#ffffff">COMPROMISED</text>
+    <text x="262" y="890" font-size="19" font-weight="700" fill="#ffffff">3</text>
+    <text x="300" y="890" font-size="18" fill="#e5e5e5">an AD domain, a hosting provider, a cultural agency site</text>
+    <text x="80" y="926" font-size="19" font-weight="700" fill="#ffffff">REACHED</text>
+    <text x="262" y="926" font-size="19" font-weight="700" fill="#ffffff">12</text>
+    <text x="300" y="926" font-size="18" fill="#e5e5e5">government estate, hosting customers, state bodies, others</text>
+    <text x="80" y="962" font-size="19" font-weight="700" fill="#ffffff">LISTED</text>
+    <text x="262" y="962" font-size="19" font-weight="700" fill="#ffffff">5</text>
+    <text x="300" y="962" font-size="18" fill="#e5e5e5">security-sector domains, private firms, 27 DNS zones</text>
+    <text x="80" y="1000" font-size="18" fill="#fb923c" font-weight="600">Where two grades fit a row, I record the lower one</text>
+  </g>
+  <line x1="500" y1="1018" x2="500" y2="1058" stroke="#cccccc" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- STEP 4: grey, defender point -->
+  <g filter="url(#cardShadow)">
+    <rect x="60" y="1064" width="880" height="200" rx="8" fill="#1a1a1a" stroke="#2a2a2a" stroke-width="1"/>
+    <rect x="60" y="1064" width="880" height="46" rx="8" fill="#6b7280"/>
+    <rect x="60" y="1097" width="880" height="13" fill="#6b7280"/>
+    <text x="80" y="1095" font-size="17" font-weight="700" fill="#cccccc" letter-spacing="0.5">STEP 4</text>
+    <text x="200" y="1095" font-size="23" font-weight="600" fill="#ffffff">The defender point</text>
+    <text x="80" y="1150" font-size="21" fill="#ffffff">The tools are well documented and easy to detect</text>
+    <text x="80" y="1184" font-size="18" fill="#e5e5e5">Block the well-known ones and do the basics, and the chain breaks</text>
+    <text x="80" y="1226" font-size="18" fill="#fb923c" font-weight="600">Antivirus blocked the GodPotato fork on a host where the operator held SYSTEM</text>
+  </g>
+
+  <!-- FOOTER -->
+  <line x1="60" y1="1304" x2="940" y2="1304" stroke="#2a2a2a" stroke-width="1"/>
+  <text x="500" y="1338" text-anchor="middle" font-size="18" font-weight="600" fill="#ffffff">Detection anchors:  /sh/sh.jsp  ·  /invoker/JMXInvokerServlet</text>
+  <text x="500" y="1368" text-anchor="middle" font-size="18" font-weight="600" fill="#ffffff">LsassDump service  ·  pentest@cyberstrike key comment</text>
+  <text x="500" y="1404" text-anchor="middle" font-size="15" fill="#cccccc">Counts are rows of the victim table (22), graded from the operator's own files</text>
+  <text x="500" y="1436" text-anchor="middle" font-size="14" fill="#888888">Legend: orange = operator and platform · red = operator tooling · deep red = targets · grey = defender response</text>
+</svg>

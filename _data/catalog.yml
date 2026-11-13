@@ -24,6 +24,17 @@
 #     detection_tiers is set on 51 entries and read by nothing; do not add it.
 
 entries:
+  # ===== PENDING GO-LIVE: INV-2026-080 CyberStrikeAI workbench (uncomment at launch) =====
+  # Withheld: unlisted preview awaiting Joseph's go-live. Flip per hunters-ledger-publish
+  # references/preview-and-go-live.md, "Go-live flip" (uncomment, drop unlisted/sitemap flags).
+  #  - title: "An AI Pentest Platform Drives Commodity Tooling Against Portuguese Government Targets"
+  #    date: 2026-11-12
+  #    severity: high
+  #    tags: [Open Dir, AI Abuse, Toolkit, Cred Theft]
+  #    report_url: /reports/inv-2026-080-cyberstrike-ad-workbench/
+  #    detection_url: /hunting-detections/inv-2026-080-cyberstrike-ad-workbench-detections
+  #    ioc_url: /ioc-feeds/inv-2026-080-cyberstrike-ad-workbench-iocs.json
+  # ======================================================================================
   - title: "Help Desks to Host Shells Across Brazil's Public Sector"
     date: 2026-10-15
     severity: critical

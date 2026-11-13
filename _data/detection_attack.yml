@@ -1438,6 +1438,76 @@
       name: "Web Protocols"
       rules: "Inkognito Custom X-Admin-Token Header in HTTP Request (SURICATA, Hunting); Inkognito X-Admin-Token in CORS Allow-Headers Response (SURICATA, Hunting)"
       count: 2
+"inv-2026-080-cyberstrike-ad-workbench-detections":
+  total: 13
+  tactics: 8
+  unresolved: []
+  rows:
+    - tactic: "Resource Development"
+      id: "T1588.007"
+      name: "Artificial Intelligence"
+      rules: "HKTL_CyberStrikeAI_Platform_Default_Agent_Authorisation_Prompt (YARA, Hunting); CyberStrikeAI Workspace Path In A Linux Command Line (SIGMA, Hunting)"
+      count: 2
+    - tactic: "Initial Access"
+      id: "T1190"
+      name: "Exploit Public-Facing Application"
+      rules: "HKTL_Veeam_CVE_2024_40711_PoC_Patched_ReachFramework1337_Assembly (YARA, Hunting); JBoss JMX Invoker Servlet Or JexBoss Shell Page Requested (SIGMA, Hunting); THL DETECT JBoss Invoker Servlet DeploymentFileRepository JSP Write (SURICATA, Detection); THL HUNT External Serialized Java Object POST To JBoss Invoker Servlet (SURICATA, Hunting); THL HUNT Veeam Remoting CDbCryptoKeyInfo RepairRecs Payload (SURICATA, Hunting)"
+      count: 5
+    - tactic: "Execution"
+      id: "T1059.001"
+      name: "PowerShell"
+      rules: "Service Installed With Cmd And Encoded PowerShell Image Path (SIGMA, Hunting)"
+      count: 1
+    - tactic: "Execution"
+      id: "T1569.002"
+      name: "Service Execution"
+      rules: "Service Installed With Cmd And Encoded PowerShell Image Path (SIGMA, Hunting)"
+      count: 1
+    - tactic: "Persistence"
+      id: "T1136.002"
+      name: "Domain Account"
+      rules: "MAL_CyberStrike_DnsPlugin_ServerLevelPluginDll_DomainAdmin_Backdoor (YARA, Detection); User Account Named Cyberstrike Created (SIGMA, Hunting)"
+      count: 2
+    - tactic: "Persistence"
+      id: "T1505.001"
+      name: "SQL Stored Procedures"
+      rules: "Sqlcmd Used To Run Xp_cmdshell Starting A Shell (SIGMA, Hunting)"
+      count: 1
+    - tactic: "Privilege Escalation"
+      id: "T1068"
+      name: "Exploitation for Privilege Escalation"
+      rules: "HKTL_Linux_PwnKit_CVE_2021_4034_GCONV_PATH_Exploit_Binary (YARA, Detection); MAL_CyberStrike_PwnKit_Root_Proof_Gconv_Module (YARA, Hunting); PwnKit Exploit Staging Via GCONV_PATH Named Directory (SIGMA, Detection)"
+      count: 3
+    - tactic: "Stealth"
+      id: "T1036.005"
+      name: "Match Legitimate Resource Name or Location"
+      rules: "Execution Of Svcutil Or Svcutil_clean Executable (SIGMA, Hunting)"
+      count: 1
+    - tactic: "Stealth"
+      id: "T1134.001"
+      name: "Token Impersonation/Theft"
+      rules: "HKTL_GodPotato_Lineage_Wide_Strings (YARA, Detection); MAL_CyberStrike_GodPotato_SvcUtil_Fork_Renamed_Pipe_LSASS_Dump (YARA, Hunting); Potato-Style Privilege Escalation Via Prefixed RPC Endpoint Mapper Pipe (SIGMA, Detection)"
+      count: 3
+    - tactic: "Credential Access"
+      id: "T1003.001"
+      name: "LSASS Memory"
+      rules: "MAL_CyberStrike_GodPotato_SvcUtil_Fork_Renamed_Pipe_LSASS_Dump (YARA, Hunting); Service Installed To Dump Process Memory Via Comsvcs MiniDump (SIGMA, Detection)"
+      count: 2
+    - tactic: "Credential Access"
+      id: "T1558.003"
+      name: "Kerberoasting"
+      rules: "Rubeus Kerberos Ticket Request Command Line (SIGMA, Hunting)"
+      count: 1
+    - tactic: "Credential Access"
+      id: "T1558.004"
+      name: "AS-REP Roasting"
+      rules: "THL HUNT Kerberos Unknown-Principal Error Burst From KDC (SURICATA, Hunting)"
+      count: 1
+    - tactic: "Command and Control"
+      id: "T1572"
+      name: "Protocol Tunneling"
+      rules: "Chisel Reverse Server Started On Linux (SIGMA, Hunting); THL HUNT Chisel Tunnel WebSocket Upgrade (SURICATA, Hunting)"
+      count: 2
 "kaido-quasar-rat-detections":
   total: 8
   tactics: 4

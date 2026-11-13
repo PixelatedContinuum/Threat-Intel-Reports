@@ -1,5 +1,5 @@
 {
- "generated_at": "2026-11-12T03:32:32Z",
+ "generated_at": "2026-11-13T01:50:53Z",
  "counts": {
   "indicators": 2056,
   "reports": 60,
@@ -70,7 +70,9 @@
    "webserver-compromise-kit-91-236-230-250-iocs.json",
    "webshells-to-the-cloud.json"
   ],
-  "embargoed": [],
+  "embargoed": [
+   "inv-2026-080-cyberstrike-ad-workbench-iocs.json"
+  ],
   "unknown": [],
   "empty": []
  },

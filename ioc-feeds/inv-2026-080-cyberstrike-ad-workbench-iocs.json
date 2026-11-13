@@ -1,0 +1,280 @@
+{
+  "metadata": {
+    "malware_name": "CyberStrike AD Workbench",
+    "family": "Operator-built privilege-escalation and AD tooling around the CyberStrikeAI penetration-testing agent platform (INV-2026-080)",
+    "report_date": "2026-11-12",
+    "analyst": "The Hunters Ledger",
+    "confidence": "MODERATE",
+    "tlp": "CLEAR",
+    "investigation": "INV-2026-080",
+    "notes": "Operator-side values only: the operator's server, operator-built files, and the operator's own labels. Victim values are not in this feed. Stock public tools are marked STOCK and carry action HUNT; their hashes match anyone using the public tool. Execution of the operator-built files on any victim is not shown by any held file."
+  },
+  "file_hashes": {
+    "sha256": [
+      {
+        "value": "02a98b325408f623e192d569d6cb11a60aaf61a114a5c4f35bbfd1dcbe56d69c",
+        "filename": "dnsplugin.dll",
+        "type": "PE DLL (DNS Server plugin)",
+        "confidence": "HIGH",
+        "role": "operator-built",
+        "action": "BLOCK",
+        "context": "On load runs three hidden net commands: creates a domain account and adds it to Domain Admins and local Administrators. Compile date 2026-10-05. Whether it ran on any victim is INSUFFICIENT.",
+        "source": "Static analysis of the operator's DNS Server plugin DLL, `dnsplugin.dll`"
+      },
+      {
+        "value": "7033ee65a125bec39860af0cef8d64f46a0cf7e579baab5d57e31d83367333f9",
+        "filename": "pwnkit.so",
+        "type": "ELF64 shared object (gconv module)",
+        "confidence": "HIGH",
+        "role": "operator-built",
+        "action": "BLOCK",
+        "context": "Operator-written gconv module for the PwnKit chain; writes a root proof file to /tmp. Whether it ran is not shown.",
+        "source": "Static analysis of the operator's `pwnkit.so`, held in two copies with the same hash"
+      },
+      {
+        "value": "863a7a843b30d5252a84e5b03e850236fce4cac1954be4227c1cf396138759a5",
+        "filename": "exploit_pwnkit_static",
+        "type": "ELF64 static executable",
+        "confidence": "HIGH",
+        "role": "operator-built",
+        "action": "BLOCK",
+        "context": "Static driver embedding pwnkit.so; PwnKit-style pkexec chain. GCC Ubuntu 15.2.0 build string on the operator ELFs.",
+        "source": "Static analysis of the operator's static PwnKit driver binary"
+      },
+      {
+        "value": "fbf97f4fc02266d2904b125ac6f55199c0e2855374646659b27e63bdf9cf5490",
+        "filename": "exploit_pwnkit.__rev2",
+        "type": "ELF64 executable",
+        "confidence": "HIGH",
+        "role": "operator-built",
+        "action": "BLOCK",
+        "context": "Other revision of the PwnKit driver, without the embedded module.",
+        "source": "Static analysis of the operator's dynamic PwnKit driver revision"
+      },
+      {
+        "value": "1046cf19fb280684236193059805005bb8b1f3ad3b6fe7ca2b35d9dea8523273",
+        "filename": "SvcUtil.exe",
+        "type": "PE .NET executable",
+        "confidence": "HIGH",
+        "role": "operator-built (GodPotato fork)",
+        "action": "BLOCK",
+        "context": "Renamed GodPotato fork that adds an LSASS minidump; named pipe SvcUtil\\pipe\\epmapper. Run evidence NOT CHECKED.",
+        "source": "Static analysis of the operator's `SvcUtil.exe` GodPotato fork"
+      },
+      {
+        "value": "fe0445f870c905ff33fc75223ce709992f8bb219d2fff6acd3775518b894a025",
+        "filename": "SvcUtil_clean.exe",
+        "type": "PE .NET executable",
+        "confidence": "HIGH",
+        "role": "operator-built (GodPotato fork)",
+        "action": "BLOCK",
+        "context": "Renamed GodPotato fork without the LSASS dump; same pipe name.",
+        "source": "Static analysis of the operator's `SvcUtil_clean.exe` GodPotato fork"
+      },
+      {
+        "value": "b95c849d510e5cf8fdbb8bfcae2ca36a8a0c1f383c783fae74d95bece46f084f",
+        "filename": "dnsplugin.c",
+        "type": "C source",
+        "confidence": "HIGH",
+        "role": "operator-written source",
+        "action": "BLOCK",
+        "context": "Source of dnsplugin.dll.",
+        "source": "Static analysis of a second held copy of the operator's DNS Server plugin DLL"
+      },
+      {
+        "value": "e0691216a96faa65a66c8e9de47cbe1f87d9a8c5a1417ea8e126a4c4fe1944cb",
+        "filename": "pwnkit.c",
+        "type": "C source",
+        "confidence": "HIGH",
+        "role": "operator-written source",
+        "action": "BLOCK",
+        "context": "Source of pwnkit.so (gconv module).",
+        "source": "Static analysis of the operator's PwnKit source file `pwnkit.c`"
+      },
+      {
+        "value": "2dcc37be26344f68e3124c3fd5ca5ca1ec672d2933c6db5f7c57222f6f9117d1",
+        "filename": "exploit_pwnkit.c",
+        "type": "C source",
+        "confidence": "HIGH",
+        "role": "operator-written source",
+        "action": "BLOCK",
+        "context": "Source of the PwnKit driver.",
+        "source": "Static analysis of the operator's PwnKit source file `exploit_pwnkit.c`"
+      },
+      {
+        "value": "cc3b5d073dd879275e274177d7293a9737dc76407bdabe0cc667bf0eaf3c7f1f",
+        "filename": "PwnKit",
+        "type": "ELF64 executable",
+        "confidence": "MODERATE",
+        "role": "operator's own compile of stock public PwnKit source",
+        "action": "HUNT",
+        "context": "Public ly4k PwnKit exploit rebuilt by the operator; the hash identifies the operator's build, not the public project. Anyone building the same source may differ.",
+        "source": "Static analysis of the public ly4k PwnKit prebuilt binary the operator holds"
+      },
+      {
+        "value": "44e83f84a5d5219e2f7c3cf1e4f02489cae81361227f46946abe4b8d8245b879",
+        "filename": "ly4k_pwnkit.py",
+        "type": "ELF64 executable (renamed .py)",
+        "confidence": "HIGH",
+        "role": "STOCK public tool",
+        "action": "HUNT",
+        "context": "Hash equals the public ly4k PwnKit prebuilt (first seen on VirusTotal 2022-06-23); the operator renamed it. Seen on the operator host, but any user of the public tool carries this hash.",
+        "source": "Static analysis of the operator's rebuild of the public ly4k PwnKit binary"
+      },
+      {
+        "value": "9a8e9d587b570d4074f1c8317b163aa8d0c566efd88f294d9d85bc7776352a28",
+        "filename": "GodPotato-NET4.exe",
+        "type": "PE .NET executable",
+        "confidence": "HIGH",
+        "role": "STOCK public tool",
+        "action": "HUNT",
+        "context": "Hash equals the GodPotato V1.20 release. Public tool; hunt context only.",
+        "source": "Static analysis of the stock GodPotato `GodPotato-NET4.exe` the operator holds"
+      },
+      {
+        "value": "e788f829b1a0141a488afb5f82b94f13035623609ca3b83f0c6985919cd9e83b",
+        "filename": "chisel.exe",
+        "type": "PE64 Go executable",
+        "confidence": "HIGH",
+        "role": "STOCK public tool (jpillora/chisel, locally built)",
+        "action": "HUNT",
+        "context": "Go build info: module github.com/jpillora/chisel, vcs.revision 3208da34, unmodified; 13 of 13 dependency modules equal upstream. The operator served it on port 8090 and fetched it with certutil. Locally built, so the hash is this build only.",
+        "source": "Static analysis of the stock chisel build the operator holds, held in two copies with the same hash"
+      },
+      {
+        "value": "1bfbefa4ff4d0df3ee0090b5079cf84ed2e8d5377ba5b7a30afd88367d57b9ff",
+        "filename": "Rubeus.exe",
+        "type": "PE .NET executable",
+        "confidence": "HIGH",
+        "role": "STOCK public tool (circulating build)",
+        "action": "HUNT",
+        "context": "Circulating public build (VirusTotal 333 submissions, first seen 2022-10-19). Exact-source equality not established. Hunt context only.",
+        "source": "Static analysis of the circulating public `Rubeus.exe` build the operator holds"
+      }
+    ]
+  },
+  "network_indicators": {
+    "ipv4": [
+      {
+        "value": "199.247.13.103",
+        "port": 8000,
+        "protocol": "TCP",
+        "purpose": "Operator server: open directory (745 files listed by Vantage)",
+        "first_seen": "2026-09-26",
+        "confidence": "HIGH",
+        "action": "BLOCK",
+        "notes": "Vultr (The Constant Company, AS20473) commercial hosting address in 199.247.0.0/19. Caveats before blocking: the address served unrelated tenants in 2019 to 2021 and 2023 to 2024, and whether the operator rented this instance or compromised it is INSUFFICIENT, so a block can fall on an innocent owner or a future tenant; time-box any block and re-check the address first. Ports 8081 (HTTP 404 on 2026-10-07) and 8090 (tool staging: chisel, dnsplugin.dll) also seen.",
+        "false_positive_note": "Shared commercial hosting. The address has had other tenants and may be reassigned; the instance may belong to a third party. Do not treat as a permanent block."
+      }
+    ],
+    "ports": [
+      {
+        "value": "199.247.13.103:8000",
+        "purpose": "open directory",
+        "confidence": "HIGH",
+        "source": "Port sighting on the operator's server",
+        "context": "open directory"
+      },
+      {
+        "value": "199.247.13.103:8081",
+        "purpose": "HTTP 404 on 2026-10-07; chisel server --reverse --port 8081 appears in operator scripts",
+        "confidence": "MODERATE",
+        "source": "Port sighting on the operator's server; the chisel server start line is in the operator's `daemon_chisel.py`",
+        "context": "HTTP 404 on 2026-10-07; chisel server --reverse --port 8081 appears in operator scripts"
+      },
+      {
+        "value": "199.247.13.103:8090",
+        "purpose": "tool staging (chisel.exe, dnsplugin.dll served; certutil fetch target)",
+        "confidence": "HIGH",
+        "source": "Port sighting on the operator's server (tool staging: chisel, dnsplugin.dll)",
+        "context": "tool staging (chisel.exe, dnsplugin.dll served; certutil fetch target)"
+      }
+    ],
+    "urls": []
+  },
+  "host_indicators": {
+    "file_paths": [
+      {
+        "value": "/tmp/pwned_root.txt",
+        "purpose": "Root proof file written by pwnkit.so (id, first shadow lines, /root listing); first line '=== PWNKIT ROOT PROOF ==='",
+        "confidence": "HIGH",
+        "action": "HUNT",
+        "source": "The PwnKit marker file named in the operator's `pwnkit.c`, where it appears on a victim host",
+        "context": "Root proof file written by pwnkit.so (id, first shadow lines, /root listing); first line '=== PWNKIT ROOT PROOF ==='"
+      },
+      {
+        "value": "/sh/sh.jsp",
+        "purpose": "Operator JSP web shell path (parameter c); web path on a victim host",
+        "confidence": "HIGH",
+        "action": "HUNT",
+        "source": "Path of the JSP web shell in the operator's deployment scripts",
+        "context": "Operator JSP web shell path (parameter c); web path on a victim host"
+      },
+      {
+        "value": "/shell/cmd.jsp",
+        "purpose": "Second operator JSP shell path on an internal server (GET parameter c)",
+        "confidence": "HIGH",
+        "action": "HUNT",
+        "source": "Path of the JSP web shell in the operator's deployment scripts",
+        "context": "Second operator JSP shell path on an internal server (GET parameter c)"
+      },
+      {
+        "value": "/CyberStrikeAI/tmp/workspace/projects/",
+        "purpose": "Default project workspace directory of the public CyberStrikeAI AI penetration-testing platform (full form /root/CyberStrikeAI/tmp/workspace/projects/<uuid>); the operator's scripts and report carry it",
+        "confidence": "HIGH",
+        "action": "HUNT",
+        "source": "The CyberStrikeAI platform's workspace layout (392 occurrences in 103 of the operator's 1,743 files)",
+        "context": "Platform default layout, not an operator-chosen value: a hit shows the platform in use on a host, which security teams also run on purpose. Not a block value."
+      }
+    ],
+    "named_pipes": [
+      {
+        "value": "\\\\.\\pipe\\SvcUtil\\pipe\\epmapper",
+        "purpose": "Pipe name of the renamed GodPotato forks SvcUtil.exe and SvcUtil_clean.exe",
+        "confidence": "HIGH",
+        "action": "HUNT",
+        "source": "The pipe name in the operator's two `SvcUtil` GodPotato forks",
+        "context": "Pipe name of the renamed GodPotato forks SvcUtil.exe and SvcUtil_clean.exe"
+      }
+    ]
+  },
+  "behavioral_indicators": [
+    {
+      "pattern": "cyberstrike",
+      "kind": "domain account name",
+      "purpose": "Account dnsplugin.dll creates with 'net user ... /add /domain' and adds to Domain Admins and local Administrators (Events 4720, 4728, 4732 under dns.exe). Hunt for the name; it is the platform's own name.",
+      "confidence": "HIGH",
+      "action": "HUNT",
+      "source": "Static analysis of `dnsplugin.dll`, what it does when loaded",
+      "context": "Account dnsplugin.dll creates with 'net user ... /add /domain' and adds to Domain Admins and local Administrators (Events 4720, 4728, 4732 under dns.exe). Hunt for the name; it is the platform's own name."
+    },
+    {
+      "pattern": "pentest@cyberstrike",
+      "kind": "SSH public key comment",
+      "purpose": "Comment on the operator's standing ed25519 and RSA-4096 key pairs; look for it in authorized_keys. The ed25519 public key is the next entry.",
+      "confidence": "HIGH",
+      "action": "HUNT",
+      "source": "Comment on the operator's standing SSH public key pair, read from the held `/ssh_keys/id_ed25519.pub` (101 bytes, sha256 da51e1172372b6b1db1fec48ee5c8239e52ee3fc0ef498c3b9df85cd2d9a3fae)",
+      "context": "Comment on the operator's standing ed25519 and RSA-4096 key pairs; look for it in authorized_keys. The ed25519 public key is the next entry."
+    },
+    {
+      "pattern": "AAAAC3NzaC1lZDI1NTE5AAAAIBRxk25ztgApbSSf7FcT9W91dyNBQyDn4GmhBOHUGndz",
+      "kind": "SSH public key (ed25519), blob only",
+      "purpose": "Public half of the operator's standing ed25519 key (single-line authorized_keys form 'ssh-ed25519 <blob> pentest@cyberstrike'). An operator-owned public value. Hunt for the blob in authorized_keys, key stores and logs; a match on a victim host means the operator planted or used this key. The RSA-4096 public key is not in this feed.",
+      "confidence": "HIGH",
+      "action": "HUNT",
+      "source": "The held `/ssh_keys/id_ed25519.pub` (101 bytes, sha256 da51e1172372b6b1db1fec48ee5c8239e52ee3fc0ef498c3b9df85cd2d9a3fae): a single line, key type ssh-ed25519, comment pentest@cyberstrike",
+      "context": "Public half of the operator's standing ed25519 key (single-line authorized_keys form 'ssh-ed25519 <blob> pentest@cyberstrike'). An operator-owned public value. Hunt for the blob in authorized_keys, key stores and logs; a match on a victim host means the operator planted or used this key. The RSA-4096 public key is not in this feed."
+    }
+  ],
+  "hunt_only_never_block": [
+    {
+      "value": "fr.bastaniqifi.ir",
+      "role": "unverified tie (neither shown nor excluded)",
+      "context": "Passive DNS (VirusTotal) shows an A record from this name to the case IP, TTL 300, last modified 2026-10-07, inside a set of country-labelled .ir hostnames that all point to different hosts and look like a VPN or proxy node fleet. A scan-history export scoped to the apex domain did not show the record, which neither confirms nor contradicts the passive-DNS result; a fuller passive-DNS and scan-history request is outstanding. Whether the workbench operator runs that fleet, rents a node in it or only shares an address with it is not established: LOW as a link to the operator. The directory on :8000 was first seen 2026-09-26, eleven days before the record, and the address has had other tenants. Context only, do not block.",
+      "confidence": "LOW",
+      "false_positive_note": "Possible third-party service. Never block on this alone",
+      "source": "Passive DNS (VirusTotal) and a scan-history export, as described in the context"
+    }
+  ]
+}

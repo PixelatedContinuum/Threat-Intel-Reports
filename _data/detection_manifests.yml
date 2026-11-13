@@ -2635,6 +2635,214 @@ inkognito-russian-vpn-phishing-185-221-196-118-20260516-detections:
     robustness: 2
     confidence: "MODERATE"
     attack: [T1071.001]
+inv-2026-080-cyberstrike-ad-workbench-detections:
+  - name: "MAL_CyberStrike_DnsPlugin_ServerLevelPluginDll_DomainAdmin_Backdoor"
+    engine: yara
+    tier: Detection
+    fence: 0
+    hash: "a7bd54e8"
+    head: "import \"pe\" rule MAL_CyberStrike_DnsPlugin_Serve"
+    robustness: 2
+    confidence: "HIGH"
+    attack: [T1136.002]
+  - name: "HKTL_Linux_PwnKit_CVE_2021_4034_GCONV_PATH_Exploit_Binary"
+    engine: yara
+    tier: Detection
+    fence: 1
+    hash: "a543f592"
+    head: "rule HKTL_Linux_PwnKit_CVE_2021_4034_GCONV_PATH_"
+    robustness: 2
+    confidence: "HIGH"
+    attack: [T1068]
+  - name: "HKTL_GodPotato_Lineage_Wide_Strings"
+    engine: yara
+    tier: Detection
+    fence: 2
+    hash: "fdb6d576"
+    head: "rule HKTL_GodPotato_Lineage_Wide_Strings { meta:"
+    robustness: 2
+    confidence: "HIGH"
+    attack: [T1134.001]
+  - name: "MAL_CyberStrike_PwnKit_Root_Proof_Gconv_Module"
+    engine: yara
+    tier: Hunting
+    fence: 3
+    hash: "84151710"
+    head: "rule MAL_CyberStrike_PwnKit_Root_Proof_Gconv_Mod"
+    robustness: 1
+    confidence: "MODERATE"
+    attack: [T1068]
+  - name: "MAL_CyberStrike_GodPotato_SvcUtil_Fork_Renamed_Pipe_LSASS_Dump"
+    engine: yara
+    tier: Hunting
+    fence: 4
+    hash: "1af23350"
+    head: "rule MAL_CyberStrike_GodPotato_SvcUtil_Fork_Rena"
+    robustness: 1
+    confidence: "HIGH"
+    attack: [T1134.001, T1003.001]
+  - name: "HKTL_CyberStrikeAI_Platform_Default_Agent_Authorisation_Prompt"
+    engine: yara
+    tier: Hunting
+    fence: 5
+    hash: "b4846a46"
+    head: "rule HKTL_CyberStrikeAI_Platform_Default_Agent_A"
+    robustness: 1
+    confidence: "MODERATE"
+    attack: [T1588.007]
+  - name: "HKTL_Veeam_CVE_2024_40711_PoC_Patched_ReachFramework1337_Assembly"
+    engine: yara
+    tier: Hunting
+    fence: 6
+    hash: "e47d78a6"
+    head: "rule HKTL_Veeam_CVE_2024_40711_PoC_Patched_Reach"
+    robustness: 1
+    confidence: "MODERATE"
+    attack: [T1190]
+  - name: "Potato-Style Privilege Escalation Via Prefixed RPC Endpoint Mapper Pipe"
+    engine: sigma
+    tier: Detection
+    fence: 7
+    hash: "1d45ccf9"
+    head: "title: Potato-Style Privilege Escalation Via Pre"
+    robustness: 2
+    confidence: "MODERATE"
+    attack: [T1134.001]
+  - name: "PwnKit Exploit Staging Via GCONV_PATH Named Directory"
+    engine: sigma
+    tier: Detection
+    fence: 8
+    hash: "0edcbbd1"
+    head: "title: PwnKit Exploit Staging Via GCONV_PATH Nam"
+    robustness: 3
+    confidence: "HIGH"
+    attack: [T1068]
+  - name: "Service Installed To Dump Process Memory Via Comsvcs MiniDump"
+    engine: sigma
+    tier: Detection
+    fence: 9
+    hash: "1cf398bc"
+    head: "title: Service Installed To Dump Process Memory "
+    robustness: 3
+    confidence: "HIGH"
+    attack: [T1003.001]
+  - name: "Sqlcmd Used To Run Xp_cmdshell Starting A Shell"
+    engine: sigma
+    tier: Hunting
+    fence: 10
+    hash: "aa0ea8bf"
+    head: "title: Sqlcmd Used To Run Xp_cmdshell Starting A"
+    robustness: 2
+    confidence: "MODERATE"
+    attack: [T1505.001]
+  - name: "JBoss JMX Invoker Servlet Or JexBoss Shell Page Requested"
+    engine: sigma
+    tier: Hunting
+    fence: 11
+    hash: "906d3abb"
+    head: "title: JBoss JMX Invoker Servlet Or JexBoss Shel"
+    robustness: 2
+    confidence: "MODERATE"
+    attack: [T1190]
+  - name: "User Account Named Cyberstrike Created"
+    engine: sigma
+    tier: Hunting
+    fence: 12
+    hash: "b66b6187"
+    head: "title: User Account Named Cyberstrike Created id"
+    robustness: 1
+    confidence: "HIGH"
+    attack: [T1136.002]
+  - name: "Execution Of Svcutil Or Svcutil_clean Executable"
+    engine: sigma
+    tier: Hunting
+    fence: 13
+    hash: "75e6455b"
+    head: "title: Execution Of Svcutil Or Svcutil_clean Exe"
+    robustness: 1
+    confidence: "MODERATE"
+    attack: [T1036.005]
+  - name: "Service Installed With Cmd And Encoded PowerShell Image Path"
+    engine: sigma
+    tier: Hunting
+    fence: 14
+    hash: "653f07fe"
+    head: "title: Service Installed With Cmd And Encoded Po"
+    robustness: 2
+    confidence: "MODERATE"
+    attack: [T1569.002, T1059.001]
+  - name: "Rubeus Kerberos Ticket Request Command Line"
+    engine: sigma
+    tier: Hunting
+    fence: 15
+    hash: "ea2bcb81"
+    head: "title: Rubeus Kerberos Ticket Request Command Li"
+    robustness: 2
+    confidence: "MODERATE"
+    attack: [T1558.003]
+  - name: "Chisel Reverse Server Started On Linux"
+    engine: sigma
+    tier: Hunting
+    fence: 16
+    hash: "07319525"
+    head: "title: Chisel Reverse Server Started On Linux id"
+    robustness: 2
+    confidence: "MODERATE"
+    attack: [T1572]
+  - name: "CyberStrikeAI Workspace Path In A Linux Command Line"
+    engine: sigma
+    tier: Hunting
+    fence: 17
+    hash: "d8ad3961"
+    head: "title: CyberStrikeAI Workspace Path In A Linux C"
+    robustness: 1
+    confidence: "MODERATE"
+    attack: [T1588.007]
+  - name: "THL DETECT JBoss Invoker Servlet DeploymentFileRepository JSP Write"
+    engine: suricata
+    tier: Detection
+    fence: 18
+    hash: "d1a83820"
+    head: "alert http any any -> $HOME_NET any (msg:\"THL DE"
+    robustness: 2
+    confidence: "HIGH"
+    attack: [T1190]
+  - name: "THL HUNT External Serialized Java Object POST To JBoss Invoker Servlet"
+    engine: suricata
+    tier: Hunting
+    fence: 19
+    hash: "880daa4e"
+    head: "alert http $EXTERNAL_NET any -> $HOME_NET any (m"
+    robustness: 2
+    confidence: "MODERATE"
+    attack: [T1190]
+  - name: "THL HUNT Chisel Tunnel WebSocket Upgrade"
+    engine: suricata
+    tier: Hunting
+    fence: 20
+    hash: "394dd738"
+    head: "alert http $HOME_NET any -> $EXTERNAL_NET any (m"
+    robustness: 2
+    confidence: "MODERATE"
+    attack: [T1572]
+  - name: "THL HUNT Veeam Remoting CDbCryptoKeyInfo RepairRecs Payload"
+    engine: suricata
+    tier: Hunting
+    fence: 21
+    hash: "1b5f6077"
+    head: "alert tcp any any -> $HOME_NET any (msg:\"THL HUN"
+    robustness: 2
+    confidence: "LOW"
+    attack: [T1190]
+  - name: "THL HUNT Kerberos Unknown-Principal Error Burst From KDC"
+    engine: suricata
+    tier: Hunting
+    fence: 22
+    hash: "db30ce4c"
+    head: "alert krb5 any any -> any any (msg:\"THL HUNT Cyb"
+    robustness: 2
+    confidence: "MODERATE"
+    attack: [T1558.004]
 kaido-quasar-rat-detections:
   - name: "KAIDO Quasar-Fork Namespace + Costura Asset"
     engine: yara
