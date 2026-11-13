@@ -60,7 +60,7 @@ One operator used CyberStrikeAI, a public AI penetration-testing agent platform,
 - The tools are commodity and much of the work failed: chisel, PwnKit, GodPotato, Rubeus, a public Veeam proof of concept and operator-written glue, with no new malware. Five credential dumps on a second agency server, where the operator already had SYSTEM-level command execution, left no dump file, and a staged domain-admin DLL is not shown to have run. All of it is detectable (Sections 11 and 12).
 - The "authorised pentest" label in the operator's reports carries no weight, because the platform's default prompt tells every model session it already holds full authorisation; it is framing aimed at the model. I read the activity as unauthorised, at MODERATE.
 - I tie the operator to no named actor and to no other case I hold, and the motive is undetermined, at LOW.
-- For defenders, in my read across the cases I have worked, which this case did not measure, agent platforms put this breadth and pace within reach of ordinary operators, so the time from an exposed flaw to public loss can be hours. The defence is the same basics, applied faster (Section 14).
+- For defenders, in my read across the cases I have worked, which this case did not measure, agent platforms put this breadth and pace within reach of ordinary operators, so the time from an exposed flaw to public loss can be hours. A separate CyberStrikeAI case, published by Elastic on 13 November 2026, measured the platform working at machine speed (Section 4). The defence is the same basics, applied faster (Section 14).
 
 CyberStrikeAI and its abuse are already publicly documented (Section 16). What this case adds is one operator's whole workbench, graded per victim.
 
@@ -70,7 +70,7 @@ CyberStrikeAI and its abuse are already publicly documented (Section 16). What t
 
 For an organisation outside this case, the lesson is less about this operator than about where the risk now sits.
 
-Breadth is now cheap. A free, public agent platform let one operator survey a national government's estate (26 seed domains, 5,846 live hosts), break into one agency and work a hosting provider in the same days. Being one target among thousands is no longer cover when the survey, the exploit and the follow-up all run from one workspace.
+Breadth is now cheap. A free, public agent platform let one operator survey a national government's estate (26 seed domains, 5,846 live hosts), break into one agency and work a hosting provider in the same days. Being one target among thousands is no longer cover when the survey, the exploit and the follow-up all run from one workspace. In a separate CyberStrikeAI intrusion against cloud accounts, Elastic measured one session making 56 API calls in 141 milliseconds.
 
 Old weaknesses carried the loss, and nothing here needed new malware. The losses came from a deserialization flaw public for years, a password store one fixed key could decrypt, and credentials and keys an intruder could read. Exposure to this kind of operator tracks an organisation's unpatched internet-facing servers and how it stores secrets, not its exposure to advanced tooling.
 
@@ -153,6 +153,8 @@ So an "authorised penetration test" header in this operator's files carries no e
 Two narrower questions stay open, and I state neither as fact. Whether the operator added its own authorisation or scope text on top of the default is INSUFFICIENT, because the platform's database, its `config.yaml`, its conversations and any agent trace are not in the capture I read (the evidence gaps give the bound). Whether a model rather than the operator wrote the ministry report's prose is a working hypothesis at MODERATE and no more. The ministry report reproduces the platform's findings store, but its scope table, organisation chart and asset map are composed text the platform's report generators do not emit, so it is not an unmodified export.
 
 Public reporting already brackets this. Trend Micro's research describes an operator presenting "an authorized assessment" as a false premise to get past model guardrails, and the Cloud Security Alliance notes that the platform's safeguards can be switched off by whoever controls the deployment. I found no public source stating that the default prompt itself asserts authorisation, though the prompt sits in a public repository that anyone can read, so I do not offer that as a novelty claim.
+
+Elastic Security Labs published a second CyberStrikeAI case on 13 November 2026: an operator on a Hong Kong server used stolen credentials against four AWS accounts between 30 September and 16 October, and one role session made 56 calls in 141 milliseconds, about 2.5 ms per call, with 65 of the case's 78 alerts on the first day. It is a different operator on different infrastructure (Section 13). It supplies the measured tempo this case lacks, and Elastic is careful to say it cannot prove a model was making the decisions, which is the same limit I hold here.
 
 ## 5. The Attack Chain
 {: .hl-tier-2}
@@ -543,6 +545,8 @@ What the case gives a detection engineer, in order of durability:
 
 Several behaviours are covered upstream already, so I did not duplicate them. The DnsAdmins registry and child-process rules, `comsvcs` MiniDump on a command line, a shell under `sqlservr.exe` and web-shell command words in access logs all have SigmaHQ rules. SigmaHQ also covers `Rubeus.exe` runs and the `kerberoast` and `asktgt` command lines, which is why my Rubeus rule keeps only `asktgs` with `/ticket:` and `/service:`. Stock chisel and Rubeus are matched by public signatures. The weakest handle in the set is the staging directory `C:\ProgramData\`, because the name is common.
 
+The operator also tested a found AWS key with one signed `sts:GetCallerIdentity` call (V14). That is the first step of Elastic's CyberStrikeAI case too, and a first-time GetCallerIdentity call from an unfamiliar external address is the cloud-side handle for it. I wrote no cloud rule, because I hold no result of that call and no cloud telemetry.
+
 Three gaps remain. The JSP shells' own bytes are not held, so there is no file rule for them, only the request path and parameter. Kerberoast volume needs a per-environment baseline I do not have; the operator used AES256 tickets, so the common RC4-downgrade rules will not fire on it. And the platform's own artefacts, its prompt and findings store, never cross a victim network, because the model calls run from the operator's server to its model provider.
 
 ## 13. Threat Actor Assessment
@@ -571,12 +575,15 @@ No operator-side identifier recurs anywhere else I hold. I swept the operator's 
 
 One other operator I investigated in the same period, on a different host, shares a single TLS fingerprint (JARM) value with a node of the `.ir` fleet. That value is shared by more than 100,000 hosts, so it carries no weight. Names, addresses and file hashes share nothing, and the working language, tooling, hosting and targeting differ. The two are not shown to be the same operator, and I do not say they are unrelated either.
 
+Elastic's 13 November 2026 case is the same tool in another operator's hands. Its three server addresses, its hosting (AS133199, Hong Kong), its certificate serial and its FOFA fingerprint occur in none of the 33,805 files of my investigations, where this case's own address occurs in 17, and Elastic's article carries none of this operator's identifiers. The two windows overlap, 30 September to 16 October there and 4 to 7 October here, but the platform is public, so a shared tool and overlapping dates are not a link. I hold no certificate from this host's platform interface to set against Elastic's, so that one comparison is not made.
+
 | Hypothesis | Inconsistencies | Where it stands |
 |---|---|---|
 | An unauthorised intruder, not a sanctioned engagement | None in the files held; one version of the operator's ministry report is unheld | Carried, MODERATE |
 | A sanctioned red team or national exercise | No engagement document in 1,887 files; the report breaks its own exclusion list; the target set spans the central state and a provider's tenants; the authorisation label is the platform's default prompt | Not supported, and not killed outright while one report version is unheld |
 | A model, not the operator, wrote the report | The report is not an unmodified platform export; no agent trace, conversation or database is held | MODERATE as a working hypothesis only |
 | The same operator as that other case | Different language, tooling, hosting and targeting; 0 shared names, addresses or hashes; the shared JARM is common | INSUFFICIENT: not shown |
+| The same operator as Elastic's AWS case | Different address, hosting and targets; 0 of Elastic's identifiers in 33,805 files; this host's platform certificate is not held | INSUFFICIENT: not shown |
 | The operator runs the `.ir` node fleet | One A record, first appearance not known (last modified 7 October 2026); the address had earlier tenants | LOW as a link |
 | The motive is financial | No buyer, price, demand or wallet; the payment-gateway script has no result | LOW, a hypothesis |
 
@@ -587,6 +594,7 @@ One other operator I investigated in the same period, on a different host, share
 | Motive undetermined, LOW | A buyer, price or demand; tasking text or a state-linked lineage; or the operator's reason for serving the export publicly |
 | The `.ir` fleet tie, LOW | IP history for the host and the fleet nodes, DNS history, or a `.ir` hostname or panel in the operator's files |
 | No link to that other case, INSUFFICIENT | A Farsi or `.ir` artefact in this operator's files, a CyberStrikeAI artefact in the other's, or a shared origin address behind the fleet domains |
+| No link to Elastic's AWS case, INSUFFICIENT | This host's platform certificate matching Elastic's serial, or a shared address, credential or cloud account between the two |
 
 ## 14. Recommendations
 {: .hl-tier-1}
@@ -646,6 +654,7 @@ The single source that would do the most damage if wrong is the operator's own s
 
 - CyberStrikeAI source repository: [github.com/AIPentest/CyberStrikeAI](https://github.com/AIPentest/CyberStrikeAI), formerly `Ed1s0nZ/CyberStrikeAI`, Apache-2.0. The default system prompt and workspace layout discussed in Section 4 were read from this source at versions v1.7.5, v1.7.17 and v1.7.24.
 - Team Cymru (2026): [Tracking CyberStrikeAI: AI-Native Offensive Tools & MSS Ties](https://www.team-cymru.com/post/tracking-cyberstrikeai-usage), 21 IP addresses running the platform between 20 January and 26 February 2026, none of them this host.
+- Elastic Security Labs (13 November 2026), Samir Bousseaden, Bryan Porras Blanch and Terrance DeJesus: [56 AWS API calls in 141 milliseconds: Inside an AI-run intrusion](https://www.elastic.co/security-labs/threat-command/cyberstrikeai-aws-cloudtrail-intrusion), a separate CyberStrikeAI operator against four AWS accounts, with the detection rules that fired.
 - BleepingComputer (2026): [CyberStrikeAI tool adopted by hackers for AI-powered attacks](https://www.bleepingcomputer.com/news/security/cyberstrikeai-tool-adopted-by-hackers-for-ai-powered-attacks/), a general-audience account of the Team Cymru findings.
 - Cloud Security Alliance (2026): [Multi-Agent Offensive Frameworks in the Wild: CyberStrikeAI and ARTEX](https://labs.cloudsecurityalliance.org/research/csa-research-note-cyberstrikeai-artex-multi-agent-offense-20/), on 2026 campaigns using the platform and its disableable safeguards.
 - Trend Micro TrendAI (2026): [Not Only ARTEX: The Different Levels AI is Used in Attacks Targeting Japan](https://www.trendaisecurity.com/en-us/resources-insights/deep-research/not-only-artex-the-different-levels-ai-is-used-in-attacks-targeting-japan), including a CyberStrikeAI operator's open directory and an operator presenting "an authorized assessment" as a false premise to a model.

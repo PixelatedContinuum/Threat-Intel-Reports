@@ -1331,3 +1331,6 @@ html:has(.hl-report-page) {
 @media (max-width: 479px) { .hl-rv-callout-band, .hl-rv-zoom-rail, .hl-rv-zoom-axis { display: none; } }
 /* the same band on the Overview's Observation window rail: the rail is the positioned box, so the band spans the rail's full height */
 .hl-rv-callout-band--rail { top: 0; bottom: 0; }
+/* the band is drawn after the marks, so it sits under them by z-index: its dashed edge never crosses a mark */
+.hl-rv-callout-band { z-index: 0; }
+.hl-report-page .hl-rv-cmark, .hl-report-page .hl-rv-marker { z-index: 1; }

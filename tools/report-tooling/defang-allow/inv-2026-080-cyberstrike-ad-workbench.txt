@@ -7,3 +7,4 @@ thedfirreport.com  # cited reference page linked in the text (vendor, research, 
 www.sophos.com  # cited reference page linked in the text (vendor, research, news, government or standards), not infrastructure of the actor
 pwnkit.so  # file name (.so), the operator-written PwnKit gconv module, not a host
 GenToken.java  # file name (.java), an operator source file, not a host
+www.elastic.co  # cited reference page linked in the text (vendor, research, news, government or standards), not infrastructure of the actor
