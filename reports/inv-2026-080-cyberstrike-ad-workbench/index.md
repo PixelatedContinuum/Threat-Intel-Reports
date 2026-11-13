@@ -6,6 +6,8 @@ permalink: /reports/inv-2026-080-cyberstrike-ad-workbench/
 hide: true
 unlisted: true
 sitemap: false
+preview_cover_label: "Agentic Intrusion"   # preview only: the header cover while the catalog entry is parked; drop at go-live (the catalog cover_label takes over)
+preview_severity: high
 category: "AI-Assisted Intrusion"
 description: "One operator ran the public CyberStrikeAI agent platform from a Paris server against the Portuguese central government and a hosting provider, took and decrypted a government records application's user and password tables, and served them publicly, all with off-the-shelf tools a defender can detect."
 detection_page: /hunting-detections/inv-2026-080-cyberstrike-ad-workbench-detections/
@@ -30,7 +32,7 @@ figure_nav:
   - image: cyberstrikeai-platform-to-victims-chain.svg
     parts:
       - label: "Operator and platform"
-        anchor: "#4-the-ai-pentest-platform-and-why-its-authorised-pentest-label-carries-no-weight"
+        anchor: "#4-technical-classification-an-ai-agent-platform-driving-stock-tools"
       - label: "The platform drives public tools"
         anchor: "#82-what-is-stock-and-what-the-operator-wrote"
       - label: "The tools reach the targets, by grade"
@@ -43,47 +45,42 @@ figure_nav:
 **Last Updated:** November 12, 2026<br>
 **Threat Level:** HIGH
 
-> **Risk vs. Campaign Threat Level:** I score the toolkit's own technical risk at 6.4 out of 10, MEDIUM, because almost everything in it is stock, well documented and detectable (Section 2). I rate the campaign HIGH because of who it reached and what it exposed: a government records application's decrypted password store served from an open directory to the public internet, a central-government target set and a hosting provider's credentials. The tooling is mundane; the outcome is not.
+> **Risk vs. Campaign Threat Level:** The toolkit scores MEDIUM, 6.4 out of 10, because almost all of it is stock and detectable (Section 2). The campaign is HIGH because of what it reached and exposed: a central-government target set, a hosting provider's credentials and a decrypted password store published to the internet.
 
 ---
-
-## BLUF (Bottom Line Up Front)
-{: .hl-tier-1}
-{: .hl-tab-overview}
-
-One operator, working from an open directory on a Vultr server in Paris (`199[.]247[.]13[.]103`), used CyberStrikeAI, a public AI penetration-testing agent platform, to drive off-the-shelf offensive tooling against the Portuguese central government, a Portuguese hosting provider and its customers, and a few unrelated sites. Across 22 victim rows, 2 show host-level access, 3 are compromised on material the operator held, 12 were reached from outside and 5 were only listed.
-
-The most serious finding I hold at MODERATE. The operator intruded into a government records application run by a Portuguese public-sector agency, pulled its user-account and password-backup tables through a web shell, decrypted 111,404 stored password values with a single fixed key, and served the decrypted export from its own open directory, where 10 distinct public addresses were served it with status 200. Its project report, a separate 100-finding document, claims far more citizen personal data than that. Whether this operator also took the personal and health tables the application's schema lists is INSUFFICIENT: no file I hold contains those tables' personal or health fields.
-
-I read the activity as unauthorised, at MODERATE, and I give one verdict for all of it. Its ministry report, 335 lines with 22 findings, calls itself an "authorised penetration test", but the platform's default prompt tells every model session that it already holds full authorisation, so I read that label as framing aimed at the model, and it shows no mandate.
-
-The tools are ordinary, and I found no new malware. It is chisel, PwnKit, GodPotato, Rubeus, a public Veeam proof of concept and a pile of operator-written glue, steered by an agent platform. That is detectable, and much of it is not shown to have worked. Five service-based credential dumps on one agency server, where the operator already had SYSTEM-level command execution, left no dump file, and an antivirus product detected the GodPotato fork the operator delivered to its share; I do not tie that detection to the five dump runs.
 
 ## 1. Executive Summary
 {: .hl-tier-1}
 {: .hl-tab-overview}
 
-An operator running the CyberStrikeAI agent platform from `199[.]247[.]13[.]103` surveyed the Portuguese central government from its own list of 26 seed domains, found a long-public JBoss deserialization flaw on a public-sector agency's records application server and ran a web shell there, took and decrypted the user and password tables of the records application that agency runs, and served them from its open directory. From that first foothold it ran commands as SYSTEM on a second server, came to hold a memory dump of a member server's credentials from an Active Directory domain on that network, and staged a DLL built to create a domain-admin account. In parallel it held root-level credential material for a Portuguese hosting provider and scripted restores of that provider's customer backups. The operator's own scanner logged the records application server vulnerable at 22:14:53 on 4 October 2026, and the last status-200 response for the decrypted export in its server log is at 00:45:56 on 7 October.
+One operator used CyberStrikeAI, a public AI penetration-testing agent platform, to run off-the-shelf attack tools against the Portuguese central government and a Portuguese hosting provider in the same few days. It broke into a public-sector agency's records application through a JBoss flaw public for years, decrypted the application's stored passwords with a single fixed key, and had decrypted user-account passwords downloadable from its own open directory 5 h 17 min after its scanner flagged the server. Nothing in the toolkit is new. What the case shows is pace and reach: an agent platform let one operator work a national government estate and a hosting provider at once, and the wins it got came from weaknesses defenders have known about for years.
 
-How far it got is uneven, and I grade each victim separately in Section 3. The agency is the one organisation with host-level access shown on its own systems. The domain, the hosting provider and a state agency's website are compromised on credential or account material the operator held, without the route being in any file I hold. Everything else was probed, scanned or listed. Several of the operator's privilege steps are built and staged but never shown to work, and the five service-based credential dumps on the second server left no dump file.
+- The deepest result, which I hold at MODERATE, is a web shell on the agency's records application server, its user-account and password-backup tables pulled by SQL, 111,404 stored password values decrypted, and the export served from an unauthenticated directory to 10 distinct public addresses. Whether the operator also took the personal and health tables the schema lists is INSUFFICIENT: no file I hold contains them.
+- Of 22 victim rows, 2 show host-level access, 3 are compromised on material the operator held (an Active Directory domain's member-server memory dump, a hosting provider's root credentials and SSH keys, a state agency site's administrator rows), 12 were reached from outside and 5 were only listed (Section 3). The provider's credentials reach its customers; no customer output is held.
+- The tools are commodity and much of the work failed: chisel, PwnKit, GodPotato, Rubeus, a public Veeam proof of concept and operator-written glue, with no new malware. Five credential dumps on a second agency server, where the operator already had SYSTEM-level command execution, left no dump file, and a staged domain-admin DLL is not shown to have run. All of it is detectable (Sections 11 and 12).
+- The "authorised pentest" label in the operator's reports carries no weight, because the platform's default prompt tells every model session it already holds full authorisation; it is framing aimed at the model. I read the activity as unauthorised, at MODERATE.
+- I tie the operator to no named actor and to no other case I hold, and the motive is undetermined, at LOW.
+- For defenders, in my read across the cases I have worked, which this case did not measure, agent platforms put this breadth and pace within reach of ordinary operators, so the time from an exposed flaw to public loss can be hours. The defence is the same basics, applied faster (Section 14).
 
-This case shows one operator's whole workbench: the targets, the tooling, the platform's workspace, the outcomes and the operator's own write-up, graded per victim. CyberStrikeAI and its use in the wild are already documented (Section 16 cites the reporting), so I report what one person did with it.
-
-What this case shows matters more than any one tool in it. With the evolution of agentic pentest tooling that actors now pick up, the worry is shifting away from sophisticated new malware that bypasses everything. Most of the actors I see lean on off-the-shelf commodity tooling and large language models to run leaner and faster attacks, so speed and volume carry more of the risk than sophistication does. Advanced actors are still out there, but an average actor can now run successful attacks at speed and scale too.
-
-What I keep seeing across the cases I have worked is actors grabbing whatever they can find and running it with an LLM. That is my read across cases, not something this case measured, and I hold no baseline for how much the platform sped this operator up.
-
-What this case does show is narrower. The operator ran the platform (its workspace paths sit in 103 files) and relied on commodity public tools that are well documented and easy to detect. An antivirus product detected a GodPotato fork delivered to the second agency server where the operator already had SYSTEM, and I do not tie that to the five dump runs there, which left no dump file for reasons the held output gives separately. The operator's wins sat on a JBoss flaw public for years, an application whose password store a single fixed key could decrypt, and credentials and keys left where an intruder could read them.
-
-The standout is the AI pentest platform, and Section 4 covers what it does to the evidence. Almost everything else in the workbench is mundane. I make no attribution to a named actor or persona (Section 13), and I found nothing that ties this operator to any other case I hold.
+CyberStrikeAI and its abuse are already publicly documented (Section 16). What this case adds is one operator's whole workbench, graded per victim.
 
 ## 2. Business Risk Assessment
 {: .hl-tier-1}
 {: .hl-tab-overview}
 
-The real exposure is to the organisations on the target list, and it comes from what the operator took and where it put it. For the agency, 111,404 stored password values are decrypted: 2,088 in the user-account table and 109,316 in a password-backup table whose population the export itself does not show (Section 6 sets out what a separate list adds). That is a count of values, not of people or live accounts. The decrypted export did not stay with the operator. Its open directory answered requests for it with status 200 across a 14.3-hour span of the server log, and an earlier file of decrypted user-account passwords was public from 03:32:17 on 5 October. That is about 5 h 17 min after the operator's scanner logged the host vulnerable at 22:14:53 on 4 October, both times on the operator's server clock.
+For an organisation outside this case, the lesson is less about this operator than about where the risk now sits.
 
-For the domain on the same network, the operator holds a member server's credential dump, 55 Kerberoasted ticket records (none cracked) and the domain's computer and user inventories (34,149 computer rows and 65,131 user lines). For the hosting provider, it holds a WHM root session URL, a root password hash and private SSH keys equal to the provider's Puppet-managed copies, which is the kind of material that reaches the customers the provider hosts. No output from any customer system is held, so the customer reach is capability with no shown result.
+Breadth is now cheap. A free, public agent platform let one operator survey a national government's estate (26 seed domains, 5,846 live hosts), break into one agency and work a hosting provider in the same days. Being one target among thousands is no longer cover when the survey, the exploit and the follow-up all run from one workspace.
+
+Old weaknesses carried the loss, and nothing here needed new malware. The losses came from a deserialization flaw public for years, a password store one fixed key could decrypt, and credentials and keys an intruder could read. Exposure to this kind of operator tracks an organisation's unpatched internet-facing servers and how it stores secrets, not its exposure to advanced tooling.
+
+Theft became publication within hours. The operator served what it took from an open directory, and decrypted user-account passwords were downloadable 5 h 17 min after its scanner flagged the server. A breach like this can be a public exposure before it is a known incident, and every account in a leaked store has to be treated as burned.
+
+A provider's control plane reaches every tenant. The operator held a hosting provider's root session, root password hash, SSH keys and backup-server access, and scripted restores of customers' backups. A customer's exposure includes its hosting or managed-service provider's administrative credentials. No customer output is held here, so that reach is capability, not a shown result.
+
+An "authorised pentest" label proves nothing either. The platform writes authorisation into its own prompt, so a report claiming a sanctioned test, found on a compromised host or in a leak, is not evidence that anyone sanctioned it.
+
+The scores below rate the toolkit's technical risk to a defender.
 
 | Risk dimension | Score | Rationale |
 |---|---|---|
@@ -94,9 +91,7 @@ For the domain on the same network, the operator holds a member server's credent
 | Lateral movement | 8/10 | Remote service creation, admin shares, an SSH jump host, SOCKS tunnelling and credential reuse |
 | Detection challenge | 3/10 | Stock tools with public signatures, fixed shell paths and service names, and a fixed account name |
 
-Weighted 20, 20, 15, 15, 15 and 15 percent, I score the toolkit's overall technical risk at 6.4 out of 10, MEDIUM. The campaign threat level stays HIGH for the reason in the header note: the victims are a national government estate and a hosting provider, and one of them had its decrypted password store published.
-
-There are two limits on these numbers. I hold no victim-side telemetry for any organisation, so nothing here is confirmed from a victim's own logs. And whether a person, a crawler, a scanner or the operator itself fetched the export is not known; the server log carries no user agent.
+Weighted 20, 20, 15, 15, 15 and 15 percent, I score the toolkit's overall technical risk at 6.4 out of 10, MEDIUM. The campaign is HIGH for its reach and for what it exposed. I hold no victim-side telemetry, so nothing here is confirmed from a victim's own logs.
 
 ## 3. Victims: Who Was Hit and How Far the Operator Got
 {: .hl-tier-2}
@@ -139,11 +134,11 @@ V04's grade is a judgment on credential material whose route I cannot show. The 
 
 Any wider theft of personal data, which the project report claims, or of the health tables the schema lists, is not in this table because no file I hold shows it. Section 6 sets out what the held export contains and what it does not, and names two result files that go beyond it. For the hosting provider's customers and the 27 DNS zone owners, I asked the national CERT to have the provider notify them; I hold no confirmation.
 
-## 4. The AI Pentest Platform, and Why Its "Authorised Pentest" Label Carries No Weight
+## 4. Technical Classification: An AI Agent Platform Driving Stock Tools
 {: .hl-tier-2}
 {: .hl-tab-chain}
 
-The operator worked inside CyberStrikeAI, and that is the one part of this case I find genuinely worth a defender's attention. CyberStrikeAI is a public, Apache-2.0 licensed AI penetration-testing agent platform written in Go, published on GitHub since 8 November 2025 (now under `AIPentest/CyberStrikeAI`). It wraps a large language model in an agent loop with a catalogue of integrated offensive tools, a per-project workspace, and a findings store that records each verified vulnerability as a database entry with its own ID.
+The capability in this case is an AI agent platform steering stock public tools, not a malware family. The operator worked inside CyberStrikeAI, and the platform added pace and reach rather than new technique; it is the one part of this case I find genuinely worth a defender's attention. CyberStrikeAI is a public, Apache-2.0 licensed AI penetration-testing agent platform written in Go, published on GitHub since 8 November 2025 (now under `AIPentest/CyberStrikeAI`). It wraps a large language model in an agent loop with a catalogue of integrated offensive tools, a per-project workspace, and a findings store that records each verified vulnerability as a database entry with its own ID.
 
 I state that an actor used AI tools only when I hold direct evidence of it, and here I do. The platform's workspace path, `/root/CyberStrikeAI/tmp/workspace/projects/<uuid>`, occurs 392 times in 103 of the first 1,743 files scanned, and `/root/CyberStrikeAI` itself 418 times in 116. The directory yielded 1,887 captured files in all as of 12 November 2026: the 1,743 files scanned and the 143 later files, which were phrase-scanned separately and add no workspace count, make 1,886, and the 1,887th is the operator's project report, read in full. Two workspace projects appear: the main one, `72995c0d-1e52-4f27-b754-a7d80c685421`, and a wordlist copy whose ID begins `6a86acd6`. The ministry report reproduces the platform's finding IDs and field labels, 23 distinct IDs that occur nowhere else in the capture. The work ran in this platform at HIGH confidence.
 
@@ -172,18 +167,15 @@ The operator's work runs as one loose chain from a government-wide survey to a s
 
 | Stage | What the operator did | Where it is shown |
 |---|---|---|
-| Recon | Built a seed list of 26 Portuguese government domains in 15 ministry groups, enumerated 10,422 subdomains to 5,846 alive hosts, and port-scanned the agency's range and other targets | The operator's seed list, enumeration output and scan logs |
-| Resource development | Worked from the CyberStrikeAI workspace on its Paris server, staged stock chisel for download on port 8090, and compiled its own DNS plugin DLL at 18:14:33 UTC on 5 October 2026 | Workspace paths in 103 files; the staged files and build artefacts |
-| Initial access (V01) | Probed the records application server's JBoss 4.2.3 `JMXInvokerServlet` with the public JexBoss tool, which logged it VULNERABLE at 22:14:53 on 4 October; an operator web shell at `/sh/sh.jsp` then runs on that host | The JexBoss log and the shell drivers; how the shell was placed is not shown |
-| Collection (V01) | Ran `sqlcmd` through the shell against the records database on a separate database server, pulled the user-account table (3,356 rows) and the password-backup table (166,970 rows), and decrypted 111,404 password values with one key | The collection and decryption scripts and the export they produced |
-| Exposure | Served the decrypted export from its own open directory: 19 responses with status 200 to 10 distinct public addresses between 10:25:32 on 6 October and 00:45:56 on 7 October | The operator's own HTTP server log |
-| Lateral movement (V01) | Created a remote service over SCM on a second V01 server, which ran as SYSTEM, and read its output back over the C$ share | The service result files read back over SMB |
-| Credential access (V01, V02) | Ran five LSASS dumps against the second server, none of which left a dump file, and delivered a GodPotato fork that an antivirus product detected; held a member-server memory dump from the V02 domain; Kerberoasted 55 AES256 records, and its cracker printed two candidate passwords that do not verify | Dump listings ending "File Not Found", the antivirus error, the dump file and the cracking output |
-| Privilege staging (V02) | Built and staged a DNS Server plugin DLL that would create a domain account named `cyberstrike` and add it to Domain Admins, with a WMI setter aimed at a DNS server recorded in V02's row | The DLL, its source and the upload and setter scripts; no output in 2,372 held files (archive members included; the keyword scan below ran one file earlier) |
-| Hosting provider (V04, V05, V22) | Held a WHM root session URL, a root password hash and SSH keys equal to the provider's Puppet-managed copies, scripted 26 backup API calls, 11 of them file restores and 3 scheduled MySQL restores, aimed at customer data, and scanned 78 private addresses from an SSH jump host | The credential files, the backup API scripts and the scan output |
-| Other targets | Held two administrator rows from a state agency's site, and probed portals, login pages and APIs across the rest of the list | The operator files listed per row in Section 3 |
+| 1. Survey | Worked from the CyberStrikeAI workspace on its Paris server, built a seed list of 26 Portuguese government domains in 15 ministry groups, enumerated 10,422 subdomains to 5,846 alive hosts, port-scanned the agency's range and other targets, staged stock chisel for download and compiled its own DNS plugin DLL at 18:14:33 UTC on 5 October 2026 | Workspace paths in 103 files; the seed list, enumeration output and scan logs; the staged files and build artefacts |
+| 2. Break in | Probed the agency's records application server (V01) with the public JexBoss tool, which logged its JBoss 4.2.3 `JMXInvokerServlet` VULNERABLE at 22:14:53 on 4 October; an operator web shell at `/sh/sh.jsp` then runs on that host. Held two administrator rows from a state agency's site (V07) and probed portals and login pages across the rest of the list | The JexBoss log and the shell drivers (how the shell was placed is not shown); the operator files listed per row in Section 3 |
+| 3. Take the tables | Ran `sqlcmd` through the shell against the records database on a separate database server, pulled the user-account table (3,356 rows) and the password-backup table (166,970 rows), and decrypted 111,404 password values with one key | The collection and decryption scripts and the export they produced |
+| 4. Serve them publicly | Moved the export out through the shell and served it from its own open directory: 19 responses with status 200 to 10 distinct public addresses between 10:25:32 on 6 October and 00:45:56 on 7 October; an earlier decrypted accounts file was served from 03:32:17 on 5 October | The operator's own HTTP server log |
+| 5. Spread | Created a remote service over SCM on a second V01 server, which ran as SYSTEM, and read its output back over the C$ share; tunnelled through SOCKS and scanned 78 private addresses from an SSH jump host (V22) | The service result files read back over SMB; the jump host's scan output |
+| 6. Go for the domain | Ran five LSASS dumps against the second server, none of which left a dump file, and delivered a GodPotato fork that an antivirus product detected; held a member-server memory dump from the V02 domain; Kerberoasted 55 AES256 records, and its cracker printed two candidate passwords that do not verify; built and staged a DNS Server plugin DLL that would create a domain account named `cyberstrike` and add it to Domain Admins | Dump listings ending "File Not Found", the antivirus error, the dump file, the cracking output; the DLL, its source and the upload and setter scripts, with no output in 2,372 held files (archive members included) |
+| 7. The hosting provider | Held a WHM root session URL, a root password hash and SSH keys equal to the provider's Puppet-managed copies (V04), and scripted 26 backup API calls, 11 of them file restores and 3 scheduled MySQL restores, aimed at customer data (V05) | The credential files and the backup API scripts |
 
-Read top to bottom, it is a competent but very ordinary intrusion. The one deep result sat on a host exposed to a JBoss flaw any scanner can find, and on a password store a single fixed key could open. Everything the operator tried beyond that point, privilege escalation, credential dumping on the second agency server, a domain-admin account, either failed or is not shown to have worked.
+Read top to bottom, it is a competent but very ordinary intrusion run at breadth, and the platform's contribution was pace and reach. The one deep result sat on a host exposed to a JBoss flaw any scanner can find, and on a password store a single fixed key could open. Everything the operator tried beyond that point, privilege escalation, credential dumping on the second agency server, a domain-admin account, either failed or is not shown to have worked.
 
 ## 6. The Records Application Intrusion and the Exposed Credential Export
 {: .hl-tier-2}
@@ -225,7 +217,7 @@ I do not add those client counts together, because no union of the clients acros
 {: .hl-tier-2}
 {: .hl-tab-timeline}
 
-This is the dated record of the operator's server and its activity, from the platform's public release to the CERT notification. The operator's hands-on window against the agency is short: under three days, from the first vulnerability verdict on 4 October to the write test in the second server's share on 7 October 2026. Times from the operator's server log are on its own clock, whose timezone is unstated; times marked UTC come from file metadata. The DLL's first fetch from the directory is at 18:37:32 on that log clock, 22 min 59 s after its 18:14:33 UTC compile time, so if the compile stamp is honest the log clock is not more than 23 minutes ahead of UTC. Before the operator, from 2019 to 2024, `199[.]247[.]13[.]103` served several unrelated earlier tenants, the last a French domain whose certificates run from March 2023 to February 2024.
+This is the dated record of the operator's server and its activity, from the platform's public release to the CERT notification. The operator's hands-on window against the agency is short: under three days, from the first vulnerability verdict on 4 October to the write test in the second server's share on 7 October 2026. Survey, break-in, decryption and publication all sit inside that window, which is what working from an agent platform looked like here. Times from the operator's server log are on its own clock, whose timezone is unstated; times marked UTC come from file metadata. The DLL's first fetch from the directory is at 18:37:32 on that log clock, 22 min 59 s after its 18:14:33 UTC compile time, so if the compile stamp is honest the log clock is not more than 23 minutes ahead of UTC. Before the operator, from 2019 to 2024, `199[.]247[.]13[.]103` served several unrelated earlier tenants, the last a French domain whose certificates run from March 2023 to February 2024.
 
 | Date | Observation |
 |---|---|
@@ -403,7 +395,7 @@ A few artefacts identify the operator's working environment. None of them names 
 
 ## 9. Infrastructure
 {: .hl-tier-2}
-{: .hl-tab-attribution}
+{: .hl-tab-timeline}
 
 The operator's server is ordinary commercial hosting, and nothing about it points to a particular actor. `199[.]247[.]13[.]103` is a Vultr address (The Constant Company, AS20473) in the 199[.]247[.]0[.]0/19 block, announced from Paris. I hold the ASN and block at HIGH. I found no bulletproof-hosting indicator, and I put "not bulletproof" at MODERATE because it rests on the provider's identity alone; I did not check reputation lists or cross-check the routing record. Whether the operator rented this instance or compromised someone else's is INSUFFICIENT: the evidence is consistent with a rental, and nothing in it tells the two apart.
 
@@ -424,19 +416,6 @@ The operator's behaviour maps to 69 procedure rows covering 66 distinct techniqu
 The counts are 42 OBSERVED and 27 INFERRED, and row confidence is HIGH on 29, MODERATE on 37 and LOW on 3. Three of the OBSERVED rows carry a qualifier in their evidence: the service-execution row, where the SYSTEM service ran and the dump runs on the same host failed; the password-spraying row, where every attempt failed; and the Windows-service row, where each service was transient.
 
 OBSERVED never means a victim log or a victim grade: I hold no victim telemetry, so it is always the operator's own record of a result. No row maps Impact, phishing or supply chain, because nothing held shows encryption, wiping, defacement or a lure. The DNS Server plugin route has no dedicated technique in v20.0 and is recorded by its effects, under Windows Management Instrumentation, Domain Account and Account Manipulation.
-
-The techniques that carry the case are below: the platform, the route into the records application, and what was taken from it and from the domain. The full table follows.
-
-| Tactic / Technique | Name | Status | Conf. | Evidence |
-|---|---|---|---|---|
-| Resource Development / T1588.007 | Artificial Intelligence | OBSERVED | HIGH | CyberStrikeAI workspace; platform finding IDs in report |
-| Initial Access / T1190 | Exploit Public-Facing Application (V01) | OBSERVED | MODERATE | JBoss `JMXInvokerServlet`; the scan is HIGH, how the shell was placed is not shown |
-| Persistence / T1505.003 | Web Shell | OBSERVED | HIGH | `/sh/sh.jsp`, `/shell/cmd.jsp`, `diag*.jsp` pushed by `certutil` |
-| Credential Access / T1555 | Credentials from Password Stores | OBSERVED | HIGH | One key decrypts 111,404 of 111,404 values |
-| Collection / T1005 | Data from Local System | OBSERVED | HIGH | Application tables by SQL; an 18 MB hive; class files |
-| Exfiltration / T1041 | Exfiltration Over C2 Channel | OBSERVED | HIGH | 252 of 252 segments of a 25 MB file via the shell |
-| Credential Access / T1003.001 | LSASS Memory | OBSERVED | HIGH | 72 MB V02 dump: 36 sessions, 4 user accounts |
-| Credential Access / T1558.003 | Kerberoasting | OBSERVED | HIGH | 55 AES256 records, 11 failures |
 
 | Tactic / Technique | Name | Status | Conf. | Evidence |
 |---|---|---|---|---|
@@ -608,7 +587,7 @@ One other operator I investigated in the same period, on a different host, share
 {: .hl-tier-1}
 {: .hl-tab-indicators}
 
-These follow from what this operator did and where ordinary controls showed up. The operator ran the platform against commodity public tools, and an antivirus product detected a delivered GodPotato fork on a server where the operator already had SYSTEM. I do not tie that detection to the failed dumps, and protection did not stop the intrusion elsewhere, so these are the basics the case points at, not a tested defence.
+These follow from what this operator did and where ordinary controls showed up. The operator ran the platform against commodity public tools, and an antivirus product detected a delivered GodPotato fork on a server where the operator already had SYSTEM. I do not tie that detection to the failed dumps, and protection did not stop the intrusion elsewhere, so these are the basics the case points at, not a tested defence. The tools are old, so the controls are too; what this case changes is how fast they have to work.
 
 - Find and retire exposed JBoss invoker servlets (`/invoker/JMXInvokerServlet`) and other long-public deserialization entry points on internet-facing application servers. The operator's one deep win was on a host exposed this way, though how its shell was placed is not shown.
 - Stop storing passwords with reversible encryption under a fixed or default application key. One key opened 111,404 of 111,404 stored values here.

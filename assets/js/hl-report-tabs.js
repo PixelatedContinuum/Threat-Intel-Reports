@@ -1600,6 +1600,44 @@
       b.addEventListener('focus', function () { show(r); }); b.addEventListener('mouseenter', function () { show(r); });
       make('span', 'hl-rv-symbol', '', b); var vtext = make('span', '', null, b); make('span', 'hl-rv-vnum', (i + 1) + '.', vtext); vtext.appendChild(document.createTextNode(' ' + r.event)); make('small', '', r.lane + ' · ' + r.quality.replace('-', ' '), b);
     });
+    // T-0524.2: an optional curated callout (curation.timeline_callout: from, to, label, text) for a report whose events crowd one short window.
+    // It shades that window on the main axis and redraws only the events inside it on their own rail, spaced by the full time each row prints
+    // (date-only rows sit at the start of their day). The source table stays authoritative and is printed in full below.
+    var co = curation.timeline_callout;
+    if (co && co.from && co.to) {
+      var cf = Date.parse(co.from), ct = Date.parse(co.to) + 86400000;
+      if (!isNaN(cf) && !isNaN(ct) && ct > cf) {
+        // The band sits in the swimlane box, not in a rail or the axis, whose children the marker and label passes iterate; 22px is the rail's inline margin.
+        var band = make('div', 'hl-rv-callout-band', null, horizontal);
+        band.style.left = 'calc(22px + (100% - 44px) * ' + Math.max(0, (cf - min) / (max - min || 1)) + ' - 14px)';
+        band.style.width = 'calc((100% - 44px) * ' + Math.min(1, (ct - cf) / (max - min || 1)) + ' + 28px)';
+        band.setAttribute('aria-hidden', 'true');
+        var inside = rows.map(function (r, i) { return { r: r, i: i }; }).filter(function (x) { return x.r.when >= cf && x.r.when < ct; });
+        var box = make('aside', 'hl-rv-callout', null, chart); box.setAttribute('aria-label', co.label || 'Timeline callout');
+        make('h4', '', co.label || 'Callout', box);
+        if (co.text) make('p', '', co.text, box);
+        var zrail = make('div', 'hl-rv-zoom-rail', null, box), zaxis = make('div', 'hl-rv-zoom-axis', null, box);
+        function stamp(r) { var m = r.display.match(/(\d{4}-\d{2}-\d{2})(?:\s+(\d{2}:\d{2}(?::\d{2})?))?/); return m ? Date.parse(m[1] + 'T' + (m[2] || '00:00') + 'Z') : r.when; }
+        inside.forEach(function (x) {
+          var b = button('', zrail, function () { show(x.r); }); b.className = 'hl-rv-zmark hl-rv-' + x.r.quality;
+          b.dataset.rvEvent = x.i; b.dataset.t = stamp(x.r); b.title = x.r.display + ': ' + x.r.event; b.setAttribute('aria-label', x.r.display + ': ' + x.r.event);
+          make('span', 'hl-rv-symbol', '', b); make('span', '', x.i + 1, b);
+          b.addEventListener('focus', function () { show(x.r); }); b.addEventListener('mouseenter', function () { show(x.r); });
+        });
+        for (var d = cf; d < ct; d += 86400000) { var tick = make('span', '', new Date(d).toISOString().slice(0, 10), zaxis); tick.style.left = 100 * (d - cf) / (ct - cf) + '%'; }
+        function placeZoom() {
+          var width = zrail.clientWidth; if (!width) return; var slots = [], step = (parseFloat(getComputedStyle(zrail).getPropertyValue('--rv-mark-h')) || 64) + 8;
+          Array.from(zrail.children).forEach(function (b) {
+            var x = (+b.dataset.t - cf) / (ct - cf) * width, iv = { left: x - 26, right: x + 26 }, slot = 0; // a 44px mark plus 4px clear each side
+            while (slots[slot] && slots[slot].some(function (s) { return iv.left < s.right && iv.right > s.left; })) slot++;
+            if (!slots[slot]) slots[slot] = []; slots[slot].push(iv);
+            b.style.left = 100 * (+b.dataset.t - cf) / (ct - cf) + '%'; b.style.top = slot * step + 'px';
+          });
+          zrail.style.height = Math.max(1, slots.length) * step - 8 + 'px';
+        }
+        new ResizeObserver(placeZoom).observe(zrail);
+      }
+    }
     var tableDetails = make('details', 'hl-rv-chronology-table', null, parent); tableDetails.open = true; make('summary', '', 'Chronology as a table', tableDetails); dashTable(tableDetails, m, 'Every dated event as printed', 'chronology');
     return true;
   }

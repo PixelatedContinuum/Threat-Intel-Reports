@@ -26,12 +26,13 @@
 entries:
   # ===== PENDING GO-LIVE: INV-2026-080 CyberStrikeAI workbench (uncomment at launch) =====
   # Withheld: unlisted preview awaiting Joseph's go-live. Flip per hunters-ledger-publish
-  # references/preview-and-go-live.md, "Go-live flip" (uncomment, drop unlisted/sitemap flags).
+  # references/preview-and-go-live.md, "Go-live flip" (uncomment, drop unlisted/sitemap flags and the report's preview_cover_label/preview_severity).
   #  - title: "An AI Pentest Platform Drives Commodity Tooling Against Portuguese Government Targets"
   #    date: 2026-11-12
   #    severity: high
   #    tags: [Open Dir, AI Abuse, Toolkit, Cred Theft]
   #    report_url: /reports/inv-2026-080-cyberstrike-ad-workbench/
+  #    cover_label: "Agentic Intrusion"
   #    detection_url: /hunting-detections/inv-2026-080-cyberstrike-ad-workbench-detections
   #    ioc_url: /ioc-feeds/inv-2026-080-cyberstrike-ad-workbench-iocs.json
   # ======================================================================================

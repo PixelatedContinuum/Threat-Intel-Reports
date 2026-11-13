@@ -1314,3 +1314,18 @@ html:has(.hl-report-page) {
   .hl-report-page .hl-post-header > .hl-rv-cover:has(.c3-chart--compact) { contain: none; height: auto; padding-bottom: 0; }
   .hl-report-page .hl-rv-cover:has(.c3-chart--compact) .c3-cover { flex: none; height: 96px; }
 }
+/* T-0524.2: curated timeline callout (curation.timeline_callout). A shaded band over the crowded window on the main chart, then a box
+   that redraws only that window's events on their own rail, spaced by the time each row prints. Its marks are .hl-rv-zmark, not
+   .hl-rv-marker, so they are never counted as extra events of the main chart; they take the main marks' size and shapes. */
+.hl-rv-swimlanes { position: relative; }
+.hl-rv-callout-band { position: absolute; top: 0; bottom: 40px; border: 1px dashed var(--rv-warn); border-radius: var(--rv-radius); background: color-mix(in srgb, var(--rv-warn) 10%, transparent); pointer-events: none; }
+.hl-rv-callout { margin: 20px 0 0; padding: 14px 16px 10px; border: 1px solid var(--rv-warn); border-left-width: 4px; border-radius: var(--rv-radius); background: var(--rv-bg); }
+.hl-report-page .hl-rv-callout h4 { margin: 0 0 6px !important; font-size: 16px !important; color: var(--rv-warn) !important; }
+.hl-report-page .hl-rv-callout p { margin: 0 0 14px; font-size: var(--rv-fs); line-height: 1.5; color: var(--rv-text); }
+.hl-rv-zoom-rail { position: relative; margin-inline: 22px; border-top: 1px solid var(--rv-line); }
+.hl-report-page .hl-rv-zmark { position: absolute; top: 0; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; justify-content: flex-start; gap: 4px; padding: 2px; width: 44px; height: var(--rv-mark-h); min-width: 44px; min-height: 44px; font-size: var(--rv-num); border: 0; background: transparent; line-height: 1.2; }
+.hl-rv-zmark > span:last-child { font-size: var(--rv-num); font-weight: 600; color: var(--rv-muted); font-variant-numeric: tabular-nums; }
+.hl-rv-zoom-axis { position: relative; height: 28px; margin-inline: 22px; border-top: 1px solid var(--rv-line); }
+.hl-rv-zoom-axis span { position: absolute; top: 6px; font-size: 13px; color: var(--rv-muted); white-space: nowrap; }
+.hl-rv-zoom-axis span::before { content: ""; position: absolute; left: 0; top: -10px; height: 8px; border-left: 1px solid var(--rv-line); }
+@media (max-width: 479px) { .hl-rv-callout-band, .hl-rv-zoom-rail, .hl-rv-zoom-axis { display: none; } }

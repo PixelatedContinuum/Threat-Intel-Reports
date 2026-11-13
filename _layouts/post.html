@@ -121,8 +121,11 @@ document.addEventListener('DOMContentLoaded', function () {
 {%- comment -%} T-0556 w4 (concept 3): the byline, the cover (w2's c3-cover include, fed by this report's catalog entry; no entry or no cover_label, no cover) and the sponsor foot. The bottom line and the action buttons are placed by hl-report-tabs.js, the facts strip is the Overview data view's figure tiles. {%- endcomment -%}
 {%- assign _rcat = site.data.catalog.entries | where: "report_url", page.url | first -%}
 <p class="hl-rv-byline"><span>By <b>Joseph Harrison</b></span><span>The Hunter's Ledger</span></p>
-{%- if _rcat.cover_label %}
-<div class="hl-rv-cover">{% include c3-cover.html label=_rcat.cover_label severity=_rcat.severity size="header" %}{% include compact-attack-chart.html report_url=page.url %}</div>
+{%- comment -%} T-0524.2: an unlisted preview has its catalog entry parked (commented out), so it takes the cover from its own front matter (preview_cover_label, preview_severity) and the ATT&CK counts from its own mapping table, so the preview shows the header card the go-live page will show. A listed report reads the catalog only. {%- endcomment -%}
+{%- assign _rcov = _rcat.cover_label -%}{%- assign _rsev = _rcat.severity -%}
+{%- if _rcov == nil and page.unlisted -%}{%- assign _rcov = page.preview_cover_label -%}{%- assign _rsev = page.preview_severity -%}{%- endif -%}
+{%- if _rcov %}
+<div class="hl-rv-cover">{% include c3-cover.html label=_rcov severity=_rsev size="header" %}{% if _rcat %}{% include compact-attack-chart.html report_url=page.url %}{% else %}{% include compact-attack-chart.html page_content=page.content %}{% endif %}</div>
 {%- endif %}
 {% include report-sponsor-bar.html part="report" %}{% endif %}
 </div>

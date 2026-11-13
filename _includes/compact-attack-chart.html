@@ -12,6 +12,24 @@
       {%- assign cc_report = cc_tech.reports | where: 'url', include.report_url | first -%}
       {%- if cc_report -%}{{ cc_report.tactic }}|{%- endif -%}
     {%- endfor -%}
+  {%- elsif include.page_content -%}
+    {%- comment -%} Unlisted preview only (post.html): the attack_index omits unpublished reports, so count the page's own "| Tactic / T-id |" mapping rows, each tactic and technique once, the same unit the index uses. {%- endcomment -%}
+    {%- assign cc_seen = '' -%}
+    {%- assign cc_lines = include.page_content | newline_to_br | split: '<br />' -%}
+    {%- for cc_line in cc_lines -%}
+      {%- assign cc_l = cc_line | strip -%}
+      {%- if cc_l contains ' / T' and cc_l.size > 2 and cc_l contains '|' -%}
+        {%- assign cc_first = cc_l | split: '|' -%}
+        {%- assign cc_cell = cc_first[1] | strip -%}
+        {%- assign cc_parts = cc_cell | split: ' / T' -%}
+        {%- assign cc_d = cc_parts[1] | slice: 0 -%}
+        {%- if cc_parts.size == 2 and '0123456789' contains cc_d -%}
+          {%- assign cc_tac = cc_parts[0] | strip -%}
+          {%- assign cc_key = '~' | append: cc_cell | append: '~' -%}
+          {%- unless cc_seen contains cc_key -%}{%- assign cc_seen = cc_seen | append: cc_key -%}{{ cc_tac }}|{%- endunless -%}
+        {%- endif -%}
+      {%- endif -%}
+    {%- endfor -%}
   {%- endif -%}
 {%- endcapture -%}
 {%- assign cc_tactics = cc_raw | split: '|' -%}

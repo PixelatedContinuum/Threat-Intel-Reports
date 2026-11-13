@@ -1,0 +1,294 @@
+# Editorial view selections for this report only. Source tables remain authoritative.
+# T-0524.2: the ATT&CK table has no Scope column, so each join matches every row of its technique (scope_prefix empty).
+{
+  "stage_joins": {
+    "1. Survey": [
+      {
+        "technique": "T1595.001",
+        "scope_prefix": ""
+      },
+      {
+        "technique": "T1595.002",
+        "scope_prefix": ""
+      },
+      {
+        "technique": "T1590.002",
+        "scope_prefix": ""
+      },
+      {
+        "technique": "T1596.003",
+        "scope_prefix": ""
+      },
+      {
+        "technique": "T1588.007",
+        "scope_prefix": ""
+      },
+      {
+        "technique": "T1588.002",
+        "scope_prefix": ""
+      },
+      {
+        "technique": "T1587.001",
+        "scope_prefix": ""
+      },
+      {
+        "technique": "T1608.001",
+        "scope_prefix": ""
+      },
+      {
+        "technique": "T1046",
+        "scope_prefix": ""
+      }
+    ],
+    "2. Break in": [
+      {
+        "technique": "T1190",
+        "scope_prefix": ""
+      },
+      {
+        "technique": "T1505.003",
+        "scope_prefix": ""
+      },
+      {
+        "technique": "T1059.003",
+        "scope_prefix": ""
+      },
+      {
+        "technique": "T1059.001",
+        "scope_prefix": ""
+      },
+      {
+        "technique": "T1071.001",
+        "scope_prefix": ""
+      },
+      {
+        "technique": "T1105",
+        "scope_prefix": ""
+      },
+      {
+        "technique": "T1132.001",
+        "scope_prefix": ""
+      },
+      {
+        "technique": "T1140",
+        "scope_prefix": ""
+      },
+      {
+        "technique": "T1033",
+        "scope_prefix": ""
+      },
+      {
+        "technique": "T1606",
+        "scope_prefix": ""
+      },
+      {
+        "technique": "T1110.001",
+        "scope_prefix": ""
+      }
+    ],
+    "3. Take the tables": [
+      {
+        "technique": "T1505.001",
+        "scope_prefix": ""
+      },
+      {
+        "technique": "T1005",
+        "scope_prefix": ""
+      },
+      {
+        "technique": "T1119",
+        "scope_prefix": ""
+      },
+      {
+        "technique": "T1555",
+        "scope_prefix": ""
+      },
+      {
+        "technique": "T1074.001",
+        "scope_prefix": ""
+      },
+      {
+        "technique": "T1003.002",
+        "scope_prefix": ""
+      },
+      {
+        "technique": "T1003.004",
+        "scope_prefix": ""
+      }
+    ],
+    "4. Serve them publicly": [
+      {
+        "technique": "T1041",
+        "scope_prefix": ""
+      }
+    ],
+    "5. Spread": [
+      {
+        "technique": "T1569.002",
+        "scope_prefix": ""
+      },
+      {
+        "technique": "T1543.003",
+        "scope_prefix": ""
+      },
+      {
+        "technique": "T1053.005",
+        "scope_prefix": ""
+      },
+      {
+        "technique": "T1021.002",
+        "scope_prefix": ""
+      },
+      {
+        "technique": "T1570",
+        "scope_prefix": ""
+      },
+      {
+        "technique": "T1021.004",
+        "scope_prefix": ""
+      },
+      {
+        "technique": "T1572",
+        "scope_prefix": ""
+      },
+      {
+        "technique": "T1090.001",
+        "scope_prefix": ""
+      },
+      {
+        "technique": "T1018",
+        "scope_prefix": ""
+      },
+      {
+        "technique": "T1036.005",
+        "scope_prefix": ""
+      },
+      {
+        "technique": "T1134.001",
+        "scope_prefix": ""
+      },
+      {
+        "technique": "T1070.004",
+        "scope_prefix": ""
+      },
+      {
+        "technique": "T1059.004",
+        "scope_prefix": ""
+      },
+      {
+        "technique": "T1068",
+        "scope_prefix": ""
+      },
+      {
+        "technique": "T1550.002",
+        "scope_prefix": ""
+      },
+      {
+        "technique": "T1210",
+        "scope_prefix": ""
+      }
+    ],
+    "6. Go for the domain": [
+      {
+        "technique": "T1003.001",
+        "scope_prefix": ""
+      },
+      {
+        "technique": "T1218.011",
+        "scope_prefix": ""
+      },
+      {
+        "technique": "T1558.003",
+        "scope_prefix": ""
+      },
+      {
+        "technique": "T1110.002",
+        "scope_prefix": ""
+      },
+      {
+        "technique": "T1110.003",
+        "scope_prefix": ""
+      },
+      {
+        "technique": "T1110.004",
+        "scope_prefix": ""
+      },
+      {
+        "technique": "T1078.002",
+        "scope_prefix": ""
+      },
+      {
+        "technique": "T1087.002",
+        "scope_prefix": ""
+      },
+      {
+        "technique": "T1069.002",
+        "scope_prefix": ""
+      },
+      {
+        "technique": "T1482",
+        "scope_prefix": ""
+      },
+      {
+        "technique": "T1552.006",
+        "scope_prefix": ""
+      },
+      {
+        "technique": "T1649",
+        "scope_prefix": ""
+      },
+      {
+        "technique": "T1550.003",
+        "scope_prefix": ""
+      },
+      {
+        "technique": "T1047",
+        "scope_prefix": ""
+      },
+      {
+        "technique": "T1136.002",
+        "scope_prefix": ""
+      },
+      {
+        "technique": "T1098",
+        "scope_prefix": ""
+      },
+      {
+        "technique": "T1564.003",
+        "scope_prefix": ""
+      },
+      {
+        "technique": "T1007",
+        "scope_prefix": ""
+      }
+    ],
+    "7. The hosting provider": [
+      {
+        "technique": "T1078",
+        "scope_prefix": ""
+      },
+      {
+        "technique": "T1552.004",
+        "scope_prefix": ""
+      },
+      {
+        "technique": "T1083",
+        "scope_prefix": ""
+      },
+      {
+        "technique": "T1074.002",
+        "scope_prefix": ""
+      },
+      {
+        "technique": "T1098",
+        "scope_prefix": ""
+      }
+    ]
+  },
+  "timeline_callout": {
+    "from": "2026-10-04",
+    "to": "2026-10-07",
+    "label": "Hands-on window, 4 to 7 October 2026",
+    "text": "10 of the 17 dated events fall in these three days. This is an AI pentest platform at work: one operator went from a vulnerability verdict on the agency's server to decrypted passwords on the public internet in 5 h 17 min, and was building a domain-admin DLL and running credential dumps against other hosts in the same window. Times are printed as the rows give them, on the operator's server clock (timezone unstated) or in UTC where marked."
+  }
+}
