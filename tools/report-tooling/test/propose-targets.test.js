@@ -105,10 +105,10 @@ function templateMd(rows) {
   }).join('\n');
 }
 
-test('all 19 headings of the report template get a tab proposal, each the one recorded in the fixture', function () {
-  assert.strictEqual(FIXTURE.length, 19);
+test('all 18 headings of the report template get a tab proposal, each the one recorded in the fixture', function () {
+  assert.strictEqual(FIXTURE.length, 18);   /* 19 before 2026-11-13: the BLUF heading left the template (one Executive Summary is the bottom line) */
   var props = P.proposeFor(templateMd(FIXTURE));
-  assert.strictEqual(props.length, 19);
+  assert.strictEqual(props.length, 18);
   var unplaced = props.filter(function (p) { return !p.tab; }).map(function (p) { return p.text; });
   assert.deepStrictEqual(unplaced, [], 'unplaced template headings');
   props.forEach(function (p, i) { assert.strictEqual(p.tab, FIXTURE[i][1], p.text); });

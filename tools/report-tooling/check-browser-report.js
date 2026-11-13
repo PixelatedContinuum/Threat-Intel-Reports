@@ -2245,7 +2245,7 @@ function chainTableVerdict(m, attackRows) {
       }
       if (wrong.length) bad.push(wrong.length + ' marked-row fault(s): ' + wrong.slice(0, 3).join('; '));
     }
-  } else if (m.carry) bad.push(m.carry + ' row(s) are marked but the report has no key list');
+  } else { if (m.carry) bad.push(m.carry + ' row(s) are marked but the report has no key list'); if (m.ev) bad.push(m.ev + ' evidence note(s) drawn but the report has no key list'); }
   return { notChecked: false, ok: bad.length === 0, why: bad, detail: m.rows + ' row(s) against ' + attackRows + '; ' + m.carry + ' marked of ' + m.keySrc + ' list row(s)' + (bad.length ? '; ' + bad.join('; ') : '') };
 }
 /* The phone icon tab strip (390 and 360): every tab is an icon with its accessible name, only the selected one shows its label, the strip is the tablist, and the Sections menu still lists every tab. */
@@ -2355,6 +2355,14 @@ async function chainRows(page, url) {
       var vM2 = miniVerdict(rest, await page.json(CHAINMINI_EXPR), await page.json(CHAINMINI_EXPR)); row(N.mini, w, h, vM2);
       await page.evaluate('(function(){window.scrollTo(0,0);var i=document.querySelector("#tab-chain .hl-rv-console .hl-rv-csearch input");if(i){i.value="";i.dispatchEvent(new Event("input",{bubbles:true}));}})()'); await CDP.sleep(150);
     }
+    /* T-0524.2: a report with no "carries the case" list (the house standard from 2026-11-13, no separate key table) still gets
+       three real controls: a mark or an evidence note injected into the drawn table must make the table row FAIL, because the
+       report gives no row to mark. The page is put back after each. */
+    function noKeyCtl(js, label) { return [vT, label, async function () {
+      await page.evaluate('(function(){var rows=[].slice.call(document.querySelectorAll("#tab-chain .hl-rv-procedures tbody tr"));window.__hlNK=[];' + js + '})()');
+      var v = chainTableVerdict(await page.json(CHAIN_EXPR), attackRows);
+      await page.evaluate('(function(){(window.__hlNK||[]).forEach(function(n){n.remove();});window.__hlNK=null;})()');
+      return v; }]; }
     if (w === 1280) {
       var ctls = [
         [vC, 'a chip whose handler is gone makes the console row FAIL', async function () {
@@ -2363,17 +2371,17 @@ async function chainRows(page, url) {
           var ps = await page.json(CHAINSTATE_EXPR); return consoleVerdict(m, ps, null, attackRows); }],
         [vF, 'with one stage node removed the flow row FAILS', async function () { await page.evaluate('(function(){var n=document.querySelector("#tab-chain .hl-rv-flow .hl-rv-fnode");if(n)n.closest("li").remove();})()'); return flowVerdict(await page.json(CHAIN_EXPR)); }],
         /* review F2 (T-0500.1.7.3 c5): equal counts, wrong content. Each control changes the page, reads the verdict, and puts the page back before the next control. */
-        [m.keySrc ? vT : { notChecked: true, ok: false, detail: 'this report has no "carries the case" list (0 source rows), so no mark is drawn to move' }, 'a carries-the-case mark and its evidence moved to another row (counts unchanged) makes the table row FAIL', async function () {
+        (!m.keySrc) ? noKeyCtl('var n=document.createElement("span");n.className="hl-rv-carry";rows[0].cells[0].appendChild(n);window.__hlNK.push(n);', 'with no key list, a carries-the-case mark injected into the first row makes the table row FAIL') : [vT, 'a carries-the-case mark and its evidence moved to another row (counts unchanged) makes the table row FAIL', async function () {
           var moved = await page.json('(function(){var P=document.getElementById("tab-chain"),rows=[].slice.call(P.querySelectorAll(".hl-rv-procedures tbody tr"));var from=rows.filter(function(r){return r.querySelector(".hl-rv-carry");})[0],to=rows.filter(function(r){return !r.querySelector(".hl-rv-carry");})[0];if(!from||!to)return false;var a=from.querySelector(".hl-rv-carry"),b=from.querySelector(".hl-rv-ev"),cell=to.cells[a.parentNode.cellIndex];window.__hlC5={a:a,b:b,home:a.parentNode};cell.appendChild(a);cell.appendChild(b);return true;})()');
           var v = moved ? chainTableVerdict(await page.json(CHAIN_EXPR), attackRows) : { notChecked: true, ok: false, detail: 'every row of the table is marked, so there is no unmarked row to move a mark to' };
           await page.evaluate('(function(){var s=window.__hlC5;if(s){s.home.appendChild(s.a);s.home.appendChild(s.b);window.__hlC5=null;}})()');
           return v; }],
-        [m.keySrc ? vT : { notChecked: true, ok: false, detail: 'this report has no "carries the case" list (0 source rows), so no mark is drawn to move' }, 'the evidence text of a marked row replaced by other text (counts unchanged) makes the table row FAIL', async function () {
+        (!m.keySrc) ? noKeyCtl('var n=document.createElement("div");n.className="hl-rv-ev";n.innerHTML="<p>Invented evidence</p>";rows[0].cells[rows[0].cells.length-1].appendChild(n);window.__hlNK.push(n);', 'with no key list, an evidence note injected into a row makes the table row FAIL') : [vT, 'the evidence text of a marked row replaced by other text (counts unchanged) makes the table row FAIL', async function () {
           var old = await page.json('(function(){var p=document.querySelector("#tab-chain .hl-rv-procedures .hl-rv-ev p");if(!p)return null;var o=p.textContent;p.textContent="Invented evidence that the report does not give.";window.__hlC5o={p:p,o:o};return o;})()');
           var v = old !== null ? chainTableVerdict(await page.json(CHAIN_EXPR), attackRows) : { notChecked: true, ok: false, detail: 'no evidence note is drawn' };
           await page.evaluate('(function(){var s=window.__hlC5o;if(s){s.p.textContent=s.o;window.__hlC5o=null;}})()');
           return v; }],
-        [m.keySrc ? vT : { notChecked: true, ok: false, detail: 'this report has no "carries the case" list (0 source rows), so no mark is drawn to remove' }, 'with one carries-the-case mark removed the table row FAILS', async function () { await page.evaluate('(function(){var n=document.querySelector("#tab-chain .hl-rv-procedures .hl-rv-carry");if(n)n.remove();})()'); return chainTableVerdict(await page.json(CHAIN_EXPR), attackRows); }],
+        (!m.keySrc) ? noKeyCtl('var r=rows[rows.length-1];var n=document.createElement("span");n.className="hl-rv-carry";r.cells[0].appendChild(n);window.__hlNK.push(n);', 'with no key list, a carries-the-case mark injected into the last row makes the table row FAIL') : [vT, 'with one carries-the-case mark removed the table row FAILS', async function () { await page.evaluate('(function(){var n=document.querySelector("#tab-chain .hl-rv-procedures .hl-rv-carry");if(n)n.remove();})()'); return chainTableVerdict(await page.json(CHAIN_EXPR), attackRows); }],
         [vL, 'a tactic button whose handler is gone makes the highlighting row FAIL', async function () {
           /* the handlers sit on the view body, so a copy without them: stop the events before they reach it */
           await page.evaluate('(function(){var P=document.getElementById("tab-chain");P.addEventListener("focusin",function(e){e.stopImmediatePropagation();},true);P.addEventListener("mouseover",function(e){e.stopImmediatePropagation();},true);})()');
