@@ -166,8 +166,14 @@ families:
     kind: tunnel
   - family: PrintSpoofer
     kind: exploit
+  - family: GodPotato
+    kind: exploit
+    summary: A public Windows privilege-escalation tool in the Potato line that turns a service account's impersonation right into SYSTEM.
 
   # ---- kits and toolkits ----
+  - family: CyberStrikeAI
+    kind: other
+    summary: A free, public AI agent platform for offensive security testing, seen driving stock attack tools in a real intrusion.
   - family: BellaMain
     kind: kit
     aliases: ["BellaMain PhaaS panel"]

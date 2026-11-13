@@ -1687,6 +1687,66 @@ families:
     rule_count: 1
     feed_count: 0
     actor_count: 0
+  - name: GodPotato
+    slug: godpotato
+    url: /families/godpotato/
+    kind: exploit
+    aliases: []
+    summary: >-
+      A public Windows privilege-escalation tool in the Potato line that turns a service account's
+      impersonation right into SYSTEM.
+    reports:
+      - url: /reports/inv-2026-080-cyberstrike-ad-workbench/
+        title: An AI Pentest Platform Drives Commodity Tooling Against Portuguese Government Targets
+        date: '2026-11-12'
+        detection_url: /hunting-detections/inv-2026-080-cyberstrike-ad-workbench-detections
+        ioc_url: /ioc-feeds/inv-2026-080-cyberstrike-ad-workbench-iocs.json
+        stix_url: /stix/inv-2026-080-cyberstrike-ad-workbench.json
+    detections:
+      - url: /hunting-detections/inv-2026-080-cyberstrike-ad-workbench-detections
+        title: An AI Pentest Platform Drives Commodity Tooling Against Portuguese Government Targets
+        date: '2026-11-12'
+        report_url: /reports/inv-2026-080-cyberstrike-ad-workbench/
+        label: GodPotato
+        rules:
+          - HKTL_GodPotato_Lineage_Wide_Strings
+    feeds: []
+    actors: []
+    tooling_labels: []
+    report_count: 1
+    rule_count: 1
+    feed_count: 0
+    actor_count: 0
+  - name: CyberStrikeAI
+    slug: cyberstrikeai
+    url: /families/cyberstrikeai/
+    kind: other
+    aliases: []
+    summary: >-
+      A free, public AI agent platform for offensive security testing, seen driving stock attack
+      tools in a real intrusion.
+    reports:
+      - url: /reports/inv-2026-080-cyberstrike-ad-workbench/
+        title: An AI Pentest Platform Drives Commodity Tooling Against Portuguese Government Targets
+        date: '2026-11-12'
+        detection_url: /hunting-detections/inv-2026-080-cyberstrike-ad-workbench-detections
+        ioc_url: /ioc-feeds/inv-2026-080-cyberstrike-ad-workbench-iocs.json
+        stix_url: /stix/inv-2026-080-cyberstrike-ad-workbench.json
+    detections:
+      - url: /hunting-detections/inv-2026-080-cyberstrike-ad-workbench-detections
+        title: An AI Pentest Platform Drives Commodity Tooling Against Portuguese Government Targets
+        date: '2026-11-12'
+        report_url: /reports/inv-2026-080-cyberstrike-ad-workbench/
+        label: CyberStrikeAI
+        rules:
+          - HKTL_CyberStrikeAI_Platform_Default_Agent_Authorisation_Prompt
+    feeds: []
+    actors: []
+    tooling_labels: []
+    report_count: 1
+    rule_count: 1
+    feed_count: 0
+    actor_count: 0
   - name: BellaMain
     slug: bellamain
     url: /families/bellamain/
@@ -1903,9 +1963,6 @@ unmapped:
   - label: CyberStrike-AD-Workbench
     where:
       - detection inv-2026-080-cyberstrike-ad-workbench-detections
-  - label: CyberStrikeAI
-    where:
-      - detection inv-2026-080-cyberstrike-ad-workbench-detections
   - label: EncDec-Ransomware
     where:
       - detection enc-dec-ransomware-family-detections
@@ -1935,9 +1992,6 @@ unmapped:
   - label: Ghost ASP Webshell
     where:
       - detection flaskc2-postex-toolkit-67-215-232-25-detections
-  - label: GodPotato
-    where:
-      - detection inv-2026-080-cyberstrike-ad-workbench-detections
   - label: Golang-RAT-Generic
     where:
       - detection agent-exe-detections
