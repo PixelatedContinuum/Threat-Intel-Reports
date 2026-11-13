@@ -1702,6 +1702,30 @@ families:
         detection_url: /hunting-detections/inv-2026-080-cyberstrike-ad-workbench-detections
         ioc_url: /ioc-feeds/inv-2026-080-cyberstrike-ad-workbench-iocs.json
         stix_url: /stix/inv-2026-080-cyberstrike-ad-workbench.json
+      - url: /reports/sliver-c2-windows-postex-staging-193-233-202-17/
+        title: Sliver C2 Windows Post-Exploitation Staging, 193.233.202.17
+        date: '2026-09-07'
+        detection_url: /hunting-detections/sliver-c2-windows-postex-staging-193-233-202-17-detections
+        ioc_url: /ioc-feeds/sliver-c2-windows-postex-staging-193-233-202-17-iocs.json
+        stix_url: /stix/sliver-c2-windows-postex-staging-193-233-202-17.json
+      - url: /reports/flaskc2-postex-toolkit-67-215-232-25/
+        title: Flask C2 & MSSQL CLR Backdoor on a Windows Post-Exploitation Staging Host
+        date: '2026-06-12'
+        detection_url: /hunting-detections/flaskc2-postex-toolkit-67-215-232-25-detections
+        ioc_url: /ioc-feeds/flaskc2-postex-toolkit-67-215-232-25-iocs.json
+        stix_url: /stix/flaskc2-postex-toolkit-67-215-232-25.json
+      - url: /reports/opendirectory-45-130-148-125-20260430/
+        title: AdaptixC2 Open Directory Exposure (45.130.148.125)
+        date: '2026-04-30'
+        detection_url: /hunting-detections/opendirectory-45-130-148-125-20260430-detections
+        ioc_url: /ioc-feeds/opendirectory-45-130-148-125-20260430-iocs.json
+        stix_url: /stix/opendirectory-45-130-148-125-20260430.json
+      - url: /reports/open-directory-94-103-1-13-20260423/
+        title: Chaos Ransomware (TorBrowserTor) Multi-Stage Loader (94.103.1.13)
+        date: '2026-04-23'
+        detection_url: /hunting-detections/open-directory-94-103-1-13-20260423-detections
+        ioc_url: /ioc-feeds/open-directory-94-103-1-13-20260423-iocs.json
+        stix_url: /stix/open-directory-94-103-1-13-20260423.json
     detections:
       - url: /hunting-detections/inv-2026-080-cyberstrike-ad-workbench-detections
         title: An AI Pentest Platform Drives Commodity Tooling Against Portuguese Government Targets
@@ -1710,12 +1734,32 @@ families:
         label: GodPotato
         rules:
           - HKTL_GodPotato_Lineage_Wide_Strings
-    feeds: []
+    feeds:
+      - url: /ioc-feeds/flaskc2-postex-toolkit-67-215-232-25-iocs.json
+        title: Flask C2 & MSSQL CLR Backdoor on a Windows Post-Exploitation Staging Host
+        date: '2026-06-12'
+        report_url: /reports/flaskc2-postex-toolkit-67-215-232-25/
+        label: GodPotato
+      - url: /ioc-feeds/open-directory-94-103-1-13-20260423-iocs.json
+        title: Chaos Ransomware (TorBrowserTor) Multi-Stage Loader (94.103.1.13)
+        date: '2026-04-23'
+        report_url: /reports/open-directory-94-103-1-13-20260423/
+        label: GodPotato
+      - url: /ioc-feeds/opendirectory-45-130-148-125-20260430-iocs.json
+        title: AdaptixC2 Open Directory Exposure (45.130.148.125)
+        date: '2026-04-30'
+        report_url: /reports/opendirectory-45-130-148-125-20260430/
+        label: GodPotato
+      - url: /ioc-feeds/sliver-c2-windows-postex-staging-193-233-202-17-iocs.json
+        title: Sliver C2 Windows Post-Exploitation Staging, 193.233.202.17
+        date: '2026-09-07'
+        report_url: /reports/sliver-c2-windows-postex-staging-193-233-202-17/
+        label: GodPotato
     actors: []
     tooling_labels: []
-    report_count: 1
+    report_count: 5
     rule_count: 1
-    feed_count: 0
+    feed_count: 4
     actor_count: 0
   - name: CyberStrikeAI
     slug: cyberstrikeai

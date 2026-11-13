@@ -47,12 +47,14 @@
       },
       {
         "value": "38c5737b1b417d70da8ba72f1b53babc5377733648c2e4b80ba33a991c0e3e9f",
+        "family": "GodPotato",
         "filename": "gp_obf.exe",
         "confidence": "HIGH",
         "context": "Obfuscated GodPotato (internal name SvcUtil.exe, compiled 2026-04-02)"
       },
       {
         "value": "c2a3592cf37b67b1bdcb389947e6469602b0e52bf247017740c7cc3dddc1e8ae",
+        "family": "GodPotato",
         "filename": "gp_fat.exe",
         "confidence": "HIGH",
         "context": "GodPotato variant, 2026-04-02 build"
@@ -65,6 +67,7 @@
       },
       {
         "value": "9a8e9d587b570d4074f1c8317b163aa8d0c566efd88f294d9d85bc7776352a28",
+        "family": "GodPotato",
         "filename": "gp.exe",
         "confidence": "HIGH",
         "context": "Standard GodPotato, labeled in version info"
@@ -79,6 +82,7 @@
       },
       {
         "value": "3027a212272957298bf4d32505370fa63fb162d6a6a6ec091af9d7626317a858",
+        "family": "GodPotato",
         "filename": "gp2.exe",
         "confidence": "HIGH",
         "context": "GodPotato CLR v2 variant"
