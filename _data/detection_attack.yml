@@ -1440,7 +1440,7 @@
       count: 2
 "inv-2026-080-cyberstrike-ad-workbench-detections":
   total: 13
-  tactics: 8
+  tactics: 9
   unresolved: []
   rows:
     - tactic: "Resource Development"
@@ -1496,11 +1496,11 @@
     - tactic: "Credential Access"
       id: "T1558.003"
       name: "Kerberoasting"
-      rules: "Rubeus Kerberos Ticket Request Command Line (SIGMA, Hunting)"
+      rules: "Rubeus Kerberos Service Ticket Request Command Line (SIGMA, Hunting)"
       count: 1
-    - tactic: "Credential Access"
-      id: "T1558.004"
-      name: "AS-REP Roasting"
+    - tactic: "Discovery"
+      id: "T1087.002"
+      name: "Domain Account"
       rules: "THL HUNT Kerberos Unknown-Principal Error Burst From KDC (SURICATA, Hunting)"
       count: 1
     - tactic: "Command and Control"

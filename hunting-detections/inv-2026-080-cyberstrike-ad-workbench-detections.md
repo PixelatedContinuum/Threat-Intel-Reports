@@ -22,7 +22,7 @@ sitemap: false
 |---|---|---|---|---|
 | YARA | 3 | 4 | T1136.002, T1068, T1134.001, T1003.001, T1588.007, T1190 | 1 |
 | Sigma | 3 | 8 | T1134.001, T1068, T1003.001, T1190, T1505.001, T1136.002, T1036.005, T1569.002, T1059.001, T1558.003, T1572, T1588.007 | 3 |
-| Suricata | 1 | 4 | T1190, T1572, T1558.004 | 1 |
+| Suricata | 1 | 4 | T1190, T1572, T1087.002 | 1 |
 
 > **Detection vs Hunting:** *Detection rules* are high-fidelity and evasion-resilient, safe to alert on. *Hunting rules* are broader or key on a name the operator can change, for scoping and threat-hunting. Expect to review the hits.
 
@@ -32,15 +32,16 @@ The file carries 23 rules: 7 Detection and 16 Hunting. A "Considered and Cut" se
 
 ## How this file was built, and what it does not claim
 
-These rules come from a static reading of an operator's open directory. The operator drove an AI penetration-testing platform (CyberStrikeAI) against Portuguese government, health and hosting targets from one server, and left a workbench of scripts, builds and logs behind. I found no victim-side telemetry in the capture, so no rule below was confirmed by a victim log. Where a rule keys on something I read in a binary or a script, the rule says so, and where a technique was attempted but no held result shows it working, the rule says that as well.
+These rules come from a static reading of an operator's open directory. The operator drove an AI penetration-testing platform (CyberStrikeAI) against Portuguese public-sector and hosting targets from one server, and left a workbench of scripts, builds and logs behind. I found no victim-side telemetry in the capture, so no rule below was confirmed by a victim log. Where a rule keys on something I read in a binary or a script, the rule says so, and where a technique was attempted but no held result shows it working, the rule says that as well.
 
 This version grades each step by what the evidence shows. Where a step is only attempted or its success is not shown (PwnKit, either GodPotato fork, the DNS plugin, the LSASS dumpers, the certificate requests), each rule says so, and no rule claims that a privilege step worked on a victim.
 
-Three limits apply to every rule here.
+Four limits apply to every rule here.
 
 - **Execution was never observed.** Nothing from the capture was run. A rule that depends on how Windows or Linux logs an event (a pipe name in Sysmon, a path in a file event) is derived from the artifact's strings and from how the public technique works, and is marked NOT CHECKED against live telemetry.
 - **Upstream coverage was read from local clones.** The SigmaHQ clone is dated 2026-09-12 and the signature-base clone 2026-09-13, so anything merged after those dates is not reflected. Suricata coverage was read from the ruleset loaded on the sensor.
 - **No operator or victim value appears in a rule.** The one operator-chosen account name that two rules key on is the platform's own name.
+- **Upstream novelty is not established for the Sigma rules.** The SigmaHQ rule "HackTool - Rubeus Execution" already covers `Rubeus.exe`, `kerberoast` and `asktgt`, so the Rubeus rule here keeps only the `asktgs` service-ticket request. I read an upstream condition by hand only where a rule's Validation line says so; for the other rules a broader upstream rule may exist. Whether upstream covers "PwnKit Exploit Staging Via GCONV_PATH Named Directory" (a Linux file event) or "User Account Named Cyberstrike Created" (Windows Security event 4720) is NOT CHECKED. The 7 YARA rules have no close match among 5,791 signature-base rules, which is a comparison of string sets and nothing more.
 
 ---
 
@@ -210,7 +211,7 @@ rule MAL_CyberStrike_PwnKit_Root_Proof_Gconv_Module {
 **ATT&CK Note:** The LSASS minidump messages belong to `SvcUtil.exe` only; `SvcUtil_clean.exe` is the same fork without that addition and matches on the renamed pipe.
 **Confidence:** HIGH
 **False Positives:** None known. Every anchor is a name the operator chose (the `SvcUtil` pipe component, the dump messages), so a rename of those strings defeats the rule; the broader lineage rule above is the durable one.
-**Blind Spots:** Misses any fork with a different pipe component or reworded dump messages. Whether either binary ran on a victim is not shown: the held diagnostics show a SQL-service context and blank output, not a SYSTEM result, and on the one internal server where a fork was delivered the host antivirus blocked it (a certutil hash print of the file returned 0x800700e1).
+**Blind Spots:** Misses any fork with a different pipe component or reworded dump messages. Whether either binary ran on a victim is not shown: the held diagnostics show a SQL-service context and blank output, not a SYSTEM result, and on the one internal server where a fork was delivered, the file was flagged as malware when read back (a certutil hash print of it returned 0x800700e1, "the file contains a virus or potentially unwanted software"). I do not tie that detection to the five LSASS dump runs, which left no dump file there for a cause that is not shown.
 **Validation:** Hits `SvcUtil.exe` (1046cf19fb28) and `SvcUtil_clean.exe` (fe0445f870c9); does not hit stock `GodPotato-NET4.exe`, which is the required control. 0 hits on the other controls.
 **Deployment:** Endpoint file scan of web and SQL server staging directories. The rule tests `filesize`, so it does not match inside process memory.
 **Basis:** The operator's `SvcUtil.exe` and `SvcUtil_clean.exe` forks of GodPotato and the three UTF-16 literals that separate them from the stock build.
@@ -250,7 +251,7 @@ rule MAL_CyberStrike_GodPotato_SvcUtil_Fork_Renamed_Pipe_LSASS_Dump {
 **ATT&CK Note:** I map the operator's use of the platform to this resource-development technique; a file on a defender's host is evidence that the platform is present there, not that it was used against anyone.
 **Confidence:** MODERATE
 **False Positives:** Security teams and researchers who run or study the public platform, and anyone who keeps a copy of its source. This is a public Apache-2.0 project, so a hit identifies the platform, not an operator.
-**Blind Spots:** The three phrases are the platform's default prompt in its source file at the commit I read (`557f74d7`, version 1.7.24); the same wording is present in v1.7.5, v1.7.17 and v1.7.24 but not in v1.7.0, which was not fetched. The rule misses a build with an edited or translated prompt, and a binary that stores the text compressed. No platform binary is held, so the claim that a compiled build embeds these bytes uncompressed is NOT CHECKED; only the source file is a confirmed hit.
+**Blind Spots:** The three phrases are the platform's default prompt in its source file at the commit I read (`557f74d7`, version 1.7.24); the same wording is present in v1.7.5, v1.7.17 and v1.7.24; v1.7.0 was not checked. The rule misses a build with an edited or translated prompt, and a binary that stores the text compressed. No platform binary is held, so the claim that a compiled build embeds these bytes uncompressed is NOT CHECKED; only the source file is a confirmed hit.
 **Validation:** Compiles with `yarac`. A benign-file scan hit the retained platform source file `internal_agent_default_single_system_prompt.go` (sha256 prefix 750318a65a63) as the required known positive and fired on 0 of 6,283 files in a benign corpus; that corpus is Linux-leaning with no Windows system files, so it is narrow evidence. A Windows scan fired on 0 of 31,876 `System32` files, 0 of 32,993 `Program Files` files and 0 of 62,815 security-tool files; its own match check against a platform build was NOT CHECKED, because no build is held.
 **Deployment:** Linux and Windows file scan of servers and developer hosts where an AI penetration-testing platform has no business purpose; a hit starts a question about who installed it.
 **Basis:** The "授权状态" block in the platform's default prompt source (raw source lines 11 to 15, retrieved by two methods with equal sha256), and the operator's workspace, which is the platform's directory layout.
@@ -416,10 +417,10 @@ level: high
 **ATT&CK Coverage:** T1003.001 (LSASS Memory)
 **Confidence:** HIGH
 **False Positives:** None known. A service whose image path runs `comsvcs.dll` with `MiniDump` has no administrative use I know of.
-**Blind Spots:** Misses a service whose image path hides the dump command in an encoded PowerShell argument, and hosts that do not collect the System log. Of the operator's five dumper scripts, only `lsass_dump4.py` puts `comsvcs.dll, MiniDump` in the service path in plain text; the other four pass a base64 `-EncodedCommand`, so this rule would not have matched four of the five (the Hunting rule for an encoded-command service path covers them). All five runs against the one host they reached are recorded as failed (one held result file carries `DUMP_OK=False`), so the rule describes what the operator tried, not a dump that worked. The 72,374,897-byte LSASS dump in the capture is not tied to a script.
+**Blind Spots:** Misses a service whose image path hides the dump command in an encoded PowerShell argument, and hosts that do not collect the System log. Of the operator's five dumper scripts, only `lsass_dump4.py` puts `comsvcs.dll, MiniDump` in the service path in plain text; the other four pass a base64 `-EncodedCommand`, so this rule would not have matched four of the five (the Hunting rule for an encoded-command service path covers them). The five runs against the one host they reached left no dump file there, and the cause is not shown (one held result file carries `DUMP_OK=False`), so the rule describes what the operator tried, not a dump that worked. The 72,374,897-byte LSASS dump in the capture is not tied to a script.
 **Validation:** `sigma check`, `yamllint` and the SigmaHQ test scripts: 0 errors, 0 issues; converts to Lucene and EQL. Upstream: SigmaHQ covers the same dump when it runs from a process command line (`proc_creation_win_rundll32_process_dump_via_comsvcs`) and when LSASS is accessed (`proc_access_win_lsass_dump_comsvcs_dll`), but I found no rule on the service-install event; I read the condition of `win_system_service_install_susp` and it does not list `comsvcs`.
 **Deployment:** Windows System log (Event ID 7045) from domain controllers and servers.
-**Basis:** The operator's five `lsass_dump*.py` scripts; the plain `comsvcs.dll, MiniDump` service path is in `lsass_dump4.py` only, and all five runs against the one host they reached failed.
+**Basis:** The operator's five `lsass_dump*.py` scripts; the plain `comsvcs.dll, MiniDump` service path is in `lsass_dump4.py` only, and the five runs against the one host they reached left no dump file there (cause not shown).
 
 ```yaml
 title: Service Installed To Dump Process Memory Via Comsvcs MiniDump
@@ -429,7 +430,7 @@ description: >-
   Detects installation of a Windows service whose image path runs comsvcs.dll with the MiniDump export, the form used to dump
   LSASS memory as SYSTEM through a remotely created service. One of the operator's five dumper scripts created a service named
   LsassDump on a second host with a command line of this shape, started it, looked for the dump file over the administrative
-  share and deleted the service. The five recorded runs of the dumper scripts all failed.
+  share and deleted the service. The five recorded runs of the dumper scripts left no dump file there, and the cause is not shown.
 references:
     - https://the-hunters-ledger.com/hunting-detections/inv-2026-080-cyberstrike-ad-workbench-detections/
 author: The Hunters Ledger
@@ -647,10 +648,10 @@ level: medium
 **ATT&CK Coverage:** T1569.002 (Service Execution), T1059.001 (PowerShell)
 **Confidence:** MODERATE
 **False Positives:** Software deployment and remote administration tools that install a service whose image path is an encoded PowerShell command. They are uncommon but exist, which is why this is a lead and not an alert.
-**Blind Spots:** Misses a service that runs a script file or a payload binary, and a command line that spells the parameter in a form this pattern does not list. It describes what the operator built: four of its five LSASS dumper scripts install the service with this image path (`lsass_dump.py`, `lsass_dump2.py`, `lsass_dump3.py`, `lsass_dump5.py`), and the five recorded runs against the one host reached all failed, so the rule is not evidence that a dump occurred.
+**Blind Spots:** Misses a service that runs a script file or a payload binary, and a command line that spells the parameter in a form this pattern does not list. It describes what the operator built: four of its five LSASS dumper scripts install the service with this image path (`lsass_dump.py`, `lsass_dump2.py`, `lsass_dump3.py`, `lsass_dump5.py`), and the five recorded runs against the one host left no dump file there (cause not shown), so the rule is not evidence that a dump occurred.
 **Validation:** `sigma check`, `yamllint` and the SigmaHQ test scripts: 0 errors, 0 issues; converts to Lucene and EQL. Not tested against a logged 7045 event, because none is held. A benign case that must not fire: a service whose image path is a plain executable path. SigmaHQ already carries `win_system_powershell_script_installed_as_service`, whose selector is any `powershell` or `pwsh` in the image path, so this rule is a narrower hunting subset.
 **Deployment:** Windows System log (Event ID 7045) from servers and domain controllers.
-**Basis:** The `cmd.exe /c powershell -NoProfile -ExecutionPolicy Bypass -EncodedCommand <b64>` service path in `lsass_dump.py` and the three scripts that repeat it; all runs against the one host they reached failed.
+**Basis:** The `cmd.exe /c powershell -NoProfile -ExecutionPolicy Bypass -EncodedCommand <b64>` service path in `lsass_dump.py` and the three scripts that repeat it; the runs against the one host they reached left no dump file there (cause not shown).
 
 ```yaml
 title: Service Installed With Cmd And Encoded PowerShell Image Path
@@ -659,7 +660,7 @@ status: experimental
 description: >-
   Detects installation of a Windows service whose image path starts cmd and runs powershell with an encoded command. Four of the
   operator's five LSASS dumper scripts create a service of this shape on a second host, so that the base64 text hides the
-  comsvcs MiniDump command from a rule that reads the image path. The five recorded runs of those scripts all failed.
+  comsvcs MiniDump command from a rule that reads the image path. The five recorded runs of those scripts left no dump file there, and the cause is not shown.
 references:
     - https://the-hunters-ledger.com/hunting-detections/inv-2026-080-cyberstrike-ad-workbench-detections/
 author: The Hunters Ledger
@@ -691,28 +692,28 @@ falsepositives:
 level: medium
 ```
 
-#### Rubeus Kerberos Ticket Request Command Line
+#### Rubeus Kerberos Service Ticket Request Command Line
 
 **Tier:** Hunting
 **Robustness:** 2
 **ATT&CK Coverage:** T1558.003 (Kerberoasting)
-**ATT&CK Note:** The same Rubeus calls also request a TGT (`asktgt`), which is Use Alternate Authentication Material territory; I grade the service-ticket collection as the shown behaviour, so I tag that.
+**ATT&CK Note:** The same drivers also request a TGT (`asktgt`), which is Use Alternate Authentication Material territory and which upstream already covers (see Validation). This rule keeps only the service-ticket request, which is the behaviour I grade as shown.
 **Confidence:** MODERATE
 **False Positives:** Authorised red-team and penetration-test staff running Rubeus, and Kerberos troubleshooting by administrators who know the tool. Treat a hit as a lead to confirm who ran it.
-**Blind Spots:** The command lines come from the operator's driver scripts, which build them (`rubeus_dashboard.py`, `rubeus_asktgt.py`), and not from a logged process-creation event; no victim telemetry is held. A renamed Rubeus binary matches only the `asktgs` branch. I did not add an `OriginalFileName` condition, because no version resource of the held build was read. The Splunk grouping of the `or` in the condition has not been run through the grouping check, since this rule is not published for Splunk.
-**Validation:** `sigma check`, `yamllint` and the SigmaHQ test scripts: 0 errors, 0 issues; converts to Lucene and EQL. The held `Rubeus.exe` is a circulating public build, hash-equal to nothing official. Upstream: a file-name search of the local SigmaHQ clone for `asktgs` finds script-block, logon-process and network rules for Rubeus and none on the process command line; I did not read their conditions.
+**Blind Spots:** The command lines come from the operator's driver scripts, which build them (`rubeus_dashboard.py`, `rubeus_asktgt.py`), and not from a logged process-creation event; no victim telemetry is held. The rule matches the command line, so a renamed Rubeus binary still matches, but a driver that spells the arguments another way (no space before `/ticket:` or `/service:`, or a different verb) does not. It does not cover the `asktgt`, `kerberoast` or `Rubeus.exe` forms, which the upstream rule covers. The condition is a single selection with no `or`, so the Splunk grouping check has nothing to group.
+**Validation:** `sigma check`, `yamllint` and the SigmaHQ test scripts: 0 errors, 0 issues; converts to Lucene and EQL. The held `Rubeus.exe` is a circulating public build, hash-equal to nothing official. Upstream, partially covered: I read `rules/windows/process_creation/proc_creation_win_hktl_rubeus.yml` in the local SigmaHQ clone ("HackTool - Rubeus Execution", stable, level critical). It matches the image name `\Rubeus.exe`, `OriginalFileName` `Rubeus.exe`, the description `Rubeus`, and command-line fragments including `kerberoast ` and `asktgt /user:`. It does not list `asktgs`, so this rule is cut to the `asktgs` branch with `/ticket:` and `/service:`. The prior-art tool (`sigma_prior_art.py`) compares only inside one telemetry class and cannot clear a rule; I read the upstream condition by hand. I did not read the script-block, logon-process or network Rubeus rules in the clone.
 **Deployment:** Process creation with command line on servers and workstations; the operator staged the tool as `C:\ProgramData\Rubeus.exe`.
 **Basis:** `rubeus_dashboard.py` (lines 11 to 21) runs `asktgs` with `/ticket:`, `/service:`, `/enctype:aes256`, `/nowrap`; four TGT-request drivers call `C:\ProgramData\Rubeus.exe`. The operator's output holds 55 AES256 ticket records and 11 failures.
 
 ```yaml
-title: Rubeus Kerberos Ticket Request Command Line
+title: Rubeus Kerberos Service Ticket Request Command Line
 id: b09b8c80-6ee2-4b7f-a7c3-88b4837f8bd5
 status: experimental
 description: >-
-  Detects a Rubeus command line that requests Kerberos tickets, either the asktgs verb with a ticket and a service name, or any
-  asktgt, asktgs or kerberoast verb on an executable named Rubeus.exe. The operator staged the public Rubeus build in a shared
-  program-data directory and its driver scripts call asktgs with the ticket, service, AES256 encryption type and nowrap
-  switches to collect service tickets for offline cracking.
+  Detects a command line that requests a Kerberos service ticket with the Rubeus asktgs verb, a ticket and a service name,
+  whatever the executable is called. The operator staged the public Rubeus build in a shared program-data directory and its
+  driver scripts call asktgs with the ticket, service, AES256 encryption type and nowrap switches to collect service tickets.
+  The SigmaHQ rule for Rubeus execution already covers the Rubeus.exe image name, kerberoast and asktgt, and not asktgs.
 references:
     - https://the-hunters-ledger.com/hunting-detections/inv-2026-080-cyberstrike-ad-workbench-detections/
     - https://github.com/GhostPack/Rubeus
@@ -727,19 +728,12 @@ logsource:
     product: windows
     definition: 'Requires process creation logging that populates Image and CommandLine, for example Sysmon Event ID 1 or Security Event ID 4688 with command line auditing enabled.'
 detection:
-    selection_img:
-        Image|endswith: '\Rubeus.exe'
-    selection_verb:
-        CommandLine|contains:
-            - ' asktgt '
-            - ' asktgs '
-            - ' kerberoast '
-    selection_asktgs:
+    selection:
         CommandLine|contains|all:
             - ' asktgs '
             - ' /ticket:'
             - ' /service:'
-    condition: (selection_img and selection_verb) or selection_asktgs
+    condition: selection
 falsepositives:
     - Authorised red-team staff running Rubeus
     - Administrators troubleshooting Kerberos with the tool
@@ -800,10 +794,10 @@ level: medium
 **ATT&CK Note:** I map the operator's use of the platform to this resource-development technique. On a defender's host the rule shows that the platform's workspace layout is in use there.
 **Confidence:** MODERATE
 **False Positives:** Security teams that run the platform on purpose, and researchers analysing it. The path is the platform's own default layout (`/root/CyberStrikeAI/tmp/workspace/projects/<uuid>`), so it identifies the platform, not an operator, and an operator can install it elsewhere.
-**Blind Spots:** Needs full command lines. The path appears in 392 occurrences across 103 of the 1,743 files captured from the operator's server, in scripts and logs, and none of that shows that the path appears in a process event on any host; this is NOT CHECKED against live telemetry. A platform installed under another directory is missed.
+**Blind Spots:** Needs full command lines. The path appears in 392 occurrences across 103 of the first 1,743 captured files from the operator's server, in scripts and logs, and none of that shows that the path appears in a process event on any host; this is NOT CHECKED against live telemetry. A platform installed under another directory is missed.
 **Validation:** `sigma check`, `yamllint` and the SigmaHQ test scripts: 0 errors, 0 issues; converts to Lucene and EQL. A benign case that must not fire: any command line without the platform's directory.
 **Deployment:** Linux process creation on servers where an AI penetration-testing platform has no business purpose.
-**Basis:** The platform's workspace path appears 392 times in 103 of the operator's 1,743 files, and `/root/CyberStrikeAI` 418 times in 116 files.
+**Basis:** The platform's workspace path appears 392 times in 103 of the first 1,743 captured files, and `/root/CyberStrikeAI` 418 times in 116 files. The repository's current path is github.com/AIPentest/CyberStrikeAI (formerly Ed1s0nZ).
 
 ```yaml
 title: CyberStrikeAI Workspace Path In A Linux Command Line
@@ -816,7 +810,7 @@ description: >-
   presence.
 references:
     - https://the-hunters-ledger.com/hunting-detections/inv-2026-080-cyberstrike-ad-workbench-detections/
-    - https://github.com/Ed1s0nZ/CyberStrikeAI
+    - https://github.com/AIPentest/CyberStrikeAI
 author: The Hunters Ledger
 date: 2026-11-12
 tags:
@@ -915,8 +909,8 @@ alert tcp any any -> $HOME_NET any (msg:"THL HUNT CyberStrike-AD-Workbench Veeam
 
 **Tier:** Hunting
 **Robustness:** 2
-**ATT&CK Coverage:** T1558.004 (AS-REP Roasting)
-**ATT&CK Note:** I grade the AS-REP roasting step ATTEMPTED with no AS-REP reply. The loop behaves as account enumeration, but I carry no separate Kerberos-enumeration row (the T1087.002 row is LDAP enumeration), so I tag the technique I graded.
+**ATT&CK Coverage:** T1087.002 (Domain Account)
+**ATT&CK Note:** The loop is account enumeration: it confirmed that three of the names it submitted exist and are disabled or locked (3 `KDC_ERR_CLIENT_REVOKED` replies), and the other 2,112 names were unknown to the domain. It returned no AS-REP reply and no hash, so I do not map it to AS-REP roasting (T1558.004).
 **Confidence:** MODERATE
 **False Positives:** A directory migration, a misconfigured service or a vulnerability scan that tries many names the domain does not hold, and a mail or VPN gateway forwarding mistyped logons. The threshold of 50 errors in 60 seconds is my choice, set far under the operator's rate and over a normal user's typing, and each environment needs to tune it.
 **Blind Spots:** Needs a sensor that sees the traffic between the client and the domain controller, which the firewall sensor does not for traffic inside one VLAN. A slower enumeration stays under the threshold. The rate is derived from the script: the operator's loop sleeps 0.2 seconds between candidates, so at most 5 requests a second or about 300 a minute (`krb_userenum2.py:50-57`), and its log holds 2,115 requests (2,112 `KDC_ERR_C_PRINCIPAL_UNKNOWN`, 3 `KDC_ERR_CLIENT_REVOKED`, 0 AS-REP). It ran through a local SOCKS port, so the packets reached the domain controller from the jump host and not from the operator's address.
@@ -945,8 +939,8 @@ I looked at every behaviour in the sources named for this part and wrote a rule 
 | Shell under `sqlservr.exe` | Sigma | Cut, covered upstream | `proc_creation_win_mssql_susp_child_process` (read). I wrote the `sqlcmd` caller side instead. |
 | Command words in a web shell query string (`whoami`, `net user`, `cmd /c`, `powershell`) | Sigma | Cut, covered upstream | `web_win_webshells_in_access_logs` (read). Access logs only show the variant of the operator's client that sends `?c=` on a GET; the other variants send the command in a POST body. |
 | `rundll32 comsvcs.dll, MiniDump` on a command line | Sigma | Cut, covered upstream | `proc_creation_win_rundll32_process_dump_via_comsvcs` and `proc_access_win_lsass_dump_comsvcs_dll` (named, conditions not read). I wrote the service-install variant, which I found no rule for. |
-| Kerberoasting (55 AES256 ticket records and 11 failures from the .NET ticket API and Rubeus) | Sigma | Partly written, partly Cut | The operator's tool is Rubeus `asktgs` and the ticket API, both public; I wrote the Rubeus command-line Hunting rule. The base event (4769 with AES256 encryption) occurs for ordinary service tickets in every domain, so a log-side rule needs a per-environment count and I hold no victim telemetry to set one. The AES256 choice also means the common RC4-downgrade rules do not match this operator. Written up as a gap below. |
-| AS-REP roasting (the operator's own log: 2,115 Kerberos requests, 2,112 `KDC_ERR_C_PRINCIPAL_UNKNOWN`, 3 `KDC_ERR_CLIENT_REVOKED`, 0 AS-REP replies) | Suricata | Written as Hunting | I grade this ATTEMPTED: a no-pre-authentication request loop that behaves as account enumeration, and no hash was returned. The KDC-side burst of unknown-principal errors is the observable, so the rule is a threshold on that error. |
+| Kerberoasting (55 AES256 ticket records and 11 failures from the .NET ticket API and Rubeus) | Sigma | Partly written, partly Cut | The operator's tool is Rubeus `asktgs` and the ticket API, both public; I wrote the Rubeus command-line Hunting rule, cut to the `asktgs` branch because the SigmaHQ rule "HackTool - Rubeus Execution" (`proc_creation_win_hktl_rubeus.yml`) already covers the image name, `kerberoast ` and `asktgt /user:`. The base event (4769 with AES256 encryption) occurs for ordinary service tickets in every domain, so a log-side rule needs a per-environment count and I hold no victim telemetry to set one. The AES256 choice also means the common RC4-downgrade rules do not match this operator. Written up as a gap below. |
+| Kerberos account enumeration (the operator's own log: 2,115 Kerberos requests, 2,112 `KDC_ERR_C_PRINCIPAL_UNKNOWN`, 3 `KDC_ERR_CLIENT_REVOKED`, 0 AS-REP replies) | Suricata | Written as Hunting | A no-pre-authentication request loop that confirmed three names exist and are disabled or locked; no AS-REP reply and no hash was returned, so I do not map it to AS-REP roasting. The KDC-side burst of unknown-principal errors is the observable, so the rule is a threshold on that error. |
 | `certutil -urlcache -split -f` fetch of `chisel.exe` from the case host on port 8090 | Sigma | Cut, to feed | The generic certutil download behaviour is covered by upstream rules; the case-specific part is the host and port. |
 | Operator web shell paths `/sh/sh.jsp` and `/shell/cmd.jsp` | Sigma | Cut, to feed | One literal each; remove it and nothing behavioural is left. |
 | Standing SSH key comment `pentest@cyberstrike` | Sigma | Cut, to feed | A string inside `authorized_keys` content, which no Sigma logsource exposes. The key comment is recorded in the IOC feed. |
@@ -961,9 +955,9 @@ The atomics above are in the IOC feed for this case (`inv-2026-080-cyberstrike-a
 
 ## Coverage Gaps
 
-- **The JSP web shells.** `/sh/sh.jsp`, `/shell/cmd.jsp` and the `diag*.jsp` pages were pushed to victims with `certutil -decode`, but none of their bytes is held. A file rule for them needs a victim-side copy of the shells. A passive-DNS and scan-history request on the operator's address is outstanding and may supply one. Until then the only handle is the request path and the `c` parameter.
+- **The JSP web shells.** `/sh/sh.jsp`, `/shell/cmd.jsp` and the `diag*.jsp` pages were pushed to victims with `certutil -decode`, but none of their bytes is held. I hold no copy; a victim-side copy would allow a file rule. Until then the only handle is the request path and the `c` parameter.
 - **Victim-side confirmation of any privilege step.** I hold no victim log. Whether the PwnKit module, either GodPotato fork, the DNS plugin or the certificate requests ran is not shown by any held file, so every rule here describes what the operator built and tried, not what a victim recorded.
-- **Kerberoast ticket volume.** A correlation on service-ticket request volume per account is the useful log-side detection for the 55 AES256 ticket records above, and it needs a threshold taken from a victim's own baseline. The AS-REP side is a different case: the operator's log holds 2,115 requests, 2,112 of them `KDC_ERR_C_PRINCIPAL_UNKNOWN` and none an AS-REP reply (graded ATTEMPTED), and the Suricata hunting rule covers the burst at the KDC.
+- **Kerberoast ticket volume.** A correlation on service-ticket request volume per account is the useful log-side detection for the 55 AES256 ticket records above, and it needs a threshold taken from a victim's own baseline. The Kerberos account-enumeration loop is a different case: the operator's log holds 2,115 requests, 2,112 of them `KDC_ERR_C_PRINCIPAL_UNKNOWN`, 3 `KDC_ERR_CLIENT_REVOKED` and none an AS-REP reply, and the Suricata hunting rule covers the burst at the KDC.
 - **The CyberStrikeAI platform on the wire and in logs.** The platform's own artefacts are the default model-facing prompt text, the `record_vulnerability` tool and the workspace path layout. None of them crosses a victim network, because the model calls go from the operator's server to a provider I cannot name from the held files. The platform database, configuration and conversations are not held. The two hunting rules written cover the platform's files and its workspace path on a host that runs it.
 - **R1Soft backup server abuse.** The operator called the server API with a login and asked for a restore to an alternate agent with destination `/var/www/html/`. The evidence is authenticated API calls with no distinguishing network or host indicator, so I have no rule; the server's own API audit log is the place to look.
 - **How chisel was run on a victim.** The invoking script is not held, so there is no client command line to key on.

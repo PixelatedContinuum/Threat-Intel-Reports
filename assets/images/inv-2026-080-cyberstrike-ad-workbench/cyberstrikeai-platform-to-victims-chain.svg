@@ -14,7 +14,8 @@
 
   <text x="500" y="62" text-anchor="middle" font-size="40" font-weight="700" fill="#ffffff">An AI Agent Platform Drives Stock Tools</text>
   <text x="500" y="106" text-anchor="middle" font-size="24" fill="#f5f5f5">One operator, one Paris server, 22 victim rows graded</text>
-  <text x="500" y="140" text-anchor="middle" font-size="18" fill="#cccccc">Every tool is public and documented, so blocking them and the basics breaks the chain</text>
+  <text x="500" y="132" text-anchor="middle" font-size="17" fill="#cccccc">In this case the commodity tooling was caught where basic controls were in place;</text>
+  <text x="500" y="154" text-anchor="middle" font-size="17" fill="#cccccc">I do not claim that as a tested defence</text>
   <line x1="60" y1="166" x2="940" y2="166" stroke="#2a2a2a" stroke-width="1"/>
 
   <!-- STEP 1: orange, operator and platform -->
@@ -55,16 +56,16 @@
     <text x="80" y="814" font-size="21" fill="#ffffff">22 victim rows, one per organisation or group</text>
     <text x="80" y="854" font-size="19" font-weight="700" fill="#ffffff">ACCESS SHOWN</text>
     <text x="262" y="854" font-size="19" font-weight="700" fill="#ffffff">2</text>
-    <text x="300" y="854" font-size="18" fill="#e5e5e5">a public-safety agency's servers; an SSH jump host</text>
+    <text x="300" y="854" font-size="18" fill="#e5e5e5">a public-sector agency's servers; an SSH jump host</text>
     <text x="80" y="890" font-size="19" font-weight="700" fill="#ffffff">COMPROMISED</text>
     <text x="262" y="890" font-size="19" font-weight="700" fill="#ffffff">3</text>
-    <text x="300" y="890" font-size="18" fill="#e5e5e5">an AD domain, a hosting provider, a cultural agency site</text>
+    <text x="300" y="890" font-size="18" fill="#e5e5e5">an AD domain, a hosting provider, a state agency site</text>
     <text x="80" y="926" font-size="19" font-weight="700" fill="#ffffff">REACHED</text>
     <text x="262" y="926" font-size="19" font-weight="700" fill="#ffffff">12</text>
     <text x="300" y="926" font-size="18" fill="#e5e5e5">government estate, hosting customers, state bodies, others</text>
     <text x="80" y="962" font-size="19" font-weight="700" fill="#ffffff">LISTED</text>
     <text x="262" y="962" font-size="19" font-weight="700" fill="#ffffff">5</text>
-    <text x="300" y="962" font-size="18" fill="#e5e5e5">security-sector domains, private firms, 27 DNS zones</text>
+    <text x="300" y="962" font-size="18" fill="#e5e5e5">AD domains, private firms, 27 DNS zones</text>
     <text x="80" y="1000" font-size="18" fill="#fb923c" font-weight="600">Where two grades fit a row, I record the lower one</text>
   </g>
   <line x1="500" y1="1018" x2="500" y2="1058" stroke="#cccccc" stroke-width="2" marker-end="url(#arrow)"/>
@@ -77,8 +78,8 @@
     <text x="80" y="1095" font-size="17" font-weight="700" fill="#cccccc" letter-spacing="0.5">STEP 4</text>
     <text x="200" y="1095" font-size="23" font-weight="600" fill="#ffffff">The defender point</text>
     <text x="80" y="1150" font-size="21" fill="#ffffff">The tools are well documented and easy to detect</text>
-    <text x="80" y="1184" font-size="18" fill="#e5e5e5">Block the well-known ones and do the basics, and the chain breaks</text>
-    <text x="80" y="1226" font-size="18" fill="#fb923c" font-weight="600">Antivirus blocked the GodPotato fork on a host where the operator held SYSTEM</text>
+    <text x="80" y="1184" font-size="18" fill="#e5e5e5">Block the well-known ones and do the basics; I did not test that this stops them</text>
+    <text x="80" y="1226" font-size="18" fill="#fb923c" font-weight="600">Antivirus detected the delivered GodPotato fork; I do not tie it to the failed dumps</text>
   </g>
 
   <!-- FOOTER -->

@@ -77,9 +77,9 @@
         "type": "C source",
         "confidence": "HIGH",
         "role": "operator-written source",
-        "action": "BLOCK",
-        "context": "Source of dnsplugin.dll.",
-        "source": "Static analysis of a second held copy of the operator's DNS Server plugin DLL"
+        "action": "HUNT",
+        "context": "Source of dnsplugin.dll. A source file on disk, not something to block on the wire; look for it on hosts and in code stores.",
+        "source": "Reading of the operator's source file `dnsplugin.c`, the source of `dnsplugin.dll`"
       },
       {
         "value": "e0691216a96faa65a66c8e9de47cbe1f87d9a8c5a1417ea8e126a4c4fe1944cb",
@@ -87,8 +87,8 @@
         "type": "C source",
         "confidence": "HIGH",
         "role": "operator-written source",
-        "action": "BLOCK",
-        "context": "Source of pwnkit.so (gconv module).",
+        "action": "HUNT",
+        "context": "Source of pwnkit.so (gconv module). A source file on disk, not something to block on the wire; look for it on hosts and in code stores.",
         "source": "Static analysis of the operator's PwnKit source file `pwnkit.c`"
       },
       {
@@ -97,8 +97,8 @@
         "type": "C source",
         "confidence": "HIGH",
         "role": "operator-written source",
-        "action": "BLOCK",
-        "context": "Source of the PwnKit driver.",
+        "action": "HUNT",
+        "context": "Source of the PwnKit driver. A source file on disk, not something to block on the wire; look for it on hosts and in code stores.",
         "source": "Static analysis of the operator's PwnKit source file `exploit_pwnkit.c`"
       },
       {
@@ -109,7 +109,7 @@
         "role": "operator's own compile of stock public PwnKit source",
         "action": "HUNT",
         "context": "Public ly4k PwnKit exploit rebuilt by the operator; the hash identifies the operator's build, not the public project. Anyone building the same source may differ.",
-        "source": "Static analysis of the public ly4k PwnKit prebuilt binary the operator holds"
+        "source": "Static analysis of the operator's own compile of the public PwnKit source (the held `PwnKit.c` is byte-identical to the public source); not the public prebuilt binary"
       },
       {
         "value": "44e83f84a5d5219e2f7c3cf1e4f02489cae81361227f46946abe4b8d8245b879",
@@ -119,7 +119,7 @@
         "role": "STOCK public tool",
         "action": "HUNT",
         "context": "Hash equals the public ly4k PwnKit prebuilt (first seen on VirusTotal 2022-06-23); the operator renamed it. Seen on the operator host, but any user of the public tool carries this hash.",
-        "source": "Static analysis of the operator's rebuild of the public ly4k PwnKit binary"
+        "source": "Static analysis of `ly4k_pwnkit.py`, byte-identical to the public ly4k PwnKit prebuilt binary (compared with a fetched copy), renamed to .py"
       },
       {
         "value": "9a8e9d587b570d4074f1c8317b163aa8d0c566efd88f294d9d85bc7776352a28",
@@ -136,19 +136,19 @@
         "filename": "chisel.exe",
         "type": "PE64 Go executable",
         "confidence": "HIGH",
-        "role": "STOCK public tool (jpillora/chisel, locally built)",
+        "role": "Public tool (jpillora/chisel), widely circulating from-source build; not built by this operator",
         "action": "HUNT",
-        "context": "Go build info: module github.com/jpillora/chisel, vcs.revision 3208da34, unmodified; 13 of 13 dependency modules equal upstream. The operator served it on port 8090 and fetched it with certutil. Locally built, so the hash is this build only.",
-        "source": "Static analysis of the stock chisel build the operator holds, held in two copies with the same hash"
+        "context": "Go build info: module github.com/jpillora/chisel, vcs.revision 3208da34, unmodified; 14 of 14 dependency modules equal upstream. The operator served it on port 8090 and fetched it with certutil. The same file hash is a widely circulating from-source build, first seen by VirusTotal on 2024-10-07 and submitted 198 times from 178 sources, so it identifies the public file and anyone who holds it, not this operator's own build.",
+        "source": "Static analysis of the chisel build the operator holds, held in two copies with the same hash; first-seen date and source count from a passive VirusTotal hash lookup"
       },
       {
         "value": "1bfbefa4ff4d0df3ee0090b5079cf84ed2e8d5377ba5b7a30afd88367d57b9ff",
         "filename": "Rubeus.exe",
         "type": "PE .NET executable",
         "confidence": "HIGH",
-        "role": "STOCK public tool (circulating build)",
+        "role": "Public tool, circulating build; not operator-compiled",
         "action": "HUNT",
-        "context": "Circulating public build (VirusTotal 333 submissions, first seen 2022-10-19). Exact-source equality not established. Hunt context only.",
+        "context": "Circulating public build (VirusTotal 333 submissions from 310 sources, first seen 2022-10-19). The Rubeus project publishes no binaries, so no official hash exists; whether this file equals a build from the public source is NOT CHECKED. Hunt context only.",
         "source": "Static analysis of the circulating public `Rubeus.exe` build the operator holds"
       }
     ]
@@ -223,7 +223,7 @@
         "purpose": "Default project workspace directory of the public CyberStrikeAI AI penetration-testing platform (full form /root/CyberStrikeAI/tmp/workspace/projects/<uuid>); the operator's scripts and report carry it",
         "confidence": "HIGH",
         "action": "HUNT",
-        "source": "The CyberStrikeAI platform's workspace layout (392 occurrences in 103 of the operator's 1,743 files)",
+        "source": "The CyberStrikeAI platform's workspace layout (392 occurrences in 103 of the first 1,743 captured files)",
         "context": "Platform default layout, not an operator-chosen value: a hit shows the platform in use on a host, which security teams also run on purpose. Not a block value."
       }
     ],
@@ -271,7 +271,7 @@
     {
       "value": "fr.bastaniqifi.ir",
       "role": "unverified tie (neither shown nor excluded)",
-      "context": "Passive DNS (VirusTotal) shows an A record from this name to the case IP, TTL 300, last modified 2026-10-07, inside a set of country-labelled .ir hostnames that all point to different hosts and look like a VPN or proxy node fleet. A scan-history export scoped to the apex domain did not show the record, which neither confirms nor contradicts the passive-DNS result; a fuller passive-DNS and scan-history request is outstanding. Whether the workbench operator runs that fleet, rents a node in it or only shares an address with it is not established: LOW as a link to the operator. The directory on :8000 was first seen 2026-09-26, eleven days before the record, and the address has had other tenants. Context only, do not block.",
+      "context": "Passive DNS (VirusTotal) shows an A record from this name to the case IP, TTL 300, last modified 2026-10-07, inside a set of country-labelled .ir hostnames that all point to different hosts and look like a VPN or proxy node fleet. A scan-history export scoped to the apex domain did not show the record, which neither confirms nor contradicts the passive-DNS result; Whether the workbench operator runs that fleet, rents a node in it or only shares an address with it is not established: LOW as a link to the operator. The directory on :8000 was first seen 2026-09-26. The record's first appearance is not known; its last-modified date is 7 October 2026. The address has had other tenants. Context only, do not block.",
       "confidence": "LOW",
       "false_positive_note": "Possible third-party service. Never block on this alone",
       "source": "Passive DNS (VirusTotal) and a scan-history export, as described in the context"

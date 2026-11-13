@@ -2721,7 +2721,7 @@ inv-2026-080-cyberstrike-ad-workbench-detections:
     engine: sigma
     tier: Detection
     fence: 9
-    hash: "1cf398bc"
+    hash: "74aa1483"
     head: "title: Service Installed To Dump Process Memory "
     robustness: 3
     confidence: "HIGH"
@@ -2766,17 +2766,17 @@ inv-2026-080-cyberstrike-ad-workbench-detections:
     engine: sigma
     tier: Hunting
     fence: 14
-    hash: "653f07fe"
+    hash: "74b85dd3"
     head: "title: Service Installed With Cmd And Encoded Po"
     robustness: 2
     confidence: "MODERATE"
     attack: [T1569.002, T1059.001]
-  - name: "Rubeus Kerberos Ticket Request Command Line"
+  - name: "Rubeus Kerberos Service Ticket Request Command Line"
     engine: sigma
     tier: Hunting
     fence: 15
-    hash: "ea2bcb81"
-    head: "title: Rubeus Kerberos Ticket Request Command Li"
+    hash: "5693a868"
+    head: "title: Rubeus Kerberos Service Ticket Request Co"
     robustness: 2
     confidence: "MODERATE"
     attack: [T1558.003]
@@ -2793,7 +2793,7 @@ inv-2026-080-cyberstrike-ad-workbench-detections:
     engine: sigma
     tier: Hunting
     fence: 17
-    hash: "d8ad3961"
+    hash: "cc5d2907"
     head: "title: CyberStrikeAI Workspace Path In A Linux C"
     robustness: 1
     confidence: "MODERATE"
@@ -2842,7 +2842,7 @@ inv-2026-080-cyberstrike-ad-workbench-detections:
     head: "alert krb5 any any -> any any (msg:\"THL HUNT Cyb"
     robustness: 2
     confidence: "MODERATE"
-    attack: [T1558.004]
+    attack: [T1087.002]
 kaido-quasar-rat-detections:
   - name: "KAIDO Quasar-Fork Namespace + Costura Asset"
     engine: yara
