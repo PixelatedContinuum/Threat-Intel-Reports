@@ -1,14 +1,29 @@
 {
   "spec": "The Hunters Ledger STIX 2.1 bundle manifest: poll this file, compare sha256 per bundle, fetch what changed.",
   "license": "CC BY 4.0",
-  "count": 44,
+  "count": 45,
   "zip": {
     "file": "hunters-ledger-stix-bundles.zip",
     "url": "https://the-hunters-ledger.com/stix/hunters-ledger-stix-bundles.zip",
-    "sha256": "8dc235d99b5214bab178790670fe2277aec6f95f39dd71a78bda908191ba8e75",
-    "bytes": 1999314
+    "sha256": "1889f8e6f9445104c73406f5d8eba33330fbec4cb0d4baf8e252382bbe821745",
+    "bytes": 2014775
   },
   "bundles": [
+    {
+      "slug": "inv-2026-080-cyberstrike-ad-workbench",
+      "title": "An AI Pentest Platform Drives Commodity Tooling Against Portuguese Government Targets",
+      "date": "2026-11-12",
+      "file": "inv-2026-080-cyberstrike-ad-workbench.json",
+      "url": "https://the-hunters-ledger.com/stix/inv-2026-080-cyberstrike-ad-workbench.json",
+      "report_url": "https://the-hunters-ledger.com/reports/inv-2026-080-cyberstrike-ad-workbench/",
+      "bundle_id": "bundle--7f2adf77-9f13-4030-86d7-d84b49d188b2",
+      "report_id": "report--b034ce74-2ea6-5d71-b42e-a9e5b67cc53b",
+      "sha256": "b8bf8f00be20cd3b0766f1b547539ea05346027d7488a98fe440a61aa4568d37",
+      "bytes": 82631,
+      "objects": 78,
+      "indicators": 24,
+      "modified": "2026-11-13T16:44:07.61011Z"
+    },
     {
       "slug": "opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015",
       "title": "Help Desks to Host Shells Across Brazil's Public Sector",

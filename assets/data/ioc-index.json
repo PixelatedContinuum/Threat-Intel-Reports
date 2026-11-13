@@ -1,11 +1,11 @@
 {
- "generated_at": "2026-11-13T01:50:53Z",
+ "generated_at": "2026-11-13T16:56:55Z",
  "counts": {
-  "indicators": 2056,
-  "reports": 60,
-  "multi_report": 146,
+  "indicators": 2073,
+  "reports": 61,
+  "multi_report": 147,
   "suppressed_benign": 113,
-  "never_block": 134
+  "never_block": 135
  },
  "coverage": {
   "indexed": [
@@ -39,6 +39,7 @@
    "gocloud-multiservice-cryptojacking-149-28-112-221-iocs.json",
    "gotenberg-rce-cryptomining-107-175-69-137-iocs.json",
    "inkognito-russian-vpn-phishing-185-221-196-118-20260516-iocs.json",
+   "inv-2026-080-cyberstrike-ad-workbench-iocs.json",
    "kaido-quasar-rat-iocs.json",
    "korean-claude-openclaw-221.150.15.104-iocs.json",
    "malware-analysis-houselet.json",
@@ -70,9 +71,7 @@
    "webserver-compromise-kit-91-236-230-250-iocs.json",
    "webshells-to-the-cloud.json"
   ],
-  "embargoed": [
-   "inv-2026-080-cyberstrike-ad-workbench-iocs.json"
-  ],
+  "embargoed": [],
   "unknown": [],
   "empty": []
  },
@@ -317,6 +316,14 @@
    "report_url": "/reports/inkognito-russian-vpn-phishing-185-221-196-118-20260516/",
    "detection_url": "/hunting-detections/inkognito-russian-vpn-phishing-185-221-196-118-20260516-detections",
    "ioc_url": "/ioc-feeds/inkognito-russian-vpn-phishing-185-221-196-118-20260516-iocs.json"
+  },
+  "inv-2026-080-cyberstrike-ad-workbench": {
+   "title": "An AI Pentest Platform Drives Commodity Tooling Against Portuguese Government Targets",
+   "date": "2026-11-12",
+   "severity": "high",
+   "report_url": "/reports/inv-2026-080-cyberstrike-ad-workbench/",
+   "detection_url": "/hunting-detections/inv-2026-080-cyberstrike-ad-workbench-detections",
+   "ioc_url": "/ioc-feeds/inv-2026-080-cyberstrike-ad-workbench-iocs.json"
   },
   "kaido-quasar-rat": {
    "title": "KAIDO: A Brazilian Quasar-Fork RAT with Hidden-Desktop Session Hijacking",
@@ -3112,6 +3119,10 @@
     "role": "GodPotato (operator-recompiled .NET). Universal DCOM/RPC SeImpersonate Potato. g.exe and gp.exe are byte-identical. Identified as public tool via signature, not hash identity."
    },
    {
+    "report": "inv-2026-080-cyberstrike-ad-workbench",
+    "role": "Hash equals the GodPotato V1.20 release. Public tool; hunt context only."
+   },
+   {
     "report": "open-directory-94-103-1-13-20260423",
     "role": "Standard GodPotato, labeled in version info"
    },
@@ -3195,6 +3206,10 @@
    {
     "report": "flaskc2-postex-toolkit-67-215-232-25",
     "role": "Rubeus (GhostPack), operator-recompiled .NET (compile 2026-03-23). Kerberos abuse (kerberoast/asktgt/s4u). Identified as public tool via signature, not hash identity."
+   },
+   {
+    "report": "inv-2026-080-cyberstrike-ad-workbench",
+    "role": "Public tool, circulating build; not operator-compiled"
    },
    {
     "report": "opendirectory-45-130-148-125-20260430",
@@ -4781,6 +4796,161 @@
     "report": "inkognito-russian-vpn-phishing-185-221-196-118-20260516"
    }
   ],
+  "sha256:02a98b325408f623e192d569d6cb11a60aaf61a114a5c4f35bbfd1dcbe56d69c": [
+   {
+    "report": "inv-2026-080-cyberstrike-ad-workbench",
+    "role": "operator-built"
+   }
+  ],
+  "filename:dnsplugin.dll": [
+   {
+    "report": "inv-2026-080-cyberstrike-ad-workbench",
+    "role": "operator-built"
+   }
+  ],
+  "sha256:7033ee65a125bec39860af0cef8d64f46a0cf7e579baab5d57e31d83367333f9": [
+   {
+    "report": "inv-2026-080-cyberstrike-ad-workbench",
+    "role": "operator-built"
+   }
+  ],
+  "domain:pwnkit.so": [
+   {
+    "report": "inv-2026-080-cyberstrike-ad-workbench",
+    "role": "operator-built"
+   }
+  ],
+  "sha256:863a7a843b30d5252a84e5b03e850236fce4cac1954be4227c1cf396138759a5": [
+   {
+    "report": "inv-2026-080-cyberstrike-ad-workbench",
+    "role": "operator-built"
+   }
+  ],
+  "sha256:fbf97f4fc02266d2904b125ac6f55199c0e2855374646659b27e63bdf9cf5490": [
+   {
+    "report": "inv-2026-080-cyberstrike-ad-workbench",
+    "role": "Other revision of the PwnKit driver, without the embedded module."
+   }
+  ],
+  "sha256:1046cf19fb280684236193059805005bb8b1f3ad3b6fe7ca2b35d9dea8523273": [
+   {
+    "report": "inv-2026-080-cyberstrike-ad-workbench",
+    "role": "operator-built (GodPotato fork)"
+   }
+  ],
+  "filename:svcutil.exe": [
+   {
+    "report": "inv-2026-080-cyberstrike-ad-workbench",
+    "role": "operator-built (GodPotato fork)"
+   }
+  ],
+  "sha256:fe0445f870c905ff33fc75223ce709992f8bb219d2fff6acd3775518b894a025": [
+   {
+    "report": "inv-2026-080-cyberstrike-ad-workbench",
+    "role": "Renamed GodPotato fork without the LSASS dump; same pipe name."
+   }
+  ],
+  "filename:svcutil_clean.exe": [
+   {
+    "report": "inv-2026-080-cyberstrike-ad-workbench",
+    "role": "Renamed GodPotato fork without the LSASS dump; same pipe name."
+   }
+  ],
+  "sha256:b95c849d510e5cf8fdbb8bfcae2ca36a8a0c1f383c783fae74d95bece46f084f": [
+   {
+    "report": "inv-2026-080-cyberstrike-ad-workbench",
+    "role": "operator-written source"
+   }
+  ],
+  "sha256:e0691216a96faa65a66c8e9de47cbe1f87d9a8c5a1417ea8e126a4c4fe1944cb": [
+   {
+    "report": "inv-2026-080-cyberstrike-ad-workbench",
+    "role": "operator-written source"
+   }
+  ],
+  "sha256:2dcc37be26344f68e3124c3fd5ca5ca1ec672d2933c6db5f7c57222f6f9117d1": [
+   {
+    "report": "inv-2026-080-cyberstrike-ad-workbench",
+    "role": "operator-written source"
+   }
+  ],
+  "sha256:cc3b5d073dd879275e274177d7293a9737dc76407bdabe0cc667bf0eaf3c7f1f": [
+   {
+    "report": "inv-2026-080-cyberstrike-ad-workbench",
+    "role": "operator's own compile of stock public PwnKit source"
+   }
+  ],
+  "sha256:44e83f84a5d5219e2f7c3cf1e4f02489cae81361227f46946abe4b8d8245b879": [
+   {
+    "report": "inv-2026-080-cyberstrike-ad-workbench",
+    "role": "STOCK public tool"
+   }
+  ],
+  "filename:godpotato-net4.exe": [
+   {
+    "report": "inv-2026-080-cyberstrike-ad-workbench",
+    "role": "Hash equals the GodPotato V1.20 release. Public tool; hunt context only."
+   }
+  ],
+  "sha256:e788f829b1a0141a488afb5f82b94f13035623609ca3b83f0c6985919cd9e83b": [
+   {
+    "report": "inv-2026-080-cyberstrike-ad-workbench",
+    "role": "PE64 Go executable"
+   },
+   {
+    "report": "open-directory-94-103-1-13-20260423",
+    "role": "Chisel tunneling tool, Go 1.23.1, 9.8 MB"
+   },
+   {
+    "report": "opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817",
+    "role": "PE64 Go binary"
+   },
+   {
+    "report": "seasia-gov-exploitation-toolkit-144-172-106-236",
+    "role": "PE32+ Go executable"
+   },
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17",
+    "role": "Chisel v1.11.5 Windows PE client"
+   }
+  ],
+  "filename:chisel.exe": [
+   {
+    "report": "inv-2026-080-cyberstrike-ad-workbench",
+    "role": "PE64 Go executable"
+   },
+   {
+    "report": "open-directory-94-103-1-13-20260423",
+    "role": "Chisel tunneling tool, Go 1.23.1, 9.8 MB"
+   },
+   {
+    "report": "opendirectory-45-130-148-125-20260430"
+   },
+   {
+    "report": "seasia-gov-exploitation-toolkit-144-172-106-236",
+    "role": "PE32+ Go executable"
+   },
+   {
+    "report": "sliver-c2-windows-postex-staging-193-233-202-17",
+    "role": "Chisel v1.11.5 Linux ELF, the operator-side tunnel server"
+   }
+  ],
+  "sha256:1bfbefa4ff4d0df3ee0090b5079cf84ed2e8d5377ba5b7a30afd88367d57b9ff": [
+   {
+    "report": "inv-2026-080-cyberstrike-ad-workbench",
+    "role": "Public tool, circulating build; not operator-compiled"
+   },
+   {
+    "report": "opendirectory-45-130-148-125-20260430",
+    "role": "Ghostpack commodity Kerberos abuse tool. YARA: HKTL_NET_GUID_Rubeus."
+   }
+  ],
+  "ipv4:199.247.13.103": [
+   {
+    "report": "inv-2026-080-cyberstrike-ad-workbench",
+    "role": "Vultr (The Constant Company, AS20473) commercial hosting address in 199.247.0.0/19. Caveats before blocking: the address served unrelated tenants in 2019 to 2021 and 2023 to 2024, and whether the operator rented this instance or compromised it is INSUFFICIENT, so a block can fall on an innocent owner or a future tenant; time-box any block and re-check the address first. Ports 8081 (HTTP 404 on 2026-10-07) and 8090 (tool staging: chisel, dnsplugin.dll) also seen."
+   }
+  ],
   "url:http://221.150.15.104:8080/": [
    {
     "report": "korean-claude-openclaw-221.150.15.104",
@@ -5889,41 +6059,6 @@
    },
    {
     "report": "webserver-compromise-kit-91-236-230-250"
-   }
-  ],
-  "sha256:e788f829b1a0141a488afb5f82b94f13035623609ca3b83f0c6985919cd9e83b": [
-   {
-    "report": "open-directory-94-103-1-13-20260423",
-    "role": "Chisel tunneling tool, Go 1.23.1, 9.8 MB"
-   },
-   {
-    "report": "opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817",
-    "role": "PE64 Go binary"
-   },
-   {
-    "report": "seasia-gov-exploitation-toolkit-144-172-106-236",
-    "role": "PE32+ Go executable"
-   },
-   {
-    "report": "sliver-c2-windows-postex-staging-193-233-202-17",
-    "role": "Chisel v1.11.5 Windows PE client"
-   }
-  ],
-  "filename:chisel.exe": [
-   {
-    "report": "open-directory-94-103-1-13-20260423",
-    "role": "Chisel tunneling tool, Go 1.23.1, 9.8 MB"
-   },
-   {
-    "report": "opendirectory-45-130-148-125-20260430"
-   },
-   {
-    "report": "seasia-gov-exploitation-toolkit-144-172-106-236",
-    "role": "PE32+ Go executable"
-   },
-   {
-    "report": "sliver-c2-windows-postex-staging-193-233-202-17",
-    "role": "Chisel v1.11.5 Linux ELF, the operator-side tunnel server"
    }
   ],
   "sha256:929cc7bcdff39d5ba305603b475cde8d86c2f6b69532cde8e27ea7e3710efbaa": [
@@ -7815,12 +7950,6 @@
   "filename:powerview.ps1": [
    {
     "report": "opendirectory-45-130-148-125-20260430"
-   }
-  ],
-  "sha256:1bfbefa4ff4d0df3ee0090b5079cf84ed2e8d5377ba5b7a30afd88367d57b9ff": [
-   {
-    "report": "opendirectory-45-130-148-125-20260430",
-    "role": "Ghostpack commodity Kerberos abuse tool. YARA: HKTL_NET_GUID_Rubeus."
    }
   ],
   "sha256:29955ba1e2193047ee5f4561445f81e218ae4de1a295f8fd296ad536bf381f17": [
@@ -12821,6 +12950,12 @@
   "domain:dohwawazs.pro": [
    {
     "report": "gotenberg-rce-cryptomining-107-175-69-137"
+   }
+  ],
+  "domain:fr.bastaniqifi.ir": [
+   {
+    "report": "inv-2026-080-cyberstrike-ad-workbench",
+    "role": "unverified tie (neither shown nor excluded)"
    }
   ],
   "domain:open.oppomobile.com": [

@@ -2,13 +2,14 @@
 # ATT&CK tables, _data/detection_attack.yml, _data/actors_index.yml and the
 # catalog. Do NOT edit by hand; re-run the generator. Published sources only.
 attack_version: '19.2'
-max_score: 128
+max_score: 129
 tactics:
   - name: Reconnaissance
     slug: reconnaissance
     techniques:
       - T1589
       - T1589.001
+      - T1590.002
       - T1590.005
       - T1592.004
       - T1593.002
@@ -20,8 +21,8 @@ tactics:
       - T1595.003
       - T1596.003
       - T1596.005
-    technique_count: 13
-    report_count: 23
+    technique_count: 14
+    report_count: 27
     rule_count: 5
   - name: Resource Development
     slug: resource-development
@@ -45,12 +46,13 @@ tactics:
       - T1588.002
       - T1588.004
       - T1588.005
+      - T1588.007
       - T1608.001
       - T1608.003
       - T1608.005
-    technique_count: 22
-    report_count: 65
-    rule_count: 35
+    technique_count: 23
+    report_count: 69
+    rule_count: 37
   - name: Initial Access
     slug: initial-access
     techniques:
@@ -71,8 +73,8 @@ tactics:
       - T1566.003
       - T1566.004
     technique_count: 16
-    report_count: 47
-    rule_count: 61
+    report_count: 50
+    rule_count: 66
   - name: Execution
     slug: execution
     techniques:
@@ -100,8 +102,8 @@ tactics:
       - T1574.001
       - T1574.006
     technique_count: 23
-    report_count: 126
-    rule_count: 168
+    report_count: 132
+    rule_count: 170
   - name: Persistence
     slug: persistence
     techniques:
@@ -138,8 +140,8 @@ tactics:
       - T1554
       - T1653
     technique_count: 32
-    report_count: 105
-    rule_count: 155
+    report_count: 113
+    rule_count: 158
   - name: Privilege Escalation
     slug: privilege-escalation
     techniques:
@@ -181,8 +183,8 @@ tactics:
       - T1548.002
       - T1611
     technique_count: 37
-    report_count: 144
-    rule_count: 177
+    report_count: 151
+    rule_count: 183
   - name: Stealth
     slug: stealth
     techniques:
@@ -250,8 +252,8 @@ tactics:
       - T1622
       - T1684.001
     technique_count: 63
-    report_count: 262
-    rule_count: 255
+    report_count: 270
+    rule_count: 259
   - name: Defense Impairment
     slug: defense-impairment
     techniques:
@@ -297,6 +299,7 @@ tactics:
       - T1552.003
       - T1552.004
       - T1552.005
+      - T1552.006
       - T1555
       - T1555.003
       - T1555.004
@@ -308,9 +311,9 @@ tactics:
       - T1606
       - T1606.001
       - T1649
-    technique_count: 35
-    report_count: 92
-    rule_count: 60
+    technique_count: 36
+    report_count: 105
+    rule_count: 63
   - name: Discovery
     slug: discovery
     techniques:
@@ -344,8 +347,8 @@ tactics:
       - T1614
       - T1622
     technique_count: 29
-    report_count: 166
-    rule_count: 51
+    report_count: 174
+    rule_count: 52
   - name: Lateral Movement
     slug: lateral-movement
     techniques:
@@ -360,11 +363,12 @@ tactics:
       - T1210
       - T1534
       - T1550.001
+      - T1550.002
       - T1550.003
       - T1563.002
       - T1570
-    technique_count: 14
-    report_count: 28
+    technique_count: 15
+    report_count: 34
     rule_count: 21
   - name: Collection
     slug: collection
@@ -375,6 +379,7 @@ tactics:
       - T1056.002
       - T1056.003
       - T1074.001
+      - T1074.002
       - T1113
       - T1115
       - T1119
@@ -388,8 +393,8 @@ tactics:
       - T1560
       - T1602.001
       - T1602.002
-    technique_count: 19
-    report_count: 85
+    technique_count: 20
+    report_count: 89
     rule_count: 40
   - name: Command and Control
     slug: command-and-control
@@ -426,8 +431,8 @@ tactics:
       - T1573.002
       - T1665
     technique_count: 31
-    report_count: 166
-    rule_count: 254
+    report_count: 171
+    rule_count: 256
   - name: Exfiltration
     slug: exfiltration
     techniques:
@@ -437,7 +442,7 @@ tactics:
       - T1567
       - T1567.002
     technique_count: 5
-    report_count: 31
+    report_count: 32
     rule_count: 21
   - name: Impact
     slug: impact
@@ -531,6 +536,11 @@ techniques:
     tactics:
       - Credential Access
     reports:
+      - url: /reports/inv-2026-080-cyberstrike-ad-workbench/
+        title: An AI Pentest Platform Drives Commodity Tooling Against Portuguese Government Targets
+        date: '2026-11-12'
+        tactic: Credential Access
+        confidence: HIGH
       - url: /reports/sliver-c2-windows-postex-staging-193-233-202-17/
         title: Sliver C2 Windows Post-Exploitation Staging, 193.233.202.17
         date: '2026-09-07'
@@ -547,6 +557,14 @@ techniques:
         tactic: Credential Access
         confidence: HIGH
     detections:
+      - url: /hunting-detections/inv-2026-080-cyberstrike-ad-workbench-detections
+        title: An AI Pentest Platform Drives Commodity Tooling Against Portuguese Government Targets
+        date: '2026-11-12'
+        report_url: /reports/inv-2026-080-cyberstrike-ad-workbench/
+        rules: >-
+          MAL_CyberStrike_GodPotato_SvcUtil_Fork_Renamed_Pipe_LSASS_Dump (YARA, Hunting); Service
+          Installed To Dump Process Memory Via Comsvcs MiniDump (SIGMA, Detection)
+        count: 2
       - url: /hunting-detections/sliver-c2-windows-postex-staging-193-233-202-17-detections
         title: Sliver C2 Windows Post-Exploitation Staging, 193.233.202.17
         date: '2026-09-07'
@@ -574,16 +592,21 @@ techniques:
       - UTA-2026-024
     url: /techniques/T1003.001/
     mitre_url: https://attack.mitre.org/techniques/T1003/001/
-    report_count: 3
-    rule_count: 3
+    report_count: 4
+    rule_count: 5
     actor_count: 4
-    score: 6
+    score: 9
   - id: T1003.002
     name: Security Account Manager
     tactic: Credential Access
     tactics:
       - Credential Access
     reports:
+      - url: /reports/inv-2026-080-cyberstrike-ad-workbench/
+        title: An AI Pentest Platform Drives Commodity Tooling Against Portuguese Government Targets
+        date: '2026-11-12'
+        tactic: Credential Access
+        confidence: HIGH
       - url: /reports/sliver-c2-windows-postex-staging-193-233-202-17/
         title: Sliver C2 Windows Post-Exploitation Staging, 193.233.202.17
         date: '2026-09-07'
@@ -621,10 +644,10 @@ techniques:
       - UTA-2026-024
     url: /techniques/T1003.002/
     mitre_url: https://attack.mitre.org/techniques/T1003/002/
-    report_count: 3
+    report_count: 4
     rule_count: 3
     actor_count: 3
-    score: 6
+    score: 7
   - id: T1003.003
     name: NTDS
     tactic: Credential Access
@@ -651,6 +674,11 @@ techniques:
     tactics:
       - Credential Access
     reports:
+      - url: /reports/inv-2026-080-cyberstrike-ad-workbench/
+        title: An AI Pentest Platform Drives Commodity Tooling Against Portuguese Government Targets
+        date: '2026-11-12'
+        tactic: Credential Access
+        confidence: MODERATE
       - url: /reports/sliver-c2-windows-postex-staging-193-233-202-17/
         title: Sliver C2 Windows Post-Exploitation Staging, 193.233.202.17
         date: '2026-09-07'
@@ -667,10 +695,10 @@ techniques:
       - UTA-2026-024
     url: /techniques/T1003.004/
     mitre_url: https://attack.mitre.org/techniques/T1003/004/
-    report_count: 1
+    report_count: 2
     rule_count: 1
     actor_count: 1
-    score: 2
+    score: 3
   - id: T1003.006
     name: DCSync
     tactic: Credential Access
@@ -716,6 +744,11 @@ techniques:
     tactics:
       - Collection
     reports:
+      - url: /reports/inv-2026-080-cyberstrike-ad-workbench/
+        title: An AI Pentest Platform Drives Commodity Tooling Against Portuguese Government Targets
+        date: '2026-11-12'
+        tactic: Collection
+        confidence: HIGH
       - url: /reports/opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015/
         title: Help Desks to Host Shells Across Brazil's Public Sector
         date: '2026-10-15'
@@ -841,16 +874,21 @@ techniques:
       - n-3-xl
     url: /techniques/T1005/
     mitre_url: https://attack.mitre.org/techniques/T1005/
-    report_count: 18
+    report_count: 19
     rule_count: 3
     actor_count: 11
-    score: 21
+    score: 22
   - id: T1007
     name: System Service Discovery
     tactic: Discovery
     tactics:
       - Discovery
     reports:
+      - url: /reports/inv-2026-080-cyberstrike-ad-workbench/
+        title: An AI Pentest Platform Drives Commodity Tooling Against Portuguese Government Targets
+        date: '2026-11-12'
+        tactic: Discovery
+        confidence: MODERATE
       - url: /reports/arsenal-237-new-files/killer-dll/
         title: 'Arsenal-237 New Files: killer.dll (BYOVD Process Termination)'
         date: '2026-01-24'
@@ -890,10 +928,10 @@ techniques:
     actors: []
     url: /techniques/T1007/
     mitre_url: https://attack.mitre.org/techniques/T1007/
-    report_count: 4
+    report_count: 5
     rule_count: 4
     actor_count: 0
-    score: 8
+    score: 9
   - id: T1008
     name: Fallback Channels
     tactic: Command and Control
@@ -1126,6 +1164,11 @@ techniques:
     tactics:
       - Discovery
     reports:
+      - url: /reports/inv-2026-080-cyberstrike-ad-workbench/
+        title: An AI Pentest Platform Drives Commodity Tooling Against Portuguese Government Targets
+        date: '2026-11-12'
+        tactic: Discovery
+        confidence: MODERATE
       - url: /reports/opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015/
         title: Help Desks to Host Shells Across Brazil's Public Sector
         date: '2026-10-15'
@@ -1169,10 +1212,10 @@ techniques:
       - vova75rus
     url: /techniques/T1018/
     mitre_url: https://attack.mitre.org/techniques/T1018/
-    report_count: 4
+    report_count: 5
     rule_count: 2
     actor_count: 6
-    score: 6
+    score: 7
   - id: T1020
     name: Automated Exfiltration
     tactic: Exfiltration
@@ -1297,6 +1340,11 @@ techniques:
     tactics:
       - Lateral Movement
     reports:
+      - url: /reports/inv-2026-080-cyberstrike-ad-workbench/
+        title: An AI Pentest Platform Drives Commodity Tooling Against Portuguese Government Targets
+        date: '2026-11-12'
+        tactic: Lateral Movement
+        confidence: HIGH
       - url: /reports/sliver-c2-windows-postex-staging-193-233-202-17/
         title: Sliver C2 Windows Post-Exploitation Staging, 193.233.202.17
         date: '2026-09-07'
@@ -1343,16 +1391,21 @@ techniques:
       - UTA-2026-024
     url: /techniques/T1021.002/
     mitre_url: https://attack.mitre.org/techniques/T1021/002/
-    report_count: 4
+    report_count: 5
     rule_count: 4
     actor_count: 4
-    score: 8
+    score: 9
   - id: T1021.004
     name: SSH
     tactic: Lateral Movement
     tactics:
       - Lateral Movement
     reports:
+      - url: /reports/inv-2026-080-cyberstrike-ad-workbench/
+        title: An AI Pentest Platform Drives Commodity Tooling Against Portuguese Government Targets
+        date: '2026-11-12'
+        tactic: Lateral Movement
+        confidence: MODERATE
       - url: /reports/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817/
         title: Carrier Credential Harvesting Through a Customer's Router
         date: '2026-08-18'
@@ -1389,10 +1442,10 @@ techniques:
       - UTA-2026-023
     url: /techniques/T1021.004/
     mitre_url: https://attack.mitre.org/techniques/T1021/004/
-    report_count: 1
+    report_count: 2
     rule_count: 7
     actor_count: 3
-    score: 8
+    score: 9
   - id: T1021.005
     name: VNC
     tactic: Lateral Movement
@@ -2063,6 +2116,11 @@ techniques:
     tactics:
       - Discovery
     reports:
+      - url: /reports/inv-2026-080-cyberstrike-ad-workbench/
+        title: An AI Pentest Platform Drives Commodity Tooling Against Portuguese Government Targets
+        date: '2026-11-12'
+        tactic: Discovery
+        confidence: HIGH
       - url: /reports/opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015/
         title: Help Desks to Host Shells Across Brazil's Public Sector
         date: '2026-10-15'
@@ -2133,10 +2191,10 @@ techniques:
       - UTA-2026-024
     url: /techniques/T1033/
     mitre_url: https://attack.mitre.org/techniques/T1033/
-    report_count: 10
+    report_count: 11
     rule_count: 2
     actor_count: 4
-    score: 12
+    score: 13
   - id: T1036
     name: Masquerading
     tactic: Stealth
@@ -2315,6 +2373,11 @@ techniques:
     tactics:
       - Stealth
     reports:
+      - url: /reports/inv-2026-080-cyberstrike-ad-workbench/
+        title: An AI Pentest Platform Drives Commodity Tooling Against Portuguese Government Targets
+        date: '2026-11-12'
+        tactic: Stealth
+        confidence: MODERATE
       - url: /reports/sliver-c2-windows-postex-staging-193-233-202-17/
         title: Sliver C2 Windows Post-Exploitation Staging, 193.233.202.17
         date: '2026-09-07'
@@ -2401,6 +2464,12 @@ techniques:
         tactic: Stealth
         confidence: HIGH
     detections:
+      - url: /hunting-detections/inv-2026-080-cyberstrike-ad-workbench-detections
+        title: An AI Pentest Platform Drives Commodity Tooling Against Portuguese Government Targets
+        date: '2026-11-12'
+        report_url: /reports/inv-2026-080-cyberstrike-ad-workbench/
+        rules: Execution Of Svcutil Or Svcutil_clean Executable (SIGMA, Hunting)
+        count: 1
       - url: /hunting-detections/gotenberg-rce-cryptomining-107-175-69-137-detections
         title: Gotenberg CVE-2026-42589 Mass Exploitation and Cryptomining
         date: '2026-09-16'
@@ -2558,10 +2627,10 @@ techniques:
       - vova75rus
     url: /techniques/T1036.005/
     mitre_url: https://attack.mitre.org/techniques/T1036/005/
-    report_count: 17
-    rule_count: 39
+    report_count: 18
+    rule_count: 40
     actor_count: 15
-    score: 56
+    score: 58
   - id: T1036.007
     name: Double File Extension
     tactic: Stealth
@@ -2632,6 +2701,11 @@ techniques:
     tactics:
       - Exfiltration
     reports:
+      - url: /reports/inv-2026-080-cyberstrike-ad-workbench/
+        title: An AI Pentest Platform Drives Commodity Tooling Against Portuguese Government Targets
+        date: '2026-11-12'
+        tactic: Exfiltration
+        confidence: HIGH
       - url: /reports/opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015/
         title: Help Desks to Host Shells Across Brazil's Public Sector
         date: '2026-10-15'
@@ -2835,16 +2909,21 @@ techniques:
       - n-3-xl
     url: /techniques/T1041/
     mitre_url: https://attack.mitre.org/techniques/T1041/
-    report_count: 23
+    report_count: 24
     rule_count: 13
     actor_count: 14
-    score: 36
+    score: 37
   - id: T1046
     name: Network Service Discovery
     tactic: Discovery
     tactics:
       - Discovery
     reports:
+      - url: /reports/inv-2026-080-cyberstrike-ad-workbench/
+        title: An AI Pentest Platform Drives Commodity Tooling Against Portuguese Government Targets
+        date: '2026-11-12'
+        tactic: Discovery
+        confidence: HIGH
       - url: /reports/opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015/
         title: Help Desks to Host Shells Across Brazil's Public Sector
         date: '2026-10-15'
@@ -2925,16 +3004,21 @@ techniques:
       - UTA-2026-024
     url: /techniques/T1046/
     mitre_url: https://attack.mitre.org/techniques/T1046/
-    report_count: 9
+    report_count: 10
     rule_count: 4
     actor_count: 8
-    score: 13
+    score: 14
   - id: T1047
     name: Windows Management Instrumentation
     tactic: Execution
     tactics:
       - Execution
     reports:
+      - url: /reports/inv-2026-080-cyberstrike-ad-workbench/
+        title: An AI Pentest Platform Drives Commodity Tooling Against Portuguese Government Targets
+        date: '2026-11-12'
+        tactic: Execution
+        confidence: MODERATE
       - url: /reports/sliver-c2-windows-postex-staging-193-233-202-17/
         title: Sliver C2 Windows Post-Exploitation Staging, 193.233.202.17
         date: '2026-09-07'
@@ -2975,10 +3059,10 @@ techniques:
       - UTA-2026-024
     url: /techniques/T1047/
     mitre_url: https://attack.mitre.org/techniques/T1047/
-    report_count: 5
+    report_count: 6
     rule_count: 2
     actor_count: 3
-    score: 7
+    score: 8
   - id: T1048.003
     name: Exfiltration Over Unencrypted Non-C2 Protocol
     tactic: Exfiltration
@@ -3124,6 +3208,11 @@ techniques:
       - Persistence
       - Privilege Escalation
     reports:
+      - url: /reports/inv-2026-080-cyberstrike-ad-workbench/
+        title: An AI Pentest Platform Drives Commodity Tooling Against Portuguese Government Targets
+        date: '2026-11-12'
+        tactic: Execution
+        confidence: HIGH
       - url: /reports/sliver-c2-windows-postex-staging-193-233-202-17/
         title: Sliver C2 Windows Post-Exploitation Staging, 193.233.202.17
         date: '2026-09-07'
@@ -3288,10 +3377,10 @@ techniques:
       - n-3-xl
     url: /techniques/T1053.005/
     mitre_url: https://attack.mitre.org/techniques/T1053/005/
-    report_count: 13
+    report_count: 14
     rule_count: 22
     actor_count: 7
-    score: 35
+    score: 36
   - id: T1055
     name: Process Injection
     tactic: Stealth
@@ -4077,6 +4166,11 @@ techniques:
     tactics:
       - Execution
     reports:
+      - url: /reports/inv-2026-080-cyberstrike-ad-workbench/
+        title: An AI Pentest Platform Drives Commodity Tooling Against Portuguese Government Targets
+        date: '2026-11-12'
+        tactic: Execution
+        confidence: HIGH
       - url: /reports/newdouble-clickfix/
         title: >-
           FACEIT ClickFix Pages Point CS2 Players to a Script URL That VirusTotal Ties to a
@@ -4190,6 +4284,12 @@ techniques:
         tactic: Execution
         confidence: HIGH
     detections:
+      - url: /hunting-detections/inv-2026-080-cyberstrike-ad-workbench-detections
+        title: An AI Pentest Platform Drives Commodity Tooling Against Portuguese Government Targets
+        date: '2026-11-12'
+        report_url: /reports/inv-2026-080-cyberstrike-ad-workbench/
+        rules: Service Installed With Cmd And Encoded PowerShell Image Path (SIGMA, Hunting)
+        count: 1
       - url: /hunting-detections/newdouble-clickfix-detections
         title: >-
           FACEIT ClickFix Pages Point CS2 Players to a Script URL That VirusTotal Ties to a
@@ -4367,16 +4467,21 @@ techniques:
       - n-3-xl
     url: /techniques/T1059.001/
     mitre_url: https://attack.mitre.org/techniques/T1059/001/
-    report_count: 22
-    rule_count: 36
+    report_count: 23
+    rule_count: 37
     actor_count: 13
-    score: 58
+    score: 60
   - id: T1059.003
     name: Windows Command Shell
     tactic: Execution
     tactics:
       - Execution
     reports:
+      - url: /reports/inv-2026-080-cyberstrike-ad-workbench/
+        title: An AI Pentest Platform Drives Commodity Tooling Against Portuguese Government Targets
+        date: '2026-11-12'
+        tactic: Execution
+        confidence: HIGH
       - url: /reports/sliver-c2-windows-postex-staging-193-233-202-17/
         title: Sliver C2 Windows Post-Exploitation Staging, 193.233.202.17
         date: '2026-09-07'
@@ -4496,16 +4601,21 @@ techniques:
       - n-3-xl
     url: /techniques/T1059.003/
     mitre_url: https://attack.mitre.org/techniques/T1059/003/
-    report_count: 15
+    report_count: 16
     rule_count: 6
     actor_count: 10
-    score: 21
+    score: 22
   - id: T1059.004
     name: Unix Shell
     tactic: Execution
     tactics:
       - Execution
     reports:
+      - url: /reports/inv-2026-080-cyberstrike-ad-workbench/
+        title: An AI Pentest Platform Drives Commodity Tooling Against Portuguese Government Targets
+        date: '2026-11-12'
+        tactic: Execution
+        confidence: MODERATE
       - url: /reports/opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015/
         title: Help Desks to Host Shells Across Brazil's Public Sector
         date: '2026-10-15'
@@ -4626,10 +4736,10 @@ techniques:
       - vova75rus
     url: /techniques/T1059.004/
     mitre_url: https://attack.mitre.org/techniques/T1059/004/
-    report_count: 8
+    report_count: 9
     rule_count: 22
     actor_count: 11
-    score: 30
+    score: 31
   - id: T1059.005
     name: Visual Basic
     tactic: Execution
@@ -4898,6 +5008,11 @@ techniques:
     tactics:
       - Privilege Escalation
     reports:
+      - url: /reports/inv-2026-080-cyberstrike-ad-workbench/
+        title: An AI Pentest Platform Drives Commodity Tooling Against Portuguese Government Targets
+        date: '2026-11-12'
+        tactic: Privilege Escalation
+        confidence: MODERATE
       - url: /reports/sliver-c2-windows-postex-staging-193-233-202-17/
         title: Sliver C2 Windows Post-Exploitation Staging, 193.233.202.17
         date: '2026-09-07'
@@ -4949,6 +5064,15 @@ techniques:
         tactic: Privilege Escalation
         confidence: HIGH
     detections:
+      - url: /hunting-detections/inv-2026-080-cyberstrike-ad-workbench-detections
+        title: An AI Pentest Platform Drives Commodity Tooling Against Portuguese Government Targets
+        date: '2026-11-12'
+        report_url: /reports/inv-2026-080-cyberstrike-ad-workbench/
+        rules: >-
+          HKTL_Linux_PwnKit_CVE_2021_4034_GCONV_PATH_Exploit_Binary (YARA, Detection);
+          MAL_CyberStrike_PwnKit_Root_Proof_Gconv_Module (YARA, Hunting); PwnKit Exploit Staging Via
+          GCONV_PATH Named Directory (SIGMA, Detection)
+        count: 3
       - url: >-
           /hunting-detections/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817-detections
         title: Carrier Credential Harvesting Through a Customer's Router
@@ -5013,16 +5137,21 @@ techniques:
       - UTA-2026-024
     url: /techniques/T1068/
     mitre_url: https://attack.mitre.org/techniques/T1068/
-    report_count: 10
-    rule_count: 19
+    report_count: 11
+    rule_count: 22
     actor_count: 5
-    score: 29
+    score: 33
   - id: T1069.002
     name: Domain Groups
     tactic: Discovery
     tactics:
       - Discovery
     reports:
+      - url: /reports/inv-2026-080-cyberstrike-ad-workbench/
+        title: An AI Pentest Platform Drives Commodity Tooling Against Portuguese Government Targets
+        date: '2026-11-12'
+        tactic: Discovery
+        confidence: MODERATE
       - url: /reports/sliver-c2-windows-postex-staging-193-233-202-17/
         title: Sliver C2 Windows Post-Exploitation Staging, 193.233.202.17
         date: '2026-09-07'
@@ -5045,10 +5174,10 @@ techniques:
       - UTA-2026-024
     url: /techniques/T1069.002/
     mitre_url: https://attack.mitre.org/techniques/T1069/002/
-    report_count: 2
+    report_count: 3
     rule_count: 1
     actor_count: 2
-    score: 3
+    score: 4
   - id: T1070
     name: Indicator Removal
     tactic: Stealth
@@ -5107,6 +5236,11 @@ techniques:
     tactics:
       - Stealth
     reports:
+      - url: /reports/inv-2026-080-cyberstrike-ad-workbench/
+        title: An AI Pentest Platform Drives Commodity Tooling Against Portuguese Government Targets
+        date: '2026-11-12'
+        tactic: Stealth
+        confidence: MODERATE
       - url: /reports/sliver-c2-windows-postex-staging-193-233-202-17/
         title: Sliver C2 Windows Post-Exploitation Staging, 193.233.202.17
         date: '2026-09-07'
@@ -5233,10 +5367,10 @@ techniques:
       - UTA-2026-024
     url: /techniques/T1070.004/
     mitre_url: https://attack.mitre.org/techniques/T1070/004/
-    report_count: 15
+    report_count: 16
     rule_count: 8
     actor_count: 8
-    score: 23
+    score: 24
   - id: T1070.005
     name: Network Share Connection Removal
     tactic: Stealth
@@ -5323,6 +5457,11 @@ techniques:
     tactics:
       - Command and Control
     reports:
+      - url: /reports/inv-2026-080-cyberstrike-ad-workbench/
+        title: An AI Pentest Platform Drives Commodity Tooling Against Portuguese Government Targets
+        date: '2026-11-12'
+        tactic: Command and Control
+        confidence: HIGH
       - url: /reports/opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015/
         title: Help Desks to Host Shells Across Brazil's Public Sector
         date: '2026-10-15'
@@ -5780,10 +5919,10 @@ techniques:
       - n-3-xl
     url: /techniques/T1071.001/
     mitre_url: https://attack.mitre.org/techniques/T1071/001/
-    report_count: 34
+    report_count: 35
     rule_count: 94
     actor_count: 19
-    score: 128
+    score: 129
   - id: T1071.002
     name: File Transfer Protocols
     tactic: Command and Control
@@ -5871,6 +6010,11 @@ techniques:
     tactics:
       - Collection
     reports:
+      - url: /reports/inv-2026-080-cyberstrike-ad-workbench/
+        title: An AI Pentest Platform Drives Commodity Tooling Against Portuguese Government Targets
+        date: '2026-11-12'
+        tactic: Collection
+        confidence: MODERATE
       - url: /reports/sliver-c2-windows-postex-staging-193-233-202-17/
         title: Sliver C2 Windows Post-Exploitation Staging, 193.233.202.17
         date: '2026-09-07'
@@ -5887,10 +6031,29 @@ techniques:
       - UTA-2026-024
     url: /techniques/T1074.001/
     mitre_url: https://attack.mitre.org/techniques/T1074/001/
-    report_count: 2
+    report_count: 3
     rule_count: 0
     actor_count: 2
-    score: 2
+    score: 3
+  - id: T1074.002
+    name: Remote Data Staging
+    tactic: Collection
+    tactics:
+      - Collection
+    reports:
+      - url: /reports/inv-2026-080-cyberstrike-ad-workbench/
+        title: An AI Pentest Platform Drives Commodity Tooling Against Portuguese Government Targets
+        date: '2026-11-12'
+        tactic: Collection
+        confidence: MODERATE
+    detections: []
+    actors: []
+    url: /techniques/T1074.002/
+    mitre_url: https://attack.mitre.org/techniques/T1074/002/
+    report_count: 1
+    rule_count: 0
+    actor_count: 0
+    score: 1
   - id: T1078
     name: Valid Accounts
     tactic: Stealth
@@ -5900,6 +6063,11 @@ techniques:
       - Privilege Escalation
       - Initial Access
     reports:
+      - url: /reports/inv-2026-080-cyberstrike-ad-workbench/
+        title: An AI Pentest Platform Drives Commodity Tooling Against Portuguese Government Targets
+        date: '2026-11-12'
+        tactic: Initial Access
+        confidence: MODERATE
       - url: /reports/opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015/
         title: Help Desks to Host Shells Across Brazil's Public Sector
         date: '2026-10-15'
@@ -5966,10 +6134,10 @@ techniques:
       - UTA-2026-023
     url: /techniques/T1078/
     mitre_url: https://attack.mitre.org/techniques/T1078/
-    report_count: 6
+    report_count: 7
     rule_count: 6
     actor_count: 6
-    score: 12
+    score: 13
   - id: T1078.001
     name: Default Accounts
     tactic: Stealth
@@ -6002,6 +6170,11 @@ techniques:
       - Privilege Escalation
       - Initial Access
     reports:
+      - url: /reports/inv-2026-080-cyberstrike-ad-workbench/
+        title: An AI Pentest Platform Drives Commodity Tooling Against Portuguese Government Targets
+        date: '2026-11-12'
+        tactic: Initial Access
+        confidence: MODERATE
       - url: /reports/sliver-c2-windows-postex-staging-193-233-202-17/
         title: Sliver C2 Windows Post-Exploitation Staging, 193.233.202.17
         date: '2026-09-07'
@@ -6023,10 +6196,10 @@ techniques:
       - UTA-2026-024
     url: /techniques/T1078.002/
     mitre_url: https://attack.mitre.org/techniques/T1078/002/
-    report_count: 3
+    report_count: 4
     rule_count: 0
     actor_count: 2
-    score: 3
+    score: 4
   - id: T1078.003
     name: Local Accounts
     tactic: Stealth
@@ -6280,6 +6453,11 @@ techniques:
     tactics:
       - Discovery
     reports:
+      - url: /reports/inv-2026-080-cyberstrike-ad-workbench/
+        title: An AI Pentest Platform Drives Commodity Tooling Against Portuguese Government Targets
+        date: '2026-11-12'
+        tactic: Discovery
+        confidence: MODERATE
       - url: /reports/opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015/
         title: Help Desks to Host Shells Across Brazil's Public Sector
         date: '2026-10-15'
@@ -6372,10 +6550,10 @@ techniques:
       - n-3-xl
     url: /techniques/T1083/
     mitre_url: https://attack.mitre.org/techniques/T1083/
-    report_count: 15
+    report_count: 16
     rule_count: 2
     actor_count: 5
-    score: 17
+    score: 18
   - id: T1087
     name: Account Discovery
     tactic: Discovery
@@ -6433,6 +6611,11 @@ techniques:
     tactics:
       - Discovery
     reports:
+      - url: /reports/inv-2026-080-cyberstrike-ad-workbench/
+        title: An AI Pentest Platform Drives Commodity Tooling Against Portuguese Government Targets
+        date: '2026-11-12'
+        tactic: Discovery
+        confidence: HIGH
       - url: /reports/opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015/
         title: Help Desks to Host Shells Across Brazil's Public Sector
         date: '2026-10-15'
@@ -6449,6 +6632,12 @@ techniques:
         tactic: Discovery
         confidence: HIGH
     detections:
+      - url: /hunting-detections/inv-2026-080-cyberstrike-ad-workbench-detections
+        title: An AI Pentest Platform Drives Commodity Tooling Against Portuguese Government Targets
+        date: '2026-11-12'
+        report_url: /reports/inv-2026-080-cyberstrike-ad-workbench/
+        rules: THL HUNT Kerberos Unknown-Principal Error Burst From KDC (SURICATA, Hunting)
+        count: 1
       - url: /hunting-detections/opendirectory-45-130-148-125-20260430-detections
         title: AdaptixC2 Open Directory Exposure (45.130.148.125)
         date: '2026-04-30'
@@ -6460,10 +6649,10 @@ techniques:
       - UTA-2026-024
     url: /techniques/T1087.002/
     mitre_url: https://attack.mitre.org/techniques/T1087/002/
-    report_count: 3
-    rule_count: 1
+    report_count: 4
+    rule_count: 2
     actor_count: 2
-    score: 4
+    score: 6
   - id: T1087.004
     name: Cloud Account
     tactic: Discovery
@@ -6544,6 +6733,11 @@ techniques:
     tactics:
       - Command and Control
     reports:
+      - url: /reports/inv-2026-080-cyberstrike-ad-workbench/
+        title: An AI Pentest Platform Drives Commodity Tooling Against Portuguese Government Targets
+        date: '2026-11-12'
+        tactic: Command and Control
+        confidence: MODERATE
       - url: /reports/opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015/
         title: Help Desks to Host Shells Across Brazil's Public Sector
         date: '2026-10-15'
@@ -6631,10 +6825,10 @@ techniques:
       - UTA-2026-023
     url: /techniques/T1090.001/
     mitre_url: https://attack.mitre.org/techniques/T1090/001/
-    report_count: 7
+    report_count: 8
     rule_count: 13
     actor_count: 5
-    score: 20
+    score: 21
   - id: T1090.002
     name: External Proxy
     tactic: Command and Control
@@ -6959,6 +7153,11 @@ techniques:
       - Persistence
       - Privilege Escalation
     reports:
+      - url: /reports/inv-2026-080-cyberstrike-ad-workbench/
+        title: An AI Pentest Platform Drives Commodity Tooling Against Portuguese Government Targets
+        date: '2026-11-12'
+        tactic: Persistence
+        confidence: MODERATE
       - url: /reports/opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015/
         title: Help Desks to Host Shells Across Brazil's Public Sector
         date: '2026-10-15'
@@ -7016,10 +7215,10 @@ techniques:
       - UTA-2026-024
     url: /techniques/T1098/
     mitre_url: https://attack.mitre.org/techniques/T1098/
-    report_count: 4
+    report_count: 5
     rule_count: 6
     actor_count: 3
-    score: 10
+    score: 11
   - id: T1098.004
     name: SSH Authorized Keys
     tactic: Persistence
@@ -7311,6 +7510,11 @@ techniques:
     tactics:
       - Command and Control
     reports:
+      - url: /reports/inv-2026-080-cyberstrike-ad-workbench/
+        title: An AI Pentest Platform Drives Commodity Tooling Against Portuguese Government Targets
+        date: '2026-11-12'
+        tactic: Command and Control
+        confidence: HIGH
       - url: /reports/opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015/
         title: Help Desks to Host Shells Across Brazil's Public Sector
         date: '2026-10-15'
@@ -7579,10 +7783,10 @@ techniques:
       - vova75rus
     url: /techniques/T1105/
     mitre_url: https://attack.mitre.org/techniques/T1105/
-    report_count: 21
+    report_count: 22
     rule_count: 30
     actor_count: 17
-    score: 51
+    score: 52
   - id: T1106
     name: Native API
     tactic: Execution
@@ -7711,6 +7915,11 @@ techniques:
     tactics:
       - Credential Access
     reports:
+      - url: /reports/inv-2026-080-cyberstrike-ad-workbench/
+        title: An AI Pentest Platform Drives Commodity Tooling Against Portuguese Government Targets
+        date: '2026-11-12'
+        tactic: Credential Access
+        confidence: MODERATE
       - url: /reports/opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015/
         title: Help Desks to Host Shells Across Brazil's Public Sector
         date: '2026-10-15'
@@ -7758,16 +7967,21 @@ techniques:
       - UTA-2026-019
     url: /techniques/T1110.001/
     mitre_url: https://attack.mitre.org/techniques/T1110/001/
-    report_count: 3
+    report_count: 4
     rule_count: 6
     actor_count: 2
-    score: 9
+    score: 10
   - id: T1110.002
     name: Password Cracking
     tactic: Credential Access
     tactics:
       - Credential Access
     reports:
+      - url: /reports/inv-2026-080-cyberstrike-ad-workbench/
+        title: An AI Pentest Platform Drives Commodity Tooling Against Portuguese Government Targets
+        date: '2026-11-12'
+        tactic: Credential Access
+        confidence: HIGH
       - url: /reports/opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015/
         title: Help Desks to Host Shells Across Brazil's Public Sector
         date: '2026-10-15'
@@ -7777,16 +7991,21 @@ techniques:
     actors: []
     url: /techniques/T1110.002/
     mitre_url: https://attack.mitre.org/techniques/T1110/002/
-    report_count: 1
+    report_count: 2
     rule_count: 0
     actor_count: 0
-    score: 1
+    score: 2
   - id: T1110.003
     name: Password Spraying
     tactic: Credential Access
     tactics:
       - Credential Access
     reports:
+      - url: /reports/inv-2026-080-cyberstrike-ad-workbench/
+        title: An AI Pentest Platform Drives Commodity Tooling Against Portuguese Government Targets
+        date: '2026-11-12'
+        tactic: Credential Access
+        confidence: HIGH
       - url: /reports/opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015/
         title: Help Desks to Host Shells Across Brazil's Public Sector
         date: '2026-10-15'
@@ -7835,16 +8054,21 @@ techniques:
       - UTA-2026-023
     url: /techniques/T1110.003/
     mitre_url: https://attack.mitre.org/techniques/T1110/003/
-    report_count: 5
+    report_count: 6
     rule_count: 3
     actor_count: 5
-    score: 8
+    score: 9
   - id: T1110.004
     name: Credential Stuffing
     tactic: Credential Access
     tactics:
       - Credential Access
     reports:
+      - url: /reports/inv-2026-080-cyberstrike-ad-workbench/
+        title: An AI Pentest Platform Drives Commodity Tooling Against Portuguese Government Targets
+        date: '2026-11-12'
+        tactic: Credential Access
+        confidence: MODERATE
       - url: /reports/opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015/
         title: Help Desks to Host Shells Across Brazil's Public Sector
         date: '2026-10-15'
@@ -7859,10 +8083,10 @@ techniques:
     actors: []
     url: /techniques/T1110.004/
     mitre_url: https://attack.mitre.org/techniques/T1110/004/
-    report_count: 2
+    report_count: 3
     rule_count: 0
     actor_count: 0
-    score: 2
+    score: 3
   - id: T1112
     name: Modify Registry
     tactic: Defense Impairment
@@ -8162,6 +8386,11 @@ techniques:
     tactics:
       - Collection
     reports:
+      - url: /reports/inv-2026-080-cyberstrike-ad-workbench/
+        title: An AI Pentest Platform Drives Commodity Tooling Against Portuguese Government Targets
+        date: '2026-11-12'
+        tactic: Collection
+        confidence: MODERATE
       - url: /reports/opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015/
         title: Help Desks to Host Shells Across Brazil's Public Sector
         date: '2026-10-15'
@@ -8216,10 +8445,10 @@ techniques:
       - UTA-2026-019
     url: /techniques/T1119/
     mitre_url: https://attack.mitre.org/techniques/T1119/
-    report_count: 4
+    report_count: 5
     rule_count: 7
     actor_count: 4
-    score: 11
+    score: 12
   - id: T1123
     name: Audio Capture
     tactic: Collection
@@ -8432,6 +8661,11 @@ techniques:
     tactics:
       - Command and Control
     reports:
+      - url: /reports/inv-2026-080-cyberstrike-ad-workbench/
+        title: An AI Pentest Platform Drives Commodity Tooling Against Portuguese Government Targets
+        date: '2026-11-12'
+        tactic: Command and Control
+        confidence: MODERATE
       - url: /reports/opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015/
         title: Help Desks to Host Shells Across Brazil's Public Sector
         date: '2026-10-15'
@@ -8537,10 +8771,10 @@ techniques:
       - UTA-2026-024
     url: /techniques/T1132.001/
     mitre_url: https://attack.mitre.org/techniques/T1132/001/
-    report_count: 10
+    report_count: 11
     rule_count: 10
     actor_count: 6
-    score: 20
+    score: 21
   - id: T1132.002
     name: Non-Standard Encoding
     tactic: Command and Control
@@ -8650,6 +8884,11 @@ techniques:
       - Stealth
       - Privilege Escalation
     reports:
+      - url: /reports/inv-2026-080-cyberstrike-ad-workbench/
+        title: An AI Pentest Platform Drives Commodity Tooling Against Portuguese Government Targets
+        date: '2026-11-12'
+        tactic: Privilege Escalation
+        confidence: MODERATE
       - url: /reports/sliver-c2-windows-postex-staging-193-233-202-17/
         title: Sliver C2 Windows Post-Exploitation Staging, 193.233.202.17
         date: '2026-09-07'
@@ -8691,6 +8930,15 @@ techniques:
         tactic: Privilege Escalation
         confidence: HIGH
     detections:
+      - url: /hunting-detections/inv-2026-080-cyberstrike-ad-workbench-detections
+        title: An AI Pentest Platform Drives Commodity Tooling Against Portuguese Government Targets
+        date: '2026-11-12'
+        report_url: /reports/inv-2026-080-cyberstrike-ad-workbench/
+        rules: >-
+          HKTL_GodPotato_Lineage_Wide_Strings (YARA, Detection);
+          MAL_CyberStrike_GodPotato_SvcUtil_Fork_Renamed_Pipe_LSASS_Dump (YARA, Hunting);
+          Potato-Style Privilege Escalation Via Prefixed RPC Endpoint Mapper Pipe (SIGMA, Detection)
+        count: 3
       - url: /hunting-detections/webserver-compromise-kit-91-236-230-250-detections
         title: Webserver Compromise Kit (91.236.230.250)
         date: '2026-02-20'
@@ -8715,10 +8963,10 @@ techniques:
       - UTA-2026-024
     url: /techniques/T1134.001/
     mitre_url: https://attack.mitre.org/techniques/T1134/001/
-    report_count: 8
-    rule_count: 7
+    report_count: 9
+    rule_count: 10
     actor_count: 3
-    score: 15
+    score: 19
   - id: T1134.002
     name: Create Process with Token
     tactic: Stealth
@@ -8926,6 +9174,11 @@ techniques:
     tactics:
       - Persistence
     reports:
+      - url: /reports/inv-2026-080-cyberstrike-ad-workbench/
+        title: An AI Pentest Platform Drives Commodity Tooling Against Portuguese Government Targets
+        date: '2026-11-12'
+        tactic: Persistence
+        confidence: MODERATE
       - url: /reports/sliver-c2-windows-postex-staging-193-233-202-17/
         title: Sliver C2 Windows Post-Exploitation Staging, 193.233.202.17
         date: '2026-09-07'
@@ -8937,6 +9190,14 @@ techniques:
         tactic: Persistence
         confidence: HIGH
     detections:
+      - url: /hunting-detections/inv-2026-080-cyberstrike-ad-workbench-detections
+        title: An AI Pentest Platform Drives Commodity Tooling Against Portuguese Government Targets
+        date: '2026-11-12'
+        report_url: /reports/inv-2026-080-cyberstrike-ad-workbench/
+        rules: >-
+          MAL_CyberStrike_DnsPlugin_ServerLevelPluginDll_DomainAdmin_Backdoor (YARA, Detection);
+          User Account Named Cyberstrike Created (SIGMA, Hunting)
+        count: 2
       - url: /hunting-detections/sliver-c2-windows-postex-staging-193-233-202-17-detections
         title: Sliver C2 Windows Post-Exploitation Staging, 193.233.202.17
         date: '2026-09-07'
@@ -8958,16 +9219,21 @@ techniques:
       - UTA-2026-024
     url: /techniques/T1136.002/
     mitre_url: https://attack.mitre.org/techniques/T1136/002/
-    report_count: 2
-    rule_count: 4
+    report_count: 3
+    rule_count: 6
     actor_count: 2
-    score: 6
+    score: 9
   - id: T1140
     name: Deobfuscate/Decode Files or Information
     tactic: Stealth
     tactics:
       - Stealth
     reports:
+      - url: /reports/inv-2026-080-cyberstrike-ad-workbench/
+        title: An AI Pentest Platform Drives Commodity Tooling Against Portuguese Government Targets
+        date: '2026-11-12'
+        tactic: Stealth
+        confidence: HIGH
       - url: /reports/opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015/
         title: Help Desks to Host Shells Across Brazil's Public Sector
         date: '2026-10-15'
@@ -9121,10 +9387,10 @@ techniques:
       - UTA-2026-024
     url: /techniques/T1140/
     mitre_url: https://attack.mitre.org/techniques/T1140/
-    report_count: 17
+    report_count: 18
     rule_count: 12
     actor_count: 13
-    score: 29
+    score: 30
   - id: T1185
     name: Browser Session Hijacking
     tactic: Collection
@@ -9188,6 +9454,11 @@ techniques:
     tactics:
       - Initial Access
     reports:
+      - url: /reports/inv-2026-080-cyberstrike-ad-workbench/
+        title: An AI Pentest Platform Drives Commodity Tooling Against Portuguese Government Targets
+        date: '2026-11-12'
+        tactic: Initial Access
+        confidence: MODERATE
       - url: /reports/opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015/
         title: Help Desks to Host Shells Across Brazil's Public Sector
         date: '2026-10-15'
@@ -9249,6 +9520,17 @@ techniques:
         tactic: Initial Access
         confidence: HIGH
     detections:
+      - url: /hunting-detections/inv-2026-080-cyberstrike-ad-workbench-detections
+        title: An AI Pentest Platform Drives Commodity Tooling Against Portuguese Government Targets
+        date: '2026-11-12'
+        report_url: /reports/inv-2026-080-cyberstrike-ad-workbench/
+        rules: >-
+          HKTL_Veeam_CVE_2024_40711_PoC_Patched_ReachFramework1337_Assembly (YARA, Hunting); JBoss
+          JMX Invoker Servlet Or JexBoss Shell Page Requested (SIGMA, Hunting); THL DETECT JBoss
+          Invoker Servlet DeploymentFileRepository JSP Write (SURICATA, Detection); THL HUNT
+          External Serialized Java Object POST To JBoss Invoker Servlet (SURICATA, Hunting); THL
+          HUNT Veeam Remoting CDbCryptoKeyInfo RepairRecs Payload (SURICATA, Hunting)
+        count: 5
       - url: >-
           /hunting-detections/opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015-detections
         title: Help Desks to Host Shells Across Brazil's Public Sector
@@ -9371,10 +9653,10 @@ techniques:
       - UTA-2026-023
     url: /techniques/T1190/
     mitre_url: https://attack.mitre.org/techniques/T1190/
-    report_count: 12
-    rule_count: 48
+    report_count: 13
+    rule_count: 53
     actor_count: 7
-    score: 60
+    score: 66
   - id: T1195.002
     name: Compromise Software Supply Chain
     tactic: Initial Access
@@ -9613,6 +9895,11 @@ techniques:
     tactics:
       - Lateral Movement
     reports:
+      - url: /reports/inv-2026-080-cyberstrike-ad-workbench/
+        title: An AI Pentest Platform Drives Commodity Tooling Against Portuguese Government Targets
+        date: '2026-11-12'
+        tactic: Lateral Movement
+        confidence: LOW
       - url: /reports/opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015/
         title: Help Desks to Host Shells Across Brazil's Public Sector
         date: '2026-10-15'
@@ -9628,10 +9915,10 @@ techniques:
       - UTA-2026-023
     url: /techniques/T1210/
     mitre_url: https://attack.mitre.org/techniques/T1210/
-    report_count: 2
+    report_count: 3
     rule_count: 0
     actor_count: 1
-    score: 2
+    score: 3
   - id: T1212
     name: Exploitation for Credential Access
     tactic: Credential Access
@@ -9861,6 +10148,11 @@ techniques:
     tactics:
       - Stealth
     reports:
+      - url: /reports/inv-2026-080-cyberstrike-ad-workbench/
+        title: An AI Pentest Platform Drives Commodity Tooling Against Portuguese Government Targets
+        date: '2026-11-12'
+        tactic: Stealth
+        confidence: MODERATE
       - url: /reports/new-files-found-20260408/
         title: OpenStrike Expanded Toolkit — 106 New Files (2026-04-08)
         date: '2026-04-08'
@@ -9884,10 +10176,10 @@ techniques:
       - UTA-2026-004
     url: /techniques/T1218.011/
     mitre_url: https://attack.mitre.org/techniques/T1218/011/
-    report_count: 2
+    report_count: 3
     rule_count: 2
     actor_count: 1
-    score: 4
+    score: 5
   - id: T1218.014
     name: MMC
     tactic: Stealth
@@ -10159,6 +10451,11 @@ techniques:
     tactics:
       - Discovery
     reports:
+      - url: /reports/inv-2026-080-cyberstrike-ad-workbench/
+        title: An AI Pentest Platform Drives Commodity Tooling Against Portuguese Government Targets
+        date: '2026-11-12'
+        tactic: Discovery
+        confidence: MODERATE
       - url: /reports/sliver-c2-windows-postex-staging-193-233-202-17/
         title: Sliver C2 Windows Post-Exploitation Staging, 193.233.202.17
         date: '2026-09-07'
@@ -10194,10 +10491,10 @@ techniques:
       - UTA-2026-024
     url: /techniques/T1482/
     mitre_url: https://attack.mitre.org/techniques/T1482/
-    report_count: 3
+    report_count: 4
     rule_count: 3
     actor_count: 2
-    score: 6
+    score: 7
   - id: T1485
     name: Data Destruction
     tactic: Impact
@@ -10918,12 +11215,23 @@ techniques:
     tactics:
       - Persistence
     reports:
+      - url: /reports/inv-2026-080-cyberstrike-ad-workbench/
+        title: An AI Pentest Platform Drives Commodity Tooling Against Portuguese Government Targets
+        date: '2026-11-12'
+        tactic: Persistence
+        confidence: MODERATE
       - url: /reports/flaskc2-postex-toolkit-67-215-232-25/
         title: Flask C2 & MSSQL CLR Backdoor on a Windows Post-Exploitation Staging Host
         date: '2026-06-12'
         tactic: Persistence
         confidence: HIGH
     detections:
+      - url: /hunting-detections/inv-2026-080-cyberstrike-ad-workbench-detections
+        title: An AI Pentest Platform Drives Commodity Tooling Against Portuguese Government Targets
+        date: '2026-11-12'
+        report_url: /reports/inv-2026-080-cyberstrike-ad-workbench/
+        rules: Sqlcmd Used To Run Xp_cmdshell Starting A Shell (SIGMA, Hunting)
+        count: 1
       - url: /hunting-detections/flaskc2-postex-toolkit-67-215-232-25-detections
         title: Flask C2 & MSSQL CLR Backdoor on a Windows Post-Exploitation Staging Host
         date: '2026-06-12'
@@ -10938,16 +11246,21 @@ techniques:
     actors: []
     url: /techniques/T1505.001/
     mitre_url: https://attack.mitre.org/techniques/T1505/001/
-    report_count: 1
-    rule_count: 5
+    report_count: 2
+    rule_count: 6
     actor_count: 0
-    score: 6
+    score: 8
   - id: T1505.003
     name: Web Shell
     tactic: Persistence
     tactics:
       - Persistence
     reports:
+      - url: /reports/inv-2026-080-cyberstrike-ad-workbench/
+        title: An AI Pentest Platform Drives Commodity Tooling Against Portuguese Government Targets
+        date: '2026-11-12'
+        tactic: Persistence
+        confidence: HIGH
       - url: /reports/opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015/
         title: Help Desks to Host Shells Across Brazil's Public Sector
         date: '2026-10-15'
@@ -11083,10 +11396,10 @@ techniques:
       - UTA-2026-023
     url: /techniques/T1505.003/
     mitre_url: https://attack.mitre.org/techniques/T1505/003/
-    report_count: 8
+    report_count: 9
     rule_count: 24
     actor_count: 6
-    score: 32
+    score: 33
   - id: T1518
     name: Software Discovery
     tactic: Discovery
@@ -11603,6 +11916,11 @@ techniques:
       - Persistence
       - Privilege Escalation
     reports:
+      - url: /reports/inv-2026-080-cyberstrike-ad-workbench/
+        title: An AI Pentest Platform Drives Commodity Tooling Against Portuguese Government Targets
+        date: '2026-11-12'
+        tactic: Persistence
+        confidence: HIGH
       - url: /reports/cloudsync-assembler-toolkit-91-197-98-188/
         title: 'CloudSync: An Assembler''s Intrusion Toolkit'
         date: '2026-08-03'
@@ -11687,10 +12005,10 @@ techniques:
       - n-3-xl
     url: /techniques/T1543.003/
     mitre_url: https://attack.mitre.org/techniques/T1543/003/
-    report_count: 10
+    report_count: 11
     rule_count: 6
     actor_count: 3
-    score: 16
+    score: 17
   - id: T1547
     name: Boot or Logon Autostart Execution
     tactic: Persistence
@@ -12180,12 +12498,36 @@ techniques:
     rule_count: 0
     actor_count: 0
     score: 1
+  - id: T1550.002
+    name: Pass the Hash
+    tactic: Lateral Movement
+    tactics:
+      - Lateral Movement
+    reports:
+      - url: /reports/inv-2026-080-cyberstrike-ad-workbench/
+        title: An AI Pentest Platform Drives Commodity Tooling Against Portuguese Government Targets
+        date: '2026-11-12'
+        tactic: Lateral Movement
+        confidence: MODERATE
+    detections: []
+    actors: []
+    url: /techniques/T1550.002/
+    mitre_url: https://attack.mitre.org/techniques/T1550/002/
+    report_count: 1
+    rule_count: 0
+    actor_count: 0
+    score: 1
   - id: T1550.003
     name: Pass the Ticket
     tactic: Lateral Movement
     tactics:
       - Lateral Movement
     reports:
+      - url: /reports/inv-2026-080-cyberstrike-ad-workbench/
+        title: An AI Pentest Platform Drives Commodity Tooling Against Portuguese Government Targets
+        date: '2026-11-12'
+        tactic: Lateral Movement
+        confidence: LOW
       - url: /reports/flaskc2-postex-toolkit-67-215-232-25/
         title: Flask C2 & MSSQL CLR Backdoor on a Windows Post-Exploitation Staging Host
         date: '2026-06-12'
@@ -12195,10 +12537,10 @@ techniques:
     actors: []
     url: /techniques/T1550.003/
     mitre_url: https://attack.mitre.org/techniques/T1550/003/
-    report_count: 1
+    report_count: 2
     rule_count: 0
     actor_count: 0
-    score: 1
+    score: 2
   - id: T1552
     name: Unsecured Credentials
     tactic: Credential Access
@@ -12322,6 +12664,11 @@ techniques:
     tactics:
       - Credential Access
     reports:
+      - url: /reports/inv-2026-080-cyberstrike-ad-workbench/
+        title: An AI Pentest Platform Drives Commodity Tooling Against Portuguese Government Targets
+        date: '2026-11-12'
+        tactic: Credential Access
+        confidence: MODERATE
       - url: /reports/opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015/
         title: Help Desks to Host Shells Across Brazil's Public Sector
         date: '2026-10-15'
@@ -12349,10 +12696,10 @@ techniques:
       - UTA-2026-023
     url: /techniques/T1552.004/
     mitre_url: https://attack.mitre.org/techniques/T1552/004/
-    report_count: 4
+    report_count: 5
     rule_count: 0
     actor_count: 3
-    score: 4
+    score: 5
   - id: T1552.005
     name: Cloud Instance Metadata API
     tactic: Credential Access
@@ -12401,6 +12748,25 @@ techniques:
     rule_count: 5
     actor_count: 2
     score: 8
+  - id: T1552.006
+    name: Group Policy Preferences
+    tactic: Credential Access
+    tactics:
+      - Credential Access
+    reports:
+      - url: /reports/inv-2026-080-cyberstrike-ad-workbench/
+        title: An AI Pentest Platform Drives Commodity Tooling Against Portuguese Government Targets
+        date: '2026-11-12'
+        tactic: Credential Access
+        confidence: LOW
+    detections: []
+    actors: []
+    url: /techniques/T1552.006/
+    mitre_url: https://attack.mitre.org/techniques/T1552/006/
+    report_count: 1
+    rule_count: 0
+    actor_count: 0
+    score: 1
   - id: T1553.002
     name: Code Signing
     tactic: Defense Impairment
@@ -12546,6 +12912,11 @@ techniques:
     tactics:
       - Credential Access
     reports:
+      - url: /reports/inv-2026-080-cyberstrike-ad-workbench/
+        title: An AI Pentest Platform Drives Commodity Tooling Against Portuguese Government Targets
+        date: '2026-11-12'
+        tactic: Credential Access
+        confidence: HIGH
       - url: /reports/opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015/
         title: Help Desks to Host Shells Across Brazil's Public Sector
         date: '2026-10-15'
@@ -12574,10 +12945,10 @@ techniques:
       - UTA-2026-023
     url: /techniques/T1555/
     mitre_url: https://attack.mitre.org/techniques/T1555/
-    report_count: 3
+    report_count: 4
     rule_count: 1
     actor_count: 2
-    score: 4
+    score: 5
   - id: T1555.003
     name: Credentials from Web Browsers
     tactic: Credential Access
@@ -12790,6 +13161,11 @@ techniques:
     tactics:
       - Credential Access
     reports:
+      - url: /reports/inv-2026-080-cyberstrike-ad-workbench/
+        title: An AI Pentest Platform Drives Commodity Tooling Against Portuguese Government Targets
+        date: '2026-11-12'
+        tactic: Credential Access
+        confidence: HIGH
       - url: /reports/flaskc2-postex-toolkit-67-215-232-25/
         title: Flask C2 & MSSQL CLR Backdoor on a Windows Post-Exploitation Staging Host
         date: '2026-06-12'
@@ -12800,15 +13176,21 @@ techniques:
         date: '2026-04-30'
         tactic: Credential Access
         confidence: HIGH
-    detections: []
+    detections:
+      - url: /hunting-detections/inv-2026-080-cyberstrike-ad-workbench-detections
+        title: An AI Pentest Platform Drives Commodity Tooling Against Portuguese Government Targets
+        date: '2026-11-12'
+        report_url: /reports/inv-2026-080-cyberstrike-ad-workbench/
+        rules: Rubeus Kerberos Service Ticket Request Command Line (SIGMA, Hunting)
+        count: 1
     actors:
       - UTA-2026-006
     url: /techniques/T1558.003/
     mitre_url: https://attack.mitre.org/techniques/T1558/003/
-    report_count: 2
-    rule_count: 0
+    report_count: 3
+    rule_count: 1
     actor_count: 1
-    score: 2
+    score: 4
   - id: T1558.004
     name: AS-REP Roasting
     tactic: Credential Access
@@ -13045,6 +13427,11 @@ techniques:
     tactics:
       - Stealth
     reports:
+      - url: /reports/inv-2026-080-cyberstrike-ad-workbench/
+        title: An AI Pentest Platform Drives Commodity Tooling Against Portuguese Government Targets
+        date: '2026-11-12'
+        tactic: Stealth
+        confidence: MODERATE
       - url: /reports/open-directory-94-103-1-13-20260423/
         title: Chaos Ransomware (TorBrowserTor) Multi-Stage Loader (94.103.1.13)
         date: '2026-04-23'
@@ -13099,10 +13486,10 @@ techniques:
       - UTA-2026-005
     url: /techniques/T1564.003/
     mitre_url: https://attack.mitre.org/techniques/T1564/003/
-    report_count: 6
+    report_count: 7
     rule_count: 3
     actor_count: 2
-    score: 9
+    score: 10
   - id: T1565.001
     name: Stored Data Manipulation
     tactic: Impact
@@ -13398,6 +13785,11 @@ techniques:
     tactics:
       - Execution
     reports:
+      - url: /reports/inv-2026-080-cyberstrike-ad-workbench/
+        title: An AI Pentest Platform Drives Commodity Tooling Against Portuguese Government Targets
+        date: '2026-11-12'
+        tactic: Execution
+        confidence: HIGH
       - url: /reports/new-files-found-20260408/
         title: OpenStrike Expanded Toolkit — 106 New Files (2026-04-08)
         date: '2026-04-08'
@@ -13409,6 +13801,12 @@ techniques:
         tactic: Execution
         confidence: MODERATE
     detections:
+      - url: /hunting-detections/inv-2026-080-cyberstrike-ad-workbench-detections
+        title: An AI Pentest Platform Drives Commodity Tooling Against Portuguese Government Targets
+        date: '2026-11-12'
+        report_url: /reports/inv-2026-080-cyberstrike-ad-workbench/
+        rules: Service Installed With Cmd And Encoded PowerShell Image Path (SIGMA, Hunting)
+        count: 1
       - url: /hunting-detections/turkish-arpa-openclaw-state-insurer-209.38.205.158-detections
         title: Turkish ARPA AI-Augmented Observability Compromise (209.38.205.158)
         date: '2026-05-25'
@@ -13422,16 +13820,21 @@ techniques:
       - UTA-2026-013
     url: /techniques/T1569.002/
     mitre_url: https://attack.mitre.org/techniques/T1569/002/
-    report_count: 2
-    rule_count: 2
+    report_count: 3
+    rule_count: 3
     actor_count: 2
-    score: 4
+    score: 6
   - id: T1570
     name: Lateral Tool Transfer
     tactic: Lateral Movement
     tactics:
       - Lateral Movement
     reports:
+      - url: /reports/inv-2026-080-cyberstrike-ad-workbench/
+        title: An AI Pentest Platform Drives Commodity Tooling Against Portuguese Government Targets
+        date: '2026-11-12'
+        tactic: Lateral Movement
+        confidence: HIGH
       - url: /reports/sliver-c2-windows-postex-staging-193-233-202-17/
         title: Sliver C2 Windows Post-Exploitation Staging, 193.233.202.17
         date: '2026-09-07'
@@ -13466,10 +13869,10 @@ techniques:
       - UTA-2026-024
     url: /techniques/T1570/
     mitre_url: https://attack.mitre.org/techniques/T1570/
-    report_count: 3
+    report_count: 4
     rule_count: 2
     actor_count: 3
-    score: 5
+    score: 6
   - id: T1571
     name: Non-Standard Port
     tactic: Command and Control
@@ -13583,6 +13986,11 @@ techniques:
     tactics:
       - Command and Control
     reports:
+      - url: /reports/inv-2026-080-cyberstrike-ad-workbench/
+        title: An AI Pentest Platform Drives Commodity Tooling Against Portuguese Government Targets
+        date: '2026-11-12'
+        tactic: Command and Control
+        confidence: MODERATE
       - url: /reports/opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015/
         title: Help Desks to Host Shells Across Brazil's Public Sector
         date: '2026-10-15'
@@ -13639,6 +14047,14 @@ techniques:
         tactic: Command and Control
         confidence: HIGH
     detections:
+      - url: /hunting-detections/inv-2026-080-cyberstrike-ad-workbench-detections
+        title: An AI Pentest Platform Drives Commodity Tooling Against Portuguese Government Targets
+        date: '2026-11-12'
+        report_url: /reports/inv-2026-080-cyberstrike-ad-workbench/
+        rules: >-
+          Chisel Reverse Server Started On Linux (SIGMA, Hunting); THL HUNT Chisel Tunnel WebSocket
+          Upgrade (SURICATA, Hunting)
+        count: 2
       - url: >-
           /hunting-detections/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817-detections
         title: Carrier Credential Harvesting Through a Customer's Router
@@ -13723,10 +14139,10 @@ techniques:
       - vova75rus
     url: /techniques/T1572/
     mitre_url: https://attack.mitre.org/techniques/T1572/
-    report_count: 11
-    rule_count: 21
+    report_count: 12
+    rule_count: 23
     actor_count: 15
-    score: 32
+    score: 35
   - id: T1573
     name: Encrypted Channel
     tactic: Command and Control
@@ -14460,6 +14876,11 @@ techniques:
     tactics:
       - Resource Development
     reports:
+      - url: /reports/inv-2026-080-cyberstrike-ad-workbench/
+        title: An AI Pentest Platform Drives Commodity Tooling Against Portuguese Government Targets
+        date: '2026-11-12'
+        tactic: Resource Development
+        confidence: HIGH
       - url: /reports/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817/
         title: Carrier Credential Harvesting Through a Customer's Router
         date: '2026-08-18'
@@ -14523,10 +14944,10 @@ techniques:
       - UTA-2026-023
     url: /techniques/T1587.001/
     mitre_url: https://attack.mitre.org/techniques/T1587/001/
-    report_count: 6
+    report_count: 7
     rule_count: 9
     actor_count: 7
-    score: 15
+    score: 16
   - id: T1587.002
     name: Code Signing Certificates
     tactic: Resource Development
@@ -14626,6 +15047,11 @@ techniques:
     tactics:
       - Resource Development
     reports:
+      - url: /reports/inv-2026-080-cyberstrike-ad-workbench/
+        title: An AI Pentest Platform Drives Commodity Tooling Against Portuguese Government Targets
+        date: '2026-11-12'
+        tactic: Resource Development
+        confidence: HIGH
       - url: /reports/sliver-c2-windows-postex-staging-193-233-202-17/
         title: Sliver C2 Windows Post-Exploitation Staging, 193.233.202.17
         date: '2026-09-07'
@@ -14698,10 +15124,10 @@ techniques:
       - n-3-xl
     url: /techniques/T1588.002/
     mitre_url: https://attack.mitre.org/techniques/T1588/002/
-    report_count: 9
+    report_count: 10
     rule_count: 2
     actor_count: 9
-    score: 11
+    score: 12
   - id: T1588.004
     name: Digital Certificates
     tactic: Resource Development
@@ -14768,6 +15194,33 @@ techniques:
     rule_count: 2
     actor_count: 3
     score: 5
+  - id: T1588.007
+    name: Artificial Intelligence
+    tactic: Resource Development
+    tactics:
+      - Resource Development
+    reports:
+      - url: /reports/inv-2026-080-cyberstrike-ad-workbench/
+        title: An AI Pentest Platform Drives Commodity Tooling Against Portuguese Government Targets
+        date: '2026-11-12'
+        tactic: Resource Development
+        confidence: HIGH
+    detections:
+      - url: /hunting-detections/inv-2026-080-cyberstrike-ad-workbench-detections
+        title: An AI Pentest Platform Drives Commodity Tooling Against Portuguese Government Targets
+        date: '2026-11-12'
+        report_url: /reports/inv-2026-080-cyberstrike-ad-workbench/
+        rules: >-
+          HKTL_CyberStrikeAI_Platform_Default_Agent_Authorisation_Prompt (YARA, Hunting);
+          CyberStrikeAI Workspace Path In A Linux Command Line (SIGMA, Hunting)
+        count: 2
+    actors: []
+    url: /techniques/T1588.007/
+    mitre_url: https://attack.mitre.org/techniques/T1588/007/
+    report_count: 1
+    rule_count: 2
+    actor_count: 0
+    score: 3
   - id: T1589
     name: Gather Victim Identity Information
     tactic: Reconnaissance
@@ -14814,6 +15267,25 @@ techniques:
     rule_count: 0
     actor_count: 2
     score: 2
+  - id: T1590.002
+    name: DNS
+    tactic: Reconnaissance
+    tactics:
+      - Reconnaissance
+    reports:
+      - url: /reports/inv-2026-080-cyberstrike-ad-workbench/
+        title: An AI Pentest Platform Drives Commodity Tooling Against Portuguese Government Targets
+        date: '2026-11-12'
+        tactic: Reconnaissance
+        confidence: HIGH
+    detections: []
+    actors: []
+    url: /techniques/T1590.002/
+    mitre_url: https://attack.mitre.org/techniques/T1590/002/
+    report_count: 1
+    rule_count: 0
+    actor_count: 0
+    score: 1
   - id: T1590.005
     name: IP Addresses
     tactic: Reconnaissance
@@ -14938,6 +15410,11 @@ techniques:
     tactics:
       - Reconnaissance
     reports:
+      - url: /reports/inv-2026-080-cyberstrike-ad-workbench/
+        title: An AI Pentest Platform Drives Commodity Tooling Against Portuguese Government Targets
+        date: '2026-11-12'
+        tactic: Reconnaissance
+        confidence: HIGH
       - url: /reports/opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015/
         title: Help Desks to Host Shells Across Brazil's Public Sector
         date: '2026-10-15'
@@ -14953,16 +15430,21 @@ techniques:
       - UTA-2026-011
     url: /techniques/T1595.001/
     mitre_url: https://attack.mitre.org/techniques/T1595/001/
-    report_count: 2
+    report_count: 3
     rule_count: 0
     actor_count: 1
-    score: 2
+    score: 3
   - id: T1595.002
     name: Vulnerability Scanning
     tactic: Reconnaissance
     tactics:
       - Reconnaissance
     reports:
+      - url: /reports/inv-2026-080-cyberstrike-ad-workbench/
+        title: An AI Pentest Platform Drives Commodity Tooling Against Portuguese Government Targets
+        date: '2026-11-12'
+        tactic: Reconnaissance
+        confidence: HIGH
       - url: /reports/opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015/
         title: Help Desks to Host Shells Across Brazil's Public Sector
         date: '2026-10-15'
@@ -15019,10 +15501,10 @@ techniques:
       - vova75rus
     url: /techniques/T1595.002/
     mitre_url: https://attack.mitre.org/techniques/T1595/002/
-    report_count: 7
+    report_count: 8
     rule_count: 3
     actor_count: 8
-    score: 10
+    score: 11
   - id: T1595.003
     name: Wordlist Scanning
     tactic: Reconnaissance
@@ -15049,6 +15531,11 @@ techniques:
     tactics:
       - Reconnaissance
     reports:
+      - url: /reports/inv-2026-080-cyberstrike-ad-workbench/
+        title: An AI Pentest Platform Drives Commodity Tooling Against Portuguese Government Targets
+        date: '2026-11-12'
+        tactic: Reconnaissance
+        confidence: MODERATE
       - url: /reports/multivector-ecommerce-rce-toolkit-192-3-1-116/
         title: 'Enough to Be Dangerous: The Mechanics of an LLM-Assisted Intrusion Campaign'
         date: '2026-07-21'
@@ -15059,10 +15546,10 @@ techniques:
       - UTA-2026-019
     url: /techniques/T1596.003/
     mitre_url: https://attack.mitre.org/techniques/T1596/003/
-    report_count: 1
+    report_count: 2
     rule_count: 0
     actor_count: 1
-    score: 1
+    score: 2
   - id: T1596.005
     name: Scan Databases
     tactic: Reconnaissance
@@ -15169,6 +15656,11 @@ techniques:
     tactics:
       - Credential Access
     reports:
+      - url: /reports/inv-2026-080-cyberstrike-ad-workbench/
+        title: An AI Pentest Platform Drives Commodity Tooling Against Portuguese Government Targets
+        date: '2026-11-12'
+        tactic: Credential Access
+        confidence: MODERATE
       - url: /reports/shinyhunters-dls-91-215-85-22-20260417/
         title: ShinyHunters Data Leak Site (91.215.85.22)
         date: '2026-04-17'
@@ -15178,10 +15670,10 @@ techniques:
     actors: []
     url: /techniques/T1606/
     mitre_url: https://attack.mitre.org/techniques/T1606/
-    report_count: 1
+    report_count: 2
     rule_count: 0
     actor_count: 0
-    score: 1
+    score: 2
   - id: T1606.001
     name: Web Cookies
     tactic: Credential Access
@@ -15214,6 +15706,11 @@ techniques:
     tactics:
       - Resource Development
     reports:
+      - url: /reports/inv-2026-080-cyberstrike-ad-workbench/
+        title: An AI Pentest Platform Drives Commodity Tooling Against Portuguese Government Targets
+        date: '2026-11-12'
+        tactic: Resource Development
+        confidence: HIGH
       - url: /reports/sliver-c2-windows-postex-staging-193-233-202-17/
         title: Sliver C2 Windows Post-Exploitation Staging, 193.233.202.17
         date: '2026-09-07'
@@ -15242,10 +15739,10 @@ techniques:
       - UTA-2026-024
     url: /techniques/T1608.001/
     mitre_url: https://attack.mitre.org/techniques/T1608/001/
-    report_count: 4
+    report_count: 5
     rule_count: 0
     actor_count: 4
-    score: 4
+    score: 5
   - id: T1608.003
     name: Install Digital Certificate
     tactic: Resource Development
@@ -15655,6 +16152,11 @@ techniques:
     tactics:
       - Credential Access
     reports:
+      - url: /reports/inv-2026-080-cyberstrike-ad-workbench/
+        title: An AI Pentest Platform Drives Commodity Tooling Against Portuguese Government Targets
+        date: '2026-11-12'
+        tactic: Credential Access
+        confidence: MODERATE
       - url: /reports/opendirectory-45-130-148-125-20260430/
         title: AdaptixC2 Open Directory Exposure (45.130.148.125)
         date: '2026-04-30'
@@ -15665,10 +16167,10 @@ techniques:
       - UTA-2026-006
     url: /techniques/T1649/
     mitre_url: https://attack.mitre.org/techniques/T1649/
-    report_count: 1
+    report_count: 2
     rule_count: 0
     actor_count: 1
-    score: 1
+    score: 2
   - id: T1653
     name: Power Settings
     tactic: Persistence

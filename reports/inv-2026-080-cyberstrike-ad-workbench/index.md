@@ -3,15 +3,12 @@ title: "An AI Pentest Platform Drives Commodity Tooling Against Portuguese Gover
 date: '2026-11-12'
 layout: post
 permalink: /reports/inv-2026-080-cyberstrike-ad-workbench/
+thumbnail: /assets/images/cards/inv-2026-080-cyberstrike-ad-workbench.png
 hide: true
-unlisted: true
-sitemap: false
-preview_cover_label: "Agentic Intrusion"   # preview only: the header cover while the catalog entry is parked; drop at go-live (the catalog cover_label takes over)
-preview_severity: high
 category: "AI-Assisted Intrusion"
 description: "One operator ran the public CyberStrikeAI agent platform from a Paris server against the Portuguese central government and a hosting provider, took and decrypted a government records application's user and password tables, and served them publicly, all with off-the-shelf tools a defender can detect."
 detection_page: /hunting-detections/inv-2026-080-cyberstrike-ad-workbench-detections/
-ioc_feed: /ioc-feeds/inv-2026-080-cyberstrike-ad-workbench-iocs.json
+ioc_feed: /ioc-feeds/inv-2026-080-cyberstrike-ad-workbench/
 detection_sections:
   - label: "YARA Rules"
     anchor: "#yara-rules"
@@ -39,6 +36,7 @@ figure_nav:
         anchor: "#3-victims-who-was-hit-and-how-far-the-operator-got"
       - label: "The defender point"
         anchor: "#14-recommendations"
+stix_bundle: /stix/inv-2026-080-cyberstrike-ad-workbench.json
 ---
 
 **Campaign Identifier:** CyberStrikeAI-Workbench-PT-Government-199[.]247[.]13[.]103<br>

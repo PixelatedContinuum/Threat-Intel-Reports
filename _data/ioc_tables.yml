@@ -6596,6 +6596,242 @@
       fp_risk: null
   never_block_total: 0
   never_block_rows:
+"inv-2026-080-cyberstrike-ad-workbench":
+  slug: "inv-2026-080-cyberstrike-ad-workbench"
+  page_url: "/ioc-feeds/inv-2026-080-cyberstrike-ad-workbench/"
+  title: "An AI Pentest Platform Drives Commodity Tooling Against Portuguese Government Targets"
+  date: "2026-11-12"
+  severity: "high"
+  feed_url: "/ioc-feeds/inv-2026-080-cyberstrike-ad-workbench-iocs.json"
+  report_url: "/reports/inv-2026-080-cyberstrike-ad-workbench/"
+  detection_url: "/hunting-detections/inv-2026-080-cyberstrike-ad-workbench-detections"
+  total: 35
+  untyped: 3
+  counts:
+    filename: 14
+    ipv4: 2
+    path: 2
+    pattern: 3
+    sha256: 14
+  has_confidence: true
+  has_action: true
+  has_fp_risk: false
+  rows:
+    - type: "ipv4"
+      value: "199.247.13.103"
+      context: "Vultr (The Constant Company, AS20473) commercial hosting address in 199.247.0.0/19. Caveats before blocking: the address served unrelated tenants in 2019 to 2021 and 2023 to 2024, and whether the operator rented this instance or compromised it is INSUFFICIENT, so a block can fall on an innocent owner or a future tenant; time-box any block and re-check the address first. Ports 8081 (HTTP 404 on 2026-10-07) and 8090 (tool staging: chisel, dnsplugin.dll) also seen."
+      confidence: "HIGH"
+      action: "BLOCK"
+      fp_risk: null
+    - type: "ipv4"
+      value: "199.247.13.103:8000"
+      context: "Vultr (The Constant Company, AS20473) commercial hosting address in 199.247.0.0/19. Caveats before blocking: the address served unrelated tenants in 2019 to 2021 and 2023 to 2024, and whether the operator rented this instance or compromised it is INSUFFICIENT, so a block can fall on an innocent owner or a future tenant; time-box any block and re-check the address first. Ports 8081 (HTTP 404 on 2026-10-07) and 8090 (tool staging: chisel, dnsplugin.dll) also seen."
+      confidence: "HIGH"
+      action: "BLOCK"
+      fp_risk: null
+    - type: "sha256"
+      value: "02a98b325408f623e192d569d6cb11a60aaf61a114a5c4f35bbfd1dcbe56d69c"
+      context: "operator-built"
+      confidence: "HIGH"
+      action: "BLOCK"
+      fp_risk: null
+    - type: "sha256"
+      value: "1046cf19fb280684236193059805005bb8b1f3ad3b6fe7ca2b35d9dea8523273"
+      context: "operator-built (GodPotato fork)"
+      confidence: "HIGH"
+      action: "BLOCK"
+      fp_risk: null
+    - type: "sha256"
+      value: "1bfbefa4ff4d0df3ee0090b5079cf84ed2e8d5377ba5b7a30afd88367d57b9ff"
+      context: "Public tool, circulating build; not operator-compiled"
+      confidence: "HIGH"
+      action: "HUNT"
+      fp_risk: null
+    - type: "sha256"
+      value: "2dcc37be26344f68e3124c3fd5ca5ca1ec672d2933c6db5f7c57222f6f9117d1"
+      context: "operator-written source"
+      confidence: "HIGH"
+      action: "HUNT"
+      fp_risk: null
+    - type: "sha256"
+      value: "44e83f84a5d5219e2f7c3cf1e4f02489cae81361227f46946abe4b8d8245b879"
+      context: "STOCK public tool"
+      confidence: "HIGH"
+      action: "HUNT"
+      fp_risk: null
+    - type: "sha256"
+      value: "7033ee65a125bec39860af0cef8d64f46a0cf7e579baab5d57e31d83367333f9"
+      context: "operator-built"
+      confidence: "HIGH"
+      action: "BLOCK"
+      fp_risk: null
+    - type: "sha256"
+      value: "863a7a843b30d5252a84e5b03e850236fce4cac1954be4227c1cf396138759a5"
+      context: "operator-built"
+      confidence: "HIGH"
+      action: "BLOCK"
+      fp_risk: null
+    - type: "sha256"
+      value: "9a8e9d587b570d4074f1c8317b163aa8d0c566efd88f294d9d85bc7776352a28"
+      context: "Hash equals the GodPotato V1.20 release. Public tool; hunt context only."
+      confidence: "HIGH"
+      action: "HUNT"
+      fp_risk: null
+    - type: "sha256"
+      value: "b95c849d510e5cf8fdbb8bfcae2ca36a8a0c1f383c783fae74d95bece46f084f"
+      context: "operator-written source"
+      confidence: "HIGH"
+      action: "HUNT"
+      fp_risk: null
+    - type: "sha256"
+      value: "cc3b5d073dd879275e274177d7293a9737dc76407bdabe0cc667bf0eaf3c7f1f"
+      context: "operator's own compile of stock public PwnKit source"
+      confidence: "MODERATE"
+      action: "HUNT"
+      fp_risk: null
+    - type: "sha256"
+      value: "e0691216a96faa65a66c8e9de47cbe1f87d9a8c5a1417ea8e126a4c4fe1944cb"
+      context: "operator-written source"
+      confidence: "HIGH"
+      action: "HUNT"
+      fp_risk: null
+    - type: "sha256"
+      value: "e788f829b1a0141a488afb5f82b94f13035623609ca3b83f0c6985919cd9e83b"
+      context: "chisel.exe"
+      confidence: "HIGH"
+      action: "HUNT"
+      fp_risk: null
+    - type: "sha256"
+      value: "fbf97f4fc02266d2904b125ac6f55199c0e2855374646659b27e63bdf9cf5490"
+      context: "Other revision of the PwnKit driver, without the embedded module."
+      confidence: "HIGH"
+      action: "BLOCK"
+      fp_risk: null
+    - type: "sha256"
+      value: "fe0445f870c905ff33fc75223ce709992f8bb219d2fff6acd3775518b894a025"
+      context: "Renamed GodPotato fork without the LSASS dump; same pipe name."
+      confidence: "HIGH"
+      action: "BLOCK"
+      fp_risk: null
+    - type: "path"
+      value: "/tmp/pwned_root.txt"
+      context: null
+      confidence: "HIGH"
+      action: "HUNT"
+      fp_risk: null
+    - type: "path"
+      value: "\\\\.\\pipe\\SvcUtil\\pipe\\epmapper"
+      context: "Pipe name of the renamed GodPotato forks SvcUtil.exe and SvcUtil_clean.exe"
+      confidence: "HIGH"
+      action: "HUNT"
+      fp_risk: null
+    - type: "filename"
+      value: "PwnKit"
+      context: "operator's own compile of stock public PwnKit source"
+      confidence: "MODERATE"
+      action: "HUNT"
+      fp_risk: null
+    - type: "filename"
+      value: "chisel.exe"
+      context: null
+      confidence: "HIGH"
+      action: "HUNT"
+      fp_risk: null
+    - type: "filename"
+      value: "dnsplugin.c"
+      context: "operator-written source"
+      confidence: "HIGH"
+      action: "HUNT"
+      fp_risk: null
+    - type: "filename"
+      value: "dnsplugin.dll"
+      context: "operator-built"
+      confidence: "HIGH"
+      action: "BLOCK"
+      fp_risk: null
+    - type: "filename"
+      value: "exploit_pwnkit.__rev2"
+      context: "Other revision of the PwnKit driver, without the embedded module."
+      confidence: "HIGH"
+      action: "BLOCK"
+      fp_risk: null
+    - type: "filename"
+      value: "exploit_pwnkit.c"
+      context: "operator-written source"
+      confidence: "HIGH"
+      action: "HUNT"
+      fp_risk: null
+    - type: "filename"
+      value: "exploit_pwnkit_static"
+      context: "operator-built"
+      confidence: "HIGH"
+      action: "BLOCK"
+      fp_risk: null
+    - type: "filename"
+      value: "godpotato-net4.exe"
+      context: "Hash equals the GodPotato V1.20 release. Public tool; hunt context only."
+      confidence: "HIGH"
+      action: "HUNT"
+      fp_risk: null
+    - type: "filename"
+      value: "ly4k_pwnkit.py"
+      context: "STOCK public tool"
+      confidence: "HIGH"
+      action: "HUNT"
+      fp_risk: null
+    - type: "filename"
+      value: "pwnkit.c"
+      context: "operator-written source"
+      confidence: "HIGH"
+      action: "HUNT"
+      fp_risk: null
+    - type: "filename"
+      value: "pwnkit.so"
+      context: "operator-built"
+      confidence: "HIGH"
+      action: "BLOCK"
+      fp_risk: null
+    - type: "filename"
+      value: "rubeus.exe"
+      context: "Public tool, circulating build; not operator-compiled"
+      confidence: "HIGH"
+      action: "HUNT"
+      fp_risk: null
+    - type: "filename"
+      value: "svcutil.exe"
+      context: "operator-built (GodPotato fork)"
+      confidence: "HIGH"
+      action: "BLOCK"
+      fp_risk: null
+    - type: "filename"
+      value: "svcutil_clean.exe"
+      context: "Renamed GodPotato fork without the LSASS dump; same pipe name."
+      confidence: "HIGH"
+      action: "BLOCK"
+      fp_risk: null
+    - type: "pattern"
+      value: "AAAAC3NzaC1lZDI1NTE5AAAAIBRxk25ztgApbSSf7FcT9W91dyNBQyDn4GmhBOHUGndz"
+      context: null
+      confidence: "HIGH"
+      action: "HUNT"
+      fp_risk: null
+    - type: "pattern"
+      value: "cyberstrike"
+      context: null
+      confidence: "HIGH"
+      action: "HUNT"
+      fp_risk: null
+    - type: "pattern"
+      value: "pentest@cyberstrike"
+      context: null
+      confidence: "HIGH"
+      action: "HUNT"
+      fp_risk: null
+  never_block_total: 1
+  never_block_rows:
+    - type: "domain"
+      value: "fr.bastaniqifi.ir"
+      context: "Passive DNS (VirusTotal) shows an A record from this name to the case IP, TTL 300, last modified 2026-10-07, inside a set of country-labelled .ir hostnames that all point to different hosts and look like a VPN or proxy node fleet. A scan-history export scoped to the apex domain did not show the record, which neither confirms nor contradicts the passive-DNS result; Whether the workbench operator runs that fleet, rents a node in it or only shares an address with it is not established: LOW as a link to the operator. The directory on :8000 was first seen 2026-09-26. The record's first appearance is not known; its last-modified date is 7 October 2026. The address has had other tenants. Context only, do not block."
 "kaido-quasar-rat":
   slug: "kaido-quasar-rat"
   page_url: "/ioc-feeds/kaido-quasar-rat/"

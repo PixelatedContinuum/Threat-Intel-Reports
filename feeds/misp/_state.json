@@ -5,6 +5,12 @@
     "uuid": "8bc8284b-deb5-546c-a233-57ea34b2ea0d"
   },
   "events": {
+    "df6586ed-6272-5da7-8c1f-4aa7d56762c1": {
+      "slug": "inv-2026-080-cyberstrike-ad-workbench",
+      "hash": "cd7f8207b4e45bba3b4a5d25021dba6fe2bd70ab2645671da5b2776366984da3",
+      "timestamp": 1794588300,
+      "first_published": "2026-11-13"
+    },
     "e296ef63-2666-50f4-b20c-b0c7291660a2": {
       "slug": "opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015",
       "hash": "6143756807f3ba8561579ca2ff07c5fffd8c5cddce3cd40eb536e86773a7f3d5",

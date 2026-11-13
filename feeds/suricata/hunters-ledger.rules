@@ -1,6 +1,6 @@
 # Hunters Ledger - consolidated Suricata detection feed
 # https://the-hunters-ledger.com/  |  License: CC BY 4.0
-# 130 rules from 38 campaigns. SIDs are STABLE across rebuilds (persistent
+# 135 rules from 39 campaigns. SIDs are STABLE across rebuilds (persistent
 # sid-map.json; allocated block 3500000-3509999 via sidallocation.org).
 # Above each rule: '# <campaign> (orig sid:N)', then annotation lines:
 #   TIER: Detection|Hunting  |  robustness N  |  confidence X
@@ -215,6 +215,30 @@ alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL HUNT Inkognito Custom X-
 #   rate-limited
 #   FP: Internally-developed web applications that independently expose X-Admin-Token in their own CORS configuration; security research or authorized...
 alert http $EXTERNAL_NET any -> $HOME_NET any (msg:"THL HUNT Inkognito X-Admin-Token in CORS Allow-Headers Response (Admin API Auth Primitive)"; flow:established,to_client; http.header; content:"Access-Control-Allow-Headers"; nocase; content:"X-Admin-Token"; nocase; distance:0; pcre:"/Access-Control-Allow-Headers\x3a[^\r\n]*X-Admin-Token/i"; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/inkognito-russian-vpn-phishing-185-221-196-118-20260516-detections/; classtype:trojan-activity; sid:3500031; rev:4; metadata:author The_Hunters_Ledger, date 2026-05-16;)
+# inv-2026-080-cyberstrike-ad-workbench (orig sid:1000001)
+#   TIER: Detection  |  robustness 2  |  confidence HIGH
+#   FP: A JBoss administrator who writes a JSP through the DeploymentFileRepository management bean over the HTTP invoker. I know of no routine workflow that...
+alert http any any -> $HOME_NET any (msg:"THL DETECT CyberStrike-AD-Workbench JBoss Invoker Servlet DeploymentFileRepository JSP Write (Webshell Deploy)"; flow:established,to_server; http.method; content:"POST"; http.uri; content:"/invoker/"; nocase; http.request_body; content:"|ac ed 00 05|"; startswith; content:"jboss.admin|3a|service=DeploymentFileRepository"; fast_pattern; content:".jsp"; distance:0; within:100; reference:url,the-hunters-ledger.com/hunting-detections/inv-2026-080-cyberstrike-ad-workbench-detections/; classtype:web-application-attack; sid:3500220; rev:1; metadata:author The_Hunters_Ledger, date 2026-11-09;)
+# inv-2026-080-cyberstrike-ad-workbench (orig sid:1000002)
+#   TIER: Hunting  |  robustness 2  |  confidence MODERATE  |  BROAD - triage before alerting
+#   rate-limited
+#   FP: Legitimate JBoss management clients outside the protected network, and vulnerability scanners. Any POST of a serialized Java object to the invoker...
+alert http $EXTERNAL_NET any -> $HOME_NET any (msg:"THL HUNT CyberStrike-AD-Workbench External Serialized Java Object POST To JBoss Invoker Servlet (JexBoss Check)"; flow:established,to_server; http.method; content:"POST"; http.uri; content:"/invoker/"; nocase; http.request_body; content:"|ac ed 00 05|"; startswith; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/inv-2026-080-cyberstrike-ad-workbench-detections/; classtype:web-application-attack; sid:3500221; rev:1; metadata:author The_Hunters_Ledger, date 2026-11-09;)
+# inv-2026-080-cyberstrike-ad-workbench (orig sid:1000003)
+#   TIER: Hunting  |  robustness 2  |  confidence MODERATE  |  BROAD - triage before alerting
+#   rate-limited
+#   FP: Administrators and developers who use chisel on purpose. Chisel is a public tool and the subprotocol value is its own, so a hit tells you chisel is...
+alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL HUNT CyberStrike-AD-Workbench Chisel Tunnel WebSocket Upgrade (Reverse Tunnel Transport)"; flow:established,to_server; http.header; content:"Sec-WebSocket-Protocol|3a| chisel-v3"; nocase; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/inv-2026-080-cyberstrike-ad-workbench-detections/; classtype:trojan-activity; sid:3500222; rev:1; metadata:author The_Hunters_Ledger, date 2026-11-09;)
+# inv-2026-080-cyberstrike-ad-workbench (orig sid:1000004)
+#   TIER: Hunting  |  robustness 2  |  confidence LOW  |  BROAD - triage before alerting
+#   rate-limited
+#   FP: Unknown. I do not know whether Veeam's own components ever send this object with a populated RepairRecs field over the network, so I cannot rule out...
+alert tcp any any -> $HOME_NET any (msg:"THL HUNT CyberStrike-AD-Workbench Veeam Remoting CDbCryptoKeyInfo RepairRecs Payload (CVE-2024-40711 Exploit Shape)"; flow:established,to_server; content:"CDbCryptoKeyInfo"; fast_pattern; content:"RepairRecs"; distance:0; within:400; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/inv-2026-080-cyberstrike-ad-workbench-detections/; classtype:attempted-admin; sid:3500223; rev:1; metadata:author The_Hunters_Ledger, date 2026-11-09;)
+# inv-2026-080-cyberstrike-ad-workbench (orig sid:1000005)
+#   TIER: Hunting  |  robustness 2  |  confidence MODERATE  |  BROAD - triage before alerting
+#   rate-limited
+#   FP: A directory migration, a misconfigured service or a vulnerability scan that tries many names the domain does not hold, and a mail or VPN gateway...
+alert krb5 any any -> any any (msg:"THL HUNT CyberStrike-AD-Workbench Kerberos Unknown-Principal Error Burst From KDC (AS-REQ Account Enumeration)"; flow:to_client; krb5_err_code:6; detection_filter:track by_dst, count 50, seconds 60; reference:url,the-hunters-ledger.com/hunting-detections/inv-2026-080-cyberstrike-ad-workbench-detections/; classtype:attempted-recon; sid:3500224; rev:1; metadata:author The_Hunters_Ledger, date 2026-11-12;)
 # kaido-quasar-rat (orig sid:9300802)
 #   TIER: Detection  |  robustness 2  |  confidence HIGH
 #   rate-limited

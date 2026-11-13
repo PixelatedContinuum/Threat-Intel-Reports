@@ -1900,6 +1900,12 @@ unmapped:
   - label: Custom-Python-A2A-C2 + Gemini-CLI-Augmented-Credential-Mill
     where:
       - feed russian-gemini-credential-mill-213.165.51.115-iocs.json
+  - label: CyberStrike-AD-Workbench
+    where:
+      - detection inv-2026-080-cyberstrike-ad-workbench-detections
+  - label: CyberStrikeAI
+    where:
+      - detection inv-2026-080-cyberstrike-ad-workbench-detections
   - label: EncDec-Ransomware
     where:
       - detection enc-dec-ransomware-family-detections
@@ -1929,6 +1935,9 @@ unmapped:
   - label: Ghost ASP Webshell
     where:
       - detection flaskc2-postex-toolkit-67-215-232-25-detections
+  - label: GodPotato
+    where:
+      - detection inv-2026-080-cyberstrike-ad-workbench-detections
   - label: Golang-RAT-Generic
     where:
       - detection agent-exe-detections
@@ -1990,6 +1999,11 @@ unmapped:
   - label: Operator toolkit (no malware family; server-side shell, Python, PHP and Java tooling)
     where:
       - feed opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015-iocs.json
+  - label: >-
+      Operator-built privilege-escalation and AD tooling around the CyberStrikeAI
+      penetration-testing agent platform (INV-2026-080)
+    where:
+      - feed inv-2026-080-cyberstrike-ad-workbench-iocs.json
   - label: PoetRAT
     where:
       - detection agent-exe-detections
@@ -2004,6 +2018,9 @@ unmapped:
       - >-
         detection
         opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817-detections
+  - label: PwnKit
+    where:
+      - detection inv-2026-080-cyberstrike-ad-workbench-detections
   - label: Rovodev Operator Artifacts
     where:
       - detection rovodev-mirai-matrix-c2-87.106.143.220-detections
@@ -2038,6 +2055,9 @@ unmapped:
       - >-
         detection
         opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817-detections
+  - label: Veeam-CVE-2024-40711-PoC
+    where:
+      - detection inv-2026-080-cyberstrike-ad-workbench-detections
   - label: XWorm RAT
     where:
       - feed agent-xworm-exe.json

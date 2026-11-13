@@ -153,6 +153,11 @@ events:
     event_url: /feeds/misp/93d0b666-26a5-57ab-a3dc-45f197c65e10.json
     report_url: /reports/inkognito-russian-vpn-phishing-185-221-196-118-20260516/
     detection_url: /hunting-detections/inkognito-russian-vpn-phishing-185-221-196-118-20260516-detections/
+  - slug: inv-2026-080-cyberstrike-ad-workbench
+    uuid: df6586ed-6272-5da7-8c1f-4aa7d56762c1
+    event_url: /feeds/misp/df6586ed-6272-5da7-8c1f-4aa7d56762c1.json
+    report_url: /reports/inv-2026-080-cyberstrike-ad-workbench/
+    detection_url: /hunting-detections/inv-2026-080-cyberstrike-ad-workbench-detections/
   - slug: kaido-quasar-rat-144-172-109-203
     uuid: 4eed77fa-9767-536f-8fef-728b06ae1cb3
     event_url: /feeds/misp/4eed77fa-9767-536f-8fef-728b06ae1cb3.json

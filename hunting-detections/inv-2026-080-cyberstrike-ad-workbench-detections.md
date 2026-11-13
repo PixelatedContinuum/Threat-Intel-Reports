@@ -4,8 +4,6 @@ date: '2026-11-12'
 layout: post
 permalink: /hunting-detections/inv-2026-080-cyberstrike-ad-workbench-detections/
 hide: true
-unlisted: true
-sitemap: false
 ---
 
 **Campaign:** INV-2026-080
