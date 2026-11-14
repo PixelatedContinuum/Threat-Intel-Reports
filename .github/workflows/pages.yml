@@ -1,0 +1,540 @@
+# Build and deploy the-hunters-ledger.com with GitHub Actions.
+#
+# Why this exists. The Wire (/wire/) refreshes every 15 minutes (hourly until
+# 2026-10-28, T-0458), and until now each refresh
+# was a commit to main: 37 of the last 50 commits were "wire: refresh", which
+# buried the real history. This workflow builds the site from main but takes the
+# Wire data from a separate `wire-data` branch that the generator force-pushes as
+# a single orphan commit each run (wire.yml plus a copy of this file, because
+# GitHub runs a push event from the workflows in the pushed commit's own tree). main stays a history of the site; the Wire
+# still updates every 15 minutes with nobody touching anything.
+#
+# Triggers. A push to main (content, layouts, data) or to wire-data (a 15-minute
+# refresh) both build the SAME thing: main's tree plus the newest Wire file. The
+# `concurrency` group lets an in-flight build finish and keeps only the newest
+# waiting run (GitHub cancels older pending runs in the group), so a burst of
+# pushes costs at most one extra deploy. It used to cancel the in-flight build;
+# on 2026-11-06 (T-0565.1) builds ran past the 15-minute refresh and a layout push
+# was cancelled twice before it could deploy, so nothing is cancelled now. Measured
+# for T-0603 over the last 300 runs (November 2026): median run 314 s, mean 339 s,
+# p95 769 s, maximum 1,021 s, 0 cancelled; the build job alone ran a median 277 s.
+# The 15-minute spacing therefore has little headroom: the build job warns when it
+# passes the budget set in its last step. GitHub's
+# 10-builds-an-hour Pages soft limit does not apply to a custom Actions workflow
+# (docs.github.com/en/pages/getting-started-with-github-pages/github-pages-limits).
+#
+# Gates and the deploy. `deploy` needs both `build` and `gates`, so a failure in
+# the source-side gates (tests, embargo and feed checks, every report) stops the
+# deploy. `gates` runs on every trigger against main's tree, a wire-data push
+# included: otherwise the next 15-minute refresh would publish a main that had
+# failed its gates. A failure in either job, or in the deploy, opens (or comments
+# on) one GitHub issue titled "Site deploy failed" (job `alert`), which notifies
+# whoever watches the repository; the next successful deploy closes it.
+#
+# The cutover guard on `deploy`. The move from deploy-from-branch to this workflow
+# finished on 2026-10-09; the repository variable PAGES_VIA_ACTIONS has been "true"
+# since then and Pages reports build_type "workflow". The `if:` on `deploy` stays as
+# the rollback switch: set the variable to anything but "true" and the site is still
+# built and gated on every push but not deployed, which is what you want while you
+# switch Settings > Pages > Source back to deploy-from-branch.
+#
+# The Wire data is gated before it is built in (tools/report-tooling/check-wire.js),
+# which prints a last line `WIRE-VERDICT page=<..> data=<..> stale=<..>` (each PASS,
+# FAIL or NOT_CHECKED) and exits with the worst class. The step reads that line and
+# nothing else. A FAIL on the page side (wire/index.md, the feeds, the Details files,
+# custom.scss) is a code bug on main: it fails the build and never touches the Wire
+# data. A FAIL on the data alone (malformed generator output) drops the file so
+# /wire/ renders its "not currently available" state instead of a broken page, and a
+# report push is never blocked by a generator problem. Stale-but-well-formed data is
+# kept: the page prints its own generated_at, which is the honest thing to show, and
+# the warning lands in the run summary. No verdict line is a build failure.
+
+name: Build and deploy site
+
+on:
+  push:
+    branches: [main, wire-data]
+  workflow_dispatch:
+
+# Least privilege: the default is read-only. `build` and `deploy` ask for the Pages
+# permissions they use; `gates` gets nothing more, `alert` adds issues: write.
+permissions:
+  contents: read
+
+concurrency:
+  group: pages-deploy
+  cancel-in-progress: false
+
+jobs:
+  build:
+    name: Build (main + newest Wire)
+    runs-on: ubuntu-latest
+    # Median 277 s, longest run seen 1,021 s: 30 minutes bounds a hang (GitHub's default is 360).
+    timeout-minutes: 30
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    steps:
+      - name: Start the build clock
+        run: echo "BUILD_START=$(date +%s)" >> "$GITHUB_ENV"
+
+      # Always main, whichever branch's push woke us: a wire-data push must not
+      # build the wire-data tree (it holds wire.yml and a copy of this workflow file,
+      # which is there only so GitHub fires the push event; see push-wire-data.sh).
+      - name: Check out main
+        uses: actions/checkout@v7
+        with:
+          ref: main
+
+      - name: Bring in the Wire data from the wire-data branch
+        run: |
+          set -eu
+          if git fetch --depth=1 origin '+refs/heads/wire-data:refs/remotes/origin/wire-data' 2>/dev/null; then
+            git show origin/wire-data:wire.yml > _data/wire.yml
+            echo "wire: using origin/wire-data ($(grep -m1 '^generated_at:' _data/wire.yml || echo 'no generated_at'))"
+          elif [ -f _data/wire.yml ]; then
+            echo "::notice::wire: no wire-data branch yet; building with the copy committed on main ($(grep -m1 '^generated_at:' _data/wire.yml))"
+          else
+            echo "::warning::wire: no wire-data branch and no committed _data/wire.yml; /wire/ will render as unavailable"
+          fi
+
+      # Node 22 or newer: the test runner is invoked with a glob
+      # (`node --test "test/**/*.test.js"`), which Node 20 does not expand.
+      - name: Set up Node
+        uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: tools/report-tooling/package-lock.json
+
+      - name: Install report tooling
+        working-directory: tools/report-tooling
+        run: npm ci --no-audit --no-fund
+
+      - name: Gate the Wire data
+        working-directory: tools/report-tooling
+        env:
+          WIRE_GATE_NO_FETCH: "1"
+        run: |
+          set +e
+          out="${RUNNER_TEMP:-/tmp}/wire-gate.txt"
+          node check-wire.js | tee "$out"
+          rc=${PIPESTATUS[0]}
+          set -e
+          # The gate's last line is the only thing read here. A missing or malformed
+          # line is a build failure, never a pass: it means the gate crashed or changed.
+          last=$(tail -n 1 "$out")
+          re='^WIRE-VERDICT page=(PASS|FAIL|NOT_CHECKED) data=(PASS|FAIL|NOT_CHECKED) stale=(PASS|FAIL|NOT_CHECKED)$'
+          if ! [[ "$last" =~ $re ]]; then
+            echo "::error::check-wire: no WIRE-VERDICT line as the last line of its output (exit $rc). The gate crashed or its output changed; failing the build."
+            exit 1
+          fi
+          page=${BASH_REMATCH[1]}; data=${BASH_REMATCH[2]}; stale=${BASH_REMATCH[3]}
+          echo "wire gate: page=$page data=$data stale=$stale (exit $rc)"
+          if [ -n "${GITHUB_STEP_SUMMARY:-}" ]; then
+            echo "Wire gate: page=$page data=$data stale=$stale (exit $rc)" >> "$GITHUB_STEP_SUMMARY"
+          fi
+          # A page fault is code on main: fail the build, and leave the Wire data in place.
+          if [ "$page" = FAIL ]; then
+            echo "::error::check-wire: the Wire page, its feeds, Details files or tab rules failed their structure check. That is a page bug on main, not a data problem; the Wire data is left in place and the build fails."
+            exit 1
+          fi
+          if [ "$page" = NOT_CHECKED ]; then
+            echo "::warning::check-wire: the page side was NOT CHECKED (see log). Building with the data as-is."
+          fi
+          # A data fault is generator output: drop the file so /wire/ renders unavailable, keep publishing.
+          if [ "$data" = FAIL ]; then
+            echo "::warning::check-wire: the Wire data is malformed. Dropping it so /wire/ renders as unavailable rather than broken. Fix the generator and push wire-data again."
+            rm -f ../../_data/wire.yml
+          elif [ "$data" = NOT_CHECKED ]; then
+            echo "::warning::check-wire: the Wire data was NOT CHECKED (see log). Building with the data as-is."
+          fi
+          # Stale-only: keep the data, the page shows its own generated_at.
+          if [ "$stale" = FAIL ]; then
+            echo "::warning::check-wire: the Wire data is stale (generator has missed runs). Publishing it anyway; the page shows its generated_at."
+          elif [ "$stale" = NOT_CHECKED ]; then
+            echo "::warning::check-wire: the Wire data age was NOT CHECKED (see log)."
+          fi
+
+      - name: Configure Pages
+        id: pages
+        uses: actions/configure-pages@v6
+
+      # The same builder GitHub Pages uses for deploy-from-branch (github-pages
+      # gem, remote_theme support), so what this produces is what the branch
+      # deploy produced, byte for byte where the inputs match.
+      - name: Build with Jekyll
+        uses: actions/jekyll-build-pages@v1
+        with:
+          source: ./
+          destination: ./_site
+
+      # Prune the remote theme's unused scripts and fonts from the built site (T-0605 L02). The theme copies its whole assets/ tree: KaTeX,
+      # Mermaid, Font Awesome, Pacifico and a search script ship on every deploy (about 3.9 MB of JS, 1.6 MB of fonts) that no page loads.
+      # tools/report-tooling/prune-theme-assets.js decides by measuring, not by a name list: a theme-only file under assets/js or assets/fonts
+      # stays only if a built page, a stylesheet or a script of ours (or a kept theme file) references it. It prints what it scanned, kept and
+      # removed, then re-reads every page and kept stylesheet and fails when any href, src, url() or @import points at a removed file.
+      # Exit 0 PASS, 1 FAIL (a reference to a removed file), 2 NOT CHECKED (the build could not be read): both fail the job, as the link gate does.
+      # It runs before the later gates so they see the pruned site. jekyll-build-pages runs as root, so _site comes back root-owned.
+      - name: Prune the theme files no page references
+        working-directory: tools/report-tooling
+        run: |
+          sudo chown -R "$(id -u):$(id -g)" ../../_site
+          set +e
+          node prune-theme-assets.js --site ../../_site --source ../..
+          rc=$?
+          set -e
+          case $rc in
+            0) echo "PASS         prune-theme-assets.js" ;;
+            2) echo "::error::prune-theme-assets.js NOT CHECKED (exit 2): it could not read the build"; exit 1 ;;
+            *) echo "::error::prune-theme-assets.js FAILED (exit $rc): a built page references a theme file the prune removed"; exit 1 ;;
+          esac
+
+      # Site search. Pagefind indexes the built HTML in place and writes its
+      # bundle to _site/pagefind/, which /search/ loads at runtime. Only pages
+      # carrying data-pagefind-body (set in _layouts/default.html, withheld from
+      # unlisted pages) are indexed, so an embargoed report never reaches the
+      # index. Pinned so an upstream release cannot change the bundle under us:
+      # pagefind 1.3.0 is an exact devDependency of tools/report-tooling, installed
+      # by `npm ci` above (T-0548; this step was `npx pagefind@1.3.0 --site _site`).
+      # tools/report-tooling/build-search-index.js drives Pagefind through its Node API so
+      # the Wire rows (nKEV, CVEs, headlines; their text is not in the page, the Details
+      # pane is fetched at runtime) are added as records beside the pages. It prints
+      # "Indexed N pages" and the record counts per section, fails when a section has
+      # source rows but no record, and writes the records it indexed to
+      # /tmp/wire-search-records.json for the defang gate below. --wire-bundle pagefind-wire puts the Wire records in a second index at _site/pagefind-wire/ that /search/ merges
+      # at indexWeight 0.3, so reports and detection pages rank before Wire rows (Pagefind cannot weight single records).
+      - name: Build the search index
+        working-directory: tools/report-tooling
+        run: |
+          set -euo pipefail
+          # actions/jekyll-build-pages runs in a container as root, so _site comes
+          # back root-owned and Pagefind (running as the runner user) could not
+          # create _site/pagefind: "PermissionDenied" on the first run, 2026-10-09.
+          sudo chown -R "$(id -u):$(id -g)" ../../_site
+          node build-search-index.js --site ../../_site --records-out /tmp/wire-search-records.json --wire-bundle pagefind-wire 2>&1 | tee /tmp/pagefind.txt
+
+      # Decision 5 of the site restyle (T-0500.1.7.4, Joseph 2026-11-02): no rendered page shows a raw network indicator or links to actor
+      # infrastructure. The gate reads the built _site (check-defang.js --site), report pages included (their title, citation, BibTeX and Continue Reading
+      # cards come from the layout; a report's own text is also gated at its source above).
+      # --records adds the text the search index holds for the Wire rows (T-0548): /pagefind/ is excluded from the page scan, so the records the index step wrote are the gated input.
+      # Exit 0 PASS, 1 FAIL (a page the build just produced carries a raw or clickable indicator: fail the job), 2 NOT CHECKED (warn, as the other gates do).
+      - name: Gate the rendered pages for raw indicators
+        working-directory: tools/report-tooling
+        run: |
+          set +e
+          node check-defang.js --site ../../_site --records /tmp/wire-search-records.json
+          rc=$?
+          set -e
+          case $rc in
+            0) echo "PASS         check-defang.js --site" ;;
+            2) echo "::warning::check-defang.js --site NOT CHECKED (exit 2); see its log above" ;;
+            *) echo "::error::check-defang.js --site FAILED (exit $rc): a rendered page carries a raw or clickable indicator"; exit 1 ;;
+          esac
+
+      # Every internal link on the built pages resolves to a built file (T-0603 M1, A1). Exit 1: a dead link or a
+      # trailing slash on a file URL, fail the job. Exit 2: the gate could not read the build, fail the job too (a
+      # link gate that measured nothing is not a pass). Dead #anchors fail the job too (T-0605: the last one fixed).
+      - name: Gate the built pages for dead internal links
+        working-directory: tools/report-tooling
+        run: |
+          set +e
+          node check-links.js --site ../../_site
+          rc=$?
+          set -e
+          case $rc in
+            0) echo "PASS         check-links.js --site" ;;
+            2) echo "::error::check-links.js --site NOT CHECKED (exit 2): the gate could not read the build"; exit 1 ;;
+            *) echo "::error::check-links.js --site FAILED (exit $rc): a built page links to a page or file that is not in the build"; exit 1 ;;
+          esac
+
+      # T-0605 L19: the Detections, IOC and STIX panels of every report open inside the viewport, with their first item uncovered and without moving the page, at 375 and 1280 px, in headless Chrome on the built _site (check-browser-hero.js; its own planted-defect controls must fail). Exit 2 (no browser, no report page, a bad argument) fails the job: a gate that opened nothing is not a pass.
+      - name: Gate the hero panels in a real browser
+        working-directory: tools/report-tooling
+        run: |
+          set +e
+          # The gate's own search tries /usr/bin/chromium first; on the runner that one never wrote its DevToolsActivePort into the gate's profile (run 43254559884), so name Google Chrome, which the runner image ships, and say which binary ran.
+          for c in /usr/bin/google-chrome /usr/bin/google-chrome-stable; do if [ -x "$c" ]; then export HL_CHROME="$c"; break; fi; done
+          echo "browser: ${HL_CHROME:-none of /usr/bin/google-chrome, /usr/bin/google-chrome-stable}  $(${HL_CHROME:-false} --version 2>/dev/null)"
+          ls -l /usr/bin/chromium /usr/bin/chromium-browser /usr/bin/google-chrome 2>&1
+          HL_CDP_LAUNCH_WAIT_MS=90000 HL_SITE_DIR=../../_site node check-browser-hero.js
+          rc=$?
+          set -e
+          case $rc in
+            0) echo "PASS         check-browser-hero.js" ;;
+            2) echo "::error::check-browser-hero.js NOT CHECKED (exit 2): no browser, no built report page, or a bad argument"; exit 1 ;;
+            *) echo "::error::check-browser-hero.js FAILED (exit $rc): a hero panel opens off screen, under another element, or moves the page"; exit 1 ;;
+          esac
+
+      # A report's detection_page, ioc_feed and stix_bundle values must each name a page or file that exists (check-companions.js, T-0603).
+      # Until the review of T-0603's final this gate ran only from `npm run verify`, so a push could deploy a dangling value.
+      - name: Gate the reports' companion links
+        working-directory: tools/report-tooling
+        run: |
+          set +e
+          node check-companions.js
+          rc=$?
+          set -e
+          case $rc in
+            0) echo "PASS         check-companions.js" ;;
+            *) echo "::error::check-companions.js did not pass (exit $rc): a report names a detection page, IOC feed or STIX bundle that does not exist, or the gate could not run"; exit 1 ;;
+          esac
+
+      - name: Sanity-check the build
+        run: |
+          set -eu
+          test -f _site/index.html
+          test -f _site/.well-known/security.txt
+          test -f _site/wire/index.html
+          test -f _site/wire/feed.xml
+          test -f _site/wire/vulns.xml
+          test -f _site/wire/cves.xml
+          test -f _site/hunting-detections/feed.xml
+          python3 -c "import xml.dom.minidom; [xml.dom.minidom.parse(f) for f in ('_site/feed.xml', '_site/wire/feed.xml', '_site/wire/vulns.xml', '_site/wire/cves.xml', '_site/hunting-detections/feed.xml')]" && echo "the five Atom feeds are well-formed XML"
+          python3 -c "import json; [json.load(open(f))['items'] for f in ('_site/feed.json', '_site/hunting-detections/feed.json')]" && echo "the two JSON Feeds parse"
+          # The Dataset structured data on the IOC viewer pages, the two catalog pages, the MISP feed page and the detection library must be valid JSON-LD.
+          python3 - <<'PY'
+          import glob, json, re
+          pages = ['_site/ioc-feeds/index.html', '_site/stix/index.html', '_site/feeds/misp/index.html', '_site/hunting-detections/index.html'] + sorted(glob.glob('_site/ioc-feeds/*/index.html'))
+          n = 0
+          for p in pages:
+              html = open(p, encoding='utf-8').read()
+              blocks = [b for b in re.findall(r'<script type="application/ld\+json">(.*?)</script>', html, re.S) if '"Data' in b]
+              assert blocks, p + ' carries no Dataset or DataCatalog JSON-LD'
+              for b in blocks:
+                  d = json.loads(b)
+                  assert d['@type'] in ('Dataset', 'DataCatalog'), p
+                  n += 1
+          print('Dataset JSON-LD parses on %d pages' % n)
+          PY
+          test -f _site/reports/index.html
+          test -f _site/sitemap.xml
+          test -f _site/search/index.html
+          test -f _site/actors/index.html
+          actors=$(grep -o 'class="hl-card hl-catalog-card hl-actor-card"' _site/actors/index.html | wc -l)
+          echo "actor index renders $actors cards"
+          test "$actors" -gt 0
+          layers=$(ls _site/actors/*/attack-navigator-layer.json | wc -l)
+          echo "actor profiles publish $layers Navigator layers"
+          test "$layers" -eq "$actors"
+          test -f _site/techniques/index.html
+          test -f _site/families/index.html
+          test -f _site/assets/data/attack-navigator-layer.json
+          cells=$(grep -o 'class="hl-heatmap__cell"' _site/techniques/index.html | wc -l)
+          echo "technique heatmap renders $cells cells"
+          test "$cells" -gt 0
+          fams=$(grep -o 'class="hl-card hl-catalog-card hl-family-card"' _site/families/index.html | wc -l)
+          echo "family index renders $fams cards"
+          test "$fams" -gt 0
+          test -f _site/feeds/misp/manifest.json
+          test -f _site/feeds/misp/hashes.csv
+          test -f _site/feeds/misp/index.html
+          test -f _site/feeds/misp/changelog/index.html
+          test -f _site/stix/manifest.json
+          events=$(ls _site/feeds/misp/ | grep -c -E '^[0-9a-f-]{36}\.json$')
+          echo "MISP feed publishes $events events"
+          test "$events" -gt 0
+          test ! -f _site/feeds/misp/_state.json
+          test -f _site/pagefind/pagefind.js
+          test -f _site/pagefind/pagefind-ui.js
+          # the Wire rows' second index, merged by /search/ (mergeIndex); without it the search page loses every Wire result (T-0548)
+          test -f _site/pagefind-wire/pagefind.js
+          test -f _site/pagefind-wire/pagefind-entry.json
+          echo "search index: $(grep -m1 -o 'Indexed [0-9]* pages' /tmp/pagefind.txt || echo 'page count not reported')"
+          echo "search index: $(grep -m1 '^Wire records:' /tmp/pagefind.txt | cut -c1-300 || echo 'no Wire records line')"
+          cards=$(grep -o 'hl-catalog-card' _site/reports/index.html | wc -l)
+          echo "reports listing renders $cards cards"
+          test "$cards" -gt 0
+          if grep -q 'hl-wire__item' _site/wire/index.html; then
+            echo "wire renders $(grep -o 'hl-wire__item ' _site/wire/index.html | wc -l) headlines"
+          else
+            echo "::notice::wire page rendered in its unavailable state"
+          fi
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v5
+        with:
+          path: ./_site
+          # v4 and later drop dot-directories by default, which would drop
+          # _site/.well-known/security.txt (see the include in _config.yml).
+          # .git and .github are excluded either way.
+          include-hidden-files: true
+
+      # Build-time budget. The figure is the build job's, from step 1 to here
+      # (median 277 s, longest run 1,021 s, November 2026). The Wire refreshes every
+      # 15 minutes (900 s); warn at 600 s so the drift shows before it costs a refresh.
+      # Update BUDGET when the median moves.
+      - name: Check the build time against its budget
+        env:
+          BUDGET: "600"
+        run: |
+          elapsed=$(( $(date +%s) - BUILD_START ))
+          echo "build job: ${elapsed} s so far (budget ${BUDGET} s)"
+          if [ -n "${GITHUB_STEP_SUMMARY:-}" ]; then
+            echo "Build job time to here: ${elapsed} s, budget ${BUDGET} s" >> "$GITHUB_STEP_SUMMARY"
+          fi
+          if [ "$elapsed" -gt "$BUDGET" ]; then
+            echo "::warning::the build job took ${elapsed} s, over its ${BUDGET} s budget; the 15-minute Wire refresh is 900 s"
+          fi
+
+  deploy:
+    name: Deploy to GitHub Pages
+    # Both: a failed source-side gate stops the deploy. `gates` runs on every trigger.
+    needs: [build, gates]
+    # The rollback switch (see the header): the repository variable PAGES_VIA_ACTIONS.
+    # A status function in an `if` switches off the implicit success() check, so
+    # the two results are spelled out.
+    if: ${{ !cancelled() && vars.PAGES_VIA_ACTIONS == 'true' && needs.build.result == 'success' && needs.gates.result == 'success' }}
+    runs-on: ubuntu-latest
+    # Two attempts at the clamped 10 minutes, plus start-up.
+    timeout-minutes: 25
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url || steps.deployment_retry.outputs.page_url }}
+    steps:
+      - name: Deploy
+        id: deployment
+        uses: actions/deploy-pages@v5
+        # One retry below: 11 of 299 runs failed at the Pages file sync timeout
+        # and 1 at "Deployment failed, try again later" (T-0603).
+        continue-on-error: true
+        with:
+          # GitHub clamps this to 600000 ms (10 minutes) whatever is set, and
+          # warned on every run when it was set higher. On 2026-11-06 the file
+          # sync ran past it ("Timeout reached, aborting!" at syncing_files);
+          # the retry step is the mitigation now, not a longer timeout.
+          timeout: 600000
+
+      - name: Deploy again after a failed first attempt
+        id: deployment_retry
+        if: ${{ steps.deployment.outcome == 'failure' }}
+        uses: actions/deploy-pages@v5
+        with:
+          timeout: 600000
+
+  # The source-side gates that the pre-commit hook runs locally, run here on
+  # every push so a bypassed hook (or a push from a machine without it) is still
+  # caught. `deploy` needs this job: a gate that fails stops the deploy.
+  gates:
+    name: Tests and source gates
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    # contents: read from the workflow default; no Pages or id-token permission.
+    steps:
+      # Always main, as in the build job: on a wire-data push the default checkout
+      # would be the wire-data tree, which holds no site.
+      - uses: actions/checkout@v7
+        with:
+          ref: main
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: tools/report-tooling/package-lock.json
+      - name: Install report tooling
+        working-directory: tools/report-tooling
+        run: npm ci --no-audit --no-fund
+      - name: Unit tests
+        working-directory: tools/report-tooling
+        run: npm test
+      # The outbound documents (PDFs, emails, cards) read docs/brand/tokens.json and tokens.css, which gen_tokens.py derives from
+      # assets/css/custom.scss (T-0563). A stylesheet change that moves a token fails here until `python3 docs/brand/gen_tokens.py` is re-run
+      # and the two files are committed. Stdlib only, so the runner's python3 is enough. Exit 0 PASS, 1 FAIL (drift).
+      - name: Brand tokens match the stylesheet
+        run: python3 docs/brand/gen_tokens.py --check
+      - name: Source-side gates
+        working-directory: tools/report-tooling
+        run: |
+          set -u
+          fail=0
+          for g in check-detection-manifest.js check-detection-attack.js check-ioc-index.js \
+                   check-ioc-tables.js check-ioc-feeds.js check-ioc-feeds-attack.js \
+                   check-embargo-artifacts.js check-tags.js check-actors.js check-xref.js \
+                   check-misp-feed.js check-stix-manifest.js; do
+            echo "::group::$g"
+            rc=0
+            node "$g" || rc=$?
+            echo "::endgroup::"
+            case $rc in
+              0) echo "PASS         $g" ;;
+              2) echo "::warning::$g NOT CHECKED (exit 2); see its log above" ;;
+              *) echo "::error::$g FAILED (exit $rc)"; fail=1 ;;
+            esac
+          done
+          echo "::group::check-report.js (every report)"
+          for r in ../../reports/*/index.md; do
+            rc=0
+            node check-report.js "$r" > /tmp/cr.txt 2>&1 || rc=$?
+            if [ $rc -eq 1 ]; then echo "::error::check-report FAILED for $r"; cat /tmp/cr.txt; fail=1;
+            elif [ $rc -ne 0 ]; then echo "::warning::check-report NOT CHECKED (exit $rc) for $r"; cat /tmp/cr.txt; fi
+          done
+          echo "::endgroup::"
+          exit $fail
+      - name: Validate the MISP feed with PyMISP
+        working-directory: tools/report-tooling
+        # The format's reference implementation loads every event, so a type or
+        # category MISP would reject fails here rather than on a subscriber's pull.
+        run: |
+          set -u
+          python3 -m pip install --quiet --disable-pip-version-check pymisp
+          rc=0
+          python3 validate-misp-feed.py || rc=$?
+          case $rc in
+            0) echo "PASS         validate-misp-feed.py" ;;
+            2) echo "::warning::validate-misp-feed.py NOT CHECKED (exit 2); see its log above" ;;
+            *) echo "::error::validate-misp-feed.py FAILED (exit $rc)"; exit 1 ;;
+          esac
+
+      # The social-card library (tools/social-card/cardlib.py) renders the cards the report pages and the announcements use; its tests had
+      # no CI step (T-0605 L53). The file is plain Python with its own runner (exit 1 on any failure) and imports Pillow and PyYAML, which the
+      # runner's python3 does not carry, so they are installed here the way the PyMISP step installs its package.
+      - name: Social-card tests
+        run: |
+          set -u
+          python3 -m pip install --quiet --disable-pip-version-check pillow pyyaml
+          rc=0
+          python3 tools/social-card/tests/test_cardlib.py || rc=$?
+          case $rc in
+            0) echo "PASS         tools/social-card/tests/test_cardlib.py" ;;
+            *) echo "::error::tools/social-card/tests/test_cardlib.py FAILED (exit $rc)"; exit 1 ;;
+          esac
+
+  # A failed run used to announce itself nowhere (33 failures in 300 runs, one
+  # outage of 5 h 22 min, T-0603). One open issue per outage: the first failure
+  # opens it, later failures comment on it, the next successful deploy closes it.
+  # Needs `issues: write` and the repository's Issues feature turned on.
+  alert:
+    name: Report a failed run
+    needs: [build, gates, deploy]
+    if: ${{ always() && !cancelled() }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: read
+      issues: write
+    env:
+      GH_TOKEN: ${{ github.token }}
+      GH_REPO: ${{ github.repository }}
+      RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+      TITLE: Site deploy failed
+    steps:
+      - name: Open or update the failure issue
+        if: ${{ contains(needs.*.result, 'failure') }}
+        run: |
+          body="Run ${RUN_URL} failed. build: ${{ needs.build.result }}, gates: ${{ needs.gates.result }}, deploy: ${{ needs.deploy.result }}."
+          n=$(gh issue list --state open --search "\"$TITLE\" in:title" --json number,title --jq "[.[] | select(.title == \"$TITLE\")][0].number // empty")
+          if [ -n "$n" ]; then
+            gh issue comment "$n" --body "$body"
+          else
+            gh issue create --title "$TITLE" --body "$body"
+          fi
+      - name: Close the failure issue after a successful deploy
+        if: ${{ needs.deploy.result == 'success' }}
+        run: |
+          for n in $(gh issue list --state open --search "\"$TITLE\" in:title" --json number,title --jq ".[] | select(.title == \"$TITLE\") | .number"); do
+            gh issue close "$n" --comment "Deployed successfully in ${RUN_URL}."
+          done
