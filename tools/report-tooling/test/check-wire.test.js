@@ -1340,3 +1340,150 @@ test('nKEV grouping copy stays pinned on the real template',function(){
    assert.equal(CW.checkPage(page.replace(pin,'removed'),inc).status,'FAIL',pin);
  });
 });
+
+/* T-0628: the priority picks keys and counts (contract: tasks/runs/T-0628/contract.md). The fixture
+   test/fixtures/picks-wire.yml carries two pick rows (one seeded, one with empty signals) and two rows
+   that are not picks. The pick checks are WARN lines like every CVEs-tab data check (a FAIL would make
+   pages.yml drop the headlines), so "fails" below means the cves warnings name the defect. */
+var yamlPicks = require('js-yaml');
+var fsPicks = require('node:fs');
+var pathPicks = require('node:path');
+function picksFixture() {
+  return yamlPicks.load(fsPicks.readFileSync(pathPicks.join(__dirname, 'fixtures', 'picks-wire.yml'), 'utf8'));
+}
+var PICKS_NOW = Date.parse('2026-11-05T21:00:00Z');
+function picksWarn(d) { return CW.check(d, SOURCES, PICKS_NOW).cveWarnings.join('\n'); }
+function pickRow(d, cve) { return d.cves.filter(function (r) { return r.cve === cve; })[0]; }
+
+test('T-0628 control: the picks fixture passes with no cve warnings, and counts its picks', function () {
+  var d = picksFixture();
+  assert.equal(d.cves.filter(function (r) { return r.pick_day; }).length, 2);
+  assert.ok(d.cves.some(function (r) { return r.pick_day && r.signals.length === 0; }), 'one pick has empty signals');
+  assert.ok(d.cves.some(function (r) { return r.pick_seeded === true; }), 'one pick is seeded');
+  var r = CW.check(d, SOURCES, PICKS_NOW);
+  assert.equal(r.status, 'PASS');
+  assert.deepEqual(r.cveWarnings, []);
+  assert.equal(r.counts.cves, 4);
+});
+
+test('T-0628 data from before the picks (no pick key, no pick count) still passes', function () {
+  var d = picksFixture();
+  d.cves.forEach(function (r) { PICK_KEYS_TEST.forEach(function (k) { delete r[k]; }); });
+  // a pick row without signals is a defect once nothing marks it a pick
+  d.cves = d.cves.filter(function (r) { return r.signals.length > 0; });
+  ['picks', 'picks_today', 'pick_pool'].forEach(function (k) { delete d.cves_counts[k]; });
+  d.cves_counts.total = d.cves.length; d.cves_counts.high = 2; d.cves_counts.critical = 1; d.cves_counts.medium = 0; d.cves_counts.msf = 1;
+  d.cve_vendors = [{ label: 'Fixture', count: d.cves.length }];
+  var r = CW.check(d, SOURCES, PICKS_NOW);
+  assert.equal(r.status, 'PASS');
+  assert.deepEqual(r.cveWarnings, []);
+});
+var PICK_KEYS_TEST = ['pick_day', 'pick_score', 'pick_reasons', 'pick_class', 'pick_seeded'];
+
+test('T-0628 pick_reasons out of order, repeated or unknown are named', function () {
+  var d = picksFixture();
+  pickRow(d, 'CVE-2026-9101').pick_reasons = ['nomi', 'tooling', 'noauth', 'class'];
+  assert.match(picksWarn(d), /9101\).*pick reason tooling out of order or twice/);
+  d = picksFixture();
+  pickRow(d, 'CVE-2026-9101').pick_reasons = ['tooling', 'tooling', 'nomi', 'noauth', 'class'];
+  assert.match(picksWarn(d), /9101\).*out of order or twice/);
+  d = picksFixture();
+  pickRow(d, 'CVE-2026-9101').pick_reasons = ['tooling', 'luck', 'class'];
+  assert.match(picksWarn(d), /9101\).*unknown pick reason "luck"/);
+});
+
+test('T-0628 a row with no pick_day carries score 0, no reasons, no class and is not seeded', function () {
+  var d = picksFixture();
+  pickRow(d, 'CVE-2026-9103').pick_score = 3;
+  assert.match(picksWarn(d), /9103\).*pick_score 3 but no pick_day/);
+  d = picksFixture();
+  pickRow(d, 'CVE-2026-9103').pick_reasons = ['nomi'];
+  assert.match(picksWarn(d), /9103\).*pick reasons but has no pick_day/);
+  d = picksFixture();
+  pickRow(d, 'CVE-2026-9103').pick_class = 'File transfer';
+  assert.match(picksWarn(d), /9103\).*pick_class but no pick_day/);
+  d = picksFixture();
+  pickRow(d, 'CVE-2026-9103').pick_seeded = true;
+  assert.match(picksWarn(d), /9103\).*seeded but has no pick_day/);
+});
+
+test('T-0628 pick types: day, score, list, class label, seeded flag', function () {
+  var d = picksFixture(); pickRow(d, 'CVE-2026-9101').pick_day = '2026-13-40';
+  assert.match(picksWarn(d), /9101\).*pick_day "2026-13-40"/);
+  d = picksFixture(); pickRow(d, 'CVE-2026-9101').pick_day = '2026-11-09';
+  assert.match(picksWarn(d), /9101\).*pick_day 2026-11-09, after cves_generated_at/);
+  d = picksFixture(); pickRow(d, 'CVE-2026-9101').pick_day = '2026-11-01';
+  assert.match(picksWarn(d), /9101\).*before its published day/);
+  d = picksFixture(); pickRow(d, 'CVE-2026-9101').pick_score = '7';
+  assert.match(picksWarn(d), /9101\).*pick_score "7"/);
+  d = picksFixture(); pickRow(d, 'CVE-2026-9101').pick_score = 6.5;
+  assert.match(picksWarn(d), /9101\).*pick_score 6.5/);
+  d = picksFixture(); pickRow(d, 'CVE-2026-9101').pick_reasons = 'tooling';
+  assert.match(picksWarn(d), /9101\).*pick_reasons that are not a list/);
+  d = picksFixture(); pickRow(d, 'CVE-2026-9101').pick_class = 'Printers';
+  assert.match(picksWarn(d), /9101\).*unknown pick_class "Printers"/);
+  d = picksFixture(); pickRow(d, 'CVE-2026-9101').pick_class = '';
+  assert.match(picksWarn(d), /9101\).*class reason but pick_class is empty/);
+  d = picksFixture(); pickRow(d, 'CVE-2026-9102').pick_class = 'File transfer';
+  assert.match(picksWarn(d), /9102\).*pick_class but does not list the class reason/);
+  d = picksFixture(); pickRow(d, 'CVE-2026-9101').pick_seeded = 'yes';
+  assert.match(picksWarn(d), /9101\).*pick_seeded "yes"/);
+});
+
+test('T-0628 some pick keys without the others are named, and a missing pick_seeded counts as some', function () {
+  var d = picksFixture(); delete pickRow(d, 'CVE-2026-9101').pick_seeded;
+  assert.match(picksWarn(d), /9101\).*only some pick keys \(pick_day, pick_score, pick_reasons, pick_class\)/);
+});
+
+test('T-0628 a pick may list no signal; a row that is not a pick still needs one', function () {
+  var d = picksFixture();
+  assert.equal(pickRow(d, 'CVE-2026-9102').signals.length, 0);
+  assert.doesNotMatch(picksWarn(d), /lists no selection arm/);
+  pickRow(d, 'CVE-2026-9103').signals = []; pickRow(d, 'CVE-2026-9103').epss_pct = '0.1';
+  assert.match(picksWarn(d), /9103\).*lists no selection arm/);
+  // a pick row's signals are still held to its facts
+  d = picksFixture(); pickRow(d, 'CVE-2026-9102').signals = ['msf'];
+  assert.match(picksWarn(d), /9102\).*lists signal msf but the row shows no msf fact/);
+});
+
+test('T-0628 pick counts are held to the rows when declared, and a count not declared is not', function () {
+  var d = picksFixture(); d.cves_counts.picks = 5;
+  assert.match(picksWarn(d), /cves_counts picks disagrees with the rows: declared 5, actual 2/);
+  d = picksFixture(); d.cves_counts.picks_today = 2;
+  assert.match(picksWarn(d), /cves_counts picks_today disagrees with the rows: declared 2, actual 1/);
+  d = picksFixture(); d.cves_counts.pick_pool = -1;
+  assert.match(picksWarn(d), /pick_pool is -1, not a whole number/);
+  d = picksFixture(); d.cves_counts.pick_pool = '40';
+  assert.match(picksWarn(d), /pick_pool is "40"/);
+  d = picksFixture(); delete d.cves_counts.picks; delete d.cves_counts.picks_today; delete d.cves_counts.pick_pool;
+  assert.deepEqual(CW.check(d, SOURCES, PICKS_NOW).cveWarnings, []);
+});
+
+test('T-0628 the cap of 250 counts the rows below the picks, not the picks', function () {
+  var d = picksFixture();
+  var many = d.cves.filter(function (r) { return r.pick_day; });
+  for (var i = 0; i < 250; i++) many.push(Object.assign({}, pickRow(d, 'CVE-2026-9104'), { cve: 'CVE-2026-' + (9500 + i) }));
+  d.cves = many; d.cves_counts.total = many.length; d.cves_counts.high = 0; d.cves_counts.critical = 0; d.cves_counts.medium = 0;
+  d.cves_counts.msf = 0; d.cves_counts.nuclei = 250; d.cves_counts.epss90 = 0;
+  d.cve_vendors = [{ label: 'Fixture', count: many.length }];
+  assert.doesNotMatch(picksWarn(d), /over the cap/);
+  many.push(Object.assign({}, pickRow(d, 'CVE-2026-9104'), { cve: 'CVE-2026-9999' }));
+  assert.match(picksWarn(d), /251 rows besides 2 priority picks, over the cap of 250/);
+});
+
+test('T-0628 the page template: the picks group, filter chip and pick strip are pinned, and losing one fails the page check', function () {
+  var page = fsPicks.readFileSync(pathPicks.join(__dirname, '..', '..', '..', 'wire', 'index.md'), 'utf8');
+  var includes = {};
+  fsPicks.readdirSync(pathPicks.join(__dirname, '..', '..', '..', '_includes')).filter(function (n) { return /^wire-/.test(n); })
+    .forEach(function (n) { includes[n] = fsPicks.readFileSync(pathPicks.join(__dirname, '..', '..', '..', '_includes', n), 'utf8'); });
+  assert.equal(CW.checkPage(page, includes).status, 'PASS');
+  ['id="cves-priority-picks"', 'data-sig="pick">Priority picks', 'class="hl-vuln__pick"', 'A pick is a priority, not evidence of exploitation',
+    'was not blind', '10.3%', 'outside that cap'].forEach(function (pin) {
+    assert.ok(page.includes(pin), pin);
+    assert.equal(CW.checkPage(page.replace(pin, 'removed'), includes).status, 'FAIL', pin);
+  });
+  // an unescaped pick value is caught by the existing escaping check
+  assert.equal(CW.checkPage(page.replace('{{ r.pick_class | escape }}', '{{ r.pick_class }}'), includes).status, 'FAIL');
+  // the panel copy stays free of dashes
+  assert.equal(CW.checkPage(page.replace('is my daily shortlist', 'is my daily shortlist — yes'), includes).status, 'FAIL');
+});

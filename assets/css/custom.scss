@@ -9159,6 +9159,48 @@ a.hl-kc:hover { border-color: var(--kc); color: #ffffff; }
   .hl-idx--wire .hl-vuln__badges { justify-content: flex-start; }
 }
 
+/* ===== T-0628: the Priority picks group on the CVEs tab =====
+   A pick row is the ordinary CVE row plus one strip under it: the score, one chip per factor, the day
+   picked. The strip is its own line so each item stands apart (the site owner is dyslexic: no run-on
+   rows), and each factor has its own hue. Gold is left to sponsors. */
+.hl-idx--wire #cves .hl-wire__day--picks { --wd: #4ade80; }
+.hl-idx--wire .hl-vuln__pick {
+  grid-column: 2 / -1;
+  display: flex; flex-wrap: wrap; align-items: center; gap: 0.4em 0.6em;
+  margin-top: 0.15em; padding-top: 0.35em;
+  border-top: 1px dashed color-mix(in srgb, var(--hl-border-card) 80%, transparent);
+}
+.hl-pick__score, .hl-pick__chip {
+  font-size: var(--hl-fs-small, 0.85em);
+  line-height: 1.5; white-space: nowrap; cursor: help;
+  padding: 0.05em 0.6em; border-radius: 3px;
+}
+.hl-pick__score {
+  --p: #4ade80;
+  font-weight: 700; font-variant-numeric: tabular-nums; letter-spacing: 0.01em;
+  color: #0b1a10; background: var(--p); border: 1px solid var(--p);
+}
+.hl-pick__chip {
+  --p: #8b949e;
+  color: var(--p);
+  border: 1px solid color-mix(in srgb, var(--p) 50%, var(--hl-border-card));
+  background: color-mix(in srgb, var(--p) 13%, transparent);
+}
+.hl-pick__chip--tooling  { --p: #fb923c; }
+.hl-pick__chip--nomi     { --p: #79c0ff; }
+.hl-pick__chip--ssvc     { --p: #bc8cff; }
+.hl-pick__chip--epss     { --p: #22d3ee; }
+.hl-pick__chip--noauth   { --p: #f472b6; }
+.hl-pick__chip--critical { --p: #ff6b6b; }
+.hl-pick__chip--class    { --p: #2dd4bf; }
+.hl-pick__chip--seed     { --p: #8b949e; border-style: dashed; }
+.hl-pick__date { font-size: var(--hl-fs-small, 0.85em); color: var(--hl-text-muted); white-space: nowrap; margin-left: auto; }
+.hl-legend__list dt .hl-pick__score, .hl-legend__list dt .hl-pick__chip { font-size: var(--hl-fs-meta); cursor: default; }
+.hl-wire-data__list dt .hl-pick__score, .hl-wire-data__list dt .hl-pick__chip, .hl-wire-data__list dt .hl-pick__date { cursor: default; }
+@media (max-width: 700px) {
+  .hl-pick__date { margin-left: 0; flex: 0 0 100%; }
+}
+
 /* ===== T-0603 V1 (A48, S29, A49): one stat strip =====
    Every stat strip (index plates, detection and feed pages, actor, family, technique, Wire, impact) is .hl-d-kpis. The variants above painted the strip
    itself (the 2a2a2a or 1a1a1a ground, or the 1px gap) so a row that was not full showed the ground as a grey slab, 152 pages in the B1 build.

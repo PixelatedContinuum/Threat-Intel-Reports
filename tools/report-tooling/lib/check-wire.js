@@ -550,6 +550,60 @@ var CVES_SIGNALS = { msf: 1, edb: 1, nuclei: 1, et: 1, epss90: 1, epss_vedas: 1,
 var CVES_ARMS = ['msf', 'edb', 'nuclei', 'et', 'epss90', 'epss_vedas', 'wp_unauth'];
 var CVSS_VECTOR = /^(?:CVSS:\d\.\d\/)?[A-Za-z]{1,3}:[A-Za-z0-9]{1,3}(?:\/[A-Za-z]{1,3}:[A-Za-z0-9]{1,3})*$/;
 var CVES_BODY_KEYS = ['description', 'summary', 'context'];
+/* T-0628: the priority picks. Five keys the exporter writes on every row once picks exist (empty on a
+   row that is not a pick), checked only when present so data from before them still passes (the site
+   deploys before the exporter). Contract: tasks/runs/T-0628/contract.md. Like every CVEs-tab data
+   check here they are WARN lines, not a FAIL: pages.yml drops the whole wire.yml on a FAIL, and the
+   headlines must not depend on this read. */
+var PICK_KEYS = ['pick_day', 'pick_score', 'pick_reasons', 'pick_class', 'pick_seeded'];
+var PICK_REASON_ORDER = ['tooling', 'nomi', 'ssvc', 'epss90', 'noauth', 'critical', 'class'];
+var PICK_CLASSES = ['Edge and network device', 'File transfer', 'IT and remote management', 'Identity and access',
+  'Virtualization and backup', 'Email and collaboration', 'Operating system or browser', 'Enterprise application', 'CMS core'];
+function isPick(r) { return hasKey(r, 'pick_day') && !isEmpty(r.pick_day); }
+function pickProblems(r, genDay) {
+  var out = [];
+  var present = PICK_KEYS.filter(function (k) { return hasKey(r, k); });
+  if (!present.length) return out;
+  if (present.length !== PICK_KEYS.length) {
+    out.push('carries only some pick keys (' + present.join(', ') + '); the exporter writes all five or none');
+    return out;
+  }
+  var pick = !isEmpty(r.pick_day);
+  if (pick && typeof r.pick_day !== 'string') { out.push('has a pick_day that is not text'); return out; }
+  if (pick) {
+    var pd = realDay(r.pick_day);
+    if (isNaN(pd)) out.push('has pick_day ' + JSON.stringify(r.pick_day) + ', not empty or a real YYYY-MM-DD day');
+    else {
+      if (genDay && pd > genDay) out.push('has pick_day ' + r.pick_day + ', after cves_generated_at');
+      if (!isNaN(realDay(r.published)) && pd < realDay(r.published)) out.push('has pick_day ' + r.pick_day + ', before its published day ' + r.published);
+    }
+  }
+  if (!(typeof r.pick_score === 'number' && Number.isInteger(r.pick_score) && r.pick_score >= 0)) {
+    out.push('has pick_score ' + JSON.stringify(r.pick_score) + ', not a whole number of 0 or more');
+  } else if (!pick && r.pick_score !== 0) {
+    out.push('has pick_score ' + r.pick_score + ' but no pick_day (a row that is not a pick scores 0)');
+  }
+  if (!Array.isArray(r.pick_reasons)) out.push('has pick_reasons that are not a list');
+  else {
+    var last = -1;
+    r.pick_reasons.forEach(function (t) {
+      var at = PICK_REASON_ORDER.indexOf(t);
+      if (at === -1) out.push('lists unknown pick reason ' + JSON.stringify(t));
+      else if (at <= last) out.push('lists pick reason ' + t + ' out of order or twice (order: ' + PICK_REASON_ORDER.join(', ') + ')');
+      else last = at;
+    });
+    if (!pick && r.pick_reasons.length) out.push('lists pick reasons but has no pick_day');
+    var hasClassToken = r.pick_reasons.indexOf('class') !== -1;
+    if (pick && hasClassToken && isEmpty(r.pick_class)) out.push('lists the class reason but pick_class is empty');
+    if (pick && !hasClassToken && !isEmpty(r.pick_class)) out.push('has a pick_class but does not list the class reason');
+  }
+  if (typeof r.pick_class !== 'string') out.push('has a pick_class that is not text');
+  else if (r.pick_class !== '' && PICK_CLASSES.indexOf(r.pick_class) === -1) out.push('has unknown pick_class ' + JSON.stringify(r.pick_class));
+  else if (!pick && r.pick_class !== '') out.push('has a pick_class but no pick_day');
+  if (typeof r.pick_seeded !== 'boolean') out.push('has pick_seeded ' + JSON.stringify(r.pick_seeded) + ', not true or false');
+  else if (!pick && r.pick_seeded) out.push('is marked seeded but has no pick_day');
+  return out;
+}
 var EPSS_HIGH_PCT = 0.90;
 function signalFacts(r) {
   var epct = Number(r.epss_pct);
@@ -588,7 +642,12 @@ function checkCves(doc, now) {
     warnings.push('cves_status is ok but there are no rows: possible if nothing passes the rule, ' +
       'but the measurement behind the rule found 25 rows over 30 days');
   }
-  if (rows.length > CVES_CAP) warnings.push('carries ' + rows.length + ' rows, over the cap of ' + CVES_CAP);
+  // Picks sit above the list and outside its cap (T-0628).
+  var nPicksRows = rows.filter(isPick).length;
+  if (rows.length - nPicksRows > CVES_CAP) {
+    warnings.push('carries ' + (rows.length - nPicksRows) + ' rows' + (nPicksRows ? ' besides ' + nPicksRows + ' priority picks' : '') +
+      ', over the cap of ' + CVES_CAP);
+  }
 
   var cgen = Date.parse(doc.cves_generated_at || '');
   if (rows.length && !cgen) {
@@ -597,6 +656,8 @@ function checkCves(doc, now) {
     warnings.push('cves_generated_at is ' + ((now - cgen) / 3600000).toFixed(1) +
       ' hours old, over ' + CVES_STALE_HOURS);
   }
+  var genDayMs = cgen ? Date.parse(new Date(cgen).toISOString().slice(0, 10) + 'T00:00:00Z') : null;
+  var nPicks = 0, nPicksToday = 0;
   var windowDays = Number(doc.window_days);
   var oldest = cgen && windowDays ? cgen - (windowDays + 1) * 86400000 : null;
 
@@ -635,6 +696,11 @@ function checkCves(doc, now) {
     if (typeof r.vendor === 'string' && r.vendor.indexOf('|') !== -1) {
       warnings.push(where + ' has a vendor containing "|", which the vendor filter cannot match');
     }
+    pickProblems(r, genDayMs).forEach(function (p) { warnings.push(where + ' ' + p); });
+    if (isPick(r)) {
+      nPicks++;
+      if (genDayMs && realDay(r.pick_day) === genDayMs) nPicksToday++;
+    }
     var sp = scoreProblem(r);
     if (sp) warnings.push(where + ' ' + sp);
     else if (SEVERITIES[String(r.severity)]) nSev[r.severity]++;
@@ -667,7 +733,8 @@ function checkCves(doc, now) {
         if (!has && facts[s]) warnings.push(where + ' shows ' + s + ' but does not list it as a signal');
         if (facts[s]) nSig[s]++;
       });
-      if (!CVES_ARMS.some(function (s) { return listed.indexOf(s) !== -1; })) {
+      // A pick no admission reason selects may list no signal (T-0628); any other row must list an arm.
+      if (!isPick(r) && !CVES_ARMS.some(function (s) { return listed.indexOf(s) !== -1; })) {
         warnings.push(where + ' lists no selection arm (' + CVES_ARMS.join(', ') + '), so nothing admits it under the rule');
       }
     }
@@ -691,6 +758,16 @@ function checkCves(doc, now) {
       warnings.push('cves_counts severity disagrees with the rows on ' + bad.join(', '));
     }
   }
+  // T-0628: the pick counts, held to the rows when declared; pick_pool is only a count.
+  if (rows.length && hasKey(cc, 'picks') && Number(cc.picks) !== nPicks) {
+    warnings.push('cves_counts picks disagrees with the rows: declared ' + cc.picks + ', actual ' + nPicks);
+  }
+  if (rows.length && hasKey(cc, 'picks_today') && genDayMs && Number(cc.picks_today) !== nPicksToday) {
+    warnings.push('cves_counts picks_today disagrees with the rows: declared ' + cc.picks_today + ', actual ' + nPicksToday);
+  }
+  ['picks', 'picks_today', 'pick_pool'].forEach(function (k) {
+    if (hasKey(cc, k) && !isCount(cc[k])) warnings.push('cves_counts ' + k + ' is ' + JSON.stringify(cc[k]) + ', not a whole number of 0 or more');
+  });
   // A signal count the file declares must match the rows; one it does not declare is not held to it.
   Object.keys(nSig).forEach(function (k) {
     if (rows.length && hasKey(cc, k) && Number(cc[k]) !== nSig[k]) {
@@ -1468,12 +1545,17 @@ function checkDayLayout(src, includes) {
   ].forEach(function (pin) { if (!n.includes(pin)) out.push('nKEVs explanation lost: ' + pin); });
   ['seven reasons', 'WordPress-class', 'unauthenticated', 'five weakness groups', '8.3%', '7.0%', '6.4%',
    'after seeing the data', '6.3%', '8.6%', '3.7%', '123 of 244', '50%', 'one-third trigger', 'does not admit',
-   'CC0', 'at most 250', 'with baseline-admitted rows first', 'sources and left them out', 'CC BY 4.0', 'Empirical Security'
+   'CC0', 'at most 250', 'with baseline-admitted rows first', 'sources and left them out', 'CC BY 4.0', 'Empirical Security',
+   // T-0628: the priority picks rule, its measured results and its limits.
+   'three new picks', 'last 30 days', '10.3%', '3.3%', 'about 4 in 10', 'CVSS 7.0 floor', 'was not blind',
+   'A pick is a priority, not evidence of exploitation', 'outside that cap', 'exploit evidence'
   ].forEach(function (pin) { if (!c.includes(pin)) out.push('CVEs explanation lost: ' + pin); });
   if (/data-age-group=|data-age="recent">Recent|data-age="">Include older/.test(src)) out.push('nKEVs must use day groups and no age filter');
   ['group_by: "added"', 'sort: "prio"', 'id="vulns-{{ day_group.name | escape }}"', 'data-sig="wp_unauth"',
    'w_wp', 'r.nomi == true', 'https://github.com/nomi-sec/PoC-in-GitHub/blob/master/', 'wire-chips.js',
    // T-0565.2: the KEV-product filter narrows the CVEs tab; it is never an admission reason.
+   // T-0628: the Priority picks group, its filter chip and the pick strip on a row.
+   'id="cves-priority-picks"', 'data-sig="pick">Priority picks', 'class="hl-vuln__pick"', 'assign pick_group = picks_ordered | group_by_exp',
    'data-sig="kev_product">Product exploited before', 'kev_product{% endif %}"', 'Product exploited before</dt><dd>Filter only, never admits'
   ].forEach(function (pin) { if (!src.includes(pin)) out.push('Wire layout lost: ' + pin); });
   if (/nomi_poc/.test(src)) out.push('nomi_poc is not an admission reason');
