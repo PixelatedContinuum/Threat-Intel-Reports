@@ -48,6 +48,8 @@ first refusal; product groups only see the remaining rows. CISA stays plain.
 {%- assign policy_min = product_group_min -%}
 {%- assign policy_label = fold_row.vendor | append: " " | append: fold_row.product | normalize_whitespace | strip | append: " CVEs" -%}
 {%- endif -%}
+{%- comment -%} T-0628: the Priority picks group is never folded; its order is the score order. {%- endcomment -%}
+{%- if include.picks == true -%}{%- assign policy_key = "" -%}{%- endif -%}
 {%- assign fold_keys = fold_keys | push: policy_key -%}
 {%- assign fold_labels = fold_labels | push: policy_label -%}
 {%- assign fold_thresholds = fold_thresholds | push: policy_min -%}
