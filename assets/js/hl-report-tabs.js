@@ -1051,7 +1051,10 @@
     victims.rows.map(function (r, i) { return { k: gradeOf(r[vg]), i: i }; }).sort(function (a, b) { return GRADE_ORDER.indexOf(a.k) - GRADE_ORDER.indexOf(b.k) || a.i - b.i; })
       .forEach(function (o) { var sq = make('span', 'hl-rv-sq', null, squares); sq.dataset.rvGrade = o.k; sq.style.setProperty('--seg', GRADE_HUES[o.k]); });
     var keys = make('div', 'hl-fig-keys', null, f.draw);
-    order.forEach(function (k) { var d = make('div', 'hl-fig-key', null, keys); d.style.setProperty('--seg', GRADE_HUES[k]); make('strong', '', counts[k], d); d.appendChild(document.createTextNode(' ' + (k === 'OTHER' ? 'Other grades' : k))); });
+    // the four grades the report defines are always counted (a grade with no row reads 0, as the tally paragraph does); another grade is counted only when a row carries it
+    ['ACCESS SHOWN', 'COMPROMISED', 'REACHED', 'LISTED'].concat(['CURRENT', 'OTHER'].filter(function (k) { return counts[k]; })).forEach(function (k) {
+      var d = make('div', 'hl-fig-key' + (counts[k] ? '' : ' is-zero'), null, keys); d.style.setProperty('--seg', GRADE_HUES[k]); make('strong', '', counts[k] || 0, d); d.appendChild(document.createTextNode(' ' + (k === 'OTHER' ? 'Other grades' : k)));
+    });
     return f.fig;
   }
   // Chain: techniques by tactic, one column per tactic, one cell per procedure row (the scan band's heat map, no buttons). Needs the ATT&CK table: the detection page's techniques have no table in the text to sit before.
