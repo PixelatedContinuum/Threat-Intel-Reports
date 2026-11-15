@@ -1383,6 +1383,7 @@ var TYPE_SPEC = [
   ['inline figure caption', '.hl-fig > figcaption', 16, 15],
   ['inline figure source line', '.hl-fig > .hl-fig-src, .hl-facts-block > .hl-fig-src', 15, 15],
   ['inline facts line', '.hl-fact', 16, 15],
+  ['inline fact value', '.hl-fact strong', 16, 15],
   ['inline figure key', '.hl-fig-key', 15, 15],
   ['inline table toolbar chip', '.hl-tbar-chip', 15, 15]
 ];
