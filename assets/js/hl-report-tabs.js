@@ -7,6 +7,8 @@
   if (!content) return;
   var root = document.documentElement;
   var page = content.closest('.hl-report-page');
+  // T-0637: figures in the text. Front matter `figures: inline` puts hl-figs-inline on the page (layouts/post.html); without it nothing below changes.
+  var inline = !!(page && page.classList.contains('hl-figs-inline'));
   // T-0603 A55: the address the page was opened with, read before anything can rewrite it. A reload restores the old scroll position while the tabs are being built, and select() at start-up ran the reading-line update, which rewrote the address to the first heading's id before go() read it, so the tab was lost (reproduced on the short report, fixed by this and by `booting` below).
   var startHash = location.hash, booting = true;
   // ALL_TOKENS is the fixed tab order a report may tag; TOKENS (and the arrays indexed with it) is narrowed below to the
@@ -153,8 +155,15 @@
     }, fallback);
   }
   var live = make('p', 'hl-rv-live', '', content); live.setAttribute('aria-live', 'polite'); live.setAttribute('aria-atomic', 'true');
+  // T-0637: in inline mode a table's own toolbar (its filters) is built first and the copy buttons join it, so one slim bar sits above the report's table.
+  var inlineBars = new Map(), inlineResets = [], inlineRowById = {};
+  function barFor(table) {
+    var bar = inlineBars.get(table);
+    if (!bar) { bar = make('div', 'hl-rv-table-tools hl-tbar', null); inlineBars.set(table, bar); }
+    return bar;
+  }
   function tableCopy(table, parent, column) {
-    var tools = make('div', 'hl-rv-table-tools', null, parent);
+    var tools = inlineBars.get(table) || make('div', 'hl-rv-table-tools', null, parent);
     function value(col) {
       return Array.from(table.rows).map(function (r) {
         return Array.from(r.cells).filter(function (_, i) { return col === undefined || i === col; }).map(function (c) { return c.textContent; }).join('\t');
@@ -462,6 +471,7 @@
     currentLabel.textContent = NAMES[i]; menuLinks.forEach(function (a, j) { if (j === i) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current'); }); closeMenu(false); fillMenuSections(); measureBar(); updateProgress(); clearLink();
   }
   function mode(one) {
+    if (one) inlineResets.forEach(function (reset) { reset(); });
     onepage = one; pageContents.hidden = !one; currentSection = null; root.classList.toggle('hl-onepage', one); root.classList.toggle('hl-tabbed', !one);
     if (one) {
       // Lead with the written report in its original order; park the hidden
@@ -507,7 +517,7 @@
     }
     // An old link to a tab this report does not have (nothing was tagged for it) opens the first tab instead of doing nothing.
     if (id.indexOf('tab-') === 0 && ALL_TOKENS.indexOf(id.slice(4)) >= 0) { mode(false); select(0); if (scroll) scrollTopTab(); panels[0].focus({ preventScroll: true }); return true; }
-    var el = document.getElementById(id); if (!el) return false;
+    var el = document.getElementById(id) || inlineRowById[id]; if (!el) return false;
     var panel = el.closest('.hl-rv-panel');
     if (!onepage && panel) { mode(false); select(panels.indexOf(panel)); }
     // Row fragments also expand a phone summary card on cold load.
@@ -540,7 +550,7 @@
   window.addEventListener('popstate', function () { if (!location.hash) { mode(false); select(0); } else go(location.hash, true); });
 
   function tableFold(parent, label) { var d = make('details', 'hl-rv-table-fold', null, parent); d.open = true; make('summary', '', label, d); return d; }
-  function missing(parent, need) { make('p', 'hl-rv-unavailable', 'View unavailable: needs ' + need + '. The full report follows.', parent); }
+  function missing(parent, need) { if (inline) return; make('p', 'hl-rv-unavailable', 'View unavailable: needs ' + need + '. The full report follows.', parent); }
   function badge(parent, value) {
     // Keep range, compound and off-scale wording intact; never silently rescale.
     var cls = 'hl-rv-badge';
@@ -618,10 +628,12 @@
     }
     // A facet value with no row behind it is not drawn: a chip that can only give an empty table is not a filter.
     var facets = specs.map(function (s) { return { spec: s, values: s.values.map(function (v) { return { v: v, n: rows.filter(function (r) { return pred(r, s, v); }).length }; }).filter(function (x) { return x.n > 0; }) }; }).filter(function (f) { return f.values.length; });
-    var area = make('section', 'hl-rv-pn hl-rv-console hl-rv-filters', null, parent); area.setAttribute('role', 'search'); area.setAttribute('aria-label', 'Search and filter the attack chain');
+    var area = make('section', (inline ? '' : 'hl-rv-pn ') + 'hl-rv-console hl-rv-filters' + (inline ? ' hl-tbar-console' : ''), null, parent); area.setAttribute('role', 'search'); area.setAttribute('aria-label', 'Search and filter the attack chain');
     var head = make('div', 'hl-rv-pn-head', null, area);
-    icon('<path d="M3 5h18l-7 8v6l-4-2v-4z"/>', 17, head, 'hl-rv-eyebrow-icon'); make('h3', 'hl-rv-pn-title', 'Filter the procedures', head);
-    make('p', 'hl-rv-pn-sub', 'search, then ' + facets.map(function (f) { return f.spec.label.toLowerCase(); }).join(', '), head);
+    if (!inline) {
+      icon('<path d="M3 5h18l-7 8v6l-4-2v-4z"/>', 17, head, 'hl-rv-eyebrow-icon'); make('h3', 'hl-rv-pn-title', 'Filter the procedures', head);
+      make('p', 'hl-rv-pn-sub', 'search, then ' + facets.map(function (f) { return f.spec.label.toLowerCase(); }).join(', '), head);
+    }
     var search = make('label', 'hl-rv-csearch', null, area); make('span', '', 'Search ' + noun, search);
     var input = make('input', '', null, search); input.type = 'search'; input.autocomplete = 'off'; input.placeholder = 'Search, for example a technique ID or a host';
     var tog = make('button', 'hl-rv-ftoggle', 'Filters', area); tog.type = 'button'; tog.setAttribute('aria-expanded', 'false'); tog.setAttribute('aria-controls', 'hl-rv-facets-' + seq);
@@ -935,8 +947,18 @@
   // A stat tile is the number, its label, a small drawing of what it counts and where it leads (design D, B's panel). Its "How counted" note is the body of
   // the tile's "i" popover, text unchanged, in the DOM; a tile says where its number is read from and is never drawn without a source.
   // opt: kind (the tile's name for the gate), from (the source sentence), href and dest (where it leads when that is not a tab), viz (a drawing: segments or dots), sub (one line of detail).
+  var factFrom = [], timelineNote = '';
   function tile(parent, value, label, how, tok, short, opt) {
     opt = opt || {};
+    if (inline) {
+      // T-0637: the Overview's facts line. The value and label as plain text, no drawing; the tile's "How counted" note is the item's title and where it is read from joins the line's source.
+      var fm = { victims: victims, chain: attack, timeline: chronology }[tok], from = opt.from || (fm ? fromNote(fm) : 'the detection guidance');
+      var fact = make('span', 'hl-fact', null, parent); if (opt.kind) fact.dataset.rvTile = opt.kind;
+      fact.title = value + ' ' + label + '. How counted: ' + how + ' From ' + from + '.';
+      make('strong', '', value, fact); fact.appendChild(document.createTextNode(' ' + label));
+      if (factFrom.indexOf(from) < 0) factFrom.push(from);
+      return;
+    }
     var cellBox = make('div', 'hl-rv-tilecell', null, parent);
     var a = opt.noLink ? make('div', 'hl-rv-tile', null, cellBox) : link('', opt.href || '#tab-' + tok, cellBox); a.className = 'hl-rv-tile'; a.dataset.rvShort = short; if (opt.kind) a.dataset.rvTile = opt.kind;
     var big = make('strong', 'hl-rv-value', value, a); make('span', '', label, a); if (big.textContent !== String(value)) a.dataset.rvFull = value;
@@ -956,9 +978,134 @@
     if (!opt.href && !opt.noLink && m) a.href = '#' + m.heading.id;
     make('span', 'hl-rv-tile-destination', '↗ ' + (opt.dest || NAMES[TOKENS.indexOf(tok)]), a);
   }
+  // ---- T-0637: figures in the text (front matter `figures: inline`). The generated band is not built; each figure is placed in the report text, directly before the
+  // report table it is drawn from, and a table's filters and copy buttons sit in one slim toolbar above the report's own table. Nothing here runs without the page class. ----
+  // A figure: caption above the drawing, the source line (the old "How counted" note) always visible under it. Generated figures carry no number, so they never collide with the author's own.
+  function figBox(caption, note, cls) {
+    var fig = make('figure', 'hl-fig' + (cls ? ' ' + cls : ''));
+    make('figcaption', '', caption, fig);
+    var draw = make('div', 'hl-fig-draw', null, fig);
+    var src = make('p', 'hl-fig-src', note, fig);
+    return { fig: fig, draw: draw, src: src };
+  }
+  // Where a figure goes for a table: directly before it, or, when the table is inside a teardown that starts closed, before that teardown, so the figure is not hidden with it.
+  function figSite(table) {
+    var site = table;
+    for (var d = table.closest('details'); d; d = d.parentElement && d.parentElement.closest('details')) site = d;
+    return site;
+  }
+  // The report table's own body rows, when they line up one to one with the model the figures read (no spans that shift a cell). A table that does not line up gets no toolbar.
+  function sourceRows(m) {
+    var body = m && m.table && m.table.tBodies[0];
+    if (!body) return null;
+    var trs = Array.from(body.rows);
+    if (trs.length !== m.rows.length || trs.some(function (r) { return r.cells.length !== m.headers.length; })) return null;
+    return trs;
+  }
+  function filterHost(table) {
+    var bar = barFor(table), host = bar.querySelector(':scope > .hl-tbar-filters');
+    if (!host) { host = make('div', 'hl-tbar-filters', null); bar.insertBefore(host, bar.firstChild); }
+    return host;
+  }
+  // Single-choice chips with counts that filter the report table's own rows (the grade, confidence and indicator-type controls). Reset by a link into a hidden row, one-page mode and print.
+  function chipFilter(m, label, noun, keyOf, order, hue) {
+    var trs = sourceRows(m); if (!trs) return null;
+    var counts = {}, seen = [];
+    m.rows.forEach(function (r) { var k = keyOf(r); if (!counts[k]) { counts[k] = 0; seen.push(k); } counts[k]++; });
+    var keys = (order || []).filter(function (k) { return counts[k]; }).concat(seen.filter(function (k) { return (order || []).indexOf(k) < 0; }));
+    var host = filterHost(m.table);
+    var group = make('div', 'hl-tbar-group', null, host); group.setAttribute('role', 'group'); group.setAttribute('aria-label', 'Filter ' + noun + ' by ' + label.toLowerCase());
+    make('span', 'hl-tbar-label', 'Show', group);
+    var chips = [], status = make('p', 'hl-rv-count hl-tbar-count', '', host); status.setAttribute('role', 'status');
+    function apply(value) {
+      var n = 0;
+      trs.forEach(function (tr, i) { var hit = !value || keyOf(m.rows[i]) === value; tr.hidden = !hit; if (hit) n++; });
+      chips.forEach(function (c) { c.setAttribute('aria-pressed', String(c.dataset.rvValue === value)); });
+      status.textContent = value ? 'Showing ' + n + ' of ' + trs.length + ' ' + noun : '';
+    }
+    [''].concat(keys).forEach(function (k) {
+      var b = make('button', 'hl-rv-fchip hl-tbar-chip', null, group); b.type = 'button'; b.dataset.rvValue = k; b.dataset.rvFacet = label;
+      if (k && hue && hue[k]) b.style.setProperty('--seg', hue[k]);
+      make('span', '', k === 'OTHER' ? 'Other grades' : (k || 'All'), b); b.appendChild(document.createTextNode(' ')); make('strong', '', k ? counts[k] : trs.length, b);
+      b.addEventListener('click', function () { apply(b.getAttribute('aria-pressed') === 'true' && k ? '' : k); });
+      chips.push(b);
+    });
+    trs.forEach(function (tr) { tr.addEventListener('hl-rv-reveal', function () { apply(''); }); });
+    inlineResets.push(function () { apply(''); });
+    apply('');
+    return { apply: apply };
+  }
+  // Victims: one square per row of the victim table, coloured by grade, with the four counts (the Overview scan band's grade strip, with no organisation buttons and no linked highlighting).
+  function gradeFigure() {
+    if (!victims || col(victims, /Grade/i) < 0) return null;
+    var vg = col(victims, /Grade/i), counts = {};
+    victims.rows.forEach(function (r) { var k = gradeOf(r[vg]); counts[k] = (counts[k] || 0) + 1; });
+    var order = GRADE_ORDER.filter(function (k) { return counts[k]; });
+    var noun = /Organi[sz]ation/i.test(victims.headers[0]) ? 'organisation' : 'row';
+    var f = figBox(victims.rows.length + ' ' + noun + (victims.rows.length === 1 ? '' : 's') + ' by access grade',
+      'How counted: one square for each row of the victim table, coloured by that row\'s Grade. From ' + fromNote(victims) + '.', 'hl-fig--grades');
+    var squares = make('div', 'hl-rv-squares', null, f.draw); squares.setAttribute('role', 'img');
+    squares.setAttribute('aria-label', victims.rows.length + ' rows by grade: ' + order.map(function (k) { return counts[k] + ' ' + k; }).join(', '));
+    victims.rows.map(function (r, i) { return { k: gradeOf(r[vg]), i: i }; }).sort(function (a, b) { return GRADE_ORDER.indexOf(a.k) - GRADE_ORDER.indexOf(b.k) || a.i - b.i; })
+      .forEach(function (o) { var sq = make('span', 'hl-rv-sq', null, squares); sq.dataset.rvGrade = o.k; sq.style.setProperty('--seg', GRADE_HUES[o.k]); });
+    var keys = make('div', 'hl-fig-keys', null, f.draw);
+    order.forEach(function (k) { var d = make('div', 'hl-fig-key', null, keys); d.style.setProperty('--seg', GRADE_HUES[k]); make('strong', '', counts[k], d); d.appendChild(document.createTextNode(' ' + (k === 'OTHER' ? 'Other grades' : k))); });
+    return f.fig;
+  }
+  // Chain: techniques by tactic, one column per tactic, one cell per procedure row (the scan band's heat map, no buttons). Needs the ATT&CK table: the detection page's techniques have no table in the text to sit before.
+  function heatFigure() {
+    if (!attack) return null;
+    var heat = attack.rows.map(function (r) { return { tactic: tacticName(cell(r, attackC.tactic)) || 'Unlabelled', status: attackC.status >= 0 ? r[attackC.status] : '', label: cell(r, attackC.id) + ' ' + cell(r, attackC.name) }; });
+    if (!heat.length) return null;
+    var cols = {}, tacticList = [];
+    heat.forEach(function (h) { if (!cols[h.tactic]) { cols[h.tactic] = []; tacticList.push(h.tactic); } cols[h.tactic].push(h); });
+    var seen = tacticList.slice(); tacticList.sort(function (a, b) { var x = TACTIC_ORDER.indexOf(a), y = TACTIC_ORDER.indexOf(b); return (x < 0 ? 99 : x) - (y < 0 ? 99 : y) || seen.indexOf(a) - seen.indexOf(b); });
+    var hasStatus = attackC.status >= 0, nt = tacticList.length;
+    var f = figBox(heat.length + (attack.legacy ? ' mapping rows' : ' procedure rows') + ' by tactic, across ' + nt + ' tactic' + (nt === 1 ? '' : 's'),
+      'How counted: one cell for each row of the ATT&CK table, grouped by its Tactic cell' + (hasStatus ? ' and coloured by its Status' : '; the report states no Status, so every cell is one colour') + '. From ' + fromNote(attack) + '.', 'hl-fig--heat');
+    if (hasStatus) {
+      var lg = make('div', 'hl-rv-heat-legend', null, f.draw);
+      ['OBSERVED', 'INFERRED', 'NOT SHOWN'].forEach(function (k) { var it = make('span', '', null, lg); var sw = make('span', 'hl-rv-cell hl-rv-cell--sw', null, it); sw.dataset.rvStatus = k; sw.style.setProperty('--seg', STATUS_HUES[k]); make('span', '', k.charAt(0) + k.slice(1).toLowerCase(), it); });
+    }
+    var scroller = make('div', 'hl-rv-heat', null, f.draw); scroller.tabIndex = 0; scroller.setAttribute('role', 'region'); scroller.setAttribute('aria-label', 'Techniques by tactic');
+    tacticList.forEach(function (tc) {
+      var colEl = make('div', 'hl-rv-heatcol', null, scroller), hb = make('div', 'hl-rv-heathead', null, colEl);
+      make('strong', '', cols[tc].length, hb); make('span', '', tc, hb);
+      var cells = make('div', 'hl-rv-heatcells', null, colEl);
+      cols[tc].forEach(function (h) { var c = make('span', 'hl-rv-cell', null, cells); c.title = h.label; if (hasStatus) { c.dataset.rvStatus = h.status; c.style.setProperty('--seg', STATUS_HUES[h.status] || 'var(--acc)'); } });
+    });
+    return f.fig;
+  }
+  // Overview: the risk bars, one figure before each risk table (the table keeps the rationale, so the bar does not repeat it).
+  function riskFigures() {
+    riskTables.forEach(function (m) {
+      var rows = riskRows(m), overall = rows.find(function (r) { return r.total && isFinite(r.score.num); });
+      var f = figBox(rows.length + ' risk dimension' + (rows.length === 1 ? '' : 's') + ', scored as the report scores them' + (overall ? '; overall ' + scoreValue(overall.score) : ''),
+        'How counted: one bar for each row of the risk table, as long as its score is of its maximum (a word rating such as HIGH is drawn on a four-step scale and marked as one); the weight is the table\'s own text. From ' + fromNote(m) + '.', 'hl-fig--risk');
+      var list = make('ol', 'hl-rv-dims', null, make('div', 'hl-rv-risk', null, f.draw));
+      rows.forEach(function (r) {
+        var li = make('li', 'hl-rv-riskrow' + (r.total ? ' is-total' : ''), null, list), head = make('div', 'hl-rv-riskhead', null, li);
+        make('span', 'hl-rv-riskname', r.name, head);
+        var sc = make('span', 'hl-rv-riskscore', null, head);
+        if (isFinite(r.score.num)) { make('strong', '', String(r.score.num), sc); make('small', '', '/' + r.score.max, sc); } else make('strong', 'hl-rv-riskword', r.score.text, sc);
+        var meta = make('span', 'hl-rv-riskmeta', null, head);
+        if (r.weight) make('span', '', r.weight + ' weight', meta);
+        if (isFinite(r.score.num) && r.score.rest) make('span', 'hl-rv-riskrest', r.score.rest, meta);
+        if (r.sev) make('span', 'hl-rv-riskrest', r.sev, meta);
+        var bar = make('div', 'hl-rv-riskbar', null, li); bar.setAttribute('role', 'img');
+        var fill = make('i', '', null, bar), frac, scale;
+        if (isFinite(r.score.num)) { frac = Math.max(0, Math.min(1, r.score.num / (r.score.max || 10))); scale = 'num'; bar.setAttribute('aria-label', r.score.num + ' out of ' + r.score.max); }
+        else if (RISK_WORDS[r.score.word]) { frac = RISK_WORDS[r.score.word] / 4; scale = 'word'; bar.setAttribute('aria-label', r.score.word + ' rating, drawn on a four-step scale'); }
+        else { frac = 0; scale = 'none'; bar.setAttribute('aria-label', 'No numeric score: ' + r.score.text); }
+        bar.dataset.rvScale = scale; fill.style.width = Math.round(frac * 1000) / 10 + '%';
+      });
+      figSite(m.table).before(f.fig);
+    });
+  }
+
   var builders = {
     overview: function (body) {
-      var tiles = make('div', 'hl-rv-tiles', null, body), count = 0;
+      var tiles = make('div', inline ? 'hl-facts' : 'hl-rv-tiles', null, body), count = 0;
       var destTab = TOKENS.indexOf('indicators') >= 0 ? 'indicators' : 'overview';
       var det = siteData.techniques && siteData.techniques.rows && siteData.techniques.rows.length ? siteData.techniques : null;
       var detPage = siteData.detection_page && safeHref(siteData.detection_page) ? siteData.detection_page : null;
@@ -1023,12 +1170,21 @@
           tile(tiles, n, 'IOC entries', feed ? 'Entries in the report\'s IOC feed as the site lists them.' : 'Entries the report says its IOC feed carries.', destTab, 'IOC entries',
             { kind: 'iocs', from: feed ? 'the IOC feed table (_data/ioc_tables.yml)' : 'the report\'s indicator section', href: feed && safeHref(feed.feed_url) ? feed.feed_url : undefined, dest: feed ? 'IOC feed' : undefined }); count++; }
       }
-      scanBand(body); riskPanel(body); judgmentsPanel(body);
+      if (!inline) { scanBand(body); riskPanel(body); judgmentsPanel(body); } else riskFigures();
       if (!count) missing(body, 'a victim grade, procedure, risk, detection, indicator or dated chronology source to count');
       var line = Array.from(tiles.querySelectorAll('.hl-rv-tile')).map(function (t) { return (t.dataset.rvFull || text(t.querySelector('strong'))) + ' ' + t.dataset.rvShort; }).join(' · ');
       return line || 'Headline figures remain in the full report';
     },
     victims: function (body) {
+      if (inline) {
+        // T-0637: the grade strip after the tally paragraph or, without one, before the victim table; the grade chips filter that table. No cards, no grade bars.
+        var gf = gradeFigure();
+        if (gf) {
+          if (tallyParagraph) tallyParagraph.after(gf); else figSite(victims.table).before(gf);
+          chipFilter(victims, 'Grade', 'organisations', function (r) { return gradeOf(r[col(victims, /Grade/i)]); }, GRADE_ORDER, GRADE_HUES);
+        }
+        return '';
+      }
       if (!victims) { missing(body, 'an Organisation / Grade table'); return 'Victim grades remain in the full report'; }
       var grade = col(victims, /Grade/i), counts = {};
       victims.rows.forEach(function (r) { var m = r[grade].match(/^(ACCESS SHOWN|COMPROMISED|REACHED|LISTED|CURRENT)/); if (m) counts[m[1]] = (counts[m[1]] || 0) + 1; });
@@ -1060,10 +1216,12 @@
       var cons = null;
       var key = null;   // the report's own list of the techniques that carry the case, when it has one
       if (stages) {
-        if (curation.stage_joins) make('p', 'hl-rv-note', 'Stage-to-procedure links: curated for this report.', body);
-        var storyHead = make('div', 'hl-rv-story-head', null, body);
-        icon(TAB_ICONS.chain, 17, storyHead, 'hl-rv-eyebrow-icon'); make('h3', 'hl-rv-pn-title', 'The chain story', storyHead);
-        make('p', 'hl-rv-pn-sub', stages.rows.length + ' stages in the order the report gives them, each with the procedure rows the report links to it', storyHead);
+        if (!inline) {
+          if (curation.stage_joins) make('p', 'hl-rv-note', 'Stage-to-procedure links: curated for this report.', body);
+          var storyHead = make('div', 'hl-rv-story-head', null, body);
+          icon(TAB_ICONS.chain, 17, storyHead, 'hl-rv-eyebrow-icon'); make('h3', 'hl-rv-pn-title', 'The chain story', storyHead);
+          make('p', 'hl-rv-pn-sub', stages.rows.length + ' stages in the order the report gives them, each with the procedure rows the report links to it', storyHead);
+        }
         var wrap = make('div', 'hl-rv-chain-scroll', null, body); wrap.tabIndex = 0; wrap.setAttribute('role', 'region'); wrap.setAttribute('aria-label', 'Attack stages');
         var columns = make('div', 'hl-rv-stages', null, wrap);
         stages.rows.forEach(function (r, si) {
@@ -1075,7 +1233,7 @@
           phone.addEventListener('change', function () { detail.open = !phone.matches; });
           card = detail;
           // T-0524.2 (Joseph, 2026-11-13): the stage's own text is the stage table in the same tab; the card carries the stage, its linked procedures and a link to that text.
-          sourceLink(stages, card);
+          if (!inline) sourceLink(stages, card);   // inline: the stage table is directly below
           // Only explicit shared procedure names join. Never infer a stage from tactic alone.
           if (attack) {
             // Optional editorial joins are supplied only by the current report.
@@ -1119,19 +1277,20 @@
         });
         linkRead = make('p', 'hl-rv-linkread', '', flowWrap); linkRead.setAttribute('role', 'status'); linkRead.setAttribute('aria-live', 'polite');
       } else missing(body, 'a Stage / What the operator did table');
-      if (attack) {
-        // Filters and the live count are visible above both stage cards and the procedure table. Only this generated copy is ever filtered.
-        var full = make('section', 'hl-rv-procedures', null, body);
-        var table = dashTable(full, attack, attack.legacy ? 'All ATT&CK mapping rows' : 'All ATT&CK procedure rows', 'procedures');
+      if (attack && (!inline || sourceRows(attack))) {
+        // Filters and the live count are visible above both stage cards and the procedure table. Only this generated copy is ever filtered (inline mode: the report's own table, whose rows come back on Clear).
+        var full = inline ? null : make('section', 'hl-rv-procedures', null, body);
+        var table = inline ? attack.table : dashTable(full, attack, attack.legacy ? 'All ATT&CK mapping rows' : 'All ATT&CK procedure rows', 'procedures');
         var tacticCol = attackC.tactic;
         function tactic(value) { return tacticName(value); }
         var tactics = attack.rows.map(function (r) { return tactic(r[tacticCol]); }).filter(function (v, i, a) { return v && a.indexOf(v) === i; });
-        var generatedRows = Array.from(table.tBodies[0].rows);
+        var generatedRows = inline ? sourceRows(attack) : Array.from(table.tBodies[0].rows);
+        if (inline) generatedRows.forEach(function (row, ri) { inlineRowById['hl-rv-procedures-' + (ri + 1)] = row; });
         // The report's own list of the techniques that carry the case (a smaller table of the same shape with Evidence), when it has one. Each list row marks the first full-table row
         // with the same technique ID and name that no earlier list row already marked; the evidence text is the list row's own.
         var keyModel = models.filter(function (m) { return m !== attack && m.token === 'chain' && m.rows.length < attack.rows.length && m.headers.some(function (h) { return /Tactic.*Technique/i.test(h); }) && m.headers.some(function (h) { return /^Status$/i.test(h); }) && m.headers.some(function (h) { return /^Evidence/i.test(h); }); })[0];
         var keyRows = {};
-        if (keyModel && !attack.legacy) {
+        if (keyModel && !attack.legacy && !inline) {
           var kt = col(keyModel, /Tactic.*Technique/i), kn = col(keyModel, /^Name$/i), ke = col(keyModel, /^Evidence/i), claimed = {}, matched = 0;
           keyModel.rows.forEach(function (kr) {
             var kid = (kr[kt].match(/T\d{4}(?:\.\d{3})?/) || [])[0]; if (!kid) return;
@@ -1146,7 +1305,7 @@
         }
         // The table's own cells: the tactic as a button that lights its stages (only when stages with linked rows exist), the technique ID in monospace, a meter beside the confidence, the key mark and its evidence.
         var anyLinks = stageRows.some(function (a) { return a.length; });
-        generatedRows.forEach(function (row, ri) {
+        (inline ? [] : generatedRows).forEach(function (row, ri) {
           var tc = row.cells[tacticCol], tv = text(tc), idM = tv.match(/T\d{4}(?:\.\d{3})?/), tname = tactic(tv);
           if (tc && tname) {
             while (tc.firstChild) tc.removeChild(tc.firstChild);
@@ -1186,12 +1345,13 @@
           Array.from(body.querySelectorAll('button.hl-rv-tac')).forEach(function (b) { b.setAttribute('aria-pressed', String(!!name && b.dataset.rvTactic === name)); });
           lightTactic(name);
         }
-        body.addEventListener('click', function (e) { var b = e.target.closest && e.target.closest('button.hl-rv-tac'); if (!b) return; setPinned(pinnedTactic === b.dataset.rvTactic ? null : b.dataset.rvTactic); });
-        body.addEventListener('mouseover', function (e) { var b = e.target.closest && e.target.closest('button.hl-rv-tac, .hl-rv-fchip[data-rv-facet="Tactic"]'); if (b) lightTactic(b.dataset.rvTactic || b.dataset.rvValue); });
-        body.addEventListener('mouseout', function (e) { var b = e.target.closest && e.target.closest('button.hl-rv-tac, .hl-rv-fchip[data-rv-facet="Tactic"]'); if (b) lightTactic(pinnedTactic); });
-        body.addEventListener('focusin', function (e) { var b = e.target.closest && e.target.closest('button.hl-rv-tac, .hl-rv-fchip[data-rv-facet="Tactic"]'); if (b) lightTactic(b.dataset.rvTactic || b.dataset.rvValue); });
-        body.addEventListener('focusout', function (e) { var b = e.target.closest && e.target.closest('button.hl-rv-tac, .hl-rv-fchip[data-rv-facet="Tactic"]'); if (b) lightTactic(pinnedTactic); });
-        cons = chainConsole(body, table, specs, attack.legacy ? 'mapping rows' : 'procedure rows', function (visible, filtering, st) {
+        var delegate = inline ? content : body;
+        delegate.addEventListener('click', function (e) { var b = e.target.closest && e.target.closest('button.hl-rv-tac'); if (!b) return; setPinned(pinnedTactic === b.dataset.rvTactic ? null : b.dataset.rvTactic); });
+        delegate.addEventListener('mouseover', function (e) { var b = e.target.closest && e.target.closest('button.hl-rv-tac, .hl-rv-fchip[data-rv-facet="Tactic"]'); if (b) lightTactic(b.dataset.rvTactic || b.dataset.rvValue); });
+        delegate.addEventListener('mouseout', function (e) { var b = e.target.closest && e.target.closest('button.hl-rv-tac, .hl-rv-fchip[data-rv-facet="Tactic"]'); if (b) lightTactic(pinnedTactic); });
+        delegate.addEventListener('focusin', function (e) { var b = e.target.closest && e.target.closest('button.hl-rv-tac, .hl-rv-fchip[data-rv-facet="Tactic"]'); if (b) lightTactic(b.dataset.rvTactic || b.dataset.rvValue); });
+        delegate.addEventListener('focusout', function (e) { var b = e.target.closest && e.target.closest('button.hl-rv-tac, .hl-rv-fchip[data-rv-facet="Tactic"]'); if (b) lightTactic(pinnedTactic); });
+        cons = chainConsole(inline ? filterHost(attack.table) : body, table, specs, attack.legacy ? 'mapping rows' : 'procedure rows', function (visible, filtering, st) {
           var indices = visible.map(function (r) { return generatedRows.indexOf(r); });
           stageCards.forEach(function (card, si) {
             var hits = stageRows[si].filter(function (ri) { return indices.includes(ri); }).length;
@@ -1202,20 +1362,24 @@
           });
         });
         var filterArea = cons.area;
-        if (flowWrap) flowWrap.after(filterArea); else body.insertBefore(filterArea, body.firstChild);
-        filterArea.after(cons.anchor);
-        var note = make('p', 'hl-rv-pn-note', 'Stage filters use explicit procedure links only. Unjoined rows stay in the full table. Muted stages remain readable; the written report below is never filtered. Facet counts are over all ' + attack.rows.length + ' rows of table ' + attack.index + '.' +
+        if (inline) filterArea.after(cons.anchor);
+        else {
+          if (flowWrap) flowWrap.after(filterArea); else body.insertBefore(filterArea, body.firstChild);
+          filterArea.after(cons.anchor);
+        }
+        var note = make('p', 'hl-rv-pn-note', 'Stage filters use explicit procedure links only. Unjoined rows stay in the full table. ' + (inline ? 'Muted stages remain readable. Filtering hides rows of the report\'s own table until you clear it (Reset filters, or any link into a hidden row); the text around it is never filtered.' : 'Muted stages remain readable; the written report below is never filtered.') + ' Facet counts are over all ' + attack.rows.length + ' rows of table ' + attack.index + '.' +
           (key ? ' "Carries the case" marks the rows of the report\'s own list of the techniques that carry the case (' + text(key.model.heading) + ', table ' + key.model.index + '): each list row marks the first row of the full table with the same technique ID and name that no earlier list row marked (' + key.matched + ' of ' + key.total + ' list rows matched); its Evidence text is the list row\'s own. Where one technique ID has several rows this is the choice made, not a reading of which row the report meant.' : ''));
         infoButton(cons.head, [note], 'How the filters, counts and marks are read');
         var statusTiles = make('div', 'hl-rv-status-tiles', null);
-        ['OBSERVED', 'INFERRED', 'NOT SHOWN'].filter(function () { return !attack.legacy; }).forEach(function (value) {
+        ['OBSERVED', 'INFERRED', 'NOT SHOWN'].filter(function () { return !attack.legacy && !inline; }).forEach(function (value) {
           var n = attack.rows.filter(function (r) { return r[attackC.status] === value; }).length;
           var tile = make('div', 'hl-rv-status-tile hl-rv-' + value.toLowerCase().replace(/ /g, '-'), null, statusTiles);
           make('strong', '', n, tile); badge(tile, value);
           var how = make('small', '', 'How counted: procedure rows with this status. ' + attack.rows.length + ' rows in table ' + attack.index + '.');
           infoButton(tile, [how], 'How counted: ' + value + ' procedure rows'); sourceLink(attack, tile, value + ' procedure rows');
         });
-        if (attack.legacy) {
+        if (inline) { /* the report's own table is right there; the heat map's source line says when the table states no Status */ }
+        else if (attack.legacy) {
           // Say what the report's table does not hold; never fill a Status in.
           var absent = [attackC.status < 0 && 'Status (OBSERVED, INFERRED, NOT SHOWN)', attackC.conf < 0 && 'Confidence', attackC.scope < 0 && 'Scope'].filter(Boolean);
           // The view reads one table, the largest. Say how many ATT&CK mapping tables of this tab it leaves out, with their rows.
@@ -1225,21 +1389,40 @@
           cons.anchor.after(unstated);
         } else cons.anchor.after(statusTiles);
         // The story and the table sit under the console; the table's own heading is a B eyebrow.
-        var thead = make('div', 'hl-rv-story-head hl-rv-table-head', null); full.insertBefore(thead, full.firstChild);
-        icon(TAB_ICONS.chain, 17, thead, 'hl-rv-eyebrow-icon'); make('h3', 'hl-rv-pn-title', (attack.legacy ? 'All ' + attack.rows.length + ' ATT&CK mapping rows' : 'All ' + attack.rows.length + ' procedure rows'), thead);
-        make('p', 'hl-rv-pn-sub', 'the full table; the tactic buttons light the stages they appear in', thead);
-        cons.watch(full);
+        if (!inline) {
+          var thead = make('div', 'hl-rv-story-head hl-rv-table-head', null); full.insertBefore(thead, full.firstChild);
+          icon(TAB_ICONS.chain, 17, thead, 'hl-rv-eyebrow-icon'); make('h3', 'hl-rv-pn-title', (attack.legacy ? 'All ' + attack.rows.length + ' ATT&CK mapping rows' : 'All ' + attack.rows.length + ' procedure rows'), thead);
+          make('p', 'hl-rv-pn-sub', 'the full table; the tactic buttons light the stages they appear in', thead);
+        }
+        cons.watch(inline ? attack.table : full);
       } else missing(body, 'a Tactic / Technique, Status and Confidence procedure table');
+      if (inline) {
+        // T-0637: the stage ribbon and chain story go before the stage table, the heat map before the ATT&CK table. Each is placed only when its source table is in the text.
+        if (stages && flowWrap) {
+          var sf = figBox(stages.rows.length + ' stages in the order the report gives them, each with the procedure rows the report links to it',
+            'How counted: one card for each row of the stage table. A procedure is listed under a stage only when the report links them (' + (curation.stage_joins ? 'curated for this report' : 'the stage text names the technique') + '), never by tactic alone. From ' + fromNote(stages) + '.', 'hl-fig--chain');
+          sf.draw.appendChild(flowWrap); sf.draw.appendChild(wrap);
+          figSite(stages.table).before(sf.fig);
+        }
+        var hf = heatFigure(); if (hf) figSite(attack.table).before(hf);
+      }
       if (attack && attack.legacy) return (stages ? stages.rows.length + ' stages, ' : '') + attack.rows.length + ' ATT&CK mapping rows, status not stated';
       var status = attack ? attack.rows.reduce(function (out, r) { var s = r[attackC.status]; out[s] = (out[s] || 0) + 1; return out; }, {}) : {};
       return (stages ? stages.rows.length : 0) + ' stages, ' + (attack ? attack.rows.length : 0) + ' procedures' + (attack ? ': ' + Object.keys(status).map(function (s) { return status[s] + ' ' + s.toLowerCase(); }).join(', ') : '');
     },
     timeline: function (body) {
       if (!chronology) { missing(body, 'a Date / Observation chronology table'); return 'Chronology remains in the full report'; }
+      if (inline) {
+        // T-0637: the chart goes before the chronology table; the note on marker shapes and lanes is its source line. Dates that do not parse draw nothing (the table is right there).
+        var tdc = col(chronology, /^Date|^Time|^When/i), tf = figBox(chronology.rows.length + ' dated events, from ' + chronology.rows[0][tdc] + ' to ' + chronology.rows[chronology.rows.length - 1][tdc], '', 'hl-fig--timeline');
+        if (drawTimeline(tf.draw, chronology)) { tf.src.textContent = 'From ' + fromNote(chronology) + '. ' + timelineNote; figSite(chronology.table).before(tf.fig); }
+        return '';
+      }
       if (!drawTimeline(body, chronology)) return 'Chronology as printed; date positions unavailable'; return chronology.rows.length + ' dated events · ' + chronology.rows[0][col(chronology, /^Date|^Time|^When/i)] + ' to ' + chronology.rows[chronology.rows.length - 1][col(chronology, /^Date|^Time|^When/i)] + ' · date precision preserved';
     },
     attribution: function (body) {
-      var diamond = make('div', 'hl-rv-diamond', null, body); make('span', 'hl-rv-diamond-label', 'Diamond Model', diamond);
+      var af = inline ? figBox('The Diamond Model: four vertices, each in the report\'s own words', 'Each cell quotes the first statement of the section that holds it; the link opens that section.', 'hl-fig--diamond') : null;
+      var diamond = make('div', 'hl-rv-diamond', null, inline ? af.draw : body); if (!inline) make('span', 'hl-rv-diamond-label', 'Diamond Model', diamond);
       [['Adversary', 'attribution', /Threat Actor|Actor Assessment|Attribution/i], ['Capability', 'chain', /classification/i], ['Infrastructure', 'timeline', /infrastructure/i], ['Victim', 'victims', /Who.*Hit|victim|access|impact/i]].forEach(function (v) {
         var block = sections.find(function (s) { return s.token === v[1] && s.heading && v[2].test(text(s.heading)); });
         var p = block && Array.prototype.find.call(block.node.querySelectorAll('p'), function (q) { return !labelOnly(q); });
@@ -1247,12 +1430,37 @@
         if (p) { make('blockquote', '', firstSentence(p), card); link('Read in the report', '#' + block.heading.id, card).setAttribute('aria-label', 'Read in the report: ' + v[0] + ': ' + text(block.heading)); }
         else make('p', '', 'No structured ' + v[0].toLowerCase() + ' statement found. Read the full sections below.', card);
       });
+      if (inline) {
+        // T-0637: after the first statement of the attribution section; the hypotheses and calls tables are the report's own, right there.
+        var asec = sections.find(function (s) { return s.token === 'attribution' && s.heading; });
+        var apara = asec && Array.prototype.find.call(asec.node.children, function (q) { return q.tagName === 'P' && !labelOnly(q); });
+        if (apara) apara.after(af.fig); else if (asec) asec.heading.after(af.fig);
+        return '';
+      }
       if (hypotheses) dashTable(tableFold(body, 'Read all ' + hypotheses.rows.length + ' competing hypotheses'), hypotheses, 'Competing hypotheses', 'hypotheses'); else missing(body, 'a Hypothesis / Where it stands table');
       if (calls) { var secondary = dashTable(tableFold(body, 'What would change each attribution call'), calls, 'Attribution calls and what would change them', 'calls'); secondary.closest('details').open = false; }
       return 'Four Diamond Model vertices' + (hypotheses ? ', ' + hypotheses.rows.length + ' hypotheses' : '');
     },
     indicators: function (body) {
-      if (!indicators) { missing(body, 'an Indicator / Action table'); return 'Indicators remain in the full report'; }
+      if (!indicators && !inline) { missing(body, 'an Indicator / Action table'); return 'Indicators remain in the full report'; }
+      if (inline) {
+        // T-0637: the type filter goes on the indicator table's own toolbar (the copy buttons are already there); the rule counts are one line in the detection section, before its first table
+        // or, with none, after the paragraph the counts are read from. The chips list, the "Printed here" line and the copied detection paragraph are not built.
+        if (indicators) chipFilter(indicators, 'Type', 'indicators', function (r) { return type(r[0]); }, ['IP', 'Hash', 'Path', 'Other']);
+        if (ruleTotal !== null && detectionSection) {
+          var rf = figBox(ruleTotal + ' detection and hunting rules, by engine', 'How counted: the counts in the report\'s detection guidance, reconciled to the engine and tier counts. From ' + text(detectionSection.heading) + ', first paragraph.', 'hl-fig--rules');
+          var rl = make('p', 'hl-fig-line', null, rf.draw);
+          engines.forEach(function (e, i) {
+            if (i) rl.appendChild(document.createTextNode('; '));
+            var a = Array.from(document.querySelectorAll('#hl-detect-panel a[href]')).find(function (a) { return new RegExp(e.engine === 'Suricata' ? 'Suricata' : e.engine, 'i').test(text(a)); });
+            if (a) link(e.engine + ': ' + e.total + ' rules', a.getAttribute('href'), rl); else make('span', '', e.engine + ': ' + e.total + ' rules', rl);
+            make('span', '', ', ' + e.detection + ' detection, ' + e.hunting + ' hunting', rl);
+          });
+          var firstTable = detectionSection.node.querySelector('table');
+          if (firstTable) figSite(firstTable).before(rf.fig); else if (detectionParagraph) detectionParagraph.after(rf.fig);
+        }
+        return '';
+      }
       make('p', 'hl-rv-feed-count', 'Printed here: ' + indicators.rows.length + (feedMatch ? ' · in the feed: ' + feedMatch[1] : ' indicator rows'), body);
       var actions = make('div', 'hl-rv-indicator-actions', null, body);
       var feed = Array.from(document.querySelectorAll('a[href]')).find(function (a) { return /\/ioc-feeds\//.test(a.getAttribute('href')); });
@@ -1276,6 +1484,19 @@
     },
     confidence: function (body) {
       if (!judgments) { missing(body, 'a Claim / Confidence / What would change it table'); return 'Confidence and gaps remain in the full report'; }
+      if (inline) {
+        // T-0637: the distribution bar goes before the judgments table; its confidence filter is a row of chips on that table's own toolbar.
+        var jc = col(judgments, /Confidence/i), jcounts = {}, jseen = [];
+        judgments.rows.forEach(function (r) { var v = r[jc]; if (!jcounts[v]) { jcounts[v] = 0; jseen.push(v); } jcounts[v]++; });
+        var LV = ['DEFINITE', 'HIGH', 'MODERATE', 'LOW', 'INSUFFICIENT'], jorder = LV.filter(function (v) { return jcounts[v]; }).concat(jseen.filter(function (v) { return LV.indexOf(v) < 0; }));
+        var jf = figBox(judgments.rows.length + ' judgments by confidence, as the report prints it', 'How counted: one segment for each confidence word as printed, as wide as its share of the ' + judgments.rows.length + ' rows; a range or a compound level is a segment of its own and is never rescaled. From ' + fromNote(judgments) + '.', 'hl-fig--dist');
+        var jbar = make('div', 'hl-rv-distbar', null, jf.draw); jbar.setAttribute('role', 'img'); jbar.setAttribute('aria-label', jorder.map(function (v) { return jcounts[v] + ' ' + v; }).join(', '));
+        var jkeys = make('div', 'hl-rv-distribution hl-fig-keys hl-fig-keys--dist', null, jf.draw);
+        jorder.forEach(function (v) { var seg = make('span', '', null, jbar); seg.style.flexGrow = jcounts[v]; seg.style.flexBasis = '0'; seg.title = v + ': ' + jcounts[v]; var k = make('span', 'hl-fig-key', null, jkeys); make('strong', '', jcounts[v], k); k.appendChild(document.createTextNode(' ' + v)); });
+        figSite(judgments.table).before(jf.fig);
+        chipFilter(judgments, 'Confidence', 'judgments', function (r) { return r[jc]; }, jorder);
+        return '';
+      }
       var all = tableFold(body, 'Filter all ' + judgments.rows.length + ' judgments');
       var table = dashTable(all, judgments, 'Judgments and what would change them', 'judgments');
       var distribution = make('div', 'hl-rv-distribution', null, body);
@@ -1291,32 +1512,45 @@
   };
   TOKENS.forEach(function (t, i) {
     var panel = panels[i], head = panel.querySelector('.hl-rv-panel-head');
-    var view = make('section', 'hl-rv-view' + (t === 'overview' ? ' hl-rv-view--scan' : ''), null); head.after(view);
-    var firstSource = sections.find(function (s) { return s.token === t && s.heading; });
-    if (firstSource) { var skip = link('Skip this view', '#' + firstSource.heading.id, panel); skip.className = 'hl-rv-skip-view'; view.before(skip); }
-    var summary = make('div', 'hl-rv-view-summary', null, view), line = make('p', '', '', summary);
-    icon(TAB_ICONS[t], 17, summary, 'hl-rv-eyebrow-icon');
-    var toggle = button('Show the view', summary); toggle.id = 'hl-rv-toggle-' + t;
-    var body = make('div', 'hl-rv-view-body', null, view); body.id = 'hl-rv-view-' + t;
-    toggle.setAttribute('aria-controls', body.id);
-    line.textContent = builders[t](body);
-    sourceFooter(body, { overview: [victims, attack, judgments, chronology], victims: [victims], chain: [stages, attack], timeline: [chronology], attribution: [hypotheses, calls], indicators: [indicators], confidence: [judgments] }[t]);
-    if ((t === 'overview' || t === 'indicators') && detectionSection) link('Counts from: ' + text(detectionSection.heading) + ', first paragraph', '#' + detectionSection.heading.id, body.querySelector('.hl-rv-source-footer'));
-    // Design D: the "how counted" and "from" notes of this view sit behind its "i" in the bar; "Not stated" lines and the curated note stay visible.
-    var viewNotes = Array.from(body.querySelectorAll('.hl-rv-note:not(.hl-rv-unstated), .hl-rv-source-footer'));
-    if (viewNotes.length) infoButton(summary, viewNotes, 'How this view is counted and where it is read from');
-    if (t === 'overview') {
-      var overviewLead = body.querySelector('.hl-rv-lead');
-      function placeLead() { if (overviewLead) { if (phone.matches) view.before(overviewLead); else body.insertBefore(overviewLead, body.firstChild); } }
-      placeLead(); phone.addEventListener('change', placeLead);
+    var view;
+    if (inline) {
+      // T-0637: no generated band. The builders draw into a scratch node, place each figure in the report text, and hand back only what stays in the panel (the Overview facts line).
+      view = head;
+      var scratch = make('div', '', null); builders[t](scratch);
+      var facts = scratch.querySelector('.hl-facts');
+      if (facts && facts.children.length) {
+        var fw = make('div', 'hl-facts-block'); fw.appendChild(facts);
+        make('p', 'hl-fig-src', 'Counted from ' + factFrom.join('; ') + '.', fw);
+        head.after(fw); view = fw;
+      }
+    } else {
+      var view = make('section', 'hl-rv-view' + (t === 'overview' ? ' hl-rv-view--scan' : ''), null); head.after(view);
+      var firstSource = sections.find(function (s) { return s.token === t && s.heading; });
+      if (firstSource) { var skip = link('Skip this view', '#' + firstSource.heading.id, panel); skip.className = 'hl-rv-skip-view'; view.before(skip); }
+      var summary = make('div', 'hl-rv-view-summary', null, view), line = make('p', '', '', summary);
+      icon(TAB_ICONS[t], 17, summary, 'hl-rv-eyebrow-icon');
+      var toggle = button('Show the view', summary); toggle.id = 'hl-rv-toggle-' + t;
+      var body = make('div', 'hl-rv-view-body', null, view); body.id = 'hl-rv-view-' + t;
+      toggle.setAttribute('aria-controls', body.id);
+      line.textContent = builders[t](body);
+      sourceFooter(body, { overview: [victims, attack, judgments, chronology], victims: [victims], chain: [stages, attack], timeline: [chronology], attribution: [hypotheses, calls], indicators: [indicators], confidence: [judgments] }[t]);
+      if ((t === 'overview' || t === 'indicators') && detectionSection) link('Counts from: ' + text(detectionSection.heading) + ', first paragraph', '#' + detectionSection.heading.id, body.querySelector('.hl-rv-source-footer'));
+      // Design D: the "how counted" and "from" notes of this view sit behind its "i" in the bar; "Not stated" lines and the curated note stay visible.
+      var viewNotes = Array.from(body.querySelectorAll('.hl-rv-note:not(.hl-rv-unstated), .hl-rv-source-footer'));
+      if (viewNotes.length) infoButton(summary, viewNotes, 'How this view is counted and where it is read from');
+      if (t === 'overview') {
+        var overviewLead = body.querySelector('.hl-rv-lead');
+        function placeLead() { if (overviewLead) { if (phone.matches) view.before(overviewLead); else body.insertBefore(overviewLead, body.firstChild); } }
+        placeLead(); phone.addEventListener('change', placeLead);
+      }
+      if (t === 'chain' && curation.stage_joins || t === 'timeline' && curation.timeline_lanes) make('p', 'hl-rv-curated', 'View selections curated for this report.', view);
+      body.hidden = phone.matches; toggle.textContent = body.hidden ? 'Show the view' : 'Hide the view'; toggle.setAttribute('aria-expanded', String(!body.hidden));
+      function sync(open) { body.hidden = !open; toggle.textContent = open ? 'Hide the view' : 'Show the view'; toggle.setAttribute('aria-expanded', String(open)); }
+      toggle.addEventListener('click', function () { sync(body.hidden); });
+      phone.addEventListener('change', function () { sync(!phone.matches); });
+      var first = sections.find(function (s) { return s.token === t && s.heading; });
+      if (first) link('Jump to the full sections ↓', '#' + first.heading.id, body).className = 'hl-rv-jump';
     }
-    if (t === 'chain' && curation.stage_joins || t === 'timeline' && curation.timeline_lanes) make('p', 'hl-rv-curated', 'View selections curated for this report.', view);
-    body.hidden = phone.matches; toggle.textContent = body.hidden ? 'Show the view' : 'Hide the view'; toggle.setAttribute('aria-expanded', String(!body.hidden));
-    function sync(open) { body.hidden = !open; toggle.textContent = open ? 'Hide the view' : 'Show the view'; toggle.setAttribute('aria-expanded', String(open)); }
-    toggle.addEventListener('click', function () { sync(body.hidden); });
-    phone.addEventListener('change', function () { sync(!phone.matches); });
-    var first = sections.find(function (s) { return s.token === t && s.heading; });
-    if (first) link('Jump to the full sections ↓', '#' + first.heading.id, body).className = 'hl-rv-jump';
     var hs = sections.filter(function (s) { return s.token === t && s.heading; });
     if (hs.length) {
       var toc = make('details', 'hl-rv-contents', null); view.after(toc); toc.open = !phone.matches;
@@ -1558,12 +1792,13 @@
       }
       r.lane = lane; return r;
     });
-    make('p', 'hl-rv-note', 'Dates are printed as written. Marker shapes: ● given date, ◆ inferred year, ▰ range, ◌ disputed. ' + (curation.timeline_lanes ? 'Timeline lanes: curated for this report; they group the chronology wording.' : 'Events share a single chronology lane.'), parent);
+    timelineNote = 'Dates are printed as written. Marker shapes: ● given date, ◆ inferred year, ▰ range, ◌ disputed. ' + (curation.timeline_lanes ? 'Timeline lanes: curated for this report; they group the chronology wording.' : 'Events share a single chronology lane.');
+    if (!inline) make('p', 'hl-rv-note', timelineNote, parent);
     var chart = make('div', 'hl-rv-timeline', null, parent), detail = make('p', 'hl-rv-event', 'Select an event to read its date and observation.', parent); detail.setAttribute('role', 'status');
     var lanes = curation.timeline_lanes ? [curation.timeline_lanes.default].concat(curation.timeline_lanes.rules.map(function (r) { return r.label; })).filter(function (v, i, a) { return a.indexOf(v) === i; }) : ['Chronology'];
     function show(r) { chart.querySelectorAll('[data-rv-event]').forEach(function (n) { n.classList.toggle('hl-rv-event-active', +n.dataset.rvEvent === rows.indexOf(r)); }); detail.textContent = r.display + ' · ' + r.lane + ' · ' + r.quality.replace('-', ' ') + ': ' + r.event; }
     var valid = rows.filter(function (r) { return !isNaN(r.when); });
-    if (valid.length !== rows.length) { chart.remove(); detail.remove(); missing(parent, 'a chronology with parseable dates; original date wording is retained below'); dashTable(parent, m, 'Chronology as printed', 'chronology'); return false; }
+    if (valid.length !== rows.length) { chart.remove(); detail.remove(); missing(parent, 'a chronology with parseable dates; original date wording is retained below'); if (!inline) dashTable(parent, m, 'Chronology as printed', 'chronology'); return false; }
     var min = Math.min.apply(null, valid.map(function (r) { return r.when; })), max = Math.max.apply(null, valid.map(function (r) { return r.end; }));
     var legend = make('div', 'hl-rv-timeline-legend', null, chart);
     lanes.forEach(function (lane, i) { var item = make('span', 'hl-rv-lane-' + i, null, legend); make('span', 'hl-rv-lane-swatch', '', item); make('span', '', lane, item); });
@@ -1650,7 +1885,7 @@
         new ResizeObserver(placeZoom).observe(zrail);
       }
     }
-    var tableDetails = make('details', 'hl-rv-chronology-table', null, parent); tableDetails.open = true; make('summary', '', 'Chronology as a table', tableDetails); dashTable(tableDetails, m, 'Every dated event as printed', 'chronology');
+    if (!inline) { var tableDetails = make('details', 'hl-rv-chronology-table', null, parent); tableDetails.open = true; make('summary', '', 'Chronology as a table', tableDetails); dashTable(tableDetails, m, 'Every dated event as printed', 'chronology'); }
     return true;
   }
   } catch (error) {

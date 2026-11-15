@@ -4,6 +4,7 @@ date: '2026-11-15'
 layout: post
 permalink: /reports/inv-2026-082-agent-platform-command-channel/
 hide: true
+figures: inline
 unlisted: true
 sitemap: false
 preview_cover_label: "Platform Abuse"   # preview only: header cover while the catalog entry is parked; drop at go-live

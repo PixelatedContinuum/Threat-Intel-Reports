@@ -1334,3 +1334,101 @@ html:has(.hl-report-page) {
 /* the band is drawn after the marks, so it sits under them by z-index: its dashed edge never crosses a mark */
 .hl-rv-callout-band { z-index: 0; }
 .hl-report-page .hl-rv-cmark, .hl-report-page .hl-rv-marker { z-index: 1; }
+
+/* ---------- T-0637: figures in the text (front matter `figures: inline`) ----------
+   Everything below is scoped under .hl-figs-inline, which the layout sets only for a report that asks for it; no other report sees a rule of this block.
+   One visual language: a figure sits on the page (no fill, no box, no radius, no shadow), one hairline above it; the caption is above the drawing, the source line
+   (the old "How counted" note) is under it and always visible. Colour stays only where it means something (grade, status, severity, confidence); neutral greys otherwise.
+   Figures, captions, source lines and table toolbars are sans; mono is for indicator values and technique IDs. 15px (--hl-fs-meta) is the floor. */
+.hl-report-page.hl-figs-inline { --hl-hairline: #3a3a3a; }
+.hl-report-page.hl-figs-inline .hl-post-content .hl-fig { display: block; margin: 32px 0; padding: 16px 0 0; border: 0; border-top: 1px solid var(--hl-hairline); border-radius: 0; background: none; box-shadow: none; min-width: 0; font-family: var(--hl-font-sans); font-size: var(--hl-fs-small); line-height: 1.5; color: var(--rv-text); }
+.hl-report-page.hl-figs-inline .hl-post-content .hl-fig > figcaption { margin: 0 0 14px; padding: 0; font-family: var(--hl-font-sans); font-size: var(--hl-fs-small); font-weight: 400; line-height: 1.5; color: var(--rv-text); max-width: 60em; }
+.hl-report-page.hl-figs-inline .hl-post-content .hl-fig > .hl-fig-src { margin: 12px 0 0; padding: 0; font-family: var(--hl-font-sans); font-size: var(--hl-fs-meta); font-weight: 400; line-height: 1.5; color: var(--rv-muted); max-width: 60em; }
+.hl-report-page.hl-figs-inline .hl-fig-draw { min-width: 0; font-family: var(--hl-font-sans); }
+.hl-report-page.hl-figs-inline .hl-fig-draw :is(p, h3, h4, blockquote, ol, ul) { font-family: var(--hl-font-sans); }
+.hl-report-page.hl-figs-inline .hl-fig a { color: var(--acc); font-size: inherit; text-decoration: none; }
+.hl-report-page.hl-figs-inline .hl-fig a:hover { text-decoration: underline; }
+.hl-report-page.hl-figs-inline .hl-fig strong { font-weight: 600; color: var(--rv-text); }
+
+/* Overview: the facts line */
+.hl-report-page.hl-figs-inline .hl-facts-block { margin: 0 0 28px; font-family: var(--hl-font-sans); }
+.hl-report-page.hl-figs-inline .hl-facts { display: flex; flex-wrap: wrap; gap: 6px 0; margin: 0; padding: 14px 0; border-block: 1px solid var(--hl-hairline); font-family: var(--hl-font-sans); font-size: var(--hl-fs-small); line-height: 1.4; color: var(--rv-muted); }
+.hl-report-page.hl-figs-inline .hl-fact { padding-right: 18px; margin-right: 18px; border-right: 1px solid var(--rv-row-line); }
+.hl-report-page.hl-figs-inline .hl-fact:last-child { padding-right: 0; margin-right: 0; border-right: 0; }
+.hl-report-page.hl-figs-inline .hl-fact strong { margin-right: 5px; font-weight: 600; font-variant-numeric: tabular-nums; color: var(--rv-text); }
+.hl-report-page.hl-figs-inline .hl-facts-block > .hl-fig-src { margin: 10px 0 0; font-family: var(--hl-font-sans); font-size: var(--hl-fs-meta); line-height: 1.5; color: var(--rv-muted); max-width: 60em; }
+
+/* The count keys under a grade strip and a confidence bar */
+.hl-report-page.hl-figs-inline .hl-fig-keys { display: grid; grid-template-columns: repeat(auto-fill, minmax(9.5rem, 12rem)); gap: 8px 12px; margin: 12px 0 0; }
+.hl-report-page.hl-figs-inline .hl-fig-key { min-width: 0; padding-top: 6px; border-top: 2px solid var(--seg, var(--rv-line)); font-family: var(--hl-font-sans); font-size: var(--hl-fs-meta); line-height: 1.3; color: var(--rv-muted); overflow-wrap: anywhere; }
+.hl-report-page.hl-figs-inline .hl-fig-key strong { display: block; font-size: 20px; line-height: 1.2; font-variant-numeric: tabular-nums; }
+.hl-report-page.hl-figs-inline .hl-fig-keys--dist .hl-fig-key { border-top-color: var(--rv-sw, var(--rv-muted)); }
+.hl-report-page.hl-figs-inline .hl-fig .hl-rv-squares { gap: 4px; }
+.hl-report-page.hl-figs-inline .hl-fig .hl-rv-distbar { height: 14px; margin: 0; border-radius: 0; }
+
+/* Risk bars */
+.hl-report-page.hl-figs-inline .hl-fig .hl-rv-riskrow { grid-template-columns: minmax(10rem, 17rem) minmax(0, 1fr); grid-template-areas: "head bar"; align-items: center; gap: 4px 24px; padding: 10px 0; }
+.hl-report-page.hl-figs-inline .hl-fig .hl-rv-riskrow:first-child { padding-top: 0; }
+.hl-report-page.hl-figs-inline .hl-fig .hl-rv-riskbar { height: 10px; border-radius: 0; }
+.hl-report-page.hl-figs-inline .hl-fig .hl-rv-riskbar > i { border-radius: 0; }
+.hl-report-page.hl-figs-inline .hl-fig .hl-rv-riskrow.is-total .hl-rv-riskname { color: var(--rv-text); font-weight: 600; }
+
+.hl-report-page.hl-figs-inline .hl-fig :is(.hl-rv-riskscore, .hl-rv-riskscore strong, .hl-rv-riskscore small, .hl-rv-riskname, .hl-rv-riskmeta, .hl-rv-riskrest) { font-family: var(--hl-font-sans); }
+
+/* Chain: the heat map's column heads are text, not buttons */
+.hl-report-page.hl-figs-inline .hl-fig .hl-rv-heat { gap: 6px; padding-bottom: 8px; }
+.hl-report-page.hl-figs-inline .hl-fig .hl-rv-heatcol { border-radius: 0; background: none; }
+.hl-report-page.hl-figs-inline .hl-fig div.hl-rv-heathead { display: flex; flex-direction: column; align-items: center; justify-content: flex-start; gap: 6px; width: 100%; min-height: 150px; padding: 8px 2px; border: 0; border-bottom: 1px solid var(--rv-row-line); background: none; }
+.hl-report-page.hl-figs-inline .hl-fig .hl-rv-cell { border-radius: 0; }
+
+/* Attribution: the Diamond, four plain cells */
+.hl-report-page.hl-figs-inline .hl-fig .hl-rv-diamond { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 32px; padding: 0; border: 0; background: none; }
+.hl-report-page.hl-figs-inline .hl-fig .hl-rv-diamond-card { padding: 12px 0 14px; border: 0; border-top: 1px solid var(--rv-row-line); border-radius: 0; background: none; box-shadow: none; }
+.hl-report-page.hl-figs-inline .hl-fig .hl-rv-diamond-card h3 { margin: 0 0 6px !important; padding: 0 !important; border: 0 !important; background: none !important; font-family: var(--hl-font-sans); font-size: var(--hl-fs-meta) !important; font-weight: 600 !important; letter-spacing: 0.02em; text-transform: none; color: var(--rv-muted) !important; }
+.hl-report-page.hl-figs-inline .hl-fig .hl-rv-diamond-card blockquote { margin: 0 0 8px !important; padding: 0 !important; border: 0 !important; background: none !important; font-family: var(--hl-font-sans); font-size: var(--hl-fs-small); line-height: 1.5; color: var(--rv-text); }
+.hl-report-page.hl-figs-inline .hl-fig .hl-rv-diamond-card blockquote p { margin: 0; font-size: inherit; line-height: inherit; }
+
+/* Rule counts: one sentence-style line */
+.hl-report-page.hl-figs-inline .hl-fig .hl-fig-line { margin: 0; font-family: var(--hl-font-sans); font-size: var(--hl-fs-small); line-height: 1.6; color: var(--rv-text); }
+
+/* Chain: the stage ribbon and the chain story, flat. Ribbon steps stay buttons (they filter the ATT&CK table) in the chip style; the story is a ruled list, not a column of cards on a spine. */
+.hl-report-page.hl-figs-inline .hl-fig .hl-rv-flowwrap { margin: 0 0 16px; gap: 8px; }
+.hl-report-page.hl-figs-inline .hl-fig ol.hl-rv-flow { gap: 16px; padding: 2px 2px 8px; }
+.hl-report-page.hl-figs-inline .hl-fig .hl-rv-flow button.hl-rv-fnode { min-height: 0; gap: 6px; border-radius: 0; background: none; box-shadow: none; }
+.hl-report-page.hl-figs-inline .hl-fig .hl-rv-flow button.hl-rv-fnode[aria-pressed="true"], .hl-report-page.hl-figs-inline .hl-fig .hl-rv-flow button.hl-rv-fnode.is-linked { background: none; border-color: var(--rv-text); box-shadow: none; }
+.hl-report-page.hl-figs-inline .hl-fig .hl-rv-fnum { border-radius: 0; background: none; border: 1px solid var(--rv-line); color: var(--rv-text); }
+.hl-report-page.hl-figs-inline .hl-fig .hl-rv-fnm { font-size: var(--hl-fs-small); font-weight: 600; color: var(--rv-text); }
+.hl-report-page.hl-figs-inline .hl-fig .hl-rv-fct { font-family: var(--hl-font-sans); font-size: var(--hl-fs-meta); }
+.hl-report-page.hl-figs-inline .hl-fig .hl-rv-flow > li::before, .hl-report-page.hl-figs-inline .hl-fig .hl-rv-flow > li::after { content: none; }
+.hl-report-page.hl-figs-inline .hl-fig .hl-rv-mini { border-radius: 0; }
+.hl-report-page.hl-figs-inline .hl-fig .hl-rv-mini > span { background: var(--rv-ok); }
+.hl-report-page.hl-figs-inline .hl-fig .hl-rv-mini > .hl-rv-inferred { background: var(--rv-warn); }
+.hl-report-page.hl-figs-inline .hl-fig .hl-rv-mini > .hl-rv-not-shown { background: var(--rv-muted); }
+.hl-report-page.hl-figs-inline .hl-fig .hl-rv-stages { padding-left: 0; gap: 0; }
+.hl-report-page.hl-figs-inline .hl-fig .hl-rv-stages::before, .hl-report-page.hl-figs-inline .hl-fig .hl-rv-stage::before { content: none; }
+.hl-report-page.hl-figs-inline .hl-fig .hl-rv-stage { padding: 12px 0; border: 0; border-top: 1px solid var(--rv-row-line); border-radius: 0; background: none; box-shadow: none; }
+.hl-report-page.hl-figs-inline .hl-fig .hl-rv-stage-detail > summary { padding: 0 0 8px; font-size: var(--hl-fs-small); line-height: 1.4; font-weight: 600; letter-spacing: 0; color: var(--rv-text); }
+.hl-report-page.hl-figs-inline .hl-fig .hl-rv-stage-no { position: static; width: auto; height: auto; overflow: visible; clip: auto; margin-right: 6px; color: var(--rv-muted); }
+.hl-report-page.hl-figs-inline .hl-fig .hl-rv-stage-count { font-family: var(--hl-font-sans); font-size: var(--hl-fs-meta) !important; letter-spacing: 0; }
+.hl-report-page.hl-figs-inline .hl-fig .hl-rv-stage .hl-rv-table-fold > summary { display: none; }
+.hl-report-page.hl-figs-inline .hl-fig .hl-rv-stage a.hl-rv-procedure { margin: 0 0 4px; padding: 8px 12px; background: none; border: 0; border-left-width: 3px; border-left-style: solid; border-radius: 0; font-family: var(--hl-font-sans); }
+.hl-report-page.hl-figs-inline .hl-fig .hl-rv-stage-lit, .hl-report-page.hl-figs-inline .hl-fig .hl-rv-stage.hl-rv-stage-lit { border-color: var(--rv-text); box-shadow: none; }
+.hl-report-page.hl-figs-inline .hl-fig .hl-rv-stage-match { border-top-color: var(--rv-text); }
+
+/* Table toolbars: plain chip buttons in one row, wrapping, no panel. The filters come first, Copy table and Copy column close the row. */
+.hl-report-page.hl-figs-inline .hl-rv-table-tools.hl-tbar { display: flex; flex-wrap: wrap; align-items: center; justify-content: flex-start; gap: 8px 12px; margin: 0 0 8px; padding: 0; border: 0; background: none; font-family: var(--hl-font-sans); }
+.hl-report-page.hl-figs-inline .hl-tbar-filters { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; flex: 0 1 auto; min-width: 0; }
+.hl-report-page.hl-figs-inline .hl-tbar-filters:has(.hl-tbar-console) { flex: 1 1 100%; }
+.hl-report-page.hl-figs-inline .hl-tbar-group { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; min-width: 0; }
+.hl-report-page.hl-figs-inline .hl-tbar-label { font-family: var(--hl-font-sans); font-size: var(--hl-fs-meta); color: var(--rv-muted); }
+.hl-report-page.hl-figs-inline button.hl-tbar-chip { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 0 14px; border-radius: 0; font-family: var(--hl-font-sans); font-size: var(--hl-fs-meta); letter-spacing: 0; color: var(--rv-muted); }
+.hl-report-page.hl-figs-inline button.hl-tbar-chip[style*="--seg"]::before { content: ''; flex: none; width: 8px; height: 8px; background: var(--seg); }
+.hl-report-page.hl-figs-inline button.hl-tbar-chip strong { font-weight: 600; font-variant-numeric: tabular-nums; color: var(--rv-muted); }
+.hl-report-page.hl-figs-inline button.hl-tbar-chip[aria-pressed="true"] { border-color: var(--rv-text); color: var(--rv-text); background: none; }
+.hl-report-page.hl-figs-inline .hl-tbar-count { margin: 0; font-family: var(--hl-font-sans); font-size: var(--hl-fs-meta); color: var(--rv-muted); }
+.hl-report-page.hl-figs-inline .hl-tbar-console { margin: 0; padding: 0; border: 0; background: none; flex: 1 1 100%; }
+.hl-report-page.hl-figs-inline .hl-tbar-console { display: flex; flex-direction: column; align-items: stretch; gap: 10px; }
+.hl-report-page.hl-figs-inline .hl-tbar-console .hl-rv-csearch { max-width: 30rem; }
+.hl-report-page.hl-figs-inline .hl-tbar-console .hl-rv-pn-head:not(:has(*)) { display: none; }
+.hl-report-page.hl-figs-inline .hl-onepage .hl-fig, .hl-onepage .hl-report-page.hl-figs-inline .hl-fig,
+.hl-onepage .hl-report-page.hl-figs-inline :is(.hl-facts-block, .hl-tbar-filters, .hl-rv-minibar-anchor) { display: none !important; }
