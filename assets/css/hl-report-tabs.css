@@ -1389,11 +1389,11 @@ html:has(.hl-report-page) {
 .hl-report-page.hl-figs-inline .hl-fig .hl-strip { display: block; overflow-x: auto; overflow-y: hidden; max-width: 100%; padding: 2px 0 4px; }
 .hl-report-page.hl-figs-inline .hl-fig .hl-strip-track { position: relative; box-sizing: content-box; }
 .hl-report-page.hl-figs-inline .hl-fig .hl-strip-gaps { position: relative; height: 22px; }
-.hl-report-page.hl-figs-inline .hl-fig .hl-strip-gap { position: absolute; top: 0; display: flex; justify-content: center; height: 20px; font-family: var(--hl-font-sans); font-size: var(--hl-fs-meta); line-height: 20px; white-space: nowrap; color: var(--rv-muted); border-bottom: 1px solid var(--rv-line); }
+.hl-report-page.hl-figs-inline .hl-fig .hl-strip-gap { position: absolute; top: 0; transform: translateX(-50%); width: max-content; height: 20px; font-family: var(--hl-font-sans); font-size: var(--hl-fs-meta); line-height: 20px; white-space: nowrap; color: var(--rv-muted); }
 .hl-report-page.hl-figs-inline .hl-fig .hl-strip-lane { padding: 0; border: 0; }
-.hl-report-page.hl-figs-inline .hl-fig .hl-strip-lane h3 { position: sticky; left: 0; display: inline-block; margin: 6px 0 2px !important; font-family: var(--hl-font-sans); font-size: var(--hl-fs-meta) !important; font-weight: 600 !important; color: var(--rv-muted) !important; }
+.hl-report-page.hl-figs-inline .hl-fig .hl-strip-lane h3 { position: sticky; left: 0; display: inline-block; margin: 6px 0 2px !important; padding: 0 !important; border: 0 !important; background: none !important; font-family: var(--hl-font-sans); font-size: var(--hl-fs-meta) !important; font-weight: 600 !important; color: var(--rv-muted) !important; }
 .hl-report-page.hl-figs-inline .hl-fig .hl-strip-rail { margin: 0; border-top: 1px solid var(--rv-line); }
-.hl-report-page.hl-figs-inline .hl-fig .hl-rv-callout-band:not([hidden]) { display: block; top: 0; bottom: 0; border-radius: 0; }
+.hl-report-page.hl-figs-inline .hl-fig .hl-rv-callout-band:not([hidden]) { display: block; top: 0; bottom: 0; border-radius: 0; background: none; }
 .hl-report-page.hl-figs-inline .hl-fig .hl-rv-callout { margin: 16px 0 0; padding: 12px 0 0; border: 0; border-top: 1px solid var(--hl-hairline); border-radius: 0; background: none; }
 .hl-report-page.hl-figs-inline .hl-fig p.hl-rv-event { margin: 8px 0 0; padding: 0; min-height: 42px; border: 0; border-radius: 0; background: none; font-size: var(--hl-fs-small); line-height: 1.4; }
 .hl-report-page.hl-figs-inline .hl-fig .hl-rv-vertical-timeline { display: none; }

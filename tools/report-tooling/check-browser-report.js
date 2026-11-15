@@ -2835,6 +2835,10 @@ var MUT_NO_NOTICE = ["function missing(parent, need) { make('p', 'hl-rv-unavaila
 /* the strip of the last mapping table is never drawn (attack-coverage.js init loops over every mapping table) */
 var MUT_DROP_LAST_STRIP = ['findMappingTables(body).forEach(function (table) {', 'findMappingTables(body).slice(0, -1).forEach(function (table) {'];
 /* label thinning off: every axis label is kept, so 25 dates cannot be 25 non-overlapping labels */
+/* the strip switched off: an inline page falls back to the date-axis lanes (the control for the strip rows) */
+var MUT_NO_STRIP = ["if (inline) { var st = drawStrip(horizontal, rows, lanes, show);", "if (false) { var st = drawStrip(horizontal, rows, lanes, show);"];
+/* the strip's slots shrunk to 20 px with no widening: markers 44 px wide then overlap (the control for the 25-date strip row) */
+var MUT_TIGHT_STRIP = ["var STRIP = { pitch: 44, min: 4, k: 6, labelFrom: 6, edge: 4 };", "var STRIP = { pitch: 20, min: 0, k: 0, labelFrom: 6, edge: 0 };"];
 var MUT_NO_THIN = ['if (box.left < last + 6) n.hidden = true; else { last = box.right; drawn++; }', '{ last = box.right; drawn++; }'];
 function thinExpr(fw) {
   return '(function(){var e=document.querySelector("#tab-timeline .hl-rv-axis");if(!e)return {width:' + fw + ',missing:true};' +
@@ -3096,7 +3100,7 @@ var TIMELINE_EXPR = '(function(){function vis(e){var r=e.getBoundingClientRect()
   'var legend=Q.map(function(q){var it=document.querySelector(".hl-rv-timeline-legend .hl-rv-legend-item.hl-rv-"+q),s=it?it.querySelector(".hl-rv-symbol"):null;return {q:q,found:!!s,visible:s?vis(s):false,paint:s?paint(s):null,w:s?s.getBoundingClientRect().width:0,h:s?s.getBoundingClientRect().height:0};});' +
   'return {vw:innerWidth,horizontal:horizontal,dotCount:dots.length,dotMin:dots.length?Math.min.apply(null,dots.map(function(e){var r=e.getBoundingClientRect();return Math.min(r.width,r.height);})):null,' +
   'numMin:nums.length?Math.min.apply(null,nums):null,numCount:nums.length,marks:marks,axis:axis,kinds:kinds,dots:dotList,numbers:numberList,refs:refs,legend:legend,' +
-  'events:document.querySelectorAll(".hl-rv-vertical-timeline li").length,markerTotal:document.querySelectorAll(".hl-rv-marker").length,' +
+  'inline:!!document.querySelector(".hl-figs-inline"),events:document.querySelectorAll(".hl-rv-vertical-timeline li").length,markerTotal:document.querySelectorAll(".hl-rv-marker").length,' +
   'dated:[].slice.call(document.querySelectorAll(".hl-rv-vertical-timeline .hl-rv-date")).filter(function(e){return e.textContent.trim().length>0;}).length,' +
   'tableRows:(function(){var d=document.querySelectorAll(".hl-rv-chronology-table tbody tr").length;if(d||!document.querySelector(".hl-figs-inline"))return d;var f=document.querySelector("figure.hl-fig--timeline");if(!f)return 0;var tb=[].slice.call(document.querySelectorAll("#tab-timeline .hl-rv-source table")).filter(function(t){return !!(f.compareDocumentPosition(t)&4);})[0];return tb&&tb.tBodies[0]?tb.tBodies[0].rows.length:0;})()};})()';
 function overlapPairs(rects) {
@@ -3135,10 +3139,13 @@ function timelineVerdict(m) {
   var axisHits = 0;
   m.marks.forEach(function (mk) { m.axis.forEach(function (ax) { if (mk.l < ax.r - 1 && mk.r > ax.l + 1 && mk.t < ax.b - 1 && mk.b > ax.t + 1) axisHits++; }); });
   if (axisHits) why.push(axisHits + ' mark(s) overlap a date label');
-  if (!m.events || m.events !== m.tableRows) why.push(m.events + ' dated list item(s) against ' + m.tableRows + ' table row(s)');
+  /* T-0637 (p1b): an inline page draws one strip of markers and no vertical list, so the list's rows are not asked for; the markers are still counted against the table's rows, and the strip has its own row (inlineTimelineVerdict) */
+  if (!m.inline) {
+    if (!m.events || m.events !== m.tableRows) why.push(m.events + ' dated list item(s) against ' + m.tableRows + ' table row(s)');
+    if (m.dated !== m.events) why.push(m.dated + ' of ' + m.events + ' list items carry their date');
+  }
   if (m.markerTotal !== m.tableRows) why.push(m.markerTotal + ' swim-lane mark(s) against ' + m.tableRows + ' table row(s)');
-  if (m.dated !== m.events) why.push(m.dated + ' of ' + m.events + ' list items carry their date');
-  return { notChecked: false, ok: why.length === 0, why: why, detail: (m.horizontal ? 'swim lanes' : 'vertical list') + ': ' + m.dotCount + ' mark(s), smallest ' + m.dotMin.toFixed(1) + ' px, numbers from ' + m.numMin + ' px, ' + m.marks.length + ' box(es) and ' + m.axis.length + ' date label(s) checked for overlap, ' + m.events + ' events against ' + m.tableRows + ' table rows' + (why.length ? '; ' + why.join('; ') : '') };
+  return { notChecked: false, ok: why.length === 0, why: why, detail: (m.inline ? 'event strip' : m.horizontal ? 'swim lanes' : 'vertical list') + ': ' + m.dotCount + ' mark(s), smallest ' + m.dotMin.toFixed(1) + ' px, numbers from ' + m.numMin + ' px, ' + m.marks.length + ' box(es) and ' + m.axis.length + ' date label(s) checked for overlap, ' + (m.inline ? m.markerTotal + ' marks' : m.events + ' events') + ' against ' + m.tableRows + ' table rows' + (why.length ? '; ' + why.join('; ') : '') };
 }
 function legendVerdict(m) {
   if (!m || !m.legend) return { notChecked: true, ok: false, detail: 'nothing was measured' };
@@ -3177,7 +3184,103 @@ function unparsedTimelineRows(unp, want, vp, nameA, nameB) {
   rows.push({ name: 'NOT CHECKED: ' + vp + ': ' + nameB, pass: false, detail: why });
   return rows;
 }
-async function timelineRows(page, url) {
+/* T-0637 (p1b): the inline timeline is ONE row of markers in the order the report prints the events, spaced by order with each gap widened by the time between the two
+   events (not a linear date axis). What a reader can see is measured here, in a real browser, and each property has a control that must FAIL:
+     the count of markers is the count of chronology rows; left to right they are in report order; no two markers overlap and their centres are at least a marker apart;
+     the gap between neighbours never shrinks as the time between them grows (hours read from the report's own table, not from the script's data attributes), and a gap
+     ten times longer in time is wider on screen; a label says how long wherever the time is 6 hours or more, and nowhere else, in words that match the table; no label
+     overlaps another label or a marker; the strip is about one marker row plus labels tall and the whole figure is bounded; a strip wider than the page scrolls in its
+     own box and the page itself does not. */
+function inlineTimelineMeasure() {
+  var f = document.querySelector('figure.hl-fig--timeline');
+  if (!f) return { found: false };
+  var doc = document.documentElement;
+  function R(e) { var r = e.getBoundingClientRect(); return { l: r.left, t: r.top, r: r.right, b: r.bottom, w: r.width, h: r.height }; }
+  var strip = f.querySelector('.hl-strip');
+  var tb = [].slice.call(document.querySelectorAll('#tab-timeline .hl-rv-source table')).filter(function (t) { return !!(f.compareDocumentPosition(t) & 4); })[0];
+  var dates = [];
+  if (tb && tb.tBodies[0]) {
+    var heads = [].slice.call(tb.tHead ? tb.tHead.rows[0].cells : []).map(function (c) { return c.textContent.replace(/\s+/g, ' ').trim(); });
+    var dc = heads.findIndex(function (h) { return /^Date|^Time|^When/i.test(h); });
+    dates = [].slice.call(tb.tBodies[0].rows).map(function (r) { return dc >= 0 && r.cells[dc] ? r.cells[dc].textContent.replace(/\s+/g, ' ').trim() : ''; });
+  }
+  var markers = [].slice.call(f.querySelectorAll('.hl-rv-marker')).map(function (b) { var r = R(b); return { ev: +b.dataset.rvEvent, cx: (r.l + r.r) / 2, l: r.l, r: r.r, t: r.t, b: r.b, gapH: b.dataset.rvGapH === undefined ? null : +b.dataset.rvGapH }; });
+  var labels = [].slice.call(f.querySelectorAll('.hl-strip-gap')).map(function (g) { var rg = document.createRange(); rg.selectNodeContents(g); var r = rg.getBoundingClientRect(); return { forEv: +g.dataset.rvGapFor, text: g.textContent.replace(/\s+/g, ' ').trim(), gapH: +g.dataset.rvGapH, l: r.left, r: r.right, t: r.top, b: r.bottom }; });
+  var cs = strip ? getComputedStyle(strip) : null;
+  return {
+    found: true, vw: window.innerWidth, fig: R(f), figH: f.getBoundingClientRect().height,
+    strip: strip ? { h: strip.getBoundingClientRect().height, clientW: strip.clientWidth, scrollW: strip.scrollWidth, ovx: cs.overflowX } : null,
+    lanes: f.querySelectorAll('.hl-strip-lane').length, callout: !!f.querySelector('.hl-rv-callout'),
+    markers: markers, labels: labels, dates: dates, tableRows: dates.length,
+    pageOverflow: doc.scrollWidth - doc.clientWidth, vertical: f.querySelectorAll('.hl-rv-vertical-timeline li').length && getComputedStyle(f.querySelector('.hl-rv-vertical-timeline')).display !== 'none'
+  };
+}
+var INLINE_TIMELINE_EXPR = '(' + inlineTimelineMeasure.toString() + ')()';
+var INLINE_STRIP_LABEL_FROM_H = 6;   /* hours from which a gap is labelled: the figure's source line states the same number */
+function inlineStamp(display) {
+  var m = String(display).match(/(\d{4}-\d{2}-\d{2})(?:[ T]+(\d{2}:\d{2}(?::\d{2})?))?/);
+  return m ? Date.parse(m[1] + 'T' + (m[2] || '00:00') + 'Z') : NaN;
+}
+function inlineGapWords(hours) {
+  var h = Math.abs(hours), sign = hours < 0 ? '-' : '+', d = h / 24;
+  if (Math.round(h) < 24) return sign + Math.round(h) + ' h';
+  if (d < 60) return sign + Math.round(d) + ' d';
+  if (d < 730) return sign + Math.round(d / 30.44) + ' mo';
+  return sign + Math.round(d / 365.25) + ' yr';
+}
+function boxesOverlap(a, b) { return a.l < b.r - 1 && a.r > b.l + 1 && a.t < b.b - 1 && a.b > b.t + 1; }
+function inlineTimelineVerdict(m) {
+  if (!m || !m.found || !m.markers || !m.markers.length) return { notChecked: true, ok: false, detail: 'no timeline strip was drawn on this page, so nothing was measured' };
+  var why = [], n = m.markers.length, mk = m.markers.slice().sort(function (a, b) { return a.ev - b.ev; });
+  if (m.vertical) why.push('the vertical list is still shown (the strip is the one drawing)');
+  if (n !== m.tableRows) why.push(n + ' marker(s) against ' + m.tableRows + ' chronology row(s)');
+  // order: sorted by x, the report-order indices must read 0..n-1
+  var byX = m.markers.slice().sort(function (a, b) { return a.cx - b.cx; });
+  if (!byX.every(function (x, i) { return x.ev === i; })) why.push('the markers are not in report order from left to right (x order reads ' + byX.slice(0, 8).map(function (x) { return x.ev + 1; }).join(',') + (n > 8 ? '...' : '') + ')');
+  // overlap and pitch
+  var boxes = m.markers.map(function (x) { return { l: x.l, r: x.r, t: x.t, b: x.b }; }), hits = 0;
+  for (var i = 0; i < boxes.length; i++) for (var j = i + 1; j < boxes.length; j++) if (boxesOverlap(boxes[i], boxes[j])) hits++;
+  if (hits) why.push(hits + ' pair(s) of markers overlap');
+  var tight = 0; for (var k = 1; k < mk.length; k++) if (mk[k].cx - mk[k - 1].cx < 43.5) tight++;
+  if (tight) why.push(tight + ' neighbour pair(s) closer than one 44 px marker');
+  // hours between neighbours, from the report's own table, and the script's own record of them
+  var exp = [null], bad = 0;
+  for (var q = 1; q < m.dates.length; q++) { var h = (inlineStamp(m.dates[q]) - inlineStamp(m.dates[q - 1])) / 3600000; exp[q] = h; }
+  if (exp.slice(1).some(function (h) { return isNaN(h); })) return { notChecked: true, ok: false, detail: 'a date in the chronology table could not be read by the gate, so the spacing was not compared with elapsed time' };
+  for (var r = 1; r < mk.length; r++) if (mk[r].gapH === null || Math.abs(mk[r].gapH - exp[r]) > 0.02) bad++;
+  if (bad) why.push(bad + ' marker(s) carry an elapsed-time value that is not the table\'s');
+  // spacing grows with the time between neighbours: never narrower for a longer time, and wider for a time ten times longer
+  var gaps = []; for (var g = 1; g < mk.length; g++) gaps.push({ h: Math.abs(exp[g]), d: mk[g].cx - mk[g - 1].cx });
+  var mono = 0, grow = 0, grewChecked = 0;
+  for (var a2 = 0; a2 < gaps.length; a2++) for (var b2 = 0; b2 < gaps.length; b2++) {
+    if (gaps[a2].h < gaps[b2].h && gaps[a2].d > gaps[b2].d + 0.75) mono++;
+    if (10 * (gaps[a2].h + 1) <= gaps[b2].h + 1) { grewChecked++; if (!(gaps[b2].d > gaps[a2].d + 3)) grow++; }
+  }
+  if (mono) why.push(mono + ' pair(s) of gaps where the shorter time is drawn wider');
+  if (grow) why.push(grow + ' pair(s) of gaps where ten times the time is not drawn at least 3 px wider');
+  // gap labels: one wherever the time is 6 hours or more, in the table's own figures, none elsewhere, each between its two markers
+  var want = []; for (var w = 1; w < mk.length; w++) if (Math.abs(exp[w]) >= INLINE_STRIP_LABEL_FROM_H) want.push(w);
+  var got = m.labels.map(function (l) { return l.forEv; }).sort(function (x, y) { return x - y; });
+  if (want.join(',') !== got.join(',')) why.push('labels on gaps [' + got.join(',') + '] where the table has long gaps at [' + want.join(',') + ']');
+  var wrongText = m.labels.filter(function (l) { return l.text !== inlineGapWords(exp[l.forEv]); });
+  if (wrongText.length) why.push(wrongText.length + ' label(s) say something other than the table\'s elapsed time (first: "' + wrongText[0].text + '" for ' + (exp[wrongText[0].forEv] === undefined ? '?' : inlineGapWords(exp[wrongText[0].forEv])) + ')');
+  var misplaced = m.labels.filter(function (l) { var a = mk[l.forEv - 1], b = mk[l.forEv]; var c = (l.l + l.r) / 2; return !a || !b || c < a.cx - 1 || c > b.cx + 1; });
+  if (misplaced.length) why.push(misplaced.length + ' label(s) not between their two markers');
+  var lh = 0; for (var x1 = 0; x1 < m.labels.length; x1++) { for (var x2 = x1 + 1; x2 < m.labels.length; x2++) if (boxesOverlap(m.labels[x1], m.labels[x2])) lh++; for (var x3 = 0; x3 < boxes.length; x3++) if (boxesOverlap(m.labels[x1], boxes[x3])) lh++; }
+  if (lh) why.push(lh + ' overlap(s) of a gap label with another label or a marker');
+  // height: the strip is about one marker row plus labels; the whole figure is bounded when it is a single lane with no callout
+  var lanes = Math.max(1, m.lanes), stripMax = 130 + (lanes - 1) * 100;
+  if (!m.strip) why.push('no .hl-strip scroller around the markers');
+  else {
+    if (m.strip.h > stripMax) why.push('the strip is ' + Math.round(m.strip.h) + ' px tall (at most ' + stripMax + ' for ' + lanes + ' lane(s))');
+    if (m.strip.scrollW > m.strip.clientW + 1 && !/^(auto|scroll)$/.test(m.strip.ovx)) why.push('the strip is wider than its box (' + m.strip.scrollW + ' of ' + m.strip.clientW + ' px) and does not scroll');
+  }
+  var figMax = m.vw >= 1000 ? 300 : (m.vw >= 700 ? 340 : 460), bounded = lanes === 1 && !m.callout;
+  if (bounded && m.figH > figMax) why.push('the figure is ' + Math.round(m.figH) + ' px tall (at most ' + figMax + ' at ' + m.vw + ' px wide)');
+  if (m.pageOverflow > 1) why.push('the page scrolls sideways by ' + m.pageOverflow + ' px');
+  return { notChecked: false, ok: why.length === 0, why: why, detail: n + ' marker(s) against ' + m.tableRows + ' chronology row(s); ' + hits + ' overlapping pair(s), ' + m.labels.length + ' gap label(s) of ' + want.length + ' expected, ' + gaps.length + ' gap(s) compared for growth (' + grewChecked + ' pair(s) a factor of ten apart); strip ' + (m.strip ? Math.round(m.strip.h) + ' px tall, content ' + m.strip.scrollW + ' in a ' + m.strip.clientW + ' px box' : 'absent') + '; figure ' + Math.round(m.figH) + ' px tall at ' + m.vw + ' px' + (bounded ? ' (bound ' + figMax + ')' : ' (' + lanes + ' lane(s)' + (m.callout ? ', with a callout' : '') + ': no whole-figure bound applied)') + (why.length ? '; ' + why.join('; ') : '') };
+}
+async function timelineRows(page, url, html) {
   var nameA = 'the timeline marks are large (dots 32 px, numbers 18 px; smaller on a phone), never overlap, and every event is present';
   var nameB = 'the timeline legend swatches carry the same colours as the dots';
   for (var i = 0; i < TIMELINE_VIEWPORTS.length; i++) {
@@ -3217,7 +3320,45 @@ async function timelineRows(page, url) {
     var tv = timelineVerdict(m), lv = legendVerdict(m);
     if (tv.notChecked) check('NOT CHECKED: ' + w + 'x' + h + ': ' + nameA, false, tv.detail); else check(w + 'x' + h + ': ' + nameA, tv.ok, tv.detail);
     if (lv.notChecked) check('NOT CHECKED: ' + w + 'x' + h + ': ' + nameB, false, lv.detail); else check(w + 'x' + h + ': ' + nameB, lv.ok, lv.detail);
+    if (INLINE) await inlineTimelineStripRows(page, url, html, w, h, i === 0);
   }
+}
+var INLINE_STRIP_ROW = 'the timeline is one row of markers in report order, spaced by order and widened by the time between events, labelled where the gap is long, and the figure is bounded in height';
+/* The strip row at one viewport, and (first viewport only) its controls: each is a real fault put on the live page that the same verdict must FAIL on. */
+async function inlineTimelineStripRows(page, url, html, w, h, withControls) {
+  var tag = w + 'x' + h + ': ';
+  var mm = await page.json(INLINE_TIMELINE_EXPR), v = inlineTimelineVerdict(mm);
+  if (v.notChecked) { check('NOT CHECKED: ' + tag + INLINE_STRIP_ROW, false, v.detail); return; }
+  check(tag + INLINE_STRIP_ROW, v.ok, v.detail);
+  if (!withControls) return;
+  function ctl(name, vv) { check('control: ' + name, vv.ok === false && !vv.notChecked, vv.ok === false ? 'FAILS as designed: ' + vv.why.slice(0, 2).join('; ') : 'the control did NOT fire: ' + vv.detail); }
+  var faults = [
+    ['markers at an equal pitch (no widening with elapsed time) make the strip row FAIL', '(function(){[].slice.call(document.querySelectorAll("figure.hl-fig--timeline .hl-rv-marker")).forEach(function(b){b.style.left=(22+60*(+b.dataset.rvEvent))+"px";});})()'],
+    ['two markers drawn on top of each other make the strip row FAIL', '(function(){var b=document.querySelectorAll("figure.hl-fig--timeline .hl-rv-marker");if(b.length>1)b[1].style.left=b[0].style.left;})()'],
+    ['markers in reverse order make the strip row FAIL', '(function(){var b=[].slice.call(document.querySelectorAll("figure.hl-fig--timeline .hl-rv-marker"));var n=b.length;b.forEach(function(x){x.style.left=(22+60*(n-1-(+x.dataset.rvEvent)))+"px";});})()'],
+    ['a strip stretched to 600 px tall (the old tower) makes the strip row FAIL', '(function(){[].slice.call(document.querySelectorAll("figure.hl-fig--timeline .hl-rv-rail")).forEach(function(r){r.style.height="600px";});})()'],
+    ['a marker removed makes the strip row FAIL', '(function(){var b=document.querySelector("figure.hl-fig--timeline .hl-rv-marker");if(b)b.remove();})()']
+  ];
+  for (var i = 0; i < faults.length; i++) {
+    await gotoAndWait(page, url);
+    await page.evaluate('location.hash=' + JSON.stringify('#tab-timeline')); await CDP.sleep(350);   /* only reached when the report has a timeline tab: timelineRows returns before this for a page without one */
+    await page.evaluate(faults[i][1]); await CDP.sleep(150);
+    ctl(faults[i][0], inlineTimelineVerdict(await page.json(INLINE_TIMELINE_EXPR)));
+  }
+  // the layout this replaces: the same page with the strip switched off falls back to the date-axis lanes, where 11 of 13 (082) or 18 of 21 (083) events stack in one column
+  var cname = 'control: the strip row FAILS on a copy of the page whose layout stacks the markers by date again (the tower)';
+  var tower = mutatedTabsScript([MUT_NO_STRIP]);
+  if (!tower || !html) { check('NOT CHECKED: ' + cname, false, !html ? 'the fetched page was not passed to the timeline rows, so no copy could be served' : 'hl-report-tabs.js no longer contains the text the control changes (' + MUT_NO_STRIP[0].slice(0, 50) + '...)'); }
+  else {
+    var tpath = new URL(url).pathname;
+    var tsrv = await SERVER.start({ [tpath]: html }, { root: ROOT, base: BASE, files: { [TABS_SCRIPT_PATH]: tower } });
+    try {
+      await setViewport(page, 1280, 900);
+      if (!(await gotoAndWait(page, tsrv.origin + tpath + '#tab-timeline'))) check('NOT CHECKED: ' + cname, false, 'the tab controller never built on the control copy');
+      else { await CDP.sleep(400); ctl(cname.replace(/^control: /, ''), inlineTimelineVerdict(await page.json(INLINE_TIMELINE_EXPR))); }
+    } finally { tsrv.close(); }
+  }
+  await setViewport(page, w, h);
 }
 
 /* Row A, at the two sizes 4a names for the bar. */
@@ -4800,7 +4941,7 @@ async function tabbedChecks(page, opts) {
   await chainRows(page, url);
   await shareRows(page, url);
   await mispRows(page, url);
-  await timelineRows(page, url);
+  await timelineRows(page, url, opts.html);
   await attackStripRows(page, url, opts.html);
   await tabControlRows(page, url, opts.html);
   await boxFitRows(page, url, opts.html);
@@ -4880,7 +5021,7 @@ async function tabbedChecks(page, opts) {
   var fsrv = await SERVER.start({ [fixturePath]: fixture }, { root: ROOT, base: BASE });
   try {
     var thin = [];
-    var vertical = null;
+    var vertical = null, inlineFx = [];
     for (var f = 0; f < 3; f++) {
       var fw = [1280, 768, 390][f];
       await setViewport(page, fw, 900);
@@ -4889,6 +5030,7 @@ async function tabbedChecks(page, opts) {
         thin.push({ width: fw, error: 'tab controller did not build on the fixture' });
         continue;
       }
+      if (INLINE) { await CDP.sleep(300); inlineFx.push({ w: fw, m: await page.json(INLINE_TIMELINE_EXPR) }); continue; }   /* T-0637 (p1b): an inline page has one strip at every width: it is measured, not thinned or turned vertical */
       if (fw < 480) {
         if (!(await clickToggle(page, 'timeline')) && !INLINE) { vertical = { count: 0, shown: 0, noToggle: true }; continue; }   /* an inline page has no view to open: its chart is in the text */
         await CDP.sleep(200);
@@ -4902,7 +5044,25 @@ async function tabbedChecks(page, opts) {
       }
     }
     var horiz = thin.filter(function (x) { return !x.missing && !x.error; });
-    if (!horiz.length) {
+    if (INLINE) {
+      /* T-0637 (p1b): the fixture's 25 dated rows on an inline page: one row of 25 markers at each width, in order, none overlapping, labels clear of the markers, the figure bounded.
+         The control is the same fixture served with a layout whose slots are 20 px and never widen: the same verdict must FAIL. */
+      var fxName = 'the 25-date fixture draws one row of 25 markers in report order, none overlapping, every gap label clear of the markers, within the height bound' + fx;
+      var fxv = inlineFx.map(function (x) { return { w: x.w, v: inlineTimelineVerdict(x.m), n: x.m && x.m.markers ? x.m.markers.length : 0 }; });
+      if (!fxv.length || fxv.some(function (x) { return x.v.notChecked; })) check('NOT CHECKED: ' + fxName, false, fxv.length ? fxv.filter(function (x) { return x.v.notChecked; }).map(function (x) { return x.w + 'px: ' + x.v.detail; }).join('; ') : 'the fixture never built at any width');
+      else check(fxName, fxv.every(function (x) { return x.v.ok && x.n === 25; }), fxv.map(function (x) { return x.w + 'px: ' + x.n + ' of 25 markers; ' + x.v.detail; }).join(' | '));
+      var fcname = 'control: the 25-date strip row FAILS on a copy of the fixture whose layout packs the markers at 20 px with no widening';
+      var tight = mutatedTabsScript([MUT_TIGHT_STRIP]);
+      if (!tight) check('NOT CHECKED: ' + fcname, false, 'hl-report-tabs.js no longer contains the text the control changes (' + MUT_TIGHT_STRIP[0].slice(0, 50) + '...), so no copy could be built');
+      else {
+        var tsrv2 = await SERVER.start({ [fixturePath]: fixture }, { root: ROOT, base: BASE, files: { [TABS_SCRIPT_PATH]: tight } });
+        try {
+          await setViewport(page, 1280, 900);
+          if (!(await gotoAndWait(page, tsrv2.origin + fixturePath + '#tab-timeline'))) check('NOT CHECKED: ' + fcname, false, 'the tab controller never built on the control copy');
+          else { await CDP.sleep(300); var tv2 = inlineTimelineVerdict(await page.json(INLINE_TIMELINE_EXPR)); check(fcname, tv2.ok === false && !tv2.notChecked, tv2.ok === false ? 'FAILS as designed: ' + tv2.why.slice(0, 2).join('; ') : 'the control did NOT fire: ' + tv2.detail); }
+        } finally { tsrv2.close(); }
+      }
+    } else if (!horiz.length) {
       check('NOT CHECKED: the 25-date timeline fixture' + fx, false,
         'no .hl-rv-axis on the fixture (the page builds no dated chronology view): ' +
         JSON.stringify(thin));
@@ -5609,6 +5769,9 @@ if (require.main === module) {
     inlineOnceVerdict: inlineOnceVerdict,
     inlineCountsVerdicts: inlineCountsVerdicts,
     inlineToolbarVerdict: inlineToolbarVerdict,
-    inlineChainTableVerdict: inlineChainTableVerdict
+    inlineChainTableVerdict: inlineChainTableVerdict,
+    INLINE_TIMELINE_EXPR: INLINE_TIMELINE_EXPR,
+    inlineTimelineVerdict: inlineTimelineVerdict,
+    inlineGapWords: inlineGapWords
   };
 }

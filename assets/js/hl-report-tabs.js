@@ -9,7 +9,7 @@
   var page = content.closest('.hl-report-page');
   // T-0637: figures in the text. Front matter `figures: inline` puts hl-figs-inline on the page (layouts/post.html); without it nothing below changes.
   var inline = !!(page && page.classList.contains('hl-figs-inline'));
-  var STRIP = { pitch: 44, min: 4, k: 6, labelFrom: 6 };   // the inline timeline strip's constants (see drawStrip): slot px, minimum gap px, px per factor of ten in hours, hours from which a gap is labelled
+  var STRIP = { pitch: 44, min: 4, k: 6, labelFrom: 6, edge: 4 };   // the inline timeline strip's constants (see drawStrip): slot px, minimum gap px, px per factor of ten in hours, hours from which a gap is labelled
   // T-0603 A55: the address the page was opened with, read before anything can rewrite it. A reload restores the old scroll position while the tabs are being built, and select() at start-up ran the reading-line update, which rewrote the address to the first heading's id before go() read it, so the tab was lost (reproduced on the short report, fixed by this and by `booting` below).
   var startHash = location.hash, booting = true;
   // ALL_TOKENS is the fixed tab order a report may tag; TOKENS (and the arrays indexed with it) is narrowed below to the
@@ -1815,18 +1815,18 @@
     return sign + Math.round(d / 365.25) + ' yr';
   }
   function drawStrip(host, rows, lanes, show) {
-    var track = make('div', 'hl-strip-track', null, host), xs = [], hoursBefore = [], x = STRIP.pitch / 2;
+    var track = make('div', 'hl-strip-track', null, host), xs = [], hoursBefore = [], x = STRIP.pitch / 2 + STRIP.edge;
     host.setAttribute('role', 'group'); host.setAttribute('aria-label', 'Chronology: ' + rows.length + ' events in report order; this strip scrolls sideways when it is wider than the page');
     rows.forEach(function (r, i) {
       if (i) { var hrs = (stripStamp(r) - stripStamp(rows[i - 1])) / 3600000; hoursBefore[i] = hrs; x += STRIP.pitch + stripGapPx(hrs); }
       xs[i] = x;
     });
-    track.style.width = (xs[xs.length - 1] + STRIP.pitch / 2) + 'px';
+    track.style.width = (xs[xs.length - 1] + STRIP.pitch / 2 + STRIP.edge) + 'px';   // the edge keeps the first and last marker's focus ring inside the scroller
     var gaps = make('div', 'hl-strip-gaps', null, track); gaps.setAttribute('aria-hidden', 'true');
     rows.forEach(function (r, i) {
       if (!i || Math.abs(hoursBefore[i]) < STRIP.labelFrom) return;
-      var g = make('span', 'hl-strip-gap', stripGapText(hoursBefore[i]), gaps), left = xs[i - 1] + STRIP.pitch / 2, width = xs[i] - STRIP.pitch / 2 - left;
-      g.style.left = left + 'px'; g.style.width = width + 'px'; g.dataset.rvGapFor = i; g.dataset.rvGapH = hoursBefore[i];
+      var g = make('span', 'hl-strip-gap', stripGapText(hoursBefore[i]), gaps);
+      g.style.left = ((xs[i - 1] + xs[i]) / 2) + 'px'; g.dataset.rvGapFor = i; g.dataset.rvGapH = hoursBefore[i];   // centred on the middle of the gap between the two markers
     });
     lanes.forEach(function (lane, li) {
       var band = make('div', 'hl-strip-lane hl-rv-lane-' + li, null, track);
