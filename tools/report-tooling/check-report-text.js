@@ -237,7 +237,7 @@ var DELETE_TEARDOWN_JS = '(function(){' +
   'var pick=null,wasOpen=null;' +
   'for(var i=0;i<ds.length;i++){if(!ds[i].open){pick=ds[i];wasOpen=false;break;}}' +
   'if(!pick){pick=ds[0];wasOpen=!!pick.open;}' +
-  'var ps=[].slice.call(pick.querySelectorAll("p"));' +
+  'var ps=[].slice.call(pick.querySelectorAll("p")).filter(function(p){return !p.closest("[data-rv-chrome]");});' +   /* T-0637: a paragraph the page generated (an "i" note, a toolbar count) is not report text: deleting it proves nothing */
   'for(var j=0;j<ps.length;j++){' +
   'var w=(ps[j].textContent||"").replace(/\\s+/g," ").trim();' +
   'var n=w?w.split(" ").length:0;' +
