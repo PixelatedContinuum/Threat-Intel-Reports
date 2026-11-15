@@ -1487,3 +1487,130 @@ test('T-0628 the page template: the picks group, filter chip and pick strip are 
   // the panel copy stays free of dashes
   assert.equal(CW.checkPage(page.replace('is my daily shortlist', 'is my daily shortlist — yes'), includes).status, 'FAIL');
 });
+
+/* T-0638: the nKEVs Priority group keys and counts (contract: tasks/runs/T-0638/contract.md).
+   test/fixtures/np-wire.yml is w5b-wire.yml (old data, no np_ keys) with the four keys on every row,
+   exactly 3 rows over the threshold of 5, and the counts to match. Data checks are WARN lines like
+   every other row check here, so "fails" below means vulnWarnings name the defect. */
+var NP_KEYS_TEST = ['np_score', 'np_reasons', 'np_class', 'np_rank'];
+function npFixture() {
+  return yamlPicks.load(fsPicks.readFileSync(pathPicks.join(__dirname, 'fixtures', 'np-wire.yml'), 'utf8'));
+}
+function npOld() {
+  return yamlPicks.load(fsPicks.readFileSync(pathPicks.join(__dirname, 'fixtures', 'w5b-wire.yml'), 'utf8'));
+}
+function npWarn(d) { return CW.check(d, SOURCES, Date.parse(d.generated_at)).vulnWarnings.join('\n'); }
+function npRow(d, cve) { return d.vulns.filter(function (r) { return r.cve === cve; })[0]; }
+
+test('T-0638 control: the new fixture passes with no vuln warnings and exactly 3 ranked rows of 46', function () {
+  var d = npFixture();
+  assert.equal(d.vulns.length, 46);
+  assert.equal(d.vulns.filter(function (r) { return r.np_rank > 0; }).length, 3);
+  assert.deepEqual(d.vulns.filter(function (r) { return r.np_rank > 0; }).map(function (r) { return r.np_rank; }), [1, 2, 3]);
+  assert.equal(d.vulns_counts.np_priority, 3);
+  var r = CW.check(d, SOURCES, Date.parse(d.generated_at));
+  assert.equal(r.status, 'PASS');
+  assert.deepEqual(r.vulnWarnings, []);
+  assert.equal(r.counts.vulns, 46);
+});
+
+test('T-0638 control: the old fixture (no np_ key, no np count) passes, with the same row count', function () {
+  var d = npOld();
+  assert.equal(d.vulns.length, 46);
+  assert.ok(d.vulns.every(function (r) { return NP_KEYS_TEST.every(function (k) { return !(k in r); }); }));
+  assert.ok(!('np_priority' in d.vulns_counts));
+  var r = CW.check(d, SOURCES, Date.parse(d.generated_at));
+  assert.equal(r.status, 'PASS');
+  assert.deepEqual(r.vulnWarnings, []);
+  assert.equal(r.counts.vulns, 46);
+});
+
+test('T-0638 the new fixture with every np_ key and count removed passes like the old data', function () {
+  var d = npFixture();
+  d.vulns.forEach(function (r) { NP_KEYS_TEST.forEach(function (k) { delete r[k]; }); });
+  ['np_priority', 'np_threshold', 'np_classes'].forEach(function (k) { delete d.vulns_counts[k]; });
+  assert.equal(npWarn(d), '');
+});
+
+test('T-0638 only some np_ keys on a row is named', function () {
+  var d = npFixture();
+  delete npRow(d, 'CVE-2026-9101').np_class;
+  assert.match(npWarn(d), /9101\).*only some np_ keys \(np_score, np_reasons, np_rank\)/);
+});
+
+test('T-0638 np_reasons out of order, repeated or unknown are named', function () {
+  var d = npFixture();
+  npRow(d, 'CVE-2026-9101').np_reasons = ['noauth', 'tooling', 'class', 'cisa', 'fresh'];
+  assert.match(npWarn(d), /9101\).*np reason class out of order or twice/);
+  d = npFixture();
+  npRow(d, 'CVE-2026-9101').np_reasons = ['noauth', 'luck', 'class', 'tooling', 'cisa', 'fresh'];
+  assert.match(npWarn(d), /9101\).*unknown np reason "luck"/);
+});
+
+test('T-0638 np_score must equal the points of its reasons, and the class token must match np_class', function () {
+  var d = npFixture();
+  npRow(d, 'CVE-2026-9101').np_score = 9;
+  assert.match(npWarn(d), /9101\).*np_score 9 but its reasons add up to 6/);
+  d = npFixture();
+  npRow(d, 'CVE-2026-9101').np_class = '';
+  assert.match(npWarn(d), /9101\).*lists the class reason but np_class is empty/);
+  d = npFixture();
+  npRow(d, 'CVE-2026-9101').np_class = 'Quantum toasters';
+  assert.match(npWarn(d), /9101\).*unknown np_class "Quantum toasters"/);
+  // an operating system or browser class is worth 1 point: 9100 scores 6 with it
+  d = npFixture();
+  npRow(d, 'CVE-2026-9100').np_class = 'Edge and network device';
+  assert.match(npWarn(d), /9100\).*np_score 6 but its reasons add up to 7/);
+});
+
+test('T-0638 the fresh reason needs an age_group of new when the row carries one', function () {
+  var d = npFixture();
+  npRow(d, 'CVE-2026-9101').age_group = 'mid';
+  assert.match(npWarn(d), /9101\).*fresh reason but its age_group is "mid"/);
+});
+
+test('T-0638 np_rank must run 1..n in score order, and agree with the threshold', function () {
+  var d = npFixture();
+  npRow(d, 'CVE-2026-9104').np_rank = 5;
+  assert.match(npWarn(d), /np_rank is not 1\.\.3 without gaps or repeats/);
+  d = npFixture();
+  npRow(d, 'CVE-2026-9100').np_score = 6;
+  var r = npRow(d, 'CVE-2026-9101');
+  r.np_reasons = ['noauth', 'class', 'cisa']; r.np_score = 4;
+  assert.match(npWarn(d), /9101 has np_rank but np_score 4 is under np_threshold 5/);
+  d = npFixture();
+  var low = d.vulns.filter(function (x) { return x.np_rank === 0; })[0];
+  low.np_score = 6; low.np_reasons = ['noauth', 'critical', 'class', 'tooling', 'cisa']; low.np_class = 'Edge and network device';
+  assert.match(npWarn(d), new RegExp(low.cve + ' scores 6 \\(threshold 5\\) but has no np_rank'));
+});
+
+test('T-0638 np counts are held to the rows when declared, and rows with ranks but no count are named', function () {
+  var d = npFixture();
+  d.vulns_counts.np_priority = 4;
+  assert.match(npWarn(d), /np_priority disagrees with the rows: declared 4, actual 3/);
+  d = npFixture();
+  d.vulns_counts.np_classes = 'v9';
+  assert.match(npWarn(d), /np_classes is "v9"/);
+  d = npFixture();
+  delete d.vulns_counts.np_priority;
+  assert.match(npWarn(d), /rows carry 3 np_rank rows but vulns_counts has no np_priority/);
+  d = npFixture();
+  d.vulns_counts.np_threshold = -1;
+  assert.match(npWarn(d), /np_threshold is -1/);
+});
+
+test('T-0638 the page template: the Priority group, its chip, strip and panel text are pinned, and losing one fails the page check', function () {
+  var page = fsPicks.readFileSync(pathPicks.join(__dirname, '..', '..', '..', 'wire', 'index.md'), 'utf8');
+  var includes = {};
+  fsPicks.readdirSync(pathPicks.join(__dirname, '..', '..', '..', '_includes')).filter(function (n) { return /^wire-/.test(n); })
+    .forEach(function (n) { includes[n] = fsPicks.readFileSync(pathPicks.join(__dirname, '..', '..', '..', '_includes', n), 'utf8'); });
+  assert.equal(CW.checkPage(page, includes).status, 'PASS');
+  ['id="vulns-priority"', 'data-sig="np">Priority group', 'sort: "np_rank"', 'hl-vuln__np', 'my patch-first order',
+    'A row needs 5 points', 'product classes are my judgment', 'I have not measured it'].forEach(function (pin) {
+    assert.ok(page.includes(pin), pin);
+    assert.equal(CW.checkPage(page.replace(pin, 'removed'), includes).status, 'FAIL', pin);
+  });
+  // an unescaped np_class is caught by the existing escaping check
+  assert.equal(CW.checkPage(page.replace('{{ r.np_class | escape }}', '{{ r.np_class }}'), includes).status, 'FAIL');
+  assert.equal(CW.checkPage(page.replace('so I have not measured it', 'so I have not measured it — yet'), includes).status, 'FAIL');
+});

@@ -213,6 +213,9 @@ function readBuilt(JSDOM, html) {
     var current = null;
     [].slice.call(grid.querySelectorAll('[data-filter-group], ' + out.itemSel)).forEach(function (node) {
       if (node.hasAttribute('data-filter-group')) {
+        // T-0638: a Priority group heading (the CVEs picks, the nKEVs Priority group) is not a day; its
+        // rows carry their own day, so no day is held against them.
+        if (/^\s*Priority\b/.test(node.textContent)) { current = '*'; return; }
         current = headingToDay(node.textContent);
         if (!current) problems.push('#' + id + ': unparseable day heading "' + node.textContent.trim() + '"');
       } else if (node.matches(out.itemSel)) {
@@ -224,7 +227,7 @@ function readBuilt(JSDOM, html) {
         });
         out.rows.push(row);
         if (row.day) out.dayCounts[row.day] = (out.dayCounts[row.day] || 0) + 1;
-        if (current && row.day && row.day !== current && out.disagreements.length < 5) {
+        if (current && current !== '*' && row.day && row.day !== current && out.disagreements.length < 5) {
           out.disagreements.push('#' + id + ': a row under the ' + current + ' heading carries data-day="' + row.day + '"');
         }
       }

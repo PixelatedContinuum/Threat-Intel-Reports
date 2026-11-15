@@ -391,6 +391,7 @@ function checkVulns(doc, now) {
   var nRule = { cisa_sigma: 0, snort3: 0 };
   var nNoRuleFields = 0;
   var nNkev = { disclosed: 0, prenvd: 0, epss: 0, epss_pre: 0 };
+  var nNp = 0, npRows = [];
   rows.forEach(function (r, n) {
     r = r || {};
     var where = 'vulns row ' + (n + 1) + ' (' + String(r.cve || '?') + ')';
@@ -416,6 +417,8 @@ function checkVulns(doc, now) {
     else nUnscored++;
     pointerProblems(r).forEach(function (p) { warnings.push(where + ' ' + p); });
     nkevProblems(r).forEach(function (p) { warnings.push(where + ' ' + p); });
+    npProblems(r).forEach(function (p) { warnings.push(where + ' ' + p); });
+    if (isNp(r)) { nNp++; npRows.push(r); }
     cvenowProblems(r).forEach(function (p) { warnings.push(where + ' ' + p); });
     if (!isEmpty(r.disclosed)) nNkev.disclosed++;
     if (typeof r.gap === 'number' && r.gap < 0) nNkev.prenvd++;
@@ -497,6 +500,31 @@ function checkVulns(doc, now) {
         ', actual ' + badn.map(function (k) { return k + '=' + nNkev[k]; }).join(' '));
     }
   }
+  // T-0638: the Priority group. Held to the rows when declared; rows with the keys but no counts, or
+  // counts but no keys, render the group from the rows alone (the counts only label it).
+  var anyNp = rows.some(function (r) { return r && NP_KEYS.some(function (k) { return hasKey(r, k); }); });
+  if (rows.length && hasKey(vc, 'np_priority')) {
+    if (!isCount(vc.np_priority)) warnings.push('vulns_counts np_priority is ' + JSON.stringify(vc.np_priority) + ', not a whole number of 0 or more');
+    else if (vc.np_priority !== nNp) warnings.push('vulns_counts np_priority disagrees with the rows: declared ' + vc.np_priority + ', actual ' + nNp);
+  } else if (nNp > 0) {
+    warnings.push('rows carry ' + nNp + ' np_rank rows but vulns_counts has no np_priority');
+  }
+  if (hasKey(vc, 'np_threshold') && !isCount(vc.np_threshold)) warnings.push('vulns_counts np_threshold is ' + JSON.stringify(vc.np_threshold) + ', not a whole number of 0 or more');
+  if (hasKey(vc, 'np_classes') && NP_CLASS_SETS.indexOf(vc.np_classes) === -1) warnings.push('vulns_counts np_classes is ' + JSON.stringify(vc.np_classes) + ', not one of ' + NP_CLASS_SETS.join(', '));
+  if (anyNp) {
+    var npRanks = npRows.map(function (r) { return r.np_rank; }).sort(function (a, b) { return a - b; });
+    if (npRanks.some(function (v, i) { return v !== i + 1; })) warnings.push('np_rank is not 1..' + nNp + ' without gaps or repeats');
+    var byRank = npRows.slice().sort(function (a, b) { return a.np_rank - b.np_rank; });
+    byRank.forEach(function (r, i) {
+      if (i && r.np_score > byRank[i - 1].np_score) warnings.push(r.cve + ' np_rank puts it below a lower score');
+      if (hasKey(vc, 'np_threshold') && isCount(vc.np_threshold) && r.np_score < vc.np_threshold) warnings.push(r.cve + ' has np_rank but np_score ' + r.np_score + ' is under np_threshold ' + vc.np_threshold);
+    });
+    if (hasKey(vc, 'np_threshold') && isCount(vc.np_threshold)) {
+      rows.forEach(function (r) {
+        if (r && hasKey(r, 'np_rank') && r.np_rank === 0 && Number.isInteger(r.np_score) && r.np_score >= vc.np_threshold) warnings.push(r.cve + ' scores ' + r.np_score + ' (threshold ' + vc.np_threshold + ') but has no np_rank');
+      });
+    }
+  }
   // T-0565 contract: older files remain readable; a grouped export must be complete.
   if (rows.some(function (r) { return hasKey(r, 'age_group') || hasKey(r, 'prio'); })) {
     var ages = {new: 0, mid: 0, old: 0, unknown: 0}, ranks = {}, batches = {}, wp = 0;
@@ -559,6 +587,59 @@ var PICK_KEYS = ['pick_day', 'pick_score', 'pick_reasons', 'pick_class', 'pick_s
 var PICK_REASON_ORDER = ['tooling', 'nomi', 'ssvc', 'epss90', 'noauth', 'critical', 'class'];
 var PICK_CLASSES = ['Edge and network device', 'File transfer', 'IT and remote management', 'Identity and access',
   'Virtualization and backup', 'Email and collaboration', 'Operating system or browser', 'Enterprise application', 'CMS core'];
+/* T-0638: the nKEVs Priority group. Four keys the exporter writes on every nKEV row once the ranking
+   exists, checked only when present so data from before them still passes and renders no group (the
+   site deploys before the exporter). Contract: tasks/runs/T-0638/contract.md. WARN lines, not FAILs,
+   for the reason the CVEs picks give above. */
+var NP_KEYS = ['np_score', 'np_reasons', 'np_class', 'np_rank'];
+var NP_REASON_ORDER = ['noauth', 'critical', 'class', 'tooling', 'cisa', 'fresh'];
+var NP_CLASSES = PICK_CLASSES.concat(['AI and ML application', 'OT and industrial control']);
+var NP_CLASS_SETS = ['v2+addendum', 'v2', 'none'];
+function isNp(r) { return hasKey(r, 'np_rank') && Number.isInteger(r.np_rank) && r.np_rank > 0; }
+function npPoints(r) {
+  var t = 0;
+  if (!Array.isArray(r.np_reasons)) return NaN;
+  r.np_reasons.forEach(function (k) {
+    if (k === 'class') t += r.np_class === 'Operating system or browser' ? 1 : 2;
+    else t += 1;
+  });
+  return t;
+}
+function npProblems(r) {
+  var out = [];
+  var present = NP_KEYS.filter(function (k) { return hasKey(r, k); });
+  if (!present.length) return out;
+  if (present.length !== NP_KEYS.length) {
+    out.push('carries only some np_ keys (' + present.join(', ') + '); the exporter writes all four or none');
+    return out;
+  }
+  if (!(Number.isInteger(r.np_score) && r.np_score >= 0)) out.push('has np_score ' + JSON.stringify(r.np_score) + ', not a whole number of 0 or more');
+  if (!(Number.isInteger(r.np_rank) && r.np_rank >= 0)) out.push('has np_rank ' + JSON.stringify(r.np_rank) + ', not a whole number of 0 or more');
+  if (!Array.isArray(r.np_reasons)) out.push('has np_reasons that are not a list');
+  else {
+    var last = -1;
+    r.np_reasons.forEach(function (t) {
+      var at = NP_REASON_ORDER.indexOf(t);
+      if (at === -1) out.push('lists unknown np reason ' + JSON.stringify(t));
+      else if (at <= last) out.push('lists np reason ' + t + ' out of order or twice (order: ' + NP_REASON_ORDER.join(', ') + ')');
+      if (at > last) last = at;
+    });
+    var hasClassToken = r.np_reasons.indexOf('class') !== -1;
+    if (typeof r.np_class === 'string') {
+      if (hasClassToken && r.np_class === '') out.push('lists the class reason but np_class is empty');
+      if (!hasClassToken && r.np_class !== '') out.push('has an np_class but does not list the class reason');
+    }
+    if (Number.isInteger(r.np_score) && !out.length && npPoints(r) !== r.np_score) {
+      out.push('has np_score ' + r.np_score + ' but its reasons add up to ' + npPoints(r));
+    }
+    if (r.np_reasons.indexOf('fresh') !== -1 && hasKey(r, 'age_group') && r.age_group !== 'new') {
+      out.push('lists the fresh reason but its age_group is ' + JSON.stringify(r.age_group));
+    }
+  }
+  if (typeof r.np_class !== 'string') out.push('has an np_class that is not text');
+  else if (r.np_class !== '' && NP_CLASSES.indexOf(r.np_class) === -1) out.push('has unknown np_class ' + JSON.stringify(r.np_class));
+  return out;
+}
 function isPick(r) { return hasKey(r, 'pick_day') && !isEmpty(r.pick_day); }
 function pickProblems(r, genDay) {
   var out = [];
@@ -1541,7 +1622,9 @@ function checkDayLayout(src, includes) {
   panels.forEach(function (panel, i) { out = out.concat(checkVedasCopy(panel, i ? 'CVEs explanation' : 'nKEVs explanation')); });
   var n = panels[0] || '', c = panels[1] || '';
   ["I do not curate", 'Empirical Security', 'Every VulnCheck KEV entry stays visible.',
-   'Filters open matching batches and counts show matching rows.', 'newest day first', 'at least 20 entries'
+   'Filters open matching batches and counts show matching rows.', 'newest day first', 'at least 20 entries',
+   // T-0638: the Priority group's rule and its limit.
+   'my patch-first order', 'A row needs 5 points', 'product classes are my judgment', 'I have not measured it'
   ].forEach(function (pin) { if (!n.includes(pin)) out.push('nKEVs explanation lost: ' + pin); });
   ['seven reasons', 'WordPress-class', 'unauthenticated', 'five weakness groups', '8.3%', '7.0%', '6.4%',
    'after seeing the data', '6.3%', '8.6%', '3.7%', '123 of 244', '50%', 'one-third trigger', 'does not admit',
@@ -1555,6 +1638,8 @@ function checkDayLayout(src, includes) {
    'w_wp', 'r.nomi == true', 'https://github.com/nomi-sec/PoC-in-GitHub/blob/master/', 'wire-chips.js',
    // T-0565.2: the KEV-product filter narrows the CVEs tab; it is never an admission reason.
    // T-0628: the Priority picks group, its filter chip and the pick strip on a row.
+   // T-0638: the nKEVs Priority group, its filter chip and the reason strip on a row.
+   'id="vulns-priority"', 'data-sig="np">Priority group', 'assign np_rows = np_rows | push: nrow', 'sort: "np_rank"', 'hl-vuln__np',
    'id="cves-priority-picks"', 'data-sig="pick">Priority picks', 'class="hl-vuln__pick"', 'assign pick_group = picks_ordered | group_by_exp',
    'data-sig="kev_product">Product exploited before', 'kev_product{% endif %}"', 'Product exploited before</dt><dd>Filter only, never admits'
   ].forEach(function (pin) { if (!src.includes(pin)) out.push('Wire layout lost: ' + pin); });

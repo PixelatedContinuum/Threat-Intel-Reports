@@ -100,6 +100,20 @@ test('readBuilt names a tab whose target section is missing, and a row whose dat
   assert.match(g.sections.headlines.disagreements[0], /2026-11-01 heading carries data-day="2026-10-30"/);
 });
 
+test('T-0638 readBuilt takes a Priority group heading as no day: no problem, no disagreement, rows still read, and a wrong day under a real heading still disagrees', function () {
+  var page = wirePage().replace(
+    '<div class="hl-wire__day" data-filter-group>Monday 2 November 2026 &middot; 2 added</div>',
+    '<div class="hl-wire__day hl-wire__day--np" data-filter-group>Priority &middot; <span data-container-count>1</span> row, highest score first</div>' +
+    row('hl-vuln', 'id="cve-cve-2026-9" data-title="cve-2026-9 v p" data-list="cisa" data-sev="critical" data-sig="np" data-day="2026-10-20"', 'p') +
+    '<div class="hl-wire__day" data-filter-group>Monday 2 November 2026 &middot; 2 added</div>');
+  var f = WH.readBuilt(JSDOM, page);
+  assert.deepEqual(f.problems, []);
+  assert.equal(f.sections.vulns.rows.length, 3);
+  assert.deepEqual(f.sections.vulns.disagreements, []);
+  var g = WH.readBuilt(JSDOM, page.replace('data-list="cisa" data-sev="critical" data-day="2026-11-02"', 'data-list="cisa" data-sev="critical" data-day="2026-10-01"'));
+  assert.equal(g.sections.vulns.disagreements.length, 1, 'a row under a real day heading is still held to it');
+});
+
 function get(origin, p) {
   return new Promise(function (resolve, reject) {
     http.get(origin + p, function (res) {
