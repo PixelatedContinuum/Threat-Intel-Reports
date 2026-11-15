@@ -9,6 +9,7 @@
   var page = content.closest('.hl-report-page');
   // T-0637: figures in the text. Front matter `figures: inline` puts hl-figs-inline on the page (layouts/post.html); without it nothing below changes.
   var inline = !!(page && page.classList.contains('hl-figs-inline'));
+  var STRIP = { pitch: 44, min: 4, k: 6, labelFrom: 6 };   // the inline timeline strip's constants (see drawStrip): slot px, minimum gap px, px per factor of ten in hours, hours from which a gap is labelled
   // T-0603 A55: the address the page was opened with, read before anything can rewrite it. A reload restores the old scroll position while the tabs are being built, and select() at start-up ran the reading-line update, which rewrote the address to the first heading's id before go() read it, so the tab was lost (reproduced on the short report, fixed by this and by `booting` below).
   var startHash = location.hash, booting = true;
   // ALL_TOKENS is the fixed tab order a report may tag; TOKENS (and the arrays indexed with it) is narrowed below to the
@@ -1058,6 +1059,9 @@
     return f.fig;
   }
   // Chain: techniques by tactic, one column per tactic, one cell per procedure row (the scan band's heat map, no buttons). Needs the ATT&CK table: the detection page's techniques have no table in the text to sit before.
+  // T-0637 (p1b): the inline heat map takes the SAME three status hues as the procedure-table badges and the stage ribbon's minibars (--rv-ok, --rv-warn, --rv-muted), so a status reads one
+  // colour on the whole tab; the hatch (INFERRED) and the outline (NOT SHOWN) stay as the second cue that does not depend on colour. (The dashboard's own heat map keeps STATUS_HUES.)
+  var HEAT_HUES = { OBSERVED: 'var(--rv-ok)', INFERRED: 'var(--rv-warn)', 'NOT SHOWN': 'var(--rv-muted)' };
   function heatFigure() {
     if (!attack) return null;
     var heat = attack.rows.map(function (r) { return { tactic: tacticName(cell(r, attackC.tactic)) || 'Unlabelled', status: attackC.status >= 0 ? r[attackC.status] : '', label: cell(r, attackC.id) + ' ' + cell(r, attackC.name) }; });
@@ -1070,14 +1074,14 @@
       'How counted: one cell for each row of the ATT&CK table, grouped by its Tactic cell' + (hasStatus ? ' and coloured by its Status' : '; the report states no Status, so every cell is one colour') + '. From ' + fromNote(attack) + '.', 'hl-fig--heat');
     if (hasStatus) {
       var lg = make('div', 'hl-rv-heat-legend', null, f.draw);
-      ['OBSERVED', 'INFERRED', 'NOT SHOWN'].forEach(function (k) { var it = make('span', '', null, lg); var sw = make('span', 'hl-rv-cell hl-rv-cell--sw', null, it); sw.dataset.rvStatus = k; sw.style.setProperty('--seg', STATUS_HUES[k]); make('span', '', k.charAt(0) + k.slice(1).toLowerCase(), it); });
+      ['OBSERVED', 'INFERRED', 'NOT SHOWN'].forEach(function (k) { var it = make('span', '', null, lg); var sw = make('span', 'hl-rv-cell hl-rv-cell--sw', null, it); sw.dataset.rvStatus = k; sw.style.setProperty('--seg', HEAT_HUES[k]); make('span', '', k.charAt(0) + k.slice(1).toLowerCase(), it); });
     }
     var scroller = make('div', 'hl-rv-heat', null, f.draw); scroller.tabIndex = 0; scroller.setAttribute('role', 'region'); scroller.setAttribute('aria-label', 'Techniques by tactic');
     tacticList.forEach(function (tc) {
       var colEl = make('div', 'hl-rv-heatcol', null, scroller), hb = make('div', 'hl-rv-heathead', null, colEl);
       make('strong', '', cols[tc].length, hb); make('span', '', tc, hb);
       var cells = make('div', 'hl-rv-heatcells', null, colEl);
-      cols[tc].forEach(function (h) { var c = make('span', 'hl-rv-cell', null, cells); c.title = h.label; if (hasStatus) { c.dataset.rvStatus = h.status; c.style.setProperty('--seg', STATUS_HUES[h.status] || 'var(--acc)'); } });
+      cols[tc].forEach(function (h) { var c = make('span', 'hl-rv-cell', null, cells); c.title = h.label; if (hasStatus) { c.dataset.rvStatus = h.status; c.style.setProperty('--seg', HEAT_HUES[h.status] || 'var(--acc)'); } });
     });
     return f.fig;
   }
@@ -1793,6 +1797,54 @@
   booting = false;
   if (document.fonts) document.fonts.ready.then(function () { measureBar(); if (location.hash) go(location.hash, false); });
 
+  // ---- T-0637 (p1b): the inline timeline is one row of markers, in the order the report prints the events. The old chart put each marker at its date on a linear axis, so the
+  // events of one busy day stacked into a tower (11 of 13 on one preview, 18 of 21 on the other). Here the x of a marker comes from the ORDER of the events: every marker takes a
+  // 44px slot (the touch target), and the gap between two neighbours is STRIP.min px plus STRIP.k px for each factor of ten in the hours between their start times, so it grows
+  // with the time between them and never shrinks below the minimum. Where the gap is STRIP.labelFrom hours or more, a small label says how long ("+7 h", "+6 d", "+4 yr").
+  // It is a pure function of the rows: no measuring, no resize handler, so it cannot drift. ----
+  function stripStamp(r) {
+    var m = String(r.display).match(/(\d{4}-\d{2}-\d{2})(?:[ T]+(\d{2}:\d{2}(?::\d{2})?))?/), t = m ? Date.parse(m[1] + 'T' + (m[2] || '00:00') + 'Z') : NaN;
+    return isNaN(t) ? r.when : t;
+  }
+  function stripGapPx(hours) { return STRIP.min + STRIP.k * Math.log10(1 + Math.abs(hours)); }
+  function stripGapText(hours) {
+    var h = Math.abs(hours), sign = hours < 0 ? '-' : '+', d = h / 24;
+    if (Math.round(h) < 24) return sign + Math.round(h) + ' h';
+    if (d < 60) return sign + Math.round(d) + ' d';
+    if (d < 730) return sign + Math.round(d / 30.44) + ' mo';
+    return sign + Math.round(d / 365.25) + ' yr';
+  }
+  function drawStrip(host, rows, lanes, show) {
+    var track = make('div', 'hl-strip-track', null, host), xs = [], hoursBefore = [], x = STRIP.pitch / 2;
+    host.setAttribute('role', 'group'); host.setAttribute('aria-label', 'Chronology: ' + rows.length + ' events in report order; this strip scrolls sideways when it is wider than the page');
+    rows.forEach(function (r, i) {
+      if (i) { var hrs = (stripStamp(r) - stripStamp(rows[i - 1])) / 3600000; hoursBefore[i] = hrs; x += STRIP.pitch + stripGapPx(hrs); }
+      xs[i] = x;
+    });
+    track.style.width = (xs[xs.length - 1] + STRIP.pitch / 2) + 'px';
+    var gaps = make('div', 'hl-strip-gaps', null, track); gaps.setAttribute('aria-hidden', 'true');
+    rows.forEach(function (r, i) {
+      if (!i || Math.abs(hoursBefore[i]) < STRIP.labelFrom) return;
+      var g = make('span', 'hl-strip-gap', stripGapText(hoursBefore[i]), gaps), left = xs[i - 1] + STRIP.pitch / 2, width = xs[i] - STRIP.pitch / 2 - left;
+      g.style.left = left + 'px'; g.style.width = width + 'px'; g.dataset.rvGapFor = i; g.dataset.rvGapH = hoursBefore[i];
+    });
+    lanes.forEach(function (lane, li) {
+      var band = make('div', 'hl-strip-lane hl-rv-lane-' + li, null, track);
+      if (lanes.length > 1) make('h3', '', lane, band);
+      var rail = make('div', 'hl-rv-rail hl-strip-rail', null, band);
+      rows.forEach(function (r, i) {
+        if (r.lane !== lane) return;
+        var b = button('', rail, function () { show(r); }); b.className = 'hl-rv-marker hl-rv-' + r.quality;
+        b.dataset.rvEvent = i; b.title = r.display + ': ' + r.event; b.setAttribute('aria-label', r.display + ': ' + r.event);
+        b.dataset.start = r.when; b.dataset.end = r.end; if (i) b.dataset.rvGapH = hoursBefore[i];
+        b.style.left = xs[i] + 'px';
+        make('span', 'hl-rv-symbol', '', b); make('span', '', i + 1, b);
+        b.addEventListener('focus', function () { show(r); }); b.addEventListener('mouseenter', function () { show(r); });
+      });
+    });
+    return { track: track, x: xs };
+  }
+
   function drawTimeline(parent, m) {
     var rows = chronologyRows(m).map(function (r) {
       var lane = 'Chronology';
@@ -1802,7 +1854,9 @@
       }
       r.lane = lane; return r;
     });
-    timelineNote = 'Dates are printed as written. Marker shapes: ● given date, ◆ inferred year, ▰ range, ◌ disputed. ' + (curation.timeline_lanes ? 'Timeline lanes: curated for this report; they group the chronology wording.' : 'Events share a single chronology lane.');
+    timelineNote = inline
+      ? 'Markers follow the order of the report\'s table; each gap is widened by the time between the two events (labelled where it is ' + STRIP.labelFrom + ' hours or more), so the spacing is not a linear date axis.' + (curation.timeline_lanes ? ' Lanes are curated for this report; they group the chronology wording.' : '')
+      : 'Dates are printed as written. Marker shapes: ● given date, ◆ inferred year, ▰ range, ◌ disputed. ' + (curation.timeline_lanes ? 'Timeline lanes: curated for this report; they group the chronology wording.' : 'Events share a single chronology lane.');
     if (!inline) make('p', 'hl-rv-note', timelineNote, parent);
     var chart = make('div', 'hl-rv-timeline', null, parent), detail = make('p', 'hl-rv-event', 'Select an event to read its date and observation.', parent); detail.setAttribute('role', 'status');
     var lanes = curation.timeline_lanes ? [curation.timeline_lanes.default].concat(curation.timeline_lanes.rules.map(function (r) { return r.label; })).filter(function (v, i, a) { return a.indexOf(v) === i; }) : ['Chronology'];
@@ -1811,10 +1865,12 @@
     if (valid.length !== rows.length) { chart.remove(); detail.remove(); missing(parent, 'a chronology with parseable dates; original date wording is retained below'); if (!inline) dashTable(parent, m, 'Chronology as printed', 'chronology'); return false; }
     var min = Math.min.apply(null, valid.map(function (r) { return r.when; })), max = Math.max.apply(null, valid.map(function (r) { return r.end; }));
     var legend = make('div', 'hl-rv-timeline-legend', null, chart);
-    lanes.forEach(function (lane, i) { var item = make('span', 'hl-rv-lane-' + i, null, legend); make('span', 'hl-rv-lane-swatch', '', item); make('span', '', lane, item); });
+    if (!inline || lanes.length > 1) lanes.forEach(function (lane, i) { var item = make('span', 'hl-rv-lane-' + i, null, legend); make('span', 'hl-rv-lane-swatch', '', item); make('span', '', lane, item); });   // inline: one lane needs no key
     // The four status swatches are the same shapes as the dots and take their colour from the same quality class (--mark in the stylesheet), so a legend cannot drift from the dots.
     [['given', 'Given date'], ['year-inferred', 'Inferred year'], ['range', 'Range'], ['disputed', 'Disputed']].forEach(function (v) { var item = make('span', 'hl-rv-legend-item hl-rv-' + v[0], null, legend); make('span', 'hl-rv-symbol', '', item); make('span', '', v[1], item); });
-    var horizontal = make('div', 'hl-rv-swimlanes', null, chart);
+    var horizontal = make('div', 'hl-rv-swimlanes' + (inline ? ' hl-strip' : ''), null, chart), stripTrack = null, stripX = null;
+    if (inline) { var st = drawStrip(horizontal, rows, lanes, show); stripTrack = st.track; stripX = st.x; }   // T-0637 (p1b): one row of markers in report order, spaced by order and widened by elapsed time
+    else {
     lanes.forEach(function (lane, li) {
       var band = make('div', 'hl-rv-lane hl-rv-lane-' + li, null, horizontal); make('h3', '', lane, band);
       var rail = make('div', 'hl-rv-rail', null, band);
@@ -1857,6 +1913,7 @@
       b.addEventListener('focus', function () { show(r); }); b.addEventListener('mouseenter', function () { show(r); });
       make('span', 'hl-rv-symbol', '', b); var vtext = make('span', '', null, b); make('span', 'hl-rv-vnum', (i + 1) + '.', vtext); vtext.appendChild(document.createTextNode(' ' + r.event)); make('small', '', r.lane + ' · ' + r.quality.replace('-', ' '), b);
     });
+    }
     // T-0524.2: an optional curated callout (curation.timeline_callout: from, to, label, text) for a report whose events crowd one short window.
     // It shades that window on the main axis and redraws only the events inside it on their own rail, spaced by the full time each row prints
     // (date-only rows sit at the start of their day). The source table stays authoritative and is printed in full below.
@@ -1865,11 +1922,17 @@
       var cf = Date.parse(co.from), ct = Date.parse(co.to) + 86400000;
       if (!isNaN(cf) && !isNaN(ct) && ct > cf) {
         // The band sits in the swimlane box, not in a rail or the axis, whose children the marker and label passes iterate; 22px is the rail's inline margin.
-        var band = make('div', 'hl-rv-callout-band', null, horizontal);
-        band.style.left = 'calc(22px + (100% - 44px) * ' + Math.max(0, (cf - min) / (max - min || 1)) + ' - 14px)';
-        band.style.width = 'calc((100% - 44px) * ' + Math.min(1, (ct - cf) / (max - min || 1)) + ' + 28px)';
-        band.setAttribute('aria-hidden', 'true');
         var inside = rows.map(function (r, i) { return { r: r, i: i }; }).filter(function (x) { return x.r.when >= cf && x.r.when < ct; });
+        var band = make('div', 'hl-rv-callout-band', null, inline ? stripTrack : horizontal);
+        if (inline) {
+          // The strip has no date axis: the band covers the markers of the events inside the window (they are the ones the callout redraws), padded by half a marker.
+          var bx = inside.map(function (x) { return stripX[x.i]; });
+          if (bx.length) { band.style.left = (Math.min.apply(null, bx) - STRIP.pitch / 2 - 4) + 'px'; band.style.width = (Math.max.apply(null, bx) - Math.min.apply(null, bx) + STRIP.pitch + 8) + 'px'; } else band.hidden = true;
+        } else {
+          band.style.left = 'calc(22px + (100% - 44px) * ' + Math.max(0, (cf - min) / (max - min || 1)) + ' - 14px)';
+          band.style.width = 'calc((100% - 44px) * ' + Math.min(1, (ct - cf) / (max - min || 1)) + ' + 28px)';
+        }
+        band.setAttribute('aria-hidden', 'true');
         var box = make('aside', 'hl-rv-callout', null, chart); box.setAttribute('aria-label', co.label || 'Timeline callout');
         make('h4', '', co.label || 'Callout', box);
         if (co.text) make('p', '', co.text, box);

@@ -1352,9 +1352,9 @@ html:has(.hl-report-page) {
 
 /* Overview: the facts line */
 .hl-report-page.hl-figs-inline .hl-facts-block { margin: 0 0 28px; font-family: var(--hl-font-sans); }
-.hl-report-page.hl-figs-inline .hl-facts { display: flex; flex-wrap: wrap; gap: 6px 0; margin: 0; padding: 14px 0; border-block: 1px solid var(--hl-hairline); font-family: var(--hl-font-sans); font-size: var(--hl-fs-small); line-height: 1.4; color: var(--rv-muted); }
-.hl-report-page.hl-figs-inline .hl-fact { padding-right: 18px; margin-right: 18px; border-right: 1px solid var(--rv-row-line); }
-.hl-report-page.hl-figs-inline .hl-fact:last-child { padding-right: 0; margin-right: 0; border-right: 0; }
+.hl-report-page.hl-figs-inline .hl-facts { display: flex; flex-wrap: wrap; gap: 6px 32px; margin: 0; padding: 14px 0; border-block: 1px solid var(--hl-hairline); font-family: var(--hl-font-sans); font-size: var(--hl-fs-small); line-height: 1.4; color: var(--rv-muted); }
+/* no separator glyph or rule between facts: items wrap by a column gap, so no line can end on a separator (a rule after the last item of a wrapped line read as a stray mark) */
+.hl-report-page.hl-figs-inline .hl-fact { padding: 0; margin: 0; border: 0; }
 .hl-report-page.hl-figs-inline .hl-fact strong { margin-right: 5px; font-weight: 600; font-variant-numeric: tabular-nums; color: var(--rv-text); }
 .hl-report-page.hl-figs-inline .hl-facts-block > .hl-fig-src { margin: 10px 0 0; font-family: var(--hl-font-sans); font-size: var(--hl-fs-meta); line-height: 1.5; color: var(--rv-muted); max-width: 60em; }
 
@@ -1384,6 +1384,20 @@ html:has(.hl-report-page) {
 .hl-report-page.hl-figs-inline .hl-fig .hl-rv-cell { border-radius: 0; }
 
 .hl-report-page.hl-figs-inline .hl-fig :is(.hl-rv-vertical-timeline, .hl-rv-vertical-timeline *, .hl-rv-swimlanes, .hl-rv-swimlanes *, .hl-rv-callout, .hl-rv-callout *, .hl-rv-event) { font-family: var(--hl-font-sans); }
+/* Timeline: one row of markers in report order (T-0637 p1b). The strip scrolls sideways in its own box; the gap labels sit above the gaps they describe; the selected event reads as a plain line under it. */
+.hl-report-page.hl-figs-inline .hl-fig .hl-rv-timeline-legend { margin: 0 0 8px; gap: 4px 20px; }
+.hl-report-page.hl-figs-inline .hl-fig .hl-strip { display: block; overflow-x: auto; overflow-y: hidden; max-width: 100%; padding: 2px 0 4px; }
+.hl-report-page.hl-figs-inline .hl-fig .hl-strip-track { position: relative; box-sizing: content-box; }
+.hl-report-page.hl-figs-inline .hl-fig .hl-strip-gaps { position: relative; height: 22px; }
+.hl-report-page.hl-figs-inline .hl-fig .hl-strip-gap { position: absolute; top: 0; display: flex; justify-content: center; height: 20px; font-family: var(--hl-font-sans); font-size: var(--hl-fs-meta); line-height: 20px; white-space: nowrap; color: var(--rv-muted); border-bottom: 1px solid var(--rv-line); }
+.hl-report-page.hl-figs-inline .hl-fig .hl-strip-lane { padding: 0; border: 0; }
+.hl-report-page.hl-figs-inline .hl-fig .hl-strip-lane h3 { position: sticky; left: 0; display: inline-block; margin: 6px 0 2px !important; font-family: var(--hl-font-sans); font-size: var(--hl-fs-meta) !important; font-weight: 600 !important; color: var(--rv-muted) !important; }
+.hl-report-page.hl-figs-inline .hl-fig .hl-strip-rail { margin: 0; border-top: 1px solid var(--rv-line); }
+.hl-report-page.hl-figs-inline .hl-fig .hl-rv-callout-band:not([hidden]) { display: block; top: 0; bottom: 0; border-radius: 0; }
+.hl-report-page.hl-figs-inline .hl-fig .hl-rv-callout { margin: 16px 0 0; padding: 12px 0 0; border: 0; border-top: 1px solid var(--hl-hairline); border-radius: 0; background: none; }
+.hl-report-page.hl-figs-inline .hl-fig p.hl-rv-event { margin: 8px 0 0; padding: 0; min-height: 42px; border: 0; border-radius: 0; background: none; font-size: var(--hl-fs-small); line-height: 1.4; }
+.hl-report-page.hl-figs-inline .hl-fig .hl-rv-vertical-timeline { display: none; }
+
 /* Attribution: the Diamond, four plain cells */
 .hl-report-page.hl-figs-inline .hl-fig .hl-rv-diamond { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 32px; padding: 0; border: 0; background: none; }
 .hl-report-page.hl-figs-inline .hl-fig .hl-rv-diamond-card { padding: 12px 0 14px; border: 0; border-top: 1px solid var(--rv-row-line); border-radius: 0; background: none; box-shadow: none; }
@@ -1400,6 +1414,10 @@ html:has(.hl-report-page) {
 .hl-report-page.hl-figs-inline .hl-fig .hl-rv-flow button.hl-rv-fnode { min-height: 0; gap: 6px; border-radius: 0; background: none; box-shadow: none; }
 .hl-report-page.hl-figs-inline .hl-fig .hl-rv-flow button.hl-rv-fnode[aria-pressed="true"], .hl-report-page.hl-figs-inline .hl-fig .hl-rv-flow button.hl-rv-fnode.is-linked { background: none; border-color: var(--rv-text); box-shadow: none; }
 .hl-report-page.hl-figs-inline .hl-fig .hl-rv-fnum { border-radius: 0; background: none; border: 1px solid var(--rv-line); color: var(--rv-text); }
+/* the step number, then its name on its own line under it, for every step (a short name no longer sits beside the number while a long one wraps under it); the status line under the ribbon takes no room while it is empty */
+.hl-report-page.hl-figs-inline .hl-fig .hl-rv-fnb { flex-direction: column; flex-wrap: nowrap; align-items: flex-start; gap: 8px; }
+.hl-report-page.hl-figs-inline .hl-fig .hl-rv-fnm { padding-top: 0; min-height: 2.4em; }
+.hl-report-page.hl-figs-inline .hl-fig .hl-rv-flowwrap p.hl-rv-linkread:empty { display: none; }
 .hl-report-page.hl-figs-inline .hl-fig .hl-rv-fnm { font-size: var(--hl-fs-small); font-weight: 600; color: var(--rv-text); }
 .hl-report-page.hl-figs-inline .hl-fig .hl-rv-fct { font-family: var(--hl-font-sans); font-size: var(--hl-fs-meta); }
 .hl-report-page.hl-figs-inline .hl-fig .hl-rv-flow > li::before, .hl-report-page.hl-figs-inline .hl-fig .hl-rv-flow > li::after { content: none; }
@@ -1445,7 +1463,7 @@ html:has(.hl-report-page) {
 
 /* Phone: figures are full width; the facts stack one to a line, the risk rows and the Diamond cells go to one column. The heat map, the stage ribbon and the timeline keep their own overflow-x scrollers (the page itself never scrolls sideways). */
 @media (max-width: 699px) {
-  .hl-report-page.hl-figs-inline .hl-fact { flex: 1 1 100%; padding: 2px 0; margin-right: 0; border-right: 0; }
+  .hl-report-page.hl-figs-inline .hl-fact { flex: 1 1 100%; padding: 2px 0; }
   .hl-report-page.hl-figs-inline .hl-fig .hl-rv-riskrow { grid-template-columns: minmax(0, 1fr); grid-template-areas: "head" "bar"; gap: 6px; }
   .hl-report-page.hl-figs-inline .hl-fig .hl-rv-diamond { grid-template-columns: minmax(0, 1fr); }
   .hl-report-page.hl-figs-inline .hl-post-content .hl-fig { margin: 24px 0; }
