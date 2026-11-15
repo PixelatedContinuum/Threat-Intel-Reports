@@ -2970,6 +2970,231 @@ inv-2026-082-agent-platform-command-channel-detections:
     robustness: 1
     confidence: "LOW"
     attack: [T1041]
+inv-2026-083-federal-ad-credential-access-rig-detections:
+  - name: "MAL_LNX_INV2026083_HTTPSJsonAgent_RequestTemplates"
+    engine: yara
+    tier: Detection
+    fence: 0
+    hash: "602adbc5"
+    head: "rule MAL_LNX_INV2026083_HTTPSJsonAgent_RequestTe"
+    robustness: 2
+    confidence: "HIGH"
+    attack: [T1071.001, T1573.001, T1001.003, T1105, T1041]
+  - name: "MAL_WIN_INV2026083_Msedge_SideloadLoader_ExportSpartanCookies"
+    engine: yara
+    tier: Detection
+    fence: 1
+    hash: "d13abea6"
+    head: "rule MAL_WIN_INV2026083_Msedge_SideloadLoader_Ex"
+    robustness: 2
+    confidence: "HIGH"
+    attack: [T1574.001]
+  - name: "MAL_WIN_INV2026083_OneDriveGraphBeacon_Shellcode_Immediates"
+    engine: yara
+    tier: Detection
+    fence: 2
+    hash: "eb56ba4c"
+    head: "rule MAL_WIN_INV2026083_OneDriveGraphBeacon_Shel"
+    robustness: 2
+    confidence: "HIGH"
+    attack: [T1102.002]
+  - name: "MAL_LNX_INV2026083_HTTPSJsonAgent_StaticKeyString"
+    engine: yara
+    tier: Hunting
+    fence: 3
+    hash: "e1710c70"
+    head: "rule MAL_LNX_INV2026083_HTTPSJsonAgent_StaticKey"
+    robustness: 2
+    confidence: "MODERATE"
+    attack: [T1573.001]
+  - name: "SUSP_LNX_ZigLLVM19_MbedTLS36_StaticELF_Toolchain"
+    engine: yara
+    tier: Hunting
+    fence: 4
+    hash: "bf620bbe"
+    head: "rule SUSP_LNX_ZigLLVM19_MbedTLS36_StaticELF_Tool"
+    robustness: 1
+    confidence: "LOW"
+  - name: "SUSP_WIN_RockstarGames_ExpiredCert_SmallDLL"
+    engine: yara
+    tier: Hunting
+    fence: 5
+    hash: "65842b9e"
+    head: "import \"pe\" rule SUSP_WIN_RockstarGames_ExpiredC"
+    robustness: 1
+    confidence: "MODERATE"
+    attack: [T1553.002]
+  - name: "Msedge.dll Loaded Without a Microsoft Signature"
+    engine: sigma
+    tier: Detection
+    fence: 6
+    hash: "c71d87d4"
+    head: "title: Msedge.dll Loaded Without a Microsoft Sig"
+    robustness: 2
+    confidence: "HIGH"
+    attack: [T1574.001]
+  - name: "Edge Cookie Exporter Helper Running Outside the Edge Install Directory"
+    engine: sigma
+    tier: Detection
+    fence: 7
+    hash: "118dead8"
+    head: "title: Edge Cookie Exporter Helper Running Outsi"
+    robustness: 2
+    confidence: "HIGH"
+    attack: [T1574.001]
+  - name: "Kubernetes Pod Created With Privileged Host Root Mount and Staged Base64 Script"
+    engine: sigma
+    tier: Detection
+    fence: 8
+    hash: "552d0029"
+    head: "title: Kubernetes Pod Created With Privileged Ho"
+    robustness: 2
+    confidence: "MODERATE"
+    attack: [T1611, T1610]
+  - name: "Linux Process Executed From an In-Memory File With a Systemd Command Line"
+    engine: sigma
+    tier: Detection
+    fence: 9
+    hash: "7a17181e"
+    head: "title: Linux Process Executed From an In-Memory "
+    robustness: 2
+    confidence: "MODERATE"
+    attack: [T1036.005, T1620]
+  - name: "Image Loaded With an Expired Rockstar Games Signature"
+    engine: sigma
+    tier: Hunting
+    fence: 10
+    hash: "76ebbe60"
+    head: "title: Image Loaded With an Expired Rockstar Gam"
+    robustness: 1
+    confidence: "MODERATE"
+    attack: [T1553.002]
+  - name: "OneDrive Command Folder Requests To Microsoft Graph With a Bare Mozilla User-Agent"
+    engine: sigma
+    tier: Hunting
+    fence: 11
+    hash: "ea213f9a"
+    head: "title: OneDrive Command Folder Requests To Micro"
+    robustness: 1
+    confidence: "MODERATE"
+    attack: [T1102.002]
+  - name: "Install-Window File Created Beside a Side-Loaded Edge Helper"
+    engine: sigma
+    tier: Hunting
+    fence: 12
+    hash: "ddd00092"
+    head: "title: Install-Window File Created Beside a Side"
+    robustness: 1
+    confidence: "MODERATE"
+    attack: [T1480]
+  - name: "Kubernetes Pod Created With Privileged Host Namespaces and the Node Root Mounted"
+    engine: sigma
+    tier: Hunting
+    fence: 13
+    hash: "8648a166"
+    head: "title: Kubernetes Pod Created With Privileged Ho"
+    robustness: 2
+    confidence: "MODERATE"
+    attack: [T1611, T1610]
+  - name: "Linux Process Executed From an In-Memory Plugin File"
+    engine: sigma
+    tier: Hunting
+    fence: 14
+    hash: "18c2fb60"
+    head: "title: Linux Process Executed From an In-Memory "
+    robustness: 1
+    confidence: "MODERATE"
+    attack: [T1620]
+  - name: "Impacket NTLM Relay Server Started on a Linux Host"
+    engine: sigma
+    tier: Hunting
+    fence: 15
+    hash: "f800935e"
+    head: "title: Impacket NTLM Relay Server Started on a L"
+    robustness: 1
+    confidence: "MODERATE"
+    attack: [T1557.001]
+  - name: "Many Distinct Kerberos Service Tickets Requested From One Host"
+    engine: sigma
+    tier: Hunting
+    fence: 16
+    hash: "6e43e8bf"
+    head: "title: Kerberos Service Ticket Granted For a Use"
+    robustness: 1
+    confidence: "MODERATE"
+    attack: [T1558.003]
+  - name: "Many Unknown Accounts Probed Over Kerberos From One Host"
+    engine: sigma
+    tier: Hunting
+    fence: 17
+    hash: "80484922"
+    head: "title: Kerberos Authentication Request For an Un"
+    robustness: 1
+    confidence: "MODERATE"
+    attack: [T1087.002]
+  - name: "Many Accounts Failing a Network Logon With a Wrong Password From One Host"
+    engine: sigma
+    tier: Hunting
+    fence: 18
+    hash: "abf45980"
+    head: "title: Failed Network Logon With a Wrong Passwor"
+    robustness: 1
+    confidence: "LOW"
+    attack: [T1110.003]
+  - name: "THL DETECT INV-2026-083 Chisel v3 WebSocket Tunnel Client Upgrade"
+    engine: suricata
+    tier: Detection
+    fence: 19
+    hash: "69692415"
+    head: "alert http $HOME_NET any -> $EXTERNAL_NET any (m"
+    robustness: 2
+    confidence: "MODERATE"
+    attack: [T1572]
+  - name: "THL HUNT INV-2026-083 Agent C2 Zone customerlop.top DNS Query"
+    engine: suricata
+    tier: Hunting
+    fence: 20
+    hash: "6d4df6f7"
+    head: "alert dns $HOME_NET any -> any any (msg:\"THL HUN"
+    robustness: 1
+    confidence: "MODERATE"
+    attack: [T1071.001]
+  - name: "THL HUNT INV-2026-083 Agent C2 Zone customerlop.top TLS SNI"
+    engine: suricata
+    tier: Hunting
+    fence: 21
+    hash: "ff29f659"
+    head: "alert tls $HOME_NET any -> $EXTERNAL_NET any (ms"
+    robustness: 1
+    confidence: "MODERATE"
+    attack: [T1071.001]
+  - name: "THL HUNT INV-2026-083 HTTPS Agent JSON Key And Data Beacon With No User-Agent"
+    engine: suricata
+    tier: Hunting
+    fence: 22
+    hash: "e315991a"
+    head: "alert http $HOME_NET any -> $EXTERNAL_NET any (m"
+    robustness: 1
+    confidence: "MODERATE"
+    attack: [T1071.001, T1001.003]
+  - name: "THL HUNT INV-2026-083 OneDrive cmd Folder Request To Graph With Bare Mozilla User-Agent"
+    engine: suricata
+    tier: Hunting
+    fence: 23
+    hash: "34d52a8a"
+    head: "alert http $HOME_NET any -> $EXTERNAL_NET any (m"
+    robustness: 1
+    confidence: "MODERATE"
+    attack: [T1102.002]
+  - name: "THL HUNT INV-2026-083 Refresh-Token Grant With Office Client Id And Bare Mozilla User-Agent"
+    engine: suricata
+    tier: Hunting
+    fence: 24
+    hash: "efc37b51"
+    head: "alert http $HOME_NET any -> $EXTERNAL_NET any (m"
+    robustness: 1
+    confidence: "MODERATE"
+    attack: [T1102.002]
 kaido-quasar-rat-detections:
   - name: "KAIDO Quasar-Fork Namespace + Costura Asset"
     engine: yara

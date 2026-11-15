@@ -1,5 +1,5 @@
 {
- "generated_at": "2026-11-15T04:13:25Z",
+ "generated_at": "2026-11-15T05:49:03Z",
  "counts": {
   "indicators": 2073,
   "reports": 61,
@@ -72,7 +72,8 @@
    "webshells-to-the-cloud.json"
   ],
   "embargoed": [
-   "inv-2026-082-agent-platform-command-channel-iocs.json"
+   "inv-2026-082-agent-platform-command-channel-iocs.json",
+   "inv-2026-083-federal-ad-credential-access-rig-iocs.json"
   ],
   "unknown": [],
   "empty": []

@@ -122,5 +122,9 @@
   "zerotrace-74-0-42-25-20260316": {
     "section": "5. Technical Capabilities Deep-Dive",
     "reason": "Reviewed 2026-10-17 (T-0213), not reordered. Canonical report order (report-structure-template: executive framing and scope, then the technical descent, then the reference apparatus): the Tier 2 sections after the teardown carry the findings and reference sections, so the teardown sits in the first third by design (tier sequence 111232222222222222)."
+  },
+  "inv-2026-083-federal-ad-credential-access-rig": {
+    "section": "6. Technical Teardown: The Linux HTTPS Agent",
+    "reason": "Reviewed 2026-11-15 (T-0634), not reordered. The three teardowns follow the attack chain on purpose: they are the evidence that the Tier 2 sections after them (timeline, infrastructure, ATT&CK, detections, actor assessment) cite, they are collapsed by default, and on the tabbed page each later Tier 2 section opens in its own tab (tier sequence 11222333222222122)."
   }
 }

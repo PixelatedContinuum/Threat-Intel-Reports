@@ -1563,6 +1563,101 @@
       name: "Stored Data Manipulation"
       rules: "Agent Platform Internal Workspace Reload Route Called Through The Gateway (with publish, save and ordering correlation) (SIGMA, Hunting)"
       count: 1
+"inv-2026-083-federal-ad-credential-access-rig-detections":
+  total: 18
+  tactics: 8
+  unresolved: []
+  rows:
+    - tactic: "Execution"
+      id: "T1610"
+      name: "Deploy Container"
+      rules: "Kubernetes Pod Created With Privileged Host Root Mount and Staged Base64 Script (SIGMA, Detection); Kubernetes Pod Created With Privileged Host Namespaces and the Node Root Mounted (SIGMA, Hunting)"
+      count: 2
+    - tactic: "Privilege Escalation"
+      id: "T1611"
+      name: "Escape to Host"
+      rules: "Kubernetes Pod Created With Privileged Host Root Mount and Staged Base64 Script (SIGMA, Detection); Kubernetes Pod Created With Privileged Host Namespaces and the Node Root Mounted (SIGMA, Hunting)"
+      count: 2
+    - tactic: "Stealth"
+      id: "T1036.005"
+      name: "Match Legitimate Resource Name or Location"
+      rules: "Linux Process Executed From an In-Memory File With a Systemd Command Line (SIGMA, Detection)"
+      count: 1
+    - tactic: "Stealth"
+      id: "T1480"
+      name: "Execution Guardrails"
+      rules: "Install-Window File Created Beside a Side-Loaded Edge Helper (SIGMA, Hunting)"
+      count: 1
+    - tactic: "Stealth"
+      id: "T1574.001"
+      name: "DLL"
+      rules: "MAL_WIN_INV2026083_Msedge_SideloadLoader_ExportSpartanCookies (YARA, Detection); Msedge.dll Loaded Without a Microsoft Signature (SIGMA, Detection); Edge Cookie Exporter Helper Running Outside the Edge Install Directory (SIGMA, Detection)"
+      count: 3
+    - tactic: "Stealth"
+      id: "T1620"
+      name: "Reflective Code Loading"
+      rules: "Linux Process Executed From an In-Memory File With a Systemd Command Line (SIGMA, Detection); Linux Process Executed From an In-Memory Plugin File (SIGMA, Hunting)"
+      count: 2
+    - tactic: "Defense Impairment"
+      id: "T1553.002"
+      name: "Code Signing"
+      rules: "SUSP_WIN_RockstarGames_ExpiredCert_SmallDLL (YARA, Hunting); Image Loaded With an Expired Rockstar Games Signature (SIGMA, Hunting)"
+      count: 2
+    - tactic: "Credential Access"
+      id: "T1110.003"
+      name: "Password Spraying"
+      rules: "Many Accounts Failing a Network Logon With a Wrong Password From One Host (SIGMA, Hunting)"
+      count: 1
+    - tactic: "Credential Access"
+      id: "T1557.001"
+      name: "Name Resolution Poisoning and SMB Relay"
+      rules: "Impacket NTLM Relay Server Started on a Linux Host (SIGMA, Hunting)"
+      count: 1
+    - tactic: "Credential Access"
+      id: "T1558.003"
+      name: "Kerberoasting"
+      rules: "Many Distinct Kerberos Service Tickets Requested From One Host (SIGMA, Hunting)"
+      count: 1
+    - tactic: "Discovery"
+      id: "T1087.002"
+      name: "Domain Account"
+      rules: "Many Unknown Accounts Probed Over Kerberos From One Host (SIGMA, Hunting)"
+      count: 1
+    - tactic: "Command and Control"
+      id: "T1001.003"
+      name: "Protocol or Service Impersonation"
+      rules: "MAL_LNX_INV2026083_HTTPSJsonAgent_RequestTemplates (YARA, Detection); THL HUNT INV-2026-083 HTTPS Agent JSON Key And Data Beacon With No User-Agent (SURICATA, Hunting)"
+      count: 2
+    - tactic: "Command and Control"
+      id: "T1071.001"
+      name: "Web Protocols"
+      rules: "MAL_LNX_INV2026083_HTTPSJsonAgent_RequestTemplates (YARA, Detection); THL HUNT INV-2026-083 Agent C2 Zone customerlop.top DNS Query (SURICATA, Hunting); THL HUNT INV-2026-083 Agent C2 Zone customerlop.top TLS SNI (SURICATA, Hunting); THL HUNT INV-2026-083 HTTPS Agent JSON Key And Data Beacon With No User-Agent (SURICATA, Hunting)"
+      count: 4
+    - tactic: "Command and Control"
+      id: "T1102.002"
+      name: "Bidirectional Communication"
+      rules: "MAL_WIN_INV2026083_OneDriveGraphBeacon_Shellcode_Immediates (YARA, Detection); OneDrive Command Folder Requests To Microsoft Graph With a Bare Mozilla User-Agent (SIGMA, Hunting); THL HUNT INV-2026-083 OneDrive cmd Folder Request To Graph With Bare Mozilla User-Agent (SURICATA, Hunting); THL HUNT INV-2026-083 Refresh-Token Grant With Office Client Id And Bare Mozilla User-Agent (SURICATA, Hunting)"
+      count: 4
+    - tactic: "Command and Control"
+      id: "T1105"
+      name: "Ingress Tool Transfer"
+      rules: "MAL_LNX_INV2026083_HTTPSJsonAgent_RequestTemplates (YARA, Detection)"
+      count: 1
+    - tactic: "Command and Control"
+      id: "T1572"
+      name: "Protocol Tunneling"
+      rules: "THL DETECT INV-2026-083 Chisel v3 WebSocket Tunnel Client Upgrade (SURICATA, Detection)"
+      count: 1
+    - tactic: "Command and Control"
+      id: "T1573.001"
+      name: "Symmetric Cryptography"
+      rules: "MAL_LNX_INV2026083_HTTPSJsonAgent_RequestTemplates (YARA, Detection); MAL_LNX_INV2026083_HTTPSJsonAgent_StaticKeyString (YARA, Hunting)"
+      count: 2
+    - tactic: "Exfiltration"
+      id: "T1041"
+      name: "Exfiltration Over C2 Channel"
+      rules: "MAL_LNX_INV2026083_HTTPSJsonAgent_RequestTemplates (YARA, Detection)"
+      count: 1
 "kaido-quasar-rat-detections":
   total: 8
   tactics: 4
