@@ -244,6 +244,20 @@ test('every row is tagged with the day of the heading above it', function () {
   assert.deepEqual(b.dayCounts, { '2026-08-18': 2, '2026-08-16': 1 });
 });
 
+test('T-0640: the live markup (a .hl-wire__row wrapper around the anchor, T-0532) builds, the wrapper carries the day', function () {
+  var wrapped =
+    '<div class="hl-wire__day" data-filter-group>Tuesday 18 August 2026</div>' +
+    '<div class="hl-wire__row" data-day="2026-08-18"><a class="hl-wire__item" data-title="one"></a><div class="hl-details"></div></div>' +
+    '<div class="hl-wire__row" data-day="2026-08-18"><a class="hl-wire__item" data-title="two"></a></div>' +
+    '<div class="hl-wire__day" data-filter-group>Sunday 16 August 2026</div>' +
+    '<div class="hl-wire__row" data-day="2026-08-16"><a class="hl-wire__item" data-title="three"></a></div>';
+  var html = liveLike(wrapped).replace('data-filter-item=".hl-wire__item"', 'data-filter-item=".hl-wire__row"');
+  var b = WH.build(JSDOM, parts({ liveHtml: html }));
+  assert.equal(b.rows, 3, 'each wrapper is one row, never zero (the pre-fix harness threw "rendered no wire rows")');
+  assert.deepEqual(b.dayCounts, { '2026-08-18': 2, '2026-08-16': 1 });
+  assert.match(b.html, /class="hl-wire__row" data-day="2026-08-18"/, 'the day sits on the wrapper, the filter item');
+});
+
 test('a day inside the span with no rows is reported as a gap', function () {
   // The quiet-day empty state has nothing to exercise without one.
   var b = WH.build(JSDOM, parts());

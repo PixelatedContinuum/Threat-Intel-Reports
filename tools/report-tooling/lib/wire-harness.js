@@ -66,7 +66,10 @@ function build(JSDOM, parts) {
     if (node.hasAttribute && node.hasAttribute('data-filter-group')) {
       current = headingToDay(node.textContent);
       if (!current) throw new Error('unparseable day heading: ' + node.textContent);
-    } else if (node.classList && node.classList.contains('hl-wire__item')) {
+    } else if (node.classList && (node.classList.contains('hl-wire__row') || node.classList.contains('hl-wire__item'))) {
+      /* T-0640: since T-0532 (2367a0c) a headline is a .hl-wire__row wrapper holding the .hl-wire__item
+         anchor and its Details panel; the wrapper is the grid child, the filter item and the carrier of
+         data-day. A bare anchor (the older markup) still counts, so old pages build too. */
       if (!current) throw new Error('a row appeared before any day heading');
       var was = node.getAttribute('data-day');
       if (was) {
