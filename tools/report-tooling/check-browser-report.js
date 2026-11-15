@@ -2137,6 +2137,7 @@ function chainMeasure() {
     nodes: nodes.length, cards: cards.length,
     nodeCounts: nodes.map(function (n) { var s = n.querySelector('.hl-rv-fct'); var m = s && s.textContent.match(/^(\d+) linked/); return m ? +m[1] : null; }),
     storyRows: cards.map(function (c) { return c.querySelectorAll('a.hl-rv-procedure').length; }),
+    nodeRows: nodes.map(function (n) { var v = n.getAttribute('data-rv-rows'); return v === null ? null : (v ? v.split(',').length : 0); }),
     thPos: th ? getComputedStyle(th).position : null, tidFont: tid ? getComputedStyle(tid).fontFamily : null, tidCount: P.querySelectorAll('.hl-rv-procedures td .hl-rv-tid').length,
     carry: P.querySelectorAll('.hl-rv-procedures .hl-rv-carry').length, ev: P.querySelectorAll('.hl-rv-procedures .hl-rv-ev p').length, keyMatched: km ? +km[1] : null, keyTotal: km ? +km[2] : null, srcRows: srcRows, keyList: keyList, drawn: drawn,
     tac: P.querySelectorAll('.hl-rv-procedures button.hl-rv-tac').length, inline: inl, attached: !!(inl && con && tbl && con.closest('.hl-tbar') && con.closest('.hl-tbar').nextElementSibling && con.closest('.hl-tbar').nextElementSibling.contains(tbl)),
@@ -2160,10 +2161,12 @@ function chainMini() {
 function chainLight() {
   var P = document.getElementById('tab-chain'), b = P.querySelector('.hl-rv-procedures button.hl-rv-tac') || (document.querySelector('.hl-figs-inline') ? P.querySelector('.hl-rv-console .hl-rv-fchip[data-rv-facet="Tactic"]') : null); if (!b) return { tactic: null };
   var name = b.dataset.rvTactic || b.dataset.rvValue, cards = [].slice.call(P.querySelectorAll('.hl-rv-stage'));
-  var expect = cards.map(function (c, i) { return [].slice.call(c.querySelectorAll('a.hl-rv-procedure .hl-rv-pname small')).some(function (s) { return s.textContent.indexOf(name) === 0; }) ? i : -1; }).filter(function (i) { return i >= 0; });
   var nodes = [].slice.call(P.querySelectorAll('.hl-rv-flow .hl-rv-fnode'));
+  var inl = !!document.querySelector('.hl-figs-inline') && !cards.length;   /* T-0637: no story cards; each node names the tactics of the rows it links */
+  var expect = inl ? nodes.map(function (n, i) { return (n.getAttribute('data-rv-tactics') || '').split('|').indexOf(name) >= 0 ? i : -1; }).filter(function (i) { return i >= 0; })
+    : cards.map(function (c, i) { return [].slice.call(c.querySelectorAll('a.hl-rv-procedure .hl-rv-pname small')).some(function (s) { return s.textContent.indexOf(name) === 0; }) ? i : -1; }).filter(function (i) { return i >= 0; });
   return { tactic: name, expect: expect, lit: nodes.map(function (n, i) { return n.classList.contains('is-linked') ? i : -1; }).filter(function (i) { return i >= 0; }),
-    litCards: cards.map(function (n, i) { return n.classList.contains('hl-rv-stage-lit') ? i : -1; }).filter(function (i) { return i >= 0; }), read: (P.querySelector('.hl-rv-linkread') || {}).textContent || '' };
+    litCards: cards.map(function (n, i) { return n.classList.contains('hl-rv-stage-lit') ? i : -1; }).filter(function (i) { return i >= 0; }), read: (P.querySelector('.hl-rv-linkread') || {}).textContent || '', inline: inl };
 }
 var CHAIN_EXPR = '(' + chainMeasure.toString() + ')()', CHAINSTATE_EXPR = '(' + chainState.toString() + ')()', CHAINMINI_EXPR = '(' + chainMini.toString() + ')()', CHAINLIGHT_EXPR = '(' + chainLight.toString() + ')()';
 /* The console: a chip for every facet value, each with its count over the table; the Status, Confidence and Tactic counts add up to the table's rows (every row has one of each);
@@ -2210,8 +2213,14 @@ function flowVerdict(m) {
   if (!m.stageSrc) return { notChecked: true, ok: false, detail: 'this report has no stage table (0 source rows)' + (m.nodes ? '; ' + m.nodes + ' node(s) are drawn from nothing' : '') };
   var bad = [];
   if (m.nodes !== m.stageSrc) bad.push('the flow draws ' + m.nodes + ' nodes, the stage table has ' + m.stageSrc + ' rows');
+  if (m.inline) {
+    /* T-0637 inline mode: the ribbon only; a story card would be a second copy of the ATT&CK rows. Each node's count is the number of table rows it filters to. */
+    if (m.cards) bad.push('the inline figure draws ' + m.cards + ' story card(s), a second copy of the procedure rows');
+    (m.nodeCounts || []).forEach(function (n, i) { var r = (m.nodeRows || [])[i]; if (n !== null && n !== r) bad.push('node ' + (i + 1) + ' says ' + n + ' linked, it carries ' + r + ' table row(s)'); });
+  } else {
   if (m.cards !== m.stageSrc) bad.push('the story draws ' + m.cards + ' stage cards, the stage table has ' + m.stageSrc + ' rows');
   (m.nodeCounts || []).forEach(function (n, i) { if (n !== null && n !== (m.storyRows || [])[i]) bad.push('node ' + (i + 1) + ' says ' + n + ' linked, its story card lists ' + (m.storyRows || [])[i]); });
+  }
   return { notChecked: false, ok: bad.length === 0, why: bad, detail: m.nodes + ' node(s), ' + m.cards + ' story card(s) against ' + m.stageSrc + ' stage row(s)' + (bad.length ? '; ' + bad.join('; ') : '') };
 }
 /* Linked tactic highlighting: focusing a tactic lights exactly the stages whose linked rows carry that tactic (measured from the story's own rows); leaving clears it. */
@@ -2219,7 +2228,7 @@ function lightVerdict(lit, cleared) {
   if (!lit || lit.tactic === null) return { notChecked: true, ok: false, detail: 'this report has no stage table with linked procedure rows, so the table draws no tactic button' };
   var bad = [];
   if (lit.lit.join(',') !== lit.expect.join(',')) bad.push('lit stage node(s) [' + lit.lit.join(',') + '], the story rows with tactic ' + lit.tactic + ' are in stage(s) [' + lit.expect.join(',') + ']');
-  if (lit.litCards.join(',') !== lit.expect.join(',')) bad.push('lit story card(s) [' + lit.litCards.join(',') + '], expected [' + lit.expect.join(',') + ']');
+  if (!lit.inline && lit.litCards.join(',') !== lit.expect.join(',')) bad.push('lit story card(s) [' + lit.litCards.join(',') + '], expected [' + lit.expect.join(',') + ']');
   if (!lit.expect.length && !/appears in no stage/.test(lit.read)) bad.push('the tactic is in no stage and the line does not say so');
   if (cleared && (cleared.lit.length || cleared.litCards.length)) bad.push('leaving the tactic leaves ' + cleared.lit.length + ' node(s) lit');
   return { notChecked: false, ok: bad.length === 0, why: bad, detail: 'tactic ' + lit.tactic + ' lights stage(s) [' + lit.lit.join(',') + '] of the ' + lit.expect.length + ' the story rows name' + (bad.length ? '; ' + bad.join('; ') : '') };

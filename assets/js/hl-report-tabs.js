@@ -1259,6 +1259,8 @@
             var li = make('li', 'hl-rv-fli', null, ribbon);
             var step = button('', li, function () {
               if (matches.length && cons) { cons.toggle('Stage', r[0]); if (inline) openAround(attack.table); }
+              // T-0637 (lead): inline mode draws no story copy of the procedure rows, so a press takes the reader to the filtered table itself.
+              if (inline) { if (matches.length) { var tbar = cons && cons.anchor && cons.anchor.closest('.hl-tbar'); (tbar || attack.table).scrollIntoView({ block: 'start', behavior: 'smooth' }); } else { openAround(stages.table); stages.table.scrollIntoView({ block: 'nearest', behavior: 'smooth' }); } return; }
               detail.open = true; stageCards[si].scrollIntoView({ block: 'nearest', behavior: 'smooth' });
             }); step.className = 'hl-rv-fnode'; step.setAttribute('aria-pressed', 'false');
             step.setAttribute('aria-label', 'Stage ' + lab.n + ', ' + lab.name + ': ' + matches.length + ' linked procedures. ' + (matches.length ? 'Go to the stage and filter to it.' : 'Go to the stage; no procedure row is linked to it.'));
@@ -1266,6 +1268,7 @@
             if (!attack.legacy) mini(step);
             make('small', 'hl-rv-fct', matches.length + ' linked', step);
             flowButtons.push(step);
+            if (inline) { step.setAttribute('data-rv-rows', stageRows[si].join(',')); step.setAttribute('data-rv-tactics', stageTactics[si].join('|')); }
             if (!matches.length) make('p', 'hl-rv-count', 'No explicit procedure join supplied; all rows remain in the table below.', card);
             matches.forEach(function (a) {
               var idText = cell(a.row, attackC.id), idM = idText.match(/T\d{4}(?:\.\d{3})?/);
@@ -1278,7 +1281,7 @@
               if (attackC.status >= 0) badge(chip, a.row[attackC.status]);
               if (attackC.conf >= 0) { var cb = badge(chip, a.row[attackC.conf]); pipsBefore(cb, a.row[attackC.conf]); }
             });
-          } else { var li0 = make('li', 'hl-rv-fli', null, ribbon); var s0 = button('', li0, function () { stageCards[si].scrollIntoView({ block: 'nearest', behavior: 'smooth' }); }); s0.className = 'hl-rv-fnode'; var nb0 = make('span', 'hl-rv-fnb', null, s0); make('span', 'hl-rv-fnum', lab.n, nb0).setAttribute('aria-hidden', 'true'); make('strong', 'hl-rv-fnm', lab.name, nb0); flowButtons.push(s0); }
+          } else { var li0 = make('li', 'hl-rv-fli', null, ribbon); var s0 = button('', li0, function () { if (inline) { openAround(stages.table); stages.table.scrollIntoView({ block: 'nearest', behavior: 'smooth' }); return; } stageCards[si].scrollIntoView({ block: 'nearest', behavior: 'smooth' }); }); s0.className = 'hl-rv-fnode'; var nb0 = make('span', 'hl-rv-fnb', null, s0); make('span', 'hl-rv-fnum', lab.n, nb0).setAttribute('aria-hidden', 'true'); make('strong', 'hl-rv-fnm', lab.name, nb0); flowButtons.push(s0); }
         });
         linkRead = make('p', 'hl-rv-linkread', '', flowWrap); linkRead.setAttribute('role', 'status'); linkRead.setAttribute('aria-live', 'polite');
       } else missing(body, 'a Stage / What the operator did table');
@@ -1404,9 +1407,10 @@
       if (inline) {
         // T-0637: the stage ribbon and chain story go before the stage table, the heat map before the ATT&CK table. Each is placed only when its source table is in the text.
         if (stages && flowWrap) {
-          var sf = figBox(stages.rows.length + ' stages in the order the report gives them, each with the procedure rows the report links to it',
-            'How counted: one card for each row of the stage table. A procedure is listed under a stage only when the report links them (' + (curation.stage_joins ? 'curated for this report' : 'the stage text names the technique') + '), never by tactic alone. From ' + fromNote(stages) + '.', 'hl-fig--chain');
-          sf.draw.appendChild(flowWrap); sf.draw.appendChild(wrap);
+          // T-0637 (lead): the ribbon only. The per-stage procedure lists repeated the ATT&CK table's rows a second time (1,600 px on INV-2026-082); a press filters that table instead.
+          var sf = figBox(stages.rows.length + ' stages in the order the report gives them' + (attack && cons ? '; press one to filter the procedure table to the rows the report links to it' : ''),
+            'How counted: one step for each row of the stage table, with the number of procedure rows the report links to it (' + (curation.stage_joins ? 'curated for this report' : 'the stage text names the technique') + '), never by tactic alone. From ' + fromNote(stages) + '.', 'hl-fig--chain');
+          sf.draw.appendChild(flowWrap);
           figSite(stages.table).before(sf.fig);
         }
         var hf = heatFigure(); if (hf) figSite(attack.table).before(hf);
