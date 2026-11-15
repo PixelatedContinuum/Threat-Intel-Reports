@@ -42,7 +42,7 @@ entries:
   # Withheld on purpose: the report, the detection page and the IOC feed are an unlisted PREVIEW (T-0635).
   # Go-live flip: preview-and-go-live.md. Uncomment, replace preview_cover_label with cover_label below,
   # add stix_url, repoint the report's ioc_feed to /ioc-feeds/<slug>/, and re-read this block against the report title.
-  #  - title: "An Intruder Configured an Enterprise AI-Agent Platform as a Command and Relay Channel"
+  #  - title: "A Threat Actor Configured an Enterprise AI-Agent Platform as a Command and Relay Channel"
   #    date: 2026-11-15
   #    severity: high
   #    tags: [Open Dir, AI Abuse, C2, Cred Theft]

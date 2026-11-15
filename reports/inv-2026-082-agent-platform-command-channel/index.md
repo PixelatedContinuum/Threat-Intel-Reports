@@ -1,5 +1,5 @@
 ---
-title: "An Intruder Configured an Enterprise AI-Agent Platform as a Command and Relay Channel"
+title: "A Threat Actor Configured an Enterprise AI-Agent Platform as a Command and Relay Channel"
 date: '2026-11-15'
 layout: post
 permalink: /reports/inv-2026-082-agent-platform-command-channel/
@@ -68,13 +68,13 @@ The affected parties have been notified. The rest of this note grades the victim
 {: .hl-tier-2}
 {: .hl-tab-victims}
 
-I name no victim and no customer of one. This is the operator's target list graded by what the operator's own files show, one organisation or group per row, and where two grades fit I record the lower. COMPROMISED means the operator holds material that only working access returns, but the route that produced it is not in anything I hold. REACHED means a response from the target is held in the operator's files and nothing more; a script written to reach a target, or a login tried, does not count. LISTED means the operator's files name the party and show nothing else.
+The victim is a mobile-phone and consumer-electronics manufacturer, reached through the cloud estate it runs in a Hong Kong region, and that estate also hosts the physical access-control platform of one of its South Asian manufacturing sites. Below is the operator's target list, graded by what the operator's own files show, one organisation or group per row, and where two grades fit I record the lower. COMPROMISED means the operator holds material that only working access returns, but the route that produced it is not in anything I hold. REACHED means a response from the target is held in the operator's files and nothing more; a script written to reach a target, or a login tried, does not count. LISTED means the operator's files name the party and show nothing else.
 
 Of the 2 rows, the grades are 0 ACCESS SHOWN, 1 COMPROMISED, 0 REACHED and 1 LISTED.
 
 | Organisation | Grade | What the operator's files show | Latest dated evidence |
 |---|---|---|---|
-| A consumer-electronics maker: its Hong Kong cloud estate, agent platform, internal services, DevOps and source-control services, and a door-access platform that is an instance in the same cloud account | COMPROMISED | A worker node's cloud role credential in the shape the node's metadata service returns, used from outside; an instance inventory of 1,162 records; internal service-registry records pulled by an unknown route; configuration and workspace writes on the agent platform that returned 200 in the one captured output | 2026-10-30 09:52:29 UTC, the credential's first dated use |
+| A mobile-phone and consumer-electronics manufacturer: its Hong Kong cloud estate, agent platform, internal services, DevOps and source-control services, and a manufacturing site's door-access platform that is an instance in the same cloud account | COMPROMISED | A worker node's cloud role credential in the shape the node's metadata service returns, used from outside; an instance inventory of 1,162 records; internal service-registry records pulled by an unknown route; configuration and workspace writes on the agent platform that returned 200 in the one captured output | 2026-10-30 09:52:29 UTC, the credential's first dated use |
 | The owner of another tenant's agent workspace on the victim's shared pods | LISTED | Scripts that read that tenant's workspace files, including a model-key field, off the pod filesystem; no output of the read is held | No dated evidence held |
 
 The row is COMPROMISED and not ACCESS SHOWN because presence inside a pod is an inference. The credential reached the operator by a route I cannot identify, and a request forged from outside the pod would produce the same file. No held file excludes that, so under the rule that I never upgrade on inference, the lower grade stands. It would rise to ACCESS SHOWN on a relay console log naming worker hosts, the output of an operator command run in a pod, or a pod process listing.
@@ -191,7 +191,7 @@ The server's hosting is unresolved. WHOIS for the covering /24 names one provide
 
 The tunnel service is third-party. The operator ran the open-source bore client on the server and in the pod, and claimed a fixed remote port, 1811, on the public bore server, `bore[.]pub`, whose single address `159[.]223[.]110[.]159` serves every user of the service. It sits in the feed's hunt-only list, because a block there is a service block and not a takedown. The operator fought for that port with what its scripts call sibling sessions, a contest that matters for the operator read in Section 10.
 
-The exposure the operator caused is a second finding. In the latest held revision of its web log, 36 distinct staged files in 13 directories were fetched with status 200, 180 times, by addresses that were not the operator's: 144 by seven crawler-pattern addresses and 36 by other fetchers. Three of those files are at the top of the victim's list: the DevOps panel response that embeds the shared source-control credential (6 fetches by 6 addresses), the full instance inventory (7 by 6), and the temporary credential file (8 by 7, all after it expired). The third parties are not shown to be actors, and I do not name them.
+The exposure the operator caused is a second finding. In the latest held revision of its web log, 36 distinct staged files in 13 directories were fetched with status 200, 180 times, by addresses that were not the operator's: 144 by seven crawler-pattern addresses and 36 by other fetchers. Three of those files are at the top of the victim's list: the DevOps panel response that embeds the shared source-control credential (6 fetches by 6 addresses), the full instance inventory (7 by 6), and the temporary credential file (8 by 7, all after it expired). The third parties are not shown to be actors.
 
 The log records address, time, request line and status, with no user agent and no size, so no transfer size can be derived. No request arrives from a private-range address and no victim pod is identifiable in it. That is a limit and not an absence, and matching the pod's egress address against the 275 fetcher addresses would settle it.
 
@@ -238,7 +238,7 @@ Two things have no Enterprise technique. Repointing an agent's model endpoint, a
 {: .hl-tier-2}
 {: .hl-tab-indicators}
 
-The indicators are operator-side only: the operator's server and ports, the URL paths it served, the scripts it wrote and the strings it chose. No victim value is in the feed. The machine-readable set is [`inv-2026-082-agent-platform-command-channel-iocs.json`](/ioc-feeds/inv-2026-082-agent-platform-command-channel-iocs.json), at TLP:CLEAR. It carries 92 operator-side indicator entries: 27 SHA-256 hashes, the operator's IP address, 21 host-and-port endpoints, 2 wildcard-DNS names, 30 URLs, 1 file path and 10 behavioural strings. The 92 are the entries the feed's validator read, and 3 further hunt-only entries sit outside them.
+The indicators are operator-side only: the operator's server and ports, the URL paths it served, the scripts it wrote and the strings it chose. The machine-readable set is [`inv-2026-082-agent-platform-command-channel-iocs.json`](/ioc-feeds/inv-2026-082-agent-platform-command-channel-iocs.json), at TLP:CLEAR. It carries 92 operator-side indicator entries: 27 SHA-256 hashes, the operator's IP address, 21 host-and-port endpoints, 2 wildcard-DNS names, 30 URLs, 1 file path and 10 behavioural strings. The 92 are the entries the feed's validator read, and 3 further hunt-only entries sit outside them.
 
 Hashes of operator scripts change with any edit, so the endpoints and strings carry more of the weight. Stock fscan and gogo are not listed by hash, because their hashes match anyone using the public tools. The shared tunnel service sits in the hunt-only list, since a block on it reaches every user of the service.
 
@@ -270,9 +270,9 @@ The [detection file](/hunting-detections/inv-2026-082-detections/) for this case
 
 Four signals held up as durable and low-noise. An agent whose model base URL is outside the platform's catalogue is the repoint itself. A tool-server entry whose command is an inline interpreter call that downloads and runs a hidden file is the plant, and the Detection-tier YARA and Sigma rules key on it. A scripted endpoint that answers an agent with tool calls is the model server, and a hunting YARA rule covers its code shape. A worker-node role listing compute instances across several regions, or used from a public source address, covers the cloud half.
 
-Nine of the 21 behaviours I considered have no rule, and each has a reason in the file's coverage section. One of them is the door-access console: its only distinctive strings are the product's own routes, which would identify a platform in the affected estate, so I withhold that rule. The unauthenticated token route and the private-agent registration would need the gateway to log request bodies or response codes, which I have no sample of, and the right fix for the token route is to remove it. A base64-wrapped shell step is generic and I saw it only in operator scripts and never in process telemetry. I wrote no rule for the shared credential appearing in a command line, since the held value has no stable format.
+Nine of the 21 behaviours I considered have no rule, and each has a reason in the file's coverage section. One of them is the door-access console: its only distinctive strings are one vendor's own product routes, too narrow to be useful as a published rule, and without them it is the public Struts2 S2-045 payload that existing rulesets cover. The unauthenticated token route and the private-agent registration would need the gateway to log request bodies or response codes, which I have no sample of, and the right fix for the token route is to remove it. A base64-wrapped shell step is generic and I saw it only in operator scripts and never in process telemetry. I wrote no rule for the shared credential appearing in a command line, since the held value has no stable format.
 
-Three of the Sigma rules carry the platform's route names, because a gateway log carries nothing else to key on. Whether the platform is a product others run is NOT CHECKED, and its route names could identify the affected organisation. The three gateway Sigma rules therefore carry placeholder paths, and a defender fills in their own platform's routes before using them.
+Three of the Sigma rules key on the platform's routes, because a gateway log carries nothing else to key on. Whether the platform is a product others run is NOT CHECKED, so the three gateway Sigma rules carry placeholder paths, and a defender fills in their own platform's routes before using them.
 
 ## 10. Threat Actor Assessment
 {: .hl-tier-2}
@@ -335,7 +335,7 @@ Each mechanism here is documented as research, and I am not aware of a published
 
 The Mandiant hook-tampering case is the nearest in-the-wild one, and it is adjacent. It does not describe a model endpoint repointed, a tool-server entry run as a command, or a tool loop used as a relay. Its case study 2 and the Qualys incident, with an AI agent as the actor, are prior art for reading an operator as an AI-assisted one, which bears on Section 10.
 
-Whether the victim's platform is bespoke or a product other organisations run is NOT CHECKED, and it decides the audience. The class is not bespoke by nature, since many productised agent platforms have a UI that runs stdio commands. If it is a product, the route-level rules have readers; if it is bespoke, they identify one company's product. No CVE is asserted: these are configuration weaknesses on the victim's side, not product vulnerabilities.
+Whether the victim's platform is bespoke or a product other organisations run is NOT CHECKED, and it decides the audience. The class is not bespoke by nature, since many productised agent platforms have a UI that runs stdio commands. If it is a product, the route-level rules have readers; if it is bespoke, they apply to one company's deployment. No CVE is asserted: these are configuration weaknesses on the victim's side, not product vulnerabilities.
 
 ## 12. Recommendations
 {: .hl-tier-1}

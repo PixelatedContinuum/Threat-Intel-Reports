@@ -2920,7 +2920,7 @@ inv-2026-082-agent-platform-command-channel-detections:
     engine: sigma
     tier: Hunting
     fence: 8
-    hash: "cccbb85b"
+    hash: "a68f404c"
     head: "title: Agent Platform Publish Request id: 9993f7"
     robustness: 2
     confidence: "LOW"

@@ -36,7 +36,7 @@ These rules come from a static reading of an operator's open directory (1,040 fi
 
 **Behaviours considered.** The 15-step agent-platform chain (17 items counting steps 2a and 2b) plus four other threads: the cloud credential, source control, the door-access platform probes, and the receivers and tunnels. That is 21 behaviours. Twelve have at least one rule here (chain steps 4, 5, 6, 7, 9, 11, 13, 14 and 15, and three of the four threads). Nine are in Coverage Gaps or Considered and Cut with a reason (steps 1, 2, 2a, 2b, 3, 8, 10 and 12, and the door-access probes).
 
-**Victim values are withheld.** No account id, agent id, owner code, internal hostname, victim address, credential or person appears in any rule. Whether the agent platform is bespoke or a product others run is NOT CHECKED so its route names could identify the affected organisation: the three gateway Sigma rules carry placeholder paths, and the defender fills in their own platform's routes. The publish, then save, then reload ordering is what carries over. The product's own service names and model names are left out. The only operator values are public: the operator address and ports go to the IOC feed, and bore.pub is a shared third-party service.
+**The rules are operator-side and environment-neutral.** Account ids, agent ids, internal hostnames and credentials are specific to each environment and a defender adds their own. Whether the agent platform is bespoke or a product others run is NOT CHECKED, so the three gateway Sigma rules carry placeholder paths, and the defender fills in their own platform's routes. The publish, then save, then reload ordering is what carries over. The product's own service names and model names are left out. The only operator values are public: the operator address and ports go to the IOC feed, and bore.pub is a shared third-party service.
 
 **Validation in numbers.**
 
@@ -470,7 +470,7 @@ level: medium
 **False Positives:** The platform's own editor and services if they call the reload route through the gateway after a save. I cannot tell from the held files how often that happens, so the standalone reload rule is only a lead.
 **Blind Spots:** The access log shows the path and not the body, so the rule cannot see that the model endpoint was changed, or to what. Needs a gateway that logs the route. Correlation support: Lucene cannot run the ordering rule; EQL converts it as a three-step sequence by client address.
 **Validation:** `sigma check` with the SigmaHQ configuration, `yamllint` and `tests/test_rules.py`: 0 errors, 0 issues. Lucene: plain rules convert, correlation unsupported. EQL: converts. NOT CHECKED against gateway logs. Correlation files cannot go upstream as written (SigmaHQ has none in `rules/`; `correlation_` filename prefix applied).
-**Deployment:** Gateway or ingress access logs of the agent platform, with a client address field. The three path values are placeholders: put in your own platform's publish, workspace-save and internal reload routes before deploying. I withhold the routes seen in this case because they identify the affected platform; the publish, then save, then reload ordering is the part that carries over.
+**Deployment:** Gateway or ingress access logs of the agent platform, with a client address field. The three path values are placeholders: put in your own platform's publish, workspace-save and internal reload routes before deploying. The publish, then save, then reload ordering is the part that carries over.
 **Basis:** Steps 5 to 7 of the chain: publish, then rewrite the model block, then reload without republishing, so the platform does not restore its own model block (`final2.py`, `order.py`, `claimfire.py`). 69 corpus files call the reload route.
 
 ```yaml
@@ -492,7 +492,7 @@ tags:
     - detection.emerging-threats
 logsource:
     category: proxy
-    definition: 'Requires gateway or ingress access logs that record the request method, path and client address. The path value is a placeholder for your platform''s route; the route seen in this case is withheld because it identifies the affected platform.'
+    definition: 'Requires gateway or ingress access logs that record the request method, path and client address. The path value is a placeholder for your platform''s route; the route names vary by platform.'
 detection:
     selection:
         cs-method: 'POST'
@@ -520,7 +520,7 @@ tags:
     - detection.emerging-threats
 logsource:
     category: proxy
-    definition: 'Requires gateway or ingress access logs that record the request method, path and client address. The path value is a placeholder for your platform''s route; the route seen in this case is withheld because it identifies the affected platform.'
+    definition: 'Requires gateway or ingress access logs that record the request method, path and client address. The path value is a placeholder for your platform''s route; the route names vary by platform.'
 detection:
     selection:
         c-uri|contains: '/REPLACE-workspace-save-route/'
@@ -549,7 +549,7 @@ tags:
     - detection.emerging-threats
 logsource:
     category: proxy
-    definition: 'Requires gateway or ingress access logs that record the request method, path and client address. The path value is a placeholder: replace it with your platform''s internal reload route. The route seen in this case is withheld because it identifies the affected platform.'
+    definition: 'Requires gateway or ingress access logs that record the request method, path and client address. The path value is a placeholder: replace it with your platform''s internal reload route. Route names vary by platform.'
 detection:
     selection:
         cs-method: 'POST'
@@ -600,7 +600,7 @@ level: medium
 **ATT&CK Note:** The operator replayed one stolen shared secret rather than guessing, so Brute Force is only the nearest fit for the rejection burst.
 **Confidence:** LOW
 **False Positives:** A CI job or integration with an expired token retrying.
-**Blind Spots:** Cannot name the pod or the shared account, because that takes victim values. A local filter must add the pod egress and the account name. The held outputs show no successful GitLab response, so I do not know the burst was followed by a success. A rule for a successful sign-in by the shared account from a new source needs the account name and is a Coverage Gap.
+**Blind Spots:** Cannot name the pod or the shared account, because those are specific to each environment. A local filter must add the pod egress and the account name. The held outputs show no successful GitLab response, so I do not know the burst was followed by a success. A rule for a successful sign-in by the shared account from a new source needs the account name and is a Coverage Gap.
 **Validation:** `sigma check` with the SigmaHQ configuration, `yamllint` and `tests/test_rules.py`: 0 errors, 0 issues. Lucene: correlation unsupported. EQL: converts. NOT CHECKED against GitLab logs.
 **Deployment:** GitLab or its reverse proxy access logs with the path, status and client address mapped.
 **Basis:** One shared service-account secret tried as an account password, as a personal-access-token header and as git-over-HTTP basic auth (`gitlab_probe.py`, `podgl2.py`, `gl_check.py`).
@@ -756,7 +756,7 @@ alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL HUNT INV-2026-082 POST T
 | YARA for the receiver scripts (`sink.py`, `hitrecv.py`, `vps_serve.py`) | Cut | Each is a short stock `http.server` upload handler, indistinguishable from thousands of benign scripts. |
 | YARA for the server-side relay scripts (`muxsrv*.py`, `relay9111.py`) | Cut | Same stock socket code; the worker-side rule already covers the protocol. Not run against benign files, so a rule here would be untested. |
 | Rules for the `fscan` and `gogo` scanners | Cut | Public tools. I did not check upstream coverage, so it is NOT CHECKED whether rules exist. |
-| YARA for the door-access console probe scripts | Cut | Its distinctive strings are the console product's own routes, which would identify a platform in the affected estate. Without them the rule is the public Struts2 S2-045 payload, which existing rulesets cover. |
+| YARA for the door-access console probe scripts | Cut | Its distinctive strings are one vendor's own product routes, too narrow to publish as a rule. Without them the rule is the public Struts2 S2-045 payload, which existing rulesets cover. |
 | Suricata for the S2-045 Content-Type payload | Cut | It is the public Struts2 exploit and I did not check existing network rulesets. |
 
 ---
@@ -765,14 +765,14 @@ alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL HUNT INV-2026-082 POST T
 
 I could not write a rule, or could not honestly tier one, for these. Each says what would enable it.
 
-- **The door-access platform probes.** The only distinctive strings are the console product's own routes, which would identify a platform in the affected estate, so the rule is withheld from this file (see Considered and Cut). A defender running that product can hunt for the public Struts2 S2-045 payload against its console.
+- **The door-access platform probes.** The only distinctive strings are one vendor's own product routes, too narrow to publish as a rule (see Considered and Cut). A defender running that product can hunt for the public Struts2 S2-045 payload against its console.
 
 - **Chain step 1, 2, 2a and 2b: the unauthenticated login and token minting.** The evidence is the route and an empty-body request. A rule needs the platform's gateway to log request bodies or response codes for that route, which I have no sample of. The remediation is to remove the route.
 - **Chain step 3: private agent registration.** The create routes are 6 shapes; a rule would be a rule on a victim product's routes. It needs a log of agent creation with the creating principal.
 - **Chain step 4 and 6, what was written.** Whether `config.json` was changed to an endpoint outside the platform's model catalogue is the real signal. It needs request-body logging or a periodic audit of the workspace file against the catalogue. My ordering correlation only shows the path sequence.
 - **Chain step 8 and 10: read-back and trigger chat.** Ordinary calls; no distinguishing field.
 - **Chain step 12: base64-wrapped shell step.** The `printf | base64 -d | bash` form is generic and I saw it only in an operator script, never in process telemetry, so I did not write a rule for it.
-- **A pod using a shared service account to sign in to GitLab.** A specific rule would need the account name and the pod egress address, which are victim values. The generic burst rule is written; a successful-sign-in rule is not.
+- **A pod using a shared service account to sign in to GitLab.** A specific rule would need the account name and the pod egress address, which are specific to each environment. The generic burst rule is written; a successful-sign-in rule is not.
 - **The shared service-account secret appearing in a URL or netrc.** A secret-in-command-line rule needs the secret's format. The held evidence is a 20-character value; no stable format.
 - **Cloud write and execute.** No successful write or execute call is shown (the cloud assistant call was denied), so there is no behaviour to detect past discovery.
 - **Network contact with the operator host.** The operator's own script comments say pod egress to the host was blocked (the operator's belief, not an observed control; the operator moved to bore.pub for that reason), so most pod traffic would be to bore.pub, which is why the bore rules are Hunting.
