@@ -1381,6 +1381,7 @@ html:has(.hl-report-page) {
 .hl-report-page.hl-figs-inline .hl-fig div.hl-rv-heathead { display: flex; flex-direction: column; align-items: center; justify-content: flex-start; gap: 6px; width: 100%; min-height: 150px; padding: 8px 2px; border: 0; border-bottom: 1px solid var(--rv-row-line); background: none; }
 .hl-report-page.hl-figs-inline .hl-fig .hl-rv-cell { border-radius: 0; }
 
+.hl-report-page.hl-figs-inline .hl-fig :is(.hl-rv-vertical-timeline, .hl-rv-vertical-timeline *, .hl-rv-swimlanes, .hl-rv-swimlanes *, .hl-rv-callout, .hl-rv-callout *, .hl-rv-event) { font-family: var(--hl-font-sans); }
 /* Attribution: the Diamond, four plain cells */
 .hl-report-page.hl-figs-inline .hl-fig .hl-rv-diamond { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 32px; padding: 0; border: 0; background: none; }
 .hl-report-page.hl-figs-inline .hl-fig .hl-rv-diamond-card { padding: 12px 0 14px; border: 0; border-top: 1px solid var(--rv-row-line); border-radius: 0; background: none; box-shadow: none; }
@@ -1432,3 +1433,19 @@ html:has(.hl-report-page) {
 .hl-report-page.hl-figs-inline .hl-tbar-console .hl-rv-pn-head:not(:has(*)) { display: none; }
 .hl-report-page.hl-figs-inline .hl-onepage .hl-fig, .hl-onepage .hl-report-page.hl-figs-inline .hl-fig,
 .hl-onepage .hl-report-page.hl-figs-inline :is(.hl-facts-block, .hl-tbar-filters, .hl-rv-minibar-anchor) { display: none !important; }
+
+/* The ATT&CK coverage strip the report page already draws beside the mapping table is a generated figure in the text too: under the flag it takes the figure style (a hairline above, no box). Its content, its Navigator download and its tactic buttons are unchanged. */
+.hl-report-page.hl-figs-inline .hl-post-content .hl-attack { border: 0; border-top: 1px solid var(--hl-hairline); border-radius: 0; background: none; box-shadow: none; }
+
+/* Header, under the flag: the cover and the compact ATT&CK chart lose the tinted fill and the border (content, texture and the severity edge stay). */
+.hl-report-page.hl-figs-inline .hl-rv-cover .c3-cover { background: none; border: 0; box-shadow: none; }
+.hl-report-page.hl-figs-inline .hl-rv-cover .c3-chart--compact { background: none; border: 0; box-shadow: none; }
+
+/* Phone: figures are full width; the facts stack one to a line, the risk rows and the Diamond cells go to one column. The heat map, the stage ribbon and the timeline keep their own overflow-x scrollers (the page itself never scrolls sideways). */
+@media (max-width: 699px) {
+  .hl-report-page.hl-figs-inline .hl-fact { flex: 1 1 100%; padding: 2px 0; margin-right: 0; border-right: 0; }
+  .hl-report-page.hl-figs-inline .hl-fig .hl-rv-riskrow { grid-template-columns: minmax(0, 1fr); grid-template-areas: "head" "bar"; gap: 6px; }
+  .hl-report-page.hl-figs-inline .hl-fig .hl-rv-diamond { grid-template-columns: minmax(0, 1fr); }
+  .hl-report-page.hl-figs-inline .hl-post-content .hl-fig { margin: 24px 0; }
+  .hl-report-page.hl-figs-inline .hl-fig-keys { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}

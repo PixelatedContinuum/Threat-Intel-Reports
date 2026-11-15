@@ -447,6 +447,9 @@ var SHAPE_NEED = {
   confidence: 'a Claim / Confidence / What would change it table'
 };
 var SHAPES = null;
+/* T-0637: a report with front matter `figures: inline` puts its figures in the text and builds no generated view band. Set in tabbedChecks from the page class; every row
+   that asserts the dashboard has an inline branch, and a page without the class takes the old branch untouched. */
+var INLINE = false;
 /* 4a's four mobile sizes plus the desktop one 5.4 names. Order matters only for
    the log; 812x375 is a landscape phone and gets the tablet layout. */
 var TAB_VIEWPORTS = [
@@ -560,7 +563,7 @@ var SECTION_RENDER_EXPR = '(function(){' +
   '[].slice.call(document.querySelectorAll(".hl-rv-source")).forEach(function(block){' +
   'var h=block.querySelector("h2");if(!h||!h.id)return;' +
   'var kids=[].slice.call(block.children),bad=[];' +
-  'kids.forEach(function(el){var rs=why(el);if(!rs.length)return;' +
+  'kids.forEach(function(el){if(el.matches("figure.hl-fig"))return;var rs=why(el);if(!rs.length)return;' +
   'bad.push((el===h?"heading":el.tagName.toLowerCase()+(el.className?"."+String(el.className).split(" ")[0]:""))+" ("+rs.join(", ")+")");});' +
   'out.count++;out.sections[h.id]={blocks:kids.length,bad:bad};});' +
   'return out;})()';
@@ -1375,7 +1378,13 @@ var TYPE_SPEC = [
   ['toolbar mono label', '.hl-rv-current', 14, null],
   ['header mono label', '.hl-post-header__badge', 14, 14],
   ['sponsor mono label', '.hl-rvsp__label', 14, 14],
-  ['header resource button', '.hl-quicklinks .hl-quicklink__label', 16, 15]
+  ['header resource button', '.hl-quicklinks .hl-quicklink__label', 16, 15],
+  /* T-0637: the text of an inline figure (a page without figures: inline has none of these elements, so none is measured and the count above is unchanged). The floor is the site's 15px. */
+  ['inline figure caption', '.hl-fig > figcaption', 16, 15],
+  ['inline figure source line', '.hl-fig > .hl-fig-src, .hl-facts-block > .hl-fig-src', 15, 15],
+  ['inline facts line', '.hl-fact', 16, 15],
+  ['inline figure key', '.hl-fig-key', 15, 15],
+  ['inline table toolbar chip', '.hl-tbar-chip', 15, 15]
 ];
 var TYPE_EXPR = '(function(){var SPEC=' + JSON.stringify(TYPE_SPEC) + ';' +
   'function vis(e){return e.getClientRects().length>0&&getComputedStyle(e).visibility!=="hidden";}' +
@@ -1772,7 +1781,7 @@ async function plateRows(page, url, mdText) {
    collapsed at rest with its note hidden and in the DOM, opens on a real key press (Enter) and on a real pointer press, shows its note inside
    the viewport, and closes on Escape. The note text must be generated chrome, never inside a report section. */
 var INFO_EXPR = '(function(){return [].slice.call(document.querySelectorAll(".hl-rv-panel:not([hidden]) .hl-rv-info")).map(function(b,i){var p=document.getElementById(b.getAttribute("aria-controls"));var r=b.getBoundingClientRect();' +
-  'return {i:i,label:b.getAttribute("aria-label"),tabIndex:b.tabIndex,disabled:b.disabled,w:r.width,h:r.height,expanded:b.getAttribute("aria-expanded"),hasPop:!!p,popHidden:!!p&&p.hidden,popTextLen:p?p.textContent.trim().length:0,popInReport:!!(p&&p.closest(".hl-rv-source")),chrome:b.hasAttribute("data-rv-chrome")&&!!p&&p.hasAttribute("data-rv-chrome")};});})()';
+  'return {i:i,label:b.getAttribute("aria-label"),tabIndex:b.tabIndex,disabled:b.disabled,w:r.width,h:r.height,expanded:b.getAttribute("aria-expanded"),hasPop:!!p,popHidden:!!p&&p.hidden,popTextLen:p?p.textContent.trim().length:0,popInReport:!!(p&&p.closest(".hl-rv-source")&&!(document.querySelector(".hl-figs-inline")&&p.hasAttribute("data-rv-chrome"))),chrome:b.hasAttribute("data-rv-chrome")&&!!p&&p.hasAttribute("data-rv-chrome")};});})()';
 /* Every "i" button of the open tab is probed (review F3 of T-0500.1.7.3): opened by Enter and by a real pointer press, its note's rectangle read on all four sides against the
    viewport, closed by Escape; then once more with the button scrolled to the bottom edge of the screen, where a note placed below it has no room. */
 function infoFits(b, vw, vh) { return !!b && b.r - b.l > 0 && b.l >= -0.5 && b.r <= vw + 0.5 && b.t >= -0.5 && b.b <= vh + 0.5; }
@@ -1847,7 +1856,9 @@ async function infoRows(page, url) {
   async function prepare(w, h) {
     await setViewport(page, w, h);
     if (!(await gotoAndWait(page, url))) return false;
-    await page.evaluate('location.hash="#tab-' + firstTab() + '"'); await CDP.sleep(250);
+    /* T-0637: an inline page has no view band, so its only "i" is the filter console's (Attack chain), inside the teardown that holds the ATT&CK table: open that teardown first */
+    await page.evaluate('location.hash="#tab-' + (INLINE && hasTab('chain') ? 'chain' : firstTab()) + '"'); await CDP.sleep(250);
+    if (INLINE) { await page.evaluate('(function(){[].slice.call(document.querySelectorAll(".hl-rv-panel:not([hidden]) .hl-rv-info")).forEach(function(b){for(var d=b.closest("details");d;d=d.parentElement&&d.parentElement.closest("details"))d.open=true;});})()'); await CDP.sleep(200); }
     var open = await page.json('(function(){var t=document.querySelector(".hl-rv-panel:not([hidden]) .hl-rv-view-summary button[aria-expanded=false]:not(.hl-rv-info)");if(t)t.click();return !!t;})()');
     if (open) await CDP.sleep(250);
     return true;
@@ -1862,14 +1873,14 @@ async function infoRows(page, url) {
     if (i === 0) {
       /* each control starts from a fresh load, so one broken button never hides the next control's result */
       var ctlRun = async function (label, setup, needTwo) {
-        if (needTwo && rows.length < 2) { check('NOT CHECKED: control: ' + label, false, 'this tab has ' + rows.length + ' "i" button, so there is no later button to break'); return; }
+        if (needTwo && rows.length < 2 && !INLINE) { check('NOT CHECKED: control: ' + label, false, 'this tab has ' + rows.length + ' "i" button, so there is no later button to break'); return; }
         if (!(await prepare(w, h))) { check('NOT CHECKED: control: ' + label, false, 'the tab controller never built'); return; }
         await page.evaluate(setup);
         var c2 = infoVerdict(await page.json(INFO_EXPR), await infoProbe(page));
         check('control: ' + label, c2.ok === false && !c2.notChecked, c2.ok === false ? 'FAILS as designed: ' + c2.detail : 'the control did NOT fire: ' + c2.detail);
       };
       await ctlRun('an "i" button whose handler is gone makes the popover row FAIL', '(function(){var b=document.querySelector(".hl-rv-panel:not([hidden]) .hl-rv-info");if(b){var c=b.cloneNode(true);b.replaceWith(c);}})()', false);
-      await ctlRun('a LATER "i" button (the last of the tab) whose handler is gone makes the popover row FAIL, though the first still works', '(function(){var a=document.querySelectorAll(".hl-rv-panel:not([hidden]) .hl-rv-info");var b=a[a.length-1];if(b){var c=b.cloneNode(true);b.replaceWith(c);}})()', true);
+      await ctlRun('a LATER "i" button (the last of the tab) whose handler is gone makes the popover row FAIL, though the first still works', (INLINE ? '(function(){var b=document.querySelector(".hl-rv-panel:not([hidden]) .hl-rv-info"),p=b&&document.getElementById(b.getAttribute("aria-controls"));if(!b||!p)return;var b2=b.cloneNode(true),p2=p.cloneNode(true);p2.id=p.id+"-gate";b2.setAttribute("aria-controls",p2.id);b.parentNode.appendChild(b2);b.parentNode.appendChild(p2);})();' : '') + '(function(){var a=document.querySelectorAll(".hl-rv-panel:not([hidden]) .hl-rv-info");var b=a[a.length-1];if(b){var c=b.cloneNode(true);b.replaceWith(c);}})()', true);
       await ctlRun('a note forced below the bottom of the viewport makes the popover row FAIL', '(function(){var s=document.createElement("style");s.textContent=".hl-rv-pop{position:fixed !important;top:100vh !important;bottom:auto !important;transform:none !important;}";document.head.appendChild(s);})()', false);
       await ctlRun('a note forced above the top of the viewport makes the popover row FAIL', '(function(){var s=document.createElement("style");s.textContent=".hl-rv-pop{position:fixed !important;top:-2000px !important;bottom:auto !important;transform:none !important;}";document.head.appendChild(s);})()', false);
     }
@@ -2032,6 +2043,7 @@ async function openOverview(page, url, w, h) {
   return true;
 }
 async function overviewScanRows(page, url) {
+  if (INLINE) { await inlineFigureRows(page, url); return; }   /* T-0637: the band is not built; the figures are measured where they now are */
   var states = [[1280, 900], [390, 844]];
   var attackRows = SHAPES && SHAPES.chain && SHAPES.chain.attack && SHAPES.chain.attack.shape ? SHAPES.chain.attack.rows : null;
   var victimRows = SHAPES && SHAPES.victims && SHAPES.victims.shape ? SHAPES.victims.rows : 0;
@@ -2091,13 +2103,14 @@ function chainMeasure() {
   function t(e) { return e ? e.textContent.replace(/\s+/g, ' ').trim() : ''; }
   var tables = [].slice.call(P.querySelectorAll('.hl-rv-source table')).map(function (tb) {
     var hr = tb.tHead ? tb.tHead.rows[0] : tb.rows[0];
-    return { hs: [].slice.call(hr.cells).map(t), rows: tb.querySelectorAll('tbody tr').length, cells: [].slice.call(tb.querySelectorAll('tbody tr')).map(function (tr) { return [].slice.call(tr.cells).map(t); }) };
+    return { el: tb, hs: [].slice.call(hr.cells).map(t), rows: tb.querySelectorAll('tbody tr').length, cells: [].slice.call(tb.querySelectorAll('tbody tr')).map(function (tr) { return [].slice.call(tr.cells).map(t); }) };
   });
   function has(m, re) { return m.hs.some(function (h) { return re.test(h); }); }
   var stageSrc = tables.filter(function (m) { return has(m, /^(Stage|Phase)$/i) && has(m, /What.*(did|does|happens)/i); })[0] || null;
   var attackSrc = tables.filter(function (m) { return has(m, /Tactic.*Technique/i) || has(m, /^Tactic$/i) && has(m, /^Technique( ID)?$/i); }).sort(function (a, b) { return b.rows - a.rows; })[0] || null;
   var keySrc = attackSrc ? tables.filter(function (m) { return m !== attackSrc && m.rows < attackSrc.rows && has(m, /Tactic.*Technique/i) && has(m, /^Status$/i) && has(m, /^Evidence/i); })[0] || null : null;
-  var con = P.querySelector('.hl-rv-console'), proc = P.querySelector('.hl-rv-procedures'), tbl = proc ? proc.querySelector('table') : null;
+  var inl = !!document.querySelector('.hl-figs-inline');   /* T-0637: the console and the filtered rows are on the report's own table */
+  var con = P.querySelector('.hl-rv-console'), proc = P.querySelector('.hl-rv-procedures'), tbl = proc ? proc.querySelector('table') : (inl && attackSrc ? attackSrc.el : null);
   var rows = tbl ? [].slice.call(tbl.tBodies[0].rows) : [];
   var chips = con ? [].slice.call(con.querySelectorAll('.hl-rv-facets .hl-rv-fchip')).map(function (c) { return { f: c.dataset.rvFacet, v: c.dataset.rvValue, n: +c.querySelector('strong').textContent }; }) : [];
   var nodes = [].slice.call(P.querySelectorAll('.hl-rv-flow .hl-rv-fnode')), cards = [].slice.call(P.querySelectorAll('.hl-rv-stage'));
@@ -2125,11 +2138,13 @@ function chainMeasure() {
     storyRows: cards.map(function (c) { return c.querySelectorAll('a.hl-rv-procedure').length; }),
     thPos: th ? getComputedStyle(th).position : null, tidFont: tid ? getComputedStyle(tid).fontFamily : null, tidCount: P.querySelectorAll('.hl-rv-procedures td .hl-rv-tid').length,
     carry: P.querySelectorAll('.hl-rv-procedures .hl-rv-carry').length, ev: P.querySelectorAll('.hl-rv-procedures .hl-rv-ev p').length, keyMatched: km ? +km[1] : null, keyTotal: km ? +km[2] : null, srcRows: srcRows, keyList: keyList, drawn: drawn,
-    tac: P.querySelectorAll('.hl-rv-procedures button.hl-rv-tac').length, innerW: innerWidth, mini: !!P.querySelector('.hl-rv-minibar'), miniHidden: P.querySelector('.hl-rv-minibar') ? P.querySelector('.hl-rv-minibar').hidden : null
+    tac: P.querySelectorAll('.hl-rv-procedures button.hl-rv-tac').length, inline: inl, attached: !!(inl && con && tbl && con.closest('.hl-tbar') && con.closest('.hl-tbar').nextElementSibling && con.closest('.hl-tbar').nextElementSibling.contains(tbl)),
+    dashCopies: P.querySelectorAll('.hl-rv-procedures, .hl-rv-table').length, marks: tbl ? tbl.querySelectorAll('.hl-rv-carry, .hl-rv-ev, .hl-rv-tac').length : 0, innerW: innerWidth, mini: !!P.querySelector('.hl-rv-minibar'), miniHidden: P.querySelector('.hl-rv-minibar') ? P.querySelector('.hl-rv-minibar').hidden : null
   };
 }
 function chainState() {
   var P = document.getElementById('tab-chain'), con = P.querySelector('.hl-rv-console'), rows = [].slice.call(P.querySelectorAll('.hl-rv-procedures tbody tr'));
+  if (!rows.length && document.querySelector('.hl-figs-inline')) { var bar = con.closest('.hl-tbar'), nx = bar && bar.nextElementSibling, tb = nx && nx.querySelector('table'); rows = tb ? [].slice.call(tb.tBodies[0].rows) : []; }
   var pressed = [].slice.call(con.querySelectorAll('.hl-rv-facets .hl-rv-fchip[aria-pressed=true]')).map(function (c) { return c.dataset.rvFacet + ':' + c.dataset.rvValue; });
   return { shown: rows.filter(function (r) { return !r.hidden; }).length, total: rows.length, count: con.querySelector('.hl-rv-count').textContent.replace(/\s+/g, ' ').trim(), pressed: pressed,
     resetShown: [].slice.call(con.querySelectorAll('button')).some(function (b) { return b.textContent === 'Reset filters' && !b.hidden; }) };
@@ -2139,11 +2154,11 @@ function chainMini() {
   var r = m.getBoundingClientRect(), c = con.getBoundingClientRect(), card = document.querySelector('.hl-rv-featcard'), cr = card && getComputedStyle(card).display !== 'none' ? card.getBoundingClientRect() : null;
   var bar = document.querySelector('.hl-rv-bar .hl-rv-mobile-line'), br = bar ? bar.getBoundingClientRect() : null;
   var mi = m.querySelector('input'), main = con.querySelector('.hl-rv-csearch input');
-  return { present: true, hidden: m.hidden, w: r.width, h: r.height, left: r.left, right: r.right, top: r.top, colLeft: c.left, colRight: c.right, cardRight: cr ? cr.right : null, barBottom: br ? br.bottom : null, hasSearch: !!mi, tableH: (document.querySelector('#tab-chain .hl-rv-procedures') || { getBoundingClientRect: function () { return { height: 0 }; } }).getBoundingClientRect().height, miniValue: mi ? mi.value : null, mainValue: main ? main.value : null };
+  return { present: true, hidden: m.hidden, w: r.width, h: r.height, left: r.left, right: r.right, top: r.top, colLeft: c.left, colRight: c.right, cardRight: cr ? cr.right : null, barBottom: br ? br.bottom : null, hasSearch: !!mi, tableH: (document.querySelector('#tab-chain .hl-rv-procedures') || (function () { var bar = con.closest('.hl-tbar'), nx = bar && bar.nextElementSibling; return nx && nx.querySelector('table'); })() || { getBoundingClientRect: function () { return { height: 0 }; } }).getBoundingClientRect().height, miniValue: mi ? mi.value : null, mainValue: main ? main.value : null };
 }
 function chainLight() {
-  var P = document.getElementById('tab-chain'), b = P.querySelector('.hl-rv-procedures button.hl-rv-tac'); if (!b) return { tactic: null };
-  var name = b.dataset.rvTactic, cards = [].slice.call(P.querySelectorAll('.hl-rv-stage'));
+  var P = document.getElementById('tab-chain'), b = P.querySelector('.hl-rv-procedures button.hl-rv-tac') || (document.querySelector('.hl-figs-inline') ? P.querySelector('.hl-rv-console .hl-rv-fchip[data-rv-facet="Tactic"]') : null); if (!b) return { tactic: null };
+  var name = b.dataset.rvTactic || b.dataset.rvValue, cards = [].slice.call(P.querySelectorAll('.hl-rv-stage'));
   var expect = cards.map(function (c, i) { return [].slice.call(c.querySelectorAll('a.hl-rv-procedure .hl-rv-pname small')).some(function (s) { return s.textContent.indexOf(name) === 0; }) ? i : -1; }).filter(function (i) { return i >= 0; });
   var nodes = [].slice.call(P.querySelectorAll('.hl-rv-flow .hl-rv-fnode'));
   return { tactic: name, expect: expect, lit: nodes.map(function (n, i) { return n.classList.contains('is-linked') ? i : -1; }).filter(function (i) { return i >= 0; }),
@@ -2248,6 +2263,19 @@ function chainTableVerdict(m, attackRows) {
   } else { if (m.carry) bad.push(m.carry + ' row(s) are marked but the report has no key list'); if (m.ev) bad.push(m.ev + ' evidence note(s) drawn but the report has no key list'); }
   return { notChecked: false, ok: bad.length === 0, why: bad, detail: m.rows + ' row(s) against ' + attackRows + '; ' + m.carry + ' marked of ' + m.keySrc + ' list row(s)' + (bad.length ? '; ' + bad.join('; ') : '') };
 }
+/* T-0637: the inline-figures page's version of the procedure-table row. The console is attached directly above the report's own ATT&CK table, which keeps every row (none hidden at rest) and carries no generated mark, no tactic button
+   and no second copy of itself in a view. */
+function inlineChainTableVerdict(m, attackRows) {
+  if (!m || !m.panel) return { notChecked: true, ok: false, detail: 'no Attack chain panel was found, so nothing was measured' };
+  if (!attackRows) return { notChecked: true, ok: false, detail: 'this report has no ATT&CK table (0 source rows)' };
+  var bad = [];
+  if (m.rows !== attackRows) bad.push('the report\'s table has ' + m.rows + ' row(s) on the page, the source has ' + attackRows);
+  if (m.hiddenRows) bad.push(m.hiddenRows + ' row(s) hidden at rest');
+  if (!m.attached) bad.push('the filter console is not attached directly above the report\'s own ATT&CK table');
+  if (m.dashCopies) bad.push(m.dashCopies + ' generated table copy or copies on the tab');
+  if (m.marks) bad.push(m.marks + ' generated mark(s), evidence note(s) or tactic button(s) inside the report\'s table');
+  return { notChecked: false, ok: bad.length === 0, why: bad, detail: m.rows + ' row(s) against ' + attackRows + ', ' + m.hiddenRows + ' hidden, console attached ' + m.attached + ', ' + m.dashCopies + ' table copies' + (bad.length ? '; ' + bad.join('; ') : '') };
+}
 /* The phone icon tab strip (390 and 360): every tab is an icon with its accessible name, only the selected one shows its label, the strip is the tablist, and the Sections menu still lists every tab. */
 function stripMeasure() {
   var tl = document.querySelector('.hl-rv-tabs'), tabs = tl ? [].slice.call(tl.querySelectorAll('[role=tab]')) : [];
@@ -2299,7 +2327,7 @@ function plateEdgeVerdict(m) {
 }
 /* The page settles a little after the first scroll (the panel's images and folds), so the console is scrolled past in two passes, the second from where the first landed. */
 async function scrollPastConsole(page) {
-  var expr = '(function(){var e=document.querySelector("#tab-chain .hl-rv-console");if(e)window.scrollTo(0,e.getBoundingClientRect().bottom+scrollY-90);})()';
+  var expr = '(function(){var e=document.querySelector("#tab-chain .hl-rv-console");if(e)window.scrollTo({top:e.getBoundingClientRect().bottom+scrollY-90,behavior:"instant"});})()';   /* instant: the page's smooth scrolling would still be on its way after the wait when the console is thousands of pixels down (an inline page keeps it in the text, under the report's own sections) */
   await page.evaluate(expr); await CDP.sleep(350); await page.evaluate(expr); await CDP.sleep(450);
 }
 async function chainRows(page, url) {
@@ -2308,7 +2336,9 @@ async function chainRows(page, url) {
     mini: 'the slim sticky bar appears once the console has scrolled past, stays inside the report column clear of the margin card and under the reading line, and shares the console\'s search',
     flow: 'the stage flow draws a card and a story stage for every row of the report\'s stage table, each counting the procedure rows its story lists',
     light: 'linked tactic highlighting: a focused tactic lights exactly the stages whose linked rows carry it, and leaving clears it',
-    tbl: 'the procedure table draws every source row with a sticky header and monospace technique IDs, and marks exactly the rows of the report\'s own "carries the case" list, each with its evidence' };
+    tbl: 'the procedure table draws every source row with a sticky header and monospace technique IDs, and marks exactly the rows of the report\'s own "carries the case" list, each with its evidence',
+    tblIn: 'the filter console sits directly above the report\'s own ATT&CK table, which keeps every row and carries no generated mark or second copy' };
+  var tacSel = INLINE ? '#tab-chain .hl-rv-console .hl-rv-fchip[data-rv-facet="Tactic"]' : '#tab-chain .hl-rv-procedures button.hl-rv-tac';
   function row(name, w, h, v) { var n = w + 'x' + h + ': ' + name; if (v.notChecked) check('NOT CHECKED: ' + n, false, v.detail); else check(n, v.ok, v.detail); }
   function ctl(name, v) { check('control: ' + name, v.ok === false && !v.notChecked, v.ok === false ? 'FAILS as designed: ' + v.detail : 'the control did NOT fire: ' + v.detail); }
   var states = [[1440, 900], [1280, 900], [390, 844]];
@@ -2319,6 +2349,7 @@ async function chainRows(page, url) {
     if (!hasTab('chain')) { check('NOT CHECKED: ' + w + 'x' + h + ': Attack chain rows', false, 'the report has no Attack chain tab'); continue; }
     await page.evaluate('location.hash="#tab-chain"'); await CDP.sleep(250);
     if (phone) { await page.json('(function(){var t=document.querySelector("#tab-chain .hl-rv-view-summary button[aria-expanded=false]:not(.hl-rv-info)");if(t)t.click();return !!t;})()'); await CDP.sleep(250); }
+    if (INLINE) { await page.evaluate('(function(){[].slice.call(document.querySelectorAll("#tab-chain .hl-rv-source table")).forEach(function(tb){for(var d=tb.closest("details");d;d=d.parentElement&&d.parentElement.closest("details"))d.open=true;});})()'); await CDP.sleep(250); }   /* the report\'s table may sit in a closed teardown, with its console */
     var m = await page.json(CHAIN_EXPR);
     if (w === 1440) {
       /* one pass at 1440 for the slim bar against the margin card; the console, flow, light and table rows run at 1280 and 390 */
@@ -2343,15 +2374,17 @@ async function chainRows(page, url) {
     }
     var vC = consoleVerdict(m, pressedState, clearedState, attackRows); row(N.con, w, h, vC);
     var vF = flowVerdict(m); row(N.flow, w, h, vF);
-    await page.evaluate('(function(){var b=document.querySelector("#tab-chain .hl-rv-procedures button.hl-rv-tac");if(b){b.scrollIntoView({block:"center"});b.focus();}})()'); await CDP.sleep(200);
-    var lit = await page.json(CHAINLIGHT_EXPR); await page.evaluate('(function(){var b=document.querySelector("#tab-chain .hl-rv-procedures button.hl-rv-tac");if(b)b.blur();})()'); await CDP.sleep(150);
+    if (INLINE) { await page.send('Input.dispatchMouseEvent', { type: 'mouseMoved', x: 2, y: 2 }); await CDP.sleep(100); }   /* the chip is lit by focus here: a pointer left on a chip by the presses above would light (and re-light) it by hover */
+    await page.evaluate('(function(){var b=document.querySelector(' + JSON.stringify(tacSel) + ');if(b){b.scrollIntoView({block:"center"});b.focus();}})()'); await CDP.sleep(200);
+    var lit = await page.json(CHAINLIGHT_EXPR); await page.evaluate('(function(){var b=document.querySelector(' + JSON.stringify(tacSel) + ');if(b)b.blur();})()'); await CDP.sleep(150);
     var vL = lightVerdict(lit, await page.json(CHAINLIGHT_EXPR)); row(N.light, w, h, vL);
-    var vT = chainTableVerdict(m, attackRows); row(N.tbl, w, h, vT);
+    var vT = INLINE ? inlineChainTableVerdict(m, attackRows) : chainTableVerdict(m, attackRows); row(INLINE ? N.tblIn : N.tbl, w, h, vT);
     if (!phone) {
       await page.evaluate('(function(){window.scrollTo(0,0);})()'); await CDP.sleep(450);
       var rest = await page.json(CHAINMINI_EXPR);
       await scrollPastConsole(page);
       await page.evaluate('(function(){var i=document.querySelector("#tab-chain .hl-rv-minibar input");if(i){i.value="T10";i.dispatchEvent(new Event("input",{bubbles:true}));}})()'); await CDP.sleep(200);
+      if (INLINE) await scrollPastConsole(page);   /* the rows the filter hides shift the page (scroll anchoring) under a table that sits in the text, so the console is put back above the reading line before the bar is read */
       var vM2 = miniVerdict(rest, await page.json(CHAINMINI_EXPR), await page.json(CHAINMINI_EXPR)); row(N.mini, w, h, vM2);
       await page.evaluate('(function(){window.scrollTo(0,0);var i=document.querySelector("#tab-chain .hl-rv-console .hl-rv-csearch input");if(i){i.value="";i.dispatchEvent(new Event("input",{bubbles:true}));}})()'); await CDP.sleep(150);
     }
@@ -2385,9 +2418,23 @@ async function chainRows(page, url) {
         [vL, 'a tactic button whose handler is gone makes the highlighting row FAIL', async function () {
           /* the handlers sit on the view body, so a copy without them: stop the events before they reach it */
           await page.evaluate('(function(){var P=document.getElementById("tab-chain");P.addEventListener("focusin",function(e){e.stopImmediatePropagation();},true);P.addEventListener("mouseover",function(e){e.stopImmediatePropagation();},true);})()');
-          await page.evaluate('(function(){var b=document.querySelector("#tab-chain .hl-rv-procedures button.hl-rv-tac");b.focus();})()'); await CDP.sleep(150);
+          await page.evaluate('(function(){var b=document.querySelector(' + JSON.stringify(tacSel) + ');b.focus();})()'); await CDP.sleep(150);
           return lightVerdict(await page.json(CHAINLIGHT_EXPR), null); }]
       ];
+      if (INLINE) {
+        /* the controls of the dashboard table (a mark moved to another row, evidence replaced) have no table of their own here; two take their place, each re-creating a defect of the report's table */
+        ctls = ctls.filter(function (c) { return !/carries-the-case|evidence/.test(c[1]); });
+        ctls.push([vT, 'a generated mark injected into the report\'s own ATT&CK table makes the table row FAIL', async function () {
+          await page.evaluate('(function(){var t=document.querySelector("#tab-chain .hl-rv-console").closest(".hl-tbar").nextElementSibling.querySelector("table");var n=document.createElement("span");n.className="hl-rv-carry";t.tBodies[0].rows[0].cells[0].appendChild(n);window.__hlNK=[n];})()');
+          var v = inlineChainTableVerdict(await page.json(CHAIN_EXPR), attackRows);
+          await page.evaluate('(function(){(window.__hlNK||[]).forEach(function(n){n.remove();});window.__hlNK=null;})()');
+          return v; }]);
+        ctls.push([vT, 'a second copy of the ATT&CK table drawn on the tab makes the table row FAIL', async function () {
+          await page.evaluate('(function(){var t=document.querySelector("#tab-chain .hl-rv-console").closest(".hl-tbar").nextElementSibling.querySelector("table").cloneNode(true);var d=document.createElement("section");d.className="hl-rv-procedures";d.appendChild(t);document.getElementById("tab-chain").appendChild(d);window.__hlNK=[d];})()');
+          var v = inlineChainTableVerdict(await page.json(CHAIN_EXPR), attackRows);
+          await page.evaluate('(function(){(window.__hlNK||[]).forEach(function(n){n.remove();});window.__hlNK=null;})()');
+          return v; }]);
+      }
       for (var ci = 0; ci < ctls.length; ci++) {
         if (ctls[ci][0].notChecked) { check('NOT CHECKED: control: ' + ctls[ci][1], false, 'the row it controls measured nothing on this report (' + ctls[ci][0].detail + '), so there is nothing to break'); continue; }
         ctl(ctls[ci][1], await ctls[ci][2]());
@@ -3019,7 +3066,7 @@ var TIMELINE_EXPR = '(function(){function vis(e){var r=e.getBoundingClientRect()
   'numMin:nums.length?Math.min.apply(null,nums):null,numCount:nums.length,marks:marks,axis:axis,kinds:kinds,dots:dotList,numbers:numberList,refs:refs,legend:legend,' +
   'events:document.querySelectorAll(".hl-rv-vertical-timeline li").length,markerTotal:document.querySelectorAll(".hl-rv-marker").length,' +
   'dated:[].slice.call(document.querySelectorAll(".hl-rv-vertical-timeline .hl-rv-date")).filter(function(e){return e.textContent.trim().length>0;}).length,' +
-  'tableRows:document.querySelectorAll(".hl-rv-chronology-table tbody tr").length};})()';
+  'tableRows:(function(){var d=document.querySelectorAll(".hl-rv-chronology-table tbody tr").length;if(d||!document.querySelector(".hl-figs-inline"))return d;var f=document.querySelector("figure.hl-fig--timeline");if(!f)return 0;var tb=[].slice.call(document.querySelectorAll("#tab-timeline .hl-rv-source table")).filter(function(t){return !!(f.compareDocumentPosition(t)&4);})[0];return tb&&tb.tBodies[0]?tb.tBodies[0].rows.length:0;})()};})()';
 function overlapPairs(rects) {
   var hits = 0;
   for (var i = 0; i < rects.length; i++) for (var j = i + 1; j < rects.length; j++) {
@@ -3523,6 +3570,7 @@ async function viewCollapsedState(page, label, hash) {
   return m;
 }
 async function viewFitRows(page, url, html) {
+  if (INLINE) { await inlineFitRows(page, url); return; }   /* T-0637: there is no data view to collapse; the figures are fit-tested where they are */
   var nameOverlap = 'with each data view collapsed, no visible element of the view overlaps a painted sibling, on every tab at 1280 and 390 px';
   var nameRounded = 'with each data view collapsed, a summary bar with rounded bottom corners has no visible sibling under it, on every tab at 1280 and 390 px';
   var states = [];
@@ -3576,6 +3624,454 @@ async function viewFitRows(page, url, html) {
   await restoreReportPage(page, url);
 }
 
+/* ---------- T-0637: the inline-figures rows ----------
+   A report whose front matter says `figures: inline` builds no generated view band (hl-report-tabs.js, .hl-figs-inline). Its figures sit in the text, each directly before the
+   report table it is drawn from, and a table's filters share one slim toolbar above that table. These rows replace the rows that assert the band (the cards, the Overview scan rows,
+   the view-collapsed fit rows) and measure the same things where they now are: the figure counts against the report's own tables, the placement, the one-table-once rule, the
+   toolbars, and what one-page mode and print do with them. Every expectation is read from the source tables (SHAPES, the article with scripts off), never from the figure itself,
+   and each row has a control that re-creates the defect on the same page and must FAIL. A kind of figure the report has no table for is not a row: the placement row compares
+   the set drawn with the set the report's tables support, so a figure drawn from nothing FAILS there. */
+function inlineMeasure() {
+  function t(e) { return e ? e.textContent.replace(/\s+/g, ' ').trim() : ''; }
+  function has(hs, re) { return hs.some(function (h) { return re.test(h); }); }
+  function heads(tb) { var hr = tb.tHead ? tb.tHead.rows[0] : tb.rows[0]; return [].slice.call(hr.cells).map(t); }
+  var all = [].slice.call(document.querySelectorAll('table'));
+  var src = [].slice.call(document.querySelectorAll('.hl-rv-source table'));
+  var meta = src.map(function (tb, i) {
+    var p = tb.closest('.hl-rv-panel'), body = tb.tBodies[0], hs = heads(tb);
+    return { i: i, tab: p ? p.id.replace(/^tab-/, '') : '', hs: hs, n: body ? body.rows.length : 0, hidden: body ? [].slice.call(body.rows).filter(function (r) { return r.hidden; }).length : 0,
+      closed: (function () { var d = tb.closest('details'); return !!d && !d.open; })(), names: body ? [].slice.call(body.rows).map(function (r) { return t(r.cells[0]); }) : [] };
+  });
+  function pick(tab, f) { return meta.filter(function (m) { return m.tab === tab && f(m.hs); }); }
+  var RISK_HEAD = /^(Risk (Dimension|Factor)|Dimension)$/i, RISK_SCORE = /^Score|^Rating/i;
+  var found = {
+    victims: pick('victims', function (h) { return has(h, /Organisation|Organization|Victim/i) && has(h, /Grade/i); })[0] || null,
+    stages: pick('chain', function (h) { return has(h, /^Stage$/i) && has(h, /What.*did/i); })[0] || null,
+    attack: pick('chain', function (h) { return has(h, /Tactic.*Technique/i) && has(h, /^Status$/i); }).sort(function (a, b) { return b.n - a.n; })[0] ||
+      pick('chain', function (h) { return has(h, /Tactic.*Technique/i) || has(h, /^Tactic$/i) && has(h, /^Technique( ID)?$/i); }).sort(function (a, b) { return b.n - a.n; })[0] || null,
+    chron: pick('timeline', function (h) { return has(h, /^Date|^Time|^When/i) && has(h, /Observation|Event/i); })[0] || null,
+    judg: pick('confidence', function (h) { return has(h, /Claim|Judgment/i) && has(h, /Confidence/i); })[0] || pick('confidence', function (h) { return has(h, /Claim|Judgment|Finding/i) && has(h, /Confidence/i); })[0] || null,
+    indic: pick('indicators', function (h) { return has(h, /^Indicator/i) && has(h, /Action/i); })[0] || null,
+    risks: pick('overview', function (h) { return h.some(function (x) { return RISK_HEAD.test(x); }) && h.some(function (x) { return RISK_SCORE.test(x); }); })
+  };
+  // the detection sentence, as the layout reads it
+  var rule = null, detBlock = null;
+  [].slice.call(document.querySelectorAll('#tab-indicators .hl-rv-source')).forEach(function (b) {
+    var h = b.querySelector(':scope > h2'); if (detBlock || !h || !/Detection|Hunting/i.test(t(h))) return; detBlock = b;
+    var p = b.querySelector('p'), tx = p ? t(p) : '', mt = tx.match(/(\d+) rules\b/), eng = [];
+    tx.replace(/(\d+) (Sigma|Suricata|YARA) \((\d+) detection, (\d+) hunting\)/g, function (_, a, e, d, hh) { eng.push([+a, +d, +hh]); });
+    if (/no YARA/.test(tx)) eng.push([0, 0, 0]);
+    if (mt && eng.length && eng.every(function (e) { return e[0] === e[1] + e[2]; }) && eng.reduce(function (n, e) { return n + e[0]; }, 0) === +mt[1]) rule = +mt[1];
+  });
+  var detTable = detBlock ? detBlock.querySelector('table') : null;
+  function nextTable(el) {
+    for (var i = 0; i < src.length; i++) { if (el.compareDocumentPosition(src[i]) & Node.DOCUMENT_POSITION_FOLLOWING && !el.contains(src[i])) return i; }
+    return -1;
+  }
+  var figs = [].slice.call(document.querySelectorAll('figure.hl-fig')).map(function (f) {
+    var kind = (f.className.match(/hl-fig--(\w+)/) || [])[1] || '', prev = f.previousElementSibling, cap = f.firstElementChild, last = f.lastElementChild;
+    var cs = getComputedStyle(f);
+    return { kind: kind, tab: (f.closest('.hl-rv-panel') || {}).id || '', next: nextTable(f), prevTag: prev ? prev.tagName : '', prevText: prev ? t(prev).slice(0, 160) : '', prevChrome: !!(prev && prev.hasAttribute('data-rv-chrome')),
+      capOk: !!cap && cap.tagName === 'FIGCAPTION' && t(cap).length > 0, cap: cap ? t(cap) : '', srcOk: !!last && last.classList.contains('hl-fig-src') && t(last).length > 0, src: last ? t(last) : '',
+      chrome: f.hasAttribute('data-rv-chrome') && f.hasAttribute('data-pagefind-ignore'), inDetailsClosed: !!(f.closest('details') && !f.closest('details').open),
+      style: { bg: cs.backgroundColor, bt: parseFloat(cs.borderTopWidth), bb: parseFloat(cs.borderBottomWidth), bl: parseFloat(cs.borderLeftWidth), br: parseFloat(cs.borderRightWidth), rad: cs.borderTopLeftRadius, shadow: cs.boxShadow },
+      capPx: cap ? parseFloat(getComputedStyle(cap).fontSize) : 0, srcPx: last ? parseFloat(getComputedStyle(last).fontSize) : 0, capFont: cap ? getComputedStyle(cap).fontFamily : '', srcFont: last ? getComputedStyle(last).fontFamily : '',
+      capTop: cap ? cap.getBoundingClientRect().top : 0, drawTop: f.querySelector('.hl-fig-draw') ? f.querySelector('.hl-fig-draw').getBoundingClientRect().top : 0, srcTop: last ? last.getBoundingClientRect().top : 0 };
+  });
+  var facts = [].slice.call(document.querySelectorAll('#tab-overview .hl-facts .hl-fact')).map(function (f) { return { value: t(f.querySelector('strong')), text: t(f), title: f.title || '' }; });
+  var fb = document.querySelector('#tab-overview .hl-facts-block');
+  var fbPrev = fb ? fb.previousElementSibling : null;
+  function hereTab(sel) { return [].slice.call(document.querySelectorAll(sel)); }
+  var grade = {}, gf = document.querySelector('figure.hl-fig--grades');
+  if (gf) { gf.querySelectorAll('.hl-rv-sq').forEach(function (s) { grade[s.dataset.rvGrade] = (grade[s.dataset.rvGrade] || 0) + 1; }); }
+  var keyCounts = {}; hereTab('figure.hl-fig--grades .hl-fig-key').forEach(function (k) { var g = t(k).replace(/^\d+\s*/, ''); keyCounts[g] = +t(k.querySelector('strong')); });
+  var victimGrades = {}; if (found.victims) { var vt = src[found.victims.i], gc = heads(vt).findIndex(function (h) { return /Grade/i.test(h); });
+    [].slice.call(vt.tBodies[0].rows).forEach(function (r) { var m = t(r.cells[gc]).match(/^(ACCESS SHOWN|COMPROMISED|REACHED|LISTED|CURRENT)/); var g = m ? m[1] : 'OTHER'; victimGrades[g] = (victimGrades[g] || 0) + 1; }); }
+  var heat = { cells: hereTab('figure.hl-fig--heat .hl-rv-heat .hl-rv-cell:not(.hl-rv-cell--sw)').length, cols: hereTab('figure.hl-fig--heat .hl-rv-heatcol').map(function (c) { return { n: +t(c.querySelector('.hl-rv-heathead strong')), cells: c.querySelectorAll('.hl-rv-heatcells .hl-rv-cell').length }; }) };
+  var risk = hereTab('figure.hl-fig--risk').map(function (f) { return { names: [].slice.call(f.querySelectorAll('.hl-rv-riskrow .hl-rv-riskname')).map(t), bars: f.querySelectorAll('.hl-rv-riskbar').length, fills: f.querySelectorAll('.hl-rv-riskbar > i').length, why: f.querySelectorAll('.hl-rv-riskwhy').length }; });
+  var dist = { segs: hereTab('figure.hl-fig--dist .hl-rv-distbar > span').length, keys: hereTab('figure.hl-fig--dist .hl-fig-key strong').map(function (s) { return +t(s); }) };
+  var flow = { nodes: hereTab('figure.hl-fig--chain .hl-rv-flow .hl-rv-fnode').length, cards: hereTab('figure.hl-fig--chain .hl-rv-stage').length };
+  var diamond = hereTab('figure.hl-fig--diamond .hl-rv-diamond-card').map(function (c) { return { h: t(c.querySelector('h3')), link: !!c.querySelector('a[href^="#"]'), quote: !!c.querySelector('blockquote') }; });
+  var rl = document.querySelector('figure.hl-fig--rules .hl-fig-line');
+  var rules = rl ? { text: t(rl), nums: (t(rl).match(/: (\d+) rules/g) || []).map(function (x) { return +x.match(/\d+/)[0]; }) } : null;
+  var bars = hereTab('.hl-tbar').map(function (b) {
+    var nxt = b.nextElementSibling, tb = nxt ? nxt.querySelector('table') : null, idx = tb ? src.indexOf(tb) : -1;
+    return { tab: (b.closest('.hl-rv-panel') || {}).id || '', tbl: idx, chips: [].slice.call(b.querySelectorAll('.hl-tbar-chip')).map(function (c) { return { v: c.dataset.rvValue, n: +t(c.querySelector('strong')), pressed: c.getAttribute('aria-pressed') }; }),
+      console: !!b.querySelector('.hl-rv-console'), copy: [].slice.call(b.querySelectorAll('button')).filter(function (x) { return /^Copy/.test(x.textContent); }).length, count: t(b.querySelector('.hl-tbar-count')) };
+  });
+  return { outside: all.filter(function (x) { return !x.closest('.hl-rv-source'); }).length, inSource: src.length, tables: meta.map(function (m) { return { i: m.i, tab: m.tab, n: m.n, hs: m.hs.join('|').slice(0, 60), closed: m.closed }; }),
+    found: { victims: found.victims && found.victims.i, stages: found.stages && found.stages.i, attack: found.attack && found.attack.i, chron: found.chron && found.chron.i, judg: found.judg && found.judg.i, indic: found.indic && found.indic.i, risks: found.risks.map(function (m) { return m.i; }) },
+    rows: { victims: found.victims && found.victims.n, stages: found.stages && found.stages.n, attack: found.attack && found.attack.n, chron: found.chron && found.chron.n, judg: found.judg && found.judg.n, risks: found.risks.map(function (m) { return m.n; }), riskNames: found.risks.map(function (m) { return m.names; }) },
+    rule: rule, detTable: detTable ? src.indexOf(detTable) : -1, detPara: detBlock ? (function () { var p = detBlock.querySelector('p'); return p ? t(p).slice(0, 80) : ''; })() : '',
+    figs: figs, facts: facts, factsPrev: fbPrev ? fbPrev.className : null, factsBlock: !!fb, factsSrc: fb ? t(fb.querySelector('.hl-fig-src')) : '', tiles: document.querySelectorAll('.hl-rv-tile, .hl-rv-view').length,
+    grade: grade, keyCounts: keyCounts, victimGrades: victimGrades, heat: heat, risk: risk, dist: dist, flow: flow, diamond: diamond, rules: rules, bars: bars,
+    attribution: !!document.getElementById('tab-attribution') };
+}
+var INLINE_EXPR = '(' + inlineMeasure.toString() + ')()';
+/* The placement row: the set of figures the page draws is the set the report's tables support, each directly before its source table (or after the paragraph it is named after). */
+function inlinePlacementVerdict(m, shapes) {
+  if (!m) return { notChecked: true, ok: false, detail: 'nothing was measured' };
+  var bad = [], kinds = {}, listed = [];
+  m.figs.forEach(function (f) { (kinds[f.kind] = kinds[f.kind] || []).push(f); });
+  function expectOne(kind, srcIdx, label, tabCond) {
+    var drawn = kinds[kind] || [];
+    if (srcIdx === null || srcIdx === undefined || srcIdx < 0) { if (drawn.length) bad.push(drawn.length + ' ' + label + ' figure(s) drawn but the report has no table for it'); return; }
+    if (drawn.length !== 1) { bad.push(label + ': ' + drawn.length + ' figure(s) drawn, 1 expected from its source table'); return; }
+    listed.push(label);
+    var f = drawn[0];
+    if (kind === 'grades') {
+      var ok = f.prevTag === 'P' && /\d+ ACCESS SHOWN.*\d+ COMPROMISED.*\d+ REACHED.*\d+ LISTED/.test(f.prevText) || f.next === srcIdx;
+      if (!ok) bad.push(label + ' is not after the tally paragraph or directly before the victim table (next table index ' + f.next + ', expected ' + srcIdx + ')');
+    } else if (f.next !== srcIdx) bad.push(label + ' is not directly before its source table (the next table after it is #' + f.next + ', its table is #' + srcIdx + ')');
+  }
+  expectOne('grades', m.found.victims, 'grade strip');
+  expectOne('chain', m.found.stages, 'stage ribbon and chain story');
+  expectOne('heat', m.found.attack, 'technique heat map');
+  expectOne('timeline', m.found.chron, 'timeline');
+  expectOne('dist', m.found.judg, 'confidence distribution');
+  // risk: one figure per risk table, in order
+  var rf = kinds.risk || [];
+  if (rf.length !== m.found.risks.length) bad.push('risk bars: ' + rf.length + ' figure(s) drawn, ' + m.found.risks.length + ' risk table(s) in the report');
+  else rf.forEach(function (f, i) { listed.push('risk bars ' + (i + 1)); if (f.next !== m.found.risks[i]) bad.push('risk bars ' + (i + 1) + ' is not directly before its risk table (next table #' + f.next + ', its table #' + m.found.risks[i] + ')'); });
+  // diamond: after the first statement of the attribution section; one when the tab exists
+  var df = kinds.diamond || [];
+  if (m.attribution) {
+    if (df.length !== 1) bad.push('Diamond Model: ' + df.length + ' figure(s) drawn, 1 expected');
+    else { listed.push('Diamond Model'); if (df[0].prevTag !== 'P' && df[0].prevTag !== 'H2') bad.push('Diamond Model does not follow a paragraph or the section heading (' + df[0].prevTag + ')'); }
+  } else if (df.length) bad.push('a Diamond Model is drawn but the report has no attribution tab');
+  // rules: only when the detection sentence reconciles
+  var rl = kinds.rules || [];
+  if (m.rule !== null) {
+    if (rl.length !== 1) bad.push('rule counts: ' + rl.length + ' figure(s) drawn, 1 expected from the detection sentence');
+    else { listed.push('rule counts'); if (m.detTable >= 0 ? rl[0].next !== m.detTable : rl[0].prevTag !== 'P') bad.push('rule counts are not before the detection section\'s first table or after its first paragraph'); }
+  } else if (rl.length) bad.push('rule counts are drawn but the detection sentence does not reconcile');
+  var known = { grades: 1, chain: 1, heat: 1, timeline: 1, dist: 1, risk: 1, diamond: 1, rules: 1 };
+  m.figs.forEach(function (f) { if (!known[f.kind]) bad.push('an unknown figure kind "' + f.kind + '" is drawn'); if (f.inDetailsClosed) bad.push(f.kind + ' figure is inside a closed teardown'); });
+  // the facts line
+  var want = shapes && shapes.overview ? shapes.overview.tiles : null;
+  if (!want || !want.length) { if (m.facts.length) bad.push(m.facts.length + ' fact(s) drawn but the report has no source for any'); }
+  else {
+    listed.push('facts line');
+    var got = m.facts.map(function (f) { return f.value; });
+    if (got.join('\u0001') !== want.join('\u0001')) bad.push('the facts line reads [' + got.join(' | ') + '], the report\'s tables give [' + want.join(' | ') + ']');
+    if (!m.factsBlock) bad.push('no facts block');
+    else if (m.factsPrev !== 'hl-rv-panel-head') bad.push('the facts line does not open the Overview panel (it follows ' + m.factsPrev + ')');
+    if (!m.factsSrc || !/Counted from/.test(m.factsSrc)) bad.push('the facts line has no source line');
+    m.facts.forEach(function (f, i) { if (!/How counted: .* From /.test(f.title)) bad.push('fact ' + (i + 1) + ' says nothing of where it is counted from'); });
+  }
+  if (m.tiles) bad.push(m.tiles + ' generated tile(s) or view band(s) still on the page');
+  if (!listed.length) return { notChecked: true, ok: false, detail: 'the report has no table any figure could be drawn from, so nothing was compared' };
+  return { notChecked: false, ok: bad.length === 0, why: bad, detail: listed.length + ' figure kind(s) compared with the report\'s tables (' + listed.join(', ') + '); ' + m.figs.length + ' figure(s) drawn, ' + m.facts.length + ' fact(s)' + (bad.length ? '; ' + bad.join('; ') : '') };
+}
+/* Anatomy: a caption above the drawing, a source line under it, no box, one hairline above, sans text at or over the floor, generated chrome. */
+function inlineAnatomyVerdict(m) {
+  if (!m || !m.figs.length) return { notChecked: true, ok: false, detail: 'no figure is on this page, so nothing was measured' };
+  var bad = [];
+  m.figs.forEach(function (f) {
+    var n = f.kind + ' figure';
+    if (!f.capOk) bad.push(n + ' has no caption as its first child');
+    if (!f.srcOk) bad.push(n + ' has no source line as its last child');
+    if (!f.chrome) bad.push(n + ' is not marked data-rv-chrome and data-pagefind-ignore');
+    var s = f.style;
+    if (!(s.bt === 1) || s.bb || s.bl || s.br) bad.push(n + ' has borders other than one hairline above (' + [s.bt, s.br, s.bb, s.bl].join('/') + ')');
+    if (!/rgba\(0, 0, 0, 0\)|transparent/.test(s.bg)) bad.push(n + ' has a fill (' + s.bg + ')');
+    if (s.rad !== '0px') bad.push(n + ' has a radius (' + s.rad + ')');
+    if (s.shadow !== 'none') bad.push(n + ' has a shadow');
+    if (f.capPx && f.capPx < 15) bad.push(n + ' caption is ' + f.capPx + 'px, under the 15px floor');
+    if (f.srcPx && f.srcPx < 15) bad.push(n + ' source line is ' + f.srcPx + 'px, under the 15px floor');
+    if (/mono|Consolas|Menlo|Courier/i.test(f.capFont + ' ' + f.srcFont)) bad.push(n + ' caption or source line is set in monospace');
+    if (f.drawTop && f.capTop && f.capTop > f.drawTop) bad.push(n + ' caption is below the drawing');
+    if (f.drawTop && f.srcTop && f.srcTop < f.drawTop) bad.push(n + ' source line is above the drawing');
+    if (/^(Figure|Fig\.)\s*\d/i.test(f.cap)) bad.push(n + ' caption is numbered, which would collide with the author\'s numbering');
+  });
+  return { notChecked: false, ok: bad.length === 0, why: bad, detail: m.figs.length + ' figure(s): caption above, source line under, one hairline, no fill, border box, radius or shadow, sans at or over the floor' + (bad.length ? '; ' + bad.join('; ') : '') };
+}
+/* One table once: the article's tables (scripts off) are the page's tables, all inside the report's own sections, none re-drawn. */
+function inlineOnceVerdict(m, article) {
+  if (article === null || article === undefined) return { notChecked: true, ok: false, detail: 'the article was not counted with scripts off, so there is nothing to compare the built page with' };
+  var bad = [];
+  if (m.outside !== 0) bad.push(m.outside + ' table(s) outside the report\'s own sections');
+  if (m.inSource !== article) bad.push('the built page has ' + m.inSource + ' table(s) in the report\'s sections, the article has ' + article);
+  return { notChecked: false, ok: bad.length === 0, why: bad, detail: article + ' table(s) in the article (scripts off), ' + m.inSource + ' in the report\'s sections on the built page, ' + m.outside + ' outside them' + (bad.length ? '; ' + bad.join('; ') : '') };
+}
+function inlineCountsVerdicts(m, shapes) {
+  var out = [];
+  function add(name, v) { out.push({ name: name, v: v }); }
+  if (m.found.victims !== null && m.found.victims !== undefined && m.found.victims >= 0 && (m.figs.some(function (f) { return f.kind === 'grades'; }))) {
+    var bad = [], n = m.rows.victims, sq = Object.keys(m.grade).reduce(function (a, k) { return a + m.grade[k]; }, 0), ks = Object.keys(m.keyCounts).reduce(function (a, k) { return a + m.keyCounts[k]; }, 0);
+    if (sq !== n) bad.push(sq + ' square(s), the victim table has ' + n + ' row(s)');
+    if (ks !== n) bad.push('the keys add up to ' + ks + ', the table has ' + n + ' row(s)');
+    Object.keys(m.victimGrades).forEach(function (g) { if ((m.grade[g] || 0) !== m.victimGrades[g]) bad.push(g + ': ' + (m.grade[g] || 0) + ' square(s), ' + m.victimGrades[g] + ' row(s) of that grade'); });
+    add('the grade strip draws one square for every row of the victim table and its keys give the count of each grade', { ok: bad.length === 0, detail: sq + ' square(s) against ' + n + ' row(s); keys ' + JSON.stringify(m.keyCounts) + (bad.length ? '; ' + bad.join('; ') : '') });
+  }
+  if (m.figs.some(function (f) { return f.kind === 'heat'; })) {
+    var bh = [], na = m.rows.attack;
+    if (m.heat.cells !== na) bh.push(m.heat.cells + ' cell(s), the ATT&CK table has ' + na + ' row(s)');
+    m.heat.cols.forEach(function (c, i) { if (c.n !== c.cells) bh.push('column ' + (i + 1) + ' says ' + c.n + ' and draws ' + c.cells); });
+    add('the technique heat map draws one cell for every ATT&CK procedure row and each column states its own count', { ok: bh.length === 0, detail: m.heat.cells + ' cell(s) in ' + m.heat.cols.length + ' column(s) against ' + na + ' row(s)' + (bh.length ? '; ' + bh.join('; ') : '') });
+  }
+  if (m.risk.length) {
+    var br = [];
+    m.risk.forEach(function (f, i) {
+      var names = m.rows.riskNames[i] || [];
+      if (f.names.join('|') !== names.join('|')) br.push('figure ' + (i + 1) + ' draws [' + f.names.join(' | ') + '], the table has [' + names.join(' | ') + ']');
+      if (f.bars !== names.length || f.fills !== names.length) br.push('figure ' + (i + 1) + ' has ' + f.bars + ' bar(s) and ' + f.fills + ' fill(s) for ' + names.length + ' row(s)');
+      if (f.why) br.push('figure ' + (i + 1) + ' repeats the table\'s rationale text');
+    });
+    add('the risk bars draw one bar for every row of each risk table, in its order', { ok: br.length === 0, detail: m.risk.length + ' figure(s) over ' + m.rows.risks.reduce(function (a, b) { return a + b; }, 0) + ' row(s)' + (br.length ? '; ' + br.join('; ') : '') });
+  }
+  if (m.figs.some(function (f) { return f.kind === 'dist'; })) {
+    var bd = [], nj = m.rows.judg, sum = m.dist.keys.reduce(function (a, b) { return a + b; }, 0);
+    if (sum !== nj) bd.push('the keys add up to ' + sum + ', the judgments table has ' + nj + ' row(s)');
+    if (m.dist.segs !== m.dist.keys.length) bd.push(m.dist.segs + ' segment(s) for ' + m.dist.keys.length + ' confidence word(s)');
+    add('the confidence distribution has a segment for every printed confidence and its counts add up to the judgments table', { ok: bd.length === 0, detail: m.dist.segs + ' segment(s), keys ' + JSON.stringify(m.dist.keys) + ' against ' + nj + ' row(s)' + (bd.length ? '; ' + bd.join('; ') : '') });
+  }
+  if (m.figs.some(function (f) { return f.kind === 'diamond'; })) {
+    var bm = [];
+    if (m.diamond.length !== 4) bm.push(m.diamond.length + ' cell(s), 4 expected');
+    m.diamond.forEach(function (c) { if (c.quote && !c.link) bm.push(c.h + ' quotes a section and gives no link to it'); });
+    add('the Diamond Model has its four cells and each cell that quotes the report links to the section it quotes', { ok: bm.length === 0, detail: m.diamond.map(function (c) { return c.h + (c.link ? ' (linked)' : ''); }).join(', ') + (bm.length ? '; ' + bm.join('; ') : '') });
+  }
+  if (m.rules) {
+    var bl = [], total = m.rules.nums.reduce(function (a, b) { return a + b; }, 0);
+    if (m.rule !== null && total !== m.rule) bl.push('the line adds up to ' + total + ' rules, the detection sentence says ' + m.rule);
+    add('the rule-count line adds up to the detection sentence it is read from', { ok: bl.length === 0, detail: m.rules.text.slice(0, 120) + (bl.length ? '; ' + bl.join('; ') : '') });
+  }
+  return out;
+}
+var INLINE_TOOLBAR_EXPR = '(function(){function t(e){return e?e.textContent.replace(/\\s+/g," ").trim():"";}' +
+  'return [].slice.call(document.querySelectorAll(".hl-tbar")).map(function(b,bi){var nxt=b.nextElementSibling,tb=nxt?nxt.querySelector("table"):null;if(!tb||!tb.tBodies[0])return null;' +
+  'var rows=[].slice.call(tb.tBodies[0].rows);return {bi:bi,tab:(b.closest(".hl-rv-panel")||{}).id,rows:rows.length,shown:rows.filter(function(r){return !r.hidden;}).length,count:t(b.querySelector(".hl-tbar-count")),' +
+  'chips:[].slice.call(b.querySelectorAll(".hl-tbar-chip")).map(function(c){return {v:c.dataset.rvValue,n:+t(c.querySelector("strong")),p:c.getAttribute("aria-pressed")};})};}).filter(Boolean);})()';
+function inlineToolbarVerdict(rows, pressed, cleared) {
+  if (!rows || !rows.length) return { notChecked: true, ok: false, detail: 'the page has no table toolbar with filter chips, so nothing was measured' };
+  var bad = [];
+  rows.forEach(function (r) {
+    var real = r.chips.filter(function (c) { return c.v !== ''; }), sum = real.reduce(function (a, c) { return a + c.n; }, 0), all = r.chips.filter(function (c) { return c.v === ''; })[0];
+    if (!all || all.n !== r.rows) bad.push('toolbar ' + r.bi + ' (' + r.tab + '): the All chip says ' + (all ? all.n : 'nothing') + ', the table has ' + r.rows + ' row(s)');
+    if (sum !== r.rows) bad.push('toolbar ' + r.bi + ': the chips add up to ' + sum + ', the table has ' + r.rows + ' row(s)');
+    if (r.shown !== r.rows) bad.push('toolbar ' + r.bi + ': ' + (r.rows - r.shown) + ' row(s) hidden at rest');
+    if (r.count !== '') bad.push('toolbar ' + r.bi + ': the count line reads ' + JSON.stringify(r.count) + ' at rest');
+  });
+  if (pressed) pressed.forEach(function (p) {
+    if (p.shown !== p.want) bad.push('toolbar ' + p.bi + ': pressing ' + JSON.stringify(p.v) + ' shows ' + p.shown + ' row(s), its chip says ' + p.want);
+    if (!new RegExp('^Showing ' + p.want + ' of ' + p.rows + ' ').test(p.count)) bad.push('toolbar ' + p.bi + ': the count line reads ' + JSON.stringify(p.count) + ' while filtered');
+    if (p.pressedChips !== 1) bad.push('toolbar ' + p.bi + ': ' + p.pressedChips + ' chips are pressed after one press');
+  });
+  if (cleared) cleared.forEach(function (p) { if (p.shown !== p.rows || p.count !== '') bad.push('toolbar ' + p.bi + ': a second press leaves ' + p.shown + ' of ' + p.rows + ' row(s), count ' + JSON.stringify(p.count)); });
+  return { notChecked: false, ok: bad.length === 0, why: bad, detail: rows.length + ' toolbar(s): ' + rows.map(function (r) { return r.tab.replace('tab-', '') + ' ' + r.chips.length + ' chip(s) over ' + r.rows + ' row(s)'; }).join(', ') + (bad.length ? '; ' + bad.join('; ') : '') };
+}
+async function inlineToolbarRun(page, tabs) {
+  var all = [], pressed = [], cleared = [];
+  function chipBars(tab) { return page.json(INLINE_TOOLBAR_EXPR).then(function (rows) { return rows.filter(function (r) { return r.tab === 'tab-' + tab && r.chips.length; }); }); }
+  for (var i = 0; i < tabs.length; i++) {
+    await page.evaluate('location.hash="#tab-' + tabs[i] + '"'); await CDP.sleep(250);
+    var rows = await chipBars(tabs[i]);
+    for (var k = 0; k < rows.length; k++) {
+      var r = rows[k]; all.push(r);
+      var first = r.chips.filter(function (c) { return c.v !== ''; })[0]; if (!first) continue;
+      var js = function (tab, kk, v, act) { return '(function(){var bars=[].slice.call(document.querySelectorAll("#tab-' + tab + ' .hl-tbar")).filter(function(x){return x.querySelector(".hl-tbar-chip");});var b=bars[' + kk + '];var c=[].slice.call(b.querySelectorAll(".hl-tbar-chip")).filter(function(x){return x.dataset.rvValue===' + JSON.stringify(v) + ';})[0];' + act + '})()'; };
+      await page.evaluate(js(tabs[i], k, first.v, 'c.scrollIntoView({block:"center"});c.click();')); await CDP.sleep(150);
+      var st = (await chipBars(tabs[i]))[k];
+      pressed.push({ bi: r.bi, v: first.v, want: first.n, rows: st.rows, shown: st.shown, count: st.count, pressedChips: st.chips.filter(function (c) { return c.p === 'true' && c.v !== ''; }).length });
+      await page.evaluate(js(tabs[i], k, first.v, 'c.click();')); await CDP.sleep(150);
+      var st2 = (await chipBars(tabs[i]))[k];
+      cleared.push({ bi: r.bi, rows: st2.rows, shown: st2.shown, count: st2.count });
+    }
+  }
+  return { all: all, pressed: pressed, cleared: cleared };
+}
+async function inlineArticleTables(page, url) {
+  await page.send('Emulation.setScriptExecutionDisabled', { value: true });
+  var n = null;
+  try { await page.send('Page.navigate', { url: url }); await CDP.sleep(1200); n = await page.json('document.querySelectorAll(".hl-post-content table").length'); }
+  finally { await page.send('Emulation.setScriptExecutionDisabled', { value: false }); }
+  return n;
+}
+/* One-page mode and print restore the article order: the generated figures and the filters are not drawn, every row of a filtered table is back. */
+var INLINE_ONEPAGE_EXPR = '(function(){var figs=[].slice.call(document.querySelectorAll("figure.hl-fig,.hl-facts-block,.hl-tbar-filters"));var shown=figs.filter(function(f){var r=f.getBoundingClientRect();return r.width>0||r.height>0;});' +
+  'var rows=[].slice.call(document.querySelectorAll(".hl-rv-source tbody tr")),hid=rows.filter(function(r){return r.hidden;}).length;return {figs:figs.length,shown:shown.length,rows:rows.length,hiddenRows:hid,one:document.documentElement.classList.contains("hl-onepage")};})()';
+async function inlineOnePageRows(page, url) {
+  var name = 'one-page mode and print hide the generated figures and filters and bring every filtered row back, leaving the article as written';
+  await setViewport(page, 1280, 900);
+  if (!(await gotoAndWait(page, url))) { check('NOT CHECKED: ' + name, false, 'the tab controller never built, so nothing was measured'); return; }
+  // filter something first so a row is hidden when the mode changes
+  var tab = hasTab('victims') ? 'victims' : hasTab('confidence') ? 'confidence' : null;
+  if (!tab) { check('NOT CHECKED: ' + name, false, 'the report has no tab with a filter toolbar, so no row could be hidden before the mode change'); return; }
+  await page.evaluate('location.hash="#tab-' + tab + '"'); await CDP.sleep(250);
+  var did = await page.json('(function(){var c=[].slice.call(document.querySelectorAll("#tab-' + tab + ' .hl-tbar-chip")).filter(function(x){return x.dataset.rvValue!=="";})[0];if(!c)return false;c.scrollIntoView({block:"center"});c.click();return true;})()');
+  var before = await page.json(INLINE_ONEPAGE_EXPR);
+  await page.evaluate('location.hash="#one-page"'); await CDP.sleep(350);
+  var one = await page.json(INLINE_ONEPAGE_EXPR);
+  await page.evaluate('location.hash="#tab-' + tab + '"'); await CDP.sleep(250);
+  await page.evaluate('(function(){var c=[].slice.call(document.querySelectorAll("#tab-' + tab + ' .hl-tbar-chip")).filter(function(x){return x.dataset.rvValue!=="";})[0];if(c){c.scrollIntoView({block:"center"});c.click();}})()');
+  await page.send('Emulation.setEmulatedMedia', { media: 'print' });
+  await page.evaluate('window.dispatchEvent(new Event("beforeprint"))'); await CDP.sleep(300);
+  var pr = await page.json(INLINE_ONEPAGE_EXPR);
+  await page.send('Emulation.setEmulatedMedia', { media: 'screen' });
+  await page.evaluate('window.dispatchEvent(new Event("afterprint"))'); await CDP.sleep(250);
+  var bad = [];
+  if (!did) bad.push('no filter chip could be pressed, so the reset was not exercised');
+  if (did && !before.hiddenRows) bad.push('pressing a chip hid no row, so the reset was not exercised');
+  if (!one.one) bad.push('the page is not in one-page mode');
+  if (one.shown) bad.push(one.shown + ' of ' + one.figs + ' generated figure or filter element(s) are drawn in one-page mode');
+  if (one.hiddenRows) bad.push(one.hiddenRows + ' row(s) still hidden in one-page mode');
+  if (pr.shown) bad.push(pr.shown + ' of ' + pr.figs + ' generated figure or filter element(s) are drawn in print');
+  if (pr.hiddenRows) bad.push(pr.hiddenRows + ' row(s) still hidden in print');
+  if (!one.figs) bad.push('no generated figure was found to measure');
+  check(name, bad.length === 0 && !!did, 'filtered state: ' + before.hiddenRows + ' of ' + before.rows + ' row(s) hidden; one-page: ' + one.shown + ' of ' + one.figs + ' drawn, ' + one.hiddenRows + ' hidden; print: ' + pr.shown + ' drawn, ' + pr.hiddenRows + ' hidden' + (bad.length ? '; ' + bad.join('; ') : ''));
+  await page.evaluate('location.hash="#tab-' + firstTab() + '"'); await CDP.sleep(100);
+}
+var INLINE_FIT_EXPR = '(function(){var vw=document.documentElement.clientWidth,bad=[],n=0;[].slice.call(document.querySelectorAll(".hl-rv-panel:not([hidden]) figure.hl-fig, .hl-rv-panel:not([hidden]) .hl-facts-block")).forEach(function(f){n++;var r=f.getBoundingClientRect();if(r.right>vw+1||r.left<-1)bad.push(f.className.split(" ").pop()+" spans "+Math.round(r.left)+".."+Math.round(r.right)+" of "+vw);' +
+  '[].slice.call(f.querySelectorAll("*")).forEach(function(e){var b=e.getBoundingClientRect();if(b.width>0&&(b.right>vw+1)){var sc=false;for(var a=e;a&&a!==f;a=a.parentElement){var o=getComputedStyle(a).overflowX;if((o==="auto"||o==="scroll")&&a.getBoundingClientRect().right<=vw+1){sc=true;break;}}if(!sc)bad.push((e.className||e.tagName).toString().split(" ")[0]+" ends at "+Math.round(b.right)+" of "+vw);}});});' +
+  'var doc=document.documentElement;return {n:n,bad:bad.slice(0,6),badCount:bad.length,scrollW:doc.scrollWidth,client:doc.clientWidth};})()';
+async function inlinePhoneRows(page, width) {
+  var name = width + ' px: every figure fits the screen (a wide drawing scrolls in its own container) and the page does not scroll sideways';
+  var total = 0, bad = [];
+  for (var c = 0; c < liveTokens().length; c++) {
+    await page.evaluate('location.hash=' + JSON.stringify('#tab-' + liveTokens()[c])); await CDP.sleep(250);
+    var m = await page.json(INLINE_FIT_EXPR); total += m.n;
+    if (m.badCount) bad.push(liveTokens()[c] + ': ' + m.bad.join('; '));
+    if (m.scrollW > m.client + 1) bad.push(liveTokens()[c] + ': the page is ' + m.scrollW + ' px wide in a ' + m.client + ' px screen');
+  }
+  if (!total) { check('NOT CHECKED: ' + name, false, 'no figure was on any tab, so nothing was measured'); return; }
+  check(name, bad.length === 0, total + ' figure(s) and facts line(s) measured across ' + liveTokens().length + ' tab(s)' + (bad.length ? '; ' + bad.join(' | ') : ''));
+  await page.evaluate('location.hash="#tab-' + firstTab() + '"'); await CDP.sleep(100);
+}
+/* The inline counterpart of the collapsed-view fit rows: with a tab open, no visible element of a generated figure, facts line or table toolbar overlaps a painted sibling (the same test as the view rows,
+   lib/box-fit.js viewFit, over the units that now exist). */
+function inlineFigFit() {
+  var root = document.querySelector('.hl-report-page');
+  var o = { figs: 0, siblingPairs: 0, overlap: [] };
+  if (!root) return { notChecked: 'no .hl-report-page on the page', figs: 0 };
+  function px(v) { var n = parseFloat(v); return isNaN(n) ? 0 : n; }
+  function sig(e) { var c = String(e.getAttribute('class') || '').split(/\s+/).filter(Boolean).slice(0, 2).join('.'); return e.tagName.toLowerCase() + (c ? '.' + c : ''); }
+  var SKIP = { SCRIPT: 1, STYLE: 1, NOSCRIPT: 1, TEMPLATE: 1, LINK: 1, META: 1, BR: 1, WBR: 1 };
+  function shown(e) { if (SKIP[e.tagName]) return null; var c = getComputedStyle(e); if (c.display === 'none' || c.display === 'contents' || c.visibility === 'hidden' || c.visibility === 'collapse') return null; var r = e.getBoundingClientRect(); return r.width >= 1 && r.height >= 1 ? { c: c, r: r } : null; }
+  function paints(e, c) {
+    if (/^(IMG|SVG|CANVAS|VIDEO|INPUT|SELECT|TEXTAREA|PICTURE|IFRAME)$/i.test(e.tagName)) return true;
+    if (c.backgroundImage && c.backgroundImage !== 'none') return true;
+    if (c.backgroundColor && c.backgroundColor !== 'transparent' && !/rgba\(.*,\s*0\)$/.test(c.backgroundColor)) return true;
+    var S = ['Left', 'Right', 'Top', 'Bottom'];
+    for (var k = 0; k < S.length; k++) if (px(c['border' + S[k] + 'Width']) > 0 && c['border' + S[k] + 'Style'] !== 'none' && !/rgba\(.*,\s*0\)$/.test(c['border' + S[k] + 'Color'] || '')) return true;
+    if (c.boxShadow && c.boxShadow !== 'none') return true;
+    for (var n = e.firstChild; n; n = n.nextSibling) if (n.nodeType === 3 && /\S/.test(n.nodeValue)) return true;
+    return false;
+  }
+  function flow(c) { return c.position !== 'absolute' && c.position !== 'fixed'; }
+  var units = root.querySelectorAll('.hl-rv-panel:not([hidden]) figure.hl-fig, .hl-rv-panel:not([hidden]) .hl-facts-block, .hl-rv-panel:not([hidden]) .hl-tbar');
+  for (var i = 0; i < units.length; i++) {
+    var v = units[i]; if (!shown(v)) continue;
+    o.figs++;
+    var all = [v].concat([].slice.call(v.querySelectorAll('*')));
+    for (var a = 0; a < all.length; a++) {
+      var A = shown(all[a]); if (!A || !flow(A.c) || A.c.display === 'inline') continue;
+      for (var f = all[a].nextElementSibling; f; f = f.nextElementSibling) {
+        var B = shown(f); if (!B || !flow(B.c) || B.c.display === 'inline') continue;
+        o.siblingPairs++;
+        var ox = Math.min(A.r.right, B.r.right) - Math.max(A.r.left, B.r.left), oy = Math.min(A.r.bottom, B.r.bottom) - Math.max(A.r.top, B.r.top);
+        if (ox > 1 && oy > 1 && (paints(all[a], A.c) || paints(f, B.c))) o.overlap.push({ sig: sig(all[a]), other: sig(f), by: Math.round(oy * 10) / 10, wide: Math.round(ox * 10) / 10, unit: sig(v) });
+      }
+    }
+  }
+  return o;
+}
+var INLINE_FIT_EXPR2 = '(' + inlineFigFit.toString() + ')()';
+async function inlineFitRows(page, url) {
+  var name = 'no visible element of a generated figure, facts line or table toolbar overlaps a painted sibling, on every tab at 1280 and 390 px';
+  var figs = 0, pairs = 0, found = [], bad = [];
+  var vps = [[1280, 900], [390, 844]];
+  for (var v = 0; v < vps.length; v++) {
+    await setViewport(page, vps[v][0], vps[v][1]);
+    if (!(await gotoAndWait(page, url))) { bad.push('the tab controller never built at ' + vps[v][0] + 'x' + vps[v][1]); continue; }
+    for (var i = 0; i < liveTokens().length; i++) {
+      await page.evaluate('location.hash="#tab-' + liveTokens()[i] + '"'); await CDP.sleep(250);
+      var m = await page.json(INLINE_FIT_EXPR2);
+      if (m.notChecked) { bad.push(m.notChecked); continue; }
+      figs += m.figs; pairs += m.siblingPairs;
+      m.overlap.forEach(function (x) { found.push(vps[v][0] + 'x' + vps[v][1] + ' ' + liveTokens()[i] + ': ' + x.sig + ' overlaps its sibling ' + x.other + ' by ' + x.by + 'px (' + x.wide + 'px wide) inside ' + x.unit); });
+    }
+  }
+  if (!figs) check('NOT CHECKED: ' + name, false, 'no generated figure, facts line or toolbar was shown on any tab' + (bad.length ? ' (' + bad.join('; ') + ')' : ''));
+  else check(name, !found.length && !bad.length, pairs + ' sibling pair(s) compared across ' + figs + ' figure, facts or toolbar unit(s)' + (found.length ? '; ' + found.length + ' fault(s): ' + found.slice(0, 4).join(' | ') : '') + (bad.length ? '; NOT MEASURED: ' + bad.join('; ') : ''));
+  // control: the source line pulled up over the drawing, on the first tab that has a figure
+  await setViewport(page, 1280, 900);
+  if (!(await gotoAndWait(page, url))) { check('NOT CHECKED: control: a source line pulled up over its figure makes the fit row FAIL', false, 'the tab controller never built'); return; }
+  var tab = await page.json('(function(){var f=document.querySelector("figure.hl-fig");var p=f&&f.closest(".hl-rv-panel");return p?p.id.replace("tab-",""):null;})()');
+  if (!tab) { check('NOT CHECKED: control: a source line pulled up over its figure makes the fit row FAIL', false, 'no figure on the page to break'); return; }
+  await page.evaluate('location.hash="#tab-' + tab + '"'); await CDP.sleep(250);
+  await page.evaluate('(function(){var s=document.createElement("style");s.id="hl-gate-fit-ctl";s.textContent="figure.hl-fig > .hl-fig-src{margin-top:-60px !important}";document.head.appendChild(s);})()'); await CDP.sleep(200);
+  var c = await page.json(INLINE_FIT_EXPR2);
+  check('control: a source line pulled up over its figure makes the fit row FAIL', !c.notChecked && c.overlap.length > 0, c.overlap.length ? 'FAILS as designed: ' + c.overlap.length + ' fault(s), first: ' + c.overlap[0].sig + ' overlaps ' + c.overlap[0].other : 'the control did NOT fire');
+  await restoreReportPage(page, url);
+}
+
+async function inlineFigureRows(page, url) {
+  function ctl(name, v) { check('control: ' + name, v.ok === false && !v.notChecked, v.ok === false ? 'FAILS as designed: ' + v.detail : 'the control did NOT fire: ' + v.detail); }
+  var states = [[1280, 900], [390, 844]];
+  var article = await inlineArticleTables(page, url);
+  for (var si = 0; si < states.length; si++) {
+    var w = states[si][0], h = states[si][1], tag = w + 'x' + h + ': ';
+    await setViewport(page, w, h);
+    if (!(await gotoAndWait(page, url))) { check('NOT CHECKED: ' + tag + 'inline figures', false, 'the tab controller never built, so nothing was measured'); continue; }
+    // the measure reads every tab's figures at once: figures of a hidden tab are in the DOM, so no tab switch is needed except for the geometry rows
+    var m = await page.json(INLINE_EXPR);
+    var vP = inlinePlacementVerdict(m, SHAPES), vA = inlineAnatomyVerdict(m), vO = inlineOnceVerdict(m, article);
+    function row(name, v) { if (v.notChecked) check('NOT CHECKED: ' + tag + name, false, v.detail); else check(tag + name, v.ok, v.detail); }
+    row('the figures drawn are the figures the report\'s tables support, each directly before its own source table or after the paragraph it is named after, and the facts line opens the Overview', vP);
+    row('every figure has a caption above its drawing and a source line under it, no box, fill, radius or shadow, one hairline above, sans text at or over the 15 px floor', vA);
+    row('no table is drawn twice: the article\'s tables are the page\'s tables, all in the report\'s own sections', vO);
+    var counts = inlineCountsVerdicts(m, SHAPES);
+    counts.forEach(function (c) { row(c.name, c.v); });
+    if (si === 0) {
+      // controls on this same page: one square, one heat cell, one risk row, one segment removed; a figure moved away from its table; a table drawn a second time; a figure given a box
+      var ctls = [
+        ['with one grade square removed the grade-strip row FAILS', '(function(){var c=document.querySelector("figure.hl-fig--grades .hl-rv-sq");if(c)c.remove();return !!c;})()', function (mm) { return inlineCountsVerdicts(mm, SHAPES).filter(function (x) { return /grade strip/.test(x.name); })[0]; }],
+        ['with one heat cell removed the heat-map row FAILS', '(function(){var c=document.querySelector("figure.hl-fig--heat .hl-rv-cell:not(.hl-rv-cell--sw)");if(c)c.remove();return !!c;})()', function (mm) { return inlineCountsVerdicts(mm, SHAPES).filter(function (x) { return /heat map/.test(x.name); })[0]; }],
+        ['with one risk row removed the risk-bar row FAILS', '(function(){var c=document.querySelector("figure.hl-fig--risk .hl-rv-riskrow");if(c)c.remove();return !!c;})()', function (mm) { return inlineCountsVerdicts(mm, SHAPES).filter(function (x) { return /risk bars/.test(x.name); })[0]; }],
+        ['with one confidence segment removed the distribution row FAILS', '(function(){var c=document.querySelector("figure.hl-fig--dist .hl-rv-distbar > span");if(c)c.remove();return !!c;})()', function (mm) { return inlineCountsVerdicts(mm, SHAPES).filter(function (x) { return /distribution/.test(x.name); })[0]; }]
+      ];
+      for (var ci = 0; ci < ctls.length; ci++) {
+        await gotoAndWait(page, url);
+        var did = await page.json(ctls[ci][1]);
+        if (!did) continue;   /* a kind of figure the report has no table for draws nothing, has no row, and so has no control; the placement row asserts that nothing is drawn for it */
+        var mm = await page.json(INLINE_EXPR), x = ctls[ci][2](mm);
+        ctl(ctls[ci][0], x ? x.v : { ok: true, detail: 'the row was not produced' });
+      }
+      await gotoAndWait(page, url);
+      var moved = await page.json('(function(){var f=document.querySelector("figure.hl-fig--grades")||document.querySelector("figure.hl-fig--heat");if(!f)return false;document.body.appendChild(f);return true;})()');
+      if (!moved) check('NOT CHECKED: control: a figure moved away from its table makes the placement row FAIL', false, 'the report draws no grade or heat figure to move');
+      else ctl('a figure moved away from its table makes the placement row FAIL', inlinePlacementVerdict(await page.json(INLINE_EXPR), SHAPES));
+      await gotoAndWait(page, url);
+      await page.evaluate('(function(){var t=document.querySelector(".hl-rv-source table").cloneNode(true);document.querySelector(".hl-rv-panel").appendChild(t);})()');
+      ctl('a table drawn a second time outside the report\'s sections makes the one-table-once row FAIL', inlineOnceVerdict(await page.json(INLINE_EXPR), article));
+      await gotoAndWait(page, url);
+      await page.evaluate('(function(){var f=document.querySelector("figure.hl-fig");f.style.cssText="border:1px solid #888;border-radius:6px;background:#222;box-shadow:0 2px 8px #000";})()');
+      ctl('a figure given a box, fill, radius and shadow makes the anatomy row FAIL', inlineAnatomyVerdict(await page.json(INLINE_EXPR)));
+      await gotoAndWait(page, url);
+    }
+  }
+  // toolbars (the chips that filter a report table's own rows), at both sizes, with a control
+  for (var ti = 0; ti < states.length; ti++) {
+    var tw = states[ti][0], th = states[ti][1], ttag = tw + 'x' + th + ': ';
+    await setViewport(page, tw, th);
+    if (!(await gotoAndWait(page, url))) { check('NOT CHECKED: ' + ttag + 'table toolbars', false, 'the tab controller never built, so nothing was measured'); continue; }
+    var run = await inlineToolbarRun(page, liveTokens().filter(function (t) { return t !== 'chain'; }));
+    var vT = inlineToolbarVerdict(run.all, run.pressed, run.cleared);
+    var tname = 'each table toolbar sits directly above the report\'s own table: a chip for every value with its count, the counts add up to the table\'s rows, a press shows exactly that many rows, a second press brings them all back';
+    if (vT.notChecked) check('NOT CHECKED: ' + ttag + tname, false, vT.detail); else check(ttag + tname, vT.ok, vT.detail);
+    if (ti === 0 && !vT.notChecked) {
+      await gotoAndWait(page, url);
+      var tab0 = run.all[0].tab.replace('tab-', '');
+      await page.evaluate('location.hash="#tab-' + tab0 + '"'); await CDP.sleep(250);
+      await page.evaluate('(function(){var c=document.querySelector("#tab-' + tab0 + ' .hl-tbar-chip:not([data-rv-value=\\"\\"])");var n=c.cloneNode(true);c.replaceWith(n);})()');
+      var run2 = await inlineToolbarRun(page, [tab0]);
+      ctl('a chip whose handler is gone makes the toolbar row FAIL', inlineToolbarVerdict(run2.all, run2.pressed, run2.cleared));
+    }
+  }
+  await inlineOnePageRows(page, url);
+}
+
 async function tabbedChecks(page, opts) {
   var url = opts.url;
 
@@ -3590,6 +4086,7 @@ async function tabbedChecks(page, opts) {
   var built = TAB_TOKENS.filter(function (t) { return pageTabs.some(function (x) { return x.token === t; }); });
   LIVE_TOKENS = built.length ? built : null;
   SHAPES = await page.json(SHAPES_EXPR);
+  INLINE = await page.json('!!document.querySelector(".hl-report-page.hl-figs-inline")');
 
   /* ---- the authored report is the expectation (fix rounds 1 and 2) -------
      Read once, before any tab state changes: which sections exist, in what
@@ -4086,83 +4583,88 @@ async function tabbedChecks(page, opts) {
     /* ---- phone-only gates (4a) ----------------------------------------- */
     if (width >= 700) continue;
 
-    /* Views open as a compact card: collapsed body, a figure line, and a
-       control that expands the same view in place. The first integer in the
-       line is reconciled against the count of the elements it summarises. */
-    var cards = [];
-    var cardProblems = [];
-    for (var c = 0; c < liveTokens().length; c++) {
-      var ct = liveTokens()[c];
-      await page.evaluate('location.hash=' + JSON.stringify('#tab-' + ct));
-      await CDP.sleep(80);
-      var before = await page.json('(function(t){var panel=document.getElementById("tab-"+t);' +
-        'var sum=panel.querySelector(".hl-rv-view-summary p");' +
-        'var body=panel.querySelector(".hl-rv-view-body");' +
-        'var toggle=document.getElementById("hl-rv-toggle-"+t);' +
-        'var tables=[].slice.call(panel.querySelectorAll(".hl-rv-table"));' +
-        'return {line:sum?sum.textContent.trim():"",hidden:body?body.hidden:null,' +
-        'expanded:toggle?toggle.getAttribute("aria-expanded"):null,' +
-        'controls:toggle?toggle.getAttribute("aria-controls"):null,' +
-        'bodyId:body?body.id:null,' +
-        'wideTables:tables.filter(function(x){return x.getBoundingClientRect().width>panel.clientWidth+1;}).length,' +
-        'tables:tables.length};})(' + JSON.stringify(ct) + ')');
-      var panelWidth = await page.json('(function(){var panel=document.getElementById("tab-' +
-        ct + '");return panel.clientWidth;})()');
-      var hadToggle = await clickToggle(page, ct);
-      await CDP.sleep(120);
-      var after = await page.json('(function(t){var panel=document.getElementById("tab-"+t);' +
-        'var sum=panel.querySelector(".hl-rv-view-summary p");' +
-        'var body=panel.querySelector(".hl-rv-view-body");' +
-        'var toggle=document.getElementById("hl-rv-toggle-"+t);' +
-        'return {line:sum?sum.textContent.trim():"",hidden:body?body.hidden:null,' +
-        'h:body?Math.round(body.getBoundingClientRect().height):0,' +
-        'expanded:toggle?toggle.getAttribute("aria-expanded"):null};})(' +
-        JSON.stringify(ct) + ')');
-      var primary = await page.json('(function(sel){var n=0;' +
-        'try{n=document.querySelectorAll("#tab-' + ct + ' " + sel).length;}catch(e){n=-1;}' +
-        'return n;})(' + JSON.stringify(TAB_PRIMARY[ct]) + ')');
-      var m = before.line.match(/\d+/);
-      var primaryCount = primary;
-      cards.push({ token: ct, line: before.line, count: primaryCount,
-        wide: before.wideTables, tables: before.tables, panelW: panelWidth });
-      if (before.hidden !== true || before.expanded !== 'false' ||
-          before.controls !== before.bodyId || !before.line) {
-        cardProblems.push(ct + ': hidden=' + before.hidden + ' aria-expanded=' +
-          before.expanded + ' line="' + before.line.slice(0, 40) + '"');
+    /* T-0637: an inline-figures page has no view cards; its phone rows are the figure rows (inlineFigureRows) and the row below. */
+    if (INLINE) {
+      await inlinePhoneRows(page, width);
+    } else {
+      /* Views open as a compact card: collapsed body, a figure line, and a
+         control that expands the same view in place. The first integer in the
+         line is reconciled against the count of the elements it summarises. */
+      var cards = [];
+      var cardProblems = [];
+      for (var c = 0; c < liveTokens().length; c++) {
+        var ct = liveTokens()[c];
+        await page.evaluate('location.hash=' + JSON.stringify('#tab-' + ct));
+        await CDP.sleep(80);
+        var before = await page.json('(function(t){var panel=document.getElementById("tab-"+t);' +
+          'var sum=panel.querySelector(".hl-rv-view-summary p");' +
+          'var body=panel.querySelector(".hl-rv-view-body");' +
+          'var toggle=document.getElementById("hl-rv-toggle-"+t);' +
+          'var tables=[].slice.call(panel.querySelectorAll(".hl-rv-table"));' +
+          'return {line:sum?sum.textContent.trim():"",hidden:body?body.hidden:null,' +
+          'expanded:toggle?toggle.getAttribute("aria-expanded"):null,' +
+          'controls:toggle?toggle.getAttribute("aria-controls"):null,' +
+          'bodyId:body?body.id:null,' +
+          'wideTables:tables.filter(function(x){return x.getBoundingClientRect().width>panel.clientWidth+1;}).length,' +
+          'tables:tables.length};})(' + JSON.stringify(ct) + ')');
+        var panelWidth = await page.json('(function(){var panel=document.getElementById("tab-' +
+          ct + '");return panel.clientWidth;})()');
+        var hadToggle = await clickToggle(page, ct);
+        await CDP.sleep(120);
+        var after = await page.json('(function(t){var panel=document.getElementById("tab-"+t);' +
+          'var sum=panel.querySelector(".hl-rv-view-summary p");' +
+          'var body=panel.querySelector(".hl-rv-view-body");' +
+          'var toggle=document.getElementById("hl-rv-toggle-"+t);' +
+          'return {line:sum?sum.textContent.trim():"",hidden:body?body.hidden:null,' +
+          'h:body?Math.round(body.getBoundingClientRect().height):0,' +
+          'expanded:toggle?toggle.getAttribute("aria-expanded"):null};})(' +
+          JSON.stringify(ct) + ')');
+        var primary = await page.json('(function(sel){var n=0;' +
+          'try{n=document.querySelectorAll("#tab-' + ct + ' " + sel).length;}catch(e){n=-1;}' +
+          'return n;})(' + JSON.stringify(TAB_PRIMARY[ct]) + ')');
+        var m = before.line.match(/\d+/);
+        var primaryCount = primary;
+        cards.push({ token: ct, line: before.line, count: primaryCount,
+          wide: before.wideTables, tables: before.tables, panelW: panelWidth });
+        if (before.hidden !== true || before.expanded !== 'false' ||
+            before.controls !== before.bodyId || !before.line) {
+          cardProblems.push(ct + ': hidden=' + before.hidden + ' aria-expanded=' +
+            before.expanded + ' line="' + before.line.slice(0, 40) + '"');
+        }
+        /* T-0500.1.9 (J5): what the card must show depends on what the REPORT has. A table or sentence shape the report lacks
+           gives the documented "View unavailable" notice, and that PASSES; a shape the report has whose view is wrong FAILS. The shape
+           is read from the report's own source tables, not from the view. */
+        var shapeInfo = SHAPES && SHAPES[ct];
+        if (!shapeInfo) {
+          check('NOT CHECKED: the ' + width + ' px ' + ct + ' card states a headline figure', false,
+            'the report\'s table shapes could not be read from the page, so what this view should show is not known');
+        } else {
+          var fact = (await page.json(viewFactsExpr([ct])))[0];
+          fact.line = before.line; fact.count = primaryCount;
+          var sv = cardVerdict(shapeInfo, fact);
+          var opened = after.hidden === false && after.h > 0 && after.expanded === 'true' && after.line === before.line;
+          var cardName = width + ' px ' + ct + (sv.irregular ? ': the report has this view\'s table with irregular rows' : sv.absent ? (sv.attackChecked ? ': the report lacks this view\'s Stage table, the expanded card says so, and it draws the ATT&CK table\'s rows' : ': the report lacks this view\'s table, and the expanded card says so')
+              : ': the expanded card shows the figure the source table has');
+          var cardDetail = sv.detail + '; collapsed h=' + (before.hidden ? 0 : 'shown') + ', expanded h=' + after.h +
+              ', line unchanged=' + (after.line === before.line);
+          if (sv.notChecked) check('NOT CHECKED: ' + cardName, false, sv.detail);
+          else check(cardName, sv.ok && opened, cardDetail);
+        }
+        if (before.wideTables) {
+          cardProblems.push(ct + ': ' + before.wideTables + ' of ' + before.tables +
+            ' dashboard tables wider than the ' + panelWidth + ' px panel');
+        }
+        if (hadToggle) await clickToggle(page, ct);
+        await CDP.sleep(60);
       }
-      /* T-0500.1.9 (J5): what the card must show depends on what the REPORT has. A table or sentence shape the report lacks
-         gives the documented "View unavailable" notice, and that PASSES; a shape the report has whose view is wrong FAILS. The shape
-         is read from the report's own source tables, not from the view. */
-      var shapeInfo = SHAPES && SHAPES[ct];
-      if (!shapeInfo) {
-        check('NOT CHECKED: the ' + width + ' px ' + ct + ' card states a headline figure', false,
-          'the report\'s table shapes could not be read from the page, so what this view should show is not known');
-      } else {
-        var fact = (await page.json(viewFactsExpr([ct])))[0];
-        fact.line = before.line; fact.count = primaryCount;
-        var sv = cardVerdict(shapeInfo, fact);
-        var opened = after.hidden === false && after.h > 0 && after.expanded === 'true' && after.line === before.line;
-        var cardName = width + ' px ' + ct + (sv.irregular ? ': the report has this view\'s table with irregular rows' : sv.absent ? (sv.attackChecked ? ': the report lacks this view\'s Stage table, the expanded card says so, and it draws the ATT&CK table\'s rows' : ': the report lacks this view\'s table, and the expanded card says so')
-            : ': the expanded card shows the figure the source table has');
-        var cardDetail = sv.detail + '; collapsed h=' + (before.hidden ? 0 : 'shown') + ', expanded h=' + after.h +
-            ', line unchanged=' + (after.line === before.line);
-        if (sv.notChecked) check('NOT CHECKED: ' + cardName, false, sv.detail);
-        else check(cardName, sv.ok && opened, cardDetail);
-      }
-      if (before.wideTables) {
-        cardProblems.push(ct + ': ' + before.wideTables + ' of ' + before.tables +
-          ' dashboard tables wider than the ' + panelWidth + ' px panel');
-      }
-      if (hadToggle) await clickToggle(page, ct);
-      await CDP.sleep(60);
+      check(width + ' px: every view opens as a compact card',
+        cardProblems.length === 0, cardProblems.join('; ') ||
+        liveTokens().length + ' of ' + liveTokens().length + ' views collapsed with a figure line and an aria-controls toggle');
+      check(width + ' px: no dashboard table is wider than the screen',
+        cards.every(function (x) { return x.wide === 0; }),
+        cards.map(function (x) { return x.token + ' ' + (x.tables - x.wide) + '/' + x.tables; }).join(', ') +
+        ' dashboard tables fit');
     }
-    check(width + ' px: every view opens as a compact card',
-      cardProblems.length === 0, cardProblems.join('; ') ||
-      liveTokens().length + ' of ' + liveTokens().length + ' views collapsed with a figure line and an aria-controls toggle');
-    check(width + ' px: no dashboard table is wider than the screen',
-      cards.every(function (x) { return x.wide === 0; }),
-      cards.map(function (x) { return x.token + ' ' + (x.tables - x.wide) + '/' + x.tables; }).join(', ') +
-      ' dashboard tables fit');
 
     /* Sections menu: every tab one tap away, nothing off-screen. Scroll to the
        top first so the sticky bar and its menu are in their resting position;
@@ -4356,7 +4858,7 @@ async function tabbedChecks(page, opts) {
         continue;
       }
       if (fw < 480) {
-        if (!(await clickToggle(page, 'timeline'))) { vertical = { count: 0, shown: 0, noToggle: true }; continue; }
+        if (!(await clickToggle(page, 'timeline')) && !INLINE) { vertical = { count: 0, shown: 0, noToggle: true }; continue; }   /* an inline page has no view to open: its chart is in the text */
         await CDP.sleep(200);
         vertical = await page.json('(function(){' +
           'var ls=[].slice.call(document.querySelectorAll("#tab-timeline .hl-rv-vertical-timeline li"));' +
@@ -5066,6 +5568,15 @@ if (require.main === module) {
     BOX_CONTROLS: BOX_CONTROLS,
     boxFitRows: boxFitRows,
     viewFitRows: viewFitRows,
-    VIEW_CONTROLS: VIEW_CONTROLS
+    VIEW_CONTROLS: VIEW_CONTROLS,
+    SHAPES_EXPR: SHAPES_EXPR,
+    INLINE_EXPR: INLINE_EXPR,
+    INLINE_TOOLBAR_EXPR: INLINE_TOOLBAR_EXPR,
+    inlinePlacementVerdict: inlinePlacementVerdict,
+    inlineAnatomyVerdict: inlineAnatomyVerdict,
+    inlineOnceVerdict: inlineOnceVerdict,
+    inlineCountsVerdicts: inlineCountsVerdicts,
+    inlineToolbarVerdict: inlineToolbarVerdict,
+    inlineChainTableVerdict: inlineChainTableVerdict
   };
 }

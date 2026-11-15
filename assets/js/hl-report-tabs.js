@@ -156,7 +156,7 @@
   }
   var live = make('p', 'hl-rv-live', '', content); live.setAttribute('aria-live', 'polite'); live.setAttribute('aria-atomic', 'true');
   // T-0637: in inline mode a table's own toolbar (its filters) is built first and the copy buttons join it, so one slim bar sits above the report's table.
-  var inlineBars = new Map(), inlineResets = [], inlineRowById = {};
+  var inlineBars = new Map(), inlineAnchors = new Map(), inlineResets = [], inlineRowById = {};
   function barFor(table) {
     var bar = inlineBars.get(table);
     if (!bar) { bar = make('div', 'hl-rv-table-tools hl-tbar', null); inlineBars.set(table, bar); }
@@ -550,7 +550,7 @@
   window.addEventListener('popstate', function () { if (!location.hash) { mode(false); select(0); } else go(location.hash, true); });
 
   function tableFold(parent, label) { var d = make('details', 'hl-rv-table-fold', null, parent); d.open = true; make('summary', '', label, d); return d; }
-  function missing(parent, need) { if (inline) return; make('p', 'hl-rv-unavailable', 'View unavailable: needs ' + need + '. The full report follows.', parent); }
+  function missing(parent, need) { make('p', 'hl-rv-unavailable', 'View unavailable: needs ' + need + '. The full report follows.', parent); }
   function badge(parent, value) {
     // Keep range, compound and off-scale wording intact; never silently rescale.
     var cls = 'hl-rv-badge';
@@ -994,6 +994,8 @@
     for (var d = table.closest('details'); d; d = d.parentElement && d.parentElement.closest('details')) site = d;
     return site;
   }
+  // A filter acts on rows the reader cannot see while their teardown is closed: opening the teardown that holds the table is part of pressing the filter.
+  function openAround(el) { for (var d = el.closest('details'); d; d = d.parentElement && d.parentElement.closest('details')) d.open = true; }
   // The report table's own body rows, when they line up one to one with the model the figures read (no spans that shift a cell). A table that does not line up gets no toolbar.
   function sourceRows(m) {
     var body = m && m.table && m.table.tBodies[0];
@@ -1253,7 +1255,7 @@
             if (!attack.legacy) mini(heading);
             var li = make('li', 'hl-rv-fli', null, ribbon);
             var step = button('', li, function () {
-              if (matches.length && cons) cons.toggle('Stage', r[0]);
+              if (matches.length && cons) { cons.toggle('Stage', r[0]); if (inline) openAround(attack.table); }
               detail.open = true; stageCards[si].scrollIntoView({ block: 'nearest', behavior: 'smooth' });
             }); step.className = 'hl-rv-fnode'; step.setAttribute('aria-pressed', 'false');
             step.setAttribute('aria-label', 'Stage ' + lab.n + ', ' + lab.name + ': ' + matches.length + ' linked procedures. ' + (matches.length ? 'Go to the stage and filter to it.' : 'Go to the stage; no procedure row is linked to it.'));
@@ -1362,7 +1364,7 @@
           });
         });
         var filterArea = cons.area;
-        if (inline) filterArea.after(cons.anchor);
+        if (inline) inlineAnchors.set(attack.table, cons.anchor);   // the slim bar's anchor goes above the toolbar, in the block that holds the whole table, so it can stay under the reading line while the table scrolls
         else {
           if (flowWrap) flowWrap.after(filterArea); else body.insertBefore(filterArea, body.firstChild);
           filterArea.after(cons.anchor);
@@ -1414,7 +1416,7 @@
       if (!chronology) { missing(body, 'a Date / Observation chronology table'); return 'Chronology remains in the full report'; }
       if (inline) {
         // T-0637: the chart goes before the chronology table; the note on marker shapes and lanes is its source line. Dates that do not parse draw nothing (the table is right there).
-        var tdc = col(chronology, /^Date|^Time|^When/i), tf = figBox(chronology.rows.length + ' dated events, from ' + chronology.rows[0][tdc] + ' to ' + chronology.rows[chronology.rows.length - 1][tdc], '', 'hl-fig--timeline');
+        var tdc = col(chronology, /^Date|^Time|^When/i), tf = figBox(chronology.rows.length + ' dated events, in the order the report prints them (the first is ' + chronology.rows[0][tdc] + ', the last is ' + chronology.rows[chronology.rows.length - 1][tdc] + ')', '', 'hl-fig--timeline');
         if (drawTimeline(tf.draw, chronology)) { tf.src.textContent = 'From ' + fromNote(chronology) + '. ' + timelineNote; figSite(chronology.table).before(tf.fig); }
         return '';
       }
@@ -1581,6 +1583,7 @@
       wrap.setAttribute('role', 'region'); wrap.setAttribute('aria-label', (s.heading ? text(s.heading) : 'Report') + ', table ' + (i + 1));
       table.before(wrap); wrap.appendChild(table);
       var tools = tableCopy(table, s.node, Array.from(table.rows[0].cells).findIndex(function (c) { return /^Indicator/i.test(text(c)); })); wrap.before(tools);
+      if (inlineAnchors.has(table)) tools.before(inlineAnchors.get(table));
       Array.from(table.rows).forEach(function (row) { Array.from(row.cells).forEach(function (cell, ci) {
         var value = text(cell), h = text(table.rows[0].cells[ci]);
         if (/Conf/i.test(h)) cell.classList.add('hl-rv-confidence-cell');
