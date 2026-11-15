@@ -509,6 +509,9 @@ function checkVulns(doc, now) {
   } else if (nNp > 0) {
     warnings.push('rows carry ' + nNp + ' np_rank rows but vulns_counts has no np_priority');
   }
+  var npTop = hasKey(vc, 'np_top') && isCount(vc.np_top) ? vc.np_top : null;
+  if (hasKey(vc, 'np_top') && !isCount(vc.np_top)) warnings.push('vulns_counts np_top is ' + JSON.stringify(vc.np_top) + ', not a whole number of 0 or more');
+  if (npTop !== null && nNp > npTop) warnings.push('the Priority group has ' + nNp + ' rows, over np_top ' + npTop);
   if (hasKey(vc, 'np_threshold') && !isCount(vc.np_threshold)) warnings.push('vulns_counts np_threshold is ' + JSON.stringify(vc.np_threshold) + ', not a whole number of 0 or more');
   if (hasKey(vc, 'np_classes') && NP_CLASS_SETS.indexOf(vc.np_classes) === -1) warnings.push('vulns_counts np_classes is ' + JSON.stringify(vc.np_classes) + ', not one of ' + NP_CLASS_SETS.join(', '));
   if (anyNp) {
@@ -521,7 +524,12 @@ function checkVulns(doc, now) {
     });
     if (hasKey(vc, 'np_threshold') && isCount(vc.np_threshold)) {
       rows.forEach(function (r) {
-        if (r && hasKey(r, 'np_rank') && r.np_rank === 0 && Number.isInteger(r.np_score) && r.np_score >= vc.np_threshold) warnings.push(r.cve + ' scores ' + r.np_score + ' (threshold ' + vc.np_threshold + ') but has no np_rank');
+        // A full group (np_top reached) leaves lower-ranked rows over the threshold out; then only a row that
+        // outscores the group's last row is wrong.
+        var lastScore = byRank.length ? byRank[byRank.length - 1].np_score : null;
+        var full = npTop !== null && nNp >= npTop;
+        if (r && hasKey(r, 'np_rank') && r.np_rank === 0 && Number.isInteger(r.np_score) && r.np_score >= vc.np_threshold &&
+            (!full || r.np_score > lastScore)) warnings.push(r.cve + ' scores ' + r.np_score + ' (threshold ' + vc.np_threshold + (full ? ', group full at ' + npTop : '') + ') but has no np_rank');
       });
     }
   }
@@ -1624,7 +1632,7 @@ function checkDayLayout(src, includes) {
   ["I do not curate", 'Empirical Security', 'Every VulnCheck KEV entry stays visible.',
    'Filters open matching batches and counts show matching rows.', 'newest day first', 'at least 20 entries',
    // T-0638: the Priority group's rule and its limit.
-   'my patch-first order', 'A row needs 5 points', 'product classes are my judgment', 'I have not measured it'
+   'my patch-first order', 'needs 5 points', 'the ten highest-scoring rows', 'product classes are my judgment', 'I have not measured it'
   ].forEach(function (pin) { if (!n.includes(pin)) out.push('nKEVs explanation lost: ' + pin); });
   ['seven reasons', 'WordPress-class', 'unauthenticated', 'five weakness groups', '8.3%', '7.0%', '6.4%',
    'after seeing the data', '6.3%', '8.6%', '3.7%', '123 of 244', '50%', 'one-third trigger', 'does not admit',

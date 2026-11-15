@@ -137,7 +137,7 @@ reads back from the built page (it fails the index step on a duplicate). A vuln 
 {%- if n_np > 0 -%}
 <h3>Priority</h3>
 <p>The Priority group at the top of this tab is my patch-first order. Every row on this tab is already exploited, so the group predicts nothing. It ranks which of these flaws I would patch first.</p>
-<p>A row earns one point for each of these: a network flaw that needs no login or user action, a CVSS score of 9.0 or higher, public tooling, a CISA KEV listing, and a flaw disclosed under 30 days before VulnCheck listed it. It earns two points for a product class I treat as patch-first, or one for an operating system or browser. A row needs 5 points to enter the group, and it shows there once, not again under its day.</p>
+<p>A row earns one point for each of these: a network flaw that needs no login or user action, a CVSS score of 9.0 or higher, public tooling, a CISA KEV listing, and a flaw disclosed under 30 days before VulnCheck listed it. It earns two points for a product class I treat as patch-first, or one for an operating system or browser. The group holds the ten highest-scoring rows, and a row needs 5 points to be among them, so on a quiet month it holds fewer. A row in the group shows there once, not again under its day.</p>
 <p>The product classes are my judgment, and they are listed in the exporter's class files. There is no later outcome I can test this order against, so I have not measured it.</p>
 {%- endif -%}
 <h3>Reading the data and filters</h3>

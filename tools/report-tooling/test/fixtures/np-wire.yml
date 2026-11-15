@@ -81,6 +81,7 @@ vulns_counts:
     n: 20
   np_priority: 3
   np_threshold: 5
+  np_top: 10
   np_classes: v2+addendum
 vulns:
 - cve: CVE-2026-9100

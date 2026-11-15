@@ -1599,6 +1599,26 @@ test('T-0638 np counts are held to the rows when declared, and rows with ranks b
   assert.match(npWarn(d), /np_threshold is -1/);
 });
 
+test('T-0638 np_top caps the group: over the cap warns, a full group may leave lower rows over the threshold out', function () {
+  var d = npFixture();
+  d.vulns_counts.np_top = 2;
+  assert.match(npWarn(d), /the Priority group has 3 rows, over np_top 2/);
+  d = npFixture();
+  d.vulns_counts.np_top = 'ten';
+  assert.match(npWarn(d), /np_top is "ten"/);
+  // full group (np_top 3, 3 ranked): an unranked row at the threshold but not above the last ranked score is fine
+  d = npFixture();
+  d.vulns_counts.np_top = 3;
+  var ranked = d.vulns.filter(function (x) { return x.np_rank > 0; }).sort(function (a, b) { return a.np_rank - b.np_rank; });
+  var last = ranked[ranked.length - 1].np_score;
+  var low = d.vulns.filter(function (x) { return x.np_rank === 0; })[0];
+  low.np_score = 5; low.np_reasons = ['noauth', 'class', 'tooling', 'cisa']; low.np_class = 'Edge and network device';
+  if (last >= 5) assert.doesNotMatch(npWarn(d), new RegExp(low.cve + ' scores'));
+  // but an unranked row that outscores the last ranked row is still named
+  low.np_score = 7; low.np_reasons = ['noauth', 'critical', 'class', 'tooling', 'cisa', 'fresh']; low.age_group = 'new';
+  assert.match(npWarn(d), new RegExp(low.cve + ' scores 7 \\(threshold 5, group full at 3\\) but has no np_rank'));
+});
+
 test('T-0638 the page template: the Priority group, its chip, strip and panel text are pinned, and losing one fails the page check', function () {
   var page = fsPicks.readFileSync(pathPicks.join(__dirname, '..', '..', '..', 'wire', 'index.md'), 'utf8');
   var includes = {};
@@ -1606,7 +1626,7 @@ test('T-0638 the page template: the Priority group, its chip, strip and panel te
     .forEach(function (n) { includes[n] = fsPicks.readFileSync(pathPicks.join(__dirname, '..', '..', '..', '_includes', n), 'utf8'); });
   assert.equal(CW.checkPage(page, includes).status, 'PASS');
   ['id="vulns-priority"', 'data-sig="np">Priority group', 'sort: "np_rank"', 'hl-vuln__np', 'my patch-first order',
-    'A row needs 5 points', 'product classes are my judgment', 'I have not measured it'].forEach(function (pin) {
+    'needs 5 points', 'the ten highest-scoring rows', 'product classes are my judgment', 'I have not measured it'].forEach(function (pin) {
     assert.ok(page.includes(pin), pin);
     assert.equal(CW.checkPage(page.replace(pin, 'removed'), includes).status, 'FAIL', pin);
   });
