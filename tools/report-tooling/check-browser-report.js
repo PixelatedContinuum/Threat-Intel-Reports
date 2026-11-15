@@ -2882,6 +2882,7 @@ function irregularTableHtml(html, candidate) {
   });
 }
 var MUT_BAD_LINE = ['line.textContent = builders[t](body);', "builders[t](body); line.textContent = 'x';"];
+var MUT_IGNORE_FLAG = ["var inline = !!(page && page.classList.contains('hl-figs-inline'));", 'var inline = false;'];   /* T-0637 */
 function mutatedTabsScript(mutations, file) {
   var src;
   try { src = fs.readFileSync(path.join(ROOT, 'assets', 'js', file || 'hl-report-tabs.js'), 'utf8'); } catch (e) { return null; }
@@ -2939,6 +2940,27 @@ async function tabControlRows(page, url, html) {
         check(nameA, fired && rv.ok, 'forced copy: ' + (fv.ok ? 'PASS (the row cannot see an empty tab)' : fv.detail) + ' | real script, timeline sections moved to chain: ' + rv.detail);
       }
     } finally { forcedSrv.close(); realSrv.close(); }
+  }
+  if (INLINE) {
+    /* T-0637: the three card controls below break the cards of the dashboard, which an inline page does not build (they would "fail" on a page with no cards at all, for the wrong reason). Their inline counterpart:
+       on a copy of the page whose script ignores the flag the band comes back and the figures do not, and the placement row must FAIL. */
+    var nameI = 'control: the placement row FAILS on a copy of the page whose script ignores figures: inline (the band is built, the figures are not)';
+    var ignoring = mutatedTabsScript([MUT_IGNORE_FLAG]);
+    if (!ignoring) check('NOT CHECKED: ' + nameI, false, 'hl-report-tabs.js no longer contains the text the control changes (' + MUT_IGNORE_FLAG[0].slice(0, 60) + '...), so no copy could be built');
+    else if (!SHAPES) check('NOT CHECKED: ' + nameI, false, 'the report\'s table shapes were not read, so what the page should draw is not known');
+    else {
+      var ipath0 = new URL(url).pathname + '__ignore-flag-control/';
+      var isrv0 = await SERVER.start({ [ipath0]: html }, { root: ROOT, base: BASE, files: { [TABS_SCRIPT_PATH]: ignoring } });
+      try {
+        if (!(await gotoAndWait(page, isrv0.origin + ipath0))) check('NOT CHECKED: ' + nameI, false, 'the tab controller never built on the control copy');
+        else {
+          var iv0 = inlinePlacementVerdict(await page.json(INLINE_EXPR), SHAPES);
+          check(nameI, iv0.ok === false && !iv0.notChecked, iv0.ok === false ? 'FAILS as designed: ' + iv0.detail.slice(0, 300) : 'the control did NOT fire: ' + iv0.detail);
+        }
+      } finally { isrv0.close(); }
+    }
+    await restoreReportPage(page, url);
+    return;
   }
   var broken = mutatedTabsScript([MUT_NO_NOTICE, MUT_BAD_LINE]);
   if (!broken) check('NOT CHECKED: ' + nameB, false, 'hl-report-tabs.js no longer contains the text the control changes, so no broken copy could be built');
