@@ -1469,3 +1469,12 @@ html:has(.hl-report-page) {
   .hl-report-page.hl-figs-inline .hl-post-content .hl-fig { margin: 24px 0; }
   .hl-report-page.hl-figs-inline .hl-fig-keys { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
+
+/* T-0637 (Joseph, 2026-11-15: keep the chain story, integrated more seamlessly). Inline only.
+   The ribbon steps lose their boxes (a top rule like every figure), and each story row carries a thin bar in its status hue instead of a bright white one. */
+.hl-report-page.hl-figs-inline .hl-fig .hl-rv-flow button.hl-rv-fnode { border: 0; border-top: 1px solid var(--rv-row-line); padding: 10px 8px 4px 0; }
+.hl-report-page.hl-figs-inline .hl-fig .hl-rv-flow button.hl-rv-fnode[aria-pressed="true"], .hl-report-page.hl-figs-inline .hl-fig .hl-rv-flow button.hl-rv-fnode.is-linked { border-top-color: var(--rv-text); }
+.hl-report-page.hl-figs-inline .hl-fig .hl-rv-stage a.hl-rv-procedure { border-left-width: 2px; border-left-color: var(--rv-row-line); }
+.hl-report-page.hl-figs-inline .hl-fig .hl-rv-stage a.hl-rv-procedure:has(.hl-rv-observed) { border-left-color: var(--rv-ok); }
+.hl-report-page.hl-figs-inline .hl-fig .hl-rv-stage a.hl-rv-procedure:has(.hl-rv-inferred) { border-left-color: var(--rv-warn, #f5c518); }
+.hl-report-page.hl-figs-inline .hl-fig .hl-rv-stage a.hl-rv-procedure:has(.hl-rv-not-shown) { border-left-color: var(--rv-muted); }

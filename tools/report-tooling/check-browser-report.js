@@ -2214,9 +2214,9 @@ function flowVerdict(m) {
   var bad = [];
   if (m.nodes !== m.stageSrc) bad.push('the flow draws ' + m.nodes + ' nodes, the stage table has ' + m.stageSrc + ' rows');
   if (m.inline) {
-    /* T-0637 inline mode: the ribbon only; a story card would be a second copy of the ATT&CK rows. Each node's count is the number of table rows it filters to. */
-    if (m.cards) bad.push('the inline figure draws ' + m.cards + ' story card(s), a second copy of the procedure rows');
-    (m.nodeCounts || []).forEach(function (n, i) { var r = (m.nodeRows || [])[i]; if (n !== null && n !== r) bad.push('node ' + (i + 1) + ' says ' + n + ' linked, it carries ' + r + ' table row(s)'); });
+    /* T-0637 inline mode (Joseph kept the chain story): a story stage for every stage row, and each node's count equals both its story stage's rows and the table rows it filters to. */
+    if (m.cards !== m.stageSrc) bad.push('the chain story draws ' + m.cards + ' stage(s), the stage table has ' + m.stageSrc + ' rows');
+    (m.nodeCounts || []).forEach(function (n, i) { var r = (m.nodeRows || [])[i], st = (m.storyRows || [])[i]; if (n !== null && (n !== r || n !== st)) bad.push('node ' + (i + 1) + ' says ' + n + ' linked, it carries ' + r + ' table row(s) and its story stage lists ' + st); });
   } else {
   if (m.cards !== m.stageSrc) bad.push('the story draws ' + m.cards + ' stage cards, the stage table has ' + m.stageSrc + ' rows');
   (m.nodeCounts || []).forEach(function (n, i) { if (n !== null && n !== (m.storyRows || [])[i]) bad.push('node ' + (i + 1) + ' says ' + n + ' linked, its story card lists ' + (m.storyRows || [])[i]); });

@@ -1237,9 +1237,9 @@
           var lab = stageLabel(r[0], si);
           var card = make('article', 'hl-rv-stage', null, columns); card.setAttribute('data-n', lab.n);
           stageCards.push(card); stageRows.push([]); stageTactics.push([]);
-          var detail = make('details', 'hl-rv-stage-detail', null, card); detail.open = !phone.matches; stageDetails.push(detail);
+          var detail = make('details', 'hl-rv-stage-detail', null, card); detail.open = inline || !phone.matches; stageDetails.push(detail);   // T-0637: inline, the story is open on phones too (a closed list showed as bare headings)
           var heading = make('summary', '', r[0], detail); var nm = String(r[0]).match(/^(\d+\.\s*)(.+)$/); if (nm) { heading.textContent = ''; make('span', 'hl-rv-stage-no', nm[1], heading); heading.appendChild(document.createTextNode(nm[2])); }
-          phone.addEventListener('change', function () { detail.open = !phone.matches; });
+          if (!inline) phone.addEventListener('change', function () { detail.open = !phone.matches; });
           card = detail;
           // T-0524.2 (Joseph, 2026-11-13): the stage's own text is the stage table in the same tab; the card carries the stage, its linked procedures and a link to that text.
           if (!inline) sourceLink(stages, card);   // inline: the stage table is directly below
@@ -1256,15 +1256,13 @@
             stageRows[si] = matches.map(function (a) { return a.index; });
             stageTactics[si] = matches.map(function (a) { return tacticName(cell(a.row, attackC.tactic)); }).filter(function (v, i, arr) { return v && arr.indexOf(v) === i; });
             var procedureList = matches.length ? tableFold(card, matches.length + ' linked procedure rows') : card;
-            make('small', 'hl-rv-stage-count', matches.length + ' linked procedures', heading);
+            make('small', 'hl-rv-stage-count', matches.length + ' linked procedure' + (inline && matches.length === 1 ? '' : 's'), heading);
             var counts = ['OBSERVED', 'INFERRED', 'NOT SHOWN'].map(function (status) { return matches.filter(function (a) { return attackC.status >= 0 && a.row[attackC.status] === status; }).length; });
             function mini(parent) { var bar = make('span', 'hl-rv-mini', null, parent); bar.setAttribute('role', 'img'); bar.setAttribute('aria-label', counts.map(function (n, i) { return n + ' ' + ['observed', 'inferred', 'not shown'][i]; }).join(', ')); counts.forEach(function (n, i) { if (n) { var segment = make('span', 'hl-rv-' + ['observed','inferred','not-shown'][i], '', bar); segment.style.flexGrow = String(n); } }); }
             if (!attack.legacy) mini(heading);
             var li = make('li', 'hl-rv-fli', null, ribbon);
             var step = button('', li, function () {
               if (matches.length && cons) { cons.toggle('Stage', r[0]); if (inline) openAround(attack.table); }
-              // T-0637 (lead): inline mode draws no story copy of the procedure rows, so a press takes the reader to the filtered table itself.
-              if (inline) { if (matches.length) { var tbar = cons && cons.anchor && cons.anchor.closest('.hl-tbar'); (tbar || attack.table).scrollIntoView({ block: 'start', behavior: 'smooth' }); } else { openAround(stages.table); stages.table.scrollIntoView({ block: 'nearest', behavior: 'smooth' }); } return; }
               detail.open = true; stageCards[si].scrollIntoView({ block: 'nearest', behavior: 'smooth' });
             }); step.className = 'hl-rv-fnode'; step.setAttribute('aria-pressed', 'false');
             step.setAttribute('aria-label', 'Stage ' + lab.n + ', ' + lab.name + ': ' + matches.length + ' linked procedures. ' + (matches.length ? 'Go to the stage and filter to it.' : 'Go to the stage; no procedure row is linked to it.'));
@@ -1285,7 +1283,7 @@
               if (attackC.status >= 0) badge(chip, a.row[attackC.status]);
               if (attackC.conf >= 0) { var cb = badge(chip, a.row[attackC.conf]); pipsBefore(cb, a.row[attackC.conf]); }
             });
-          } else { var li0 = make('li', 'hl-rv-fli', null, ribbon); var s0 = button('', li0, function () { if (inline) { openAround(stages.table); stages.table.scrollIntoView({ block: 'nearest', behavior: 'smooth' }); return; } stageCards[si].scrollIntoView({ block: 'nearest', behavior: 'smooth' }); }); s0.className = 'hl-rv-fnode'; var nb0 = make('span', 'hl-rv-fnb', null, s0); make('span', 'hl-rv-fnum', lab.n, nb0).setAttribute('aria-hidden', 'true'); make('strong', 'hl-rv-fnm', lab.name, nb0); flowButtons.push(s0); }
+          } else { var li0 = make('li', 'hl-rv-fli', null, ribbon); var s0 = button('', li0, function () { stageCards[si].scrollIntoView({ block: 'nearest', behavior: 'smooth' }); }); s0.className = 'hl-rv-fnode'; var nb0 = make('span', 'hl-rv-fnb', null, s0); make('span', 'hl-rv-fnum', lab.n, nb0).setAttribute('aria-hidden', 'true'); make('strong', 'hl-rv-fnm', lab.name, nb0); flowButtons.push(s0); }
         });
         linkRead = make('p', 'hl-rv-linkread', '', flowWrap); linkRead.setAttribute('role', 'status'); linkRead.setAttribute('aria-live', 'polite');
       } else missing(body, 'a Stage / What the operator did table');
@@ -1411,10 +1409,10 @@
       if (inline) {
         // T-0637: the stage ribbon and chain story go before the stage table, the heat map before the ATT&CK table. Each is placed only when its source table is in the text.
         if (stages && flowWrap) {
-          // T-0637 (lead): the ribbon only. The per-stage procedure lists repeated the ATT&CK table's rows a second time (1,600 px on INV-2026-082); a press filters that table instead.
-          var sf = figBox(stages.rows.length + ' stages in the order the report gives them' + (attack && cons ? '; press one to filter the procedure table to the rows the report links to it' : ''),
-            'How counted: one step for each row of the stage table, with the number of procedure rows the report links to it (' + (curation.stage_joins ? 'curated for this report' : 'the stage text names the technique') + '), never by tactic alone. From ' + fromNote(stages) + '.', 'hl-fig--chain');
-          sf.draw.appendChild(flowWrap);
+          // T-0637 (Joseph, 2026-11-15: keep the chain story): the ribbon steps through the stages and the story under it lists each stage's linked procedure rows; a press opens that stage and filters the report's ATT&CK table.
+          var sf = figBox('The chain story: ' + stages.rows.length + ' stages in the order the report gives them, each with the procedure rows the report links to it',
+            'How counted: one stage for each row of the stage table. A procedure is listed under a stage only when the report links them (' + (curation.stage_joins ? 'curated for this report' : 'the stage text names the technique') + '), never by tactic alone. From ' + fromNote(stages) + '.', 'hl-fig--chain');
+          sf.draw.appendChild(flowWrap); sf.draw.appendChild(wrap);
           figSite(stages.table).before(sf.fig);
         }
         var hf = heatFigure(); if (hf) figSite(attack.table).before(hf);
