@@ -39,7 +39,7 @@ test('exactly the two unlisted previews carry figures: inline (site copies; vaul
 test('the cache-busters moved with the stylesheet and the script (both carry the same value)', () => {
   const a = read('_layouts/post.html').match(/hl-report-tabs\.js' \| relative_url \}\}\?v=([0-9.]+)/)[1];
   const b = read('_includes/default/head.liquid').match(/hl-report-tabs\.css' \| relative_url \}\}\?v=([0-9.]+)/)[1];
-  assert.equal(a, b); assert.equal(a, '20261115.2');
+  assert.equal(a, b); assert.equal(a, '20261115.3');
 });
 
 test('every rule the inline block adds to the stylesheet is scoped under .hl-figs-inline, so no other report can see it', () => {
@@ -216,13 +216,13 @@ test('the browser gate\'s inline rows, run on the jsdom page: placement, once, c
   } finally { f.w.close(); }
 });
 
-test('the inline anatomy row FAILS on a figure with a box, a fill, a radius, a shadow, a number, no source line or text under the floor', () => {
-  const ok = { kind: 'grades', capOk: true, srcOk: true, chrome: true, style: { bg: 'rgba(0, 0, 0, 0)', bt: 1, bb: 0, bl: 0, br: 0, rad: '0px', shadow: 'none' }, capPx: 16, srcPx: 15, capFont: 'IBM Plex Sans', srcFont: 'IBM Plex Sans', capTop: 10, drawTop: 40, srcTop: 90, cap: '2 rows by grade' };
+test('the inline anatomy row FAILS on a figure that is not a panel, has a large radius or a shadow, a number, no source line or text under the floor', () => {
+  const ok = { kind: 'grades', capOk: true, srcOk: true, chrome: true, style: { bg: 'rgb(24, 24, 24)', bt: 1, bb: 1, bl: 1, br: 1, rad: '6px', shadow: 'none' }, capPx: 18, srcPx: 15, capFont: 'IBM Plex Sans', srcFont: 'IBM Plex Sans', capTop: 10, drawTop: 40, srcTop: 90, cap: '2 rows by grade' };
   assert.equal(G.inlineAnatomyVerdict({ figs: [ok] }).ok, true);
   const bad = (patch) => G.inlineAnatomyVerdict({ figs: [Object.assign({}, ok, patch)] });
-  assert.equal(bad({ style: Object.assign({}, ok.style, { bl: 1 }) }).ok, false, 'a border box');
-  assert.equal(bad({ style: Object.assign({}, ok.style, { bg: 'rgb(34, 34, 34)' }) }).ok, false, 'a fill');
-  assert.equal(bad({ style: Object.assign({}, ok.style, { rad: '6px' }) }).ok, false, 'a radius');
+  assert.equal(bad({ style: Object.assign({}, ok.style, { bl: 0, br: 0, bb: 0 }) }).ok, false, 'one hairline above only: not a panel');
+  assert.equal(bad({ style: Object.assign({}, ok.style, { bg: 'rgba(0, 0, 0, 0)' }) }).ok, false, 'no fill');
+  assert.equal(bad({ style: Object.assign({}, ok.style, { rad: '16px' }) }).ok, false, 'a large radius');
   assert.equal(bad({ style: Object.assign({}, ok.style, { shadow: 'rgba(0, 0, 0, 0.5) 0px 2px 8px' }) }).ok, false, 'a shadow');
   assert.equal(bad({ cap: 'Figure 2: grades' }).ok, false, 'a number that would collide with the author\'s');
   assert.equal(bad({ srcOk: false }).ok, false, 'no source line');

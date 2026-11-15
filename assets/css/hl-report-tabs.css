@@ -1478,3 +1478,24 @@ html:has(.hl-report-page) {
 .hl-report-page.hl-figs-inline .hl-fig .hl-rv-stage a.hl-rv-procedure:has(.hl-rv-observed) { border-left-color: var(--rv-ok); }
 .hl-report-page.hl-figs-inline .hl-fig .hl-rv-stage a.hl-rv-procedure:has(.hl-rv-inferred) { border-left-color: var(--rv-warn, #f5c518); }
 .hl-report-page.hl-figs-inline .hl-fig .hl-rv-stage a.hl-rv-procedure:has(.hl-rv-not-shown) { border-left-color: var(--rv-muted); }
+
+/* T-0637 (Joseph, 2026-11-15, after seeing the previews live): the figures were too seamless. Each figure is now a quiet panel set apart from the prose:
+   a slightly lighter fill and a 1px border on all sides, a blue mono FIGURE eyebrow like the SECTION one, a larger white caption, and light (not grey) labels. Inline only. */
+.hl-report-page.hl-figs-inline { --hl-fig-bg: #181818; --hl-fig-line: #333333; --hl-fig-label: #d4d4d4; }
+.hl-report-page.hl-figs-inline .hl-post-content .hl-fig { margin: 40px 0; padding: 20px 24px 18px; border: 1px solid var(--hl-fig-line); border-radius: 6px; background: var(--hl-fig-bg); box-shadow: none; color: var(--rv-text); }
+.hl-report-page.hl-figs-inline .hl-post-content .hl-fig > figcaption { margin: 0 0 18px; font-size: var(--hl-fs-body, 18px); font-weight: 600; line-height: 1.4; color: #ffffff; }
+.hl-report-page.hl-figs-inline .hl-post-content .hl-fig > figcaption::before { content: "FIGURE"; content: "FIGURE" / ""; display: block; margin: 0 0 6px; font-family: var(--rv-mono); font-size: var(--hl-fs-meta); font-weight: 400; letter-spacing: 0.08em; line-height: 1.2; color: var(--acc); }
+.hl-report-page.hl-figs-inline .hl-post-content .hl-fig > .hl-fig-src { margin: 16px 0 0; padding-top: 12px; border-top: 1px solid var(--hl-fig-line); color: var(--hl-fig-label); }
+.hl-report-page.hl-figs-inline .hl-fig-key { color: var(--hl-fig-label); font-size: var(--hl-fs-small); }
+.hl-report-page.hl-figs-inline .hl-fig-key strong { font-size: 24px; color: #ffffff; }
+.hl-report-page.hl-figs-inline .hl-fig :is(.hl-rv-fct, .hl-rv-stage-count, .hl-rv-pname small, .hl-rv-heathead, .hl-rv-riskmeta, .hl-rv-riskscore small, .hl-rv-legend, .hl-rv-legend *) { color: var(--hl-fig-label); }
+.hl-report-page.hl-figs-inline .hl-fig .hl-rv-fnm, .hl-report-page.hl-figs-inline .hl-fig .hl-rv-stage-detail > summary { font-size: var(--hl-fs-body, 18px); color: #ffffff; }
+/* the facts line on Overview: the same panel, white figures, light labels */
+.hl-report-page.hl-figs-inline .hl-facts-block { padding: 16px 24px; border: 1px solid var(--hl-fig-line); border-radius: 6px; background: var(--hl-fig-bg); }
+.hl-report-page.hl-figs-inline .hl-facts { padding: 0 0 12px; border-block: 0; border-bottom: 1px solid var(--hl-fig-line); font-size: var(--hl-fs-body, 18px); color: var(--hl-fig-label); }
+.hl-report-page.hl-figs-inline .hl-fact strong { color: #ffffff; font-size: 22px; }
+.hl-report-page.hl-figs-inline .hl-facts-block > .hl-fig-src { color: var(--hl-fig-label); }
+@media (max-width: 699px) {
+  .hl-report-page.hl-figs-inline .hl-post-content .hl-fig { padding: 16px 14px 14px; margin: 32px 0; }
+  .hl-report-page.hl-figs-inline .hl-facts-block { padding: 14px; }
+}

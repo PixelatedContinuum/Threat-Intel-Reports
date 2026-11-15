@@ -3946,9 +3946,10 @@ function inlineAnatomyVerdict(m) {
     if (!f.srcOk) bad.push(n + ' has no source line as its last child');
     if (!f.chrome) bad.push(n + ' is not marked data-rv-chrome and data-pagefind-ignore');
     var s = f.style;
-    if (!(s.bt === 1) || s.bb || s.bl || s.br) bad.push(n + ' has borders other than one hairline above (' + [s.bt, s.br, s.bb, s.bl].join('/') + ')');
-    if (!/rgba\(0, 0, 0, 0\)|transparent/.test(s.bg)) bad.push(n + ' has a fill (' + s.bg + ')');
-    if (s.rad !== '0px') bad.push(n + ' has a radius (' + s.rad + ')');
+    /* Joseph, 2026-11-15 (live previews): figures stand apart from the prose as a quiet panel: a 1px border on every side, a fill, a radius of at most 8px, no shadow. */
+    if (!(s.bt === 1 && s.br === 1 && s.bb === 1 && s.bl === 1)) bad.push(n + ' is not a panel with a 1px border on every side (' + [s.bt, s.br, s.bb, s.bl].join('/') + ')');
+    if (/rgba\(0, 0, 0, 0\)|transparent/.test(s.bg)) bad.push(n + ' has no fill, so it does not stand apart from the text');
+    if (!/^\d+(\.\d+)?px$/.test(s.rad) || parseFloat(s.rad) > 8) bad.push(n + ' has a radius over 8px (' + s.rad + ')');
     if (s.shadow !== 'none') bad.push(n + ' has a shadow');
     if (f.capPx && f.capPx < 15) bad.push(n + ' caption is ' + f.capPx + 'px, under the 15px floor');
     if (f.srcPx && f.srcPx < 15) bad.push(n + ' source line is ' + f.srcPx + 'px, under the 15px floor');
@@ -3957,7 +3958,7 @@ function inlineAnatomyVerdict(m) {
     if (f.drawTop && f.srcTop && f.srcTop < f.drawTop) bad.push(n + ' source line is above the drawing');
     if (/^(Figure|Fig\.)\s*\d/i.test(f.cap)) bad.push(n + ' caption is numbered, which would collide with the author\'s numbering');
   });
-  return { notChecked: false, ok: bad.length === 0, why: bad, detail: m.figs.length + ' figure(s): caption above, source line under, one hairline, no fill, border box, radius or shadow, sans at or over the floor' + (bad.length ? '; ' + bad.join('; ') : '') };
+  return { notChecked: false, ok: bad.length === 0, why: bad, detail: m.figs.length + ' figure(s): caption above, source line under, a panel (1px border all round, a fill, radius at most 8px, no shadow), sans at or over the floor' + (bad.length ? '; ' + bad.join('; ') : '') };
 }
 /* One table once: the article's tables (scripts off) are the page's tables, all inside the report's own sections, none re-drawn. */
 function inlineOnceVerdict(m, article) {
@@ -4219,8 +4220,8 @@ async function inlineFigureRows(page, url) {
       await page.evaluate('(function(){var t=document.querySelector(".hl-rv-source table").cloneNode(true);document.querySelector(".hl-rv-panel").appendChild(t);})()');
       ctl('a table drawn a second time outside the report\'s sections makes the one-table-once row FAIL', inlineOnceVerdict(await page.json(INLINE_EXPR), article));
       await gotoAndWait(page, url);
-      await page.evaluate('(function(){var f=document.querySelector("figure.hl-fig");f.style.cssText="border:1px solid #888;border-radius:6px;background:#222;box-shadow:0 2px 8px #000";})()');
-      ctl('a figure given a box, fill, radius and shadow makes the anatomy row FAIL', inlineAnatomyVerdict(await page.json(INLINE_EXPR)));
+      await page.evaluate('(function(){var f=document.querySelector("figure.hl-fig");f.style.cssText="border:0;border-top:1px solid #888;border-radius:16px;background:transparent;box-shadow:0 2px 8px #000";})()');
+      ctl('a figure stripped of its panel (no side borders, no fill) and given a 16px radius and a shadow makes the anatomy row FAIL', inlineAnatomyVerdict(await page.json(INLINE_EXPR)));
       await gotoAndWait(page, url);
     }
   }
