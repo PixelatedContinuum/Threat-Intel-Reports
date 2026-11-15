@@ -1,5 +1,5 @@
 {
- "generated_at": "2026-11-13T18:33:54Z",
+ "generated_at": "2026-11-15T04:13:25Z",
  "counts": {
   "indicators": 2073,
   "reports": 61,
@@ -71,7 +71,9 @@
    "webserver-compromise-kit-91-236-230-250-iocs.json",
    "webshells-to-the-cloud.json"
   ],
-  "embargoed": [],
+  "embargoed": [
+   "inv-2026-082-agent-platform-command-channel-iocs.json"
+  ],
   "unknown": [],
   "empty": []
  },

@@ -2843,6 +2843,133 @@ inv-2026-080-cyberstrike-ad-workbench-detections:
     robustness: 2
     confidence: "MODERATE"
     attack: [T1087.002]
+inv-2026-082-agent-platform-command-channel-detections:
+  - name: "MAL_AgentPlatform_MCP_Stdio_Python_Downloader_Plant"
+    engine: yara
+    tier: Detection
+    fence: 0
+    hash: "d58fcb59"
+    head: "rule MAL_AgentPlatform_MCP_Stdio_Python_Download"
+    robustness: 2
+    confidence: "HIGH"
+    attack: [T1059.006, T1105]
+  - name: "MAL_AgentPlatform_Scripted_LLM_Endpoint_SSE_ToolCall_Queue"
+    engine: yara
+    tier: Hunting
+    fence: 1
+    hash: "0985ae73"
+    head: "rule MAL_AgentPlatform_Scripted_LLM_Endpoint_SSE"
+    robustness: 2
+    confidence: "MODERATE"
+    attack: [T1071.001]
+  - name: "MAL_ReverseSOCKS_Pod_Worker_Host_Port_Line_Ack_Protocol"
+    engine: yara
+    tier: Hunting
+    fence: 2
+    hash: "f2372b02"
+    head: "rule MAL_ReverseSOCKS_Pod_Worker_Host_Port_Line_"
+    robustness: 2
+    confidence: "MODERATE"
+    attack: [T1090]
+  - name: "MAL_Pod_Socks5_Relay_Batch_Helper_Docstring_Family"
+    engine: yara
+    tier: Hunting
+    fence: 3
+    hash: "f4fb7c6a"
+    head: "rule MAL_Pod_Socks5_Relay_Batch_Helper_Docstring"
+    robustness: 1
+    confidence: "MODERATE"
+    attack: [T1090]
+  - name: "Python Inline Downloader Writing A Hidden Script To Tmp And Spawning It"
+    engine: sigma
+    tier: Detection
+    fence: 4
+    hash: "8b3a99cf"
+    head: "title: Python Inline Downloader Writing A Hidden"
+    robustness: 2
+    confidence: "MODERATE"
+    attack: [T1059.006, T1105]
+  - name: "Bore Tunnel Client Exposing A Local Port Through A Remote Server"
+    engine: sigma
+    tier: Hunting
+    fence: 5
+    hash: "b39f3f61"
+    head: "title: Bore Tunnel Client Exposing A Local Port "
+    robustness: 2
+    confidence: "HIGH"
+    attack: [T1572, T1090]
+  - name: "ACK Worker Node Role Listing Compute Instances In Several Regions (with base rule)"
+    engine: sigma
+    tier: Hunting
+    fence: 6
+    hash: "d22e6ae8"
+    head: "title: ACK Worker Node Role Session Calling Desc"
+    robustness: 3
+    confidence: "MODERATE"
+    attack: [T1580]
+  - name: "ACK Worker Node Role Session Used From A Public Source Address"
+    engine: sigma
+    tier: Hunting
+    fence: 7
+    hash: "3ff669b8"
+    head: "title: ACK Worker Node Role Session Used From A "
+    robustness: 2
+    confidence: "LOW"
+    attack: [T1078.004]
+  - name: "Agent Platform Internal Workspace Reload Route Called Through The Gateway (with publish, save and ordering correlation)"
+    engine: sigma
+    tier: Hunting
+    fence: 8
+    hash: "cccbb85b"
+    head: "title: Agent Platform Publish Request id: 9993f7"
+    robustness: 2
+    confidence: "LOW"
+    attack: [T1565.001]
+  - name: "GitLab API User Lookup Rejected Repeatedly From One Source (with base rule)"
+    engine: sigma
+    tier: Hunting
+    fence: 9
+    hash: "cfe428f4"
+    head: "title: GitLab API User Lookup Rejected id: 8a46e"
+    robustness: 2
+    confidence: "LOW"
+    attack: [T1110]
+  - name: "THL HUNT INV-2026-082 bore Tunnel Client Hello Frame (Open-Source Reverse Tunnel Session)"
+    engine: suricata
+    tier: Hunting
+    fence: 10
+    hash: "9bcc2762"
+    head: "alert tcp $HOME_NET any -> $EXTERNAL_NET any (ms"
+    robustness: 2
+    confidence: "MODERATE"
+    attack: [T1572]
+  - name: "THL HUNT INV-2026-082 bore.pub Public Tunnel Server DNS Query (Shared Service, Do Not Block On This Alone)"
+    engine: suricata
+    tier: Hunting
+    fence: 11
+    hash: "257cdf12"
+    head: "alert dns $HOME_NET any -> any any (msg:\"THL HUN"
+    robustness: 0
+    confidence: "HIGH"
+    attack: [T1572]
+  - name: "THL HUNT INV-2026-082 Python urllib Fetch Of Operator Payload File Name (Agent-Platform Plant Downloader)"
+    engine: suricata
+    tier: Hunting
+    fence: 12
+    hash: "9e00c062"
+    head: "alert http $HOME_NET any -> $EXTERNAL_NET any (m"
+    robustness: 1
+    confidence: "MODERATE"
+    attack: [T1105]
+  - name: "THL HUNT INV-2026-082 POST To /up With name Query And Python urllib Client (Operator Receiver Shape)"
+    engine: suricata
+    tier: Hunting
+    fence: 13
+    hash: "a2095419"
+    head: "alert http $HOME_NET any -> $EXTERNAL_NET any (m"
+    robustness: 1
+    confidence: "LOW"
+    attack: [T1041]
 kaido-quasar-rat-detections:
   - name: "KAIDO Quasar-Fork Namespace + Costura Asset"
     engine: yara

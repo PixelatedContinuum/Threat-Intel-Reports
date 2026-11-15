@@ -1508,6 +1508,61 @@
       name: "Protocol Tunneling"
       rules: "Chisel Reverse Server Started On Linux (SIGMA, Hunting); THL HUNT Chisel Tunnel WebSocket Upgrade (SURICATA, Hunting)"
       count: 2
+"inv-2026-082-agent-platform-command-channel-detections":
+  total: 10
+  tactics: 7
+  unresolved: []
+  rows:
+    - tactic: "Execution"
+      id: "T1059.006"
+      name: "Python"
+      rules: "MAL_AgentPlatform_MCP_Stdio_Python_Downloader_Plant (YARA, Detection); Python Inline Downloader Writing A Hidden Script To Tmp And Spawning It (SIGMA, Detection)"
+      count: 2
+    - tactic: "Stealth"
+      id: "T1078.004"
+      name: "Cloud Accounts"
+      rules: "ACK Worker Node Role Session Used From A Public Source Address (SIGMA, Hunting)"
+      count: 1
+    - tactic: "Credential Access"
+      id: "T1110"
+      name: "Brute Force"
+      rules: "GitLab API User Lookup Rejected Repeatedly From One Source (with base rule) (SIGMA, Hunting)"
+      count: 1
+    - tactic: "Discovery"
+      id: "T1580"
+      name: "Cloud Infrastructure Discovery"
+      rules: "ACK Worker Node Role Listing Compute Instances In Several Regions (with base rule) (SIGMA, Hunting)"
+      count: 1
+    - tactic: "Command and Control"
+      id: "T1071.001"
+      name: "Web Protocols"
+      rules: "MAL_AgentPlatform_Scripted_LLM_Endpoint_SSE_ToolCall_Queue (YARA, Hunting)"
+      count: 1
+    - tactic: "Command and Control"
+      id: "T1090"
+      name: "Proxy"
+      rules: "MAL_ReverseSOCKS_Pod_Worker_Host_Port_Line_Ack_Protocol (YARA, Hunting); MAL_Pod_Socks5_Relay_Batch_Helper_Docstring_Family (YARA, Hunting); Bore Tunnel Client Exposing A Local Port Through A Remote Server (SIGMA, Hunting)"
+      count: 3
+    - tactic: "Command and Control"
+      id: "T1105"
+      name: "Ingress Tool Transfer"
+      rules: "MAL_AgentPlatform_MCP_Stdio_Python_Downloader_Plant (YARA, Detection); Python Inline Downloader Writing A Hidden Script To Tmp And Spawning It (SIGMA, Detection); THL HUNT INV-2026-082 Python urllib Fetch Of Operator Payload File Name (Agent-Platform Plant Downloader) (SURICATA, Hunting)"
+      count: 3
+    - tactic: "Command and Control"
+      id: "T1572"
+      name: "Protocol Tunneling"
+      rules: "Bore Tunnel Client Exposing A Local Port Through A Remote Server (SIGMA, Hunting); THL HUNT INV-2026-082 bore Tunnel Client Hello Frame (Open-Source Reverse Tunnel Session) (SURICATA, Hunting); THL HUNT INV-2026-082 bore.pub Public Tunnel Server DNS Query (Shared Service, Do Not Block On This Alone) (SURICATA, Hunting)"
+      count: 3
+    - tactic: "Exfiltration"
+      id: "T1041"
+      name: "Exfiltration Over C2 Channel"
+      rules: "THL HUNT INV-2026-082 POST To /up With name Query And Python urllib Client (Operator Receiver Shape) (SURICATA, Hunting)"
+      count: 1
+    - tactic: "Impact"
+      id: "T1565.001"
+      name: "Stored Data Manipulation"
+      rules: "Agent Platform Internal Workspace Reload Route Called Through The Gateway (with publish, save and ordering correlation) (SIGMA, Hunting)"
+      count: 1
 "kaido-quasar-rat-detections":
   total: 8
   tactics: 4

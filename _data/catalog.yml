@@ -24,6 +24,19 @@
 #     detection_tiers is set on 51 entries and read by nothing; do not add it.
 
 entries:
+  # ===== PENDING GO-LIVE: INV-2026-082 agent-platform command channel (uncomment at launch) =====
+  # Withheld on purpose: the report, the detection page and the IOC feed are an unlisted PREVIEW (T-0635).
+  # Go-live flip: preview-and-go-live.md. Uncomment, replace preview_cover_label with cover_label below,
+  # add stix_url, repoint the report's ioc_feed to /ioc-feeds/<slug>/, and re-read this block against the report title.
+  #  - title: "An Intruder Configured an Enterprise AI-Agent Platform as a Command and Relay Channel"
+  #    date: 2026-11-15
+  #    severity: high
+  #    tags: [Open Dir, AI Abuse, C2, Cred Theft]
+  #    report_url: /reports/inv-2026-082-agent-platform-command-channel/
+  #    cover_label: "Platform Abuse"
+  #    detection_url: /hunting-detections/inv-2026-082-detections
+  #    ioc_url: /ioc-feeds/inv-2026-082-agent-platform-command-channel-iocs.json
+  # =============================================================================================
   - title: "An AI Pentest Platform Drives Commodity Tooling Against Portuguese Government Targets"
     date: 2026-11-12
     severity: high

@@ -1,0 +1,908 @@
+{
+  "metadata": {
+    "malware_name": "Cloud and AI-agent platform intrusion toolkit (INV-2026-082)",
+    "family": "Operator-written Python tooling: scripted LLM endpoint, MCP plant, reverse SOCKS relay, receive-only sinks, around one open-directory VPS",
+    "report_date": "2026-11-14",
+    "analyst": "The Hunters Ledger",
+    "confidence": "HIGH",
+    "tlp": "CLEAR",
+    "investigation": "INV-2026-082",
+    "notes": "Operator-side values only: the operator's VPS, ports, URL paths, operator-written script hashes and operator-chosen strings. No victim value of any kind (no victim address, host, credential, token, account or project id). Stock public tools (fscan, gogo) are not listed as hashes: their hashes match anyone using the public tool. bore.pub and 159.223.110.159 are a shared public tunnel service and sit in hunt_only_never_block. Execution of the operator scripts on a victim is shown only where the case notes say so."
+  },
+  "file_hashes": {
+    "sha256": [
+      {
+        "value": "53dbc1254deae948749fd3aaae86391769e0e77dfe1a6e92e62a61102af6edc8",
+        "filename": "sink.py",
+        "type": "Python script",
+        "size_bytes": 2303,
+        "confidence": "HIGH",
+        "role": "operator-built: sink",
+        "action": "BLOCK",
+        "description": "Receive-only HTTP sink the pod POSTs files to; stores uploads in a pull folder",
+        "context": "Python source written by the operator. Held in the captured directory; whether it ran on any victim is shown only where the case notes say so. Hash changes with any edit, so use the URL, port and string indicators as well.",
+        "source": "Operator's own file in the captured open directory (AttackCapture copy, inventory sha256), read statically"
+      },
+      {
+        "value": "044569af53a71ab8df28ceb5633cc657d4d19034527821c7b98a8dbb1205c480",
+        "filename": "vps_serve.py",
+        "type": "Python script",
+        "size_bytes": 1569,
+        "confidence": "HIGH",
+        "role": "operator-built: receiver",
+        "action": "BLOCK",
+        "description": "Operator receiver for pod-pushed data (collector saving POST bodies, or scan-hit receiver)",
+        "context": "Python source written by the operator. Held in the captured directory; whether it ran on any victim is shown only where the case notes say so. Hash changes with any edit, so use the URL, port and string indicators as well.",
+        "source": "Operator's own file in the captured open directory (AttackCapture copy, inventory sha256), read statically"
+      },
+      {
+        "value": "bc9af45cf803d508affe503ba8b48350ba6bce5aca203b70ecb231bdf6d7676b",
+        "filename": "hitrecv.py",
+        "type": "Python script",
+        "size_bytes": 1167,
+        "confidence": "HIGH",
+        "role": "operator-built: receiver",
+        "action": "BLOCK",
+        "description": "Operator receiver for pod-pushed data (collector saving POST bodies, or scan-hit receiver)",
+        "context": "Python source written by the operator. Held in the captured directory; whether it ran on any victim is shown only where the case notes say so. Hash changes with any edit, so use the URL, port and string indicators as well.",
+        "source": "Operator's own file in the captured open directory (AttackCapture copy, inventory sha256), read statically"
+      },
+      {
+        "value": "b660141d80bcc05457e881e2db687120677473c8d43c62b26c2c413fbd50b885",
+        "filename": "mcp_plant.py",
+        "type": "Python script",
+        "size_bytes": 1193,
+        "confidence": "HIGH",
+        "role": "operator-built: mcp-plant",
+        "action": "BLOCK",
+        "description": "Plants a stdio MCP server entry in an agent workspace whose command downloads and starts an operator script",
+        "context": "Python source written by the operator. Held in the captured directory; whether it ran on any victim is shown only where the case notes say so. Hash changes with any edit, so use the URL, port and string indicators as well.",
+        "source": "Operator's own file in the captured open directory (AttackCapture copy, inventory sha256), read statically"
+      },
+      {
+        "value": "6f8ff1b3fc55c4daf033f66ee6a71fc8d3d71ffa532e196a18cca6c977c4f953",
+        "filename": "mp2.py",
+        "type": "Python script",
+        "size_bytes": 1219,
+        "confidence": "HIGH",
+        "role": "operator-built: mcp-plant",
+        "action": "BLOCK",
+        "description": "Plants a stdio MCP server entry in an agent workspace whose command downloads and starts an operator script",
+        "context": "Python source written by the operator. Held in the captured directory; whether it ran on any victim is shown only where the case notes say so. Hash changes with any edit, so use the URL, port and string indicators as well.",
+        "source": "Operator's own file in the captured open directory (AttackCapture copy, inventory sha256), read statically"
+      },
+      {
+        "value": "5754b27c7321b0d4644a14004a8e87de5f50fa06c7787bc241bed2be691beef6",
+        "filename": "mp3.py",
+        "type": "Python script",
+        "size_bytes": 1242,
+        "confidence": "HIGH",
+        "role": "operator-built: mcp-plant",
+        "action": "BLOCK",
+        "description": "Plants a stdio MCP server entry in an agent workspace whose command downloads and starts an operator script",
+        "context": "Python source written by the operator. Held in the captured directory; whether it ran on any victim is shown only where the case notes say so. Hash changes with any edit, so use the URL, port and string indicators as well.",
+        "source": "Operator's own file in the captured open directory (AttackCapture copy, inventory sha256), read statically"
+      },
+      {
+        "value": "dff6b8c293aac57fc786fa4a662bdd96c2b0b811eb6b7738ad2330aa517afe39",
+        "filename": "wt.py",
+        "type": "Python script",
+        "size_bytes": 1041,
+        "confidence": "HIGH",
+        "role": "operator-built: mcp-plant",
+        "action": "BLOCK",
+        "description": "Plants a stdio MCP server entry in an agent workspace whose command downloads and starts an operator script",
+        "context": "Python source written by the operator. Held in the captured directory; whether it ran on any victim is shown only where the case notes say so. Hash changes with any edit, so use the URL, port and string indicators as well.",
+        "source": "Operator's own file in the captured open directory (AttackCapture copy, inventory sha256), read statically"
+      },
+      {
+        "value": "d08901561f5f60d5b1dccc6847f00e6a8cc474e6fae8351df05494d6e58b235a",
+        "filename": "own_llm.py",
+        "type": "Python script",
+        "size_bytes": 5615,
+        "confidence": "HIGH",
+        "role": "operator-built: scripted-llm",
+        "action": "BLOCK",
+        "description": "Scripted LLM endpoint: answers the platform's model API and returns the operator's next tool call as the model reply",
+        "context": "Python source written by the operator. Held in the captured directory; whether it ran on any victim is shown only where the case notes say so. Hash changes with any edit, so use the URL, port and string indicators as well.",
+        "source": "Operator's own file in the captured open directory (AttackCapture copy, inventory sha256), read statically"
+      },
+      {
+        "value": "76773e6b1932ed53cb61e78b2f9db9488facab9c2b0904123936e14144b9cd92",
+        "filename": "axllm.py",
+        "type": "Python script",
+        "size_bytes": 5607,
+        "confidence": "HIGH",
+        "role": "operator-built: scripted-llm",
+        "action": "BLOCK",
+        "description": "Scripted LLM endpoint: answers the platform's model API and returns the operator's next tool call as the model reply",
+        "context": "Python source written by the operator. Held in the captured directory; whether it ran on any victim is shown only where the case notes say so. Hash changes with any edit, so use the URL, port and string indicators as well.",
+        "source": "Operator's own file in the captured open directory (AttackCapture copy, inventory sha256), read statically"
+      },
+      {
+        "value": "67b4214af357420abb3b61e954dd2507c56cc45eaf89238d16fb6c9e51245349",
+        "filename": "my_llm.py",
+        "type": "Python script",
+        "size_bytes": 7220,
+        "confidence": "HIGH",
+        "role": "operator-built: scripted-llm",
+        "action": "BLOCK",
+        "description": "Scripted LLM endpoint: answers the platform's model API and returns the operator's next tool call as the model reply",
+        "context": "Python source written by the operator. Held in the captured directory; whether it ran on any victim is shown only where the case notes say so. Hash changes with any edit, so use the URL, port and string indicators as well.",
+        "source": "Operator's own file in the captured open directory (AttackCapture copy, inventory sha256), read statically"
+      },
+      {
+        "value": "dd510773f7aecf667ee465e1e04e8a576cc4e206fa9b1bb364590120a3b882e8",
+        "filename": "own_llm3.py",
+        "type": "Python script",
+        "size_bytes": 7652,
+        "confidence": "HIGH",
+        "role": "operator-built: scripted-llm",
+        "action": "BLOCK",
+        "description": "Scripted LLM endpoint: answers the platform's model API and returns the operator's next tool call as the model reply",
+        "context": "Python source written by the operator. Held in the captured directory; whether it ran on any victim is shown only where the case notes say so. Hash changes with any edit, so use the URL, port and string indicators as well.",
+        "source": "Operator's own file in the captured open directory (AttackCapture copy, inventory sha256), read statically"
+      },
+      {
+        "value": "f66ae5e83328255b4e5e8bf99ac948e9f2dfdf9960b88906b4f40b65ef1bb0ee",
+        "filename": "own_llm4.py",
+        "type": "Python script",
+        "size_bytes": 7064,
+        "confidence": "HIGH",
+        "role": "operator-built: scripted-llm",
+        "action": "BLOCK",
+        "description": "Scripted LLM endpoint: answers the platform's model API and returns the operator's next tool call as the model reply",
+        "context": "Python source written by the operator. Held in the captured directory; whether it ran on any victim is shown only where the case notes say so. Hash changes with any edit, so use the URL, port and string indicators as well.",
+        "source": "Operator's own file in the captured open directory (AttackCapture copy, inventory sha256), read statically"
+      },
+      {
+        "value": "76d901ac74f377e8dc2e307407ab4b1125e90ecae828dbfa8a67ebd19a4e2f85",
+        "filename": "hb.py",
+        "type": "Python script",
+        "size_bytes": 2976,
+        "confidence": "HIGH",
+        "role": "operator-built: relay-worker",
+        "action": "BLOCK",
+        "description": "Reverse SOCKS or tunnel worker that runs in the victim pod and dials the operator relay",
+        "context": "Python source written by the operator. Held in the captured directory; whether it ran on any victim is shown only where the case notes say so. Hash changes with any edit, so use the URL, port and string indicators as well.",
+        "source": "Operator's own file in the captured open directory (AttackCapture copy, inventory sha256), read statically"
+      },
+      {
+        "value": "e4d7f354ac8a60e72c5e79557559b30b8b8e397723b2ef4ccc1507e9722d5b01",
+        "filename": "muxpod.py",
+        "type": "Python script",
+        "size_bytes": 2530,
+        "confidence": "HIGH",
+        "role": "operator-built: relay-worker",
+        "action": "BLOCK",
+        "description": "Reverse SOCKS or tunnel worker that runs in the victim pod and dials the operator relay",
+        "context": "Python source written by the operator. Held in the captured directory; whether it ran on any victim is shown only where the case notes say so. Hash changes with any edit, so use the URL, port and string indicators as well.",
+        "source": "Operator's own file in the captured open directory (AttackCapture copy, inventory sha256), read statically"
+      },
+      {
+        "value": "bce9a7471be71f18d8a7af65581c70be82024f17db0bc8dd4d72e3a436ec55c4",
+        "filename": "mxpod.py",
+        "type": "Python script",
+        "size_bytes": 3442,
+        "confidence": "HIGH",
+        "role": "operator-built: relay-worker",
+        "action": "BLOCK",
+        "description": "Reverse SOCKS or tunnel worker that runs in the victim pod and dials the operator relay",
+        "context": "Python source written by the operator. Held in the captured directory; whether it ran on any victim is shown only where the case notes say so. Hash changes with any edit, so use the URL, port and string indicators as well.",
+        "source": "Operator's own file in the captured open directory (AttackCapture copy, inventory sha256), read statically"
+      },
+      {
+        "value": "da6300c4289d32d402fa6e3df1673aed602aab1e4d1388263f18138015b7e714",
+        "filename": "mxpod2.py",
+        "type": "Python script",
+        "size_bytes": 3759,
+        "confidence": "HIGH",
+        "role": "operator-built: relay-worker",
+        "action": "BLOCK",
+        "description": "Reverse SOCKS or tunnel worker that runs in the victim pod and dials the operator relay",
+        "context": "Python source written by the operator. Held in the captured directory; whether it ran on any victim is shown only where the case notes say so. Hash changes with any edit, so use the URL, port and string indicators as well.",
+        "source": "Operator's own file in the captured open directory (AttackCapture copy, inventory sha256), read statically"
+      },
+      {
+        "value": "581a23e39ad6e78e5313a1445cc337168158f1a9f454528cc0613f97143d5647",
+        "filename": "pxmcp2.py",
+        "type": "Python script",
+        "size_bytes": 3844,
+        "confidence": "HIGH",
+        "role": "operator-built: relay-worker",
+        "action": "BLOCK",
+        "description": "Reverse SOCKS or tunnel worker that runs in the victim pod and dials the operator relay",
+        "context": "Python source written by the operator. Held in the captured directory; whether it ran on any victim is shown only where the case notes say so. Hash changes with any edit, so use the URL, port and string indicators as well.",
+        "source": "Operator's own file in the captured open directory (AttackCapture copy, inventory sha256), read statically"
+      },
+      {
+        "value": "3e18453f832f4999a8bc0a70d86dde1e7db9758f36660c403de0b99b419c59da",
+        "filename": "cfgrelay.py",
+        "type": "Python script",
+        "size_bytes": 2907,
+        "confidence": "HIGH",
+        "role": "operator-built: relay-worker",
+        "action": "BLOCK",
+        "description": "Reverse SOCKS or tunnel worker that runs in the victim pod and dials the operator relay",
+        "context": "Python source written by the operator. Held in the captured directory; whether it ran on any victim is shown only where the case notes say so. Hash changes with any edit, so use the URL, port and string indicators as well.",
+        "source": "Operator's own file in the captured open directory (AttackCapture copy, inventory sha256), read statically"
+      },
+      {
+        "value": "59c3bd56abea1000de558ffd21845757689311cf61f00e9dac23dca593914ffe",
+        "filename": "muxsrv.py",
+        "type": "Python script",
+        "size_bytes": 4665,
+        "confidence": "HIGH",
+        "role": "operator-built: relay-server",
+        "action": "BLOCK",
+        "description": "Operator-side reverse SOCKS server or single-port front that pairs pod workers with local clients",
+        "context": "Python source written by the operator. Held in the captured directory; whether it ran on any victim is shown only where the case notes say so. Hash changes with any edit, so use the URL, port and string indicators as well.",
+        "source": "Operator's own file in the captured open directory (AttackCapture copy, inventory sha256), read statically"
+      },
+      {
+        "value": "dfd7e80ed0a03ad9f6b38c1db782c6c88d4877829696eeecb097d9979aa64391",
+        "filename": "muxsrv8.py (also held as relay9111.py, same bytes)",
+        "type": "Python script",
+        "size_bytes": 6186,
+        "confidence": "HIGH",
+        "role": "operator-built: relay-server",
+        "action": "BLOCK",
+        "description": "Operator-side reverse SOCKS server or single-port front that pairs pod workers with local clients",
+        "context": "Python source written by the operator. Held in the captured directory; whether it ran on any victim is shown only where the case notes say so. Hash changes with any edit, so use the URL, port and string indicators as well.",
+        "source": "Operator's own file in the captured open directory (AttackCapture copy, inventory sha256), read statically"
+      },
+      {
+        "value": "c62479d5f62165fd6a936ce90bbc43eb550e12007410e7b839bd511d32b469d1",
+        "filename": "revsocks_vps.py",
+        "type": "Python script",
+        "size_bytes": 3378,
+        "confidence": "HIGH",
+        "role": "operator-built: relay-server",
+        "action": "BLOCK",
+        "description": "Operator-side reverse SOCKS server or single-port front that pairs pod workers with local clients",
+        "context": "Python source written by the operator. Held in the captured directory; whether it ran on any victim is shown only where the case notes say so. Hash changes with any edit, so use the URL, port and string indicators as well.",
+        "source": "Operator's own file in the captured open directory (AttackCapture copy, inventory sha256), read statically"
+      },
+      {
+        "value": "a5853acd955f3aa3d477e43fc58ae474895bb1ed8346491ed3227c31ff710dbd",
+        "filename": "front.py",
+        "type": "Python script",
+        "size_bytes": 6280,
+        "confidence": "HIGH",
+        "role": "operator-built: relay-server",
+        "action": "BLOCK",
+        "description": "Operator-side reverse SOCKS server or single-port front that pairs pod workers with local clients",
+        "context": "Python source written by the operator. Held in the captured directory; whether it ran on any victim is shown only where the case notes say so. Hash changes with any edit, so use the URL, port and string indicators as well.",
+        "source": "Operator's own file in the captured open directory (AttackCapture copy, inventory sha256), read statically"
+      },
+      {
+        "value": "896146dc951bc0483ecf360509cf56aa50ce399cdea05f30eec6100895ec53d7",
+        "filename": "deployhb.py",
+        "type": "Python script",
+        "size_bytes": 1055,
+        "confidence": "MODERATE",
+        "role": "operator-built: delivery",
+        "action": "BLOCK",
+        "description": "Stages or fetches an operator script into the agent workspace and starts it",
+        "context": "Python source written by the operator. Held in the captured directory; whether it ran on any victim is shown only where the case notes say so. Hash changes with any edit, so use the URL, port and string indicators as well.",
+        "source": "Operator's own file in the captured open directory (AttackCapture copy, inventory sha256), read statically"
+      },
+      {
+        "value": "e47ad08bd023f2894d539b4b7290b07608efbc85a2d73d623981a1bf1869917e",
+        "filename": "boot.py",
+        "type": "Python script",
+        "size_bytes": 710,
+        "confidence": "MODERATE",
+        "role": "operator-built: delivery",
+        "action": "BLOCK",
+        "description": "Stages or fetches an operator script into the agent workspace and starts it",
+        "context": "Python source written by the operator. Held in the captured directory; whether it ran on any victim is shown only where the case notes say so. Hash changes with any edit, so use the URL, port and string indicators as well.",
+        "source": "Operator's own file in the captured open directory (AttackCapture copy, inventory sha256), read statically"
+      },
+      {
+        "value": "f8fd837161666ec604a548624fed1d243cc14f04b4acaeb6e95ab970d22a7ae6",
+        "filename": "prismadc_rce.py",
+        "type": "Python script",
+        "size_bytes": 5022,
+        "confidence": "MODERATE",
+        "role": "operator-built: door-platform",
+        "action": "BLOCK",
+        "description": "Door-access platform tooling: default-login enumeration and Struts2 injection tests, and a reimplemented encrypted-credential login. Hash only; no credential in this feed",
+        "context": "Python source written by the operator. Held in the captured directory; whether it ran on any victim is shown only where the case notes say so. Hash changes with any edit, so use the URL, port and string indicators as well.",
+        "source": "Operator's own file in the captured open directory (AttackCapture copy, inventory sha256), read statically",
+        "publication_note": "The filename is the operator's own and is kept so the indicator stays true; it carries a product name of a door-access platform in the affected estate, not the victim organisation."
+      },
+      {
+        "value": "1f1f28ec7e2aa6823db107acfd06ff70a3e2f3963e644b0b879d706a77756e59",
+        "filename": "prism_login.py",
+        "type": "Python script",
+        "size_bytes": 3194,
+        "confidence": "MODERATE",
+        "role": "operator-built: door-platform",
+        "action": "BLOCK",
+        "description": "Door-access platform tooling: default-login enumeration and Struts2 injection tests, and a reimplemented encrypted-credential login. Hash only; no credential in this feed",
+        "context": "Python source written by the operator. Held in the captured directory; whether it ran on any victim is shown only where the case notes say so. Hash changes with any edit, so use the URL, port and string indicators as well.",
+        "source": "Operator's own file in the captured open directory (AttackCapture copy, inventory sha256), read statically",
+        "publication_note": "Operator's own file name, retained because renaming it would falsify the indicator; the name carries the door-access product's name, which is not otherwise published."
+      },
+      {
+        "value": "039c18e9f936d5f8608a22a05f5964da5f64c9c1edc8441282b373414aa4a269",
+        "filename": "chisel",
+        "type": "Go ELF (operator build of the public chisel tunnel tool)",
+        "size_bytes": 10898264,
+        "confidence": "MODERATE",
+        "role": "operator-built: tunnel",
+        "action": "ALERT",
+        "description": "Dynamically linked operator build of the public jpillora/chisel tunnel, listed on the operator server port 18960 after the October activity; not in VirusTotal",
+        "context": "Second capture 2026-11-14. Use on this exact hash only: other chisel builds are legitimate tools used by many. Whether it ran on any victim is not shown.",
+        "source": "Operator open directory, second capture (COLLECTION-PROVENANCE.txt SECOND CAPTURE)"
+      }
+    ]
+  },
+  "network_indicators": {
+    "ipv4": [
+      {
+        "value": "198.44.116.69",
+        "protocol": "TCP",
+        "purpose": "Operator VPS: open directory, receivers, payload server, reverse-SOCKS relay and scripted LLM endpoint, by port (see network_indicators.ports)",
+        "first_seen": "2026-10-30",
+        "last_seen": "2026-10-31",
+        "confidence": "HIGH",
+        "action": "BLOCK",
+        "notes": "Single operator-owned host in the corpus (infrastructure.md section 1, item 1). Logged activity 2026-10-30 09:52Z to 2026-10-31 12:13Z; the time zone of the http.server logs is MODERATE. WHOIS for 198.44.116.0/24 names Hostwinds LLC while Vantage and VirusTotal show another AS owner label; the abuse contact was not checked. Commercial hosting: the address can be reassigned, so time-box any block.",
+        "false_positive_note": "Shared commercial hosting. The address may be reassigned; re-check before a permanent block.",
+        "source": "Operator scripts naming 198.44.116.69:<port> in 100+ corpus files; sink80 access-log self-test; push.log (infrastructure.md 2.1)"
+      }
+    ],
+    "ports": [
+      {
+        "value": "198.44.116.69:80",
+        "purpose": "Open directory of the operator working folder (python http.server); the exposure",
+        "confidence": "HIGH",
+        "source": "Access-log self-test and sink80 logs (infrastructure.md 2.1, sink80.sh:3-9)",
+        "context": "Open directory of the operator working folder (python http.server); the exposure"
+      },
+      {
+        "value": "198.44.116.69:8088",
+        "purpose": "sink.py receive-only sink and push target; push.log holds 6 GET requests 2026-10-30 10:54:44 to 11:17:03 UTC",
+        "confidence": "HIGH",
+        "source": "push.log:1-6, cfg_t4.sh:10",
+        "context": "sink.py receive-only sink and push target; push.log holds 6 GET requests 2026-10-30 10:54:44 to 11:17:03 UTC"
+      },
+      {
+        "value": "198.44.116.69:8460",
+        "purpose": "front.py single-port front: HTTP scripted LLM endpoint plus reverse-tunnel worker listener; agent baseUrl target; also serves pxpod.py, pxmcp.py, pxmcp2.py",
+        "confidence": "MODERATE",
+        "source": "front.py:1-8,17; exgo.py:18,43; 25 files",
+        "context": "front.py single-port front: HTTP scripted LLM endpoint plus reverse-tunnel worker listener; agent baseUrl target; also serves pxpod.py, pxmcp.py, pxmcp2.py"
+      },
+      {
+        "value": "198.44.116.69:9004",
+        "purpose": "Reverse SOCKS entry the pod relay connects back to",
+        "confidence": "MODERATE",
+        "source": "cfgrelay.py:13-14, egz.py:5",
+        "context": "Reverse SOCKS entry the pod relay connects back to"
+      },
+      {
+        "value": "198.44.116.69:9011",
+        "purpose": "Payload download server (python http.server): hb.py, gogo, fscan and helper scripts",
+        "confidence": "MODERATE",
+        "source": "pk3.py:63, relay3.py:6, sink9011.sh; 17 files",
+        "context": "Payload download server (python http.server): hb.py, gogo, fscan and helper scripts"
+      },
+      {
+        "value": "198.44.116.69:9100",
+        "purpose": "Reverse SOCKS pod link (POD_PORT); also served gogo",
+        "confidence": "MODERATE",
+        "source": "revsocks_vps.py:16,45; revsocks.log:1-2",
+        "context": "Reverse SOCKS pod link (POD_PORT); also served gogo"
+      },
+      {
+        "value": "198.44.116.69:8899",
+        "purpose": "Static server of a staging folder; connection traces from outside in srv.log",
+        "confidence": "HIGH",
+        "source": "srv.py, srv.log:1,3,28,53",
+        "context": "Static server of a staging folder; connection traces from outside in srv.log"
+      },
+      {
+        "value": "198.44.116.69:9020",
+        "purpose": "Static and collector server (boot.sh, vps_serve.py); srv.log shows a scanner GET / on 2026-10-31",
+        "confidence": "HIGH",
+        "source": "serve.log:1, pub/boot.sh:5, vonly/serve.log:2-3",
+        "context": "Static and collector server (boot.sh, vps_serve.py); srv.log shows a scanner GET / on 2026-10-31"
+      },
+      {
+        "value": "198.44.116.69:9012",
+        "purpose": "Upload test endpoint (POST /up, header X-Tag)",
+        "confidence": "MODERATE",
+        "source": "pt.py:5-6; callers only, no receipt log",
+        "context": "Upload test endpoint (POST /up, header X-Tag)"
+      },
+      {
+        "value": "198.44.116.69:9300",
+        "purpose": "hitrecv.py receiver for in-pod scan hits",
+        "confidence": "HIGH",
+        "source": "hitrecv.py:2,38; hitrecv.log (2 scanner connection-reset tracebacks)",
+        "context": "hitrecv.py receiver for in-pod scan hits"
+      },
+      {
+        "value": "198.44.116.69:19611",
+        "purpose": "Pod downloader for b.py and .s1.py (the MCP plant target)",
+        "confidence": "MODERATE",
+        "source": "mp2.py:6,8; mcp_plant.py:6",
+        "context": "Pod downloader for b.py and .s1.py (the MCP plant target)"
+      },
+      {
+        "value": "198.44.116.69:8444",
+        "purpose": "Fake-LLM endpoint port used as agent baseUrl",
+        "confidence": "MODERATE",
+        "source": "inject2.py:10",
+        "context": "Fake-LLM endpoint port used as agent baseUrl"
+      },
+      {
+        "value": "198.44.116.69:8445",
+        "purpose": "Fake-LLM endpoint port used as agent baseUrl",
+        "confidence": "MODERATE",
+        "source": "rearm_pf.py:16",
+        "context": "Fake-LLM endpoint port used as agent baseUrl"
+      },
+      {
+        "value": "198.44.116.69:8902",
+        "purpose": "Fake-LLM endpoint port used as agent baseUrl",
+        "confidence": "MODERATE",
+        "source": "bt.py:16, mr.py:15",
+        "context": "Fake-LLM endpoint port used as agent baseUrl"
+      },
+      {
+        "value": "198.44.116.69:9443",
+        "purpose": "Fake-LLM endpoint port used as agent baseUrl",
+        "confidence": "MODERATE",
+        "source": "remount.py:32, newagent.py:35",
+        "context": "Fake-LLM endpoint port used as agent baseUrl"
+      },
+      {
+        "value": "198.44.116.69:8901",
+        "purpose": "One-off download endpoint (z.py)",
+        "confidence": "LOW",
+        "source": "j16.json:2-3",
+        "context": "One-off download endpoint (z.py)"
+      },
+      {
+        "value": "198.44.116.69:8903",
+        "purpose": "One-off download endpoint (n)",
+        "confidence": "LOW",
+        "source": "nr.py:14",
+        "context": "One-off download endpoint (n)"
+      },
+      {
+        "value": "198.44.116.69:8686",
+        "purpose": "Relay link check / one step list",
+        "confidence": "LOW",
+        "source": "sweep_steps.json:1",
+        "context": "Relay link check / one step list"
+      },
+      {
+        "value": "198.44.116.69:19090",
+        "purpose": "Relay link check",
+        "confidence": "LOW",
+        "source": "pod_rvchk.py:23",
+        "context": "Relay link check"
+      },
+      {
+        "value": "198.44.116.69:8451",
+        "purpose": "Named only in two operator scripts",
+        "confidence": "LOW",
+        "source": "grep 198.44.116.69:8451 over corpus/ac (2 files)",
+        "context": "Named only in two operator scripts"
+      },
+      {
+        "value": "198.44.116.69:19011",
+        "purpose": "Named only in two operator scripts",
+        "confidence": "LOW",
+        "source": "grep 198.44.116.69:19011 over corpus/ac (2 files)",
+        "context": "Named only in two operator scripts"
+      }
+    ],
+    "domains": [
+      {
+        "value": "198-44-116-69.sslip.io",
+        "purpose": "Wildcard-DNS name that resolves to the operator VPS; used in the MCP plant (mp3.py)",
+        "context": "Resolves only to the operator VPS.",
+        "confidence": "HIGH",
+        "action": "BLOCK",
+        "source": "mp3.py:5-10; 7 occurrences in 9 files",
+        "false_positive_note": "sslip.io is a shared service. This one name embeds the operator IP and resolves only to it; do not block sslip.io itself."
+      },
+      {
+        "value": "198.44.116.69.sslip.io",
+        "purpose": "Second sslip.io spelling of the operator VPS address",
+        "context": "Resolves only to the operator VPS.",
+        "confidence": "MODERATE",
+        "action": "BLOCK",
+        "source": "grep over corpus/ac, 3 occurrences",
+        "false_positive_note": "Same as above: tenant name only, not the bare provider."
+      }
+    ],
+    "urls": [
+      {
+        "value": "http://198.44.116.69:19611/b.py",
+        "purpose": "MCP plant payload URL (b.py is not held; its class is hb.py)",
+        "context": "MCP plant payload URL (b.py is not held; its class is hb.py)",
+        "confidence": "HIGH",
+        "action": "BLOCK",
+        "source": "mcp_plant.py:6; mp2.py:6-9; agent-platform-chain.md section 4 control"
+      },
+      {
+        "value": "http://198.44.116.69:9011/hb.py",
+        "purpose": "Reverse SOCKS worker download",
+        "context": "Reverse SOCKS worker download",
+        "confidence": "HIGH",
+        "action": "BLOCK",
+        "source": "sink9011.sh; i1.py:16; boot.py:15"
+      },
+      {
+        "value": "http://198.44.116.69:9011/hb2.py",
+        "purpose": "Worker download (second revision name; not held)",
+        "context": "Worker download (second revision name; not held)",
+        "confidence": "LOW",
+        "action": "BLOCK",
+        "source": "grep over corpus/ac, 1 file"
+      },
+      {
+        "value": "http://198.44.116.69:9011/r.py",
+        "purpose": "Relay launcher download (not held)",
+        "context": "Relay launcher download (not held)",
+        "confidence": "MODERATE",
+        "action": "BLOCK",
+        "source": "grep over corpus/ac, 5 files"
+      },
+      {
+        "value": "http://198.44.116.69:9011/pa.py",
+        "purpose": "Helper start script download",
+        "context": "Helper start script download",
+        "confidence": "MODERATE",
+        "action": "BLOCK",
+        "source": "grep over corpus/ac, 2 files"
+      },
+      {
+        "value": "http://198.44.116.69:9011/e2.py",
+        "purpose": "Agent chat retry script download",
+        "context": "Agent chat retry script download",
+        "confidence": "MODERATE",
+        "action": "BLOCK",
+        "source": "grep over corpus/ac, 2 files"
+      },
+      {
+        "value": "http://198.44.116.69:9011/muxpod.py",
+        "purpose": "Pod-side worker pool download",
+        "context": "Pod-side worker pool download",
+        "confidence": "MODERATE",
+        "action": "BLOCK",
+        "source": "grep over corpus/ac, 1 file"
+      },
+      {
+        "value": "http://198.44.116.69:9011/gogo",
+        "purpose": "Scanner binary download (stock gogo; the URL is the operator's)",
+        "context": "Scanner binary download (stock gogo; the URL is the operator's)",
+        "confidence": "HIGH",
+        "action": "BLOCK",
+        "source": "pod_gogo.py; relay3.py:6"
+      },
+      {
+        "value": "http://198.44.116.69:9011/fscan",
+        "purpose": "Scanner binary download (stock fscan; the URL is the operator's)",
+        "context": "Scanner binary download (stock fscan; the URL is the operator's)",
+        "confidence": "HIGH",
+        "action": "BLOCK",
+        "source": "f2.sh; grep over corpus/ac, 1 file"
+      },
+      {
+        "value": "http://198.44.116.69:9100/gogo",
+        "purpose": "Scanner binary download from the reverse-SOCKS link port",
+        "context": "Scanner binary download from the reverse-SOCKS link port",
+        "confidence": "MODERATE",
+        "action": "BLOCK",
+        "source": "pk.py:12"
+      },
+      {
+        "value": "http://198.44.116.69:8460/v1",
+        "purpose": "Scripted LLM endpoint used as agent llm.baseUrl",
+        "context": "Scripted LLM endpoint used as agent llm.baseUrl",
+        "confidence": "HIGH",
+        "action": "BLOCK",
+        "source": "front.py; exgo.py:18,43; 12 URL occurrences"
+      },
+      {
+        "value": "http://198.44.116.69:8902/v1",
+        "purpose": "Scripted LLM endpoint as agent baseUrl",
+        "context": "Scripted LLM endpoint as agent baseUrl",
+        "confidence": "MODERATE",
+        "action": "BLOCK",
+        "source": "bt.py:16; mr.py:15"
+      },
+      {
+        "value": "http://198.44.116.69:9443/v1",
+        "purpose": "Scripted LLM endpoint as agent baseUrl",
+        "context": "Scripted LLM endpoint as agent baseUrl",
+        "confidence": "MODERATE",
+        "action": "BLOCK",
+        "source": "remount.py:32; newagent.py:35"
+      },
+      {
+        "value": "http://198.44.116.69:8445/v1",
+        "purpose": "Scripted LLM endpoint as agent baseUrl",
+        "context": "Scripted LLM endpoint as agent baseUrl",
+        "confidence": "MODERATE",
+        "action": "BLOCK",
+        "source": "rearm_pf.py:16; reb/bak_config.json:6"
+      },
+      {
+        "value": "http://198.44.116.69:8444/v1",
+        "purpose": "Scripted LLM endpoint as agent baseUrl",
+        "context": "Scripted LLM endpoint as agent baseUrl",
+        "confidence": "MODERATE",
+        "action": "BLOCK",
+        "source": "inject2.py:10"
+      },
+      {
+        "value": "http://198.44.116.69:8460/pxpod.py",
+        "purpose": "Pod-side worker download from the front port (not held)",
+        "context": "Pod-side worker download from the front port (not held)",
+        "confidence": "MODERATE",
+        "action": "BLOCK",
+        "source": "grep over corpus/ac, 10 occurrences"
+      },
+      {
+        "value": "http://198.44.116.69:8460/pxmcp.py",
+        "purpose": "Pod-side MCP worker download (not held)",
+        "context": "Pod-side MCP worker download (not held)",
+        "confidence": "LOW",
+        "action": "BLOCK",
+        "source": "grep over corpus/ac, 1 occurrence"
+      },
+      {
+        "value": "http://198.44.116.69:8460/pxmcp2.py",
+        "purpose": "Pod-side MCP worker with reverse relay download",
+        "context": "Pod-side MCP worker with reverse relay download",
+        "confidence": "MODERATE",
+        "action": "BLOCK",
+        "source": "grep over corpus/ac, 1 occurrence; pxmcp2.py held"
+      },
+      {
+        "value": "http://198.44.116.69:8088/hb.py",
+        "purpose": "Worker fetched from the 8088 sink by an urllib client 2026-10-30 10:55:37Z",
+        "context": "Worker fetched from the 8088 sink by an urllib client 2026-10-30 10:55:37Z",
+        "confidence": "HIGH",
+        "action": "BLOCK",
+        "source": "push.log:2-3"
+      },
+      {
+        "value": "http://198.44.116.69:8088/mcp",
+        "purpose": "MCP-shaped path on the sink port",
+        "context": "MCP-shaped path on the sink port",
+        "confidence": "LOW",
+        "action": "BLOCK",
+        "source": "grep over corpus/ac, 1 occurrence"
+      },
+      {
+        "value": "http://198.44.116.69:8088/sse",
+        "purpose": "MCP-shaped path on the sink port",
+        "context": "MCP-shaped path on the sink port",
+        "confidence": "LOW",
+        "action": "BLOCK",
+        "source": "grep over corpus/ac, 1 occurrence"
+      },
+      {
+        "value": "http://198.44.116.69:9012/up",
+        "purpose": "Upload test endpoint (POST)",
+        "context": "Upload test endpoint (POST)",
+        "confidence": "MODERATE",
+        "action": "BLOCK",
+        "source": "pt.py:5-6; 3 occurrences"
+      },
+      {
+        "value": "http://198.44.116.69:9020/boot.sh",
+        "purpose": "In-pod bootstrap download",
+        "context": "In-pod bootstrap download",
+        "confidence": "MODERATE",
+        "action": "BLOCK",
+        "source": "pub/boot.sh:5; serve.log:1"
+      },
+      {
+        "value": "http://198.44.116.69:8899/gl_check.py",
+        "purpose": "Source-control login check script download",
+        "context": "Source-control login check script download",
+        "confidence": "MODERATE",
+        "action": "BLOCK",
+        "source": "grep over corpus/ac, 2 occurrences"
+      },
+      {
+        "value": "http://198.44.116.69:8901/z.py",
+        "purpose": "Source-control API check script download",
+        "context": "Source-control API check script download",
+        "confidence": "LOW",
+        "action": "BLOCK",
+        "source": "j16.json:2-3"
+      },
+      {
+        "value": "http://198.44.116.69:8903/n",
+        "purpose": "One-off download",
+        "context": "One-off download",
+        "confidence": "LOW",
+        "action": "BLOCK",
+        "source": "nr.py:14"
+      },
+      {
+        "value": "http://198.44.116.69:8686/r",
+        "purpose": "Relay download",
+        "context": "Relay download",
+        "confidence": "LOW",
+        "action": "BLOCK",
+        "source": "sweep_steps.json:1"
+      },
+      {
+        "value": "http://198.44.116.69/notes.txt",
+        "purpose": "Self-test file in the open directory root (first line of sink.log and sink80.log)",
+        "context": "Self-test file in the open directory root (first line of sink.log and sink80.log)",
+        "confidence": "HIGH",
+        "action": "BLOCK",
+        "source": "sink80.log.__rev8:1-2; sink.log.__rev7:1-2"
+      },
+      {
+        "value": "http://198-44-116-69.sslip.io:9011/hb.py",
+        "purpose": "Same worker download addressed by the sslip.io name",
+        "context": "Same worker download addressed by the sslip.io name",
+        "confidence": "HIGH",
+        "action": "BLOCK",
+        "source": "mp3.py:5-10; 3 occurrences"
+      },
+      {
+        "value": "http://198-44-116-69.sslip.io:9011/r.py",
+        "purpose": "Relay launcher by the sslip.io name",
+        "context": "Relay launcher by the sslip.io name",
+        "confidence": "MODERATE",
+        "action": "BLOCK",
+        "source": "grep over corpus/ac, 1 occurrence"
+      }
+    ]
+  },
+  "host_indicators": {
+    "file_paths": [
+      {
+        "value": "/tmp/.hb.py",
+        "context": "Where the planted MCP command writes the downloaded worker",
+        "purpose": "Where the planted MCP command writes the downloaded worker before starting it detached",
+        "confidence": "MODERATE",
+        "source": "mcp_plant.py:6-8 (agent-platform-chain.md section 4)"
+      }
+    ]
+  },
+  "behavioral_indicators": [
+    {
+      "type": "string_pattern",
+      "pattern": "probe-authz-check",
+      "kind": "cloud instance name",
+      "purpose": "Operator-chosen instance name in 08_foothold.py; search the cloud audit trail and instance list. The create call has no held output, so existence is NOT CHECKED.",
+      "confidence": "MODERATE",
+      "action": "HUNT",
+      "source": "cloud-depth.md, 08_foothold.py lines 62-81",
+      "context": "Operator-chosen instance name in 08_foothold.py; search the cloud audit trail and instance list. The create call has no held output, so existence is NOT CHECKED."
+    },
+    {
+      "type": "string_pattern",
+      "pattern": "probe-kp-20261030",
+      "kind": "cloud key pair name",
+      "purpose": "Operator-chosen key pair name for a create call with no held output.",
+      "confidence": "MODERATE",
+      "action": "HUNT",
+      "source": "cloud-depth.md, 07_writeauthz.py / 08_foothold.py / akperm2.py",
+      "context": "Operator-chosen key pair name for a create call with no held output."
+    },
+    {
+      "type": "string_pattern",
+      "pattern": "probe-import-20261030",
+      "kind": "cloud key pair name",
+      "purpose": "Operator-chosen key pair name for an import call with no held output.",
+      "confidence": "MODERATE",
+      "action": "HUNT",
+      "source": "cloud-depth.md, 07_writeauthz.py / 08_foothold.py",
+      "context": "Operator-chosen key pair name for an import call with no held output."
+    },
+    {
+      "type": "string_pattern",
+      "pattern": "diag-kp",
+      "kind": "cloud key pair name",
+      "purpose": "Operator-chosen key pair name in akperm2.py; no held output.",
+      "confidence": "MODERATE",
+      "action": "HUNT",
+      "source": "cloud-depth.md, akperm2.py lines 15-33",
+      "context": "Operator-chosen key pair name in akperm2.py; no held output."
+    },
+    {
+      "type": "string_pattern",
+      "pattern": "probe-20261030",
+      "kind": "cloud snapshot name",
+      "purpose": "Operator-chosen snapshot name in the write-authorisation probes; no held output.",
+      "confidence": "MODERATE",
+      "action": "HUNT",
+      "source": "cloud-depth.md, 07_writeauthz.py",
+      "context": "Operator-chosen snapshot name in the write-authorisation probes; no held output."
+    },
+    {
+      "type": "string_pattern",
+      "pattern": "diag",
+      "kind": "cloud instance description",
+      "purpose": "Operator set (or tried to set) an instance description to this string in pivot.py lines 10-14; no held output. Short string: use only with the audit-trail window 2026-10-30.",
+      "confidence": "LOW",
+      "action": "HUNT",
+      "source": "cloud-depth.md, pivot.py lines 10-14",
+      "context": "Operator set (or tried to set) an instance description to this string in pivot.py lines 10-14; no held output. Short string: use only with the audit-trail window 2026-10-30."
+    },
+    {
+      "type": "string_pattern",
+      "pattern": "rx-<epoch>",
+      "kind": "agent object name",
+      "purpose": "Private agent names created through the config service (final2.py:30, mkagent1.py); the numeric suffix is an epoch time.",
+      "confidence": "HIGH",
+      "action": "HUNT",
+      "source": "agent-platform-chain.md step 3; final2.py:29-36",
+      "context": "Private agent names created through the config service (final2.py:30, mkagent1.py); the numeric suffix is an epoch time."
+    },
+    {
+      "type": "string_pattern",
+      "pattern": "poc-agent",
+      "kind": "agent object name",
+      "purpose": "Private agent name created through the config service (rearm2.py:11).",
+      "confidence": "HIGH",
+      "action": "HUNT",
+      "source": "agent-platform-chain.md step 3; rearm2.py:11",
+      "context": "Private agent name created through the config service (rearm2.py:11)."
+    },
+    {
+      "type": "string_pattern",
+      "pattern": "mcpServers[].command containing 'python3 -c' that downloads from 198.44.116.69 or bore.pub",
+      "kind": "agent workspace tools.json entry",
+      "purpose": "Planted stdio MCP server: the runtime executes the command itself, outside the chat path. Audit tools.json in every agent workspace.",
+      "confidence": "HIGH",
+      "action": "HUNT",
+      "source": "agent-platform-chain.md step 9 and 13; mcp_plant.py:5-12",
+      "context": "Planted stdio MCP server: the runtime executes the command itself, outside the chat path. Audit tools.json in every agent workspace."
+    },
+    {
+      "type": "string_pattern",
+      "pattern": "llm.baseUrl in config.json pointing at an address not in the platform model catalogue",
+      "kind": "agent config.json value",
+      "purpose": "The repoint step; the operator's endpoint is a scripted server that answers GET /v1/models and returns tool calls as model replies.",
+      "confidence": "HIGH",
+      "action": "HUNT",
+      "source": "agent-platform-chain.md steps 6 and 8; final2.py:59-61",
+      "context": "The repoint step; the operator's endpoint is a scripted server that answers GET /v1/models and returns tool calls as model replies."
+    }
+  ],
+  "hunt_only_never_block": [
+    {
+      "value": "bore.pub",
+      "role": "third-party public tunnel rendezvous (open-source bore, free public server); used by the operator, not operated by the operator",
+      "context": "The operator runs the bore client on the VPS and in the pod and publishes local ports at bore.pub:<port>. The operator's fixed port is 1811 (claim1811.sh, take1811.sh; about 35 scripts). Other remote ports are random assignments per session. Blocking the host takes out every other bore user; hunt for it, do not feed it to a blocklist.",
+      "confidence": "HIGH",
+      "false_positive_note": "Shared public service. Do not block.",
+      "source": "infrastructure.md 2.2; bore_oe.log:1-2 (listening at bore.pub:19620, 2026-10-30 22:34:43Z)"
+    },
+    {
+      "value": "159.223.110.159",
+      "role": "third-party: the public A record of bore.pub (DigitalOcean AS14061)",
+      "context": "Hard-coded as the tunnel host in mxpod.py, muxpod.py, mxpod2.py, mcpx.py and pod_gogo.py. VirusTotal rates it 16 of 92 engines malicious because of bore abuse by many users. Not an operator server and not a second party (HIGH).",
+      "confidence": "HIGH",
+      "false_positive_note": "Shared public service. Do not block.",
+      "source": "infrastructure.md 2.2 and 2.3; pod_gogo.py:11"
+    },
+    {
+      "value": "bore.pub:1811",
+      "role": "operator-claimed remote port on the shared bore server",
+      "context": "A host:port on a third-party server. Useful to find in egress logs or agent baseUrl values; the port alone is not a block on bore.pub. Agent configs whose llm.baseUrl or MCP command points here are the operator's.",
+      "confidence": "HIGH",
+      "false_positive_note": "Shared public service. Do not block the host.",
+      "source": "claim1811.sh:1-3; take1811.sh:3-4; keeper2.py:1-8"
+    }
+  ]
+}

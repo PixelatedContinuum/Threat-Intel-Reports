@@ -1,0 +1,60 @@
+# Editorial view selections for this report only. Source tables remain authoritative.
+# T-0524.2: the stage names do not match procedure names, so each stage is joined to the ATT&CK procedure rows its Where-it-is-shown evidence supports. The ATT&CK table has no Scope column, so each join matches every row of its technique (scope_prefix empty). Cloud discovery, credential and impact rows belong to no stage of the seven-step command channel and stay unjoined.
+{
+  "stage_joins": {
+    "1. Mint a token": [
+      {
+        "technique": "T1190",
+        "scope_prefix": ""
+      }
+    ],
+    "2. Register a private agent": [
+      {
+        "technique": "T1190",
+        "scope_prefix": ""
+      }
+    ],
+    "3. Repoint the model": [
+      {
+        "technique": "T1190",
+        "scope_prefix": ""
+      }
+    ],
+    "4. Answer with tool calls": [
+      {
+        "technique": "T1587.001",
+        "scope_prefix": ""
+      },
+      {
+        "technique": "T1059.004",
+        "scope_prefix": ""
+      }
+    ],
+    "5. Plant a model-free entry": [
+      {
+        "technique": "T1059.006",
+        "scope_prefix": ""
+      },
+      {
+        "technique": "T1105",
+        "scope_prefix": ""
+      }
+    ],
+    "6. Relay": [
+      {
+        "technique": "T1090",
+        "scope_prefix": ""
+      },
+      {
+        "technique": "T1572",
+        "scope_prefix": ""
+      }
+    ],
+    "7. Re-assert and evade the filter": [
+      {
+        "technique": "T1027.010",
+        "scope_prefix": ""
+      }
+    ]
+  }
+}

@@ -1,0 +1,9 @@
+hb.py  # file name (.py), the operator-written reverse SOCKS worker, not a host
+embracethered.com  # cited reference page linked in the text (research), not infrastructure of the actor
+labs.cloudsecurityalliance.org  # cited reference page linked in the text (research), not infrastructure of the actor
+isc.sans.edu  # cited reference page linked in the text (research), not infrastructure of the actor
+www.ox.security  # cited reference page linked in the text (vendor research), not infrastructure of the actor
+blog.qualys.com  # cited reference page linked in the text (vendor research), not infrastructure of the actor
+cloud.google.com  # cited reference pages linked in the text (vendor research), not infrastructure of the actor
+www.microsoft.com  # cited reference page linked in the text (vendor research), not infrastructure of the actor
+invariantlabs.ai  # cited reference page linked in the text (vendor research), not infrastructure of the actor
