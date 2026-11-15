@@ -301,7 +301,6 @@
       },
       {
         "value": "f8fd837161666ec604a548624fed1d243cc14f04b4acaeb6e95ab970d22a7ae6",
-        "filename": "prismadc_rce.py",
         "type": "Python script",
         "size_bytes": 5022,
         "confidence": "MODERATE",
@@ -310,7 +309,7 @@
         "description": "Door-access platform tooling: default-login enumeration and Struts2 injection tests, and a reimplemented encrypted-credential login. Hash only; no credential in this feed",
         "context": "Python source written by the operator. Held in the captured directory; whether it ran on any victim is shown only where the case notes say so. Hash changes with any edit, so use the URL, port and string indicators as well.",
         "source": "Operator's own file in the captured open directory (AttackCapture copy, inventory sha256), read statically",
-        "publication_note": "The filename is the operator's own and is kept so the indicator stays true; it carries a product name of a door-access platform in the affected estate, not the victim organisation."
+        "publication_note": "Filename withheld: the operator's own filename carries the product name of a platform in the affected estate. The hash is the indicator."
       },
       {
         "value": "1f1f28ec7e2aa6823db107acfd06ff70a3e2f3963e644b0b879d706a77756e59",
