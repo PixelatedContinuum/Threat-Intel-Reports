@@ -51,6 +51,30 @@ hl_idx: single
     } catch (e) { /* URL API missing: the search still works, the address bar just does not follow it */ }
   }
 
+  // One indicator typed on its own (an IPv4 with or without a port, a domain, a full MD5/SHA1/SHA256,
+  // a CVE id; fanged or defanged) is searched as an exact phrase (T-0652). Unquoted, Pagefind splits
+  // 74.208.158.106 into 74, 208, 158, 106 and prefix-matches each piece, so an absent IP returned hashes,
+  // version numbers and dates that merely start with those digits. Quoted, it matches the whole indicator
+  // or nothing (measured on the live index 2026-11-16: 87.106.143.220 went from 29 results, 2 wrong, to 27,
+  // all right; 74.208.158.106 from 5 wrong to 0). Only a lone indicator is quoted: Pagefind returned
+  // nothing for two quoted phrases together, and a quoted partial hash finds nothing where the bare
+  // prefix still works, so anything else goes through unchanged.
+  var INDICATOR = [
+    /^\d{1,3}(?:\.\d{1,3}){3}(?::\d{1,5})?$/,                 // IPv4, optional port
+    /^(?:[a-z0-9-]+\.)+[a-z][a-z0-9-]{1,62}$/i,               // domain
+    /^(?:[a-f0-9]{32}|[a-f0-9]{40}|[a-f0-9]{64})$/i,          // MD5, SHA1, SHA256
+    /^cve-\d{4}-\d{4,}$/i                                     // CVE id
+  ];
+  function processTerm(term) {
+    var t = (term || '').trim();
+    if (!t || /["\s]/.test(t)) return term;
+    var plain = t.replace(/\[\.\]|\(\.\)|\{\.\}|\[dot\]/gi, '.');
+    for (var i = 0; i < INDICATOR.length; i++) {
+      if (INDICATOR[i].test(plain)) return '"' + plain + '"';
+    }
+    return term;
+  }
+
   var s = document.createElement('script');
   s.src = base + '/pagefind/pagefind-ui.js';
   s.onerror = function () {
@@ -65,6 +89,7 @@ hl_idx: single
       showImages: false,
       excerptLength: 30,
       resetStyles: false,
+      processTerm: processTerm,
       // Several ticked Sections show the union of their results (T-0553). Pagefind ANDs an array of
       // values for one filter; this folder holds a front for pagefind.js that sends { any: [...] } instead.
       bundlePath: base + '/assets/js/pagefind-any/',
