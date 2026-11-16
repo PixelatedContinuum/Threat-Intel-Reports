@@ -338,11 +338,11 @@ reads back from the built page (it fails the index step on a duplicate). A vuln 
 {%- assign np_ordered = np_rows | sort: "np_rank" -%}
 {%- assign gen_day = wire.vulns_generated_at | default: wire.generated_at | date: "%Y-%m-%d" -%}
 <nav class="hl-pstrip" id="vulns-priority" aria-label="Priority rows on the nKEVs tab" data-pagefind-ignore>
-<span class="hl-pstrip__label">Priority <span class="hl-pstrip__n">{{ np_ordered.size | escape }}</span></span>
+<span class="hl-pstrip__label">Top <span class="hl-pstrip__n">{{ np_ordered.size | escape }}</span> by priority</span>
 <ul class="hl-pstrip__list">
 {%- for r in np_ordered -%}
 {%- assign np_name_v = r.vendor | append: "" | strip | downcase -%}{%- assign np_name_p = r.product | append: "" | strip -%}{%- assign np_name_n = np_name_v | size -%}{%- assign np_name_h = np_name_p | slice: 0, np_name_n | downcase -%}{%- if np_name_n > 0 and np_name_h == np_name_v -%}{%- assign np_name = np_name_p -%}{%- else -%}{%- assign np_name = r.vendor | append: " " | append: np_name_p | normalize_whitespace | strip -%}{%- endif -%}{%- if np_name == "" -%}{%- assign np_name = r.cve -%}{%- endif -%}
-<li><a class="hl-pstrip__a" href="#cve-{{ r.cve | downcase | escape }}" title="{{ r.cve | escape }} {{ np_name | escape }}: Priority {{ r.np_score | plus: 0 }}"><span class="hl-pstrip__name">{{ np_name | truncate: 26 | escape }}</span><span class="hl-pstrip__s">{{ r.np_score | plus: 0 }}</span>{%- if r.added == gen_day -%}<span class="hl-pstrip__new">new</span>{%- endif -%}</a></li>
+<li><a class="hl-pstrip__a" href="#cve-{{ r.cve | downcase | escape }}" title="{{ r.cve | escape }} {{ np_name | escape }}: Priority {{ r.np_score | plus: 0 }}"><span class="hl-pstrip__name">{{ np_name | truncate: 90 | escape }}</span><span class="hl-pstrip__s">{{ r.np_score | plus: 0 }}</span>{%- if r.added == gen_day -%}<span class="hl-pstrip__new">new</span>{%- endif -%}</a></li>
 {%- endfor -%}
 </ul>
 </nav>
@@ -661,13 +661,13 @@ reads back from the built page (it fails the index step on a duplicate). A vuln 
 {%- assign lp_day = latest_pick_day.name | append: "" -%}
 {%- assign gen_day = wire.cves_generated_at | default: wire.generated_at | date: "%Y-%m-%d" -%}
 <nav class="hl-pstrip hl-pstrip--cves" id="cves-priority-picks" aria-label="Latest priority picks on the CVEs tab" data-pagefind-ignore>
-<span class="hl-pstrip__label">Priority <span class="hl-pstrip__n">{{ latest_pick_day.items.size | escape }}</span>{%- if lp_day == gen_day -%}<span class="hl-pstrip__new">new today</span>{%- endif -%}</span>
+<span class="hl-pstrip__label">Top <span class="hl-pstrip__n">{{ latest_pick_day.items.size | escape }}</span> picks{%- if lp_day == gen_day -%}<span class="hl-pstrip__new">new today</span>{%- endif -%}</span>
 <ul class="hl-pstrip__list">
 {%- for r in picks_ordered -%}
 {%- assign pd_now = r.pick_day | append: "" -%}
 {%- if pd_now == lp_day -%}
 {%- assign pk_name_v = r.vendor | append: "" | strip | downcase -%}{%- assign pk_name_p = r.product | append: "" | strip -%}{%- assign pk_name_n = pk_name_v | size -%}{%- assign pk_name_h = pk_name_p | slice: 0, pk_name_n | downcase -%}{%- if pk_name_n > 0 and pk_name_h == pk_name_v -%}{%- assign pk_name = pk_name_p -%}{%- else -%}{%- assign pk_name = r.vendor | append: " " | append: pk_name_p | normalize_whitespace | strip -%}{%- endif -%}{%- if pk_name == "" -%}{%- assign pk_name = r.cve -%}{%- endif -%}
-<li><a class="hl-pstrip__a" href="#cves-{{ r.cve | downcase | escape }}" title="{{ r.cve | escape }} {{ pk_name | escape }}: pick score {{ r.pick_score | plus: 0 }}"><span class="hl-pstrip__name">{{ pk_name | truncate: 26 | escape }}</span><span class="hl-pstrip__s">{{ r.pick_score | plus: 0 }}</span></a></li>
+<li><a class="hl-pstrip__a" href="#cves-{{ r.cve | downcase | escape }}" title="{{ r.cve | escape }} {{ pk_name | escape }}: pick score {{ r.pick_score | plus: 0 }}"><span class="hl-pstrip__name">{{ pk_name | truncate: 90 | escape }}</span><span class="hl-pstrip__s">{{ r.pick_score | plus: 0 }}</span></a></li>
 {%- endif -%}
 {%- endfor -%}
 <li><button type="button" class="hl-pstrip__a hl-pstrip__all" data-pstrip-chip="pick" hidden title="Show only the priority picks, the same as the Priority picks chip">All {{ picks_ordered.size | escape }} picks</button></li>

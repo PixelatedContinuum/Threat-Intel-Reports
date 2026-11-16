@@ -9217,9 +9217,9 @@ a.hl-kc:hover { border-color: var(--kc); color: #ffffff; }
   background: var(--hl-bg-card);
 }
 .hl-idx--wire .hl-pstrip__label { font-weight: 700; font-size: var(--hl-fs-small, 0.85em); white-space: nowrap; color: var(--hl-text-primary); }
-.hl-idx--wire .hl-pstrip__n { font-variant-numeric: tabular-nums; margin-left: 0.3em; color: #4ade80; }
+.hl-idx--wire .hl-pstrip__n { font-variant-numeric: tabular-nums; margin: 0 0.25em; color: #4ade80; }
 .hl-idx--wire .hl-pstrip__list { display: flex; flex-wrap: wrap; gap: 0.3em 0.4em; flex: 1 1 14em; min-width: 0; margin: 0; padding: 0; list-style: none; }
-.hl-idx--wire .hl-pstrip__list > li { margin: 0; padding: 0; min-width: 0; max-width: 100%; }
+.hl-idx--wire .hl-pstrip__list > li { margin: 0; padding: 0; min-width: 0; max-width: min(100%, 24em); }  /* T-0641: names run to 24em, then an ellipsis */
 .hl-idx--wire .hl-pstrip__list > li::before { content: none; }
 .hl-idx--wire .hl-pstrip__a {
   display: inline-flex; align-items: baseline; gap: 0.4em; max-width: 100%; box-sizing: border-box;
@@ -9240,7 +9240,10 @@ a.hl-kc:hover { border-color: var(--kc); color: #ffffff; }
   .hl-idx--wire .hl-pstrip { gap: 0.2em 0.5em; }
   .hl-idx--wire .hl-pstrip__label { flex: 0 0 100%; }
   .hl-idx--wire .hl-pstrip__list { flex-basis: 100%; }
-  .hl-idx--wire .hl-pstrip__name { max-width: 8.5em; }
+  /* T-0641: one item per line on a phone, the name filling the line, the score at its right end */
+  .hl-idx--wire .hl-pstrip__list > li { flex: 1 1 100%; max-width: 100%; }
+  .hl-idx--wire .hl-pstrip__a { display: flex; width: 100%; }
+  .hl-idx--wire .hl-pstrip__name { flex: 1 1 auto; }
 }
 .hl-idx--wire .hl-pstrip__all { font-weight: 700; color: #4ade80; border-style: dashed; }
 .hl-idx--wire .hl-pstrip__all[hidden] { display: none; }
