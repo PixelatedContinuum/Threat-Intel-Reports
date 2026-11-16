@@ -1524,7 +1524,7 @@ html:has(.hl-report-page) {
 .hl-report-page.hl-figs-inline .hl-fact .hl-fact-l { color: color-mix(in srgb, var(--fc) 30%, var(--hl-fig-label)); }
 /* Chain ribbon and story: stage numbers, link counts, technique IDs */
 .hl-report-page.hl-figs-inline .hl-fig .hl-rv-flow .hl-rv-fnum { border-color: var(--fc); color: var(--fc); }
-.hl-report-page.hl-figs-inline .hl-fig :is(.hl-rv-fct, .hl-rv-stage-count) { color: color-mix(in srgb, var(--fc) 40%, var(--hl-fig-label)); }
+.hl-report-page.hl-figs-inline .hl-fig.hl-fig--chain :is(.hl-rv-fct, .hl-rv-stage-count) { color: color-mix(in srgb, var(--fc) 40%, var(--hl-fig-label)); }   /* .hl-fig.hl-fig--chain: out-weighs the earlier light-label rule that lists these two classes */
 .hl-report-page.hl-figs-inline .hl-fig .hl-rv-stage-no { color: var(--fc); }
 .hl-report-page.hl-figs-inline .hl-fig .hl-rv-stage a.hl-rv-procedure .hl-rv-tid { color: var(--hl-c-purple); }
 /* Heat map: the column counts; keys: the number takes a light tint of its own grade or confidence hue */
