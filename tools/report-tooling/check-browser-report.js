@@ -3888,7 +3888,8 @@ function inlineMeasure() {
       if (a.tagName === 'DETAILS' && !a.open) { undo.push((function (el) { return function () { el.open = false; }; })(a)); a.open = true; }
     }
     var cap = f.firstElementChild, last = f.lastElementChild, dr = f.querySelector('.hl-fig-draw');
-    var g = { rendered: f.getClientRects().length > 0, capTop: cap ? cap.getBoundingClientRect().top : 0, drawTop: dr ? dr.getBoundingClientRect().top : 0, srcTop: last ? last.getBoundingClientRect().top : 0, hasDraw: !!dr };
+    function box(el) { return !!el && el.getClientRects().length > 0; }
+    var g = { rendered: f.getClientRects().length > 0, capTop: cap ? cap.getBoundingClientRect().top : 0, drawTop: dr ? dr.getBoundingClientRect().top : 0, srcTop: last ? last.getBoundingClientRect().top : 0, hasDraw: !!dr, boxes: box(cap) && box(last) && (!dr || box(dr)) };
     undo.reverse().forEach(function (u) { u(); });
     return g;
   }
@@ -3924,7 +3925,7 @@ function inlineMeasure() {
       chrome: f.hasAttribute('data-rv-chrome') && f.hasAttribute('data-pagefind-ignore'), inDetailsClosed: !!(f.closest('details') && !f.closest('details').open),
       style: { bg: cs.backgroundColor, bt: parseFloat(cs.borderTopWidth), bb: parseFloat(cs.borderBottomWidth), bl: parseFloat(cs.borderLeftWidth), br: parseFloat(cs.borderRightWidth), rad: cs.borderTopLeftRadius, shadow: cs.boxShadow },
       capPx: cap ? parseFloat(getComputedStyle(cap).fontSize) : 0, srcPx: last ? parseFloat(getComputedStyle(last).fontSize) : 0, capFont: cap ? getComputedStyle(cap).fontFamily : '', srcFont: last ? getComputedStyle(last).fontFamily : '',
-      capTop: g.capTop, drawTop: g.drawTop, srcTop: g.srcTop, rendered: g.rendered, hasDraw: g.hasDraw };
+      capTop: g.capTop, drawTop: g.drawTop, srcTop: g.srcTop, rendered: g.rendered, hasDraw: g.hasDraw, boxes: g.boxes };
   });
   /* T-0637 (p6, Joseph 2026-11-16): nothing says FIGURE as a title. Every figcaption on the page, and the elements inside it, are read for text the stylesheet draws (::before, ::after) as well as the words themselves. */
   var kickers = [], noPseudo = /jsdom/i.test(navigator.userAgent);   /* jsdom does not implement pseudo-element styles (and says so on stderr for each call): its pages are measured for text only */
@@ -4063,7 +4064,8 @@ function inlineAnatomyVerdict(m) {
     if (f.title && f.sub && f.titlePx && f.subPx && f.titlePx <= f.subPx) bad.push(n + ' title (' + f.titlePx + 'px) is not larger than its subtitle (' + f.subPx + 'px)');
   });
   (m.kickers || []).forEach(function (k) { bad.push('a caption draws the word FIGURE: ' + k); });
-  var unmeasured = m.figs.filter(function (f) { return f.rendered === false || (f.rendered && f.hasDraw && !(f.drawTop || f.capTop)); }).map(function (f) { return f.kind; });
+  /* review_8c4765abb77645e9: the caption, the drawing and the source line each need a box of their own before their order is read */
+  var unmeasured = m.figs.filter(function (f) { return f.rendered === false || f.boxes === false; }).map(function (f) { return f.kind; });
   if (!bad.length && unmeasured.length) return { notChecked: true, ok: false, detail: unmeasured.length + ' of ' + m.figs.length + ' figure(s) drew no boxes even with their tab shown (' + unmeasured.join(', ') + '), so the caption, drawing and source order was not measured' };
   return { notChecked: false, ok: bad.length === 0, why: bad, detail: m.figs.length + ' figure(s): a title with its subtitle above the drawing and no FIGURE label (' + m.figs.map(function (f) { return f.title; }).join(' | ') + '), source line under, a panel (1px border all round, a fill, radius at most 8px, no shadow), sans at or over the floor' + (bad.length ? '; ' + bad.join('; ') : '') };
 }

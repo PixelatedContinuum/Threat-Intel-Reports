@@ -255,6 +255,7 @@ test('the inline anatomy row FAILS on a figure that is not a panel, has a large 
   // review_e42fb4aa0c894315 (P2): a figure that drew no boxes is NOT CHECKED, not PASS; a measured defect still FAILS beside it
   assert.equal(G.inlineAnatomyVerdict({ figs: [ok, Object.assign({}, ok, { rendered: false, capTop: 0, drawTop: 0, srcTop: 0 })] }).notChecked, true, 'an unmeasured figure');
   assert.equal(G.inlineAnatomyVerdict({ figs: [Object.assign({}, ok, { srcOk: false }), Object.assign({}, ok, { rendered: false })] }).ok, false, 'a defect is not hidden by an unmeasured figure');
+  assert.equal(G.inlineAnatomyVerdict({ figs: [Object.assign({}, ok, { rendered: true, boxes: false, capTop: 40, drawTop: 0 })] }).notChecked, true, 'a drawing with no box beside a measured caption is NOT CHECKED (review_8c4765abb77645e9)');
   // T-0637 p6 (Joseph 2026-11-16): a title, a smaller subtitle, and no FIGURE label anywhere
   assert.equal(bad({ title: '' }).ok, false, 'no title');
   assert.equal(bad({ title: 'Figure: grades' }).ok, false, 'a title that is the label FIGURE');
