@@ -183,7 +183,7 @@
   // before detaching anything, so rollback retains only report words too.
   content.querySelectorAll('.hl-fignav, .hl-attack').forEach(function (n) { n.setAttribute('data-rv-chrome', ''); n.setAttribute('data-pagefind-ignore', ''); });
   // A failed enhancement must put the exact original nodes back, in report order.
-  var originalChrome = new Set(document.querySelectorAll('[data-rv-chrome]'));
+  var originalChrome = new Set(document.querySelectorAll('[data-rv-chrome]')), removedStrips = [];   // removedStrips: T-0637 (p7), the coverage strips an inline build takes away, kept so a failed build can put them back
   var curation = {};
   var viewData = document.getElementById('hl-report-view-data');
   if (viewData) { try { curation = JSON.parse(viewData.textContent); } catch (e) { console.warn('Report view data unavailable', e); } }
@@ -293,6 +293,8 @@
   // The risk assessment tables of the Overview (a report may carry more than one). Header matching is tolerant: the first column names the dimension, one column holds the score or rating.
   var riskTables = models.filter(function (m) { return m.token === 'overview' && col(m, RISK_HEAD) >= 0 && col(m, RISK_SCORE) >= 0; });
   var RISK_WORDS = { LOW: 1, MEDIUM: 2, MODERATE: 2, HIGH: 3, CRITICAL: 4 };
+  // T-0637 (p7): the level the stylesheet colours the threat fact by (low green, medium and moderate yellow, high and critical red); a level not in this list gets no attribute and keeps the impact red.
+  var THREAT_LEVELS = { LOW: 'low', MEDIUM: 'medium', MODERATE: 'medium', HIGH: 'high', CRITICAL: 'critical' };
   function parseScore(value) {
     var t = String(value).replace(/\s+/g, ' ').trim(), n = t.match(/^(\d+(?:\.\d+)?)\s*(?:\/\s*(\d+(?:\.\d+)?)|out of\s*(\d+(?:\.\d+)?))?/);
     if (n) return { text: t, num: +n[1], max: +(n[2] || n[3] || 10), rest: t.slice(n[0].length).replace(/^[\s,;:()\-]+|[\s,;:()\-]+$/g, '') };
@@ -335,6 +337,15 @@
       if (!start && years.size === 1) { var stamp = Date.parse(display.replace(/\s*\(.*?\)/g, '') + ' ' + Array.from(years)[0]); if (!isNaN(stamp)) start = new Date(stamp).toISOString().slice(0, 10); }
       return { display: display, event: event, quality: quality, when: Date.parse(start), end: dates[1] && quality === 'range' ? Date.parse(dates[1]) : Date.parse(start) };
     });
+  }
+  // T-0637 (p7, Joseph 2026-11-16): the observation window runs from the START of the first chronology cell to the END of the last. chronologyRows reads a cell as a range when it says "to"
+  // (quality 'range': start = its first ISO date, end = its second); a first cell that is itself a range gives its start and a last cell that is one gives its end, so the tile never reads "A to B to C".
+  // A cell that is not a range, or whose "to" has no figure on both sides ("Up to the 14th"), is used as printed.
+  function windowEdge(display, last) {
+    if (!/\bto\b/.test(display)) return display;
+    var parts = display.split(/\s+to\s+/);
+    if (parts.length < 2 || !parts.every(function (p) { return /\d/.test(p); })) return display;
+    return parts[last ? parts.length - 1 : 0].trim();
   }
   var bar = make('nav', 'hl-rv-bar', null);
   bar.setAttribute('aria-label', 'Report sections');
@@ -950,12 +961,21 @@
   // the tile's "i" popover, text unchanged, in the DOM; a tile says where its number is read from and is never drawn without a source.
   // opt: kind (the tile's name for the gate), from (the source sentence), href and dest (where it leads when that is not a tab), viz (a drawing: segments or dots), sub (one line of detail).
   var factFrom = [], timelineNote = '';
+  // T-0637 (p7, Joseph 2026-11-16): a count of one reads in the singular on the facts line ("1 organisation with inside or authenticated access"); every other count keeps the plural its label carries.
+  // Only the count tiles are touched (a threat level, a risk score and the observation window are not counts), and only inline: the dashboard tile keeps its label.
+  var COUNT_KINDS = ['inside', 'techniques', 'dtech', 'procedures', 'rules', 'drules', 'iocs'], SINGULAR = [[/organisations\b/, 'organisation'], [/technique IDs\b/, 'technique ID'], [/techniques\b/, 'technique'], [/rows\b/, 'row'], [/rules\b/, 'rule'], [/entries\b/, 'entry']];
+  function countLabel(value, label, kind) {
+    if (String(value) !== '1' || COUNT_KINDS.indexOf(kind) < 0) return label;
+    return SINGULAR.reduce(function (l, p) { return l.replace(p[0], p[1]); }, label);
+  }
   function tile(parent, value, label, how, tok, short, opt) {
     opt = opt || {};
     if (inline) {
       // T-0637: the Overview's facts line. The value and label as plain text, no drawing; the tile's "How counted" note is the item's title and where it is read from joins the line's source.
       var fm = { victims: victims, chain: attack, timeline: chronology }[tok], from = opt.from || (fm ? fromNote(fm) : 'the detection guidance');
       var fact = make('span', 'hl-fact', null, parent); if (opt.kind) fact.dataset.rvTile = opt.kind;
+      if (opt.level) fact.dataset.rvLevel = opt.level;   // T-0637 (p7): the threat tile's level, which the stylesheet reads to pick its colour
+      label = countLabel(value, label, opt.kind);
       fact.title = value + ' ' + label + '. How counted: ' + how + ' From ' + from + '.';
       make('strong', '', value, fact); make('span', 'hl-fact-l', ' ' + label, fact);   // T-0637 (p6): the label is its own span, so the stylesheet can tint it; the text is unchanged
       if (factFrom.indexOf(from) < 0) factFrom.push(from);
@@ -982,6 +1002,22 @@
   }
   // ---- T-0637: figures in the text (front matter `figures: inline`). The generated band is not built; each figure is placed in the report text, directly before the
   // report table it is drawn from, and a table's filters and copy buttons sit in one slim toolbar above the report's own table. Nothing here runs without the page class. ----
+  // T-0637 (p7, Joseph 2026-11-16, option 3b): the ATT&CK coverage strip that attack-coverage.js draws above the mapping table shows what the technique heat map right above that table shows, so in this mode it is
+  // not drawn. Its "Navigator layer" button is not lost: the same button, with its handler, moves to the heat map's source line and downloads the same layer. A strip for a mapping table the heat map is not
+  // drawn from (a second mapping table, or a report with a strip and no heat map) is left where it is. The strip is found as the last one before the table with no other table between them.
+  function coverageStripToHeatMap(fig, table) {
+    var tables = Array.from(document.querySelectorAll('table')), strip = null;
+    Array.from(document.querySelectorAll('.hl-attack')).forEach(function (s) {
+      if (!(s.compareDocumentPosition(table) & 4)) return;   // the strip is before the table
+      var next = tables.find(function (t) { return s.compareDocumentPosition(t) & 4; });
+      if (next === table) strip = s;
+    });
+    if (!strip) return;
+    var btn = strip.querySelector('.hl-attack__export'), src = fig.querySelector('.hl-fig-src');
+    removedStrips.push({ strip: strip, parent: strip.parentNode, next: strip.nextSibling, btn: btn, head: btn && btn.parentNode });
+    if (btn && src) src.appendChild(btn);
+    strip.remove();
+  }
   // A figure: caption above the drawing, the source line (the old "How counted" note) always visible under it. Generated figures carry no number, so they never collide with the author's own.
   // T-0637 (p6, Joseph 2026-11-16): the caption is a short TITLE naming the visual, with the former caption sentence kept under it as a smaller subtitle (no explanatory text is lost).
   // Titles come from the figure kind (the code below), never from the report; no "FIGURE" label is drawn anywhere.
@@ -1160,13 +1196,13 @@
         if (chronology) {
           var dc = col(chronology, /^Date|^Time|^When/i), crow = chronologyRows(chronology), stamps = crow.map(function (r) { return r.when; }).filter(function (v) { return !isNaN(v); });
           var span = stamps.length === crow.length && stamps.length ? Math.round((Math.max.apply(null, crow.map(function (r) { return r.end; })) - Math.min.apply(null, stamps)) / 86400000) : null;
-          tile(tiles, chronology.rows[0][dc] + ' to ' + chronology.rows[chronology.rows.length - 1][dc], 'observation window', 'First and last rows in the chronology; not an activity duration.', 'timeline', 'observation window',
+          tile(tiles, inline ? windowEdge(chronology.rows[0][dc], false) + ' to ' + windowEdge(chronology.rows[chronology.rows.length - 1][dc], true) : chronology.rows[0][dc] + ' to ' + chronology.rows[chronology.rows.length - 1][dc], 'observation window', 'First and last rows in the chronology; not an activity duration.', 'timeline', 'observation window',
             { kind: 'window', viz: { parts: [{ n: 1 }] }, sub: span !== null ? span + ' days between the first and last dated entry' : '' }); count++;
         }
       } else {
         // Fallback set, from the data this report has: threat level, overall risk score, distinct ATT&CK techniques, detection rules, IOC entries. A tile with no source is not drawn.
         if (threatLevel) { tile(tiles, threatLevel, 'threat level', 'The Threat Level line at the top of the report.', 'overview', 'threat level',
-          { kind: 'threat', from: 'the report\'s Threat Level line', noLink: true, viz: { parts: [1, 2, 3, 4].map(function (n) { return { n: 1, cls: n <= (RISK_WORDS[threatLevel.toUpperCase()] || 0) ? 'on' : 'off' }; }) } }); count++; }
+          { kind: 'threat', level: THREAT_LEVELS[threatLevel.toUpperCase()], from: 'the report\'s Threat Level line', noLink: true, viz: { parts: [1, 2, 3, 4].map(function (n) { return { n: 1, cls: n <= (RISK_WORDS[threatLevel.toUpperCase()] || 0) ? 'on' : 'off' }; }) } }); count++; }
         var overall = overallRisk();
         if (overall) { var hid = overall.heading && overall.heading.id;
           tile(tiles, overall.value, 'overall risk score', 'The report\'s own overall score for the toolkit or campaign, read as printed; not computed here.', 'overview', 'risk score',
@@ -1430,7 +1466,7 @@
           sf.draw.appendChild(flowWrap); sf.draw.appendChild(wrap);
           figSite(stages.table).before(sf.fig);
         }
-        var hf = heatFigure(); if (hf) figSite(attack.table).before(hf);
+        var hf = heatFigure(); if (hf) { figSite(attack.table).before(hf); coverageStripToHeatMap(hf, attack.table); }
       }
       if (attack && attack.legacy) return (stages ? stages.rows.length + ' stages, ' : '') + attack.rows.length + ' ATT&CK mapping rows, status not stated';
       var status = attack ? attack.rows.reduce(function (out, r) { var s = r[attackC.status]; out[s] = (out[s] || 0) + 1; return out; }, {}) : {};
@@ -1979,6 +2015,7 @@
     // original source. Existing layout assets and pre-existing chrome survive.
     document.querySelectorAll('.hl-rv-hit').forEach(function (n) { n.replaceWith(document.createTextNode(n.textContent)); });
     document.querySelectorAll('[data-rv-chrome]').forEach(function (n) { if (!originalChrome.has(n)) n.remove(); });
+    removedStrips.forEach(function (r) { if (r.btn && r.head) r.head.appendChild(r.btn); r.parent.insertBefore(r.strip, r.next); });   // T-0637 (p7): a failed build brings back the coverage strip it took away, with its button
     content.replaceChildren.apply(content, sourceNodes);
     root.classList.remove('hl-rv-ready', 'hl-tabbed', 'hl-onepage', 'hl-rv-reading');
     if (page) delete page.dataset.rvHue;

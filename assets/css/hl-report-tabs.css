@@ -1543,3 +1543,15 @@ html:has(.hl-report-page) {
 @media (max-width: 899px) {
   .hl-report-page.hl-figs-inline .hl-fig .hl-rv-stage a.hl-rv-procedure .hl-rv-pev { flex: 1 1 100%; }
 }
+
+/* ===== T-0637 (p7, Joseph 2026-11-16: "1c, 3b, 4c"). Inline only, scoped like the block above.
+   1c: the threat-level fact takes the colour of its level instead of the impact red: low green, medium (and moderate) yellow, high and critical red. A level the script could not name carries no
+   data-rv-level and keeps the impact red set above. The label follows through --fc, as it does for every fact; the overall risk score is not part of this.
+   3b: the Navigator layer button, moved out of the coverage strip, sits on the heat map's source line.
+   4c: the inferred hatch is a soft yellow stripe on the panel (a 2px line at 75% over a 4px gap at 22%), still unlike the solid green of an observed cell. */
+.hl-report-page.hl-figs-inline .hl-fact[data-rv-tile="threat"][data-rv-level="low"] { --fc: var(--hl-c-green); }
+.hl-report-page.hl-figs-inline .hl-fact[data-rv-tile="threat"][data-rv-level="medium"] { --fc: var(--hl-c-yellow); }
+.hl-report-page.hl-figs-inline .hl-fact[data-rv-tile="threat"]:is([data-rv-level="high"], [data-rv-level="critical"]) { --fc: var(--hl-c-red); }
+.hl-report-page.hl-figs-inline .hl-fig .hl-rv-cell[data-rv-status="INFERRED"] { background: repeating-linear-gradient(135deg, rgba(250, 204, 21, 0.75) 0 2px, rgba(250, 204, 21, 0.22) 2px 6px); }
+.hl-report-page.hl-figs-inline .hl-fig-src > .hl-attack__export { display: inline-flex; align-items: center; min-height: 40px; margin: 8px 0 0 14px; padding: 0 14px; font: 600 var(--hl-fs-meta) var(--hl-font-sans); color: var(--fc); background: transparent; border: 1px solid var(--fc); border-radius: 3px; opacity: 1; cursor: pointer; vertical-align: middle; }
+.hl-report-page.hl-figs-inline .hl-fig-src > .hl-attack__export:hover, .hl-report-page.hl-figs-inline .hl-fig-src > .hl-attack__export:focus-visible { background: color-mix(in srgb, var(--fc) 14%, transparent); }

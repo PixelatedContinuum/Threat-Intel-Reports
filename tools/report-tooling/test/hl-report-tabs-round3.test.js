@@ -98,7 +98,8 @@ function gradientSelectors(text){
 }
 // T-0556 w1 (Joseph's concept 3): no box, header, tile, panel, connector or sponsor panel paints a gradient any more; surfaces are flat.
 // What stays is data drawn as a fill: the risk bars and the inferred-status hatch.
-const GRAD_OK=['.hl-rv-riskbar > i','.hl-rv-riskbar[data-rv-scale="word"] > i','.hl-rv-cell[data-rv-status="INFERRED"]'];
+// T-0637 (p7, Joseph 2026-11-16 "4c"): the inline figures draw the same inferred-status hatch in a softer yellow; it is the one added entry, the same data fill on the same cell.
+const GRAD_OK=['.hl-rv-riskbar > i','.hl-rv-riskbar[data-rv-scale="word"] > i','.hl-rv-cell[data-rv-status="INFERRED"]','.hl-report-page.hl-figs-inline .hl-fig .hl-rv-cell[data-rv-status="INFERRED"]'];
 function assertGradientsAllowed(sels){for(const sel of sels)assert.ok(GRAD_OK.includes(sel),'a gradient on a non-header selector: '+sel);}
 test('CSS control: a grouped rule hides no selector behind its first (allowed, .hl-rv-tabs { background: gradient }, where the allowed one is a data fill (T-0556 w1))',()=>{
   const sels=gradientSelectors('.hl-rv-riskbar > i, .hl-rv-tabs { background: linear-gradient(red, blue); }');

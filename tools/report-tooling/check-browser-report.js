@@ -835,7 +835,16 @@ function shapesInPage(SPECS, ALT) {
     var ids = {}; attack.rows.forEach(function (r) { (r[idCol].match(/T\d{4}(?:\.\d{3})?/g) || []).forEach(function (id) { ids[id] = 1; }); });
     tiles.push(String(Object.keys(ids).length)); tiles.push(String(attack.rows.length));
     if (rule !== null) tiles.push(String(rule));
-    if (chron) { var dc = col(chron, /^Date|^Time|^When/i); tiles.push(chron.rows[0][dc] + ' to ' + chron.rows[chron.rows.length - 1][dc]); }
+    if (chron) {
+      var dc = col(chron, /^Date|^Time|^When/i), first = chron.rows[0][dc], last = chron.rows[chron.rows.length - 1][dc];
+      /* T-0637 (p7, Joseph 2026-11-16): on an inline page the window is the START of the first date cell to the END of the last, so a first cell that is itself a range ("2016-03-04 to 2017-03-20") never gives "A to B to C".
+         The dashboard tile keeps the two cells as printed. A cell is a range when it says "to" with a figure on each side; any other cell is used as printed. */
+      if (document.querySelector('.hl-report-page.hl-figs-inline')) {
+        var edge = function (c, end) { var parts = /\bto\b/.test(c) ? c.split(/\s+to\s+/) : []; return parts.length > 1 && parts.every(function (q) { return /\d/.test(q); }) ? parts[end ? parts.length - 1 : 0].trim() : c; };
+        first = edge(first, false); last = edge(last, true);
+      }
+      tiles.push(first + ' to ' + last);
+    }
   } else {
     var meta = [].slice.call(document.querySelectorAll('.hl-rv-source > p')).map(txt).filter(function (t) { return /^(Campaign Identifier|Last Updated|Threat Level):/.test(t); }).join(' ');
     var th = meta.match(/(?:^|\s)Threat Level:\s*(CRITICAL|HIGH|MEDIUM|MODERATE|LOW)\b/i); if (th) tiles.push(th[1]);
@@ -2659,7 +2668,7 @@ function attackTablesInPage(TACTICS) {
     return m.slice(table.tHead ? table.tHead.rows.length : 0);
   }
   function judge(table) {
-    var rows = grid(table), withId = 0, mapped = 0;
+    var rows = grid(table), withId = 0, mapped = 0, ids = {}, idRows = 0;
     rows.forEach(function (cells) {
       var idx = -1;
       for (var i = 0; i < cells.length; i++) { if (ID.test(cells[i] || '')) { idx = i; break; } }
@@ -2667,9 +2676,9 @@ function attackTablesInPage(TACTICS) {
       withId++;
       var own = cells[idx], before = own.slice(0, own.search(ID)), ok = tactic(before);
       for (var j = idx - 1; j >= 0 && !ok; j--) ok = tactic(cells[j]);
-      if (ok) mapped++;
+      if (ok) { mapped++; (own.match(/\bT\d{4}(?:\.\d{3})?\b/g) || []).forEach(function (id) { ids[id] = 1; idRows++; }); }   /* T-0637 (p7): the technique IDs of the mapped rows, read here, so a moved Navigator layer is held to a count this row found itself */
     });
-    return { withId: withId, mapped: mapped };
+    return { withId: withId, mapped: mapped, ids: Object.keys(ids).length, idRows: idRows };
   }
   function label(table) {
     for (var n = table; n && n !== document.body; n = n.parentElement) {
@@ -2682,7 +2691,13 @@ function attackTablesInPage(TACTICS) {
   var strips = [].slice.call(document.querySelectorAll('.hl-attack')), used = [];
   var list = tables.map(function (t, i) {
     var j = judge(t), panel = t.closest('[role=tabpanel]');
-    return { table: t, index: i + 1, label: label(t), panel: panel ? panel.id : null, rows: grid(t).length, withId: j.withId, mapped: j.mapped > 0, strip: null };
+    return { table: t, index: i + 1, label: label(t), panel: panel ? panel.id : null, rows: grid(t).length, withId: j.withId, mapped: j.mapped > 0, strip: null, heatFig: null, ids: j.ids, idRows: j.idRows };
+  });
+  /* T-0637 (p7): the figure placed directly before a table is its heat map when it is a technique heat map: the next table after the figure is that table (the placement row holds the same rule) */
+  [].slice.call(document.querySelectorAll('figure.hl-fig--heat')).forEach(function (f) {
+    var nx = tables.filter(function (t) { return !f.contains(t) && (f.compareDocumentPosition(t) & Node.DOCUMENT_POSITION_FOLLOWING); })[0];
+    var hx = nx && list.filter(function (y) { return y.table === nx; })[0];
+    if (hx) hx.heatFig = f;
   });
   list.filter(function (x) { return x.mapped; }).forEach(function (x) {
     var block = x.table.closest('.hl-rv-source'), best = null;
@@ -2692,22 +2707,25 @@ function attackTablesInPage(TACTICS) {
     });
     if (best) { used.push(best); x.strip = best; }
   });
-  return { blocks: blocks.length, list: list, strips: strips, unpaired: strips.length - used.length, tablesRead: tables.length, vis: vis };
+  return { blocks: blocks.length, list: list, strips: strips, unpaired: strips.length - used.length, tablesRead: tables.length, vis: vis, inline: !!document.querySelector('.hl-report-page.hl-figs-inline') };
 }
 var ATTACK_STRIP_EXPR = '(async function(){var T=(' + attackTablesInPage.toString() + ')(' + JSON.stringify(ATTACK_TACTICS) + ');' +
-  'async function measure(st){var exp=[].slice.call(st.querySelectorAll(".hl-attack__export")),btn=exp[0]||null,dl=null;' +
-  'if(btn){var cap=null,old=HTMLAnchorElement.prototype.click;HTMLAnchorElement.prototype.click=function(){cap={href:this.href,download:this.download};};' +
+  /* T-0637 (p7): a table whose technique heat map is drawn above it (inline figures) has no strip; its Navigator layer button is measured on the heat map's source line instead, by the same click and the same download read */
+  'async function dlOf(btn){var dl=null;if(btn){var cap=null,old=HTMLAnchorElement.prototype.click;HTMLAnchorElement.prototype.click=function(){cap={href:this.href,download:this.download};};' +
   'try{btn.click();}finally{HTMLAnchorElement.prototype.click=old;}' +
-  'if(cap){try{var j=JSON.parse(await (await fetch(cap.href)).text());dl={file:cap.download,techniques:(j.techniques||[]).length,domain:j.domain||null};}catch(e){dl={file:cap.download,error:String(e)};}}else dl={error:"clicking the button offered no file"};}' +
+  'if(cap){try{var j=JSON.parse(await (await fetch(cap.href)).text());dl={file:cap.download,techniques:(j.techniques||[]).length,domain:j.domain||null};}catch(e){dl={file:cap.download,error:String(e)};}}else dl={error:"clicking the button offered no file"};}return dl;}' +
+  'async function measureHeat(f){var src=f.querySelector(":scope > .hl-fig-src"),exp=src?[].slice.call(src.querySelectorAll(".hl-attack__export")):[],btn=exp[0]||null;' +
+  'return {exportCount:exp.length,exportVisible:btn?T.vis(btn):false,exportText:btn?btn.textContent.trim():null,download:await dlOf(btn),loose:document.querySelectorAll(".hl-attack__export").length-exp.length};}' +
+  'async function measure(st){var exp=[].slice.call(st.querySelectorAll(".hl-attack__export")),btn=exp[0]||null,dl=await dlOf(btn);' +
   'var cnt=(st.querySelector(".hl-attack__count")||{}).textContent||"",n=cnt.match(/(\\d+) techniques/);' +
   'return {chrome:st.hasAttribute("data-rv-chrome"),segs:st.querySelectorAll(".hl-attack__seg").length,techniques:n?Number(n[1]):0,count:cnt,visible:T.vis(st),' +
   'exportCount:exp.length,exportVisible:btn?T.vis(btn):false,exportText:btn?btn.textContent.trim():null,download:dl};}' +
   'var tables=[];for(var i=0;i<T.list.length;i++){var x=T.list[i];' +
   /* T-0500.1.11: a strip is drawn beside its mapping table, in whichever tab holds that table. A strip in a tab that is not selected is not painted,
      so the tab that holds the table is selected before its strip is measured (the old row measured every strip with the Attack chain tab open). */
-  'if(x.strip&&x.panel&&location.hash!=="#"+x.panel){location.hash="#"+x.panel;await new Promise(function(r){setTimeout(r,300);});}' +
-  'tables.push({index:x.index,label:x.label,panel:x.panel,rows:x.rows,withId:x.withId,mapped:x.mapped,strip:x.strip?await measure(x.strip):null});}' +
-  'return JSON.stringify({sourceBlocks:T.blocks,tablesRead:T.tablesRead,stripsOnPage:T.strips.length,unpaired:T.unpaired,tables:tables});})()';
+  'if((x.strip||x.heatFig)&&x.panel&&location.hash!=="#"+x.panel){location.hash="#"+x.panel;await new Promise(function(r){setTimeout(r,300);});}' +
+  'tables.push({index:x.index,label:x.label,panel:x.panel,rows:x.rows,withId:x.withId,mapped:x.mapped,ids:x.ids,idRows:x.idRows,strip:x.strip?await measure(x.strip):null,heat:x.heatFig?await measureHeat(x.heatFig):null});}' +
+  'return JSON.stringify({sourceBlocks:T.blocks,tablesRead:T.tablesRead,stripsOnPage:T.strips.length,unpaired:T.unpaired,inline:T.inline,tables:tables});})()';
 function attackStripVerdict(m) {
   if (!m) return { notChecked: true, ok: false, detail: 'nothing was measured' };
   if (!m.sourceBlocks) return { notChecked: true, ok: false, detail: 'the page has no .hl-rv-source section, so there is no report text to read mapping tables from' };
@@ -2720,6 +2738,23 @@ function attackStripVerdict(m) {
   want.forEach(function (t) {
     var name = 'mapping table ' + t.index + (t.label ? ' (' + t.label + ')' : '') + (t.panel ? ' in ' + t.panel : '');
     var s = t.strip;
+    if (m.inline && t.heat) {
+      /* T-0637 (p7, Joseph 2026-11-16, 3b): the heat map above this table shows what the coverage strip shows, so no strip is drawn for it; its Navigator layer button is on the heat map's source line, and works. */
+      var h = t.heat, hw = [];
+      if (s) hw.push('a coverage strip is still drawn above the heat map that shows the same thing');
+      if (h.exportCount !== 1) hw.push(h.exportCount ? h.exportCount + ' Navigator layer buttons on the heat map\'s source line (1 expected)' : 'has no Navigator layer button on its heat map\'s source line');
+      else {
+        if (!/Navigator layer/.test(h.exportText || '')) hw.push('the download button reads ' + JSON.stringify(h.exportText));
+        if (!h.exportVisible) hw.push('the Navigator layer button is not painted');
+        if (!h.download || h.download.error) hw.push('the Navigator layer button offered no usable file (' + (h.download ? h.download.error : 'no result') + ')');
+        else if (!/\.json$/.test(h.download.file || '') || !(h.download.techniques > 0)) hw.push('the download is ' + JSON.stringify(h.download.file) + ' with ' + h.download.techniques + ' technique(s) in its layer');
+        else if (t.ids > 0 && (h.download.techniques < t.ids || h.download.techniques > t.idRows)) hw.push('the download lists ' + h.download.techniques + ' techniques, the table has ' + t.ids + ' distinct technique IDs on ' + t.idRows + ' mapped rows');
+      }
+      if (h.loose) hw.push(h.loose + ' further Navigator layer button(s) are drawn outside the heat map\'s source line');
+      hw.forEach(function (x) { why.push(name + ': ' + x); });
+      parts.push('table ' + t.index + ': heat map, no strip, Navigator layer on its source line' + (h.download && h.download.file ? ', download ' + h.download.file + ' with ' + h.download.techniques : ''));
+      return;
+    }
     if (!s) { why.push(name + ' has no coverage strip (' + m.stripsOnPage + ' strip(s) on the page for ' + want.length + ' mapping table(s))'); return; }
     var w = [];
     if (!s.chrome) w.push('the strip is not marked data-rv-chrome, so the completeness gate would count its words as report text');
@@ -2737,7 +2772,7 @@ function attackStripVerdict(m) {
     w.forEach(function (x) { why.push(name + ': ' + x); });
     parts.push('table ' + t.index + ': ' + s.segs + ' bars, ' + s.techniques + ' techniques' + (s.download && s.download.file ? ', download ' + s.download.file + ' with ' + s.download.techniques : ''));
   });
-  var have = want.filter(function (t) { return t.strip; }).length;
+  var have = want.filter(function (t) { return t.strip || (m.inline && t.heat); }).length;
   return { notChecked: false, ok: why.length === 0, why: why,
     detail: have + ' strip(s) for ' + want.length + ' mapping table(s) (' + m.tablesRead + ' source table(s) read; ' + m.stripsOnPage + ' strip(s) on the page, ' + m.unpaired + ' with no mapping table of their own): ' + parts.join('; ') + skipNote + (why.length ? '; ' + why.join('; ') : '') };
 }
@@ -2746,7 +2781,7 @@ function attackStripControlHtml(html) {
   return out === html ? null : out;
 }
 async function attackStripRows(page, url, html) {
-  var name = 'every ATT&CK mapping table has its coverage strip beside it, in whichever tab holds the table, with a working Navigator layer download';
+  var name = 'every ATT&CK mapping table has its coverage strip beside it, in whichever tab holds the table, with a working Navigator layer download (an inline page that draws the technique heat map above the table draws no strip there: the heat map\'s source line carries the button)';
   /* T-0500.1.11: the strip is drawn next to the report's ATT&CK mapping table, in the Attack chain tab when the page builds one and in
      whichever tab holds that table otherwise (a one-tab report: the Overview, as the gate has always measured it). The page is opened
      on a tab it built; asking for #tab-chain on a page without one selected nothing. */
@@ -2773,7 +2808,7 @@ async function attackStripRows(page, url, html) {
     await CDP.sleep(250);
     var cv = attackStripVerdict(JSON.parse(await page.evaluate(ATTACK_STRIP_EXPR)));
     if (cv.notChecked) check('NOT CHECKED: ' + cname, false, cv.detail);
-    else check(cname, !cv.ok && /has no coverage strip/.test(cv.why.join(' ')), 'the row said: ' + (cv.ok ? 'PASS (it cannot see a missing strip)' : cv.why.join('; ')));
+    else check(cname, !cv.ok && /has no coverage strip|has no Navigator layer button/.test(cv.why.join(' ')), 'the row said: ' + (cv.ok ? 'PASS (it cannot see a missing strip)' : cv.why.join('; ')));
   } finally {
     csrv.close();
   }
@@ -2795,7 +2830,7 @@ async function attackStripRows(page, url, html) {
         var pv = attackStripVerdict(pm);
         var expectedN = (pm.tables || []).filter(function (t) { return t.mapped; }).length;
         if (pv.notChecked) check('NOT CHECKED: ' + pname, false, pv.detail);
-        else check(pname, !pv.ok && pv.why.length === 1 && /has no coverage strip/.test(pv.why[0]), 'the report has ' + expectedN + ' mapping table(s); the row said: ' + (pv.ok ? 'PASS (it cannot see a lost strip)' : pv.why.join('; ')));
+        else check(pname, !pv.ok && pv.why.length === 1 && /has no coverage strip|has no Navigator layer button/.test(pv.why[0]), 'the report has ' + expectedN + ' mapping table(s); the row said: ' + (pv.ok ? 'PASS (it cannot see a lost strip)' : pv.why.join('; ')));
       }
     } finally {
       psrv.close();
@@ -2805,7 +2840,7 @@ async function attackStripRows(page, url, html) {
      every strip with one rule; the row must name each mapping table's strip as not painted. A row that measured only the strips of the open
      tab, or that never opened the holding tab, would pass here for a table in a tab it did not open. */
   var hname = 'control: the strip row FAILS on a copy of the page whose strips are hidden, in the tab that holds each mapping table';
-  var hidden = String(html).replace('</head>', '<style>.hl-attack{display:none !important}</style></head>');
+  var hidden = String(html).replace('</head>', '<style>.hl-attack{display:none !important} .hl-fig-src > .hl-attack__export{display:none !important}</style></head>');   /* the second rule hides a Navigator layer button moved onto a heat map (T-0637 p7) */
   if (hidden === String(html)) check('NOT CHECKED: ' + hname, false, 'the fetched page has no </head> to put the hiding rule in front of, so no copy could be built');
   else {
     var hpath = new URL(url).pathname + '__strips-hidden/';
@@ -2818,12 +2853,26 @@ async function attackStripRows(page, url, html) {
         var hm = JSON.parse(await page.evaluate(ATTACK_STRIP_EXPR));
         var hv = attackStripVerdict(hm);
         var wantN = (hm.tables || []).filter(function (t) { return t.mapped; }).length;
-        var named = hv.notChecked ? 0 : (hv.why || []).filter(function (x) { return /the strip is not painted/.test(x); }).length;
+        var namedSet = {}; if (!hv.notChecked) (hv.why || []).forEach(function (x) { var mt = /not painted/.test(x) && x.match(/^mapping table \d+/); if (mt) namedSet[mt[0]] = 1; });
+        var named = Object.keys(namedSet).length;   /* one per mapping table, whether its strip or its heat map's button was hidden */
         if (hv.notChecked) check('NOT CHECKED: ' + hname, false, hv.detail);
-        else check(hname, !hv.ok && named === wantN, 'the report has ' + wantN + ' mapping table(s); the row named ' + named + ' strip(s) as not painted: ' + (hv.ok ? 'PASS (it cannot see a hidden strip)' : hv.why.slice(0, 2).join('; ')));
+        else check(hname, !hv.ok && named === wantN, 'the report has ' + wantN + ' mapping table(s); the row named ' + named + ' table(s) whose strip or Navigator layer button is not painted: ' + (hv.ok ? 'PASS (it cannot see a hidden strip)' : hv.why.slice(0, 2).join('; ')));
       }
     } finally {
       hsrv.close();
+    }
+  }
+  /* T-0637 (p7, 3b): on an inline page that draws a technique heat map above a mapping table the strip is not drawn. The control draws one back, above that heat map, on the page itself; the row must FAIL and say so.
+     A page that draws no heat map has nothing to put a strip above, so it has no such control (it keeps its strips, and the rows above measure them). */
+  var sname = 'control: the strip row FAILS on a copy of the page where a coverage strip is drawn back above the technique heat map';
+  await setViewport(page, 1280, 900);
+  if (await gotoAndWait(page, url + '#tab-' + stripTab)) {
+    await CDP.sleep(250);
+    var added = await page.json('(function(){var f=document.querySelector(".hl-figs-inline figure.hl-fig--heat");if(!f)return false;var s=document.createElement("div");s.className="hl-attack";s.setAttribute("data-rv-chrome","");s.innerHTML="<div class=\\"hl-attack__head\\"><span class=\\"hl-attack__count\\">1 techniques</span></div>";f.parentNode.insertBefore(s,f);return true;})()');
+    if (added) {
+      var sv = attackStripVerdict(JSON.parse(await page.evaluate(ATTACK_STRIP_EXPR)));
+      if (sv.notChecked) check('NOT CHECKED: ' + sname, false, sv.detail);
+      else check(sname, !sv.ok && /a coverage strip is still drawn above the heat map/.test((sv.why || []).join(' ')), 'the row said: ' + (sv.ok ? 'PASS (it cannot see a strip above the heat map)' : sv.why.join('; ')));
     }
   }
   await restoreReportPage(page, url);
@@ -4452,6 +4501,76 @@ function inlineColourVerdict(rows) {
   if (!measured) return { notChecked: true, ok: false, detail: 'no coloured figure text is on this page, so nothing was measured' };
   return { notChecked: false, ok: bad.length === 0, why: bad, detail: measured + ' text kind(s), ' + elements + ' element(s): ' + listed.join(', ') + (bad.length ? '; ' + bad.join('; ') : '') };
 }
+/* T-0637 (p7, Joseph 2026-11-16: "1c"). THREAT COLOUR. The threat-level fact takes the colour of its level (low green #4ade80, medium or moderate yellow #facc15, high or critical red #f87171) and its label a
+   tint of that colour; a level this table does not name keeps the impact red. Read from the computed colours of the number and its label; the level is the fact's own text, which the facts row has already compared with
+   the report's Threat Level line. The known positive is the state before p7: a MEDIUM level drawn in the impact red. */
+var THREAT_COLOURS = { LOW: [74, 222, 128], MEDIUM: [250, 204, 21], MODERATE: [250, 204, 21], HIGH: [248, 113, 113], CRITICAL: [248, 113, 113] };
+var THREAT_DEFAULT = [248, 113, 113];
+function inlineThreatMeasure() {
+  return [].slice.call(document.querySelectorAll('.hl-facts .hl-fact[data-rv-tile="threat"]')).map(function (f) {
+    var n = f.querySelector('strong'), l = f.querySelector('.hl-fact-l');
+    return { level: (n.textContent || '').replace(/\s+/g, ' ').trim(), num: getComputedStyle(n).color, lab: l ? getComputedStyle(l).color : '' };
+  });
+}
+var INLINE_THREAT_EXPR = '(' + inlineThreatMeasure.toString() + ')()';
+function cssRgb(c) {
+  var m = String(c).match(/^rgba?\(\s*([\d.]+)[,\s]+([\d.]+)[,\s]+([\d.]+)/);
+  if (m) return [+m[1], +m[2], +m[3]];
+  m = String(c).match(/^color\(srgb\s+([\d.]+)\s+([\d.]+)\s+([\d.]+)/);
+  return m ? [+m[1] * 255, +m[2] * 255, +m[3] * 255] : null;
+}
+function inlineThreatVerdict(rows) {
+  if (!rows) return { notChecked: true, ok: false, detail: 'nothing was measured' };
+  if (!rows.length) return { notChecked: true, ok: false, detail: 'this page draws no threat-level fact, so nothing was measured' };
+  var bad = [], parts = [];
+  rows.forEach(function (r) {
+    var want = THREAT_COLOURS[r.level.toUpperCase()] || THREAT_DEFAULT, got = cssRgb(r.num), lab = cssRgb(r.lab);
+    var named = THREAT_COLOURS[r.level.toUpperCase()] ? '' : ' (a level this row does not name: the impact red)';
+    if (!got) { bad.push('threat level ' + r.level + ': its colour "' + r.num + '" could not be read'); return; }
+    if (Math.max.apply(null, got.map(function (v, i) { return Math.abs(Math.round(v) - want[i]); })) > 1) bad.push('threat level ' + r.level + ' is drawn in rgb(' + got.map(Math.round).join(',') + '), the colour of that level is rgb(' + want.join(',') + ')' + named);
+    var dist = function (a, b) { return Math.sqrt(a.reduce(function (n, v, i) { return n + (v - b[i]) * (v - b[i]); }, 0)); };
+    if (!lab) bad.push('threat level ' + r.level + ': its label colour "' + r.lab + '" could not be read');
+    else if (!(dist(lab, want) < dist([212, 212, 212], want))) bad.push('threat level ' + r.level + ': its label rgb(' + lab.map(Math.round).join(',') + ') is not a tint of the number\'s colour rgb(' + want.join(',') + ')');
+    parts.push(r.level + ' rgb(' + got.map(Math.round).join(',') + ')');
+  });
+  return { notChecked: false, ok: bad.length === 0, why: bad, detail: rows.length + ' threat-level fact(s): ' + parts.join(', ') + (bad.length ? '; ' + bad.join('; ') : '') };
+}
+/* T-0637 (p7, Joseph 2026-11-16: "4c"). INFERRED HATCH. An inferred heat-map cell (and its legend swatch) is a soft yellow stripe on the panel: repeating-linear-gradient(135deg, rgba(250,204,21,0.75) 0 2px,
+   rgba(250,204,21,0.22) 2px 6px). It must stay unlike an observed cell, which is one solid fill with no image. Read from the computed background of each. The known positives are the solid fill of an observed
+   cell (an inferred cell drawn the same) and the hatch before p7 (a full-strength yellow with a dark stripe). */
+function inlineHatchMeasure() {
+  function pick(sel) { var e = document.querySelector(sel); if (!e) return null; var c = getComputedStyle(e); return { image: c.backgroundImage, colour: c.backgroundColor }; }
+  var h = 'figure.hl-fig--heat ';
+  return { cell: pick(h + '.hl-rv-heat .hl-rv-cell[data-rv-status="INFERRED"]'), swatch: pick(h + '.hl-rv-cell--sw[data-rv-status="INFERRED"]'),
+    observed: pick(h + '.hl-rv-heat .hl-rv-cell[data-rv-status="OBSERVED"]'), observedSwatch: pick(h + '.hl-rv-cell--sw[data-rv-status="OBSERVED"]') };
+}
+var INLINE_HATCH_EXPR = '(' + inlineHatchMeasure.toString() + ')()';
+var HATCH_WANT = [[0.75, 0, 2], [0.22, 2, 6]];
+function hatchStops(image) {
+  var g = String(image).match(/^repeating-linear-gradient\(\s*135deg\s*,(.*)\)$/);
+  if (!g) return null;
+  var out = {}, re = /rgba?\(\s*250\s*,\s*204\s*,\s*21\s*(?:,\s*([\d.]+))?\s*\)\s*(-?[\d.]+)px(?:\s+(-?[\d.]+)px)?/g, m, n = 0;
+  while ((m = re.exec(g[1]))) { var a = m[1] === undefined ? 1 : +m[1], k = String(a), pos = [+m[2]].concat(m[3] === undefined ? [] : [+m[3]]); out[k] = out[k] ? out[k].concat(pos) : pos; n++; }
+  return n ? out : null;
+}
+function inlineHatchVerdict(m) {
+  if (!m) return { notChecked: true, ok: false, detail: 'nothing was measured' };
+  if (!m.swatch) return { notChecked: true, ok: false, detail: 'the heat map has no legend swatch for an inferred cell, so nothing was measured' };
+  var bad = [], seen = [];
+  [['inferred legend swatch', m.swatch], ['inferred cell', m.cell]].forEach(function (e) {
+    if (!e[1]) return;   /* a report with no inferred row draws no inferred cell; the swatch is always there when the heat map has a Status column */
+    seen.push(e[0]);
+    var st = hatchStops(e[1].image), ok = !!st;
+    HATCH_WANT.forEach(function (w) { var pos = st && st[String(w[0])]; if (!pos || Math.min.apply(null, pos) !== w[1] || Math.max.apply(null, pos) !== w[2]) ok = false; });
+    if (ok && Object.keys(st).length !== HATCH_WANT.length) ok = false;
+    if (!ok) bad.push('the ' + e[0] + ' background is ' + JSON.stringify(String(e[1].image).slice(0, 160)) + ', not the soft hatch (a 135deg stripe of rgba(250,204,21) at 0.75 from 0 to 2px and 0.22 from 2px to 6px)');
+    var obs = e[1] === m.swatch ? m.observedSwatch : m.observed;
+    if (obs && obs.image !== 'none') bad.push('the observed ' + (e[1] === m.swatch ? 'swatch' : 'cell') + ' is not one solid fill (background-image ' + JSON.stringify(String(obs.image).slice(0, 80)) + ')');
+    if (obs && e[1].image === obs.image) bad.push('the ' + e[0] + ' reads the same as an observed one (both background-image ' + JSON.stringify(String(obs.image).slice(0, 60)) + ')');
+  });
+  if (!m.observed && !m.observedSwatch) bad.push('no observed cell or swatch was found to compare the hatch with');
+  return { notChecked: false, ok: bad.length === 0, why: bad, detail: seen.join(' and ') + ' read as the soft hatch and unlike the solid observed fill' + (bad.length ? '; ' + bad.join('; ') : '') };
+}
 /* T-0637 (p5): one control per predicate inlineCountsVerdicts emits. Each is [name, a script that breaks the figure and returns whether the page drew it, the row it must fail]; a page that draws no such figure has nothing to break, so the control is skipped. */
 var INLINE_COUNT_CONTROLS = [
   ['with one grade square removed the grade-strip row FAILS', '(function(){var c=document.querySelector("figure.hl-fig--grades .hl-rv-sq");if(c)c.remove();return !!c;})()', function (mm) { return inlineCountsVerdicts(mm, SHAPES).filter(function (x) { return /grade strip/.test(x.name); })[0]; }],
@@ -4513,6 +4632,41 @@ async function inlineEvidenceColourRows(page, url, tag, si) {
     };
     await cm('.hl-fact strong{color:#ffffff !important}', 'every fact number back to white (the state before the colours) makes the colour row FAIL', '.hl-fact strong');
     await cm('.hl-fig > figcaption .hl-fig-title{color:#4a4a4a !important}', 'a figure title in dark grey (under 4.5:1) makes the colour row FAIL', '.hl-fig > figcaption .hl-fig-title');
+  }
+  /* T-0637 (p7, 1c): the threat-level fact is the colour of its level. A page with no threat-level fact (the rich shape, or a report with no Threat Level line) has nothing for this row to measure and gets no row, as for the count controls. */
+  await gotoAndWait(page, url);
+  var tm = await page.json(INLINE_THREAT_EXPR);
+  if (tm && tm.length) {
+    var tname = 'the threat-level fact takes the colour of its level (low green, medium yellow, high and critical red) and its label a tint of it';
+    row(tname, inlineThreatVerdict(tm));
+    if (si === 0 && inlineThreatVerdict(tm).ok) {
+      var lvl = tm[0].level.toUpperCase(), wrong = THREAT_COLOURS[lvl] && THREAT_COLOURS[lvl][0] === 248 ? '#4ade80' : '#f87171';
+      var tc = async function (css, name) {
+        await gotoAndWait(page, url);
+        await page.evaluate('(function(){var s=document.createElement("style");s.textContent=' + JSON.stringify(css) + ';document.head.appendChild(s);})()');
+        await CDP.sleep(200);
+        ctl(name, inlineThreatVerdict(await page.json(INLINE_THREAT_EXPR)));
+      };
+      await tc('.hl-fact[data-rv-tile="threat"] strong{color:' + wrong + ' !important}', 'a threat level ' + tm[0].level + ' drawn in ' + wrong + ', the colour of another level, makes the threat-colour row FAIL');
+      await tc('.hl-fact[data-rv-tile="threat"] .hl-fact-l{color:#d4d4d4 !important}', 'a threat-level label left grey makes the threat-colour row FAIL');
+    }
+  }
+  /* T-0637 (p7, 4c): the inferred hatch is the soft stripe and still unlike an observed cell. A page with no heat map or no Status legend has nothing to measure and gets no row. */
+  await gotoAndWait(page, url);
+  var hm = await page.json(INLINE_HATCH_EXPR);
+  if (hm && hm.swatch) {
+    var hname = 'the inferred hatch on the heat map (cells and legend swatch) is the soft 135-degree yellow stripe, and an observed cell stays one solid fill';
+    row(hname, inlineHatchVerdict(hm));
+    if (si === 0 && inlineHatchVerdict(hm).ok) {
+      var hc = async function (css, name) {
+        await gotoAndWait(page, url);
+        await page.evaluate('(function(){var s=document.createElement("style");s.textContent=' + JSON.stringify(css) + ';document.head.appendChild(s);})()');
+        await CDP.sleep(200);
+        ctl(name, inlineHatchVerdict(await page.json(INLINE_HATCH_EXPR)));
+      };
+      await hc('figure.hl-fig--heat .hl-rv-cell[data-rv-status="INFERRED"]{background:var(--rv-ok) !important}', 'an inferred cell drawn as the solid green of an observed one makes the hatch row FAIL');
+      await hc('figure.hl-fig--heat .hl-rv-cell[data-rv-status="INFERRED"]{background:repeating-linear-gradient(135deg,#facc15 0 3px,#2a2a10 3px 6px) !important}', 'the hatch as it was before p7 (full yellow over a dark stripe) makes the hatch row FAIL');
+    }
   }
   await gotoAndWait(page, url);
 }
@@ -6127,6 +6281,10 @@ if (require.main === module) {
     INLINE_COLOUR_SPEC: INLINE_COLOUR_SPEC,
     INLINE_COLOUR_EXPR: INLINE_COLOUR_EXPR,
     inlineColourVerdict: inlineColourVerdict,
+    INLINE_THREAT_EXPR: INLINE_THREAT_EXPR,
+    inlineThreatVerdict: inlineThreatVerdict,
+    INLINE_HATCH_EXPR: INLINE_HATCH_EXPR,
+    inlineHatchVerdict: inlineHatchVerdict,
     INLINE_COUNT_CONTROLS: INLINE_COUNT_CONTROLS,
     inlineToolbarVerdict: inlineToolbarVerdict,
     inlineChainTableVerdict: inlineChainTableVerdict,

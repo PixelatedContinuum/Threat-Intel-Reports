@@ -10,6 +10,7 @@ const { JSDOM } = require('jsdom');
 const root = path.join(__dirname, '..', '..', '..');
 const read = (p) => fs.readFileSync(path.join(root, p), 'utf8');
 const script = read('assets/js/hl-report-tabs.js');
+const stripScript = read('assets/js/attack-coverage.js');
 const css = read('assets/css/hl-report-tabs.css');
 const G = require('../check-browser-report.js');
 const PREVIEWS = ['inv-2026-082-agent-platform-command-channel', 'inv-2026-083-federal-ad-credential-access-rig'];
@@ -35,7 +36,7 @@ test('no report opts back to the dashboard (site rollout, Joseph 2026-11-15); th
 test('the cache-busters moved with the stylesheet and the script (both carry the same value)', () => {
   const a = read('_layouts/post.html').match(/hl-report-tabs\.js' \| relative_url \}\}\?v=([0-9.]+)/)[1];
   const b = read('_includes/default/head.liquid').match(/hl-report-tabs\.css' \| relative_url \}\}\?v=([0-9.]+)/)[1];
-  assert.equal(a, b); assert.equal(a, '20261116.3');
+  assert.equal(a, b); assert.equal(a, '20261116.4');
 });
 
 test('every rule the inline block adds to the stylesheet is scoped under .hl-figs-inline, so no other report can see it', () => {
@@ -71,12 +72,14 @@ const REPORT = [
     '<h2 class="hl-tab-indicators" id="s6b">8. Detection and Hunting Guidance</h2><p>The package carries 3 rules: 1 Sigma (1 detection, 0 hunting) and 2 YARA (1 detection, 1 hunting).</p>',
   TAB('confidence', 's7', '9. Confidence Summary', '<p>Each judgment carries its confidence.</p>' + TABLE(['Claim', 'Confidence', 'What would change it'], [['The server is the operator\'s', 'HIGH', 'a record'], ['It is one crew', 'MODERATE', 'a second case'], ['The date is the first use', 'HIGH', 'an earlier log']]))
 ].join('');
-function page(flag, report, curation, hash) {
+function page(flag, report, curation, hash, opts) {
   const dom = new JSDOM(`<div class="hl-page hl-report-page${flag ? ' hl-figs-inline' : ''}"><div class="hl-post-body"><div class="hl-post-content">${report || REPORT}</div></div>${curation ? '<script id="hl-report-view-data" type="application/json">' + JSON.stringify(curation) + '</script>' : ''}</div>`, { url: 'https://example.test/report/' + (hash || ''), runScripts: 'outside-only' });
   const w = dom.window; w.matchMedia = () => ({ matches: false, addEventListener() {} }); w.ResizeObserver = class { observe() {} }; w.HTMLElement.prototype.scrollIntoView = function () {};
   if (!w.requestAnimationFrame) w.requestAnimationFrame = (fn) => setTimeout(fn, 0);   // a row-link fragment scrolls to its row after a frame
   const articleTables = w.document.querySelectorAll('.hl-post-content table').length;
   const articleText = w.document.querySelector('.hl-post-content').textContent.replace(/\s+/g, '');
+  // T-0637 (p7): opts.strip runs attack-coverage.js first, as the page does (it is deferred ahead of this script), and records what its Navigator layer button downloads
+  if (opts && opts.strip) { w.eval(stripScript); w.URL.createObjectURL = (b) => { w.__blob = b; return 'blob:x'; }; w.URL.revokeObjectURL = () => {}; w.Blob = class { constructor(parts) { this.text = parts.join(''); } }; w.HTMLAnchorElement.prototype.click = function () { w.__dl = this.download; }; }
   w.eval(script);
   assert.ok(w.document.documentElement.classList.contains('hl-rv-ready'), 'the script built the page');
   return { dom, w, d: w.document, articleTables, articleText };
@@ -602,4 +605,210 @@ test('p6 colour row: PASS on brand colours at 4.5:1; FAIL on a white or grey fac
   assert.equal(G.inlineColourVerdict([{ name: 'figure title', kind: 'fig', n: 2, read: 0, worst: null, neutral: 0, colours: {} }]).ok, false, 'elements whose colour could not be read');
   assert.equal(G.inlineColourVerdict([{ name: 'figure title', kind: 'fig', n: 2, read: 1, worst: { ratio: 6.4, colour: '248,113,113', text: 'T' }, neutral: 0, colours: {} }]).ok, false, 'one of two elements unread is not a PASS (review_15773667294d46ae)');
   assert.ok(G.INLINE_COLOUR_SPEC.length >= 14 && /hl-fact strong/.test(G.INLINE_COLOUR_SPEC.map((x) => x[1]).join(' ')));
+});
+
+
+// ===== T-0637 (p7, Joseph 2026-11-16: "1c, 3b, 4c" and two fixes) =====
+const timelineWith = (rows) => REPORT.replace(/<tr><td>2026-10-30<\/td>.*?<\/tr><tr><td>2026-11-02<\/td>.*?<\/tr><tr><td>2026-11-14<\/td>.*?<\/tr>/, rows.map((r) => `<tr><td>${r[0]}</td><td>${r[1]}</td></tr>`).join(''));
+const windowTile = (f) => f.d.querySelector('.hl-fact[data-rv-tile="window"] strong').textContent;
+
+test('p7 observation window: the start of the first date cell to the end of the last, one "to" however the cells are written; the dashboard tile keeps the cells as printed (control)', () => {
+  const cases = [
+    [[['2016-03-04 to 2017-03-20', 'a'], ['2020-01-01', 'b'], ['2026-11-14', 'c']], '2016-03-04 to 2026-11-14'],       // the first cell is a range (the 083 case)
+    [[['2026-10-30', 'a'], ['2026-11-02', 'b'], ['2026-11-01 to 2026-11-14', 'c']], '2026-10-30 to 2026-11-14'],       // the last cell is a range: its end
+    [[['2016-03-04 to 2017-03-20', 'a'], ['2020-01-01', 'b'], ['2026-11-01 to 2026-11-14', 'c']], '2016-03-04 to 2026-11-14'],   // both
+    [[['2026-10-30', 'a'], ['2026-11-02', 'b'], ['2026-11-14', 'c']], '2026-10-30 to 2026-11-14'],                     // no range: as before
+  ];
+  for (const [rows, want] of cases) {
+    const f = page(true, timelineWith(rows));
+    try { const got = windowTile(f); assert.equal(got, want); assert.equal(got.split(' to ').length, 2, 'one "to": ' + got); } finally { f.w.close(); }
+  }
+  // a "to" with no figure on one side ("Up to the 14th") is not a range: the cell is used as printed
+  const f = page(true, timelineWith([['Up to 2026-10-30', 'a'], ['2026-11-02', 'b'], ['2026-11-14', 'c']]));
+  try { assert.equal(windowTile(f), 'Up to 2026-10-30 to 2026-11-14'); } finally { f.w.close(); }
+  // control: the dashboard (no flag) is the state before p7, "A to B to C"
+  const c = page(false, timelineWith(cases[0][0]));
+  try { assert.equal(c.d.querySelector('.hl-rv-tile[data-rv-tile="window"] strong').textContent, '2016-03-04 to 2017-03-20 to 2026-11-14'); } finally { c.w.close(); }
+});
+
+test('p7 the gate reads the same window: its expectation for a first-cell range is "start to end", and a page that still joins three dates FAILS the facts row', () => {
+  const f = page(true, timelineWith([['2016-03-04 to 2017-03-20', 'a'], ['2020-01-01', 'b'], ['2026-11-14', 'c']]));
+  try {
+    const want = JSON.parse(JSON.stringify(f.w.eval(G.SHAPES_EXPR).overview.tiles));
+    assert.ok(want.includes('2016-03-04 to 2026-11-14'), JSON.stringify(want));
+    const m = JSON.parse(JSON.stringify(f.w.eval(G.INLINE_EXPR)));
+    assert.deepEqual(m.facts.map((x) => x.value), want, 'the page and the gate agree');
+    // control: the tile as it was ("A to B to C") no longer equals the report's tables
+    const shapes = f.w.eval(G.SHAPES_EXPR);
+    const ok = G.inlinePlacementVerdict(m, JSON.parse(JSON.stringify(shapes))); assert.equal(/the facts line reads/.test((ok.why || []).join(' ')), false, JSON.stringify(ok.why));
+    m.facts = m.facts.map((x) => x.value === '2016-03-04 to 2026-11-14' ? Object.assign({}, x, { value: '2016-03-04 to 2017-03-20 to 2026-11-14' }) : x);
+    const bad = G.inlinePlacementVerdict(m, JSON.parse(JSON.stringify(shapes))); assert.equal(bad.ok, false); assert.match(bad.why.join(' | '), /the facts line reads \[.*2016-03-04 to 2017-03-20 to 2026-11-14.*\], the report's tables give \[.*2016-03-04 to 2026-11-14/);
+  } finally { f.w.close(); }
+});
+
+test('p7 grammar: a count of one reads in the singular on the facts line (organisation, technique ID, procedure row, rule, IOC entry); every other count keeps its plural; the dashboard keeps its label (control)', () => {
+  const one = REPORT.replace('<td>Org B</td><td>COMPROMISED</td>', '<td>Org B</td><td>REACHED</td>')
+    .replace(/<tr><td>Execution \/ T1059<\/td>.*?<\/tr>/, '').replace(/<tr><td>Execution \/ T1059\.004<\/td>.*?<\/tr>/, '')
+    .replace('carries 3 rules: 1 Sigma (1 detection, 0 hunting) and 2 YARA (1 detection, 1 hunting)', 'carries 1 rules: 1 Sigma (1 detection, 0 hunting)');
+  const f = page(true, one);
+  try {
+    const facts = [...f.d.querySelectorAll('.hl-facts .hl-fact')].map((x) => x.textContent.replace(/\s+/g, ' ').trim());
+    assert.deepEqual(facts.slice(0, 4), ['1 organisation with inside or authenticated access', '1 distinct technique ID', '1 procedure row', '1 detection and hunting rule'], facts.join(' | '));
+    assert.match(f.d.querySelector('.hl-fact[data-rv-tile="inside"]').title, /^1 organisation with inside/);
+  } finally { f.w.close(); }
+  const many = page(true);
+  try {
+    const facts = [...many.d.querySelectorAll('.hl-facts .hl-fact')].map((x) => x.textContent.replace(/\s+/g, ' ').trim());
+    assert.deepEqual(facts.slice(0, 4), ['2 organisations with inside or authenticated access', '3 distinct technique IDs', '3 procedure rows', '3 detection and hunting rules'], facts.join(' | '));
+  } finally { many.w.close(); }
+  const dash = page(false, one);
+  try { assert.equal(/organisations with inside/.test(dash.d.querySelector('.hl-rv-tile[data-rv-tile="inside"]').textContent), true, 'the dashboard tile is the state before p7'); } finally { dash.w.close(); }
+  // the fallback set: technique and IOC counts of one
+  const fb = REPORT.replace(/<h2 class="hl-tab-victims".*?<\/table>/, '').replace(/<tr><td>Execution \/ T1059<\/td>.*?<\/tr>/, '').replace(/<tr><td>Execution \/ T1059\.004<\/td>.*?<\/tr>/, '')
+    .replace('<p>Sixteen indicators.</p>', '<p>The feed carries 1 operator-side indicator entries.</p>');
+  const g = page(true, fb);
+  try {
+    const facts = [...g.d.querySelectorAll('.hl-facts .hl-fact')].map((x) => x.textContent.replace(/\s+/g, ' ').trim());
+    assert.ok(facts.includes('1 distinct ATT&CK technique'), facts.join(' | ')); assert.ok(facts.includes('1 IOC entry'), facts.join(' | '));
+  } finally { g.w.close(); }
+});
+
+const LEVELS = { LOW: 'low', MEDIUM: 'medium', MODERATE: 'medium', HIGH: 'high', CRITICAL: 'critical' };
+const threatReport = (level) => TAB('overview', 's1', '1. Executive Summary', `<p>Threat Level: ${level}</p><p>The bottom line.</p>`) + TAB('indicators', 's6', '7. Indicators of Compromise', '<p>The feed carries 16 operator-side indicator entries.</p>');
+test('p7 threat colour: the threat fact carries its level and the stylesheet colours it by level (low green, medium yellow, high and critical red); the risk score and a level the page cannot read keep the impact red', () => {
+  for (const [word, level] of Object.entries(LEVELS)) {
+    const f = page(true, threatReport(word));
+    try { const t = f.d.querySelector('.hl-fact[data-rv-tile="threat"]'); assert.equal(t.querySelector('strong').textContent, word); assert.equal(t.dataset.rvLevel, level, word); } finally { f.w.close(); }
+  }
+  const unreadable = page(true, threatReport('SEVERE'));
+  try { assert.equal(unreadable.d.querySelectorAll('.hl-fact[data-rv-tile="threat"]').length, 0, 'a level the page cannot read draws no threat fact'); } finally { unreadable.w.close(); }
+  const block = css.slice(css.indexOf('T-0637 (p7, Joseph 2026-11-16'));
+  assert.match(block, /\[data-rv-tile="threat"\]\[data-rv-level="low"\] \{ --fc: var\(--hl-c-green\); \}/);
+  assert.match(block, /\[data-rv-tile="threat"\]\[data-rv-level="medium"\] \{ --fc: var\(--hl-c-yellow\); \}/);
+  assert.match(block, /\[data-rv-tile="threat"\]:is\(\[data-rv-level="high"\], \[data-rv-level="critical"\]\) \{ --fc: var\(--hl-c-red\); \}/);
+  assert.match(css, /\.hl-fact:is\(\[data-rv-tile="inside"\], \[data-rv-tile="threat"\], \[data-rv-tile="risk"\]\) \{ --fc: var\(--hl-c-red\); \}/, 'the default (an unnamed level, the risk score) is still the impact red');
+  assert.equal(/data-rv-level="[a-z]+"\]\s*\{[^}]*risk/.test(block), false);
+  // the dashboard tile carries no level attribute: nothing about it changes
+  const d = page(false, threatReport('MEDIUM'));
+  try { assert.equal(d.d.querySelectorAll('[data-rv-level]').length, 0); } finally { d.w.close(); }
+});
+
+test('p7 threat colour row: PASS on the colour of each level; FAIL on the impact red for MEDIUM or LOW (the state before p7), on a wrong colour and on a grey label; NOT CHECKED when there is no fact', () => {
+  const rgb = { LOW: 'rgb(74, 222, 128)', MEDIUM: 'rgb(250, 204, 21)', HIGH: 'rgb(248, 113, 113)', CRITICAL: 'rgb(248, 113, 113)' };
+  const lab = { LOW: 'rgb(171, 215, 187)', MEDIUM: 'rgb(223, 210, 155)', HIGH: 'rgb(223, 182, 182)', CRITICAL: 'rgb(223, 182, 182)' };
+  const row = (level, num, l) => [{ level, num: num || rgb[level], lab: l || lab[level] }];
+  for (const lv of Object.keys(rgb)) { const v = G.inlineThreatVerdict(row(lv)); assert.equal(v.ok, true, lv + ' ' + v.detail); }
+  assert.equal(G.inlineThreatVerdict(row('MODERATE', rgb.MEDIUM, lab.MEDIUM)).ok, true);
+  assert.equal(G.inlineThreatVerdict([{ level: 'MEDIUM', num: 'color(srgb 0.98 0.8 0.08)', lab: 'color(srgb 0.87 0.82 0.61)' }]).ok, true, 'the colour(srgb ...) form a browser may return');
+  const before = G.inlineThreatVerdict(row('MEDIUM', rgb.HIGH, lab.HIGH));   // the known positive: MEDIUM in the impact red
+  assert.equal(before.ok, false); assert.match(before.why.join(' '), /MEDIUM is drawn in rgb\(248,113,113\), the colour of that level is rgb\(250,204,21\)/);
+  assert.equal(G.inlineThreatVerdict(row('LOW', rgb.HIGH, lab.LOW)).ok, false);
+  assert.equal(G.inlineThreatVerdict(row('HIGH', rgb.LOW, lab.HIGH)).ok, false, 'a wrong colour for a high level');
+  assert.equal(G.inlineThreatVerdict(row('HIGH', rgb.HIGH, 'rgb(212, 212, 212)')).ok, false, 'a grey label');
+  assert.equal(G.inlineThreatVerdict(row('SEVERE', rgb.HIGH, lab.HIGH)).ok, true, 'a level this row does not name keeps the impact red');
+  assert.equal(G.inlineThreatVerdict(row('SEVERE', rgb.LOW, lab.LOW)).ok, false);
+  assert.equal(G.inlineThreatVerdict([]).notChecked, true); assert.equal(G.inlineThreatVerdict(null).notChecked, true);
+  // the measurement runs on a real page and reads the level the page draws
+  const f = page(true, threatReport('MEDIUM'));
+  try { const m = JSON.parse(JSON.stringify(f.w.eval(G.INLINE_THREAT_EXPR))); assert.equal(m.length, 1); assert.equal(m[0].level, 'MEDIUM'); } finally { f.w.close(); }
+});
+
+test('p7 hatch: the inline stylesheet draws the inferred cell as the soft stripe, the dashboard rule is unchanged, and the hatch row FAILS on a solid fill and on the old hatch', () => {
+  const soft = 'repeating-linear-gradient(135deg, rgba(250, 204, 21, 0.75) 0 2px, rgba(250, 204, 21, 0.22) 2px 6px)';
+  assert.ok(css.includes('.hl-report-page.hl-figs-inline .hl-fig .hl-rv-cell[data-rv-status="INFERRED"] { background: ' + soft + '; }'));
+  assert.ok(css.includes('.hl-rv-cell[data-rv-status="INFERRED"] { background: repeating-linear-gradient(135deg, var(--seg) 0 3px, color-mix(in srgb, var(--seg) 30%, #0d1117) 3px 6px); }'), 'the dashboard\'s hatch is the state before p7');
+  const good = 'repeating-linear-gradient(135deg, rgba(250, 204, 21, 0.75) 0px, rgba(250, 204, 21, 0.75) 2px, rgba(250, 204, 21, 0.22) 2px, rgba(250, 204, 21, 0.22) 6px)';
+  const m = (img, obs) => ({ cell: { image: img, colour: 'rgba(0, 0, 0, 0)' }, swatch: { image: img, colour: 'rgba(0, 0, 0, 0)' }, observed: { image: obs || 'none', colour: 'rgb(74, 222, 128)' }, observedSwatch: { image: obs || 'none', colour: 'rgb(74, 222, 128)' } });
+  const ok = G.inlineHatchVerdict(m(good)); assert.equal(ok.ok, true, ok.detail);
+  const old = 'repeating-linear-gradient(135deg, rgb(250, 204, 21) 0px, rgb(250, 204, 21) 3px, rgb(73, 61, 12) 3px, rgb(73, 61, 12) 6px)';
+  assert.equal(G.inlineHatchVerdict(m(old)).ok, false, 'the hatch before p7');
+  assert.equal(G.inlineHatchVerdict(m('none')).ok, false, 'a solid fill, the same as an observed cell');
+  assert.equal(G.inlineHatchVerdict(m(good.replace('0.22', '0.5').replace('0.22', '0.5'))).ok, false, 'a different alpha');
+  assert.equal(G.inlineHatchVerdict(m(good.replace('135deg', '45deg'))).ok, false, 'a different angle');
+  assert.equal(G.inlineHatchVerdict(m(good.replace('6px', '8px'))).ok, false, 'a different stripe width');
+  assert.equal(G.inlineHatchVerdict(m(good, good)).ok, false, 'an observed cell that is hatched too reads the same');
+  assert.equal(G.inlineHatchVerdict(Object.assign(m(good), { observed: null, observedSwatch: null })).ok, false, 'nothing to compare with');
+  assert.equal(G.inlineHatchVerdict(Object.assign(m(good), { swatch: null })).notChecked, true); assert.equal(G.inlineHatchVerdict(null).notChecked, true);
+  assert.equal(G.inlineHatchVerdict(Object.assign(m(good), { cell: null })).ok, true, 'no inferred cell on the page: the swatch alone is measured');
+  // the measurement finds the swatch and cells of a real inline page
+  const f = page(true);
+  try { const mm = JSON.parse(JSON.stringify(f.w.eval(G.INLINE_HATCH_EXPR))); assert.ok(mm.swatch && mm.observedSwatch && mm.cell && mm.observed); } finally { f.w.close(); }
+});
+
+const stripMap = (techs) => '<h2 class="hl-tab-attribution" id="s5c">Coverage</h2>' + TABLE(['Tactic / Technique', 'Name', 'Evidence'], techs);
+test('p7 coverage strip: an inline page that draws the heat map draws no strip above its table, and the Navigator layer button, with its handler, sits on the heat map\'s source line; the dashboard keeps its strip (control)', () => {
+  const f = page(true, REPORT, null, '', { strip: true });
+  try {
+    const d = f.d;
+    assert.equal(d.querySelectorAll('.hl-attack').length, 0, 'no coverage strip');
+    const heat = d.querySelector('figure.hl-fig--heat');
+    assert.ok(heat, 'the heat map is drawn');
+    const btns = [...d.querySelectorAll('.hl-attack__export')];
+    assert.equal(btns.length, 1, 'one Navigator layer button on the page');
+    assert.equal(btns[0].parentNode, heat.querySelector(':scope > .hl-fig-src'), 'on the heat map\'s source line');
+    assert.equal(heat.lastElementChild, heat.querySelector(':scope > .hl-fig-src'), 'the source line is still the last thing in the figure');
+    assert.equal(btns[0].textContent.trim(), '↓ Navigator layer');
+    assert.ok(heat.hasAttribute('data-rv-chrome'), 'the button is inside generated chrome');
+    // it works the same way: a click offers a layer file listing the table's techniques
+    btns[0].click();
+    assert.match(f.w.__dl, /-layer\.json$/);
+    const layer = JSON.parse(f.w.__blob.text);
+    assert.equal(layer.domain, 'enterprise-attack'); assert.deepEqual(layer.techniques.map((t) => t.techniqueID).sort(), ['T1059', 'T1059.004', 'T1190']);
+    // the report's own words are unchanged
+    const clone = d.createElement('div'); [...d.querySelectorAll('.hl-rv-source')].forEach((s) => clone.appendChild(s.cloneNode(true)));
+    clone.querySelectorAll('[data-rv-chrome]').forEach((n) => n.remove());
+    assert.equal(clone.textContent.replace(/\s+/g, ''), f.articleText);
+  } finally { f.w.close(); }
+  // control: the dashboard layout keeps its strip and the button in it
+  const c = page(false, REPORT, null, '', { strip: true });
+  try { assert.equal(c.d.querySelectorAll('.hl-attack').length, 1); assert.equal(c.d.querySelectorAll('.hl-attack .hl-attack__export').length, 1); assert.equal(c.d.querySelectorAll('figure.hl-fig--heat').length, 0); } finally { c.w.close(); }
+});
+
+test('p7 coverage strip: a mapping table the heat map is not drawn from keeps its strip and button (a second table; a report with a strip and no heat map)', () => {
+  // two mapping tables: the heat map is drawn from the Status table; the second table (another tab) keeps its strip
+  const two = REPORT + stripMap([['Execution / T1059', 'Command Interpreter', 'x'], ['Discovery / T1082', 'System Information Discovery', 'y']]);
+  const f = page(true, two, null, '', { strip: true });
+  try {
+    const d = f.d;
+    assert.equal(d.querySelectorAll('figure.hl-fig--heat').length, 1);
+    assert.equal(d.querySelectorAll('.hl-attack').length, 1, 'the second table keeps its strip');
+    assert.equal(d.querySelectorAll('.hl-attack .hl-attack__export').length, 1);
+    assert.equal(d.querySelectorAll('figure.hl-fig--heat .hl-fig-src .hl-attack__export').length, 1, 'and the heat map has its own button');
+    assert.match(d.querySelector('.hl-attack .hl-attack__count').textContent, /^2 techniques/);
+  } finally { f.w.close(); }
+  // no heat map at all (no chain section): the strip stays, with its button, in inline mode
+  const noChain = REPORT.replace(/<h2 class="hl-tab-chain" id="s3b">.*?<\/table>/, '') + stripMap([['Execution / T1059', 'Command Interpreter', 'x']]);
+  const g = page(true, noChain, null, '', { strip: true });
+  try {
+    assert.equal(g.d.querySelectorAll('figure.hl-fig--heat').length, 0, 'no heat map');
+    assert.equal(g.d.querySelectorAll('.hl-attack').length, 1, 'the strip is kept');
+    assert.equal(g.d.querySelectorAll('.hl-attack .hl-attack__export').length, 1);
+  } finally { g.w.close(); }
+});
+
+test('p7 strip row: for a table with a heat map the row wants no strip and one working button on the heat map\'s source line; it FAILS on a strip drawn back, a missing, hidden or broken button, and a wrong count', () => {
+  const heatTable = (patch, top) => Object.assign({ inline: true, sourceBlocks: 9, tablesRead: 4, stripsOnPage: 0, unpaired: 0, tables: [Object.assign({ index: 3, label: '4. MITRE ATT&CK Mapping', panel: 'tab-chain', rows: 17, withId: 16, mapped: true, ids: 16, idRows: 17, strip: null,
+    heat: Object.assign({ exportCount: 1, exportVisible: true, exportText: '↓ Navigator layer', loose: 0, download: { file: 'x-layer.json', techniques: 16, domain: 'enterprise-attack' } }, patch || {}) }, top || {})] }, {});
+  const v = G.attackStripVerdict(heatTable()); assert.equal(v.ok, true, v.detail); assert.match(v.detail, /heat map, no strip, Navigator layer on its source line, download x-layer\.json with 16/);
+  const fail = (m, re) => { const x = G.attackStripVerdict(m); assert.equal(x.ok, false, JSON.stringify(x)); assert.match(x.why.join(' | '), re); };
+  fail(heatTable({ exportCount: 0, exportVisible: false, exportText: null, download: null }), /has no Navigator layer button on its heat map/);
+  fail(heatTable({ exportVisible: false }), /Navigator layer button is not painted/);
+  fail(heatTable({ exportText: 'Download' }), /download button reads/);
+  fail(heatTable({ download: { error: 'clicking the button offered no file' } }), /offered no usable file/);
+  fail(heatTable({ download: { file: 'x.json', techniques: 0 } }), /0 technique\(s\) in its layer/);
+  fail(heatTable({ download: { file: 'x-layer.json', techniques: 40, domain: 'e' } }), /lists 40 techniques, the table has 16 distinct technique IDs on 17 mapped rows/);
+  fail(heatTable({ download: { file: 'x-layer.json', techniques: 3, domain: 'e' } }), /lists 3 techniques/);
+  fail(heatTable({ loose: 1 }), /1 further Navigator layer button/);
+  fail(heatTable({}, { strip: { chrome: true, segs: 15, techniques: 16, count: '16 techniques', visible: true, exportCount: 1, exportVisible: true, exportText: '↓ Navigator layer', download: { file: 'x.json', techniques: 16 } } }), /a coverage strip is still drawn above the heat map that shows the same thing/);
+  // control: the same measurement on a dashboard page (no inline flag) is judged as before, by its strip
+  const dash = heatTable(); dash.inline = false;
+  const dv = G.attackStripVerdict(dash); assert.equal(dv.ok, false); assert.match(dv.why.join(' '), /has no coverage strip/);
+  // the real measurement on a jsdom page names the heat map's button and finds no strip
+  const f = page(true, REPORT, null, '', { strip: true });
+  try {
+    f.w.Range.prototype.getBoundingClientRect = function () { return { left: 0, right: 0, top: 0, bottom: 0, width: 0, height: 0 }; };
+    const T = f.w.eval('(' + G.attackTablesInPage.toString() + ')(' + JSON.stringify(G.ATTACK_TACTICS) + ')');
+    const x = T.list.filter((y) => y.mapped); assert.equal(x.length, 1); assert.ok(x[0].heatFig && x[0].heatFig.classList.contains('hl-fig--heat')); assert.equal(x[0].strip, null); assert.equal(T.inline, true);
+    assert.equal(x[0].ids, 3); assert.equal(x[0].idRows, 3);
+  } finally { f.w.close(); }
 });
