@@ -1014,7 +1014,16 @@
     });
     if (!strip) return;
     var btn = strip.querySelector('.hl-attack__export'), src = fig.querySelector('.hl-fig-src');
-    removedStrips.push({ strip: strip, parent: strip.parentNode, next: strip.nextSibling, btn: btn, head: btn && btn.parentNode });
+    // One-page view hides every figure, so the moved button would be unreachable there (Joseph, 2026-11-16: "fix the one-page navigator button too"). A stand-in, shown only in one-page view, sits where
+    // the strip was and clicks the same button, so the one handler serves both views. It carries its own class, not hl-attack__export, so tabbed-view rows still see exactly one Navigator layer button.
+    var hold = null;
+    if (btn) {
+      hold = make('div', 'hl-onepage-nav'); hold.setAttribute('data-rv-chrome', ''); hold.setAttribute('data-pagefind-ignore', '');
+      var px = make('button', 'hl-onepage-nav__btn', btn.textContent, hold); px.type = 'button';
+      px.addEventListener('click', function () { btn.click(); });
+      strip.parentNode.insertBefore(hold, strip);
+    }
+    removedStrips.push({ strip: strip, parent: strip.parentNode, next: strip.nextSibling, btn: btn, head: btn && btn.parentNode, hold: hold });
     if (btn && src) src.appendChild(btn);
     strip.remove();
   }
@@ -2015,7 +2024,7 @@
     // original source. Existing layout assets and pre-existing chrome survive.
     document.querySelectorAll('.hl-rv-hit').forEach(function (n) { n.replaceWith(document.createTextNode(n.textContent)); });
     document.querySelectorAll('[data-rv-chrome]').forEach(function (n) { if (!originalChrome.has(n)) n.remove(); });
-    removedStrips.forEach(function (r) { if (r.btn && r.head) r.head.appendChild(r.btn); r.parent.insertBefore(r.strip, r.next); });   // T-0637 (p7): a failed build brings back the coverage strip it took away, with its button
+    removedStrips.forEach(function (r) { if (r.btn && r.head) r.head.appendChild(r.btn); r.parent.insertBefore(r.strip, r.next); if (r.hold) r.hold.remove(); });   // T-0637 (p7): a failed build brings back the coverage strip it took away, with its button
     content.replaceChildren.apply(content, sourceNodes);
     root.classList.remove('hl-rv-ready', 'hl-tabbed', 'hl-onepage', 'hl-rv-reading');
     if (page) delete page.dataset.rvHue;

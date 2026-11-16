@@ -1555,3 +1555,8 @@ html:has(.hl-report-page) {
 .hl-report-page.hl-figs-inline .hl-fig .hl-rv-cell[data-rv-status="INFERRED"] { background: repeating-linear-gradient(135deg, rgba(250, 204, 21, 0.75) 0 2px, rgba(250, 204, 21, 0.22) 2px 6px); }
 .hl-report-page.hl-figs-inline .hl-fig-src > .hl-attack__export { display: inline-flex; align-items: center; min-height: 44px; margin: 8px 0 0 14px; padding: 0 14px; font: 600 var(--hl-fs-meta) var(--hl-font-sans); color: var(--fc); background: transparent; border: 1px solid var(--fc); border-radius: 3px; opacity: 1; cursor: pointer; vertical-align: middle; }
 .hl-report-page.hl-figs-inline .hl-fig-src > .hl-attack__export:hover, .hl-report-page.hl-figs-inline .hl-fig-src > .hl-attack__export:focus-visible { background: color-mix(in srgb, var(--fc) 14%, transparent); }
+/* T-0637: the one-page stand-in for the heat map's Navigator layer button (figures are hidden in one-page view). Hidden in the tabbed view and in print. */
+.hl-report-page.hl-figs-inline .hl-onepage-nav { display: none; }
+.hl-report-page.hl-figs-inline .hl-onepage .hl-onepage-nav, .hl-onepage .hl-report-page.hl-figs-inline .hl-onepage-nav { display: block; margin: 12px 0; }
+.hl-report-page.hl-figs-inline .hl-onepage-nav__btn { display: inline-flex; align-items: center; min-height: 44px; padding: 0 14px; font: 600 var(--hl-fs-meta) var(--hl-font-sans); color: var(--acc); background: transparent; border: 1px solid var(--acc); border-radius: 3px; cursor: pointer; }
+@media print { .hl-report-page.hl-figs-inline .hl-onepage-nav { display: none !important; } }

@@ -36,7 +36,7 @@ test('no report opts back to the dashboard (site rollout, Joseph 2026-11-15); th
 test('the cache-busters moved with the stylesheet and the script (both carry the same value)', () => {
   const a = read('_layouts/post.html').match(/hl-report-tabs\.js' \| relative_url \}\}\?v=([0-9.]+)/)[1];
   const b = read('_includes/default/head.liquid').match(/hl-report-tabs\.css' \| relative_url \}\}\?v=([0-9.]+)/)[1];
-  assert.equal(a, b); assert.equal(a, '20261116.4');
+  assert.equal(a, b); assert.equal(a, '20261116.5');
 });
 
 test('every rule the inline block adds to the stylesheet is scoped under .hl-figs-inline, so no other report can see it', () => {
@@ -754,6 +754,16 @@ test('p7 coverage strip: an inline page that draws the heat map draws no strip a
     btns[0].click();
     assert.match(f.w.__dl, /-layer\.json$/);
     const layer = JSON.parse(f.w.__blob.text);
+    // one-page view hides the figure, so a stand-in button sits where the strip was and offers the same file (Joseph 2026-11-16)
+    const px = d.querySelectorAll('.hl-onepage-nav__btn');
+    assert.equal(px.length, 1, 'one one-page stand-in');
+    assert.ok(px[0].closest('[data-rv-chrome]'), 'the stand-in is generated chrome');
+    assert.equal(heat.contains(px[0]), false, 'the stand-in is outside the figure one-page view hides');
+    f.w.__dl = null; f.w.__blob = null; px[0].click();
+    assert.match(f.w.__dl, /-layer\.json$/, 'the stand-in offers the same layer file');
+    assert.equal(JSON.parse(f.w.__blob.text).techniques.length, layer.techniques.length, 'with the same techniques');
+    assert.match(css, /\.hl-figs-inline \.hl-onepage-nav \{ display: none; \}/, 'hidden in the tabbed view');
+    assert.match(css, /\.hl-onepage \.hl-report-page\.hl-figs-inline \.hl-onepage-nav \{ display: block/, 'shown in one-page view');
     assert.equal(layer.domain, 'enterprise-attack'); assert.deepEqual(layer.techniques.map((t) => t.techniqueID).sort(), ['T1059', 'T1059.004', 'T1190']);
     // the report's own words are unchanged
     const clone = d.createElement('div'); [...d.querySelectorAll('.hl-rv-source')].forEach((s) => clone.appendChild(s.cloneNode(true)));
