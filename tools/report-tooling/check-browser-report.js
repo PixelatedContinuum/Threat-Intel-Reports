@@ -3275,7 +3275,7 @@ function inlineTimelineVerdict(m) {
     if (m.strip.h > stripMax) why.push('the strip is ' + Math.round(m.strip.h) + ' px tall (at most ' + stripMax + ' for ' + lanes + ' lane(s))');
     if (m.strip.scrollW > m.strip.clientW + 1 && !/^(auto|scroll)$/.test(m.strip.ovx)) why.push('the strip is wider than its box (' + m.strip.scrollW + ' of ' + m.strip.clientW + ' px) and does not scroll');
   }
-  var figMax = m.vw >= 1000 ? 300 : (m.vw >= 700 ? 340 : 460), bounded = lanes === 1 && !m.callout;
+  /* bounds include the figure panel (padding, FIGURE eyebrow, 18px caption; Joseph 2026-11-15): about 120 px over the strip alone; the old stacked tower was 1,270-1,650 px */ var figMax = m.vw >= 1000 ? 420 : (m.vw >= 700 ? 480 : 620), bounded = lanes === 1 && !m.callout;
   if (bounded && m.figH > figMax) why.push('the figure is ' + Math.round(m.figH) + ' px tall (at most ' + figMax + ' at ' + m.vw + ' px wide)');
   if (m.pageOverflow > 1) why.push('the page scrolls sideways by ' + m.pageOverflow + ' px');
   return { notChecked: false, ok: why.length === 0, why: why, detail: n + ' marker(s) against ' + m.tableRows + ' chronology row(s); ' + hits + ' overlapping pair(s), ' + m.labels.length + ' gap label(s) of ' + want.length + ' expected, ' + gaps.length + ' gap(s) compared for growth (' + grewChecked + ' pair(s) a factor of ten apart); strip ' + (m.strip ? Math.round(m.strip.h) + ' px tall, content ' + m.strip.scrollW + ' in a ' + m.strip.clientW + ' px box' : 'absent') + '; figure ' + Math.round(m.figH) + ' px tall at ' + m.vw + ' px' + (bounded ? ' (bound ' + figMax + ')' : ' (' + lanes + ' lane(s)' + (m.callout ? ', with a callout' : '') + ': no whole-figure bound applied)') + (why.length ? '; ' + why.join('; ') : '') };
