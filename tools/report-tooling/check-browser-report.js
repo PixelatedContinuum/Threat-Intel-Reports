@@ -563,7 +563,8 @@ var SECTION_RENDER_EXPR = '(function(){' +
   '[].slice.call(document.querySelectorAll(".hl-rv-source")).forEach(function(block){' +
   'var h=block.querySelector("h2");if(!h||!h.id)return;' +
   'var kids=[].slice.call(block.children),bad=[];' +
-  'kids.forEach(function(el){if(el.matches("figure.hl-fig"))return;var rs=why(el);if(!rs.length)return;' +
+  'var inl=!!document.querySelector(".hl-figs-inline");' +
+  'kids.forEach(function(el){if(el.matches("figure.hl-fig"))return;if(inl&&el.matches(".hl-rv-minibar-anchor,.hl-tbar-filters,.hl-facts-block")){out.generated=(out.generated||0)+1;return;}var rs=why(el);if(!rs.length)return;' +
   'bad.push((el===h?"heading":el.tagName.toLowerCase()+(el.className?"."+String(el.className).split(" ")[0]:""))+" ("+rs.join(", ")+")");});' +
   'out.count++;out.sections[h.id]={blocks:kids.length,bad:bad};});' +
   'return out;})()';
@@ -1891,13 +1892,13 @@ async function infoRows(page, url) {
 /* (7) No report text is hidden at rest. Every paragraph, list item and table cell of the report's own sections in the open tab is drawn (a
    box with area, not display:none, not visibility:hidden), except inside a closed <details> (a teardown is the report's own fold). The check
    covers the open tab, then the next, and it reports how many it measured. The control hides one report paragraph and the row must FAIL. */
-var TEXT_HIDDEN_EXPR = '(function(){var n=0,hidden=[];var secs=[].slice.call(document.querySelectorAll(".hl-rv-panel:not([hidden]) .hl-rv-source"));' +
-  'secs.forEach(function(s){[].slice.call(s.querySelectorAll("p,li,td,th,h2,h3,h4,figcaption")).forEach(function(e){if(!e.textContent.trim())return;var d=e.closest("details");if(d&&!d.open&&d!==e)return;' +
+var TEXT_HIDDEN_EXPR = '(function(){var n=0,skipped=0,hidden=[];var secs=[].slice.call(document.querySelectorAll(".hl-rv-panel:not([hidden]) .hl-rv-source"));' +
+  'secs.forEach(function(s){[].slice.call(s.querySelectorAll("p,li,td,th,h2,h3,h4,figcaption")).forEach(function(e){if(!e.textContent.trim())return;var d=e.closest("details");if(d&&!d.open&&d!==e)return;if(e.closest(".hl-rv-pop")){skipped++;return;}' +
   'var cs=getComputedStyle(e),r=e.getBoundingClientRect();n++;if(cs.display==="none"||cs.visibility==="hidden"||r.width===0||r.height===0)hidden.push((e.tagName+" "+e.textContent.trim().slice(0,40)));});});' +
-  'return {sections:secs.length,measured:n,hidden:hidden.slice(0,6),hiddenCount:hidden.length};})()';
+  'return {sections:secs.length,measured:n,skipped:skipped,hidden:hidden.slice(0,6),hiddenCount:hidden.length};})()';
 function textHiddenVerdict(m) {
   if (!m || !m.sections || !m.measured) return { notChecked: true, ok: false, detail: 'no report paragraph was measured in the open tab (' + (m ? m.sections + ' sections, ' + m.measured + ' text blocks' : 'nothing measured') + ')' };
-  return { notChecked: false, ok: m.hiddenCount === 0, why: m.hidden, detail: m.sections + ' report section(s), ' + m.measured + ' text block(s) measured, ' + m.hiddenCount + ' hidden' + (m.hiddenCount ? ': ' + m.hidden.join(' | ') : '') };
+  return { notChecked: false, ok: m.hiddenCount === 0, why: m.hidden, detail: m.sections + ' report section(s), ' + m.measured + ' text block(s) measured' + (m.skipped ? ' (' + m.skipped + ' generated popover note(s) left out: they are shut on purpose)' : '') + ', ' + m.hiddenCount + ' hidden' + (m.hiddenCount ? ': ' + m.hidden.join(' | ') : '') };
 }
 async function textHiddenRows(page, url) {
   var name = 'no report text is hidden at rest in the open tab';
@@ -1911,7 +1912,7 @@ async function textHiddenRows(page, url) {
       if (v.notChecked) check('NOT CHECKED: ' + states[i][0] + 'x' + states[i][1] + ' ' + rowTabs()[t] + ': ' + name, false, v.detail); else check(states[i][0] + 'x' + states[i][1] + ' ' + rowTabs()[t] + ': ' + name, v.ok, v.detail);
     }
     if (i === 0) {
-      await page.evaluate('(function(){var p=document.querySelector(".hl-rv-panel:not([hidden]) .hl-rv-source p");if(p)p.style.display="none";})()');
+      await page.evaluate('(function(){var p=[].slice.call(document.querySelectorAll(".hl-rv-panel:not([hidden]) .hl-rv-source p")).filter(function(x){return !x.closest(".hl-rv-pop");})[0];if(p)p.style.display="none";})()');
       var c = textHiddenVerdict(await page.json(TEXT_HIDDEN_EXPR));
       check('control: with one report paragraph hidden the text-hidden row FAILS', c.ok === false && !c.notChecked, c.ok === false ? 'FAILS as designed: ' + c.detail : 'the control did NOT fire: ' + c.detail);
     }
@@ -2132,6 +2133,7 @@ function chainMeasure() {
     return { carry: !!r.querySelector('.hl-rv-carry'), ev: evp ? t(evp) : null, id: tidEl ? t(tidEl) : (((r.cells[0] ? t(r.cells[0]) : '').match(TID)) || [''])[0], name: nc ? t(nc) : '' };
   });
   return {
+    attackAligned: attackSrc ? attackSrc.cells.every(function (c) { return c.length === attackSrc.hs.length; }) : null,
     panel: true, console: !!con, search: !!(con && con.querySelector('input[type=search]')), chips: chips, rows: rows.length, hiddenRows: rows.filter(function (r) { return r.hidden; }).length,
     count: con ? t(con.querySelector('.hl-rv-count')) : null, stageSrc: stageSrc ? stageSrc.rows : 0, attackSrc: attackSrc ? attackSrc.rows : 0, keySrc: keySrc ? keySrc.rows : 0,
     nodes: nodes.length, cards: cards.length,
@@ -2162,6 +2164,8 @@ function chainLight() {
   var P = document.getElementById('tab-chain'), b = P.querySelector('.hl-rv-procedures button.hl-rv-tac') || (document.querySelector('.hl-figs-inline') ? P.querySelector('.hl-rv-console .hl-rv-fchip[data-rv-facet="Tactic"]') : null); if (!b) return { tactic: null };
   var name = b.dataset.rvTactic || b.dataset.rvValue, cards = [].slice.call(P.querySelectorAll('.hl-rv-stage'));
   var nodes = [].slice.call(P.querySelectorAll('.hl-rv-flow .hl-rv-fnode'));
+  /* T-0637 (p4): the dashboard draws no tactic button unless a stage has a linked procedure row, so the row is NOT CHECKED there; an inline page always has the console's Tactic chips, so the same condition is read from the stage nodes */
+  if (document.querySelector('.hl-figs-inline') && !nodes.some(function (n) { return (n.getAttribute('data-rv-rows') || '') !== ''; })) return { tactic: null, nodes: nodes.length, noLinks: true };
   var inl = !!document.querySelector('.hl-figs-inline') && !cards.length;   /* T-0637: no story cards; each node names the tactics of the rows it links */
   var expect = inl ? nodes.map(function (n, i) { return (n.getAttribute('data-rv-tactics') || '').split('|').indexOf(name) >= 0 ? i : -1; }).filter(function (i) { return i >= 0; })
     : cards.map(function (c, i) { return [].slice.call(c.querySelectorAll('a.hl-rv-procedure .hl-rv-pname small')).some(function (s) { return s.textContent.indexOf(name) === 0; }) ? i : -1; }).filter(function (i) { return i >= 0; });
@@ -2174,6 +2178,7 @@ var CHAIN_EXPR = '(' + chainMeasure.toString() + ')()', CHAINSTATE_EXPR = '(' + 
 function consoleVerdict(m, pressed, cleared, attackRows) {
   if (!m || !m.panel) return { notChecked: true, ok: false, detail: 'no Attack chain panel was found, so nothing was measured' };
   if (!attackRows) return { notChecked: true, ok: false, detail: 'this report has no ATT&CK table (0 source rows)' };
+  if (m.inline && m.attackAligned === false) return { notChecked: true, ok: false, detail: INLINE_SPAN_WHY };
   var bad = [];
   if (!m.console) bad.push('no filter console is drawn');
   if (!m.search) bad.push('the console has no search box');
@@ -2225,7 +2230,7 @@ function flowVerdict(m) {
 }
 /* Linked tactic highlighting: focusing a tactic lights exactly the stages whose linked rows carry that tactic (measured from the story's own rows); leaving clears it. */
 function lightVerdict(lit, cleared) {
-  if (!lit || lit.tactic === null) return { notChecked: true, ok: false, detail: 'this report has no stage table with linked procedure rows, so the table draws no tactic button' };
+  if (!lit || lit.tactic === null) return { notChecked: true, ok: false, detail: 'this report has no stage table with linked procedure rows, so the table draws no tactic button' + (lit && lit.noLinks ? ' (inline page: ' + lit.nodes + ' stage node(s), none linked to a procedure row, so no stage can be lit by a tactic)' : '') };
   var bad = [];
   if (lit.lit.join(',') !== lit.expect.join(',')) bad.push('lit stage node(s) [' + lit.lit.join(',') + '], the story rows with tactic ' + lit.tactic + ' are in stage(s) [' + lit.expect.join(',') + ']');
   if (!lit.inline && lit.litCards.join(',') !== lit.expect.join(',')) bad.push('lit story card(s) [' + lit.litCards.join(',') + '], expected [' + lit.expect.join(',') + ']');
@@ -2273,11 +2278,13 @@ function chainTableVerdict(m, attackRows) {
   } else { if (m.carry) bad.push(m.carry + ' row(s) are marked but the report has no key list'); if (m.ev) bad.push(m.ev + ' evidence note(s) drawn but the report has no key list'); }
   return { notChecked: false, ok: bad.length === 0, why: bad, detail: m.rows + ' row(s) against ' + attackRows + '; ' + m.carry + ' marked of ' + m.keySrc + ' list row(s)' + (bad.length ? '; ' + bad.join('; ') : '') };
 }
+var INLINE_SPAN_WHY = 'the report\'s ATT&CK table has rows whose cells do not line up with its header columns (a cell that spans rows, such as a tactic written once for the rows under it, leaves the rows after it a cell short), so the page draws no filter console on it, because hiding a row would hide the spanned cell and shift the cells of the rows after it; there is no console to measure';
 /* T-0637: the inline-figures page's version of the procedure-table row. The console is attached directly above the report's own ATT&CK table, which keeps every row (none hidden at rest) and carries no generated mark, no tactic button
    and no second copy of itself in a view. */
 function inlineChainTableVerdict(m, attackRows) {
   if (!m || !m.panel) return { notChecked: true, ok: false, detail: 'no Attack chain panel was found, so nothing was measured' };
   if (!attackRows) return { notChecked: true, ok: false, detail: 'this report has no ATT&CK table (0 source rows)' };
+  if (m.attackAligned === false) return { notChecked: true, ok: false, detail: INLINE_SPAN_WHY };
   var bad = [];
   if (m.rows !== attackRows) bad.push('the report\'s table has ' + m.rows + ' row(s) on the page, the source has ' + attackRows);
   if (m.hiddenRows) bad.push(m.hiddenRows + ' row(s) hidden at rest');
@@ -3278,7 +3285,7 @@ function inlineTimelineVerdict(m) {
   /* bounds include the figure panel (padding, FIGURE eyebrow, 18px caption; Joseph 2026-11-15): about 120 px over the strip alone; the old stacked tower was 1,270-1,650 px */ var figMax = m.vw >= 1000 ? 420 : (m.vw >= 700 ? 480 : 620), bounded = lanes === 1 && !m.callout;
   if (bounded && m.figH > figMax) why.push('the figure is ' + Math.round(m.figH) + ' px tall (at most ' + figMax + ' at ' + m.vw + ' px wide)');
   if (m.pageOverflow > 1) why.push('the page scrolls sideways by ' + m.pageOverflow + ' px');
-  return { notChecked: false, ok: why.length === 0, why: why, detail: n + ' marker(s) against ' + m.tableRows + ' chronology row(s); ' + hits + ' overlapping pair(s), ' + m.labels.length + ' gap label(s) of ' + want.length + ' expected, ' + gaps.length + ' gap(s) compared for growth (' + grewChecked + ' pair(s) a factor of ten apart); strip ' + (m.strip ? Math.round(m.strip.h) + ' px tall, content ' + m.strip.scrollW + ' in a ' + m.strip.clientW + ' px box' : 'absent') + '; figure ' + Math.round(m.figH) + ' px tall at ' + m.vw + ' px' + (bounded ? ' (bound ' + figMax + ')' : ' (' + lanes + ' lane(s)' + (m.callout ? ', with a callout' : '') + ': no whole-figure bound applied)') + (why.length ? '; ' + why.join('; ') : '') };
+  return { notChecked: false, ok: why.length === 0, why: why, grew: grewChecked, gapsN: gaps.length, detail: n + ' marker(s) against ' + m.tableRows + ' chronology row(s); ' + hits + ' overlapping pair(s), ' + m.labels.length + ' gap label(s) of ' + want.length + ' expected, ' + gaps.length + ' gap(s) compared for growth (' + grewChecked + ' pair(s) a factor of ten apart); strip ' + (m.strip ? Math.round(m.strip.h) + ' px tall, content ' + m.strip.scrollW + ' in a ' + m.strip.clientW + ' px box' : 'absent') + '; figure ' + Math.round(m.figH) + ' px tall at ' + m.vw + ' px' + (bounded ? ' (bound ' + figMax + ')' : ' (' + lanes + ' lane(s)' + (m.callout ? ', with a callout' : '') + ': no whole-figure bound applied)') + (why.length ? '; ' + why.join('; ') : '') };
 }
 async function timelineRows(page, url, html) {
   var nameA = 'the timeline marks are large (dots 32 px, numbers 18 px; smaller on a phone), never overlap, and every event is present';
@@ -3296,14 +3303,23 @@ async function timelineRows(page, url, html) {
        row then checks what the page shows INSTEAD: no timeline tab, or the documented "View unavailable" notice, and no mark drawn. */
     var tlTab = liveTokens().indexOf('timeline') >= 0;
     if (!tlTab || (SHAPES && SHAPES.timeline && SHAPES.timeline.shape === false)) {
-      var drawn = await page.json('document.querySelectorAll(".hl-rv-marker, .hl-rv-vertical-marker, .hl-rv-timeline-legend").length');
-      var tlNotice = tlTab ? (await page.json(viewNoticeExpr('timeline'))).notice : null;
-      var noneOk = drawn === 0 && (!tlTab || (tlNotice && tlNotice.indexOf('View unavailable: needs') === 0));
+      var drawnExpr = 'document.querySelectorAll(".hl-rv-marker, .hl-rv-vertical-marker, .hl-rv-timeline-legend, figure.hl-fig--timeline").length';
+      var drawn = await page.json(drawnExpr);
+      /* T-0637 (p4): an inline page builds no timeline view, so there is no "View unavailable" notice to read: the report's own section is the whole tab, and the row asks that nothing of the timeline figure is drawn from a table that is not there */
+      var tlNotice = tlTab && !INLINE ? (await page.json(viewNoticeExpr('timeline'))).notice : null;
+      var noneOk = drawn === 0 && (!tlTab || INLINE || (tlNotice && tlNotice.indexOf('View unavailable: needs') === 0));
       var noneDetail = tlTab
-        ? 'the report has no Date / Observation chronology table: the timeline view says ' + JSON.stringify(tlNotice) + ' and draws ' + drawn + ' mark(s) or legend(s)'
+        ? 'the report has no Date / Observation chronology table: ' + (INLINE ? 'the inline page draws no timeline figure for it' : 'the timeline view says ' + JSON.stringify(tlNotice)) + ' and draws ' + drawn + ' mark(s), legend(s) or timeline figure(s)'
         : 'the report tags no section for the timeline tab, so the page builds none: ' + drawn + ' mark(s) or legend(s) drawn';
       check(w + 'x' + h + ': ' + nameA, noneOk, noneDetail);
       check(w + 'x' + h + ': ' + nameB, noneOk, noneDetail);
+      if (INLINE && tlTab && i === 0) {
+        /* control (known positive): a timeline mark and a figure put on the page where the report has no chronology table must make the same verdict FAIL */
+        await page.evaluate('(function(){var p=document.getElementById("tab-timeline")||document.body;var f=document.createElement("figure");f.className="hl-fig hl-fig--timeline";f.id="hl-gate-tl-ctl";p.appendChild(f);})()'); await CDP.sleep(100);
+        var cdrawn = await page.json(drawnExpr);
+        await page.evaluate('(function(){var f=document.getElementById("hl-gate-tl-ctl");if(f)f.remove();})()');
+        check('control: a timeline figure drawn on a report with no chronology table makes the no-timeline row FAIL', cdrawn > 0 && drawn === 0, cdrawn > 0 ? 'FAILS as designed: ' + cdrawn + ' timeline figure(s) or mark(s) drawn from no table' : 'the control did NOT fire: ' + cdrawn + ' drawn');
+      }
       continue;
     }
     /* T-0500.1.11: a chronology table whose dates do not parse is a table the report HAS, so SHAPES says shape true, yet the view draws no mark
@@ -3315,6 +3331,15 @@ async function timelineRows(page, url, html) {
       var want = SHAPES && SHAPES.timeline && typeof SHAPES.timeline.rows === 'number' ? SHAPES.timeline.rows : null;
       unparsedTimelineRows(unp, want, w + 'x' + h, nameA, nameB).forEach(function (row) { check(row.name, row.pass, row.detail); });
       continue;
+    }
+    if (INLINE) {
+      /* T-0637 (p4): a chronology with a row the page cannot place (a date cell such as "80+") draws no timeline on an inline page, as the dashboard draws no mark and says "dates do not parse": the marks and the legend are NOT CHECKED, and the figure-placement row is the one that checks nothing is drawn from it */
+      var tim = await page.json(INLINE_EXPR);
+      if (!(tim.figs || []).some(function (f) { return f.kind === 'timeline'; }) && tim.chronParses === false) {
+        var whyNC = 'the chronology has a row with no date the page can place, so the inline page draws no timeline figure (the figure-placement row checks that none is drawn); there is no mark or legend to measure';
+        check('NOT CHECKED: ' + w + 'x' + h + ': ' + nameA, false, whyNC); check('NOT CHECKED: ' + w + 'x' + h + ': ' + nameB, false, whyNC);
+        continue;
+      }
     }
     var m = await page.json(TIMELINE_EXPR);
     var tv = timelineVerdict(m), lv = legendVerdict(m);
@@ -3340,6 +3365,8 @@ async function inlineTimelineStripRows(page, url, html, w, h, withControls) {
     ['a marker removed makes the strip row FAIL', '(function(){var b=document.querySelector("figure.hl-fig--timeline .hl-rv-marker");if(b)b.remove();})()']
   ];
   for (var i = 0; i < faults.length; i++) {
+    /* T-0637 (p4): the equal-pitch fault is told from the right spacing only by a pair of gaps whose times are a factor of ten apart (a shorter time drawn wider needs a strictly shorter time); a report whose few events hold no such pair cannot show the widening, so this control is NOT CHECKED there */
+    if (i === 0 && !(v.grew > 0)) { check('NOT CHECKED: control: ' + faults[0][0], false, 'this report has ' + v.gapsN + ' gap(s) between its events and none pair is a factor of ten apart in time, so an equal pitch cannot be told from the right spacing here; the control needs such a pair'); continue; }
     await gotoAndWait(page, url);
     await page.evaluate('location.hash=' + JSON.stringify('#tab-timeline')); await CDP.sleep(350);   /* only reached when the report has a timeline tab: timelineRows returns before this for a page without one */
     await page.evaluate(faults[i][1]); await CDP.sleep(150);
@@ -3819,7 +3846,7 @@ function inlineMeasure() {
   var RISK_HEAD = /^(Risk (Dimension|Factor)|Dimension)$/i, RISK_SCORE = /^Score|^Rating/i;
   var found = {
     victims: pick('victims', function (h) { return has(h, /Organisation|Organization|Victim/i) && has(h, /Grade/i); })[0] || null,
-    stages: pick('chain', function (h) { return has(h, /^Stage$/i) && has(h, /What.*did/i); })[0] || null,
+    stages: pick('chain', function (h) { return has(h, /^(Stage|Phase)$/i) && has(h, /What.*(did|does|happens)/i); })[0] || null,   /* the same two header pairs the page reads (and the gate's SHAPES) */
     attack: pick('chain', function (h) { return has(h, /Tactic.*Technique/i) && has(h, /^Status$/i); }).sort(function (a, b) { return b.n - a.n; })[0] ||
       pick('chain', function (h) { return has(h, /Tactic.*Technique/i) || has(h, /^Tactic$/i) && has(h, /^Technique( ID)?$/i); }).sort(function (a, b) { return b.n - a.n; })[0] || null,
     chron: pick('timeline', function (h) { return has(h, /^Date|^Time|^When/i) && has(h, /Observation|Event/i); })[0] || null,
@@ -3872,7 +3899,15 @@ function inlineMeasure() {
     return { tab: (b.closest('.hl-rv-panel') || {}).id || '', tbl: idx, chips: [].slice.call(b.querySelectorAll('.hl-tbar-chip')).map(function (c) { return { v: c.dataset.rvValue, n: +t(c.querySelector('strong')), pressed: c.getAttribute('aria-pressed') }; }),
       console: !!b.querySelector('.hl-rv-console'), copy: [].slice.call(b.querySelectorAll('button')).filter(function (x) { return /^Copy/.test(x.textContent); }).length, count: t(b.querySelector('.hl-tbar-count')) };
   });
-  return { outside: all.filter(function (x) { return !x.closest('.hl-rv-source'); }).length, inSource: src.length, tables: meta.map(function (m) { return { i: m.i, tab: m.tab, n: m.n, hs: m.hs.join('|').slice(0, 60), closed: m.closed }; }),
+  /* T-0637 (p4): does every row of the chronology hold a date the page can place? The page draws no timeline for a table that has a row with none ("Hours static since discovery | 80+"): an ISO date in every date cell, or, when the table names one year only, a month and day that Date.parse reads with that year. Same rule as the page, read here from the cells. */
+  var chronParses = null;
+  if (found.chron) {
+    var ctb = src[found.chron.i], cbody = ctb && ctb.tBodies[0], chs = ctb ? [].slice.call((ctb.tHead || {}).rows ? ctb.tHead.rows[0].cells : ctb.rows[0].cells).map(t) : [], cdc = chs.findIndex(function (h) { return /^Date|^Time|^When/i.test(h); });
+    var ccells = cbody && cdc >= 0 ? [].slice.call(cbody.rows).map(function (r) { return t(r.cells[cdc]); }) : null;
+    if (ccells) { var cyears = {}; ccells.forEach(function (c) { (c.match(/\b20\d{2}\b/g) || []).forEach(function (y) { cyears[y] = 1; }); }); var cy = Object.keys(cyears);
+      chronParses = ccells.every(function (c) { if (/\d{4}-\d{2}-\d{2}/.test(c)) return true; return cy.length === 1 && !isNaN(Date.parse(c.replace(/\s*\(.*?\)/g, '') + ' ' + cy[0])); }); }
+  }
+  return { chronParses: chronParses, outside: all.filter(function (x) { return !x.closest('.hl-rv-source'); }).length, inSource: src.length, tables: meta.map(function (m) { return { i: m.i, tab: m.tab, n: m.n, hs: m.hs.join('|').slice(0, 60), closed: m.closed }; }),
     found: { victims: found.victims && found.victims.i, stages: found.stages && found.stages.i, attack: found.attack && found.attack.i, chron: found.chron && found.chron.i, judg: found.judg && found.judg.i, indic: found.indic && found.indic.i, risks: found.risks.map(function (m) { return m.i; }) },
     rows: { victims: found.victims && found.victims.n, stages: found.stages && found.stages.n, attack: found.attack && found.attack.n, chron: found.chron && found.chron.n, judg: found.judg && found.judg.n, risks: found.risks.map(function (m) { return m.n; }), riskNames: found.risks.map(function (m) { return m.names; }) },
     rule: rule, detTable: detTable ? src.indexOf(detTable) : -1, detPara: detBlock ? (function () { var p = detBlock.querySelector('p'); return p ? t(p).slice(0, 80) : ''; })() : '',
@@ -3900,7 +3935,11 @@ function inlinePlacementVerdict(m, shapes) {
   expectOne('grades', m.found.victims, 'grade strip');
   expectOne('chain', m.found.stages, 'stage ribbon and chain story');
   expectOne('heat', m.found.attack, 'technique heat map');
-  expectOne('timeline', m.found.chron, 'timeline');
+  if (m.found.chron !== null && m.found.chron !== undefined && m.found.chron >= 0 && m.chronParses === false) {
+    /* the chronology has a row with no date the page can place: the page draws no timeline and the table is right there (the dashboard says "View unavailable" for the same table) */
+    if ((kinds.timeline || []).length) bad.push((kinds.timeline || []).length + ' timeline figure(s) drawn from a chronology that has a row with no date the page can place');
+    listed.push('timeline (a date does not parse: none drawn)');
+  } else expectOne('timeline', m.found.chron, 'timeline');
   expectOne('dist', m.found.judg, 'confidence distribution');
   // risk: one figure per risk table, in order
   var rf = kinds.risk || [];
@@ -4063,37 +4102,75 @@ async function inlineArticleTables(page, url) {
   return n;
 }
 /* One-page mode and print restore the article order: the generated figures and the filters are not drawn, every row of a filtered table is back. */
-var INLINE_ONEPAGE_EXPR = '(function(){var figs=[].slice.call(document.querySelectorAll("figure.hl-fig,.hl-facts-block,.hl-tbar-filters"));var shown=figs.filter(function(f){var r=f.getBoundingClientRect();return r.width>0||r.height>0;});' +
-  'var rows=[].slice.call(document.querySelectorAll(".hl-rv-source tbody tr")),hid=rows.filter(function(r){return r.hidden;}).length;return {figs:figs.length,shown:shown.length,rows:rows.length,hiddenRows:hid,one:document.documentElement.classList.contains("hl-onepage")};})()';
+/* press the first chip of the ATT&CK console that hides some rows of the report's table but not all; returns whether one was pressed */
+var INLINE_CONSOLE_PRESS_EXPR = '(function(){var P=document.getElementById("tab-chain");var con=P&&P.querySelector(".hl-rv-console");if(!con)return false;var tb=con.closest(".hl-tbar"),nx=tb&&tb.nextElementSibling,t=nx&&nx.querySelector("table");var n=t&&t.tBodies[0]?t.tBodies[0].rows.length:0;' +
+  'var c=[].slice.call(con.querySelectorAll(".hl-rv-facets .hl-rv-fchip")).filter(function(x){var k=+(x.querySelector("strong")||{}).textContent;return k>0&&k<n&&x.getAttribute("aria-pressed")!=="true";})[0];if(!c)return false;c.scrollIntoView({block:"center"});c.click();return true;})()';
+var INLINE_ONEPAGE_EXPR = '(function(){var figs=[].slice.call(document.querySelectorAll("figure.hl-fig,.hl-facts-block,.hl-tbar-filters,.hl-rv-minibar-anchor"));var shown=figs.filter(function(f){var r=f.getBoundingClientRect();return r.width>0||r.height>0;});' +
+  'var rows=[].slice.call(document.querySelectorAll(".hl-rv-source tbody tr")),hid=rows.filter(function(r){return r.hidden;}).length;return {figs:figs.length,shown:shown.length,shownNames:shown.slice(0,3).map(function(f){return f.className.split(" ")[0];}),rows:rows.length,hiddenRows:hid,one:document.documentElement.classList.contains("hl-onepage")};})()';
+/* The first tab, in the report's order, whose toolbar has a chip to press (the Grade, Confidence and Type chips, or the ATT&CK console's chips are not toolbar chips): null when the report draws none. */
+var INLINE_CHIP_TAB_EXPR = '(function(){var tabs=[].slice.call(document.querySelectorAll(".hl-rv-panel"));for(var i=0;i<tabs.length;i++){var c=[].slice.call(tabs[i].querySelectorAll(".hl-tbar-chip")).filter(function(x){return x.dataset.rvValue!=="";})[0];if(c)return tabs[i].id.replace("tab-","");}return null;})()';
 async function inlineOnePageRows(page, url) {
-  var name = 'one-page mode and print hide the generated figures and filters and bring every filtered row back, leaving the article as written';
+  var nameFig = 'one-page mode and print hide the generated figures and filters, leaving the article as written';
+  var nameRows = 'one-page mode and print bring every row of a filtered table back';
   await setViewport(page, 1280, 900);
-  if (!(await gotoAndWait(page, url))) { check('NOT CHECKED: ' + name, false, 'the tab controller never built, so nothing was measured'); return; }
-  // filter something first so a row is hidden when the mode changes
-  var tab = hasTab('victims') ? 'victims' : hasTab('confidence') ? 'confidence' : null;
-  if (!tab) { check('NOT CHECKED: ' + name, false, 'the report has no tab with a filter toolbar, so no row could be hidden before the mode change'); return; }
-  await page.evaluate('location.hash="#tab-' + tab + '"'); await CDP.sleep(250);
-  var did = await page.json('(function(){var c=[].slice.call(document.querySelectorAll("#tab-' + tab + ' .hl-tbar-chip")).filter(function(x){return x.dataset.rvValue!=="";})[0];if(!c)return false;c.scrollIntoView({block:"center"});c.click();return true;})()');
+  if (!(await gotoAndWait(page, url))) { check('NOT CHECKED: ' + nameFig, false, 'the tab controller never built, so nothing was measured'); check('NOT CHECKED: ' + nameRows, false, 'the tab controller never built, so nothing was measured'); return; }
+  // filter something first so a row is hidden when the mode changes: the first tab with a toolbar chip, in the report's order
+  var tab = await page.json(INLINE_CHIP_TAB_EXPR);
+  var did = false, didCon = false;
+  if (tab) {
+    await page.evaluate('location.hash="#tab-' + tab + '"'); await CDP.sleep(250);
+    did = await page.json('(function(){var c=[].slice.call(document.querySelectorAll("#tab-' + tab + ' .hl-tbar-chip")).filter(function(x){return x.dataset.rvValue!=="";})[0];if(!c)return false;c.scrollIntoView({block:"center"});c.click();return true;})()');
+  }
+  // the ATT&CK console filters the report's own table too: its chip (one that hides some rows but not all) is pressed as well
+  if (hasTab('chain')) {
+    await page.evaluate('location.hash="#tab-chain"'); await CDP.sleep(250);
+    didCon = await page.json(INLINE_CONSOLE_PRESS_EXPR);
+  }
   var before = await page.json(INLINE_ONEPAGE_EXPR);
   await page.evaluate('location.hash="#one-page"'); await CDP.sleep(350);
   var one = await page.json(INLINE_ONEPAGE_EXPR);
-  await page.evaluate('location.hash="#tab-' + tab + '"'); await CDP.sleep(250);
-  await page.evaluate('(function(){var c=[].slice.call(document.querySelectorAll("#tab-' + tab + ' .hl-tbar-chip")).filter(function(x){return x.dataset.rvValue!=="";})[0];if(c){c.scrollIntoView({block:"center"});c.click();}})()');
+  // control (known positive): a stylesheet that draws the generated figures again in one-page mode must make the figures row FAIL
+  await page.evaluate('(function(){var s=document.createElement("style");s.id="hl-gate-onepage-ctl";s.textContent="html.hl-onepage .hl-report-page.hl-figs-inline figure.hl-fig.hl-fig.hl-fig,html.hl-onepage .hl-report-page.hl-figs-inline .hl-facts-block.hl-facts-block.hl-facts-block,html.hl-onepage .hl-report-page.hl-figs-inline .hl-tbar-filters.hl-tbar-filters.hl-tbar-filters{display:block !important;}";document.head.appendChild(s);})()'); await CDP.sleep(150);
+  var oneCtl = await page.json(INLINE_ONEPAGE_EXPR);
+  await page.evaluate('(function(){var s=document.getElementById("hl-gate-onepage-ctl");if(s)s.remove();})()'); await CDP.sleep(100);
+  if (tab) {
+    await page.evaluate('location.hash="#tab-' + tab + '"'); await CDP.sleep(250);
+    await page.evaluate('(function(){var c=[].slice.call(document.querySelectorAll("#tab-' + tab + ' .hl-tbar-chip")).filter(function(x){return x.dataset.rvValue!=="";})[0];if(c){c.scrollIntoView({block:"center"});c.click();}})()');
+  }
+  if (didCon) { await page.evaluate('location.hash="#tab-chain"'); await CDP.sleep(250); await page.json(INLINE_CONSOLE_PRESS_EXPR); }
   await page.send('Emulation.setEmulatedMedia', { media: 'print' });
   await page.evaluate('window.dispatchEvent(new Event("beforeprint"))'); await CDP.sleep(300);
   var pr = await page.json(INLINE_ONEPAGE_EXPR);
   await page.send('Emulation.setEmulatedMedia', { media: 'screen' });
   await page.evaluate('window.dispatchEvent(new Event("afterprint"))'); await CDP.sleep(250);
+  // row 1: the generated figures and filters are not drawn
   var bad = [];
-  if (!did) bad.push('no filter chip could be pressed, so the reset was not exercised');
-  if (did && !before.hiddenRows) bad.push('pressing a chip hid no row, so the reset was not exercised');
   if (!one.one) bad.push('the page is not in one-page mode');
-  if (one.shown) bad.push(one.shown + ' of ' + one.figs + ' generated figure or filter element(s) are drawn in one-page mode');
-  if (one.hiddenRows) bad.push(one.hiddenRows + ' row(s) still hidden in one-page mode');
-  if (pr.shown) bad.push(pr.shown + ' of ' + pr.figs + ' generated figure or filter element(s) are drawn in print');
-  if (pr.hiddenRows) bad.push(pr.hiddenRows + ' row(s) still hidden in print');
-  if (!one.figs) bad.push('no generated figure was found to measure');
-  check(name, bad.length === 0 && !!did, 'filtered state: ' + before.hiddenRows + ' of ' + before.rows + ' row(s) hidden; one-page: ' + one.shown + ' of ' + one.figs + ' drawn, ' + one.hiddenRows + ' hidden; print: ' + pr.shown + ' drawn, ' + pr.hiddenRows + ' hidden' + (bad.length ? '; ' + bad.join('; ') : ''));
+  if (one.shown) bad.push(one.shown + ' of ' + one.figs + ' generated figure or filter element(s) are drawn in one-page mode (' + one.shownNames.join(', ') + ')');
+  if (pr.shown) bad.push(pr.shown + ' of ' + pr.figs + ' generated figure or filter element(s) are drawn in print (' + pr.shownNames.join(', ') + ')');
+  var figDetail = 'one-page: ' + one.shown + ' of ' + one.figs + ' generated element(s) drawn; print: ' + pr.shown + ' of ' + pr.figs + ' drawn' + (bad.length ? '; ' + bad.join('; ') : '');
+  if (!one.figs) check('NOT CHECKED: ' + nameFig, false, 'the page drew no generated figure, facts line or filter, so there was nothing to hide');
+  else {
+    check(nameFig, bad.length === 0, figDetail);
+    check('control: a stylesheet that draws the generated figures again in one-page mode makes the figures row FAIL', oneCtl.shown > 0 && one.one, oneCtl.shown > 0 ? 'FAILS as designed: ' + oneCtl.shown + ' of ' + oneCtl.figs + ' generated element(s) drawn in one-page mode' : 'the control did NOT fire: ' + oneCtl.shown + ' of ' + oneCtl.figs + ' drawn');
+  }
+  // row 2: every row of a filtered table is back
+  if (!did && !didCon) check('NOT CHECKED: ' + nameRows, false, 'this report draws no filter on any tab (no toolbar chip, and no console chip that hides some rows of its ATT&CK table), so no row could be hidden before the mode change');
+  else {
+    var bad2 = [], pressedWhat = (did ? 'toolbar chip on tab ' + tab : '') + (did && didCon ? ' and ' : '') + (didCon ? 'console chip on the chain tab' : '');
+    if (!before.hiddenRows) bad2.push('pressing ' + pressedWhat + ' hid no row, so the reset was not exercised');
+    if (one.hiddenRows) bad2.push(one.hiddenRows + ' row(s) still hidden in one-page mode');
+    if (pr.hiddenRows) bad2.push(pr.hiddenRows + ' row(s) still hidden in print');
+    check(nameRows, bad2.length === 0, pressedWhat + ': filtered state ' + before.hiddenRows + ' of ' + before.rows + ' row(s) hidden; one-page: ' + one.hiddenRows + ' hidden; print: ' + pr.hiddenRows + ' hidden' + (bad2.length ? '; ' + bad2.join('; ') : ''));
+    if (before.hiddenRows) {
+      // control (known positive): a row left hidden in one-page mode must make the same measure FAIL
+      await page.evaluate('location.hash="#one-page"'); await CDP.sleep(350);
+      await page.evaluate('(function(){var r=document.querySelector(".hl-rv-source tbody tr");if(r){r.hidden=true;r.setAttribute("data-gate-ctl","1");}})()');
+      var rowCtl = await page.json(INLINE_ONEPAGE_EXPR);
+      await page.evaluate('(function(){var r=document.querySelector("[data-gate-ctl]");if(r){r.hidden=false;r.removeAttribute("data-gate-ctl");}})()');
+      check('control: a row left hidden in one-page mode makes the filtered-rows row FAIL', rowCtl.one && rowCtl.hiddenRows > 0, rowCtl.hiddenRows > 0 ? 'FAILS as designed: ' + rowCtl.hiddenRows + ' row(s) hidden in one-page mode' : 'the control did NOT fire: ' + rowCtl.hiddenRows + ' hidden');
+    }
+  }
   await page.evaluate('location.hash="#tab-' + firstTab() + '"'); await CDP.sleep(100);
 }
 var INLINE_FIT_EXPR = '(function(){var vw=document.documentElement.clientWidth,bad=[],n=0;[].slice.call(document.querySelectorAll(".hl-rv-panel:not([hidden]) figure.hl-fig, .hl-rv-panel:not([hidden]) .hl-facts-block")).forEach(function(f){n++;var r=f.getBoundingClientRect();if(r.right>vw+1||r.left<-1)bad.push(f.className.split(" ").pop()+" spans "+Math.round(r.left)+".."+Math.round(r.right)+" of "+vw);' +
@@ -4750,6 +4827,13 @@ async function tabbedChecks(page, opts) {
             ' section(s) not rendered: ' + notShown.join(' | ')
           : opts.authored.h2.length + ' of ' + opts.authored.h2.length +
             ' sections rendered, heading and every block, at this width'));
+      if (INLINE && width === 1280) {
+        /* T-0637 (p4): this row leaves out the generated elements one-page mode hides on purpose (the figures, the facts line, the filters, the slim-bar anchor); the control puts a hidden AUTHORED paragraph in the same place and the row must FAIL */
+        await page.evaluate('(function(){var b=[].slice.call(document.querySelectorAll(".hl-rv-source")).filter(function(x){var h=x.querySelector("h2");return h&&h.id&&x.querySelector(":scope > p");})[0];var p=b&&b.querySelector(":scope > p");if(p){p.setAttribute("data-gate-ctl","1");p.style.setProperty("display","none","important");}})()');
+        var cRender = await page.json(SECTION_RENDER_EXPR), cBad = Object.keys(cRender.sections).filter(function (k) { return cRender.sections[k].bad.length; });
+        await page.evaluate('(function(){var p=document.querySelector("[data-gate-ctl]");if(p){p.style.removeProperty("display");p.removeAttribute("data-gate-ctl");}})()');
+        check('control: an authored paragraph hidden in one-page mode makes the every-block row FAIL', cBad.length > 0, cBad.length ? 'FAILS as designed: ' + cBad.length + ' section(s) with a block not rendered, first "' + cBad[0] + '": ' + cRender.sections[cBad[0]].bad[0] : 'the control did NOT fire: ' + Object.keys(cRender.sections).length + ' section(s) measured, none with a hidden block');
+      }
     }
     await page.evaluate('location.hash="#tab-' + firstTab() + '"');
     await CDP.sleep(80);
@@ -5715,6 +5799,7 @@ if (require.main === module) {
     frontMatterLinks: frontMatterLinks,
     infoVerdict: infoVerdict, infoFits: infoFits,
     textHiddenVerdict: textHiddenVerdict,
+    TEXT_HIDDEN_EXPR: TEXT_HIDDEN_EXPR, SECTION_RENDER_EXPR: SECTION_RENDER_EXPR,
     riskBarVerdict: riskBarVerdict,
     heatVerdict: heatVerdict,
     squaresVerdict: squaresVerdict,
