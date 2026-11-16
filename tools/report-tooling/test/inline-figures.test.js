@@ -214,6 +214,11 @@ test('the browser gate\'s inline rows, run on the jsdom page: placement, once, c
     const inWrap2 = JSON.parse(JSON.stringify(f.w.eval(G.INLINE_EXPR)));
     wrap2.before(tbl); wrap2.remove();
     assert.equal(G.inlinePlacementVerdict(inWrap2, shapes).ok, false, 'bare text inside the wrapper before the table');
+    // review: bare text directly between the figure and its table FAILS
+    const bare = f.w.document.createTextNode('Unrelated prose'); heat.after(bare);
+    const between2 = JSON.parse(JSON.stringify(f.w.eval(G.INLINE_EXPR))); bare.remove();
+    assert.equal(G.inlinePlacementVerdict(between2, shapes).ok, false, 'bare text between the heat map and its table');
+    assert.equal(G.inlinePlacementVerdict(JSON.parse(JSON.stringify(f.w.eval(G.INLINE_EXPR))), shapes).ok, true, 'restored again');
     assert.equal(G.inlinePlacementVerdict(JSON.parse(JSON.stringify(f.w.eval(G.INLINE_EXPR))), shapes).ok, true, 'restored page passes again');
     const sq = JSON.parse(JSON.stringify(m)); sq.grade.REACHED = 0;
     assert.equal(G.inlineCountsVerdicts(sq, shapes).find((c) => /grade strip/.test(c.name)).v.ok, false, 'a square short');

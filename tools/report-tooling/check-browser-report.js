@@ -3898,8 +3898,10 @@ function inlineMeasure() {
   function adjacentTo(f, tbl) {
     if (!tbl) return false;
     for (var n = f; n && !(n.classList && n.classList.contains('hl-rv-panel')); n = n.parentElement) {
-      var s = n.nextElementSibling;
-      while (s && skip(s)) s = s.nextElementSibling;
+      /* every node after the figure counts, text included (review: bare text between the figure and the table passed) */
+      var s = n.nextSibling, text = false;
+      while (s && !(s.nodeType === 1 && !skip(s))) { if (s.nodeType === 3 && /\S/.test(s.nodeValue)) { text = true; break; } s = s.nextSibling; }
+      if (text) return false;
       if (!s) continue;
       if (s === tbl) return true;
       if (!s.contains(tbl)) return false;
