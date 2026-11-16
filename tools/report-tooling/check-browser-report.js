@@ -3293,7 +3293,7 @@ function inlineTimelineVerdict(m) {
     if (m.strip.h > stripMax) why.push('the strip is ' + Math.round(m.strip.h) + ' px tall (at most ' + stripMax + ' for ' + lanes + ' lane(s))');
     if (m.strip.scrollW > m.strip.clientW + 1 && !/^(auto|scroll)$/.test(m.strip.ovx)) why.push('the strip is wider than its box (' + m.strip.scrollW + ' of ' + m.strip.clientW + ' px) and does not scroll');
   }
-  /* bounds include the figure panel (padding, FIGURE eyebrow, 18px caption; Joseph 2026-11-15): about 120 px over the strip alone; the old stacked tower was 1,270-1,650 px */ var figMax = m.vw >= 1000 ? 420 : (m.vw >= 700 ? 480 : 620), bounded = lanes === 1 && !m.callout;
+  /* bounds include the figure panel (padding, the title and subtitle (p6; the FIGURE eyebrow and 18px caption before 2026-11-16); Joseph 2026-11-15): about 120 px over the strip alone; the old stacked tower was 1,270-1,650 px */ var figMax = m.vw >= 1000 ? 420 : (m.vw >= 700 ? 480 : 620), bounded = lanes === 1 && !m.callout;
   if (bounded && m.figH > figMax) why.push('the figure is ' + Math.round(m.figH) + ' px tall (at most ' + figMax + ' at ' + m.vw + ' px wide)');
   if (m.pageOverflow > 1) why.push('the page scrolls sideways by ' + m.pageOverflow + ' px');
   if (undated && !why.length) return { notChecked: true, ok: false, detail: undated + ' gap(s) between dates the page itself cannot place (no ISO date, and not one month and day under a single year), so the spacing was not compared with elapsed time; the order, overlap, count and height checks found nothing' };
@@ -4333,7 +4333,7 @@ function inlineEvidenceVerdict(m) {
     withText++;
     if (r.pev === null) { bad.push(who + ' has no evidence text; the table cell reads ' + JSON.stringify(String(r.cell).slice(0, 50))); return; }
     drawn++;
-    if (r.pev !== r.cell) bad.push(who + ' evidence text differs from the table cell: ' + JSON.stringify(r.pev.slice(0, 50)) + ' against ' + JSON.stringify(String(r.cell).slice(0, 50)));
+    if (r.pev !== r.cell) bad.push(who + ' evidence text differs from the table cell: ends ' + JSON.stringify(r.pev.slice(-40)) + ' against ' + JSON.stringify(String(r.cell).slice(-40)) + ' (' + r.pev.length + ' and ' + String(r.cell).length + ' characters)');
     if (r.over === 'ellipsis') bad.push(who + ' evidence text is cut off with an ellipsis');
     if (r.clamp && r.clamp !== 'none') bad.push(who + ' evidence text is clamped to ' + r.clamp + ' line(s)');
     if (r.sw > r.cw + TOL || r.sh > r.ch + TOL) bad.push(who + ' evidence text is wider or taller than its box (' + r.sw + 'x' + r.sh + ' in ' + r.cw + 'x' + r.ch + '), so it is clipped');
@@ -4437,7 +4437,8 @@ async function inlineEvidenceColourRows(page, url, tag, si) {
   var shown = await showChain();
   var m = shown ? await page.json(INLINE_EVIDENCE_EXPR) : { fig: false, why: 'no chain story is drawn on this page' };
   var v = inlineEvidenceVerdict(m);
-  row(ename, v);
+  /* A page that draws no chain story has nothing for this row to measure, and says so in the placement row (a stage ribbon drawn from no stage table FAILS there): no row, as for the count controls of a figure the report has no table for. A chain story that IS drawn but cannot be read (no linked row, a table that does not line up) stays a NOT CHECKED row. */
+  if (m.fig !== false) row(ename, v);
   if (!v.notChecked && v.ok) {
     var hasText = m.rows.some(function (r) { return r.pev !== null; });
     var mut = async function (script, name) {
