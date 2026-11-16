@@ -9,7 +9,7 @@ hl_idx: single
 <header class="hl-page-header hl-d-plate" style="--ph-accent: #58a6ff;">
   <div class="hl-page-header__label hl-d-kicker">Search</div>
   <h1 class="hl-page-header__title">Search the Ledger</h1>
-  <div class="hl-page-header__desc">Full-text search across every published report, detection page and IOC feed. Type an indicator, a technique, a tool name or a phrase, and narrow by section.</div>
+  <div class="hl-page-header__desc">Full-text search across every published report, detection page and IOC feed. Type an indicator, a technique, a tool name or a phrase, and narrow by section. Put a term in "quotes" to match it exactly.</div>
 </header>
 
 {%- comment -%}
@@ -22,6 +22,7 @@ hl_idx: single
   bookmarked.
 {%- endcomment -%}
 <link rel="stylesheet" href="{{ '/pagefind/pagefind-ui.css' | relative_url }}">
+<p id="hl-search-tip" class="hl-search__tip" aria-live="polite" hidden></p>
 <div id="hl-search" class="hl-search"></div>
 <p id="hl-search-notice" class="hl-search__notice" hidden></p>
 <script>
@@ -51,28 +52,27 @@ hl_idx: single
     } catch (e) { /* URL API missing: the search still works, the address bar just does not follow it */ }
   }
 
-  // One indicator typed on its own (an IPv4 with or without a port, a domain, a full MD5/SHA1/SHA256,
-  // a CVE id; fanged or defanged) is searched as an exact phrase (T-0652). Unquoted, Pagefind splits
-  // 74.208.158.106 into 74, 208, 158, 106 and prefix-matches each piece, so an absent IP returned hashes,
-  // version numbers and dates that merely start with those digits. Quoted, it matches the whole indicator
-  // or nothing (measured on the live index 2026-11-16: 87.106.143.220 went from 29 results, 2 wrong, to 27,
-  // all right; 74.208.158.106 from 5 wrong to 0). Only a lone indicator is quoted: Pagefind returned
-  // nothing for two quoted phrases together, and a quoted partial hash finds nothing where the bare
-  // prefix still works, so anything else goes through unchanged.
+  // Quoted search (T-0652). Unquoted, Pagefind splits 74.208.158.106 into 74, 208, 158, 106 and
+  // prefix-matches each piece, so a search stays broad: it also returns hashes, version numbers and
+  // dates that share those digits. That breadth is kept on purpose. A term the reader puts in quotes is
+  // matched whole, fanged or defanged (Pagefind does this natively; measured on the live index
+  // 2026-11-16: "87.106.143.220" 27 results, all right, against 29 with 2 wrong unquoted; an absent IP
+  // quoted returns none). When the box holds one unquoted indicator, a tip above it offers the quoted
+  // search in one click, since most readers will not know quotes do this.
   var INDICATOR = [
     /^\d{1,3}(?:\.\d{1,3}){3}(?::\d{1,5})?$/,                 // IPv4, optional port
     /^(?:[a-z0-9-]+\.)+[a-z][a-z0-9-]{1,62}$/i,               // domain
     /^(?:[a-f0-9]{32}|[a-f0-9]{40}|[a-f0-9]{64})$/i,          // MD5, SHA1, SHA256
     /^cve-\d{4}-\d{4,}$/i                                     // CVE id
   ];
-  function processTerm(term) {
+  function isLoneIndicator(term) {
     var t = (term || '').trim();
-    if (!t || /["\s]/.test(t)) return term;
+    if (!t || /["\s]/.test(t)) return false;
     var plain = t.replace(/\[\.\]|\(\.\)|\{\.\}|\[dot\]/gi, '.');
     for (var i = 0; i < INDICATOR.length; i++) {
-      if (INDICATOR[i].test(plain)) return '"' + plain + '"';
+      if (INDICATOR[i].test(plain)) return true;
     }
-    return term;
+    return false;
   }
 
   var s = document.createElement('script');
@@ -89,7 +89,6 @@ hl_idx: single
       showImages: false,
       excerptLength: 30,
       resetStyles: false,
-      processTerm: processTerm,
       // Several ticked Sections show the union of their results (T-0553). Pagefind ANDs an array of
       // values for one filter; this folder holds a front for pagefind.js that sends { any: [...] } instead.
       bundlePath: base + '/assets/js/pagefind-any/',
@@ -119,16 +118,37 @@ hl_idx: single
       var input = mount ? mount.querySelector('input.pagefind-ui__search-input') : null;
       return input ? input.value.trim() : '';
     }
+    // The quoted-search tip sits above the box; one click runs the exact search.
+    var tip = document.getElementById('hl-search-tip');
+    function updateTip(term) {
+      if (!tip) return;
+      if (!isLoneIndicator(term)) { tip.hidden = true; return; }
+      var exact = '"' + term.trim() + '"';
+      tip.textContent = 'Showing every page that shares part of this term. For an exact match, search ';
+      var b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'hl-search__tip-link';
+      b.textContent = exact;
+      b.addEventListener('click', function () {
+        var input = mount.querySelector('input.pagefind-ui__search-input');
+        if (input) input.value = exact;
+        ui.triggerSearch(exact);
+        syncUrl(exact);
+        updateTip(exact);
+      });
+      tip.appendChild(b);
+      tip.hidden = false;
+    }
     if (mount) {
-      mount.addEventListener('input', function () { syncUrl(currentTerm()); });
+      mount.addEventListener('input', function () { syncUrl(currentTerm()); updateTip(currentTerm()); });
       mount.addEventListener('click', function (ev) {
         var t = ev.target;
         if (t && t.closest && t.closest('.pagefind-ui__search-clear')) {
-          setTimeout(function () { syncUrl(currentTerm()); }, 0);
+          setTimeout(function () { syncUrl(currentTerm()); updateTip(currentTerm()); }, 0);
         }
       });
     }
-    if (initial && typeof ui.triggerSearch === 'function') ui.triggerSearch(initial);
+    if (initial && typeof ui.triggerSearch === 'function') { ui.triggerSearch(initial); updateTip(initial); }
 
     // Colour each result by the section its URL belongs to, the same palette the
     // listing cards use, and prepend a section chip. Pagefind renders results

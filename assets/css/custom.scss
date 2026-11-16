@@ -6383,6 +6383,23 @@ main.content:focus { outline: none; }
    gives #hl-search the same 12px. Scoped to .hl-idx so no other page moves. */
 .hl-idx .hl-search { margin-top: 12px; }
 
+/* Quoted-search tip (T-0652): shown above the box when it holds one unquoted indicator. */
+.hl-search__tip {
+  color:var(--hl-text-muted);
+  font-size:.85em;
+  margin:12px 0 0;
+}
+.hl-search__tip-link {
+  font:inherit;
+  font-family:var(--hl-font-mono, monospace);
+  background:none;
+  border:0;
+  padding:0;
+  color:var(--hl-accent-blue);
+  text-decoration:underline;
+  cursor:pointer;
+  word-break:break-all;
+}
 .hl-search__notice {
   color:var(--hl-text-muted);
   border:1px dashed var(--hl-border-card);
