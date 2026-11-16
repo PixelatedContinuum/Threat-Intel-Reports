@@ -701,6 +701,7 @@
     }
     function queue() { if (!ticking) { ticking = true; (window.requestAnimationFrame || function (f) { return setTimeout(f, 16); })(place); } }
     window.addEventListener('scroll', queue, { passive: true }); window.addEventListener('resize', queue);
+    if (inline) inlineResets.push(function () { state.q = ''; state.facet = {}; apply(); });   // T-0637 (p4): one-page mode and print bring back the rows this console hid in the report's own ATT&CK table, as the toolbar chips do
     apply();
     return { area: area, head: head, anchor: anchor, toggle: toggle, watch: function (el) { watched = el; queue(); } };
   }
