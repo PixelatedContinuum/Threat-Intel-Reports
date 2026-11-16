@@ -570,5 +570,6 @@ test('p6 colour row: PASS on brand colours at 4.5:1; FAIL on a white or grey fac
   assert.equal(G.inlineColourVerdict([r('figure title', 'fig', 1, 4.2)]).ok, false, 'under 4.5:1');
   assert.equal(G.inlineColourVerdict([r('figure title', 'fig', 0, 0)]).notChecked, true, 'zero elements is not a PASS');
   assert.equal(G.inlineColourVerdict([{ name: 'figure title', kind: 'fig', n: 2, read: 0, worst: null, neutral: 0, colours: {} }]).ok, false, 'elements whose colour could not be read');
+  assert.equal(G.inlineColourVerdict([{ name: 'figure title', kind: 'fig', n: 2, read: 1, worst: { ratio: 6.4, colour: '248,113,113', text: 'T' }, neutral: 0, colours: {} }]).ok, false, 'one of two elements unread is not a PASS (review_15773667294d46ae)');
   assert.ok(G.INLINE_COLOUR_SPEC.length >= 14 && /hl-fact strong/.test(G.INLINE_COLOUR_SPEC.map((x) => x[1]).join(' ')));
 });

@@ -4404,6 +4404,7 @@ function inlineColourVerdict(rows) {
   rows.forEach(function (r) {
     if (!r.n) return;
     if (!r.read) { bad.push(r.name + ': ' + r.n + ' element(s), none with a readable colour and fill'); return; }
+    if (r.read < r.n) bad.push(r.name + ': ' + r.read + ' of ' + r.n + ' element(s) had a readable colour and fill, so ' + (r.n - r.read) + ' went unmeasured');
     measured++; elements += r.read;
     listed.push(r.name + ' x' + r.read + ' min ' + r.worst.ratio.toFixed(1) + ':1');
     if (r.worst.ratio < 4.5) bad.push(r.name + ' reads ' + r.worst.ratio.toFixed(2) + ':1 (rgb ' + r.worst.colour + ', "' + r.worst.text + '"), under 4.5:1');
