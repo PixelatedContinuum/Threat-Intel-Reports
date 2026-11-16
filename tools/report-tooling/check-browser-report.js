@@ -1381,7 +1381,9 @@ var TYPE_SPEC = [
   ['sponsor mono label', '.hl-rvsp__label', 14, 14],
   ['header resource button', '.hl-quicklinks .hl-quicklink__label', 16, 15],
   /* T-0637: the text of an inline figure (a page without figures: inline has none of these elements, so none is measured and the count above is unchanged). The floor is the site's 15px. */
-  ['inline figure caption', '.hl-fig > figcaption', 16, 15],
+  ['inline figure title', '.hl-fig > figcaption .hl-fig-title', 16, 15],
+  ['inline figure subtitle', '.hl-fig > figcaption .hl-fig-sub', 15, 15],
+  ['inline chain-story evidence text', '.hl-fig--chain .hl-rv-pev', 15, 15],
   ['inline figure source line', '.hl-fig > .hl-fig-src, .hl-facts-block > .hl-fig-src', 15, 15],
   ['inline facts line', '.hl-fact', 16, 15],
   ['inline fact value', '.hl-fact strong', 16, 15],
@@ -3881,12 +3883,24 @@ function inlineMeasure() {
   var figs = [].slice.call(document.querySelectorAll('figure.hl-fig')).map(function (f) {
     var kind = (f.className.match(/hl-fig--(\w+)/) || [])[1] || '', prev = f.previousElementSibling, cap = f.firstElementChild, last = f.lastElementChild;
     var cs = getComputedStyle(f);
-    return { kind: kind, tab: (f.closest('.hl-rv-panel') || {}).id || '', next: nextTable(f), prevTag: prev ? prev.tagName : '', prevText: prev ? t(prev).slice(0, 160) : '', prevChrome: !!(prev && prev.hasAttribute('data-rv-chrome')),
+    var capTitle = cap ? cap.querySelector('.hl-fig-title') : null, capSub = cap ? cap.querySelector('.hl-fig-sub') : null;
+    return { title: capTitle ? t(capTitle) : '', sub: capSub ? t(capSub) : '', titlePx: capTitle ? parseFloat(getComputedStyle(capTitle).fontSize) : 0, subPx: capSub ? parseFloat(getComputedStyle(capSub).fontSize) : 0,
+      kind: kind, tab: (f.closest('.hl-rv-panel') || {}).id || '', next: nextTable(f), prevTag: prev ? prev.tagName : '', prevText: prev ? t(prev).slice(0, 160) : '', prevChrome: !!(prev && prev.hasAttribute('data-rv-chrome')),
       capOk: !!cap && cap.tagName === 'FIGCAPTION' && t(cap).length > 0, cap: cap ? t(cap) : '', srcOk: !!last && last.classList.contains('hl-fig-src') && t(last).length > 0, src: last ? t(last) : '',
       chrome: f.hasAttribute('data-rv-chrome') && f.hasAttribute('data-pagefind-ignore'), inDetailsClosed: !!(f.closest('details') && !f.closest('details').open),
       style: { bg: cs.backgroundColor, bt: parseFloat(cs.borderTopWidth), bb: parseFloat(cs.borderBottomWidth), bl: parseFloat(cs.borderLeftWidth), br: parseFloat(cs.borderRightWidth), rad: cs.borderTopLeftRadius, shadow: cs.boxShadow },
       capPx: cap ? parseFloat(getComputedStyle(cap).fontSize) : 0, srcPx: last ? parseFloat(getComputedStyle(last).fontSize) : 0, capFont: cap ? getComputedStyle(cap).fontFamily : '', srcFont: last ? getComputedStyle(last).fontFamily : '',
       capTop: cap ? cap.getBoundingClientRect().top : 0, drawTop: f.querySelector('.hl-fig-draw') ? f.querySelector('.hl-fig-draw').getBoundingClientRect().top : 0, srcTop: last ? last.getBoundingClientRect().top : 0 };
+  });
+  /* T-0637 (p6, Joseph 2026-11-16): nothing says FIGURE as a title. Every figcaption on the page, and the elements inside it, are read for text the stylesheet draws (::before, ::after) as well as the words themselves. */
+  var kickers = [], noPseudo = /jsdom/i.test(navigator.userAgent);   /* jsdom does not implement pseudo-element styles (and says so on stderr for each call): its pages are measured for text only */
+  if (!noPseudo) [].slice.call(document.querySelectorAll('figcaption')).forEach(function (c) {
+    [c].concat([].slice.call(c.querySelectorAll('*'))).forEach(function (el) {
+      ['::before', '::after'].forEach(function (ps) {
+        var ct = getComputedStyle(el, ps).content;
+        if (ct && ct !== 'none' && ct !== 'normal' && /figure/i.test(ct)) kickers.push((c.closest('figure') && c.closest('figure').className || 'figure') + ' ' + el.tagName.toLowerCase() + ps + ' draws ' + ct);
+      });
+    });
   });
   var facts = [].slice.call(document.querySelectorAll('#tab-overview .hl-facts .hl-fact')).map(function (f) { return { value: t(f.querySelector('strong')), text: t(f), title: f.title || '' }; });
   var fb = document.querySelector('#tab-overview .hl-facts-block');
@@ -3917,7 +3931,7 @@ function inlineMeasure() {
     if (ccells) { var cyears = {}; ccells.forEach(function (c) { (c.match(/\b20\d{2}\b/g) || []).forEach(function (y) { cyears[y] = 1; }); }); var cy = Object.keys(cyears);
       chronParses = ccells.every(function (c) { if (/\d{4}-\d{2}-\d{2}/.test(c)) return true; return cy.length === 1 && !isNaN(Date.parse(c.replace(/\s*\(.*?\)/g, '') + ' ' + cy[0])); }); }
   }
-  return { chronParses: chronParses, outside: all.filter(function (x) { return !x.closest('.hl-rv-source'); }).length, inSource: src.length, tables: meta.map(function (m) { return { i: m.i, tab: m.tab, n: m.n, hs: m.hs.join('|').slice(0, 60), closed: m.closed }; }),
+  return { kickers: kickers, chronParses: chronParses, outside: all.filter(function (x) { return !x.closest('.hl-rv-source'); }).length, inSource: src.length, tables: meta.map(function (m) { return { i: m.i, tab: m.tab, n: m.n, hs: m.hs.join('|').slice(0, 60), closed: m.closed }; }),
     found: { victims: found.victims && found.victims.i, stages: found.stages && found.stages.i, attack: found.attack && found.attack.i, chron: found.chron && found.chron.i, judg: found.judg && found.judg.i, indic: found.indic && found.indic.i, risks: found.risks.map(function (m) { return m.i; }) },
     rows: { victims: found.victims && found.victims.n, stages: found.stages && found.stages.n, attack: found.attack && found.attack.n, chron: found.chron && found.chron.n, judg: found.judg && found.judg.n, risks: found.risks.map(function (m) { return m.n; }), riskNames: found.risks.map(function (m) { return m.names; }) },
     rule: rule, detTable: detTable ? src.indexOf(detTable) : -1, detPara: detBlock ? (function () { var p = detBlock.querySelector('p'); return p ? t(p).slice(0, 80) : ''; })() : '',
@@ -4006,8 +4020,15 @@ function inlineAnatomyVerdict(m) {
     if (f.drawTop && f.capTop && f.capTop > f.drawTop) bad.push(n + ' caption is below the drawing');
     if (f.drawTop && f.srcTop && f.srcTop < f.drawTop) bad.push(n + ' source line is above the drawing');
     if (/^(Figure|Fig\.)\s*\d/i.test(f.cap)) bad.push(n + ' caption is numbered, which would collide with the author\'s numbering');
+    /* T-0637 (p6, Joseph 2026-11-16): the caption is a TITLE naming the visual, with the old caption sentence under it as a smaller subtitle; no "FIGURE" label above it. */
+    if (!f.title) bad.push(n + ' has no title (.hl-fig-title) in its caption');
+    else if (/^(figure\b|fig\b\.?)/i.test(f.title)) bad.push(n + ' title reads "' + f.title + '", a label and not a title');
+    if (f.title && f.titlePx && f.titlePx < 16) bad.push(n + ' title is ' + f.titlePx + 'px, under the 16px floor');
+    if (f.sub && f.subPx && f.subPx < 15) bad.push(n + ' subtitle is ' + f.subPx + 'px, under the 15px floor');
+    if (f.title && f.sub && f.titlePx && f.subPx && f.titlePx <= f.subPx) bad.push(n + ' title (' + f.titlePx + 'px) is not larger than its subtitle (' + f.subPx + 'px)');
   });
-  return { notChecked: false, ok: bad.length === 0, why: bad, detail: m.figs.length + ' figure(s): caption above, source line under, a panel (1px border all round, a fill, radius at most 8px, no shadow), sans at or over the floor' + (bad.length ? '; ' + bad.join('; ') : '') };
+  (m.kickers || []).forEach(function (k) { bad.push('a caption draws the word FIGURE: ' + k); });
+  return { notChecked: false, ok: bad.length === 0, why: bad, detail: m.figs.length + ' figure(s): a title with its subtitle above the drawing and no FIGURE label (' + m.figs.map(function (f) { return f.title; }).join(' | ') + '), source line under, a panel (1px border all round, a fill, radius at most 8px, no shadow), sans at or over the floor' + (bad.length ? '; ' + bad.join('; ') : '') };
 }
 /* One table once: the article's tables (scripts off) are the page's tables, all inside the report's own sections, none re-drawn. */
 function inlineOnceVerdict(m, article) {
@@ -4270,6 +4291,127 @@ async function inlineFitRows(page, url) {
   await restoreReportPage(page, url);
 }
 
+/* ---------- T-0637 (p6, Joseph 2026-11-16): chain-story evidence text and the colour of the inline figures ----------
+   EVIDENCE. In the chain story each procedure row (ID, name and tactic on the left, status and confidence on the right) carries the row's own Evidence text, taken word for word from the
+   report's ATT&CK table (its Evidence column), in the middle of the row on a desktop and under the name on a phone, wrapping, never cut off with an ellipsis. A table with no Evidence column
+   draws nothing there. The expectation is read from the report's own table cell, never from the figure; the figure's words are generated chrome, so the completeness gate does not count
+   them (they are on the page twice, here and in the table: that is the design). One row per viewport; controls change a word, remove one, push the text under the name on a desktop,
+   clip it with an ellipsis, and (for a table with no Evidence column) invent one. */
+function inlineEvidenceMeasure() {
+  function t(e) { return e ? e.textContent.replace(/\s+/g, ' ').trim() : ''; }
+  function box(e) { if (!e) return null; var r = e.getBoundingClientRect(); return { l: r.left, r: r.right, t: r.top, b: r.bottom, w: r.width, h: r.height }; }
+  var chain = document.querySelector('figure.hl-fig--chain'), heat = document.querySelector('figure.hl-fig--heat');
+  if (!chain) return { fig: false, why: 'no chain story is drawn on this page' };
+  var chips = [].slice.call(chain.querySelectorAll('a.hl-rv-procedure'));
+  if (!chips.length) return { fig: true, rows: [], why: 'the chain story lists no linked procedure row' };
+  var table = heat ? [].slice.call(document.querySelectorAll('.hl-rv-source table')).filter(function (tb) { return (heat.compareDocumentPosition(tb) & 4) && !heat.contains(tb); })[0] : null;
+  if (!table) return { fig: true, rows: [], why: 'the ATT&CK table could not be found (it is the table that follows the heat map)' };
+  var hr = table.tHead ? table.tHead.rows[0] : table.rows[0], hs = [].slice.call(hr.cells).map(t);
+  var evc = -1; hs.forEach(function (h, i) { if (evc < 0 && /Evidence/i.test(h)) evc = i; });
+  var body = table.tBodies[0] ? [].slice.call(table.tBodies[0].rows) : [];
+  var aligned = body.length > 0 && body.every(function (r) { return r.cells.length === hs.length; });
+  var rows = chips.map(function (a) {
+    var mm = (a.getAttribute('href') || '').match(/^#hl-rv-procedures-(\d+)$/), n = mm ? +mm[1] : 0, tr = body[n - 1] || null;
+    var pev = a.querySelector('.hl-rv-pev'), pn = a.querySelector('.hl-rv-pname'), badge = a.querySelector('.hl-rv-badge'), cs = pev ? getComputedStyle(pev) : null;
+    return { n: n, inTable: !!tr, cell: tr && evc >= 0 ? t(tr.cells[evc]) : null, pev: pev ? t(pev) : null, chip: box(a), pn: box(pn), pe: box(pev), badge: box(badge),
+      over: cs ? cs.textOverflow : '', clamp: cs ? (cs.webkitLineClamp || 'none') : '', sw: pev ? pev.scrollWidth : 0, cw: pev ? pev.clientWidth : 0, sh: pev ? pev.scrollHeight : 0, ch: pev ? pev.clientHeight : 0, ws: cs ? cs.whiteSpace : '' };
+  });
+  return { fig: true, evc: evc, heads: hs, aligned: aligned, nBody: body.length, vw: window.innerWidth, rows: rows };
+}
+var INLINE_EVIDENCE_EXPR = '(' + inlineEvidenceMeasure.toString() + ')()';
+function inlineEvidenceVerdict(m) {
+  if (!m || !m.fig) return { notChecked: true, ok: false, detail: (m && m.why) || 'nothing was measured' };
+  if (!m.rows.length) return { notChecked: true, ok: false, detail: m.why || 'the chain story lists no linked procedure row' };
+  if (!m.aligned) return { notChecked: true, ok: false, detail: 'the ATT&CK table\'s rows do not line up cell for cell with its header (a spanned cell), so a row\'s Evidence cell could not be located' };
+  var gone = m.rows.filter(function (r) { return !r.inTable; });
+  if (gone.length) return { notChecked: true, ok: false, detail: gone.length + ' of ' + m.rows.length + ' linked row(s) point at a row the table does not have (' + m.nBody + ' body rows), so their cells were not read' };
+  var bad = [], withText = 0, empty = 0, drawn = 0, phone = m.vw < 900, TOL = 1;
+  m.rows.forEach(function (r) {
+    var who = 'row ' + r.n;
+    if (m.evc < 0) { if (r.pev !== null) bad.push(who + ' draws evidence text but the table has no Evidence column'); return; }
+    if (r.cell === '') { empty++; if (r.pev !== null) bad.push(who + ' draws text for an empty Evidence cell'); return; }
+    withText++;
+    if (r.pev === null) { bad.push(who + ' has no evidence text; the table cell reads ' + JSON.stringify(String(r.cell).slice(0, 50))); return; }
+    drawn++;
+    if (r.pev !== r.cell) bad.push(who + ' evidence text differs from the table cell: ' + JSON.stringify(r.pev.slice(0, 50)) + ' against ' + JSON.stringify(String(r.cell).slice(0, 50)));
+    if (r.over === 'ellipsis') bad.push(who + ' evidence text is cut off with an ellipsis');
+    if (r.clamp && r.clamp !== 'none') bad.push(who + ' evidence text is clamped to ' + r.clamp + ' line(s)');
+    if (r.sw > r.cw + TOL || r.sh > r.ch + TOL) bad.push(who + ' evidence text is wider or taller than its box (' + r.sw + 'x' + r.sh + ' in ' + r.cw + 'x' + r.ch + '), so it is clipped');
+    if (r.pe && r.chip && (r.pe.r > r.chip.r + TOL || r.pe.l < r.chip.l - TOL)) bad.push(who + ' evidence text spills out of its row');
+    if (r.pe && r.pn) {
+      if (phone) { if (r.pe.t < r.pn.b - TOL) bad.push(who + ' evidence text is not under the name on a phone (text top ' + Math.round(r.pe.t) + ', name bottom ' + Math.round(r.pn.b) + ')'); }
+      else {
+        if (r.pe.l < r.pn.r - TOL) bad.push(who + ' evidence text is not to the right of the name on a desktop');
+        if (!(r.pe.t < r.pn.b && r.pe.b > r.pn.t)) bad.push(who + ' evidence text is not on the same line as the name on a desktop, so it is not in the middle of the row');
+        if (r.badge && r.badge.t < r.pe.b && r.badge.b > r.pe.t && r.pe.r > r.badge.l + TOL) bad.push(who + ' evidence text runs into the status badge');
+      }
+    }
+  });
+  var detail = m.rows.length + ' linked row(s) in the chain story at ' + m.vw + 'px against the ATT&CK table\'s ' + m.nBody + ' row(s): ' + (m.evc < 0 ? 'the table has no Evidence column and none is drawn' : withText + ' with an Evidence cell (' + drawn + ' drawn word for word), ' + empty + ' with an empty cell (nothing drawn)') + (bad.length ? '; ' + bad.slice(0, 4).join('; ') + (bad.length > 4 ? ' (+' + (bad.length - 4) + ' more)' : '') : '');
+  return { notChecked: false, ok: bad.length === 0, why: bad, detail: detail };
+}
+/* COLOUR. Text a reader scans (a figure title, the facts line's numbers, the stage numbers, the technique IDs, the keys, the evidence text) is set in a brand colour, never a flat grey or white, and every
+   such pair reads at 4.5:1 or better on the figure's own fill. Read from the computed colours of every element, hidden tabs included (a colour needs no box). A fact's number in white or grey is the
+   known positive (the state before 2026-11-16). */
+var INLINE_COLOUR_SPEC = [
+  ['figure title', '.hl-fig > figcaption .hl-fig-title', 'fig'],
+  ['figure subtitle', '.hl-fig > figcaption .hl-fig-sub', 'fig'],
+  ['source-line label', '.hl-fig-src__k', 'any'],
+  ['facts-line number', '.hl-facts .hl-fact strong', 'fact'],
+  ['facts-line label', '.hl-facts .hl-fact .hl-fact-l', 'any'],
+  ['stage number', '.hl-fig--chain .hl-rv-fnum', 'any'],
+  ['stage link count', '.hl-fig--chain .hl-rv-fct', 'any'],
+  ['story stage number', '.hl-fig--chain .hl-rv-stage-no', 'any'],
+  ['story link count', '.hl-fig--chain .hl-rv-stage-count', 'any'],
+  ['technique ID', '.hl-fig--chain a.hl-rv-procedure .hl-rv-tid', 'any'],
+  ['evidence text', '.hl-fig--chain .hl-rv-pev', 'any'],
+  ['heat-map column count', '.hl-fig--heat .hl-rv-heathead strong', 'any'],
+  ['key number', '.hl-fig-key:not(.is-zero) strong', 'any'],
+  ['risk score', '.hl-fig--risk .hl-rv-riskscore strong', 'any'],
+  ['Diamond vertex name', '.hl-fig--diamond .hl-rv-diamond-card h3', 'any'],
+  ['timeline lane name', '.hl-fig--timeline .hl-strip-lane h3', 'any']
+];
+function inlineColourMeasure() {
+  var SPEC = JSON.parse(SPEC_JSON);
+  function rgb(c) {
+    var m = String(c).match(/^rgba?\(\s*([\d.]+)[,\s]+([\d.]+)[,\s]+([\d.]+)(?:[,\s/]+([\d.%]+))?\s*\)$/);
+    if (m) return { r: +m[1], g: +m[2], b: +m[3], a: m[4] === undefined ? 1 : (/%$/.test(m[4]) ? parseFloat(m[4]) / 100 : +m[4]) };
+    m = String(c).match(/^color\(srgb\s+([\d.]+)\s+([\d.]+)\s+([\d.]+)(?:\s*\/\s*([\d.%]+))?\s*\)$/);
+    if (m) return { r: +m[1] * 255, g: +m[2] * 255, b: +m[3] * 255, a: m[4] === undefined ? 1 : (/%$/.test(m[4]) ? parseFloat(m[4]) / 100 : +m[4]) };
+    return null;
+  }
+  function lin(v) { v = v / 255; return v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4); }
+  function lum(c) { return 0.2126 * lin(c.r) + 0.7152 * lin(c.g) + 0.0722 * lin(c.b); }
+  function fillOf(el) { var p = el.closest('.hl-fig, .hl-facts-block'), c = p ? rgb(getComputedStyle(p).backgroundColor) : null; return c && c.a > 0.99 ? c : null; }
+  return SPEC.map(function (s) {
+    var els = [].slice.call(document.querySelectorAll(s[1])), worst = null, neutral = 0, unread = 0, colours = {};
+    els.forEach(function (el) {
+      var fg = rgb(getComputedStyle(el).color), bg = fillOf(el);
+      if (!fg || !bg) { unread++; return; }
+      if (fg.a < 1) fg = { r: fg.r * fg.a + bg.r * (1 - fg.a), g: fg.g * fg.a + bg.g * (1 - fg.a), b: fg.b * fg.a + bg.b * (1 - fg.a), a: 1 };
+      var l1 = lum(fg), l2 = lum(bg), ratio = (Math.max(l1, l2) + 0.05) / (Math.min(l1, l2) + 0.05);
+      var key = Math.round(fg.r) + ',' + Math.round(fg.g) + ',' + Math.round(fg.b); colours[key] = (colours[key] || 0) + 1;
+      if (Math.max(fg.r, fg.g, fg.b) - Math.min(fg.r, fg.g, fg.b) < 24) neutral++;
+      if (!worst || ratio < worst.ratio) worst = { ratio: ratio, colour: key, text: (el.textContent || '').replace(/\s+/g, ' ').trim().slice(0, 30) };
+    });
+    return { name: s[0], kind: s[2], n: els.length, read: els.length - unread, worst: worst, neutral: neutral, colours: colours };
+  });
+}
+var INLINE_COLOUR_EXPR = '(function(){var SPEC_JSON=' + JSON.stringify(JSON.stringify(INLINE_COLOUR_SPEC)) + ';return (' + inlineColourMeasure.toString() + ')();})()';
+function inlineColourVerdict(rows) {
+  if (!rows) return { notChecked: true, ok: false, detail: 'nothing was measured' };
+  var bad = [], measured = 0, elements = 0, listed = [];
+  rows.forEach(function (r) {
+    if (!r.n) return;
+    if (!r.read) { bad.push(r.name + ': ' + r.n + ' element(s), none with a readable colour and fill'); return; }
+    measured++; elements += r.read;
+    listed.push(r.name + ' x' + r.read + ' min ' + r.worst.ratio.toFixed(1) + ':1');
+    if (r.worst.ratio < 4.5) bad.push(r.name + ' reads ' + r.worst.ratio.toFixed(2) + ':1 (rgb ' + r.worst.colour + ', "' + r.worst.text + '"), under 4.5:1');
+    if (r.kind === 'fact' && r.neutral) bad.push(r.neutral + ' of ' + r.n + ' fact number(s) are white or grey, not a brand colour');
+  });
+  if (!measured) return { notChecked: true, ok: false, detail: 'no coloured figure text is on this page, so nothing was measured' };
+  return { notChecked: false, ok: bad.length === 0, why: bad, detail: measured + ' text kind(s), ' + elements + ' element(s): ' + listed.join(', ') + (bad.length ? '; ' + bad.join('; ') : '') };
+}
 /* T-0637 (p5): one control per predicate inlineCountsVerdicts emits. Each is [name, a script that breaks the figure and returns whether the page drew it, the row it must fail]; a page that draws no such figure has nothing to break, so the control is skipped. */
 var INLINE_COUNT_CONTROLS = [
   ['with one grade square removed the grade-strip row FAILS', '(function(){var c=document.querySelector("figure.hl-fig--grades .hl-rv-sq");if(c)c.remove();return !!c;})()', function (mm) { return inlineCountsVerdicts(mm, SHAPES).filter(function (x) { return /grade strip/.test(x.name); })[0]; }],
@@ -4280,6 +4422,57 @@ var INLINE_COUNT_CONTROLS = [
   ['with the link out of one quoting Diamond Model cell the Diamond row FAILS', '(function(){var c=[].slice.call(document.querySelectorAll("figure.hl-fig--diamond .hl-rv-diamond-card")).filter(function(x){return x.querySelector("blockquote")&&x.querySelector("a[href^=\\"#\\"]");})[0];if(!c)return false;c.querySelector("a[href^=\\"#\\"]").remove();return true;})()', function (mm) { return inlineCountsVerdicts(mm, SHAPES).filter(function (x) { return /Diamond Model/.test(x.name); })[0]; }],
   ['with the rule-count line corrupted (a total off by one) the rule-count row FAILS', '(function(){var l=document.querySelector("figure.hl-fig--rules .hl-fig-line");if(!l)return false;var n=l.textContent,r=n.replace(/: (\\d+) rules/,function(a,d){return ": "+(+d+1)+" rules";});if(r===n)return false;l.textContent=r;return true;})()', function (mm) { return inlineCountsVerdicts(mm, SHAPES).filter(function (x) { return /rule-count line/.test(x.name); })[0]; }]
 ];
+/* T-0637 (p6): the evidence-text row and the colour row of the inline figures, at one viewport, each with controls that re-create the defect on the same page and must FAIL. */
+async function inlineEvidenceColourRows(page, url, tag, si) {
+  function row(name, v) { if (v.notChecked) check('NOT CHECKED: ' + tag + name, false, v.detail); else check(tag + name, v.ok, v.detail); }
+  function ctl(name, v) { check('control: ' + tag + name, v.ok === false && !v.notChecked, v.ok === false ? 'FAILS as designed: ' + v.detail : 'the control did NOT fire: ' + v.detail); }
+  async function showChain() {
+    var id = await page.json('(function(){var f=document.querySelector("figure.hl-fig--chain");var p=f&&f.closest(".hl-rv-panel");return p?p.id:null;})()');
+    if (id) { await page.evaluate('location.hash="#' + id + '"'); await CDP.sleep(300); }
+    return id;
+  }
+  var ename = 'the chain story\'s procedure rows carry the report\'s own Evidence text, word for word as its ATT&CK table prints it, in the middle of the row on a desktop and under the name on a phone, never cut off';
+  var cname = 'the inline figures\' coloured text (titles, facts numbers, stage numbers, technique IDs, keys, evidence) is a brand colour at 4.5:1 or better on its panel, and no fact number is white or grey';
+  await gotoAndWait(page, url);
+  var shown = await showChain();
+  var m = shown ? await page.json(INLINE_EVIDENCE_EXPR) : { fig: false, why: 'no chain story is drawn on this page' };
+  var v = inlineEvidenceVerdict(m);
+  row(ename, v);
+  if (!v.notChecked && v.ok) {
+    var hasText = m.rows.some(function (r) { return r.pev !== null; });
+    var mut = async function (script, name) {
+      await gotoAndWait(page, url); await showChain();
+      var did = await page.json(script);
+      if (!did) { check('NOT CHECKED: control: ' + tag + name, false, 'the control found nothing on the page to break'); return; }
+      await CDP.sleep(250);
+      ctl(name, inlineEvidenceVerdict(await page.json(INLINE_EVIDENCE_EXPR)));
+    };
+    var STYLE = function (css) { return '(function(){var s=document.createElement("style");s.textContent=' + JSON.stringify(css) + ';document.head.appendChild(s);return true;})()'; };
+    if (hasText) {
+      await mut('(function(){var e=document.querySelector("figure.hl-fig--chain .hl-rv-pev");if(!e)return false;e.textContent=e.textContent+" (edited)";return true;})()', 'one evidence text with a word added makes the evidence row FAIL');
+      await mut('(function(){var e=document.querySelector("figure.hl-fig--chain .hl-rv-pev");if(!e)return false;e.remove();return true;})()', 'one evidence text removed makes the evidence row FAIL');
+      await mut(STYLE('.hl-fig--chain .hl-rv-pev{white-space:nowrap !important;overflow:hidden !important;text-overflow:ellipsis !important;max-width:3em !important}'), 'evidence text clipped with an ellipsis makes the evidence row FAIL');
+      if (!(m.vw < 900)) await mut(STYLE('.hl-fig--chain .hl-rv-pev{flex:1 1 100% !important}'), 'evidence text pushed under the name on a desktop makes the evidence row FAIL');
+      else await mut(STYLE('.hl-fig--chain .hl-rv-procedure .hl-rv-pev{position:absolute !important;top:0 !important;right:0 !important;width:30% !important}'), 'evidence text lifted out beside the row on a phone makes the evidence row FAIL');
+    } else {
+      await mut('(function(){var c=document.querySelector("figure.hl-fig--chain a.hl-rv-procedure");if(!c)return false;var s=document.createElement("span");s.className="hl-rv-pev";s.textContent="invented evidence";c.appendChild(s);return true;})()', 'evidence text drawn where the table has none makes the evidence row FAIL');
+    }
+  }
+  await gotoAndWait(page, url);
+  var cv = inlineColourVerdict(await page.json(INLINE_COLOUR_EXPR));
+  row(cname, cv);
+  if (!cv.notChecked && cv.ok && si === 0) {
+    var cm = async function (css, name) {
+      await gotoAndWait(page, url);
+      await page.evaluate('(function(){var s=document.createElement("style");s.textContent=' + JSON.stringify(css) + ';document.head.appendChild(s);})()');
+      await CDP.sleep(200);
+      ctl(name, inlineColourVerdict(await page.json(INLINE_COLOUR_EXPR)));
+    };
+    await cm('.hl-fact strong{color:#ffffff !important}', 'every fact number back to white (the state before the colours) makes the colour row FAIL');
+    await cm('.hl-fig > figcaption .hl-fig-title{color:#4a4a4a !important}', 'a figure title in dark grey (under 4.5:1) makes the colour row FAIL');
+  }
+  await gotoAndWait(page, url);
+}
 async function inlineFigureRows(page, url) {
   function ctl(name, v) { check('control: ' + name, v.ok === false && !v.notChecked, v.ok === false ? 'FAILS as designed: ' + v.detail : 'the control did NOT fire: ' + v.detail); }
   var states = [[1280, 900], [390, 844]];
@@ -4293,10 +4486,11 @@ async function inlineFigureRows(page, url) {
     var vP = inlinePlacementVerdict(m, SHAPES), vA = inlineAnatomyVerdict(m), vO = inlineOnceVerdict(m, article);
     function row(name, v) { if (v.notChecked) check('NOT CHECKED: ' + tag + name, false, v.detail); else check(tag + name, v.ok, v.detail); }
     row('the figures drawn are the figures the report\'s tables support, each directly before its own source table or after the paragraph it is named after, and the facts line opens the Overview', vP);
-    row('every figure has a caption above its drawing and a source line under it, no box, fill, radius or shadow, one hairline above, sans text at or over the 15 px floor', vA);
+    row('every figure has a title with its subtitle above its drawing (no FIGURE label anywhere) and a source line under it, a panel with a border, a fill, a radius of at most 8 px and no shadow, sans text at or over the 15 px floor', vA);
     row('no table is drawn twice: the article\'s tables are the page\'s tables, all in the report\'s own sections', vO);
     var counts = inlineCountsVerdicts(m, SHAPES);
     counts.forEach(function (c) { row(c.name, c.v); });
+    await inlineEvidenceColourRows(page, url, tag, si);
     if (si === 0) {
       // controls on this same page: one square, one heat cell, one risk row, one segment removed; a figure moved away from its table; a table drawn a second time; a figure given a box
       var ctls = INLINE_COUNT_CONTROLS;
@@ -4321,6 +4515,15 @@ async function inlineFigureRows(page, url) {
       var aname = 'a figure stripped of its panel (no side borders, no fill) and given a 16px radius and a shadow makes the anatomy row FAIL';
       if (!stripped) check('NOT CHECKED: control: ' + aname, false, 'the report draws no figure to strip');
       else ctl(aname, inlineAnatomyVerdict(await page.json(INLINE_EXPR)));
+      await gotoAndWait(page, url);
+      /* T-0637 (p6): the two known positives of Joseph's 2026-11-16 point: a FIGURE label drawn above the caption (the old ::before) and a caption with no title */
+      var kick = await page.json('(function(){if(!document.querySelector("figure.hl-fig"))return false;var s=document.createElement("style");s.textContent=' + JSON.stringify('.hl-fig > figcaption::before{content:"FIGURE" !important;display:block}') + ';document.head.appendChild(s);return true;})()');
+      if (!kick) check('NOT CHECKED: control: ' + tag + 'a FIGURE label drawn above the captions makes the anatomy row FAIL', false, 'the report draws no figure');
+      else ctl('a FIGURE label drawn above the captions makes the anatomy row FAIL', inlineAnatomyVerdict(await page.json(INLINE_EXPR)));
+      await gotoAndWait(page, url);
+      var untitled = await page.json('(function(){var t=document.querySelector("figure.hl-fig > figcaption .hl-fig-title");if(!t)return false;t.remove();return true;})()');
+      if (!untitled) check('NOT CHECKED: control: ' + tag + 'a caption with its title removed makes the anatomy row FAIL', false, 'the report draws no figure title to remove');
+      else ctl('a caption with its title removed makes the anatomy row FAIL', inlineAnatomyVerdict(await page.json(INLINE_EXPR)));
       await gotoAndWait(page, url);
     }
   }
@@ -5876,6 +6079,11 @@ if (require.main === module) {
     inlineAnatomyVerdict: inlineAnatomyVerdict,
     inlineOnceVerdict: inlineOnceVerdict,
     inlineCountsVerdicts: inlineCountsVerdicts,
+    INLINE_EVIDENCE_EXPR: INLINE_EVIDENCE_EXPR,
+    inlineEvidenceVerdict: inlineEvidenceVerdict,
+    INLINE_COLOUR_SPEC: INLINE_COLOUR_SPEC,
+    INLINE_COLOUR_EXPR: INLINE_COLOUR_EXPR,
+    inlineColourVerdict: inlineColourVerdict,
     INLINE_COUNT_CONTROLS: INLINE_COUNT_CONTROLS,
     inlineToolbarVerdict: inlineToolbarVerdict,
     inlineChainTableVerdict: inlineChainTableVerdict,

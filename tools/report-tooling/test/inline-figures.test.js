@@ -35,7 +35,7 @@ test('no report opts back to the dashboard (site rollout, Joseph 2026-11-15); th
 test('the cache-busters moved with the stylesheet and the script (both carry the same value)', () => {
   const a = read('_layouts/post.html').match(/hl-report-tabs\.js' \| relative_url \}\}\?v=([0-9.]+)/)[1];
   const b = read('_includes/default/head.liquid').match(/hl-report-tabs\.css' \| relative_url \}\}\?v=([0-9.]+)/)[1];
-  assert.equal(a, b); assert.equal(a, '20261116.2');
+  assert.equal(a, b); assert.equal(a, '20261116.3');
 });
 
 test('every rule the inline block adds to the stylesheet is scoped under .hl-figs-inline, so no other report can see it', () => {
@@ -214,7 +214,7 @@ test('the browser gate\'s inline rows, run on the jsdom page: placement, once, c
 });
 
 test('the inline anatomy row FAILS on a figure that is not a panel, has a large radius or a shadow, a number, no source line or text under the floor', () => {
-  const ok = { kind: 'grades', capOk: true, srcOk: true, chrome: true, style: { bg: 'rgb(24, 24, 24)', bt: 1, bb: 1, bl: 1, br: 1, rad: '6px', shadow: 'none' }, capPx: 18, srcPx: 15, capFont: 'IBM Plex Sans', srcFont: 'IBM Plex Sans', capTop: 10, drawTop: 40, srcTop: 90, cap: '2 rows by grade' };
+  const ok = { title: 'Victim access grades', sub: '2 rows by grade', titlePx: 20, subPx: 16, kind: 'grades', capOk: true, srcOk: true, chrome: true, style: { bg: 'rgb(24, 24, 24)', bt: 1, bb: 1, bl: 1, br: 1, rad: '6px', shadow: 'none' }, capPx: 18, srcPx: 15, capFont: 'IBM Plex Sans', srcFont: 'IBM Plex Sans', capTop: 10, drawTop: 40, srcTop: 90, cap: '2 rows by grade' };
   assert.equal(G.inlineAnatomyVerdict({ figs: [ok] }).ok, true);
   const bad = (patch) => G.inlineAnatomyVerdict({ figs: [Object.assign({}, ok, patch)] });
   assert.equal(bad({ style: Object.assign({}, ok.style, { bl: 0, br: 0, bb: 0 }) }).ok, false, 'one hairline above only: not a panel');
@@ -226,6 +226,16 @@ test('the inline anatomy row FAILS on a figure that is not a panel, has a large 
   assert.equal(bad({ srcPx: 13 }).ok, false, 'under the floor');
   assert.equal(bad({ srcFont: 'IBM Plex Mono' }).ok, false, 'monospace');
   assert.equal(G.inlineAnatomyVerdict({ figs: [] }).notChecked, true);
+  // T-0637 p6 (Joseph 2026-11-16): a title, a smaller subtitle, and no FIGURE label anywhere
+  assert.equal(bad({ title: '' }).ok, false, 'no title');
+  assert.equal(bad({ title: 'Figure: grades' }).ok, false, 'a title that is the label FIGURE');
+  assert.equal(bad({ title: 'FIGURE' }).ok, false, 'a title that is the label alone');
+  assert.equal(bad({ titlePx: 15 }).ok, false, 'a title under 16px');
+  assert.equal(bad({ subPx: 14 }).ok, false, 'a subtitle under 15px');
+  assert.equal(bad({ titlePx: 16, subPx: 16 }).ok, false, 'a title no larger than its subtitle');
+  assert.equal(bad({ sub: '' }).ok, true, 'a figure may have a title and no subtitle');
+  assert.equal(G.inlineAnatomyVerdict({ figs: [ok], kickers: ['hl-fig hl-fig--grades figcaption::before draws "FIGURE"'] }).ok, false, 'the word FIGURE drawn by the stylesheet');
+  assert.equal(G.inlineAnatomyVerdict({ figs: [ok], kickers: [] }).ok, true);
 });
 
 // ---- p1b: the four taste fixes -------------------------------------------------------------------------------------------------------------------------------------------
@@ -442,4 +452,123 @@ test('every predicate inlineCountsVerdicts emits has a control that breaks the f
     const bare = page(true, REPORT.replace(/<h2 class="hl-tab-attribution"[\s\S]*?(?=<h2 class="hl-tab-indicators")/, ''));
     try { assert.equal(bare.w.eval(ctls[4][1]), false); } finally { bare.w.close(); }
   } finally { f.w.close(); }
+});
+
+// ---- p6 (Joseph 2026-11-16): titles, colour, chain-story evidence text -------------------------------------------------------------------------------------------------------
+const CHAIN_EV = (heads, rows) => TAB('chain', 's3', '3. The Attack Chain', '<p>Two stages.</p>' + TABLE(['Stage', 'What the operator did', 'Where it is shown'], [['1. Get in', 'It used Exploit Public-Facing Application against the portal.', 'a'], ['2. Run things', 'It ran a Command Interpreter by hand.', 'b']]) +
+  '<h2 class="hl-tab-chain" id="s3b">4. MITRE ATT&amp;CK Mapping</h2>' + TABLE(heads, rows));
+const EV_HEADS = ['Tactic / Technique', 'Name', 'Status', 'Conf.', 'Evidence'];
+const EV_ROWS = [['Initial Access / T1190', 'Exploit Public-Facing Application', 'OBSERVED', 'HIGH', 'nmap of V01 range;  masscan <code>-p 1-1024</code>'], ['Execution / T1059', 'Command Interpreter', 'INFERRED', 'MODERATE', '']];
+const collapse = (x) => x.replace(/\s+/g, ' ').trim();
+
+test('p6 titles: every figure kind has a short title naming the visual, its old caption sentence is the subtitle, and nothing says FIGURE', () => {
+  const f = page(true);
+  try {
+    const want = { 'hl-fig--chain': 'The chain story', 'hl-fig--diamond': 'The Diamond Model', 'hl-fig--dist': 'Confidence spread', 'hl-fig--grades': 'Victim access grades', 'hl-fig--heat': 'Technique heat map', 'hl-fig--rules': 'Detection rules by engine', 'hl-fig--timeline': 'Event timeline' };
+    const figs = [...f.d.querySelectorAll('figure.hl-fig')];
+    assert.equal(figs.length, 7);
+    for (const fig of figs) {
+      const kind = [...fig.classList].find((c) => /^hl-fig--/.test(c)), cap = fig.firstElementChild;
+      assert.equal(cap.querySelector('.hl-fig-title').textContent, want[kind], kind);
+      assert.ok(cap.querySelector('.hl-fig-sub') && cap.querySelector('.hl-fig-sub').textContent.length > 15, kind + ' keeps its caption sentence as the subtitle');
+      assert.equal(/^\s*figure\b/i.test(cap.textContent), false, kind + ' caption does not start with FIGURE');
+    }
+    // no explanatory text is lost: the chain story's old caption sentence is still there, minus its "The chain story:" lead that the title now carries
+    assert.match(f.d.querySelector('figure.hl-fig--chain .hl-fig-sub').textContent, /^\d+ stages in the order the report gives them, each with the procedure rows the report links to it$/);
+    assert.equal(f.d.querySelector('figure.hl-fig--diamond .hl-fig-sub').textContent, "Four vertices, each in the report's own words");
+    // the source line's label is its own span and its text is unchanged
+    const src = f.d.querySelector('figure.hl-fig--grades .hl-fig-src');
+    assert.equal(src.querySelector('.hl-fig-src__k').textContent, 'How counted:'); assert.match(src.textContent, /^How counted: one square for each row/);
+    assert.equal(f.d.querySelector('.hl-facts-block .hl-fig-src .hl-fig-src__k').textContent, 'Counted from');
+  } finally { f.w.close(); }
+  assert.match(script, /figBox\('Risk scores',/); assert.equal(/figBox\('[^']*FIGURE/i.test(script), false);
+  assert.equal(/content:\s*"FIGURE"/.test(css), false, 'the stylesheet draws no FIGURE label');
+  assert.equal(/figcaption::before/.test(css), false, 'and no pseudo-element on the caption at all');
+});
+
+test('p6 colour: every facts-line kind the script emits has a category colour in the stylesheet, five brand tokens and no other hue', () => {
+  const kinds = [...new Set([...script.matchAll(/kind: '(\w+)'/g)].map((m) => m[1]))];
+  assert.ok(kinds.length >= 10, 'kinds found: ' + kinds.join(','));
+  const block = css.slice(css.indexOf('T-0637 (p6, Joseph 2026-11-16): colour'));
+  for (const k of kinds) assert.match(block, new RegExp('data-rv-tile="' + k + '"'), 'no colour rule for the ' + k + ' fact');
+  for (const tok of ['--hl-c-red: var(--rv-bad)', '--hl-c-blue: var(--acc)', '--hl-c-green: var(--rv-ok)', '--hl-c-yellow: var(--rv-warn)', '--hl-c-purple: var(--hl-accent-purple, #bc8cff)']) assert.ok(block.includes(tok), tok);
+  assert.equal([...block.matchAll(/#[0-9a-fA-F]{6}\b/g)].map((m) => m[0].toLowerCase()).filter((h) => !['#bc8cff', '#ffffff'].includes(h)).length, 0, 'no new hex colour beyond the purple token fallback and white');
+  // the dashboard keeps its look: nothing in the block is outside the inline scope (the scope test above covers selectors), and the facts number is not left white
+  assert.equal(/\.hl-fact strong \{ color: #ffffff/.test(block), false);
+});
+
+test('p6 evidence: each linked procedure row of the chain story carries its table row\'s Evidence cell word for word; an empty cell draws nothing; the words are chrome', () => {
+  const f = page(true, CHAIN_EV(EV_HEADS, EV_ROWS));
+  try {
+    const d = f.d, chips = [...d.querySelectorAll('figure.hl-fig--chain a.hl-rv-procedure')];
+    assert.equal(chips.length, 2, 'both rows are linked to a stage');
+    const tbl = [...d.querySelectorAll('#tab-chain .hl-rv-source table')][1], body = [...tbl.tBodies[0].rows];
+    assert.deepEqual(heads(tbl), EV_HEADS);
+    const evs = chips.map((c) => c.querySelector('.hl-rv-pev'));
+    const n0 = +chips[0].getAttribute('href').match(/(\d+)$/)[1], n1 = +chips[1].getAttribute('href').match(/(\d+)$/)[1];
+    assert.equal(collapse(evs[0].textContent), collapse(body[n0 - 1].cells[4].textContent), 'verbatim, whitespace collapsed as every cell is');
+    assert.equal(evs[0].textContent, 'nmap of V01 range; masscan -p 1-1024');
+    assert.equal(evs[1], null, 'row ' + n1 + ' has an empty Evidence cell: nothing is drawn');
+    // DOM order inside the row: ID, name block, evidence text, then the badges
+    assert.deepEqual([...chips[0].children].map((c) => c.className.split(' ')[0]).slice(0, 3), ['hl-rv-tid', 'hl-rv-pname', 'hl-rv-pev']);
+    assert.ok(evs[0].hasAttribute('data-rv-chrome') && evs[0].hasAttribute('data-pagefind-ignore'), 'generated chrome, so the completeness gate does not count the second copy');
+    // the report's own words are unchanged: the sections minus generated chrome read as the article read
+    const clone = d.createElement('div'); [...d.querySelectorAll('.hl-rv-source')].forEach((x) => clone.appendChild(x.cloneNode(true)));
+    clone.querySelectorAll('[data-rv-chrome]').forEach((x) => x.remove());
+    assert.equal(clone.textContent.replace(/\s+/g, ''), f.articleText);
+  } finally { f.w.close(); }
+});
+
+test('p6 evidence: a report whose ATT&CK table has no Evidence column draws nothing there; the dashboard (figures: dashboard) never draws it', () => {
+  const none = page(true, CHAIN_EV(['Tactic / Technique', 'Name', 'Status', 'Conf.'], EV_ROWS.map((r) => r.slice(0, 4))));
+  try { assert.equal(none.d.querySelectorAll('figure.hl-fig--chain a.hl-rv-procedure').length, 2); assert.equal(none.d.querySelectorAll('.hl-rv-pev').length, 0); } finally { none.w.close(); }
+  const dash = page(false, CHAIN_EV(EV_HEADS, EV_ROWS));
+  try { assert.ok(dash.d.querySelectorAll('.hl-rv-procedure').length >= 2, 'the dashboard still lists the rows'); assert.equal(dash.d.querySelectorAll('.hl-rv-pev').length, 0, 'and draws no evidence text: the dashboard renders as it did'); } finally { dash.w.close(); }
+  const key = page(true, CHAIN_EV(['Tactic', 'Technique ID', 'Technique Name', 'Confidence', 'Key Evidence'], [['Initial Access', 'T1190', 'Exploit Public-Facing Application', 'HIGH', 'a key row']]));
+  try { assert.ok(key.d.querySelectorAll('.hl-rv-pev').length <= 1); } finally { key.w.close(); }
+});
+
+test('p6 evidence row: PASS on the right text in the right place; FAIL on a changed word, a missing text, text for an empty cell, an ellipsis, a clamp, a spill, a desktop row not in line, a phone row not under the name', () => {
+  const box = (l, r, t, b) => ({ l, r, t, b, w: r - l, h: b - t });
+  const row = (n, cell, pev, extra) => Object.assign({ n, inTable: true, cell, pev, chip: box(0, 1100, 0, 60), pn: box(100, 350, 10, 50), pe: null, badge: box(900, 1000, 20, 40), over: 'clip', clamp: 'none', sw: 400, cw: 400, sh: 20, ch: 20, ws: 'normal' }, extra || {});
+  const desk = (rows) => ({ fig: true, evc: 4, aligned: true, nBody: 3, vw: 1280, rows });
+  const withBox = (r) => Object.assign(r, { pe: r.pev === null ? null : box(400, 860, 10, 50) });
+  const ok = desk([withBox(row(1, 'a; b', 'a; b')), withBox(row(2, '', null))]);
+  const v = G.inlineEvidenceVerdict(ok); assert.equal(v.ok, true); assert.match(v.detail, /2 linked row\(s\).*1 with an Evidence cell \(1 drawn word for word\), 1 with an empty cell/);
+  const bad = (mut) => { const m = JSON.parse(JSON.stringify(ok)); mut(m); return G.inlineEvidenceVerdict(m); };
+  assert.equal(bad((m) => { m.rows[0].pev = 'a; b (edited)'; }).ok, false, 'one word added');
+  assert.equal(bad((m) => { m.rows[0].pev = null; m.rows[0].pe = null; }).ok, false, 'text missing');
+  assert.equal(bad((m) => { m.rows[1].pev = 'invented'; m.rows[1].pe = box(400, 860, 10, 50); }).ok, false, 'text for an empty cell');
+  assert.equal(bad((m) => { m.rows[0].over = 'ellipsis'; }).ok, false, 'ellipsis');
+  assert.equal(bad((m) => { m.rows[0].clamp = '2'; }).ok, false, 'line clamp');
+  assert.equal(bad((m) => { m.rows[0].sw = 500; }).ok, false, 'wider than its box: clipped');
+  assert.equal(bad((m) => { m.rows[0].pe = box(400, 1200, 10, 50); }).ok, false, 'spills out of the row');
+  assert.equal(bad((m) => { m.rows[0].pe = box(100, 860, 60, 100); }).ok, false, 'on a desktop, under the name instead of beside it');
+  assert.equal(bad((m) => { m.rows[0].pe = box(200, 860, 10, 50); }).ok, false, 'on a desktop, overlapping the name');
+  assert.equal(bad((m) => { m.rows[0].pe = box(400, 950, 10, 50); }).ok, false, 'on a desktop, running into the badge');
+  const phone = JSON.parse(JSON.stringify(ok)); phone.vw = 390;
+  phone.rows[0].chip = box(0, 360, 0, 120); phone.rows[0].pn = box(10, 340, 10, 50); phone.rows[0].pe = box(10, 340, 52, 90); phone.rows[0].badge = box(10, 100, 95, 115);
+  assert.equal(G.inlineEvidenceVerdict(phone).ok, true, 'a phone row with the text under the name');
+  const beside = JSON.parse(JSON.stringify(phone)); beside.rows[0].pe = box(180, 340, 10, 50);
+  assert.equal(G.inlineEvidenceVerdict(beside).ok, false, 'a phone row with the text beside the name');
+  // no Evidence column: nothing may be drawn
+  const noCol = (pev) => ({ fig: true, evc: -1, aligned: true, nBody: 2, vw: 1280, rows: [row(1, null, pev)] });
+  assert.equal(G.inlineEvidenceVerdict(noCol(null)).ok, true); assert.match(G.inlineEvidenceVerdict(noCol(null)).detail, /no Evidence column and none is drawn/);
+  assert.equal(G.inlineEvidenceVerdict(noCol('x')).ok, false, 'text drawn where the table has no column');
+  // not measurable: NOT CHECKED, never PASS
+  assert.equal(G.inlineEvidenceVerdict({ fig: false, why: 'no chain story is drawn on this page' }).notChecked, true);
+  assert.equal(G.inlineEvidenceVerdict({ fig: true, rows: [], why: 'the chain story lists no linked procedure row' }).notChecked, true);
+  assert.equal(bad((m) => { m.aligned = false; }).notChecked, true);
+  assert.equal(bad((m) => { m.rows[0].inTable = false; }).notChecked, true);
+});
+
+test('p6 colour row: PASS on brand colours at 4.5:1; FAIL on a white or grey fact number and on any pair under 4.5:1; NOT CHECKED when nothing was measured', () => {
+  const r = (name, kind, n, ratio, neutral) => ({ name, kind, n, read: n, worst: { ratio, colour: '248,113,113', text: '5' }, neutral: neutral || 0, colours: {} });
+  const rows = [r('figure title', 'fig', 7, 6.4), r('facts-line number', 'fact', 5, 6.4), r('technique ID', 'any', 9, 7.0), r('evidence text', 'any', 0, 0)];
+  const v = G.inlineColourVerdict(rows); assert.equal(v.ok, true); assert.match(v.detail, /3 text kind\(s\), 21 element\(s\)/);
+  assert.equal(G.inlineColourVerdict([r('facts-line number', 'fact', 4, 15.9, 4)]).ok, false, 'four white numbers: Joseph\'s screenshot');
+  assert.equal(G.inlineColourVerdict([r('figure title', 'fig', 1, 4.2)]).ok, false, 'under 4.5:1');
+  assert.equal(G.inlineColourVerdict([r('figure title', 'fig', 0, 0)]).notChecked, true, 'zero elements is not a PASS');
+  assert.equal(G.inlineColourVerdict([{ name: 'figure title', kind: 'fig', n: 2, read: 0, worst: null, neutral: 0, colours: {} }]).ok, false, 'elements whose colour could not be read');
+  assert.ok(G.INLINE_COLOUR_SPEC.length >= 14 && /hl-fact strong/.test(G.INLINE_COLOUR_SPEC.map((x) => x[1]).join(' ')));
 });
