@@ -24,7 +24,7 @@ permalink: /wire/agent/
 <h2>Latest headlines</h2>
 <ul>
 {%- for i in wire.items limit: 40 %}
-<li>{{ i.date | date: "%Y-%m-%d" }}, {{ i.source | escape }}: {{ i.title | escape }}</li>
+<li>{{ i.date | date: "%Y-%m-%d" }}, {{ i.source | escape | replace: "&#39;", "'" | replace: "&quot;", '"' }}: {{ i.title | escape | replace: "&#39;", "'" | replace: "&quot;", '"' }}</li>
 {%- endfor %}
 </ul>
 <p>All {{ n_items }} headlines with links: <a href="{{ '/wire/agent/news.json' | relative_url }}">news.json</a> and <a href="{{ '/wire/' | relative_url }}">The Wire</a>.</p>
