@@ -209,6 +209,11 @@ test('the browser gate\'s inline rows, run on the jsdom page: placement, once, c
     const inWrap = JSON.parse(JSON.stringify(f.w.eval(G.INLINE_EXPR)));
     wrap.before(tbl); wrap.remove();
     assert.equal(G.inlinePlacementVerdict(inWrap, shapes).ok, false, 'prose inside the wrapper before the table');
+    // review round 2: bare text inside the wrapper FAILS too
+    const wrap2 = f.w.document.createElement('div'); tbl.before(wrap2); wrap2.append(f.w.document.createTextNode('Unrelated prose'), tbl);
+    const inWrap2 = JSON.parse(JSON.stringify(f.w.eval(G.INLINE_EXPR)));
+    wrap2.before(tbl); wrap2.remove();
+    assert.equal(G.inlinePlacementVerdict(inWrap2, shapes).ok, false, 'bare text inside the wrapper before the table');
     assert.equal(G.inlinePlacementVerdict(JSON.parse(JSON.stringify(f.w.eval(G.INLINE_EXPR))), shapes).ok, true, 'restored page passes again');
     const sq = JSON.parse(JSON.stringify(m)); sq.grade.REACHED = 0;
     assert.equal(G.inlineCountsVerdicts(sq, shapes).find((c) => /grade strip/.test(c.name)).v.ok, false, 'a square short');
