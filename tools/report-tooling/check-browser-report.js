@@ -3893,12 +3893,21 @@ function inlineMeasure() {
     return g;
   }
   /* review_e42fb4aa0c894315 (P2): "directly before its source table" means the first element after the figure that is not generated chrome is that table or holds it, not merely that it is the next table somewhere later. */
+  /* allowed between a figure and its table: generated chrome only (an authored teardown holding the table is handled below) */
+  function skip(el) { return el.hasAttribute('data-rv-chrome') || /^(SCRIPT|STYLE|TEMPLATE)$/.test(el.tagName); }
   function adjacentTo(f, tbl) {
     if (!tbl) return false;
     for (var n = f; n && !(n.classList && n.classList.contains('hl-rv-panel')); n = n.parentElement) {
       var s = n.nextElementSibling;
-      while (s && (s.hasAttribute('data-rv-chrome') || /^(SCRIPT|STYLE|TEMPLATE)$/.test(s.tagName))) s = s.nextElementSibling;
-      if (s) return s === tbl || s.contains(tbl);
+      while (s && skip(s)) s = s.nextElementSibling;
+      if (!s) continue;
+      if (s === tbl) return true;
+      if (!s.contains(tbl)) return false;
+      /* the authored teardown that holds the table is the boundary review_e42fb4aa0c894315 allows: its own summary, headings and notes come before the table by design */
+      if (s.tagName === 'DETAILS') return true;
+      /* inside a wrapper, everything before the table on the way down must be chrome too (review round 2: prose inside the wrapper passed) */
+      for (var c = tbl; c !== s; c = c.parentElement) for (var q = c.previousElementSibling; q; q = q.previousElementSibling) if (!skip(q)) return false;
+      return true;
     }
     return false;
   }

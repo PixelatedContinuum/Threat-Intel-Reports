@@ -203,6 +203,13 @@ test('the browser gate\'s inline rows, run on the jsdom page: placement, once, c
     const between = JSON.parse(JSON.stringify(f.w.eval(G.INLINE_EXPR))); prose.remove();
     assert.equal(between.figs.find((x) => x.kind === 'heat').next, m.figs.find((x) => x.kind === 'heat').next, 'the next table is unchanged');
     assert.equal(G.inlinePlacementVerdict(between, shapes).ok, false, 'prose between the heat map and its table');
+    // review round 2: prose inside a wrapper that holds the table FAILS too
+    const tbl = f.w.document.querySelectorAll('.hl-rv-source table')[m.figs.find((x) => x.kind === 'heat').next];
+    const wrap = f.w.document.createElement('div'); const p2 = f.w.document.createElement('p'); p2.textContent = 'unrelated prose'; tbl.before(wrap); wrap.append(p2, tbl);
+    const inWrap = JSON.parse(JSON.stringify(f.w.eval(G.INLINE_EXPR)));
+    wrap.before(tbl); wrap.remove();
+    assert.equal(G.inlinePlacementVerdict(inWrap, shapes).ok, false, 'prose inside the wrapper before the table');
+    assert.equal(G.inlinePlacementVerdict(JSON.parse(JSON.stringify(f.w.eval(G.INLINE_EXPR))), shapes).ok, true, 'restored page passes again');
     const sq = JSON.parse(JSON.stringify(m)); sq.grade.REACHED = 0;
     assert.equal(G.inlineCountsVerdicts(sq, shapes).find((c) => /grade strip/.test(c.name)).v.ok, false, 'a square short');
     const hc = JSON.parse(JSON.stringify(m)); hc.heat.cells -= 1;
