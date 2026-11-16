@@ -1,0 +1,30 @@
+---
+layout: wire-agent
+title: "The Wire: vulnerability and headline data in plain text"
+description: "Plain-text copy of The Wire for AI assistants and search: newly exploited vulnerabilities (VulnCheck KEV, CISA KEV), significant new CVEs and threat intelligence headlines, refreshed about every 15 minutes."
+permalink: /wire/agent/
+---
+{%- include wire-agent-select.html -%}
+<p>This is a plain-text copy of <a href="{{ '/wire/' | relative_url }}">The Wire</a> for AI assistants, agents and search engines. It holds the same data the page shows: {{ k_rows.size }} CVEs newly added to VulnCheck's Known Exploited Vulnerabilities (KEV) catalog in the last {{ wire.window_days }} days (already exploited), {{ c_rows.size }} significant new CVEs that are on neither VulnCheck KEV nor CISA KEV, and {{ n_items }} threat intelligence headlines. Vulnerability data as of {{ wire.vulns_generated_at | escape }} (UTC).</p>
+<h2>How to use it</h2>
+<ul>
+<li><a href="{{ '/wire/agent/kevs/' | relative_url }}">Exploited vulnerabilities (nKEVs)</a>: one line per CVE newly added to VulnCheck KEV, with CISA KEV status, severity, EPSS and priority.</li>
+<li><a href="{{ '/wire/agent/cves/' | relative_url }}">Significant new CVEs</a>: one line per CVE on neither KEV list. Being listed is a selection signal, not evidence of exploitation.</li>
+<li><a href="{{ '/wire/agent/vendors/' | relative_url }}">Vendor index</a>: every vendor with its CVEs on each list. Start here to answer "what affects vendor X".</li>
+<li>Full detail by vendor name (description, affected and fixed versions, CVSS vector, SSVC, exploitation citations, public exploits, detection rules): {% for b in site.data.wire_agent_buckets %}<a href="{{ '/wire/agent/detail/' | relative_url }}{{ b.slug }}/">{{ b.label | escape }}</a>{% unless forloop.last %} · {% endunless %}{% endfor %}.</li>
+<li>Machine-readable JSON with every field defined: <a href="{{ '/wire/agent/index.json' | relative_url }}">/wire/agent/index.json</a> (also summary.json, kevs.json, cves.json, news.json, all.json), and <a href="{{ '/llms.txt' | relative_url }}">/llms.txt</a>.</li>
+</ul>
+<h2>What the terms mean</h2>
+<ul>
+<li><b>VulnCheck KEV</b>: VulnCheck has recorded exploitation of the CVE. <b>CISA KEV</b>: also on CISA's Known Exploited Vulnerabilities catalog, with CISA's remediation due date.</li>
+<li><b>EPSS</b>: FIRST's predicted probability of exploitation in the next 30 days. <b>SSVC</b>: CISA's own exploitation, automatable and technical-impact decision points.</li>
+<li><b>Priority</b> (nKEVs): The Hunter's Ledger's patch-first score for flaws already exploited: points for a no-login network flaw, CVSS 9.0 or more, public tooling, a CISA KEV listing, a recent disclosure, and a patch-first product class. <b>Pick</b> (CVEs): a daily shortlist of three CVEs likely to be exploited. Both are this site's own judgment, not a vendor or government rating.</li>
+<li>A missing value means no confirmed value was available, not proof of absence.</li>
+</ul>
+<h2>Latest headlines</h2>
+<ul>
+{%- for i in wire.items limit: 40 %}
+<li>{{ i.date | date: "%Y-%m-%d" }}, {{ i.source | escape }}: {{ i.title | escape }}</li>
+{%- endfor %}
+</ul>
+<p>All {{ n_items }} headlines with links: <a href="{{ '/wire/agent/news.json' | relative_url }}">news.json</a> and <a href="{{ '/wire/' | relative_url }}">The Wire</a>.</p>

@@ -42,7 +42,7 @@ position: 2.5
 
 <div class="hl-wire__callout hl-wire__callout--h">These headlines come from public research and news sources, pulled every 15 minutes from the OpenCTI instance I run myself, which itself polls the publishers' feeds every 5 to 15 minutes. The reporting belongs to its publishers and every item links to the original; my own research is in the <a href="/reports/">reports section</a>.</div>
 
-<p class="hl-wire__freshness">Updated {{ wire.generated_at | date: "%-d %B %Y, %H:%M" }} UTC &middot; {{ n_headlines }} headlines from the last {{ wire.window_days }} days &middot; <a href="{{ '/wire/feed.xml' | relative_url }}">Atom feed</a></p>
+<p class="hl-wire__freshness">Updated {{ wire.generated_at | date: "%-d %B %Y, %H:%M" }} UTC &middot; {{ n_headlines }} headlines from the last {{ wire.window_days }} days &middot; <a href="{{ '/wire/feed.xml' | relative_url }}">Atom feed</a> &middot; <a href="{{ '/wire/agent/' | relative_url }}">Plain-text and JSON data</a></p>
 
 {%- comment -%}
   The chip vocabulary comes precomputed from wire.topics rather than from the

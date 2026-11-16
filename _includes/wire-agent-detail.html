@@ -1,0 +1,30 @@
+{%- comment -%}
+  T-0651: one Wire vulnerability row as one plain HTML section for the Wire agent detail
+  pages. r = the row, list = "kev" or "cve". Every value goes through | escape; in text (never in an attribute) the quote entities are put back, so
+  defang-html.html sees an e-mail or domain inside quotes ('support@example.com') and defangs it. External
+  links are the same ones /wire/ links (NVD, the citations VulnCheck gives, cve.now);
+  nothing is linked that the page does not link.
+{%- endcomment -%}
+{%- assign dr = include.r -%}{%- assign d_id = dr.cve | downcase -%}
+{%- if include.list == "kev" -%}{%- assign d_anchor = "#cve-" | append: d_id -%}{%- else -%}{%- assign d_anchor = "#cves-" | append: d_id -%}{%- endif -%}
+{%- assign d_cisa_len = dr.cisa_added | append: "" | size -%}
+<section id="{{ d_id | escape }}">
+<h3>{{ dr.cve | escape }}: {% if dr.vendor and dr.vendor != "" %}{{ dr.vendor | escape | replace: "&#39;", "'" | replace: "&quot;", '"' }} {% endif %}{{ dr.product | escape | replace: "&#39;", "'" | replace: "&quot;", '"' }}{% if dr.title and dr.title != "" %}. {{ dr.title | escape | replace: "&#39;", "'" | replace: "&quot;", '"' }}{% endif %}</h3>
+<dl>
+<dt>Status</dt><dd>{% if include.list == "kev" %}Exploited: on VulnCheck KEV since {{ dr.added | escape }}{% if d_cisa_len == 10 %}; on CISA KEV since {{ dr.cisa_added | escape }}{% if dr.kev_due and dr.kev_due != "" %}, CISA due date {{ dr.kev_due | escape }}{% endif %}{% else %}; not on CISA KEV{% endif %}{% else %}Not on VulnCheck KEV or CISA KEV; published {{ dr.published | escape }}. Listed as likely to matter soon (a selection signal, not evidence of exploitation){% if dr.signals and dr.signals != empty %}; admitted for: {{ dr.signals | join: ", " | escape }}{% endif %}{% endif %}</dd>
+<dt>Severity</dt><dd>{% if dr.cvss and dr.cvss != "" %}{{ dr.severity | upcase | escape }} {{ dr.cvss | escape }} (CVSS {{ dr.cvss_version | escape }}, scored by {{ dr.scored_by | escape }}) {{ dr.cvss_vector | escape }}{% else %}no CVSS score{% endif %}</dd>
+<dt>EPSS</dt><dd>{% if dr.epss and dr.epss != "" %}{{ dr.epss | escape }} (percentile {{ dr.epss_pct | escape }}, {{ dr.epss_date | escape }}){% else %}no EPSS score{% endif %}{% if dr.vedas %}; VEDAS {{ dr.vedas | escape }}{% endif %}</dd>
+{%- if dr.ssvc_expl and dr.ssvc_expl != "" %}<dt>CISA SSVC</dt><dd>exploitation {{ dr.ssvc_expl | escape }}, automatable {{ dr.ssvc_auto | escape }}, technical impact {{ dr.ssvc_impact | escape }}</dd>{% endif %}
+{%- if include.list == "kev" %}<dt>Priority</dt><dd>{{ dr.np_score | escape }}{% if dr.np_reasons and dr.np_reasons != empty %} ({{ dr.np_reasons | join: ", " | escape }}{% if dr.np_class and dr.np_class != "" %}; class {{ dr.np_class | escape }}{% endif %}){% endif %}{% assign d_np = dr.np_rank | plus: 0 %}{% if d_np > 0 %}; in the nKEVs Priority strip{% endif %}</dd>{% else %}{% assign d_pd = dr.pick_day | append: "" | size %}{% if d_pd > 0 %}<dt>Priority pick</dt><dd>picked {{ dr.pick_day | escape }}, score {{ dr.pick_score | escape }} ({{ dr.pick_reasons | join: ", " | escape }}{% if dr.pick_class and dr.pick_class != "" %}; class {{ dr.pick_class | escape }}{% endif %})</dd>{% endif %}{% endif %}
+{%- if dr.cwe and dr.cwe != empty %}<dt>CWE</dt><dd>{{ dr.cwe | join: ", " | escape }}</dd>{% endif %}
+{%- if dr.affected and dr.affected != empty %}<dt>Affected</dt><dd>{{ dr.affected | join: "; " | escape | replace: "&#39;", "'" | replace: "&quot;", '"' }}</dd>{% endif %}
+{%- if dr.fixed and dr.fixed != "" %}<dt>Fixed in</dt><dd>{{ dr.fixed | escape }}</dd>{% endif %}
+{%- if dr.aliases and dr.aliases != empty %}<dt>Aliases</dt><dd>{{ dr.aliases | join: ", " | escape }}</dd>{% endif %}
+{%- if dr.kev_product and dr.kev_product != "" %}<dt>Product history</dt><dd>CISA KEV lists {{ dr.kev_product_n | escape }} earlier CVE(s) in {{ dr.kev_product | escape }}</dd>{% endif %}
+{%- if dr.reports and dr.reports != empty %}<dt>Exploitation cited by</dt><dd>{% for rp in dr.reports %}{% assign rp_head = rp.url | slice: 0, 8 %}{% if rp_head == "https://" %}<a href="{{ rp.url | escape }}" rel="noopener noreferrer nofollow">{{ rp.host | escape }}</a>{% unless forloop.last %}, {% endunless %}{% endif %}{% endfor %}{% assign d_more = dr.reports_more | plus: 0 %}{% if d_more > 0 %} (+{{ d_more }} more in VulnCheck KEV){% endif %}</dd>{% endif %}
+{%- assign d_ex = dr.msf | size | plus: 0 %}{% assign d_edb = dr.edb | size | plus: 0 %}{% if d_ex > 0 or d_edb > 0 %}<dt>Public exploits</dt><dd>{% if d_ex > 0 %}Metasploit: {{ dr.msf | join: ", " | escape }}{% endif %}{% if d_ex > 0 and d_edb > 0 %}; {% endif %}{% if d_edb > 0 %}Exploit-DB: {{ dr.edb | join: ", " | escape }}{% endif %} (untested)</dd>{% endif %}
+{%- assign d_et = dr.et_sids | size | plus: 0 %}{% assign d_cs = dr.cisa_sigma | size | plus: 0 %}{% assign d_sn = dr.snort3_sids | size | plus: 0 %}{% if d_et > 0 or d_cs > 0 or d_sn > 0 or dr.nuclei != "" %}<dt>Detection rules</dt><dd>{% if d_et > 0 %}ET Open SIDs {{ dr.et_sids | join: ", " | escape }}. {% endif %}{% if dr.nuclei and dr.nuclei != "" %}Nuclei {{ dr.nuclei | escape }}. {% endif %}{% if d_cs > 0 %}CISA Sigma {{ dr.cisa_sigma | join: ", " | escape }}. {% endif %}{% if d_sn > 0 %}Snort 3 community SIDs {{ dr.snort3_sids | join: ", " | escape }}.{% endif %}</dd>{% endif %}
+{%- if dr.desc and dr.desc != "" %}<dt>Description</dt><dd>{{ dr.desc | escape | replace: "&#39;", "'" | replace: "&quot;", '"' }}</dd>{% endif %}
+<dt>Links</dt><dd><a href="https://nvd.nist.gov/vuln/detail/{{ dr.cve | escape }}">NVD</a>, <a href="{{ '/wire/' | relative_url }}{{ d_anchor | escape }}">The Wire</a></dd>
+</dl>
+</section>

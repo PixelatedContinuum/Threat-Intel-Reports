@@ -1063,10 +1063,10 @@ function readReal(rel) {
 test('the gate follows the include chain: every wire-* include the page names is read, the real six pass', function () {
   /* T-0532 adds wire-details-row.html, which the Details JSON pages include for
      themselves (its escaping is their check, not this one); the chain the PAGE
-     names stays the six below. T-0651 adds wire-agent-row.html and wire-agent-brief.html,
-     which only the agent feed (wire/agent/*.json) includes, for the same reason. */
+     names stays the six below. T-0651 adds the wire-agent-* includes, which only the agent
+     feed (wire/agent/*.json and its plain HTML pages) includes, for the same reason. */
   var rowInc = 'wire-details-row.html';
-  var agentIncs = ['wire-agent-brief.html', 'wire-agent-row.html', 'wire-agent-select.html'];
+  var agentIncs = ['wire-agent-brief.html', 'wire-agent-bucket.html', 'wire-agent-bucketof.html', 'wire-agent-detail.html', 'wire-agent-list.html', 'wire-agent-row.html', 'wire-agent-select.html'];
   var inc = realIncludes();
   assert.deepEqual(Object.keys(inc).sort(),
     agentIncs.concat(['wire-cve-why.html', rowInc, 'wire-fold-keys.html', 'wire-fold.html', 'wire-nkev-priority.html', 'wire-vuln-epss.html', 'wire-vuln-new.html',

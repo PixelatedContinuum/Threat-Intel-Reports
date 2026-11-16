@@ -1,0 +1,12 @@
+# T-0651: the detail pages of the Wire agent HTML (/wire/agent/detail/<slug>/), one per
+# vendor-initial bucket. wire-agent-bucketof.html assigns the same slugs; each needs its
+# stub page in wire/agent/detail/.
+- {slug: a-c, label: "A to C"}
+- {slug: d-f, label: "D to F"}
+- {slug: g-i, label: "G to I"}
+- {slug: j-l, label: "J to L"}
+- {slug: m-o, label: "M to O"}
+- {slug: p-r, label: "P to R"}
+- {slug: s-u, label: "S to U"}
+- {slug: v-z, label: "V to Z"}
+- {slug: other, label: "a digit, a symbol or no vendor"}

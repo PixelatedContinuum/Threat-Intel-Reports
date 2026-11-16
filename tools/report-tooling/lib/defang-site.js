@@ -76,7 +76,7 @@ function pageType(rel) {
   var table = [[/^\/reports\/[^\/]+\/(?:.+\/)?$/, 'report'], [/^\/reports\/$/, 'reports-index'], [/^\/hunting-detections\/[^\/]+\/$/, 'detection'], [/^\/hunting-detections\/$/, 'detections-index'],
     [/^\/ioc-feeds\/[^\/]+\/$/, 'ioc-feed'], [/^\/ioc-feeds\/$/, 'ioc-feeds-index'], [/^\/actors\/[^\/]+\/$/, 'actor'], [/^\/actors\/$/, 'actors-index'],
     [/^\/techniques\/[^\/]+\/$/, 'technique'], [/^\/techniques\/$/, 'techniques-index'], [/^\/families\/[^\/]+\/$/, 'family'], [/^\/families\/$/, 'families-index'],
-    [/^\/behind-the-reports\/[^\/]+\/$/, 'behind-step'], [/^\/$/, 'home'], [/^\/wire\/$/, 'wire']];
+    [/^\/behind-the-reports\/[^\/]+\/$/, 'behind-step'], [/^\/$/, 'home'], [/^\/wire\/(?:agent\/(?:[^\/]+\/)*)?$/, 'wire']];
   for (var i = 0; i < table.length; i++) if (table[i][0].test(r)) return table[i][1];
   return 'single:' + r.replace(/^\/|\/$/g, '');
 }

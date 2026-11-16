@@ -1,0 +1,10 @@
+{%- comment -%} T-0651: the body of one detail page: every row of both lists whose vendor falls in include.bucket (wire-agent-bucketof.html), nKEVs first, each as a wire-agent-detail.html section. {%- endcomment -%}
+{%- include wire-agent-select.html -%}
+{%- assign bb_k = 0 -%}{%- assign bb_c = 0 -%}
+{%- capture bb_kev -%}{%- for r in k_rows -%}{%- include wire-agent-bucketof.html vendor=r.vendor -%}{%- if bk_slug == include.bucket -%}{%- assign bb_k = bb_k | plus: 1 -%}{% include wire-agent-detail.html r=r list="kev" %}{%- endif -%}{%- endfor -%}{%- endcapture -%}
+{%- capture bb_cve -%}{%- for r in c_rows -%}{%- include wire-agent-bucketof.html vendor=r.vendor -%}{%- if bk_slug == include.bucket -%}{%- assign bb_c = bb_c | plus: 1 -%}{% include wire-agent-detail.html r=r list="cve" %}{%- endif -%}{%- endfor -%}{%- endcapture -%}
+<p>Full detail for every vulnerability on The Wire whose vendor name starts with {{ page.letters | escape }}: {{ bb_k }} exploited (newly added to VulnCheck KEV) and {{ bb_c }} significant new CVEs on neither KEV list. Data as of {{ wire.vulns_generated_at | escape }}. Other letters: {% for b in site.data.wire_agent_buckets %}<a href="{{ '/wire/agent/detail/' | relative_url }}{{ b.slug }}/">{{ b.label | escape }}</a>{% unless forloop.last %} · {% endunless %}{% endfor %}.</p>
+<h2>Exploited: newly added to VulnCheck KEV ({{ bb_k }})</h2>
+{{ bb_kev }}
+<h2>Significant new CVEs, not on a KEV list ({{ bb_c }})</h2>
+{{ bb_cve }}

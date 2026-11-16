@@ -1,0 +1,20 @@
+---
+layout: none
+permalink: /sitemap-wire-agent.xml
+sitemap: false
+---
+<?xml version="1.0" encoding="UTF-8"?>
+{%- comment -%}
+  T-0651: a second sitemap for the Wire agent feed's non-HTML files (jekyll-sitemap lists
+  HTML pages only, so the plain-text pages under /wire/agent/ are already in
+  /sitemap.xml). Named in robots.txt. lastmod is the Wire's own generation time, so a
+  crawler sees the files change with each refresh.
+{%- endcomment -%}
+{%- assign wire = site.data.wire -%}
+{%- assign lm = wire.generated_at | date: "%Y-%m-%dT%H:%M:%SZ" -%}
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+{%- assign sm_files = "llms.txt,wire/agent/index.json,wire/agent/summary.json,wire/agent/kevs.json,wire/agent/cves.json,wire/agent/news.json,wire/agent/all.json" | split: "," -%}
+{%- for f in sm_files %}
+<url><loc>{{ "/" | append: f | absolute_url | xml_escape }}</loc><lastmod>{{ lm | xml_escape }}</lastmod></url>
+{%- endfor %}
+</urlset>
