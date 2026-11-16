@@ -748,6 +748,7 @@ test('p7 coverage strip: an inline page that draws the heat map draws no strip a
     assert.equal(btns[0].parentNode, heat.querySelector(':scope > .hl-fig-src'), 'on the heat map\'s source line');
     assert.equal(heat.lastElementChild, heat.querySelector(':scope > .hl-fig-src'), 'the source line is still the last thing in the figure');
     assert.equal(btns[0].textContent.trim(), '↓ Navigator layer');
+    assert.match(css, /\.hl-fig-src > \.hl-attack__export \{[^}]*min-height: 44px/, 'a touch target of at least 44 px (the gate\'s chrome-target row measured 40 px)');
     assert.ok(heat.hasAttribute('data-rv-chrome'), 'the button is inside generated chrome');
     // it works the same way: a click offers a layer file listing the table's techniques
     btns[0].click();
