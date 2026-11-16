@@ -157,7 +157,7 @@
   }
   var live = make('p', 'hl-rv-live', '', content); live.setAttribute('aria-live', 'polite'); live.setAttribute('aria-atomic', 'true');
   // T-0637: in inline mode a table's own toolbar (its filters) is built first and the copy buttons join it, so one slim bar sits above the report's table.
-  var inlineBars = new Map(), inlineAnchors = new Map(), inlineResets = [], inlineRowById = {};
+  var inlineBars = new Map(), inlineAnchors = new Map(), inlineResets = [], inlineRowById = Object.create(null);
   function barFor(table) {
     var bar = inlineBars.get(table);
     if (!bar) { bar = make('div', 'hl-rv-table-tools hl-tbar', null); inlineBars.set(table, bar); }

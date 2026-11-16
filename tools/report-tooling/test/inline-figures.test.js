@@ -35,7 +35,7 @@ test('no report opts back to the dashboard (site rollout, Joseph 2026-11-15); th
 test('the cache-busters moved with the stylesheet and the script (both carry the same value)', () => {
   const a = read('_layouts/post.html').match(/hl-report-tabs\.js' \| relative_url \}\}\?v=([0-9.]+)/)[1];
   const b = read('_includes/default/head.liquid').match(/hl-report-tabs\.css' \| relative_url \}\}\?v=([0-9.]+)/)[1];
-  assert.equal(a, b); assert.equal(a, '20261116.1');
+  assert.equal(a, b); assert.equal(a, '20261116.2');
 });
 
 test('every rule the inline block adds to the stylesheet is scoped under .hl-figs-inline, so no other report can see it', () => {
@@ -71,9 +71,10 @@ const REPORT = [
     '<h2 class="hl-tab-indicators" id="s6b">8. Detection and Hunting Guidance</h2><p>The package carries 3 rules: 1 Sigma (1 detection, 0 hunting) and 2 YARA (1 detection, 1 hunting).</p>',
   TAB('confidence', 's7', '9. Confidence Summary', '<p>Each judgment carries its confidence.</p>' + TABLE(['Claim', 'Confidence', 'What would change it'], [['The server is the operator\'s', 'HIGH', 'a record'], ['It is one crew', 'MODERATE', 'a second case'], ['The date is the first use', 'HIGH', 'an earlier log']]))
 ].join('');
-function page(flag, report, curation) {
-  const dom = new JSDOM(`<div class="hl-page hl-report-page${flag ? ' hl-figs-inline' : ''}"><div class="hl-post-body"><div class="hl-post-content">${report || REPORT}</div></div>${curation ? '<script id="hl-report-view-data" type="application/json">' + JSON.stringify(curation) + '</script>' : ''}</div>`, { url: 'https://example.test/report/', runScripts: 'outside-only' });
+function page(flag, report, curation, hash) {
+  const dom = new JSDOM(`<div class="hl-page hl-report-page${flag ? ' hl-figs-inline' : ''}"><div class="hl-post-body"><div class="hl-post-content">${report || REPORT}</div></div>${curation ? '<script id="hl-report-view-data" type="application/json">' + JSON.stringify(curation) + '</script>' : ''}</div>`, { url: 'https://example.test/report/' + (hash || ''), runScripts: 'outside-only' });
   const w = dom.window; w.matchMedia = () => ({ matches: false, addEventListener() {} }); w.ResizeObserver = class { observe() {} }; w.HTMLElement.prototype.scrollIntoView = function () {};
+  if (!w.requestAnimationFrame) w.requestAnimationFrame = (fn) => setTimeout(fn, 0);   // a row-link fragment scrolls to its row after a frame
   const articleTables = w.document.querySelectorAll('.hl-post-content table').length;
   const articleText = w.document.querySelector('.hl-post-content').textContent.replace(/\s+/g, '');
   w.eval(script);
@@ -371,5 +372,74 @@ test('stage ribbon and facts line: the name sits on its own line under the numbe
     for (const m of factRules) assert.equal(/border-right|border-left|content:/.test(m[2]), false, 'a separator in: ' + m[0]);
     assert.equal(/\|/.test(f.d.querySelector('.hl-facts').textContent), false, 'and none in the text');
     assert.match(block, /\.hl-figs-inline \.hl-facts \{[^}]*gap: 6px 32px/);
+  } finally { f.w.close(); }
+});
+
+// ---- p5: the three findings of the different-provider review -------------------------------------------------------------------------------------------------------------
+test('a fragment that names an Object.prototype member (#constructor, #toString, #__proto__, #hasOwnProperty) opens the report like any unknown fragment, on both layouts', () => {
+  for (const flag of [true, false]) for (const hash of ['#constructor', '#toString', '#__proto__', '#hasOwnProperty', '#unknown-fragment']) {
+    let f; try { f = page(flag, REPORT, null, hash); } catch (e) { e.message += ' [' + (flag ? 'inline ' : 'dashboard ') + hash + ']'; throw e; }   // page() asserts hl-rv-ready: an enhancement that rolled back fails here
+    try {
+      assert.ok(f.d.querySelectorAll('.hl-rv-panel').length >= 5, (flag ? 'inline ' : 'dashboard ') + hash + ': the tabs were built');
+      assert.equal(f.d.querySelectorAll('.hl-rv-warn, [data-rv-unavailable]').length, 0);
+    } finally { f.w.close(); }
+  }
+  // the lookup still finds a generated procedure row by its id (control: the fix must not break the fallback it guards)
+  const g = page(true, REPORT, null, '#hl-rv-procedures-1');
+  try { assert.ok(g.d.documentElement.classList.contains('hl-rv-ready')); } finally { g.w.close(); }
+});
+
+const NON_ISO = [['Oct 30, 2026', 'First request'], ['Oct 31 (inferred)', 'Second request'], ['Nov 14 (inferred)', 'Last request']];
+test('the gate reads the chronology dates the page reads ("Oct 30, 2026", "Oct 31 (inferred)"): a correct non-ISO strip PASSES and one with reversed markers FAILS, not NOT CHECKED', () => {
+  const f = page(true, timelineReport(NON_ISO));
+  f.w.Range.prototype.getBoundingClientRect = function () { return { left: 0, right: 0, top: 0, bottom: 0, width: 0, height: 0 }; };   // jsdom has no layout
+  try {
+    assert.equal(f.w.eval(G.INLINE_EXPR).chronParses, true, 'the page itself draws this chronology');
+    const m = JSON.parse(JSON.stringify(f.w.eval(G.INLINE_TIMELINE_EXPR)));
+    assert.deepEqual(m.dates, NON_ISO.map((r) => r[0]));
+    assert.ok(m.markers.length === 3, 'a strip was drawn');
+    // jsdom has no layout: give the markers the positions a browser gives the strip (one 44 px slot, widening with the time between events)
+    const pos = (order) => { const c = JSON.parse(JSON.stringify(m)); c.vw = 1280; c.vertical = false; c.pageOverflow = 0; c.figH = 300; c.strip = { h: 100, clientW: 800, scrollW: 800, ovx: 'auto' };
+      const xs = [22]; c.markers.forEach((k, i) => { if (i) xs[i] = xs[i - 1] + 44 + 4 + 17 * Math.log10(1 + Math.abs(k.gapH)); });
+      order.forEach((ev, i) => { const k = c.markers.find((x) => x.ev === ev); k.cx = xs[i]; k.l = xs[i] - 22; k.r = xs[i] + 22; k.t = 100; k.b = 144; });
+      c.labels = c.labels.map((l) => { const mid = (xs[l.forEv - 1] + xs[l.forEv]) / 2; return Object.assign(l, { l: mid - 10, r: mid + 10, t: 20, b: 40 }); }); return c; };
+    const good = pos([0, 1, 2]), gv = G.inlineTimelineVerdict(good);
+    assert.equal(gv.notChecked, false, 'dates the page reads are measured: ' + gv.detail);
+    const rev = G.inlineTimelineVerdict(pos([2, 1, 0]));
+    assert.equal(rev.notChecked, false, 'reversed markers are a FAIL, not NOT CHECKED: ' + rev.detail); assert.equal(rev.ok, false);
+    assert.ok(rev.why.some((w) => /report order/.test(w)), rev.detail);
+    // a chronology the page cannot date (two years, no ISO) keeps the date-independent failures
+    const un = pos([2, 1, 0]); un.dates = ['Oct 30, 2026', 'Oct 31, 2027', 'Nov 14, 2026'];
+    const uv = G.inlineTimelineVerdict(un); assert.equal(uv.notChecked, false); assert.equal(uv.ok, false); assert.ok(uv.why.some((w) => /report order/.test(w)), uv.detail);
+    const ov = pos([0, 1, 2]); ov.dates = un.dates; ov.markers[1].cx = ov.markers[0].cx + 10; ov.markers[1].l = ov.markers[0].l + 10; ov.markers[1].r = ov.markers[0].r + 10;
+    assert.ok(G.inlineTimelineVerdict(ov).why.some((w) => /overlap/.test(w)), 'overlap survives an undatable gap');
+    const cn = pos([0, 1, 2]); cn.dates = un.dates; cn.tableRows = 4; assert.ok(G.inlineTimelineVerdict(cn).why.some((w) => /chronology row/.test(w)), 'count survives');
+    const ht = pos([0, 1, 2]); ht.dates = un.dates; ht.strip.h = 900; assert.ok(G.inlineTimelineVerdict(ht).why.some((w) => /px tall/.test(w)), 'height survives');
+    const clean = pos([0, 1, 2]); clean.dates = un.dates;
+    const cv = G.inlineTimelineVerdict(clean); assert.equal(cv.notChecked, true, cv.detail + ' // nothing wrong and the gaps cannot be dated: NOT CHECKED, never PASS');
+  } finally { f.w.close(); }
+});
+
+test('every predicate inlineCountsVerdicts emits has a control that breaks the figure on the live page and makes that row FAIL', () => {
+  const f = page(true);
+  try {
+    const shapes = JSON.parse(JSON.stringify(f.w.eval(G.SHAPES_EXPR)));
+    const rows = G.inlineCountsVerdicts(JSON.parse(JSON.stringify(f.w.eval(G.INLINE_EXPR))), shapes).map((c) => c.name);
+    const ctls = G.INLINE_COUNT_CONTROLS;
+    for (const n of [/grade strip/, /heat map/, /distribution/, /Diamond Model/, /rule-count line/]) assert.ok(rows.some((r) => n.test(r)), 'row emitted: ' + n);
+    assert.equal(ctls.length, 7);
+    let fired = 0, skipped = [];
+    for (const c of ctls) {
+      const g = page(true);
+      try {
+        if (!g.w.eval(c[1])) { skipped.push(c[0]); continue; }   // the page draws no such figure: the gate skips the control
+        const x = c[2](JSON.parse(JSON.stringify(g.w.eval(G.INLINE_EXPR))));
+        assert.ok(x, 'the row exists: ' + c[0]); assert.equal(x.v.ok, false, 'FAILS as designed: ' + c[0]); fired++;
+      } finally { g.w.close(); }
+    }
+    assert.equal(fired, 6); assert.deepEqual(skipped, ['with one risk row removed the risk-bar row FAILS'], 'only the risk control is skipped: this fixture has no risk table');
+    // a page that draws no Diamond figure and no rule line: the script returns false, so the gate skips the control
+    const bare = page(true, REPORT.replace(/<h2 class="hl-tab-attribution"[\s\S]*?(?=<h2 class="hl-tab-indicators")/, ''));
+    try { assert.equal(bare.w.eval(ctls[4][1]), false); } finally { bare.w.close(); }
   } finally { f.w.close(); }
 });

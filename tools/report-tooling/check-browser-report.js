@@ -3224,9 +3224,14 @@ function inlineTimelineMeasure() {
 }
 var INLINE_TIMELINE_EXPR = '(' + inlineTimelineMeasure.toString() + ')()';
 var INLINE_STRIP_LABEL_FROM_H = 6;   /* hours from which a gap is labelled: the figure's source line states the same number */
-function inlineStamp(display) {
+/* T-0637 (p5): mirrors the page. stripStamp (hl-report-tabs.js) reads an ISO date, with an optional time, from the printed cell; where there is none it falls back to the
+   chronology row's own coordinate, which chronologyRows gives from "Oct 30, 2026" or "Oct 31 (inferred)" by Date.parse of the text without its brackets plus the table's one
+   year (none when the table names two years), taken as a UTC calendar day. `years` is every 20xx in the table's date cells, as chronologyRows builds it. NaN = the page cannot place it either. */
+function inlineStamp(display, years) {
   var m = String(display).match(/(\d{4}-\d{2}-\d{2})(?:[ T]+(\d{2}:\d{2}(?::\d{2})?))?/);
-  return m ? Date.parse(m[1] + 'T' + (m[2] || '00:00') + 'Z') : NaN;
+  if (m) return Date.parse(m[1] + 'T' + (m[2] || '00:00') + 'Z');
+  if (years && years.length === 1) { var t = Date.parse(String(display).replace(/\s*\(.*?\)/g, '') + ' ' + years[0]); if (!isNaN(t)) return Date.parse(new Date(t).toISOString().slice(0, 10)); }
+  return NaN;
 }
 function inlineGapWords(hours) {
   var h = Math.abs(hours), sign = hours < 0 ? '-' : '+', d = h / 24;
@@ -3250,15 +3255,18 @@ function inlineTimelineVerdict(m) {
   if (hits) why.push(hits + ' pair(s) of markers overlap');
   var tight = 0; for (var k = 1; k < mk.length; k++) if (mk[k].cx - mk[k - 1].cx < 43.5) tight++;
   if (tight) why.push(tight + ' neighbour pair(s) closer than one 44 px marker');
-  // hours between neighbours, from the report's own table, and the script's own record of them
-  var exp = [null], bad = 0;
-  for (var q = 1; q < m.dates.length; q++) { var h = (inlineStamp(m.dates[q]) - inlineStamp(m.dates[q - 1])) / 3600000; exp[q] = h; }
-  if (exp.slice(1).some(function (h) { return isNaN(h); })) return { notChecked: true, ok: false, detail: 'a date in the chronology table could not be read by the gate, so the spacing was not compared with elapsed time' };
+  // hours between neighbours, from the report's own table, and the script's own record of them. A date the page cannot place either leaves these date-dependent rows
+  // unmeasured (named below); the order, overlap, count and height findings above and below stand on their own.
+  var years = {}; m.dates.forEach(function (d) { (String(d).match(/\b20\d{2}\b/g) || []).forEach(function (y) { years[y] = 1; }); }); years = Object.keys(years);
+  var exp = [null], bad = 0, undated = 0;
+  for (var q = 1; q < m.dates.length; q++) { var h = (inlineStamp(m.dates[q], years) - inlineStamp(m.dates[q - 1], years)) / 3600000; exp[q] = h; if (isNaN(h)) undated++; }
+  var gaps = [], grewChecked = 0, want = [];
+  if (!undated) {
   for (var r = 1; r < mk.length; r++) if (mk[r].gapH === null || Math.abs(mk[r].gapH - exp[r]) > 0.02) bad++;
   if (bad) why.push(bad + ' marker(s) carry an elapsed-time value that is not the table\'s');
   // spacing grows with the time between neighbours: never narrower for a longer time, and wider for a time ten times longer
-  var gaps = []; for (var g = 1; g < mk.length; g++) gaps.push({ h: Math.abs(exp[g]), d: mk[g].cx - mk[g - 1].cx });
-  var mono = 0, grow = 0, grewChecked = 0;
+  for (var g = 1; g < mk.length; g++) gaps.push({ h: Math.abs(exp[g]), d: mk[g].cx - mk[g - 1].cx });
+  var mono = 0, grow = 0;
   for (var a2 = 0; a2 < gaps.length; a2++) for (var b2 = 0; b2 < gaps.length; b2++) {
     if (gaps[a2].h < gaps[b2].h && gaps[a2].d > gaps[b2].d + 0.75) mono++;
     if (10 * (gaps[a2].h + 1) <= gaps[b2].h + 1) { grewChecked++; if (!(gaps[b2].d > gaps[a2].d + 3)) grow++; }
@@ -3266,11 +3274,12 @@ function inlineTimelineVerdict(m) {
   if (mono) why.push(mono + ' pair(s) of gaps where the shorter time is drawn wider');
   if (grow) why.push(grow + ' pair(s) of gaps where ten times the time is not drawn at least 3 px wider');
   // gap labels: one wherever the time is 6 hours or more, in the table's own figures, none elsewhere, each between its two markers
-  var want = []; for (var w = 1; w < mk.length; w++) if (Math.abs(exp[w]) >= INLINE_STRIP_LABEL_FROM_H) want.push(w);
+  for (var w = 1; w < mk.length; w++) if (Math.abs(exp[w]) >= INLINE_STRIP_LABEL_FROM_H) want.push(w);
   var got = m.labels.map(function (l) { return l.forEv; }).sort(function (x, y) { return x - y; });
   if (want.join(',') !== got.join(',')) why.push('labels on gaps [' + got.join(',') + '] where the table has long gaps at [' + want.join(',') + ']');
   var wrongText = m.labels.filter(function (l) { return l.text !== inlineGapWords(exp[l.forEv]); });
   if (wrongText.length) why.push(wrongText.length + ' label(s) say something other than the table\'s elapsed time (first: "' + wrongText[0].text + '" for ' + (exp[wrongText[0].forEv] === undefined ? '?' : inlineGapWords(exp[wrongText[0].forEv])) + ')');
+  }
   var misplaced = m.labels.filter(function (l) { var a = mk[l.forEv - 1], b = mk[l.forEv]; var c = (l.l + l.r) / 2; return !a || !b || c < a.cx - 1 || c > b.cx + 1; });
   if (misplaced.length) why.push(misplaced.length + ' label(s) not between their two markers');
   var lh = 0; for (var x1 = 0; x1 < m.labels.length; x1++) { for (var x2 = x1 + 1; x2 < m.labels.length; x2++) if (boxesOverlap(m.labels[x1], m.labels[x2])) lh++; for (var x3 = 0; x3 < boxes.length; x3++) if (boxesOverlap(m.labels[x1], boxes[x3])) lh++; }
@@ -3285,7 +3294,8 @@ function inlineTimelineVerdict(m) {
   /* bounds include the figure panel (padding, FIGURE eyebrow, 18px caption; Joseph 2026-11-15): about 120 px over the strip alone; the old stacked tower was 1,270-1,650 px */ var figMax = m.vw >= 1000 ? 420 : (m.vw >= 700 ? 480 : 620), bounded = lanes === 1 && !m.callout;
   if (bounded && m.figH > figMax) why.push('the figure is ' + Math.round(m.figH) + ' px tall (at most ' + figMax + ' at ' + m.vw + ' px wide)');
   if (m.pageOverflow > 1) why.push('the page scrolls sideways by ' + m.pageOverflow + ' px');
-  return { notChecked: false, ok: why.length === 0, why: why, grew: grewChecked, gapsN: gaps.length, detail: n + ' marker(s) against ' + m.tableRows + ' chronology row(s); ' + hits + ' overlapping pair(s), ' + m.labels.length + ' gap label(s) of ' + want.length + ' expected, ' + gaps.length + ' gap(s) compared for growth (' + grewChecked + ' pair(s) a factor of ten apart); strip ' + (m.strip ? Math.round(m.strip.h) + ' px tall, content ' + m.strip.scrollW + ' in a ' + m.strip.clientW + ' px box' : 'absent') + '; figure ' + Math.round(m.figH) + ' px tall at ' + m.vw + ' px' + (bounded ? ' (bound ' + figMax + ')' : ' (' + lanes + ' lane(s)' + (m.callout ? ', with a callout' : '') + ': no whole-figure bound applied)') + (why.length ? '; ' + why.join('; ') : '') };
+  if (undated && !why.length) return { notChecked: true, ok: false, detail: undated + ' gap(s) between dates the page itself cannot place (no ISO date, and not one month and day under a single year), so the spacing was not compared with elapsed time; the order, overlap, count and height checks found nothing' };
+  return { notChecked: false, ok: why.length === 0, why: why, grew: grewChecked, gapsN: gaps.length, detail: n + ' marker(s) against ' + m.tableRows + ' chronology row(s); ' + hits + ' overlapping pair(s), ' + m.labels.length + ' gap label(s) of ' + want.length + ' expected, ' + gaps.length + ' gap(s) compared for growth (' + grewChecked + ' pair(s) a factor of ten apart)' + (undated ? '; ' + undated + ' gap(s) between dates the page cannot place were not compared with elapsed time' : '') + '; strip ' + (m.strip ? Math.round(m.strip.h) + ' px tall, content ' + m.strip.scrollW + ' in a ' + m.strip.clientW + ' px box' : 'absent') + '; figure ' + Math.round(m.figH) + ' px tall at ' + m.vw + ' px' + (bounded ? ' (bound ' + figMax + ')' : ' (' + lanes + ' lane(s)' + (m.callout ? ', with a callout' : '') + ': no whole-figure bound applied)') + (why.length ? '; ' + why.join('; ') : '') };
 }
 async function timelineRows(page, url, html) {
   var nameA = 'the timeline marks are large (dots 32 px, numbers 18 px; smaller on a phone), never overlap, and every event is present';
@@ -4260,6 +4270,16 @@ async function inlineFitRows(page, url) {
   await restoreReportPage(page, url);
 }
 
+/* T-0637 (p5): one control per predicate inlineCountsVerdicts emits. Each is [name, a script that breaks the figure and returns whether the page drew it, the row it must fail]; a page that draws no such figure has nothing to break, so the control is skipped. */
+var INLINE_COUNT_CONTROLS = [
+  ['with one grade square removed the grade-strip row FAILS', '(function(){var c=document.querySelector("figure.hl-fig--grades .hl-rv-sq");if(c)c.remove();return !!c;})()', function (mm) { return inlineCountsVerdicts(mm, SHAPES).filter(function (x) { return /grade strip/.test(x.name); })[0]; }],
+  ['with one heat cell removed the heat-map row FAILS', '(function(){var c=document.querySelector("figure.hl-fig--heat .hl-rv-cell:not(.hl-rv-cell--sw)");if(c)c.remove();return !!c;})()', function (mm) { return inlineCountsVerdicts(mm, SHAPES).filter(function (x) { return /heat map/.test(x.name); })[0]; }],
+  ['with one risk row removed the risk-bar row FAILS', '(function(){var c=document.querySelector("figure.hl-fig--risk .hl-rv-riskrow");if(c)c.remove();return !!c;})()', function (mm) { return inlineCountsVerdicts(mm, SHAPES).filter(function (x) { return /risk bars/.test(x.name); })[0]; }],
+  ['with one confidence segment removed the distribution row FAILS', '(function(){var c=document.querySelector("figure.hl-fig--dist .hl-rv-distbar > span");if(c)c.remove();return !!c;})()', function (mm) { return inlineCountsVerdicts(mm, SHAPES).filter(function (x) { return /distribution/.test(x.name); })[0]; }],
+  ['with one Diamond Model cell removed the Diamond row FAILS', '(function(){var c=document.querySelector("figure.hl-fig--diamond .hl-rv-diamond-card");if(c)c.remove();return !!c;})()', function (mm) { return inlineCountsVerdicts(mm, SHAPES).filter(function (x) { return /Diamond Model/.test(x.name); })[0]; }],
+  ['with the link out of one quoting Diamond Model cell the Diamond row FAILS', '(function(){var c=[].slice.call(document.querySelectorAll("figure.hl-fig--diamond .hl-rv-diamond-card")).filter(function(x){return x.querySelector("blockquote")&&x.querySelector("a[href^=\\"#\\"]");})[0];if(!c)return false;c.querySelector("a[href^=\\"#\\"]").remove();return true;})()', function (mm) { return inlineCountsVerdicts(mm, SHAPES).filter(function (x) { return /Diamond Model/.test(x.name); })[0]; }],
+  ['with the rule-count line corrupted (a total off by one) the rule-count row FAILS', '(function(){var l=document.querySelector("figure.hl-fig--rules .hl-fig-line");if(!l)return false;var n=l.textContent,r=n.replace(/: (\\d+) rules/,function(a,d){return ": "+(+d+1)+" rules";});if(r===n)return false;l.textContent=r;return true;})()', function (mm) { return inlineCountsVerdicts(mm, SHAPES).filter(function (x) { return /rule-count line/.test(x.name); })[0]; }]
+];
 async function inlineFigureRows(page, url) {
   function ctl(name, v) { check('control: ' + name, v.ok === false && !v.notChecked, v.ok === false ? 'FAILS as designed: ' + v.detail : 'the control did NOT fire: ' + v.detail); }
   var states = [[1280, 900], [390, 844]];
@@ -4279,12 +4299,7 @@ async function inlineFigureRows(page, url) {
     counts.forEach(function (c) { row(c.name, c.v); });
     if (si === 0) {
       // controls on this same page: one square, one heat cell, one risk row, one segment removed; a figure moved away from its table; a table drawn a second time; a figure given a box
-      var ctls = [
-        ['with one grade square removed the grade-strip row FAILS', '(function(){var c=document.querySelector("figure.hl-fig--grades .hl-rv-sq");if(c)c.remove();return !!c;})()', function (mm) { return inlineCountsVerdicts(mm, SHAPES).filter(function (x) { return /grade strip/.test(x.name); })[0]; }],
-        ['with one heat cell removed the heat-map row FAILS', '(function(){var c=document.querySelector("figure.hl-fig--heat .hl-rv-cell:not(.hl-rv-cell--sw)");if(c)c.remove();return !!c;})()', function (mm) { return inlineCountsVerdicts(mm, SHAPES).filter(function (x) { return /heat map/.test(x.name); })[0]; }],
-        ['with one risk row removed the risk-bar row FAILS', '(function(){var c=document.querySelector("figure.hl-fig--risk .hl-rv-riskrow");if(c)c.remove();return !!c;})()', function (mm) { return inlineCountsVerdicts(mm, SHAPES).filter(function (x) { return /risk bars/.test(x.name); })[0]; }],
-        ['with one confidence segment removed the distribution row FAILS', '(function(){var c=document.querySelector("figure.hl-fig--dist .hl-rv-distbar > span");if(c)c.remove();return !!c;})()', function (mm) { return inlineCountsVerdicts(mm, SHAPES).filter(function (x) { return /distribution/.test(x.name); })[0]; }]
-      ];
+      var ctls = INLINE_COUNT_CONTROLS;
       for (var ci = 0; ci < ctls.length; ci++) {
         await gotoAndWait(page, url);
         var did = await page.json(ctls[ci][1]);
@@ -5861,6 +5876,7 @@ if (require.main === module) {
     inlineAnatomyVerdict: inlineAnatomyVerdict,
     inlineOnceVerdict: inlineOnceVerdict,
     inlineCountsVerdicts: inlineCountsVerdicts,
+    INLINE_COUNT_CONTROLS: INLINE_COUNT_CONTROLS,
     inlineToolbarVerdict: inlineToolbarVerdict,
     inlineChainTableVerdict: inlineChainTableVerdict,
     INLINE_TIMELINE_EXPR: INLINE_TIMELINE_EXPR,
