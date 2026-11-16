@@ -3356,7 +3356,7 @@ async function inlineTimelineStripRows(page, url, html, w, h, withControls) {
   if (v.notChecked) { check('NOT CHECKED: ' + tag + INLINE_STRIP_ROW, false, v.detail); return; }
   check(tag + INLINE_STRIP_ROW, v.ok, v.detail);
   if (!withControls) return;
-  function ctl(name, vv) { check('control: ' + name, vv.ok === false && !vv.notChecked, vv.ok === false ? 'FAILS as designed: ' + vv.why.slice(0, 2).join('; ') : 'the control did NOT fire: ' + vv.detail); }
+  function ctl(name, vv) { check('control: ' + name, vv.ok === false && !vv.notChecked, vv.ok === false ? 'FAILS as designed: ' + (vv.why || [vv.detail]).slice(0, 2).join('; ') : 'the control did NOT fire: ' + vv.detail); }
   var faults = [
     ['markers at an equal pitch (no widening with elapsed time) make the strip row FAIL', '(function(){[].slice.call(document.querySelectorAll("figure.hl-fig--timeline .hl-rv-marker")).forEach(function(b){b.style.left=(22+60*(+b.dataset.rvEvent))+"px";});})()'],
     ['two markers drawn on top of each other make the strip row FAIL', '(function(){var b=document.querySelectorAll("figure.hl-fig--timeline .hl-rv-marker");if(b.length>1)b[1].style.left=b[0].style.left;})()'],
@@ -4130,9 +4130,12 @@ async function inlineOnePageRows(page, url) {
   await page.evaluate('location.hash="#one-page"'); await CDP.sleep(350);
   var one = await page.json(INLINE_ONEPAGE_EXPR);
   // control (known positive): a stylesheet that draws the generated figures again in one-page mode must make the figures row FAIL
-  await page.evaluate('(function(){var s=document.createElement("style");s.id="hl-gate-onepage-ctl";s.textContent="html.hl-onepage .hl-report-page.hl-figs-inline figure.hl-fig.hl-fig.hl-fig,html.hl-onepage .hl-report-page.hl-figs-inline .hl-facts-block.hl-facts-block.hl-facts-block,html.hl-onepage .hl-report-page.hl-figs-inline .hl-tbar-filters.hl-tbar-filters.hl-tbar-filters{display:block !important;}";document.head.appendChild(s);})()'); await CDP.sleep(150);
+  /* T-0637: a report whose only generated element sits in a container one-page mode never shows (the 109.230.231.37 overview: a slim-bar anchor and no figure) gives the
+     stylesheet nothing it can paint, so the control adds one generated figure of its own to the first report section first: the known positive is then on every page */
+  await page.evaluate('(function(){if(document.querySelector(".hl-rv-source figure.hl-fig"))return;var src=document.querySelector(".hl-post-content .hl-rv-source");if(!src)return;var f=document.createElement("figure");f.className="hl-fig hl-gate-ctl-fig";f.textContent="gate control figure";src.insertBefore(f,src.firstChild);})()');
+  await page.evaluate('(function(){var s=document.createElement("style");s.id="hl-gate-onepage-ctl";s.textContent="html.hl-onepage .hl-report-page.hl-figs-inline figure.hl-fig.hl-fig.hl-fig,html.hl-onepage .hl-report-page.hl-figs-inline .hl-facts-block.hl-facts-block.hl-facts-block,html.hl-onepage .hl-report-page.hl-figs-inline .hl-tbar-filters.hl-tbar-filters.hl-tbar-filters,html.hl-onepage .hl-report-page.hl-figs-inline .hl-rv-minibar-anchor.hl-rv-minibar-anchor.hl-rv-minibar-anchor{display:block !important;}";document.head.appendChild(s);})()'); await CDP.sleep(150);
   var oneCtl = await page.json(INLINE_ONEPAGE_EXPR);
-  await page.evaluate('(function(){var s=document.getElementById("hl-gate-onepage-ctl");if(s)s.remove();})()'); await CDP.sleep(100);
+  await page.evaluate('(function(){var s=document.getElementById("hl-gate-onepage-ctl");if(s)s.remove();[].slice.call(document.querySelectorAll(".hl-gate-ctl-fig")).forEach(function(f){f.remove();});})()'); await CDP.sleep(100);
   if (tab) {
     await page.evaluate('location.hash="#tab-' + tab + '"'); await CDP.sleep(250);
     await page.evaluate('(function(){var c=[].slice.call(document.querySelectorAll("#tab-' + tab + ' .hl-tbar-chip")).filter(function(x){return x.dataset.rvValue!=="";})[0];if(c){c.scrollIntoView({block:"center"});c.click();}})()');
@@ -4294,11 +4297,15 @@ async function inlineFigureRows(page, url) {
       if (!moved) check('NOT CHECKED: control: a figure moved away from its table makes the placement row FAIL', false, 'the report draws no grade or heat figure to move');
       else ctl('a figure moved away from its table makes the placement row FAIL', inlinePlacementVerdict(await page.json(INLINE_EXPR), SHAPES));
       await gotoAndWait(page, url);
-      await page.evaluate('(function(){var t=document.querySelector(".hl-rv-source table").cloneNode(true);document.querySelector(".hl-rv-panel").appendChild(t);})()');
-      ctl('a table drawn a second time outside the report\'s sections makes the one-table-once row FAIL', inlineOnceVerdict(await page.json(INLINE_EXPR), article));
+      var copied = await page.json('(function(){var t=document.querySelector(".hl-rv-source table"),p=document.querySelector(".hl-rv-panel");if(!t||!p)return false;p.appendChild(t.cloneNode(true));return true;})()');
+      if (!copied) check('NOT CHECKED: control: a table drawn a second time outside the report\'s sections makes the one-table-once row FAIL', false, 'the report has no table in a tab to copy');
+      else ctl('a table drawn a second time outside the report\'s sections makes the one-table-once row FAIL', inlineOnceVerdict(await page.json(INLINE_EXPR), article));
       await gotoAndWait(page, url);
-      await page.evaluate('(function(){var f=document.querySelector("figure.hl-fig");f.style.cssText="border:0;border-top:1px solid #888;border-radius:16px;background:transparent;box-shadow:0 2px 8px #000";})()');
-      ctl('a figure stripped of its panel (no side borders, no fill) and given a 16px radius and a shadow makes the anatomy row FAIL', inlineAnatomyVerdict(await page.json(INLINE_EXPR)));
+      /* T-0637: a report that draws no figure has nothing to strip (the 109.230.231.37 overview threw here) */
+      var stripped = await page.json('(function(){var f=document.querySelector("figure.hl-fig");if(!f)return false;f.style.cssText="border:0;border-top:1px solid #888;border-radius:16px;background:transparent;box-shadow:0 2px 8px #000";return true;})()');
+      var aname = 'a figure stripped of its panel (no side borders, no fill) and given a 16px radius and a shadow makes the anatomy row FAIL';
+      if (!stripped) check('NOT CHECKED: control: ' + aname, false, 'the report draws no figure to strip');
+      else ctl(aname, inlineAnatomyVerdict(await page.json(INLINE_EXPR)));
       await gotoAndWait(page, url);
     }
   }
@@ -5144,7 +5151,7 @@ async function tabbedChecks(page, opts) {
         try {
           await setViewport(page, 1280, 900);
           if (!(await gotoAndWait(page, tsrv2.origin + fixturePath + '#tab-timeline'))) check('NOT CHECKED: ' + fcname, false, 'the tab controller never built on the control copy');
-          else { await CDP.sleep(300); var tv2 = inlineTimelineVerdict(await page.json(INLINE_TIMELINE_EXPR)); check(fcname, tv2.ok === false && !tv2.notChecked, tv2.ok === false ? 'FAILS as designed: ' + tv2.why.slice(0, 2).join('; ') : 'the control did NOT fire: ' + tv2.detail); }
+          else { await CDP.sleep(300); var tv2 = inlineTimelineVerdict(await page.json(INLINE_TIMELINE_EXPR)); if (tv2.notChecked) check('NOT CHECKED: ' + fcname, false, tv2.detail); else check(fcname, tv2.ok === false, tv2.ok === false ? 'FAILS as designed: ' + (tv2.why || [tv2.detail]).slice(0, 2).join('; ') : 'the control did NOT fire: ' + tv2.detail); }
         } finally { tsrv2.close(); }
       }
     } else if (!horiz.length) {
