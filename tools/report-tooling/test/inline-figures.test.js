@@ -218,6 +218,10 @@ test('the browser gate\'s inline rows, run on the jsdom page: placement, once, c
     const bare = f.w.document.createTextNode('Unrelated prose'); heat.after(bare);
     const between2 = JSON.parse(JSON.stringify(f.w.eval(G.INLINE_EXPR))); bare.remove();
     assert.equal(G.inlinePlacementVerdict(between2, shapes).ok, false, 'bare text between the heat map and its table');
+    // review_9ae2ff1729ee43bd: the rule-count figure is held to the same adjacency when the detection section has a table
+    const rules = (adj) => { const x = JSON.parse(JSON.stringify(m)); x.rule = x.rule || { total: 1 }; x.detTable = 0; x.figs = x.figs.filter((g) => g.kind !== 'rules').concat([{ kind: 'rules', next: 0, adj, prevTag: 'DIV', prevText: '' }]); return G.inlinePlacementVerdict(x, shapes).detail; };
+    assert.doesNotMatch(rules(true), /rule counts are not before/, 'a rule-count figure directly before its table');
+    assert.match(rules(false), /rule counts are not before/, 'a rule-count figure with prose between it and its table');
     assert.equal(G.inlinePlacementVerdict(JSON.parse(JSON.stringify(f.w.eval(G.INLINE_EXPR))), shapes).ok, true, 'restored again');
     assert.equal(G.inlinePlacementVerdict(JSON.parse(JSON.stringify(f.w.eval(G.INLINE_EXPR))), shapes).ok, true, 'restored page passes again');
     const sq = JSON.parse(JSON.stringify(m)); sq.grade.REACHED = 0;

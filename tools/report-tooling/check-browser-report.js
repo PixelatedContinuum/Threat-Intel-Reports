@@ -4014,7 +4014,7 @@ function inlinePlacementVerdict(m, shapes) {
   var rl = kinds.rules || [];
   if (m.rule !== null) {
     if (rl.length !== 1) bad.push('rule counts: ' + rl.length + ' figure(s) drawn, 1 expected from the detection sentence');
-    else { listed.push('rule counts'); if (m.detTable >= 0 ? rl[0].next !== m.detTable : rl[0].prevTag !== 'P') bad.push('rule counts are not before the detection section\'s first table or after its first paragraph'); }
+    else { listed.push('rule counts'); if (m.detTable >= 0 ? (rl[0].next !== m.detTable || rl[0].adj === false) : rl[0].prevTag !== 'P') bad.push('rule counts are not before the detection section\'s first table or after its first paragraph'); }
   } else if (rl.length) bad.push('rule counts are drawn but the detection sentence does not reconcile');
   var known = { grades: 1, chain: 1, heat: 1, timeline: 1, dist: 1, risk: 1, diamond: 1, rules: 1 };
   m.figs.forEach(function (f) { if (!known[f.kind]) bad.push('an unknown figure kind "' + f.kind + '" is drawn'); if (f.inDetailsClosed) bad.push(f.kind + ' figure is inside a closed teardown'); });
