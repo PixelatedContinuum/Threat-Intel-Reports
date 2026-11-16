@@ -5,8 +5,10 @@
   CVEs tab, significant new CVEs on neither KEV list).
 
   Every field the exporter writes on the row is emitted, by iterating the row itself,
-  so a field added to wire.yml later reaches agents with no edit here. One field is left
-  out on purpose: epss_spark, the SVG polyline points the page draws the EPSS line with,
+  so a field added to wire.yml later reaches agents with no edit here. Left out on purpose:
+  the model-written prose fields the page never renders and the exporter never reads
+  (summary, context, originalDescription and the like: a_skip below; review_973c1568f83c41b1
+  showed an injected summary key would otherwise be published), and epss_spark, the SVG polyline points the page draws the EPSS line with,
   which carry nothing an agent can use (epss, epss_pre, epss_max and epss_date carry the
   values). The derived keys come first (id, list, the two KEV flags and the two URLs),
   then the row's own keys, each with its comma at its FRONT, so no absence can leave a
@@ -16,6 +18,7 @@
   CVEs), so it opens the row on the page.
 {%- endcomment -%}
 {%- assign ar = include.r -%}
+{%- assign a_skip = "epss_spark,summary,context,originalDescription,original_description,description,model_summary" | split: "," -%}
 {%- assign a_id = ar.cve | downcase -%}
 {%- assign a_cisa_len = ar.cisa_added | append: "" | size -%}
 {%- if include.list == "kev" -%}{%- assign a_anchor = "#cve-" | append: a_id -%}{%- assign a_vc = true -%}{%- else -%}{%- assign a_anchor = "#cves-" | append: a_id -%}{%- assign a_vc = false -%}{%- endif -%}
@@ -23,5 +26,5 @@
 {%- assign a_wire = "/wire/" | absolute_url | append: a_anchor -%}
 {%- assign a_nvd = "https://nvd.nist.gov/vuln/detail/" | append: ar.cve -%}
 {"id": {{ ar.cve | jsonify }}, "list": {{ include.list | jsonify }}, "on_vulncheck_kev": {{ a_vc | jsonify }}, "on_cisa_kev": {{ a_cisa | jsonify }}, "wire_url": {{ a_wire | jsonify }}, "nvd_url": {{ a_nvd | jsonify }}
-{%- for kv in ar -%}{%- unless kv[0] == "epss_spark" -%}, {{ kv[0] | jsonify }}: {{ kv[1] | jsonify }}{%- endunless -%}{%- endfor -%}
+{%- for kv in ar -%}{%- unless a_skip contains kv[0] -%}, {{ kv[0] | jsonify }}: {{ kv[1] | jsonify }}{%- endunless -%}{%- endfor -%}
 }

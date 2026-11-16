@@ -36,7 +36,7 @@ var DETAILS_ROW_INCLUDE = path.join(ROOT, '_includes', 'wire-details-row.html');
 var DETAILS_JS = path.join(ROOT, 'assets', 'js', 'wire-details.js');
 /* T-0651: the Wire agent feed (wire/agent/*.json) and its two row includes, held to the same jsonify rule. */
 var AGENT_FILES = ['index.json', 'summary.json', 'kevs.json', 'cves.json', 'news.json', 'all.json'].map(function (f) { return ['wire/agent/' + f, path.join(ROOT, 'wire', 'agent', f)]; })
-  .concat([['_includes/wire-agent-row.html', path.join(ROOT, '_includes', 'wire-agent-row.html')], ['_includes/wire-agent-brief.html', path.join(ROOT, '_includes', 'wire-agent-brief.html')]]);
+  .concat([['_includes/wire-agent-row.html', path.join(ROOT, '_includes', 'wire-agent-row.html')], ['_includes/wire-agent-brief.html', path.join(ROOT, '_includes', 'wire-agent-brief.html')], ['_includes/wire-agent-select.html', path.join(ROOT, '_includes', 'wire-agent-select.html')]]);
 
 var yaml, CW;
 try {

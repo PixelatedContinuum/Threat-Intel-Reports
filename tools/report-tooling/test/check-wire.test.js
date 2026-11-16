@@ -1066,7 +1066,7 @@ test('the gate follows the include chain: every wire-* include the page names is
      names stays the six below. T-0651 adds wire-agent-row.html and wire-agent-brief.html,
      which only the agent feed (wire/agent/*.json) includes, for the same reason. */
   var rowInc = 'wire-details-row.html';
-  var agentIncs = ['wire-agent-brief.html', 'wire-agent-row.html'];
+  var agentIncs = ['wire-agent-brief.html', 'wire-agent-row.html', 'wire-agent-select.html'];
   var inc = realIncludes();
   assert.deepEqual(Object.keys(inc).sort(),
     agentIncs.concat(['wire-cve-why.html', rowInc, 'wire-fold-keys.html', 'wire-fold.html', 'wire-nkev-priority.html', 'wire-vuln-epss.html', 'wire-vuln-new.html',

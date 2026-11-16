@@ -10,10 +10,7 @@ sitemap: false
   then fetch the full rows from kevs.json or cves.json. Same shape guards as those files.
 {%- endcomment -%}
 {%- assign wire = site.data.wire -%}
-{%- assign k_rows = "" | split: "" -%}
-{%- for r in wire.vulns -%}{%- if r.cve and r.added -%}{%- assign k_head = r.cve | slice: 0, 4 -%}{%- assign k_alen = r.added | size -%}{%- if k_head == "CVE-" and k_alen == 10 -%}{%- assign k_rows = k_rows | push: r -%}{%- endif -%}{%- endif -%}{%- endfor -%}
-{%- assign c_rows = "" | split: "" -%}
-{%- for r in wire.cves -%}{%- assign c_head = r.cve | slice: 0, 4 -%}{%- if c_head == "CVE-" -%}{%- assign c_rows = c_rows | push: r -%}{%- endif -%}{%- endfor -%}
+{%- include wire-agent-select.html -%}
 {%- assign k_by = k_rows | group_by: "vendor" -%}{%- assign c_by = c_rows | group_by: "vendor" -%}
 {"dataset": "summary", "description": "One compact object per vulnerability on The Wire (list kev: newly added to VulnCheck KEV; list cve: significant new CVE on neither KEV list), plus a vendor index. Use it to shortlist, then read the full rows in kevs.json or cves.json. Field meanings: /wire/agent/index.json.", "index": {{ "/wire/agent/index.json" | absolute_url | jsonify }}, "kevs_generated_at": {{ wire.vulns_generated_at | jsonify }}, "cves_generated_at": {{ wire.cves_generated_at | jsonify }}, "window_days": {{ wire.window_days | jsonify }}, "count": {{ k_rows.size | plus: c_rows.size | jsonify }}, "kev_count": {{ k_rows.size | jsonify }}, "cve_count": {{ c_rows.size | jsonify }}, "vendors": {"kev": {
 {%- for g in k_by -%}{%- unless forloop.first -%},{%- endunless %}
