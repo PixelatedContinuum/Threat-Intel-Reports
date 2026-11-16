@@ -5,5 +5,5 @@ description: "Every CVE newly added to VulnCheck's Known Exploited Vulnerabiliti
 permalink: /wire/agent/kevs/
 ---
 {%- include wire-agent-select.html -%}
-<p>Every CVE VulnCheck added to its KEV catalog in the last {{ wire.window_days }} days: exploitation is recorded for all of them. CISA KEV marks those also on CISA's catalog. {% if "kev" == "kev" %}{{ k_rows.size }}{% else %}{{ c_rows.size }}{% endif %} CVEs, data as of {% if "kev" == "kev" %}{{ wire.vulns_generated_at | escape }}{% else %}{{ wire.cves_generated_at | escape }}{% endif %} (UTC). Each CVE links to its full detail; vendors are indexed on the <a href="{{ '/wire/agent/vendors/' | relative_url }}">vendor page</a>.</p>
+<p>Every CVE VulnCheck added to its KEV catalog in the last {{ wire.window_days | escape }} days: exploitation is recorded for all of them. CISA KEV marks those also on CISA's catalog. {% if "kev" == "kev" %}{{ k_rows.size }}{% else %}{{ c_rows.size }}{% endif %} CVEs, data as of {% if "kev" == "kev" %}{{ wire.vulns_generated_at | escape }}{% else %}{{ wire.cves_generated_at | escape }}{% endif %} (UTC). Each CVE links to its full detail; vendors are indexed on the <a href="{{ '/wire/agent/vendors/' | relative_url }}">vendor page</a>.</p>
 {% include wire-agent-list.html list="kev" %}

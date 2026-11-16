@@ -5,5 +5,5 @@ description: "Significant new CVEs published in the last 30 days that are on nei
 permalink: /wire/agent/cves/
 ---
 {%- include wire-agent-select.html -%}
-<p>CVEs published in the last {{ wire.window_days }} days that are on neither VulnCheck KEV nor CISA KEV, selected as likely to matter soon. Being listed is a selection signal, not evidence of exploitation. {% if "cve" == "kev" %}{{ k_rows.size }}{% else %}{{ c_rows.size }}{% endif %} CVEs, data as of {% if "cve" == "kev" %}{{ wire.vulns_generated_at | escape }}{% else %}{{ wire.cves_generated_at | escape }}{% endif %} (UTC). Each CVE links to its full detail; vendors are indexed on the <a href="{{ '/wire/agent/vendors/' | relative_url }}">vendor page</a>.</p>
+<p>CVEs published in the last {{ wire.window_days | escape }} days that are on neither VulnCheck KEV nor CISA KEV, selected as likely to matter soon. Being listed is a selection signal, not evidence of exploitation. {% if "cve" == "kev" %}{{ k_rows.size }}{% else %}{{ c_rows.size }}{% endif %} CVEs, data as of {% if "cve" == "kev" %}{{ wire.vulns_generated_at | escape }}{% else %}{{ wire.cves_generated_at | escape }}{% endif %} (UTC). Each CVE links to its full detail; vendors are indexed on the <a href="{{ '/wire/agent/vendors/' | relative_url }}">vendor page</a>.</p>
 {% include wire-agent-list.html list="cve" %}

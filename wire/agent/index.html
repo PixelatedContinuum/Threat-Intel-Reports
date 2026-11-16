@@ -5,7 +5,7 @@ description: "Plain-text copy of The Wire for AI assistants and search: newly ex
 permalink: /wire/agent/
 ---
 {%- include wire-agent-select.html -%}
-<p>This is a plain-text copy of <a href="{{ '/wire/' | relative_url }}">The Wire</a> for AI assistants, agents and search engines. It holds the same data the page shows: {{ k_rows.size }} CVEs newly added to VulnCheck's Known Exploited Vulnerabilities (KEV) catalog in the last {{ wire.window_days }} days (already exploited), {{ c_rows.size }} significant new CVEs that are on neither VulnCheck KEV nor CISA KEV, and {{ n_items }} threat intelligence headlines. Vulnerability data as of {{ wire.vulns_generated_at | escape }} (UTC).</p>
+<p>This is a plain-text copy of <a href="{{ '/wire/' | relative_url }}">The Wire</a> for AI assistants, agents and search engines. It holds the same data the page shows: {{ k_rows.size }} CVEs newly added to VulnCheck's Known Exploited Vulnerabilities (KEV) catalog in the last {{ wire.window_days | escape }} days (already exploited), {{ c_rows.size }} significant new CVEs that are on neither VulnCheck KEV nor CISA KEV, and {{ n_items }} threat intelligence headlines. Vulnerability data as of {{ wire.vulns_generated_at | escape }} (UTC).</p>
 <h2>How to use it</h2>
 <ul>
 <li><a href="{{ '/wire/agent/kevs/' | relative_url }}">Exploited vulnerabilities (nKEVs)</a>: one line per CVE newly added to VulnCheck KEV, with CISA KEV status, severity, EPSS and priority.</li>
@@ -24,7 +24,7 @@ permalink: /wire/agent/
 <h2>Latest headlines</h2>
 <ul>
 {%- for i in wire.items limit: 40 %}
-<li>{{ i.date | date: "%Y-%m-%d" }}, {{ i.source | escape | replace: "&#39;", "'" | replace: "&quot;", '"' }}: {{ i.title | escape | replace: "&#39;", "'" | replace: "&quot;", '"' }}</li>
+<li>{{ i.date | date: "%Y-%m-%d" | escape }}, {{ i.source | escape | replace: "&#39;", "'" | replace: "&quot;", '"' }}: {{ i.title | escape | replace: "&#39;", "'" | replace: "&quot;", '"' }}</li>
 {%- endfor %}
 </ul>
 <p>All {{ n_items }} headlines with links: <a href="{{ '/wire/agent/news.json' | relative_url }}">news.json</a> and <a href="{{ '/wire/' | relative_url }}">The Wire</a>.</p>
