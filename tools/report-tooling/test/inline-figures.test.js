@@ -15,25 +15,21 @@ const G = require('../check-browser-report.js');
 const PREVIEWS = ['inv-2026-082-agent-platform-command-channel', 'inv-2026-083-federal-ad-credential-access-rig'];
 const frontMatter = (md) => md.split(/\n---\n/)[0];
 
-test('the layout adds hl-figs-inline to the report page for figures: inline, and nowhere else', () => {
+test('the layout adds hl-figs-inline to every tabbed report page unless it says figures: dashboard, and nowhere else', () => {
+  // Joseph, 2026-11-15: the inline figures go live on the whole site; `figures: dashboard` is the per-report way back.
   const layout = read('_layouts/post.html');
-  assert.match(layout, /hl-report-page\{% if page\.figures == 'inline' %\} hl-figs-inline\{% endif %\}/);
+  assert.match(layout, /hl-report-page\{% unless page\.figures == 'dashboard' %\} hl-figs-inline\{% endunless %\}/);
   assert.equal((layout.match(/hl-figs-inline/g) || []).length, 1, 'one place sets the class');
   assert.equal(/figures/.test(read('_includes/default/head.liquid')), false, 'the head include does not read the switch');
 });
 
-test('exactly the two unlisted previews carry figures: inline (site copies; vault copies too when the vault is beside the checkout)', () => {
-  const flagged = fs.readdirSync(path.join(root, 'reports')).filter((d) => {
+test('no report opts back to the dashboard (site rollout, Joseph 2026-11-15); the two first previews still say figures: inline', () => {
+  const optedOut = fs.readdirSync(path.join(root, 'reports')).filter((d) => {
     const f = path.join(root, 'reports', d, 'index.md');
-    return fs.existsSync(f) && /^figures: inline$/m.test(frontMatter(fs.readFileSync(f, 'utf8')));
-  }).sort();
-  assert.deepEqual(flagged, PREVIEWS);
-  for (const d of PREVIEWS) {
-    const fm = frontMatter(read('reports/' + d + '/index.md'));
-    assert.match(fm, /^unlisted: true$/m, d + ' is an unlisted preview');
-    const vault = path.join(root, '..', '..', 'threat-intel-vault', 'reports', d, 'index.md');
-    if (fs.existsSync(vault)) assert.match(frontMatter(fs.readFileSync(vault, 'utf8')), /^figures: inline$/m, 'the vault copy of ' + d);
-  }
+    return fs.existsSync(f) && /^figures: dashboard$/m.test(frontMatter(fs.readFileSync(f, 'utf8')));
+  });
+  assert.deepEqual(optedOut, []);
+  for (const d of PREVIEWS) assert.match(frontMatter(read('reports/' + d + '/index.md')), /^figures: inline$/m, d);
 });
 
 test('the cache-busters moved with the stylesheet and the script (both carry the same value)', () => {
