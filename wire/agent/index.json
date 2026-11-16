@@ -1,0 +1,159 @@
+---
+layout: none
+permalink: /wire/agent/index.json
+sitemap: false
+---
+{%- comment -%}
+  T-0651 (Joseph, 2026-11-16): the entry point of the Wire agent feed, a machine-readable
+  copy of The Wire for automated agents. It is not linked from the site's navigation;
+  agents find it through /llms.txt and the rel="alternate" link in /wire/'s head. It
+  carries the usage notes, the file list with live counts, and the meaning of every
+  field. Everything here is static text except the counts and timestamps, which are
+  emitted through | jsonify like every other value in the agent files. Rebuilt with the
+  site on every Wire refresh (the wire-data push), so it is never older than the page.
+{%- endcomment -%}
+{%- assign wire = site.data.wire -%}
+{%- assign k_n = 0 -%}{%- for r in wire.vulns -%}{%- if r.cve and r.added -%}{%- assign k_head = r.cve | slice: 0, 4 -%}{%- assign k_alen = r.added | size -%}{%- if k_head == "CVE-" and k_alen == 10 -%}{%- assign k_n = k_n | plus: 1 -%}{%- endif -%}{%- endif -%}{%- endfor -%}
+{%- assign c_n = 0 -%}{%- for r in wire.cves -%}{%- assign c_head = r.cve | slice: 0, 4 -%}{%- if c_head == "CVE-" -%}{%- assign c_n = c_n | plus: 1 -%}{%- endif -%}{%- endfor -%}
+{
+"name": "The Hunter's Ledger: The Wire, agent feed",
+"about": "A machine-readable copy of The Wire (https://the-hunters-ledger.com/wire/): newly exploited vulnerabilities (VulnCheck KEV additions), significant new CVEs not yet on a KEV list, and threat intelligence headlines, over a rolling window. It holds the same data the page renders, rebuilt with the site on every Wire refresh (about every 15 minutes).",
+"site": {{ "/" | absolute_url | jsonify }},
+"page": {{ "/wire/" | absolute_url | jsonify }},
+"generated_at": {{ wire.generated_at | date_to_xmlschema | jsonify }},
+"kevs_generated_at": {{ wire.vulns_generated_at | jsonify }},
+"cves_generated_at": {{ wire.cves_generated_at | jsonify }},
+"window_days": {{ wire.window_days | jsonify }},
+
+"instructions_for_agents": [
+  "Start here. Pick the smallest file that answers the question, and fetch the larger ones only if you need more fields.",
+  "If your context or fetch size is limited, do not fetch all.json. Fetch summary.json first (one short object per CVE plus a vendor index), shortlist the CVEs that matter, then fetch kevs.json and/or cves.json and keep only the rows whose id is on your shortlist.",
+  "To answer 'which of these affect vendor or product X', use summary.json's vendors index (vendor name to CVE ids, separately for the kev and cve lists), then match on the vendor and product fields of the rows. Vendor names are as each source gives them, so match case-insensitively and try likely variants (for example 'Microsoft' and 'Microsoft Corporation').",
+  "Every file is one JSON document. If your tool truncated it, the JSON will not parse: treat the result as incomplete, not as an empty list, and fall back to a smaller file.",
+  "Check the generated_at timestamps and the status fields before relying on the data. status other than 'ok' means that list could not be refreshed and may be stale or empty.",
+  "list 'kev' rows are already exploited: VulnCheck has recorded exploitation for every one. list 'cve' rows are NOT known to be exploited; they are selected as likely to matter soon, which is a selection signal and not evidence of exploitation.",
+  "on_cisa_kev true means the CVE is also on CISA's KEV catalog (cisa_added is the date, kev_due the CISA remediation due date).",
+  "Cite the original sources (nvd_url, the reports list, the news item url) and The Wire (wire_url) when you pass this on. Scores such as priority and np_score are the site author's own patch-first ordering, not a vendor or government rating.",
+  "An empty field ('' or []) means the source gave no value, not that the answer is zero or no. For example, an empty et_sids means no ET Open rule names the CVE as of the check time, not that the CVE is undetectable."
+],
+
+"files": [
+  {"name": "summary.json", "url": {{ "/wire/agent/summary.json" | absolute_url | jsonify }}, "use_for": "Shortlisting. One compact object per CVE on both lists (id, list, KEV flags, date, vendor, product, title, severity, CVSS, CWE, EPSS, priority, wire_url) plus a vendor index. The smallest vulnerability file.", "rows": {{ k_n | plus: c_n | jsonify }}},
+  {"name": "kevs.json", "url": {{ "/wire/agent/kevs.json" | absolute_url | jsonify }}, "use_for": "Every CVE newly added to VulnCheck KEV in the window, with every field: description, CWE, affected versions, exploitation citations, CISA KEV dates, CVSS vector, EPSS history values, SSVC, public exploits, detection rules, fix versions, aliases.", "rows": {{ k_n | jsonify }}},
+  {"name": "cves.json", "url": {{ "/wire/agent/cves.json" | absolute_url | jsonify }}, "use_for": "Significant new CVEs on neither KEV list, with every field, including why each was admitted (signals) and the daily priority picks.", "rows": {{ c_n | jsonify }}},
+  {"name": "news.json", "url": {{ "/wire/agent/news.json" | absolute_url | jsonify }}, "use_for": "Threat intelligence headlines: title, publisher, link, date and topic labels. No article text; follow url to the publisher.", "rows": {{ wire.items.size | jsonify }}},
+  {"name": "all.json", "url": {{ "/wire/agent/all.json" | absolute_url | jsonify }}, "use_for": "Everything above in one file (kevs, cves and news). The largest file; use it only if you can read about a megabyte of JSON in one go.", "rows": {{ k_n | plus: c_n | plus: wire.items.size | jsonify }}}
+],
+
+"row_keys_common": {
+  "id": "The CVE id, e.g. CVE-2026-12345.",
+  "list": "'kev' (newly added to VulnCheck KEV, already exploited) or 'cve' (significant new CVE on neither KEV list).",
+  "on_vulncheck_kev": "true for every kev row, false for every cve row.",
+  "on_cisa_kev": "true when the CVE is also on CISA's KEV catalog.",
+  "wire_url": "The row on The Wire page.",
+  "nvd_url": "The CVE's NVD record.",
+  "cve": "The CVE id as the source gives it (same as id).",
+  "vendor": "Vendor as the source gives it. '' when none is given.",
+  "product": "Product as the source gives it.",
+  "title": "CVE record title, when available (mostly cve rows).",
+  "desc": "The CVE record's own description text, quoted from the record.",
+  "cwe": "CWE ids from the CVE record.",
+  "affected": "Affected product and version ranges from the CVE record, as text.",
+  "fixed": "Fixed version(s) where cve.now records them. '' when not known.",
+  "aliases": "Other advisory ids for the same flaw (for example GHSA and EUVD ids), from cve.now.",
+  "cvss": "CVSS base score as text, from the NVD record through VulnCheck NVD++ (mostly the CNA's score). '' when unscored.",
+  "cvss_version": "CVSS version of that score.",
+  "severity": "critical, high, medium or low: the band of the CVSS score. '' when unscored, which never means low.",
+  "scored_by": "Who scored it: CNA (the CVE Numbering Authority that issued the CVE), ADP (an Authorized Data Publisher such as CISA) or NVD. '' when unscored.",
+  "cvss_vector": "The CVSS vector string. AV:N/PR:N/UI:N means network reachable with no login and no user interaction.",
+  "epss": "FIRST's EPSS probability (0 to 1) that the CVE is exploited in the next 30 days, as of epss_date.",
+  "epss_pct": "EPSS percentile (0 to 1). 0.90 or more is the top 10%; it is a rank, not a probability.",
+  "epss_date": "Date of the EPSS value.",
+  "epss_max": "Highest EPSS in the last 30 days.",
+  "epss_xmodel": "'pre' and/or 'spark' when an EPSS comparison crosses a change of FIRST's EPSS model, so the before and after values are not like for like.",
+  "vedas": "A.R.P. Syndicate's VEDAS exploit-maturity estimate (0 to 1). The source publishes no formula; a high value is not evidence of exploitation or of working exploit code.",
+  "ssvc_expl": "CISA's SSVC exploitation decision point (none, poc or active), from CISA Vulnrichment via cve.now.",
+  "ssvc_auto": "CISA's SSVC automatable decision point (yes or no).",
+  "ssvc_impact": "CISA's SSVC technical impact (partial or total).",
+  "msf": "Metasploit modules for the CVE, confirmed against Rapid7's own module index. Untested.",
+  "edb": "Exploit-DB entries for the CVE, confirmed against Exploit-DB's own index. Untested.",
+  "nuclei": "The ProjectDiscovery Nuclei template that names the CVE, or ''.",
+  "et_sids": "Emerging Threats ET Open Suricata rule SIDs that name the CVE.",
+  "cisa_sigma": "Rule files in cisagov/SIGMA_Rules that name the CVE.",
+  "snort3_sids": "Snort 3 community rule SIDs that name the CVE.",
+  "stories": "How many Wire headlines name the CVE (search news.json for the id)."
+},
+
+"row_keys_kev_only": {
+  "added": "Day VulnCheck added the CVE to its KEV catalog (YYYY-MM-DD).",
+  "cisa_added": "Day CISA added it to CISA KEV. '' when it is not on CISA KEV.",
+  "kev_due": "CISA's remediation due date, when on CISA KEV.",
+  "evidence": "Earliest date of a report VulnCheck cites for the CVE. A citation date, not the date exploitation began.",
+  "reports": "The reports VulnCheck cites as evidence of exploitation: url and host.",
+  "reports_more": "How many more cited reports VulnCheck lists beyond those in reports.",
+  "disclosed": "Day NVD published the CVE.",
+  "gap": "Days from NVD publication to the VulnCheck KEV add. Negative means VulnCheck listed it before NVD published it. Absent when unknown.",
+  "age_group": "new (listed under 30 days after disclosure), mid (30 to 365 days), old (over 365 days) or unknown.",
+  "older": "true when the CVE's year is more than a year before the year VulnCheck added it.",
+  "wp": "true for a WordPress plugin or theme CVE.",
+  "epss_pre": "EPSS 7 days before the KEV add, for comparison with epss (EPSS often rises after exploitation is public).",
+  "ratio_now": "(CVSS / 10) / EPSS now. Above 1, severity runs ahead of predicted likelihood.",
+  "ratio_pre": "The same ratio using epss_pre.",
+  "prio": "The row's position in the nKEVs tab's display order (1 is first): CISA-listed first, then no-login network flaws, then public tooling, then higher EPSS.",
+  "np_score": "The site author's patch-first score: 1 point each for a no-login network flaw, CVSS 9.0 or more, public tooling, a CISA KEV listing, and disclosure under 30 days before the VulnCheck add; 2 points for a patch-first product class (1 for an operating system or browser). Higher means patch sooner. It ranks flaws that are already exploited; it predicts nothing and has not been measured against outcomes.",
+  "np_reasons": "Which of those points the row earned: noauth, critical, class, tooling, cisa, fresh.",
+  "np_class": "The patch-first product class that earned the class points, or ''.",
+  "np_rank": "Position in the nKEVs Priority strip. 0 when the row is not in it."
+},
+
+"row_keys_cve_only": {
+  "published": "Day the CVE was published (YYYY-MM-DD).",
+  "signals": "Why the CVE was admitted to the list: msf (Metasploit module), edb (Exploit-DB entry), nuclei (Nuclei template), et (ET Open rule), epss90 (EPSS percentile 0.90 or more), epss_vedas (EPSS at least 1% with VEDAS at least 0.80 and CVSS at least 7.0), wp_unauth (a WordPress plugin or theme flaw whose description says unauthenticated and whose CWE is SQL injection, file upload, privilege escalation, path traversal or file inclusion, or SSRF). Any one admits it. Empty for a CVE present only as a priority pick.",
+  "nomi": "true when nomi-sec's PoC-in-GitHub index lists a public proof of concept. Untested.",
+  "kev_product": "The product name when CISA has listed earlier CVEs in the same product on its KEV catalog. A fact about the product, not about this CVE.",
+  "kev_product_n": "How many earlier CVEs in that product CISA has listed.",
+  "pick_day": "The day this CVE was chosen as one of the three daily priority picks, or '' when it is not a pick.",
+  "pick_score": "The daily-pick score: likelihood (PoC listed 1, SSVC poc or active 1, EPSS percentile 0.90 or more 1, public exploit tooling or rule 2), impact (no-login network flaw, CVSS 9.0 or more) and product class, added together. In the author's replay from February 2025 to September 2026, about 10% of picks old enough to judge reached VulnCheck KEV within 90 days. It was not a blind test.",
+  "pick_reasons": "Which pick points the CVE earned: tooling, nomi, ssvc, epss90, noauth, critical, class.",
+  "pick_class": "The product class that earned the class points, or ''.",
+  "pick_seeded": "true for a pick from the first seeded set, not a daily pick."
+},
+
+"summary_row_keys": {
+  "date": "added (kev) or published (cve).",
+  "priority": "np_score for kev rows, pick_score for cve rows.",
+  "priority_listed": "true when the row is in its tab's Priority strip (kev) or is a daily priority pick (cve).",
+  "other keys": "As in row_keys_common."
+},
+
+"news_item_keys": {
+  "title": "The headline as the publisher wrote it.",
+  "url": "The original article. kind 'vuln' items link back to The Wire.",
+  "source": "The publisher.",
+  "date": "Publication time (ISO 8601, UTC).",
+  "kind": "research (vendor or researcher publication), news (journalism), or vuln (a Wire summary line for one day's VulnCheck KEV additions).",
+  "labels": "Topic labels from the publisher's tags, as given."
+},
+
+"sources_and_licences": [
+  "nKEVs: VulnCheck's KEV catalog as VulnCheck publishes it (https://vulncheck.com/kev). The site does not curate those entries.",
+  "CVE records, titles, SSVC decision points (CISA Vulnrichment), fixed versions and advisory ids: cve.now, CC BY 4.0.",
+  "CVSS scores and vectors: the CVE's NVD record, through VulnCheck NVD++ (mostly the CNA's score).",
+  "EPSS: FIRST (https://first.org/epss), generated by Empirical Security.",
+  "VEDAS exploit maturity: A.R.P. Syndicate.",
+  "Metasploit modules: Rapid7's metasploit-framework module index. Exploit-DB entries: Exploit-DB's own index. Proofs of concept: nomi-sec PoC-in-GitHub.",
+  "Detection rules: Emerging Threats ET Open, ProjectDiscovery Nuclei templates, cisagov/SIGMA_Rules, Snort 3 community ruleset.",
+  "Headlines: each item's own publisher. Headline, attribution and link only.",
+  "The CVEs tab's selection rule, the priority scores and the product classes are the site author's own. Attribute them to The Hunter's Ledger."
+],
+
+"other_machine_readable_feeds": {
+  "llms_txt": {{ "/llms.txt" | absolute_url | jsonify }},
+  "wire_atom": {{ "/wire/feed.xml" | absolute_url | jsonify }},
+  "nkevs_atom": {{ "/wire/vulns.xml" | absolute_url | jsonify }},
+  "cves_atom": {{ "/wire/cves.xml" | absolute_url | jsonify }},
+  "reports_json_feed": {{ "/feed.json" | absolute_url | jsonify }},
+  "stix_manifest": {{ "/stix/manifest.json" | absolute_url | jsonify }},
+  "misp_feed": {{ "/feeds/misp/manifest.json" | absolute_url | jsonify }}
+}
+}

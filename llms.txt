@@ -1,0 +1,37 @@
+---
+layout: none
+permalink: /llms.txt
+sitemap: false
+---
+{%- comment -%}
+  T-0651 (Joseph, 2026-11-16): /llms.txt, the plain-text entry point for automated
+  agents (llmstxt.org convention). Not linked from the site's navigation. It points at
+  the machine-readable feeds, first among them the Wire agent feed (/wire/agent/).
+{%- endcomment -%}
+# The Hunter's Ledger
+
+> Independent threat intelligence: malware and infrastructure investigations, detection rules (YARA, Sigma, Suricata), IOC feeds, and The Wire, a rolling view of newly exploited vulnerabilities, significant new CVEs and threat intelligence headlines.
+
+Agents: prefer the JSON files below to parsing the HTML pages. They carry the same data the pages render.
+
+## The Wire (vulnerabilities and headlines)
+
+- [Wire agent feed index]({{ "/wire/agent/index.json" | absolute_url }}): start here. Usage notes, the file list with row counts, and the meaning of every field.
+- [Summary]({{ "/wire/agent/summary.json" | absolute_url }}): one compact object per CVE plus a vendor index. Use it to shortlist when your context is limited.
+- [nKEVs]({{ "/wire/agent/kevs.json" | absolute_url }}): every CVE newly added to VulnCheck's KEV catalog (already exploited), all fields.
+- [CVEs]({{ "/wire/agent/cves.json" | absolute_url }}): significant new CVEs on neither VulnCheck KEV nor CISA KEV, all fields.
+- [Headlines]({{ "/wire/agent/news.json" | absolute_url }}): headline, publisher, link, date and labels.
+- [Everything]({{ "/wire/agent/all.json" | absolute_url }}): all of the above in one file, about a megabyte.
+
+## Reports, detections and indicators
+
+- [Reports JSON Feed]({{ "/feed.json" | absolute_url }}): published reports.
+- [Detection rules JSON Feed]({{ "/hunting-detections/feed.json" | absolute_url }})
+- [STIX 2.1 bundle manifest]({{ "/stix/manifest.json" | absolute_url }}): every published STIX bundle with its SHA-256.
+- [MISP feed]({{ "/feeds/misp/manifest.json" | absolute_url }})
+- [Suricata ruleset]({{ "/feeds/suricata/hunters-ledger.rules" | absolute_url }})
+- [IOC feeds]({{ "/ioc-feeds/" | absolute_url }}): per-campaign JSON indicator feeds, CC BY 4.0.
+
+## Attribution
+
+Cite The Hunter's Ledger and the original sources each file names. The Wire's vulnerability data comes from VulnCheck KEV, cve.now (CC BY 4.0), NVD, FIRST EPSS, A.R.P. Syndicate VEDAS, Rapid7, Exploit-DB and public rule sets; /wire/agent/index.json lists them.

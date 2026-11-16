@@ -1,0 +1,27 @@
+{%- comment -%}
+  T-0651: one Wire vulnerability row as one agent-feed object, for wire/agent/*.json.
+  Called with r = one row the calling page has already passed through the tab's own
+  shape guard, and list = "kev" (the nKEVs tab, VulnCheck KEV additions) or "cve" (the
+  CVEs tab, significant new CVEs on neither KEV list).
+
+  Every field the exporter writes on the row is emitted, by iterating the row itself,
+  so a field added to wire.yml later reaches agents with no edit here. One field is left
+  out on purpose: epss_spark, the SVG polyline points the page draws the EPSS line with,
+  which carry nothing an agent can use (epss, epss_pre, epss_max and epss_date carry the
+  values). The derived keys come first (id, list, the two KEV flags and the two URLs),
+  then the row's own keys, each with its comma at its FRONT, so no absence can leave a
+  trailing comma. Every value is emitted through | jsonify (check-wire.js holds this
+  file to that rule): a quote, a backslash or a control character cannot change the JSON
+  shape. wire_url is the row's own element id on /wire/ (cve-<id> on nKEVs, cves-<id> on
+  CVEs), so it opens the row on the page.
+{%- endcomment -%}
+{%- assign ar = include.r -%}
+{%- assign a_id = ar.cve | downcase -%}
+{%- assign a_cisa_len = ar.cisa_added | append: "" | size -%}
+{%- if include.list == "kev" -%}{%- assign a_anchor = "#cve-" | append: a_id -%}{%- assign a_vc = true -%}{%- else -%}{%- assign a_anchor = "#cves-" | append: a_id -%}{%- assign a_vc = false -%}{%- endif -%}
+{%- if a_cisa_len == 10 -%}{%- assign a_cisa = true -%}{%- else -%}{%- assign a_cisa = false -%}{%- endif -%}
+{%- assign a_wire = "/wire/" | absolute_url | append: a_anchor -%}
+{%- assign a_nvd = "https://nvd.nist.gov/vuln/detail/" | append: ar.cve -%}
+{"id": {{ ar.cve | jsonify }}, "list": {{ include.list | jsonify }}, "on_vulncheck_kev": {{ a_vc | jsonify }}, "on_cisa_kev": {{ a_cisa | jsonify }}, "wire_url": {{ a_wire | jsonify }}, "nvd_url": {{ a_nvd | jsonify }}
+{%- for kv in ar -%}{%- unless kv[0] == "epss_spark" -%}, {{ kv[0] | jsonify }}: {{ kv[1] | jsonify }}{%- endunless -%}{%- endfor -%}
+}

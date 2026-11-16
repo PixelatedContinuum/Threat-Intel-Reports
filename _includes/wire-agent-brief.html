@@ -1,0 +1,22 @@
+{%- comment -%}
+  T-0651: one Wire vulnerability row as one compact object for wire/agent/summary.json,
+  the chunk for an agent that cannot take the full rows. list = "kev" or "cve", as in
+  wire-agent-row.html, whose derived keys this repeats. date is the row's list date
+  (added to VulnCheck KEV for kev, published for cve); priority is the tab's own score
+  (np_score, the nKEVs patch-first score, or pick_score, the CVEs daily-pick score) and
+  priority_listed says whether the row is in that tab's Priority strip. Every value is
+  emitted through | jsonify.
+{%- endcomment -%}
+{%- assign br = include.r -%}
+{%- assign b_id = br.cve | downcase -%}
+{%- assign b_cisa_len = br.cisa_added | append: "" | size -%}
+{%- if b_cisa_len == 10 -%}{%- assign b_cisa = true -%}{%- else -%}{%- assign b_cisa = false -%}{%- endif -%}
+{%- if include.list == "kev" -%}
+{%- assign b_anchor = "#cve-" | append: b_id -%}{%- assign b_vc = true -%}{%- assign b_date = br.added -%}{%- assign b_score = br.np_score -%}
+{%- assign b_np = br.np_rank | plus: 0 -%}{%- if b_np > 0 -%}{%- assign b_listed = true -%}{%- else -%}{%- assign b_listed = false -%}{%- endif -%}
+{%- else -%}
+{%- assign b_anchor = "#cves-" | append: b_id -%}{%- assign b_vc = false -%}{%- assign b_date = br.published -%}{%- assign b_score = br.pick_score -%}
+{%- assign b_pd = br.pick_day | append: "" | size -%}{%- if b_pd > 0 -%}{%- assign b_listed = true -%}{%- else -%}{%- assign b_listed = false -%}{%- endif -%}
+{%- endif -%}
+{%- assign b_wire = "/wire/" | absolute_url | append: b_anchor -%}
+{"id": {{ br.cve | jsonify }}, "list": {{ include.list | jsonify }}, "on_vulncheck_kev": {{ b_vc | jsonify }}, "on_cisa_kev": {{ b_cisa | jsonify }}, "date": {{ b_date | jsonify }}, "vendor": {{ br.vendor | jsonify }}, "product": {{ br.product | jsonify }}, "title": {{ br.title | jsonify }}, "severity": {{ br.severity | jsonify }}, "cvss": {{ br.cvss | jsonify }}, "cwe": {{ br.cwe | jsonify }}, "epss": {{ br.epss | jsonify }}, "epss_pct": {{ br.epss_pct | jsonify }}, "priority": {{ b_score | jsonify }}, "priority_listed": {{ b_listed | jsonify }}, "wire_url": {{ b_wire | jsonify }}}

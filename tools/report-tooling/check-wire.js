@@ -34,6 +34,9 @@ var DETAILS_NKEV = path.join(ROOT, 'wire', 'details-nkev.json');
 var DETAILS_CVES = path.join(ROOT, 'wire', 'details-cves.json');
 var DETAILS_ROW_INCLUDE = path.join(ROOT, '_includes', 'wire-details-row.html');
 var DETAILS_JS = path.join(ROOT, 'assets', 'js', 'wire-details.js');
+/* T-0651: the Wire agent feed (wire/agent/*.json) and its two row includes, held to the same jsonify rule. */
+var AGENT_FILES = ['index.json', 'summary.json', 'kevs.json', 'cves.json', 'news.json', 'all.json'].map(function (f) { return ['wire/agent/' + f, path.join(ROOT, 'wire', 'agent', f)]; })
+  .concat([['_includes/wire-agent-row.html', path.join(ROOT, '_includes', 'wire-agent-row.html')], ['_includes/wire-agent-brief.html', path.join(ROOT, '_includes', 'wire-agent-brief.html')]]);
 
 var yaml, CW;
 try {
@@ -201,7 +204,7 @@ var detailsChecks = [
   ['_includes/wire-details-row.html', CW.checkDetailsJsonPage(readOr(DETAILS_ROW_INCLUDE)), '(every value emitted through jsonify)'],
   ['assets/js/wire-details.js', CW.checkDetailsScript(readOr(DETAILS_JS)), '(text nodes and validated hrefs only)'],
   ['page: Details structure', CW.checkDetailsPage(pageSrc), '(nKEV and CVEs toggles first in the row, none on headlines, the wrapper filter item, versioned data-details)']
-];
+].concat(AGENT_FILES.map(function (a) { return [a[0], CW.checkDetailsJsonPage(readOr(a[1])), '(every value emitted through jsonify)']; }));
 var pageStatuses = [p.status, tc.status, fd.status, fvn.status, r.valuePage];
 detailsChecks.forEach(function (c) {
   console.log(c[1].status + '  ' + c[0] + (c[1].status === 'PASS' ? '  ' + c[2] : ''));

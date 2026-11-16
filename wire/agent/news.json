@@ -1,0 +1,17 @@
+---
+layout: none
+permalink: /wire/agent/news.json
+sitemap: false
+---
+{%- comment -%}
+  T-0651: the agent feed's headlines chunk: every item in wire.items, all fields. The
+  Wire aggregates by headline and attribution only, so there is no summary or body to
+  emit (check-wire.js fails the build if a description field appears in wire.yml). An
+  item's date is a timestamp in the YAML, so it is emitted in ISO 8601 form.
+{%- endcomment -%}
+{%- assign wire = site.data.wire -%}
+{"dataset": "news", "description": "Threat intelligence headlines from public research and news sources in the window, newest first. Headline, publisher, link and topic labels only: no article text. kind is research, news, or vuln (a Wire summary line for one day's VulnCheck KEV additions, linking back to the nKEVs tab). Field meanings: /wire/agent/index.json.", "index": {{ "/wire/agent/index.json" | absolute_url | jsonify }}, "generated_at": {{ wire.generated_at | date_to_xmlschema | jsonify }}, "window_days": {{ wire.window_days | jsonify }}, "count": {{ wire.items.size | jsonify }}, "counts": {{ wire.counts | jsonify }}, "topics": {{ wire.topics | jsonify }}, "items": [
+{%- for i in wire.items -%}{%- unless forloop.first -%},{%- endunless %}
+{"title": {{ i.title | jsonify }}, "url": {{ i.url | jsonify }}, "source": {{ i.source | jsonify }}, "date": {{ i.date | date_to_xmlschema | jsonify }}, "kind": {{ i.kind | jsonify }}, "labels": {{ i.labels | jsonify }}}
+{%- endfor %}
+]}

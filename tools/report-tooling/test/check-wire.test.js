@@ -1063,12 +1063,14 @@ function readReal(rel) {
 test('the gate follows the include chain: every wire-* include the page names is read, the real six pass', function () {
   /* T-0532 adds wire-details-row.html, which the Details JSON pages include for
      themselves (its escaping is their check, not this one); the chain the PAGE
-     names stays the six below. */
+     names stays the six below. T-0651 adds wire-agent-row.html and wire-agent-brief.html,
+     which only the agent feed (wire/agent/*.json) includes, for the same reason. */
   var rowInc = 'wire-details-row.html';
+  var agentIncs = ['wire-agent-brief.html', 'wire-agent-row.html'];
   var inc = realIncludes();
   assert.deepEqual(Object.keys(inc).sort(),
-    ['wire-cve-why.html', rowInc, 'wire-fold-keys.html', 'wire-fold.html', 'wire-nkev-priority.html', 'wire-vuln-epss.html', 'wire-vuln-new.html',
-     'wire-vuln-news.html', 'wire-vuln-rules.html', 'wire-vuln-sev.html', 'wire-vuln-vedas.html']);
+    agentIncs.concat(['wire-cve-why.html', rowInc, 'wire-fold-keys.html', 'wire-fold.html', 'wire-nkev-priority.html', 'wire-vuln-epss.html', 'wire-vuln-new.html',
+     'wire-vuln-news.html', 'wire-vuln-rules.html', 'wire-vuln-sev.html', 'wire-vuln-vedas.html']).sort());
   var page = readReal('wire/index.md');
   var r = CW.checkPage(page, inc);
   assert.equal(r.status, 'PASS', r.problems.join(' | '));
@@ -1081,7 +1083,7 @@ test('the gate follows the include chain: every wire-* include the page names is
     assert.match(x.problems.join(' '), new RegExp('NOT CHECKED: _includes/' + name.replace(/\./g, '\\.') + ' could not be read'));
   });
   // the Details row include is not in the page's chain, so it may sit outside this map
-  var withoutRow = Object.assign({}, inc); delete withoutRow[rowInc];
+  var withoutRow = Object.assign({}, inc); delete withoutRow[rowInc]; agentIncs.forEach(function (n) { delete withoutRow[n]; });
   assert.equal(CW.checkPage(page, withoutRow).status, 'PASS');
 });
 

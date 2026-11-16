@@ -33,6 +33,8 @@ function run(mutate, wireYml, originYml) {
   var root = fs.mkdtempSync(path.join(os.tmpdir(), 'hl-wirecli-'));
   try {
     ['wire/index.md', 'wire/cves.xml', 'wire/vulns.xml', 'wire/details-nkev.json', 'wire/details-cves.json',
+      'wire/agent/index.json', 'wire/agent/summary.json', 'wire/agent/kevs.json', 'wire/agent/cves.json',
+      'wire/agent/news.json', 'wire/agent/all.json',
       'assets/css/custom.scss', 'assets/js/wire-details.js', '_data/wire-sources.yml'
     ].forEach(function (f) { copy(path.join(SITE, f), path.join(root, f)); });
     fs.readdirSync(path.join(SITE, '_includes')).filter(function (n) { return /^wire-.*\.html$/.test(n); })

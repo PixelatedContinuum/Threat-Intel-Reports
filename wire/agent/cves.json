@@ -1,0 +1,19 @@
+---
+layout: none
+permalink: /wire/agent/cves.json
+sitemap: false
+---
+{%- comment -%}
+  T-0651: the agent feed's CVEs chunk. Every row of the /wire/ CVEs tab (significant new
+  CVEs on neither VulnCheck KEV nor CISA KEV), all fields, one object per row. The shape
+  guard is the page's own (a CVE id in CVE shape), so "count" equals the tab's row count.
+  Field meanings live in /wire/agent/index.json.
+{%- endcomment -%}
+{%- assign wire = site.data.wire -%}
+{%- assign c_rows = "" | split: "" -%}
+{%- for r in wire.cves -%}{%- assign c_head = r.cve | slice: 0, 4 -%}{%- if c_head == "CVE-" -%}{%- assign c_rows = c_rows | push: r -%}{%- endif -%}{%- endfor -%}
+{"dataset": "cves", "description": "Significant new CVEs published in the window that are on neither VulnCheck KEV nor CISA KEV, selected by the CVEs tab's admission rule (a selection signal, not evidence of exploitation). A CVE leaves this list for kevs.json when VulnCheck adds it to its KEV catalog. Field meanings: /wire/agent/index.json.", "index": {{ "/wire/agent/index.json" | absolute_url | jsonify }}, "generated_at": {{ wire.cves_generated_at | jsonify }}, "status": {{ wire.cves_status | jsonify }}, "window_days": {{ wire.window_days | jsonify }}, "count": {{ c_rows.size | jsonify }}, "counts": {{ wire.cves_counts | jsonify }}, "top_vendors": {{ wire.cve_vendors | jsonify }}, "rows": [
+{%- for r in c_rows -%}{%- unless forloop.first -%},{%- endunless %}
+{% include wire-agent-row.html r=r list="cve" -%}
+{%- endfor %}
+]}
