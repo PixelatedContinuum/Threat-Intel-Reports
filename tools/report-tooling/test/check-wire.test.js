@@ -1477,15 +1477,16 @@ test('T-0628 the page template: the picks group, filter chip and pick strip are 
   fsPicks.readdirSync(pathPicks.join(__dirname, '..', '..', '..', '_includes')).filter(function (n) { return /^wire-/.test(n); })
     .forEach(function (n) { includes[n] = fsPicks.readFileSync(pathPicks.join(__dirname, '..', '..', '..', '_includes', n), 'utf8'); });
   assert.equal(CW.checkPage(page, includes).status, 'PASS');
-  ['id="cves-priority-picks"', 'data-sig="pick">Priority picks', 'class="hl-vuln__pick"', 'A pick is a priority, not evidence of exploitation',
-    'was not blind', '10.3%', 'outside that cap'].forEach(function (pin) {
+  ['class="hl-pstrip hl-pstrip--cves" id="cves-priority-picks"', 'data-sig="pick">Priority picks', 'class="hl-vuln__pick"', 'A pick is a priority, not evidence of exploitation',
+    'was not blind', '10.3%', 'outside that cap', 'data-pstrip-chip="pick"', 'class="hl-pstrip__new">new today</span>', 'The strip at the top of this tab links to my latest daily picks',
+    'every pick stays in the day its CVE was published'].forEach(function (pin) {
     assert.ok(page.includes(pin), pin);
     assert.equal(CW.checkPage(page.replace(pin, 'removed'), includes).status, 'FAIL', pin);
   });
   // an unescaped pick value is caught by the existing escaping check
   assert.equal(CW.checkPage(page.replace('{{ r.pick_class | escape }}', '{{ r.pick_class }}'), includes).status, 'FAIL');
   // the panel copy stays free of dashes
-  assert.equal(CW.checkPage(page.replace('is my daily shortlist', 'is my daily shortlist — yes'), includes).status, 'FAIL');
+  assert.equal(CW.checkPage(page.replace('are my daily shortlist', 'are my daily shortlist — yes'), includes).status, 'FAIL');
 });
 
 /* T-0638: the nKEVs Priority group keys and counts (contract: tasks/runs/T-0638/contract.md).
@@ -1625,11 +1626,13 @@ test('T-0638 the page template: the Priority group, its chip, strip and panel te
   fsPicks.readdirSync(pathPicks.join(__dirname, '..', '..', '..', '_includes')).filter(function (n) { return /^wire-/.test(n); })
     .forEach(function (n) { includes[n] = fsPicks.readFileSync(pathPicks.join(__dirname, '..', '..', '..', '_includes', n), 'utf8'); });
   assert.equal(CW.checkPage(page, includes).status, 'PASS');
-  ['id="vulns-priority"', 'data-sig="np">Priority group', 'sort: "np_rank"', 'hl-vuln__np', 'my patch-first order',
+  ['class="hl-pstrip" id="vulns-priority"', 'data-sig="np">Priority group', 'sort: "np_rank"', 'hl-vuln__np', 'class="hl-pstrip__new">new</span>', 'The Priority strip at the top of this tab', 'the row stays in its own day with its Priority badge', 'my patch-first order',
     'needs 5 points', 'the ten highest-scoring rows', 'product classes are my judgment', 'I have not measured it'].forEach(function (pin) {
     assert.ok(page.includes(pin), pin);
     assert.equal(CW.checkPage(page.replace(pin, 'removed'), includes).status, 'FAIL', pin);
   });
+  // T-0641: a Priority group put back in the day loop fails the page check; priority rows live in their days
+  assert.equal(CW.checkPage(page.replace('<h2 class="hl-wire__day" id="vulns-{{ day_group.name', '<h2 class="hl-wire__day hl-wire__day--np" id="vulns-{{ day_group.name'), includes).status, 'FAIL');
   // an unescaped np_class is caught by the existing escaping check
   assert.equal(CW.checkPage(page.replace('{{ r.np_class | escape }}', '{{ r.np_class }}'), includes).status, 'FAIL');
   assert.equal(CW.checkPage(page.replace('so I have not measured it', 'so I have not measured it — yet'), includes).status, 'FAIL');

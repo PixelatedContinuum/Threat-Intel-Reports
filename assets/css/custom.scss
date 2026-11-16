@@ -9204,6 +9204,52 @@ a.hl-kc:hover { border-color: var(--kc); color: #ffffff; }
   .hl-pick__date { margin-left: 0; flex: 0 0 100%; }
 }
 
+/* ===== T-0641: the Priority strips on the nKEVs and CVEs tabs =====
+   One compact block above the day groups: a label with the count, then one linked item per priority row (short
+   name and score). The rows themselves stay in their days. An item wraps onto the next line on a narrow screen;
+   a long name is cut with an ellipsis inside its own box, so the strip never makes the page scroll sideways.
+   "new" is text, not colour only. Gold is left to sponsors. */
+.hl-idx--wire .hl-pstrip {
+  display: flex; flex-wrap: wrap; align-items: baseline; gap: 0.3em 0.7em;
+  box-sizing: border-box; min-width: 0; max-width: 100%;
+  margin: 0.4rem 0 0.75rem; padding: 0.4rem 0.6rem;
+  border: 1px solid var(--hl-border-card); border-left: 3px solid #4ade80; border-radius: 4px;
+  background: var(--hl-bg-card);
+}
+.hl-idx--wire .hl-pstrip__label { font-weight: 700; font-size: var(--hl-fs-small, 0.85em); white-space: nowrap; color: var(--hl-text-primary); }
+.hl-idx--wire .hl-pstrip__n { font-variant-numeric: tabular-nums; margin-left: 0.3em; color: #4ade80; }
+.hl-idx--wire .hl-pstrip__list { display: flex; flex-wrap: wrap; gap: 0.3em 0.4em; flex: 1 1 14em; min-width: 0; margin: 0; padding: 0; list-style: none; }
+.hl-idx--wire .hl-pstrip__list > li { margin: 0; padding: 0; min-width: 0; max-width: 100%; }
+.hl-idx--wire .hl-pstrip__list > li::before { content: none; }
+.hl-idx--wire .hl-pstrip__a {
+  display: inline-flex; align-items: baseline; gap: 0.4em; max-width: 100%; box-sizing: border-box;
+  padding: 0.05em 0.5em; border: 1px solid var(--hl-border-card); border-radius: 3px;
+  font: inherit; font-size: var(--hl-fs-small, 0.85em); line-height: 1.5; text-decoration: none; cursor: pointer;
+  color: var(--hl-text-primary); background: transparent;
+}
+.hl-idx--wire .hl-pstrip__a:hover { background: color-mix(in srgb, #4ade80 12%, transparent); border-color: #4ade80; }
+.hl-idx--wire .hl-pstrip__a:focus-visible { outline: 2px solid var(--hl-accent-blue); outline-offset: 2px; }
+.hl-idx--wire .hl-pstrip__name { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.hl-idx--wire .hl-pstrip__s { font-weight: 700; font-variant-numeric: tabular-nums; color: #4ade80; flex: none; }
+.hl-idx--wire .hl-pstrip__new {
+  flex: none; margin-left: 0.4em; padding: 0 0.4em; border: 1px solid #fb923c; border-radius: 3px;
+  font-size: var(--hl-fs-meta, 0.75em); font-weight: 700; line-height: 1.5; color: #fb923c; white-space: nowrap;
+}
+.hl-idx--wire .hl-pstrip__a .hl-pstrip__new { margin-left: 0; }
+@media (max-width: 700px) {
+  .hl-idx--wire .hl-pstrip { gap: 0.2em 0.5em; }
+  .hl-idx--wire .hl-pstrip__label { flex: 0 0 100%; }
+  .hl-idx--wire .hl-pstrip__list { flex-basis: 100%; }
+  .hl-idx--wire .hl-pstrip__name { max-width: 8.5em; }
+}
+.hl-idx--wire .hl-pstrip__all { font-weight: 700; color: #4ade80; border-style: dashed; }
+.hl-idx--wire .hl-pstrip__all[hidden] { display: none; }
+/* A strip link lands on its row: the row is the :target. The tint above stays while the hash does; this adds
+   a bar on its left edge and a short flash that fades, so the row is easy to find at once. */
+.hl-idx--wire .hl-vuln:target { box-shadow: inset 3px 0 0 #4ade80; animation: hl-prio-flash 2.4s ease-out 1; }
+@keyframes hl-prio-flash { from { background-color: color-mix(in srgb, #4ade80 40%, transparent); } }
+@media (prefers-reduced-motion: reduce) { .hl-idx--wire .hl-vuln:target { animation: none; } }
+
 /* ===== T-0603 V1 (A48, S29, A49): one stat strip =====
    Every stat strip (index plates, detection and feed pages, actor, family, technique, Wire, impact) is .hl-d-kpis. The variants above painted the strip
    itself (the 2a2a2a or 1a1a1a ground, or the 1px gap) so a row that was not full showed the ground as a grey slab, 152 pages in the B1 build.

@@ -1631,26 +1631,35 @@ function checkDayLayout(src, includes) {
   var n = panels[0] || '', c = panels[1] || '';
   ["I do not curate", 'Empirical Security', 'Every VulnCheck KEV entry stays visible.',
    'Filters open matching batches and counts show matching rows.', 'newest day first', 'at least 20 entries',
-   // T-0638: the Priority group's rule and its limit.
-   'my patch-first order', 'needs 5 points', 'the ten highest-scoring rows', 'product classes are my judgment', 'I have not measured it'
+   // T-0638: the Priority group's rule and its limit. T-0641: the strip, and that the rows stay in their days.
+   'my patch-first order', 'needs 5 points', 'the ten highest-scoring rows', 'product classes are my judgment', 'I have not measured it',
+   'The Priority strip at the top of this tab', 'the row stays in its own day with its Priority badge'
   ].forEach(function (pin) { if (!n.includes(pin)) out.push('nKEVs explanation lost: ' + pin); });
   ['seven reasons', 'WordPress-class', 'unauthenticated', 'five weakness groups', '8.3%', '7.0%', '6.4%',
    'after seeing the data', '6.3%', '8.6%', '3.7%', '123 of 244', '50%', 'one-third trigger', 'does not admit',
    'CC0', 'at most 250', 'with baseline-admitted rows first', 'sources and left them out', 'CC BY 4.0', 'Empirical Security',
    // T-0628: the priority picks rule, its measured results and its limits.
    'three new picks', 'last 30 days', '10.3%', '3.3%', 'about 4 in 10', 'CVSS 7.0 floor', 'was not blind',
-   'A pick is a priority, not evidence of exploitation', 'outside that cap', 'exploit evidence'
+   'A pick is a priority, not evidence of exploitation', 'outside that cap', 'exploit evidence',
+   // T-0641: the strip links to the latest picks; every pick stays in its publication day.
+   'The strip at the top of this tab links to my latest daily picks', 'every pick stays in the day its CVE was published',
+   'The Priority picks are my daily shortlist', 'sit in their own days'
   ].forEach(function (pin) { if (!c.includes(pin)) out.push('CVEs explanation lost: ' + pin); });
   if (/data-age-group=|data-age="recent">Recent|data-age="">Include older/.test(src)) out.push('nKEVs must use day groups and no age filter');
   ['group_by: "added"', 'sort: "prio"', 'id="vulns-{{ day_group.name | escape }}"', 'data-sig="wp_unauth"',
    'w_wp', 'r.nomi == true', 'https://github.com/nomi-sec/PoC-in-GitHub/blob/master/', 'wire-chips.js',
    // T-0565.2: the KEV-product filter narrows the CVEs tab; it is never an admission reason.
    // T-0628: the Priority picks group, its filter chip and the pick strip on a row.
-   // T-0638: the nKEVs Priority group, its filter chip and the reason strip on a row.
-   'id="vulns-priority"', 'data-sig="np">Priority group', 'assign np_rows = np_rows | push: nrow', 'sort: "np_rank"', 'hl-vuln__np',
-   'id="cves-priority-picks"', 'data-sig="pick">Priority picks', 'class="hl-vuln__pick"', 'assign pick_group = picks_ordered | group_by_exp',
+   // T-0638: the nKEVs Priority filter chip and the reason strip on a row.
+   // T-0641: the Priority strip on each tab (rows stay in their days), its new marker and the All picks button.
+   'class="hl-pstrip" id="vulns-priority"', 'data-sig="np">Priority group', 'assign np_rows = np_rows | push: nrow', 'sort: "np_rank"', 'hl-vuln__np',
+   'class="hl-pstrip hl-pstrip--cves" id="cves-priority-picks"', 'data-sig="pick">Priority picks', 'class="hl-vuln__pick"',
+   'href="#cve-{{ r.cve | downcase | escape }}"', 'href="#cves-{{ r.cve | downcase | escape }}"', 'class="hl-pstrip__new">new</span>',
+   'class="hl-pstrip__new">new today</span>', 'data-pstrip-chip="pick"', 'assign latest_pick_day = picks_raw | group_by: "pick_day"',
    'data-sig="kev_product">Product exploited before', 'kev_product{% endif %}"', 'Product exploited before</dt><dd>Filter only, never admits'
   ].forEach(function (pin) { if (!src.includes(pin)) out.push('Wire layout lost: ' + pin); });
+  // T-0641: the groups are gone; a priority row renders in its day only.
+  if (/hl-wire__day--np|hl-wire__day--picks|'__np'|'__picks'/.test(src)) out.push('Wire layout: a Priority group is back; priority rows belong in their day groups, with a strip above');
   if (/nomi_poc/.test(src)) out.push('nomi_poc is not an admission reason');
   // T-0605 L57: the page-side copy of the guard wire/cves.xml has (checkCvesFeed): cve.now supplies SSVC, fixed version and advisory ids, never the exploit chips.
   if (/carries[^.]{0,160}(?:Metasploit|Exploit-DB)/i.test(src)) out.push('the page says cve.now carries Metasploit or Exploit-DB data');

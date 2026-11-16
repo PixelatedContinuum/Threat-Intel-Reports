@@ -116,14 +116,18 @@ reads back from the built page (it fails the index step on a duplicate). A vuln 
 
 <section id="vulns" class="hl-wtabs__sec" data-filter-scope data-details="{{ '/wire/details-nkev.json' | relative_url }}?v={{ wire.vulns_generated_at | default: wire.generated_at | escape }}">
 {%- comment -%}
-  T-0638: the nKEVs Priority group. A row with np_rank above 0 is in it: shown once, in the group, not
-  under its day, and ordered by np_rank. Data with no np_rank on any row makes no group and no panel
-  section, and renders as before (the site deploys before the exporter).
+  T-0641: the nKEVs Priority strip. A row with np_rank above 0 is a priority row. It stays in its day
+  group, in the day's own order, with its Priority badge and reason chips; the strip at the top of the
+  tab lists the priority rows by np_rank, each linking to its row. Data with no np_rank on any row makes
+  no strip and no panel section, and renders as before (the site deploys before the exporter).
+  A row the row template would skip (no CVE- id, no ten-character day) is left out of the strip too, so
+  no item links to a row that is not drawn.
 {%- endcomment -%}
-{%- assign np_rows = "" | split: "" -%}{%- assign rest_rows = "" | split: "" -%}
+{%- assign np_rows = "" | split: "" -%}
 {%- for nrow in wire.vulns -%}
 {%- assign np_r = nrow.np_rank | plus: 0 -%}
-{%- if np_r > 0 -%}{%- assign np_rows = np_rows | push: nrow -%}{%- else -%}{%- assign rest_rows = rest_rows | push: nrow -%}{%- endif -%}
+{%- assign np_head = nrow.cve | slice: 0, 4 -%}{%- assign np_alen = nrow.added | size -%}
+{%- if np_r > 0 and np_head == "CVE-" and np_alen == 10 -%}{%- assign np_rows = np_rows | push: nrow -%}{%- endif -%}
 {%- endfor -%}
 {%- assign n_np = np_rows.size -%}
 <details class="hl-wire-explanation" id="nkev-explanation" data-pagefind-ignore>
@@ -136,8 +140,8 @@ reads back from the built page (it fails the index step on a duplicate). A vuln 
 <p>I also checked ENISA's EU Vulnerability Database as a second source here. It flagged none of the rows that only VulnCheck lists, and for the five CVEs it alone marks as exploited, the sources it cited did not support that mark, so I left it out.</p>
 {%- if n_np > 0 -%}
 <h3>Priority</h3>
-<p>The Priority group at the top of this tab is my patch-first order. Every row on this tab is already exploited, so the group predicts nothing. It ranks which of these flaws I would patch first.</p>
-<p>A row earns one point for each of these: a network flaw that needs no login or user action, a CVSS score of 9.0 or higher, public tooling, a CISA KEV listing, and a flaw disclosed under 30 days before VulnCheck listed it. It earns two points for a product class I treat as patch-first, or one for an operating system or browser. The group holds the ten highest-scoring rows, and a row needs 5 points to be among them, so on a quiet month it holds fewer. A row in the group shows there once, not again under its day.</p>
+<p>The Priority strip at the top of this tab lists my patch-first order. Every row on this tab is already exploited, so the order predicts nothing. It ranks which of these flaws I would patch first.</p>
+<p>A row earns one point for each of these: a network flaw that needs no login or user action, a CVSS score of 9.0 or higher, public tooling, a CISA KEV listing, and a flaw disclosed under 30 days before VulnCheck listed it. It earns two points for a product class I treat as patch-first, or one for an operating system or browser. The strip holds the ten highest-scoring rows, and a row needs 5 points to be among them, so on a quiet month it holds fewer. Each item in the strip jumps to its row, and the row stays in its own day with its Priority badge.</p>
 <p>The product classes are my judgment, and they are listed in the exporter's class files. There is no later outcome I can test this order against, so I have not measured it.</p>
 {%- endif -%}
 <h3>Reading the data and filters</h3>
@@ -325,18 +329,30 @@ reads back from the built page (it fails the index step on a duplicate). A vuln 
   <div class="hl-filter__empty" data-filter-empty hidden><span data-filter-empty-msg>No CVEs match that filter.</span> <button type="button" class="hl-filter__reset" data-filter-reset>Clear filters</button></div>
 </div>
 
-<div class="hl-wire hl-vulns" data-filter-grid data-filter-item=".hl-vuln" data-pagefind-ignore>
-{%- assign day_groups = rest_rows | group_by: "added" | sort: "name" | reverse -%}
-{%- if n_np > 0 -%}{%- assign np_ordered = np_rows | sort: "np_rank" -%}{%- assign np_group = np_ordered | group_by_exp: "r", "'__np'" -%}{%- assign day_groups = np_group | concat: day_groups -%}{%- endif -%}
-{%- for day_group in day_groups -%}
-{%- assign is_np = false -%}{%- if day_group.name == "__np" -%}{%- assign is_np = true -%}{%- endif -%}
-{%- if is_np -%}{%- assign group_rows = day_group.items -%}{%- else -%}{%- assign group_rows = day_group.items | sort: "prio" -%}{%- endif -%}
-<div class="hl-vuln-group" data-filter-container data-wire-layout="days">
-{%- if is_np -%}
-<h2 class="hl-wire__day hl-wire__day--np" id="vulns-priority" data-filter-group>Priority &middot; <span data-container-count>{{ group_rows.size }}</span> row{% if group_rows.size != 1 %}s{% endif %}, highest score first</h2>
-{%- else -%}
-<h2 class="hl-wire__day" id="vulns-{{ day_group.name | escape }}" data-day-target="{{ day_group.name | escape }}" data-filter-group>{{ day_group.name | date: "%A %-d %B %Y" | escape }} &middot; <span data-container-count>{{ group_rows.size }}</span> added</h2>
+{%- comment -%}
+  T-0641: the Priority strip, one compact line above the day groups. Each item is a link to the row's
+  own id (the row is the :target, and wire-details.js opens its Details). "new" marks a row added on the
+  data's generated day (UTC).
+{%- endcomment -%}
+{%- if n_np > 0 -%}
+{%- assign np_ordered = np_rows | sort: "np_rank" -%}
+{%- assign gen_day = wire.vulns_generated_at | default: wire.generated_at | date: "%Y-%m-%d" -%}
+<nav class="hl-pstrip" id="vulns-priority" aria-label="Priority rows on the nKEVs tab" data-pagefind-ignore>
+<span class="hl-pstrip__label">Priority <span class="hl-pstrip__n">{{ np_ordered.size | escape }}</span></span>
+<ul class="hl-pstrip__list">
+{%- for r in np_ordered -%}
+{%- assign np_name_v = r.vendor | append: "" | strip | downcase -%}{%- assign np_name_p = r.product | append: "" | strip -%}{%- assign np_name_n = np_name_v | size -%}{%- assign np_name_h = np_name_p | slice: 0, np_name_n | downcase -%}{%- if np_name_n > 0 and np_name_h == np_name_v -%}{%- assign np_name = np_name_p -%}{%- else -%}{%- assign np_name = r.vendor | append: " " | append: np_name_p | normalize_whitespace | strip -%}{%- endif -%}{%- if np_name == "" -%}{%- assign np_name = r.cve -%}{%- endif -%}
+<li><a class="hl-pstrip__a" href="#cve-{{ r.cve | downcase | escape }}" title="{{ r.cve | escape }} {{ np_name | escape }}: Priority {{ r.np_score | plus: 0 }}"><span class="hl-pstrip__name">{{ np_name | truncate: 26 | escape }}</span><span class="hl-pstrip__s">{{ r.np_score | plus: 0 }}</span>{%- if r.added == gen_day -%}<span class="hl-pstrip__new">new</span>{%- endif -%}</a></li>
+{%- endfor -%}
+</ul>
+</nav>
 {%- endif -%}
+<div class="hl-wire hl-vulns" data-filter-grid data-filter-item=".hl-vuln" data-pagefind-ignore>
+{%- assign day_groups = wire.vulns | group_by: "added" | sort: "name" | reverse -%}
+{%- for day_group in day_groups -%}
+{%- assign group_rows = day_group.items | sort: "prio" -%}
+<div class="hl-vuln-group" data-filter-container data-wire-layout="days">
+<h2 class="hl-wire__day" id="vulns-{{ day_group.name | escape }}" data-day-target="{{ day_group.name | escape }}" data-filter-group>{{ day_group.name | date: "%A %-d %B %Y" | escape }} &middot; <span data-container-count>{{ group_rows.size }}</span> added</h2>
 {%- assign rendered_rows = "" | split: "" -%}
 {%- for r in group_rows -%}
 {%- capture rendered_row -%}
@@ -350,6 +366,7 @@ reads back from the built page (it fails the index step on a duplicate). A vuln 
 {%- if vok -%}
 {%- assign cisa_len = r.cisa_added | size -%}{%- assign ev_len = r.evidence | size -%}{%- comment -%} A score is drawn only with a known band and a score beside it; Liquid has no operator precedence, so the band test is a contains on the list. {%- endcomment -%}{%- assign sev = "none" -%}{%- assign cvss_len = r.cvss | size -%}{%- if cvss_len > 0 -%}{%- if sev_bands contains r.severity -%}{%- assign sev = r.severity -%}{%- endif -%}{%- endif -%}
 {%- assign vday = r.added | slice: 0, 10 -%}
+{%- assign np_r = r.np_rank | plus: 0 -%}{%- assign is_np = false -%}{%- if np_r > 0 -%}{%- assign is_np = true -%}{%- endif -%}
 {%- assign cve_parts = r.cve | split: "-" -%}{%- assign cve_year = cve_parts[1] -%}
 {%- comment -%} T-0407 pointers. A row from a wire.yml written before them carries none and draws none. {%- endcomment -%}
 {%- assign det = "" | split: "" -%}{%- assign n_sids = r.et_sids | size -%}{%- assign nu_len = r.nuclei | size -%}
@@ -367,7 +384,7 @@ reads back from the built page (it fails the index step on a duplicate). A vuln 
 {%- endcapture -%}
 {%- assign rendered_rows = rendered_rows | push: rendered_row -%}
 {%- endfor -%}
-{%- include wire-fold-keys.html rows=group_rows mode="nkev" picks=is_np -%}
+{%- include wire-fold-keys.html rows=group_rows mode="nkev" -%}
 {%- include wire-fold.html rows=rendered_rows keys=fold_keys labels=fold_labels thresholds=fold_thresholds -%}
 </div>
 {%- endfor -%}
@@ -396,14 +413,14 @@ reads back from the built page (it fails the index step on a duplicate). A vuln 
 
 <p>I use this tab to pick CVEs likely to be exploited soon out of the flood of disclosures. It covers recent publications absent from both VulnCheck KEV and CISA KEV. Admission is a selection signal, not evidence that exploitation has happened. A CVE moves to the nKEVs tab when it is added to VulnCheck KEV.</p>
 <h3>Priority picks</h3>
-<p>The Priority picks group at the top of this tab is my daily shortlist. Each day I add three new picks from the CVEs published in the last 30 days that are on neither VulnCheck KEV nor CISA KEV. A pick stays until it is 30 days past publication or is listed as exploited, and then it leaves, as every row does.</p>
+<p>The strip at the top of this tab links to my latest daily picks, and every pick stays in the day its CVE was published. The Priority picks are my daily shortlist. Each day I add three new picks from the CVEs published in the last 30 days that are on neither VulnCheck KEV nor CISA KEV. A pick stays until it is 30 days past publication or is listed as exploited, and then it leaves, as every row does.</p>
 <p>I score each eligible CVE by adding points from three factors. For likelihood, a public proof of concept in nomi-sec's index earns 1, SSVC exploitation of poc or active earns 1, an EPSS percentile of 0.90 or higher earns 1, and a Metasploit module, an Exploit-DB entry, a Nuclei template or an ET Open rule earns 2 in total, however many exist. For impact, network reachable with no privileges and no user interaction earns 1, and a CVSS score of 9.0 or higher earns 1. For product class, a product in one of my hand-kept classes earns 2: edge and network devices, file transfer, IT and remote management, identity and access, virtualization and backup, email and collaboration, enterprise applications, and CMS cores. Operating systems and browsers earn 1.</p>
 <p>The three highest scores each day become the picks. Ties go to the higher CVSS score, then the higher EPSS percentile, then the higher CVE id. A CVE with a CVSS score of 7.0 or higher is eligible. A CVE with a lower score is eligible only when it carries exploit evidence: a proof of concept listing, SSVC poc or active, an exploit tool or rule, or an EPSS percentile of 0.90 or higher. A CVE with no score is not eligible. Each pick shows its score as "Priority" and a number, one chip for each factor that earned points (hover a chip for what it means), the class label, and the day I picked it.</p>
-<p>A CVE that is both a pick and admitted by one of the reasons below shows once, in the picks group. The picks sit above the list and outside its cap of 250 rows. In my replay the 3 a day rule held about 65 picks on the tab at a time, and up to about 90.</p>
+<p>A CVE that is both a pick and admitted by one of the reasons below shows once, in its day, with its pick score. The picks sit outside its cap of 250 rows. In my replay the 3 a day rule held about 65 picks on the tab at a time, and up to about 90.</p>
 <p>I measured this rule by replaying it day by day over pick days from 6 February 2025 to 30 September 2026. Of the picks old enough to judge, 10.3% were on VulnCheck KEV within 90 days of the pick and 3.3% were on CISA KEV. Those shares include picks below CVSS 7.0 that carried exploit evidence. The picks also caught about 4 in 10 of the CVEs later listed: 146 of the 353 CVEs published between 6 February 2025 and 7 August 2026 that VulnCheck KEV listed within 90 days of publication, and 48 of the 187 that CISA KEV listed. That 4 in 10 figure was measured with the CVSS 7.0 floor, before I admitted lower-scored CVEs, so it does not describe the rule as shown here.</p>
 <p>I kept three a day because larger caps did not pay. In the 30 day view, picks ranked 4 and 5 reached VulnCheck KEV at 1.5%, against 9.3% for the top 3. I also tested using CISA KEV history of the vendor or product in place of my class list, and it did worse, so I kept the list.</p>
 <p>These are the limits. The replay was not blind: I built the rule on the same periods I measured, tuned the class list after seeing results, and chose to admit lower-scored CVEs after seeing which later-exploited CVEs the floor had missed, so the p-values do not account for that. The gain from admitting lower-scored CVEs came in the two earlier periods, and for CISA KEV it is 3 CVEs. The first set of picks is a start-up set, marked as such, and it is left out of the test. From now on I log every live pick with its day and factors, and I will score those picks against KEV listings no earlier than 90 days after the first daily pick. A pick is a priority, not evidence of exploitation.</p>
-<h3>The admission reasons below the picks</h3>
+<h3>The admission reasons beside the picks</h3>
 <p>Any one of the seven reasons admits a CVE. FIRST's Exploit Prediction Scoring System (EPSS) percentile of at least 0.90 puts it in the top 10% for predicted exploitation likelihood. That is a relative rank, not a 90% probability. The other score-based reason pairs EPSS probability of at least 1% with A.R.P. Syndicate's VEDAS exploit-maturity estimate of at least 80% and a Common Vulnerability Scoring System (CVSS) score of at least 7.0. I require the pair because VEDAS alone performed below the cohort's exploitation rate in my replay.</p>
 <p>A Metasploit module confirmed in Rapid7's index, an Exploit-DB entry confirmed in its publisher's index, a ProjectDiscovery Nuclei template, or an Emerging Threats ET Open rule each also admits a CVE. These identify available tooling or detection coverage. I have not tested the exploits, and a template or rule naming a CVE does not establish exploitation.</p>
 <p>I treat a CVE as WordPress-class when its source identifies Wordfence, WPScan or Patchstack, or its affected product names WordPress. I admit these CVEs when the description says unauthenticated and the CWE falls in five weakness groups: SQL injection, file upload, privilege escalation, path traversal or local file inclusion, and server-side request forgery. In my longer replay, the added rows later listed as exploited were 8.3% on the 2025 design set, 7.0% on the January to June 2026 test set and 6.4% on the July to September comparison. I chose this addition after seeing the data; these are measured shares, not promised hit rates.</p>
@@ -412,7 +429,7 @@ reads back from the built page (it fails the index step on a duplicate). A vuln 
 <p>My July to September 2026 replay judged 36,786 eligible CVEs once, seven days after publication, using the inputs available then. Later exploitation means a VulnCheck KEV addition after that point, through 5 November 2026: 116 CVEs met that outcome. The EPSS percentile reason selected 24 CVEs, three later listed; the EPSS and VEDAS pair selected 40, four later listed; tooling selected 53, eight later listed. Together they selected 102, with 12 later listed. These sets overlap, so their counts do not add.</p>
 <p>Those are small, in-sample results, not promised hit rates. July VEDAS history was unavailable; 323 eligible CVEs could not be judged for the paired reason. The replay took one look at day seven, while the live list rechecks throughout its publication window. Follow-up is shorter for later publications; October was too recent to judge.</p>
 <p>I retired the reason combining CVSS at least 9.0, network access with no login or user action, and a product previously on CISA KEV. It selected 267 CVEs in the same replay, only three later listed. That volume bought little coverage. For the past dates I used the CVSS scores as written in the CVE record at the time, because the live source's own history was not available, so this is a bounded result. The "product on CISA KEV before" chip remains context about the product, not this CVE.</p>
-<p>Severity, standalone EPSS probability or maturity, news counts, SSVC assessments, fixed versions and advisory identifiers add context without independently admitting rows. The Rules chip also includes CISA Sigma and Snort 3 coverage, which do not admit CVEs. I combine the admission reasons by showing at most 250 rows, not counting the priority picks, which sit above them and outside that cap, with baseline-admitted rows first and WordPress-only additions after them; inside each tier I rank by number of reasons met, then EPSS, exploit maturity and CVSS; publication-day headings organize the display. Missing chips mean missing confirmed data, not proof of absence.</p>
+<p>Severity, standalone EPSS probability or maturity, news counts, SSVC assessments, fixed versions and advisory identifiers add context without independently admitting rows. The Rules chip also includes CISA Sigma and Snort 3 coverage, which do not admit CVEs. I combine the admission reasons by showing at most 250 rows, not counting the priority picks, which sit in their own days and outside that cap, with baseline-admitted rows first and WordPress-only additions after them; inside each tier I rank by number of reasons met, then EPSS, exploit maturity and CVSS; publication-day headings organize the display. Missing chips mean missing confirmed data, not proof of absence.</p>
 <p>I also tested other sources and left them out. Some did not separate later exploited CVEs from the rest in my replay, or rarely touch the CVEs shown here: CIRCL community sightings, unrestricted GitHub repository search and Microsoft's Exploitability Index. One forbids reproducing its values (the CrowdSec CVE tracker). One asks automated clients not to fetch it and keeps no history (WordPress.org plugin install counts). Two publish no dated feed per CVE (Shadowserver, Google Project Zero's tracker).</p>
 <h3>Reading the data and filters</h3>
 
@@ -466,7 +483,7 @@ reads back from the built page (it fails the index step on a duplicate). A vuln 
 </dl>
 <p class="hl-wire-data__p">Picking several chips in one row shows any of them; picking chips in different rows narrows to rows that match all. The filters are kept in the page address, so a filtered view can be shared by copying the link.</p>
 <div class="hl-wire-data__h">About this data</div>
-<p class="hl-wire-data__p">I choose which CVEs appear here, by the rule in this panel. The priority picks sit above the list and outside its cap. Below them I show at most 250 rows. When more qualify, baseline-admitted rows rank first; inside each tier I rank by how many reasons they meet, then by EPSS, then by exploit maturity, then by CVSS.</p>
+<p class="hl-wire-data__p">I choose which CVEs appear here, by the rule in this panel. The priority picks sit in their own days and outside its cap. Beyond them I show at most 250 rows. When more qualify, baseline-admitted rows rank first; inside each tier I rank by how many reasons they meet, then by EPSS, then by exploit maturity, then by CVSS.</p>
 <p class="hl-wire-data__p">The CVE listing, titles, SSVC decision points (CISA's own assessment, from <a href="https://github.com/cisagov/vulnrichment" target="_blank" rel="noopener noreferrer">Vulnrichment</a>), fixed versions and advisory ids come from <a href="https://cve.now/" target="_blank" rel="noopener noreferrer">cve.now</a> (CC BY 4.0). CVSS scores and vectors come from the CVE's NVD record through VulnCheck, mostly the CNA's score, unless the row says cve.now.</p>
 <p class="hl-wire-data__p">Metasploit modules come from Rapid7's <a href="https://github.com/rapid7/metasploit-framework" target="_blank" rel="noopener noreferrer">metasploit-framework</a> module index and Exploit-DB entries from <a href="https://www.exploit-db.com/" target="_blank" rel="noopener noreferrer">Exploit-DB</a>'s own index. "Product on CISA KEV" comes from CISA's <a href="https://www.cisa.gov/known-exploited-vulnerabilities-catalog" target="_blank" rel="noopener noreferrer">KEV catalog</a>. EPSS scores are FIRST's (<a href="https://www.first.org/epss/" target="_blank" rel="noopener noreferrer">first.org/epss</a>), generated by Empirical Security. VEDAS exploit maturity from <a href="https://github.com/ARPSyndicate/cve-scores" target="_blank" rel="noopener noreferrer">A.R.P. Syndicate</a>.</p>
 
@@ -599,24 +616,24 @@ reads back from the built page (it fails the index step on a duplicate). A vuln 
   <div class="hl-filter__empty" data-filter-empty hidden><span data-filter-empty-msg>No CVEs match that filter.</span> <button type="button" class="hl-filter__reset" data-filter-reset>Clear filters</button></div>
 </div>
 
-<div class="hl-wire hl-vulns" data-filter-grid data-filter-item=".hl-vuln" data-pagefind-ignore>
 {%- comment -%}
   Days newest first, rows inside a day in the exporter's order (its ranking). group_by keeps the
   rows' order within a group; sort by the group's name puts the days in order whatever order the
   file lists them in, so a heading and its id appear once.
 {%- endcomment -%}
 {%- comment -%}
-  T-0628: the priority picks. A row with a pick_day is a pick: it is shown once, in the group
-  that opens the list, and not again under its published day. The group is ordered here by
-  pick_score, then cvss, then the CVE id, all highest first (a CVSS of 10.0 and a longer CVE
-  number are the two cases a plain text sort gets wrong, so each has its own pass). The group
-  rides in the same loop as the days as one more group, so a pick row is the same row markup.
-  Data without a pick_day on any row makes no group and renders as before.
+  T-0641: the priority picks strip. A row with a pick_day is a pick. It stays in the day group of its
+  published date, with its pick score and reason chips; the strip at the top of the tab lists the picks
+  made on the latest pick day, ordered here by pick_score, then cvss, then the CVE id, all highest first
+  (a CVSS of 10.0 and a longer CVE number are the two cases a plain text sort gets wrong, so each has
+  its own pass). The last item, "All N picks", turns on the Priority picks filter chip. Data without a
+  pick_day on any row makes no strip and renders as before. A pick the row template would skip (no CVE-
+  id, no ten-character published day) is left out, so no item links to a row that is not drawn.
 {%- endcomment -%}
-{%- assign nonpick_rows = "" | split: "" -%}{%- assign picks_raw = "" | split: "" -%}
+{%- assign picks_raw = "" | split: "" -%}
 {%- for r in wire.cves -%}
-{%- assign pd_len = r.pick_day | append: "" | size -%}
-{%- if pd_len > 0 -%}{%- assign picks_raw = picks_raw | push: r -%}{%- else -%}{%- assign nonpick_rows = nonpick_rows | push: r -%}{%- endif -%}
+{%- assign pd_len = r.pick_day | append: "" | size -%}{%- assign pk_head = r.cve | slice: 0, 4 -%}{%- assign pk_plen = r.published | append: "" | size -%}
+{%- if pd_len > 0 and pk_head == "CVE-" and pk_plen == 10 -%}{%- assign picks_raw = picks_raw | push: r -%}{%- endif -%}
 {%- endfor -%}
 {%- assign picks_ordered = "" | split: "" -%}
 {%- if picks_raw.size > 0 -%}
@@ -639,24 +656,36 @@ reads back from the built page (it fails the index step on a duplicate). A vuln 
 {%- endfor -%}
 {%- endfor -%}
 {%- endif -%}
-{%- assign cgroups = nonpick_rows | group_by: "published" | sort: "name" | reverse -%}
-{%- assign pick_group = picks_ordered | group_by_exp: "r", "'__picks'" -%}
-{%- assign cgroups = pick_group | concat: cgroups -%}
+{%- if picks_ordered.size > 0 -%}
+{%- assign latest_pick_day = picks_raw | group_by: "pick_day" | sort: "name" | reverse | first -%}
+{%- assign lp_day = latest_pick_day.name | append: "" -%}
+{%- assign gen_day = wire.cves_generated_at | default: wire.generated_at | date: "%Y-%m-%d" -%}
+<nav class="hl-pstrip hl-pstrip--cves" id="cves-priority-picks" aria-label="Latest priority picks on the CVEs tab" data-pagefind-ignore>
+<span class="hl-pstrip__label">Priority <span class="hl-pstrip__n">{{ latest_pick_day.items.size | escape }}</span>{%- if lp_day == gen_day -%}<span class="hl-pstrip__new">new today</span>{%- endif -%}</span>
+<ul class="hl-pstrip__list">
+{%- for r in picks_ordered -%}
+{%- assign pd_now = r.pick_day | append: "" -%}
+{%- if pd_now == lp_day -%}
+{%- assign pk_name_v = r.vendor | append: "" | strip | downcase -%}{%- assign pk_name_p = r.product | append: "" | strip -%}{%- assign pk_name_n = pk_name_v | size -%}{%- assign pk_name_h = pk_name_p | slice: 0, pk_name_n | downcase -%}{%- if pk_name_n > 0 and pk_name_h == pk_name_v -%}{%- assign pk_name = pk_name_p -%}{%- else -%}{%- assign pk_name = r.vendor | append: " " | append: pk_name_p | normalize_whitespace | strip -%}{%- endif -%}{%- if pk_name == "" -%}{%- assign pk_name = r.cve -%}{%- endif -%}
+<li><a class="hl-pstrip__a" href="#cves-{{ r.cve | downcase | escape }}" title="{{ r.cve | escape }} {{ pk_name | escape }}: pick score {{ r.pick_score | plus: 0 }}"><span class="hl-pstrip__name">{{ pk_name | truncate: 26 | escape }}</span><span class="hl-pstrip__s">{{ r.pick_score | plus: 0 }}</span></a></li>
+{%- endif -%}
+{%- endfor -%}
+<li><button type="button" class="hl-pstrip__a hl-pstrip__all" data-pstrip-chip="pick" hidden title="Show only the priority picks, the same as the Priority picks chip">All {{ picks_ordered.size | escape }} picks</button></li>
+</ul>
+</nav>
+{%- endif -%}
+<div class="hl-wire hl-vulns" data-filter-grid data-filter-item=".hl-vuln" data-pagefind-ignore>
+{%- assign cgroups = wire.cves | group_by: "published" | sort: "name" | reverse -%}
 {%- for g in cgroups -%}
 {%- assign gname = g.name | append: "" -%}{%- assign gname_len = gname | size -%}
-{%- assign is_picks = false -%}{%- if gname == "__picks" -%}{%- assign is_picks = true -%}{%- endif -%}
-{%- if gname_len == 10 or is_picks -%}
-{%- if is_picks -%}
-<div class="hl-wire__day hl-wire__day--picks" id="cves-priority-picks" data-filter-group>Priority picks &middot; {{ g.items.size }} picked, highest score first</div>
-{%- else -%}
+{%- if gname_len == 10 -%}
 <div class="hl-wire__day" id="cves-{{ gname | escape }}" data-day-target="{{ gname | escape }}" data-filter-group>{{ gname | date: "%A %-d %B %Y" | escape }} &middot; {{ g.items.size }} published</div>
-{%- endif -%}
 {%- assign rendered_rows = "" | split: "" -%}
 {%- for r in g.items -%}
 {%- capture rendered_row -%}
 {%- assign cve_head = r.cve | slice: 0, 4 -%}
 {%- if cve_head == "CVE-" -%}
-{%- if is_picks -%}{%- assign vday = r.published -%}{%- else -%}{%- assign vday = gname -%}{%- endif -%}
+{%- assign pdr = r.pick_day | append: "" | size -%}{%- assign is_picks = false -%}{%- if pdr > 0 -%}{%- assign is_picks = true -%}{%- endif -%}{%- assign vday = gname -%}
 {%- assign cvss_len = r.cvss | size -%}{%- assign sev = "none" -%}{%- if cvss_len > 0 -%}{%- if sev_bands contains r.severity -%}{%- assign sev = r.severity -%}{%- endif -%}{%- endif -%}
 {%- assign det = "" | split: "" -%}{%- assign n_sids = r.et_sids | size -%}{%- assign nu_len = r.nuclei | size -%}{%- assign rn_cs = r.cisa_sigma | size -%}{%- assign rn_sn = r.snort3_sids | size -%}
 {%- assign rn_nu = 0 -%}{%- if nu_len > 0 -%}{%- assign rn_nu = 1 -%}{%- endif -%}
@@ -670,7 +699,7 @@ reads back from the built page (it fails the index step on a duplicate). A vuln 
 {%- endcapture -%}
 {%- assign rendered_rows = rendered_rows | push: rendered_row -%}
 {%- endfor -%}
-{%- include wire-fold-keys.html rows=g.items mode="cves" picks=is_picks -%}
+{%- include wire-fold-keys.html rows=g.items mode="cves" -%}
 {%- include wire-fold.html rows=rendered_rows keys=fold_keys labels=fold_labels thresholds=fold_thresholds -%}
 {%- endif -%}
 {%- endfor -%}
@@ -696,7 +725,7 @@ reads back from the built page (it fails the index step on a duplicate). A vuln 
 </div>
 
 <script defer src="{{ '/assets/js/listing-filter.js' | relative_url }}?v=19"></script>
-<script defer src="{{ '/assets/js/wire-chips.js' | relative_url }}?v=4"></script>
+<script defer src="{{ '/assets/js/wire-chips.js' | relative_url }}?v=5"></script>
 <script defer src="{{ '/assets/js/wire-details.js' | relative_url }}?v=10"></script>
 
 {%- else -%}

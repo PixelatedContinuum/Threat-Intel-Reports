@@ -48,8 +48,11 @@ first refusal; product groups only see the remaining rows. CISA stays plain.
 {%- assign policy_min = product_group_min -%}
 {%- assign policy_label = fold_row.vendor | append: " " | append: fold_row.product | normalize_whitespace | strip | append: " CVEs" -%}
 {%- endif -%}
-{%- comment -%} T-0628: the Priority picks group is never folded; its order is the score order. {%- endcomment -%}
-{%- if include.picks == true -%}{%- assign policy_key = "" -%}{%- endif -%}
+{%- comment -%} T-0641: a priority row (an nKEV with np_rank above 0, a CVE with a pick_day) stays in its day group and is never folded into a batch, so the strip's link always lands on a visible row. {%- endcomment -%}
+{%- assign fold_prio = false -%}
+{%- if include.mode == "nkev" -%}{%- assign fold_np = fold_row.np_rank | plus: 0 -%}{%- if fold_np > 0 -%}{%- assign fold_prio = true -%}{%- endif -%}
+{%- else -%}{%- assign fold_pd = fold_row.pick_day | append: "" | size -%}{%- if fold_pd > 0 -%}{%- assign fold_prio = true -%}{%- endif -%}{%- endif -%}
+{%- if fold_prio -%}{%- assign policy_key = "" -%}{%- endif -%}
 {%- assign fold_keys = fold_keys | push: policy_key -%}
 {%- assign fold_labels = fold_labels | push: policy_label -%}
 {%- assign fold_thresholds = fold_thresholds | push: policy_min -%}

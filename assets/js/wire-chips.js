@@ -94,6 +94,41 @@
       document.fonts.ready.then(function () { if (inView) fit(true); });
     }
   });
+  // T-0641: the Priority strip's "All N picks" button does what the Priority picks chip does: it clicks
+  // that chip, unless the chip is already on. The button is hidden in the markup and shown here, so a
+  // page without this script has no dead control.
+  document.querySelectorAll('[data-pstrip-chip]').forEach(function (b) {
+    var sec = b.closest('.hl-wtabs__sec');
+    var chip = sec && sec.querySelector('.hl-chip-btn[data-sig="' + b.getAttribute('data-pstrip-chip') + '"]');
+    if (!chip) return;
+    b.hidden = false;
+    b.addEventListener('click', function () { if (!chip.classList.contains('is-on')) chip.click(); });
+  });
+  // T-0641: a strip item scrolls to a row that can sit far down the page. Rows above it change height as
+  // the scroll brings them into view (chips are fitted when a row arrives), so the first landing misses.
+  // Re-land on the row for a couple of seconds, instantly, until the heights settle. Any reader input
+  // stops it at once.
+  document.querySelectorAll('.hl-pstrip__list a[href^="#"]').forEach(function (a) {
+    a.addEventListener('click', function () {
+      var id;
+      try { id = decodeURIComponent(a.getAttribute('href').slice(1)); } catch (e) { return; }
+      var tries = 0, timer = 0, evs = ['wheel', 'touchstart', 'keydown'];
+      function stop() {
+        window.clearTimeout(timer); tries = 99;
+        evs.forEach(function (n) { window.removeEventListener(n, stop); });
+      }
+      evs.forEach(function (n) { window.addEventListener(n, stop, { passive: true }); });
+      (function tick() {
+        if (tries >= 25) { stop(); return; }
+        var el = document.getElementById(id);
+        if (el && tries > 0 && Math.abs(el.getBoundingClientRect().top - 80) > 3) {
+          el.scrollIntoView({ block: 'start', behavior: 'instant' });
+        }
+        tries++;
+        timer = window.setTimeout(tick, 100);
+      })();
+    });
+  });
   // listing-filter.js runs first and applies a shared ?cq=/?vq= search before the chip text
   // above joins data-title; re-apply it now (T-0565.1 review, settled under T-0576).
   document.dispatchEvent(new Event('hl:refilter'));
