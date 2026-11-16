@@ -3880,17 +3880,40 @@ function inlineMeasure() {
     for (var i = 0; i < src.length; i++) { if (el.compareDocumentPosition(src[i]) & Node.DOCUMENT_POSITION_FOLLOWING && !el.contains(src[i])) return i; }
     return -1;
   }
+  /* review_e42fb4aa0c894315 (P2): a figure in a tab that is not shown has no boxes, so its caption/drawing/source order cannot be read. Each is measured with its hidden ancestors (tab panels, closed teardowns) shown for the read, then put back; one still unmeasured makes the row NOT CHECKED, never PASS. */
+  function geo(f) {
+    var undo = [];
+    if (!f.getClientRects().length) for (var a = f.parentElement; a; a = a.parentElement) {
+      if (a.hidden) { undo.push((function (el) { return function () { el.hidden = true; }; })(a)); a.hidden = false; }
+      if (a.tagName === 'DETAILS' && !a.open) { undo.push((function (el) { return function () { el.open = false; }; })(a)); a.open = true; }
+    }
+    var cap = f.firstElementChild, last = f.lastElementChild, dr = f.querySelector('.hl-fig-draw');
+    var g = { rendered: f.getClientRects().length > 0, capTop: cap ? cap.getBoundingClientRect().top : 0, drawTop: dr ? dr.getBoundingClientRect().top : 0, srcTop: last ? last.getBoundingClientRect().top : 0, hasDraw: !!dr };
+    undo.reverse().forEach(function (u) { u(); });
+    return g;
+  }
+  /* review_e42fb4aa0c894315 (P2): "directly before its source table" means the first element after the figure that is not generated chrome is that table or holds it, not merely that it is the next table somewhere later. */
+  function adjacentTo(f, tbl) {
+    if (!tbl) return false;
+    for (var n = f; n && !(n.classList && n.classList.contains('hl-rv-panel')); n = n.parentElement) {
+      var s = n.nextElementSibling;
+      while (s && (s.hasAttribute('data-rv-chrome') || /^(SCRIPT|STYLE|TEMPLATE)$/.test(s.tagName))) s = s.nextElementSibling;
+      if (s) return s === tbl || s.contains(tbl);
+    }
+    return false;
+  }
   var figs = [].slice.call(document.querySelectorAll('figure.hl-fig')).map(function (f) {
+    var g = geo(f), nx = nextTable(f);
     var kind = (f.className.match(/hl-fig--(\w+)/) || [])[1] || '', prev = f.previousElementSibling, cap = f.firstElementChild, last = f.lastElementChild;
     var cs = getComputedStyle(f);
     var capTitle = cap ? cap.querySelector('.hl-fig-title') : null, capSub = cap ? cap.querySelector('.hl-fig-sub') : null;
     return { title: capTitle ? t(capTitle) : '', sub: capSub ? t(capSub) : '', titlePx: capTitle ? parseFloat(getComputedStyle(capTitle).fontSize) : 0, subPx: capSub ? parseFloat(getComputedStyle(capSub).fontSize) : 0,
-      kind: kind, tab: (f.closest('.hl-rv-panel') || {}).id || '', next: nextTable(f), prevTag: prev ? prev.tagName : '', prevText: prev ? t(prev).slice(0, 160) : '', prevChrome: !!(prev && prev.hasAttribute('data-rv-chrome')),
+      kind: kind, tab: (f.closest('.hl-rv-panel') || {}).id || '', next: nx, adj: nx >= 0 && adjacentTo(f, src[nx]), prevTag: prev ? prev.tagName : '', prevText: prev ? t(prev).slice(0, 160) : '', prevChrome: !!(prev && prev.hasAttribute('data-rv-chrome')),
       capOk: !!cap && cap.tagName === 'FIGCAPTION' && t(cap).length > 0, cap: cap ? t(cap) : '', srcOk: !!last && last.classList.contains('hl-fig-src') && t(last).length > 0, src: last ? t(last) : '',
       chrome: f.hasAttribute('data-rv-chrome') && f.hasAttribute('data-pagefind-ignore'), inDetailsClosed: !!(f.closest('details') && !f.closest('details').open),
       style: { bg: cs.backgroundColor, bt: parseFloat(cs.borderTopWidth), bb: parseFloat(cs.borderBottomWidth), bl: parseFloat(cs.borderLeftWidth), br: parseFloat(cs.borderRightWidth), rad: cs.borderTopLeftRadius, shadow: cs.boxShadow },
       capPx: cap ? parseFloat(getComputedStyle(cap).fontSize) : 0, srcPx: last ? parseFloat(getComputedStyle(last).fontSize) : 0, capFont: cap ? getComputedStyle(cap).fontFamily : '', srcFont: last ? getComputedStyle(last).fontFamily : '',
-      capTop: cap ? cap.getBoundingClientRect().top : 0, drawTop: f.querySelector('.hl-fig-draw') ? f.querySelector('.hl-fig-draw').getBoundingClientRect().top : 0, srcTop: last ? last.getBoundingClientRect().top : 0 };
+      capTop: g.capTop, drawTop: g.drawTop, srcTop: g.srcTop, rendered: g.rendered, hasDraw: g.hasDraw };
   });
   /* T-0637 (p6, Joseph 2026-11-16): nothing says FIGURE as a title. Every figcaption on the page, and the elements inside it, are read for text the stylesheet draws (::before, ::after) as well as the words themselves. */
   var kickers = [], noPseudo = /jsdom/i.test(navigator.userAgent);   /* jsdom does not implement pseudo-element styles (and says so on stderr for each call): its pages are measured for text only */
@@ -3952,9 +3975,10 @@ function inlinePlacementVerdict(m, shapes) {
     listed.push(label);
     var f = drawn[0];
     if (kind === 'grades') {
-      var ok = f.prevTag === 'P' && /\d+ ACCESS SHOWN.*\d+ COMPROMISED.*\d+ REACHED.*\d+ LISTED/.test(f.prevText) || f.next === srcIdx;
+      var ok = f.prevTag === 'P' && /\d+ ACCESS SHOWN.*\d+ COMPROMISED.*\d+ REACHED.*\d+ LISTED/.test(f.prevText) || (f.next === srcIdx && f.adj !== false);
       if (!ok) bad.push(label + ' is not after the tally paragraph or directly before the victim table (next table index ' + f.next + ', expected ' + srcIdx + ')');
     } else if (f.next !== srcIdx) bad.push(label + ' is not directly before its source table (the next table after it is #' + f.next + ', its table is #' + srcIdx + ')');
+    else if (f.adj === false) bad.push(label + ' is not directly before its source table: something that is not page chrome sits between them');
   }
   expectOne('grades', m.found.victims, 'grade strip');
   expectOne('chain', m.found.stages, 'stage ribbon and chain story');
@@ -3968,7 +3992,7 @@ function inlinePlacementVerdict(m, shapes) {
   // risk: one figure per risk table, in order
   var rf = kinds.risk || [];
   if (rf.length !== m.found.risks.length) bad.push('risk bars: ' + rf.length + ' figure(s) drawn, ' + m.found.risks.length + ' risk table(s) in the report');
-  else rf.forEach(function (f, i) { listed.push('risk bars ' + (i + 1)); if (f.next !== m.found.risks[i]) bad.push('risk bars ' + (i + 1) + ' is not directly before its risk table (next table #' + f.next + ', its table #' + m.found.risks[i] + ')'); });
+  else rf.forEach(function (f, i) { listed.push('risk bars ' + (i + 1)); if (f.next !== m.found.risks[i]) bad.push('risk bars ' + (i + 1) + ' is not directly before its risk table (next table #' + f.next + ', its table #' + m.found.risks[i] + ')'); else if (f.adj === false) bad.push('risk bars ' + (i + 1) + ' is not directly before its risk table: something that is not page chrome sits between them'); });
   // diamond: after the first statement of the attribution section; one when the tab exists
   var df = kinds.diamond || [];
   if (m.attribution) {
@@ -4028,6 +4052,8 @@ function inlineAnatomyVerdict(m) {
     if (f.title && f.sub && f.titlePx && f.subPx && f.titlePx <= f.subPx) bad.push(n + ' title (' + f.titlePx + 'px) is not larger than its subtitle (' + f.subPx + 'px)');
   });
   (m.kickers || []).forEach(function (k) { bad.push('a caption draws the word FIGURE: ' + k); });
+  var unmeasured = m.figs.filter(function (f) { return f.rendered === false || (f.rendered && f.hasDraw && !(f.drawTop || f.capTop)); }).map(function (f) { return f.kind; });
+  if (!bad.length && unmeasured.length) return { notChecked: true, ok: false, detail: unmeasured.length + ' of ' + m.figs.length + ' figure(s) drew no boxes even with their tab shown (' + unmeasured.join(', ') + '), so the caption, drawing and source order was not measured' };
   return { notChecked: false, ok: bad.length === 0, why: bad, detail: m.figs.length + ' figure(s): a title with its subtitle above the drawing and no FIGURE label (' + m.figs.map(function (f) { return f.title; }).join(' | ') + '), source line under, a panel (1px border all round, a fill, radius at most 8px, no shadow), sans at or over the floor' + (bad.length ? '; ' + bad.join('; ') : '') };
 }
 /* One table once: the article's tables (scripts off) are the page's tables, all inside the report's own sections, none re-drawn. */
@@ -4464,14 +4490,16 @@ async function inlineEvidenceColourRows(page, url, tag, si) {
   var cv = inlineColourVerdict(await page.json(INLINE_COLOUR_EXPR));
   row(cname, cv);
   if (!cv.notChecked && cv.ok && si === 0) {
-    var cm = async function (css, name) {
+    var cm = async function (css, name, sel) {
       await gotoAndWait(page, url);
+      /* a page with nothing for the control to recolour has nothing to break: NOT CHECKED, never a control that "did not fire" */
+      if (!(await page.json('!!document.querySelector(' + JSON.stringify(sel) + ')'))) { check('NOT CHECKED: control: ' + tag + name, false, 'the page draws no ' + sel + ' to recolour'); return; }
       await page.evaluate('(function(){var s=document.createElement("style");s.textContent=' + JSON.stringify(css) + ';document.head.appendChild(s);})()');
       await CDP.sleep(200);
       ctl(name, inlineColourVerdict(await page.json(INLINE_COLOUR_EXPR)));
     };
-    await cm('.hl-fact strong{color:#ffffff !important}', 'every fact number back to white (the state before the colours) makes the colour row FAIL');
-    await cm('.hl-fig > figcaption .hl-fig-title{color:#4a4a4a !important}', 'a figure title in dark grey (under 4.5:1) makes the colour row FAIL');
+    await cm('.hl-fact strong{color:#ffffff !important}', 'every fact number back to white (the state before the colours) makes the colour row FAIL', '.hl-fact strong');
+    await cm('.hl-fig > figcaption .hl-fig-title{color:#4a4a4a !important}', 'a figure title in dark grey (under 4.5:1) makes the colour row FAIL', '.hl-fig > figcaption .hl-fig-title');
   }
   await gotoAndWait(page, url);
 }

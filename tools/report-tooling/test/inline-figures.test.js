@@ -198,6 +198,11 @@ test('the browser gate\'s inline rows, run on the jsdom page: placement, once, c
     assert.equal(G.inlinePlacementVerdict(missing, shapes).ok, false, 'a figure the report\'s table supports is missing');
     const orphan = JSON.parse(JSON.stringify(m)); orphan.found.attack = null;
     assert.equal(G.inlinePlacementVerdict(orphan, shapes).ok, false, 'a heat map drawn with no ATT&CK table');
+    // review_e42fb4aa0c894315 (P2): prose put between a figure and its table FAILS, though its next table is still its own
+    const heat = f.w.document.querySelector('figure.hl-fig--heat'); const prose = f.w.document.createElement('p'); prose.textContent = 'unrelated report prose'; heat.after(prose);
+    const between = JSON.parse(JSON.stringify(f.w.eval(G.INLINE_EXPR))); prose.remove();
+    assert.equal(between.figs.find((x) => x.kind === 'heat').next, m.figs.find((x) => x.kind === 'heat').next, 'the next table is unchanged');
+    assert.equal(G.inlinePlacementVerdict(between, shapes).ok, false, 'prose between the heat map and its table');
     const sq = JSON.parse(JSON.stringify(m)); sq.grade.REACHED = 0;
     assert.equal(G.inlineCountsVerdicts(sq, shapes).find((c) => /grade strip/.test(c.name)).v.ok, false, 'a square short');
     const hc = JSON.parse(JSON.stringify(m)); hc.heat.cells -= 1;
@@ -226,6 +231,9 @@ test('the inline anatomy row FAILS on a figure that is not a panel, has a large 
   assert.equal(bad({ srcPx: 13 }).ok, false, 'under the floor');
   assert.equal(bad({ srcFont: 'IBM Plex Mono' }).ok, false, 'monospace');
   assert.equal(G.inlineAnatomyVerdict({ figs: [] }).notChecked, true);
+  // review_e42fb4aa0c894315 (P2): a figure that drew no boxes is NOT CHECKED, not PASS; a measured defect still FAILS beside it
+  assert.equal(G.inlineAnatomyVerdict({ figs: [ok, Object.assign({}, ok, { rendered: false, capTop: 0, drawTop: 0, srcTop: 0 })] }).notChecked, true, 'an unmeasured figure');
+  assert.equal(G.inlineAnatomyVerdict({ figs: [Object.assign({}, ok, { srcOk: false }), Object.assign({}, ok, { rendered: false })] }).ok, false, 'a defect is not hidden by an unmeasured figure');
   // T-0637 p6 (Joseph 2026-11-16): a title, a smaller subtitle, and no FIGURE label anywhere
   assert.equal(bad({ title: '' }).ok, false, 'no title');
   assert.equal(bad({ title: 'Figure: grades' }).ok, false, 'a title that is the label FIGURE');
