@@ -1,0 +1,652 @@
+{
+  "metadata": {
+    "malware_name": "INV-2026-084 Sliver and Metasploit toolkit on an open-directory operator host",
+    "family": "Sliver implants (8 builds, 7 dial the case host, 1 internal TCP pivot), Metasploit Meterpreter stagers (6), PowerShell C2 scripts",
+    "report_date": "2026-11-16",
+    "analyst": "The Hunters Ledger",
+    "confidence": "HIGH",
+    "tlp": "AMBER+STRICT",
+    "slug": "opendirectory-169-58-165-63-ad-intrusion-vs-pakistani-university-20261116",
+    "notes": "Pre-publication. Operator-side indicators only. No victim address, host name, account, credential, organisation name or abbreviation is in this feed. Network values are not defanged (machine-readable). Hash-only rows are marked as listed, not computed. Not checked: operator reuse of any hash, key or UUID on other hosts; full values of the age keys of the garbled builds; the Npcap vendor-style certificate files."
+  },
+  "file_hashes": {
+    "sha256": [
+      {
+        "value": "bd1a14378f3b067f36808098b4571bede03e40545e4eb237f9cfdef345a5b01d",
+        "filename": "sp.exe",
+        "type": "Sliver mTLS implant, plain build (Go PE)",
+        "confidence": "DEFINITE"
+      },
+      {
+        "value": "312e58ca243a2089e5df14e1a655090ca71bdcc5cb6efade2fb7da721557ae95",
+        "filename": "vmupd.exe",
+        "type": "Sliver HTTPS implant, plain build (Go PE)",
+        "confidence": "DEFINITE"
+      },
+      {
+        "value": "fbb340af03b610156ae37db33ee4596749c2f1df943a6546edb0df52fdcefbdd",
+        "filename": "spadc1.exe",
+        "type": "Sliver TCP pivot implant, plain build; does not dial the case host",
+        "confidence": "DEFINITE"
+      },
+      {
+        "value": "0d3415e8d45de96f426e77d388097b4af86f70572ac4bf5f010c3e29d7bede24",
+        "filename": "sliver.exe",
+        "type": "Sliver mTLS implant, garbled build (Go PE)",
+        "confidence": "HIGH"
+      },
+      {
+        "value": "101a72aaa594be6f848f3a91d99eeba19f7a1fdaeb4d30811558c71bb0cbbd7b",
+        "filename": "u131.exe",
+        "type": "Sliver mTLS implant, garbled build",
+        "confidence": "HIGH"
+      },
+      {
+        "value": "3399297d500ff200311f4a3fa711bc3b22e9aa80672c379267a9317e5f90e7da",
+        "filename": "u237.exe",
+        "type": "Sliver mTLS implant, garbled build",
+        "confidence": "HIGH"
+      },
+      {
+        "value": "a5f0f1532af8c8009d660edaa7b8813468e4188afcac2007f7800f24e893cc80",
+        "filename": "u218.exe",
+        "type": "Sliver mTLS implant, garbled build",
+        "confidence": "HIGH"
+      },
+      {
+        "value": "0d65479e7522efaa1ee8c83b87e86298f70305b0ae10d5f3865f1366ef683be6",
+        "filename": "esxi_implant",
+        "type": "Sliver HTTPS implant, garbled Linux ELF",
+        "confidence": "HIGH"
+      },
+      {
+        "value": "2f380acae889b78719aad5054e898e9f5e6f1882931a81617f96b92c57a0f76d",
+        "filename": "sliver.exe.gz",
+        "type": "gzip whose single member has the same md5 as sliver.exe",
+        "confidence": "HIGH"
+      },
+      {
+        "value": "da4172c7816d9ec15801c46dacb077dd883f7629c3f101c1e7e2928bba7e8659",
+        "filename": "meter4444.exe",
+        "type": "Meterpreter-style reverse_tcp stager to :4444",
+        "confidence": "HIGH"
+      },
+      {
+        "value": "239aba3d8e91cf551dfbd2f73fe66eb70b89a55becac2d6aa4a5844af9364232",
+        "filename": "meter4446.exe",
+        "type": "Meterpreter-style reverse_tcp stager to :4446",
+        "confidence": "HIGH"
+      },
+      {
+        "value": "7b14d6d41aeb2108ba8e47a915d5316b678e091f03b80673eb5a17f2f5e7a035",
+        "filename": "meter64.exe",
+        "type": "Meterpreter-style reverse_tcp stager to :4446",
+        "confidence": "HIGH"
+      },
+      {
+        "value": "5a082262d27f130a1bc5c19032641274d9f99246911bb98f1d099b8b25cc1912",
+        "filename": "meter86.exe",
+        "type": "Meterpreter-style x86 reverse_tcp stager to :4447",
+        "confidence": "HIGH"
+      },
+      {
+        "value": "e11ba63ff2ee839dda183984cd667b118bb892533008f229ebed227c3841c9be",
+        "filename": "met183.exe",
+        "type": "Meterpreter-style reverse_tcp stager to :8444",
+        "confidence": "HIGH"
+      },
+      {
+        "value": "a5111c366fad5fdbbc7407419427bf3eacdaedebcaeb590eb79412e3605a304f",
+        "filename": "meter5555_183.exe",
+        "type": "Stageless Meterpreter reflective-DLL loader, reverse_tcp to :5555",
+        "confidence": "HIGH"
+      },
+      {
+        "value": "bec9fef34d35226f2558bf0aea16717c92d444342add598b50743dea5b0b0dfb",
+        "filename": "loop.ps1",
+        "type": "PowerShell command-poll implant to the case host",
+        "confidence": "HIGH"
+      },
+      {
+        "value": "40691f99312114d0918f2ca12fe5c60c1a21166d98fb6c8ebdd8a2a6589c7e5f",
+        "filename": "r.ps1",
+        "type": "PowerShell raw TCP reverse shell to :9001",
+        "confidence": "HIGH"
+      },
+      {
+        "value": "f45d4f191cb981468c143a80c52fd43a6bf63339ea7ce8ae506d12526538bff9",
+        "filename": "npcap_install.bat",
+        "type": "Fetches the Npcap set from the operator :8444 path",
+        "confidence": "HIGH"
+      },
+      {
+        "value": "0763f31dd87c8466bc26695b1d4a075b1e64a6dec006720f98dcbb6245057cfc",
+        "filename": "npcap_cert.bat",
+        "type": "Fetches two certificate files from the operator :8444 path and trusts them",
+        "confidence": "HIGH"
+      },
+      {
+        "value": "2580520109e9f5592df059115fe559e632aa91e71fb9b8af71c28dfc30248e90",
+        "filename": "kclean.exe",
+        "type": "listed by the open directory, bytes not held",
+        "confidence": "LOW",
+        "context": "Listed by the open directory, bytes not held, hash as listed through the Vantage store and not computed from bytes. listed by the open directory, bytes not held; name suggests an AV killer; not on VT"
+      },
+      {
+        "value": "6272bbc5093faa1f13532ed67d1259162b62c19b62c54d8514d756bb91ee9cf4",
+        "filename": "kclean2.exe",
+        "type": "listed by the open directory, bytes not held",
+        "confidence": "LOW",
+        "context": "Listed by the open directory, bytes not held, hash as listed through the Vantage store and not computed from bytes. Name suggests an AV killer; not on VT"
+      },
+      {
+        "value": "13a692be6e3950a26850cf4041278eedfba5d345911878e69390582cb52089b4",
+        "filename": "killav.exe",
+        "type": "listed by the open directory, bytes not held",
+        "confidence": "LOW",
+        "context": "Listed by the open directory, bytes not held, hash as listed through the Vantage store and not computed from bytes. Name suggests an AV killer; not on VT"
+      },
+      {
+        "value": "7195cb0a0186834ed7c92ff4e9604274b912bf0529cdca62893b8b2d97d456b0",
+        "filename": "killav2.exe",
+        "type": "listed by the open directory, bytes not held",
+        "confidence": "LOW",
+        "context": "Listed by the open directory, bytes not held, hash as listed through the Vantage store and not computed from bytes. Name suggests an AV killer; not on VT"
+      },
+      {
+        "value": "f5f3f432a4f4a6296916fa96bd3eaf41e50a27e764bea417143d355bdc2c6570",
+        "filename": "killloop.exe",
+        "type": "listed by the open directory, bytes not held",
+        "confidence": "LOW",
+        "context": "Listed by the open directory, bytes not held, hash as listed through the Vantage store and not computed from bytes. Name suggests an AV killer; not on VT"
+      },
+      {
+        "value": "557ab7f9b87e08ef28ccc6e6210b617c1a99d35199865584b2a262e0e87eaea0",
+        "filename": "kk3.exe",
+        "type": "listed by the open directory, bytes not held",
+        "confidence": "LOW",
+        "context": "Listed by the open directory, bytes not held, hash as listed through the Vantage store and not computed from bytes. Name suggests an AV killer; not on VT (56,832 B)"
+      },
+      {
+        "value": "a9316c74803028e504d91786c1b1bdd28313ec1978eede3bf9c50c9f4e4afdd6",
+        "filename": "meter5555.exe",
+        "type": "listed by the open directory, bytes not held",
+        "confidence": "LOW",
+        "context": "Listed by the open directory, bytes not held, hash as listed through the Vantage store and not computed from bytes. listed, not held; same 262,656 B size as meter5555_183.exe; not on VT"
+      },
+      {
+        "value": "c408c0a2fa94b442072215dc547372e37d45b574c81b7a24f99662e706a7b1e9",
+        "filename": "meter_tcp.exe",
+        "type": "listed by the open directory, bytes not held",
+        "confidence": "LOW",
+        "context": "Listed by the open directory, bytes not held, hash as listed through the Vantage store and not computed from bytes. as meter5555.exe"
+      },
+      {
+        "value": "81e26fd186c0f53425e54a39b1a1cbe7eb7487d35f7e6cdec2c9850e2f88d346",
+        "filename": "mtest.exe",
+        "type": "listed by the open directory, bytes not held",
+        "confidence": "LOW",
+        "context": "Listed by the open directory, bytes not held, hash as listed through the Vantage store and not computed from bytes. listed, not held; 14,848 B; not on VT"
+      }
+    ]
+  },
+  "network_indicators": {
+    "ipv4": [
+      {
+        "value": "169.58.165.63",
+        "purpose": "Operator host: Sliver C2 (mTLS 31337, HTTPS 8000), Meterpreter stager and stageless callbacks, PowerShell loop C2, open-directory file server (8080, 8444, 9002)",
+        "confidence": "DEFINITE",
+        "action": "BLOCK",
+        "false_positive_risk": "LOW: single dedicated address. Do not block the hosting provider AS or the /16.",
+        "context": "Operator host: Sliver C2 (mTLS 31337, HTTPS 8000), Meterpreter stager and stageless callbacks, PowerShell loop C2, open-directory file server (8080, 8444, 9002). VT: AS51167 Contabo GmbH."
+      }
+    ],
+    "ipv6": [],
+    "domains": [
+      {
+        "value": "cytomate.xyz",
+        "purpose": "Front for the case host: Cloudflare Origin Certificate SAN on the host, page title 'Cytomate Cloud - Maintenance'; borrows the name of a Doha security vendor whose own domain differs; whether the vendor has any role is not established (INSUFFICIENT). Working basis is a criminal intrusion (Joseph, 2026-11-16); the authorised-engagement alternative is open",
+        "confidence": "HIGH",
+        "action": "BLOCK",
+        "false_positive_risk": "LOW: operator-controlled zone, resolves behind Cloudflare; block the name, never the Cloudflare addresses",
+        "context": "w2-infra-report.md section 3 and section 2 rows 1, 3, 5, 6"
+      },
+      {
+        "value": "breach.cytomate.xyz",
+        "purpose": "Subdomain; four Linux Sliver samples on VT dial it (not in our corpus; same-operator link MODERATE)",
+        "confidence": "MODERATE",
+        "action": "BLOCK",
+        "false_positive_risk": "LOW: operator-controlled zone, resolves behind Cloudflare; block the name, never the Cloudflare addresses",
+        "context": "w2-infra-report.md section 2 row 7 and section 3"
+      }
+    ],
+    "urls": [
+      {
+        "value": "mtls://169.58.165.63:31337",
+        "purpose": "Sliver mTLS C2 string as recovered from sp.exe at F:0x699d4a (control)",
+        "confidence": "HIGH",
+        "action": "BLOCK",
+        "context": "Plaintext string in sp.exe, re-read on FlareVM 2026-11-16"
+      },
+      {
+        "value": "https://169.58.165.63:8000",
+        "purpose": "Sliver HTTPS C2 string from vmupd.exe at F:0x72ddc0",
+        "confidence": "HIGH",
+        "action": "BLOCK",
+        "context": "Sliver HTTPS C2 string (vmupd.exe plaintext, re-read on FlareVM 2026-11-16)"
+      },
+      {
+        "value": "tcp://169.58.165.63:5555",
+        "purpose": "Meterpreter config URL decoded from the stageless config of meter5555_183.exe",
+        "confidence": "HIGH",
+        "action": "BLOCK",
+        "context": "Config URL decoded from the stageless config TLV"
+      },
+      {
+        "value": "http://169.58.165.63/t/cmd",
+        "purpose": "loop.ps1 tasking poll (every 5 s, runs non-'none' text with Invoke-Expression)",
+        "confidence": "HIGH",
+        "action": "BLOCK",
+        "context": "w1-actions.jsonl row loop.ps1"
+      },
+      {
+        "value": "http://169.58.165.63/o/out",
+        "purpose": "loop.ps1 output POST (base64)",
+        "confidence": "HIGH",
+        "action": "BLOCK",
+        "context": "w1-actions.jsonl row loop.ps1"
+      },
+      {
+        "value": "http://169.58.165.63:8444/npcap131/",
+        "purpose": "Operator staging path that npcap_install.bat and npcap_cert.bat fetch the Npcap set and two certificate files from",
+        "confidence": "HIGH",
+        "action": "BLOCK",
+        "context": "w1-actions.jsonl rows npcap_install.bat, npcap_cert.bat"
+      }
+    ],
+    "email_addresses": [],
+    "user_agents": [],
+    "endpoints": [
+      {
+        "value": "169.58.165.63:31337",
+        "port": 31337,
+        "protocol": "TCP",
+        "purpose": "Sliver mTLS C2 (control: sp.exe, plaintext string at F:0x699d4a)",
+        "confidence": "HIGH",
+        "action": "BLOCK",
+        "context": "Sliver mTLS C2 of sp.exe, sliver.exe, u131.exe, u237.exe and u218.exe. Control: sp.exe string mtls://169.58.165.63:31337 at F:0x699d4a, re-read on FlareVM 2026-11-16."
+      },
+      {
+        "value": "169.58.165.63:8000",
+        "port": 8000,
+        "protocol": "TCP",
+        "purpose": "Sliver HTTPS C2",
+        "confidence": "HIGH",
+        "action": "BLOCK",
+        "context": "Sliver HTTPS C2 of vmupd.exe (F:0x72ddc0) and esxi_implant. Together with the five :31337 builds, 7 of the 8 Sliver builds dial this host; the eighth is an internal TCP pivot."
+      },
+      {
+        "value": "169.58.165.63:5555",
+        "port": 5555,
+        "protocol": "TCP",
+        "purpose": "Metasploit Meterpreter reverse_tcp listener: stageless callback of meter5555_183.exe (not a Sliver transport)",
+        "confidence": "HIGH",
+        "action": "BLOCK",
+        "context": "Stageless Metasploit Meterpreter reverse_tcp callback of meter5555_183.exe, config URL tcp://169.58.165.63:5555 decoded from the config TLV at file offset 0x400A4 (XOR key a15cb566). Not Sliver."
+      },
+      {
+        "value": "169.58.165.63:4444",
+        "port": 4444,
+        "protocol": "TCP",
+        "purpose": "Meterpreter reverse_tcp stager callback",
+        "confidence": "HIGH",
+        "action": "BLOCK",
+        "context": "Meterpreter-style reverse_tcp stager callback of meter4444.exe (off 0x1AF4)"
+      },
+      {
+        "value": "169.58.165.63:4446",
+        "port": 4446,
+        "protocol": "TCP",
+        "purpose": "Meterpreter reverse_tcp stager callback",
+        "confidence": "HIGH",
+        "action": "BLOCK",
+        "context": "Meterpreter-style reverse_tcp stager callback of meter4446.exe and meter64.exe (off 0x1AF0); handled by handler4446.rc and h4446.rc"
+      },
+      {
+        "value": "169.58.165.63:4447",
+        "port": 4447,
+        "protocol": "TCP",
+        "purpose": "Meterpreter reverse_tcp stager callback (x86)",
+        "confidence": "HIGH",
+        "action": "BLOCK",
+        "context": "Meterpreter-style reverse_tcp stager callback of meter86.exe, x86 (push at 0x1ABD)"
+      },
+      {
+        "value": "169.58.165.63:8444",
+        "port": 8444,
+        "protocol": "TCP",
+        "purpose": "Meterpreter reverse_tcp stager callback; same port also serves the open directory",
+        "confidence": "HIGH",
+        "action": "BLOCK",
+        "context": "Meterpreter-style reverse_tcp stager callback of met183.exe (off 0x1AF0); the same port also serves the open directory and the Npcap set"
+      },
+      {
+        "value": "169.58.165.63:9001",
+        "port": 9001,
+        "protocol": "TCP",
+        "purpose": "Raw TCP reverse shell target of r.ps1",
+        "confidence": "MODERATE",
+        "action": "MONITOR",
+        "context": "Raw TCP reverse shell target of r.ps1; port was open at sweep 2130, no HTTP response"
+      },
+      {
+        "value": "169.58.165.63:8080",
+        "port": 8080,
+        "protocol": "TCP",
+        "purpose": "Open-directory file server",
+        "confidence": "HIGH",
+        "action": "BLOCK",
+        "context": "Open-directory file server (staged tools and the dumps); no access log held"
+      },
+      {
+        "value": "169.58.165.63:8444",
+        "port": 8444,
+        "protocol": "TCP",
+        "purpose": "Open-directory file server",
+        "confidence": "HIGH",
+        "action": "BLOCK",
+        "context": "Open-directory file server and http.log host"
+      },
+      {
+        "value": "169.58.165.63:9002",
+        "port": 9002,
+        "protocol": "TCP",
+        "purpose": "Open-directory file server",
+        "confidence": "HIGH",
+        "action": "BLOCK",
+        "context": "Open-directory file server and http.log host (the :8444 log is a byte prefix of the :9002 log)"
+      },
+      {
+        "value": "169.58.165.63:8445",
+        "port": 8445,
+        "protocol": "TCP",
+        "purpose": "Banner \"Server: NimPlant C2 Server\" seen by VT, not open at sweep; carried from the infrastructure return, not re-checked",
+        "confidence": "HIGH",
+        "action": "MONITOR",
+        "context": "NimPlant C2 server banner seen by VT on 2026-11-16 (header 'Server: NimPlant C2 Server'); not open at sweep 2130. Carried from the infrastructure return, not re-checked here"
+      },
+      {
+        "value": "169.58.165.63:8888",
+        "port": 8888,
+        "protocol": "TCP",
+        "purpose": "A VT sandbox sample dials it (Sliver, transport not shown); carried from the infrastructure return, not re-checked",
+        "confidence": "MODERATE",
+        "action": "MONITOR",
+        "context": "A VT sandbox sample dials it (Sliver, transport not shown). Carried from the infrastructure return, not re-checked here"
+      }
+    ],
+    "tls_certificates": [
+      {
+        "value": "8c7500fae71e868abbb1c9d545419535b4ad6b4c1c9b7d20ab32ac270a89f047",
+        "hash_type": "SHA256",
+        "confidence": "HIGH",
+        "action": "MONITOR",
+        "context": "Cloudflare Origin Certificate served by the case host, SAN cytomate.xyz and *.cytomate.xyz (a pivot for a certificate search) Pivot key: pivot only; a VT certificate search on it returned 0 but the VT modifier control failed (NOT CHECKED). Hunt.io search 2026-11-17: no other IP presents this certificate (Joseph's account, bounded by Hunt.io's coverage); Hunt.io shows the case host serving it on 443 from 2026-09-14 to 2026-10-27 (Corrected 2026-11-17, T-0646, Hunt.io GUI review)"
+      },
+      {
+        "value": "59eb3f044d9d2811c2664e9cd86bc7d1d39042978125bf043394647c7d343539",
+        "hash_type": "SHA256",
+        "confidence": "HIGH",
+        "action": "MONITOR",
+        "context": "Sliver mTLS CA certificate (self-signed, empty subject, P-384) shared by sp.exe, sliver.exe, u131.exe, u237.exe, u218.exe; NotBefore 2025-10-11 is a floor only (CA created between 2025-10-11 and 2026-10-10) Pivot key: pivot key for other servers of the same Sliver instance; any listener presenting a certificate from this CA is the same server. Hunt.io search 2026-11-17 (45-day window): 1 hit, the case host only, so no second server is found in that window (bounded negative; longer window NOT CHECKED) (Corrected 2026-11-17, T-0646, Hunt.io GUI review)"
+      },
+      {
+        "value": "b8fdca9d56f76de964eca3a4d058abb0f4a7418f",
+        "hash_type": "SKI",
+        "confidence": "HIGH",
+        "action": "MONITOR",
+        "context": "Subject key identifier of the same CA"
+      },
+      {
+        "value": "090610d16ffbff33c8a8360289cffaee261c99e8",
+        "hash_type": "SHA1",
+        "confidence": "HIGH",
+        "action": "MONITOR",
+        "context": "SHA-1 of the same CA certificate (from sp.exe, certutil dump)"
+      },
+      {
+        "value": "69bf77d6bf8b1a2eb0f069134d3623fe9e40e8213553462b071d86de01dd7b08",
+        "hash_type": "SHA256",
+        "confidence": "HIGH",
+        "action": "MONITOR",
+        "context": "Sliver implant certificate of sp.exe; CN withheld (derived from a victim name) Pivot key: specific to one implant"
+      },
+      {
+        "value": "a5be98ffb34169ec0d5523b6110a755d39fb6823d6385a0d7fcd05540bbb0b10",
+        "hash_type": "SHA256",
+        "confidence": "HIGH",
+        "action": "MONITOR",
+        "context": "Sliver implant certificate of sliver.exe, CN withheld (derived from a victim name) Pivot key: specific to one implant"
+      },
+      {
+        "value": "607f56406a157dc67079381a5dd5cb961a9559c1d3986c285b21c72e396c14c1",
+        "hash_type": "SHA256",
+        "confidence": "HIGH",
+        "action": "MONITOR",
+        "context": "Sliver implant certificate of u131.exe, CN FOOLISH_NICHE Pivot key: specific to one implant"
+      },
+      {
+        "value": "3229aa719390b37de74ec2894d14a4148e5b8d919371e267f08639ad2e469872",
+        "hash_type": "SHA256",
+        "confidence": "HIGH",
+        "action": "MONITOR",
+        "context": "Sliver implant certificate of u237.exe, CN HAPPY_WEDGE Pivot key: specific to one implant"
+      },
+      {
+        "value": "5daf3a3c38d198813ee5e11dc59983c576c990d3afcc22d5fadcba7f3d006eed",
+        "hash_type": "SHA256",
+        "confidence": "HIGH",
+        "action": "MONITOR",
+        "context": "Sliver implant certificate of u218.exe, CN CRUDE_MINT Pivot key: specific to one implant"
+      }
+    ]
+  },
+  "host_indicators": {
+    "registry_keys": [],
+    "file_paths": [],
+    "mutex_names": [],
+    "service_names": [],
+    "scheduled_tasks": [],
+    "named_pipes": []
+  },
+  "hunt_only_never_block": {
+    "note": "Values that are hunt pivots or that sit on shared infrastructure (Cloudflare fronts), plus generic paths and driver hashes. None is a block entry.",
+    "entries": [
+      {
+        "value": "104.21.93.95",
+        "role": "Cloudflare front address that cytomate.xyz resolves to",
+        "false_positive_note": "Never block: shared Cloudflare address",
+        "confidence": "HIGH",
+        "context": "Cloudflare address that cytomate.xyz resolves to"
+      },
+      {
+        "value": "172.67.208.128",
+        "role": "Cloudflare front address that cytomate.xyz resolves to",
+        "false_positive_note": "Never block: shared Cloudflare address",
+        "confidence": "HIGH",
+        "context": "Cloudflare address that cytomate.xyz resolves to"
+      },
+      {
+        "value": "3fd3fd20d00000021c43d43d00043d204204071741c36579e355f830d285a5",
+        "role": "JARM of the case host as VT prints it",
+        "false_positive_note": "Hunt pivot only; a server fingerprint is not a block entry (MODERATE)",
+        "confidence": "MODERATE",
+        "context": "JARM of the case host as VT prints it. Hunt.io JARM search 2026-11-17 returned too many hosts to use: a common TLS stack, context only, never a pivot (Corrected 2026-11-17, T-0646, Hunt.io GUI review)"
+      },
+      {
+        "value": "20F1D34CD5D8E2ED",
+        "role": "Minisign key id shared by the Sliver builds that carry one",
+        "false_positive_note": "Hunt pivot; not a block entry",
+        "confidence": "HIGH",
+        "context": "Minisign key id of the key shared by all builds that carry one (sp, sliver, u131, u237, u218, vmupd, spadc1)"
+      },
+      {
+        "value": "RWTt4tjVTNPxIImsIePlROPU1308LbkJ/Q7Q/zpk2sI/MrIemKQY+jtY",
+        "role": "Minisign public key in sp.exe, vmupd.exe and spadc1.exe",
+        "false_positive_note": "Hunt pivot; not a block entry",
+        "confidence": "HIGH",
+        "context": "Minisign public key in sp.exe, vmupd.exe and spadc1.exe (same value in all three)"
+      },
+      {
+        "value": "age10gwcxev8afaj3chvqtlxa2m2jvjew32svcwel7ttxfel753cncqsnp9cxe",
+        "role": "age recipient public key in a Sliver build",
+        "false_positive_note": "Hunt pivot; not a block entry",
+        "confidence": "HIGH",
+        "context": "age recipient public key in sp.exe"
+      },
+      {
+        "value": "age1hynzchzjt38argqddev94w08k7v0ha50wj34maqs7urgzecztq2qy0ha02",
+        "role": "age recipient public key in a Sliver build",
+        "false_positive_note": "Hunt pivot; not a block entry",
+        "confidence": "HIGH",
+        "context": "age recipient public key in vmupd.exe ; (shared with spadc1.exe and, per Wave 2, the four garbled Windows builds)"
+      },
+      {
+        "value": "age1vs0h2c8qmdz5p5676arvukvdefppqdxuep0957ze2c0ayj9lpvdqh0tfey",
+        "role": "age recipient public key in a Sliver build",
+        "false_positive_note": "Hunt pivot; not a block entry",
+        "confidence": "HIGH",
+        "context": "age recipient public key in vmupd.exe"
+      },
+      {
+        "value": "age1vk6gej66y9kmw8pq3vkmz278v93jcplukzgskcnkuejsrql5pugsg3x8k6",
+        "role": "age recipient public key in a Sliver build",
+        "false_positive_note": "Hunt pivot; not a block entry",
+        "confidence": "HIGH",
+        "context": "age recipient public key in spadc1.exe"
+      },
+      {
+        "value": "3ae7126587cf73f3cef0cff2a41a799c",
+        "role": "Meterpreter payload UUID of meter5555_183.exe",
+        "false_positive_note": "Reuse key only; not a block entry",
+        "confidence": "HIGH",
+        "context": "Payload UUID TLV (0x401cd) of the stageless Meterpreter config in meter5555_183.exe; operator-generated, a reuse key if it recurs"
+      },
+      {
+        "value": "a15cb566",
+        "role": "Repeating 4-byte XOR key of the stageless Meterpreter config overlay",
+        "false_positive_note": "Config-decoding key; not a block entry",
+        "confidence": "HIGH",
+        "context": "Repeating 4-byte XOR key of the stageless Meterpreter config overlay (file offset 0x40000 to 0x401FF)"
+      },
+      {
+        "value": "2fdfdd13a0c548bb68c9d5aa8599a9265d4659da3e237fe7a42ac6ac06b9a06a",
+        "role": "Driver listed by the open directory (GoFly64.sys), bytes not held; BYOVD candidate",
+        "false_positive_note": "Hunt only: driver may be legitimate or widely redistributed; blocking its hash is a defender decision",
+        "confidence": "MODERATE",
+        "context": "Driver listed by the open directory, bytes not held; VT 21/67 malicious (VT name GoFly64.sys); LOLDrivers: MATCH c2ed6a76-95ad-45fd-97d4-b55deefb3e32"
+      },
+      {
+        "value": "ebcb856723bd023c7ecb40fc71b3ff2ed3795fa08313f397569866167655dadf",
+        "role": "Driver listed by the open directory (HNOs2Ec.sys), bytes not held; BYOVD candidate",
+        "false_positive_note": "Hunt only: driver may be legitimate or widely redistributed; blocking its hash is a defender decision",
+        "confidence": "MODERATE",
+        "context": "Driver listed by the open directory, bytes not held; VT 1/67 malicious (VT name HNOs2Ec.sys); LOLDrivers: NO MATCH"
+      },
+      {
+        "value": "8a8652604f7789a6259ae05266652580b18729e1f1c05612b9d338eb8379ecee",
+        "role": "Driver listed by the open directory (MonProcess.sys), bytes not held; BYOVD candidate",
+        "false_positive_note": "Hunt only: driver may be legitimate or widely redistributed; blocking its hash is a defender decision",
+        "confidence": "MODERATE",
+        "context": "Driver listed by the open directory, bytes not held; VT 5/71 malicious (VT name MonProcess.sys); LOLDrivers: NO MATCH"
+      },
+      {
+        "value": "72d0b5615b996cbb01b1ca139e627079094f734da48a0435ffd8480a25d0a258",
+        "role": "Driver listed by the open directory (MonProcessEX.sys), bytes not held; BYOVD candidate",
+        "false_positive_note": "Hunt only: driver may be legitimate or widely redistributed; blocking its hash is a defender decision",
+        "confidence": "MODERATE",
+        "context": "Driver listed by the open directory, bytes not held; VT 25/72 malicious (VT name MonProcess.sys); LOLDrivers: MATCH c3c083d2-e9bd-4891-8582-46086de2b2b4"
+      },
+      {
+        "value": "cdfbe62ef515546f1728189260d0bdf77167063b6dbb77f1db6ed8b61145a2bc",
+        "role": "Driver listed by the open directory (p152.sys), bytes not held; BYOVD candidate",
+        "false_positive_note": "Hunt only: driver may be legitimate or widely redistributed; blocking its hash is a defender decision",
+        "confidence": "MODERATE",
+        "context": "Driver listed by the open directory, bytes not held; VT 1/70 malicious (VT name procexp.Sys); LOLDrivers: MATCH 0567c6c4-282f-406f-9369-7f876b899c25"
+      },
+      {
+        "value": "28c5bb735f9fc38e0ebd366978898f0cfcd455e4ff8bf1a321768b09e01ee84d",
+        "role": "Driver listed by the open directory (xkpsm.sys), bytes not held; BYOVD candidate",
+        "false_positive_note": "Hunt only: driver may be legitimate or widely redistributed; blocking its hash is a defender decision",
+        "confidence": "MODERATE",
+        "context": "Driver listed by the open directory, bytes not held; VT 16/72 malicious (VT name xkpsm.sys); LOLDrivers: MATCH 767ed0a0-606b-4297-a858-e2af5b4a0400"
+      },
+      {
+        "value": "C:\\Users\\Public\\hives\\",
+        "role": "Operator working path on victim hosts, seen in scripts",
+        "false_positive_note": "Generic Windows path; hunt on it, never block",
+        "confidence": "HIGH",
+        "context": "hive dump folder (SAM, SECURITY, SYSTEM, .save copies)"
+      },
+      {
+        "value": "C:\\Users\\Public\\npcap131\\",
+        "role": "Operator working path on victim hosts, seen in scripts",
+        "false_positive_note": "Generic Windows path; hunt on it, never block",
+        "confidence": "HIGH",
+        "context": "Npcap set and certificate staging folder, done.txt and done2.txt"
+      },
+      {
+        "value": "C:\\Users\\Public\\inveigh\\Microsoft-Log.txt",
+        "role": "Operator working path on victim hosts, seen in scripts",
+        "false_positive_note": "Generic Windows path; hunt on it, never block",
+        "confidence": "HIGH",
+        "context": "Inveigh log read by check.rc"
+      },
+      {
+        "value": "C:\\Users\\Public\\bc_mitm_long.txt",
+        "role": "Operator working path on victim hosts, seen in scripts",
+        "false_positive_note": "Generic Windows path; hunt on it, never block",
+        "confidence": "HIGH",
+        "context": "bettercap long-run log (also bc_mitm_test.txt, bc_passive.txt, bc_recon2_out.txt)"
+      },
+      {
+        "value": "C:\\Windows\\Temp\\hunt_out.txt",
+        "role": "Operator working path on victim hosts, seen in scripts",
+        "false_positive_note": "Generic Windows path; hunt on it, never block",
+        "confidence": "HIGH",
+        "context": "host survey output (hunt2.txt, acl.txt, acldone.txt, adenum.txt, adenum.bat in the same folder)"
+      }
+    ]
+  },
+  "non_indicators": {
+    "entries": [
+      {
+        "value": "github.com/google/gvisor/runc/cgroup",
+        "context": "Sliver default non-debug module-path rewrite, a family-wide string and not operator-specific; YARA anchor for the Sliver family only. The masqueraded protobuf package sits under github.com/google/gvisor/protobuf/sliverpb."
+      },
+      {
+        "value": "FOOLISH_NICHE",
+        "context": "Sliver default random implant name and certificate CN (u131, u237, u218); any default Sliver build can carry such a name"
+      },
+      {
+        "value": "HAPPY_WEDGE",
+        "context": "Sliver default random implant name and certificate CN (u131, u237, u218); any default Sliver build can carry such a name"
+      },
+      {
+        "value": "CRUDE_MINT",
+        "context": "Sliver default random implant name and certificate CN (u131, u237, u218); any default Sliver build can carry such a name"
+      }
+    ]
+  },
+  "explicitly_excluded": {
+    "note": "Classes left out on purpose. Values are not repeated.",
+    "classes": [
+      "Stock upstream Chisel builds (three, served at other addresses too) and public tools staged by the operator (bettercap, Invoke-SMBExec, a CVE-2021-21974 port not compared with upstream)",
+      "Third-party installers and parts (Npcap, WinPcap, libusb, pthreadVC, vc_redist, python embed)",
+      "The hosting provider range and AS for the case host",
+      "Four Linux Sliver samples on VT with only truncated hashes in the return",
+      "Operator-chosen implant names and certificate CNs and a server working directory that derive from a victim name",
+      "The internal pivot parent address of the TCP pivot build, and every victim host, account, dataset, credential and file-server client address"
+    ]
+  }
+}

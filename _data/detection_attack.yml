@@ -2288,6 +2288,101 @@
       name: "Exfiltration Over Unencrypted Non-C2 Protocol"
       rules: "WSMA_CVE_2023_20198_DoubleEncode_Exfil (YARA, Detection); Network-Device Self-Exfiltration via Outbound PUT with User-Agent cisco-IOS (SURICATA, Detection); Cisco WSMA fileCopy Request With a dstURL Parameter (SURICATA, Hunting)"
       count: 3
+"opendirectory-169-58-165-63-ad-intrusion-vs-pakistani-university-20261116-detections":
+  total: 18
+  tactics: 8
+  unresolved: []
+  rows:
+    - tactic: "Execution"
+      id: "T1059.001"
+      name: "PowerShell"
+      rules: "PowerShell Script Block Opens A Raw TCP Stream And Runs Each Received Command With Iex (SIGMA, Detection); PowerShell Script Block Polls An HTTP Endpoint For Commands Runs Them And Posts The Base64 Output (SIGMA, Hunting)"
+      count: 2
+    - tactic: "Persistence"
+      id: "T1543.003"
+      name: "Windows Service"
+      rules: "Pnputil Installs A Driver Package From A User-Writable Path (SIGMA, Hunting)"
+      count: 1
+    - tactic: "Stealth"
+      id: "T1620"
+      name: "Reflective Code Loading"
+      rules: "SUSP_WIN_INV2026084_Meterpreter_ReflectiveStub_EmbeddedDll (YARA, Hunting)"
+      count: 1
+    - tactic: "Defense Impairment"
+      id: "T1553.004"
+      name: "Install Root Certificate"
+      rules: "Certutil Adds A Certificate To The TrustedPublisher Store From A User-Writable Path (SIGMA, Detection)"
+      count: 1
+    - tactic: "Credential Access"
+      id: "T1003.002"
+      name: "Security Account Manager"
+      rules: "Registry Hive Copies Written To A Public Profile Hives Folder (SIGMA, Hunting)"
+      count: 1
+    - tactic: "Credential Access"
+      id: "T1040"
+      name: "Network Sniffing"
+      rules: "Bettercap Man-In-The-Middle Modules Started From The Command Line (SIGMA, Detection)"
+      count: 1
+    - tactic: "Credential Access"
+      id: "T1552.001"
+      name: "Credentials In Files"
+      rules: "PowerShell Script Block Surveys Autologon Cmdkey And Windows Vault Credentials Together (SIGMA, Hunting)"
+      count: 1
+    - tactic: "Credential Access"
+      id: "T1555"
+      name: "Credentials from Password Stores"
+      rules: "PowerShell Script Block Surveys Autologon Cmdkey And Windows Vault Credentials Together (SIGMA, Hunting)"
+      count: 1
+    - tactic: "Credential Access"
+      id: "T1557.001"
+      name: "Name Resolution Poisoning and SMB Relay"
+      rules: "Inveigh Capture Files Created In A Public Profile Folder (SIGMA, Hunting)"
+      count: 1
+    - tactic: "Credential Access"
+      id: "T1557.002"
+      name: "ARP Cache Poisoning"
+      rules: "Bettercap Man-In-The-Middle Modules Started From The Command Line (SIGMA, Detection)"
+      count: 1
+    - tactic: "Discovery"
+      id: "T1069.002"
+      name: "Domain Groups"
+      rules: "PowerShell Script Block Enumerates Admin Accounts SPN Accounts And Privileged Groups Over LDAP (SIGMA, Hunting); PowerShell Script Block Audits DACLs For Write And Control Rights On Domain Objects (SIGMA, Hunting)"
+      count: 2
+    - tactic: "Discovery"
+      id: "T1087.002"
+      name: "Domain Account"
+      rules: "PowerShell Script Block Enumerates Admin Accounts SPN Accounts And Privileged Groups Over LDAP (SIGMA, Hunting); Operator Recon Output Files Created In Windows Temp (SIGMA, Hunting)"
+      count: 2
+    - tactic: "Collection"
+      id: "T1005"
+      name: "Data from Local System"
+      rules: "Operator Recon Output Files Created In Windows Temp (SIGMA, Hunting)"
+      count: 1
+    - tactic: "Command and Control"
+      id: "T1071.001"
+      name: "Web Protocols"
+      rules: "MAL_WIN_INV2026084_Sliver_ProtobufReflectionNames_GoImplant (YARA, Detection); MAL_WIN_INV2026084_Sliver_MasqueradedGvisorModuleRoot_PlainBuild (YARA, Hunting); PowerShell Script Block Polls An HTTP Endpoint For Commands Runs Them And Posts The Base64 Output (SIGMA, Hunting); THL DETECT INV-2026-084 NimPlant C2 Server Banner In HTTP Response Header (C2 Server Indicator) (SURICATA, Detection); THL HUNT INV-2026-084 PowerShell HTTP Tasking Loop Command Poll (Operator Beacon Indicator) (SURICATA, Hunting); THL HUNT INV-2026-084 PowerShell HTTP Tasking Loop Base64 Result Post (Operator Beacon Indicator) (SURICATA, Hunting); THL HUNT INV-2026-084 Operator Front Domain cytomate.xyz DNS Query (C2 Front Indicator) (SURICATA, Hunting); THL HUNT INV-2026-084 Operator Front Domain cytomate.xyz TLS SNI (C2 Front Indicator) (SURICATA, Hunting)"
+      count: 8
+    - tactic: "Command and Control"
+      id: "T1095"
+      name: "Non-Application Layer Protocol"
+      rules: "PowerShell Script Block Opens A Raw TCP Stream And Runs Each Received Command With Iex (SIGMA, Detection)"
+      count: 1
+    - tactic: "Command and Control"
+      id: "T1105"
+      name: "Ingress Tool Transfer"
+      rules: "HKTL_WIN_INV2026084_Meterpreter_MsfTemplateStager_PayloadMarker (YARA, Hunting); Driver Package Files Created In The Public Profile (SIGMA, Hunting); THL HUNT INV-2026-084 Npcap Driver Package Fetch From Operator Staging Path (Tool Staging Indicator) (SURICATA, Hunting)"
+      count: 3
+    - tactic: "Command and Control"
+      id: "T1572"
+      name: "Protocol Tunneling"
+      rules: "HKTL_GEN_INV2026084_Chisel_GoTunnel_UpstreamBuild (YARA, Hunting)"
+      count: 1
+    - tactic: "Command and Control"
+      id: "T1573.002"
+      name: "Asymmetric Cryptography"
+      rules: "MAL_WIN_INV2026084_Sliver_ProtobufReflectionNames_GoImplant (YARA, Detection); MAL_WIN_INV2026084_Sliver_MasqueradedGvisorModuleRoot_PlainBuild (YARA, Hunting)"
+      count: 2
 "opendirectory-216-126-227-49-cve-2026-41940-cpanel-harvester-20260517-detections":
   total: 8
   tactics: 5

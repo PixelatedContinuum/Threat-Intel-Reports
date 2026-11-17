@@ -1,5 +1,5 @@
 {
- "generated_at": "2026-11-15T05:49:03Z",
+ "generated_at": "2026-11-17T13:55:57Z",
  "counts": {
   "indicators": 2073,
   "reports": 61,
@@ -73,7 +73,8 @@
   ],
   "embargoed": [
    "inv-2026-082-agent-platform-command-channel-iocs.json",
-   "inv-2026-083-federal-ad-credential-access-rig-iocs.json"
+   "inv-2026-083-federal-ad-credential-access-rig-iocs.json",
+   "opendirectory-169-58-165-63-ad-intrusion-vs-pakistani-university-20261116-iocs.json"
   ],
   "unknown": [],
   "empty": []

@@ -1,0 +1,220 @@
+# Editorial view selections for this report only. Source tables remain authoritative.
+# The ATT&CK table has no Scope column, so each join matches every row of its technique (scope_prefix empty). Joins follow the stage table's own evidence cells. No victim value.
+{
+  "stage_joins": {
+    "1. Prepare the server": [
+      {
+        "technique": "T1608.002",
+        "scope_prefix": ""
+      },
+      {
+        "technique": "T1588.002",
+        "scope_prefix": ""
+      },
+      {
+        "technique": "T1071.001",
+        "scope_prefix": ""
+      }
+    ],
+    "2. Hold a foothold": [
+      {
+        "technique": "T1095",
+        "scope_prefix": ""
+      },
+      {
+        "technique": "T1059.001",
+        "scope_prefix": ""
+      },
+      {
+        "technique": "T1059.003",
+        "scope_prefix": ""
+      },
+      {
+        "technique": "T1027.010",
+        "scope_prefix": ""
+      },
+      {
+        "technique": "T1070.004",
+        "scope_prefix": ""
+      },
+      {
+        "technique": "T1620",
+        "scope_prefix": ""
+      }
+    ],
+    "3. Survey the hosts": [
+      {
+        "technique": "T1059.001",
+        "scope_prefix": ""
+      },
+      {
+        "technique": "T1027.010",
+        "scope_prefix": ""
+      },
+      {
+        "technique": "T1033",
+        "scope_prefix": ""
+      },
+      {
+        "technique": "T1049",
+        "scope_prefix": ""
+      },
+      {
+        "technique": "T1057",
+        "scope_prefix": ""
+      },
+      {
+        "technique": "T1069.001",
+        "scope_prefix": ""
+      },
+      {
+        "technique": "T1083",
+        "scope_prefix": ""
+      },
+      {
+        "technique": "T1555.004",
+        "scope_prefix": ""
+      },
+      {
+        "technique": "T1552.001",
+        "scope_prefix": ""
+      },
+      {
+        "technique": "T1552.002",
+        "scope_prefix": ""
+      },
+      {
+        "technique": "T1552.003",
+        "scope_prefix": ""
+      }
+    ],
+    "4. Collect credentials": [
+      {
+        "technique": "T1557.001",
+        "scope_prefix": ""
+      },
+      {
+        "technique": "T1003.002",
+        "scope_prefix": ""
+      },
+      {
+        "technique": "T1003.004",
+        "scope_prefix": ""
+      },
+      {
+        "technique": "T1074.001",
+        "scope_prefix": ""
+      },
+      {
+        "technique": "T1041",
+        "scope_prefix": ""
+      }
+    ],
+    "5. Read and test the directory": [
+      {
+        "technique": "T1078.002",
+        "scope_prefix": ""
+      },
+      {
+        "technique": "T1087.002",
+        "scope_prefix": ""
+      },
+      {
+        "technique": "T1069.002",
+        "scope_prefix": ""
+      },
+      {
+        "technique": "T1018",
+        "scope_prefix": ""
+      },
+      {
+        "technique": "T1558.004",
+        "scope_prefix": ""
+      },
+      {
+        "technique": "T1558.003",
+        "scope_prefix": ""
+      },
+      {
+        "technique": "T1110.003",
+        "scope_prefix": ""
+      },
+      {
+        "technique": "T1110.001",
+        "scope_prefix": ""
+      },
+      {
+        "technique": "T1021.002",
+        "scope_prefix": ""
+      }
+    ],
+    "6. Stage the spread": [
+      {
+        "technique": "T1105",
+        "scope_prefix": ""
+      },
+      {
+        "technique": "T1046",
+        "scope_prefix": ""
+      },
+      {
+        "technique": "T1557.002",
+        "scope_prefix": ""
+      },
+      {
+        "technique": "T1040",
+        "scope_prefix": ""
+      },
+      {
+        "technique": "T1553",
+        "scope_prefix": ""
+      },
+      {
+        "technique": "T1027",
+        "scope_prefix": ""
+      },
+      {
+        "technique": "T1095",
+        "scope_prefix": ""
+      },
+      {
+        "technique": "T1071.001",
+        "scope_prefix": ""
+      },
+      {
+        "technique": "T1573.002",
+        "scope_prefix": ""
+      },
+      {
+        "technique": "T1090.001",
+        "scope_prefix": ""
+      },
+      {
+        "technique": "T1090",
+        "scope_prefix": ""
+      },
+      {
+        "technique": "T1132.001",
+        "scope_prefix": ""
+      },
+      {
+        "technique": "T1572",
+        "scope_prefix": ""
+      }
+    ],
+    "7. Aim at the virtualisation layer": [
+      {
+        "technique": "T1210",
+        "scope_prefix": ""
+      },
+      {
+        "technique": "T1046",
+        "scope_prefix": ""
+      },
+      {
+        "technique": "T1027",
+        "scope_prefix": ""
+      }
+    ]
+  }
+}

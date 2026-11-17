@@ -24,6 +24,20 @@
 #     detection_tiers is set on 51 entries and read by nothing; do not add it.
 
 entries:
+  # ===== PENDING GO-LIVE: INV-2026-084 Active Directory intrusion of a Pakistani university (uncomment at launch) =====
+  # Withheld on purpose: the report, the detection page and the IOC feed are an unlisted PREVIEW (T-0646).
+  # Go-live waits on Joseph (victim notifications and his grace period). Go-live flip: preview-and-go-live.md.
+  # Uncomment, replace preview_cover_label with cover_label below, add stix_url, repoint the report's
+  # ioc_feed to /ioc-feeds/<slug>/, set the feed's tlp to the go-live marking, and re-read this block against the report title.
+  #  - title: "A Prepared Intruder Inside a Pakistani University, With an ESXi Path Staged"
+  #    date: 2026-11-17
+  #    severity: high
+  #    tags: [Open Dir, C2, Cred Theft, Toolkit]
+  #    report_url: /reports/opendirectory-169-58-165-63-ad-intrusion-vs-pakistani-university-20261116/
+  #    cover_label: "AD Intrusion"
+  #    detection_url: /hunting-detections/opendirectory-169-58-165-63-ad-intrusion-vs-pakistani-university-20261116-detections
+  #    ioc_url: /ioc-feeds/opendirectory-169-58-165-63-ad-intrusion-vs-pakistani-university-20261116-iocs.json
+  # =============================================================================================
   # ===== PENDING GO-LIVE: INV-2026-083 federal AD credential-access rig (uncomment at launch) =====
   # Withheld on purpose: the report, the detection page and the IOC feed are an unlisted PREVIEW (T-0634).
   # Go-live waits on Joseph (CISA and NPR notified plus his grace period). Go-live flip: preview-and-go-live.md.

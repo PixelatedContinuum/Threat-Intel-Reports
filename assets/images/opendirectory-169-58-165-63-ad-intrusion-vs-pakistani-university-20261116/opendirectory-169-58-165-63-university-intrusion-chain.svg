@@ -1,0 +1,86 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 2150" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif">
+<!-- vertical-chain; derived figure; no victim identifiers -->
+<defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M 0 0 L 10 5 L 0 10 z" fill="#cccccc"/></marker><filter id="cardShadow" x="-2%" y="-2%" width="104%" height="108%"><feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#000" flood-opacity="0.55"/></filter></defs>
+<rect width="1000" height="2150" fill="#161616"/><rect x="0.5" y="0.5" width="999" height="2149" fill="none" stroke="#2a2a2a" stroke-width="1"/>
+<text x="500" y="62" text-anchor="middle" font-size="40" font-weight="700" fill="#ffffff">Operator Server to University Chain</text>
+<text x="500" y="106" text-anchor="middle" font-size="24" fill="#f5f5f5">What is shown, what is held, what is only staged</text>
+<text x="500" y="140" text-anchor="middle" font-size="18" fill="#cccccc">Initial access is not identified. No victim-side telemetry is held.</text>
+<line x1="60" y1="166" x2="940" y2="166" stroke="#2a2a2a" stroke-width="1"/>
+<g filter="url(#cardShadow)"><rect x="60" y="196" width="880" height="212" rx="8" fill="#1a1a1a" stroke="#2a2a2a" stroke-width="1"/>
+<rect x="60" y="196" width="880" height="46" rx="8" fill="#f97316"/><rect x="60" y="229" width="880" height="13" fill="#f97316"/>
+<text x="80" y="227" font-size="17" font-weight="700" fill="#111111" letter-spacing="0.5">STEP 1</text>
+<text x="172" y="227" font-size="22" font-weight="600" fill="#111111">Operator server prepared</text>
+<text x="924" y="226" text-anchor="end" font-size="14" font-weight="700" fill="#111111" letter-spacing="0.5">SHOWN</text>
+<text x="80" y="282" font-size="20" fill="#ffffff">169[.]58[.]165[.]63 on Contabo: SSH from 13 August, Sliver from 19 August</text>
+<text x="80" y="316" font-size="17" fill="#e5e5e5" font-family="ui-monospace, 'Cascadia Mono', Menlo, monospace">Sliver mTLS 31337 · HTTPS 8000 · stager ports 4444, 4446, 4447, 5555</text>
+<text x="80" y="350" font-size="18" fill="#e5e5e5">8 Sliver builds, 6 stagers, a front domain behind Cloudflare</text>
+<text x="80" y="384" font-size="18" fill="#fb923c" font-weight="600">Hunt: internal hosts that reached it on ports 8444 or 9002</text>
+</g>
+<g filter="url(#cardShadow)"><rect x="60" y="452" width="880" height="184" rx="8" fill="#1a1a1a" stroke="#2a2a2a" stroke-width="1"/>
+<rect x="60" y="452" width="880" height="46" rx="8" fill="#dc2626"/><rect x="60" y="485" width="880" height="13" fill="#dc2626"/>
+<text x="80" y="483" font-size="17" font-weight="700" fill="#ffffff" letter-spacing="0.5">STEP 2</text>
+<text x="172" y="483" font-size="22" font-weight="600" fill="#ffffff">Four Windows footholds</text>
+<text x="924" y="482" text-anchor="end" font-size="14" font-weight="700" fill="#ffffff" letter-spacing="0.5">SHOWN: COMMAND OUTPUT</text>
+<text x="80" y="538" font-size="20" fill="#ffffff">Metasploit sessions on four servers by 5 November</text>
+<text x="80" y="572" font-size="18" fill="#e5e5e5">The same encoded survey ran on all four inside 8 minutes</text>
+<text x="80" y="606" font-size="18" fill="#fb923c" font-weight="600">Initial access not identified: no web, VPN or authentication log held</text>
+</g>
+<g filter="url(#cardShadow)"><rect x="60" y="680" width="880" height="184" rx="8" fill="#1a1a1a" stroke="#2a2a2a" stroke-width="1"/>
+<rect x="60" y="680" width="880" height="46" rx="8" fill="#dc2626"/><rect x="60" y="713" width="880" height="13" fill="#dc2626"/>
+<text x="80" y="711" font-size="17" font-weight="700" fill="#ffffff" letter-spacing="0.5">STEP 3</text>
+<text x="172" y="711" font-size="22" font-weight="600" fill="#ffffff">Credentials collected</text>
+<text x="924" y="710" text-anchor="end" font-size="14" font-weight="700" fill="#ffffff" letter-spacing="0.5">SHOWN</text>
+<text x="80" y="766" font-size="20" fill="#ffffff">Six NTLMv2 responses captured in 1 h 33 m 54 s</text>
+<text x="80" y="800" font-size="18" fill="#e5e5e5">SAM, SYSTEM and SECURITY hives saved from three servers</text>
+<text x="80" y="834" font-size="18" fill="#e5e5e5">No domain-admin credential held</text>
+</g>
+<g filter="url(#cardShadow)"><rect x="60" y="908" width="880" height="184" rx="8" fill="#1a1a1a" stroke="#2a2a2a" stroke-width="1"/>
+<rect x="60" y="908" width="880" height="46" rx="8" fill="#dc2626"/><rect x="60" y="941" width="880" height="13" fill="#dc2626"/>
+<text x="80" y="939" font-size="17" font-weight="700" fill="#ffffff" letter-spacing="0.5">STEP 4</text>
+<text x="172" y="939" font-size="22" font-weight="600" fill="#ffffff">Directory read through one account</text>
+<text x="924" y="938" text-anchor="end" font-size="14" font-weight="700" fill="#ffffff" letter-spacing="0.5">SHOWN: OPERATOR OUTPUT</text>
+<text x="80" y="994" font-size="20" fill="#ffffff">One valid account read 14,038 user rows, 59 groups</text>
+<text x="80" y="1028" font-size="20" fill="#ffffff">and 4 computer accounts</text>
+<text x="80" y="1062" font-size="18" fill="#e5e5e5">AS-REP probe 0 roastable · Kerberoast no entries · share test 0 of 3,805 pairs</text>
+</g>
+<g filter="url(#cardShadow)"><rect x="60" y="1136" width="700" height="184" rx="8" fill="#1a1a1a" stroke="#2a2a2a" stroke-width="1"/>
+<rect x="60" y="1136" width="700" height="46" rx="8" fill="#eab308"/><rect x="60" y="1169" width="700" height="13" fill="#eab308"/>
+<text x="80" y="1167" font-size="17" font-weight="700" fill="#111111" letter-spacing="0.5">STEP 5</text>
+<text x="172" y="1167" font-size="22" font-weight="600" fill="#111111">University records, held</text>
+<text x="744" y="1166" text-anchor="end" font-size="14" font-weight="700" fill="#111111" letter-spacing="0.5">HELD, ROUTE NOT SHOWN</text>
+<text x="80" y="1222" font-size="20" fill="#ffffff">Held on the operator's server; when and how taken is not shown</text>
+<text x="80" y="1256" font-size="18" fill="#e5e5e5">328,942 rows from five university tables (rows, not people)</text>
+<text x="80" y="1290" font-size="18" fill="#fb923c" font-weight="600">Off the chain: no arrow, no claim they moved in this intrusion</text>
+</g>
+<g filter="url(#cardShadow)"><rect x="60" y="1364" width="880" height="252" rx="8" fill="#1a1a1a" stroke="#eab308" stroke-width="2" stroke-dasharray="9 6"/>
+<rect x="60" y="1364" width="880" height="46" rx="8" fill="#eab308"/><rect x="60" y="1397" width="880" height="13" fill="#eab308"/>
+<text x="80" y="1395" font-size="17" font-weight="700" fill="#111111" letter-spacing="0.5">STEP 6</text>
+<text x="172" y="1395" font-size="22" font-weight="600" fill="#111111">Tool staging, internal association</text>
+<text x="924" y="1394" text-anchor="end" font-size="14" font-weight="700" fill="#111111" letter-spacing="0.5">STAGED: NOT SHOWN RUN</text>
+<text x="80" y="1450" font-size="20" fill="#ffffff">An address in a block registered to the university's research</text>
+<text x="80" y="1484" font-size="20" fill="#ffffff">network made 105 requests (103 answered) for 41 distinct files</text>
+<text x="80" y="1518" font-size="18" fill="#e5e5e5">Network association only: delivery, not execution; device not identified</text>
+<text x="80" y="1552" font-size="18" fill="#e5e5e5">Pivot build configured to dial an internal parent on TCP 9898</text>
+<text x="80" y="1586" font-size="18" fill="#fb923c" font-weight="600">No listener shown</text>
+</g>
+<g filter="url(#cardShadow)"><rect x="60" y="1660" width="880" height="222" rx="8" fill="#1a1a1a" stroke="#dc2626" stroke-width="2" stroke-dasharray="9 6"/>
+<rect x="60" y="1660" width="880" height="46" rx="8" fill="#7f1d1d"/><rect x="60" y="1693" width="880" height="13" fill="#7f1d1d"/>
+<text x="80" y="1691" font-size="17" font-weight="700" fill="#ffffff" letter-spacing="0.5">STEP 7</text>
+<text x="172" y="1691" font-size="22" font-weight="600" fill="#ffffff">ESXi path</text>
+<text x="924" y="1690" text-anchor="end" font-size="14" font-weight="700" fill="#ffffff" letter-spacing="0.5">STAGED: NOT SHOWN USED</text>
+<text x="80" y="1746" font-size="20" fill="#ffffff">Port of the public CVE-2021-21974 exploit, 6 scanners, a Linux Sliver build</text>
+<text x="80" y="1780" font-size="18" fill="#e5e5e5">Scanners default to the university's own address range</text>
+<text x="80" y="1814" font-size="18" fill="#fb923c" font-weight="600">No scan output, exploit reply or ESXi session held:</text>
+<text x="80" y="1848" font-size="18" fill="#fb923c" font-weight="600">scanning, exploitation and contact are NOT CHECKED</text>
+</g>
+<line x1="500" y1="408" x2="500" y2="446" stroke="#cccccc" stroke-width="2" marker-end="url(#arrow)"/>
+<line x1="500" y1="636" x2="500" y2="674" stroke="#cccccc" stroke-width="2" marker-end="url(#arrow)"/>
+<line x1="500" y1="864" x2="500" y2="902" stroke="#cccccc" stroke-width="2" marker-end="url(#arrow)"/>
+<line x1="850" y1="1092" x2="850" y2="1358" stroke="#cccccc" stroke-width="2" stroke-dasharray="7 5" marker-end="url(#arrow)"/>
+<line x1="500" y1="1616" x2="500" y2="1654" stroke="#cccccc" stroke-width="2" stroke-dasharray="7 5" marker-end="url(#arrow)"/>
+<line x1="60" y1="1912" x2="940" y2="1912" stroke="#2a2a2a" stroke-width="1"/>
+<text x="500" y="1946" text-anchor="middle" font-size="18" font-weight="600" fill="#ffffff">Hunt first: internal hosts that reached the server on 8444 or 9002</text>
+<text x="500" y="1976" text-anchor="middle" font-size="18" font-weight="600" fill="#ffffff">internal hosts listening on TCP 9898 · ESXi hosts with SLP reachable internally</text>
+<text x="500" y="2022" text-anchor="middle" font-size="15" fill="#cccccc">Solid border: operator output held. Dashed border: staged, not shown run or used. Held records have no arrow.</text>
+<text x="500" y="2054" text-anchor="middle" font-size="14" fill="#888888">Legend: orange = access · red = operator code · yellow = staging and held data · deep red = endgame</text>
+</svg>

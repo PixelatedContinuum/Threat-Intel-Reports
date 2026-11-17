@@ -1,0 +1,18 @@
+cve.py  # file name (.py) of a public exploit script the report names, not a host
+github.com/google/gvisor  # public gVisor repository named as the prior-art source for a cited file, not actor infrastructure (path-scoped)
+github.com/google/gvisor/runc/cgroup  # public gVisor source path cited as the origin of a file name, not actor infrastructure (path-scoped)
+github.com/BishopFox/sliver  # public Sliver framework repository named as the tool origin (path-scoped)
+github.com/burrowers/garble  # public garble obfuscator repository named as the tool origin (path-scoped)
+github.com/chvancooten/NimPlant  # public NimPlant repository named as the tool origin (path-scoped)
+github.com/jpillora/chisel  # public chisel repository named as the tool origin (path-scoped)
+github.com/Kevin-Robertson/Inveigh  # public Inveigh repository named as the tool origin (path-scoped)
+github.com/bettercap/bettercap  # public bettercap repository named as the tool origin (path-scoped)
+loldrivers.io  # LOLDrivers vulnerable-driver catalogue named as a reference, not infrastructure of the actor
+nvd.nist.gov  # NIST National Vulnerability Database cited as a reference page, not infrastructure of the actor
+bleepingcomputer.com  # cited news reference page, not infrastructure of the actor
+comparitech.com  # cited reference page, not infrastructure of the actor
+therecord.media  # cited news reference page, not infrastructure of the actor
+www.helpnetsecurity.com  # cited news reference page, not infrastructure of the actor
+www.techtarget.com  # cited news reference page, not infrastructure of the actor
+www.loldrivers.io  # LOLDrivers catalogue host as the report's reference link spells it (www form of loldrivers.io, exact host only), not infrastructure of the actor
+www.comparitech.com  # cited research reference page linked in the text (www form of comparitech.com, exact host only), not infrastructure of the actor

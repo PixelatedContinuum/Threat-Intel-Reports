@@ -4495,6 +4495,214 @@ opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817
     robustness: 3
     confidence: "MODERATE"
     attack: [T1048.003]
+opendirectory-169-58-165-63-ad-intrusion-vs-pakistani-university-20261116-detections:
+  - name: "MAL_WIN_INV2026084_Sliver_ProtobufReflectionNames_GoImplant"
+    engine: yara
+    tier: Detection
+    fence: 0
+    hash: "0a52b116"
+    head: "rule MAL_WIN_INV2026084_Sliver_ProtobufReflectio"
+    robustness: 2
+    confidence: "HIGH"
+    attack: [T1071.001, T1573.002]
+  - name: "MAL_WIN_INV2026084_Sliver_MasqueradedGvisorModuleRoot_PlainBuild"
+    engine: yara
+    tier: Hunting
+    fence: 1
+    hash: "dd8c5372"
+    head: "rule MAL_WIN_INV2026084_Sliver_MasqueradedGvisor"
+    robustness: 1
+    confidence: "HIGH"
+    attack: [T1071.001, T1573.002]
+  - name: "HKTL_WIN_INV2026084_Meterpreter_MsfTemplateStager_PayloadMarker"
+    engine: yara
+    tier: Hunting
+    fence: 2
+    hash: "8ff137bf"
+    head: "rule HKTL_WIN_INV2026084_Meterpreter_MsfTemplate"
+    robustness: 1
+    confidence: "MODERATE"
+    attack: [T1105]
+  - name: "SUSP_WIN_INV2026084_Meterpreter_ReflectiveStub_EmbeddedDll"
+    engine: yara
+    tier: Hunting
+    fence: 3
+    hash: "bc66c4ad"
+    head: "rule SUSP_WIN_INV2026084_Meterpreter_ReflectiveS"
+    robustness: 1
+    confidence: "MODERATE"
+    attack: [T1620]
+  - name: "HKTL_GEN_INV2026084_Chisel_GoTunnel_UpstreamBuild"
+    engine: yara
+    tier: Hunting
+    fence: 4
+    hash: "a3cef7af"
+    head: "rule HKTL_GEN_INV2026084_Chisel_GoTunnel_Upstrea"
+    robustness: 1
+    confidence: "HIGH"
+    attack: [T1572]
+  - name: "Certutil Adds A Certificate To The TrustedPublisher Store From A User-Writable Path"
+    engine: sigma
+    tier: Detection
+    fence: 5
+    hash: "d1ea10bb"
+    head: "title: Certutil Adds A Certificate To The Truste"
+    robustness: 2
+    confidence: "HIGH"
+    attack: [T1553.004]
+  - name: "Bettercap Man-In-The-Middle Modules Started From The Command Line"
+    engine: sigma
+    tier: Detection
+    fence: 6
+    hash: "6b5b2f50"
+    head: "title: Bettercap Man-In-The-Middle Modules Start"
+    robustness: 2
+    confidence: "HIGH"
+    attack: [T1557.002, T1040]
+  - name: "PowerShell Script Block Opens A Raw TCP Stream And Runs Each Received Command With Iex"
+    engine: sigma
+    tier: Detection
+    fence: 7
+    hash: "32503912"
+    head: "title: PowerShell Script Block Opens A Raw TCP S"
+    robustness: 2
+    confidence: "HIGH"
+    attack: [T1059.001, T1095]
+  - name: "Registry Hive Copies Written To A Public Profile Hives Folder"
+    engine: sigma
+    tier: Hunting
+    fence: 8
+    hash: "00932100"
+    head: "title: Registry Hive Copies Written To A Public "
+    robustness: 1
+    confidence: "HIGH"
+    attack: [T1003.002]
+  - name: "Inveigh Capture Files Created In A Public Profile Folder"
+    engine: sigma
+    tier: Hunting
+    fence: 9
+    hash: "2fe253a7"
+    head: "title: Inveigh Capture Files Created In A Public"
+    robustness: 1
+    confidence: "HIGH"
+    attack: [T1557.001]
+  - name: "PowerShell Script Block Enumerates Admin Accounts SPN Accounts And Privileged Groups Over LDAP"
+    engine: sigma
+    tier: Hunting
+    fence: 10
+    hash: "118217b9"
+    head: "title: PowerShell Script Block Enumerates Admin "
+    robustness: 2
+    confidence: "MODERATE"
+    attack: [T1087.002, T1069.002]
+  - name: "PowerShell Script Block Audits DACLs For Write And Control Rights On Domain Objects"
+    engine: sigma
+    tier: Hunting
+    fence: 11
+    hash: "fc69dc62"
+    head: "title: PowerShell Script Block Audits DACLs For "
+    robustness: 2
+    confidence: "MODERATE"
+    attack: [T1069.002]
+  - name: "PowerShell Script Block Surveys Autologon Cmdkey And Windows Vault Credentials Together"
+    engine: sigma
+    tier: Hunting
+    fence: 12
+    hash: "48a073cc"
+    head: "title: PowerShell Script Block Surveys Autologon"
+    robustness: 2
+    confidence: "MODERATE"
+    attack: [T1552.001, T1555]
+  - name: "PowerShell Script Block Polls An HTTP Endpoint For Commands Runs Them And Posts The Base64 Output"
+    engine: sigma
+    tier: Hunting
+    fence: 13
+    hash: "6a6ae6ce"
+    head: "title: PowerShell Script Block Polls An HTTP End"
+    robustness: 2
+    confidence: "MODERATE"
+    attack: [T1059.001, T1071.001]
+  - name: "Operator Recon Output Files Created In Windows Temp"
+    engine: sigma
+    tier: Hunting
+    fence: 14
+    hash: "78fb2373"
+    head: "title: Operator Recon Output Files Created In Wi"
+    robustness: 1
+    confidence: "HIGH"
+    attack: [T1087.002, T1005]
+  - name: "Pnputil Installs A Driver Package From A User-Writable Path"
+    engine: sigma
+    tier: Hunting
+    fence: 15
+    hash: "b5a459ea"
+    head: "title: Pnputil Installs A Driver Package From A "
+    robustness: 2
+    confidence: "MODERATE"
+    attack: [T1543.003]
+  - name: "Driver Package Files Created In The Public Profile"
+    engine: sigma
+    tier: Hunting
+    fence: 16
+    hash: "c4030b31"
+    head: "title: Driver Package Files Created In The Publi"
+    robustness: 2
+    confidence: "MODERATE"
+    attack: [T1105]
+  - name: "THL DETECT INV-2026-084 NimPlant C2 Server Banner In HTTP Response Header (C2 Server Indicator)"
+    engine: suricata
+    tier: Detection
+    fence: 17
+    hash: "645499f7"
+    head: "alert http $EXTERNAL_NET any -> $HOME_NET any (m"
+    robustness: 2
+    confidence: "MODERATE"
+    attack: [T1071.001]
+  - name: "THL HUNT INV-2026-084 PowerShell HTTP Tasking Loop Command Poll (Operator Beacon Indicator)"
+    engine: suricata
+    tier: Hunting
+    fence: 18
+    hash: "518a2912"
+    head: "alert http $HOME_NET any -> $EXTERNAL_NET any (m"
+    robustness: 1
+    confidence: "MODERATE"
+    attack: [T1071.001]
+  - name: "THL HUNT INV-2026-084 PowerShell HTTP Tasking Loop Base64 Result Post (Operator Beacon Indicator)"
+    engine: suricata
+    tier: Hunting
+    fence: 19
+    hash: "f3e78672"
+    head: "alert http $HOME_NET any -> $EXTERNAL_NET any (m"
+    robustness: 1
+    confidence: "MODERATE"
+    attack: [T1071.001]
+  - name: "THL HUNT INV-2026-084 Operator Front Domain cytomate.xyz DNS Query (C2 Front Indicator)"
+    engine: suricata
+    tier: Hunting
+    fence: 20
+    hash: "876059f8"
+    head: "alert dns $HOME_NET any -> any any (msg:\"THL HUN"
+    robustness: 1
+    confidence: "HIGH"
+    attack: [T1071.001]
+  - name: "THL HUNT INV-2026-084 Operator Front Domain cytomate.xyz TLS SNI (C2 Front Indicator)"
+    engine: suricata
+    tier: Hunting
+    fence: 21
+    hash: "81d8c922"
+    head: "alert tls $HOME_NET any -> $EXTERNAL_NET any (ms"
+    robustness: 1
+    confidence: "HIGH"
+    attack: [T1071.001]
+  - name: "THL HUNT INV-2026-084 Npcap Driver Package Fetch From Operator Staging Path (Tool Staging Indicator)"
+    engine: suricata
+    tier: Hunting
+    fence: 22
+    hash: "5d6fcf15"
+    head: "alert http $HOME_NET any -> $EXTERNAL_NET any (m"
+    robustness: 1
+    confidence: "MODERATE"
+    attack: [T1105]
 opendirectory-216-126-227-49-cve-2026-41940-cpanel-harvester-20260517-detections:
   - name: "CVE-2026-41940 cPanel Harvester Toolkit: Bespoke Component Filenames"
     engine: yara
