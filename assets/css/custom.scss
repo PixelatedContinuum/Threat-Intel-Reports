@@ -9214,6 +9214,8 @@ a.hl-kc:hover { border-color: var(--kc); color: #ffffff; }
 /* T-0638: the nKEVs Priority group reuses the strip and chips above; two more reasons. */
 .hl-pick__chip--cisa     { --p: #58a6ff; }
 .hl-pick__chip--fresh    { --p: #a3e635; }
+/* T-0665: the Just published marker. Same shape as the pick score; a sky blue so a reader tells it from the green Priority score. */
+.hl-pick__score--fresh   { --p: #7dd3fc; }
 .hl-pick__date { font-size: var(--hl-fs-small, 0.85em); color: var(--hl-text-muted); white-space: nowrap; margin-left: auto; }
 .hl-legend__list dt .hl-pick__score, .hl-legend__list dt .hl-pick__chip { font-size: var(--hl-fs-meta); cursor: default; }
 .hl-wire-data__list dt .hl-pick__score, .hl-wire-data__list dt .hl-pick__chip, .hl-wire-data__list dt .hl-pick__date { cursor: default; }

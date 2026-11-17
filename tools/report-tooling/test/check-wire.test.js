@@ -1491,6 +1491,202 @@ test('T-0628 the page template: the picks group, filter chip and pick strip are 
   assert.equal(CW.checkPage(page.replace('are my daily shortlist', 'are my daily shortlist — yes'), includes).status, 'FAIL');
 });
 
+/* T-0665: the "Just published" rows (contract: tasks/runs/T-0665/contract.md). test/fixtures/fresh-wire.yml is
+   picks-wire.yml with the four fresh keys on every CVE row and nine rows added: CVE-2026-9105 and 9106 are
+   Just published only (signals []), 9107 is Just published and a pick (signals []), 9103 is an arm row that is
+   also Just published, and 9110 is the one Just published row among six same-day rows for one product. The
+   checks are WARN lines like every CVEs-tab data check, so "fails" below means the cves warnings name the defect.
+   The controls: the fixture passes clean, picks-wire.yml (no fresh keys) still passes clean, and so does the
+   same fixture with every fresh key and the fresh count removed. */
+function freshFixture() {
+  return yamlPicks.load(fsPicks.readFileSync(pathPicks.join(__dirname, 'fixtures', 'fresh-wire.yml'), 'utf8'));
+}
+var FRESH_KEYS_TEST = ['fresh', 'fresh_score', 'fresh_reasons', 'fresh_class'];
+var FRESH_NOW = PICKS_NOW;
+function freshWarn(d) { return CW.check(d, SOURCES, FRESH_NOW).cveWarnings.join('\n'); }
+
+test('T-0665 control: the fresh fixture passes with no cve warnings and holds 5 fresh rows of 13', function () {
+  var d = freshFixture();
+  assert.equal(d.cves.length, 13);
+  assert.equal(d.cves.filter(function (r) { return r.fresh === true; }).length, 5);
+  assert.equal(d.cves_counts.fresh, 5);
+  assert.ok(d.cves.some(function (r) { return r.fresh && r.signals.length === 0 && !r.pick_day; }), 'a fresh-only row with no signal');
+  assert.ok(d.cves.some(function (r) { return r.fresh && r.signals.length === 0 && r.pick_day; }), 'a row that is fresh and a pick');
+  assert.ok(d.cves.some(function (r) { return r.fresh && r.signals.length > 0; }), 'a fresh row an arm also admits');
+  var r = CW.check(d, SOURCES, FRESH_NOW);
+  assert.equal(r.status, 'PASS');
+  assert.deepEqual(r.cveWarnings, []);
+  assert.equal(r.counts.cves, 13);
+});
+
+test('T-0665 controls: data from before the fresh keys (picks fixture, or the fresh fixture stripped of them) still passes clean', function () {
+  assert.deepEqual(CW.check(picksFixture(), SOURCES, PICKS_NOW).cveWarnings, []);
+  var d = freshFixture();
+  d.cves.forEach(function (r) { FRESH_KEYS_TEST.forEach(function (k) { delete r[k]; }); });
+  delete d.cves_counts.fresh;
+  // the rows that only a fresh key admitted now list no arm, which is the defect the keys excuse: those three are named, nothing else is
+  var w = CW.check(d, SOURCES, FRESH_NOW).cveWarnings.filter(function (x) { return !/lists no selection arm/.test(x); });
+  assert.deepEqual(w, []);
+  var d2 = freshFixture();
+  d2.cves = d2.cves.filter(function (r) { return !r.fresh; });
+  d2.cves.forEach(function (r) { FRESH_KEYS_TEST.forEach(function (k) { delete r[k]; }); });
+  delete d2.cves_counts.fresh;
+  d2.cves_counts.total = d2.cves.length; d2.cves_counts.critical = 0; d2.cves_counts.high = 0; d2.cves_counts.medium = 0; d2.cves_counts.nuclei = 0;
+  d2.cves_counts.epss90 = 0; d2.cves_counts.msf = 0; d2.cves_counts.picks = 2; d2.cves_counts.picks_today = 1;
+  d2.cves.forEach(function (r) { if (SEV_BANDS_TEST.indexOf(r.severity) !== -1) d2.cves_counts[r.severity]++; if (r.msf.length) d2.cves_counts.msf++; if (r.nuclei) d2.cves_counts.nuclei++; if (Number(r.epss_pct) >= 0.9) d2.cves_counts.epss90++; });
+  d2.cve_vendors = [{ label: 'Fixture', count: d2.cves.length }];
+  assert.deepEqual(CW.check(d2, SOURCES, FRESH_NOW).cveWarnings, []);
+});
+var SEV_BANDS_TEST = ['critical', 'high', 'medium', 'low'];
+
+test('T-0665 some fresh keys without the others are named, for each key left out', function () {
+  FRESH_KEYS_TEST.forEach(function (k) {
+    var d = freshFixture(); delete pickRow(d, 'CVE-2026-9105')[k];
+    assert.match(freshWarn(d), new RegExp('9105\\).*only some fresh keys \\(' + FRESH_KEYS_TEST.filter(function (x) { return x !== k; }).join(', ') + '\\); the exporter writes all four or none'), k);
+  });
+});
+
+test('T-0665 fresh types: flag, score, list, class label', function () {
+  var d = freshFixture(); pickRow(d, 'CVE-2026-9105').fresh = 'yes';
+  assert.match(freshWarn(d), /9105\).*has fresh "yes", not true or false/);
+  d = freshFixture(); pickRow(d, 'CVE-2026-9105').fresh_score = '4';
+  assert.match(freshWarn(d), /9105\).*fresh_score "4", not a whole number of 0 or more/);
+  d = freshFixture(); pickRow(d, 'CVE-2026-9105').fresh_score = 4.5;
+  assert.match(freshWarn(d), /9105\).*fresh_score 4.5, not a whole number/);
+  d = freshFixture(); pickRow(d, 'CVE-2026-9105').fresh_score = -1;
+  assert.match(freshWarn(d), /9105\).*fresh_score -1, not a whole number/);
+  d = freshFixture(); pickRow(d, 'CVE-2026-9105').fresh_reasons = 'class';
+  assert.match(freshWarn(d), /9105\).*fresh_reasons that are not a list/);
+  d = freshFixture(); pickRow(d, 'CVE-2026-9105').fresh_class = 'Printers';
+  assert.match(freshWarn(d), /9105\).*unknown fresh_class "Printers"/);
+  d = freshFixture(); pickRow(d, 'CVE-2026-9105').fresh_class = 7;
+  assert.match(freshWarn(d), /9105\).*fresh_class that is not text/);
+});
+
+test('T-0665 fresh_reasons: out of order, repeated, unknown, and the pick-only reasons are named', function () {
+  var d = freshFixture(); pickRow(d, 'CVE-2026-9105').fresh_reasons = ['critical', 'noauth', 'class'];
+  assert.match(freshWarn(d), /9105\).*fresh reason noauth out of order or twice \(order: nomi, ssvc, noauth, critical, class\)/);
+  d = freshFixture(); pickRow(d, 'CVE-2026-9105').fresh_reasons = ['noauth', 'noauth', 'class'];
+  assert.match(freshWarn(d), /9105\).*out of order or twice/);
+  d = freshFixture(); pickRow(d, 'CVE-2026-9105').fresh_reasons = ['noauth', 'luck', 'class'];
+  assert.match(freshWarn(d), /9105\).*unknown fresh reason "luck"/);
+  // a new CVE has no tooling and no EPSS history: those two pick reasons are not fresh reasons
+  ['tooling', 'epss90'].forEach(function (t) {
+    d = freshFixture(); pickRow(d, 'CVE-2026-9105').fresh_reasons = [t, 'noauth', 'class'];
+    assert.match(freshWarn(d), new RegExp('9105\\).*unknown fresh reason "' + t + '"'), t);
+  });
+});
+
+test('T-0665 fresh_class is a known class label if and only if class is a reason', function () {
+  var d = freshFixture(); pickRow(d, 'CVE-2026-9105').fresh_class = '';
+  assert.match(freshWarn(d), /9105\).*class reason but fresh_class is empty/);
+  d = freshFixture(); pickRow(d, 'CVE-2026-9106').fresh_class = 'File transfer';
+  assert.match(freshWarn(d), /9106\).*fresh_class but does not list the class reason/);
+  // every pick class label is accepted
+  ['Edge and network device', 'File transfer', 'IT and remote management', 'Identity and access', 'Virtualization and backup', 'Email and collaboration',
+    'Operating system or browser', 'Enterprise application', 'CMS core'].forEach(function (c) {
+    d = freshFixture(); pickRow(d, 'CVE-2026-9105').fresh_class = c; pickRow(d, 'CVE-2026-9105').fresh_score = c === 'Operating system or browser' ? 3 : 4;
+    assert.doesNotMatch(freshWarn(d), /9105/, c);
+  });
+});
+
+test('T-0665 a row that is not fresh scores 0 and carries no reasons and no class', function () {
+  var d = freshFixture(); pickRow(d, 'CVE-2026-9104').fresh_score = 2;
+  assert.match(freshWarn(d), /9104\).*fresh_score 2 but is not fresh/);
+  d = freshFixture(); pickRow(d, 'CVE-2026-9104').fresh_reasons = ['nomi'];
+  assert.match(freshWarn(d), /9104\).*fresh reasons but is not fresh/);
+  d = freshFixture(); pickRow(d, 'CVE-2026-9104').fresh_class = 'File transfer';
+  assert.match(freshWarn(d), /9104\).*fresh_class but is not fresh/);
+});
+
+test('T-0665 the score is what the reasons earn: 2 for a class (1 for an operating system or browser), 1 for each other', function () {
+  var d = freshFixture(); pickRow(d, 'CVE-2026-9105').fresh_score = 3;
+  assert.match(freshWarn(d), /9105\).*fresh_score 3 but its reasons add up to 4/);
+  d = freshFixture(); pickRow(d, 'CVE-2026-9105').fresh_class = 'Operating system or browser';
+  assert.match(freshWarn(d), /9105\).*fresh_score 4 but its reasons add up to 3/);
+  // a fresh row may score 0 with no reason
+  d = freshFixture(); Object.assign(pickRow(d, 'CVE-2026-9106'), { fresh_score: 0, fresh_reasons: [] });
+  d.cves_counts.fresh = 5;
+  assert.doesNotMatch(freshWarn(d), /9106/);
+});
+
+test('T-0665 a Just published row may list no signal; a row that is neither fresh nor a pick still needs one', function () {
+  var d = freshFixture();
+  assert.equal(pickRow(d, 'CVE-2026-9105').signals.length, 0);
+  assert.equal(pickRow(d, 'CVE-2026-9106').signals.length, 0);
+  assert.doesNotMatch(freshWarn(d), /lists no selection arm/);
+  // the same row, not fresh: nothing admits it
+  pickRow(d, 'CVE-2026-9106').fresh = false; Object.assign(pickRow(d, 'CVE-2026-9106'), { fresh_score: 0, fresh_reasons: [] });
+  d.cves_counts.fresh = 4;
+  assert.match(freshWarn(d), /9106\).*lists no selection arm/);
+  // a fresh row's signals are still held to its facts
+  d = freshFixture(); pickRow(d, 'CVE-2026-9105').signals = ['msf'];
+  assert.match(freshWarn(d), /9105\).*lists signal msf but the row shows no msf fact/);
+});
+
+test('T-0665 cves_counts.fresh is held to the rows when declared, and one not declared is not', function () {
+  var d = freshFixture(); d.cves_counts.fresh = 6;
+  assert.match(freshWarn(d), /cves_counts fresh disagrees with the rows: declared 6, actual 5/);
+  d = freshFixture(); d.cves_counts.fresh = 0;
+  assert.match(freshWarn(d), /cves_counts fresh disagrees with the rows: declared 0, actual 5/);
+  d = freshFixture(); d.cves_counts.fresh = '5';
+  assert.match(freshWarn(d), /cves_counts fresh is "5", not a whole number of 0 or more/);
+  d = freshFixture(); d.cves_counts.fresh = -1;
+  assert.match(freshWarn(d), /cves_counts fresh is -1, not a whole number/);
+  d = freshFixture(); delete d.cves_counts.fresh;
+  assert.deepEqual(CW.check(d, SOURCES, FRESH_NOW).cveWarnings, []);
+});
+
+test('T-0665 the cap of 250 counts the rows below the picks and the Just published rows', function () {
+  var d = freshFixture();
+  var keep = d.cves.filter(function (r) { return r.pick_day || r.fresh; });
+  var nOut = keep.length;
+  for (var i = 0; i < 250; i++) keep.push(Object.assign({}, pickRow(d, 'CVE-2026-9104'), { cve: 'CVE-2026-' + (9500 + i) }));
+  d.cves = keep; d.cves_counts.total = keep.length; d.cves_counts.high = 0; d.cves_counts.critical = 0; d.cves_counts.medium = 0;
+  d.cves_counts.msf = 0; d.cves_counts.nuclei = 250; d.cves_counts.epss90 = 0; d.cves_counts.picks = 3; d.cves_counts.picks_today = 2;
+  d.cve_vendors = [{ label: 'Fixture', count: keep.length }];
+  assert.doesNotMatch(freshWarn(d), /over the cap/);
+  keep.push(Object.assign({}, pickRow(d, 'CVE-2026-9104'), { cve: 'CVE-2026-9999' }));
+  assert.match(freshWarn(d), /251 rows besides 3 priority picks and 4 just published rows, over the cap of 250/);
+  assert.ok(nOut > 3);
+});
+
+test('T-0665 a retired reason or a separate Priority group is still rejected beside fresh rows', function () {
+  var page = fsPicks.readFileSync(pathPicks.join(__dirname, '..', '..', '..', 'wire', 'index.md'), 'utf8');
+  var includes = {};
+  fsPicks.readdirSync(pathPicks.join(__dirname, '..', '..', '..', '_includes')).filter(function (n) { return /^wire-/.test(n); })
+    .forEach(function (n) { includes[n] = fsPicks.readFileSync(pathPicks.join(__dirname, '..', '..', '..', '_includes', n), 'utf8'); });
+  assert.equal(CW.checkPage(page, includes).status, 'PASS');
+  assert.equal(CW.checkPage(page + '\n<div class="hl-wire__day hl-wire__day--picks">', includes).status, 'FAIL');
+});
+
+test('T-0665 the page template: the Just published chip, marker, key and the not-evidence wording are pinned, and losing one fails the page check', function () {
+  var page = fsPicks.readFileSync(pathPicks.join(__dirname, '..', '..', '..', 'wire', 'index.md'), 'utf8');
+  var includes = {};
+  fsPicks.readdirSync(pathPicks.join(__dirname, '..', '..', '..', '_includes')).filter(function (n) { return /^wire-/.test(n); })
+    .forEach(function (n) { includes[n] = fsPicks.readFileSync(pathPicks.join(__dirname, '..', '..', '..', '_includes', n), 'utf8'); });
+  assert.equal(CW.checkPage(page, includes).status, 'PASS');
+  ['data-sig="fresh">Just published', 'assign c_fresh = c_fresh | plus: 1', 'class="hl-vuln__pick hl-vuln__fresh"', 'hl-pick__score hl-pick__score--fresh" title="Just published.',
+    'hl-pick__score--fresh">Just published</span></dt><dd>', 'These rows are new and unproven', 'there is no evidence of exploitation for them yet',
+    'not a sign that anyone is attacking it', 'The rows sit outside the cap of 250',
+    'each of the last seven published days shows its three highest ranked CVEs as Just published rows'].forEach(function (pin) {
+    assert.ok(page.includes(pin), pin);
+    assert.equal(CW.checkPage(page.replace(pin, 'removed'), includes).status, 'FAIL', pin);
+  });
+  // the fold policy must keep skipping a fresh row
+  var inc2 = Object.assign({}, includes, { 'wire-fold-keys.html': includes['wire-fold-keys.html'].replace('fold_row.fresh == true', 'fold_row.nope == true') });
+  assert.equal(CW.checkPage(page, inc2).status, 'FAIL');
+  // an unescaped fresh value is caught by the existing escaping check
+  assert.equal(CW.checkPage(page.replace('{{ r.fresh_class | escape }}', '{{ r.fresh_class }}'), includes).status, 'FAIL');
+  // the panel copy stays free of dashes
+  assert.equal(CW.checkPage(page.replace('These rows are new and unproven', 'These rows are new and unproven — yes'), includes).status, 'FAIL');
+});
+
+test('T-0665 the fresh fixture is what the template draws: every fresh key a row carries is one the gate knows', function () {
+  var d = freshFixture();
+  d.cves.forEach(function (r) { FRESH_KEYS_TEST.forEach(function (k) { assert.ok(Object.prototype.hasOwnProperty.call(r, k), r.cve + ' lacks ' + k); }); });
+});
+
 /* T-0638: the nKEVs Priority group keys and counts (contract: tasks/runs/T-0638/contract.md).
    test/fixtures/np-wire.yml is w5b-wire.yml (old data, no np_ keys) with the four keys on every row,
    exactly 3 rows over the threshold of 5, and the counts to match. Data checks are WARN lines like

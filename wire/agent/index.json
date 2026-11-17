@@ -119,13 +119,18 @@ sitemap: false
   "pick_score": "The daily-pick score: likelihood (PoC listed 1, SSVC poc or active 1, EPSS percentile 0.90 or more 1, public exploit tooling or rule 2), impact (no-login network flaw, CVSS 9.0 or more) and product class, added together. In the author's replay from February 2025 to September 2026, about 10% of picks old enough to judge reached VulnCheck KEV within 90 days. It was not a blind test.",
   "pick_reasons": "Which pick points the CVE earned: tooling, nomi, ssvc, epss90, noauth, critical, class.",
   "pick_class": "The product class that earned the class points, or ''.",
-  "pick_seeded": "true for a pick from the first seeded set, not a daily pick."
+  "pick_seeded": "true for a pick from the first seeded set, not a daily pick.",
+  "fresh": "true for a Just published row: one of the three highest ranked CVEs of a day among the last seven, ranked on what a new CVE already has (product class, CVSS 9.0 or more, a no-login network flaw, a public proof of concept, SSVC poc or active). It is new and unproven: no evidence of exploitation exists yet, and a Just published row is not a pick and not an admission reason. false on every other row.",
+  "fresh_score": "The Just published score: 2 for a product class (1 for an operating system or browser) plus 1 each for CVSS 9.0 or more, no login over the network, a proof of concept listing and SSVC poc or active. 0 on a row that is not Just published.",
+  "fresh_reasons": "Which of those points the row earned, in this order: nomi, ssvc, noauth, critical, class.",
+  "fresh_class": "The product class that earned the class points, or ''."
 },
 
 "summary_row_keys": {
   "date": "added (kev) or published (cve).",
   "priority": "np_score for kev rows, pick_score for cve rows.",
   "priority_listed": "true when the row is in its tab's Priority strip (kev) or is a daily priority pick (cve).",
+  "fresh": "cve rows only: true for a Just published row (fresh_score is its score, 0 otherwise). Not a pick: priority and priority_listed describe picks only.",
   "other keys": "As in row_keys_common."
 },
 

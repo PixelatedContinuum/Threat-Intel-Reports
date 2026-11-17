@@ -4,7 +4,7 @@
   wire-agent-row.html, whose derived keys this repeats. date is the row's list date
   (added to VulnCheck KEV for kev, published for cve); priority is the tab's own score
   (np_score, the nKEVs patch-first score, or pick_score, the CVEs daily-pick score) and
-  priority_listed says whether the row is in that tab's Priority strip. Every value is
+  priority_listed says whether the row is in that tab's Priority strip. T-0665: a cve row also carries fresh (the Just published marker) and fresh_score. Every value is
   emitted through | jsonify.
 {%- endcomment -%}
 {%- assign br = include.r -%}
@@ -19,4 +19,4 @@
 {%- assign b_pd = br.pick_day | append: "" | size -%}{%- if b_pd > 0 -%}{%- assign b_listed = true -%}{%- else -%}{%- assign b_listed = false -%}{%- endif -%}
 {%- endif -%}
 {%- assign b_wire = "/wire/" | absolute_url | append: b_anchor -%}
-{"id": {{ br.cve | jsonify }}, "list": {{ include.list | jsonify }}, "on_vulncheck_kev": {{ b_vc | jsonify }}, "on_cisa_kev": {{ b_cisa | jsonify }}, "date": {{ b_date | jsonify }}, "vendor": {{ br.vendor | jsonify }}, "product": {{ br.product | jsonify }}, "title": {{ br.title | jsonify }}, "severity": {{ br.severity | jsonify }}, "cvss": {{ br.cvss | jsonify }}, "cwe": {{ br.cwe | jsonify }}, "epss": {{ br.epss | jsonify }}, "epss_pct": {{ br.epss_pct | jsonify }}, "priority": {{ b_score | jsonify }}, "priority_listed": {{ b_listed | jsonify }}, "wire_url": {{ b_wire | jsonify }}}
+{"id": {{ br.cve | jsonify }}, "list": {{ include.list | jsonify }}, "on_vulncheck_kev": {{ b_vc | jsonify }}, "on_cisa_kev": {{ b_cisa | jsonify }}, "date": {{ b_date | jsonify }}, "vendor": {{ br.vendor | jsonify }}, "product": {{ br.product | jsonify }}, "title": {{ br.title | jsonify }}, "severity": {{ br.severity | jsonify }}, "cvss": {{ br.cvss | jsonify }}, "cwe": {{ br.cwe | jsonify }}, "epss": {{ br.epss | jsonify }}, "epss_pct": {{ br.epss_pct | jsonify }}, "priority": {{ b_score | jsonify }}, "priority_listed": {{ b_listed | jsonify }}{% if include.list == "cve" %}{% if br.fresh == true %}{% assign b_fresh = true %}{% else %}{% assign b_fresh = false %}{% endif %}, "fresh": {{ b_fresh | jsonify }}, "fresh_score": {{ br.fresh_score | default: 0 | jsonify }}{% endif %}, "wire_url": {{ b_wire | jsonify }}}

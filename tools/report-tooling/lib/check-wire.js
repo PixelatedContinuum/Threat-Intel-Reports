@@ -693,6 +693,55 @@ function pickProblems(r, genDay) {
   else if (!pick && r.pick_seeded) out.push('is marked seeded but has no pick_day');
   return out;
 }
+/* T-0665: the "Just published" rows. Four keys the exporter writes on every CVE row once the rule exists
+   (empty on a row that is not one), checked only when present so data from before them still passes (the
+   site deploys before the exporter). Contract: tasks/runs/T-0665/contract.md. A fresh row ranks a new CVE
+   on what a new CVE already has, so no tooling and no EPSS reason exists, and the reasons are the five
+   pick reasons that can exist at publication, in the pick order. WARN lines like every CVEs-tab data
+   check here, for the reason the picks give above. */
+var FRESH_KEYS = ['fresh', 'fresh_score', 'fresh_reasons', 'fresh_class'];
+var FRESH_REASON_ORDER = ['nomi', 'ssvc', 'noauth', 'critical', 'class'];
+function isFresh(r) { return hasKey(r, 'fresh') && r.fresh === true; }
+function freshProblems(r) {
+  var out = [];
+  var present = FRESH_KEYS.filter(function (k) { return hasKey(r, k); });
+  if (!present.length) return out;
+  if (present.length !== FRESH_KEYS.length) {
+    out.push('carries only some fresh keys (' + present.join(', ') + '); the exporter writes all four or none');
+    return out;
+  }
+  if (typeof r.fresh !== 'boolean') out.push('has fresh ' + JSON.stringify(r.fresh) + ', not true or false');
+  var fresh = r.fresh === true;
+  if (!(typeof r.fresh_score === 'number' && Number.isInteger(r.fresh_score) && r.fresh_score >= 0)) {
+    out.push('has fresh_score ' + JSON.stringify(r.fresh_score) + ', not a whole number of 0 or more');
+  } else if (!fresh && r.fresh_score !== 0) {
+    out.push('has fresh_score ' + r.fresh_score + ' but is not fresh (a row that is not fresh scores 0)');
+  }
+  if (!Array.isArray(r.fresh_reasons)) out.push('has fresh_reasons that are not a list');
+  else {
+    var last = -1;
+    r.fresh_reasons.forEach(function (t) {
+      var at = FRESH_REASON_ORDER.indexOf(t);
+      if (at === -1) out.push('lists unknown fresh reason ' + JSON.stringify(t));
+      else if (at <= last) out.push('lists fresh reason ' + t + ' out of order or twice (order: ' + FRESH_REASON_ORDER.join(', ') + ')');
+      else last = at;
+    });
+    if (!fresh && r.fresh_reasons.length) out.push('lists fresh reasons but is not fresh');
+    var hasClassToken = r.fresh_reasons.indexOf('class') !== -1;
+    if (fresh && hasClassToken && isEmpty(r.fresh_class)) out.push('lists the class reason but fresh_class is empty');
+    if (fresh && !hasClassToken && !isEmpty(r.fresh_class)) out.push('has a fresh_class but does not list the class reason');
+    // The contract's score is the sum of what the reasons earn: 2 for the class (1 for an operating system or browser), 1 for each other.
+    if (fresh && !out.length && Number.isInteger(r.fresh_score)) {
+      var pts = 0;
+      r.fresh_reasons.forEach(function (t) { pts += t === 'class' ? (r.fresh_class === 'Operating system or browser' ? 1 : 2) : 1; });
+      if (pts !== r.fresh_score) out.push('has fresh_score ' + r.fresh_score + ' but its reasons add up to ' + pts);
+    }
+  }
+  if (typeof r.fresh_class !== 'string') out.push('has a fresh_class that is not text');
+  else if (r.fresh_class !== '' && PICK_CLASSES.indexOf(r.fresh_class) === -1) out.push('has unknown fresh_class ' + JSON.stringify(r.fresh_class));
+  else if (!fresh && r.fresh_class !== '') out.push('has a fresh_class but is not fresh');
+  return out;
+}
 var EPSS_HIGH_PCT = 0.90;
 function signalFacts(r) {
   var epct = Number(r.epss_pct);
@@ -731,10 +780,14 @@ function checkCves(doc, now) {
     warnings.push('cves_status is ok but there are no rows: possible if nothing passes the rule, ' +
       'but the measurement behind the rule found 25 rows over 30 days');
   }
-  // Picks sit above the list and outside its cap (T-0628).
+  // Picks sit above the list and outside its cap (T-0628); so do the Just published rows (T-0665).
   var nPicksRows = rows.filter(isPick).length;
-  if (rows.length - nPicksRows > CVES_CAP) {
-    warnings.push('carries ' + (rows.length - nPicksRows) + ' rows' + (nPicksRows ? ' besides ' + nPicksRows + ' priority picks' : '') +
+  var nFreshOnly = rows.filter(function (r) { return isFresh(r) && !isPick(r); }).length;
+  var nOutsideCap = nPicksRows + nFreshOnly;
+  if (rows.length - nOutsideCap > CVES_CAP) {
+    warnings.push('carries ' + (rows.length - nOutsideCap) + ' rows' +
+      (nPicksRows ? ' besides ' + nPicksRows + ' priority picks' : '') +
+      (nFreshOnly ? (nPicksRows ? ' and ' : ' besides ') + nFreshOnly + ' just published rows' : '') +
       ', over the cap of ' + CVES_CAP);
   }
 
@@ -746,7 +799,7 @@ function checkCves(doc, now) {
       ' hours old, over ' + CVES_STALE_HOURS);
   }
   var genDayMs = cgen ? Date.parse(new Date(cgen).toISOString().slice(0, 10) + 'T00:00:00Z') : null;
-  var nPicks = 0, nPicksToday = 0;
+  var nPicks = 0, nPicksToday = 0, nFresh = 0;
   var windowDays = Number(doc.window_days);
   var oldest = cgen && windowDays ? cgen - (windowDays + 1) * 86400000 : null;
 
@@ -786,10 +839,12 @@ function checkCves(doc, now) {
       warnings.push(where + ' has a vendor containing "|", which the vendor filter cannot match');
     }
     pickProblems(r, genDayMs).forEach(function (p) { warnings.push(where + ' ' + p); });
+    freshProblems(r).forEach(function (p) { warnings.push(where + ' ' + p); });
     if (isPick(r)) {
       nPicks++;
       if (genDayMs && realDay(r.pick_day) === genDayMs) nPicksToday++;
     }
+    if (isFresh(r)) nFresh++;
     var sp = scoreProblem(r);
     if (sp) warnings.push(where + ' ' + sp);
     else if (SEVERITIES[String(r.severity)]) nSev[r.severity]++;
@@ -822,8 +877,8 @@ function checkCves(doc, now) {
         if (!has && facts[s]) warnings.push(where + ' shows ' + s + ' but does not list it as a signal');
         if (facts[s]) nSig[s]++;
       });
-      // A pick no admission reason selects may list no signal (T-0628); any other row must list an arm.
-      if (!isPick(r) && !CVES_ARMS.some(function (s) { return listed.indexOf(s) !== -1; })) {
+      // A pick or a Just published row no admission reason selects may list no signal (T-0628, T-0665); any other row must list an arm.
+      if (!isPick(r) && !isFresh(r) && !CVES_ARMS.some(function (s) { return listed.indexOf(s) !== -1; })) {
         warnings.push(where + ' lists no selection arm (' + CVES_ARMS.join(', ') + '), so nothing admits it under the rule');
       }
     }
@@ -857,6 +912,11 @@ function checkCves(doc, now) {
   ['picks', 'picks_today', 'pick_pool'].forEach(function (k) {
     if (hasKey(cc, k) && !isCount(cc[k])) warnings.push('cves_counts ' + k + ' is ' + JSON.stringify(cc[k]) + ', not a whole number of 0 or more');
   });
+  // T-0665: the Just published count, held to the rows when declared (a file from before it declares none).
+  if (rows.length && hasKey(cc, 'fresh') && Number(cc.fresh) !== nFresh) {
+    warnings.push('cves_counts fresh disagrees with the rows: declared ' + cc.fresh + ', actual ' + nFresh);
+  }
+  if (hasKey(cc, 'fresh') && !isCount(cc.fresh)) warnings.push('cves_counts fresh is ' + JSON.stringify(cc.fresh) + ', not a whole number of 0 or more');
   // A signal count the file declares must match the rows; one it does not declare is not held to it.
   Object.keys(nSig).forEach(function (k) {
     if (rows.length && hasKey(cc, k) && Number(cc[k]) !== nSig[k]) {
@@ -1643,7 +1703,10 @@ function checkDayLayout(src, includes) {
    'A pick is a priority, not evidence of exploitation', 'outside that cap', 'exploit evidence',
    // T-0641: the strip links to the latest picks; every pick stays in its publication day.
    'The strip at the top of this tab links to my latest daily picks', 'every pick stays in the day its CVE was published',
-   'The Priority picks are my daily shortlist', 'sit in their own days'
+   'The Priority picks are my daily shortlist', 'sit in their own days',
+   // T-0665: the Just published rows, what they are and that they are not evidence of exploitation.
+   'each of the last seven published days shows its three highest ranked CVEs as Just published rows', 'These rows are new and unproven',
+   'there is no evidence of exploitation for them yet', 'not a sign that anyone is attacking it', 'The rows sit outside the cap of 250'
   ].forEach(function (pin) { if (!c.includes(pin)) out.push('CVEs explanation lost: ' + pin); });
   if (/data-age-group=|data-age="recent">Recent|data-age="">Include older/.test(src)) out.push('nKEVs must use day groups and no age filter');
   ['group_by: "added"', 'sort: "prio"', 'id="vulns-{{ day_group.name | escape }}"', 'data-sig="wp_unauth"',
@@ -1656,8 +1719,15 @@ function checkDayLayout(src, includes) {
    'class="hl-pstrip hl-pstrip--cves" id="cves-priority-picks"', 'data-sig="pick">Priority picks', 'class="hl-vuln__pick"',
    'href="#cve-{{ r.cve | downcase | escape }}"', 'href="#cves-{{ r.cve | downcase | escape }}"', 'class="hl-pstrip__new">new</span>',
    'class="hl-pstrip__new">new today</span>', 'data-pstrip-chip="pick"', 'assign latest_pick_day = picks_raw | group_by: "pick_day"',
-   'data-sig="kev_product">Product exploited before', 'kev_product{% endif %}"', 'Product exploited before</dt><dd>Filter only, never admits'
+   'data-sig="kev_product">Product exploited before', 'kev_product{% endif %}"', 'Product exploited before</dt><dd>Filter only, never admits',
+   // T-0665: the Just published rows: the filter chip, its count from the rows, the data-sig token, the marker strip and the legend key.
+   'data-sig="fresh">Just published', 'assign c_fresh = c_fresh | plus: 1', 'fresh{% endif %}', 'class="hl-vuln__pick hl-vuln__fresh"',
+   'hl-pick__score hl-pick__score--fresh" title="Just published.', 'hl-pick__score--fresh">Just published</span></dt><dd>'
   ].forEach(function (pin) { if (!src.includes(pin)) out.push('Wire layout lost: ' + pin); });
+  // T-0665: a Just published row stays in its day, so the fold policy must skip it, as it skips a pick.
+  if (includes && typeof includes['wire-fold-keys.html'] === 'string' && includes['wire-fold-keys.html'].indexOf('fold_row.fresh == true') === -1) {
+    out.push('Wire fold contract lost: a Just published row (fresh true) must never be folded into a batch');
+  }
   // T-0641: the groups are gone; a priority row renders in its day only.
   if (/hl-wire__day--np|hl-wire__day--picks|'__np'|'__picks'/.test(src)) out.push('Wire layout: a Priority group is back; priority rows belong in their day groups, with a strip above');
   if (/nomi_poc/.test(src)) out.push('nomi_poc is not an admission reason');
