@@ -1,6 +1,6 @@
 # Hunters Ledger - consolidated Suricata detection feed
 # https://the-hunters-ledger.com/  |  License: CC BY 4.0
-# 135 rules from 39 campaigns. SIDs are STABLE across rebuilds (persistent
+# 139 rules from 40 campaigns. SIDs are STABLE across rebuilds (persistent
 # sid-map.json; allocated block 3500000-3509999 via sidallocation.org).
 # Above each rule: '# <campaign> (orig sid:N)', then annotation lines:
 #   TIER: Detection|Hunting  |  robustness N  |  confidence X
@@ -239,6 +239,26 @@ alert tcp any any -> $HOME_NET any (msg:"THL HUNT CyberStrike-AD-Workbench Veeam
 #   rate-limited
 #   FP: A directory migration, a misconfigured service or a vulnerability scan that tries many names the domain does not hold, and a mail or VPN gateway...
 alert krb5 any any -> any any (msg:"THL HUNT CyberStrike-AD-Workbench Kerberos Unknown-Principal Error Burst From KDC (AS-REQ Account Enumeration)"; flow:to_client; krb5_err_code:6; detection_filter:track by_dst, count 50, seconds 60; reference:url,the-hunters-ledger.com/hunting-detections/inv-2026-080-cyberstrike-ad-workbench-detections/; classtype:attempted-recon; sid:3500224; rev:1; metadata:author The_Hunters_Ledger, date 2026-11-12;)
+# inv-2026-082-agent-platform-command-channel (orig sid:1000001)
+#   TIER: Hunting  |  robustness 2  |  confidence MODERATE  |  BROAD - triage before alerting
+#   rate-limited
+#   FP: Any developer using the bore client to any server. The frame is the open-source tool's own: its source defines the client message Hello(u16) and...
+alert tcp $HOME_NET any -> $EXTERNAL_NET any (msg:"THL HUNT INV-2026-082 bore Tunnel Client Hello Frame (Open-Source Reverse Tunnel Session)"; flow:established,to_server; dsize:13<>20; content:"{|22|Hello|22 3a|"; startswith; content:"}|00|"; endswith; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/inv-2026-082-detections/; classtype:policy-violation; sid:3500225; rev:1; metadata:author The_Hunters_Ledger, date 2026-11-14;)
+# inv-2026-082-agent-platform-command-channel (orig sid:1000002)
+#   TIER: Hunting  |  robustness 0  |  confidence HIGH  |  BROAD - triage before alerting
+#   rate-limited
+#   FP: Everyone who uses the free public bore.pub server. It is a shared third-party service, so a block on it hits other people's tunnels and not the...
+alert dns $HOME_NET any -> any any (msg:"THL HUNT INV-2026-082 bore.pub Public Tunnel Server DNS Query (Shared Service, Do Not Block On This Alone)"; dns.query; content:"bore.pub"; nocase; endswith; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/inv-2026-082-detections/; classtype:policy-violation; sid:3500226; rev:1; metadata:author The_Hunters_Ledger, date 2026-11-14;)
+# inv-2026-082-agent-platform-command-channel (orig sid:1000003)
+#   TIER: Hunting  |  robustness 1  |  confidence MODERATE  |  BROAD - triage before alerting
+#   rate-limited
+#   FP: A script that fetches a file with one of these names using the default Python urllib user agent. Generic names like b.py and boot.py will occur on...
+alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL HUNT INV-2026-082 Python urllib Fetch Of Operator Payload File Name (Agent-Platform Plant Downloader)"; flow:established,to_server; http.method; content:"GET"; http.user_agent; content:"Python-urllib/"; startswith; http.uri; content:".py"; endswith; pcre:"/^\/(?:hb|b|boot|deployhb|own_llm|axllm|mcp_plant)\.py$/"; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/inv-2026-082-detections/; classtype:trojan-activity; sid:3500227; rev:1; metadata:author The_Hunters_Ledger, date 2026-11-14;)
+# inv-2026-082-agent-platform-command-channel (orig sid:1000004)
+#   TIER: Hunting  |  robustness 1  |  confidence LOW  |  BROAD - triage before alerting
+#   rate-limited
+#   FP: Any internal tool that uploads with a Python script to an /up?name= endpoint.
+alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL HUNT INV-2026-082 POST To /up With name Query And Python urllib Client (Operator Receiver Shape)"; flow:established,to_server; http.method; content:"POST"; http.uri; content:"/up?name="; startswith; fast_pattern; http.user_agent; content:"Python-urllib/"; startswith; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/inv-2026-082-detections/; classtype:trojan-activity; sid:3500228; rev:1; metadata:author The_Hunters_Ledger, date 2026-11-14;)
 # kaido-quasar-rat (orig sid:9300802)
 #   TIER: Detection  |  robustness 2  |  confidence HIGH
 #   rate-limited

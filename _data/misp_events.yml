@@ -158,6 +158,11 @@ events:
     event_url: /feeds/misp/df6586ed-6272-5da7-8c1f-4aa7d56762c1.json
     report_url: /reports/inv-2026-080-cyberstrike-ad-workbench/
     detection_url: /hunting-detections/inv-2026-080-cyberstrike-ad-workbench-detections/
+  - slug: inv-2026-082-agent-platform-command-channel
+    uuid: 07fbff33-a946-51d0-a23b-50d06b3d6da8
+    event_url: /feeds/misp/07fbff33-a946-51d0-a23b-50d06b3d6da8.json
+    report_url: /reports/inv-2026-082-agent-platform-command-channel/
+    detection_url: /hunting-detections/inv-2026-082-detections/
   - slug: kaido-quasar-rat-144-172-109-203
     uuid: 4eed77fa-9767-536f-8fef-728b06ae1cb3
     event_url: /feeds/misp/4eed77fa-9767-536f-8fef-728b06ae1cb3.json

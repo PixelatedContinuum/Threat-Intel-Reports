@@ -1,0 +1,2297 @@
+{
+    "type": "bundle",
+    "id": "bundle--26bd7126-da58-4bc0-ba42-ec837d8e5094",
+    "objects": [
+        {
+            "type": "identity",
+            "spec_version": "2.1",
+            "id": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-11-15T04:43:04.899207Z",
+            "modified": "2026-11-15T04:43:04.899207Z",
+            "name": "The Hunters Ledger",
+            "identity_class": "organization"
+        },
+        {
+            "type": "marking-definition",
+            "spec_version": "2.1",
+            "id": "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9",
+            "created": "2017-01-20T00:00:00.000Z",
+            "definition_type": "tlp",
+            "name": "TLP:WHITE",
+            "definition": {
+                "tlp": "white"
+            }
+        },
+        {
+            "type": "domain-name",
+            "spec_version": "2.1",
+            "id": "domain-name--0205482f-6f3e-5102-b26e-fb9615758ac7",
+            "value": "198-44-116-69.sslip.io"
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--264ed0ef-c23b-5fda-ac0f-ca2078085f71",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-11-15T04:43:04.899995Z",
+            "modified": "2026-11-15T04:43:04.899995Z",
+            "name": "domain: 198-44-116-69.sslip.io",
+            "description": "Resolves only to the operator VPS. | sslip.io is a shared service. This one name embeds the operator IP and resolves only to it; do not block sslip.io itself.",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "[domain-name:value = '198-44-116-69.sslip.io']",
+            "pattern_type": "stix",
+            "pattern_version": "2.1",
+            "valid_from": "2026-11-15T00:00:00Z",
+            "confidence": 80,
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ],
+            "x_opencti_detection": true,
+            "x_opencti_main_observable_type": "Domain-Name",
+            "x_opencti_score": 80
+        },
+        {
+            "type": "ipv4-addr",
+            "spec_version": "2.1",
+            "id": "ipv4-addr--0e86ed56-2a8c-5165-b459-8412c9850cef",
+            "value": "198.44.116.69"
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--c6f83846-a4a9-54ab-8210-23f94452a86c",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-11-15T04:43:04.90462Z",
+            "modified": "2026-11-15T04:43:04.90462Z",
+            "name": "ipv4: 198.44.116.69",
+            "description": "Single operator-owned host in the corpus (infrastructure.md section 1, item 1). Logged activity 2026-10-30 09:52Z to 2026-10-31 12:13Z; the time zone of the http.server logs is MODERATE. WHOIS for 198.44.116.0/24 names Hostwinds LLC while Vantage and VirusTotal show another AS owner label; the abuse contact was not checked. Commercial hosting: the address can be reassigned, so time-box any block. | Shared commercial hosting. The address may be reassigned; re-check before a permanent block.",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "[ipv4-addr:value = '198.44.116.69']",
+            "pattern_type": "stix",
+            "pattern_version": "2.1",
+            "valid_from": "2026-11-15T00:00:00Z",
+            "confidence": 80,
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ],
+            "x_opencti_detection": true,
+            "x_opencti_main_observable_type": "IPv4-Addr",
+            "x_opencti_score": 80
+        },
+        {
+            "type": "domain-name",
+            "spec_version": "2.1",
+            "id": "domain-name--590698cf-657e-5e41-8b21-705b4fec45aa",
+            "value": "198.44.116.69.sslip.io"
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--46c2dcaa-827c-5a6e-ae9c-cb0c1cc5c23b",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-11-15T04:43:04.905396Z",
+            "modified": "2026-11-15T04:43:04.905396Z",
+            "name": "domain: 198.44.116.69.sslip.io",
+            "description": "Resolves only to the operator VPS. | Same as above: tenant name only, not the bare provider.",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "[domain-name:value = '198.44.116.69.sslip.io']",
+            "pattern_type": "stix",
+            "pattern_version": "2.1",
+            "valid_from": "2026-11-15T00:00:00Z",
+            "confidence": 60,
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ],
+            "x_opencti_detection": true,
+            "x_opencti_main_observable_type": "Domain-Name",
+            "x_opencti_score": 60
+        },
+        {
+            "type": "url",
+            "spec_version": "2.1",
+            "id": "url--0a41b319-a26c-5cc0-bc55-3872582df73c",
+            "value": "http://198-44-116-69.sslip.io:9011/hb.py"
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--01bcfb55-17fd-5a9c-a359-f3e04ba98c99",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-11-15T04:43:04.905947Z",
+            "modified": "2026-11-15T04:43:04.905947Z",
+            "name": "url: http://198-44-116-69.sslip.io:9011/hb.py",
+            "description": "Same worker download addressed by the sslip.io name",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "[url:value = 'http://198-44-116-69.sslip.io:9011/hb.py']",
+            "pattern_type": "stix",
+            "pattern_version": "2.1",
+            "valid_from": "2026-11-15T00:00:00Z",
+            "confidence": 80,
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ],
+            "x_opencti_detection": true,
+            "x_opencti_main_observable_type": "Url",
+            "x_opencti_score": 80
+        },
+        {
+            "type": "url",
+            "spec_version": "2.1",
+            "id": "url--b7a0f922-06d1-5fc2-b0e0-a5edf47e3240",
+            "value": "http://198-44-116-69.sslip.io:9011/r.py"
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--c9bf0a93-3aa2-56fc-8f67-30e6484c395b",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-11-15T04:43:04.907289Z",
+            "modified": "2026-11-15T04:43:04.907289Z",
+            "name": "url: http://198-44-116-69.sslip.io:9011/r.py",
+            "description": "Relay launcher by the sslip.io name",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "[url:value = 'http://198-44-116-69.sslip.io:9011/r.py']",
+            "pattern_type": "stix",
+            "pattern_version": "2.1",
+            "valid_from": "2026-11-15T00:00:00Z",
+            "confidence": 60,
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ],
+            "x_opencti_detection": true,
+            "x_opencti_main_observable_type": "Url",
+            "x_opencti_score": 60
+        },
+        {
+            "type": "url",
+            "spec_version": "2.1",
+            "id": "url--09b89396-289e-56dc-8fd6-a9b93d35424c",
+            "value": "http://198.44.116.69/notes.txt"
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--50833c0f-c164-5b24-a502-712e54738d2f",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-11-15T04:43:04.908778Z",
+            "modified": "2026-11-15T04:43:04.908778Z",
+            "name": "url: http://198.44.116.69/notes.txt",
+            "description": "Self-test file in the open directory root (first line of sink.log and sink80.log)",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "[url:value = 'http://198.44.116.69/notes.txt']",
+            "pattern_type": "stix",
+            "pattern_version": "2.1",
+            "valid_from": "2026-11-15T00:00:00Z",
+            "confidence": 80,
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ],
+            "x_opencti_detection": true,
+            "x_opencti_main_observable_type": "Url",
+            "x_opencti_score": 80
+        },
+        {
+            "type": "url",
+            "spec_version": "2.1",
+            "id": "url--45317ad4-f57d-551d-badf-164b199b07c2",
+            "value": "http://198.44.116.69:19611/b.py"
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--0754ccc7-bdfb-5b1d-86ab-cc40b19f3b1f",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-11-15T04:43:04.909589Z",
+            "modified": "2026-11-15T04:43:04.909589Z",
+            "name": "url: http://198.44.116.69:19611/b.py",
+            "description": "MCP plant payload URL (b.py is not held; its class is hb.py)",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "[url:value = 'http://198.44.116.69:19611/b.py']",
+            "pattern_type": "stix",
+            "pattern_version": "2.1",
+            "valid_from": "2026-11-15T00:00:00Z",
+            "confidence": 80,
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ],
+            "x_opencti_detection": true,
+            "x_opencti_main_observable_type": "Url",
+            "x_opencti_score": 80
+        },
+        {
+            "type": "url",
+            "spec_version": "2.1",
+            "id": "url--a12ae972-671a-5d56-9bae-b8b71d98936e",
+            "value": "http://198.44.116.69:8088/hb.py"
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--40897fce-5937-5ecb-93ba-fd7f3de0e031",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-11-15T04:43:04.910594Z",
+            "modified": "2026-11-15T04:43:04.910594Z",
+            "name": "url: http://198.44.116.69:8088/hb.py",
+            "description": "Worker fetched from the 8088 sink by an urllib client 2026-10-30 10:55:37Z",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "[url:value = 'http://198.44.116.69:8088/hb.py']",
+            "pattern_type": "stix",
+            "pattern_version": "2.1",
+            "valid_from": "2026-11-15T00:00:00Z",
+            "confidence": 80,
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ],
+            "x_opencti_detection": true,
+            "x_opencti_main_observable_type": "Url",
+            "x_opencti_score": 80
+        },
+        {
+            "type": "url",
+            "spec_version": "2.1",
+            "id": "url--89fe258d-bd2f-597a-a87d-6080f42933a6",
+            "value": "http://198.44.116.69:8088/mcp"
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--e80eecee-d89b-51b3-96e1-239a63bb2846",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-11-15T04:43:04.911102Z",
+            "modified": "2026-11-15T04:43:04.911102Z",
+            "name": "url: http://198.44.116.69:8088/mcp",
+            "description": "MCP-shaped path on the sink port",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "[url:value = 'http://198.44.116.69:8088/mcp']",
+            "pattern_type": "stix",
+            "pattern_version": "2.1",
+            "valid_from": "2026-11-15T00:00:00Z",
+            "confidence": 40,
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ],
+            "x_opencti_detection": true,
+            "x_opencti_main_observable_type": "Url",
+            "x_opencti_score": 40
+        },
+        {
+            "type": "url",
+            "spec_version": "2.1",
+            "id": "url--ee332459-273c-5c4c-87ed-e96f8b5a58ad",
+            "value": "http://198.44.116.69:8088/sse"
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--d5f4e544-ccf7-523e-9b4b-f31f0ce810a4",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-11-15T04:43:04.911763Z",
+            "modified": "2026-11-15T04:43:04.911763Z",
+            "name": "url: http://198.44.116.69:8088/sse",
+            "description": "MCP-shaped path on the sink port",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "[url:value = 'http://198.44.116.69:8088/sse']",
+            "pattern_type": "stix",
+            "pattern_version": "2.1",
+            "valid_from": "2026-11-15T00:00:00Z",
+            "confidence": 40,
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ],
+            "x_opencti_detection": true,
+            "x_opencti_main_observable_type": "Url",
+            "x_opencti_score": 40
+        },
+        {
+            "type": "url",
+            "spec_version": "2.1",
+            "id": "url--cdcb2c9f-26bf-5fb8-8798-e28ffc149548",
+            "value": "http://198.44.116.69:8444/v1"
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--fd5525f7-2bbe-51ea-bce2-895d8cde9395",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-11-15T04:43:04.912208Z",
+            "modified": "2026-11-15T04:43:04.912208Z",
+            "name": "url: http://198.44.116.69:8444/v1",
+            "description": "Scripted LLM endpoint as agent baseUrl",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "[url:value = 'http://198.44.116.69:8444/v1']",
+            "pattern_type": "stix",
+            "pattern_version": "2.1",
+            "valid_from": "2026-11-15T00:00:00Z",
+            "confidence": 60,
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ],
+            "x_opencti_detection": true,
+            "x_opencti_main_observable_type": "Url",
+            "x_opencti_score": 60
+        },
+        {
+            "type": "url",
+            "spec_version": "2.1",
+            "id": "url--bd800ff1-73df-59b7-92f8-5cc6673c8d0a",
+            "value": "http://198.44.116.69:8445/v1"
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--3c5cf4b6-70aa-5b45-b7e9-15a9e69ae7cb",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-11-15T04:43:04.912659Z",
+            "modified": "2026-11-15T04:43:04.912659Z",
+            "name": "url: http://198.44.116.69:8445/v1",
+            "description": "Scripted LLM endpoint as agent baseUrl",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "[url:value = 'http://198.44.116.69:8445/v1']",
+            "pattern_type": "stix",
+            "pattern_version": "2.1",
+            "valid_from": "2026-11-15T00:00:00Z",
+            "confidence": 60,
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ],
+            "x_opencti_detection": true,
+            "x_opencti_main_observable_type": "Url",
+            "x_opencti_score": 60
+        },
+        {
+            "type": "url",
+            "spec_version": "2.1",
+            "id": "url--258aa346-d324-51cb-85f0-d7483e3b7507",
+            "value": "http://198.44.116.69:8460/pxmcp.py"
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--c62cc7b0-64db-5629-b228-4f1844d40ed6",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-11-15T04:43:04.91312Z",
+            "modified": "2026-11-15T04:43:04.91312Z",
+            "name": "url: http://198.44.116.69:8460/pxmcp.py",
+            "description": "Pod-side MCP worker download (not held)",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "[url:value = 'http://198.44.116.69:8460/pxmcp.py']",
+            "pattern_type": "stix",
+            "pattern_version": "2.1",
+            "valid_from": "2026-11-15T00:00:00Z",
+            "confidence": 40,
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ],
+            "x_opencti_detection": true,
+            "x_opencti_main_observable_type": "Url",
+            "x_opencti_score": 40
+        },
+        {
+            "type": "url",
+            "spec_version": "2.1",
+            "id": "url--a373899f-ebf3-5c11-8ef0-3e58f5a2fe5e",
+            "value": "http://198.44.116.69:8460/pxmcp2.py"
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--cf4d7891-32d9-5327-8450-5dbab52f56b8",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-11-15T04:43:04.913543Z",
+            "modified": "2026-11-15T04:43:04.913543Z",
+            "name": "url: http://198.44.116.69:8460/pxmcp2.py",
+            "description": "Pod-side MCP worker with reverse relay download",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "[url:value = 'http://198.44.116.69:8460/pxmcp2.py']",
+            "pattern_type": "stix",
+            "pattern_version": "2.1",
+            "valid_from": "2026-11-15T00:00:00Z",
+            "confidence": 60,
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ],
+            "x_opencti_detection": true,
+            "x_opencti_main_observable_type": "Url",
+            "x_opencti_score": 60
+        },
+        {
+            "type": "url",
+            "spec_version": "2.1",
+            "id": "url--e50e211f-f102-50ef-b828-6401d4239886",
+            "value": "http://198.44.116.69:8460/pxpod.py"
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--2085133d-5531-552a-83e0-8fd26e9019ce",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-11-15T04:43:04.91399Z",
+            "modified": "2026-11-15T04:43:04.91399Z",
+            "name": "url: http://198.44.116.69:8460/pxpod.py",
+            "description": "Pod-side worker download from the front port (not held)",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "[url:value = 'http://198.44.116.69:8460/pxpod.py']",
+            "pattern_type": "stix",
+            "pattern_version": "2.1",
+            "valid_from": "2026-11-15T00:00:00Z",
+            "confidence": 60,
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ],
+            "x_opencti_detection": true,
+            "x_opencti_main_observable_type": "Url",
+            "x_opencti_score": 60
+        },
+        {
+            "type": "url",
+            "spec_version": "2.1",
+            "id": "url--b8000112-737b-5fd7-a40b-9f21b99b6e59",
+            "value": "http://198.44.116.69:8460/v1"
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--f523de09-9d79-5dfc-8784-9f99b2c26cfa",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-11-15T04:43:04.914436Z",
+            "modified": "2026-11-15T04:43:04.914436Z",
+            "name": "url: http://198.44.116.69:8460/v1",
+            "description": "Scripted LLM endpoint used as agent llm.baseUrl",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "[url:value = 'http://198.44.116.69:8460/v1']",
+            "pattern_type": "stix",
+            "pattern_version": "2.1",
+            "valid_from": "2026-11-15T00:00:00Z",
+            "confidence": 80,
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ],
+            "x_opencti_detection": true,
+            "x_opencti_main_observable_type": "Url",
+            "x_opencti_score": 80
+        },
+        {
+            "type": "url",
+            "spec_version": "2.1",
+            "id": "url--f0a59bde-34cd-5a01-9fa7-b31e441af683",
+            "value": "http://198.44.116.69:8686/r"
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--a78df369-ea77-5f9a-83b3-dbbc3c9de676",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-11-15T04:43:04.91491Z",
+            "modified": "2026-11-15T04:43:04.91491Z",
+            "name": "url: http://198.44.116.69:8686/r",
+            "description": "Relay download",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "[url:value = 'http://198.44.116.69:8686/r']",
+            "pattern_type": "stix",
+            "pattern_version": "2.1",
+            "valid_from": "2026-11-15T00:00:00Z",
+            "confidence": 40,
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ],
+            "x_opencti_detection": true,
+            "x_opencti_main_observable_type": "Url",
+            "x_opencti_score": 40
+        },
+        {
+            "type": "url",
+            "spec_version": "2.1",
+            "id": "url--91fe204d-c735-5f3b-a0e9-768871031baa",
+            "value": "http://198.44.116.69:8899/gl_check.py"
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--381d02da-75e3-577e-80fa-67f20aefbba1",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-11-15T04:43:04.915338Z",
+            "modified": "2026-11-15T04:43:04.915338Z",
+            "name": "url: http://198.44.116.69:8899/gl_check.py",
+            "description": "Source-control login check script download",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "[url:value = 'http://198.44.116.69:8899/gl_check.py']",
+            "pattern_type": "stix",
+            "pattern_version": "2.1",
+            "valid_from": "2026-11-15T00:00:00Z",
+            "confidence": 60,
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ],
+            "x_opencti_detection": true,
+            "x_opencti_main_observable_type": "Url",
+            "x_opencti_score": 60
+        },
+        {
+            "type": "url",
+            "spec_version": "2.1",
+            "id": "url--f0ae5deb-102b-5d42-a246-1e12b53a885a",
+            "value": "http://198.44.116.69:8901/z.py"
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--a2e3b98a-5ebf-5aa3-9471-e520e2770f5c",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-11-15T04:43:04.915837Z",
+            "modified": "2026-11-15T04:43:04.915837Z",
+            "name": "url: http://198.44.116.69:8901/z.py",
+            "description": "Source-control API check script download",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "[url:value = 'http://198.44.116.69:8901/z.py']",
+            "pattern_type": "stix",
+            "pattern_version": "2.1",
+            "valid_from": "2026-11-15T00:00:00Z",
+            "confidence": 40,
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ],
+            "x_opencti_detection": true,
+            "x_opencti_main_observable_type": "Url",
+            "x_opencti_score": 40
+        },
+        {
+            "type": "url",
+            "spec_version": "2.1",
+            "id": "url--0ad54b9a-23bf-56c4-907f-e2183d98ac04",
+            "value": "http://198.44.116.69:8902/v1"
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--00ee7e3d-a3f4-53f5-99df-15cfded471dc",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-11-15T04:43:04.916282Z",
+            "modified": "2026-11-15T04:43:04.916282Z",
+            "name": "url: http://198.44.116.69:8902/v1",
+            "description": "Scripted LLM endpoint as agent baseUrl",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "[url:value = 'http://198.44.116.69:8902/v1']",
+            "pattern_type": "stix",
+            "pattern_version": "2.1",
+            "valid_from": "2026-11-15T00:00:00Z",
+            "confidence": 60,
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ],
+            "x_opencti_detection": true,
+            "x_opencti_main_observable_type": "Url",
+            "x_opencti_score": 60
+        },
+        {
+            "type": "url",
+            "spec_version": "2.1",
+            "id": "url--1f1b6125-a946-54a1-a1a5-65232ded2c44",
+            "value": "http://198.44.116.69:8903/n"
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--959592e5-cb3d-5136-9dec-8905423c31bc",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-11-15T04:43:04.9167Z",
+            "modified": "2026-11-15T04:43:04.9167Z",
+            "name": "url: http://198.44.116.69:8903/n",
+            "description": "One-off download",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "[url:value = 'http://198.44.116.69:8903/n']",
+            "pattern_type": "stix",
+            "pattern_version": "2.1",
+            "valid_from": "2026-11-15T00:00:00Z",
+            "confidence": 40,
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ],
+            "x_opencti_detection": true,
+            "x_opencti_main_observable_type": "Url",
+            "x_opencti_score": 40
+        },
+        {
+            "type": "url",
+            "spec_version": "2.1",
+            "id": "url--500161c7-9826-5bc4-99a4-36c518ef8e36",
+            "value": "http://198.44.116.69:9011/e2.py"
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--7df5033b-b187-5d35-ab25-2e9b6f28619a",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-11-15T04:43:04.917138Z",
+            "modified": "2026-11-15T04:43:04.917138Z",
+            "name": "url: http://198.44.116.69:9011/e2.py",
+            "description": "Agent chat retry script download",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "[url:value = 'http://198.44.116.69:9011/e2.py']",
+            "pattern_type": "stix",
+            "pattern_version": "2.1",
+            "valid_from": "2026-11-15T00:00:00Z",
+            "confidence": 60,
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ],
+            "x_opencti_detection": true,
+            "x_opencti_main_observable_type": "Url",
+            "x_opencti_score": 60
+        },
+        {
+            "type": "url",
+            "spec_version": "2.1",
+            "id": "url--da126beb-6635-5e5f-85c3-87fff912f3bf",
+            "value": "http://198.44.116.69:9011/fscan"
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--e29cefea-197a-5547-ae38-dffa096fefbe",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-11-15T04:43:04.917545Z",
+            "modified": "2026-11-15T04:43:04.917545Z",
+            "name": "url: http://198.44.116.69:9011/fscan",
+            "description": "Scanner binary download (stock fscan; the URL is the operator's)",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "[url:value = 'http://198.44.116.69:9011/fscan']",
+            "pattern_type": "stix",
+            "pattern_version": "2.1",
+            "valid_from": "2026-11-15T00:00:00Z",
+            "confidence": 80,
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ],
+            "x_opencti_detection": true,
+            "x_opencti_main_observable_type": "Url",
+            "x_opencti_score": 80
+        },
+        {
+            "type": "url",
+            "spec_version": "2.1",
+            "id": "url--8f1c8c75-8edd-5b58-ae57-9f84782abad1",
+            "value": "http://198.44.116.69:9011/gogo"
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--32687a80-7569-5c41-80e4-44b31ee3e888",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-11-15T04:43:04.91868Z",
+            "modified": "2026-11-15T04:43:04.91868Z",
+            "name": "url: http://198.44.116.69:9011/gogo",
+            "description": "Scanner binary download (stock gogo; the URL is the operator's)",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "[url:value = 'http://198.44.116.69:9011/gogo']",
+            "pattern_type": "stix",
+            "pattern_version": "2.1",
+            "valid_from": "2026-11-15T00:00:00Z",
+            "confidence": 80,
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ],
+            "x_opencti_detection": true,
+            "x_opencti_main_observable_type": "Url",
+            "x_opencti_score": 80
+        },
+        {
+            "type": "url",
+            "spec_version": "2.1",
+            "id": "url--43b0955f-c5f5-5ac7-9a33-c5e937af14fd",
+            "value": "http://198.44.116.69:9011/hb.py"
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--2cbe835d-ad1d-5fb7-9496-602e429f89bb",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-11-15T04:43:04.919289Z",
+            "modified": "2026-11-15T04:43:04.919289Z",
+            "name": "url: http://198.44.116.69:9011/hb.py",
+            "description": "Reverse SOCKS worker download",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "[url:value = 'http://198.44.116.69:9011/hb.py']",
+            "pattern_type": "stix",
+            "pattern_version": "2.1",
+            "valid_from": "2026-11-15T00:00:00Z",
+            "confidence": 80,
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ],
+            "x_opencti_detection": true,
+            "x_opencti_main_observable_type": "Url",
+            "x_opencti_score": 80
+        },
+        {
+            "type": "url",
+            "spec_version": "2.1",
+            "id": "url--de35a798-1750-55a7-861b-5f604ebbce28",
+            "value": "http://198.44.116.69:9011/hb2.py"
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--1185f13a-be52-570f-bdf6-522099ec80cf",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-11-15T04:43:04.919932Z",
+            "modified": "2026-11-15T04:43:04.919932Z",
+            "name": "url: http://198.44.116.69:9011/hb2.py",
+            "description": "Worker download (second revision name; not held)",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "[url:value = 'http://198.44.116.69:9011/hb2.py']",
+            "pattern_type": "stix",
+            "pattern_version": "2.1",
+            "valid_from": "2026-11-15T00:00:00Z",
+            "confidence": 40,
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ],
+            "x_opencti_detection": true,
+            "x_opencti_main_observable_type": "Url",
+            "x_opencti_score": 40
+        },
+        {
+            "type": "url",
+            "spec_version": "2.1",
+            "id": "url--aff71864-c98f-5a50-a198-a3c321317f4f",
+            "value": "http://198.44.116.69:9011/muxpod.py"
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--4b204c60-b1fd-5c77-9623-dbe039d69c6d",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-11-15T04:43:04.920914Z",
+            "modified": "2026-11-15T04:43:04.920914Z",
+            "name": "url: http://198.44.116.69:9011/muxpod.py",
+            "description": "Pod-side worker pool download",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "[url:value = 'http://198.44.116.69:9011/muxpod.py']",
+            "pattern_type": "stix",
+            "pattern_version": "2.1",
+            "valid_from": "2026-11-15T00:00:00Z",
+            "confidence": 60,
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ],
+            "x_opencti_detection": true,
+            "x_opencti_main_observable_type": "Url",
+            "x_opencti_score": 60
+        },
+        {
+            "type": "url",
+            "spec_version": "2.1",
+            "id": "url--8bfe4c83-5e3e-577b-904c-40ba7940a8a0",
+            "value": "http://198.44.116.69:9011/pa.py"
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--a7a738c1-0d76-5e41-bb5b-75614e86b24d",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-11-15T04:43:04.921603Z",
+            "modified": "2026-11-15T04:43:04.921603Z",
+            "name": "url: http://198.44.116.69:9011/pa.py",
+            "description": "Helper start script download",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "[url:value = 'http://198.44.116.69:9011/pa.py']",
+            "pattern_type": "stix",
+            "pattern_version": "2.1",
+            "valid_from": "2026-11-15T00:00:00Z",
+            "confidence": 60,
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ],
+            "x_opencti_detection": true,
+            "x_opencti_main_observable_type": "Url",
+            "x_opencti_score": 60
+        },
+        {
+            "type": "url",
+            "spec_version": "2.1",
+            "id": "url--0722abbf-1228-56cc-bc11-339d16bbebf5",
+            "value": "http://198.44.116.69:9011/r.py"
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--1a8b0db0-f435-5786-af5c-84205d987efc",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-11-15T04:43:04.922105Z",
+            "modified": "2026-11-15T04:43:04.922105Z",
+            "name": "url: http://198.44.116.69:9011/r.py",
+            "description": "Relay launcher download (not held)",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "[url:value = 'http://198.44.116.69:9011/r.py']",
+            "pattern_type": "stix",
+            "pattern_version": "2.1",
+            "valid_from": "2026-11-15T00:00:00Z",
+            "confidence": 60,
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ],
+            "x_opencti_detection": true,
+            "x_opencti_main_observable_type": "Url",
+            "x_opencti_score": 60
+        },
+        {
+            "type": "url",
+            "spec_version": "2.1",
+            "id": "url--966d3459-f1d6-54a1-892d-2ead0c059fac",
+            "value": "http://198.44.116.69:9012/up"
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--d96eb98d-7172-5f69-a137-26fd16c946c6",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-11-15T04:43:04.922618Z",
+            "modified": "2026-11-15T04:43:04.922618Z",
+            "name": "url: http://198.44.116.69:9012/up",
+            "description": "Upload test endpoint (POST)",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "[url:value = 'http://198.44.116.69:9012/up']",
+            "pattern_type": "stix",
+            "pattern_version": "2.1",
+            "valid_from": "2026-11-15T00:00:00Z",
+            "confidence": 60,
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ],
+            "x_opencti_detection": true,
+            "x_opencti_main_observable_type": "Url",
+            "x_opencti_score": 60
+        },
+        {
+            "type": "url",
+            "spec_version": "2.1",
+            "id": "url--9fb821af-f57a-575b-a2f9-abf150f7c9cb",
+            "value": "http://198.44.116.69:9020/boot.sh"
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--ab05b84b-bb4d-5af7-9cce-c4d39f3b998f",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-11-15T04:43:04.92319Z",
+            "modified": "2026-11-15T04:43:04.92319Z",
+            "name": "url: http://198.44.116.69:9020/boot.sh",
+            "description": "In-pod bootstrap download",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "[url:value = 'http://198.44.116.69:9020/boot.sh']",
+            "pattern_type": "stix",
+            "pattern_version": "2.1",
+            "valid_from": "2026-11-15T00:00:00Z",
+            "confidence": 60,
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ],
+            "x_opencti_detection": true,
+            "x_opencti_main_observable_type": "Url",
+            "x_opencti_score": 60
+        },
+        {
+            "type": "url",
+            "spec_version": "2.1",
+            "id": "url--a3294323-4803-5275-bdc4-dc52b2725924",
+            "value": "http://198.44.116.69:9100/gogo"
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--e51ba3c7-6634-542b-a75d-d906f0a3846d",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-11-15T04:43:04.923889Z",
+            "modified": "2026-11-15T04:43:04.923889Z",
+            "name": "url: http://198.44.116.69:9100/gogo",
+            "description": "Scanner binary download from the reverse-SOCKS link port",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "[url:value = 'http://198.44.116.69:9100/gogo']",
+            "pattern_type": "stix",
+            "pattern_version": "2.1",
+            "valid_from": "2026-11-15T00:00:00Z",
+            "confidence": 60,
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ],
+            "x_opencti_detection": true,
+            "x_opencti_main_observable_type": "Url",
+            "x_opencti_score": 60
+        },
+        {
+            "type": "url",
+            "spec_version": "2.1",
+            "id": "url--90eb078e-be1f-57e7-9936-8e6a20a24aef",
+            "value": "http://198.44.116.69:9443/v1"
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--cc954b90-271d-54c5-86a8-f853bcc53db6",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-11-15T04:43:04.924735Z",
+            "modified": "2026-11-15T04:43:04.924735Z",
+            "name": "url: http://198.44.116.69:9443/v1",
+            "description": "Scripted LLM endpoint as agent baseUrl",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "[url:value = 'http://198.44.116.69:9443/v1']",
+            "pattern_type": "stix",
+            "pattern_version": "2.1",
+            "valid_from": "2026-11-15T00:00:00Z",
+            "confidence": 60,
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ],
+            "x_opencti_detection": true,
+            "x_opencti_main_observable_type": "Url",
+            "x_opencti_score": 60
+        },
+        {
+            "type": "file",
+            "spec_version": "2.1",
+            "id": "file--758ceb6c-f24d-54f7-bc05-161d03e2124c",
+            "hashes": {
+                "SHA-256": "039c18e9f936d5f8608a22a05f5964da5f64c9c1edc8441282b373414aa4a269"
+            }
+        },
+        {
+            "type": "file",
+            "spec_version": "2.1",
+            "id": "file--799beb75-653e-56f6-97c5-48a9195adb6f",
+            "hashes": {
+                "SHA-256": "044569af53a71ab8df28ceb5633cc657d4d19034527821c7b98a8dbb1205c480"
+            }
+        },
+        {
+            "type": "file",
+            "spec_version": "2.1",
+            "id": "file--31dfb693-3365-5b21-a144-97072472bf11",
+            "hashes": {
+                "SHA-256": "1f1f28ec7e2aa6823db107acfd06ff70a3e2f3963e644b0b879d706a77756e59"
+            }
+        },
+        {
+            "type": "file",
+            "spec_version": "2.1",
+            "id": "file--0aa22d6f-4772-5a73-8610-2845c8070e26",
+            "hashes": {
+                "SHA-256": "3e18453f832f4999a8bc0a70d86dde1e7db9758f36660c403de0b99b419c59da"
+            }
+        },
+        {
+            "type": "file",
+            "spec_version": "2.1",
+            "id": "file--b11d0cbf-7c52-5d4a-9fc6-c7062f0ee3f4",
+            "hashes": {
+                "SHA-256": "53dbc1254deae948749fd3aaae86391769e0e77dfe1a6e92e62a61102af6edc8"
+            }
+        },
+        {
+            "type": "file",
+            "spec_version": "2.1",
+            "id": "file--8d5e5082-1d55-532c-bf27-54c188a01118",
+            "hashes": {
+                "SHA-256": "5754b27c7321b0d4644a14004a8e87de5f50fa06c7787bc241bed2be691beef6"
+            }
+        },
+        {
+            "type": "file",
+            "spec_version": "2.1",
+            "id": "file--5c0b7586-0e98-5d5d-bf0e-1867b64e3a8c",
+            "hashes": {
+                "SHA-256": "581a23e39ad6e78e5313a1445cc337168158f1a9f454528cc0613f97143d5647"
+            }
+        },
+        {
+            "type": "file",
+            "spec_version": "2.1",
+            "id": "file--b1dacf54-2dbb-5141-badd-26eb1e189ab6",
+            "hashes": {
+                "SHA-256": "59c3bd56abea1000de558ffd21845757689311cf61f00e9dac23dca593914ffe"
+            }
+        },
+        {
+            "type": "file",
+            "spec_version": "2.1",
+            "id": "file--d860d748-1af6-53c9-a925-923db9947f30",
+            "hashes": {
+                "SHA-256": "67b4214af357420abb3b61e954dd2507c56cc45eaf89238d16fb6c9e51245349"
+            }
+        },
+        {
+            "type": "file",
+            "spec_version": "2.1",
+            "id": "file--127c2337-8710-5e98-a398-30722259a316",
+            "hashes": {
+                "SHA-256": "6f8ff1b3fc55c4daf033f66ee6a71fc8d3d71ffa532e196a18cca6c977c4f953"
+            }
+        },
+        {
+            "type": "file",
+            "spec_version": "2.1",
+            "id": "file--44c8c29e-0fa1-5fcf-872f-7cef11995533",
+            "hashes": {
+                "SHA-256": "76773e6b1932ed53cb61e78b2f9db9488facab9c2b0904123936e14144b9cd92"
+            }
+        },
+        {
+            "type": "file",
+            "spec_version": "2.1",
+            "id": "file--047d5a36-e16e-57ce-b55b-f37bd0cbf492",
+            "hashes": {
+                "SHA-256": "76d901ac74f377e8dc2e307407ab4b1125e90ecae828dbfa8a67ebd19a4e2f85"
+            }
+        },
+        {
+            "type": "file",
+            "spec_version": "2.1",
+            "id": "file--066f60ef-b6fb-57cf-81fa-319275613a5d",
+            "hashes": {
+                "SHA-256": "896146dc951bc0483ecf360509cf56aa50ce399cdea05f30eec6100895ec53d7"
+            }
+        },
+        {
+            "type": "file",
+            "spec_version": "2.1",
+            "id": "file--70469a93-7260-5e78-a601-3437afaa5e58",
+            "hashes": {
+                "SHA-256": "a5853acd955f3aa3d477e43fc58ae474895bb1ed8346491ed3227c31ff710dbd"
+            }
+        },
+        {
+            "type": "file",
+            "spec_version": "2.1",
+            "id": "file--500ea9a0-c2f9-561f-939e-fad39337ae4f",
+            "hashes": {
+                "SHA-256": "b660141d80bcc05457e881e2db687120677473c8d43c62b26c2c413fbd50b885"
+            }
+        },
+        {
+            "type": "file",
+            "spec_version": "2.1",
+            "id": "file--4b44f19b-f65c-5ebb-aeea-de688995748d",
+            "hashes": {
+                "SHA-256": "bc9af45cf803d508affe503ba8b48350ba6bce5aca203b70ecb231bdf6d7676b"
+            }
+        },
+        {
+            "type": "file",
+            "spec_version": "2.1",
+            "id": "file--89e4eca9-19b0-5a65-995b-ff9d063ccbc5",
+            "hashes": {
+                "SHA-256": "bce9a7471be71f18d8a7af65581c70be82024f17db0bc8dd4d72e3a436ec55c4"
+            }
+        },
+        {
+            "type": "file",
+            "spec_version": "2.1",
+            "id": "file--9c589253-acfc-5875-be66-5ddfdff55bf7",
+            "hashes": {
+                "SHA-256": "c62479d5f62165fd6a936ce90bbc43eb550e12007410e7b839bd511d32b469d1"
+            }
+        },
+        {
+            "type": "file",
+            "spec_version": "2.1",
+            "id": "file--9419387f-ef82-56ac-965f-3e36bf442cbb",
+            "hashes": {
+                "SHA-256": "d08901561f5f60d5b1dccc6847f00e6a8cc474e6fae8351df05494d6e58b235a"
+            }
+        },
+        {
+            "type": "file",
+            "spec_version": "2.1",
+            "id": "file--357f9cef-d62d-5ce4-89ba-9bfce552a16a",
+            "hashes": {
+                "SHA-256": "da6300c4289d32d402fa6e3df1673aed602aab1e4d1388263f18138015b7e714"
+            }
+        },
+        {
+            "type": "file",
+            "spec_version": "2.1",
+            "id": "file--8171f0af-d629-5f68-a71e-aab7a35f56b6",
+            "hashes": {
+                "SHA-256": "dd510773f7aecf667ee465e1e04e8a576cc4e206fa9b1bb364590120a3b882e8"
+            }
+        },
+        {
+            "type": "file",
+            "spec_version": "2.1",
+            "id": "file--60d4f112-19fd-5ed3-a5b0-e3c75fb9130b",
+            "hashes": {
+                "SHA-256": "dfd7e80ed0a03ad9f6b38c1db782c6c88d4877829696eeecb097d9979aa64391"
+            }
+        },
+        {
+            "type": "file",
+            "spec_version": "2.1",
+            "id": "file--dd01ba86-0e00-5fa6-af5d-cb6f3a0c1a47",
+            "hashes": {
+                "SHA-256": "dff6b8c293aac57fc786fa4a662bdd96c2b0b811eb6b7738ad2330aa517afe39"
+            }
+        },
+        {
+            "type": "file",
+            "spec_version": "2.1",
+            "id": "file--abd2a94f-ee60-5b69-8b15-bfdbf9ea80da",
+            "hashes": {
+                "SHA-256": "e47ad08bd023f2894d539b4b7290b07608efbc85a2d73d623981a1bf1869917e"
+            }
+        },
+        {
+            "type": "file",
+            "spec_version": "2.1",
+            "id": "file--c08220be-7e36-55a7-8946-7b54d08bffd8",
+            "hashes": {
+                "SHA-256": "e4d7f354ac8a60e72c5e79557559b30b8b8e397723b2ef4ccc1507e9722d5b01"
+            }
+        },
+        {
+            "type": "file",
+            "spec_version": "2.1",
+            "id": "file--6ebb27c0-a889-5409-99fc-fbf995d74dfc",
+            "hashes": {
+                "SHA-256": "f66ae5e83328255b4e5e8bf99ac948e9f2dfdf9960b88906b4f40b65ef1bb0ee"
+            }
+        },
+        {
+            "type": "file",
+            "spec_version": "2.1",
+            "id": "file--cbf198f8-4ba8-5b3e-bef8-92d6e15afa57",
+            "hashes": {
+                "SHA-256": "f8fd837161666ec604a548624fed1d243cc14f04b4acaeb6e95ab970d22a7ae6"
+            }
+        },
+        {
+            "type": "domain-name",
+            "spec_version": "2.1",
+            "id": "domain-name--2e604da9-69df-5a6e-9686-d7a5f79aa299",
+            "value": "bore.pub"
+        },
+        {
+            "type": "ipv4-addr",
+            "spec_version": "2.1",
+            "id": "ipv4-addr--c5ed8bb4-47fc-5593-b3a5-0a8df269af31",
+            "value": "159.223.110.159"
+        },
+        {
+            "type": "network-traffic",
+            "spec_version": "2.1",
+            "id": "network-traffic--bb4ca2f6-628a-5fa2-8763-6234845c24bc",
+            "dst_ref": "domain-name--2e604da9-69df-5a6e-9686-d7a5f79aa299",
+            "dst_port": 1811,
+            "protocols": [
+                "tcp"
+            ]
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--55e6ba17-5884-5381-b0f8-332959f1fa7c",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-11-15T04:43:04.938765Z",
+            "modified": "2026-11-15T04:43:04.938765Z",
+            "name": "MAL_AgentPlatform_MCP_Stdio_Python_Downloader_Plant",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "rule MAL_AgentPlatform_MCP_Stdio_Python_Downloader_Plant {\n   meta:\n      description = \"Detects a stdio MCP server entry whose command is python3 -c with an inline downloader (fetch a URL, write the bytes to a hidden .py under /tmp, start it with subprocess.Popen), either as a tools.json workspace file or as the operator script that writes one\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/inv-2026-082-detections/\"\n      date = \"2026-11-14\"\n      hash1 = \"b660141d80bcc05457e881e2db687120677473c8d43c62b26c2c413fbd50b885\"\n      hash2 = \"85b27a02024523973d2b12621e944856f62011d6\"\n      hash3 = \"4b1397ff3c226feaa5034913ba1b87fa\"\n      family = \"AgentPlatform-MCP-Plant\"\n      id = \"27a257cc-c52f-5ba2-9b40-7ec4e9fe18cd\"\n   strings:\n      $mcp = \"mcpServers\" ascii\n      $stdio = /\\\\?\"transport\\\\?\"\\s*:\\s*\\\\?\"stdio\\\\?\"/ ascii\n      $cmd = /\\\\?\"command\\\\?\"\\s*:\\s*\\\\?\"python3?\\\\?\"/ ascii\n      $dashc = /\\\\?\"args\\\\?\"\\s*:\\s*\\[\\s*\\\\?\"-c\\\\?\"/ ascii\n      $fetch = \"urllib.request.urlopen(\" ascii\n      $drop = /open\\('\\/tmp\\/\\.[A-Za-z0-9_]{1,16}\\.py','wb'\\)\\.write\\(/ ascii\n      $spawn = /subprocess\\.Popen\\(\\['python3?','\\/tmp\\/\\.[A-Za-z0-9_]{1,16}\\.py'/ ascii\n   condition:\n      filesize < 100KB and all of them\n}",
+            "pattern_type": "yara",
+            "valid_from": "2026-11-15T00:00:00Z",
+            "labels": [
+                "detection-rule"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--a7c7a560-fb04-5bc7-b69b-7ed33a8e02ad",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-11-15T04:43:04.939035Z",
+            "modified": "2026-11-15T04:43:04.939035Z",
+            "name": "MAL_AgentPlatform_Scripted_LLM_Endpoint_SSE_ToolCall_Queue",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "rule MAL_AgentPlatform_Scripted_LLM_Endpoint_SSE_ToolCall_Queue {\n   meta:\n      description = \"Detects a small Python HTTP server that imitates a Responses-style LLM endpoint: serves server-sent events with function_call items, pops the next tool call from a local step file on every turn, and records the function_call_output the platform posts back\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/inv-2026-082-detections/\"\n      date = \"2026-11-14\"\n      hash1 = \"d08901561f5f60d5b1dccc6847f00e6a8cc474e6fae8351df05494d6e58b235a\"\n      hash2 = \"ed8f4c3047685131e5e8b3e6b6ea90176fd3c1ee\"\n      hash3 = \"5b24067a14a490742421af01960ce996\"\n      family = \"AgentPlatform-Scripted-LLM\"\n      id = \"63c56d31-99fc-5cd9-a973-f646c4fcc401\"\n   strings:\n      $ev1 = \"response.output_item.added\" ascii\n      $ev2 = \"response.function_call_arguments.delta\" ascii\n      $ev3 = \"response.function_call_arguments.done\" ascii\n      $in = \"function_call_output\" ascii\n      $fc = /\"type\"\\s*:\\s*\"function_call\"/ ascii\n      $sse = \"text/event-stream\" ascii\n      $srv1 = \"BaseHTTPRequestHandler\" ascii\n      $srv2 = \"ThreadingHTTPServer\" ascii\n      $json1 = \"json.loads(\" ascii\n      $json2 = \"json.dumps(\" ascii\n   condition:\n      filesize < 64KB and all of ($ev*) and $in and $fc and $sse and 1 of ($srv*) and all of ($json*)\n}",
+            "pattern_type": "yara",
+            "valid_from": "2026-11-15T00:00:00Z",
+            "labels": [
+                "detection-rule"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--5948e85c-c2e3-52da-999c-612b0999622b",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-11-15T04:43:04.939166Z",
+            "modified": "2026-11-15T04:43:04.939166Z",
+            "name": "MAL_ReverseSOCKS_Pod_Worker_Host_Port_Line_Ack_Protocol",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "rule MAL_ReverseSOCKS_Pod_Worker_Host_Port_Line_Ack_Protocol {\n   meta:\n      description = \"Detects the pod-side worker of a reverse SOCKS pair: holds idle sockets open to a relay, reads a newline-terminated host and port line, dials it, answers with the single byte 1 or 0, then pipes the sockets\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/inv-2026-082-detections/\"\n      date = \"2026-11-14\"\n      hash1 = \"76d901ac74f377e8dc2e307407ab4b1125e90ecae828dbfa8a67ebd19a4e2f85\"\n      hash2 = \"5b87c465ca646b21ef18a62c5c18116b0056f4a6\"\n      hash3 = \"9119df78f2c4f737145c7d392bba6573\"\n      family = \"ReverseSOCKS-Pod-Worker\"\n      id = \"8ce0d078-78bb-5f69-9950-745e07155de7\"\n   strings:\n      $ack1 = /\\.sendall\\(b\"1\"\\)/ ascii\n      $ack0 = /\\.sendall\\(b\"0\"\\)/ ascii\n      $dial = /create_connection\\(\\(host, ?(int\\()?port/ ascii\n      $nl = \"\\\\n\" ascii\n      $thr = \"threading.Thread(\" ascii\n   condition:\n      filesize < 32KB and all of them\n}",
+            "pattern_type": "yara",
+            "valid_from": "2026-11-15T00:00:00Z",
+            "labels": [
+                "detection-rule"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--7fdf4634-f6b6-5519-b5d1-e2300dbea84f",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-11-15T04:43:04.939324Z",
+            "modified": "2026-11-15T04:43:04.939324Z",
+            "name": "MAL_Pod_Socks5_Relay_Batch_Helper_Docstring_Family",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "rule MAL_Pod_Socks5_Relay_Batch_Helper_Docstring_Family {\n   meta:\n      description = \"Detects the numbered in-pod SOCKS5 relay helper scripts that share one module header: a minimal bidirectional relay with a half-close pump, a getaddrinfo-based connect helper and a subprocess shell helper\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/inv-2026-082-detections/\"\n      date = \"2026-11-14\"\n      hash1 = \"6166a55d058ce8cddacd2e458c340e6e5280fade0852d87a16095de995b81da3\"\n      hash2 = \"959b9a062e8a336016dea8f0b9ea4a9c40cb60f7\"\n      hash3 = \"4609a8f6e268aaf6090e9d8bf69a9488\"\n      family = \"Pod-Socks5-Relay-Helpers\"\n      id = \"0e8375d9-64d0-5524-b21d-8ea6725ed447\"\n   strings:\n      $doc = \"Minimal in-pod socks5 relay\" ascii\n      $pump = \"half-close b so the peer sees EOF\" ascii\n      $conn = \"def conn(host, port, to=8)\" ascii\n      $noaddr = \"raise IOError(\\\"noaddr\\\")\" ascii\n      $s5 = /b\"\\\\x05\\\\x00\"/ ascii\n   condition:\n      filesize < 64KB and 4 of them\n}",
+            "pattern_type": "yara",
+            "valid_from": "2026-11-15T00:00:00Z",
+            "labels": [
+                "detection-rule"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--64802431-709e-56eb-8a82-b4a886fb4aab",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-11-15T04:43:04.939438Z",
+            "modified": "2026-11-15T04:43:04.939438Z",
+            "name": "Python Inline Downloader Writing A Hidden Script To Tmp And Spawning It",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "title: Python Inline Downloader Writing A Hidden Script To Tmp And Spawning It\nid: 0b0d8ba2-0394-49c8-a0b1-d6ca6b03ad64\nstatus: experimental\ndescription: >-\n  Detects a python interpreter started with an inline -c program that fetches a URL with urlopen, writes the bytes to a hidden file under /tmp and starts it with Popen.\n  An AI-agent platform runtime executes exactly this command when a workspace tools file declares a stdio MCP server whose command is python3 -c, which gives the planter code execution without the model in the loop.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/inv-2026-082-detections/\nauthor: The Hunters Ledger\ndate: 2026-11-14\ntags:\n    - attack.execution\n    - attack.t1059.006\n    - attack.command-and-control\n    - attack.t1105\n    - stp.3\n    - detection.emerging-threats\nlogsource:\n    category: process_creation\n    product: linux\n    definition: 'Requires process creation logging that populates the full CommandLine, for example auditd execve records normalised to process_creation or an EDR process feed. Inline programs longer than the logger truncation limit are not matched.'\ndetection:\n    selection_img:\n        Image|contains: '/python'\n    selection_cmd:\n        CommandLine|contains|all:\n            - ' -c '\n            - 'urlopen('\n            - 'Popen('\n            - '/tmp/.'\n    condition: all of selection_*\nfalsepositives:\n    - Unlikely, installer or bootstrap one-liners that fetch a script into a hidden temporary file and start it\nlevel: high",
+            "pattern_type": "sigma",
+            "valid_from": "2026-11-15T00:00:00Z",
+            "labels": [
+                "detection-rule"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--247f5e9a-1c82-5773-a737-b896a5219030",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-11-15T04:43:04.939543Z",
+            "modified": "2026-11-15T04:43:04.939543Z",
+            "name": "Bore Tunnel Client Exposing A Local Port Through A Remote Server",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "title: Bore Tunnel Client Exposing A Local Port Through A Remote Server\nid: a8893ad2-acdd-4ae4-8118-f1c020c52dbc\nstatus: experimental\ndescription: >-\n  Detects the open-source bore client run as bore local PORT --to SERVER, which publishes a local TCP port on a remote rendezvous server.\n  The operator in INV-2026-082 ran it on a rented server and, by the scripts that were written to run in a pod (execution there inferred, not shown), in a victim pod to expose the scripted LLM endpoint, a payload server and a result receiver on public ports of the free bore.pub server.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/inv-2026-082-detections/\n    - https://github.com/ekzhang/bore\nauthor: The Hunters Ledger\ndate: 2026-11-14\ntags:\n    - attack.command-and-control\n    - attack.t1572\n    - attack.t1090\n    - stp.2\n    - detection.emerging-threats\nlogsource:\n    category: process_creation\n    product: linux\n    definition: 'Requires process creation logging with CommandLine, for example auditd execve normalised to process_creation or an EDR process feed.'\ndetection:\n    selection:\n        Image|endswith: '/bore'\n        CommandLine|contains|all:\n            - ' local '\n            - ' --to '\n    condition: selection\nfalsepositives:\n    - Developers who use bore to share a local web service during testing\nlevel: medium",
+            "pattern_type": "sigma",
+            "valid_from": "2026-11-15T00:00:00Z",
+            "labels": [
+                "detection-rule"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--8aedb61d-ea04-50c4-8fa9-8174773ef15d",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-11-15T04:43:04.939642Z",
+            "modified": "2026-11-15T04:43:04.939642Z",
+            "name": "ACK Worker Node Role Session Calling DescribeInstances",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "title: ACK Worker Node Role Session Calling DescribeInstances\nid: 57f7d699-d6a3-4aad-a28a-8c2c10347b74\nname: ack_worker_role_describeinstances\nstatus: experimental\ndescription: >-\n  Detects an ActionTrail event in which a session of the default managed-Kubernetes worker node role calls the compute DescribeInstances API.\n  The node role's own agents call it for their own region, so a single event is normal and the rule is the base of the multi-region correlation in this file.\n  In INV-2026-082 a temporary credential with the shape of a node metadata-service credential was used to list every compute instance in 7 regions.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/inv-2026-082-detections/\n    - https://www.alibabacloud.com/help/en/actiontrail/user-guide/management-event-structure\nauthor: The Hunters Ledger\ndate: 2026-11-14\ntags:\n    - attack.discovery\n    - attack.t1580\n    - stp.3\n    - detection.emerging-threats\nlogsource:\n    product: alibaba\n    service: actiontrail\n    definition: 'Requires ActionTrail management events delivered to the SIEM as JSON with the documented field names (eventName, userIdentity.type, userIdentity.userName, sourceIpAddress, acsRegion). The default worker node role name prefix KubernetesWorkerRole is an assumption about clusters created with default settings; renamed roles are missed.'\ndetection:\n    selection:\n        eventName: 'DescribeInstances'\n        userIdentity.type: 'assumed-role'\n        userIdentity.userName|startswith: 'KubernetesWorkerRole'\n    condition: selection\nfalsepositives:\n    - Node role agents and cluster autoscaler calling DescribeInstances for their own region\nlevel: informational\n---\ntitle: ACK Worker Node Role Listing Compute Instances In Several Regions\nid: eb1c1dcc-2dc5-4a4f-8039-1d889f29ec1d\nstatus: experimental\ndescription: >-\n  Detects a single worker node role session calling DescribeInstances in four or more regions within 15 minutes.\n  A node role belongs to one cluster in one region, so a sweep across regions is a stolen credential being used to inventory the account.\n  The INV-2026-082 operator swept 7 regions with one temporary node-role credential and held a 1,162-instance inventory afterwards.\n  Needs ActionTrail events and a backend that supports Sigma correlation (value_count).\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/inv-2026-082-detections/\nauthor: The Hunters Ledger\ndate: 2026-11-14\ntags:\n    - attack.discovery\n    - attack.t1580\n    - stp.4\n    - detection.emerging-threats\ncorrelation:\n    type: value_count\n    rules:\n        - ack_worker_role_describeinstances\n    group-by:\n        - userIdentity.userName\n    timespan: 15m\n    condition:\n        gte: 4\n        field: acsRegion\nfalsepositives:\n    - A cross-region inventory or cost tool that was granted the node role\nlevel: high",
+            "pattern_type": "sigma",
+            "valid_from": "2026-11-15T00:00:00Z",
+            "labels": [
+                "detection-rule"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--1276f4f0-2073-54be-9305-1a50a768e8a8",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-11-15T04:43:04.93974Z",
+            "modified": "2026-11-15T04:43:04.93974Z",
+            "name": "ACK Worker Node Role Session Used From A Public Source Address",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "title: ACK Worker Node Role Session Used From A Public Source Address\nid: bb9d396e-a73b-4bd0-8c09-74acc0fc7c2e\nstatus: experimental\ndescription: >-\n  Detects an ActionTrail event in which a session of the default managed-Kubernetes worker node role makes an API call from a source address outside the private ranges.\n  A node role credential is issued to code running on the node, so a call from an address that is neither the node nor your own egress is a stolen credential.\n  This rule cannot know your egress ranges, so every node that reaches the API through a public address or NAT needs a filter before the rule is usable.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/inv-2026-082-detections/\n    - https://www.alibabacloud.com/help/en/actiontrail/user-guide/management-event-structure\nauthor: The Hunters Ledger\ndate: 2026-11-14\ntags:\n    - attack.stealth\n    - attack.persistence\n    - attack.privilege-escalation\n    - attack.initial-access\n    - attack.t1078.004\n    - stp.3\n    - detection.emerging-threats\nlogsource:\n    product: alibaba\n    service: actiontrail\n    definition: 'Requires ActionTrail management events delivered to the SIEM as JSON with the documented field names (userIdentity.type, userIdentity.userName, sourceIpAddress). The documentation says sourceIpAddress holds the client address in most cases and a service identifier when a cloud service sends the request, so service identifiers must be handled in the filter. KubernetesWorkerRole is the default node role name prefix; renamed roles are missed.'\ndetection:\n    selection:\n        userIdentity.type: 'assumed-role'\n        userIdentity.userName|startswith: 'KubernetesWorkerRole'\n    filter_private:\n        sourceIpAddress|cidr:\n            - '10.0.0.0/8'\n            - '172.16.0.0/12'\n            - '192.168.0.0/16'\n    condition: selection and not filter_private\nfalsepositives:\n    - Nodes that reach the API through a public address or a NAT gateway, which must be listed in a local filter\n    - Cloud services that act on the role and report a service identifier in sourceIpAddress\nlevel: medium",
+            "pattern_type": "sigma",
+            "valid_from": "2026-11-15T00:00:00Z",
+            "labels": [
+                "detection-rule"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--58d361da-9a43-5f3c-9f79-60731adcab49",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-11-15T04:43:04.939838Z",
+            "modified": "2026-11-17T16:30:50.910884Z",
+            "name": "Agent Platform Publish Request",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "title: Agent Platform Publish Request\nid: 9993f791-aeb8-4789-b4f6-802249886c02\nname: agent_platform_publish\nstatus: experimental\ndescription: >-\n  Detects a POST to the publish route of an AI-agent platform's config service.\n  Building block for the publish, save, reload ordering correlation in this file; it is not meant to alert alone.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/inv-2026-082-detections/\nauthor: The Hunters Ledger\ndate: 2026-11-14\ntags:\n    - attack.impact\n    - attack.t1565.001\n    - stp.2\n    - detection.emerging-threats\nlogsource:\n    category: proxy\n    definition: 'Requires gateway or ingress access logs that record the request method, path and client address. The path value is a placeholder for your platform''s route; the route names vary by platform.'\ndetection:\n    selection:\n        cs-method: 'POST'\n        c-uri|contains: '/REPLACE-publish-route/'\n    condition: selection\nfalsepositives:\n    - Every legitimate publish\nlevel: informational\n---\ntitle: Agent Platform Workspace File Save Request\nid: 95931ef0-a119-4073-a122-a40474582913\nname: agent_platform_workspace_save\nstatus: experimental\ndescription: >-\n  Detects a request to the workspace file save route of an AI-agent platform's config service.\n  Building block for the publish, save, reload ordering correlation in this file; it is not meant to alert alone.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/inv-2026-082-detections/\nauthor: The Hunters Ledger\ndate: 2026-11-14\ntags:\n    - attack.impact\n    - attack.t1565.001\n    - stp.2\n    - detection.emerging-threats\nlogsource:\n    category: proxy\n    definition: 'Requires gateway or ingress access logs that record the request method, path and client address. The path value is a placeholder for your platform''s route; the route names vary by platform.'\ndetection:\n    selection:\n        c-uri|contains: '/REPLACE-workspace-save-route/'\n    condition: selection\nfalsepositives:\n    - Every legitimate workspace edit\nlevel: informational\n---\ntitle: Agent Platform Internal Workspace Reload Route Called Through The Gateway\nid: 2f8c5d64-66d6-4077-a599-0a185ba958f2\nname: agent_platform_reload\nstatus: experimental\ndescription: >-\n  Detects a POST to the internal workspace reload route of an AI-agent platform through the public or shared gateway.\n  The route pushes a changed agent configuration into the running pod without a republish.\n  In INV-2026-082 the operator called it after rewriting an agent's model endpoint so the change took effect without the platform restoring its own model block.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/inv-2026-082-detections/\nauthor: The Hunters Ledger\ndate: 2026-11-14\ntags:\n    - attack.persistence\n    - attack.impact\n    - attack.t1565.001\n    - stp.2\n    - detection.emerging-threats\nlogsource:\n    category: proxy\n    definition: 'Requires gateway or ingress access logs that record the request method, path and client address. The path value is a placeholder: replace it with your platform''s internal reload route. Route names vary by platform.'\ndetection:\n    selection:\n        cs-method: 'POST'\n        c-uri|contains: '/REPLACE-internal-reload-route'\n    condition: selection\nfalsepositives:\n    - The platform's own editor or services, if they call this route through the gateway after a configuration save\nlevel: medium\n---\ntitle: Agent Configuration Written After Publish Then Reloaded Without Republish\nid: ab3ec12c-a6bd-43a9-a4ea-a7f6d6a1baee\nstatus: experimental\ndescription: >-\n  Detects, for one client address within two minutes, a publish, then a workspace file save, then the internal workspace reload, in that order.\n  A normal edit saves first and publishes after. The INV-2026-082 operator published first, wrote the agent's model endpoint afterwards and reloaded, which keeps the platform from restoring its own model block over the operator's endpoint.\n  The access log shows the save only as a path, so what was written is NOT CHECKED by this rule.\n  Needs the gateway logs of the base rules and a backend that supports Sigma correlation (temporal_ordered).\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/inv-2026-082-detections/\nauthor: The Hunters Ledger\ndate: 2026-11-14\ntags:\n    - attack.impact\n    - attack.t1565.001\n    - stp.3\n    - detection.emerging-threats\ncorrelation:\n    type: temporal_ordered\n    rules:\n        - agent_platform_publish\n        - agent_platform_workspace_save\n        - agent_platform_reload\n    group-by:\n        - c-ip\n    timespan: 2m\nfalsepositives:\n    - An editor that publishes before saving and then reloads\nlevel: medium",
+            "pattern_type": "sigma",
+            "valid_from": "2026-11-15T00:00:00Z",
+            "labels": [
+                "detection-rule"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--e257dd5a-059d-57f8-8dae-452ae334da34",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-11-15T04:43:04.939946Z",
+            "modified": "2026-11-15T04:43:04.939946Z",
+            "name": "GitLab API User Lookup Rejected",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "title: GitLab API User Lookup Rejected\nid: 8a46e348-da01-4b1b-abc7-22b9a9a5ef03\nname: gitlab_api_user_rejected\nstatus: experimental\ndescription: >-\n  Detects a rejected request to the GitLab user endpoint.\n  Building block for the repeated-rejection correlation in this file; it is not meant to alert alone.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/inv-2026-082-detections/\nauthor: The Hunters Ledger\ndate: 2026-11-14\ntags:\n    - attack.credential-access\n    - attack.t1110\n    - stp.2\n    - detection.emerging-threats\nlogsource:\n    category: proxy\n    definition: 'Requires GitLab or its reverse proxy access logs with the request path, status and client address mapped to c-uri, sc-status and c-ip.'\ndetection:\n    selection:\n        c-uri|startswith: '/api/v4/user'\n        sc-status: 401\n    condition: selection\nfalsepositives:\n    - Every expired token or mistyped credential\nlevel: informational\n---\ntitle: GitLab API User Lookup Rejected Repeatedly From One Source\nid: 2a79d4b5-8144-4767-a57b-173101a77fbf\nstatus: experimental\ndescription: >-\n  Detects four or more rejected requests to the GitLab user endpoint from one source address within 10 minutes.\n  In INV-2026-082 one harvested shared service-account secret was tried as an account password, as a personal-access-token header and as git-over-HTTP basic auth against the same GitLab instance, which produces a burst of rejections from the pod that holds it.\n  Whether any attempt succeeded is NOT CHECKED, because the held outputs show no successful response.\n  Needs the access logs of the base rule and a backend that supports Sigma correlation (event_count). A pod using a shared service account cannot be named without local values, so add the pod egress and account name in a local filter.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/inv-2026-082-detections/\n    - https://docs.gitlab.com/ee/administration/logs/\nauthor: The Hunters Ledger\ndate: 2026-11-14\ntags:\n    - attack.credential-access\n    - attack.t1110\n    - stp.2\n    - detection.emerging-threats\ncorrelation:\n    type: event_count\n    rules:\n        - gitlab_api_user_rejected\n    group-by:\n        - c-ip\n    timespan: 10m\n    condition:\n        gte: 4\nfalsepositives:\n    - A CI job or integration with an expired token retrying\nlevel: low",
+            "pattern_type": "sigma",
+            "valid_from": "2026-11-15T00:00:00Z",
+            "labels": [
+                "detection-rule"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--2a5258c7-113a-5080-9fa9-c66d954da0a2",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-11-15T04:43:04.940045Z",
+            "modified": "2026-11-15T04:43:04.940045Z",
+            "name": "THL HUNT INV-2026-082 bore Tunnel Client Hello Frame (Open-Source Reverse Tunnel Session)",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "alert tcp $HOME_NET any -> $EXTERNAL_NET any (msg:\"THL HUNT INV-2026-082 bore Tunnel Client Hello Frame (Open-Source Reverse Tunnel Session)\"; flow:established,to_server; dsize:13<>20; content:\"{|22|Hello|22 3a|\"; startswith; content:\"}|00|\"; endswith; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/inv-2026-082-detections/; classtype:policy-violation; sid:1000001; rev:1; metadata:author The_Hunters_Ledger, date 2026-11-14;)",
+            "pattern_type": "suricata",
+            "valid_from": "2026-11-15T00:00:00Z",
+            "labels": [
+                "detection-rule"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--289180ea-6c1a-59cc-9932-574614731d94",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-11-15T04:43:04.940143Z",
+            "modified": "2026-11-15T04:43:04.940143Z",
+            "name": "THL HUNT INV-2026-082 bore.pub Public Tunnel Server DNS Query (Shared Service, Do Not Block On This Alone)",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "alert dns $HOME_NET any -> any any (msg:\"THL HUNT INV-2026-082 bore.pub Public Tunnel Server DNS Query (Shared Service, Do Not Block On This Alone)\"; dns.query; content:\"bore.pub\"; nocase; endswith; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/inv-2026-082-detections/; classtype:policy-violation; sid:1000002; rev:1; metadata:author The_Hunters_Ledger, date 2026-11-14;)",
+            "pattern_type": "suricata",
+            "valid_from": "2026-11-15T00:00:00Z",
+            "labels": [
+                "detection-rule"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--42456703-b610-53b6-b5b8-d48baa58c45c",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-11-15T04:43:04.940239Z",
+            "modified": "2026-11-15T04:43:04.940239Z",
+            "name": "THL HUNT INV-2026-082 Python urllib Fetch Of Operator Payload File Name (Agent-Platform Plant Downloader)",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "alert http $HOME_NET any -> $EXTERNAL_NET any (msg:\"THL HUNT INV-2026-082 Python urllib Fetch Of Operator Payload File Name (Agent-Platform Plant Downloader)\"; flow:established,to_server; http.method; content:\"GET\"; http.user_agent; content:\"Python-urllib/\"; startswith; http.uri; content:\".py\"; endswith; pcre:\"/^\\/(?:hb|b|boot|deployhb|own_llm|axllm|mcp_plant)\\.py$/\"; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/inv-2026-082-detections/; classtype:trojan-activity; sid:1000003; rev:1; metadata:author The_Hunters_Ledger, date 2026-11-14;)",
+            "pattern_type": "suricata",
+            "valid_from": "2026-11-15T00:00:00Z",
+            "labels": [
+                "detection-rule"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--21dfc7b7-4fec-58e5-8322-fcfa295c4d06",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-11-15T04:43:04.940334Z",
+            "modified": "2026-11-15T04:43:04.940334Z",
+            "name": "THL HUNT INV-2026-082 POST To /up With name Query And Python urllib Client (Operator Receiver Shape)",
+            "indicator_types": [
+                "malicious-activity"
+            ],
+            "pattern": "alert http $HOME_NET any -> $EXTERNAL_NET any (msg:\"THL HUNT INV-2026-082 POST To /up With name Query And Python urllib Client (Operator Receiver Shape)\"; flow:established,to_server; http.method; content:\"POST\"; http.uri; content:\"/up?name=\"; startswith; fast_pattern; http.user_agent; content:\"Python-urllib/\"; startswith; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/inv-2026-082-detections/; classtype:trojan-activity; sid:1000004; rev:1; metadata:author The_Hunters_Ledger, date 2026-11-14;)",
+            "pattern_type": "suricata",
+            "valid_from": "2026-11-15T00:00:00Z",
+            "labels": [
+                "detection-rule"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "tool",
+            "spec_version": "2.1",
+            "id": "tool--17d6cd49-7550-50ba-bd10-63c6a0f8d5bb",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-11-15T04:43:04.940883Z",
+            "modified": "2026-11-15T04:43:04.940883Z",
+            "name": "Second capture 2026-11-14. Use on this exact hash only: other chisel builds are legitimate tools used by many. Whether it ran on any victim is not shown.",
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "tool",
+            "spec_version": "2.1",
+            "id": "tool--4062c0f5-35ef-52eb-afc8-c274e6fb32f3",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-11-15T04:43:04.941Z",
+            "modified": "2026-11-15T04:43:04.941Z",
+            "name": "Python source written by the operator. Held in the captured directory; whether it ran on any victim is shown only where the case notes say so. Hash changes with any edit (044569af)",
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "tool",
+            "spec_version": "2.1",
+            "id": "tool--752cba10-03c6-542a-9356-5ca4fd44fe32",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-11-15T04:43:04.941104Z",
+            "modified": "2026-11-15T04:43:04.941104Z",
+            "name": "Python source written by the operator. Held in the captured directory; whether it ran on any victim is shown only where the case notes say so. Hash changes with any edit (1f1f28ec)",
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "tool",
+            "spec_version": "2.1",
+            "id": "tool--6cc29758-722f-5387-90fd-246044f30dca",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-11-15T04:43:04.941203Z",
+            "modified": "2026-11-15T04:43:04.941203Z",
+            "name": "Python source written by the operator. Held in the captured directory; whether it ran on any victim is shown only where the case notes say so. Hash changes with any edit (3e18453f)",
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "tool",
+            "spec_version": "2.1",
+            "id": "tool--1f6fea89-5f20-5ae2-ab9c-186b4dddba00",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-11-15T04:43:04.941298Z",
+            "modified": "2026-11-15T04:43:04.941298Z",
+            "name": "Python source written by the operator. Held in the captured directory; whether it ran on any victim is shown only where the case notes say so. Hash changes with any edit (53dbc125)",
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "tool",
+            "spec_version": "2.1",
+            "id": "tool--25a8a785-c420-58b0-980e-80b346884ae5",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-11-15T04:43:04.941392Z",
+            "modified": "2026-11-15T04:43:04.941392Z",
+            "name": "Python source written by the operator. Held in the captured directory; whether it ran on any victim is shown only where the case notes say so. Hash changes with any edit (5754b27c)",
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "tool",
+            "spec_version": "2.1",
+            "id": "tool--e5f48ee5-cf6b-5dd5-a32c-83afca010172",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-11-15T04:43:04.941484Z",
+            "modified": "2026-11-15T04:43:04.941484Z",
+            "name": "Python source written by the operator. Held in the captured directory; whether it ran on any victim is shown only where the case notes say so. Hash changes with any edit (581a23e3)",
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "tool",
+            "spec_version": "2.1",
+            "id": "tool--03509e98-11d9-53ef-a216-5c1159507981",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-11-15T04:43:04.941577Z",
+            "modified": "2026-11-15T04:43:04.941577Z",
+            "name": "Python source written by the operator. Held in the captured directory; whether it ran on any victim is shown only where the case notes say so. Hash changes with any edit (59c3bd56)",
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "tool",
+            "spec_version": "2.1",
+            "id": "tool--40165c4c-bd8b-5287-af66-21eda92be637",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-11-15T04:43:04.941672Z",
+            "modified": "2026-11-15T04:43:04.941672Z",
+            "name": "Python source written by the operator. Held in the captured directory; whether it ran on any victim is shown only where the case notes say so. Hash changes with any edit (67b4214a)",
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "tool",
+            "spec_version": "2.1",
+            "id": "tool--c918c339-69a6-529e-bf89-ce94f477daa3",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-11-15T04:43:04.941765Z",
+            "modified": "2026-11-15T04:43:04.941765Z",
+            "name": "Python source written by the operator. Held in the captured directory; whether it ran on any victim is shown only where the case notes say so. Hash changes with any edit (6f8ff1b3)",
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "tool",
+            "spec_version": "2.1",
+            "id": "tool--006c3294-1a99-5a0d-add2-e4080ea03cea",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-11-15T04:43:04.941857Z",
+            "modified": "2026-11-15T04:43:04.941857Z",
+            "name": "Python source written by the operator. Held in the captured directory; whether it ran on any victim is shown only where the case notes say so. Hash changes with any edit (76773e6b)",
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "tool",
+            "spec_version": "2.1",
+            "id": "tool--8a60d050-d941-53ff-8a96-58388a634e86",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-11-15T04:43:04.941954Z",
+            "modified": "2026-11-15T04:43:04.941954Z",
+            "name": "Python source written by the operator. Held in the captured directory; whether it ran on any victim is shown only where the case notes say so. Hash changes with any edit (76d901ac)",
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "tool",
+            "spec_version": "2.1",
+            "id": "tool--a5e5509b-2832-5af0-b66a-90d63917637a",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-11-15T04:43:04.942044Z",
+            "modified": "2026-11-15T04:43:04.942044Z",
+            "name": "Python source written by the operator. Held in the captured directory; whether it ran on any victim is shown only where the case notes say so. Hash changes with any edit (896146dc)",
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "tool",
+            "spec_version": "2.1",
+            "id": "tool--ba899355-6ac3-526b-a5ef-334e99480366",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-11-15T04:43:04.942135Z",
+            "modified": "2026-11-15T04:43:04.942135Z",
+            "name": "Python source written by the operator. Held in the captured directory; whether it ran on any victim is shown only where the case notes say so. Hash changes with any edit (a5853acd)",
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "tool",
+            "spec_version": "2.1",
+            "id": "tool--5f60ad2f-22c4-53e7-bbf2-bfb2eaabd383",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-11-15T04:43:04.942227Z",
+            "modified": "2026-11-15T04:43:04.942227Z",
+            "name": "Python source written by the operator. Held in the captured directory; whether it ran on any victim is shown only where the case notes say so. Hash changes with any edit (b660141d)",
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "tool",
+            "spec_version": "2.1",
+            "id": "tool--692cef97-05cd-5e3d-8ae5-9d9761052626",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-11-15T04:43:04.942318Z",
+            "modified": "2026-11-15T04:43:04.942318Z",
+            "name": "Python source written by the operator. Held in the captured directory; whether it ran on any victim is shown only where the case notes say so. Hash changes with any edit (bc9af45c)",
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "tool",
+            "spec_version": "2.1",
+            "id": "tool--dfebeb0d-b942-5b0c-ae4a-1664f0bfd090",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-11-15T04:43:04.942407Z",
+            "modified": "2026-11-15T04:43:04.942407Z",
+            "name": "Python source written by the operator. Held in the captured directory; whether it ran on any victim is shown only where the case notes say so. Hash changes with any edit (bce9a747)",
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "tool",
+            "spec_version": "2.1",
+            "id": "tool--fe3d473e-d448-552d-afb6-e5de6e75a179",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-11-15T04:43:04.942497Z",
+            "modified": "2026-11-15T04:43:04.942497Z",
+            "name": "Python source written by the operator. Held in the captured directory; whether it ran on any victim is shown only where the case notes say so. Hash changes with any edit (c62479d5)",
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "tool",
+            "spec_version": "2.1",
+            "id": "tool--38a6b001-d1bc-5269-bdbc-3d4ce448f4c5",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-11-15T04:43:04.942588Z",
+            "modified": "2026-11-15T04:43:04.942588Z",
+            "name": "Python source written by the operator. Held in the captured directory; whether it ran on any victim is shown only where the case notes say so. Hash changes with any edit (d0890156)",
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "tool",
+            "spec_version": "2.1",
+            "id": "tool--6f267f8a-a14b-5150-99ee-af3b4c6dc6b7",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-11-15T04:43:04.94268Z",
+            "modified": "2026-11-15T04:43:04.94268Z",
+            "name": "Python source written by the operator. Held in the captured directory; whether it ran on any victim is shown only where the case notes say so. Hash changes with any edit (da6300c4)",
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "tool",
+            "spec_version": "2.1",
+            "id": "tool--9738a815-c177-577e-983c-59bead798dda",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-11-15T04:43:04.942772Z",
+            "modified": "2026-11-15T04:43:04.942772Z",
+            "name": "Python source written by the operator. Held in the captured directory; whether it ran on any victim is shown only where the case notes say so. Hash changes with any edit (dd510773)",
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "tool",
+            "spec_version": "2.1",
+            "id": "tool--7a4b8d37-3b8e-55ad-bb56-eeb0b264b6ff",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-11-15T04:43:04.942863Z",
+            "modified": "2026-11-15T04:43:04.942863Z",
+            "name": "Python source written by the operator. Held in the captured directory; whether it ran on any victim is shown only where the case notes say so. Hash changes with any edit (dfd7e80e)",
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "tool",
+            "spec_version": "2.1",
+            "id": "tool--9f418ced-7109-5dde-b54b-74c674af5a63",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-11-15T04:43:04.942962Z",
+            "modified": "2026-11-15T04:43:04.942962Z",
+            "name": "Python source written by the operator. Held in the captured directory; whether it ran on any victim is shown only where the case notes say so. Hash changes with any edit (dff6b8c2)",
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "tool",
+            "spec_version": "2.1",
+            "id": "tool--78d518b6-c185-54df-8fc0-699be9aa55c4",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-11-15T04:43:04.943051Z",
+            "modified": "2026-11-15T04:43:04.943051Z",
+            "name": "Python source written by the operator. Held in the captured directory; whether it ran on any victim is shown only where the case notes say so. Hash changes with any edit (e47ad08b)",
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "tool",
+            "spec_version": "2.1",
+            "id": "tool--b1f5c8fd-24d4-5657-89aa-0623c742c7e5",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-11-15T04:43:04.943141Z",
+            "modified": "2026-11-15T04:43:04.943141Z",
+            "name": "Python source written by the operator. Held in the captured directory; whether it ran on any victim is shown only where the case notes say so. Hash changes with any edit (e4d7f354)",
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "tool",
+            "spec_version": "2.1",
+            "id": "tool--d0bc85ed-22d7-591c-88cf-a6eadd3e114e",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-11-15T04:43:04.943232Z",
+            "modified": "2026-11-15T04:43:04.943232Z",
+            "name": "Python source written by the operator. Held in the captured directory; whether it ran on any victim is shown only where the case notes say so. Hash changes with any edit (f66ae5e8)",
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "tool",
+            "spec_version": "2.1",
+            "id": "tool--5ec5171c-cb59-520e-8e64-b03dad32cb46",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-11-15T04:43:04.943335Z",
+            "modified": "2026-11-15T04:43:04.943335Z",
+            "name": "Python source written by the operator. Held in the captured directory; whether it ran on any victim is shown only where the case notes say so. Hash changes with any edit (f8fd8371)",
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "attack-pattern",
+            "spec_version": "2.1",
+            "id": "attack-pattern--6214841b-936d-5da2-b5c8-4bed4cf9aee0",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-11-15T04:43:04.943422Z",
+            "modified": "2026-11-15T04:43:04.943422Z",
+            "name": "Exploit Public-Facing Application",
+            "external_references": [
+                {
+                    "source_name": "mitre-attack",
+                    "url": "https://attack.mitre.org/techniques/T1190",
+                    "external_id": "T1190"
+                }
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "attack-pattern",
+            "spec_version": "2.1",
+            "id": "attack-pattern--a387d13a-29dd-5f80-a6ce-f062cb324db3",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-11-15T04:43:04.943564Z",
+            "modified": "2026-11-15T04:43:04.943564Z",
+            "name": "Cloud Accounts",
+            "external_references": [
+                {
+                    "source_name": "mitre-attack",
+                    "url": "https://attack.mitre.org/techniques/T1078/004",
+                    "external_id": "T1078.004"
+                }
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "attack-pattern",
+            "spec_version": "2.1",
+            "id": "attack-pattern--be0beb0c-2499-5178-a012-309e486ef121",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-11-15T04:43:04.943678Z",
+            "modified": "2026-11-15T04:43:04.943678Z",
+            "name": "Cloud Instance Metadata API",
+            "external_references": [
+                {
+                    "source_name": "mitre-attack",
+                    "url": "https://attack.mitre.org/techniques/T1552/005",
+                    "external_id": "T1552.005"
+                }
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "attack-pattern",
+            "spec_version": "2.1",
+            "id": "attack-pattern--e2996cd1-1d5a-52e2-97bd-f24a7b8f02aa",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-11-15T04:43:04.943786Z",
+            "modified": "2026-11-15T04:43:04.943786Z",
+            "name": "Cloud Infrastructure Discovery",
+            "external_references": [
+                {
+                    "source_name": "mitre-attack",
+                    "url": "https://attack.mitre.org/techniques/T1580",
+                    "external_id": "T1580"
+                }
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "attack-pattern",
+            "spec_version": "2.1",
+            "id": "attack-pattern--99faa775-7366-5b35-9527-17f7643bc506",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-11-15T04:43:04.94389Z",
+            "modified": "2026-11-15T04:43:04.94389Z",
+            "name": "Python",
+            "external_references": [
+                {
+                    "source_name": "mitre-attack",
+                    "url": "https://attack.mitre.org/techniques/T1059/006",
+                    "external_id": "T1059.006"
+                }
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "attack-pattern",
+            "spec_version": "2.1",
+            "id": "attack-pattern--44bf0bb6-4445-5791-9daa-2c0a12978bf7",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-11-15T04:43:04.944005Z",
+            "modified": "2026-11-15T04:43:04.944005Z",
+            "name": "Ingress Tool Transfer",
+            "external_references": [
+                {
+                    "source_name": "mitre-attack",
+                    "url": "https://attack.mitre.org/techniques/T1105",
+                    "external_id": "T1105"
+                }
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "attack-pattern",
+            "spec_version": "2.1",
+            "id": "attack-pattern--4c8a2c8e-7edd-5841-b747-edf536e3797d",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-11-15T04:43:04.94411Z",
+            "modified": "2026-11-15T04:43:04.94411Z",
+            "name": "Proxy",
+            "external_references": [
+                {
+                    "source_name": "mitre-attack",
+                    "url": "https://attack.mitre.org/techniques/T1090",
+                    "external_id": "T1090"
+                }
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "attack-pattern",
+            "spec_version": "2.1",
+            "id": "attack-pattern--81ac1dd0-a8ac-50ba-bd1a-cec2886340d5",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-11-15T04:43:04.944215Z",
+            "modified": "2026-11-15T04:43:04.944215Z",
+            "name": "Protocol Tunneling",
+            "external_references": [
+                {
+                    "source_name": "mitre-attack",
+                    "url": "https://attack.mitre.org/techniques/T1572",
+                    "external_id": "T1572"
+                }
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "attack-pattern",
+            "spec_version": "2.1",
+            "id": "attack-pattern--4efef37e-c256-5987-a1b8-60d9424c7250",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-11-15T04:43:04.944316Z",
+            "modified": "2026-11-15T04:43:04.944316Z",
+            "name": "Default Accounts",
+            "external_references": [
+                {
+                    "source_name": "mitre-attack",
+                    "url": "https://attack.mitre.org/techniques/T1078/001",
+                    "external_id": "T1078.001"
+                }
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "attack-pattern",
+            "spec_version": "2.1",
+            "id": "attack-pattern--5d52a307-2bd5-508d-851f-5b2b85a514f6",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-11-15T04:43:04.944417Z",
+            "modified": "2026-11-15T04:43:04.944417Z",
+            "name": "System Shutdown/Reboot",
+            "external_references": [
+                {
+                    "source_name": "mitre-attack",
+                    "url": "https://attack.mitre.org/techniques/T1529",
+                    "external_id": "T1529"
+                }
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "attack-pattern",
+            "spec_version": "2.1",
+            "id": "attack-pattern--06cbe52b-abcb-5b54-a3ec-c553a82c7374",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-11-15T04:43:04.944517Z",
+            "modified": "2026-11-15T04:43:04.944517Z",
+            "name": "Exfiltration Over C2 Channel",
+            "external_references": [
+                {
+                    "source_name": "mitre-attack",
+                    "url": "https://attack.mitre.org/techniques/T1041",
+                    "external_id": "T1041"
+                }
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "attack-pattern",
+            "spec_version": "2.1",
+            "id": "attack-pattern--87b8e72a-5437-59a8-a6a9-16f846415a26",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-11-15T04:43:04.944649Z",
+            "modified": "2026-11-15T04:43:04.944649Z",
+            "name": "Malware",
+            "external_references": [
+                {
+                    "source_name": "mitre-attack",
+                    "url": "https://attack.mitre.org/techniques/T1587/001",
+                    "external_id": "T1587.001"
+                }
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "infrastructure",
+            "spec_version": "2.1",
+            "id": "infrastructure--c0c31784-931f-5058-94bb-07ba805a4ca3",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-11-15T04:43:04.944825Z",
+            "modified": "2026-11-15T04:43:04.944825Z",
+            "name": "inv-2026-082-agent-platform-command-channel infrastructure",
+            "infrastructure_types": [
+                "command-and-control",
+                "hosting"
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        },
+        {
+            "type": "report",
+            "spec_version": "2.1",
+            "id": "report--7945b55c-70f5-5ed0-8b33-c9a058a295f2",
+            "created_by_ref": "identity--8bc8284b-deb5-546c-a233-57ea34b2ea0d",
+            "created": "2026-11-15T04:43:04.945796Z",
+            "modified": "2026-11-17T16:30:50.916468Z",
+            "name": "A Threat Actor Configured an Enterprise AI-Agent Platform as a Command and Relay Channel",
+            "description": "Operator-side values only: the operator's VPS, ports, URL paths, operator-written script hashes and operator-chosen strings. No victim value of any kind (no victim address, host, credential, token, account or project id). Stock public tools (fscan, gogo) are not listed as hashes: their hashes match anyone using the public tool. bore.pub and 159.223.110.159 are a shared public tunnel service and sit in hunt_only_never_block. Execution of the operator scripts on a victim is shown only where the case notes say so.",
+            "report_types": [
+                "threat-report"
+            ],
+            "published": "2026-11-15T00:00:00Z",
+            "object_refs": [
+                "domain-name--0205482f-6f3e-5102-b26e-fb9615758ac7",
+                "indicator--264ed0ef-c23b-5fda-ac0f-ca2078085f71",
+                "ipv4-addr--0e86ed56-2a8c-5165-b459-8412c9850cef",
+                "indicator--c6f83846-a4a9-54ab-8210-23f94452a86c",
+                "domain-name--590698cf-657e-5e41-8b21-705b4fec45aa",
+                "indicator--46c2dcaa-827c-5a6e-ae9c-cb0c1cc5c23b",
+                "url--0a41b319-a26c-5cc0-bc55-3872582df73c",
+                "indicator--01bcfb55-17fd-5a9c-a359-f3e04ba98c99",
+                "url--b7a0f922-06d1-5fc2-b0e0-a5edf47e3240",
+                "indicator--c9bf0a93-3aa2-56fc-8f67-30e6484c395b",
+                "url--09b89396-289e-56dc-8fd6-a9b93d35424c",
+                "indicator--50833c0f-c164-5b24-a502-712e54738d2f",
+                "url--45317ad4-f57d-551d-badf-164b199b07c2",
+                "indicator--0754ccc7-bdfb-5b1d-86ab-cc40b19f3b1f",
+                "url--a12ae972-671a-5d56-9bae-b8b71d98936e",
+                "indicator--40897fce-5937-5ecb-93ba-fd7f3de0e031",
+                "url--89fe258d-bd2f-597a-a87d-6080f42933a6",
+                "indicator--e80eecee-d89b-51b3-96e1-239a63bb2846",
+                "url--ee332459-273c-5c4c-87ed-e96f8b5a58ad",
+                "indicator--d5f4e544-ccf7-523e-9b4b-f31f0ce810a4",
+                "url--cdcb2c9f-26bf-5fb8-8798-e28ffc149548",
+                "indicator--fd5525f7-2bbe-51ea-bce2-895d8cde9395",
+                "url--bd800ff1-73df-59b7-92f8-5cc6673c8d0a",
+                "indicator--3c5cf4b6-70aa-5b45-b7e9-15a9e69ae7cb",
+                "url--258aa346-d324-51cb-85f0-d7483e3b7507",
+                "indicator--c62cc7b0-64db-5629-b228-4f1844d40ed6",
+                "url--a373899f-ebf3-5c11-8ef0-3e58f5a2fe5e",
+                "indicator--cf4d7891-32d9-5327-8450-5dbab52f56b8",
+                "url--e50e211f-f102-50ef-b828-6401d4239886",
+                "indicator--2085133d-5531-552a-83e0-8fd26e9019ce",
+                "url--b8000112-737b-5fd7-a40b-9f21b99b6e59",
+                "indicator--f523de09-9d79-5dfc-8784-9f99b2c26cfa",
+                "url--f0a59bde-34cd-5a01-9fa7-b31e441af683",
+                "indicator--a78df369-ea77-5f9a-83b3-dbbc3c9de676",
+                "url--91fe204d-c735-5f3b-a0e9-768871031baa",
+                "indicator--381d02da-75e3-577e-80fa-67f20aefbba1",
+                "url--f0ae5deb-102b-5d42-a246-1e12b53a885a",
+                "indicator--a2e3b98a-5ebf-5aa3-9471-e520e2770f5c",
+                "url--0ad54b9a-23bf-56c4-907f-e2183d98ac04",
+                "indicator--00ee7e3d-a3f4-53f5-99df-15cfded471dc",
+                "url--1f1b6125-a946-54a1-a1a5-65232ded2c44",
+                "indicator--959592e5-cb3d-5136-9dec-8905423c31bc",
+                "url--500161c7-9826-5bc4-99a4-36c518ef8e36",
+                "indicator--7df5033b-b187-5d35-ab25-2e9b6f28619a",
+                "url--da126beb-6635-5e5f-85c3-87fff912f3bf",
+                "indicator--e29cefea-197a-5547-ae38-dffa096fefbe",
+                "url--8f1c8c75-8edd-5b58-ae57-9f84782abad1",
+                "indicator--32687a80-7569-5c41-80e4-44b31ee3e888",
+                "url--43b0955f-c5f5-5ac7-9a33-c5e937af14fd",
+                "indicator--2cbe835d-ad1d-5fb7-9496-602e429f89bb",
+                "url--de35a798-1750-55a7-861b-5f604ebbce28",
+                "indicator--1185f13a-be52-570f-bdf6-522099ec80cf",
+                "url--aff71864-c98f-5a50-a198-a3c321317f4f",
+                "indicator--4b204c60-b1fd-5c77-9623-dbe039d69c6d",
+                "url--8bfe4c83-5e3e-577b-904c-40ba7940a8a0",
+                "indicator--a7a738c1-0d76-5e41-bb5b-75614e86b24d",
+                "url--0722abbf-1228-56cc-bc11-339d16bbebf5",
+                "indicator--1a8b0db0-f435-5786-af5c-84205d987efc",
+                "url--966d3459-f1d6-54a1-892d-2ead0c059fac",
+                "indicator--d96eb98d-7172-5f69-a137-26fd16c946c6",
+                "url--9fb821af-f57a-575b-a2f9-abf150f7c9cb",
+                "indicator--ab05b84b-bb4d-5af7-9cce-c4d39f3b998f",
+                "url--a3294323-4803-5275-bdc4-dc52b2725924",
+                "indicator--e51ba3c7-6634-542b-a75d-d906f0a3846d",
+                "url--90eb078e-be1f-57e7-9936-8e6a20a24aef",
+                "indicator--cc954b90-271d-54c5-86a8-f853bcc53db6",
+                "file--758ceb6c-f24d-54f7-bc05-161d03e2124c",
+                "file--799beb75-653e-56f6-97c5-48a9195adb6f",
+                "file--31dfb693-3365-5b21-a144-97072472bf11",
+                "file--0aa22d6f-4772-5a73-8610-2845c8070e26",
+                "file--b11d0cbf-7c52-5d4a-9fc6-c7062f0ee3f4",
+                "file--8d5e5082-1d55-532c-bf27-54c188a01118",
+                "file--5c0b7586-0e98-5d5d-bf0e-1867b64e3a8c",
+                "file--b1dacf54-2dbb-5141-badd-26eb1e189ab6",
+                "file--d860d748-1af6-53c9-a925-923db9947f30",
+                "file--127c2337-8710-5e98-a398-30722259a316",
+                "file--44c8c29e-0fa1-5fcf-872f-7cef11995533",
+                "file--047d5a36-e16e-57ce-b55b-f37bd0cbf492",
+                "file--066f60ef-b6fb-57cf-81fa-319275613a5d",
+                "file--70469a93-7260-5e78-a601-3437afaa5e58",
+                "file--500ea9a0-c2f9-561f-939e-fad39337ae4f",
+                "file--4b44f19b-f65c-5ebb-aeea-de688995748d",
+                "file--89e4eca9-19b0-5a65-995b-ff9d063ccbc5",
+                "file--9c589253-acfc-5875-be66-5ddfdff55bf7",
+                "file--9419387f-ef82-56ac-965f-3e36bf442cbb",
+                "file--357f9cef-d62d-5ce4-89ba-9bfce552a16a",
+                "file--8171f0af-d629-5f68-a71e-aab7a35f56b6",
+                "file--60d4f112-19fd-5ed3-a5b0-e3c75fb9130b",
+                "file--dd01ba86-0e00-5fa6-af5d-cb6f3a0c1a47",
+                "file--abd2a94f-ee60-5b69-8b15-bfdbf9ea80da",
+                "file--c08220be-7e36-55a7-8946-7b54d08bffd8",
+                "file--6ebb27c0-a889-5409-99fc-fbf995d74dfc",
+                "file--cbf198f8-4ba8-5b3e-bef8-92d6e15afa57",
+                "domain-name--2e604da9-69df-5a6e-9686-d7a5f79aa299",
+                "ipv4-addr--c5ed8bb4-47fc-5593-b3a5-0a8df269af31",
+                "network-traffic--bb4ca2f6-628a-5fa2-8763-6234845c24bc",
+                "indicator--55e6ba17-5884-5381-b0f8-332959f1fa7c",
+                "indicator--a7c7a560-fb04-5bc7-b69b-7ed33a8e02ad",
+                "indicator--5948e85c-c2e3-52da-999c-612b0999622b",
+                "indicator--7fdf4634-f6b6-5519-b5d1-e2300dbea84f",
+                "indicator--64802431-709e-56eb-8a82-b4a886fb4aab",
+                "indicator--247f5e9a-1c82-5773-a737-b896a5219030",
+                "indicator--8aedb61d-ea04-50c4-8fa9-8174773ef15d",
+                "indicator--1276f4f0-2073-54be-9305-1a50a768e8a8",
+                "indicator--58d361da-9a43-5f3c-9f79-60731adcab49",
+                "indicator--e257dd5a-059d-57f8-8dae-452ae334da34",
+                "indicator--2a5258c7-113a-5080-9fa9-c66d954da0a2",
+                "indicator--289180ea-6c1a-59cc-9932-574614731d94",
+                "indicator--42456703-b610-53b6-b5b8-d48baa58c45c",
+                "indicator--21dfc7b7-4fec-58e5-8322-fcfa295c4d06",
+                "tool--17d6cd49-7550-50ba-bd10-63c6a0f8d5bb",
+                "tool--4062c0f5-35ef-52eb-afc8-c274e6fb32f3",
+                "tool--752cba10-03c6-542a-9356-5ca4fd44fe32",
+                "tool--6cc29758-722f-5387-90fd-246044f30dca",
+                "tool--1f6fea89-5f20-5ae2-ab9c-186b4dddba00",
+                "tool--25a8a785-c420-58b0-980e-80b346884ae5",
+                "tool--e5f48ee5-cf6b-5dd5-a32c-83afca010172",
+                "tool--03509e98-11d9-53ef-a216-5c1159507981",
+                "tool--40165c4c-bd8b-5287-af66-21eda92be637",
+                "tool--c918c339-69a6-529e-bf89-ce94f477daa3",
+                "tool--006c3294-1a99-5a0d-add2-e4080ea03cea",
+                "tool--8a60d050-d941-53ff-8a96-58388a634e86",
+                "tool--a5e5509b-2832-5af0-b66a-90d63917637a",
+                "tool--ba899355-6ac3-526b-a5ef-334e99480366",
+                "tool--5f60ad2f-22c4-53e7-bbf2-bfb2eaabd383",
+                "tool--692cef97-05cd-5e3d-8ae5-9d9761052626",
+                "tool--dfebeb0d-b942-5b0c-ae4a-1664f0bfd090",
+                "tool--fe3d473e-d448-552d-afb6-e5de6e75a179",
+                "tool--38a6b001-d1bc-5269-bdbc-3d4ce448f4c5",
+                "tool--6f267f8a-a14b-5150-99ee-af3b4c6dc6b7",
+                "tool--9738a815-c177-577e-983c-59bead798dda",
+                "tool--7a4b8d37-3b8e-55ad-bb56-eeb0b264b6ff",
+                "tool--9f418ced-7109-5dde-b54b-74c674af5a63",
+                "tool--78d518b6-c185-54df-8fc0-699be9aa55c4",
+                "tool--b1f5c8fd-24d4-5657-89aa-0623c742c7e5",
+                "tool--d0bc85ed-22d7-591c-88cf-a6eadd3e114e",
+                "tool--5ec5171c-cb59-520e-8e64-b03dad32cb46",
+                "attack-pattern--6214841b-936d-5da2-b5c8-4bed4cf9aee0",
+                "attack-pattern--a387d13a-29dd-5f80-a6ce-f062cb324db3",
+                "attack-pattern--be0beb0c-2499-5178-a012-309e486ef121",
+                "attack-pattern--e2996cd1-1d5a-52e2-97bd-f24a7b8f02aa",
+                "attack-pattern--99faa775-7366-5b35-9527-17f7643bc506",
+                "attack-pattern--44bf0bb6-4445-5791-9daa-2c0a12978bf7",
+                "attack-pattern--4c8a2c8e-7edd-5841-b747-edf536e3797d",
+                "attack-pattern--81ac1dd0-a8ac-50ba-bd1a-cec2886340d5",
+                "attack-pattern--4efef37e-c256-5987-a1b8-60d9424c7250",
+                "attack-pattern--5d52a307-2bd5-508d-851f-5b2b85a514f6",
+                "attack-pattern--06cbe52b-abcb-5b54-a3ec-c553a82c7374",
+                "attack-pattern--87b8e72a-5437-59a8-a6a9-16f846415a26",
+                "infrastructure--c0c31784-931f-5058-94bb-07ba805a4ca3"
+            ],
+            "labels": [
+                "Open Dir",
+                "AI Abuse",
+                "C2",
+                "Cred Theft"
+            ],
+            "external_references": [
+                {
+                    "source_name": "The Hunters Ledger",
+                    "url": "https://the-hunters-ledger.com/reports/inv-2026-082-agent-platform-command-channel/"
+                }
+            ],
+            "object_marking_refs": [
+                "marking-definition--613f2e26-407d-48c7-9eca-b8e91df99dc9"
+            ]
+        }
+    ]
+}

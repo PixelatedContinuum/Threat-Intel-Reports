@@ -6832,6 +6832,641 @@
     - type: "domain"
       value: "fr.bastaniqifi.ir"
       context: "Passive DNS (VirusTotal) shows an A record from this name to the case IP, TTL 300, last modified 2026-10-07, inside a set of country-labelled .ir hostnames that all point to different hosts and look like a VPN or proxy node fleet. A scan-history export scoped to the apex domain did not show the record, which neither confirms nor contradicts the passive-DNS result; Whether the workbench operator runs that fleet, rents a node in it or only shares an address with it is not established: LOW as a link to the operator. The directory on :8000 was first seen 2026-09-26. The record's first appearance is not known; its last-modified date is 7 October 2026. The address has had other tenants. Context only, do not block."
+"inv-2026-082-agent-platform-command-channel":
+  slug: "inv-2026-082-agent-platform-command-channel"
+  page_url: "/ioc-feeds/inv-2026-082-agent-platform-command-channel/"
+  title: "A Threat Actor Configured an Enterprise AI-Agent Platform as a Command and Relay Channel"
+  date: "2026-11-15"
+  severity: "high"
+  feed_url: "/ioc-feeds/inv-2026-082-agent-platform-command-channel-iocs.json"
+  report_url: "/reports/inv-2026-082-agent-platform-command-channel/"
+  detection_url: "/hunting-detections/inv-2026-082-detections"
+  total: 100
+  untyped: 28
+  counts:
+    domain: 2
+    endpoint: 3
+    filename: 26
+    ipv4: 1
+    path: 1
+    pattern: 10
+    sha256: 27
+    url: 30
+  has_confidence: true
+  has_action: true
+  has_fp_risk: false
+  rows:
+    - type: "ipv4"
+      value: "198.44.116.69"
+      context: "Single operator-owned host in the corpus (infrastructure.md section 1, item 1). Logged activity 2026-10-30 09:52Z to 2026-10-31 12:13Z; the time zone of the http.server logs is MODERATE. WHOIS for 198.44.116.0/24 names Hostwinds LLC while Vantage and VirusTotal show another AS owner label; the abuse contact was not checked. Commercial hosting: the address can be reassigned, so time-box any block."
+      confidence: "HIGH"
+      action: "BLOCK"
+      fp_risk: null
+    - type: "domain"
+      value: "198-44-116-69.sslip.io"
+      context: "Resolves only to the operator VPS."
+      confidence: "HIGH"
+      action: "BLOCK"
+      fp_risk: null
+    - type: "domain"
+      value: "198.44.116.69.sslip.io"
+      context: "Resolves only to the operator VPS."
+      confidence: "MODERATE"
+      action: "BLOCK"
+      fp_risk: null
+    - type: "endpoint"
+      value: "inject2.py:10"
+      context: "Fake-LLM endpoint port used as agent baseUrl"
+      confidence: "MODERATE"
+      action: null
+      fp_risk: null
+    - type: "endpoint"
+      value: "nr.py:14"
+      context: "One-off download endpoint (n)"
+      confidence: "LOW"
+      action: null
+      fp_risk: null
+    - type: "endpoint"
+      value: "pk.py:12"
+      context: "Scanner binary download from the reverse-SOCKS link port"
+      confidence: "MODERATE"
+      action: "BLOCK"
+      fp_risk: null
+    - type: "url"
+      value: "http://198-44-116-69.sslip.io:9011/hb.py"
+      context: "Same worker download addressed by the sslip.io name"
+      confidence: "HIGH"
+      action: "BLOCK"
+      fp_risk: null
+    - type: "url"
+      value: "http://198-44-116-69.sslip.io:9011/r.py"
+      context: "Relay launcher by the sslip.io name"
+      confidence: "MODERATE"
+      action: "BLOCK"
+      fp_risk: null
+    - type: "url"
+      value: "http://198.44.116.69/notes.txt"
+      context: "Self-test file in the open directory root (first line of sink.log and sink80.log)"
+      confidence: "HIGH"
+      action: "BLOCK"
+      fp_risk: null
+    - type: "url"
+      value: "http://198.44.116.69:19611/b.py"
+      context: "MCP plant payload URL (b.py is not held; its class is hb.py)"
+      confidence: "HIGH"
+      action: "BLOCK"
+      fp_risk: null
+    - type: "url"
+      value: "http://198.44.116.69:8088/hb.py"
+      context: "Worker fetched from the 8088 sink by an urllib client 2026-10-30 10:55:37Z"
+      confidence: "HIGH"
+      action: "BLOCK"
+      fp_risk: null
+    - type: "url"
+      value: "http://198.44.116.69:8088/mcp"
+      context: "MCP-shaped path on the sink port"
+      confidence: "LOW"
+      action: "BLOCK"
+      fp_risk: null
+    - type: "url"
+      value: "http://198.44.116.69:8088/sse"
+      context: "MCP-shaped path on the sink port"
+      confidence: "LOW"
+      action: "BLOCK"
+      fp_risk: null
+    - type: "url"
+      value: "http://198.44.116.69:8444/v1"
+      context: "Scripted LLM endpoint as agent baseUrl"
+      confidence: "MODERATE"
+      action: "BLOCK"
+      fp_risk: null
+    - type: "url"
+      value: "http://198.44.116.69:8445/v1"
+      context: "Scripted LLM endpoint as agent baseUrl"
+      confidence: "MODERATE"
+      action: "BLOCK"
+      fp_risk: null
+    - type: "url"
+      value: "http://198.44.116.69:8460/pxmcp.py"
+      context: "Pod-side MCP worker download (not held)"
+      confidence: "LOW"
+      action: "BLOCK"
+      fp_risk: null
+    - type: "url"
+      value: "http://198.44.116.69:8460/pxmcp2.py"
+      context: "Pod-side MCP worker with reverse relay download"
+      confidence: "MODERATE"
+      action: "BLOCK"
+      fp_risk: null
+    - type: "url"
+      value: "http://198.44.116.69:8460/pxpod.py"
+      context: "Pod-side worker download from the front port (not held)"
+      confidence: "MODERATE"
+      action: "BLOCK"
+      fp_risk: null
+    - type: "url"
+      value: "http://198.44.116.69:8460/v1"
+      context: "Scripted LLM endpoint used as agent llm.baseUrl"
+      confidence: "HIGH"
+      action: "BLOCK"
+      fp_risk: null
+    - type: "url"
+      value: "http://198.44.116.69:8686/r"
+      context: "Relay download"
+      confidence: "LOW"
+      action: "BLOCK"
+      fp_risk: null
+    - type: "url"
+      value: "http://198.44.116.69:8899/gl_check.py"
+      context: "Source-control login check script download"
+      confidence: "MODERATE"
+      action: "BLOCK"
+      fp_risk: null
+    - type: "url"
+      value: "http://198.44.116.69:8901/z.py"
+      context: "Source-control API check script download"
+      confidence: "LOW"
+      action: "BLOCK"
+      fp_risk: null
+    - type: "url"
+      value: "http://198.44.116.69:8902/v1"
+      context: "Scripted LLM endpoint as agent baseUrl"
+      confidence: "MODERATE"
+      action: "BLOCK"
+      fp_risk: null
+    - type: "url"
+      value: "http://198.44.116.69:8903/n"
+      context: "One-off download"
+      confidence: "LOW"
+      action: "BLOCK"
+      fp_risk: null
+    - type: "url"
+      value: "http://198.44.116.69:9011/e2.py"
+      context: "Agent chat retry script download"
+      confidence: "MODERATE"
+      action: "BLOCK"
+      fp_risk: null
+    - type: "url"
+      value: "http://198.44.116.69:9011/fscan"
+      context: "Scanner binary download (stock fscan; the URL is the operator's)"
+      confidence: "HIGH"
+      action: "BLOCK"
+      fp_risk: null
+    - type: "url"
+      value: "http://198.44.116.69:9011/gogo"
+      context: "Scanner binary download (stock gogo; the URL is the operator's)"
+      confidence: "HIGH"
+      action: "BLOCK"
+      fp_risk: null
+    - type: "url"
+      value: "http://198.44.116.69:9011/hb.py"
+      context: "Reverse SOCKS worker download"
+      confidence: "HIGH"
+      action: "BLOCK"
+      fp_risk: null
+    - type: "url"
+      value: "http://198.44.116.69:9011/hb2.py"
+      context: "Worker download (second revision name; not held)"
+      confidence: "LOW"
+      action: "BLOCK"
+      fp_risk: null
+    - type: "url"
+      value: "http://198.44.116.69:9011/muxpod.py"
+      context: "Pod-side worker pool download"
+      confidence: "MODERATE"
+      action: "BLOCK"
+      fp_risk: null
+    - type: "url"
+      value: "http://198.44.116.69:9011/pa.py"
+      context: "Helper start script download"
+      confidence: "MODERATE"
+      action: "BLOCK"
+      fp_risk: null
+    - type: "url"
+      value: "http://198.44.116.69:9011/r.py"
+      context: "Relay launcher download (not held)"
+      confidence: "MODERATE"
+      action: "BLOCK"
+      fp_risk: null
+    - type: "url"
+      value: "http://198.44.116.69:9012/up"
+      context: "Upload test endpoint (POST)"
+      confidence: "MODERATE"
+      action: "BLOCK"
+      fp_risk: null
+    - type: "url"
+      value: "http://198.44.116.69:9020/boot.sh"
+      context: "In-pod bootstrap download"
+      confidence: "MODERATE"
+      action: "BLOCK"
+      fp_risk: null
+    - type: "url"
+      value: "http://198.44.116.69:9100/gogo"
+      context: "Scanner binary download from the reverse-SOCKS link port"
+      confidence: "MODERATE"
+      action: "BLOCK"
+      fp_risk: null
+    - type: "url"
+      value: "http://198.44.116.69:9443/v1"
+      context: "Scripted LLM endpoint as agent baseUrl"
+      confidence: "MODERATE"
+      action: "BLOCK"
+      fp_risk: null
+    - type: "sha256"
+      value: "039c18e9f936d5f8608a22a05f5964da5f64c9c1edc8441282b373414aa4a269"
+      context: "operator-built: tunnel"
+      confidence: "MODERATE"
+      action: "ALERT"
+      fp_risk: null
+    - type: "sha256"
+      value: "044569af53a71ab8df28ceb5633cc657d4d19034527821c7b98a8dbb1205c480"
+      context: "operator-built: receiver"
+      confidence: "HIGH"
+      action: "BLOCK"
+      fp_risk: null
+    - type: "sha256"
+      value: "1f1f28ec7e2aa6823db107acfd06ff70a3e2f3963e644b0b879d706a77756e59"
+      context: "operator-built: door-platform"
+      confidence: "MODERATE"
+      action: "BLOCK"
+      fp_risk: null
+    - type: "sha256"
+      value: "3e18453f832f4999a8bc0a70d86dde1e7db9758f36660c403de0b99b419c59da"
+      context: "Reverse SOCKS or tunnel worker that runs in the victim pod and dials the operator relay"
+      confidence: "HIGH"
+      action: "BLOCK"
+      fp_risk: null
+    - type: "sha256"
+      value: "53dbc1254deae948749fd3aaae86391769e0e77dfe1a6e92e62a61102af6edc8"
+      context: "Receive-only HTTP sink the pod POSTs files to; stores uploads in a pull folder"
+      confidence: "HIGH"
+      action: "BLOCK"
+      fp_risk: null
+    - type: "sha256"
+      value: "5754b27c7321b0d4644a14004a8e87de5f50fa06c7787bc241bed2be691beef6"
+      context: "operator-built: mcp-plant"
+      confidence: "HIGH"
+      action: "BLOCK"
+      fp_risk: null
+    - type: "sha256"
+      value: "581a23e39ad6e78e5313a1445cc337168158f1a9f454528cc0613f97143d5647"
+      context: "Reverse SOCKS or tunnel worker that runs in the victim pod and dials the operator relay"
+      confidence: "HIGH"
+      action: "BLOCK"
+      fp_risk: null
+    - type: "sha256"
+      value: "59c3bd56abea1000de558ffd21845757689311cf61f00e9dac23dca593914ffe"
+      context: "operator-built: relay-server"
+      confidence: "HIGH"
+      action: "BLOCK"
+      fp_risk: null
+    - type: "sha256"
+      value: "67b4214af357420abb3b61e954dd2507c56cc45eaf89238d16fb6c9e51245349"
+      context: "operator-built: scripted-llm"
+      confidence: "HIGH"
+      action: "BLOCK"
+      fp_risk: null
+    - type: "sha256"
+      value: "6f8ff1b3fc55c4daf033f66ee6a71fc8d3d71ffa532e196a18cca6c977c4f953"
+      context: "operator-built: mcp-plant"
+      confidence: "HIGH"
+      action: "BLOCK"
+      fp_risk: null
+    - type: "sha256"
+      value: "76773e6b1932ed53cb61e78b2f9db9488facab9c2b0904123936e14144b9cd92"
+      context: "operator-built: scripted-llm"
+      confidence: "HIGH"
+      action: "BLOCK"
+      fp_risk: null
+    - type: "sha256"
+      value: "76d901ac74f377e8dc2e307407ab4b1125e90ecae828dbfa8a67ebd19a4e2f85"
+      context: "Reverse SOCKS or tunnel worker that runs in the victim pod and dials the operator relay"
+      confidence: "HIGH"
+      action: "BLOCK"
+      fp_risk: null
+    - type: "sha256"
+      value: "896146dc951bc0483ecf360509cf56aa50ce399cdea05f30eec6100895ec53d7"
+      context: "Stages or fetches an operator script into the agent workspace and starts it"
+      confidence: "MODERATE"
+      action: "BLOCK"
+      fp_risk: null
+    - type: "sha256"
+      value: "a5853acd955f3aa3d477e43fc58ae474895bb1ed8346491ed3227c31ff710dbd"
+      context: "operator-built: relay-server"
+      confidence: "HIGH"
+      action: "BLOCK"
+      fp_risk: null
+    - type: "sha256"
+      value: "b660141d80bcc05457e881e2db687120677473c8d43c62b26c2c413fbd50b885"
+      context: "operator-built: mcp-plant"
+      confidence: "HIGH"
+      action: "BLOCK"
+      fp_risk: null
+    - type: "sha256"
+      value: "bc9af45cf803d508affe503ba8b48350ba6bce5aca203b70ecb231bdf6d7676b"
+      context: "operator-built: receiver"
+      confidence: "HIGH"
+      action: "BLOCK"
+      fp_risk: null
+    - type: "sha256"
+      value: "bce9a7471be71f18d8a7af65581c70be82024f17db0bc8dd4d72e3a436ec55c4"
+      context: "Reverse SOCKS or tunnel worker that runs in the victim pod and dials the operator relay"
+      confidence: "HIGH"
+      action: "BLOCK"
+      fp_risk: null
+    - type: "sha256"
+      value: "c62479d5f62165fd6a936ce90bbc43eb550e12007410e7b839bd511d32b469d1"
+      context: "operator-built: relay-server"
+      confidence: "HIGH"
+      action: "BLOCK"
+      fp_risk: null
+    - type: "sha256"
+      value: "d08901561f5f60d5b1dccc6847f00e6a8cc474e6fae8351df05494d6e58b235a"
+      context: "operator-built: scripted-llm"
+      confidence: "HIGH"
+      action: "BLOCK"
+      fp_risk: null
+    - type: "sha256"
+      value: "da6300c4289d32d402fa6e3df1673aed602aab1e4d1388263f18138015b7e714"
+      context: "Reverse SOCKS or tunnel worker that runs in the victim pod and dials the operator relay"
+      confidence: "HIGH"
+      action: "BLOCK"
+      fp_risk: null
+    - type: "sha256"
+      value: "dd510773f7aecf667ee465e1e04e8a576cc4e206fa9b1bb364590120a3b882e8"
+      context: "operator-built: scripted-llm"
+      confidence: "HIGH"
+      action: "BLOCK"
+      fp_risk: null
+    - type: "sha256"
+      value: "dfd7e80ed0a03ad9f6b38c1db782c6c88d4877829696eeecb097d9979aa64391"
+      context: "operator-built: relay-server"
+      confidence: "HIGH"
+      action: "BLOCK"
+      fp_risk: null
+    - type: "sha256"
+      value: "dff6b8c293aac57fc786fa4a662bdd96c2b0b811eb6b7738ad2330aa517afe39"
+      context: "operator-built: mcp-plant"
+      confidence: "HIGH"
+      action: "BLOCK"
+      fp_risk: null
+    - type: "sha256"
+      value: "e47ad08bd023f2894d539b4b7290b07608efbc85a2d73d623981a1bf1869917e"
+      context: "Stages or fetches an operator script into the agent workspace and starts it"
+      confidence: "MODERATE"
+      action: "BLOCK"
+      fp_risk: null
+    - type: "sha256"
+      value: "e4d7f354ac8a60e72c5e79557559b30b8b8e397723b2ef4ccc1507e9722d5b01"
+      context: "Reverse SOCKS or tunnel worker that runs in the victim pod and dials the operator relay"
+      confidence: "HIGH"
+      action: "BLOCK"
+      fp_risk: null
+    - type: "sha256"
+      value: "f66ae5e83328255b4e5e8bf99ac948e9f2dfdf9960b88906b4f40b65ef1bb0ee"
+      context: "operator-built: scripted-llm"
+      confidence: "HIGH"
+      action: "BLOCK"
+      fp_risk: null
+    - type: "sha256"
+      value: "f8fd837161666ec604a548624fed1d243cc14f04b4acaeb6e95ab970d22a7ae6"
+      context: "operator-built: door-platform"
+      confidence: "MODERATE"
+      action: "BLOCK"
+      fp_risk: null
+    - type: "path"
+      value: "/tmp/.hb.py"
+      context: "Where the planted MCP command writes the downloaded worker"
+      confidence: "MODERATE"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "axllm.py"
+      context: "operator-built: scripted-llm"
+      confidence: "HIGH"
+      action: "BLOCK"
+      fp_risk: null
+    - type: "filename"
+      value: "boot.py"
+      context: "Stages or fetches an operator script into the agent workspace and starts it"
+      confidence: "MODERATE"
+      action: "BLOCK"
+      fp_risk: null
+    - type: "filename"
+      value: "cfgrelay.py"
+      context: "Reverse SOCKS or tunnel worker that runs in the victim pod and dials the operator relay"
+      confidence: "HIGH"
+      action: "BLOCK"
+      fp_risk: null
+    - type: "filename"
+      value: "chisel"
+      context: "operator-built: tunnel"
+      confidence: "MODERATE"
+      action: "ALERT"
+      fp_risk: null
+    - type: "filename"
+      value: "deployhb.py"
+      context: "Stages or fetches an operator script into the agent workspace and starts it"
+      confidence: "MODERATE"
+      action: "BLOCK"
+      fp_risk: null
+    - type: "filename"
+      value: "front.py"
+      context: "operator-built: relay-server"
+      confidence: "HIGH"
+      action: "BLOCK"
+      fp_risk: null
+    - type: "filename"
+      value: "hb.py"
+      context: "Reverse SOCKS or tunnel worker that runs in the victim pod and dials the operator relay"
+      confidence: "HIGH"
+      action: "BLOCK"
+      fp_risk: null
+    - type: "filename"
+      value: "hitrecv.py"
+      context: "operator-built: receiver"
+      confidence: "HIGH"
+      action: "BLOCK"
+      fp_risk: null
+    - type: "filename"
+      value: "mcp_plant.py"
+      context: "operator-built: mcp-plant"
+      confidence: "HIGH"
+      action: "BLOCK"
+      fp_risk: null
+    - type: "filename"
+      value: "mp2.py"
+      context: "operator-built: mcp-plant"
+      confidence: "HIGH"
+      action: "BLOCK"
+      fp_risk: null
+    - type: "filename"
+      value: "mp3.py"
+      context: "operator-built: mcp-plant"
+      confidence: "HIGH"
+      action: "BLOCK"
+      fp_risk: null
+    - type: "filename"
+      value: "muxpod.py"
+      context: "Reverse SOCKS or tunnel worker that runs in the victim pod and dials the operator relay"
+      confidence: "HIGH"
+      action: "BLOCK"
+      fp_risk: null
+    - type: "filename"
+      value: "muxsrv.py"
+      context: "operator-built: relay-server"
+      confidence: "HIGH"
+      action: "BLOCK"
+      fp_risk: null
+    - type: "filename"
+      value: "muxsrv8.py (also held as relay9111.py, same bytes)"
+      context: "operator-built: relay-server"
+      confidence: "HIGH"
+      action: "BLOCK"
+      fp_risk: null
+    - type: "filename"
+      value: "mxpod.py"
+      context: "Reverse SOCKS or tunnel worker that runs in the victim pod and dials the operator relay"
+      confidence: "HIGH"
+      action: "BLOCK"
+      fp_risk: null
+    - type: "filename"
+      value: "mxpod2.py"
+      context: "Reverse SOCKS or tunnel worker that runs in the victim pod and dials the operator relay"
+      confidence: "HIGH"
+      action: "BLOCK"
+      fp_risk: null
+    - type: "filename"
+      value: "my_llm.py"
+      context: "operator-built: scripted-llm"
+      confidence: "HIGH"
+      action: "BLOCK"
+      fp_risk: null
+    - type: "filename"
+      value: "own_llm.py"
+      context: "operator-built: scripted-llm"
+      confidence: "HIGH"
+      action: "BLOCK"
+      fp_risk: null
+    - type: "filename"
+      value: "own_llm3.py"
+      context: "operator-built: scripted-llm"
+      confidence: "HIGH"
+      action: "BLOCK"
+      fp_risk: null
+    - type: "filename"
+      value: "own_llm4.py"
+      context: "operator-built: scripted-llm"
+      confidence: "HIGH"
+      action: "BLOCK"
+      fp_risk: null
+    - type: "filename"
+      value: "prism_login.py"
+      context: "operator-built: door-platform"
+      confidence: "MODERATE"
+      action: "BLOCK"
+      fp_risk: null
+    - type: "filename"
+      value: "pxmcp2.py"
+      context: "Reverse SOCKS or tunnel worker that runs in the victim pod and dials the operator relay"
+      confidence: "HIGH"
+      action: "BLOCK"
+      fp_risk: null
+    - type: "filename"
+      value: "revsocks_vps.py"
+      context: "operator-built: relay-server"
+      confidence: "HIGH"
+      action: "BLOCK"
+      fp_risk: null
+    - type: "filename"
+      value: "sink.py"
+      context: "Receive-only HTTP sink the pod POSTs files to; stores uploads in a pull folder"
+      confidence: "HIGH"
+      action: "BLOCK"
+      fp_risk: null
+    - type: "filename"
+      value: "vps_serve.py"
+      context: "operator-built: receiver"
+      confidence: "HIGH"
+      action: "BLOCK"
+      fp_risk: null
+    - type: "filename"
+      value: "wt.py"
+      context: "operator-built: mcp-plant"
+      confidence: "HIGH"
+      action: "BLOCK"
+      fp_risk: null
+    - type: "pattern"
+      value: "diag"
+      context: null
+      confidence: "LOW"
+      action: "HUNT"
+      fp_risk: null
+    - type: "pattern"
+      value: "diag-kp"
+      context: "Operator-chosen key pair name in akperm2.py; no held output."
+      confidence: "MODERATE"
+      action: "HUNT"
+      fp_risk: null
+    - type: "pattern"
+      value: "llm.baseUrl in config.json pointing at an address not in the platform model catalogue"
+      context: null
+      confidence: "HIGH"
+      action: "HUNT"
+      fp_risk: null
+    - type: "pattern"
+      value: "mcpServers[].command containing 'python3 -c' that downloads from 198.44.116.69 or bore.pub"
+      context: null
+      confidence: "HIGH"
+      action: "HUNT"
+      fp_risk: null
+    - type: "pattern"
+      value: "poc-agent"
+      context: "Private agent name created through the config service (rearm2.py:11)."
+      confidence: "HIGH"
+      action: "HUNT"
+      fp_risk: null
+    - type: "pattern"
+      value: "probe-20261030"
+      context: "Operator-chosen snapshot name in the write-authorisation probes; no held output."
+      confidence: "MODERATE"
+      action: "HUNT"
+      fp_risk: null
+    - type: "pattern"
+      value: "probe-authz-check"
+      context: null
+      confidence: "MODERATE"
+      action: "HUNT"
+      fp_risk: null
+    - type: "pattern"
+      value: "probe-import-20261030"
+      context: "Operator-chosen key pair name for an import call with no held output."
+      confidence: "MODERATE"
+      action: "HUNT"
+      fp_risk: null
+    - type: "pattern"
+      value: "probe-kp-20261030"
+      context: "Operator-chosen key pair name for a create call with no held output."
+      confidence: "MODERATE"
+      action: "HUNT"
+      fp_risk: null
+    - type: "pattern"
+      value: "rx-<epoch>"
+      context: null
+      confidence: "HIGH"
+      action: "HUNT"
+      fp_risk: null
+  never_block_total: 3
+  never_block_rows:
+    - type: "ipv4"
+      value: "159.223.110.159"
+      context: "Hard-coded as the tunnel host in mxpod.py, muxpod.py, mxpod2.py, mcpx.py and pod_gogo.py. VirusTotal rates it 16 of 92 engines malicious because of bore abuse by many users. Not an operator server and not a second party (HIGH)."
+    - type: "domain"
+      value: "bore.pub"
+      context: "The operator runs the bore client on the VPS and in the pod and publishes local ports at bore.pub:<port>. The operator's fixed port is 1811 (claim1811.sh, take1811.sh; about 35 scripts). Other remote ports are random assignments per session. Blocking the host takes out every other bore user; hunt for it, do not feed it to a blocklist."
+    - type: "endpoint"
+      value: "bore.pub:1811"
+      context: "A host:port on a third-party server. Useful to find in egress logs or agent baseUrl values; the port alone is not a block on bore.pub. Agent configs whose llm.baseUrl or MCP command points here are the operator's."
 "kaido-quasar-rat":
   slug: "kaido-quasar-rat"
   page_url: "/ioc-feeds/kaido-quasar-rat/"

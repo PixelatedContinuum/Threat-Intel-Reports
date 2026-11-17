@@ -1,11 +1,11 @@
 {
- "generated_at": "2026-11-17T13:55:57Z",
+ "generated_at": "2026-11-18T13:40:00Z",
  "counts": {
-  "indicators": 2073,
-  "reports": 61,
+  "indicators": 2149,
+  "reports": 62,
   "multi_report": 147,
   "suppressed_benign": 113,
-  "never_block": 135
+  "never_block": 137
  },
  "coverage": {
   "indexed": [
@@ -40,6 +40,7 @@
    "gotenberg-rce-cryptomining-107-175-69-137-iocs.json",
    "inkognito-russian-vpn-phishing-185-221-196-118-20260516-iocs.json",
    "inv-2026-080-cyberstrike-ad-workbench-iocs.json",
+   "inv-2026-082-agent-platform-command-channel-iocs.json",
    "kaido-quasar-rat-iocs.json",
    "korean-claude-openclaw-221.150.15.104-iocs.json",
    "malware-analysis-houselet.json",
@@ -72,7 +73,6 @@
    "webshells-to-the-cloud.json"
   ],
   "embargoed": [
-   "inv-2026-082-agent-platform-command-channel-iocs.json",
    "inv-2026-083-federal-ad-credential-access-rig-iocs.json",
    "opendirectory-169-58-165-63-ad-intrusion-vs-pakistani-university-20261116-iocs.json"
   ],
@@ -328,6 +328,14 @@
    "report_url": "/reports/inv-2026-080-cyberstrike-ad-workbench/",
    "detection_url": "/hunting-detections/inv-2026-080-cyberstrike-ad-workbench-detections",
    "ioc_url": "/ioc-feeds/inv-2026-080-cyberstrike-ad-workbench-iocs.json"
+  },
+  "inv-2026-082-agent-platform-command-channel": {
+   "title": "A Threat Actor Configured an Enterprise AI-Agent Platform as a Command and Relay Channel",
+   "date": "2026-11-15",
+   "severity": "high",
+   "report_url": "/reports/inv-2026-082-agent-platform-command-channel/",
+   "detection_url": "/hunting-detections/inv-2026-082-detections",
+   "ioc_url": "/ioc-feeds/inv-2026-082-agent-platform-command-channel-iocs.json"
   },
   "kaido-quasar-rat": {
    "title": "KAIDO: A Brazilian Quasar-Fork RAT with Hidden-Desktop Session Hijacking",
@@ -4953,6 +4961,462 @@
    {
     "report": "inv-2026-080-cyberstrike-ad-workbench",
     "role": "Vultr (The Constant Company, AS20473) commercial hosting address in 199.247.0.0/19. Caveats before blocking: the address served unrelated tenants in 2019 to 2021 and 2023 to 2024, and whether the operator rented this instance or compromised it is INSUFFICIENT, so a block can fall on an innocent owner or a future tenant; time-box any block and re-check the address first. Ports 8081 (HTTP 404 on 2026-10-07) and 8090 (tool staging: chisel, dnsplugin.dll) also seen."
+   }
+  ],
+  "sha256:53dbc1254deae948749fd3aaae86391769e0e77dfe1a6e92e62a61102af6edc8": [
+   {
+    "report": "inv-2026-082-agent-platform-command-channel",
+    "role": "Receive-only HTTP sink the pod POSTs files to; stores uploads in a pull folder"
+   }
+  ],
+  "domain:sink.py": [
+   {
+    "report": "inv-2026-082-agent-platform-command-channel",
+    "role": "Receive-only HTTP sink the pod POSTs files to; stores uploads in a pull folder"
+   }
+  ],
+  "sha256:044569af53a71ab8df28ceb5633cc657d4d19034527821c7b98a8dbb1205c480": [
+   {
+    "report": "inv-2026-082-agent-platform-command-channel",
+    "role": "operator-built: receiver"
+   }
+  ],
+  "sha256:bc9af45cf803d508affe503ba8b48350ba6bce5aca203b70ecb231bdf6d7676b": [
+   {
+    "report": "inv-2026-082-agent-platform-command-channel",
+    "role": "operator-built: receiver"
+   }
+  ],
+  "domain:hitrecv.py": [
+   {
+    "report": "inv-2026-082-agent-platform-command-channel",
+    "role": "operator-built: receiver"
+   }
+  ],
+  "sha256:b660141d80bcc05457e881e2db687120677473c8d43c62b26c2c413fbd50b885": [
+   {
+    "report": "inv-2026-082-agent-platform-command-channel",
+    "role": "operator-built: mcp-plant"
+   }
+  ],
+  "sha256:6f8ff1b3fc55c4daf033f66ee6a71fc8d3d71ffa532e196a18cca6c977c4f953": [
+   {
+    "report": "inv-2026-082-agent-platform-command-channel",
+    "role": "operator-built: mcp-plant"
+   }
+  ],
+  "domain:mp2.py": [
+   {
+    "report": "inv-2026-082-agent-platform-command-channel",
+    "role": "operator-built: mcp-plant"
+   }
+  ],
+  "sha256:5754b27c7321b0d4644a14004a8e87de5f50fa06c7787bc241bed2be691beef6": [
+   {
+    "report": "inv-2026-082-agent-platform-command-channel",
+    "role": "operator-built: mcp-plant"
+   }
+  ],
+  "domain:mp3.py": [
+   {
+    "report": "inv-2026-082-agent-platform-command-channel",
+    "role": "operator-built: mcp-plant"
+   }
+  ],
+  "sha256:dff6b8c293aac57fc786fa4a662bdd96c2b0b811eb6b7738ad2330aa517afe39": [
+   {
+    "report": "inv-2026-082-agent-platform-command-channel",
+    "role": "operator-built: mcp-plant"
+   }
+  ],
+  "domain:wt.py": [
+   {
+    "report": "inv-2026-082-agent-platform-command-channel",
+    "role": "operator-built: mcp-plant"
+   }
+  ],
+  "sha256:d08901561f5f60d5b1dccc6847f00e6a8cc474e6fae8351df05494d6e58b235a": [
+   {
+    "report": "inv-2026-082-agent-platform-command-channel",
+    "role": "operator-built: scripted-llm"
+   }
+  ],
+  "sha256:76773e6b1932ed53cb61e78b2f9db9488facab9c2b0904123936e14144b9cd92": [
+   {
+    "report": "inv-2026-082-agent-platform-command-channel",
+    "role": "operator-built: scripted-llm"
+   }
+  ],
+  "domain:axllm.py": [
+   {
+    "report": "inv-2026-082-agent-platform-command-channel",
+    "role": "operator-built: scripted-llm"
+   }
+  ],
+  "sha256:67b4214af357420abb3b61e954dd2507c56cc45eaf89238d16fb6c9e51245349": [
+   {
+    "report": "inv-2026-082-agent-platform-command-channel",
+    "role": "operator-built: scripted-llm"
+   }
+  ],
+  "sha256:dd510773f7aecf667ee465e1e04e8a576cc4e206fa9b1bb364590120a3b882e8": [
+   {
+    "report": "inv-2026-082-agent-platform-command-channel",
+    "role": "operator-built: scripted-llm"
+   }
+  ],
+  "sha256:f66ae5e83328255b4e5e8bf99ac948e9f2dfdf9960b88906b4f40b65ef1bb0ee": [
+   {
+    "report": "inv-2026-082-agent-platform-command-channel",
+    "role": "operator-built: scripted-llm"
+   }
+  ],
+  "sha256:76d901ac74f377e8dc2e307407ab4b1125e90ecae828dbfa8a67ebd19a4e2f85": [
+   {
+    "report": "inv-2026-082-agent-platform-command-channel",
+    "role": "Reverse SOCKS or tunnel worker that runs in the victim pod and dials the operator relay"
+   }
+  ],
+  "domain:hb.py": [
+   {
+    "report": "inv-2026-082-agent-platform-command-channel",
+    "role": "Reverse SOCKS or tunnel worker that runs in the victim pod and dials the operator relay"
+   }
+  ],
+  "sha256:e4d7f354ac8a60e72c5e79557559b30b8b8e397723b2ef4ccc1507e9722d5b01": [
+   {
+    "report": "inv-2026-082-agent-platform-command-channel",
+    "role": "Reverse SOCKS or tunnel worker that runs in the victim pod and dials the operator relay"
+   }
+  ],
+  "domain:muxpod.py": [
+   {
+    "report": "inv-2026-082-agent-platform-command-channel",
+    "role": "Reverse SOCKS or tunnel worker that runs in the victim pod and dials the operator relay"
+   }
+  ],
+  "sha256:bce9a7471be71f18d8a7af65581c70be82024f17db0bc8dd4d72e3a436ec55c4": [
+   {
+    "report": "inv-2026-082-agent-platform-command-channel",
+    "role": "Reverse SOCKS or tunnel worker that runs in the victim pod and dials the operator relay"
+   }
+  ],
+  "domain:mxpod.py": [
+   {
+    "report": "inv-2026-082-agent-platform-command-channel",
+    "role": "Reverse SOCKS or tunnel worker that runs in the victim pod and dials the operator relay"
+   }
+  ],
+  "sha256:da6300c4289d32d402fa6e3df1673aed602aab1e4d1388263f18138015b7e714": [
+   {
+    "report": "inv-2026-082-agent-platform-command-channel",
+    "role": "Reverse SOCKS or tunnel worker that runs in the victim pod and dials the operator relay"
+   }
+  ],
+  "domain:mxpod2.py": [
+   {
+    "report": "inv-2026-082-agent-platform-command-channel",
+    "role": "Reverse SOCKS or tunnel worker that runs in the victim pod and dials the operator relay"
+   }
+  ],
+  "sha256:581a23e39ad6e78e5313a1445cc337168158f1a9f454528cc0613f97143d5647": [
+   {
+    "report": "inv-2026-082-agent-platform-command-channel",
+    "role": "Reverse SOCKS or tunnel worker that runs in the victim pod and dials the operator relay"
+   }
+  ],
+  "domain:pxmcp2.py": [
+   {
+    "report": "inv-2026-082-agent-platform-command-channel",
+    "role": "Reverse SOCKS or tunnel worker that runs in the victim pod and dials the operator relay"
+   }
+  ],
+  "sha256:3e18453f832f4999a8bc0a70d86dde1e7db9758f36660c403de0b99b419c59da": [
+   {
+    "report": "inv-2026-082-agent-platform-command-channel",
+    "role": "Reverse SOCKS or tunnel worker that runs in the victim pod and dials the operator relay"
+   }
+  ],
+  "domain:cfgrelay.py": [
+   {
+    "report": "inv-2026-082-agent-platform-command-channel",
+    "role": "Reverse SOCKS or tunnel worker that runs in the victim pod and dials the operator relay"
+   }
+  ],
+  "sha256:59c3bd56abea1000de558ffd21845757689311cf61f00e9dac23dca593914ffe": [
+   {
+    "report": "inv-2026-082-agent-platform-command-channel",
+    "role": "operator-built: relay-server"
+   }
+  ],
+  "domain:muxsrv.py": [
+   {
+    "report": "inv-2026-082-agent-platform-command-channel",
+    "role": "operator-built: relay-server"
+   }
+  ],
+  "sha256:dfd7e80ed0a03ad9f6b38c1db782c6c88d4877829696eeecb097d9979aa64391": [
+   {
+    "report": "inv-2026-082-agent-platform-command-channel",
+    "role": "operator-built: relay-server"
+   }
+  ],
+  "sha256:c62479d5f62165fd6a936ce90bbc43eb550e12007410e7b839bd511d32b469d1": [
+   {
+    "report": "inv-2026-082-agent-platform-command-channel",
+    "role": "operator-built: relay-server"
+   }
+  ],
+  "sha256:a5853acd955f3aa3d477e43fc58ae474895bb1ed8346491ed3227c31ff710dbd": [
+   {
+    "report": "inv-2026-082-agent-platform-command-channel",
+    "role": "operator-built: relay-server"
+   }
+  ],
+  "domain:front.py": [
+   {
+    "report": "inv-2026-082-agent-platform-command-channel",
+    "role": "operator-built: relay-server"
+   }
+  ],
+  "sha256:896146dc951bc0483ecf360509cf56aa50ce399cdea05f30eec6100895ec53d7": [
+   {
+    "report": "inv-2026-082-agent-platform-command-channel",
+    "role": "Stages or fetches an operator script into the agent workspace and starts it"
+   }
+  ],
+  "domain:deployhb.py": [
+   {
+    "report": "inv-2026-082-agent-platform-command-channel",
+    "role": "Stages or fetches an operator script into the agent workspace and starts it"
+   }
+  ],
+  "sha256:e47ad08bd023f2894d539b4b7290b07608efbc85a2d73d623981a1bf1869917e": [
+   {
+    "report": "inv-2026-082-agent-platform-command-channel",
+    "role": "Stages or fetches an operator script into the agent workspace and starts it"
+   }
+  ],
+  "domain:boot.py": [
+   {
+    "report": "inv-2026-082-agent-platform-command-channel",
+    "role": "Stages or fetches an operator script into the agent workspace and starts it"
+   }
+  ],
+  "sha256:f8fd837161666ec604a548624fed1d243cc14f04b4acaeb6e95ab970d22a7ae6": [
+   {
+    "report": "inv-2026-082-agent-platform-command-channel",
+    "role": "operator-built: door-platform"
+   }
+  ],
+  "sha256:1f1f28ec7e2aa6823db107acfd06ff70a3e2f3963e644b0b879d706a77756e59": [
+   {
+    "report": "inv-2026-082-agent-platform-command-channel",
+    "role": "operator-built: door-platform"
+   }
+  ],
+  "sha256:039c18e9f936d5f8608a22a05f5964da5f64c9c1edc8441282b373414aa4a269": [
+   {
+    "report": "inv-2026-082-agent-platform-command-channel",
+    "role": "operator-built: tunnel"
+   }
+  ],
+  "ipv4:198.44.116.69": [
+   {
+    "report": "inv-2026-082-agent-platform-command-channel",
+    "role": "Single operator-owned host in the corpus (infrastructure.md section 1, item 1). Logged activity 2026-10-30 09:52Z to 2026-10-31 12:13Z; the time zone of the http.server logs is MODERATE. WHOIS for 198.44.116.0/24 names Hostwinds LLC while Vantage and VirusTotal show another AS owner label; the abuse contact was not checked. Commercial hosting: the address can be reassigned, so time-box any block."
+   }
+  ],
+  "domain:198-44-116-69.sslip.io": [
+   {
+    "report": "inv-2026-082-agent-platform-command-channel",
+    "role": "Resolves only to the operator VPS."
+   }
+  ],
+  "domain:198.44.116.69.sslip.io": [
+   {
+    "report": "inv-2026-082-agent-platform-command-channel",
+    "role": "Resolves only to the operator VPS."
+   }
+  ],
+  "url:http://198.44.116.69:19611/b.py": [
+   {
+    "report": "inv-2026-082-agent-platform-command-channel",
+    "role": "MCP plant payload URL (b.py is not held; its class is hb.py)"
+   }
+  ],
+  "url:http://198.44.116.69:9011/hb.py": [
+   {
+    "report": "inv-2026-082-agent-platform-command-channel",
+    "role": "Reverse SOCKS worker download"
+   }
+  ],
+  "url:http://198.44.116.69:9011/hb2.py": [
+   {
+    "report": "inv-2026-082-agent-platform-command-channel",
+    "role": "Worker download (second revision name; not held)"
+   }
+  ],
+  "url:http://198.44.116.69:9011/r.py": [
+   {
+    "report": "inv-2026-082-agent-platform-command-channel",
+    "role": "Relay launcher download (not held)"
+   }
+  ],
+  "url:http://198.44.116.69:9011/pa.py": [
+   {
+    "report": "inv-2026-082-agent-platform-command-channel",
+    "role": "Helper start script download"
+   }
+  ],
+  "url:http://198.44.116.69:9011/e2.py": [
+   {
+    "report": "inv-2026-082-agent-platform-command-channel",
+    "role": "Agent chat retry script download"
+   }
+  ],
+  "url:http://198.44.116.69:9011/muxpod.py": [
+   {
+    "report": "inv-2026-082-agent-platform-command-channel",
+    "role": "Pod-side worker pool download"
+   }
+  ],
+  "url:http://198.44.116.69:9011/gogo": [
+   {
+    "report": "inv-2026-082-agent-platform-command-channel",
+    "role": "Scanner binary download (stock gogo; the URL is the operator's)"
+   }
+  ],
+  "url:http://198.44.116.69:9011/fscan": [
+   {
+    "report": "inv-2026-082-agent-platform-command-channel",
+    "role": "Scanner binary download (stock fscan; the URL is the operator's)"
+   }
+  ],
+  "url:http://198.44.116.69:9100/gogo": [
+   {
+    "report": "inv-2026-082-agent-platform-command-channel",
+    "role": "Scanner binary download from the reverse-SOCKS link port"
+   }
+  ],
+  "url:http://198.44.116.69:8460/v1": [
+   {
+    "report": "inv-2026-082-agent-platform-command-channel",
+    "role": "Scripted LLM endpoint used as agent llm.baseUrl"
+   }
+  ],
+  "url:http://198.44.116.69:8902/v1": [
+   {
+    "report": "inv-2026-082-agent-platform-command-channel",
+    "role": "Scripted LLM endpoint as agent baseUrl"
+   }
+  ],
+  "url:http://198.44.116.69:9443/v1": [
+   {
+    "report": "inv-2026-082-agent-platform-command-channel",
+    "role": "Scripted LLM endpoint as agent baseUrl"
+   }
+  ],
+  "url:http://198.44.116.69:8445/v1": [
+   {
+    "report": "inv-2026-082-agent-platform-command-channel",
+    "role": "Scripted LLM endpoint as agent baseUrl"
+   }
+  ],
+  "url:http://198.44.116.69:8444/v1": [
+   {
+    "report": "inv-2026-082-agent-platform-command-channel",
+    "role": "Scripted LLM endpoint as agent baseUrl"
+   }
+  ],
+  "url:http://198.44.116.69:8460/pxpod.py": [
+   {
+    "report": "inv-2026-082-agent-platform-command-channel",
+    "role": "Pod-side worker download from the front port (not held)"
+   }
+  ],
+  "url:http://198.44.116.69:8460/pxmcp.py": [
+   {
+    "report": "inv-2026-082-agent-platform-command-channel",
+    "role": "Pod-side MCP worker download (not held)"
+   }
+  ],
+  "url:http://198.44.116.69:8460/pxmcp2.py": [
+   {
+    "report": "inv-2026-082-agent-platform-command-channel",
+    "role": "Pod-side MCP worker with reverse relay download"
+   }
+  ],
+  "url:http://198.44.116.69:8088/hb.py": [
+   {
+    "report": "inv-2026-082-agent-platform-command-channel",
+    "role": "Worker fetched from the 8088 sink by an urllib client 2026-10-30 10:55:37Z"
+   }
+  ],
+  "url:http://198.44.116.69:8088/mcp": [
+   {
+    "report": "inv-2026-082-agent-platform-command-channel",
+    "role": "MCP-shaped path on the sink port"
+   }
+  ],
+  "url:http://198.44.116.69:8088/sse": [
+   {
+    "report": "inv-2026-082-agent-platform-command-channel",
+    "role": "MCP-shaped path on the sink port"
+   }
+  ],
+  "url:http://198.44.116.69:9012/up": [
+   {
+    "report": "inv-2026-082-agent-platform-command-channel",
+    "role": "Upload test endpoint (POST)"
+   }
+  ],
+  "url:http://198.44.116.69:9020/boot.sh": [
+   {
+    "report": "inv-2026-082-agent-platform-command-channel",
+    "role": "In-pod bootstrap download"
+   }
+  ],
+  "url:http://198.44.116.69:8899/gl_check.py": [
+   {
+    "report": "inv-2026-082-agent-platform-command-channel",
+    "role": "Source-control login check script download"
+   }
+  ],
+  "url:http://198.44.116.69:8901/z.py": [
+   {
+    "report": "inv-2026-082-agent-platform-command-channel",
+    "role": "Source-control API check script download"
+   }
+  ],
+  "url:http://198.44.116.69:8903/n": [
+   {
+    "report": "inv-2026-082-agent-platform-command-channel",
+    "role": "One-off download"
+   }
+  ],
+  "url:http://198.44.116.69:8686/r": [
+   {
+    "report": "inv-2026-082-agent-platform-command-channel",
+    "role": "Relay download"
+   }
+  ],
+  "url:http://198.44.116.69/notes.txt": [
+   {
+    "report": "inv-2026-082-agent-platform-command-channel",
+    "role": "Self-test file in the open directory root (first line of sink.log and sink80.log)"
+   }
+  ],
+  "url:http://198-44-116-69.sslip.io:9011/hb.py": [
+   {
+    "report": "inv-2026-082-agent-platform-command-channel",
+    "role": "Same worker download addressed by the sslip.io name"
+   }
+  ],
+  "url:http://198-44-116-69.sslip.io:9011/r.py": [
+   {
+    "report": "inv-2026-082-agent-platform-command-channel",
+    "role": "Relay launcher by the sslip.io name"
    }
   ],
   "url:http://221.150.15.104:8080/": [
@@ -12960,6 +13424,17 @@
    {
     "report": "inv-2026-080-cyberstrike-ad-workbench",
     "role": "unverified tie (neither shown nor excluded)"
+   }
+  ],
+  "domain:bore.pub": [
+   {
+    "report": "inv-2026-082-agent-platform-command-channel"
+   }
+  ],
+  "ipv4:159.223.110.159": [
+   {
+    "report": "inv-2026-082-agent-platform-command-channel",
+    "role": "third-party: the public A record of bore.pub (DigitalOcean AS14061)"
    }
   ],
   "domain:open.oppomobile.com": [

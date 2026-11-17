@@ -2,7 +2,7 @@
 # ATT&CK tables, _data/detection_attack.yml, _data/actors_index.yml and the
 # catalog. Do NOT edit by hand; re-run the generator. Published sources only.
 attack_version: '19.2'
-max_score: 129
+max_score: 130
 tactics:
   - name: Reconnaissance
     slug: reconnaissance
@@ -51,7 +51,7 @@ tactics:
       - T1608.003
       - T1608.005
     technique_count: 23
-    report_count: 69
+    report_count: 70
     rule_count: 37
   - name: Initial Access
     slug: initial-access
@@ -73,8 +73,8 @@ tactics:
       - T1566.003
       - T1566.004
     technique_count: 16
-    report_count: 50
-    rule_count: 66
+    report_count: 53
+    rule_count: 67
   - name: Execution
     slug: execution
     techniques:
@@ -101,9 +101,10 @@ tactics:
       - T1569.002
       - T1574.001
       - T1574.006
-    technique_count: 23
-    report_count: 132
-    rule_count: 170
+      - T1651
+    technique_count: 24
+    report_count: 135
+    rule_count: 172
   - name: Persistence
     slug: persistence
     techniques:
@@ -140,8 +141,8 @@ tactics:
       - T1554
       - T1653
     technique_count: 32
-    report_count: 113
-    rule_count: 158
+    report_count: 115
+    rule_count: 159
   - name: Privilege Escalation
     slug: privilege-escalation
     techniques:
@@ -183,8 +184,8 @@ tactics:
       - T1548.002
       - T1611
     technique_count: 37
-    report_count: 151
-    rule_count: 183
+    report_count: 153
+    rule_count: 184
   - name: Stealth
     slug: stealth
     techniques:
@@ -252,8 +253,8 @@ tactics:
       - T1622
       - T1684.001
     technique_count: 63
-    report_count: 270
-    rule_count: 259
+    report_count: 273
+    rule_count: 260
   - name: Defense Impairment
     slug: defense-impairment
     techniques:
@@ -312,8 +313,8 @@ tactics:
       - T1606.001
       - T1649
     technique_count: 36
-    report_count: 105
-    rule_count: 63
+    report_count: 107
+    rule_count: 64
   - name: Discovery
     slug: discovery
     techniques:
@@ -342,13 +343,15 @@ tactics:
       - T1497.003
       - T1518
       - T1518.001
+      - T1526
       - T1538
+      - T1580
       - T1613
       - T1614
       - T1622
-    technique_count: 29
-    report_count: 174
-    rule_count: 52
+    technique_count: 31
+    report_count: 178
+    rule_count: 53
   - name: Lateral Movement
     slug: lateral-movement
     techniques:
@@ -394,7 +397,7 @@ tactics:
       - T1602.001
       - T1602.002
     technique_count: 20
-    report_count: 89
+    report_count: 90
     rule_count: 40
   - name: Command and Control
     slug: command-and-control
@@ -431,8 +434,8 @@ tactics:
       - T1573.002
       - T1665
     technique_count: 31
-    report_count: 171
-    rule_count: 256
+    report_count: 174
+    rule_count: 266
   - name: Exfiltration
     slug: exfiltration
     techniques:
@@ -442,8 +445,8 @@ tactics:
       - T1567
       - T1567.002
     technique_count: 5
-    report_count: 32
-    rule_count: 21
+    report_count: 34
+    rule_count: 22
   - name: Impact
     slug: impact
     techniques:
@@ -464,8 +467,8 @@ tactics:
       - T1565.001
       - T1657
     technique_count: 16
-    report_count: 43
-    rule_count: 59
+    report_count: 44
+    rule_count: 60
 techniques:
   - id: T1001
     name: Data Obfuscation
@@ -1164,6 +1167,11 @@ techniques:
     tactics:
       - Discovery
     reports:
+      - url: /reports/inv-2026-082-agent-platform-command-channel/
+        title: A Threat Actor Configured an Enterprise AI-Agent Platform as a Command and Relay Channel
+        date: '2026-11-15'
+        tactic: Discovery
+        confidence: HIGH
       - url: /reports/inv-2026-080-cyberstrike-ad-workbench/
         title: An AI Pentest Platform Drives Commodity Tooling Against Portuguese Government Targets
         date: '2026-11-12'
@@ -1212,16 +1220,21 @@ techniques:
       - vova75rus
     url: /techniques/T1018/
     mitre_url: https://attack.mitre.org/techniques/T1018/
-    report_count: 5
+    report_count: 6
     rule_count: 2
     actor_count: 6
-    score: 7
+    score: 8
   - id: T1020
     name: Automated Exfiltration
     tactic: Exfiltration
     tactics:
       - Exfiltration
     reports:
+      - url: /reports/inv-2026-082-agent-platform-command-channel/
+        title: A Threat Actor Configured an Enterprise AI-Agent Platform as a Command and Relay Channel
+        date: '2026-11-15'
+        tactic: Exfiltration
+        confidence: MODERATE
       - url: /reports/opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015/
         title: Help Desks to Host Shells Across Brazil's Public Sector
         date: '2026-10-15'
@@ -1251,10 +1264,10 @@ techniques:
       - UTA-2026-013
     url: /techniques/T1020/
     mitre_url: https://attack.mitre.org/techniques/T1020/
-    report_count: 2
+    report_count: 3
     rule_count: 3
     actor_count: 1
-    score: 5
+    score: 6
   - id: T1021
     name: Remote Services
     tactic: Lateral Movement
@@ -1962,6 +1975,11 @@ techniques:
     tactics:
       - Stealth
     reports:
+      - url: /reports/inv-2026-082-agent-platform-command-channel/
+        title: A Threat Actor Configured an Enterprise AI-Agent Platform as a Command and Relay Channel
+        date: '2026-11-15'
+        tactic: Stealth
+        confidence: MODERATE
       - url: /reports/opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015/
         title: Help Desks to Host Shells Across Brazil's Public Sector
         date: '2026-10-15'
@@ -2000,10 +2018,10 @@ techniques:
       - UTA-2026-020
     url: /techniques/T1027.010/
     mitre_url: https://attack.mitre.org/techniques/T1027/010/
-    report_count: 5
+    report_count: 6
     rule_count: 2
     actor_count: 1
-    score: 7
+    score: 8
   - id: T1027.011
     name: Fileless Storage
     tactic: Stealth
@@ -2701,6 +2719,11 @@ techniques:
     tactics:
       - Exfiltration
     reports:
+      - url: /reports/inv-2026-082-agent-platform-command-channel/
+        title: A Threat Actor Configured an Enterprise AI-Agent Platform as a Command and Relay Channel
+        date: '2026-11-15'
+        tactic: Exfiltration
+        confidence: MODERATE
       - url: /reports/inv-2026-080-cyberstrike-ad-workbench/
         title: An AI Pentest Platform Drives Commodity Tooling Against Portuguese Government Targets
         date: '2026-11-12'
@@ -2822,6 +2845,14 @@ techniques:
         tactic: Exfiltration
         confidence: HIGH
     detections:
+      - url: /hunting-detections/inv-2026-082-detections
+        title: A Threat Actor Configured an Enterprise AI-Agent Platform as a Command and Relay Channel
+        date: '2026-11-15'
+        report_url: /reports/inv-2026-082-agent-platform-command-channel/
+        rules: >-
+          THL HUNT INV-2026-082 POST To /up With name Query And Python urllib Client (Operator
+          Receiver Shape) (SURICATA, Hunting)
+        count: 1
       - url: /hunting-detections/newdouble-clickfix-detections
         title: >-
           FACEIT ClickFix Pages Point CS2 Players to a Script URL That VirusTotal Ties to a
@@ -2909,16 +2940,21 @@ techniques:
       - n-3-xl
     url: /techniques/T1041/
     mitre_url: https://attack.mitre.org/techniques/T1041/
-    report_count: 24
-    rule_count: 13
+    report_count: 25
+    rule_count: 14
     actor_count: 14
-    score: 37
+    score: 39
   - id: T1046
     name: Network Service Discovery
     tactic: Discovery
     tactics:
       - Discovery
     reports:
+      - url: /reports/inv-2026-082-agent-platform-command-channel/
+        title: A Threat Actor Configured an Enterprise AI-Agent Platform as a Command and Relay Channel
+        date: '2026-11-15'
+        tactic: Discovery
+        confidence: HIGH
       - url: /reports/inv-2026-080-cyberstrike-ad-workbench/
         title: An AI Pentest Platform Drives Commodity Tooling Against Portuguese Government Targets
         date: '2026-11-12'
@@ -3004,10 +3040,10 @@ techniques:
       - UTA-2026-024
     url: /techniques/T1046/
     mitre_url: https://attack.mitre.org/techniques/T1046/
-    report_count: 10
+    report_count: 11
     rule_count: 4
     actor_count: 8
-    score: 14
+    score: 15
   - id: T1047
     name: Windows Management Instrumentation
     tactic: Execution
@@ -4611,6 +4647,11 @@ techniques:
     tactics:
       - Execution
     reports:
+      - url: /reports/inv-2026-082-agent-platform-command-channel/
+        title: A Threat Actor Configured an Enterprise AI-Agent Platform as a Command and Relay Channel
+        date: '2026-11-15'
+        tactic: Execution
+        confidence: MODERATE
       - url: /reports/inv-2026-080-cyberstrike-ad-workbench/
         title: An AI Pentest Platform Drives Commodity Tooling Against Portuguese Government Targets
         date: '2026-11-12'
@@ -4736,10 +4777,10 @@ techniques:
       - vova75rus
     url: /techniques/T1059.004/
     mitre_url: https://attack.mitre.org/techniques/T1059/004/
-    report_count: 9
+    report_count: 10
     rule_count: 22
     actor_count: 11
-    score: 31
+    score: 32
   - id: T1059.005
     name: Visual Basic
     tactic: Execution
@@ -4830,6 +4871,11 @@ techniques:
     tactics:
       - Execution
     reports:
+      - url: /reports/inv-2026-082-agent-platform-command-channel/
+        title: A Threat Actor Configured an Enterprise AI-Agent Platform as a Command and Relay Channel
+        date: '2026-11-15'
+        tactic: Execution
+        confidence: MODERATE
       - url: /reports/seasia-gov-exploitation-toolkit-144-172-106-236/
         title: 'The Middle Tier: A Non-APT Operator''s Reach Into Four Southeast Asian Governments'
         date: '2026-08-13'
@@ -4856,6 +4902,14 @@ techniques:
         tactic: Execution
         confidence: DEFINITE
     detections:
+      - url: /hunting-detections/inv-2026-082-detections
+        title: A Threat Actor Configured an Enterprise AI-Agent Platform as a Command and Relay Channel
+        date: '2026-11-15'
+        report_url: /reports/inv-2026-082-agent-platform-command-channel/
+        rules: >-
+          MAL_AgentPlatform_MCP_Stdio_Python_Downloader_Plant (YARA, Detection); Python Inline
+          Downloader Writing A Hidden Script To Tmp And Spawning It (SIGMA, Detection)
+        count: 2
       - url: /hunting-detections/gocloud-multiservice-cryptojacking-149-28-112-221-detections
         title: GOCLOUD Multi-Service Cryptojacking
         date: '2026-07-26'
@@ -4936,10 +4990,10 @@ techniques:
       - vova75rus
     url: /techniques/T1059.006/
     mitre_url: https://attack.mitre.org/techniques/T1059/006/
-    report_count: 5
-    rule_count: 24
+    report_count: 6
+    rule_count: 26
     actor_count: 11
-    score: 29
+    score: 32
   - id: T1059.007
     name: JavaScript
     tactic: Execution
@@ -5633,6 +5687,12 @@ techniques:
         tactic: Command and Control
         confidence: HIGH
     detections:
+      - url: /hunting-detections/inv-2026-082-detections
+        title: A Threat Actor Configured an Enterprise AI-Agent Platform as a Command and Relay Channel
+        date: '2026-11-15'
+        report_url: /reports/inv-2026-082-agent-platform-command-channel/
+        rules: MAL_AgentPlatform_Scripted_LLM_Endpoint_SSE_ToolCall_Queue (YARA, Hunting)
+        count: 1
       - url: /hunting-detections/gotenberg-rce-cryptomining-107-175-69-137-detections
         title: Gotenberg CVE-2026-42589 Mass Exploitation and Cryptomining
         date: '2026-09-16'
@@ -5920,9 +5980,9 @@ techniques:
     url: /techniques/T1071.001/
     mitre_url: https://attack.mitre.org/techniques/T1071/001/
     report_count: 35
-    rule_count: 94
+    rule_count: 95
     actor_count: 19
-    score: 129
+    score: 130
   - id: T1071.002
     name: File Transfer Protocols
     tactic: Command and Control
@@ -6147,6 +6207,11 @@ techniques:
       - Privilege Escalation
       - Initial Access
     reports:
+      - url: /reports/inv-2026-082-agent-platform-command-channel/
+        title: A Threat Actor Configured an Enterprise AI-Agent Platform as a Command and Relay Channel
+        date: '2026-11-15'
+        tactic: Initial Access
+        confidence: HIGH
       - url: /reports/gocloud-multiservice-cryptojacking-149-28-112-221/
         title: GOCLOUD Multi-Service Cryptojacking
         date: '2026-07-26'
@@ -6157,10 +6222,10 @@ techniques:
       - UTA-2026-020
     url: /techniques/T1078.001/
     mitre_url: https://attack.mitre.org/techniques/T1078/001/
-    report_count: 1
+    report_count: 2
     rule_count: 0
     actor_count: 1
-    score: 1
+    score: 2
   - id: T1078.002
     name: Domain Accounts
     tactic: Stealth
@@ -6232,19 +6297,30 @@ techniques:
       - Privilege Escalation
       - Initial Access
     reports:
+      - url: /reports/inv-2026-082-agent-platform-command-channel/
+        title: A Threat Actor Configured an Enterprise AI-Agent Platform as a Command and Relay Channel
+        date: '2026-11-15'
+        tactic: Initial Access
+        confidence: HIGH
       - url: /reports/shinyhunters-dls-91-215-85-22-20260417/
         title: ShinyHunters Data Leak Site (91.215.85.22)
         date: '2026-04-17'
         tactic: Initial Access
         confidence: HIGH
-    detections: []
+    detections:
+      - url: /hunting-detections/inv-2026-082-detections
+        title: A Threat Actor Configured an Enterprise AI-Agent Platform as a Command and Relay Channel
+        date: '2026-11-15'
+        report_url: /reports/inv-2026-082-agent-platform-command-channel/
+        rules: ACK Worker Node Role Session Used From A Public Source Address (SIGMA, Hunting)
+        count: 1
     actors: []
     url: /techniques/T1078.004/
     mitre_url: https://attack.mitre.org/techniques/T1078/004/
-    report_count: 1
-    rule_count: 0
+    report_count: 2
+    rule_count: 1
     actor_count: 0
-    score: 1
+    score: 3
   - id: T1082
     name: System Information Discovery
     tactic: Discovery
@@ -6678,6 +6754,11 @@ techniques:
     tactics:
       - Command and Control
     reports:
+      - url: /reports/inv-2026-082-agent-platform-command-channel/
+        title: A Threat Actor Configured an Enterprise AI-Agent Platform as a Command and Relay Channel
+        date: '2026-11-15'
+        tactic: Command and Control
+        confidence: MODERATE
       - url: /reports/sliver-c2-windows-postex-staging-193-233-202-17/
         title: Sliver C2 Windows Post-Exploitation Staging, 193.233.202.17
         date: '2026-09-07'
@@ -6699,6 +6780,15 @@ techniques:
         tactic: Command and Control
         confidence: HIGH
     detections:
+      - url: /hunting-detections/inv-2026-082-detections
+        title: A Threat Actor Configured an Enterprise AI-Agent Platform as a Command and Relay Channel
+        date: '2026-11-15'
+        report_url: /reports/inv-2026-082-agent-platform-command-channel/
+        rules: >-
+          MAL_ReverseSOCKS_Pod_Worker_Host_Port_Line_Ack_Protocol (YARA, Hunting);
+          MAL_Pod_Socks5_Relay_Batch_Helper_Docstring_Family (YARA, Hunting); Bore Tunnel Client
+          Exposing A Local Port Through A Remote Server (SIGMA, Hunting)
+        count: 3
       - url: /hunting-detections/cloudsync-assembler-toolkit-91-197-98-188-detections
         title: 'CloudSync: An Assembler''s Intrusion Toolkit'
         date: '2026-08-03'
@@ -6723,10 +6813,10 @@ techniques:
       - UTA-2026-024
     url: /techniques/T1090/
     mitre_url: https://attack.mitre.org/techniques/T1090/
-    report_count: 4
-    rule_count: 3
+    report_count: 5
+    rule_count: 6
     actor_count: 3
-    score: 7
+    score: 11
   - id: T1090.001
     name: Internal Proxy
     tactic: Command and Control
@@ -7510,6 +7600,11 @@ techniques:
     tactics:
       - Command and Control
     reports:
+      - url: /reports/inv-2026-082-agent-platform-command-channel/
+        title: A Threat Actor Configured an Enterprise AI-Agent Platform as a Command and Relay Channel
+        date: '2026-11-15'
+        tactic: Command and Control
+        confidence: HIGH
       - url: /reports/inv-2026-080-cyberstrike-ad-workbench/
         title: An AI Pentest Platform Drives Commodity Tooling Against Portuguese Government Targets
         date: '2026-11-12'
@@ -7621,6 +7716,16 @@ techniques:
         tactic: Command and Control
         confidence: HIGH
     detections:
+      - url: /hunting-detections/inv-2026-082-detections
+        title: A Threat Actor Configured an Enterprise AI-Agent Platform as a Command and Relay Channel
+        date: '2026-11-15'
+        report_url: /reports/inv-2026-082-agent-platform-command-channel/
+        rules: >-
+          MAL_AgentPlatform_MCP_Stdio_Python_Downloader_Plant (YARA, Detection); Python Inline
+          Downloader Writing A Hidden Script To Tmp And Spawning It (SIGMA, Detection); THL HUNT
+          INV-2026-082 Python urllib Fetch Of Operator Payload File Name (Agent-Platform Plant
+          Downloader) (SURICATA, Hunting)
+        count: 3
       - url: /hunting-detections/newdouble-clickfix-detections
         title: >-
           FACEIT ClickFix Pages Point CS2 Players to a Script URL That VirusTotal Ties to a
@@ -7783,10 +7888,10 @@ techniques:
       - vova75rus
     url: /techniques/T1105/
     mitre_url: https://attack.mitre.org/techniques/T1105/
-    report_count: 22
-    rule_count: 30
+    report_count: 23
+    rule_count: 33
     actor_count: 17
-    score: 52
+    score: 56
   - id: T1106
     name: Native API
     tactic: Execution
@@ -7899,16 +8004,24 @@ techniques:
         date: '2025-10-20'
         tactic: Credential Access
         confidence: HIGH
-    detections: []
+    detections:
+      - url: /hunting-detections/inv-2026-082-detections
+        title: A Threat Actor Configured an Enterprise AI-Agent Platform as a Command and Relay Channel
+        date: '2026-11-15'
+        report_url: /reports/inv-2026-082-agent-platform-command-channel/
+        rules: >-
+          GitLab API User Lookup Rejected Repeatedly From One Source (with base rule) (SIGMA,
+          Hunting)
+        count: 1
     actors:
       - UTA-2026-011
       - UTA-2026-021
     url: /techniques/T1110/
     mitre_url: https://attack.mitre.org/techniques/T1110/
     report_count: 3
-    rule_count: 0
+    rule_count: 1
     actor_count: 2
-    score: 3
+    score: 4
   - id: T1110.001
     name: Password Guessing
     tactic: Credential Access
@@ -9454,6 +9567,11 @@ techniques:
     tactics:
       - Initial Access
     reports:
+      - url: /reports/inv-2026-082-agent-platform-command-channel/
+        title: A Threat Actor Configured an Enterprise AI-Agent Platform as a Command and Relay Channel
+        date: '2026-11-15'
+        tactic: Initial Access
+        confidence: MODERATE
       - url: /reports/inv-2026-080-cyberstrike-ad-workbench/
         title: An AI Pentest Platform Drives Commodity Tooling Against Portuguese Government Targets
         date: '2026-11-12'
@@ -9653,10 +9771,10 @@ techniques:
       - UTA-2026-023
     url: /techniques/T1190/
     mitre_url: https://attack.mitre.org/techniques/T1190/
-    report_count: 13
+    report_count: 14
     rule_count: 53
     actor_count: 7
-    score: 66
+    score: 67
   - id: T1195.002
     name: Compromise Software Supply Chain
     tactic: Initial Access
@@ -9963,6 +10081,11 @@ techniques:
     tactics:
       - Collection
     reports:
+      - url: /reports/inv-2026-082-agent-platform-command-channel/
+        title: A Threat Actor Configured an Enterprise AI-Agent Platform as a Command and Relay Channel
+        date: '2026-11-15'
+        tactic: Collection
+        confidence: HIGH
       - url: /reports/opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015/
         title: Help Desks to Host Shells Across Brazil's Public Sector
         date: '2026-10-15'
@@ -10017,10 +10140,10 @@ techniques:
       - UTA-2026-019
     url: /techniques/T1213/
     mitre_url: https://attack.mitre.org/techniques/T1213/
-    report_count: 4
+    report_count: 5
     rule_count: 6
     actor_count: 4
-    score: 10
+    score: 11
   - id: T1213.002
     name: Sharepoint
     tactic: Collection
@@ -11491,6 +11614,25 @@ techniques:
     rule_count: 3
     actor_count: 3
     score: 11
+  - id: T1526
+    name: Cloud Service Discovery
+    tactic: Discovery
+    tactics:
+      - Discovery
+    reports:
+      - url: /reports/inv-2026-082-agent-platform-command-channel/
+        title: A Threat Actor Configured an Enterprise AI-Agent Platform as a Command and Relay Channel
+        date: '2026-11-15'
+        tactic: Discovery
+        confidence: HIGH
+    detections: []
+    actors: []
+    url: /techniques/T1526/
+    mitre_url: https://attack.mitre.org/techniques/T1526/
+    report_count: 1
+    rule_count: 0
+    actor_count: 0
+    score: 1
   - id: T1528
     name: Steal Application Access Token
     tactic: Credential Access
@@ -11535,6 +11677,11 @@ techniques:
     tactics:
       - Impact
     reports:
+      - url: /reports/inv-2026-082-agent-platform-command-channel/
+        title: A Threat Actor Configured an Enterprise AI-Agent Platform as a Command and Relay Channel
+        date: '2026-11-15'
+        tactic: Impact
+        confidence: DEFINITE
       - url: /reports/evilsoul-engine-stealer-maas-144-172-103-98/
         title: 'EvilSoul-Engine: A Brazilian Stealer-Builder Malware-as-a-Service'
         date: '2026-07-03'
@@ -11560,10 +11707,10 @@ techniques:
       - n-3-xl
     url: /techniques/T1529/
     mitre_url: https://attack.mitre.org/techniques/T1529/
-    report_count: 4
+    report_count: 5
     rule_count: 0
     actor_count: 1
-    score: 4
+    score: 5
   - id: T1530
     name: Data from Cloud Storage
     tactic: Collection
@@ -12546,7 +12693,12 @@ techniques:
     tactic: Credential Access
     tactics:
       - Credential Access
-    reports: []
+    reports:
+      - url: /reports/inv-2026-082-agent-platform-command-channel/
+        title: A Threat Actor Configured an Enterprise AI-Agent Platform as a Command and Relay Channel
+        date: '2026-11-15'
+        tactic: Credential Access
+        confidence: HIGH
     detections:
       - url: >-
           /hunting-detections/opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015-detections
@@ -12560,10 +12712,10 @@ techniques:
     actors: []
     url: /techniques/T1552/
     mitre_url: https://attack.mitre.org/techniques/T1552/
-    report_count: 0
+    report_count: 1
     rule_count: 1
     actor_count: 0
-    score: 1
+    score: 2
   - id: T1552.001
     name: Credentials In Files
     tactic: Credential Access
@@ -12706,6 +12858,11 @@ techniques:
     tactics:
       - Credential Access
     reports:
+      - url: /reports/inv-2026-082-agent-platform-command-channel/
+        title: A Threat Actor Configured an Enterprise AI-Agent Platform as a Command and Relay Channel
+        date: '2026-11-15'
+        tactic: Credential Access
+        confidence: MODERATE
       - url: /reports/opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015/
         title: Help Desks to Host Shells Across Brazil's Public Sector
         date: '2026-10-15'
@@ -12744,10 +12901,10 @@ techniques:
       - UTA-2026-019
     url: /techniques/T1552.005/
     mitre_url: https://attack.mitre.org/techniques/T1552/005/
-    report_count: 3
+    report_count: 4
     rule_count: 5
     actor_count: 2
-    score: 8
+    score: 9
   - id: T1552.006
     name: Group Policy Preferences
     tactic: Credential Access
@@ -13506,14 +13663,22 @@ techniques:
         date: '2025-12-15'
         tactic: Impact
         confidence: HIGH
-    detections: []
+    detections:
+      - url: /hunting-detections/inv-2026-082-detections
+        title: A Threat Actor Configured an Enterprise AI-Agent Platform as a Command and Relay Channel
+        date: '2026-11-15'
+        report_url: /reports/inv-2026-082-agent-platform-command-channel/
+        rules: >-
+          Agent Platform Internal Workspace Reload Route Called Through The Gateway (with publish,
+          save and ordering correlation) (SIGMA, Hunting)
+        count: 1
     actors: []
     url: /techniques/T1565.001/
     mitre_url: https://attack.mitre.org/techniques/T1565/001/
     report_count: 2
-    rule_count: 0
+    rule_count: 1
     actor_count: 0
-    score: 2
+    score: 3
   - id: T1566
     name: Phishing
     tactic: Initial Access
@@ -13986,6 +14151,11 @@ techniques:
     tactics:
       - Command and Control
     reports:
+      - url: /reports/inv-2026-082-agent-platform-command-channel/
+        title: A Threat Actor Configured an Enterprise AI-Agent Platform as a Command and Relay Channel
+        date: '2026-11-15'
+        tactic: Command and Control
+        confidence: HIGH
       - url: /reports/inv-2026-080-cyberstrike-ad-workbench/
         title: An AI Pentest Platform Drives Commodity Tooling Against Portuguese Government Targets
         date: '2026-11-12'
@@ -14047,6 +14217,16 @@ techniques:
         tactic: Command and Control
         confidence: HIGH
     detections:
+      - url: /hunting-detections/inv-2026-082-detections
+        title: A Threat Actor Configured an Enterprise AI-Agent Platform as a Command and Relay Channel
+        date: '2026-11-15'
+        report_url: /reports/inv-2026-082-agent-platform-command-channel/
+        rules: >-
+          Bore Tunnel Client Exposing A Local Port Through A Remote Server (SIGMA, Hunting); THL
+          HUNT INV-2026-082 bore Tunnel Client Hello Frame (Open-Source Reverse Tunnel Session)
+          (SURICATA, Hunting); THL HUNT INV-2026-082 bore.pub Public Tunnel Server DNS Query (Shared
+          Service, Do Not Block On This Alone) (SURICATA, Hunting)
+        count: 3
       - url: /hunting-detections/inv-2026-080-cyberstrike-ad-workbench-detections
         title: An AI Pentest Platform Drives Commodity Tooling Against Portuguese Government Targets
         date: '2026-11-12'
@@ -14139,10 +14319,10 @@ techniques:
       - vova75rus
     url: /techniques/T1572/
     mitre_url: https://attack.mitre.org/techniques/T1572/
-    report_count: 12
-    rule_count: 23
+    report_count: 13
+    rule_count: 26
     actor_count: 15
-    score: 35
+    score: 39
   - id: T1573
     name: Encrypted Channel
     tactic: Command and Control
@@ -14456,6 +14636,33 @@ techniques:
     rule_count: 14
     actor_count: 3
     score: 14
+  - id: T1580
+    name: Cloud Infrastructure Discovery
+    tactic: Discovery
+    tactics:
+      - Discovery
+    reports:
+      - url: /reports/inv-2026-082-agent-platform-command-channel/
+        title: A Threat Actor Configured an Enterprise AI-Agent Platform as a Command and Relay Channel
+        date: '2026-11-15'
+        tactic: Discovery
+        confidence: HIGH
+    detections:
+      - url: /hunting-detections/inv-2026-082-detections
+        title: A Threat Actor Configured an Enterprise AI-Agent Platform as a Command and Relay Channel
+        date: '2026-11-15'
+        report_url: /reports/inv-2026-082-agent-platform-command-channel/
+        rules: >-
+          ACK Worker Node Role Listing Compute Instances In Several Regions (with base rule) (SIGMA,
+          Hunting)
+        count: 1
+    actors: []
+    url: /techniques/T1580/
+    mitre_url: https://attack.mitre.org/techniques/T1580/
+    report_count: 1
+    rule_count: 1
+    actor_count: 0
+    score: 2
   - id: T1583.001
     name: Domains
     tactic: Resource Development
@@ -14876,6 +15083,11 @@ techniques:
     tactics:
       - Resource Development
     reports:
+      - url: /reports/inv-2026-082-agent-platform-command-channel/
+        title: A Threat Actor Configured an Enterprise AI-Agent Platform as a Command and Relay Channel
+        date: '2026-11-15'
+        tactic: Resource Development
+        confidence: MODERATE
       - url: /reports/inv-2026-080-cyberstrike-ad-workbench/
         title: An AI Pentest Platform Drives Commodity Tooling Against Portuguese Government Targets
         date: '2026-11-12'
@@ -14944,10 +15156,10 @@ techniques:
       - UTA-2026-023
     url: /techniques/T1587.001/
     mitre_url: https://attack.mitre.org/techniques/T1587/001/
-    report_count: 7
+    report_count: 8
     rule_count: 9
     actor_count: 7
-    score: 16
+    score: 17
   - id: T1587.002
     name: Code Signing Certificates
     tactic: Resource Development
@@ -16171,6 +16383,25 @@ techniques:
     rule_count: 0
     actor_count: 1
     score: 2
+  - id: T1651
+    name: Cloud Administration Command
+    tactic: Execution
+    tactics:
+      - Execution
+    reports:
+      - url: /reports/inv-2026-082-agent-platform-command-channel/
+        title: A Threat Actor Configured an Enterprise AI-Agent Platform as a Command and Relay Channel
+        date: '2026-11-15'
+        tactic: Execution
+        confidence: HIGH
+    detections: []
+    actors: []
+    url: /techniques/T1651/
+    mitre_url: https://attack.mitre.org/techniques/T1651/
+    report_count: 1
+    rule_count: 0
+    actor_count: 0
+    score: 1
   - id: T1653
     name: Power Settings
     tactic: Persistence

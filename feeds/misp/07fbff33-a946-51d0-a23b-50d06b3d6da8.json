@@ -1,0 +1,644 @@
+{
+  "Event": {
+    "uuid": "07fbff33-a946-51d0-a23b-50d06b3d6da8",
+    "info": "A Threat Actor Configured an Enterprise AI-Agent Platform as a Command and Relay Channel",
+    "date": "2026-11-15",
+    "threat_level_id": 1,
+    "analysis": 2,
+    "timestamp": 1794933198,
+    "publish_timestamp": 1794933198,
+    "published": true,
+    "Orgc": {
+      "name": "The Hunters Ledger",
+      "uuid": "8bc8284b-deb5-546c-a233-57ea34b2ea0d"
+    },
+    "Tag": [
+      {
+        "name": "tlp:clear",
+        "colour": "#ffffff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"Open Dir\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"AI Abuse\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"C2\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"Cred Theft\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Exfiltration Over C2 Channel - T1041\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Python - T1059.006\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Web Protocols - T1071.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Default Accounts - T1078.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Cloud Accounts - T1078.004\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Proxy - T1090\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Ingress Tool Transfer - T1105\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Brute Force - T1110\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Exploit Public-Facing Application - T1190\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"System Shutdown/Reboot - T1529\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Cloud Instance Metadata API - T1552.005\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Stored Data Manipulation - T1565.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Protocol Tunneling - T1572\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Cloud Infrastructure Discovery - T1580\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Malware - T1587.001\"",
+        "colour": "#0088cc"
+      }
+    ],
+    "Attribute": [
+      {
+        "uuid": "98948139-e8f3-5bfd-925c-4815806eeb2b",
+        "type": "link",
+        "category": "External analysis",
+        "value": "https://the-hunters-ledger.com/hunting-detections/inv-2026-082-detections/",
+        "to_ids": false,
+        "comment": "Detection rules, The Hunters Ledger",
+        "timestamp": 1794933198
+      },
+      {
+        "uuid": "993ea00c-fa65-586d-96d7-0153110554ec",
+        "type": "link",
+        "category": "External analysis",
+        "value": "https://the-hunters-ledger.com/ioc-feeds/inv-2026-082-agent-platform-command-channel-iocs.json",
+        "to_ids": false,
+        "comment": "IOC feed (JSON), The Hunters Ledger",
+        "timestamp": 1794933198
+      },
+      {
+        "uuid": "b53e753f-7b91-5bee-81e5-f0c610d2b16c",
+        "type": "link",
+        "category": "External analysis",
+        "value": "https://the-hunters-ledger.com/reports/inv-2026-082-agent-platform-command-channel/",
+        "to_ids": false,
+        "comment": "Report, The Hunters Ledger",
+        "timestamp": 1794933198
+      },
+      {
+        "uuid": "d21f81e5-a7b6-5e6e-a85b-c386e998330b",
+        "type": "link",
+        "category": "External analysis",
+        "value": "https://the-hunters-ledger.com/stix/inv-2026-082-agent-platform-command-channel.json",
+        "to_ids": false,
+        "comment": "STIX 2.1 bundle, The Hunters Ledger",
+        "timestamp": 1794933198
+      },
+      {
+        "uuid": "7b13e09c-3bcc-547e-9cb9-63b755857f29",
+        "type": "domain",
+        "category": "Network activity",
+        "value": "198-44-116-69.sslip.io",
+        "to_ids": true,
+        "comment": "domain: 198-44-116-69.sslip.io. Resolves only to the operator VPS. | sslip.io is a shared service. This one name embeds the operator IP and resolves only to it; do not block sslip.io itself. [confidence 80/100]",
+        "timestamp": 1794933198
+      },
+      {
+        "uuid": "669fb819-6b4f-5c8b-ac56-83fc1373d9c7",
+        "type": "domain",
+        "category": "Network activity",
+        "value": "198.44.116.69.sslip.io",
+        "to_ids": true,
+        "comment": "domain: 198.44.116.69.sslip.io. Resolves only to the operator VPS. | Same as above: tenant name only, not the bare provider. [confidence 60/100]",
+        "timestamp": 1794933198
+      },
+      {
+        "uuid": "87602630-4d50-5c2a-af45-f3cd4221f391",
+        "type": "url",
+        "category": "Network activity",
+        "value": "http://198-44-116-69.sslip.io:9011/hb.py",
+        "to_ids": true,
+        "comment": "url: http://198-44-116-69.sslip.io:9011/hb.py. Same worker download addressed by the sslip.io name [confidence 80/100]",
+        "timestamp": 1794933198
+      },
+      {
+        "uuid": "5bc4266d-d2e8-5c53-a1c9-2c709646e122",
+        "type": "url",
+        "category": "Network activity",
+        "value": "http://198-44-116-69.sslip.io:9011/r.py",
+        "to_ids": true,
+        "comment": "url: http://198-44-116-69.sslip.io:9011/r.py. Relay launcher by the sslip.io name [confidence 60/100]",
+        "timestamp": 1794933198
+      },
+      {
+        "uuid": "0fb36f0b-707d-5bca-8d33-9ab6191ed1a1",
+        "type": "url",
+        "category": "Network activity",
+        "value": "http://198.44.116.69/notes.txt",
+        "to_ids": true,
+        "comment": "url: http://198.44.116.69/notes.txt. Self-test file in the open directory root (first line of sink.log and sink80.log) [confidence 80/100]",
+        "timestamp": 1794933198
+      },
+      {
+        "uuid": "62decce3-f798-56b7-9cd1-969c28491572",
+        "type": "url",
+        "category": "Network activity",
+        "value": "http://198.44.116.69:19611/b.py",
+        "to_ids": true,
+        "comment": "url: http://198.44.116.69:19611/b.py. MCP plant payload URL (b.py is not held; its class is hb.py) [confidence 80/100]",
+        "timestamp": 1794933198
+      },
+      {
+        "uuid": "ccf0df72-8250-5774-bff1-8d5cdfb01fb6",
+        "type": "url",
+        "category": "Network activity",
+        "value": "http://198.44.116.69:8088/hb.py",
+        "to_ids": true,
+        "comment": "url: http://198.44.116.69:8088/hb.py. Worker fetched from the 8088 sink by an urllib client 2026-10-30 10:55:37Z [confidence 80/100]",
+        "timestamp": 1794933198
+      },
+      {
+        "uuid": "84dd8c0d-d9ab-5733-a134-ea8842adc020",
+        "type": "url",
+        "category": "Network activity",
+        "value": "http://198.44.116.69:8088/mcp",
+        "to_ids": false,
+        "comment": "url: http://198.44.116.69:8088/mcp. MCP-shaped path on the sink port [confidence 40/100]",
+        "timestamp": 1794933198
+      },
+      {
+        "uuid": "e0703142-dd9c-5369-a8de-96a5e4bc47f5",
+        "type": "url",
+        "category": "Network activity",
+        "value": "http://198.44.116.69:8088/sse",
+        "to_ids": false,
+        "comment": "url: http://198.44.116.69:8088/sse. MCP-shaped path on the sink port [confidence 40/100]",
+        "timestamp": 1794933198
+      },
+      {
+        "uuid": "25058785-424e-5331-b613-ad1ad3112b8e",
+        "type": "url",
+        "category": "Network activity",
+        "value": "http://198.44.116.69:8444/v1",
+        "to_ids": true,
+        "comment": "url: http://198.44.116.69:8444/v1. Scripted LLM endpoint as agent baseUrl [confidence 60/100]",
+        "timestamp": 1794933198
+      },
+      {
+        "uuid": "25f1f2c8-7ed9-56f8-b102-6f8145ad68f0",
+        "type": "url",
+        "category": "Network activity",
+        "value": "http://198.44.116.69:8445/v1",
+        "to_ids": true,
+        "comment": "url: http://198.44.116.69:8445/v1. Scripted LLM endpoint as agent baseUrl [confidence 60/100]",
+        "timestamp": 1794933198
+      },
+      {
+        "uuid": "f8d1e7af-93f4-5926-bf83-e34df3164ae7",
+        "type": "url",
+        "category": "Network activity",
+        "value": "http://198.44.116.69:8460/pxmcp.py",
+        "to_ids": false,
+        "comment": "url: http://198.44.116.69:8460/pxmcp.py. Pod-side MCP worker download (not held) [confidence 40/100]",
+        "timestamp": 1794933198
+      },
+      {
+        "uuid": "f46851e3-91e4-55d8-ba2a-5327332a965f",
+        "type": "url",
+        "category": "Network activity",
+        "value": "http://198.44.116.69:8460/pxmcp2.py",
+        "to_ids": true,
+        "comment": "url: http://198.44.116.69:8460/pxmcp2.py. Pod-side MCP worker with reverse relay download [confidence 60/100]",
+        "timestamp": 1794933198
+      },
+      {
+        "uuid": "ef51188c-b715-559f-82c0-d3ed77a2c637",
+        "type": "url",
+        "category": "Network activity",
+        "value": "http://198.44.116.69:8460/pxpod.py",
+        "to_ids": true,
+        "comment": "url: http://198.44.116.69:8460/pxpod.py. Pod-side worker download from the front port (not held) [confidence 60/100]",
+        "timestamp": 1794933198
+      },
+      {
+        "uuid": "9f58cee3-3a7c-55e2-a3e3-3bc9a356e771",
+        "type": "url",
+        "category": "Network activity",
+        "value": "http://198.44.116.69:8460/v1",
+        "to_ids": true,
+        "comment": "url: http://198.44.116.69:8460/v1. Scripted LLM endpoint used as agent llm.baseUrl [confidence 80/100]",
+        "timestamp": 1794933198
+      },
+      {
+        "uuid": "557b8f96-8ffa-57d3-94b1-867d4e383204",
+        "type": "url",
+        "category": "Network activity",
+        "value": "http://198.44.116.69:8686/r",
+        "to_ids": false,
+        "comment": "url: http://198.44.116.69:8686/r. Relay download [confidence 40/100]",
+        "timestamp": 1794933198
+      },
+      {
+        "uuid": "0a4013fd-810d-56d9-8713-db52e02657c9",
+        "type": "url",
+        "category": "Network activity",
+        "value": "http://198.44.116.69:8899/gl_check.py",
+        "to_ids": true,
+        "comment": "url: http://198.44.116.69:8899/gl_check.py. Source-control login check script download [confidence 60/100]",
+        "timestamp": 1794933198
+      },
+      {
+        "uuid": "a23f1275-dae0-56ac-aba3-83137a63c50a",
+        "type": "url",
+        "category": "Network activity",
+        "value": "http://198.44.116.69:8901/z.py",
+        "to_ids": false,
+        "comment": "url: http://198.44.116.69:8901/z.py. Source-control API check script download [confidence 40/100]",
+        "timestamp": 1794933198
+      },
+      {
+        "uuid": "5e88b63b-497b-5226-aa57-895101e87715",
+        "type": "url",
+        "category": "Network activity",
+        "value": "http://198.44.116.69:8902/v1",
+        "to_ids": true,
+        "comment": "url: http://198.44.116.69:8902/v1. Scripted LLM endpoint as agent baseUrl [confidence 60/100]",
+        "timestamp": 1794933198
+      },
+      {
+        "uuid": "40698c7b-ac2f-5621-bfb2-d658daba6f01",
+        "type": "url",
+        "category": "Network activity",
+        "value": "http://198.44.116.69:8903/n",
+        "to_ids": false,
+        "comment": "url: http://198.44.116.69:8903/n. One-off download [confidence 40/100]",
+        "timestamp": 1794933198
+      },
+      {
+        "uuid": "20ba26dd-ede1-53c8-a49d-b29276527d54",
+        "type": "url",
+        "category": "Network activity",
+        "value": "http://198.44.116.69:9011/e2.py",
+        "to_ids": true,
+        "comment": "url: http://198.44.116.69:9011/e2.py. Agent chat retry script download [confidence 60/100]",
+        "timestamp": 1794933198
+      },
+      {
+        "uuid": "af0a209e-9f3e-5d8e-8b87-23dc7960be80",
+        "type": "url",
+        "category": "Network activity",
+        "value": "http://198.44.116.69:9011/fscan",
+        "to_ids": true,
+        "comment": "url: http://198.44.116.69:9011/fscan. Scanner binary download (stock fscan; the URL is the operator's) [confidence 80/100]",
+        "timestamp": 1794933198
+      },
+      {
+        "uuid": "f1929d7c-f1d1-54b6-bff2-3f6facd8b371",
+        "type": "url",
+        "category": "Network activity",
+        "value": "http://198.44.116.69:9011/gogo",
+        "to_ids": true,
+        "comment": "url: http://198.44.116.69:9011/gogo. Scanner binary download (stock gogo; the URL is the operator's) [confidence 80/100]",
+        "timestamp": 1794933198
+      },
+      {
+        "uuid": "845d4a89-8b9b-59ac-b4f4-b6cf3901540f",
+        "type": "url",
+        "category": "Network activity",
+        "value": "http://198.44.116.69:9011/hb.py",
+        "to_ids": true,
+        "comment": "url: http://198.44.116.69:9011/hb.py. Reverse SOCKS worker download [confidence 80/100]",
+        "timestamp": 1794933198
+      },
+      {
+        "uuid": "8e767e60-0142-53a4-8a24-99c10ad9870e",
+        "type": "url",
+        "category": "Network activity",
+        "value": "http://198.44.116.69:9011/hb2.py",
+        "to_ids": false,
+        "comment": "url: http://198.44.116.69:9011/hb2.py. Worker download (second revision name; not held) [confidence 40/100]",
+        "timestamp": 1794933198
+      },
+      {
+        "uuid": "3c8e3973-d1d4-5848-8313-a3aea27d422f",
+        "type": "url",
+        "category": "Network activity",
+        "value": "http://198.44.116.69:9011/muxpod.py",
+        "to_ids": true,
+        "comment": "url: http://198.44.116.69:9011/muxpod.py. Pod-side worker pool download [confidence 60/100]",
+        "timestamp": 1794933198
+      },
+      {
+        "uuid": "a26ec21f-0199-51a4-9aec-3b291ac89500",
+        "type": "url",
+        "category": "Network activity",
+        "value": "http://198.44.116.69:9011/pa.py",
+        "to_ids": true,
+        "comment": "url: http://198.44.116.69:9011/pa.py. Helper start script download [confidence 60/100]",
+        "timestamp": 1794933198
+      },
+      {
+        "uuid": "00dc532f-be56-5923-980a-090c2bbc7350",
+        "type": "url",
+        "category": "Network activity",
+        "value": "http://198.44.116.69:9011/r.py",
+        "to_ids": true,
+        "comment": "url: http://198.44.116.69:9011/r.py. Relay launcher download (not held) [confidence 60/100]",
+        "timestamp": 1794933198
+      },
+      {
+        "uuid": "6f836beb-18b7-5a69-b4cd-de50b247b1a1",
+        "type": "url",
+        "category": "Network activity",
+        "value": "http://198.44.116.69:9012/up",
+        "to_ids": true,
+        "comment": "url: http://198.44.116.69:9012/up. Upload test endpoint (POST) [confidence 60/100]",
+        "timestamp": 1794933198
+      },
+      {
+        "uuid": "5695d8cc-a8a3-54c3-a89e-85642ba0535c",
+        "type": "url",
+        "category": "Network activity",
+        "value": "http://198.44.116.69:9020/boot.sh",
+        "to_ids": true,
+        "comment": "url: http://198.44.116.69:9020/boot.sh. In-pod bootstrap download [confidence 60/100]",
+        "timestamp": 1794933198
+      },
+      {
+        "uuid": "7c0bd0d6-9cd8-59e6-a3f1-431b360a208d",
+        "type": "url",
+        "category": "Network activity",
+        "value": "http://198.44.116.69:9100/gogo",
+        "to_ids": true,
+        "comment": "url: http://198.44.116.69:9100/gogo. Scanner binary download from the reverse-SOCKS link port [confidence 60/100]",
+        "timestamp": 1794933198
+      },
+      {
+        "uuid": "00672073-16d7-545d-a142-d35c3fc84c64",
+        "type": "url",
+        "category": "Network activity",
+        "value": "http://198.44.116.69:9443/v1",
+        "to_ids": true,
+        "comment": "url: http://198.44.116.69:9443/v1. Scripted LLM endpoint as agent baseUrl [confidence 60/100]",
+        "timestamp": 1794933198
+      },
+      {
+        "uuid": "46a23915-5fc0-5319-8e84-6392b060f6cc",
+        "type": "ip-dst",
+        "category": "Network activity",
+        "value": "198.44.116.69",
+        "to_ids": true,
+        "comment": "ipv4: 198.44.116.69. Single operator-owned host in the corpus (infrastructure.md section 1, item 1). Logged activity 2026-10-30 09:52Z to 2026-10-31 12:13Z; the time zone of the http.server logs is MODERATE. WHOIS for 198.44.116.0/24 names Hostwinds LLC while Vantage and VirusTotal show another AS owner label; the abuse contact was not checked. Commercial hosting: the address can be reassigned, so time-box any block. | Shared commercial hosting. The address may be reassigned; re-check before a permanent block. [confidence 80/100]",
+        "timestamp": 1794933198
+      },
+      {
+        "uuid": "965600af-890f-51eb-ba34-82195d21a073",
+        "type": "snort",
+        "category": "Network activity",
+        "value": "alert dns $HOME_NET any -> any any (msg:\"THL HUNT INV-2026-082 bore.pub Public Tunnel Server DNS Query (Shared Service, Do Not Block On This Alone)\"; dns.query; content:\"bore.pub\"; nocase; endswith; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/inv-2026-082-detections/; classtype:policy-violation; sid:1000002; rev:1; metadata:author The_Hunters_Ledger, date 2026-11-14;)",
+        "to_ids": false,
+        "comment": "THL HUNT INV-2026-082 bore.pub Public Tunnel Server DNS Query (Shared Service, Do Not Block On This Alone) | TIER: Hunting | robustness 0 | confidence HIGH | ATT&CK T1572 | rule hash 257cdf12 | https://the-hunters-ledger.com/hunting-detections/inv-2026-082-detections/",
+        "timestamp": 1794933198,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Hunting\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "b89c8612-c0d2-5210-bb67-e95a72f0ad1d",
+        "type": "snort",
+        "category": "Network activity",
+        "value": "alert http $HOME_NET any -> $EXTERNAL_NET any (msg:\"THL HUNT INV-2026-082 POST To /up With name Query And Python urllib Client (Operator Receiver Shape)\"; flow:established,to_server; http.method; content:\"POST\"; http.uri; content:\"/up?name=\"; startswith; fast_pattern; http.user_agent; content:\"Python-urllib/\"; startswith; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/inv-2026-082-detections/; classtype:trojan-activity; sid:1000004; rev:1; metadata:author The_Hunters_Ledger, date 2026-11-14;)",
+        "to_ids": false,
+        "comment": "THL HUNT INV-2026-082 POST To /up With name Query And Python urllib Client (Operator Receiver Shape) | TIER: Hunting | robustness 1 | confidence LOW | ATT&CK T1041 | rule hash a2095419 | https://the-hunters-ledger.com/hunting-detections/inv-2026-082-detections/",
+        "timestamp": 1794933198,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Hunting\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "cdfb0f27-1f3e-5b78-9c20-4c97fc83cb40",
+        "type": "snort",
+        "category": "Network activity",
+        "value": "alert http $HOME_NET any -> $EXTERNAL_NET any (msg:\"THL HUNT INV-2026-082 Python urllib Fetch Of Operator Payload File Name (Agent-Platform Plant Downloader)\"; flow:established,to_server; http.method; content:\"GET\"; http.user_agent; content:\"Python-urllib/\"; startswith; http.uri; content:\".py\"; endswith; pcre:\"/^\\/(?:hb|b|boot|deployhb|own_llm|axllm|mcp_plant)\\.py$/\"; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/inv-2026-082-detections/; classtype:trojan-activity; sid:1000003; rev:1; metadata:author The_Hunters_Ledger, date 2026-11-14;)",
+        "to_ids": false,
+        "comment": "THL HUNT INV-2026-082 Python urllib Fetch Of Operator Payload File Name (Agent-Platform Plant Downloader) | TIER: Hunting | robustness 1 | confidence MODERATE | ATT&CK T1105 | rule hash 9e00c062 | https://the-hunters-ledger.com/hunting-detections/inv-2026-082-detections/",
+        "timestamp": 1794933198,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Hunting\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "f988f315-fe88-5c8b-8869-acf35bddd9dd",
+        "type": "snort",
+        "category": "Network activity",
+        "value": "alert tcp $HOME_NET any -> $EXTERNAL_NET any (msg:\"THL HUNT INV-2026-082 bore Tunnel Client Hello Frame (Open-Source Reverse Tunnel Session)\"; flow:established,to_server; dsize:13<>20; content:\"{|22|Hello|22 3a|\"; startswith; content:\"}|00|\"; endswith; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/inv-2026-082-detections/; classtype:policy-violation; sid:1000001; rev:1; metadata:author The_Hunters_Ledger, date 2026-11-14;)",
+        "to_ids": false,
+        "comment": "THL HUNT INV-2026-082 bore Tunnel Client Hello Frame (Open-Source Reverse Tunnel Session) | TIER: Hunting | robustness 2 | confidence MODERATE | ATT&CK T1572 | rule hash 9bcc2762 | https://the-hunters-ledger.com/hunting-detections/inv-2026-082-detections/",
+        "timestamp": 1794933198,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Hunting\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "47d38801-22da-5d08-b96c-d36242b4f82f",
+        "type": "sigma",
+        "category": "Payload installation",
+        "value": "title: ACK Worker Node Role Session Calling DescribeInstances\nid: 57f7d699-d6a3-4aad-a28a-8c2c10347b74\nname: ack_worker_role_describeinstances\nstatus: experimental\ndescription: >-\n  Detects an ActionTrail event in which a session of the default managed-Kubernetes worker node role calls the compute DescribeInstances API.\n  The node role's own agents call it for their own region, so a single event is normal and the rule is the base of the multi-region correlation in this file.\n  In INV-2026-082 a temporary credential with the shape of a node metadata-service credential was used to list every compute instance in 7 regions.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/inv-2026-082-detections/\n    - https://www.alibabacloud.com/help/en/actiontrail/user-guide/management-event-structure\nauthor: The Hunters Ledger\ndate: 2026-11-14\ntags:\n    - attack.discovery\n    - attack.t1580\n    - stp.3\n    - detection.emerging-threats\nlogsource:\n    product: alibaba\n    service: actiontrail\n    definition: 'Requires ActionTrail management events delivered to the SIEM as JSON with the documented field names (eventName, userIdentity.type, userIdentity.userName, sourceIpAddress, acsRegion). The default worker node role name prefix KubernetesWorkerRole is an assumption about clusters created with default settings; renamed roles are missed.'\ndetection:\n    selection:\n        eventName: 'DescribeInstances'\n        userIdentity.type: 'assumed-role'\n        userIdentity.userName|startswith: 'KubernetesWorkerRole'\n    condition: selection\nfalsepositives:\n    - Node role agents and cluster autoscaler calling DescribeInstances for their own region\nlevel: informational\n---\ntitle: ACK Worker Node Role Listing Compute Instances In Several Regions\nid: eb1c1dcc-2dc5-4a4f-8039-1d889f29ec1d\nstatus: experimental\ndescription: >-\n  Detects a single worker node role session calling DescribeInstances in four or more regions within 15 minutes.\n  A node role belongs to one cluster in one region, so a sweep across regions is a stolen credential being used to inventory the account.\n  The INV-2026-082 operator swept 7 regions with one temporary node-role credential and held a 1,162-instance inventory afterwards.\n  Needs ActionTrail events and a backend that supports Sigma correlation (value_count).\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/inv-2026-082-detections/\nauthor: The Hunters Ledger\ndate: 2026-11-14\ntags:\n    - attack.discovery\n    - attack.t1580\n    - stp.4\n    - detection.emerging-threats\ncorrelation:\n    type: value_count\n    rules:\n        - ack_worker_role_describeinstances\n    group-by:\n        - userIdentity.userName\n    timespan: 15m\n    condition:\n        gte: 4\n        field: acsRegion\nfalsepositives:\n    - A cross-region inventory or cost tool that was granted the node role\nlevel: high",
+        "to_ids": false,
+        "comment": "ACK Worker Node Role Listing Compute Instances In Several Regions (with base rule) | TIER: Hunting | robustness 3 | confidence MODERATE | ATT&CK T1580 | rule hash d22e6ae8 | https://the-hunters-ledger.com/hunting-detections/inv-2026-082-detections/",
+        "timestamp": 1794933198,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Hunting\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "65640938-c25a-52fa-b533-d1ffddefbb5f",
+        "type": "sigma",
+        "category": "Payload installation",
+        "value": "title: ACK Worker Node Role Session Used From A Public Source Address\nid: bb9d396e-a73b-4bd0-8c09-74acc0fc7c2e\nstatus: experimental\ndescription: >-\n  Detects an ActionTrail event in which a session of the default managed-Kubernetes worker node role makes an API call from a source address outside the private ranges.\n  A node role credential is issued to code running on the node, so a call from an address that is neither the node nor your own egress is a stolen credential.\n  This rule cannot know your egress ranges, so every node that reaches the API through a public address or NAT needs a filter before the rule is usable.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/inv-2026-082-detections/\n    - https://www.alibabacloud.com/help/en/actiontrail/user-guide/management-event-structure\nauthor: The Hunters Ledger\ndate: 2026-11-14\ntags:\n    - attack.stealth\n    - attack.persistence\n    - attack.privilege-escalation\n    - attack.initial-access\n    - attack.t1078.004\n    - stp.3\n    - detection.emerging-threats\nlogsource:\n    product: alibaba\n    service: actiontrail\n    definition: 'Requires ActionTrail management events delivered to the SIEM as JSON with the documented field names (userIdentity.type, userIdentity.userName, sourceIpAddress). The documentation says sourceIpAddress holds the client address in most cases and a service identifier when a cloud service sends the request, so service identifiers must be handled in the filter. KubernetesWorkerRole is the default node role name prefix; renamed roles are missed.'\ndetection:\n    selection:\n        userIdentity.type: 'assumed-role'\n        userIdentity.userName|startswith: 'KubernetesWorkerRole'\n    filter_private:\n        sourceIpAddress|cidr:\n            - '10.0.0.0/8'\n            - '172.16.0.0/12'\n            - '192.168.0.0/16'\n    condition: selection and not filter_private\nfalsepositives:\n    - Nodes that reach the API through a public address or a NAT gateway, which must be listed in a local filter\n    - Cloud services that act on the role and report a service identifier in sourceIpAddress\nlevel: medium",
+        "to_ids": false,
+        "comment": "ACK Worker Node Role Session Used From A Public Source Address | TIER: Hunting | robustness 2 | confidence LOW | ATT&CK T1078.004 | rule hash 3ff669b8 | https://the-hunters-ledger.com/hunting-detections/inv-2026-082-detections/",
+        "timestamp": 1794933198,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Hunting\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "d6de022e-d892-5748-93cc-1a53aa012197",
+        "type": "sigma",
+        "category": "Payload installation",
+        "value": "title: Agent Platform Publish Request\nid: 9993f791-aeb8-4789-b4f6-802249886c02\nname: agent_platform_publish\nstatus: experimental\ndescription: >-\n  Detects a POST to the publish route of an AI-agent platform's config service.\n  Building block for the publish, save, reload ordering correlation in this file; it is not meant to alert alone.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/inv-2026-082-detections/\nauthor: The Hunters Ledger\ndate: 2026-11-14\ntags:\n    - attack.impact\n    - attack.t1565.001\n    - stp.2\n    - detection.emerging-threats\nlogsource:\n    category: proxy\n    definition: 'Requires gateway or ingress access logs that record the request method, path and client address. The path value is a placeholder for your platform''s route; the route names vary by platform.'\ndetection:\n    selection:\n        cs-method: 'POST'\n        c-uri|contains: '/REPLACE-publish-route/'\n    condition: selection\nfalsepositives:\n    - Every legitimate publish\nlevel: informational\n---\ntitle: Agent Platform Workspace File Save Request\nid: 95931ef0-a119-4073-a122-a40474582913\nname: agent_platform_workspace_save\nstatus: experimental\ndescription: >-\n  Detects a request to the workspace file save route of an AI-agent platform's config service.\n  Building block for the publish, save, reload ordering correlation in this file; it is not meant to alert alone.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/inv-2026-082-detections/\nauthor: The Hunters Ledger\ndate: 2026-11-14\ntags:\n    - attack.impact\n    - attack.t1565.001\n    - stp.2\n    - detection.emerging-threats\nlogsource:\n    category: proxy\n    definition: 'Requires gateway or ingress access logs that record the request method, path and client address. The path value is a placeholder for your platform''s route; the route names vary by platform.'\ndetection:\n    selection:\n        c-uri|contains: '/REPLACE-workspace-save-route/'\n    condition: selection\nfalsepositives:\n    - Every legitimate workspace edit\nlevel: informational\n---\ntitle: Agent Platform Internal Workspace Reload Route Called Through The Gateway\nid: 2f8c5d64-66d6-4077-a599-0a185ba958f2\nname: agent_platform_reload\nstatus: experimental\ndescription: >-\n  Detects a POST to the internal workspace reload route of an AI-agent platform through the public or shared gateway.\n  The route pushes a changed agent configuration into the running pod without a republish.\n  In INV-2026-082 the operator called it after rewriting an agent's model endpoint so the change took effect without the platform restoring its own model block.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/inv-2026-082-detections/\nauthor: The Hunters Ledger\ndate: 2026-11-14\ntags:\n    - attack.persistence\n    - attack.impact\n    - attack.t1565.001\n    - stp.2\n    - detection.emerging-threats\nlogsource:\n    category: proxy\n    definition: 'Requires gateway or ingress access logs that record the request method, path and client address. The path value is a placeholder: replace it with your platform''s internal reload route. Route names vary by platform.'\ndetection:\n    selection:\n        cs-method: 'POST'\n        c-uri|contains: '/REPLACE-internal-reload-route'\n    condition: selection\nfalsepositives:\n    - The platform's own editor or services, if they call this route through the gateway after a configuration save\nlevel: medium\n---\ntitle: Agent Configuration Written After Publish Then Reloaded Without Republish\nid: ab3ec12c-a6bd-43a9-a4ea-a7f6d6a1baee\nstatus: experimental\ndescription: >-\n  Detects, for one client address within two minutes, a publish, then a workspace file save, then the internal workspace reload, in that order.\n  A normal edit saves first and publishes after. The INV-2026-082 operator published first, wrote the agent's model endpoint afterwards and reloaded, which keeps the platform from restoring its own model block over the operator's endpoint.\n  The access log shows the save only as a path, so what was written is NOT CHECKED by this rule.\n  Needs the gateway logs of the base rules and a backend that supports Sigma correlation (temporal_ordered).\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/inv-2026-082-detections/\nauthor: The Hunters Ledger\ndate: 2026-11-14\ntags:\n    - attack.impact\n    - attack.t1565.001\n    - stp.3\n    - detection.emerging-threats\ncorrelation:\n    type: temporal_ordered\n    rules:\n        - agent_platform_publish\n        - agent_platform_workspace_save\n        - agent_platform_reload\n    group-by:\n        - c-ip\n    timespan: 2m\nfalsepositives:\n    - An editor that publishes before saving and then reloads\nlevel: medium",
+        "to_ids": false,
+        "comment": "Agent Platform Internal Workspace Reload Route Called Through The Gateway (with publish, save and ordering correlation) | TIER: Hunting | robustness 2 | confidence LOW | ATT&CK T1565.001 | rule hash a68f404c | https://the-hunters-ledger.com/hunting-detections/inv-2026-082-detections/",
+        "timestamp": 1794933198,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Hunting\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "f3ba0eec-416a-52a9-baa3-6b11c90fe821",
+        "type": "sigma",
+        "category": "Payload installation",
+        "value": "title: Bore Tunnel Client Exposing A Local Port Through A Remote Server\nid: a8893ad2-acdd-4ae4-8118-f1c020c52dbc\nstatus: experimental\ndescription: >-\n  Detects the open-source bore client run as bore local PORT --to SERVER, which publishes a local TCP port on a remote rendezvous server.\n  The operator in INV-2026-082 ran it on a rented server and, by the scripts that were written to run in a pod (execution there inferred, not shown), in a victim pod to expose the scripted LLM endpoint, a payload server and a result receiver on public ports of the free bore.pub server.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/inv-2026-082-detections/\n    - https://github.com/ekzhang/bore\nauthor: The Hunters Ledger\ndate: 2026-11-14\ntags:\n    - attack.command-and-control\n    - attack.t1572\n    - attack.t1090\n    - stp.2\n    - detection.emerging-threats\nlogsource:\n    category: process_creation\n    product: linux\n    definition: 'Requires process creation logging with CommandLine, for example auditd execve normalised to process_creation or an EDR process feed.'\ndetection:\n    selection:\n        Image|endswith: '/bore'\n        CommandLine|contains|all:\n            - ' local '\n            - ' --to '\n    condition: selection\nfalsepositives:\n    - Developers who use bore to share a local web service during testing\nlevel: medium",
+        "to_ids": false,
+        "comment": "Bore Tunnel Client Exposing A Local Port Through A Remote Server | TIER: Hunting | robustness 2 | confidence HIGH | ATT&CK T1572, T1090 | rule hash b39f3f61 | https://the-hunters-ledger.com/hunting-detections/inv-2026-082-detections/",
+        "timestamp": 1794933198,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Hunting\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "608645bf-6981-5a92-a6ec-bc7cff6c7f14",
+        "type": "sigma",
+        "category": "Payload installation",
+        "value": "title: GitLab API User Lookup Rejected\nid: 8a46e348-da01-4b1b-abc7-22b9a9a5ef03\nname: gitlab_api_user_rejected\nstatus: experimental\ndescription: >-\n  Detects a rejected request to the GitLab user endpoint.\n  Building block for the repeated-rejection correlation in this file; it is not meant to alert alone.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/inv-2026-082-detections/\nauthor: The Hunters Ledger\ndate: 2026-11-14\ntags:\n    - attack.credential-access\n    - attack.t1110\n    - stp.2\n    - detection.emerging-threats\nlogsource:\n    category: proxy\n    definition: 'Requires GitLab or its reverse proxy access logs with the request path, status and client address mapped to c-uri, sc-status and c-ip.'\ndetection:\n    selection:\n        c-uri|startswith: '/api/v4/user'\n        sc-status: 401\n    condition: selection\nfalsepositives:\n    - Every expired token or mistyped credential\nlevel: informational\n---\ntitle: GitLab API User Lookup Rejected Repeatedly From One Source\nid: 2a79d4b5-8144-4767-a57b-173101a77fbf\nstatus: experimental\ndescription: >-\n  Detects four or more rejected requests to the GitLab user endpoint from one source address within 10 minutes.\n  In INV-2026-082 one harvested shared service-account secret was tried as an account password, as a personal-access-token header and as git-over-HTTP basic auth against the same GitLab instance, which produces a burst of rejections from the pod that holds it.\n  Whether any attempt succeeded is NOT CHECKED, because the held outputs show no successful response.\n  Needs the access logs of the base rule and a backend that supports Sigma correlation (event_count). A pod using a shared service account cannot be named without local values, so add the pod egress and account name in a local filter.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/inv-2026-082-detections/\n    - https://docs.gitlab.com/ee/administration/logs/\nauthor: The Hunters Ledger\ndate: 2026-11-14\ntags:\n    - attack.credential-access\n    - attack.t1110\n    - stp.2\n    - detection.emerging-threats\ncorrelation:\n    type: event_count\n    rules:\n        - gitlab_api_user_rejected\n    group-by:\n        - c-ip\n    timespan: 10m\n    condition:\n        gte: 4\nfalsepositives:\n    - A CI job or integration with an expired token retrying\nlevel: low",
+        "to_ids": false,
+        "comment": "GitLab API User Lookup Rejected Repeatedly From One Source (with base rule) | TIER: Hunting | robustness 2 | confidence LOW | ATT&CK T1110 | rule hash cfe428f4 | https://the-hunters-ledger.com/hunting-detections/inv-2026-082-detections/",
+        "timestamp": 1794933198,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Hunting\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "2512cc50-cdb0-5b96-b17e-b704cbd54dfb",
+        "type": "sigma",
+        "category": "Payload installation",
+        "value": "title: Python Inline Downloader Writing A Hidden Script To Tmp And Spawning It\nid: 0b0d8ba2-0394-49c8-a0b1-d6ca6b03ad64\nstatus: experimental\ndescription: >-\n  Detects a python interpreter started with an inline -c program that fetches a URL with urlopen, writes the bytes to a hidden file under /tmp and starts it with Popen.\n  An AI-agent platform runtime executes exactly this command when a workspace tools file declares a stdio MCP server whose command is python3 -c, which gives the planter code execution without the model in the loop.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/inv-2026-082-detections/\nauthor: The Hunters Ledger\ndate: 2026-11-14\ntags:\n    - attack.execution\n    - attack.t1059.006\n    - attack.command-and-control\n    - attack.t1105\n    - stp.3\n    - detection.emerging-threats\nlogsource:\n    category: process_creation\n    product: linux\n    definition: 'Requires process creation logging that populates the full CommandLine, for example auditd execve records normalised to process_creation or an EDR process feed. Inline programs longer than the logger truncation limit are not matched.'\ndetection:\n    selection_img:\n        Image|contains: '/python'\n    selection_cmd:\n        CommandLine|contains|all:\n            - ' -c '\n            - 'urlopen('\n            - 'Popen('\n            - '/tmp/.'\n    condition: all of selection_*\nfalsepositives:\n    - Unlikely, installer or bootstrap one-liners that fetch a script into a hidden temporary file and start it\nlevel: high",
+        "to_ids": true,
+        "comment": "Python Inline Downloader Writing A Hidden Script To Tmp And Spawning It | TIER: Detection | robustness 2 | confidence MODERATE | ATT&CK T1059.006, T1105 | rule hash 8b3a99cf | https://the-hunters-ledger.com/hunting-detections/inv-2026-082-detections/",
+        "timestamp": 1794933198,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Detection\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "7b0a62ea-66cb-5f94-a241-b67bf2b6ea64",
+        "type": "yara",
+        "category": "Payload installation",
+        "value": "rule MAL_AgentPlatform_MCP_Stdio_Python_Downloader_Plant {\n   meta:\n      description = \"Detects a stdio MCP server entry whose command is python3 -c with an inline downloader (fetch a URL, write the bytes to a hidden .py under /tmp, start it with subprocess.Popen), either as a tools.json workspace file or as the operator script that writes one\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/inv-2026-082-detections/\"\n      date = \"2026-11-14\"\n      hash1 = \"b660141d80bcc05457e881e2db687120677473c8d43c62b26c2c413fbd50b885\"\n      hash2 = \"85b27a02024523973d2b12621e944856f62011d6\"\n      hash3 = \"4b1397ff3c226feaa5034913ba1b87fa\"\n      family = \"AgentPlatform-MCP-Plant\"\n      id = \"27a257cc-c52f-5ba2-9b40-7ec4e9fe18cd\"\n   strings:\n      $mcp = \"mcpServers\" ascii\n      $stdio = /\\\\?\"transport\\\\?\"\\s*:\\s*\\\\?\"stdio\\\\?\"/ ascii\n      $cmd = /\\\\?\"command\\\\?\"\\s*:\\s*\\\\?\"python3?\\\\?\"/ ascii\n      $dashc = /\\\\?\"args\\\\?\"\\s*:\\s*\\[\\s*\\\\?\"-c\\\\?\"/ ascii\n      $fetch = \"urllib.request.urlopen(\" ascii\n      $drop = /open\\('\\/tmp\\/\\.[A-Za-z0-9_]{1,16}\\.py','wb'\\)\\.write\\(/ ascii\n      $spawn = /subprocess\\.Popen\\(\\['python3?','\\/tmp\\/\\.[A-Za-z0-9_]{1,16}\\.py'/ ascii\n   condition:\n      filesize < 100KB and all of them\n}",
+        "to_ids": true,
+        "comment": "MAL_AgentPlatform_MCP_Stdio_Python_Downloader_Plant | TIER: Detection | robustness 2 | confidence HIGH | ATT&CK T1059.006, T1105 | rule hash d58fcb59 | https://the-hunters-ledger.com/hunting-detections/inv-2026-082-detections/",
+        "timestamp": 1794933198,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Detection\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "038c1bad-da02-5d55-ade1-8521ae7f7d54",
+        "type": "yara",
+        "category": "Payload installation",
+        "value": "rule MAL_AgentPlatform_Scripted_LLM_Endpoint_SSE_ToolCall_Queue {\n   meta:\n      description = \"Detects a small Python HTTP server that imitates a Responses-style LLM endpoint: serves server-sent events with function_call items, pops the next tool call from a local step file on every turn, and records the function_call_output the platform posts back\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/inv-2026-082-detections/\"\n      date = \"2026-11-14\"\n      hash1 = \"d08901561f5f60d5b1dccc6847f00e6a8cc474e6fae8351df05494d6e58b235a\"\n      hash2 = \"ed8f4c3047685131e5e8b3e6b6ea90176fd3c1ee\"\n      hash3 = \"5b24067a14a490742421af01960ce996\"\n      family = \"AgentPlatform-Scripted-LLM\"\n      id = \"63c56d31-99fc-5cd9-a973-f646c4fcc401\"\n   strings:\n      $ev1 = \"response.output_item.added\" ascii\n      $ev2 = \"response.function_call_arguments.delta\" ascii\n      $ev3 = \"response.function_call_arguments.done\" ascii\n      $in = \"function_call_output\" ascii\n      $fc = /\"type\"\\s*:\\s*\"function_call\"/ ascii\n      $sse = \"text/event-stream\" ascii\n      $srv1 = \"BaseHTTPRequestHandler\" ascii\n      $srv2 = \"ThreadingHTTPServer\" ascii\n      $json1 = \"json.loads(\" ascii\n      $json2 = \"json.dumps(\" ascii\n   condition:\n      filesize < 64KB and all of ($ev*) and $in and $fc and $sse and 1 of ($srv*) and all of ($json*)\n}",
+        "to_ids": false,
+        "comment": "MAL_AgentPlatform_Scripted_LLM_Endpoint_SSE_ToolCall_Queue | TIER: Hunting | robustness 2 | confidence MODERATE | ATT&CK T1071.001 | rule hash 0985ae73 | https://the-hunters-ledger.com/hunting-detections/inv-2026-082-detections/",
+        "timestamp": 1794933198,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Hunting\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "955ad934-f7c2-5ac9-be25-1f7929d62919",
+        "type": "yara",
+        "category": "Payload installation",
+        "value": "rule MAL_Pod_Socks5_Relay_Batch_Helper_Docstring_Family {\n   meta:\n      description = \"Detects the numbered in-pod SOCKS5 relay helper scripts that share one module header: a minimal bidirectional relay with a half-close pump, a getaddrinfo-based connect helper and a subprocess shell helper\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/inv-2026-082-detections/\"\n      date = \"2026-11-14\"\n      hash1 = \"6166a55d058ce8cddacd2e458c340e6e5280fade0852d87a16095de995b81da3\"\n      hash2 = \"959b9a062e8a336016dea8f0b9ea4a9c40cb60f7\"\n      hash3 = \"4609a8f6e268aaf6090e9d8bf69a9488\"\n      family = \"Pod-Socks5-Relay-Helpers\"\n      id = \"0e8375d9-64d0-5524-b21d-8ea6725ed447\"\n   strings:\n      $doc = \"Minimal in-pod socks5 relay\" ascii\n      $pump = \"half-close b so the peer sees EOF\" ascii\n      $conn = \"def conn(host, port, to=8)\" ascii\n      $noaddr = \"raise IOError(\\\"noaddr\\\")\" ascii\n      $s5 = /b\"\\\\x05\\\\x00\"/ ascii\n   condition:\n      filesize < 64KB and 4 of them\n}",
+        "to_ids": false,
+        "comment": "MAL_Pod_Socks5_Relay_Batch_Helper_Docstring_Family | TIER: Hunting | robustness 1 | confidence MODERATE | ATT&CK T1090 | rule hash f4fb7c6a | https://the-hunters-ledger.com/hunting-detections/inv-2026-082-detections/",
+        "timestamp": 1794933198,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Hunting\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "5d7887ca-3562-5c16-9c02-4299b311a16d",
+        "type": "yara",
+        "category": "Payload installation",
+        "value": "rule MAL_ReverseSOCKS_Pod_Worker_Host_Port_Line_Ack_Protocol {\n   meta:\n      description = \"Detects the pod-side worker of a reverse SOCKS pair: holds idle sockets open to a relay, reads a newline-terminated host and port line, dials it, answers with the single byte 1 or 0, then pipes the sockets\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/inv-2026-082-detections/\"\n      date = \"2026-11-14\"\n      hash1 = \"76d901ac74f377e8dc2e307407ab4b1125e90ecae828dbfa8a67ebd19a4e2f85\"\n      hash2 = \"5b87c465ca646b21ef18a62c5c18116b0056f4a6\"\n      hash3 = \"9119df78f2c4f737145c7d392bba6573\"\n      family = \"ReverseSOCKS-Pod-Worker\"\n      id = \"8ce0d078-78bb-5f69-9950-745e07155de7\"\n   strings:\n      $ack1 = /\\.sendall\\(b\"1\"\\)/ ascii\n      $ack0 = /\\.sendall\\(b\"0\"\\)/ ascii\n      $dial = /create_connection\\(\\(host, ?(int\\()?port/ ascii\n      $nl = \"\\\\n\" ascii\n      $thr = \"threading.Thread(\" ascii\n   condition:\n      filesize < 32KB and all of them\n}",
+        "to_ids": false,
+        "comment": "MAL_ReverseSOCKS_Pod_Worker_Host_Port_Line_Ack_Protocol | TIER: Hunting | robustness 2 | confidence MODERATE | ATT&CK T1090 | rule hash f2372b02 | https://the-hunters-ledger.com/hunting-detections/inv-2026-082-detections/",
+        "timestamp": 1794933198,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Hunting\"",
+            "colour": "#4ade80"
+          }
+        ]
+      }
+    ],
+    "Object": []
+  }
+}

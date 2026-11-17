@@ -5,14 +5,10 @@ layout: post
 permalink: /reports/inv-2026-082-agent-platform-command-channel/
 hide: true
 figures: inline
-unlisted: true
-sitemap: false
-preview_cover_label: "Platform Abuse"   # preview only: header cover while the catalog entry is parked; drop at go-live
-preview_severity: high
 category: "AI-Agent Platform Abuse"
 description: "An operator rewrote a consumer-electronics maker's own AI-agent platform configuration to serve as an execution and relay channel, with a scripted fake model server and a model-free tool-server plant. This note gives the method, the detections and what the evidence does and does not show."
 detection_page: /hunting-detections/inv-2026-082-detections/
-ioc_feed: /ioc-feeds/inv-2026-082-agent-platform-command-channel-iocs.json
+ioc_feed: /ioc-feeds/inv-2026-082-agent-platform-command-channel/
 detection_sections:
   - label: "YARA Rules"
     anchor: "#yara-rules"
@@ -40,6 +36,7 @@ figure_nav:
         anchor: "#4-the-attack-chain-token-repoint-plant-relay"
       - label: "Detection anchors"
         anchor: "#9-detection-and-hunting-guidance"
+stix_bundle: /stix/inv-2026-082-agent-platform-command-channel.json
 ---
 
 **Campaign Identifier:** AgentPlatform-ConfigChannel-OpenDirectory-198[.]44[.]116[.]69<br>

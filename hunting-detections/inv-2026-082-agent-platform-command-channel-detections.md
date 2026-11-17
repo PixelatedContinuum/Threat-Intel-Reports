@@ -4,8 +4,6 @@ date: '2026-11-14'
 layout: post
 permalink: /hunting-detections/inv-2026-082-detections/
 hide: true
-unlisted: true
-sitemap: false
 ---
 
 **Campaign:** INV-2026-082

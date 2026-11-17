@@ -1963,6 +1963,12 @@ unmapped:
   - label: AI-augmented operator tradecraft (capability-building)
     where:
       - feed korean-claude-openclaw-221.150.15.104-iocs.json
+  - label: AgentPlatform-MCP-Plant
+    where:
+      - detection inv-2026-082-agent-platform-command-channel-detections
+  - label: AgentPlatform-Scripted-LLM
+    where:
+      - detection inv-2026-082-agent-platform-command-channel-detections
   - label: Arsenal-237
     where:
       - detection arsenal-237-chromelevator-exe-detections
@@ -2102,6 +2108,14 @@ unmapped:
       penetration-testing agent platform (INV-2026-080)
     where:
       - feed inv-2026-080-cyberstrike-ad-workbench-iocs.json
+  - label: >-
+      Operator-written Python tooling: scripted LLM endpoint, MCP plant, reverse SOCKS relay,
+      receive-only sinks, around one open-directory VPS
+    where:
+      - feed inv-2026-082-agent-platform-command-channel-iocs.json
+  - label: Pod-Socks5-Relay-Helpers
+    where:
+      - detection inv-2026-082-agent-platform-command-channel-detections
   - label: PoetRAT
     where:
       - detection agent-exe-detections
@@ -2119,6 +2133,9 @@ unmapped:
   - label: PwnKit
     where:
       - detection inv-2026-080-cyberstrike-ad-workbench-detections
+  - label: ReverseSOCKS-Pod-Worker
+    where:
+      - detection inv-2026-082-agent-platform-command-channel-detections
   - label: Rovodev Operator Artifacts
     where:
       - detection rovodev-mirai-matrix-c2-87.106.143.220-detections
