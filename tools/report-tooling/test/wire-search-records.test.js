@@ -307,3 +307,35 @@ test('F2 C: a CISA-only nKEV row indexes "Not in VulnCheck KEV." and never "Adde
   var mcnt = mb.records.filter(function (r) { return r.url.endsWith('cve-cve-2026-0001'); })[0].content;
   assert.ok(mcnt.indexOf('Added to VulnCheck KEV.') > -1 && mcnt.indexOf('Not in VulnCheck KEV.') < 0, 'the mutated builder claims the VulnCheck addition');
 });
+
+/* T-0668: an nKEV record is dated by the row's event, falling back to added */
+test('T-0668 date: an nKEV record takes the event day; added when event is missing or not a day; the data-day attribute last (control: an event-moved row)', function () {
+  var base = { added: '2026-11-04', desc: 'd' };
+  var moved = rec(withNkev(Object.assign({}, base, { event: '2026-11-17', event_src: 'cisa', cisa_added: '2026-11-17' })), 'cve-cve-2026-0001');
+  assert.strictEqual(moved.meta.date, '2026-11-17', 'event differs from added: the event day');
+  assert.strictEqual(rec(withNkev(base), 'cve-cve-2026-0001').meta.date, '2026-11-04', 'no event key: added');
+  ['', null, 'soon', '2026-11', 20261117].forEach(function (bad) {
+    assert.strictEqual(rec(withNkev(Object.assign({}, base, { event: bad })), 'cve-cve-2026-0001').meta.date, '2026-11-04', 'event ' + JSON.stringify(bad) + ': added');
+  });
+  assert.strictEqual(rec(withNkev({ desc: 'd', event: 'x' }), 'cve-cve-2026-0001').meta.date, '2026-11-01', 'neither: the row data-day');
+  // the CVEs tab is still dated by published, event ignored
+  assert.strictEqual(rec(withCves({ published: '2026-10-29', event: '2026-11-17', desc: 'd' }), 'cves-cve-2026-0003').meta.date, '2026-10-29');
+});
+
+/* T-0668: the record's text follows the pane's section order */
+test('T-0668 order: nKEV record text runs exploitation, fix, detection, exploits, severity, CVE record, links', function () {
+  var c = rec(withNkev({ added: '2026-11-01', cisa_added: '2026-11-02', desc: 'Zdesc', cwe: ['CWE-78'], affected: ['Acme Gadget: 1.0'], fixed: '1.3', kev_due: '2026-11-20',
+    reports: [{ url: 'https://vendor.example.com/r', host: 'vendor.example.com' }], et_sids: ['2050001'], msf: ['modules/exploits/linux/gadget_rce.rb'],
+    cvss: '9.8', severity: 'critical', cvss_version: '3.1', scored_by: 'NVD', cvss_vector: 'CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H', ssvc_expl: 'poc', aliases: ['GHSA-aaaa-bbbb-cccc'] }), 'cve-cve-2026-0001').content;
+  var marks = ['Added to VulnCheck KEV.', 'On CISA KEV.', "VulnCheck's cited reports", 'Acme Gadget: 1.0', 'Fixed in 1.3', "CISA's due date", 'ET Open SID 2050001', 'Metasploit gadget_rce.rb', 'CVSS v3.1', 'From the vector', 'Exploitation: poc', 'Zdesc', 'CWE-78', 'GHSA-aaaa-bbbb-cccc'];
+  var at = marks.map(function (m) { return c.indexOf(m); });
+  at.forEach(function (p, i) { assert.ok(p > -1, 'present: ' + marks[i]); if (i) assert.ok(p > at[i - 1], marks[i] + ' follows ' + marks[i - 1]); });
+});
+
+test('T-0668 order: CVEs record text runs why listed, fix, detection, exploits, severity, CVE record, links', function () {
+  var c = rec(withCves({ published: '2026-10-29', signals: ['msf', 'epss90'], msf: ['modules/exploits/linux/x_rce.rb'], epss_pct: 0.95, affected: ['Acme: 1.0'], fixed: '2.0', et_sids: ['2050002'],
+    cvss: '8.1', severity: 'high', cvss_version: '3.1', scored_by: 'CNA', desc: 'Zdesc', cwe: ['CWE-287'], aliases: ['GHSA-aaaa-bbbb-cccc'] }), 'cves-cve-2026-0003').content;
+  var marks = ['A Metasploit module for this CVE', "FIRST's EPSS puts", 'Acme: 1.0', 'Fixed in 2.0', 'ET Open SID 2050002', 'Metasploit x_rce.rb', 'CVSS v3.1', 'Zdesc', 'CWE-287', 'GHSA-aaaa-bbbb-cccc'];
+  var at = marks.map(function (m) { return c.indexOf(m); });
+  at.forEach(function (p, i) { assert.ok(p > -1, 'present: ' + marks[i]); if (i) assert.ok(p > at[i - 1], marks[i] + ' follows ' + marks[i - 1]); });
+});

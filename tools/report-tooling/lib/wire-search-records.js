@@ -102,22 +102,10 @@ function detailLines(d, isCves) {
   var out = [];
   if (!d || typeof d !== 'object') { out.push('No details in our data for this CVE.'); return out; }   // NO_ENTRY, the one message kept
 
-  // secRecord (wire-details.js 146-177): desc; the title only on the CVEs tab
-  var desc = squash(d.desc);
-  if (desc) out.push(desc);
-  else if (isCves && squash(d.title)) out.push(squash(d.title));
-  arr(d.cwe).forEach(function (c) { if (typeof c === 'string' && CWE_SHAPE.test(c)) out.push(c); });
-
-  // secAffected (180-205): the affected terms; the fixed versions that pass the version shape, else the no-fixed-version message
-  arr(d.affected).forEach(function (a) { if (typeof a === 'string' && a.trim()) out.push(squash(a)); });
-  var fixedOk = str(d.fixed).split(',').map(squash).filter(function (v) { return VERSION_SHAPE.test(v); });
-  if (fixedOk.length) out.push('Fixed in ' + fixedOk.join(', '));
-
-  // secWhatDo (208-215)
-  if (isDay(d.kev_due)) out.push("CISA's due date for US federal agencies.");
+  // T-0668: the order is the pane's (wire-details.js buildNkevPanel / buildCvesPanel after T-0667 D1): why it is here, the fix, detection, exploits, severity, then the CVE record and the links.
 
   if (!isCves) {
-    // secExploitation (218-270), nKEVs only; the reports hosts are the pane's links' text
+    // secExploitation, nKEVs only; the reports hosts are the pane's links' text
     // T-0667 F3: a CISA-only row (the exporter's explicit cisa_only key) was never added to VulnCheck KEV (wire-details.js isCisaOnly).
     var cisaOnly = d.cisa_only === true;
     if (isDay(d.added) && !cisaOnly) out.push('Added to VulnCheck KEV.');
@@ -135,7 +123,7 @@ function detailLines(d, isCves) {
     }
     if (isDay(d.evidence) && isDay(d.added) && d.evidence < d.added) out.push('Earliest citation date.');
   } else {
-    // secWhyListed (273-309), CVEs tab only: each claim the chips make, in the pane's words, with the numbers left out
+    // secWhyListed, CVEs tab only: each claim the chips make, in the pane's words, with the numbers left out
     var signals = arr(d.signals);
     var cvss = nnum(d.cvss), vec = str(d.cvss_vector), kp = squash(d.kev_product), kn = nnum(d.kev_product_n);
     if (signals.indexOf('crit_noauth_kev_product') !== -1 && !isNaN(cvss) && cvss >= 9 && CVSS_VECTOR_SHAPE.test(vec) &&
@@ -148,18 +136,24 @@ function detailLines(d, isCves) {
     if (signals.indexOf('epss90') !== -1 && !isNaN(pct) && pct >= 0.90) out.push("FIRST's EPSS puts this CVE in the top 10% for likelihood of exploitation in the next 30 days.");
   }
 
-  // secExploits (312-351): the Metasploit module file names and Exploit-DB ids that pass their shapes
-  arr(d.msf).forEach(function (p) { if (typeof p === 'string' && MSF_SHAPE.test(p)) { out.push('Metasploit ' + p.split('/').pop()); } });
-  arr(d.edb).forEach(function (e) { var s = String(e).trim(); if (DIGITS.test(s) && s.length <= 8) { out.push('Exploit-DB EDB-' + s); } });
+  // secFix: the affected terms; the fixed versions that pass the version shape; the CISA due date
+  arr(d.affected).forEach(function (a) { if (typeof a === 'string' && a.trim()) out.push(squash(a)); });
+  var fixedOk = str(d.fixed).split(',').map(squash).filter(function (v) { return VERSION_SHAPE.test(v); });
+  if (fixedOk.length) out.push('Fixed in ' + fixedOk.join(', '));
+  if (isDay(d.kev_due)) out.push("CISA's due date for US federal agencies.");
 
-  // secDetection (354-418): ET Open, Nuclei, CISA Sigma, Snort 3 rule ids that pass their shapes
+  // secDetection: ET Open, Nuclei, CISA Sigma, Snort 3 rule ids that pass their shapes
   arr(d.et_sids).forEach(function (s) { var t = String(s).trim(); if (DIGITS.test(t)) { out.push('ET Open SID ' + t); } });
   var nuc = str(d.nuclei);
   if (nuc && RULE_PATH_SHAPE.test(nuc)) { out.push('Nuclei ' + nuc.split('/').pop()); }
   arr(d.cisa_sigma).forEach(function (p) { if (typeof p === 'string' && RULE_PATH_SHAPE.test(p)) { out.push('CISA Sigma ' + p); } });
   arr(d.snort3_sids).forEach(function (s) { var t = String(s).trim(); if (DIGITS.test(t)) { out.push('Snort 3 SID ' + t); } });
 
-  // secSeverity (435-481): the band word and who scored it, the vector in words, the SSVC labels; the score digits stay out
+  // secExploits: the Metasploit module file names and Exploit-DB ids that pass their shapes
+  arr(d.msf).forEach(function (p) { if (typeof p === 'string' && MSF_SHAPE.test(p)) { out.push('Metasploit ' + p.split('/').pop()); } });
+  arr(d.edb).forEach(function (e) { var s = String(e).trim(); if (DIGITS.test(s) && s.length <= 8) { out.push('Exploit-DB EDB-' + s); } });
+
+  // secSeverity: the band word and who scored it, the vector in words, the SSVC labels; the score digits stay out
   var score = nnum(str(d.cvss).trim());
   var scoredOk = str(d.cvss).trim() !== '' && !isNaN(score) && score > 0 && score <= 10 && SEVERITIES[str(d.severity)] && CVSS_VERSIONS[str(d.cvss_version)] && SCORED_BY[str(d.scored_by)];
   if (scoredOk) {
@@ -186,9 +180,15 @@ function detailLines(d, isCves) {
   });
   if (bits.length) out.push(bits.join(' ') + " (CISA's assessment, via cve.now)");
 
-  // secLikelihood (484-514): numbers only; nothing is indexed.
+  // secLikelihood: numbers only; nothing is indexed.
 
-  // secLinks (517-556): the advisory ids that pass the GHSA / EUVD shapes (the links' text)
+  // secRecord: desc; the title only on the CVEs tab; the CWE ids
+  var desc = squash(d.desc);
+  if (desc) out.push(desc);
+  else if (isCves && squash(d.title)) out.push(squash(d.title));
+  arr(d.cwe).forEach(function (c) { if (typeof c === 'string' && CWE_SHAPE.test(c)) out.push(c); });
+
+  // secLinks: the advisory ids that pass the GHSA / EUVD shapes (the links' text)
   arr(d.aliases).forEach(function (a) { if (typeof a === 'string' && (/^GHSA(?:-[a-z0-9]{4}){3}$/i.test(a) || /^EUVD-\d{4}-\d{4,}$/i.test(a))) out.push(a); });
   return out;
 }
@@ -246,7 +246,8 @@ function buildRecords(input) {
       if (isCves && d && squash(d.title) && title.indexOf(squash(d.title)) < 0) title = title + ' ' + squash(d.title);
       // a row's own visible text is searchable too, so a row with no Details entry still has its CVE, vendor and product
       lines.unshift(squash(cve + ' ' + vendorProduct));
-      var date = day(d && (isCves ? d.published : d.added)) || day(row.getAttribute('data-day'));
+      // T-0668: an nKEV record is dated by the row's event (the latest exploitation event), else by `added` when `event` is missing or not a day.
+      var date = day(d && (isCves ? d.published : (isDay(d.event) ? d.event : d.added))) || day(row.getAttribute('data-day'));
       add(sectionKey, id, title || id, lines, date);
     });
   }
