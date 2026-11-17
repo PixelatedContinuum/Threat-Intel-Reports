@@ -21,6 +21,7 @@ var C = require('../../assets/js/ioc-classify.js');
 var CS = require('./lib/catalog-status.js');
 var B = require('./lib/benign.js');
 var H = require('./lib/feed-hygiene.js');
+var FP = require('./lib/feed-private.js');
 
 var ROOT = path.join(__dirname, '..', '..');
 var FEED_DIR = path.join(ROOT, 'ioc-feeds');
@@ -228,11 +229,15 @@ function build(feeds, catalogText, unlistedBySlug) {
     if (state === 'embargoed') { coverage.embargoed.push(file); return; }
     if (state === 'unknown')   { coverage.unknown.push(file); return; }
 
+    /* Private vault-only metadata (lib/feed-private.js, T-0662) is removed before the walk.
+       This walk descends into `metadata`. Today a hand-copied `victim_names` list is held out
+       only because its key contains `victim` (feed-hygiene.js keyBucketTier); stripping by
+       field means the index no longer depends on that naming rule. */
+    var feed = FP.strip(feeds[file]).feed;
     var found = [];
-    collect(feeds[file], found, null, false, EXEMPT_TOP, true);
+    collect(feed, found, null, false, EXEMPT_TOP, true);
     if (found.suppressed) suppressed += found.suppressed;
 
-    var feed = feeds[file];
     var nbRoot = (feed && typeof feed === 'object') ? feed.hunt_only_never_block : null;
     var foundNB = [];
     if (nbRoot != null) collect(nbRoot, foundNB, null, false, null, false);

@@ -22,6 +22,7 @@
    "22 indicators" and "22 indicators we could type" must not look alike. */
 
 var X = require('./ioc-table-extract.js');
+var FP = require('./feed-private.js');
 
 /* TWO derivations, deliberately, because the site already has one and it cannot
    be changed without breaking the search index.
@@ -78,7 +79,10 @@ function build(feeds, status, meta) {
     }
     bySlug[slug] = file;
 
-    var s = X.summarise(feeds[file]);
+    /* Private vault-only metadata never reaches a page (lib/feed-private.js, T-0662). The walk
+       already skips `metadata` apart from `metadata.infrastructure`; stripping here keeps that
+       true if the walk ever widens. */
+    var s = X.summarise(FP.strip(feeds[file]).feed);
     var nbRows = s.neverBlockRows || [];
     if (!s.rows.length && !nbRows.length) { skipped.empty++; return; }
 
