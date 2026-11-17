@@ -1211,7 +1211,7 @@ test('one xml-escape mutation per newly escaped vulns.xml value fails the nKEV f
     ['#cve-{{ r.cve | downcase | xml_escape }}</id>', '#cve-{{ r.cve | downcase }}</id>'],
     ['<published>{{ vday | xml_escape }}T00:00:00Z', '<published>{{ vday }}T00:00:00Z'],
     ['<updated>{{ vday | xml_escape }}T00:00:00Z', '<updated>{{ vday }}T00:00:00Z'],
-    ['KEV {{ vday | xml_escape }}{% if dis_len', 'KEV {{ vday }}{% if dis_len'],
+    ['KEV {{ r.added | xml_escape }}{% if vday != r.added %}', 'KEV {{ r.added }}{% if vday != r.added %}'],
     ['since {{ r.cisa_added | xml_escape }}', 'since {{ r.cisa_added }}']
   ];
   cases.forEach(function (c, i) {
@@ -1338,8 +1338,9 @@ test('VEDAS legend claims and source hrefs are pinned separately in each tab', f
 
 test('nKEV grouping copy stays pinned on the real template',function(){
  var page=readReal('wire/index.md'), inc=realIncludes();
- ['newest day first','at least 20 entries','Every VulnCheck KEV entry stays visible.','Filters open matching batches and counts show matching rows.'].forEach(function(pin){
-   assert.equal(CW.checkPage(page.replace(pin,'removed'),inc).status,'FAIL',pin);
+ ['newest day first','at least 5 entries','Every VulnCheck KEV entry stays visible.','Filters open matching batches and counts show matching rows.'].forEach(function(pin){
+   // T-0667: the panel keeps a text for data from before the event day and one for data with it, so a pin can appear twice; drop every copy.
+   assert.equal(CW.checkPage(page.split(pin).join('removed'),inc).status,'FAIL',pin);
  });
 });
 
@@ -1825,7 +1826,7 @@ test('T-0638 the page template: the Priority group, its chip, strip and panel te
     .forEach(function (n) { includes[n] = fsPicks.readFileSync(pathPicks.join(__dirname, '..', '..', '..', '_includes', n), 'utf8'); });
   assert.equal(CW.checkPage(page, includes).status, 'PASS');
   ['class="hl-pstrip" id="vulns-priority"', 'data-sig="np">Priority group', 'sort: "np_rank"', 'hl-vuln__np', 'class="hl-pstrip__new">new</span>', 'The Priority strip at the top of this tab', 'the row stays in its own day with its Priority badge', 'my patch-first order',
-    'needs 5 points', 'the ten highest-scoring rows', 'product classes are my judgment', 'I have not measured it'].forEach(function (pin) {
+    'needs 5 points', 'The strip holds the highest-scoring rows', 'The strip holds every row that scores 5 or more points', 'product classes are my judgment', 'I have not measured it'].forEach(function (pin) {
     assert.ok(page.includes(pin), pin);
     assert.equal(CW.checkPage(page.replace(pin, 'removed'), includes).status, 'FAIL', pin);
   });
@@ -1834,4 +1835,351 @@ test('T-0638 the page template: the Priority group, its chip, strip and panel te
   // an unescaped np_class is caught by the existing escaping check
   assert.equal(CW.checkPage(page.replace('{{ r.np_class | escape }}', '{{ r.np_class }}'), includes).status, 'FAIL');
   assert.equal(CW.checkPage(page.replace('so I have not measured it', 'so I have not measured it — yet'), includes).status, 'FAIL');
+});
+
+/* T-0667: the nKEVs event day (R1), the Priority group without a cap and one row per product (R2), the WordPress fold at
+   five (R3) and the canary and ransomware flags (R4). Contract: tasks/runs/T-0667/contract.md. Fixture
+   test/fixtures/event-wire.yml (generator tasks/runs/T-0667/p2-make-fixture.js): 33 rows, 5 moved by their event day, 5 ranked,
+   two 5+ Fixture Firewall rows unranked, two WordPress folds of 5, one 4-row WordPress day, a CISA-only row and an old-shape row.
+   Data checks are WARN lines like every row check here, so "fails" below means vulnWarnings name the defect. */
+var EV_KEYS_TEST = ['event', 'event_src', 'first_seen', 'canary', 'ransomware'];
+function evFixture() {
+  return yamlPicks.load(fsPicks.readFileSync(pathPicks.join(__dirname, 'fixtures', 'event-wire.yml'), 'utf8'));
+}
+var evWarn = npWarn, evRow = npRow;
+function evGateWith(from, to) {
+  // The gate's own source with one expression changed: a mutation control, so a test that cannot tell the gate is broken shows up.
+  var Module = require('module');
+  var file = pathPicks.join(__dirname, '..', 'lib', 'check-wire.js');
+  var src = fsPicks.readFileSync(file, 'utf8');
+  assert.ok(src.includes(from), 'mutation anchor missing: ' + from);
+  var m = new Module(file, module);
+  m.filename = file;
+  m.paths = Module._nodeModulePaths(pathPicks.dirname(file));
+  m._compile(src.replace(from, to), file);
+  return m.exports;
+}
+
+test('T-0667 control: the event fixture passes with no vuln warnings; its cases are all there', function () {
+  var d = evFixture();
+  var r = CW.check(d, SOURCES, Date.parse(d.generated_at));
+  assert.equal(r.status, 'PASS');
+  assert.deepEqual(r.vulnWarnings, []);
+  assert.deepEqual(r.cveWarnings, []);
+  assert.equal(d.vulns.length, 33);
+  assert.equal(r.counts.vulns, 33);
+  var src = function (s) { return d.vulns.filter(function (x) { return x.event_src === s; }); };
+  assert.equal(src('vulncheck').length + src('cisa').length + src('first_seen').length + d.vulns.filter(function (x) { return !('event' in x); }).length, 33);
+  assert.ok(src('cisa').length >= 2 && src('first_seen').length >= 2 && src('vulncheck').length > 10);
+  assert.equal(d.vulns.filter(function (x) { return x.event && x.event !== x.added; }).length, d.vulns_counts.event_moved);
+  assert.equal(d.vulns.filter(function (x) { return x.canary; }).length, 2);
+  assert.equal(d.vulns.filter(function (x) { return x.ransomware; }).length, 2);
+  var cisaOnly = evRow(d, 'CVE-2026-9306');
+  assert.deepEqual([cisaOnly.reports.length, cisaOnly.event === cisaOnly.added, cisaOnly.event_src], [0, true, 'cisa']);
+  assert.equal(d.vulns_counts.np_per_product, true);
+  assert.ok(!('np_top' in d.vulns_counts));
+  assert.equal(d.vulns.filter(function (x) { return x.np_score >= 5; }).length, 7);
+  assert.equal(d.vulns.filter(function (x) { return x.np_rank > 0; }).length, 5);
+});
+
+test('T-0667 control: the fixture with the event keys, the new counts and the Priority keys removed passes like the data before them', function () {
+  var d = evFixture();
+  d.vulns.forEach(function (r) { EV_KEYS_TEST.concat(NP_KEYS_TEST).forEach(function (k) { delete r[k]; }); });
+  ['cisa_admitted', 'cisa_missing', 'event_moved', 'np_per_product', 'np_priority', 'np_threshold', 'np_classes'].forEach(function (k) { delete d.vulns_counts[k]; });
+  // the batch whose fifth member came from its event day is a four-row day in the old shape: no batch, none declared
+  var moved = d.vulns.filter(function (x) { return x.batch && x.batch !== 'wp-' + x.added; })[0].batch;
+  d.vulns.forEach(function (r) { if (r.batch === moved) delete r.batch; });
+  d.vulns_counts.batches = d.vulns_counts.batches.filter(function (b) { return b.key !== moved; });
+  assert.equal(d.vulns_counts.batches.length, 1);
+  assert.equal(evWarn(d), '');
+});
+
+test('T-0667 control: the same fixture with only the event keys and new counts removed still names the unranked 5+ rows (the old rule has no one-per-product)', function () {
+  var d = evFixture();
+  d.vulns.forEach(function (r) { EV_KEYS_TEST.forEach(function (k) { delete r[k]; }); });
+  ['cisa_admitted', 'cisa_missing', 'event_moved', 'np_per_product'].forEach(function (k) { delete d.vulns_counts[k]; });
+  var moved = d.vulns.filter(function (x) { return x.batch && x.batch !== 'wp-' + x.added; })[0].batch;
+  d.vulns.forEach(function (r) { if (r.batch === moved) delete r.batch; });
+  d.vulns_counts.batches = d.vulns_counts.batches.filter(function (b) { return b.key !== moved; });
+  assert.equal(evWarn(d), 'CVE-2026-9302 scores 5 (threshold 5) but has no np_rank\nCVE-2026-9303 scores 5 (threshold 5) but has no np_rank');
+});
+
+test('T-0667 only some of the five event keys on a row is named; an unknown source, a bad day and a non-boolean flag too', function () {
+  var d = evFixture();
+  delete evRow(d, 'CVE-2026-9301').canary;
+  assert.match(evWarn(d), /9301\).*only some event keys \(event, event_src, first_seen, ransomware\); the exporter writes all five or none/);
+  d = evFixture();
+  evRow(d, 'CVE-2026-9301').event_src = 'sauron';
+  assert.match(evWarn(d), /9301\).*event_src "sauron", not one of vulncheck, cisa, first_seen/);
+  d = evFixture();
+  evRow(d, 'CVE-2026-9301').event = '2026-13-45';
+  assert.match(evWarn(d), /9301\).*event "2026-13-45", not a real day/);
+  d = evFixture();
+  evRow(d, 'CVE-2026-9301').canary = 'yes';
+  assert.match(evWarn(d), /9301\).*canary "yes", not true or false/);
+  evRow(d, 'CVE-2026-9301').canary = false; evRow(d, 'CVE-2026-9301').ransomware = 1;
+  assert.match(evWarn(d), /9301\).*ransomware 1, not true or false/);
+  d = evFixture();
+  evRow(d, 'CVE-2026-9304').first_seen = 'last week';
+  assert.match(evWarn(d), /9304\).*first_seen "last week", not empty or a real day/);
+});
+
+test('T-0667 the event must follow from the three dates: each source, the 1-day boundary and the 2-day backdate', function () {
+  var d = evFixture();
+  // 9307: first seen one day after the VulnCheck date is the UTC boundary, not a move (control: passes as built)
+  assert.equal(evWarn(d), '');
+  var b = evRow(d, 'CVE-2026-9307');
+  b.event = b.first_seen; b.event_src = 'first_seen';
+  assert.match(evWarn(d), /9307\).*event 2026-11-17 from first_seen but its dates .* give 2026-11-16 from vulncheck/);
+  // 9308: two days is a move
+  d = evFixture();
+  var c = evRow(d, 'CVE-2026-9308');
+  c.event = c.added; c.event_src = 'vulncheck';
+  assert.match(evWarn(d), /9308\).*give 2026-11-17 from first_seen/);
+  // a CISA date later than the VulnCheck one moves the row to the CISA day; leaving it on the VulnCheck day is named
+  d = evFixture();
+  var e = evRow(d, 'CVE-2026-9304');
+  e.event = e.added; e.event_src = 'vulncheck';
+  assert.match(evWarn(d), /9304\).*give 2026-11-17 from cisa/);
+  // a CISA date earlier than the VulnCheck one does not move it (9309); claiming it did is named
+  d = evFixture();
+  var f = evRow(d, 'CVE-2026-9309');
+  f.event = f.cisa_added; f.event_src = 'cisa';
+  assert.match(evWarn(d), /9309\).*event 2026-11-12 before its added day 2026-11-14/);
+  // and a later CISA day than the VulnCheck one, with the row left on the VulnCheck day, is named (9304 above)
+  // the ties: the VulnCheck day wins a tie with the CISA day
+  d = evFixture();
+  var g = evRow(d, 'CVE-2026-9301');   // added and cisa_added are both the fixture day
+  assert.equal(g.event_src, 'vulncheck');
+  g.event_src = 'cisa';
+  assert.match(evWarn(d), /9301\).*give 2026-11-17 from vulncheck/);
+  // an event day before the add day is named
+  d = evFixture();
+  var h = evRow(d, 'CVE-2026-9307');
+  h.event = '2026-11-01';
+  assert.match(evWarn(d), /9307\).*event 2026-11-01 before its added day 2026-11-16/);
+});
+
+test('T-0667 first seen counts only 2 or more days after the later of the VulnCheck and CISA dates', function () {
+  var d = evFixture();
+  var r = evRow(d, 'CVE-2026-9314');   // added 11th, CISA 16th, first seen 17th: one day after the later date, so the CISA day stands
+  assert.deepEqual([r.event, r.event_src], ['2026-11-16', 'cisa']);
+  assert.equal(evWarn(d), '');
+  r.event = r.first_seen; r.event_src = 'first_seen';
+  assert.match(evWarn(d), /9314\).*event 2026-11-17 from first_seen but its dates .* give 2026-11-16 from cisa/);
+  // two days after the CISA day moves it
+  d = evFixture();
+  r = evRow(d, 'CVE-2026-9314');
+  r.cisa_added = '2026-11-15'; r.event = '2026-11-17'; r.event_src = 'first_seen';
+  assert.equal(evWarn(d), '');
+});
+
+test('T-0667 a CISA-only row is dated by the CISA day; the same row without a CISA day is named', function () {
+  var d = evFixture();
+  assert.equal(evWarn(d), '');
+  var o = evRow(d, 'CVE-2026-9306');
+  o.cisa_added = '';
+  assert.match(evWarn(d), /9306\).*event 2026-11-16 from cisa but its dates/);
+});
+
+test('T-0667 the new counts are held to the rows when they can be', function () {
+  var d = evFixture();
+  d.vulns_counts.event_moved = 9;
+  assert.match(evWarn(d), /event_moved disagrees with the rows: declared 9, actual 5/);
+  d = evFixture();
+  d.vulns_counts.cisa_admitted = 'two';
+  assert.match(evWarn(d), /cisa_admitted is "two", not a whole number of 0 or more/);
+  d.vulns_counts.cisa_admitted = 999;
+  assert.match(evWarn(d), /cisa_admitted 999 is more than the 33 rows/);
+  d = evFixture();
+  d.vulns_counts.cisa_missing = -1;
+  assert.match(evWarn(d), /cisa_missing is -1/);
+  d = evFixture();
+  d.vulns_counts.np_per_product = 'yes';
+  assert.match(evWarn(d), /np_per_product is "yes", not true/);
+  // data that declares event_moved but whose rows carry no event keys is not held to it (an exporter mid-roll-out)
+  d = evFixture();
+  d.vulns.forEach(function (r) { EV_KEYS_TEST.forEach(function (k) { delete r[k]; }); });
+  d.vulns_counts.batches = [];
+  d.vulns.forEach(function (r) { delete r.batch; });
+  assert.doesNotMatch(evWarn(d), /event_moved/);
+});
+
+test('T-0667 one ranked row per product: a second ranked row of a product is named, and the mutated gate misses it (control)', function () {
+  var d = evFixture();
+  assert.equal(evWarn(d), '');
+  // 9302 and 9303 are the unranked 5+ Fixture Firewall rows; rank 9302 as a sixth row
+  evRow(d, 'CVE-2026-9302').np_rank = 6; d.vulns_counts.np_priority = 6;
+  var w = evWarn(d);
+  assert.match(w, /CVE-2026-9302 is a second ranked row for fixture firewall \(CVE-2026-9301 holds the rank\): np_per_product allows one/);
+  // the mutation: the same gate with the one-per-product check switched off must not name it, so the assertion above is the check, not luck
+  var mut = evGateWith("if (perProduct && rankedProducts[key]) warnings.push(", "if (false && rankedProducts[key]) warnings.push(");
+  var mw = mut.check(d, SOURCES, Date.parse(d.generated_at)).vulnWarnings.join('\n');
+  assert.doesNotMatch(mw, /second ranked row/);
+  // a gate that stops recording the product's holder (the other half of the rule) is caught by the unranked-row check
+  var mut2 = evGateWith("else rankedProducts[key] = r.cve;", "else rankedProducts[key] = '';");
+  var d2 = evFixture();
+  assert.match(mut2.check(d2, SOURCES, Date.parse(d2.generated_at)).vulnWarnings.join('\n'), /but has no np_rank and no ranked row of its product/);
+});
+
+test('T-0667 a row at the threshold with no rank is fine when its product has one, named when it does not', function () {
+  var d = evFixture();
+  assert.equal(d.vulns.filter(function (x) { return x.np_score >= 5 && x.np_rank === 0; }).length, 2);
+  assert.equal(evWarn(d), '');
+  // unrank the one Directory row: nothing else holds that product, so it is named
+  var r = evRow(d, 'CVE-2026-9311');
+  r.np_rank = 0; d.vulns_counts.np_priority = 4;
+  assert.match(evWarn(d), /CVE-2026-9311 scores 5 \(threshold 5\) but has no np_rank and no ranked row of its product/);
+  // old shape (no np_per_product): the same row is the old message, with no product rule
+  var o = evFixture();
+  delete o.vulns_counts.np_per_product;
+  evRow(o, 'CVE-2026-9311').np_rank = 0; o.vulns_counts.np_priority = 4;
+  assert.match(evWarn(o), /CVE-2026-9311 scores 5 \(threshold 5\) but has no np_rank/);
+  // old shape: the unranked Firewall rows are now wrong too, since nothing excuses them
+  assert.match(evWarn(o), /CVE-2026-9302 scores 5 \(threshold 5\) but has no np_rank/);
+});
+
+test('T-0667 the order inside the Priority group: score, then event day, then EPSS, then CVE id (new shape only)', function () {
+  var d = evFixture();
+  function swap(a, b) { var x = evRow(d, a), y = evRow(d, b), t = x.np_rank; x.np_rank = y.np_rank; y.np_rank = t; }
+  // 9304 (rank 4, event 17th) and 9311 (rank 5, event 14th): swapped, the earlier event ranks above
+  swap('CVE-2026-9304', 'CVE-2026-9311');
+  assert.match(evWarn(d), /CVE-2026-9304 np_rank puts it below a row of the same score with an earlier event day/);
+  // 9313 (rank 3, EPSS 0.60) and 9304 (rank 4, EPSS 0.05) share a score and an event day
+  d = evFixture();
+  swap('CVE-2026-9313', 'CVE-2026-9304');
+  assert.match(evWarn(d), /CVE-2026-9313 np_rank puts it below a row of the same score and event day with a lower EPSS/);
+  // equal EPSS: the higher CVE id ranks first
+  d = evFixture();
+  evRow(d, 'CVE-2026-9313').epss = '0.05'; evRow(d, 'CVE-2026-9313').epss_pct = '0.5';
+  assert.equal(evWarn(d), '');
+  swap('CVE-2026-9313', 'CVE-2026-9304');
+  assert.match(evWarn(d), /CVE-2026-9313 np_rank puts it below a row with a higher CVE id at the same score, event day and EPSS/);
+  // a missing EPSS ranks last
+  d = evFixture();
+  evRow(d, 'CVE-2026-9313').epss = ''; evRow(d, 'CVE-2026-9313').epss_pct = ''; evRow(d, 'CVE-2026-9313').epss_date = ''; evRow(d, 'CVE-2026-9313').epss_max = ''; evRow(d, 'CVE-2026-9313').epss_spark = '';
+  assert.match(evWarn(d), /np_rank puts it below a row of the same score and event day with a lower EPSS/);
+  // the old shape is held to score order only, as before
+  d = evFixture();
+  delete d.vulns_counts.np_per_product;
+  swap('CVE-2026-9304', 'CVE-2026-9311');
+  assert.doesNotMatch(evWarn(d), /earlier event day/);
+});
+
+test('T-0667 the cap: np_top, when an older exporter writes it, still caps the group; its absence does not', function () {
+  var d = evFixture();
+  assert.equal(evWarn(d), '');
+  d.vulns_counts.np_top = 3;
+  assert.match(evWarn(d), /the Priority group has 5 rows, over np_top 3/);
+  d.vulns_counts.np_top = 5;
+  assert.equal(evWarn(d), '');
+});
+
+test('T-0667 a WordPress batch is keyed by the event day and holds five rows or more', function () {
+  var d = evFixture();
+  var moved = d.vulns.filter(function (x) { return x.batch && x.batch !== 'wp-' + x.added; })[0];
+  assert.ok(moved && moved.event_src === 'first_seen', 'the fixture has a batch member whose event day is not its added day');
+  assert.equal(d.vulns_counts.batches.length, 2);
+  assert.ok(d.vulns_counts.batches.every(function (b) { return b.n === 5; }));
+  // keyed by its added day, the moved row's batch is named
+  moved.batch = 'wp-' + moved.added;
+  assert.match(evWarn(d), new RegExp(moved.cve + ' batch must match its WordPress event day'));
+  // a declared batch under five is named; four was fine before only because the floor was twenty
+  d = evFixture();
+  d.vulns_counts.batches[0].n = 4;
+  assert.match(evWarn(d), /vulns_counts batch differs from rows or has fewer than 5 rows/);
+  d = evFixture();
+  var key = d.vulns_counts.batches[0].key;
+  d.vulns.filter(function (x) { return x.batch === key; })[0].wp = false;
+  assert.match(evWarn(d), /batch must match its WordPress event day/);
+});
+
+test('T-0667 the page: the new template pins fail the page check when lost; the fold keys carry the event day', function () {
+  var root = pathPicks.join(__dirname, '..', '..', '..');
+  var page = fsPicks.readFileSync(pathPicks.join(root, 'wire', 'index.md'), 'utf8');
+  var includes = {};
+  fsPicks.readdirSync(pathPicks.join(root, '_includes')).filter(function (n) { return /^wire-/.test(n); })
+    .forEach(function (n) { includes[n] = fsPicks.readFileSync(pathPicks.join(root, '_includes', n), 'utf8'); });
+  assert.equal(CW.checkPage(page, includes).status, 'PASS');
+  ['group_by_exp: "gr", "gr.event | default: gr.added"', 'assign vday = r.event | default: r.added', 'hl-vuln__ev hl-vuln__dates',
+    'CISA KEV {{ dt_ev | escape }} &middot; VulnCheck {{ dt_vc | escape }}', 'First seen here {{ dt_ev | escape }} &middot; VulnCheck dated {{ dt_vc | escape }}',
+    'hl-vuln__b hl-vuln__b--canary', 'hl-vuln__b hl-vuln__b--ransom', 'data-sig="canary">VulnCheck canary', 'data-sig="ransomware">Ransomware',
+    'assign n_canary = n_canary | plus: 1', 'assign n_ransom = n_ransom | plus: 1', 'assign np_evd = r.event | default: r.added', 'r.evidence < r.added',
+    'assign wp_batch_group_min = 5', 'at least 5 entries', 'A row in the Priority strip is never folded.', 'I group rows by the day of the latest exploitation event I know of for the CVE',
+    'I group rows by the day VulnCheck added them', 'The strip holds every row that scores 5 or more points, with no cap, and lists one row per product',
+    'canary network recorded exploitation of the CVE', 'Neither adds Priority points.', 'not in VulnCheck KEV'].forEach(function (pin) {
+    assert.ok(page.includes(pin), 'the template carries: ' + pin);
+    assert.equal(CW.checkPage(page.split(pin).join('removed'), includes).status, 'FAIL', pin);
+  });
+  var keys = includes['wire-fold-keys.html'];
+  assert.ok(keys.includes('fold_row.event | default: fold_row.added'));
+  var lost = Object.assign({}, includes, { 'wire-fold-keys.html': keys.split('fold_row.event | default: fold_row.added').join('fold_row.added') });
+  assert.equal(CW.checkPage(page, lost).status, 'FAIL');
+  // an unescaped date in the new chips is caught by the existing escaping check
+  assert.equal(CW.checkPage(page.replace('{{ dt_ev | escape }} &middot; VulnCheck {{ dt_vc | escape }}', '{{ dt_ev }} &middot; VulnCheck {{ dt_vc | escape }}'), includes).status, 'FAIL');
+});
+
+/* T-0667: the built fixture page. Skipped unless HL_EVENT_SITE names a Jekyll build of the event fixture (wire.yml = event-wire.yml
+   with generated_at moved to the build time); the counts below are the fixture's. NOT CHECKED when skipped, never a pass. */
+test('T-0667 the built event fixture draws every case', { skip: process.env.HL_EVENT_SITE ? false : 'NOT CHECKED: set HL_EVENT_SITE to the Jekyll build of event-wire.yml' }, function () {
+  var JSDOMlocal = require('jsdom').JSDOM;
+  var html = fsPicks.readFileSync(pathPicks.join(process.env.HL_EVENT_SITE, 'wire', 'index.html'), 'utf8');
+  var dom = new JSDOMlocal(html);
+  var d = dom.window.document;
+  var sec = d.getElementById('vulns');
+  var rows = [].slice.call(sec.querySelectorAll('.hl-vuln'));
+  assert.equal(rows.length, 33, 'rows drawn');
+  var dated = rows.filter(function (r) { return r.querySelector('.hl-vuln__dates'); });
+  var text = dated.map(function (r) { return r.querySelector('.hl-vuln__dates').textContent.replace(/\s+/g, ' ').trim(); });
+  assert.equal(dated.length, 6, 'rows with a dates chip: ' + text.join(' | '));
+  assert.ok(text.indexOf('CISA KEV 17 Nov · VulnCheck 3 Oct') > -1, text.join(' | '));
+  assert.ok(text.indexOf('First seen here 17 Nov · VulnCheck dated 25 Oct') > -1, text.join(' | '));
+  assert.ok(text.indexOf('CISA KEV 16 Nov · not in VulnCheck KEV') > -1, text.join(' | '));
+  assert.equal(sec.querySelectorAll('.hl-vuln .hl-vuln__b--canary').length, 2);
+  assert.equal(sec.querySelectorAll('.hl-vuln .hl-vuln__b--ransom').length, 2);
+  assert.equal(sec.querySelectorAll('.hl-pstrip__list > li').length, 5, 'strip items');
+  assert.equal(sec.querySelectorAll('.hl-vuln__np').length, 5, 'ranked rows carry the Priority strip');
+  assert.equal(sec.querySelectorAll('[data-filter-batch]').length, 2, 'WordPress folds');
+  [].slice.call(sec.querySelectorAll('[data-filter-batch]')).forEach(function (b) { assert.equal(b.querySelectorAll('.hl-vuln').length, 5); });
+  // every day a row was added on is an anchor on the page (the digest headlines link #vulns-<added day>), whether or not any row sits under it
+  var addedDays = Array.from(new Set(evFixture().vulns.map(function (x) { return x.added; })));
+  var missing = addedDays.filter(function (day) { return !d.getElementById('vulns-' + day); });
+  assert.deepEqual(missing, [], 'added days with no anchor');
+  var aliases = [].slice.call(sec.querySelectorAll('.hl-wire__dayalias')).map(function (a) { return a.id; });
+  assert.ok(aliases.length >= 3 && aliases.indexOf('vulns-2026-10-25') > -1 && aliases.indexOf('vulns-2026-10-03') > -1, 'alias anchors: ' + aliases.join(' '));
+  assert.equal(addedDays.length, sec.querySelectorAll('h2.hl-wire__day').length + aliases.length, 'one anchor per added day, a heading or an alias');
+  // the old-shape row sits under its added day with no dates chip and no flags
+  var old = d.getElementById('cve-cve-2026-9312');
+  assert.ok(old && !old.querySelector('.hl-vuln__dates') && !old.querySelector('.hl-vuln__b--canary'));
+  assert.equal(old.getAttribute('data-day'), '2026-11-13');
+  // a row dated by its event is under the event day heading and carries it as data-day
+  var fs1 = d.getElementById('cve-cve-2015-9305');
+  assert.equal(fs1.getAttribute('data-day'), '2026-11-17');
+  assert.equal(fs1.closest('.hl-vuln-group').querySelector('h2').id, 'vulns-2026-11-17');
+});
+
+test('T-0667 the dates chip is kept ahead of the EPSS and tooling chips when a row cannot show every chip (wire-chips.js rank); with the rank removed it overflows', function () {
+  var JSDOMc = require('jsdom').JSDOM;
+  var src = fsPicks.readFileSync(pathPicks.join(__dirname, '..', '..', '..', 'assets', 'js', 'wire-chips.js'), 'utf8');
+  var row = '<div class="hl-vuln" data-title="cve-2026-0001"><span class="hl-vuln__badges">' +
+    '<span class="hl-vuln__p hl-vuln__ep"><span class="hl-vuln__p--epss">EPSS 1%</span></span>' +
+    '<span class="hl-vuln__tool">Nuclei</span><span class="hl-vuln__ev hl-vuln__dates">CISA KEV 17 Nov</span>' +
+    '<span class="hl-vuln__b hl-vuln__b--canary">VulnCheck canary</span><span class="hl-vuln__sev">HIGH</span>' +
+    '<span class="hl-vuln__b hl-vuln__b--cisa">CISA KEV</span></span></div>';
+  function shown(code) {
+    var dom = new JSDOMc(row, { runScripts: 'outside-only' });
+    dom.window.eval(code);   // unmeasured fallback: the priority chips only, at most four after the CVSS chip is counted
+    var out = {};
+    ['.hl-vuln__dates', '.hl-vuln__b--canary', '.hl-vuln__tool', '.hl-vuln__p--epss'].forEach(function (s) {
+      var el = dom.window.document.querySelector(s); out[s] = !el.closest('.hl-vuln__badges > *').hidden;
+    });
+    dom.window.close();
+    return out;
+  }
+  var real = shown(src);
+  assert.equal(real['.hl-vuln__dates'], true);
+  assert.equal(real['.hl-vuln__tool'], true);
+  assert.equal(real['.hl-vuln__p--epss'], false);
+  var mutated = shown(src.replace("if (chip.matches('.hl-vuln__dates')) return 1;", ''));
+  assert.equal(mutated['.hl-vuln__dates'], false, 'control: without the rank the dates chip is hidden first');
 });

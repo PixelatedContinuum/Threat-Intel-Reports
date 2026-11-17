@@ -6,7 +6,7 @@ const page = fs.readFileSync(path.join(root,'wire/index.md'),'utf8');
 const includes = Object.fromEntries(fs.readdirSync(path.join(root,'_includes')).filter(n=>/^wire-/.test(n)).map(n=>[n,fs.readFileSync(path.join(root,'_includes',n),'utf8')]));
 test('W5b day layout, WordPress reason, index-only nomi and keys have negative controls',()=>{
  assert.equal(CW.checkPage(page,includes).status,'PASS');
- for(const pin of ['group_by: "added"','sort: "prio"','data-sig="wp_unauth"','r.nomi == true','https://github.com/nomi-sec/PoC-in-GitHub/blob/master/','wire-chips.js','8.3%','7.0%','6.4%','123 of 244','50%','after seeing the data']) {
+ for(const pin of ['group_by_exp: "gr", "gr.event | default: gr.added"','sort: "prio"','data-sig="wp_unauth"','r.nomi == true','https://github.com/nomi-sec/PoC-in-GitHub/blob/master/','wire-chips.js','8.3%','7.0%','6.4%','123 of 244','50%','after seeing the data']) {
   assert.ok(page.includes(pin),pin); assert.equal(CW.checkPage(page.replace(pin,'removed'),includes).status,'FAIL',pin);
  }
  for(const bad of ['<div data-age-group="old">','<button data-age="recent">Recent</button>','nomi_poc']) assert.equal(CW.checkPage(page+bad,includes).status,'FAIL',bad);

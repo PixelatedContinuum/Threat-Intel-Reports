@@ -1,0 +1,2106 @@
+# T-0667: the nKEVs tab with every case the contract names, built by tasks/runs/T-0667/p2-make-fixture.js (headlines and CVEs from np-wire.yml, days moved to 2026-11-14..17).
+# 9301..9314: vulncheck, cisa and first_seen events, both-dates rows, a CISA-only row (no reports), the 1-day boundary (stays), canary and ransomware flags,
+# one Fixture Firewall row ranked and two 5+ Firewall rows unranked (one per product), an old-shape row (no event keys); WordPress: a 5-row day (folds), a 4-row day,
+# and a 5-row event day made of 4 added that day plus 1 first seen that day (folds); a CISA-listed WordPress row stays plain.
+generated_at: '2026-11-17T18:00:00.000Z'
+window_days: 30
+counts:
+  total: 4
+  research: 3
+  news: 1
+topics:
+  - label: security
+    count: 2
+    color: 3
+  - label: ransomware
+    count: 1
+    color: 4
+  - label: malware
+    count: 1
+    color: 5
+label_colors:
+  security: 3
+  ransomware: 4
+  malware: 5
+items:
+  - title: Synthetic research fixture
+    url: https://example.org/research
+    source: AlienVault
+    date: '2026-11-17T18:00:00.000Z'
+    kind: research
+    labels:
+      - security
+      - ransomware
+  - title: Synthetic news fixture
+    url: https://example.org/news
+    source: BleepingComputer
+    date: '2026-11-17T18:00:00.000Z'
+    kind: news
+    labels: []
+  - title: Synthetic rule fixture
+    url: https://example.org/rules
+    source: Cisco Talos
+    date: '2026-11-17T18:00:00.000Z'
+    kind: research
+    labels:
+      - malware
+  - title: Synthetic advisory fixture
+    url: https://example.org/advisory
+    source: Microsoft
+    date: '2026-11-17T18:00:00.000Z'
+    kind: research
+    labels:
+      - security
+vedas_generated_at: '2026-11-17T18:00:00.000Z'
+vulns_status: ok
+vulns_generated_at: '2026-11-17T18:00:00.000Z'
+vulns_counts:
+  total: 33
+  cisa: 7
+  older: 1
+  critical: 7
+  high: 25
+  medium: 0
+  low: 0
+  unscored: 1
+  et: 6
+  nuclei: 0
+  cisa_sigma: 0
+  snort3: 0
+  detect: 6
+  reported: 32
+  stories: 0
+  disclosed: 32
+  prenvd: 0
+  epss: 32
+  epss_pre: 0
+  age_new: 2
+  age_mid: 29
+  age_old: 1
+  age_unknown: 1
+  wp: 15
+  batches:
+    - key: wp-2026-11-13
+      day: '2026-11-13'
+      'n': 5
+    - key: wp-2026-11-09
+      day: '2026-11-09'
+      'n': 5
+  np_priority: 5
+  np_threshold: 5
+  np_classes: v2+addendum
+  np_per_product: true
+  cisa_admitted: 2
+  cisa_missing: 0
+  event_moved: 5
+vulns:
+  - cve: CVE-2026-9304
+    vendor: Fixture
+    product: Gateway
+    title: Example flaw in the example product, case 4.
+    cvss: '9.8'
+    cvss_version: '3.1'
+    severity: critical
+    scored_by: CNA
+    epss: '0.05'
+    epss_pct: '0.5'
+    epss_date: '2026-11-17'
+    epss_max: '0.10'
+    epss_spark: 0,10 120,0
+    signals: []
+    msf: []
+    edb: []
+    et_sids: []
+    nuclei: ''
+    cisa_sigma: []
+    snort3_sids: []
+    ssvc_expl: ''
+    ssvc_auto: ''
+    ssvc_impact: ''
+    fixed: ''
+    aliases: []
+    stories: 0
+    cvss_vector: CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:L/A:N
+    kev_product: ''
+    kev_product_n: ''
+    reports:
+      - url: https://example.org/report-4
+        host: example.org
+    reports_more: 0
+    added: '2026-10-03'
+    cisa_added: '2026-11-17'
+    evidence: ''
+    older: false
+    disclosed: '2026-01-21'
+    vedas: 0.5
+    np_score: 5
+    np_reasons:
+      - noauth
+      - critical
+      - class
+      - cisa
+    np_class: Identity and access
+    np_rank: 4
+    event: '2026-11-17'
+    event_src: cisa
+    first_seen: ''
+    canary: false
+    ransomware: true
+    kev_due: '2026-11-24'
+    gap: 255
+    age_group: mid
+    prio: 1
+  - cve: CVE-2026-9301
+    vendor: Fixture
+    product: Firewall
+    title: Example flaw in the example product, case 1.
+    cvss: '9.8'
+    cvss_version: '3.1'
+    severity: critical
+    scored_by: CNA
+    epss: '0.20'
+    epss_pct: '0.5'
+    epss_date: '2026-11-17'
+    epss_max: '0.10'
+    epss_spark: 0,10 120,0
+    signals: []
+    msf: []
+    edb: []
+    et_sids:
+      - 2036011
+    nuclei: ''
+    cisa_sigma: []
+    snort3_sids: []
+    ssvc_expl: ''
+    ssvc_auto: ''
+    ssvc_impact: ''
+    fixed: ''
+    aliases: []
+    stories: 0
+    cvss_vector: CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:L/A:N
+    kev_product: ''
+    kev_product_n: ''
+    reports:
+      - url: https://example.org/report-1
+        host: example.org
+    reports_more: 0
+    added: '2026-11-17'
+    cisa_added: '2026-11-17'
+    evidence: ''
+    older: false
+    disclosed: '2026-08-09'
+    vedas: 0.5
+    np_score: 6
+    np_reasons:
+      - noauth
+      - critical
+      - class
+      - tooling
+      - cisa
+    np_class: Edge and network device
+    np_rank: 2
+    event: '2026-11-17'
+    event_src: vulncheck
+    first_seen: ''
+    canary: true
+    ransomware: false
+    gap: 100
+    age_group: mid
+    prio: 2
+  - cve: CVE-2026-9313
+    vendor: Fixture
+    product: Switch
+    title: Example flaw in the example product, case 12.
+    cvss: '9.8'
+    cvss_version: '3.1'
+    severity: critical
+    scored_by: CNA
+    epss: '0.60'
+    epss_pct: '0.5'
+    epss_date: '2026-11-17'
+    epss_max: '0.10'
+    epss_spark: 0,10 120,0
+    signals: []
+    msf: []
+    edb: []
+    et_sids:
+      - 2036016
+    nuclei: ''
+    cisa_sigma: []
+    snort3_sids: []
+    ssvc_expl: ''
+    ssvc_auto: ''
+    ssvc_impact: ''
+    fixed: ''
+    aliases: []
+    stories: 0
+    cvss_vector: CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:L/A:N
+    kev_product: ''
+    kev_product_n: ''
+    reports:
+      - url: https://example.org/report-12
+        host: example.org
+    reports_more: 0
+    added: '2026-11-17'
+    cisa_added: ''
+    evidence: ''
+    older: false
+    disclosed: '2026-08-19'
+    vedas: 0.5
+    np_score: 5
+    np_reasons:
+      - noauth
+      - critical
+      - class
+      - tooling
+    np_class: Edge and network device
+    np_rank: 3
+    event: '2026-11-17'
+    event_src: vulncheck
+    first_seen: ''
+    canary: false
+    ransomware: false
+    gap: 90
+    age_group: mid
+    prio: 3
+  - cve: CVE-2026-9308
+    vendor: Fixture
+    product: Backdate
+    title: Example flaw in the example product, case 8.
+    cvss: '8.8'
+    cvss_version: '3.1'
+    severity: high
+    scored_by: CNA
+    epss: '0.10'
+    epss_pct: '0.5'
+    epss_date: '2026-11-17'
+    epss_max: '0.10'
+    epss_spark: 0,10 120,0
+    signals: []
+    msf: []
+    edb: []
+    et_sids: []
+    nuclei: ''
+    cisa_sigma: []
+    snort3_sids: []
+    ssvc_expl: ''
+    ssvc_auto: ''
+    ssvc_impact: ''
+    fixed: ''
+    aliases: []
+    stories: 0
+    cvss_vector: CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:L/A:N
+    kev_product: ''
+    kev_product_n: ''
+    reports:
+      - url: https://example.org/report-8
+        host: example.org
+    reports_more: 0
+    added: '2026-11-15'
+    cisa_added: ''
+    evidence: ''
+    older: false
+    disclosed: '2026-10-08'
+    vedas: 0.5
+    np_score: 0
+    np_reasons: []
+    np_class: ''
+    np_rank: 0
+    event: '2026-11-17'
+    event_src: first_seen
+    first_seen: '2026-11-17'
+    canary: false
+    ransomware: false
+    gap: 38
+    age_group: mid
+    prio: 4
+  - cve: CVE-2026-9302
+    vendor: Fixture
+    product: Firewall
+    title: Example flaw in the example product, case 2.
+    cvss: '9.8'
+    cvss_version: '3.1'
+    severity: critical
+    scored_by: CNA
+    epss: '0.30'
+    epss_pct: '0.5'
+    epss_date: '2026-11-17'
+    epss_max: '0.10'
+    epss_spark: 0,10 120,0
+    signals: []
+    msf: []
+    edb: []
+    et_sids:
+      - 2036012
+    nuclei: ''
+    cisa_sigma: []
+    snort3_sids: []
+    ssvc_expl: ''
+    ssvc_auto: ''
+    ssvc_impact: ''
+    fixed: ''
+    aliases: []
+    stories: 0
+    cvss_vector: CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:L/A:N
+    kev_product: ''
+    kev_product_n: ''
+    reports:
+      - url: https://example.org/report-2
+        host: example.org
+    reports_more: 0
+    added: '2026-11-17'
+    cisa_added: ''
+    evidence: ''
+    older: false
+    disclosed: '2026-08-09'
+    vedas: 0.5
+    np_score: 5
+    np_reasons:
+      - noauth
+      - critical
+      - class
+      - tooling
+    np_class: Edge and network device
+    np_rank: 0
+    event: '2026-11-17'
+    event_src: vulncheck
+    first_seen: ''
+    canary: false
+    ransomware: false
+    gap: 100
+    age_group: mid
+    prio: 5
+  - cve: CVE-2015-9305
+    vendor: Fixture
+    product: Legacy server
+    title: Example flaw in the example product, case 5.
+    cvss: '8.8'
+    cvss_version: '3.1'
+    severity: high
+    scored_by: CNA
+    epss: '0.10'
+    epss_pct: '0.5'
+    epss_date: '2026-11-17'
+    epss_max: '0.10'
+    epss_spark: 0,10 120,0
+    signals: []
+    msf: []
+    edb: []
+    et_sids: []
+    nuclei: ''
+    cisa_sigma: []
+    snort3_sids: []
+    ssvc_expl: ''
+    ssvc_auto: ''
+    ssvc_impact: ''
+    fixed: ''
+    aliases: []
+    stories: 0
+    cvss_vector: CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:L/A:N
+    kev_product: ''
+    kev_product_n: ''
+    reports:
+      - url: https://example.org/report-5
+        host: example.org
+    reports_more: 0
+    added: '2026-10-25'
+    cisa_added: ''
+    evidence: ''
+    older: true
+    disclosed: '2015-12-05'
+    vedas: 0.5
+    np_score: 0
+    np_reasons: []
+    np_class: ''
+    np_rank: 0
+    event: '2026-11-17'
+    event_src: first_seen
+    first_seen: '2026-11-17'
+    canary: true
+    ransomware: true
+    gap: 3977
+    age_group: old
+    prio: 6
+  - cve: CVE-2026-9314
+    vendor: Fixture
+    product: Cisa then first seen
+    title: Example flaw in the example product, case 13.
+    cvss: '8.8'
+    cvss_version: '3.1'
+    severity: high
+    scored_by: CNA
+    epss: '0.10'
+    epss_pct: '0.5'
+    epss_date: '2026-11-17'
+    epss_max: '0.10'
+    epss_spark: 0,10 120,0
+    signals: []
+    msf: []
+    edb: []
+    et_sids: []
+    nuclei: ''
+    cisa_sigma: []
+    snort3_sids: []
+    ssvc_expl: ''
+    ssvc_auto: ''
+    ssvc_impact: ''
+    fixed: ''
+    aliases: []
+    stories: 0
+    cvss_vector: CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:L/A:N
+    kev_product: ''
+    kev_product_n: ''
+    reports:
+      - url: https://example.org/report-13
+        host: example.org
+    reports_more: 0
+    added: '2026-11-11'
+    cisa_added: '2026-11-16'
+    evidence: ''
+    older: false
+    disclosed: '2026-10-08'
+    vedas: 0.5
+    np_score: 0
+    np_reasons: []
+    np_class: ''
+    np_rank: 0
+    event: '2026-11-16'
+    event_src: cisa
+    first_seen: '2026-11-17'
+    canary: false
+    ransomware: false
+    kev_due: '2026-11-27'
+    gap: 34
+    age_group: mid
+    prio: 7
+  - cve: CVE-2026-9310
+    vendor: Fixture
+    product: Hypervisor
+    title: Example flaw in the example product, case 10.
+    cvss: '9.8'
+    cvss_version: '3.1'
+    severity: critical
+    scored_by: CNA
+    epss: '0.80'
+    epss_pct: '0.5'
+    epss_date: '2026-11-17'
+    epss_max: '0.10'
+    epss_spark: 0,10 120,0
+    signals: []
+    msf: []
+    edb: []
+    et_sids:
+      - 2036014
+    nuclei: ''
+    cisa_sigma: []
+    snort3_sids: []
+    ssvc_expl: ''
+    ssvc_auto: ''
+    ssvc_impact: ''
+    fixed: ''
+    aliases: []
+    stories: 0
+    cvss_vector: CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:L/A:N
+    kev_product: ''
+    kev_product_n: ''
+    reports:
+      - url: https://example.org/report-10
+        host: example.org
+    reports_more: 0
+    added: '2026-11-16'
+    cisa_added: '2026-11-16'
+    evidence: ''
+    older: false
+    disclosed: '2026-11-07'
+    vedas: 0.5
+    np_score: 7
+    np_reasons:
+      - noauth
+      - critical
+      - class
+      - tooling
+      - cisa
+      - fresh
+    np_class: Virtualization and backup
+    np_rank: 1
+    event: '2026-11-16'
+    event_src: vulncheck
+    first_seen: ''
+    canary: false
+    ransomware: false
+    gap: 9
+    age_group: new
+    prio: 8
+  - cve: CVE-2026-9306
+    vendor: Fixture
+    product: Cisa only appliance
+    title: ''
+    cvss: ''
+    cvss_version: ''
+    severity: ''
+    scored_by: ''
+    epss: ''
+    epss_pct: ''
+    epss_date: ''
+    epss_max: ''
+    epss_spark: ''
+    signals: []
+    msf: []
+    edb: []
+    et_sids: []
+    nuclei: ''
+    cisa_sigma: []
+    snort3_sids: []
+    ssvc_expl: ''
+    ssvc_auto: ''
+    ssvc_impact: ''
+    fixed: ''
+    aliases: []
+    stories: 0
+    cvss_vector: ''
+    kev_product: ''
+    kev_product_n: ''
+    reports: []
+    reports_more: 0
+    added: '2026-11-16'
+    cisa_added: '2026-11-16'
+    evidence: ''
+    older: false
+    disclosed: ''
+    np_score: 0
+    np_reasons: []
+    np_class: ''
+    np_rank: 0
+    event: '2026-11-16'
+    event_src: cisa
+    first_seen: ''
+    canary: false
+    ransomware: false
+    kev_due: '2026-12-07'
+    gap: ''
+    age_group: unknown
+    prio: 9
+  - cve: CVE-2026-9307
+    vendor: Fixture
+    product: Boundary
+    title: Example flaw in the example product, case 7.
+    cvss: '8.8'
+    cvss_version: '3.1'
+    severity: high
+    scored_by: CNA
+    epss: '0.10'
+    epss_pct: '0.5'
+    epss_date: '2026-11-17'
+    epss_max: '0.10'
+    epss_spark: 0,10 120,0
+    signals: []
+    msf: []
+    edb: []
+    et_sids: []
+    nuclei: ''
+    cisa_sigma: []
+    snort3_sids: []
+    ssvc_expl: ''
+    ssvc_auto: ''
+    ssvc_impact: ''
+    fixed: ''
+    aliases: []
+    stories: 0
+    cvss_vector: CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:L/A:N
+    kev_product: ''
+    kev_product_n: ''
+    reports:
+      - url: https://example.org/report-7
+        host: example.org
+    reports_more: 0
+    added: '2026-11-16'
+    cisa_added: ''
+    evidence: ''
+    older: false
+    disclosed: '2026-10-08'
+    vedas: 0.5
+    np_score: 0
+    np_reasons: []
+    np_class: ''
+    np_rank: 0
+    event: '2026-11-16'
+    event_src: vulncheck
+    first_seen: '2026-11-17'
+    canary: false
+    ransomware: false
+    gap: 39
+    age_group: mid
+    prio: 10
+  - cve: CVE-2026-9303
+    vendor: Fixture
+    product: Firewall
+    title: Example flaw in the example product, case 3.
+    cvss: '9.8'
+    cvss_version: '3.1'
+    severity: critical
+    scored_by: CNA
+    epss: '0.40'
+    epss_pct: '0.5'
+    epss_date: '2026-11-17'
+    epss_max: '0.10'
+    epss_spark: 0,10 120,0
+    signals: []
+    msf: []
+    edb: []
+    et_sids:
+      - 2036013
+    nuclei: ''
+    cisa_sigma: []
+    snort3_sids: []
+    ssvc_expl: ''
+    ssvc_auto: ''
+    ssvc_impact: ''
+    fixed: ''
+    aliases: []
+    stories: 0
+    cvss_vector: CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:L/A:N
+    kev_product: ''
+    kev_product_n: ''
+    reports:
+      - url: https://example.org/report-3
+        host: example.org
+    reports_more: 0
+    added: '2026-11-16'
+    cisa_added: ''
+    evidence: ''
+    older: false
+    disclosed: '2026-08-09'
+    vedas: 0.5
+    np_score: 5
+    np_reasons:
+      - noauth
+      - critical
+      - class
+      - tooling
+    np_class: Edge and network device
+    np_rank: 0
+    event: '2026-11-16'
+    event_src: vulncheck
+    first_seen: ''
+    canary: false
+    ransomware: false
+    gap: 99
+    age_group: mid
+    prio: 11
+  - cve: CVE-2026-9309
+    vendor: Fixture
+    product: Cisa first
+    title: Example flaw in the example product, case 9.
+    cvss: '8.8'
+    cvss_version: '3.1'
+    severity: high
+    scored_by: CNA
+    epss: '0.10'
+    epss_pct: '0.5'
+    epss_date: '2026-11-17'
+    epss_max: '0.10'
+    epss_spark: 0,10 120,0
+    signals: []
+    msf: []
+    edb: []
+    et_sids: []
+    nuclei: ''
+    cisa_sigma: []
+    snort3_sids: []
+    ssvc_expl: ''
+    ssvc_auto: ''
+    ssvc_impact: ''
+    fixed: ''
+    aliases: []
+    stories: 0
+    cvss_vector: CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:L/A:N
+    kev_product: ''
+    kev_product_n: ''
+    reports:
+      - url: https://example.org/report-9
+        host: example.org
+    reports_more: 0
+    added: '2026-11-14'
+    cisa_added: '2026-11-12'
+    evidence: ''
+    older: false
+    disclosed: '2026-10-08'
+    vedas: 0.5
+    np_score: 0
+    np_reasons: []
+    np_class: ''
+    np_rank: 0
+    event: '2026-11-14'
+    event_src: vulncheck
+    first_seen: ''
+    canary: false
+    ransomware: false
+    kev_due: '2026-11-27'
+    gap: 37
+    age_group: mid
+    prio: 12
+  - cve: CVE-2026-9311
+    vendor: Fixture
+    product: Directory
+    title: Example flaw in the example product, case 11.
+    cvss: '9.8'
+    cvss_version: '3.1'
+    severity: critical
+    scored_by: CNA
+    epss: '0.10'
+    epss_pct: '0.5'
+    epss_date: '2026-11-17'
+    epss_max: '0.10'
+    epss_spark: 0,10 120,0
+    signals: []
+    msf: []
+    edb: []
+    et_sids:
+      - 2036015
+    nuclei: ''
+    cisa_sigma: []
+    snort3_sids: []
+    ssvc_expl: ''
+    ssvc_auto: ''
+    ssvc_impact: ''
+    fixed: ''
+    aliases: []
+    stories: 0
+    cvss_vector: CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:L/A:N
+    kev_product: ''
+    kev_product_n: ''
+    reports:
+      - url: https://example.org/report-11
+        host: example.org
+    reports_more: 0
+    added: '2026-11-14'
+    cisa_added: ''
+    evidence: ''
+    older: false
+    disclosed: '2026-08-19'
+    vedas: 0.5
+    np_score: 5
+    np_reasons:
+      - noauth
+      - critical
+      - class
+      - tooling
+    np_class: Identity and access
+    np_rank: 5
+    event: '2026-11-14'
+    event_src: vulncheck
+    first_seen: ''
+    canary: false
+    ransomware: false
+    gap: 87
+    age_group: mid
+    prio: 13
+  - cve: CVE-2026-9433
+    vendor: WordPress
+    product: Fold plugin 14
+    title: WordPress plugin flaw 14.
+    cvss: '8.8'
+    cvss_version: '3.1'
+    severity: high
+    scored_by: CNA
+    epss: '0.10'
+    epss_pct: '0.5'
+    epss_date: '2026-11-17'
+    epss_max: '0.10'
+    epss_spark: 0,10 120,0
+    signals: []
+    msf: []
+    edb: []
+    et_sids: []
+    nuclei: ''
+    cisa_sigma: []
+    snort3_sids: []
+    ssvc_expl: ''
+    ssvc_auto: ''
+    ssvc_impact: ''
+    fixed: ''
+    aliases: []
+    stories: 0
+    cvss_vector: CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:L/A:N
+    kev_product: ''
+    kev_product_n: ''
+    reports:
+      - url: https://example.org/report-33
+        host: example.org
+    reports_more: 0
+    added: '2026-11-13'
+    cisa_added: '2026-11-13'
+    evidence: ''
+    older: false
+    disclosed: '2026-10-08'
+    vedas: 0.5
+    np_score: 0
+    np_reasons: []
+    np_class: ''
+    np_rank: 0
+    event: '2026-11-13'
+    event_src: vulncheck
+    first_seen: ''
+    canary: false
+    ransomware: false
+    wp: true
+    gap: 36
+    age_group: mid
+    prio: 14
+  - cve: CVE-2026-9423
+    vendor: WordPress
+    product: Fold plugin 4
+    title: WordPress plugin flaw 4.
+    cvss: '8.8'
+    cvss_version: '3.1'
+    severity: high
+    scored_by: CNA
+    epss: '0.10'
+    epss_pct: '0.5'
+    epss_date: '2026-11-17'
+    epss_max: '0.10'
+    epss_spark: 0,10 120,0
+    signals: []
+    msf: []
+    edb: []
+    et_sids: []
+    nuclei: ''
+    cisa_sigma: []
+    snort3_sids: []
+    ssvc_expl: ''
+    ssvc_auto: ''
+    ssvc_impact: ''
+    fixed: ''
+    aliases: []
+    stories: 0
+    cvss_vector: CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:L/A:N
+    kev_product: ''
+    kev_product_n: ''
+    reports:
+      - url: https://example.org/report-23
+        host: example.org
+    reports_more: 0
+    added: '2026-11-13'
+    cisa_added: ''
+    evidence: ''
+    older: false
+    disclosed: '2026-10-08'
+    vedas: 0.5
+    np_score: 0
+    np_reasons: []
+    np_class: ''
+    np_rank: 0
+    event: '2026-11-13'
+    event_src: vulncheck
+    first_seen: ''
+    canary: false
+    ransomware: false
+    wp: true
+    batch: wp-2026-11-13
+    gap: 36
+    age_group: mid
+    prio: 15
+  - cve: CVE-2026-9422
+    vendor: WordPress
+    product: Fold plugin 3
+    title: WordPress plugin flaw 3.
+    cvss: '8.8'
+    cvss_version: '3.1'
+    severity: high
+    scored_by: CNA
+    epss: '0.10'
+    epss_pct: '0.5'
+    epss_date: '2026-11-17'
+    epss_max: '0.10'
+    epss_spark: 0,10 120,0
+    signals: []
+    msf: []
+    edb: []
+    et_sids: []
+    nuclei: ''
+    cisa_sigma: []
+    snort3_sids: []
+    ssvc_expl: ''
+    ssvc_auto: ''
+    ssvc_impact: ''
+    fixed: ''
+    aliases: []
+    stories: 0
+    cvss_vector: CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:L/A:N
+    kev_product: ''
+    kev_product_n: ''
+    reports:
+      - url: https://example.org/report-22
+        host: example.org
+    reports_more: 0
+    added: '2026-11-13'
+    cisa_added: ''
+    evidence: ''
+    older: false
+    disclosed: '2026-10-08'
+    vedas: 0.5
+    np_score: 0
+    np_reasons: []
+    np_class: ''
+    np_rank: 0
+    event: '2026-11-13'
+    event_src: vulncheck
+    first_seen: ''
+    canary: false
+    ransomware: false
+    wp: true
+    batch: wp-2026-11-13
+    gap: 36
+    age_group: mid
+    prio: 16
+  - cve: CVE-2026-9421
+    vendor: WordPress
+    product: Fold plugin 2
+    title: WordPress plugin flaw 2.
+    cvss: '8.8'
+    cvss_version: '3.1'
+    severity: high
+    scored_by: CNA
+    epss: '0.10'
+    epss_pct: '0.5'
+    epss_date: '2026-11-17'
+    epss_max: '0.10'
+    epss_spark: 0,10 120,0
+    signals: []
+    msf: []
+    edb: []
+    et_sids: []
+    nuclei: ''
+    cisa_sigma: []
+    snort3_sids: []
+    ssvc_expl: ''
+    ssvc_auto: ''
+    ssvc_impact: ''
+    fixed: ''
+    aliases: []
+    stories: 0
+    cvss_vector: CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:L/A:N
+    kev_product: ''
+    kev_product_n: ''
+    reports:
+      - url: https://example.org/report-21
+        host: example.org
+    reports_more: 0
+    added: '2026-11-13'
+    cisa_added: ''
+    evidence: ''
+    older: false
+    disclosed: '2026-10-08'
+    vedas: 0.5
+    np_score: 0
+    np_reasons: []
+    np_class: ''
+    np_rank: 0
+    event: '2026-11-13'
+    event_src: vulncheck
+    first_seen: ''
+    canary: false
+    ransomware: false
+    wp: true
+    batch: wp-2026-11-13
+    gap: 36
+    age_group: mid
+    prio: 17
+  - cve: CVE-2026-9420
+    vendor: WordPress
+    product: Fold plugin 1
+    title: WordPress plugin flaw 1.
+    cvss: '8.8'
+    cvss_version: '3.1'
+    severity: high
+    scored_by: CNA
+    epss: '0.10'
+    epss_pct: '0.5'
+    epss_date: '2026-11-17'
+    epss_max: '0.10'
+    epss_spark: 0,10 120,0
+    signals: []
+    msf: []
+    edb: []
+    et_sids: []
+    nuclei: ''
+    cisa_sigma: []
+    snort3_sids: []
+    ssvc_expl: ''
+    ssvc_auto: ''
+    ssvc_impact: ''
+    fixed: ''
+    aliases: []
+    stories: 0
+    cvss_vector: CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:L/A:N
+    kev_product: ''
+    kev_product_n: ''
+    reports:
+      - url: https://example.org/report-20
+        host: example.org
+    reports_more: 0
+    added: '2026-11-13'
+    cisa_added: ''
+    evidence: ''
+    older: false
+    disclosed: '2026-10-08'
+    vedas: 0.5
+    np_score: 0
+    np_reasons: []
+    np_class: ''
+    np_rank: 0
+    event: '2026-11-13'
+    event_src: vulncheck
+    first_seen: ''
+    canary: false
+    ransomware: false
+    wp: true
+    batch: wp-2026-11-13
+    gap: 36
+    age_group: mid
+    prio: 18
+  - cve: CVE-2026-9419
+    vendor: WordPress
+    product: Fold plugin 0
+    title: WordPress plugin flaw 0.
+    cvss: '8.8'
+    cvss_version: '3.1'
+    severity: high
+    scored_by: CNA
+    epss: '0.10'
+    epss_pct: '0.5'
+    epss_date: '2026-11-17'
+    epss_max: '0.10'
+    epss_spark: 0,10 120,0
+    signals: []
+    msf: []
+    edb: []
+    et_sids: []
+    nuclei: ''
+    cisa_sigma: []
+    snort3_sids: []
+    ssvc_expl: ''
+    ssvc_auto: ''
+    ssvc_impact: ''
+    fixed: ''
+    aliases: []
+    stories: 0
+    cvss_vector: CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:L/A:N
+    kev_product: ''
+    kev_product_n: ''
+    reports:
+      - url: https://example.org/report-19
+        host: example.org
+    reports_more: 0
+    added: '2026-11-13'
+    cisa_added: ''
+    evidence: ''
+    older: false
+    disclosed: '2026-10-08'
+    vedas: 0.5
+    np_score: 0
+    np_reasons: []
+    np_class: ''
+    np_rank: 0
+    event: '2026-11-13'
+    event_src: vulncheck
+    first_seen: ''
+    canary: false
+    ransomware: false
+    wp: true
+    batch: wp-2026-11-13
+    gap: 36
+    age_group: mid
+    prio: 19
+  - cve: CVE-2026-9312
+    vendor: Fixture
+    product: Old shape
+    title: Example flaw in the example product, case 14.
+    cvss: '8.8'
+    cvss_version: '3.1'
+    severity: high
+    scored_by: CNA
+    epss: '0.10'
+    epss_pct: '0.5'
+    epss_date: '2026-11-17'
+    epss_max: '0.10'
+    epss_spark: 0,10 120,0
+    signals: []
+    msf: []
+    edb: []
+    et_sids: []
+    nuclei: ''
+    cisa_sigma: []
+    snort3_sids: []
+    ssvc_expl: ''
+    ssvc_auto: ''
+    ssvc_impact: ''
+    fixed: ''
+    aliases: []
+    stories: 0
+    cvss_vector: CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:L/A:N
+    kev_product: ''
+    kev_product_n: ''
+    reports:
+      - url: https://example.org/report-14
+        host: example.org
+    reports_more: 0
+    added: '2026-11-13'
+    cisa_added: ''
+    evidence: ''
+    older: false
+    disclosed: '2026-10-08'
+    vedas: 0.5
+    np_score: 0
+    np_reasons: []
+    np_class: ''
+    np_rank: 0
+    gap: 36
+    age_group: mid
+    prio: 20
+  - cve: CVE-2026-9415
+    vendor: Fixture
+    product: Widget 15
+    title: Example flaw in the example product, case 15.
+    cvss: '8.8'
+    cvss_version: '3.1'
+    severity: high
+    scored_by: CNA
+    epss: '0.10'
+    epss_pct: '0.5'
+    epss_date: '2026-11-17'
+    epss_max: '0.10'
+    epss_spark: 0,10 120,0
+    signals: []
+    msf: []
+    edb: []
+    et_sids: []
+    nuclei: ''
+    cisa_sigma: []
+    snort3_sids: []
+    ssvc_expl: ''
+    ssvc_auto: ''
+    ssvc_impact: ''
+    fixed: ''
+    aliases: []
+    stories: 0
+    cvss_vector: CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:L/A:N
+    kev_product: ''
+    kev_product_n: ''
+    reports:
+      - url: https://example.org/report-15
+        host: example.org
+    reports_more: 0
+    added: '2026-11-12'
+    cisa_added: ''
+    evidence: ''
+    older: false
+    disclosed: '2026-10-08'
+    vedas: 0.5
+    np_score: 0
+    np_reasons: []
+    np_class: ''
+    np_rank: 0
+    event: '2026-11-12'
+    event_src: vulncheck
+    first_seen: ''
+    canary: false
+    ransomware: false
+    gap: 35
+    age_group: mid
+    prio: 21
+  - cve: CVE-2026-9427
+    vendor: WordPress
+    product: Fold plugin 8
+    title: WordPress plugin flaw 8.
+    cvss: '8.8'
+    cvss_version: '3.1'
+    severity: high
+    scored_by: CNA
+    epss: '0.10'
+    epss_pct: '0.5'
+    epss_date: '2026-11-17'
+    epss_max: '0.10'
+    epss_spark: 0,10 120,0
+    signals: []
+    msf: []
+    edb: []
+    et_sids: []
+    nuclei: ''
+    cisa_sigma: []
+    snort3_sids: []
+    ssvc_expl: ''
+    ssvc_auto: ''
+    ssvc_impact: ''
+    fixed: ''
+    aliases: []
+    stories: 0
+    cvss_vector: CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:L/A:N
+    kev_product: ''
+    kev_product_n: ''
+    reports:
+      - url: https://example.org/report-27
+        host: example.org
+    reports_more: 0
+    added: '2026-11-11'
+    cisa_added: ''
+    evidence: ''
+    older: false
+    disclosed: '2026-10-08'
+    vedas: 0.5
+    np_score: 0
+    np_reasons: []
+    np_class: ''
+    np_rank: 0
+    event: '2026-11-11'
+    event_src: vulncheck
+    first_seen: ''
+    canary: false
+    ransomware: false
+    wp: true
+    gap: 34
+    age_group: mid
+    prio: 22
+  - cve: CVE-2026-9426
+    vendor: WordPress
+    product: Fold plugin 7
+    title: WordPress plugin flaw 7.
+    cvss: '8.8'
+    cvss_version: '3.1'
+    severity: high
+    scored_by: CNA
+    epss: '0.10'
+    epss_pct: '0.5'
+    epss_date: '2026-11-17'
+    epss_max: '0.10'
+    epss_spark: 0,10 120,0
+    signals: []
+    msf: []
+    edb: []
+    et_sids: []
+    nuclei: ''
+    cisa_sigma: []
+    snort3_sids: []
+    ssvc_expl: ''
+    ssvc_auto: ''
+    ssvc_impact: ''
+    fixed: ''
+    aliases: []
+    stories: 0
+    cvss_vector: CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:L/A:N
+    kev_product: ''
+    kev_product_n: ''
+    reports:
+      - url: https://example.org/report-26
+        host: example.org
+    reports_more: 0
+    added: '2026-11-11'
+    cisa_added: ''
+    evidence: ''
+    older: false
+    disclosed: '2026-10-08'
+    vedas: 0.5
+    np_score: 0
+    np_reasons: []
+    np_class: ''
+    np_rank: 0
+    event: '2026-11-11'
+    event_src: vulncheck
+    first_seen: ''
+    canary: false
+    ransomware: false
+    wp: true
+    gap: 34
+    age_group: mid
+    prio: 23
+  - cve: CVE-2026-9425
+    vendor: WordPress
+    product: Fold plugin 6
+    title: WordPress plugin flaw 6.
+    cvss: '8.8'
+    cvss_version: '3.1'
+    severity: high
+    scored_by: CNA
+    epss: '0.10'
+    epss_pct: '0.5'
+    epss_date: '2026-11-17'
+    epss_max: '0.10'
+    epss_spark: 0,10 120,0
+    signals: []
+    msf: []
+    edb: []
+    et_sids: []
+    nuclei: ''
+    cisa_sigma: []
+    snort3_sids: []
+    ssvc_expl: ''
+    ssvc_auto: ''
+    ssvc_impact: ''
+    fixed: ''
+    aliases: []
+    stories: 0
+    cvss_vector: CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:L/A:N
+    kev_product: ''
+    kev_product_n: ''
+    reports:
+      - url: https://example.org/report-25
+        host: example.org
+    reports_more: 0
+    added: '2026-11-11'
+    cisa_added: ''
+    evidence: ''
+    older: false
+    disclosed: '2026-10-08'
+    vedas: 0.5
+    np_score: 0
+    np_reasons: []
+    np_class: ''
+    np_rank: 0
+    event: '2026-11-11'
+    event_src: vulncheck
+    first_seen: ''
+    canary: false
+    ransomware: false
+    wp: true
+    gap: 34
+    age_group: mid
+    prio: 24
+  - cve: CVE-2026-9424
+    vendor: WordPress
+    product: Fold plugin 5
+    title: WordPress plugin flaw 5.
+    cvss: '8.8'
+    cvss_version: '3.1'
+    severity: high
+    scored_by: CNA
+    epss: '0.10'
+    epss_pct: '0.5'
+    epss_date: '2026-11-17'
+    epss_max: '0.10'
+    epss_spark: 0,10 120,0
+    signals: []
+    msf: []
+    edb: []
+    et_sids: []
+    nuclei: ''
+    cisa_sigma: []
+    snort3_sids: []
+    ssvc_expl: ''
+    ssvc_auto: ''
+    ssvc_impact: ''
+    fixed: ''
+    aliases: []
+    stories: 0
+    cvss_vector: CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:L/A:N
+    kev_product: ''
+    kev_product_n: ''
+    reports:
+      - url: https://example.org/report-24
+        host: example.org
+    reports_more: 0
+    added: '2026-11-11'
+    cisa_added: ''
+    evidence: ''
+    older: false
+    disclosed: '2026-10-08'
+    vedas: 0.5
+    np_score: 0
+    np_reasons: []
+    np_class: ''
+    np_rank: 0
+    event: '2026-11-11'
+    event_src: vulncheck
+    first_seen: ''
+    canary: false
+    ransomware: false
+    wp: true
+    gap: 34
+    age_group: mid
+    prio: 25
+  - cve: CVE-2026-9416
+    vendor: Fixture
+    product: Widget 16
+    title: Example flaw in the example product, case 16.
+    cvss: '8.8'
+    cvss_version: '3.1'
+    severity: high
+    scored_by: CNA
+    epss: '0.10'
+    epss_pct: '0.5'
+    epss_date: '2026-11-17'
+    epss_max: '0.10'
+    epss_spark: 0,10 120,0
+    signals: []
+    msf: []
+    edb: []
+    et_sids: []
+    nuclei: ''
+    cisa_sigma: []
+    snort3_sids: []
+    ssvc_expl: ''
+    ssvc_auto: ''
+    ssvc_impact: ''
+    fixed: ''
+    aliases: []
+    stories: 0
+    cvss_vector: CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:L/A:N
+    kev_product: ''
+    kev_product_n: ''
+    reports:
+      - url: https://example.org/report-16
+        host: example.org
+    reports_more: 0
+    added: '2026-11-11'
+    cisa_added: ''
+    evidence: ''
+    older: false
+    disclosed: '2026-10-08'
+    vedas: 0.5
+    np_score: 0
+    np_reasons: []
+    np_class: ''
+    np_rank: 0
+    event: '2026-11-11'
+    event_src: vulncheck
+    first_seen: ''
+    canary: false
+    ransomware: false
+    gap: 34
+    age_group: mid
+    prio: 26
+  - cve: CVE-2026-9417
+    vendor: Fixture
+    product: Widget 17
+    title: Example flaw in the example product, case 17.
+    cvss: '8.8'
+    cvss_version: '3.1'
+    severity: high
+    scored_by: CNA
+    epss: '0.10'
+    epss_pct: '0.5'
+    epss_date: '2026-11-17'
+    epss_max: '0.10'
+    epss_spark: 0,10 120,0
+    signals: []
+    msf: []
+    edb: []
+    et_sids: []
+    nuclei: ''
+    cisa_sigma: []
+    snort3_sids: []
+    ssvc_expl: ''
+    ssvc_auto: ''
+    ssvc_impact: ''
+    fixed: ''
+    aliases: []
+    stories: 0
+    cvss_vector: CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:L/A:N
+    kev_product: ''
+    kev_product_n: ''
+    reports:
+      - url: https://example.org/report-17
+        host: example.org
+    reports_more: 0
+    added: '2026-11-10'
+    cisa_added: ''
+    evidence: ''
+    older: false
+    disclosed: '2026-10-08'
+    vedas: 0.5
+    np_score: 0
+    np_reasons: []
+    np_class: ''
+    np_rank: 0
+    event: '2026-11-10'
+    event_src: vulncheck
+    first_seen: ''
+    canary: false
+    ransomware: false
+    gap: 33
+    age_group: mid
+    prio: 27
+  - cve: CVE-2026-9432
+    vendor: WordPress
+    product: Fold plugin 13
+    title: WordPress plugin flaw 13.
+    cvss: '8.8'
+    cvss_version: '3.1'
+    severity: high
+    scored_by: CNA
+    epss: '0.10'
+    epss_pct: '0.5'
+    epss_date: '2026-11-17'
+    epss_max: '0.10'
+    epss_spark: 0,10 120,0
+    signals: []
+    msf: []
+    edb: []
+    et_sids: []
+    nuclei: ''
+    cisa_sigma: []
+    snort3_sids: []
+    ssvc_expl: ''
+    ssvc_auto: ''
+    ssvc_impact: ''
+    fixed: ''
+    aliases: []
+    stories: 0
+    cvss_vector: CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:L/A:N
+    kev_product: ''
+    kev_product_n: ''
+    reports:
+      - url: https://example.org/report-32
+        host: example.org
+    reports_more: 0
+    added: '2026-10-19'
+    cisa_added: ''
+    evidence: ''
+    older: false
+    disclosed: '2026-10-08'
+    vedas: 0.5
+    np_score: 0
+    np_reasons: []
+    np_class: ''
+    np_rank: 0
+    event: '2026-11-09'
+    event_src: first_seen
+    first_seen: '2026-11-09'
+    canary: false
+    ransomware: false
+    wp: true
+    batch: wp-2026-11-09
+    gap: 11
+    age_group: new
+    prio: 28
+  - cve: CVE-2026-9431
+    vendor: WordPress
+    product: Fold plugin 12
+    title: WordPress plugin flaw 12.
+    cvss: '8.8'
+    cvss_version: '3.1'
+    severity: high
+    scored_by: CNA
+    epss: '0.10'
+    epss_pct: '0.5'
+    epss_date: '2026-11-17'
+    epss_max: '0.10'
+    epss_spark: 0,10 120,0
+    signals: []
+    msf: []
+    edb: []
+    et_sids: []
+    nuclei: ''
+    cisa_sigma: []
+    snort3_sids: []
+    ssvc_expl: ''
+    ssvc_auto: ''
+    ssvc_impact: ''
+    fixed: ''
+    aliases: []
+    stories: 0
+    cvss_vector: CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:L/A:N
+    kev_product: ''
+    kev_product_n: ''
+    reports:
+      - url: https://example.org/report-31
+        host: example.org
+    reports_more: 0
+    added: '2026-11-09'
+    cisa_added: ''
+    evidence: ''
+    older: false
+    disclosed: '2026-10-08'
+    vedas: 0.5
+    np_score: 0
+    np_reasons: []
+    np_class: ''
+    np_rank: 0
+    event: '2026-11-09'
+    event_src: vulncheck
+    first_seen: ''
+    canary: false
+    ransomware: false
+    wp: true
+    batch: wp-2026-11-09
+    gap: 32
+    age_group: mid
+    prio: 29
+  - cve: CVE-2026-9430
+    vendor: WordPress
+    product: Fold plugin 11
+    title: WordPress plugin flaw 11.
+    cvss: '8.8'
+    cvss_version: '3.1'
+    severity: high
+    scored_by: CNA
+    epss: '0.10'
+    epss_pct: '0.5'
+    epss_date: '2026-11-17'
+    epss_max: '0.10'
+    epss_spark: 0,10 120,0
+    signals: []
+    msf: []
+    edb: []
+    et_sids: []
+    nuclei: ''
+    cisa_sigma: []
+    snort3_sids: []
+    ssvc_expl: ''
+    ssvc_auto: ''
+    ssvc_impact: ''
+    fixed: ''
+    aliases: []
+    stories: 0
+    cvss_vector: CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:L/A:N
+    kev_product: ''
+    kev_product_n: ''
+    reports:
+      - url: https://example.org/report-30
+        host: example.org
+    reports_more: 0
+    added: '2026-11-09'
+    cisa_added: ''
+    evidence: ''
+    older: false
+    disclosed: '2026-10-08'
+    vedas: 0.5
+    np_score: 0
+    np_reasons: []
+    np_class: ''
+    np_rank: 0
+    event: '2026-11-09'
+    event_src: vulncheck
+    first_seen: ''
+    canary: false
+    ransomware: false
+    wp: true
+    batch: wp-2026-11-09
+    gap: 32
+    age_group: mid
+    prio: 30
+  - cve: CVE-2026-9429
+    vendor: WordPress
+    product: Fold plugin 10
+    title: WordPress plugin flaw 10.
+    cvss: '8.8'
+    cvss_version: '3.1'
+    severity: high
+    scored_by: CNA
+    epss: '0.10'
+    epss_pct: '0.5'
+    epss_date: '2026-11-17'
+    epss_max: '0.10'
+    epss_spark: 0,10 120,0
+    signals: []
+    msf: []
+    edb: []
+    et_sids: []
+    nuclei: ''
+    cisa_sigma: []
+    snort3_sids: []
+    ssvc_expl: ''
+    ssvc_auto: ''
+    ssvc_impact: ''
+    fixed: ''
+    aliases: []
+    stories: 0
+    cvss_vector: CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:L/A:N
+    kev_product: ''
+    kev_product_n: ''
+    reports:
+      - url: https://example.org/report-29
+        host: example.org
+    reports_more: 0
+    added: '2026-11-09'
+    cisa_added: ''
+    evidence: ''
+    older: false
+    disclosed: '2026-10-08'
+    vedas: 0.5
+    np_score: 0
+    np_reasons: []
+    np_class: ''
+    np_rank: 0
+    event: '2026-11-09'
+    event_src: vulncheck
+    first_seen: ''
+    canary: false
+    ransomware: false
+    wp: true
+    batch: wp-2026-11-09
+    gap: 32
+    age_group: mid
+    prio: 31
+  - cve: CVE-2026-9428
+    vendor: WordPress
+    product: Fold plugin 9
+    title: WordPress plugin flaw 9.
+    cvss: '8.8'
+    cvss_version: '3.1'
+    severity: high
+    scored_by: CNA
+    epss: '0.10'
+    epss_pct: '0.5'
+    epss_date: '2026-11-17'
+    epss_max: '0.10'
+    epss_spark: 0,10 120,0
+    signals: []
+    msf: []
+    edb: []
+    et_sids: []
+    nuclei: ''
+    cisa_sigma: []
+    snort3_sids: []
+    ssvc_expl: ''
+    ssvc_auto: ''
+    ssvc_impact: ''
+    fixed: ''
+    aliases: []
+    stories: 0
+    cvss_vector: CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:L/A:N
+    kev_product: ''
+    kev_product_n: ''
+    reports:
+      - url: https://example.org/report-28
+        host: example.org
+    reports_more: 0
+    added: '2026-11-09'
+    cisa_added: ''
+    evidence: ''
+    older: false
+    disclosed: '2026-10-08'
+    vedas: 0.5
+    np_score: 0
+    np_reasons: []
+    np_class: ''
+    np_rank: 0
+    event: '2026-11-09'
+    event_src: vulncheck
+    first_seen: ''
+    canary: false
+    ransomware: false
+    wp: true
+    batch: wp-2026-11-09
+    gap: 32
+    age_group: mid
+    prio: 32
+  - cve: CVE-2026-9418
+    vendor: Fixture
+    product: Widget 18
+    title: Example flaw in the example product, case 18.
+    cvss: '8.8'
+    cvss_version: '3.1'
+    severity: high
+    scored_by: CNA
+    epss: '0.10'
+    epss_pct: '0.5'
+    epss_date: '2026-11-17'
+    epss_max: '0.10'
+    epss_spark: 0,10 120,0
+    signals: []
+    msf: []
+    edb: []
+    et_sids: []
+    nuclei: ''
+    cisa_sigma: []
+    snort3_sids: []
+    ssvc_expl: ''
+    ssvc_auto: ''
+    ssvc_impact: ''
+    fixed: ''
+    aliases: []
+    stories: 0
+    cvss_vector: CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:L/A:N
+    kev_product: ''
+    kev_product_n: ''
+    reports:
+      - url: https://example.org/report-18
+        host: example.org
+    reports_more: 0
+    added: '2026-11-09'
+    cisa_added: ''
+    evidence: ''
+    older: false
+    disclosed: '2026-10-08'
+    vedas: 0.5
+    np_score: 0
+    np_reasons: []
+    np_class: ''
+    np_rank: 0
+    event: '2026-11-09'
+    event_src: vulncheck
+    first_seen: ''
+    canary: false
+    ransomware: false
+    gap: 32
+    age_group: mid
+    prio: 33
+cves_status: ok
+cves_generated_at: '2026-11-17T18:00:00.000Z'
+cves_counts:
+  total: 7
+  critical: 4
+  high: 3
+  medium: 0
+  low: 0
+  unscored: 0
+  msf: 1
+  edb: 1
+  nuclei: 1
+  et: 1
+  epss90: 1
+  epss_vedas: 1
+  wp_unauth: 1
+cve_vendors:
+  - label: Fixture
+    count: 6
+cves:
+  - cve: CVE-2026-9001
+    published: '2026-11-17'
+    vendor: Fixture
+    product: Widget
+    title: Synthetic fixture CVE record. Additional product title to exercise readable wrapping and chip fit.
+    cvss: '7.5'
+    cvss_version: '3.1'
+    severity: high
+    scored_by: CNA
+    epss: '0.12'
+    epss_pct: '0.5'
+    epss_date: '2026-11-17'
+    epss_max: '0.12'
+    epss_spark: 0,10 120,0
+    signals:
+      - epss_vedas
+    msf: []
+    edb: []
+    et_sids: []
+    nuclei: ''
+    cisa_sigma: []
+    snort3_sids: []
+    ssvc_expl: ''
+    ssvc_auto: ''
+    ssvc_impact: ''
+    fixed: ''
+    aliases: []
+    stories: 0
+    cvss_vector: CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:L/A:N
+    kev_product: ''
+    kev_product_n: ''
+    reports: []
+    reports_more: 0
+    vedas: 0.852
+    nomi: true
+  - cve: CVE-2026-9002
+    published: '2026-11-17'
+    vendor: Fixture
+    product: Widget
+    title: Synthetic fixture CVE record. Additional product title to exercise readable wrapping and chip fit.
+    cvss: '9.8'
+    cvss_version: '3.1'
+    severity: critical
+    scored_by: CNA
+    epss: '0.12'
+    epss_pct: '0.5'
+    epss_date: '2026-11-17'
+    epss_max: '0.12'
+    epss_spark: 0,10 120,0
+    signals:
+      - msf
+    msf:
+      - modules/exploits/linux/http/fixture.rb
+    edb: []
+    et_sids: []
+    nuclei: ''
+    cisa_sigma: []
+    snort3_sids: []
+    ssvc_expl: ''
+    ssvc_auto: ''
+    ssvc_impact: ''
+    fixed: ''
+    aliases: []
+    stories: 0
+    cvss_vector: CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:L/A:N
+    kev_product: ''
+    kev_product_n: ''
+    reports: []
+    reports_more: 0
+    nomi: false
+  - cve: CVE-2026-9003
+    published: '2026-11-17'
+    vendor: Fixture
+    product: Widget
+    title: Synthetic fixture CVE record. Additional product title to exercise readable wrapping and chip fit.
+    cvss: '7.5'
+    cvss_version: '3.1'
+    severity: high
+    scored_by: CNA
+    epss: '0.12'
+    epss_pct: '0.5'
+    epss_date: '2026-11-17'
+    epss_max: '0.12'
+    epss_spark: 0,10 120,0
+    signals:
+      - edb
+    msf: []
+    edb:
+      - '12345'
+    et_sids: []
+    nuclei: ''
+    cisa_sigma: []
+    snort3_sids: []
+    ssvc_expl: ''
+    ssvc_auto: ''
+    ssvc_impact: ''
+    fixed: ''
+    aliases: []
+    stories: 0
+    cvss_vector: CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:L/A:N
+    kev_product: ''
+    kev_product_n: ''
+    reports: []
+    reports_more: 0
+    vedas: 0
+    nomi: false
+  - cve: CVE-2026-9020
+    published: '2026-11-17'
+    vendor: Fixture
+    product: Widget
+    title: Synthetic fixture CVE record. Additional product title to exercise readable wrapping and chip fit.
+    cvss: '9.8'
+    cvss_version: '3.1'
+    severity: critical
+    scored_by: CNA
+    epss: '0.12'
+    epss_pct: '0.5'
+    epss_date: '2026-11-17'
+    epss_max: '0.12'
+    epss_spark: 0,10 120,0
+    signals:
+      - nuclei
+    msf: []
+    edb: []
+    et_sids: []
+    nuclei: http/cves/2026/CVE-2026-9020.yaml
+    cisa_sigma: []
+    snort3_sids: []
+    ssvc_expl: ''
+    ssvc_auto: ''
+    ssvc_impact: ''
+    fixed: ''
+    aliases: []
+    stories: 0
+    cvss_vector: CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:L/A:N
+    kev_product: Fixture Widget
+    kev_product_n: 3
+    reports: []
+    reports_more: 0
+    nomi: false
+  - cve: CVE-2026-9021
+    published: '2026-11-17'
+    vendor: Fixture
+    product: Widget
+    title: Synthetic fixture CVE record. Additional product title to exercise readable wrapping and chip fit.
+    cvss: '9.8'
+    cvss_version: '3.1'
+    severity: critical
+    scored_by: CNA
+    epss: '0.12'
+    epss_pct: '0.5'
+    epss_date: '2026-11-17'
+    epss_max: '0.12'
+    epss_spark: 0,10 120,0
+    signals:
+      - et
+    msf: []
+    edb: []
+    et_sids:
+      - 2036001
+    nuclei: ''
+    cisa_sigma: []
+    snort3_sids: []
+    ssvc_expl: ''
+    ssvc_auto: ''
+    ssvc_impact: ''
+    fixed: ''
+    aliases: []
+    stories: 0
+    cvss_vector: CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:L/A:N
+    kev_product: ''
+    kev_product_n: ''
+    reports: []
+    reports_more: 0
+    nomi: false
+  - cve: CVE-2026-9022
+    published: '2026-11-17'
+    vendor: Fixture
+    product: Widget
+    title: Synthetic fixture CVE record. Additional product title to exercise readable wrapping and chip fit.
+    cvss: '9.8'
+    cvss_version: '3.1'
+    severity: critical
+    scored_by: CNA
+    epss: '0.12'
+    epss_pct: '0.95'
+    epss_date: '2026-11-17'
+    epss_max: '0.12'
+    epss_spark: 0,10 120,0
+    signals:
+      - epss90
+    msf: []
+    edb: []
+    et_sids: []
+    nuclei: ''
+    cisa_sigma: []
+    snort3_sids: []
+    ssvc_expl: ''
+    ssvc_auto: ''
+    ssvc_impact: ''
+    fixed: ''
+    aliases: []
+    stories: 0
+    cvss_vector: CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:L/A:N
+    kev_product: ''
+    kev_product_n: ''
+    reports: []
+    reports_more: 0
+    nomi: false
+  - cve: CVE-2026-99999
+    published: '2026-11-17'
+    vendor: WordPress
+    product: Example Plugin
+    title: Unauthenticated arbitrary file upload in Example Plugin permits changes to protected content. Additional product title to exercise readable wrapping and chip fit.
+    cvss: '7.5'
+    cvss_version: '3.1'
+    severity: high
+    scored_by: CNA
+    epss: '0.005'
+    epss_pct: '0.5'
+    epss_date: '2026-11-17'
+    epss_max: '0.12'
+    epss_spark: 0,10 120,0
+    signals:
+      - wp_unauth
+    msf: []
+    edb: []
+    et_sids: []
+    nuclei: ''
+    cisa_sigma: []
+    snort3_sids: []
+    ssvc_expl: ''
+    ssvc_auto: ''
+    ssvc_impact: ''
+    fixed: ''
+    aliases: []
+    stories: 0
+    cvss_vector: CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:L/A:N
+    kev_product: ''
+    kev_product_n: ''
+    reports: []
+    reports_more: 0
+    vedas: 0
+    nomi: true
+vuln_vendors:
+  - label: Fixture
+    count: 18
+  - label: WordPress
+    count: 15

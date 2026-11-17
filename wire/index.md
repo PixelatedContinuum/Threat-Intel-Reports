@@ -11,9 +11,12 @@ position: 2.5
 {% include index-header.html accent="#58a6ff" label="The Wire" title="Threat Intelligence Headlines" desc="Threat reporting, newly exploited vulnerabilities and significant new CVEs, refreshed every 15 minutes." %}
 
 {%- assign wire = site.data.wire -%}
-{%- assign wp_batch_group_min = 20 -%}
+{%- assign wp_batch_group_min = 5 -%}
 {%- assign wp_unauth_group_min = 2 -%}
 {%- assign product_group_min = 5 -%}
+{%- comment -%} T-0667: ev_new is true once the exporter writes the event day (it adds vulns_counts.event_moved with it). Data from before that renders as it did, and the panel keeps the text that was true of it (the site deploys before the exporter). {%- endcomment -%}
+{%- assign ev_new = false -%}{%- if wire.vulns_counts.event_moved != nil -%}{%- assign ev_new = true -%}{%- endif -%}
+{%- assign pp_new = false -%}{%- if wire.vulns_counts.np_per_product == true -%}{%- assign pp_new = true -%}{%- endif -%}
 {%- if wire and wire.items and wire.items != empty -%}
 {%- assign n_headlines = wire.counts.research | plus: wire.counts.news -%}
 {%- assign n_vulns = wire.vulns_counts.total | default: 0 | plus: 0 -%}
@@ -124,24 +127,33 @@ reads back from the built page (it fails the index step on a duplicate). A vuln 
   no item links to a row that is not drawn.
 {%- endcomment -%}
 {%- assign np_rows = "" | split: "" -%}
+{%- assign n_canary = 0 -%}{%- assign n_ransom = 0 -%}{%- assign n_dated = 0 -%}
 {%- for nrow in wire.vulns -%}
 {%- assign np_r = nrow.np_rank | plus: 0 -%}
 {%- assign np_head = nrow.cve | slice: 0, 4 -%}{%- assign np_alen = nrow.added | size -%}
 {%- if np_r > 0 and np_head == "CVE-" and np_alen == 10 -%}{%- assign np_rows = np_rows | push: nrow -%}{%- endif -%}
+{%- comment -%} T-0667: the flag chips and the two-date rows, counted over the rows the row template draws. {%- endcomment -%}
+{%- if np_head == "CVE-" and np_alen == 10 -%}
+{%- if nrow.canary == true -%}{%- assign n_canary = n_canary | plus: 1 -%}{%- endif -%}
+{%- if nrow.ransomware == true -%}{%- assign n_ransom = n_ransom | plus: 1 -%}{%- endif -%}
+{%- assign np_ev = nrow.event | default: nrow.added -%}{%- if np_ev != nrow.added -%}{%- assign n_dated = n_dated | plus: 1 -%}{%- endif -%}
+{%- endif -%}
 {%- endfor -%}
 {%- assign n_np = np_rows.size -%}
+{%- assign n_flags = n_canary | plus: n_ransom -%}
 <details class="hl-wire-explanation" id="nkev-explanation" data-pagefind-ignore>
 <summary>Explanation and data used</summary>
 <div class="hl-wire-explanation__body">
 <p>I keep already exploited CVEs here, using additions to VulnCheck's Known Exploited Vulnerabilities (KEV) catalog. CISA listing is not required: the CISA KEV badge marks CVEs on both catalogs. A low EPSS or a missing rule does not remove a row, because VulnCheck has already recorded exploitation.</p>
-<p>I group rows by the day VulnCheck added them, newest day first. Each date shows how many CVEs were added that day. Inside a day I use the exporter's priority order: CISA-listed first, then network flaws needing no privileges or user action (AV:N, PR:N, UI:N), then public exploit or detection tooling, then higher EPSS (missing last), with CVE id breaking ties. These datapoints order confirmed exploitation rather than deciding whether it deserves a row.</p>
-<p>I fold a day's WordPress plugin and theme batch when it contains at least 20 entries. One folded line stays at the first member's rank and opens to every member. Every VulnCheck KEV entry stays visible. Filters open matching batches and counts show matching rows. Smaller batches stay as individual rows. I also fold five or more same-day CVEs for the same product into one line.</p>
+{%- if ev_new -%}<p>I group rows by the day of the latest exploitation event I know of for the CVE, newest day first. For most rows that is the day VulnCheck added it. A row sits under a later day when CISA added the CVE to its own KEV catalog after VulnCheck did, or when I first published it here two or more days after VulnCheck's date (VulnCheck can list a CVE with an earlier date than the day it reaches me). Those rows show both dates, for example "CISA KEV 17 Nov &middot; VulnCheck 4 Nov" or "First seen here 17 Nov &middot; VulnCheck dated 25 Oct". A CVE that CISA added inside the window and VulnCheck dated before it still gets a row, under the CISA day. A CVE on CISA's catalog that VulnCheck does not list at all gets a row that says so. Each date shows how many CVEs sit under it.</p>{%- else -%}<p>I group rows by the day VulnCheck added them, newest day first. Each date shows how many CVEs were added that day.</p>{%- endif -%}
+<p>Inside a day I use the exporter's priority order: CISA-listed first, then network flaws needing no privileges or user action (AV:N, PR:N, UI:N), then public exploit or detection tooling, then higher EPSS (missing last), with CVE id breaking ties. These datapoints order confirmed exploitation rather than deciding whether it deserves a row.</p>
+<p>I fold a day's WordPress plugin and theme batch when it contains at least 5 entries. One folded line stays at the first member's rank and opens to every member. Every VulnCheck KEV entry stays visible. Filters open matching batches and counts show matching rows. Smaller batches stay as individual rows. I also fold five or more same-day CVEs for the same product into one line. A row in the Priority strip is never folded.</p>
 <p>I give the title room before chips. The +N button opens the remaining context in place, including the gap from NVD publication to listing when known. VulnCheck gives no separate date of first exploitation.</p>
 <p>I also checked ENISA's EU Vulnerability Database as a second source here. It flagged none of the rows that only VulnCheck lists, and for the five CVEs it alone marks as exploited, the sources it cited did not support that mark, so I left it out.</p>
 {%- if n_np > 0 -%}
 <h3>Priority</h3>
 <p>The Priority strip at the top of this tab lists my patch-first order. Every row on this tab is already exploited, so the order predicts nothing. It ranks which of these flaws I would patch first.</p>
-<p>A row earns one point for each of these: a network flaw that needs no login or user action, a CVSS score of 9.0 or higher, public tooling, a CISA KEV listing, and a flaw disclosed under 30 days before VulnCheck listed it. It earns two points for a product class I treat as patch-first, or one for an operating system or browser. The strip holds the ten highest-scoring rows, and a row needs 5 points to be among them, so on a quiet month it holds fewer. Each item in the strip jumps to its row, and the row stays in its own day with its Priority badge.</p>
+<p>A row earns one point for each of these: a network flaw that needs no login or user action, a CVSS score of 9.0 or higher, public tooling, a CISA KEV listing, and a flaw disclosed under 30 days before VulnCheck listed it. It earns two points for a product class I treat as patch-first, or one for an operating system or browser. {%- if pp_new -%}The strip holds every row that scores 5 or more points, with no cap, and lists one row per product: when a product has several rows at 5 or more, the best ranked one is in the strip and the others keep their score and badge but are not repeated there. The order is score first, then the row's own date (newest first), then EPSS, then CVE id. {%- else -%}The strip holds the highest-scoring rows, and a row needs 5 points to be among them, so on a quiet month it holds fewer. {%- endif -%}Each item in the strip jumps to its row, and the row stays in its own day with its Priority badge.</p>
 <p>The product classes are my judgment, and they are listed in the exporter's class files. There is no later outcome I can test this order against, so I have not measured it.</p>
 {%- endif -%}
 <h3>Reading the data and filters</h3>
@@ -156,6 +168,12 @@ reads back from the built page (it fails the index step on a duplicate). A vuln 
 <dd>Severity: the CVSS base score in the CVE's NVD record, read through VulnCheck NVD++. Most are scored by the CVE's CNA, not by NVD; hover the chip to see who scored it. A CVE with no score shows no chip.</dd>
 <dt><span class="hl-vuln__b hl-vuln__b--cisa">CISA KEV</span></dt>
 <dd>The CVE is also in CISA's Known Exploited Vulnerabilities catalog. Hover for the date CISA added it.</dd>
+{%- if ev_new -%}
+<dt><span class="hl-vuln__ev hl-vuln__dates">CISA KEV 17 Nov &middot; VulnCheck 4 Nov</span> <span class="hl-vuln__ev hl-vuln__dates">First seen here 17 Nov &middot; VulnCheck dated 25 Oct</span></dt>
+<dd>Both dates of a row that sits under a later day than VulnCheck's. The first is the day CISA added the CVE, the second the day I first published it here; the VulnCheck date is the one VulnCheck gives. A row with only a CISA date and no VulnCheck date says "not in VulnCheck KEV".</dd>
+<dt><span class="hl-vuln__b hl-vuln__b--canary">VulnCheck canary</span> <span class="hl-vuln__b hl-vuln__b--ransom">Ransomware</span></dt>
+<dd>Canary: VulnCheck's own canary network recorded exploitation of the CVE, which is VulnCheck's flag and not a CISA or vendor statement. Ransomware: VulnCheck or CISA marks the CVE as used in known ransomware campaigns. Neither adds Priority points.</dd>
+{%- endif -%}
 <dt><span class="hl-vuln__ev">evidence 2026-01-01</span></dt>
 <dd>The earliest date VulnCheck records for a report it cites for the CVE, drawn only when it is earlier than the day VulnCheck added the CVE. It is VulnCheck's citation date, not a date of first exploitation.</dd>
 <dt><span class="hl-vuln__p hl-vuln__p--epss">EPSS 3%</span></dt>
@@ -197,13 +215,17 @@ reads back from the built page (it fails the index step on a duplicate). A vuln 
 <dd>"pre-NVD" shows only the CVEs VulnCheck added before NVD published them.</dd>
 <dt class="hl-wire-data__k">Vendor</dt>
 <dd>Narrows to one or more vendors.</dd>
+{%- if n_flags > 0 -%}
+<dt class="hl-wire-data__k">Flags</dt>
+<dd>{%- if n_np > 0 -%}Priority group, {% endif -%}rows VulnCheck's canaries recorded, and rows marked as used in ransomware campaigns. Picking several shows rows that match any of them.</dd>
+{%- endif -%}
 <dt class="hl-wire-data__k">Added</dt>
-<dd>When VulnCheck added the CVE: today, the last 7 days, or the whole {{ wire.window_days }}-day window, counted from the last data update.</dd>
+<dd>{%- if ev_new -%}The day the row sits under, its latest exploitation event: today, the last 7 days, or the whole {{ wire.window_days }}-day window, counted from the last data update.{%- else -%}When VulnCheck added the CVE: today, the last 7 days, or the whole {{ wire.window_days }}-day window, counted from the last data update.{%- endif -%}</dd>
 
 </dl>
 <p class="hl-wire-data__p">Picking several chips in one row shows any of them; picking chips in different rows narrows to rows that match all. The filters are kept in the page address, so a filtered view can be shared by copying the link.</p>
 <div class="hl-wire-data__h">About this data</div>
-<p class="hl-wire-data__p">This tab shows the nKEVs in VulnCheck's KEV catalog as VulnCheck publishes it. I do not curate or track this data myself; every entry comes from VulnCheck, and their catalog is at <a href="https://www.vulncheck.com/kev" target="_blank" rel="noopener noreferrer">vulncheck.com/kev</a>. EPSS scores from FIRST (<a href="https://www.first.org/epss/" target="_blank" rel="noopener noreferrer">first.org/epss</a>), generated by Empirical Security. The SSVC, fixed version and advisory fields come from <a href="https://cve.now/" target="_blank" rel="noopener noreferrer">cve.now</a> (CC BY 4.0), and the Metasploit and Exploit-DB entries from Rapid7's and Exploit-DB's own indexes. VEDAS exploit maturity from <a href="https://github.com/ARPSyndicate/cve-scores" target="_blank" rel="noopener noreferrer">A.R.P. Syndicate</a>.</p>
+<p class="hl-wire-data__p">This tab shows the nKEVs in VulnCheck's KEV catalog as VulnCheck publishes it. I do not curate or track this data myself; every entry comes from VulnCheck, and their catalog is at <a href="https://www.vulncheck.com/kev" target="_blank" rel="noopener noreferrer">vulncheck.com/kev</a>.{%- if ev_new %} The one exception to "from VulnCheck" is the dating: a CISA date comes from CISA's KEV catalog, and "First seen here" is the day my exporter first published the row.{%- endif %} EPSS scores from FIRST (<a href="https://www.first.org/epss/" target="_blank" rel="noopener noreferrer">first.org/epss</a>), generated by Empirical Security. The SSVC, fixed version and advisory fields come from <a href="https://cve.now/" target="_blank" rel="noopener noreferrer">cve.now</a> (CC BY 4.0), and the Metasploit and Exploit-DB entries from Rapid7's and Exploit-DB's own indexes. VEDAS exploit maturity from <a href="https://github.com/ARPSyndicate/cve-scores" target="_blank" rel="noopener noreferrer">A.R.P. Syndicate</a>.</p>
 
 </div>
 </details>
@@ -259,9 +281,11 @@ reads back from the built page (it fails the index step on a duplicate). A vuln 
 {%- endcapture -%}
 {%- comment -%} T-0638: the Priority entries, a second list after the key, only when the group exists. {%- endcomment -%}
 {%- capture np_legend -%}{%- if n_np > 0 -%}<dl class="hl-legend__list"><dt><span class="hl-pick__score">Priority</span></dt><dd>Patch-first score</dd><dt><span class="hl-pick__chip hl-pick__chip--noauth">Reason</span></dt><dd>What earned a point</dd></dl>{%- endif -%}{%- endcapture -%}
+{%- comment -%} T-0667: the dating and flag entries, only when the data carries them. {%- endcomment -%}
+{%- capture ev_legend -%}{%- if n_dated > 0 or n_flags > 0 -%}<dl class="hl-legend__list">{%- if n_dated > 0 -%}<dt><span class="hl-vuln__ev hl-vuln__dates">CISA KEV</span></dt><dd>Row dated by a later event</dd>{%- endif -%}{%- if n_canary > 0 -%}<dt><span class="hl-vuln__b hl-vuln__b--canary">Canary</span></dt><dd>Seen by VulnCheck canaries</dd>{%- endif -%}{%- if n_ransom > 0 -%}<dt><span class="hl-vuln__b hl-vuln__b--ransom">Ransomware</span></dt><dd>Known ransomware use</dd>{%- endif -%}</dl>{%- endif -%}{%- endcapture -%}
 <details class="hl-legend-mobile" data-pagefind-ignore>
 <summary>Legend</summary>
-<div class="hl-legend__body">{{ legend_html }}{{ np_legend }}</div>
+<div class="hl-legend__body">{{ legend_html }}{{ np_legend }}{{ ev_legend }}</div>
 </details>
 
 {%- comment -%}
@@ -279,11 +303,14 @@ reads back from the built page (it fails the index step on a duplicate). A vuln 
     <button type="button" class="hl-chip-btn hl-chip-btn--topic hl-vc-cisa" data-list="cisa">Also CISA KEV <span class="hl-chip-btn__n">{{ wire.vulns_counts.cisa }}</span></button>
     <button type="button" class="hl-chip-btn hl-chip-btn--topic hl-vc-vulncheck" data-list="vconly">VulnCheck only <span class="hl-chip-btn__n">{{ wire.vulns_counts.total | minus: wire.vulns_counts.cisa }}</span></button>
   </div>
-  {%- if n_np > 0 -%}
+  {%- comment -%} T-0667: the Priority chip and the canary and ransomware chips share one row, so they are one axis (data-sig): picking several shows rows that match any of them. {%- endcomment -%}
+  {%- if n_np > 0 or n_flags > 0 -%}
   <div class="hl-filter__chips hl-filter__chips--kind">
-    <span class="hl-filter__dim">Priority</span>
+    <span class="hl-filter__dim">{% if n_flags > 0 %}Flags{% else %}Priority{% endif %}</span>
     <button type="button" class="hl-chip-btn is-on" data-sig="">All</button>
-    <button type="button" class="hl-chip-btn hl-chip-btn--topic hl-topic-c2" data-sig="np">Priority group <span class="hl-chip-btn__n">{{ n_np }}</span></button>
+    {%- if n_np > 0 -%}<button type="button" class="hl-chip-btn hl-chip-btn--topic hl-topic-c2" data-sig="np">Priority group <span class="hl-chip-btn__n">{{ n_np }}</span></button>{%- endif -%}
+    {%- if n_canary > 0 -%}<button type="button" class="hl-chip-btn hl-chip-btn--topic hl-vc-canary" data-sig="canary">VulnCheck canary <span class="hl-chip-btn__n">{{ n_canary }}</span></button>{%- endif -%}
+    {%- if n_ransom > 0 -%}<button type="button" class="hl-chip-btn hl-chip-btn--topic hl-vc-ransom" data-sig="ransomware">Ransomware <span class="hl-chip-btn__n">{{ n_ransom }}</span></button>{%- endif -%}
   </div>
   {%- endif -%}
   {%- comment -%} Severity (T-0399): the band of the row's CVSS base score; "none" is a CVE with no score, never a low one. Every chip on this bar carries a colour (T-0441): severity chips reuse the row badge's band colour, list and age chips their badge's, the rest the topic palette. {%- endcomment -%}
@@ -338,18 +365,26 @@ reads back from the built page (it fails the index step on a duplicate). A vuln 
 {%- assign np_ordered = np_rows | sort: "np_rank" -%}
 {%- assign gen_day = wire.vulns_generated_at | default: wire.generated_at | date: "%Y-%m-%d" -%}
 <nav class="hl-pstrip" id="vulns-priority" aria-label="Priority rows on the nKEVs tab" data-pagefind-ignore>
-<span class="hl-pstrip__label">Top <span class="hl-pstrip__n">{{ np_ordered.size | escape }}</span> by priority</span>
+<span class="hl-pstrip__label">{% unless pp_new %}Top {% endunless %}<span class="hl-pstrip__n">{{ np_ordered.size | escape }}</span> by priority</span>
 <ul class="hl-pstrip__list">
 {%- for r in np_ordered -%}
 {%- assign np_name_v = r.vendor | append: "" | strip | downcase -%}{%- assign np_name_p = r.product | append: "" | strip -%}{%- assign np_name_n = np_name_v | size -%}{%- assign np_name_h = np_name_p | slice: 0, np_name_n | downcase -%}{%- if np_name_n > 0 and np_name_h == np_name_v -%}{%- assign np_name = np_name_p -%}{%- else -%}{%- assign np_name = r.vendor | append: " " | append: np_name_p | normalize_whitespace | strip -%}{%- endif -%}{%- if np_name == "" -%}{%- assign np_name = r.cve -%}{%- endif -%}
-<li><a class="hl-pstrip__a" href="#cve-{{ r.cve | downcase | escape }}" title="{{ r.cve | escape }} {{ np_name | escape }}: Priority {{ r.np_score | plus: 0 }}"><span class="hl-pstrip__name">{{ np_name | truncate: 90 | escape }}</span><span class="hl-pstrip__s">{{ r.np_score | plus: 0 }}</span>{%- if r.added == gen_day -%}<span class="hl-pstrip__new">new</span>{%- endif -%}</a></li>
+<li><a class="hl-pstrip__a" href="#cve-{{ r.cve | downcase | escape }}" title="{{ r.cve | escape }} {{ np_name | escape }}: Priority {{ r.np_score | plus: 0 }}"><span class="hl-pstrip__name">{{ np_name | truncate: 90 | escape }}</span><span class="hl-pstrip__s">{{ r.np_score | plus: 0 }}</span>{%- assign np_evd = r.event | default: r.added -%}{%- if np_evd == gen_day -%}<span class="hl-pstrip__new">new</span>{%- endif -%}</a></li>
 {%- endfor -%}
 </ul>
 </nav>
 {%- endif -%}
 <div class="hl-wire hl-vulns" data-filter-grid data-filter-item=".hl-vuln" data-pagefind-ignore>
-{%- assign day_groups = wire.vulns | group_by: "added" | sort: "name" | reverse -%}
+{%- comment -%} T-0667: a row sits under its event day (the latest exploitation event); a row with no event, or an empty one, sits under its added day, as before. {%- endcomment -%}
+{%- assign day_groups = wire.vulns | group_by_exp: "gr", "gr.event | default: gr.added" | sort: "name" | reverse -%}
+{%- comment -%} T-0667: the digest headlines link #vulns-<added day>. When every row added that day sits under a later event day, no group carries that id, so the link would dangle: an empty anchor stands in the day order where the day would have been. {%- endcomment -%}
+{%- assign group_names = day_groups | map: "name" -%}
+{%- assign alias_days = "" | split: "" -%}
+{%- for ar in wire.vulns -%}{%- assign ar_len = ar.added | size -%}{%- if ar_len == 10 -%}{%- unless group_names contains ar.added -%}{%- unless alias_days contains ar.added -%}{%- assign alias_days = alias_days | push: ar.added -%}{%- endunless -%}{%- endunless -%}{%- endif -%}{%- endfor -%}
+{%- assign alias_days = alias_days | sort | reverse -%}
+{%- assign alias_done = "|" -%}
 {%- for day_group in day_groups -%}
+{%- for ad in alias_days -%}{%- assign ad_key = "|" | append: ad | append: "|" -%}{%- if ad > day_group.name -%}{%- unless alias_done contains ad_key -%}{%- assign alias_done = alias_done | append: ad | append: "|" -%}<div class="hl-wire__dayalias" id="vulns-{{ ad | escape }}" data-day-target="{{ ad | escape }}"></div>{%- endunless -%}{%- endif -%}{%- endfor -%}
 {%- assign group_rows = day_group.items | sort: "prio" -%}
 <div class="hl-vuln-group" data-filter-container data-wire-layout="days">
 <h2 class="hl-wire__day" id="vulns-{{ day_group.name | escape }}" data-day-target="{{ day_group.name | escape }}" data-filter-group>{{ day_group.name | date: "%A %-d %B %Y" | escape }} &middot; <span data-container-count>{{ group_rows.size }}</span> added</h2>
@@ -365,8 +400,13 @@ reads back from the built page (it fails the index step on a duplicate). A vuln 
 {%- if r.cve and r.added -%}{%- assign cve_head = r.cve | slice: 0, 4 -%}{%- assign added_len = r.added | size -%}{%- if cve_head == "CVE-" and added_len == 10 -%}{%- assign vok = true -%}{%- endif -%}{%- endif -%}
 {%- if vok -%}
 {%- assign cisa_len = r.cisa_added | size -%}{%- assign ev_len = r.evidence | size -%}{%- comment -%} A score is drawn only with a known band and a score beside it; Liquid has no operator precedence, so the band test is a contains on the list. {%- endcomment -%}{%- assign sev = "none" -%}{%- assign cvss_len = r.cvss | size -%}{%- if cvss_len > 0 -%}{%- if sev_bands contains r.severity -%}{%- assign sev = r.severity -%}{%- endif -%}{%- endif -%}
-{%- assign vday = r.added | slice: 0, 10 -%}
+{%- comment -%} T-0667: the row's day is its event day (the latest exploitation event). A row from a wire.yml written before it carries no event and keeps its added day. {%- endcomment -%}
+{%- assign vday = r.event | default: r.added -%}
 {%- assign np_r = r.np_rank | plus: 0 -%}{%- assign is_np = false -%}{%- if np_r > 0 -%}{%- assign is_np = true -%}{%- endif -%}
+{%- assign is_canary = false -%}{%- if r.canary == true -%}{%- assign is_canary = true -%}{%- endif -%}{%- assign is_ransom = false -%}{%- if r.ransomware == true -%}{%- assign is_ransom = true -%}{%- endif -%}
+{%- assign row_sig = "" | split: "" -%}{%- if is_np -%}{%- assign row_sig = row_sig | push: "np" -%}{%- endif -%}{%- if is_canary -%}{%- assign row_sig = row_sig | push: "canary" -%}{%- endif -%}{%- if is_ransom -%}{%- assign row_sig = row_sig | push: "ransomware" -%}{%- endif -%}
+{%- assign ev_src = r.event_src | default: "" -%}{%- assign is_dated = false -%}{%- if vday != r.added -%}{%- assign is_dated = true -%}{%- endif -%}
+{%- assign ev_cisaonly = false -%}{%- if ev_src == "cisa" and is_dated == false and cisa_len == 10 -%}{%- if r.cisa_added == r.added -%}{%- assign ev_cisaonly = true -%}{%- endif -%}{%- endif -%}
 {%- assign cve_parts = r.cve | split: "-" -%}{%- assign cve_year = cve_parts[1] -%}
 {%- comment -%} T-0407 pointers. A row from a wire.yml written before them carries none and draws none. {%- endcomment -%}
 {%- assign det = "" | split: "" -%}{%- assign n_sids = r.et_sids | size -%}{%- assign nu_len = r.nuclei | size -%}
@@ -379,7 +419,7 @@ reads back from the built page (it fails the index step on a duplicate). A vuln 
 {%- if gap_len > 0 -%}{%- assign gap_n = r.gap | plus: 0 -%}{%- if gap_n < 0 -%}{%- assign nvd_key = "pre" -%}{%- assign gap_abs = gap_n | times: -1 -%}{%- endif -%}{%- endif -%}
 {%- assign epss_len = r.epss | append: "" | size -%}{%- assign epss_pre_len = r.epss_pre | append: "" | size -%}{%- assign spark_len = r.epss_spark | append: "" | size -%}{%- assign rn_len = r.ratio_now | append: "" | size -%}{%- assign rp_len = r.ratio_pre | append: "" | size -%}
 {%- assign n_reps = r.reports | size -%}{%- assign n_more = r.reports_more | default: 0 | plus: 0 -%}{%- assign n_st = r.stories | default: 0 -%}
-<div class="hl-vuln" id="cve-{{ r.cve | downcase | escape }}" data-prio="{{ r.prio | escape }}" data-title="{{ r.cve | downcase | escape }} {{ r.vendor | downcase | escape }} {{ r.product | downcase | escape }} {{ r.title | downcase | escape }}{% if is_np %} priority {{ r.np_class | downcase | escape }}{% endif %}" data-list="{% if cisa_len == 10 %}cisa{% else %}vconly{% endif %}" data-vendor="{{ r.vendor | escape }}" data-age="{% if r.older == true %}older{% else %}recent{% endif %}" data-sev="{{ sev | escape }}" data-det="{{ det | join: '|' | escape }}" data-nvd="{{ nvd_key | escape }}"{% if is_np %} data-sig="np"{% endif %} data-day="{{ vday | escape }}">{% comment %} T-0532: the Details toggle, first in the row, hidden until the script removes it. {% endcomment %}<button type="button" class="hl-dt" aria-expanded="false" hidden title="Show details"><span class="hl-dt__sr">Details</span></button><a class="hl-vuln__cve" href="https://nvd.nist.gov/vuln/detail/{{ r.cve | escape }}" target="_blank" rel="noopener noreferrer">{{ r.cve | escape }}</a><span class="hl-vuln__vp" title="{{ r.vendor | escape }} {{ r.product | escape }}">{% if r.vendor and r.vendor != "" %}<b>{{ r.vendor | escape }}</b> {{ r.product | escape }}{% else %}<span class="hl-vuln__none">vendor not given</span>{% endif %}{% if r.title and r.title != "" %} {{ r.title | escape }}{% endif %}</span><span class="hl-vuln__badges">{% include wire-nkev-priority.html %}{% include wire-vuln-sev.html %}{% if cisa_len == 10 %}<span class="hl-vuln__b hl-vuln__b--cisa" title="Added to CISA KEV {{ r.cisa_added | escape }}{% if r.kev_due and r.kev_due != '' %}; CISA due date {{ r.kev_due | escape }}{% endif %}">CISA KEV</span>{% endif %}{% comment %} evidence is the earliest citation date; drawn only when it says something the day heading does not. {% endcomment %}{% if ev_len == 10 and r.evidence < vday %}<span class="hl-vuln__ev">evidence {{ r.evidence | escape }}</span>{% endif %}{% if gap_len > 0 and r.disclosed != "" %}<span class="hl-vuln__gap-fact">{% if gap_n == 0 %}listed on the day of disclosure{% else %}{% assign gap_d = gap_n %}{% if gap_n < 0 %}{% assign gap_d = gap_abs %}{% endif %}listed {{ gap_d | escape }} day{% if gap_d != 1 %}s{% endif %} {% if gap_n < 0 %}before{% else %}after{% endif %} disclosure{% endif %}</span>{% endif %}{% include wire-vuln-epss.html %}{% include wire-vuln-vedas.html %}{% comment %} T-0407 pointers as compact chips, one line per row: the reports VulnCheck cites open from a click (a native details element, no script), the headline count links to the Headlines search, Rules N opens the public rules (ET Open, Nuclei, CISA Sigma, Snort 3 community) that name the CVE. {% endcomment %}{% if n_reps > 0 %}{% assign n_src = n_reps | plus: n_more %}<details class="hl-vuln__pop"><summary class="hl-vuln__p" title="Exploitation reported by {{ n_src }} source{% if n_src != 1 %}s{% endif %} VulnCheck cites">{{ n_src }} src</summary><span class="hl-vuln__popbody">Reported by{% for rp in r.reports %}{% assign rp_head = rp.url | slice: 0, 8 %}{% if rp_head == "https://" %}<a href="{{ rp.url | escape }}" target="_blank" rel="noopener noreferrer nofollow">{{ rp.host | escape }}</a>{% endif %}{% endfor %}{% if n_more > 0 %}<span class="hl-vuln__dim">+{{ n_more }} more in VulnCheck KEV</span>{% endif %}</span></details>{% endif %}{% include wire-vuln-news.html %}{% include wire-vuln-rules.html %}{% include wire-vuln-new.html %}</span>{% if is_np %}<div class="hl-vuln__pick hl-vuln__np"><span class="hl-pick__score" title="Priority {{ r.np_score | plus: 0 }}. This is my patch-first score: the points the row earned from the reasons beside it. More points rank higher. It ranks exploited flaws; it does not predict anything.">Priority {{ r.np_score | plus: 0 }}</span>{% for t in r.np_reasons %}{% case t %}{% when "noauth" %}<span class="hl-pick__chip hl-pick__chip--noauth" title="The CVSS vector says network reachable, no privileges needed and no user interaction. Worth 1 point.">No login</span>{% when "critical" %}<span class="hl-pick__chip hl-pick__chip--critical" title="The CVSS score is 9.0 or higher. Worth 1 point.">CVSS 9+</span>{% when "class" %}<span class="hl-pick__chip hl-pick__chip--class" title="The product belongs to one of my patch-first product classes: {% if r.np_class and r.np_class != "" %}{{ r.np_class | escape }}{% else %}class not named{% endif %}. Worth 2 points, or 1 for an operating system or browser.">{% if r.np_class and r.np_class != "" %}{{ r.np_class | escape }}{% else %}Product class{% endif %}</span>{% when "tooling" %}<span class="hl-pick__chip hl-pick__chip--tooling" title="A Metasploit module, an Exploit-DB entry, a Nuclei template or an ET Open rule names this CVE. Worth 1 point. I have not tested any of them.">Public tooling</span>{% when "cisa" %}<span class="hl-pick__chip hl-pick__chip--cisa" title="The CVE is also on CISA's KEV catalog. Worth 1 point.">CISA KEV</span>{% when "fresh" %}<span class="hl-pick__chip hl-pick__chip--fresh" title="The flaw was disclosed under 30 days before VulnCheck listed it. Worth 1 point.">New flaw</span>{% endcase %}{% endfor %}</div>{% endif %}</div>
+<div class="hl-vuln" id="cve-{{ r.cve | downcase | escape }}" data-prio="{{ r.prio | escape }}" data-title="{{ r.cve | downcase | escape }} {{ r.vendor | downcase | escape }} {{ r.product | downcase | escape }} {{ r.title | downcase | escape }}{% if is_np %} priority {{ r.np_class | downcase | escape }}{% endif %}{% if is_canary %} vulncheck canary{% endif %}{% if is_ransom %} ransomware{% endif %}" data-list="{% if cisa_len == 10 %}cisa{% else %}vconly{% endif %}" data-vendor="{{ r.vendor | escape }}" data-age="{% if r.older == true %}older{% else %}recent{% endif %}" data-sev="{{ sev | escape }}" data-det="{{ det | join: '|' | escape }}" data-nvd="{{ nvd_key | escape }}"{% if row_sig.size > 0 %} data-sig="{{ row_sig | join: '|' | escape }}"{% endif %} data-day="{{ vday | escape }}">{% comment %} T-0532: the Details toggle, first in the row, hidden until the script removes it. {% endcomment %}<button type="button" class="hl-dt" aria-expanded="false" hidden title="Show details"><span class="hl-dt__sr">Details</span></button><a class="hl-vuln__cve" href="https://nvd.nist.gov/vuln/detail/{{ r.cve | escape }}" target="_blank" rel="noopener noreferrer">{{ r.cve | escape }}</a><span class="hl-vuln__vp" title="{{ r.vendor | escape }} {{ r.product | escape }}">{% if r.vendor and r.vendor != "" %}<b>{{ r.vendor | escape }}</b> {{ r.product | escape }}{% else %}<span class="hl-vuln__none">vendor not given</span>{% endif %}{% if r.title and r.title != "" %} {{ r.title | escape }}{% endif %}</span><span class="hl-vuln__badges">{% include wire-nkev-priority.html %}{% include wire-vuln-sev.html %}{% if cisa_len == 10 %}<span class="hl-vuln__b hl-vuln__b--cisa" title="Added to CISA KEV {{ r.cisa_added | escape }}{% if r.kev_due and r.kev_due != '' %}; CISA due date {{ r.kev_due | escape }}{% endif %}">CISA KEV</span>{% endif %}{% comment %} T-0667: a row under a later day than VulnCheck's shows both dates, worded by what set its day; a row built from the CISA catalog alone says so. {% endcomment %}{% if is_dated %}{% assign dt_ev = vday | date: "%-d %b" %}{% assign dt_vc = r.added | date: "%-d %b" %}{% if ev_src == "cisa" %}<span class="hl-vuln__ev hl-vuln__dates" title="CISA added this CVE to its KEV catalog on {{ r.event | escape }}, after VulnCheck's date of {{ r.added | escape }}. I list it under the later day.">CISA KEV {{ dt_ev | escape }} &middot; VulnCheck {{ dt_vc | escape }}</span>{% elsif ev_src == "first_seen" %}<span class="hl-vuln__ev hl-vuln__dates" title="VulnCheck dates this CVE {{ r.added | escape }}, but I first published it here on {{ r.event | escape }}. I list it under the day it reached me.">First seen here {{ dt_ev | escape }} &middot; VulnCheck dated {{ dt_vc | escape }}</span>{% else %}<span class="hl-vuln__ev hl-vuln__dates" title="Latest exploitation event {{ r.event | escape }}; VulnCheck dates this CVE {{ r.added | escape }}.">Latest event {{ dt_ev | escape }} &middot; VulnCheck {{ dt_vc | escape }}</span>{% endif %}{% elsif ev_cisaonly %}{% assign dt_ev = vday | date: "%-d %b" %}<span class="hl-vuln__ev hl-vuln__dates" title="CISA lists this CVE in its KEV catalog (added {{ r.cisa_added | escape }}) and VulnCheck's KEV catalog does not. I list it under the CISA day.">CISA KEV {{ dt_ev | escape }} &middot; not in VulnCheck KEV</span>{% endif %}{% if is_canary %}<span class="hl-vuln__b hl-vuln__b--canary" title="VulnCheck's own canary network recorded exploitation of this CVE. It is VulnCheck's flag, not a statement from CISA or the vendor. It adds no Priority points.">VulnCheck canary</span>{% endif %}{% if is_ransom %}<span class="hl-vuln__b hl-vuln__b--ransom" title="Marked as used in known ransomware campaigns, by VulnCheck's KEV data or CISA's KEV catalog. It adds no Priority points.">Ransomware</span>{% endif %}{% comment %} evidence is the earliest citation date; drawn only when it says something the day heading does not. {% endcomment %}{% if ev_len == 10 and r.evidence < r.added %}<span class="hl-vuln__ev">evidence {{ r.evidence | escape }}</span>{% endif %}{% if gap_len > 0 and r.disclosed != "" %}<span class="hl-vuln__gap-fact">{% if gap_n == 0 %}listed on the day of disclosure{% else %}{% assign gap_d = gap_n %}{% if gap_n < 0 %}{% assign gap_d = gap_abs %}{% endif %}listed {{ gap_d | escape }} day{% if gap_d != 1 %}s{% endif %} {% if gap_n < 0 %}before{% else %}after{% endif %} disclosure{% endif %}</span>{% endif %}{% include wire-vuln-epss.html %}{% include wire-vuln-vedas.html %}{% comment %} T-0407 pointers as compact chips, one line per row: the reports VulnCheck cites open from a click (a native details element, no script), the headline count links to the Headlines search, Rules N opens the public rules (ET Open, Nuclei, CISA Sigma, Snort 3 community) that name the CVE. {% endcomment %}{% if n_reps > 0 %}{% assign n_src = n_reps | plus: n_more %}<details class="hl-vuln__pop"><summary class="hl-vuln__p" title="Exploitation reported by {{ n_src }} source{% if n_src != 1 %}s{% endif %} VulnCheck cites">{{ n_src }} src</summary><span class="hl-vuln__popbody">Reported by{% for rp in r.reports %}{% assign rp_head = rp.url | slice: 0, 8 %}{% if rp_head == "https://" %}<a href="{{ rp.url | escape }}" target="_blank" rel="noopener noreferrer nofollow">{{ rp.host | escape }}</a>{% endif %}{% endfor %}{% if n_more > 0 %}<span class="hl-vuln__dim">+{{ n_more }} more in VulnCheck KEV</span>{% endif %}</span></details>{% endif %}{% include wire-vuln-news.html %}{% include wire-vuln-rules.html %}{% include wire-vuln-new.html %}</span>{% if is_np %}<div class="hl-vuln__pick hl-vuln__np"><span class="hl-pick__score" title="Priority {{ r.np_score | plus: 0 }}. This is my patch-first score: the points the row earned from the reasons beside it. More points rank higher. It ranks exploited flaws; it does not predict anything.">Priority {{ r.np_score | plus: 0 }}</span>{% for t in r.np_reasons %}{% case t %}{% when "noauth" %}<span class="hl-pick__chip hl-pick__chip--noauth" title="The CVSS vector says network reachable, no privileges needed and no user interaction. Worth 1 point.">No login</span>{% when "critical" %}<span class="hl-pick__chip hl-pick__chip--critical" title="The CVSS score is 9.0 or higher. Worth 1 point.">CVSS 9+</span>{% when "class" %}<span class="hl-pick__chip hl-pick__chip--class" title="The product belongs to one of my patch-first product classes: {% if r.np_class and r.np_class != "" %}{{ r.np_class | escape }}{% else %}class not named{% endif %}. Worth 2 points, or 1 for an operating system or browser.">{% if r.np_class and r.np_class != "" %}{{ r.np_class | escape }}{% else %}Product class{% endif %}</span>{% when "tooling" %}<span class="hl-pick__chip hl-pick__chip--tooling" title="A Metasploit module, an Exploit-DB entry, a Nuclei template or an ET Open rule names this CVE. Worth 1 point. I have not tested any of them.">Public tooling</span>{% when "cisa" %}<span class="hl-pick__chip hl-pick__chip--cisa" title="The CVE is also on CISA's KEV catalog. Worth 1 point.">CISA KEV</span>{% when "fresh" %}<span class="hl-pick__chip hl-pick__chip--fresh" title="The flaw was disclosed under 30 days before VulnCheck listed it. Worth 1 point.">New flaw</span>{% endcase %}{% endfor %}</div>{% endif %}</div>
 {%- endif -%}
 {%- endcapture -%}
 {%- assign rendered_rows = rendered_rows | push: rendered_row -%}
@@ -388,13 +428,15 @@ reads back from the built page (it fails the index step on a duplicate). A vuln 
 {%- include wire-fold.html rows=rendered_rows keys=fold_keys labels=fold_labels thresholds=fold_thresholds -%}
 </div>
 {%- endfor -%}
+{%- comment -%} the added days older than the oldest group {%- endcomment -%}
+{%- for ad in alias_days -%}{%- assign ad_key = "|" | append: ad | append: "|" -%}{%- unless alias_done contains ad_key -%}<div class="hl-wire__dayalias" id="vulns-{{ ad | escape }}" data-day-target="{{ ad | escape }}"></div>{%- endunless -%}{%- endfor -%}
 </div>
 
 {%- comment -%} T-0468.2: the heading is a details summary, so a reader can fold the legend out of the way and open it again. Open on load. {%- endcomment -%}
 <aside class="hl-post-toc hl-legend" aria-label="Legend" tabindex="0" data-pagefind-ignore>
 <details class="hl-legend__fold" open>
 <summary class="hl-post-toc__heading" title="Show or hide the legend">Legend</summary>
-<div class="hl-legend__body">{{ legend_html }}{{ np_legend }}</div>
+<div class="hl-legend__body">{{ legend_html }}{{ np_legend }}{{ ev_legend }}</div>
 </details>
 </aside>
 
@@ -735,7 +777,7 @@ reads back from the built page (it fails the index step on a duplicate). A vuln 
 </div>
 
 <script defer src="{{ '/assets/js/listing-filter.js' | relative_url }}?v=19"></script>
-<script defer src="{{ '/assets/js/wire-chips.js' | relative_url }}?v=5"></script>
+<script defer src="{{ '/assets/js/wire-chips.js' | relative_url }}?v=6"></script>
 <script defer src="{{ '/assets/js/wire-details.js' | relative_url }}?v=10"></script>
 
 {%- else -%}

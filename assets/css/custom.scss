@@ -3940,6 +3940,8 @@ a.hl-sponsor-rail__item:focus-visible { outline: 2px solid #ffffff; outline-offs
 .hl-vc-vulncheck { --wire-topic: #bc8cff; }
 .hl-vc-none      { --wire-topic: #8b949e; }
 .hl-vc-prenvd    { --wire-topic: #f778ba; }
+.hl-vc-canary    { --wire-topic: #22d3ee; }
+.hl-vc-ransom    { --wire-topic: #e879f9; }
 .hl-chip-btn--topic[class*="hl-vuln__sev--"] { --wire-topic: var(--s); }
 
 .hl-vuln {
@@ -3977,6 +3979,9 @@ a.hl-sponsor-rail__item:focus-visible { outline: 2px solid #ffffff; outline-offs
   background: color-mix(in srgb, var(--b, var(--hl-text-muted)) 13%, transparent);
 }
 .hl-vuln__b--cisa { --b: #f87171; }
+/* T-0667: the VulnCheck canary and ransomware flags. No Priority points; the colours are not the CISA red or the severity bands. */
+.hl-vuln__b--canary { --b: #22d3ee; }
+.hl-vuln__b--ransom { --b: #e879f9; }
 /* T-0468: days from NVD publication to the VulnCheck KEV add, and the badge for a
    CVE VulnCheck added before NVD published it. */
 /* Severity (T-0399): the row's CVSS base score, square-cornered so it does not
@@ -3997,6 +4002,10 @@ a.hl-sponsor-rail__item:focus-visible { outline: 2px solid #ffffff; outline-offs
 .hl-vuln__sev--medium   { --s: #e3b341; }
 .hl-vuln__sev--low      { --s: #7ee787; }
 .hl-vuln__ev { font-size: var(--hl-fs-meta); color: var(--hl-text-muted); white-space: nowrap; align-self: center; }
+/* T-0667: a row dated by a later event shows both dates in this one muted chip. */
+.hl-vuln__dates { color: var(--hl-text-primary); }
+/* T-0667: an empty anchor for an added day whose rows all sit under later event days, so a digest link to it still lands. */
+.hl-wire__dayalias { height: 0; margin: 0; padding: 0; overflow: hidden; }
 /* T-0407: the row's pointers as compact chips at the end of the one line:
    "src" opens the reports VulnCheck cites (a native <details>, no script),
    "news" links to the Headlines search, ET and N mark a public rule or

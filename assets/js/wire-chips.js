@@ -18,6 +18,9 @@
         if (chip.querySelector('.hl-vuln__p--epss')) return 2;
       } else {
         if (chip.matches('.hl-vuln__b--cisa')) return 0;
+        // T-0667: the dates chip says why the row sits under this day, so it outranks the tooling chips; the canary and ransomware flags rank with them.
+        if (chip.matches('.hl-vuln__dates')) return 1;
+        if (chip.matches('.hl-vuln__b--canary, .hl-vuln__b--ransom')) return 2;
         if (chip.matches('.hl-vuln__preauth')) return 1;
         if (chip.matches('.hl-vuln__tool')) return 2;
         if (chip.querySelector('.hl-vuln__p--epss')) return 3;

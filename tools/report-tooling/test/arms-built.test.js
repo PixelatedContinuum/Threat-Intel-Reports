@@ -7,8 +7,8 @@ test('T-0565 complete contract fixture and invalid-field controls',()=>{
  const check=d=>CW.check(d,null,Date.parse(d.generated_at));
  const r=check(fixture);assert.equal(r.status,'PASS');assert.deepEqual(r.vulnWarnings,[]);assert.deepEqual(r.cveWarnings,[]);
  assert.equal(fixture.vulns.length,46);assert.equal(fixture.cves.length,7);
- const bad=structuredClone(fixture);bad.vulns[0].age_group='old';bad.vulns[1].prio=bad.vulns[0].prio;bad.vulns_counts.age_mid=0;bad.vulns_counts.batches[0].n=19;
- const w=check(bad).vulnWarnings.join(' ');for(const p of [/age_group/,/unique rank/,/age_mid/,/fewer than 20/])assert.match(w,p);
+ const bad=structuredClone(fixture);bad.vulns[0].age_group='old';bad.vulns[1].prio=bad.vulns[0].prio;bad.vulns_counts.age_mid=0;bad.vulns_counts.batches[0].n=4;
+ const w=check(bad).vulnWarnings.join(' ');for(const p of [/age_group/,/unique rank/,/age_mid/,/fewer than 5/])assert.match(w,p);
  const retired=structuredClone(fixture);retired.cves[0].signals.push('crit_noauth_kev_product');assert.equal(check(retired).status,'FAIL');
 });
 test('T-0565 rendered groups, batches, filters, priorities, chips and both anchor forms', {skip:process.env.HL_ARMS_SITE?false:'NOT CHECKED: set HL_ARMS_SITE to the Jekyll contract fixture build'},async()=>{
@@ -35,9 +35,9 @@ test('T-0565 rendered groups, batches, filters, priorities, chips and both ancho
  }finally{dom.window.close();}
 });
 
-test('T-0565.1 per-day fold minimum is twenty',()=>{
+test('T-0565.1 per-day fold minimum is five (T-0667; twenty before)',()=>{
  const template=fs.readFileSync(path.join(root,'wire/index.md'),'utf8');
- assert.match(template,/assign wp_batch_group_min = 20/);
+ assert.match(template,/assign wp_batch_group_min = 5/);
  assert.equal((template.match(/assign wp_batch_group_min =/g)||[]).length,1);
  const rows=fixture.vulns.filter(r=>r.added==='2026-10-11');
  assert.equal(rows.length,4);assert.ok(rows.every(r=>!r.batch));

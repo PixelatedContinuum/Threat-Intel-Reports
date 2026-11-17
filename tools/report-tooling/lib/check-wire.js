@@ -391,7 +391,7 @@ function checkVulns(doc, now) {
   var nRule = { cisa_sigma: 0, snort3: 0 };
   var nNoRuleFields = 0;
   var nNkev = { disclosed: 0, prenvd: 0, epss: 0, epss_pre: 0 };
-  var nNp = 0, npRows = [];
+  var nNp = 0, npRows = [], nEventMoved = 0;
   rows.forEach(function (r, n) {
     r = r || {};
     var where = 'vulns row ' + (n + 1) + ' (' + String(r.cve || '?') + ')';
@@ -418,6 +418,8 @@ function checkVulns(doc, now) {
     pointerProblems(r).forEach(function (p) { warnings.push(where + ' ' + p); });
     nkevProblems(r).forEach(function (p) { warnings.push(where + ' ' + p); });
     npProblems(r).forEach(function (p) { warnings.push(where + ' ' + p); });
+    eventProblems(r).forEach(function (p) { warnings.push(where + ' ' + p); });
+    if (hasKey(r, 'event') && typeof r.event === 'string' && r.event !== r.added) nEventMoved++;
     if (isNp(r)) { nNp++; npRows.push(r); }
     cvenowProblems(r).forEach(function (p) { warnings.push(where + ' ' + p); });
     if (!isEmpty(r.disclosed)) nNkev.disclosed++;
@@ -509,9 +511,14 @@ function checkVulns(doc, now) {
   } else if (nNp > 0) {
     warnings.push('rows carry ' + nNp + ' np_rank rows but vulns_counts has no np_priority');
   }
+  // T-0667 (R2): the cap is gone. The old shape carries np_top (a cap) and is held to it; the new shape
+  // carries np_per_product: true and no np_top, and is held to one ranked row per product instead.
   var npTop = hasKey(vc, 'np_top') && isCount(vc.np_top) ? vc.np_top : null;
   if (hasKey(vc, 'np_top') && !isCount(vc.np_top)) warnings.push('vulns_counts np_top is ' + JSON.stringify(vc.np_top) + ', not a whole number of 0 or more');
   if (npTop !== null && nNp > npTop) warnings.push('the Priority group has ' + nNp + ' rows, over np_top ' + npTop);
+  var perProduct = hasKey(vc, 'np_per_product');
+  if (perProduct && vc.np_per_product !== true) warnings.push('vulns_counts np_per_product is ' + JSON.stringify(vc.np_per_product) + ', not true');
+  perProduct = perProduct && vc.np_per_product === true;
   if (hasKey(vc, 'np_threshold') && !isCount(vc.np_threshold)) warnings.push('vulns_counts np_threshold is ' + JSON.stringify(vc.np_threshold) + ', not a whole number of 0 or more');
   if (hasKey(vc, 'np_classes') && NP_CLASS_SETS.indexOf(vc.np_classes) === -1) warnings.push('vulns_counts np_classes is ' + JSON.stringify(vc.np_classes) + ', not one of ' + NP_CLASS_SETS.join(', '));
   if (anyNp) {
@@ -520,18 +527,47 @@ function checkVulns(doc, now) {
     var byRank = npRows.slice().sort(function (a, b) { return a.np_rank - b.np_rank; });
     byRank.forEach(function (r, i) {
       if (i && r.np_score > byRank[i - 1].np_score) warnings.push(r.cve + ' np_rank puts it below a lower score');
+      else if (i && perProduct && r.np_score === byRank[i - 1].np_score) {
+        var tie = npTieProblem(byRank[i - 1], r);
+        if (tie) warnings.push(r.cve + ' ' + tie);
+      }
       if (hasKey(vc, 'np_threshold') && isCount(vc.np_threshold) && r.np_score < vc.np_threshold) warnings.push(r.cve + ' has np_rank but np_score ' + r.np_score + ' is under np_threshold ' + vc.np_threshold);
     });
+    // One ranked row per product (new shape), and every product with a row at the threshold has its one.
+    var rankedProducts = Object.create(null);
+    byRank.forEach(function (r) {
+      var key = npProductKey(r);
+      if (key === '') return;
+      if (perProduct && rankedProducts[key]) warnings.push(r.cve + ' is a second ranked row for ' + key + ' (' + rankedProducts[key] + ' holds the rank): np_per_product allows one');
+      else rankedProducts[key] = r.cve;
+    });
     if (hasKey(vc, 'np_threshold') && isCount(vc.np_threshold)) {
+      var lastScore = byRank.length ? byRank[byRank.length - 1].np_score : null;
+      var full = npTop !== null && nNp >= npTop;
       rows.forEach(function (r) {
+        if (!(r && hasKey(r, 'np_rank') && r.np_rank === 0 && Number.isInteger(r.np_score) && r.np_score >= vc.np_threshold)) return;
+        if (perProduct) {
+          // Unranked by the one-per-product rule: fine when its product has a ranked row, wrong when it has none.
+          var pk = npProductKey(r);
+          if (pk !== '' && rankedProducts[pk]) return;
+          warnings.push(r.cve + ' scores ' + r.np_score + ' (threshold ' + vc.np_threshold + ') but has no np_rank and no ranked row of its product');
+          return;
+        }
         // A full group (np_top reached) leaves lower-ranked rows over the threshold out; then only a row that
         // outscores the group's last row is wrong.
-        var lastScore = byRank.length ? byRank[byRank.length - 1].np_score : null;
-        var full = npTop !== null && nNp >= npTop;
-        if (r && hasKey(r, 'np_rank') && r.np_rank === 0 && Number.isInteger(r.np_score) && r.np_score >= vc.np_threshold &&
-            (!full || r.np_score > lastScore)) warnings.push(r.cve + ' scores ' + r.np_score + ' (threshold ' + vc.np_threshold + (full ? ', group full at ' + npTop : '') + ') but has no np_rank');
+        if (!full || r.np_score > lastScore) warnings.push(r.cve + ' scores ' + r.np_score + ' (threshold ' + vc.np_threshold + (full ? ', group full at ' + npTop : '') + ') but has no np_rank');
       });
     }
+  }
+  // T-0667 (R1): the counts the exporter adds with the event day. Each is held to the rows when it can be.
+  ['cisa_admitted', 'cisa_missing', 'event_moved'].forEach(function (k) {
+    if (hasKey(vc, k) && !isCount(vc[k])) warnings.push('vulns_counts ' + k + ' is ' + JSON.stringify(vc[k]) + ', not a whole number of 0 or more');
+  });
+  if (rows.length && hasKey(vc, 'event_moved') && isCount(vc.event_moved) && rows.some(function (r) { return hasKey(r, 'event'); }) && vc.event_moved !== nEventMoved) {
+    warnings.push('vulns_counts event_moved disagrees with the rows: declared ' + vc.event_moved + ', actual ' + nEventMoved);
+  }
+  if (hasKey(vc, 'cisa_admitted') && isCount(vc.cisa_admitted) && vc.cisa_admitted > rows.length) {
+    warnings.push('vulns_counts cisa_admitted ' + vc.cisa_admitted + ' is more than the ' + rows.length + ' rows');
   }
   // T-0565 contract: older files remain readable; a grouped export must be complete.
   if (rows.some(function (r) { return hasKey(r, 'age_group') || hasKey(r, 'prio'); })) {
@@ -547,7 +583,8 @@ function checkVulns(doc, now) {
       if (hasKey(r, 'wp') && r.wp !== true) warnings.push(r.cve + ' wp must be true or absent');
       if (r.wp) wp++;
       if (hasKey(r, 'batch')) {
-        if (!r.wp || r.batch !== 'wp-' + r.added) warnings.push(r.cve + ' batch must match its WordPress added day');
+        // T-0667 (R3): a batch is keyed by the row's event day (its added day on a row with no event).
+        if (!r.wp || r.batch !== 'wp-' + eventDay(r)) warnings.push(r.cve + ' batch must match its WordPress event day');
         batches[r.batch] = (batches[r.batch] || 0) + 1;
       }
     });
@@ -558,8 +595,8 @@ function checkVulns(doc, now) {
     var declared = Array.isArray(vc.batches) ? vc.batches : [];
     if (declared.length !== Object.keys(batches).length) warnings.push('vulns_counts batches disagrees with rows');
     declared.forEach(function (b) {
-      if (b.key !== 'wp-' + b.day || b.n !== batches[b.key] || b.n < 20)
-        warnings.push('vulns_counts batch differs from rows or has fewer than 20 rows');
+      if (b.key !== 'wp-' + b.day || b.n !== batches[b.key] || b.n < WP_FOLD_MIN)
+        warnings.push('vulns_counts batch differs from rows or has fewer than ' + WP_FOLD_MIN + ' rows');
     });
   }
   return { problems: problems, warnings: warnings, total: rows.length };
@@ -647,6 +684,74 @@ function npProblems(r) {
   if (typeof r.np_class !== 'string') out.push('has an np_class that is not text');
   else if (r.np_class !== '' && NP_CLASSES.indexOf(r.np_class) === -1) out.push('has unknown np_class ' + JSON.stringify(r.np_class));
   return out;
+}
+/* T-0667 (R1, R3, R4): the event day. Five keys the exporter writes on every nKEV row once it dates rows by
+   their latest exploitation event, checked only when present (all five or none) so data from before them
+   still passes and renders by `added` (the site deploys before the exporter). `event` is the latest of
+   `added` (the VulnCheck add), `cisa_added` and `first_seen`, and `first_seen` counts only when it is 2 or
+   more days after the later of `added` and `cisa_added` (a backdated arrival; one day is the UTC day
+   boundary; P1-return.md, 2026-11-17). Ties go to vulncheck,
+   then cisa, then first_seen. A row built from the CISA entry alone (the CVE is not in VulnCheck) has
+   added = cisa_added and event_src cisa. Contract: tasks/runs/T-0667/contract.md. WARN lines, as for the
+   Priority keys above. */
+var EV_KEYS = ['event', 'event_src', 'first_seen', 'canary', 'ransomware'];
+var EV_SRCS = ['vulncheck', 'cisa', 'first_seen'];
+var WP_FOLD_MIN = 5;
+function eventDay(r) { return hasKey(r, 'event') && typeof r.event === 'string' && DAY_SHAPE.test(r.event) ? r.event : r.added; }
+function expectedEvent(r) {
+  var best = { day: r.added, src: 'vulncheck' };
+  var add = realDay(r.added);
+  var cand = [['cisa', r.cisa_added]];
+  var later = isNaN(realDay(r.cisa_added)) ? add : Math.max(add, realDay(r.cisa_added));
+  if (!isNaN(realDay(r.first_seen)) && !isNaN(later) && (realDay(r.first_seen) - later) / 86400000 >= 2) cand.push(['first_seen', r.first_seen]);
+  cand.forEach(function (c) {
+    var t = realDay(c[1]);
+    if (!isNaN(t) && (isNaN(realDay(best.day)) || t > realDay(best.day))) best = { day: c[1], src: c[0] };
+  });
+  return best;
+}
+function eventProblems(r) {
+  var out = [];
+  var present = EV_KEYS.filter(function (k) { return hasKey(r, k); });
+  if (!present.length) return out;
+  if (present.length !== EV_KEYS.length) {
+    out.push('carries only some event keys (' + present.join(', ') + '); the exporter writes all five or none');
+    return out;
+  }
+  if (isNaN(realDay(r.event))) out.push('has event ' + JSON.stringify(r.event) + ', not a real day');
+  if (EV_SRCS.indexOf(r.event_src) === -1) out.push('has event_src ' + JSON.stringify(r.event_src) + ', not one of ' + EV_SRCS.join(', '));
+  if (!isEmpty(r.first_seen) && isNaN(realDay(r.first_seen))) out.push('has first_seen ' + JSON.stringify(r.first_seen) + ', not empty or a real day');
+  if (typeof r.canary !== 'boolean') out.push('has canary ' + JSON.stringify(r.canary) + ', not true or false');
+  if (typeof r.ransomware !== 'boolean') out.push('has ransomware ' + JSON.stringify(r.ransomware) + ', not true or false');
+  if (!isNaN(realDay(r.event)) && !isNaN(realDay(r.added)) && EV_SRCS.indexOf(r.event_src) !== -1) {
+    if (realDay(r.event) < realDay(r.added)) {
+      out.push('has event ' + r.event + ' before its added day ' + r.added);
+    } else {
+      var want = expectedEvent(r);
+      // A CISA-only row (not in VulnCheck) is dated by the CISA day, which is also its added day, and carries no reports. A row with
+      // reports is a VulnCheck row, so on a same-day tie the VulnCheck source wins.
+      var cisaOnly = r.event_src === 'cisa' && r.event === r.added && r.cisa_added === r.added && reportsOf(r).length === 0;
+      if (!cisaOnly && (want.day !== r.event || want.src !== r.event_src)) {
+        out.push('has event ' + r.event + ' from ' + r.event_src + ' but its dates (added ' + r.added + ', cisa_added ' +
+          JSON.stringify(r.cisa_added || '') + ', first_seen ' + JSON.stringify(r.first_seen || '') + ') give ' + want.day + ' from ' + want.src);
+      }
+    }
+  }
+  return out;
+}
+function npProductKey(r) {
+  return (String(r.vendor || '') + ' ' + String(r.product || '')).replace(/\s+/g, ' ').trim().toLowerCase();
+}
+function cveParts(id) { var m = /^CVE-(\d+)-(\d+)$/.exec(String(id)); return m ? [Number(m[1]), Number(m[2])] : [0, 0]; }
+// Within one score the order is event desc, EPSS desc (missing last), CVE id desc (R2). `a` ranks above `b`.
+function npTieProblem(a, b) {
+  var ea = realDay(eventDay(a)), eb = realDay(eventDay(b));
+  if (ea !== eb && !isNaN(ea) && !isNaN(eb)) return ea > eb ? '' : 'np_rank puts it below a row of the same score with an earlier event day';
+  var pa = isEmpty(a.epss) ? -1 : Number(a.epss), pb = isEmpty(b.epss) ? -1 : Number(b.epss);
+  if (pa !== pb && !isNaN(pa) && !isNaN(pb)) return pa > pb ? '' : 'np_rank puts it below a row of the same score and event day with a lower EPSS';
+  var ca = cveParts(a.cve), cb = cveParts(b.cve);
+  if (ca[0] !== cb[0] || ca[1] !== cb[1]) return (ca[0] > cb[0] || (ca[0] === cb[0] && ca[1] > cb[1])) ? '' : 'np_rank puts it below a row with a higher CVE id at the same score, event day and EPSS';
+  return '';
 }
 function isPick(r) { return hasKey(r, 'pick_day') && !isEmpty(r.pick_day); }
 function pickProblems(r, genDay) {
@@ -1690,9 +1795,14 @@ function checkDayLayout(src, includes) {
   panels.forEach(function (panel, i) { out = out.concat(checkVedasCopy(panel, i ? 'CVEs explanation' : 'nKEVs explanation')); });
   var n = panels[0] || '', c = panels[1] || '';
   ["I do not curate", 'Empirical Security', 'Every VulnCheck KEV entry stays visible.',
-   'Filters open matching batches and counts show matching rows.', 'newest day first', 'at least 20 entries',
+   'Filters open matching batches and counts show matching rows.', 'newest day first', 'at least 5 entries', 'A row in the Priority strip is never folded.',
    // T-0638: the Priority group's rule and its limit. T-0641: the strip, and that the rows stay in their days.
-   'my patch-first order', 'needs 5 points', 'the ten highest-scoring rows', 'product classes are my judgment', 'I have not measured it',
+   'my patch-first order', 'needs 5 points', 'product classes are my judgment', 'I have not measured it',
+   // T-0667: the Priority rule with no cap (new data) and without a number (data from before it), the event-day dating and the flags.
+   'The strip holds every row that scores 5 or more points, with no cap, and lists one row per product', 'The strip holds the highest-scoring rows',
+   'I group rows by the day of the latest exploitation event I know of for the CVE', 'I group rows by the day VulnCheck added them',
+   'CISA KEV 17 Nov &middot; VulnCheck 4 Nov', 'First seen here 17 Nov &middot; VulnCheck dated 25 Oct', 'not in VulnCheck KEV',
+   'canary network recorded exploitation of the CVE', 'Neither adds Priority points.',
    'The Priority strip at the top of this tab', 'the row stays in its own day with its Priority badge'
   ].forEach(function (pin) { if (!n.includes(pin)) out.push('nKEVs explanation lost: ' + pin); });
   ['seven reasons', 'WordPress-class', 'unauthenticated', 'five weakness groups', '8.3%', '7.0%', '6.4%',
@@ -1709,7 +1819,7 @@ function checkDayLayout(src, includes) {
    'there is no evidence of exploitation for them yet', 'not a sign that anyone is attacking it', 'The rows sit outside the cap of 250'
   ].forEach(function (pin) { if (!c.includes(pin)) out.push('CVEs explanation lost: ' + pin); });
   if (/data-age-group=|data-age="recent">Recent|data-age="">Include older/.test(src)) out.push('nKEVs must use day groups and no age filter');
-  ['group_by: "added"', 'sort: "prio"', 'id="vulns-{{ day_group.name | escape }}"', 'data-sig="wp_unauth"',
+  ['group_by_exp: "gr", "gr.event | default: gr.added"', 'sort: "prio"', 'id="vulns-{{ day_group.name | escape }}"', 'data-sig="wp_unauth"',
    'w_wp', 'r.nomi == true', 'https://github.com/nomi-sec/PoC-in-GitHub/blob/master/', 'wire-chips.js',
    // T-0565.2: the KEV-product filter narrows the CVEs tab; it is never an admission reason.
    // T-0628: the Priority picks group, its filter chip and the pick strip on a row.
@@ -1720,6 +1830,11 @@ function checkDayLayout(src, includes) {
    'href="#cve-{{ r.cve | downcase | escape }}"', 'href="#cves-{{ r.cve | downcase | escape }}"', 'class="hl-pstrip__new">new</span>',
    'class="hl-pstrip__new">new today</span>', 'data-pstrip-chip="pick"', 'assign latest_pick_day = picks_raw | group_by: "pick_day"',
    'data-sig="kev_product">Product exploited before', 'kev_product{% endif %}"', 'Product exploited before</dt><dd>Filter only, never admits',
+   // T-0667: the event day on the row (both dates, worded by source), the canary and ransomware chips and their filter chips, the count of each from the rows.
+   'assign vday = r.event | default: r.added', 'hl-wire__dayalias', 'hl-vuln__ev hl-vuln__dates', 'First seen here {{ dt_ev | escape }} &middot; VulnCheck dated {{ dt_vc | escape }}',
+   'CISA KEV {{ dt_ev | escape }} &middot; VulnCheck {{ dt_vc | escape }}', 'hl-vuln__b hl-vuln__b--canary', 'hl-vuln__b hl-vuln__b--ransom',
+   'data-sig="canary">VulnCheck canary', 'data-sig="ransomware">Ransomware', 'assign n_canary = n_canary | plus: 1', 'assign n_ransom = n_ransom | plus: 1',
+   'assign np_evd = r.event | default: r.added', '{{ ev_legend }}', 'r.evidence < r.added',
    // T-0665: the Just published rows: the filter chip, its count from the rows, the data-sig token, the marker strip and the legend key.
    'data-sig="fresh">Just published', 'assign c_fresh = c_fresh | plus: 1', 'fresh{% endif %}', 'class="hl-vuln__pick hl-vuln__fresh"',
    'hl-pick__score hl-pick__score--fresh" title="Just published.', 'hl-pick__score--fresh">Just published</span></dt><dd>'
@@ -1727,6 +1842,10 @@ function checkDayLayout(src, includes) {
   // T-0665: a Just published row stays in its day, so the fold policy must skip it, as it skips a pick.
   if (includes && typeof includes['wire-fold-keys.html'] === 'string' && includes['wire-fold-keys.html'].indexOf('fold_row.fresh == true') === -1) {
     out.push('Wire fold contract lost: a Just published row (fresh true) must never be folded into a batch');
+  }
+  // T-0667 (R3): a batch is the event day's, so its label reads the event day, not the VulnCheck add day.
+  if (includes && typeof includes['wire-fold-keys.html'] === 'string' && includes['wire-fold-keys.html'].indexOf('fold_row.event | default: fold_row.added') === -1) {
+    out.push('Wire fold contract lost: the WordPress batch label must read the row\'s event day (fold_row.event | default: fold_row.added)');
   }
   // T-0641: the groups are gone; a priority row renders in its day only.
   if (/hl-wire__day--np|hl-wire__day--picks|'__np'|'__picks'/.test(src)) out.push('Wire layout: a Priority group is back; priority rows belong in their day groups, with a strip above');
@@ -1748,7 +1867,7 @@ function checkDayLayout(src, includes) {
   if (heading) unescapedOutputs(heading[0]).filter(function(m) { return !/\.size\s*\}\}$/.test(m); }).forEach(function (m) { out.push('the nKEV row template prints '+m+' without escape'); });
   var sec = src.slice(src.indexOf('<section id="cves"'), src.indexOf('</section>', src.indexOf('<section id="cves"')));
   unescapedOutputs(sec).forEach(function (m) { out.push('CVEs prints '+m+' without escape'); });
-  ['assign wp_unauth_group_min = 2', 'assign product_group_min = 5',
+  ['assign wp_unauth_group_min = 2', 'assign product_group_min = 5', 'assign wp_batch_group_min = 5',
    'id="cves-{{ gname | escape }}" data-day-target="{{ gname | escape }}"',
    'include wire-fold-keys.html rows=group_rows mode="nkev"',
    'include wire-fold-keys.html rows=g.items mode="cves"',

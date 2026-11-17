@@ -30,7 +30,9 @@ first refusal; product groups only see the remaining rows. CISA stays plain.
 {%- assign policy_label = "WordPress plugin CVEs, no login needed" -%}
 {%- if include.mode == "nkev" -%}
 {%- assign policy_min = wp_batch_group_min -%}
-{%- assign added_label = fold_row.added | date: "%-d %B" -%}
+{%- comment -%} T-0667: the batch is the event day's (a row with no event keeps its added day). {%- endcomment -%}
+{%- assign fold_day = fold_row.event | default: fold_row.added -%}
+{%- assign added_label = fold_day | date: "%-d %B" -%}
 {%- assign policy_label = "WordPress plugin and theme CVEs added on " | append: added_label -%}
 {%- endif -%}
 {%- if policy_key == "" or wp_count < policy_min -%}

@@ -88,7 +88,7 @@ sitemap: false
 },
 
 "row_keys_kev_only": {
-  "added": "Day VulnCheck added the CVE to its KEV catalog (YYYY-MM-DD).",
+  "added": "Day VulnCheck added the CVE to its KEV catalog (YYYY-MM-DD). For a row built from CISA's catalog alone it is the CISA day.",
   "cisa_added": "Day CISA added it to CISA KEV. '' when it is not on CISA KEV.",
   "kev_due": "CISA's remediation due date, when on CISA KEV.",
   "evidence": "Earliest date of a report VulnCheck cites for the CVE. A citation date, not the date exploitation began.",
@@ -106,7 +106,12 @@ sitemap: false
   "np_score": "The site author's patch-first score: 1 point each for a no-login network flaw, CVSS 9.0 or more, public tooling, a CISA KEV listing, and disclosure under 30 days before the VulnCheck add; 2 points for a patch-first product class (1 for an operating system or browser). Higher means patch sooner. It ranks flaws that are already exploited; it predicts nothing and has not been measured against outcomes.",
   "np_reasons": "Which of those points the row earned: noauth, critical, class, tooling, cisa, fresh.",
   "np_class": "The patch-first product class that earned the class points, or ''.",
-  "np_rank": "Position in the nKEVs Priority strip. 0 when the row is not in it."
+  "np_rank": "Position in the nKEVs Priority strip. 0 when the row is not in it. The strip holds every row scoring 5 or more, one row per product (the best ranked row of a product has the rank, the others 0), ordered by score, then event day, then EPSS, then CVE id.",
+  "event": "The row's day on the nKEVs tab (YYYY-MM-DD): the latest of added, cisa_added and first_seen, where first_seen counts only when it is 2 or more days after added. Rows from before this key are listed by added.",
+  "event_src": "Which date set event: vulncheck (the VulnCheck add), cisa (the CISA KEV add) or first_seen (the day The Wire first published the row). A row built from CISA's catalog alone, with no VulnCheck record, has cisa.",
+  "first_seen": "The day The Wire first published the CVE on this tab, or '' when the exporter could not read its record of it.",
+  "canary": "true when VulnCheck's canary network recorded exploitation of the CVE (VulnCheck's flag, not CISA's or the vendor's). Scores no Priority points.",
+  "ransomware": "true when VulnCheck or CISA marks the CVE as used in known ransomware campaigns. Scores no Priority points."
 },
 
 "row_keys_cve_only": {
@@ -127,7 +132,10 @@ sitemap: false
 },
 
 "summary_row_keys": {
-  "date": "added (kev) or published (cve).",
+  "date": "event (kev: the latest exploitation event, which is added unless CISA's add or the first-seen day is later) or published (cve).",
+  "event_src": "kev rows from an exporter that writes the event day: which date set it. Absent on older data.",
+  "canary": "kev rows, as event_src: the VulnCheck canary flag.",
+  "ransomware": "kev rows, as event_src: the known-ransomware-use flag.",
   "priority": "np_score for kev rows, pick_score for cve rows.",
   "priority_listed": "true when the row is in its tab's Priority strip (kev) or is a daily priority pick (cve).",
   "fresh": "cve rows only: true for a Just published row (fresh_score is its score, 0 otherwise). Not a pick: priority and priority_listed describe picks only.",
