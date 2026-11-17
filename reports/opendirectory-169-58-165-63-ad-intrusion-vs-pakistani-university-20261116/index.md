@@ -61,7 +61,7 @@ figure_nav:
 {: .hl-tier-1}
 {: .hl-tab-overview}
 
-An operator I cannot name worked inside a Pakistani university's Windows estate in early November 2026, and the way it did so is the lesson. It ran commands on four of the university's servers through Metasploit sessions (Metasploit is an attack framework security testers also use), captured a local administrator's network logon responses as they crossed the wire, saved registry hives, read the university's entire Active Directory through one valid account, and then staged its next move against the virtualisation layer: a public exploit for VMware ESXi and scanners set to the university's own address range. What lets a defender find this operator is the shape of the work, and a server identity that the builds and stagers point back to: one certificate authority (the signing root that vouches for a server's identity) inside its Sliver implants (Sliver is an open-source command-and-control framework), a front domain (a public-facing name that stands in front of the real server) that borrows a security vendor's name, and a single address. I found no prior public reporting on this host, front or campaign in the search forms I could verify.
+An operator I cannot name worked inside a Pakistani university's Windows estate in early November 2026, and the way they did so is the lesson. They ran commands on four of the university's servers through Metasploit sessions (Metasploit is an attack framework security testers also use), captured a local administrator's network logon responses as they crossed the wire, saved registry hives, read the university's entire Active Directory through one valid account, and then staged their next move against the virtualisation layer: a public exploit for VMware ESXi and scanners set to the university's own address range. What lets a defender find this operator is the shape of the work, and a server identity that the builds and stagers point back to: one certificate authority (the signing root that vouches for a server's identity) inside their Sliver implants (Sliver is an open-source command-and-control framework), a front domain (a public-facing name that stands in front of the real server) that borrows a security vendor's name, and a single address. I found no prior public reporting on this host, front or campaign in the search forms I could verify.
 
 - This was a prepared intrusion. Three of the eight Sliver implants carry names the operator chose for the hosts they were meant for, the scanners shipped already pointed at the university's range, and the tools were staged in order over three days. My read is that the operator arrived ready to do a specific job and was doing it.
 - The operator worked from inside the perimeter. Tools were requested from the operator's server by an address registered to the university's own research network, and one implant was built to call a parent inside the university rather than the internet. Most monitoring watches the edge for outside threats, and this operator was positioned not to look like one.
@@ -76,7 +76,7 @@ From here I grade how far the operator got on each part of the university's esta
 {: .hl-tier-1}
 {: .hl-tab-overview}
 
-For an organisation outside this case, the risk sits less in this operator's tools than in where it chose to stand.
+For an organisation outside this case, the risk sits less in this operator's tools than in where they chose to stand.
 
 An intruder inside the perimeter is harder to see than one outside it. Controls tuned to catch connections from unfamiliar hosting providers do not see an internal address fetching tools as foreign, which is the position this operator took (Section 7).
 
@@ -329,7 +329,7 @@ The operator also held 4,739 application login pairs, one of them reused on the 
 
 ### 9.4 Local-network interception and the packet-capture driver
 
-The operator prepared to sit on the university's network as a man in the middle. It staged bettercap with eight launcher scripts that step up from a version check to a 60-second ARP-spoofing smoke test, a two-hour full-duplex spoof with a transparent HTTP and HTTPS proxy, and an endless loop against a fixed list of 20 internal hosts. None of the output files is held, so what the capture saw, and whether any launcher ran on a university host, is not shown.
+The operator prepared to sit on the university's network as a man in the middle. They staged bettercap with eight launcher scripts that step up from a version check to a 60-second ARP-spoofing smoke test, a two-hour full-duplex spoof with a transparent HTTP and HTTPS proxy, and an endless loop against a fixed list of 20 internal hosts. None of the output files is held, so what the capture saw, and whether any launcher ran on a university host, is not shown.
 
 <details markdown="1" class="hl-teardown">
 <summary>How the operator installs a capture driver from its own server</summary>
@@ -484,7 +484,7 @@ No technique is mapped for initial access, which is not identified, for persiste
 {: .hl-tier-2}
 {: .hl-tab-indicators}
 
-The indicators for this case are operator-side only: the operator's server and front, the files it built or staged, and the certificates and keys inside its builds. No university value is in the feed, since I name no victim. The full machine-readable set is the IOC feed, [`opendirectory-169-58-165-63-ad-intrusion-vs-pakistani-university-20261116-iocs.json`](/ioc-feeds/opendirectory-169-58-165-63-ad-intrusion-vs-pakistani-university-20261116-iocs.json). It carries 59 operator-side indicator entries: 28 SHA-256 file hashes, 1 IPv4 address, 2 domains, 6 URLs, 13 host-and-port endpoints and 9 certificate values.
+The indicators for this case are operator-side only: the operator's server and front, the files they built or staged, and the certificates and keys inside their builds. No university value is in the feed, since I name no victim. The full machine-readable set is the IOC feed, [`opendirectory-169-58-165-63-ad-intrusion-vs-pakistani-university-20261116-iocs.json`](/ioc-feeds/opendirectory-169-58-165-63-ad-intrusion-vs-pakistani-university-20261116-iocs.json). It carries 59 operator-side indicator entries: 28 SHA-256 file hashes, 1 IPv4 address, 2 domains, 6 URLs, 13 host-and-port endpoints and 9 certificate values.
 
 Nine of the 28 hashes are files the directory listed but no one could obtain, so those hashes come from the listing and are marked LOW. A separate hunt-only bucket in the feed holds 22 values that must never be blocked or that only make sense as hunting keys: the two shared Cloudflare addresses, the host's TLS fingerprint, the Sliver signing and age keys, the Meterpreter payload UUID and XOR key, the six listed driver hashes and the operator's working folders on victim hosts. The stock Chisel builds are left out of the block set, because their hashes match anyone using the public tool. A short set worth acting on first:
 
