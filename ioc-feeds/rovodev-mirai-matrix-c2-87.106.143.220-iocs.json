@@ -9,10 +9,7 @@
     "analyst": "The Hunters Ledger",
     "confidence": "HIGH",
     "tlp": "CLEAR",
-    "threat_level": "HIGH",
-    "victim_names": [
-      "GetYourGroup"
-    ]
+    "threat_level": "HIGH"
   },
   "file_hashes": {
     "sha256": [
