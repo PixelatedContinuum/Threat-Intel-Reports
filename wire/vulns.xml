@@ -41,6 +41,9 @@ sitemap: false
   {%- comment %} T-0667: an entry is dated by its event day, the latest exploitation event (the VulnCheck add, the CISA add or the day the Wire first published it); a row from before the event keys keeps its added day. {% endcomment %}
   {%- assign vday = r.event | default: r.added %}
   {%- assign cisa_len = r.cisa_added | size %}
+  {%- comment %} T-0667 F2: a CISA-only row (event_src cisa, added equal to cisa_added, no VulnCheck report) was built from CISA's catalog alone; VulnCheck never listed it. {% endcomment %}
+  {%- assign co_reps = r.reports | size %}{% assign co_more = r.reports_more | default: 0 | plus: 0 %}{% assign cisa_only = false %}
+  {%- if r.event_src == "cisa" and cisa_len == 10 and r.cisa_added == r.added and co_reps == 0 and co_more == 0 %}{% assign cisa_only = true %}{% endif %}
   <entry>
     <title>{{ r.cve | xml_escape }}{% if r.vendor and r.vendor != "" %}: {{ r.vendor | xml_escape }} {{ r.product | xml_escape }}{% endif %}</title>
     <link href="{{ site.url }}/wire/#cve-{{ r.cve | downcase | xml_escape }}" rel="alternate" type="text/html"/>
@@ -63,7 +66,9 @@ sitemap: false
     <id>{{ site.url }}/wire/#cve-{{ r.cve | downcase | xml_escape }}</id>
     <published>{{ vday | xml_escape }}T00:00:00Z</published>
     <updated>{{ vday | xml_escape }}T00:00:00Z</updated>
+    {%- unless cisa_only %}
     <category term="vulncheck-kev" label="VulnCheck KEV"/>
+    {%- endunless %}
     {%- if cisa_len == 10 %}
     <category term="cisa-kev" label="CISA KEV"/>
     {%- endif %}
@@ -96,7 +101,7 @@ sitemap: false
     {%- endif %}
     {%- assign gap_str = r.gap | append: "" %}{% assign gap_len = gap_str | size %}{% assign gap_n = 0 %}{% if gap_len > 0 %}{% assign gap_n = r.gap | plus: 0 %}{% endif %}
     {%- assign dis_len = r.disclosed | append: "" | size %}{% assign epss_len = r.epss | append: "" | size %}
-    <summary type="text">{% if dis_len == 10 %}Disclosed {{ r.disclosed | xml_escape }}; added{% else %}Added{% endif %} to VulnCheck KEV {{ r.added | xml_escape }}{% if vday != r.added %}; listed on the Wire under {{ vday | xml_escape }}{% if r.event_src == "cisa" %}, the day CISA added it to CISA KEV{% elsif r.event_src == "first_seen" %}, the day it was first published here{% endif %}{% endif %}{% if dis_len == 10 and gap_len > 0 %} ({% if gap_n > 0 %}+{% endif %}{{ gap_n }} day{% if gap_n != 1 and gap_n != -1 %}s{% endif %}){% endif %}{% if epss_len > 0 %}; EPSS {{ r.epss | times: 1.0 | round: 3 }}{% endif %}{% if cisa_len == 10 %}; in CISA KEV since {{ r.cisa_added | xml_escape }}{% endif %}{% if r.canary == true %}; VulnCheck canaries recorded exploitation{% endif %}{% if r.ransomware == true %}; marked as used in known ransomware campaigns{% endif %}{% if sev != "" %}; CVSS v{{ r.cvss_version | xml_escape }} {{ r.cvss | xml_escape }} {{ r.severity | upcase | xml_escape }}, scored by {% if r.scored_by == "NVD" %}NVD{% elsif r.scored_by == "ADP" %}CISA's ADP{% else %}the CNA{% endif %} (VulnCheck NVD++){% endif %}.</summary>
+    <summary type="text">{% if cisa_only %}{% if dis_len == 10 %}Disclosed {{ r.disclosed | xml_escape }}; added{% else %}Added{% endif %} to CISA KEV {{ r.cisa_added | xml_escape }}; not in VulnCheck KEV{% else %}{% if dis_len == 10 %}Disclosed {{ r.disclosed | xml_escape }}; added{% else %}Added{% endif %} to VulnCheck KEV {{ r.added | xml_escape }}{% endif %}{% if vday != r.added %}; listed on the Wire under {{ vday | xml_escape }}{% if r.event_src == "cisa" %}, the day CISA added it to CISA KEV{% elsif r.event_src == "first_seen" %}, the day it was first published here{% endif %}{% endif %}{% if dis_len == 10 and gap_len > 0 and cisa_only == false %} ({% if gap_n > 0 %}+{% endif %}{{ gap_n }} day{% if gap_n != 1 and gap_n != -1 %}s{% endif %}){% endif %}{% if epss_len > 0 %}; EPSS {{ r.epss | times: 1.0 | round: 3 }}{% endif %}{% if cisa_len == 10 and cisa_only == false %}; in CISA KEV since {{ r.cisa_added | xml_escape }}{% endif %}{% if r.canary == true %}; VulnCheck canaries recorded exploitation{% endif %}{% if r.ransomware == true %}; marked as used in known ransomware campaigns{% endif %}{% if sev != "" %}; CVSS v{{ r.cvss_version | xml_escape }} {{ r.cvss | xml_escape }} {{ r.severity | upcase | xml_escape }}, scored by {% if r.scored_by == "NVD" %}NVD{% elsif r.scored_by == "ADP" %}CISA's ADP{% else %}the CNA{% endif %} (VulnCheck NVD++){% endif %}.</summary>
   </entry>
   {%- endif %}
   {%- endfor %}

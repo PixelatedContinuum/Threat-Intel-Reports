@@ -75,6 +75,7 @@ var DONE_CISA = "CISA's due date for US federal agencies: ";
 var KEV_ADD = 'Added to VulnCheck KEV on ';
 var CISA_SINCE = 'On CISA KEV since ';
 var NOT_CISA = 'Not on CISA KEV.';
+var NOT_VC_HEAD = 'Not in VulnCheck KEV as of ';
 var SEEN_HERE = 'First seen here on ';
 var SEEN_TAIL = ', the day I first published it.';
 var CANARY_LINE = "VulnCheck's own canary network recorded exploitation of this CVE. That is VulnCheck's flag, not a statement from CISA or the vendor.";
@@ -283,16 +284,27 @@ function rankCves(panel, d) {
 }
 
 /* --- Exploitation (nKEVs): why it ranks, the dated events in order, the flags, the sources ---- */
-function secExploitation(panel, d) {
+/* T-0667 F2: a CISA-only row is one the exporter built from CISA's catalog alone: event_src
+   cisa, added equal to cisa_added, and no VulnCheck report. VulnCheck never listed it, so
+   no line may say VulnCheck added it. (Derived: the exporter writes no explicit key.) */
+function isCisaOnly(d) {
+  var reps = lst(d.reports);
+  var more = num(d.reports_more);
+  var a = dayOf(d.added);
+  return d.event_src === 'cisa' && !!a && a === dayOf(d.cisa_added) &&
+    (!reps || reps.length === 0) && (isNaN(more) || more === 0);
+}
+function secExploitation(panel, d, asOfDay) {
   headInto(panel, 'Exploitation');
   rankNkev(panel, d);
   var added = dayOf(d.added);
   var cisaDay = dayOf(d.cisa_added);
+  var cisaOnly = isCisaOnly(d);
   // T-0667 D4: every dated event in one list, oldest first; the same day keeps the order
   // VulnCheck, CISA, first seen, earliest citation. "First seen here" is shown only when it
   // names a day the other events do not (a seeded row has it equal to the VulnCheck day).
   var events = [];
-  if (added) { events.push({ day: added, ord: 0, text: KEV_ADD + added + '.' }); }
+  if (added && !cisaOnly) { events.push({ day: added, ord: 0, text: KEV_ADD + added + '.' }); }
   if (cisaDay) { events.push({ day: cisaDay, ord: 1, text: CISA_SINCE + cisaDay + '.' }); }
   var seen = dayOf(d.first_seen);
   if (seen && seen !== added && seen !== cisaDay) {
@@ -306,6 +318,10 @@ function secExploitation(panel, d) {
   });
   events.forEach(function (e) { lineInto(panel, e.text); });
   if (!cisaDay) { lineInto(panel, NOT_CISA); }
+  if (cisaOnly) {
+    var vcDay = dayOf(asOfDay);
+    lineInto(panel, vcDay ? NOT_VC_HEAD + vcDay + '.' : NOT_VC_HEAD.replace(/ as of $/, '') + '.');
+  }
   if (d.canary === true) { lineInto(panel, CANARY_LINE); }
   if (d.ransomware === true) { lineInto(panel, RANSOM_LINE); }
   var reps = lst(d.reports);
@@ -337,7 +353,7 @@ function secExploitation(panel, d) {
   }
   var feed = dayOf(d.disclosed);
   var gap = num(d.gap);
-  if (added && feed && !isNaN(gap)) {
+  if (added && feed && !isNaN(gap) && !cisaOnly) {
     if (gap > 0) {
       var n = Math.floor(gap);
       lineInto(panel, 'NVD published ' + feed + ', ' + n + (n === 1 ? PUB_DAY : PUB_LATE));
@@ -638,8 +654,8 @@ function secLinks(panel, d, cveId) {
 /* --- the two tabs' fact sheets, in the design's fixed order --------------------------------- */
 /* T-0667 D1: the answer first. Why it is here, then the fix, then how to detect and exploit
    it, how bad and how likely, and only then the CVE record's description and the links. */
-function buildNkevPanel(panel, d, cveId) {
-  secExploitation(panel, d);
+function buildNkevPanel(panel, d, cveId, asOfDay) {
+  secExploitation(panel, d, asOfDay);
   secFix(panel, d);
   secDetection(panel, d);
   secExploits(panel, d);
@@ -732,7 +748,7 @@ function fillVulnPanel(panel, row, state) {
   if (isCves) {
     buildCvesPanel(panel, entry, cveId, state.genDay);
   } else {
-    buildNkevPanel(panel, entry, cveId);
+    buildNkevPanel(panel, entry, cveId, state.genDay);
   }
 }
 

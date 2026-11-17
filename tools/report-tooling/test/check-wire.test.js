@@ -1211,7 +1211,8 @@ test('one xml-escape mutation per newly escaped vulns.xml value fails the nKEV f
     ['#cve-{{ r.cve | downcase | xml_escape }}</id>', '#cve-{{ r.cve | downcase }}</id>'],
     ['<published>{{ vday | xml_escape }}T00:00:00Z', '<published>{{ vday }}T00:00:00Z'],
     ['<updated>{{ vday | xml_escape }}T00:00:00Z', '<updated>{{ vday }}T00:00:00Z'],
-    ['KEV {{ r.added | xml_escape }}{% if vday != r.added %}', 'KEV {{ r.added }}{% if vday != r.added %}'],
+    ['KEV {{ r.added | xml_escape }}{% endif %}{% if vday != r.added %}', 'KEV {{ r.added }}{% endif %}{% if vday != r.added %}'],
+    ['to CISA KEV {{ r.cisa_added | xml_escape }}; not in', 'to CISA KEV {{ r.cisa_added }}; not in'],
     ['since {{ r.cisa_added | xml_escape }}', 'since {{ r.cisa_added }}']
   ];
   cases.forEach(function (c, i) {
@@ -2182,4 +2183,72 @@ test('T-0667 the dates chip is kept ahead of the EPSS and tooling chips when a r
   assert.equal(real['.hl-vuln__p--epss'], false);
   var mutated = shown(src.replace("if (chip.matches('.hl-vuln__dates')) return 1;", ''));
   assert.equal(mutated['.hl-vuln__dates'], false, 'control: without the rank the dates chip is hidden first');
+});
+
+/* T-0667 F2 (review r1). Fix D: the Priority product is the (vendor, product) pair as the exporter's product_key keeps it
+   (wire_export.py: lower-cased, whitespace-collapsed, as a pair). Fix C: the three Liquid consumers of a CISA-only row. */
+test('F2 D: (Acme Beta, Gamma) and (Acme, Beta Gamma) are two products; the same pair spelled with other case and spacing is one', function () {
+  var d = evFixture();
+  var a = evRow(d, 'CVE-2026-9304'), b = evRow(d, 'CVE-2026-9313');
+  assert.ok(a.np_rank > 0 && b.np_rank > 0, 'both rows are ranked in the fixture');
+  a.vendor = 'Acme Beta'; a.product = 'Gamma'; b.vendor = 'Acme'; b.product = 'Beta Gamma';
+  assert.doesNotMatch(evWarn(d), /second ranked row/, 'the vendor/product boundary keeps them apart');
+  // control: the same pair, differently cased and spaced, is one product and the second ranked row is named
+  b.vendor = '  ACME   beta '; b.product = 'gamma';
+  assert.match(evWarn(d), /CVE-2026-9304 is a second ranked row for acme beta gamma \(CVE-2026-9313 holds the rank\)/);
+  // an unranked 5+ row is excused by a ranked row of the same pair only, not of a boundary-shifted pair
+  var e = evFixture();
+  evRow(e, 'CVE-2026-9302').vendor = 'Fixture'; evRow(e, 'CVE-2026-9302').product = 'Firewall';
+  evRow(e, 'CVE-2026-9301').vendor = 'Fixture Firewall'; evRow(e, 'CVE-2026-9301').product = '';
+  assert.match(evWarn(e), /CVE-2026-9302 scores 5 \(threshold 5\) but has no np_rank and no ranked row of its product/);
+});
+test('F2 D mutation control: the old joined-string key merges the two products, so the test above measures the boundary', function () {
+  var mut = evGateWith("return v || p ? v + NP_KEY_SEP + p : '';", "return v || p ? v + ' ' + p : '';");
+  var d = evFixture();
+  var a = evRow(d, 'CVE-2026-9304'), b = evRow(d, 'CVE-2026-9313');
+  a.vendor = 'Acme Beta'; a.product = 'Gamma'; b.vendor = 'Acme'; b.product = 'Beta Gamma';
+  assert.match(mut.check(d, SOURCES, Date.parse(d.generated_at)).vulnWarnings.join('\n'), /second ranked row for acme beta gamma/);
+});
+
+var CO_TEMPLATES = ['wire/vulns.xml', '_includes/wire-agent-brief.html', '_includes/wire-agent-row.html', '_includes/wire-agent-detail.html'];
+test('F2 C: each template that says VulnCheck for a kev row derives the CISA-only case from event_src cisa, added = cisa_added and no reports', function () {
+  var root = pathPicks.join(__dirname, '..', '..', '..');
+  CO_TEMPLATES.forEach(function (f) {
+    var t = fsPicks.readFileSync(pathPicks.join(root, f), 'utf8');
+    assert.match(t, /event_src == "cisa"/, f);
+    assert.match(t, /cisa_added == \w+\.added/, f);
+    assert.match(t, /reports \| size/, f);
+    assert.match(t, /reports_more/, f);
+  });
+  // control: a template with the added-equals-cisa_added leg removed no longer matches the pin
+  var t0 = fsPicks.readFileSync(pathPicks.join(root, 'wire/vulns.xml'), 'utf8');
+  assert.doesNotMatch(t0.replace(/r\.cisa_added == r\.added/g, 'true'), /cisa_added == \w+\.added/);
+  var brief = fsPicks.readFileSync(pathPicks.join(root, '_includes/wire-agent-brief.html'), 'utf8');
+  assert.match(brief, /if b_co -%\}\{%- assign b_vc = false/);
+  var xml = t0;
+  assert.match(xml, /unless cisa_only %\}\s*<category term="vulncheck-kev"/);
+});
+
+test('F2 C the built event fixture: the CISA-only row (9306) is not VulnCheck KEV in the Atom feed and the agent files; a VulnCheck row (9301) still is', { skip: process.env.HL_EVENT_SITE ? false : 'NOT CHECKED: set HL_EVENT_SITE to the Jekyll build of event-wire.yml' }, function () {
+  var site = process.env.HL_EVENT_SITE;
+  var xml = fsPicks.readFileSync(pathPicks.join(site, 'wire', 'vulns.xml'), 'utf8');
+  function entry(cve) { return (xml.match(/<entry>[\s\S]*?<\/entry>/g) || []).filter(function (e) { return e.indexOf('>' + cve) > -1 || e.indexOf(cve + ':') > -1; })[0]; }
+  var co = entry('CVE-2026-9306'), vc = entry('CVE-2026-9301');
+  assert.ok(co && vc, 'both entries are in the feed');
+  assert.doesNotMatch(co, /vulncheck-kev|VulnCheck KEV label|to VulnCheck KEV/);
+  assert.match(co, /<category term="cisa-kev"/);
+  assert.match(co, /Added to CISA KEV 2026-11-16; not in VulnCheck KEV\./);
+  assert.match(vc, /<category term="vulncheck-kev"/);
+  assert.match(vc, /to VulnCheck KEV 20/);
+  ['kevs.json', 'summary.json', 'all.json'].forEach(function (f) {
+    var j = JSON.parse(fsPicks.readFileSync(pathPicks.join(site, 'wire', 'agent', f), 'utf8'));
+    var rows = j.rows || j.kevs || (j.items) || [];
+    var flat = JSON.stringify(j);
+    assert.match(flat, /"id": ?"CVE-2026-9306", ?"list": ?"kev", ?"on_vulncheck_kev": ?false/, f);
+    assert.match(flat, /"id": ?"CVE-2026-9301", ?"list": ?"kev", ?"on_vulncheck_kev": ?true/, f);
+  });
+  var detail = fsPicks.readFileSync(pathPicks.join(site, 'wire', 'agent', 'detail', 'd-f', 'index.html'), 'utf8');
+  assert.match(detail, /Exploited: on CISA KEV since 2026-11-16, not in VulnCheck KEV/);
+  var details = fsPicks.readFileSync(pathPicks.join(site, 'wire', 'details-nkev.json'), 'utf8');
+  assert.ok(details.indexOf('"cve-2026-9306"') > -1, 'the details row exists (its panel text is tested in wire-details-dom.test.js)');
 });

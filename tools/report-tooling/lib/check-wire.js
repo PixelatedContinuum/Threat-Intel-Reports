@@ -538,7 +538,7 @@ function checkVulns(doc, now) {
     byRank.forEach(function (r) {
       var key = npProductKey(r);
       if (key === '') return;
-      if (perProduct && rankedProducts[key]) warnings.push(r.cve + ' is a second ranked row for ' + key + ' (' + rankedProducts[key] + ' holds the rank): np_per_product allows one');
+      if (perProduct && rankedProducts[key]) warnings.push(r.cve + ' is a second ranked row for ' + npProductLabel(key) + ' (' + rankedProducts[key] + ' holds the rank): np_per_product allows one');
       else rankedProducts[key] = r.cve;
     });
     if (hasKey(vc, 'np_threshold') && isCount(vc.np_threshold)) {
@@ -739,9 +739,15 @@ function eventProblems(r) {
   }
   return out;
 }
+// T-0667 F2: the product is the (vendor, product) pair, each lowercased with whitespace collapsed, exactly as the exporter's
+// product_key does (wire_export.py): (Acme Beta, Gamma) and (Acme, Beta Gamma) are two products. '' when a row names neither.
+var NP_KEY_SEP = '\u0001';
+function npNorm(v) { return String(v || '').toLowerCase().split(/\s+/).filter(Boolean).join(' '); }
 function npProductKey(r) {
-  return (String(r.vendor || '') + ' ' + String(r.product || '')).replace(/\s+/g, ' ').trim().toLowerCase();
+  var v = npNorm(r.vendor), p = npNorm(r.product);
+  return v || p ? v + NP_KEY_SEP + p : '';
 }
+function npProductLabel(key) { return key.split(NP_KEY_SEP).filter(Boolean).join(' '); }
 function cveParts(id) { var m = /^CVE-(\d+)-(\d+)$/.exec(String(id)); return m ? [Number(m[1]), Number(m[2])] : [0, 0]; }
 // Within one score the order is event desc, EPSS desc (missing last), CVE id desc (R2). `a` ranks above `b`.
 function npTieProblem(a, b) {

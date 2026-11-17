@@ -118,7 +118,11 @@ function detailLines(d, isCves) {
 
   if (!isCves) {
     // secExploitation (218-270), nKEVs only; the reports hosts are the pane's links' text
-    if (isDay(d.added)) out.push('Added to VulnCheck KEV.');
+    // T-0667 F2: a CISA-only row (event_src cisa, added equal to cisa_added, no VulnCheck report) was never added to VulnCheck KEV (wire-details.js isCisaOnly).
+    var cisaOnly = d.event_src === 'cisa' && isDay(d.added) && d.added === d.cisa_added &&
+      !(Array.isArray(d.reports) && d.reports.length) && !(nnum(d.reports_more) > 0);
+    if (isDay(d.added) && !cisaOnly) out.push('Added to VulnCheck KEV.');
+    if (cisaOnly) out.push('Not in VulnCheck KEV.');
     out.push(isDay(d.cisa_added) ? 'On CISA KEV.' : 'Not on CISA KEV.');
     var hosts = [];
     arr(d.reports).forEach(function (r) {
@@ -127,7 +131,7 @@ function detailLines(d, isCves) {
     });
     if (hosts.length) out.push("VulnCheck's cited reports: " + hosts.join(', '));
     var gap = nnum(d.gap);
-    if (isDay(d.added) && isDay(d.disclosed) && !isNaN(gap)) {
+    if (isDay(d.added) && isDay(d.disclosed) && !isNaN(gap) && !cisaOnly) {
       out.push(gap > 0 ? 'NVD published it days before the KEV add.' : gap === 0 ? 'NVD published it the same day VulnCheck added it.' : 'VulnCheck added it days before NVD published it.');
     }
     if (isDay(d.evidence) && isDay(d.added) && d.evidence < d.added) out.push('Earliest citation date.');

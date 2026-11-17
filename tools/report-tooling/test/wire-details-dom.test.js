@@ -458,7 +458,7 @@ test('D1: the CVEs panel opens with why it is listed, and the CVE record comes a
 test('D1 control: the old order (the CVE record first) fails the order check on both tabs', async function () {
   // The renderer with buildNkevPanel and buildCvesPanel calling secRecord first, as before T-0667.
   var mutated = RENDERER
-    .replace('function buildNkevPanel(panel, d, cveId) {\n', 'function buildNkevPanel(panel, d, cveId) {\n  secRecord(panel, d, false);\n')
+    .replace('function buildNkevPanel(panel, d, cveId, asOfDay) {\n', 'function buildNkevPanel(panel, d, cveId, asOfDay) {\n  secRecord(panel, d, false);\n')
     .replace('function buildCvesPanel(panel, d, cveId, asOfDay) {\n', 'function buildCvesPanel(panel, d, cveId, asOfDay) {\n  secRecord(panel, d, true);\n');
   assert.notEqual(mutated, RENDERER, 'the mutation must change the renderer');
   var pn = await panelFor({ 'cve-2026-1001': nk() }, 'cve-cve-2026-1001', { renderer: mutated });
@@ -750,4 +750,33 @@ test('old-shape rows (no event, rank or flag keys) render every section with no 
   var pe = await panelFor({ 'cve-2026-1001': emptyNk }, 'cve-cve-2026-1001');
   assert.deepEqual(headingsOf(pe), NKEV_ORDER);
   assert.doesNotMatch(pe.textContent, /undefined|NaN|\bnull\b|Why it ranks|canary|ransomware/);
+});
+
+/* --- T-0667 F2 (review r1, fix C): a CISA-only row was never added to VulnCheck KEV --------- */
+var CISA_ONLY = { added: '2026-11-16', cisa_added: '2026-11-16', event: '2026-11-16', event_src: 'cisa', first_seen: '', reports: [], reports_more: 0, evidence: '', disclosed: '', gap: '', canary: false, ransomware: false };
+test('F2 C: a CISA-only row says it is on CISA KEV and not in VulnCheck KEV as of the generated day, and never "Added to VulnCheck KEV"', async function () {
+  var opts = { genAt: '2026-11-17T19:01:26Z' };
+  var p = await panelFor({ 'cve-2026-1001': nk(CISA_ONLY) }, 'cve-cve-2026-1001', opts);
+  var ls = linesOf(p);
+  assert.ok(ls.indexOf('On CISA KEV since 2026-11-16.') > -1, ls.join(' | '));
+  assert.ok(ls.indexOf('Not in VulnCheck KEV as of 2026-11-17.') > -1, ls.join(' | '));
+  assert.doesNotMatch(p.textContent, /Added to VulnCheck KEV/);
+  assert.doesNotMatch(p.textContent, /VulnCheck added it|NVD published it the same day VulnCheck/, 'no VulnCheck-relative gap line');
+  // control: the same dates on a row VulnCheck did list (a report cited, event_src vulncheck) keep the VulnCheck line and say nothing of absence
+  var c = await panelFor({ 'cve-2026-1001': nk(Object.assign({}, CISA_ONLY, { event_src: 'vulncheck', reports: [{ url: 'https://vendor.example/a', host: 'vendor.example' }] })) }, 'cve-cve-2026-1001', { genAt: opts.genAt });
+  assert.match(c.textContent, /Added to VulnCheck KEV on 2026-11-16\./);
+  assert.doesNotMatch(c.textContent, /Not in VulnCheck KEV/);
+  // each part of the derivation is needed: a later CISA day, a cited report or a source other than cisa is not CISA-only
+  [{ cisa_added: '2026-11-17', event: '2026-11-17' }, { reports_more: 3 }, { event_src: 'first_seen' }].forEach(function (o) {
+    return panelFor({ 'cve-2026-1001': nk(Object.assign({}, CISA_ONLY, o)) }, 'cve-cve-2026-1001', { genAt: opts.genAt }).then(function (q) {
+      assert.match(q.textContent, /Added to VulnCheck KEV on 2026-11-16\./, JSON.stringify(o));
+    });
+  });
+});
+test('F2 C mutation control: with the derivation switched off the renderer claims the VulnCheck addition, so the test above measures the derivation', async function () {
+  var mutated = RENDERER.replace("return d.event_src === 'cisa' &&", "return false && d.event_src === 'cisa' &&");
+  assert.notEqual(mutated, RENDERER, 'mutation anchor');
+  var p = await panelFor({ 'cve-2026-1001': nk(CISA_ONLY) }, 'cve-cve-2026-1001', { genAt: '2026-11-17T19:01:26Z', renderer: mutated });
+  assert.match(p.textContent, /Added to VulnCheck KEV on 2026-11-16\./);
+  assert.doesNotMatch(p.textContent, /Not in VulnCheck KEV/);
 });
