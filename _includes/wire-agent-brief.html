@@ -10,8 +10,8 @@
 {%- assign br = include.r -%}
 {%- assign b_id = br.cve | downcase -%}
 {%- assign b_cisa_len = br.cisa_added | append: "" | size -%}
-{%- comment -%} T-0667 F2: a CISA-only row (event_src cisa, added equal to cisa_added, no VulnCheck report) is not on VulnCheck KEV. {%- endcomment -%}
-{%- assign b_co = false -%}{%- if br.event_src == "cisa" and b_cisa_len == 10 and br.cisa_added == br.added -%}{%- assign b_co_n = br.reports | size -%}{%- assign b_co_m = br.reports_more | default: 0 | plus: 0 -%}{%- if b_co_n == 0 and b_co_m == 0 -%}{%- assign b_co = true -%}{%- endif -%}{%- endif -%}
+{%- comment -%} T-0667 F3: a CISA-only row (the exporter's cisa_only key) is not on VulnCheck KEV. {%- endcomment -%}
+{%- assign b_co = false -%}{%- if br.cisa_only == true -%}{%- assign b_co = true -%}{%- endif -%}
 {%- if b_cisa_len == 10 -%}{%- assign b_cisa = true -%}{%- else -%}{%- assign b_cisa = false -%}{%- endif -%}
 {%- if include.list == "kev" -%}
 {%- assign b_anchor = "#cve-" | append: b_id -%}{%- if b_co -%}{%- assign b_vc = false -%}{%- else -%}{%- assign b_vc = true -%}{%- endif -%}{%- assign b_date = br.event | default: br.added -%}{%- assign b_score = br.np_score -%}

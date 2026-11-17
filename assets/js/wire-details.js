@@ -284,15 +284,11 @@ function rankCves(panel, d) {
 }
 
 /* --- Exploitation (nKEVs): why it ranks, the dated events in order, the flags, the sources ---- */
-/* T-0667 F2: a CISA-only row is one the exporter built from CISA's catalog alone: event_src
-   cisa, added equal to cisa_added, and no VulnCheck report. VulnCheck never listed it, so
-   no line may say VulnCheck added it. (Derived: the exporter writes no explicit key.) */
+/* T-0667 F3: a CISA-only row is one the exporter built from CISA's catalog alone. The
+   exporter says so with an explicit cisa_only boolean; VulnCheck never listed the row, so
+   no line may say VulnCheck added it. A file written before the key has none: not CISA-only. */
 function isCisaOnly(d) {
-  var reps = lst(d.reports);
-  var more = num(d.reports_more);
-  var a = dayOf(d.added);
-  return d.event_src === 'cisa' && !!a && a === dayOf(d.cisa_added) &&
-    (!reps || reps.length === 0) && (isNaN(more) || more === 0);
+  return d.cisa_only === true;
 }
 function secExploitation(panel, d, asOfDay) {
   headInto(panel, 'Exploitation');

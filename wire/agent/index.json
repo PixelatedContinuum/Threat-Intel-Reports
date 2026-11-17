@@ -51,7 +51,7 @@ sitemap: false
 "row_keys_common": {
   "id": "The CVE id, e.g. CVE-2026-12345.",
   "list": "'kev' (newly added to VulnCheck KEV, already exploited) or 'cve' (significant new CVE on neither KEV list).",
-  "on_vulncheck_kev": "true for a kev row, false for every cve row and for a kev row built from CISA's catalog alone (event_src cisa, added equal to cisa_added, no VulnCheck report), which VulnCheck does not list.",
+  "on_vulncheck_kev": "true for a kev row, false for every cve row and for a kev row built from CISA's catalog alone (the row's cisa_only key), which VulnCheck does not list.",
   "on_cisa_kev": "true when the CVE is also on CISA's KEV catalog.",
   "wire_url": "The row on The Wire page.",
   "nvd_url": "The CVE's NVD record.",

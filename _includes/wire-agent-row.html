@@ -21,7 +21,7 @@
 {%- assign a_skip = "epss_spark,summary,context,originalDescription,original_description,description,model_summary" | split: "," -%}
 {%- assign a_id = ar.cve | downcase -%}
 {%- assign a_cisa_len = ar.cisa_added | append: "" | size -%}
-{%- assign a_co = false -%}{%- if ar.event_src == "cisa" and a_cisa_len == 10 and ar.cisa_added == ar.added -%}{%- assign a_co_n = ar.reports | size -%}{%- assign a_co_m = ar.reports_more | default: 0 | plus: 0 -%}{%- if a_co_n == 0 and a_co_m == 0 -%}{%- assign a_co = true -%}{%- endif -%}{%- endif -%}
+{%- assign a_co = false -%}{%- if ar.cisa_only == true -%}{%- assign a_co = true -%}{%- endif -%}
 {%- if include.list == "kev" -%}{%- assign a_anchor = "#cve-" | append: a_id -%}{%- if a_co -%}{%- assign a_vc = false -%}{%- else -%}{%- assign a_vc = true -%}{%- endif -%}{%- else -%}{%- assign a_anchor = "#cves-" | append: a_id -%}{%- assign a_vc = false -%}{%- endif -%}
 {%- if a_cisa_len == 10 -%}{%- assign a_cisa = true -%}{%- else -%}{%- assign a_cisa = false -%}{%- endif -%}
 {%- assign a_wire = "/wire/" | absolute_url | append: a_anchor -%}

@@ -41,9 +41,8 @@ sitemap: false
   {%- comment %} T-0667: an entry is dated by its event day, the latest exploitation event (the VulnCheck add, the CISA add or the day the Wire first published it); a row from before the event keys keeps its added day. {% endcomment %}
   {%- assign vday = r.event | default: r.added %}
   {%- assign cisa_len = r.cisa_added | size %}
-  {%- comment %} T-0667 F2: a CISA-only row (event_src cisa, added equal to cisa_added, no VulnCheck report) was built from CISA's catalog alone; VulnCheck never listed it. {% endcomment %}
-  {%- assign co_reps = r.reports | size %}{% assign co_more = r.reports_more | default: 0 | plus: 0 %}{% assign cisa_only = false %}
-  {%- if r.event_src == "cisa" and cisa_len == 10 and r.cisa_added == r.added and co_reps == 0 and co_more == 0 %}{% assign cisa_only = true %}{% endif %}
+  {%- comment %} T-0667 F3: a CISA-only row (the exporter's explicit cisa_only key) was built from CISA's catalog alone; VulnCheck never listed it. A wire.yml from before the key has none: not CISA-only. {% endcomment %}
+  {%- assign cisa_only = false %}{% if r.cisa_only == true %}{% assign cisa_only = true %}{% endif %}
   <entry>
     <title>{{ r.cve | xml_escape }}{% if r.vendor and r.vendor != "" %}: {{ r.vendor | xml_escape }} {{ r.product | xml_escape }}{% endif %}</title>
     <link href="{{ site.url }}/wire/#cve-{{ r.cve | downcase | xml_escape }}" rel="alternate" type="text/html"/>

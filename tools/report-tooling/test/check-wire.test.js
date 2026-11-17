@@ -1840,8 +1840,8 @@ test('T-0638 the page template: the Priority group, its chip, strip and panel te
 
 /* T-0667: the nKEVs event day (R1), the Priority group without a cap and one row per product (R2), the WordPress fold at
    five (R3) and the canary and ransomware flags (R4). Contract: tasks/runs/T-0667/contract.md. Fixture
-   test/fixtures/event-wire.yml (generator tasks/runs/T-0667/p2-make-fixture.js): 33 rows, 5 moved by their event day, 5 ranked,
-   two 5+ Fixture Firewall rows unranked, two WordPress folds of 5, one 4-row WordPress day, a CISA-only row and an old-shape row.
+   test/fixtures/event-wire.yml (generator tasks/runs/T-0667/p2-make-fixture.js): 34 rows, 6 moved by their event day, 5 ranked,
+   two 5+ Fixture Firewall rows unranked, two WordPress folds of 5, one 4-row WordPress day, two CISA-only rows (one dated by its first-seen day) and an old-shape row.
    Data checks are WARN lines like every row check here, so "fails" below means vulnWarnings name the defect. */
 var EV_KEYS_TEST = ['event', 'event_src', 'first_seen', 'canary', 'ransomware'];
 function evFixture() {
@@ -1867,10 +1867,10 @@ test('T-0667 control: the event fixture passes with no vuln warnings; its cases 
   assert.equal(r.status, 'PASS');
   assert.deepEqual(r.vulnWarnings, []);
   assert.deepEqual(r.cveWarnings, []);
-  assert.equal(d.vulns.length, 33);
-  assert.equal(r.counts.vulns, 33);
+  assert.equal(d.vulns.length, 34);
+  assert.equal(r.counts.vulns, 34);
   var src = function (s) { return d.vulns.filter(function (x) { return x.event_src === s; }); };
-  assert.equal(src('vulncheck').length + src('cisa').length + src('first_seen').length + d.vulns.filter(function (x) { return !('event' in x); }).length, 33);
+  assert.equal(src('vulncheck').length + src('cisa').length + src('first_seen').length + d.vulns.filter(function (x) { return !('event' in x); }).length, 34);
   assert.ok(src('cisa').length >= 2 && src('first_seen').length >= 2 && src('vulncheck').length > 10);
   assert.equal(d.vulns.filter(function (x) { return x.event && x.event !== x.added; }).length, d.vulns_counts.event_moved);
   assert.equal(d.vulns.filter(function (x) { return x.canary; }).length, 2);
@@ -1986,12 +1986,12 @@ test('T-0667 a CISA-only row is dated by the CISA day; the same row without a CI
 test('T-0667 the new counts are held to the rows when they can be', function () {
   var d = evFixture();
   d.vulns_counts.event_moved = 9;
-  assert.match(evWarn(d), /event_moved disagrees with the rows: declared 9, actual 5/);
+  assert.match(evWarn(d), /event_moved disagrees with the rows: declared 9, actual 6/);
   d = evFixture();
   d.vulns_counts.cisa_admitted = 'two';
   assert.match(evWarn(d), /cisa_admitted is "two", not a whole number of 0 or more/);
   d.vulns_counts.cisa_admitted = 999;
-  assert.match(evWarn(d), /cisa_admitted 999 is more than the 33 rows/);
+  assert.match(evWarn(d), /cisa_admitted 999 is more than the 34 rows/);
   d = evFixture();
   d.vulns_counts.cisa_missing = -1;
   assert.match(evWarn(d), /cisa_missing is -1/);
@@ -2129,10 +2129,10 @@ test('T-0667 the built event fixture draws every case', { skip: process.env.HL_E
   var d = dom.window.document;
   var sec = d.getElementById('vulns');
   var rows = [].slice.call(sec.querySelectorAll('.hl-vuln'));
-  assert.equal(rows.length, 33, 'rows drawn');
+  assert.equal(rows.length, 34, 'rows drawn');
   var dated = rows.filter(function (r) { return r.querySelector('.hl-vuln__dates'); });
   var text = dated.map(function (r) { return r.querySelector('.hl-vuln__dates').textContent.replace(/\s+/g, ' ').trim(); });
-  assert.equal(dated.length, 6, 'rows with a dates chip: ' + text.join(' | '));
+  assert.equal(dated.length, 7, 'rows with a dates chip: ' + text.join(' | '));
   assert.ok(text.indexOf('CISA KEV 17 Nov · VulnCheck 3 Oct') > -1, text.join(' | '));
   assert.ok(text.indexOf('First seen here 17 Nov · VulnCheck dated 25 Oct') > -1, text.join(' | '));
   assert.ok(text.indexOf('CISA KEV 16 Nov · not in VulnCheck KEV') > -1, text.join(' | '));
@@ -2211,30 +2211,35 @@ test('F2 D mutation control: the old joined-string key merges the two products, 
 });
 
 var CO_TEMPLATES = ['wire/vulns.xml', '_includes/wire-agent-brief.html', '_includes/wire-agent-row.html', '_includes/wire-agent-detail.html'];
-test('F2 C: each template that says VulnCheck for a kev row derives the CISA-only case from event_src cisa, added = cisa_added and no reports', function () {
+test('F3: each template that says VulnCheck for a kev row reads the exporter\'s cisa_only key, not a derivation from other fields', function () {
   var root = pathPicks.join(__dirname, '..', '..', '..');
-  CO_TEMPLATES.forEach(function (f) {
+  CO_TEMPLATES.concat(['wire/index.md', '_includes/wire-details-row.html']).forEach(function (f) {
     var t = fsPicks.readFileSync(pathPicks.join(root, f), 'utf8');
-    assert.match(t, /event_src == "cisa"/, f);
-    assert.match(t, /cisa_added == \w+\.added/, f);
-    assert.match(t, /reports \| size/, f);
-    assert.match(t, /reports_more/, f);
+    assert.match(t, /cisa_only/, f);
+    if (f !== '_includes/wire-details-row.html') assert.match(t, /cisa_only == true/, f);
+    assert.doesNotMatch(t, /cisa_added == \w+\.added/, f + ' still derives the case from added = cisa_added');
+    assert.doesNotMatch(t, /reports_more \| default: 0 \| plus: 0 %\}\{%-? ?if \w+_co_n/, f);
   });
-  // control: a template with the added-equals-cisa_added leg removed no longer matches the pin
+  // control: the pin does see a derivation when one is put back
   var t0 = fsPicks.readFileSync(pathPicks.join(root, 'wire/vulns.xml'), 'utf8');
-  assert.doesNotMatch(t0.replace(/r\.cisa_added == r\.added/g, 'true'), /cisa_added == \w+\.added/);
+  assert.match(t0.replace('r.cisa_only == true', 'r.cisa_added == r.added'), /cisa_added == \w+\.added/);
   var brief = fsPicks.readFileSync(pathPicks.join(root, '_includes/wire-agent-brief.html'), 'utf8');
   assert.match(brief, /if b_co -%\}\{%- assign b_vc = false/);
-  var xml = t0;
-  assert.match(xml, /unless cisa_only %\}\s*<category term="vulncheck-kev"/);
+  assert.match(t0, /unless cisa_only %\}\s*<category term="vulncheck-kev"/);
+  var idx = fsPicks.readFileSync(pathPicks.join(root, 'wire/index.md'), 'utf8');
+  assert.match(idx, /First seen here \{\{ dt_ev \| escape \}\} &middot; CISA KEV \{\{ dt_ca \| escape \}\} &middot; not in VulnCheck KEV/);
 });
 
 test('F2 C the built event fixture: the CISA-only row (9306) is not VulnCheck KEV in the Atom feed and the agent files; a VulnCheck row (9301) still is', { skip: process.env.HL_EVENT_SITE ? false : 'NOT CHECKED: set HL_EVENT_SITE to the Jekyll build of event-wire.yml' }, function () {
   var site = process.env.HL_EVENT_SITE;
   var xml = fsPicks.readFileSync(pathPicks.join(site, 'wire', 'vulns.xml'), 'utf8');
   function entry(cve) { return (xml.match(/<entry>[\s\S]*?<\/entry>/g) || []).filter(function (e) { return e.indexOf('>' + cve) > -1 || e.indexOf(cve + ':') > -1; })[0]; }
-  var co = entry('CVE-2026-9306'), vc = entry('CVE-2026-9301');
-  assert.ok(co && vc, 'both entries are in the feed');
+  var co = entry('CVE-2026-9306'), vc = entry('CVE-2026-9301'), late = entry('CVE-2026-9315');
+  assert.ok(co && vc && late, 'all three entries are in the feed');
+  // F3: the CISA-only row first published 3 days after its CISA day (event_src first_seen) is still not VulnCheck KEV
+  assert.doesNotMatch(late, /vulncheck-kev|to VulnCheck KEV 20/);
+  assert.match(late, /<category term="cisa-kev"/);
+  assert.match(late, /Added to CISA KEV 2026-11-14; not in VulnCheck KEV; listed on the Wire under 2026-11-17, the day it was first published here\./);
   assert.doesNotMatch(co, /vulncheck-kev|VulnCheck KEV label|to VulnCheck KEV/);
   assert.match(co, /<category term="cisa-kev"/);
   assert.match(co, /Added to CISA KEV 2026-11-16; not in VulnCheck KEV\./);
@@ -2246,9 +2251,55 @@ test('F2 C the built event fixture: the CISA-only row (9306) is not VulnCheck KE
     var flat = JSON.stringify(j);
     assert.match(flat, /"id": ?"CVE-2026-9306", ?"list": ?"kev", ?"on_vulncheck_kev": ?false/, f);
     assert.match(flat, /"id": ?"CVE-2026-9301", ?"list": ?"kev", ?"on_vulncheck_kev": ?true/, f);
+    assert.match(flat, /"id": ?"CVE-2026-9315", ?"list": ?"kev", ?"on_vulncheck_kev": ?false/, f);
   });
   var detail = fsPicks.readFileSync(pathPicks.join(site, 'wire', 'agent', 'detail', 'd-f', 'index.html'), 'utf8');
   assert.match(detail, /Exploited: on CISA KEV since 2026-11-16, not in VulnCheck KEV/);
   var details = fsPicks.readFileSync(pathPicks.join(site, 'wire', 'details-nkev.json'), 'utf8');
   assert.ok(details.indexOf('"cve-2026-9306"') > -1, 'the details row exists (its panel text is tested in wire-details-dom.test.js)');
+  var dj = JSON.parse(details).rows;
+  assert.equal(dj['cve-2026-9315'].cisa_only, true);
+  assert.equal(dj['cve-2026-9301'].cisa_only, false);
+  // F3: the row line of the late CISA-only row says first seen, the CISA day and not in VulnCheck KEV, and never "VulnCheck dated"
+  var JSDOMb = require('jsdom').JSDOM;
+  var pg = new JSDOMb(fsPicks.readFileSync(pathPicks.join(site, 'wire', 'index.html'), 'utf8')).window.document;
+  var chip = pg.querySelector('#cve-cve-2026-9315 .hl-vuln__dates');
+  assert.ok(chip, 'the late CISA-only row has a dates chip');
+  var chipText = chip.textContent.replace(/\s+/g, ' ').trim();
+  assert.equal(chipText, 'First seen here 17 Nov \u00b7 CISA KEV 14 Nov \u00b7 not in VulnCheck KEV');
+  assert.doesNotMatch(chipText, /VulnCheck dated/);
+});
+
+/* T-0667 F3 (review r2): the exporter's explicit cisa_only key replaces the four-field derivation. */
+test('F3 gate: cisa_only must be a bool when present; true needs an empty reports list; a file without the key still passes', function () {
+  var d = evFixture();
+  assert.equal(evRow(d, 'CVE-2026-9315').cisa_only, true);
+  assert.equal(evRow(d, 'CVE-2026-9301').cisa_only, false);
+  assert.equal(evWarn(d), '');
+  var e = evFixture(); evRow(e, 'CVE-2026-9315').cisa_only = 'yes';
+  assert.match(evWarn(e), /9315\).*cisa_only "yes", not true or false/);
+  var f = evFixture(); evRow(f, 'CVE-2026-9315').reports = [{ url: 'https://example.org/x', host: 'example.org' }];
+  assert.match(evWarn(f), /9315\).*cisa_only true but lists 1 VulnCheck report/);
+  var g = evFixture(); g.vulns.forEach(function (r) { delete r.cisa_only; });
+  // old shape for the key: the late row is then judged as a VulnCheck row and its dates no longer give first_seen
+  assert.doesNotMatch(evWarn(g), /cisa_only/);
+});
+test('F3 gate: a CISA-only row is dated from cisa_added and first_seen (no VulnCheck day); a wrong event is named', function () {
+  var d = evFixture();
+  var r = evRow(d, 'CVE-2026-9315');
+  r.event = '2026-11-14'; r.event_src = 'cisa';
+  assert.match(evWarn(d), /9315\).*has event 2026-11-14 from cisa but its dates .* give 2026-11-17 from first_seen/);
+  var e = evFixture(); evRow(e, 'CVE-2026-9315').first_seen = '2026-11-15';
+  assert.match(evWarn(e), /9315\).*give 2026-11-14 from cisa/);
+  // a first_seen one day after the CISA day does not move it (the 2-day rule)
+  var h = evFixture(); var q = evRow(h, 'CVE-2026-9315'); q.first_seen = '2026-11-15'; q.event = '2026-11-14'; q.event_src = 'cisa';
+  h.vulns_counts.event_moved -= 1;
+  assert.equal(evWarn(h), '');
+});
+test('F3 gate mutation control: a gate that ignores cisa_only dates the CISA-only row by the VulnCheck rule and names a correct row', function () {
+  var mut = evGateWith("var want = cisaOnly ? expectedCisaOnlyEvent(r) : expectedEvent(r);", "var want = expectedEvent(r);");
+  var d = evFixture();
+  var m = mut.check(d, SOURCES, Date.parse(d.generated_at)).vulnWarnings.join('\n');
+  assert.match(m, /9306\).*give 2026-11-16 from vulncheck/, 'the mutated gate names the correct CISA-only row');
+  assert.doesNotMatch(evWarn(d), /9306/);
 });

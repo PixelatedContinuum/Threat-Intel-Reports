@@ -710,8 +710,21 @@ function expectedEvent(r) {
   });
   return best;
 }
+// A CISA-only row has no VulnCheck day: its candidate dates are cisa_added and first_seen (first_seen wins at 2 or more days later).
+function expectedCisaOnlyEvent(r) {
+  var best = { day: r.cisa_added, src: 'cisa' };
+  var c = realDay(r.cisa_added), f = realDay(r.first_seen);
+  if (!isNaN(c) && !isNaN(f) && (f - c) / 86400000 >= 2) best = { day: r.first_seen, src: 'first_seen' };
+  return best;
+}
 function eventProblems(r) {
   var out = [];
+  // T-0667 F3: cisa_only is the exporter's explicit key (a row VulnCheck does not list); a file from before it has none.
+  var cisaOnly = hasKey(r, 'cisa_only') && r.cisa_only === true;
+  if (hasKey(r, 'cisa_only')) {
+    if (typeof r.cisa_only !== 'boolean') out.push('has cisa_only ' + JSON.stringify(r.cisa_only) + ', not true or false');
+    else if (cisaOnly && reportsOf(r).length > 0) out.push('has cisa_only true but lists ' + reportsOf(r).length + ' VulnCheck report(s)');
+  }
   var present = EV_KEYS.filter(function (k) { return hasKey(r, k); });
   if (!present.length) return out;
   if (present.length !== EV_KEYS.length) {
@@ -727,11 +740,8 @@ function eventProblems(r) {
     if (realDay(r.event) < realDay(r.added)) {
       out.push('has event ' + r.event + ' before its added day ' + r.added);
     } else {
-      var want = expectedEvent(r);
-      // A CISA-only row (not in VulnCheck) is dated by the CISA day, which is also its added day, and carries no reports. A row with
-      // reports is a VulnCheck row, so on a same-day tie the VulnCheck source wins.
-      var cisaOnly = r.event_src === 'cisa' && r.event === r.added && r.cisa_added === r.added && reportsOf(r).length === 0;
-      if (!cisaOnly && (want.day !== r.event || want.src !== r.event_src)) {
+      var want = cisaOnly ? expectedCisaOnlyEvent(r) : expectedEvent(r);
+      if (want.day !== r.event || want.src !== r.event_src) {
         out.push('has event ' + r.event + ' from ' + r.event_src + ' but its dates (added ' + r.added + ', cisa_added ' +
           JSON.stringify(r.cisa_added || '') + ', first_seen ' + JSON.stringify(r.first_seen || '') + ') give ' + want.day + ' from ' + want.src);
       }

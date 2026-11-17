@@ -285,21 +285,25 @@ test('the pane drops an invalid rule or exploit value, so the record does too, a
 });
 
 test('F2 C: a CISA-only nKEV row indexes "Not in VulnCheck KEV." and never "Added to VulnCheck KEV."; the mutated builder does (control)', function () {
-  var only = { added: '2026-11-16', cisa_added: '2026-11-16', event_src: 'cisa', reports: [], reports_more: 0, desc: 'd', disclosed: '2026-11-10', gap: 6 };
+  var only = { added: '2026-11-16', cisa_added: '2026-11-16', event_src: 'cisa', cisa_only: true, reports: [], reports_more: 0, desc: 'd', disclosed: '2026-11-10', gap: 6 };
   var c = rec(withNkev(only), 'cve-cve-2026-0001').content;
   assert.ok(c.indexOf('Not in VulnCheck KEV.') > -1 && c.indexOf('On CISA KEV.') > -1, c);
   assert.ok(c.indexOf('Added to VulnCheck KEV.') < 0 && c.indexOf('days before the KEV add') < 0, c);
-  // control: with a cited report the same row is a VulnCheck row
-  var v = rec(withNkev(Object.assign({}, only, { reports: [{ url: 'https://vendor.example.com/r', host: 'vendor.example.com' }] })), 'cve-cve-2026-0001').content;
+  // F3: late CISA-only row (published 3 days after its CISA day, event_src first_seen)
+  var late = Object.assign({}, only, { added: '2026-11-14', cisa_added: '2026-11-14', event: '2026-11-17', event_src: 'first_seen', first_seen: '2026-11-17' });
+  var lc = rec(withNkev(late), 'cve-cve-2026-0001').content;
+  assert.ok(lc.indexOf('Not in VulnCheck KEV.') > -1 && lc.indexOf('Added to VulnCheck KEV.') < 0, lc);
+  // control: without the key (old data) or with it false, the same row is a VulnCheck row
+  var v = rec(withNkev(Object.assign({}, only, { cisa_only: false })), 'cve-cve-2026-0001').content;
   assert.ok(v.indexOf('Added to VulnCheck KEV.') > -1 && v.indexOf('Not in VulnCheck KEV.') < 0, v);
   // mutation: the derivation off, in the module's own source
   var Module = require('module'), file = require.resolve('../lib/wire-search-records.js');
   var src = fs.readFileSync(file, 'utf8');
-  assert.ok(src.includes("var cisaOnly = d.event_src === 'cisa' &&"), 'mutation anchor');
+  assert.ok(src.includes("var cisaOnly = d.cisa_only === true;"), 'mutation anchor');
   var m = new Module(file, module); m.filename = file; m.paths = Module._nodeModulePaths(path.dirname(file));
-  m._compile(src.replace("var cisaOnly = d.event_src === 'cisa' &&", "var cisaOnly = false && d.event_src === 'cisa' &&"), file);
+  m._compile(src.replace("var cisaOnly = d.cisa_only === true;", "var cisaOnly = false;"), file);
   var dom = new JSDOM(wirePage());
-  var mb = m.exports.buildRecords({ document: dom.window.document, nkevDetails: JSON.stringify({ rows: { 'cve-2026-0001': only } }), cveDetails: CVES });
+  var mb = m.exports.buildRecords({ document: dom.window.document, nkevDetails: JSON.stringify({ rows: { 'cve-2026-0001': late } }), cveDetails: CVES });
   var mcnt = mb.records.filter(function (r) { return r.url.endsWith('cve-cve-2026-0001'); })[0].content;
   assert.ok(mcnt.indexOf('Added to VulnCheck KEV.') > -1 && mcnt.indexOf('Not in VulnCheck KEV.') < 0, 'the mutated builder claims the VulnCheck addition');
 });

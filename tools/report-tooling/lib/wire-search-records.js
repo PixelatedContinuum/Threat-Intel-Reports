@@ -118,9 +118,8 @@ function detailLines(d, isCves) {
 
   if (!isCves) {
     // secExploitation (218-270), nKEVs only; the reports hosts are the pane's links' text
-    // T-0667 F2: a CISA-only row (event_src cisa, added equal to cisa_added, no VulnCheck report) was never added to VulnCheck KEV (wire-details.js isCisaOnly).
-    var cisaOnly = d.event_src === 'cisa' && isDay(d.added) && d.added === d.cisa_added &&
-      !(Array.isArray(d.reports) && d.reports.length) && !(nnum(d.reports_more) > 0);
+    // T-0667 F3: a CISA-only row (the exporter's explicit cisa_only key) was never added to VulnCheck KEV (wire-details.js isCisaOnly).
+    var cisaOnly = d.cisa_only === true;
     if (isDay(d.added) && !cisaOnly) out.push('Added to VulnCheck KEV.');
     if (cisaOnly) out.push('Not in VulnCheck KEV.');
     out.push(isDay(d.cisa_added) ? 'On CISA KEV.' : 'Not on CISA KEV.');

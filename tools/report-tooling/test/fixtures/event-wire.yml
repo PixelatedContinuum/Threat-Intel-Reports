@@ -1,5 +1,5 @@
 # T-0667: the nKEVs tab with every case the contract names, built by tasks/runs/T-0667/p2-make-fixture.js (headlines and CVEs from np-wire.yml, days moved to 2026-11-14..17).
-# 9301..9314: vulncheck, cisa and first_seen events, both-dates rows, a CISA-only row (no reports), the 1-day boundary (stays), canary and ransomware flags,
+# 9301..9315: vulncheck, cisa and first_seen events, both-dates rows, a CISA-only row (no reports, cisa_only true) and a late CISA-only row (event_src first_seen), the 1-day boundary (stays), canary and ransomware flags,
 # one Fixture Firewall row ranked and two 5+ Firewall rows unranked (one per product), an old-shape row (no event keys); WordPress: a 5-row day (folds), a 4-row day,
 # and a 5-row event day made of 4 added that day plus 1 first seen that day (folds); a CISA-listed WordPress row stays plain.
 generated_at: '2026-11-17T18:00:00.000Z'
@@ -55,14 +55,14 @@ vedas_generated_at: '2026-11-17T18:00:00.000Z'
 vulns_status: ok
 vulns_generated_at: '2026-11-17T18:00:00.000Z'
 vulns_counts:
-  total: 33
-  cisa: 7
+  total: 34
+  cisa: 8
   older: 1
   critical: 7
   high: 25
   medium: 0
   low: 0
-  unscored: 1
+  unscored: 2
   et: 6
   nuclei: 0
   cisa_sigma: 0
@@ -77,7 +77,7 @@ vulns_counts:
   age_new: 2
   age_mid: 29
   age_old: 1
-  age_unknown: 1
+  age_unknown: 2
   wp: 15
   batches:
     - key: wp-2026-11-13
@@ -92,8 +92,58 @@ vulns_counts:
   np_per_product: true
   cisa_admitted: 2
   cisa_missing: 0
-  event_moved: 5
+  event_moved: 6
 vulns:
+  - cve: CVE-2026-9315
+    vendor: Fixture
+    product: Late cisa only appliance
+    title: ''
+    cvss: ''
+    cvss_version: ''
+    severity: ''
+    scored_by: ''
+    epss: ''
+    epss_pct: ''
+    epss_date: ''
+    epss_max: ''
+    epss_spark: ''
+    signals: []
+    msf: []
+    edb: []
+    et_sids: []
+    nuclei: ''
+    cisa_sigma: []
+    snort3_sids: []
+    ssvc_expl: ''
+    ssvc_auto: ''
+    ssvc_impact: ''
+    fixed: ''
+    aliases: []
+    stories: 0
+    cvss_vector: ''
+    kev_product: ''
+    kev_product_n: ''
+    reports: []
+    reports_more: 0
+    added: '2026-11-14'
+    cisa_added: '2026-11-14'
+    evidence: ''
+    older: false
+    disclosed: ''
+    np_score: 0
+    np_reasons: []
+    np_class: ''
+    np_rank: 0
+    event: '2026-11-17'
+    event_src: first_seen
+    first_seen: '2026-11-17'
+    canary: false
+    ransomware: false
+    cisa_only: true
+    kev_due: '2026-12-07'
+    gap: ''
+    age_group: unknown
+    prio: 1
   - cve: CVE-2026-9304
     vendor: Fixture
     product: Gateway
@@ -146,10 +196,11 @@ vulns:
     first_seen: ''
     canary: false
     ransomware: true
+    cisa_only: false
     kev_due: '2026-11-24'
     gap: 255
     age_group: mid
-    prio: 1
+    prio: 2
   - cve: CVE-2026-9301
     vendor: Fixture
     product: Firewall
@@ -204,13 +255,14 @@ vulns:
     first_seen: ''
     canary: true
     ransomware: false
+    cisa_only: false
     gap: 100
     age_group: mid
-    prio: 2
+    prio: 3
   - cve: CVE-2026-9313
     vendor: Fixture
     product: Switch
-    title: Example flaw in the example product, case 12.
+    title: Example flaw in the example product, case 13.
     cvss: '9.8'
     cvss_version: '3.1'
     severity: critical
@@ -238,7 +290,7 @@ vulns:
     kev_product: ''
     kev_product_n: ''
     reports:
-      - url: https://example.org/report-12
+      - url: https://example.org/report-13
         host: example.org
     reports_more: 0
     added: '2026-11-17'
@@ -260,13 +312,14 @@ vulns:
     first_seen: ''
     canary: false
     ransomware: false
+    cisa_only: false
     gap: 90
     age_group: mid
-    prio: 3
+    prio: 4
   - cve: CVE-2026-9308
     vendor: Fixture
     product: Backdate
-    title: Example flaw in the example product, case 8.
+    title: Example flaw in the example product, case 9.
     cvss: '8.8'
     cvss_version: '3.1'
     severity: high
@@ -293,7 +346,7 @@ vulns:
     kev_product: ''
     kev_product_n: ''
     reports:
-      - url: https://example.org/report-8
+      - url: https://example.org/report-9
         host: example.org
     reports_more: 0
     added: '2026-11-15'
@@ -311,9 +364,10 @@ vulns:
     first_seen: '2026-11-17'
     canary: false
     ransomware: false
+    cisa_only: false
     gap: 38
     age_group: mid
-    prio: 4
+    prio: 5
   - cve: CVE-2026-9302
     vendor: Fixture
     product: Firewall
@@ -367,9 +421,10 @@ vulns:
     first_seen: ''
     canary: false
     ransomware: false
+    cisa_only: false
     gap: 100
     age_group: mid
-    prio: 5
+    prio: 6
   - cve: CVE-2015-9305
     vendor: Fixture
     product: Legacy server
@@ -418,13 +473,14 @@ vulns:
     first_seen: '2026-11-17'
     canary: true
     ransomware: true
+    cisa_only: false
     gap: 3977
     age_group: old
-    prio: 6
+    prio: 7
   - cve: CVE-2026-9314
     vendor: Fixture
     product: Cisa then first seen
-    title: Example flaw in the example product, case 13.
+    title: Example flaw in the example product, case 14.
     cvss: '8.8'
     cvss_version: '3.1'
     severity: high
@@ -451,7 +507,7 @@ vulns:
     kev_product: ''
     kev_product_n: ''
     reports:
-      - url: https://example.org/report-13
+      - url: https://example.org/report-14
         host: example.org
     reports_more: 0
     added: '2026-11-11'
@@ -469,14 +525,15 @@ vulns:
     first_seen: '2026-11-17'
     canary: false
     ransomware: false
+    cisa_only: false
     kev_due: '2026-11-27'
     gap: 34
     age_group: mid
-    prio: 7
+    prio: 8
   - cve: CVE-2026-9310
     vendor: Fixture
     product: Hypervisor
-    title: Example flaw in the example product, case 10.
+    title: Example flaw in the example product, case 11.
     cvss: '9.8'
     cvss_version: '3.1'
     severity: critical
@@ -504,7 +561,7 @@ vulns:
     kev_product: ''
     kev_product_n: ''
     reports:
-      - url: https://example.org/report-10
+      - url: https://example.org/report-11
         host: example.org
     reports_more: 0
     added: '2026-11-16'
@@ -528,9 +585,10 @@ vulns:
     first_seen: ''
     canary: false
     ransomware: false
+    cisa_only: false
     gap: 9
     age_group: new
-    prio: 8
+    prio: 9
   - cve: CVE-2026-9306
     vendor: Fixture
     product: Cisa only appliance
@@ -576,14 +634,15 @@ vulns:
     first_seen: ''
     canary: false
     ransomware: false
+    cisa_only: true
     kev_due: '2026-12-07'
     gap: ''
     age_group: unknown
-    prio: 9
+    prio: 10
   - cve: CVE-2026-9307
     vendor: Fixture
     product: Boundary
-    title: Example flaw in the example product, case 7.
+    title: Example flaw in the example product, case 8.
     cvss: '8.8'
     cvss_version: '3.1'
     severity: high
@@ -610,7 +669,7 @@ vulns:
     kev_product: ''
     kev_product_n: ''
     reports:
-      - url: https://example.org/report-7
+      - url: https://example.org/report-8
         host: example.org
     reports_more: 0
     added: '2026-11-16'
@@ -628,9 +687,10 @@ vulns:
     first_seen: '2026-11-17'
     canary: false
     ransomware: false
+    cisa_only: false
     gap: 39
     age_group: mid
-    prio: 10
+    prio: 11
   - cve: CVE-2026-9303
     vendor: Fixture
     product: Firewall
@@ -684,13 +744,14 @@ vulns:
     first_seen: ''
     canary: false
     ransomware: false
+    cisa_only: false
     gap: 99
     age_group: mid
-    prio: 11
+    prio: 12
   - cve: CVE-2026-9309
     vendor: Fixture
     product: Cisa first
-    title: Example flaw in the example product, case 9.
+    title: Example flaw in the example product, case 10.
     cvss: '8.8'
     cvss_version: '3.1'
     severity: high
@@ -717,7 +778,7 @@ vulns:
     kev_product: ''
     kev_product_n: ''
     reports:
-      - url: https://example.org/report-9
+      - url: https://example.org/report-10
         host: example.org
     reports_more: 0
     added: '2026-11-14'
@@ -735,14 +796,15 @@ vulns:
     first_seen: ''
     canary: false
     ransomware: false
+    cisa_only: false
     kev_due: '2026-11-27'
     gap: 37
     age_group: mid
-    prio: 12
+    prio: 13
   - cve: CVE-2026-9311
     vendor: Fixture
     product: Directory
-    title: Example flaw in the example product, case 11.
+    title: Example flaw in the example product, case 12.
     cvss: '9.8'
     cvss_version: '3.1'
     severity: critical
@@ -770,7 +832,7 @@ vulns:
     kev_product: ''
     kev_product_n: ''
     reports:
-      - url: https://example.org/report-11
+      - url: https://example.org/report-12
         host: example.org
     reports_more: 0
     added: '2026-11-14'
@@ -792,10 +854,11 @@ vulns:
     first_seen: ''
     canary: false
     ransomware: false
+    cisa_only: false
     gap: 87
     age_group: mid
-    prio: 13
-  - cve: CVE-2026-9433
+    prio: 14
+  - cve: CVE-2026-9434
     vendor: WordPress
     product: Fold plugin 14
     title: WordPress plugin flaw 14.
@@ -825,7 +888,7 @@ vulns:
     kev_product: ''
     kev_product_n: ''
     reports:
-      - url: https://example.org/report-33
+      - url: https://example.org/report-34
         host: example.org
     reports_more: 0
     added: '2026-11-13'
@@ -843,14 +906,69 @@ vulns:
     first_seen: ''
     canary: false
     ransomware: false
+    cisa_only: false
     wp: true
     gap: 36
     age_group: mid
-    prio: 14
-  - cve: CVE-2026-9423
+    prio: 15
+  - cve: CVE-2026-9424
     vendor: WordPress
     product: Fold plugin 4
     title: WordPress plugin flaw 4.
+    cvss: '8.8'
+    cvss_version: '3.1'
+    severity: high
+    scored_by: CNA
+    epss: '0.10'
+    epss_pct: '0.5'
+    epss_date: '2026-11-17'
+    epss_max: '0.10'
+    epss_spark: 0,10 120,0
+    signals: []
+    msf: []
+    edb: []
+    et_sids: []
+    nuclei: ''
+    cisa_sigma: []
+    snort3_sids: []
+    ssvc_expl: ''
+    ssvc_auto: ''
+    ssvc_impact: ''
+    fixed: ''
+    aliases: []
+    stories: 0
+    cvss_vector: CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:L/A:N
+    kev_product: ''
+    kev_product_n: ''
+    reports:
+      - url: https://example.org/report-24
+        host: example.org
+    reports_more: 0
+    added: '2026-11-13'
+    cisa_added: ''
+    evidence: ''
+    older: false
+    disclosed: '2026-10-08'
+    vedas: 0.5
+    np_score: 0
+    np_reasons: []
+    np_class: ''
+    np_rank: 0
+    event: '2026-11-13'
+    event_src: vulncheck
+    first_seen: ''
+    canary: false
+    ransomware: false
+    cisa_only: false
+    wp: true
+    batch: wp-2026-11-13
+    gap: 36
+    age_group: mid
+    prio: 16
+  - cve: CVE-2026-9423
+    vendor: WordPress
+    product: Fold plugin 3
+    title: WordPress plugin flaw 3.
     cvss: '8.8'
     cvss_version: '3.1'
     severity: high
@@ -895,15 +1013,16 @@ vulns:
     first_seen: ''
     canary: false
     ransomware: false
+    cisa_only: false
     wp: true
     batch: wp-2026-11-13
     gap: 36
     age_group: mid
-    prio: 15
+    prio: 17
   - cve: CVE-2026-9422
     vendor: WordPress
-    product: Fold plugin 3
-    title: WordPress plugin flaw 3.
+    product: Fold plugin 2
+    title: WordPress plugin flaw 2.
     cvss: '8.8'
     cvss_version: '3.1'
     severity: high
@@ -948,15 +1067,16 @@ vulns:
     first_seen: ''
     canary: false
     ransomware: false
+    cisa_only: false
     wp: true
     batch: wp-2026-11-13
     gap: 36
     age_group: mid
-    prio: 16
+    prio: 18
   - cve: CVE-2026-9421
     vendor: WordPress
-    product: Fold plugin 2
-    title: WordPress plugin flaw 2.
+    product: Fold plugin 1
+    title: WordPress plugin flaw 1.
     cvss: '8.8'
     cvss_version: '3.1'
     severity: high
@@ -1001,15 +1121,16 @@ vulns:
     first_seen: ''
     canary: false
     ransomware: false
+    cisa_only: false
     wp: true
     batch: wp-2026-11-13
     gap: 36
     age_group: mid
-    prio: 17
+    prio: 19
   - cve: CVE-2026-9420
     vendor: WordPress
-    product: Fold plugin 1
-    title: WordPress plugin flaw 1.
+    product: Fold plugin 0
+    title: WordPress plugin flaw 0.
     cvss: '8.8'
     cvss_version: '3.1'
     severity: high
@@ -1054,113 +1175,15 @@ vulns:
     first_seen: ''
     canary: false
     ransomware: false
+    cisa_only: false
     wp: true
     batch: wp-2026-11-13
-    gap: 36
-    age_group: mid
-    prio: 18
-  - cve: CVE-2026-9419
-    vendor: WordPress
-    product: Fold plugin 0
-    title: WordPress plugin flaw 0.
-    cvss: '8.8'
-    cvss_version: '3.1'
-    severity: high
-    scored_by: CNA
-    epss: '0.10'
-    epss_pct: '0.5'
-    epss_date: '2026-11-17'
-    epss_max: '0.10'
-    epss_spark: 0,10 120,0
-    signals: []
-    msf: []
-    edb: []
-    et_sids: []
-    nuclei: ''
-    cisa_sigma: []
-    snort3_sids: []
-    ssvc_expl: ''
-    ssvc_auto: ''
-    ssvc_impact: ''
-    fixed: ''
-    aliases: []
-    stories: 0
-    cvss_vector: CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:L/A:N
-    kev_product: ''
-    kev_product_n: ''
-    reports:
-      - url: https://example.org/report-19
-        host: example.org
-    reports_more: 0
-    added: '2026-11-13'
-    cisa_added: ''
-    evidence: ''
-    older: false
-    disclosed: '2026-10-08'
-    vedas: 0.5
-    np_score: 0
-    np_reasons: []
-    np_class: ''
-    np_rank: 0
-    event: '2026-11-13'
-    event_src: vulncheck
-    first_seen: ''
-    canary: false
-    ransomware: false
-    wp: true
-    batch: wp-2026-11-13
-    gap: 36
-    age_group: mid
-    prio: 19
-  - cve: CVE-2026-9312
-    vendor: Fixture
-    product: Old shape
-    title: Example flaw in the example product, case 14.
-    cvss: '8.8'
-    cvss_version: '3.1'
-    severity: high
-    scored_by: CNA
-    epss: '0.10'
-    epss_pct: '0.5'
-    epss_date: '2026-11-17'
-    epss_max: '0.10'
-    epss_spark: 0,10 120,0
-    signals: []
-    msf: []
-    edb: []
-    et_sids: []
-    nuclei: ''
-    cisa_sigma: []
-    snort3_sids: []
-    ssvc_expl: ''
-    ssvc_auto: ''
-    ssvc_impact: ''
-    fixed: ''
-    aliases: []
-    stories: 0
-    cvss_vector: CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:L/A:N
-    kev_product: ''
-    kev_product_n: ''
-    reports:
-      - url: https://example.org/report-14
-        host: example.org
-    reports_more: 0
-    added: '2026-11-13'
-    cisa_added: ''
-    evidence: ''
-    older: false
-    disclosed: '2026-10-08'
-    vedas: 0.5
-    np_score: 0
-    np_reasons: []
-    np_class: ''
-    np_rank: 0
     gap: 36
     age_group: mid
     prio: 20
-  - cve: CVE-2026-9415
+  - cve: CVE-2026-9312
     vendor: Fixture
-    product: Widget 15
+    product: Old shape
     title: Example flaw in the example product, case 15.
     cvss: '8.8'
     cvss_version: '3.1'
@@ -1191,6 +1214,52 @@ vulns:
       - url: https://example.org/report-15
         host: example.org
     reports_more: 0
+    added: '2026-11-13'
+    cisa_added: ''
+    evidence: ''
+    older: false
+    disclosed: '2026-10-08'
+    vedas: 0.5
+    np_score: 0
+    np_reasons: []
+    np_class: ''
+    np_rank: 0
+    gap: 36
+    age_group: mid
+    prio: 21
+  - cve: CVE-2026-9416
+    vendor: Fixture
+    product: Widget 16
+    title: Example flaw in the example product, case 16.
+    cvss: '8.8'
+    cvss_version: '3.1'
+    severity: high
+    scored_by: CNA
+    epss: '0.10'
+    epss_pct: '0.5'
+    epss_date: '2026-11-17'
+    epss_max: '0.10'
+    epss_spark: 0,10 120,0
+    signals: []
+    msf: []
+    edb: []
+    et_sids: []
+    nuclei: ''
+    cisa_sigma: []
+    snort3_sids: []
+    ssvc_expl: ''
+    ssvc_auto: ''
+    ssvc_impact: ''
+    fixed: ''
+    aliases: []
+    stories: 0
+    cvss_vector: CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:L/A:N
+    kev_product: ''
+    kev_product_n: ''
+    reports:
+      - url: https://example.org/report-16
+        host: example.org
+    reports_more: 0
     added: '2026-11-12'
     cisa_added: ''
     evidence: ''
@@ -1206,13 +1275,67 @@ vulns:
     first_seen: ''
     canary: false
     ransomware: false
+    cisa_only: false
     gap: 35
     age_group: mid
-    prio: 21
-  - cve: CVE-2026-9427
+    prio: 22
+  - cve: CVE-2026-9428
     vendor: WordPress
     product: Fold plugin 8
     title: WordPress plugin flaw 8.
+    cvss: '8.8'
+    cvss_version: '3.1'
+    severity: high
+    scored_by: CNA
+    epss: '0.10'
+    epss_pct: '0.5'
+    epss_date: '2026-11-17'
+    epss_max: '0.10'
+    epss_spark: 0,10 120,0
+    signals: []
+    msf: []
+    edb: []
+    et_sids: []
+    nuclei: ''
+    cisa_sigma: []
+    snort3_sids: []
+    ssvc_expl: ''
+    ssvc_auto: ''
+    ssvc_impact: ''
+    fixed: ''
+    aliases: []
+    stories: 0
+    cvss_vector: CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:L/A:N
+    kev_product: ''
+    kev_product_n: ''
+    reports:
+      - url: https://example.org/report-28
+        host: example.org
+    reports_more: 0
+    added: '2026-11-11'
+    cisa_added: ''
+    evidence: ''
+    older: false
+    disclosed: '2026-10-08'
+    vedas: 0.5
+    np_score: 0
+    np_reasons: []
+    np_class: ''
+    np_rank: 0
+    event: '2026-11-11'
+    event_src: vulncheck
+    first_seen: ''
+    canary: false
+    ransomware: false
+    cisa_only: false
+    wp: true
+    gap: 34
+    age_group: mid
+    prio: 23
+  - cve: CVE-2026-9427
+    vendor: WordPress
+    product: Fold plugin 7
+    title: WordPress plugin flaw 7.
     cvss: '8.8'
     cvss_version: '3.1'
     severity: high
@@ -1257,14 +1380,15 @@ vulns:
     first_seen: ''
     canary: false
     ransomware: false
+    cisa_only: false
     wp: true
     gap: 34
     age_group: mid
-    prio: 22
+    prio: 24
   - cve: CVE-2026-9426
     vendor: WordPress
-    product: Fold plugin 7
-    title: WordPress plugin flaw 7.
+    product: Fold plugin 6
+    title: WordPress plugin flaw 6.
     cvss: '8.8'
     cvss_version: '3.1'
     severity: high
@@ -1309,14 +1433,15 @@ vulns:
     first_seen: ''
     canary: false
     ransomware: false
+    cisa_only: false
     wp: true
     gap: 34
     age_group: mid
-    prio: 23
+    prio: 25
   - cve: CVE-2026-9425
     vendor: WordPress
-    product: Fold plugin 6
-    title: WordPress plugin flaw 6.
+    product: Fold plugin 5
+    title: WordPress plugin flaw 5.
     cvss: '8.8'
     cvss_version: '3.1'
     severity: high
@@ -1361,110 +1486,8 @@ vulns:
     first_seen: ''
     canary: false
     ransomware: false
+    cisa_only: false
     wp: true
-    gap: 34
-    age_group: mid
-    prio: 24
-  - cve: CVE-2026-9424
-    vendor: WordPress
-    product: Fold plugin 5
-    title: WordPress plugin flaw 5.
-    cvss: '8.8'
-    cvss_version: '3.1'
-    severity: high
-    scored_by: CNA
-    epss: '0.10'
-    epss_pct: '0.5'
-    epss_date: '2026-11-17'
-    epss_max: '0.10'
-    epss_spark: 0,10 120,0
-    signals: []
-    msf: []
-    edb: []
-    et_sids: []
-    nuclei: ''
-    cisa_sigma: []
-    snort3_sids: []
-    ssvc_expl: ''
-    ssvc_auto: ''
-    ssvc_impact: ''
-    fixed: ''
-    aliases: []
-    stories: 0
-    cvss_vector: CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:L/A:N
-    kev_product: ''
-    kev_product_n: ''
-    reports:
-      - url: https://example.org/report-24
-        host: example.org
-    reports_more: 0
-    added: '2026-11-11'
-    cisa_added: ''
-    evidence: ''
-    older: false
-    disclosed: '2026-10-08'
-    vedas: 0.5
-    np_score: 0
-    np_reasons: []
-    np_class: ''
-    np_rank: 0
-    event: '2026-11-11'
-    event_src: vulncheck
-    first_seen: ''
-    canary: false
-    ransomware: false
-    wp: true
-    gap: 34
-    age_group: mid
-    prio: 25
-  - cve: CVE-2026-9416
-    vendor: Fixture
-    product: Widget 16
-    title: Example flaw in the example product, case 16.
-    cvss: '8.8'
-    cvss_version: '3.1'
-    severity: high
-    scored_by: CNA
-    epss: '0.10'
-    epss_pct: '0.5'
-    epss_date: '2026-11-17'
-    epss_max: '0.10'
-    epss_spark: 0,10 120,0
-    signals: []
-    msf: []
-    edb: []
-    et_sids: []
-    nuclei: ''
-    cisa_sigma: []
-    snort3_sids: []
-    ssvc_expl: ''
-    ssvc_auto: ''
-    ssvc_impact: ''
-    fixed: ''
-    aliases: []
-    stories: 0
-    cvss_vector: CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:L/A:N
-    kev_product: ''
-    kev_product_n: ''
-    reports:
-      - url: https://example.org/report-16
-        host: example.org
-    reports_more: 0
-    added: '2026-11-11'
-    cisa_added: ''
-    evidence: ''
-    older: false
-    disclosed: '2026-10-08'
-    vedas: 0.5
-    np_score: 0
-    np_reasons: []
-    np_class: ''
-    np_rank: 0
-    event: '2026-11-11'
-    event_src: vulncheck
-    first_seen: ''
-    canary: false
-    ransomware: false
     gap: 34
     age_group: mid
     prio: 26
@@ -1494,11 +1517,63 @@ vulns:
     fixed: ''
     aliases: []
     stories: 0
-    cvss_vector: CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:L/A:N
+    cvss_vector: CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:L/A:N
     kev_product: ''
     kev_product_n: ''
     reports:
       - url: https://example.org/report-17
+        host: example.org
+    reports_more: 0
+    added: '2026-11-11'
+    cisa_added: ''
+    evidence: ''
+    older: false
+    disclosed: '2026-10-08'
+    vedas: 0.5
+    np_score: 0
+    np_reasons: []
+    np_class: ''
+    np_rank: 0
+    event: '2026-11-11'
+    event_src: vulncheck
+    first_seen: ''
+    canary: false
+    ransomware: false
+    cisa_only: false
+    gap: 34
+    age_group: mid
+    prio: 27
+  - cve: CVE-2026-9418
+    vendor: Fixture
+    product: Widget 18
+    title: Example flaw in the example product, case 18.
+    cvss: '8.8'
+    cvss_version: '3.1'
+    severity: high
+    scored_by: CNA
+    epss: '0.10'
+    epss_pct: '0.5'
+    epss_date: '2026-11-17'
+    epss_max: '0.10'
+    epss_spark: 0,10 120,0
+    signals: []
+    msf: []
+    edb: []
+    et_sids: []
+    nuclei: ''
+    cisa_sigma: []
+    snort3_sids: []
+    ssvc_expl: ''
+    ssvc_auto: ''
+    ssvc_impact: ''
+    fixed: ''
+    aliases: []
+    stories: 0
+    cvss_vector: CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:L/A:N
+    kev_product: ''
+    kev_product_n: ''
+    reports:
+      - url: https://example.org/report-18
         host: example.org
     reports_more: 0
     added: '2026-11-10'
@@ -1516,10 +1591,11 @@ vulns:
     first_seen: ''
     canary: false
     ransomware: false
+    cisa_only: false
     gap: 33
     age_group: mid
-    prio: 27
-  - cve: CVE-2026-9432
+    prio: 28
+  - cve: CVE-2026-9433
     vendor: WordPress
     product: Fold plugin 13
     title: WordPress plugin flaw 13.
@@ -1549,7 +1625,7 @@ vulns:
     kev_product: ''
     kev_product_n: ''
     reports:
-      - url: https://example.org/report-32
+      - url: https://example.org/report-33
         host: example.org
     reports_more: 0
     added: '2026-10-19'
@@ -1567,15 +1643,70 @@ vulns:
     first_seen: '2026-11-09'
     canary: false
     ransomware: false
+    cisa_only: false
     wp: true
     batch: wp-2026-11-09
     gap: 11
     age_group: new
-    prio: 28
-  - cve: CVE-2026-9431
+    prio: 29
+  - cve: CVE-2026-9432
     vendor: WordPress
     product: Fold plugin 12
     title: WordPress plugin flaw 12.
+    cvss: '8.8'
+    cvss_version: '3.1'
+    severity: high
+    scored_by: CNA
+    epss: '0.10'
+    epss_pct: '0.5'
+    epss_date: '2026-11-17'
+    epss_max: '0.10'
+    epss_spark: 0,10 120,0
+    signals: []
+    msf: []
+    edb: []
+    et_sids: []
+    nuclei: ''
+    cisa_sigma: []
+    snort3_sids: []
+    ssvc_expl: ''
+    ssvc_auto: ''
+    ssvc_impact: ''
+    fixed: ''
+    aliases: []
+    stories: 0
+    cvss_vector: CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:L/A:N
+    kev_product: ''
+    kev_product_n: ''
+    reports:
+      - url: https://example.org/report-32
+        host: example.org
+    reports_more: 0
+    added: '2026-11-09'
+    cisa_added: ''
+    evidence: ''
+    older: false
+    disclosed: '2026-10-08'
+    vedas: 0.5
+    np_score: 0
+    np_reasons: []
+    np_class: ''
+    np_rank: 0
+    event: '2026-11-09'
+    event_src: vulncheck
+    first_seen: ''
+    canary: false
+    ransomware: false
+    cisa_only: false
+    wp: true
+    batch: wp-2026-11-09
+    gap: 32
+    age_group: mid
+    prio: 30
+  - cve: CVE-2026-9431
+    vendor: WordPress
+    product: Fold plugin 11
+    title: WordPress plugin flaw 11.
     cvss: '8.8'
     cvss_version: '3.1'
     severity: high
@@ -1620,15 +1751,16 @@ vulns:
     first_seen: ''
     canary: false
     ransomware: false
+    cisa_only: false
     wp: true
     batch: wp-2026-11-09
     gap: 32
     age_group: mid
-    prio: 29
+    prio: 31
   - cve: CVE-2026-9430
     vendor: WordPress
-    product: Fold plugin 11
-    title: WordPress plugin flaw 11.
+    product: Fold plugin 10
+    title: WordPress plugin flaw 10.
     cvss: '8.8'
     cvss_version: '3.1'
     severity: high
@@ -1673,15 +1805,16 @@ vulns:
     first_seen: ''
     canary: false
     ransomware: false
+    cisa_only: false
     wp: true
     batch: wp-2026-11-09
     gap: 32
     age_group: mid
-    prio: 30
+    prio: 32
   - cve: CVE-2026-9429
     vendor: WordPress
-    product: Fold plugin 10
-    title: WordPress plugin flaw 10.
+    product: Fold plugin 9
+    title: WordPress plugin flaw 9.
     cvss: '8.8'
     cvss_version: '3.1'
     severity: high
@@ -1726,68 +1859,16 @@ vulns:
     first_seen: ''
     canary: false
     ransomware: false
+    cisa_only: false
     wp: true
     batch: wp-2026-11-09
     gap: 32
     age_group: mid
-    prio: 31
-  - cve: CVE-2026-9428
-    vendor: WordPress
-    product: Fold plugin 9
-    title: WordPress plugin flaw 9.
-    cvss: '8.8'
-    cvss_version: '3.1'
-    severity: high
-    scored_by: CNA
-    epss: '0.10'
-    epss_pct: '0.5'
-    epss_date: '2026-11-17'
-    epss_max: '0.10'
-    epss_spark: 0,10 120,0
-    signals: []
-    msf: []
-    edb: []
-    et_sids: []
-    nuclei: ''
-    cisa_sigma: []
-    snort3_sids: []
-    ssvc_expl: ''
-    ssvc_auto: ''
-    ssvc_impact: ''
-    fixed: ''
-    aliases: []
-    stories: 0
-    cvss_vector: CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:L/A:N
-    kev_product: ''
-    kev_product_n: ''
-    reports:
-      - url: https://example.org/report-28
-        host: example.org
-    reports_more: 0
-    added: '2026-11-09'
-    cisa_added: ''
-    evidence: ''
-    older: false
-    disclosed: '2026-10-08'
-    vedas: 0.5
-    np_score: 0
-    np_reasons: []
-    np_class: ''
-    np_rank: 0
-    event: '2026-11-09'
-    event_src: vulncheck
-    first_seen: ''
-    canary: false
-    ransomware: false
-    wp: true
-    batch: wp-2026-11-09
-    gap: 32
-    age_group: mid
-    prio: 32
-  - cve: CVE-2026-9418
+    prio: 33
+  - cve: CVE-2026-9419
     vendor: Fixture
-    product: Widget 18
-    title: Example flaw in the example product, case 18.
+    product: Widget 19
+    title: Example flaw in the example product, case 19.
     cvss: '8.8'
     cvss_version: '3.1'
     severity: high
@@ -1814,7 +1895,7 @@ vulns:
     kev_product: ''
     kev_product_n: ''
     reports:
-      - url: https://example.org/report-18
+      - url: https://example.org/report-19
         host: example.org
     reports_more: 0
     added: '2026-11-09'
@@ -1832,9 +1913,10 @@ vulns:
     first_seen: ''
     canary: false
     ransomware: false
+    cisa_only: false
     gap: 32
     age_group: mid
-    prio: 33
+    prio: 34
 cves_status: ok
 cves_generated_at: '2026-11-17T18:00:00.000Z'
 cves_counts:
@@ -2101,6 +2183,6 @@ cves:
     nomi: true
 vuln_vendors:
   - label: Fixture
-    count: 18
+    count: 19
   - label: WordPress
     count: 15
