@@ -83,6 +83,7 @@ var RANSOM_LINE = "Marked as used in known ransomware campaigns, by VulnCheck's 
 var RANK_LEAD_NP = 'Why it ranks: Priority, my patch-first score for exploited flaws.';
 var RANK_LEAD_PICK = 'Why it ranks: a Priority pick, scored when I picked it.';
 var RANK_LEAD_FRESH = 'Why it ranks: Just published, new and unproven, with no evidence of exploitation yet.';
+var RANK_LEAD_BOTH = 'Why it ranks: a Priority pick, scored when I picked it, and also Just published, new and unproven, with no evidence of exploitation yet. Both rank it on the same points.';
 var REPORTS_LEAD = "VulnCheck's cited reports: ";
 var MORE_REPORTS = ' more in VulnCheck KEV';
 var EVIDENCE_LINE = 'Earliest citation date: ';
@@ -274,11 +275,29 @@ function rankNkev(panel, d) {
     rankInto(panel, RANK_LEAD_NP, d.np_reasons, d.np_class, d.np_score, NP_WORDS, '');
   }
 }
+/* T-0668: a pick that is also Just published used to print the same point lines twice
+   (4 of 35 picks on 2026-11-17 data). The two scores are computed separately, so the
+   blocks merge only when they are the same points, class and total; a pick whose two
+   scores differ keeps both blocks, each with its own total. */
+function sameRank(d) {
+  var p = lst(d.pick_reasons);
+  var f = lst(d.fresh_reasons);
+  if (!p || !f || !p.length || p.length !== f.length) { return false; }
+  if (num(d.pick_score) !== num(d.fresh_score) || isNaN(num(d.pick_score))) { return false; }
+  if (str(d.pick_class) !== str(d.fresh_class)) { return false; }
+  return p.every(function (t, i) { return t === f[i]; });
+}
 function rankCves(panel, d) {
-  if (dayOf(d.pick_day)) {
+  var isPick = !!dayOf(d.pick_day);
+  var isFresh = d.fresh === true;
+  if (isPick && isFresh && sameRank(d)) {
+    rankInto(panel, RANK_LEAD_BOTH, d.pick_reasons, d.pick_class, d.pick_score, PICK_WORDS, ' when I picked it');
+    return;
+  }
+  if (isPick) {
     rankInto(panel, RANK_LEAD_PICK, d.pick_reasons, d.pick_class, d.pick_score, PICK_WORDS, ' when I picked it');
   }
-  if (d.fresh === true) {
+  if (isFresh) {
     rankInto(panel, RANK_LEAD_FRESH, d.fresh_reasons, d.fresh_class, d.fresh_score, FRESH_WORDS, '');
   }
 }

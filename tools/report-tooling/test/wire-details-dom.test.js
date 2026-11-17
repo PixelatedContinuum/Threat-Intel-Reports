@@ -606,6 +606,51 @@ test('D3: a row that is both a pick and Just published explains both', async fun
   assert.ok(linesOf(p).indexOf('Total: 2 points.') > -1);
 });
 
+/* T-0668: a pick that is also Just published shows its points once. Values are the live 2026-11-17 row CVE-2026-126170 (pick 5, fresh 5, the same four reasons). */
+test('T-0668: a pick that is also Just published with the same points shows one block and one total', async function () {
+  var row = cv({ pick_day: '2026-11-17', pick_score: 5, pick_reasons: ['nomi', 'noauth', 'critical', 'class'], pick_class: 'Edge and network device', pick_seeded: false,
+    fresh: true, fresh_score: 5, fresh_reasons: ['nomi', 'noauth', 'critical', 'class'], fresh_class: 'Edge and network device' });
+  var p = await panelFor({ 'cve-2026-9999': row }, 'cves-cve-2026-9999');
+  assert.equal(pointsOf(p).length, 4, 'four point lines, not eight');
+  assert.equal(sumPoints(p), 5);
+  assert.equal(linesOf(p).filter(function (l) { return /^Total:/.test(l); }).length, 1);
+  assert.ok(linesOf(p).indexOf('Total: 5 points when I picked it.') > -1);
+  var leads = linesOf(p).filter(function (l) { return /^Why it ranks:/.test(l); });
+  assert.equal(leads.length, 1);
+  assert.match(leads[0], /a Priority pick/);
+  assert.match(leads[0], /also Just published/);
+  assert.match(leads[0], /same points/);
+});
+
+test('T-0668: a pick and Just published with different reasons or totals keep both blocks, each with its own total', async function () {
+  var diffTotal = cv({ pick_day: '2026-11-17', pick_score: 5, pick_reasons: ['tooling', 'noauth', 'critical', 'nomi'], pick_class: '', pick_seeded: false,
+    fresh: true, fresh_score: 3, fresh_reasons: ['nomi', 'noauth', 'critical'], fresh_class: '' });
+  var p = await panelFor({ 'cve-2026-9999': diffTotal }, 'cves-cve-2026-9999');
+  assert.equal(linesOf(p).filter(function (l) { return /^Why it ranks:/.test(l); }).length, 2);
+  assert.ok(linesOf(p).indexOf('Total: 5 points when I picked it.') > -1);
+  assert.ok(linesOf(p).indexOf('Total: 3 points.') > -1);
+  // same total, different class: not the same points
+  var diffClass = cv({ pick_day: '2026-11-17', pick_score: 4, pick_reasons: ['noauth', 'class'], pick_class: 'Operating system or browser', pick_seeded: false,
+    fresh: true, fresh_score: 4, fresh_reasons: ['noauth', 'class'], fresh_class: 'Identity and access' });
+  var q = await panelFor({ 'cve-2026-9999': diffClass }, 'cves-cve-2026-9999');
+  assert.equal(linesOf(q).filter(function (l) { return /^Why it ranks:/.test(l); }).length, 2);
+});
+
+test('T-0668: a fresh-only row and a pick-only row each keep their own single block', async function () {
+  var fo = cv({ fresh: true, fresh_score: 5, fresh_reasons: ['nomi', 'noauth', 'critical', 'class'], fresh_class: 'Edge and network device' });
+  var p = await panelFor({ 'cve-2026-9999': fo }, 'cves-cve-2026-9999');
+  assert.equal(pointsOf(p).length, 4);
+  assert.ok(linesOf(p).indexOf('Total: 5 points.') > -1);
+  assert.match(linesOf(p).filter(function (l) { return /^Why it ranks:/.test(l); })[0], /^Why it ranks: Just published, new and unproven/);
+  assert.ok(!/Priority pick/.test(p.textContent));
+  var po = cv({ pick_day: '2026-11-17', pick_score: 5, pick_reasons: ['nomi', 'noauth', 'critical', 'class'], pick_class: 'Edge and network device', pick_seeded: false });
+  var q = await panelFor({ 'cve-2026-9999': po }, 'cves-cve-2026-9999');
+  assert.equal(pointsOf(q).length, 4);
+  assert.ok(linesOf(q).indexOf('Total: 5 points when I picked it.') > -1);
+  assert.match(linesOf(q).filter(function (l) { return /^Why it ranks:/.test(l); })[0], /^Why it ranks: a Priority pick, scored when I picked it\.$/);
+  assert.ok(!/Just published/.test(q.textContent));
+});
+
 test('D3: an unranked row gets no rank lines (np_rank 0 at a score of 5; no keys at all; a plain CVE row; a row that is not fresh)', async function () {
   var unranked = nk({ np_rank: 0, np_score: 5, np_reasons: ['noauth', 'critical', 'class', 'tooling'], np_class: 'Edge and network device' });
   var cases = [
