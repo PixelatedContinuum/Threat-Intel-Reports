@@ -71,12 +71,17 @@ var TITLE_SRC = "The CVE record's first sentence, via cve.now. The full descript
 var FIXED_EMPTY = "No fixed version in the data I hold; check the vendor's advisory.";
 var FIXED_IN = 'Fixed in: ';
 var FIXED_TAIL = " (from the CVE record's affected data, via cve.now)";
-var DONE_FIXED = 'A fixed version is listed above.';
 var DONE_CISA = "CISA's due date for US federal agencies: ";
-var DONE_NONE = 'No fixed version in the data I hold.';
 var KEV_ADD = 'Added to VulnCheck KEV on ';
 var CISA_SINCE = 'On CISA KEV since ';
 var NOT_CISA = 'Not on CISA KEV.';
+var SEEN_HERE = 'First seen here on ';
+var SEEN_TAIL = ', the day I first published it.';
+var CANARY_LINE = "VulnCheck's own canary network recorded exploitation of this CVE. That is VulnCheck's flag, not a statement from CISA or the vendor.";
+var RANSOM_LINE = "Marked as used in known ransomware campaigns, by VulnCheck's KEV data or CISA's KEV catalog.";
+var RANK_LEAD_NP = 'Why it ranks: Priority, my patch-first score for exploited flaws.';
+var RANK_LEAD_PICK = 'Why it ranks: a Priority pick, scored when I picked it.';
+var RANK_LEAD_FRESH = 'Why it ranks: Just published, new and unproven, with no evidence of exploitation yet.';
 var REPORTS_LEAD = "VulnCheck's cited reports: ";
 var MORE_REPORTS = ' more in VulnCheck KEV';
 var EVIDENCE_LINE = 'Earliest citation date: ';
@@ -117,7 +122,7 @@ function el(tag, cls, text) {
 /* T-0569: each section heading carries a colour key (Joseph, 2026-11-06), matched to the
    row chip it explains where there is one; CSS sets the colours. */
 var HEAD_KEYS = {
-  'CVE record': 'rec', 'Affected and fixed': 'fix', 'What to do': 'todo', 'Exploitation': 'expl',
+  'CVE record': 'rec', 'Fix': 'fix', 'Exploitation': 'expl',
   'Why listed': 'why', 'Public exploits': 'exp', 'Detection': 'det', 'Severity': 'sev',
   'Likelihood': 'epss', 'Likelihood (EPSS)': 'epss', 'Links': 'links'
 };
@@ -187,9 +192,9 @@ function secRecord(panel, d, isCves) {
   panel.appendChild(row);
 }
 
-/* --- Section 2: affected and fixed -------------------------------------------- */
-function secAffected(panel, d) {
-  headInto(panel, 'Affected and fixed');
+/* --- Fix: affected, fixed and the CISA due date, said once (T-0667 D2) ---------- */
+function secFix(panel, d) {
+  headInto(panel, 'Fix');
   var aff = lst(d.affected);
   if (aff) {
     aff.forEach(function (term) {
@@ -199,64 +204,133 @@ function secAffected(panel, d) {
     });
   }
   var fixed = str(d.fixed).trim();
+  var parts = [];
   if (fixed) {
-    var parts = [];
     fixed.split(',').forEach(function (raw) {
       var v = raw.trim();
       if (VERSION_SHAPE.test(v)) { parts.push(v); }
     });
-    if (parts.length) {
-      lineInto(panel, FIXED_IN + parts.join(', ') + FIXED_TAIL);
-    } else {
-      lineInto(panel, FIXED_EMPTY);
+  }
+  lineInto(panel, parts.length ? FIXED_IN + parts.join(', ') + FIXED_TAIL : FIXED_EMPTY);
+  var due = dayOf(d.kev_due);
+  if (due) { lineInto(panel, DONE_CISA + due + '.'); }
+}
+
+/* --- Why it ranks: one line per point earned, in the chips' own words (T-0667 D3) ----
+   The words and the points are the ones the row chips carry in wire/index.md (the nKEVs
+   Priority chips, the CVEs Priority pick chips and the Just published chips), so a reader
+   who hovers a chip on a desktop and one who opens this panel on a phone read the same
+   thing. A class reason is worth 2 points, or 1 for an operating system or browser. */
+var NP_WORDS = {
+  noauth: ['No login', 1], critical: ['CVSS 9+', 1], tooling: ['Public tooling', 1],
+  cisa: ['CISA KEV', 1], fresh: ['New flaw', 1]
+};
+var PICK_WORDS = {
+  tooling: ['Exploit tooling', 2], nomi: ['PoC on GitHub', 1], ssvc: ['SSVC exploitation', 1],
+  epss90: ['EPSS top 10%', 1], noauth: ['No login needed', 1], critical: ['CVSS 9.0 or higher', 1]
+};
+var FRESH_WORDS = {
+  nomi: ['PoC on GitHub', 1], ssvc: ['SSVC exploitation', 1], noauth: ['No login needed', 1],
+  critical: ['CVSS 9.0 or higher', 1]
+};
+var OS_CLASS = 'Operating system or browser';
+function pointsText(n) { return n + (n === 1 ? ' point' : ' points'); }
+function rankInto(panel, lead, reasons, cls, score, words, totalTail) {
+  var list = lst(reasons);
+  var sc = num(score);
+  if (!list || !list.length || isNaN(sc)) { return; }
+  var rows = [];
+  var sum = 0;
+  list.forEach(function (t) {
+    var label = '';
+    var pts = 0;
+    if (t === 'class') {
+      label = str(cls).trim() || 'Product class';
+      pts = str(cls) === OS_CLASS ? 1 : 2;
+    } else if (typeof t === 'string' && Object.prototype.hasOwnProperty.call(words, t)) {
+      label = words[t][0];
+      pts = words[t][1];
     }
+    if (!label) { return; }
+    rows.push(label + ': ' + pointsText(pts));
+    sum += pts;
+  });
+  if (!rows.length) { return; }
+  lineInto(panel, lead);
+  rows.forEach(function (r) { panel.appendChild(el('p', 'hl-dt__line hl-dt__pt', r)); });
+  if (sum === sc) {
+    panel.appendChild(el('p', 'hl-dt__line hl-dt__tot', 'Total: ' + pointsText(sum) + (totalTail || '') + '.'));
   } else {
-    lineInto(panel, FIXED_EMPTY);
+    panel.appendChild(el('p', 'hl-dt__line hl-dt__tot',
+      'These add up to ' + pointsText(sum) + ', but my score for it is ' + sc + '.'));
+  }
+}
+/* A Priority row on the nKEVs tab (np_rank above 0), a Priority pick and a Just published
+   row on the CVEs tab. An unranked row carries none of the keys and gets no lines. */
+function rankNkev(panel, d) {
+  var r = num(d.np_rank);
+  if (!isNaN(r) && r > 0) {
+    rankInto(panel, RANK_LEAD_NP, d.np_reasons, d.np_class, d.np_score, NP_WORDS, '');
+  }
+}
+function rankCves(panel, d) {
+  if (dayOf(d.pick_day)) {
+    rankInto(panel, RANK_LEAD_PICK, d.pick_reasons, d.pick_class, d.pick_score, PICK_WORDS, ' when I picked it');
+  }
+  if (d.fresh === true) {
+    rankInto(panel, RANK_LEAD_FRESH, d.fresh_reasons, d.fresh_class, d.fresh_score, FRESH_WORDS, '');
   }
 }
 
-/* --- Section 3: what to do, facts only ------------------------------------------ */
-function secWhatDo(panel, d) {
-  headInto(panel, 'What to do');
-  var bits = [];
-  if (str(d.fixed).trim()) { bits.push(DONE_FIXED); }
-  var due = dayOf(d.kev_due);
-  if (due) { bits.push(DONE_CISA + due + '.'); }
-  lineInto(panel, bits.length ? bits.join(' ') : DONE_NONE);
-}
-
-/* --- Section 4: exploitation (nKEVs) -------------------------------------------- */
+/* --- Exploitation (nKEVs): why it ranks, the dated events in order, the flags, the sources ---- */
 function secExploitation(panel, d) {
   headInto(panel, 'Exploitation');
+  rankNkev(panel, d);
   var added = dayOf(d.added);
-  if (added) {
-    lineInto(panel, KEV_ADD + added + '.');
-  }
   var cisaDay = dayOf(d.cisa_added);
-  lineInto(panel, cisaDay ? CISA_SINCE + cisaDay + '.' : NOT_CISA);
+  // T-0667 D4: every dated event in one list, oldest first; the same day keeps the order
+  // VulnCheck, CISA, first seen, earliest citation. "First seen here" is shown only when it
+  // names a day the other events do not (a seeded row has it equal to the VulnCheck day).
+  var events = [];
+  if (added) { events.push({ day: added, ord: 0, text: KEV_ADD + added + '.' }); }
+  if (cisaDay) { events.push({ day: cisaDay, ord: 1, text: CISA_SINCE + cisaDay + '.' }); }
+  var seen = dayOf(d.first_seen);
+  if (seen && seen !== added && seen !== cisaDay) {
+    events.push({ day: seen, ord: 2, text: SEEN_HERE + seen + SEEN_TAIL });
+  }
+  var ev = dayOf(d.evidence);
+  if (ev && added && ev < added) { events.push({ day: ev, ord: 3, text: EVIDENCE_LINE + ev + '.' }); }
+  events.sort(function (x, y) {
+    if (x.day !== y.day) { return x.day < y.day ? -1 : 1; }
+    return x.ord - y.ord;
+  });
+  events.forEach(function (e) { lineInto(panel, e.text); });
+  if (!cisaDay) { lineInto(panel, NOT_CISA); }
+  if (d.canary === true) { lineInto(panel, CANARY_LINE); }
+  if (d.ransomware === true) { lineInto(panel, RANSOM_LINE); }
   var reps = lst(d.reports);
   if (reps && reps.length) {
     var row = el('p', 'hl-dt__line');
     row.textContent = REPORTS_LEAD;
-    var seen = 0;
+    var nSeen = 0;
     reps.forEach(function (rp) {
       var u = rp && typeof rp.url === 'string' ? rp.url : '';
       var host = rp && typeof rp.host === 'string' ? rp.host : '';
       if (!u || u.length > URL_LIMIT || !REPORT_SHAPE.test(u) || !host) { return; }
-      if (seen) { row.appendChild(document.createTextNode(', ')); }
+      if (nSeen) { row.appendChild(document.createTextNode(', ')); }
       var a = el('a', 'hl-dt__link', host);
       a.href = u;
       a.target = '_blank';
       a.rel = 'noopener noreferrer nofollow';
       row.appendChild(a);
-      seen++;
+      nSeen++;
     });
     var more = num(d.reports_more);
-    if (seen && !isNaN(more) && more > 0) {
+    if (nSeen && !isNaN(more) && more > 0) {
       row.appendChild(document.createTextNode(' '));
       row.appendChild(el('span', 'hl-dt__dim', '+' + Math.floor(more) + MORE_REPORTS));
     }
-    if (seen) {
+    if (nSeen) {
       row.appendChild(document.createTextNode('.'));
       panel.appendChild(row);
     }
@@ -274,15 +348,12 @@ function secExploitation(panel, d) {
       lineInto(panel, PRE_NVD + back + (back === 1 ? PRE_NVD_DAY : PRE_NVD_LATE));
     }
   }
-  var ev = dayOf(d.evidence);
-  if (ev && added && ev < added) {
-    lineInto(panel, EVIDENCE_LINE + ev + '.');
-  }
 }
 
 /* --- Section 4 (CVEs tab): why listed, the chips' own claims ---------------------- */
 function secWhyListed(panel, d, asOfDay) {
   headInto(panel, 'Why listed');
+  rankCves(panel, d);
   var signals = lst(d.signals);
   if (signals) {
     if (signals.indexOf('nuclei') !== -1) lineInto(panel, 'A Nuclei template names this CVE.');
@@ -508,7 +579,8 @@ function secLikelihood(panel, d, isCves) {
   if (!isCves) {
     var pre = str(d.epss_pre).trim();
     var preNum = num(pre);
-    if (pre && !isNaN(preNum) && preNum >= 0 && preNum <= 1) {
+    // T-0667 D5: the "7 days before" line only when it differs from today's value.
+    if (pre && !isNaN(preNum) && preNum >= 0 && preNum <= 1 && preNum !== score) {
       lineInto(panel, EPSS_PRE + pre + '.' + (xmodel.indexOf('pre') === 0 ? EPSS_CROSSED : ''));
     }
   }
@@ -564,26 +636,26 @@ function secLinks(panel, d, cveId) {
 }
 
 /* --- the two tabs' fact sheets, in the design's fixed order --------------------------------- */
+/* T-0667 D1: the answer first. Why it is here, then the fix, then how to detect and exploit
+   it, how bad and how likely, and only then the CVE record's description and the links. */
 function buildNkevPanel(panel, d, cveId) {
-  secRecord(panel, d, false);
-  secAffected(panel, d);
-  secWhatDo(panel, d);
   secExploitation(panel, d);
-  secExploits(panel, d);
+  secFix(panel, d);
   secDetection(panel, d);
+  secExploits(panel, d);
   secSeverity(panel, d);
   secLikelihood(panel, d, false);
+  secRecord(panel, d, false);
   secLinks(panel, d, cveId);
 }
 function buildCvesPanel(panel, d, cveId, asOfDay) {
-  secRecord(panel, d, true);
-  secAffected(panel, d);
-  secWhatDo(panel, d);
   secWhyListed(panel, d, asOfDay);
-  secExploits(panel, d);
+  secFix(panel, d);
   secDetection(panel, d);
+  secExploits(panel, d);
   secSeverity(panel, d);
   secLikelihood(panel, d, true);
+  secRecord(panel, d, true);
   secLinks(panel, d, cveId);
 }
 

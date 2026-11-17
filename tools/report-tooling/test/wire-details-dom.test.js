@@ -41,6 +41,15 @@ function build(rows, genAt) {
 /* A miniature of the real markup, same classes, data attributes and the real id
    shape: the page's row ids carry the doubled prefix the template writes, so
    id="cve-{{ downcased }}" is "cve-cve-2026-1001". Same here. */
+/* T-0667 part D: more rows on one tab, for the cases below. A key is the plain lowercased CVE id
+   the details file uses; the page id carries the tab's prefix (cve- on nKEVs, cves- on CVEs). */
+function extraRows(keys, prefix) {
+  return (keys || []).map(function (k) {
+    return '<div class="hl-vuln' + (prefix === 'cves-' ? ' hl-vuln--cve' : '') + '" id="' + prefix + k + '" data-day="2026-10-31">' +
+      '<button type="button" class="hl-dt" aria-expanded="false" hidden="" title="Show details"><span class="hl-dt__sr">Details</span></button>' +
+      '<a class="hl-vuln__cve" href="https://nvd.nist.gov/vuln/detail/' + k.toUpperCase() + '">' + k.toUpperCase() + '</a></div>';
+  }).join('');
+}
 function pageHtml(opts) {
   var hid = opts && opts.headlineId ? ' id="' + opts.headlineId + '"' : '';
   return '<body>' +
@@ -58,12 +67,12 @@ function pageHtml(opts) {
     '<div class="hl-vuln" id="cve-cve-2026-1001" data-title="cve-2026-1001 acme widget" data-day="2026-10-31">' +
     '<button type="button" class="hl-dt" aria-expanded="false" hidden="" title="Show details"><span class="hl-dt__sr">Details</span></button><a class="hl-vuln__cve" href="https://nvd.nist.gov/vuln/detail/CVE-2026-1001">CVE-2026-1001</a>' +
     '<span class="hl-vuln__vp"><b>Acme</b> Widget</span>' +
-    '</div>' +
+    '</div>' + extraRows(opts && opts.nkevKeys, 'cve-') +
     '</section>' +
     '<section id="cves" class="hl-wtabs__sec" data-filter-scope data-details="/wire/details-cves.json?v=2026-11-01T19:32:18Z">' +
     '<div class="hl-vuln hl-vuln--cve" id="cves-cve-2026-9999" data-day="2026-10-31">' +
     '<button type="button" class="hl-dt" aria-expanded="false" hidden="" title="Show details"><span class="hl-dt__sr">Details</span></button><a class="hl-vuln__cve" href="https://nvd.nist.gov/vuln/detail/CVE-2026-9999">CVE-2026-9999</a>' +
-    '</div>' +
+    '</div>' + extraRows(opts && opts.cveKeys, 'cves-') +
     '</section></body>';
 }
 
@@ -79,7 +88,7 @@ function openDom(rows, opts) {
     if (opts.badFetch) { return Promise.resolve({ ok: false, status: 503, json: function () { return Promise.resolve({}); } }); }
     return Promise.resolve({ ok: true, status: 200, json: function () { return Promise.resolve(JSON.parse(build(rows, opts.genAt))); } });
   };
-  win.eval(RENDERER);
+  win.eval(opts.renderer || RENDERER);
   var doc = win.document;
   // init() removes each toggle's hidden attribute
   [].forEach.call(doc.querySelectorAll('.hl-dt'), function (b) {
@@ -105,7 +114,7 @@ test('a nKEV row opens the full fact sheet in the design\u2019s fixed order', as
   assert.match(p.textContent, /Loading details\.\.\./);
   await settle();
   var t = p.textContent;
-  ['CVE record', 'Affected and fixed', 'What to do', 'Exploitation', 'Public exploits',
+  ['CVE record', 'Fix', 'Exploitation', 'Public exploits',
    'Detection', 'Severity', 'Likelihood (EPSS)', 'Links'].forEach(function (h) {
     assert.ok(t.indexOf(h) !== -1, 'missing section heading ' + h);
   });
@@ -116,7 +125,7 @@ test('a nKEV row opens the full fact sheet in the design\u2019s fixed order', as
   assert.equal(cweLink.getAttribute('href'), 'https://cwe.mitre.org/data/definitions/79.html');
   assert.match(t, /Acme Widget: 1\.0 up to and including 2\.0/);
   assert.match(t, /Fixed in: 2\.1\.0/);
-  assert.match(t, /A fixed version is listed above\./);
+  assert.doesNotMatch(t, /A fixed version is listed above\./, 'T-0667 D2: the fix is said once');
   assert.match(t, /CISA's due date for US federal agencies: 2026-11-15\./);
   assert.match(t, /Added to VulnCheck KEV on 2026-10-31\./);
   assert.match(t, /On CISA KEV since 2026-10-30\./);
@@ -390,4 +399,355 @@ test('the click path still opens and closes a pane after the hash code is in (co
   clicks(doc, btn);
   assert.equal(paneOf(doc, 'cve-cve-2026-1001'), null);
   assert.deepEqual(env.opts.scrolled, [], 'a plain click does not scroll');
+});
+
+/* ===========================================================================
+   T-0667 part D: the Details panel, refined (D1 to D5, Joseph's go 2026-11-17).
+   Proposal: tasks/runs/T-0667/details-proposal.md.
+   D1 new section order; D2 one Fix section; D3 why the row ranks; D4 the exploitation
+   timeline on nKEV rows; D5 no repeated EPSS line.
+   =========================================================================== */
+
+var BASE_NKEV = NKEV_ROWS['cve-2026-1001'];
+var BASE_CVE = CVE_ROWS['cve-2026-9999'];
+
+function nk(over) { return Object.assign({}, BASE_NKEV, over || {}); }
+function cv(over) { return Object.assign({}, BASE_CVE, over || {}); }
+
+/* Open one row's panel and return the panel element. */
+async function panelFor(rows, rowId, opts) {
+  var env = openDom(rows, opts);
+  var doc = env.dom.window.document;
+  var rowEl = doc.getElementById(rowId);
+  clicks(doc, rowEl.querySelector('.hl-dt'));
+  await settle();
+  return rowEl.querySelector('.hl-dt__panel');
+}
+function headingsOf(panel) {
+  return [].map.call(panel.querySelectorAll('.hl-dt__h'), function (h) { return h.textContent; });
+}
+function linesOf(panel) {
+  return [].map.call(panel.querySelectorAll('.hl-dt__line'), function (p) { return p.textContent; });
+}
+function pointsOf(panel) {
+  return [].map.call(panel.querySelectorAll('.hl-dt__pt'), function (p) { return p.textContent; });
+}
+function sumPoints(panel) {
+  var sum = 0;
+  pointsOf(panel).forEach(function (t) {
+    var m = /: (\d+) points?$/.exec(t);
+    assert.ok(m, 'a point line ends in "N point(s)": ' + t);
+    sum += Number(m[1]);
+  });
+  return sum;
+}
+
+var NKEV_ORDER = ['Exploitation', 'Fix', 'Detection', 'Public exploits', 'Severity', 'Likelihood (EPSS)', 'CVE record', 'Links'];
+var CVES_ORDER = ['Why listed', 'Fix', 'Detection', 'Public exploits', 'Severity', 'Likelihood', 'CVE record', 'Links'];
+
+test('D1: the nKEVs panel opens with why the row is here, and the CVE record comes after the likelihood', async function () {
+  var p = await panelFor({ 'cve-2026-1001': nk() }, 'cve-cve-2026-1001');
+  assert.deepEqual(headingsOf(p), NKEV_ORDER);
+});
+
+test('D1: the CVEs panel opens with why it is listed, and the CVE record comes after the likelihood', async function () {
+  var p = await panelFor({ 'cve-2026-9999': cv() }, 'cves-cve-2026-9999');
+  assert.deepEqual(headingsOf(p), CVES_ORDER);
+});
+
+test('D1 control: the old order (the CVE record first) fails the order check on both tabs', async function () {
+  // The renderer with buildNkevPanel and buildCvesPanel calling secRecord first, as before T-0667.
+  var mutated = RENDERER
+    .replace('function buildNkevPanel(panel, d, cveId) {\n', 'function buildNkevPanel(panel, d, cveId) {\n  secRecord(panel, d, false);\n')
+    .replace('function buildCvesPanel(panel, d, cveId, asOfDay) {\n', 'function buildCvesPanel(panel, d, cveId, asOfDay) {\n  secRecord(panel, d, true);\n');
+  assert.notEqual(mutated, RENDERER, 'the mutation must change the renderer');
+  var pn = await panelFor({ 'cve-2026-1001': nk() }, 'cve-cve-2026-1001', { renderer: mutated });
+  assert.equal(headingsOf(pn)[0], 'CVE record', 'the mutant draws the record first');
+  assert.notDeepEqual(headingsOf(pn), NKEV_ORDER.concat(['CVE record']).slice(0, 8), 'sanity');
+  assert.notDeepEqual(headingsOf(pn).slice(0, NKEV_ORDER.length), NKEV_ORDER, 'the order check would fail on the mutant (nKEVs)');
+  var pc = await panelFor({ 'cve-2026-9999': cv() }, 'cves-cve-2026-9999', { renderer: mutated });
+  assert.equal(headingsOf(pc)[0], 'CVE record');
+  assert.notDeepEqual(headingsOf(pc).slice(0, CVES_ORDER.length), CVES_ORDER, 'the order check would fail on the mutant (CVEs)');
+});
+
+test('D2: one Fix section, and "no fixed version" is said once, on both tabs', async function () {
+  var noFix = { fixed: '', affected: ['Acme Widget: 1.0 up to and including 2.0'], kev_due: '' };
+  var pn = await panelFor({ 'cve-2026-1001': nk(noFix) }, 'cve-cve-2026-1001');
+  var pc = await panelFor({ 'cve-2026-9999': cv({ fixed: '', kev_due: '' }) }, 'cves-cve-2026-9999');
+  [pn, pc].forEach(function (p) {
+    var heads = headingsOf(p);
+    assert.equal(heads.filter(function (h) { return h === 'Fix'; }).length, 1, 'one Fix heading');
+    assert.equal(heads.indexOf('Affected and fixed'), -1);
+    assert.equal(heads.indexOf('What to do'), -1);
+    var said = linesOf(p).filter(function (l) { return /No fixed version in the data I hold/.test(l); });
+    assert.equal(said.length, 1, 'the no-fix line appears once: ' + JSON.stringify(said));
+    assert.doesNotMatch(p.textContent, /No fixed version in the data I hold\.(?!;)/, 'the second, shorter wording is gone');
+  });
+  // the affected terms sit in the same section, before the fix line
+  var kids = [].slice.call(pn.children);
+  var fixAt = kids.findIndex(function (k) { return k.textContent === 'Fix'; });
+  assert.equal(kids[fixAt + 1].textContent, 'Acme Widget: 1.0 up to and including 2.0', 'the affected term opens the Fix section');
+  assert.match(kids[fixAt + 2].textContent, /^No fixed version in the data I hold/);
+});
+
+test('D2: a fixed row names the version once and the CISA due date once, both under Fix', async function () {
+  var p = await panelFor({ 'cve-2026-1001': nk() }, 'cve-cve-2026-1001');
+  var t = p.textContent;
+  assert.equal(t.split('Fixed in: 2.1.0').length - 1, 1);
+  assert.equal(t.split("CISA's due date for US federal agencies: 2026-11-15.").length - 1, 1);
+  assert.doesNotMatch(t, /A fixed version is listed above/);
+  // under the Fix heading, before the next heading
+  var kids = [].slice.call(p.children);
+  var fixAt = kids.findIndex(function (k) { return k.textContent === 'Fix'; });
+  var nextAt = kids.findIndex(function (k, i) { return i > fixAt && /hl-dt__h\b/.test(k.className); });
+  var inFix = kids.slice(fixAt + 1, nextAt).map(function (k) { return k.textContent; }).join('|');
+  assert.match(inFix, /Fixed in: 2\.1\.0/);
+  assert.match(inFix, /CISA's due date/);
+});
+
+/* --- D3: the words and points are the chips' own ---------------------------------------- */
+function chipTable(blockStartMarker) {
+  // wire/index.md: the {% for t in r.<x>_reasons %} ... {% endfor %} block of each tab's chips.
+  var md = fs.readFileSync(path.join(__dirname, '..', '..', '..', 'wire', 'index.md'), 'utf8');
+  var at = md.indexOf(blockStartMarker);
+  assert.ok(at > -1, 'chip block not found: ' + blockStartMarker);
+  var end = md.indexOf('{% endfor %}', at);
+  var block = md.slice(at, end);
+  var out = {};
+  var re = /\{% when "([a-z0-9]+)" %\}<span class="hl-pick__chip[^"]*" title="([^"]*)">([^<{]*)<\/span>/g;
+  var m;
+  while ((m = re.exec(block))) {
+    var pts = /Worth (\d) points?/.exec(m[2]);
+    out[m[1]] = { label: m[3], pts: pts ? Number(pts[1]) : NaN };
+  }
+  // The class chip's title and label hold Liquid (the class name), so the pattern above skips it:
+  // read its rule from the text instead. Its label is the class name, its points 2 (1 for an OS or browser).
+  var cm = /\{% when "class" %\}<span class="hl-pick__chip hl-pick__chip--class" title="[^]*?Worth 2 points, or 1 for an operating system or browser\./.exec(block);
+  if (cm) { out['class'] = { label: '(class name)', pts: 2 }; }
+  return out;
+}
+
+test('D3: every reason line uses the chip’s word and points (nKEV Priority, CVE pick, Just published)', async function () {
+  var np = chipTable('{% for t in r.np_reasons %}');
+  var pick = chipTable('{% for t in r.pick_reasons %}');
+  var fresh = chipTable('{% for t in r.fresh_reasons %}');
+  assert.deepEqual(Object.keys(np).sort(), ['cisa', 'class', 'critical', 'fresh', 'noauth', 'tooling'], 'the page chips read for nKEV');
+  assert.deepEqual(Object.keys(pick).sort(), ['class', 'critical', 'epss90', 'noauth', 'nomi', 'ssvc', 'tooling']);
+  assert.deepEqual(Object.keys(fresh).sort(), ['class', 'critical', 'noauth', 'nomi', 'ssvc']);
+  function expectLines(table, reasons, cls) {
+    return reasons.map(function (t) {
+      var pts = t === 'class' ? (cls === 'Operating system or browser' ? 1 : 2) : table[t].pts;
+      var label = t === 'class' ? cls : table[t].label;
+      return label + ': ' + pts + (pts === 1 ? ' point' : ' points');
+    });
+  }
+  var npReasons = ['noauth', 'critical', 'class', 'tooling', 'cisa', 'fresh'];
+  var pickReasons = ['tooling', 'nomi', 'ssvc', 'epss90', 'noauth', 'critical', 'class'];
+  var freshReasons = ['nomi', 'ssvc', 'noauth', 'critical', 'class'];
+  var nkRow = nk({ np_rank: 1, np_score: 8, np_reasons: npReasons, np_class: 'Edge and network device' });
+  var pkRow = cv({ pick_day: '2026-10-31', pick_score: 10, pick_reasons: pickReasons, pick_class: 'Identity and access', pick_seeded: false });
+  var frRow = cv({ fresh: true, fresh_score: 6, fresh_reasons: freshReasons, fresh_class: 'Identity and access' });
+  var pn = await panelFor({ 'cve-2026-1001': nkRow }, 'cve-cve-2026-1001');
+  assert.deepEqual(pointsOf(pn), expectLines(np, npReasons, 'Edge and network device'));
+  var pp = await panelFor({ 'cve-2026-9999': pkRow }, 'cves-cve-2026-9999');
+  assert.deepEqual(pointsOf(pp), expectLines(pick, pickReasons, 'Identity and access'));
+  var pf = await panelFor({ 'cve-2026-9999': frRow }, 'cves-cve-2026-9999');
+  assert.deepEqual(pointsOf(pf), expectLines(fresh, freshReasons, 'Identity and access'));
+});
+
+test('D3: on a Priority row the points sum to the row’s score and the total line says so', async function () {
+  var row = nk({ np_rank: 4, np_score: 5, np_reasons: ['noauth', 'critical', 'class', 'cisa'], np_class: 'Edge and network device' });
+  var p = await panelFor({ 'cve-2026-1001': row }, 'cve-cve-2026-1001');
+  assert.equal(sumPoints(p), 5, 'the lines add up to np_score');
+  assert.equal(pointsOf(p).length, 4);
+  assert.ok(linesOf(p).indexOf('Total: 5 points.') > -1);
+  assert.match(linesOf(p)[0], /^Why it ranks: Priority/);
+  // first section: the rank lines sit right under the Exploitation heading, before the timeline
+  assert.equal(headingsOf(p)[0], 'Exploitation');
+  var kids = [].slice.call(p.children);
+  assert.equal(kids[0].textContent, 'Exploitation');
+  assert.match(kids[1].textContent, /^Why it ranks: Priority/);
+  assert.ok(kids.findIndex(function (k) { return k.className.indexOf('hl-dt__tot') > -1; }) <
+            kids.findIndex(function (k) { return /^Added to VulnCheck KEV/.test(k.textContent); }));
+});
+
+test('D3: an operating-system class is 1 point, other classes 2, and the sum still matches', async function () {
+  var row = nk({ np_rank: 2, np_score: 5, np_reasons: ['noauth', 'critical', 'class', 'tooling', 'cisa'], np_class: 'Operating system or browser' });
+  var p = await panelFor({ 'cve-2026-1001': row }, 'cve-cve-2026-1001');
+  assert.ok(pointsOf(p).indexOf('Operating system or browser: 1 point') > -1);
+  assert.equal(sumPoints(p), 5);
+});
+
+test('D3: a Priority pick on the CVEs tab sums to its pick score, under Why listed', async function () {
+  var row = cv({ pick_day: '2026-10-31', pick_score: 7, pick_reasons: ['tooling', 'nomi', 'epss90', 'noauth', 'class'], pick_class: 'Identity and access', pick_seeded: false });
+  var p = await panelFor({ 'cve-2026-9999': row }, 'cves-cve-2026-9999');
+  assert.equal(sumPoints(p), 7);
+  assert.ok(pointsOf(p).indexOf('Exploit tooling: 2 points') > -1);
+  assert.ok(linesOf(p).indexOf('Total: 7 points when I picked it.') > -1);
+  var kids = [].slice.call(p.children);
+  assert.equal(kids[0].textContent, 'Why listed');
+  assert.match(kids[1].textContent, /^Why it ranks: a Priority pick/);
+});
+
+test('D3: a Just published row sums to its score and says there is no evidence of exploitation', async function () {
+  var row = cv({ fresh: true, fresh_score: 4, fresh_reasons: ['nomi', 'noauth', 'class'], fresh_class: 'Identity and access' });
+  var p = await panelFor({ 'cve-2026-9999': row }, 'cves-cve-2026-9999');
+  assert.equal(sumPoints(p), 4);
+  assert.ok(linesOf(p).indexOf('Total: 4 points.') > -1);
+  assert.match(p.textContent, /Just published, new and unproven, with no evidence of exploitation yet\./);
+});
+
+test('D3: a row that is both a pick and Just published explains both', async function () {
+  var row = cv({ pick_day: '2026-10-31', pick_score: 3, pick_reasons: ['nomi', 'noauth', 'critical'], pick_class: '', pick_seeded: false,
+    fresh: true, fresh_score: 2, fresh_reasons: ['noauth', 'critical'], fresh_class: '' });
+  var p = await panelFor({ 'cve-2026-9999': row }, 'cves-cve-2026-9999');
+  assert.equal(pointsOf(p).length, 5);
+  assert.ok(linesOf(p).indexOf('Total: 3 points when I picked it.') > -1);
+  assert.ok(linesOf(p).indexOf('Total: 2 points.') > -1);
+});
+
+test('D3: an unranked row gets no rank lines (np_rank 0 at a score of 5; no keys at all; a plain CVE row; a row that is not fresh)', async function () {
+  var unranked = nk({ np_rank: 0, np_score: 5, np_reasons: ['noauth', 'critical', 'class', 'tooling'], np_class: 'Edge and network device' });
+  var cases = [
+    [{ 'cve-2026-1001': unranked }, 'cve-cve-2026-1001', 'unranked at 5+'],
+    [{ 'cve-2026-1001': nk() }, 'cve-cve-2026-1001', 'nKEV row with no np keys'],
+    [{ 'cve-2026-9999': cv() }, 'cves-cve-2026-9999', 'CVE row with no pick or fresh keys'],
+    [{ 'cve-2026-9999': cv({ pick_day: '', pick_score: 0, pick_reasons: [], pick_class: '', pick_seeded: false, fresh: false, fresh_score: 0, fresh_reasons: [], fresh_class: '' }) },
+      'cves-cve-2026-9999', 'CVE row with the keys, none earned']
+  ];
+  for (var i = 0; i < cases.length; i++) {
+    var p = await panelFor(cases[i][0], cases[i][1]);
+    assert.equal(pointsOf(p).length, 0, cases[i][2] + ': no point lines');
+    assert.doesNotMatch(p.textContent, /Why it ranks|Total:/, cases[i][2]);
+  }
+});
+
+test('D3: reasons on a row that does not hold the rank are not explained (fresh false, no pick day)', async function () {
+  var row = cv({ pick_day: '', pick_score: 0, pick_reasons: ['nomi', 'noauth'], pick_class: '', pick_seeded: false,
+    fresh: false, fresh_score: 0, fresh_reasons: ['nomi', 'noauth'], fresh_class: '' });
+  var p = await panelFor({ 'cve-2026-9999': row }, 'cves-cve-2026-9999');
+  assert.equal(pointsOf(p).length, 0);
+  assert.doesNotMatch(p.textContent, /Why it ranks|Total:/);
+});
+
+test('D3: reasons that do not add up to the score are said, not hidden behind a total', async function () {
+  var row = nk({ np_rank: 1, np_score: 9, np_reasons: ['noauth', 'critical'], np_class: '' });
+  var p = await panelFor({ 'cve-2026-1001': row }, 'cve-cve-2026-1001');
+  assert.equal(sumPoints(p), 2);
+  assert.ok(linesOf(p).indexOf('These add up to 2 points, but my score for it is 9.') > -1);
+  assert.equal(linesOf(p).filter(function (l) { return /^Total:/.test(l); }).length, 0);
+});
+
+/* --- D4: the exploitation timeline -------------------------------------------------------- */
+function dated(panel) {
+  // the dated exploitation lines, with the day each carries, in the order the panel draws them
+  var pats = [
+    [/^Earliest citation date: (\d{4}-\d{2}-\d{2})\./, 'citation'],
+    [/^Added to VulnCheck KEV on (\d{4}-\d{2}-\d{2})\./, 'vulncheck'],
+    [/^On CISA KEV since (\d{4}-\d{2}-\d{2})\./, 'cisa'],
+    [/^First seen here on (\d{4}-\d{2}-\d{2}),/, 'first_seen']
+  ];
+  var out = [];
+  linesOf(panel).forEach(function (l) {
+    pats.forEach(function (pt) { var m = pt[0].exec(l); if (m) out.push({ src: pt[1], day: m[1] }); });
+  });
+  return out;
+}
+
+test('D4: the dated events read in date order: citation, VulnCheck, CISA, first seen here', async function () {
+  var row = nk({ added: '2026-11-04', cisa_added: '2026-11-17', first_seen: '2026-11-20', event: '2026-11-20', event_src: 'first_seen',
+    evidence: '2026-10-30', canary: false, ransomware: false });
+  var p = await panelFor({ 'cve-2026-1001': row }, 'cve-cve-2026-1001');
+  var ev = dated(p);
+  assert.deepEqual(ev.map(function (e) { return e.src; }), ['citation', 'vulncheck', 'cisa', 'first_seen']);
+  var days = ev.map(function (e) { return e.day; });
+  assert.deepEqual(days, days.slice().sort(), 'the days ascend');
+});
+
+test('D4: CISA listing before the VulnCheck add reads first; the same day keeps VulnCheck, then CISA', async function () {
+  var p1 = await panelFor({ 'cve-2026-1001': nk({ added: '2026-11-04', cisa_added: '2026-11-01', evidence: '' }) }, 'cve-cve-2026-1001');
+  assert.deepEqual(dated(p1).map(function (e) { return e.src; }), ['cisa', 'vulncheck']);
+  var p2 = await panelFor({ 'cve-2026-1001': nk({ added: '2026-11-04', cisa_added: '2026-11-04', evidence: '' }) }, 'cve-cve-2026-1001');
+  assert.deepEqual(dated(p2).map(function (e) { return e.src; }), ['vulncheck', 'cisa']);
+});
+
+test('D4: a CVE not on CISA KEV says so after its dated events; first seen is left out when it names no new day', async function () {
+  var row = nk({ added: '2026-11-04', cisa_added: '', first_seen: '2026-11-04', evidence: '' });
+  var p = await panelFor({ 'cve-2026-1001': row }, 'cve-cve-2026-1001');
+  assert.deepEqual(dated(p).map(function (e) { return e.src; }), ['vulncheck']);
+  var ls = linesOf(p);
+  assert.ok(ls.indexOf('Not on CISA KEV.') > ls.indexOf('Added to VulnCheck KEV on 2026-11-04.'));
+  assert.doesNotMatch(p.textContent, /First seen here/);
+});
+
+test('D4: canary and ransomware lines show when true, and only then', async function () {
+  var both = await panelFor({ 'cve-2026-1001': nk({ canary: true, ransomware: true }) }, 'cve-cve-2026-1001');
+  assert.match(both.textContent, /VulnCheck's own canary network recorded exploitation of this CVE\. That is VulnCheck's flag, not a statement from CISA or the vendor\./);
+  assert.match(both.textContent, /Marked as used in known ransomware campaigns, by VulnCheck's KEV data or CISA's KEV catalog\./);
+  var canaryOnly = await panelFor({ 'cve-2026-1001': nk({ canary: true, ransomware: false }) }, 'cve-cve-2026-1001');
+  assert.match(canaryOnly.textContent, /canary network/);
+  assert.doesNotMatch(canaryOnly.textContent, /ransomware/);
+  var none = await panelFor({ 'cve-2026-1001': nk({ canary: false, ransomware: false }) }, 'cve-cve-2026-1001');
+  assert.doesNotMatch(none.textContent, /canary|ransomware/);
+  // a string "true" is not a flag
+  var str = await panelFor({ 'cve-2026-1001': nk({ canary: 'true', ransomware: 'true' }) }, 'cve-cve-2026-1001');
+  assert.doesNotMatch(str.textContent, /canary|ransomware/);
+});
+
+test('D4: the cited sources are listed in the panel with their links, and the extra count shows', async function () {
+  var row = nk({
+    reports: [{ url: 'https://vendor.example/advisory/1', host: 'vendor.example' }, { url: 'https://blog.example.net/post', host: 'blog.example.net' },
+      { url: 'http://insecure.example/x', host: 'insecure.example' }],
+    reports_more: 2
+  });
+  var p = await panelFor({ 'cve-2026-1001': row }, 'cve-cve-2026-1001');
+  var line = linesOf(p).filter(function (l) { return /^VulnCheck's cited reports:/.test(l); })[0];
+  assert.ok(line, 'the sources line is there');
+  assert.match(line, /vendor\.example, blog\.example\.net \+2 more in VulnCheck KEV\.$/);
+  var links = [].filter.call(p.querySelectorAll('a'), function (a) { return /example/.test(a.textContent); });
+  assert.deepEqual(links.map(function (a) { return a.getAttribute('href'); }), ['https://vendor.example/advisory/1', 'https://blog.example.net/post']);
+  links.forEach(function (a) { assert.equal(a.rel, 'noopener noreferrer nofollow'); assert.equal(a.target, '_blank'); });
+  assert.doesNotMatch(p.textContent, /insecure\.example/, 'a non-https report is not shown');
+});
+
+test('D4: the timeline, flags and sources sit under Exploitation, in that order', async function () {
+  var row = nk({ added: '2026-10-31', cisa_added: '2026-11-02', canary: true, ransomware: true, reports: [{ url: 'https://vendor.example/a', host: 'vendor.example' }] });
+  var p = await panelFor({ 'cve-2026-1001': row }, 'cve-cve-2026-1001');
+  var ls = linesOf(p);
+  var at = function (re) { return ls.findIndex(function (l) { return re.test(l); }); };
+  var order = [at(/^Added to VulnCheck KEV/), at(/^On CISA KEV since/), at(/canary network/), at(/ransomware campaigns/), at(/^VulnCheck's cited reports/), at(/^NVD published/)];
+  assert.ok(order.every(function (i) { return i > -1; }), JSON.stringify(order));
+  assert.deepEqual(order, order.slice().sort(function (a, b) { return a - b; }));
+});
+
+/* --- D5: no repeated EPSS line ---------------------------------------------------------- */
+test('D5: the "7 days before" EPSS line is absent when it equals today’s value and present when it differs', async function () {
+  var same = await panelFor({ 'cve-2026-1001': nk({ epss: '0.004', epss_pre: '0.004' }) }, 'cve-cve-2026-1001');
+  assert.doesNotMatch(same.textContent, /7 days before the KEV add/);
+  assert.match(same.textContent, /EPSS 0\.004 \(35th percentile\)/, 'the current EPSS line stays');
+  var sameFmt = await panelFor({ 'cve-2026-1001': nk({ epss: '0.004', epss_pre: '0.0040' }) }, 'cve-cve-2026-1001');
+  assert.doesNotMatch(sameFmt.textContent, /7 days before the KEV add/, 'equal as numbers, written differently');
+  var diff = await panelFor({ 'cve-2026-1001': nk({ epss: '0.004', epss_pre: '0.001' }) }, 'cve-cve-2026-1001');
+  assert.match(diff.textContent, /7 days before the KEV add: 0\.001\./);
+  var lower = await panelFor({ 'cve-2026-1001': nk({ epss: '0.001', epss_pre: '0.004' }) }, 'cve-cve-2026-1001');
+  assert.match(lower.textContent, /7 days before the KEV add: 0\.004\./, 'a drop is shown too');
+});
+
+/* --- rows from before the new keys still render --------------------------------------------- */
+test('old-shape rows (no event, rank or flag keys) render every section with no stray words', async function () {
+  var oldNk = Object.assign({}, BASE_NKEV);
+  ['event', 'event_src', 'first_seen', 'canary', 'ransomware', 'np_score', 'np_reasons', 'np_class', 'np_rank'].forEach(function (k) { delete oldNk[k]; });
+  var oldCv = Object.assign({}, BASE_CVE);
+  ['pick_day', 'pick_score', 'pick_reasons', 'pick_class', 'pick_seeded', 'fresh', 'fresh_score', 'fresh_reasons', 'fresh_class'].forEach(function (k) { delete oldCv[k]; });
+  var pn = await panelFor({ 'cve-2026-1001': oldNk }, 'cve-cve-2026-1001');
+  var pc = await panelFor({ 'cve-2026-9999': oldCv }, 'cves-cve-2026-9999');
+  assert.deepEqual(headingsOf(pn), NKEV_ORDER);
+  assert.deepEqual(headingsOf(pc), CVES_ORDER);
+  [pn, pc].forEach(function (p) { assert.doesNotMatch(p.textContent, /undefined|NaN|\bnull\b/); });
+  assert.match(pn.textContent, /Added to VulnCheck KEV on 2026-10-31\./);
+  // the same rows with every new key present but empty (the exporter's shape on an unranked, undated row)
+  var emptyNk = Object.assign({}, oldNk, { event: '', event_src: '', first_seen: '', canary: false, ransomware: false, np_score: 0, np_reasons: [], np_class: '', np_rank: 0 });
+  var pe = await panelFor({ 'cve-2026-1001': emptyNk }, 'cve-cve-2026-1001');
+  assert.deepEqual(headingsOf(pe), NKEV_ORDER);
+  assert.doesNotMatch(pe.textContent, /undefined|NaN|\bnull\b|Why it ranks|canary|ransomware/);
 });

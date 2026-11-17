@@ -24,7 +24,7 @@ position: 2.5
 
 <div class="hl-d-kpis hl-d-kpis--wire" style="--fc: 4;">
   <div class="hl-d-kpi" style="--kc: #58a6ff;"><span class="hl-d-kpi__n">{{ n_headlines }}</span><span class="hl-d-kpi__cap">Headlines</span><span class="hl-d-kpi__note">last {{ wire.window_days | plus: 0 }} days</span></div>
-  <div class="hl-d-kpi" style="--kc: #bc8cff;"><span class="hl-d-kpi__n">{{ n_vulns }}</span><span class="hl-d-kpi__cap">nKEVs</span><span class="hl-d-kpi__note">new to VulnCheck KEV</span></div>
+  <div class="hl-d-kpi" style="--kc: #bc8cff;"><span class="hl-d-kpi__n">{{ n_vulns }}</span><span class="hl-d-kpi__cap">nKEVs</span><span class="hl-d-kpi__note">{% if ev_new %}VulnCheck or CISA KEV, by latest event{% else %}new to VulnCheck KEV{% endif %}</span></div>
   <div class="hl-d-kpi" style="--kc: #2dd4bf;"><span class="hl-d-kpi__n">{{ n_cves }}</span><span class="hl-d-kpi__cap">Significant new CVEs</span><span class="hl-d-kpi__note">not yet on a KEV list</span></div>
   <div class="hl-d-kpi" style="--kc: #7ee787;"><span class="hl-d-kpi__n hl-d-kpi__n--sm">{{ wire.generated_at | date: "%H:%M" | escape }} UTC</span><span class="hl-d-kpi__cap">Last data update</span><span class="hl-d-kpi__note">{{ wire.generated_at | date: "%-d %B %Y" | escape }}, at capture</span></div>
 </div>
@@ -39,7 +39,7 @@ position: 2.5
   stays the tabs'. Designed in T-0394, built in T-0396.
 {%- endcomment -%}
 <div class="hl-wtabs">
-<nav class="hl-wtabs__nav" aria-label="Sections of The Wire"><a class="hl-wtabs__tab hl-wtabs__tab--h" href="#headlines">{% include d-icon.html name="pulse" %}<span class="hl-wtabs__t">Headlines</span><span class="hl-wtabs__n">{{ n_headlines }}</span></a><a class="hl-wtabs__tab hl-wtabs__tab--v" href="#vulns" title="New Known Exploited Vulnerabilities: CVEs newly added to VulnCheck&#39;s KEV catalog">{% include d-icon.html name="alert" %}<span class="hl-wtabs__t">nKEVs</span><span class="hl-wtabs__n">{{ n_vulns }}</span></a><a class="hl-wtabs__tab hl-wtabs__tab--c" href="#cves" title="Significant new CVEs not yet on a KEV list">{% include d-icon.html name="shield" %}<span class="hl-wtabs__t">CVEs</span><span class="hl-wtabs__n">{{ n_cves }}</span></a></nav>
+<nav class="hl-wtabs__nav" aria-label="Sections of The Wire"><a class="hl-wtabs__tab hl-wtabs__tab--h" href="#headlines">{% include d-icon.html name="pulse" %}<span class="hl-wtabs__t">Headlines</span><span class="hl-wtabs__n">{{ n_headlines }}</span></a><a class="hl-wtabs__tab hl-wtabs__tab--v" href="#vulns" title="{% if ev_new %}New Known Exploited Vulnerabilities: CVEs added to VulnCheck&#39;s or CISA&#39;s KEV catalog, dated by the latest exploitation event{% else %}New Known Exploited Vulnerabilities: CVEs newly added to VulnCheck&#39;s KEV catalog{% endif %}">{% include d-icon.html name="alert" %}<span class="hl-wtabs__t">nKEVs</span><span class="hl-wtabs__n">{{ n_vulns }}</span></a><a class="hl-wtabs__tab hl-wtabs__tab--c" href="#cves" title="Significant new CVEs not yet on a KEV list">{% include d-icon.html name="shield" %}<span class="hl-wtabs__t">CVEs</span><span class="hl-wtabs__n">{{ n_cves }}</span></a></nav>
 
 <section id="headlines" class="hl-wtabs__sec" data-filter-scope>
 
@@ -238,7 +238,7 @@ reads back from the built page (it fails the index step on a duplicate). A vuln 
   to follow it (the callout and the long chip-meaning paragraph) lives in the legend
   below, which sits where a report shows its table of contents.
 {%- endcomment -%}
-<p class="hl-wire__freshness hl-wire__freshness--v">nKEVs: CVEs newly added to VulnCheck's Known Exploited Vulnerabilities (KEV) catalog in the last {{ wire.window_days }} days &middot; Data: <a href="https://www.vulncheck.com/kev" target="_blank" rel="noopener noreferrer">VulnCheck KEV</a> &middot; EPSS from <a href="https://www.first.org/epss/" target="_blank" rel="noopener noreferrer">FIRST</a> &middot; Extra fields: <a href="https://cve.now/" target="_blank" rel="noopener noreferrer">cve.now</a> (CC BY 4.0) &middot; VEDAS exploit maturity from <a href="https://github.com/ARPSyndicate/cve-scores" target="_blank" rel="noopener noreferrer">A.R.P. Syndicate</a> &middot; <a href="{{ '/wire/vulns.xml' | relative_url }}">Atom feed (nKEVs)</a></p>
+<p class="hl-wire__freshness hl-wire__freshness--v">nKEVs: {% if ev_new %}CVEs in VulnCheck's or CISA's Known Exploited Vulnerabilities (KEV) catalog, dated by the latest exploitation event, in the last {{ wire.window_days }} days{% else %}CVEs newly added to VulnCheck's Known Exploited Vulnerabilities (KEV) catalog in the last {{ wire.window_days }} days{% endif %} &middot; Data: <a href="https://www.vulncheck.com/kev" target="_blank" rel="noopener noreferrer">VulnCheck KEV</a> &middot; EPSS from <a href="https://www.first.org/epss/" target="_blank" rel="noopener noreferrer">FIRST</a> &middot; Extra fields: <a href="https://cve.now/" target="_blank" rel="noopener noreferrer">cve.now</a> (CC BY 4.0) &middot; VEDAS exploit maturity from <a href="https://github.com/ARPSyndicate/cve-scores" target="_blank" rel="noopener noreferrer">A.R.P. Syndicate</a> &middot; <a href="{{ '/wire/vulns.xml' | relative_url }}">Atom feed (nKEVs)</a></p>
 
 
 {%- assign vshow = false -%}
