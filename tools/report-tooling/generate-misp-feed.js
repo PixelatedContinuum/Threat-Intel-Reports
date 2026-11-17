@@ -18,11 +18,12 @@
 var fs = require('node:fs');
 var path = require('node:path');
 
-var M, A, P, CAT, yaml;
+var M, A, P, DS, CAT, yaml;
 try {
   M = require('./lib/misp-feed.js');
   A = require('./lib/actors.js');
   P = require('./lib/parse-detections.js');
+  DS = require('./lib/detection-stem.js');
   CAT = require('./lib/attack-catalog.js');
   yaml = require('js-yaml');
 } catch (e) {
@@ -89,7 +90,7 @@ function run(opts) {
       catch (err) { problems.push(slug + ': STIX bundle ' + e.stix_url + ' could not be read: ' + err.message); return; }
     }
     if (e.detection_url) {
-      var dp = path.join(A.DETECTION_DIR, String(e.detection_url).split('/').pop() + '.md');
+      var dp = path.join(A.DETECTION_DIR, DS.detectionStem(e.detection_url) + '.md');
       var md;
       try { md = fs.readFileSync(dp, 'utf8'); }
       catch (err) { problems.push(slug + ': detection page ' + e.detection_url + ' could not be read: ' + err.message); return; }

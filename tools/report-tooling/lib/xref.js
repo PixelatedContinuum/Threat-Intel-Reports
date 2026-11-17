@@ -23,6 +23,7 @@
 var fs = require('node:fs');
 var path = require('node:path');
 var yaml = require('js-yaml');
+var detectionStem = require('./detection-stem.js').detectionStem;
 
 var ROOT = path.join(__dirname, '..', '..', '..');
 var FAMILIES_FILE = path.join(ROOT, '_data', 'families.yml');
@@ -222,7 +223,7 @@ function buildAttack(reports, catalogByUrl, detectionAttack, actorsIndex, opts) 
   Object.keys(catalogByUrl).forEach(function (url) {
     var e = catalogByUrl[url];
     if (e.detection_url) {
-      var key = String(e.detection_url).split('/').pop();
+      var key = detectionStem(e.detection_url);
       detectionPublished[key] = true;
       detectionMeta[key] = { url: String(e.detection_url), title: e.title ? String(e.title) : key,
         date: e.date ? dateStr(e.date) : null, report_url: url };
@@ -348,7 +349,7 @@ function buildFamilies(families, detectionFamilies, feedFamilies, catalogByUrl, 
     var e = catalogByUrl[url];
     var row = { url: url, title: e.title ? String(e.title) : url, date: e.date ? dateStr(e.date) : null,
       detection_url: e.detection_url || null, ioc_url: e.ioc_url || null, stix_url: e.stix_url || null };
-    if (e.detection_url) detectionMeta[String(e.detection_url).split('/').pop()] = row;
+    if (e.detection_url) detectionMeta[detectionStem(e.detection_url)] = row;
     if (e.ioc_url) feedMeta[String(e.ioc_url).split('/').pop()] = row;
     (e.tags || []).forEach(function (t) {
       (reportsByTag[norm(t)] = reportsByTag[norm(t)] || []).push(row);

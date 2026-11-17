@@ -20,6 +20,7 @@ var fs = require('node:fs');
 var path = require('node:path');
 
 var yaml = require('js-yaml');
+var detectionStem = require('./detection-stem.js').detectionStem;
 
 var ROOT = path.join(__dirname, '..', '..', '..');
 var ACTORS_FILE = path.join(ROOT, '_data', 'actors.yml');
@@ -395,7 +396,7 @@ function build(actors, reports, catalogByUrl, opts) {
         return;
       }
       var det = row.detection_url && opts.detectionAttack &&
-        opts.detectionAttack[String(row.detection_url).split('/').pop()];
+        opts.detectionAttack[detectionStem(row.detection_url)];
       if (det && det.rows) {
         det.rows.forEach(function (t) { add(t, String(row.detection_url), 'detections'); });
       }
