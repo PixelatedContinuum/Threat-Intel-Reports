@@ -108,9 +108,22 @@ function detailLines(d, isCves) {
     // secExploitation, nKEVs only; the reports hosts are the pane's links' text
     // T-0667 F3: a CISA-only row (the exporter's explicit cisa_only key) was never added to VulnCheck KEV (wire-details.js isCisaOnly).
     var cisaOnly = d.cisa_only === true;
-    if (isDay(d.added) && !cisaOnly) out.push('Added to VulnCheck KEV.');
+    // T-0668 F1: the dated events in the pane's order (wire-details.js secExploitation): oldest day first, the same day in the order VulnCheck, CISA, first seen, earliest citation;
+    // then the not-on-CISA line, not-in-VulnCheck, canary, ransomware, the cited reports, the NVD gap. The days are in the text, as the pane shows them.
+    var added = isDay(d.added) ? d.added : '', cisaDay = isDay(d.cisa_added) ? d.cisa_added : '';
+    var events = [];
+    if (added && !cisaOnly) events.push({ day: added, ord: 0, text: 'Added to VulnCheck KEV on ' + added + '.' });
+    if (cisaDay) events.push({ day: cisaDay, ord: 1, text: 'On CISA KEV since ' + cisaDay + '.' });
+    var seen = isDay(d.first_seen) ? d.first_seen : '';
+    if (seen && seen !== added && seen !== cisaDay) events.push({ day: seen, ord: 2, text: 'First seen here on ' + seen + ', the day I first published it.' });
+    var evd = isDay(d.evidence) ? d.evidence : '';
+    if (evd && added && evd < added) events.push({ day: evd, ord: 3, text: 'Earliest citation date: ' + evd + '.' });
+    events.sort(function (x, y) { return x.day !== y.day ? (x.day < y.day ? -1 : 1) : x.ord - y.ord; });
+    events.forEach(function (e) { out.push(e.text); });
+    if (!cisaDay) out.push('Not on CISA KEV.');
     if (cisaOnly) out.push('Not in VulnCheck KEV.');
-    out.push(isDay(d.cisa_added) ? 'On CISA KEV.' : 'Not on CISA KEV.');
+    if (d.canary === true) out.push("VulnCheck's own canary network recorded exploitation of this CVE. That is VulnCheck's flag, not a statement from CISA or the vendor.");
+    if (d.ransomware === true) out.push("Marked as used in known ransomware campaigns, by VulnCheck's KEV data or CISA's KEV catalog.");
     var hosts = [];
     arr(d.reports).forEach(function (r) {
       var u = r && typeof r.url === 'string' ? r.url : '', h = r && typeof r.host === 'string' ? squash(r.host) : '';
@@ -121,7 +134,6 @@ function detailLines(d, isCves) {
     if (isDay(d.added) && isDay(d.disclosed) && !isNaN(gap) && !cisaOnly) {
       out.push(gap > 0 ? 'NVD published it days before the KEV add.' : gap === 0 ? 'NVD published it the same day VulnCheck added it.' : 'VulnCheck added it days before NVD published it.');
     }
-    if (isDay(d.evidence) && isDay(d.added) && d.evidence < d.added) out.push('Earliest citation date.');
   } else {
     // secWhyListed, CVEs tab only: each claim the chips make, in the pane's words, with the numbers left out
     var signals = arr(d.signals);

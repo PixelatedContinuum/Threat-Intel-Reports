@@ -854,3 +854,43 @@ test('F2 C mutation control: with the derivation switched off the renderer claim
   var pl = await panelFor({ 'cve-2026-1001': nk(CISA_ONLY_LATE) }, 'cve-cve-2026-1001', { genAt: '2026-11-17T19:01:26Z', renderer: mutated });
   assert.match(pl.textContent, /Added to VulnCheck KEV on 2026-11-14\./);
 });
+
+/* T-0668 F1: the search record's exploitation lines run in the order the rendered Details panel shows them. Both sides are reduced to the same kind of line
+   and compared as sequences; the rows include the reviewer's REPRO 1 row (citation 2026-10-20, CISA 2026-11-01, VulnCheck 2026-11-04, a cited report). */
+var KIND_RES = [['citation', /^Earliest citation date/], ['cisa', /^On CISA KEV since/], ['vulncheck', /^Added to VulnCheck KEV on/], ['seen', /^First seen here on/], ['notcisa', /^Not on CISA KEV\./],
+  ['notvc', /^Not in VulnCheck KEV/], ['canary', /canary network/], ['ransom', /known ransomware/], ['reports', /^VulnCheck's cited reports/], ['gap', /^(NVD published|VulnCheck added it )/]];
+function kindOf(line) {
+  for (var i = 0; i < KIND_RES.length; i++) { if (KIND_RES[i][1].test(line)) return KIND_RES[i][0]; }
+  return null;
+}
+function exploitationKinds(panel) {
+  var heads = [].slice.call(panel.querySelectorAll('.hl-dt__h'));
+  var h = heads.filter(function (x) { return x.textContent === 'Exploitation'; })[0];
+  var kinds = [];
+  for (var n = h.nextElementSibling; n && !n.classList.contains('hl-dt__h'); n = n.nextElementSibling) {
+    var k = kindOf(n.textContent);
+    if (k) kinds.push(k);
+  }
+  return kinds;
+}
+var ORDER_ROWS = {
+  repro1: { added: '2026-11-04', cisa_added: '2026-11-01', evidence: '2026-10-20', disclosed: '2026-11-01', gap: -3, reports: [{ url: 'https://vendor.example.com/r', host: 'vendor.example.com' }], reports_more: 0 },
+  sameday: { added: '2026-11-04', cisa_added: '2026-11-04', canary: true, ransomware: true, evidence: '2026-10-20', disclosed: '2026-11-01', gap: 3, reports: [{ url: 'https://vendor.example.com/r', host: 'vendor.example.com' }], reports_more: 0 },
+  seenlate: { added: '2026-11-01', first_seen: '2026-11-05', reports: [], reports_more: 0 },
+  cisaonly: { added: '2026-11-16', cisa_added: '2026-11-16', cisa_only: true, reports: [], reports_more: 0 }
+};
+Object.keys(ORDER_ROWS).forEach(function (name) {
+  test('T-0668 F1: the search record lists the exploitation lines in the Details panel order (' + name + ')', async function () {
+    var row = Object.assign({}, NKEV_ROWS['cve-2026-1001'], { cisa_added: null, evidence: null, disclosed: null, gap: null, reports: [], reports_more: 0 }, ORDER_ROWS[name]);
+    var env = openDom({ 'cve-2026-1001': row });
+    var doc = env.dom.window.document;
+    var rowEl = doc.getElementById('cve-cve-2026-1001');
+    clicks(doc, rowEl.querySelector('.hl-dt'));
+    await settle();
+    var panelKinds = exploitationKinds(rowEl.querySelector('.hl-dt__panel'));
+    var searchKinds = require('../lib/wire-search-records.js').detailLines(row, false).map(kindOf).filter(Boolean);
+    assert.ok(panelKinds.length >= 2, 'the control: the panel shows several exploitation lines: ' + panelKinds.join(','));
+    assert.deepStrictEqual(searchKinds, panelKinds);
+    if (name === 'repro1') assert.deepStrictEqual(panelKinds.slice(0, 3), ['citation', 'cisa', 'vulncheck']);
+  });
+});

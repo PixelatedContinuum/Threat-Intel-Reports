@@ -253,7 +253,7 @@ test('why listed (CVEs tab): the chips claims are indexed in words, only when th
 
 test('exploitation (nKEV tab): KEV and CISA wording and the cited hosts', function () {
   var n = rec(withNkev({ added: '2026-11-01', cisa_added: '2026-11-01', disclosed: '2026-10-30', gap: 2, desc: 'd', reports: [{ url: 'https://vendor.example.com/r', host: 'vendor.example.com' }] }), 'cve-cve-2026-0001').content;
-  ['Added to VulnCheck KEV.', 'On CISA KEV.', 'NVD published it days before the KEV add.', 'vendor[.]example[.]com'].forEach(function (t) {
+  ['Added to VulnCheck KEV on ', 'On CISA KEV since ', 'NVD published it days before the KEV add.', 'vendor[.]example[.]com'].forEach(function (t) {
     assert.ok(n.indexOf(t) > -1, 'content holds: ' + t);
   });
   assert.ok(rec(withNkev({ added: '2026-11-01', desc: 'd' }), 'cve-cve-2026-0001').content.indexOf('Not on CISA KEV.') > -1);
@@ -287,15 +287,15 @@ test('the pane drops an invalid rule or exploit value, so the record does too, a
 test('F2 C: a CISA-only nKEV row indexes "Not in VulnCheck KEV." and never "Added to VulnCheck KEV."; the mutated builder does (control)', function () {
   var only = { added: '2026-11-16', cisa_added: '2026-11-16', event_src: 'cisa', cisa_only: true, reports: [], reports_more: 0, desc: 'd', disclosed: '2026-11-10', gap: 6 };
   var c = rec(withNkev(only), 'cve-cve-2026-0001').content;
-  assert.ok(c.indexOf('Not in VulnCheck KEV.') > -1 && c.indexOf('On CISA KEV.') > -1, c);
-  assert.ok(c.indexOf('Added to VulnCheck KEV.') < 0 && c.indexOf('days before the KEV add') < 0, c);
+  assert.ok(c.indexOf('Not in VulnCheck KEV.') > -1 && c.indexOf('On CISA KEV since ') > -1, c);
+  assert.ok(c.indexOf('Added to VulnCheck KEV on ') < 0 && c.indexOf('days before the KEV add') < 0, c);
   // F3: late CISA-only row (published 3 days after its CISA day, event_src first_seen)
   var late = Object.assign({}, only, { added: '2026-11-14', cisa_added: '2026-11-14', event: '2026-11-17', event_src: 'first_seen', first_seen: '2026-11-17' });
   var lc = rec(withNkev(late), 'cve-cve-2026-0001').content;
-  assert.ok(lc.indexOf('Not in VulnCheck KEV.') > -1 && lc.indexOf('Added to VulnCheck KEV.') < 0, lc);
+  assert.ok(lc.indexOf('Not in VulnCheck KEV.') > -1 && lc.indexOf('Added to VulnCheck KEV on ') < 0, lc);
   // control: without the key (old data) or with it false, the same row is a VulnCheck row
   var v = rec(withNkev(Object.assign({}, only, { cisa_only: false })), 'cve-cve-2026-0001').content;
-  assert.ok(v.indexOf('Added to VulnCheck KEV.') > -1 && v.indexOf('Not in VulnCheck KEV.') < 0, v);
+  assert.ok(v.indexOf('Added to VulnCheck KEV on ') > -1 && v.indexOf('Not in VulnCheck KEV.') < 0, v);
   // mutation: the derivation off, in the module's own source
   var Module = require('module'), file = require.resolve('../lib/wire-search-records.js');
   var src = fs.readFileSync(file, 'utf8');
@@ -305,7 +305,7 @@ test('F2 C: a CISA-only nKEV row indexes "Not in VulnCheck KEV." and never "Adde
   var dom = new JSDOM(wirePage());
   var mb = m.exports.buildRecords({ document: dom.window.document, nkevDetails: JSON.stringify({ rows: { 'cve-2026-0001': late } }), cveDetails: CVES });
   var mcnt = mb.records.filter(function (r) { return r.url.endsWith('cve-cve-2026-0001'); })[0].content;
-  assert.ok(mcnt.indexOf('Added to VulnCheck KEV.') > -1 && mcnt.indexOf('Not in VulnCheck KEV.') < 0, 'the mutated builder claims the VulnCheck addition');
+  assert.ok(mcnt.indexOf('Added to VulnCheck KEV on ') > -1 && mcnt.indexOf('Not in VulnCheck KEV.') < 0, 'the mutated builder claims the VulnCheck addition');
 });
 
 /* T-0668: an nKEV record is dated by the row's event, falling back to added */
@@ -327,7 +327,7 @@ test('T-0668 order: nKEV record text runs exploitation, fix, detection, exploits
   var c = rec(withNkev({ added: '2026-11-01', cisa_added: '2026-11-02', desc: 'Zdesc', cwe: ['CWE-78'], affected: ['Acme Gadget: 1.0'], fixed: '1.3', kev_due: '2026-11-20',
     reports: [{ url: 'https://vendor.example.com/r', host: 'vendor.example.com' }], et_sids: ['2050001'], msf: ['modules/exploits/linux/gadget_rce.rb'],
     cvss: '9.8', severity: 'critical', cvss_version: '3.1', scored_by: 'NVD', cvss_vector: 'CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H', ssvc_expl: 'poc', aliases: ['GHSA-aaaa-bbbb-cccc'] }), 'cve-cve-2026-0001').content;
-  var marks = ['Added to VulnCheck KEV.', 'On CISA KEV.', "VulnCheck's cited reports", 'Acme Gadget: 1.0', 'Fixed in 1.3', "CISA's due date", 'ET Open SID 2050001', 'Metasploit gadget_rce.rb', 'CVSS v3.1', 'From the vector', 'Exploitation: poc', 'Zdesc', 'CWE-78', 'GHSA-aaaa-bbbb-cccc'];
+  var marks = ['Added to VulnCheck KEV on ', 'On CISA KEV since ', "VulnCheck's cited reports", 'Acme Gadget: 1.0', 'Fixed in 1.3', "CISA's due date", 'ET Open SID 2050001', 'Metasploit gadget_rce.rb', 'CVSS v3.1', 'From the vector', 'Exploitation: poc', 'Zdesc', 'CWE-78', 'GHSA-aaaa-bbbb-cccc'];
   var at = marks.map(function (m) { return c.indexOf(m); });
   at.forEach(function (p, i) { assert.ok(p > -1, 'present: ' + marks[i]); if (i) assert.ok(p > at[i - 1], marks[i] + ' follows ' + marks[i - 1]); });
 });
@@ -338,4 +338,22 @@ test('T-0668 order: CVEs record text runs why listed, fix, detection, exploits, 
   var marks = ['A Metasploit module for this CVE', "FIRST's EPSS puts", 'Acme: 1.0', 'Fixed in 2.0', 'ET Open SID 2050002', 'Metasploit x_rce.rb', 'CVSS v3.1', 'Zdesc', 'CWE-287', 'GHSA-aaaa-bbbb-cccc'];
   var at = marks.map(function (m) { return c.indexOf(m); });
   at.forEach(function (p, i) { assert.ok(p > -1, 'present: ' + marks[i]); if (i) assert.ok(p > at[i - 1], marks[i] + ' follows ' + marks[i - 1]); });
+});
+
+/* T-0668 F1: the nKEV exploitation text runs in the Details panel's order, with the panel's days (the cross-check against the rendered panel is in wire-details-dom.test.js). */
+test('T-0668 F1 order: a row with citation 2026-10-20, CISA 2026-11-01, VulnCheck 2026-11-04 and a cited report reads in the Details panel order (control: the fixed old order differs)', function () {
+  var row = { added: '2026-11-04', cisa_added: '2026-11-01', evidence: '2026-10-20', desc: 'd', reports: [{ url: 'https://vendor.example.com/r', host: 'vendor.example.com' }] };
+  var c = rec(withNkev(row), 'cve-cve-2026-0001').content;
+  var want = ['Earliest citation date: 2026-10-20.', 'On CISA KEV since 2026-11-01.', 'Added to VulnCheck KEV on 2026-11-04.', "VulnCheck's cited reports: vendor[.]example[.]com"];
+  var at = want.map(function (m) { return c.indexOf(m); });
+  at.forEach(function (p, i) { assert.ok(p > -1, 'present: ' + want[i]); if (i) assert.ok(p > at[i - 1], want[i] + ' follows ' + want[i - 1]); });
+  // control: the order the builder had before (VulnCheck, CISA, hosts, citation) is not the output
+  assert.ok(c.indexOf('Added to VulnCheck KEV on') > c.indexOf('Earliest citation date'), 'citation first');
+  // same-day tie: VulnCheck, then CISA; flags after the not-on-CISA line and before the reports
+  var tie = rec(withNkev({ added: '2026-11-04', cisa_added: '2026-11-04', canary: true, ransomware: true, desc: 'd', reports: [{ url: 'https://vendor.example.com/r', host: 'vendor.example.com' }] }), 'cve-cve-2026-0001').content;
+  var t = ['Added to VulnCheck KEV on 2026-11-04.', 'On CISA KEV since 2026-11-04.', "canary network", 'known ransomware', "VulnCheck's cited reports"].map(function (m) { return tie.indexOf(m); });
+  t.forEach(function (p, i) { assert.ok(p > -1, 'tie present ' + i); if (i) assert.ok(p > t[i - 1], 'tie order ' + i); });
+  // a CISA-only row is not described as added to VulnCheck
+  var only = rec(withNkev({ added: '2026-11-16', cisa_added: '2026-11-16', cisa_only: true, desc: 'd' }), 'cve-cve-2026-0001').content;
+  assert.ok(only.indexOf('Added to VulnCheck') < 0 && only.indexOf('Not in VulnCheck KEV.') > -1, only);
 });
