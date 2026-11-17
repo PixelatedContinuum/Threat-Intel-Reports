@@ -571,6 +571,19 @@ test('D3: on a Priority row the points sum to the row’s score and the total li
             kids.findIndex(function (k) { return /^Added to VulnCheck KEV/.test(k.textContent); }));
 });
 
+test('T-0668 a new-shape Priority row (no cisa reason) shows no CISA line and the total adds up; an old-shape row with cisa still adds up', async function () {
+  var fresh = nk({ np_rank: 3, np_score: 5, np_reasons: ['noauth', 'critical', 'class', 'tooling'], np_class: 'Edge and network device' });
+  var pn = await panelFor({ 'cve-2026-1001': fresh }, 'cve-cve-2026-1001');
+  assert.equal(sumPoints(pn), 5);
+  assert.ok(pointsOf(pn).every(function (l) { return !/CISA/.test(l); }), 'no CISA point line');
+  assert.ok(linesOf(pn).indexOf('Total: 5 points.') > -1);
+  var old = nk({ np_rank: 3, np_score: 6, np_reasons: ['noauth', 'critical', 'class', 'tooling', 'cisa'], np_class: 'Edge and network device' });
+  var po = await panelFor({ 'cve-2026-1001': old }, 'cve-cve-2026-1001');
+  assert.equal(sumPoints(po), 6);
+  assert.ok(pointsOf(po).indexOf('CISA KEV: 1 point') > -1);
+  assert.ok(linesOf(po).indexOf('Total: 6 points.') > -1);
+});
+
 test('D3: an operating-system class is 1 point, other classes 2, and the sum still matches', async function () {
   var row = nk({ np_rank: 2, np_score: 5, np_reasons: ['noauth', 'critical', 'class', 'tooling', 'cisa'], np_class: 'Operating system or browser' });
   var p = await panelFor({ 'cve-2026-1001': row }, 'cve-cve-2026-1001');

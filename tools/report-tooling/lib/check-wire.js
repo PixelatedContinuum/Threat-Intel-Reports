@@ -637,6 +637,9 @@ var PICK_CLASSES = ['Edge and network device', 'File transfer', 'IT and remote m
    site deploys before the exporter). Contract: tasks/runs/T-0638/contract.md. WARN lines, not FAILs,
    for the reason the CVEs picks give above. */
 var NP_KEYS = ['np_score', 'np_reasons', 'np_class', 'np_rank'];
+/* T-0668: 'cisa' is no longer a point (a KEV listing is what puts a row on the tab). It stays in the
+   order list so data written before the exporter change, which lists it for 1 point, still validates;
+   a new row that omits it but keeps the point in np_score fails the add-up check below. */
 var NP_REASON_ORDER = ['noauth', 'critical', 'class', 'tooling', 'cisa', 'fresh'];
 var NP_CLASSES = PICK_CLASSES.concat(['AI and ML application', 'OT and industrial control']);
 var NP_CLASS_SETS = ['v2+addendum', 'v2', 'none'];

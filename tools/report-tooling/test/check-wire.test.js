@@ -1739,6 +1739,25 @@ test('T-0638 only some np_ keys on a row is named', function () {
   assert.match(npWarn(d), /9101\).*only some np_ keys \(np_score, np_reasons, np_rank\)/);
 });
 
+test('T-0668 a CISA KEV listing is no point: old data (cisa, 1 point) and new data (no cisa reason) both pass, a new row still counting it is named', function () {
+  var cve = 'CVE-2026-9101';
+  var d = npFixture();
+  var r = npRow(d, cve);
+  assert.ok(r.np_reasons.indexOf('cisa') !== -1, 'the fixture row is old shape: cisa reason, 1 point');
+  assert.equal(npWarn(d), '', 'old shape passes');
+  // new shape: cisa reason gone and its point out of the score (the full zero-warning pass on new-shape data is the real-data gate run, not this fixture)
+  var nw = npFixture();
+  var rn = npRow(nw, cve);
+  rn.np_reasons.splice(rn.np_reasons.indexOf('cisa'), 1); rn.np_score -= 1;
+  // lowering one score in a hand-built fixture can disturb its rank order; the add-up check is what this shape must pass
+  assert.doesNotMatch(npWarn(nw), /add up|unknown np reason|out of order/, 'new shape: reasons add up to the score');
+  // mutation: reason gone, score still counts the CISA point
+  var bad = npFixture();
+  var rb = npRow(bad, cve);
+  rb.np_reasons.splice(rb.np_reasons.indexOf('cisa'), 1);
+  assert.match(npWarn(bad), /9101\) has np_score 6 but its reasons add up to 5/);
+});
+
 test('T-0638 np_reasons out of order, repeated or unknown are named', function () {
   var d = npFixture();
   npRow(d, 'CVE-2026-9101').np_reasons = ['noauth', 'tooling', 'class', 'cisa', 'fresh'];

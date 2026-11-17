@@ -227,6 +227,9 @@ var NP_WORDS = {
   noauth: ['No login', 1], critical: ['CVSS 9+', 1], tooling: ['Public tooling', 1],
   cisa: ['CISA KEV', 1], fresh: ['New flaw', 1]
 };
+/* T-0668: a CISA KEV listing earns no point now, so a new row never carries the cisa reason. The entry
+   stays for data written before the exporter change (cisa in np_reasons, 1 point in np_score), which
+   must still add up to its score; a row without the reason shows no CISA line. */
 var PICK_WORDS = {
   tooling: ['Exploit tooling', 2], nomi: ['PoC on GitHub', 1], ssvc: ['SSVC exploitation', 1],
   epss90: ['EPSS top 10%', 1], noauth: ['No login needed', 1], critical: ['CVSS 9.0 or higher', 1]
