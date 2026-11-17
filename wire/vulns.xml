@@ -5,8 +5,8 @@ sitemap: false
 ---
 <?xml version="1.0" encoding="UTF-8"?>
 {%- comment -%}
-  The Wire's nKEVs tab (was Vulnerabilities, renamed in T-0468) as an Atom feed: one entry per CVE VulnCheck
-  added to its Known Exploited Vulnerabilities catalog in the window, newest
+  The Wire's nKEVs tab (was Vulnerabilities, renamed in T-0468) as an Atom feed: one entry per CVE in VulnCheck's
+  or CISA's Known Exploited Vulnerabilities catalog whose latest exploitation event is in the window, newest
   first, from the same `vulns:` rows /wire/ renders (_data/wire.yml, written by
   wire_export.py from VulnCheck's API). Each entry links to its row on /wire/.
   There is no description: the rows carry none, by the Wire's rule. The
@@ -20,7 +20,7 @@ sitemap: false
 {%- assign sev_bands = "critical,high,medium,low" | split: "," %}
 <feed xmlns="http://www.w3.org/2005/Atom">
   <title>{{ site.title | xml_escape }}: The Wire, nKEVs (new known exploited vulnerabilities)</title>
-  <subtitle>This feed shows VulnCheck's Known Exploited Vulnerabilities (KEV) catalog as VulnCheck publishes it. I do not curate or track this data myself; every entry comes from VulnCheck, and their catalog is at vulncheck.com/kev.</subtitle>
+  <subtitle>This feed shows CVEs in VulnCheck's Known Exploited Vulnerabilities (KEV) catalog as VulnCheck publishes it, and CVEs on CISA's KEV catalog, dated by the latest exploitation event. I do not curate or track this data myself; every entry comes from VulnCheck or CISA, and VulnCheck's catalog is at vulncheck.com/kev.</subtitle>
   <link href="{{ site.url }}/wire/vulns.xml" rel="self" type="application/atom+xml"/>
   <link href="{{ site.url }}/wire/#vulns" rel="alternate" type="text/html"/>
   <link href="https://www.vulncheck.com/kev" rel="via" type="text/html" title="VulnCheck KEV"/>

@@ -1,12 +1,12 @@
 ---
 layout: wire-agent
 title: "The Wire vendor index: exploited and significant new CVEs by vendor"
-description: "Every vendor on The Wire with its newly exploited CVEs (VulnCheck KEV, CISA KEV) and significant new CVEs, linked to full detail."
+description: "Every vendor on The Wire with its exploited CVEs (VulnCheck KEV, CISA KEV) and significant new CVEs, linked to full detail."
 permalink: /wire/agent/vendors/
 ---
 {%- include wire-agent-select.html -%}
 {%- assign v_all = k_rows | concat: c_rows | group_by: "vendor" | sort: "name" -%}
-<p>{{ v_all.size }} vendors, sorted by name as each source gives it (match case-insensitively). "Exploited" means newly added to VulnCheck KEV; "CISA" marks those also on CISA KEV; "new CVE" means on neither KEV list. Data as of {{ wire.vulns_generated_at | escape }} (UTC).</p>
+<p>{{ v_all.size }} vendors, sorted by name as each source gives it (match case-insensitively). "Exploited" means in VulnCheck KEV or CISA KEV, dated by the latest exploitation event; "CISA" marks those on CISA KEV; "new CVE" means on neither KEV list. Data as of {{ wire.vulns_generated_at | escape }} (UTC).</p>
 <table><thead><tr><th>Vendor</th><th>CVEs</th></tr></thead><tbody>
 {%- for g in v_all -%}{%- include wire-agent-bucketof.html vendor=g.name %}
 <tr><td>{% if g.name and g.name != "" %}{{ g.name | escape | replace: "&#39;", "'" | replace: "&quot;", '"' }}{% else %}(no vendor given){% endif %}</td><td>{% for r in g.items %}<a href="{{ '/wire/agent/detail/' | relative_url }}{{ bk_slug }}/#{{ r.cve | downcase | escape }}">{{ r.cve | escape }}</a> {% if r.added %}exploited{% assign vcl = r.cisa_added | append: "" | size %}{% if vcl == 10 %}, CISA{% endif %}{% else %}new CVE{% endif %}{% if r.product and r.product != "" %}, {{ r.product | escape | replace: "&#39;", "'" | replace: "&quot;", '"' }}{% endif %}{% unless forloop.last %}; {% endunless %}{% endfor %}</td></tr>

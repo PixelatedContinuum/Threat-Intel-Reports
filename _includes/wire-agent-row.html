@@ -1,7 +1,7 @@
 {%- comment -%}
   T-0651: one Wire vulnerability row as one agent-feed object, for wire/agent/*.json.
   Called with r = one row the calling page has already passed through the tab's own
-  shape guard, and list = "kev" (the nKEVs tab, VulnCheck KEV additions) or "cve" (the
+  shape guard, and list = "kev" (the nKEVs tab, VulnCheck or CISA KEV rows) or "cve" (the
   CVEs tab, significant new CVEs on neither KEV list).
 
   Every field the exporter writes on the row is emitted, by iterating the row itself,

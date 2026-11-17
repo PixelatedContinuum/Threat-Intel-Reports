@@ -1,9 +1,9 @@
 ---
 layout: wire-agent
-title: "Exploited vulnerabilities newly added to VulnCheck KEV (nKEVs)"
-description: "Every CVE newly added to VulnCheck's Known Exploited Vulnerabilities catalog in the last 30 days, with CISA KEV status and due date, severity, EPSS and patch-first priority, from The Wire."
+title: "Exploited vulnerabilities in VulnCheck or CISA KEV, by latest event (nKEVs)"
+description: "Every CVE in VulnCheck's or CISA's Known Exploited Vulnerabilities catalog whose latest exploitation event falls in the last 30 days, with CISA KEV status and due date, severity, EPSS and patch-first priority, from The Wire."
 permalink: /wire/agent/kevs/
 ---
 {%- include wire-agent-select.html -%}
-<p>Every CVE VulnCheck added to its KEV catalog in the last {{ wire.window_days | escape }} days: exploitation is recorded for all of them. CISA KEV marks those also on CISA's catalog. {% if "kev" == "kev" %}{{ k_rows.size }}{% else %}{{ c_rows.size }}{% endif %} CVEs, data as of {% if "kev" == "kev" %}{{ wire.vulns_generated_at | escape }}{% else %}{{ wire.cves_generated_at | escape }}{% endif %} (UTC). Each CVE links to its full detail; vendors are indexed on the <a href="{{ '/wire/agent/vendors/' | relative_url }}">vendor page</a>.</p>
+<p>Every CVE in VulnCheck's or CISA's KEV catalog whose latest exploitation event falls in the last {{ wire.window_days | escape }} days. The event is the VulnCheck add, the CISA add or the day The Wire first published the row, whichever is latest. Exploitation is recorded for all of them. CISA KEV marks those on CISA's catalog; a row on CISA's catalog alone says it is not in VulnCheck KEV. {% if "kev" == "kev" %}{{ k_rows.size }}{% else %}{{ c_rows.size }}{% endif %} CVEs, data as of {% if "kev" == "kev" %}{{ wire.vulns_generated_at | escape }}{% else %}{{ wire.cves_generated_at | escape }}{% endif %} (UTC). Each CVE links to its full detail; vendors are indexed on the <a href="{{ '/wire/agent/vendors/' | relative_url }}">vendor page</a>.</p>
 {% include wire-agent-list.html list="kev" %}

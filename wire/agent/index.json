@@ -17,7 +17,7 @@ sitemap: false
 {%- assign k_n = k_rows.size -%}{%- assign c_n = c_rows.size -%}
 {
 "name": "The Hunter's Ledger: The Wire, agent feed",
-"about": "A machine-readable copy of The Wire (https://the-hunters-ledger.com/wire/): newly exploited vulnerabilities (VulnCheck KEV additions), significant new CVEs not yet on a KEV list, and threat intelligence headlines, over a rolling window. It holds the same data the page renders, rebuilt with the site on every Wire refresh (about every 15 minutes).",
+"about": "A machine-readable copy of The Wire (https://the-hunters-ledger.com/wire/): exploited vulnerabilities (VulnCheck KEV or CISA KEV, dated by the latest exploitation event), significant new CVEs not yet on a KEV list, and threat intelligence headlines, over a rolling window. It holds the same data the page renders, rebuilt with the site on every Wire refresh (about every 15 minutes).",
 "site": {{ "/" | absolute_url | jsonify }},
 "page": {{ "/wire/" | absolute_url | jsonify }},
 "generated_at": {{ wire.generated_at | date: "%Y-%m-%dT%H:%M:%SZ" | jsonify }},
@@ -34,7 +34,7 @@ sitemap: false
   "To answer 'which of these affect vendor or product X', use summary.json's vendors index (vendor name to CVE ids, separately for the kev and cve lists), then match on the vendor and product fields of the rows. Vendor names are as each source gives them, so match case-insensitively and try likely variants (for example 'Microsoft' and 'Microsoft Corporation').",
   "Every file is one JSON document. If your tool truncated it, the JSON will not parse: treat the result as incomplete, not as an empty list, and fall back to a smaller file.",
   "Check the generated_at timestamps and the status fields before relying on the data. status other than 'ok' means that list could not be refreshed and may be stale or empty.",
-  "list 'kev' rows are already exploited: VulnCheck has recorded exploitation for every one. list 'cve' rows are on neither VulnCheck KEV nor CISA KEV; they are selected as likely to matter soon, and being on the list is a selection signal, not evidence of exploitation. Before treating a cve row as unexploited, read ssvc_expl: 'active' is CISA's assessment that exploitation is occurring. ssvc_expl 'poc', msf, edb and nomi show only that proof-of-concept or exploit code is public (untested here); that is availability of code, not evidence that exploitation has happened.",
+  "list 'kev' rows are already exploited: VulnCheck or CISA has recorded exploitation for every one (on_vulncheck_kev and on_cisa_kev say which). list 'cve' rows are on neither VulnCheck KEV nor CISA KEV; they are selected as likely to matter soon, and being on the list is a selection signal, not evidence of exploitation. Before treating a cve row as unexploited, read ssvc_expl: 'active' is CISA's assessment that exploitation is occurring. ssvc_expl 'poc', msf, edb and nomi show only that proof-of-concept or exploit code is public (untested here); that is availability of code, not evidence that exploitation has happened.",
   "on_cisa_kev true means the CVE is also on CISA's KEV catalog (cisa_added is the date, kev_due the CISA remediation due date).",
   "Cite the original sources (nvd_url, the reports list, the news item url) and The Wire (wire_url) when you pass this on. Scores such as priority and np_score are the site author's own patch-first ordering, not a vendor or government rating.",
   "An empty field ('' or []) means no confirmed value was available, not that the answer is zero or no. For example, an empty et_sids means no ET Open rule naming the CVE was confirmed at the last check (a source lookup that failed also leaves it empty); it is not proof that no rule exists or that the CVE is undetectable."
@@ -42,7 +42,7 @@ sitemap: false
 
 "files": [
   {"name": "summary.json", "url": {{ "/wire/agent/summary.json" | absolute_url | jsonify }}, "use_for": "Shortlisting. One compact object per CVE on both lists (id, list, KEV flags, date, vendor, product, title, severity, CVSS, CWE, EPSS, priority, wire_url) plus a vendor index. The smallest vulnerability file.", "rows": {{ k_n | plus: c_n | jsonify }}},
-  {"name": "kevs.json", "url": {{ "/wire/agent/kevs.json" | absolute_url | jsonify }}, "use_for": "Every CVE newly added to VulnCheck KEV in the window, with every field: description, CWE, affected versions, exploitation citations, CISA KEV dates, CVSS vector, EPSS history values, SSVC, public exploits, detection rules, fix versions, aliases.", "rows": {{ k_n | jsonify }}},
+  {"name": "kevs.json", "url": {{ "/wire/agent/kevs.json" | absolute_url | jsonify }}, "use_for": "Every CVE in VulnCheck KEV or CISA KEV whose latest exploitation event is in the window, with every field: description, CWE, affected versions, exploitation citations, CISA KEV dates, CVSS vector, EPSS history values, SSVC, public exploits, detection rules, fix versions, aliases.", "rows": {{ k_n | jsonify }}},
   {"name": "cves.json", "url": {{ "/wire/agent/cves.json" | absolute_url | jsonify }}, "use_for": "Significant new CVEs on neither KEV list, with every field, including why each was admitted (signals) and the daily priority picks.", "rows": {{ c_n | jsonify }}},
   {"name": "news.json", "url": {{ "/wire/agent/news.json" | absolute_url | jsonify }}, "use_for": "Threat intelligence headlines: title, publisher, link, date and topic labels. No article text; follow url to the publisher.", "rows": {{ n_items | jsonify }}},
   {"name": "all.json", "url": {{ "/wire/agent/all.json" | absolute_url | jsonify }}, "use_for": "Everything above in one file (kevs, cves and news). The largest file; use it only if you can read about a megabyte of JSON in one go.", "rows": {{ k_n | plus: c_n | plus: n_items | jsonify }}}
@@ -50,7 +50,7 @@ sitemap: false
 
 "row_keys_common": {
   "id": "The CVE id, e.g. CVE-2026-12345.",
-  "list": "'kev' (newly added to VulnCheck KEV, already exploited) or 'cve' (significant new CVE on neither KEV list).",
+  "list": "'kev' (in VulnCheck KEV or CISA KEV, dated by the latest exploitation event, already exploited) or 'cve' (significant new CVE on neither KEV list).",
   "on_vulncheck_kev": "true for a kev row, false for every cve row and for a kev row built from CISA's catalog alone (the row's cisa_only key), which VulnCheck does not list.",
   "on_cisa_kev": "true when the CVE is also on CISA's KEV catalog.",
   "wire_url": "The row on The Wire page.",

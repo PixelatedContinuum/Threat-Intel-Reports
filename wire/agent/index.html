@@ -1,14 +1,14 @@
 ---
 layout: wire-agent
 title: "The Wire: vulnerability and headline data in plain text"
-description: "Plain-text copy of The Wire for AI assistants and search: newly exploited vulnerabilities (VulnCheck KEV, CISA KEV), significant new CVEs and threat intelligence headlines, refreshed about every 15 minutes."
+description: "Plain-text copy of The Wire for AI assistants and search: exploited vulnerabilities (VulnCheck KEV, CISA KEV), significant new CVEs and threat intelligence headlines, refreshed about every 15 minutes."
 permalink: /wire/agent/
 ---
 {%- include wire-agent-select.html -%}
-<p>This is a plain-text copy of <a href="{{ '/wire/' | relative_url }}">The Wire</a> for AI assistants, agents and search engines. It holds the same data the page shows: {{ k_rows.size }} CVEs newly added to VulnCheck's Known Exploited Vulnerabilities (KEV) catalog in the last {{ wire.window_days | escape }} days (already exploited), {{ c_rows.size }} significant new CVEs that are on neither VulnCheck KEV nor CISA KEV, and {{ n_items }} threat intelligence headlines. Vulnerability data as of {{ wire.vulns_generated_at | escape }} (UTC).</p>
+<p>This is a plain-text copy of <a href="{{ '/wire/' | relative_url }}">The Wire</a> for AI assistants, agents and search engines. It holds the same data the page shows: {{ k_rows.size }} CVEs in VulnCheck's or CISA's Known Exploited Vulnerabilities (KEV) catalog whose latest exploitation event falls in the last {{ wire.window_days | escape }} days (already exploited), {{ c_rows.size }} significant new CVEs that are on neither VulnCheck KEV nor CISA KEV, and {{ n_items }} threat intelligence headlines. Vulnerability data as of {{ wire.vulns_generated_at | escape }} (UTC).</p>
 <h2>How to use it</h2>
 <ul>
-<li><a href="{{ '/wire/agent/kevs/' | relative_url }}">Exploited vulnerabilities (nKEVs)</a>: one line per CVE newly added to VulnCheck KEV, with CISA KEV status, severity, EPSS and priority.</li>
+<li><a href="{{ '/wire/agent/kevs/' | relative_url }}">Exploited vulnerabilities (nKEVs)</a>: one line per CVE in VulnCheck or CISA KEV, dated by its latest exploitation event, with CISA KEV status, severity, EPSS and priority.</li>
 <li><a href="{{ '/wire/agent/cves/' | relative_url }}">Significant new CVEs</a>: one line per CVE on neither KEV list. Being listed is a selection signal, not evidence of exploitation.</li>
 <li><a href="{{ '/wire/agent/vendors/' | relative_url }}">Vendor index</a>: every vendor with its CVEs on each list. Start here to answer "what affects vendor X".</li>
 <li>Full detail by vendor name (description, affected and fixed versions, CVSS vector, SSVC, exploitation citations, public exploits, detection rules): {% for b in site.data.wire_agent_buckets %}<a href="{{ '/wire/agent/detail/' | relative_url }}{{ b.slug }}/">{{ b.label | escape }}</a>{% unless forloop.last %} · {% endunless %}{% endfor %}.</li>
