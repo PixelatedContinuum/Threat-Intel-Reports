@@ -117,10 +117,17 @@ test('all 18 headings of the report template get a tab proposal, each the one re
 test('the five headings audit T06 found unplaced come from the template pass, and a control heading still does not', function () {
   var props = P.proposeFor(templateMd(FIXTURE));
   var fromTemplate = props.filter(function (p) { return p.how === 'template'; }).map(function (p) { return p.text; });
-  ['3. What Is [Malware Name]?', '10. Recommendations', 'Delivery Method Analysis & Initial Access Vectors',
+  ['10. Recommendations', 'Delivery Method Analysis & Initial Access Vectors',
     'Future Evolution & Threat Trends', 'Frequently Asked Questions'].forEach(function (h) {
     assert.ok(fromTemplate.indexOf(h) !== -1, h + ' should be placed by the template pass');
   });
+  // T-0524.2 renamed the template's heading 3; the name pass now places it on chain, and the old
+  // form, still in published reports, is still placed by the template pass (T-0676).
+  var tc = props.filter(function (p) { return /^3\. Technical Classification/.test(p.text); })[0];
+  assert.strictEqual(tc && tc.tab, 'chain');
+  var old = P.proposeFor(templateMd([['1. Executive Summary'], ['3. What Is [Malware Name]?'], ['Confidence Summary']]));
+  assert.strictEqual(old[1].how, 'template');
+  assert.strictEqual(old[1].tab, 'chain');
   // The control: a heading no rule knows is still unplaced and counted.
   var ctl = P.proposeFor(templateMd(FIXTURE.concat([['Xyzzy Plugh', 'x']])));
   assert.strictEqual(ctl[ctl.length - 1].tab, null);
