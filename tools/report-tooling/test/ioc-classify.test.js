@@ -289,7 +289,35 @@ test('S3: defangValue defangs a bare or bracketed IPv6 value and is idempotent; 
   assert.strictEqual(C.defangText('at 12:30:45 mac aa:bb:cc:dd:ee:ff std::string'), 'at 12:30:45 mac aa:bb:cc:dd:ee:ff std::string', 'control: not addresses');
 });
 
-/* ---- T-0500.1.7.6 P1 finding 3 (review_5cfea0f481014885): the /prefix form and the letter-only forms ---- */
+/* ---- T-0677 P1 (T-0500.1.7.6 PROPOSAL 2): one IPv6 rule, pinned against the include ---- */
+/* The same six cases are pinned on the include's side in test/defang-render.test.js (V6_AGREEMENT): defang-text.html reads a digit-free
+   candidate as an address only when it is written in lower case, so "Add::Bad" is prose and "dead:beef::abcd" is not. */
+var V6_AGREEMENT = [
+  ['dead:beef::abcd', 'dead[:]beef[:][:]abcd'],
+  ['fe80::1', 'fe80[:][:]1'],
+  ['2001:db8::7', '2001[:]db8[:][:]7'],
+  ['2001:DB8::7', '2001[:]DB8[:][:]7'],
+  ['Add::Bad', 'Add::Bad'],
+  ['DEAD:BEEF::ABCD', 'DEAD:BEEF::ABCD']
+];
+
+test('T-0677 P1: an upper-case digit-free hex pair is prose, not an address: defangText agrees with _includes/defang-text.html', function () {
+  V6_AGREEMENT.forEach(function (c) {
+    assert.strictEqual(C.defangText(c[0]), c[1], c[0]);
+  });
+  /* the predicate itself, so a future caller that is not defangText inherits the rule */
+  var address = [true, true, true, true, false, false];
+  V6_AGREEMENT.forEach(function (c, i) {
+    assert.strictEqual(C.isIpv6(c[0]), address[i], 'isIpv6: ' + c[0]);
+  });
+  assert.strictEqual(C.isIpv6('Add::Bad'), false);
+  assert.strictEqual(C.isIpv6('DEAD:BEEF::ABCD'), false);
+  assert.strictEqual(C.isIpv6('dead:beef::abcd'), true);
+  assert.strictEqual(C.isIpv6('2001:DB8::7'), true, 'a digit anywhere keeps an upper-case address an address');
+  assert.strictEqual(C.isIpv6('std::vector'), false, 'control: still not an address');
+  assert.strictEqual(C.isIpv6('::'), false, 'control: a bare "::" is still not an address');
+});
+
 test('P1 finding 3: defangText defangs an IPv6 address with a /prefix, one with no decimal digit and the IPv4-mapped form; prose stays as written', function () {
   var C = require('../../../assets/js/ioc-classify.js');
   assert.strictEqual(C.defangText('net 2001:db8::/32 here'), 'net 2001[:]db8[:][:]/32 here');

@@ -169,9 +169,12 @@
   }
 
   /* A bare IPv6 address by grammar, not by shape: hex groups of 1 to 4 digits, one optional "::", an optional IPv4 tail, eight groups or fewer with "::". A time (12:30:45), a MAC
-     (aa:bb:cc:dd:ee:ff, six groups) and "std::string" are not addresses; "2001:db8::", "::1" and "2001:db8:1:2:3:4:5:6" are. */
+     (aa:bb:cc:dd:ee:ff, six groups) and "std::string" are not addresses; "2001:db8::", "::1" and "2001:db8:1:2:3:4:5:6" are. A candidate with no decimal digit is an address only
+     when it is written in lower case, the rule _includes/defang-text.html applies (T-0677): "dead:beef::abcd" is one, and an upper-case word that happens to be hex ("Add::Bad",
+     "DEAD:BEEF::ABCD") is prose and keeps its characters. One predicate serves both sides, so the page and the classifier cannot disagree on what to defang. */
   function isIpv6(a) {
     if (!/^[0-9a-f:.]+$/i.test(a) || a.indexOf(':') === -1 || /:::/.test(a)) return false;
+    if (!/\d/.test(a) && a !== a.toLowerCase()) return false;
     var halves = a.split('::');
     if (halves.length > 2) return false;
     var tail4 = /(\d{1,3}\.){3}\d{1,3}$/.test(a);

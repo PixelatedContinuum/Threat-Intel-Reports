@@ -445,6 +445,29 @@ test('T-0677 P1: what the browser renders for an entity-written indicator is an 
   assert.equal(gate(fixtureSite({ 'index.html': got })).status, 0, 'the include output passes the gate');
 });
 
+/* ---- T-0677 P1 (T-0500.1.7.6 PROPOSAL 2): one IPv6 rule for the include and assets/js/ioc-classify.js ---- */
+const V6_AGREEMENT = [
+  // a digit-free candidate is an address only in lower case (the include's rule); the classifier pinned the same six in test/ioc-classify.test.js
+  ['dead:beef::abcd', 'dead[:]beef[:][:]abcd'],
+  ['fe80::1', 'fe80[:][:]1'],
+  ['2001:db8::7', '2001[:]db8[:][:]7'],
+  ['2001:DB8::7', '2001[:]DB8[:][:]7'],
+  ['Add::Bad', 'Add::Bad'],
+  ['DEAD:BEEF::ABCD', 'DEAD:BEEF::ABCD']
+];
+
+test('T-0677 P1: the include and the classifier agree on IPv6: an upper-case digit-free hex pair is prose, a lower-case one (or any candidate with a digit) is an address', (t) => {
+  if (!JEKYLL) return t.skip('NOT CHECKED: no jekyll gem on this machine, so the Liquid include was not executed');
+  const C = require('../../../assets/js/ioc-classify.js');
+  const body = V6_AGREEMENT.map((c, i) => '<!--K' + i + '-->{% capture h %}{% raw %}<p>' + c[0] + '</p>{% endraw %}{% endcapture %}{% include defang-html.html html=h %}<!--L' + i + '-->').join('\n');
+  const { html } = buildSite(body);
+  V6_AGREEMENT.forEach((c, i) => {
+    const got = html.split('<!--K' + i + '-->')[1].split('<!--L' + i + '-->')[0].replace(/^\n/, '').replace(/\n$/, '');
+    assert.equal(got, '<p>' + c[1] + '</p>', 'include: ' + c[0]);
+    assert.equal(C.defangText(c[0]), c[1], 'classifier: ' + c[0]);
+  });
+});
+
 /* ---- the gate on a fixture site (no Jekyll needed) ---- */
 function fixtureSite(files) {
   const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'hl-defang-site-'));
