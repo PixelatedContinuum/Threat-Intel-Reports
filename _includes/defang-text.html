@@ -234,6 +234,7 @@
                 {%- if _dt_gr != "" -%}{%- assign _dt_is6 = false -%}{%- endif -%}
               {%- endif -%}
             {%- endfor -%}
+            {%- if _dt_nocol == "" -%}{%- comment -%} "::" and nothing else is prose, not an address: assets/js/ioc-classify.js isIpv6 reads it the same way {%- endcomment -%}{%- assign _dt_is6 = false -%}{%- endif -%}
             {%- assign _dt_nodig = _dt_cand | remove: "0" | remove: "1" | remove: "2" | remove: "3" | remove: "4" | remove: "5" | remove: "6" | remove: "7" | remove: "8" | remove: "9" -%}
             {%- if _dt_nodig.size == _dt_cand.size -%}
               {%- comment -%} no decimal digit at all: an address only when it is written in lower case ("dead:beef::abcd", T-0500.1.7.6 finding 3); an upper-case word that

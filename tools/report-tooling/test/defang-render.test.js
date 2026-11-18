@@ -361,6 +361,7 @@ test('P1 finding 3: IPv6 with no decimal digit and the IPv4-mapped form are defa
     ['net 2001:db8::/32 keeps its prefix', 'net 2001[:]db8[:][:]/32 keeps its prefix'],
     // controls: what is not an address keeps every character
     ['Add::Bad std::vector Note: ok', 'Add::Bad std::vector Note: ok'],
+    ['and :: and ::1 here', 'and :: and [:][:]1 here'],
     ['v1.2.3.4 and 300.1.1.1 and 10:30:45', 'v1[.]2[.]3[.]4 and 300.1.1.1 and 10:30:45']
   ];
   const body = CASES.map((c, i) => '<!--R' + i + '-->' + cap(c[0]) + '{% include defang-html.html html=t %}' + '<!--S' + i + '-->').join('\n') +
