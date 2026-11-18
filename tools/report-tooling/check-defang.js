@@ -3,7 +3,7 @@
 
 /* The defang lint (T-0500.1.12, rules 1, 2, 3 and 5 of tasks/runs/T-0500.1.12/defang-rules.md; Joseph, 2026-10-31:
    "we just do not want it to be easy for people to make a mistake and run something"). Hardened against the cross-provider review
-   of 2026-10-31 (Sol, review_a84e0d5e90cc4692): link targets, shared-host allowances, per-line command brackets, IPv6 and the TLD list.
+   of 2026-10-31 (review_a84e0d5e90cc4692): link targets, shared-host allowances, per-line command brackets, IPv6 and the TLD list.
 
    node check-defang.js <report folder | index.md | any .md> [--allow FILE]... [--allow-dir DIR] [--no-auto-allow] [--all]
 
@@ -346,7 +346,7 @@ var V6_BRACKET_RE = /(?<![0-9A-Za-z])\[([0-9A-Fa-f:]{2,45})\](?::\d{1,5})?(?:\/\
 var V6_DEFANGED_RE = /(?<![0-9A-Za-z\]])(\[?)([0-9A-Fa-f]+(?:\[:\][0-9A-Fa-f]*|:[0-9A-Fa-f]*)+)(\]?)(?::\d{1,5})?(?:\/\d{1,3})?/g;
 
 /* THE SHAPE OF AN IPv6 ADDRESS. This lint's own rule; it is NOT the same rule as the page include (_includes/defang-text.html) or the
-   browser script (assets/js/ioc-classify.js, isIpv6), measured by actual Jekyll renders in review T-0500.1.7.5 (codex Sol):
+   browser script (assets/js/ioc-classify.js, isIpv6), measured by actual Jekyll renders in review T-0500.1.7.5:
      - the lint flags shapes the include leaves raw: `{2001:db8::1}`, `**2001:db8::1**`, `2001:db8::1|`, `2001:db8::1/path`. That is
        intended: a raw address a reader can copy is a leak whether or not the include would have caught it, so the lint stays the stricter one.
      - the lint does not flag shapes the include or the browser defang: `[::2]` (fewer than three bracketed colons) and `dead:beef::cafe`,
