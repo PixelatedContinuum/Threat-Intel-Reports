@@ -181,3 +181,64 @@ test('the phone icon strip and the plate edge: the strip names every tab and sho
   assert.equal(G.plateEdgeVerdict({ present: true, n: 3, minLeft: 34, colLefts: [34, 198.5], shareLeft: 206.5 }).ok, false, 'an indent from the second column FAILS');
   assert.equal(G.plateEdgeVerdict({ present: true, n: 6, minLeft: 34, shareLeft: null }).notChecked, true);
 });
+test('review P2 (T-0500.1.7.7): the identity of every drawn procedure row is compared with its source, marked or not', () => {
+  const f = page(STAGES + KEY + ATT);
+  try {
+    const measure = () => JSON.parse(JSON.stringify(f.w.eval(G.CHAIN_EXPR)));
+    const verdict = (m) => G.chainTableVerdict(Object.assign({}, m, { innerW: 800, tidCount: 0 }), 4);
+    const rows = () => [...f.d.querySelectorAll('#tab-chain .hl-rv-procedures tbody tr')];
+    assert.equal(verdict(measure()).ok, true, 'the built table passes');
+    assert.equal(rows()[0].classList.contains('hl-rv-keyrow'), false, 'the row under test is not one the report\'s list marks');
+    // 1. an UNMARKED row drawn as another technique, counts unchanged: the gate used to compare identities only on marked rows
+    const tid = rows()[0].querySelector('.hl-rv-tid'), was = tid.textContent; tid.textContent = 'T1000';
+    const v1 = verdict(measure());
+    assert.equal(v1.ok, false, 'an unmarked row drawn as another technique must FAIL: ' + v1.detail);
+    assert.match(v1.detail, /row 1 \(T1595 Active Scanning\) is drawn as T1000/);
+    tid.textContent = was; assert.equal(verdict(measure()).ok, true, 'put back, it passes again');
+    // 2. an unmarked row drawn with another name only
+    const nm = rows()[0].cells[1], nmWas = nm.textContent; nm.textContent = 'Port Scanning';
+    const v2 = verdict(measure());
+    assert.equal(v2.ok, false, 'an unmarked row drawn with another name must FAIL: ' + v2.detail);
+    assert.match(v2.detail, /is drawn as T1595 Port Scanning/);
+    nm.textContent = nmWas;
+    // 3. control: a MARKED row whose identity changes still FAILS
+    const tid3 = rows()[3].querySelector('.hl-rv-tid'), was3 = tid3.textContent; tid3.textContent = 'T1000';
+    const v3 = verdict(measure());
+    assert.equal(v3.ok, false, 'control: the marked row identity check still fires'); assert.match(v3.detail, /is drawn as T1000/);
+    tid3.textContent = was3; assert.equal(verdict(measure()).ok, true);
+    // 4. a report with no carries-the-case list has nothing to mark, but its drawn rows are still compared with the source
+    const m = measure(), noKey = Object.assign({}, m, { keySrc: 0, keyList: [], carry: 0, ev: 0, keyMatched: null, keyTotal: 0 });
+    assert.equal(verdict(noKey).ok, true, verdict(noKey).detail);
+    const wrongRow = Object.assign({}, noKey, { drawn: m.drawn.map((d, i) => i ? d : Object.assign({}, d, { id: 'T1000' })) });
+    assert.equal(verdict(wrongRow).ok, false, 'with no key list the drawn identities are checked all the same');
+  } finally { f.w.close(); }
+});
+test('review P2 (T-0500.1.7.7): an open "i" note is refitted when the screen is resized or the page scrolled, and stays inside the viewport', () => {
+  const f = page(STAGES + KEY + ATT);
+  try {
+    const w = f.w; Object.defineProperty(w, 'innerWidth', { value: 400, configurable: true }); Object.defineProperty(w, 'innerHeight', { value: 800, configurable: true });
+    const btn = f.d.querySelector('.hl-rv-info'), pop = f.d.getElementById(btn.getAttribute('aria-controls'));
+    assert.ok(btn && pop, 'the page draws an i button with its note');
+    // the geometry is stipulated, and the note's rectangle follows its own transform the way a real box does
+    let at = { popTop: 200, left: 20, btnTop: 160 };
+    const shift = () => { const m = /translate\((-?\d+)px, (-?\d+)px\)/.exec(pop.style.transform || ''); return { x: m ? +m[1] : 0, y: m ? +m[2] : 0 }; };
+    pop.getBoundingClientRect = () => { const s = shift(); return { left: at.left + s.x, right: at.left + 360 + s.x, top: at.popTop + s.y, bottom: at.popTop + 300 + s.y, width: 360, height: 300 }; };
+    btn.getBoundingClientRect = () => ({ left: 340, right: 384, top: at.btnTop, bottom: at.btnTop + 44, width: 44, height: 44 });
+    const screen = (h) => Object.defineProperty(w, 'innerHeight', { value: h, configurable: true });
+    btn.click(); assert.equal(pop.style.transform, '', 'control: opened with room below, nothing moves');
+    // the screen shrinks under the open note (200..500 in 400px): the note is refitted, 12px above the bottom edge
+    screen(400); w.dispatchEvent(new w.Event('resize'));
+    assert.equal(pop.style.transform, 'translate(0px, -112px)');
+    // the screen grows back: the refit clears the transform instead of leaving the smaller screen's slide on it
+    screen(800); w.dispatchEvent(new w.Event('resize'));
+    assert.equal(pop.style.transform, '');
+    // the page scrolls under the open note (now at 700..1000, its button at 660): refitted above the button
+    at = { popTop: 700, left: 20, btnTop: 660 }; f.d.dispatchEvent(new w.Event('scroll'));
+    assert.equal(pop.style.transform, 'translate(0px, -334px)');
+    // a second scroll refits from the note's resting place: 1100..1400 with its button at 1060 does not fit above, so it is slid to end 12px above the bottom edge (488..788),
+    // never on top of the first slide, which would have left it at 1100..1400 minus 278
+    at = { popTop: 1100, left: 20, btnTop: 1060 }; f.d.dispatchEvent(new w.Event('scroll'));
+    assert.equal(pop.style.transform, 'translate(0px, -612px)', 'the refit reads the note untransformed, never its own previous slide');
+    btn.click(); assert.equal(pop.hidden, true); assert.equal(pop.style.transform, '', 'closing resets it');
+  } finally { f.w.close(); }
+});

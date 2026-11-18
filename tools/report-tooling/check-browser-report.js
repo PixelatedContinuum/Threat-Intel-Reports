@@ -1798,6 +1798,10 @@ var INFO_EXPR = '(function(){return [].slice.call(document.querySelectorAll(".hl
 /* Every "i" button of the open tab is probed (review F3 of T-0500.1.7.3): opened by Enter and by a real pointer press, its note's rectangle read on all four sides against the
    viewport, closed by Escape; then once more with the button scrolled to the bottom edge of the screen, where a note placed below it has no room. */
 function infoFits(b, vw, vh) { return !!b && b.r - b.l > 0 && b.l >= -0.5 && b.r <= vw + 0.5 && b.t >= -0.5 && b.b <= vh + 0.5; }
+/* The bottom-edge probe aims to put the button's bottom 8 px above the bottom of the screen. More room than this below it means the page could not scroll that far, so the
+   condition was never produced and nothing about a note with no room below was measured (review P2, T-0500.1.7.7). 12 accepts a fractional scroll position, not a gap the probe
+   could have closed. */
+var EDGE_ROOM_MAX = 12;
 function infoVerdict(rows, probe) {
   if (!rows || !rows.length) return { notChecked: true, ok: false, detail: 'this tab has no "i" popover, so nothing was measured' };
   var why = [];
@@ -1827,6 +1831,12 @@ function infoVerdict(rows, probe) {
   var nOpen = probes ? probes.filter(function (p) { return p.keyOpened; }).length : 0, nTap = probes ? probes.filter(function (p) { return p.tapOpened; }).length : 0;
   var nFit = probes ? probes.filter(function (p) { return p.keyOpened && infoFits(p.box, vw, vh); }).length : 0, nEdge = probes ? probes.filter(function (p) { return p.edgeOpened && infoFits(p.edgeBox, vw, vh); }).length : 0;
   var nEsc = probes ? probes.filter(function (p) { return p.escCloses; }).length : 0;
+  /* A probe that never got the button near the bottom measured the centred case only: the claim in the detail line below ("at the bottom edge") would be false. With no other
+     fault the row is NOT CHECKED; with one, the fault is a FAIL and the unmeasured edge is named beside it (a FAIL must never be hidden behind a NOT CHECKED). */
+  var unachieved = probes ? probes.filter(function (p) { return typeof p.edgeRoom === 'number' && p.edgeRoom > EDGE_ROOM_MAX; }) : [];
+  var edgeGap = unachieved.length ? 'the bottom edge of the screen was not reached for ' + unachieved.length + ' of ' + probes.length + ' "i" button(s): ' + unachieved.map(function (p) { return '#' + p.i + ' had ' + Math.round(p.edgeRoom) + ' px of room below it'; }).join(', ') + ' (the probe puts the button 8 px above the bottom; more than ' + EDGE_ROOM_MAX + ' means the page could not scroll that far), so what a note does with no room below it was not measured' : null;
+  if (edgeGap && !why.length) return { notChecked: true, ok: false, why: why, detail: edgeGap };
+  if (edgeGap) why.push(edgeGap);
   return { notChecked: false, ok: why.length === 0, why: why, detail: rows.length + ' "i" button(s) measured' + (probes ? ', ' + probes.length + ' probed; of those Enter opens ' + nOpen + ', a press opens ' + nTap + ', inside the viewport on all four sides ' + nFit + ' (centred) and ' + nEdge + ' (at the bottom edge' + (edgeRoom !== null ? ', least room below the button ' + Math.round(edgeRoom) + ' px' : '') + '), Escape closes ' + nEsc : '') + (why.length ? '; ' + why.slice(0, 4).join('; ') + (why.length > 4 ? '; and ' + (why.length - 4) + ' more' : '') : '') };
 }
 async function pressEnter(page) {
@@ -1843,6 +1853,10 @@ async function infoProbe(page) {
   var focusOn = async function (i) { for (var k = 0; k < 40; k++) { if (await page.json('(function(){var b=' + Q(i) + ';return !!b&&document.activeElement===b;})()')) return true; await CDP.sleep(50); await page.evaluate('(function(){var b=' + Q(i) + ';if(b)b.focus({preventScroll:true});})()'); } return false; };
   var state = function (i) { return page.json('(function(){var b=' + Q(i) + ';var p=b&&document.getElementById(b.getAttribute("aria-controls"));return !!p&&!p.hidden&&b.getAttribute("aria-expanded")==="true";})()'); };
   var box = function (i) { return page.json('(function(){var b=' + Q(i) + ';var p=b&&document.getElementById(b.getAttribute("aria-controls"));if(!p||p.hidden)return null;var r=p.getBoundingClientRect();return {l:r.left,t:r.top,r:r.right,b:r.bottom};})()'); };
+  /* The bottom-edge probe scrolls UP from the button's centred place to bring it down against the bottom of the screen, so it needs room ABOVE the button; a page whose tab
+     starts near the top has none, and a row that silently measured nothing at the edge passed before review P2 of T-0500.1.7.7. A hidden spacer ahead of the page body gives
+     every page that room. It is removed before the probe returns, so no later row measures a stretched page. */
+  await page.evaluate('(function(){var s=document.getElementById("hl-rv-gate-tail");if(!s){s=document.createElement("div");s.id="hl-rv-gate-tail";s.setAttribute("aria-hidden","true");s.style.cssText="height:140vh;width:1px;visibility:hidden;pointer-events:none;";document.body.insertBefore(s,document.body.firstChild);}})()');
   for (var i = 0; i < n; i++) {
     var pr = { i: i, keyOpened: false, tapOpened: false, escCloses: false, box: null, edgeOpened: false, edgeBox: null, edgeRoom: null };
     await page.evaluate('(function(){var b=' + Q(i) + ';if(b){b.scrollIntoView({block:"center",behavior:"instant"});b.focus();}})()'); await CDP.sleep(150); await focusOn(i);
@@ -1861,6 +1875,7 @@ async function infoProbe(page) {
     await pressKey(page, 'Escape', 'Escape', 27); await CDP.sleep(150);
     probes.push(pr);
   }
+  await page.evaluate('(function(){var s=document.getElementById("hl-rv-gate-tail");if(s)s.remove();})()');
   return { probes: probes, vw: vp.w, vh: vp.h };
 }
 async function infoRows(page, url) {
@@ -2262,31 +2277,31 @@ function chainTableVerdict(m, attackRows) {
     if (m.keyMatched === null) bad.push('the key list is not accounted for in the note');
     else if (m.carry !== m.keyMatched) bad.push(m.carry + ' row(s) are marked, the note says ' + m.keyMatched + ' matched');
     if (m.ev !== m.carry) bad.push(m.ev + ' evidence note(s) for ' + m.carry + ' marked row(s)');
-    /* Counts alone pass a mark and its evidence moved to the wrong row, or the evidence replaced by other text (review F1 of T-0500.1.7.3, finding F2). The expected marks are derived
-       from the report's own two source tables by the rule the note states: a list row marks the first source row with the same technique ID and name that no earlier list row marked.
-       Each drawn row must then be marked exactly when expected, carry the list row's own evidence text, and be the source row it should be. */
-    if (!m.srcRows || !m.keyList || !m.drawn) bad.push('the identities and evidence text of the marked rows were not measured');
-    else {
-      var want = {}, claimed = {};
-      m.keyList.forEach(function (k) {
-        if (!k.id) return;
-        for (var i = 0; i < m.srcRows.length; i++) { if (claimed[i] || m.srcRows[i].id !== k.id || m.srcRows[i].name.toLowerCase() !== k.name.toLowerCase()) continue; claimed[i] = true; want[i] = k.ev; break; }
-      });
-      var wrong = [];
-      for (var di = 0; di < Math.max(m.drawn.length, m.srcRows.length); di++) {
-        var d = m.drawn[di], sr = m.srcRows[di], should = want[di] !== undefined;
-        if (!d || !sr) { wrong.push('row ' + (di + 1) + ' exists in only one of the drawn table and the source table'); continue; }
-        var tag = 'row ' + (di + 1) + ' (' + sr.id + ' ' + sr.name + ')';
-        if (should && !d.carry) wrong.push(tag + ' should carry the mark and does not');
-        else if (!should && d.carry) wrong.push(tag + ' carries a mark the report\'s list does not give it');
-        else if (should) {
-          if (d.ev !== want[di]) wrong.push(tag + ' shows evidence ' + JSON.stringify(String(d.ev).slice(0, 60)) + ', the list says ' + JSON.stringify(String(want[di]).slice(0, 60)));
-          if (d.id !== sr.id || d.name.toLowerCase() !== sr.name.toLowerCase()) wrong.push(tag + ' is drawn as ' + d.id + ' ' + d.name);
-        }
-      }
-      if (wrong.length) bad.push(wrong.length + ' marked-row fault(s): ' + wrong.slice(0, 3).join('; '));
-    }
   } else { if (m.carry) bad.push(m.carry + ' row(s) are marked but the report has no key list'); if (m.ev) bad.push(m.ev + ' evidence note(s) drawn but the report has no key list'); }
+  /* Counts alone pass a mark and its evidence moved to the wrong row, the evidence replaced by other text (review F1 of T-0500.1.7.3, finding F2), or an unmarked row drawn as
+     another technique (review P2, T-0500.1.7.7). The expected marks are derived from the report's own two source tables by the rule the note states: a list row marks the first
+     source row with the same technique ID and name that no earlier list row marked. EVERY drawn row is then the source row it should be, marked or not; a marked row additionally
+     carries exactly its list row's evidence text. With no list there is nothing to mark, but the drawn rows are still the source's rows. */
+  if (!m.srcRows || !m.drawn) bad.push('the identities of the drawn rows were not measured');
+  else {
+    var want = {}, claimed = {};
+    (m.keyList || []).forEach(function (k) {
+      if (!k.id) return;
+      for (var i = 0; i < m.srcRows.length; i++) { if (claimed[i] || m.srcRows[i].id !== k.id || m.srcRows[i].name.toLowerCase() !== k.name.toLowerCase()) continue; claimed[i] = true; want[i] = k.ev; break; }
+    });
+    var wrong = [];
+    for (var di = 0; di < Math.max(m.drawn.length, m.srcRows.length); di++) {
+      var d = m.drawn[di], sr = m.srcRows[di], should = want[di] !== undefined;
+      if (!d || !sr) { wrong.push('row ' + (di + 1) + ' exists in only one of the drawn table and the source table'); continue; }
+      var tag = 'row ' + (di + 1) + ' (' + sr.id + ' ' + sr.name + ')';
+      if (d.id !== sr.id || d.name.toLowerCase() !== sr.name.toLowerCase()) wrong.push(tag + ' is drawn as ' + d.id + ' ' + d.name);
+      if (!m.keySrc) continue;   /* no list: the marks were reported above, the identity above still applies */
+      if (should && !d.carry) wrong.push(tag + ' should carry the mark and does not');
+      else if (!should && d.carry) wrong.push(tag + ' carries a mark the report\'s list does not give it');
+      else if (should && d.ev !== want[di]) wrong.push(tag + ' shows evidence ' + JSON.stringify(String(d.ev).slice(0, 60)) + ', the list says ' + JSON.stringify(String(want[di]).slice(0, 60)));
+    }
+    if (wrong.length) bad.push(wrong.length + ' procedure-row fault(s): ' + wrong.slice(0, 3).join('; '));
+  }
   return { notChecked: false, ok: bad.length === 0, why: bad, detail: m.rows + ' row(s) against ' + attackRows + '; ' + m.carry + ' marked of ' + m.keySrc + ' list row(s)' + (bad.length ? '; ' + bad.join('; ') : '') };
 }
 var INLINE_SPAN_WHY = 'the report\'s ATT&CK table has rows whose cells do not line up with its header columns (a cell that spans rows, such as a tactic written once for the rows under it, leaves the rows after it a cell short), so the page draws no filter console on it, because hiding a row would hide the spanned cell and shift the cells of the rows after it; there is no console to measure';

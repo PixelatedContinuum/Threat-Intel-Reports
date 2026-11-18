@@ -114,6 +114,16 @@
   }
   document.addEventListener('click', function (e) { if (openInfo && !e.target.closest('.hl-rv-pop, .hl-rv-info')) closeInfo(false); });
   document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeInfo(true); });
+  /* An open note is refitted when the screen changes under it (review P2, T-0500.1.7.7): fitInfo on the opening click alone left a note outside the viewport after a resize or a
+     scroll. The transform is cleared first because getBoundingClientRect includes it, so refitting from the note's resting place never stacks slide on slide. */
+  function refitInfo() {
+    if (!openInfo) return;
+    openInfo.pop.style.transform = '';
+    fitInfo(openInfo.pop, openInfo.btn);
+  }
+  window.addEventListener('resize', refitInfo);
+  /* capture, because a scroll event does not bubble and one from a scrolling element never reaches window; the capture phase sees the document's own scroll and every element's. */
+  document.addEventListener('scroll', refitInfo, { passive: true, capture: true });
   function safeHref(h) {
     if (typeof h !== 'string' || /[\\\s\u0000-\u0020\u007f]/.test(h)) return false;
     if (h.charAt(0) === '#') return true;

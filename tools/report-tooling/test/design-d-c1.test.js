@@ -131,3 +131,18 @@ test('the colour parser reads the color(srgb ...) form Chrome gives a color-mix(
   const v = G.featuredSponsorVerdict({ wide: false, reportSponsors: 0, siteItems: 1, band, featCard: null, foot: null, goldBandInDom: false, card: Object.assign({}, band, { isReport: false, label: "Featured sponsor of The Hunter's Ledger" }), markPresent: false });
   assert.equal(v.ok, true, v.detail);
 });
+test('review P2 (T-0500.1.7.7): the popover row reports NOT CHECKED when the button never reached the bottom edge', () => {
+  const ROOMY = { l: 20, t: 300, r: 380, b: 600 };
+  const v = G.infoVerdict([IROW()], PROBE([P1({ edgeBox: ROOMY, edgeRoom: 500 })]));
+  assert.equal(v.ok, false);
+  assert.equal(v.notChecked, true, '500px of room below the button tests nothing at the bottom edge, so the row is NOT CHECKED: ' + v.detail);
+  assert.match(v.detail, /bottom edge/); assert.match(v.detail, /500/);
+  // controls: the probe's own target (8px of room) is the edge condition and still PASSES; 12 accepts fractional scroll and is still the edge
+  assert.equal(G.infoVerdict([IROW()], PROBE([P1({ edgeRoom: 8 })])).ok, true);
+  assert.equal(G.infoVerdict([IROW()], PROBE([P1({ edgeRoom: 12 })])).ok, true);
+  const gap = G.infoVerdict([IROW()], PROBE([P1({ edgeRoom: 24 })]));
+  assert.equal(gap.notChecked, true, 'a gap the probe could have closed is not the bottom edge: ' + gap.detail);
+  // a measured fault beside an unmeasured edge is a FAIL, never hidden behind NOT CHECKED
+  const both = G.infoVerdict([IROW()], PROBE([P1({ edgeRoom: 500, tapOpened: false })]));
+  assert.equal(both.ok, false); assert.equal(both.notChecked, false, both.detail); assert.match(both.detail, /pointer press on i #0/);
+});
