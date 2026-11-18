@@ -28,8 +28,9 @@
    while it still holds exactly what was typed.
 
    EXIT: 0 PASS; 1 FAIL (a raw indicator in the rendered DOM, an input's value or a captured string, or a page that did not load); 2 NOT CHECKED (no browser, a missing dependency, an
-   unreadable site, no page selected, or any surface that could not be checked: a zero denominator of pages, text nodes, controls or captures, an unreadable ioc-index.json, a scenario that
-   did not run). A FAIL outranks a NOT CHECKED; a NOT CHECKED outranks a PASS, so a run with a surface it could not check never ends PASS (T-0500.1.7.4 fix-r2, finding S1).
+   unreadable site, no page selected, a debugging connection that dropped or a browser that exited after it opened, a listener that could not be started, or any surface that could not be
+   checked: a zero denominator of pages, text nodes, controls or captures, an unreadable ioc-index.json, a scenario that did not run). A FAIL outranks a NOT CHECKED; a NOT CHECKED outranks
+   a PASS, so a run with a surface it could not check never ends PASS (T-0500.1.7.4 fix-r2, finding S1; the gate's own outage is NOT CHECKED: T-0500.1.7.6 finding 4).
    PRINTS: pages, widths, controls pressed by kind, captures by kind and how many were judged and how many exempt, DOM text nodes and tooltip attributes judged, and a CANNOT SEE line.
 
    THE GATE'S OWN KNOWN POSITIVE is a separate script, tasks/runs/T-0500.1.7.4/build/fix-r1/browser-defang-control.sh: it stages a scratch copy of the site, plants one defect per page (an inline
@@ -309,7 +310,9 @@ function sleep(ms) { return CDP.sleep(ms); }
         scanner.scan(rel, stub).forEach(function (f) { T.findings.push(f); });
         continue;
       }
-      try { loaded = await navigate(rel, w); } catch (e) { loaded = false; }
+      // a lost debugging connection is the gate's own infrastructure failing, never a page that did not load (T-0500.1.7.6 finding 4):
+      // cdp.js marks those errors notChecked, and they go up to the final catch, which reports NOT CHECKED.
+      try { loaded = await navigate(rel, w); } catch (e) { if (e && e.notChecked) throw e; loaded = false; }
       if (!loaded) { T.loadFails.push(rel + ' @' + w); T.findings.push({ page: rel, type: type, ctx: 'load', kind: 'LOAD-FAILED', token: 'the page did not reach readyState complete at ' + w }); continue; }
       T.loads++; T.runs++; T.perPage[rel].runs++;
       // the page's own data-literal cells (hash, filename, path, registry values printed as recorded): a copy or download of them is exact by the same rule the page-wide pass applies
@@ -368,4 +371,10 @@ function sleep(ms) { return CDP.sleep(ms); }
   else if (V.status === 'NOT CHECKED') console.log('NOT CHECKED  ' + V.unavailable + ' surface(s) could not be checked (listed above as NOT CHECKED lines); nothing that did run found a raw indicator, but this is not a PASS: ' + T.unavailable.map(function (u) { return u.slice(0, 160); }).join(' | ') + '. ' + cannot);
   else console.log('PASS  no raw network indicator in the rendered DOM (text, tooltips, input values) of ' + T.loads + ' page loads, in anything copied, shared or downloaded by ' + T.presses + ' presses, or in the IOC search, Wire details and site search scenarios. ' + cannot);
   process.exit(V.code);
-})().catch(function (e) { console.log('FAIL  gate crashed: ' + (e && e.stack || e)); process.exit(1); });
+})().catch(function (e) {
+  // T-0500.1.7.6 finding 4: lib/cdp.js marks every error that means the browser or its connection is gone (a dropped socket, a command that timed out, a browser
+  // that exited), and lib/page-server.js marks a listener that could not be started. No page surface was read when one of those is the cause, so the verdict is
+  // NOT CHECKED (exit 2), never FAIL (exit 1): a gate that blames the site for its own outage is a gate that cannot be trusted when it does say PASS.
+  if (e && e.notChecked) notChecked(e.message);
+  console.log('FAIL  gate crashed: ' + (e && e.stack || e)); process.exit(1);
+});

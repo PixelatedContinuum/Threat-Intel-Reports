@@ -48,6 +48,38 @@ test('an empty site (no page at all) is NOT CHECKED (exit 2) too', () => {
   assert.match(r.stdout, /NOT CHECKED .*no page selected \(0 pages/);
 });
 
+/* ---- T-0500.1.7.6 finding 4 (review_5cfea0f481014885): the browser gate's own infrastructure failing is NOT CHECKED, never FAIL.
+   cdp-fixtures/cdp-outage-stub.js is loaded with `node --require`: the gate source runs unchanged with a CDP connection and a local server
+   that are the only false things in the run, so what is asserted is the gate's own verdict handling. ---- */
+const GATE_STUB = path.join(__dirname, '..', 'cdp-fixtures', 'cdp-outage-stub.js');
+function gateWithStub(env, site) {
+  return cp.spawnSync(process.execPath, ['--require', GATE_STUB, GATE, '--site', site], { encoding: 'utf8', env: Object.assign({}, process.env, env) });
+}
+
+test('T-0500.1.7.6 finding 4: a debugging connection lost after the browser opened is NOT CHECKED (exit 2), never FAIL (exit 1)', () => {
+  const d = site({ 'index.html': PAGE('<p>Host 198[.]51[.]100[.]17</p>') });
+  const r = gateWithStub({ HL_STUB_CDP_FAIL_ON: 'Page.addScriptToEvaluateOnNewDocument' }, d);
+  assert.strictEqual(r.status, 2, 'exit 2, not 1: ' + r.stdout + r.stderr);
+  assert.match(r.stdout, /NOT CHECKED/);
+  assert.doesNotMatch(r.stdout, /FAIL/);
+});
+
+test('T-0500.1.7.6 finding 4: a connection lost while navigating is NOT CHECKED too, not a page-reported LOAD-FAILED', () => {
+  const d = site({ 'index.html': PAGE('<p>Host 198[.]51[.]100[.]17</p>') });
+  const r = gateWithStub({ HL_STUB_CDP_FAIL_ON: 'Page.navigate' }, d);
+  assert.strictEqual(r.status, 2, 'exit 2, not 1: ' + r.stdout + r.stderr);
+  assert.match(r.stdout, /NOT CHECKED/);
+  assert.doesNotMatch(r.stdout, /LOAD-FAILED/, 'the page is not blamed for the gate losing its browser');
+  assert.doesNotMatch(r.stdout, /^FAIL/m);
+});
+
+test('T-0500.1.7.6 finding 4 control: an error with no notChecked mark at the same point is still FAIL (exit 1), so the cases above are not a gate that gives up on everything', () => {
+  const d = site({ 'index.html': PAGE('<p>Host 198[.]51[.]100[.]17</p>') });
+  const r = gateWithStub({ HL_STUB_CDP_FAIL_ON: 'Page.addScriptToEvaluateOnNewDocument', HL_STUB_CDP_HARD: '1' }, d);
+  assert.strictEqual(r.status, 1, 'a real crash is FAIL: ' + r.stdout + r.stderr);
+  assert.match(r.stdout, /^FAIL/m);
+});
+
 test('a missing --site is NOT CHECKED (exit 2), never a pass', () => {
   const r = cp.spawnSync('node', [GATE], { encoding: 'utf8' });
   assert.strictEqual(r.status, 2);
