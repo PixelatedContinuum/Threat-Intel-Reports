@@ -6140,10 +6140,10 @@ async function main() {
    legitimate NOT CHECKED branch). If one exists, the run already failed
    before it crashed: print every recorded failure, print the crash message
    too (the reason the run aborted early is still information and must not
-   be suppressed), and exit 1. Only when NOTHING has failed yet does a crash
-   here still mean NOT CHECKED, exactly as before -- so the sentinel path
-   (which never reaches this handler at all; it is caught and handled inside
-   main() itself) and the "crashed before any check ran" path are both
+   be suppressed), and exit 1. Only when NOTHING has failed yet does the cause of the crash decide:
+   a notChecked error from lib/cdp.js or lib/page-server.js is NOT CHECKED (exit 2), and anything
+   else is a crash and FAILs (T-0678) -- so the sentinel path (which never reaches this handler at
+   all; it is caught and handled inside main() itself) and a crash after a real failure are both
    unchanged. */
 /* Everything above is reachable from `node --test` as pure functions: the CLI
    entry point runs only when this file is the program, so a test can require it
@@ -6161,7 +6161,15 @@ if (require.main === module) {
       console.log('\ncrash: ' + e.message);
       process.exit(1);
     }
-    notChecked('the browser check errored before finishing: ' + e.message);
+    /* T-0678: with nothing failed yet, the two causes are still told apart. An error lib/cdp.js or
+       lib/page-server.js marked notChecked is this gate's instrument failing (a dropped debugging
+       connection, a command timed out, a listener that could not start): no page was read, so the
+       verdict is NOT CHECKED (exit 2), never FAIL (exit 1), which would say the site is broken when
+       the instrument is. Any other error is this gate crashing, and stays FAIL, so a run is never
+       NOT CHECKED for everything. */
+    if (e && e.notChecked) notChecked('the browser check could not run: ' + e.message);
+    console.log('FAIL  gate crashed: ' + (e && e.stack || e));
+    process.exit(1);
   });
 } else {
   module.exports = {

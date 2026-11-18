@@ -872,5 +872,12 @@ async function runBuilt() {
 }
 
 (BUILT_MODE ? runBuilt() : runLive()).catch(function (e) {
-  notChecked('the browser check errored before finishing: ' + e.message);
+  /* T-0678: a debugging connection that dropped, or a listener that could not be started, is this
+     gate's own instrument failing (lib/cdp.js and lib/page-server.js mark those errors notChecked).
+     Nothing about the site was read, so the verdict is NOT CHECKED (exit 2), never FAIL (exit 1):
+     FAIL says the site is broken, and it would be saying that about the instrument. Every other
+     error is this gate crashing, and stays FAIL, so a run is never NOT CHECKED for everything. */
+  if (e && e.notChecked) notChecked('the browser check could not run: ' + e.message);
+  console.log('FAIL  gate crashed: ' + (e && e.stack || e));
+  process.exit(1);
 });
