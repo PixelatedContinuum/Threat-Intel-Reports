@@ -29,13 +29,63 @@
 {%- endcomment -%}
 {%- assign _dt_in = include.text | append: "" -%}
 {%- comment -%} T-0677 (T-0500.1.7.6 PROPOSAL 1): a dot or a colon written as an HTML entity is the character the reader sees, so the text is judged on the
-   decoded form. Only the two characters an indicator is built from are decoded (. &#46; &#046; &#x2e; &#x2E; &#X2e; &#X2E; &period; and
-   : &#58; &#058; &#x3a; &#x3A; &#X3a; &#X3A; &colon;); every other entity, &amp; and &#38; included, is left as written, so prose with no indicator
-   comes out byte-identical. The decoded word is the one judged; a word that does not defang is printed as it was written (below). {%- endcomment -%}
+   decoded form. A numeric reference is decoded BY VALUE (T-0677 P2, review_131206fafdd347c0): decimal 46 or 58, or hex 2e or 3a in any case of x and any case of the
+   hex digits, with any count of leading zeros, and with or without the terminating semicolon (the digits then end at the first character that is not a digit, or
+   not a hex digit for the x form, which is where the parser ends them). &period; and &colon; are kept. Every other entity, &amp; and &#38; included, is left as
+   written, so prose with no indicator comes out byte-identical. The decoded word is the one judged; a word that does not defang is printed as it was written
+   (below). {%- endcomment -%}
 {%- assign _dt_ent = false -%}
 {%- unless include.type -%}
   {%- if _dt_in contains "&#" or _dt_in contains "&period;" or _dt_in contains "&colon;" -%}
-    {%- assign _dt_dec = _dt_in | replace: "&#46;", "." | replace: "&#046;", "." | replace: "&#x2e;", "." | replace: "&#x2E;", "." | replace: "&#X2e;", "." | replace: "&#X2E;", "." | replace: "&period;", "." | replace: "&#58;", ":" | replace: "&#058;", ":" | replace: "&#x3a;", ":" | replace: "&#x3A;", ":" | replace: "&#X3a;", ":" | replace: "&#X3A;", ":" | replace: "&colon;", ":" -%}
+    {%- comment -%} one pass over the text cut at "&#": read the digits after it, strip the leading zeros by value, and keep the reference as written unless it is
+       exactly a dot or a colon. The first piece, before the first "&#", is copied as it is. {%- endcomment -%}
+    {%- assign _dt_np = _dt_in | split: "&#" -%}
+    {%- capture _dt_dec -%}{{- _dt_np[0] -}}
+    {%- for _dt_npc in _dt_np offset: 1 -%}
+      {%- assign _dt_nch = "" -%}
+      {%- assign _dt_nrest = "" -%}
+      {%- assign _dt_nd = _dt_npc -%}
+      {%- assign _dt_nhex = false -%}
+      {%- assign _dt_nc0 = _dt_nd | slice: 0 | append: "" -%}
+      {%- if _dt_nc0 == "x" or _dt_nc0 == "X" -%}
+        {%- assign _dt_nhex = true -%}
+        {%- assign _dt_nd = _dt_nd | slice: 1, 100000 -%}
+      {%- elsif "0123456789" contains _dt_nc0 -%}
+      {%- else -%}
+        {%- assign _dt_nd = "" -%}
+      {%- endif -%}
+      {%- if _dt_nd != "" -%}
+        {%- comment -%} the leading zeros: split on "0" and take the first piece that is not empty, whose index is the count of zeros, so any count costs one
+           split and no loop over the zeros. A reference of zeros alone has no such piece and is not a dot or a colon. {%- endcomment -%}
+        {%- assign _dt_nz = _dt_nd | split: "0" -%}
+        {%- assign _dt_noff = -1 -%}
+        {%- for _dt_nzp in _dt_nz -%}
+          {%- if _dt_noff < 0 and _dt_nzp != "" -%}{%- assign _dt_noff = forloop.index0 -%}{%- endif -%}
+        {%- endfor -%}
+        {%- if _dt_noff >= 0 -%}
+          {%- assign _dt_nr = _dt_nd | slice: _dt_noff, 100000 -%}
+          {%- assign _dt_n2 = _dt_nr | slice: 0, 2 | append: "" -%}
+          {%- if _dt_nhex -%}
+            {%- assign _dt_ndig = "0123456789abcdefABCDEF" -%}
+            {%- if _dt_n2 == "2e" or _dt_n2 == "2E" -%}{%- assign _dt_nch = "." -%}
+            {%- elsif _dt_n2 == "3a" or _dt_n2 == "3A" -%}{%- assign _dt_nch = ":" -%}{%- endif -%}
+          {%- else -%}
+            {%- assign _dt_ndig = "0123456789" -%}
+            {%- if _dt_n2 == "46" -%}{%- assign _dt_nch = "." -%}
+            {%- elsif _dt_n2 == "58" -%}{%- assign _dt_nch = ":" -%}{%- endif -%}
+          {%- endif -%}
+          {%- if _dt_nch != "" -%}
+            {%- assign _dt_nrest = _dt_nr | slice: 2, 100000 -%}
+            {%- assign _dt_na0 = _dt_nrest | slice: 0 | append: "" -%}
+            {%- if _dt_na0 == ";" -%}{%- assign _dt_nrest = _dt_nrest | slice: 1, 100000 -%}
+            {%- elsif _dt_na0 != "" and _dt_ndig contains _dt_na0 -%}{%- assign _dt_nch = "" -%}{%- endif -%}
+          {%- endif -%}
+        {%- endif -%}
+      {%- endif -%}
+      {%- if _dt_nch == "" -%}{{- "&#" -}}{{- _dt_npc -}}{%- else -%}{{- _dt_nch -}}{{- _dt_nrest -}}{%- endif -%}
+    {%- endfor -%}
+    {%- endcapture -%}
+    {%- assign _dt_dec = _dt_dec | replace: "&period;", "." | replace: "&colon;", ":" -%}
     {%- if _dt_dec != _dt_in -%}{%- assign _dt_ent = true -%}{%- endif -%}
   {%- endif -%}
 {%- endunless -%}
@@ -87,7 +137,52 @@
     {%- comment -%} the word as the reader's browser renders it (T-0677): the decoded form is the one judged, the raw word is what is printed when it does not defang {%- endcomment -%}
     {%- assign _dt_wj = _dt_w -%}
     {%- if _dt_ent -%}
-      {%- assign _dt_wj = _dt_w | replace: "&#46;", "." | replace: "&#046;", "." | replace: "&#x2e;", "." | replace: "&#x2E;", "." | replace: "&#X2e;", "." | replace: "&#X2E;", "." | replace: "&period;", "." | replace: "&#58;", ":" | replace: "&#058;", ":" | replace: "&#x3a;", ":" | replace: "&#x3A;", ":" | replace: "&#X3a;", ":" | replace: "&#X3A;", ":" | replace: "&colon;", ":" -%}
+      {%- comment -%} the same by-value decode as above, on the word (T-0677 P2, review_131206fafdd347c0) {%- endcomment -%}
+      {%- assign _dt_np = _dt_w | split: "&#" -%}
+      {%- capture _dt_wj -%}{{- _dt_np[0] -}}
+      {%- for _dt_npc in _dt_np offset: 1 -%}
+        {%- assign _dt_nch = "" -%}
+        {%- assign _dt_nrest = "" -%}
+        {%- assign _dt_nd = _dt_npc -%}
+        {%- assign _dt_nhex = false -%}
+        {%- assign _dt_nc0 = _dt_nd | slice: 0 | append: "" -%}
+        {%- if _dt_nc0 == "x" or _dt_nc0 == "X" -%}
+          {%- assign _dt_nhex = true -%}
+          {%- assign _dt_nd = _dt_nd | slice: 1, 100000 -%}
+        {%- elsif "0123456789" contains _dt_nc0 -%}
+        {%- else -%}
+          {%- assign _dt_nd = "" -%}
+        {%- endif -%}
+        {%- if _dt_nd != "" -%}
+          {%- assign _dt_nz = _dt_nd | split: "0" -%}
+          {%- assign _dt_noff = -1 -%}
+          {%- for _dt_nzp in _dt_nz -%}
+            {%- if _dt_noff < 0 and _dt_nzp != "" -%}{%- assign _dt_noff = forloop.index0 -%}{%- endif -%}
+          {%- endfor -%}
+          {%- if _dt_noff >= 0 -%}
+            {%- assign _dt_nr = _dt_nd | slice: _dt_noff, 100000 -%}
+            {%- assign _dt_n2 = _dt_nr | slice: 0, 2 | append: "" -%}
+            {%- if _dt_nhex -%}
+              {%- assign _dt_ndig = "0123456789abcdefABCDEF" -%}
+              {%- if _dt_n2 == "2e" or _dt_n2 == "2E" -%}{%- assign _dt_nch = "." -%}
+              {%- elsif _dt_n2 == "3a" or _dt_n2 == "3A" -%}{%- assign _dt_nch = ":" -%}{%- endif -%}
+            {%- else -%}
+              {%- assign _dt_ndig = "0123456789" -%}
+              {%- if _dt_n2 == "46" -%}{%- assign _dt_nch = "." -%}
+              {%- elsif _dt_n2 == "58" -%}{%- assign _dt_nch = ":" -%}{%- endif -%}
+            {%- endif -%}
+            {%- if _dt_nch != "" -%}
+              {%- assign _dt_nrest = _dt_nr | slice: 2, 100000 -%}
+              {%- assign _dt_na0 = _dt_nrest | slice: 0 | append: "" -%}
+              {%- if _dt_na0 == ";" -%}{%- assign _dt_nrest = _dt_nrest | slice: 1, 100000 -%}
+              {%- elsif _dt_na0 != "" and _dt_ndig contains _dt_na0 -%}{%- assign _dt_nch = "" -%}{%- endif -%}
+            {%- endif -%}
+          {%- endif -%}
+        {%- endif -%}
+        {%- if _dt_nch == "" -%}{{- "&#" -}}{{- _dt_npc -}}{%- else -%}{{- _dt_nch -}}{{- _dt_nrest -}}{%- endif -%}
+      {%- endfor -%}
+      {%- endcapture -%}
+      {%- assign _dt_wj = _dt_wj | replace: "&period;", "." | replace: "&colon;", ":" -%}
     {%- endif -%}
     {%- if _dt_wj contains "." or _dt_wj contains "@" or _dt_wj contains ":" -%}
     {%- assign _dt_wu = _dt_wj -%}

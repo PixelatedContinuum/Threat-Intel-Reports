@@ -515,6 +515,85 @@ test('P2 (review_6cee79058a4c4cc0): every HTML whitespace character is the separ
   });
 });
 
+/* ---- T-0677 P2 (review_131206fafdd347c0): a numeric reference to "." (46) or ":" (58), in every spelling the parser decodes ----
+   The decode used to be a fixed list of spellings, so a reference with another count of leading zeros stayed raw while the browser rendered the
+   character. HTML decodes a numeric reference by value: decimal or hex (any case of x), zeros however many, and the terminating semicolon may be
+   left out in text (the digits then run to the first character that is not a digit, or a hex digit for the x form). Each form below is measured
+   against jsdom first, so the test asserts what the parser does and not what the include happens to print. */
+const NUMREF = {
+  dot: ['&#46;', '&#046;', '&#00046;', '&#00000000000000000000046;', '&#x2e;', '&#X2e;', '&#x2E;', '&#X2E;',
+    '&#x00002e;', '&#x002e;', '&#X000002E;', '&#x0000000000000000002e;',
+    // no bound in the decode: a 200-zero spelling costs the same one split as a one-zero spelling
+    '&#' + '0'.repeat(200) + '46;', '&#X' + '0'.repeat(200) + '2E;'],
+  colon: ['&#58;', '&#058;', '&#00058;', '&#00000000000000000000058;', '&#x3a;', '&#X3a;', '&#x3A;', '&#X3A;',
+    '&#x00003a;', '&#x003a;', '&#X000003A;', '&#x0000000000000000003a;',
+    '&#' + '0'.repeat(200) + '58;', '&#X' + '0'.repeat(200) + '3A;']
+};
+const NUMREF_BARE = [
+  // no terminating semicolon: the digits end at the first non-digit, which is what jsdom does in text
+  ['dot, decimal, no semicolon', 'evil&#00046example&#00046com', 'evil[.]example[.]com'],
+  ['dot, hex, no semicolon', 'evil&#x0002exyz', 'evil[.]xyz'],
+  ['colon, decimal, no semicolon', '2001&#00058db8&#00058&#00058', '2001[:]db8[:][:]']
+];
+const NUMREF_REJECT = [
+  // the digits run past 46/58, so the reference is another character and must be left as written (a decode that ignored this would defang a non-indicator)
+  ['decimal, the value is 461', 'evil&#000461example&#000461com'],
+  ['hex, the value is 0x2e1', 'evil&#x0002e1xample']
+];
+
+test('T-0677 P2 (review_131206fafdd347c0): a numeric reference to a dot or a colon is decoded by value, any count of leading zeros, decimal or hex, any case of x, semicolon or not', (t) => {
+  if (!JEKYLL) return t.skip('NOT CHECKED: no jekyll gem on this machine, so the Liquid include was not executed');
+  // the denominator: what jsdom renders for each form, before the include is asked to produce it
+  const cases = [];
+  for (const f of NUMREF.dot) {
+    const rendered = new JSDOM('<!doctype html><html><body><p>x' + f + 'y</p></body></html>').window.document.body.textContent;
+    assert.equal(rendered, 'x.y', 'control: the browser decodes ' + f + ' to a dot, it rendered ' + JSON.stringify(rendered));
+    cases.push(['dot form ' + f, 'evil' + f + 'example' + f + 'xyz', 'evil[.]example[.]xyz']);
+    cases.push(['dot form ' + f + ' in a title', '<p title="evil' + f + 'example' + f + 'xyz">t</p>', '<p title="evil[.]example[.]xyz">t</p>']);
+    cases.push(['dot form ' + f + ' in an address', '198' + f + '51' + f + '100' + f + '17', '198[.]51[.]100[.]17']);
+  }
+  for (const f of NUMREF.colon) {
+    const rendered = new JSDOM('<!doctype html><html><body><p>x' + f + 'y</p></body></html>').window.document.body.textContent;
+    assert.equal(rendered, 'x:y', 'control: the browser decodes ' + f + ' to a colon, it rendered ' + JSON.stringify(rendered));
+    cases.push(['colon form ' + f, '2001' + f + 'db8' + f + f + '7', '2001[:]db8[:][:]7']);
+    cases.push(['colon form ' + f + ' in a title', '<p title="2001' + f + 'db8' + f + f + '7">t</p>', '<p title="2001[:]db8[:][:]7">t</p>']);
+  }
+  NUMREF_BARE.forEach(([name, input, want]) => cases.push([name, input, want]));
+  // controls: the reference decodes to another character, so it is not ours to touch; and an entity that is not a dot or colon keeps every byte
+  NUMREF_REJECT.forEach(([name, input]) => {
+    const rendered = new JSDOM('<!doctype html><html><body><p>' + input + '</p></body></html>').window.document.body.textContent;
+    assert.doesNotMatch(rendered, /[.:]/, 'control: ' + name + ' is not a dot or colon to the browser, it rendered ' + JSON.stringify(rendered));
+    cases.push([name + ' stays as written', input, input]);
+  });
+  for (const prose of ['Tom &amp; Jerry&#38; Co &#38; AT&amp;T', 'the ampersand &#0038; and &#38; and &amp; are prose', 'Tom &amp; Jerry&#38; Co']) {
+    cases.push(['prose control ' + prose, prose, prose]);
+    cases.push(['prose control in a title ' + prose, '<p title="' + prose + '">t</p>', '<p title="' + prose + '">t</p>']);
+  }
+  const body = cases.map((c, i) => '<!--Q' + i + '-->{% capture h %}{% raw %}' + c[1] + '{% endraw %}{% endcapture %}{% include defang-html.html html=h %}<!--R' + i + '-->').join('\n');
+  const { out, html } = buildSite(body);
+  cases.forEach((c, i) => {
+    const got = html.split('<!--Q' + i + '-->')[1].split('<!--R' + i + '-->')[0].replace(/^\n/, '').replace(/\n$/, '');
+    assert.equal(got, c[2], c[0] + ': ' + JSON.stringify(c[1]));
+  });
+  // the same dot forms through defang-text directly (a card title and a search value take that path)
+  const body2 = NUMREF.dot.map((f, i) => '<!--S' + i + '-->{% include defang-text.html text=\'evil' + f + 'example' + f + 'com\' %}<!--T' + i + '-->').join('\n');
+  const { html: html2 } = buildSite(body2);
+  NUMREF.dot.forEach((f, i) => {
+    const got = html2.split('<!--S' + i + '-->')[1].split('<!--T' + i + '-->')[0].replace(/^\n/, '').replace(/\n$/, '');
+    assert.equal(got, 'evil[.]example[.]com', 'defang-text: ' + f);
+  });
+  // and what a reader sees: the raw page is a live domain, the include's page is not, and the rendered-page gate agrees
+  const raw = '<p>evil&#00046;example&#00046;xyz and 198&#x00002e;51&#x00002e;100&#x00002e;17</p>';
+  const rawText = new JSDOM('<!doctype html><html><body>' + raw + '</body></html>').window.document.body.textContent;
+  assert.match(rawText, /evil\.example\.xyz and 198\.51\.100\.17/, 'control: the browser reads the raw zero-padded forms as a live domain and address');
+  const run = buildSite('<!--U0-->{% capture h %}{% raw %}' + raw + '{% endraw %}{% endcapture %}{% include defang-html.html html=h %}<!--V0-->');
+  const shown = run.html.split('<!--U0-->')[1].split('<!--V0-->')[0].replace(/^\n/, '').replace(/\n$/, '');
+  const shownText = new JSDOM('<!doctype html><html><body>' + shown + '</body></html>').window.document.body.textContent;
+  assert.doesNotMatch(shownText, /evil\.example\.xyz|198\.51\.100\.17/, 'no readable domain or address survives: ' + shownText);
+  assert.equal(gate(fixtureSite({ 'index.html': raw })).status, 1, 'control: the gate reports the raw zero-padded form');
+  assert.equal(gate(fixtureSite({ 'index.html': shown })).status, 0, 'the include output passes the gate');
+});
+
 /* ---- the gate on a fixture site (no Jekyll needed) ---- */
 function fixtureSite(files) {
   const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'hl-defang-site-'));
