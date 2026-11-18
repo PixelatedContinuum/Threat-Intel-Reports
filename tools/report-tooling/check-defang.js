@@ -9,8 +9,8 @@
 
    Reads the report SOURCE (a folder: every .md under it, the index and any sub-report pages; a file: that file) and reports
 
-     1. every un-defanged, non-private network indicator a reader sees in the page body: URLs, IPv4 addresses, IPv6 literals in a URL,
-        domains and e-mail addresses, in prose, inline code, tables, lists, fenced blocks, LINK TARGETS (inline `](url)`, reference
+     1. every un-defanged, non-private network indicator a reader sees in the page body: URLs, IPv4 addresses, IPv6 addresses (bare in the
+        text, bracketed, or a literal in a URL), domains and e-mail addresses, in prose, inline code, tables, lists, fenced blocks, LINK TARGETS (inline `](url)`, reference
         definitions, autolinks, href/src attributes: the same rules and allow files as text) and the front-matter fields the page
         renders (everything except the page-identity keys title, description, permalink, slug and the fields that are paths or switches:
         see FM_SKIP). A partly defanged host (`evil[.]example.com`) is reported: the canonical form defangs every dot. A domain is a name
@@ -60,6 +60,18 @@
    not an indicator, and is not flagged; a ws/wss URL whose host has no dot (`localhost`, `{host}`) is not flagged either.
    An IPv6 literal in a URL (`http://[2001:db8::7]/p`, also behind hxxp or ws) is IPV6-URL unless its colons are `[:]`.
 
+   IPv6 IN PAGE TEXT (T-0500.1.7.5): a bare address in a sentence, a table cell or inline code (`2001:db8::7`, `2a01:4f8:c17:1234::1`,
+   bracketed as `[2001:db8::7]:443`) is IPV6. All colons must be `[:]`; a raw colon beside a `[:]` is IPV6-PARTLY-DEFANGED, the same rule
+   the URL scan applies. PRIVATE EXCLUSIONS are isPrivateIPv6's: loopback, unspecified, link-local, unique-local, multicast (`::1`, `fe80::1`,
+   `fd00::1`, `ff02::1`) are counted as private, never flagged. THE SHAPE (ipv6Shape, below) is the page include's and the browser
+   script's rule, so the lint and the render agree on what an address is: hex groups of 1 to 4 digits, 2 to 7 colons, no `:::`, at most one
+   `::`, either a `::` or all seven colons written out, no dot, and at least one decimal digit. The colon count is what keeps a clock time
+   (12:30:45), a MAC address (aa:bb:cc:dd:ee:ff), a ratio and a Windows drive path out; the digit is what keeps code paths (`std::vector`,
+   `a::b`, `ab::cd`) and a bare `::` out; and a BRACKETED literal needs three colons or more, because `[::2]` is a Python slice, not an
+   address. An IPv4-mapped address (`::ffff:203.0.113.5`) carries a dot, so it is not matched here: the IPv4 rule already flags the
+   `203.0.113.5` in it, and it is not counted twice. An address the include leaves raw because it holds no decimal digit or a dot is a gap
+   this lint shares with the render, not a shape it flags differently.
+
    Findings are printed DEFANGED (the lint's own output is not a copy-ready indicator list).
 
    DENOMINATORS, printed every run (lines are non-blank lines): files, front-matter lines, body lines, fenced blocks (total / marked .hl-copy and skipped /
@@ -67,11 +79,14 @@
    none), command-like blocks (fully bracketed / no bracket / bracketed on some lines only) and recognised executable lines, the TLD list size. A run that
    scanned no lines is NOT CHECKED, never PASS.
 
-   SELF-TEST, every run, before the verdict is believed: a known-positive fixture must be flagged on every kind (URL, IPv4, IPv6 URL,
-   domain, e-mail, partly defanged host, link target, unmarked attacker block, bare executable line, bare multi-tenant allow entry) and
-   its defanged twin must come back clean, or the run is NOT CHECKED. A missing or implausible TLD snapshot is NOT CHECKED too.
+   SELF-TEST, every run, before the verdict is believed: a known-positive fixture must be flagged on every kind (URL, IPv4, IPv6 bare in the
+   text, IPv6 partly defanged, IPv6 URL, domain, e-mail, partly defanged host, link target, unmarked attacker block, bare executable line,
+   bare multi-tenant allow entry) and its defanged twin must come back clean, or the run is NOT CHECKED. A missing or implausible TLD
+   snapshot is NOT CHECKED too.
 
-   WHAT IT CANNOT SEE (the PASS line says so): deliberate obfuscation by the author (comment and continuation tricks, srcset or entity-encoded schemes, mixed-encoding dot segments, numeric or hex IPv4 hosts); IPv6 outside a URL; a domain whose last label is not in the IANA snapshot (the snapshot
+   WHAT IT CANNOT SEE (the PASS line says so): deliberate obfuscation by the author (comment and continuation tricks, srcset or
+   entity-encoded schemes, mixed-encoding dot segments, numeric or hex IPv4 hosts); an IPv6 form outside the shape above (no decimal digit,
+   a dotted IPv4 tail, fewer than three colons inside brackets such as `[::1]`); a domain whose last label is not in the IANA snapshot (the snapshot
    dates from its first line; refresh it by hand); a command whose first token is not in COMMANDS or a cmdlet; indented (4-space)
    code, which is read as prose; anything rendered by an include or Liquid tag from data outside the file; the rendered page (this is
    a source lint); and whether an allowed name is really benign, since the allow file is a reviewer's claim. A file name or code
@@ -187,8 +202,19 @@ var CMDLET_RE = /^(?:invoke|set|new|get|start|add|remove|out|import|export|enabl
 /* ---------- helpers ---------- */
 
 function defangForPrint(s) {
-  return String(s).replace(/\bhttps?:\/\//gi, function (m) { return m.replace(/tt/i, 'xx'); })
+  /* an IPv6 address in the printed text takes the include's canonical `[:]` form first, so no finding, near-window or block excerpt can be
+     pasted as a live address (T-0500.1.7.5); a port, a scheme colon and a clock time are not an address shape and keep their colons */
+  return defangIpv6Text(String(s)).replace(/\bhttps?:\/\//gi, function (m) { return m.replace(/tt/i, 'xx'); })
     .replace(/(?<!\[)\.(?!\])/g, '[.]').replace(/@/g, '[@]');
+}
+/* The IPv6 part of the printed defang, for any text a finding quotes (a token, a line, a near window). Only a raw address changes; a
+   defanged one already holds `[:]` and no hex run matches. */
+function defangIpv6Text(s) {
+  s = String(s).replace(V6_BRACKET_RE, function (m, inner) {
+    return ipv6Shape(inner) && (inner.match(/:/g) || []).length >= 3 ? '[' + v6ForPrint(inner) + ']' + m.slice(m.indexOf(']') + 1) : m;
+  });
+  V6_BARE_RE.lastIndex = 0;
+  return s.replace(V6_BARE_RE, function (m, inner) { return ipv6Shape(inner) ? v6ForPrint(inner) : m; });
 }
 
 function isPrivateIPv4(o) {
@@ -310,6 +336,46 @@ var DOMAIN_RE = /(?<![A-Za-z0-9_\\-])((?:[A-Za-z0-9](?:[A-Za-z0-9-]*[A-Za-z0-9])
 var HXXP_RE = /\b(?:hxxps?|fxp):\/\//gi;
 /* A scheme (real or defanged) followed by a bracketed IPv6 literal whose colons are still raw. */
 var V6_URL_RE = /\b(?:https?|hxxps?|ftps?|fxp|sftp|wss?):\/\/\[((?:[0-9A-Fa-f.:]|\[:\])*)\](?::\d+)?/gi;
+/* A bare IPv6 address in page text (T-0500.1.7.5): a run of hex digits and colons that is not the tail of a longer word or address, and
+   not the inside of a bracketed literal (V6_BRACKET_RE reads that). ipv6Shape decides; the regex only cuts the candidate. A full stop
+   after the address (end of sentence) is not part of it. */
+var V6_BARE_RE = /(?<![0-9A-Za-z:._\[\]])([0-9A-Fa-f:]{2,45})(?![0-9A-Za-z:_])/g;
+/* A bracketed literal in text: `[2001:db8::7]`, `[2001:db8::7]:443`, `[...]/64`. */
+var V6_BRACKET_RE = /(?<![0-9A-Za-z])\[([0-9A-Fa-f:]{2,45})\](?::\d{1,5})?(?:\/\d{1,3})?/g;
+/* Colons already defanged: `2a01[:]4f8[:]c17[:]1234[:][:]1`, bracketed and with a port or prefix as above. */
+var V6_DEFANGED_RE = /(?<![0-9A-Za-z\]])(\[?)([0-9A-Fa-f]+(?:\[:\][0-9A-Fa-f]*|:[0-9A-Fa-f]*)+)(\]?)(?::\d{1,5})?(?:\/\d{1,3})?/g;
+
+/* THE SHAPE OF AN IPv6 ADDRESS, the same rule the page include (_includes/defang-text.html) and the browser script
+   (assets/js/ioc-classify.js, isIpv6) apply, so a page the lint flags is a page the render can defang:
+     hex groups of 1 to 4 digits, 2 to 7 colons, no `:::`, at most one `::`, either a `::` or all seven colons written out, no dot (an
+     IPv4-mapped `::ffff:203.0.113.5` is left to the IPv4 rule), and at least one decimal digit in the whole address.
+   Why each part: the colon count keeps out a clock time (12:30:45), a MAC address (aa:bb:cc:dd:ee:ff, five colons), a ratio (16:9), a
+   Windows drive path (C:\x) and a port; the decimal digit keeps out C++/Rust paths (std::vector, a::b, ab::cd: hex letters, no digit) and a
+   bare `::`; the dot test keeps the IPv4 tail in one rule. Returns false for everything else. */
+function ipv6Shape(a) {
+  if (!/^[0-9A-Fa-f:]+$/.test(a)) return false;
+  var colons = (a.match(/:/g) || []).length;
+  if (colons < 2 || colons > 7) return false;
+  if (a.indexOf(':::') !== -1 || !/[0-9]/.test(a)) return false;
+  var halves = a.split('::');
+  if (halves.length > 2) return false;
+  var ok = true, groups = 0;
+  halves.forEach(function (h) {
+    if (!h) return;
+    h.split(':').forEach(function (g) { if (/^[0-9A-Fa-f]{1,4}$/.test(g)) groups++; else ok = false; });
+  });
+  if (!ok) return false;
+  if (halves.length === 2) return groups >= 1 && groups <= 7; /* a compressed form: `::` stands for the groups not written */
+  return groups === 8; /* no `::`: all eight groups written out */
+}
+/* An address is a WORD, not a fragment of one. It starts a word: after a space, a bracket, a quote, a markdown emphasis mark, or the
+   start of the line. This is the page include's own boundary (it judged the whole word and left ";::17 10t" alone, an XOR-obfuscated
+   Mirai string in a real report table, tasks/runs/T-0500.1.7.5: the gate flagged it before this test and that was the one false positive
+   on the whole built site). `x::17`, `;2001:db8::1` and `=2001:db8::1` are the same shape: a fragment, not an address. */
+var V6_LEAD = /[\s([{<"'`*]/;
+function v6WordStart(line, i) { return i === 0 || V6_LEAD.test(line.charAt(i - 1)); }
+/* The canonical defang of an address, the form _includes/defang-text.html prints; the lint prints the same so its own output is not copy-ready. */
+function v6ForPrint(a) { return String(a).replace(/:/g, '[:]'); }
 
 function mask(line, start, end) { return line.slice(0, start) + ' '.repeat(end - start) + line.slice(end); }
 
@@ -317,6 +383,8 @@ function mask(line, start, end) { return line.slice(0, start) + ' '.repeat(end -
 function isPrivateIPv6(a) {
   a = String(a).toLowerCase();
   if (a === '::1' || a === '::') return true;
+  /* the same two written out in full (`0:0:0:0:0:0:0:1`, `0:0:0:0:0:0:0:0`), which the bare-text scan matches like any other address */
+  if (/^(?:0{1,4}:){7}0{0,3}1$/.test(a) || /^(?:0{1,4}:){7}0{1,4}$/.test(a)) return true;
   var first = (a.split(':')[0] || '0');
   var n = parseInt(first || '0', 16);
   if (n >= 0xfe80 && n <= 0xfebf) return true; /* fe80::/10 */
@@ -417,6 +485,47 @@ function scanLine(rawLine, allow) {
       if (al3) { noteAllowed(al3); continue; }
       out.flagged.push({ kind: seps.every(function (s) { return s === '.'; }) ? 'IPV4' : 'IPV4-PARTLY-DEFANGED', token: m[0] });
     } else out.defanged++;
+  }
+  spans.forEach(function (s) { line = mask(line, s[0], s[1]); });
+
+  // 3b. a bare IPv6 address in the text (T-0500.1.7.5): prose, a table cell, inline code. Shape, exclusions and why: ipv6Shape above.
+  //     Runs after the URL passes, so a literal that is a URL host is IPV6-URL once, never a second IPV6; and after IPv4, so the address
+  //     an IPv4-mapped `::ffff:203.0.113.5` carries is not counted twice.
+  V6_BARE_RE.lastIndex = 0;
+  spans = [];
+  while ((m = V6_BARE_RE.exec(line))) {
+    if (!v6WordStart(line, m.index) || !ipv6Shape(m[1])) continue;
+    spans.push([m.index, m.index + m[0].length]);
+    if (isPrivateIPv6(m[1])) { out.privateN++; continue; }
+    out.flagged.push({ kind: 'IPV6', token: v6ForPrint(m[1]) });
+  }
+  spans.forEach(function (s) { line = mask(line, s[0], s[1]); });
+
+  // 3c. the bracketed literal in text: `[2001:db8::7]`, `[2001:db8::7]:443`. Three colons or more: `[::2]` is a Python slice.
+  V6_BRACKET_RE.lastIndex = 0;
+  spans = [];
+  while ((m = V6_BRACKET_RE.exec(line))) {
+    if (!v6WordStart(line, m.index) || !ipv6Shape(m[1]) || (m[1].match(/:/g) || []).length < 3) continue;
+    spans.push([m.index, m.index + m[0].length]);
+    if (isPrivateIPv6(m[1])) { out.privateN++; continue; }
+    out.flagged.push({ kind: 'IPV6', token: '[' + v6ForPrint(m[1]) + ']' + m[0].slice(m[0].indexOf(']') + 1) });
+  }
+  spans.forEach(function (s) { line = mask(line, s[0], s[1]); });
+
+  // 3d. colons already defanged (`2a01[:]4f8[:]c17[:]1234[:][:]1`): all of them defanged counts as defanged; a raw colon beside a `[:]`
+  //     is IPV6-PARTLY-DEFANGED, the rule the URL scan applies to a partly defanged host. Judged on the refanged form, so a token that
+  //     would not be an address either way is neither, and the same word-start test applies.
+  V6_DEFANGED_RE.lastIndex = 0;
+  spans = [];
+  while ((m = V6_DEFANGED_RE.exec(line))) {
+    var v6t = m[2];
+    if (!v6WordStart(line, m.index) || v6t.indexOf('[:]') === -1) continue;
+    var v6re = v6t.replace(/\[:\]/g, ':');
+    if (!ipv6Shape(v6re)) continue;
+    spans.push([m.index, m.index + m[0].length]);
+    if ((v6t.replace(/\[:\]/g, '|').match(/:/g) || []).length) { out.flagged.push({ kind: 'IPV6-PARTLY-DEFANGED', token: m[0] }); continue; }
+    if (isPrivateIPv6(v6re)) { out.privateN++; continue; }
+    out.defanged++;
   }
   spans.forEach(function (s) { line = mask(line, s[0], s[1]); });
 
@@ -651,7 +760,9 @@ var FIXTURE_BAD = [
   'socket ws://192.0.2.5:8080/x here',
   'tunnel http://[2001:db8::7]/payload here',
   'script evil-attacker.sh seen',
-  'host github.com/Iamem/payload seen'
+  'host github.com/Iamem/payload seen',
+  'peer 2001:db8:c17:1234::1 answered',            /* IPv6, bare in a sentence */
+  'cell 2001[:]db8:c17:1234::1 listed'             /* IPv6-PARTLY-DEFANGED: a raw colon beside the defanged ones */
 ];
 var FIXTURE_GOOD = [
   'beacon at hxxp://198[.]51[.]100[.]17:8080/a.ps1 now',
@@ -663,14 +774,17 @@ var FIXTURE_GOOD = [
   'WebSocket (ws://) and `wss://` are named as schemes, ws://localhost:8080/x is no indicator',
   'tunnel hxxp://[2001[:]db8[:][:]7]/payload and http://[::1]:8080/x fine',
   'script evil-attacker[.]sh seen',
-  'host github[.]com/Iamem/payload seen'
+  'host github[.]com/Iamem/payload seen',
+  'peer 2001[:]db8[:]c17[:]1234[:][:]1 and [2001[:]db8[:][:]7]:443 answered',  /* defanged IPv6, the include's form */
+  'not addresses: 12:30:45 and aa:bb:cc:dd:ee:ff and 16:9 and :: and C:\\Windows\\System32 and std::vector and a::b and x[::2]',
+  'private ::1 and fe80::1 and fd00::1 and ff02::1 are out of scope'
 ];
 function selfTest() {
   var allow = makeAllow([]), why = [];
   var tl;
   try { tl = getTlds(); } catch (e) { return [e.message]; }
   if (tl.count < 1000 || !isTld('com') || !isTld('sh') || !isTld('xn--p1ai')) why.push('IANA TLD snapshot looks wrong: ' + tl.count + ' names (expected well over 1000, with com, sh, xn--p1ai)');
-  var kinds = [['URL'], ['IPV4'], ['DOMAIN'], ['EMAIL'], ['IPV4-PARTLY-DEFANGED'], ['DOMAIN-PARTLY-DEFANGED'], ['URL'], ['IPV6-URL'], ['DOMAIN'], ['DOMAIN']];
+  var kinds = [['URL'], ['IPV4'], ['DOMAIN'], ['EMAIL'], ['IPV4-PARTLY-DEFANGED'], ['DOMAIN-PARTLY-DEFANGED'], ['URL'], ['IPV6-URL'], ['DOMAIN'], ['DOMAIN'], ['IPV6'], ['IPV6-PARTLY-DEFANGED']];
   FIXTURE_BAD.forEach(function (l, n) {
     var r = scanLine(l, allow);
     if (!r.flagged.some(function (f) { return f.kind === kinds[n][0]; })) why.push('known positive not flagged as ' + kinds[n][0] + ': ' + defangForPrint(l));
@@ -806,7 +920,7 @@ function main() {
   try { R = run(target, allowFiles); } catch (e) { console.log('NOT CHECKED  ' + e.message); process.exit(2); }
   var s = R.stats;
   console.log('check-defang: ' + target);
-  console.log('  self-test   known positives flagged (URL, IPv4, IPv6 URL, domain on an IANA TLD, e-mail, partly defanged, link target, bare attacker block and line, bare multi-tenant allow entry), defanged twins and private addresses clean');
+  console.log('  self-test   known positives flagged (URL, IPv4, bare IPv6 in text, partly defanged IPv6, IPv6 URL, domain on an IANA TLD, e-mail, partly defanged, link target, bare attacker block and line, bare multi-tenant allow entry), defanged twins and private addresses clean');
   console.log('  tld list    ' + getTlds().count + ' names, data/iana-tlds.txt: ' + getTlds().version);
   console.log('  allow file  ' + autoNote + (allowFiles.length > autoFiles.length ? '; plus ' + (allowFiles.length - autoFiles.length) + ' --allow file(s)' : ''));
   console.log('  files       ' + s.files + ' page(s) read (index.md and any .md with front matter)' + (R.skipped.length ? '; ' + R.skipped.length + ' .md without front matter not read (not published): ' + R.skipped.map(function (f) { return path.basename(f); }).join(', ') : ''));
@@ -839,7 +953,7 @@ function main() {
     process.exit(1);
   }
   console.log('PASS  no un-defanged indicator outside .hl-copy blocks, link targets included, and no attacker command line without a bracketed command token; ' + summary +
-    '; CANNOT SEE: deliberate obfuscation by the author (comment and line-continuation tricks, srcset or entity-encoded schemes, mixed-encoding dot segments, numeric or hex IPv4 hosts: the lint guards honest mistakes, not evasion); bare IPv6 text outside a URL; a domain whose last label is not in the IANA snapshot (' + getTlds().count + ' names); a command whose first token is not in COMMANDS; indented (4-space) code; Liquid/include output; the rendered page; whether an allowed name is really benign (the allow file is the reviewer\'s claim)');
+    '; CANNOT SEE: deliberate obfuscation by the author (comment and line-continuation tricks, srcset or entity-encoded schemes, mixed-encoding dot segments, numeric or hex IPv4 hosts: the lint guards honest mistakes, not evasion); an IPv6 form outside the shape the render defangs (no decimal digit, a dotted IPv4 tail, fewer than three colons inside brackets such as `[::1]`); a domain whose last label is not in the IANA snapshot (' + getTlds().count + ' names); a command whose first token is not in COMMANDS; indented (4-space) code; Liquid/include output; the rendered page; whether an allowed name is really benign (the allow file is the reviewer\'s claim)');
   process.exit(0);
 }
 
@@ -863,7 +977,7 @@ function mainSite(site, allowData, only, all, records, pagesOnly) {
     F = F.concat(RS.findings);
   }
   console.log('check-defang --site: ' + site);
-  console.log('  self-test   known positives flagged (IPv4, domain, e-mail, URL, link to an IP, unlisted link, foreign mailto, raw pre outside a detection page, tooltip attribute), defanged twins, own-page links and a detection rule body clean');
+  console.log('  self-test   known positives flagged (IPv4, bare IPv6, domain, e-mail, URL, link to an IP, unlisted link, foreign mailto, raw pre outside a detection page, tooltip attribute), defanged twins, own-page links and a detection rule body clean');
   console.log('  allow data  ' + allowData + ': ' + R.data.rawCount + ' raw names, ' + R.data.mailboxCount + ' own mailboxes, ' + R.data.links.length + ' link entries');
   var types = Object.keys(s.byType).sort().map(function (t) { return t + ' ' + s.byType[t]; });
   console.log('  pages       ' + s.pages + ' scanned: ' + types.join(', '));

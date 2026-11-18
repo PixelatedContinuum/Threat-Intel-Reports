@@ -8,7 +8,7 @@
    node check-defang.js --site <_site dir> [--allow-data FILE] [--all]
 
    WHAT IT FAILS (exit 1), per page, on the text a reader sees:
-     1. a network indicator (URL, IPv4, IPv6 URL, domain on an IANA TLD, e-mail) in a text node or in a tooltip attribute (title, alt,
+     1. a network indicator (URL, IPv4, IPv6 (in text, bracketed or a URL literal), domain on an IANA TLD, e-mail) in a text node or in a tooltip attribute (title, alt,
         aria-label, placeholder, data-copy) that is not defanged and not in the `raw` list of _data/defang_allow.yml. Same scanner and same
         defang forms as the report lint (scanLine): hxxp, [.], [@], [:].
      2. a clickable <a> whose target is an IP address (LINK-IP), whose host is not in the `links` list (LINK-UNLISTED; the Wire is exempt
@@ -410,12 +410,14 @@ function scanSite(dir, dataFile, opts) {
   return { stats: stats, findings: findings, data: sc.data };
 }
 
-/* Known positives and their clean twins, run before any verdict is believed. Documentation ranges only (RFC 5737, RFC 2606). */
+/* Known positives and their clean twins, run before any verdict is believed. Documentation ranges only (RFC 5737, RFC 3849, RFC 2606). */
 var FIX_BAD = '<html><body><main><p>C2 at 198.51.100.17 and evil-host.example.xyz, mail op@evil-host.example.xyz, fetch http://198.51.100.17/p. <code>203.0.113.9</code></p>' +
+  '<p>relay 2001:db8:c17:1234::1 answered and [2001:db8::7]:443 listens</p>' +
   '<p title="198.51.100.77">tip</p><a href="http://198.51.100.17/x">go</a><a href="https://unlisted-vendor.example.net/r">v</a><a href="mailto:op@evil-host.example.xyz">m</a>' +
   '<pre>198.51.100.20 outside a detection page</pre></main></body></html>';
 var FIX_GOOD = '<html><body><main><p>C2 at 198[.]51[.]100[.]17 and evil-host[.]example[.]xyz, mail op[@]evil-host[.]example[.]xyz, fetch hxxp://198[.]51[.]100[.]17/p. <code>203[.]0[.]113[.]9</code> ' +
   'and <a href="https://attack.mitre.org/techniques/T1001/">attack.mitre.org</a> kept, <a href="/actors/UTA-2026-001/">198[.]51[.]100[.]17</a> and 10.0.0.1</p>' +
+  '<p>relay 2001[:]db8[:]c17[:]1234[:][:]1 answered and [2001[:]db8[:][:]7]:443 listens, at 12:30:45</p>' +
   '<pre>198[.]51[.]100[.]20 outside a detection page</pre></main></body></html>';
 function selfTest() {
   var why = [];
@@ -428,7 +430,7 @@ function selfTest() {
     return { f: f, st: st };
   }
   var bad = run(FIX_BAD, 'actors/UTA-2026-001/index.html');
-  var want = ['IPV4', 'DOMAIN', 'EMAIL', 'URL', 'LINK-IP', 'LINK-UNLISTED', 'LINK-MAILTO', 'PRE-OUTSIDE-DETECTION'];
+  var want = ['IPV4', 'IPV6', 'DOMAIN', 'EMAIL', 'URL', 'LINK-IP', 'LINK-UNLISTED', 'LINK-MAILTO', 'PRE-OUTSIDE-DETECTION'];
   var got = bad.f.map(function (x) { return x.kind; });
   want.forEach(function (k) { if (got.indexOf(k) === -1) why.push('known positive not flagged as ' + k); });
   if (!bad.f.some(function (x) { return x.ctx === 'attr:title'; })) why.push('known positive in a title attribute not flagged');
