@@ -288,3 +288,20 @@ test('S3: defangValue defangs a bare or bracketed IPv6 value and is idempotent; 
   assert.strictEqual(C.defangText('Beacon to 2001:db8::7, then 2001:db8:: and 2001:db8:1:2:3:4:5:6.'), 'Beacon to 2001[:]db8[:][:]7, then 2001[:]db8[:][:] and 2001[:]db8[:]1[:]2[:]3[:]4[:]5[:]6.');
   assert.strictEqual(C.defangText('at 12:30:45 mac aa:bb:cc:dd:ee:ff std::string'), 'at 12:30:45 mac aa:bb:cc:dd:ee:ff std::string', 'control: not addresses');
 });
+
+/* ---- T-0500.1.7.6 P1 finding 3 (review_5cfea0f481014885): the /prefix form and the letter-only forms ---- */
+test('P1 finding 3: defangText defangs an IPv6 address with a /prefix, one with no decimal digit and the IPv4-mapped form; prose stays as written', function () {
+  var C = require('../../../assets/js/ioc-classify.js');
+  assert.strictEqual(C.defangText('net 2001:db8::/32 here'), 'net 2001[:]db8[:][:]/32 here');
+  assert.strictEqual(C.defangText('upstream 2001:db8::/32, then 2001:db8::1/128.'), 'upstream 2001[:]db8[:][:]/32, then 2001[:]db8[:][:]1/128.');
+  assert.strictEqual(C.defangText('[2001:db8::]/32 and 2001:db8::/0'), '[2001[:]db8[:][:]]/32 and 2001[:]db8[:][:]/0');
+  assert.strictEqual(C.defangText('dead:beef::abcd'), 'dead[:]beef[:][:]abcd', 'no decimal digit');
+  assert.strictEqual(C.defangText('::ffff:192.0.2.1'), '[:][:]ffff[:]192[.]0[.]2[.]1', 'IPv4-mapped');
+  // control: a word that only looks like an address keeps its characters (std::vector, a MAC, a time). An upper-case digit-free hex pair such as "Add::Bad" is NOT this control:
+  // the JS path reads it as an address today (PROPOSAL T-0500.1.7.6: make isIpv6 agree with the include's lower-case rule), so it is not asserted here.
+  assert.strictEqual(C.defangText('std::vector, mac aa:bb:cc:dd:ee:ff at 12:30:45'), 'std::vector, mac aa:bb:cc:dd:ee:ff at 12:30:45', 'control: not addresses');
+  ['net 2001:db8::/32', 'dead:beef::abcd', '::ffff:192.0.2.1'].forEach(function (s) {
+    var once = C.defangText(s);
+    assert.strictEqual(C.defangText(once), once, 'idempotent: ' + once);
+  });
+});

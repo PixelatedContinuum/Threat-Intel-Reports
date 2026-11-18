@@ -351,6 +351,28 @@ test('P1 finding 5: unlinking an actor anchor keeps the reader-facing parts of i
   CASES.forEach((c, i) => assert.equal(html.split('<!--P' + i + '-->')[1].split('<!--Q' + i + '-->')[0].replace(/^\n/, '').replace(/\n$/, ''), c[1], 'case ' + i));
 });
 
+test('P1 finding 3: IPv6 with no decimal digit and the IPv4-mapped form are defanged in running text; a hex-looking word stays as written', (t) => {
+  if (!JEKYLL) return t.skip('NOT CHECKED: no jekyll gem on this machine, so the Liquid include was not executed');
+  const CASES = [
+    ['feed c2 dead:beef::abcd here', 'feed c2 dead[:]beef[:][:]abcd here'],
+    ['dead:beef::1 stays covered', 'dead[:]beef[:][:]1 stays covered'],
+    ['mapped ::ffff:192.0.2.1 and [::ffff:192.0.2.1]:443', 'mapped [:][:]ffff[:]192[.]0[.]2[.]1 and [[:][:]ffff[:]192[.]0[.]2[.]1]:443'],
+    ['at ::ffff:10.0.0.1.', 'at [:][:]ffff[:]10[.]0[.]0[.]1.'],
+    ['net 2001:db8::/32 keeps its prefix', 'net 2001[:]db8[:][:]/32 keeps its prefix'],
+    // controls: what is not an address keeps every character
+    ['Add::Bad std::vector Note: ok', 'Add::Bad std::vector Note: ok'],
+    ['v1.2.3.4 and 300.1.1.1 and 10:30:45', 'v1[.]2[.]3[.]4 and 300.1.1.1 and 10:30:45']
+  ];
+  const body = CASES.map((c, i) => '<!--R' + i + '-->' + cap(c[0]) + '{% include defang-html.html html=t %}' + '<!--S' + i + '-->').join('\n') +
+    '\n<!--T0-->{% include ioc-cell.html type="ipv6" value="dead:beef::abcd" %}<!--U0-->' +
+    '\n<!--T1-->{% include ioc-cell.html type="ipv6" value="::ffff:192.0.2.1" %}<!--U1-->';
+  const { html } = buildSite(body);
+  const got = (a, k) => html.split('<!--' + a + k + '-->')[1].split('<!--' + String.fromCharCode(a.charCodeAt(0) + 1) + k + '-->')[0].replace(/^\n/, '').replace(/\n$/, '');
+  CASES.forEach((c, i) => assert.equal(got('R', i), c[1], 'case ' + i));
+  assert.equal(got('T', 0), '<code>dead[:]beef[:][:]abcd</code>', 'a viewer cell');
+  assert.equal(got('T', 1), '<code>[:][:]ffff[:]192[.]0[.]2[.]1</code>', 'a mapped viewer cell');
+});
+
 /* ---- the gate on a fixture site (no Jekyll needed) ---- */
 function fixtureSite(files) {
   const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'hl-defang-site-'));

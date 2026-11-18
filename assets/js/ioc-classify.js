@@ -204,9 +204,10 @@
   function defangText(text) {
     return String(text == null ? '' : text).replace(/[^\s,;|]+/g, function (word) {
       var un = unfang(word);
-      /* a bare or bracketed IPv6 address (and "[addr]:port") before the generic trimming below, which would cut the trailing colons of "2001:db8::" off as punctuation */
-      var m6 = /^([<("'`]*)(\[?)([0-9a-f:.]*[0-9a-f:])(\]?)(:\d{1,5})?([>)"'`,;!?.]*)$/i.exec(un);
-      if (m6 && !!m6[2] === !!m6[4] && (m6[2] || !m6[5]) && isIpv6(m6[3])) return m6[1] + defangValue(m6[2] + m6[3] + m6[4], 'ipv6') + (m6[5] || '') + m6[6];
+      /* a bare or bracketed IPv6 address (and "[addr]:port", and a "/prefix" after it) before the generic trimming below, which would cut the trailing colons of "2001:db8::" off as
+         punctuation. T-0500.1.7.6 finding 3: the prefix form ("2001:db8::/32") was left raw. */
+      var m6 = /^([<("'`]*)(\[?)([0-9a-f:.]*[0-9a-f:])(\]?)(:\d{1,5})?(\/\d{1,3})?([>)"'`,;!?.]*)$/i.exec(un);
+      if (m6 && !!m6[2] === !!m6[4] && (m6[2] || !m6[5]) && isIpv6(m6[3])) return m6[1] + defangValue(m6[2] + m6[3] + m6[4], 'ipv6') + (m6[5] || '') + (m6[6] || '') + m6[7];
       var lead = /^[<("'`\[]*/.exec(un)[0];
       var rest = un.slice(lead.length);
       var tail = /[>)"'`,;:!?.\]]*$/.exec(rest)[0];
