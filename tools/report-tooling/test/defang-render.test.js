@@ -327,7 +327,9 @@ test('P1 finding 2: every spelling a browser accepts for a reader-facing attribu
     ['<input type="hidden" value="198.51.100.17">', '<input type="hidden" value="198.51.100.17">'],
     ['<p data-title="198.51.100.17">search key</p>', '<p data-title="198.51.100.17">search key</p>'],
     ['<p class="x-198.51.100.17">class</p>', '<p class="x-198.51.100.17">class</p>'],
-    ['<p title="no indicator here">plain</p>', '<p title="no indicator here">plain</p>']
+    ['<p title="no indicator here">plain</p>', '<p title="no indicator here">plain</p>'],
+    // a tag with more attributes than the walk's steps is copied whole, never cut short
+    ['<p title="no indicator here" a1="x" a2="x" a3="x" a4="x" a5="x" a6="x" a7="x" a8="x" a9="x" a10="x" a11="x" a12="x" a13="x" a14="x" a15="x" a16="x" a17="x" a18="x" a19="x" a20="x" a21="x" a22="x" a23="x" a24="x" a25="x" a26="x" a27="x" a28="x" a29="x" a30="x" a31="x" a32="x" a33="x" a34="x" a35="x" a36="x" a37="x" a38="x" a39="x" a40="x" a41="x" a42="x" a43="x" a44="x" a45="x">long</p>', '<p title="no indicator here" a1="x" a2="x" a3="x" a4="x" a5="x" a6="x" a7="x" a8="x" a9="x" a10="x" a11="x" a12="x" a13="x" a14="x" a15="x" a16="x" a17="x" a18="x" a19="x" a20="x" a21="x" a22="x" a23="x" a24="x" a25="x" a26="x" a27="x" a28="x" a29="x" a30="x" a31="x" a32="x" a33="x" a34="x" a35="x" a36="x" a37="x" a38="x" a39="x" a40="x" a41="x" a42="x" a43="x" a44="x" a45="x">long</p>']
   ];
   const body = CASES.map((c, i) => '<!--N' + i + '-->{% capture h %}{% raw %}' + c[0] + '{% endraw %}{% endcapture %}{% include defang-html.html html=h %}<!--O' + i + '-->').join('\n');
   const { html } = buildSite(body);

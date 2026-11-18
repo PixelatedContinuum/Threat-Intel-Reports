@@ -248,6 +248,8 @@
             {%- endif -%}
           {%- endunless -%}
         {%- endfor -%}
+        {%- comment -%} a tag with more attributes than the walk's steps keeps its remainder as written: the walk can fall short of the end, never drop text {%- endcomment -%}
+        {%- unless _dh_stop -%}{{- _dh_rem -}}{%- endunless -%}
         {%- endcapture -%}
         {%- assign _dh_tag_out = _dh_walk -%}
       {%- endif -%}
