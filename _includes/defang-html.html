@@ -16,8 +16,10 @@
       its article links are curated feed publishers, not actor infrastructure, and the rendered-page gate checks them for IP targets only);
     - a kept external link whose label is only its own host name or host + path ("patchstack.com", "linkedin.com/in/josephrharrison") is not defanged: the label names where the reference goes.
   An element carrying data-literal="<type>" (the IOC viewer's hash, filename, path and registry cells, _includes/ioc-cell.html) keeps its text as written.
-  Tag attributes are never rewritten: an href or a data-title search key stays exactly as the layout wrote it (the IOC viewer's data-confidence, data-action and data-fp, which its CSV export reads, are written defanged by the layout itself) (the rendered-page gate reads the tooltip
-  attributes title, alt, aria-label and data-copy, so a layout must defang those where it writes them).
+  Tag attributes: the six the rendered-page gate reads (title, alt, aria-label, placeholder, data-copy, data-gloss) go through the text defang, and so does the value an <input>
+  displays (not a hidden, checkbox, radio, file, image, range or colour control, which prints nothing). They are read by name whatever the spelling a browser accepts (name case,
+  spaces around "=", double, single or no quote) and only the value is rewritten; href, data-title, every other data-* and every other attribute stay exactly as written (the IOC
+  viewer's data-confidence, data-action and data-fp, which its CSV export reads, are written defanged by the layout itself).
   The markup is cut at "<" and ">", which kramdown and Liquid always escape in text (&lt; &gt;); a raw ">" inside an attribute value would be read as the end of the tag.
 {%- endcomment -%}
 {%- assign _dh_unlink = true -%}
@@ -25,8 +27,7 @@
 {%- assign _dh_links = site.data.defang_allow.links -%}
 {%- assign _dh_raw = site.data.defang_allow.raw -%}
 {%- assign _dh_mbx = site.data.defang_allow.mailboxes -%}
-{%- assign _dh_attrs = "title,alt,aria-label" | split: "," -%}
-{%- assign _dh_qs = "d,s" | split: "," -%}
+{%- assign _dh_attrs = "title,alt,aria-label,placeholder,data-copy,data-gloss" | split: "," -%}
 {%- capture _dh_nlc %}
 {% endcapture -%}
 {%- capture _dh_tabc %}	{% endcapture -%}
@@ -71,6 +72,9 @@
       {%- assign _dh_txt_raw = false -%}
       {%- assign _dh_lab = "" -%}
       {%- assign _dh_lab2 = "" -%}
+      {%- assign _dh_unl_here = false -%}
+      {%- assign _dh_id_v = "" -%}
+      {%- assign _dh_title_v = "" -%}
       {%- if _dh_nm == "script" or _dh_nm == "style" or _dh_nm == "pre" or _dh_nm == "template" or _dh_nm == "textarea" -%}
         {%- assign _dh_skip = _dh_nm -%}
         {%- assign _dh_txt_raw = true -%}
@@ -154,32 +158,108 @@
           {%- assign _dh_lab = "" -%}
           {%- assign _dh_href = _dh_href | replace: '"', "&quot;" | replace: "<", "&lt;" | replace: ">", "&gt;" -%}
           {%- capture _dh_hd %}{% include defang-text.html text=_dh_href %}{% endcapture -%}
-          {%- assign _dh_tag_out = 'span class="hl-unlinked" data-unlinked="' | append: _dh_hd | append: '"' -%}
+          {%- assign _dh_unl_here = true -%}
           {%- assign _dh_unl = true -%}
         {%- endif -%}
       {%- elsif _dh_nm == "/a" and _dh_unl -%}
         {%- assign _dh_tag_out = "/span" -%}
         {%- assign _dh_unl = false -%}
       {%- endif -%}
-      {%- comment -%} the tooltip attributes a reader can hover: title, alt and aria-label go through the text defang; href, data-* and every other attribute stay exactly as written {%- endcomment -%}
-      {%- if _dh_tag_out contains "title=" or _dh_tag_out contains "alt=" or _dh_tag_out contains "aria-label=" -%}
-        {%- for _dh_at in _dh_attrs -%}
-          {%- for _dh_qn in _dh_qs -%}
-            {%- if _dh_qn == "d" -%}{%- assign _dh_qc = '"' -%}{%- else -%}{%- assign _dh_qc = "'" -%}{%- endif -%}
-            {%- assign _dh_ak = " " | append: _dh_at | append: "=" | append: _dh_qc -%}
-            {%- if _dh_tag_out contains _dh_ak -%}
-              {%- assign _dh_av = _dh_tag_out | split: _dh_ak | last | append: "" | split: _dh_qc | first | append: "" -%}
-              {%- if _dh_av contains "." or _dh_av contains "@" or _dh_av contains ":" -%}
-                {%- capture _dh_avd %}{% include defang-text.html text=_dh_av %}{% endcapture -%}
-                {%- if _dh_avd != _dh_av -%}
-                  {%- assign _dh_ao = _dh_ak | append: _dh_av | append: _dh_qc -%}
-                  {%- assign _dh_an = _dh_ak | append: _dh_avd | append: _dh_qc -%}
-                  {%- assign _dh_tag_out = _dh_tag_out | replace_first: _dh_ao, _dh_an -%}
+      {%- comment -%} T-0500.1.7.6 finding 2 (review_5cfea0f481014885): the reader-facing attributes are read by name, in ANY spelling a browser accepts (upper or lower case,
+         spaces around "=", double, single or no quote), one walk over the attributes instead of a search for one exact string. They are the six the rendered-page gate reads
+         (lib/defang-site.js TOOLTIP_ATTRS) plus the value an <input> displays; href, data-title, data-* and every other attribute stay exactly as written.
+         A tag with none of them and no anchor to unlink is copied as it was, so the build writes the same bytes as before for every other tag. {%- endcomment -%}
+      {%- assign _dh_rf = false -%}
+      {%- if _dh_unl_here or _dh_nm == "input" -%}{%- assign _dh_rf = true -%}{%- endif -%}
+      {%- if _dh_rf == false -%}
+        {%- for _dh_at in _dh_attrs -%}{%- if _dh_tl contains _dh_at -%}{%- assign _dh_rf = true -%}{%- endif -%}{%- endfor -%}
+      {%- endif -%}
+      {%- if _dh_rf -%}
+        {%- assign _dh_nodisp = false -%}
+        {%- if _dh_nm == "input" -%}
+          {%- comment -%} the type is compared with quotes and spaces taken out, so every spelling of type="hidden" and its six neighbours is read {%- endcomment -%}
+          {%- assign _dh_tyq = _dh_tl | replace: '"', "" | replace: "'", "" | replace: " ", "" -%}
+          {%- assign _dh_tynames = "hidden,checkbox,radio,file,image,range,color" | split: "," -%}
+          {%- for _dh_ty in _dh_tynames -%}
+            {%- assign _dh_tyu = "type=" | append: _dh_ty -%}
+            {%- if _dh_tyq contains _dh_tyu -%}{%- assign _dh_nodisp = true -%}{%- endif -%}
+          {%- endfor -%}
+        {%- endif -%}
+        {%- assign _dh_rem = _dh_tagn -%}
+        {%- assign _dh_stop = false -%}
+        {%- capture _dh_walk -%}
+        {%- for _dh_i in (1..40) -%}
+          {%- unless _dh_stop -%}
+            {%- assign _dh_ls = _dh_rem | lstrip -%}
+            {%- if _dh_ls == "" -%}
+              {{- _dh_rem -}}
+              {%- assign _dh_stop = true -%}
+            {%- else -%}
+              {%- assign _dh_nlead = _dh_rem.size | minus: _dh_ls.size -%}
+              {%- if _dh_nlead > 0 -%}{{- _dh_rem | slice: 0, _dh_nlead -}}{%- endif -%}
+              {%- assign _dh_t0 = _dh_ls | split: " " | first | append: "" -%}
+              {%- assign _dh_an = _dh_t0 | split: "=" | first | append: "" -%}
+              {%- if _dh_an == "" -%}
+                {{- _dh_ls -}}
+                {%- assign _dh_stop = true -%}
+              {%- else -%}
+                {%- assign _dh_arest = _dh_ls | slice: _dh_an.size, 100000 -%}
+                {%- assign _dh_ar2 = _dh_arest | lstrip -%}
+                {%- assign _dh_ac0 = _dh_ar2 | slice: 0 -%}
+                {%- assign _dh_anl = _dh_an | downcase -%}
+                {%- if _dh_ac0 == "=" -%}
+                  {%- assign _dh_ar3 = _dh_ar2 | slice: 1, 100000 | lstrip -%}
+                  {%- assign _dh_aq = _dh_ar3 | slice: 0 -%}
+                  {%- assign _dh_aqc = "" -%}
+                  {%- if _dh_aq == '"' or _dh_aq == "'" -%}
+                    {%- assign _dh_aqc = _dh_aq -%}
+                    {%- assign _dh_av = _dh_ar3 | slice: 1, 100000 | split: _dh_aq | first | append: "" -%}
+                    {%- assign _dh_aused = _dh_av.size | plus: 2 -%}
+                  {%- else -%}
+                    {%- assign _dh_av = _dh_ar3 | split: " " | first | append: "" -%}
+                    {%- assign _dh_aused = _dh_av.size -%}
+                  {%- endif -%}
+                  {%- if _dh_aused >= _dh_ar3.size -%}{%- assign _dh_atail = "" -%}{%- else -%}{%- assign _dh_atail = _dh_ar3 | slice: _dh_aused, 100000 -%}{%- endif -%}
+                  {%- assign _dh_isrf = false -%}
+                  {%- if _dh_attrs contains _dh_anl -%}{%- assign _dh_isrf = true -%}{%- endif -%}
+                  {%- if _dh_anl == "value" and _dh_nm == "input" and _dh_nodisp == false -%}{%- assign _dh_isrf = true -%}{%- endif -%}
+                  {%- assign _dh_avd = _dh_av -%}
+                  {%- if _dh_isrf -%}
+                    {%- if _dh_av contains "." or _dh_av contains "@" or _dh_av contains ":" -%}
+                      {%- capture _dh_avd %}{% include defang-text.html text=_dh_av %}{% endcapture -%}
+                    {%- endif -%}
+                  {%- endif -%}
+                  {%- if _dh_anl == "title" and _dh_title_v == "" -%}{%- assign _dh_title_v = _dh_avd -%}{%- endif -%}
+                  {%- if _dh_anl == "id" and _dh_id_v == "" -%}{%- assign _dh_id_v = _dh_av -%}{%- endif -%}
+                  {%- assign _dh_used = _dh_ls.size | minus: _dh_atail.size -%}
+                  {%- if _dh_avd == _dh_av -%}
+                    {{- _dh_ls | slice: 0, _dh_used -}}
+                  {%- else -%}
+                    {%- assign _dh_vstart = _dh_used | minus: _dh_av.size | minus: _dh_aqc.size -%}
+                    {%- assign _dh_nv = _dh_ls | slice: 0, _dh_vstart | append: _dh_avd | append: _dh_aqc -%}
+                    {{- _dh_nv -}}
+                  {%- endif -%}
+                  {%- assign _dh_rem = _dh_atail -%}
+                {%- else -%}
+                  {{- _dh_an -}}
+                  {%- assign _dh_rem = _dh_arest -%}
                 {%- endif -%}
               {%- endif -%}
             {%- endif -%}
-          {%- endfor -%}
+          {%- endunless -%}
         {%- endfor -%}
+        {%- endcapture -%}
+        {%- assign _dh_tag_out = _dh_walk -%}
+      {%- endif -%}
+      {%- if _dh_unl_here -%}
+        {%- comment -%} T-0500.1.7.6 finding 5 (review_5cfea0f481014885): removing the target keeps what the reader could see of the anchor: its id and its title tooltip (the title
+           already went through the text defang in the walk above), so the reference keeps its name and its plain-language context. {%- endcomment -%}
+        {%- assign _dh_tag_out = 'span class="hl-unlinked" data-unlinked="' | append: _dh_hd | append: '"' -%}
+        {%- if _dh_id_v != "" -%}{%- assign _dh_tag_out = _dh_tag_out | append: ' id="' | append: _dh_id_v | append: '"' -%}{%- endif -%}
+        {%- if _dh_title_v != "" -%}
+          {%- assign _dh_tv = _dh_title_v | replace: '"', "&quot;" | replace: "<", "&lt;" | replace: ">", "&gt;" -%}
+          {%- assign _dh_tag_out = _dh_tag_out | append: ' title="' | append: _dh_tv | append: '"' -%}
+        {%- endif -%}
       {%- endif -%}
       {%- if _dh_tag_out == _dh_tagn -%}{%- assign _dh_tag_out = _dh_tag -%}{%- endif -%}
       {{- "<" -}}{{- _dh_tag_out -}}{{- ">" -}}

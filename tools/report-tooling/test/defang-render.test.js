@@ -250,7 +250,7 @@ const R2_HTML = [
   ['<a href = "https://198.51.100.17/">z</a>', '<span class="hl-unlinked" data-unlinked="hxxps://198[.]51[.]100[.]17/">z</span>'],
   ["<a\n href='https://198.51.100.17/'\n class=\"x\">ml</a>", '<span class="hl-unlinked" data-unlinked="hxxps://198[.]51[.]100[.]17/">ml</span>'],
   // fail closed: an "href=" written inside another attribute, an entity-written scheme, a quote in the target
-  ['<a title="see href=https://198.51.100.17/" href="/reports/">t</a>', '<span class="hl-unlinked" data-unlinked="hxxps://198[.]51[.]100[.]17/&quot;">t</span>'],
+  ['<a title="see href=https://198.51.100.17/" href="/reports/">t</a>', '<span class="hl-unlinked" data-unlinked="hxxps://198[.]51[.]100[.]17/&quot;" title="see href=hxxps://198[.]51[.]100[.]17/">t</span>'],
   ['<a href="&#104;ttp://198.51.100.17/">e</a>', '<span class="hl-unlinked" data-unlinked="&#104;ttp://198[.]51[.]100[.]17/">e</span>'],
   // the allow list and our own pages are unaffected by the quote style
   ["<a href='https://attack.mitre.org/techniques/T1001/'>mitre</a> <a href='/reports/'>own</a>", "<a href='https://attack.mitre.org/techniques/T1001/'>mitre</a> <a href='/reports/'>own</a>"],
@@ -309,6 +309,46 @@ test('P1 finding 1: an href that only looks relative ("/\\198.51.100.17/x") is u
   const g = gate(fixtureSite({ 'actors/x/index.html': got }));
   assert.equal(g.status, 0, g.stdout);
   assert.match(g.stdout, /unlinked\s+1 <a> rendered as text/);
+});
+
+test('P1 finding 2: every spelling a browser accepts for a reader-facing attribute is defanged (spaces around "=", upper case, no quote, an input\'s displayed value); a search key stays as written', (t) => {
+  if (!JEKYLL) return t.skip('NOT CHECKED: no jekyll gem on this machine, so the Liquid include was not executed');
+  const CASES = [
+    ['<p title="198.51.100.17">control</p>', '<p title="198[.]51[.]100[.]17">control</p>'],
+    ['<p title = "198.51.100.17">spaced</p>', '<p title = "198[.]51[.]100[.]17">spaced</p>'],
+    ['<p TITLE="198.51.100.17">upper</p>', '<p TITLE="198[.]51[.]100[.]17">upper</p>'],
+    ['<p title=198.51.100.17>unq</p>', '<p title=198[.]51[.]100[.]17>unq</p>'],
+    ["<p title = '198.51.100.17'>single</p>", "<p title = '198[.]51[.]100[.]17'>single</p>"],
+    ['<img alt="host 198.51.100.17" src="/a.png">', '<img alt="host 198[.]51[.]100[.]17" src="/a.png">'],
+    ['<span data-copy="198.51.100.17">x</span>', '<span data-copy="198[.]51[.]100[.]17">x</span>'],
+    ['<input value="198.51.100.17">', '<input value="198[.]51[.]100[.]17">'],
+    ['<input type="search" value="198.51.100.17">', '<input type="search" value="198[.]51[.]100[.]17">'],
+    // controls: what is not displayed or not reader-facing keeps its characters
+    ['<input type="hidden" value="198.51.100.17">', '<input type="hidden" value="198.51.100.17">'],
+    ['<p data-title="198.51.100.17">search key</p>', '<p data-title="198.51.100.17">search key</p>'],
+    ['<p class="x-198.51.100.17">class</p>', '<p class="x-198.51.100.17">class</p>'],
+    ['<p title="no indicator here">plain</p>', '<p title="no indicator here">plain</p>']
+  ];
+  const body = CASES.map((c, i) => '<!--N' + i + '-->{% capture h %}{% raw %}' + c[0] + '{% endraw %}{% endcapture %}{% include defang-html.html html=h %}<!--O' + i + '-->').join('\n');
+  const { html } = buildSite(body);
+  CASES.forEach((c, i) => assert.equal(html.split('<!--N' + i + '-->')[1].split('<!--O' + i + '-->')[0].replace(/^\n/, '').replace(/\n$/, ''), c[1], 'case ' + i));
+});
+
+test('P1 finding 5: unlinking an actor anchor keeps the reader-facing parts of it (id, title tooltip), so a reference loses its target and not its context', (t) => {
+  if (!JEKYLL) return t.skip('NOT CHECKED: no jekyll gem on this machine, so the Liquid include was not executed');
+  const CASES = [
+    ["<a href='https://198.51.100.17/' title='Context the reader could hover' id='reference'>Actor host</a>",
+      '<span class="hl-unlinked" data-unlinked="hxxps://198[.]51[.]100[.]17/" id="reference" title="Context the reader could hover">Actor host</span>'],
+    // the tooltip is defanged by the same walk it would get on a kept anchor
+    ['<a href="http://198.51.100.17/x" title="C2 at 198.51.100.17" id="ref-2">host</a>',
+      '<span class="hl-unlinked" data-unlinked="hxxp://198[.]51[.]100[.]17/x" id="ref-2" title="C2 at 198[.]51[.]100[.]17">host</span>'],
+    // controls: an anchor with no id or title gains neither; a kept anchor is unchanged, attributes in the order it wrote them
+    ['<a href="https://vendor.example.net/r">vendor</a>', '<span class="hl-unlinked" data-unlinked="hxxps://vendor[.]example[.]net/r">vendor</span>'],
+    ["<a href='https://attack.mitre.org/techniques/T1001/' title='Context' id='mitre'>mitre</a>", "<a href='https://attack.mitre.org/techniques/T1001/' title='Context' id='mitre'>mitre</a>"]
+  ];
+  const body = CASES.map((c, i) => '<!--P' + i + '-->{% capture h %}{% raw %}' + c[0] + '{% endraw %}{% endcapture %}{% include defang-html.html html=h %}<!--Q' + i + '-->').join('\n');
+  const { html } = buildSite(body);
+  CASES.forEach((c, i) => assert.equal(html.split('<!--P' + i + '-->')[1].split('<!--Q' + i + '-->')[0].replace(/^\n/, '').replace(/\n$/, ''), c[1], 'case ' + i));
 });
 
 /* ---- the gate on a fixture site (no Jekyll needed) ---- */
