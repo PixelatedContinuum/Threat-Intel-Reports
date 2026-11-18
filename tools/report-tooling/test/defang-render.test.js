@@ -407,6 +407,9 @@ test('T-0677 P1: an indicator written with dot or colon entities is defanged (th
     ['<p title="evil&#46;example&#46;xyz">t</p>', '<p title="evil[.]example[.]xyz">t</p>'],
     ['<img alt="host evil&#x2e;example&#x2e;xyz" src="/a.png">', '<img alt="host evil[.]example[.]xyz" src="/a.png">'],
     ['<p data-copy="2001&#58;db8&#58;&#58;7">x</p>', '<p data-copy="2001[:]db8[:][:]7">x</p>'],
+    ['<span aria-label="see evil&#46;example&#46;xyz">x</span>', '<span aria-label="see evil[.]example[.]xyz">x</span>'],
+    ['<input type="text" placeholder="C2 198&#46;51&#46;100&#46;17" value="x">', '<input type="text" placeholder="C2 198[.]51[.]100[.]17" value="x">'],
+    ['<span data-gloss="net 2001&#58;db8&#58;&#58;7">x</span>', '<span data-gloss="net 2001[:]db8[:][:]7">x</span>'],
     ['<input value="evil&period;example&period;xyz">', '<input value="evil[.]example[.]xyz">'],
     // controls: a raw element, a data-literal cell and an entity-prose attribute keep every byte
     ['<pre>evil&#46;example&#46;xyz</pre>', '<pre>evil&#46;example&#46;xyz</pre>'],
@@ -434,7 +437,7 @@ test('T-0677 P1: what the browser renders for an entity-written indicator is an 
   const body = '<!--X0-->{% capture h %}{% raw %}<p>C2 at evil&#46;example&#46;xyz and 198&#46;51&#46;100&#46;17</p>{% endraw %}{% endcapture %}{% include defang-html.html html=h %}<!--Y0-->';
   const { out, html } = buildSite(body);
   const got = html.split('<!--X0-->')[1].split('<!--Y0-->')[0].replace(/^\n/, '').replace(/\n$/, '');
-  // the reviewer's measurement: the raw entity form is an ordinary domain to every reader
+  // the measurement recorded in T-0500.1.7.6: the raw entity form is an ordinary domain to every reader
   const raw = new JSDOM('<!doctype html><html><body><p>C2 at evil&#46;example&#46;xyz and 198&#46;51&#46;100&#46;17</p></body></html>').window.document.body.textContent;
   assert.match(raw, /evil\.example\.xyz and 198\.51\.100\.17/, 'control: the browser reads the entity form as a live domain and address');
   const shown = new JSDOM('<!doctype html><html><body>' + got + '</body></html>').window.document.body.textContent;
