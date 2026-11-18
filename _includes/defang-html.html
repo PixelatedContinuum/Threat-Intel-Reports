@@ -19,8 +19,9 @@
   An element carrying data-literal="<type>" (the IOC viewer's hash, filename, path and registry cells, _includes/ioc-cell.html) keeps its text as written.
   Tag attributes: the six the rendered-page gate reads (title, alt, aria-label, placeholder, data-copy, data-gloss) go through the text defang, and so does the value an <input>
   displays (not a hidden, checkbox, radio, file, image, range or colour control, which prints nothing). They are read by name whatever the spelling a browser accepts (name case,
-  spaces around "=", double, single or no quote) and only the value is rewritten; href, data-title, every other data-* and every other attribute stay exactly as written (the IOC
-  viewer's data-confidence, data-action and data-fp, which its CSV export reads, are written defanged by the layout itself).
+  any HTML whitespace — space, tab, line feed, form feed, carriage return — around "=" or between attributes, double, single or no quote) and only the value is rewritten; href,
+  data-title, every other data-* and every other attribute stay exactly as written (the IOC viewer's data-confidence, data-action and data-fp, which its CSV export reads, are
+  written defanged by the layout itself).
   The markup is cut at "<" and ">", which kramdown and Liquid always escape in text (&lt; &gt;); a raw ">" inside an attribute value would be read as the end of the tag.
 {%- endcomment -%}
 {%- assign _dh_unlink = true -%}
@@ -32,6 +33,9 @@
 {%- capture _dh_nlc %}
 {% endcapture -%}
 {%- capture _dh_tabc %}	{% endcapture -%}
+{%- capture _dh_crc %}{% endcapture -%}
+{%- capture _dh_ffc %}{% endcapture -%}
+{%- assign _dh_crlfc = _dh_crc | append: _dh_nlc -%}
 {%- assign _dh_pieces = include.html | append: "" | split: "<" -%}
 {%- assign _dh_skip = "" -%}
 {%- assign _dh_unl = false -%}
@@ -65,9 +69,13 @@
       {%- assign _dh_tag = _dh_p | split: ">" | first | append: "" -%}
       {%- assign _dh_n = _dh_tag.size | plus: 1 -%}
       {%- assign _dh_txt = _dh_p | slice: _dh_n, 10000000 -%}
-      {%- comment -%} a tag may be broken over lines or tabbed: read it with single spaces (T-0500.1.7.4 review 2) {%- endcomment -%}
+      {%- comment -%} a tag may be broken over lines or tabbed: read it with single spaces. All five characters a browser accepts as attribute whitespace
+         (space, tab, line feed, form feed, carriage return, with a CRLF pair counting as one) are read as a space here, so every separator the walk reads below is one
+         character regardless of how the tag was written (T-0500.1.7.6 P2, review_6cee79058a4c4cc0); a tag nothing rewrites is printed from _dh_tag, so its bytes are kept {%- endcomment -%}
       {%- assign _dh_tagn = _dh_tag -%}
-      {%- if _dh_tag contains _dh_nlc or _dh_tag contains _dh_tabc -%}{%- assign _dh_tagn = _dh_tag | replace: _dh_nlc, " " | replace: _dh_tabc, " " -%}{%- endif -%}
+      {%- if _dh_tag contains _dh_crlfc or _dh_tag contains _dh_nlc or _dh_tag contains _dh_tabc or _dh_tag contains _dh_crc or _dh_tag contains _dh_ffc -%}
+        {%- assign _dh_tagn = _dh_tag | replace: _dh_crlfc, " " | replace: _dh_nlc, " " | replace: _dh_tabc, " " | replace: _dh_crc, " " | replace: _dh_ffc, " " -%}
+      {%- endif -%}
       {%- assign _dh_tl = _dh_tagn | downcase -%}
       {%- assign _dh_nm = _dh_tl | split: " " | first | append: "" -%}
       {%- assign _dh_tag_out = _dh_tagn -%}
@@ -179,8 +187,9 @@
       {%- if _dh_rf -%}
         {%- assign _dh_nodisp = false -%}
         {%- if _dh_nm == "input" -%}
-          {%- comment -%} the type is compared with quotes and spaces taken out, so every spelling of type="hidden" and its six neighbours is read {%- endcomment -%}
-          {%- assign _dh_tyq = _dh_tl | replace: '"', "" | replace: "'", "" | replace: " ", "" -%}
+          {%- comment -%} the type is compared with quotes and every whitespace character taken out (the read is Liquid's split on a space, which is a split on every
+             whitespace run, so a tabbed or line-broken type="hidden" is read like a spaced one: T-0500.1.7.6 P2, review_6cee79058a4c4cc0) {%- endcomment -%}
+          {%- assign _dh_tyq = _dh_tl | replace: '"', "" | replace: "'", "" | split: " " | join: "" -%}
           {%- assign _dh_tynames = "hidden,checkbox,radio,file,image,range,color" | split: "," -%}
           {%- for _dh_ty in _dh_tynames -%}
             {%- assign _dh_tyu = "type=" | append: _dh_ty -%}

@@ -471,6 +471,50 @@ test('T-0677 P1: the include and the classifier agree on IPv6: an upper-case dig
   });
 });
 
+/* ---- T-0500.1.7.6 P2 (review_6cee79058a4c4cc0): the attribute walk reads every HTML whitespace character as a separator ----
+   A browser accepts space, tab, line feed, carriage return and form feed (and a CRLF pair, which it normalises to one newline) wherever
+   an attribute separator goes: before an attribute name, on either side of "=", at the end of an unquoted value, after a quoted one. The
+   walk is written to read a space; this matrix writes each of those positions with each of the five characters, and requires the same
+   output the space spelling gives, byte for byte, so a value a reader would see raw cannot hide behind a tab or a form feed. */
+const HTML_WS = [['space', ' '], ['tab', '\t'], ['line feed', '\n'], ['carriage return', '\r'], ['form feed', '\f'], ['CRLF pair', '\r\n']];
+test('P2 (review_6cee79058a4c4cc0): every HTML whitespace character is the separator the walk reads a space as, in every position it reads one', (t) => {
+  if (!JEKYLL) return t.skip('NOT CHECKED: no jekyll gem on this machine, so the Liquid include was not executed');
+  const CASES = [];
+  for (const [name, ws] of HTML_WS) {
+    // 1. between the element name and its first attribute (the walk's leading-whitespace read and its token split)
+    CASES.push([name + ', before the first attribute', '<p' + ws + 'title="198.51.100.17">x</p>',
+      '<p title="198[.]51[.]100[.]17">x</p>']);
+    // 2. on either side of "=" (the read between the name and "=", and between "=" and the value)
+    CASES.push([name + ', around "="', '<p title' + ws + '=' + ws + '"198.51.100.17">x</p>',
+      '<p title = "198[.]51[.]100[.]17">x</p>']);
+    // 3. ending an unquoted value (the walk's token split on the value)
+    CASES.push([name + ', ending an unquoted value', '<p title=198.51.100.17' + ws + 'class="c">x</p>',
+      '<p title=198[.]51[.]100[.]17 class="c">x</p>']);
+    // 4. after a quoted value (the next attribute's leading whitespace)
+    CASES.push([name + ', after a quoted value', '<p title="198.51.100.17"' + ws + 'class="c">x</p>',
+      '<p title="198[.]51[.]100[.]17" class="c">x</p>']);
+    // 5. the same two reads on an anchor's href, which its own walk reads (Liquid lstrip around "=" and the unquoted target)
+    CASES.push([name + ', in an anchor href', '<a href' + ws + '=' + ws + '"https://198.51.100.17/x">x</a>',
+      '<span class="hl-unlinked" data-unlinked="hxxps://198[.]51[.]100[.]17/x">x</span>']);
+    CASES.push([name + ', ending an unquoted href', '<a href=https://198.51.100.17/x' + ws + 'class="c">x</a>',
+      '<span class="hl-unlinked" data-unlinked="hxxps://198[.]51[.]100[.]17/x">x</span>']);
+    // 6. inside the spelling of an input's type, which decides whether the value it displays is rewritten at all:
+    //    a hidden input's value is not displayed, so the tag must come out exactly as it went in
+    CASES.push([name + ', inside the input type spelling', '<input type' + ws + '=' + ws + '"hidden"' + ws + 'value="198.51.100.17">',
+      '<input type' + ws + '=' + ws + '"hidden"' + ws + 'value="198.51.100.17">']);
+  }
+  // control: a tag the walk has no reason to touch keeps every byte of its whitespace, whatever it is
+  const UNTOUCHED = [['control, CR in a tag with no reader-facing attribute', '<p\rclass="x">y</p>', '<p\rclass="x">y</p>'],
+    ['control, FF in a tag with no reader-facing attribute', '<p\fclass="x">198.51.100.17</p>', '<p\fclass="x">198[.]51[.]100[.]17</p>']];
+  const all = CASES.concat(UNTOUCHED);
+  const body = all.map((c, i) => '<!--W' + i + '-->{% capture h %}{% raw %}' + c[1] + '{% endraw %}{% endcapture %}{% include defang-html.html html=h %}<!--X' + i + '-->').join('\n');
+  const { html } = buildSite(body);
+  all.forEach((c, i) => {
+    const got = html.split('<!--W' + i + '-->')[1].split('<!--X' + i + '-->')[0].replace(/^\n/, '').replace(/\n$/, '');
+    assert.equal(got, c[2], c[0] + ': ' + JSON.stringify(c[1]));
+  });
+});
+
 /* ---- the gate on a fixture site (no Jekyll needed) ---- */
 function fixtureSite(files) {
   const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'hl-defang-site-'));
