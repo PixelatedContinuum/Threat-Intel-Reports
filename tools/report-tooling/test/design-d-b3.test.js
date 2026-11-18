@@ -44,11 +44,55 @@ test('every section of a dashboard has an entry in its bar, one icon and accent 
   }
 });
 
-test('the dashboards print no network indicator of their own and compute their counts from the page lists', () => {
-  for (const file of Object.keys(SECTIONS)) {
+/* T-0500.1.7.6 finding 7 (review_731d8e368b194a90): the test that stood here asserted only that the source holds no dotted quad and contains ".size", and it
+   passed on the unchanged baseline layout, so it could not see a wrong dashboard count. This one renders the layout's own count block with Liquid against two
+   data sets and requires every number the KPI tiles print to follow the data: a hardcoded number, a wrong filter, a lost list or a count that does not reach
+   the tile fails, and it fails on the baseline, which has no count block at all. */
+const COUNT_BLOCKS = {
+  '_layouts/actor.html': {
+    first: '{%- assign n_rep = ix.reports.size', last: 'assign max_m = 1',
+    vars: ['n_rep', 'n_prim', 'n_ment', 'n_tech', 'n_tac', 'n_ident', 'n_kinds', 'n_tool', 'n_rel'],
+    data: [
+      { ix: { reports: [{ role: 'primary', mentions: 7 }, { role: 'mention', mentions: 3 }, { role: 'primary', mentions: 1 }], attack: ['T1', 'T2', 'T3', 'T4', 'T5'], tactics: ['a', 'b'] },
+        a: { identifiers: [{ kind: 'ipv4' }, { kind: 'domain' }, { kind: 'ipv4' }, { kind: 'md5' }], tooling: ['x'], related: ['y', 'z'] } },
+      { ix: { reports: [], attack: [], tactics: [] }, a: { identifiers: [], tooling: [], related: [] } },
+      { ix: { reports: [{ role: 'mention', mentions: 2 }], attack: ['T1'], tactics: ['a'] }, a: { identifiers: [{ kind: 'sha256' }], tooling: ['x', 'y'], related: ['z'] } }
+    ],
+    want: [['3', '2', '1', '5', '2', '4', '3', '1', '2'], ['0', '0', '0', '0', '0', '0', '0', '0', '0'], ['1', '0', '1', '1', '1', '1', '1', '2', '1']]
+  },
+  '_layouts/family.html': {
+    first: '{%- assign n_rep = f.report_count', last: 'assign n_det = f.detections.size',
+    vars: ['n_rep', 'n_rule', 'n_feed', 'n_act', 'n_det'],
+    data: [{ f: { report_count: 4, rule_count: 9, feed_count: 2, actor_count: 3, detections: [{}, {}] } },
+      { f: { detections: [] } },
+      { f: { report_count: 1, rule_count: 0, feed_count: 0, actor_count: 6, detections: [{}] } }],
+    want: [['4', '9', '2', '3', '2'], ['0', '0', '0', '0', '0'], ['1', '0', '0', '6', '1']]
+  },
+  '_layouts/technique.html': {
+    first: '{%- assign n_rep = t.report_count', last: 'assign n_tac = t.tactics.size',
+    vars: ['n_rep', 'n_rule', 'n_act', 'n_det', 'n_tac'],
+    data: [{ t: { report_count: 2, rule_count: 5, actor_count: 4, detections: [{}, {}, {}], tactics: ['a'] } },
+      { t: { detections: [], tactics: [] } },
+      { t: { report_count: 7, rule_count: 1, actor_count: 0, detections: [{}], tactics: ['a', 'b', 'c'] } }],
+    want: [['2', '5', '4', '3', '1'], ['0', '0', '0', '0', '0'], ['7', '1', '0', '1', '3']]
+  }
+};
+
+test('the dashboards compute each KPI count from the page lists and print that number: the count block rendered with Liquid follows the data in every shape', { skip: !haveLiquid && 'NOT CHECKED: ruby or the liquid gem is missing' }, () => {
+  for (const [file, spec] of Object.entries(COUNT_BLOCKS)) {
     const src = strip(read(file));
-    assert.equal(/\b\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\b/.test(src), false, file + ': no literal address');
-    assert.ok(/\.size/.test(src), file + ' counts lists with .size');
+    assert.equal(/\b\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\b/.test(src), false, file + ': the dashboard prints no literal address of its own');
+    const i = src.indexOf(spec.first);
+    assert.ok(i > -1, file + ': the count block starts at ' + JSON.stringify(spec.first) + ' (the baseline layout has no such block)');
+    const j = src.indexOf(spec.last, i);
+    assert.ok(j > i, file + ': the count block ends at ' + JSON.stringify(spec.last));
+    const block = src.slice(i, src.indexOf('\n', j) + 1);
+    const tpl = block + '\n' + spec.vars.map((v) => '{{ ' + v + ' }}').join('|');
+    spec.data.forEach((data, n) => {
+      assert.equal(liquid(tpl, data).trim(), spec.want[n].join('|'), file + ': data set ' + n);
+    });
+    // the number the block computes is the number the tile prints (a count that never reaches d-kpi.html is a number no reader sees)
+    assert.match(src, /include d-kpi\.html num=n_rep\b/, file + ': the report count reaches a KPI tile');
   }
 });
 
