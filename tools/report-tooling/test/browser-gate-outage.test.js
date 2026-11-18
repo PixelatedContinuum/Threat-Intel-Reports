@@ -56,6 +56,13 @@ test('T-0678 downloads control: an error with no notChecked mark at the same poi
   assertFail(runGate(DOWNLOADS, Object.assign({}, DL_ENV, { HL_STUB_CDP_HARD: '1' })), 'downloads control');
 });
 
+test('T-0678 downloads: a listener that cannot bind, which lib/page-server.js marks notChecked, is NOT CHECKED (exit 2)', () => {
+  const r = runGate(DOWNLOADS, { HL_STUB_FETCH_HTML: PAGE, HL_STUB_SERVER_ERROR: 'could not listen on 127.0.0.1: listen EPERM' });
+  assert.strictEqual(r.status, 2, 'exit 2: ' + r.stdout + r.stderr);
+  assert.match(r.stdout, /NOT CHECKED .*could not listen on 127\.0\.0\.1: listen EPERM/);
+  assert.doesNotMatch(r.stdout, /^FAIL/m);
+});
+
 /* ---- check-browser-report.js: the first browser command after open is the page read in
    waitForStableInputs(), i.e. Runtime.evaluate. ---- */
 const REPORT = 'check-browser-report.js';
@@ -67,6 +74,13 @@ test('T-0678 report: the debugging connection lost after the browser opened is N
 
 test('T-0678 report control: an error with no notChecked mark at the same point is still FAIL (exit 1)', () => {
   assertFail(runGate(REPORT, Object.assign({}, REPORT_ENV, { HL_STUB_CDP_HARD: '1' }), ['xworm']), 'report control');
+});
+
+test('T-0678 report: a listener that cannot bind, which lib/page-server.js marks notChecked, is NOT CHECKED (exit 2)', () => {
+  const r = runGate(REPORT, { HL_STUB_FETCH_HTML: PAGE, HL_STUB_SERVER_ERROR: 'could not listen on 127.0.0.1: listen EPERM' }, ['xworm']);
+  assert.strictEqual(r.status, 2, 'exit 2: ' + r.stdout + r.stderr);
+  assert.match(r.stdout, /NOT CHECKED .*could not listen on 127\.0\.0\.1: listen EPERM/);
+  assert.doesNotMatch(r.stdout, /^FAIL/m);
 });
 
 /* ---- check-browser-wire.js: BUILT mode, first browser command after open is Network.setBlockedURLs. ---- */

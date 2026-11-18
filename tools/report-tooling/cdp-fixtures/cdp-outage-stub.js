@@ -9,8 +9,9 @@
    method that contains it (empty: every command fails). The error has the shape lib/cdp.js raises when
    the debugging connection drops (lib/cdp.js failPending).
 
-   HL_STUB_SERVER_ERROR: when set, startDir() rejects with that message, the way a denied loopback
-   listen now does (T-0500.1.7.6 finding 6).
+   HL_STUB_SERVER_ERROR: when set, startDir() and start() reject with that message, the way a
+   denied loopback listen does. The error carries notChecked, as lib/page-server.js:96-99 and
+   :150-153 mark it (T-0500.1.7.6 finding 6).
 
    HL_STUB_CDP_HARD=1: the rejected error is a plain Error with no notChecked mark (the control: the
    gate must still call a real crash FAIL, so the NOT CHECKED cases are not a gate that always exits 2).
@@ -66,13 +67,19 @@ var cdp = {
   sleep: function () { return Promise.resolve(); }
 };
 
+function listenRefused() {
+  var e = new Error(process.env.HL_STUB_SERVER_ERROR);
+  e.notChecked = true;   // lib/page-server.js start() and startDir() mark a listener that cannot bind
+  return e;
+}
+
 var server = {
   startDir: function () {
-    if (process.env.HL_STUB_SERVER_ERROR) return Promise.reject(new Error(process.env.HL_STUB_SERVER_ERROR));
+    if (process.env.HL_STUB_SERVER_ERROR) return Promise.reject(listenRefused());
     return Promise.resolve({ origin: 'http://127.0.0.1:9', misses: [], close: function () {} });
   },
   start: function () {
-    if (process.env.HL_STUB_SERVER_ERROR) return Promise.reject(new Error(process.env.HL_STUB_SERVER_ERROR));
+    if (process.env.HL_STUB_SERVER_ERROR) return Promise.reject(listenRefused());
     return Promise.resolve({ origin: 'http://127.0.0.1:9', misses: [], close: function () {} });
   }
 };
