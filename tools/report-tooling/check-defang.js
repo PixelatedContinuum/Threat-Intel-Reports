@@ -63,8 +63,8 @@
    IPv6 IN PAGE TEXT (T-0500.1.7.5): a bare address in a sentence, a table cell or inline code (`2001:db8::7`, `2a01:4f8:c17:1234::1`,
    bracketed as `[2001:db8::7]:443`) is IPV6. All colons must be `[:]`; a raw colon beside a `[:]` is IPV6-PARTLY-DEFANGED, the same rule
    the URL scan applies. PRIVATE EXCLUSIONS are isPrivateIPv6's: loopback, unspecified, link-local, unique-local, multicast (`::1`, `fe80::1`,
-   `fd00::1`, `ff02::1`) are counted as private, never flagged. THE SHAPE (ipv6Shape, below) is the page include's and the browser
-   script's rule, so the lint and the render agree on what an address is: hex groups of 1 to 4 digits, 2 to 7 colons, no `:::`, at most one
+   `fd00::1`, `ff02::1`) are counted as private, never flagged. THE SHAPE (ipv6Shape, below) is this lint's own rule, close to but NOT
+   identical with the page include's and the browser script's (the differences are listed at ipv6Shape): hex groups of 1 to 4 digits, 2 to 7 colons, no `:::`, at most one
    `::`, either a `::` or all seven colons written out, no dot, and at least one decimal digit. The colon count is what keeps a clock time
    (12:30:45), a MAC address (aa:bb:cc:dd:ee:ff), a ratio and a Windows drive path out; the digit is what keeps code paths (`std::vector`,
    `a::b`, `ab::cd`) and a bare `::` out; and a BRACKETED literal needs three colons or more, because `[::2]` is a Python slice, not an
@@ -345,8 +345,13 @@ var V6_BRACKET_RE = /(?<![0-9A-Za-z])\[([0-9A-Fa-f:]{2,45})\](?::\d{1,5})?(?:\/\
 /* Colons already defanged: `2a01[:]4f8[:]c17[:]1234[:][:]1`, bracketed and with a port or prefix as above. */
 var V6_DEFANGED_RE = /(?<![0-9A-Za-z\]])(\[?)([0-9A-Fa-f]+(?:\[:\][0-9A-Fa-f]*|:[0-9A-Fa-f]*)+)(\]?)(?::\d{1,5})?(?:\/\d{1,3})?/g;
 
-/* THE SHAPE OF AN IPv6 ADDRESS, the same rule the page include (_includes/defang-text.html) and the browser script
-   (assets/js/ioc-classify.js, isIpv6) apply, so a page the lint flags is a page the render can defang:
+/* THE SHAPE OF AN IPv6 ADDRESS. This lint's own rule; it is NOT the same rule as the page include (_includes/defang-text.html) or the
+   browser script (assets/js/ioc-classify.js, isIpv6), measured by actual Jekyll renders in review T-0500.1.7.5 (codex Sol):
+     - the lint flags shapes the include leaves raw: `{2001:db8::1}`, `**2001:db8::1**`, `2001:db8::1|`, `2001:db8::1/path`. That is
+       intended: a raw address a reader can copy is a leak whether or not the include would have caught it, so the lint stays the stricter one.
+     - the lint does not flag shapes the include or the browser defang: `[::2]` (fewer than three bracketed colons) and `dead:beef::cafe`,
+       `a::b` (no decimal digit). Those are already defanged on the page when real, and flagging them would also catch code and slices.
+   Over the full built site (636 pages, T-0500.1.7.5) none of these shapes occurs. The rule:
      hex groups of 1 to 4 digits, 2 to 7 colons, no `:::`, at most one `::`, either a `::` or all seven colons written out, no dot (an
      IPv4-mapped `::ffff:203.0.113.5` is left to the IPv4 rule), and at least one decimal digit in the whole address.
    Why each part: the colon count keeps out a clock time (12:30:45), a MAC address (aa:bb:cc:dd:ee:ff, five colons), a ratio (16:9), a
@@ -369,7 +374,7 @@ function ipv6Shape(a) {
   return groups === 8; /* no `::`: all eight groups written out */
 }
 /* An address is a WORD, not a fragment of one. It starts a word: after a space, a bracket, a quote, a markdown emphasis mark, or the
-   start of the line. This is the page include's own boundary (it judged the whole word and left ";::17 10t" alone, an XOR-obfuscated
+   start of the line. This follows the page include on the case that mattered (it judged the whole word and left ";::17 10t" alone, an XOR-obfuscated
    Mirai string in a real report table, tasks/runs/T-0500.1.7.5: the gate flagged it before this test and that was the one false positive
    on the whole built site). `x::17`, `;2001:db8::1` and `=2001:db8::1` are the same shape: a fragment, not an address. */
 var V6_LEAD = /[\s([{<"'`*]/;
