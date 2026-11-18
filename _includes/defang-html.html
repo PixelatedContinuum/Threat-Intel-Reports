@@ -115,8 +115,10 @@
                 {%- assign _dh_sch = _dh_hl | split: ":" | first | append: "" -%}
                 {%- unless _dh_sch contains "/" or _dh_sch contains "." -%}{%- assign _dh_kind = "other" -%}{%- endunless -%}
               {%- endif -%}
-              {%- comment -%} fail closed: a backslash host ("\\198.51.100.17"), an entity-written scheme or colon, a space inside the target {%- endcomment -%}
-              {%- if _dh_c1 == "\" or _dh_hl contains "&#" or _dh_hl contains "&colon;" or _dh_hl contains "&tab;" or _dh_hl contains "&newline;" -%}{%- assign _dh_kind = "other" -%}{%- endif -%}
+              {%- comment -%} fail closed: a backslash anywhere in the target, an entity-written scheme or colon, a space inside the target. A backslash is a path separator to the URL parser
+                 (the WHATWG parser turns it into "/" for an http(s) base), so "/\198.51.100.17/x" resolves to https://198.51.100.17/x: a leading-slash test alone would read it as a relative
+                 link to our own site, and nothing here writes a backslash in an href on purpose (T-0500.1.7.6 finding 1). {%- endcomment -%}
+              {%- if _dh_hl contains "\" or _dh_hl contains "&#" or _dh_hl contains "&colon;" or _dh_hl contains "&tab;" or _dh_hl contains "&newline;" -%}{%- assign _dh_kind = "other" -%}{%- endif -%}
               {%- assign _dh_keep_c = true -%}
               {%- assign _dh_lab_c = "" -%}
               {%- assign _dh_lab2_c = "" -%}

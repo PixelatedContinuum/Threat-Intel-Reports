@@ -291,6 +291,26 @@ test('review round 2, T1-T5: escaped-quote JSON-LD, IPv6 in text, code and toolt
   assert.equal(got('V', 5), '[:][:]ffff[:]192[.]0[.]2[.]1', 'an IPv4-mapped address');
 });
 
+/* ---- T-0500.1.7.6 P1: the seven findings of review_5cfea0f481014885 (1-5) and review_731d8e368b194a90 (6-7), each a failing-then-passing case against this include ---- */
+const JSDOM = require('jsdom').JSDOM;
+
+test('P1 finding 1: an href that only looks relative ("/\\198.51.100.17/x") is unlinked, because the URL parser reads the backslash as a separator and resolves the address as the host', (t) => {
+  if (!JEKYLL) return t.skip('NOT CHECKED: no jekyll gem on this machine, so the Liquid include was not executed');
+  const body = '<!--L0-->{% capture h %}{% raw %}<a href="/\\198.51.100.17/x">actor</a> <a href="/reports/">own</a>{% endraw %}{% endcapture %}{% include defang-html.html html=h %}<!--M0-->';
+  const { html } = buildSite(body);
+  const got = html.split('<!--L0-->')[1].split('<!--M0-->')[0].replace(/^\n/, '').replace(/\n$/, '');
+  // what a browser does with what the include prints: the reviewer resolved the old anchor to https://198.51.100.17/x
+  const dom = new JSDOM('<!doctype html><html><body>' + got + '</body></html>', { url: 'https://the-hunters-ledger.com/actors/UTA-2026-001/' });
+  const links = Array.from(dom.window.document.querySelectorAll('a[href]')).map((a) => a.href);
+  assert.deepEqual(links.filter((h) => h.includes('198.51.100.17')), [], 'no anchor resolves to the actor address; the page resolved ' + JSON.stringify(links));
+  assert.deepEqual(links, ['https://the-hunters-ledger.com/reports/'], 'control: the own-page link is still a link');
+  assert.equal(got, '<span class="hl-unlinked" data-unlinked="/\\198[.]51[.]100[.]17/x">actor</span> <a href="/reports/">own</a>', 'the address is text, its target defanged');
+  // the rendered-page gate sees the lost link and reports it, instead of a link it never looked at
+  const g = gate(fixtureSite({ 'actors/x/index.html': got }));
+  assert.equal(g.status, 0, g.stdout);
+  assert.match(g.stdout, /unlinked\s+1 <a> rendered as text/);
+});
+
 /* ---- the gate on a fixture site (no Jekyll needed) ---- */
 function fixtureSite(files) {
   const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'hl-defang-site-'));
