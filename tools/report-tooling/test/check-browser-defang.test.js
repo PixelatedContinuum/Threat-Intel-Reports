@@ -80,6 +80,13 @@ test('T-0500.1.7.6 finding 4 control: an error with no notChecked mark at the sa
   assert.match(r.stdout, /^FAIL/m);
 });
 
+test('T-0500.1.7.6 finding 6: the gate reports a server it could not stand up as NOT CHECKED (exit 2), the caller half of the listener fix', () => {
+  const d = site({ 'index.html': PAGE('<p>x</p>') });
+  const r = gateWithStub({ HL_STUB_SERVER_ERROR: 'could not listen on 127.0.0.1: listen EPERM', HL_STUB_CDP_FAIL_ON: 'no-such-method' }, d);
+  assert.strictEqual(r.status, 2, 'exit 2: ' + r.stdout + r.stderr);
+  assert.match(r.stdout, /NOT CHECKED  could not serve/);
+});
+
 test('a missing --site is NOT CHECKED (exit 2), never a pass', () => {
   const r = cp.spawnSync('node', [GATE], { encoding: 'utf8' });
   assert.strictEqual(r.status, 2);

@@ -51,7 +51,7 @@ function start(pages, opts) {
   var base = (opts.base || '').replace(/\/+$/, '');
   var misses = [];
 
-  return new Promise(function (resolve) {
+  return new Promise(function (resolve, reject) {
     var srv = http.createServer(function (req, res) {
       var url = req.url.split('?')[0];
 
@@ -92,6 +92,14 @@ function start(pages, opts) {
       });
     });
 
+    // T-0500.1.7.6 finding 6 (review_731d8e368b194a90): a listen the machine refuses (EPERM, EADDRINUSE) emits 'error' asynchronously, and
+    // with no handler that is an unhandled event: the process exits 1 with no verdict at all, which a gate reads as FAIL. Reject instead,
+    // marked notChecked so the caller states NOT CHECKED (exit 2) rather than blaming the site for the machine.
+    srv.on('error', function (e) {
+      var err = new Error('could not listen on 127.0.0.1: ' + e.message);
+      err.notChecked = true;
+      reject(err);
+    });
     srv.listen(0, '127.0.0.1', function () {
       resolve({
         origin: 'http://127.0.0.1:' + srv.address().port,
@@ -138,6 +146,12 @@ function startDir(dir) {
       }
       misses.push(url);
       res.writeHead(404); res.end('not found');
+    });
+    // the same handler as start(): a listener that cannot bind is a rejection the gate turns into NOT CHECKED, never an unhandled 'error' (T-0500.1.7.6 finding 6)
+    srv.on('error', function (e) {
+      var err = new Error('could not listen on 127.0.0.1: ' + e.message);
+      err.notChecked = true;
+      reject(err);
     });
     srv.listen(0, '127.0.0.1', function () {
       resolve({

@@ -147,3 +147,42 @@ test('opts.files serves a path from the given text in place of the working-tree 
     assert.equal(real.status, 200);
   } finally { srv.close(); }
 });
+
+/* ---- T-0500.1.7.6 finding 6 (review_731d8e368b194a90): a listener that cannot bind is a rejection the gate can report as NOT CHECKED.
+   http.createServer is replaced for the length of the test, because the fault is a machine that denies a loopback listen: the fake emits
+   'error' on the next tick exactly as net.Server does, so what is exercised is the real startDir()/start() promise code. ---- */
+function deniedListener(message) {
+  var EventEmitter = require('node:events').EventEmitter;
+  var srv = new EventEmitter();
+  srv.listen = function () {
+    process.nextTick(function () { var e = new Error(message); e.code = 'EPERM'; srv.emit('error', e); });
+    return srv;
+  };
+  srv.close = function (cb) { if (cb) cb(); };
+  srv.address = function () { return { port: 0 }; };
+  return srv;
+}
+
+test('T-0500.1.7.6 finding 6: a denied loopback listen rejects (marked notChecked) instead of emitting an unhandled error that exits 1 with no verdict', async () => {
+  const real = http.createServer;
+  const unhandled = [];
+  const onUncaught = (e) => unhandled.push(e);
+  process.on('uncaughtException', onUncaught);
+  http.createServer = () => deniedListener('listen EPERM: operation not permitted 127.0.0.1');
+  const settle = (p) => Promise.race([
+    p.then(() => 'resolved', (e) => ({ rejected: e.message, notChecked: !!e.notChecked })),
+    new Promise((r) => setTimeout(() => r('still pending 1 s after the listen failed: the emitted error had no handler, so the caller waits for a server that will never exist'), 1000))
+  ]);
+  let dirOutcome, startOutcome;
+  try {
+    dirOutcome = await settle(PS.startDir(tmpRoot()));
+    startOutcome = await settle(PS.start({ '/x/': '<html>x</html>' }, { root: tmpRoot() }));
+  } finally {
+    http.createServer = real;
+    process.removeListener('uncaughtException', onUncaught);
+  }
+  assert.deepEqual(unhandled.map((e) => e.message), [], 'no unhandled error escaped');
+  assert.match(dirOutcome.rejected || '', /could not listen on 127\.0\.0\.1: .*EPERM/, 'startDir: ' + JSON.stringify(dirOutcome));
+  assert.equal(dirOutcome.notChecked, true, 'marked notChecked, so a gate reports NOT CHECKED (exit 2)');
+  assert.match(startOutcome.rejected || '', /could not listen on 127\.0\.0\.1: .*EPERM/, 'start: ' + JSON.stringify(startOutcome));
+});
