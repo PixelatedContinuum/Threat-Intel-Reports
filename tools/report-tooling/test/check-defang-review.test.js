@@ -1,10 +1,10 @@
 'use strict';
-/* T-0500.1.12 part harden: the cross-provider review of the defang lint (Sol, review_a84e0d5e90cc4692) returned 28 fixtures; each is a
+/* T-0500.1.12 part harden: the cross-provider review of the defang lint (review_a84e0d5e90cc4692) returned 28 fixtures; each is a
    case here, with the verdict the rules give it, plus the benign twin of each failing case. They use only run() and the allow file, so the
    same file runs against the PRE-HARDENING lint (DEFANG_LINT=<path to the old check-defang.js>): every case that expects FAIL must then
    fail the test (control: the old lint passed them). tasks/runs/T-0500.1.12/harden/old-vs-new.txt records that run.
 
-   Verdict per fixture. Sol's expected FAIL stands for 26 of 28. Two it called FAIL are PASS by lead decision 3 (a block that is a whole
+   Verdict per fixture. The reviewer's expected FAIL stands for 26 of 28. Two it called FAIL are PASS by lead decision 3 (a block that is a whole
    program rather than a paste-and-run line is acceptable once its indicators are defanged): python-executable and javascript-script.
    Their twins that ARE commands (`python -c ...`, `node -e ...`, `curl | python`) FAIL here.
    Fixture addresses are RFC 5737 documentation ranges; names are inert. */
@@ -215,7 +215,7 @@ test('a path scope cannot be walked out of: dot segments, encoded dots and slash
   fails(H + 'https://github.com/ne0nd0gx/x\n', scoped);
 });
 
-/* T-0500.1.12 r2fix (Sol round 2): F5 a raw domain before "(" and F6 a partly defanged IPv6 host are findings */
+/* T-0500.1.12 r2fix (review round 2): F5 a raw domain before "(" and F6 a partly defanged IPv6 host are findings */
 test('r2fix F5: a raw domain directly followed by "(" is flagged; the defanged form and an allowed name pass', function () {
   fails(H + 'evil-attacker.sh(foo)\n');
   passes(H + 'evil-attacker[.]sh(foo)\n');

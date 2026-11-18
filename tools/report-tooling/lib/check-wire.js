@@ -1383,7 +1383,7 @@ function checkPage(src, includes) {
   return verdict(problems.length ? 'FAIL' : 'PASS', null, problems, [], null);
 }
 
-/* The Headlines row (T-0532, Sol review_8c50e5967cc944d4 P1). Its text comes from
+/* The Headlines row (T-0532, review_8c50e5967cc944d4 P1). Its text comes from
    publishers' feeds, so every output is escaped like the vuln rows'. The exporter
    decodes feed entities first (flatten), so escaping here prints them correctly.
    Bare prints allowed: `tgt` (a fixed attribute string the template assigns),

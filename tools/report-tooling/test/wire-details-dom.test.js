@@ -262,7 +262,7 @@ test('an entry the details file does not carry says so in one line', async funct
   assert.match(rowEl.querySelector('.hl-dt__panel').textContent, /No details in our data for this CVE\./);
 });
 
-test('a capped description says the full text is on NVD; a short one does not (Sol round 2 P2)', async function () {
+test('a capped description says the full text is on NVD; a short one does not (review round 2 P2)', async function () {
   var capped = Object.assign({}, NKEV_ROWS['cve-2026-1001'], { desc: 'x'.repeat(2997) + '...' });
   var env = openDom({ 'cve-2026-1001': capped });
   var doc = env.dom.window.document;

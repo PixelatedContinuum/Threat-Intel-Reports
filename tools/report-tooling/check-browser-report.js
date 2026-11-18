@@ -745,7 +745,7 @@ function serialiseAlt() {
   Object.keys(SHAPE_ALT).forEach(function (k) { o[k] = SHAPE_ALT[k].map(function (r) { return [r.source, r.flags]; }); });
   return JSON.stringify(o);
 }
-/* T-0500.1.9 sitefix3 (Sol review F1, F2): what the SOURCE says, read independently of the views.
+/* T-0500.1.9 sitefix3 (review F1, F2): what the SOURCE says, read independently of the views.
    For every table in a panel's `.hl-rv-source` blocks it records, separately: whether the headers match a view's shape, and whether the
    table is usable (a header row, at least one data row, and every row as wide as the header; the same test hl-report-tabs.js applies).
    The first version kept only the usable tables, so a table whose headers matched but whose rows were short vanished from the data and the
@@ -1010,7 +1010,7 @@ function timelineFixtureHtml(html) {
   });
   return done ? out : null;
 }
-/* Sol review F4 (sitefix3): a report with no chronology used to record a PASS for "the 25-date timeline fixture" while saying in its own
+/* Review F4 (sitefix3): a report with no chronology used to record a PASS for "the 25-date timeline fixture" while saying in its own
    detail that nothing was exercised. The label-thinning algorithm is the layout's, not the report's, so it is exercised on a chronology
    the gate supplies: a Date / Observation section tagged for the Timeline tab is injected into the fetched page ahead of its first tab
    section, 25 rows at 30-day steps, and the real layout builds a timeline from it. That row says the chronology was injected. What the
@@ -1081,7 +1081,7 @@ function tabSetVsReportVerdict(pageTabs, authoredTokens) {
 /* ---------- 4a: the tab bar, and the targets 4a names (p7) ----------------
 
    WHY THESE ROWS EXIST. design-v4 4a's "Gates added for mobile" asks for two
-   things this file did not assert, both found by the deepseek review of the
+   things this file did not assert, both found by the review of the
    pilot (review_e74f3dcbe2074ad1, V3 task task_b933cd7c01a04024):
 
    1. every tab reachable from the TAB BAR at 768x1024 and 812x375. The
@@ -1095,8 +1095,8 @@ function tabSetVsReportVerdict(pageTabs, authoredTokens) {
       so the teardown summaries 4a names and the in-tab section navigation were
       never measured at any width.
 
-   The lead measured both by hand on the live preview (p5-report.md, "After the
-   deepseek review") because the gate asserted neither. Measured by hand is not
+   The lead measured both by hand on the live preview (p5-report.md, the post-review
+   section) because the gate asserted neither. Measured by hand is not
    a gate: the next layout change is then verified by nobody.
 
    THREE THINGS KEEP THESE ROWS HONEST.
@@ -2626,7 +2626,7 @@ async function mispRows(page, url) {
   }
 }
 
-/* T-0500.1.9 (Joseph 2026-10-30, audit H07 and F2; Sol review F3 in sitefix3): the ATT&CK coverage strip and the Navigator layer download are
+/* T-0500.1.9 (Joseph 2026-10-30, audit H07 and F2; review F3 in sitefix3): the ATT&CK coverage strip and the Navigator layer download are
    back on tabbed pages, ONE STRIP FOR EVERY MAPPING TABLE the report has.
    A mapping table is decided by a RULE, found here without the strip's own parser so a page that never loaded attack-coverage.js cannot
    excuse itself: a table in the report's own words (`.hl-rv-source`, never the generated views, which carry a copy of the procedure table
@@ -2812,7 +2812,7 @@ async function attackStripRows(page, url, html) {
   } finally {
     csrv.close();
   }
-  /* The partial-loss control (Sol review F3): the strip of the LAST mapping table is not drawn and every other strip is. With two or more
+  /* The partial-loss control (review F3): the strip of the LAST mapping table is not drawn and every other strip is. With two or more
      mapping tables this is a partial loss, the case a row that measured only the first strip could not see; with one it is the same
      total loss as above. The row must name the table that lost its strip. */
   var pname = 'control: the strip row FAILS on a copy of the page that does not draw the strip of the last mapping table';
@@ -3065,7 +3065,7 @@ async function tabControlRows(page, url, html) {
   var irrHtml = ownCands.length ? html : injectedHtml, irrCands = ownCands.length ? ownCands : (injectedHtml ? irregularTableCandidates(injectedHtml, null) : []);
   var irrNote = ownCands.length ? '' : ' (on a table the gate injected: the report has no table of its own that a view reads)';
 
-  /* Sol review F2 (sitefix3): the views are checked against the SOURCE table, not against themselves. This copy drops the last data row of
+  /* Review F2 (sitefix3): the views are checked against the SOURCE table, not against themselves. This copy drops the last data row of
      every table the layout reads before a view is built, so each view, its summary line and Overview's tiles agree with each other and are
      one row short of the article. The card verdict must FAIL for every view whose source table has two or more rows (and for Overview
      when the procedure table has two or more); the unmutated page passes the same rows. */
@@ -3100,7 +3100,7 @@ async function tabControlRows(page, url, html) {
     } finally { lsrv.close(); }
   }
 
-  /* Sol review F1 (sitefix3): a table the report HAS whose rows are irregular is a FAIL, not a "missing" view. This copy removes one data
+  /* Review F1 (sitefix3): a table the report HAS whose rows are irregular is a FAIL, not a "missing" view. This copy removes one data
      cell from the last row of a source table a view reads, so the layout cannot read the table and shows its "view unavailable" notice. The
      card verdict must FAIL for that view and name the table; the same report with its table intact does not. */
   var nameD = 'control: the card row FAILS on a copy of the page whose source table has a short row, though the view shows the "unavailable" notice' + irrNote;
@@ -5583,7 +5583,7 @@ async function tabbedChecks(page, opts) {
       check('below 480 px the 25-date fixture turns vertical with every event' + fx,
         !!vertical && vertical.shown === 25,
         vertical ? vertical.shown + ' of 25 events painted vertically' + (vertical.noToggle ? ' (the fixture has no #hl-rv-toggle-timeline to open)' : '') : 'no vertical list built');
-      /* The control (Sol review F4): the same fixture on a layout that does not thin. The thinning row must FAIL on it, so a PASS above is
+      /* The control (review F4): the same fixture on a layout that does not thin. The thinning row must FAIL on it, so a PASS above is
          a measured one and not a row that cannot see an unthinned axis. */
       var cname = 'control: the thinning row FAILS on a copy of the fixture whose layout never thins its labels';
       var nothin = mutatedTabsScript([MUT_NO_THIN]);
@@ -6197,7 +6197,7 @@ if (require.main === module) {
     TAB_SECTIONS_EXPR: TAB_SECTIONS_EXPR,
     SHAPE_SPECS: SHAPE_SPECS,
     TAB_VIEWPORTS: TAB_VIEWPORTS,
-    /* p7: the 4a rows the deepseek review found missing, and the pure
+    /* p7: the 4a rows the pilot review found missing, and the pure
        verdicts behind them, so a test can prove each row can fail. */
     MIN_TARGET_PX: MIN_TARGET_PX,
     TAB_BAR_VIEWPORTS: TAB_BAR_VIEWPORTS,

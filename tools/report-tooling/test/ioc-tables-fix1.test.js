@@ -6,7 +6,7 @@
    Every test here names its subject and counts its denominator from the feeds
    themselves, so a feed growing does not silently turn a check into a no-op.
 
-   The reviewer's list (tasks/runs/T-0500.1.6/review/haiku-review.result.json):
+   The reviewer's list (review of T-0500.1.6):
      assertion 3   179 of 283 hash-labelled filenames absent from the whole table
      assertion 7   45.130.148.125 (metadata.infrastructure.source_ip) lost
      assertion 8   9 BLOCK addresses with no bare row anywhere

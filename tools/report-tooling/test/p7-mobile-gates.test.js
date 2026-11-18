@@ -5,7 +5,7 @@
    in-tab section navigation.
 
    WHY THESE EXIST. design-v4 4a's "Gates added for mobile" asks for both, and
-   the deepseek review of the pilot (review_e74f3dcbe2074ad1) found the gate
+   the review of the pilot (review_e74f3dcbe2074ad1) found the gate
    asserted neither: the per-viewport loop skips widths of 700 px and above, and
    the 44 px count covered chrome controls only. A row added to a gate is worth
    nothing until something proves it can FAIL, so every verdict below is driven
