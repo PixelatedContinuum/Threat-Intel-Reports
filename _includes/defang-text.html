@@ -19,6 +19,8 @@
       label and a last label that is a key of _data/defang_tlds.yml (the IANA root zone, the same snapshot check-defang.js reads) -> a domain; a hyphen stays inside a
       piece, and a piece that is neither but holds an IPv4 address after a hyphen ("Toolkit-193.233.202.17-Repository") is judged again on its hyphens
   A word that already holds [.] [@] or [:] is left as it is.
+  A dot or a colon written as an HTML entity (evil&#46;example&#46;xyz, 2001&#58;db8&#58;&#58;7, &period;, &#x2e;, &colon;) is decoded before the
+  judgment, because the browser renders it as the character, and a word that does not defang is printed as it was written (T-0677).
   A name that is a key of _data/defang_allow.yml `raw` (this site, MITRE, a product that ends in a TLD word) and an address that is a key of `mailboxes` (our own) are left alone. A file name that ends in a TLD word
   (install.sh, run.py) is read as a domain, exactly as the report lint reads it.
 
@@ -26,6 +28,17 @@
   on it; the IOC feed JSON and the detection rules are exact). Whitespace: newlines and the spaces at the ends of the text are kept, a run of spaces inside a line becomes one.
 {%- endcomment -%}
 {%- assign _dt_in = include.text | append: "" -%}
+{%- comment -%} T-0677 (T-0500.1.7.6 PROPOSAL 1): a dot or a colon written as an HTML entity is the character the reader sees, so the text is judged on the
+   decoded form. Only the two characters an indicator is built from are decoded (. &#46; &#046; &#x2e; &#x2E; &#X2e; &#X2E; &period; and
+   : &#58; &#058; &#x3a; &#x3A; &#X3a; &#X3A; &colon;); every other entity, &amp; and &#38; included, is left as written, so prose with no indicator
+   comes out byte-identical. The decoded word is the one judged; a word that does not defang is printed as it was written (below). {%- endcomment -%}
+{%- assign _dt_ent = false -%}
+{%- unless include.type -%}
+  {%- if _dt_in contains "&#" or _dt_in contains "&period;" or _dt_in contains "&colon;" -%}
+    {%- assign _dt_dec = _dt_in | replace: "&#46;", "." | replace: "&#046;", "." | replace: "&#x2e;", "." | replace: "&#x2E;", "." | replace: "&#X2e;", "." | replace: "&#X2E;", "." | replace: "&period;", "." | replace: "&#58;", ":" | replace: "&#058;", ":" | replace: "&#x3a;", ":" | replace: "&#x3A;", ":" | replace: "&#X3a;", ":" | replace: "&#X3A;", ":" | replace: "&colon;", ":" -%}
+    {%- if _dt_dec != _dt_in -%}{%- assign _dt_ent = true -%}{%- endif -%}
+  {%- endif -%}
+{%- endunless -%}
 {%- if include.type -%}
   {%- assign _dt_ty = include.type | downcase -%}
   {%- if _dt_ty == "ipv4" or _dt_ty == "ipv6" or _dt_ty == "domain" or _dt_ty == "endpoint" or _dt_ty == "url" or _dt_ty == "email" -%}
@@ -56,7 +69,7 @@
     {%- endif -%}
     {{- _dt_v | replace: ".", "[.]" -}}
   {%- else -%}{{- _dt_in -}}{%- endif -%}
-{%- elsif _dt_in contains "." or _dt_in contains "@" or _dt_in contains ":" -%}
+{%- elsif _dt_ent or _dt_in contains "." or _dt_in contains "@" or _dt_in contains ":" -%}
 {%- capture _dt_nl %}
 {% endcapture -%}
 {%- assign _dt_raw = site.data.defang_allow.raw -%}
@@ -71,8 +84,13 @@
   {%- if _dt_c0 == " " -%}{{ " " }}{%- endif -%}
   {%- for _dt_w in _dt_words -%}
     {%- assign _dt_out = _dt_w -%}
-    {%- if _dt_w contains "." or _dt_w contains "@" or _dt_w contains ":" -%}
-    {%- assign _dt_wu = _dt_w -%}
+    {%- comment -%} the word as the reader's browser renders it (T-0677): the decoded form is the one judged, the raw word is what is printed when it does not defang {%- endcomment -%}
+    {%- assign _dt_wj = _dt_w -%}
+    {%- if _dt_ent -%}
+      {%- assign _dt_wj = _dt_w | replace: "&#46;", "." | replace: "&#046;", "." | replace: "&#x2e;", "." | replace: "&#x2E;", "." | replace: "&#X2e;", "." | replace: "&#X2E;", "." | replace: "&period;", "." | replace: "&#58;", ":" | replace: "&#058;", ":" | replace: "&#x3a;", ":" | replace: "&#x3A;", ":" | replace: "&#X3a;", ":" | replace: "&#X3A;", ":" | replace: "&colon;", ":" -%}
+    {%- endif -%}
+    {%- if _dt_wj contains "." or _dt_wj contains "@" or _dt_wj contains ":" -%}
+    {%- assign _dt_wu = _dt_wj -%}
     {%- comment -%} T-0500.1.7.4 review 2 (T5): a word that already holds [.] [@] or [:] is un-defanged first and defanged again from scratch, so a half-done "op[@]actor-domain.com" comes out whole; a word that is no indicator comes back as it was written (below) {%- endcomment -%}
     {%- if _dt_w contains "[" -%}{%- assign _dt_wu = _dt_w | replace: "[.]", "." | replace: "[@]", "@" | replace: "[:]", ":" -%}{%- endif -%}
     {%- assign _dt_skipw = false -%}

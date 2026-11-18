@@ -8,6 +8,7 @@
 
   WHAT IT DOES, one pass over the markup cut at "<":
     - text between tags goes through defang-text.html (URLs, IPv4, IPv6, domains, e-mails -> hxxp / [.] / [@] / [:]; a name in _data/defang_allow.yml `raw` is left alone);
+      a dot or a colon written as an HTML entity (evil&#46;example&#46;xyz) is decoded there, so the piece takes that pass as well (T-0677);
     - the inside of <pre>, <script>, <style>, <template> and <textarea> is copied as it is: a <pre> on a detection page is a rule body (decision 5 keeps rule bodies exact),
       and a script is code, not text (the rendered-page gate fails a raw indicator in a <pre> anywhere else);
     - an <a href> that points off this site is kept only when its target (host + path, no scheme, no www) begins with an entry of _data/defang_allow.yml `links` (MITRE, vendor
@@ -38,12 +39,13 @@
 {%- for _dh_p in _dh_pieces -%}
   {%- if forloop.first -%}
     {%- assign _dh_t = _dh_p -%}
-    {%- if _dh_t contains "." or _dh_t contains "@" or _dh_t contains ":" -%}{%- include defang-text.html text=_dh_t -%}{%- else -%}{{- _dh_t -}}{%- endif -%}
+    {%- comment -%} an entity-written dot or colon is an indicator character to the reader (T-0677): such a piece takes the text pass, which decodes it {%- endcomment -%}
+    {%- if _dh_t contains "." or _dh_t contains "@" or _dh_t contains ":" or _dh_t contains "&#" or _dh_t contains "&period;" or _dh_t contains "&colon;" -%}{%- include defang-text.html text=_dh_t -%}{%- else -%}{{- _dh_t -}}{%- endif -%}
   {%- else -%}
-    {%- comment -%} fast path (the build runs this on every page): a piece with no ".", "@" or ":" in it, outside a raw element and not opening or closing one of the tags that matter, is copied as it is {%- endcomment -%}
+    {%- comment -%} fast path (the build runs this on every page): a piece with no ".", "@" or ":", and no entity-written dot or colon, outside a raw element and not opening or closing one of the tags that matter, is copied as it is {%- endcomment -%}
     {%- assign _dh_fast = false -%}
     {%- if _dh_skip == "" -%}
-      {%- unless _dh_p contains "." or _dh_p contains "@" or _dh_p contains ":" -%}
+      {%- unless _dh_p contains "." or _dh_p contains "@" or _dh_p contains ":" or _dh_p contains "&#" or _dh_p contains "&period;" or _dh_p contains "&colon;" -%}
         {%- assign _dh_f2 = _dh_p | slice: 0, 2 | downcase -%}
         {%- unless _dh_f2 == "a " or _dh_f2 == "a>" or _dh_f2 == "pr" or _dh_f2 == "sc" or _dh_f2 == "st" or _dh_f2 == "te" or _dh_f2 == "/a" -%}{%- assign _dh_fast = true -%}{%- endunless -%}
       {%- endunless -%}
@@ -225,7 +227,7 @@
                   {%- if _dh_anl == "value" and _dh_nm == "input" and _dh_nodisp == false -%}{%- assign _dh_isrf = true -%}{%- endif -%}
                   {%- assign _dh_avd = _dh_av -%}
                   {%- if _dh_isrf -%}
-                    {%- if _dh_av contains "." or _dh_av contains "@" or _dh_av contains ":" -%}
+                    {%- if _dh_av contains "." or _dh_av contains "@" or _dh_av contains ":" or _dh_av contains "&#" or _dh_av contains "&period;" or _dh_av contains "&colon;" -%}
                       {%- capture _dh_avd %}{% include defang-text.html text=_dh_av %}{% endcapture -%}
                     {%- endif -%}
                   {%- endif -%}
@@ -266,7 +268,7 @@
       {%- if _dh_tag_out == _dh_tagn -%}{%- assign _dh_tag_out = _dh_tag -%}{%- endif -%}
       {{- "<" -}}{{- _dh_tag_out -}}{{- ">" -}}
       {%- if _dh_txt_raw -%}{{- _dh_txt -}}
-      {%- elsif _dh_txt contains "." or _dh_txt contains "@" or _dh_txt contains ":" -%}
+      {%- elsif _dh_txt contains "." or _dh_txt contains "@" or _dh_txt contains ":" or _dh_txt contains "&#" or _dh_txt contains "&period;" or _dh_txt contains "&colon;" -%}
         {%- assign _dh_tt = _dh_txt | strip | downcase | remove_first: "https://" | remove_first: "http://" | remove_first: "www." -%}
         {%- assign _dh_tn = _dh_tt.size | minus: 1 -%}
         {%- assign _dh_tl9 = _dh_tt | slice: _dh_tn -%}

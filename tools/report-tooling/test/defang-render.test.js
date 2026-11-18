@@ -376,6 +376,75 @@ test('P1 finding 3: IPv6 with no decimal digit and the IPv4-mapped form are defa
   assert.equal(got('T', 1), '<code>[:][:]ffff[:]192[.]0[.]2[.]1</code>', 'a mapped viewer cell');
 });
 
+/* ---- T-0677 P1 (T-0500.1.7.6 PROPOSAL 1): text written with HTML entities is the indicator the reader sees ---- */
+const ENTITY_CASES = [
+  // the forms the review measured: decimal dot, decimal address
+  ['C2 at evil&#46;example&#46;xyz and 198&#46;51&#46;100&#46;17 now', 'C2 at evil[.]example[.]xyz and 198[.]51[.]100[.]17 now'],
+  // hex dot, in the spellings a browser decodes (lower-case and upper-case x, upper-case hex digits)
+  ['evil&#x2e;example&#x2e;xyz', 'evil[.]example[.]xyz'],
+  ['evil&#X2e;example&#X2e;xyz', 'evil[.]example[.]xyz'],
+  ['evil&#X2E;example&#X2E;xyz', 'evil[.]example[.]xyz'],
+  ['evil&#x2E;example&#x2E;xyz', 'evil[.]example[.]xyz'],
+  // named dot
+  ['evil&period;example&period;xyz', 'evil[.]example[.]xyz'],
+  // the colon entity forms, on an IPv6 address
+  ['2001&#58;db8&#58;&#58;7', '2001[:]db8[:][:]7'],
+  ['2001&#x3a;db8&#x3a;&#x3a;7', '2001[:]db8[:][:]7'],
+  ['2001&#X3A;db8&#X3A;&#X3A;7', '2001[:]db8[:][:]7'],
+  ['2001&colon;db8&colon;&colon;7', '2001[:]db8[:][:]7'],
+  // the entity forms inside running text, with the punctuation around the word
+  ['see (evil&#46;example&#46;xyz), then 198&#46;51&#46;100&#46;17.', 'see (evil[.]example[.]xyz), then 198[.]51[.]100[.]17.'],
+  // controls: an entity that is neither a dot nor a colon, and prose with no indicator, come out byte-identical
+  ['Tom &amp; Jerry&#38; Co &#38; AT&amp;T &lt;note&gt;', 'Tom &amp; Jerry&#38; Co &#38; AT&amp;T &lt;note&gt;'],
+  ['the ampersand &#38; and &amp; and &#8212; are ordinary prose', 'the ampersand &#38; and &amp; and &#8212; are ordinary prose'],
+  ['AT&amp;T at 198.51.100.17', 'AT&amp;T at 198[.]51[.]100[.]17']
+];
+
+test('T-0677 P1: an indicator written with dot or colon entities is defanged (the browser renders it as an ordinary domain or address); entity prose is byte-identical', (t) => {
+  if (!JEKYLL) return t.skip('NOT CHECKED: no jekyll gem on this machine, so the Liquid include was not executed');
+  const ATTR_CASES = [
+    ['<p title="C2 at 198&#46;51&#46;100&#46;17">t</p>', '<p title="C2 at 198[.]51[.]100[.]17">t</p>'],
+    ['<p title="evil&#46;example&#46;xyz">t</p>', '<p title="evil[.]example[.]xyz">t</p>'],
+    ['<img alt="host evil&#x2e;example&#x2e;xyz" src="/a.png">', '<img alt="host evil[.]example[.]xyz" src="/a.png">'],
+    ['<p data-copy="2001&#58;db8&#58;&#58;7">x</p>', '<p data-copy="2001[:]db8[:][:]7">x</p>'],
+    ['<input value="evil&period;example&period;xyz">', '<input value="evil[.]example[.]xyz">'],
+    // controls: a raw element, a data-literal cell and an entity-prose attribute keep every byte
+    ['<pre>evil&#46;example&#46;xyz</pre>', '<pre>evil&#46;example&#46;xyz</pre>'],
+    ['<script>var a = "evil&#46;example&#46;xyz";</script>', '<script>var a = "evil&#46;example&#46;xyz";</script>'],
+    ['<style>.x::after{content:"evil&#46;example&#46;xyz"}</style>', '<style>.x::after{content:"evil&#46;example&#46;xyz"}</style>'],
+    ['<template>evil&#46;example&#46;xyz</template>', '<template>evil&#46;example&#46;xyz</template>'],
+    ['<textarea>evil&#46;example&#46;xyz</textarea>', '<textarea>evil&#46;example&#46;xyz</textarea>'],
+    ['<code data-literal="filename">evil&#46;example&#46;xyz</code>', '<code data-literal="filename">evil&#46;example&#46;xyz</code>'],
+    ['<p title="Tom &amp; Jerry&#38; Co">x</p>', '<p title="Tom &amp; Jerry&#38; Co">x</p>']
+  ];
+  const body = ENTITY_CASES.map((c, i) => '<!--G' + i + '-->{% include defang-text.html text=\'' + c[0].replace(/'/g, '&#39;') + '\' %}<!--H' + i + '-->').join('\n') + '\n' +
+    ENTITY_CASES.map((c, i) => '<!--E' + i + '-->{% capture h %}{% raw %}<p>' + c[0] + '</p>{% endraw %}{% endcapture %}{% include defang-html.html html=h %}<!--F' + i + '-->').join('\n') + '\n' +
+    ATTR_CASES.map((c, i) => '<!--A' + i + '-->{% capture h %}{% raw %}' + c[0] + '{% endraw %}{% endcapture %}{% include defang-html.html html=h %}<!--B' + i + '-->').join('\n');
+  const { html } = buildSite(body);
+  const got = (a, k) => html.split('<!--' + a + k + '-->')[1].split('<!--' + String.fromCharCode(a.charCodeAt(0) + 1) + k + '-->')[0].replace(/^\n/, '').replace(/\n$/, '');
+  ENTITY_CASES.forEach((c, i) => {
+    assert.equal(got('G', i), c[1], 'text case ' + i + ': ' + c[0]);
+    assert.equal(got('E', i), '<p>' + c[1] + '</p>', 'html case ' + i + ': ' + c[0]);
+  });
+  ATTR_CASES.forEach((c, i) => assert.equal(got('A', i), c[1], 'attribute case ' + i + ': ' + c[0]));
+});
+
+test('T-0677 P1: what the browser renders for an entity-written indicator is an ordinary domain before the fix and the defanged form after it (jsdom)', (t) => {
+  if (!JEKYLL) return t.skip('NOT CHECKED: no jekyll gem on this machine, so the Liquid include was not executed');
+  const body = '<!--X0-->{% capture h %}{% raw %}<p>C2 at evil&#46;example&#46;xyz and 198&#46;51&#46;100&#46;17</p>{% endraw %}{% endcapture %}{% include defang-html.html html=h %}<!--Y0-->';
+  const { out, html } = buildSite(body);
+  const got = html.split('<!--X0-->')[1].split('<!--Y0-->')[0].replace(/^\n/, '').replace(/\n$/, '');
+  // the reviewer's measurement: the raw entity form is an ordinary domain to every reader
+  const raw = new JSDOM('<!doctype html><html><body><p>C2 at evil&#46;example&#46;xyz and 198&#46;51&#46;100&#46;17</p></body></html>').window.document.body.textContent;
+  assert.match(raw, /evil\.example\.xyz and 198\.51\.100\.17/, 'control: the browser reads the entity form as a live domain and address');
+  const shown = new JSDOM('<!doctype html><html><body>' + got + '</body></html>').window.document.body.textContent;
+  assert.doesNotMatch(shown, /evil\.example\.xyz|198\.51\.100\.17/, 'no readable domain or address survives: ' + shown);
+  assert.match(shown, /evil\[\.\]example\[\.\]xyz and 198\[\.\]51\[\.\]100\[\.\]17/);
+  // and the rendered-page gate agrees: the raw page is a finding, the include's page is clean
+  assert.equal(gate(fixtureSite({ 'index.html': '<p>C2 at evil&#46;example&#46;xyz and 198&#46;51&#46;100&#46;17</p>' })).status, 1, 'control: the gate reports the raw entity form');
+  assert.equal(gate(fixtureSite({ 'index.html': got })).status, 0, 'the include output passes the gate');
+});
+
 /* ---- the gate on a fixture site (no Jekyll needed) ---- */
 function fixtureSite(files) {
   const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'hl-defang-site-'));
