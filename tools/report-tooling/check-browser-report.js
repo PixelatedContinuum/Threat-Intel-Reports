@@ -1470,16 +1470,29 @@ var TYPE_EXPR = '(function(){var SPEC=' + JSON.stringify(TYPE_SPEC) + ';' +
 var TYPE_REQUIRED_BASE = ['tab name', 'section panel heading', 'toolbar text', 'toolbar mono label'];
 var TYPE_REQUIRED_DASHBOARD = ['data-view summary line'];
 var TYPE_REQUIRED_FIRST = ['Executive Summary prose'];
+/* T-0500.1.7.8 (P2b): the categories the phone layout never paints, so the phone row must not require them. At 390 the
+   tab strip is icon chips: `assets/css/hl-report-tabs.css:867` (`@media (max-width: 699px)`) hides `.hl-rv-tab-full`,
+   and only the selected chip names itself, with `.hl-rv-tab-label` at 15px (`:864` hides it at rest, `:866` draws it
+   on `[aria-selected="true"]`). `:860` in the same block hides `.hl-rv-current` outright, so the reading line keeps
+   only `.hl-rv-current-section` (`toolbar text`, drawn and still required). Both are hidden again at 700-1179px
+   (`:838`, `:840`), a width the gate does not measure, and both are drawn at 1280. A row the phone does not draw
+   cannot be measured there, so requiring it turned every tabbed report's phone row into NOT CHECKED; a row the phone
+   does draw and the tab did not measure still is (finding 7(a)). The gate-coverage test pins each name here to a
+   TYPE_SPEC row with no phone floor and to the desktop required set, so a row that gains a phone floor or leaves the
+   desktop set cannot stay on this list unnoticed. */
+var TYPE_PHONE_ABSENT = ['tab name', 'toolbar mono label'];
 function requiredTypeRows(opt) {
   opt = opt || {};
   var names = TYPE_REQUIRED_BASE.slice();
+  if (opt.phone) names = names.filter(function (n) { return TYPE_PHONE_ABSENT.indexOf(n) < 0; });
   if (!opt.inline) names = names.concat(TYPE_REQUIRED_DASHBOARD);
   if (opt.first) names = names.concat(TYPE_REQUIRED_FIRST);
   return names;
 }
 function typeScaleVerdict(rows, phone, opt) {
   if (!rows || !rows.length) return { notChecked: true, ok: false, detail: 'nothing was measured' };
-  var absent = requiredTypeRows(opt).filter(function (name) {
+  opt = opt || {};
+  var absent = requiredTypeRows({ inline: opt.inline, first: opt.first, phone: phone }).filter(function (name) {
     var i = TYPE_SPEC.findIndex(function (r) { return r[0] === name; });
     return i < 0 || !rows[i] || !rows[i].n || rows[i].px == null;
   });
@@ -6352,6 +6365,8 @@ if (require.main === module) {
     legendVerdict: legendVerdict,
     TIMELINE_EXPR: TIMELINE_EXPR,
     typeScaleVerdict: typeScaleVerdict,
+    requiredTypeRows: requiredTypeRows,
+    TYPE_PHONE_ABSENT: TYPE_PHONE_ABSENT,
     TYPE_SPEC: TYPE_SPEC,
     PANEL_EXPR: PANEL_EXPR,
     TYPE_EXPR: TYPE_EXPR,

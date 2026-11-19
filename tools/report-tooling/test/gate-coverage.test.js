@@ -78,6 +78,42 @@ test('(a) finding 7: an inline page is not required to carry the data-view summa
   assert.strictEqual(v.ok, true, v.detail);
 });
 
+/* T-0500.1.7.8 (P2b, the 7(a) follow-up): at 390 the phone layout never draws `.hl-rv-tab-full`
+   (assets/css/hl-report-tabs.css:867) nor `.hl-rv-current` (:860, `display: none !important`): the tab strip is
+   icon chips and the reading line keeps only `.hl-rv-current-section`. Requiring those two rows at phone width
+   reported NOT CHECKED on every tabbed report on a phone. A row the phone does not draw is not required there;
+   a row the desktop draws and the tab did not measure stays NOT CHECKED. */
+function rowsWithout(names) {
+  var rows = scale();
+  names.forEach(function (name) {
+    rows[G.TYPE_SPEC.findIndex(function (r) { return r[0] === name; })].n = 0;
+    rows[G.TYPE_SPEC.findIndex(function (r) { return r[0] === name; })].px = null;
+  });
+  return rows;
+}
+
+test('(a) P2b: the phone row does not require the categories the phone layout never draws', function () {
+  var v = G.typeScaleVerdict(rowsWithout(['tab name', 'toolbar mono label']), true, { token: 'chain' });
+  assert.strictEqual(v.notChecked, false, 'the phone row required a label the phone does not paint: ' + v.detail);
+  assert.strictEqual(v.ok, true, v.detail);
+});
+
+test('(a) P2b control: the same rows with no tab name on a desktop are still NOT CHECKED', function () {
+  var v = G.typeScaleVerdict(rowsWithout(['tab name']), false, { token: 'chain' });
+  assert.strictEqual(v.notChecked, true, 'a row the desktop draws and the tab did not measure must stay NOT CHECKED: ' + v.detail);
+  assert.match(v.detail, /tab name/);
+});
+
+test('(a) P2b: every category the phone row drops is one the spec declares off the phone scale and the desktop requires', function () {
+  assert.deepStrictEqual(G.TYPE_PHONE_ABSENT.slice().sort(), ['tab name', 'toolbar mono label']);
+  G.TYPE_PHONE_ABSENT.forEach(function (name) {
+    var i = G.TYPE_SPEC.findIndex(function (r) { return r[0] === name; });
+    assert.ok(i >= 0, name + ' is not a type-scale row');
+    assert.strictEqual(G.TYPE_SPEC[i][3], null, name + ' has a phone floor, so the phone draws it and it must stay required');
+    assert.ok(G.requiredTypeRows({}).indexOf(name) >= 0, name + ' is not required on a desktop');
+  });
+});
+
 /* (b) the long-paragraph measure: two qualifying paragraphs, the second under the floor */
 function proseRows(html) {
   var dom = new JSDOM('<body>' + html + '</body>', { runScripts: 'outside-only' });
