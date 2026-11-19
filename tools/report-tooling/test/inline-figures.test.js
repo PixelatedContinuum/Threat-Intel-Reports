@@ -36,7 +36,7 @@ test('no report opts back to the dashboard (site rollout, Joseph 2026-11-15); th
 test('the cache-busters moved with the stylesheet and the script (both carry the same value)', () => {
   const a = read('_layouts/post.html').match(/hl-report-tabs\.js' \| relative_url \}\}\?v=([0-9.]+)/)[1];
   const b = read('_includes/default/head.liquid').match(/hl-report-tabs\.css' \| relative_url \}\}\?v=([0-9.]+)/)[1];
-  assert.equal(a, b); assert.equal(a, '20261118.2');
+  assert.equal(a, b); assert.equal(a, '20261118.3');
 });
 
 test('every rule the inline block adds to the stylesheet is scoped under .hl-figs-inline, so no other report can see it', () => {

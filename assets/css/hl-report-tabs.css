@@ -529,10 +529,9 @@ a.hl-rv-feat__item:hover .hl-rv-feat__cta, a.hl-rv-featcard__item:hover .hl-rv-f
 .hl-report-page .hl-post-content .hl-rv-stage h4 { font-size: var(--rv-fs) !important; color: var(--rv-muted) !important; font-weight: 600 !important; margin: 0 0 4px !important; }
 .hl-rv-stage-state { margin: 8px 0 0; font-size: var(--rv-fs); color: var(--rv-muted); }
 .hl-rv-stage-match { border-color: var(--acc); }
-/* T-0500.1.7.8 (finding 3): was opacity: 0.6, which dropped a retained stage's h4 (#a8a8a8) to 3.69:1 and its
-   procedure small to 3.44:1 (T-0500.1.7.8 P1.triage.md). A retained stage is still readable content: the mute is
-   carried by the edge and the fill, never by the text. */
-.hl-rv-stage-muted { background: #0d0d0d; border-color: var(--rv-row-line); border-style: dashed; }
+/* a muted or dim stage is painted where it can win the cascade: under `.hl-report-page .hl-rv-stage`, below
+   (T-0500.1.7.8 P2c). The 0,1,0 rule that used to sit here lost its fill and its dashed edge to that 0,2,0
+   rule, so on a report page the mute was declared and discarded and a muted stage looked matched. */
 .hl-rv-mini { display: flex; flex: 1 1 100%; gap: 2px; height: 4px; border-radius: 2px; overflow: hidden; background: var(--rv-line); min-width: 40px; }
 .hl-rv-mini > span { display: block; height: 100%; background: var(--acc); }
 .hl-rv-mini > .hl-rv-inferred { background: color-mix(in srgb, var(--acc) 50%, var(--rv-bg)); }
@@ -1058,15 +1057,30 @@ html:has(.hl-report-page) .hl-toast__label { font-size: var(--rv-fs); }
 .hl-report-page .hl-rv-stage {
   position: relative; margin: 0; padding: 16px 18px 18px; border: 1px solid var(--rv-line); border-radius: 3px;
   background: var(--rv-card);
-  transition: opacity 0.15s, border-color 0.15s;
+  transition: border-color 0.15s, background-color 0.15s;
+}
+/* T-0500.1.7.8 P2c: a stage the chain filter leaves unmatched (`.hl-rv-stage-muted`, js:1439) or the tactic key
+   de-emphasises (`.hl-rv-stage-dim`, js:1418) is retained, readable content, so the mute is carried by its edge
+   and its fill and never by the text: no opacity, which is what dropped the muted h4 to 3.69:1 (P1.triage.md
+   finding 3). The fill is the page colour taken 80% toward black, so the card sinks below the #111111 page and
+   out of the #111111 < #1a1a1a ladder, and it follows the print block's white page instead of printing as a
+   near-black card under #333 text (a hard #0d0d0d would). The edge turns dashed in the muted grey: that is the
+   mark that reads on a panel and on a flat inline row alike (the fill step alone is 1.02:1 against the page
+   and 1.11:1 against the plain card: it sinks the card, it cannot carry the mute by itself).
+   Scoped to 0,3,0 on purpose: the rule above is 0,2,0 and the 0,1,0 rule this replaces lost its fill and edge. */
+.hl-report-page .hl-rv-stage.hl-rv-stage-muted,
+.hl-report-page .hl-rv-stage.hl-rv-stage-dim {
+  background-color: color-mix(in srgb, var(--rv-bg) 80%, #000); border-style: dashed; border-color: var(--rv-muted);
 }
 .hl-rv-stage::before { content: attr(data-n); position: absolute; left: -78px; top: 10px; z-index: 1; box-sizing: border-box; width: 56px; height: 56px; display: grid; place-items: center; border-radius: 50%; border: 2px solid var(--acc); background: #141414; color: #ffffff; font-family: var(--hl-font-sans); font-size: 24px; font-weight: 600; font-variant-numeric: tabular-nums; line-height: 1; box-shadow: 0 0 0 6px var(--rv-bg); } /* the stage number on the spine, as in the approved mockup (d-combined .node): the number beside the story, not a bare dot */
+/* the spine dot carries the accent ring for a stage that is in play; a muted or dim one keeps the grey ring */
+.hl-report-page .hl-rv-stage.hl-rv-stage-muted::before,
+.hl-report-page .hl-rv-stage.hl-rv-stage-dim::before { border-color: var(--rv-muted); }
 .hl-report-page .hl-rv-stages { position: relative; }
 .hl-rv-stages::before { content: ''; position: absolute; left: 27px; top: 0; bottom: 0; width: 2px; background: var(--rv-line); } /* one spine on its host, dots on the cards sit on it */
 .hl-rv-stage.hl-rv-stage-lit { border-color: var(--acc); box-shadow: 0 0 0 1px var(--acc); }
 .hl-rv-stage.hl-rv-stage-lit::before { background: color-mix(in srgb, var(--acc) 30%, #141414); box-shadow: 0 0 0 6px var(--rv-bg), 0 0 0 8px var(--acc); }
 @media (max-width: 719px) { .hl-report-page .hl-rv-stages { padding-left: 54px; } .hl-rv-stage::before { left: -54px; top: 12px; width: 42px; height: 42px; font-size: 19px; box-shadow: 0 0 0 5px var(--rv-bg); } .hl-rv-stages::before { left: 20px; } }
-.hl-rv-stage.hl-rv-stage-dim { opacity: 0.45; }
 .hl-report-page .hl-rv-stage-detail > summary { font-size: clamp(24px, 2.4vw, 30px); line-height: 1.35; letter-spacing: -0.01em; color: #ffffff; padding-bottom: 12px; }
 .hl-rv-stage-no { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; } /* the number is drawn on the spine (data-n); the text stays in the page for the completeness gate and screen readers */
 .hl-rv-stage .hl-rv-mini { flex: 0 0 120px; }
@@ -1431,6 +1445,13 @@ html:has(.hl-report-page) {
 .hl-report-page.hl-figs-inline .hl-fig .hl-rv-stages { padding-left: 0; gap: 0; }
 .hl-report-page.hl-figs-inline .hl-fig .hl-rv-stages::before, .hl-report-page.hl-figs-inline .hl-fig .hl-rv-stage::before { content: none; }
 .hl-report-page.hl-figs-inline .hl-fig .hl-rv-stage { padding: 12px 0; border: 0; border-top: 1px solid var(--rv-row-line); border-radius: 0; background: none; box-shadow: none; }
+/* the same mute on an inline page, where a stage is a flat row: 0,5,0 because the 0,4,0 reset just above drops
+   the fill and the box, and it sets the edge's colour and style rather than the box because only the top edge has
+   width here (T-0500.1.7.8 P2c: without this rule an inline page's mute was reset too). */
+.hl-report-page.hl-figs-inline .hl-fig .hl-rv-stage.hl-rv-stage-muted,
+.hl-report-page.hl-figs-inline .hl-fig .hl-rv-stage.hl-rv-stage-dim {
+  background-color: color-mix(in srgb, var(--rv-bg) 80%, #000); border-style: dashed; border-color: var(--rv-muted);
+}
 .hl-report-page.hl-figs-inline .hl-fig .hl-rv-stage-detail > summary { padding: 0 0 8px; font-size: var(--hl-fs-small); line-height: 1.4; font-weight: 600; letter-spacing: 0; color: var(--rv-text); }
 .hl-report-page.hl-figs-inline .hl-fig .hl-rv-stage-no { position: static; width: auto; height: auto; overflow: visible; clip: auto; margin-right: 6px; color: var(--rv-muted); }
 .hl-report-page.hl-figs-inline .hl-fig .hl-rv-stage-count { font-family: var(--hl-font-sans); font-size: var(--hl-fs-meta) !important; letter-spacing: 0; }
