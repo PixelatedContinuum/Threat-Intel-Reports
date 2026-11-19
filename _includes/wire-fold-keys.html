@@ -1,13 +1,31 @@
 {%- comment -%}
 Day-scoped policy, separate from the generic renderer. WordPress groups get
 first refusal; product groups only see the remaining rows. CISA stays plain.
+T-0565.1.3: a row the page does not draw is not a fold member. wire/index.md
+skips a non-canonical row (its vok guard: a CVE id starting CVE-, and on the
+nKEV tab a ten-character added day), so such a row gets the empty key here and
+never reaches fold_size in wire-fold.html. Keep this test identical to the
+page's guard.
 {%- endcomment -%}
 {%- assign fold_keys = "" | split: "" -%}
 {%- assign fold_labels = "" | split: "" -%}
 {%- assign fold_thresholds = "" | split: "" -%}
 {%- assign wp_keys = "" | split: "" -%}
+{%- assign fold_ok_list = "" | split: "" -%}
 {%- for fold_row in include.rows -%}
+{%- assign fold_head = fold_row.cve | slice: 0, 4 -%}
+{%- assign fold_ok = false -%}
+{%- if fold_head == "CVE-" -%}
+{%- if include.mode == "nkev" -%}
+{%- assign fold_added_len = fold_row.added | size -%}
+{%- if fold_added_len == 10 -%}{%- assign fold_ok = true -%}{%- endif -%}
+{%- else -%}
+{%- assign fold_ok = true -%}
+{%- endif -%}
+{%- endif -%}
+{%- assign fold_ok_list = fold_ok_list | push: fold_ok -%}
 {%- assign wp_key = "" -%}
+{%- if fold_ok -%}
 {%- if include.mode == "nkev" -%}
 {%- assign cisa_size = fold_row.cisa_added | size -%}
 {%- if cisa_size != 10 -%}{%- assign wp_key = fold_row.batch | default: "" -%}{%- endif -%}
@@ -17,10 +35,12 @@ first refusal; product groups only see the remaining rows. CISA stays plain.
 {%- assign wp_key = "wp-unauth-" | append: fold_row.published -%}
 {%- endif -%}
 {%- endif -%}
+{%- endif -%}
 {%- assign wp_keys = wp_keys | push: wp_key -%}
 {%- endfor -%}
 {%- for fold_row in include.rows -%}
 {%- assign policy_index = forloop.index0 -%}
+{%- assign fold_ok = fold_ok_list[policy_index] -%}
 {%- assign policy_key = wp_keys[policy_index] -%}
 {%- assign wp_count = 0 -%}
 {%- for candidate_key in wp_keys -%}
@@ -55,6 +75,8 @@ first refusal; product groups only see the remaining rows. CISA stays plain.
 {%- if include.mode == "nkev" -%}{%- assign fold_np = fold_row.np_rank | plus: 0 -%}{%- if fold_np > 0 -%}{%- assign fold_prio = true -%}{%- endif -%}
 {%- else -%}{%- assign fold_pd = fold_row.pick_day | append: "" | size -%}{%- if fold_pd > 0 -%}{%- assign fold_prio = true -%}{%- endif -%}{%- if fold_row.fresh == true -%}{%- assign fold_prio = true -%}{%- endif -%}{%- endif -%}
 {%- if fold_prio -%}{%- assign policy_key = "" -%}{%- endif -%}
+{%- comment -%} T-0565.1.3: a row the page does not draw carries no key, so a batch can neither open on it nor count it. {%- endcomment -%}
+{%- unless fold_ok -%}{%- assign policy_key = "" -%}{%- endunless -%}
 {%- assign fold_keys = fold_keys | push: policy_key -%}
 {%- assign fold_labels = fold_labels | push: policy_label -%}
 {%- assign fold_thresholds = fold_thresholds | push: policy_min -%}
