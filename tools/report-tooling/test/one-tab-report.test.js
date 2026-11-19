@@ -67,7 +67,7 @@ test('the empty-landmark row FAILS on a nav with nothing in it, names it, and is
   assert.equal(G.emptyLandmarkVerdict(null).ok,false);
 });
 
-function tab(o){return Object.assign({id:'tabbtn-overview',selected:true,color:'rgb(226, 226, 226)',shadow:'rgb(88, 166, 255) 0px -2px 0px 0px inset',numContent:'counter(hlrvtab)',numColor:'rgb(88, 166, 255)',iconShown:false},o||{});}
+function tab(o){return Object.assign({id:'tabbtn-overview',selected:true,color:'rgb(226, 226, 226)',shadow:'rgb(88, 166, 255) 0px -2px 0px 0px inset',numContent:'counter(hlrvtab)',numColor:'rgb(88, 166, 255)',iconShown:false,fills:['rgb(17, 17, 17)']},o||{});}
 test('the tab look row with one tab measures what one tab can show, says it made no comparison, and FAILS when that is wrong',()=>{
   const v=G.tabLookVerdict([tab()]);
   assert.equal(v.notChecked,false);assert.equal(v.single,true);assert.equal(v.ok,true,v.detail);assert.match(v.detail,/no idle tab exists/);

@@ -629,10 +629,14 @@ function chromeTextExpr(token) {
    From 700 px the tabs are numbered text on a ruled line: every tab carries a number drawn by CSS (a counter in ::before), no tab shows an icon,
    and the selected tab, and only it, has one accent underline (an inset 2px bottom shadow) in the same accent as its number, with a label colour its
    idle neighbours do not have. Below 700 px the approved icon strip stays and has its own row (stripVerdict). */
-var TAB_LOOK_EXPR = '(function(){var tabs=[].slice.call(document.querySelectorAll("[role=tab]"));' +
+/* T-0500.1.7.8 (finding 1): also return every background between the tab and the page, nearest first. In the concept 3 layout the
+   tab is transparent and the bar behind it paints the fill, so the verdict composites the list and measures the selected tab's paint
+   against it; a fill it cannot read leaves the row NOT CHECKED rather than a pass. */
+var TAB_LOOK_EXPR = '(function(){function fills(el){var out=[],e=el;while(e){out.push(getComputedStyle(e).backgroundColor);e=e.parentElement;}return out;}' +
+  'var tabs=[].slice.call(document.querySelectorAll("[role=tab]"));' +
   'return tabs.map(function(b){var c=getComputedStyle(b),bf=getComputedStyle(b,"::before"),ib=b.querySelector(".hl-rv-tab-icon");' +
   'return {id:b.id,selected:b.getAttribute("aria-selected")==="true",color:c.color,shadow:c.boxShadow,numContent:bf.content,numColor:bf.color,' +
-  'iconShown:!!ib&&getComputedStyle(ib).display!=="none"&&ib.getBoundingClientRect().width>0};});})()';
+  'iconShown:!!ib&&getComputedStyle(ib).display!=="none"&&ib.getBoundingClientRect().width>0,fills:fills(b)};});})()';
 function rgbaOf(c) {
   /* Chrome serialises a color-mix() result as color(srgb r g b / a) with channels 0 to 1 */
   var cm = /^color\(srgb\s+([\d.]+)\s+([\d.]+)\s+([\d.]+)(?:\s*\/\s*([\d.]+%?))?\s*\)$/.exec(c || '');
@@ -643,6 +647,35 @@ function tabUnderline(shadow) {
   var m = /^(rgba?\([^)]*\)|color\([^)]*\))\s+0px\s+(-?[\d.]+)px\s+0px(?:\s+0px)?\s+inset$/.exec(String(shadow || '').trim());
   return m ? { color: m[1], thick: Math.abs(parseFloat(m[2])) } : null;
 }
+/* T-0500.1.7.8 (finding 1): the opaque fill a tab is painted on, from the list TAB_LOOK_EXPR returns (nearest first).
+   Nothing opaque in the list means the paint cannot be measured, and the row says NOT CHECKED (null). */
+function tabFill(fills) {
+  if (!fills || !fills.length) return null;
+  var base = { r: 0, g: 0, b: 0 }, opaque = false;
+  for (var i = fills.length - 1; i >= 0; i--) {   /* farthest first: a nearer layer paints over the ones behind it */
+    var c = rgbaOf(fills[i]);
+    if (!c || c.a <= 0) continue;
+    var a = Math.min(1, c.a);
+    base = { r: c.r * a + base.r * (1 - a), g: c.g * a + base.g * (1 - a), b: c.b * a + base.b * (1 - a) };
+    if (a >= 1) opaque = true;
+  }
+  return opaque ? base : null;   /* every layer was translucent: there is no known fill to measure against */
+}
+function relLum(c) {
+  function ch(v) { v = v / 255; return v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4); }
+  return 0.2126 * ch(c.r) + 0.7152 * ch(c.g) + 0.0722 * ch(c.b);
+}
+/* WCAG 2.x contrast of a foreground (a computed CSS colour, translucent allowed, laid over the fill) against an opaque fill */
+function tabContrast(fg, fill) {
+  var c = rgbaOf(fg);
+  if (!c || !fill) return null;
+  var a = Math.min(1, Math.max(0, c.a));
+  var over = { r: c.r * a + fill.r * (1 - a), g: c.g * a + fill.g * (1 - a), b: c.b * a + fill.b * (1 - a) };
+  var l1 = relLum(over), l2 = relLum(fill);
+  return (Math.max(l1, l2) + 0.05) / (Math.min(l1, l2) + 0.05);
+}
+function rgbText(f) { return 'rgb(' + Math.round(f.r) + ', ' + Math.round(f.g) + ', ' + Math.round(f.b) + ')'; }
+var TAB_PAINT_FLOOR = 3;   /* WCAG 1.4.11 non-text contrast, and the large-text floor: a selected tab's label is 16-17px bold */
 function tabLookVerdict(tabs) {
   if (!tabs || tabs.length < 1) return { notChecked: true, ok: false, detail: 'no tab was rendered, so nothing could be measured' };
   var why = [];
@@ -663,9 +696,26 @@ function tabLookVerdict(tabs) {
     });
   }
   var single = tabs.length === 1;
+  /* T-0500.1.7.8 (finding 1): the checks above accepted a selected tab painted in the page fill. The label, the number and
+     the underline must clear 3:1 against the fill behind the tab, or the selected state is not painted at all. */
+  var paint = null;
+  if (sel.length === 1) {
+    var fill = tabFill(sel[0].fills);
+    if (!fill) return { notChecked: true, ok: false, detail: 'the fill behind the selected tab could not be read (backgrounds: ' + (sel[0].fills && sel[0].fills.length ? sel[0].fills.join(' | ') : 'none returned') + '), so whether it is painted was not measured' };
+    var parts = [['label', sel[0].color], ['number', sel[0].numColor]];
+    if (u) parts.push(['underline', u.color]);
+    var ratios = [];
+    parts.forEach(function (part) {
+      var r = tabContrast(part[1], fill);
+      if (r == null) { why.push('the selected tab\'s ' + part[0] + ' colour ' + part[1] + ' could not be read'); return; }
+      ratios.push(part[0] + ' ' + part[1] + ' ' + r.toFixed(1) + ':1');
+      if (r < TAB_PAINT_FLOOR - 0.005) why.push('the selected tab\'s ' + part[0] + ' ' + part[1] + ' is ' + r.toFixed(1) + ':1 against ' + rgbText(fill) + ', under the 3:1 floor');
+    });
+    paint = 'selected ' + sel[0].id + ' painted: ' + ratios.join(', ') + ' against ' + rgbText(fill) + ', floor 3:1';
+  }
   return { notChecked: false, ok: why.length === 0, why: why, single: single,
     detail: tabs.length + ' tab(s), all numbered text: selected ' + (sel[0] ? sel[0].id + ' ' + sel[0].color + (u ? ' with a ' + u.thick + 'px ' + u.color + ' underline' : ' with no underline') : 'none') +
-      (single ? '; one tab, so no idle tab exists and the idle comparisons were not made' : '; ' + idle.length + ' idle tab(s) with no underline and a different number colour') + (why.length ? '; ' + why.join('; ') : '') };
+      (single ? '; one tab, so no idle tab exists and the idle comparisons were not made' : '; ' + idle.length + ' idle tab(s) with no underline and a different number colour') + (paint ? '; ' + paint : '') + (why.length ? '; ' + why.join('; ') : '') };
 }
 
 /* Keyboard, measured with real key events. A synthetic KeyboardEvent dispatched
@@ -6224,7 +6274,7 @@ if (require.main === module) {
        verdicts behind them, so a test can prove each row can fail. */
     MIN_TARGET_PX: MIN_TARGET_PX,
     TAB_BAR_VIEWPORTS: TAB_BAR_VIEWPORTS,
-    tabLookVerdict: tabLookVerdict, tabUnderline: tabUnderline,
+    tabLookVerdict: tabLookVerdict, tabUnderline: tabUnderline, TAB_LOOK_EXPR: TAB_LOOK_EXPR,
     emptyLandmarkVerdict: emptyLandmarkVerdict,
     LANDMARK_EXPR: LANDMARK_EXPR,
     menuSelectVerdict: menuSelectVerdict,

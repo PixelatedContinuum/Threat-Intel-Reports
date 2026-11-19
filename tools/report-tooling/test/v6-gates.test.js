@@ -18,7 +18,7 @@ var G = require('../check-browser-report.js');
    A tab is what TAB_LOOK_EXPR measures: label colour, box-shadow, the ::before number's content and colour, whether an icon is shown. */
 var ACC = 'rgb(88, 166, 255)', UL = ACC + ' 0px -2px 0px 0px inset';
 function tab(id, over) {
-  return Object.assign({ id: id, selected: false, color: 'rgb(168, 168, 168)', shadow: 'none', numContent: 'counter(hlrvtab)', numColor: 'rgb(168, 168, 168)', iconShown: false }, over || {});
+  return Object.assign({ id: id, selected: false, color: 'rgb(168, 168, 168)', shadow: 'none', numContent: 'counter(hlrvtab)', numColor: 'rgb(168, 168, 168)', iconShown: false, fills: ['rgb(17, 17, 17)'] }, over || {});
 }
 function good() {
   return [0, 1, 2, 3, 4, 5, 6].map(function (i) { return i === 2 ? tab('tabbtn-' + i, { selected: true, color: 'rgb(226, 226, 226)', shadow: UL, numColor: ACC }) : tab('tabbtn-' + i); });
