@@ -1,9 +1,10 @@
 'use strict';
 
 /* T-0603 A58: the default `npm run verify:browser` must reach every gate and exit with the worst class
-   (1 FAIL, then 2 NOT CHECKED, then 0), and its Wire step must drive a built site, because the default
-   (LIVE) mode of check-browser-wire.js expects the old flat Wire list and returns NOT CHECKED on the
-   three-tab page. No browser is launched here: the three gate commands are replaced by `(exit N)`. */
+   (1 FAIL, then 2 NOT CHECKED, then 0), and its Wire step must drive a built site: BUILT mode is the
+   only mode that checks all three tabs (Headlines, nKEVs, CVEs) and reads its expected counts from the
+   built markup. The default (LIVE) mode drives the Headlines tab only (T-0632).
+   No browser is launched here: the three gate commands are replaced by `(exit N)`. */
 
 var test = require('node:test');
 var assert = require('node:assert');

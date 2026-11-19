@@ -15,8 +15,10 @@
 
    LIVE (the default): fetch https://the-hunters-ledger.com/wire/ and its theme
    sheet, put the working tree's stylesheet and filter module on it
-   (lib/wire-harness.js `build`) and drive that. This is the original gate and
-   its checks are unchanged; it expects the page's single flat list.
+   (lib/wire-harness.js `build`) and drive that. It drives the Headlines tab
+   only: the page's first [data-filter-grid], whose published rows are filtered
+   by the working tree's CSS and JS. The nKEVs (#vulns) and CVEs (#cves) tabs
+   are BUILT mode's checks, not this mode's.
 
    BUILT (HL_SITE_DIR, or an http:// HL_SITE_BASE): drive a finished Jekyll
    `_site` exactly as built, with nothing substituted and nothing proxied. This
@@ -27,8 +29,14 @@
    page makes (analytics, a signup form) are blocked and counted, so the verdict
    never depends on someone else's server being up.
 
-   Every BUILT check prints its denominator, [n=...], and a check whose
-   denominator is zero is a FAIL, never a PASS.
+   BUILT checks print their denominator, [n=...], and a check whose denominator
+   is zero is NOT CHECKED, never a PASS. A LIVE check that is a property of one
+   element (is the control painted, is the console clean) prints
+   [no denominator]; LIVE checks that count rows carry their [n=...] too. In
+   both modes the verdict is FAIL (exit 1) if any check FAILed, else NOT
+   CHECKED (exit 2) if any could not run, else PASS (exit 0), from
+   lib/gate-ledger.js; the LIVE empty-state branch and summary are
+   lib/wire-live.js.
 
    Run: node check-browser-wire.js [--shots <dir>]
    Env: HL_CHROME     path to a Chrome/Chromium binary
@@ -89,14 +97,15 @@ function fetchText(url) {
    about the site. This checker had its own copy of that server until the report
    checker needed the same thing; one definition of one rule. */
 
-var results = [];
-function check(name, pass, detail) {
-  results.push({ name: name, pass: pass });
-  console.log('   ' + (pass ? 'PASS  ' : 'FAIL  ') + name);
-  if (detail) console.log('         ' + detail);
-}
+/* LIVE mode's checks go through the same ledger as BUILT mode (lib/gate-ledger.js), so its verdict is
+   one rule in one place: FAIL outranks NOT CHECKED, and a check that could not run is never a FAIL.
+   The empty-state branch and the summary line are lib/wire-live.js, so `npm test` proves them without
+   a browser (test/browser-gate-wire-live.test.js). */
+var WIRE_LIVE = require('./lib/wire-live.js');
 
 async function runLive() {
+  var L = require('./lib/gate-ledger.js').makeLedger(function (l) { console.log(l); });
+  var liveChk = L.chk, livePlain = L.plain;
   var liveHtml, themeCss;
   try {
     liveHtml = await fetchText(BASE + '/wire/');
@@ -148,9 +157,9 @@ async function runLive() {
   console.log('');
 
   try {
-    check('every row on the live page loaded',
+    liveChk('every row on the live page loaded',
       (await page.evaluate('document.querySelectorAll(".hl-wire__item").length')) === built.rows,
-      built.rows + ' rows expected');
+      built.rows, 'rows', built.rows + ' rows expected');
 
     /* The published template's own data-day, checked against the published
        page's own day headings. This is the only thing anywhere that sees the
@@ -158,18 +167,19 @@ async function runLive() {
        timezone split that carrying the day exists to prevent. Before the filter
        shipped, no row carried the attribute and this reports NOT CHECKED. */
     if (!built.deployed.carriedRows) {
-      check('NOT CHECKED: the published page carries no data-day yet', false,
-        'nothing to compare against its headings; the working-tree source shape is ' +
-        'covered by check-wire.js instead');
+      L.skipped('the published data-day agrees with the published day headings',
+        'the published page carries no data-day yet, so there is nothing to compare against its ' +
+        'headings; the working-tree source shape is covered by check-wire.js instead');
     } else {
-      check('the published data-day agrees with the published day headings',
+      liveChk('the published data-day agrees with the published day headings',
         built.disagreements.length === 0,
+        built.deployed.carriedRows, 'rows',
         built.disagreements.length ? built.disagreements.join('; ')
           : built.deployed.carriedRows + ' of ' + built.rows + ' rows, every one matching');
     }
 
     var errs = page.consoleErrors();
-    check('no script error blocked the filter module', errs.length === 0,
+    livePlain('no script error blocked the filter module', errs.length === 0,
       errs.length ? errs.slice(0, 3).join(' | ') +
         (srv.misses.length ? '  [assets not served: ' + srv.misses.join(', ') + ']' : '')
         : 'clean console');
@@ -177,10 +187,10 @@ async function runLive() {
     // --- the control renders ---
     var di = await page.computed('[data-filter-date]',
       ['display', 'fontSize', 'colorScheme', 'backgroundColor']);
-    check('the date control renders with real geometry',
+    livePlain('the date control renders with real geometry',
       !!di && di._present && di._w > 60 && di._h > 20,
       di && di._present ? di._w + 'x' + di._h + ', display=' + di.display : 'ELEMENT ABSENT');
-    check('the native picker glyph is legible on the dark field',
+    livePlain('the native picker glyph is legible on the dark field',
       di && di.colorScheme === 'dark', 'color-scheme = ' + (di && di.colorScheme));
 
     /* The `rem` trap. The theme sets body to 1.25em = 20px while `rem` resolves
@@ -191,11 +201,11 @@ async function runLive() {
     var chipFs = await page.evaluate(
       'getComputedStyle(document.querySelector(".hl-chip-btn")).fontSize');
     if (bodyFs < 19) {
-      check('NOT CHECKED: the rem trap needs the real theme cascade', false,
-        'body computed at ' + bodyFs + 'px, expected ~20px; em and rem coincide here ' +
-        'so this check could not tell them apart');
+      L.skipped('the date control is sized in em like its neighbours, not rem',
+        'the rem trap needs the real theme cascade: body computed at ' + bodyFs + 'px, expected ' +
+        '~20px, and em and rem coincide here, so this check could not tell them apart');
     } else {
-      check('the date control is sized in em like its neighbours, not rem',
+      livePlain('the date control is sized in em like its neighbours, not rem',
         di.fontSize === chipFs,
         'date input ' + di.fontSize + ' vs topic chip ' + chipFs + ' on a ' + bodyFs +
         'px body (the rem path would give 12.8px)');
@@ -205,13 +215,13 @@ async function runLive() {
        `display: none` that the hidden attribute relies on, so a "hidden" control
        in a flex row is plainly visible without an explicit [hidden] rule. */
     var clr = await page.computed('[data-filter-date-clear]', ['display']);
-    check('the clear-date control is truly invisible before a date is picked',
+    livePlain('the clear-date control is truly invisible before a date is picked',
       clr._present && clr.display === 'none' && clr._w === 0,
       'display=' + clr.display + ', box ' + clr._w + 'x' + clr._h);
 
     var mm = await page.json('(function(){var e=document.querySelector("[data-filter-date]");' +
       'return {min:e.getAttribute("min"),max:e.getAttribute("max")};})()');
-    check('min and max bound the input to the real corpus',
+    livePlain('min and max bound the input to the real corpus',
       mm.min === first && mm.max === last, JSON.stringify(mm));
 
     // --- filtering ---
@@ -227,16 +237,17 @@ async function runLive() {
     await setDate(busiest);
     var rBusy = await page.visibleCount('.hl-wire__item');
     var dBusy = await page.visibleCount('[data-filter-group]');
-    check('picking the busiest day shows exactly its rows under one heading',
+    liveChk('picking the busiest day shows exactly its rows under one heading',
       rBusy === built.dayCounts[busiest] && dBusy === 1,
+      built.dayCounts[busiest], 'rows',
       rBusy + ' rows under ' + dBusy + ' heading (expected ' + built.dayCounts[busiest] + ' under 1)');
 
     var cnt = await page.evaluate('document.querySelector("[data-filter-count]").textContent');
-    check('the count line reports the narrowing',
+    livePlain('the count line reports the narrowing',
       cnt === 'Showing ' + built.dayCounts[busiest] + ' of ' + built.rows, '"' + cnt + '"');
 
     var clr2 = await page.computed('[data-filter-date-clear]', ['display']);
-    check('the clear-date control appears once a date is set',
+    livePlain('the clear-date control appears once a date is set',
       clr2.display !== 'none' && clr2._w > 20, 'display=' + clr2.display + ' width=' + clr2._w);
 
     // A real pointer press and release, not el.click().
@@ -244,24 +255,24 @@ async function runLive() {
     var rAll = await page.visibleCount('.hl-wire__item');
     var dAll = await page.visibleCount('[data-filter-group]');
     var val = await page.evaluate('document.querySelector("[data-filter-date]").value');
-    check('a real pointer click on Clear date restores every row',
+    liveChk('a real pointer click on Clear date restores every row',
       rAll === built.rows && dAll === built.days.length && val === '',
+      built.rows, 'rows',
       rAll + ' rows, ' + dAll + ' headings, input value "' + val + '"');
 
     // --- the two empty states ---
+    /* The no-quiet-day decision lives in lib/wire-live.js, not inline here, so a unit test can prove
+       that a LIVE run whose corpus has no empty day is NOT CHECKED (exit 2) and not FAIL (exit 1). */
+    var qm = null;
     if (quiet) {
       await setDate(quiet);
-      var qm = await page.evaluate('document.querySelector("[data-filter-empty-msg]").textContent');
-      check('a quiet day inside the window says so and names the date',
-        /quiet some days/.test(qm), qm);
-    } else {
-      check('NOT CHECKED: no empty day inside the current window to exercise', false,
-        'every day in the corpus currently carries at least one item');
+      qm = await page.evaluate('document.querySelector("[data-filter-empty-msg]").textContent');
     }
+    WIRE_LIVE.quietDay(L, quiet, qm);
 
     await setDate('2020-01-05');
     var om = await page.evaluate('document.querySelector("[data-filter-empty-msg]").textContent');
-    check('a date outside the window states the real bounds instead',
+    livePlain('a date outside the window states the real bounds instead',
       /outside the window/.test(om), om);
 
     /* The date must not be blamed for another filter's emptiness. A day holding
@@ -273,7 +284,7 @@ async function runLive() {
       's.value="zzz-no-such-headline";s.dispatchEvent(new Event("input",{bubbles:true}));})()');
     await CDP.sleep(150);
     var fm = await page.evaluate('document.querySelector("[data-filter-empty-msg]").textContent');
-    check('a day with headlines is not called quiet when another filter emptied it',
+    livePlain('a day with headlines is not called quiet when another filter emptied it',
       !/quiet/.test(fm) && /No headlines match that filter/.test(fm),
       withTag + ' holds ' + built.dayCounts[withTag] + ' headlines. message: "' + fm + '"');
 
@@ -284,7 +295,7 @@ async function runLive() {
     var after = page.networkUrls().slice(baseline).filter(function (u) {
       return u.indexOf('data:') !== 0;
     });
-    check('nothing was transmitted while the reader filtered',
+    livePlain('nothing was transmitted while the reader filtered',
       after.length === 0,
       after.length ? after.slice(0, 5).join(', ') :
         'none, against ' + baseline + ' asset requests at page load');
@@ -308,10 +319,7 @@ async function runLive() {
     srv.close();
   }
 
-  var failed = results.filter(function (r) { return !r.pass; });
-  console.log('\n' + (failed.length ? 'FAIL' : 'PASS') + '  /wire/ in a real browser  (' +
-    (results.length - failed.length) + '/' + results.length + ' checks)');
-  process.exit(failed.length ? 1 : 0);
+  process.exit(WIRE_LIVE.finish(L, function (l) { console.log(l); }));
 }
 
 
