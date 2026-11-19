@@ -60,7 +60,9 @@ function pickReport() {
    read as well as the one-level ones, since most of the 18 pages that overflowed there live one level down. */
 function pickDenseReport() {
   var pref = '/reports/new-enc-exe/';   /* the worst cell measured: 627px at 390 on the build before T-0605 (T-0537) */
-  if (fs.existsSync(path.join(SITE_DIR, pref, 'index.html'))) return pref;
+  /* the preferred page must still hold both, or the fallback search runs (review_a7d8: a kept slug
+     whose content changed would silently stop exercising a dense report) */
+  if (isDense(pref)) return pref;
   var roots = [];
   var top = path.join(SITE_DIR, 'reports');
   if (!fs.existsSync(top)) return null;
@@ -73,11 +75,14 @@ function pickDenseReport() {
     });
   });
   roots.sort();
-  for (var i = 0; i < roots.length; i++) {
-    var html = fs.readFileSync(path.join(SITE_DIR, roots[i], 'index.html'), 'utf8');
-    if (html.indexOf('<pre class="highlight"') > -1 && html.indexOf('<table') > -1) return roots[i];
-  }
+  for (var i = 0; i < roots.length; i++) if (roots[i] !== pref && isDense(roots[i])) return roots[i];
   return null;
+}
+function isDense(url) {
+  var f = path.join(SITE_DIR, url, 'index.html');
+  if (!fs.existsSync(f)) return false;
+  var html = fs.readFileSync(f, 'utf8');
+  return html.indexOf('<pre class="highlight"') > -1 && html.indexOf('<table') > -1;
 }
 /* a report page is read at 320 too (see WIDTHS in the header) */
 function widthsFor(url) { return url.indexOf('/reports/') === 0 ? [320, 390, 1440] : [390, 1440]; }
@@ -238,4 +243,5 @@ async function main() {
   process.exit(V.code);
 }
 
-main().catch(function (e) { notChecked('the sweep errored before finishing: ' + e.message + '\n' + e.stack); });
+if (require.main === module) main().catch(function (e) { notChecked('the sweep errored before finishing: ' + e.message + '\n' + e.stack); });
+module.exports = { pickDenseReport: pickDenseReport, isDense: isDense };
