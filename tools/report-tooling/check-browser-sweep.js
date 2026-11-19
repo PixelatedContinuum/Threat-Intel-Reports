@@ -4,11 +4,16 @@
 /* The site sweep, in a real browser (T-0556 w6): one pass over every kind of page at 390 and 1440 for horizontal scroll and clipped text,
    one computed-colour pass for text contrast (WCAG AA), and a real-keyboard pass for visible focus.
 
-   PAGE KINDS (each picked from the built site, never hardcoded to a slug that may go): home, reports index, a report, its detection page,
-   an IOC feed page, the three Wire tabs, actors index, an actor, families index, a family, techniques index, a technique, search, 404,
-   about-me, support, sponsor. A kind with no page in the build is NOT CHECKED, named.
+   PAGE KINDS (each picked from the built site, never required to exist): home, reports index, a report, a report with code
+   and tables, its detection page, an IOC feed page, the three Wire tabs, actors index, an actor, families index, a family, techniques
+   index, a technique, search, 404, about-me, support, sponsor. A kind is a preferred slug when it is there and a scan for the kind
+   when it is not; a kind with no page in the build is NOT CHECKED, named.
 
-   CHECKS (lib/page-sweep.js holds the in-page expressions): per page and width, overflow, clip; per page at 1440 and 390, contrast;
+   WIDTHS: 390 and 1440 for every kind; a report page is read at 320 as well, because the dense report pages (code blocks, wide tables,
+   glossary tooltips, heading anchors) are the only kind that has ever scrolled sideways on a phone, and 390 alone did not show it on
+   every page of that kind (T-0537: 18 pages over at 320 and 390).
+
+   CHECKS (lib/page-sweep.js holds the in-page expressions): per page and width, overflow, clip and contrast;
    keyboard: Tab through home, a report, the Wire and search with real key events (Input.dispatchKeyEvent), and at every stop read the
    focused element, whether it is on screen and not covered, and whether anything about it changes between focused and blurred
    (outline, box-shadow, border, background, text colour, decoration). A stop whose style does not change is a FAIL.
@@ -50,13 +55,39 @@ function pickReport() {
   if (fs.existsSync(path.join(SITE_DIR, pref, 'index.html'))) return pref;
   return first('reports', function () { return true; });
 }
+/* A report page that carries both a highlighted code block and a table: the dense report kind that scrolled sideways on a phone (T-0537).
+   Picked by what the page contains, not by slug, so a renamed report cannot take the kind away; the nested /reports/<a>/<b>/ bundles are
+   read as well as the one-level ones, since most of the 18 pages that overflowed there live one level down. */
+function pickDenseReport() {
+  var pref = '/reports/new-enc-exe/';   /* the worst cell measured: 627px at 390 on the build before T-0605 (T-0537) */
+  if (fs.existsSync(path.join(SITE_DIR, pref, 'index.html'))) return pref;
+  var roots = [];
+  var top = path.join(SITE_DIR, 'reports');
+  if (!fs.existsSync(top)) return null;
+  fs.readdirSync(top).forEach(function (n) {
+    var sub = path.join(top, n);
+    try { if (!fs.statSync(sub).isDirectory()) return; } catch (e) { return; }
+    if (fs.existsSync(path.join(sub, 'index.html'))) roots.push('/reports/' + n + '/');
+    fs.readdirSync(sub).forEach(function (m) {
+      if (fs.existsSync(path.join(sub, m, 'index.html'))) roots.push('/reports/' + n + '/' + m + '/');
+    });
+  });
+  roots.sort();
+  for (var i = 0; i < roots.length; i++) {
+    var html = fs.readFileSync(path.join(SITE_DIR, roots[i], 'index.html'), 'utf8');
+    if (html.indexOf('<pre class="highlight"') > -1 && html.indexOf('<table') > -1) return roots[i];
+  }
+  return null;
+}
+/* a report page is read at 320 too (see WIDTHS in the header) */
+function widthsFor(url) { return url.indexOf('/reports/') === 0 ? [320, 390, 1440] : [390, 1440]; }
 function pages() {
   var rep = pickReport();
   var slug = rep ? rep.split('/')[2] : null;
   var det = slug && fs.existsSync(path.join(SITE_DIR, 'hunting-detections', slug, 'index.html')) ? '/hunting-detections/' + slug + '/' : first('hunting-detections', function () { return true; });
   var ioc = slug && fs.existsSync(path.join(SITE_DIR, 'ioc-feeds', slug, 'index.html')) ? '/ioc-feeds/' + slug + '/' : first('ioc-feeds', function () { return true; });
   var list = [
-    ['home', '/'], ['reports index', '/reports/'], ['a report', rep], ['its detection page', det], ['an IOC feed page', ioc],
+    ['home', '/'], ['reports index', '/reports/'], ['a report', rep], ['a report with code and tables', pickDenseReport()], ['its detection page', det], ['an IOC feed page', ioc],
     ['Wire headlines', '/wire/#headlines'], ['Wire nKEVs', '/wire/#vulns'], ['Wire CVEs', '/wire/#cves'],
     ['actors index', '/actors/'], ['an actor', first('actors', function (n) { return /^UTA/.test(n); })],
     ['families index', '/families/'], ['a family', first('families', function () { return true; })],
@@ -139,10 +170,11 @@ async function main() {
     PAGES = PAGES.filter(function (p) { return !!p[1]; });
 
     if (ONLY.indexOf('overflow') > -1 || ONLY.indexOf('contrast') > -1) {
-      for (var w of [390, 1440]) {
-        await setViewport(page, w, w === 390 ? 844 : 900);
+      for (var w of [320, 390, 1440]) {
+        await setViewport(page, w, w === 1440 ? 900 : 844);
         for (var pi = 0; pi < PAGES.length; pi++) {
           var p = PAGES[pi];
+          if (widthsFor(p[1]).indexOf(w) < 0) continue;
           await load(page, origin + p[1]);
           if (ONLY.indexOf('overflow') > -1) {
             var o = await page.json(SWEEP.OVERFLOW_EXPR), c = await page.json(SWEEP.CLIP_EXPR);
