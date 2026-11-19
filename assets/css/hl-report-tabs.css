@@ -304,8 +304,8 @@ a.hl-rv-feat__item:hover .hl-rv-feat__cta, a.hl-rv-featcard__item:hover .hl-rv-f
   font-family: var(--hl-font-serif); font-size: clamp(30px, 3.8vw, 46px) !important; font-weight: 700 !important; line-height: 1.3; letter-spacing: -0.02em;
 }
 .hl-rv-panel-head p { grid-column: 1 / -1; margin: 6px 0 0 !important; max-width: 44em; font-size: 18px !important; line-height: 1.5; color: var(--rv-muted) !important; }
-.hl-rv-skip-view { display: none; }
-.hl-rv-skip-view:focus { display: inline-flex; }
+.hl-rv-skip-view { position: absolute; display: inline-flex; align-items: center; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip: rect(0 0 0 0); clip-path: inset(50%); white-space: nowrap; border: 0; }
+.hl-rv-skip-view:focus, .hl-rv-skip-view:focus-visible { position: static; width: auto; height: auto; margin: 0 0 12px; padding: 8px 14px; overflow: visible; clip: auto; clip-path: none; background: var(--rv-row); border: 1px solid var(--acc); border-radius: var(--rv-radius); color: var(--rv-text); font-family: var(--hl-font-sans); font-size: var(--rv-fs); text-decoration: underline; }
 
 /* ---------- A report section (design D): the report's prose sits on the page, no box. A hairline and a mono eyebrow (the section number) open it.
    Generated views are the boxed panels (B's panel look, below). ---------- */
