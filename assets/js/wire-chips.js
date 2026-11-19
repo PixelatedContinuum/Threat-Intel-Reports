@@ -36,7 +36,17 @@
     btn.setAttribute('aria-controls', box.id);
     btn.setAttribute('aria-expanded', 'false');
     box.appendChild(btn);
-    var expanded = false, busy = false, inView = false;
+    var expanded = false, busy = false, inView = false, revealed = [];
+    // T-0565.1.3: the first element inside a revealed chip a reader can focus (a link, a
+    // button, a details summary), so expanding can hand focus to it.
+    function focusTarget(chip) {
+      var sel = 'a[href], button, summary, input, select, textarea, [tabindex]:not([tabindex="-1"])';
+      if (chip.matches(sel)) return chip;
+      return chip.querySelector(sel);
+    }
+    function focusEl(el) {
+      try { el.focus({ preventScroll: true }); } catch (e) { el.focus(); }
+    }
     function fit(measure) {
       if (busy) return;
       busy = true;
@@ -66,18 +76,48 @@
       // An expanded row whose overflow has emptied (a wider viewport) is collapsed, so
       // a later narrowing hides the overflow again instead of showing it under a '−N'.
       if (overflow === 0) expanded = false;
+      revealed = out;
       out.forEach(function (chip) { chip.hidden = !expanded; });
+      var hadFocus = document.activeElement === btn;
       btn.hidden = overflow === 0;
       btn.textContent = expanded ? '−' + overflow : '+' + overflow;
       // The accessible name starts with the visible text (WCAG 2.5.3).
       btn.setAttribute('aria-label', btn.textContent + ': ' + (expanded ? 'hide ' : 'show ') + overflow + ' more details');
       btn.setAttribute('aria-expanded', String(expanded));
       box.classList.toggle('is-expanded', expanded);
+      // T-0565.1.3: a focused button that hides (its overflow emptied on a wider viewport)
+      // would take focus out of the page with it. Put focus back in the same row.
+      if (btn.hidden && hadFocus) {
+        var back = row.querySelector('.hl-vuln__cve') ||
+          row.querySelector('a[href], button, summary, [tabindex]:not([tabindex="-1"])') || row;
+        if (back === row && !row.hasAttribute('tabindex')) row.setAttribute('tabindex', '-1');
+        focusEl(back);
+      }
       busy = false;
     }
-    btn.addEventListener('click', function () { expanded = !expanded; fit(inView); });
+    btn.addEventListener('click', function () {
+      var opening = !expanded;
+      expanded = opening;
+      fit(inView);
+      // T-0565.1.3: the button sits after the chips it reveals, so without this a reader who
+      // pressed it reaches the revealed chips only with Shift+Tab. Focus the first revealed
+      // interactive chip rather than moving the button earlier in the DOM: the row's visual
+      // order and its tab order stay the same, and Tab runs on through the revealed chips to
+      // the '−N' button, which still follows them.
+      if (opening && btn.getAttribute('aria-expanded') === 'true') {
+        for (var i = 0; i < revealed.length; i++) {
+          var target = focusTarget(revealed[i]);
+          if (target) { focusEl(target); break; }
+        }
+      }
+    });
     btn.addEventListener('keydown', function (e) {
       if (e.key === 'Escape' && expanded) { expanded = false; fit(inView); }
+    });
+    // T-0565.1.3: expanding hands focus into the revealed chips, so Escape pressed there
+    // must still collapse the row and put focus back on the button it came from.
+    box.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && expanded) { expanded = false; fit(inView); focusEl(btn); }
     });
     if (window.ResizeObserver) {
       var previous = -1;
