@@ -2168,7 +2168,7 @@ ghost-cryptojacker-vova75rus-77.110.96.200-detections:
     engine: sigma
     tier: Detection
     fence: 11
-    hash: "2dcdc92b"
+    hash: "087c5bf4"
     head: "title: Suspicious Shared Library Created in PAM "
     robustness: 3
     confidence: "HIGH"
@@ -3364,7 +3364,7 @@ malware-analysis-houselet-detections:
     engine: sigma
     tier: Hunting
     fence: 4
-    hash: "7414f768"
+    hash: "9f49fef3"
     head: "title: Command Line Referencing Virtualization o"
     robustness: 2
     confidence: "MODERATE"
@@ -4337,7 +4337,7 @@ opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817
     engine: sigma
     tier: Detection
     fence: 13
-    hash: "e7c072b6"
+    hash: "33be42e3"
     head: "title: Content Change to /etc/passwd or /usr/bin"
     robustness: 3
     confidence: "HIGH"
@@ -5694,7 +5694,7 @@ rovodev-mirai-matrix-c2-87.106.143.220-detections:
     engine: sigma
     tier: Hunting
     fence: 13
-    hash: "125a4c25"
+    hash: "4e9ae856"
     head: "title: Naku or Pandora Mirai Arch-Tagged Binary "
     robustness: 1
     confidence: "HIGH"
@@ -5702,16 +5702,14 @@ rovodev-mirai-matrix-c2-87.106.143.220-detections:
   - name: "PandoraNet Botnet ID in Process Command Line: Active Pandora-Mirai Infection"
     engine: sigma
     tier: Hunting
-    fence: 14
-    hash: "a88cfaf3"
-    head: "title: PandoraNet Botnet ID in Process Command L"
+    cross_referenced: true
     robustness: 1
     confidence: "HIGH for the artifact; retiered on durability"
     attack: [T1095, T1059.004]
   - name: "Process Launched with /dev/watchdog on the Command Line, Mirai-Canonical Persistence Tactic"
     engine: sigma
     tier: Hunting
-    fence: 15
+    fence: 14
     hash: "c07f1ecb"
     head: "title: Process Launched with /dev/watchdog on th"
     robustness: 2
@@ -5720,7 +5718,7 @@ rovodev-mirai-matrix-c2-87.106.143.220-detections:
   - name: "Naku/Pandora-Mirai Operator-Bespoke 22-Char Charset String: Family Tracking Signature"
     engine: sigma
     tier: Hunting
-    fence: 16
+    fence: 15
     hash: "16f1251b"
     head: "title: Naku/Pandora-Mirai Operator-Bespoke 22-Ch"
     robustness: 1
@@ -5728,7 +5726,7 @@ rovodev-mirai-matrix-c2-87.106.143.220-detections:
   - name: "Linux Process Connecting to discord.com on Port 443 Outside node_modules or discord.js Paths (Matrix C2 Bot Pattern)"
     engine: sigma
     tier: Hunting
-    fence: 17
+    fence: 16
     hash: "ae386dd4"
     head: "title: Linux Process Connecting to discord.com o"
     robustness: 2
@@ -5737,7 +5735,7 @@ rovodev-mirai-matrix-c2-87.106.143.220-detections:
   - name: "Rovodev AI Agent Sessions Directory or Session Context File Created on a Linux Host"
     engine: sigma
     tier: Hunting
-    fence: 18
+    fence: 17
     hash: "d545ae71"
     head: "title: Rovodev AI Agent Sessions Directory or Se"
     robustness: 2
@@ -5746,7 +5744,7 @@ rovodev-mirai-matrix-c2-87.106.143.220-detections:
   - name: "Rovodev Runtime Log rovodev.log Created on a Linux Host (Scoping Lead for AI-Augmented Offensive Operations)"
     engine: sigma
     tier: Hunting
-    fence: 19
+    fence: 18
     hash: "3094869b"
     head: "title: Rovodev Runtime Log rovodev.log Created o"
     robustness: 1
@@ -5755,7 +5753,7 @@ rovodev-mirai-matrix-c2-87.106.143.220-detections:
   - name: "Pandora-Mirai Naku Binary Distribution URI Path"
     engine: suricata
     tier: Detection
-    fence: 20
+    fence: 19
     hash: "992a8707"
     head: "alert http $HOME_NET any -> $EXTERNAL_NET any (m"
     robustness: 2
@@ -5764,7 +5762,7 @@ rovodev-mirai-matrix-c2-87.106.143.220-detections:
   - name: "Pandora-Mirai Pandoras-Box Binary Distribution URI Path"
     engine: suricata
     tier: Detection
-    fence: 21
+    fence: 20
     hash: "70432092"
     head: "alert http $HOME_NET any -> $EXTERNAL_NET any (m"
     robustness: 2
@@ -5773,7 +5771,7 @@ rovodev-mirai-matrix-c2-87.106.143.220-detections:
   - name: "Pandora-Mirai bot.sh Reseed Download URI Pattern"
     engine: suricata
     tier: Hunting
-    fence: 22
+    fence: 21
     hash: "40808673"
     head: "alert http $HOME_NET any -> $EXTERNAL_NET any (m"
     robustness: 1
@@ -5782,7 +5780,7 @@ rovodev-mirai-matrix-c2-87.106.143.220-detections:
   - name: "Naku Binary Reference in HTTP URI (Bare Substring)"
     engine: suricata
     tier: Hunting
-    fence: 23
+    fence: 22
     hash: "adf251f5"
     head: "alert http $HOME_NET any -> $EXTERNAL_NET any (m"
     robustness: 1
@@ -5791,7 +5789,7 @@ rovodev-mirai-matrix-c2-87.106.143.220-detections:
   - name: "keyosbuff Handle Substring in HTTP URI (C2-Leak Repository Owner Lead)"
     engine: suricata
     tier: Hunting
-    fence: 24
+    fence: 23
     hash: "9b097a8c"
     head: "alert http $HOME_NET any -> any any (msg:\"THL HU"
     robustness: 1
@@ -5799,7 +5797,7 @@ rovodev-mirai-matrix-c2-87.106.143.220-detections:
   - name: "Naku Binary Fetch URI Pattern: Historical Aruba Distribution Convention"
     engine: suricata
     tier: Hunting
-    fence: 25
+    fence: 24
     hash: "ed56016d"
     head: "alert http $HOME_NET any -> $EXTERNAL_NET any (m"
     robustness: 1
@@ -5808,7 +5806,7 @@ rovodev-mirai-matrix-c2-87.106.143.220-detections:
   - name: "Naku Binary Fetch URI Pattern: Historical Aruba Backup Distribution Convention"
     engine: suricata
     tier: Hunting
-    fence: 26
+    fence: 25
     hash: "3c52c0d4"
     head: "alert http $HOME_NET any -> $EXTERNAL_NET any (m"
     robustness: 1
@@ -5817,7 +5815,7 @@ rovodev-mirai-matrix-c2-87.106.143.220-detections:
   - name: "Naku-Pandora Mirai Operator-Bespoke CNC Protocol (Length-Prefixed String Option Keys)"
     engine: suricata
     tier: Hunting
-    fence: 27
+    fence: 26
     hash: "e16fe90e"
     head: "alert tcp $HOME_NET any -> $EXTERNAL_NET 23 (msg"
     robustness: 2
@@ -5826,7 +5824,7 @@ rovodev-mirai-matrix-c2-87.106.143.220-detections:
   - name: "Matrix C2 Discord Bot Attack-Method Dispatch: ovh-nuke"
     engine: suricata
     tier: Hunting
-    fence: 28
+    fence: 27
     hash: "46667cc4"
     head: "alert http $HOME_NET any -> any any (msg:\"THL HU"
     robustness: 2
@@ -5835,7 +5833,7 @@ rovodev-mirai-matrix-c2-87.106.143.220-detections:
   - name: "Matrix C2 Discord Bot Attack-Method Dispatch: syn-storm/frag-storm/udp-bypass/icmp-hell"
     engine: suricata
     tier: Hunting
-    fence: 29
+    fence: 28
     hash: "1d810065"
     head: "alert http $HOME_NET any -> any any (msg:\"THL HU"
     robustness: 2

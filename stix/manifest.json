@@ -106,13 +106,13 @@
       "file": "opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817.json",
       "url": "https://the-hunters-ledger.com/stix/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817.json",
       "report_url": "https://the-hunters-ledger.com/reports/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817/",
-      "bundle_id": "bundle--eba0bd19-6d3f-4551-b139-bcb88f078a8e",
+      "bundle_id": "bundle--5346844b-637d-40f9-9375-b7f28bb00ad0",
       "report_id": "report--2aa3b7a4-9d57-5059-94af-58ae5009f969",
-      "sha256": "9576db3019901f01068dffc09a31bb82406baa110604614baa040bf2273a312b",
-      "bytes": 3096379,
+      "sha256": "0cfb5cb3bd79226749860f5a47735fea51da377b2fcbbbe0ab8b881ad67a6ce5",
+      "bytes": 3096757,
       "objects": 4085,
       "indicators": 105,
-      "modified": "2026-10-17T16:28:32.863642Z"
+      "modified": "2026-11-19T20:32:51.336679Z"
     },
     {
       "slug": "seasia-gov-exploitation-toolkit-144-172-106-236",
@@ -256,13 +256,13 @@
       "file": "rovodev-mirai-matrix-c2-87.106.143.220.json",
       "url": "https://the-hunters-ledger.com/stix/rovodev-mirai-matrix-c2-87.106.143.220.json",
       "report_url": "https://the-hunters-ledger.com/reports/rovodev-mirai-matrix-c2-87.106.143.220/",
-      "bundle_id": "bundle--f50973e4-5536-4a6a-bc42-ac574cc21f22",
+      "bundle_id": "bundle--48184f1e-79bc-45e5-9875-23474c24a2ac",
       "report_id": "report--d6a3df6a-be77-50bd-8c19-3b3a9455ec93",
-      "sha256": "e0b9284482c498124c0aa5715715a12a8748c049659a9121011800863ef26a52",
-      "bytes": 1214124,
-      "objects": 1549,
-      "indicators": 61,
-      "modified": "2026-10-17T16:28:36.430964Z"
+      "sha256": "792bc8d51c81446c10de65cbfbd1be63bd877690bc4a61b33b6f951725dadb8a",
+      "bytes": 1211590,
+      "objects": 1547,
+      "indicators": 60,
+      "modified": "2026-11-19T20:32:53.629005Z"
     },
     {
       "slug": "ghost-cryptojacker-vova75rus-77.110.96.200",
@@ -271,13 +271,13 @@
       "file": "ghost-cryptojacker-vova75rus-77.110.96.200.json",
       "url": "https://the-hunters-ledger.com/stix/ghost-cryptojacker-vova75rus-77.110.96.200.json",
       "report_url": "https://the-hunters-ledger.com/reports/ghost-cryptojacker-vova75rus-77.110.96.200/",
-      "bundle_id": "bundle--b0acbb6b-7f2f-4f77-8c7b-0557f2be5b36",
+      "bundle_id": "bundle--cb9affab-9d3b-4e28-bcd2-fd7322083230",
       "report_id": "report--9aa555ca-d9d6-51c3-8af0-af351596d438",
-      "sha256": "0452cab5bab0209596767f8825119d41003725578d203d246b96250e0688998c",
-      "bytes": 610800,
+      "sha256": "462b30918e67120d1667ee16810c07265210a3d5abe5d609b0aba0c93a568f2d",
+      "bytes": 611142,
       "objects": 754,
       "indicators": 56,
-      "modified": "2026-10-17T16:28:30.695979Z"
+      "modified": "2026-11-19T20:32:50.465041Z"
     },
     {
       "slug": "russian-gemini-credential-mill-213.165.51.115",
@@ -646,13 +646,13 @@
       "file": "malware-analysis-houselet.json",
       "url": "https://the-hunters-ledger.com/stix/malware-analysis-houselet.json",
       "report_url": "https://the-hunters-ledger.com/reports/malware-analysis-houselet/",
-      "bundle_id": "bundle--022c439c-80d7-4341-88d3-3ac5331531f0",
+      "bundle_id": "bundle--90e7da50-e132-4c01-b32a-b5953b753eb6",
       "report_id": "report--66cfa6ea-e048-5321-893d-ff84b9a53c13",
-      "sha256": "5ebdfc333f9b968ddb6abbde14476ed0ced1c239963d853c4a6f51d8fa23cec0",
-      "bytes": 16664,
+      "sha256": "6344cfa4dcebd21c8581883441ae0131c3640ee3f0bb46a169269f158b516604",
+      "bytes": 17567,
       "objects": 10,
       "indicators": 5,
-      "modified": "2026-11-08T12:40:30.754345Z"
+      "modified": "2026-11-19T20:32:51.060922Z"
     },
     {
       "slug": "AdvancedRouterScanner",
