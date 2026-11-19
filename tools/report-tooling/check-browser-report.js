@@ -1401,6 +1401,13 @@ function panelStackVerdict(m, opt) {
   var named = function (n) { return items.filter(function (x) { return x.name === n; })[0]; };
   var hdr = named('header'), tabs = named('tab row'), bar = named('toolbar');
   if (!hdr || !tabs) return { notChecked: true, ok: false, detail: 'the header or the tab row was not found, so the attachment was not measured' };
+  /* T-0500.1.7.8 (finding 7c): the components this tab must have, from the gate's own tab definitions. Every built tab gets a
+     panel head (hl-report-tabs.js builds one per tab) and, unless the page is inline, a generated `.hl-rv-view`; the header and
+     the tab row exist once per page. 'featured band' (a sponsor booking), 'bottom line' (a BLUF section), 'toolbar' (layout)
+     and 'first section' (already required by the tab-set row) stay optional. An absent required component is NOT CHECKED. */
+  var required = ['header', 'tab row', 'tab title'].concat(opt && opt.inline ? [] : ['data view']);
+  var absent = required.filter(function (n) { return !named(n); });
+  if (absent.length) return { notChecked: true, ok: false, detail: 'required component(s) were not found on this tab: ' + absent.join(', ') + ', so the top of the page was not fully measured' };
   var why = [], gaps = [];
   for (var i = 1; i < items.length; i++) {
     var gap = items[i].top - items[i - 1].bottom;
@@ -1451,16 +1458,37 @@ var TYPE_SPEC = [
 ];
 var TYPE_EXPR = '(function(){var SPEC=' + JSON.stringify(TYPE_SPEC) + ';' +
   'function vis(e){return e.getClientRects().length>0&&getComputedStyle(e).visibility!=="hidden";}' +
-  'return SPEC.map(function(c){var sel=c[1],els;if(sel.indexOf("LONGP:")===0){var e=[].slice.call(document.querySelectorAll(sel.slice(6))).filter(function(x){return vis(x)&&x.textContent.length>200;})[0];els=e?[e]:[];}' +
+  'return SPEC.map(function(c){var sel=c[1],els;if(sel.indexOf("LONGP:")===0){els=[].slice.call(document.querySelectorAll(sel.slice(6))).filter(function(x){return vis(x)&&x.textContent.length>200;});}' +
   'else els=[].slice.call(document.querySelectorAll(sel)).filter(vis);' +
   'return {name:c[0],n:els.length,px:els.length?Math.min.apply(null,els.map(function(e){return parseFloat(getComputedStyle(e).fontSize);})):null};});})()';
-function typeScaleVerdict(rows, phone) {
+/* T-0500.1.7.8 (finding 7): the categories a tab must actually have measured, from the gate's own tab definitions.
+   Every built tab gets a numbered tab label, a section heading (a tab exists only for sections), and the reading bar's
+   two labels; every non-inline tab gets the generated view and its summary line. The first built tab (`rowTabs()[0]`)
+   holds the report's opening sections, so the prose floor is required there and not on a later tab whose sections may
+   all be short. An inline page (`figures: inline`, `.hl-figs-inline`) builds no view band, so it is not held to the
+   summary line. A required row with nothing measured is NOT CHECKED, never a silent pass (finding 7(a)). */
+var TYPE_REQUIRED_BASE = ['tab name', 'section panel heading', 'toolbar text', 'toolbar mono label'];
+var TYPE_REQUIRED_DASHBOARD = ['data-view summary line'];
+var TYPE_REQUIRED_FIRST = ['Executive Summary prose'];
+function requiredTypeRows(opt) {
+  opt = opt || {};
+  var names = TYPE_REQUIRED_BASE.slice();
+  if (!opt.inline) names = names.concat(TYPE_REQUIRED_DASHBOARD);
+  if (opt.first) names = names.concat(TYPE_REQUIRED_FIRST);
+  return names;
+}
+function typeScaleVerdict(rows, phone, opt) {
   if (!rows || !rows.length) return { notChecked: true, ok: false, detail: 'nothing was measured' };
+  var absent = requiredTypeRows(opt).filter(function (name) {
+    var i = TYPE_SPEC.findIndex(function (r) { return r[0] === name; });
+    return i < 0 || !rows[i] || !rows[i].n || rows[i].px == null;
+  });
+  if (absent.length) return { notChecked: true, ok: false, detail: 'required categories were not measured on this tab: ' + absent.join(', ') + ', so the scale was not measured' };
   var why = [], measured = 0, listed = [];
   rows.forEach(function (r, i) {
     var min = phone ? TYPE_SPEC[i][3] : TYPE_SPEC[i][2];
     if (min == null) return;
-    if (!r.n || r.px == null) return; /* an element absent from this tab is not a failure; the count below says how many were measured */
+    if (!r.n || r.px == null) return; /* an optional element absent from this tab is not a failure; the count below says how many were measured (required categories returned NOT CHECKED above) */
     measured++;
     listed.push(r.name + ' ' + r.px);
     if (r.px < min - 0.01) why.push(r.name + ' is ' + r.px + ' px, floor ' + min);
@@ -1487,7 +1515,7 @@ async function panelRows(page, url) {
       await CDP.sleep(250);
       await page.evaluate('window.scrollTo(0,0)');
       await CDP.sleep(150);
-      var pv = panelStackVerdict(await page.json(PANEL_EXPR), { phone: phone });
+      var pv = panelStackVerdict(await page.json(PANEL_EXPR), { phone: phone, inline: INLINE });
       if (pv.notChecked) check('NOT CHECKED: ' + label + ' ' + token + ': ' + nameA, false, pv.detail);
       else check(label + ' ' + token + ': ' + nameA, pv.ok, pv.detail);
       if (t === 0 && pv.ok) {
@@ -1496,13 +1524,13 @@ async function panelRows(page, url) {
         for (var pci = 0; pci < pctl.length; pci++) {
           await page.evaluate('(function(){var s=document.createElement("style");s.id="w6a-panel-ctl";s.textContent=' + JSON.stringify(pctl[pci][1]) + ';document.head.appendChild(s);})()');
           await CDP.sleep(200);
-          var pcv = panelStackVerdict(await page.json(PANEL_EXPR), { phone: phone });
+          var pcv = panelStackVerdict(await page.json(PANEL_EXPR), { phone: phone, inline: INLINE });
           await page.evaluate('(function(){var s=document.getElementById("w6a-panel-ctl");if(s)s.remove();})()');
           check('control: ' + label + ': ' + pctl[pci][0] + ' makes the top-of-page row FAIL', pcv.ok === false && !pcv.notChecked, pcv.ok === false ? 'FAILS as designed: ' + pcv.detail : 'the control did NOT fire: ' + pcv.detail);
         }
       }
       await page.evaluate('document.querySelectorAll(".hl-rv-view details").forEach(function(d){d.open=true;})');
-      var tv = typeScaleVerdict(await page.json(TYPE_EXPR), phone);
+      var tv = typeScaleVerdict(await page.json(TYPE_EXPR), phone, { token: token, inline: INLINE, first: t === 0 });
       if (tv.notChecked) check('NOT CHECKED: ' + label + ' ' + token + ': ' + nameB, false, tv.detail);
       else check(label + ' ' + token + ': ' + nameB, tv.ok, tv.detail);
     }
