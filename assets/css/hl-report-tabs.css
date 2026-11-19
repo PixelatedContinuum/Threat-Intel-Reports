@@ -997,7 +997,7 @@ html:has(.hl-report-page) .hl-toast__label { font-size: var(--rv-fs); }
 .hl-report-page .hl-rv-flow button.hl-rv-fnode {
   --a: var(--acc); display: flex; flex-direction: column; align-items: stretch; justify-content: flex-start; gap: 9px; width: 100%; min-height: 118px; padding: 12px 10px; text-align: left; white-space: normal;
   border: 1px solid var(--rv-line); border-radius: 3px; background: var(--rv-card); color: var(--rv-text); cursor: pointer;
-  transition: opacity 0.15s, border-color 0.15s, box-shadow 0.15s, background 0.15s;
+  transition: border-color 0.15s, box-shadow 0.15s, background-color 0.15s;
 }
 .hl-rv-flow > li:not(:last-child)::after { content: ''; position: absolute; right: -18px; top: 26px; width: 18px; height: 10px; background: var(--rv-line) center / 100% 2px no-repeat; pointer-events: none; } /* 10px tall on purpose: a drawn connector, not an accent strip the box-fit row measures against its host */
 .hl-rv-flow > li:not(:last-child)::before { content: ''; position: absolute; right: -19px; top: 25px; z-index: 1; border-left: 7px solid color-mix(in srgb, var(--acc) 45%, #333); border-top: 6px solid transparent; border-bottom: 6px solid transparent; pointer-events: none; }
@@ -1008,7 +1008,18 @@ html:has(.hl-report-page) .hl-toast__label { font-size: var(--rv-fs); }
 .hl-rv-fnode .hl-rv-mini { flex: 0 0 auto; width: 100%; height: 6px; }
 .hl-report-page .hl-rv-flow button.hl-rv-fnode:hover { border-color: color-mix(in srgb, var(--acc) 60%, var(--rv-line)); }
 .hl-report-page .hl-rv-flow button.hl-rv-fnode[aria-pressed="true"], .hl-report-page .hl-rv-flow button.hl-rv-fnode.is-linked { border-color: var(--acc); background: var(--rv-card); box-shadow: 0 0 0 1px var(--acc); }
-.hl-rv-flow.has-link .hl-rv-fnode:not(.is-linked), .hl-rv-fnode.is-muted { opacity: 0.4; }
+/* T-0680: a chain step is a text-bearing button, so a step the filter leaves unmatched (`.is-muted`, js:1440)
+   or the tactic key de-emphasises (`.is-dim`, js:1419-1420) carries its mute in its edge and its fill, never in
+   its text: the old `opacity: .4` dropped its name, its linked count and its number together, the same defect
+   T-0500.1.7.8 finding 3 fixed on the stage cards. The fill is the page colour mixed 80/20 with black and the
+   edge turns dashed in the muted grey, the mark a muted stage carries. `.is-dim` replaces the old
+   `has-link :not(.is-linked)` half: `lightTactic` toggles the two classes as opposites on every step, so it is
+   the same set without a `:not()` to evaluate. Scoped to 0,4,1 so it wins the 0,3,1 node rule above and ties
+   the pressed rule it follows; the inline page needs its own 0,6,1 rule near css:1500, below the 0,5,1 reset. */
+.hl-report-page .hl-rv-flow button.hl-rv-fnode.is-muted,
+.hl-report-page .hl-rv-flow button.hl-rv-fnode.is-dim {
+  background-color: color-mix(in srgb, var(--rv-bg) 80%, #000); border-style: dashed; border-color: var(--rv-muted);
+}
 .hl-report-page .hl-rv-flowwrap p.hl-rv-linkread { margin: 0; min-height: 1.5em; padding: 0 2px; border: 0; } /* its line is reserved: text appearing on a hover must not push the console down from under the pointer (found by the console row on opendirectory-45, where a Tactic chip is the first chip) */
 
 /* the console: a B panel with a search box and one row of chips for each facet */
@@ -1498,6 +1509,14 @@ html:has(.hl-report-page) {
    The ribbon steps lose their boxes (a top rule like every figure), and each story row carries a thin bar in its status hue instead of a bright white one. */
 .hl-report-page.hl-figs-inline .hl-fig .hl-rv-flow button.hl-rv-fnode { border: 0; border-top: 1px solid var(--rv-row-line); padding: 10px 8px 4px 0; }
 .hl-report-page.hl-figs-inline .hl-fig .hl-rv-flow button.hl-rv-fnode[aria-pressed="true"], .hl-report-page.hl-figs-inline .hl-fig .hl-rv-flow button.hl-rv-fnode.is-linked { border-top-color: var(--rv-text); }
+/* the same mute on an inline page, where a step is a flat row with only its top edge: 0,6,1 because the 0,5,1
+   reset above drops the fill and the box and repaints the edge solid, and it follows the pressed rule so it also
+   wins that tie. It sets the edge's colour and style rather than the box because only the top edge has width here,
+   as the inline stage mute does (T-0680). */
+.hl-report-page.hl-figs-inline .hl-fig .hl-rv-flow button.hl-rv-fnode.is-muted,
+.hl-report-page.hl-figs-inline .hl-fig .hl-rv-flow button.hl-rv-fnode.is-dim {
+  background-color: color-mix(in srgb, var(--rv-bg) 80%, #000); border-style: dashed; border-color: var(--rv-muted);
+}
 .hl-report-page.hl-figs-inline .hl-fig .hl-rv-stage a.hl-rv-procedure { border-left-width: 2px; border-left-color: var(--rv-row-line); }
 .hl-report-page.hl-figs-inline .hl-fig .hl-rv-stage a.hl-rv-procedure:has(.hl-rv-observed) { border-left-color: var(--rv-ok); }
 .hl-report-page.hl-figs-inline .hl-fig .hl-rv-stage a.hl-rv-procedure:has(.hl-rv-inferred) { border-left-color: var(--rv-warn, #f5c518); }
