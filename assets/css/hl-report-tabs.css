@@ -529,7 +529,10 @@ a.hl-rv-feat__item:hover .hl-rv-feat__cta, a.hl-rv-featcard__item:hover .hl-rv-f
 .hl-report-page .hl-post-content .hl-rv-stage h4 { font-size: var(--rv-fs) !important; color: var(--rv-muted) !important; font-weight: 600 !important; margin: 0 0 4px !important; }
 .hl-rv-stage-state { margin: 8px 0 0; font-size: var(--rv-fs); color: var(--rv-muted); }
 .hl-rv-stage-match { border-color: var(--acc); }
-.hl-rv-stage-muted { opacity: 0.6; }
+/* T-0500.1.7.8 (finding 3): was opacity: 0.6, which dropped a retained stage's h4 (#a8a8a8) to 3.69:1 and its
+   procedure small to 3.44:1 (T-0500.1.7.8 P1.triage.md). A retained stage is still readable content: the mute is
+   carried by the edge and the fill, never by the text. */
+.hl-rv-stage-muted { background: #0d0d0d; border-color: var(--rv-row-line); border-style: dashed; }
 .hl-rv-mini { display: flex; flex: 1 1 100%; gap: 2px; height: 4px; border-radius: 2px; overflow: hidden; background: var(--rv-line); min-width: 40px; }
 .hl-rv-mini > span { display: block; height: 100%; background: var(--acc); }
 .hl-rv-mini > .hl-rv-inferred { background: color-mix(in srgb, var(--acc) 50%, var(--rv-bg)); }
