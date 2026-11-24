@@ -7467,6 +7467,302 @@
     - type: "endpoint"
       value: "bore.pub:1811"
       context: "A host:port on a third-party server. Useful to find in egress logs or agent baseUrl values; the port alone is not a block on bore.pub. Agent configs whose llm.baseUrl or MCP command points here are the operator's."
+"inv-2026-083-federal-ad-credential-access-rig":
+  slug: "inv-2026-083-federal-ad-credential-access-rig"
+  page_url: "/ioc-feeds/inv-2026-083-federal-ad-credential-access-rig/"
+  title: "A Credential-Access Rig Aimed at a US Federal Agriculture Department"
+  date: "2026-11-15"
+  severity: "high"
+  feed_url: "/ioc-feeds/inv-2026-083-federal-ad-credential-access-rig-iocs.json"
+  report_url: "/reports/inv-2026-083-federal-ad-credential-access-rig/"
+  detection_url: "/hunting-detections/inv-2026-083-federal-ad-credential-access-rig-detections"
+  total: 43
+  untyped: 1
+  counts:
+    domain: 5
+    filename: 5
+    ipv4: 4
+    md5: 3
+    pattern: 13
+    sha1: 1
+    sha256: 5
+    url: 7
+  has_confidence: true
+  has_action: true
+  has_fp_risk: true
+  rows:
+    - type: "ipv4"
+      value: "118.128.151.28"
+      context: null
+      confidence: "MODERATE"
+      action: "MONITOR"
+      fp_risk: "MEDIUM: rented MOACK address, earlier tenant 2024"
+    - type: "ipv4"
+      value: "151.236.22.111"
+      context: "MEDIUM: rented M247/Edis address with at least four earlier occupants since 2023; current tenure starts 2026-10-10 (upper bound). Block with a time window."
+      confidence: "HIGH"
+      action: "BLOCK"
+      fp_risk: "MEDIUM: rented M247/Edis address with at least four earlier occupants since 2023; current tenure starts 2026-10-10 (upper bound). Block with a time window."
+    - type: "ipv4"
+      value: "45.143.167.122"
+      context: null
+      confidence: "MODERATE"
+      action: "MONITOR"
+      fp_risk: "HIGH: BlueVPS shared address; the SoftEther name predates the zone by six weeks"
+    - type: "ipv4"
+      value: "45.143.167.96"
+      context: null
+      confidence: "MODERATE"
+      action: "MONITOR"
+      fp_risk: "HIGH: BlueVPS shared address with several earlier unrelated tenants"
+    - type: "domain"
+      value: "customerlop.top"
+      context: null
+      confidence: "HIGH"
+      action: "BLOCK"
+      fp_risk: "low"
+    - type: "domain"
+      value: "mail.customerlop.top"
+      context: "Single-name certificate issued 2026-09-22; points to 45.143.167.96."
+      confidence: "HIGH"
+      action: "BLOCK"
+      fp_risk: "low"
+    - type: "domain"
+      value: "robonode.shop"
+      context: null
+      confidence: "MODERATE"
+      action: "MONITOR"
+      fp_risk: "MEDIUM: single-source certificate subject (VirusTotal; urlscan corroborates only the timing, a 15-year certificate valid from 2026-10-28); the shared or re-let host alternative on the BlueVPS address is not excluded"
+    - type: "domain"
+      value: "update.customerlop.top"
+      context: "Points to 45.143.167.122; VirusTotal first resolution 2026-10-26, Iris 2026-10-29."
+      confidence: "HIGH"
+      action: "BLOCK"
+      fp_risk: "low"
+    - type: "domain"
+      value: "www.customerlop.top"
+      context: "LOW: the implant's configured C2 zone (who registered it NOT CHECKED) behind Cloudflare; do not block the Cloudflare front addresses"
+      confidence: "HIGH"
+      action: "BLOCK"
+      fp_risk: "LOW: the implant's configured C2 zone (who registered it NOT CHECKED) behind Cloudflare; do not block the Cloudflare front addresses"
+    - type: "url"
+      value: "http://151.236.22.111/agent.bin"
+      context: null
+      confidence: "HIGH"
+      action: "BLOCK"
+      fp_risk: null
+    - type: "url"
+      value: "http://151.236.22.111/chisel"
+      context: "Delivery URL for the pivot binary, HTTP 200 at 01:50:06 UTC"
+      confidence: "HIGH"
+      action: "BLOCK"
+      fp_risk: null
+    - type: "url"
+      value: "https://www.customerlop.top/wp-admin/admin-ajax.php"
+      context: "agent.bin poll path, POST with JSON body {\"key\":...,\"data\":\"check\"}"
+      confidence: "HIGH"
+      action: "BLOCK"
+      fp_risk: null
+    - type: "url"
+      value: "https://www.customerlop.top/wp-content/themes/b2/Assets/admin/gd_block.css"
+      context: "agent.bin task-result path (POST)"
+      confidence: "HIGH"
+      action: "BLOCK"
+      fp_risk: null
+    - type: "url"
+      value: "https://www.customerlop.top/wp-content/themes/b2/Assets/fontend/mobile.css"
+      context: "agent.bin file-to-C2 path (POST)"
+      confidence: "HIGH"
+      action: "BLOCK"
+      fp_risk: null
+    - type: "url"
+      value: "https://www.customerlop.top/wp-content/themes/b2/Assets/fonts/iconfont.css"
+      context: "agent.bin register path (POST)"
+      confidence: "HIGH"
+      action: "BLOCK"
+      fp_risk: null
+    - type: "url"
+      value: "https://www.customerlop.top/wp-includes/js/jquery/jquery.min.js"
+      context: "agent.bin file and plugin fetch path (POST)"
+      confidence: "HIGH"
+      action: "BLOCK"
+      fp_risk: null
+    - type: "sha256"
+      value: "0a76c28f5452dbbc146752d0b4e28b10779a337091f59650b94f5e938545572c"
+      context: "chisel"
+      confidence: "HIGH"
+      action: null
+      fp_risk: "HIGH: stock public build known to VirusTotal since 2024-10-10, 104 submissions; ties the operator to nothing"
+    - type: "sha256"
+      value: "7c48e8e30eec255a62d51aa18c0b09522b71d33ccc6b58b05c71ae7c9a52b044"
+      context: "msedge.dll embedded shellcode blob (extracted, 49696 bytes)"
+      confidence: "HIGH"
+      action: null
+      fp_risk: null
+    - type: "sha256"
+      value: "862e4d023f8326042066561d62768169ab4b1d3f4d7e16f58013e3a444581671"
+      context: "config.bin"
+      confidence: "DEFINITE"
+      action: null
+      fp_risk: null
+    - type: "sha256"
+      value: "a04a732678f95f80a6361ef95312b995b0336898cb66d9ffce63b9ed7803d096"
+      context: "agent.bin"
+      confidence: "DEFINITE"
+      action: null
+      fp_risk: null
+    - type: "sha256"
+      value: "f2d86abbb8f49cf19be5d910e87bfce5e1f62525a46a2da833e7daf04809a13b"
+      context: "msedge.dll"
+      confidence: "DEFINITE"
+      action: null
+      fp_risk: null
+    - type: "sha1"
+      value: "25f21b4614e03250dec788bbc0f1beb8c43828d4"
+      context: "agent.bin"
+      confidence: null
+      action: null
+      fp_risk: null
+    - type: "md5"
+      value: "5da1d555e3f32e0d20e5986dac1c2a71"
+      context: "msedge.dll"
+      confidence: null
+      action: null
+      fp_risk: null
+    - type: "md5"
+      value: "6804216bf8ae869a7253482c69cae553"
+      context: "agent.bin"
+      confidence: null
+      action: null
+      fp_risk: null
+    - type: "md5"
+      value: "f8e93dccfa28c649887925c67fc0697b"
+      context: "msedge.dll"
+      confidence: null
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "agent.bin"
+      context: null
+      confidence: "DEFINITE"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "chisel"
+      context: null
+      confidence: "HIGH"
+      action: null
+      fp_risk: "HIGH: stock public build known to VirusTotal since 2024-10-10, 104 submissions; ties the operator to nothing"
+    - type: "filename"
+      value: "config.bin"
+      context: null
+      confidence: "DEFINITE"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "msedge.dll"
+      context: null
+      confidence: "DEFINITE"
+      action: null
+      fp_risk: null
+    - type: "filename"
+      value: "msedge.dll embedded shellcode blob (extracted, 49696 bytes)"
+      context: null
+      confidence: "HIGH"
+      action: null
+      fp_risk: null
+    - type: "pattern"
+      value: "/proc/<pid>/exe -> '/memfd: (deleted)' (empty name) or '/memfd:plugin (deleted)'"
+      context: "agent.bin re-exec from memfd and plugin ELF execution"
+      confidence: "HIGH"
+      action: null
+      fp_risk: null
+    - type: "pattern"
+      value: "Entra non-interactive sign-ins, application Microsoft Office, resource Microsoft Graph, about every 15 minutes from one host egress"
+      context: "token refresh interval 900000 ms; read in code, not observed"
+      confidence: "MODERATE"
+      action: null
+      fp_risk: null
+    - type: "pattern"
+      value: "Global\\OdMutex"
+      context: null
+      confidence: "HIGH"
+      action: null
+      fp_risk: null
+    - type: "pattern"
+      value: "Linux process whose /proc/<pid>/cmdline is the single argument '/lib/systemd/systemd --user' (one string containing a space), parent PID 1 or not user@<uid>.service, exe not /usr/lib/systemd/systemd"
+      context: null
+      confidence: "HIGH"
+      action: null
+      fp_risk: null
+    - type: "pattern"
+      value: "OneDrive folder 'cmd' at the drive root holding command.txt, output.txt and cbt.bin"
+      context: "operator C2 store; lives in the token owner's tenant, which may not be the victim's"
+      confidence: "HIGH"
+      action: null
+      fp_risk: null
+    - type: "pattern"
+      value: "POST /wp-admin/admin-ajax.php with body {\"key\":\"<digits>\",\"data\":\"check\"} answered with JSON holding message or status"
+      context: "server-side hunt shape for sibling C2 hosts (passive sources first)"
+      confidence: "HIGH"
+      action: null
+      fp_risk: null
+    - type: "pattern"
+      value: "Process comm '/lib/systemd/sy' (15-byte truncation)"
+      context: "agent.bin PR_SET_NAME"
+      confidence: "HIGH"
+      action: null
+      fp_risk: null
+    - type: "pattern"
+      value: "TCP 443 to www.customerlop.top, one short TLS 1.2 session (mbed TLS 3.6.0 client, no certificate verification) every 54 to 66 seconds; decrypted: POST with headers Host, Content-Type: application/json, Content-Length, Connection: close and no User-Agent"
+      context: "agent.bin default Sleep 60 s, Jitter 10 percent. JA3/JA4 NOT COMPUTED."
+      confidence: "HIGH"
+      action: null
+      fp_risk: null
+    - type: "pattern"
+      value: "WinINet agent string exactly 'Mozilla' with POST /<tenant>/oauth2/token?api-version=1.0, grant_type=refresh_token, client_id=d3590ed6-52b3-4102-aeff-aad2292ab01c, then GET/PUT graph.microsoft.com /v1.0/me/drive/root:/cmd/command.txt:/content and output.txt"
+      context: null
+      confidence: "HIGH"
+      action: null
+      fp_risk: null
+    - type: "pattern"
+      value: "cbt.bin (48 to 128 bytes) created by the host process beside config.bin (1488 bytes in this build)"
+      context: "msedge.dll beacon time-gate file; direction of the gate comparison not settled"
+      confidence: "MODERATE"
+      action: null
+      fp_risk: null
+    - type: "pattern"
+      value: "edge.exe whose OriginalFileName is cookie_exporter.exe loading msedge.dll from a non-Microsoft directory, DLL signed by 'Rockstar Games, Inc.' with SignatureStatus Expired"
+      context: null
+      confidence: "HIGH"
+      action: null
+      fp_risk: null
+    - type: "pattern"
+      value: "memfd_create('', MFD_CLOEXEC), ftruncate, RWX mmap, execve('/proc/self/fd/N') in one process"
+      context: "agent.bin 0x1033da0"
+      confidence: "HIGH"
+      action: null
+      fp_risk: null
+    - type: "pattern"
+      value: "sha256 of the 44-byte static string at agent.bin file offset 0xa71d0 = 642fedfa569003ed5427715a9b6a8ea6365f8e10edc935758e0017aeb17aa0d0"
+      context: null
+      confidence: "HIGH"
+      action: null
+      fp_risk: null
+  never_block_total: 4
+  never_block_rows:
+    - type: "domain"
+      value: "graph.microsoft.com"
+      context: "Microsoft Graph, OneDrive command store"
+    - type: "domain"
+      value: "login.microsoftonline.com"
+      context: "Microsoft identity platform used for the beacon token grant"
+    - type: "sha1"
+      value: "c9793f4a2e629d88f2213622d7a0c170d9c7cbc6"
+      context: "SHA-1 thumbprint of the Authenticode certificate on msedge.dll (subject Rockstar Games, Inc., Entrust OVCS1, valid 2016-03-04 to 2017-03-20)"
+    - type: "md5"
+      value: "5057286e4033fcb0000000005565f5ac"
+      context: "Serial of the same certificate"
 "kaido-quasar-rat":
   slug: "kaido-quasar-rat"
   page_url: "/ioc-feeds/kaido-quasar-rat/"

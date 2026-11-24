@@ -1,11 +1,11 @@
 {
- "generated_at": "2026-11-18T13:40:00Z",
+ "generated_at": "2026-11-24T13:57:22Z",
  "counts": {
-  "indicators": 2149,
-  "reports": 62,
-  "multi_report": 147,
+  "indicators": 2177,
+  "reports": 63,
+  "multi_report": 149,
   "suppressed_benign": 113,
-  "never_block": 137
+  "never_block": 141
  },
  "coverage": {
   "indexed": [
@@ -41,6 +41,7 @@
    "inkognito-russian-vpn-phishing-185-221-196-118-20260516-iocs.json",
    "inv-2026-080-cyberstrike-ad-workbench-iocs.json",
    "inv-2026-082-agent-platform-command-channel-iocs.json",
+   "inv-2026-083-federal-ad-credential-access-rig-iocs.json",
    "kaido-quasar-rat-iocs.json",
    "korean-claude-openclaw-221.150.15.104-iocs.json",
    "malware-analysis-houselet.json",
@@ -73,7 +74,6 @@
    "webshells-to-the-cloud.json"
   ],
   "embargoed": [
-   "inv-2026-083-federal-ad-credential-access-rig-iocs.json",
    "opendirectory-169-58-165-63-ad-intrusion-vs-pakistani-university-20261116-iocs.json"
   ],
   "unknown": [],
@@ -336,6 +336,14 @@
    "report_url": "/reports/inv-2026-082-agent-platform-command-channel/",
    "detection_url": "/hunting-detections/inv-2026-082-detections",
    "ioc_url": "/ioc-feeds/inv-2026-082-agent-platform-command-channel-iocs.json"
+  },
+  "inv-2026-083-federal-ad-credential-access-rig": {
+   "title": "A Credential-Access Rig Aimed at a US Federal Agriculture Department",
+   "date": "2026-11-15",
+   "severity": "high",
+   "report_url": "/reports/inv-2026-083-federal-ad-credential-access-rig/",
+   "detection_url": "/hunting-detections/inv-2026-083-federal-ad-credential-access-rig-detections",
+   "ioc_url": "/ioc-feeds/inv-2026-083-federal-ad-credential-access-rig-iocs.json"
   },
   "kaido-quasar-rat": {
    "title": "KAIDO: A Brazilian Quasar-Fork RAT with Hidden-Desktop Session Hijacking",
@@ -5419,6 +5427,183 @@
     "role": "Relay launcher by the sslip.io name"
    }
   ],
+  "sha256:a04a732678f95f80a6361ef95312b995b0336898cb66d9ffce63b9ed7803d096": [
+   {
+    "report": "inv-2026-083-federal-ad-credential-access-rig",
+    "role": "ELF64 x86-64 static, stripped (Linux HTTPS agent)"
+   }
+  ],
+  "filename:agent.bin": [
+   {
+    "report": "inv-2026-083-federal-ad-credential-access-rig",
+    "role": "ELF64 x86-64 static, stripped (Linux HTTPS agent)"
+   },
+   {
+    "report": "opendirectory-45-130-148-125-20260430",
+    "role": "AdaptixC2 Linux ELF agent"
+   }
+  ],
+  "sha256:f2d86abbb8f49cf19be5d910e87bfce5e1f62525a46a2da833e7daf04809a13b": [
+   {
+    "report": "inv-2026-083-federal-ad-credential-access-rig",
+    "role": "PE64 DLL (side-load loader, embedded OneDrive beacon)"
+   }
+  ],
+  "filename:msedge.dll": [
+   {
+    "report": "inv-2026-083-federal-ad-credential-access-rig",
+    "role": "PE64 DLL (side-load loader, embedded OneDrive beacon)"
+   }
+  ],
+  "sha256:7c48e8e30eec255a62d51aa18c0b09522b71d33ccc6b58b05c71ae7c9a52b044": [
+   {
+    "report": "inv-2026-083-federal-ad-credential-access-rig",
+    "role": "x64 position-independent shellcode"
+   }
+  ],
+  "sha256:862e4d023f8326042066561d62768169ab4b1d3f4d7e16f58013e3a444581671": [
+   {
+    "report": "inv-2026-083-federal-ad-credential-access-rig",
+    "role": "AES-256-CBC blob, key and IV stored in the file"
+   }
+  ],
+  "filename:config.bin": [
+   {
+    "report": "inv-2026-083-federal-ad-credential-access-rig",
+    "role": "AES-256-CBC blob, key and IV stored in the file"
+   }
+  ],
+  "sha256:0a76c28f5452dbbc146752d0b4e28b10779a337091f59650b94f5e938545572c": [
+   {
+    "report": "inv-2026-083-federal-ad-credential-access-rig",
+    "role": "ELF64 Go build of public chisel tunnel tool"
+   },
+   {
+    "report": "opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817",
+    "role": "Stock jpillora chisel v1.23.1 linux/amd64"
+   }
+  ],
+  "md5:6804216bf8ae869a7253482c69cae553": [
+   {
+    "report": "inv-2026-083-federal-ad-credential-access-rig"
+   }
+  ],
+  "md5:f8e93dccfa28c649887925c67fc0697b": [
+   {
+    "report": "inv-2026-083-federal-ad-credential-access-rig"
+   }
+  ],
+  "sha1:25f21b4614e03250dec788bbc0f1beb8c43828d4": [
+   {
+    "report": "inv-2026-083-federal-ad-credential-access-rig"
+   }
+  ],
+  "md5:5da1d555e3f32e0d20e5986dac1c2a71": [
+   {
+    "report": "inv-2026-083-federal-ad-credential-access-rig"
+   }
+  ],
+  "ipv4:151.236.22.111": [
+   {
+    "report": "inv-2026-083-federal-ad-credential-access-rig",
+    "role": "MEDIUM: rented M247/Edis address with at least four earlier occupants since 2023; current tenure starts 2026-10-10 (upper bound). Block with a time window."
+   }
+  ],
+  "ipv4:45.143.167.96": [
+   {
+    "report": "inv-2026-083-federal-ad-credential-access-rig"
+   }
+  ],
+  "ipv4:45.143.167.122": [
+   {
+    "report": "inv-2026-083-federal-ad-credential-access-rig"
+   }
+  ],
+  "ipv4:118.128.151.28": [
+   {
+    "report": "inv-2026-083-federal-ad-credential-access-rig"
+   }
+  ],
+  "domain:www.customerlop.top": [
+   {
+    "report": "inv-2026-083-federal-ad-credential-access-rig",
+    "role": "LOW: the implant's configured C2 zone (who registered it NOT CHECKED) behind Cloudflare; do not block the Cloudflare front addresses"
+   }
+  ],
+  "domain:customerlop.top": [
+   {
+    "report": "inv-2026-083-federal-ad-credential-access-rig"
+   }
+  ],
+  "domain:mail.customerlop.top": [
+   {
+    "report": "inv-2026-083-federal-ad-credential-access-rig",
+    "role": "Single-name certificate issued 2026-09-22; points to 45.143.167.96."
+   }
+  ],
+  "domain:update.customerlop.top": [
+   {
+    "report": "inv-2026-083-federal-ad-credential-access-rig",
+    "role": "Points to 45.143.167.122; VirusTotal first resolution 2026-10-26, Iris 2026-10-29."
+   }
+  ],
+  "domain:robonode.shop": [
+   {
+    "report": "inv-2026-083-federal-ad-credential-access-rig"
+   }
+  ],
+  "url:https://www.customerlop.top/wp-admin/admin-ajax.php": [
+   {
+    "report": "inv-2026-083-federal-ad-credential-access-rig",
+    "role": "agent.bin poll path, POST with JSON body {\"key\":...,\"data\":\"check\"}"
+   }
+  ],
+  "url:https://www.customerlop.top/wp-content/themes/b2/Assets/fonts/iconfont.css": [
+   {
+    "report": "inv-2026-083-federal-ad-credential-access-rig",
+    "role": "agent.bin register path (POST)"
+   }
+  ],
+  "url:https://www.customerlop.top/wp-content/themes/b2/Assets/admin/gd_block.css": [
+   {
+    "report": "inv-2026-083-federal-ad-credential-access-rig",
+    "role": "agent.bin task-result path (POST)"
+   }
+  ],
+  "url:https://www.customerlop.top/wp-content/themes/b2/Assets/fontend/mobile.css": [
+   {
+    "report": "inv-2026-083-federal-ad-credential-access-rig",
+    "role": "agent.bin file-to-C2 path (POST)"
+   }
+  ],
+  "url:https://www.customerlop.top/wp-includes/js/jquery/jquery.min.js": [
+   {
+    "report": "inv-2026-083-federal-ad-credential-access-rig",
+    "role": "agent.bin file and plugin fetch path (POST)"
+   }
+  ],
+  "url:http://151.236.22.111/agent.bin": [
+   {
+    "report": "inv-2026-083-federal-ad-credential-access-rig"
+   }
+  ],
+  "url:http://151.236.22.111/chisel": [
+   {
+    "report": "inv-2026-083-federal-ad-credential-access-rig",
+    "role": "Delivery URL for the pivot binary, HTTP 200 at 01:50:06 UTC"
+   }
+  ],
+  "sha256:47b956eeb628b9f00327c2a45cbae6b07e317ccad7df83dbe7d30b72fb5ca7e9": [
+   {
+    "report": "inv-2026-083-federal-ad-credential-access-rig"
+   }
+  ],
+  "sha256:642fedfa569003ed5427715a9b6a8ea6365f8e10edc935758e0017aeb17aa0d0": [
+   {
+    "report": "inv-2026-083-federal-ad-credential-access-rig",
+    "role": "Repeated here from behavioral_indicators so a consumer does not treat it as a file hash"
+   }
+  ],
   "url:http://221.150.15.104:8080/": [
    {
     "report": "korean-claude-openclaw-221.150.15.104",
@@ -7229,12 +7414,6 @@
     "role": "PE64 Go binary"
    }
   ],
-  "sha256:0a76c28f5452dbbc146752d0b4e28b10779a337091f59650b94f5e938545572c": [
-   {
-    "report": "opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817",
-    "role": "Stock jpillora chisel v1.23.1 linux/amd64"
-   }
-  ],
   "sha256:e5621ffe4879f0ec39ed40f688db9399c2d43054d41ef14472fa335c4693b915": [
    {
     "report": "opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817",
@@ -8538,12 +8717,6 @@
    {
     "report": "opendirectory-45-130-148-125-20260430",
     "role": "AdaptixC2 beacon (shellcode form)"
-   }
-  ],
-  "filename:agent.bin": [
-   {
-    "report": "opendirectory-45-130-148-125-20260430",
-    "role": "AdaptixC2 Linux ELF agent"
    }
   ],
   "url:http://45.130.148.125:80/api/v1/status": [
@@ -13435,6 +13608,29 @@
    {
     "report": "inv-2026-082-agent-platform-command-channel",
     "role": "third-party: the public A record of bore.pub (DigitalOcean AS14061)"
+   }
+  ],
+  "domain:login.microsoftonline.com": [
+   {
+    "report": "inv-2026-083-federal-ad-credential-access-rig",
+    "role": "Microsoft identity platform used for the beacon token grant"
+   }
+  ],
+  "domain:graph.microsoft.com": [
+   {
+    "report": "inv-2026-083-federal-ad-credential-access-rig",
+    "role": "Microsoft Graph, OneDrive command store"
+   }
+  ],
+  "sha1:c9793f4a2e629d88f2213622d7a0c170d9c7cbc6": [
+   {
+    "report": "inv-2026-083-federal-ad-credential-access-rig"
+   }
+  ],
+  "md5:5057286e4033fcb0000000005565f5ac": [
+   {
+    "report": "inv-2026-083-federal-ad-credential-access-rig",
+    "role": "Serial of the same certificate"
    }
   ],
   "domain:open.oppomobile.com": [

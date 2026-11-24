@@ -1004,6 +1004,43 @@ actors:
   reports:
     primary:
     - /reports/sliver-c2-windows-postex-staging-193-233-202-17/
+- id: UTA-2026-025
+  status: active
+  first_observed: 2026-11-15
+  last_updated: 2026-11-15
+  type: Active Directory credential-access and foothold rig run from one rented server, with a Linux HTTPS
+    agent and a signed OneDrive side-load implant
+  motivation: Undetermined (LOW); the report's initial-access-broker read is its author's own and graded INSUFFICIENT
+  targeting:
+    regions:
+    - United States
+    sectors:
+    - Federal government
+    - Media
+    note: One federal department is graded ACCESS SHOWN (MODERATE). A US media organisation appears once, graded
+      ACCESS SHOWN at MODERATE with a researcher or sandbox source still open. No victim is named.
+  confidence:
+    distinct_actor: MODERATE
+    named_actor: INSUFFICIENT
+  summary: A toolset cluster seen on one open directory, the two implants, a signed side-load, a numbered work-directory
+    convention and a combination of techniques. The operator built a way into a US federal department's Active
+    Directory, held 239 of its Kerberos service tickets and had an address on its network fetch the implant.
+    The label tracks the tools, not a person, a state or a motive, and no named actor is a candidate.
+  primary_host: 151.236.22.111
+  tooling:
+  - agent.bin (static Linux HTTPS agent)
+  - msedge.dll (signed OneDrive side-load loader)
+  - chisel
+  identifiers:
+  - kind: domain
+    value: www[.]customerlop[.]top
+    context: command-and-control host baked into the Linux agent, TCP 443 behind Cloudflare
+  - kind: string
+    value: 'Global\OdMutex'
+    context: mutex of the OneDrive beacon, read in code and not seen running
+  reports:
+    primary:
+    - /reports/inv-2026-083-federal-ad-credential-access-rig/
 # ---- Named actors: a report attributes the activity to a self-identifying handle at
 # HIGH or above, so no UTA designation was assigned. Same rules as above.
 - id: vova75rus

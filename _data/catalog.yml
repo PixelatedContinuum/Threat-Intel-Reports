@@ -38,20 +38,15 @@ entries:
   #    detection_url: /hunting-detections/opendirectory-169-58-165-63-ad-intrusion-vs-pakistani-university-20261116-detections
   #    ioc_url: /ioc-feeds/opendirectory-169-58-165-63-ad-intrusion-vs-pakistani-university-20261116-iocs.json
   # =============================================================================================
-  # ===== PENDING GO-LIVE: INV-2026-083 federal AD credential-access rig (uncomment at launch) =====
-  # Withheld on purpose: the report, the detection page and the IOC feed are an unlisted PREVIEW (T-0634).
-  # Go-live waits on Joseph (CISA and NPR notified plus his grace period). Go-live flip: preview-and-go-live.md.
-  # Uncomment, replace preview_cover_label with cover_label below, add stix_url, repoint the report's
-  # ioc_feed to /ioc-feeds/<slug>/, set the feed's tlp to the go-live marking, and re-read this block against the report title.
-  #  - title: "A Credential-Access Rig Aimed at a US Federal Agriculture Department"
-  #    date: 2026-11-15
-  #    severity: high
-  #    tags: [Open Dir, Cred Theft, C2, Toolkit]
-  #    report_url: /reports/inv-2026-083-federal-ad-credential-access-rig/
-  #    cover_label: "Credential Access"
-  #    detection_url: /hunting-detections/inv-2026-083-federal-ad-credential-access-rig-detections
-  #    ioc_url: /ioc-feeds/inv-2026-083-federal-ad-credential-access-rig-iocs.json
-  # =============================================================================================
+  - title: "A Credential-Access Rig Aimed at a US Federal Agriculture Department"
+    date: 2026-11-15
+    severity: high
+    tags: [Open Dir, Cred Theft, C2, Toolkit]
+    report_url: /reports/inv-2026-083-federal-ad-credential-access-rig/
+    stix_url: /stix/inv-2026-083-federal-ad-credential-access-rig.json
+    cover_label: "Credential Access"
+    detection_url: /hunting-detections/inv-2026-083-federal-ad-credential-access-rig-detections
+    ioc_url: /ioc-feeds/inv-2026-083-federal-ad-credential-access-rig-iocs.json
   - title: "A Threat Actor Configured an Enterprise AI-Agent Platform as a Command and Relay Channel"
     date: 2026-11-15
     severity: high

@@ -1,6 +1,6 @@
 # Hunters Ledger - consolidated Suricata detection feed
 # https://the-hunters-ledger.com/  |  License: CC BY 4.0
-# 139 rules from 40 campaigns. SIDs are STABLE across rebuilds (persistent
+# 145 rules from 41 campaigns. SIDs are STABLE across rebuilds (persistent
 # sid-map.json; allocated block 3500000-3509999 via sidallocation.org).
 # Above each rule: '# <campaign> (orig sid:N)', then annotation lines:
 #   TIER: Detection|Hunting  |  robustness N  |  confidence X
@@ -259,6 +259,36 @@ alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL HUNT INV-2026-082 Python
 #   rate-limited
 #   FP: Any internal tool that uploads with a Python script to an /up?name= endpoint.
 alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL HUNT INV-2026-082 POST To /up With name Query And Python urllib Client (Operator Receiver Shape)"; flow:established,to_server; http.method; content:"POST"; http.uri; content:"/up?name="; startswith; fast_pattern; http.user_agent; content:"Python-urllib/"; startswith; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/inv-2026-082-detections/; classtype:trojan-activity; sid:3500228; rev:1; metadata:author The_Hunters_Ledger, date 2026-11-14;)
+# inv-2026-083-federal-ad-credential-access-rig (orig sid:1000001)
+#   TIER: Detection  |  robustness 2  |  confidence MODERATE
+#   rate-limited
+#   FP: An administrator or contractor who uses chisel to reach a service through a firewall, and a red-team exercise. Chisel has no routine use inside most...
+alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL DETECT INV-2026-083 Chisel v3 WebSocket Tunnel Client Upgrade (Tunnel Transport Indicator)"; flow:established,to_server; http.header; content:"Sec-WebSocket-Protocol|3a 20|chisel-v3"; nocase; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/inv-2026-083-federal-ad-credential-access-rig-detections/; classtype:trojan-activity; sid:3500229; rev:1; metadata:author The_Hunters_Ledger, date 2026-11-14;)
+# inv-2026-083-federal-ad-credential-access-rig (orig sid:1000002)
+#   TIER: Hunting  |  robustness 1  |  confidence MODERATE  |  BROAD - triage before alerting
+#   rate-limited
+#   FP: None known. The zone was registered on 2026-05-22 and no legitimate use is established. A security team or a sinkhole that resolves the name will hit.
+alert dns $HOME_NET any -> any any (msg:"THL HUNT INV-2026-083 Agent C2 Zone customerlop.top DNS Query (C2 Domain Indicator)"; dns.query; dotprefix; content:".customerlop.top"; nocase; endswith; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/inv-2026-083-federal-ad-credential-access-rig-detections/; classtype:trojan-activity; sid:3500230; rev:1; metadata:author The_Hunters_Ledger, date 2026-11-14;)
+# inv-2026-083-federal-ad-credential-access-rig (orig sid:1000003)
+#   TIER: Hunting  |  robustness 1  |  confidence MODERATE  |  BROAD - triage before alerting
+#   rate-limited
+#   FP: None known, as for the DNS rule.
+alert tls $HOME_NET any -> $EXTERNAL_NET any (msg:"THL HUNT INV-2026-083 Agent C2 Zone customerlop.top TLS SNI (C2 Domain Indicator)"; flow:established,to_server; tls.sni; dotprefix; content:".customerlop.top"; nocase; endswith; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/inv-2026-083-federal-ad-credential-access-rig-detections/; classtype:trojan-activity; sid:3500231; rev:1; metadata:author The_Hunters_Ledger, date 2026-11-14;)
+# inv-2026-083-federal-ad-credential-access-rig (orig sid:1000004)
+#   TIER: Hunting  |  robustness 1  |  confidence MODERATE  |  BROAD - triage before alerting
+#   rate-limited
+#   FP: Other custom clients that post a JSON body with key and data fields to a path under /wp- with no User-Agent header. That is an unusual combination,...
+alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL HUNT INV-2026-083 HTTPS Agent JSON Key And Data Beacon With No User-Agent (Decrypted C2 Traffic)"; flow:established,to_server; http.method; content:"POST"; http.uri; content:"/wp-"; startswith; http.header_names; content:!"|0d 0a|User-Agent|0d 0a|"; nocase; http.request_body; content:"{|22|key|22 3a 22|"; startswith; content:"|22 2c 22|data|22 3a 22|"; distance:0; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/inv-2026-083-federal-ad-credential-access-rig-detections/; classtype:trojan-activity; sid:3500232; rev:1; metadata:author The_Hunters_Ledger, date 2026-11-14;)
+# inv-2026-083-federal-ad-credential-access-rig (orig sid:1000005)
+#   TIER: Hunting  |  robustness 1  |  confidence MODERATE  |  BROAD - triage before alerting
+#   rate-limited
+#   FP: A script that calls Graph with a bare Mozilla agent and keeps files in a OneDrive folder named cmd. I know of none.
+alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL HUNT INV-2026-083 OneDrive cmd Folder Request To Graph With Bare Mozilla User-Agent (Decrypted C2 Traffic)"; flow:established,to_server; http.host; content:"graph.microsoft.com"; bsize:19; http.user_agent; content:"Mozilla"; bsize:7; http.uri; content:"/me/drive/root|3a|/cmd/"; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/inv-2026-083-federal-ad-credential-access-rig-detections/; classtype:trojan-activity; sid:3500233; rev:1; metadata:author The_Hunters_Ledger, date 2026-11-14;)
+# inv-2026-083-federal-ad-credential-access-rig (orig sid:1000006)
+#   TIER: Hunting  |  robustness 1  |  confidence MODERATE  |  BROAD - triage before alerting
+#   rate-limited
+#   FP: Another tool that uses the same public client id with a bare Mozilla agent, such as a script that refreshes Microsoft 365 tokens. I know of none.
+alert http $HOME_NET any -> $EXTERNAL_NET any (msg:"THL HUNT INV-2026-083 Refresh-Token Grant With Office Client Id And Bare Mozilla User-Agent (Decrypted C2 Traffic)"; flow:established,to_server; http.method; content:"POST"; http.host; content:"login.microsoftonline.com"; bsize:25; http.user_agent; content:"Mozilla"; bsize:7; http.uri; content:"/oauth2/token?api-version=1.0"; endswith; http.request_body; content:"client_id=d3590ed6-52b3-4102-aeff-aad2292ab01c"; content:"grant_type=refresh_token"; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/inv-2026-083-federal-ad-credential-access-rig-detections/; classtype:trojan-activity; sid:3500234; rev:1; metadata:author The_Hunters_Ledger, date 2026-11-14;)
 # kaido-quasar-rat (orig sid:9300802)
 #   TIER: Detection  |  robustness 2  |  confidence HIGH
 #   rate-limited

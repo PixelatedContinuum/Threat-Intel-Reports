@@ -2,7 +2,7 @@
 # ATT&CK tables, _data/detection_attack.yml, _data/actors_index.yml and the
 # catalog. Do NOT edit by hand; re-run the generator. Published sources only.
 attack_version: '19.2'
-max_score: 130
+max_score: 135
 tactics:
   - name: Reconnaissance
     slug: reconnaissance
@@ -22,7 +22,7 @@ tactics:
       - T1596.003
       - T1596.005
     technique_count: 14
-    report_count: 27
+    report_count: 28
     rule_count: 5
   - name: Resource Development
     slug: resource-development
@@ -44,14 +44,15 @@ tactics:
       - T1587.004
       - T1588.001
       - T1588.002
+      - T1588.003
       - T1588.004
       - T1588.005
       - T1588.007
       - T1608.001
       - T1608.003
       - T1608.005
-    technique_count: 23
-    report_count: 70
+    technique_count: 24
+    report_count: 73
     rule_count: 37
   - name: Initial Access
     slug: initial-access
@@ -73,7 +74,7 @@ tactics:
       - T1566.003
       - T1566.004
     technique_count: 16
-    report_count: 53
+    report_count: 54
     rule_count: 67
   - name: Execution
     slug: execution
@@ -101,10 +102,11 @@ tactics:
       - T1569.002
       - T1574.001
       - T1574.006
+      - T1610
       - T1651
-    technique_count: 24
-    report_count: 135
-    rule_count: 172
+    technique_count: 25
+    report_count: 140
+    rule_count: 177
   - name: Persistence
     slug: persistence
     techniques:
@@ -141,7 +143,7 @@ tactics:
       - T1554
       - T1653
     technique_count: 32
-    report_count: 115
+    report_count: 118
     rule_count: 159
   - name: Privilege Escalation
     slug: privilege-escalation
@@ -184,8 +186,8 @@ tactics:
       - T1548.002
       - T1611
     technique_count: 37
-    report_count: 153
-    rule_count: 184
+    report_count: 157
+    rule_count: 186
   - name: Stealth
     slug: stealth
     techniques:
@@ -253,8 +255,8 @@ tactics:
       - T1622
       - T1684.001
     technique_count: 63
-    report_count: 273
-    rule_count: 260
+    report_count: 279
+    rule_count: 267
   - name: Defense Impairment
     slug: defense-impairment
     techniques:
@@ -271,8 +273,8 @@ tactics:
       - T1686
       - T1686.003
     technique_count: 12
-    report_count: 41
-    rule_count: 54
+    report_count: 42
+    rule_count: 56
   - name: Credential Access
     slug: credential-access
     techniques:
@@ -292,6 +294,7 @@ tactics:
       - T1110.002
       - T1110.003
       - T1110.004
+      - T1187
       - T1212
       - T1528
       - T1539
@@ -306,15 +309,16 @@ tactics:
       - T1555.004
       - T1555.005
       - T1557
+      - T1557.001
       - T1558.001
       - T1558.003
       - T1558.004
       - T1606
       - T1606.001
       - T1649
-    technique_count: 36
-    report_count: 107
-    rule_count: 64
+    technique_count: 38
+    report_count: 114
+    rule_count: 67
   - name: Discovery
     slug: discovery
     techniques:
@@ -350,8 +354,8 @@ tactics:
       - T1614
       - T1622
     technique_count: 31
-    report_count: 178
-    rule_count: 53
+    report_count: 186
+    rule_count: 54
   - name: Lateral Movement
     slug: lateral-movement
     techniques:
@@ -371,7 +375,7 @@ tactics:
       - T1563.002
       - T1570
     technique_count: 15
-    report_count: 34
+    report_count: 36
     rule_count: 21
   - name: Collection
     slug: collection
@@ -391,19 +395,22 @@ tactics:
       - T1185
       - T1213
       - T1213.002
+      - T1213.003
       - T1530
       - T1557
+      - T1557.001
       - T1560
       - T1602.001
       - T1602.002
-    technique_count: 20
-    report_count: 90
-    rule_count: 40
+    technique_count: 22
+    report_count: 93
+    rule_count: 41
   - name: Command and Control
     slug: command-and-control
     techniques:
       - T1001
       - T1001.002
+      - T1001.003
       - T1008
       - T1071
       - T1071.001
@@ -433,9 +440,9 @@ tactics:
       - T1573.001
       - T1573.002
       - T1665
-    technique_count: 31
-    report_count: 174
-    rule_count: 266
+    technique_count: 32
+    report_count: 185
+    rule_count: 280
   - name: Exfiltration
     slug: exfiltration
     techniques:
@@ -445,8 +452,8 @@ tactics:
       - T1567
       - T1567.002
     technique_count: 5
-    report_count: 34
-    rule_count: 22
+    report_count: 36
+    rule_count: 23
   - name: Impact
     slug: impact
     techniques:
@@ -508,6 +515,34 @@ techniques:
     rule_count: 0
     actor_count: 0
     score: 1
+  - id: T1001.003
+    name: Protocol or Service Impersonation
+    tactic: Command and Control
+    tactics:
+      - Command and Control
+    reports:
+      - url: /reports/inv-2026-083-federal-ad-credential-access-rig/
+        title: A Credential-Access Rig Aimed at a US Federal Agriculture Department
+        date: '2026-11-15'
+        tactic: Command and Control
+        confidence: MODERATE
+    detections:
+      - url: /hunting-detections/inv-2026-083-federal-ad-credential-access-rig-detections
+        title: A Credential-Access Rig Aimed at a US Federal Agriculture Department
+        date: '2026-11-15'
+        report_url: /reports/inv-2026-083-federal-ad-credential-access-rig/
+        rules: >-
+          MAL_LNX_INV2026083_HTTPSJsonAgent_RequestTemplates (YARA, Detection); THL HUNT
+          INV-2026-083 HTTPS Agent JSON Key And Data Beacon With No User-Agent (SURICATA, Hunting)
+        count: 2
+    actors:
+      - UTA-2026-025
+    url: /techniques/T1001.003/
+    mitre_url: https://attack.mitre.org/techniques/T1001/003/
+    report_count: 1
+    rule_count: 2
+    actor_count: 1
+    score: 3
   - id: T1003
     name: OS Credential Dumping
     tactic: Credential Access
@@ -605,6 +640,11 @@ techniques:
     tactics:
       - Credential Access
     reports:
+      - url: /reports/inv-2026-083-federal-ad-credential-access-rig/
+        title: A Credential-Access Rig Aimed at a US Federal Agriculture Department
+        date: '2026-11-15'
+        tactic: Credential Access
+        confidence: HIGH
       - url: /reports/inv-2026-080-cyberstrike-ad-workbench/
         title: An AI Pentest Platform Drives Commodity Tooling Against Portuguese Government Targets
         date: '2026-11-12'
@@ -645,12 +685,13 @@ techniques:
       - UTA-2026-006
       - UTA-2026-023
       - UTA-2026-024
+      - UTA-2026-025
     url: /techniques/T1003.002/
     mitre_url: https://attack.mitre.org/techniques/T1003/002/
-    report_count: 4
+    report_count: 5
     rule_count: 3
-    actor_count: 3
-    score: 7
+    actor_count: 4
+    score: 8
   - id: T1003.003
     name: NTDS
     tactic: Credential Access
@@ -747,6 +788,11 @@ techniques:
     tactics:
       - Collection
     reports:
+      - url: /reports/inv-2026-083-federal-ad-credential-access-rig/
+        title: A Credential-Access Rig Aimed at a US Federal Agriculture Department
+        date: '2026-11-15'
+        tactic: Collection
+        confidence: HIGH
       - url: /reports/inv-2026-080-cyberstrike-ad-workbench/
         title: An AI Pentest Platform Drives Commodity Tooling Against Portuguese Government Targets
         date: '2026-11-12'
@@ -874,13 +920,14 @@ techniques:
       - UTA-2026-021
       - UTA-2026-023
       - UTA-2026-024
+      - UTA-2026-025
       - n-3-xl
     url: /techniques/T1005/
     mitre_url: https://attack.mitre.org/techniques/T1005/
-    report_count: 19
+    report_count: 20
     rule_count: 3
-    actor_count: 11
-    score: 22
+    actor_count: 12
+    score: 23
   - id: T1007
     name: System Service Discovery
     tactic: Discovery
@@ -1094,6 +1141,11 @@ techniques:
     tactics:
       - Discovery
     reports:
+      - url: /reports/inv-2026-083-federal-ad-credential-access-rig/
+        title: A Credential-Access Rig Aimed at a US Federal Agriculture Department
+        date: '2026-11-15'
+        tactic: Discovery
+        confidence: HIGH
       - url: /reports/opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015/
         title: Help Desks to Host Shells Across Brazil's Public Sector
         date: '2026-10-15'
@@ -1130,12 +1182,13 @@ techniques:
       - UTA-2026-020
       - UTA-2026-023
       - UTA-2026-024
+      - UTA-2026-025
     url: /techniques/T1016/
     mitre_url: https://attack.mitre.org/techniques/T1016/
-    report_count: 6
+    report_count: 7
     rule_count: 0
-    actor_count: 4
-    score: 6
+    actor_count: 5
+    score: 7
   - id: T1016.001
     name: Internet Connection Discovery
     tactic: Discovery
@@ -1353,6 +1406,11 @@ techniques:
     tactics:
       - Lateral Movement
     reports:
+      - url: /reports/inv-2026-083-federal-ad-credential-access-rig/
+        title: A Credential-Access Rig Aimed at a US Federal Agriculture Department
+        date: '2026-11-15'
+        tactic: Lateral Movement
+        confidence: HIGH
       - url: /reports/inv-2026-080-cyberstrike-ad-workbench/
         title: An AI Pentest Platform Drives Commodity Tooling Against Portuguese Government Targets
         date: '2026-11-12'
@@ -1402,12 +1460,13 @@ techniques:
       - UTA-2026-021
       - UTA-2026-023
       - UTA-2026-024
+      - UTA-2026-025
     url: /techniques/T1021.002/
     mitre_url: https://attack.mitre.org/techniques/T1021/002/
-    report_count: 5
+    report_count: 6
     rule_count: 4
-    actor_count: 4
-    score: 9
+    actor_count: 5
+    score: 10
   - id: T1021.004
     name: SSH
     tactic: Lateral Movement
@@ -2064,6 +2123,11 @@ techniques:
     tactics:
       - Stealth
     reports:
+      - url: /reports/inv-2026-083-federal-ad-credential-access-rig/
+        title: A Credential-Access Rig Aimed at a US Federal Agriculture Department
+        date: '2026-11-15'
+        tactic: Stealth
+        confidence: HIGH
       - url: /reports/bellamain-turkish-phaas-79-137-192-3-20260516/
         title: BellaMain Turkish PhaaS Panel (79.137.192.3)
         date: '2026-05-16'
@@ -2122,18 +2186,24 @@ techniques:
       - UTA-2026-008
       - UTA-2026-009
       - UTA-2026-010
+      - UTA-2026-025
     url: /techniques/T1027.013/
     mitre_url: https://attack.mitre.org/techniques/T1027/013/
-    report_count: 5
+    report_count: 6
     rule_count: 5
-    actor_count: 5
-    score: 10
+    actor_count: 6
+    score: 11
   - id: T1033
     name: System Owner/User Discovery
     tactic: Discovery
     tactics:
       - Discovery
     reports:
+      - url: /reports/inv-2026-083-federal-ad-credential-access-rig/
+        title: A Credential-Access Rig Aimed at a US Federal Agriculture Department
+        date: '2026-11-15'
+        tactic: Discovery
+        confidence: HIGH
       - url: /reports/inv-2026-080-cyberstrike-ad-workbench/
         title: An AI Pentest Platform Drives Commodity Tooling Against Portuguese Government Targets
         date: '2026-11-12'
@@ -2207,12 +2277,13 @@ techniques:
       - UTA-2026-003
       - UTA-2026-004
       - UTA-2026-024
+      - UTA-2026-025
     url: /techniques/T1033/
     mitre_url: https://attack.mitre.org/techniques/T1033/
-    report_count: 11
+    report_count: 12
     rule_count: 2
-    actor_count: 4
-    score: 13
+    actor_count: 5
+    score: 14
   - id: T1036
     name: Masquerading
     tactic: Stealth
@@ -2391,6 +2462,11 @@ techniques:
     tactics:
       - Stealth
     reports:
+      - url: /reports/inv-2026-083-federal-ad-credential-access-rig/
+        title: A Credential-Access Rig Aimed at a US Federal Agriculture Department
+        date: '2026-11-15'
+        tactic: Stealth
+        confidence: HIGH
       - url: /reports/inv-2026-080-cyberstrike-ad-workbench/
         title: An AI Pentest Platform Drives Commodity Tooling Against Portuguese Government Targets
         date: '2026-11-12'
@@ -2482,6 +2558,14 @@ techniques:
         tactic: Stealth
         confidence: HIGH
     detections:
+      - url: /hunting-detections/inv-2026-083-federal-ad-credential-access-rig-detections
+        title: A Credential-Access Rig Aimed at a US Federal Agriculture Department
+        date: '2026-11-15'
+        report_url: /reports/inv-2026-083-federal-ad-credential-access-rig/
+        rules: >-
+          Linux Process Executed From an In-Memory File With a Systemd Command Line (SIGMA,
+          Detection)
+        count: 1
       - url: /hunting-detections/inv-2026-080-cyberstrike-ad-workbench-detections
         title: An AI Pentest Platform Drives Commodity Tooling Against Portuguese Government Targets
         date: '2026-11-12'
@@ -2641,14 +2725,15 @@ techniques:
       - UTA-2026-021
       - UTA-2026-023
       - UTA-2026-024
+      - UTA-2026-025
       - n-3-xl
       - vova75rus
     url: /techniques/T1036.005/
     mitre_url: https://attack.mitre.org/techniques/T1036/005/
-    report_count: 18
-    rule_count: 40
-    actor_count: 15
-    score: 58
+    report_count: 19
+    rule_count: 41
+    actor_count: 16
+    score: 60
   - id: T1036.007
     name: Double File Extension
     tactic: Stealth
@@ -2724,6 +2809,11 @@ techniques:
         date: '2026-11-15'
         tactic: Exfiltration
         confidence: MODERATE
+      - url: /reports/inv-2026-083-federal-ad-credential-access-rig/
+        title: A Credential-Access Rig Aimed at a US Federal Agriculture Department
+        date: '2026-11-15'
+        tactic: Exfiltration
+        confidence: HIGH
       - url: /reports/inv-2026-080-cyberstrike-ad-workbench/
         title: An AI Pentest Platform Drives Commodity Tooling Against Portuguese Government Targets
         date: '2026-11-12'
@@ -2853,6 +2943,12 @@ techniques:
           THL HUNT INV-2026-082 POST To /up With name Query And Python urllib Client (Operator
           Receiver Shape) (SURICATA, Hunting)
         count: 1
+      - url: /hunting-detections/inv-2026-083-federal-ad-credential-access-rig-detections
+        title: A Credential-Access Rig Aimed at a US Federal Agriculture Department
+        date: '2026-11-15'
+        report_url: /reports/inv-2026-083-federal-ad-credential-access-rig/
+        rules: MAL_LNX_INV2026083_HTTPSJsonAgent_RequestTemplates (YARA, Detection)
+        count: 1
       - url: /hunting-detections/newdouble-clickfix-detections
         title: >-
           FACEIT ClickFix Pages Point CS2 Players to a Script URL That VirusTotal Ties to a
@@ -2937,13 +3033,14 @@ techniques:
       - UTA-2026-021
       - UTA-2026-023
       - UTA-2026-024
+      - UTA-2026-025
       - n-3-xl
     url: /techniques/T1041/
     mitre_url: https://attack.mitre.org/techniques/T1041/
-    report_count: 25
-    rule_count: 14
-    actor_count: 14
-    score: 39
+    report_count: 26
+    rule_count: 15
+    actor_count: 15
+    score: 41
   - id: T1046
     name: Network Service Discovery
     tactic: Discovery
@@ -2952,6 +3049,11 @@ techniques:
     reports:
       - url: /reports/inv-2026-082-agent-platform-command-channel/
         title: A Threat Actor Configured an Enterprise AI-Agent Platform as a Command and Relay Channel
+        date: '2026-11-15'
+        tactic: Discovery
+        confidence: HIGH
+      - url: /reports/inv-2026-083-federal-ad-credential-access-rig/
+        title: A Credential-Access Rig Aimed at a US Federal Agriculture Department
         date: '2026-11-15'
         tactic: Discovery
         confidence: HIGH
@@ -3038,12 +3140,13 @@ techniques:
       - UTA-2026-021
       - UTA-2026-023
       - UTA-2026-024
+      - UTA-2026-025
     url: /techniques/T1046/
     mitre_url: https://attack.mitre.org/techniques/T1046/
-    report_count: 11
+    report_count: 12
     rule_count: 4
-    actor_count: 8
-    score: 15
+    actor_count: 9
+    score: 16
   - id: T1047
     name: Windows Management Instrumentation
     tactic: Execution
@@ -3244,6 +3347,11 @@ techniques:
       - Persistence
       - Privilege Escalation
     reports:
+      - url: /reports/inv-2026-083-federal-ad-credential-access-rig/
+        title: A Credential-Access Rig Aimed at a US Federal Agriculture Department
+        date: '2026-11-15'
+        tactic: Persistence
+        confidence: MODERATE
       - url: /reports/inv-2026-080-cyberstrike-ad-workbench/
         title: An AI Pentest Platform Drives Commodity Tooling Against Portuguese Government Targets
         date: '2026-11-12'
@@ -3410,13 +3518,14 @@ techniques:
       - UTA-2026-020
       - UTA-2026-021
       - UTA-2026-024
+      - UTA-2026-025
       - n-3-xl
     url: /techniques/T1053.005/
     mitre_url: https://attack.mitre.org/techniques/T1053/005/
-    report_count: 14
+    report_count: 15
     rule_count: 22
-    actor_count: 7
-    score: 36
+    actor_count: 8
+    score: 37
   - id: T1055
     name: Process Injection
     tactic: Stealth
@@ -4011,6 +4120,11 @@ techniques:
     tactics:
       - Discovery
     reports:
+      - url: /reports/inv-2026-083-federal-ad-credential-access-rig/
+        title: A Credential-Access Rig Aimed at a US Federal Agriculture Department
+        date: '2026-11-15'
+        tactic: Discovery
+        confidence: HIGH
       - url: /reports/opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015/
         title: Help Desks to Host Shells Across Brazil's Public Sector
         date: '2026-10-15'
@@ -4133,12 +4247,13 @@ techniques:
       - UTA-2026-010
       - UTA-2026-020
       - UTA-2026-021
+      - UTA-2026-025
     url: /techniques/T1057/
     mitre_url: https://attack.mitre.org/techniques/T1057/
-    report_count: 19
+    report_count: 20
     rule_count: 4
-    actor_count: 10
-    score: 23
+    actor_count: 11
+    score: 24
   - id: T1059
     name: Command and Scripting Interpreter
     tactic: Execution
@@ -4513,6 +4628,11 @@ techniques:
     tactics:
       - Execution
     reports:
+      - url: /reports/inv-2026-083-federal-ad-credential-access-rig/
+        title: A Credential-Access Rig Aimed at a US Federal Agriculture Department
+        date: '2026-11-15'
+        tactic: Execution
+        confidence: HIGH
       - url: /reports/inv-2026-080-cyberstrike-ad-workbench/
         title: An AI Pentest Platform Drives Commodity Tooling Against Portuguese Government Targets
         date: '2026-11-12'
@@ -4634,13 +4754,14 @@ techniques:
       - UTA-2026-021
       - UTA-2026-023
       - UTA-2026-024
+      - UTA-2026-025
       - n-3-xl
     url: /techniques/T1059.003/
     mitre_url: https://attack.mitre.org/techniques/T1059/003/
-    report_count: 16
+    report_count: 17
     rule_count: 6
-    actor_count: 10
-    score: 22
+    actor_count: 11
+    score: 23
   - id: T1059.004
     name: Unix Shell
     tactic: Execution
@@ -4652,6 +4773,11 @@ techniques:
         date: '2026-11-15'
         tactic: Execution
         confidence: MODERATE
+      - url: /reports/inv-2026-083-federal-ad-credential-access-rig/
+        title: A Credential-Access Rig Aimed at a US Federal Agriculture Department
+        date: '2026-11-15'
+        tactic: Execution
+        confidence: HIGH
       - url: /reports/inv-2026-080-cyberstrike-ad-workbench/
         title: An AI Pentest Platform Drives Commodity Tooling Against Portuguese Government Targets
         date: '2026-11-12'
@@ -4774,13 +4900,14 @@ techniques:
       - UTA-2026-019
       - UTA-2026-020
       - UTA-2026-023
+      - UTA-2026-025
       - vova75rus
     url: /techniques/T1059.004/
     mitre_url: https://attack.mitre.org/techniques/T1059/004/
-    report_count: 10
+    report_count: 11
     rule_count: 22
-    actor_count: 11
-    score: 32
+    actor_count: 12
+    score: 33
   - id: T1059.005
     name: Visual Basic
     tactic: Execution
@@ -5062,6 +5189,11 @@ techniques:
     tactics:
       - Privilege Escalation
     reports:
+      - url: /reports/inv-2026-083-federal-ad-credential-access-rig/
+        title: A Credential-Access Rig Aimed at a US Federal Agriculture Department
+        date: '2026-11-15'
+        tactic: Privilege Escalation
+        confidence: HIGH
       - url: /reports/inv-2026-080-cyberstrike-ad-workbench/
         title: An AI Pentest Platform Drives Commodity Tooling Against Portuguese Government Targets
         date: '2026-11-12'
@@ -5189,18 +5321,24 @@ techniques:
       - UTA-2026-021
       - UTA-2026-023
       - UTA-2026-024
+      - UTA-2026-025
     url: /techniques/T1068/
     mitre_url: https://attack.mitre.org/techniques/T1068/
-    report_count: 11
+    report_count: 12
     rule_count: 22
-    actor_count: 5
-    score: 33
+    actor_count: 6
+    score: 34
   - id: T1069.002
     name: Domain Groups
     tactic: Discovery
     tactics:
       - Discovery
     reports:
+      - url: /reports/inv-2026-083-federal-ad-credential-access-rig/
+        title: A Credential-Access Rig Aimed at a US Federal Agriculture Department
+        date: '2026-11-15'
+        tactic: Discovery
+        confidence: HIGH
       - url: /reports/inv-2026-080-cyberstrike-ad-workbench/
         title: An AI Pentest Platform Drives Commodity Tooling Against Portuguese Government Targets
         date: '2026-11-12'
@@ -5226,12 +5364,13 @@ techniques:
     actors:
       - UTA-2026-006
       - UTA-2026-024
+      - UTA-2026-025
     url: /techniques/T1069.002/
     mitre_url: https://attack.mitre.org/techniques/T1069/002/
-    report_count: 3
+    report_count: 4
     rule_count: 1
-    actor_count: 2
-    score: 4
+    actor_count: 3
+    score: 5
   - id: T1070
     name: Indicator Removal
     tactic: Stealth
@@ -5290,6 +5429,11 @@ techniques:
     tactics:
       - Stealth
     reports:
+      - url: /reports/inv-2026-083-federal-ad-credential-access-rig/
+        title: A Credential-Access Rig Aimed at a US Federal Agriculture Department
+        date: '2026-11-15'
+        tactic: Stealth
+        confidence: MODERATE
       - url: /reports/inv-2026-080-cyberstrike-ad-workbench/
         title: An AI Pentest Platform Drives Commodity Tooling Against Portuguese Government Targets
         date: '2026-11-12'
@@ -5419,12 +5563,13 @@ techniques:
       - UTA-2026-020
       - UTA-2026-023
       - UTA-2026-024
+      - UTA-2026-025
     url: /techniques/T1070.004/
     mitre_url: https://attack.mitre.org/techniques/T1070/004/
-    report_count: 16
+    report_count: 17
     rule_count: 8
-    actor_count: 8
-    score: 24
+    actor_count: 9
+    score: 25
   - id: T1070.005
     name: Network Share Connection Removal
     tactic: Stealth
@@ -5511,6 +5656,11 @@ techniques:
     tactics:
       - Command and Control
     reports:
+      - url: /reports/inv-2026-083-federal-ad-credential-access-rig/
+        title: A Credential-Access Rig Aimed at a US Federal Agriculture Department
+        date: '2026-11-15'
+        tactic: Command and Control
+        confidence: HIGH
       - url: /reports/inv-2026-080-cyberstrike-ad-workbench/
         title: An AI Pentest Platform Drives Commodity Tooling Against Portuguese Government Targets
         date: '2026-11-12'
@@ -5693,6 +5843,16 @@ techniques:
         report_url: /reports/inv-2026-082-agent-platform-command-channel/
         rules: MAL_AgentPlatform_Scripted_LLM_Endpoint_SSE_ToolCall_Queue (YARA, Hunting)
         count: 1
+      - url: /hunting-detections/inv-2026-083-federal-ad-credential-access-rig-detections
+        title: A Credential-Access Rig Aimed at a US Federal Agriculture Department
+        date: '2026-11-15'
+        report_url: /reports/inv-2026-083-federal-ad-credential-access-rig/
+        rules: >-
+          MAL_LNX_INV2026083_HTTPSJsonAgent_RequestTemplates (YARA, Detection); THL HUNT
+          INV-2026-083 Agent C2 Zone customerlop.top DNS Query (SURICATA, Hunting); THL HUNT
+          INV-2026-083 Agent C2 Zone customerlop.top TLS SNI (SURICATA, Hunting); THL HUNT
+          INV-2026-083 HTTPS Agent JSON Key And Data Beacon With No User-Agent (SURICATA, Hunting)
+        count: 4
       - url: /hunting-detections/gotenberg-rce-cryptomining-107-175-69-137-detections
         title: Gotenberg CVE-2026-42589 Mass Exploitation and Cryptomining
         date: '2026-09-16'
@@ -5976,13 +6136,14 @@ techniques:
       - UTA-2026-020
       - UTA-2026-023
       - UTA-2026-024
+      - UTA-2026-025
       - n-3-xl
     url: /techniques/T1071.001/
     mitre_url: https://attack.mitre.org/techniques/T1071/001/
-    report_count: 35
-    rule_count: 95
-    actor_count: 19
-    score: 130
+    report_count: 36
+    rule_count: 99
+    actor_count: 20
+    score: 135
   - id: T1071.002
     name: File Transfer Protocols
     tactic: Command and Control
@@ -6327,6 +6488,11 @@ techniques:
     tactics:
       - Discovery
     reports:
+      - url: /reports/inv-2026-083-federal-ad-credential-access-rig/
+        title: A Credential-Access Rig Aimed at a US Federal Agriculture Department
+        date: '2026-11-15'
+        tactic: Discovery
+        confidence: HIGH
       - url: /reports/opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015/
         title: Help Desks to Host Shells Across Brazil's Public Sector
         date: '2026-10-15'
@@ -6516,19 +6682,25 @@ techniques:
       - UTA-2026-021
       - UTA-2026-023
       - UTA-2026-024
+      - UTA-2026-025
       - n-3-xl
     url: /techniques/T1082/
     mitre_url: https://attack.mitre.org/techniques/T1082/
-    report_count: 29
+    report_count: 30
     rule_count: 6
-    actor_count: 15
-    score: 35
+    actor_count: 16
+    score: 36
   - id: T1083
     name: File and Directory Discovery
     tactic: Discovery
     tactics:
       - Discovery
     reports:
+      - url: /reports/inv-2026-083-federal-ad-credential-access-rig/
+        title: A Credential-Access Rig Aimed at a US Federal Agriculture Department
+        date: '2026-11-15'
+        tactic: Discovery
+        confidence: HIGH
       - url: /reports/inv-2026-080-cyberstrike-ad-workbench/
         title: An AI Pentest Platform Drives Commodity Tooling Against Portuguese Government Targets
         date: '2026-11-12'
@@ -6623,13 +6795,14 @@ techniques:
       - UTA-2026-006
       - UTA-2026-007
       - UTA-2026-011
+      - UTA-2026-025
       - n-3-xl
     url: /techniques/T1083/
     mitre_url: https://attack.mitre.org/techniques/T1083/
-    report_count: 16
+    report_count: 17
     rule_count: 2
-    actor_count: 5
-    score: 18
+    actor_count: 6
+    score: 19
   - id: T1087
     name: Account Discovery
     tactic: Discovery
@@ -6687,6 +6860,11 @@ techniques:
     tactics:
       - Discovery
     reports:
+      - url: /reports/inv-2026-083-federal-ad-credential-access-rig/
+        title: A Credential-Access Rig Aimed at a US Federal Agriculture Department
+        date: '2026-11-15'
+        tactic: Discovery
+        confidence: HIGH
       - url: /reports/inv-2026-080-cyberstrike-ad-workbench/
         title: An AI Pentest Platform Drives Commodity Tooling Against Portuguese Government Targets
         date: '2026-11-12'
@@ -6708,6 +6886,12 @@ techniques:
         tactic: Discovery
         confidence: HIGH
     detections:
+      - url: /hunting-detections/inv-2026-083-federal-ad-credential-access-rig-detections
+        title: A Credential-Access Rig Aimed at a US Federal Agriculture Department
+        date: '2026-11-15'
+        report_url: /reports/inv-2026-083-federal-ad-credential-access-rig/
+        rules: Many Unknown Accounts Probed Over Kerberos From One Host (SIGMA, Hunting)
+        count: 1
       - url: /hunting-detections/inv-2026-080-cyberstrike-ad-workbench-detections
         title: An AI Pentest Platform Drives Commodity Tooling Against Portuguese Government Targets
         date: '2026-11-12'
@@ -6723,12 +6907,13 @@ techniques:
     actors:
       - UTA-2026-006
       - UTA-2026-024
+      - UTA-2026-025
     url: /techniques/T1087.002/
     mitre_url: https://attack.mitre.org/techniques/T1087/002/
-    report_count: 4
-    rule_count: 2
-    actor_count: 2
-    score: 6
+    report_count: 5
+    rule_count: 3
+    actor_count: 3
+    score: 8
   - id: T1087.004
     name: Cloud Account
     tactic: Discovery
@@ -6823,6 +7008,11 @@ techniques:
     tactics:
       - Command and Control
     reports:
+      - url: /reports/inv-2026-083-federal-ad-credential-access-rig/
+        title: A Credential-Access Rig Aimed at a US Federal Agriculture Department
+        date: '2026-11-15'
+        tactic: Command and Control
+        confidence: HIGH
       - url: /reports/inv-2026-080-cyberstrike-ad-workbench/
         title: An AI Pentest Platform Drives Commodity Tooling Against Portuguese Government Targets
         date: '2026-11-12'
@@ -6913,12 +7103,13 @@ techniques:
       - UTA-2026-011
       - UTA-2026-015
       - UTA-2026-023
+      - UTA-2026-025
     url: /techniques/T1090.001/
     mitre_url: https://attack.mitre.org/techniques/T1090/001/
-    report_count: 8
+    report_count: 9
     rule_count: 13
-    actor_count: 5
-    score: 21
+    actor_count: 6
+    score: 22
   - id: T1090.002
     name: External Proxy
     tactic: Command and Control
@@ -6975,6 +7166,11 @@ techniques:
     tactics:
       - Command and Control
     reports:
+      - url: /reports/inv-2026-083-federal-ad-credential-access-rig/
+        title: A Credential-Access Rig Aimed at a US Federal Agriculture Department
+        date: '2026-11-15'
+        tactic: Command and Control
+        confidence: HIGH
       - url: /reports/seasia-gov-exploitation-toolkit-144-172-106-236/
         title: 'The Middle Tier: A Non-APT Operator''s Reach Into Four Southeast Asian Governments'
         date: '2026-08-13'
@@ -7042,12 +7238,13 @@ techniques:
       - UTA-2026-009
       - UTA-2026-018
       - UTA-2026-021
+      - UTA-2026-025
     url: /techniques/T1090.003/
     mitre_url: https://attack.mitre.org/techniques/T1090/003/
-    report_count: 6
+    report_count: 7
     rule_count: 8
-    actor_count: 3
-    score: 14
+    actor_count: 4
+    score: 15
   - id: T1090.004
     name: Domain Fronting
     tactic: Command and Control
@@ -7135,6 +7332,11 @@ techniques:
     tactics:
       - Command and Control
     reports:
+      - url: /reports/inv-2026-083-federal-ad-credential-access-rig/
+        title: A Credential-Access Rig Aimed at a US Federal Agriculture Department
+        date: '2026-11-15'
+        tactic: Command and Control
+        confidence: MODERATE
       - url: /reports/opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015/
         title: Help Desks to Host Shells Across Brazil's Public Sector
         date: '2026-10-15'
@@ -7229,13 +7431,14 @@ techniques:
     actors:
       - UTA-2026-004
       - UTA-2026-014
+      - UTA-2026-025
       - n-3-xl
     url: /techniques/T1095/
     mitre_url: https://attack.mitre.org/techniques/T1095/
-    report_count: 5
+    report_count: 6
     rule_count: 18
-    actor_count: 3
-    score: 23
+    actor_count: 4
+    score: 24
   - id: T1098
     name: Account Manipulation
     tactic: Persistence
@@ -7536,6 +7739,11 @@ techniques:
     tactics:
       - Command and Control
     reports:
+      - url: /reports/inv-2026-083-federal-ad-credential-access-rig/
+        title: A Credential-Access Rig Aimed at a US Federal Agriculture Department
+        date: '2026-11-15'
+        tactic: Command and Control
+        confidence: HIGH
       - url: /reports/multivector-ecommerce-rce-toolkit-192-3-1-116/
         title: 'Enough to Be Dangerous: The Mechanics of an LLM-Assisted Intrusion Campaign'
         date: '2026-07-21'
@@ -7547,6 +7755,17 @@ techniques:
         tactic: Command and Control
         confidence: HIGH
     detections:
+      - url: /hunting-detections/inv-2026-083-federal-ad-credential-access-rig-detections
+        title: A Credential-Access Rig Aimed at a US Federal Agriculture Department
+        date: '2026-11-15'
+        report_url: /reports/inv-2026-083-federal-ad-credential-access-rig/
+        rules: >-
+          MAL_WIN_INV2026083_OneDriveGraphBeacon_Shellcode_Immediates (YARA, Detection); OneDrive
+          Command Folder Requests To Microsoft Graph With a Bare Mozilla User-Agent (SIGMA,
+          Hunting); THL HUNT INV-2026-083 OneDrive cmd Folder Request To Graph With Bare Mozilla
+          User-Agent (SURICATA, Hunting); THL HUNT INV-2026-083 Refresh-Token Grant With Office
+          Client Id And Bare Mozilla User-Agent (SURICATA, Hunting)
+        count: 4
       - url: /hunting-detections/ghost-cryptojacker-vova75rus-77.110.96.200-detections
         title: GHOST Cryptojacker Kit — Vova75Rus Supply Chain (77.110.96.200)
         date: '2026-05-25'
@@ -7567,13 +7786,14 @@ techniques:
       - UTA-2026-016
       - UTA-2026-017
       - UTA-2026-019
+      - UTA-2026-025
       - vova75rus
     url: /techniques/T1102.002/
     mitre_url: https://attack.mitre.org/techniques/T1102/002/
-    report_count: 2
-    rule_count: 3
-    actor_count: 5
-    score: 5
+    report_count: 3
+    rule_count: 7
+    actor_count: 6
+    score: 10
   - id: T1104
     name: Multi-Stage Channels
     tactic: Command and Control
@@ -7602,6 +7822,11 @@ techniques:
     reports:
       - url: /reports/inv-2026-082-agent-platform-command-channel/
         title: A Threat Actor Configured an Enterprise AI-Agent Platform as a Command and Relay Channel
+        date: '2026-11-15'
+        tactic: Command and Control
+        confidence: HIGH
+      - url: /reports/inv-2026-083-federal-ad-credential-access-rig/
+        title: A Credential-Access Rig Aimed at a US Federal Agriculture Department
         date: '2026-11-15'
         tactic: Command and Control
         confidence: HIGH
@@ -7726,6 +7951,12 @@ techniques:
           INV-2026-082 Python urllib Fetch Of Operator Payload File Name (Agent-Platform Plant
           Downloader) (SURICATA, Hunting)
         count: 3
+      - url: /hunting-detections/inv-2026-083-federal-ad-credential-access-rig-detections
+        title: A Credential-Access Rig Aimed at a US Federal Agriculture Department
+        date: '2026-11-15'
+        report_url: /reports/inv-2026-083-federal-ad-credential-access-rig/
+        rules: MAL_LNX_INV2026083_HTTPSJsonAgent_RequestTemplates (YARA, Detection)
+        count: 1
       - url: /hunting-detections/newdouble-clickfix-detections
         title: >-
           FACEIT ClickFix Pages Point CS2 Players to a Script URL That VirusTotal Ties to a
@@ -7884,14 +8115,15 @@ techniques:
       - UTA-2026-021
       - UTA-2026-023
       - UTA-2026-024
+      - UTA-2026-025
       - n-3-xl
       - vova75rus
     url: /techniques/T1105/
     mitre_url: https://attack.mitre.org/techniques/T1105/
-    report_count: 23
-    rule_count: 33
-    actor_count: 17
-    score: 56
+    report_count: 24
+    rule_count: 34
+    actor_count: 18
+    score: 58
   - id: T1106
     name: Native API
     tactic: Execution
@@ -8114,6 +8346,11 @@ techniques:
     tactics:
       - Credential Access
     reports:
+      - url: /reports/inv-2026-083-federal-ad-credential-access-rig/
+        title: A Credential-Access Rig Aimed at a US Federal Agriculture Department
+        date: '2026-11-15'
+        tactic: Credential Access
+        confidence: HIGH
       - url: /reports/inv-2026-080-cyberstrike-ad-workbench/
         title: An AI Pentest Platform Drives Commodity Tooling Against Portuguese Government Targets
         date: '2026-11-12'
@@ -8145,6 +8382,12 @@ techniques:
         tactic: Credential Access
         confidence: MODERATE
     detections:
+      - url: /hunting-detections/inv-2026-083-federal-ad-credential-access-rig-detections
+        title: A Credential-Access Rig Aimed at a US Federal Agriculture Department
+        date: '2026-11-15'
+        report_url: /reports/inv-2026-083-federal-ad-credential-access-rig/
+        rules: Many Accounts Failing a Network Logon With a Wrong Password From One Host (SIGMA, Hunting)
+        count: 1
       - url: /hunting-detections/ai-agent-frameworks-2026-05-23-detections
         title: Multi-Actor AI-Agent Framework Abuse (8 Operators)
         date: '2026-06-16'
@@ -8165,12 +8408,13 @@ techniques:
       - UTA-2026-018
       - UTA-2026-019
       - UTA-2026-023
+      - UTA-2026-025
     url: /techniques/T1110.003/
     mitre_url: https://attack.mitre.org/techniques/T1110/003/
-    report_count: 6
-    rule_count: 3
-    actor_count: 5
-    score: 9
+    report_count: 7
+    rule_count: 4
+    actor_count: 6
+    score: 11
   - id: T1110.004
     name: Credential Stuffing
     tactic: Credential Access
@@ -8774,6 +9018,11 @@ techniques:
     tactics:
       - Command and Control
     reports:
+      - url: /reports/inv-2026-083-federal-ad-credential-access-rig/
+        title: A Credential-Access Rig Aimed at a US Federal Agriculture Department
+        date: '2026-11-15'
+        tactic: Command and Control
+        confidence: HIGH
       - url: /reports/inv-2026-080-cyberstrike-ad-workbench/
         title: An AI Pentest Platform Drives Commodity Tooling Against Portuguese Government Targets
         date: '2026-11-12'
@@ -8882,12 +9131,13 @@ techniques:
       - UTA-2026-020
       - UTA-2026-023
       - UTA-2026-024
+      - UTA-2026-025
     url: /techniques/T1132.001/
     mitre_url: https://attack.mitre.org/techniques/T1132/001/
-    report_count: 11
+    report_count: 12
     rule_count: 10
-    actor_count: 6
-    score: 21
+    actor_count: 7
+    score: 22
   - id: T1132.002
     name: Non-Standard Encoding
     tactic: Command and Control
@@ -9534,6 +9784,26 @@ techniques:
     rule_count: 3
     actor_count: 0
     score: 3
+  - id: T1187
+    name: Forced Authentication
+    tactic: Credential Access
+    tactics:
+      - Credential Access
+    reports:
+      - url: /reports/inv-2026-083-federal-ad-credential-access-rig/
+        title: A Credential-Access Rig Aimed at a US Federal Agriculture Department
+        date: '2026-11-15'
+        tactic: Credential Access
+        confidence: HIGH
+    detections: []
+    actors:
+      - UTA-2026-025
+    url: /techniques/T1187/
+    mitre_url: https://attack.mitre.org/techniques/T1187/
+    report_count: 1
+    rule_count: 0
+    actor_count: 1
+    score: 1
   - id: T1189
     name: Drive-by Compromise
     tactic: Initial Access
@@ -9569,6 +9839,11 @@ techniques:
     reports:
       - url: /reports/inv-2026-082-agent-platform-command-channel/
         title: A Threat Actor Configured an Enterprise AI-Agent Platform as a Command and Relay Channel
+        date: '2026-11-15'
+        tactic: Initial Access
+        confidence: MODERATE
+      - url: /reports/inv-2026-083-federal-ad-credential-access-rig/
+        title: A Credential-Access Rig Aimed at a US Federal Agriculture Department
         date: '2026-11-15'
         tactic: Initial Access
         confidence: MODERATE
@@ -9769,12 +10044,13 @@ techniques:
       - UTA-2026-019
       - UTA-2026-020
       - UTA-2026-023
+      - UTA-2026-025
     url: /techniques/T1190/
     mitre_url: https://attack.mitre.org/techniques/T1190/
-    report_count: 14
+    report_count: 15
     rule_count: 53
-    actor_count: 7
-    score: 67
+    actor_count: 8
+    score: 68
   - id: T1195.002
     name: Compromise Software Supply Chain
     tactic: Initial Access
@@ -10013,6 +10289,11 @@ techniques:
     tactics:
       - Lateral Movement
     reports:
+      - url: /reports/inv-2026-083-federal-ad-credential-access-rig/
+        title: A Credential-Access Rig Aimed at a US Federal Agriculture Department
+        date: '2026-11-15'
+        tactic: Lateral Movement
+        confidence: HIGH
       - url: /reports/inv-2026-080-cyberstrike-ad-workbench/
         title: An AI Pentest Platform Drives Commodity Tooling Against Portuguese Government Targets
         date: '2026-11-12'
@@ -10031,12 +10312,13 @@ techniques:
     detections: []
     actors:
       - UTA-2026-023
+      - UTA-2026-025
     url: /techniques/T1210/
     mitre_url: https://attack.mitre.org/techniques/T1210/
-    report_count: 3
+    report_count: 4
     rule_count: 0
-    actor_count: 1
-    score: 3
+    actor_count: 2
+    score: 4
   - id: T1212
     name: Exploitation for Credential Access
     tactic: Credential Access
@@ -10162,6 +10444,26 @@ techniques:
     report_count: 1
     rule_count: 0
     actor_count: 0
+    score: 1
+  - id: T1213.003
+    name: Code Repositories
+    tactic: Collection
+    tactics:
+      - Collection
+    reports:
+      - url: /reports/inv-2026-083-federal-ad-credential-access-rig/
+        title: A Credential-Access Rig Aimed at a US Federal Agriculture Department
+        date: '2026-11-15'
+        tactic: Collection
+        confidence: HIGH
+    detections: []
+    actors:
+      - UTA-2026-025
+    url: /techniques/T1213.003/
+    mitre_url: https://attack.mitre.org/techniques/T1213/003/
+    report_count: 1
+    rule_count: 0
+    actor_count: 1
     score: 1
   - id: T1218
     name: System Binary Proxy Execution
@@ -10493,6 +10795,11 @@ techniques:
     tactics:
       - Stealth
     reports:
+      - url: /reports/inv-2026-083-federal-ad-credential-access-rig/
+        title: A Credential-Access Rig Aimed at a US Federal Agriculture Department
+        date: '2026-11-15'
+        tactic: Stealth
+        confidence: MODERATE
       - url: /reports/kaido-quasar-rat-144-172-109-203/
         title: 'KAIDO: A Brazilian Quasar-Fork RAT with Hidden-Desktop Session Hijacking'
         date: '2026-07-03'
@@ -10519,6 +10826,12 @@ techniques:
         tactic: Execution
         confidence: HIGH
     detections:
+      - url: /hunting-detections/inv-2026-083-federal-ad-credential-access-rig-detections
+        title: A Credential-Access Rig Aimed at a US Federal Agriculture Department
+        date: '2026-11-15'
+        report_url: /reports/inv-2026-083-federal-ad-credential-access-rig/
+        rules: Install-Window File Created Beside a Side-Loaded Edge Helper (SIGMA, Hunting)
+        count: 1
       - url: /hunting-detections/opendirectory-62-60-237-100-20260506-detections
         title: HijackLoader / Penguish / Rugmi to AsyncRAT Multi-Vector Phishing Campaign
         date: '2026-05-06'
@@ -10530,13 +10843,14 @@ techniques:
       - UTA-2026-007
       - UTA-2026-008
       - UTA-2026-011
+      - UTA-2026-025
       - n-3-xl
     url: /techniques/T1480/
     mitre_url: https://attack.mitre.org/techniques/T1480/
-    report_count: 5
-    rule_count: 1
-    actor_count: 5
-    score: 6
+    report_count: 6
+    rule_count: 2
+    actor_count: 6
+    score: 8
   - id: T1480.002
     name: Mutual Exclusion
     tactic: Stealth
@@ -11379,6 +11693,11 @@ techniques:
     tactics:
       - Persistence
     reports:
+      - url: /reports/inv-2026-083-federal-ad-credential-access-rig/
+        title: A Credential-Access Rig Aimed at a US Federal Agriculture Department
+        date: '2026-11-15'
+        tactic: Persistence
+        confidence: HIGH
       - url: /reports/inv-2026-080-cyberstrike-ad-workbench/
         title: An AI Pentest Platform Drives Commodity Tooling Against Portuguese Government Targets
         date: '2026-11-12'
@@ -11517,12 +11836,13 @@ techniques:
       - UTA-2026-019
       - UTA-2026-021
       - UTA-2026-023
+      - UTA-2026-025
     url: /techniques/T1505.003/
     mitre_url: https://attack.mitre.org/techniques/T1505/003/
-    report_count: 9
+    report_count: 10
     rule_count: 24
-    actor_count: 6
-    score: 33
+    actor_count: 7
+    score: 34
   - id: T1518
     name: Software Discovery
     tactic: Discovery
@@ -11982,6 +12302,11 @@ techniques:
       - Persistence
       - Privilege Escalation
     reports:
+      - url: /reports/inv-2026-083-federal-ad-credential-access-rig/
+        title: A Credential-Access Rig Aimed at a US Federal Agriculture Department
+        date: '2026-11-15'
+        tactic: Persistence
+        confidence: HIGH
       - url: /reports/gotenberg-rce-cryptomining-107-175-69-137/
         title: Gotenberg CVE-2026-42589 Mass Exploitation and Cryptomining
         date: '2026-09-16'
@@ -12049,13 +12374,14 @@ techniques:
       - UTA-2026-016
       - UTA-2026-017
       - UTA-2026-020
+      - UTA-2026-025
       - vova75rus
     url: /techniques/T1543.002/
     mitre_url: https://attack.mitre.org/techniques/T1543/002/
-    report_count: 2
+    report_count: 3
     rule_count: 13
-    actor_count: 6
-    score: 15
+    actor_count: 7
+    score: 16
   - id: T1543.003
     name: Windows Service
     tactic: Persistence
@@ -12722,6 +13048,11 @@ techniques:
     tactics:
       - Credential Access
     reports:
+      - url: /reports/inv-2026-083-federal-ad-credential-access-rig/
+        title: A Credential-Access Rig Aimed at a US Federal Agriculture Department
+        date: '2026-11-15'
+        tactic: Credential Access
+        confidence: MODERATE
       - url: /reports/opendirectory-38-180-16-98-brazil-public-sector-toolkit-20261015/
         title: Help Desks to Host Shells Across Brazil's Public Sector
         date: '2026-10-15'
@@ -12784,13 +13115,14 @@ techniques:
       - UTA-2026-013
       - UTA-2026-019
       - UTA-2026-023
+      - UTA-2026-025
       - n-3-xl
     url: /techniques/T1552.001/
     mitre_url: https://attack.mitre.org/techniques/T1552/001/
-    report_count: 5
+    report_count: 6
     rule_count: 7
-    actor_count: 5
-    score: 12
+    actor_count: 6
+    score: 13
   - id: T1552.003
     name: Shell History
     tactic: Credential Access
@@ -12930,12 +13262,25 @@ techniques:
     tactics:
       - Defense Impairment
     reports:
+      - url: /reports/inv-2026-083-federal-ad-credential-access-rig/
+        title: A Credential-Access Rig Aimed at a US Federal Agriculture Department
+        date: '2026-11-15'
+        tactic: Stealth
+        confidence: HIGH
       - url: /reports/sliver-open-directory/
         title: Sliver C2 Toolchain with ScareCrow Loader (45.94.31.220)
         date: '2026-03-10'
         tactic: Stealth
         confidence: DEFINITE
     detections:
+      - url: /hunting-detections/inv-2026-083-federal-ad-credential-access-rig-detections
+        title: A Credential-Access Rig Aimed at a US Federal Agriculture Department
+        date: '2026-11-15'
+        report_url: /reports/inv-2026-083-federal-ad-credential-access-rig/
+        rules: >-
+          SUSP_WIN_RockstarGames_ExpiredCert_SmallDLL (YARA, Hunting); Image Loaded With an Expired
+          Rockstar Games Signature (SIGMA, Hunting)
+        count: 2
       - url: /hunting-detections/sliver-open-directory-detections
         title: Sliver C2 Toolchain with ScareCrow Loader (45.94.31.220)
         date: '2026-03-10'
@@ -12946,12 +13291,13 @@ techniques:
         count: 2
     actors:
       - UTA-2026-001
+      - UTA-2026-025
     url: /techniques/T1553.002/
     mitre_url: https://attack.mitre.org/techniques/T1553/002/
-    report_count: 1
-    rule_count: 2
-    actor_count: 1
-    score: 3
+    report_count: 2
+    rule_count: 4
+    actor_count: 2
+    score: 6
   - id: T1553.004
     name: Install Root Certificate
     tactic: Defense Impairment
@@ -13293,6 +13639,33 @@ techniques:
     rule_count: 1
     actor_count: 0
     score: 2
+  - id: T1557.001
+    name: Name Resolution Poisoning and SMB Relay
+    tactic: Credential Access
+    tactics:
+      - Credential Access
+      - Collection
+    reports:
+      - url: /reports/inv-2026-083-federal-ad-credential-access-rig/
+        title: A Credential-Access Rig Aimed at a US Federal Agriculture Department
+        date: '2026-11-15'
+        tactic: Credential Access
+        confidence: HIGH
+    detections:
+      - url: /hunting-detections/inv-2026-083-federal-ad-credential-access-rig-detections
+        title: A Credential-Access Rig Aimed at a US Federal Agriculture Department
+        date: '2026-11-15'
+        report_url: /reports/inv-2026-083-federal-ad-credential-access-rig/
+        rules: Impacket NTLM Relay Server Started on a Linux Host (SIGMA, Hunting)
+        count: 1
+    actors:
+      - UTA-2026-025
+    url: /techniques/T1557.001/
+    mitre_url: https://attack.mitre.org/techniques/T1557/001/
+    report_count: 1
+    rule_count: 1
+    actor_count: 1
+    score: 2
   - id: T1558.001
     name: Golden Ticket
     tactic: Credential Access
@@ -13318,6 +13691,11 @@ techniques:
     tactics:
       - Credential Access
     reports:
+      - url: /reports/inv-2026-083-federal-ad-credential-access-rig/
+        title: A Credential-Access Rig Aimed at a US Federal Agriculture Department
+        date: '2026-11-15'
+        tactic: Credential Access
+        confidence: MODERATE
       - url: /reports/inv-2026-080-cyberstrike-ad-workbench/
         title: An AI Pentest Platform Drives Commodity Tooling Against Portuguese Government Targets
         date: '2026-11-12'
@@ -13334,6 +13712,12 @@ techniques:
         tactic: Credential Access
         confidence: HIGH
     detections:
+      - url: /hunting-detections/inv-2026-083-federal-ad-credential-access-rig-detections
+        title: A Credential-Access Rig Aimed at a US Federal Agriculture Department
+        date: '2026-11-15'
+        report_url: /reports/inv-2026-083-federal-ad-credential-access-rig/
+        rules: Many Distinct Kerberos Service Tickets Requested From One Host (SIGMA, Hunting)
+        count: 1
       - url: /hunting-detections/inv-2026-080-cyberstrike-ad-workbench-detections
         title: An AI Pentest Platform Drives Commodity Tooling Against Portuguese Government Targets
         date: '2026-11-12'
@@ -13342,12 +13726,13 @@ techniques:
         count: 1
     actors:
       - UTA-2026-006
+      - UTA-2026-025
     url: /techniques/T1558.003/
     mitre_url: https://attack.mitre.org/techniques/T1558/003/
-    report_count: 3
-    rule_count: 1
-    actor_count: 1
-    score: 4
+    report_count: 4
+    rule_count: 2
+    actor_count: 2
+    score: 6
   - id: T1558.004
     name: AS-REP Roasting
     tactic: Credential Access
@@ -13859,6 +14244,11 @@ techniques:
     tactics:
       - Exfiltration
     reports:
+      - url: /reports/inv-2026-083-federal-ad-credential-access-rig/
+        title: A Credential-Access Rig Aimed at a US Federal Agriculture Department
+        date: '2026-11-15'
+        tactic: Exfiltration
+        confidence: HIGH
       - url: /reports/evilsoul-engine-stealer-maas-144-172-103-98/
         title: 'EvilSoul-Engine: A Brazilian Stealer-Builder Malware-as-a-Service'
         date: '2026-07-03'
@@ -13890,13 +14280,14 @@ techniques:
       - UTA-2026-008
       - UTA-2026-009
       - UTA-2026-010
+      - UTA-2026-025
       - n-3-xl
     url: /techniques/T1567.002/
     mitre_url: https://attack.mitre.org/techniques/T1567/002/
-    report_count: 4
+    report_count: 5
     rule_count: 2
-    actor_count: 4
-    score: 6
+    actor_count: 5
+    score: 7
   - id: T1568
     name: Dynamic Resolution
     tactic: Command and Control
@@ -14156,6 +14547,11 @@ techniques:
         date: '2026-11-15'
         tactic: Command and Control
         confidence: HIGH
+      - url: /reports/inv-2026-083-federal-ad-credential-access-rig/
+        title: A Credential-Access Rig Aimed at a US Federal Agriculture Department
+        date: '2026-11-15'
+        tactic: Command and Control
+        confidence: MODERATE
       - url: /reports/inv-2026-080-cyberstrike-ad-workbench/
         title: An AI Pentest Platform Drives Commodity Tooling Against Portuguese Government Targets
         date: '2026-11-12'
@@ -14227,6 +14623,12 @@ techniques:
           (SURICATA, Hunting); THL HUNT INV-2026-082 bore.pub Public Tunnel Server DNS Query (Shared
           Service, Do Not Block On This Alone) (SURICATA, Hunting)
         count: 3
+      - url: /hunting-detections/inv-2026-083-federal-ad-credential-access-rig-detections
+        title: A Credential-Access Rig Aimed at a US Federal Agriculture Department
+        date: '2026-11-15'
+        report_url: /reports/inv-2026-083-federal-ad-credential-access-rig/
+        rules: THL DETECT INV-2026-083 Chisel v3 WebSocket Tunnel Client Upgrade (SURICATA, Detection)
+        count: 1
       - url: /hunting-detections/inv-2026-080-cyberstrike-ad-workbench-detections
         title: An AI Pentest Platform Drives Commodity Tooling Against Portuguese Government Targets
         date: '2026-11-12'
@@ -14316,13 +14718,14 @@ techniques:
       - UTA-2026-021
       - UTA-2026-023
       - UTA-2026-024
+      - UTA-2026-025
       - vova75rus
     url: /techniques/T1572/
     mitre_url: https://attack.mitre.org/techniques/T1572/
-    report_count: 13
-    rule_count: 26
-    actor_count: 15
-    score: 39
+    report_count: 14
+    rule_count: 27
+    actor_count: 16
+    score: 41
   - id: T1573
     name: Encrypted Channel
     tactic: Command and Control
@@ -14389,6 +14792,11 @@ techniques:
     tactics:
       - Command and Control
     reports:
+      - url: /reports/inv-2026-083-federal-ad-credential-access-rig/
+        title: A Credential-Access Rig Aimed at a US Federal Agriculture Department
+        date: '2026-11-15'
+        tactic: Command and Control
+        confidence: HIGH
       - url: /reports/kaido-quasar-rat-144-172-109-203/
         title: 'KAIDO: A Brazilian Quasar-Fork RAT with Hidden-Desktop Session Hijacking'
         date: '2026-07-03'
@@ -14435,6 +14843,14 @@ techniques:
         tactic: Command and Control
         confidence: HIGH
     detections:
+      - url: /hunting-detections/inv-2026-083-federal-ad-credential-access-rig-detections
+        title: A Credential-Access Rig Aimed at a US Federal Agriculture Department
+        date: '2026-11-15'
+        report_url: /reports/inv-2026-083-federal-ad-credential-access-rig/
+        rules: >-
+          MAL_LNX_INV2026083_HTTPSJsonAgent_RequestTemplates (YARA, Detection);
+          MAL_LNX_INV2026083_HTTPSJsonAgent_StaticKeyString (YARA, Hunting)
+        count: 2
       - url: /hunting-detections/kaido-quasar-rat-detections
         title: 'KAIDO: A Brazilian Quasar-Fork RAT with Hidden-Desktop Session Hijacking'
         date: '2026-07-03'
@@ -14488,19 +14904,25 @@ techniques:
       - UTA-2026-008
       - UTA-2026-009
       - UTA-2026-010
+      - UTA-2026-025
       - n-3-xl
     url: /techniques/T1573.001/
     mitre_url: https://attack.mitre.org/techniques/T1573/001/
-    report_count: 9
-    rule_count: 8
-    actor_count: 9
-    score: 17
+    report_count: 10
+    rule_count: 10
+    actor_count: 10
+    score: 20
   - id: T1573.002
     name: Asymmetric Cryptography
     tactic: Command and Control
     tactics:
       - Command and Control
     reports:
+      - url: /reports/inv-2026-083-federal-ad-credential-access-rig/
+        title: A Credential-Access Rig Aimed at a US Federal Agriculture Department
+        date: '2026-11-15'
+        tactic: Command and Control
+        confidence: HIGH
       - url: /reports/sliver-c2-windows-postex-staging-193-233-202-17/
         title: Sliver C2 Windows Post-Exploitation Staging, 193.233.202.17
         date: '2026-09-07'
@@ -14552,12 +14974,13 @@ techniques:
       - UTA-2026-009
       - UTA-2026-010
       - UTA-2026-024
+      - UTA-2026-025
     url: /techniques/T1573.002/
     mitre_url: https://attack.mitre.org/techniques/T1573/002/
-    report_count: 6
+    report_count: 7
     rule_count: 2
-    actor_count: 7
-    score: 8
+    actor_count: 8
+    score: 9
   - id: T1574.001
     name: DLL
     tactic: Stealth
@@ -14565,6 +14988,11 @@ techniques:
       - Stealth
       - Execution
     reports:
+      - url: /reports/inv-2026-083-federal-ad-credential-access-rig/
+        title: A Credential-Access Rig Aimed at a US Federal Agriculture Department
+        date: '2026-11-15'
+        tactic: Stealth
+        confidence: HIGH
       - url: /reports/opendirectory-62-60-237-100-20260506/
         title: HijackLoader / Penguish / Rugmi to AsyncRAT Multi-Vector Phishing Campaign
         date: '2026-05-06'
@@ -14576,6 +15004,15 @@ techniques:
         tactic: Stealth
         confidence: MODERATE
     detections:
+      - url: /hunting-detections/inv-2026-083-federal-ad-credential-access-rig-detections
+        title: A Credential-Access Rig Aimed at a US Federal Agriculture Department
+        date: '2026-11-15'
+        report_url: /reports/inv-2026-083-federal-ad-credential-access-rig/
+        rules: >-
+          MAL_WIN_INV2026083_Msedge_SideloadLoader_ExportSpartanCookies (YARA, Detection);
+          Msedge.dll Loaded Without a Microsoft Signature (SIGMA, Detection); Edge Cookie Exporter
+          Helper Running Outside the Edge Install Directory (SIGMA, Detection)
+        count: 3
       - url: /hunting-detections/opendirectory-62-60-237-100-20260506-detections
         title: HijackLoader / Penguish / Rugmi to AsyncRAT Multi-Vector Phishing Campaign
         date: '2026-05-06'
@@ -14587,12 +15024,13 @@ techniques:
     actors:
       - UTA-2026-006
       - UTA-2026-007
+      - UTA-2026-025
     url: /techniques/T1574.001/
     mitre_url: https://attack.mitre.org/techniques/T1574/001/
-    report_count: 2
-    rule_count: 2
-    actor_count: 2
-    score: 4
+    report_count: 3
+    rule_count: 5
+    actor_count: 3
+    score: 8
   - id: T1574.006
     name: Dynamic Linker Hijacking
     tactic: Stealth
@@ -14727,6 +15165,11 @@ techniques:
     tactics:
       - Resource Development
     reports:
+      - url: /reports/inv-2026-083-federal-ad-credential-access-rig/
+        title: A Credential-Access Rig Aimed at a US Federal Agriculture Department
+        date: '2026-11-15'
+        tactic: Resource Development
+        confidence: HIGH
       - url: /reports/opendirectory-13-140-145-210-weblogic-deserialization-telecom-harvester-20260817/
         title: Carrier Credential Harvesting Through a Customer's Router
         date: '2026-08-18'
@@ -14800,12 +15243,13 @@ techniques:
       - UTA-2026-019
       - UTA-2026-020
       - UTA-2026-023
+      - UTA-2026-025
     url: /techniques/T1583.003/
     mitre_url: https://attack.mitre.org/techniques/T1583/003/
-    report_count: 10
+    report_count: 11
     rule_count: 2
-    actor_count: 9
-    score: 12
+    actor_count: 10
+    score: 13
   - id: T1583.004
     name: Server
     tactic: Resource Development
@@ -15340,6 +15784,26 @@ techniques:
     rule_count: 2
     actor_count: 9
     score: 12
+  - id: T1588.003
+    name: Code Signing Certificates
+    tactic: Resource Development
+    tactics:
+      - Resource Development
+    reports:
+      - url: /reports/inv-2026-083-federal-ad-credential-access-rig/
+        title: A Credential-Access Rig Aimed at a US Federal Agriculture Department
+        date: '2026-11-15'
+        tactic: Resource Development
+        confidence: MODERATE
+    detections: []
+    actors:
+      - UTA-2026-025
+    url: /techniques/T1588.003/
+    mitre_url: https://attack.mitre.org/techniques/T1588/003/
+    report_count: 1
+    rule_count: 0
+    actor_count: 1
+    score: 1
   - id: T1588.004
     name: Digital Certificates
     tactic: Resource Development
@@ -15622,6 +16086,11 @@ techniques:
     tactics:
       - Reconnaissance
     reports:
+      - url: /reports/inv-2026-083-federal-ad-credential-access-rig/
+        title: A Credential-Access Rig Aimed at a US Federal Agriculture Department
+        date: '2026-11-15'
+        tactic: Reconnaissance
+        confidence: HIGH
       - url: /reports/inv-2026-080-cyberstrike-ad-workbench/
         title: An AI Pentest Platform Drives Commodity Tooling Against Portuguese Government Targets
         date: '2026-11-12'
@@ -15640,12 +16109,13 @@ techniques:
     detections: []
     actors:
       - UTA-2026-011
+      - UTA-2026-025
     url: /techniques/T1595.001/
     mitre_url: https://attack.mitre.org/techniques/T1595/001/
-    report_count: 3
+    report_count: 4
     rule_count: 0
-    actor_count: 1
-    score: 3
+    actor_count: 2
+    score: 4
   - id: T1595.002
     name: Vulnerability Scanning
     tactic: Reconnaissance
@@ -15918,6 +16388,11 @@ techniques:
     tactics:
       - Resource Development
     reports:
+      - url: /reports/inv-2026-083-federal-ad-credential-access-rig/
+        title: A Credential-Access Rig Aimed at a US Federal Agriculture Department
+        date: '2026-11-15'
+        tactic: Resource Development
+        confidence: HIGH
       - url: /reports/inv-2026-080-cyberstrike-ad-workbench/
         title: An AI Pentest Platform Drives Commodity Tooling Against Portuguese Government Targets
         date: '2026-11-12'
@@ -15949,12 +16424,13 @@ techniques:
       - UTA-2026-020
       - UTA-2026-023
       - UTA-2026-024
+      - UTA-2026-025
     url: /techniques/T1608.001/
     mitre_url: https://attack.mitre.org/techniques/T1608/001/
-    report_count: 5
+    report_count: 6
     rule_count: 0
-    actor_count: 4
-    score: 5
+    actor_count: 5
+    score: 6
   - id: T1608.003
     name: Install Digital Certificate
     tactic: Resource Development
@@ -16013,13 +16489,56 @@ techniques:
     rule_count: 1
     actor_count: 3
     score: 4
+  - id: T1610
+    name: Deploy Container
+    tactic: Execution
+    tactics:
+      - Execution
+    reports:
+      - url: /reports/inv-2026-083-federal-ad-credential-access-rig/
+        title: A Credential-Access Rig Aimed at a US Federal Agriculture Department
+        date: '2026-11-15'
+        tactic: Execution
+        confidence: HIGH
+    detections:
+      - url: /hunting-detections/inv-2026-083-federal-ad-credential-access-rig-detections
+        title: A Credential-Access Rig Aimed at a US Federal Agriculture Department
+        date: '2026-11-15'
+        report_url: /reports/inv-2026-083-federal-ad-credential-access-rig/
+        rules: >-
+          Kubernetes Pod Created With Privileged Host Root Mount and Staged Base64 Script (SIGMA,
+          Detection); Kubernetes Pod Created With Privileged Host Namespaces and the Node Root
+          Mounted (SIGMA, Hunting)
+        count: 2
+    actors:
+      - UTA-2026-025
+    url: /techniques/T1610/
+    mitre_url: https://attack.mitre.org/techniques/T1610/
+    report_count: 1
+    rule_count: 2
+    actor_count: 1
+    score: 3
   - id: T1611
     name: Escape to Host
     tactic: Privilege Escalation
     tactics:
       - Privilege Escalation
-    reports: []
+    reports:
+      - url: /reports/inv-2026-083-federal-ad-credential-access-rig/
+        title: A Credential-Access Rig Aimed at a US Federal Agriculture Department
+        date: '2026-11-15'
+        tactic: Privilege Escalation
+        confidence: HIGH
     detections:
+      - url: /hunting-detections/inv-2026-083-federal-ad-credential-access-rig-detections
+        title: A Credential-Access Rig Aimed at a US Federal Agriculture Department
+        date: '2026-11-15'
+        report_url: /reports/inv-2026-083-federal-ad-credential-access-rig/
+        rules: >-
+          Kubernetes Pod Created With Privileged Host Root Mount and Staged Base64 Script (SIGMA,
+          Detection); Kubernetes Pod Created With Privileged Host Namespaces and the Node Root
+          Mounted (SIGMA, Hunting)
+        count: 2
       - url: /hunting-detections/ai-agent-frameworks-2026-05-23-detections
         title: Multi-Actor AI-Agent Framework Abuse (8 Operators)
         date: '2026-06-16'
@@ -16035,13 +16554,14 @@ techniques:
     actors:
       - UTA-2026-016
       - UTA-2026-017
+      - UTA-2026-025
       - vova75rus
     url: /techniques/T1611/
     mitre_url: https://attack.mitre.org/techniques/T1611/
-    report_count: 0
-    rule_count: 2
-    actor_count: 3
-    score: 2
+    report_count: 1
+    rule_count: 4
+    actor_count: 4
+    score: 5
   - id: T1613
     name: Container and Resource Discovery
     tactic: Discovery
@@ -16093,6 +16613,11 @@ techniques:
     tactics:
       - Stealth
     reports:
+      - url: /reports/inv-2026-083-federal-ad-credential-access-rig/
+        title: A Credential-Access Rig Aimed at a US Federal Agriculture Department
+        date: '2026-11-15'
+        tactic: Stealth
+        confidence: MODERATE
       - url: /reports/sliver-c2-windows-postex-staging-193-233-202-17/
         title: Sliver C2 Windows Post-Exploitation Staging, 193.233.202.17
         date: '2026-09-07'
@@ -16159,6 +16684,14 @@ techniques:
         tactic: Stealth
         confidence: HIGH
     detections:
+      - url: /hunting-detections/inv-2026-083-federal-ad-credential-access-rig-detections
+        title: A Credential-Access Rig Aimed at a US Federal Agriculture Department
+        date: '2026-11-15'
+        report_url: /reports/inv-2026-083-federal-ad-credential-access-rig/
+        rules: >-
+          Linux Process Executed From an In-Memory File With a Systemd Command Line (SIGMA,
+          Detection); Linux Process Executed From an In-Memory Plugin File (SIGMA, Hunting)
+        count: 2
       - url: /hunting-detections/sliver-c2-windows-postex-staging-193-233-202-17-detections
         title: Sliver C2 Windows Post-Exploitation Staging, 193.233.202.17
         date: '2026-09-07'
@@ -16261,14 +16794,15 @@ techniques:
       - UTA-2026-017
       - UTA-2026-021
       - UTA-2026-024
+      - UTA-2026-025
       - n-3-xl
       - vova75rus
     url: /techniques/T1620/
     mitre_url: https://attack.mitre.org/techniques/T1620/
-    report_count: 13
-    rule_count: 21
-    actor_count: 12
-    score: 34
+    report_count: 14
+    rule_count: 23
+    actor_count: 13
+    score: 37
   - id: T1622
     name: Debugger Evasion
     tactic: Stealth
@@ -16364,6 +16898,11 @@ techniques:
     tactics:
       - Credential Access
     reports:
+      - url: /reports/inv-2026-083-federal-ad-credential-access-rig/
+        title: A Credential-Access Rig Aimed at a US Federal Agriculture Department
+        date: '2026-11-15'
+        tactic: Credential Access
+        confidence: HIGH
       - url: /reports/inv-2026-080-cyberstrike-ad-workbench/
         title: An AI Pentest Platform Drives Commodity Tooling Against Portuguese Government Targets
         date: '2026-11-12'
@@ -16377,12 +16916,13 @@ techniques:
     detections: []
     actors:
       - UTA-2026-006
+      - UTA-2026-025
     url: /techniques/T1649/
     mitre_url: https://attack.mitre.org/techniques/T1649/
-    report_count: 2
+    report_count: 3
     rule_count: 0
-    actor_count: 1
-    score: 2
+    actor_count: 2
+    score: 3
   - id: T1651
     name: Cloud Administration Command
     tactic: Execution

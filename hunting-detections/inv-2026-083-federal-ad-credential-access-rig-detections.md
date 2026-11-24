@@ -4,8 +4,6 @@ date: '2026-11-15'
 layout: post
 permalink: /hunting-detections/inv-2026-083-federal-ad-credential-access-rig-detections/
 hide: true
-unlisted: true
-sitemap: false
 ---
 
 **Campaign:** INV-2026-083

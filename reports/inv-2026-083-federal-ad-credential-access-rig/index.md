@@ -3,16 +3,13 @@ title: "A Credential-Access Rig Aimed at a US Federal Agriculture Department"
 date: '2026-11-15'
 layout: post
 permalink: /reports/inv-2026-083-federal-ad-credential-access-rig/
+thumbnail: /assets/images/cards/inv-2026-083-federal-ad-credential-access-rig.png
 hide: true
 figures: inline
-unlisted: true
-sitemap: false
-preview_cover_label: "Credential Access"   # preview only: header cover while the catalog entry is parked; drop at go-live
-preview_severity: high
 category: "Credential-Access Toolkit"
 description: "An unidentified operator built a rig to take over a US federal agriculture department's Active Directory, delivered an implant to an address on the department's network, and held 239 of its Kerberos service tickets, using a Linux HTTPS agent and a OneDrive-controlled Windows loader signed with a Rockstar Games certificate key."
 detection_page: /hunting-detections/inv-2026-083-federal-ad-credential-access-rig-detections/
-ioc_feed: /ioc-feeds/inv-2026-083-federal-ad-credential-access-rig-iocs.json
+ioc_feed: /ioc-feeds/inv-2026-083-federal-ad-credential-access-rig/
 detection_sections:
   - label: "YARA Rules"
     anchor: "#yara-rules"
@@ -29,6 +26,7 @@ ioc_highlights:
     note: "agent.bin, static Linux HTTPS agent (SHA-256)"
   - value: "f2d86abbb8f49cf19be5d910e87bfce5e1f62525a46a2da833e7daf04809a13b"
     note: "msedge.dll, side-load loader with an embedded OneDrive beacon, Rockstar Games signature (SHA-256)"
+stix_bundle: /stix/inv-2026-083-federal-ad-credential-access-rig.json
 ---
 
 **Campaign Identifier:** OpenDirectory-ADCredentialAccess-USFedAgriculture-151[.]236[.]22[.]111<br>
@@ -51,7 +49,7 @@ The grades below are defined in Section 3. ACCESS SHOWN means evidence that the 
 - The department's Active Directory realm is COMPROMISED on possession of the ticket material, which I hold at HIGH. How the tickets were obtained is unknown, and no cracked password, logon or working credential use is in the evidence.
 - The container platform is REACHED at TCP level only, and cluster-admin access is INSUFFICIENT. The operator forged an administrator-named client certificate and holds its key, but nothing in the files I hold shows any cluster trusts the issuer.
 - A US media organisation appears once, as a shell banner arriving at the operator's server. I grade it ACCESS SHOWN at MODERATE, with a researcher, sandbox or shared-egress source still open.
-- My read is that this is an initial access broker building footholds to show or sell. I grade actor type INSUFFICIENT and I cannot name the operator, so I carry that read as mine and set the evidence that leaves it open beside it. I track the toolset as UTA-2026-025 (a tracking label of The Hunters Ledger for an actor not linked to a named group; see the note in Section 14).
+- My read is that this is an initial access broker building footholds to show or sell. I grade actor type INSUFFICIENT and I cannot name the operator, so I carry that read as mine and set the evidence that leaves it open beside it. I track the toolset as <a href="/actors/UTA-2026-025/">UTA-2026-025</a> (a tracking label of The Hunters Ledger for an actor not linked to a named group; see the note in Section 14).
 - The defender point is to know what normal looks like, and the urgent hunt is the delivery window of 2026-10-29 and the signed-DLL pattern, with the realm and platform logs next. A signed file from a game publisher that does no gaming, a Microsoft binary running from the wrong directory and a refresh-token sign-in from a process with no browser are all detectable, and none of them is a reason to allow a file because its signature checks out.
 
 The rest of the report grades each victim, takes both implants apart, and gives the hunt anchors and the indicators. Both implants have no public match in my bounded searches, which is not the same as saying they are new, and I keep the two apart throughout.
@@ -476,11 +474,11 @@ I did not write a rule where the case could not support one. There is no rule fo
 {: .hl-tier-2}
 {: .hl-tab-attribution}
 
-> **Note on UTA identifiers:** "UTA" stands for Unattributed Threat Actor. UTA-2026-025 is a tracking label The Hunters Ledger assigns to an actor I have observed but cannot yet link to a publicly named threat group. Other vendors and feeds will not use this label; it is specific to this publication. If later evidence ties the activity to a named actor, I will retire the label and update the report.
+> **Note on UTA identifiers:** "UTA" stands for Unattributed Threat Actor. <a href="/actors/UTA-2026-025/">UTA-2026-025</a> is a tracking label The Hunters Ledger assigns to an actor I have observed but cannot yet link to a publicly named threat group. Other vendors and feeds will not use this label; it is specific to this publication. If later evidence ties the activity to a named actor, I will retire the label and update the report.
 
 I cannot attribute this activity to any named threat actor, and I hold that at INSUFFICIENT. No source, vendor report, catalogue entry, infrastructure overlap or code similarity nominates a candidate. I swept the public vendor reports and actor profiles I could reach, and the indicator feeds, by text and found 0 operator-specific hits. The Hunt.io actor catalogue and a comparison against my earlier cases are NOT CHECKED. Where a label is needed I call it an unidentified operator.
 
-UTA-2026-025 tracks a toolset cluster seen on one open directory: the two implants, the Rockstar-signed side-load, the numbered work-directory convention and the combination of techniques. It is not a person, a developer, a state, a motive or a new malware family, and I do not use it to call the operator a broker, a state group or a crew. I hold the cluster at MODERATE, and the designation meets the creation gates on six characteristics, four of them technical or infrastructure, at an Admiralty rating of B2 and no higher.
+<a href="/actors/UTA-2026-025/">UTA-2026-025</a> tracks a toolset cluster seen on one open directory: the two implants, the Rockstar-signed side-load, the numbered work-directory convention and the combination of techniques. It is not a person, a developer, a state, a motive or a new malware family, and I do not use it to call the operator a broker, a state group or a crew. I hold the cluster at MODERATE, and the designation meets the creation gates on six characteristics, four of them technical or infrastructure, at an Admiralty rating of B2 and no higher.
 
 ### My read of the operator
 
@@ -515,7 +513,7 @@ The authorised-test reading is the one I weigh most carefully, because the evide
 | Actor type INSUFFICIENT; my broker read stays mine | A forum listing or buyer hand-off tied to these footholds moves toward a broker; collection of agency documents beyond source and inventory moves toward espionage |
 | Motivation undetermined, LOW | A listing, a ransom demand, a decrypted operator note or a tasking artefact |
 | Authorised test least supported, not excluded | The department's and the media organisation's confirmation that no authorised test covered the window, which closes the column |
-| UTA-2026-025 as a toolset cluster, MODERATE | A second case or an external report tying these tools to a named group, or code comparison with another build that shows shared or sold tooling |
+| <a href="/actors/UTA-2026-025/">UTA-2026-025</a> as a toolset cluster, MODERATE | A second case or an external report tying these tools to a named group, or code comparison with another build that shows shared or sold tooling |
 
 No comparison family is a candidate crew. VoidLink, GraphWorm, GRAPHITE, BirdyClient and Antino share a technique class or structure with parts of this toolset, and I claim no lineage with any of them.
 

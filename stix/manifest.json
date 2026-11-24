@@ -1,12 +1,12 @@
 {
   "spec": "The Hunters Ledger STIX 2.1 bundle manifest: poll this file, compare sha256 per bundle, fetch what changed.",
   "license": "CC BY 4.0",
-  "count": 46,
+  "count": 47,
   "zip": {
     "file": "hunters-ledger-stix-bundles.zip",
     "url": "https://the-hunters-ledger.com/stix/hunters-ledger-stix-bundles.zip",
-    "sha256": "d639b417c3a562698708dfd9467d106f1206dff845d75624b8074b9d290eec3c",
-    "bytes": 2034794
+    "sha256": "6edcfcd13458437b2211445d0954443cd96c85b07de482a9fec82733c70e52e6",
+    "bytes": 2088771
   },
   "bundles": [
     {
@@ -23,6 +23,21 @@
       "objects": 153,
       "indicators": 47,
       "modified": "2026-11-17T16:30:50.916468Z"
+    },
+    {
+      "slug": "inv-2026-083-federal-ad-credential-access-rig",
+      "title": "A Credential-Access Rig Aimed at a US Federal Agriculture Department",
+      "date": "2026-11-15",
+      "file": "inv-2026-083-federal-ad-credential-access-rig.json",
+      "url": "https://the-hunters-ledger.com/stix/inv-2026-083-federal-ad-credential-access-rig.json",
+      "report_url": "https://the-hunters-ledger.com/reports/inv-2026-083-federal-ad-credential-access-rig/",
+      "bundle_id": "bundle--a890ac18-bddd-40be-aeb5-cd3b9f0a6549",
+      "report_id": "report--df5506f9-4b61-5069-a863-2ae0168d4c1c",
+      "sha256": "b4cc3a5414f07d1c49f9ea689a91c0131b9d5532eb21833efa3aca983cbde947",
+      "bytes": 417139,
+      "objects": 505,
+      "indicators": 44,
+      "modified": "2026-11-24T13:55:32.643507Z"
     },
     {
       "slug": "inv-2026-080-cyberstrike-ad-workbench",

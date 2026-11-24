@@ -1,0 +1,835 @@
+{
+  "Event": {
+    "uuid": "2b202cd7-0ff9-584c-a52c-fc38d4154e1f",
+    "info": "A Credential-Access Rig Aimed at a US Federal Agriculture Department",
+    "date": "2026-11-15",
+    "threat_level_id": 1,
+    "analysis": 2,
+    "timestamp": 1795528647,
+    "publish_timestamp": 1795528647,
+    "published": true,
+    "Orgc": {
+      "name": "The Hunters Ledger",
+      "uuid": "8bc8284b-deb5-546c-a233-57ea34b2ea0d"
+    },
+    "Tag": [
+      {
+        "name": "tlp:clear",
+        "colour": "#ffffff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"Open Dir\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"Cred Theft\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"C2\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "hunters-ledger:topic=\"Toolkit\"",
+        "colour": "#58a6ff"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Protocol or Service Impersonation - T1001.003\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Security Account Manager - T1003.002\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Data from Local System - T1005\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"System Network Configuration Discovery - T1016\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"SMB/Windows Admin Shares - T1021.002\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Encrypted/Encoded File - T1027.013\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"System Owner/User Discovery - T1033\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Match Legitimate Resource Name or Location - T1036.005\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Exfiltration Over C2 Channel - T1041\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Network Service Discovery - T1046\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Scheduled Task - T1053.005\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Process Discovery - T1057\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Windows Command Shell - T1059.003\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Unix Shell - T1059.004\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Exploitation for Privilege Escalation - T1068\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Domain Groups - T1069.002\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"File Deletion - T1070.004\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Web Protocols - T1071.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"System Information Discovery - T1082\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"File and Directory Discovery - T1083\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Domain Account - T1087.002\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Internal Proxy - T1090.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Multi-hop Proxy - T1090.003\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Non-Application Layer Protocol - T1095\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Bidirectional Communication - T1102.002\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Ingress Tool Transfer - T1105\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Password Spraying - T1110.003\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Standard Encoding - T1132.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Forced Authentication - T1187\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Exploit Public-Facing Application - T1190\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Exploitation of Remote Services - T1210\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Code Repositories - T1213.003\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Execution Guardrails - T1480\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Web Shell - T1505.003\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Systemd Service - T1543.002\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Credentials In Files - T1552.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Code Signing - T1553.002\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Name Resolution Poisoning and SMB Relay - T1557.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Kerberoasting - T1558.003\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Exfiltration to Cloud Storage - T1567.002\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Protocol Tunneling - T1572\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Symmetric Cryptography - T1573.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Asymmetric Cryptography - T1573.002\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"DLL - T1574.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Virtual Private Server - T1583.003\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Malware - T1587.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Code Signing Certificates - T1588.003\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Scanning IP Blocks - T1595.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Upload Malware - T1608.001\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Deploy Container - T1610\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Escape to Host - T1611\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Reflective Code Loading - T1620\"",
+        "colour": "#0088cc"
+      },
+      {
+        "name": "misp-galaxy:mitre-attack-pattern=\"Steal or Forge Authentication Certificates - T1649\"",
+        "colour": "#0088cc"
+      }
+    ],
+    "Attribute": [
+      {
+        "uuid": "a8521b41-e0f6-5e9e-888d-f98f20a821f3",
+        "type": "link",
+        "category": "External analysis",
+        "value": "https://the-hunters-ledger.com/hunting-detections/inv-2026-083-federal-ad-credential-access-rig-detections/",
+        "to_ids": false,
+        "comment": "Detection rules, The Hunters Ledger",
+        "timestamp": 1795528647
+      },
+      {
+        "uuid": "59a8f157-bfb5-551b-a902-fe21b8ab1a79",
+        "type": "link",
+        "category": "External analysis",
+        "value": "https://the-hunters-ledger.com/ioc-feeds/inv-2026-083-federal-ad-credential-access-rig-iocs.json",
+        "to_ids": false,
+        "comment": "IOC feed (JSON), The Hunters Ledger",
+        "timestamp": 1795528647
+      },
+      {
+        "uuid": "1671bf98-28dc-599a-8246-da0fa2872e9a",
+        "type": "link",
+        "category": "External analysis",
+        "value": "https://the-hunters-ledger.com/reports/inv-2026-083-federal-ad-credential-access-rig/",
+        "to_ids": false,
+        "comment": "Report, The Hunters Ledger",
+        "timestamp": 1795528647
+      },
+      {
+        "uuid": "9ae53839-a7b3-5da6-88e9-e97f24ed08f2",
+        "type": "link",
+        "category": "External analysis",
+        "value": "https://the-hunters-ledger.com/stix/inv-2026-083-federal-ad-credential-access-rig.json",
+        "to_ids": false,
+        "comment": "STIX 2.1 bundle, The Hunters Ledger",
+        "timestamp": 1795528647
+      },
+      {
+        "uuid": "8b220c48-b8a0-5518-b31f-30a2c8433cb8",
+        "type": "sha256",
+        "category": "Payload delivery",
+        "value": "862e4d023f8326042066561d62768169ab4b1d3f4d7e16f58013e3a444581671",
+        "to_ids": true,
+        "comment": "sha256: 862e4d023f8326042066561d62768169ab4b1d3f4d7e16f58013e3a444581671 [confidence 95/100]",
+        "timestamp": 1795528647
+      },
+      {
+        "uuid": "7f3d6923-ebb3-5826-bf2a-aff2f5fc4153",
+        "type": "sha256",
+        "category": "Payload delivery",
+        "value": "a04a732678f95f80a6361ef95312b995b0336898cb66d9ffce63b9ed7803d096",
+        "to_ids": true,
+        "comment": "sha256: a04a732678f95f80a6361ef95312b995b0336898cb66d9ffce63b9ed7803d096 [confidence 95/100]",
+        "timestamp": 1795528647
+      },
+      {
+        "uuid": "6a25557a-fe9c-5666-b8bb-e6b89fe8ea51",
+        "type": "sha256",
+        "category": "Payload delivery",
+        "value": "f2d86abbb8f49cf19be5d910e87bfce5e1f62525a46a2da833e7daf04809a13b",
+        "to_ids": true,
+        "comment": "sha256: f2d86abbb8f49cf19be5d910e87bfce5e1f62525a46a2da833e7daf04809a13b [confidence 95/100]",
+        "timestamp": 1795528647
+      },
+      {
+        "uuid": "73189e51-74bf-5370-a2ac-911544fdfb00",
+        "type": "domain",
+        "category": "Network activity",
+        "value": "customerlop.top",
+        "to_ids": true,
+        "comment": "domain: customerlop.top. Zone of the baked-in C2 host; Cloudflare name servers, wildcard certificates from the registration day. [confidence 80/100]",
+        "timestamp": 1795528647
+      },
+      {
+        "uuid": "4173f4cc-b9f9-5b6a-b508-757df097f048",
+        "type": "domain",
+        "category": "Network activity",
+        "value": "mail.customerlop.top",
+        "to_ids": true,
+        "comment": "domain: mail.customerlop.top. Single-name certificate issued 2026-09-22; points to 45.143.167.96. [confidence 80/100]",
+        "timestamp": 1795528647
+      },
+      {
+        "uuid": "54f87aa0-fcf0-5498-807c-f897ede77810",
+        "type": "domain",
+        "category": "Network activity",
+        "value": "robonode.shop",
+        "to_ids": true,
+        "comment": "domain: robonode.shop. Link to the C2 zone MODERATE: the Cloudflare Origin certificate for *.robonode.shop on the C2 zone's mail host is a non-commodity leg; the name-server pair, registrar and registrant placeholder carry no weight. Registered 2026-10-14 at Gname. The other two zones of the family and 193.104.75.44 stay out of this feed (LOW to the C2 zone). | MEDIUM: single-source certificate subject (VirusTotal; urlscan corroborates only the timing, a 15-year certificate valid from 2026-10-28); the shared or re-let host alternative on the BlueVPS address is not excluded [confidence 60/100]",
+        "timestamp": 1795528647
+      },
+      {
+        "uuid": "ef3dd211-58cd-5af6-b7ae-80c859d42ba1",
+        "type": "domain",
+        "category": "Network activity",
+        "value": "update.customerlop.top",
+        "to_ids": true,
+        "comment": "domain: update.customerlop.top. Points to 45.143.167.122; VirusTotal first resolution 2026-10-26, Iris 2026-10-29. [confidence 80/100]",
+        "timestamp": 1795528647
+      },
+      {
+        "uuid": "778389d8-4457-5426-ba80-5dbe4f736d00",
+        "type": "domain",
+        "category": "Network activity",
+        "value": "www.customerlop.top",
+        "to_ids": true,
+        "comment": "domain: www.customerlop.top. Plaintext config slot in agent.bin (VA 0x10a9ac0). Registered 2026-05-22 at Gname (three sources agree). Whether it is live or resolves to a working server is NOT CHECKED (no packet sent). | LOW: the implant's configured C2 zone (who registered it NOT CHECKED) behind Cloudflare; do not block the Cloudflare front addresses [confidence 80/100]",
+        "timestamp": 1795528647
+      },
+      {
+        "uuid": "deaa81b6-6beb-5bb8-a2cc-0bb26e09d13f",
+        "type": "url",
+        "category": "Network activity",
+        "value": "http://151.236.22.111/agent.bin",
+        "to_ids": true,
+        "comment": "url: http://151.236.22.111/agent.bin. Delivery URL, HTTP 200 to an agency-egress host 2026-10-29 01:50:05 UTC (operator's http80.log) [confidence 80/100]",
+        "timestamp": 1795528647
+      },
+      {
+        "uuid": "7685708f-41d3-58ec-99a6-b256b2356796",
+        "type": "url",
+        "category": "Network activity",
+        "value": "http://151.236.22.111/chisel",
+        "to_ids": true,
+        "comment": "url: http://151.236.22.111/chisel. Delivery URL for the pivot binary, HTTP 200 at 01:50:06 UTC [confidence 80/100]",
+        "timestamp": 1795528647
+      },
+      {
+        "uuid": "6ab80729-a78c-594b-a418-a5bb9bba62c1",
+        "type": "url",
+        "category": "Network activity",
+        "value": "https://www.customerlop.top/wp-admin/admin-ajax.php",
+        "to_ids": true,
+        "comment": "url: https://www.customerlop.top/wp-admin/admin-ajax.php. agent.bin poll path, POST with JSON body {\"key\":...,\"data\":\"check\"} [confidence 80/100]",
+        "timestamp": 1795528647
+      },
+      {
+        "uuid": "a4ccdbe4-3edf-51ee-8d5f-8d6dfe21ba12",
+        "type": "url",
+        "category": "Network activity",
+        "value": "https://www.customerlop.top/wp-content/themes/b2/Assets/admin/gd_block.css",
+        "to_ids": true,
+        "comment": "url: https://www.customerlop.top/wp-content/themes/b2/Assets/admin/gd_block.css. agent.bin task-result path (POST) [confidence 80/100]",
+        "timestamp": 1795528647
+      },
+      {
+        "uuid": "3ab43a8e-9010-5a15-aeeb-f9fd3e322388",
+        "type": "url",
+        "category": "Network activity",
+        "value": "https://www.customerlop.top/wp-content/themes/b2/Assets/fontend/mobile.css",
+        "to_ids": true,
+        "comment": "url: https://www.customerlop.top/wp-content/themes/b2/Assets/fontend/mobile.css. agent.bin file-to-C2 path (POST) [confidence 80/100]",
+        "timestamp": 1795528647
+      },
+      {
+        "uuid": "f316e9f0-c2ea-518c-9312-31392f27f010",
+        "type": "url",
+        "category": "Network activity",
+        "value": "https://www.customerlop.top/wp-content/themes/b2/Assets/fonts/iconfont.css",
+        "to_ids": true,
+        "comment": "url: https://www.customerlop.top/wp-content/themes/b2/Assets/fonts/iconfont.css. agent.bin register path (POST) [confidence 80/100]",
+        "timestamp": 1795528647
+      },
+      {
+        "uuid": "4c73ff6e-ec83-5828-a9f0-aff3a3ff27c2",
+        "type": "url",
+        "category": "Network activity",
+        "value": "https://www.customerlop.top/wp-includes/js/jquery/jquery.min.js",
+        "to_ids": true,
+        "comment": "url: https://www.customerlop.top/wp-includes/js/jquery/jquery.min.js. agent.bin file and plugin fetch path (POST) [confidence 80/100]",
+        "timestamp": 1795528647
+      },
+      {
+        "uuid": "c8b29ec5-4804-51a0-aed6-a159792838ab",
+        "type": "ip-dst",
+        "category": "Network activity",
+        "value": "118.128.151.28",
+        "to_ids": true,
+        "comment": "ipv4: 118.128.151.28. HIGH that it is an attacker-run rig (Hunt.io tag ARTEX, three AttackCapture open-directory entries); MODERATE that it is the same operator as 151.236.22.111. Last Hunt.io record 2026-11-01; whether it is still up is NOT CHECKED. | MEDIUM: rented MOACK address, earlier tenant 2024 [confidence 60/100]",
+        "timestamp": 1795528647
+      },
+      {
+        "uuid": "af547eb2-5b1a-5bc3-b6b8-da5d3c14b7d4",
+        "type": "ip-dst",
+        "category": "Network activity",
+        "value": "151.236.22.111",
+        "to_ids": true,
+        "comment": "ipv4: 151.236.22.111. Hosting identity DEFINITE (VirusTotal, RIPEstat, RDAP agree); operator control of the address for the campaign window HIGH. | MEDIUM: rented M247/Edis address with at least four earlier occupants since 2023; current tenure starts 2026-10-10 (upper bound). Block with a time window. [confidence 80/100]",
+        "timestamp": 1795528647
+      },
+      {
+        "uuid": "a9879ab8-5262-575d-9dea-02bf207a2196",
+        "type": "ip-dst",
+        "category": "Network activity",
+        "value": "45.143.167.122",
+        "to_ids": true,
+        "comment": "ipv4: 45.143.167.122. Name pointer HIGH; 'a VPN the operator uses' rests on one pointer, MODERATE and no higher (15.9). | HIGH: BlueVPS shared address; the SoftEther name predates the zone by six weeks [confidence 60/100]",
+        "timestamp": 1795528647
+      },
+      {
+        "uuid": "5d4ed637-20f0-540e-96ea-7a6c7b5e529b",
+        "type": "ip-dst",
+        "category": "Network activity",
+        "value": "45.143.167.96",
+        "to_ids": true,
+        "comment": "ipv4: 45.143.167.96. Name pointer HIGH (zone owner's own record, continuous 2026-09-22 to 2026-11-11); operator control of the host MODERATE. | HIGH: BlueVPS shared address with several earlier unrelated tenants [confidence 60/100]",
+        "timestamp": 1795528647
+      },
+      {
+        "uuid": "a12c581d-c32b-54bc-ba61-de3d4d2677c2",
+        "type": "snort",
+        "category": "Network activity",
+        "value": "alert dns $HOME_NET any -> any any (msg:\"THL HUNT INV-2026-083 Agent C2 Zone customerlop.top DNS Query (C2 Domain Indicator)\"; dns.query; dotprefix; content:\".customerlop.top\"; nocase; endswith; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/inv-2026-083-federal-ad-credential-access-rig-detections/; classtype:trojan-activity; sid:1000002; rev:1; metadata:author The_Hunters_Ledger, date 2026-11-14;)",
+        "to_ids": false,
+        "comment": "THL HUNT INV-2026-083 Agent C2 Zone customerlop.top DNS Query | TIER: Hunting | robustness 1 | confidence MODERATE | ATT&CK T1071.001 | rule hash 6d4df6f7 | https://the-hunters-ledger.com/hunting-detections/inv-2026-083-federal-ad-credential-access-rig-detections/",
+        "timestamp": 1795528647,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Hunting\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "e0381cd9-1a68-5af5-a6d0-bb87813f158f",
+        "type": "snort",
+        "category": "Network activity",
+        "value": "alert http $HOME_NET any -> $EXTERNAL_NET any (msg:\"THL DETECT INV-2026-083 Chisel v3 WebSocket Tunnel Client Upgrade (Tunnel Transport Indicator)\"; flow:established,to_server; http.header; content:\"Sec-WebSocket-Protocol|3a 20|chisel-v3\"; nocase; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/inv-2026-083-federal-ad-credential-access-rig-detections/; classtype:trojan-activity; sid:1000001; rev:1; metadata:author The_Hunters_Ledger, date 2026-11-14;)",
+        "to_ids": true,
+        "comment": "THL DETECT INV-2026-083 Chisel v3 WebSocket Tunnel Client Upgrade | TIER: Detection | robustness 2 | confidence MODERATE | ATT&CK T1572 | rule hash 69692415 | https://the-hunters-ledger.com/hunting-detections/inv-2026-083-federal-ad-credential-access-rig-detections/",
+        "timestamp": 1795528647,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Detection\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "44edbc89-bfc4-5a25-9a8e-54ece8662284",
+        "type": "snort",
+        "category": "Network activity",
+        "value": "alert http $HOME_NET any -> $EXTERNAL_NET any (msg:\"THL HUNT INV-2026-083 HTTPS Agent JSON Key And Data Beacon With No User-Agent (Decrypted C2 Traffic)\"; flow:established,to_server; http.method; content:\"POST\"; http.uri; content:\"/wp-\"; startswith; http.header_names; content:!\"|0d 0a|User-Agent|0d 0a|\"; nocase; http.request_body; content:\"{|22|key|22 3a 22|\"; startswith; content:\"|22 2c 22|data|22 3a 22|\"; distance:0; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/inv-2026-083-federal-ad-credential-access-rig-detections/; classtype:trojan-activity; sid:1000004; rev:1; metadata:author The_Hunters_Ledger, date 2026-11-14;)",
+        "to_ids": false,
+        "comment": "THL HUNT INV-2026-083 HTTPS Agent JSON Key And Data Beacon With No User-Agent | TIER: Hunting | robustness 1 | confidence MODERATE | ATT&CK T1071.001, T1001.003 | rule hash e315991a | https://the-hunters-ledger.com/hunting-detections/inv-2026-083-federal-ad-credential-access-rig-detections/",
+        "timestamp": 1795528647,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Hunting\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "0faa86d9-2a7a-5435-98da-b9d3c3e30901",
+        "type": "snort",
+        "category": "Network activity",
+        "value": "alert http $HOME_NET any -> $EXTERNAL_NET any (msg:\"THL HUNT INV-2026-083 OneDrive cmd Folder Request To Graph With Bare Mozilla User-Agent (Decrypted C2 Traffic)\"; flow:established,to_server; http.host; content:\"graph.microsoft.com\"; bsize:19; http.user_agent; content:\"Mozilla\"; bsize:7; http.uri; content:\"/me/drive/root|3a|/cmd/\"; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/inv-2026-083-federal-ad-credential-access-rig-detections/; classtype:trojan-activity; sid:1000005; rev:1; metadata:author The_Hunters_Ledger, date 2026-11-14;)",
+        "to_ids": false,
+        "comment": "THL HUNT INV-2026-083 OneDrive cmd Folder Request To Graph With Bare Mozilla User-Agent | TIER: Hunting | robustness 1 | confidence MODERATE | ATT&CK T1102.002 | rule hash 34d52a8a | https://the-hunters-ledger.com/hunting-detections/inv-2026-083-federal-ad-credential-access-rig-detections/",
+        "timestamp": 1795528647,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Hunting\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "e76d65a0-a8fc-53ec-ba62-6f08470cfa59",
+        "type": "snort",
+        "category": "Network activity",
+        "value": "alert http $HOME_NET any -> $EXTERNAL_NET any (msg:\"THL HUNT INV-2026-083 Refresh-Token Grant With Office Client Id And Bare Mozilla User-Agent (Decrypted C2 Traffic)\"; flow:established,to_server; http.method; content:\"POST\"; http.host; content:\"login.microsoftonline.com\"; bsize:25; http.user_agent; content:\"Mozilla\"; bsize:7; http.uri; content:\"/oauth2/token?api-version=1.0\"; endswith; http.request_body; content:\"client_id=d3590ed6-52b3-4102-aeff-aad2292ab01c\"; content:\"grant_type=refresh_token\"; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/inv-2026-083-federal-ad-credential-access-rig-detections/; classtype:trojan-activity; sid:1000006; rev:1; metadata:author The_Hunters_Ledger, date 2026-11-14;)",
+        "to_ids": false,
+        "comment": "THL HUNT INV-2026-083 Refresh-Token Grant With Office Client Id And Bare Mozilla User-Agent | TIER: Hunting | robustness 1 | confidence MODERATE | ATT&CK T1102.002 | rule hash efc37b51 | https://the-hunters-ledger.com/hunting-detections/inv-2026-083-federal-ad-credential-access-rig-detections/",
+        "timestamp": 1795528647,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Hunting\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "f3892264-5cb9-53b7-a381-f5735a8ebbd3",
+        "type": "snort",
+        "category": "Network activity",
+        "value": "alert tls $HOME_NET any -> $EXTERNAL_NET any (msg:\"THL HUNT INV-2026-083 Agent C2 Zone customerlop.top TLS SNI (C2 Domain Indicator)\"; flow:established,to_server; tls.sni; dotprefix; content:\".customerlop.top\"; nocase; endswith; threshold:type limit,track by_src,count 1,seconds 3600; reference:url,the-hunters-ledger.com/hunting-detections/inv-2026-083-federal-ad-credential-access-rig-detections/; classtype:trojan-activity; sid:1000003; rev:1; metadata:author The_Hunters_Ledger, date 2026-11-14;)",
+        "to_ids": false,
+        "comment": "THL HUNT INV-2026-083 Agent C2 Zone customerlop.top TLS SNI | TIER: Hunting | robustness 1 | confidence MODERATE | ATT&CK T1071.001 | rule hash ff29f659 | https://the-hunters-ledger.com/hunting-detections/inv-2026-083-federal-ad-credential-access-rig-detections/",
+        "timestamp": 1795528647,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Hunting\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "7b61a4a3-cab1-560d-9038-0599a6f19f81",
+        "type": "sigma",
+        "category": "Payload installation",
+        "value": "title: Edge Cookie Exporter Helper Running Outside the Edge Install Directory\nid: 069e1f8a-bb1c-40aa-a114-b8c1816a8e37\nstatus: experimental\ndescription: >-\n    Detects a process whose original file name is cookie_exporter.exe running from a directory that is not a Microsoft Edge install.\n    The helper is a genuine Microsoft binary that loads msedge.dll from its own directory, which makes it a usable host for a side-loaded DLL.\n    The case this rule is written from ran the helper renamed to edge.exe beside a malicious msedge.dll.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/inv-2026-083-federal-ad-credential-access-rig-detections/\nauthor: The Hunters Ledger\ndate: 2026-11-14\ntags:\n    - attack.stealth\n    - attack.execution\n    - attack.t1574.001\n    - stp.3\nlogsource:\n    category: process_creation\n    product: windows\n    definition: 'Requires process-creation logging that carries the original file name from the version resource, for example Sysmon Event ID 1 from version 10. Security Event ID 4688 does not carry it.'\ndetection:\n    selection:\n        OriginalFileName: 'cookie_exporter.exe'\n    filter_main_edge_install:\n        # sourced: documented platform default, per-machine Microsoft Edge install roots for every channel (Edge, Edge Beta, Edge Dev)\n        Image|startswith:\n            - 'C:\\Program Files (x86)\\Microsoft\\Edge'\n            - 'C:\\Program Files\\Microsoft\\Edge'\n    condition: selection and not 1 of filter_main_*\nfalsepositives:\n    - A per-user Microsoft Edge install that keeps the helper outside Program Files\nlevel: high",
+        "to_ids": true,
+        "comment": "Edge Cookie Exporter Helper Running Outside the Edge Install Directory | TIER: Detection | robustness 2 | confidence HIGH | ATT&CK T1574.001 | rule hash 118dead8 | https://the-hunters-ledger.com/hunting-detections/inv-2026-083-federal-ad-credential-access-rig-detections/",
+        "timestamp": 1795528647,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Detection\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "8b378ce2-395a-5361-827e-32398e3e171a",
+        "type": "sigma",
+        "category": "Payload installation",
+        "value": "title: Failed Network Logon With a Wrong Password\nid: 63ef0bc4-6b6e-47a4-aa68-abcd299ff22a\nname: failed_network_logon_wrong_password_base\nstatus: experimental\ndescription: >-\n    Base rule for the correlation rule below. Matches a failed network logon whose sub-status is the wrong-password code.\n    Not meant to be alerted on by itself.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/inv-2026-083-federal-ad-credential-access-rig-detections/\nauthor: The Hunters Ledger\ndate: 2026-11-14\ntags:\n    - attack.credential-access\n    - attack.t1110.003\n    - stp.1\nlogsource:\n    product: windows\n    service: security\n    definition: 'Requires the domain-controller Security log with logon failure auditing enabled (Event ID 4625).'\ndetection:\n    selection:\n        EventID: 4625\n        LogonType: 3\n        SubStatus: '0xc000006a'\n    condition: selection\nfalsepositives:\n    - A single mistyped password; this base rule is for correlation only\nlevel: informational\n---\ntitle: Many Accounts Failing a Network Logon With a Wrong Password From One Host\nid: d953ea41-0fb9-41f1-8282-d450a1635177\nstatus: experimental\ndescription: >-\n    Fires when one client address fails a network logon with the wrong-password code for 20 or more distinct accounts within 10 minutes, the shape of a password spray that tries one password per account.\n    The spray in the case this rule is written from made 136 attempts, one per account, cycling eight passwords.\n    The threshold and window are starting values to tune.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/inv-2026-083-federal-ad-credential-access-rig-detections/\nauthor: The Hunters Ledger\ndate: 2026-11-14\ntags:\n    - attack.credential-access\n    - attack.t1110.003\n    - stp.1\ncorrelation:\n    type: value_count\n    rules:\n        - failed_network_logon_wrong_password_base\n    group-by:\n        - IpAddress\n    timespan: 10m\n    condition:\n        field: TargetUserName\n        gte: 20\nfalsepositives:\n    - A shared workstation, terminal server or authentication gateway where many users fail at once\nlevel: medium",
+        "to_ids": false,
+        "comment": "Many Accounts Failing a Network Logon With a Wrong Password From One Host | TIER: Hunting | robustness 1 | confidence LOW | ATT&CK T1110.003 | rule hash abf45980 | https://the-hunters-ledger.com/hunting-detections/inv-2026-083-federal-ad-credential-access-rig-detections/",
+        "timestamp": 1795528647,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Hunting\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "6342aaec-d949-58d8-8777-74eb586b891b",
+        "type": "sigma",
+        "category": "Payload installation",
+        "value": "title: Image Loaded With an Expired Rockstar Games Signature\nid: 374c0e91-da88-479a-9d57-cff5120d588d\nstatus: experimental\ndescription: >-\n    Detects a module load of a DLL whose signature is a Rockstar Games certificate that Windows reports as expired.\n    The certificate expired in March 2017, and the loader in the case this rule is written from was built in 2026 with that certificate's key.\n    A process that is not a Rockstar game loading such a DLL is worth a look at the DLL's path and build date.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/inv-2026-083-federal-ad-credential-access-rig-detections/\nauthor: The Hunters Ledger\ndate: 2026-11-14\ntags:\n    - attack.defense-impairment\n    - attack.t1553.002\n    - stp.2\nlogsource:\n    category: image_load\n    product: windows\n    definition: 'Requires image-load logging that records the signer and the signature status, for example Sysmon Event ID 7 with the Signature and SignatureStatus fields. The default Sysmon configuration does not log module loads.'\ndetection:\n    selection:\n        Signature|contains: 'Rockstar Games'\n        SignatureStatus: 'Expired'\n        ImageLoaded|endswith: '.dll'\n    condition: selection\nfalsepositives:\n    - Legacy Rockstar Games titles and the Social Club client that load DLLs signed with this certificate\nlevel: medium",
+        "to_ids": false,
+        "comment": "Image Loaded With an Expired Rockstar Games Signature | TIER: Hunting | robustness 1 | confidence MODERATE | ATT&CK T1553.002 | rule hash 76ebbe60 | https://the-hunters-ledger.com/hunting-detections/inv-2026-083-federal-ad-credential-access-rig-detections/",
+        "timestamp": 1795528647,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Hunting\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "422b541d-fdbb-5346-b7b7-3faf464386a0",
+        "type": "sigma",
+        "category": "Payload installation",
+        "value": "title: Impacket NTLM Relay Server Started on a Linux Host\nid: bfb9a933-1fb4-46c5-bd63-5fed032ef3fe\nstatus: experimental\ndescription: >-\n    Detects a command line that starts the Impacket NTLM relay script with SMB2 support on a Linux host.\n    The operator in the case this rule is written from launched the script this way twice, once from their own server and once from a runner prepared for a victim node.\n    A relay server on a production server or container node is rarely legitimate.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/inv-2026-083-federal-ad-credential-access-rig-detections/\nauthor: The Hunters Ledger\ndate: 2026-11-14\ntags:\n    - attack.credential-access\n    - attack.collection\n    - attack.t1557.001\n    - stp.2\nlogsource:\n    category: process_creation\n    product: linux\n    definition: 'Requires a Linux process-creation feed that records the full command line.'\ndetection:\n    selection:\n        CommandLine|contains|all:\n            - 'ntlmrelayx'\n            - '-smb2support'\n    condition: selection\nfalsepositives:\n    - Authorized red-team exercises that run the relay tool\nlevel: medium",
+        "to_ids": false,
+        "comment": "Impacket NTLM Relay Server Started on a Linux Host | TIER: Hunting | robustness 1 | confidence MODERATE | ATT&CK T1557.001 | rule hash f800935e | https://the-hunters-ledger.com/hunting-detections/inv-2026-083-federal-ad-credential-access-rig-detections/",
+        "timestamp": 1795528647,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Hunting\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "40655a16-c668-542c-ba8e-1698aea7e883",
+        "type": "sigma",
+        "category": "Payload installation",
+        "value": "title: Install-Window File Created Beside a Side-Loaded Edge Helper\nid: fda2d5e2-3996-4050-b897-cd5e11f4a015\nstatus: experimental\ndescription: >-\n    Detects the creation of a file named cbt.bin by a process named edge.exe or cookie_exporter.exe.\n    The OneDrive implant in the case this rule is written from creates this file on first run to hold an encrypted install-window time beside its configuration file.\n    Microsoft's cookie_exporter.exe helper has no reason to write it.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/inv-2026-083-federal-ad-credential-access-rig-detections/\nauthor: The Hunters Ledger\ndate: 2026-11-14\ntags:\n    - attack.stealth\n    - attack.t1480\n    - stp.2\nlogsource:\n    category: file_event\n    product: windows\n    definition: 'Requires file-creation logging, for example Sysmon Event ID 11.'\ndetection:\n    selection:\n        TargetFilename|endswith: '\\cbt.bin'\n        Image|endswith:\n            - '\\edge.exe'\n            - '\\cookie_exporter.exe'\n    condition: selection\nfalsepositives:\n    - Unknown software that writes a file named cbt.bin from a process with one of these names\nlevel: medium",
+        "to_ids": false,
+        "comment": "Install-Window File Created Beside a Side-Loaded Edge Helper | TIER: Hunting | robustness 1 | confidence MODERATE | ATT&CK T1480 | rule hash ddd00092 | https://the-hunters-ledger.com/hunting-detections/inv-2026-083-federal-ad-credential-access-rig-detections/",
+        "timestamp": 1795528647,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Hunting\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "344d4c0f-d132-526c-bf11-909440caa07f",
+        "type": "sigma",
+        "category": "Payload installation",
+        "value": "title: Kerberos Authentication Request For an Unknown Account\nid: 610f563b-5eb8-422d-b9f3-4e75bf0ade96\nname: kerberos_asreq_unknown_account_base\nstatus: experimental\ndescription: >-\n    Base rule for the correlation rule below. Matches a Kerberos authentication request for an account that does not exist in the directory (result code 0x6).\n    Not meant to be alerted on by itself.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/inv-2026-083-federal-ad-credential-access-rig-detections/\nauthor: The Hunters Ledger\ndate: 2026-11-14\ntags:\n    - attack.discovery\n    - attack.t1087.002\n    - stp.1\nlogsource:\n    product: windows\n    service: security\n    definition: 'Requires the domain-controller Security log with Kerberos authentication service auditing enabled (Event ID 4768, failures included).'\ndetection:\n    selection:\n        EventID: 4768\n        Status: '0x6'\n    condition: selection\nfalsepositives:\n    - A single mistyped user name; this base rule is for correlation only\nlevel: informational\n---\ntitle: Many Unknown Accounts Probed Over Kerberos From One Host\nid: dfaccdba-57e1-4c75-8132-1220f2400b5f\nstatus: experimental\ndescription: >-\n    Fires when one client address sends Kerberos authentication requests for 20 or more distinct accounts that do not exist within 10 minutes, the shape of a user-name enumeration sweep.\n    The sweep in the case this rule is written from probed 253 names and 112 came back as unknown, though the time it took is not known.\n    The threshold and window are starting values to tune.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/inv-2026-083-federal-ad-credential-access-rig-detections/\nauthor: The Hunters Ledger\ndate: 2026-11-14\ntags:\n    - attack.discovery\n    - attack.t1087.002\n    - stp.1\ncorrelation:\n    type: value_count\n    rules:\n        - kerberos_asreq_unknown_account_base\n    group-by:\n        - IpAddress\n    timespan: 10m\n    condition:\n        field: TargetUserName\n        gte: 20\nfalsepositives:\n    - A directory-migration tool or an application with a stale account list that retries many retired names\nlevel: medium",
+        "to_ids": false,
+        "comment": "Many Unknown Accounts Probed Over Kerberos From One Host | TIER: Hunting | robustness 1 | confidence MODERATE | ATT&CK T1087.002 | rule hash 80484922 | https://the-hunters-ledger.com/hunting-detections/inv-2026-083-federal-ad-credential-access-rig-detections/",
+        "timestamp": 1795528647,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Hunting\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "3c0fb90b-be00-56ad-9791-28b2cb041a9c",
+        "type": "sigma",
+        "category": "Payload installation",
+        "value": "title: Kerberos Service Ticket Granted For a User Service Account\nid: c1ce9762-eca1-4ad3-b8b3-b8cf40bb31bd\nname: kerberos_service_ticket_user_account_base\nstatus: experimental\ndescription: >-\n    Base rule for the correlation rule below. Matches a successful Kerberos service-ticket request for a service that is not the ticket-granting service and not a computer account.\n    It carries no encryption-type condition on purpose, because the harvest in the case this rule is written from used AES-256 tickets only.\n    Not meant to be alerted on by itself.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/inv-2026-083-federal-ad-credential-access-rig-detections/\nauthor: The Hunters Ledger\ndate: 2026-11-14\ntags:\n    - attack.credential-access\n    - attack.t1558.003\n    - stp.1\nlogsource:\n    product: windows\n    service: security\n    definition: 'Requires the domain-controller Security log with Kerberos service ticket operations auditing enabled (Event ID 4769).'\ndetection:\n    selection:\n        EventID: 4769\n        Status: '0x0'\n    filter_main_service_names:\n        # sourced: documented platform default, the ticket-granting service and computer accounts are the bulk of genuine Kerberos traffic\n        ServiceName|endswith:\n            - 'krbtgt'\n            - '$'\n    filter_main_machine_requesters:\n        # sourced: documented platform default, computer accounts request tickets as part of normal domain operation\n        TargetUserName|contains: '$@'\n    condition: selection and not 1 of filter_main_*\nfalsepositives:\n    - Every normal service-ticket request for a user service account; this base rule is for correlation only\nlevel: informational\n---\ntitle: Many Distinct Kerberos Service Tickets Requested From One Host\nid: 8436f81d-034a-474f-affe-06aecfc9b9fc\nstatus: experimental\ndescription: >-\n    Fires when one client address is granted service tickets for 25 or more distinct user-account service names within 10 minutes, the volume shape of a Kerberoast harvest.\n    The harvest in the case this rule is written from covered 239 service names for 89 accounts, though the time it took is not known.\n    The threshold and window are starting values to tune against the busiest legitimate hosts.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/inv-2026-083-federal-ad-credential-access-rig-detections/\nauthor: The Hunters Ledger\ndate: 2026-11-14\ntags:\n    - attack.credential-access\n    - attack.t1558.003\n    - stp.1\ncorrelation:\n    type: value_count\n    rules:\n        - kerberos_service_ticket_user_account_base\n    group-by:\n        - IpAddress\n    timespan: 10m\n    condition:\n        field: ServiceName\n        gte: 25\nfalsepositives:\n    - A jump host, terminal server or monitoring tool that legitimately reaches many services from one address\nlevel: medium",
+        "to_ids": false,
+        "comment": "Many Distinct Kerberos Service Tickets Requested From One Host | TIER: Hunting | robustness 1 | confidence MODERATE | ATT&CK T1558.003 | rule hash 6e43e8bf | https://the-hunters-ledger.com/hunting-detections/inv-2026-083-federal-ad-credential-access-rig-detections/",
+        "timestamp": 1795528647,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Hunting\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "39caa86f-7b0e-505e-870f-e282d9621dc0",
+        "type": "sigma",
+        "category": "Payload installation",
+        "value": "title: Kubernetes Pod Created With Privileged Host Namespaces and the Node Root Mounted\nid: ca159c16-dda1-49de-a3a6-ff5d93ceeb87\nstatus: experimental\ndescription: >-\n    Detects creation of a pod that is privileged, joins the node's process, network and IPC namespaces, and mounts the node's root filesystem through a hostPath volume.\n    That combination hands the pod the whole node.\n    The case this rule is written from contained thirteen manifests of exactly this shape, none shown to have been submitted.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/inv-2026-083-federal-ad-credential-access-rig-detections/\nauthor: The Hunters Ledger\ndate: 2026-11-14\ntags:\n    - attack.privilege-escalation\n    - attack.t1611\n    - attack.execution\n    - attack.t1610\n    - stp.3\nlogsource:\n    category: application\n    product: kubernetes\n    service: audit\n    definition: 'Requires the Kubernetes API-server audit log at request-body level (RequestResponse) for pod creation. The field names are the flattened request object; adapt them to your log pipeline.'\ndetection:\n    selection:\n        verb: 'create'\n        objectRef.resource: 'pods'\n        requestObject.spec.hostPID: true\n        requestObject.spec.hostNetwork: true\n        requestObject.spec.hostIPC: true\n        requestObject.spec.containers.securityContext.privileged: true\n        requestObject.spec.volumes.hostPath.path: '/'\n    condition: selection\nfalsepositives:\n    - An administrator opening a node-level debug session with a sysadmin profile\n    - Node-maintenance or storage agents that run privileged with the node root mounted\nlevel: medium",
+        "to_ids": false,
+        "comment": "Kubernetes Pod Created With Privileged Host Namespaces and the Node Root Mounted | TIER: Hunting | robustness 2 | confidence MODERATE | ATT&CK T1611, T1610 | rule hash 8648a166 | https://the-hunters-ledger.com/hunting-detections/inv-2026-083-federal-ad-credential-access-rig-detections/",
+        "timestamp": 1795528647,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Hunting\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "b5a9af55-84cb-5865-95fd-964872ca1188",
+        "type": "sigma",
+        "category": "Payload installation",
+        "value": "title: Kubernetes Pod Created With Privileged Host Root Mount and Staged Base64 Script\nid: 682eeb5a-e28d-4e60-b382-e971f9699bae\nstatus: experimental\ndescription: >-\n    Detects creation of a pod that runs a privileged container, mounts the node's root filesystem through a hostPath volume,\n    and runs a shell command that decodes a base64 string and executes the result from /tmp.\n    The combination gives the pod the node's own filesystem, and the staged script runs against it.\n    The case this rule is written from contained thirteen manifests of exactly this shape, none shown to have been submitted.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/inv-2026-083-federal-ad-credential-access-rig-detections/\nauthor: The Hunters Ledger\ndate: 2026-11-14\ntags:\n    - attack.privilege-escalation\n    - attack.t1611\n    - attack.execution\n    - attack.t1610\n    - stp.3\nlogsource:\n    category: application\n    product: kubernetes\n    service: audit\n    definition: 'Requires the Kubernetes API-server audit log at request-body level (RequestResponse) for pod creation. The field names are the flattened request object; adapt them to your log pipeline.'\ndetection:\n    selection:\n        verb: 'create'\n        objectRef.resource: 'pods'\n        requestObject.spec.containers.securityContext.privileged: true\n        requestObject.spec.volumes.hostPath.path: '/'\n        requestObject.spec.containers.args|contains|all:\n            - 'base64 -d'\n            - 'sh /tmp/'\n    condition: selection\nfalsepositives:\n    - A node-maintenance operator or installer that stages a decoded script from /tmp inside a privileged pod with the node root mounted\nlevel: high",
+        "to_ids": true,
+        "comment": "Kubernetes Pod Created With Privileged Host Root Mount and Staged Base64 Script | TIER: Detection | robustness 2 | confidence MODERATE | ATT&CK T1611, T1610 | rule hash 552d0029 | https://the-hunters-ledger.com/hunting-detections/inv-2026-083-federal-ad-credential-access-rig-detections/",
+        "timestamp": 1795528647,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Detection\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "0246a37d-7910-589b-9019-ae266807e542",
+        "type": "sigma",
+        "category": "Payload installation",
+        "value": "title: Linux Process Executed From an In-Memory File With a Systemd Command Line\nid: 714e0182-7abc-4ad7-812d-7f75b5555508\nstatus: experimental\ndescription: >-\n    Detects a Linux process started from a memory-backed file or a file-descriptor path whose command line is a systemd user instance.\n    A genuine systemd user manager runs from the systemd binary on disk.\n    The Linux agent in the case this rule is written from copies itself into an anonymous memory file and re-executes with this command line to look like a service manager.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/inv-2026-083-federal-ad-credential-access-rig-detections/\nauthor: The Hunters Ledger\ndate: 2026-11-14\ntags:\n    - attack.stealth\n    - attack.t1036.005\n    - attack.t1620\n    - stp.3\nlogsource:\n    category: process_creation\n    product: linux\n    definition: 'Requires a Linux process-creation feed (an EDR, or auditd with execve logging) that records the executed image path and the full command line.'\ndetection:\n    selection_image:\n        Image|startswith:\n            - '/memfd:'\n            - '/proc/self/fd/'\n    selection_cmd:\n        CommandLine|startswith: '/lib/systemd/systemd --user'\n    condition: all of selection_*\nfalsepositives:\n    - A custom init or sandbox tool that re-executes itself from a memory file while keeping a systemd-style argument zero\nlevel: high",
+        "to_ids": true,
+        "comment": "Linux Process Executed From an In-Memory File With a Systemd Command Line | TIER: Detection | robustness 2 | confidence MODERATE | ATT&CK T1036.005, T1620 | rule hash 7a17181e | https://the-hunters-ledger.com/hunting-detections/inv-2026-083-federal-ad-credential-access-rig-detections/",
+        "timestamp": 1795528647,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Detection\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "e3db32a9-253e-50f1-b221-578c1b5958e2",
+        "type": "sigma",
+        "category": "Payload installation",
+        "value": "title: Linux Process Executed From an In-Memory Plugin File\nid: d14e72ef-4a98-4051-84b1-7dfee4a744c1\nstatus: experimental\ndescription: >-\n    Detects a Linux process whose executable is a memory-backed file named plugin.\n    The Linux agent in the case this rule is written from downloads an ELF from its server, writes it to a memory file with that name and executes it, which is how it receives any capability beyond its built-in commands.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/inv-2026-083-federal-ad-credential-access-rig-detections/\nauthor: The Hunters Ledger\ndate: 2026-11-14\ntags:\n    - attack.stealth\n    - attack.t1620\n    - stp.2\nlogsource:\n    category: process_creation\n    product: linux\n    definition: 'Requires a Linux process-creation feed (an EDR, or auditd with execve logging) that records the executed image path.'\ndetection:\n    selection:\n        Image|contains: '/memfd:plugin'\n    condition: selection\nfalsepositives:\n    - Unknown software that names its own memory file plugin\nlevel: medium",
+        "to_ids": false,
+        "comment": "Linux Process Executed From an In-Memory Plugin File | TIER: Hunting | robustness 1 | confidence MODERATE | ATT&CK T1620 | rule hash 18c2fb60 | https://the-hunters-ledger.com/hunting-detections/inv-2026-083-federal-ad-credential-access-rig-detections/",
+        "timestamp": 1795528647,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Hunting\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "dbd31b4e-8fb0-5a7e-bbe5-bf39e508f4b7",
+        "type": "sigma",
+        "category": "Payload installation",
+        "value": "title: Msedge.dll Loaded Without a Microsoft Signature\nid: c0c26c39-6c2b-45c3-8798-646d2550fd34\nstatus: experimental\ndescription: >-\n    Detects a library named msedge.dll that is loaded into a process without a Microsoft signature.\n    Microsoft's cookie_exporter.exe helper loads msedge.dll from its own directory and calls the export ExportSpartanCookies,\n    so a copy of that helper placed beside a look-alike DLL runs the DLL's code under a trusted process name.\n    The DLL in the case this rule is written from carried an expired Rockstar Games signature.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/inv-2026-083-federal-ad-credential-access-rig-detections/\nauthor: The Hunters Ledger\ndate: 2026-11-14\ntags:\n    - attack.stealth\n    - attack.execution\n    - attack.t1574.001\n    - stp.3\nlogsource:\n    category: image_load\n    product: windows\n    definition: 'Requires image-load logging that records the signer, for example Sysmon Event ID 7 with the Signed and Signature fields. The default Sysmon configuration does not log module loads.'\ndetection:\n    selection:\n        ImageLoaded|endswith: '\\msedge.dll'\n    filter_main_microsoft:\n        # sourced: documented platform default, Microsoft signs the msedge.dll it ships\n        Signed: 'true'\n        Signature: 'Microsoft Corporation'\n    condition: selection and not filter_main_microsoft\nfalsepositives:\n    - A developer build of a Chromium-based browser that reuses the msedge.dll name without a Microsoft signature\nlevel: high",
+        "to_ids": true,
+        "comment": "Msedge.dll Loaded Without a Microsoft Signature | TIER: Detection | robustness 2 | confidence HIGH | ATT&CK T1574.001 | rule hash c71d87d4 | https://the-hunters-ledger.com/hunting-detections/inv-2026-083-federal-ad-credential-access-rig-detections/",
+        "timestamp": 1795528647,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Detection\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "9734d44e-3fb5-5c0e-b661-ce2649af6f45",
+        "type": "sigma",
+        "category": "Payload installation",
+        "value": "title: OneDrive Command Folder Requests To Microsoft Graph With a Bare Mozilla User-Agent\nid: 0aa8af50-f75c-4cd7-a62f-0c0869210c78\nstatus: experimental\ndescription: >-\n    Detects a request to Microsoft Graph for a file under a OneDrive folder named cmd at the drive root, sent with the bare User-Agent Mozilla and no version.\n    The implant in the case this rule is written from reads its commands from cmd/command.txt, writes its output to cmd/output.txt and uploads files into the same folder.\n    No browser or Microsoft client sends a bare Mozilla agent.\nreferences:\n    - https://the-hunters-ledger.com/hunting-detections/inv-2026-083-federal-ad-credential-access-rig-detections/\nauthor: The Hunters Ledger\ndate: 2026-11-14\ntags:\n    - attack.command-and-control\n    - attack.t1102.002\n    - stp.2\nlogsource:\n    category: proxy\n    definition: 'Requires web-proxy logs from a proxy that decrypts TLS, with the full URL path and the User-Agent.'\ndetection:\n    selection:\n        cs-host: 'graph.microsoft.com'\n        c-useragent: 'Mozilla'\n        c-uri|contains: '/me/drive/root:/cmd/'\n    condition: selection\nfalsepositives:\n    - A script that calls Microsoft Graph with the same bare agent string and keeps files in a OneDrive folder named cmd\nlevel: medium",
+        "to_ids": false,
+        "comment": "OneDrive Command Folder Requests To Microsoft Graph With a Bare Mozilla User-Agent | TIER: Hunting | robustness 1 | confidence MODERATE | ATT&CK T1102.002 | rule hash ea213f9a | https://the-hunters-ledger.com/hunting-detections/inv-2026-083-federal-ad-credential-access-rig-detections/",
+        "timestamp": 1795528647,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Hunting\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "893a9000-b071-5485-8e18-cae2c7426301",
+        "type": "yara",
+        "category": "Payload installation",
+        "value": "import \"pe\"\n\nrule SUSP_WIN_RockstarGames_ExpiredCert_SmallDLL {\n   meta:\n      description = \"Hunts for a small Windows DLL that carries the Rockstar Games code-signing certificate (serial 5057286E4033FCB0000000005565F5AC, Entrust OVCS1, expired 2017-03-20) in its certificate table; the one known instance is a 2026 build, so a small DLL with this signer is worth a look at its build date and purpose\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/inv-2026-083-federal-ad-credential-access-rig-detections/\"\n      date = \"2026-11-14\"\n      hash1 = \"f2d86abbb8f49cf19be5d910e87bfce5e1f62525a46a2da833e7daf04809a13b\"\n      hash2 = \"d622367246c391631ae2b28d3510150ef50f4000\"\n      hash3 = \"f8e93dccfa28c649887925c67fc0697b\"\n      family = \"INV-2026-083-OneDrive-Loader\"\n      id = \"ccadac64-ffc0-556e-bd51-d71bcefcc7b4\"\n   strings:\n      $rock = \"Rockstar Games, Inc.\" ascii\n      $serial = { 50 57 28 6E 40 33 FC B0 00 00 00 00 55 65 F5 AC }\n      $ent = \"Entrust Code Signing CA - OVCS1\" ascii\n   condition:\n      uint16(0) == 0x5A4D and\n      filesize < 2MB and\n      pe.characteristics & pe.DLL and\n      $rock and $serial and $ent\n}",
+        "to_ids": false,
+        "comment": "SUSP_WIN_RockstarGames_ExpiredCert_SmallDLL | TIER: Hunting | robustness 1 | confidence MODERATE | ATT&CK T1553.002 | rule hash 65842b9e | https://the-hunters-ledger.com/hunting-detections/inv-2026-083-federal-ad-credential-access-rig-detections/",
+        "timestamp": 1795528647,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Hunting\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "eb070f49-c608-5c51-b5b2-b3e14ff41eb5",
+        "type": "yara",
+        "category": "Payload installation",
+        "value": "rule MAL_LNX_INV2026083_HTTPSJsonAgent_RequestTemplates {\n   meta:\n      description = \"Detects the stripped static Linux ELF HTTPS agent by its HTTP request template (Host header carrying the port, JSON content type, no User-Agent) together with its JSON register, poll, fetch and file-send body templates and protocol reply strings, all stored in clear in .rodata\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/inv-2026-083-federal-ad-credential-access-rig-detections/\"\n      date = \"2026-11-14\"\n      hash1 = \"a04a732678f95f80a6361ef95312b995b0336898cb66d9ffce63b9ed7803d096\"\n      hash2 = \"25f21b4614e03250dec788bbc0f1beb8c43828d4\"\n      hash3 = \"6804216bf8ae869a7253482c69cae553\"\n      family = \"INV-2026-083-HTTPS-Agent\"\n      id = \"372c7ce6-758d-56dd-a957-8c029f95a028\"\n   strings:\n      $post = \"POST /%s HTTP/1.1\\r\\nHost: %s:%s\\r\\nContent-Type: application/json\\r\\nContent-Length: %zu\\r\\nConnection: close\\r\\n\\r\\n%s\" ascii\n      $j1 = \"{\\\"Hostname\\\":\\\"%s\\\",\\\"Osname\\\":\\\"%s\\\",\\\"Username\\\":\\\"%s\\\",\\\"Innerip\\\":\\\"%s\\\",\\\"Pid\\\":\\\"%d\\\",\\\"Processname\\\":\\\"%s\\\",\\\"Sleep\\\":%d,\\\"Groupid\\\":1}\" ascii\n      $j2 = \"{\\\"key\\\":\\\"%d\\\",\\\"data\\\":\\\"check\\\"}\" ascii\n      $j3 = \"{\\\"key\\\":\\\"%d\\\",\\\"data\\\":\\\"download\\\",\\\"token\\\":\\\"%s\\\"}\" ascii\n      $j4 = \"{\\\"key\\\":\\\"%d\\\",\\\"data\\\":\\\"%s\\\",\\\"token\\\":\\\"%s\\\",\\\"path\\\":\\\"%s\\\"}\" ascii\n      $j5 = \"{\\\"key\\\":\\\"%s\\\",\\\"data\\\":\\\"%s\\\"}\" ascii\n      $re = \"\\\"status\\\":\\\"re_register\\\"\" ascii\n      $sl = \"Sleep: %ds, Jitter: %d%%\" ascii\n   condition:\n      uint32(0) == 0x464c457f and\n      filesize < 2MB and\n      $post and\n      2 of ($j*) and\n      ($re or $sl)\n}",
+        "to_ids": true,
+        "comment": "MAL_LNX_INV2026083_HTTPSJsonAgent_RequestTemplates | TIER: Detection | robustness 2 | confidence HIGH | ATT&CK T1071.001, T1573.001, T1001.003, T1105, T1041 | rule hash 602adbc5 | https://the-hunters-ledger.com/hunting-detections/inv-2026-083-federal-ad-credential-access-rig-detections/",
+        "timestamp": 1795528647,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Detection\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "c072ee4b-07a7-5fd2-81ff-fe0cf3b392d2",
+        "type": "yara",
+        "category": "Payload installation",
+        "value": "rule MAL_LNX_INV2026083_HTTPSJsonAgent_StaticKeyString {\n   meta:\n      description = \"Hunts for the 44-character static string that the Linux HTTPS agent appends to its session token to form its XOR key, matched on its first eight and last four characters; a second build carrying the same string would come from the same builder\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/inv-2026-083-federal-ad-credential-access-rig-detections/\"\n      date = \"2026-11-14\"\n      hash1 = \"a04a732678f95f80a6361ef95312b995b0336898cb66d9ffce63b9ed7803d096\"\n      hash2 = \"25f21b4614e03250dec788bbc0f1beb8c43828d4\"\n      hash3 = \"6804216bf8ae869a7253482c69cae553\"\n      family = \"INV-2026-083-HTTPS-Agent\"\n      id = \"5e63b9a3-36b0-55fe-99c3-1b50649b027b\"\n   strings:\n      $key = /5p\\+6P7rR[A-Za-z0-9+\\/]{32}Sps=/ ascii\n   condition:\n      uint32(0) == 0x464c457f and\n      filesize < 4MB and\n      $key\n}",
+        "to_ids": false,
+        "comment": "MAL_LNX_INV2026083_HTTPSJsonAgent_StaticKeyString | TIER: Hunting | robustness 2 | confidence MODERATE | ATT&CK T1573.001 | rule hash e1710c70 | https://the-hunters-ledger.com/hunting-detections/inv-2026-083-federal-ad-credential-access-rig-detections/",
+        "timestamp": 1795528647,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Hunting\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "332f6cb1-d820-5ef4-9284-623aa2e85fa8",
+        "type": "yara",
+        "category": "Payload installation",
+        "value": "rule MAL_WIN_INV2026083_Msedge_SideloadLoader_ExportSpartanCookies {\n   meta:\n      description = \"Detects the side-load DLL named msedge.dll that exports ExportSpartanCookies for Microsoft's cookie_exporter.exe and carries a loader whose API names (VirtualAlloc, VirtualProtect, kernel32.dll) are stored one byte lower and rebuilt at run time\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/inv-2026-083-federal-ad-credential-access-rig-detections/\"\n      date = \"2026-11-14\"\n      hash1 = \"f2d86abbb8f49cf19be5d910e87bfce5e1f62525a46a2da833e7daf04809a13b\"\n      hash2 = \"d622367246c391631ae2b28d3510150ef50f4000\"\n      hash3 = \"f8e93dccfa28c649887925c67fc0697b\"\n      family = \"INV-2026-083-OneDrive-Loader\"\n      id = \"950d2ea8-0f2c-5c1b-a8fb-e3a20fbbe039\"\n   strings:\n      $exp = \"ExportSpartanCookies\" ascii fullword\n      $c1 = { 55 68 71 73 74 60 6B 40 6B 6B 6E 62 }\n      $c2 = { 55 68 71 73 74 60 6B 4F 71 6E 73 64 62 73 }\n      $c3 = { 6A 64 71 6D 64 6B 32 31 2D 63 6B 6B }\n      $head = { 48 89 5C 24 08 48 89 74 24 10 48 89 7C 24 18 55 48 8D 6C 24 C0 48 81 EC }\n   condition:\n      uint16(0) == 0x5A4D and\n      filesize < 2MB and\n      $exp and $head and\n      all of ($c*)\n}",
+        "to_ids": true,
+        "comment": "MAL_WIN_INV2026083_Msedge_SideloadLoader_ExportSpartanCookies | TIER: Detection | robustness 2 | confidence HIGH | ATT&CK T1574.001 | rule hash d13abea6 | https://the-hunters-ledger.com/hunting-detections/inv-2026-083-federal-ad-credential-access-rig-detections/",
+        "timestamp": 1795528647,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Detection\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "f7f04ec5-2112-5b60-a54c-38bd12d99e5d",
+        "type": "yara",
+        "category": "Payload installation",
+        "value": "rule MAL_WIN_INV2026083_OneDriveGraphBeacon_Shellcode_Immediates {\n   meta:\n      description = \"Detects the plaintext x64 shellcode implant that talks to Microsoft Graph and OneDrive, by the immediate-loaded fragments of its OAuth client id and its command verbs (the strings are built eight bytes at a time on the stack, so none is contiguous ASCII), in the DLL's data section, an extracted blob or process memory\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/inv-2026-083-federal-ad-credential-access-rig-detections/\"\n      date = \"2026-11-14\"\n      hash1 = \"f2d86abbb8f49cf19be5d910e87bfce5e1f62525a46a2da833e7daf04809a13b\"\n      hash2 = \"d622367246c391631ae2b28d3510150ef50f4000\"\n      hash3 = \"f8e93dccfa28c649887925c67fc0697b\"\n      family = \"INV-2026-083-OneDrive-Loader\"\n      id = \"665ee881-1bb9-555d-92e1-defd48ac849b\"\n   strings:\n      $pro = { 55 48 89 E5 53 B8 D8 16 00 00 E8 F2 36 00 00 48 29 C4 48 B8 63 6F 6E 66 69 67 2E 62 }\n      $glob = { 48 B8 47 6C 6F 62 61 6C 5C 4F }\n      $cid1 = { 48 B8 64 33 35 39 30 65 64 36 }\n      $cid2 = { 48 BA 2D 35 32 62 33 2D 34 31 }\n      $v1 = { 48 B8 64 6F 77 6E 6C 6F 61 64 }\n      $v2 = { 48 B8 77 68 65 72 65 61 6D 69 }\n      $v3 = { 48 B8 64 65 61 63 74 69 76 65 }\n      $v4 = { 48 B8 73 63 68 74 61 73 6B 73 }\n      $v5 = { 48 B8 4D 6F 7A 69 6C 6C 61 }\n   condition:\n      $cid1 and $cid2 and\n      3 of ($v*) and\n      ($pro or $glob)\n}",
+        "to_ids": true,
+        "comment": "MAL_WIN_INV2026083_OneDriveGraphBeacon_Shellcode_Immediates | TIER: Detection | robustness 2 | confidence HIGH | ATT&CK T1102.002 | rule hash eb56ba4c | https://the-hunters-ledger.com/hunting-detections/inv-2026-083-federal-ad-credential-access-rig-detections/",
+        "timestamp": 1795528647,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Detection\"",
+            "colour": "#4ade80"
+          }
+        ]
+      },
+      {
+        "uuid": "7e7f8ac6-fc7d-5910-ac90-54a82ca0fac1",
+        "type": "yara",
+        "category": "Payload installation",
+        "value": "rule SUSP_LNX_ZigLLVM19_MbedTLS36_StaticELF_Toolchain {\n   meta:\n      description = \"Hunts for a static ELF whose .comment section records both Debian GCC 15.2.0-7 and a Zig-bundled clang and LLD 19.1.7, and that embeds nine mbed TLS 3.6.0 library source paths under /tmp; a build fingerprint shared by any binary built the same way, not specific to one actor\"\n      license = \"CC BY 4.0 - https://creativecommons.org/licenses/by/4.0/\"\n      author = \"The Hunters Ledger\"\n      reference = \"https://the-hunters-ledger.com/hunting-detections/inv-2026-083-federal-ad-credential-access-rig-detections/\"\n      date = \"2026-11-14\"\n      hash1 = \"a04a732678f95f80a6361ef95312b995b0336898cb66d9ffce63b9ed7803d096\"\n      hash2 = \"25f21b4614e03250dec788bbc0f1beb8c43828d4\"\n      hash3 = \"6804216bf8ae869a7253482c69cae553\"\n      family = \"INV-2026-083-HTTPS-Agent\"\n      id = \"60ad0f83-e319-5347-8db9-766ad366999c\"\n   strings:\n      $gcc = \"GCC: (Debian 15.2.0-7) 15.2.0\" ascii\n      $llvm = \"clang version 19.1.7\" ascii\n      $lld = \"Linker: LLD 19.1.7\" ascii\n      $mbed = \"/tmp/mbedtls-3.6.0/library/\" ascii\n   condition:\n      uint32(0) == 0x464c457f and\n      filesize < 4MB and\n      $gcc and $llvm and $lld and\n      #mbed >= 3\n}",
+        "to_ids": false,
+        "comment": "SUSP_LNX_ZigLLVM19_MbedTLS36_StaticELF_Toolchain | TIER: Hunting | robustness 1 | confidence LOW | rule hash bf620bbe | https://the-hunters-ledger.com/hunting-detections/inv-2026-083-federal-ad-credential-access-rig-detections/",
+        "timestamp": 1795528647,
+        "Tag": [
+          {
+            "name": "hunters-ledger:tier=\"Hunting\"",
+            "colour": "#4ade80"
+          }
+        ]
+      }
+    ],
+    "Object": []
+  }
+}

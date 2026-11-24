@@ -1,0 +1,384 @@
+{
+  "name": "The Hunter’s Ledger: UTA-2026-025",
+  "domain": "enterprise-attack",
+  "description": "ATT&CK techniques mapped by the published reports about UTA-2026-025 on the-hunters-ledger.com (1 report(s), 52 technique(s)). Score is the number of reports about the actor mapping the technique. Profile: https://the-hunters-ledger.com/actors/UTA-2026-025/",
+  "versions": {
+    "attack": "19",
+    "navigator": "4.9.0",
+    "layer": "4.5"
+  },
+  "techniques": [
+    {
+      "techniqueID": "T1001.003",
+      "tactic": "command-and-control",
+      "score": 1,
+      "comment": "Protocol or Service Impersonation. 1 report(s) about UTA-2026-025, mapped in https://the-hunters-ledger.com/reports/inv-2026-083-federal-ad-credential-access-rig/. https://the-hunters-ledger.com/actors/UTA-2026-025/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1003.002",
+      "tactic": "credential-access",
+      "score": 1,
+      "comment": "Security Account Manager. 1 report(s) about UTA-2026-025, mapped in https://the-hunters-ledger.com/reports/inv-2026-083-federal-ad-credential-access-rig/. https://the-hunters-ledger.com/actors/UTA-2026-025/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1005",
+      "tactic": "collection",
+      "score": 1,
+      "comment": "Data from Local System. 1 report(s) about UTA-2026-025, mapped in https://the-hunters-ledger.com/reports/inv-2026-083-federal-ad-credential-access-rig/. https://the-hunters-ledger.com/actors/UTA-2026-025/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1016",
+      "tactic": "discovery",
+      "score": 1,
+      "comment": "System Network Configuration Discovery. 1 report(s) about UTA-2026-025, mapped in https://the-hunters-ledger.com/reports/inv-2026-083-federal-ad-credential-access-rig/. https://the-hunters-ledger.com/actors/UTA-2026-025/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1021.002",
+      "tactic": "lateral-movement",
+      "score": 1,
+      "comment": "SMB/Windows Admin Shares. 1 report(s) about UTA-2026-025, mapped in https://the-hunters-ledger.com/reports/inv-2026-083-federal-ad-credential-access-rig/. https://the-hunters-ledger.com/actors/UTA-2026-025/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1027.013",
+      "tactic": "stealth",
+      "score": 1,
+      "comment": "Encrypted/Encoded File. 1 report(s) about UTA-2026-025, mapped in https://the-hunters-ledger.com/reports/inv-2026-083-federal-ad-credential-access-rig/. https://the-hunters-ledger.com/actors/UTA-2026-025/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1033",
+      "tactic": "discovery",
+      "score": 1,
+      "comment": "System Owner/User Discovery. 1 report(s) about UTA-2026-025, mapped in https://the-hunters-ledger.com/reports/inv-2026-083-federal-ad-credential-access-rig/. https://the-hunters-ledger.com/actors/UTA-2026-025/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1036.005",
+      "tactic": "stealth",
+      "score": 1,
+      "comment": "Match Legitimate Resource Name or Location. 1 report(s) about UTA-2026-025, mapped in https://the-hunters-ledger.com/reports/inv-2026-083-federal-ad-credential-access-rig/. https://the-hunters-ledger.com/actors/UTA-2026-025/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1041",
+      "tactic": "exfiltration",
+      "score": 1,
+      "comment": "Exfiltration Over C2 Channel. 1 report(s) about UTA-2026-025, mapped in https://the-hunters-ledger.com/reports/inv-2026-083-federal-ad-credential-access-rig/. https://the-hunters-ledger.com/actors/UTA-2026-025/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1046",
+      "tactic": "discovery",
+      "score": 1,
+      "comment": "Network Service Discovery. 1 report(s) about UTA-2026-025, mapped in https://the-hunters-ledger.com/reports/inv-2026-083-federal-ad-credential-access-rig/. https://the-hunters-ledger.com/actors/UTA-2026-025/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1053.005",
+      "tactic": "persistence",
+      "score": 1,
+      "comment": "Scheduled Task. 1 report(s) about UTA-2026-025, mapped in https://the-hunters-ledger.com/reports/inv-2026-083-federal-ad-credential-access-rig/. https://the-hunters-ledger.com/actors/UTA-2026-025/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1057",
+      "tactic": "discovery",
+      "score": 1,
+      "comment": "Process Discovery. 1 report(s) about UTA-2026-025, mapped in https://the-hunters-ledger.com/reports/inv-2026-083-federal-ad-credential-access-rig/. https://the-hunters-ledger.com/actors/UTA-2026-025/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1059.003",
+      "tactic": "execution",
+      "score": 1,
+      "comment": "Windows Command Shell. 1 report(s) about UTA-2026-025, mapped in https://the-hunters-ledger.com/reports/inv-2026-083-federal-ad-credential-access-rig/. https://the-hunters-ledger.com/actors/UTA-2026-025/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1059.004",
+      "tactic": "execution",
+      "score": 1,
+      "comment": "Unix Shell. 1 report(s) about UTA-2026-025, mapped in https://the-hunters-ledger.com/reports/inv-2026-083-federal-ad-credential-access-rig/. https://the-hunters-ledger.com/actors/UTA-2026-025/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1068",
+      "tactic": "privilege-escalation",
+      "score": 1,
+      "comment": "Exploitation for Privilege Escalation. 1 report(s) about UTA-2026-025, mapped in https://the-hunters-ledger.com/reports/inv-2026-083-federal-ad-credential-access-rig/. https://the-hunters-ledger.com/actors/UTA-2026-025/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1069.002",
+      "tactic": "discovery",
+      "score": 1,
+      "comment": "Domain Groups. 1 report(s) about UTA-2026-025, mapped in https://the-hunters-ledger.com/reports/inv-2026-083-federal-ad-credential-access-rig/. https://the-hunters-ledger.com/actors/UTA-2026-025/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1070.004",
+      "tactic": "stealth",
+      "score": 1,
+      "comment": "File Deletion. 1 report(s) about UTA-2026-025, mapped in https://the-hunters-ledger.com/reports/inv-2026-083-federal-ad-credential-access-rig/. https://the-hunters-ledger.com/actors/UTA-2026-025/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1071.001",
+      "tactic": "command-and-control",
+      "score": 1,
+      "comment": "Web Protocols. 1 report(s) about UTA-2026-025, mapped in https://the-hunters-ledger.com/reports/inv-2026-083-federal-ad-credential-access-rig/. https://the-hunters-ledger.com/actors/UTA-2026-025/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1082",
+      "tactic": "discovery",
+      "score": 1,
+      "comment": "System Information Discovery. 1 report(s) about UTA-2026-025, mapped in https://the-hunters-ledger.com/reports/inv-2026-083-federal-ad-credential-access-rig/. https://the-hunters-ledger.com/actors/UTA-2026-025/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1083",
+      "tactic": "discovery",
+      "score": 1,
+      "comment": "File and Directory Discovery. 1 report(s) about UTA-2026-025, mapped in https://the-hunters-ledger.com/reports/inv-2026-083-federal-ad-credential-access-rig/. https://the-hunters-ledger.com/actors/UTA-2026-025/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1087.002",
+      "tactic": "discovery",
+      "score": 1,
+      "comment": "Domain Account. 1 report(s) about UTA-2026-025, mapped in https://the-hunters-ledger.com/reports/inv-2026-083-federal-ad-credential-access-rig/. https://the-hunters-ledger.com/actors/UTA-2026-025/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1090.001",
+      "tactic": "command-and-control",
+      "score": 1,
+      "comment": "Internal Proxy. 1 report(s) about UTA-2026-025, mapped in https://the-hunters-ledger.com/reports/inv-2026-083-federal-ad-credential-access-rig/. https://the-hunters-ledger.com/actors/UTA-2026-025/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1090.003",
+      "tactic": "command-and-control",
+      "score": 1,
+      "comment": "Multi-hop Proxy. 1 report(s) about UTA-2026-025, mapped in https://the-hunters-ledger.com/reports/inv-2026-083-federal-ad-credential-access-rig/. https://the-hunters-ledger.com/actors/UTA-2026-025/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1095",
+      "tactic": "command-and-control",
+      "score": 1,
+      "comment": "Non-Application Layer Protocol. 1 report(s) about UTA-2026-025, mapped in https://the-hunters-ledger.com/reports/inv-2026-083-federal-ad-credential-access-rig/. https://the-hunters-ledger.com/actors/UTA-2026-025/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1102.002",
+      "tactic": "command-and-control",
+      "score": 1,
+      "comment": "Bidirectional Communication. 1 report(s) about UTA-2026-025, mapped in https://the-hunters-ledger.com/reports/inv-2026-083-federal-ad-credential-access-rig/. https://the-hunters-ledger.com/actors/UTA-2026-025/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1105",
+      "tactic": "command-and-control",
+      "score": 1,
+      "comment": "Ingress Tool Transfer. 1 report(s) about UTA-2026-025, mapped in https://the-hunters-ledger.com/reports/inv-2026-083-federal-ad-credential-access-rig/. https://the-hunters-ledger.com/actors/UTA-2026-025/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1110.003",
+      "tactic": "credential-access",
+      "score": 1,
+      "comment": "Password Spraying. 1 report(s) about UTA-2026-025, mapped in https://the-hunters-ledger.com/reports/inv-2026-083-federal-ad-credential-access-rig/. https://the-hunters-ledger.com/actors/UTA-2026-025/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1132.001",
+      "tactic": "command-and-control",
+      "score": 1,
+      "comment": "Standard Encoding. 1 report(s) about UTA-2026-025, mapped in https://the-hunters-ledger.com/reports/inv-2026-083-federal-ad-credential-access-rig/. https://the-hunters-ledger.com/actors/UTA-2026-025/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1187",
+      "tactic": "credential-access",
+      "score": 1,
+      "comment": "Forced Authentication. 1 report(s) about UTA-2026-025, mapped in https://the-hunters-ledger.com/reports/inv-2026-083-federal-ad-credential-access-rig/. https://the-hunters-ledger.com/actors/UTA-2026-025/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1190",
+      "tactic": "initial-access",
+      "score": 1,
+      "comment": "Exploit Public-Facing Application. 1 report(s) about UTA-2026-025, mapped in https://the-hunters-ledger.com/reports/inv-2026-083-federal-ad-credential-access-rig/. https://the-hunters-ledger.com/actors/UTA-2026-025/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1210",
+      "tactic": "lateral-movement",
+      "score": 1,
+      "comment": "Exploitation of Remote Services. 1 report(s) about UTA-2026-025, mapped in https://the-hunters-ledger.com/reports/inv-2026-083-federal-ad-credential-access-rig/. https://the-hunters-ledger.com/actors/UTA-2026-025/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1213.003",
+      "tactic": "collection",
+      "score": 1,
+      "comment": "Code Repositories. 1 report(s) about UTA-2026-025, mapped in https://the-hunters-ledger.com/reports/inv-2026-083-federal-ad-credential-access-rig/. https://the-hunters-ledger.com/actors/UTA-2026-025/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1480",
+      "tactic": "stealth",
+      "score": 1,
+      "comment": "Execution Guardrails. 1 report(s) about UTA-2026-025, mapped in https://the-hunters-ledger.com/reports/inv-2026-083-federal-ad-credential-access-rig/. https://the-hunters-ledger.com/actors/UTA-2026-025/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1505.003",
+      "tactic": "persistence",
+      "score": 1,
+      "comment": "Web Shell. 1 report(s) about UTA-2026-025, mapped in https://the-hunters-ledger.com/reports/inv-2026-083-federal-ad-credential-access-rig/. https://the-hunters-ledger.com/actors/UTA-2026-025/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1543.002",
+      "tactic": "persistence",
+      "score": 1,
+      "comment": "Systemd Service. 1 report(s) about UTA-2026-025, mapped in https://the-hunters-ledger.com/reports/inv-2026-083-federal-ad-credential-access-rig/. https://the-hunters-ledger.com/actors/UTA-2026-025/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1552.001",
+      "tactic": "credential-access",
+      "score": 1,
+      "comment": "Credentials In Files. 1 report(s) about UTA-2026-025, mapped in https://the-hunters-ledger.com/reports/inv-2026-083-federal-ad-credential-access-rig/. https://the-hunters-ledger.com/actors/UTA-2026-025/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1553.002",
+      "tactic": "stealth",
+      "score": 1,
+      "comment": "Code Signing. 1 report(s) about UTA-2026-025, mapped in https://the-hunters-ledger.com/reports/inv-2026-083-federal-ad-credential-access-rig/. https://the-hunters-ledger.com/actors/UTA-2026-025/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1557.001",
+      "tactic": "credential-access",
+      "score": 1,
+      "comment": "Name Resolution Poisoning and SMB Relay. 1 report(s) about UTA-2026-025, mapped in https://the-hunters-ledger.com/reports/inv-2026-083-federal-ad-credential-access-rig/. https://the-hunters-ledger.com/actors/UTA-2026-025/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1558.003",
+      "tactic": "credential-access",
+      "score": 1,
+      "comment": "Kerberoasting. 1 report(s) about UTA-2026-025, mapped in https://the-hunters-ledger.com/reports/inv-2026-083-federal-ad-credential-access-rig/. https://the-hunters-ledger.com/actors/UTA-2026-025/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1567.002",
+      "tactic": "exfiltration",
+      "score": 1,
+      "comment": "Exfiltration to Cloud Storage. 1 report(s) about UTA-2026-025, mapped in https://the-hunters-ledger.com/reports/inv-2026-083-federal-ad-credential-access-rig/. https://the-hunters-ledger.com/actors/UTA-2026-025/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1572",
+      "tactic": "command-and-control",
+      "score": 1,
+      "comment": "Protocol Tunneling. 1 report(s) about UTA-2026-025, mapped in https://the-hunters-ledger.com/reports/inv-2026-083-federal-ad-credential-access-rig/. https://the-hunters-ledger.com/actors/UTA-2026-025/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1573.001",
+      "tactic": "command-and-control",
+      "score": 1,
+      "comment": "Symmetric Cryptography. 1 report(s) about UTA-2026-025, mapped in https://the-hunters-ledger.com/reports/inv-2026-083-federal-ad-credential-access-rig/. https://the-hunters-ledger.com/actors/UTA-2026-025/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1573.002",
+      "tactic": "command-and-control",
+      "score": 1,
+      "comment": "Asymmetric Cryptography. 1 report(s) about UTA-2026-025, mapped in https://the-hunters-ledger.com/reports/inv-2026-083-federal-ad-credential-access-rig/. https://the-hunters-ledger.com/actors/UTA-2026-025/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1574.001",
+      "tactic": "stealth",
+      "score": 1,
+      "comment": "DLL. 1 report(s) about UTA-2026-025, mapped in https://the-hunters-ledger.com/reports/inv-2026-083-federal-ad-credential-access-rig/. https://the-hunters-ledger.com/actors/UTA-2026-025/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1583.003",
+      "tactic": "resource-development",
+      "score": 1,
+      "comment": "Virtual Private Server. 1 report(s) about UTA-2026-025, mapped in https://the-hunters-ledger.com/reports/inv-2026-083-federal-ad-credential-access-rig/. https://the-hunters-ledger.com/actors/UTA-2026-025/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1588.003",
+      "tactic": "resource-development",
+      "score": 1,
+      "comment": "Code Signing Certificates. 1 report(s) about UTA-2026-025, mapped in https://the-hunters-ledger.com/reports/inv-2026-083-federal-ad-credential-access-rig/. https://the-hunters-ledger.com/actors/UTA-2026-025/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1595.001",
+      "tactic": "reconnaissance",
+      "score": 1,
+      "comment": "Scanning IP Blocks. 1 report(s) about UTA-2026-025, mapped in https://the-hunters-ledger.com/reports/inv-2026-083-federal-ad-credential-access-rig/. https://the-hunters-ledger.com/actors/UTA-2026-025/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1608.001",
+      "tactic": "resource-development",
+      "score": 1,
+      "comment": "Upload Malware. 1 report(s) about UTA-2026-025, mapped in https://the-hunters-ledger.com/reports/inv-2026-083-federal-ad-credential-access-rig/. https://the-hunters-ledger.com/actors/UTA-2026-025/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1610",
+      "tactic": "execution",
+      "score": 1,
+      "comment": "Deploy Container. 1 report(s) about UTA-2026-025, mapped in https://the-hunters-ledger.com/reports/inv-2026-083-federal-ad-credential-access-rig/. https://the-hunters-ledger.com/actors/UTA-2026-025/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1611",
+      "tactic": "privilege-escalation",
+      "score": 1,
+      "comment": "Escape to Host. 1 report(s) about UTA-2026-025, mapped in https://the-hunters-ledger.com/reports/inv-2026-083-federal-ad-credential-access-rig/. https://the-hunters-ledger.com/actors/UTA-2026-025/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1620",
+      "tactic": "stealth",
+      "score": 1,
+      "comment": "Reflective Code Loading. 1 report(s) about UTA-2026-025, mapped in https://the-hunters-ledger.com/reports/inv-2026-083-federal-ad-credential-access-rig/. https://the-hunters-ledger.com/actors/UTA-2026-025/",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1649",
+      "tactic": "credential-access",
+      "score": 1,
+      "comment": "Steal or Forge Authentication Certificates. 1 report(s) about UTA-2026-025, mapped in https://the-hunters-ledger.com/reports/inv-2026-083-federal-ad-credential-access-rig/. https://the-hunters-ledger.com/actors/UTA-2026-025/",
+      "enabled": true
+    }
+  ],
+  "gradient": {
+    "colors": [
+      "#fbe7fd",
+      "#e879f9"
+    ],
+    "minValue": 0,
+    "maxValue": 1
+  }
+}

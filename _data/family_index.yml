@@ -1595,12 +1595,13 @@ families:
       - UTA-2026-018
       - UTA-2026-023
       - UTA-2026-024
+      - UTA-2026-025
     tooling_labels:
       - chisel
     report_count: 0
     rule_count: 0
     feed_count: 0
-    actor_count: 4
+    actor_count: 5
   - name: revsocks
     slug: revsocks
     url: /families/revsocks/
@@ -2045,6 +2046,12 @@ unmapped:
   - label: Golang-RAT-Generic
     where:
       - detection agent-exe-detections
+  - label: INV-2026-083-HTTPS-Agent
+    where:
+      - detection inv-2026-083-federal-ad-credential-access-rig-detections
+  - label: INV-2026-083-OneDrive-Loader
+    where:
+      - detection inv-2026-083-federal-ad-credential-access-rig-detections
   - label: Inkognito-FraudOperation
     where:
       - detection inkognito-russian-vpn-phishing-185-221-196-118-20260516-detections
@@ -2165,6 +2172,11 @@ unmapped:
       are generic).
     where:
       - feed newdouble-clickfix-iocs.json
+  - label: >-
+      Unclassified implants; no public family match in our bounded searches (family novelty NOT
+      CHECKED)
+    where:
+      - feed inv-2026-083-federal-ad-credential-access-rig-iocs.json
   - label: Unknown - bespoke single-operator WebLogic/telecom intrusion toolkit
     where:
       - >-

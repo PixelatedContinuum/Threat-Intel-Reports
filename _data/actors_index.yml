@@ -6456,6 +6456,401 @@ actors:
       - Collection
       - Command and Control
       - Exfiltration
+  - id: UTA-2026-025
+    kind: uta
+    name: UTA-2026-025
+    url: /actors/UTA-2026-025/
+    reports:
+      - url: /reports/inv-2026-083-federal-ad-credential-access-rig/
+        title: A Credential-Access Rig Aimed at a US Federal Agriculture Department
+        date: '2026-11-15'
+        severity: high
+        role: primary
+        mentions: 4
+        detection_url: /hunting-detections/inv-2026-083-federal-ad-credential-access-rig-detections
+        ioc_url: /ioc-feeds/inv-2026-083-federal-ad-credential-access-rig-iocs.json
+        stix_url: /stix/inv-2026-083-federal-ad-credential-access-rig.json
+    report_count: 1
+    mention_count: 4
+    attack:
+      - id: T1001.003
+        name: Protocol or Service Impersonation
+        tactic: Command and Control
+        source: report
+        link: /reports/inv-2026-083-federal-ad-credential-access-rig/
+        reports:
+          - /reports/inv-2026-083-federal-ad-credential-access-rig/
+      - id: T1003.002
+        name: Security Account Manager
+        tactic: Credential Access
+        source: report
+        link: /reports/inv-2026-083-federal-ad-credential-access-rig/
+        reports:
+          - /reports/inv-2026-083-federal-ad-credential-access-rig/
+      - id: T1005
+        name: Data from Local System
+        tactic: Collection
+        source: report
+        link: /reports/inv-2026-083-federal-ad-credential-access-rig/
+        reports:
+          - /reports/inv-2026-083-federal-ad-credential-access-rig/
+      - id: T1016
+        name: System Network Configuration Discovery
+        tactic: Discovery
+        source: report
+        link: /reports/inv-2026-083-federal-ad-credential-access-rig/
+        reports:
+          - /reports/inv-2026-083-federal-ad-credential-access-rig/
+      - id: T1021.002
+        name: SMB/Windows Admin Shares
+        tactic: Lateral Movement
+        source: report
+        link: /reports/inv-2026-083-federal-ad-credential-access-rig/
+        reports:
+          - /reports/inv-2026-083-federal-ad-credential-access-rig/
+      - id: T1027.013
+        name: Encrypted/Encoded File
+        tactic: Stealth
+        source: report
+        link: /reports/inv-2026-083-federal-ad-credential-access-rig/
+        reports:
+          - /reports/inv-2026-083-federal-ad-credential-access-rig/
+      - id: T1033
+        name: System Owner/User Discovery
+        tactic: Discovery
+        source: report
+        link: /reports/inv-2026-083-federal-ad-credential-access-rig/
+        reports:
+          - /reports/inv-2026-083-federal-ad-credential-access-rig/
+      - id: T1036.005
+        name: Match Legitimate Resource Name or Location
+        tactic: Stealth
+        source: report
+        link: /reports/inv-2026-083-federal-ad-credential-access-rig/
+        reports:
+          - /reports/inv-2026-083-federal-ad-credential-access-rig/
+      - id: T1041
+        name: Exfiltration Over C2 Channel
+        tactic: Exfiltration
+        source: report
+        link: /reports/inv-2026-083-federal-ad-credential-access-rig/
+        reports:
+          - /reports/inv-2026-083-federal-ad-credential-access-rig/
+      - id: T1046
+        name: Network Service Discovery
+        tactic: Discovery
+        source: report
+        link: /reports/inv-2026-083-federal-ad-credential-access-rig/
+        reports:
+          - /reports/inv-2026-083-federal-ad-credential-access-rig/
+      - id: T1053.005
+        name: Scheduled Task
+        tactic: Persistence
+        source: report
+        link: /reports/inv-2026-083-federal-ad-credential-access-rig/
+        reports:
+          - /reports/inv-2026-083-federal-ad-credential-access-rig/
+      - id: T1057
+        name: Process Discovery
+        tactic: Discovery
+        source: report
+        link: /reports/inv-2026-083-federal-ad-credential-access-rig/
+        reports:
+          - /reports/inv-2026-083-federal-ad-credential-access-rig/
+      - id: T1059.003
+        name: Windows Command Shell
+        tactic: Execution
+        source: report
+        link: /reports/inv-2026-083-federal-ad-credential-access-rig/
+        reports:
+          - /reports/inv-2026-083-federal-ad-credential-access-rig/
+      - id: T1059.004
+        name: Unix Shell
+        tactic: Execution
+        source: report
+        link: /reports/inv-2026-083-federal-ad-credential-access-rig/
+        reports:
+          - /reports/inv-2026-083-federal-ad-credential-access-rig/
+      - id: T1068
+        name: Exploitation for Privilege Escalation
+        tactic: Privilege Escalation
+        source: report
+        link: /reports/inv-2026-083-federal-ad-credential-access-rig/
+        reports:
+          - /reports/inv-2026-083-federal-ad-credential-access-rig/
+      - id: T1069.002
+        name: Domain Groups
+        tactic: Discovery
+        source: report
+        link: /reports/inv-2026-083-federal-ad-credential-access-rig/
+        reports:
+          - /reports/inv-2026-083-federal-ad-credential-access-rig/
+      - id: T1070.004
+        name: File Deletion
+        tactic: Stealth
+        source: report
+        link: /reports/inv-2026-083-federal-ad-credential-access-rig/
+        reports:
+          - /reports/inv-2026-083-federal-ad-credential-access-rig/
+      - id: T1071.001
+        name: Web Protocols
+        tactic: Command and Control
+        source: report
+        link: /reports/inv-2026-083-federal-ad-credential-access-rig/
+        reports:
+          - /reports/inv-2026-083-federal-ad-credential-access-rig/
+      - id: T1082
+        name: System Information Discovery
+        tactic: Discovery
+        source: report
+        link: /reports/inv-2026-083-federal-ad-credential-access-rig/
+        reports:
+          - /reports/inv-2026-083-federal-ad-credential-access-rig/
+      - id: T1083
+        name: File and Directory Discovery
+        tactic: Discovery
+        source: report
+        link: /reports/inv-2026-083-federal-ad-credential-access-rig/
+        reports:
+          - /reports/inv-2026-083-federal-ad-credential-access-rig/
+      - id: T1087.002
+        name: Domain Account
+        tactic: Discovery
+        source: report
+        link: /reports/inv-2026-083-federal-ad-credential-access-rig/
+        reports:
+          - /reports/inv-2026-083-federal-ad-credential-access-rig/
+      - id: T1090.001
+        name: Internal Proxy
+        tactic: Command and Control
+        source: report
+        link: /reports/inv-2026-083-federal-ad-credential-access-rig/
+        reports:
+          - /reports/inv-2026-083-federal-ad-credential-access-rig/
+      - id: T1090.003
+        name: Multi-hop Proxy
+        tactic: Command and Control
+        source: report
+        link: /reports/inv-2026-083-federal-ad-credential-access-rig/
+        reports:
+          - /reports/inv-2026-083-federal-ad-credential-access-rig/
+      - id: T1095
+        name: Non-Application Layer Protocol
+        tactic: Command and Control
+        source: report
+        link: /reports/inv-2026-083-federal-ad-credential-access-rig/
+        reports:
+          - /reports/inv-2026-083-federal-ad-credential-access-rig/
+      - id: T1102.002
+        name: Bidirectional Communication
+        tactic: Command and Control
+        source: report
+        link: /reports/inv-2026-083-federal-ad-credential-access-rig/
+        reports:
+          - /reports/inv-2026-083-federal-ad-credential-access-rig/
+      - id: T1105
+        name: Ingress Tool Transfer
+        tactic: Command and Control
+        source: report
+        link: /reports/inv-2026-083-federal-ad-credential-access-rig/
+        reports:
+          - /reports/inv-2026-083-federal-ad-credential-access-rig/
+      - id: T1110.003
+        name: Password Spraying
+        tactic: Credential Access
+        source: report
+        link: /reports/inv-2026-083-federal-ad-credential-access-rig/
+        reports:
+          - /reports/inv-2026-083-federal-ad-credential-access-rig/
+      - id: T1132.001
+        name: Standard Encoding
+        tactic: Command and Control
+        source: report
+        link: /reports/inv-2026-083-federal-ad-credential-access-rig/
+        reports:
+          - /reports/inv-2026-083-federal-ad-credential-access-rig/
+      - id: T1187
+        name: Forced Authentication
+        tactic: Credential Access
+        source: report
+        link: /reports/inv-2026-083-federal-ad-credential-access-rig/
+        reports:
+          - /reports/inv-2026-083-federal-ad-credential-access-rig/
+      - id: T1190
+        name: Exploit Public-Facing Application
+        tactic: Initial Access
+        source: report
+        link: /reports/inv-2026-083-federal-ad-credential-access-rig/
+        reports:
+          - /reports/inv-2026-083-federal-ad-credential-access-rig/
+      - id: T1210
+        name: Exploitation of Remote Services
+        tactic: Lateral Movement
+        source: report
+        link: /reports/inv-2026-083-federal-ad-credential-access-rig/
+        reports:
+          - /reports/inv-2026-083-federal-ad-credential-access-rig/
+      - id: T1213.003
+        name: Code Repositories
+        tactic: Collection
+        source: report
+        link: /reports/inv-2026-083-federal-ad-credential-access-rig/
+        reports:
+          - /reports/inv-2026-083-federal-ad-credential-access-rig/
+      - id: T1480
+        name: Execution Guardrails
+        tactic: Stealth
+        source: report
+        link: /reports/inv-2026-083-federal-ad-credential-access-rig/
+        reports:
+          - /reports/inv-2026-083-federal-ad-credential-access-rig/
+      - id: T1505.003
+        name: Web Shell
+        tactic: Persistence
+        source: report
+        link: /reports/inv-2026-083-federal-ad-credential-access-rig/
+        reports:
+          - /reports/inv-2026-083-federal-ad-credential-access-rig/
+      - id: T1543.002
+        name: Systemd Service
+        tactic: Persistence
+        source: report
+        link: /reports/inv-2026-083-federal-ad-credential-access-rig/
+        reports:
+          - /reports/inv-2026-083-federal-ad-credential-access-rig/
+      - id: T1552.001
+        name: Credentials In Files
+        tactic: Credential Access
+        source: report
+        link: /reports/inv-2026-083-federal-ad-credential-access-rig/
+        reports:
+          - /reports/inv-2026-083-federal-ad-credential-access-rig/
+      - id: T1553.002
+        name: Code Signing
+        tactic: Stealth
+        source: report
+        link: /reports/inv-2026-083-federal-ad-credential-access-rig/
+        reports:
+          - /reports/inv-2026-083-federal-ad-credential-access-rig/
+      - id: T1557.001
+        name: Name Resolution Poisoning and SMB Relay
+        tactic: Credential Access
+        source: report
+        link: /reports/inv-2026-083-federal-ad-credential-access-rig/
+        reports:
+          - /reports/inv-2026-083-federal-ad-credential-access-rig/
+      - id: T1558.003
+        name: Kerberoasting
+        tactic: Credential Access
+        source: report
+        link: /reports/inv-2026-083-federal-ad-credential-access-rig/
+        reports:
+          - /reports/inv-2026-083-federal-ad-credential-access-rig/
+      - id: T1567.002
+        name: Exfiltration to Cloud Storage
+        tactic: Exfiltration
+        source: report
+        link: /reports/inv-2026-083-federal-ad-credential-access-rig/
+        reports:
+          - /reports/inv-2026-083-federal-ad-credential-access-rig/
+      - id: T1572
+        name: Protocol Tunneling
+        tactic: Command and Control
+        source: report
+        link: /reports/inv-2026-083-federal-ad-credential-access-rig/
+        reports:
+          - /reports/inv-2026-083-federal-ad-credential-access-rig/
+      - id: T1573.001
+        name: Symmetric Cryptography
+        tactic: Command and Control
+        source: report
+        link: /reports/inv-2026-083-federal-ad-credential-access-rig/
+        reports:
+          - /reports/inv-2026-083-federal-ad-credential-access-rig/
+      - id: T1573.002
+        name: Asymmetric Cryptography
+        tactic: Command and Control
+        source: report
+        link: /reports/inv-2026-083-federal-ad-credential-access-rig/
+        reports:
+          - /reports/inv-2026-083-federal-ad-credential-access-rig/
+      - id: T1574.001
+        name: DLL
+        tactic: Stealth
+        source: report
+        link: /reports/inv-2026-083-federal-ad-credential-access-rig/
+        reports:
+          - /reports/inv-2026-083-federal-ad-credential-access-rig/
+      - id: T1583.003
+        name: Virtual Private Server
+        tactic: Resource Development
+        source: report
+        link: /reports/inv-2026-083-federal-ad-credential-access-rig/
+        reports:
+          - /reports/inv-2026-083-federal-ad-credential-access-rig/
+      - id: T1588.003
+        name: Code Signing Certificates
+        tactic: Resource Development
+        source: report
+        link: /reports/inv-2026-083-federal-ad-credential-access-rig/
+        reports:
+          - /reports/inv-2026-083-federal-ad-credential-access-rig/
+      - id: T1595.001
+        name: Scanning IP Blocks
+        tactic: Reconnaissance
+        source: report
+        link: /reports/inv-2026-083-federal-ad-credential-access-rig/
+        reports:
+          - /reports/inv-2026-083-federal-ad-credential-access-rig/
+      - id: T1608.001
+        name: Upload Malware
+        tactic: Resource Development
+        source: report
+        link: /reports/inv-2026-083-federal-ad-credential-access-rig/
+        reports:
+          - /reports/inv-2026-083-federal-ad-credential-access-rig/
+      - id: T1610
+        name: Deploy Container
+        tactic: Execution
+        source: report
+        link: /reports/inv-2026-083-federal-ad-credential-access-rig/
+        reports:
+          - /reports/inv-2026-083-federal-ad-credential-access-rig/
+      - id: T1611
+        name: Escape to Host
+        tactic: Privilege Escalation
+        source: report
+        link: /reports/inv-2026-083-federal-ad-credential-access-rig/
+        reports:
+          - /reports/inv-2026-083-federal-ad-credential-access-rig/
+      - id: T1620
+        name: Reflective Code Loading
+        tactic: Stealth
+        source: report
+        link: /reports/inv-2026-083-federal-ad-credential-access-rig/
+        reports:
+          - /reports/inv-2026-083-federal-ad-credential-access-rig/
+      - id: T1649
+        name: Steal or Forge Authentication Certificates
+        tactic: Credential Access
+        source: report
+        link: /reports/inv-2026-083-federal-ad-credential-access-rig/
+        reports:
+          - /reports/inv-2026-083-federal-ad-credential-access-rig/
+    tactics:
+      - Reconnaissance
+      - Resource Development
+      - Initial Access
+      - Execution
+      - Persistence
+      - Privilege Escalation
+      - Stealth
+      - Credential Access
+      - Discovery
+      - Lateral Movement
+      - Collection
+      - Command and Control
+      - Exfiltration
   - id: vova75rus
     kind: named
     name: Vova75Rus
