@@ -17,6 +17,9 @@ jobs:
       - uses: actions/setup-node@v7
         with:
           node-version: 22
+      - name: Install
+        working-directory: tools/report-tooling
+        run: npm ci --no-audit --no-fund
       - name: Launch three times and time each
         working-directory: tools/report-tooling
         run: |
