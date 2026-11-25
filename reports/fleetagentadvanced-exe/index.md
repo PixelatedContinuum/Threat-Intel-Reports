@@ -1384,6 +1384,7 @@ For complete YARA, Sigma, EDR queries, PowerShell hunting scripts, and SIEM corr
 
 - **[FleetAgentAdvanced.exe Detection Package →]({{ "/hunting-detections/fleetagentadvanced-exe-detections/" | relative_url }})**
 - **[Machine-Readable IOC Feed (JSON) →]({{ "/ioc-feeds/fleetagentadvanced-exe.json" | relative_url }})**
+
 ---
 
 © 2026 Joseph, The Hunters Ledger. Licensed under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/), free to republish and adapt, including commercially, with attribution to The Hunters Ledger and a link to the original.

@@ -27,6 +27,18 @@ function detectionFiles() {
     .sort();
 }
 
+/* The page lives at its front-matter permalink, which need not follow the file
+   name (inv-2026-082-agent-platform-command-channel-detections.md is served at
+   /hunting-detections/inv-2026-082-detections/), so a URL built from the file
+   name 404s and the page reads NOT CHECKED. Fall back to the file name only
+   when the front matter carries no permalink. */
+function pagePath(file, slug) {
+  var src = fs.readFileSync(path.join(DET_DIR, file), 'utf8');
+  var fm = /^---\r?\n([\s\S]*?)\r?\n---/.exec(src);
+  var m = fm && /^permalink:\s*["']?([^"'\s]+)["']?\s*$/m.exec(fm[1]);
+  return m ? m[1] : '/hunting-detections/' + slug + '/';
+}
+
 // Source side: the generator's own verdict, without writing anything.
 function sweepSource() {
   return GEN.run({ dryRun: true });
@@ -50,7 +62,7 @@ async function sweepRendered(base, JSDOM) {
 
   for (var i = 0; i < files.length; i++) {
     var slug = files[i].replace(/[.]md$/, '');
-    var url = base + '/hunting-detections/' + slug + '/';
+    var url = base + pagePath(files[i], slug);
     var html = null;
 
     try {

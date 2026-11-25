@@ -1332,6 +1332,7 @@ For complete YARA signatures, Sigma rules, EDR queries, PowerShell hunting scrip
 
 - **[FleetAgentFUD.exe Detection Package →]({{ "/hunting-detections/fleetagentfud-exe-detections/" | relative_url }})**
 - **[Machine-Readable IOC Feed (JSON) →]({{ "/ioc-feeds/fleetagentfud-exe.json" | relative_url }})**
+
 ---
 
 © 2026 Joseph, The Hunters Ledger. Licensed under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/), free to republish and adapt, including commercially, with attribution to The Hunters Ledger and a link to the original.

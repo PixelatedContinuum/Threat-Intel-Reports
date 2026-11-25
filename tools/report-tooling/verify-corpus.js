@@ -41,6 +41,19 @@ function reportSlugs() {
     .sort();
 }
 
+/* A report's URL is its front-matter permalink, not its folder name. The 18
+   reports migrated in T-0603 kept their old nested addresses (the Arsenal-237
+   sub-reports sit at /reports/arsenal-237-new-files/<name>/ and
+   /reports/arsenal-237/<name>/), so a URL built from the folder 404s and the
+   sweep reports a live page as NOT CHECKED. Fall back to the folder only when
+   the front matter carries no permalink. */
+function reportPath(folder) {
+  var src = fs.readFileSync(path.join(REPORTS_DIR, folder, 'index.md'), 'utf8');
+  var fm = /^---\r?\n([\s\S]*?)\r?\n---/.exec(src);
+  var m = fm && /^permalink:\s*["']?([^"'\s]+)["']?\s*$/m.exec(fm[1]);
+  return m ? m[1] : '/reports/' + folder + '/';
+}
+
 // Uncommented entries only, so a preview report reads as unlisted rather than listed.
 function listedPaths() {
   var src = fs.readFileSync(CATALOG, 'utf8');
@@ -76,9 +89,10 @@ function pad(s, n) { return String(s).padEnd(n); }
     process.exit(2);
   }
 
-  var urls = slugs.map(function (s) { return BASE + '/reports/' + s + '/'; });
+  var paths = slugs.map(reportPath);
+  var urls = paths.map(function (p) { return BASE + p; });
   var unlisted = listed
-    ? slugs.filter(function (s) { return !listed['/reports/' + s + '/']; })
+    ? paths.filter(function (p) { return !listed[p]; })
     : [];
 
   console.log('Sweeping ' + urls.length + ' reports at ' + BASE);
