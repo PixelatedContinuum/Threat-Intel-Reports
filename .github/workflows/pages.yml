@@ -249,24 +249,6 @@ jobs:
             *) echo "::error::check-links.js --site FAILED (exit $rc): a built page links to a page or file that is not in the build"; exit 1 ;;
           esac
 
-      # T-0605 L19: the Detections, IOC and STIX panels of every report open inside the viewport, with their first item uncovered and without moving the page, at 375 and 1280 px, in headless Chrome on the built _site (check-browser-hero.js; its own planted-defect controls must fail). Exit 2 (no browser, no report page, a bad argument) fails the job: a gate that opened nothing is not a pass.
-      - name: Gate the hero panels in a real browser
-        working-directory: tools/report-tooling
-        run: |
-          set +e
-          # The gate's own search tries /usr/bin/chromium first; on the runner that one never wrote its DevToolsActivePort into the gate's profile (run 43254559884), so name Google Chrome, which the runner image ships, and say which binary ran.
-          for c in /usr/bin/google-chrome /usr/bin/google-chrome-stable; do if [ -x "$c" ]; then export HL_CHROME="$c"; break; fi; done
-          echo "browser: ${HL_CHROME:-none of /usr/bin/google-chrome, /usr/bin/google-chrome-stable}  $(${HL_CHROME:-false} --version 2>/dev/null)"
-          ls -l /usr/bin/chromium /usr/bin/chromium-browser /usr/bin/google-chrome 2>&1
-          HL_CDP_LAUNCH_WAIT_MS=90000 HL_SITE_DIR=../../_site node check-browser-hero.js
-          rc=$?
-          set -e
-          case $rc in
-            0) echo "PASS         check-browser-hero.js" ;;
-            2) echo "::error::check-browser-hero.js NOT CHECKED (exit 2): no browser, no built report page, or a bad argument"; exit 1 ;;
-            *) echo "::error::check-browser-hero.js FAILED (exit $rc): a hero panel opens off screen, under another element, or moves the page"; exit 1 ;;
-          esac
-
       # A report's detection_page, ioc_feed and stix_bundle values must each name a page or file that exists (check-companions.js, T-0603).
       # Until the review of T-0603's final this gate ran only from `npm run verify`, so a push could deploy a dangling value.
       - name: Gate the reports' companion links
@@ -378,14 +360,67 @@ jobs:
             echo "::warning::the build job took ${elapsed} s, over its ${BUDGET} s budget; the 15-minute Wire refresh is 900 s"
           fi
 
+  # T-0608: the hero-panel gate moved out of the build job. It took 318 to 337 s of a 554 to 664 s build (budget 600 s). It needs
+  # only the built _site, so it takes the Pages artifact the build job uploaded and runs one width per runner, in parallel
+  # (375 and 1280 px, the gate's own widths). The deploy waits for both. Each cell still fails closed: exit 2 (no browser, no
+  # report page) fails the job, and the gate's planted-defect controls must fire.
+  hero:
+    name: Hero panels in a real browser (${{ matrix.width }} px)
+    needs: [build]
+    if: ${{ !cancelled() && needs.build.result == 'success' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      matrix:
+        width: [375, 1280]
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: main
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: tools/report-tooling/package-lock.json
+      - name: Install report tooling
+        working-directory: tools/report-tooling
+        run: npm ci --no-audit --no-fund
+      - name: Fetch the built site
+        uses: actions/download-artifact@v8
+        with:
+          name: github-pages
+          path: ${{ runner.temp }}/pages
+      - name: Unpack the built site
+        run: |
+          set -eu
+          mkdir -p _site
+          tar -xf "${{ runner.temp }}/pages/artifact.tar" -C _site
+          echo "unpacked: $(find _site -name index.html | wc -l) index.html files"
+      - name: Gate the hero panels in a real browser
+        working-directory: tools/report-tooling
+        run: |
+          set +e
+          # The gate's own search tries /usr/bin/chromium first. T-0608 probe (branch t0608-probe, run 45682263260): a cold launch of /usr/bin/chromium took 14.9 s, 17.5 s and over 30 s (a failure at the 30 s default), against 8.7 s and 12.2 s for google-chrome; every warm launch took 3 s. So run 43254559884 failed on a cold start longer than the 30 s wait, and the 90 s wait is the variable that fixes it. Google Chrome is kept because it starts faster. One run per cell, so the spread is not measured.
+          for c in /usr/bin/google-chrome /usr/bin/google-chrome-stable; do if [ -x "$c" ]; then export HL_CHROME="$c"; break; fi; done
+          echo "browser: ${HL_CHROME:-none of /usr/bin/google-chrome, /usr/bin/google-chrome-stable}  $(${HL_CHROME:-false} --version 2>/dev/null)"
+          HL_CDP_LAUNCH_WAIT_MS=90000 HL_SITE_DIR=../../_site node check-browser-hero.js --widths ${{ matrix.width }}
+          rc=$?
+          set -e
+          case $rc in
+            0) echo "PASS         check-browser-hero.js ${{ matrix.width }} px" ;;
+            2) echo "::error::check-browser-hero.js NOT CHECKED (exit 2): no browser, no built report page, or a bad argument"; exit 1 ;;
+            *) echo "::error::check-browser-hero.js FAILED (exit $rc): a hero panel opens off screen, under another element, or moves the page"; exit 1 ;;
+          esac
+
   deploy:
     name: Deploy to GitHub Pages
     # Both: a failed source-side gate stops the deploy. `gates` runs on every trigger.
-    needs: [build, gates]
+    needs: [build, gates, hero]
     # The rollback switch (see the header): the repository variable PAGES_VIA_ACTIONS.
     # A status function in an `if` switches off the implicit success() check, so
     # the two results are spelled out.
-    if: ${{ !cancelled() && vars.PAGES_VIA_ACTIONS == 'true' && needs.build.result == 'success' && needs.gates.result == 'success' }}
+    if: ${{ !cancelled() && vars.PAGES_VIA_ACTIONS == 'true' && needs.build.result == 'success' && needs.gates.result == 'success' && needs.hero.result == 'success' }}
     runs-on: ubuntu-latest
     # Two attempts at the clamped 10 minutes, plus start-up.
     timeout-minutes: 25
@@ -509,7 +544,7 @@ jobs:
   # Needs `issues: write` and the repository's Issues feature turned on.
   alert:
     name: Report a failed run
-    needs: [build, gates, deploy]
+    needs: [build, gates, hero, deploy]
     if: ${{ always() && !cancelled() }}
     runs-on: ubuntu-latest
     timeout-minutes: 5
@@ -525,7 +560,7 @@ jobs:
       - name: Open or update the failure issue
         if: ${{ contains(needs.*.result, 'failure') }}
         run: |
-          body="Run ${RUN_URL} failed. build: ${{ needs.build.result }}, gates: ${{ needs.gates.result }}, deploy: ${{ needs.deploy.result }}."
+          body="Run ${RUN_URL} failed. build: ${{ needs.build.result }}, gates: ${{ needs.gates.result }}, hero: ${{ needs.hero.result }}, deploy: ${{ needs.deploy.result }}."
           n=$(gh issue list --state open --search "\"$TITLE\" in:title" --json number,title --jq "[.[] | select(.title == \"$TITLE\")][0].number // empty")
           if [ -n "$n" ]; then
             gh issue comment "$n" --body "$body"

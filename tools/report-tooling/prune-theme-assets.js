@@ -152,7 +152,7 @@ function run(opts) {
     if (!r || /^(?:data:|mailto:|tel:|javascript:|#)/i.test(r)) return;
     var hits = [];
     if (/^https?:\/\//i.test(r)) {
-      // an absolute URL on our own host would resolve; any other host is not ours
+      // every absolute URL is skipped, our own host's included: only site-relative references can keep a theme file
       return;
     }
     var url;
@@ -215,7 +215,6 @@ function run(opts) {
   if (!opts.dryRun) {
     drop.forEach(function (f) { fs.unlinkSync(f); });
     // remove directories left empty
-    walk(path.join(site, 'assets'), []);
     (function rmEmpty(d) {
       fs.readdirSync(d, { withFileTypes: true }).forEach(function (e) { if (e.isDirectory()) rmEmpty(path.join(d, e.name)); });
       if (d !== site && !fs.readdirSync(d).length) fs.rmdirSync(d);

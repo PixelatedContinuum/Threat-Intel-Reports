@@ -832,7 +832,8 @@ async function runBuilt() {
       var pe = await page.json(POP_JS);
       chk('every nKEV popover opens inside the viewport at ' + widths[wi] + 'px',
         pe.over === 0 && pe.left === 0, pe.n, 'popovers opened', pe.over + ' past the right edge, ' + pe.left + ' past the left, worst ' + pe.worst + 'px');
-      var clicked = await ev('(function(){var s=document.querySelector("#vulns details.hl-vuln__pop > summary");if(!s)return false;s.setAttribute("data-hlgate","1");return true})()');
+      /* The first summary in the DOM can be a collapsed overflow chip: wire-chips.js sets chip.hidden on the chips past the row's cap until "+N more" is pressed (T-0684: the first one was hidden, its rect 0,0, so the click was refused over the sticky header). Click the first one that is rendered, as POP_JS above counts only popovers with a width. */
+      var clicked = await ev('(function(){var l=document.querySelectorAll("#vulns details.hl-vuln__pop > summary"),s=null;for(var i=0;i<l.length;i++){var q=l[i].getBoundingClientRect();if(q.width>0&&q.height>0){s=l[i];break}}if(!s)return false;s.setAttribute("data-hlgate","1");return true})()');
       if (clicked) {
         await page.click('[data-hlgate="1"]');
         await sleep(250);
